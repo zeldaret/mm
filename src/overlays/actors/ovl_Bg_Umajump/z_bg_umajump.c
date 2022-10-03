@@ -90,7 +90,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
 
     this->objectIndex = BG_UMAJUMP_GET_OBJECT_INDEX(thisx);
-    thisx->params &= 0xFF;
+    BG_UMAJUMP_GET_FF(thisx);
 
     if ((thisx->params == BG_UMAJUMP_PARAM_2)) {
         if ((((play->sceneId == SCENE_F01) && !(gSaveContext.save.weekEventReg[89] & 0x20)) &&
