@@ -3,6 +3,16 @@
 
 #include "global.h"
 
+#define DUST_DRAWFLAG0 (0)
+#define DUST_DRAWFLAG1 (1 << 0)
+#define DUST_DRAWFLAG2 (1 << 1)
+#define DUST_DRAWFLAG_RAND_COLOR_OFFSET (1 << 2)
+
+typedef enum {
+    /* 0 */ DUST_UPDATE_NORMAL,
+    /* 1 */ DUST_UPDATE_FIRE
+} DustUpdateMode;
+
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;

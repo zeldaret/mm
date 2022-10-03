@@ -64,7 +64,7 @@ s32 func_80102EF0(PlayState* play) {
     if (Map_IsInBossArea(play) == true) {
         return true;
     }
-    curRoom = play->roomCtx.currRoom.num;
+    curRoom = play->roomCtx.curRoom.num;
     if (curRoom == -1) {
         return false;
     }
@@ -201,14 +201,14 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
 // Tests if the map data should be rotated 180 degrees
 // SCENE_35TAKI is the only scene with data flipped in this manner.
 s32 MapDisp_IsDataRotated(PlayState* play) {
-    if (play->sceneNum == SCENE_35TAKI) {
+    if (play->sceneId == SCENE_35TAKI) {
         return true;
     }
     return false;
 }
 
 s32 func_80103A10(PlayState* play) {
-    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
+    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneLayer(play) != 0)) {
         return false;
     }
     return true;
@@ -362,7 +362,7 @@ void func_8010439C(PlayState* play) {
     ActorContext* actorCtx;
     s32 i;
 
-    if (play->roomCtx.currRoom.num != -1) {
+    if (play->roomCtx.curRoom.num != -1) {
         OPEN_DISPS(play->state.gfxCtx);
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_801BEB38, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -474,7 +474,7 @@ void func_80104AE8(PlayState* play) {
     s32 i;
     Actor* actor;
 
-    if (play->roomCtx.currRoom.num != -1) {
+    if (play->roomCtx.curRoom.num != -1) {
         OPEN_DISPS(play->state.gfxCtx);
         gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_801BEB38, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -619,7 +619,7 @@ void func_80104F34(PlayState* play) {
     }
     D_801BEBB8.unk44 = 0;
     for (i2 = 0; i2 < 5; i2++) {
-        if (play->sceneNum == D_801BEC5C[i2].unk0) {
+        if (play->sceneId == D_801BEC5C[i2].unk0) {
             D_801BEBB8.unk44 = D_801BEC5C[i2].unk2;
         }
     }
@@ -957,14 +957,14 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot);
 #endif
 
 s32 func_80106408(PlayState* play) {
-    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneSetupIndex(play) != 0)) {
+    if ((gSaveContext.save.entrance == 0x6400) && (Cutscene_GetSceneLayer(play) != 0)) {
         return true;
     }
     return false;
 }
 
 s32 func_80106450(PlayState* play) {
-    if (((func_8010A0A4(play) == 0) && (Inventory_IsMapVisible(play->sceneNum) != 0)) ||
+    if (((func_8010A0A4(play) == 0) && (Inventory_IsMapVisible(play->sceneId) != 0)) ||
         ((func_8010A0A4(play) != 0) && CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex))) {
         return true;
     }
@@ -1022,7 +1022,7 @@ void func_80106644(PlayState* play, s32 x, s32 z, s32 rot) {
                 func_80104AE8(play);
             }
             if (((func_8010A0A4(play) == 0) || CHECK_DUNGEON_ITEM(1, gSaveContext.mapIndex)) &&
-                ((func_8010A0A4(play) != 0) || Inventory_IsMapVisible(play->sceneNum))) {
+                ((func_8010A0A4(play) != 0) || Inventory_IsMapVisible(play->sceneId))) {
                 if (play->interfaceCtx.unk_280 == 0) {
                     func_80105FE0(play, x, z, rot);
                 }
@@ -1144,8 +1144,8 @@ s32 func_80106BEC(s32 arg0, f32 arg1) {
     return 0;
 }
 
-s32 func_80106D08(s32 sceneNum) {
-    switch (sceneNum) {
+s32 func_80106D08(s32 sceneId) {
+    switch (sceneId) {
         case SCENE_MITURIN_BS:
             return SCENE_MITURIN;
         case SCENE_HAKUGIN_BS:
@@ -1155,7 +1155,7 @@ s32 func_80106D08(s32 sceneNum) {
         case SCENE_INISIE_BS:
             return SCENE_INISIE_N;
         default:
-            return sceneNum;
+            return sceneId;
     }
 }
 
@@ -1250,7 +1250,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                         spF0 = ((sp108->unk2 - (f32)D_801BEBB8.unk38) * arg5 - sp110) + ((arg3 / 2) + arg1);
                         spEC = ((sp108->unk6 - (f32)D_801BEBB8.unk3A) * arg5 - sp10C) + ((arg4 / 2) + arg2);
 
-                        if (var_s2 == play->roomCtx.currRoom.num) {
+                        if (var_s2 == play->roomCtx.curRoom.num) {
                             if (Map_IsInBossArea(play) != 0) {
                                 gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 1,
                                                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1261,7 +1261,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                                                        G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                             }
                         } else if (gSaveContext.save
-                                       .permanentSceneFlags[Play_GetOriginalSceneNumber(func_80106D08(play->sceneNum))]
+                                       .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                                        .rooms &
                                    (1 << var_s2)) {
                             gDPLoadTextureBlock_4b(POLY_OPA_DISP++, temp_s1, G_IM_FMT_CI, sp118, sp114, 1,
@@ -1411,7 +1411,7 @@ void func_80107B78(PlayState* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
         for (var_s3 = 0; var_s3 < D_801BEBB8.unk50; var_s3++) {
             sp3C = var_s0[var_s3].unk0;
             sp38 = &D_801BEBB8.unk0->entry[sp3C];
-            switch (arg0->sceneNum) {
+            switch (arg0->sceneId) {
                 case SCENE_MITURIN_BS:
                     var_v1_2 = gSaveContext.cycleSceneFlags[SCENE_MITURIN].chest & (1 << var_s0[var_s3].unk2);
                     break;
@@ -1480,12 +1480,12 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                     roomB = D_801F53B0[i].sides[1].room;
                     if (CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex) || (roomA < 0) ||
                         (gSaveContext.save
-                             .permanentSceneFlags[Play_GetOriginalSceneNumber(func_80106D08(play->sceneNum))]
+                             .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomA)) ||
                         (roomB < 0) ||
                         (gSaveContext.save
-                             .permanentSceneFlags[Play_GetOriginalSceneNumber(func_80106D08(play->sceneNum))]
+                             .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomB))) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -1584,7 +1584,7 @@ void func_80108AF8(PlayState* play) {
 
     if ((D_801BEBB8.unk0 != NULL) && (D_801BEC1C != 0) && (func_80108A64(play) == 0)) {
         if (Map_IsInBossArea(play) != 0) {
-            switch (play->sceneNum) {
+            switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
                     spB4 = 0;
                     break;
@@ -1607,7 +1607,7 @@ void func_80108AF8(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
         for (var_s1 = 0; var_s1 < D_801BEBB8.unk40; var_s1++) {
-            if ((gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(func_80106D08(play->sceneNum))]
+            if ((gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                      .unk_14 &
                  gBitFlags[4 - var_s1]) ||
                 CHECK_DUNGEON_ITEM2(2, spB4)) {
@@ -1628,7 +1628,7 @@ void func_80108AF8(PlayState* play) {
         a2 = 106;
         temp_a0_2 = (5 + (pauseCtx->unk_256 * 0xF));
         temp_a2_2 = temp_a0_2 + 0x10;
-        if ((pauseCtx->unk_258 == 0) && (pauseCtx->unk_242[1] == 0)) {
+        if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->cursorXIndex[1] == 0)) {
             a2++;
             a3--;
             temp_a2_2 += 4;
@@ -1692,7 +1692,7 @@ void func_801091F0(PlayState* play) {
     sp3C = 0;
     if (func_80108A64(play) == 0) {
         if (Map_IsInBossArea(play) != 0) {
-            switch (play->sceneNum) {
+            switch (play->sceneId) {
                 case SCENE_MITURIN_BS:
                     sp44 = 0;
                     break;
@@ -1718,7 +1718,7 @@ void func_801091F0(PlayState* play) {
                     var_t2 = 0x50;
                 }
                 for (var_v0 = 0; var_v0 < 2; var_v0++) {
-                    if (play->sceneNum == D_801BED24[var_v0].unk0) {
+                    if (play->sceneId == D_801BED24[var_v0].unk0) {
                         sp40 = D_801BED24[var_v0].unk4;
                         sp3C = D_801BED24[var_v0].unk8;
                     }

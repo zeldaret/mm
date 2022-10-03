@@ -260,8 +260,8 @@ void func_808A54B0(EnSt* this, PlayState* play) {
         }
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u8)(255 * temp_f0));
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
+        gSPDisplayList(POLY_XLU_DISP++, gSpinAttackDiskDL);
+        gSPDisplayList(POLY_XLU_DISP++, gSpinAttackCylinderDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -704,7 +704,7 @@ void func_808A6A78(EnSt* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, 0.04f);
         this->actor.draw = func_808A7478;
-        this->actor.hintId = 4;
+        this->actor.hintId = TATL_HINT_ID_SKULLTULA;
         this->actor.gravity = 0.0f;
         func_808A63E8(this);
         this->unk_18C = 0;

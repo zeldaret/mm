@@ -88,7 +88,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 89, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BIG_OCTO, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
 
@@ -443,7 +443,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                     bubblePos.z = this->picto.actor.world.pos.z + (2.0f * bubbleVel.z);
 
                     EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &bubbleVel, &D_80AC45A4, &D_80AC45B0,
-                                                      &D_80AC45B8, Rand_S16Offset(150, 50), 25, 0);
+                                                      &D_80AC45B8, Rand_S16Offset(150, 50), 25, false);
                 }
 
                 if (this->picto.actor.params != 0xFF) {
@@ -485,7 +485,7 @@ s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, PlayState* play) {
 void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
     if ((this->bodyCollider.base.acFlags & AC_ON) &&
         ((this->bodyCollider.base.acFlags & AC_HIT) ||
-         ((play->sceneNum == SCENE_20SICHITAI || play->sceneNum == SCENE_20SICHITAI2) &&
+         ((play->sceneId == SCENE_20SICHITAI || play->sceneId == SCENE_20SICHITAI2) &&
           EnBigokuta_IsNearSwampBoat(this, play)))) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
