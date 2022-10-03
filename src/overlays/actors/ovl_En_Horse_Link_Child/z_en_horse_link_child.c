@@ -158,7 +158,7 @@ void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
     this->unk_1E8 = 0;
     this->unk_1E4 = 0;
 
-    if (gSaveContext.sceneSetupIndex >= 4) {
+    if (gSaveContext.sceneLayer >= 4) {
         func_808DEFE8(this);
     } else {
         func_808DEFE8(this);
