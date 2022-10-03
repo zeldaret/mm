@@ -56,17 +56,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 80, 0, { 0, 0, 0 } },
 };
 
-static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
-
-static s16 sLeafScales[] = { 110, 80, 60, 40 };
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
-};
-
 void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
     f32 phi_fs0;
     s32 i;
@@ -75,6 +64,8 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
     Vec3f vel;
     Vec3f accel;
     s16 angle;
+    static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+    static s16 sLeafScales[] = { 110, 80, 60, 40 };
 
     Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
 
@@ -113,6 +104,13 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
         }
     }
 }
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
 void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
     s32 pad;
