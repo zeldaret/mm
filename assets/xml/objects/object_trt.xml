@@ -51,10 +51,10 @@
         <Texture Name="gKotakeSkinTex" OutName="kotake_skin" Format="ci8" Width="16" Height="8" Offset="0xA678" />
         <Texture Name="gKotakeMouthTex" OutName="kotake_mouth" Format="ci8" Width="8" Height="8" Offset="0xA6F8" />
         <Texture Name="gKotakeHairTex" OutName="kotake_hair" Format="rgba16" Width="8" Height="32" Offset="0xA738" />
-        <Texture Name="gKotakeBraidEndTex" OutName="kotake_BRAID_end" Format="rgba16" Width="8" Height="8" Offset="0xA938" />
+        <Texture Name="gKotakeBraidEndTex" OutName="kotake_braid_end" Format="rgba16" Width="8" Height="8" Offset="0xA938" />
         <Texture Name="gKotakeEarTex" OutName="kotake_ear" Format="ci8" Width="8" Height="8" Offset="0xA9B8" />
         <Texture Name="gKotakeCollarNeckTex" OutName="kotake_collar_neck" Format="rgba16" Width="4" Height="8" Offset="0xA9F8" />
-        <Texture Name="gKotakeFingersTex" OutName="kotake_finger" Format="ci8" Width="8" Height="16" Offset="0xAA38" />
+        <Texture Name="gKotakeFingerTex" OutName="kotake_finger" Format="ci8" Width="8" Height="16" Offset="0xAA38" />
         <Texture Name="gKotakeBroomHandleTex" OutName="kotake_broom_handle" Format="rgba16" Width="8" Height="8" Offset="0xAAB8" />->
         <Texture Name="gKotakeBroomHeadTex" OutName="kotake_broom_head" Format="rgba16" Width="16" Height="32" Offset="0xAB38" />
         <Texture Name="gKotakeJewelHolderTex" OutName="kotake_jewel_holder" Format="rgba16" Width="16" Height="8" Offset="0xAF38" />

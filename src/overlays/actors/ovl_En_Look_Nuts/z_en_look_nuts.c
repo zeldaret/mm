@@ -5,6 +5,7 @@
  */
 
 #include "z_en_look_nuts.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
 #define FLAGS (ACTOR_FLAG_80000000)
 
@@ -340,13 +341,14 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&effectVelOffset, &effectVel);
             Matrix_Pop();
             if (!this->isPlayerDetected) {
-                s16 drawFlag = 1;
+                s16 effectFlags = SOLDERSRCHBALL_INVISIBLE;
+
                 if (gSaveContext.save.isNight) {
-                    drawFlag = 0;
+                    effectFlags = 0;
                 }
                 if (Player_GetMask(play) != PLAYER_MASK_STONE) {
                     EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->isPlayerDetected,
-                                                 drawFlag);
+                                                 effectFlags);
                 }
             }
 

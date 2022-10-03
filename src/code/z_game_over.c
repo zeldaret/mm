@@ -1,5 +1,6 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 
 void GameOver_Init(PlayState* play) {
     play->gameOverCtx.state = GAMEOVER_INACTIVE;
@@ -86,7 +87,7 @@ void GameOver_Update(PlayState* play) {
             gameOverCtx->state++;
             sGameOverTimer = 0;
             Kankyo_InitGameOverLights(play);
-            ShrinkWindow_SetLetterboxTarget(32);
+            ShrinkWindow_Letterbox_SetSizeTarget(32);
             break;
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;
