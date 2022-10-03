@@ -75,7 +75,7 @@ static AnimationHeader* D_80BFCD3C[] = {
     &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
 };
 
-static LinkAnimationHeader* sLinkAnimations[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98 };
+static LinkAnimationHeader* sLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free, &gPlayerAnim_alink_dance_loop };
 
 static Vec3f D_80BFCD60 = { 500.0f, -500.0f, 0.0f };
 
