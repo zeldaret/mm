@@ -200,8 +200,8 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
-    gameState->nextGameStateInit = NULL;
-    gameState->nextGameStateSize = 0;
+    gameState->init = NULL;
+    gameState->size = 0;
 
     {
         s32 requiredScopeTemp;
@@ -225,7 +225,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
 void GameState_Destroy(GameState* gameState) {
     AudioMgr_StopAllSfxExceptSystem();
-    func_8019E014();
+    Audio_Update();
     osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
     if (gameState->destroy != NULL) {
@@ -242,12 +242,12 @@ void GameState_Destroy(GameState* gameState) {
     GameAlloc_Cleanup(&gameState->alloc);
 }
 
-GameStateFunc GameState_GetNextStateInit(GameState* gameState) {
-    return gameState->nextGameStateInit;
+GameStateFunc GameState_GetInit(GameState* gameState) {
+    return gameState->init;
 }
 
-size_t GameState_GetNextStateSize(GameState* gameState) {
-    return gameState->nextGameStateSize;
+size_t GameState_GetSize(GameState* gameState) {
+    return gameState->size;
 }
 
 u32 GameState_IsRunning(GameState* gameState) {

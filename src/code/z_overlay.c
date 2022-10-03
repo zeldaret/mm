@@ -80,8 +80,8 @@ void TransitionOverlay_ClearLoadInfo(TransitionOverlay* overlayEntry) {
     overlayEntry->loadInfo = 0; // load.count = 0, load.addr = 0
 }
 
-void TransitionOverlay_SetSegment(TransitionOverlay* overlayEntry, void* vramStart, void* vramEnd, u32 vromStart,
-                                  u32 vromEnd) {
+void TransitionOverlay_SetSegment(TransitionOverlay* overlayEntry, void* vramStart, void* vramEnd, uintptr_t vromStart,
+                                  uintptr_t vromEnd) {
     overlayEntry->vramStart = vramStart;
     overlayEntry->vramEnd = vramEnd;
     overlayEntry->vromStart = vromStart;
