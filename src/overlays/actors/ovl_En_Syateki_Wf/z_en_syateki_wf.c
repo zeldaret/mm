@@ -151,7 +151,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_WF_GET_NUMBER(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_WF_GET_INDEX(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
@@ -224,7 +224,7 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.draw = NULL;
     this->unk_2A4 = 1;
     this->unk_298 = 0;
-    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor));
+    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_INDEX(&this->actor));
     this->actionFunc = func_80A20284;
 }
 
@@ -236,7 +236,7 @@ void func_80A20284(EnSyatekiWf* this, PlayState* play) {
         if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_298 == 1)) {
             func_80A200E0(this);
             func_80A2030C(this);
-        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor))) {
+        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_INDEX(&this->actor))) {
             this->unk_298 = 1;
         }
     }

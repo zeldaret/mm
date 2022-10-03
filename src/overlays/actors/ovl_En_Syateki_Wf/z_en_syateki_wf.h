@@ -5,8 +5,8 @@
 #include "objects/object_wf/object_wf.h"
 
 #define EN_SYATEKI_WF_GET_PARAM_F0(thisx) (((thisx)->params & 0xF0) >> 4)
-#define EN_SYATEKI_WF_GET_NUMBER(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_SYATEKI_WF_PARAMS(number, unkF0, unused) (((number << 8) & 0xFF00) | ((unkF0 << 4) & 0xF0) | (unused & 0xF))
+#define EN_SYATEKI_WF_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_SYATEKI_WF_PARAMS(index, unkF0, unused) (((index << 8) & 0xFF00) | ((unkF0 << 4) & 0xF0) | (unused & 0xF))
 
 struct EnSyatekiWf;
 

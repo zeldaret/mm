@@ -23,11 +23,28 @@ typedef enum {
 } PauseEquipCButton;
 
 typedef enum {
+    /* 0 */ EQUIP_STATE_MAGIC_ARROW_GROW_ORB,
+    /* 1 */ EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT,
+    /* 2 */ EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT,
+    /* 3 */ EQUIP_STATE_MOVE_TO_C_BTN
+} EquipState;
+
+typedef enum {
   /* 0 */ DEBUG_EDITOR_NONE,
   /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
   /* 2 */ DEBUG_EDITOR_INVENTORY,
   /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
+
+// To be used for Item-Page cursor and Mask-Page cursor
+typedef enum {
+    /* 0 */ PAUSE_CURSOR_RESULT_NONE,
+    /* 1 */ PAUSE_CURSOR_RESULT_SLOT,
+    /* 2 */ PAUSE_CURSOR_RESULT_SPECIAL_POS
+} PauseMoveCursorResult;
+
+#define NUM_ITEM_SLOTS 24
+#define NUM_MASK_SLOTS 24
 
 #define PAUSE_PROMPT_YES 0
 #define PAUSE_PROMPT_NO 4
@@ -42,6 +59,11 @@ void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx);
 void KaleidoScope_DrawItemSelect(PlayState* play);
 void KaleidoScope_UpdateItemCursor(PlayState* play);
 void KaleidoScope_UpdateItemEquip(PlayState* play);
+
+// Mask
+void KaleidoScope_DrawMaskSelect(PlayState* play);
+void KaleidoScope_UpdateMaskCursor(PlayState* play);
+void KaleidoScope_UpdateMaskEquip(PlayState* play);
 
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
