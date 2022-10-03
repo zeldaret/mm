@@ -258,7 +258,7 @@ void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
 
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&gSun1Tex));
 
-            gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_07AB10);
+            gSPDisplayList(POLY_XLU_DISP++, &gSunSparkleMaterialDL);
 
             gDPPipeSync(POLY_XLU_DISP++);
 
@@ -269,7 +269,7 @@ void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
             Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_07AB58);
+            gSPDisplayList(POLY_XLU_DISP++, &gSunSparkleModelDL);
         }
     }
     CLOSE_DISPS(gfxCtx);
