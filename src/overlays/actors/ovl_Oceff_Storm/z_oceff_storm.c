@@ -31,8 +31,6 @@ const ActorInit Oceff_Storm_InitVars = {
     (ActorFunc)OceffStorm_Draw,
 };
 
-typedef enum { OCEFF_STORM_ACTION_PARAM_1 = 1 } OceffStormActionParams;
-
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -48,13 +46,13 @@ s32 func_8098176C(PlayState* play) {
         case SCENE_12HAKUGINMAE:
         case SCENE_17SETUGEN:
         case SCENE_GORONRACE:
-            if (gSaveContext.sceneSetupIndex == 0) {
+            if (gSaveContext.sceneLayer == 0) {
                 ret = true;
             }
             break;
 
         case SCENE_10YUKIYAMANOMURA2:
-            if (gSaveContext.sceneSetupIndex == 1) {
+            if (gSaveContext.sceneLayer == 1) {
                 ret = true;
             }
             break;
