@@ -298,7 +298,7 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     return false;
 }
 
-void EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
+s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
     if (this->animIndex < 7) {
         SkelAnime_Update(&this->skelAnime);
     } else {
@@ -570,12 +570,9 @@ void func_80BFC728(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC7E0(EnRz* this, PlayState* play) {
-    s32 new_var;
-
     EnRz_UpdateSkelAnime(this, play);
 
-    new_var = this->timer;
-    if (new_var > 0) {
+    if (this->timer > 0) {
         this->timer--;
     } else {
         this->actionFunc = func_80BFC8F8;
