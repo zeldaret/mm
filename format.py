@@ -50,13 +50,13 @@ def get_tidy_version(tidy_executable: str):
     return int(match.group(1))
 
 
-CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}", "clang-format"])
+CLANG_FORMAT = get_clang_executable([f"clang-format-{CLANG_VER}"])
 if CLANG_FORMAT is None:
-    sys.exit(f"Error: neither clang-format nor clang-format-{CLANG_VER} found")
+    sys.exit(f"Error: clang-format-{CLANG_VER} found")
 
 CLANG_TIDY = get_clang_executable([f"clang-tidy-{CLANG_VER}", "clang-tidy"])
 if CLANG_TIDY is None:
-    sys.exit(f"Error: neither clang-tidy nor clang-tidy-{CLANG_VER} found")
+    sys.exit(f"Error: neither clang-tidy-{CLANG_VER} nor clang-tidy found")
 
 CLANG_APPLY_REPLACEMENTS = get_clang_executable([f"clang-apply-replacements-{CLANG_VER}", "clang-apply-replacements"])
 
@@ -159,7 +159,7 @@ def main():
     if nb_jobs > 1:
         if CLANG_APPLY_REPLACEMENTS is None:
             sys.exit(
-                f"Error: neither clang-apply-replacements nor clang-apply-replacements-{CLANG_VER} found (required to use -j)"
+                f"Error: neither clang-apply-replacements-{CLANG_VER} nor clang-apply-replacements found (required to use -j)"
             )
 
     if args.files:
