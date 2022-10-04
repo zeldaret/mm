@@ -94,11 +94,7 @@ TexturePtr sDungeonTitleTextures[] = {
     gPauseStoneTowerTitleENGTex, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
 };
 
-s16 sDungeonMapFloorIconPosY[] = {
-    67, // top floor
-    81, 95, 109,
-    123 // bottom floor
-};
+s16 sDungeonMapFloorIconPosY[] = { 67, 81, 95, 109, 123 };
 
 void KaleidoScope_DrawDungeonMap(PlayState* play) {
     static s16 sStrayFairyIconTimer = 30;
