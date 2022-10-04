@@ -11,7 +11,7 @@
 
 #define THIS ((DmChar08*)thisx)
 
-void DmChar08_Init(Actor* thisx, PlayState* play);
+void DmChar08_Init(Actor* thisx, PlayState* play2);
 void DmChar08_Destroy(Actor* thisx, PlayState* play);
 void DmChar08_Update(Actor* thisx, PlayState* play);
 void DmChar08_Draw(Actor* thisx, PlayState* play);
