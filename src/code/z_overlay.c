@@ -3,17 +3,17 @@
 
 /**
  * @file z_overlay.c
- * 
+ *
  * Functions for handling transition overlays in memory
  *
  * Status codes returned from TransitionOverlay_Load and TransitionOverlay_Free:
- * 
+ *
  * -1 : failed allocation or null reference
  *  0 : successfully loaded/freed overlay
  *  1 : successfully added/removed instance
  *  2 : overlay is loaded but has no instances (?) TODO: Figure out why this exists
  *  3 : internal overlay, so always loaded
- * 
+ *
  */
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
