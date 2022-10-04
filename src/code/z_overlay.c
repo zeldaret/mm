@@ -2,7 +2,7 @@
 #include "z64load.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
-    void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->load.addr);
+    void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
 
     if ((loadedRamAddr != NULL) && (vramAddr >= overlayEntry->vramStart) && (vramAddr < overlayEntry->vramEnd)) {
         return ((uintptr_t)loadedRamAddr - (uintptr_t)overlayEntry->vramStart) + (uintptr_t)vramAddr;
@@ -25,7 +25,7 @@ s32 TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
     if (overlayEntry->vromStart == 0) {
         return 3;
     }
-    if (Lib_PhysicalToVirtual(overlayEntry->load.addr) == NULL) {
+    if (Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr) == NULL) {
         loadedRamAddr = ZeldaArena_Malloc(VRAM_PTR_SIZE(overlayEntry));
 
         if (loadedRamAddr == NULL) {
@@ -33,20 +33,20 @@ s32 TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
         }
         Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
                           overlayEntry->vramEnd, loadedRamAddr);
-        overlayEntry->load.addr = Lib_VirtualToPhysical(loadedRamAddr);
-        overlayEntry->load.count = 1;
+        overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(loadedRamAddr);
+        overlayEntry->loadInfo.count = 1;
         return 0;
-    }
-    count = overlayEntry->load.count;
-    if (count != 0) {
-        count++;
-        overlayEntry->load.count = count;
-        if (count == 0) {
-            return 2;
-        } else {
-            return 1;
-        }
     } else {
+        count = overlayEntry->loadInfo.count;
+        if (count != 0) {
+            count++;
+            overlayEntry->loadInfo.count = count;
+            if (count == 0) {
+                return 2;
+            } else {
+                return 1;
+            }
+        }
         return 2;
     }
 }
@@ -58,15 +58,15 @@ s32 TransitionOverlay_Free(TransitionOverlay* overlayEntry) {
     if (overlayEntry->vromStart == 0) {
         return 3;
     }
-    loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->load.addr);
+    loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
     if (loadedRamAddr != NULL) {
-        count = overlayEntry->load.count;
+        count = overlayEntry->loadInfo.count;
         if (count != 0) {
             count--;
-            overlayEntry->load.count = count;
+            overlayEntry->loadInfo.count = count;
             if (count == 0) {
                 ZeldaArena_Free(loadedRamAddr);
-                overlayEntry->load.addr = Lib_VirtualToPhysical(NULL);
+                overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(NULL);
                 return 0;
             }
             return 1;
@@ -77,7 +77,7 @@ s32 TransitionOverlay_Free(TransitionOverlay* overlayEntry) {
 }
 
 void TransitionOverlay_ClearLoadInfo(TransitionOverlay* overlayEntry) {
-    overlayEntry->loadInfo = 0; // load.count = 0, load.addr = 0
+    overlayEntry->loadInfo.word = 0; // Equivalent to overlayEntry->loadInfo.count = 0, overlayEntry->loadInfo.addr = 0;
 }
 
 void TransitionOverlay_SetSegment(TransitionOverlay* overlayEntry, void* vramStart, void* vramEnd, uintptr_t vromStart,

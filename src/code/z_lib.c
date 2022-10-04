@@ -701,14 +701,23 @@ void* Lib_SegmentedToVirtual(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
+/*
+ * This function seems to check whether ptr is already a virtual address and skip desegmenting it if so. However, the
+ * conditional is backwards, so it only desegments virtual addresses (which has no effect).
+ */
 void* Lib_SegmentedToVirtualNull(void* ptr) {
     if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
+    } else {
+        return SEGMENTED_TO_VIRTUAL(ptr);
     }
-
-    return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
+/*
+ * Converts a 32-bit virtual address (0x80ABCDEF) to a 24-bit physical address (0xABCDEF). The NULL case accounts for
+ * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
+ * addresses in 24-bit fields.
+ */
 void* Lib_VirtualToPhysical(void* ptr) {
     if (ptr == NULL) {
         return NULL;
@@ -717,6 +726,11 @@ void* Lib_VirtualToPhysical(void* ptr) {
     }
 }
 
+/*
+ * Converts a 24-bit physical address (0xABCDEF) to a 32-bit virtual address (0x80ABCDEF). The NULL case accounts for
+ * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
+ * addresses in 24-bit fields.
+ */
 void* Lib_PhysicalToVirtual(void* ptr) {
     if (ptr == NULL) {
         return NULL;

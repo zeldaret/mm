@@ -27,13 +27,13 @@ TransitionOverlay gTransitionOverlayTable[] = {
 
 void Transition_Init(TransitionContext* transitionCtx) {
     TransitionOverlay* overlayEntry;
-    intptr_t relocOffset;
+    ptrdiff_t relocOffset;
     TransitionInit* initInfo[1];
 
     overlayEntry = &gTransitionOverlayTable[transitionCtx->fbdemoType];
     TransitionOverlay_Load(overlayEntry);
 
-    relocOffset = (uintptr_t)Lib_PhysicalToVirtual(overlayEntry->load.addr) - (uintptr_t)overlayEntry->vramStart;
+    relocOffset = (uintptr_t)Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr) - (uintptr_t)overlayEntry->vramStart;
     initInfo[0] = NULL;
     initInfo[0] = (overlayEntry->initInfo != NULL) ? (TransitionInit*)((uintptr_t)overlayEntry->initInfo + relocOffset)
                                                    : initInfo[0];

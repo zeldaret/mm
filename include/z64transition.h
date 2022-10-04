@@ -22,9 +22,9 @@ typedef struct {
         struct {
     /* 0x00 */ u32 count : 8;
     /* 0x00 */ uintptr_t addr : 24;
-        } load;
-    /* 0x00 */ u32 loadInfo;
-    };
+        };
+    /* 0x00 */ u32 word;
+    } loadInfo;
     /* 0x04 */ void* vramStart;
     /* 0x08 */ void* vramEnd;
     /* 0x0C */ uintptr_t vromStart;
@@ -36,17 +36,7 @@ typedef struct {
 typedef struct {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;
-    /* 0x003 */ char unk03[0x5];
-    /* 0x008 */ s32 instanceData;
-    /* 0x00C */ char unk0C[0x224];
-    /*
-    union {
-       TransitionFade fade;
-       TransitionCircle circle;
-       TransitionTriforce triforce;
-       TransitionWipe wipe;
-    } instanceData;
-    */
+    /* 0x003 */ char unk_003[0x22B];
     /* 0x230 */ void* (*init)(void* transition);
     /* 0x234 */ void  (*destroy)(void* transition);
     /* 0x238 */ void  (*update)(void* transition, s32 updateRate);
@@ -56,7 +46,7 @@ typedef struct {
     /* 0x248 */ void  (*setColor)(void* transition, u32 color);
     /* 0x24C */ void  (*setEnvColor)(void* transition, u32 color);
     /* 0x250 */ s32   (*isDone)(void* transition);
-    /* 0x254 */ char unk254[0x4];
+    /* 0x254 */ char unk_254[0x4];
 } TransitionContext; // size = 0x258
 
 typedef struct {
@@ -79,7 +69,6 @@ typedef struct {
     /* 0x14 */ u8 direction; // Direction the circle is transitioning ( In / Out )
     /* 0x15 */ u8 maskType; // Positive / Negative mask type. Value of 0 will create a black circle
     /* 0x16 */ u8 isDone; // Signals when Transition is done updating
-    /* 0x17 */ UNK_TYPE1 pad_17; // struct padding
     /* 0x18 */ TexturePtr texture;
     /* 0x1C */ u8 masks;
     /* 0x1D */ u8 maskt;
