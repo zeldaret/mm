@@ -8,6 +8,7 @@
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -941,7 +942,7 @@ void Boss07_Wrath_Intro(Boss07* this, PlayState* play) {
     Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
     Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
     if (this->subCamIndex != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_Letterbox_SetSizeTarget(0x1B);
         Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
@@ -3082,7 +3083,7 @@ void Boss07_Incarnation_Intro(Boss07* this, PlayState* play) {
     Matrix_MultVec3f(&this->subCamNextEye, &this->subCamEye);
     Matrix_MultVec3f(&this->subCamNextAt, &this->subCamAt);
     if (this->subCamIndex != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_Letterbox_SetSizeTarget(0x1B);
         Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
@@ -3519,7 +3520,7 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
     this->chestScaleY = (Math_SinS(this->timer_ABC8 * 0x2000) * 0.1f) + 1.0f;
     this->chestScaleX = (Math_CosS(this->timer_ABC8 * 0x2000) * 0.1f) + 1.0f;
     if (this->subCamIndex != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_Letterbox_SetSizeTarget(0x1B);
         Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }
@@ -4601,7 +4602,7 @@ void Boss07_Mask_Intro(Boss07* this, PlayState* play) {
     if (this->subCamIndex != SUB_CAM_ID_DONE) {
         Vec3f sp50;
 
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_Letterbox_SetSizeTarget(0x1B);
         sp50.x = this->subCamAt.x;
         sp50.y = this->subCamAt.y + sp8C;
         sp50.z = this->subCamAt.z;
@@ -4691,7 +4692,7 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
     Math_ApproachF(&this->subCamAt.y, sp60.y, 0.1f, 10.0f);
     Math_ApproachF(&this->subCamAt.z, sp60.z, 0.1f, 10.0f);
     if (this->subCamIndex != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_Letterbox_SetSizeTarget(0x1B);
         sp54 = this->subCamEye;
         if (sp54.y < 30.0f) {
             sp54.y = 30.0f;
@@ -5991,7 +5992,7 @@ void Boss07_Static_Update(Actor* thisx, PlayState* play2) {
                 }
             }
         }
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->subCamIndex, &this->subCamAt, &this->subCamEye);
     }
 }

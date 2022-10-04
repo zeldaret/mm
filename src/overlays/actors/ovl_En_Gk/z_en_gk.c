@@ -118,7 +118,7 @@ Color_RGBA8 D_80B533A4 = { 50, 150, 150, 0 };
 u16 func_80B50410(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->sceneNum == SCENE_17SETUGEN2) {
+    if (play->sceneId == SCENE_17SETUGEN2) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[40] & 0x80)) {
                 switch (this->unk_31C) {
@@ -164,7 +164,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             this->unk_1E4 |= 1;
             return 0xE81;
         }
-    } else if (play->sceneNum == SCENE_GORONRACE) {
+    } else if (play->sceneId == SCENE_GORONRACE) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
@@ -297,9 +297,9 @@ void func_80B509A8(EnGk* this, PlayState* play) {
     }
 
     EffectSsDtBubble_SpawnCustomColor(play, &this->unk_2E8, &this->unk_300, &sp4C, &D_80B533A0, &D_80B533A4,
-                                      Rand_S16Offset(15, 15), phi_s1, 0);
+                                      Rand_S16Offset(15, 15), phi_s1, false);
     EffectSsDtBubble_SpawnCustomColor(play, &this->unk_2F4, &this->unk_30C, &sp4C, &D_80B533A0, &D_80B533A4,
-                                      Rand_S16Offset(15, 15), phi_s1, 0);
+                                      Rand_S16Offset(15, 15), phi_s1, false);
 }
 
 void func_80B50B38(EnGk* this, PlayState* play) {
@@ -645,7 +645,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
-                   (gSaveContext.save.entrance != 0xD010)) {
+                   (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
             func_800B863C(&this->actor, play);
         }
 
@@ -724,8 +724,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
-                    Parameter_AddMagic(play, ((void)0, gSaveContext.unk_3F30) +
-                                                 (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+                    Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
                 } else {
                     this->actionFunc = func_80B51760;
                 }
@@ -1019,7 +1018,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
     if (ENGK_GET_F(&this->actor) == ENGK_F_1) {
         this->unk_2E4 = 5;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
-        if (play->sceneNum == SCENE_17SETUGEN2) {
+        if (play->sceneId == SCENE_17SETUGEN2) {
             if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
             } else {
@@ -1027,7 +1026,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
                 this->actionFunc = func_80B51760;
             }
-        } else if (play->sceneNum == SCENE_GORONRACE) {
+        } else if (play->sceneId == SCENE_GORONRACE) {
             if (gSaveContext.save.weekEventReg[33] & 0x80) {
                 if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
                     this->actionFunc = func_80B51760;

@@ -87,8 +87,8 @@
         <Animation Name="object_boj_Anim_011F84" Offset="0x11F84" />
         <Animation Name="object_boj_Anim_0128F4" Offset="0x128F4" />
         <Animation Name="object_boj_Anim_012E84" Offset="0x12E84" />
-        <DList Name="object_boj_DL_013380" Offset="0x13380" />
-        <Texture Name="object_boj_TLUT_0134C0" OutName="tlut_0134C0" Format="rgba16" Width="16" Height="16" Offset="0x134C0" />
-        <Texture Name="object_boj_Tex_0136C0" OutName="tex_0136C0" Format="ci8" Width="16" Height="16" Offset="0x136C0" />
+        <DList Name="gBombShopBagDL" Offset="0x13380" />
+        <Texture Name="gBombShopBagTLUT" OutName="bomb_shop_bag_tlut" Format="rgba16" Width="16" Height="16" Offset="0x134C0" />
+        <Texture Name="gBombShopBagTex" OutName="bomb_shop_bag" Format="ci8" Width="16" Height="16" Offset="0x136C0" />
     </File>
 </Root>

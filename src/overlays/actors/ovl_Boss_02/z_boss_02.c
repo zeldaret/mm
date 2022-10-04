@@ -6,6 +6,7 @@
 
 #include "z_boss_02.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -17,7 +18,7 @@
 void Boss02_Init(Actor* thisx, PlayState* play);
 void Boss02_Destroy(Actor* thisx, PlayState* play);
 void Boss02_Twinmold_Update(Actor* thisx, PlayState* play);
-void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play);
+void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2);
 
 void func_809DAA74(Boss02* this, PlayState* play);
 void func_809DAA98(Boss02* this, PlayState* play);
@@ -571,13 +572,13 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         } else {
             this->unk_1D20 = 1;
         }
-        XREG(41) = KREG(14) + 20;
+        R_MAGIC_CONSUME_TIMER_GIANTS_MASK = KREG(14) + 20;
         this->unk_01AC = 1.0f;
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON5, 0.0f, 1000.0f, 0.0f, 0, 0, 0, 0);
     } else if (this->actor.params == TWINMOLD_TAIL) {
         this->actor.update = Boss02_Tail_Update;
         this->actor.draw = NULL;
-        this->actor.hintId = 0x2E;
+        this->actor.hintId = TATL_HINT_ID_TWINMOLD;
     } else {
         if (this->actor.params != TWINMOLD_BLUE) {
             this->actor.params = TWINMOLD_RED;
@@ -2033,7 +2034,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
         Matrix_MultVecY(1.0f, &this->subCamUp);
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &this->subCamEye, &this->subCamUp);
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
     }
 }
 
@@ -2241,6 +2242,6 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &subCamEye, &this->subCamUp);
         this->subCamUp.z = this->subCamUp.x = 0.0f;
         this->subCamUp.y = 1.0f;
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
     }
 }

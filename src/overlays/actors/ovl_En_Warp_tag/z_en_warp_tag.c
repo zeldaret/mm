@@ -247,8 +247,8 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
         if (1) {}
-        gSaveContext.seqIndex = 0xFF;
-        gSaveContext.nightSeqIndex = 0xFF;
+        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }
 }
 
