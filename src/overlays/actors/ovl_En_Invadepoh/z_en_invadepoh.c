@@ -145,7 +145,7 @@ extern EnInvadepohUnkStruct2 D_80B4EB40;
 extern EnInvadepohUnkStruct2 D_80B4EB48;
 extern EnInvadepohUnkStruct2 D_80B4EB50;
 extern EnInvadepohUnkStruct2 D_80B4EB58;
-extern EnInvadepohUnkStruct3 D_80B4EB58;
+extern EnInvadepohUnkStruct3 D_80B4EB5C;
 extern EnInvadepohUnkStruct4 D_80B4EB60[];
 extern EnInvadepohUnkStruct4 D_80B4EB80;
 extern EnInvadepohUnkStruct6 D_80B4EB88;

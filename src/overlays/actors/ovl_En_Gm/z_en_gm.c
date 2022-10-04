@@ -762,7 +762,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (this->unk_3F8 == 0) {
-            if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneSetupIndex == 2)) {
+            if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneLayer == 2)) {
                 func_8094E054(this, play, 0);
                 this->unk_258 = 255;
             }

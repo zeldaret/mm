@@ -5,6 +5,7 @@
 
 #include "global.h"
 #include "z64load.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Part/z_en_part.h"
@@ -1059,7 +1060,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {
@@ -2608,7 +2609,8 @@ s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
 }
 
 void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
-    func_80164C14(gfxP, &gCircleTex, 4, 0, 6, 6, ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
+    TransitionCircle_LoadAndSetTexture(gfxP, gCircleTex, 4, 0, 6, 6,
+                                       ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
 #ifdef NON_EQUIVALENT
@@ -3777,20 +3779,20 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_800BC770(PlayState* play, s16 y, s16 countdown) {
-    s16 idx = Quake_Add(&play->mainCamera, 3);
+void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown) {
+    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
 
-    Quake_SetSpeed(idx, 20000);
-    Quake_SetQuakeValues(idx, y, 0, 0, 0);
-    Quake_SetCountdown(idx, countdown);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
 }
 
-void func_800BC7D8(PlayState* play, s16 y, s16 countdown, s16 speed) {
-    s16 idx = Quake_Add(&play->mainCamera, 3);
+void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed) {
+    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
 
-    Quake_SetSpeed(idx, speed);
-    Quake_SetQuakeValues(idx, y, 0, 0, 0);
-    Quake_SetCountdown(idx, countdown);
+    Quake_SetSpeed(quakeIndex, speed);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
 }
 
 // Actor_RequestRumble?
@@ -3800,7 +3802,7 @@ void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     } else {
         Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(play, y, countdown);
+    Actor_AddQuake(play, y, countdown);
 }
 
 typedef struct {

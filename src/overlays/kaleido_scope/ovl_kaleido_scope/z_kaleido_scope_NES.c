@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "z64view.h"
 
 extern UNK_TYPE D_02001360;
 extern UNK_TYPE D_020044A0;

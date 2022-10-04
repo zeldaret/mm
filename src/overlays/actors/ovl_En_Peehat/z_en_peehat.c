@@ -15,7 +15,7 @@
 
 void EnPeehat_Init(Actor* thisx, PlayState* play);
 void EnPeehat_Destroy(Actor* thisx, PlayState* play);
-void EnPeehat_Update(Actor* thisx, PlayState* play);
+void EnPeehat_Update(Actor* thisx, PlayState* play2);
 void EnPeehat_Draw(Actor* thisx, PlayState* play);
 
 void func_80897498(EnPeehat* this);

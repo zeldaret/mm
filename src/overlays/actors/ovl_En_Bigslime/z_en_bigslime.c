@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigslime.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
@@ -14,7 +15,7 @@
 
 #define THIS ((EnBigslime*)thisx)
 
-void EnBigslime_Init(Actor* thisx, PlayState* play);
+void EnBigslime_Init(Actor* thisx, PlayState* play2);
 void EnBigslime_Destroy(Actor* thisx, PlayState* play);
 void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play);
 void EnBigslime_DrawGekko(Actor* thisx, PlayState* play);
@@ -743,12 +744,14 @@ void EnBigslime_EndThrowMinislime(EnBigslime* this) {
 
 void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     s32 i;
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 20000);
-    Quake_SetQuakeValues(quake, 15, 0, 0, 0);
-    Quake_SetCountdown(quake, 15);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.acFlags &= ~(AC_ON | AC_HIT);
 
