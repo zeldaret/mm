@@ -11,7 +11,7 @@
 
 #define THIS ((EnSyatekiCrow*)thisx)
 
-void EnSyatekiCrow_Init(Actor* thisx, PlayState* play);
+void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2);
 void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiCrow_Update(Actor* thisx, PlayState* play);
 void EnSyatekiCrow_Draw(Actor* thisx, PlayState* play);
