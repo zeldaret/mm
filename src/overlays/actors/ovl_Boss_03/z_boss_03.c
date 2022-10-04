@@ -78,9 +78,9 @@
 #define PLATFORM_HEIGHT 440.0f
 #define WATER_HEIGHT 430.0f
 
-void Boss03_Init(Actor* thisx, PlayState* play);
+void Boss03_Init(Actor* thisx, PlayState* play2);
 void Boss03_Destroy(Actor* thisx, PlayState* play);
-void Boss03_Update(Actor* thisx, PlayState* play);
+void Boss03_Update(Actor* thisx, PlayState* play2);
 void Boss03_Draw(Actor* thisx, PlayState* play);
 
 void func_809E344C(Boss03* this, PlayState* play);
