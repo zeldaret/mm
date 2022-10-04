@@ -6,7 +6,7 @@
  * 
  * Functions for handling transition overlays in memory
  *
- * Status codes returned from TrasitionOverlay_Load and TransitionOverlay_Free:
+ * Status codes returned from TransitionOverlay_Load and TransitionOverlay_Free:
  * 
  * -1 : failed allocation or null reference
  *  0 : successfully loaded/freed overlay
