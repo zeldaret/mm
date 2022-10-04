@@ -627,7 +627,7 @@ void EnKarebaba_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void EnKarebaba_DrawBaseShadow(EnKarebaba* this, PlayState* play) {
+void EnKarebaba_DrawShadow(EnKarebaba* this, PlayState* play) {
     MtxF mf;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -732,7 +732,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->boundFloor != 0) {
-        EnKarebaba_DrawBaseShadow(this, play);
+        EnKarebaba_DrawShadow(this, play);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

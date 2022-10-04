@@ -6701,7 +6701,7 @@
     0x808F24F8:("EnKarebaba_SetupRegrow",),
     0x808F254C:("EnKarebaba_Dead",),
     0x808F25A4:("EnKarebaba_Update",),
-    0x808F280C:("EnKarebaba_DrawBaseShadow",),
+    0x808F280C:("EnKarebaba_DrawShadow",),
     0x808F28F8:("EnKarebaba_Draw",),
     0x808F30B0:("EnIn_ChangeAnim",),
     0x808F3178:("func_808F3178",),
