@@ -94,17 +94,20 @@ TexturePtr sDungeonTitleTextures[] = {
     gPauseStoneTowerTitleENGTex, // DUNGEON_INDEX_STONE_TOWER_TEMPLE
 };
 
-s16 D_8082B4BC[] = { 67, 81, 95, 109 };
+s16 sDungeonMapFloorIconPosY[] = {
+    67, // top floor
+    81, 95, 109,
+    123 // bottom floor
+};
 
 void KaleidoScope_DrawDungeonMap(PlayState* play) {
-    static s16 D_8082B4C4 = 123;
     static s16 sStrayFairyIconTimer = 30;
     static s16 sStrayFairyIconIndex = 0;
     static s16 sStrayFairyIconAlphaScaleTimer = 15;
     static s16 sStrayFairyIconAlphaScaleState = 0;
     static s16 sStrayFairyIconAlpha = 255;
     static f32 sStrayFairyIconScale = 100.0f;
-    static TexturePtr D_8082B4E0[][4] = {
+    static TexturePtr sStrayFairyIconTextures[][4] = {
         // DUNGEON_INDEX_WOODFALL_TEMPLE
         { gStrayFairyWoodfallIconTex, gDungeonStrayFairyWoodfallIconTex, gStrayFairyWoodfallIconTex,
           gDungeonStrayFairyWoodfallIconTex },
@@ -130,7 +133,12 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         { 255, 255, 255 }, // DUNGEON_INDEX_GREAT_BAY_TEMPLE
         { 225, 170, 0 },   // DUNGEON_INDEX_STONE_TOWER_TEMPLE
     };
-    static s32 D_8082B538[] = { 1 << 10, 0, 0, 0 };
+    static s32 sStrayFairyIconRectS[] = {
+        1 << 10, // mirror texture horizontally
+        0,       // default
+        0,       // default
+        0        // default
+    };
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 i;
     s16 j;
@@ -237,12 +245,13 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                         sStrayFairyIconTimer = 34;
                     }
 
-                    gDPLoadTextureBlock(POLY_OPA_DISP++,
-                                        D_8082B4E0[((void)0, gSaveContext.dungeonIndex)][sStrayFairyIconIndex],
-                                        G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 24, 0, G_TX_MIRROR | G_TX_WRAP,
-                                        G_TX_NOMIRROR | G_TX_WRAP, 5, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    gDPLoadTextureBlock(
+                        POLY_OPA_DISP++,
+                        sStrayFairyIconTextures[((void)0, gSaveContext.dungeonIndex)][sStrayFairyIconIndex],
+                        G_IM_FMT_RGBA, G_IM_SIZ_32b, 32, 24, 0, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5,
+                        G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
                     gSPTextureRectangle(POLY_OPA_DISP++, 54 << 2, 140 << 2, 86 << 2, 164 << 2, G_TX_RENDERTILE,
-                                        D_8082B538[sStrayFairyIconIndex], 0, 1 << 10, 1 << 10);
+                                        sStrayFairyIconRectS[sStrayFairyIconIndex], 0, 1 << 10, 1 << 10);
 
                     KaleidoScope_DrawDungeonStrayFairyCount(play);
                     func_8012C8AC(play->state.gfxCtx);
@@ -269,12 +278,14 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, 62, D_8082B4BC[R_REVERSE_FLOOR_INDEX], 16,
-                                          16, 1 << 10, 1 << 10);
+            // Draw Player's face next to the dungeon floor icon currently in.
+            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
+                                          sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
                 POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
-                                              D_8082B4BC[FLOOR_INDEX_MAX - func_80105318()], 16, 16, 1 << 10, 1 << 10);
+                                              sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - func_80105318()], 16, 16,
+                                              1 << 10, 1 << 10);
             }
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -538,8 +549,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         // Draw the world map image flat
         // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
-        // 8 is chosen because it is smaller than `TMEM_SIZE / 2 / WIDTH` and divides the texture's height.
-        // (`TMEM_SIZE / 2` because the texture is color-indexed so the TLUT uses the other half of TMEM.)
+        // 8 is chosen because it is smaller than `TMEM_SIZE / 2 / textureWidth` and divides the texture's height.
+        // Each loaded chunk must have `size <= TMEM_SIZE / 2`
+        // because the texture is color-indexed so the TLUT uses the other half of TMEM.
 
         func_8012C628(play->state.gfxCtx);
 
@@ -549,7 +561,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-        // Process the 128 rows of pixels for gWorldMapImageTex 8 rows at a time over 16 iterations
+        // Process the 128 rows of pixels for gWorldMapImageTex, 8 rows at a time over 16 iterations
         // Loop over yPos (t), textureIndex (j)
         for (t = 62, j = 0; j < 16; j++, t += 8) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_TEX_WIDTH * 8),
@@ -568,10 +580,11 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Draw the world map angled
         // Because it is at an angle, vertices are used to place it.
         // The structure of the loops here is to satisfy the constraints of both TMEM and the size of the vertex cache.
-        // - Each loop iteration loads 9 rows, because 9 is the largest number smaller than `TMEM_SIZE / 2 / WIDTH`
-        // - Each loop is at most 8 iterations long because each row uses 4 vertices and the vertex cache has size 32 =
-        // 8 * 4 Hence there is one loop of length 8, one of length 6, and then the remaining `128 - (8 + 6) * 9 = 2`
-        // rows are drawn at the end.
+        //  -  Each loop iteration loads 9 rows,
+        //     because 9 is the largest number smaller than `TMEM_SIZE / 2 / textureWidth`
+        //  -  Each loop is at most 8 iterations long because each row uses 4 vertices
+        //     and the vertex cache has size 32  = 8 * 4 Hence there is one loop of length 8,
+        //     one of length 6, and then the remaining `128 - (8 + 6) * 9 = 2` rows are drawn at the end.
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
@@ -583,7 +596,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Set the vertices for the first 8 quads attached to the world map texture.
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 8 * 4, 0);
 
-        // Process the first 72 rows of pixels for gWorldMapImageTex 9 rows at a time over 8 iterations
+        // Process the first 72 rows of pixels for gWorldMapImageTex, 9 rows at a time over 8 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, k = 0, j = 0; i < 8; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
@@ -597,7 +610,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // 6 quads with a height of 9, 1 quad with a height of 2
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], (6 + 1) * 4, 0);
 
-        // Process the next 54 rows of pixels for gWorldMapImageTex 9 rows at a time over 6 iterations
+        // Process the next 54 rows of pixels for gWorldMapImageTex, 9 rows at a time over 6 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
