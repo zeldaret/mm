@@ -1060,7 +1060,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {
@@ -2609,7 +2609,8 @@ s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor) {
 }
 
 void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
-    func_80164C14(gfxP, &gCircleTex, 4, 0, 6, 6, ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
+    TransitionCircle_LoadAndSetTexture(gfxP, gCircleTex, 4, 0, 6, 6,
+                                       ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
 #ifdef NON_EQUIVALENT

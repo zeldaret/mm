@@ -170,7 +170,7 @@ void func_80B4BA30(Actor* thisx, PlayState* play);
 void func_80B4C568(Actor* thisx, PlayState* play);
 void func_80B4CFFC(Actor* thisx, PlayState* play);
 void func_80B46184(unkStruct80B50350* unkStruct);
-s32 func_80B450C0(f32* arg0, f32* arg1, f32 arg2, f32 arg3, f32 arg4);
+s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed);
 s32 func_80B4516C(EnInvadepoh* this);
 void func_80B45A4C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 void func_80B45A94(EnInvadePohStruct* s, unkstructInvadepoh4** u);

@@ -52,7 +52,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[0x04] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = VIRTUAL_TO_PHYSICAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
@@ -108,7 +108,7 @@ s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index) {
 void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
-    u32 vromSize;
+    uintptr_t vromSize;
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
@@ -124,7 +124,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 
 void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     u32 addr;
-    u32 vromSize;
+    uintptr_t vromSize;
     RomFile* fileTableEntry;
 
     objectCtx->status[iParm2].id = -id;
@@ -224,7 +224,7 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepIndex != 0) {
         play->objectCtx.subKeepIndex = Object_Spawn(&play->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[0x05] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
     }
 
     if (cmd->specialFiles.cUpElfMsgNum != 0) {
@@ -350,7 +350,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
         { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
         { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
     };
-    u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
+    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
