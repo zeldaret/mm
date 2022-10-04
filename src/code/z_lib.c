@@ -714,7 +714,7 @@ void* Lib_SegmentedToVirtualNull(void* ptr) {
 }
 
 /*
- * Converts a 32-bit virtual address (0x80ABCDEF) to a 24-bit physical address (0xABCDEF). The NULL case accounts for
+ * Converts a 32-bit virtual address (0x80XXXXXX) to a 24-bit physical address (0xXXXXXX). The NULL case accounts for
  * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
  * addresses in 24-bit fields.
  */
@@ -727,7 +727,7 @@ void* Lib_VirtualToPhysical(void* ptr) {
 }
 
 /*
- * Converts a 24-bit physical address (0xABCDEF) to a 32-bit virtual address (0x80ABCDEF). The NULL case accounts for
+ * Converts a 24-bit physical address (0xXXXXXX) to a 32-bit virtual address (0x80XXXXXX). The NULL case accounts for
  * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
  * addresses in 24-bit fields.
  */
