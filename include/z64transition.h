@@ -29,6 +29,8 @@ typedef enum {
  /* 1 */ TRANSITION_CIRCLE_OUT,
 } TransitionCircleDirection;
 
+#define FBDEMO_CIRCLE_GET_MASK_TYPE(type) (type & 1)
+
 typedef struct {
     /* 0x00 */ Color_RGBA8_u32 color;
     /* 0x04 */ f32 referenceRadius; // Reference for where to transition to

@@ -66,7 +66,7 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     if (type & TC_SET_PARAMS) {
-        this->maskType = type & 1;
+        this->maskType = FBDEMO_CIRCLE_GET_MASK_TYPE(type);
     } else if (type == 1) {
         this->direction = TRANSITION_CIRCLE_OUT;
     } else {
@@ -105,8 +105,8 @@ void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt,
         dsdx = 0;
         dtdy = 0;
     } else {
-        dsdx = ((SCREEN_WIDTH - (2.0f * s)) / gScreenWidth) * 1024.0f;
-        dtdy = ((SCREEN_HEIGHT - (2.0f * t)) / gScreenHeight) * 1024.0f;
+        dsdx = ((SCREEN_WIDTH - (2.0f * s)) / gScreenWidth) * (1 << 10);
+        dtdy = ((SCREEN_HEIGHT - (2.0f * t)) / gScreenHeight) * (1 << 10);
     }
 
     gSPTextureRectangle(gfx++, 0, 0, xh << 2, yh << 2, G_TX_RENDERTILE, (s32)(s * 32.0f), (s32)(t * 32.0f), dsdx, dtdy);
