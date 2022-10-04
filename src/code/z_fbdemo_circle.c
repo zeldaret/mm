@@ -13,7 +13,7 @@ Gfx D_801D0D00[] = {
 };
 
 //! @bug: TransitionCircle_Update should take an additional argument `s32 updateRate`
-const TransitionInit TransitionCircle_InitVars = {
+TransitionInit TransitionCircle_InitVars = {
     TransitionCircle_Init,   TransitionCircle_Destroy, (void*)TransitionCircle_Update, TransitionCircle_Draw,
     TransitionCircle_Start,  TransitionCircle_SetType, TransitionCircle_SetColor,      NULL,
     TransitionCircle_IsDone,
