@@ -576,11 +576,13 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Draw the world map angled
         // Because it is at an angle, vertices are used to place it.
         // The structure of the loops here is to satisfy the constraints of both TMEM and the size of the vertex cache.
-        //  -  Each loop iteration loads 9 rows,
-        //     because 9 is the largest number smaller than `TMEM_SIZE / 2 / textureWidth`
-        //  -  Each loop is at most 8 iterations long because each row uses 4 vertices
-        //     and the vertex cache has size 32  = 8 * 4 Hence there is one loop of length 8,
-        //     one of length 6, and then the remaining `128 - (8 + 6) * 9 = 2` rows are drawn at the end.
+        // - Each loop iteration loads 9 rows, because 9 is the largest number smaller than
+        //   `TMEM_SIZE / 2 / textureWidth`.
+        // - Each loop is at most 8 iterations long because each row uses 4 vertices and the vertex cache has size
+        //   `32 = 8 * 4`.
+        // .
+        // Hence there is one loop of length 8, one of length 6, and then the remaining `128 - (8 + 6) * 9 = 2` rows are
+        // drawn at the end.
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
