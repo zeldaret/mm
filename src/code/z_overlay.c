@@ -1,6 +1,3 @@
-#include "global.h"
-#include "z64load.h"
-
 /**
  * @file z_overlay.c
  *
@@ -13,8 +10,10 @@
  *  1 : successfully added/removed instance
  *  2 : overlay is loaded but has no instances (?) TODO: Figure out why this exists
  *  3 : internal overlay, so always loaded
- *
  */
+
+#include "global.h"
+#include "z64load.h"
 
 void* TransitionOverlay_VramToRam(TransitionOverlay* overlayEntry, void* vramAddr) {
     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
