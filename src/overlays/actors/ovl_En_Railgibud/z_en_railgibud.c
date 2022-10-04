@@ -35,7 +35,8 @@ void EnRailgibud_Damage(EnRailgibud* this, PlayState* play);
 void EnRailgibud_Stunned(EnRailgibud* this, PlayState* play);
 void EnRailgibud_SetupDead(EnRailgibud* this);
 void EnRailgibud_Dead(EnRailgibud* this, PlayState* play);
-void EnRailgibud_SpawnDust(PlayState* play, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
+void EnRailgibud_SpawnDust(PlayState* play, Vec3f* basePos, f32 randomnessScale, s32 dustCount, s16 dustScale,
+                           s16 scaleStep);
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, PlayState* play);
 s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play);
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, PlayState* play);
@@ -246,7 +247,7 @@ void EnRailgibud_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.targetMode = 0;
-    this->actor.hintId = 0x2D;
+    this->actor.hintId = TATL_HINT_ID_GIBDO;
     this->actor.textId = 0;
     if (ENRAILGIBUD_IS_CUTSCENE_TYPE(&this->actor)) {
         EnRailgibud_InitCutsceneGibdo(this, play);
@@ -580,7 +581,7 @@ void EnRailgibud_Damage(EnRailgibud* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
             (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
             SkelAnime_InitFlex(play, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                GIBDO_LIMB_MAX);
             this->type = EN_RAILGIBUD_TYPE_REDEAD;
@@ -933,7 +934,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
             if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(ACTOR_FLAG_4 | ACTOR_FLAG_1);
                 this->actor.flags |= (ACTOR_FLAG_8 | ACTOR_FLAG_1);
-                this->actor.hintId = 0xFF;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if ((this->actionFunc != EnRailgibud_WalkInCircles) && (this->actionFunc != EnRailgibud_WalkToHome)) {
                     EnRailgibud_SetupWalkToHome(this);
@@ -943,9 +944,9 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, PlayState* play) {
             this->actor.flags &= ~(ACTOR_FLAG_8 | ACTOR_FLAG_1);
             this->actor.flags |= (ACTOR_FLAG_4 | ACTOR_FLAG_1);
             if (this->type == EN_RAILGIBUD_TYPE_REDEAD) {
-                this->actor.hintId = 0x2A;
+                this->actor.hintId = TATL_HINT_ID_REDEAD;
             } else {
-                this->actor.hintId = 0x2D;
+                this->actor.hintId = TATL_HINT_ID_GIBDO;
             }
             this->actor.textId = 0;
         }

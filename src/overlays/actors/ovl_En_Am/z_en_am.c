@@ -35,7 +35,7 @@ void func_808B07A8(EnAm* this, PlayState* play);
 void func_808B0820(EnAm* this);
 void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
-void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor);
+void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Am_InitVars = {
     ACTOR_EN_AM,
@@ -128,7 +128,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 1, 23, 98, MASS_HEAVY };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 14, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 19, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };

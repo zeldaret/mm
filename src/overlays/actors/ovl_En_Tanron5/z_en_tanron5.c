@@ -15,10 +15,10 @@
 
 void EnTanron5_Init(Actor* thisx, PlayState* play);
 void EnTanron5_Destroy(Actor* thisx, PlayState* play);
-void EnTanron5_Update(Actor* thisx, PlayState* play);
+void EnTanron5_Update(Actor* thisx, PlayState* play2);
 void EnTanron5_Draw(Actor* thisx, PlayState* play);
 
-void func_80BE5818(Actor* thisx, PlayState* play);
+void func_80BE5818(Actor* thisx, PlayState* play2);
 void func_80BE5C10(Actor* thisx, PlayState* play);
 
 s32 D_80BE5D80 = 0;
@@ -508,9 +508,9 @@ void func_80BE5C10(Actor* thisx, PlayState* play) {
 
         func_8012C28C(play->state.gfxCtx);
         if (this->unk_1A0 == 0) {
-            texture = gameplay_keep_Tex_05BEF0;
+            texture = gDropArrows1Tex;
         } else {
-            texture = gameplay_keep_Tex_0617C0;
+            texture = gDropMagicLargeTex;
         }
 
         POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
@@ -521,7 +521,7 @@ void func_80BE5C10(Actor* thisx, PlayState* play) {
         Matrix_RotateZS(this->unk_198, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
+        gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
