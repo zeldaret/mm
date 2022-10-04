@@ -553,7 +553,6 @@ beginseg
     include "build/data/code/z_fbdemo.data.o"
     include "build/src/code/z_fbdemo_fade.o"
     include "build/src/code/z_fbdemo_circle.o"
-    include "build/data/code/z_fbdemo_circle.data.o"
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
     include "build/data/code/z_play.data.o"
@@ -1937,8 +1936,7 @@ beginseg
     name "ovl_Oceff_Storm"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Storm/z_oceff_storm.o"
-    include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.data.o"
-    include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Storm/ovl_Oceff_Storm_reloc.o"
 endseg
 
 beginseg
@@ -4768,8 +4766,7 @@ beginseg
     name "ovl_En_Bombal"
     compress
     include "build/src/overlays/actors/ovl_En_Bombal/z_en_bombal.o"
-    include "build/data/ovl_En_Bombal/ovl_En_Bombal.data.o"
-    include "build/data/ovl_En_Bombal/ovl_En_Bombal.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bombal/ovl_En_Bombal_reloc.o"
 endseg
 
 beginseg
