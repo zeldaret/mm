@@ -12,8 +12,8 @@
 
 #define THIS ((ObjKibako*)thisx)
 
-void ObjKibako_Init(Actor* thisx, PlayState* play);
-void ObjKibako_Destroy(Actor* thisx, PlayState* play);
+void ObjKibako_Init(Actor* thisx, PlayState* play2);
+void ObjKibako_Destroy(Actor* thisx, PlayState* play2);
 void ObjKibako_Update(Actor* thisx, PlayState* play);
 
 void ObjKibako_Draw(Actor* thisx, PlayState* play);
@@ -127,7 +127,7 @@ void func_80926318(ObjKibako* this, PlayState* play) {
 }
 
 void func_80926394(ObjKibako* this, PlayState* play) {
-    if ((this->isDropCollected == 0) && (play->roomCtx.currRoom.num != this->unk199)) {
+    if ((this->isDropCollected == 0) && (play->roomCtx.curRoom.num != this->unk199)) {
         this->isDropCollected = 1;
     }
 }
@@ -339,7 +339,7 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
 
     func_80926394(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;

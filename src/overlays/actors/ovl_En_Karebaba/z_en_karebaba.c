@@ -15,7 +15,7 @@
 
 void EnKarebaba_Init(Actor* thisx, PlayState* play);
 void EnKarebaba_Destroy(Actor* thisx, PlayState* play);
-void EnKarebaba_Update(Actor* thisx, PlayState* play);
+void EnKarebaba_Update(Actor* thisx, PlayState* play2);
 void EnKarebaba_Draw(Actor* thisx, PlayState* play);
 
 void func_808F155C(EnKarebaba* this);

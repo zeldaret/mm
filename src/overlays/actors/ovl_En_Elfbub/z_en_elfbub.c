@@ -15,7 +15,7 @@
 void EnElfbub_Init(Actor* thisx, PlayState* play);
 void EnElfbub_Destroy(Actor* thisx, PlayState* play);
 void EnElfbub_Update(Actor* thisx, PlayState* play);
-void EnElfbub_Draw(Actor* thisx, PlayState* play);
+void EnElfbub_Draw(Actor* thisx, PlayState* play2);
 
 void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
@@ -113,7 +113,7 @@ void EnElfbub_Pop(EnElfbub* this, PlayState* play) {
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
             EffectSsDtBubble_SpawnCustomColor(play, &pos, &velocity, &sAccel, &sPrimColor, &sEnvColor,
-                                              Rand_S16Offset(100, 50), 25, 0);
+                                              Rand_S16Offset(100, 50), 25, false);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
