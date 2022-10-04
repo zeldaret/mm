@@ -477,8 +477,8 @@ void EnGo_DrawSteam(EnGoEffect* pEffect, PlayState* play2) {
 
         Matrix_Push();
 
-        alpha = ((f32)pEffect->alphaNumer / pEffect->alphaDenom);
-        alpha *= UINT8_MAX;
+        alpha = (f32)pEffect->alphaNumer / pEffect->alphaDenom;
+        alpha *= 255;
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, (pEffect->alphaNumer + (i * 3)) * 3,
@@ -1696,14 +1696,16 @@ s32 EnGo_PowderKegGoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
 void EnGo_UpdateToStretchingAnimation(EnGo* this, PlayState* play) {
     static Vec3f sStretchingGoronOffset = { 0.0f, 0.0f, 40.0f };
 
-    static s32 sSubtypeToAnimIndex[] = { ENGO_ANIM_SQUAT_SIDE_TO_SIDE, ENGO_ANIM_DOUBLE_ARM_SIDEBEND,
-                                         ENGO_ANIM_SHAKE_LIMBS,        ENGO_ANIM_SINGLE_ARM_SIDEBEND,
-                                         ENGO_ANIM_SITTING_STRETCH,    ENGO_ANIM_HELP_SITTING_STRETCH };
+    static s32 sSubtypeToAnimIndex[] = {
+        ENGO_ANIM_SQUAT_SIDE_TO_SIDE,  ENGO_ANIM_DOUBLE_ARM_SIDEBEND, ENGO_ANIM_SHAKE_LIMBS,
+        ENGO_ANIM_SINGLE_ARM_SIDEBEND, ENGO_ANIM_SITTING_STRETCH,     ENGO_ANIM_HELP_SITTING_STRETCH,
+    };
     Vec3f newSittingStretcherPos;
 
     // The first four Racer gorons have different stretches depending on context
     // The last two remain the same (since they are dependent on one-another)
     s32 subtypeLookup = ENGO_GET_SUBTYPE(&this->actor) % 6;
+
     if (subtypeLookup < 4) {
         subtypeLookup = ((gSaveContext.eventInf[2] & 0xF) + subtypeLookup) % 4;
     }
@@ -2083,10 +2085,9 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
         } else if ((this->sleepState != ENGO_AWAKE) &&
                    (gSaveContext.save.weekEventReg[22] & 0x4 /* Elder's son has been calmed */)) {
             // While asleep, rhythmicallly snore and distort shape to show breathing.
-            const f32 MAX_DISTORTION = (0.1f * ENGO_NORMAL_SCALE); // 10% maximum distortion from snoring
-            this->actor.scale.x = this->scaleFactor - (Math_SinS(this->snorePhase) * MAX_DISTORTION);
-            this->actor.scale.y = this->scaleFactor + (Math_SinS(this->snorePhase) * MAX_DISTORTION);
-            this->actor.scale.z = this->scaleFactor + (Math_SinS(this->snorePhase) * MAX_DISTORTION);
+            this->actor.scale.x = this->scaleFactor - (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
+            this->actor.scale.y = this->scaleFactor + (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
+            this->actor.scale.z = this->scaleFactor + (Math_SinS(this->snorePhase) * (0.1f * ENGO_NORMAL_SCALE));
 
             if (this->snorePhase == 0) {
                 this->sleepState = -this->sleepState;
