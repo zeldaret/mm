@@ -701,10 +701,6 @@ void* Lib_SegmentedToVirtual(void* ptr) {
     return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
-/*
- * This function seems to check whether ptr is already a virtual address and skip desegmenting it if so. However, the
- * conditional is backwards, so it only desegments virtual addresses (which has no effect).
- */
 void* Lib_SegmentedToVirtualNull(void* ptr) {
     if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
