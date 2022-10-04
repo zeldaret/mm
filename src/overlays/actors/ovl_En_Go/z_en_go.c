@@ -434,8 +434,9 @@ EnGoEffect* EnGo_InitSteam(EnGoEffect* pEffect, Vec3f position, Vec3f accelerati
 
     // Steam effects are from the end of the snow effects to the end of all effects
     for (i = ENGO_NUM_SNOW_EFFECTS; i < ENGO_NUM_EFFECTS; i++, pEffect++) {
-        if (pEffect->effectType != ENGO_EFFECT_NONE)
+        if (pEffect->effectType != ENGO_EFFECT_NONE) {
             continue;
+        }
 
         pEffect->effectType = ENGO_EFFECT_STEAM;
         pEffect->alphaDenom = (Rand_ZeroOne() * (2.0f * (maxFrames / 3.0f))) + (maxFrames / 3.0f);
@@ -464,8 +465,9 @@ void EnGo_DrawSteam(EnGoEffect* pEffect, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     for (i = 0; i < ENGO_NUM_EFFECTS; i++, pEffect++) {
-        if (pEffect->effectType != ENGO_EFFECT_STEAM)
+        if (pEffect->effectType != ENGO_EFFECT_STEAM) {
             continue;
+        }
 
         gDPPipeSync(POLY_XLU_DISP++);
         if (!isMaterialSet) {
@@ -513,8 +515,9 @@ void EnGo_InitDust(EnGoEffect* pEffect, Vec3f pos, Vec3f accel, Vec3f vel, f32 s
 
     // Dust effects are from the end of the snow effects to the end of all effects
     for (i = ENGO_NUM_SNOW_EFFECTS; i < ENGO_NUM_EFFECTS; i++, pEffect++) {
-        if (pEffect->effectType != ENGO_EFFECT_NONE)
+        if (pEffect->effectType != ENGO_EFFECT_NONE) {
             continue;
+        }
 
         pEffect->effectType = parentEffectType + ENGO_EFFECT_DUST_START;
         pEffect->alphaDenom = (Rand_ZeroOne() * (2.0f * (maxFrames / 3.0f))) + (maxFrames / 3.0f);
@@ -555,8 +558,9 @@ void EnGo_DrawDust(EnGoEffect* pEffect, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
     for (i = 0; i < ENGO_NUM_EFFECTS; i++, pEffect++) {
-        if ((pEffect->effectType < ENGO_EFFECT_DUST_START) || (pEffect->effectType >= ENGO_EFFECT_STEAM_START))
+        if ((pEffect->effectType < ENGO_EFFECT_DUST_START) || (pEffect->effectType >= ENGO_EFFECT_STEAM_START)) {
             continue;
+        }
 
         if (!isMaterialSet) {
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
@@ -614,8 +618,9 @@ void EnGo_InitSnow(EnGoEffect* pEffect, Vec3f worldPos) {
 
     // Snow effects consume the first part of the effects table, and are paired with dust effects in the latter part
     for (i = 0; i < ENGO_NUM_SNOW_EFFECTS; i++, pEffect++) {
-        if (pEffect->effectType != ENGO_EFFECT_NONE)
+        if (pEffect->effectType != ENGO_EFFECT_NONE) {
             continue;
+        }
 
         pEffect->position = worldPos;
         pEffect->position.y += 56.0f;
@@ -721,8 +726,9 @@ void EnGo_DrawSnow(EnGoEffect* pEffect, PlayState* play, Gfx* material, Gfx* mod
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     for (i = 0; i < ENGO_NUM_SNOW_EFFECTS; i++, pEffect++) {
-        if (pEffect->effectType != effectType)
+        if (pEffect->effectType != effectType) {
             continue;
+        }
 
         if (!isMaterialSet) {
             gSPDisplayList(POLY_OPA_DISP++, material);
@@ -753,8 +759,9 @@ void EnGo_UpdateEffects(EnGo* this) {
     s32 i;
 
     for (i = 0; i < ENGO_NUM_EFFECTS; i++, pEffect++) {
-        if (pEffect->effectType == ENGO_EFFECT_NONE)
+        if (pEffect->effectType == ENGO_EFFECT_NONE) {
             continue;
+        }
 
         if (pEffect->alphaNumer == 0) {
             // "Delete" the effect by assigning its type to None.
