@@ -551,7 +551,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
         // 8 is chosen because it is smaller than `TMEM_SIZE / 2 / textureWidth` and divides the texture's height.
         // Each loaded chunk must have `size <= TMEM_SIZE / 2`
-        // because the texture is color-indexed so the TLUT uses the other half of TMEM.
+        // because the texture is color-indexed, so the TLUT uses the other half of TMEM.
 
         func_8012C628(play->state.gfxCtx);
 
