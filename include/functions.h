@@ -15,8 +15,7 @@ s32 DmaMgr_FindDmaIndex(u32 vrom);
 const char* func_800809F4(u32 param_1);
 void DmaMgr_ProcessMsg(DmaRequest* req);
 void DmaMgr_ThreadEntry(void* arg);
-s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused,
-                           OSMesgQueue* queue, void* msg);
+s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused, OSMesgQueue* queue, void* msg);
 s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
 void DmaMgr_Start(void);
 void DmaMgr_Stop(void);
@@ -558,8 +557,7 @@ void EffectSsHitmark_SpawnFixedScale(PlayState* play, s32 type, Vec3f* pos);
 void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3f* pos);
 void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 params);
 // void EffectSsKFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE1 param_6);
-void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
-                                  s16* playerDetected, s16 flags);
+void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16* playerDetected, s16 flags);
 void EffectSsKakera_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx, s16 objId, Gfx* dList);
 // void EffectSsIcePiece_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6);
 // void EffectSsIcePiece_SpawnBurst(void);
@@ -572,8 +570,7 @@ void EffectSsEnIce_Spawn(PlayState* play, Vec3f* pos, f32 scale, Vec3f* velocity
 void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 params, s16 flags, s16 bodyPart);
 // void EffectSsEnFire_SpawnVec3s(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7);
 void EffectSsExtra_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scoreIdx);
-void EffectSsDeadDb_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
-                          Color_RGBA8* env, s16 scale, s16 scaleStep, s32 life);
+void EffectSsDeadDb_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env, s16 scale, s16 scaleStep, s32 life);
 void func_800B3030(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s32 colorIndex);
 void EffectSsDeadDd_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim, Color_RGBA8* env, s16 scale, s16 scaleStep, s16 alphaStep, s32 life);
 // void EffectSsDeadDs_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Vec3f* pzParm3, Vec3f* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE4 param_8);
@@ -2489,8 +2486,7 @@ u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataIndex);
 Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex);
 s16 Play_GetOriginalSceneId(s16 sceneId);
 void Play_SaveCycleSceneFlags(GameState* thisx);
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
-                         s16 yaw);
+void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos, s16 yaw);
 void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams);
 void func_80169EFC(GameState* thisx);
 void func_80169F78(GameState* thisx);

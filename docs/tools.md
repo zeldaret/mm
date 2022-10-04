@@ -198,7 +198,7 @@ Fixes line endings in the repo to Linux style (LF), which is required for the bu
 
 ### `format.py`
 
-Formats all C files in the repo using `clang-format-11`, `clang-tidy-11`, and `clang-apply-replacements-11` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
+Formats all C files in the repo using `clang-format-11`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
 
 You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (i.e. `-j1`).
 
@@ -217,7 +217,7 @@ sudo apt install clang-format-11 clang-tidy-11 clang-apply-replacements-11
 Mac:
 Install with brew, than create symlinks for `clang-tidy` and `clang-apply-replacements` to use properly
 ```bash
-brew install llvm
+brew install llvm clang-format-11
 ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
 ```

@@ -25,7 +25,7 @@ TIDY_OPTS = "-p ."
 TIDY_FIX_OPTS = "--fix --fix-errors"
 
 # Clang-Apply-Replacements options (used for multiprocessing)
-APPLY_OPTS = "--format --style=file"
+APPLY_OPTS = ""
 
 # Compiler options used with Clang-Tidy
 # Normal warnings are disabled with -Wno-everything to focus only on tidying
