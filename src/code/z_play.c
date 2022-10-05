@@ -56,7 +56,7 @@ extern Struct_80140E80* D_801F6D4C;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
 
-void func_80167F0C(PlayState* this) {
+void Play_PostWorldDraw(PlayState* this) {
     if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != 0)) {
         KaleidoScopeCall_Draw(this);
     }
