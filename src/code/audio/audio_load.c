@@ -37,7 +37,7 @@ void* AudioLoad_SyncLoad(s32 tableType, u32 id, s32* didAllocate);
 u32 AudioLoad_GetRealTableIndex(s32 tableType, u32 id);
 void* AudioLoad_SearchCaches(s32 tableType, s32 id);
 AudioTable* AudioLoad_GetLoadTable(s32 tableType);
-void AudioLoad_SyncDma(uintptr_t devAddr, u8* addr, size_t size, s32 medium);
+void AudioLoad_SyncDma(uintptr_t devAddr, u8* ramAddr, size_t size, s32 medium);
 void AudioLoad_SyncDmaUnkMedium(uintptr_t devAddr, u8* addr, size_t size, s32 unkMediumParam);
 s32 AudioLoad_Dma(OSIoMesg* mesg, u32 priority, s32 direction, uintptr_t devAddr, void* ramAddr, size_t size,
                   OSMesgQueue* reqQueue, s32 medium, const char* dmaFuncType);
@@ -1218,9 +1218,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     s32 i;
     s32 j;
 
-    D_80208E68 = NULL;
-    D_80208E70 = NULL;
-    D_80208E74 = NULL;
+    gCustomAudioUpdateFunction = NULL;
+    gCustomAudioReverbFunction = NULL;
+    gCustomAudioSynthFunction = NULL;
 
     for (i = 0; i < ARRAY_COUNT(gAudioContext.unk_29A8); i++) {
         gAudioContext.unk_29A8[i] = NULL;

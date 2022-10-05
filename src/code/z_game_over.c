@@ -1,5 +1,6 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 
 void GameOver_Init(PlayState* play) {
     play->gameOverCtx.state = GAMEOVER_INACTIVE;
@@ -46,8 +47,8 @@ void GameOver_Update(PlayState* play) {
 
             gSaveContext.unk_3DC0 = 2000;
             gSaveContext.save.playerData.tatlTimer = 0;
-            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
             gSaveContext.eventInf[0] = 0;
             gSaveContext.eventInf[1] = 0;
             gSaveContext.eventInf[2] = 0;
@@ -67,7 +68,7 @@ void GameOver_Update(PlayState* play) {
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
-            if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
+            if (Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
                 Play_LoadToLastEntrance(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
@@ -86,7 +87,7 @@ void GameOver_Update(PlayState* play) {
             gameOverCtx->state++;
             sGameOverTimer = 0;
             Kankyo_InitGameOverLights(play);
-            ShrinkWindow_SetLetterboxTarget(32);
+            ShrinkWindow_Letterbox_SetSizeTarget(32);
             break;
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;

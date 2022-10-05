@@ -315,8 +315,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
 void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
     static s32 sGiantsCutsceneState = 0;
 
-    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 1) &&
-        (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
         switch (sGiantsCutsceneState) {
             case 0:
                 if (play->csCtx.state != 0) {
@@ -409,7 +408,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
         }
     }
 
-    if (play->sceneId == SCENE_OKUJOU && gSaveContext.sceneSetupIndex == 2) {
+    if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneLayer == 2)) {
         switch (play->csCtx.currentCsIndex) {
             case 0:
                 switch (play->csCtx.frames) {
@@ -575,7 +574,7 @@ void EnFall_Fireball_SetPerVertexAlpha(f32 fireballAlpha) {
 void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
 
-    if (play->sceneId == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 2) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 2)) {
         play->skyboxCtx.rotY -= 0.05f;
     }
 

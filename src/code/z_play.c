@@ -1,5 +1,8 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64quake.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
@@ -309,7 +312,7 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
     transitionCtx->transitionType = transitionType;
     transitionCtx->fbdemoType = fbdemoType;
     if (fbdemoType != -1) {
-        func_80163C90(transitionCtx);
+        Transition_Init(transitionCtx);
     }
 }
 
@@ -379,7 +382,7 @@ const char D_801DFB28[] = "fk";
 
 void Play_ClearTransitionInstanceType(PlayState* this) {
     if (this->transitionCtx.fbdemoType != -1) {
-        func_80163D80(&this->transitionCtx, this);
+        Transition_Destroy(&this->transitionCtx);
     }
     this->transitionCtx.transitionType = -1;
 }
@@ -577,7 +580,7 @@ void func_80166968(PlayState* this, Camera* camera) {
         Distortion_ClearType(0x10);
         Distortion_ClearType(8);
         if (sQuakeIndex != 0) {
-            Quake_RemoveFromIdx(sQuakeIndex);
+            Quake_Remove(sQuakeIndex);
         }
         func_800F694C(this);
         func_801A3EC0(0);
@@ -612,20 +615,20 @@ void Play_UpdateTransition(PlayState* this) {
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
                       !(gSaveContext.save.weekEventReg[0x34] & 0x20))) &&
                     (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
-                     (func_801A8A50(0) != NA_BGM_FINAL_HOURS))) {
+                     (Audio_GetActiveSequence(0) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
-                    gSaveContext.seqIndex = 0xFF;
-                    gSaveContext.nightSeqIndex = 0xFF;
+                    gSaveContext.seqId = 0xFF;
+                    gSaveContext.ambienceId = 0xFF;
                 }
 
                 if (func_800FD768()) {
                     func_801A4058(20);
-                    gSaveContext.seqIndex = 0xFF;
-                    gSaveContext.nightSeqIndex = 0xFF;
+                    gSaveContext.seqId = 0xFF;
+                    gSaveContext.ambienceId = 0xFF;
                 }
 
                 if (func_800FE590(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
-                    (func_801A8A50(0) == NA_BGM_FINAL_HOURS)) {
+                    (Audio_GetActiveSequence(0) == NA_BGM_FINAL_HOURS)) {
                     func_801A41C8(20);
                 }
             }
@@ -703,8 +706,8 @@ void Play_UpdateTransition(PlayState* this) {
             }
 
             this->transitionCtx.setColor(&this->transitionCtx.instanceData, color);
-            if (this->transitionCtx.setUnkColor != NULL) {
-                this->transitionCtx.setUnkColor(&this->transitionCtx.instanceData, color);
+            if (this->transitionCtx.setEnvColor != NULL) {
+                this->transitionCtx.setEnvColor(&this->transitionCtx.instanceData, color);
             }
 
             this->transitionCtx.setType(&this->transitionCtx.instanceData,
@@ -1190,9 +1193,9 @@ void Play_Draw(PlayState* this) {
         var_fv0 = 12800.0f;
     }
 
-    func_8013F0D0(&this->view, this->view.fovy, this->view.zNear, var_fv0);
+    View_SetPerspective(&this->view, this->view.fovy, this->view.zNear, var_fv0);
 
-    View_RenderView(&this->view, 0xF);
+    View_Apply(&this->view, 0xF);
 
     // The billboard matrix temporarily stores the viewing matrix
     Matrix_MtxToMtxF(&this->view.viewing, &this->billboardMtxF);
@@ -1238,7 +1241,7 @@ void Play_Draw(PlayState* this) {
 
             SET_FULLSCREEN_VIEWPORT(&spA8);
 
-            func_801400CC(&spA8, &sp218);
+            View_ApplyTo(&spA8, &sp218);
             this->transitionCtx.draw(&this->transitionCtx.instanceData, &sp218);
         }
 
@@ -1421,7 +1424,7 @@ void Play_Draw(PlayState* this) {
         Vec3s sp4C;
 
         Camera_Update(&sp4C, GET_ACTIVE_CAM(this));
-        func_80140024(&this->view);
+        View_UpdateViewingMatrix(&this->view);
         this->view.unk164 = 0;
         if ((this->skyboxId != 0) && !this->envCtx.skyboxDisabled) {
             SkyboxDraw_UpdateMatrix(&this->skyboxCtx, this->view.eye.x, this->view.eye.y, this->view.eye.z);
@@ -2204,18 +2207,17 @@ void Play_Init(GameState* thisx) {
     if (((gSaveContext.gameMode != 0) && (gSaveContext.gameMode != 1)) || (gSaveContext.save.cutscene >= 0xFFF0)) {
         gSaveContext.unk_3DC0 = 0;
         Magic_Reset(this);
-        gSaveContext.sceneSetupIndex = (gSaveContext.save.cutscene & 0xF) + 1;
+        gSaveContext.sceneLayer = (gSaveContext.save.cutscene & 0xF) + 1;
         gSaveContext.save.cutscene = 0;
     } else {
-        gSaveContext.sceneSetupIndex = 0;
+        gSaveContext.sceneLayer = 0;
     }
 
-    sp87 = gSaveContext.sceneSetupIndex;
+    sp87 = gSaveContext.sceneLayer;
 
     Play_SpawnScene(
-        this,
-        Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)),
-        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneSetupIndex)));
+        this, Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)),
+        Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)));
     KaleidoScopeCall_Init(this);
     func_80121FC4(this);
 
@@ -2317,8 +2319,8 @@ void Play_Init(GameState* thisx) {
     func_800F15D8(&this->mainCamera);
     func_801129E4(this);
     func_800FB758(this);
-    gSaveContext.seqIndex = this->soundCtx.seqIndex;
-    gSaveContext.nightSeqIndex = this->soundCtx.nightSeqIndex;
+    gSaveContext.seqId = this->sequenceCtx.seqId;
+    gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
     AnimationContext_Update(this, &this->animationCtx);
     func_800EDBE0(this);
     gSaveContext.respawnFlag = 0;

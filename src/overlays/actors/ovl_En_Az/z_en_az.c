@@ -18,16 +18,16 @@ typedef struct {
     /* 0x4 */ f32 unk_4;
 } struct_80A98F94; // size = 0x8
 
-void EnAz_Init(Actor* thisx, PlayState* play);
-void EnAz_Destroy(Actor* thisx, PlayState* play);
-void EnAz_Update(Actor* thisx, PlayState* play);
-void EnAz_Draw(Actor* thisx, PlayState* play);
+void EnAz_Init(Actor* thisx, PlayState* play2);
+void EnAz_Destroy(Actor* thisx, PlayState* play2);
+void EnAz_Update(Actor* thisx, PlayState* play2);
+void EnAz_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A982E0(PlayState* play, ActorPathing* actorPathing);
 void func_80A98414(EnAz* this, PlayState* play);
 s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 arg3, s32 arg4);
+void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 animIndex, s32 brotherAnimIndex);
 void func_80A98F94(struct_80A98F94* yData, f32 frame, f32* yInterp);
 
 void func_80A95C5C(EnAz* this, PlayState* play);
@@ -1426,7 +1426,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
                             play->msgCtx.msgMode = 0x44;
-                            func_800FD750(NA_BGM_MINI_GAME_2);
+                            func_800FD750(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);
                         } else {
@@ -1466,7 +1466,7 @@ void func_80A97C4C(EnAz* this, PlayState* play) {
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
         gSaveContext.save.weekEventReg[24] &= (u8)~1;
-        func_800FD750(NA_BGM_MINI_GAME_2);
+        func_800FD750(NA_BGM_TIMED_MINI_GAME);
         play->nextEntrance = Entrance_CreateFromSpawn(1);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;

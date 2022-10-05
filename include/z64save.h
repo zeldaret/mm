@@ -304,7 +304,7 @@ typedef struct SaveContext {
     /* 0x3CA6 */ u8 unk_3CA6;
     /* 0x3CA7 */ u8 unk_3CA7;                           // "day_night_flag"
     /* 0x3CA8 */ s32 gameMode;                          // "mode"
-    /* 0x3CAC */ s32 sceneSetupIndex;                   // "counter"
+    /* 0x3CAC */ s32 sceneLayer;                        // "counter"
     /* 0x3CB0 */ s32 respawnFlag;                       // "restart_flag"
     /* 0x3CB4 */ RespawnData respawn[RESPAWN_MODE_MAX]; // "restart_data"
     /* 0x3DB4 */ f32 entranceSpeed;                     // "player_wipe_speedF"
@@ -327,8 +327,8 @@ typedef struct SaveContext {
     /* 0x3EF8 */ s16 timerX[TIMER_ID_MAX];              // "event_xp"
     /* 0x3F06 */ s16 timerY[TIMER_ID_MAX];              // "event_yp"
     /* 0x3F14 */ s16 unk_3F14;                          // "character_change"
-    /* 0x3F16 */ u8 seqIndex;                           // "old_bgm"
-    /* 0x3F17 */ u8 nightSeqIndex;                      // "old_env"
+    /* 0x3F16 */ u8 seqId;                              // "old_bgm"
+    /* 0x3F17 */ u8 ambienceId;                         // "old_env"
     /* 0x3F18 */ u8 buttonStatus[6];                    // "button_item"
     /* 0x3F1E */ u8 hudVisibilityForceButtonAlphasByStatus; // if btn alphas are updated through Interface_UpdateButtonAlphas, instead update them through Interface_UpdateButtonAlphasByStatus "ck_fg"
     /* 0x3F20 */ u16 nextHudVisibility; // triggers the hud to change visibility to the requested value. Reset to HUD_VISIBILITY_IDLE when target is reached "alpha_type"
@@ -368,7 +368,7 @@ typedef struct SaveContext {
     /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
     /* 0x48C8 */ u16 dungeonIndex;                      // "scene_id_mix"
-    /* 0x48CA */ u8 maskMaskBit[27];                    // "mask_mask_bit", masks given away on the Moon
+    /* 0x48CA */ u8 masksGivenOnMoon[27];               // bit-packed, masks given away on the Moon. "mask_mask_bit"
 } SaveContext; // size = 0x48C8
 
 typedef enum ButtonStatus {
@@ -480,9 +480,9 @@ void func_80144A94(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
-void func_80146580(struct FileSelectState* fileSelect, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
-void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void func_80146580(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
+void func_80146628(struct FileSelectState* fileSelect2, SramContext* sramCtx);
+void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);

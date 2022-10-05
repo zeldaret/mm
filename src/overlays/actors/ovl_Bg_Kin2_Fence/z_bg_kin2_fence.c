@@ -120,19 +120,12 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
-    ColliderJntSphElement* elements = this->collider.elements;
+    s32 i;
 
-    if (elements[0].info.bumperFlags & BUMP_HIT) {
-        return 0;
-    }
-    if (elements[1].info.bumperFlags & BUMP_HIT) {
-        return 1;
-    }
-    if (elements[2].info.bumperFlags & BUMP_HIT) {
-        return 2;
-    }
-    if (elements[3].info.bumperFlags & BUMP_HIT) {
-        return 3;
+    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+            return i;
+        }
     }
     return -1;
 }

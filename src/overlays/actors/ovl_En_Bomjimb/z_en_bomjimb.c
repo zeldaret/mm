@@ -14,7 +14,7 @@
 
 void EnBomjimb_Init(Actor* thisx, PlayState* play);
 void EnBomjimb_Destroy(Actor* thisx, PlayState* play);
-void EnBomjimb_Update(Actor* thisx, PlayState* play);
+void EnBomjimb_Update(Actor* thisx, PlayState* play2);
 void EnBomjimb_Draw(Actor* thisx, PlayState* play);
 
 void func_80C01494(EnBomjimb* this);
@@ -691,7 +691,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     gSaveContext.save.bombersCaughtNum++;
 
     if (gSaveContext.save.bombersCaughtNum > 4) {
-        func_801A3098(0x922);
+        Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }

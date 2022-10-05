@@ -4,7 +4,7 @@
 #include "global.h"
 
 void Setup_Destroy(GameState* gameState);
-void Setup_Init(GameState* gameState);
+void Setup_Init(GameState* thisx);
 
 typedef struct {
     /* 0x00 */ GameState state;
