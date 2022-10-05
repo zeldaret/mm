@@ -192,7 +192,8 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
             }
         }
     }
-    if ((this->door.dyna.actor.textId == 0x239B) && Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->door.dyna.actor))) {
+    if ((this->door.dyna.actor.textId == 0x239B) &&
+        Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->door.dyna.actor))) {
         Flags_UnsetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->door.dyna.actor));
         this->actionFunc = func_80AC2154;
         this->door.dyna.actor.textId = 0x1800; // "It won't budge!"
