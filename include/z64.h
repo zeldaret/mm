@@ -777,9 +777,9 @@ typedef enum {
     /* 17 */ TRANS_TYPE_FADE_WHITE_INSTANT,
     /* 18 */ TRANS_TYPE_FADE_GREEN,
     /* 19 */ TRANS_TYPE_FADE_BLUE,
-    /* 20 */ TRANS_TYPE_20,
-    /* 21 */ TRANS_TYPE_21,
-    /* 22 */ TRANS_TYPE_22,
+    /* 20 */ TRANS_TYPE_FADE_DYNAMIC, // Chooses Black or White based on time of day
+    /* 21 */ TRANS_TYPE_CIRCLE,
+    /* 22 */ TRANS_TYPE_WIPE5,
     /* 64 */ TRANS_TYPE_64 = 64,
     /* 70 */ TRANS_TYPE_70 = 70,
     /* 72 */ TRANS_TYPE_72 = 72,

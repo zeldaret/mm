@@ -784,7 +784,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
             player->csMode = 0;
-            Play_MotionBlurDisable();
+            Play_DisableMotionBlur();
         }
 
         func_809E344C(this, play);
@@ -856,7 +856,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     this->unk_25C = 15;
 
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 90) {
-        Play_MotionBlurEnable(0x96);
+        Play_EnableMotionBlur(0x96);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -912,7 +912,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
             player->csMode = 0;
-            Play_MotionBlurDisable();
+            Play_DisableMotionBlur();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
 
@@ -1191,7 +1191,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->csState = 2;
                         this->csTimer = 0;
                         this->unk_240 = 0;
-                        Play_MotionBlurEnable(0x96);
+                        Play_EnableMotionBlur(0x96);
                         this->subCamFov = 80.0f;
 
                         case 2:
@@ -1284,7 +1284,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 this->actor.speedXZ = -200.0f;
                 Actor_MoveWithoutGravityReverse(&this->actor);
                 this->actor.world.pos.y = this->waterHeight - 150.0f;
-                Play_MotionBlurDisable();
+                Play_DisableMotionBlur();
 
                 case 5:
                     SkelAnime_Update(&this->skelAnime);
@@ -1631,7 +1631,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
                 this->csState = 3;
-                Play_MotionBlurDisable();
+                Play_DisableMotionBlur();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
                 Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_INIT_OLD);
             }
@@ -1755,7 +1755,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
         player->unk_AE8 = 101;
         player->actor.parent = NULL;
         player->csMode = 0;
-        Play_MotionBlurDisable();
+        Play_DisableMotionBlur();
     }
 
     this->unk_240 = 0;
@@ -1907,7 +1907,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                         player->unk_AE8 = 101;
                         player->actor.parent = NULL;
                         player->csMode = 0;
-                        Play_MotionBlurDisable();
+                        Play_DisableMotionBlur();
                     }
 
                     continue;

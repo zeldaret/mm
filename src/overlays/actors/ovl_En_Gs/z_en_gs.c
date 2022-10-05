@@ -170,7 +170,7 @@ void EnGs_Destroy(Actor* thisx, PlayState* play) {
     EnGs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    Play_MotionBlurDisable();
+    Play_DisableMotionBlur();
 }
 
 void func_80997D14(EnGs* this, PlayState* play) {
@@ -902,16 +902,16 @@ void func_80999AC0(EnGs* this) {
 void func_80999B34(EnGs* this) {
     if (this->unk_216 > 0) {
         if (this->unk_218 == 0) {
-            Play_MotionBlurEnable(this->unk_216);
+            Play_EnableMotionBlur(this->unk_216);
             this->unk_218 = this->unk_216;
         } else {
-            Play_MotionBlurSetAlpha(this->unk_218);
+            Play_SetMotionBlurAlpha(this->unk_218);
         }
     } else if (this->unk_218 > 0) {
         Math_StepToS(&this->unk_218, this->unk_216, 20);
-        Play_MotionBlurSetAlpha(this->unk_218);
+        Play_SetMotionBlurAlpha(this->unk_218);
         if (this->unk_218 <= 0) {
-            Play_MotionBlurDisable();
+            Play_DisableMotionBlur();
         }
     }
 }

@@ -33,7 +33,7 @@ typedef enum {
     /* 2 */ MOTION_BLUR_RUNNING
 } MotionBlurStatus;
 
-void Play_MotionBlurDraw(PlayState* this) {
+void Play_DrawMotionBlur(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     s32 alpha;
     Gfx* gfx;
@@ -85,28 +85,28 @@ void Play_MotionBlurDraw(PlayState* this) {
     }
 }
 
-void Play_MotionBlurInit(void) {
+void Play_InitMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
     R_MOTION_BLUR_PRIORITY_ENABLED = false;
     sMotionBlurStatus = MOTION_BLUR_STOPPED;
 }
 
-void Play_MotionBlurDestroy(void) {
+void Play_DestroyMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
     R_MOTION_BLUR_PRIORITY_ENABLED = false;
     sMotionBlurStatus = MOTION_BLUR_STOPPED;
 }
 
-void Play_MotionBlurSetAlpha(u32 alpha) {
+void Play_SetMotionBlurAlpha(u32 alpha) {
     R_MOTION_BLUR_ALPHA = alpha;
 }
 
-void Play_MotionBlurEnable(u32 alpha) {
+void Play_EnableMotionBlur(u32 alpha) {
     R_MOTION_BLUR_ALPHA = alpha;
     R_MOTION_BLUR_ENABLED = true;
 }
 
-void Play_MotionBlurDisable(void) {
+void Play_DisableMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
 }
 
@@ -193,16 +193,16 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
     }
 }
 
-void Play_MotionBlurPrioritySetAlpha(u32 alpha) {
+void Play_SetMotionBlurPriorityAlpha(u32 alpha) {
     R_MOTION_BLUR_PRIORITY_ALPHA = alpha;
 }
 
-void Play_MotionBlurPriorityEnable(u32 alpha) {
+void Play_EnableMotionBlurPriority(u32 alpha) {
     R_MOTION_BLUR_PRIORITY_ALPHA = alpha;
     R_MOTION_BLUR_PRIORITY_ENABLED = true;
 }
 
-void Play_MotionBlurPriorityDisable(void) {
+void Play_DisableMotionBlurPriority(void) {
     R_MOTION_BLUR_PRIORITY_ENABLED = false;
 }
 
@@ -216,10 +216,10 @@ void func_80165E1C(PreRender* prerender) {
     func_801656A4(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
 
-s32 func_80165E7C(PlayState* this, s32 transitionType) {
+s32 Play_ChooseDynamicTransition(PlayState* this, s32 transitionType) {
     s32 nextTransitionType = transitionType;
 
-    if (transitionType == TRANS_TYPE_20) {
+    if (transitionType == TRANS_TYPE_FADE_DYNAMIC) {
         if (!gSaveContext.save.isNight) {
             nextTransitionType = TRANS_TYPE_FADE_WHITE;
         } else {
@@ -292,11 +292,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
                 this->transitionMode = TRANS_MODE_CS_BLACK_FILL_INIT;
                 break;
 
-            case TRANS_TYPE_21:
+            case TRANS_TYPE_CIRCLE:
                 fbdemoType = FBDEMO_CIRCLE;
                 break;
 
-            case TRANS_TYPE_22:
+            case TRANS_TYPE_WIPE5:
                 fbdemoType = FBDEMO_WIPE5;
                 break;
 
@@ -380,7 +380,7 @@ const char D_801DFB20[] = "fi";
 const char D_801DFB24[] = "fj";
 const char D_801DFB28[] = "fk";
 
-void Play_ClearTransitionInstanceType(PlayState* this) {
+void Play_ClearTransition(PlayState* this) {
     if (this->transitionCtx.fbdemoType != -1) {
         Transition_Destroy(&this->transitionCtx);
     }
@@ -414,7 +414,7 @@ void Play_Destroy(GameState* thisx) {
     func_8016FC98(&D_801F6D50);
     this->state.gfxCtx->callback = NULL;
     this->state.gfxCtx->callbackParam = 0;
-    Play_MotionBlurDestroy();
+    Play_DestroyMotionBlur();
 
     if (SREG(94) != 0) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
@@ -439,7 +439,7 @@ void Play_Destroy(GameState* thisx) {
 
     if ((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) || D_801D0D54) {
         this->transitionCtx.destroy(&this->transitionCtx.instanceData);
-        Play_ClearTransitionInstanceType(this);
+        Play_ClearTransition(this);
         this->transitionMode = TRANS_MODE_OFF;
     }
 
@@ -634,7 +634,7 @@ void Play_UpdateTransition(PlayState* this) {
             }
 
             if (!D_801D0D54) {
-                Play_SetupTransition(this, func_80165E7C(this, this->transitionType));
+                Play_SetupTransition(this, Play_ChooseDynamicTransition(this, this->transitionType));
             }
 
             if (this->transitionMode >= TRANS_MODE_FILL_WHITE_INIT) {
@@ -725,7 +725,7 @@ void Play_UpdateTransition(PlayState* this) {
         case TRANS_MODE_INSTANCE_RUNNING:
             if (this->transitionCtx.isDone(&this->transitionCtx.instanceData)) {
                 if (this->transitionTrigger != TRANS_TRIGGER_END) {
-                    if (this->transitionCtx.transitionType == TRANS_TYPE_21) {
+                    if (this->transitionCtx.transitionType == TRANS_TYPE_CIRCLE) {
                         D_801D0D54 = false;
                     }
 
@@ -745,11 +745,11 @@ void Play_UpdateTransition(PlayState* this) {
                         SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                     }
                 } else {
-                    if (this->transitionCtx.transitionType == TRANS_TYPE_21) {
+                    if (this->transitionCtx.transitionType == TRANS_TYPE_CIRCLE) {
                         D_801D0D54 = true;
                     } else {
                         this->transitionCtx.destroy(&this->transitionCtx.instanceData);
-                        Play_ClearTransitionInstanceType(this);
+                        Play_ClearTransition(this);
                     }
                     this->transitionMode = TRANS_MODE_OFF;
                     if (gTrnsnUnkState == 3) {
@@ -1376,7 +1376,7 @@ void Play_Draw(PlayState* this) {
         }
 
         DebugDisplay_DrawObjects(this);
-        Play_MotionBlurDraw(this);
+        Play_DrawMotionBlur(this);
 
         if (((SREG(94) == 1) || (gTrnsnUnkState == 1)) || (SREG(89) == 1)) {
             Gfx* sp74;
@@ -2232,7 +2232,7 @@ void Play_Init(GameState* thisx) {
         }
     }
 
-    Play_MotionBlurInit();
+    Play_InitMotionBlur();
 
     SREG(94) = 0;
     SREG(89) = 0;

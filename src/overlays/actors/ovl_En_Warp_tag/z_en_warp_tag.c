@@ -157,7 +157,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
             func_800B8E58(player, NA_SE_PL_WARP_PLATE);
-            Play_MotionBlurEnable(0);
+            Play_EnableMotionBlur(0);
         }
 
     } else {
@@ -215,7 +215,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
                 Play_TriggerVoidOut(&play->state);
                 gSaveContext.respawnFlag = ~0x4;
-                Play_MotionBlurDisable();
+                Play_DisableMotionBlur();
             }
         }
 
@@ -224,7 +224,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         if (new15E < 0) {
             new15E = 0;
         }
-        Play_MotionBlurSetAlpha(new15E * 0.04f); // unknown Play_ function
+        Play_SetMotionBlurAlpha(new15E * 0.04f); // unknown Play_ function
     }
 }
 

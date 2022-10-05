@@ -1637,7 +1637,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                Play_MotionBlurEnable(150);
+                Play_EnableMotionBlur(150);
                 this->unk_1D14 = 0;
                 this->subCamAtVel = 0.0f;
                 this->unk_1D58 = 0.0f;
@@ -1757,7 +1757,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_1;
             player->stateFlags1 &= ~0x100;
             this->unk_1D70 = 0.01f;
-            Play_MotionBlurDisable();
+            Play_DisableMotionBlur();
             break;
     }
 

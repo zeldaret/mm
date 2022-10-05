@@ -67,7 +67,7 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     Vec3f subCamAt;
 
     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-    Play_MotionBlurEnable(140);
+    Play_EnableMotionBlur(140);
     this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
     func_800B7298(play, &this->actor, 21);
     subCamAt.x = player->actor.focus.pos.x;
@@ -96,7 +96,7 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
     func_800B7298(play, &this->actor, 0x54);
     func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
-    Play_MotionBlurDisable();
+    Play_DisableMotionBlur();
     this->actionFunc = func_808A7C78;
 }
 
