@@ -28,12 +28,12 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     u32 spaceSize;
     s32 i;
 
-    if (play->sceneNum == SCENE_CLOCKTOWER || play->sceneNum == SCENE_TOWN || play->sceneNum == SCENE_BACKTOWN ||
-        play->sceneNum == SCENE_ICHIBA) {
+    if (play->sceneId == SCENE_CLOCKTOWER || play->sceneId == SCENE_TOWN || play->sceneId == SCENE_BACKTOWN ||
+        play->sceneId == SCENE_ICHIBA) {
         spaceSize = OBJECT_SPACE_SIZE_CLOCK_TOWN;
-    } else if (play->sceneNum == SCENE_MILK_BAR) {
+    } else if (play->sceneId == SCENE_MILK_BAR) {
         spaceSize = OBJECT_SPACE_SIZE_MILK_BAR;
-    } else if (play->sceneNum == SCENE_00KEIKOKU) {
+    } else if (play->sceneId == SCENE_00KEIKOKU) {
         spaceSize = OBJECT_SPACE_SIZE_TERMINA_FIELD;
     } else {
         spaceSize = OBJECT_SPACE_SIZE_DEFAULT;
@@ -52,7 +52,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[0x04] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = VIRTUAL_TO_PHYSICAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
@@ -108,7 +108,7 @@ s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index) {
 void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
-    u32 vromSize;
+    uintptr_t vromSize;
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
@@ -124,7 +124,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 
 void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     u32 addr;
-    u32 vromSize;
+    uintptr_t vromSize;
     RomFile* fileTableEntry;
 
     objectCtx->status[iParm2].id = -id;
@@ -224,7 +224,7 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepIndex != 0) {
         play->objectCtx.subKeepIndex = Object_Spawn(&play->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[0x05] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
     }
 
     if (cmd->specialFiles.cUpElfMsgNum != 0) {
@@ -234,17 +234,17 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.unk3 = cmd->roomBehavior.gpFlag1;
-    play->roomCtx.currRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
-    play->roomCtx.currRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
+    play->roomCtx.curRoom.unk3 = cmd->roomBehavior.gpFlag1;
+    play->roomCtx.curRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    play->roomCtx.curRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
-    play->roomCtx.currRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
+    play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
     play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
+    play->roomCtx.curRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // SceneTableEntry Header Command 0x0B:  Object List
@@ -350,7 +350,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
         { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
         { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
     };
-    u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
+    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
@@ -436,17 +436,18 @@ void Scene_HeaderCmd09(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x15: Sound Settings=
 void Scene_HeaderCmdSoundSettings(PlayState* play, SceneCmd* cmd) {
-    play->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
-    play->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
+    play->sequenceCtx.seqId = cmd->soundSettings.seqId;
+    play->sequenceCtx.ambienceId = cmd->soundSettings.ambienceId;
 
-    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
-        audio_setBGM(cmd->soundSettings.bgmId);
+    if (gSaveContext.seqId == (u8)NA_BGM_DISABLED ||
+        Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS) {
+        Audio_SetSpec(cmd->soundSettings.specId);
     }
 }
 
 // SceneTableEntry Header Command 0x16: Echo Setting
 void Scene_HeaderCmdEchoSetting(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.currRoom.echo = cmd->echoSettings.echo;
+    play->roomCtx.curRoom.echo = cmd->echoSettings.echo;
 }
 
 // SceneTableEntry Header Command 0x18: Alternate Header List=
@@ -454,9 +455,9 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.sceneSetupIndex != 0) {
+    if (gSaveContext.sceneLayer != 0) {
         altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
-        altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
+        altHeader = altHeaderList[gSaveContext.sceneLayer - 1];
 
         if (altHeader != NULL) {
             Scene_ProcessHeader(play, Lib_SegmentedToVirtual(altHeader));
@@ -467,8 +468,8 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
-    play->csCtx.sceneCsCount = cmd->base.data1;
-    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->base.data2);
+    play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
+    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
@@ -491,30 +492,31 @@ void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
     func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-// SceneTableEntry Header Command 0x1A: Sets Area Visited Flag
-void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
+// SceneTableEntry Header Command 0x19: Sets Region Visited Flag
+void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
 
     while (true) {
-        if (gScenesPerRegion[i][j] == 0xFFFF) {
+        if (gSceneIdsPerRegion[i][j] == 0xFFFF) {
             i++;
             j = 0;
 
-            if (i == ARRAY_COUNT(gScenesPerRegion)) {
+            if (i == REGION_MAX) {
                 break;
             }
         }
 
-        if (play->sceneNum == gScenesPerRegion[i][j]) {
+        if (play->sceneId == gSceneIdsPerRegion[i][j]) {
             break;
         }
 
         j++;
     }
 
-    if (i < ARRAY_COUNT(gScenesPerRegion)) {
-        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
+    if (i < REGION_MAX) {
+        gSaveContext.save.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
     }
 }
 
@@ -560,7 +562,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
         Scene_HeaderCmdEchoSetting,
         Scene_HeaderCmdCutsceneList,
         Scene_HeaderCmdAltHeaderList,
-        Scene_HeaderCmdSetAreaVisitedFlag,
+        Scene_HeaderCmdSetRegionVisitedFlag,
         Scene_HeaderCmdAnimatedMaterials,
         Scene_HeaderCmdActorCutsceneList,
         Scene_HeaderCmdMiniMap,

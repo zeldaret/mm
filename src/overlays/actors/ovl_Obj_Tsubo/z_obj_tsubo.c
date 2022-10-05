@@ -15,9 +15,9 @@
 #define THIS ((ObjTsubo*)thisx)
 
 void ObjTsubo_Init(Actor* thisx, PlayState* play);
-void ObjTsubo_Destroy(Actor* thisx, PlayState* play);
+void ObjTsubo_Destroy(Actor* thisx, PlayState* play2);
 void ObjTsubo_Update(Actor* thisx, PlayState* play);
-void ObjTsubo_Draw(Actor* thisx, PlayState* play);
+void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
 void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
@@ -162,11 +162,11 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
 }
 
 s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
-    return (play->sceneNum != SCENE_HAKUGIN_BS) && (play->sceneNum != SCENE_INISIE_BS);
+    return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
 void func_8092788C(ObjTsubo* this, PlayState* play) {
-    if (!this->unk_197 && (play->roomCtx.currRoom.num != this->homeRoom)) {
+    if (!this->unk_197 && (play->roomCtx.curRoom.num != this->homeRoom)) {
         this->unk_197 = true;
     }
 }
@@ -527,7 +527,7 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
 
     func_8092788C(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
         this->actor.flags &= ~ACTOR_FLAG_4000000;
         Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);

@@ -610,4 +610,12 @@ extern ActorInit Oceff_Wipe7_InitVars;
 extern ActorInit Shot_Sun_InitVars;
 extern ActorInit TG_Sw_InitVars;
 
+extern TransitionInit TransitionFade_InitVars;
+extern TransitionInit TransitionTriforce_InitVars;
+extern TransitionInit TransitionWipe1_InitVars;
+extern TransitionInit TransitionWipe3_InitVars;
+extern TransitionInit TransitionWipe4_InitVars;
+extern TransitionInit TransitionCircle_InitVars;
+extern TransitionInit TransitionWipe5_InitVars;
+
 #endif

@@ -6,6 +6,7 @@
 
 #include "z_en_fishing.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
@@ -15,12 +16,12 @@
 
 #define WATER_SURFACE_Y(play) play->colCtx.colHeader->waterBoxes->minPos.y
 
-void EnFishing_Init(Actor* thisx, PlayState* play);
-void EnFishing_Destroy(Actor* thisx, PlayState* play);
-void EnFishing_UpdateFish(Actor* thisx, PlayState* play);
+void EnFishing_Init(Actor* thisx, PlayState* play2);
+void EnFishing_Destroy(Actor* thisx, PlayState* play2);
+void EnFishing_UpdateFish(Actor* thisx, PlayState* play2);
 void EnFishing_DrawFish(Actor* thisx, PlayState* play);
 
-void EnFishing_UpdateOwner(Actor* thisx, PlayState* play);
+void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2);
 void EnFishing_DrawOwner(Actor* thisx, PlayState* play);
 
 typedef struct {
@@ -5166,11 +5167,11 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamAt.y = mainCam->at.y;
             sSubCamAt.z = mainCam->at.z;
             D_8090CD4C = 2;
-            Interface_ChangeAlpha(12);
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
             sSubCamVelFactor = 0.0f;
             // fallthrough
         case 2:
-            ShrinkWindow_SetLetterboxTarget(27);
+            ShrinkWindow_Letterbox_SetSizeTarget(27);
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;

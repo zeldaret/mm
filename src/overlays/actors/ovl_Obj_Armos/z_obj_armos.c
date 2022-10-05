@@ -13,7 +13,7 @@
 
 void ObjArmos_Init(Actor* thisx, PlayState* play);
 void ObjArmos_Destroy(Actor* thisx, PlayState* play);
-void ObjArmos_Update(Actor* thisx, PlayState* play);
+void ObjArmos_Update(Actor* thisx, PlayState* play2);
 void ObjArmos_Draw(Actor* thisx, PlayState* play);
 
 void func_809A54B4(ObjArmos* this);
