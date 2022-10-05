@@ -82,7 +82,7 @@ void func_80167F0C(PlayState* this) {
         Gfx* opa;
         GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-        D_801F6D4C->unk_04 = gSaveContext.screenScale / 1000.0f;
+        D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
 
         OPEN_DISPS(gfxCtx);
 
