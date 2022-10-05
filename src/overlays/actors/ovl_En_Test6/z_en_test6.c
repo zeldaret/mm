@@ -184,11 +184,11 @@ void func_80A90730(EnTest6* this, PlayState* play) {
 }
 
 void func_80A90C08(s16 arg0) {
-    func_8016566C(arg0);
+    Play_MotionBlurEnable(arg0);
 }
 
 void func_80A90C34(void) {
-    func_80165690();
+    Play_MotionBlurDisable();
 }
 
 void func_80A90C54(PlayState* play, f32 arg1) {

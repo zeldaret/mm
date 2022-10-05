@@ -271,7 +271,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     Math_Vec3f_Copy(&this->subCamEye, &player->actor.world.pos);
                     this->subCamEye.y += 100.0f;
                     Math_Vec3f_Copy(&this->subCamAt, &this->actor.world.pos);
-                    func_8016566C(150);
+                    Play_MotionBlurEnable(150);
                     this->subCamFov = 60.0f;
 
                     boss = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
@@ -391,7 +391,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, 6);
-                func_80165690();
+                Play_MotionBlurDisable();
                 gSaveContext.eventInf[6] |= 1;
             }
             break;

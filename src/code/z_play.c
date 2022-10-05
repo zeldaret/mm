@@ -25,33 +25,38 @@ extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
 extern HiresoStruct D_801F6D50;
 extern u8 D_801F6DFC;
-extern u8 D_801F6DFD; // motion blur "status"?
+extern u8 sMotionBlurStatus;
 
-// Draw Motion Blur
-void func_80165460(PlayState* this) {
+typedef enum {
+    /* 0 */ MOTION_BLUR_STOPPED,
+    /* 1 */ MOTION_BLUR_INITALIZING,
+    /* 2 */ MOTION_BLUR_RUNNING
+} MotionBlurStatus;
+
+void Play_MotionBlurDraw(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     s32 alpha;
     Gfx* gfx;
     Gfx* dlistHead;
 
-    if (SREG(93) != 0) {
-        alpha = SREG(92);
+    if (R_MOTION_BLUR_PRIORITY_ENABLED) {
+        alpha = R_MOTION_BLUR_PRIORITY_ALPHA;
 
-        if (D_801F6DFD == 0) {
-            D_801F6DFD = 1;
+        if (sMotionBlurStatus == MOTION_BLUR_STOPPED) {
+            sMotionBlurStatus = MOTION_BLUR_INITALIZING;
         }
-    } else if (SREG(91) != 0) {
-        alpha = SREG(90);
+    } else if (R_MOTION_BLUR_ENABLED) {
+        alpha = R_MOTION_BLUR_ALPHA;
 
-        if (D_801F6DFD == 0) {
-            D_801F6DFD = 1;
+        if (sMotionBlurStatus == MOTION_BLUR_STOPPED) {
+            sMotionBlurStatus = MOTION_BLUR_INITALIZING;
         }
     } else {
         alpha = 0;
-        D_801F6DFD = 0;
+        sMotionBlurStatus = MOTION_BLUR_STOPPED;
     }
 
-    if (D_801F6DFD != 0) {
+    if (sMotionBlurStatus != MOTION_BLUR_STOPPED) {
         OPEN_DISPS(gfxCtx);
 
         dlistHead = POLY_OPA_DISP;
@@ -62,10 +67,10 @@ void func_80165460(PlayState* this) {
         this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
         this->pauseBgPreRender.fbufSave = this->unk_18E64;
 
-        if (D_801F6DFD == 2) {
+        if (sMotionBlurStatus == MOTION_BLUR_RUNNING) {
             func_80170AE0(&this->pauseBgPreRender, &gfx, alpha);
         } else {
-            D_801F6DFD = 2;
+            sMotionBlurStatus = MOTION_BLUR_RUNNING;
         }
 
         func_801705B4(&this->pauseBgPreRender, &gfx);
@@ -80,34 +85,29 @@ void func_80165460(PlayState* this) {
     }
 }
 
-// Motion Blur Init?
-void func_80165608(void) {
-    SREG(91) = 0;
-    SREG(93) = 0;
-    D_801F6DFD = 0;
+void Play_MotionBlurInit(void) {
+    R_MOTION_BLUR_ENABLED = false;
+    R_MOTION_BLUR_PRIORITY_ENABLED = false;
+    sMotionBlurStatus = MOTION_BLUR_STOPPED;
 }
 
-// Motion Blur Destroy?
-void func_80165630(void) {
-    SREG(91) = 0;
-    SREG(93) = 0;
-    D_801F6DFD = 0;
+void Play_MotionBlurDestroy(void) {
+    R_MOTION_BLUR_ENABLED = false;
+    R_MOTION_BLUR_PRIORITY_ENABLED = false;
+    sMotionBlurStatus = MOTION_BLUR_STOPPED;
 }
 
-// Sets Motion Blur Alpha
-void func_80165658(u32 motionBlurAlpha) {
-    SREG(90) = motionBlurAlpha;
+void Play_MotionBlurSetAlpha(u32 alpha) {
+    R_MOTION_BLUR_ALPHA = alpha;
 }
 
-// Sets Motion Blur Alpha and Enables
-void func_8016566C(u32 motionBlurAlpha) {
-    SREG(90) = motionBlurAlpha;
-    SREG(91) = true;
+void Play_MotionBlurEnable(u32 alpha) {
+    R_MOTION_BLUR_ALPHA = alpha;
+    R_MOTION_BLUR_ENABLED = true;
 }
 
-// Disables Motion Blur
-void func_80165690(void) {
-    SREG(91) = false;
+void Play_MotionBlurDisable(void) {
+    R_MOTION_BLUR_ENABLED = false;
 }
 
 void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
@@ -193,17 +193,17 @@ void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5
     }
 }
 
-void func_80165DB8(s32 arg0) {
-    SREG(92) = arg0;
+void Play_MotionBlurPrioritySetAlpha(u32 alpha) {
+    R_MOTION_BLUR_PRIORITY_ALPHA = alpha;
 }
 
-void func_80165DCC(s32 arg0) {
-    SREG(92) = arg0;
-    SREG(93) = 1;
+void Play_MotionBlurPriorityEnable(u32 alpha) {
+    R_MOTION_BLUR_PRIORITY_ALPHA = alpha;
+    R_MOTION_BLUR_PRIORITY_ENABLED = true;
 }
 
-void func_80165DF0(void) {
-    SREG(93) = 0;
+void Play_MotionBlurPriorityDisable(void) {
+    R_MOTION_BLUR_PRIORITY_ENABLED = false;
 }
 
 void func_80165E04(void) {
@@ -414,7 +414,7 @@ void Play_Destroy(GameState* thisx) {
     func_8016FC98(&D_801F6D50);
     this->state.gfxCtx->callback = NULL;
     this->state.gfxCtx->callbackParam = 0;
-    func_80165630();
+    Play_MotionBlurDestroy();
 
     if (SREG(94) != 0) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
@@ -1376,7 +1376,7 @@ void Play_Draw(PlayState* this) {
         }
 
         DebugDisplay_DrawObjects(this);
-        func_80165460(this);
+        Play_MotionBlurDraw(this);
 
         if (((SREG(94) == 1) || (gTrnsnUnkState == 1)) || (SREG(89) == 1)) {
             Gfx* sp74;
@@ -2232,7 +2232,7 @@ void Play_Init(GameState* thisx) {
         }
     }
 
-    func_80165608();
+    Play_MotionBlurInit();
 
     SREG(94) = 0;
     SREG(89) = 0;

@@ -813,7 +813,7 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
     this->subCamFovNext = 60.0f;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
     Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
-    func_8016566C(0xB4);
+    Play_MotionBlurEnable(0xB4);
     this->actionFunc = EnKakasi_DancingNightAway;
 }
 
@@ -917,7 +917,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 this->unk204 = 0xA;
                 if (this->unk190 == 0xE) {
                     func_800B7298(play, &this->picto.actor, 0x49);
-                    func_80165690();
+                    Play_MotionBlurDisable();
                     this->unk204 = 0x14;
                 }
             }

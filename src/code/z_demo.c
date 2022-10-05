@@ -554,7 +554,7 @@ void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayT
 
 void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     csCtx->state = CS_STATE_4;
-    func_80165690();
+    Play_MotionBlurDisable();
     Audio_SetCutsceneFlag(false);
     gSaveContext.cutsceneTransitionControl = 1;
 
@@ -593,7 +593,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
         }
     } else if (cmd->base == 2) {
         if (csCtx->frames == cmd->startFrame) {
-            func_80165690();
+            Play_MotionBlurDisable();
 
             switch (D_801F4DE2) {
                 case 0x1F:
@@ -763,16 +763,16 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
 void Cutscene_Command_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
-            func_8016566C(180);
+            Play_MotionBlurEnable(180);
         }
 
         if (cmd->base == 2) {
             f32 progress = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
             if (progress >= 0.9f) {
-                func_80165690();
+                Play_MotionBlurDisable();
             } else {
-                func_80165658((1.0f - progress) * 180.0f);
+                Play_MotionBlurSetAlpha((1.0f - progress) * 180.0f);
             }
         }
     }
