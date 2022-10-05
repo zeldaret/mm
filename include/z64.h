@@ -418,7 +418,7 @@ typedef struct {
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
     /* 0x1EE */ u16 debugEditor;
-    /* 0x1F0 */ u8 unk_1F0;
+    /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 unk_200;
     /* 0x202 */ u16 mode;
@@ -463,7 +463,7 @@ typedef struct {
     /* 0x298 */ f32 unk_298;
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
-    /* 0x2A0 */ s16 unk_2A0;
+    /* 0x2A0 */ s16 ocarinaSongIndex;
     /* 0x2A2 */ u8 worldMapPoints[20];
     /* 0x2B6 */ u8 unk_2B6;
     /* 0x2B7 */ u8 unk_2B7;
@@ -471,9 +471,9 @@ typedef struct {
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
-    /* 0x2BE */ s16 unk_2BE[5];
+    /* 0x2BE */ s16 ocarinaButtonsY[5];
     /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
-    /* 0x2CA */ s16 unk_2CA; // Uses OwlStatueId enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {

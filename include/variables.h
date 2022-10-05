@@ -1309,7 +1309,7 @@ extern u8 gUpgradeShifts[8];
 extern u16 gUpgradeCapacities[][4];
 extern u32 gGsFlagsMask[];
 extern u32 gGsFlagsShift[];
-extern void* gItemIcons[];
+extern TexturePtr gItemIcons[];
 extern u8 gItemSlots[];
 extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
@@ -1358,7 +1358,7 @@ extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
 extern u8 D_801CFC98;
 extern s16 D_801CFCA4[9];
 // extern UNK_TYPE2 D_801CFCAC;
-// extern UNK_TYPE1 D_801CFCB8;
+extern s16 gOcarinaSongItemMap[];
 // extern UNK_TYPE2 D_801CFCD8;
 // extern UNK_TYPE2 D_801CFCE4;
 // extern UNK_TYPE2 D_801CFCF0;

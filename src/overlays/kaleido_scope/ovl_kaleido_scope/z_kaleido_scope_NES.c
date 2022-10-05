@@ -222,30 +222,173 @@ s16 D_8082BB68[] = {
     0x000E, 0xFFFE, 0xFFFE, 0xFFEE, 0xFFEE, 0x0000,
 };
 
-s16 D_8082BB74[] = {
-    0x002D, 0x004E, 0x000A, 0x002D, 0x0050, 0x000B, 0xFF93, 0xFFA9, 0xFFBF, 0xFFD7, 0xFFED, 0xFFEE, 0xFF93, 0xFFA9,
-    0xFFBF, 0xFFD7, 0xFFED, 0xFFEE, 0xFF99, 0x0007, 0x0052, 0xFF92, 0xFFCA, 0xFF9E, 0xFFAA, 0xFFB6, 0xFFC2, 0xFFCE,
-    0xFFDA, 0xFFE6, 0xFFF2, 0xFF9E, 0xFFAA, 0xFFB6, 0xFFC2, 0xFFCE, 0xFFDA, 0xFFE6, 0xFFF2, 0x0000,
+s16 sQuestVtxRectLeft[] = {
+    45,   // QUEST_REMAINS_ODOWLA
+    78,   // QUEST_REMAINS_GOHT
+    10,   // QUEST_REMAINS_GYORG
+    45,   // QUEST_REMAINS_TWINMOLD
+    80,   // QUEST_SHIELD
+    11,   // QUEST_SWORD
+    -109, // QUEST_SONG_SONATA
+    -87,  // QUEST_SONG_LULLABY
+    -65,  // QUEST_SONG_BOSSA_NOVA
+    -41,  // QUEST_SONG_ELEGY
+    -19,  // QUEST_SONG_OATH
+    -18,  // QUEST_SONG_SARIA
+    -109, // QUEST_SONG_TIME
+    -87,  // QUEST_SONG_HEALING
+    -65,  // QUEST_SONG_EPONA
+    -41,  // QUEST_SONG_SOARING
+    -19,  // QUEST_SONG_STORMS
+    -18,  // QUEST_SONG_SUN
+    -103, // QUEST_BOMBERS_NOTEBOOK
+    7,    // QUEST_QUIVER
+    82,   // QUEST_BOMB_BAG
+    -110, // QUEST_HEART_PIECE
+    -54,  // played ocarina button index 0
+    -98,  // played ocarina button index 1
+    -86,  // played ocarina button index 2
+    -74,  // played ocarina button index 3
+    -62,  // played ocarina button index 4
+    -50,  // played ocarina button index 5
+    -38,  // played ocarina button index 6
+    -26,  // played ocarina button index 7
+    -14,  // ocarina button index 0
+    -98,  // ocarina button index 1
+    -86,  // ocarina button index 2
+    -74,  // ocarina button index 3
+    -62,  // ocarina button index 4
+    -50,  // ocarina button index 5
+    -38,  // ocarina button index 6
+    -26,  // ocarina button index 7
+    -14,  // QUEST_SKULL_TOKEN
 };
 
-s16 D_8082BBC4[] = {
-    0x003E, 0x002A, 0x002A, 0x0014, 0xFFF7, 0xFFF7, 0xFFEC, 0xFFEC, 0xFFEC, 0xFFEC, 0xFFEC, 0xFFEC, 0x0002, 0x0002,
-    0x0002, 0x0002, 0x0002, 0x0002, 0x0036, 0xFFD4, 0xFFD4, 0x0022, 0x003A, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC,
-    0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0xFFCC, 0x0000,
+s16 sQuestVtxRectTop[] = {
+    62,  // QUEST_REMAINS_ODOWLA
+    42,  // QUEST_REMAINS_GOHT
+    42,  // QUEST_REMAINS_GYORG
+    20,  // QUEST_REMAINS_TWINMOLD
+    -9,  // QUEST_SHIELD
+    -9,  // QUEST_SWORD
+    -20, // QUEST_SONG_SONATA
+    -20, // QUEST_SONG_LULLABY
+    -20, // QUEST_SONG_BOSSA_NOVA
+    -20, // QUEST_SONG_ELEGY
+    -20, // QUEST_SONG_OATH
+    -20, // QUEST_SONG_SARIA
+    2,   // QUEST_SONG_TIME
+    2,   // QUEST_SONG_HEALING
+    2,   // QUEST_SONG_EPONA
+    2,   // QUEST_SONG_SOARING
+    2,   // QUEST_SONG_STORMS
+    2,   // QUEST_SONG_SUN
+    54,  // QUEST_BOMBERS_NOTEBOOK
+    -44, // QUEST_QUIVER
+    -44, // QUEST_BOMB_BAG
+    34,  // QUEST_HEART_PIECE
+    58,  // played ocarina button index 0
+    -52, // played ocarina button index 1
+    -52, // played ocarina button index 2
+    -52, // played ocarina button index 3
+    -52, // played ocarina button index 4
+    -52, // played ocarina button index 5
+    -52, // played ocarina button index 6
+    -52, // played ocarina button index 7
+    -52, // ocarina button index 0
+    -52, // ocarina button index 1
+    -52, // ocarina button index 2
+    -52, // ocarina button index 3
+    -52, // ocarina button index 4
+    -52, // ocarina button index 5
+    -52, // ocarina button index 6
+    -52, // ocarina button index 7
+    -52, // QUEST_SKULL_TOKEN
 };
 
-s16 D_8082BC14[] = {
-    0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,
-    0x0010, 0x0010, 0x0010, 0x0010, 0x0020, 0x0020, 0x0020, 0x0018, 0x0030, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,
-    0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0000,
+s16 sQuestVtxWidths[] = {
+    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_GOHT
+    32, // QUEST_REMAINS_GYORG
+    32, // QUEST_REMAINS_TWINMOLD
+    32, // QUEST_SHIELD
+    32, // QUEST_SWORD
+    16, // QUEST_SONG_SONATA
+    16, // QUEST_SONG_LULLABY
+    16, // QUEST_SONG_BOSSA_NOVA
+    16, // QUEST_SONG_ELEGY
+    16, // QUEST_SONG_OATH
+    16, // QUEST_SONG_SARIA
+    16, // QUEST_SONG_TIME
+    16, // QUEST_SONG_HEALING
+    16, // QUEST_SONG_EPONA
+    16, // QUEST_SONG_SOARING
+    16, // QUEST_SONG_STORMS
+    16, // QUEST_SONG_SUN
+    32, // QUEST_BOMBERS_NOTEBOOK
+    32, // QUEST_QUIVER
+    32, // QUEST_BOMB_BAG
+    24, // QUEST_HEART_PIECE
+    48, // played ocarina button index 0
+    16, // played ocarina button index 1
+    16, // played ocarina button index 2
+    16, // played ocarina button index 3
+    16, // played ocarina button index 4
+    16, // played ocarina button index 5
+    16, // played ocarina button index 6
+    16, // played ocarina button index 7
+    16, // ocarina button index 0
+    16, // ocarina button index 1
+    16, // ocarina button index 2
+    16, // ocarina button index 3
+    16, // ocarina button index 4
+    16, // ocarina button index 5
+    16, // ocarina button index 6
+    16, // ocarina button index 7
+    16, // QUEST_SKULL_TOKEN
 };
 
-s16 D_8082BC64[] = {
-    0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018, 0x0018,
-    0x0018, 0x0018, 0x0018, 0x0018, 0x0020, 0x0020, 0x0020, 0x0018, 0x0030, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010,
-    0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0010, 0x0000,
+s16 sQuestVtxHeights[] = {
+    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_GOHT
+    32, // QUEST_REMAINS_GYORG
+    32, // QUEST_REMAINS_TWINMOLD
+    32, // QUEST_SHIELD
+    32, // QUEST_SWORD
+    24, // QUEST_SONG_SONATA
+    24, // QUEST_SONG_LULLABY
+    24, // QUEST_SONG_BOSSA_NOVA
+    24, // QUEST_SONG_ELEGY
+    24, // QUEST_SONG_OATH
+    24, // QUEST_SONG_SARIA
+    24, // QUEST_SONG_TIME
+    24, // QUEST_SONG_HEALING
+    24, // QUEST_SONG_EPONA
+    24, // QUEST_SONG_SOARING
+    24, // QUEST_SONG_STORMS
+    24, // QUEST_SONG_SUN
+    32, // QUEST_BOMBERS_NOTEBOOK
+    32, // QUEST_QUIVER
+    32, // QUEST_BOMB_BAG
+    24, // QUEST_HEART_PIECE
+    48, // played ocarina button index 0
+    16, // played ocarina button index 1
+    16, // played ocarina button index 2
+    16, // played ocarina button index 3
+    16, // played ocarina button index 4
+    16, // played ocarina button index 5
+    16, // played ocarina button index 6
+    16, // played ocarina button index 7
+    16, // ocarina button index 0
+    16, // ocarina button index 1
+    16, // ocarina button index 2
+    16, // ocarina button index 3
+    16, // ocarina button index 4
+    16, // ocarina button index 5
+    16, // ocarina button index 6
+    16, // ocarina button index 7
+    16, // QUEST_SKULL_TOKEN
 };
-
 f32 D_8082BCB4[] = {
     -62.0f, -36.0f, -10.0f, 16.0f, 42.0f, 68.0f,
 };
@@ -323,7 +466,7 @@ s32 D_8082BEB8[] = { 0, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80821A04.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawQuadTextureRGBA32.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_DrawTexQuadRGBA32.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80821CC4.s")
 
