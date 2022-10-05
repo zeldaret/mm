@@ -1,7 +1,8 @@
 /**
  * @file code_80140E80.c
- * @brief Copies images between color images (generally framebuffers), possibly with filling, scaling, and colour interpolation.
- * 
+ * @brief Copies images between color images (generally framebuffers), possibly with filling, scaling, and colour
+ * interpolation.
+ *
  * Used for several transition effects, and in z_play to shrink the screen at the end of the First and Second Days.
  *
  *
@@ -20,7 +21,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ FB_MODE_DO_NOTHING, // Do nothing but waste time loading microcode
-    /* 1 */ FB_MODE_GENERAL, // Interpolation, filling and scaling
+    /* 1 */ FB_MODE_GENERAL,    // Interpolation, filling and scaling
     /* 2 */ FB_MODE_INTERPOLATE
 } FbMode;
 
@@ -175,13 +176,13 @@ void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
 // internal, used in func_8014151C
 /**
  * Most general redrawing function.
- * 
+ *
  *  - Copies `source` to `img`,
  *  - fills the current framebuffer with `this->primColor`,
  *  - applies colour interpolation to `img`,
  *  - copies `img` back to `source`, with rescaling.
- * 
- * @param[in]     this 
+ *
+ * @param[in]     this
  * @param[in,out] gfxP   Pointer to current displaylist
  * @param[in,out] source Pointer to beginning of in/out color image
  * @param[out]    img    Pointer to beginning of destination color image
@@ -195,21 +196,17 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     gDPPipeSync(gfx++);
     // copy source to img
     gDPSetOtherMode(gfx++,
-        G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | 
-            G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | 
-            G_CYC_COPY | G_PM_NPRIMITIVE,
-        G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2
-    );
+                    G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
     func_8014116C(&gfx, source, img, width, height, BG_CYC_COPY);
 
     gDPPipeSync(gfx++);
     // fill framebuffer with primColor
     gDPSetOtherMode(gfx++,
-        G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | 
-            G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | 
-            G_CYC_FILL | G_PM_NPRIMITIVE,
-        G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2
-    );
+                    G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
     {
         s32 color = GPACK_RGBA5551(this->primColor.r, this->primColor.g, (u32)this->primColor.b, 1);
 
@@ -231,40 +228,29 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     if (this->envColor.a == 0) {
         // Interpolate between primColor and texel color using lod (but with max alpha)
         gDPSetOtherMode(gfx++,
-            G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | 
-                G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | 
-                G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-            G_AC_THRESHOLD | G_ZS_PIXEL | AA_EN | CVG_DST_CLAMP | ZMODE_OPA | CVG_X_ALPHA | ALPHA_CVG_SEL |
-                GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) |
-                GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA)
-        );
-        gDPSetCombineLERP(gfx++, 
-            PRIMITIVE, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 
-            0, 0, 0, 1, 
-            PRIMITIVE, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 
-            0, 0, 0, 1
-        );
+                        G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                            G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                        G_AC_THRESHOLD | G_ZS_PIXEL | AA_EN | CVG_DST_CLAMP | ZMODE_OPA | CVG_X_ALPHA | ALPHA_CVG_SEL |
+                            GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) |
+                            GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA));
+        gDPSetCombineLERP(gfx++, PRIMITIVE, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 0, 0, 0, 1, PRIMITIVE, TEXEL0, PRIM_LOD_FRAC,
+                          TEXEL0, 0, 0, 0, 1);
     } else {
         // Interpolate between envColor (the new black) and primColor (the new white)
         gDPSetOtherMode(gfx++,
-            G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | 
-                G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | 
-                G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-            G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_NOOP2
-        );
+                        G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                            G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                        G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_NOOP2);
         gDPSetColor(gfx++, G_SETENVCOLOR, this->envColor.rgba);
-        gDPSetCombineLERP(gfx++,
-            PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 
-            PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 
-            PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 
-            PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT
-        );
+        gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0,
+                          ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0,
+                          ENVIRONMENT);
     }
     // Draw scaled image in centre of width x height rectangle in `source`
     {
         f32 scale = CLAMP_ALT(this->scale, SCALE_MIN, SCALE_UNCHANGED);
-        func_801411B4(&gfx, img, source, width, height, width * 0.5f * (1.0f - scale),
-                      height * 0.5f * (1.0f - scale), scale, scale, BG_CYC_1CYC);
+        func_801411B4(&gfx, img, source, width, height, width * 0.5f * (1.0f - scale), height * 0.5f * (1.0f - scale),
+                      scale, scale, BG_CYC_1CYC);
     }
 
     gDPPipeSync(gfx++);
@@ -276,8 +262,8 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
 /**
  * If scale is within `(SCALE_MIN, SCALE_UNCHANGED)`, apply func_80141200().
  * If it is smaller than `SCALE_MIN`, fill the framebuffer with `this->primColor`
- * 
- * @param[in]     this 
+ *
+ * @param[in]     this
  * @param[in,out] gfxP   Pointer to current displaylist
  * @param[in,out] source Pointer to beginning of source color image
  * @param[in,out] img    Pointer to beginning of destination color image
@@ -295,11 +281,9 @@ void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
             gDPPipeSync(gfx++);
             // fill the framebuffer with this->primColor
             gDPSetOtherMode(gfx++,
-                G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | 
-                    G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | 
-                    G_CYC_FILL | G_PM_NPRIMITIVE,
-                G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2
-            );
+                            G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                                G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
+                            G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
             color = GPACK_RGBA5551(this->primColor.r, this->primColor.g, (u32)this->primColor.b, 1);
             gDPSetFillColor(gfx++, (color << 0x10) | color);
             //! @bug See corresponding note in func_80141200()
@@ -314,9 +298,10 @@ void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
 
 // internal, used in func_80141778, mode 2
 /**
- * Redraw `img` in-place, using texel color to interpolate between envColor (the new black) and primColor (the new white)
- * 
- * @param[in]     this 
+ * Redraw `img` in-place, using texel color to interpolate between envColor (the new black) and primColor (the new
+ * white)
+ *
+ * @param[in]     this
  * @param[in,out] gfxP   Pointer to current displaylist
  * @param[in,out] img    Pointer to beginning of color image to modify in-place
  * @param[in]     width  width of img
@@ -328,19 +313,13 @@ void func_80141678(Struct_80140E80* this, Gfx** gfxP, void* img, s32 width, s32 
     gDPPipeSync(gfx++);
 
     gDPSetOtherMode(gfx++,
-        G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | 
-            G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE | G_TD_CLAMP | G_TP_NONE | 
-            G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-        G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_NOOP2
-    );
+                    G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PIXEL | G_RM_CLD_SURF | G_RM_NOOP2);
     gDPSetColor(gfx++, G_SETPRIMCOLOR, this->primColor.rgba);
     gDPSetColor(gfx++, G_SETENVCOLOR, this->envColor.rgba);
-    gDPSetCombineLERP(gfx++,
-        PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 
-        PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT,
-        PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT,
-        PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT
-    );
+    gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT,
+                      PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT);
     func_8014116C(&gfx, img, img, width, height, BG_CYC_1CYC);
 
     gDPPipeSync(gfx++);
@@ -350,9 +329,9 @@ void func_80141678(Struct_80140E80* this, Gfx** gfxP, void* img, s32 width, s32 
 
 // main 2D drawing function in this file, used in Play and FbdemoWipe4
 /**
- * 
- * 
- * @param[in]     this 
+ *
+ *
+ * @param[in]     this
  * @param[in,out] gfxP Pointer to current displaylist
  * @param[in,out] img  Pointer to beginning of destination color image
  */
