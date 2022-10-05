@@ -1600,21 +1600,169 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
     return k;
 }
 
-s16 D_8082BB74[] = {
-    45, 78,   10,  45,  80,  11,  -109, -87, -65, -41, -19, -18, -109, -87, -65, -41, -19, -18, -103, 7,
-    82, -110, -54, -98, -86, -74, -62,  -50, -38, -26, -14, -98, -86,  -74, -62, -50, -38, -26, -14,  0,
+s16 sQuestVtxRectLeft[] = {
+    45,   // QUEST_REMAINS_ODOWLA
+    78,   // QUEST_REMAINS_GOHT
+    10,   // QUEST_REMAINS_GYORG
+    45,   // QUEST_REMAINS_TWINMOLD
+    80,   // QUEST_SHIELD
+    11,   // QUEST_SWORD
+    -109, // QUEST_SONG_SONATA
+    -87,  // QUEST_SONG_LULLABY
+    -65,  // QUEST_SONG_BOSSA_NOVA
+    -41,  // QUEST_SONG_ELEGY
+    -19,  // QUEST_SONG_OATH
+    -18,  // QUEST_SONG_SARIA
+    -109, // QUEST_SONG_TIME
+    -87,  // QUEST_SONG_HEALING
+    -65,  // QUEST_SONG_EPONA
+    -41,  // QUEST_SONG_SOARING
+    -19,  // QUEST_SONG_STORMS
+    -18,  // QUEST_SONG_SUN
+    -103, // QUEST_BOMBERS_NOTEBOOK
+    7,    // QUEST_QUIVER
+    82,   // QUEST_BOMB_BAG
+    -110, // QUEST_HEART_PIECE
+    -54,  // played ocarina button index 0
+    -98,  // played ocarina button index 1
+    -86,  // played ocarina button index 2
+    -74,  // played ocarina button index 3
+    -62,  // played ocarina button index 4
+    -50,  // played ocarina button index 5
+    -38,  // played ocarina button index 6
+    -26,  // played ocarina button index 7
+    -14,  // ocarina button index 0
+    -98,  // ocarina button index 1
+    -86,  // ocarina button index 2
+    -74,  // ocarina button index 3
+    -62,  // ocarina button index 4
+    -50,  // ocarina button index 5
+    -38,  // ocarina button index 6
+    -26,  // ocarina button index 7
+    -14,  // QUEST_SKULL_TOKEN
 };
-s16 D_8082BBC4[] = {
-    62,  42, 42, 20,  -9,  -9,  -20, -20, -20, -20, -20, -20, 2,   2,   2,   2,   2,   2,   54,  -44,
-    -44, 34, 58, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, -52, 0,
+s16 sQuestVtxRectTop[] = {
+    62,  // QUEST_REMAINS_ODOWLA
+    42,  // QUEST_REMAINS_GOHT
+    42,  // QUEST_REMAINS_GYORG
+    20,  // QUEST_REMAINS_TWINMOLD
+    -9,  // QUEST_SHIELD
+    -9,  // QUEST_SWORD
+    -20, // QUEST_SONG_SONATA
+    -20, // QUEST_SONG_LULLABY
+    -20, // QUEST_SONG_BOSSA_NOVA
+    -20, // QUEST_SONG_ELEGY
+    -20, // QUEST_SONG_OATH
+    -20, // QUEST_SONG_SARIA
+    2,   // QUEST_SONG_TIME
+    2,   // QUEST_SONG_HEALING
+    2,   // QUEST_SONG_EPONA
+    2,   // QUEST_SONG_SOARING
+    2,   // QUEST_SONG_STORMS
+    2,   // QUEST_SONG_SUN
+    54,  // QUEST_BOMBERS_NOTEBOOK
+    -44, // QUEST_QUIVER
+    -44, // QUEST_BOMB_BAG
+    34,  // QUEST_HEART_PIECE
+    58,  // played ocarina button index 0
+    -52, // played ocarina button index 1
+    -52, // played ocarina button index 2
+    -52, // played ocarina button index 3
+    -52, // played ocarina button index 4
+    -52, // played ocarina button index 5
+    -52, // played ocarina button index 6
+    -52, // played ocarina button index 7
+    -52, // ocarina button index 0
+    -52, // ocarina button index 1
+    -52, // ocarina button index 2
+    -52, // ocarina button index 3
+    -52, // ocarina button index 4
+    -52, // ocarina button index 5
+    -52, // ocarina button index 6
+    -52, // ocarina button index 7
+    -52, // QUEST_SKULL_TOKEN
 };
-s16 D_8082BC14[] = {
-    32, 32, 32, 32, 32, 32, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 32, 32,
-    32, 24, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 0,
+s16 sQuestVtxWidths[] = {
+    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_GOHT
+    32, // QUEST_REMAINS_GYORG
+    32, // QUEST_REMAINS_TWINMOLD
+    32, // QUEST_SHIELD
+    32, // QUEST_SWORD
+    16, // QUEST_SONG_SONATA
+    16, // QUEST_SONG_LULLABY
+    16, // QUEST_SONG_BOSSA_NOVA
+    16, // QUEST_SONG_ELEGY
+    16, // QUEST_SONG_OATH
+    16, // QUEST_SONG_SARIA
+    16, // QUEST_SONG_TIME
+    16, // QUEST_SONG_HEALING
+    16, // QUEST_SONG_EPONA
+    16, // QUEST_SONG_SOARING
+    16, // QUEST_SONG_STORMS
+    16, // QUEST_SONG_SUN
+    32, // QUEST_BOMBERS_NOTEBOOK
+    32, // QUEST_QUIVER
+    32, // QUEST_BOMB_BAG
+    24, // QUEST_HEART_PIECE
+    48, // played ocarina button index 0
+    16, // played ocarina button index 1
+    16, // played ocarina button index 2
+    16, // played ocarina button index 3
+    16, // played ocarina button index 4
+    16, // played ocarina button index 5
+    16, // played ocarina button index 6
+    16, // played ocarina button index 7
+    16, // ocarina button index 0
+    16, // ocarina button index 1
+    16, // ocarina button index 2
+    16, // ocarina button index 3
+    16, // ocarina button index 4
+    16, // ocarina button index 5
+    16, // ocarina button index 6
+    16, // ocarina button index 7
+    16, // QUEST_SKULL_TOKEN
 };
-s16 D_8082BC64[] = {
-    32, 32, 32, 32, 32, 32, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 32, 32,
-    32, 24, 48, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 0,
+s16 sQuestVtxHeights[] = {
+    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_GOHT
+    32, // QUEST_REMAINS_GYORG
+    32, // QUEST_REMAINS_TWINMOLD
+    32, // QUEST_SHIELD
+    32, // QUEST_SWORD
+    24, // QUEST_SONG_SONATA
+    24, // QUEST_SONG_LULLABY
+    24, // QUEST_SONG_BOSSA_NOVA
+    24, // QUEST_SONG_ELEGY
+    24, // QUEST_SONG_OATH
+    24, // QUEST_SONG_SARIA
+    24, // QUEST_SONG_TIME
+    24, // QUEST_SONG_HEALING
+    24, // QUEST_SONG_EPONA
+    24, // QUEST_SONG_SOARING
+    24, // QUEST_SONG_STORMS
+    24, // QUEST_SONG_SUN
+    32, // QUEST_BOMBERS_NOTEBOOK
+    32, // QUEST_QUIVER
+    32, // QUEST_BOMB_BAG
+    24, // QUEST_HEART_PIECE
+    48, // played ocarina button index 0
+    16, // played ocarina button index 1
+    16, // played ocarina button index 2
+    16, // played ocarina button index 3
+    16, // played ocarina button index 4
+    16, // played ocarina button index 5
+    16, // played ocarina button index 6
+    16, // played ocarina button index 7
+    16, // ocarina button index 0
+    16, // ocarina button index 1
+    16, // ocarina button index 2
+    16, // ocarina button index 3
+    16, // ocarina button index 4
+    16, // ocarina button index 5
+    16, // ocarina button index 6
+    16, // ocarina button index 7
+    16, // QUEST_SKULL_TOKEN
 };
 void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -1780,28 +1928,28 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
         pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, 156 * sizeof(Vtx));
 
         for (k = 0, j = 0; j < 39; j++, k += 4) {
-            if (j < 6) {
-                pauseCtx->questVtx[k + 0].v.ob[0] = pauseCtx->questVtx[k + 2].v.ob[0] = D_8082BB74[j];
+            if (j <= QUEST_SWORD) {
+                pauseCtx->questVtx[k + 0].v.ob[0] = pauseCtx->questVtx[k + 2].v.ob[0] = sQuestVtxRectLeft[j];
 
                 pauseCtx->questVtx[k + 1].v.ob[0] = pauseCtx->questVtx[k + 3].v.ob[0] =
-                    pauseCtx->questVtx[k + 0].v.ob[0] + D_8082BC14[j];
+                    pauseCtx->questVtx[k + 0].v.ob[0] + sQuestVtxWidths[j];
 
                 pauseCtx->questVtx[k + 0].v.ob[1] = pauseCtx->questVtx[k + 1].v.ob[1] =
-                    D_8082BBC4[j] + pauseCtx->offsetY;
+                    sQuestVtxRectTop[j] + pauseCtx->offsetY;
 
                 pauseCtx->questVtx[k + 2].v.ob[1] = pauseCtx->questVtx[k + 3].v.ob[1] =
-                    pauseCtx->questVtx[k + 0].v.ob[1] - D_8082BC64[j];
+                    pauseCtx->questVtx[k + 0].v.ob[1] - sQuestVtxHeights[j];
             } else {
-                pauseCtx->questVtx[k + 0].v.ob[0] = pauseCtx->questVtx[k + 2].v.ob[0] = D_8082BB74[j] + 2;
+                pauseCtx->questVtx[k + 0].v.ob[0] = pauseCtx->questVtx[k + 2].v.ob[0] = sQuestVtxRectLeft[j] + 2;
 
                 pauseCtx->questVtx[k + 1].v.ob[0] = pauseCtx->questVtx[k + 3].v.ob[0] =
-                    pauseCtx->questVtx[k + 0].v.ob[0] + D_8082BC14[j] - 4;
+                    pauseCtx->questVtx[k + 0].v.ob[0] + sQuestVtxWidths[j] - 4;
 
                 pauseCtx->questVtx[k + 0].v.ob[1] = pauseCtx->questVtx[k + 1].v.ob[1] =
-                    D_8082BBC4[j] + pauseCtx->offsetY - 2;
+                    sQuestVtxRectTop[j] + pauseCtx->offsetY - 2;
 
                 pauseCtx->questVtx[k + 2].v.ob[1] = pauseCtx->questVtx[k + 3].v.ob[1] =
-                    pauseCtx->questVtx[k + 0].v.ob[1] - D_8082BC64[j] + 4;
+                    pauseCtx->questVtx[k + 0].v.ob[1] - sQuestVtxHeights[j] + 4;
             }
 
             pauseCtx->questVtx[k + 0].v.ob[2] = pauseCtx->questVtx[k + 1].v.ob[2] = pauseCtx->questVtx[k + 2].v.ob[2] =
@@ -1813,8 +1961,8 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
             pauseCtx->questVtx[k + 0].v.tc[0] = pauseCtx->questVtx[k + 0].v.tc[1] = pauseCtx->questVtx[k + 1].v.tc[1] =
                 pauseCtx->questVtx[k + 2].v.tc[0] = 0;
 
-            pauseCtx->questVtx[k + 1].v.tc[0] = pauseCtx->questVtx[k + 3].v.tc[0] = D_8082BC14[j] << 5;
-            pauseCtx->questVtx[k + 2].v.tc[1] = pauseCtx->questVtx[k + 3].v.tc[1] = D_8082BC64[j] << 5;
+            pauseCtx->questVtx[k + 1].v.tc[0] = pauseCtx->questVtx[k + 3].v.tc[0] = sQuestVtxWidths[j] << 5;
+            pauseCtx->questVtx[k + 2].v.tc[1] = pauseCtx->questVtx[k + 3].v.tc[1] = sQuestVtxHeights[j] << 5;
 
             pauseCtx->questVtx[k + 0].v.cn[0] = pauseCtx->questVtx[k + 1].v.cn[0] = pauseCtx->questVtx[k + 2].v.cn[0] =
                 pauseCtx->questVtx[k + 3].v.cn[0] = pauseCtx->questVtx[k + 0].v.cn[1] =

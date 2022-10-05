@@ -126,7 +126,7 @@ typedef enum {
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
 void KaleidoScope_DrawTexQuadRGBA32(GraphicsContext* gfxCtx, TexturePtr texture, u16 width, u16 height, u16 point);
-void KaleidoScope_SetView(PauseContext* pauseCtx, f32 x, f32 y, f32 z);
+void KaleidoScope_SetView(PauseContext* pauseCtx, f32 eyeX, f32 eyeY, f32 eyeZ);
 void func_80821A04(PlayState* play);
 
 // Map
