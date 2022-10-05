@@ -253,14 +253,14 @@ s16 sQuestVtxRectLeft[] = {
     -50,  // ocarina song button index 5
     -38,  // ocarina song button index 6
     -26,  // ocarina song button index 7
-    -14,  // ocarina player input index 0
-    -98,  // ocarina player input index 1
-    -86,  // ocarina player input index 2
-    -74,  // ocarina player input index 3
-    -62,  // ocarina player input index 4
-    -50,  // ocarina player input index 5
-    -38,  // ocarina player input index 6
-    -26,  // ocarina player input index 7
+    -14,  // ocarina input button index 0
+    -98,  // ocarina input button index 1
+    -86,  // ocarina input button index 2
+    -74,  // ocarina input button index 3
+    -62,  // ocarina input button index 4
+    -50,  // ocarina input button index 5
+    -38,  // ocarina input button index 6
+    -26,  // ocarina input button index 7
     -14,  // QUEST_SKULL_TOKEN
 };
 
@@ -295,14 +295,14 @@ s16 sQuestVtxRectTop[] = {
     -52, // ocarina song button index 5
     -52, // ocarina song button index 6
     -52, // ocarina song button index 7
-    -52, // ocarina player input index 0
-    -52, // ocarina player input index 1
-    -52, // ocarina player input index 2
-    -52, // ocarina player input index 3
-    -52, // ocarina player input index 4
-    -52, // ocarina player input index 5
-    -52, // ocarina player input index 6
-    -52, // ocarina player input index 7
+    -52, // ocarina input button index 0
+    -52, // ocarina input button index 1
+    -52, // ocarina input button index 2
+    -52, // ocarina input button index 3
+    -52, // ocarina input button index 4
+    -52, // ocarina input button index 5
+    -52, // ocarina input button index 6
+    -52, // ocarina input button index 7
     -52, // QUEST_SKULL_TOKEN
 };
 
@@ -337,14 +337,14 @@ s16 sQuestVtxWidths[] = {
     16, // ocarina song button index 5
     16, // ocarina song button index 6
     16, // ocarina song button index 7
-    16, // ocarina player input index 0
-    16, // ocarina player input index 1
-    16, // ocarina player input index 2
-    16, // ocarina player input index 3
-    16, // ocarina player input index 4
-    16, // ocarina player input index 5
-    16, // ocarina player input index 6
-    16, // ocarina player input index 7
+    16, // ocarina input button index 0
+    16, // ocarina input button index 1
+    16, // ocarina input button index 2
+    16, // ocarina input button index 3
+    16, // ocarina input button index 4
+    16, // ocarina input button index 5
+    16, // ocarina input button index 6
+    16, // ocarina input button index 7
     16, // QUEST_SKULL_TOKEN
 };
 
@@ -379,14 +379,14 @@ s16 sQuestVtxHeights[] = {
     16, // ocarina song button index 5
     16, // ocarina song button index 6
     16, // ocarina song button index 7
-    16, // ocarina player input index 0
-    16, // ocarina player input index 1
-    16, // ocarina player input index 2
-    16, // ocarina player input index 3
-    16, // ocarina player input index 4
-    16, // ocarina player input index 5
-    16, // ocarina player input index 6
-    16, // ocarina player input index 7
+    16, // ocarina input button index 0
+    16, // ocarina input button index 1
+    16, // ocarina input button index 2
+    16, // ocarina input button index 3
+    16, // ocarina input button index 4
+    16, // ocarina input button index 5
+    16, // ocarina input button index 6
+    16, // ocarina input button index 7
     16, // QUEST_SKULL_TOKEN
 };
 f32 D_8082BCB4[] = {
