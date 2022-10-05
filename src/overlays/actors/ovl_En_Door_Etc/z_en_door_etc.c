@@ -92,9 +92,9 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     s32 i;
     EnDoorEtc* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetScale(&this->actor, 0.01f);
-    this->actor.shape.rot.x = -0x4000;
+    Actor_ProcessInitChain(&this->door.dyna.actor, sInitChain);
+    Actor_SetScale(&this->door.dyna.actor, 0.01f);
+    this->door.dyna.actor.shape.rot.x = -0x4000;
     this->angle = 0;
     for (i = 0; i < 15; i++, objectInfo++) {
         if (play->sceneId == objectInfo->sceneId) {
@@ -106,19 +106,19 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     }
     objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_MarkForDeath(&this->door.dyna.actor);
     } else {
-        this->objectIndex = objectIndex;
-        this->dListIndex = objectInfo->dListIndex;
-        if (this->actor.objBankIndex == this->objectIndex) {
+        this->door.requiredObjBankIndex = objectIndex;
+        this->door.dlIndex = objectInfo->dListIndex;
+        if (this->door.dyna.actor.objBankIndex == this->door.requiredObjBankIndex) {
             EnDoorEtc_WaitForObject(this, play);
         } else {
             this->actionFunc = EnDoorEtc_WaitForObject;
         }
     }
     Collider_InitCylinder(play, &this->collider);
-    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    Collider_SetCylinder(play, &this->collider, &this->door.dyna.actor, &sCylinderInit);
+    this->door.dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
 }
 
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play) {
@@ -139,11 +139,11 @@ s32 EnDoorEtc_IsDistanceGreater(Vec3f* a, Vec3f* b, f32 c) {
 }
 
 void EnDoorEtc_WaitForObject(EnDoorEtc* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
-        this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.objBankIndex = this->objectIndex;
+    if (Object_IsLoaded(&play->objectCtx, this->door.requiredObjBankIndex)) {
+        this->door.dyna.actor.flags &= ~ACTOR_FLAG_10;
+        this->door.dyna.actor.objBankIndex = this->door.requiredObjBankIndex;
         this->actionFunc = func_80AC2354;
-        this->actor.draw = EnDoorEtc_Draw;
+        this->door.dyna.actor.draw = EnDoorEtc_Draw;
     }
 }
 
@@ -175,27 +175,27 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play) {
     s16 yawDiff;
     s32 yawDiffAbs;
 
-    Actor_OffsetOfPointInActorCoords(&this->actor, &playerOffsetFromDoor, &player->actor.world.pos);
-    if (this->unk_1A1 == 0) {
+    Actor_OffsetOfPointInActorCoords(&this->door.dyna.actor, &playerOffsetFromDoor, &player->actor.world.pos);
+    if (this->door.playOpenAnim == 0) {
         if ((!Player_InCsMode(play)) &&
             ((fabsf(playerOffsetFromDoor.y) < 20.0f) && fabsf(playerOffsetFromDoor.x) < 20.0f) &&
             (fabsf(playerOffsetFromDoor.z) < 50.0f)) {
-            yawDiff = player->actor.shape.rot.y - this->actor.shape.rot.y;
+            yawDiff = player->actor.shape.rot.y - this->door.dyna.actor.shape.rot.y;
             if (playerOffsetFromDoor.z > 0.0f) {
                 yawDiff = 0x8000 - yawDiff;
             }
             yawDiffAbs = ABS_ALT(yawDiff);
             if (yawDiffAbs < 0x3000) {
                 player->doorDirection = (playerOffsetFromDoor.z >= 0.0f) ? 1.0f : -1.0f;
-                player->doorActor = &this->actor;
+                player->doorActor = &this->door.dyna.actor;
                 player->doorType = -1;
             }
         }
     }
-    if ((this->actor.textId == 0x239B) && Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->actor))) {
-        Flags_UnsetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->actor));
+    if ((this->door.dyna.actor.textId == 0x239B) && Flags_GetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->door.dyna.actor))) {
+        Flags_UnsetSwitch(play, ENDOORETC_GET_SWITCHFLAG(&this->door.dyna.actor));
         this->actionFunc = func_80AC2154;
-        this->actor.textId = 0x1800; // "It won't budge!"
+        this->door.dyna.actor.textId = 0x1800; // "It won't budge!"
         this->unk_1F4 |= 1;
         this->timer = 0x5A;
     }
@@ -206,18 +206,18 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play) {
 
     while (door != NULL) {
         if ((door->id != ACTOR_EN_DOOR) ||
-            !EnDoorEtc_IsDistanceGreater(&door->world.pos, &this->actor.world.pos, 10.0f)) {
+            !EnDoorEtc_IsDistanceGreater(&door->world.pos, &this->door.dyna.actor.world.pos, 10.0f)) {
             door = door->next;
         } else {
-            this->actor.world.pos.x = door->world.pos.x;
-            this->actor.world.pos.y = door->world.pos.y;
-            this->actor.world.pos.z = door->world.pos.z;
-            this->actor.shape.rot.y = door->shape.rot.y;
-            this->actor.world.rot.y = door->world.rot.y;
+            this->door.dyna.actor.world.pos.x = door->world.pos.x;
+            this->door.dyna.actor.world.pos.y = door->world.pos.y;
+            this->door.dyna.actor.world.pos.z = door->world.pos.z;
+            this->door.dyna.actor.shape.rot.y = door->shape.rot.y;
+            this->door.dyna.actor.world.rot.y = door->world.rot.y;
             Actor_MarkForDeath(door);
             this->actionFunc = func_80AC21A0;
-            this->actor.textId = 0x239B;
-            Actor_SetFocus(&this->actor, 70.0f);
+            this->door.dyna.actor.textId = 0x239B;
+            Actor_SetFocus(&this->door.dyna.actor, 70.0f);
             break;
         }
     }
@@ -229,7 +229,7 @@ void EnDoorEtc_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     if (this->unk_1F4 & 1) {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
+        Collider_UpdateCylinder(&this->door.dyna.actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }

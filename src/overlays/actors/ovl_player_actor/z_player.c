@@ -4400,7 +4400,7 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
             gSaveContext.ambienceId = 0xFF;
         }
 
-        ShrinkWindow_SetLetterboxTarget(32);
+        ShrinkWindow_Letterbox_SetSizeTarget(32);
     }
 }
 

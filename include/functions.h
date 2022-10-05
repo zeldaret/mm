@@ -1898,7 +1898,7 @@ void func_80122F28(Player* player);
 s32 func_80122F9C(PlayState* play);
 s32 func_80122FCC(PlayState* play);
 void func_8012300C(PlayState* play, s32 arg1);
-void func_8012301C(Player* player, PlayState* play2);
+void func_8012301C(Actor* thisx, PlayState* play2);
 void func_80123140(PlayState* play, Player* player);
 s32 Player_InBlockingCsMode(PlayState* play, Player* player);
 s32 Player_InCsMode(PlayState* play);
