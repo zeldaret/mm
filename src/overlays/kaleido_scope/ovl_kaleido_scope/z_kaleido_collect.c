@@ -62,7 +62,8 @@ s16 sQuestRemainsEnvBlue[] = {
     150, // Unused
 };
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
+// TODO: is actually NON_MATCHING, update once `z_kaleido_scope_NES.c` is decompiled
 // A single small regalloc at the first `func_8010DC58` for the heart piece count (see `gItemIcons`)
 void KaleidoScope_DrawQuestStatus(PlayState* play) {
     static s16 sQuestRemainsColorTimer = 20;
