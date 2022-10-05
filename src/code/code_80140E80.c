@@ -25,11 +25,8 @@ typedef enum {
     /* 2 */ FB_MODE_INTERPOLATE
 } FbMode;
 
-// ucode.h
-#define SP_UCODE_DATA_SIZE 0x800
-
 #define SCALE_MIN 0.032f
-#define SCALE_UNCHANGED 1.0f //!< also maximum scale
+#define SCALE_MAX 1.0f //!< also unchanged scale
 
 // Init
 void func_80140E80(Struct_80140E80* this) {
@@ -61,7 +58,7 @@ void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32
 
     // Draw bg in appropriate type
     gSPObjRenderMode(gfx++, G_OBJRM_ANTIALIAS | G_OBJRM_BILERP);
-    if (!!(cycleFlag & BG_CYC_COPY) != 0) { //! TODO possibly fake, may be a better way
+    if (!!(cycleFlag & BG_CYC_COPY) != 0) { //! FAKE: may possibly be a better way
         gSPBgRectCopy(gfx++, bg);
     } else {
         gSPBgRect1Cyc(gfx++, bg);
@@ -136,12 +133,12 @@ void func_80141008(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
 // "default settings" wrapper for func_80141008
 /**
  * Set up a BG from a specified source image and draw it to the specified color image with func_80140EAC(), using the
- * BG's settings. Position uses the default (0,0), and no rescaling is done even 1-cycle mode is enabled.
+ * BG's settings. Position uses the default (0,0), and no rescaling is done even if 1-cycle mode is enabled.
  *
  * @see func_80141008() for arguments.
  */
 void func_8014116C(Gfx** gfxP, void* source, void* img, s32 width, s32 height, s32 cycleFlag) {
-    func_80141008(gfxP, source, img, width, height, 0.0f, 0.0f, SCALE_UNCHANGED, SCALE_UNCHANGED, cycleFlag);
+    func_80141008(gfxP, source, img, width, height, 0.0f, 0.0f, SCALE_MAX, SCALE_MAX, cycleFlag);
 }
 
 // wrapper for func_80141008 with general arguments, used in func_80141200
@@ -248,7 +245,8 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     }
     // Draw scaled image in centre of width x height rectangle in `source`
     {
-        f32 scale = CLAMP_ALT(this->scale, SCALE_MIN, SCALE_UNCHANGED);
+        f32 scale = CLAMP_ALT(this->scale, SCALE_MIN, SCALE_MAX);
+
         func_801411B4(&gfx, img, source, width, height, width * 0.5f * (1.0f - scale), height * 0.5f * (1.0f - scale),
                       scale, scale, BG_CYC_1CYC);
     }
@@ -260,7 +258,7 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
 
 // internal, used in func_80141778, mode 1
 /**
- * If scale is within `(SCALE_MIN, SCALE_UNCHANGED)`, apply func_80141200().
+ * If scale is within `(SCALE_MIN, SCALE_MAX)`, apply func_80141200().
  * If it is smaller than `SCALE_MIN`, fill the framebuffer with `this->primColor`
  *
  * @param[in]     this
@@ -271,7 +269,7 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
  * @param[in]     height Output height in pixels
  */
 void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height) {
-    if (this->scale < SCALE_UNCHANGED) {
+    if (this->scale < SCALE_MAX) {
         Gfx* gfx = *gfxP;
         u32 color;
 

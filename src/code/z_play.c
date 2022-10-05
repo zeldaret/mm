@@ -57,19 +57,16 @@ extern Struct_80140E80* D_801F6D4C;
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
 
 void func_80167F0C(PlayState* this) {
-    // Draw pause menu
     if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != 0)) {
         KaleidoScopeCall_Draw(this);
     }
 
-    // Draw interface/HUD
     if (gSaveContext.gameMode == 0) {
-        func_8011F0E0(this);
+        Interface_Draw(this);
     }
 
-    // Draw Message items
     if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == 0)) || (this->msgCtx.currentTextId != 0xFF)) {
-        func_80156758(this);
+        Message_Draw(this);
     }
 
     if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {

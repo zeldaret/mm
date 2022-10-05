@@ -35,7 +35,7 @@ TransitionInit TransitionWipe4_InitVars = {
 void TransitionWipe4_Start(void* thisx) {
     TransitionWipe4* this = (TransitionWipe4*)thisx;
 
-    this->isDone = 0;
+    this->isDone = false;
 
     switch (this->speedType) {
         default:
