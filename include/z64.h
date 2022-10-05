@@ -418,7 +418,7 @@ typedef struct {
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
     /* 0x1EE */ u16 debugEditor;
-    /* 0x1F0 */ u8 unk_1F0;
+    /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 unk_200;
     /* 0x202 */ u16 mode;

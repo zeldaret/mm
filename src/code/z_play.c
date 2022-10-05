@@ -23,8 +23,8 @@ extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
-extern HiresoStruct D_801F6D50;
-extern u8 D_801F6DFC;
+extern HiresoStruct sHireso;
+extern u8 sBombersNotebookOpen;
 extern u8 sMotionBlurStatus;
 
 typedef enum {
@@ -398,7 +398,7 @@ void Play_Destroy(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-    if (D_801F6DFC) {
+    if (sBombersNotebookOpen) {
         MsgEvent_SendNullTask();
         func_80178750();
         gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
@@ -408,10 +408,10 @@ void Play_Destroy(GameState* thisx) {
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
         gfxCtx->updateViMode = true;
-        D_801F6DFC = false;
+        sBombersNotebookOpen = false;
     }
 
-    func_8016FC98(&D_801F6D50);
+    Hireso_Destroy(&sHireso);
     this->state.gfxCtx->callback = NULL;
     this->state.gfxCtx->callbackParam = 0;
     Play_DestroyMotionBlur();
@@ -1071,19 +1071,19 @@ void Play_Update(PlayState* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 #endif
 
-void func_80167DE4(PlayState* this) {
-    if (!D_801F6DFC) {
-        if (this->pauseCtx.unk_1F0 != 0) {
-            D_801F6DFC = true;
-            D_801F6D50.unk_00 = 0;
+void Play_SetupUpdate(PlayState* this) {
+    if (!sBombersNotebookOpen) {
+        if (this->pauseCtx.bombersNotebookOpen) {
+            sBombersNotebookOpen = true;
+            sHireso.unk_00 = 0;
         }
     } else {
         if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
             CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
             CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
-            D_801F6DFC = false;
-            this->pauseCtx.unk_1F0 = 0;
-            D_801F6D50.unk_00 = 0;
+            sBombersNotebookOpen = false;
+            this->pauseCtx.bombersNotebookOpen = false;
+            sHireso.unk_00 = 0;
             this->msgCtx.msgLength = 0;
             this->msgCtx.msgMode = 0;
             this->msgCtx.currentTextId = 0;
@@ -1091,8 +1091,8 @@ void func_80167DE4(PlayState* this) {
             play_sound(NA_SE_SY_CANCEL);
         }
     }
-    if (D_801F6DFC) {
-        func_8016F5A8(this, &D_801F6D50, this->state.input);
+    if (sBombersNotebookOpen) {
+        Hireso_Update(this, &sHireso, this->state.input);
         Message_Update(this);
     } else {
         Play_Update(this);
@@ -1442,13 +1442,13 @@ void Play_Draw(PlayState* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
 #endif
 
-void func_80168DAC(PlayState* this) {
+void Play_SetupDraw(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     {
         GraphicsContext* gfxCtx2 = this->state.gfxCtx;
 
-        if (D_801F6DFC) {
+        if (sBombersNotebookOpen) {
             if (D_801FBBD4 != 1) {
                 MsgEvent_SendNullTask();
                 func_80178818();
@@ -1475,8 +1475,8 @@ void func_80168DAC(PlayState* this) {
         }
     }
 
-    if (D_801F6DFC && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
-        func_8016F1A8(&D_801F6D50, gfxCtx);
+    if (sBombersNotebookOpen && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
+        Hireso_Draw(&sHireso, gfxCtx);
         Message_Draw(this);
     } else {
         Play_Draw(this);
@@ -1484,10 +1484,10 @@ void func_80168DAC(PlayState* this) {
 }
 
 void Play_Main(GameState* thisx) {
-    static Input* D_801D0D60 = NULL;
+    static Input* prevInput = NULL;
     PlayState* this = (PlayState*)thisx;
 
-    D_801D0D60 = CONTROLLER1(&this->state);
+    prevInput = CONTROLLER1(&this->state);
     DebugDisplay_Init();
 
     {
@@ -1496,18 +1496,18 @@ void Play_Main(GameState* thisx) {
         if (1) {
             this->state.gfxCtx = NULL;
         }
-        func_80167DE4(this);
+        Play_SetupUpdate(this);
         this->state.gfxCtx = gfxCtx;
     }
 
     {
-        Input sp28 = *CONTROLLER1(&this->state);
+        Input input = *CONTROLLER1(&this->state);
 
         if (1) {
             *CONTROLLER1(&this->state) = D_801F6C18;
         }
-        func_80168DAC(this);
-        *CONTROLLER1(&this->state) = sp28;
+        Play_SetupDraw(this);
+        *CONTROLLER1(&this->state) = input;
     }
 
     ActorCutscene_Update();
@@ -1518,11 +1518,11 @@ s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
-f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* feetPos) {
-    f32 floorHeight = BgCheck_EntityRaycastFloor3(&this->colCtx, poly, bgId, feetPos);
+f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {
+    f32 floorHeight = BgCheck_EntityRaycastFloor3(&this->colCtx, poly, bgId, pos);
 
     if (floorHeight > BGCHECK_Y_MIN) {
-        func_800C0094(*poly, feetPos->x, floorHeight, feetPos->z, mtx);
+        func_800C0094(*poly, pos->x, floorHeight, pos->z, mtx);
     } else {
         mtx->xy = 0.0f;
         mtx->zx = 0.0f;
@@ -1536,11 +1536,12 @@ f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, V
         mtx->yz = 0.0f;
         mtx->zy = 0.0f;
         mtx->yy = 1.0f;
-        mtx->xw = feetPos->x;
-        mtx->yw = feetPos->y;
-        mtx->zw = feetPos->z;
+        mtx->xw = pos->x;
+        mtx->yw = pos->y;
+        mtx->zw = pos->z;
         mtx->ww = 1.0f;
     }
+
     return floorHeight;
 }
 
@@ -2302,7 +2303,9 @@ void Play_Init(GameState* thisx) {
     ZeldaArena_Init(((temp_v0_12 + 8) & ~0xF), (sp94 - ((temp_v0_12 + 8) & ~0xF)) + temp_v0_12);
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
-    while (Room_HandleLoadCallbacks(this, &this->roomCtx) == 0) {}
+    while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {
+        // Empty
+    }
 
     if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.unk3 == 1) || (this->roomCtx.curRoom.unk3 == 5))) {
         Actor_Spawn(&this->actorCtx, this, 0x15A, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
@@ -2325,8 +2328,8 @@ void Play_Init(GameState* thisx) {
     AnimationContext_Update(this, &this->animationCtx);
     func_800EDBE0(this);
     gSaveContext.respawnFlag = 0;
-    D_801F6DFC = false;
-    func_8016FC78(&D_801F6D50);
+    sBombersNotebookOpen = false;
+    Hireso_Init(&sHireso);
 }
 
 // play_hireso need to confirm still
