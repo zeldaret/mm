@@ -1,7 +1,16 @@
-#ifndef _Z64_TRANSITION_H_
-#define _Z64_TRANSITION_H_
+#ifndef Z64_TRANSITION_H
+#define Z64_TRANSITION_H
 
 #include "ultra64.h"
+
+// TODO: Figure out circular dependencies
+#if 0
+#include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
+#include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
+#endif
 
 #define TC_SET_PARAMS (1 << 7)
 
@@ -32,24 +41,6 @@ typedef struct {
     /* 0x14 */ TransitionInit* initInfo;
     /* 0x18 */ size_t size;
 } TransitionOverlay;
- 
-typedef struct {
-    /* 0x000 */ s16 transitionType;
-    /* 0x002 */ s8 fbdemoType;
-    /* 0x003 */ char unk_003[0x5];
-    /* 0x008 */ s32 instanceData;
-    /* 0x00C */ char unk_00C[0x224];
-    /* 0x230 */ void* (*init)(void* transition);
-    /* 0x234 */ void  (*destroy)(void* transition);
-    /* 0x238 */ void  (*update)(void* transition, s32 updateRate);
-    /* 0x23C */ void  (*draw)(void* transition, Gfx** gfxP);
-    /* 0x240 */ void  (*start)(void* transition);
-    /* 0x244 */ void  (*setType)(void* transition, s32 type);
-    /* 0x248 */ void  (*setColor)(void* transition, u32 color);
-    /* 0x24C */ void  (*setEnvColor)(void* transition, u32 color);
-    /* 0x250 */ s32   (*isDone)(void* transition);
-    /* 0x254 */ char unk_254[0x4];
-} TransitionContext; // size = 0x258
 
 typedef struct {
     /* 0x0 */ char unk_0[0xC];
@@ -77,5 +68,34 @@ typedef struct {
     /* 0x1E */ s8 unk_1E; // Set to 4 and never used
     /* 0x1F */ s8 unk_1F; // Set to 0 and never used
 } TransitionCircle; // size = 0x20
+
+typedef struct {
+    /* 0x000 */ s16 transitionType;
+    /* 0x002 */ s8 fbdemoType;
+    /* 0x003 */ char unk_003[0x5];
+    /* 0x008 */ union {
+        TransitionFade fade;
+        TransitionCircle circle;
+#if 0
+        TransitionTriforce triforce;
+        TransitionWipe1 wipe1;
+        TransitionWipe3 wipe3;
+        TransitionWipe4 wipe4;
+        TransitionWipe5 wipe5;
+#endif
+        u8 forceSize[0x218];
+    } instanceData;
+    /* 0x220 */ char unk_220[0x10];
+    /* 0x230 */ void* (*init)(void* transition);
+    /* 0x234 */ void  (*destroy)(void* transition);
+    /* 0x238 */ void  (*update)(void* transition, s32 updateRate);
+    /* 0x23C */ void  (*draw)(void* transition, Gfx** gfxP);
+    /* 0x240 */ void  (*start)(void* transition);
+    /* 0x244 */ void  (*setType)(void* transition, s32 type);
+    /* 0x248 */ void  (*setColor)(void* transition, u32 color);
+    /* 0x24C */ void  (*setEnvColor)(void* transition, u32 color);
+    /* 0x250 */ s32   (*isDone)(void* transition);
+    /* 0x254 */ char unk_254[0x4];
+} TransitionContext; // size = 0x258
 
 #endif
