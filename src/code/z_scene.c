@@ -468,8 +468,8 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
-    play->csCtx.sceneCsCount = cmd->base.data1;
-    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->base.data2);
+    play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
+    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
@@ -492,8 +492,8 @@ void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
     func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-// SceneTableEntry Header Command 0x1A: Sets Area Visited Flag
-void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
+// SceneTableEntry Header Command 0x19: Sets Region Visited Flag
+void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
 
@@ -502,7 +502,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
             i++;
             j = 0;
 
-            if (i == ARRAY_COUNT(gSceneIdsPerRegion)) {
+            if (i == REGION_MAX) {
                 break;
             }
         }
@@ -514,8 +514,9 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
         j++;
     }
 
-    if (i < ARRAY_COUNT(gSceneIdsPerRegion)) {
-        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
+    if (i < REGION_MAX) {
+        gSaveContext.save.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
     }
 }
 
@@ -561,7 +562,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
         Scene_HeaderCmdEchoSetting,
         Scene_HeaderCmdCutsceneList,
         Scene_HeaderCmdAltHeaderList,
-        Scene_HeaderCmdSetAreaVisitedFlag,
+        Scene_HeaderCmdSetRegionVisitedFlag,
         Scene_HeaderCmdAnimatedMaterials,
         Scene_HeaderCmdActorCutsceneList,
         Scene_HeaderCmdMiniMap,
