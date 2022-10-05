@@ -2463,7 +2463,7 @@ void func_80166968(PlayState* play, Camera* camera);
 void func_80166B30(PlayState* play);
 void Play_Update(PlayState* play);
 void func_80167DE4(PlayState* play);
-// void func_80167F0C(void);
+void Play_PostWorldDraw(PlayState* play);
 void Play_Draw(PlayState* play);
 void func_80168DAC(PlayState* play);
 void Play_Main(PlayState* play);
