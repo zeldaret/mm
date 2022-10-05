@@ -12,8 +12,8 @@
 
 #define THIS ((EnBigpo*)thisx)
 
-void EnBigpo_Init(Actor* thisx, PlayState* play);
-void EnBigpo_Destroy(Actor* thisx, PlayState* play);
+void EnBigpo_Init(Actor* thisx, PlayState* play2);
+void EnBigpo_Destroy(Actor* thisx, PlayState* play2);
 void EnBigpo_Update(Actor* thisx, PlayState* play);
 void EnBigpo_UpdateFire(Actor* thisx, PlayState* play);
 

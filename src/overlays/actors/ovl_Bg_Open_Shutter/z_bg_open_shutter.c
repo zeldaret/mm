@@ -15,7 +15,7 @@
 
 void BgOpenShutter_Init(Actor* thisx, PlayState* play);
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
-void BgOpenShutter_Update(Actor* thisx, PlayState* play);
+void BgOpenShutter_Update(Actor* thisx, PlayState* play2);
 void BgOpenShutter_Draw(Actor* thisx, PlayState* play);
 
 void func_80ACAD88(BgOpenShutter* this, PlayState* play);

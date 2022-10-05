@@ -14,7 +14,7 @@
 void EnTorch2_Init(Actor* thisx, PlayState* play);
 void EnTorch2_Destroy(Actor* thisx, PlayState* play);
 void EnTorch2_Update(Actor* thisx, PlayState* play);
-void EnTorch2_Draw(Actor* thisx, PlayState* play);
+void EnTorch2_Draw(Actor* thisx, PlayState* play2);
 
 void EnTorch2_UpdateIdle(Actor* thisx, PlayState* play);
 void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play);

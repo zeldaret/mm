@@ -11,7 +11,7 @@
 
 #define THIS ((EnElf*)thisx)
 
-void EnElf_Init(Actor* thisx, PlayState* play);
+void EnElf_Init(Actor* thisx, PlayState* play2);
 void EnElf_Destroy(Actor* thisx, PlayState* play);
 void EnElf_Update(Actor* thisx, PlayState* play);
 void EnElf_Draw(Actor* thisx, PlayState* play);
@@ -29,9 +29,9 @@ void func_8088E484(EnElf* this, PlayState* play);
 void func_8088E850(EnElf* this, PlayState* play);
 void func_8088EFA4(EnElf* this, PlayState* play);
 void func_8088F214(EnElf* this, PlayState* play);
-void func_8088F5F4(EnElf* this, PlayState* play, s32 arg2);
+void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife);
 void func_8089010C(Actor* thisx, PlayState* play);
-void func_808908D0(Vec3f* arg0, PlayState* play, u32 arg2);
+void func_808908D0(Vec3f* vec, PlayState* play, u32 action);
 
 const ActorInit En_Elf_InitVars = {
     ACTOR_EN_ELF,

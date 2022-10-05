@@ -245,14 +245,14 @@ void Map_Update(PlayState* play) {
             if (floor != -1) {
                 gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].unk_14 |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
-                XREG(94) = FLOOR_INDEX_MAX - floor;
+                R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {
                     sLastRoomNum = interfaceCtx->mapRoomNum;
                 }
             }
         } else if (Map_IsInBossArea(play)) {
             func_80105294();
-            XREG(94) = FLOOR_INDEX_MAX - func_80105318();
+            R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - func_80105318();
         }
     }
 }

@@ -1,5 +1,5 @@
 #include "global.h"
-
+#include "z64view.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"

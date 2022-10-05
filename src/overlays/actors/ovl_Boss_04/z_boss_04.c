@@ -5,14 +5,15 @@
  */
 
 #include "z_boss_04.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
-void Boss04_Init(Actor* thisx, PlayState* play);
+void Boss04_Init(Actor* thisx, PlayState* play2);
 void Boss04_Destroy(Actor* thisx, PlayState* play);
-void Boss04_Update(Actor* thisx, PlayState* play);
+void Boss04_Update(Actor* thisx, PlayState* play2);
 void Boss04_Draw(Actor* thisx, PlayState* play);
 
 void func_809EC544(Boss04* this);
@@ -399,7 +400,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
     if (this->subCamId != SUB_CAM_ID_DONE) {
         Vec3f subCamAt;
 
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         if (this->subCamAtOscillator != 0) {
             this->subCamAtOscillator--;
         }

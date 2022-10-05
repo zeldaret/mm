@@ -286,13 +286,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef struct {
-    /* 0x0 */ s8 letterboxTarget;
-    /* 0x1 */ s8 letterboxMagnitude;
-    /* 0x2 */ s8 pillarboxTarget;
-    /* 0x3 */ s8 pillarboxMagnitude;
-} ShrinkWindowContext; // size = 0x4
-
 typedef void(*osCreateThread_func)(void*);
 
 typedef enum {
@@ -446,7 +439,7 @@ typedef struct {
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 cursorXIndex[5];
     /* 0x24C */ s16 cursorYIndex[5];
-    /* 0x256 */ s16 unk_256;
+    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
     /* 0x25C */ u16 unk_25C;
@@ -479,8 +472,8 @@ typedef struct {
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
     /* 0x2BE */ s16 unk_2BE[5];
-    /* 0x2C8 */ u16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlStatueId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef enum DoAction {

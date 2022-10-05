@@ -16,7 +16,7 @@
 void EnTanron2_Init(Actor* thisx, PlayState* play);
 void EnTanron2_Destroy(Actor* thisx, PlayState* play);
 void EnTanron2_Update(Actor* thisx, PlayState* play);
-void EnTanron2_Draw(Actor* thisx, PlayState* play);
+void EnTanron2_Draw(Actor* thisx, PlayState* play2);
 
 void func_80BB69C0(EnTanron2* this);
 void func_80BB69FC(EnTanron2* this, PlayState* play);

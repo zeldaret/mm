@@ -52,7 +52,6 @@
  * - Effect Update/Draw
  * - Seaweed
  */
-
 #include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
@@ -78,9 +77,9 @@
 #define PLATFORM_HEIGHT 440.0f
 #define WATER_HEIGHT 430.0f
 
-void Boss03_Init(Actor* thisx, PlayState* play);
+void Boss03_Init(Actor* thisx, PlayState* play2);
 void Boss03_Destroy(Actor* thisx, PlayState* play);
-void Boss03_Update(Actor* thisx, PlayState* play);
+void Boss03_Update(Actor* thisx, PlayState* play2);
 void Boss03_Draw(Actor* thisx, PlayState* play);
 
 void func_809E344C(Boss03* this, PlayState* play);
@@ -2156,7 +2155,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[objectIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);

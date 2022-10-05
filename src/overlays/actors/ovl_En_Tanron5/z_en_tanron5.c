@@ -15,10 +15,10 @@
 
 void EnTanron5_Init(Actor* thisx, PlayState* play);
 void EnTanron5_Destroy(Actor* thisx, PlayState* play);
-void EnTanron5_Update(Actor* thisx, PlayState* play);
+void EnTanron5_Update(Actor* thisx, PlayState* play2);
 void EnTanron5_Draw(Actor* thisx, PlayState* play);
 
-void func_80BE5818(Actor* thisx, PlayState* play);
+void func_80BE5818(Actor* thisx, PlayState* play2);
 void func_80BE5C10(Actor* thisx, PlayState* play);
 
 s32 D_80BE5D80 = 0;

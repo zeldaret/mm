@@ -7,6 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -18,7 +19,7 @@
 void Boss02_Init(Actor* thisx, PlayState* play);
 void Boss02_Destroy(Actor* thisx, PlayState* play);
 void Boss02_Twinmold_Update(Actor* thisx, PlayState* play);
-void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play);
+void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2);
 
 void func_809DAA74(Boss02* this, PlayState* play);
 void func_809DAA98(Boss02* this, PlayState* play);
@@ -2034,7 +2035,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
         Matrix_MultVecY(1.0f, &this->subCamUp);
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &this->subCamEye, &this->subCamUp);
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
     }
 }
 
@@ -2242,6 +2243,6 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &subCamEye, &this->subCamUp);
         this->subCamUp.z = this->subCamUp.x = 0.0f;
         this->subCamUp.y = 1.0f;
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
     }
 }
