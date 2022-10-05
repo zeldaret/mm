@@ -70,7 +70,7 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
 
 void Audio_StartMorningSceneSequence(u16 seqId);
 void Audio_StartSceneSequence(u16 seqId);
-void Audio_PlaySequenceWithSeqPlayerIO(s8 playerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
+void Audio_PlaySequenceWithSeqPlayerIO(s8 playerIndex, u16 seqId, u8 fadeInDuration, s8 ioPort, u8 ioData);
 void func_801A4428(u8 reverbIndex);
 void func_801A3038(void);
 void Audio_PlayAmbience(u8 ambienceId);

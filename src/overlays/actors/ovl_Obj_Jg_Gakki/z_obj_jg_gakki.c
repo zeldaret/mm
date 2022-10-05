@@ -11,7 +11,7 @@
 
 #define THIS ((ObjJgGakki*)thisx)
 
-void ObjJgGakki_Init(Actor* thisx, PlayState* play);
+void ObjJgGakki_Init(Actor* thisx, PlayState* play2);
 void ObjJgGakki_Destroy(Actor* thisx, PlayState* play);
 void ObjJgGakki_Update(Actor* thisx, PlayState* play);
 void ObjJgGakki_Draw(Actor* thisx, PlayState* play);

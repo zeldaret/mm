@@ -57,7 +57,7 @@ void func_800F4A10(PlayState* play) {
     YREG(21) = -1570;
     YREG(22) = -3140;
     YREG(23) = 1570;
-    R_PAUSE_WORLD_MAP_YAW = -1570;
+    R_PAUSE_WORLD_MAP_YAW = -0x622;
     R_PAUSE_WORLD_MAP_Y_OFFSET = -90;
     R_PAUSE_WORLD_MAP_DEPTH = -14400;
 }

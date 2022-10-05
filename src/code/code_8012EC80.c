@@ -563,7 +563,7 @@ static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
         SCENE_BACKTOWN,
         SCENE_CLOCKTOWER,
         SCENE_ALLEY,
-        -1,
+        0xFFFF,
     },
     {
         // TINGLE_MAP_WOODFALL
@@ -573,7 +573,7 @@ static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
         SCENE_22DEKUCITY,
         SCENE_DEKU_KING,
         SCENE_KINSTA1,
-        -1,
+        0xFFFF,
     },
     {
         // TINGLE_MAP_SNOWHEAD
@@ -587,7 +587,7 @@ static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
         SCENE_GORONRACE,
         SCENE_17SETUGEN,
         SCENE_17SETUGEN2,
-        -1,
+        0xFFFF,
     },
     {
         // TINGLE_MAP_ROMANI_RANCH
@@ -597,7 +597,7 @@ static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
         SCENE_F01C,
         SCENE_F01_B,
         SCENE_KOEPONARACE,
-        -1,
+        0xFFFF,
     },
     {
         // TINGLE_MAP_GREAT_BAY
@@ -608,7 +608,7 @@ static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
         SCENE_KAIZOKU,
         SCENE_33ZORACITY,
         SCENE_35TAKI,
-        -1,
+        0xFFFF,
     },
     {
         // TINGLE_MAP_STONE_TOWER
@@ -617,7 +617,7 @@ static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
         SCENE_CASTLE,
         SCENE_IKANA,
         SCENE_REDEAD,
-        -1,
+        0xFFFF,
     },
 };
 

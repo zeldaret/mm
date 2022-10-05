@@ -24,7 +24,7 @@
 
 #define THIS ((DoorShutter*)thisx)
 
-void DoorShutter_Init(Actor* thisx, PlayState* play);
+void DoorShutter_Init(Actor* thisx, PlayState* play2);
 void DoorShutter_Destroy(Actor* thisx, PlayState* play);
 void DoorShutter_Update(Actor* thisx, PlayState* play);
 

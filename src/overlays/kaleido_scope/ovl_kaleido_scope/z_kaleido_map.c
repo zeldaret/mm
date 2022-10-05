@@ -595,7 +595,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         // Set the vertices for the first 8 quads attached to the world map texture.
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 32, 0);
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 8 * 4, 0);
 
         // Process the first 72 rows of pixels for gWorldMapImageTex, 9 rows at a time over 8 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
@@ -607,14 +607,16 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], 28, 0);
+        // Set the vertices for the last 7 quads attached to the world map texture:
+        // 6 quads with a height of 9, 1 quad with a height of 2
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], (6 + 1) * 4, 0);
 
         // Process the next 54 rows of pixels for gWorldMapImageTex, 9 rows at a time over 6 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (216 * 9), G_IM_FMT_CI, G_IM_SIZ_8b, 216,
-                                9, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                                G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
+                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
@@ -670,7 +672,6 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWorldMapDotPrimColors[0][0], sWorldMapDotPrimColors[0][1],
                         sWorldMapDotPrimColors[0][2], pauseCtx->alpha);
-
         gDPSetEnvColor(POLY_OPA_DISP++, sWorldMapDotEnvColors[0][0], sWorldMapDotEnvColors[0][1],
                        sWorldMapDotEnvColors[0][2], 0);
 
@@ -808,17 +809,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 }
 
 u16 sOwlWarpPauseItems[] = {
-    0xB + 0xA4, // OWL_WARP_GREAT_BAY_COAST
-    0xF + 0xA4, // OWL_WARP_ZORA_CAPE
-    0x6 + 0xA4, // OWL_WARP_SNOWHEAD
-    0xD + 0xA4, // OWL_WARP_MOUNTAIN_VILLAGE
-    0x5 + 0xA4, // OWL_WARP_CLOCK_TOWN
-    0xE + 0xA4, // OWL_WARP_MILK_ROAD
-    0x4 + 0xA4, // OWL_WARP_WOODFALL
-    0xC + 0xA4, // OWL_WARP_SOUTHERN_SWAMP
-    0x8 + 0xA4, // OWL_WARP_IKANA_CANYON
-    0xA + 0xA4, // OWL_WARP_STONE_TOWER
+    0xAF, // OWL_WARP_GREAT_BAY_COAST
+    0xB3, // OWL_WARP_ZORA_CAPE
+    0xAA, // OWL_WARP_SNOWHEAD
+    0xB1, // OWL_WARP_MOUNTAIN_VILLAGE
+    0xA9, // OWL_WARP_CLOCK_TOWN
+    0xB2, // OWL_WARP_MILK_ROAD
+    0xA8, // OWL_WARP_WOODFALL
+    0xB0, // OWL_WARP_SOUTHERN_SWAMP
+    0xAC, // OWL_WARP_IKANA_CANYON
+    0xAE, // OWL_WARP_STONE_TOWER
 };
+
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     static u16 sStickAdjTimer = 0; // unused timer that counts up every frame. Resets on reading a stickAdj.
     PauseContext* pauseCtx = &play->pauseCtx;
