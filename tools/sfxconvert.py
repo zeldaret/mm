@@ -51,6 +51,8 @@ def lookup_sfx(idnum, repo):
     else:
         id = idnum
     idfix,sfxFlag = fix_sfx_flag(id)
+    if idfix is None:
+        return id
     with open(repo + os.sep + 'include' + os.sep + 'sfx.h','r') as sfxfile:
         for line in sfxfile:
             if(line.count(idfix)):
@@ -63,6 +65,10 @@ def fix_sfx_flag(id):
         return splitdata[0].strip(), ' -' + splitdata[1]
     if id.endswith("U"):
         id = id[:-1]
+    try:
+        id_hex = int(id, 16)
+    except ValueError:
+        return None,None
     if not(int(id, 16) & 0x800):
         newid = '0x' + format(int(id,16) + 0x800,'X')
         sfxFlag = ' - SFX_FLAG'
