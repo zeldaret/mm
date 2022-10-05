@@ -784,7 +784,7 @@ void EnFall_LodMoon_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gLodmoonEyesDL);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
     gSPDisplayList(POLY_OPA_DISP++, gLodmoonMoonDL);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

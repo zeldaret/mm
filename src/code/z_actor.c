@@ -2686,7 +2686,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
 
         // spAC = phi_s1;
         Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
-        phi_s1_2 = func_801660B8(play, spAC);
+        phi_s1_2 = Play_SetFog(play, spAC);
 
         for (spB4 = 0; spB4 < numActors; spB4++, actors++) {
             Actor_Draw(play, *actors);

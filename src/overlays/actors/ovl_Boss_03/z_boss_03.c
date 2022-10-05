@@ -2274,7 +2274,7 @@ void Boss03_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     this->unk_2BC = 0;

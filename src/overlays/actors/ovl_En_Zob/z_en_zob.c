@@ -769,7 +769,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
                           func_80BA0F64, func_80BA0FAC, &this->actor);
 
     if (this->unk_2F4 & 0x20) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

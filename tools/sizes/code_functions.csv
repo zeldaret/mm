@@ -1395,7 +1395,7 @@ asm/non_matchings/code/z_lights/Lights_FindBufSlot.s,Lights_FindBufSlot,0x801023
 asm/non_matchings/code/z_lights/Lights_FreeNode.s,Lights_FreeNode,0x80102464,0x12
 asm/non_matchings/code/z_lights/LightContext_Init.s,LightContext_Init,0x801024AC,0x1B
 asm/non_matchings/code/z_lights/LightContext_SetAmbientColor.s,LightContext_SetAmbientColor,0x80102518,0xB
-asm/non_matchings/code/z_lights/func_80102544.s,func_80102544,0x80102544,0xF
+asm/non_matchings/code/z_lights/LightContext_SetFogProperties.s,LightContext_SetFogProperties,0x80102544,0xF
 asm/non_matchings/code/z_lights/LightContext_NewLights.s,LightContext_NewLights,0x80102580,0xE
 asm/non_matchings/code/z_lights/LightContext_InitList.s,LightContext_InitList,0x801025B8,0x4
 asm/non_matchings/code/z_lights/LightContext_DestroyList.s,LightContext_DestroyList,0x801025C8,0x17
@@ -2499,7 +2499,7 @@ asm/non_matchings/code/z_play/func_80165E1C.s,func_80165E1C,0x80165E1C,0x18
 asm/non_matchings/code/z_play/Play_ChooseDynamicTransition.s,Play_ChooseDynamicTransition,0x80165E7C,0x11
 asm/non_matchings/code/z_play/Play_SetupTransition.s,Play_SetupTransition,0x80165EC0,0x68
 asm/non_matchings/code/z_play/Play_ClearTransition.s,Play_ClearTransition,0x80166060,0x16
-asm/non_matchings/code/z_play/func_801660B8.s,func_801660B8,0x801660B8,0x21
+asm/non_matchings/code/z_play/Play_SetFog.s,Play_SetFog,0x801660B8,0x21
 asm/non_matchings/code/z_play/Play_Destroy.s,Play_Destroy,0x8016613C,0xA2
 asm/non_matchings/code/z_play/func_801663C4.s,func_801663C4,0x801663C4,0xA0
 asm/non_matchings/code/z_play/func_80166644.s,func_80166644,0x80166644,0x9C

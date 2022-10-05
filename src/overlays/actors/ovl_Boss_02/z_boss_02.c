@@ -1392,7 +1392,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     }
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     spA4 = 0.0f;
     spA0 = 0.0f;
@@ -1427,7 +1427,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
             if (sp98 < this->unk_01BC[phi_v0].y) {
                 gSPDisplayList(POLY_OPA_DISP++, D_809DFA9C[i]);
             }
-            POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+            POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
         }
 
         if (i == 21) {

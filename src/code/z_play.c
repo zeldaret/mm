@@ -387,11 +387,11 @@ void Play_ClearTransition(PlayState* this) {
     this->transitionCtx.transitionType = -1;
 }
 
-Gfx* func_801660B8(PlayState* this, Gfx* gfx) {
-    s32 phi_v1 = this->lightCtx.unkC * (5.0f / 64.0f);
+Gfx* Play_SetFog(PlayState* this, Gfx* gfx) {
+    s32 fogFar = this->lightCtx.fogFar * (5.0f / 64.0f);
 
-    return Gfx_SetFogWithSync(gfx, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9, 0,
-                              this->lightCtx.unkA, (phi_v1 <= 1000) ? 1000 : phi_v1);
+    return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g, this->lightCtx.fogColor.b, 0,
+                              this->lightCtx.fogNear, (fogFar <= 1000) ? 1000 : fogFar);
 }
 
 void Play_Destroy(GameState* thisx) {
@@ -1158,7 +1158,8 @@ void Play_Draw(PlayState* this) {
         if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.mesh->type0.type == 1)) {
             func_8012CF0C(gfxCtx, 0, 1, 0, 0, 0);
         } else {
-            func_8012CF0C(gfxCtx, 1, 1, this->lightCtx.unk7, this->lightCtx.unk8, this->lightCtx.unk9);
+            func_8012CF0C(gfxCtx, 1, 1, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g,
+                          this->lightCtx.fogColor.b);
         }
     } else {
         func_8012CF0C(gfxCtx, 0, 0, 0, 0, 0);
@@ -1184,11 +1185,11 @@ void Play_Draw(PlayState* this) {
 
     ShrinkWindow_Draw(gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(this, POLY_OPA_DISP);
-    POLY_XLU_DISP = func_801660B8(this, POLY_XLU_DISP);
+    POLY_OPA_DISP = Play_SetFog(this, POLY_OPA_DISP);
+    POLY_XLU_DISP = Play_SetFog(this, POLY_XLU_DISP);
 
     // fogFar
-    var_fv0 = this->lightCtx.unkC;
+    var_fv0 = this->lightCtx.fogFar;
     if (var_fv0 > 12800.0f) {
         var_fv0 = 12800.0f;
     }

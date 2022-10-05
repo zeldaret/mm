@@ -211,7 +211,7 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
     if (ptr->unk_00 != 0) {
         Matrix_Translate(ptr->unk_08 * ptr->unk_04, ptr->unk_0C, ptr->unk_10 * ptr->unk_04, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, ptr->unk_04 * 0.02f, MTXMODE_APPLY);
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
         POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A9402C[ptr->unk_00]));

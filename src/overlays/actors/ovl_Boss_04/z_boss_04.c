@@ -828,7 +828,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           Boss04_OverrideLimbDraw, Boss04_PostLimbDraw, &this->actor);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (this->actionFunc != func_809EC568) {
         func_8012C448(play->state.gfxCtx);
