@@ -38,7 +38,7 @@ typedef struct DmChar08 {
     /* 0x207 */ u8 unk_207;
     /* 0x208 */ u8 unk_208;
     /* 0x209 */ u8 dynapolyInitialized;
-} DmChar08;// Size = 0x020C 
+} DmChar08; // size = 0x20C
 
 extern const ActorInit Dm_Char08_InitVars;
 

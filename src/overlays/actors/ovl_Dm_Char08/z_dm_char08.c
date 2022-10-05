@@ -396,13 +396,13 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                         break;
 
                     case 1:
-                        // "Why so slow?" ...
+                        // Fire hookshot
                         Message_StartTextbox(play, 0x102A, &this->dyna.actor);
                         this->unk_206++;
                         break;
 
                     case 2:
-                        // "Heh, heh, heh.  Of course I know your name."...
+                        // I know your name
                         if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
                             Message_StartTextbox(play, 0x102B, &this->dyna.actor);
                             this->unk_206 = 0;
@@ -415,7 +415,7 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                         break;
 
                     case 1:
-                        //"...Are you going to the temple again?"...
+                        // Going to the temple again
                         Message_StartTextbox(play, 0x103B, &this->dyna.actor);
                         this->unk_206++;
                         break;
@@ -899,7 +899,7 @@ void func_80AB096C(DmChar08* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     }
-    if ((this->animIndex == 1) && Animation_OnFrame(&this->skelAnime, 16.0f)) {
+    if ((this->animIndex == TURTLE_ANIM_SWIM) && Animation_OnFrame(&this->skelAnime, 16.0f)) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIG_TORTOISE_SWIM);
     }
 }
