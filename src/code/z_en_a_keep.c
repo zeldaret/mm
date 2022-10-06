@@ -10,8 +10,8 @@ void EnAObj_Destroy(Actor* thisx, PlayState* play);
 void EnAObj_Update(Actor* thisx, PlayState* play);
 void EnAObj_Draw(Actor* thisx, PlayState* play);
 
-void EnAObj_Update1(EnAObj* this, PlayState* play);
-void EnAObj_Update2(EnAObj* this, PlayState* play);
+void EnAObj_WaitTalk(EnAObj* this, PlayState* play);
+void EnAObj_WaitFinishedTalking(EnAObj* this, PlayState* play);
 
 ActorInit En_A_Obj_InitVars = {
     ACTOR_EN_A_OBJ,
@@ -46,7 +46,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN(ICHAINTYPE_U8, targetMode, 0, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
 void EnAObj_Init(Actor* thisx, PlayState* play) {
@@ -59,7 +59,7 @@ void EnAObj_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collision, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collision);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actionFunc = EnAObj_Update1;
+    this->actionFunc = EnAObj_WaitTalk;
 }
 
 void EnAObj_Destroy(Actor* thisx, PlayState* play) {
@@ -68,11 +68,11 @@ void EnAObj_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collision);
 }
 
-void EnAObj_Update1(EnAObj* this, PlayState* play) {
+void EnAObj_WaitTalk(EnAObj* this, PlayState* play) {
     s32 yawDiff;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        this->actionFunc = EnAObj_Update2;
+        this->actionFunc = EnAObj_WaitFinishedTalking;
     } else {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
 
@@ -82,9 +82,9 @@ void EnAObj_Update1(EnAObj* this, PlayState* play) {
     }
 }
 
-void EnAObj_Update2(EnAObj* this, PlayState* play) {
+void EnAObj_WaitFinishedTalking(EnAObj* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        this->actionFunc = EnAObj_Update1;
+        this->actionFunc = EnAObj_WaitTalk;
     }
 }
 
