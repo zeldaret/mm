@@ -52,8 +52,8 @@ static InitChainEntry sInitChain[] = {
 void EnAObj_Init(Actor* thisx, PlayState* play) {
     EnAObj* this = THIS;
 
-    this->actor.textId = ((this->actor.params >> 8) & 0xFF) | 0x300;
-    this->actor.params = (this->actor.params & 0xFF) - 9;
+    this->actor.textId = AOBJ_GET_TEXTID(&this->actor);
+    this->actor.params = AOBJ_GET_TYPE(&this->actor);
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 12);
     Collider_InitAndSetCylinder(play, &this->collision, &this->actor, &sCylinderInit);
@@ -76,7 +76,7 @@ void EnAObj_WaitTalk(EnAObj* this, PlayState* play) {
     } else {
         yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y));
 
-        if ((yawDiff < 0x2800) || ((this->actor.params == 1) && (yawDiff > 0x5800))) {
+        if ((yawDiff < 0x2800) || ((this->actor.params == AOBJ_SIGNPOST_ARROW) && (yawDiff > 0x5800))) {
             func_800B863C(&this->actor, play);
         }
     }
@@ -97,8 +97,8 @@ void EnAObj_Update(Actor* thisx, PlayState* play) {
 }
 
 static Gfx* sDLists[] = {
-    gSignRectangularDL,
-    gSignDirectionalDL,
+    gSignRectangularDL, // AOBJ_SIGNPOST_OBLONG
+    gSignDirectionalDL, // AOBJ_SIGNPOST_ARROW
 };
 
 void EnAObj_Draw(Actor* thisx, PlayState* play) {
