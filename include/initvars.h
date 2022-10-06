@@ -419,6 +419,7 @@ extern ActorInit En_Snowwd_InitVars;
 extern ActorInit En_Sob1_InitVars;
 extern ActorInit En_Ssh_InitVars;
 extern ActorInit En_St_InitVars;
+extern ActorInit En_A_Obj_InitVars;
 extern ActorInit En_Sth_InitVars;
 extern ActorInit En_Sth2_InitVars;
 extern ActorInit En_Stone_heishi_InitVars;

@@ -139,7 +139,7 @@ typedef struct Actor {
     /* 0x008 */ PosRot home; // Initial position/rotation when spawned. Can be used for other purposes
     /* 0x01C */ s16 params; // Configurable variable set by the actor's spawn data; original name: "args_data"
     /* 0x01E */ s8 objBankIndex; // Object bank index of the actor's object dependency; original name: "bank"
-    /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
+    /* 0x01F */ u8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ s16 unk20;
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
@@ -288,8 +288,7 @@ typedef struct EnAObj {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
-    /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} EnAObj; // size = 0x1A8
+} EnAObj; // size = 0x194
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
