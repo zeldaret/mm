@@ -16262,9 +16262,9 @@ void func_80851F18(PlayState* play, Player* this) {
         temp_v0 = &this->unk_B10[this->unk_B86[i]];
 
         AnimationContext_SetLoadFrame(play, temp->unk_4, *temp_v0, this->skelAnime.limbCount,
-                                      ALIGN16(this->blendTableBuffer));
+                                      ALIGN16((uintptr_t)this->blendTableBuffer));
         AnimationContext_SetCopyTrue(play, this->skelAnime.limbCount, this->skelAnime.jointTable,
-                                     ALIGN16(this->blendTableBuffer), D_8085BA20);
+                                     ALIGN16((uintptr_t)this->blendTableBuffer), D_8085BA20);
     }
 
     temp_v0 = this->unk_B10;
