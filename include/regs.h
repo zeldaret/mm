@@ -112,6 +112,8 @@
 #define R_FB_FILTER_A                     SREG(84)
 #define R_FB_FILTER_ENV_COLOR(c)          SREG(85 + c)
 
+
+#define R_PICTOGRAPH_PHOTO_STATE          SREG(89)
 #define R_MOTION_BLUR_ALPHA               SREG(90)
 #define R_MOTION_BLUR_ENABLED             SREG(91)
 #define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)

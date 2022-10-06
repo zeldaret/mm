@@ -2450,7 +2450,7 @@ void Play_DisableMotionBlur(void);
 // void Play_ConvertBufferToI(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
 // void Play_EnableMotionBlurPriority(void);
 // void Play_DisableMotionBlurPriority(void);
-// void Play_TakePictograph(void);
+// void Play_TakePictographPhoto(void);
 // void Play_ChooseDynamicTransition(void);
 // void Play_SetupTransition(void);
 // void Play_ClearTransition(void);

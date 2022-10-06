@@ -204,11 +204,19 @@ void Play_DisableMotionBlurPriority(void) {
     R_MOTION_BLUR_PRIORITY_ENABLED = false;
 }
 
-void func_80165E04(void) {
-    SREG(89) = 1;
+typedef enum {
+    /* 0 */ PICTOGRAPH_PHOTO_STATE_OFF,
+    /* 1 */ PICTOGRAPH_PHOTO_STATE_START,
+    /* 2 */ PICTOGRAPH_PHOTO_STATE_TAKE,
+    /* 3 */ PICTOGRAPH_PHOTO_STATE_FINISH
+} PictographPhotoState;
+
+// Will take the photograph, but doesn't compress and save it
+void Play_StartTakingPictographPhoto(void) {
+    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_START;
 }
 
-void Play_TakePictograph(PreRender* prerender) {
+void Play_TakePictographPhoto(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
     Play_ConvertBufferToI(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
@@ -413,12 +421,12 @@ void Play_Destroy(GameState* thisx) {
     this->state.gfxCtx->callbackParam = 0;
     Play_DestroyMotionBlur();
 
-    if (SREG(94) != 0) {
+    if (R_PAUSE_MENU_MODE != 0) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
-        SREG(94) = 0;
+        R_PAUSE_MENU_MODE = 0;
     }
 
-    SREG(89) = 0;
+    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_OFF;
     PreRender_Destroy(&this->pauseBgPreRender);
     this->unk_18E58 = NULL;
     this->pictoPhotoI8 = NULL;
@@ -936,11 +944,11 @@ void Play_Update(PlayState* this) {
     gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
     gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
 
-    if (SREG(89) == 2) {
-        SREG(89) = 3;
+    if (R_PICTOGRAPH_PHOTO_STATE == PICTOGRAPH_PHOTO_STATE_TAKE) {
+        R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_FINISH;
         MsgEvent_SendNullTask();
-        Play_TakePictograph(&this->pauseBgPreRender);
-        SREG(89) = 0;
+        Play_TakePictographPhoto(&this->pauseBgPreRender);
+        R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_OFF;
     }
     Actor_SetMovementScale(this->state.framerateDivisor);
 
@@ -1144,12 +1152,12 @@ void Play_Draw(PlayState* this) {
     u8 sp25B = false;
     f32 var_fv0; // fogFar
 
-    if (SREG(94) >= 4) {
+    if (R_PAUSE_MENU_MODE >= 4) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
-        SREG(94) = 0;
+        R_PAUSE_MENU_MODE = 0;
     }
 
-    if ((SREG(94) < 2) && (gTrnsnUnkState < 2)) {
+    if ((R_PAUSE_MENU_MODE < 2) && (gTrnsnUnkState < 2)) {
         if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.mesh->type0.type == 1)) {
             func_8012CF0C(gfxCtx, 0, 1, 0, 0, 0);
         } else {
@@ -1264,15 +1272,15 @@ void Play_Draw(PlayState* this) {
 
     PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
 
-    if (SREG(94) == 2) {
+    if (R_PAUSE_MENU_MODE == 2) {
         MsgEvent_SendNullTask();
         if (!gSaveContext.screenScaleFlag) {
             PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
         }
-        SREG(94) = 3;
+        R_PAUSE_MENU_MODE = 3;
         SREG(33) |= 1;
     } else {
-        if (SREG(94) == 3) {
+        if (R_PAUSE_MENU_MODE == 3) {
             Gfx* sp8C = POLY_OPA_DISP;
 
             if (this->pauseBgPreRender.unk_4D == 2) {
@@ -1374,7 +1382,7 @@ void Play_Draw(PlayState* this) {
         DebugDisplay_DrawObjects(this);
         Play_DrawMotionBlur(this);
 
-        if (((SREG(94) == 1) || (gTrnsnUnkState == 1)) || (SREG(89) == 1)) {
+        if (((R_PAUSE_MENU_MODE == 1) || (gTrnsnUnkState == 1)) || (R_PICTOGRAPH_PHOTO_STATE == 1)) {
             Gfx* sp74;
             Gfx* sp70 = POLY_OPA_DISP;
 
@@ -1382,12 +1390,12 @@ void Play_Draw(PlayState* this) {
             gSPDisplayList(OVERLAY_DISP++, sp74);
             this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
 
-            if (SREG(94) == 1) {
-                SREG(94) = 2;
+            if (R_PAUSE_MENU_MODE == 1) {
+                R_PAUSE_MENU_MODE = 2;
                 this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
                 this->pauseBgPreRender.cvgSave = this->unk_18E58;
-            } else if (SREG(89) == 1) {
-                SREG(89) = 2;
+            } else if (R_PICTOGRAPH_PHOTO_STATE == 1) {
+                R_PICTOGRAPH_PHOTO_STATE = 2;
                 this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
                 this->pauseBgPreRender.cvgSave = this->unk_18E58;
             } else {
@@ -2231,8 +2239,8 @@ void Play_Init(GameState* thisx) {
 
     Play_InitMotionBlur();
 
-    SREG(94) = 0;
-    SREG(89) = 0;
+    R_PAUSE_MENU_MODE = 0;
+    R_PICTOGRAPH_PHOTO_STATE = 0;
 
     PreRender_Init(&this->pauseBgPreRender);
     PreRender_SetValuesSave(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL, NULL);
