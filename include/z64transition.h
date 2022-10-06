@@ -3,14 +3,11 @@
 
 #include "ultra64.h"
 
-// TODO: Figure out circular dependencies
-#if 0
 #include "overlays/fbdemos/ovl_fbdemo_triforce/z_fbdemo_triforce.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe1/z_fbdemo_wipe1.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe3/z_fbdemo_wipe3.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe4/z_fbdemo_wipe4.h"
 #include "overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h"
-#endif
 
 #define TC_SET_PARAMS (1 << 7)
 
@@ -76,14 +73,11 @@ typedef struct {
     /* 0x008 */ union {
         TransitionFade fade;
         TransitionCircle circle;
-#if 0
         TransitionTriforce triforce;
         TransitionWipe1 wipe1;
         TransitionWipe3 wipe3;
         TransitionWipe4 wipe4;
         TransitionWipe5 wipe5;
-#endif
-        u8 forceSize[0x218];
     } instanceData;
     /* 0x220 */ char unk_220[0x10];
     /* 0x230 */ void* (*init)(void* transition);

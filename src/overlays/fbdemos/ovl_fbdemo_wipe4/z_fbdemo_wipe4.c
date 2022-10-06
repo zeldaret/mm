@@ -4,6 +4,7 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_wipe4.h"
 
 void* TransitionWipe4_Init(void* thisx);

@@ -1,7 +1,8 @@
 #ifndef Z_FBDEMO_WIPE1_H
 #define Z_FBDEMO_WIPE1_H
 
-#include "global.h"
+#include "ultra64.h"
+#include "color.h"
 
 typedef struct {
     /* 0x000 */ char unk_0[0x218];
