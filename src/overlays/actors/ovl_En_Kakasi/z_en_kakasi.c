@@ -813,7 +813,7 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
     this->subCamFovNext = 60.0f;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
     Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
-    Play_EnableMotionBlur(0xB4);
+    Play_EnableMotionBlur(180);
     this->actionFunc = EnKakasi_DancingNightAway;
 }
 

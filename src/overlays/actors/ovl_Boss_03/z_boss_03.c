@@ -856,7 +856,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
     this->unk_25C = 15;
 
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 90) {
-        Play_EnableMotionBlur(0x96);
+        Play_EnableMotionBlur(150);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -1191,7 +1191,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                         this->csState = 2;
                         this->csTimer = 0;
                         this->unk_240 = 0;
-                        Play_EnableMotionBlur(0x96);
+                        Play_EnableMotionBlur(150);
                         this->subCamFov = 80.0f;
 
                         case 2:

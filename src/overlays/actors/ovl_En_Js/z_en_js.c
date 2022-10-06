@@ -110,7 +110,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_8096A6F4;
 
             Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
-            Play_EnableMotionBlur(0x3C);
+            Play_EnableMotionBlur(60);
 
             if (gSaveContext.save.weekEventReg[84] & 0x20) {
                 Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));

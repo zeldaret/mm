@@ -183,11 +183,11 @@ void func_80A90730(EnTest6* this, PlayState* play) {
     }
 }
 
-void func_80A90C08(s16 arg0) {
-    Play_EnableMotionBlur(arg0);
+void EnTest6_EnableMotionBlur(s16 alpha) {
+    Play_EnableMotionBlur(alpha);
 }
 
-void func_80A90C34(void) {
+void EnTest6_DisableMotionBlur(void) {
     Play_DisableMotionBlur();
 }
 
@@ -396,7 +396,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     play->unk_18844 = false;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
-    func_80A90C34();
+    EnTest6_DisableMotionBlur();
     Distortion_ClearType(DISTORTION_TYPE_5);
     Actor_MarkForDeath(&this->actor);
 }
@@ -462,7 +462,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                                                 ((subCam->at.z - subCam->eye.z) * 0.2f);
                     }
                 }
-                func_80A90C08(0x78);
+                EnTest6_EnableMotionBlur(120);
                 Distortion_SetType(DISTORTION_TYPE_5);
                 Distortion_SetCountdown(80);
                 play->unk_18844 = true;
@@ -517,7 +517,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
             if (this->unk_27A == 10) {
                 this->unk_14C = 0.1f;
-                func_80A90C34();
+                EnTest6_DisableMotionBlur();
                 Distortion_ClearType(DISTORTION_TYPE_5);
                 play->unk_18844 = false;
                 if (this->unk_254 != NULL) {
@@ -617,7 +617,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     play->unk_18844 = false;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
-    func_80A90C34();
+    EnTest6_DisableMotionBlur();
     Distortion_ClearType(DISTORTION_TYPE_5);
     Actor_MarkForDeath(&this->actor);
 }
@@ -680,11 +680,11 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
     switch (this->unk_27A) {
         case 119:
-            func_80A90C08(0x32);
+            EnTest6_EnableMotionBlur(50);
             break;
 
         case 115:
-            func_80A90C08(0x14);
+            EnTest6_EnableMotionBlur(20);
             Distortion_SetType(DISTORTION_TYPE_5);
             Distortion_SetCountdown(90);
             this->unk_274 = 2;
@@ -704,24 +704,24 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             break;
 
         case 61:
-            func_80A90C08(0x96);
+            EnTest6_EnableMotionBlur(150);
             this->unk_274 = 4;
             break;
 
         case 51:
-            func_80A90C08(0xB4);
+            EnTest6_EnableMotionBlur(180);
             this->unk_274 = 5;
             break;
 
         case 14:
         case 15:
-            func_80A90C08(0x32);
+            EnTest6_EnableMotionBlur(50);
             Distortion_ClearType(DISTORTION_TYPE_5);
             this->unk_274 = 0;
             break;
 
         case 1:
-            func_80A90C34();
+            EnTest6_DisableMotionBlur();
             if (gSaveContext.eventInf[5] & 4) {
                 this->unk_274 = 9;
             }

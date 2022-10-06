@@ -461,7 +461,7 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
         func_80AF082C(this, func_80AF1CA0);
         this->unk_144 |= 0x20;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
-        Play_EnableMotionBlur(0x78);
+        Play_EnableMotionBlur(120);
     }
 }
 
