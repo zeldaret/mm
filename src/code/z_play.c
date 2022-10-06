@@ -8,24 +8,22 @@
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-extern Gfx D_0E000140[];
-
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
 
 // bss
-extern s16 sTransitionFillTimer;
-extern Input D_801F6C18;
-extern FbDemoStruct sTrnsnUnk;
-extern u16* D_801F6D0C;
-extern s32 gTrnsnUnkState;
-extern VisMono sVisMono;
-extern Color_RGBA8_u32 gVisMonoColor;
-extern Struct_80140E80 D_801F6D38;
-extern Struct_80140E80* D_801F6D4C;
-extern HiresoStruct sHireso;
-extern u8 sBombersNotebookOpen;
-extern u8 sMotionBlurStatus;
+s16 sTransitionFillTimer;
+Input D_801F6C18;
+FbDemoStruct sTrnsnUnk;
+u16* D_801F6D0C;
+s32 gTrnsnUnkState;
+VisMono sVisMono;
+Color_RGBA8_u32 gVisMonoColor;
+Struct_80140E80 D_801F6D38;
+Struct_80140E80* D_801F6D4C;
+HiresoStruct sHireso;
+u8 sBombersNotebookOpen;
+u8 sMotionBlurStatus;
 
 typedef enum {
     /* 0 */ MOTION_BLUR_STOPPED,
@@ -267,7 +265,7 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
                 fbdemoType = FBDEMO_FADE;
                 break;
 
-            case TRANS_TYPE_FILL_WHITE2:
+            case TRANS_TYPE_FILL_WHITE_FAST:
             case TRANS_TYPE_FILL_WHITE:
                 this->transitionMode = TRANS_MODE_FILL_WHITE_INIT;
                 break;
@@ -655,7 +653,7 @@ void Play_UpdateTransition(PlayState* this) {
             }
 
             if ((this->transitionCtx.transitionType == TRANS_TYPE_WIPE_FAST) ||
-                (this->transitionCtx.transitionType == TRANS_TYPE_FILL_WHITE2)) {
+                (this->transitionCtx.transitionType == TRANS_TYPE_FILL_WHITE_FAST)) {
                 transWipeSpeed = 28;
             } else {
                 transWipeSpeed = 14;
@@ -1286,7 +1284,7 @@ void Play_Draw(PlayState* this) {
                 func_80170798(&this->pauseBgPreRender, &sp8C);
             }
 
-            gSPDisplayList(sp8C++, D_0E000140);
+            gSPDisplayList(sp8C++, D_0E000000.syncSegments);
             POLY_OPA_DISP = sp8C;
             sp25B = true;
             goto Play_Draw_DrawOverlayElements;
@@ -1545,11 +1543,11 @@ f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, V
     return floorHeight;
 }
 
-void func_801691F0(PlayState* this, MtxF* mtx, Vec3f* feetPos) {
+void func_801691F0(PlayState* this, MtxF* mtx, Vec3f* pos) {
     CollisionPoly* poly;
     s32 bgId;
 
-    func_80169100(this, mtx, &poly, &bgId, feetPos);
+    func_80169100(this, mtx, &poly, &bgId, pos);
 }
 
 void* Play_LoadFile(PlayState* this, RomFile* entry) {
@@ -2308,7 +2306,7 @@ void Play_Init(GameState* thisx) {
     }
 
     if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.unk3 == 1) || (this->roomCtx.curRoom.unk3 == 5))) {
-        Actor_Spawn(&this->actorCtx, this, 0x15A, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
+        Actor_Spawn(&this->actorCtx, this, ACTOR_EN_TEST4, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
     }
 
     player = GET_PLAYER(this);
@@ -2332,5 +2330,5 @@ void Play_Init(GameState* thisx) {
     Hireso_Init(&sHireso);
 }
 
-// play_hireso need to confirm still
+//! TODO: fake symbol, remove when Hireso_Update is matching
 u16 D_801D0D78[] = { 0, 0, 0, 0 };
