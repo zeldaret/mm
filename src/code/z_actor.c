@@ -224,7 +224,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(floorHeight); i++, spB8 >>= 1) {
             feetPosPtr->y += 50.0f;
-            *floorHeightPtr = func_80169100(play, &sp13C, &spF8, &bgId, feetPosPtr);
+            *floorHeightPtr = Play_GetFloorSurfaceImpl(play, &sp13C, &spF8, &bgId, feetPosPtr);
             feetPosPtr->y -= 50.0f;
 
             distToFloor = feetPosPtr->y - *floorHeightPtr;

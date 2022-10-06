@@ -108,7 +108,8 @@ void Play_DisableMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
 }
 
-void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft, s32 pixelTop, s32 pixelRight, s32 pixelBottom, s32 type) {
+void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft, s32 pixelTop, s32 pixelRight,
+                           s32 pixelBottom, s32 type) {
     s32 i;
     s32 j;
     u32 pixel;
@@ -1512,7 +1513,7 @@ s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
 }
 
-f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {
+f32 Play_GetFloorSurfaceImpl(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {
     f32 floorHeight = BgCheck_EntityRaycastFloor3(&this->colCtx, poly, bgId, pos);
 
     if (floorHeight > BGCHECK_Y_MIN) {
@@ -1539,11 +1540,11 @@ f32 func_80169100(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, V
     return floorHeight;
 }
 
-void func_801691F0(PlayState* this, MtxF* mtx, Vec3f* pos) {
+void Play_GetFloorSurface(PlayState* this, MtxF* mtx, Vec3f* pos) {
     CollisionPoly* poly;
     s32 bgId;
 
-    func_80169100(this, mtx, &poly, &bgId, pos);
+    Play_GetFloorSurfaceImpl(this, mtx, &poly, &bgId, pos);
 }
 
 void* Play_LoadFile(PlayState* this, RomFile* entry) {
