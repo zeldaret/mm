@@ -2064,12 +2064,12 @@ void Play_Init(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     s32 pad;
-    u32 temp_v0_12;
-    s32 sp94;
+    uintptr_t zAlloc;
+    s32 zAllocSize;
     Player* player;
     s32 i;
     s32 spawn;
-    u8 sp87;
+    u8 sceneLayer;
     s32 scene;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
@@ -2209,7 +2209,7 @@ void Play_Init(GameState* thisx) {
         gSaveContext.sceneLayer = 0;
     }
 
-    sp87 = gSaveContext.sceneLayer;
+    sceneLayer = gSaveContext.sceneLayer;
 
     Play_SpawnScene(
         this, Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)),
@@ -2262,7 +2262,7 @@ void Play_Init(GameState* thisx) {
     if (gSaveContext.gameMode != 1) {
         if (gSaveContext.nextTransitionType == TRANS_NEXT_TYPE_DEFAULT) {
             this->transitionType =
-                (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sp87) >> 7) & 0x7F;
+                (Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) + sceneLayer) >> 7) & 0x7F;
         } else {
             this->transitionType = gSaveContext.nextTransitionType;
             gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
@@ -2292,9 +2292,9 @@ void Play_Init(GameState* thisx) {
     D_801F6D4C->envColor.a = 0;
     EnvFlags_UnsetAll(this);
     THA_GetSize(&this->state.heap);
-    sp94 = THA_GetSize(&this->state.heap);
-    temp_v0_12 = (u32)THA_AllocEndAlign16(&this->state.heap, sp94);
-    ZeldaArena_Init(((temp_v0_12 + 8) & ~0xF), (sp94 - ((temp_v0_12 + 8) & ~0xF)) + temp_v0_12);
+    zAllocSize = THA_GetSize(&this->state.heap);
+    zAlloc = (uintptr_t)THA_AllocEndAlign16(&this->state.heap, zAllocSize);
+    ZeldaArena_Init(((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc);
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
     while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {
