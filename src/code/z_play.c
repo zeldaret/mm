@@ -108,82 +108,81 @@ void Play_DisableMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
 }
 
-void func_801656A4(void* arg0, u16* arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft, s32 pixelTop, s32 pixelRight, s32 pixelBottom, s32 type) {
     s32 i;
     s32 j;
-    u32 t2;
-    u32 temp1;
-    u32 temp2;
-    u32 tempr;
-    u32 tempg;
-    u32 tempb;
+    u32 pixel;
+    u32 r;
+    u32 g;
+    u32 b;
 
-    switch (arg7) {
+    switch (type) {
         case 4: {
-            u8* arg01 = (u8*)arg0;
+            u8* destI4 = (u8*)destI;
+            u32 upper;
+            u32 lower;
 
-            for (i = arg4; i <= arg6; i++) {
-                for (j = arg3; j <= arg5; j += 2) {
-                    t2 = arg1[i * arg2 + j];
-                    tempr = (t2 >> 11) & 0x1F;
-                    tempg = (t2 >> 6) & 0x1F;
-                    tempb = (t2 >> 1) & 0x1F;
-                    temp1 = ((tempr * 2 + tempg * 4 + tempb) * 0xF) / 217;
+            for (i = pixelTop; i <= pixelBottom; i++) {
+                for (j = pixelLeft; j <= pixelRight; j += 2) {
+                    pixel = srcBuf[i * bufWidth + j];
+                    r = (pixel >> 11) & 0x1F;
+                    g = (pixel >> 6) & 0x1F;
+                    b = (pixel >> 1) & 0x1F;
+                    upper = ((r * 2 + g * 4 + b) * 0xF) / 217;
 
-                    t2 = arg1[i * arg2 + j + 1];
-                    tempr = (t2 >> 11) & 0x1F;
-                    tempg = (t2 >> 6) & 0x1F;
-                    tempb = (t2 >> 1) & 0x1F;
-                    temp2 = ((tempr * 2 + tempg * 4 + tempb) * 0xF) / 217;
+                    pixel = srcBuf[i * bufWidth + j + 1];
+                    r = (pixel >> 11) & 0x1F;
+                    g = (pixel >> 6) & 0x1F;
+                    b = (pixel >> 1) & 0x1F;
+                    lower = ((r * 2 + g * 4 + b) * 0xF) / 217;
 
-                    *(arg01++) = (temp1 << 4) | temp2;
+                    *(destI4++) = (upper << 4) | lower;
                 }
             }
             break;
         }
 
         case 5: {
-            u8* arg02 = (u8*)arg0;
+            u8* destI5 = (u8*)destI;
 
-            for (i = arg4; i <= arg6; i++) {
-                for (j = arg3; j <= arg5; j++) {
-                    t2 = arg1[i * arg2 + j];
-                    tempr = (t2 >> 11) & 0x1F;
-                    tempg = (t2 >> 6) & 0x1F;
-                    tempb = (t2 >> 1) & 0x1F;
+            for (i = pixelTop; i <= pixelBottom; i++) {
+                for (j = pixelLeft; j <= pixelRight; j++) {
+                    pixel = srcBuf[i * bufWidth + j];
+                    r = (pixel >> 11) & 0x1F;
+                    g = (pixel >> 6) & 0x1F;
+                    b = (pixel >> 1) & 0x1F;
 
-                    //! What
-                    t2 = 0;
+                    pixel = 0;
 
-                    *(arg02++) = (((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217) & 0xF8;
+                    *(destI5++) = (((r * 2 + g * 4 + b) * 0xFF) / 217) & 0xF8;
                 }
             }
             break;
         }
 
         case 8: {
-            u8* arg03 = (u8*)arg0;
+            u8* destI8 = (u8*)destI;
 
-            for (i = arg4; i <= arg6; i++) {
-                for (j = arg3; j <= arg5; j++) {
-                    t2 = arg1[i * arg2 + j];
+            for (i = pixelTop; i <= pixelBottom; i++) {
+                for (j = pixelLeft; j <= pixelRight; j++) {
+                    pixel = srcBuf[i * bufWidth + j];
 
-                    tempr = (t2 >> 11) & 0x1F;
-                    tempg = (t2 >> 6) & 0x1F;
-                    tempb = (t2 >> 1) & 0x1F;
+                    r = (pixel >> 11) & 0x1F;
+                    g = (pixel >> 6) & 0x1F;
+                    b = (pixel >> 1) & 0x1F;
 
-                    *(arg03++) = ((tempr * 2 + tempg * 4 + tempb) * 0xFF) / 217;
+                    *(destI8++) = ((r * 2 + g * 4 + b) * 0xFF) / 217;
                 }
             }
             break;
         }
 
         case 16: {
-            u16* arg0u = (u16*)arg0;
+            u16* destI16 = (u16*)destI;
 
-            for (i = arg4; i <= arg6; i++) {
-                for (j = arg3; j <= arg5; j++) {
-                    *(arg0u++) = arg1[i * arg2 + j];
+            for (i = pixelTop; i <= pixelBottom; i++) {
+                for (j = pixelLeft; j <= pixelRight; j++) {
+                    *(destI16++) = srcBuf[i * bufWidth + j];
                 }
             }
             break;
@@ -208,10 +207,9 @@ void func_80165E04(void) {
     SREG(89) = 1;
 }
 
-// Takes the picto photo, stores it as I8 to gPictoPhotoI8
-void func_80165E1C(PreRender* prerender) {
+void Play_TakePictograph(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    func_801656A4(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
+    Play_ConvertBufferToI(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
 
 s32 Play_ChooseDynamicTransition(PlayState* this, s32 transitionType) {
@@ -458,60 +456,58 @@ void Play_Destroy(GameState* thisx) {
     ZeldaArena_Cleanup();
 }
 
-// compresses from I8 to I5 and stores it in the save file
-void func_801663C4(u8* srcI8, s8* destI5, size_t size) {
+void Play_CompressI8ToI5(u8* srcI8, s8* destI5, size_t size) {
     u32 i;
     u8* src = srcI8;
     s8* dest = destI5;
     s32 var_a3 = 8;
-    u32 var_t0 = 0;
+    u32 destPixel = 0;
     s32 var_a1;
-    u32 temp_lo_2;
+    u32 srcPixel;
 
     for (i = 0; i < size; i++) {
-        temp_lo_2 = *src++;
-        temp_lo_2 = (temp_lo_2 * 0x1F + 0x80) / 255;
+        srcPixel = *src++;
+        srcPixel = (srcPixel * 0x1F + 0x80) / 255;
         var_a1 = var_a3 - 5;
         if (var_a1 > 0) {
-            var_t0 |= temp_lo_2 << (var_a1);
+            destPixel |= srcPixel << (var_a1);
 
         } else {
-            var_t0 |= temp_lo_2 >> -(var_a1);
-            *dest++ = var_t0;
+            destPixel |= srcPixel >> -(var_a1);
+            *dest++ = destPixel;
             var_a1 += 8;
-            var_t0 = temp_lo_2 << (var_a1);
+            destPixel = srcPixel << (var_a1);
         }
         var_a3 = var_a1;
     }
     if (var_a3 < 8) {
-        *dest = var_t0;
+        *dest = destPixel;
     }
 }
 
-// decompresses from the save file from I5 to I8
-void func_80166644(u8* srcI5, s8* destI8, size_t size) {
+void Play_DecompressI5ToI8(u8* srcI5, s8* destI8, size_t size) {
     u32 i;
     u8* src = srcI5;
     s8* dest = destI8;
     s32 var_a3 = 8;
-    u32 var_t0;
+    u32 destPixel;
     s32 var_a1;
-    u32 temp_lo_2 = *src++;
+    u32 srcPixel = *src++;
 
     for (i = 0; i < size; i++) {
         var_a1 = var_a3 - 5;
         if (var_a1 > 0) {
-            var_t0 = 0;
-            var_t0 |= temp_lo_2 >> (var_a1);
+            destPixel = 0;
+            destPixel |= srcPixel >> (var_a1);
         } else {
-            var_t0 = 0;
-            var_t0 |= temp_lo_2 << -(var_a1);
-            temp_lo_2 = *src++;
+            destPixel = 0;
+            destPixel |= srcPixel << -(var_a1);
+            srcPixel = *src++;
             var_a1 += 8;
-            var_t0 |= temp_lo_2 >> var_a1;
+            destPixel |= srcPixel >> var_a1;
         }
-        var_t0 = (var_t0 & 0x1F) * 0xFF / 0x1F;
-        *dest++ = var_t0;
+        destPixel = (destPixel & 0x1F) * 0xFF / 0x1F;
+        *dest++ = destPixel;
         var_a3 = var_a1;
     }
 }
@@ -942,7 +938,7 @@ void Play_Update(PlayState* this) {
     if (SREG(89) == 2) {
         SREG(89) = 3;
         MsgEvent_SendNullTask();
-        func_80165E1C(&this->pauseBgPreRender);
+        Play_TakePictograph(&this->pauseBgPreRender);
         SREG(89) = 0;
     }
     Actor_SetMovementScale(this->state.framerateDivisor);
