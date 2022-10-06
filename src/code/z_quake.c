@@ -668,7 +668,7 @@ void Distortion_Update(void) {
             zScaleFactor = 1.0f;
             xyScaleFactor = 1.0f;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_4) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_UNDERWATER_ENTRY) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 countdownMax = sDistortionRequest.countdown;
                 depthPhase = 0x760;
@@ -690,7 +690,7 @@ void Distortion_Update(void) {
             countdownRatio = sDistortionRequest.countdown / (f32)countdownMax;
             zScaleFactor = xyScaleFactor = countdownRatio;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_3) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_ZORA_SWIMMING) {
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
 
@@ -745,7 +745,7 @@ void Distortion_Update(void) {
             }
             zScaleFactor = -xyScaleFactor;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_2) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_NON_ZORA_SWIMMING) {
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
 

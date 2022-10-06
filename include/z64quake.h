@@ -47,9 +47,9 @@ s32 Quake_NumActiveQuakes(void);
 void Quake_Init(void);
 
 #define DISTORTION_TYPE_0 (1 << 0)
-#define DISTORTION_TYPE_2 (1 << 2)
-#define DISTORTION_TYPE_3 (1 << 3)
-#define DISTORTION_TYPE_4 (1 << 4)
+#define DISTORTION_TYPE_NON_ZORA_SWIMMING (1 << 2)
+#define DISTORTION_TYPE_ZORA_SWIMMING (1 << 3)
+#define DISTORTION_TYPE_UNDERWATER_ENTRY (1 << 4)
 #define DISTORTION_TYPE_5 (1 << 5)
 #define DISTORTION_TYPE_6 (1 << 6)
 #define DISTORTION_TYPE_7 (1 << 7)

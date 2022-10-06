@@ -516,45 +516,45 @@ void func_80166644(u8* srcI5, s8* destI8, size_t size) {
     }
 }
 
-f32 func_801668B4(PlayState* this, Vec3f* arg1, s32* arg2) {
+f32 Play_GetWaterSurface(PlayState* this, Vec3f* pos, s32* lightIndex) {
     Player* player = GET_PLAYER(this);
-    f32 sp38 = player->actor.world.pos.y;
+    f32 waterSurfaceY = player->actor.world.pos.y;
     WaterBox* waterBox;
     s32 bgId;
 
-    if (!WaterBox_GetSurfaceImpl(this, &this->colCtx, arg1->x, arg1->z, &sp38, &waterBox, &bgId)) {
+    if (!WaterBox_GetSurfaceImpl(this, &this->colCtx, pos->x, pos->z, &waterSurfaceY, &waterBox, &bgId)) {
         return BGCHECK_Y_MIN;
     }
 
-    if (sp38 < arg1->y) {
+    if (waterSurfaceY < pos->y) {
         return BGCHECK_Y_MIN;
     }
 
-    *arg2 = WaterBox_GetLightSettingIndex(&this->colCtx, waterBox);
-    return sp38;
+    *lightIndex = WaterBox_GetLightSettingIndex(&this->colCtx, waterBox);
+    return waterSurfaceY;
 }
 
-void func_80166968(PlayState* this, Camera* camera) {
+void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
     static s16 sQuakeIndex = -1;
     static s16 sIsCameraUnderwater = false;
     s32 pad;
-    s32 sp28;
+    s32 lightIndex;
     Player* player = GET_PLAYER(this);
 
     sIsCameraUnderwater = camera->stateFlags & CAM_STATE_UNDERWATER;
-    if (func_801668B4(this, &camera->eye, &sp28) != BGCHECK_Y_MIN) {
+    if (Play_GetWaterSurface(this, &camera->eye, &lightIndex) != BGCHECK_Y_MIN) {
         if (!sIsCameraUnderwater) {
             Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
             sQuakeIndex = -1;
-            Distortion_SetType(0x10);
+            Distortion_SetType(DISTORTION_TYPE_UNDERWATER_ENTRY);
             Distortion_SetCountdown(80);
         }
 
         func_801A3EC0(0x20);
-        func_800F6834(this, sp28);
+        func_800F6834(this, lightIndex);
 
-        if ((sQuakeIndex == -1) || (Quake_GetCountdown(sQuakeIndex) == 0xA)) {
-            s16 quakeIndex = Quake_Add(camera, 5);
+        if ((sQuakeIndex == -1) || (Quake_GetCountdown(sQuakeIndex) == 10)) {
+            s16 quakeIndex = Quake_Add(camera, QUAKE_TYPE_5);
 
             sQuakeIndex = quakeIndex;
             if (quakeIndex != 0) {
@@ -564,19 +564,19 @@ void func_80166968(PlayState* this, Camera* camera) {
             }
         }
         if (player->stateFlags3 & PLAYER_STATE3_8000) {
-            Distortion_SetType(8);
-            Distortion_ClearType(4);
+            Distortion_SetType(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
         } else {
-            Distortion_SetType(4);
-            Distortion_ClearType(8);
+            Distortion_SetType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
         }
     } else {
         if (sIsCameraUnderwater) {
             Camera_ClearFlags(camera, CAM_STATE_UNDERWATER);
         }
-        Distortion_ClearType(4);
-        Distortion_ClearType(0x10);
-        Distortion_ClearType(8);
+        Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+        Distortion_ClearType(DISTORTION_TYPE_UNDERWATER_ENTRY);
+        Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
         if (sQuakeIndex != 0) {
             Quake_Remove(sQuakeIndex);
         }
@@ -1050,7 +1050,7 @@ void Play_Update(PlayState* this) {
     }
 
     if (!sp5C) {
-        func_80166968(this, this->cameraPtrs[this->nextCamera]);
+        Play_UpdateWaterCamera(this, this->cameraPtrs[this->nextCamera]);
         Distortion_Update();
     }
 
@@ -1097,7 +1097,7 @@ void Play_SetupUpdate(PlayState* this) {
     }
 }
 
-void Play_DrawOverlayElements(PlayState* this) {
+void Play_PostWorldDraw(PlayState* this) {
     if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         KaleidoScopeCall_Draw(this);
     }
@@ -1262,7 +1262,7 @@ void Play_Draw(PlayState* this) {
         TransitionUnk_Draw(&sTrnsnUnk, &sp90);
         POLY_OPA_DISP = sp90;
         sp25B = true;
-        goto Play_Draw_DrawOverlayElements;
+        goto Play_Draw_PostWorldDraw;
     }
 
     PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
@@ -1287,7 +1287,7 @@ void Play_Draw(PlayState* this) {
             gSPDisplayList(sp8C++, D_0E000000.syncSegments);
             POLY_OPA_DISP = sp8C;
             sp25B = true;
-            goto Play_Draw_DrawOverlayElements;
+            goto Play_Draw_PostWorldDraw;
         }
 
         if (!this->unk_18844) {
@@ -1411,8 +1411,8 @@ void Play_Draw(PlayState* this) {
             this->unk_18B49 = 2;
             SREG(33) |= 1;
         } else {
-        Play_Draw_DrawOverlayElements:
-            Play_DrawOverlayElements(this);
+        Play_Draw_PostWorldDraw:
+            Play_PostWorldDraw(this);
         }
     }
 
