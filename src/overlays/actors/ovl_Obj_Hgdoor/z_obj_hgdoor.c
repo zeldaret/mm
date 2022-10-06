@@ -18,13 +18,13 @@ void ObjHgdoor_Draw(Actor* thisx, PlayState* play);
 
 void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this);
 void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, PlayState* play);
-void func_80BD42AC(ObjHgdoor* this);
-void func_80BD42C0(ObjHgdoor* this, PlayState* play);
-void func_80BD433C(ObjHgdoor* this);
-void func_80BD4358(ObjHgdoor* this, PlayState* play);
-void func_80BD4460(ObjHgdoor* this);
-void func_80BD4478(ObjHgdoor* this, PlayState* play);
-s32 func_80BD44D0(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupCutscene(ObjHgdoor* this);
+void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupCsAction(ObjHgdoor* this);
+void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupStopCs(ObjHgdoor* this);
+void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
+s32 ObjHgdoor_RotateDoor(ObjHgdoor* this, PlayState* play);
 
 const ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
@@ -38,7 +38,7 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Draw,
 };
 
-static s16 D_80BD4690 = 0;
+static s16 DoorOpenFlag = 0;
 static s32 unused = 0;
 static s32 unused2 = 0;
 
@@ -101,19 +101,19 @@ void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, PlayState* play) {
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         ObjHgdoor_SetChild(this, play);
         ObjHgdoor_SetParent(this, play);
-        func_80BD42AC(this);
+        ObjHgdoor_SetupCutscene(this);
     }
 }
 
-void func_80BD42AC(ObjHgdoor* this) {
-    this->actionFunc = func_80BD42C0;
+void ObjHgdoor_SetupCutscene(ObjHgdoor* this) {
+    this->actionFunc = ObjHgdoor_PlayCutscene;
 }
 
-void func_80BD42C0(ObjHgdoor* this, PlayState* play) {
+void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->dyna.actor);
-        func_80BD433C(this);
-        func_80BD433C((ObjHgdoor*)this->dyna.actor.child);
+        ObjHgdoor_SetupCsAction(this);
+        ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -122,50 +122,52 @@ void func_80BD42C0(ObjHgdoor* this, PlayState* play) {
     }
 }
 
-void func_80BD433C(ObjHgdoor* this) {
-    this->unk166 = 0x63;
-    this->actionFunc = func_80BD4358;
+void ObjHgdoor_SetupCsAction(ObjHgdoor* this) {
+    this->csAction = 0x63;
+    this->actionFunc = ObjHgdoor_HandleCsAction;
 }
 
-void func_80BD4358(ObjHgdoor* this, PlayState* play) {
+void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
     s32 actionIndex;
 
     if (Cutscene_CheckActorAction(play, 483)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 483);
-        if (this->unk166 != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk166 = play->csCtx.actorActions[actionIndex]->action;
+        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }
-                    D_80BD4690 = 1;
+                    DoorOpenFlag = 1;
                     break;
                 case 2:
                     break;
             }
         }
-        if ((D_80BD4690 == 1) && (func_80BD44D0(this, play))) {
-            func_80BD4460(this);
+        if ((DoorOpenFlag == 1) && (ObjHgdoor_RotateDoor(this, play))) {
+            ObjHgdoor_SetupStopCs(this);
         }
     } else {
-        this->unk166 = 0x63;
+        this->csAction = 0x63;
     }
 }
 
-void func_80BD4460(ObjHgdoor* this) {
+void ObjHgdoor_SetupStopCs(ObjHgdoor* this) {
     this->timer = 0;
-    this->actionFunc = func_80BD4478;
+    this->actionFunc = ObjHgdoor_StopCs;
 }
 
-void func_80BD4478(ObjHgdoor* this, PlayState* play) {
+void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
     if (this->timer++ > 80 && !ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Stop(this->cutscene);
     }
 }
 
-s32 func_80BD44D0(ObjHgdoor* this, PlayState* play) {
+// @brief Function to increment the rotation angle of the door
+// @return true when door is fully open, false otherwise
+s32 ObjHgdoor_RotateDoor(ObjHgdoor* this, PlayState* play) {
     if (this->rotation < 0x5555) {
         this->rotation += 0x1388;
     } else {
@@ -175,7 +177,7 @@ s32 func_80BD44D0(ObjHgdoor* this, PlayState* play) {
     return false;
 }
 
-void func_80BD4500(ObjHgdoor* this) {
+void ObjHgdoor_OpenDoors(ObjHgdoor* this) {
     this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y;
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         this->dyna.actor.shape.rot.y += this->rotation;
@@ -188,7 +190,7 @@ void ObjHgdoor_Update(Actor* thisx, PlayState* play) {
     ObjHgdoor* this = THIS;
 
     this->actionFunc(this, play);
-    func_80BD4500(this);
+    ObjHgdoor_OpenDoors(this);
 }
 
 void ObjHgdoor_Draw(Actor* thisx, PlayState* play) {
