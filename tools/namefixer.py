@@ -469,6 +469,7 @@ wordReplace = {
     "func_800DFC90": "Camera_GetCamDir",
     "func_800DFD04": "Camera_AddQuake",
     "func_800DFFAC": "Camera_ChangeDoorCam",
+
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_ChangeCameraStatus",
@@ -496,6 +497,11 @@ wordReplace = {
     "func_80169E6C": "Play_SetupRespawnPoint",
     "func_8016A0AC": "Play_IsUnderwater",
     "func_801690CC": "Play_InCsMode",
+    "func_80165658": "Play_SetMotionBlurAlpha",
+    "func_8016566C": "Play_EnableMotionBlur",
+    "func_80165690": "Play_DisableMotionBlur",
+    "func_801660B8": "Play_SetFog",
+
     "func_8010E9F0": "Interface_StartTimer",
     "func_8010EA9C": "Interface_StartPostmanTimer",
     "func_80121F94": "Interface_Destroy",
@@ -798,6 +804,30 @@ wordReplace = {
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_AP_FISHING_ROD",
 
+    # Enums
+    "TRANS_TYPE_00": "TRANS_TYPE_WIPE",
+    "TRANS_TYPE_01": "TRANS_TYPE_TRIFORCE",
+    "TRANS_TYPE_02": "TRANS_TYPE_FADE_BLACK",
+    "TRANS_TYPE_03": "TRANS_TYPE_FADE_WHITE",
+    "TRANS_TYPE_04": "TRANS_TYPE_FADE_BLACK_FAST",
+    "TRANS_TYPE_05": "TRANS_TYPE_FADE_WHITE_FAST",
+    "TRANS_TYPE_06": "TRANS_TYPE_FADE_BLACK_SLOW",
+    "TRANS_TYPE_07": "TRANS_TYPE_FADE_WHITE_SLOW",
+    "TRANS_TYPE_08": "TRANS_TYPE_WIPE_FAST",
+    "TRANS_TYPE_09": "TRANS_TYPE_FILL_WHITE_FAST",
+    "TRANS_TYPE_10": "TRANS_TYPE_FILL_WHITE",
+    "TRANS_TYPE_11": "TRANS_TYPE_INSTANT",
+    "TRANS_TYPE_12": "TRANS_TYPE_FILL_BROWN",
+    "TRANS_TYPE_13": "TRANS_TYPE_FADE_WHITE_CS_DELAYED",
+    "TRANS_TYPE_14": "TRANS_TYPE_SANDSTORM_PERSIST",
+    "TRANS_TYPE_15": "TRANS_TYPE_SANDSTORM_END",
+    "TRANS_TYPE_16": "TRANS_TYPE_CS_BLACK_FILL",
+    "TRANS_TYPE_17": "TRANS_TYPE_FADE_WHITE_INSTANT",
+    "TRANS_TYPE_18": "TRANS_TYPE_FADE_GREEN",
+    "TRANS_TYPE_19": "TRANS_TYPE_FADE_BLUE",
+    "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
+    "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
+    "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
 }
