@@ -38,7 +38,7 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Draw,
 };
 
-static s16 DoorOpenFlag = 0;
+static s16 sDoorOpenFlag = 0;
 static s32 unused = 0;
 static s32 unused2 = 0;
 
@@ -140,13 +140,13 @@ void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }
-                    DoorOpenFlag = 1;
+                    sDoorOpenFlag = 1;
                     break;
                 case 2:
                     break;
             }
         }
-        if ((DoorOpenFlag == 1) && (ObjHgdoor_RotateDoor(this, play))) {
+        if ((sDoorOpenFlag == 1) && (ObjHgdoor_RotateDoor(this, play))) {
             ObjHgdoor_SetupStopCs(this);
         }
     } else {
@@ -165,8 +165,11 @@ void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
     }
 }
 
-// @brief Function to increment the rotation angle of the door
-// @return true when door is fully open, false otherwise
+/**
+ * @brief Function to increment the rotation angle of the door
+ * 
+ * @return true when door is fully open, false otherwise
+ */
 s32 ObjHgdoor_RotateDoor(ObjHgdoor* this, PlayState* play) {
     if (this->rotation < 0x5555) {
         this->rotation += 0x1388;
