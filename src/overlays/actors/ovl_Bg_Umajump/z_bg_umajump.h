@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define BG_UMAJUMP_GET_OBJECT_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
-#define BG_UMAJUMP_GET_FF(thisx) ((thisx)->params &= 0xFF)
+#define BG_UMAJUMP_GET_FF(thisx) ((thisx)->params & 0xFF)
 
 struct BgUmajump;
 
