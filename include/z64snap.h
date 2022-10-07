@@ -36,11 +36,11 @@ typedef enum {
     /* 0x3F */ PICTOGRAPH_BAD_DISTANCE
 } PictographFlag;
 
-// The following macros are subject to renaming once the capture system is better understood
-#define PICTO_RESOLUTION_HORIZONTAL 150
-#define PICTO_RESOLUTION_VERTICAL 105
-#define PICTO_CAPTURE_REGION_TOPLEFT_X ((SCREEN_WIDTH - PICTO_RESOLUTION_HORIZONTAL) / 2)
-#define PICTO_CAPTURE_REGION_TOPLEFT_Y ((SCREEN_HEIGHT - PICTO_RESOLUTION_VERTICAL) / 2)
+// The subregion of the picto photo that will set the flag for an actor being in the photo
+#define PICTO_CAPTURE_REGION_WIDTH 150
+#define PICTO_CAPTURE_REGION_HEIGHT 105
+#define PICTO_CAPTURE_REGION_TOPLEFT_X ((SCREEN_WIDTH - PICTO_CAPTURE_REGION_WIDTH) / 2)
+#define PICTO_CAPTURE_REGION_TOPLEFT_Y ((SCREEN_HEIGHT - PICTO_CAPTURE_REGION_HEIGHT) / 2)
 
 s32 Snap_RecordPictographedActors(PlayState* play);
 void Snap_SetFlag(s32 flag);

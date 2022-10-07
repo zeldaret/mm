@@ -211,7 +211,9 @@ void Play_TriggerPictographPhoto(void) {
 
 void Play_TakePictographPhoto(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
+    Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, SCREEN_WIDTH, PICTO_TOPLEFT_X,
+                                       PICTO_TOPLEFT_Y, (PICTO_TOPLEFT_X + PICTO_RESOLUTION_WIDTH) - 1,
+                                       (PICTO_TOPLEFT_Y + PICTO_RESOLUTION_HEIGHT) - 1, 8);
 }
 
 s32 Play_ChooseDynamicTransition(PlayState* this, s32 transitionType) {

@@ -174,7 +174,7 @@ s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos,
     y = (s16)PROJECTED_TO_SCREEN_Y(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_Y;
 
     // checks if the coordinates are within the capture region
-    if ((x < 0) || (x > PICTO_RESOLUTION_HORIZONTAL) || (y < 0) || (y > PICTO_RESOLUTION_VERTICAL)) {
+    if ((x < 0) || (x > PICTO_CAPTURE_REGION_WIDTH) || (y < 0) || (y > PICTO_CAPTURE_REGION_HEIGHT)) {
         Snap_SetFlag(PICTOGRAPH_NOT_IN_VIEW);
         ret |= PICTOGRAPH_NOT_IN_VIEW;
     }
