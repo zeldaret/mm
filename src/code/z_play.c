@@ -611,20 +611,20 @@ void Play_UpdateTransition(PlayState* this) {
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
                       !(gSaveContext.save.weekEventReg[0x34] & 0x20))) &&
                     (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
-                     (Audio_GetActiveSequence(0) != NA_BGM_FINAL_HOURS))) {
+                     (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
-                    gSaveContext.seqId = 0xFF;
-                    gSaveContext.ambienceId = 0xFF;
+                    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (func_800FD768()) {
                     func_801A4058(20);
-                    gSaveContext.seqId = 0xFF;
-                    gSaveContext.ambienceId = 0xFF;
+                    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 }
 
                 if (func_800FE590(this) && (Entrance_GetSceneId(this->nextEntrance + sceneLayer) >= 0) &&
-                    (Audio_GetActiveSequence(0) == NA_BGM_FINAL_HOURS)) {
+                    (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
                     func_801A41C8(20);
                 }
             }
