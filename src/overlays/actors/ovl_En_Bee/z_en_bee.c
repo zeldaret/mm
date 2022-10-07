@@ -209,7 +209,7 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
 
     Math_Vec3f_Copy(&nextPos, &this->targetPos[this->posIndex]);
 
-    if (!(this->instanceId & 1)) {
+    if ((this->instanceId % 2) == 0) {
         this->targetYaw +=
             (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
     } else {
