@@ -2176,7 +2176,7 @@ void Play_Init(GameState* thisx) {
 
     func_800DFF18(&this->mainCamera, 0x7F);
     Sram_Alloc(&this->state, &this->sramCtx);
-    Construct_InitRegs(this);
+    Regs_InitData(this);
     Message_Init(this);
     GameOver_Init(this);
     SoundSource_InitAll(this);

@@ -633,6 +633,8 @@ wordReplace = {
     "Entrance_CreateIndex": "Entrance_Create",
     "Entrance_CreateIndexFromSpawn": "Entrance_CreateFromSpawn",
 
+    "func_80102544": "LightContext_SetFog",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",

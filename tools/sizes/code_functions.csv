@@ -1395,7 +1395,7 @@ asm/non_matchings/code/z_lights/Lights_FindBufSlot.s,Lights_FindBufSlot,0x801023
 asm/non_matchings/code/z_lights/Lights_FreeNode.s,Lights_FreeNode,0x80102464,0x12
 asm/non_matchings/code/z_lights/LightContext_Init.s,LightContext_Init,0x801024AC,0x1B
 asm/non_matchings/code/z_lights/LightContext_SetAmbientColor.s,LightContext_SetAmbientColor,0x80102518,0xB
-asm/non_matchings/code/z_lights/LightContext_SetFogProperties.s,LightContext_SetFogProperties,0x80102544,0xF
+asm/non_matchings/code/z_lights/LightContext_SetFog.s,LightContext_SetFog,0x80102544,0xF
 asm/non_matchings/code/z_lights/LightContext_NewLights.s,LightContext_NewLights,0x80102580,0xE
 asm/non_matchings/code/z_lights/LightContext_InitList.s,LightContext_InitList,0x801025B8,0x4
 asm/non_matchings/code/z_lights/LightContext_DestroyList.s,LightContext_DestroyList,0x801025C8,0x17
@@ -3598,4 +3598,4 @@ asm/non_matchings/code/jpegdecoder/JpegDecoder_ReadBits.s,JpegDecoder_ReadBits,0
 asm/non_matchings/code/z_game_over/GameOver_Init.s,GameOver_Init,0x801AA610,0x5
 asm/non_matchings/code/z_game_over/GameOver_FadeLights.s,GameOver_FadeLights,0x801AA624,0x1A
 asm/non_matchings/code/z_game_over/GameOver_Update.s,GameOver_Update,0x801AA68C,0x105
-asm/non_matchings/code/z_construct/Construct_InitRegs.s,Construct_InitRegs,0x801AAAA0,0x4
+asm/non_matchings/code/z_construct/Regs_InitData.s,Regs_InitData,0x801AAAA0,0x4

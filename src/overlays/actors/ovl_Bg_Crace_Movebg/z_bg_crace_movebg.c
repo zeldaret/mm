@@ -328,7 +328,7 @@ void BgCraceMovebg_ClosingDoor_Close(BgCraceMovebg* this, PlayState* play) {
     if (Math_StepToF(&this->doorHeight, 0.0f, 1.0f)) {
         if (!(this->stateFlags & BG_CRACE_MOVEBG_FLAG_PLAYER_IS_BEYOND_DOOR) &&
             !Flags_GetSwitch(play, BG_CRACE_MOVEBG_GET_SWITCH_FLAG(&this->dyna.actor) + 1)) {
-            play->haltAllActors = 1;
+            play->haltAllActors = true;
             Play_TriggerRespawn(&play->state);
             play_sound(NA_SE_OC_ABYSS);
         }

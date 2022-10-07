@@ -251,7 +251,7 @@ void Lights_FreeNode(LightNode* light) {
 void LightContext_Init(PlayState* play, LightContext* lightCtx) {
     LightContext_InitList(play, lightCtx);
     LightContext_SetAmbientColor(lightCtx, 80, 80, 80);
-    LightContext_SetFogProperties(lightCtx, 0, 0, 0, 996, 12800);
+    LightContext_SetFog(lightCtx, 0, 0, 0, 996, 12800);
     bzero(&sLightsBuffer, sizeof(LightsBuffer));
 }
 
@@ -261,7 +261,7 @@ void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b) {
     lightCtx->ambient.b = b;
 }
 
-void LightContext_SetFogProperties(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far) {
+void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far) {
     lightCtx->fogColor.r = r;
     lightCtx->fogColor.g = g;
     lightCtx->fogColor.b = b;

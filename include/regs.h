@@ -43,18 +43,31 @@
 #define bREG(r) BASE_REG(28, r)
 
 /* TODO: Actually confirm these, in case of miss-match it's at least a simple list to `sed` */
-#define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
 #define R_RUN_SPEED_LIMIT                 REG(45)
+
+#define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
 #define R_UPDATE_RATE                     SREG(30)
+#define R_FB_FILTER_TYPE                  SREG(80)
+#define R_FB_FILTER_PRIM_COLOR(c)         SREG(81 + c)
+#define R_FB_FILTER_A                     SREG(84)
+#define R_FB_FILTER_ENV_COLOR(c)          SREG(85 + c)
+#define R_PICTOGRAPH_PHOTO_STATE          SREG(89)
+#define R_MOTION_BLUR_ALPHA               SREG(90)
+#define R_MOTION_BLUR_ENABLED             SREG(91)
+#define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)
+#define R_MOTION_BLUR_PRIORITY_ENABLED    SREG(93)
 #define R_PAUSE_MENU_MODE                 SREG(94)
+
 #define R_PLAY_FILL_SCREEN_ON             MREG(64)
 #define R_PLAY_FILL_SCREEN_R              MREG(65)
 #define R_PLAY_FILL_SCREEN_G              MREG(66)
 #define R_PLAY_FILL_SCREEN_B              MREG(67)
 #define R_PLAY_FILL_SCREEN_ALPHA          MREG(68)
+
 #define R_PAUSE_WORLD_MAP_YAW             YREG(24)
 #define R_PAUSE_WORLD_MAP_Y_OFFSET        YREG(25)
 #define R_PAUSE_WORLD_MAP_DEPTH           YREG(26)
+
 #define R_MAGIC_FILL_COLOR(i)             ZREG(0 + i)
 #define R_C_BTN_COLOR(i)                  ZREG(39 + i)
 #define R_B_BTN_COLOR(i)                  ZREG(43 + i)
@@ -71,6 +84,7 @@
 #define R_ITEM_ICON_X(i)                  ZREG(82 + i)
 #define R_ITEM_ICON_Y(i)                  ZREG(86 + i)
 #define R_ITEM_ICON_DD(i)                 ZREG(90 + i)
+
 #define R_A_BTN_Y                         XREG(16)
 #define R_A_BTN_X                         XREG(17)
 #define R_A_ICON_Y                        XREG(19)
@@ -85,6 +99,7 @@
 #define R_PAUSE_OWLWARP_ALPHA             XREG(87)
 #define R_REVERSE_FLOOR_INDEX             XREG(94)
 #define R_MINIMAP_DISABLED                XREG(95)
+
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)
 #define R_OW_MINIMAP_Y                    WREG(30)
@@ -92,6 +107,7 @@
 #define R_B_LABEL_Y(i)                    WREG(43 + i)
 #define R_DGN_MINIMAP_X                   WREG(68)
 #define R_DGN_MINIMAP_Y                   WREG(69)
+
 #define R_MAP_INDEX                       VREG(11)
 #define R_MAP_TEX_INDEX_BASE              VREG(12)
 #define R_MAP_TEX_INDEX                   VREG(13)
@@ -105,16 +121,6 @@
 #define R_ITEM_ICON_WIDTH(i)              VREG(76 + i)
 #define R_ITEM_BTN_WIDTH(i)               VREG(80 + i)
 
-#define R_FB_FILTER_TYPE                  SREG(80)
-#define R_FB_FILTER_PRIM_COLOR(c)         SREG(81 + c)
-#define R_FB_FILTER_A                     SREG(84)
-#define R_FB_FILTER_ENV_COLOR(c)          SREG(85 + c)
 
-
-#define R_PICTOGRAPH_PHOTO_STATE          SREG(89)
-#define R_MOTION_BLUR_ALPHA               SREG(90)
-#define R_MOTION_BLUR_ENABLED             SREG(91)
-#define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)
-#define R_MOTION_BLUR_PRIORITY_ENABLED    SREG(93)
 
 #endif

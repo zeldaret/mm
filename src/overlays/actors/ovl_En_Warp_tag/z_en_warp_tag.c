@@ -224,7 +224,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         if (new15E < 0) {
             new15E = 0;
         }
-        Play_SetMotionBlurAlpha(new15E * 0.04f);
+        Play_SetMotionBlurAlpha(new15E * (1 / 25.0f));
     }
 }
 

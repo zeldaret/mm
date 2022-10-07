@@ -1606,7 +1606,7 @@ LightNode* Lights_FindBufSlot();
 void Lights_FreeNode(LightNode* light);
 void LightContext_Init(PlayState* play, LightContext* lightCtx);
 void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b);
-void LightContext_SetFogProperties(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far);
+void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far);
 Lights* LightContext_NewLights(LightContext* lightCtx, GraphicsContext* gfxCtx);
 void LightContext_InitList(PlayState* play, LightContext* lightCtx);
 void LightContext_DestroyList(PlayState* play, LightContext* lightCtx);
@@ -3229,6 +3229,6 @@ u8 func_801A982C(void);
 void GameOver_Init(PlayState* play);
 void GameOver_FadeLights(PlayState* play);
 void GameOver_Update(PlayState* play);
-void Construct_InitRegs(PlayState* play);
+void Regs_InitData(PlayState* play);
 
 #endif

@@ -1,5 +1,5 @@
 #include "global.h"
 
 // Remnant from OoT
-void Construct_InitRegs(PlayState* play) {
+void Regs_InitData(PlayState* play) {
 }
