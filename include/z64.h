@@ -255,7 +255,7 @@ typedef struct GraphicsContext {
     /* 0x2E4 */ u32         viConfigFeatures;
     /* 0x2E8 */ char        unk_2E8[0x2];
     /* 0x2EA */ u8          updateViMode;
-    /* 0x2EB */ u8          framebufferIdx;
+    /* 0x2EB */ u8          framebufferIndex;
     /* 0x2EC */ void        (*callback)(struct GraphicsContext*, u32);
     /* 0x2F0 */ u32         callbackParam;
     /* 0x2F4 */ f32         xScale;

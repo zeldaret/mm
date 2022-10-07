@@ -399,7 +399,7 @@ void Play_Destroy(GameState* thisx) {
     if (sBombersNotebookOpen) {
         MsgEvent_SendNullTask();
         func_80178750();
-        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
         gfxCtx->viMode = D_801FBB88;
         gfxCtx->viConfigFeatures = gViConfigFeatures;
@@ -447,10 +447,10 @@ void Play_Destroy(GameState* thisx) {
     func_80140EA0(D_801F6D4C);
     D_801F6D4C = NULL;
 
-    if (gSaveContext.save.weekEventReg[0x5C] & 0x80) {
+    if (gSaveContext.save.weekEventReg[92] & 0x80) {
         Actor_CleanupContext(&this->actorCtx, this);
     }
-    gSaveContext.save.weekEventReg[0x5C] &= (u8)~0x80;
+    gSaveContext.save.weekEventReg[92] &= (u8)~0x80;
 
     Interface_Destroy(this);
     KaleidoScopeCall_Destroy(this);
@@ -1073,19 +1073,17 @@ void Play_SetupUpdate(PlayState* this) {
             sBombersNotebookOpen = true;
             sHireso.unk_00 = 0;
         }
-    } else {
-        if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
-            CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
-            CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
-            sBombersNotebookOpen = false;
-            this->pauseCtx.bombersNotebookOpen = false;
-            sHireso.unk_00 = 0;
-            this->msgCtx.msgLength = 0;
-            this->msgCtx.msgMode = 0;
-            this->msgCtx.currentTextId = 0;
-            this->msgCtx.stateTimer = 0;
-            play_sound(NA_SE_SY_CANCEL);
-        }
+    } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
+               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
+               CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
+        sBombersNotebookOpen = false;
+        this->pauseCtx.bombersNotebookOpen = false;
+        sHireso.unk_00 = 0;
+        this->msgCtx.msgLength = 0;
+        this->msgCtx.msgMode = 0;
+        this->msgCtx.currentTextId = 0;
+        this->msgCtx.stateTimer = 0;
+        play_sound(NA_SE_SY_CANCEL);
     }
     if (sBombersNotebookOpen) {
         Hireso_Update(this, &sHireso, this->state.input);
@@ -1222,7 +1220,7 @@ void Play_Draw(PlayState* this) {
     gSPSegment(POLY_XLU_DISP++, 0x01, this->billboardMtx);
     gSPSegment(OVERLAY_DISP++, 0x01, this->billboardMtx);
 
-    if (1) {
+    {
         Gfx* sp218;
         Gfx* sp214 = POLY_OPA_DISP;
 
@@ -1448,7 +1446,7 @@ void Play_SetupDraw(PlayState* this) {
             if (D_801FBBD4 != 1) {
                 MsgEvent_SendNullTask();
                 func_80178818();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIdx % 2);
+                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
                 gfxCtx2->viMode = D_801FBB88;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
@@ -1460,7 +1458,7 @@ void Play_SetupDraw(PlayState* this) {
             if (D_801FBBD4 != 0) {
                 MsgEvent_SendNullTask();
                 func_80178750();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIdx % 2);
+                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
                 gfxCtx2->viMode = D_801FBB88;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
