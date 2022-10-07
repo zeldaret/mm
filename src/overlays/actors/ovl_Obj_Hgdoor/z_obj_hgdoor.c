@@ -16,15 +16,15 @@ void ObjHgdoor_Destroy(Actor* thisx, PlayState* play);
 void ObjHgdoor_Update(Actor* thisx, PlayState* play);
 void ObjHgdoor_Draw(Actor* thisx, PlayState* play);
 
-void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this);
-void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupIdle(ObjHgdoor* this);
+void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play);
 void ObjHgdoor_SetupCutscene(ObjHgdoor* this);
 void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play);
 void ObjHgdoor_SetupCsAction(ObjHgdoor* this);
 void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play);
 void ObjHgdoor_SetupStopCs(ObjHgdoor* this);
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
-s32 ObjHgdoor_RotateDoor(ObjHgdoor* this, PlayState* play);
+s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play);
 
 const ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
@@ -38,9 +38,7 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Draw,
 };
 
-static s16 sDoorOpenFlag = 0;
-static s32 unused = 0;
-static s32 unused2 = 0;
+static s16 sOpenFlag = 0;
 
 void ObjHgdoor_SetChild(ObjHgdoor* this, PlayState* play) {
     Actor* actorIterator = play->actorCtx.actorLists[ACTORCAT_PROP].first;
@@ -82,7 +80,7 @@ void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
     this->rotation = 0;
     this->timer = 0;
     this->cutscene = this->dyna.actor.cutscene;
-    ObjHgdoor_SetupCheckShouldOpen(this);
+    ObjHgdoor_SetupIdle(this);
 }
 
 void ObjHgdoor_Destroy(Actor* thisx, PlayState* play) {
@@ -91,11 +89,11 @@ void ObjHgdoor_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
-    this->actionFunc = ObjHgdoor_CheckShouldOpen;
+void ObjHgdoor_SetupIdle(ObjHgdoor* this) {
+    this->actionFunc = ObjHgdoor_Idle;
 }
 
-void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, PlayState* play) {
+void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
@@ -140,13 +138,14 @@ void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }
-                    sDoorOpenFlag = 1;
+                    sOpenFlag = 1;
                     break;
+
                 case 2:
                     break;
             }
         }
-        if ((sDoorOpenFlag == 1) && (ObjHgdoor_RotateDoor(this, play))) {
+        if ((sOpenFlag == 1) && ObjHgdoor_Rotate(this, play)) {
             ObjHgdoor_SetupStopCs(this);
         }
     } else {
@@ -167,10 +166,10 @@ void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
 
 /**
  * @brief Function to increment the rotation angle of the door
- * 
+ *
  * @return true when door is fully open, false otherwise
  */
-s32 ObjHgdoor_RotateDoor(ObjHgdoor* this, PlayState* play) {
+s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play) {
     if (this->rotation < 0x5555) {
         this->rotation += 0x1388;
     } else {
@@ -180,7 +179,7 @@ s32 ObjHgdoor_RotateDoor(ObjHgdoor* this, PlayState* play) {
     return false;
 }
 
-void ObjHgdoor_OpenDoors(ObjHgdoor* this) {
+void ObjHgdoor_Open(ObjHgdoor* this) {
     this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y;
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         this->dyna.actor.shape.rot.y += this->rotation;
@@ -193,7 +192,7 @@ void ObjHgdoor_Update(Actor* thisx, PlayState* play) {
     ObjHgdoor* this = THIS;
 
     this->actionFunc(this, play);
-    ObjHgdoor_OpenDoors(this);
+    ObjHgdoor_Open(this);
 }
 
 void ObjHgdoor_Draw(Actor* thisx, PlayState* play) {
