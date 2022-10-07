@@ -198,7 +198,7 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
 
     for (i = 0; i < 2; i++) {
         rnd = randPlusMinusPoint5Scaled(20.0f);
-        nextPos.x += Math_SinS((this->actor.yawTowardsPlayer + ((f32)this->targetYaw)) + yawOffset) * (rnd + 30.0f);
+        nextPos.x += Math_SinS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rnd + 30.0f);
         nextPos.y = (Math_SinS(this->flightHoverOffset) * 10.0f) + (player->actor.floorHeight + 40.0f);
         rnd = randPlusMinusPoint5Scaled(20.0f);
 
