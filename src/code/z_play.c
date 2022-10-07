@@ -108,8 +108,8 @@ void Play_DisableMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
 }
 
-void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft, s32 pixelTop, s32 pixelRight,
-                           s32 pixelBottom, s32 type) {
+void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16Width, s32 pixelLeft, s32 pixelTop,
+                                        s32 pixelRight, s32 pixelBottom, s32 bitDepth) {
     s32 i;
     s32 j;
     u32 pixel;
@@ -117,7 +117,7 @@ void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft
     u32 g;
     u32 b;
 
-    switch (type) {
+    switch (bitDepth) {
         case 4: {
             u8* destI4 = (u8*)destI;
             u32 upper;
@@ -125,13 +125,13 @@ void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j += 2) {
-                    pixel = srcBuf[i * bufWidth + j];
+                    pixel = srcRgba16[i * rgba16Width + j];
                     r = (pixel >> 11) & 0x1F;
                     g = (pixel >> 6) & 0x1F;
                     b = (pixel >> 1) & 0x1F;
                     upper = ((r * 2 + g * 4 + b) * 0xF) / 217;
 
-                    pixel = srcBuf[i * bufWidth + j + 1];
+                    pixel = srcRgba16[i * rgba16Width + j + 1];
                     r = (pixel >> 11) & 0x1F;
                     g = (pixel >> 6) & 0x1F;
                     b = (pixel >> 1) & 0x1F;
@@ -148,7 +148,7 @@ void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
-                    pixel = srcBuf[i * bufWidth + j];
+                    pixel = srcRgba16[i * rgba16Width + j];
                     r = (pixel >> 11) & 0x1F;
                     g = (pixel >> 6) & 0x1F;
                     b = (pixel >> 1) & 0x1F;
@@ -166,7 +166,7 @@ void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
-                    pixel = srcBuf[i * bufWidth + j];
+                    pixel = srcRgba16[i * rgba16Width + j];
 
                     r = (pixel >> 11) & 0x1F;
                     g = (pixel >> 6) & 0x1F;
@@ -183,7 +183,7 @@ void Play_ConvertBufferToI(void* destI, u16* srcBuf, s32 bufWidth, s32 pixelLeft
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
-                    *(destI16++) = srcBuf[i * bufWidth + j];
+                    *(destI16++) = srcRgba16[i * rgba16Width + j];
                 }
             }
             break;
@@ -204,21 +204,14 @@ void Play_DisableMotionBlurPriority(void) {
     R_MOTION_BLUR_PRIORITY_ENABLED = false;
 }
 
-typedef enum {
-    /* 0 */ PICTOGRAPH_PHOTO_STATE_OFF,
-    /* 1 */ PICTOGRAPH_PHOTO_STATE_START,
-    /* 2 */ PICTOGRAPH_PHOTO_STATE_TAKE,
-    /* 3 */ PICTOGRAPH_PHOTO_STATE_FINISH
-} PictographPhotoState;
-
 // Will take the photograph, but doesn't compress and save it
-void Play_StartTakingPictographPhoto(void) {
+void Play_TriggerPictographPhoto(void) {
     R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_START;
 }
 
 void Play_TakePictographPhoto(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    Play_ConvertBufferToI(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
+    Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, 320, 80, 64, 240 - 1, 176 - 1, 8);
 }
 
 s32 Play_ChooseDynamicTransition(PlayState* this, s32 transitionType) {

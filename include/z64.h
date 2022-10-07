@@ -1140,6 +1140,13 @@ typedef struct {
     /* 0xA8 */ s32 unk_A8;
 } HiresoStruct; // size = 0xAC
 
+typedef enum {
+    /* 0 */ PICTOGRAPH_PHOTO_STATE_OFF,
+    /* 1 */ PICTOGRAPH_PHOTO_STATE_START,
+    /* 2 */ PICTOGRAPH_PHOTO_STATE_TAKE,
+    /* 3 */ PICTOGRAPH_PHOTO_STATE_FINISH
+} PictographPhotoState;
+
 // OoT's TransitionUnk
 typedef struct {
     /* 0x00 */ char unk_00[0xDC];

@@ -2976,7 +2976,7 @@
     0x80165658:("Play_SetMotionBlurAlpha",),
     0x8016566C:("Play_EnableMotionBlur",),
     0x80165690:("Play_DisableMotionBlur",),
-    0x801656A4:("Play_ConvertBufferToI",),
+    0x801656A4:("Play_ConvertRgba16ToIntensityImage",),
     0x80165DB8:("Play_SetMotionBlurPriorityAlpha",),
     0x80165DCC:("Play_EnableMotionBlurPriority",),
     0x80165DF0:("Play_DisableMotionBlurPriority",),

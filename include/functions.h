@@ -2447,7 +2447,7 @@ void func_80165438(UNK_PTR param_1);
 void Play_SetMotionBlurAlpha(u32 alpha);
 void Play_EnableMotionBlur(u32 alpha);
 void Play_DisableMotionBlur(void);
-// void Play_ConvertBufferToI(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
+// void Play_ConvertRgba16ToIntensityImage(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
 // void Play_EnableMotionBlurPriority(void);
 // void Play_DisableMotionBlurPriority(void);
 // void Play_TakePictographPhoto(void);
