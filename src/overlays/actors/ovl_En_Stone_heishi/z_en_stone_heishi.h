@@ -14,11 +14,8 @@ typedef struct EnStoneheishi {
     /* 0x188 */ Vec3s jointTable[SOLDIER_LIMB_MAX];
     /* 0x1EE */ Vec3s morphTable[SOLDIER_LIMB_MAX];
     /* 0x254 */ EnStoneheishiActionFunc actionFunc;
-    /* 0x258 */ s16 headRotY;
-    /* 0x25A */ s16 headRotX;
-    /* 0x25C */ s16 headRotZ;
-    /* 0x25E */ s16 targetHeadPosY;
-    /* 0x260 */ s16 targetHeadPosX;
+    /* 0x258 */ Vec3s headRot;
+    /* 0x25E */ Vec3s targetHeadRot;
     /* 0x264 */ s32 animIndex;
     /* 0x268 */ s16 timer;
     /* 0x26A */ s16 drinkBottleState;

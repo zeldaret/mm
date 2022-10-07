@@ -15605,7 +15605,7 @@
     0x80BC9908:("EnStoneheishi_CheckGivenItem",),
     0x80BC9A10:("EnStoneheishi_SetupDrinkBottleProcess",),
     0x80BC9A2C:("EnStoneheishi_DrinkBottleProcess",),
-    0x80BC9C88:("EnStoneheishi_GiveItemPrize",),
+    0x80BC9C88:("EnStoneheishi_GiveItemReward",),
     0x80BC9D28:("func_80BC9D28",),
     0x80BC9E50:("func_80BC9E50",),
     0x80BC9EE4:("EnStoneheishi_Update",),

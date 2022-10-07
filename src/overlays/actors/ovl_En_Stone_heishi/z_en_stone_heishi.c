@@ -24,7 +24,7 @@ void func_80BC9E50(EnStoneheishi* this, PlayState* play);
 void func_80BC94B0(EnStoneheishi* this);
 void func_80BC9660(EnStoneheishi* this);
 void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi*);
-void EnStoneheishi_GiveItemPrize(EnStoneheishi* this, PlayState* play);
+void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play);
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
 const ActorInit En_Stone_heishi_InitVars = {
@@ -147,14 +147,14 @@ void EnStoneheishi_ChangeAnim(EnStoneheishi* this, s32 animIndex) {
 void EnStoneheishi_TrackPlayer(EnStoneheishi* this) {
     s32 yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
-    this->targetHeadPosX = 0;
+    this->targetHeadRot.y = 0;
 
     if ((this->actor.xzDistToPlayer < 200.0f) && (yawDiff < 0x4E20)) {
-        this->targetHeadPosX = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-        if (this->targetHeadPosX > 0x2710) {
-            this->targetHeadPosX = 0x2710;
-        } else if (this->targetHeadPosX < -0x2710) {
-            this->targetHeadPosX = -0x2710;
+        this->targetHeadRot.y = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+        if (this->targetHeadRot.y > 0x2710) {
+            this->targetHeadRot.y = 0x2710;
+        } else if (this->targetHeadRot.y < -0x2710) {
+            this->targetHeadRot.y = -0x2710;
         }
     }
 }
@@ -212,14 +212,14 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
 
     if ((this->textIdIndex == 0) || (this->textIdIndex == 2)) {
         if (this->animIndex != EN_STONE_HEISHI_ANIM_SIT_AND_REACH) {
-            if (fabsf(this->headRotY - this->targetHeadPosY) < 50.0f) {
+            if (fabsf(this->headRot.x - this->targetHeadRot.x) < 50.0f) {
                 EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_SIT_AND_REACH);
             }
             return;
         }
     } else if (this->textIdIndex == 3) {
         if (this->animIndex != EN_STONE_HEISHI_ANIM_WAVE) {
-            if ((this->timer == 0) && (fabsf(this->headRotY - this->targetHeadPosY) < 50.0f)) {
+            if ((this->timer == 0) && (fabsf(this->headRot.x - this->targetHeadRot.x) < 50.0f)) {
                 EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_WAVE);
             }
             return;
@@ -245,7 +245,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
         } else if (this->textIdIndex == 3) {
             func_80BC94B0(this);
         } else if (this->textIdIndex == 6) {
-            EnStoneheishi_GiveItemPrize(this, play);
+            EnStoneheishi_GiveItemReward(this, play);
         } else {
             if (this->textIdIndex < 7) {
                 this->textIdIndex++;
@@ -375,7 +375,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
     }
 }
 
-void EnStoneheishi_GiveItemPrize(EnStoneheishi* this, PlayState* play) {
+void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play) {
     func_801477B4(play);
 
     if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
@@ -420,8 +420,8 @@ void func_80BC9E50(EnStoneheishi* this, PlayState* play) {
 }
 
 void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
-    EnStoneheishi* this = THIS;
     s32 pad;
+    EnStoneheishi* this = THIS;
     Player* player = GET_PLAYER(play);
 
     if (this->timer != 0) {
@@ -444,7 +444,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
               (this->drinkBottleState <= EN_STONE_DRINK_BOTTLE_DRINKING)))) {
             EnStoneheishi_TrackPlayer(this);
         } else {
-            this->targetHeadPosX = 0;
+            this->targetHeadRot.y = 0;
         }
 
         if (!(gSaveContext.save.weekEventReg[41] & 0x40)) {
@@ -453,8 +453,8 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
             Actor_SetFocus(&this->actor, 60.0f);
         }
 
-        Math_SmoothStepToS(&this->headRotX, this->targetHeadPosX, 1, 0xBB8, 0);
-        Math_SmoothStepToS(&this->headRotY, this->targetHeadPosY, 1, 0x3E8, 0);
+        Math_SmoothStepToS(&this->headRot.y, this->targetHeadRot.y, 1, 0xBB8, 0);
+        Math_SmoothStepToS(&this->headRot.x, this->targetHeadRot.x, 1, 0x3E8, 0);
 
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -466,9 +466,9 @@ s32 EnStoneheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     EnStoneheishi* this = THIS;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
-        rot->x += this->headRotX;
-        rot->y += this->headRotY;
-        rot->z += this->headRotZ;
+        rot->x += this->headRot.y;
+        rot->y += this->headRot.x;
+        rot->z += this->headRot.z;
     }
 
     return false;
