@@ -204,7 +204,7 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
 
         nextPos.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rnd + 30.0f);
         Math_Vec3f_Copy(&this->targetPos[i], &nextPos);
-        yawOffset -= 16384.0f;
+        yawOffset -= 0x4000;
     }
 
     Math_Vec3f_Copy(&nextPos, &this->targetPos[this->posIndex]);
