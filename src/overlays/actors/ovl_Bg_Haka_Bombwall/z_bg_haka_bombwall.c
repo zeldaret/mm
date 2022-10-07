@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 80, 80, 0, { 0, 0, 0 } },
 };
 
-static s16 sRockScale[4] = { 24, 15, 10, 5 };
+static s16 sRockScales[4] = { 24, 15, 10, 5 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -77,10 +77,10 @@ s32 func_80BD5E00(BgHakaBombwall* this) {
 
 void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
     u32 i;
-    Vec3f mtxPos;
-    Vec3f mtxVel;
-    Vec3f pos;
-    Vec3f vel;
+    Vec3f Pos;
+    Vec3f Vel;
+    Vec3f posOffset;
+    Vec3f velOffset;
     f32 offsetPosX;
     f32 offsetPosY;
     s16 scale;
@@ -103,28 +103,27 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
 
         offsetPosY += 5;
 
-        pos.x = offsetPosX;
-        pos.y = offsetPosY;
-        pos.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
+        posOffset.x = offsetPosX;
+        posOffset.y = offsetPosY;
+        posOffset.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
 
-        vel.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
-        vel.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
-        vel.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
+        velOffset.x = ((Rand_ZeroOne() - 0.5f) * 5.0f) + (offsetPosX * (4.0f / 75.0f));
+        velOffset.y = (Rand_ZeroOne() * 7.0f) - 2.0f;
+        velOffset.z = (Rand_ZeroOne() * 4.0f) - 2.0f;
 
-        Matrix_MultVec3f(&pos, &mtxPos);
-        Matrix_MultVec3f(&vel, &mtxVel);
+        Matrix_MultVec3f(&posOffset, &Pos);
+        Matrix_MultVec3f(&velOffset, &Vel);
 
-        mtxPos.x += this->dyna.actor.world.pos.x;
-        mtxPos.y += this->dyna.actor.world.pos.y;
-        mtxPos.z += this->dyna.actor.world.pos.z;
+        Pos.x += this->dyna.actor.world.pos.x;
+        Pos.y += this->dyna.actor.world.pos.y;
+        Pos.z += this->dyna.actor.world.pos.z;
 
         //! FAKE
-
         if (1) {}
 
         if ((i & 3) == 0) {
             phi_s0 = 32;
-            func_800BBFB0(play, &mtxPos, 60.0f, 2, 100, 120, 1);
+            func_800BBFB0(play, &Pos, 60.0f, 2, 100, 120, 1);
         } else {
             phi_s0 = 64;
         }
@@ -136,7 +135,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
             phi_t0 = 0;
         }
 
-        scale = sRockScale[i & 3];
+        scale = sRockScales[i & (ARRAY_COUNT(sRockScales) - 1)];
 
         //! FAKE
     fake_label:;
@@ -147,7 +146,7 @@ void func_80BD5E6C(BgHakaBombwall* this, PlayState* play) {
             gravity = -450;
         }
 
-        EffectSsKakera_Spawn(play, &mtxPos, &mtxVel, &mtxPos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &Pos, &Vel, &Pos, gravity, phi_s0, 30, 0, 0, scale, phi_t0, 0, 50, -1,
                              OBJECT_HAKA_OBJ, object_haka_obj_DL_001680);
     }
 
