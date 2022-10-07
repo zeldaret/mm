@@ -4,8 +4,8 @@
 #include "global.h"
 #include "assets/objects/object_rz/object_rz.h"
 
-#define EN_RZ_GET_PARAM_8000(thisx) ((thisx)->params & 0x8000)
-#define EN_RZ_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
+#define EN_RZ_GET_SISTER(thisx) ((thisx)->params & 0x8000)
+#define EN_RZ_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define EN_RZ_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
 #define EN_RZ_STATE_1 (1 << 0)
 #define EN_RZ_STATE_2 (1 << 1)

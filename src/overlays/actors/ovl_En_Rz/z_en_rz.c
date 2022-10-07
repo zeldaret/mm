@@ -33,6 +33,11 @@ typedef enum {
 } EnRzRosaSisters;
 
 typedef enum {
+    /* 1 */ EN_RZ_TYPE_1 = 1,
+    /* 2 */ EN_RZ_TYPE_2
+} EnRzType;
+
+typedef enum {
     /* 0 */ EN_RZ_ANIM_0,
     /* 1 */ EN_RZ_ANIM_1,
     /* 2 */ EN_RZ_ANIM_2,
@@ -110,23 +115,23 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    switch (EN_RZ_GET_PARAM_F(thisx)) {
-        case 1:
+    switch (EN_RZ_GET_TYPE(thisx)) {
+        case EN_RZ_TYPE_1:
             if (!(gSaveContext.save.weekEventReg[77] & 4)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
-            EnRz_ChangeAnim(play, this, 3, ANIMMODE_LOOP, 0.0f);
+            EnRz_ChangeAnim(play, this, EN_RZ_ANIM_3, ANIMMODE_LOOP, 0.0f);
             this->actionFunc = func_80BFC674;
             this->actor.shape.yOffset = -1500.0f;
             break;
 
-        case 2:
+        case EN_RZ_TYPE_2:
             this->actor.flags |= ACTOR_FLAG_10;
             if (gSaveContext.save.weekEventReg[77] & 4) {
-                EnRz_ChangeAnim(play, this, 8, ANIMMODE_LOOP, 0.0f);
+                EnRz_ChangeAnim(play, this, EN_RZ_ANIM_8, ANIMMODE_LOOP, 0.0f);
             } else {
-                EnRz_ChangeAnim(play, this, 6, ANIMMODE_LOOP, 0.0f);
+                EnRz_ChangeAnim(play, this, EN_RZ_ANIM_6, ANIMMODE_LOOP, 0.0f);
             }
             this->actionFunc = func_80BFC3F8;
             this->sister = EnRz_FindSister(this, play);
@@ -139,16 +144,16 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
-            EnRz_ChangeAnim(play, this, 2, ANIMMODE_LOOP, 0.0f);
+            EnRz_ChangeAnim(play, this, EN_RZ_ANIM_2, ANIMMODE_LOOP, 0.0f);
             this->actionFunc = func_80BFC8F8;
-            if (!EN_RZ_GET_PARAM_8000(thisx)) {
+            if (!EN_RZ_GET_SISTER(thisx)) {
                 this->actor.textId = 0x291C;
             } else {
                 this->actor.textId = 0x2920;
             }
             break;
     }
-    if (!EN_RZ_GET_PARAM_8000(thisx)) {
+    if (!EN_RZ_GET_SISTER(thisx)) {
         this->csAction = 0x226;
     } else {
         this->csAction = 0x227;
@@ -201,7 +206,7 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
     f32 endFrame;
     AnimationHeader** animationPtr;
 
-    if (!EN_RZ_GET_PARAM_8000(&this->actor)) {
+    if (!EN_RZ_GET_SISTER(&this->actor)) {
         animationPtr = D_80BFCD20;
     } else {
         animationPtr = D_80BFCD3C;
@@ -325,7 +330,7 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
-        if ((npc->id == ACTOR_EN_RZ) && (EN_RZ_GET_PARAM_F(&this->actor) == EN_RZ_GET_PARAM_F(npc))) {
+        if ((npc->id == ACTOR_EN_RZ) && (EN_RZ_GET_TYPE(&this->actor) == EN_RZ_GET_TYPE(npc))) {
             if (&this->actor != npc) {
                 return (EnRz*)npc;
             }
@@ -351,7 +356,7 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 action;
 
-    if (!EN_RZ_GET_PARAM_8000(&this->actor) && (this->animIndex == EN_RZ_ANIM_4)) {
+    if (!EN_RZ_GET_SISTER(&this->actor) && (this->animIndex == EN_RZ_ANIM_4)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
     if (Cutscene_CheckActorAction(play, this->csAction)) {
@@ -430,7 +435,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         }
     }
 
-    if (!EN_RZ_GET_PARAM_8000(&this->actor)) {
+    if (!EN_RZ_GET_SISTER(&this->actor)) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
         sp28.z = this->actor.projectedPos.z;
@@ -531,7 +536,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             }
         }
 
-        if (!EN_RZ_GET_PARAM_8000(&this->actor)) {
+        if (!EN_RZ_GET_SISTER(&this->actor)) {
             sp30.x = this->actor.projectedPos.x;
             sp30.y = this->actor.projectedPos.y;
             sp30.z = this->actor.projectedPos.z;
@@ -574,7 +579,7 @@ void func_80BFC728(EnRz* this, PlayState* play) {
         func_801477B4(play);
         this->actionFunc = func_80BFC7E0;
         this->actor.textId++;
-        if (!EN_RZ_GET_PARAM_8000(&this->actor)) {
+        if (!EN_RZ_GET_SISTER(&this->actor)) {
             if (this->actor.textId >= 0x2920) {
                 this->actor.textId = 0x291C;
             }
@@ -676,7 +681,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    if (!EN_RZ_GET_PARAM_8000(thisx)) {
+    if (!EN_RZ_GET_SISTER(thisx)) {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), EN_RZ_ROSA_SISTERS_JUDO);
     } else {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768),
