@@ -19,13 +19,31 @@ void EnRz_Draw(Actor* thisx, PlayState* play);
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnRz_ChangeAnim(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 transitionRate);
 s32 func_80BFBA50(EnRz* this, PlayState* play);
-EnRz* func_80BFBDA0(EnRz* this, PlayState*);
+EnRz* EnRz_FindSister(EnRz* this, PlayState*);
 void func_80BFC058(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
 void func_80BFC674(EnRz* this, PlayState* play);
 void func_80BFC7E0(EnRz* this, PlayState* play);
 void func_80BFC8F8(EnRz* this, PlayState* play);
+
+typedef enum {
+    /* 0 */ EN_RZ_ROSA_SISTERS_JUDO,
+    /* 1 */ EN_RZ_ROSA_SISTERS_MARILLA
+} EnRzRosaSisters;
+
+typedef enum {
+    /* 0 */ EN_RZ_ANIM_0,
+    /* 1 */ EN_RZ_ANIM_1,
+    /* 2 */ EN_RZ_ANIM_2,
+    /* 3 */ EN_RZ_ANIM_3,
+    /* 4 */ EN_RZ_ANIM_4,
+    /* 5 */ EN_RZ_ANIM_5,
+    /* 6 */ EN_RZ_ANIM_6,
+    /* 7 */ EN_RZ_ANIM_7,
+    /* 8 */ EN_RZ_ANIM_8,
+    /* 9 */ EN_RZ_ANIM_9
+} EnRzAnimations;
 
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
@@ -39,11 +57,8 @@ const ActorInit En_Rz_InitVars = {
     (ActorFunc)EnRz_Draw,
 };
 
-TexturePtr D_80BFCCE0[] = { object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590 };
-
-TexturePtr D_80BFCCEC = object_rz_Tex_00C990;
-
-TexturePtr D_80BFCCF0 = object_rz_Tex_00CD90;
+TexturePtr D_80BFCCE0[] = { object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590, object_rz_Tex_00C990,
+                            object_rz_Tex_00CD90 };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -64,20 +79,6 @@ static ColliderCylinderInit sCylinderInit = {
     },
     { 20, 40, 0, { 0, 0, 0 } },
 };
-
-static AnimationHeader* D_80BFCD20[] = {
-    &object_rz_Anim_00457C, &object_rz_Anim_003A20, &object_rz_Anim_005E50, &object_rz_Anim_003098,
-    &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
-};
-
-static AnimationHeader* D_80BFCD3C[] = {
-    &object_rz_Anim_003A20, &object_rz_Anim_003A20, &object_rz_Anim_005390, &object_rz_Anim_003098,
-    &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
-};
-
-static LinkAnimationHeader* sLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free, &gPlayerAnim_alink_dance_loop };
-
-static Vec3f D_80BFCD60 = { 500.0f, -500.0f, 0.0f };
 
 void EnRz_Init(Actor* thisx, PlayState* play) {
     EnRz* this = THIS;
@@ -104,7 +105,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80BFC058;
     func_80BFBA50(this, play);
-    this->animIndex = 9;
+    this->animIndex = EN_RZ_ANIM_9;
     this->actor.targetMode = 0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
@@ -128,12 +129,12 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
                 EnRz_ChangeAnim(play, this, 6, ANIMMODE_LOOP, 0.0f);
             }
             this->actionFunc = func_80BFC3F8;
-            this->unk_40C = func_80BFBDA0(this, play);
+            this->sister = EnRz_FindSister(this, play);
             this->actor.uncullZoneForward = 300.0f;
             break;
 
         default:
-            this->unk_420 |= 2;
+            this->stateFlags |= EN_RZ_STATE_2;
             if (gSaveContext.save.weekEventReg[77] & 4) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -153,7 +154,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
         this->csAction = 0x227;
     }
 
-    this->unk_428 = 0;
+    this->actionIndex = 0;
 }
 
 /**
@@ -163,8 +164,9 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f oldPos;
     EnRz* this = THIS;
 
-    if (this->animIndex == 8) {
+    if (this->animIndex == EN_RZ_ANIM_8) {
         f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
+
         this->actor.scale.x = tempScale;
     }
 
@@ -184,6 +186,18 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 }
 
 void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 transitionRate) {
+    static AnimationHeader* D_80BFCD20[] = {
+        &object_rz_Anim_00457C, &object_rz_Anim_003A20, &object_rz_Anim_005E50, &object_rz_Anim_003098,
+        &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
+    };
+
+    static AnimationHeader* D_80BFCD3C[] = {
+        &object_rz_Anim_003A20, &object_rz_Anim_003A20, &object_rz_Anim_005390, &object_rz_Anim_003098,
+        &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
+    };
+
+    static LinkAnimationHeader* sLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free,
+                                                      &gPlayerAnim_alink_dance_loop };
     f32 endFrame;
     AnimationHeader** animationPtr;
 
@@ -193,7 +207,8 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         animationPtr = D_80BFCD3C;
     }
 
-    if ((animIndex >= 0) && (animIndex < 9) && ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
+    if ((animIndex >= EN_RZ_ANIM_0) && (animIndex < EN_RZ_ANIM_9) &&
+        ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
         if (animIndex >= ARRAY_COUNT(D_80BFCD20)) {
             endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)]);
             if (animMode == ANIMMODE_LOOP) {
@@ -230,46 +245,46 @@ s32 func_80BFBA50(EnRz* this, PlayState* play) {
             f32 temp_fv1 = points->z - this->actor.world.pos.z;
 
             if ((SQ(temp_fv0) + SQ(temp_fv1)) < SQ(10.0f)) {
-                this->unk_3BC = 0;
-                this->unk_420 &= ~1;
+                this->curPointIndex = 0;
+                this->stateFlags &= ~EN_RZ_STATE_1;
             } else {
-                this->unk_3BC = path->count - 1;
-                this->unk_420 |= 1;
+                this->curPointIndex = path->count - 1;
+                this->stateFlags |= EN_RZ_STATE_1;
                 return true;
             }
         }
     } else {
         this->path = NULL;
-        this->unk_3BC = 0;
+        this->curPointIndex = 0;
     }
     return false;
 }
 
 s32 func_80BFBB44(EnRz* this) {
     Path* path = this->path;
-    Vec3s* pointPos;
-    f32 temp_fa0;
-    f32 temp_fa1;
+    Vec3s* curPoint;
+    f32 diffX;
+    f32 diffZ;
 
     if (path == NULL) {
         return true;
     }
 
-    pointPos = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[this->unk_3BC];
-    temp_fa0 = pointPos->x - this->actor.world.pos.x;
-    temp_fa1 = pointPos->z - this->actor.world.pos.z;
-    this->actor.world.rot.y = Math_Atan2S(temp_fa0, temp_fa1);
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
+    curPoint = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[this->curPointIndex];
+    diffX = curPoint->x - this->actor.world.pos.x;
+    diffZ = curPoint->z - this->actor.world.pos.z;
+    this->actor.world.rot.y = Math_Atan2S(diffX, diffZ);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x07D0, 0xC8);
 
-    if ((SQ(temp_fa0) + SQ(temp_fa1)) < SQ(10.0f)) {
-        if (this->unk_420 & 1) {
-            this->unk_3BC--;
-            if (this->unk_3BC < 0) {
+    if ((SQ(diffX) + SQ(diffZ)) < SQ(10.0f)) {
+        if (this->stateFlags & EN_RZ_STATE_1) {
+            this->curPointIndex--;
+            if (this->curPointIndex < 0) {
                 return 2;
             }
         } else {
-            this->unk_3BC++;
-            if (this->unk_3BC >= path->count) {
+            this->curPointIndex++;
+            if (this->curPointIndex >= path->count) {
                 return 2;
             }
         }
@@ -299,14 +314,14 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
 }
 
 s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
-    if (this->animIndex < 7) {
-        SkelAnime_Update(&this->skelAnime);
+    if (this->animIndex < EN_RZ_ANIM_7) {
+        return SkelAnime_Update(&this->skelAnime);
     } else {
-        LinkAnimation_Update(play, &this->skelAnime);
+        return LinkAnimation_Update(play, &this->skelAnime);
     }
 }
 
-EnRz* func_80BFBDA0(EnRz* this, PlayState* play) {
+EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
     Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
@@ -336,14 +351,14 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 action;
 
-    if (!EN_RZ_GET_PARAM_8000(&this->actor) && (this->animIndex == 4)) {
+    if (!EN_RZ_GET_PARAM_8000(&this->actor) && (this->animIndex == EN_RZ_ANIM_4)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
     if (Cutscene_CheckActorAction(play, this->csAction)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
         action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;
-        if (this->unk_428 != action) {
-            this->unk_428 = action;
+        if (this->actionIndex != action) {
+            this->actionIndex = action;
             switch (action & 0xFFFF) {
                 case 1:
                     func_80BFBA1C(play, this, 1);
@@ -405,10 +420,10 @@ void func_80BFC078(EnRz* this, PlayState* play) {
             default:
                 func_801477B4(play);
                 this->actionFunc = func_80BFC3F8;
-                if (this->animIndex != 8) {
+                if (this->animIndex != EN_RZ_ANIM_8) {
                     func_80BFB9E4(play, this, 6);
-                    if (this->unk_40C != NULL) {
-                        func_80BFB9E4(play, this->unk_40C, 6);
+                    if (this->sister != NULL) {
+                        func_80BFB9E4(play, this->sister, 6);
                     }
                 }
                 break;
@@ -419,7 +434,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
         sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(3, &sp28, 0x2A, 900.0f);
+        func_801A1FB4(3, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -428,8 +443,8 @@ void func_80BFC19C(EnRz* this, PlayState* play) {
     if (!func_80BFBE70(this, play)) {
         this->actionFunc = func_80BFC3F8;
         func_80BFBA1C(play, this, 8);
-        if (this->unk_40C != NULL) {
-            func_80BFBA1C(play, this->unk_40C, 8);
+        if (this->sister != NULL) {
+            func_80BFBA1C(play, this->sister, 8);
         }
     }
 }
@@ -481,8 +496,8 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 
     EnRz_UpdateSkelAnime(this, play);
 
-    if (this->unk_40C == NULL) {
-        this->unk_40C = func_80BFBDA0(this, play);
+    if (this->sister == NULL) {
+        this->sister = EnRz_FindSister(this, play);
     }
 
     if (!func_80BFBE70(this, play)) {
@@ -507,7 +522,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             }
 
         } else if (EnRz_CanTalk(this, play)) {
-            if (func_80BFBCEC(this, play) && !(gSaveContext.save.weekEventReg[77] & 4) && this->unk_40C != NULL) {
+            if (func_80BFBCEC(this, play) && !(gSaveContext.save.weekEventReg[77] & 4) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
             } else {
@@ -520,7 +535,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             sp30.x = this->actor.projectedPos.x;
             sp30.y = this->actor.projectedPos.y;
             sp30.z = this->actor.projectedPos.z;
-            func_801A1FB4(3, &sp30, 0x2A, 900.0f);
+            func_801A1FB4(3, &sp30, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }
@@ -632,18 +647,19 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (DECR(this->unk_412) == 0) {
-        this->unk_412 = Rand_S16Offset(60, 60);
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
 
-    this->unk_410 = this->unk_412;
-    if (this->unk_410 >= 3) {
-        this->unk_410 = 0;
+    this->eyeIndex = this->blinkTimer;
+    if (this->eyeIndex > 2) {
+        this->eyeIndex = 0;
     }
 }
 
 void EnRz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnRz* this = THIS;
+    static Vec3f D_80BFCD60 = { 500.0f, -500.0f, 0.0f };
 
     if (limbIndex == OBJECT_RZ_LIMB_0B) {
         Matrix_MultVec3f(&D_80BFCD60, &thisx->focus.pos);
@@ -661,17 +677,18 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     if (!EN_RZ_GET_PARAM_8000(thisx)) {
-        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 0);
+        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), EN_RZ_ROSA_SISTERS_JUDO);
     } else {
-        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 1);
+        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768),
+                                EN_RZ_ROSA_SISTERS_MARILLA);
     }
 
-    if (this->animIndex == 4) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCF0));
-    } else if (this->unk_420 & 2) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCEC));
+    if (this->animIndex == EN_RZ_ANIM_4) {
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[4]));
+    } else if (this->stateFlags & EN_RZ_STATE_2) {
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[3]));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[this->unk_410]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[this->eyeIndex]));
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,

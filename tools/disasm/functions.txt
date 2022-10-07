@@ -16408,7 +16408,7 @@
     0x80BFBC78:("EnRz_CanTalk",),
     0x80BFBCEC:("func_80BFBCEC",),
     0x80BFBD54:("EnRz_UpdateSkelAnime",),
-    0x80BFBDA0:("func_80BFBDA0",),
+    0x80BFBDA0:("EnRz_FindSister",),
     0x80BFBDFC:("func_80BFBDFC",),
     0x80BFBE44:("EnRz_Destroy",),
     0x80BFBE70:("func_80BFBE70",),
