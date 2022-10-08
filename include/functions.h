@@ -882,6 +882,7 @@ void func_800C636C(PlayState* play, DynaCollisionContext* dyna, s32 bgId);
 void func_800C63C4(PlayState* play, DynaCollisionContext* dyna, s32 bgId);
 void func_800C641C(PlayState* play, DynaCollisionContext* dyna, s32 bgId);
 void func_800C6474(PlayState* play, DynaCollisionContext* dyna, s32 bgId);
+void func_800C6554(PlayState* play, DynaCollisionContext* dyna);
 void DynaPoly_DeleteBgActor(PlayState* play, DynaCollisionContext* dyna, s32 bgId);
 void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength, s16* zLength);
 void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex, s32* waterBoxStartIndex);
