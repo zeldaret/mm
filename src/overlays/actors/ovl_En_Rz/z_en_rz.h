@@ -9,8 +9,8 @@
 #define EN_RZ_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
 
 typedef enum {
-    /* 0 */ ROSA_SISTERS_JUDO,
-    /* 1 */ ROSA_SISTERS_MARILLA
+    /* 0 */ ROSA_SISTERS_JUDO, // in red
+    /* 1 */ ROSA_SISTERS_MARILLA // in blue
 } RosaSisters;
 
 typedef enum {

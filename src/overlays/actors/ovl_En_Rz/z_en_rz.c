@@ -55,8 +55,9 @@ const ActorInit En_Rz_InitVars = {
     (ActorFunc)EnRz_Draw,
 };
 
-TexturePtr D_80BFCCE0[] = { object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590, object_rz_Tex_00C990,
-                            object_rz_Tex_00CD90 };
+TexturePtr sEyeTextures[] = {
+    object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590, object_rz_Tex_00C990, object_rz_Tex_00CD90,
+};
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -146,7 +147,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
             }
             break;
     }
-    
+
     if (!EN_RZ_GET_SISTER(thisx)) {
         this->csAction = 0x226;
     } else {
@@ -352,7 +353,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
     if (!EN_RZ_GET_SISTER(&this->actor) && (this->animIndex == EN_RZ_ANIM_4)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
-    
+
     if (Cutscene_CheckActorAction(play, this->csAction)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
         action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;
@@ -678,16 +679,15 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     if (!EN_RZ_GET_SISTER(thisx)) {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), ROSA_SISTERS_JUDO);
     } else {
-        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768),
-                                ROSA_SISTERS_MARILLA);
+        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), ROSA_SISTERS_MARILLA);
     }
 
     if (this->animIndex == EN_RZ_ANIM_4) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[4]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[4]));
     } else if (this->stateFlags & EN_RZ_STATE_2) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[3]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[3]));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80BFCCE0[this->eyeIndex]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
