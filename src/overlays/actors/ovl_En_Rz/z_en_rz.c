@@ -153,6 +153,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
             }
             break;
     }
+    
     if (!EN_RZ_GET_SISTER(thisx)) {
         this->csAction = 0x226;
     } else {
@@ -314,7 +315,6 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
         (player->stateFlags2 & PLAYER_STATE2_2000000)) {
         return true;
     }
-
     return false;
 }
 
@@ -359,6 +359,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
     if (!EN_RZ_GET_SISTER(&this->actor) && (this->animIndex == EN_RZ_ANIM_4)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
+    
     if (Cutscene_CheckActorAction(play, this->csAction)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
         action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;

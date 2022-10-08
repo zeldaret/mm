@@ -18,9 +18,9 @@ typedef struct EnRz {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[OBJECT_RZ_LIMB_MAX];
-    /* 0x20C */ UNK_TYPE1 pad188[0x94];
+    /* 0x20C */ UNK_TYPE1 pad20C[0x94];
     /* 0x2A0 */ Vec3s morphTable[OBJECT_RZ_LIMB_MAX];
-    /* 0x324 */ UNK_TYPE1 pad2A0[0x94];
+    /* 0x324 */ UNK_TYPE1 pad324[0x94];
     /* 0x3B8 */ Path* path;
     /* 0x3BC */ s32 curPointIndex;
     /* 0x3C0 */ ColliderCylinder collider;
