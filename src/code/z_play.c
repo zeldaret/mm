@@ -551,13 +551,13 @@ void Play_UpdateTransition(PlayState* this) {
 
                 if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000) ||
                      ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
-                      !(gSaveContext.save.weekEventReg[0x21] & 0x80)) ||
+                      !(gSaveContext.save.weekEventReg[33] & 0x80)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 1)) &&
-                      !(gSaveContext.save.weekEventReg[0x14] & 2)) ||
+                      !(gSaveContext.save.weekEventReg[20] & 2)) ||
                      ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) &&
-                      !(gSaveContext.save.weekEventReg[0x37] & 0x80)) ||
+                      !(gSaveContext.save.weekEventReg[55] & 0x80)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
-                      !(gSaveContext.save.weekEventReg[0x34] & 0x20))) &&
+                      !(gSaveContext.save.weekEventReg[52] & 0x20))) &&
                     (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
@@ -684,7 +684,7 @@ void Play_UpdateTransition(PlayState* this) {
                         if (gSaveContext.minigameState == 1) {
                             gSaveContext.minigameState = 3;
                         }
-                    } else {
+                    } else { // 1 and 3
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                     }
@@ -877,9 +877,9 @@ void Play_UpdateTransition(PlayState* this) {
 #ifdef NON_MATCHING
 void Play_Update(PlayState* this) {
     PlayState* this2 = this;
-    u8 pad60;
+    u8 sp60;
     s32 sp5C = 0;
-    Input* pad58 = this->state.input;
+    Input* sp58 = this->state.input;
 
     gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
     gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
@@ -893,7 +893,7 @@ void Play_Update(PlayState* this) {
     }
     Actor_SetMovementScale(this->state.framerateDivisor);
 
-    if (FrameAdvance_Update(&this->frameAdvCtx, &pad58[1])) {
+    if (FrameAdvance_Update(&this->frameAdvCtx, &sp58[1])) {
         if ((this->transitionMode == TRANS_MODE_OFF) && (this->transitionTrigger != TRANS_TRIGGER_OFF)) {
             this->transitionMode = TRANS_MODE_SETUP;
         }
@@ -934,8 +934,8 @@ void Play_Update(PlayState* this) {
                 this->gameplayFrames++;
                 Rumble_SetUpdateEnabled(true);
                 if ((this->actorCtx.freezeFlashTimer != 0) && (this->actorCtx.freezeFlashTimer-- < 5)) {
-                    pad60 = this->actorCtx.freezeFlashTimer;
-                    if ((pad60 > 0) && ((pad60 % 2) != 0)) {
+                    sp60 = this->actorCtx.freezeFlashTimer;
+                    if ((sp60 > 0) && ((sp60 % 2) != 0)) {
                         this->envCtx.fillScreen = true;
                         this->envCtx.screenFillColor[0] = this->envCtx.screenFillColor[1] =
                             this->envCtx.screenFillColor[2] = 150;
@@ -962,8 +962,8 @@ void Play_Update(PlayState* this) {
                 Rumble_SetUpdateEnabled(false);
             }
 
-            Room_nop8012D510(this, &this->roomCtx.curRoom, &pad58[1], 0);
-            Room_nop8012D510(this, &this->roomCtx.prevRoom, &pad58[1], 1);
+            Room_nop8012D510(this, &this->roomCtx.curRoom, &sp58[1], 0);
+            Room_nop8012D510(this, &this->roomCtx.prevRoom, &sp58[1], 1);
             SkyboxDraw_Update(&this->skyboxCtx);
 
             if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
@@ -1150,18 +1150,15 @@ void Play_Draw(PlayState* this) {
 
     SkinMatrix_MtxFMtxFMult(&this->viewProjectionMtxF, &this->billboardMtxF, &this->viewProjectionMtxF);
 
-    this->billboardMtxF.mf[3][2] =
-        (this->billboardMtxF.mf[3][1] =
-             (this->billboardMtxF.mf[3][0] =
-                  (this->billboardMtxF.mf[2][3] =
-                       (this->billboardMtxF.mf[1][3] = (this->billboardMtxF.mf[0][3] = 0.0f)))));
+    this->billboardMtxF.mf[3][2] = this->billboardMtxF.mf[3][1] = this->billboardMtxF.mf[3][0] =
+        this->billboardMtxF.mf[2][3] = this->billboardMtxF.mf[1][3] = this->billboardMtxF.mf[0][3] = 0.0f;
 
     Matrix_Transpose(&this->billboardMtxF);
 
     this->billboardMtx = GRAPH_ALLOC(this->state.gfxCtx, 0x80);
 
     Matrix_MtxFToMtx(&this->billboardMtxF, this->billboardMtx);
-    Matrix_RotateYF(((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(this)) + 0x8000)) * 0.0000958738f, MTXMODE_NEW);
+    Matrix_RotateYF(BINANG_TO_RAD((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(this)) + 0x8000)), MTXMODE_NEW);
     Matrix_ToMtx(this->billboardMtx + 1);
 
     gSPSegment(POLY_OPA_DISP++, 0x01, this->billboardMtx);
@@ -1531,15 +1528,15 @@ void Play_InitScene(PlayState* this, s32 spawn) {
 
 void Play_SpawnScene(PlayState* this, s32 sceneId, s32 spawn) {
     s32 pad;
-    SceneTableEntry* sp1C = &gSceneTable[sceneId];
+    SceneTableEntry* scene = &gSceneTable[sceneId];
 
-    sp1C->unk_D = 0;
-    this->loadedScene = sp1C;
+    scene->unk_D = 0;
+    this->loadedScene = scene;
     this->sceneId = sceneId;
-    this->sceneConfig = sp1C->drawConfig;
-    this->sceneSegment = Play_LoadFile(this, &sp1C->segment);
-    sp1C->unk_D = 0;
-    gSegments[0x02] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
+    this->sceneConfig = scene->drawConfig;
+    this->sceneSegment = Play_LoadFile(this, &scene->segment);
+    scene->unk_D = 0;
+    gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
     Play_InitScene(this, spawn);
     Room_AllocateAndLoad(this, &this->roomCtx);
 }
@@ -2079,6 +2076,7 @@ void Play_Init(GameState* thisx) {
             gSaveContext.nextCutsceneIndex = 0xFFF0;
         }
 
+        // Not "First cycle" Termina Field
         if (INV_CONTENT(ITEM_OCARINA) != ITEM_OCARINA) {
             if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
                 (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
@@ -2246,9 +2244,7 @@ void Play_Init(GameState* thisx) {
     ZeldaArena_Init(((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc);
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
-    while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {
-        // Empty
-    }
+    while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}
 
     if ((CURRENT_DAY != 0) && ((this->roomCtx.curRoom.unk3 == 1) || (this->roomCtx.curRoom.unk3 == 5))) {
         Actor_Spawn(&this->actorCtx, this, ACTOR_EN_TEST4, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0);
