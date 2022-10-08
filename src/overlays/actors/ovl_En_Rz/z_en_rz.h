@@ -8,6 +8,17 @@
 #define EN_RZ_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define EN_RZ_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
 
+typedef enum {
+    /* 0 */ EN_RZ_ROSA_SISTERS_JUDO,
+    /* 1 */ EN_RZ_ROSA_SISTERS_MARILLA
+} EnRzRosaSisters;
+
+typedef enum {
+    /* 0 */ EN_RZ_TYPE_0,
+    /* 1 */ EN_RZ_TYPE_1,
+    /* 2 */ EN_RZ_TYPE_2
+} EnRzType;
+
 struct EnRz;
 
 typedef void (*EnRzActionFunc)(struct EnRz*, PlayState*);

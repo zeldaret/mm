@@ -31,16 +31,6 @@ void func_80BFC8F8(EnRz* this, PlayState* play);
 #define EN_RZ_STATE_2 (1 << 1)
 
 typedef enum {
-    /* 0 */ EN_RZ_ROSA_SISTERS_JUDO,
-    /* 1 */ EN_RZ_ROSA_SISTERS_MARILLA
-} EnRzRosaSisters;
-
-typedef enum {
-    /* 1 */ EN_RZ_TYPE_1 = 1,
-    /* 2 */ EN_RZ_TYPE_2
-} EnRzType;
-
-typedef enum {
     /* 0 */ EN_RZ_ANIM_0,
     /* 1 */ EN_RZ_ANIM_1,
     /* 2 */ EN_RZ_ANIM_2,
