@@ -132,7 +132,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
             this->actor.uncullZoneForward = 300.0f;
             break;
 
-        default:
+        default: // ROSA_SISTERS_TYPE_0
             this->stateFlags |= EN_RZ_STATE_2;
             if (gSaveContext.save.weekEventReg[77] & 4) {
                 Actor_MarkForDeath(&this->actor);
@@ -186,12 +186,12 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 }
 
 void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 transitionRate) {
-    static AnimationHeader* D_80BFCD20[] = {
+    static AnimationHeader* sJudoAnimations[] = {
         &object_rz_Anim_00457C, &object_rz_Anim_003A20, &object_rz_Anim_005E50, &object_rz_Anim_003098,
         &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
     };
 
-    static AnimationHeader* D_80BFCD3C[] = {
+    static AnimationHeader* sMarillaAnimations[] = {
         &object_rz_Anim_003A20, &object_rz_Anim_003A20, &object_rz_Anim_005390, &object_rz_Anim_003098,
         &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
     };
@@ -202,20 +202,20 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
     AnimationHeader** animationPtr;
 
     if (!EN_RZ_GET_SISTER(&this->actor)) {
-        animationPtr = D_80BFCD20;
+        animationPtr = sJudoAnimations;
     } else {
-        animationPtr = D_80BFCD3C;
+        animationPtr = sMarillaAnimations;
     }
 
     if ((animIndex >= EN_RZ_ANIM_0) && (animIndex < EN_RZ_ANIM_9) &&
         ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
-        if (animIndex >= ARRAY_COUNT(D_80BFCD20)) {
-            endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)]);
+        if (animIndex >= ARRAY_COUNT(sJudoAnimations)) {
+            endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
             if (animMode == ANIMMODE_LOOP) {
-                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)],
+                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
                                      2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, transitionRate);
             } else {
-                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(D_80BFCD20)],
+                LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
                                      2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, transitionRate);
             }
         } else {
