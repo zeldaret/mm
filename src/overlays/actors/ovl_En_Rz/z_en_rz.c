@@ -25,7 +25,7 @@ void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
 void func_80BFC674(EnRz* this, PlayState* play);
 void func_80BFC7E0(EnRz* this, PlayState* play);
-void func_80BFC8F8(EnRz* this, PlayState* play);
+void EnRz_Walk(EnRz* this, PlayState* play);
 
 #define EN_RZ_STATE_1 (1 << 0)
 #define EN_RZ_STATE_2 (1 << 1)
@@ -146,7 +146,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
                 return;
             }
             EnRz_ChangeAnim(play, this, EN_RZ_ANIM_WALKING, ANIMMODE_LOOP, 0.0f);
-            this->actionFunc = func_80BFC8F8;
+            this->actionFunc = EnRz_Walk;
             if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
                 this->actor.textId = 0x291C;
             } else { // EN_RZ_MARILLA
@@ -596,7 +596,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
     if (this->timer > 0) {
         this->timer--;
     } else {
-        this->actionFunc = func_80BFC8F8;
+        this->actionFunc = EnRz_Walk;
         func_80BFB9E4(play, this, EN_RZ_ANIM_WALKING);
     }
 
@@ -617,9 +617,8 @@ void func_80BFC8AC(EnRz* this, PlayState* play) {
     func_80BFB9E4(play, this, EN_RZ_ANIM_THINKING);
 }
 
-void func_80BFC8F8(EnRz* this, PlayState* play) {
+void EnRz_Walk(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
-
     this->actor.speedXZ = 1.5f;
 
     switch (EnRz_PathStatus(this)) {
