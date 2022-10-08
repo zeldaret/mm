@@ -11,10 +11,10 @@
 
 #define THIS ((EnTwig*)thisx)
 
-void EnTwig_Init(Actor* thisx, PlayState* play);
-void EnTwig_Destroy(Actor* thisx, PlayState* play);
-void EnTwig_Update(Actor* this, PlayState* play);
-void EnTwig_Draw(EnTwig* this, PlayState* play);
+void EnTwig_Init(Actor* thisx, PlayState* play2);
+void EnTwig_Destroy(Actor* thisx, PlayState* play2);
+void EnTwig_Update(Actor* thisx, PlayState* play2);
+void EnTwig_Draw(Actor* thisx, PlayState* play);
 
 void func_80AC0A54(EnTwig* this, PlayState* play);
 void func_80AC0A6C(EnTwig* this, PlayState* play);
@@ -227,7 +227,7 @@ void EnTwig_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
 }
 
-void EnTwig_Draw(EnTwig* thisx, PlayState* play) {
+void EnTwig_Draw(Actor* thisx, PlayState* play) {
     EnTwig* this = THIS;
 
     switch (this->unk_160) {
