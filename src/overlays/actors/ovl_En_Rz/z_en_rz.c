@@ -626,7 +626,6 @@ void func_80BFC8F8(EnRz* this, PlayState* play) {
 
         default:
             break;
-            
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
