@@ -314,6 +314,9 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     return false;
 }
 
+/*
+* Updates either Link's or Rosa Sisters animations every frame
+*/
 s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
     if (this->animIndex < EN_RZ_LINK_NORMAL_WAIT_FREE_ANIM) {
         return SkelAnime_Update(&this->skelAnime);
@@ -363,19 +366,19 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
             this->actionIndex = action;
             switch (action & 0xFFFF) {
                 case 1:
-                    func_80BFBA1C(play, this, 1);
+                    func_80BFBA1C(play, this, EN_RZ_STANDING_ANIM);
                     break;
 
                 case 2:
-                    func_80BFBA1C(play, this, 5);
+                    func_80BFBA1C(play, this, EN_RZ_ON_KNEES_ANIM);
                     break;
 
                 case 3:
-                    func_80BFBA1C(play, this, 4);
+                    func_80BFBA1C(play, this, EN_RZ_APPLAUDING_ANIM);
                     break;
 
                 case 4:
-                    func_80BFBA1C(play, this, 8);
+                    func_80BFBA1C(play, this, EN_RZ_LINK_DANCE_ANIM);
                     break;
             }
         }
@@ -444,9 +447,9 @@ void func_80BFC19C(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (!func_80BFBE70(this, play)) {
         this->actionFunc = func_80BFC3F8;
-        func_80BFBA1C(play, this, 8);
+        func_80BFBA1C(play, this, EN_RZ_LINK_DANCE_ANIM);
         if (this->sister != NULL) {
-            func_80BFBA1C(play, this->sister, 8);
+            func_80BFBA1C(play, this->sister, EN_RZ_LINK_DANCE_ANIM);
         }
     }
 }
@@ -662,10 +665,10 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
 
 void EnRz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnRz* this = THIS;
-    static Vec3f D_80BFCD60 = { 500.0f, -500.0f, 0.0f };
+    static Vec3f focusOffsetPos = { 500.0f, -500.0f, 0.0f };
 
     if (limbIndex == OBJECT_RZ_LIMB_0B) {
-        Matrix_MultVec3f(&D_80BFCD60, &thisx->focus.pos);
+        Matrix_MultVec3f(&focusOffsetPos, &thisx->focus.pos);
     }
     if (limbIndex == OBJECT_RZ_LIMB_03) {
         Matrix_MultVec3f(&gZeroVec3f, &this->shadowPos);
