@@ -94,7 +94,8 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnRz_ActorShadowFunc, 20.0f);
-
+    
+    // @bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &object_rz_Anim_003A20,
                        (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_rz_Anim_003A20);
