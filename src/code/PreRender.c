@@ -1,3 +1,10 @@
+/**
+ * @file PreRender.c
+ *
+ * This file implements various routines important to framebuffer effects, such as RDP accelerated color and depth
+ * buffer copies and coverage drawing. Also contains software implementations of the Video Interface anti-aliasing and
+ * divot filters.
+ */
 #include "global.h"
 
 /**
@@ -95,107 +102,192 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
     *gfxp = gfx;
 }
 
-void func_80170200(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
-    func_8016FF90(this, gfxp, buf, bufSave, 255, 255, 255, 255);
+/**
+ * Copies `fbuf` to `fbufSave`, discarding the alpha channel and leaving the rgb channel unchanged
+ */
+void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave) {
+    func_8016FF90(this, gfxp, fbuf, fbufSave, 255, 255, 255, 255);
 }
 
-#ifdef NON_MATCHING
-// just regalloc
-void func_8017023C(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
+//! FAKE:
+#define gSPTextureRectangle_Alt(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy)                   \
+    {                                                                                          \
+        Gfx* _g = (Gfx*)(pkt);                                                                 \
+                                                                                               \
+        _g->words.w0 = (_SHIFTL(G_TEXRECT, 24, 8) | _SHIFTL(xh, 12, 12) | _SHIFTL(yh, 0, 12)); \
+        _g->words.w1 = (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12));      \
+        gImmp1(pkt, G_RDPHALF_1, (_SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16)));                    \
+        gImmp1(pkt, G_RDPHALF_2, (_SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)));              \
+    }
+
+/**
+ * Reads the coverage values stored in the RGBA16 format `img` with dimensions `this->width`, `this->height` and
+ * converts it to an 8-bpp intensity image.
+ *
+ * @param gfxp      Display list pointer
+ * @param img       Image to read coverage from
+ * @param cvgDst    Buffer to store coverage into
+ */
+void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* cvgDst) {
     Gfx* gfx = *gfxp;
-    s32 x;
-    s32 x2;
-    s32 dx;
+    s32 rowsRemaining;
+    s32 curRow;
+    s32 nRows;
 
     gDPPipeSync(gfx++);
     gDPSetOtherMode(gfx++,
                     G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PRIM | G_RM_PASS | G_RM_OPA_CI2);
+
+    // Set the combiner to draw the texture as-is, discarding alpha channel
     gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, 0, 0, 0, 0, TEXEL0, 0, 0, 0, 0);
-    gDPSetColorImage(gfx++, G_IM_FMT_I, G_IM_SIZ_8b, this->width, bufSave);
+    // Set the destination color image to the provided address
+    gDPSetColorImage(gfx++, G_IM_FMT_I, G_IM_SIZ_8b, this->width, cvgDst);
+    // Set up a scissor based on the source image
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    dx = 0x1000 / (this->width * 2);
-    x = this->height;
-    x2 = 0;
+    // Calculate the max number of rows that can fit into TMEM at once
+    nRows = TMEM_SIZE / (this->width * G_IM_SIZ_16b_BYTES);
 
-    while (x > 0) {
+    // Set up the number of remaining rows
+    rowsRemaining = this->height;
+    curRow = 0;
+    while (rowsRemaining > 0) {
         s32 uls = 0;
         s32 lrs = this->width - 1;
         s32 ult;
         s32 lrt;
 
-        dx = CLAMP_MAX(dx, x);
-        ult = x2;
-        lrt = x2 + dx - 1;
+        // Make sure that we don't load past the end of the source image
+        nRows = MIN(rowsRemaining, nRows);
 
-        gDPLoadTextureTile(gfx++, buf, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
+        // Determine the upper and lower bounds of the rect to draw
+        ult = curRow;
+        lrt = curRow + nRows - 1;
+
+        // Load a horizontal strip of the source image in IA16 format. Since the source image is stored in memory as
+        // RGBA16, the bits are reinterpreted into IA16:
+        //
+        // r     g      b     a
+        // 11111 111 11 11111 1
+        // i         a
+        // 11111 111 11 11111 1
+        //
+        // I = (r << 3) | (g >> 2)
+        // A = (g << 6) | (b << 1) | a
+        //
+        // Since it is expected that r = g = b = cvg in the source image, this results in
+        //  I = (cvg << 3) | (cvg >> 2)
+        // This expands the 5-bit coverage into an 8-bit value
+        gDPLoadTextureTile(gfx++, img, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                            G_TX_NOLOD);
 
-        gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
-                            ult << 5, 1 << 10, 1 << 10);
+        if (1) {}
 
-        x2 += dx;
-        x -= dx;
+        // Draw that horizontal strip to the destination image. With the combiner and blender configuration set above,
+        // the intensity (I) channel of the loaded IA16 texture will be written as-is to the I8 color image, each pixel
+        // in the final image is
+        //  I = (cvg << 3) | (cvg >> 2)
+        gSPTextureRectangle_Alt(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
+                                ult << 5, 1 << 10, 1 << 10);
+
+        // Update the number of rows remaining and index of the row being drawn
+        curRow += nRows;
+        rowsRemaining -= nRows;
     }
 
+    // Reset the color image to the current framebuffer
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
     *gfxp = gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_8017023C.s")
-#endif
 
-void func_8017057C(PreRender* this, Gfx** gfxp) {
+/**
+ * Saves zbuf to zbufSave
+ */
+void PreRender_SaveZBuffer(PreRender* this, Gfx** gfxp) {
     if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
         func_8016FF70(this, gfxp, this->zbuf, this->zbufSave);
     }
 }
 
-void func_801705B4(PreRender* this, Gfx** gfxp) {
+/**
+ * Saves fbuf to fbufSave
+ */
+void PreRender_SaveFramebuffer(PreRender* this, Gfx** gfxp) {
     if ((this->fbufSave != NULL) && (this->fbuf != NULL)) {
         func_80170200(this, gfxp, this->fbuf, this->fbufSave);
     }
 }
 
-void func_801705EC(PreRender* this, Gfx** gfxp) {
+/**
+ * Fetches the coverage of the current framebuffer into an image of the same format as the current color image, storing
+ * it over the framebuffer in memory.
+ */
+void PreRender_FetchFbufCoverage(PreRender* this, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
+    // Set the blend color to full white and set maximum depth
     gDPSetBlendColor(gfx++, 255, 255, 255, 8);
-    gDPSetPrimDepth(gfx++, -1, -1);
+    gDPSetPrimDepth(gfx++, 0xFFFF, 0xFFFF);
+
+    // Uses G_RM_VISCVG to blit the coverage values to the framebuffer
+    //
+    // G_RM_VISCVG is the following special render mode:
+    //  IM_RD    : Allow read-modify-write operations on the framebuffer
+    //  FORCE_BL : Apply the blender to all pixels rather than just edges
+    //  (G_BL_CLR_IN * G_BL_0 + G_BL_CLR_BL * G_BL_A_MEM) / (G_BL_0 + G_BL_CLR_BL) = G_BL_A_MEM
+    //
+    // G_BL_A_MEM ("memory alpha") is coverage, therefore this blender configuration emits only the coverage
+    // and discards any pixel colors. For an RGBA16 framebuffer, each of the three color channels r,g,b will
+    // receive the coverage value individually.
+    //
+    // Also disables other modes such as alpha compare and texture perspective correction
     gDPSetOtherMode(gfx++,
                     G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_NONE | G_ZS_PRIM | G_RM_VISCVG | G_RM_VISCVG2);
+    // Set up a scissor with the same dimensions as the framebuffer
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
+    // Fill rectangle to obtain the coverage values as an RGBA16 image
     gDPFillRectangle(gfx++, 0, 0, this->width, this->height);
     gDPPipeSync(gfx++);
 
     *gfxp = gfx;
 }
 
-void func_80170730(PreRender* this, Gfx** gfxp) {
-    func_801705EC(this, gfxp);
+/**
+ * Draws the coverage of the current framebuffer `this->fbuf` to an I8 image at `this->cvgSave`. Overwrites
+ * `this->fbuf` in the process.
+ */
+void PreRender_DrawCoverage(PreRender* this, Gfx** gfxp) {
+    PreRender_FetchFbufCoverage(this, gfxp);
 
     if (this->cvgSave != NULL) {
-        func_8017023C(this, gfxp, this->fbuf, this->cvgSave);
+        PreRender_CoverageRgba16ToI8(this, gfxp, this->fbuf, this->cvgSave);
     }
 }
 
-void func_80170774(PreRender* this, Gfx** gfxp) {
+/**
+ * Restores zbufSave to zbuf
+ */
+void PreRender_RestoreZBuffer(PreRender* this, Gfx** gfxp) {
     func_8016FF70(this, gfxp, this->zbufSave, this->zbuf);
 }
 
+/**
+ * Draws a full-screen image to the current framebuffer, that sources the rgb channel from `this->fbufSave` and
+ * the alpha channel from `this->cvgSave` modulated by environment color.
+ */
 void func_80170798(PreRender* this, Gfx** gfxp) {
     Gfx* gfx;
-    s32 y;
-    s32 y2;
-    s32 dy;
+    s32 rowsRemaining;
+    s32 curRow;
+    s32 nRows;
     s32 rtile = 1;
 
     if (this->cvgSave != NULL) {
@@ -203,33 +295,43 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
 
         gDPPipeSync(gfx++);
         gDPSetEnvColor(gfx++, 255, 255, 255, 32);
+        // Effectively disable blending in both cycles. It's 2-cycle so that TEXEL1 can be used to point to a different
+        // texture tile.
         gDPSetOtherMode(gfx++,
                         G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PRIM | AA_EN | CVG_DST_CLAMP | ZMODE_OPA | CVG_X_ALPHA |
                             GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1) |
                             GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1));
+
+        // Set up the color combiner: first cycle: TEXEL0, TEXEL1 + ENVIRONMENT; second cycle: G_CC_PASS2
         gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 1, 0, TEXEL1, ENVIRONMENT, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED);
 
-        dy = (this->width > 320) ? 2 : 4;
-        y = this->height;
-        y2 = 0;
+        nRows = (this->width > SCREEN_WIDTH) ? 2 : 4;
 
-        while (y > 0) {
+        rowsRemaining = this->height;
+        curRow = 0;
+
+        while (rowsRemaining > 0) {
             s32 uls = 0;
             s32 lrs = this->width - 1;
             s32 ult;
             s32 lrt;
 
-            dy = CLAMP_MAX(dy, y);
+            // Make sure that we don't load past the end of the source image
+            nRows = MIN(rowsRemaining, nRows);
 
-            ult = y2;
-            lrt = (y2 + dy - 1);
+            // Determine the upper and lower bounds of the rect to draw
+            ult = curRow;
+            lrt = curRow + nRows - 1;
 
+            // Load the frame buffer line
             gDPLoadMultiTile(gfx++, this->fbufSave, 0x0000, G_TX_RENDERTILE, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width,
                              this->height, uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
                              G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             if (1) {}
+
+            // Load the coverage line
             gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
                              uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                              G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -238,11 +340,14 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             // The two if (1) {}'s above can be removed with do {} while(0) around macros
             if (1) {}
             if (1) {}
+
+            // Draw a texture for which the rgb channels come from the framebuffer and the alpha channel comes from
+            // coverage, modulated by env color
             gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
                                 ult << 5, 1 << 10, 1 << 10);
 
-            y2 += dy;
-            y -= dy;
+            curRow += nRows;
+            rowsRemaining -= nRows;
         }
 
         gDPPipeSync(gfx++);
@@ -254,7 +359,10 @@ void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
     func_8016FF90(this, gfxp, this->fbufSave, this->fbuf, 255, 255, 255, alpha);
 }
 
-void func_80170B28(PreRender* this, Gfx** gfxp) {
+/**
+ * Copies fbufSave to fbuf
+ */
+void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp) {
     func_8016FF70(this, gfxp, this->fbufSave, this->fbuf);
 }
 
@@ -266,122 +374,144 @@ void func_80170B28(PreRender* this, Gfx** gfxp) {
  *   | A B C D E |
  *     ‾ ‾ ‾ ‾ ‾
  */
-void PreRender_AntiAliasAlgorithm(PreRender* this, s32 x, s32 y) {
+void PreRender_AntiAliasFilter(PreRender* this, s32 x, s32 y) {
     s32 i;
     s32 j;
-    s32 buffA[3 * 5];
+    s32 buffCvg[3 * 5];
     s32 buffR[3 * 5];
     s32 buffG[3 * 5];
     s32 buffB[3 * 5];
-    s32 x1;
-    s32 y1;
-    s32 pad;
-    s32 pxR;
-    s32 pxG;
-    s32 pxB;
-    s32 pxR2;
-    s32 pxG2;
-    s32 pxB2;
+    s32 xi;
+    s32 yi;
+    s32 temp;
+    s32 pmaxR;
+    s32 pmaxG;
+    s32 pmaxB;
+    s32 pminR;
+    s32 pminG;
+    s32 pminB;
     Color_RGBA16 pxIn;
     Color_RGBA16 pxOut;
-    u32 pxR3;
-    u32 pxG3;
-    u32 pxB3;
+    u32 outR;
+    u32 outG;
+    u32 outB;
 
-    for (i = 0; i < 3 * 5; i++) {
-        x1 = (i % 5) + x - 2;
-        y1 = (i / 5) + y - 1;
+    // Extract pixels in the 5x3 neighborhood
+    for (i = 0; i < 5 * 3; i++) {
+        xi = x + (i % 5) - 2;
+        yi = y + (i / 5) - 1;
 
-        if (x1 < 0) {
-            x1 = 0;
-        } else if (x1 > (this->width - 1)) {
-            x1 = this->width - 1;
+        // Clamp coordinates to the edges of the image
+        if (xi < 0) {
+            xi = 0;
+        } else if (xi > (this->width - 1)) {
+            xi = this->width - 1;
         }
-        if (y1 < 0) {
-            y1 = 0;
-        } else if (y1 > (this->height - 1)) {
-            y1 = this->height - 1;
+        if (yi < 0) {
+            yi = 0;
+        } else if (yi > (this->height - 1)) {
+            yi = this->height - 1;
         }
 
-        pxIn.rgba = this->fbufSave[x1 + y1 * this->width];
+        // Extract color channels for each pixel, convert 5-bit color channels to 8-bit
+        pxIn.rgba = this->fbufSave[xi + yi * this->width];
         buffR[i] = (pxIn.r << 3) | (pxIn.r >> 2);
         buffG[i] = (pxIn.g << 3) | (pxIn.g >> 2);
         buffB[i] = (pxIn.b << 3) | (pxIn.b >> 2);
-        buffA[i] = this->cvgSave[x1 + y1 * this->width] >> 5;
+        buffCvg[i] = this->cvgSave[xi + yi * this->width] >> 5;
     }
 
-    pxR = pxR2 = buffR[7];
-    pxG = pxG2 = buffG[7];
-    pxB = pxB2 = buffB[7];
+    pmaxR = pminR = buffR[7];
+    pmaxG = pminG = buffG[7];
+    pmaxB = pminB = buffB[7];
 
-    for (i = 1; i < 3 * 5; i += 2) {
-        if (buffA[i] == 7) {
-            if (pxR < buffR[i]) {
-                for (j = 1; j < 15; j += 2) {
-                    if ((i != j) && (buffR[j] >= buffR[i]) && (buffA[j] == 7)) {
-                        pxR = buffR[i];
+    // For each neighbor
+    for (i = 1; i < 5 * 3; i += 2) {
+        // Only sample fully covered pixels
+        if (buffCvg[i] == 7) {
+            // Determine "Penultimate Maximum" Value
+
+            // If current maximum is less than this neighbor
+            if (pmaxR < buffR[i]) {
+                // For each neighbor (again)
+                for (j = 1; j < 5 * 3; j += 2) {
+                    // If not the neighbor we were at before, and this neighbor has a larger value and this pixel is
+                    // fully covered, that means the neighbor at `i` is the "penultimate maximum"
+                    if ((i != j) && (buffR[j] >= buffR[i]) && (buffCvg[j] == 7)) {
+                        pmaxR = buffR[i];
                     }
                 }
             }
-            if (pxG < buffG[i]) {
-                for (j = 1; j < 15; j += 2) {
-                    if ((i != j) && (buffG[j] >= buffG[i]) && (buffA[j] == 7)) {
-                        pxG = buffG[i];
+            if (pmaxG < buffG[i]) {
+                for (j = 1; j < 5 * 3; j += 2) {
+                    if ((i != j) && (buffG[j] >= buffG[i]) && (buffCvg[j] == 7)) {
+                        pmaxG = buffG[i];
                     }
                 }
             }
-            if (pxB < buffB[i]) {
-                for (j = 1; j < 15; j += 2) {
-                    if ((i != j) && (buffB[j] >= buffB[i]) && (buffA[j] == 7)) {
-                        pxB = buffB[i];
+            if (pmaxB < buffB[i]) {
+                for (j = 1; j < 5 * 3; j += 2) {
+                    if ((i != j) && (buffB[j] >= buffB[i]) && (buffCvg[j] == 7)) {
+                        pmaxB = buffB[i];
                     }
                 }
             }
+
             if (1) {}
-            if (pxR2 > buffR[i]) {
-                for (j = 1; j < 15; j += 2) {
-                    if ((i != j) && (buffR[j] <= buffR[i]) && (buffA[j] == 7)) {
-                        pxR2 = buffR[i];
+
+            // Determine "Penultimate Minimum" Value
+
+            // Same as above with inverted conditions
+            if (pminR > buffR[i]) {
+                for (j = 1; j < 5 * 3; j += 2) {
+                    if ((i != j) && (buffR[j] <= buffR[i]) && (buffCvg[j] == 7)) {
+                        pminR = buffR[i];
                     }
                 }
             }
-            if (pxG2 > buffG[i]) {
-                for (j = 1; j < 15; j += 2) {
-                    if ((i != j) && (buffG[j] <= buffG[i]) && (buffA[j] == 7)) {
-                        pxG2 = buffG[i];
+            if (pminG > buffG[i]) {
+                for (j = 1; j < 5 * 3; j += 2) {
+                    if ((i != j) && (buffG[j] <= buffG[i]) && (buffCvg[j] == 7)) {
+                        pminG = buffG[i];
                     }
                 }
             }
-            if (pxB2 > buffB[i]) {
-                for (j = 1; j < 15; j += 2) {
-                    if ((i != j) && (buffB[j] <= buffB[i]) && (buffA[j] == 7)) {
-                        pxB2 = buffB[i];
+            if (pminB > buffB[i]) {
+                for (j = 1; j < 5 * 3; j += 2) {
+                    if ((i != j) && (buffB[j] <= buffB[i]) && (buffCvg[j] == 7)) {
+                        pminB = buffB[i];
                     }
                 }
             }
         }
     }
 
-    pad = 7 - buffA[7];
-    pxR3 = buffR[7] + (((s32)((pad * ((pxR + pxR2) - (buffR[7] << 1))) + 4)) >> 3);
-    pxG3 = buffG[7] + (((s32)((pad * ((pxG + pxG2) - (buffG[7] << 1))) + 4)) >> 3);
-    pxB3 = buffB[7] + (((s32)((pad * ((pxB + pxB2) - (buffB[7] << 1))) + 4)) >> 3);
+    // The background color is determined by averaging the penultimate minimum and maximum pixels, and subtracting the
+    // ForeGround color:
+    //      BackGround = (pMax + pMin) - (ForeGround) * 2
 
-    pxOut.r = pxR3 >> 3;
-    pxOut.g = pxG3 >> 3;
-    pxOut.b = pxB3 >> 3;
+    // OutputColor = cvg * ForeGround + (1.0 - cvg) * BackGround
+    temp = 7 - buffCvg[7];
+    outR = buffR[7] + ((s32)(temp * (pmaxR + pminR - (buffR[7] * 2)) + 4) >> 3);
+    outG = buffG[7] + ((s32)(temp * (pmaxG + pminG - (buffG[7] * 2)) + 4) >> 3);
+    outB = buffB[7] + ((s32)(temp * (pmaxB + pminB - (buffB[7] * 2)) + 4) >> 3);
+
+    pxOut.r = outR >> 3;
+    pxOut.g = outG >> 3;
+    pxOut.b = outB >> 3;
     pxOut.a = 1;
     this->fbufSave[x + y * this->width] = pxOut.rgba;
 }
 
 /**
- * Applies an anti-alias filter to the current prerender
+ * Applies the Video Interface anti-aliasing filter to `this->fbufSave` using `this->cvgSave`
  */
 void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
     s32 x;
     s32 y;
     s32 cvg;
 
+    // Apply AA filter
     for (y = 0; y < this->height; y++) {
         for (x = 0; x < this->width; x++) {
             cvg = this->cvgSave[x + y * this->width];
@@ -389,13 +519,73 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
             cvg++;
 
             if (cvg != 8) {
-                PreRender_AntiAliasAlgorithm(this, x, y);
+                // If this pixel has only partial coverage, perform the Video Filter interpolation on it
+                PreRender_AntiAliasFilter(this, x, y);
             }
         }
     }
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801716C4.s")
+#if 0
+u32 func_801716C4(u8* arg0, u8* arg1, u8* arg2) {
+    s32 sp28[9];
+    s32* var_s2;
+    u32 var_s0;
+    u32 var_s1;
+    u8 temp_t9;
+    u8* temp_a3;
+    u8* temp_t0;
+    u8* temp_t1;
+    u8* temp_t2;
+    u8* temp_t3;
+    u8* temp_t4;
+    u8* temp_t5;
+    u8* temp_v0;
+    u8* temp_v1;
+
+    sp28[0] = 0;
+    sp28[1] = 0;
+    sp28[2] = 0;
+    sp28[3] = 0;
+    sp28[4] = 0;
+    sp28[5] = 0;
+    sp28[6] = 0;
+    sp28[7] = 0;
+    var_s0 = 0;
+    var_s1 = 0;
+    temp_v0 = &sp28[arg0[0]];
+    var_s2 = &sp28;
+    *temp_v0 += 1;
+
+    temp_v1 = &sp28[arg0[1]];
+    *temp_v1 += 1;
+
+    temp_a3 = &sp28[arg0[2]];
+    *temp_a3 += 1;
+    temp_t0 = &sp28[arg1[0]];
+    *temp_t0 += 1;
+    temp_t1 = &sp28[arg1[1]];
+    *temp_t1 += 1;
+    temp_t2 = &sp28[arg1[2]];
+    *temp_t2 += 1;
+    temp_t3 = &sp28[arg2[0]];
+    *temp_t3 += 1;
+    temp_t4 = &sp28[arg2[1]];
+    *temp_t4 += 1;
+    temp_t5 = &sp28[arg2[2]];
+    *temp_t5 += 1;
+loop_1:
+    temp_t9 = *var_s2;
+    var_s2 += 1;
+    var_s0 += temp_t9;
+    if (var_s0 < 5) {
+        var_s1 += 1;
+        goto loop_1;
+    }
+    return var_s1;
+}
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801717F8.s")
 
@@ -403,7 +593,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
  * Applies filters to the framebuffer prerender to make it look smoother
  */
 void PreRender_ApplyFilters(PreRender* this) {
-    if (this->cvgSave == NULL || this->fbufSave == NULL) {
+    if ((this->cvgSave == NULL) || (this->fbufSave == NULL)) {
         this->unk_4D = 0;
     } else {
         this->unk_4D = 1;
