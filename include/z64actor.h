@@ -298,7 +298,7 @@ typedef enum {
 #define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
 #define AOBJ_GET_TYPE(thisx) (((thisx)->params & 0xFF) - 9)
 
-#define AOBJ_GET_PARAMS(textId, type) ((((textId - 0x300) & 0xFF) << 8) | (type + 9))
+#define AOBJ_PARAMS(textId, type) ((((textId - 0x300) & 0xFF) << 8) | (type + 9))
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
