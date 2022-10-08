@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_rz" Segment="6">
-        <Animation Name="object_rz_Anim_00059C" Offset="0x59C" />
-        <Animation Name="object_rz_Anim_000DE8" Offset="0xDE8" />
-        <Animation Name="object_rz_Anim_0028D4" Offset="0x28D4" />
-        <Animation Name="object_rz_Anim_003098" Offset="0x3098" />
-        <Animation Name="object_rz_Anim_003A20" Offset="0x3A20" />
-        <Animation Name="object_rz_Anim_00457C" Offset="0x457C" />
-        <Animation Name="object_rz_Anim_005390" Offset="0x5390" />
-        <Animation Name="object_rz_Anim_005E50" Offset="0x5E50" />
+        <Animation Name="gRosaSistersApplaudingAnim" Offset="0x59C" />
+        <Animation Name="gRosaSistersOnKneesAnim" Offset="0xDE8" />
+        <Animation Name="gRosaSistersDancingAnim" Offset="0x28D4" />
+        <Animation Name="gRosaSistersSittingAnim" Offset="0x3098" />
+        <Animation Name="gRosaSistersStandingAnim" Offset="0x3A20" />
+        <Animation Name="gRosaSistersThinkingAnim" Offset="0x457C" />
+        <Animation Name="gRosaSistersWalkingAnim" Offset="0x5390" />
+        <Animation Name="gRosaSistersWalkingWhileThinkingAnim" Offset="0x5E50" />
         <DList Name="object_rz_DL_0092B0" Offset="0x92B0" />
         <DList Name="object_rz_DL_0094C8" Offset="0x94C8" />
         <DList Name="object_rz_DL_009620" Offset="0x9620" />

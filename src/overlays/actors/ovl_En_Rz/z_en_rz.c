@@ -31,16 +31,16 @@ void func_80BFC8F8(EnRz* this, PlayState* play);
 #define EN_RZ_STATE_2 (1 << 1)
 
 typedef enum {
-    /* 0 */ EN_RZ_ANIM_0,
+    /* 0 */ EN_RZ_ANIM_MIN,
     /* 1 */ EN_RZ_ANIM_1,
     /* 2 */ EN_RZ_ANIM_2,
     /* 3 */ EN_RZ_ANIM_3,
     /* 4 */ EN_RZ_ANIM_4,
     /* 5 */ EN_RZ_ANIM_5,
     /* 6 */ EN_RZ_ANIM_6,
-    /* 7 */ EN_RZ_ANIM_7,
-    /* 8 */ EN_RZ_ANIM_8,
-    /* 9 */ EN_RZ_ANIM_9
+    /* 7 */ EN_RZ_ANIM_7, // Link animation
+    /* 8 */ EN_RZ_ANIM_8, // Link animation
+    /* 9 */ EN_RZ_ANIM_MAX
 } EnRzAnimations;
 
 const ActorInit En_Rz_InitVars = {
@@ -96,16 +96,16 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, EnRz_ActorShadowFunc, 20.0f);
 
     // @bug this alignment is because of player animations, but should be using ALIGN16
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &object_rz_Anim_003A20,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &gRosaSistersStandingAnim,
                        (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
-    Animation_PlayLoop(&this->skelAnime, &object_rz_Anim_003A20);
+    Animation_PlayLoop(&this->skelAnime, &gRosaSistersStandingAnim);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     this->actionFunc = func_80BFC058;
     func_80BFBA50(this, play);
-    this->animIndex = EN_RZ_ANIM_9;
+    this->animIndex = EN_RZ_ANIM_MAX;
     this->actor.targetMode = 0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
@@ -188,12 +188,13 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 
 void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 transitionRate) {
     static AnimationHeader* sJudoAnimations[] = {
-        &object_rz_Anim_00457C, &object_rz_Anim_003A20, &object_rz_Anim_005E50, &object_rz_Anim_003098,
-        &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
+        &gRosaSistersThinkingAnim, &gRosaSistersStandingAnim,   &gRosaSistersWalkingWhileThinkingAnim,
+        &gRosaSistersSittingAnim,  &gRosaSistersApplaudingAnim, &gRosaSistersOnKneesAnim,
+        &gRosaSistersDancingAnim,
     };
     static AnimationHeader* sMarillaAnimations[] = {
-        &object_rz_Anim_003A20, &object_rz_Anim_003A20, &object_rz_Anim_005390, &object_rz_Anim_003098,
-        &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
+        &gRosaSistersStandingAnim,   &gRosaSistersStandingAnim, &gRosaSistersWalkingAnim, &gRosaSistersSittingAnim,
+        &gRosaSistersApplaudingAnim, &gRosaSistersOnKneesAnim,  &gRosaSistersDancingAnim,
     };
     static LinkAnimationHeader* sLinkAnimations[] = {
         &gPlayerAnim_link_normal_wait_free,
@@ -208,7 +209,7 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         animationPtr = sMarillaAnimations;
     }
 
-    if ((animIndex >= EN_RZ_ANIM_0) && (animIndex < EN_RZ_ANIM_9) &&
+    if ((animIndex >= EN_RZ_ANIM_MIN) && (animIndex < EN_RZ_ANIM_MAX) &&
         ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP))) {
         if (animIndex >= ARRAY_COUNT(sJudoAnimations)) {
             endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
