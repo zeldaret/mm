@@ -43,6 +43,12 @@ typedef enum {
     /* 9 */ EN_RZ_ANIM_MAX
 } EnRzAnimations;
 
+typedef enum {
+    /* 0 */ EN_RZ_PATHSTATUS_NORMAL,   //!< not near waypoint
+    /* 1 */ EN_RZ_PATHSTATUS_AT_POINT, //!< no path or new waypoint
+    /* 2 */ EN_RZ_PATHSTATUS_END       //!< reached end of path
+} EnRzPathStatus;
+
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
     ACTORCAT_NPC,
@@ -270,7 +276,7 @@ s32 func_80BFBB44(EnRz* this) {
     f32 diffZ;
 
     if (path == NULL) {
-        return true;
+        return EN_RZ_PATHSTATUS_AT_POINT;
     }
 
     curPoint = &((Vec3s*)Lib_SegmentedToVirtual(path->points))[this->curPointIndex];
@@ -283,17 +289,17 @@ s32 func_80BFBB44(EnRz* this) {
         if (this->stateFlags & EN_RZ_STATE_1) {
             this->curPointIndex--;
             if (this->curPointIndex < 0) {
-                return 2;
+                return EN_RZ_PATHSTATUS_END;
             }
         } else {
             this->curPointIndex++;
             if (this->curPointIndex >= path->count) {
-                return 2;
+                return EN_RZ_PATHSTATUS_END;
             }
         }
-        return 1;
+        return EN_RZ_PATHSTATUS_AT_POINT;
     }
-    return 0;
+    return EN_RZ_PATHSTATUS_NORMAL;
 }
 
 s32 EnRz_CanTalk(EnRz* this, PlayState* play) {
