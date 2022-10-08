@@ -109,7 +109,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     switch (EN_RZ_GET_TYPE(thisx)) {
-        case EN_RZ_TYPE_1:
+        case ROSA_SISTERS_TYPE_1:
             if (!(gSaveContext.save.weekEventReg[77] & 4)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -119,7 +119,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
             this->actor.shape.yOffset = -1500.0f;
             break;
 
-        case EN_RZ_TYPE_2:
+        case ROSA_SISTERS_TYPE_2:
             this->actor.flags |= ACTOR_FLAG_10;
             if (gSaveContext.save.weekEventReg[77] & 4) {
                 EnRz_ChangeAnim(play, this, EN_RZ_ANIM_8, ANIMMODE_LOOP, 0.0f);
@@ -676,10 +676,10 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     if (!EN_RZ_GET_SISTER(thisx)) {
-        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), EN_RZ_ROSA_SISTERS_JUDO);
+        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), ROSA_SISTERS_JUDO);
     } else {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768),
-                                EN_RZ_ROSA_SISTERS_MARILLA);
+                                ROSA_SISTERS_MARILLA);
     }
 
     if (this->animIndex == EN_RZ_ANIM_4) {
