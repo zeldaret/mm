@@ -56,44 +56,7 @@ extern Struct_80140E80* D_801F6D4C;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
 
-void Play_PostWorldDraw(PlayState* this) {
-    if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != 0)) {
-        KaleidoScopeCall_Draw(this);
-    }
-
-    if (gSaveContext.gameMode == 0) {
-        Interface_Draw(this);
-    }
-
-    if (((this->pauseCtx.state == 0) && (this->pauseCtx.debugEditor == 0)) || (this->msgCtx.currentTextId != 0xFF)) {
-        Message_Draw(this);
-    }
-
-    if (this->gameOverCtx.state != GAMEOVER_INACTIVE) {
-        GameOver_FadeLights(this);
-    }
-
-    // Shrink the whole screen display (at the end of First and Second Day by default)
-    if (gSaveContext.screenScaleFlag) {
-        Gfx* nextOpa;
-        Gfx* opa;
-        GraphicsContext* gfxCtx = this->state.gfxCtx;
-
-        D_801F6D4C->scale = gSaveContext.screenScale / 1000.0f;
-
-        OPEN_DISPS(gfxCtx);
-
-        opa = POLY_OPA_DISP;
-        nextOpa = Graph_GfxPlusOne(POLY_OPA_DISP);
-        gSPDisplayList(OVERLAY_DISP++, nextOpa);
-        func_80141778(D_801F6D4C, &nextOpa, this->unk_18E60);
-        gSPEndDisplayList(nextOpa++);
-        Graph_BranchDlist(opa, nextOpa);
-        POLY_OPA_DISP = nextOpa;
-
-        CLOSE_DISPS(gfxCtx);
-    }
-}
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167F0C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
 

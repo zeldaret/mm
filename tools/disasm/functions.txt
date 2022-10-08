@@ -2994,7 +2994,7 @@
     0x80166B30:("func_80166B30",),
     0x80167814:("Play_Update",),
     0x80167DE4:("func_80167DE4",),
-    0x80167F0C:("Play_PostWorldDraw",),
+    0x80167F0C:("func_80167F0C",),
     0x80168090:("Play_Draw",),
     0x80168DAC:("func_80168DAC",),
     0x80168F64:("Play_Main",),
