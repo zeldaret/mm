@@ -6,6 +6,15 @@
 #define BG_UMAJUMP_GET_OBJECT_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
 #define BG_UMAJUMP_GET_FF(thisx) ((thisx)->params & 0xFF)
 
+typedef enum {
+    BG_UMAJUMP_TYPE_1 = 1,
+    BG_UMAJUMP_TYPE_2,
+    BG_UMAJUMP_TYPE_3,
+    BG_UMAJUMP_TYPE_4,
+    BG_UMAJUMP_TYPE_5,
+    BG_UMAJUMP_TYPE_6,
+} BgUmaJumpType;
+
 struct BgUmajump;
 
 typedef void (*BgUmajumpActionFunc)(struct BgUmajump*, PlayState*);
@@ -20,15 +29,6 @@ typedef struct BgUmajump {
     /* 0x164 */ s32 hasSoundPlayed;
     /* 0x168 */ Actor* horse;
 } BgUmajump; // size = 0x16C
-
-typedef enum {
-    BG_UMAJUMP_PARAM_1 = 1,
-    BG_UMAJUMP_PARAM_2,
-    BG_UMAJUMP_PARAM_3,
-    BG_UMAJUMP_PARAM_4,
-    BG_UMAJUMP_PARAM_5,
-    BG_UMAJUMP_PARAM_6,
-} BgUmaJumpType;
 
 extern const ActorInit Bg_Umajump_InitVars;
 
