@@ -610,7 +610,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
     }
 }
 
-void func_80BFC8AC(EnRz* this, PlayState* play) {
+void EnRz_StopToThink(EnRz* this, PlayState* play) {
     this->timer = 100;
     this->actionFunc = func_80BFC7E0;
     this->actor.speedXZ = 0.0f;
@@ -624,11 +624,11 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
     switch (EnRz_PathStatus(this)) {
         case 2:
             EnRz_SetupPath(this, play);
-            func_80BFC8AC(this, play);
+            EnRz_StopToThink(this, play);
             break;
 
         case 1:
-            func_80BFC8AC(this, play);
+            EnRz_StopToThink(this, play);
             break;
 
         default:

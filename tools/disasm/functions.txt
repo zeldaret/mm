@@ -16425,7 +16425,7 @@
     0x80BFC674:("func_80BFC674",),
     0x80BFC728:("func_80BFC728",),
     0x80BFC7E0:("func_80BFC7E0",),
-    0x80BFC8AC:("func_80BFC8AC",),
+    0x80BFC8AC:("EnRz_StopToThink",),
     0x80BFC8F8:("EnRz_Walk",),
     0x80BFC9E4:("EnRz_Update",),
     0x80BFCAD0:("EnRz_PostLimbDraw",),
