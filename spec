@@ -1286,8 +1286,7 @@ beginseg
     name "ovl_Bg_Umajump"
     compress
     include "build/src/overlays/actors/ovl_Bg_Umajump/z_bg_umajump.o"
-    include "build/data/ovl_Bg_Umajump/ovl_Bg_Umajump.data.o"
-    include "build/data/ovl_Bg_Umajump/ovl_Bg_Umajump.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Umajump/ovl_Bg_Umajump_reloc.o"
 endseg
 
 beginseg
