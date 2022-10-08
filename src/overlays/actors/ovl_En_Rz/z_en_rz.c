@@ -55,7 +55,7 @@ const ActorInit En_Rz_InitVars = {
     (ActorFunc)EnRz_Draw,
 };
 
-TexturePtr sEnRzEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590, object_rz_Tex_00C990, object_rz_Tex_00CD90,
 };
 
@@ -685,11 +685,11 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->animIndex == EN_RZ_ANIM_4) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEnRzEyeTextures[4]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[4]));
     } else if (this->stateFlags & EN_RZ_STATE_2) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEnRzEyeTextures[3]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[3]));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEnRzEyeTextures[this->eyeIndex]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
