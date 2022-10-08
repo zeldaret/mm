@@ -555,15 +555,12 @@ void func_80BFC674(EnRz* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC608;
-        if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
+        if (Player_GetMask(play) == 0xE) {
             Message_StartTextbox(play, 0x2925, &this->actor);
-            return;
+        } else {
+            Message_StartTextbox(play, 0x2924, &this->actor);
         }
-        Message_StartTextbox(play, 0x2924, &this->actor);
-        return;
-    }
-
-    if (EnRz_CanTalk(this, play)) {
+    } else if (EnRz_CanTalk(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
     }
 }
