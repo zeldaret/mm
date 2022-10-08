@@ -27,6 +27,9 @@ void func_80BFC674(EnRz* this, PlayState* play);
 void func_80BFC7E0(EnRz* this, PlayState* play);
 void func_80BFC8F8(EnRz* this, PlayState* play);
 
+#define EN_RZ_STATE_1 (1 << 0)
+#define EN_RZ_STATE_2 (1 << 1)
+
 typedef enum {
     /* 0 */ EN_RZ_ROSA_SISTERS_JUDO,
     /* 1 */ EN_RZ_ROSA_SISTERS_MARILLA
