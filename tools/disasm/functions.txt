@@ -16403,7 +16403,7 @@
     0x80BFB864:("EnRz_ChangeAnim",),
     0x80BFB9E4:("func_80BFB9E4",),
     0x80BFBA1C:("func_80BFBA1C",),
-    0x80BFBA50:("func_80BFBA50",),
+    0x80BFBA50:("EnRz_SetupPath",),
     0x80BFBB44:("func_80BFBB44",),
     0x80BFBC78:("EnRz_CanTalk",),
     0x80BFBCEC:("func_80BFBCEC",),

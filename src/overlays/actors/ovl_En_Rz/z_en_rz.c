@@ -18,7 +18,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play);
 
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnRz_ChangeAnim(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 transitionRate);
-s32 func_80BFBA50(EnRz* this, PlayState* play);
+s32 EnRz_SetupPath(EnRz* this, PlayState* play);
 EnRz* EnRz_FindSister(EnRz* this, PlayState*);
 void EnRz_SetupUpdateSkelAnime(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
@@ -110,7 +110,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     this->actionFunc = EnRz_SetupUpdateSkelAnime;
-    func_80BFBA50(this, play);
+    EnRz_SetupPath(this, play);
     this->animIndex = EN_RZ_ANIM_MAX;
     this->actor.targetMode = 0;
     this->actor.terminalVelocity = -9.0f;
@@ -244,7 +244,7 @@ void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
     EnRz_ChangeAnim(play, this, animIndex, ANIMMODE_LOOP, 0.0f);
 }
 
-s32 func_80BFBA50(EnRz* this, PlayState* play) {
+s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
     if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
         this->path = &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
         if (this->path != NULL) {
@@ -624,7 +624,7 @@ void func_80BFC8F8(EnRz* this, PlayState* play) {
 
     switch (func_80BFBB44(this)) {
         case 2:
-            func_80BFBA50(this, play);
+            EnRz_SetupPath(this, play);
             func_80BFC8AC(this, play);
             break;
 
