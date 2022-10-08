@@ -15,7 +15,7 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play);
 void EnGe3_Update(Actor* thisx, PlayState* play);
 void EnGe3_Draw(Actor* thisx, PlayState* play);
 
-void EnGe3_ChangeAnim(EnGe3* this, s16 arg1, u8 arg2, f32 arg3);
+void EnGe3_ChangeAnim(EnGe3* this, s16 index, u8 mode, f32 morphFrames);
 void EnGe3_SetupPath(EnGe3* this, PlayState* play);
 void EnGe3_Idle(EnGe3* this, PlayState* play);
 void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play);
