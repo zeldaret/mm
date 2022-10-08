@@ -18,7 +18,7 @@ void BgDkjailIvy_Update(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Draw(Actor* thisx, PlayState* play);
 
 void BgDkjailIvy_SetupSetCollision(BgDkjailIvy* this);
-void BgDkjailIvy_SetIdle(BgDkjailIvy* this, PlayState* play);
+void BgDkjailIvy_WaitForCut(BgDkjailIvy* this, PlayState* play);
 void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this);
 void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play);
 void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this);
@@ -139,10 +139,10 @@ void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void BgDkjailIvy_SetupSetCollision(BgDkjailIvy* this) {
-    this->actionFunc = BgDkjailIvy_SetIdle;
+    this->actionFunc = BgDkjailIvy_WaitForCut;
 }
 
-void BgDkjailIvy_SetIdle(BgDkjailIvy* this, PlayState* play) {
+void BgDkjailIvy_WaitForCut(BgDkjailIvy* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->dyna.actor.flags |= ACTOR_FLAG_10;
