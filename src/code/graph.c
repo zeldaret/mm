@@ -165,7 +165,7 @@ retry:
 
     gfxCtx->masterList = gGfxMasterDL;
     if (gfxCtx->callback != NULL) {
-        gfxCtx->callback(gfxCtx, gfxCtx->callbackParam);
+        gfxCtx->callback(gfxCtx, gfxCtx->callbackArg);
     }
 
     task->type = M_GFXTASK;

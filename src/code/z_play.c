@@ -12,18 +12,18 @@ s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
 
 // bss
-s16 sTransitionFillTimer; // 0x801F6C10
-Input D_801F6C18; // 0x801F6C18
-FbDemoStruct sTrnsnUnk; // 0x801F6C30
-u16* D_801F6D0C; // 0x801F6D0C
-s32 gTrnsnUnkState; // 0x801F6D10
-VisMono sVisMono; // 0x801F6D18
-Color_RGBA8_u32 gVisMonoColor; // 0x801F6D30
-Struct_80140E80 D_801F6D38; // 0x801F6D38
-Struct_80140E80* D_801F6D4C; // 0x801F6D4C
+s16 sTransitionFillTimer;         // 0x801F6C10
+Input D_801F6C18;                 // 0x801F6C18
+FbDemoStruct sTrnsnUnk;           // 0x801F6C30
+u16* D_801F6D0C;                  // 0x801F6D0C
+s32 gTrnsnUnkState;               // 0x801F6D10
+VisMono sVisMono;                 // 0x801F6D18
+Color_RGBA8_u32 gVisMonoColor;    // 0x801F6D30
+Struct_80140E80 D_801F6D38;       // 0x801F6D38
+Struct_80140E80* D_801F6D4C;      // 0x801F6D4C
 BombersNotebook sBombersNotebook; // 0x801F6D50
-u8 sBombersNotebookOpen; // 0x801F6DFC
-u8 sMotionBlurStatus; // 0x801F6DFD
+u8 sBombersNotebookOpen;          // 0x801F6DFC
+u8 sMotionBlurStatus;             // 0x801F6DFD
 
 typedef enum {
     /* 0 */ MOTION_BLUR_OFF,
@@ -335,7 +335,7 @@ Gfx* Play_SetFog(PlayState* this, Gfx* gfx) {
     s32 fogFar = this->lightCtx.fogFar * (5.0f / 64.0f);
 
     return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g, this->lightCtx.fogColor.b, 0,
-                              this->lightCtx.fogNear, (fogFar <= 1000) ? 1000 : fogFar);
+                              this->lightCtx.fogNear, ((fogFar <= 1000) ? 1000 : fogFar));
 }
 
 void Play_Destroy(GameState* thisx) {
@@ -357,7 +357,7 @@ void Play_Destroy(GameState* thisx) {
 
     BombersNotebook_Destroy(&sBombersNotebook);
     this->state.gfxCtx->callback = NULL;
-    this->state.gfxCtx->callbackParam = 0;
+    this->state.gfxCtx->callbackArg = 0;
     Play_DestroyMotionBlur();
 
     if (R_PAUSE_MENU_MODE != PAUSE_BG_PRERENDER_OFF) {
@@ -404,7 +404,8 @@ void Play_Destroy(GameState* thisx) {
     ZeldaArena_Cleanup();
 }
 
-void Play_CompressI8ToI5(u8* srcI8, s8* destI5, size_t size) {
+// TODO: More Docs
+void Play_CompressI8ToI5(void* srcI8, void* destI5, size_t size) {
     u32 i;
     u8* src = srcI8;
     s8* dest = destI5;
@@ -415,7 +416,7 @@ void Play_CompressI8ToI5(u8* srcI8, s8* destI5, size_t size) {
 
     for (i = 0; i < size; i++) {
         srcPixel = *src++;
-        srcPixel = (srcPixel * 0x1F + 0x80) / 255;
+        srcPixel = (srcPixel * 0x1F + 0x80) / 0xFF;
         var_a1 = var_a3 - 5;
         if (var_a1 > 0) {
             destPixel |= srcPixel << (var_a1);
@@ -433,7 +434,8 @@ void Play_CompressI8ToI5(u8* srcI8, s8* destI5, size_t size) {
     }
 }
 
-void Play_DecompressI5ToI8(u8* srcI5, s8* destI8, size_t size) {
+// TODO: More Docs
+void Play_DecompressI5ToI8(void* srcI5, void* destI8, size_t size) {
     u32 i;
     u8* src = srcI5;
     s8* dest = destI8;
