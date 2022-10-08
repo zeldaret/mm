@@ -831,10 +831,6 @@ typedef struct {
     /* 0x844 */ void* fb;
 } FaultThreadStruct; // size = 0x848
 
-typedef struct FireObj FireObj;
-
-typedef struct FireObjLight FireObjLight;
-
 struct GameState;
 
 typedef void (*GameStateFunc)(struct GameState* gameState);
@@ -890,15 +886,14 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
 
-typedef struct PlayState PlayState;
 
-typedef s32 (*ColChkResetFunc)(PlayState*, Collider*);
-typedef void (*ColChkBloodFunc)(PlayState*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
+typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
+typedef void(*RoomDrawFunc)(struct PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
@@ -939,11 +934,11 @@ typedef enum {
     STACK_STATUS_OVERFLOW = 2
 } StackStatus;
 
-struct FireObjLight {
+typedef struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfo lightInfo;
     /* 0x12 */ u8 lightParamsIndex;
-}; // size = 0x14
+} FireObjLight; // size = 0x14
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -982,7 +977,7 @@ typedef struct {
     /* 0x5E */ u16 age;
 } EffFootmark; // size = 0x60
 
-struct FireObj {
+typedef struct FireObj {
     /* 0x00 */ Vec3f position;
     /* 0x0C */ f32 size;
     /* 0x10 */ f32 sizeInv;
@@ -999,7 +994,7 @@ struct FireObj {
     /* 0x2A */ s16 ignitionDelay;
     /* 0x2C */ ColliderCylinder collision;
     /* 0x78 */ FireObjLight light;
-}; // size = 0x8B
+} FireObj; // size = 0x8B
 
 typedef struct {
     /* 0x0 */ u8   seqId;
@@ -1027,7 +1022,7 @@ typedef struct {
     /* 0x0 */ u16 state;
 } GameOverContext; // size = 0x2
 
-struct PlayState {
+typedef struct PlayState {
     /* 0x00000 */ GameState state;
     /* 0x000A4 */ s16 sceneId;
     /* 0x000A6 */ u8 sceneConfig;
@@ -1118,7 +1113,7 @@ struct PlayState {
     /* 0x18E64 */ void* unk_18E64;
     /* 0x18E68 */ void* unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];
-}; // size = 0x19258
+} PlayState; // size = 0x19258
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
