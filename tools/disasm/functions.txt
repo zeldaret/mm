@@ -16413,7 +16413,7 @@
     0x80BFBE44:("EnRz_Destroy",),
     0x80BFBE70:("func_80BFBE70",),
     0x80BFBFAC:("func_80BFBFAC",),
-    0x80BFC058:("func_80BFC058",),
+    0x80BFC058:("EnRz_SetupUpdateSkelAnime",),
     0x80BFC078:("func_80BFC078",),
     0x80BFC19C:("func_80BFC19C",),
     0x80BFC214:("func_80BFC214",),
