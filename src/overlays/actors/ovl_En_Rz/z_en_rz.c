@@ -269,7 +269,7 @@ s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BFBB44(EnRz* this) {
+s32 EnRz_PathStatus(EnRz* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
@@ -622,7 +622,7 @@ void func_80BFC8F8(EnRz* this, PlayState* play) {
 
     this->actor.speedXZ = 1.5f;
 
-    switch (func_80BFBB44(this)) {
+    switch (EnRz_PathStatus(this)) {
         case 2:
             EnRz_SetupPath(this, play);
             func_80BFC8AC(this, play);
