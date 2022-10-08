@@ -38,8 +38,8 @@ typedef enum {
     /* 4 */ EN_RZ_ANIM_4,
     /* 5 */ EN_RZ_ANIM_5,
     /* 6 */ EN_RZ_ANIM_6,
-    /* 7 */ EN_RZ_ANIM_7, // Link animation
-    /* 8 */ EN_RZ_ANIM_8, // Link animation
+    /* 7 */ EN_RZ_LINK_NORMAL_WAIT_FREE_ANIM, // Link animation
+    /* 8 */ EN_RZ_LINK_DANCE_ANIM,            // Link animation
     /* 9 */ EN_RZ_ANIM_MAX
 } EnRzAnimations;
 
@@ -124,7 +124,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
         case ROSA_SISTERS_TYPE_2:
             this->actor.flags |= ACTOR_FLAG_10;
             if (gSaveContext.save.weekEventReg[77] & 4) {
-                EnRz_ChangeAnim(play, this, EN_RZ_ANIM_8, ANIMMODE_LOOP, 0.0f);
+                EnRz_ChangeAnim(play, this, EN_RZ_LINK_DANCE_ANIM, ANIMMODE_LOOP, 0.0f);
             } else {
                 EnRz_ChangeAnim(play, this, EN_RZ_ANIM_6, ANIMMODE_LOOP, 0.0f);
             }
@@ -165,7 +165,7 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     Vec3f oldPos;
     EnRz* this = THIS;
 
-    if (this->animIndex == EN_RZ_ANIM_8) {
+    if (this->animIndex == EN_RZ_LINK_DANCE_ANIM) {
         f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
 
         this->actor.scale.x = tempScale;
@@ -315,7 +315,7 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
 }
 
 s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
-    if (this->animIndex < EN_RZ_ANIM_7) {
+    if (this->animIndex < EN_RZ_LINK_NORMAL_WAIT_FREE_ANIM) {
         return SkelAnime_Update(&this->skelAnime);
     } else {
         return LinkAnimation_Update(play, &this->skelAnime);
@@ -422,7 +422,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
             default:
                 func_801477B4(play);
                 this->actionFunc = func_80BFC3F8;
-                if (this->animIndex != EN_RZ_ANIM_8) {
+                if (this->animIndex != EN_RZ_LINK_DANCE_ANIM) {
                     func_80BFB9E4(play, this, 6);
                     if (this->sister != NULL) {
                         func_80BFB9E4(play, this->sister, 6);
