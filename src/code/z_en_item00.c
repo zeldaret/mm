@@ -843,10 +843,10 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnItem00_DrawHeartContainer(EnItem00* actor, PlayState* play) {
+void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     s32 pad[2];
 
-    if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == actor->actor.objBankIndex) {
+    if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
 
         func_8012C2DC(play->state.gfxCtx);

@@ -293,14 +293,16 @@ beginseg
     name "icon_item_field_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_field_static.o"
+    include "build/assets/interface/icon_item_field_static/icon_item_field_static.o"
+    number 12
 endseg
 
 beginseg
     name "icon_item_dungeon_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_dungeon_static.o"
+    include "build/assets/interface/icon_item_dungeon_static/icon_item_dungeon_static.o"
+    number 12
 endseg
 
 beginseg
@@ -315,7 +317,8 @@ beginseg
     name "icon_item_jpn_static"
     compress
     romalign 0x1000
-    include "build/baserom/icon_item_jpn_static.o"
+    include "build/assets/interface/icon_item_jpn_static/icon_item_jpn_static.o"
+    number 13
 endseg
 
 beginseg
@@ -549,12 +552,10 @@ beginseg
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
-    include "build/data/code/code_801D0BB0.data.o"
     include "build/src/code/z_fbdemo.o"
     include "build/data/code/z_fbdemo.data.o"
     include "build/src/code/z_fbdemo_fade.o"
     include "build/src/code/z_fbdemo_circle.o"
-    include "build/data/code/z_fbdemo_circle.data.o"
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
     include "build/data/code/z_play.data.o"
@@ -1937,8 +1938,7 @@ beginseg
     name "ovl_Oceff_Storm"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Storm/z_oceff_storm.o"
-    include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.data.o"
-    include "build/data/ovl_Oceff_Storm/ovl_Oceff_Storm.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Storm/ovl_Oceff_Storm_reloc.o"
 endseg
 
 beginseg
@@ -3107,8 +3107,7 @@ beginseg
     name "ovl_Dm_Char08"
     compress
     include "build/src/overlays/actors/ovl_Dm_Char08/z_dm_char08.o"
-    include "build/data/ovl_Dm_Char08/ovl_Dm_Char08.data.o"
-    include "build/data/ovl_Dm_Char08/ovl_Dm_Char08.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Char08/ovl_Dm_Char08_reloc.o"
 endseg
 
 beginseg
@@ -4364,8 +4363,7 @@ beginseg
     name "ovl_En_Stone_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Stone_heishi/z_en_stone_heishi.o"
-    include "build/data/ovl_En_Stone_heishi/ovl_En_Stone_heishi.data.o"
-    include "build/data/ovl_En_Stone_heishi/ovl_En_Stone_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stone_heishi/ovl_En_Stone_heishi_reloc.o"
 endseg
 
 beginseg
@@ -4768,8 +4766,7 @@ beginseg
     name "ovl_En_Bombal"
     compress
     include "build/src/overlays/actors/ovl_En_Bombal/z_en_bombal.o"
-    include "build/data/ovl_En_Bombal/ovl_En_Bombal.data.o"
-    include "build/data/ovl_En_Bombal/ovl_En_Bombal.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bombal/ovl_En_Bombal_reloc.o"
 endseg
 
 beginseg
