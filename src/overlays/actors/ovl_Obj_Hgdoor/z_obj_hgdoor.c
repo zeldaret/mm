@@ -159,8 +159,10 @@ void ObjHgdoor_SetupStopCs(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
-    if (this->timer++ > 80 && !ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Stop(this->cutscene);
+    if (this->timer++ > 80) {
+        if (!ActorCutscene_GetCanPlayNext(this->cutscene)) {
+            ActorCutscene_Stop(this->cutscene);
+        }
     }
 }
 
