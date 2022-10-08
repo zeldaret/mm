@@ -18,7 +18,7 @@
 void Boss02_Init(Actor* thisx, PlayState* play);
 void Boss02_Destroy(Actor* thisx, PlayState* play);
 void Boss02_Twinmold_Update(Actor* thisx, PlayState* play);
-void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play);
+void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2);
 
 void func_809DAA74(Boss02* this, PlayState* play);
 void func_809DAA98(Boss02* this, PlayState* play);

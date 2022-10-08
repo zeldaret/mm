@@ -12,7 +12,7 @@
 
 #define THIS ((BgIkanaDharma*)thisx)
 
-void BgIkanaDharma_Init(Actor* thisx, PlayState* play);
+void BgIkanaDharma_Init(Actor* thisx, PlayState* play2);
 void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Draw(Actor* thisx, PlayState* play);
