@@ -67,7 +67,7 @@ void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32
     gDPPipeSync(gfx++);
     // Reset the color image and scissor to frame's defaults
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_801FBBCC, D_0F000000);
-    gSPDisplayList(gfx++, &D_0E000000.setScissor[0]);
+    gSPDisplayList(gfx++, D_0E000000.setScissor);
 
     *gfxP = gfx;
 }
@@ -162,12 +162,12 @@ void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
         _g->words.w1 = (unsigned int)(d);                                                      \
     })
 
-#define gDPSetLODColor(pkt, c, m, l, d)                                          \
-    _DW({                                                                        \
-        Gfx* _g = (Gfx*)(pkt);                                                   \
-                                                                                 \
-        _g->words.w0 = _SHIFTL(c, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
-        _g->words.w1 = (unsigned int)(d);                                        \
+#define gDPSetLODColor(pkt, c, m, l, d)                                            \
+    _DW({                                                                          \
+        Gfx* _g = (Gfx*)(pkt);                                                     \
+                                                                                   \
+        _g->words.w0 = (_SHIFTL(c, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8))); \
+        _g->words.w1 = (unsigned int)(d);                                          \
     })
 
 // internal, used in func_8014151C

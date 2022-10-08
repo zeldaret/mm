@@ -2602,8 +2602,8 @@ _DW({									\
         gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&ucode##TextStart),	\
 		            OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #define	gsSPLoadUcodeL(ucode)						\
-        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&##ucode##TextStart),		\
-		      OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&ucode##TextStart),		\
+		      OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #endif
 
 #ifdef	F3DEX_GBI_2
