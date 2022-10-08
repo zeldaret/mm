@@ -140,7 +140,7 @@ void Game_Update(GameState* gameState) {
 
     gameState->main(gameState);
 
-    if (R_PAUSE_MENU_MODE != 2) {
+    if (R_PAUSE_MENU_MODE != PAUSE_BG_PRERENDER_PROCESS) {
         GameState_Draw(gameState, gfxCtx);
         func_801736DC(gfxCtx);
     }
