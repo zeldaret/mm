@@ -269,7 +269,7 @@ s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
     return false;
 }
 
-s32 EnRz_PathStatus(EnRz* this) {
+EnRzPathStatus EnRz_PathStatus(EnRz* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
