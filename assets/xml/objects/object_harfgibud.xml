@@ -1,10 +1,13 @@
 ﻿<Root>
+    <!-- Object for the Pamela's father, both human and gibdo form-->
     <File Name="object_harfgibud" Segment="6">
-        <Animation Name="object_harfgibud_Anim_000370" Offset="0x370" />
-        <Animation Name="object_harfgibud_Anim_001138" Offset="0x1138" />
-        <Animation Name="object_harfgibud_Anim_0015D4" Offset="0x15D4" />
-        <Animation Name="object_harfgibud_Anim_001960" Offset="0x1960" />
-        <Animation Name="object_harfgibud_Anim_00260C" Offset="0x260C" />
+
+        <!-- Gibdo Form -->
+        <Animation Name="gHarfgibudLeanForwardAnim" Offset="0x370" />
+        <Animation Name="gHarfgibudReachForwardAnim" Offset="0x1138" />
+        <Animation Name="gHarfgibudCurlUpAnim" Offset="0x15D4" />
+        <Animation Name="gHarfgibudCrouchedPanicAnim" Offset="0x1960" />
+        <Animation Name="gHarfgibudIdleAnim" Offset="0x260C" />
 
         <DList Name="gHarfgibudGibdoPelvisDL" Offset="0x5790" />
         <DList Name="gHarfgibudGibdoRightFootDL" Offset="0x5878" />
@@ -58,11 +61,11 @@
         <Limb Name="gHarfgibudGibdoRightFootLimb" Type="Standard" EnumName="HARFGIBUD_GIBDO_LIMB_RIGHT_FOOT" Offset="0x852C" />
         <Skeleton Name="gHarfgibudGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="HARFGIBUD_GIBDO_LIMB_NONE" LimbMax="HARFGIBUD_GIBDO_LIMB_MAX" EnumName="HarfgibudGibdoLimb" Offset="0x8580" />
 
-        <Animation Name="object_harfgibud_Anim_009D44" Offset="0x9D44" />
-        <Animation Name="object_harfgibud_Anim_00A164" Offset="0xA164" />
-        <Animation Name="object_harfgibud_Anim_00AE1C" Offset="0xAE1C" />
+        <Animation Name="gHarfgibudLurchForwardAnim" Offset="0x9D44" />
+        <Animation Name="gHarfgibudRecoilFromHitAnim" Offset="0xA164" />
+        <Animation Name="gHarfgibudPanicAnim" Offset="0xAE1C" />
         <TextureAnimation Name="object_harfgibud_Matanimheader_00AE50" Offset="0xAE50" />
-        <Animation Name="object_harfgibud_Anim_00B644" Offset="0xB644" />
+        <Animation Name="gHarfgibudArmsFoldedAnim" Offset="0xB644" />
 
         <DList Name="gHarfgibudHumanPelvisDL" Offset="0xE860" />
         <DList Name="gHarfgibudHumanRightFootDL" Offset="0xE9E0" />

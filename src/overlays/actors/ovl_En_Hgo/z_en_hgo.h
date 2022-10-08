@@ -23,8 +23,8 @@ typedef struct EnHgo {
     /* 0x30E */ s16 unk_30E;
     /* 0x310 */ s16 unk_310;
     /* 0x312 */ s16 unk_312;
-    /* 0x314 */ u16 unk_314;
-    /* 0x316 */ u16 unk_316;
+    /* 0x314 */ u16 textId;
+    /* 0x316 */ u16 csAction;
 } EnHgo; // size = 0x318
 
 extern const ActorInit En_Hgo_InitVars;

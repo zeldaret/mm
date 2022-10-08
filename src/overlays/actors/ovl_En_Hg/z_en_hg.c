@@ -30,6 +30,22 @@ void func_80BCF95C(EnHg* this, PlayState* play);
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
+typedef enum {
+    /* 0x00 */ HG_ANIM_0,
+    /* 0x03 */ HG_ANIM_LEAN_FORWARD = 3,
+    /* 0x04 */ HG_ANIM_REACH_FORWARD,
+    /* 0x05 */ HG_ANIM_CURL_UP,
+    /* 0x06 */ HG_ANIM_CROUCHED_PANIC = 6,
+    /* 0x07 */ HG_ANIM_PANIC,
+} HgAnimation;
+
+typedef enum {
+    /* 0 */ HG_CS_FIRST_ENCOUNTER,
+    /* 1 */ HG_CS_GET_MASK,
+    /* 2 */ HG_CS_ALTERNATIVE_ENCOUNTER,
+    /* 3 */ HG_CS_SONG_OF_HEALING,
+} HgCsIndex;
+
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
@@ -102,14 +118,14 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_000370, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_harfgibud_Anim_001138, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_0015D4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_harfgibud_Anim_001960, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_00AE1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfgibudIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHarfgibudLurchForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHarfgibudRecoilFromHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHarfgibudLeanForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHarfgibudReachForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfgibudCurlUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHarfgibudCrouchedPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfgibudPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static u32 D_80BD00C8 = false;
@@ -120,7 +136,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &object_harfgibud_Anim_00260C, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &gHarfgibudIdleAnim, this->jointTable,
                        this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -175,7 +191,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -252,14 +268,14 @@ void func_80BCF88C(EnHg* this) {
 }
 
 void func_80BCF8A0(EnHg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->unk218])) {
-        ActorCutscene_Start(this->cutscenes[this->unk218], &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIdx])) {
+        ActorCutscene_Start(this->cutscenes[this->cutsceneIdx], &this->actor);
         func_80BCF93C(this);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscenes[this->unk218]);
+        ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIdx]);
     }
 }
 
@@ -282,21 +298,21 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
-                    this->animIndex = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    this->animIndex = HG_ANIM_LEAN_FORWARD;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LEAN_FORWARD);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
-                    this->animIndex = 5;
+                    this->animIndex = HG_ANIM_CURL_UP;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
-                    this->animIndex = 7;
-                    if ((this->unk218 == 1) || (this->unk218 == 3)) {
+                    this->animIndex = HG_ANIM_PANIC;
+                    if ((this->cutsceneIdx == HG_CS_GET_MASK) || (this->cutsceneIdx == HG_CS_SONG_OF_HEALING)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
                     break;
                 case 5:
                     this->animIndex = 1;
@@ -310,28 +326,28 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
         } else {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 switch (this->animIndex) {
-                    case 3:
-                        this->animIndex = 4;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                    case HG_ANIM_LEAN_FORWARD:
+                        this->animIndex = HG_ANIM_REACH_FORWARD;
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_REACH_FORWARD);
                         break;
-                    case 5:
-                        this->animIndex = 6;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+                    case HG_ANIM_CURL_UP:
+                        this->animIndex = HG_ANIM_CROUCHED_PANIC;
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CROUCHED_PANIC);
                         break;
                 }
             }
         }
         switch (this->animIndex) {
-            case 3:
-            case 4:
+            case HG_ANIM_LEAN_FORWARD:
+            case HG_ANIM_REACH_FORWARD:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
                 break;
-            case 5:
-            case 6:
+            case HG_ANIM_CURL_UP:
+            case HG_ANIM_CROUCHED_PANIC:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 break;
-            case 7:
-                if ((this->unk218 == 0) || (this->unk218 == 2)) {
+            case HG_ANIM_PANIC:
+                if ((this->cutsceneIdx == HG_CS_FIRST_ENCOUNTER) || (this->cutsceneIdx == HG_CS_ALTERNATIVE_ENCOUNTER)) {
                     func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
                 break;
@@ -348,7 +364,7 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
-        if (player->stateFlags2 & 0x08000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             if (!D_80BD00C8) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
@@ -360,9 +376,9 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
             if (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
                 gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
-                    this->unk218 = 3;
+                    this->cutsceneIdx = HG_CS_SONG_OF_HEALING;
                 } else {
-                    this->unk218 = 1;
+                    this->cutsceneIdx = HG_CS_GET_MASK;
                 }
                 func_80BCF88C(this);
             }
@@ -371,9 +387,9 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
                 if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
                     if (!(gSaveContext.save.weekEventReg[61] & 2)) {
                         gSaveContext.save.weekEventReg[61] |= 2;
-                        this->unk218 = 0;
+                        this->cutsceneIdx = HG_CS_FIRST_ENCOUNTER;
                     } else {
-                        this->unk218 = 2;
+                        this->cutsceneIdx = HG_CS_ALTERNATIVE_ENCOUNTER;
                     }
                     func_80BCF88C(this);
                     return;

@@ -40,7 +40,7 @@ const ActorInit En_Hgo_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gHarfgibudArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
@@ -82,7 +82,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudHumanSkel, &object_harfgibud_Anim_00B644, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudHumanSkel, &gHarfgibudArmsFoldedAnim, this->jointTable,
                        this->morphTable, HARFGIBUD_HUMAN_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -90,7 +90,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     thisx->targetMode = 6;
     this->unk_30C = 0;
     this->unk_30E = 0;
-    this->unk_314 = 0;
+    this->textId = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
     if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
@@ -137,29 +137,29 @@ void func_80BD04E0(EnHgo* this, PlayState* play) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
                 Message_StartTextbox(play, 0x15A5, &this->actor);
-                this->unk_314 = 0x15A5; // That mask is a gibdo
+                this->textId = 0x15A5; // That mask is a gibdo
 
             } else {
                 Message_StartTextbox(play, 0x15A7, &this->actor);
-                this->unk_314 = 0x15A7; // can I research that mask
+                this->textId = 0x15A7; // can I research that mask
             }
         } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
                 Message_StartTextbox(play, 0x158F, &this->actor);
-                this->unk_314 = 0x158F; // Isn't this a fairy
+                this->textId = 0x158F; // Isn't this a fairy
             } else {
                 Message_StartTextbox(play, 0x1593, &this->actor);
-                this->unk_314 = 0x1593; // Never seen a fairy this lively
+                this->textId = 0x1593; // Never seen a fairy this lively
             }
         } else {
             if (!(this->unk_310 & 2)) {
                 this->unk_310 |= 2;
                 Message_StartTextbox(play, 0x1595, &this->actor);
-                this->unk_314 = 0x1595; // ghost radar is reacting
+                this->textId = 0x1595; // ghost radar is reacting
             } else {
                 Message_StartTextbox(play, 0x1598, &this->actor);
-                this->unk_314 = 0x1598; // you seem to be similar to a ghost
+                this->textId = 0x1598; // you seem to be similar to a ghost
             }
         }
         EnHgo_SetupDialogueHandler(this);
@@ -198,47 +198,47 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
 
 void func_80BD06FC(EnHgo* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
-        switch (this->unk_314) {
+        switch (this->textId) {
             case 0x158F:
                 Message_StartTextbox(play, 0x1590, &this->actor);
-                this->unk_314 = 0x1590;
+                this->textId = 0x1590;
                 break;
             case 0x1590:
                 if (gSaveContext.save.weekEventReg[14] & 4) {
                     Message_StartTextbox(play, 0x1591, &this->actor);
-                    this->unk_314 = 0x1591;
+                    this->textId = 0x1591;
                     break;
                 }
                 Message_StartTextbox(play, 0x1592, &this->actor);
-                this->unk_314 = 0x1592;
+                this->textId = 0x1592;
                 break;
             case 0x1591:
                 Message_StartTextbox(play, 0x1592, &this->actor);
-                this->unk_314 = 0x1592;
+                this->textId = 0x1592;
                 break;
             case 0x1593:
                 Message_StartTextbox(play, 0x1594, &this->actor);
-                this->unk_314 = 0x1594;
+                this->textId = 0x1594;
                 break;
             case 0x1595:
                 Message_StartTextbox(play, 0x1596, &this->actor);
-                this->unk_314 = 0x1596;
+                this->textId = 0x1596;
                 break;
             case 0x1596:
                 Message_StartTextbox(play, 0x1597, &this->actor);
-                this->unk_314 = 0x1597;
+                this->textId = 0x1597;
                 break;
             case 0x1598:
                 Message_StartTextbox(play, 0x1599, &this->actor);
-                this->unk_314 = 0x1599;
+                this->textId = 0x1599;
                 break;
             case 0x15A5:
                 Message_StartTextbox(play, 0x15A6, &this->actor);
-                this->unk_314 = 0x15A6;
+                this->textId = 0x15A6;
                 break;
             case 0x15A6:
                 Message_StartTextbox(play, 0x15A7, &this->actor);
-                this->unk_314 = 0x15A7;
+                this->textId = 0x15A7;
                 break;
             case 0x15A7:
                 func_801477B4(play);
@@ -253,8 +253,8 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 486)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 486);
-        if (this->unk_316 != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_316 = play->csCtx.actorActions[actionIndex]->action;
+        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_218 = 0;
@@ -313,7 +313,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
                     this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);
         func_80BD0420(this);
     }
-    this->unk_316 = 0x63;
+    this->csAction = 0x63;
     return false;
 }
 
