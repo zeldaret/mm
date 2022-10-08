@@ -2562,11 +2562,11 @@ asm/non_matchings/code/z_play_hireso/func_8016C344.s,func_8016C344,0x8016C344,0x
 asm/non_matchings/code/z_play_hireso/func_8016CD4C.s,func_8016CD4C,0x8016CD4C,0x5B0
 asm/non_matchings/code/z_play_hireso/func_8016E40C.s,func_8016E40C,0x8016E40C,0x1A1
 asm/non_matchings/code/z_play_hireso/func_8016EA90.s,func_8016EA90,0x8016EA90,0x1C6
-asm/non_matchings/code/z_play_hireso/Hireso_Draw.s,Hireso_Draw,0x8016F1A8,0xD1
+asm/non_matchings/code/z_play_hireso/BombersNotebook_Draw.s,BombersNotebook_Draw,0x8016F1A8,0xD1
 asm/non_matchings/code/z_play_hireso/func_8016F4EC.s,func_8016F4EC,0x8016F4EC,0x2F
-asm/non_matchings/code/z_play_hireso/Hireso_Update.s,Hireso_Update,0x8016F5A8,0x1B4
-asm/non_matchings/code/z_play_hireso/Hireso_Init.s,Hireso_Init,0x8016FC78,0x8
-asm/non_matchings/code/z_play_hireso/Hireso_Destroy.s,Hireso_Destroy,0x8016FC98,0x16
+asm/non_matchings/code/z_play_hireso/BombersNotebook_Update.s,BombersNotebook_Update,0x8016F5A8,0x1B4
+asm/non_matchings/code/z_play_hireso/BombersNotebook_Init.s,BombersNotebook_Init,0x8016FC78,0x8
+asm/non_matchings/code/z_play_hireso/BombersNotebook_Destroy.s,BombersNotebook_Destroy,0x8016FC98,0x16
 asm/non_matchings/code/PreRender/PreRender_SetValuesSave.s,PreRender_SetValuesSave,0x8016FCF0,0xF
 asm/non_matchings/code/PreRender/PreRender_Init.s,PreRender_Init,0x8016FD2C,0xD
 asm/non_matchings/code/PreRender/PreRender_SetValues.s,PreRender_SetValues,0x8016FD60,0xD

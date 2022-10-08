@@ -1133,7 +1133,7 @@ typedef struct {
     /* 0xA0 */ char unk_A0[0x4];
     /* 0xA4 */ s32 unk_A4;
     /* 0xA8 */ s32 unk_A8;
-} HiresoStruct; // size = 0xAC
+} BombersNotebook; // size = 0xAC
 
 typedef enum {
     /* 0 */ PICTOGRAPH_PHOTO_STATE_OFF,

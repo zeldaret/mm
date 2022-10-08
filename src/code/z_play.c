@@ -21,7 +21,7 @@ VisMono sVisMono;
 Color_RGBA8_u32 gVisMonoColor;
 Struct_80140E80 D_801F6D38;
 Struct_80140E80* D_801F6D4C;
-HiresoStruct sHireso;
+BombersNotebook sBombersNotebook;
 u8 sBombersNotebookOpen;
 u8 sMotionBlurStatus;
 
@@ -355,7 +355,7 @@ void Play_Destroy(GameState* thisx) {
         sBombersNotebookOpen = false;
     }
 
-    Hireso_Destroy(&sHireso);
+    BombersNotebook_Destroy(&sBombersNotebook);
     this->state.gfxCtx->callback = NULL;
     this->state.gfxCtx->callbackParam = 0;
     Play_DestroyMotionBlur();
@@ -1017,14 +1017,14 @@ void Play_SetupUpdate(PlayState* this) {
     if (!sBombersNotebookOpen) {
         if (this->pauseCtx.bombersNotebookOpen) {
             sBombersNotebookOpen = true;
-            sHireso.unk_00 = 0;
+            sBombersNotebook.unk_00 = 0;
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
-        sHireso.unk_00 = 0;
+        sBombersNotebook.unk_00 = 0;
         this->msgCtx.msgLength = 0;
         this->msgCtx.msgMode = 0;
         this->msgCtx.currentTextId = 0;
@@ -1032,7 +1032,7 @@ void Play_SetupUpdate(PlayState* this) {
         play_sound(NA_SE_SY_CANCEL);
     }
     if (sBombersNotebookOpen) {
-        Hireso_Update(this, &sHireso, this->state.input);
+        BombersNotebook_Update(this, &sBombersNotebook, this->state.input);
         Message_Update(this);
     } else {
         Play_Update(this);
@@ -1319,7 +1319,8 @@ void Play_Draw(PlayState* this) {
         DebugDisplay_DrawObjects(this);
         Play_DrawMotionBlur(this);
 
-        if (((R_PAUSE_MENU_MODE == PAUSE_BG_PRERENDER_SETUP) || (gTrnsnUnkState == 1)) || (R_PICTOGRAPH_PHOTO_STATE == 1)) {
+        if (((R_PAUSE_MENU_MODE == PAUSE_BG_PRERENDER_SETUP) || (gTrnsnUnkState == 1)) ||
+            (R_PICTOGRAPH_PHOTO_STATE == 1)) {
             Gfx* sp74;
             Gfx* sp70 = POLY_OPA_DISP;
 
@@ -1416,7 +1417,7 @@ void Play_SetupDraw(PlayState* this) {
     }
 
     if (sBombersNotebookOpen && ((SREG(2) != 2) || (gZBufferPtr == NULL))) {
-        Hireso_Draw(&sHireso, gfxCtx);
+        BombersNotebook_Draw(&sBombersNotebook, gfxCtx);
         Message_Draw(this);
     } else {
         Play_Draw(this);
@@ -2269,8 +2270,8 @@ void Play_Init(GameState* thisx) {
     func_800EDBE0(this);
     gSaveContext.respawnFlag = 0;
     sBombersNotebookOpen = false;
-    Hireso_Init(&sHireso);
+    BombersNotebook_Init(&sBombersNotebook);
 }
 
-//! TODO: fake symbol, remove when Hireso_Update is matching
+//! TODO: fake symbol, remove when BombersNotebook_Update is matching
 u16 D_801D0D78[] = { 0, 0, 0, 0 };

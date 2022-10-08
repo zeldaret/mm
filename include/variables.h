@@ -3179,7 +3179,7 @@ extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
 extern Struct_80140E80 D_801F6D38;
 extern Struct_80140E80* D_801F6D4C;
-extern HiresoStruct sHireso;
+extern BombersNotebook sBombersNotebook;
 extern u8 sBombersNotebookOpen;
 extern u8 sMotionBlurStatus;
 extern SlowlyTask D_801F6E00;
