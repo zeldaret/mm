@@ -55,7 +55,7 @@ const ActorInit En_Rz_InitVars = {
     (ActorFunc)EnRz_Draw,
 };
 
-TexturePtr sEyeTextures[] = {
+TexturePtr sEnRzEyeTextures[] = {
     object_rz_Tex_00BC50, object_rz_Tex_00C190, object_rz_Tex_00C590, object_rz_Tex_00C990, object_rz_Tex_00CD90,
 };
 
@@ -94,7 +94,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnRz_ActorShadowFunc, 20.0f);
-    
+
     // @bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &object_rz_Anim_003A20,
                        (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
@@ -191,14 +191,14 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         &object_rz_Anim_00457C, &object_rz_Anim_003A20, &object_rz_Anim_005E50, &object_rz_Anim_003098,
         &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
     };
-
     static AnimationHeader* sMarillaAnimations[] = {
         &object_rz_Anim_003A20, &object_rz_Anim_003A20, &object_rz_Anim_005390, &object_rz_Anim_003098,
         &object_rz_Anim_00059C, &object_rz_Anim_000DE8, &object_rz_Anim_0028D4,
     };
-
-    static LinkAnimationHeader* sLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free,
-                                                      &gPlayerAnim_alink_dance_loop };
+    static LinkAnimationHeader* sLinkAnimations[] = {
+        &gPlayerAnim_link_normal_wait_free,
+        &gPlayerAnim_alink_dance_loop,
+    };
     f32 endFrame;
     AnimationHeader** animationPtr;
 
@@ -242,10 +242,10 @@ s32 func_80BFBA50(EnRz* this, PlayState* play) {
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
-            f32 temp_fv0 = points->x - this->actor.world.pos.x;
-            f32 temp_fv1 = points->z - this->actor.world.pos.z;
+            f32 diffX = points->x - this->actor.world.pos.x;
+            f32 diffY = points->z - this->actor.world.pos.z;
 
-            if ((SQ(temp_fv0) + SQ(temp_fv1)) < SQ(10.0f)) {
+            if ((SQ(diffX) + SQ(diffY)) < SQ(10.0f)) {
                 this->curPointIndex = 0;
                 this->stateFlags &= ~EN_RZ_STATE_1;
             } else {
@@ -684,11 +684,11 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->animIndex == EN_RZ_ANIM_4) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[4]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEnRzEyeTextures[4]));
     } else if (this->stateFlags & EN_RZ_STATE_2) {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[3]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEnRzEyeTextures[3]));
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEnRzEyeTextures[this->eyeIndex]));
     }
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
