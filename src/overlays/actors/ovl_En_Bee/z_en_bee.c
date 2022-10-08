@@ -120,25 +120,25 @@ void EnBee_Destroy(Actor* thisx, PlayState* play) {
 
 void EnBee_SetupFlyIdle(EnBee* this) {
     s32 pad;
-    Vec3f tmpPos;
+    Vec3f tempPos;
     s16 yawOffset;
 
     Animation_Change(&this->skelAnime, &gBeeFlyingAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gBeeFlyingAnim), 0, -10.0f);
-    Math_Vec3f_Copy(&tmpPos, &this->actor.home.pos);
+    Math_Vec3f_Copy(&tempPos, &this->actor.home.pos);
 
     yawOffset = (this->instanceId * 0x700) + 0x2000;
-    tmpPos.x += Math_SinS(yawOffset) * 50.0f;
-    tmpPos.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
-    tmpPos.z += Math_CosS(yawOffset) * 50.0f;
+    tempPos.x += Math_SinS(yawOffset) * 50.0f;
+    tempPos.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
+    tempPos.z += Math_CosS(yawOffset) * 50.0f;
 
-    Math_Vec3f_Copy(&this->targetPos[0], &tmpPos);
-    Math_Vec3f_Copy(&tmpPos, &this->actor.home.pos);
+    Math_Vec3f_Copy(&this->targetPos[0], &tempPos);
+    Math_Vec3f_Copy(&tempPos, &this->actor.home.pos);
 
-    tmpPos.x += Math_SinS(yawOffset - 0x4000) * 50.0f;
-    tmpPos.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
-    tmpPos.z += Math_CosS(yawOffset - 0x4000) * 50.0f;
+    tempPos.x += Math_SinS(yawOffset - 0x4000) * 50.0f;
+    tempPos.y = Rand_ZeroFloat(50.0f) + (this->actor.floorHeight + 30.0f);
+    tempPos.z += Math_CosS(yawOffset - 0x4000) * 50.0f;
 
-    Math_Vec3f_Copy(&this->targetPos[1], &tmpPos);
+    Math_Vec3f_Copy(&this->targetPos[1], &tempPos);
 
     this->attackDelayTimer = Rand_S16Offset(20, 30);
     this->isHostile = false;
@@ -189,7 +189,7 @@ void EnBee_SetupAttack(EnBee* this) {
 void EnBee_Attack(EnBee* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f nextPos;
-    f32 rnd;
+    f32 rand;
     f32 yawOffset;
     s32 i;
 
@@ -197,12 +197,12 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
     yawOffset = (this->instanceId * 0x700) + 0x2000;
 
     for (i = 0; i < 2; i++) {
-        rnd = randPlusMinusPoint5Scaled(20.0f);
-        nextPos.x += Math_SinS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rnd + 30.0f);
+        rand = randPlusMinusPoint5Scaled(20.0f);
+        nextPos.x += Math_SinS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rand + 30.0f);
         nextPos.y = (Math_SinS(this->flightHoverOffset) * 10.0f) + (player->actor.floorHeight + 40.0f);
-        rnd = randPlusMinusPoint5Scaled(20.0f);
+        rand = randPlusMinusPoint5Scaled(20.0f);
 
-        nextPos.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rnd + 30.0f);
+        nextPos.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rand + 30.0f);
         Math_Vec3f_Copy(&this->targetPos[i], &nextPos);
         yawOffset -= 0x4000;
     }
