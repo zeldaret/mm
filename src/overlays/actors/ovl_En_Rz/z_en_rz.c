@@ -619,9 +619,14 @@ void func_80BFC8F8(EnRz* this, PlayState* play) {
             func_80BFBA50(this, play);
             func_80BFC8AC(this, play);
             break;
+
         case 1:
             func_80BFC8AC(this, play);
             break;
+
+        default:
+            break;
+            
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
