@@ -861,10 +861,11 @@ void TitleCard_Draw(GameState* gameState, TitleCardContext* titleCtx) {
 
         OPEN_DISPS(gameState->gfxCtx);
 
-        height = (width * height > TMEM_SIZE) ? TMEM_SIZE / width : height;
-        spB4 = spB8 + (height * 4);
+        if (width * height > TMEM_SIZE) {
+            height = TMEM_SIZE / width;
+        }
 
-        if (1) {}
+        spB4 = spB8 + (height * 4);
 
         OVERLAY_DISP = func_8012C014(OVERLAY_DISP);
 
