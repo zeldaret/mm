@@ -1857,7 +1857,9 @@ void func_80169ECC(PlayState* this) {
     }
 }
 
-void Play_TriggerVoidOut(GameState* thisx) {
+// Gameplay_TriggerVoidOut ?
+// Used by Player, Ikana_Rotaryroom, Bji01, Kakasi, LiftNuts, Test4, Warptag, WarpUzu, Roomtimer
+void func_80169EFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.sceneFlags.switches[2];
@@ -1870,7 +1872,9 @@ void Play_TriggerVoidOut(GameState* thisx) {
     this->transitionType = TRANS_TYPE_FADE_BLACK;
 }
 
-void Play_LoadToLastEntrance(GameState* thisx) {
+// Gameplay_LoadToLastEntrance ?
+// Used by game_over and Test7
+void func_80169F78(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
     this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_TOP].entrance;
@@ -1880,8 +1884,10 @@ void Play_LoadToLastEntrance(GameState* thisx) {
     this->transitionType = TRANS_TYPE_FADE_BLACK;
 }
 
-void Play_TriggerRespawn(GameState* thisx) {
-    Play_LoadToLastEntrance(thisx);
+// Gameplay_TriggerRespawn ?
+// Used for void by Wallmaster, Deku Shrine doors. Also used by Player, Kaleido, DoorWarp1
+void func_80169FDC(GameState* thisx) {
+    func_80169F78(thisx);
 }
 
 // Used by Kankyo to determine how to change the lighting, e.g. for game over.

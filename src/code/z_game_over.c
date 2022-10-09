@@ -69,7 +69,7 @@ void GameOver_Update(PlayState* play) {
             break;
         case GAMEOVER_DEATH_FADE_OUT:
             if (Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
-                Play_LoadToLastEntrance(&play->state);
+                func_80169F78(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }

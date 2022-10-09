@@ -213,7 +213,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                     &newRespawnPos,
                     ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
 
-                Play_TriggerVoidOut(&play->state);
+                func_80169EFC(&play->state);
                 gSaveContext.respawnFlag = ~0x4;
                 Play_DisableMotionBlur();
             }

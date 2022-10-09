@@ -661,7 +661,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
     if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
-        Play_LoadToLastEntrance(&play->state);
+        func_80169F78(&play->state);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
             (gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams & 0xFF) | 0x600;
         gSaveContext.respawnFlag = -6;
