@@ -126,15 +126,15 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j += 2) {
                     pixel = srcRgba16[i * rgba16Width + j];
-                    r = (pixel >> 11) & 0x1F;
-                    g = (pixel >> 6) & 0x1F;
-                    b = (pixel >> 1) & 0x1F;
+                    r = RGBA16_GET_R(pixel);
+                    g = RGBA16_GET_G(pixel);
+                    b = RGBA16_GET_B(pixel);
                     upper = ((r * 2 + g * 4 + b) * 0xF) / 217;
 
                     pixel = srcRgba16[i * rgba16Width + j + 1];
-                    r = (pixel >> 11) & 0x1F;
-                    g = (pixel >> 6) & 0x1F;
-                    b = (pixel >> 1) & 0x1F;
+                    r = RGBA16_GET_R(pixel);
+                    g = RGBA16_GET_G(pixel);
+                    b = RGBA16_GET_B(pixel);
                     lower = ((r * 2 + g * 4 + b) * 0xF) / 217;
 
                     *(destI4++) = (upper << 4) | lower;
@@ -149,9 +149,9 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
                     pixel = srcRgba16[i * rgba16Width + j];
-                    r = (pixel >> 11) & 0x1F;
-                    g = (pixel >> 6) & 0x1F;
-                    b = (pixel >> 1) & 0x1F;
+                    r = RGBA16_GET_R(pixel);
+                    g = RGBA16_GET_G(pixel);
+                    b = RGBA16_GET_B(pixel);
 
                     pixel = 0;
 
@@ -168,9 +168,9 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
                 for (j = pixelLeft; j <= pixelRight; j++) {
                     pixel = srcRgba16[i * rgba16Width + j];
 
-                    r = (pixel >> 11) & 0x1F;
-                    g = (pixel >> 6) & 0x1F;
-                    b = (pixel >> 1) & 0x1F;
+                    r = RGBA16_GET_R(pixel);
+                    g = RGBA16_GET_G(pixel);
+                    b = RGBA16_GET_B(pixel);
 
                     *(destI8++) = ((r * 2 + g * 4 + b) * 0xFF) / 217;
                 }
