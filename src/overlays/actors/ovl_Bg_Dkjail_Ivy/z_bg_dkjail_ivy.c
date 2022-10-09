@@ -17,7 +17,7 @@ void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Update(Actor* thisx, PlayState* play);
 void BgDkjailIvy_Draw(Actor* thisx, PlayState* play);
 
-void BgDkjailIvy_SetupSetCollision(BgDkjailIvy* this);
+void BgDkjailIvy_SetupWaitForCut(BgDkjailIvy* this);
 void BgDkjailIvy_WaitForCut(BgDkjailIvy* this, PlayState* play);
 void BgDkjailIvy_SetupCutscene(BgDkjailIvy* this);
 void BgDkjailIvy_BeginCutscene(BgDkjailIvy* this, PlayState* play);
@@ -127,7 +127,7 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         this->alpha = 255;
-        BgDkjailIvy_SetupSetCollision(this);
+        BgDkjailIvy_SetupWaitForCut(this);
     }
 }
 
@@ -138,7 +138,7 @@ void BgDkjailIvy_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void BgDkjailIvy_SetupSetCollision(BgDkjailIvy* this) {
+void BgDkjailIvy_SetupWaitForCut(BgDkjailIvy* this) {
     this->actionFunc = BgDkjailIvy_WaitForCut;
 }
 

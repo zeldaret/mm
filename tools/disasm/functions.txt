@@ -12333,7 +12333,7 @@
     0x80ADE230:("BgDkjailIvy_IvyCutEffects",),
     0x80ADE5A4:("BgDkjailIvy_Init",),
     0x80ADE664:("BgDkjailIvy_Destroy",),
-    0x80ADE6AC:("BgDkjailIvy_SetupSetCollision",),
+    0x80ADE6AC:("BgDkjailIvy_SetupWaitForCut",),
     0x80ADE6C0:("BgDkjailIvy_WaitForCut",),
     0x80ADE734:("BgDkjailIvy_SetupCutscene",),
     0x80ADE748:("BgDkjailIvy_BeginCutscene",),
