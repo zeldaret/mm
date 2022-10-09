@@ -1924,7 +1924,7 @@ asm/non_matchings/code/code_8012EC80/Inventory_ChangeEquipment.s,Inventory_Chang
 asm/non_matchings/code/code_8012EC80/Inventory_DeleteEquipment.s,Inventory_DeleteEquipment,0x8012ED78,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_ChangeUpgrade.s,Inventory_ChangeUpgrade,0x8012EDE8,0x13
 asm/non_matchings/code/code_8012EC80/Inventory_IsMapVisible.s,Inventory_IsMapVisible,0x8012EE34,0x36
-asm/non_matchings/code/code_8012EC80/Inventory_SetMapVisibility.s,Inventory_SetMapVisibility,0x8012EF0C,0x78
+asm/non_matchings/code/code_8012EC80/Inventory_SetWorldMapCloudVisibility.s,Inventory_SetWorldMapCloudVisibility,0x8012EF0C,0x78
 asm/non_matchings/code/code_8012EC80/Inventory_SaveDekuPlaygroundHighScore.s,Inventory_SaveDekuPlaygroundHighScore,0x8012F0EC,0x34
 asm/non_matchings/code/code_8012EC80/Inventory_IncrementSkullTokenCount.s,Inventory_IncrementSkullTokenCount,0x8012F1BC,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_GetSkullTokenCount.s,Inventory_GetSkullTokenCount,0x8012F22C,0x13
@@ -1966,7 +1966,7 @@ asm/non_matchings/code/z_scene/Scene_HeaderCmdActorCutsceneList.s,Scene_HeaderCm
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMap.s,Scene_HeaderCmdMiniMap,0x80130540,0xE
 asm/non_matchings/code/z_scene/Scene_HeaderCmd1D.s,Scene_HeaderCmd1D,0x80130578,0x4
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMapCompassInfo.s,Scene_HeaderCmdMiniMapCompassInfo,0x80130588,0xA
-asm/non_matchings/code/z_scene/Scene_HeaderCmdSetAreaVisitedFlag.s,Scene_HeaderCmdSetAreaVisitedFlag,0x801305B0,0x31
+asm/non_matchings/code/z_scene/Scene_HeaderCmdSetRegionVisitedFlag.s,Scene_HeaderCmdSetRegionVisitedFlag,0x801305B0,0x31
 asm/non_matchings/code/z_scene/Scene_HeaderCmdAnimatedMaterials.s,Scene_HeaderCmdAnimatedMaterials,0x80130674,0xC
 asm/non_matchings/code/z_scene/Scene_SetExitFade.s,Scene_SetExitFade,0x801306A4,0x11
 asm/non_matchings/code/z_scene/Scene_ProcessHeader.s,Scene_ProcessHeader,0x801306E8,0x20
@@ -2394,7 +2394,7 @@ asm/non_matchings/code/z_message_nes/Message_LoadPluralRupeesNES.s,Message_LoadP
 asm/non_matchings/code/z_message_nes/Message_LoadLocalizedRupeesNES.s,Message_LoadLocalizedRupeesNES,0x80158C04,0x65
 asm/non_matchings/code/z_message_nes/Message_LoadRupeesNES.s,Message_LoadRupeesNES,0x80158D98,0x86
 asm/non_matchings/code/z_message_nes/Message_LoadTimeNES.s,Message_LoadTimeNES,0x80158FB0,0xAF
-asm/non_matchings/code/z_message_nes/Message_LoadAreaTextNES.s,Message_LoadAreaTextNES,0x8015926C,0x73
+asm/non_matchings/code/z_message_nes/Message_LoadOwlWarpTextNES.s,Message_LoadOwlWarpTextNES,0x8015926C,0x73
 asm/non_matchings/code/z_message_nes/func_80159438.s,func_80159438,0x80159438,0x8D
 asm/non_matchings/code/z_message_nes/func_8015966C.s,func_8015966C,0x8015966C,0x6CB
 asm/non_matchings/code/z_message_nes/func_8015B198.s,func_8015B198,0x8015B198,0xD6E

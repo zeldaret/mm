@@ -66,6 +66,19 @@ typedef enum {
 } QuestItem;
 
 typedef enum {
+    /* -1 */ DUNGEON_NONE = -1,
+    /*  0 */ DUNGEON_BOSS_KEY,
+    /*  1 */ DUNGEON_COMPASS,
+    /*  2 */ DUNGEON_MAP,
+    /*  3 */ DUNGEON_STRAY_FAIRIES,
+    /*  4 */ DUNGEON_FLOOR_INDEX_4, // Top Floor
+    /*  5 */ DUNGEON_FLOOR_INDEX_3,
+    /*  6 */ DUNGEON_FLOOR_INDEX_2,
+    /*  7 */ DUNGEON_FLOOR_INDEX_1,
+    /*  8 */ DUNGEON_FLOOR_INDEX_0 // Bottom Floor
+} DungeonItem;
+
+typedef enum {
     /* 0x00 */ SLOT_OCARINA,
     /* 0x01 */ SLOT_BOW,
     /* 0x02 */ SLOT_ARROW_FIRE,
@@ -550,6 +563,6 @@ typedef enum {
     /* 0x74 */ GID_PICTO_BOX,
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
     /* 0x76 */ GID_MAX
-} GetItemDrawID;
+} GetItemDrawId;
 
 #endif
