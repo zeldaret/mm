@@ -91,9 +91,9 @@ typedef enum {
     /* 17 */ TRANS_MODE_CS_BLACK_FILL
 } TransitionMode;
 
-#define TRANS_TYPE_WIPE4 (1 << 5)
-#define TRANS_TYPE_WIPE3 (1 << 6)
-#define TRANS_TYPE_SET_PARAMS (1 << 7)
+#define TRANS_TYPE_WIPE4 (1 << 6)
+#define TRANS_TYPE_WIPE3 (1 << 7)
+#define TRANS_TYPE_SET_PARAMS (1 << 8)
 
 typedef enum {
     /*  0 */ TRANS_TYPE_WIPE,

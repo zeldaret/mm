@@ -1067,12 +1067,19 @@ typedef struct {
 } BombersNotebook; // size = 0xAC
 
 typedef enum {
-    /* 0 */ PICTO_PRERENDER_OFF,
-    /* 1 */ PICTO_PRERENDER_SETUP,
-    /* 2 */ PICTO_PRERENDER_PROCESS,
-    /* 3 */ PICTO_PRERENDER_DONE,
-    /* 4 */ PICTO_PRERENDER_MAX
-} PictoPreRenderState;
+    /* 0 */ PICTOGRAPH_PHOTO_STATE_OFF,
+    /* 1 */ PICTOGRAPH_PHOTO_STATE_SETUP,
+    /* 2 */ PICTOGRAPH_PHOTO_STATE_PROCESS,
+    /* 3 */ PICTOGRAPH_PHOTO_STATE_DONE
+} PictographPhotoState;
+
+typedef enum {
+    /* 0 */ PAUSE_BG_PRERENDER_OFF,
+    /* 1 */ PAUSE_BG_PRERENDER_SETUP,
+    /* 2 */ PAUSE_BG_PRERENDER_PROCESS,
+    /* 3 */ PAUSE_BG_PRERENDER_DONE,
+    /* 4 */ PAUSE_BG_PRERENDER_MAX
+} PauseBgPreRenderState;
 
 // OoT's TransitionUnk
 typedef struct {
