@@ -66,6 +66,83 @@ typedef struct {
     /* 0x1F */ s8 unk_1F; // Set to 0 and never used
 } TransitionCircle; // size = 0x20
 
+#define TRANS_TRIGGER_OFF 0 // transition is not active
+#define TRANS_TRIGGER_START 20 // start transition (exiting an area)
+#define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
+
+typedef enum {
+    /*  0 */ TRANS_MODE_OFF,
+    /*  1 */ TRANS_MODE_SETUP,
+    /*  2 */ TRANS_MODE_INSTANCE_INIT,
+    /*  3 */ TRANS_MODE_INSTANCE_RUNNING,
+    /*  4 */ TRANS_MODE_FILL_WHITE_INIT,
+    /*  5 */ TRANS_MODE_FILL_IN,
+    /*  6 */ TRANS_MODE_FILL_OUT,
+    /*  7 */ TRANS_MODE_FILL_BROWN_INIT,
+    /*  8 */ TRANS_MODE_08, // unused
+    /*  9 */ TRANS_MODE_09, // unused
+    /* 10 */ TRANS_MODE_INSTANT,
+    /* 11 */ TRANS_MODE_INSTANCE_WAIT,
+    /* 12 */ TRANS_MODE_SANDSTORM_INIT,
+    /* 13 */ TRANS_MODE_SANDSTORM,
+    /* 14 */ TRANS_MODE_SANDSTORM_END_INIT,
+    /* 15 */ TRANS_MODE_SANDSTORM_END,
+    /* 16 */ TRANS_MODE_CS_BLACK_FILL_INIT,
+    /* 17 */ TRANS_MODE_CS_BLACK_FILL
+} TransitionMode;
+
+#define TRANS_TYPE_WIPE4 (1 << 6)
+#define TRANS_TYPE_WIPE3 (1 << 7)
+#define TRANS_TYPE_SET_PARAMS (1 << 8)
+
+typedef enum {
+    /*  0 */ TRANS_TYPE_WIPE,
+    /*  1 */ TRANS_TYPE_TRIFORCE,
+    /*  2 */ TRANS_TYPE_FADE_BLACK,
+    /*  3 */ TRANS_TYPE_FADE_WHITE,
+    /*  4 */ TRANS_TYPE_FADE_BLACK_FAST,
+    /*  5 */ TRANS_TYPE_FADE_WHITE_FAST,
+    /*  6 */ TRANS_TYPE_FADE_BLACK_SLOW,
+    /*  7 */ TRANS_TYPE_FADE_WHITE_SLOW,
+    /*  8 */ TRANS_TYPE_WIPE_FAST,
+    /*  9 */ TRANS_TYPE_FILL_WHITE_FAST,
+    /* 10 */ TRANS_TYPE_FILL_WHITE,
+    /* 11 */ TRANS_TYPE_INSTANT,
+    /* 12 */ TRANS_TYPE_FILL_BROWN,
+    /* 13 */ TRANS_TYPE_FADE_WHITE_CS_DELAYED,
+    /* 14 */ TRANS_TYPE_SANDSTORM_PERSIST,
+    /* 15 */ TRANS_TYPE_SANDSTORM_END,
+    /* 16 */ TRANS_TYPE_CS_BLACK_FILL,
+    /* 17 */ TRANS_TYPE_FADE_WHITE_INSTANT,
+    /* 18 */ TRANS_TYPE_FADE_GREEN,
+    /* 19 */ TRANS_TYPE_FADE_BLUE,
+    /* 20 */ TRANS_TYPE_FADE_DYNAMIC, // Chooses Black or White based on time of day
+    /* 21 */ TRANS_TYPE_CIRCLE,
+    /* 22 */ TRANS_TYPE_WIPE5,
+    // transition types 23 - 31 are unused
+    // transition types 32 - 39 are Wipe4 TODO needs macro
+    // transition types 40 - 63 are unused
+    // transition types 64 - 127 are Wipe3 TODO needs macro
+    /* 64 */ TRANS_TYPE_64 = 64,
+    /* 70 */ TRANS_TYPE_70 = 70,
+    /* 72 */ TRANS_TYPE_72 = 72,
+    /* 73 */ TRANS_TYPE_73,
+    /* 80 */ TRANS_TYPE_80 = 80,
+    /* 86 */ TRANS_TYPE_86 = 86
+} TransitionType;
+
+typedef enum {
+    /* 0 */ FBDEMO_FADE,
+    /* 1 */ FBDEMO_TRIFORCE,
+    /* 2 */ FBDEMO_WIPE1,
+    /* 3 */ FBDEMO_WIPE3,
+    /* 4 */ FBDEMO_WIPE4,
+    /* 5 */ FBDEMO_CIRCLE,
+    /* 6 */ FBDEMO_WIPE5
+} FbDemoType;
+
+#define TRANS_NEXT_TYPE_DEFAULT 0xFF
+
 typedef struct {
     /* 0x000 */ s16 transitionType;
     /* 0x002 */ s8 fbdemoType;

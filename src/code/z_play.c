@@ -239,11 +239,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
     bzero(transitionCtx, sizeof(TransitionContext));
 
     fbdemoType = -1;
-    if (transitionType & 0x40) {
+    if (transitionType & TRANS_TYPE_WIPE3) {
         fbdemoType = FBDEMO_WIPE3;
-    } else if ((transitionType & 0x78) == 0x20) {
+    } else if ((transitionType & 0x78) == TRANS_TYPE_WIPE4) { // Checks not only type, but also a max value of 39
         fbdemoType = FBDEMO_WIPE4;
-    } else if (!(transitionType & 0x60)) {
+    } else if (!(transitionType & (TRANS_TYPE_WIPE3 | TRANS_TYPE_WIPE4))) {
         switch (transitionType) {
             case TRANS_TYPE_TRIFORCE:
                 fbdemoType = FBDEMO_TRIFORCE;
@@ -593,9 +593,9 @@ void Play_UpdateTransition(PlayState* this) {
 
             this->transitionCtx.init(&this->transitionCtx.instanceData);
 
-            if (this->transitionCtx.transitionType & 0x60) {
+            if (this->transitionCtx.transitionType & (TRANS_TYPE_WIPE3 | TRANS_TYPE_WIPE4)) {
                 this->transitionCtx.setType(&this->transitionCtx.instanceData,
-                                            this->transitionCtx.transitionType | 0x80);
+                                            this->transitionCtx.transitionType | TRANS_TYPE_SET_PARAMS);
             }
 
             if ((this->transitionCtx.transitionType == TRANS_TYPE_WIPE_FAST) ||
