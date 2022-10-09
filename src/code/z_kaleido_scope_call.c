@@ -38,18 +38,18 @@ void KaleidoScopeCall_Update(PlayState* play) {
     if ((play->pauseCtx.state != 0) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
         if (pauseCtx->state == 1 || pauseCtx->state == 19) {
             if (ShrinkWindow_Letterbox_GetSize() == 0) {
-                R_PAUSE_MENU_MODE = PAUSE_BG_PRERENDER_SETUP;
+                R_PAUSE_MENU_MODE = PICTO_PRERENDER_SETUP;
                 pauseCtx->unk_200 = 0;
                 pauseCtx->unk_208 = 0;
                 pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
             }
         } else if (pauseCtx->state == 8) {
-            R_PAUSE_MENU_MODE = PAUSE_BG_PRERENDER_SETUP;
+            R_PAUSE_MENU_MODE = PICTO_PRERENDER_SETUP;
             pauseCtx->unk_200 = 0;
             pauseCtx->unk_208 = 0;
             pauseCtx->state = (pauseCtx->state & 0xFFFF) + 1;
         } else if ((pauseCtx->state == 2) || (pauseCtx->state == 9) || (pauseCtx->state == 20)) {
-            if (R_PAUSE_MENU_MODE == PAUSE_BG_PRERENDER_DONE) {
+            if (R_PAUSE_MENU_MODE == PICTO_PRERENDER_DONE) {
                 pauseCtx->state++;
             }
         } else if (pauseCtx->state != 0) {
@@ -76,7 +76,7 @@ void KaleidoScopeCall_Update(PlayState* play) {
 void KaleidoScopeCall_Draw(PlayState* play) {
     KaleidoMgrOverlay* kaleidoScopeOvl = &gKaleidoMgrOverlayTable[KALEIDO_OVL_KALEIDO_SCOPE];
 
-    if (R_PAUSE_MENU_MODE == PAUSE_BG_PRERENDER_DONE) {
+    if (R_PAUSE_MENU_MODE == PICTO_PRERENDER_DONE) {
         if (((play->pauseCtx.state >= 4) && (play->pauseCtx.state <= 7)) ||
             ((play->pauseCtx.state >= 11) && (play->pauseCtx.state <= 26))) {
             if (gKaleidoMgrCurOvl == kaleidoScopeOvl) {
