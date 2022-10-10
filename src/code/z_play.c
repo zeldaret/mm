@@ -1311,8 +1311,8 @@ void Play_Draw(PlayState* this) {
             Environment_DrawSandstorm(this, this->envCtx.sandstormState);
         }
 
-        if (this->unk_18876 != 0) {
-            Environment_FillScreen(gfxCtx, 0, 0, 0, this->unk_18876, 3);
+        if (this->worldCoverAlpha != 0) {
+            Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, 3);
         }
 
         DebugDisplay_DrawObjects(this);
@@ -2207,7 +2207,7 @@ void Play_Init(GameState* thisx) {
     this->state.destroy = Play_Destroy;
 
     this->transitionTrigger = TRANS_TRIGGER_END;
-    this->unk_18876 = 0;
+    this->worldCoverAlpha = 0;
     this->bgCoverAlpha = 0;
     this->haltAllActors = false;
     this->unk_18844 = false;
