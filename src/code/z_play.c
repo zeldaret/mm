@@ -875,7 +875,7 @@ void Play_UpdateTransition(PlayState* this) {
 
 // Stack issues
 #ifdef NON_MATCHING
-void Play_Update(PlayState* this) {
+void Play_UpdateGame(PlayState* this) {
     PlayState* this2 = this;
     u8 sp60;
     s32 sp5C = 0;
@@ -1012,10 +1012,10 @@ void Play_Update(PlayState* this) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_UpdateGame.s")
 #endif
 
-void Play_SetupUpdate(PlayState* this) {
+void Play_Update(PlayState* this) {
     if (!sBombersNotebookOpen) {
         if (this->pauseCtx.bombersNotebookOpen) {
             sBombersNotebookOpen = true;
@@ -1037,7 +1037,7 @@ void Play_SetupUpdate(PlayState* this) {
         BombersNotebook_Update(this, &sBombersNotebook, this->state.input);
         Message_Update(this);
     } else {
-        Play_Update(this);
+        Play_UpdateGame(this);
     }
 }
 
@@ -1084,7 +1084,7 @@ void Play_PostWorldDraw(PlayState* this) {
 }
 
 #ifdef NON_MATCHING
-void Play_Draw(PlayState* this) {
+void Play_DrawGame(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     Lights* sp268;
     Vec3f sp25C;
@@ -1379,10 +1379,10 @@ void Play_Draw(PlayState* this) {
     CLOSE_DISPS(this->state.gfxCtx);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Draw.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_DrawGame.s")
 #endif
 
-void Play_SetupDraw(PlayState* this) {
+void Play_Draw(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     {
@@ -1419,7 +1419,7 @@ void Play_SetupDraw(PlayState* this) {
         BombersNotebook_Draw(&sBombersNotebook, gfxCtx);
         Message_Draw(this);
     } else {
-        Play_Draw(this);
+        Play_DrawGame(this);
     }
 }
 
@@ -1436,7 +1436,7 @@ void Play_Main(GameState* thisx) {
         if (1) {
             this->state.gfxCtx = NULL;
         }
-        Play_SetupUpdate(this);
+        Play_Update(this);
         this->state.gfxCtx = gfxCtx;
     }
 
@@ -1446,7 +1446,7 @@ void Play_Main(GameState* thisx) {
         if (1) {
             *CONTROLLER1(&this->state) = D_801F6C18;
         }
-        Play_SetupDraw(this);
+        Play_Draw(this);
         *CONTROLLER1(&this->state) = input;
     }
 
