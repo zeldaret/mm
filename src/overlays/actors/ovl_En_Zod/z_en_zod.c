@@ -128,7 +128,8 @@ extern Vec3f D_80BB0580;
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Init.s")
 void EnZod_Init(Actor* thisx, PlayState* play) {
     s32 i;
-    EnZod* this = (EnZod*)thisx;
+    EnZod* this = THIS;
+
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = 0xFF;
     Actor_SetScale(&this->actor, 0.01f);
@@ -136,6 +137,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
                        &this->JointTable, 0xA);
     Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)(&D_06000D94));
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_80BB0540);
+
     this->unk25C[0] = this->unk25C[1] = this->unk25C[2] = 0;
     this->actor.gravity = this->actor.terminalVelocity = -4.0f;
     this->unk262[0] = this->unk262[1] = this->unk262[2] = 0x12C;
@@ -150,32 +152,33 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
         this->unk280[i] = 0.01;
     }
 
-    func_80BAF338(this, 3, 2U);
+    func_80BAF338(this, 3, 2);
     this->actionFunc = func_80BAF99C;
     switch (this->actor.params & 0xF) {
         case 1:
-            if ((gSaveContext.save.weekEventReg[0x4E] & 1)) {
+            if (gSaveContext.save.weekEventReg[0x4E] & 1) {
                 this->actionFunc = func_80BAFDB4;
                 func_80BAF338(this, 0, 2);
                 this->actor.flags |= 0x10;
                 ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
-                return;
+                break;
             }
+
             this->actionFunc = func_80BAFB84;
             if (!(gSaveContext.save.weekEventReg[0x37] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
-                return;
+                break;
             }
-            return;
+            break;
 
         case 2:
             this->actionFunc = func_80BAFF14;
             this->unk29A = -1;
             this->unk256 |= 2;
-            return;
+            break;
 
         default:
-            if ((gSaveContext.save.weekEventReg[0x37] & 0x80) != 0) {
+            if (gSaveContext.save.weekEventReg[0x37] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.flags |= 0x10;
@@ -643,58 +646,51 @@ void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
 
-//extern f32 D_80BB058C[];
-//extern f32 D_80BB05B4[];
-//extern f32 D_80BB05DC[];
-// extern u32 D_80BB0604[];
-
 void func_80BB01B0(EnZod* this, PlayState* play) {
-    f32 D_80BB058C[0xA] = {
-        0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f,
-    };
-    f32 D_80BB05B4[0xA] = {
-        0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f,
-    };
-    f32 D_80BB05DC[0xA] = {
-        0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f,
-    };
-    static u32 D_80BB0604[0xA] = {
-        0x0600A460, 0x0600A550, 0x0600A5E0, 0x0600A670, 0x0600A700,
-        0x0600A8F8, 0x0600AAF0, 0x0600ACE8, 0x0600AEE0, 0x0600B0D8,
-    };
-    f32 temp_fa0;
     s32 i;
+    f32 D_80BB058C[0xA] = { 0.0f,     -2690.0f, 2310.0f, 3888.0f, -4160.0f,
+                                   -2200.0f, -463.0f,  1397.0f, 3413.0f, 389.0f };
+    f32 D_80BB05B4[0xA] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
+    f32 D_80BB05DC[0xA] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
+    static Gfx* D_80BB0604[0xA] = { 0x0600A460, 0x0600A550, 0x0600A5E0, 0x0600A670, 0x0600A700,
+                            0x0600A8F8, 0x0600AAF0, 0x0600ACE8, 0x0600AEE0, 0x0600B0D8 };
+    f32 temp_fa0;
 
     OPEN_DISPS(play->state.gfxCtx);
-
+    
     for (i = 0; i < 10; i++) {
         Matrix_Push();
         Matrix_Translate(D_80BB058C[i], D_80BB05B4[i], D_80BB05DC[i], MTXMODE_APPLY);
-
         switch (i) {
             case 1:
+
             case 2:
+
             case 3:
                 // Matrix_RotateXS((this + (phi_s1 * 2))->unk25A, MTXMODE_APPLY);
-                Matrix_RotateXS(this->unk25A[i], MTXMODE_APPLY);
+                Matrix_RotateXS(this->unk25C[i - 1], MTXMODE_APPLY);
                 break;
+
             case 4:
+
             case 5:
+
             case 6:
+
             case 7:
+
             case 8:
+
             case 9:
                 // temp_fa0 = (this + -phi_s3)->unk28C + 1.0f;
-                temp_fa0 = this->unk280[3] + 1.0f;
+                temp_fa0 = this->unk268[9 - i] + 1.0f;
                 Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
                 break;
         }
-
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, &D_80BB0604);
-
+        // gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(__gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), (0x00 | 0x02) | 0x00);
+        gSPDisplayList(__gfxCtx->polyOpa.p++, D_80BB0604[i]);
         Matrix_Pop();
-
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
