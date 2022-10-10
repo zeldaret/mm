@@ -34,9 +34,6 @@ s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80BB01B0(EnZod* this, PlayState* play);
 
-#define DATAIMPORTED 1
-
-#if DATAIMPORTED
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
     ACTORCAT_NPC,
@@ -49,8 +46,7 @@ const ActorInit En_Zod_InitVars = {
     (ActorFunc)EnZod_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80BB0540 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -77,14 +73,6 @@ static AnimationHeader* D_80BB056C[] = {
 
 static Vec3f D_80BB0580 = { 1300.0f, 1100.0f, 0.0f };
 
-#else
-extern ColliderCylinderInit D_80BB0540;
-extern AnimationHeader* D_80BB056C[5];
-extern TexturePtr D_80BB062C[5];
-extern Vec3f D_80BB0580;
-#endif
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Init.s")
 void EnZod_Init(Actor* thisx, PlayState* play) {
     s32 i;
     EnZod* this = THIS;
@@ -95,7 +83,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zod_Skel_00D658, &object_zod_Anim_000D94, this->morphTable,
                        this->JointTable, OBJECT_ZOD_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_zod_Anim_000D94);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_80BB0540);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->unk25C[0] = this->unk25C[1] = this->unk25C[2] = 0;
     this->actor.gravity = this->actor.terminalVelocity = -4.0f;
@@ -146,41 +134,37 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Destroy.s")
-
 void EnZod_Destroy(Actor* thisx, PlayState* play) {
     EnZod* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF1EC.s")
-
 void func_80BAF1EC(EnZod* this, PlayState* play) {
-    u16 phi_a3;
+    u16 textId;
+
     if (gSaveContext.save.playerForm != 2) {
-        phi_a3 = 0x1227;
-        if ((gSaveContext.save.weekEventReg[0x20] & 8) != 0) {
-            phi_a3 = 0x1229;
+        textId = 0x1227;
+        if (gSaveContext.save.weekEventReg[0x20] & 8) {
+            textId = 0x1229;
         } else {
             gSaveContext.save.weekEventReg[0x20] |= 8;
         }
     } else if ((this->unk256 & 1) != 0) {
-        phi_a3 = 0x1225;
+        textId = 0x1225;
     } else {
-        phi_a3 = 0x1219;
+        textId = 0x1219;
         if ((gSaveContext.save.weekEventReg[0x20] & 0x10) != 0) {
-            phi_a3 = 0x1226;
+            textId = 0x1226;
         } else {
             gSaveContext.save.weekEventReg[0x20] |= 0x10;
         }
         this->unk256 |= 1;
     }
-    func_80BAF338(this, 0, 2);
-    Message_StartTextbox(play, phi_a3, &this->actor);
-}
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF2B4.s")
+    func_80BAF338(this, 0, 2);
+    Message_StartTextbox(play, textId, &this->actor);
+}
 
 s32 func_80BAF2B4(EnZod* this, PlayState* play) {
     if ((this->actor.playerHeightRel < 30.0f) && (this->actor.xzDistToPlayer < 200.0f) &&
@@ -189,8 +173,6 @@ s32 func_80BAF2B4(EnZod* this, PlayState* play) {
     }
     return false;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF338.s")
 
 void func_80BAF338(EnZod* this, s16 arg1, u8 mode) {
     if ((arg1 < 0) || (arg1 >= 5)) {
@@ -201,8 +183,6 @@ void func_80BAF338(EnZod* this, s16 arg1, u8 mode) {
     this->unk258 = arg1;
     this->unk25A = arg1;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF3E0.s")
 
 void func_80BAF3E0(EnZod* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -228,8 +208,6 @@ void func_80BAF3E0(EnZod* this) {
         SkelAnime_Update(&this->skelAnime);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF4D8.s")
 
 void func_80BAF4D8(EnZod* this) {
     s32 i;
@@ -309,8 +287,6 @@ void func_80BAF4D8(EnZod* this) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF7CC.s")
-
 void func_80BAF7CC(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
     switch (Message_GetState(&play->msgCtx)) {
@@ -369,8 +345,6 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF99C.s")
-
 void func_80BAF99C(EnZod* this, PlayState* play) {
     s32 pad;
     Vec3f sp20;
@@ -391,30 +365,27 @@ void func_80BAF99C(EnZod* this, PlayState* play) {
     func_801A1FB4(3, &sp20, 0x6D, 700.0f);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFA44.s")
-
 void func_80BAFA44(EnZod* this, PlayState* play) {
-    u16 phi_a3;
+    u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (gSaveContext.save.weekEventReg[0x4F] & 1) {
-            phi_a3 = 0x1253;
+            textId = 0x1253;
         } else {
-            phi_a3 = 0x1251;
+            textId = 0x1251;
             if (gSaveContext.save.weekEventReg[0x4E] & 0x20) {
-                phi_a3 = 0x1252;
+                textId = 0x1252;
             } else {
                 gSaveContext.save.weekEventReg[0x4E] |= 0x20;
             }
         }
     } else {
-        phi_a3 = 0x1250;
+        textId = 0x1250;
     }
-    func_80BAF338(this, 0, 2);
-    Message_StartTextbox(play, phi_a3, &this->actor);
-}
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFADC.s")
+    func_80BAF338(this, 0, 2);
+    Message_StartTextbox(play, textId, &this->actor);
+}
 
 void func_80BAFADC(EnZod* this, PlayState* play) {
     u8 msgState;
@@ -433,8 +404,6 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFB84.s")
-
 void func_80BAFB84(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
 
@@ -446,12 +415,8 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFC00.s")
-
 void func_80BAFC00(EnZod* this, PlayState* play) {
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFC10.s")
 
 void func_80BAFC10(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
@@ -472,8 +437,6 @@ void func_80BAFC10(EnZod* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFD00.s")
-
 void func_80BAFD00(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
     if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
@@ -488,8 +451,6 @@ void func_80BAFD00(EnZod* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFDB4.s")
-
 void func_80BAFDB4(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
@@ -501,8 +462,6 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFE34.s")
 
 void func_80BAFE34(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
@@ -525,8 +484,6 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFF14.s")
-
 void func_80BAFF14(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
     if (Cutscene_CheckActorAction(play, 0x203) &&
@@ -534,8 +491,6 @@ void func_80BAFF14(EnZod* this, PlayState* play) {
         this->actionFunc = func_80BAFE34;
     }
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Update.s")
 
 void EnZod_Update(Actor* thisx, PlayState* play) {
     EnZod* this = THIS;
@@ -584,8 +539,6 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB0128.s")
-
 s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZod* this = THIS;
 
@@ -596,23 +549,20 @@ s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB0170.s")
-
 void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 3) {
         Matrix_MultVec3f(&D_80BB0580, &thisx->focus.pos);
     }
 }
 
-#if DATAIMPORTED
-
 void func_80BB01B0(EnZod* this, PlayState* play) {
     s32 i;
-    static Gfx* D_80BB0604[0xA] = { 0x0600A460, 0x0600A550, 0x0600A5E0, 0x0600A670, 0x0600A700,
-                                    0x0600A8F8, 0x0600AAF0, 0x0600ACE8, 0x0600AEE0, 0x0600B0D8 };
-    f32 D_80BB058C[0xA] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
-    f32 D_80BB05B4[0xA] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
-    f32 D_80BB05DC[0xA] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
+    static Gfx* D_80BB0604[] = { object_zod_DL_00A460, object_zod_DL_00A550, object_zod_DL_00A5E0, object_zod_DL_00A670,
+                                 object_zod_DL_00A700, object_zod_DL_00A8F8, object_zod_DL_00AAF0, object_zod_DL_00ACE8,
+                                 object_zod_DL_00AEE0, object_zod_DL_00B0D8 };
+    f32 D_80BB058C[] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
+    f32 D_80BB05B4[] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
+    f32 D_80BB05DC[] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
     f32 temp_fa0;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -646,17 +596,8 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#else
-extern Gfx* D_80BB0604[0xA];
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
-#endif
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Draw.s")
-#if DATAIMPORTED
-static TexturePtr D_80BB062C[5] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50, NULL, NULL };
-#else
-extern TexturePtr D_80BB062C[5];
-#endif
+static TexturePtr D_80BB062C[5] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50, NULL,
+                                    NULL };
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
     EnZod* this = THIS;
