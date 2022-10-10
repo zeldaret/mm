@@ -1,110 +1,98 @@
-/*
- * File: z_bg_tobira01.c
- * Overlay: ovl_Bg_Tobira01
- * Description: Gate to Goron Shrine
- */
-
 #include "z_bg_tobira01.h"
 #include "objects/object_spot11_obj/object_spot11_obj.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS 0x00000030
 
 #define THIS ((BgTobira01*)thisx)
 
-void BgTobira01_Init(Actor* thisx, PlayState* play);
-void BgTobira01_Destroy(Actor* thisx, PlayState* play);
-void BgTobira01_Update(Actor* thisx, PlayState* play);
+void BgTobira01_Init(Actor* thisx, PlayState* play2);
+void BgTobira01_Destroy(Actor* thisx, PlayState* play2);
+void BgTobira01_Update(Actor* thisx, PlayState* play2);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Tobira01_InitVars = {
-    ACTOR_BG_TOBIRA01,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SPOT11_OBJ,
-    sizeof(BgTobira01),
-    (ActorFunc)BgTobira01_Init,
-    (ActorFunc)BgTobira01_Destroy,
-    (ActorFunc)BgTobira01_Update,
-    (ActorFunc)BgTobira01_Draw,
-};
+void func_80B12430(BgTobira01* this, PlayState* play);
 
-void BgTobira01_Open(BgTobira01* this, PlayState* play) {
+ActorInit Bg_Tobira01_InitVars = { ACTOR_BG_TOBIRA01,
+                                   ACTORCAT_PROP,
+                                   FLAGS,
+                                   OBJECT_SPOT11_OBJ,
+                                   sizeof(BgTobira01),
+                                   (ActorFunc)BgTobira01_Init,
+                                   (ActorFunc)BgTobira01_Destroy,
+                                   (ActorFunc)BgTobira01_Update,
+                                   (ActorFunc)BgTobira01_Draw };
+
+void func_80B12430(BgTobira01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 cutsceneId = this->dyna.actor.cutscene;
-    s16 prevTimer;
+    s16 sp1A = this->dyna.actor.cutscene;
+    s16 temp_v0;
 
-    if (this->playCutscene) {
+    if (this->unk_168) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
-        } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
-            ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
+        } else if (ActorCutscene_GetCanPlayNext(sp1A)) {
+            ActorCutscene_StartAndSetUnkLinkFields(sp1A, &this->dyna.actor);
             gSaveContext.save.weekEventReg[88] |= 0x40;
-            this->playCutscene = false;
+            this->unk_168 = false;
         } else {
-            ActorCutscene_SetIntentToPlay(cutsceneId);
+            ActorCutscene_SetIntentToPlay(sp1A);
         }
-    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
+
+    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->unk_160 == 0) && (play->actorCtx.unk1F5 != 0) &&
                (play->actorCtx.unk1F4 == 0) &&
                (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
-        this->playCutscene = true;
-        this->unk_16C = 0; // this variable is not used anywhere else
+        this->unk_168 = true;
+        this->unk_16C = 0;
     }
-
-    prevTimer = this->timer;
-
+    temp_v0 = this->unk_160;
     if (gSaveContext.save.weekEventReg[88] & 0x40) {
-        this->timer++;
+        this->unk_160++;
     } else {
-        this->timer--;
-    };
-
-    this->timer = CLAMP(this->timer, 0, 60);
-
-    if (this->timer != prevTimer) {
-        if (1) {}
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
-        this->dyna.actor.world.pos.y = (this->yOffset = (this->timer * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y);
-        this->timer2 = 180;
+        this->unk_160--;
     }
-
-    if (!(player->stateFlags1 & 0x40) && (gSaveContext.save.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
-        gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
+    this->unk_160 = CLAMP(this->unk_160, 0, 60);
+    if (temp_v0 != this->unk_160) {
+        Actor_PlaySfxAtPos(&this->dyna.actor, 0x2143);
+        this->dyna.actor.world.pos.y = this->unk_164 = (this->unk_160 * 1.6666666f) + this->dyna.actor.home.pos.y;
+        this->unk_162 = 0xB4;
+    }
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && (gSaveContext.save.weekEventReg[88] & 0x40) &&
+        (DECR(this->unk_162) == 0)) {
+        gSaveContext.save.weekEventReg[88] &= 0xBF;
     }
 }
 
-void BgTobira01_Init(Actor* thisx, PlayState* play) {
-    BgTobira01* this = THIS;
-    s32 pad;
+void BgTobira01_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgTobira01* this = (BgTobira01*)thisx;
 
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
-    gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
+    gSaveContext.save.weekEventReg[88] &= 0xBF;
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->timer2 = gSaveContext.save.isNight;
-    this->timer = 0;
-    this->actionFunc = BgTobira01_Open;
+    this->unk_162 = gSaveContext.save.isNight;
+    this->unk_160 = 0;
+    this->actionFunc = func_80B12430;
 }
 
-void BgTobira01_Destroy(Actor* thisx, PlayState* play) {
-    BgTobira01* this = THIS;
-    s32 pad;
+void BgTobira01_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgTobira01* this = (BgTobira01*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void BgTobira01_Update(Actor* thisx, PlayState* play) {
-    BgTobira01* this = THIS;
-    s32 pad;
+void BgTobira01_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgTobira01* this = (BgTobira01*)thisx;
 
     this->actionFunc(this, play);
 }
 
 void BgTobira01_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-
     func_8012C28C(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
     gSPDisplayList(POLY_OPA_DISP++, object_spot11_obj_DL_000088);
-
     CLOSE_DISPS(play->state.gfxCtx);
 }
