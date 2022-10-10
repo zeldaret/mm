@@ -2,10 +2,16 @@
 #define Z_EN_INVADEPOH_H
 
 #include "global.h"
+#include "assets/objects/object_uch/object_uch.h"
+#include "assets/objects/object_ma1/object_ma1.h"
+#include "assets/objects/object_ma2/object_ma2.h"
+#include "assets/objects/object_cow/object_cow.h"
+#include "assets/objects/object_dog/object_dog.h"
 
 struct EnInvadepoh;
 
 typedef void (*EnInvadepohActionFunc)(struct EnInvadepoh* this, PlayState* play);
+typedef void (*EnInvadepohMainFunc)(Actor* thisx, PlayState* play); // PlayState, not GameState
 
 typedef struct {
     f32 unk0;
@@ -14,61 +20,51 @@ typedef struct {
 } EnInvadepohUnkStruct1;
 
 typedef struct {
-    s8* unk0;
-    s8 unk4;
-} EnInvadepohUnkStruct2;
-
-typedef struct {
-    s8 unk0;
-    EnInvadepohUnkStruct2* unk4;
-} EnInvadepohUnkStruct3;
-
-typedef struct {
-    s8 unk0;
-    f32 unk4;
-} EnInvadepohUnkStruct4;
-
-typedef struct {
-    s8 unk0;
-    EnInvadepohUnkStruct2* unk4;
-    s8 unk8;
-    EnInvadepohUnkStruct4* unkC;
-} EnInvadepohUnkStruct5;
-
-typedef struct {
-    s8 unk0;
-    EnInvadepohUnkStruct2* unk4;
-    s8 unk8;
-    EnInvadepohUnkStruct4* unkC;
-    s16 unk10;
-    s16 unk12;
-} EnInvadepohUnkStruct6;
-
-typedef union {
-    EnInvadepohUnkStruct3 unk3;
-    EnInvadepohUnkStruct5 unk5;
-    EnInvadepohUnkStruct6 unk6;
-} EnInvadepohUnkUnion;
-
-typedef struct {
     s8 unk_0;
-    s8 unk_1;
-    u8 unk_2;
-    Vec3f unk_4;
-} EnInvadepohStructD_80B50350;
+    s8 timer;
+    u8 alpha;
+    Vec3f pos;
+} EnInvadepohWarpEffect;
 
 typedef struct {
-    EnInvadepohUnkUnion** unk_0;
-    s8 unk_4;
-    EnInvadepohUnkUnion* unk_8;
-    s16 unk_C;
-    s8 unk_E;
-    s8 unk_F;
-} EnInvadePohUnkStruct_324_1;
+    s8* index;
+    s8 count;
+} EnInvadepohFaceFrame;
 
 typedef struct {
-    EnInvadePohUnkStruct_324_1 unk_00;
-    EnInvadePohUnkStruct_324_1 unk_10;
+    s8 type;
+    EnInvadepohFaceFrame* frames;
+} EnInvadepohFaceAnim;
+
+typedef struct {
+    s8 index;
+    f32 chance;
+} EnInvadepohFaceAnimNext;
+
+typedef struct {
+    EnInvadepohFaceAnim anim;
+    s8 nextCount;
+    EnInvadepohFaceAnimNext* nextAnims;
+} EnInvadepohFaceAnimLoop;
+
+typedef struct {
+    EnInvadepohFaceAnimLoop loop;
+    s16 minDelay;
+    s16 maxDelay;
+} EnInvadepohFaceAnimLoopDelayed;
+
+typedef struct {
+    EnInvadepohFaceAnim** animSet;
+    s8 curAnimType;
+    EnInvadepohFaceAnim* curAnim;
+    s16 delayTimer;
+    s8 curFrame;
+    s8 curIndex;
+} EnInvadePohFaceInfo;
+
+typedef struct {
+    EnInvadePohFaceInfo eyeAnim;
+    EnInvadePohFaceInfo mouthAnim;
     Vec3s unk_20;
     Vec3s unk_26;
     s16 unk_2C;
@@ -82,13 +78,16 @@ typedef struct {
     s16 unk_48;
 } EnInvadePohUnkStruct_324;
 
-typedef void (*EnInvadepohUnkFunc) (EnInvadePohUnkStruct_324_1*, EnInvadepohUnkUnion**);
+typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceInfo*, EnInvadepohFaceAnim**);
+
+#define EN_INVADEPOH_LIMB_MAX 23
+// #define EN_INVADEPOH_LIMB_MAX MAX(MAX(MAX(MAX(MAX(ALIEN_LIMB_MAX, ROMANI_LIMB_MAX), CREMIA_LIMB_MAX), DOG_LIMB_MAX), COW_LIMB_MAX), COW_TAIL_LIMB_MAX)
 
 typedef struct EnInvadepoh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s unk_188[23];
-    /* 0x212 */ Vec3s unk_212[23];
+    /* 0x188 */ Vec3s unk_188[EN_INVADEPOH_LIMB_MAX];
+    /* 0x212 */ Vec3s unk_212[EN_INVADEPOH_LIMB_MAX];
     /* 0x29C */ s8 unk_29C;
     /* 0x2A0 */ ColliderCylinder unk_2A0;
     /* 0x2EC */ EnInvadepohActionFunc actionFunc;
@@ -132,6 +131,30 @@ typedef struct EnInvadepoh {
     /* 0x3B0 */ char pad3B0[0xC]; // unused? Vec3f?
     /* 0x3BC */ s8 unk_3BC;
 } EnInvadepoh; // size = 0x3C0
+
+typedef enum {
+    ENINVADEPOH_HANDLER,         // Invasion event handler   
+    ENINVADEPOH_ALIEN_INVADER,   // Alien invader
+    ENINVADEPOH_COW,             // Abudcted cow, spawned by unused alien abductor   
+    ENINVADEPOH_COW_TAIL,        // Abducted cow tail, spawned by abducted cow   
+    ENINVADEPOH_ROMANI_ABDUCTED, // Abducted Romani, spawned by unused alien abductor       
+    ENINVADEPOH_ROMANI_CONFUSED, // Returned, confused Romani   
+    ENINVADEPOH_LIGHT_BALL,      // Light ball spaceship   
+    ENINVADEPOH_ROMANI_NIGHT_1,  // Romani running to barn on night 1
+    ENINVADEPOH_ROMANI_UNKNOWN,  // Unknown, possible duplicate of previous
+    ENINVADEPOH_ROMANI_REWARD,   // Romani rewarding you for defeating invasion
+    ENINVADEPOH_DOG,             // Dog during alien invasion   
+    ENINVADEPOH_CREMIA_NIGHT_3,  // Cremia walking from barn to house on night 3
+    ENINVADEPOH_ROMANI_NIGHT_3,  // Romnani walking from barn to house on night 3
+    ENINVADEPOH_ALIEN_ABDUCTOR,  // Alien abductor, unused, carries cow or Romani
+} EnInvadepohParamsTypes;
+
+#define ENINVADEPOH_GET_PARAM_7(thisx) ((thisx)->params & 7)
+#define ENINVADEPOH_GET_PARAM_F0(thisx) ((thisx)->params >> 4 & 0xF)
+#define ENINVADEPOH_GET_PARAM_7F00(thisx) ((thisx)->params >> 8 & 0x7F)
+
+#define ENINVADEPOH_SET_PARAMS(p7F00, pF0, p7) (((p7) & 7) | (((p7F00) << 8) & 0x7F00) | (((pF0) << 4) & 0xF0))
+
 
 extern ActorInit En_Invadepoh_InitVars;
 
