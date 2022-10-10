@@ -25,11 +25,7 @@ typedef struct EnZod {
     s16 unk258;
     s16 unk25A;
     s16 unk25C[3];
-    //s16 unk25E;
-    //s16 unk260;
     s16 unk262[3];
-    //s16 unk264;
-    //s16 unk266;
     f32 unk268[6];
     f32 unk280[6];
     s16 unk298;
