@@ -34,7 +34,9 @@ s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 void func_80BB01B0(EnZod* this, PlayState* play);
 
-#if 0
+#define DATAIMPORTED 1
+
+#if DATAIMPORTED
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
     ACTORCAT_NPC,
@@ -49,81 +51,38 @@ const ActorInit En_Zod_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BB0540 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_ENEMY, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_ENEMY,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 60, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader *D_80BB056C[5] = {
-    (AnimationHeader *)0x060002E8,
-    (AnimationHeader *)0x06000894,
-    (AnimationHeader *)0x06000A9C,
-    (AnimationHeader *)0x06000D94,
-    (AnimationHeader *)0x0600D9B0,
+static AnimationHeader* D_80BB056C[] = {
+    &object_zod_Anim_0002E8, &object_zod_Anim_000894, &object_zod_Anim_000A9C,
+    &object_zod_Anim_000D94, &object_zod_Anim_00D9B0,
 };
-
-static void *D_80BB062C[5] = { (void *)0x06005E50, (void *)0x06006650, (void *)0x06006E50, NULL, NULL };
 
 static Vec3f D_80BB0580 = { 1300.0f, 1100.0f, 0.0f };
 
-static f32 D_80BB058C[0xA] = {
-    0.0f,
-    -2690.0f,
-    2310.0f,
-    3888.0f,
-    -4160.0f,
-    -2200.0f,
-    -463.0f,
-    1397.0f,
-    3413.0f,
-    389.0f,
-};
-static f32 D_80BB05B4[0xA] = {
-    0.0f,
-    6335.0f,
-    6703.0f,
-    5735.0f,
-    3098.0f,
-    3349.0f,
-    3748.0f,
-    3718.0f,
-    2980.0f,
-    1530.0f,
-};
-static f32 D_80BB05DC[0xA] = {
-    0.0f,
-    4350.0f,
-    3200.0f,
-    1555.0f,
-    2874.0f,
-    3901.0f,
-    4722.0f,
-    4344.0f,
-    3200.0f,
-    3373.0f,
-};
-static u32 D_80BB0604[0xA] = {
-    0x0600A460,
-    0x0600A550,
-    0x0600A5E0,
-    0x0600A670,
-    0x0600A700,
-    0x0600A8F8,
-    0x0600AAF0,
-    0x0600ACE8,
-    0x0600AEE0,
-    0x0600B0D8,
-};
-
-#endif
-
+#else
 extern ColliderCylinderInit D_80BB0540;
-extern FlexSkeletonHeader D_0600D658;
 extern AnimationHeader* D_80BB056C[5];
 extern TexturePtr D_80BB062C[5];
-extern UNK_TYPE D_06000D94;
-extern TexturePtr D_06007650;
 extern Vec3f D_80BB0580;
+#endif
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Init.s")
 void EnZod_Init(Actor* thisx, PlayState* play) {
@@ -131,11 +90,11 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     EnZod* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_0600D658, (AnimationHeader*)(&D_06000D94), &this->morphTable,
-                       &this->JointTable, 0xA);
-    Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)(&D_06000D94));
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_zod_Skel_00D658, &object_zod_Anim_000D94, this->morphTable,
+                       this->JointTable, OBJECT_ZOD_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &object_zod_Anim_000D94);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_80BB0540);
 
     this->unk25C[0] = this->unk25C[1] = this->unk25C[2] = 0;
@@ -645,47 +604,40 @@ void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
+#if DATAIMPORTED
 
 void func_80BB01B0(EnZod* this, PlayState* play) {
     s32 i;
-    f32 D_80BB058C[0xA] = { 0.0f,     -2690.0f, 2310.0f, 3888.0f, -4160.0f,
-                                   -2200.0f, -463.0f,  1397.0f, 3413.0f, 389.0f };
+    static Gfx* D_80BB0604[0xA] = { 0x0600A460, 0x0600A550, 0x0600A5E0, 0x0600A670, 0x0600A700,
+                                    0x0600A8F8, 0x0600AAF0, 0x0600ACE8, 0x0600AEE0, 0x0600B0D8 };
+    f32 D_80BB058C[0xA] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
     f32 D_80BB05B4[0xA] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
     f32 D_80BB05DC[0xA] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
-    static Gfx* D_80BB0604[0xA] = { 0x0600A460, 0x0600A550, 0x0600A5E0, 0x0600A670, 0x0600A700,
-                            0x0600A8F8, 0x0600AAF0, 0x0600ACE8, 0x0600AEE0, 0x0600B0D8 };
     f32 temp_fa0;
 
     OPEN_DISPS(play->state.gfxCtx);
-    
+
     for (i = 0; i < 10; i++) {
         Matrix_Push();
         Matrix_Translate(D_80BB058C[i], D_80BB05B4[i], D_80BB05DC[i], MTXMODE_APPLY);
         switch (i) {
             case 1:
-
             case 2:
-
             case 3:
                 Matrix_RotateXS(this->unk25C[i - 1], MTXMODE_APPLY);
                 break;
 
             case 4:
-
             case 5:
-
             case 6:
-
             case 7:
-
             case 8:
-
             case 9:
                 temp_fa0 = this->unk268[9 - i] + 1.0f;
                 Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
                 break;
         }
+
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_80BB0604[i]);
         Matrix_Pop();
@@ -694,7 +646,17 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+#else
+extern Gfx* D_80BB0604[0xA];
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
+#endif
+
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Draw.s")
+#if DATAIMPORTED
+static TexturePtr D_80BB062C[5] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50, NULL, NULL };
+#else
+extern TexturePtr D_80BB062C[5];
+#endif
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
     EnZod* this = THIS;
@@ -711,7 +673,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
     gfxP = POLY_OPA_DISP;
 
     gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(D_80BB062C[this->unk24C]));
-    gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&D_06007650));
+    gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&object_zod_Tex_007650));
 
     POLY_OPA_DISP = gfxP + 2;
 
