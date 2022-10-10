@@ -154,6 +154,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
 
     func_80BAF338(this, 3, 2);
     this->actionFunc = func_80BAF99C;
+
     switch (this->actor.params & 0xF) {
         case 1:
             if (gSaveContext.save.weekEventReg[0x4E] & 1) {
@@ -355,15 +356,15 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
     switch (Message_GetState(&play->msgCtx)) {
         case 4:
-            if ((Message_ShouldAdvance(play) != 0) && (play->msgCtx.currentTextId == 0x121F)) {
+            if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x121F)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1220U);
+                        func_80151938(play, 0x1220);
                         return;
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1223U);
+                        func_80151938(play, 0x1223);
                         return;
                 }
             } else {
@@ -371,7 +372,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
             }
             break;
         case 5:
-            if (Message_ShouldAdvance(play) != 0) {
+            if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x121A:
                     case 0x121B:
@@ -395,7 +396,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                         return;
                     case 0x121E:
                     case 0x1226:
-                        func_80151938(play, 0x121FU);
+                        func_80151938(play, 0x121F);
                         this->unk25A = 1;
                         return;
                     default:
@@ -501,8 +502,8 @@ void func_80BAFC10(EnZod* this, PlayState* play) {
         if (this->actor.cutscene == -1) {
             this->actionFunc = func_80BAFC00;
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
-            play->transitionType = 5;
-            play->transitionTrigger = 0x14;
+            play->transitionType = TRANS_TYPE_05;
+            play->transitionTrigger = TRANS_TRIGGER_START;
             gSaveContext.save.weekEventReg[0x4E] &= 0xFE;
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -555,7 +556,7 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
         this->unk29A = 0x3E7;
     }
     if (Cutscene_CheckActorAction(play, 0x203U) != 0) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203U)]->action == 1) {
+        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 1) {
             this->actionFunc = func_80BAFF14;
             this->unk29A = -1;
         }
@@ -667,7 +668,6 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
             case 2:
 
             case 3:
-                // Matrix_RotateXS((this + (phi_s1 * 2))->unk25A, MTXMODE_APPLY);
                 Matrix_RotateXS(this->unk25C[i - 1], MTXMODE_APPLY);
                 break;
 
@@ -682,14 +682,12 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
             case 8:
 
             case 9:
-                // temp_fa0 = (this + -phi_s3)->unk28C + 1.0f;
                 temp_fa0 = this->unk268[9 - i] + 1.0f;
                 Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
                 break;
         }
-        // gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPMatrix(__gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), (0x00 | 0x02) | 0x00);
-        gSPDisplayList(__gfxCtx->polyOpa.p++, D_80BB0604[i]);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_80BB0604[i]);
         Matrix_Pop();
     }
 
