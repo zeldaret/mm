@@ -136,16 +136,16 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
                        &this->JointTable, 0xA);
     Animation_PlayLoop(&this->skelAnime, (AnimationHeader*)(&D_06000D94));
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &D_80BB0540);
-    this->unk25C = this->unk25E = this->unk260 = 0;
+    this->unk25C[0] = this->unk25C[1] = this->unk25C[2] = 0;
     this->actor.gravity = this->actor.terminalVelocity = -4.0f;
-    this->unk262 = this->unk264 = this->unk266 = 0x12C;
+    this->unk262[0] = this->unk262[1] = this->unk262[2] = 0x12C;
     this->unk256 = 0;
     this->unk25A = -1;
     this->unk258 = -1;
     this->actor.textId = 0;
     this->unk298 = 0;
 
-    for(i = 0; i < 6; i++) {
+    for (i = 0; i < 6; i++) {
         this->unk268[i] = 0.0f;
         this->unk280[i] = 0.01;
     }
@@ -266,7 +266,86 @@ void func_80BAF3E0(EnZod* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF4D8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF4D8.s")
+
+void func_80BAF4D8(EnZod* this) {
+    s32 i;
+
+    for (i = 0 ; i < 3; i++) {
+        this->unk25C[i] += this->unk262[i];
+        this->unk262[i] -= (s16)(this->unk25C[i] * 0.1f);
+
+        if (ABS_ALT(this->unk262[i]) >= 0x65) {
+            this->unk262[i] *= 0.9f;
+        }
+
+        switch (i) {
+            case 0:
+                if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 7)) {
+                    this->unk262[i] = -0x3E8;
+                }
+                break;
+            case 1:
+                if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
+                    this->unk262[i] = -0x3E8;
+                }
+                break;
+        }
+    }
+
+    for (i = 0; i < 6; i++) {
+        this->unk268[i] += this->unk280[i];
+        this->unk280[i] -= (this->unk268[i] * 0.8f);
+
+        if (fabsf(this->unk280[i]) > 0.01f) {
+            this->unk280[i] *= 0.5f;
+        }
+
+        switch (i) {
+            case 0:
+                if (((this->unk258 == 3) || (this->unk258 == 4)) && ((s32)this->skelAnime.curFrame == 1)) {
+                    this->unk280[i] = 0.1f;
+                }
+                break;
+
+            case 2:
+                if (((this->unk258 == 3) && ((s32)this->skelAnime.curFrame == 0x13)) ||
+                    ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 8))) {
+                    this->unk280[i] = 0.1f;
+                }
+                break;
+
+            case 3:
+                switch (this->unk258) {
+                    case 3: 
+                        switch ((s32) this->skelAnime.curFrame) {
+                            case 1:
+                            case 7:
+                            case 12:
+                            case 19:
+                                this->unk280[i] = 0.03f;
+                            break;
+                        }
+                    break;
+
+                    case 4:
+                        if ((s32)this->skelAnime.curFrame == 1) {
+                            this->unk280[i] = 0.1f;
+                        }
+                        break;
+
+                }
+                break;
+
+            case 4:
+                if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
+                    this->unk280[i] = 0.15f;
+                }
+
+                break;
+        }
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAF7CC.s")
 
@@ -407,7 +486,7 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFC00.s")
 
-void func_80BAFC00(EnZod *this, PlayState *play) {
+void func_80BAFC00(EnZod* this, PlayState* play) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BAFC10.s")
@@ -563,8 +642,8 @@ void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
-
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/func_80BB01B0.s")
+/*
 typedef struct unkStruct {
     f32 unk_0;
     f32 unk_4;
@@ -683,7 +762,7 @@ void func_80BB01B0(EnZod *this, PlayState *play) {
         phi_s7 += 4;
     } while (temp_s1 != 0xA);
 }
-
+*/
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Zod/EnZod_Draw.s")
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
