@@ -113,12 +113,12 @@ void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
 #define DUST_COUNT 20
 
 void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
-    f32 temp_fs0;
+    f32 offset;
     Vec3f basePos;
     Vec3f pos;
     Vec3f velocity;
     Vec3f accel;
-    s32 temp_s1;
+    s32 angle;
     s32 scale;
     s16 scaleStep;
     s32 baseAngle;
@@ -134,10 +134,10 @@ void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
     accel.y = 0.2f;
 
     for (i = 0, baseAngle = 0; i < DUST_COUNT; i++, baseAngle += (0x10000 / DUST_COUNT)) {
-        temp_s1 = (s32)(Rand_ZeroOne() * (0x10000 / DUST_COUNT)) + baseAngle;
-        temp_fs0 = (Rand_ZeroOne() * 14.0f) + 4.0f;
-        pos.x = Math_SinS(temp_s1) * temp_fs0;
-        pos.z = Math_CosS(temp_s1) * temp_fs0;
+        angle = (s32)(Rand_ZeroOne() * (0x10000 / DUST_COUNT)) + baseAngle;
+        offset = (Rand_ZeroOne() * 14.0f) + 4.0f;
+        pos.x = Math_SinS(angle) * offset;
+        pos.z = Math_CosS(angle) * offset;
         velocity.x = (Rand_ZeroOne() - 0.5f) + (pos.x * (1.0f / 6.0f));
         velocity.z = (Rand_ZeroOne() - 0.5f) + (pos.z * (1.0f / 6.0f));
         pos.x += basePos.x;
