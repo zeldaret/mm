@@ -150,7 +150,7 @@ void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_kin2_obj_Colheader_000908);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseFireplaceGrateCol);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
