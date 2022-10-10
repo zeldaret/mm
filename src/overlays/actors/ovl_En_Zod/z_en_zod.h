@@ -27,7 +27,7 @@ typedef struct EnZod {
     /* 0x268 */ f32 unk268[6];
     /* 0x280 */ f32 unk280[6];
     /* 0x298 */ s16 unk298;
-    /* 0x29A */ s16 unk29A;
+    /* 0x29A */ s16 fogNear;
     /* 0x29C */ EnZodActionFunc actionFunc;
 } EnZod; // size = 0x2A0
 

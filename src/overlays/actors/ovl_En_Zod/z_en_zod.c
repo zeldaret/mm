@@ -121,7 +121,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
 
         case 2:
             this->actionFunc = func_80BAFF14;
-            this->unk29A = -1;
+            this->fogNear = -1;
             this->unk256 |= 2;
             break;
 
@@ -129,7 +129,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             if (gSaveContext.save.weekEventReg[0x37] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->actor.flags |= 0x10;
+            this->actor.flags |= ACTOR_FLAG_10;
             break;
     }
 }
@@ -143,18 +143,18 @@ void EnZod_Destroy(Actor* thisx, PlayState* play) {
 void func_80BAF1EC(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != 2) {
+    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
         textId = 0x1227;
         if (gSaveContext.save.weekEventReg[0x20] & 8) {
             textId = 0x1229;
         } else {
             gSaveContext.save.weekEventReg[0x20] |= 8;
         }
-    } else if ((this->unk256 & 1) != 0) {
+    } else if (this->unk256 & 1) {
         textId = 0x1225;
     } else {
         textId = 0x1219;
-        if ((gSaveContext.save.weekEventReg[0x20] & 0x10) != 0) {
+        if (gSaveContext.save.weekEventReg[0x20] & 0x10) {
             textId = 0x1226;
         } else {
             gSaveContext.save.weekEventReg[0x20] |= 0x10;
@@ -226,6 +226,7 @@ void func_80BAF4D8(EnZod* this) {
                     this->unk262[i] = -0x3E8;
                 }
                 break;
+                
             case 1:
                 if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
                     this->unk262[i] = -0x3E8;
@@ -250,7 +251,7 @@ void func_80BAF4D8(EnZod* this) {
                 break;
 
             case 2:
-                if (((this->unk258 == 3) && ((s32)this->skelAnime.curFrame == 0x13)) ||
+                if (((this->unk258 == 3) && ((s32)this->skelAnime.curFrame == 19)) ||
                     ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 8))) {
                     this->unk280[i] = 0.1f;
                 }
@@ -296,16 +297,16 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                     case 0:
                         func_8019F208();
                         func_80151938(play, 0x1220);
-                        return;
+                        break;
+
                     case 1:
                         func_8019F230();
                         func_80151938(play, 0x1223);
-                        return;
+                        break;
                 }
-            } else {
-                return;
             }
             break;
+
         case 5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
@@ -316,24 +317,29 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                     case 0x1221:
                     case 0x1227:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        return;
+                        break;
+
                     case 0x1219:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
                         this->unk25A = 2;
-                        return;
+                        break;
+
                     case 0x121D:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
                         this->unk25A = 1;
-                        return;
+                        break;
+
                     case 0x1223:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
                         this->unk25A = 0;
-                        return;
+                        break;
+
                     case 0x121E:
                     case 0x1226:
                         func_80151938(play, 0x121F);
                         this->unk25A = 1;
-                        return;
+                        break;
+
                     default:
                         func_801477B4(play);
                         this->actionFunc = func_80BAF99C;
@@ -341,7 +347,6 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                         break;
                 }
             }
-            break;
     }
 }
 
@@ -439,7 +444,7 @@ void func_80BAFC10(EnZod* this, PlayState* play) {
 
 void func_80BAFD00(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         func_80BAF338(this, 3, 2);
         this->actionFunc = func_80BAFC10;
@@ -465,22 +470,24 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
 
 void func_80BAFE34(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
-    if (this->unk29A < 0x31F) {
-        this->unk29A += 0xC8;
+    if (this->fogNear < 0x31F) {
+        this->fogNear += 0xC8;
     } else {
-        this->unk29A += 0x1E;
+        this->fogNear += 0x1E;
     }
-    if (this->unk29A >= 0x3E8) {
-        this->unk29A = 0x3E7;
+
+    if (this->fogNear >= 0x3E8) {
+        this->fogNear = 0x3E7;
     }
+
     if (Cutscene_CheckActorAction(play, 0x203U) != 0) {
         if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 1) {
             this->actionFunc = func_80BAFF14;
-            this->unk29A = -1;
+            this->fogNear = -1;
         }
     } else {
         this->actionFunc = func_80BAFF14;
-        this->unk29A = -1;
+        this->fogNear = -1;
     }
 }
 
@@ -570,6 +577,7 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
     for (i = 0; i < 10; i++) {
         Matrix_Push();
         Matrix_Translate(D_80BB058C[i], D_80BB05B4[i], D_80BB05DC[i], MTXMODE_APPLY);
+        
         switch (i) {
             case 1:
             case 2:
@@ -608,7 +616,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     if (this->unk256 & 2) {
-        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->unk29A, 1000);
+        POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->fogNear, 1000);
     }
 
     gfxP = POLY_OPA_DISP;
