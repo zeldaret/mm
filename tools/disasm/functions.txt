@@ -15253,7 +15253,7 @@
     0x80BAF1C0:("EnZod_Destroy",),
     0x80BAF1EC:("func_80BAF1EC",),
     0x80BAF2B4:("func_80BAF2B4",),
-    0x80BAF338:("func_80BAF338",),
+    0x80BAF338:("EnZod_ChangeAnimation",),
     0x80BAF3E0:("func_80BAF3E0",),
     0x80BAF4D8:("func_80BAF4D8",),
     0x80BAF7CC:("func_80BAF7CC",),

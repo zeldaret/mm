@@ -22,7 +22,7 @@ typedef struct EnZod {
     /* 0x250 */ Vec3s headRot;
     /* 0x256 */ u16 unk256;
     /* 0x258 */ s16 curAnimIndex;
-    /* 0x25A */ s16 nextAnimIndex;
+    /* 0x25A */ s16 animIndex;
     /* 0x25C */ s16 unk25C[3];
     /* 0x262 */ s16 unk262[3];
     /* 0x268 */ f32 unk268[6];
