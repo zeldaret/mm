@@ -171,7 +171,7 @@ s32 func_80A515C4(EnDnk* this) {
 
 void func_80A51648(EnDnk* this, PlayState* play) {
     if (SubS_IsObjectLoaded(this->unk_28E, play) == true) {
-        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->unk_28E].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
@@ -447,8 +447,8 @@ void func_80A52074(EnDnk* this, PlayState* play) {
 }
 
 void func_80A52134(EnDnk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneNum == SCENE_SPOT00) &&
-        (gSaveContext.sceneSetupIndex == 2)) {
+    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+        (gSaveContext.sceneLayer == 2)) {
         func_80A52074(this, play);
     }
 }

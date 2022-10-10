@@ -52,7 +52,7 @@
  * - Effect Update/Draw
  * - Seaweed
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -77,9 +77,9 @@
 #define PLATFORM_HEIGHT 440.0f
 #define WATER_HEIGHT 430.0f
 
-void Boss03_Init(Actor* thisx, PlayState* play);
+void Boss03_Init(Actor* thisx, PlayState* play2);
 void Boss03_Destroy(Actor* thisx, PlayState* play);
-void Boss03_Update(Actor* thisx, PlayState* play);
+void Boss03_Update(Actor* thisx, PlayState* play2);
 void Boss03_Draw(Actor* thisx, PlayState* play);
 
 void func_809E344C(Boss03* this, PlayState* play);
@@ -724,7 +724,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
 
             if (sp43 != 0) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->waterHeight,
-                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -1055,7 +1055,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
-                        ENWATEREFFECT_30C);
+                        ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
 
             // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1528,7 +1528,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 % 2) != 0) {
@@ -2012,7 +2012,7 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
             }
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_309);
+                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_TYPE_GYORG_RIPPLES);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
@@ -2155,7 +2155,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[objectIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
@@ -2428,7 +2428,7 @@ void Boss03_DrawEffects(PlayState* play) {
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
 
@@ -2462,7 +2462,7 @@ void Boss03_DrawEffects(PlayState* play) {
             if (!flag) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
                 gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
 

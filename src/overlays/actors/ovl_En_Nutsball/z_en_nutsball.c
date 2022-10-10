@@ -14,7 +14,7 @@
 
 void EnNutsball_Init(Actor* thisx, PlayState* play);
 void EnNutsball_Destroy(Actor* thisx, PlayState* play);
-void EnNutsball_Update(Actor* thisx, PlayState* play);
+void EnNutsball_Update(Actor* thisx, PlayState* play2);
 void EnNutsball_Draw(Actor* thisx, PlayState* play);
 
 void EnNutsball_InitColliderParams(EnNutsball* this);

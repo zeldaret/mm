@@ -15,7 +15,7 @@
 
 void EnPeehat_Init(Actor* thisx, PlayState* play);
 void EnPeehat_Destroy(Actor* thisx, PlayState* play);
-void EnPeehat_Update(Actor* thisx, PlayState* play);
+void EnPeehat_Update(Actor* thisx, PlayState* play2);
 void EnPeehat_Draw(Actor* thisx, PlayState* play);
 
 void func_80897498(EnPeehat* this);
@@ -788,7 +788,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->colliderTris.base.atFlags & AT_ON) {
-        thisx->flags |= 0x1000000;
+        thisx->flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderTris.base);
         if (thisx->params == 0) {
             Vec3f sp74;
