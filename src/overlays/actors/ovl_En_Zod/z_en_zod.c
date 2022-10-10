@@ -15,24 +15,11 @@ void EnZod_Destroy(Actor* thisx, PlayState* play);
 void EnZod_Update(Actor* thisx, PlayState* play);
 void EnZod_Draw(Actor* thisx, PlayState* play);
 
-void func_80BAF338(EnZod* this, s16 arg1, u8 mode);
+void func_80BAF338(EnZod* this, s16 nextAnimIndex, u8 mode);
 void func_80BAF99C(EnZod* this, PlayState* play);
 void func_80BAFB84(EnZod* this, PlayState* play);
 void func_80BAFDB4(EnZod* this, PlayState* play);
 void func_80BAFF14(EnZod* this, PlayState* play);
-s32 func_80BAF2B4(EnZod* this, PlayState* play);
-void func_80BAF3E0(EnZod* this);
-void func_80BAF7CC(EnZod* this, PlayState* play);
-void func_80BAFA44(EnZod* this, PlayState* play);
-void func_80BAFADC(EnZod* this, PlayState* play);
-void func_80BAFC00(EnZod* this, PlayState* play);
-void func_80BAFC10(EnZod* this, PlayState* play);
-void func_80BAFD00(EnZod* this, PlayState* play);
-void func_80BAFE34(EnZod* this, PlayState* play);
-void func_80BAF4D8(EnZod* this);
-s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_80BB01B0(EnZod* this, PlayState* play);
 
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
@@ -89,24 +76,24 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = this->actor.terminalVelocity = -4.0f;
     this->unk262[0] = this->unk262[1] = this->unk262[2] = 0x12C;
     this->unk256 = 0;
-    this->unk25A = -1;
-    this->unk258 = -1;
+    this->nextAnimIndex = -1;
+    this->curAnimIndex = -1;
     this->actor.textId = 0;
-    this->unk298 = 0;
+    this->unused = 0;
 
     for (i = 0; i < 6; i++) {
         this->unk268[i] = 0.0f;
         this->unk280[i] = 0.01;
     }
 
-    func_80BAF338(this, 3, 2);
+    func_80BAF338(this, 3, ANIMMODE_ONCE);
     this->actionFunc = func_80BAF99C;
 
-    switch (this->actor.params & 0xF) {
+    switch (ENZOD_GET_F(thisx)) {
         case 1:
             if (gSaveContext.save.weekEventReg[0x4E] & 1) {
                 this->actionFunc = func_80BAFDB4;
-                func_80BAF338(this, 0, 2);
+                func_80BAF338(this, 0, ANIMMODE_ONCE);
                 this->actor.flags |= 0x10;
                 ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
                 break;
@@ -162,7 +149,7 @@ void func_80BAF1EC(EnZod* this, PlayState* play) {
         this->unk256 |= 1;
     }
 
-    func_80BAF338(this, 0, 2);
+    func_80BAF338(this, 0, ANIMMODE_ONCE);
     Message_StartTextbox(play, textId, &this->actor);
 }
 
@@ -174,36 +161,36 @@ s32 func_80BAF2B4(EnZod* this, PlayState* play) {
     return false;
 }
 
-void func_80BAF338(EnZod* this, s16 arg1, u8 mode) {
-    if ((arg1 < 0) || (arg1 >= 5)) {
-        arg1 = 3;
+void func_80BAF338(EnZod* this, s16 nextAnimIndex, u8 mode) {
+    if ((nextAnimIndex < 0) || (nextAnimIndex >= 5)) {
+        nextAnimIndex = 3;
     }
-    Animation_Change(&this->skelAnime, D_80BB056C[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80BB056C[arg1]), mode,
+    Animation_Change(&this->skelAnime, D_80BB056C[nextAnimIndex], 1.0f, 0.0f, Animation_GetLastFrame(D_80BB056C[nextAnimIndex]), mode,
                      -5.0f);
-    this->unk258 = arg1;
-    this->unk25A = arg1;
+    this->curAnimIndex = nextAnimIndex;
+    this->nextAnimIndex = nextAnimIndex;
 }
 
 void func_80BAF3E0(EnZod* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk25A == this->unk258) {
-            func_80BAF338(this, this->unk258, 2);
-            switch (this->unk258) {
+        if (this->nextAnimIndex == this->curAnimIndex) {
+            func_80BAF338(this, this->curAnimIndex, ANIMMODE_ONCE);
+            switch (this->curAnimIndex) {
                 case 3:
                     if (Rand_ZeroFloat(1.0f) < 0.2f) {
-                        this->unk25A = 4;
+                        this->nextAnimIndex = 4;
                     }
                     break;
 
                 case 4:
                     if (Rand_ZeroFloat(1.0f) < 0.8f) {
-                        this->unk25A = 3;
+                        this->nextAnimIndex = 3;
                     }
                     break;
             }
 
         } else {
-            func_80BAF338(this, this->unk25A, 2);
+            func_80BAF338(this, this->nextAnimIndex, ANIMMODE_ONCE);
         }
         SkelAnime_Update(&this->skelAnime);
     }
@@ -222,13 +209,13 @@ void func_80BAF4D8(EnZod* this) {
 
         switch (i) {
             case 0:
-                if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 7)) {
+                if ((this->curAnimIndex == 4) && ((s32)this->skelAnime.curFrame == 7)) {
                     this->unk262[i] = -0x3E8;
                 }
                 break;
-                
+
             case 1:
-                if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
+                if ((this->curAnimIndex == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
                     this->unk262[i] = -0x3E8;
                 }
                 break;
@@ -245,20 +232,20 @@ void func_80BAF4D8(EnZod* this) {
 
         switch (i) {
             case 0:
-                if (((this->unk258 == 3) || (this->unk258 == 4)) && ((s32)this->skelAnime.curFrame == 1)) {
+                if (((this->curAnimIndex == 3) || (this->curAnimIndex == 4)) && ((s32)this->skelAnime.curFrame == 1)) {
                     this->unk280[i] = 0.1f;
                 }
                 break;
 
             case 2:
-                if (((this->unk258 == 3) && ((s32)this->skelAnime.curFrame == 19)) ||
-                    ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 8))) {
+                if (((this->curAnimIndex == 3) && ((s32)this->skelAnime.curFrame == 19)) ||
+                    ((this->curAnimIndex == 4) && ((s32)this->skelAnime.curFrame == 8))) {
                     this->unk280[i] = 0.1f;
                 }
                 break;
 
             case 3:
-                switch (this->unk258) {
+                switch (this->curAnimIndex) {
                     case 3:
                         switch ((s32)this->skelAnime.curFrame) {
                             case 1:
@@ -279,7 +266,7 @@ void func_80BAF4D8(EnZod* this) {
                 break;
 
             case 4:
-                if ((this->unk258 == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
+                if ((this->curAnimIndex == 4) && ((s32)this->skelAnime.curFrame == 0x13)) {
                     this->unk280[i] = 0.15f;
                 }
 
@@ -321,29 +308,29 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
 
                     case 0x1219:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        this->unk25A = 2;
+                        this->nextAnimIndex = 2;
                         break;
 
                     case 0x121D:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        this->unk25A = 1;
+                        this->nextAnimIndex = 1;
                         break;
 
                     case 0x1223:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        this->unk25A = 0;
+                        this->nextAnimIndex = 0;
                         break;
 
                     case 0x121E:
                     case 0x1226:
                         func_80151938(play, 0x121F);
-                        this->unk25A = 1;
+                        this->nextAnimIndex = 1;
                         break;
 
                     default:
                         func_801477B4(play);
                         this->actionFunc = func_80BAF99C;
-                        func_80BAF338(this, 3, 2);
+                        func_80BAF338(this, 3, ANIMMODE_ONCE);
                         break;
                 }
             }
@@ -388,7 +375,7 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
         textId = 0x1250;
     }
 
-    func_80BAF338(this, 0, 2);
+    func_80BAF338(this, 0, ANIMMODE_ONCE);
     Message_StartTextbox(play, textId, &this->actor);
 }
 
@@ -401,11 +388,11 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
         if ((msgState == 5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->actionFunc = func_80BAFB84;
-            func_80BAF338(this, 3, 2);
+            func_80BAF338(this, 3, ANIMMODE_ONCE);
         }
     } else {
         this->actionFunc = func_80BAFB84;
-        func_80BAF338(this, 3, 2);
+        func_80BAF338(this, 3, ANIMMODE_ONCE);
     }
 }
 
@@ -446,7 +433,7 @@ void func_80BAFD00(EnZod* this, PlayState* play) {
     func_80BAF3E0(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        func_80BAF338(this, 3, 2);
+        func_80BAF338(this, 3, ANIMMODE_ONCE);
         this->actionFunc = func_80BAFC10;
         ActorCutscene_Stop(this->actor.cutscene);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
@@ -501,9 +488,8 @@ void func_80BAFF14(EnZod* this, PlayState* play) {
 
 void EnZod_Update(Actor* thisx, PlayState* play) {
     EnZod* this = THIS;
-    u32 phi_v0;
-    Vec3s torsoRot;
     s32 pad;
+    Vec3s torsoRot;
 
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -512,21 +498,14 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80BAF4D8(this);
 
-    if (this->unk24E == 0) {
-        phi_v0 = 0;
-    } else {
-        this->unk24E--;
-        phi_v0 = this->unk24E;
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
 
-    if (phi_v0 == 0) {
-        this->unk24E = Rand_S16Offset(0x3C, 0x3C);
-    }
+    this->eyeIndex = this->blinkTimer;
 
-    this->unk24C = this->unk24E;
-
-    if (this->unk24C >= 3) {
-        this->unk24C = 0;
+    if (this->eyeIndex >= 3) {
+        this->eyeIndex = 0;
     }
 
     torsoRot.z = 0;
@@ -541,18 +520,19 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
             this->headRot.x = -0xBB8;
         }
     } else {
-        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 100);
-        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 100);
+        Math_SmoothStepToS(&this->headRot.x, 0, 6, 0x1838, 0x64);
+        Math_SmoothStepToS(&this->headRot.y, 0, 6, 0x1838, 0x64);
     }
 }
 
 s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZod* this = THIS;
 
-    if (limbIndex == 3) {
+    if (limbIndex == OBJECT_ZOD_LIMB_03) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
+
     return false;
 }
 
@@ -577,7 +557,7 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
     for (i = 0; i < 10; i++) {
         Matrix_Push();
         Matrix_Translate(D_80BB058C[i], D_80BB05B4[i], D_80BB05DC[i], MTXMODE_APPLY);
-        
+
         switch (i) {
             case 1:
             case 2:
@@ -604,10 +584,9 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-static TexturePtr D_80BB062C[5] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50, NULL,
-                                    NULL };
-
 void EnZod_Draw(Actor* thisx, PlayState* play) {
+    static TexturePtr D_80BB062C[5] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50, NULL,
+                                        NULL };
     EnZod* this = THIS;
     Gfx* gfxP;
 
@@ -621,7 +600,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     gfxP = POLY_OPA_DISP;
 
-    gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(D_80BB062C[this->unk24C]));
+    gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(D_80BB062C[this->eyeIndex]));
     gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&object_zod_Tex_007650));
 
     POLY_OPA_DISP = gfxP + 2;
