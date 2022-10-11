@@ -24,7 +24,7 @@
 
 #define THIS ((EnDoor*)thisx)
 
-void EnDoor_Init(Actor* thisx, PlayState* play);
+void EnDoor_Init(Actor* thisx, PlayState* play2);
 void EnDoor_Destroy(Actor* thisx, PlayState* play);
 void EnDoor_Update(Actor* thisx, PlayState* play);
 void EnDoor_Draw(Actor* thisx, PlayState* play);
@@ -290,7 +290,7 @@ const ActorInit En_Door_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 dListIndex;
     /* 0x04 */ s16 objectId;
 } EnDoorInfo;
@@ -405,7 +405,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
     } else {
         for (i = 0; i < ARRAY_COUNT(sObjInfo) - 34; i++, objectInfo++) {
-            if (play->sceneNum == objectInfo->sceneNum) {
+            if (play->sceneId == objectInfo->sceneId) {
                 break;
             }
         }

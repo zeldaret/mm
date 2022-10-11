@@ -17,7 +17,7 @@ void ShotSun_Destroy(Actor* thisx, PlayState* play);
 void ShotSun_Update(Actor* thisx, PlayState* play);
 
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
-void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play2);
+void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
 const ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,

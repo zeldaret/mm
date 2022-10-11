@@ -11,7 +11,7 @@
 
 #define THIS ((EnTest7*)thisx)
 
-void EnTest7_Init(Actor* thisx, PlayState* play);
+void EnTest7_Init(Actor* thisx, PlayState* play2);
 void EnTest7_Destroy(Actor* thisx, PlayState* play);
 void EnTest7_Update(Actor* thisx, PlayState* play);
 void EnTest7_Draw(Actor* thisx, PlayState* play);
@@ -409,7 +409,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     } else {
         func_80AF082C(this, func_80AF19A8);
         EnTest7_SetupAction(this, func_80AF2854);
-        func_801A2E54(NA_BGM_SONG_OF_SOARING);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
     if (play->playerActorCsIds[8] == -1) {
@@ -658,7 +658,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
 
     this->unk_148.unk_10 -= 0x2EE0;
 
-    if (play->sceneNum == SCENE_SECOM) {
+    if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);
@@ -677,8 +677,8 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
 
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_02;
-    gSaveContext.seqIndex = 0xFF;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
 
 void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
@@ -762,7 +762,7 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
     player->stateFlags2 |= 0x20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
-    if (play->roomCtx.currRoom.unk3 != 1) {
+    if (play->roomCtx.curRoom.unk3 != 1) {
         func_80AF082C(this, func_80AF2AE8);
     } else {
         func_80AF082C(this, func_80AF2EC8);

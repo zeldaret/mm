@@ -50,7 +50,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
-    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(object);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
@@ -702,16 +702,16 @@ void EffectSsKFire_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
 
 // EffectSsSolderSrchBall Spawn Functions
 
-void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused,
-                                  s16* linkDetected, s16 drawFlag) {
+void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
+                                  s16* playerDetected, s16 flags) {
     EffectSsSolderSrchBallInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
-    initParams.unused = unused;
-    initParams.linkDetected = linkDetected;
-    initParams.drawFlag = drawFlag;
+    initParams.scale = scale;
+    initParams.playerDetected = playerDetected;
+    initParams.flags = flags;
 
     EffectSs_Spawn(play, EFFECT_SS_SOLDER_SRCH_BALL, 128, &initParams);
 }
