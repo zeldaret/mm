@@ -428,7 +428,7 @@
             0x8013EC10 : "z_rumble",
             0x8013EE60 : "z_view",
             0x80140260 : "z_vimode",
-            0x80140E80 : "code_80140E80",
+            0x80140E80 : "z_visfbcopyfx",
             0x801418B0 : "z_vismono",
             0x801420C0 : "code_801420C0",
             0x80142440 : "z_vr_box",

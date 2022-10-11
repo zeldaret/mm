@@ -2272,17 +2272,16 @@ void func_80140CE0(void* arg0);
 void func_80140D04(void* arg0);
 void func_80140D10(void* arg0, Gfx** gfx, u32 arg2);
 
-// code_80140E80
-void func_80140E80(Struct_80140E80* this);
-void func_80140EA0(Struct_80140E80* this);
-// void func_80140EAC(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, s32 scalable);
-// void func_80141008(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY, s32 scalable);
-void func_8014116C(Gfx** gfxP, void* source, void* img, s32 width, s32 height, s32 cycleFlag);
-void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY, s32 cycleFlag);
-// void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height);
-// void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height);
-// void func_80141678(Struct_80140E80* this, Gfx** gfxP, void* img, s32 width, s32 height);
-void func_80141778(Struct_80140E80* this, Gfx** gfxP, void* img);
+void VisFbCopyFx_Init(VisFbCopyFx* this);
+void VisFbCopyFx_Destroy(VisFbCopyFx* this);
+void VisFbCopyFx_DrawBgToColorImage(Gfx** gfxP, uObjBg* bg, void* img, s32 width, s32 height, VisFbCopyBgMode cycleMode);
+void VisFbCopyFx_SetBg(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY, VisFbCopyBgMode cycleMode);
+void VisFbCopyFx_SetBgSimple(Gfx** gfxP, void* source, void* img, s32 width, s32 height, VisFbCopyBgMode cycleMode);
+void VisFbCopyFx_SetBgGeneral(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f32 x, f32 y, f32 scaleX, f32 scaleY, VisFbCopyBgMode cycleMode);
+void VisFbCopyFx_ApplyEffects(VisFbCopyFx* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height);
+void VisFbCopyFx_DrawGeneral(VisFbCopyFx* this, Gfx** gfxP, void* source, void* img, s32 width, s32 height);
+void VisFbCopyFx_DrawInterpolate(VisFbCopyFx* this, Gfx** gfxP, void* img, s32 width, s32 height);
+void VisFbCopyFx_Draw(VisFbCopyFx* this, Gfx** gfxP, void* img);
 
 void VisMono_Init(VisMono* this);
 void VisMono_Destroy(VisMono* this);

@@ -1141,6 +1141,25 @@ typedef struct {
     /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
 
+typedef enum {
+    /* 0 */ VIS_FB_COPY_BG_CYC_1CYC, //!< Enable rescaling
+    /* 1 */ VIS_FB_COPY_BG_CYC_COPY  //!< Direct copy, no scaling
+} VisFbCopyBgMode;
+
+typedef enum {
+    /* 0 */ VIS_FB_COPY_MODE_NONE,    //!< Do nothing but waste time loading microcode
+    /* 1 */ VIS_FB_COPY_MODE_GENERAL, //!< Interpolation, filling and scaling
+    /* 2 */ VIS_FB_COPY_MODE_INTERPOLATE
+} VisFbCopyMode;
+
+typedef struct {
+    /* 0x00 */ u8 mode;
+    /* 0x04 */ f32 scale;
+    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
+    /* 0x0C */ Color_RGBA8_u32 primColor;
+    /* 0x10 */ Color_RGBA8_u32 envColor;
+} VisFbCopyFx; // size = 0x14
+
 typedef struct {
     /* 0x00 */ u32 unk_00;
     /* 0x04 */ u32 setScissor;
@@ -1150,13 +1169,6 @@ typedef struct {
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
 
-typedef struct {
-    /* 0x00 */ u8 mode;
-    /* 0x04 */ f32 scale;
-    /* 0x08 */ f32 lodProportion; // expected to be between 0.0f and 1.0f
-    /* 0x0C */ Color_RGBA8_u32 primColor;
-    /* 0x10 */ Color_RGBA8_u32 envColor;
-} Struct_80140E80; // size = 0x14
 
 typedef struct DebugDispObject {
     /* 0x00 */ Vec3f pos;

@@ -3,8 +3,8 @@
 #include "z64shrink_window.h"
 #include "z64view.h"
 
-extern Struct_80140E80 D_801F6D38;
-extern Struct_80140E80* D_801F6D4C;
+extern VisFbCopyFx D_801F6D38;
+extern VisFbCopyFx* D_801F6D4C;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
 

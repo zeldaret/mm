@@ -12,7 +12,7 @@ typedef struct {
     /* 0x11 */ u8 colorType;
     /* 0x12 */ u8 speedType;
     /* 0x13 */ u8 isDone;
-    /* 0x14 */ Struct_80140E80 bg;
+    /* 0x14 */ VisFbCopyFx copyFx;
 } TransitionWipe4; // size = 0x28
 
 #endif

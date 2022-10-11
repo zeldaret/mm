@@ -90,21 +90,21 @@ void TransitionWipe4_Update(void* thisx, s32 updateRate) {
 // Use of THIS in this function is required to match
 void TransitionWipe4_Draw(void* thisx, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
-    Struct_80140E80* bg = &THIS->bg;
+    VisFbCopyFx* copyFx = &THIS->copyFx;
 
-    bg->primColor.rgba = THIS->primColor.rgba;
+    copyFx->primColor.rgba = THIS->primColor.rgba;
 
     if (THIS->direction != 0) {
-        bg->scale = THIS->progress;
-        bg->lodProportion = 1.0f - THIS->progress;
+        copyFx->scale = THIS->progress;
+        copyFx->lodProportion = 1.0f - THIS->progress;
     } else {
-        bg->scale = 1.0f - THIS->progress;
-        bg->lodProportion = THIS->progress;
+        copyFx->scale = 1.0f - THIS->progress;
+        copyFx->lodProportion = THIS->progress;
     }
 
-    //! @bug (Possibly) Since bg->mode is never set after being initialised to 0, the switch in func_80141778() does
+    //! @bug (Possibly) Since copyFx->mode is never set after being initialised to 0, the switch in VisFbCopyFx_Draw() does
     //! nothing, so this function call does nothing but change to the sprite microcode, then back to 3D microcode.
-    func_80141778(bg, &gfx, SysCfb_GetZBuffer());
+    VisFbCopyFx_Draw(copyFx, &gfx, SysCfb_GetZBuffer());
     *gfxP = gfx;
 }
 
