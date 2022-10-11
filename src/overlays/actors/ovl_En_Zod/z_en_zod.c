@@ -18,8 +18,17 @@ void EnZod_Draw(Actor* thisx, PlayState* play);
 void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode);
 void func_80BAF99C(EnZod* this, PlayState* play);
 void func_80BAFB84(EnZod* this, PlayState* play);
-void func_80BAFDB4(EnZod* this, PlayState* play);
+void EnZod_SetupStartSession(EnZod* this, PlayState* play);
 void func_80BAFF14(EnZod* this, PlayState* play);
+
+typedef enum {
+    ENZOD_ANIM_0,
+    ENZOD_ANIM_1,
+    ENZOD_ANIM_2,
+    ENZOD_ANIM_3,
+    ENZOD_ANIM_4,
+    ENZOD_ANIM_MAX,
+} EnZodAnimations;
 
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
@@ -60,15 +69,6 @@ static AnimationHeader* D_80BB056C[] = {
 
 static Vec3f D_80BB0580 = { 1300.0f, 1100.0f, 0.0f };
 
-typedef enum {
-    ENZOD_ANIM_0,
-    ENZOD_ANIM_1,
-    ENZOD_ANIM_2,
-    ENZOD_ANIM_3,
-    ENZOD_ANIM_4,
-    ENZOD_ANIM_MAX,
-} EnZodAnimations;
-
 void EnZod_Init(Actor* thisx, PlayState* play) {
     s32 i;
     EnZod* this = THIS;
@@ -76,7 +76,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zod_Skel_00D658, &object_zod_Anim_000D94, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &object_zod_Anim_000D94, this->morphTable,
                        this->JointTable, OBJECT_ZOD_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_zod_Anim_000D94);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -101,9 +101,9 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     switch (ENZOD_GET_F(thisx)) {
         case 1:
             if (gSaveContext.save.weekEventReg[0x4E] & 1) {
-                this->actionFunc = func_80BAFDB4;
+                this->actionFunc = EnZod_SetupStartSession;
                 EnZod_ChangeAnimation(this, ENZOD_ANIM_0, ANIMMODE_ONCE);
-                this->actor.flags |= 0x10;
+                this->actor.flags |= ACTOR_FLAG_10;
                 ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
                 break;
             }
@@ -180,18 +180,18 @@ void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode) {
     this->nextAnimIndex = nextAnimIndex;
 }
 
-void func_80BAF3E0(EnZod* this) {
+void EnZod_UpdateAnimations(EnZod* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->nextAnimIndex == this->curAnimIndex) {
             EnZod_ChangeAnimation(this, this->curAnimIndex, ANIMMODE_ONCE);
             switch (this->curAnimIndex) {
-                case 3:
+                case ENZOD_ANIM_3:
                     if (Rand_ZeroFloat(1.0f) < 0.2f) {
                         this->nextAnimIndex = ENZOD_ANIM_4;
                     }
                     break;
 
-                case 4:
+                case ENZOD_ANIM_4:
                     if (Rand_ZeroFloat(1.0f) < 0.8f) {
                         this->nextAnimIndex = ENZOD_ANIM_3;
                     }
@@ -212,20 +212,20 @@ void func_80BAF4D8(EnZod* this) {
         this->unk25C[i] += this->unk262[i];
         this->unk262[i] -= (s16)(this->unk25C[i] * 0.1f);
 
-        if (ABS_ALT(this->unk262[i]) >= 0x65) {
+        if (ABS_ALT(this->unk262[i]) > 100) {
             this->unk262[i] *= 0.9f;
         }
 
         switch (i) {
             case 0:
                 if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 7)) {
-                    this->unk262[i] = -0x3E8;
+                    this->unk262[i] = -1000;
                 }
                 break;
 
             case 1:
                 if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 19)) {
-                    this->unk262[i] = -0x3E8;
+                    this->unk262[i] = -1000;
                 }
                 break;
         }
@@ -286,9 +286,9 @@ void func_80BAF4D8(EnZod* this) {
 }
 
 void func_80BAF7CC(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+    EnZod_UpdateAnimations(this);
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x121F)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -304,7 +304,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x121A:
@@ -349,9 +349,9 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
 
 void func_80BAF99C(EnZod* this, PlayState* play) {
     s32 pad;
-    Vec3f sp20;
+    Vec3f seqPos;
 
-    func_80BAF3E0(this);
+    EnZod_UpdateAnimations(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BAF1EC(this, play);
@@ -360,11 +360,11 @@ void func_80BAF99C(EnZod* this, PlayState* play) {
         func_800B8614(&this->actor, play, 210.0f);
     }
 
-    sp20.x = this->actor.projectedPos.x;
-    sp20.y = this->actor.projectedPos.y;
-    sp20.z = this->actor.projectedPos.z;
+    seqPos.x = this->actor.projectedPos.x;
+    seqPos.y = this->actor.projectedPos.y;
+    seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(3, &sp20, 0x6D, 700.0f);
+    func_801A1FB4(3, &seqPos, 0x6D, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
@@ -372,17 +372,17 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (gSaveContext.save.weekEventReg[0x4F] & 1) {
-            textId = 0x1253;
+            textId = 0x1253; // And with that, we're all ready...
         } else {
-            textId = 0x1251;
+            textId = 0x1251; // What have you been doing? You're late, Mikau!
             if (gSaveContext.save.weekEventReg[0x4E] & 0x20) {
-                textId = 0x1252;
+                textId = 0x1252; // Hurry up and go see Lulu.
             } else {
                 gSaveContext.save.weekEventReg[0x4E] |= 0x20;
             }
         }
     } else {
-        textId = 0x1250;
+        textId = 0x1250; // If you want an autograph...
     }
 
     EnZod_ChangeAnimation(this, ENZOD_ANIM_0, ANIMMODE_ONCE);
@@ -392,9 +392,9 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
 void func_80BAFADC(EnZod* this, PlayState* play) {
     u8 msgState;
 
-    func_80BAF3E0(this);
+    EnZod_UpdateAnimations(this);
     msgState = Message_GetState(&play->msgCtx);
-    if (msgState != 2) {
+    if (msgState != TEXT_STATE_CLOSING) {
         if ((msgState == 5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->actionFunc = func_80BAFB84;
@@ -407,7 +407,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFB84(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+    EnZod_UpdateAnimations(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
@@ -421,7 +421,7 @@ void func_80BAFC00(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFC10(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+    EnZod_UpdateAnimations(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
@@ -439,8 +439,8 @@ void func_80BAFC10(EnZod* this, PlayState* play) {
     }
 }
 
-void func_80BAFD00(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+void EnZod_StartSession(EnZod* this, PlayState* play) {
+    EnZod_UpdateAnimations(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
@@ -453,20 +453,20 @@ void func_80BAFD00(EnZod* this, PlayState* play) {
     }
 }
 
-void func_80BAFDB4(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+void EnZod_SetupStartSession(EnZod* this, PlayState* play) {
+    EnZod_UpdateAnimations(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B7298(play, NULL, 0x44);
-        Message_StartTextbox(play, 0x103A, &this->actor);
-        this->actionFunc = func_80BAFD00;
+        Message_StartTextbox(play, 0x103A, &this->actor); // One... two... three...
+        this->actionFunc = EnZod_StartSession;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void func_80BAFE34(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+void EnZod_UpdateFog(EnZod* this, PlayState* play) {
+    EnZod_UpdateAnimations(this);
     if (this->fogNear < 799) {
         this->fogNear += 200;
     } else {
@@ -477,7 +477,7 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
         this->fogNear = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x203U) != 0) {
+    if (Cutscene_CheckActorAction(play, 0x203)) {
         if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 1) {
             this->actionFunc = func_80BAFF14;
             this->fogNear = -1;
@@ -489,10 +489,10 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFF14(EnZod* this, PlayState* play) {
-    func_80BAF3E0(this);
+    EnZod_UpdateAnimations(this);
     if (Cutscene_CheckActorAction(play, 0x203) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 4)) {
-        this->actionFunc = func_80BAFE34;
+        this->actionFunc = EnZod_UpdateFog;
     }
 }
 
@@ -535,7 +535,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnZod_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZod* this = THIS;
 
     if (limbIndex == OBJECT_ZOD_LIMB_03) {
@@ -546,21 +546,22 @@ s32 func_80BB0128(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-void func_80BB0170(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 3) {
+void EnZod_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    if (limbIndex == OBJECT_ZOD_LIMB_03) {
         Matrix_MultVec3f(&D_80BB0580, &thisx->focus.pos);
     }
 }
 
-void func_80BB01B0(EnZod* this, PlayState* play) {
+void EnZod_DrawDrums(EnZod* this, PlayState* play) {
     s32 i;
-    static Gfx* D_80BB0604[] = { object_zod_DL_00A460, object_zod_DL_00A550, object_zod_DL_00A5E0, object_zod_DL_00A670,
-                                 object_zod_DL_00A700, object_zod_DL_00A8F8, object_zod_DL_00AAF0, object_zod_DL_00ACE8,
-                                 object_zod_DL_00AEE0, object_zod_DL_00B0D8 };
+    static Gfx* sTijoDrumsDLs[] = {
+        gTijoDrumFrameDL, gTijoRideCymbalDL, gTijoCrashCymbalDL, gTijoHiHatDL, gTijoDrum1DL,
+        gTijoDrum2DL,      gTijoDrum3DL,      gTijoDrum4DL,       gTijoDrum5DL, gTijoBassDrumDL,
+    };
     f32 D_80BB058C[] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
     f32 D_80BB05B4[] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
     f32 D_80BB05DC[] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
-    f32 temp_fa0;
+    f32 scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -581,13 +582,13 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
             case 7:
             case 8:
             case 9:
-                temp_fa0 = this->unk268[9 - i] + 1.0f;
-                Matrix_Scale(temp_fa0, temp_fa0, temp_fa0, MTXMODE_APPLY);
+                scale = this->unk268[9 - i] + 1.0f;
+                Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
                 break;
         }
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_80BB0604[i]);
+        gSPDisplayList(POLY_OPA_DISP++, sTijoDrumsDLs[i]);
         Matrix_Pop();
     }
 
@@ -595,8 +596,7 @@ void func_80BB01B0(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80BB062C[5] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50, NULL,
-                                        NULL };
+    static TexturePtr D_80BB062C[] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50 };
     EnZod* this = THIS;
     Gfx* gfxP;
 
@@ -615,9 +615,9 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     POLY_OPA_DISP = gfxP + 2;
 
-    func_80BB01B0(this, play);
+    EnZod_DrawDrums(this, play);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80BB0128, func_80BB0170, &this->actor);
+                          EnZod_OverrideLimbDraw, EnZod_PostLimbDraw, &this->actor);
     if (this->unk256 & 2) {
         POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     }
