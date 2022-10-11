@@ -272,8 +272,8 @@ typedef struct Save {
     /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
     /* 0x0EF4 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
-    /* 0x0F5C */ u32 mapsVisited;                       // "area_arrival"
-    /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
+    /* 0x0F5C */ u32 regionsVisited;                    // "area_arrival"
+    /* 0x0F60 */ u32 worldMapCloudVisibility;           // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
     /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
     /* 0x0F66 */ u8 scarecrowSpawnSong[128];
