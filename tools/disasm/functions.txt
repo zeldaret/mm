@@ -5925,7 +5925,7 @@
     0x808B3170:("EnDekubaba_SetupHit",),
     0x808B3280:("EnDekubaba_Hit",),
     0x808B3390:("EnDekubaba_SetupPrunedSomersault",),
-    0x808B3404:("EnDekubaba_PrunedSomersault",),
+    0x808B3404:("EnDekubaba_PrunedSomersaultDie",),
     0x808B3768:("EnDekubaba_SetupShrinkDie",),
     0x808B37E8:("EnDekubaba_ShrinkDie",),
     0x808B39AC:("EnDekubaba_SetupStunnedVertical",),

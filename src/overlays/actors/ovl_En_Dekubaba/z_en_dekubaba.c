@@ -32,7 +32,7 @@ void EnDekubaba_SetupPullBack(EnDekubaba* this);
 void EnDekubaba_PullBack(EnDekubaba* this, PlayState* play);
 void EnDekubaba_Recover(EnDekubaba* this, PlayState* play);
 void EnDekubaba_Hit(EnDekubaba* this, PlayState* play);
-void EnDekubaba_PrunedSomersault(EnDekubaba* this, PlayState* play);
+void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play);
 void EnDekubaba_SetupShrinkDie(EnDekubaba* this);
 void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play);
 void EnDekubaba_SetupStunnedVertical(EnDekubaba* this);
@@ -773,15 +773,22 @@ void EnDekubaba_Recover(EnDekubaba* this, PlayState* play) {
     EnDekubaba_UpdateHeadPosition(this);
 }
 
-void EnDekubaba_SetupHit(EnDekubaba* this, s32 arg1) {
+typedef enum {
+    /* 0 */ DEKUBABA_HIT_STUNNED,
+    /* 1 */ DEKUBABA_HIT_NO_STUN,
+    /* 2 */ DEKUBABA_HIT_2,
+    /* 3 */ DEKUBABA_HIT_SPARKS
+} DekuBabaHitType;
+
+void EnDekubaba_SetupHit(EnDekubaba* this, s32 hitType) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gDekuBabaPauseChompAnim, -5.0f);
-    this->timer = arg1;
+    this->timer = hitType;
     this->collider.base.acFlags &= ~AC_ON;
     Actor_SetScale(&this->actor, this->size * 0.01f);
 
-    if (arg1 == 2) {
+    if (hitType == 2) {
         Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
-    } else if (arg1 == 3) {
+    } else if (hitType == 3) {
         Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffScale = 0.75f;
@@ -834,10 +841,10 @@ void EnDekubaba_SetupPrunedSomersault(EnDekubaba* this) {
     this->actor.speedXZ = this->size * 3.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
-    this->actionFunc = EnDekubaba_PrunedSomersault;
+    this->actionFunc = EnDekubaba_PrunedSomersaultDie;
 }
 
-void EnDekubaba_PrunedSomersault(EnDekubaba* this, PlayState* play) {
+void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
     s32 i;
     Vec3f dustPos;
     f32 deltaX;
@@ -1084,9 +1091,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                     if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ICE) {
                         EnDekubaba_SetupFrozen(this);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
-                        EnDekubaba_SetupHit(this, 3);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_SPARKS);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_NUT) {
-                        EnDekubaba_SetupHit(this, 2);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_2);
                     } else {
                         EnDekubaba_SetFireLightEffects(this, play, i);
 
@@ -1095,9 +1102,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                                 newHealth = 1;
                             }
 
-                            EnDekubaba_SetupHit(this, 1);
+                            EnDekubaba_SetupHit(this, DEKUBABA_HIT_NO_STUN);
                         } else {
-                            EnDekubaba_SetupHit(this, 0);
+                            EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUNNED);
                         }
                     }
                 } else {
@@ -1108,14 +1115,14 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                             EnDekubaba_SetupPrunedSomersault(this);
                         }
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
-                        EnDekubaba_SetupHit(this, 3);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_SPARKS);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_NUT) {
-                        EnDekubaba_SetupHit(this, 2);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_2);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ICE) {
                         EnDekubaba_SetupFrozen(this);
                     } else {
                         EnDekubaba_SetFireLightEffects(this, play, i);
-                        EnDekubaba_SetupHit(this, 0);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUNNED);
                     }
                 }
 
@@ -1135,7 +1142,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                (this->actionFunc != EnDekubaba_Hit) && (this->actor.colChkInfo.health != 0)) {
         this->actor.colChkInfo.health--;
         this->actor.dropFlag = 0;
-        EnDekubaba_SetupHit(this, 1);
+        EnDekubaba_SetupHit(this, DEKUBABA_HIT_NO_STUN);
     } else {
         return;
     }
@@ -1176,7 +1183,7 @@ void EnDekubaba_Update(Actor* thisx, PlayState* play) {
     EnDekubaba_UpdateDamage(this, play);
     this->actionFunc(this, play);
 
-    if (this->actionFunc == EnDekubaba_PrunedSomersault) {
+    if (this->actionFunc == EnDekubaba_PrunedSomersaultDie) {
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, this->size * 15.0f, 10.0f, 5);
     } else if (this->actionFunc != EnDekubaba_DeadStickDrop) {
@@ -1246,7 +1253,7 @@ void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->actionFunc == EnDekubaba_PrunedSomersault) {
+    if (this->actionFunc == EnDekubaba_PrunedSomersaultDie) {
         stemSections = 2;
     } else {
         stemSections = 3;
@@ -1357,7 +1364,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuBabaBaseLeavesDL);
 
-        if (this->actionFunc == EnDekubaba_PrunedSomersault) {
+        if (this->actionFunc == EnDekubaba_PrunedSomersaultDie) {
             EnDekubaba_DrawStemBasePruned(this, play);
         }
         if (this->boundFloor != NULL) {
