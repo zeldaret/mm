@@ -25,11 +25,11 @@ void func_80BAFF14(EnZod* this, PlayState* play);
 #define TIJO_STATE_2 (1 << 1)
 
 typedef enum {
-    ENZOD_ANIM_0,
-    ENZOD_ANIM_1,
-    ENZOD_ANIM_2,
-    ENZOD_ANIM_3,
-    ENZOD_ANIM_4,
+    ENZOD_ANIM_PLAYING_VIVACE,
+    ENZOD_ANIM_READY_TO_PLAY,
+    ENZOD_ANIM_ARMS_FOLDED,
+    ENZOD_ANIM_PLAYING_LENTO,
+    ENZOD_ANIM_PLAYING_ANDANTINO,
     ENZOD_ANIM_MAX,
 } EnZodAnimations;
 
@@ -113,14 +113,14 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
         this->drumScaleVels[i] = 0.01;
     }
 
-    EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
+    EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
     this->actionFunc = func_80BAF99C;
 
     switch (ENZOD_GET_F(thisx)) {
         case 1:
             if (gSaveContext.save.weekEventReg[0x4E] & 1) {
                 this->actionFunc = EnZod_SetupStartSession;
-                EnZod_ChangeAnimation(this, ENZOD_ANIM_0, ANIMMODE_ONCE);
+                EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
                 ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
                 break;
@@ -176,7 +176,7 @@ void func_80BAF1EC(EnZod* this, PlayState* play) {
         this->stateFlags |= TIJO_STATE_1;
     }
 
-    EnZod_ChangeAnimation(this, ENZOD_ANIM_0, ANIMMODE_ONCE);
+    EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
     Message_StartTextbox(play, textId, &this->actor);
 }
 
@@ -189,8 +189,8 @@ s32 func_80BAF2B4(EnZod* this, PlayState* play) {
 }
 
 void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode) {
-    if ((nextAnimIndex < ENZOD_ANIM_0) || (nextAnimIndex >= ENZOD_ANIM_MAX)) {
-        nextAnimIndex = ENZOD_ANIM_3;
+    if ((nextAnimIndex < ENZOD_ANIM_PLAYING_VIVACE) || (nextAnimIndex >= ENZOD_ANIM_MAX)) {
+        nextAnimIndex = ENZOD_ANIM_PLAYING_LENTO;
     }
     Animation_Change(&this->skelAnime, D_80BB056C[nextAnimIndex], 1.0f, 0.0f,
                      Animation_GetLastFrame(D_80BB056C[nextAnimIndex]), mode, -5.0f);
@@ -203,15 +203,15 @@ void EnZod_UpdateAnimations(EnZod* this) {
         if (this->nextAnimIndex == this->curAnimIndex) {
             EnZod_ChangeAnimation(this, this->curAnimIndex, ANIMMODE_ONCE);
             switch (this->curAnimIndex) {
-                case ENZOD_ANIM_3:
+                case ENZOD_ANIM_PLAYING_LENTO:
                     if (Rand_ZeroFloat(1.0f) < 0.2f) {
-                        this->nextAnimIndex = ENZOD_ANIM_4;
+                        this->nextAnimIndex = ENZOD_ANIM_PLAYING_ANDANTINO;
                     }
                     break;
 
-                case ENZOD_ANIM_4:
+                case ENZOD_ANIM_PLAYING_ANDANTINO:
                     if (Rand_ZeroFloat(1.0f) < 0.8f) {
-                        this->nextAnimIndex = ENZOD_ANIM_3;
+                        this->nextAnimIndex = ENZOD_ANIM_PLAYING_LENTO;
                     }
                     break;
             }
@@ -236,13 +236,13 @@ void func_80BAF4D8(EnZod* this) {
 
         switch (i) {
             case 0:
-                if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 7)) {
+                if ((this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO) && ((s32)this->skelAnime.curFrame == 7)) {
                     this->cymbalRotVels[i] = -1000;
                 }
                 break;
 
             case 1:
-                if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 19)) {
+                if ((this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO) && ((s32)this->skelAnime.curFrame == 19)) {
                     this->cymbalRotVels[i] = -1000;
                 }
                 break;
@@ -259,15 +259,15 @@ void func_80BAF4D8(EnZod* this) {
 
         switch (i) {
             case 0:
-                if (((this->curAnimIndex == ENZOD_ANIM_3) || (this->curAnimIndex == ENZOD_ANIM_4)) &&
+                if (((this->curAnimIndex == ENZOD_ANIM_PLAYING_LENTO) || (this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO)) &&
                     ((s32)this->skelAnime.curFrame == 1)) {
                     this->drumScaleVels[i] = 0.1f;
                 }
                 break;
 
             case 2:
-                if (((this->curAnimIndex == ENZOD_ANIM_3) && ((s32)this->skelAnime.curFrame == 19)) ||
-                    ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 8))) {
+                if (((this->curAnimIndex == ENZOD_ANIM_PLAYING_LENTO) && ((s32)this->skelAnime.curFrame == 19)) ||
+                    ((this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO) && ((s32)this->skelAnime.curFrame == 8))) {
                     this->drumScaleVels[i] = 0.1f;
                 }
                 break;
@@ -294,7 +294,7 @@ void func_80BAF4D8(EnZod* this) {
                 break;
 
             case 4:
-                if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 19)) {
+                if ((this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO) && ((s32)this->skelAnime.curFrame == 19)) {
                     this->drumScaleVels[i] = 0.15f;
                 }
 
@@ -336,29 +336,29 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
 
                     case 0x1219:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        this->nextAnimIndex = ENZOD_ANIM_2;
+                        this->nextAnimIndex = ENZOD_ANIM_ARMS_FOLDED;
                         break;
 
                     case 0x121D:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        this->nextAnimIndex = ENZOD_ANIM_1;
+                        this->nextAnimIndex = ENZOD_ANIM_READY_TO_PLAY;
                         break;
 
                     case 0x1223:
                         func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
-                        this->nextAnimIndex = ENZOD_ANIM_0;
+                        this->nextAnimIndex = ENZOD_ANIM_PLAYING_VIVACE;
                         break;
 
                     case 0x121E:
                     case 0x1226:
                         func_80151938(play, 0x121F);
-                        this->nextAnimIndex = ENZOD_ANIM_1;
+                        this->nextAnimIndex = ENZOD_ANIM_READY_TO_PLAY;
                         break;
 
                     default:
                         func_801477B4(play);
                         this->actionFunc = func_80BAF99C;
-                        EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
+                        EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
                         break;
                 }
             }
@@ -403,7 +403,7 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
         textId = 0x1250; // If you want an autograph...
     }
 
-    EnZod_ChangeAnimation(this, ENZOD_ANIM_0, ANIMMODE_ONCE);
+    EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
     Message_StartTextbox(play, textId, &this->actor);
 }
 
@@ -416,11 +416,11 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
         if ((msgState == 5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->actionFunc = func_80BAFB84;
-            EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
+            EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         }
     } else {
         this->actionFunc = func_80BAFB84;
-        EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
+        EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
     }
 }
 
@@ -461,7 +461,7 @@ void EnZod_StartSession(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
+        EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         this->actionFunc = func_80BAFC10;
         ActorCutscene_Stop(this->actor.cutscene);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
