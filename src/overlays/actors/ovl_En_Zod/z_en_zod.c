@@ -21,6 +21,9 @@ void func_80BAFB84(EnZod* this, PlayState* play);
 void EnZod_SetupStartSession(EnZod* this, PlayState* play);
 void func_80BAFF14(EnZod* this, PlayState* play);
 
+#define TIJO_STATE_1 (1 << 0)
+#define TIJO_STATE_2 (1 << 1)
+
 typedef enum {
     ENZOD_ANIM_0,
     ENZOD_ANIM_1,
@@ -29,6 +32,21 @@ typedef enum {
     ENZOD_ANIM_4,
     ENZOD_ANIM_MAX,
 } EnZodAnimations;
+
+typedef enum {
+    ENZOD_INSTRUMENT_CYMBAL_1 = 1,
+    ENZOD_INSTRUMENT_CYMBAL_2,
+    ENZOD_INSTRUMENT_CYMBAL_3,
+} EnZodInstrumentCymbal;
+
+typedef enum {
+    ENZOD_INSTRUMENT_DRUM_1 = 4,
+    ENZOD_INSTRUMENT_DRUM_2,
+    ENZOD_INSTRUMENT_DRUM_3,
+    ENZOD_INSTRUMENT_DRUM_4,
+    ENZOD_INSTRUMENT_DRUM_5,
+    ENZOD_INSTRUMENT_BASS_DRUM,
+} EnZodInstrumentDrum;
 
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
@@ -76,23 +94,23 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &object_zod_Anim_000D94, this->morphTable,
-                       this->JointTable, OBJECT_ZOD_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &object_zod_Anim_000D94, this->morphTable, this->JointTable,
+                       OBJECT_ZOD_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_zod_Anim_000D94);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->unk25C[0] = this->unk25C[1] = this->unk25C[2] = 0;
+    this->cymbalRots[0] = this->cymbalRots[1] = this->cymbalRots[2] = 0;
     this->actor.gravity = this->actor.terminalVelocity = -4.0f;
-    this->unk262[0] = this->unk262[1] = this->unk262[2] = 0x12C;
-    this->unk256 = 0;
+    this->cymbalRotVels[0] = this->cymbalRotVels[1] = this->cymbalRotVels[2] = 300;
+    this->stateFlags = 0;
     this->nextAnimIndex = -1;
     this->curAnimIndex = -1;
     this->actor.textId = 0;
-    this->unused = 0;
+    this->unk_298 = 0;
 
     for (i = 0; i < 6; i++) {
-        this->unk268[i] = 0.0f;
-        this->unk280[i] = 0.01;
+        this->drumScales[i] = 0.0f;
+        this->drumScaleVels[i] = 0.01;
     }
 
     EnZod_ChangeAnimation(this, ENZOD_ANIM_3, ANIMMODE_ONCE);
@@ -118,7 +136,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
         case 2:
             this->actionFunc = func_80BAFF14;
             this->fogNear = -1;
-            this->unk256 |= 2;
+            this->stateFlags |= TIJO_STATE_2;
             break;
 
         default:
@@ -146,7 +164,7 @@ void func_80BAF1EC(EnZod* this, PlayState* play) {
         } else {
             gSaveContext.save.weekEventReg[0x20] |= 8;
         }
-    } else if (this->unk256 & 1) {
+    } else if (this->stateFlags & TIJO_STATE_1) {
         textId = 0x1225; // Don't get mad, but i want you to hear this...
     } else {
         textId = 0x1219; // Mikau? Where've you been? I was worried.
@@ -155,7 +173,7 @@ void func_80BAF1EC(EnZod* this, PlayState* play) {
         } else {
             gSaveContext.save.weekEventReg[0x20] |= 0x10;
         }
-        this->unk256 |= 1;
+        this->stateFlags |= TIJO_STATE_1;
     }
 
     EnZod_ChangeAnimation(this, ENZOD_ANIM_0, ANIMMODE_ONCE);
@@ -209,48 +227,48 @@ void func_80BAF4D8(EnZod* this) {
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        this->unk25C[i] += this->unk262[i];
-        this->unk262[i] -= (s16)(this->unk25C[i] * 0.1f);
+        this->cymbalRots[i] += this->cymbalRotVels[i];
+        this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
 
-        if (ABS_ALT(this->unk262[i]) > 100) {
-            this->unk262[i] *= 0.9f;
+        if (ABS_ALT(this->cymbalRotVels[i]) > 100) {
+            this->cymbalRotVels[i] *= 0.9f;
         }
 
         switch (i) {
             case 0:
                 if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 7)) {
-                    this->unk262[i] = -1000;
+                    this->cymbalRotVels[i] = -1000;
                 }
                 break;
 
             case 1:
                 if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 19)) {
-                    this->unk262[i] = -1000;
+                    this->cymbalRotVels[i] = -1000;
                 }
                 break;
         }
     }
 
     for (i = 0; i < 6; i++) {
-        this->unk268[i] += this->unk280[i];
-        this->unk280[i] -= (this->unk268[i] * 0.8f);
+        this->drumScales[i] += this->drumScaleVels[i];
+        this->drumScaleVels[i] -= (this->drumScales[i] * 0.8f);
 
-        if (fabsf(this->unk280[i]) > 0.01f) {
-            this->unk280[i] *= 0.5f;
+        if (fabsf(this->drumScaleVels[i]) > 0.01f) {
+            this->drumScaleVels[i] *= 0.5f;
         }
 
         switch (i) {
             case 0:
                 if (((this->curAnimIndex == ENZOD_ANIM_3) || (this->curAnimIndex == ENZOD_ANIM_4)) &&
                     ((s32)this->skelAnime.curFrame == 1)) {
-                    this->unk280[i] = 0.1f;
+                    this->drumScaleVels[i] = 0.1f;
                 }
                 break;
 
             case 2:
                 if (((this->curAnimIndex == ENZOD_ANIM_3) && ((s32)this->skelAnime.curFrame == 19)) ||
                     ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 8))) {
-                    this->unk280[i] = 0.1f;
+                    this->drumScaleVels[i] = 0.1f;
                 }
                 break;
 
@@ -262,14 +280,14 @@ void func_80BAF4D8(EnZod* this) {
                             case 7:
                             case 12:
                             case 19:
-                                this->unk280[i] = 0.03f;
+                                this->drumScaleVels[i] = 0.03f;
                                 break;
                         }
                         break;
 
                     case 4:
                         if ((s32)this->skelAnime.curFrame == 1) {
-                            this->unk280[i] = 0.1f;
+                            this->drumScaleVels[i] = 0.1f;
                         }
                         break;
                 }
@@ -277,7 +295,7 @@ void func_80BAF4D8(EnZod* this) {
 
             case 4:
                 if ((this->curAnimIndex == ENZOD_ANIM_4) && ((s32)this->skelAnime.curFrame == 19)) {
-                    this->unk280[i] = 0.15f;
+                    this->drumScaleVels[i] = 0.15f;
                 }
 
                 break;
@@ -473,7 +491,7 @@ void EnZod_UpdateFog(EnZod* this, PlayState* play) {
         this->fogNear += 30;
     }
 
-    if (this->fogNear >= 1000) {
+    if (this->fogNear > 999) {
         this->fogNear = 999;
     }
 
@@ -556,34 +574,37 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
     s32 i;
     static Gfx* sTijoDrumsDLs[] = {
         gTijoDrumFrameDL, gTijoRideCymbalDL, gTijoCrashCymbalDL, gTijoHiHatDL, gTijoDrum1DL,
-        gTijoDrum2DL,      gTijoDrum3DL,      gTijoDrum4DL,       gTijoDrum5DL, gTijoBassDrumDL,
+        gTijoDrum2DL,     gTijoDrum3DL,      gTijoDrum4DL,       gTijoDrum5DL, gTijoBassDrumDL,
     };
-    f32 D_80BB058C[] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
-    f32 D_80BB05B4[] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
-    f32 D_80BB05DC[] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
+    f32 instrumentPosXs[] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
+    f32 instrumentPosYs[] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
+    f32 instrumentPosZs[] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
     f32 scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < ARRAY_COUNT(sTijoDrumsDLs); i++) {
         Matrix_Push();
-        Matrix_Translate(D_80BB058C[i], D_80BB05B4[i], D_80BB05DC[i], MTXMODE_APPLY);
+        Matrix_Translate(instrumentPosXs[i], instrumentPosYs[i], instrumentPosZs[i], MTXMODE_APPLY);
 
         switch (i) {
-            case 1:
-            case 2:
-            case 3:
-                Matrix_RotateXS(this->unk25C[i - 1], MTXMODE_APPLY);
+            case ENZOD_INSTRUMENT_CYMBAL_1:
+            case ENZOD_INSTRUMENT_CYMBAL_2:
+            case ENZOD_INSTRUMENT_CYMBAL_3:
+                Matrix_RotateXS(this->cymbalRots[i - 1], MTXMODE_APPLY);
                 break;
 
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                scale = this->unk268[9 - i] + 1.0f;
+            case ENZOD_INSTRUMENT_DRUM_1:
+            case ENZOD_INSTRUMENT_DRUM_2:
+            case ENZOD_INSTRUMENT_DRUM_3:
+            case ENZOD_INSTRUMENT_DRUM_4:
+            case ENZOD_INSTRUMENT_DRUM_5:
+            case ENZOD_INSTRUMENT_BASS_DRUM:
+                scale = this->drumScales[9 - i] + 1.0f;
                 Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
+                break;
+
+            default:
                 break;
         }
 
@@ -604,7 +625,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
 
-    if (this->unk256 & 2) {
+    if (this->stateFlags & TIJO_STATE_2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->fogNear, 1000);
     }
 
@@ -618,7 +639,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
     EnZod_DrawDrums(this, play);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnZod_OverrideLimbDraw, EnZod_PostLimbDraw, &this->actor);
-    if (this->unk256 & 2) {
+    if (this->stateFlags & TIJO_STATE_2) {
         POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     }
 

@@ -20,14 +20,14 @@ typedef struct EnZod {
     /* 0x24C */ s16 eyeIndex;
     /* 0x24E */ s16 blinkTimer;
     /* 0x250 */ Vec3s headRot;
-    /* 0x256 */ u16 unk256;
+    /* 0x256 */ u16 stateFlags;
     /* 0x258 */ s16 curAnimIndex;
     /* 0x25A */ s16 nextAnimIndex;
-    /* 0x25C */ s16 unk25C[3];
-    /* 0x262 */ s16 unk262[3];
-    /* 0x268 */ f32 unk268[6];
-    /* 0x280 */ f32 unk280[6];
-    /* 0x298 */ s16 unused; // Set but not used.
+    /* 0x25C */ s16 cymbalRots[3];
+    /* 0x262 */ s16 cymbalRotVels[3];
+    /* 0x268 */ f32 drumScales[6];
+    /* 0x280 */ f32 drumScaleVels[6];
+    /* 0x298 */ s16 unk_298; // Set but not used.
     /* 0x29A */ s16 fogNear;
     /* 0x29C */ EnZodActionFunc actionFunc;
 } EnZod; // size = 0x2A0
