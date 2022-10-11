@@ -102,8 +102,8 @@ void TransitionWipe4_Draw(void* thisx, Gfx** gfxP) {
         copyFx->lodProportion = THIS->progress;
     }
 
-    //! @bug (Possibly) Since copyFx->mode is never set after being initialised to 0, the switch in VisFbCopyFx_Draw() does
-    //! nothing, so this function call does nothing but change to the sprite microcode, then back to 3D microcode.
+    //! @bug (Possibly) Since copyFx->mode is never set after being initialised to 0, the switch in VisFbCopyFx_Draw()
+    //! does nothing, so this function call does nothing but change to the sprite microcode, then back to 3D microcode.
     VisFbCopyFx_Draw(copyFx, &gfx, SysCfb_GetZBuffer());
     *gfxP = gfx;
 }
