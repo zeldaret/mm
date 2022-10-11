@@ -110,7 +110,8 @@ extern GraphicsContext* __gfxCtx;
 
 #define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
 
-// Custom gbi macro
+/* Custom gbi macros */
+
 #define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
     {                                                                                                                  \
         gDPPipeSync(pkt);                                                                                              \
@@ -124,6 +125,16 @@ extern GraphicsContext* __gfxCtx;
                        ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
     }                                                                                                                  \
     (void)0
+
+// used only by code_80140E80
+#define gDPSetLODColor(pkt, c, m, l, d)                                           \
+    _DW({                                                                         \
+        Gfx* _g = (Gfx*)(pkt);                                                    \
+                                                                                  \
+        _g->words.w0 = (_SHIFTL(c, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
+        _g->words.w1 = (unsigned int)(d);                                         \
+    })
+
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)

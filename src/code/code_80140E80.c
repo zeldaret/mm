@@ -15,15 +15,15 @@
 
 // z64.h once named properly
 typedef enum {
-    /* 0 */ BG_CYC_1CYC, // Enable rescaling
-    /* 1 */ BG_CYC_COPY  // Direct copy, no scaling
+    /* 0 */ BG_CYC_1CYC, //!< Enable rescaling
+    /* 1 */ BG_CYC_COPY  //!< Direct copy, no scaling
 } BgMode;
 
 typedef enum {
-    /* 0 */ FB_MODE_DO_NOTHING, // Do nothing but waste time loading microcode
-    /* 1 */ FB_MODE_GENERAL,    // Interpolation, filling and scaling
-    /* 2 */ FB_MODE_INTERPOLATE
-} FbMode;
+    /* 0 */ FB_COPY_MODE_NONE,    //!< Do nothing but waste time loading microcode
+    /* 1 */ FB_COPY_MODE_GENERAL, //!< Interpolation, filling and scaling
+    /* 2 */ FB_COPY_MODE_INTERPOLATE
+} FbCopyMode;
 
 #define SCALE_MIN 0.032f
 #define SCALE_MAX 1.0f //!< also unchanged scale
@@ -115,7 +115,7 @@ void func_80141008(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
     bg->b.imageFlip = 0;
     bg->b.imagePtr = source;
 
-    if (!!(cycleFlag & BG_CYC_COPY) != 0) { //! TODO possibly fake, may be a better way
+    if (!!(cycleFlag & BG_CYC_COPY) != 0) { //! FAKE: may possibly be a better way
         guS2DInitBg(bg);
     } else {
         bg->s.scaleW = (s32)((1 << 10) / scaleX);
@@ -152,23 +152,6 @@ void func_801411B4(Gfx** gfxP, void* source, void* img, s32 width, s32 height, f
                    s32 cycleFlag) {
     func_80141008(gfxP, source, img, width, height, x, y, scaleX, scaleY, cycleFlag);
 }
-
-// TODO work out what to do with this.
-#define gDPSetPrimColor_u32(pkt, m, l, d)                                                      \
-    _DW({                                                                                      \
-        Gfx* _g = (Gfx*)(pkt);                                                                 \
-                                                                                               \
-        _g->words.w0 = (_SHIFTL(G_SETPRIMCOLOR, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8)); \
-        _g->words.w1 = (unsigned int)(d);                                                      \
-    })
-
-#define gDPSetLODColor(pkt, c, m, l, d)                                            \
-    _DW({                                                                          \
-        Gfx* _g = (Gfx*)(pkt);                                                     \
-                                                                                   \
-        _g->words.w0 = (_SHIFTL(c, 24, 8) | _SHIFTL(m, 8, 8) | _SHIFTL(l, 0, 8))); \
-        _g->words.w1 = (unsigned int)(d);                                          \
-    })
 
 // internal, used in func_8014151C
 /**
@@ -220,7 +203,7 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     {
         s32 lodFrac = this->lodProportion * 255;
 
-        gDPSetPrimColor_u32(gfx++, 0, lodFrac, this->primColor.rgba);
+        gDPSetLODColor(gfx++, G_SETPRIMCOLOR, 0, lodFrac, this->primColor.rgba);
     }
     if (this->envColor.a == 0) {
         // Interpolate between primColor and texel color using lod (but with max alpha)
@@ -243,7 +226,7 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
                           ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, PRIMITIVE, ENVIRONMENT, TEXEL0,
                           ENVIRONMENT);
     }
-    // Draw scaled image in centre of width x height rectangle in `source`
+    // Draw scaled image in centre of `width * height` rectangle in `source`
     {
         f32 scale = CLAMP_ALT(this->scale, SCALE_MIN, SCALE_MAX);
 
@@ -256,7 +239,7 @@ void func_80141200(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     *gfxP = gfx;
 }
 
-// internal, used in func_80141778, mode 1
+// internal, used in func_80141778, FB_COPY_MODE_GENERAL
 /**
  * If scale is within `(SCALE_MIN, SCALE_MAX)`, apply func_80141200().
  * If it is smaller than `SCALE_MIN`, fill the framebuffer with `this->primColor`
@@ -294,7 +277,7 @@ void func_8014151C(Struct_80140E80* this, Gfx** gfxP, void* source, void* img, s
     }
 }
 
-// internal, used in func_80141778, mode 2
+// internal, used in func_80141778, FB_COPY_MODE_INTERPOLATE
 /**
  * Redraw `img` in-place, using texel color to interpolate between envColor (the new black) and primColor (the new
  * white)
@@ -339,11 +322,11 @@ void func_80141778(Struct_80140E80* this, Gfx** gfxP, void* img) {
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
 
     switch (this->mode) {
-        case FB_MODE_GENERAL:
+        case FB_COPY_MODE_GENERAL:
             func_8014151C(this, &gfx, D_0F000000, img, gScreenWidth, gScreenHeight);
             break;
 
-        case FB_MODE_INTERPOLATE:
+        case FB_COPY_MODE_INTERPOLATE:
             func_80141678(this, &gfx, D_0F000000, gScreenWidth, gScreenHeight);
             break;
 
