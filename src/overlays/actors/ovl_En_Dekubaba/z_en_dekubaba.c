@@ -774,10 +774,10 @@ void EnDekubaba_Recover(EnDekubaba* this, PlayState* play) {
 }
 
 typedef enum {
-    /* 0 */ DEKUBABA_HIT_STUNNED,
-    /* 1 */ DEKUBABA_HIT_NO_STUN,
-    /* 2 */ DEKUBABA_HIT_2,
-    /* 3 */ DEKUBABA_HIT_SPARKS
+    /* 0 */ DEKUBABA_HIT_NO_STUN,
+    /* 1 */ DEKUBABA_HIT_STUN_OTHER,
+    /* 2 */ DEKUBABA_HIT_STUN_NUT,
+    /* 3 */ DEKUBABA_HIT_STUN_ELECTRIC
 } DekuBabaHitType;
 
 void EnDekubaba_SetupHit(EnDekubaba* this, s32 hitType) {
@@ -786,9 +786,9 @@ void EnDekubaba_SetupHit(EnDekubaba* this, s32 hitType) {
     this->collider.base.acFlags &= ~AC_ON;
     Actor_SetScale(&this->actor, this->size * 0.01f);
 
-    if (hitType == 2) {
+    if (hitType == DEKUBABA_HIT_STUN_NUT) {
         Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
-    } else if (hitType == 3) {
+    } else if (hitType == DEKUBABA_HIT_STUN_ELECTRIC) {
         Actor_SetColorFilter(&this->actor, 0, 155, 0, 42);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffScale = 0.75f;
@@ -817,7 +817,7 @@ void EnDekubaba_Hit(EnDekubaba* this, PlayState* play) {
         } else {
             this->collider.base.acFlags |= AC_ON;
 
-            if (this->timer == 0) {
+            if (this->timer == DEKUBABA_HIT_NO_STUN) {
                 if (this->actor.xzDistToPlayer < (80.0f * this->size)) {
                     EnDekubaba_SetupPrepareLunge(this);
                 } else {
@@ -1091,9 +1091,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                     if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ICE) {
                         EnDekubaba_SetupFrozen(this);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
-                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_SPARKS);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_ELECTRIC);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_NUT) {
-                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_2);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_NUT);
                     } else {
                         EnDekubaba_SetFireLightEffects(this, play, i);
 
@@ -1102,9 +1102,9 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                                 newHealth = 1;
                             }
 
-                            EnDekubaba_SetupHit(this, DEKUBABA_HIT_NO_STUN);
+                            EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_OTHER);
                         } else {
-                            EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUNNED);
+                            EnDekubaba_SetupHit(this, DEKUBABA_HIT_NO_STUN);
                         }
                     }
                 } else {
@@ -1115,14 +1115,14 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                             EnDekubaba_SetupPrunedSomersault(this);
                         }
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
-                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_SPARKS);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_ELECTRIC);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_NUT) {
-                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_2);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_NUT);
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ICE) {
                         EnDekubaba_SetupFrozen(this);
                     } else {
                         EnDekubaba_SetFireLightEffects(this, play, i);
-                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUNNED);
+                        EnDekubaba_SetupHit(this, DEKUBABA_HIT_NO_STUN);
                     }
                 }
 
@@ -1142,7 +1142,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                (this->actionFunc != EnDekubaba_Hit) && (this->actor.colChkInfo.health != 0)) {
         this->actor.colChkInfo.health--;
         this->actor.dropFlag = 0;
-        EnDekubaba_SetupHit(this, DEKUBABA_HIT_NO_STUN);
+        EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_OTHER);
     } else {
         return;
     }
