@@ -1915,7 +1915,7 @@ void Player_SetModelsForHoldingShield(Player* player);
 void Player_SetModels(Player* player, PlayerModelGroup modelGroup);
 void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
-void Player_SetEquipmentData(PlayState* play, Player* this);
+void Player_SetEquipmentData(PlayState* play, Player* player);
 void func_80123D50(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam);
 void func_80123DA4(Player* player);
 void func_80123DC0(Player* player);
