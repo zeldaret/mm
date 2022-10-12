@@ -1,6 +1,42 @@
 #include "ultra64.h"
 #include "global.h"
 
+/**
+ * All the data from `CameraSetting`, `CameraMode`, `sCameraUpdateHandlers`, and `CameraModeValue` below
+ * can be thought of as a single 2D ragged array table with holes in it, indexed by `[camSetting][camMode]`.
+ *
+ * The `CameraSetting` and `CameraMode` together build this 2D table, with data/functions/flags for each entry.
+ *
+ * Each entry in this 2D table consists of a both a camera-update function to run (`sCameraUpdateHandlers`),
+ * and a set of data to accompany that camera-update function (`CameraModeValue`). Often, `CameraModeValue`
+ * data entries are reused. Not every entry is valid, and the flags in the entry are used to indicate this.
+ */
+
+typedef s32 (*CameraUpdateFunc)(Camera*);
+
+typedef struct {
+    /* 0x0 */ s16 val;
+    /* 0x2 */ s16 param;
+} CameraModeValue; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ s16 funcId;
+    /* 0x2 */ s16 numValues;
+    /* 0x4 */ CameraModeValue* values;
+} CameraMode; // size = 0x8
+
+/**
+ * Flags:
+ * (flags & 0xF): Priority (lower value has higher priority)
+ * (flags & 0x40000000): Store previous setting and bgCamData, also ignores water checks
+ * (flags & 0x80000000): Set camera setting based on bg/scene data and reset action function state
+ */
+typedef struct {
+    /* 0x0 */ u32 validModes;
+    /* 0x4 */ u32 flags;
+    /* 0x8 */ CameraMode* cameraModes;
+} CameraSetting; // size = 0xC
+
 /*=====================================================================
  *                   Default Data: NORMAL0 Setting
  *=====================================================================

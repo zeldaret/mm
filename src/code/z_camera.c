@@ -55,7 +55,7 @@ s32 Camera_ChangeMode(Camera* camera, s16 mode);
 s16 Camera_ChangeSettingFlags(Camera* camera, s16 setting, s16 flags);
 s16 Camera_UnsetStateFlag(Camera* camera, s16 flags);
 
-#include "z_camera_data.c"
+#include "z_camera_data.inc.c"
 
 PlayState* sCamPlayState;
 SwingAnimation D_801EDC30[4];
@@ -6249,7 +6249,7 @@ s32 Camera_Demo3(Camera* camera) {
             // Init Data
             camera->animState++;
             rwData->timer = 125;
-            Distortion_SetType(8);
+            Distortion_SetType(DISTORTION_TYPE_3);
             Distortion_SetCountdown(60);
             break;
 
@@ -6262,7 +6262,7 @@ s32 Camera_Demo3(Camera* camera) {
             if (rwData->timer <= 0) {
                 rwData->timer = 20;
                 camera->animState++;
-                Distortion_SetType(0x10);
+                Distortion_SetType(DISTORTION_TYPE_4);
                 Distortion_SetCountdown(80);
             }
             break;
@@ -6275,7 +6275,7 @@ s32 Camera_Demo3(Camera* camera) {
                 rwData->timer = 0;
                 rwData->unk_00 = (175.0f - camera->fov) / rwData->unk_04;
                 camera->animState++;
-                Distortion_SetType(0x400);
+                Distortion_SetType(DISTORTION_TYPE_A);
                 Distortion_SetCountdown(15);
             }
             break;
@@ -6284,9 +6284,9 @@ s32 Camera_Demo3(Camera* camera) {
             rwData->timer++;
             camera->fov += rwData->unk_00 * rwData->timer;
             if (rwData->timer >= 15) {
-                Distortion_ClearType(0x400);
-                Distortion_ClearType(0x10);
-                Distortion_ClearType(8);
+                Distortion_ClearType(DISTORTION_TYPE_A);
+                Distortion_ClearType(DISTORTION_TYPE_4);
+                Distortion_ClearType(DISTORTION_TYPE_3);
                 camera->animState++;
             }
             break;
@@ -6350,7 +6350,7 @@ s32 Camera_Demo4(Camera* camera) {
                 sin = sin_rad(DEGF_TO_RADF(rwData->unk_0C));
                 rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
                 if (rwData->timer == 12) {
-                    Distortion_SetType(0x200);
+                    Distortion_SetType(DISTORTION_TYPE_9);
                     Distortion_SetCountdown(26);
                 }
             } else {
@@ -6376,7 +6376,7 @@ s32 Camera_Demo4(Camera* camera) {
                 rwData->timer = 24;
                 camera->animState++;
                 rwData->unk_0C = (32.0f - camera->fov) / 24.0f;
-                Distortion_SetType(0x800);
+                Distortion_SetType(DISTORTION_TYPE_B);
             }
             break;
 
@@ -6426,16 +6426,16 @@ s32 Camera_Demo4(Camera* camera) {
             atToEye.r = 35.0f;
 
             if (rwData->timer >= 35) {
-                Distortion_ClearType(0x200);
-                Distortion_ClearType(0x800);
+                Distortion_ClearType(DISTORTION_TYPE_9);
+                Distortion_ClearType(DISTORTION_TYPE_B);
                 camera->animState = 4;
             }
             break;
 
         case 999:
             Actor_GetFocus(&focalActorFocus, camera->focalActor);
-            Distortion_ClearType(0x200);
-            Distortion_ClearType(0x800);
+            Distortion_ClearType(DISTORTION_TYPE_9);
+            Distortion_ClearType(DISTORTION_TYPE_B);
             camera->animState = 4;
             break;
 
@@ -6510,7 +6510,7 @@ s32 Camera_Demo5(Camera* camera) {
                 camera->animState = 2;
                 rwData->unk_24 = camera->focalActorPosRot.rot.y + 0x4000;
                 rwData->timer = 46;
-                Distortion_SetType(0x200);
+                Distortion_SetType(DISTORTION_TYPE_9);
                 Distortion_SetCountdown(46);
             }
             break;
@@ -6534,14 +6534,14 @@ s32 Camera_Demo5(Camera* camera) {
             atToEye.pitch = 0;
             if (rwData->timer <= 0) {
                 camera->animState = 3;
-                Distortion_ClearType(0x200);
+                Distortion_ClearType(DISTORTION_TYPE_9);
             }
             break;
 
         case 999:
             Actor_GetFocus(&focalActorFocus, camera->focalActor);
             camera->animState = 3;
-            Distortion_ClearType(0x200);
+            Distortion_ClearType(DISTORTION_TYPE_9);
             break;
 
         case 3:
@@ -6883,7 +6883,7 @@ s32 Camera_Special8(Camera* camera) {
         Camera_SetStateFlag(camera, CAM_STATE_10 | CAM_STATE_4);
         sCameraInterfaceFlags = CAM_INTERFACE_FLAGS(CAM_LETTERBOX_NONE, CAM_HUD_VISIBILITY_ALL, 0);
 
-        // Wait for user input to move to the next camera action function
+        // Wait for user input to move to the next camera update function
         if ((camera->xzSpeed > 0.001f) || CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_A) ||
             CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_B) ||
             CHECK_BTN_ALL(CONTROLLER1(&camera->play->state)->press.button, BTN_CUP) ||
@@ -7420,9 +7420,9 @@ void Camera_EarthquakeDay3(Camera* camera) {
  * Remnant of OoT as no room in any MM scene is set to a hot-room
  */
 s32 Camera_UpdateHotRoom(Camera* camera) {
-    Distortion_ClearType(1);
+    Distortion_ClearType(DISTORTION_TYPE_0);
     if (camera->play->roomCtx.curRoom.unk2 == 3) {
-        Distortion_SetType(1);
+        Distortion_SetType(DISTORTION_TYPE_0);
     }
     return true;
 }
@@ -7431,23 +7431,23 @@ s32 Camera_SetSwordDistortion(Camera* camera) {
     switch (func_800CBB88(camera)) {
         case 1:
             // non-magic spin attack
-            if (Distortion_GetType() != 0x40) {
-                Distortion_SetType(0x40);
+            if (Distortion_GetType() != DISTORTION_TYPE_6) {
+                Distortion_SetType(DISTORTION_TYPE_6);
                 Distortion_SetCountdown(12);
             }
             break;
 
         case 2:
             // Unused: case 2 is impossible to achieve
-            if (Distortion_GetType() != 0x80) {
-                Distortion_SetType(0x80);
+            if (Distortion_GetType() != DISTORTION_TYPE_7) {
+                Distortion_SetType(DISTORTION_TYPE_7);
                 Distortion_SetCountdown(5);
             }
             break;
 
         case 3:
-            if (Distortion_GetType() != 0x100) {
-                Distortion_SetType(0x100);
+            if (Distortion_GetType() != DISTORTION_TYPE_8) {
+                Distortion_SetType(DISTORTION_TYPE_8);
                 Distortion_SetCountdown(15);
             }
             break;
@@ -7644,7 +7644,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         Camera_SetStateFlag(camera, CAM_STATE_4);
     }
 
-    // Call the Action Function
+    // Call the camera update function
     sCameraUpdateHandlers[sCameraSettings[camera->setting].cameraModes[camera->mode].funcId](camera);
 
     // Update the interface
