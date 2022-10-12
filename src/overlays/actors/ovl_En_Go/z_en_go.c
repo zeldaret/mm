@@ -1047,11 +1047,11 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
 }
 
 void func_80A136B8(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetDuration(quakeIndex, countdown);
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetPerturbations(quakeIndex, verticalMag, 0, 0, 0);
 }
 
 void func_80A13728(EnGo* this, PlayState* play) {

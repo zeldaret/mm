@@ -451,11 +451,11 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y <= sp7C)) {
         if (this->unk_1CA == 0) {
             if (this->actor.xzDistToPlayer < 400.0f) {
-                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
                 Quake_SetSpeed(quakeIndex, 17232);
-                Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 7);
+                Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 7);
             }
 
             this->unk_1C4 = 0.0f;

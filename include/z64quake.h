@@ -9,42 +9,36 @@ struct Camera;
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
     /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rollOffset;
-    /* 0x1A */ s16 zoom;
-    /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
-} QuakeCamCalc; // size = 0x20
+    /* 0x18 */ s16 upRollOffset;
+    /* 0x1A */ s16 fovOffset;
+    /* 0x1C */ f32 maxOffset; // Set to scaled max data of struct (mag for Vec3f), never used
+} ShakeInfo; // size = 0x20
 
-#define QUAKE_SPEED (1 << 0)
-#define QUAKE_VERTICAL_MAG (1 << 1)
-#define QUAKE_HORIZONTAL_MAG (1 << 2)
-#define QUAKE_ZOOM (1 << 3)
-#define QUAKE_ROLL_OFFSET (1 << 4)
-#define QUAKE_SHAKE_PLANE_OFFSET_X (1 << 5)
-#define QUAKE_SHAKE_PLANE_OFFSET_Y (1 << 6)
-#define QUAKE_SHAKE_PLANE_OFFSET_Z (1 << 7)
-#define QUAKE_COUNTDOWN (1 << 8)
-#define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
+
 
 typedef enum {
-    /* 1 */ QUAKE_TYPE_1 = 1,
-    /* 2 */ QUAKE_TYPE_2,
-    /* 3 */ QUAKE_TYPE_3,
-    /* 4 */ QUAKE_TYPE_4,
-    /* 5 */ QUAKE_TYPE_5,
-    /* 6 */ QUAKE_TYPE_6
+    /* 0 */ QUAKE_TYPE_NONE,
+    /* 1 */ QUAKE_TYPE_1, // Periodic, sustaining, random X perturbations
+    /* 2 */ QUAKE_TYPE_2, // Aperiodic, sustaining, random X perturbations
+    /* 3 */ QUAKE_TYPE_3, // Periodic, decaying
+    /* 4 */ QUAKE_TYPE_4, // Aperiodic, decaying, random X perturbations
+    /* 5 */ QUAKE_TYPE_5, // Periodic, sustaining
+    /* 6 */ QUAKE_TYPE_6 // See below
 } QuakeType;
 
-u32 Quake_SetValue(s16 quakeIndex, s16 valueType, s16 value);
-u32 Quake_SetSpeed(s16 quakeIndex, s16 speed);
-u32 Quake_SetCountdown(s16 quakeIndex, s16 countdown);
-s16 Quake_GetCountdown(s16 quakeIndex);
-u32 Quake_SetQuakeValues(s16 quakeIndex, s16 verticalMag, s16 horizontalMag, s16 zoom, s16 rollOffset);
-u32 Quake_SetQuakeValues2(s16 quakeIndex, s16 isShakePerpendicular, Vec3s shakePlaneOffset);
-s16 Quake_Add(Camera* camera, u32 type);
-s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData);
-u32 Quake_Remove(s16 index);
+s16 Quake_Request(Camera* camera, u32 type);
+
+u32 Quake_SetSpeed(s16 index, s16 speed);
+u32 Quake_SetPerturbations(s16 index, s16 y, s16 x, s16 fov, s16 roll);
+u32 Quake_SetDuration(s16 index, s16 countdown);
+u32 Quake_SetOrientation(s16 index, s16 isRelativeToScreen, Vec3s orientation);
+
+s16 Quake_GetTimeLeft(s16 index);
 s32 Quake_NumActiveQuakes(void);
+u32 Quake_RemoveRequest(s16 index);
+
 void Quake_Init(void);
+s16 Quake_Update(Camera* camera, ShakeInfo* camShake);
 
 #define DISTORTION_TYPE_0 (1 << 0)
 #define DISTORTION_TYPE_2 (1 << 2)

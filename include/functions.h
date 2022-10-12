@@ -1800,7 +1800,7 @@ VecSph* OLib_Vec3fToVecSph(VecSph* dest, Vec3f* vec);
 VecSph* OLib_Vec3fToVecSphGeo(VecSph* dest, Vec3f* vec);
 VecSph* OLib_Vec3fDiffToVecSph(VecSph* dest, Vec3f* a, Vec3f* b);
 VecSph* OLib_Vec3fDiffToVecSphGeo(VecSph* dest, Vec3f* a, Vec3f* b);
-Vec3f* OLib_VecSphAddToVec3f(Vec3f* dest, Vec3f* a, VecSph* sph);
+Vec3f* OLib_VecSphGeoAddToVec3f(Vec3f* dest, Vec3f* a, VecSph* sph);
 Vec3f* OLib_Vec3fDiffRad(Vec3f* dest, Vec3f* a, Vec3f* b);
 Vec3f* OLib_Vec3fDiffDegF(Vec3f* dest, Vec3f* a, Vec3f* b);
 Vec3s* OLib_Vec3fDiffBinAng(Vec3s* dest, Vec3f* a, Vec3f* b);

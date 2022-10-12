@@ -174,7 +174,7 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
             func_809B17D0(play, this, &temp->unk_00);
             temp_fs0 = Math3D_Vec3fDistSq(&temp->unk_00, &GET_PLAYER(play)->actor.world.pos);
             if (temp_fs0 < SQ(240.0f)) {
-                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
                 if (temp_fs0 < SQ(120.0f)) {
                     quakeVerticalMag = 4;
                 } else {
@@ -182,8 +182,8 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
                 }
 
                 Quake_SetSpeed(quakeIndex, 17232);
-                Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 7);
+                Quake_SetPerturbations(quakeIndex, quakeVerticalMag, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 7);
             }
         }
     }

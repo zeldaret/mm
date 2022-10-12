@@ -548,7 +548,7 @@ wordReplace = {
     "Quake2_SetCountdown": "Distortion_SetCountdown",
     "func_800BE680": "Actor_DrawDamageEffects",
     "func_8012F22C": "Inventory_GetSkullTokenCount",
-    "Quake_RemoveFromIdx": "Quake_Remove",
+    "Quake_RemoveFromIdx": "Quake_RemoveRequest",
 
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",

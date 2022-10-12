@@ -3781,19 +3781,19 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, PlayState* play) {
 }
 
 void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown) {
-    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, countdown);
 }
 
 void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed) {
-    s16 quakeIndex = Quake_Add(&play->mainCamera, QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(&play->mainCamera, QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, speed);
-    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetPerturbations(quakeIndex, verticalMag, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, countdown);
 }
 
 // Actor_RequestRumble?

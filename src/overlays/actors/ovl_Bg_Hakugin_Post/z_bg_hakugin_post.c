@@ -522,10 +522,10 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
                 Rumble_Request(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(play)->actor.world.pos), 255, 20, 150);
 
-                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
                 Quake_SetSpeed(quakeIndex, 20000);
-                Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 12);
+                Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 12);
 
                 if (this->unk_179 <= 0) {
                     func_8019F128(NA_SE_EV_STONEDOOR_STOP);
@@ -547,10 +547,10 @@ void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
                                             this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
                    255, 20, 150);
 
-    quakeIndex = Quake_Add(activeCam, QUAKE_TYPE_3);
+    quakeIndex = Quake_Request(activeCam, QUAKE_TYPE_3);
     Quake_SetSpeed(quakeIndex, 17232);
-    Quake_SetQuakeValues(quakeIndex, 6, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 20);
+    Quake_SetPerturbations(quakeIndex, 6, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 20);
 }
 
 void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {

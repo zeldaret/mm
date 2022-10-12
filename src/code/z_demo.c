@@ -193,10 +193,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
         case 0x8:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+                sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
-                Quake_SetQuakeValues(sCutsceneQuakeIndex, 6, 4, 0, 0);
-                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
+                Quake_SetPerturbations(sCutsceneQuakeIndex, 6, 4, 0, 0);
+                Quake_SetDuration(sCutsceneQuakeIndex, 800);
             }
             break;
         case 0x9:
@@ -283,10 +283,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
         case 0x1A:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+                sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
-                Quake_SetQuakeValues(sCutsceneQuakeIndex, 20, 10, 0, 0);
-                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
+                Quake_SetPerturbations(sCutsceneQuakeIndex, 20, 10, 0, 0);
+                Quake_SetDuration(sCutsceneQuakeIndex, 800);
             }
             break;
         case 0x1B:
@@ -335,10 +335,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
         case 0x24:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+                sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
-                Quake_SetQuakeValues(sCutsceneQuakeIndex, 2, 1, 0, 0);
-                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
+                Quake_SetPerturbations(sCutsceneQuakeIndex, 2, 1, 0, 0);
+                Quake_SetDuration(sCutsceneQuakeIndex, 800);
             }
             break;
 

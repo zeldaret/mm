@@ -295,11 +295,11 @@ void func_80A54600(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
 
 void ObjHugebombiwa_AddQuake(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
     s32 pad[2];
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 7);
+    Quake_SetPerturbations(quakeIndex, quakeVerticalMag, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 7);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
