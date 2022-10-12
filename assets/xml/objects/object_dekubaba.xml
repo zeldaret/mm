@@ -23,11 +23,11 @@
 
         <!-- Deku Baba limbs (upper/lower is only based on the "tongue" being in the lower) -->
         <Limb Name="gDekuBabaRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_ROOT" Offset="0x29D0" />
-        <Limb Name="gDekuBabaUpperJawRootRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW_ROOT_ROOT" Offset="0x29DC" />
-        <Limb Name="gDekuBabaUpperJawRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW_ROOT" Offset="0x29E8" />
+        <Limb Name="gDekuBabaUpperJawRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW_ROOT" Offset="0x29DC" />
+        <Limb Name="gDekuBabaUpperJawRooWrappertLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW_WRAPPER" Offset="0x29E8" />
         <Limb Name="gDekuBabaUpperJawLimb" Type="Standard" EnumName="DEKUBABA_LIMB_UPPER_JAW" Offset="0x29F4" />
-        <Limb Name="gDekuBabaLowerJawRootRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW_ROOT_ROOT" Offset="0x2A00" />
-        <Limb Name="gDekuBabaLowerJawRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW_ROOT" Offset="0x2A0C" />
+        <Limb Name="gDekuBabaLowerJawRootLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW_ROOT" Offset="0x2A00" />
+        <Limb Name="gDekuBabaLowerJawWrapperLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW_WRAPPER" Offset="0x2A0C" />
         <Limb Name="gDekuBabaLowerJawLimb" Type="Standard" EnumName="DEKUBABA_LIMB_LOWER_JAW" Offset="0x2A18" />
 
         <!-- Deku Baba skeleton (only used for jaws) -->

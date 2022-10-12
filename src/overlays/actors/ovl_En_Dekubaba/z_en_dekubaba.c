@@ -832,7 +832,7 @@ void EnDekubaba_Hit(EnDekubaba* this, PlayState* play) {
     EnDekubaba_UpdateHeadPosition(this);
 }
 
-void EnDekubaba_SetupPrunedSomersault(EnDekubaba* this) {
+void EnDekubaba_SetupPrunedSomersaultDie(EnDekubaba* this) {
     this->timer = 0;
     this->skelAnime.playSpeed = 0.0f;
     this->actor.gravity = -0.8f;
@@ -1112,7 +1112,7 @@ void EnDekubaba_UpdateDamage(EnDekubaba* this, PlayState* play) {
                         if (newHealth > 0) {
                             EnDekubaba_SetupSway(this);
                         } else {
-                            EnDekubaba_SetupPrunedSomersault(this);
+                            EnDekubaba_SetupPrunedSomersaultDie(this);
                         }
                     } else if (this->actor.colChkInfo.damageEffect == DEKUBABA_DMGEFF_ELECTRIC) {
                         EnDekubaba_SetupHit(this, DEKUBABA_HIT_STUN_ELECTRIC);
