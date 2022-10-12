@@ -295,7 +295,7 @@ wordReplace = {
     "func_800BC8B8": "Actor_DrawDoorLock",
     "func_800B86C8": "Actor_ChangeFocus",
     "func_800B90F4": "Actor_DeactivateLens",
-    "func_800BC770": "Actor_AddQuake",
+    "func_800BC770": "Actor_RequestQuake",
     "zelda_malloc": "ZeldaArena_Malloc",
     "zelda_mallocR": "ZeldaArena_MallocR",
     "zelda_realloc": "ZeldaArena_Realloc",

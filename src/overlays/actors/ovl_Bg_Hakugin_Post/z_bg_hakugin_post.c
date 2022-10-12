@@ -537,7 +537,7 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
     }
 }
 
-void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
+void BgHakuginPost_RequestQuakeAndRumble(BgHakuginPost* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
     Camera* activeCam = GET_ACTIVE_CAM(play);
@@ -798,7 +798,7 @@ void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
     temp_f12 = CLAMP_MAX(temp_f12, 40.0f);
     this->unk_16C += temp_f12;
     if (this->unk_168 <= this->unk_16C) {
-        func_80A9C18C(this, play);
+        BgHakuginPost_RequestQuakeAndRumble(this, play);
         func_8019F128(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
@@ -876,7 +876,7 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
         func_80A9C634(this, play);
         func_80A9B160(&D_80A9E028, play);
         this->unk_16C = this->unk_164;
-        func_80A9C18C(this, play);
+        BgHakuginPost_RequestQuakeAndRumble(this, play);
         func_8019F128(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {

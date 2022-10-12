@@ -419,8 +419,8 @@ void func_808715B8(EnBom* this, PlayState* play) {
     }
 }
 
-static s16 D_80872E98[] = { 3, 5 };
-static s16 D_80872E9C[] = { 10, 15 };
+static s16 sQuakeY[] = { 3, 5 };
+static s16 sQuakeDurations[] = { 10, 15 };
 
 void EnBom_Update(Actor* thisx, PlayState* play) {
     Vec3f spA4 = { 0.0f, 0.0f, 0.0f };
@@ -533,7 +533,8 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 }
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0, 0,
                             this->isPowderKeg);
-                func_800BC848(thisx, play, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
+                Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
+                                            sQuakeDurations[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =

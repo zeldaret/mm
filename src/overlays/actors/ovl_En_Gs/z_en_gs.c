@@ -522,8 +522,8 @@ s32 func_80998A48(EnGs* this, PlayState* play) {
 
         this->unk_1D4 = 0;
         this->unk_19A |= 1;
-        this->unk_21C = 5;
-        this->unk_21E = 40;
+        this->quakeY = 5;
+        this->quakeDuration = 40;
         this->unk_197++;
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
@@ -557,8 +557,8 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
 
         this->unk_1D4 = 0;
         this->unk_19A |= 1;
-        this->unk_21C = 5;
-        this->unk_21E = 40;
+        this->quakeY = 5;
+        this->quakeDuration = 40;
         this->unk_197--;
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
@@ -584,8 +584,8 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
         this->unk_1E0 = -0.8f;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_G_STONE_CRUSH);
         this->unk_19A |= 1;
-        this->unk_21C = 40;
-        this->unk_21E = 11;
+        this->quakeY = 40;
+        this->quakeDuration = 11;
         this->unk_19D++;
     } else if (this->unk_19D == 1) {
         step = Math_SmoothStepToF(&this->unk_1DC, this->unk_1E0, 1.0f, 0.4f, 0.001f);
@@ -610,8 +610,8 @@ s32 func_80998D44(EnGs* this, PlayState* play) {
             this->unk_216 = 0;
             this->unk_1E0 = 0.0f;
             this->unk_1D4 = 0;
-            this->unk_21C = 10;
-            this->unk_21E = 10;
+            this->quakeY = 10;
+            this->quakeDuration = 10;
             this->unk_1DC = 0.5f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
             this->unk_19D += 1;
@@ -640,8 +640,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
         this->unk_1EC = 0.0f;
 
         this->unk_19D = 1;
-        this->unk_21C = 2;
-        this->unk_21E = 40;
+        this->quakeY = 2;
+        this->quakeDuration = 40;
         this->unk_216 = 200;
     }
 
@@ -713,8 +713,8 @@ s32 func_80998F9C(EnGs* this, PlayState* play) {
             this->unk_1F0 = 0.0f;
             this->unk_1EC = 0.5f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
-            this->unk_21C = 20;
-            this->unk_21E = 2;
+            this->quakeY = 20;
+            this->quakeDuration = 2;
             this->unk_19D = 6;
         }
     }
@@ -799,8 +799,8 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         if (this->unk_1D4 <= 0) {
             this->unk_19A &= ~4;
-            this->unk_21C = 3;
-            this->unk_21E = 40;
+            this->quakeY = 3;
+            this->quakeDuration = 40;
             this->unk_1D4 = 0;
             this->unk_19D++;
         }
@@ -833,8 +833,8 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             this->unk_1DC = 0.0f;
 
             this->unk_19D++;
-            this->unk_21C = 5;
-            this->unk_21E = 20;
+            this->quakeY = 5;
+            this->quakeDuration = 20;
             this->unk_19A |= 1;
             this->unk_216 = 200;
             this->unk_1E0 = (this->unk_197 >> 2) * 0x444;
@@ -1027,8 +1027,8 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
             if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
                 (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
-            } else if (this->unk_21C > 0) {
-                func_800BC848(&this->actor, play, this->unk_21C, this->unk_21E);
+            } else if (this->quakeY > 0) {
+                Actor_RequestQuakeAndRumble(&this->actor, play, this->quakeY, this->quakeDuration);
             }
         } else {
             this->unk_216 = 0;
@@ -1047,8 +1047,8 @@ void EnGs_Update(Actor* thisx, PlayState* play) {
             }
         }
 
-        if (this->unk_21C > 0) {
-            this->unk_21C = 0;
+        if (this->quakeY > 0) {
+            this->quakeY = 0;
         }
 
         func_80999B34(this);

@@ -30,7 +30,7 @@ s16 Quake_Request(Camera* camera, u32 type);
 
 u32 Quake_SetSpeed(s16 index, s16 speed);
 u32 Quake_SetPerturbations(s16 index, s16 y, s16 x, s16 fov, s16 roll);
-u32 Quake_SetDuration(s16 index, s16 countdown);
+u32 Quake_SetDuration(s16 index, s16 duration);
 u32 Quake_SetOrientation(s16 index, s16 isRelativeToScreen, Vec3s orientation);
 
 s16 Quake_GetTimeLeft(s16 index);
@@ -52,7 +52,7 @@ s16 Quake_Update(Camera* camera, ShakeInfo* camShake);
 #define DISTORTION_TYPE_A (1 << 10)
 #define DISTORTION_TYPE_B (1 << 11)
 
-void Distortion_SetCountdown(s16 countdown);
+void Distortion_SetCountdown(s16 timer);
 s16 Distortion_GetCountdown(void);
 s16 Distortion_GetType(void);
 void Distortion_SetType(s32 type);
