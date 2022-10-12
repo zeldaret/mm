@@ -244,24 +244,24 @@ s16 sQuestVtxRectLeft[] = {
     -103, // QUEST_BOMBERS_NOTEBOOK
     7,    // QUEST_QUIVER
     82,   // QUEST_BOMB_BAG
-    -110, // QUEST_HEART_PIECE
-    -54,  // ocarina song button index 0
-    -98,  // ocarina song button index 1
-    -86,  // ocarina song button index 2
-    -74,  // ocarina song button index 3
-    -62,  // ocarina song button index 4
-    -50,  // ocarina song button index 5
-    -38,  // ocarina song button index 6
-    -26,  // ocarina song button index 7
-    -14,  // ocarina input button index 0
-    -98,  // ocarina input button index 1
-    -86,  // ocarina input button index 2
-    -74,  // ocarina input button index 3
-    -62,  // ocarina input button index 4
-    -50,  // ocarina input button index 5
-    -38,  // ocarina input button index 6
-    -26,  // ocarina input button index 7
-    -14,  // QUEST_SKULL_TOKEN
+    -110, // unused
+    -54,  // QUEST_HEART_PIECE
+    -98,  // ocarina song button index 0
+    -86,  // ocarina song button index 1
+    -74,  // ocarina song button index 2
+    -62,  // ocarina song button index 3
+    -50,  // ocarina song button index 4
+    -38,  // ocarina song button index 5
+    -26,  // ocarina song button index 6
+    -14,  // ocarina song button index 7
+    -98,  // ocarina input button index 0
+    -86,  // ocarina input button index 1
+    -74,  // ocarina input button index 2
+    -62,  // ocarina input button index 3
+    -50,  // ocarina input button index 4
+    -38,  // ocarina input button index 5
+    -26,  // ocarina input button index 6
+    -14,  // ocarina input button index 7
 };
 
 s16 sQuestVtxRectTop[] = {
@@ -286,8 +286,9 @@ s16 sQuestVtxRectTop[] = {
     54,  // QUEST_BOMBERS_NOTEBOOK
     -44, // QUEST_QUIVER
     -44, // QUEST_BOMB_BAG
-    34,  // QUEST_HEART_PIECE
-    58,  // ocarina song button index 0
+    34,  // unused
+    58,  // QUEST_HEART_PIECE
+    -52, // ocarina song button index 0
     -52, // ocarina song button index 1
     -52, // ocarina song button index 2
     -52, // ocarina song button index 3
@@ -303,7 +304,6 @@ s16 sQuestVtxRectTop[] = {
     -52, // ocarina input button index 5
     -52, // ocarina input button index 6
     -52, // ocarina input button index 7
-    -52, // QUEST_SKULL_TOKEN
 };
 
 s16 sQuestVtxWidths[] = {
@@ -328,8 +328,9 @@ s16 sQuestVtxWidths[] = {
     32, // QUEST_BOMBERS_NOTEBOOK
     32, // QUEST_QUIVER
     32, // QUEST_BOMB_BAG
-    24, // QUEST_HEART_PIECE
-    48, // ocarina song button index 0
+    24, // QUEST_SKULL_TOKEN (unused)
+    48, // QUEST_HEART_PIECE
+    16, // ocarina song button index 0
     16, // ocarina song button index 1
     16, // ocarina song button index 2
     16, // ocarina song button index 3
@@ -345,7 +346,6 @@ s16 sQuestVtxWidths[] = {
     16, // ocarina input button index 5
     16, // ocarina input button index 6
     16, // ocarina input button index 7
-    16, // QUEST_SKULL_TOKEN
 };
 
 s16 sQuestVtxHeights[] = {
@@ -370,8 +370,9 @@ s16 sQuestVtxHeights[] = {
     32, // QUEST_BOMBERS_NOTEBOOK
     32, // QUEST_QUIVER
     32, // QUEST_BOMB_BAG
-    24, // QUEST_HEART_PIECE
-    48, // ocarina song button index 0
+    24, // QUEST_SKULL_TOKEN (unused)
+    48, // QUEST_HEART_PIECE
+    16, // ocarina song button index 0
     16, // ocarina song button index 1
     16, // ocarina song button index 2
     16, // ocarina song button index 3
@@ -387,7 +388,6 @@ s16 sQuestVtxHeights[] = {
     16, // ocarina input button index 5
     16, // ocarina input button index 6
     16, // ocarina input button index 7
-    16, // QUEST_SKULL_TOKEN
 };
 f32 D_8082BCB4[] = {
     -62.0f, -36.0f, -10.0f, 16.0f, 42.0f, 68.0f,

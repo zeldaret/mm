@@ -277,6 +277,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         }
     }
 
+    // Skip over an unused questVtx entry
     j += 4;
 
     sp1CA = ABS_ALT(sQuestHpPrimRed - sQuestHpPrimColorTargets[sQuestHpPrimColorTargetIndex][0]) / sQuestHpColorTimer;
@@ -516,6 +517,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
             skullTokenDigits[2] -= 10;
         }
 
+        //! @bug: &pauseCtx->questVtx[84] is the questVtx for skull tokens
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[152], 24, 0);
 
         // Loop over two sets of digits, the first is shadowed, the second is colored
