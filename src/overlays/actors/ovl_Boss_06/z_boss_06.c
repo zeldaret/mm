@@ -4,7 +4,6 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
@@ -29,11 +28,11 @@ void func_809F2E34(Boss06* this, PlayState* play);
 void func_809F2ED0(Boss06* this, PlayState* play);
 void func_809F2EE8(Boss06* this, PlayState* play);
 
-static Vec3f D_809F4370[128];
-static EnKnight* D_809F4970;
-static s32 D_809F4974;
-static s32 D_809F4978;
-static s32 D_809F497C;
+Vec3f D_809F4370[128];
+EnKnight* D_809F4970;
+s32 D_809F4974;
+s32 D_809F4978;
+s32 D_809F497C;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0xF),
