@@ -18,16 +18,16 @@ typedef struct {
     /* 0x4 */ f32 unk_4;
 } struct_80A98F94; // size = 0x8
 
-void EnAz_Init(Actor* thisx, PlayState* play);
-void EnAz_Destroy(Actor* thisx, PlayState* play);
-void EnAz_Update(Actor* thisx, PlayState* play);
-void EnAz_Draw(Actor* thisx, PlayState* play);
+void EnAz_Init(Actor* thisx, PlayState* play2);
+void EnAz_Destroy(Actor* thisx, PlayState* play2);
+void EnAz_Update(Actor* thisx, PlayState* play2);
+void EnAz_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A982E0(PlayState* play, ActorPathing* actorPathing);
 void func_80A98414(EnAz* this, PlayState* play);
 s32 func_80A98DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void func_80A98E48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 arg3, s32 arg4);
+void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 animIndex, s32 brotherAnimIndex);
 void func_80A98F94(struct_80A98F94* yData, f32 frame, f32* yInterp);
 
 void func_80A95C5C(EnAz* this, PlayState* play);

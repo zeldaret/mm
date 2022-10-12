@@ -15,7 +15,7 @@
 
 void EnKusa_Init(Actor* thisx, PlayState* play);
 void EnKusa_Destroy(Actor* thisx, PlayState* play);
-void EnKusa_Update(Actor* thisx, PlayState* play);
+void EnKusa_Update(Actor* thisx, PlayState* play2);
 
 s32 EnKusa_SnapToFloor(EnKusa* this, PlayState* play, f32 yOffset);
 void EnKusa_DropCollectible(EnKusa* this, PlayState* play);

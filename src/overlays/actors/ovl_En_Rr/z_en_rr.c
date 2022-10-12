@@ -15,7 +15,7 @@
 void EnRr_Init(Actor* thisx, PlayState* play);
 void EnRr_Destroy(Actor* thisx, PlayState* play);
 void EnRr_Update(Actor* thisx, PlayState* play);
-void EnRr_Draw(Actor* thisx, PlayState* play);
+void EnRr_Draw(Actor* thisx, PlayState* play2);
 
 void func_808FAF94(EnRr* this, PlayState* play);
 void func_808FB088(EnRr* this, PlayState* play);

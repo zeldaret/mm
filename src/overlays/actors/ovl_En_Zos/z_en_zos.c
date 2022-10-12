@@ -15,7 +15,7 @@ void EnZos_Destroy(Actor* thisx, PlayState* play);
 void EnZos_Update(Actor* thisx, PlayState* play);
 void EnZos_Draw(Actor* thisx, PlayState* play);
 
-void EnZos_ChangeAnim(EnZos* this, s16 arg1, u8 arg2);
+void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode);
 void func_80BBB2C4(EnZos* this, PlayState* play);
 void func_80BBB354(EnZos* this, PlayState* play);
 void func_80BBB4CC(EnZos* this, PlayState* play);
