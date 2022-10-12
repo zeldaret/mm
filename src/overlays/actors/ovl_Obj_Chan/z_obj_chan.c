@@ -25,7 +25,7 @@ void ObjChan_Destroy(Actor* thisx, PlayState* play);
 void ObjChan_Update(Actor* thisx, PlayState* play);
 void ObjChan_Draw(Actor* thisx, PlayState* play);
 
-void ObjChan_ChandelierAction(ObjChan* this, PlayState* play);
+void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
 const ActorInit Obj_Chan_InitVars = {

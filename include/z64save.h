@@ -272,8 +272,8 @@ typedef struct Save {
     /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
     /* 0x0EF4 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
-    /* 0x0F5C */ u32 mapsVisited;                       // "area_arrival"
-    /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
+    /* 0x0F5C */ u32 regionsVisited;                    // "area_arrival"
+    /* 0x0F60 */ u32 worldMapCloudVisibility;           // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
     /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
     /* 0x0F66 */ u8 scarecrowSpawnSong[128];
@@ -1487,9 +1487,9 @@ void func_80144A94(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
-void func_80146580(struct FileSelectState* fileSelect, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileSelectState* fileSelect, SramContext* sramCtx);
-void Sram_InitSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
+void func_80146580(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
+void func_80146628(struct FileSelectState* fileSelect2, SramContext* sramCtx);
+void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);

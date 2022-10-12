@@ -15,9 +15,9 @@
 
 #define THIS ((EnHorse*)thisx)
 
-void EnHorse_Init(Actor* thisx, PlayState* play);
+void EnHorse_Init(Actor* thisx, PlayState* play2);
 void EnHorse_Destroy(Actor* thisx, PlayState* play);
-void EnHorse_Update(Actor* thisx, PlayState* play);
+void EnHorse_Update(Actor* thisx, PlayState* play2);
 void EnHorse_Draw(Actor* thisx, PlayState* play);
 
 void func_8087D540(Actor* thisx, PlayState* play);

@@ -58,7 +58,7 @@ void ObjUm_Update(Actor* thisx, PlayState* play);
 void ObjUm_Draw(Actor* thisx, PlayState* play);
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
-void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation index);
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
 const ActorInit Obj_Um_InitVars = {

@@ -14,7 +14,7 @@
 #define PARAMS ((EffectSsBubbleInitParams*)initParamsx)
 
 u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBubble_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this);
 void EffectSsBubble_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Bubble_InitVars = {

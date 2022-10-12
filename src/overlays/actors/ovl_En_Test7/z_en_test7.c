@@ -11,7 +11,7 @@
 
 #define THIS ((EnTest7*)thisx)
 
-void EnTest7_Init(Actor* thisx, PlayState* play);
+void EnTest7_Init(Actor* thisx, PlayState* play2);
 void EnTest7_Destroy(Actor* thisx, PlayState* play);
 void EnTest7_Update(Actor* thisx, PlayState* play);
 void EnTest7_Draw(Actor* thisx, PlayState* play);

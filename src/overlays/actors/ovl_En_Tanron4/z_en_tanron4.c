@@ -10,7 +10,7 @@
 
 #define THIS ((EnTanron4*)thisx)
 
-void EnTanron4_Init(Actor* thisx, PlayState* play);
+void EnTanron4_Init(Actor* thisx, PlayState* play2);
 void EnTanron4_Destroy(Actor* thisx, PlayState* play);
 void EnTanron4_Update(Actor* thisx, PlayState* play);
 void EnTanron4_Draw(Actor* thisx, PlayState* play);

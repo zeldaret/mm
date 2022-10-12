@@ -13,7 +13,7 @@
 
 void EnCha_Init(Actor* thisx, PlayState* play);
 void EnCha_Destroy(Actor* thisx, PlayState* play);
-void EnCha_Update(Actor* thisx, PlayState* play);
+void EnCha_Update(Actor* thisx, PlayState* play2);
 void EnCha_Draw(Actor* thisx, PlayState* play);
 
 void EnCha_Idle(EnCha* this, PlayState* play);

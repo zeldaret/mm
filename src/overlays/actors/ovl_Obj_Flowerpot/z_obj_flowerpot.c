@@ -12,8 +12,8 @@
 #define THIS ((ObjFlowerpot*)thisx)
 
 void ObjFlowerpot_Init(Actor* thisx, PlayState* play);
-void ObjFlowerpot_Destroy(Actor* thisx, PlayState* play);
-void ObjFlowerpot_Update(Actor* thisx, PlayState* play);
+void ObjFlowerpot_Destroy(Actor* thisx, PlayState* play2);
+void ObjFlowerpot_Update(Actor* thisx, PlayState* play2);
 void ObjFlowerpot_Draw(Actor* thisx, PlayState* play);
 
 void func_80A1C818(ObjFlowerpot* this);

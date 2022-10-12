@@ -18,7 +18,7 @@
 void Boss06_Init(Actor* thisx, PlayState* play);
 void Boss06_Destroy(Actor* thisx, PlayState* play);
 void Boss06_Update(Actor* thisx, PlayState* play);
-void Boss06_Draw(Actor* thisx, PlayState* play);
+void Boss06_Draw(Actor* thisx, PlayState* play2);
 
 void func_809F24A8(Boss06* this);
 void func_809F24C8(Boss06* this, PlayState* play);
