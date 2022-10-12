@@ -11,9 +11,9 @@
 
 #define THIS ((Boss04*)thisx)
 
-void Boss04_Init(Actor* thisx, PlayState* play);
+void Boss04_Init(Actor* thisx, PlayState* play2);
 void Boss04_Destroy(Actor* thisx, PlayState* play);
-void Boss04_Update(Actor* thisx, PlayState* play);
+void Boss04_Update(Actor* thisx, PlayState* play2);
 void Boss04_Draw(Actor* thisx, PlayState* play);
 
 void func_809EC544(Boss04* this);

@@ -1368,8 +1368,8 @@ asm/non_matchings/code/z_lib/Math_Vec3f_StepTo.s,Math_Vec3f_StepTo,0x80100448,0x
 asm/non_matchings/code/z_lib/Lib_Nop801004FC.s,Lib_Nop801004FC,0x801004FC,0x2
 asm/non_matchings/code/z_lib/Lib_SegmentedToVirtual.s,Lib_SegmentedToVirtual,0x80100504,0xE
 asm/non_matchings/code/z_lib/Lib_SegmentedToVirtualNull.s,Lib_SegmentedToVirtualNull,0x8010053C,0x12
-asm/non_matchings/code/z_lib/Lib_PhysicalToVirtual.s,Lib_PhysicalToVirtual,0x80100584,0x7
-asm/non_matchings/code/z_lib/Lib_PhysicalToVirtualNull.s,Lib_PhysicalToVirtualNull,0x801005A0,0x8
+asm/non_matchings/code/z_lib/Lib_VirtualToPhysical.s,Lib_VirtualToPhysical,0x80100584,0x7
+asm/non_matchings/code/z_lib/Lib_PhysicalToVirtual.s,Lib_PhysicalToVirtual,0x801005A0,0x8
 asm/non_matchings/code/z_lifemeter/LifeMeter_Init.s,LifeMeter_Init,0x801005C0,0x37
 asm/non_matchings/code/z_lifemeter/LifeMeter_UpdateColors.s,LifeMeter_UpdateColors,0x8010069C,0xF9
 asm/non_matchings/code/z_lifemeter/func_80100A80.s,func_80100A80,0x80100A80,0x8
@@ -1924,7 +1924,7 @@ asm/non_matchings/code/code_8012EC80/Inventory_ChangeEquipment.s,Inventory_Chang
 asm/non_matchings/code/code_8012EC80/Inventory_DeleteEquipment.s,Inventory_DeleteEquipment,0x8012ED78,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_ChangeUpgrade.s,Inventory_ChangeUpgrade,0x8012EDE8,0x13
 asm/non_matchings/code/code_8012EC80/Inventory_IsMapVisible.s,Inventory_IsMapVisible,0x8012EE34,0x36
-asm/non_matchings/code/code_8012EC80/Inventory_SetMapVisibility.s,Inventory_SetMapVisibility,0x8012EF0C,0x78
+asm/non_matchings/code/code_8012EC80/Inventory_SetWorldMapCloudVisibility.s,Inventory_SetWorldMapCloudVisibility,0x8012EF0C,0x78
 asm/non_matchings/code/code_8012EC80/Inventory_SaveDekuPlaygroundHighScore.s,Inventory_SaveDekuPlaygroundHighScore,0x8012F0EC,0x34
 asm/non_matchings/code/code_8012EC80/Inventory_IncrementSkullTokenCount.s,Inventory_IncrementSkullTokenCount,0x8012F1BC,0x1C
 asm/non_matchings/code/code_8012EC80/Inventory_GetSkullTokenCount.s,Inventory_GetSkullTokenCount,0x8012F22C,0x13
@@ -1966,7 +1966,7 @@ asm/non_matchings/code/z_scene/Scene_HeaderCmdActorCutsceneList.s,Scene_HeaderCm
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMap.s,Scene_HeaderCmdMiniMap,0x80130540,0xE
 asm/non_matchings/code/z_scene/Scene_HeaderCmd1D.s,Scene_HeaderCmd1D,0x80130578,0x4
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMapCompassInfo.s,Scene_HeaderCmdMiniMapCompassInfo,0x80130588,0xA
-asm/non_matchings/code/z_scene/Scene_HeaderCmdSetAreaVisitedFlag.s,Scene_HeaderCmdSetAreaVisitedFlag,0x801305B0,0x31
+asm/non_matchings/code/z_scene/Scene_HeaderCmdSetRegionVisitedFlag.s,Scene_HeaderCmdSetRegionVisitedFlag,0x801305B0,0x31
 asm/non_matchings/code/z_scene/Scene_HeaderCmdAnimatedMaterials.s,Scene_HeaderCmdAnimatedMaterials,0x80130674,0xC
 asm/non_matchings/code/z_scene/Scene_SetExitFade.s,Scene_SetExitFade,0x801306A4,0x11
 asm/non_matchings/code/z_scene/Scene_ProcessHeader.s,Scene_ProcessHeader,0x801306E8,0x20
@@ -2394,7 +2394,7 @@ asm/non_matchings/code/z_message_nes/Message_LoadPluralRupeesNES.s,Message_LoadP
 asm/non_matchings/code/z_message_nes/Message_LoadLocalizedRupeesNES.s,Message_LoadLocalizedRupeesNES,0x80158C04,0x65
 asm/non_matchings/code/z_message_nes/Message_LoadRupeesNES.s,Message_LoadRupeesNES,0x80158D98,0x86
 asm/non_matchings/code/z_message_nes/Message_LoadTimeNES.s,Message_LoadTimeNES,0x80158FB0,0xAF
-asm/non_matchings/code/z_message_nes/Message_LoadAreaTextNES.s,Message_LoadAreaTextNES,0x8015926C,0x73
+asm/non_matchings/code/z_message_nes/Message_LoadOwlWarpTextNES.s,Message_LoadOwlWarpTextNES,0x8015926C,0x73
 asm/non_matchings/code/z_message_nes/func_80159438.s,func_80159438,0x80159438,0x8D
 asm/non_matchings/code/z_message_nes/func_8015966C.s,func_8015966C,0x8015966C,0x6CB
 asm/non_matchings/code/z_message_nes/func_8015B198.s,func_8015B198,0x8015B198,0xD6E
@@ -2450,8 +2450,8 @@ asm/non_matchings/code/z_kaleido_scope_call/func_801639EC.s,func_801639EC,0x8016
 asm/non_matchings/code/z_kaleido_scope_call/func_80163A38.s,func_80163A38,0x80163A38,0x8
 asm/non_matchings/code/z_kaleido_scope_call/func_80163A58.s,func_80163A58,0x80163A58,0x6D
 asm/non_matchings/code/z_kaleido_scope_call/func_80163C0C.s,func_80163C0C,0x80163C0C,0x21
-asm/non_matchings/code/z_fbdemo_dlftbls/func_80163C90.s,func_80163C90,0x80163C90,0x3C
-asm/non_matchings/code/z_fbdemo_dlftbls/func_80163D80.s,func_80163D80,0x80163D80,0x10
+asm/non_matchings/code/z_fbdemo_dlftbls/Transition_Init.s,Transition_Init,0x80163C90,0x3C
+asm/non_matchings/code/z_fbdemo_dlftbls/Transition_Destroy.s,Transition_Destroy,0x80163D80,0x10
 asm/non_matchings/code/z_fbdemo/func_80163DC0.s,func_80163DC0,0x80163DC0,0xF3
 asm/non_matchings/code/z_fbdemo/func_8016418C.s,func_8016418C,0x8016418C,0x30
 asm/non_matchings/code/z_fbdemo/func_8016424C.s,func_8016424C,0x8016424C,0x23
@@ -2478,12 +2478,12 @@ asm/non_matchings/code/z_fbdemo_circle/TransitionCircle_SetType.s,TransitionCirc
 asm/non_matchings/code/z_fbdemo_circle/func_80164C14.s,func_80164C14,0x80164C14,0x10C
 asm/non_matchings/code/z_fbdemo_circle/TransitionCircle_Draw.s,TransitionCircle_Draw,0x80165044,0x55
 asm/non_matchings/code/z_fbdemo_circle/TransitionCircle_IsDone.s,TransitionCircle_IsDone,0x80165198,0x6
-asm/non_matchings/code/z_overlay/func_801651B0.s,func_801651B0,0x801651B0,0x1D
-asm/non_matchings/code/z_overlay/func_80165224.s,func_80165224,0x80165224,0x19
-asm/non_matchings/code/z_overlay/func_80165288.s,func_80165288,0x80165288,0x3D
-asm/non_matchings/code/z_overlay/func_8016537C.s,func_8016537C,0x8016537C,0x2F
-asm/non_matchings/code/z_overlay/func_80165438.s,func_80165438,0x80165438,0x3
-asm/non_matchings/code/z_overlay/func_80165444.s,func_80165444,0x80165444,0x7
+asm/non_matchings/code/z_overlay/TransitionOverlay_VramToRam.s,TransitionOverlay_VramToRam,0x801651B0,0x1D
+asm/non_matchings/code/z_overlay/TransitionOverlay_VramToRamArray.s,TransitionOverlay_VramToRamArray,0x80165224,0x19
+asm/non_matchings/code/z_overlay/TransitionOverlay_Load.s,TransitionOverlay_Load,0x80165288,0x3D
+asm/non_matchings/code/z_overlay/TransitionOverlay_Free.s,TransitionOverlay_Free,0x8016537C,0x2F
+asm/non_matchings/code/z_overlay/TransitionOverlay_ClearLoadInfo.s,TransitionOverlay_ClearLoadInfo,0x80165438,0x3
+asm/non_matchings/code/z_overlay/TransitionOverlay_SetSegment.s,TransitionOverlay_SetSegment,0x80165444,0x7
 asm/non_matchings/code/z_play/func_80165460.s,func_80165460,0x80165460,0x6A
 asm/non_matchings/code/z_play/func_80165608.s,func_80165608,0x80165608,0xA
 asm/non_matchings/code/z_play/func_80165630.s,func_80165630,0x80165630,0xA

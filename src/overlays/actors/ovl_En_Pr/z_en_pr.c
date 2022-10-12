@@ -12,7 +12,7 @@
 
 #define THIS ((EnPr*)thisx)
 
-void EnPr_Init(Actor* thisx, PlayState* play);
+void EnPr_Init(Actor* thisx, PlayState* play2);
 void EnPr_Destroy(Actor* thisx, PlayState* play);
 void EnPr_Update(Actor* thisx, PlayState* play);
 void EnPr_Draw(Actor* thisx, PlayState* play);

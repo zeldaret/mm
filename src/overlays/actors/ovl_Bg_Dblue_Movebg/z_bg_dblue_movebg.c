@@ -16,7 +16,7 @@
 void BgDblueMovebg_Init(Actor* thisx, PlayState* play);
 void BgDblueMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgDblueMovebg_Update(Actor* thisx, PlayState* play);
-void BgDblueMovebg_Draw(Actor* thisx, PlayState* play);
+void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A2A1E0(BgDblueMovebg* this, PlayState* play);
 void func_80A2A32C(BgDblueMovebg* this, PlayState* play);

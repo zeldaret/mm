@@ -15,7 +15,7 @@
 void DmChar00_Init(Actor* thisx, PlayState* play);
 void DmChar00_Destroy(Actor* thisx, PlayState* play);
 void DmChar00_Update(Actor* thisx, PlayState* play);
-void DmChar00_Draw(Actor* thisx, PlayState* play);
+void DmChar00_Draw(Actor* thisx, PlayState* play2);
 
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
