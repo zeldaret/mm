@@ -105,7 +105,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
             roomCtx->unk31 = 0;
             roomCtx->curRoom.segment = roomCtx->activeRoomVram;
             // TODO: Segment number enum
-            gSegments[0x03] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
+            gSegments[0x03] = VIRTUAL_TO_PHYSICAL(roomCtx->activeRoomVram);
 
             Scene_ProcessHeader(play, (SceneCmd*)roomCtx->curRoom.segment);
             func_80123140(play, GET_PLAYER(play));
@@ -130,7 +130,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {
         // TODO: Segment number enum
-        gSegments[0x03] = PHYSICAL_TO_VIRTUAL(room->segment);
+        gSegments[0x03] = VIRTUAL_TO_PHYSICAL(room->segment);
         roomDrawFuncs[room->mesh->type0.type](play, room, flags);
     }
     return;

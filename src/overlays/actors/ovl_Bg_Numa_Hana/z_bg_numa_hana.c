@@ -15,7 +15,7 @@
 void BgNumaHana_Init(Actor* thisx, PlayState* play);
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play);
 void BgNumaHana_Update(Actor* thisx, PlayState* play);
-void BgNumaHana_Draw(Actor* thisx, PlayState* play);
+void BgNumaHana_Draw(Actor* thisx, PlayState* play2);
 
 void BgNumaHana_SetupDoNothing(BgNumaHana* this);
 void BgNumaHana_DoNothing(BgNumaHana* this, PlayState* play);
