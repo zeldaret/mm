@@ -244,7 +244,7 @@ s16 sQuestVtxRectLeft[] = {
     -103, // QUEST_BOMBERS_NOTEBOOK
     7,    // QUEST_QUIVER
     82,   // QUEST_BOMB_BAG
-    -110, // unused
+    -110, // QUEST_SKULL_TOKEN (unused)
     -54,  // QUEST_HEART_PIECE
     -98,  // ocarina song button index 0
     -86,  // ocarina song button index 1
@@ -286,7 +286,7 @@ s16 sQuestVtxRectTop[] = {
     54,  // QUEST_BOMBERS_NOTEBOOK
     -44, // QUEST_QUIVER
     -44, // QUEST_BOMB_BAG
-    34,  // unused
+    34,  // QUEST_SKULL_TOKEN (unused)
     58,  // QUEST_HEART_PIECE
     -52, // ocarina song button index 0
     -52, // ocarina song button index 1
