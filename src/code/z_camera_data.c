@@ -5,11 +5,11 @@
  * All the data from `CameraSetting`, `CameraMode`, `sCameraUpdateHandlers`, and `CameraModeValue` below
  * can be thought of as a single 2D ragged array table with holes in it, indexed by `[camSetting][camMode]`.
  *
- * The `CameraSetting` and `CameraMode` together builds this 2D table, with data/functions/flags for each entry.
+ * The `CameraSetting` and `CameraMode` together build this 2D table, with data/functions/flags for each entry.
  *
  * Each entry in this 2D table consists of a both a camera-update function to run (`sCameraUpdateHandlers`),
  * and a set of data to accompany that camera-update function (`CameraModeValue`). Often, `CameraModeValue`
- * data entries are reused. Not every entry is valid.
+ * data entries are reused. Not every entry is valid, and the flags in the entry are used to indicate this.
  */
 
 /*=====================================================================
