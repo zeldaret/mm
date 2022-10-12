@@ -537,7 +537,7 @@ void EnMThunder_Draw(Actor* thisx, PlayState* play2) {
             break;
     }
 
-    Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+    Matrix_Mult(&player->leftHandMf, MTXMODE_NEW);
 
     if (this->type == ENMTHUNDER_TYPE_GILDED_SWORD) {
         Matrix_Translate(0.0f, 220.0f, 0.0f, MTXMODE_APPLY);

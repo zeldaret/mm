@@ -1061,7 +1061,7 @@ typedef struct Player {
     /* 0xB96 */ s16 unk_B96;
     /* 0xB98 */ WeaponInfo meleeWeaponInfo[3];
     /* 0xBEC */ Vec3f bodyPartsPos[PLAYER_BODYPART_MAX];
-    /* 0xCC4 */ MtxF mf_CC4;
+    /* 0xCC4 */ MtxF leftHandMf;
     /* 0xD04 */ MtxF shieldMf;
     /* 0xD44 */ u8 isBurning;
     /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part

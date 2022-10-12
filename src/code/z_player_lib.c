@@ -3410,8 +3410,8 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                     }
                     func_80126B8C(play, player);
                 }
-                Matrix_Get(&player->mf_CC4);
-                Matrix_MtxFToYXZRot(&player->mf_CC4, &player->leftHandWorld.rot, 0);
+                Matrix_Get(&player->leftHandMf);
+                Matrix_MtxFToYXZRot(&player->leftHandMf, &player->leftHandWorld.rot, 0);
             }
         }
     } else if (limbIndex == PLAYER_LIMB_R_HAND) {

@@ -1995,7 +1995,7 @@ void EnFishing_DrawRod(PlayState* play) {
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 155, 0, 255);
 
-    Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+    Matrix_Mult(&player->leftHandMf, MTXMODE_NEW);
 
     if (sLinkAge != 1) {
         Matrix_Translate(0.0f, 400.0f, 0.0f, MTXMODE_APPLY);
