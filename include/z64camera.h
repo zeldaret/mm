@@ -364,29 +364,6 @@ typedef enum {
     /* 0x15 */ CAM_DATA_21,
 } CameraDataType;
 
-typedef struct {
-    /* 0x0 */ s16 val;
-    /* 0x2 */ s16 param;
-} CameraModeValue; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ s16 funcId;
-    /* 0x2 */ s16 numValues;
-    /* 0x4 */ CameraModeValue* values;
-} CameraMode; // size = 0x8
-
-/**
- * Flags:
- * (flags & 0xF): Priority (lower value has higher priority)
- * (flags & 0x40000000): Store previous setting and bgCamData, also ignores water checks
- * (flags & 0x80000000): Set camera setting based on bg/scene data and reset action function state
- */
-typedef struct {
-    /* 0x0 */ u32 validModes;
-    /* 0x4 */ u32 flags;
-    /* 0x8 */ CameraMode* cameraModes;
-} CameraSetting; // size = 0xC
-
 /*================================
  *   MISC DATA
  *================================

@@ -4,7 +4,7 @@
 #include "z64shrink_window.h"
 #include "z64view.h"
 
-#include "z_camera_data.c"
+#include "z_camera_data.inc.c"
 
 // BSS
 s16 D_801EDBF0;

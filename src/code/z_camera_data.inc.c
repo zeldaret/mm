@@ -12,6 +12,31 @@
  * data entries are reused. Not every entry is valid, and the flags in the entry are used to indicate this.
  */
 
+typedef s32 (*CameraUpdateFunc)(Camera*);
+
+typedef struct {
+    /* 0x0 */ s16 val;
+    /* 0x2 */ s16 param;
+} CameraModeValue; // size = 0x4
+
+typedef struct {
+    /* 0x0 */ s16 funcId;
+    /* 0x2 */ s16 numValues;
+    /* 0x4 */ CameraModeValue* values;
+} CameraMode; // size = 0x8
+
+/**
+ * Flags:
+ * (flags & 0xF): Priority (lower value has higher priority)
+ * (flags & 0x40000000): Store previous setting and bgCamData, also ignores water checks
+ * (flags & 0x80000000): Set camera setting based on bg/scene data and reset action function state
+ */
+typedef struct {
+    /* 0x0 */ u32 validModes;
+    /* 0x4 */ u32 flags;
+    /* 0x8 */ CameraMode* cameraModes;
+} CameraSetting; // size = 0xC
+
 /*=====================================================================
  *                   Default Data: NORMAL0 Setting
  *=====================================================================
@@ -3690,7 +3715,7 @@ s32 Camera_Special7(Camera* camera);
 s32 Camera_Special8(Camera* camera);
 s32 Camera_Special9(Camera* camera);
 
-s32 (*sCameraUpdateHandlers[])(Camera*) = {
+CameraUpdateFunc sCameraUpdateHandlers[] = {
     NULL,
     Camera_Normal0,
     Camera_Normal1,
