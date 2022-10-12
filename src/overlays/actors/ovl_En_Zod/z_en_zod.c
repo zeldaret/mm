@@ -81,8 +81,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationHeader* D_80BB056C[] = {
-    &object_zod_Anim_0002E8, &object_zod_Anim_000894, &object_zod_Anim_000A9C,
-    &object_zod_Anim_000D94, &object_zod_Anim_00D9B0,
+    &gTijoPlayingVivaceAnim, &gTijoReadyToPlayAnim, &gTijoArmsFoldedAnim,
+    &gTijoPlayingLentoAnim, &gTijoPlayingAndantinoAnim,
 };
 
 static Vec3f D_80BB0580 = { 1300.0f, 1100.0f, 0.0f };
@@ -94,9 +94,9 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &object_zod_Anim_000D94, this->morphTable, this->JointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &gTijoPlayingLentoAnim, this->morphTable, this->JointTable,
                        OBJECT_ZOD_LIMB_MAX);
-    Animation_PlayLoop(&this->skelAnime, &object_zod_Anim_000D94);
+    Animation_PlayLoop(&this->skelAnime, &gTijoPlayingLentoAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->cymbalRots[0] = this->cymbalRots[1] = this->cymbalRots[2] = 0;
@@ -154,7 +154,7 @@ void EnZod_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BAF1EC(EnZod* this, PlayState* play) {
+void EnZod_RoomConversation(EnZod* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
@@ -180,7 +180,7 @@ void func_80BAF1EC(EnZod* this, PlayState* play) {
     Message_StartTextbox(play, textId, &this->actor);
 }
 
-s32 func_80BAF2B4(EnZod* this, PlayState* play) {
+s32 EnZod_PlayerInFrontOfTijo(EnZod* this, PlayState* play) {
     if ((this->actor.playerHeightRel < 30.0f) && (this->actor.xzDistToPlayer < 200.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
@@ -223,10 +223,10 @@ void EnZod_UpdateAnimations(EnZod* this) {
     }
 }
 
-void func_80BAF4D8(EnZod* this) {
+void EnZod_UpdateDrumVels(EnZod* this) {
     s32 i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
         this->cymbalRots[i] += this->cymbalRotVels[i];
         this->cymbalRotVels[i] -= (s16)(this->cymbalRots[i] * 0.1f);
 
@@ -249,7 +249,7 @@ void func_80BAF4D8(EnZod* this) {
         }
     }
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->drumScales); i++) {
         this->drumScales[i] += this->drumScaleVels[i];
         this->drumScaleVels[i] -= (this->drumScales[i] * 0.8f);
 
@@ -372,9 +372,9 @@ void func_80BAF99C(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_80BAF1EC(this, play);
+        EnZod_RoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
-    } else if (func_80BAF2B4(this, play)) {
+    } else if (EnZod_PlayerInFrontOfTijo(this, play)) {
         func_800B8614(&this->actor, play, 210.0f);
     }
 
@@ -430,7 +430,7 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
-    } else if (func_80BAF2B4(this, play)) {
+    } else if (EnZod_PlayerInFrontOfTijo(this, play)) {
         func_800B8614(&this->actor, play, 210.0f);
     }
 }
@@ -524,7 +524,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
     this->actionFunc(this, play);
-    func_80BAF4D8(this);
+    EnZod_UpdateDrumVels(this);
 
     if (DECR(this->blinkTimer) == 0) {
         this->blinkTimer = Rand_S16Offset(60, 60);
@@ -540,7 +540,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     torsoRot.y = 0;
     torsoRot.x = 0;
 
-    if (func_80BAF2B4(this, play)) {
+    if (EnZod_PlayerInFrontOfTijo(this, play)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
         if (this->headRot.x > 0xBB8) {
             this->headRot.x = 0xBB8;
@@ -556,7 +556,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
 s32 EnZod_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZod* this = THIS;
 
-    if (limbIndex == OBJECT_ZOD_LIMB_03) {
+    if (limbIndex == TIJO_LIMB_HEAD) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
@@ -565,7 +565,7 @@ s32 EnZod_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void EnZod_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == OBJECT_ZOD_LIMB_03) {
+    if (limbIndex == TIJO_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BB0580, &thisx->focus.pos);
     }
 }
@@ -617,7 +617,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80BB062C[] = { &object_zod_Tex_005E50, &object_zod_Tex_006650, &object_zod_Tex_006E50 };
+    static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpen, &gTijoEyesHalfOpen, &gTijoEyesClosed };
     EnZod* this = THIS;
     Gfx* gfxP;
 
@@ -631,8 +631,8 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     gfxP = POLY_OPA_DISP;
 
-    gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(D_80BB062C[this->eyeIndex]));
-    gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&object_zod_Tex_007650));
+    gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(sTijoEyesTextures[this->eyeIndex]));
+    gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&gTijoMouthClosedTex));
 
     POLY_OPA_DISP = gfxP + 2;
 
