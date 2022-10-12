@@ -182,7 +182,7 @@ QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
 
     // Add a unique random identifier to the upper bits of the index
     // The `~3` assumes there are only 4 requests
-    req->index = ((s16)(Rand_ZeroOne() * 0x10000) & ~3) + index;
+    req->index = index + ((s16)(Rand_ZeroOne() * 0x10000) & ~3);
 
     sQuakeRequestCount++;
 
@@ -501,12 +501,12 @@ void Distortion_Init(PlayState* play) {
     sDistortionRequest.state = DISTORTION_INACTIVE;
 }
 
-void Distortion_SetCountdown(s16 timer) {
-    sDistortionRequest.timer = timer;
+void Distortion_SetDuration(s16 duration) {
+    sDistortionRequest.timer = duration;
     sDistortionRequest.state = DISTORTION_SETUP;
 }
 
-s16 Distortion_GetCountdown(void) {
+s16 Distortion_GetTimeLeft(void) {
     return sDistortionRequest.timer;
 }
 
@@ -514,13 +514,13 @@ s16 Distortion_GetType(void) {
     return sDistortionRequest.type;
 }
 
-void Distortion_SetType(s32 type) {
+void Distortion_Request(s32 type) {
     if (sDistortionRequest.type < type) {
         sDistortionRequest.type = type;
     }
 }
 
-void Distortion_ClearType(s32 type) {
+void Distortion_RemoveRequest(s32 type) {
     if (sDistortionRequest.type == type) {
         sDistortionRequest.type = 0;
     }
@@ -563,7 +563,7 @@ void Distortion_Update(void) {
     f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
 
     if (sDistortionRequest.type != 0) {
-        if (sDistortionRequest.type & DISTORTION_TYPE_B) {
+        if (sDistortionRequest.type & DISTORTION_TYPE_MASK_TRANSFORM_2) {
             sDistortionRequest.timer = 2;
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
@@ -582,7 +582,7 @@ void Distortion_Update(void) {
             speed = 0.6f;
             xyScaleFactor = zScaleFactor = sDistortionRequest.timer / 60.0f;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_A) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_BOSS_WARP) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 duration = sDistortionRequest.timer;
                 depthPhase = 0x3F0;
@@ -603,7 +603,7 @@ void Distortion_Update(void) {
             speed = 0.4f;
             xyScaleFactor = zScaleFactor = ((f32)duration - sDistortionRequest.timer) / (f32)duration;
             speedScaleFactor = 0.5f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_9) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_MASK_TRANSFORM_1) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 duration = sDistortionRequest.timer;
                 depthPhase = 0x1FC;
@@ -624,7 +624,7 @@ void Distortion_Update(void) {
             speed = 0.1f;
             xyScaleFactor = zScaleFactor = ((f32)duration - sDistortionRequest.timer) / (f32)duration;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_8) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_GORON_BUTT) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 duration = sDistortionRequest.timer;
                 depthPhase = 0x2710;
@@ -649,7 +649,7 @@ void Distortion_Update(void) {
                 xyScaleFactor = zScaleFactor = 0.0f;
             }
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_7) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_UNK_ATTACK) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 duration = sDistortionRequest.timer;
                 depthPhase = 0x4B0;
@@ -670,7 +670,7 @@ void Distortion_Update(void) {
             speed = 1.5f;
             xyScaleFactor = zScaleFactor = sDistortionRequest.timer / (f32)duration;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_6) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_ZORA_KICK) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 duration = sDistortionRequest.timer;
                 depthPhase = 0x9C4;
@@ -695,7 +695,7 @@ void Distortion_Update(void) {
                 xyScaleFactor = zScaleFactor = 0.0f;
             }
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_5) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_SONG_OF_TIME) {
             sDistortionRequest.timer = 2;
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 depthPhase = 0x9C4;
@@ -720,7 +720,7 @@ void Distortion_Update(void) {
             zScaleFactor = 1.0f;
             xyScaleFactor = 1.0f;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_4) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_UNDERWATER_ENTRY) {
             if (sDistortionRequest.state == DISTORTION_SETUP) {
                 duration = sDistortionRequest.timer;
                 depthPhase = 0x760;
@@ -742,7 +742,7 @@ void Distortion_Update(void) {
             countdownRatio = sDistortionRequest.timer / (f32)duration;
             zScaleFactor = xyScaleFactor = countdownRatio;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_3) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_ZORA_SWIMMING) {
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
 
@@ -797,7 +797,7 @@ void Distortion_Update(void) {
             }
             zScaleFactor = -xyScaleFactor;
             speedScaleFactor = 1.0f;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_2) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_NON_ZORA_SWIMMING) {
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
 
@@ -848,7 +848,7 @@ void Distortion_Update(void) {
 
             xyScaleFactor = speedScaleFactor = (waterYScaleFactor * 0.15f) + 0.35f + (speedRatio * 0.4f);
             zScaleFactor = 0.9f - xyScaleFactor;
-        } else if (sDistortionRequest.type & DISTORTION_TYPE_0) {
+        } else if (sDistortionRequest.type & DISTORTION_TYPE_HOT_ROOM) {
             // Gives a small mirage-like appearance
             depthPhase = 0x3F0;
             screenPlanePhase = 0x156;
@@ -903,7 +903,7 @@ void Distortion_Update(void) {
     }
 }
 
-s32 Quake_NumActiveQuakes(void) {
+s32 Quake_GetNumActiveQuakes(void) {
     s32 numActiveQuakes = 0;
     s32 i;
 

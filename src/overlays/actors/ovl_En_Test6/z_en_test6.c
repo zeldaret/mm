@@ -397,7 +397,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
     func_80A90C34();
-    Distortion_ClearType(DISTORTION_TYPE_5);
+    Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_MarkForDeath(&this->actor);
 }
 
@@ -463,8 +463,8 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                     }
                 }
                 func_80A90C08(0x78);
-                Distortion_SetType(DISTORTION_TYPE_5);
-                Distortion_SetCountdown(80);
+                Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
+                Distortion_SetDuration(80);
                 play->unk_18844 = 1;
                 this->unk_274 = 95;
             }
@@ -518,7 +518,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
             if (this->unk_27A == 10) {
                 this->unk_14C = 0.1f;
                 func_80A90C34();
-                Distortion_ClearType(DISTORTION_TYPE_5);
+                Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
                 play->unk_18844 = 0;
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
@@ -618,7 +618,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
     func_80A90C34();
-    Distortion_ClearType(DISTORTION_TYPE_5);
+    Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_MarkForDeath(&this->actor);
 }
 
@@ -685,8 +685,8 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
         case 115:
             func_80A90C08(0x14);
-            Distortion_SetType(DISTORTION_TYPE_5);
-            Distortion_SetCountdown(90);
+            Distortion_Request(DISTORTION_TYPE_SONG_OF_TIME);
+            Distortion_SetDuration(90);
             this->unk_274 = 2;
             break;
 
@@ -716,7 +716,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         case 14:
         case 15:
             func_80A90C08(0x32);
-            Distortion_ClearType(DISTORTION_TYPE_5);
+            Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
             this->unk_274 = 0;
             break;
 
