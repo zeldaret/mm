@@ -1622,24 +1622,24 @@ s16 sQuestVtxRectLeft[] = {
     -103, // QUEST_BOMBERS_NOTEBOOK
     7,    // QUEST_QUIVER
     82,   // QUEST_BOMB_BAG
-    -110, // QUEST_HEART_PIECE
-    -54,  // played ocarina button index 0
-    -98,  // played ocarina button index 1
-    -86,  // played ocarina button index 2
-    -74,  // played ocarina button index 3
-    -62,  // played ocarina button index 4
-    -50,  // played ocarina button index 5
-    -38,  // played ocarina button index 6
-    -26,  // played ocarina button index 7
-    -14,  // ocarina button index 0
-    -98,  // ocarina button index 1
-    -86,  // ocarina button index 2
-    -74,  // ocarina button index 3
-    -62,  // ocarina button index 4
-    -50,  // ocarina button index 5
-    -38,  // ocarina button index 6
-    -26,  // ocarina button index 7
-    -14,  // QUEST_SKULL_TOKEN
+    -110, // unused
+    -54,  // QUEST_HEART_PIECE
+    -98,  // played ocarina button index 0
+    -86,  // played ocarina button index 1
+    -74,  // played ocarina button index 2
+    -62,  // played ocarina button index 3
+    -50,  // played ocarina button index 4
+    -38,  // played ocarina button index 5
+    -26,  // played ocarina button index 6
+    -14,  // played ocarina button index 7
+    -98,  // ocarina button index 0
+    -86,  // ocarina button index 1
+    -74,  // ocarina button index 2
+    -62,  // ocarina button index 3
+    -50,  // ocarina button index 4
+    -38,  // ocarina button index 5
+    -26,  // ocarina button index 6
+    -14,  // ocarina button index 7
 };
 s16 sQuestVtxRectTop[] = {
     62,  // QUEST_REMAINS_ODOWLA
@@ -1663,8 +1663,9 @@ s16 sQuestVtxRectTop[] = {
     54,  // QUEST_BOMBERS_NOTEBOOK
     -44, // QUEST_QUIVER
     -44, // QUEST_BOMB_BAG
-    34,  // QUEST_HEART_PIECE
-    58,  // played ocarina button index 0
+    34,  // unused
+    58,  // QUEST_HEART_PIECE
+    -52, // played ocarina button index 0
     -52, // played ocarina button index 1
     -52, // played ocarina button index 2
     -52, // played ocarina button index 3
@@ -1680,7 +1681,6 @@ s16 sQuestVtxRectTop[] = {
     -52, // ocarina button index 5
     -52, // ocarina button index 6
     -52, // ocarina button index 7
-    -52, // QUEST_SKULL_TOKEN
 };
 s16 sQuestVtxWidths[] = {
     32, // QUEST_REMAINS_ODOWLA
