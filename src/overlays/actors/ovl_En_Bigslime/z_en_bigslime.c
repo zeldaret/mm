@@ -15,7 +15,7 @@
 
 #define THIS ((EnBigslime*)thisx)
 
-void EnBigslime_Init(Actor* thisx, PlayState* play);
+void EnBigslime_Init(Actor* thisx, PlayState* play2);
 void EnBigslime_Destroy(Actor* thisx, PlayState* play);
 void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play);
 void EnBigslime_DrawGekko(Actor* thisx, PlayState* play);

@@ -29,7 +29,7 @@ MtxF* Matrix_GetCurrent(void);
 
 /* Basic operations */
 
-void Matrix_Mult(MtxF* matrix, MatrixMode mode);
+void Matrix_Mult(MtxF* mf, MatrixMode mode);
 void Matrix_Translate(f32 x, f32 y, f32 z, MatrixMode mode);
 void Matrix_Scale(f32 x, f32 y, f32 z, MatrixMode mode);
 void Matrix_RotateXS(s16 x, MatrixMode mode);

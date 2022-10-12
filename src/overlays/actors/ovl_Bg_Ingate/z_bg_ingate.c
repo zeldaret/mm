@@ -11,7 +11,7 @@
 
 #define THIS ((BgIngate*)thisx)
 
-void BgIngate_Init(Actor* thisx, PlayState* play);
+void BgIngate_Init(Actor* thisx, PlayState* play2);
 void BgIngate_Destroy(Actor* thisx, PlayState* play);
 void BgIngate_Update(Actor* thisx, PlayState* play);
 void BgIngate_Draw(Actor* thisx, PlayState* play);
