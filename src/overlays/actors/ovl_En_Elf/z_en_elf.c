@@ -11,7 +11,7 @@
 
 #define THIS ((EnElf*)thisx)
 
-void EnElf_Init(Actor* thisx, PlayState* play);
+void EnElf_Init(Actor* thisx, PlayState* play2);
 void EnElf_Destroy(Actor* thisx, PlayState* play);
 void EnElf_Update(Actor* thisx, PlayState* play);
 void EnElf_Draw(Actor* thisx, PlayState* play);
@@ -29,9 +29,9 @@ void func_8088E484(EnElf* this, PlayState* play);
 void func_8088E850(EnElf* this, PlayState* play);
 void func_8088EFA4(EnElf* this, PlayState* play);
 void func_8088F214(EnElf* this, PlayState* play);
-void func_8088F5F4(EnElf* this, PlayState* play, s32 arg2);
+void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife);
 void func_8089010C(Actor* thisx, PlayState* play);
-void func_808908D0(Vec3f* arg0, PlayState* play, u32 arg2);
+void func_808908D0(Vec3f* vec, PlayState* play, u32 action);
 
 const ActorInit En_Elf_InitVars = {
     ACTOR_EN_ELF,
@@ -903,14 +903,14 @@ void func_8088E850(EnElf* this, PlayState* play) {
             func_8088D660(this, &nextPos, 0.2f);
         }
 
-        if ((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 0) &&
+        if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) &&
             (play->csCtx.currentCsIndex == 0) &&
             ((play->csCtx.frames == 149) || (play->csCtx.frames == 381) || (play->csCtx.frames == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
-        if ((play->sceneNum == SCENE_SECOM) && (gSaveContext.sceneSetupIndex == 0) &&
-            (play->csCtx.currentCsIndex == 4) && (play->csCtx.frames == 95)) {
+        if ((play->sceneId == SCENE_SECOM) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 4) &&
+            (play->csCtx.frames == 95)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {

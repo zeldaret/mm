@@ -232,7 +232,7 @@ void Graph_UpdateGame(GameState* gameState) {
     Game_UpdateInput(gameState);
     Game_IncrementFrameCount(gameState);
     if (SREG(20) < 3) {
-        func_8019E014();
+        Audio_Update();
     }
 }
 

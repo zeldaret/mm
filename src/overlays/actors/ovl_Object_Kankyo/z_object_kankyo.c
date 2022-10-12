@@ -588,7 +588,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
     ObjectKankyo* this = THIS;
     f32 tempA;
 
-    if (play->sceneNum == SCENE_KYOJINNOMA) {
+    if (play->sceneId == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
         tempA = Camera_GetWaterYPos(GET_ACTIVE_CAM(play));

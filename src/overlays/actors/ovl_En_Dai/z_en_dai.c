@@ -176,7 +176,7 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_12HAKUGINMAE) && (play->csCtx.currentCsIndex == 0) &&
+    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_12HAKUGINMAE) && (play->csCtx.currentCsIndex == 0) &&
         !(gSaveContext.save.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(play, 20);

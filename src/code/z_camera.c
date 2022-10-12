@@ -1,5 +1,8 @@
 #include "ultra64.h"
 #include "global.h"
+#include "z64quake.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 /**
@@ -1167,9 +1170,9 @@ void Camera_UpdateInterface(s32 interfaceFlags) {
         }
 
         if (interfaceFlags & CAM_LETTERBOX_INSTANT) {
-            ShrinkWindow_SetLetterboxMagnitude(sCameraLetterboxSize);
+            ShrinkWindow_Letterbox_SetSize(sCameraLetterboxSize);
         } else {
-            ShrinkWindow_SetLetterboxTarget(sCameraLetterboxSize);
+            ShrinkWindow_Letterbox_SetSizeTarget(sCameraLetterboxSize);
         }
     }
 
@@ -5490,7 +5493,7 @@ s32 Camera_Unique2(Camera* camera) {
 s32 Camera_Unique3(Camera* camera) {
     s32 ret = Camera_Normal1(camera);
 
-    if ((camera->play->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
+    if ((camera->play->sceneId == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
         camera->eye.y = 5.0f;
     }
     return ret;
@@ -5502,7 +5505,7 @@ s32 Camera_Unique3(Camera* camera) {
 s32 Camera_Unique4(Camera* camera) {
     s32 ret = Camera_Parallel1(camera);
 
-    if ((camera->play->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
+    if ((camera->play->sceneId == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
         camera->eye.y = 5.0f;
     }
     return ret;
@@ -5514,7 +5517,7 @@ s32 Camera_Unique4(Camera* camera) {
 s32 Camera_Unique5(Camera* camera) {
     s32 ret = Camera_Battle1(camera);
 
-    if ((camera->play->sceneNum == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
+    if ((camera->play->sceneId == SCENE_21MITURINMAE) && (camera->eye.y < 5.0f)) {
         camera->eye.y = 5.0f;
     }
     return ret;
@@ -7710,7 +7713,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     camera->quakeOffset = quake.eyeOffset;
     View_SetScale(&camera->play->view, (OREG(67) * 0.01f) + 1.0f);
     camera->play->view.fovy = viewFov;
-    View_SetViewOrientation(&camera->play->view, &viewEye, &viewAt, &viewUp);
+    View_LookAt(&camera->play->view, &viewEye, &viewAt, &viewUp);
     camera->camDir.x = sp3C.pitch;
     camera->camDir.y = sp3C.yaw;
     camera->camDir.z = 0;

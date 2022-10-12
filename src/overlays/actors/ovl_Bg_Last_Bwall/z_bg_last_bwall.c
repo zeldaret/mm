@@ -25,7 +25,7 @@ typedef struct {
 void BgLastBwall_Init(Actor* thisx, PlayState* play);
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play);
 void BgLastBwall_Update(Actor* thisx, PlayState* play);
-void BgLastBwall_Draw(Actor* thisx, PlayState* play);
+void BgLastBwall_Draw(Actor* thisx, PlayState* play2);
 
 void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, ColliderTris* collider,
                               BgLastBwallInitColliderStruct* arg4);

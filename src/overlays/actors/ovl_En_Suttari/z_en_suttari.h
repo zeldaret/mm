@@ -34,7 +34,7 @@ typedef struct EnSuttari {
     /* 0x2FA */ s16 unk2FA[16];
     /* 0x31A */ s16 unk31A[16];
     /* 0x33A */ UNK_TYPE1 unk_33A[0xB6];
-    /* 0x3F0 */ s16 unk3F0;
+    /* 0x3F0 */ s16 playerDetected;
     /* 0x3F2 */ s16 unk3F2;
     /* 0x3F4 */ s16 unk3F4;
     /* 0x3F6 */ s16 unk3F6;
