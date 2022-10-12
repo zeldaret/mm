@@ -277,7 +277,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         }
     }
 
-    // Skip over an unused questVtx entry
+    // Skip over &pauseCtx->questVtx[84], which should be `QUEST_SKULL_TOKEN`
     j += 4;
 
     sp1CA = ABS_ALT(sQuestHpPrimRed - sQuestHpPrimColorTargets[sQuestHpPrimColorTargetIndex][0]) / sQuestHpColorTimer;
