@@ -14,8 +14,8 @@
 
 void EnWizFire_Init(Actor* thisx, PlayState* play);
 void EnWizFire_Destroy(Actor* thisx, PlayState* play);
-void EnWizFire_Update(Actor* thisx, PlayState* play);
-void EnWizFire_Draw(Actor* thisx, PlayState* play);
+void EnWizFire_Update(Actor* thisx, PlayState* play2);
+void EnWizFire_Draw(Actor* thisx, PlayState* play2);
 
 void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play);
 void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play);

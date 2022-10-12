@@ -11,7 +11,7 @@
 
 #define THIS ((EnDoorEtc*)thisx)
 
-void EnDoorEtc_Init(Actor* thisx, PlayState* play);
+void EnDoorEtc_Init(Actor* thisx, PlayState* play2);
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
 void EnDoorEtc_Update(Actor* thisx, PlayState* play);
 

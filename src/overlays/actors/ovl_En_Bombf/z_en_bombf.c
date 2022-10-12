@@ -12,7 +12,7 @@
 
 #define THIS ((EnBombf*)thisx)
 
-void EnBombf_Init(Actor* thisx, PlayState* play);
+void EnBombf_Init(Actor* thisx, PlayState* play2);
 void EnBombf_Destroy(Actor* thisx, PlayState* play);
 void EnBombf_Update(Actor* thisx, PlayState* play);
 void EnBombf_Draw(Actor* thisx, PlayState* play);

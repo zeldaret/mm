@@ -12,7 +12,7 @@
 
 void EnThiefbird_Init(Actor* thisx, PlayState* play);
 void EnThiefbird_Destroy(Actor* thisx, PlayState* play);
-void EnThiefbird_Update(Actor* thisx, PlayState* play);
+void EnThiefbird_Update(Actor* thisx, PlayState* play2);
 void EnThiefbird_Draw(Actor* thisx, PlayState* play);
 
 void func_80C11538(EnThiefbird* this);

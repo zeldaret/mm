@@ -15,7 +15,7 @@
 void EnElfbub_Init(Actor* thisx, PlayState* play);
 void EnElfbub_Destroy(Actor* thisx, PlayState* play);
 void EnElfbub_Update(Actor* thisx, PlayState* play);
-void EnElfbub_Draw(Actor* thisx, PlayState* play);
+void EnElfbub_Draw(Actor* thisx, PlayState* play2);
 
 void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);

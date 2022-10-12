@@ -11,7 +11,7 @@
 
 #define THIS ((EnGg2*)thisx)
 
-void EnGg2_Init(Actor* thisx, PlayState* play);
+void EnGg2_Init(Actor* thisx, PlayState* play2);
 void EnGg2_Destroy(Actor* thisx, PlayState* play);
 void EnGg2_Update(Actor* thisx, PlayState* play);
 void EnGg2_Draw(Actor* thisx, PlayState* play);

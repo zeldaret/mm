@@ -12,7 +12,7 @@
 
 #define THIS ((EnZot*)thisx)
 
-void EnZot_Init(Actor* thisx, PlayState* play);
+void EnZot_Init(Actor* thisx, PlayState* play2);
 void EnZot_Destroy(Actor* thisx, PlayState* play);
 void EnZot_Update(Actor* thisx, PlayState* play);
 void EnZot_Draw(Actor* thisx, PlayState* play);

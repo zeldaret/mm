@@ -22,8 +22,8 @@
 
 void EnWaterEffect_Init(Actor* thisx, PlayState* play);
 void EnWaterEffect_Destroy(Actor* thisx, PlayState* play);
-void EnWaterEffect_Update(Actor* thisx, PlayState* play);
-void EnWaterEffect_Draw(Actor* thisx, PlayState* play);
+void EnWaterEffect_Update(Actor* thisx, PlayState* play2);
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A59C04(Actor* thisx, PlayState* play2);
 void func_80A5A184(Actor* thisx, PlayState* play2);

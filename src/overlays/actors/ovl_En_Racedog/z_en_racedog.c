@@ -28,7 +28,7 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
 void EnRacedog_UpdateRaceVariables(EnRacedog* this);
 void EnRacedog_CheckForFinish(EnRacedog* this);
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
-s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates);
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play);
 void EnRacedog_PlaySfxWalk(EnRacedog* this);
 

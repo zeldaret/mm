@@ -13,7 +13,7 @@
 
 void EnIk_Init(Actor* thisx, PlayState* play);
 void EnIk_Destroy(Actor* thisx, PlayState* play);
-void EnIk_Update(Actor* thisx, PlayState* play);
+void EnIk_Update(Actor* thisx, PlayState* play2);
 void EnIk_Draw(Actor* thisx, PlayState* play);
 
 void EnIk_Thaw(EnIk* this, PlayState* play);

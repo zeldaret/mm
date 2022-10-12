@@ -16,7 +16,7 @@
 #define THIS ((EnIshi*)thisx)
 
 void EnIshi_Init(Actor* thisx, PlayState* play);
-void EnIshi_Destroy(Actor* thisx, PlayState* play);
+void EnIshi_Destroy(Actor* thisx, PlayState* play2);
 void EnIshi_Update(Actor* thisx, PlayState* play);
 
 void func_8095D804(Actor* thisx, PlayState* play);

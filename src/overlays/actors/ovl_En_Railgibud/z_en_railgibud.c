@@ -35,7 +35,8 @@ void EnRailgibud_Damage(EnRailgibud* this, PlayState* play);
 void EnRailgibud_Stunned(EnRailgibud* this, PlayState* play);
 void EnRailgibud_SetupDead(EnRailgibud* this);
 void EnRailgibud_Dead(EnRailgibud* this, PlayState* play);
-void EnRailgibud_SpawnDust(PlayState* play, Vec3f* vec, f32 arg2, s32 arg3, s16 arg4, s16 arg5);
+void EnRailgibud_SpawnDust(PlayState* play, Vec3f* basePos, f32 randomnessScale, s32 dustCount, s16 dustScale,
+                           s16 scaleStep);
 void EnRailgibud_TurnTowardsPlayer(EnRailgibud* this, PlayState* play);
 s32 EnRailgibud_PlayerInRangeWithCorrectState(EnRailgibud* this, PlayState* play);
 s32 EnRailgibud_PlayerOutOfRange(EnRailgibud* this, PlayState* play);

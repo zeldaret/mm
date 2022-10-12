@@ -12,8 +12,8 @@
 
 #define THIS ((ObjKibako*)thisx)
 
-void ObjKibako_Init(Actor* thisx, PlayState* play);
-void ObjKibako_Destroy(Actor* thisx, PlayState* play);
+void ObjKibako_Init(Actor* thisx, PlayState* play2);
+void ObjKibako_Destroy(Actor* thisx, PlayState* play2);
 void ObjKibako_Update(Actor* thisx, PlayState* play);
 
 void ObjKibako_Draw(Actor* thisx, PlayState* play);

@@ -22,7 +22,7 @@ void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, PlayState* play);
 
 void ObjRaillift_DoNothing(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play);
-void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 arg1);
+void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 index);
 void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Wait(ObjRaillift* this, PlayState* play);
@@ -49,8 +49,8 @@ static InitChainEntry sInitChain[] = {
 
 static CollisionHeader* sColHeaders[] = { &object_raillift_Colheader_004FF8, &object_raillift_Colheader_0048D0 };
 
-void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 idx) {
-    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[idx]);
+void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 index) {
+    Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[index]);
 }
 
 void ObjRaillift_Init(Actor* thisx, PlayState* play) {

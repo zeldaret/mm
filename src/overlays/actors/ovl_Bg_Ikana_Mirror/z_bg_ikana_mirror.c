@@ -16,7 +16,7 @@
 
 #define THIS ((BgIkanaMirror*)thisx)
 
-void BgIkanaMirror_Init(Actor* thisx, PlayState* play);
+void BgIkanaMirror_Init(Actor* thisx, PlayState* play2);
 void BgIkanaMirror_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaMirror_Update(Actor* thisx, PlayState* play);
 void BgIkanaMirror_Draw(Actor* thisx, PlayState* play);

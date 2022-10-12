@@ -16,12 +16,12 @@
 
 #define WATER_SURFACE_Y(play) play->colCtx.colHeader->waterBoxes->minPos.y
 
-void EnFishing_Init(Actor* thisx, PlayState* play);
-void EnFishing_Destroy(Actor* thisx, PlayState* play);
-void EnFishing_UpdateFish(Actor* thisx, PlayState* play);
+void EnFishing_Init(Actor* thisx, PlayState* play2);
+void EnFishing_Destroy(Actor* thisx, PlayState* play2);
+void EnFishing_UpdateFish(Actor* thisx, PlayState* play2);
 void EnFishing_DrawFish(Actor* thisx, PlayState* play);
 
-void EnFishing_UpdateOwner(Actor* thisx, PlayState* play);
+void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2);
 void EnFishing_DrawOwner(Actor* thisx, PlayState* play);
 
 typedef struct {

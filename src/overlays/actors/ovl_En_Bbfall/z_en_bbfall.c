@@ -14,7 +14,7 @@
 void EnBbfall_Init(Actor* thisx, PlayState* play);
 void EnBbfall_Destroy(Actor* thisx, PlayState* play);
 void EnBbfall_Update(Actor* thisx, PlayState* play);
-void EnBbfall_Draw(Actor* thisx, PlayState* play);
+void EnBbfall_Draw(Actor* thisx, PlayState* play2);
 
 void EnBbfall_SetupWaitForPlayer(EnBbfall* this);
 void EnBbfall_WaitForPlayer(EnBbfall* this, PlayState* play);

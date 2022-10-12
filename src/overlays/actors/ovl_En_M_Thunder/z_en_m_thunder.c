@@ -16,7 +16,7 @@
 void EnMThunder_Init(Actor* thisx, PlayState* play);
 void EnMThunder_Destroy(Actor* thisx, PlayState* play);
 void EnMThunder_Update(Actor* thisx, PlayState* play);
-void EnMThunder_Draw(Actor* thisx, PlayState* play);
+void EnMThunder_Draw(Actor* thisx, PlayState* play2);
 
 void EnMThunder_UnkType_Update(Actor* thisx, PlayState* play);
 

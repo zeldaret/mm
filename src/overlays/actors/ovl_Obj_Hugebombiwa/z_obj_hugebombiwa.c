@@ -14,7 +14,7 @@
 #define THIS ((ObjHugebombiwa*)thisx)
 
 void ObjHugebombiwa_Init(Actor* thisx, PlayState* play);
-void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play);
+void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2);
 void ObjHugebombiwa_Update(Actor* thisx, PlayState* play);
 void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play);
 
