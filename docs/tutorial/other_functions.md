@@ -401,7 +401,7 @@ There remains one thing we need to fix before trying to compile it, namely `*(&g
 
 ```C
     /* 0x0EF8 */ u8 weekEventReg[100];       // "week_event_reg"
-    /* 0x0F5C */ u32 mapsVisited;            // "area_arrival"
+    /* 0x0F5C */ u32 regionsVisited;         // "area_arrival"
 ```
 
 so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.save.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.save.weekEventReg[63] & 0x80)` will do.
