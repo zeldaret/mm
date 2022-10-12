@@ -5,6 +5,7 @@
  */
 
 #include "z_kaleido_scope.h"
+#include "z64view.h"
 
 extern UNK_TYPE D_02001360;
 extern UNK_TYPE D_020044A0;
@@ -344,7 +345,7 @@ s32 D_8082BEB8[] = { 0, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_8082585C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_808259D4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/KaleidoScope_SetView.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_kaleido_scope/func_80825A50.s")
 

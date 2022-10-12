@@ -13,7 +13,7 @@
 
 void ObjMilkBin_Init(Actor* thisx, PlayState* play);
 void ObjMilkBin_Destroy(Actor* thisx, PlayState* play);
-void ObjMilkBin_Update(Actor* thisx, PlayState* play);
+void ObjMilkBin_Update(Actor* thisx, PlayState* play2);
 void ObjMilkBin_Draw(Actor* thisx, PlayState* play);
 
 const ActorInit Obj_Milk_Bin_InitVars = {

@@ -282,17 +282,17 @@ void AudioSeq_InitSequenceChannel(SequenceChannel* channel) {
     channel->transposition = 0;
     channel->largeNotes = false;
     channel->bookOffset = 0;
-    channel->stereo.asByte = 0;
+    channel->stereoData.asByte = 0;
     channel->changes.asByte = 0xFF;
     channel->scriptState.depth = 0;
     channel->newPan = 0x40;
     channel->panChannelWeight = 0x80;
-    channel->unk_10 = 0xFF;
+    channel->surroundEffectIndex = 0xFF;
     channel->velocityRandomVariance = 0;
     channel->gateTimeRandomVariance = 0;
     channel->noteUnused = NULL;
     channel->reverbIndex = 0;
-    channel->reverb = 0;
+    channel->targetReverbVol = 0;
     channel->gain = 0;
     channel->notePriority = 3;
     channel->someOtherPriority = 1;
@@ -308,8 +308,8 @@ void AudioSeq_InitSequenceChannel(SequenceChannel* channel) {
     channel->vibrato.vibratoExtentChangeDelay = 0;
     channel->vibrato.vibratoDelay = 0;
     channel->filter = NULL;
-    channel->unk_20 = 0;
-    channel->unk_0F = 0;
+    channel->combFilterGain = 0;
+    channel->combFilterSize = 0;
     channel->volume = 1.0f;
     channel->volumeScale = 1.0f;
     channel->freqScale = 1.0f;
@@ -345,7 +345,7 @@ s32 AudioSeq_SeqChannelSetLayer(SequenceChannel* channel, s32 layerIndex) {
     layer->channel = channel;
     layer->adsr = channel->adsr;
     layer->adsr.decayIndex = 0;
-    layer->unk_09 = channel->reverb;
+    layer->targetReverbVol = channel->targetReverbVol;
     layer->enabled = true;
     layer->finished = false;
     layer->stopSomething = false;
@@ -355,8 +355,8 @@ s32 AudioSeq_SeqChannelSetLayer(SequenceChannel* channel, s32 layerIndex) {
     layer->bit1 = false;
     layer->notePropertiesNeedInit = false;
     layer->gateTime = 0x80;
-    layer->unk_08 = 0x80;
-    layer->stereo.asByte = 0;
+    layer->surroundEffectIndex = 0x80;
+    layer->stereoData.asByte = 0;
     layer->portamento.mode = PORTAMENTO_MODE_OFF;
     layer->scriptState.depth = 0;
     layer->pan = 0x40;
@@ -782,7 +782,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 break;
 
             case 0xCD: // layer: stereo effects
-                layer->stereo.asByte = AudioSeq_ScriptReadU8(state);
+                layer->stereoData.asByte = AudioSeq_ScriptReadU8(state);
                 break;
 
             case 0xCE: // layer: bend pitch
@@ -796,7 +796,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 break;
 
             case 0xF1: // layer:
-                layer->unk_08 = AudioSeq_ScriptReadU8(state);
+                layer->surroundEffectIndex = AudioSeq_ScriptReadU8(state);
                 break;
 
             default:
@@ -991,13 +991,14 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd) {
 
     if (layer->delay == 0) {
         if (layer->tunedSample != NULL) {
-            time = layer->tunedSample->sample->loop->end;
+            time = layer->tunedSample->sample->loop->loopEnd;
         } else {
             time = 0.0f;
         }
         time *= seqPlayer->tempo;
         time *= gAudioContext.unk_2870;
         time /= layer->freqScale;
+        //! FAKE:
         if (1) {}
         if (time > 0x7FFE) {
             time = 0x7FFE;
@@ -1416,9 +1417,9 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     channel->vibrato.vibratoDelay = cmd * 16;
                     break;
 
-                case 0xD4: // channel: set reverb
+                case 0xD4: // channel: set reverb volume
                     cmd = (u8)cmdArgs[0];
-                    channel->reverb = cmd;
+                    channel->targetReverbVol = cmd;
                     break;
 
                 case 0xC6: // channel: set soundFont
@@ -1491,7 +1492,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     } else {
                         channel->stereoHeadsetEffects = false;
                     }
-                    channel->stereo.asByte = cmd & 0x7F;
+                    channel->stereoData.asByte = cmd & 0x7F;
                     break;
 
                 case 0xD1: // channel: set note allocation policy
@@ -1537,7 +1538,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     data += 4;
                     channel->newPan = data[-3];
                     channel->panChannelWeight = data[-2];
-                    channel->reverb = data[-1];
+                    channel->targetReverbVol = data[-1];
                     channel->reverbIndex = data[0];
                     //! @bug: Not marking reverb state as changed
                     channel->changes.s.pan = true;
@@ -1551,7 +1552,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     channel->transposition = (s8)AudioSeq_ScriptReadU8(scriptState);
                     channel->newPan = AudioSeq_ScriptReadU8(scriptState);
                     channel->panChannelWeight = AudioSeq_ScriptReadU8(scriptState);
-                    channel->reverb = AudioSeq_ScriptReadU8(scriptState);
+                    channel->targetReverbVol = AudioSeq_ScriptReadU8(scriptState);
                     channel->reverbIndex = AudioSeq_ScriptReadU8(scriptState);
                     //! @bug: Not marking reverb state as changed
                     channel->changes.s.pan = true;
@@ -1569,8 +1570,8 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     channel->adsr.sustain = 0;
                     channel->velocityRandomVariance = 0;
                     channel->gateTimeRandomVariance = 0;
-                    channel->unk_0F = 0;
-                    channel->unk_20 = 0;
+                    channel->combFilterSize = 0;
+                    channel->combFilterGain = 0;
                     channel->bookOffset = 0;
                     channel->startSamplePos = 0;
                     channel->unk_E0 = 0;
@@ -1651,8 +1652,8 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     break;
 
                 case 0xBB: // channel:
-                    channel->unk_0F = cmdArgs[0];
-                    channel->unk_20 = cmdArgs[1];
+                    channel->combFilterSize = cmdArgs[0];
+                    channel->combFilterGain = cmdArgs[1];
                     break;
 
                 case 0xBC: // channel: add large
@@ -1667,8 +1668,8 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     if (cmdArgs[0] < 5) {
                         if (1) {}
                         if (gAudioContext.unk_29A8[cmdArgs[0]] != NULL) {
-                            D_80208E6C = gAudioContext.unk_29A8[cmdArgs[0]];
-                            scriptState->value = D_80208E6C(scriptState->value, channel);
+                            gCustomAudioSeqFunction = gAudioContext.unk_29A8[cmdArgs[0]];
+                            scriptState->value = gCustomAudioSeqFunction(scriptState->value, channel);
                         }
                     }
                     break;
@@ -1693,7 +1694,7 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     break;
 
                 case 0xA4: // channel:
-                    channel->unk_10 = cmdArgs[0];
+                    channel->surroundEffectIndex = cmdArgs[0];
                     break;
 
                 case 0xA5: // channel:
@@ -2197,7 +2198,7 @@ void AudioSeq_ProcessSequences(s32 arg0) {
     SequencePlayer* seqPlayer;
     u32 i;
 
-    gAudioContext.noteSubEuOffset =
+    gAudioContext.sampleStateOffset =
         (gAudioContext.audioBufferParameters.updatesPerFrame - arg0 - 1) * gAudioContext.numNotes;
 
     for (i = 0; i < (u32)gAudioContext.audioBufferParameters.numSequencePlayers; i++) {
