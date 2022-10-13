@@ -2309,7 +2309,7 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_LENS:
             // Slowly consume magic while Lens of Truth is active
-            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
                 (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
                 !Play_InCsMode(play)) {
@@ -2352,9 +2352,9 @@ void Magic_Update(PlayState* play) {
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
             // fallthrough
         case MAGIC_STATE_CONSUME_GORON_ZORA:
-            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == 0) && (msgCtx->msgMode == 0) &&
-                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-                (play->transitionMode == TRANS_MODE_OFF)) {
+            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == 0) &&
+                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
@@ -2374,7 +2374,7 @@ void Magic_Update(PlayState* play) {
             break;
 
         case MAGIC_STATE_CONSUME_GIANTS_MASK:
-            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
                 (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
@@ -2680,7 +2680,7 @@ void Interface_DrawTimers(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     // Not satisfying any of these conditions will pause the timer
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         ((msgCtx->msgMode == 0) ||
          ((msgCtx->msgMode != 0) && (msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
@@ -3125,7 +3125,7 @@ void Interface_UpdateBottleTimers(PlayState* play) {
     s32 pad[2];
 
     // Not satisfying any of these conditions will pause the bottle timer
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         ((msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&

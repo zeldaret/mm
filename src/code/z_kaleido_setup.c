@@ -14,18 +14,18 @@ void func_800F4A10(PlayState* play) {
 
     Rumble_StateReset();
 
-    pauseCtx->unk_206 = 0;
-    pauseCtx->unk_200 = 1;
+    pauseCtx->switchPageTimer = 0;
+    pauseCtx->mainState = PAUSE_MAIN_STATE_SWITCHING_PAGE;
     pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
     pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
-    pauseCtx->unk_27E = -40;
+    pauseCtx->infoPanelOffsetY = -40;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
         pauseCtx->worldMapPoints[i] = false;
     }
 
-    if (pauseCtx->state == 1) {
+    if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
         for (i = 0; i < REGION_MAX; i++) {
             if ((gSaveContext.save.regionsVisited >> i) & 1) {
                 pauseCtx->worldMapPoints[i] = true;
@@ -72,7 +72,7 @@ void KaleidoSetup_Update(PlayState* play) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((pauseCtx->state == 0) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((pauseCtx->state == PAUSE_STATE_OFF) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
             if ((gSaveContext.save.cutscene < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
@@ -85,13 +85,13 @@ void KaleidoSetup_Update(PlayState* play) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;
-                                    pauseCtx->state = 1;
+                                    pauseCtx->state = PAUSE_STATE_OPENING_0;
                                     func_800F4A10(play);
-                                    pauseCtx->mode = pauseCtx->pageIndex * 2 + 1;
+                                    pauseCtx->switchPageMode = pauseCtx->pageIndex * 2 + 1;
                                     func_801A3A7C(1);
                                 }
 
-                                if (pauseCtx->state == 1) {
+                                if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
                                     Game_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                         ShrinkWindow_Letterbox_SetSizeTarget(0);
@@ -115,14 +115,14 @@ void KaleidoSetup_Init(PlayState* play) {
 
     pauseCtx->pageIndex = PAUSE_ITEM;
 
-    pauseCtx->unk_21C = 160.0f;
-    pauseCtx->unk_218 = 160.0f;
-    pauseCtx->unk_214 = 160.0f;
-    pauseCtx->unk_210 = 160.0f;
+    pauseCtx->MaskPageRoll = 160.0f;
+    pauseCtx->QuestPageRoll = 160.0f;
+    pauseCtx->MapPageRoll = 160.0f;
+    pauseCtx->itemPageRoll = 160.0f;
 
     pauseCtx->eye.x = -64.0f;
     pauseCtx->unk_20C = 936.0f;
-    pauseCtx->unk_220 = -314.0f;
+    pauseCtx->roll = -314.0f;
 
     pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 

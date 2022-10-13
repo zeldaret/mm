@@ -1,4 +1,5 @@
 #include "global.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 Gfx sSetupDL[438] = {
     /* 0x00 */
@@ -1328,7 +1329,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 }
 
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b) {
-    if ((R_PAUSE_MENU_MODE < 2) && (D_801F6D10 < 2)) {
+    if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (D_801F6D10 < 2)) {
         func_8012CF0C(gfxCtx, true, true, r, g, b);
     } else {
         func_8012CF0C(gfxCtx, false, false, r, g, b);

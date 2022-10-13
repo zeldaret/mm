@@ -1,6 +1,7 @@
 #include "global.h"
 #include "system_malloc.h"
 #include "z64rumble.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -140,7 +141,7 @@ void Game_Update(GameState* gameState) {
 
     gameState->main(gameState);
 
-    if (R_PAUSE_MENU_MODE != 2) {
+    if (R_PAUSE_BG_PRERENDER_STATE != PAUSE_BG_PRERENDER_PROCESS) {
         GameState_Draw(gameState, gfxCtx);
         func_801736DC(gfxCtx);
     }

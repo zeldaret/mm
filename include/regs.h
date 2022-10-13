@@ -46,7 +46,7 @@
 #define R_ENABLE_ARENA_DBG                SREG(0) // Same as OoT
 #define R_RUN_SPEED_LIMIT                 REG(45)
 #define R_UPDATE_RATE                     SREG(30)
-#define R_PAUSE_MENU_MODE                 SREG(94)
+#define R_PAUSE_BG_PRERENDER_STATE        SREG(94)
 #define R_PAUSE_WORLD_MAP_YAW             YREG(24)
 #define R_PAUSE_WORLD_MAP_Y_OFFSET        YREG(25)
 #define R_PAUSE_WORLD_MAP_DEPTH           YREG(26)
