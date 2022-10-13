@@ -16,9 +16,9 @@ void EnZod_Update(Actor* thisx, PlayState* play);
 void EnZod_Draw(Actor* thisx, PlayState* play);
 
 void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode);
-void func_80BAF99C(EnZod* this, PlayState* play);
+void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play);
 void func_80BAFB84(EnZod* this, PlayState* play);
-void EnZod_SetupStartSession(EnZod* this, PlayState* play);
+void func_80BAFDB4(EnZod* this, PlayState* play);
 void func_80BAFF14(EnZod* this, PlayState* play);
 
 #define TIJO_STATE_1 (1 << 0)
@@ -81,8 +81,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationHeader* D_80BB056C[] = {
-    &gTijoPlayingVivaceAnim, &gTijoReadyToPlayAnim, &gTijoArmsFoldedAnim,
-    &gTijoPlayingLentoAnim, &gTijoPlayingAndantinoAnim,
+    &gTijoPlayingVivaceAnim, &gTijoReadyToPlayAnim,      &gTijoArmsFoldedAnim,
+    &gTijoPlayingLentoAnim,  &gTijoPlayingAndantinoAnim,
 };
 
 static Vec3f D_80BB0580 = { 1300.0f, 1100.0f, 0.0f };
@@ -114,12 +114,12 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     }
 
     EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
-    this->actionFunc = func_80BAF99C;
+    this->actionFunc = EnZod_PlayDrumsSequence;
 
     switch (ENZOD_GET_F(thisx)) {
         case 1:
             if (gSaveContext.save.weekEventReg[0x4E] & 1) {
-                this->actionFunc = EnZod_SetupStartSession;
+                this->actionFunc = func_80BAFDB4;
                 EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
                 ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
@@ -180,7 +180,7 @@ void EnZod_RoomConversation(EnZod* this, PlayState* play) {
     Message_StartTextbox(play, textId, &this->actor);
 }
 
-s32 EnZod_PlayerInFrontOfTijo(EnZod* this, PlayState* play) {
+s32 EnZod_PlayerIsFacingTijo(EnZod* this, PlayState* play) {
     if ((this->actor.playerHeightRel < 30.0f) && (this->actor.xzDistToPlayer < 200.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
@@ -259,7 +259,8 @@ void EnZod_UpdateDrumVels(EnZod* this) {
 
         switch (i) {
             case 0:
-                if (((this->curAnimIndex == ENZOD_ANIM_PLAYING_LENTO) || (this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO)) &&
+                if (((this->curAnimIndex == ENZOD_ANIM_PLAYING_LENTO) ||
+                     (this->curAnimIndex == ENZOD_ANIM_PLAYING_ANDANTINO)) &&
                     ((s32)this->skelAnime.curFrame == 1)) {
                     this->drumScaleVels[i] = 0.1f;
                 }
@@ -357,7 +358,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
 
                     default:
                         func_801477B4(play);
-                        this->actionFunc = func_80BAF99C;
+                        this->actionFunc = EnZod_PlayDrumsSequence;
                         EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
                         break;
                 }
@@ -365,7 +366,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
     }
 }
 
-void func_80BAF99C(EnZod* this, PlayState* play) {
+void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     s32 pad;
     Vec3f seqPos;
 
@@ -374,7 +375,7 @@ void func_80BAF99C(EnZod* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnZod_RoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
-    } else if (EnZod_PlayerInFrontOfTijo(this, play)) {
+    } else if (EnZod_PlayerIsFacingTijo(this, play)) {
         func_800B8614(&this->actor, play, 210.0f);
     }
 
@@ -382,7 +383,7 @@ void func_80BAF99C(EnZod* this, PlayState* play) {
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(3, &seqPos, 0x6D, 700.0f);
+    func_801A1FB4(3, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
@@ -430,21 +431,21 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
-    } else if (EnZod_PlayerInFrontOfTijo(this, play)) {
+    } else if (EnZod_PlayerIsFacingTijo(this, play)) {
         func_800B8614(&this->actor, play, 210.0f);
     }
 }
 
-void func_80BAFC00(EnZod* this, PlayState* play) {
+void EnZod_DoNothing(EnZod* this, PlayState* play) {
 }
 
-void func_80BAFC10(EnZod* this, PlayState* play) {
+void EnZod_RehearsalCutsceneTransition(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         if (this->actor.cutscene == -1) {
-            this->actionFunc = func_80BAFC00;
+            this->actionFunc = EnZod_DoNothing;
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
             play->transitionType = TRANS_TYPE_05;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -462,7 +463,7 @@ void EnZod_StartSession(EnZod* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
-        this->actionFunc = func_80BAFC10;
+        this->actionFunc = EnZod_RehearsalCutsceneTransition;
         ActorCutscene_Stop(this->actor.cutscene);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -471,7 +472,7 @@ void EnZod_StartSession(EnZod* this, PlayState* play) {
     }
 }
 
-void EnZod_SetupStartSession(EnZod* this, PlayState* play) {
+void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
@@ -540,7 +541,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     torsoRot.y = 0;
     torsoRot.x = 0;
 
-    if (EnZod_PlayerInFrontOfTijo(this, play)) {
+    if (EnZod_PlayerIsFacingTijo(this, play)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRot, &torsoRot, this->actor.focus.pos);
         if (this->headRot.x > 0xBB8) {
             this->headRot.x = 0xBB8;
