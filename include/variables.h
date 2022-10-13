@@ -1186,7 +1186,7 @@ extern f32 gDefaultPanVolume[];
 // extern UNK_TYPE1 D_801D5FD4;
 extern UNK_PTR D_801D5FE0;
 // extern UNK_TYPE1 D_801D5FE4;
-extern s32 gAudioContextInitalized;
+extern s32 gAudioCtxInitalized;
 // extern UNK_TYPE4 D_801D5FEC;
 // extern UNK_TYPE4 D_801D5FF0;
 // extern UNK_TYPE4 D_801D5FF4;
@@ -3081,7 +3081,7 @@ extern ActiveSequence gActiveSeqs[];
 // extern UNK_TYPE1 D_80200BCC;
 // extern UNK_TYPE1 D_80200BCE;
 // extern UNK_TYPE1 D_80200BD0;
-extern AudioContext gAudioContext; // at 0x80200C70
+extern AudioContext gAudioCtx; // at 0x80200C70
 extern void (*gCustomAudioUpdateFunction)(void);
 extern u32 (*gCustomAudioSeqFunction)(s8 value, SequenceChannel* channel);
 extern s32 (*gCustomAudioReverbFunction)(Sample*, s32, s8, s32);
