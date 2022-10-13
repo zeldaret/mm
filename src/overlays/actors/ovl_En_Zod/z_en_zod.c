@@ -25,27 +25,27 @@ void func_80BAFF14(EnZod* this, PlayState* play);
 #define TIJO_STATE_2 (1 << 1)
 
 typedef enum {
-    ENZOD_ANIM_PLAYING_VIVACE,
-    ENZOD_ANIM_READY_TO_PLAY,
-    ENZOD_ANIM_ARMS_FOLDED,
-    ENZOD_ANIM_PLAYING_LENTO,
-    ENZOD_ANIM_PLAYING_ANDANTINO,
-    ENZOD_ANIM_MAX,
+    /* 0 */ ENZOD_ANIM_PLAYING_VIVACE,
+    /* 1 */ ENZOD_ANIM_READY_TO_PLAY,
+    /* 2 */ ENZOD_ANIM_ARMS_FOLDED,
+    /* 3 */ ENZOD_ANIM_PLAYING_LENTO,
+    /* 4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
+    /* 5 */ ENZOD_ANIM_MAX,
 } EnZodAnimations;
 
 typedef enum {
-    ENZOD_INSTRUMENT_CYMBAL_1 = 1,
-    ENZOD_INSTRUMENT_CYMBAL_2,
-    ENZOD_INSTRUMENT_CYMBAL_3,
+    /* 1 */ ENZOD_INSTRUMENT_CYMBAL_1 = 1,
+    /* 2 */ ENZOD_INSTRUMENT_CYMBAL_2,
+    /* 3 */ ENZOD_INSTRUMENT_CYMBAL_3,
 } EnZodInstrumentCymbal;
 
 typedef enum {
-    ENZOD_INSTRUMENT_DRUM_1 = 4,
-    ENZOD_INSTRUMENT_DRUM_2,
-    ENZOD_INSTRUMENT_DRUM_3,
-    ENZOD_INSTRUMENT_DRUM_4,
-    ENZOD_INSTRUMENT_DRUM_5,
-    ENZOD_INSTRUMENT_BASS_DRUM,
+    /* 4 */ ENZOD_INSTRUMENT_DRUM_1 = 4,
+    /* 5 */ ENZOD_INSTRUMENT_DRUM_2,
+    /* 6 */ ENZOD_INSTRUMENT_DRUM_3,
+    /* 7 */ ENZOD_INSTRUMENT_DRUM_4,
+    /* 8 */ ENZOD_INSTRUMENT_DRUM_5,
+    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM,
 } EnZodInstrumentDrum;
 
 const ActorInit En_Zod_InitVars = {
@@ -80,7 +80,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 60, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BB056C[] = {
+static AnimationHeader* sAnimations[] = {
     &gTijoPlayingVivaceAnim, &gTijoReadyToPlayAnim,      &gTijoArmsFoldedAnim,
     &gTijoPlayingLentoAnim,  &gTijoPlayingAndantinoAnim,
 };
@@ -192,8 +192,8 @@ void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode) {
     if ((nextAnimIndex < ENZOD_ANIM_PLAYING_VIVACE) || (nextAnimIndex >= ENZOD_ANIM_MAX)) {
         nextAnimIndex = ENZOD_ANIM_PLAYING_LENTO;
     }
-    Animation_Change(&this->skelAnime, D_80BB056C[nextAnimIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(D_80BB056C[nextAnimIndex]), mode, -5.0f);
+    Animation_Change(&this->skelAnime, sAnimations[nextAnimIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimations[nextAnimIndex]), mode, -5.0f);
     this->curAnimIndex = nextAnimIndex;
     this->nextAnimIndex = nextAnimIndex;
 }

@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for Tijo, the drummer of The Indigo-Go's. -->
     <File Name="object_zod" Segment="6">
         <!-- Tijo Animations -->
         <Animation Name="gTijoPlayingVivaceAnim" Offset="0x2E8" />
