@@ -57,6 +57,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
+    static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
+    static s16 sLeafScales[] = { 110, 80, 60, 40 };
     f32 phi_fs0;
     s32 i;
     Vec3f spD4;
@@ -64,8 +66,6 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
     Vec3f vel;
     Vec3f accel;
     s16 angle;
-    static Gfx* sLeafDlists[] = { gKakeraLeafMiddle, gKakeraLeafTip };
-    static s16 sLeafScales[] = { 110, 80, 60, 40 };
 
     Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
 
@@ -95,7 +95,7 @@ void BgDkjailIvy_IvyCutEffects(BgDkjailIvy* this, PlayState* play) {
         EffectSsKakera_Spawn(play, &pos, &vel, &pos, -0x82, 0x40, 0x28, 0, 0, sLeafScales[i & 3], 0, 0, 44, -1,
                              GAMEPLAY_KEEP, sLeafDlists[(s32)Rand_Next() > 0]);
 
-        if ((i > 20) && ((i & 1) != 0)) {
+        if ((i > 20) && ((i % 2) != 0)) {
             accel.x = (Rand_ZeroOne() - 0.5f) * 0.2f;
             accel.y = (Rand_ZeroOne() * 0.02f) - 0.1f;
             accel.z = (Rand_ZeroOne() - 0.5f) * 0.2f;
