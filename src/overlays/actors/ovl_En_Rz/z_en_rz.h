@@ -11,13 +11,13 @@
 typedef enum {
     /* 0 */ EN_RZ_JUDO, // in red
     /* 1 */ EN_RZ_MARILLA // in blue
-} RosaSisters;
+} EnRzSister;
 
 typedef enum {
     /* 0 */ EN_RZ_TYPE_0,
     /* 1 */ EN_RZ_TYPE_1,
     /* 2 */ EN_RZ_TYPE_2
-} RosaSistersType;
+} EnRzType;
 
 struct EnRz;
 

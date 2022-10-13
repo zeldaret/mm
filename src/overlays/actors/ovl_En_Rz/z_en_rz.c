@@ -17,10 +17,10 @@ void EnRz_Update(Actor* thisx, PlayState* play);
 void EnRz_Draw(Actor* thisx, PlayState* play);
 
 void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
-void EnRz_ChangeAnim(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 transitionRate);
+void EnRz_ChangeAnim(PlayState*, EnRz*, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnRz_SetupPath(EnRz* this, PlayState* play);
 EnRz* EnRz_FindSister(EnRz* this, PlayState*);
-void EnRz_SetupUpdateSkelAnime(EnRz* this, PlayState* play);
+void func_80BFC058(EnRz* this, PlayState* play);
 void func_80BFC078(EnRz* this, PlayState* play);
 void func_80BFC3F8(EnRz* this, PlayState* play);
 void func_80BFC674(EnRz* this, PlayState* play);
@@ -47,7 +47,7 @@ typedef enum {
     /* 0 */ EN_RZ_PATHSTATUS_NORMAL,   //!< not near waypoint
     /* 1 */ EN_RZ_PATHSTATUS_AT_POINT, //!< no path or new waypoint
     /* 2 */ EN_RZ_PATHSTATUS_END       //!< reached end of path
-} EnRzPathStatus;
+} EnRzGetPathStatus;
 
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
@@ -109,7 +109,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
-    this->actionFunc = EnRz_SetupUpdateSkelAnime;
+    this->actionFunc = func_80BFC058;
     EnRz_SetupPath(this, play);
     this->animIndex = EN_RZ_ANIM_MAX;
     this->actor.targetMode = 0;
@@ -192,7 +192,7 @@ void EnRz_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
     this->actor.scale.x = 0.01f;
 }
 
-void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 transitionRate) {
+void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     // N.B. both of these arrays must be the same length due to how the animations are chosen
     static AnimationHeader* sJudoAnimations[] = {
         &gRosaSistersThinkingAnim, &gRosaSistersStandingAnim,   &gRosaSistersWalkingWhileThinkingAnim,
@@ -222,14 +222,14 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
             endFrame = Animation_GetLastFrame(sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
             if (animMode == ANIMMODE_LOOP) {
                 LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, transitionRate);
+                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
             } else {
                 LinkAnimation_Change(play, &this->skelAnime, sLinkAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, transitionRate);
+                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
             }
         } else {
             Animation_Change(&this->skelAnime, animationPtr[animIndex], 1.0f, 0.0f,
-                             Animation_GetLastFrame(animationPtr[animIndex]), animMode, transitionRate);
+                             Animation_GetLastFrame(animationPtr[animIndex]), animMode, morphFrames);
         }
 
         this->animIndex = animIndex;
@@ -269,7 +269,7 @@ s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
     return false;
 }
 
-EnRzPathStatus EnRz_PathStatus(EnRz* this) {
+EnRzGetPathStatus EnRz_PathStatus(EnRz* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
@@ -408,7 +408,7 @@ s32 func_80BFBFAC(EnRz* this, PlayState* play) {
     return false;
 }
 
-void EnRz_SetupUpdateSkelAnime(EnRz* this, PlayState* play) {
+void func_80BFC058(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
 }
 
@@ -533,7 +533,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         } else if (EnRz_CanTalk(this, play)) {
             if (func_80BFBCEC(this, play) && !(gSaveContext.save.weekEventReg[77] & 4) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
             } else {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, play, 120.0f);
@@ -622,12 +622,12 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
     this->actor.speedXZ = 1.5f;
 
     switch (EnRz_PathStatus(this)) {
-        case 2:
+        case EN_RZ_PATHSTATUS_END:
             EnRz_SetupPath(this, play);
             EnRz_StopToThink(this, play);
             break;
 
-        case 1:
+        case EN_RZ_PATHSTATUS_AT_POINT:
             EnRz_StopToThink(this, play);
             break;
 
@@ -667,11 +667,11 @@ void EnRz_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnRz_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    static Vec3f sFocusOffsetPos = { 500.0f, -500.0f, 0.0f };
     EnRz* this = THIS;
-    static Vec3f focusOffsetPos = { 500.0f, -500.0f, 0.0f };
 
     if (limbIndex == OBJECT_RZ_LIMB_0B) {
-        Matrix_MultVec3f(&focusOffsetPos, &thisx->focus.pos);
+        Matrix_MultVec3f(&sFocusOffsetPos, &thisx->focus.pos);
     }
     if (limbIndex == OBJECT_RZ_LIMB_03) {
         Matrix_MultVec3f(&gZeroVec3f, &this->shadowPos);
