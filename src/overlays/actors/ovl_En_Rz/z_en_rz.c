@@ -41,7 +41,7 @@ typedef enum {
     /* 7 */ EN_RZ_ANIM_LINK_NORMAL_WAIT_FREE,
     /* 8 */ EN_RZ_ANIM_LINK_DANCE,
     /* 9 */ EN_RZ_ANIM_MAX
-} EnRzAnimations;
+} EnRzAnimation;
 
 typedef enum {
     /* 0 */ EN_RZ_PATHSTATUS_NORMAL,   //!< not near waypoint
