@@ -15,29 +15,28 @@ void EnHg_Destroy(Actor* thisx, PlayState* play);
 void EnHg_Update(Actor* thisx, PlayState* play);
 void EnHg_Draw(Actor* thisx, PlayState* play);
 
-void func_80BCF354(EnHg* this);
-void func_80BCF398(EnHg* this, PlayState* play);
-void func_80BCF468(EnHg* this);
-void func_80BCF468(EnHg* this);
-void func_80BCF4AC(EnHg* this, PlayState* play);
-void func_80BCF5F0(EnHg* this);
-void func_80BCF634(EnHg* this, PlayState* play);
-void func_80BCF68C(EnHg* this);
-void func_80BCF6D0(EnHg* this, PlayState* play);
-void func_80BCF8A0(EnHg* this, PlayState* play);
-void func_80BCF93C(EnHg* this);
-void func_80BCF95C(EnHg* this, PlayState* play);
+void EnHg_SetupIdle(EnHg* this);
+void EnHg_Idle(EnHg* this, PlayState* play);
+void EnHg_SetupMoveTowardsPlayer(EnHg* this);
+void EnHg_MoveTowardsPlayer(EnHg* this, PlayState* play);
+void EnHg_SetupDetectPlayerDistanceFromHomePos(EnHg* this);
+void EnHg_DetectPlayerDistanceFromHomePos(EnHg* this, PlayState* play);
+void EnHg_SetupReactToHit(EnHg* this);
+void EnHg_ReactToHit(EnHg* this, PlayState* play);
+void EnHg_PlayCutscene(EnHg* this, PlayState* play);
+void EnHg_SetupCsAction(EnHg* this);
+void EnHg_HandleCsAction(EnHg* this, PlayState* play);
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 typedef enum {
-    /* 0x00 */ HG_ANIM_0,
+    /* 0x00 */ HG_ANIM_NO_ACTION,
     /* 0x03 */ HG_ANIM_LEAN_FORWARD = 3,
     /* 0x04 */ HG_ANIM_REACH_FORWARD,
     /* 0x05 */ HG_ANIM_CURL_UP,
-    /* 0x06 */ HG_ANIM_CROUCHED_PANIC = 6,
+    /* 0x06 */ HG_ANIM_CROUCHED_PANIC,
     /* 0x07 */ HG_ANIM_PANIC,
-} HgAnimation;
+} HgCsAnimation;
 
 typedef enum {
     /* 0 */ HG_CS_FIRST_ENCOUNTER,
@@ -128,7 +127,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gHarfgibudPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-static u32 D_80BD00C8 = false;
+static u32 sHasSoundPlayed = false;
 
 void EnHg_Init(Actor* thisx, PlayState* play) {
     EnHg* this = THIS;
@@ -154,7 +153,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
         this->cutscenes[i] = currentCutscene;
         currentCutscene = ActorCutscene_GetAdditionalCutscene(currentCutscene);
     }
-    func_80BCF354(this);
+    EnHg_SetupIdle(this);
 }
 
 void EnHg_Destroy(Actor* thisx, PlayState* play) {
@@ -163,16 +162,16 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BCF354(EnHg* this) {
+void EnHg_SetupIdle(EnHg* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80BCF398;
+    this->actionFunc = EnHg_Idle;
 }
 
-void func_80BCF398(EnHg* this, PlayState* play) {
+void EnHg_Idle(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
         if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
             !Cutscene_CheckActorAction(play, 0x1E3)) {
-            func_80BCF468(this);
+            EnHg_SetupMoveTowardsPlayer(this);
         }
         if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
             ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
@@ -181,12 +180,12 @@ void func_80BCF398(EnHg* this, PlayState* play) {
     }
 }
 
-void func_80BCF468(EnHg* this) {
+void EnHg_SetupMoveTowardsPlayer(EnHg* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
-    this->actionFunc = func_80BCF4AC;
+    this->actionFunc = EnHg_MoveTowardsPlayer;
 }
 
-void func_80BCF4AC(EnHg* this, PlayState* play) {
+void EnHg_MoveTowardsPlayer(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -200,38 +199,39 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
         }
         if ((Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 200.0f) &&
             (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) > 200.0f)) {
-            func_80BCF5F0(this);
+            EnHg_SetupDetectPlayerDistanceFromHomePos(this);
         }
     }
 }
 
-void func_80BCF5F0(EnHg* this) {
+void EnHg_SetupDetectPlayerDistanceFromHomePos(EnHg* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80BCF634;
+    this->actionFunc = EnHg_DetectPlayerDistanceFromHomePos;
 }
 
-void func_80BCF634(EnHg* this, PlayState* play) {
+void EnHg_DetectPlayerDistanceFromHomePos(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) < 200.0f) {
-        func_80BCF468(this);
+        EnHg_SetupMoveTowardsPlayer(this);
     }
 }
 
-void func_80BCF68C(EnHg* this) {
+void EnHg_SetupReactToHit(EnHg* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
-    this->actionFunc = func_80BCF6D0;
+    this->actionFunc = EnHg_ReactToHit;
 }
 
-void func_80BCF6D0(EnHg* this, PlayState* play) {
+void EnHg_ReactToHit(EnHg* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80BCF5F0(this);
+        EnHg_SetupDetectPlayerDistanceFromHomePos(this);
     }
 }
 
-void func_80BCF710(EnHg* this, PlayState* play) {
+void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            // "...Sort of looks different..."
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
             func_800B8614(&this->actor, play, 80.0f);
@@ -239,38 +239,38 @@ void func_80BCF710(EnHg* this, PlayState* play) {
     }
 }
 
-void func_80BCF778(EnHg* this, PlayState* play) {
+void EnHg_PlayRedeadSfx(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
-        if (this->actionFunc == func_80BCF4AC || this->actionFunc == func_80BCF6D0 ||
-            this->actionFunc == func_80BCF634) {
+        if (this->actionFunc == EnHg_MoveTowardsPlayer || this->actionFunc == EnHg_ReactToHit ||
+            this->actionFunc == EnHg_DetectPlayerDistanceFromHomePos) {
             func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
         }
     }
 }
 
-void func_80BCF7D8(EnHg* this, PlayState* play) {
+void EnHg_SetupCollision(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            func_80BCF68C(this);
+            EnHg_SetupReactToHit(this);
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-        if (this->actionFunc != func_80BCF6D0 && this->actionFunc != func_80BCF8A0 &&
-            this->actionFunc != func_80BCF95C) {
+        if (this->actionFunc != EnHg_ReactToHit && this->actionFunc != EnHg_PlayCutscene &&
+            this->actionFunc != EnHg_HandleCsAction) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 }
 
-void func_80BCF88C(EnHg* this) {
-    this->actionFunc = func_80BCF8A0;
+void EnHg_SetupCutscene(EnHg* this) {
+    this->actionFunc = EnHg_PlayCutscene;
 }
 
-void func_80BCF8A0(EnHg* this, PlayState* play) {
+void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIdx])) {
         ActorCutscene_Start(this->cutscenes[this->cutsceneIdx], &this->actor);
-        func_80BCF93C(this);
+        EnHg_SetupCsAction(this);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -279,13 +279,13 @@ void func_80BCF8A0(EnHg* this, PlayState* play) {
     }
 }
 
-void func_80BCF93C(EnHg* this) {
+void EnHg_SetupCsAction(EnHg* this) {
     this->cutscenes[3] = 0x63;
     this->cutscenes[2] = 0;
-    this->actionFunc = func_80BCF95C;
+    this->actionFunc = EnHg_HandleCsAction;
 }
 
-void func_80BCF95C(EnHg* this, PlayState* play) {
+void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 484)) {
         s32 actionIndex = Cutscene_GetActorActionIndex(play, 484);
 
@@ -355,22 +355,23 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return;
     } else if (play->csCtx.state == 0) {
-        func_80BCF354(this);
+        EnHg_SetupIdle(this);
     }
     this->cutscenes[3] = 0x63;
 }
 
-void func_80BCFC0C(EnHg* this, PlayState* play) {
+void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
+    // If the player has gone upstairs this interaction will not trigger
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
         if (player->stateFlags2 & PLAYER_STATE2_8000000) {
-            if (!D_80BD00C8) {
+            if (!sHasSoundPlayed) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
-            D_80BD00C8 = true;
+            sHasSoundPlayed = true;
         } else {
-            D_80BD00C8 = false;
+            sHasSoundPlayed = false;
         }
         if (play->msgCtx.ocarinaMode == 3) {
             if (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
@@ -380,22 +381,22 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
                 } else {
                     this->cutsceneIdx = HG_CS_GET_MASK;
                 }
-                func_80BCF88C(this);
+                EnHg_SetupCutscene(this);
             }
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.playerHeightRel) < 40.0f) {
-                if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
+                if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCsAction)) {
                     if (!(gSaveContext.save.weekEventReg[61] & 2)) {
                         gSaveContext.save.weekEventReg[61] |= 2;
                         this->cutsceneIdx = HG_CS_FIRST_ENCOUNTER;
                     } else {
                         this->cutsceneIdx = HG_CS_ALTERNATIVE_ENCOUNTER;
                     }
-                    func_80BCF88C(this);
+                    EnHg_SetupCutscene(this);
                     return;
                 }
             }
-            func_80BCF710(this, play);
+            EnHg_HandleTatlDialog(this, play);
         }
     }
 }
@@ -405,10 +406,10 @@ void EnHg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    func_80BCF7D8(this, play);
-    func_80BCFC0C(this, play);
+    EnHg_SetupCollision(this, play);
+    EnHg_WaitForPlayerAction(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 0.0f, 5);
-    func_80BCF778(this, play);
+    EnHg_PlayRedeadSfx(this, play);
 }
 
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

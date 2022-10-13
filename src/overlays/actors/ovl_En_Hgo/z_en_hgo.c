@@ -72,9 +72,9 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static TexturePtr sEyeTextures[] = {
-    object_harfgibud_Tex_011138,
-    object_harfgibud_Tex_011938,
-    object_harfgibud_Tex_012138,
+    gHarfgibudHumanEyeOpenTex,
+    gHarfgibudHumanEyeHalfTex,
+    gHarfgibudHumanEyeClosedTex,
 };
 
 void EnHgo_Init(Actor* thisx, PlayState* play) {
