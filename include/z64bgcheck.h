@@ -108,7 +108,7 @@ typedef struct {
     // 0x0008_0000 = ?
     // 0x0007_E000 = room index, 0x3F = all rooms
     // 0x0000_1F00 = lighting setting index
-    // 0x0000_00FF = CamData index
+    // 0x0000_00FF = bgCam index
 } WaterBox; // size = 0x10
 
 typedef struct {

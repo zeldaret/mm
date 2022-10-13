@@ -959,6 +959,7 @@ s32 DynaPolyActor_IsInRidingRotatingState(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsInSwitchPressedState(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_ValidateMove(PlayState* play, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius, s16 startHeight);
+
 Camera* Camera_Create(View* view, CollisionContext* colCtx, PlayState* play);
 void Camera_Destroy(Camera* camera);
 void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState* play);
@@ -1001,6 +1002,7 @@ void Camera_SetFocalActor(Camera* camera, Actor* actor);
 void Camera_SetTargetActor(Camera* camera, Actor* actor);
 f32 Camera_GetWaterYPos(Camera* camera);
 void func_800E0348(Camera* camera);
+
 DamageTable* DamageTable_Get(s32 index);
 void DamageTable_Clear(DamageTable* damageTable);
 f32 CollisionCheck_GetDamageAndEffectOnBumper(Collider* at, ColliderInfo* atInfo, Collider* ac, ColliderInfo* acInfo, u32* effect);
@@ -2925,7 +2927,7 @@ void AudioOcarina_StartDefault(u32 ocarinaFlags);
 u8 func_8019B5AC(void);
 void AudioOcarina_ResetAndReadInput(void);
 void AudioOcarina_SetOcarinaDisableTimer(u8 unused, u8 timer);
-u32 AudioOcarina_SetInstrument(u8 ocarinaInstrumentId);
+void AudioOcarina_SetInstrument(u8 ocarinaInstrumentId);
 void AudioOcarina_SetPlaybackSong(s8 songIndexPlusOne, u8 playbackState);
 void AudioOcarina_SetRecordingState(u8 recordingState);
 OcarinaStaff* AudioOcarina_GetRecordingStaff(void);

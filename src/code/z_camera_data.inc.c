@@ -3715,7 +3715,7 @@ s32 Camera_Special7(Camera* camera);
 s32 Camera_Special8(Camera* camera);
 s32 Camera_Special9(Camera* camera);
 
-s32 (*sCameraUpdateHandlers[])(Camera*) = {
+CameraUpdateFunc sCameraUpdateHandlers[] = {
     NULL,
     Camera_Normal0,
     Camera_Normal1,
