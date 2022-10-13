@@ -223,7 +223,7 @@ s16 D_8082BB68[] = {
 };
 
 s16 sQuestVtxRectLeft[] = {
-    45,   // QUEST_REMAINS_ODOWLA
+    45,   // QUEST_REMAINS_ODOLWA
     78,   // QUEST_REMAINS_GOHT
     10,   // QUEST_REMAINS_GYORG
     45,   // QUEST_REMAINS_TWINMOLD
@@ -265,7 +265,7 @@ s16 sQuestVtxRectLeft[] = {
 };
 
 s16 sQuestVtxRectTop[] = {
-    62,  // QUEST_REMAINS_ODOWLA
+    62,  // QUEST_REMAINS_ODOLWA
     42,  // QUEST_REMAINS_GOHT
     42,  // QUEST_REMAINS_GYORG
     20,  // QUEST_REMAINS_TWINMOLD
@@ -307,7 +307,7 @@ s16 sQuestVtxRectTop[] = {
 };
 
 s16 sQuestVtxWidths[] = {
-    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_ODOLWA
     32, // QUEST_REMAINS_GOHT
     32, // QUEST_REMAINS_GYORG
     32, // QUEST_REMAINS_TWINMOLD
@@ -349,7 +349,7 @@ s16 sQuestVtxWidths[] = {
 };
 
 s16 sQuestVtxHeights[] = {
-    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_ODOLWA
     32, // QUEST_REMAINS_GOHT
     32, // QUEST_REMAINS_GYORG
     32, // QUEST_REMAINS_TWINMOLD

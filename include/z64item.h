@@ -40,7 +40,7 @@ typedef enum {
 } UpgradeType;
 
 typedef enum {
-    /* 0x00 */ QUEST_REMAINS_ODOWLA,
+    /* 0x00 */ QUEST_REMAINS_ODOLWA,
     /* 0x01 */ QUEST_REMAINS_GOHT,
     /* 0x02 */ QUEST_REMAINS_GYORG,
     /* 0x03 */ QUEST_REMAINS_TWINMOLD,
