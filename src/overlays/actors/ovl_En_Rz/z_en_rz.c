@@ -686,9 +686,9 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), EN_RZ_JUDO);
+        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 0);
     } else { // EN_RZ_MARILLA
-        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), EN_RZ_MARILLA);
+        AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 1);
     }
 
     if (this->animIndex == EN_RZ_ANIM_APPLAUDING) {
