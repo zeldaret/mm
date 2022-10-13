@@ -66,7 +66,7 @@ f32 pow_int(f32 base, s32 exp) {
  * Takes an angle in radians and returns the sine.
  */
 f32 sin_rad(f32 rad) {
-    return sins(RADF_TO_BINANG(rad)) * SHT_MINV;
+    return sins(RAD_TO_BINANG(rad)) * SHT_MINV;
 }
 
 // Rename to Math_CosF
@@ -74,7 +74,7 @@ f32 sin_rad(f32 rad) {
  * Takes an angle in radians and returns the cosine.
  */
 f32 cos_rad(f32 rad) {
-    return coss(RADF_TO_BINANG(rad)) * SHT_MINV;
+    return coss(RAD_TO_BINANG(rad)) * SHT_MINV;
 }
 
 /**

@@ -700,7 +700,7 @@ f32 D_801B9E60 = 0.0f;
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo1.s")
 
 // Data for opening chests (default)
-VecSph D_801B9E64[] = {
+VecGeo D_801B9E64[] = {
     { 50.0f, 0xEE3A, 0xD558 },
     { 75.0f, 0x0000, 0x8008 },
     { 80.0f, 0xEE3A, 0x8008 },
@@ -714,7 +714,7 @@ Vec3f D_801B9E84[] = {
 };
 
 // Data for opening chests (goron)
-VecSph D_801B9EB4[] = {
+VecGeo D_801B9EB4[] = {
     { 60.0f, 0xEE3A, 0xD558 },
     { 95.0f, 0x0000, 0x8008 },
     { 90.0f, 0xEE3A, 0x8008 },

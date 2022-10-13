@@ -54,8 +54,8 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 verticalPert
     Vec3f* at = &req->camera->at;
     Vec3f* eye = &req->camera->eye;
     Vec3f atEyeOffset;
-    VecSph atEyeOffsetSph2;
-    VecSph eyeAtAngle;
+    VecGeo atEyeOffsetGeo;
+    VecGeo eyeAtAngle;
 
     // isShakePerpendicular is always set to 1 before reaching this conditional
     // alternative is an unused fixed vertical shake
@@ -63,27 +63,27 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 verticalPert
         atEyeOffset.x = 0;
         atEyeOffset.y = 0;
         atEyeOffset.z = 0;
-        OLib_Vec3fDiffToVecSphGeo(&eyeAtAngle, eye, at);
+        OLib_Vec3fDiffToVecGeo(&eyeAtAngle, eye, at);
 
-        atEyeOffsetSph2.r = req->verticalMag * verticalPertubation;
-        atEyeOffsetSph2.pitch = eyeAtAngle.pitch + req->shakePlaneOffset.x + 0x4000;
-        atEyeOffsetSph2.yaw = eyeAtAngle.yaw + req->shakePlaneOffset.y;
-        OLib_VecSphAddToVec3f(&atEyeOffset, &atEyeOffset, &atEyeOffsetSph2);
+        atEyeOffsetGeo.r = req->verticalMag * verticalPertubation;
+        atEyeOffsetGeo.pitch = eyeAtAngle.pitch + req->shakePlaneOffset.x + 0x4000;
+        atEyeOffsetGeo.yaw = eyeAtAngle.yaw + req->shakePlaneOffset.y;
+        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &atEyeOffsetGeo);
 
-        atEyeOffsetSph2.r = req->horizontalMag * horizontalPertubation;
-        atEyeOffsetSph2.pitch = eyeAtAngle.pitch + req->shakePlaneOffset.x;
-        atEyeOffsetSph2.yaw = eyeAtAngle.yaw + req->shakePlaneOffset.y + 0x4000;
-        OLib_VecSphAddToVec3f(&atEyeOffset, &atEyeOffset, &atEyeOffsetSph2);
+        atEyeOffsetGeo.r = req->horizontalMag * horizontalPertubation;
+        atEyeOffsetGeo.pitch = eyeAtAngle.pitch + req->shakePlaneOffset.x;
+        atEyeOffsetGeo.yaw = eyeAtAngle.yaw + req->shakePlaneOffset.y + 0x4000;
+        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &atEyeOffsetGeo);
     } else {
         atEyeOffset.x = 0;
         atEyeOffset.y = req->verticalMag * verticalPertubation;
         atEyeOffset.z = 0;
 
-        atEyeOffsetSph2.r = req->horizontalMag * horizontalPertubation;
-        atEyeOffsetSph2.pitch = req->shakePlaneOffset.x;
-        atEyeOffsetSph2.yaw = req->shakePlaneOffset.y;
+        atEyeOffsetGeo.r = req->horizontalMag * horizontalPertubation;
+        atEyeOffsetGeo.pitch = req->shakePlaneOffset.x;
+        atEyeOffsetGeo.yaw = req->shakePlaneOffset.y;
 
-        OLib_VecSphAddToVec3f(&atEyeOffset, &atEyeOffset, &atEyeOffsetSph2);
+        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &atEyeOffsetGeo);
     }
 
     shake->atOffset = shake->eyeOffset = atEyeOffset;
@@ -825,9 +825,9 @@ void Distortion_Update(void) {
         screenPlanePhase += CAM_DEG_TO_BINANG(screenPlanePhaseStep);
 
         View_SetDistortionOrientation(&sDistortionRequest.play->view,
-                                      Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
-                                      Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
-                                      Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+                                      Math_CosS(depthPhase) * (DEG_TO_RAD(rotX) * xyScaleFactor),
+                                      Math_SinS(depthPhase) * (DEG_TO_RAD(rotY) * xyScaleFactor),
+                                      Math_SinS(screenPlanePhase) * (DEG_TO_RAD(rotZ) * zScaleFactor));
         View_SetDistortionScale(&sDistortionRequest.play->view,
                                 (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,

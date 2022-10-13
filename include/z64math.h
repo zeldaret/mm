@@ -87,12 +87,19 @@ typedef struct {
     /* 0x0C */ Vec3f b;
 } LineSegment; // size = 0x18
 
-// Defines a point in the spherical coordinate system
 typedef struct {
-    /* 0x0 */ f32 r;       // radius
-    /* 0x4 */ s16 pitch;   // polar (zenith) angle
-    /* 0x6 */ s16 yaw;     // azimuthal angle
-} VecSph; // size = 0x8
+    /* 0x0 */ f32 r; // radius
+    /* 0x4 */ s16 pitch; // depends on coordinate system. See below.
+    /* 0x6 */ s16 yaw; // azimuthal angle
+} VecSphGeo; // size = 0x8
+
+// Defines a point in the spherical coordinate system.
+// Pitch is 0 along the positive y-axis (up)
+typedef VecSphGeo VecSph;
+
+// Defines a point in the geographic coordinate system.
+// Pitch is 0 along the xz-plane (horizon)
+typedef VecSphGeo VecGeo;
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
@@ -114,10 +121,17 @@ typedef struct {
 
 // Angle conversion macros
 #define DEG_TO_BINANG(degrees) (s16)((degrees) * (0x8000 / 180.0f))
-#define RADF_TO_BINANG(radf) (s16)((radf) * (0x8000 / M_PI))
-#define RADF_TO_DEGF(radf) ((radf) * (180.0f / M_PI))
-#define DEGF_TO_RADF(degf) ((degf) * (M_PI / 180.0f))
-#define BINANG_TO_RAD(binang) (((f32)binang / 0x8000) * M_PI)
+#define DEG_TO_BINANG_ALT(degrees) (s16)(((degrees) / 180.0f) * 0x8000)
+#define RAD_TO_BINANG(radians) (s16)((radians) * (0x8000 / M_PI))
+#define RAD_TO_BINANG_ALT(radians) (s16)((radians * 0x8000) / M_PI)
+
+#define RAD_TO_DEG(radf) ((radf) * (180.0f / M_PI))
+#define DEG_TO_RAD(degf) ((degf) * (M_PI / 180.0f))
+
+#define BINANG_TO_DEG(binang) ((f32)(binang) * (180.0f / 0x8000))
+#define BINANG_TO_RAD(binang) ((f32)(binang) * (M_PI / 0x8000))
+#define BINANG_TO_RAD_ALT(binang) (((f32)(binang) / (f32)0x8000) * M_PI)
+#define BINANG_TO_RAD_ALT2(binang) (((f32)(binang) * M_PI) / 0x8000)
 
 // Angle arithmetic macros
 #define BINANG_ROT180(angle) ((s16)(angle + 0x8000))

@@ -174,20 +174,20 @@ void EnMinislime_CheckBackgroundCollision(EnMinislime* this) {
 }
 
 void EnMinislime_AddIceShardEffect(EnMinislime* this) {
+    s32 pad;
     EnBigslime* bigslime = (EnBigslime*)this->actor.parent;
     EnBigslimeIceShardEffect* iceShardEffect;
     s32 i = 10 * this->id + BIGSLIME_NUM_VTX;
     s32 i_end = i + 10;
-    VecSph vecSph;
-
-    vecSph.yaw = 0;
+    s16 pitch;
+    s16 yaw = 0;
 
     for (; i < i_end; i++) {
         iceShardEffect = &bigslime->iceShardEffect[i];
-        vecSph.pitch = Rand_S16Offset(0x1000, 0x3000);
-        iceShardEffect->velocity.x = Math_CosS(vecSph.pitch) * Math_SinS(vecSph.yaw);
-        iceShardEffect->velocity.y = Math_SinS(vecSph.pitch);
-        iceShardEffect->velocity.z = Math_CosS(vecSph.pitch) * Math_CosS(vecSph.yaw);
+        pitch = Rand_S16Offset(0x1000, 0x3000);
+        iceShardEffect->velocity.x = Math_CosS(pitch) * Math_SinS(yaw);
+        iceShardEffect->velocity.y = Math_SinS(pitch);
+        iceShardEffect->velocity.z = Math_CosS(pitch) * Math_CosS(yaw);
         iceShardEffect->pos.x = this->actor.world.pos.x + (400.0f * this->actor.scale.x) * iceShardEffect->velocity.x;
         iceShardEffect->pos.y =
             this->actor.world.pos.y + (((iceShardEffect->velocity.y * 2.0f) - 1.0f) * 400.0f * this->actor.scale.y);
@@ -198,7 +198,7 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
         iceShardEffect->isEnabled = true;
         Math_Vec3f_ScaleAndStore(&iceShardEffect->velocity, Rand_ZeroFloat(3.0f) + 7.0f, &iceShardEffect->velocity);
         iceShardEffect->scale = (Rand_ZeroFloat(6.0f) + 2.0f) * 0.001f;
-        vecSph.yaw += 0x1999;
+        yaw += 0x1999;
     }
 
     this->frozenAlpha = 0;
