@@ -112,7 +112,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     s32 i;
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1D8); i++) {
@@ -121,7 +121,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 
         path = &play->setupPathList[path->unk1];
         if (path == NULL) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -130,7 +130,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 
     path = &play->setupPathList[path->unk1];
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_200.points = Lib_SegmentedToVirtual(path->points);

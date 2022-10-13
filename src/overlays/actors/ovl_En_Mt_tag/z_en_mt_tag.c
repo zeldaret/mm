@@ -404,7 +404,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -443,7 +443,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
         } else {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -460,7 +460,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             // Keep racing
             func_8019F208();
@@ -496,7 +496,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMttag_RaceStart;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

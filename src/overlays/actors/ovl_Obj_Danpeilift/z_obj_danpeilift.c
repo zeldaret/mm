@@ -57,7 +57,7 @@ void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_obj_danpeilift_Colheader_000BA0);
     if (this->dyna.bgId == BG_ACTOR_MAX) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         this->speed = OBJDANPEILIFT_GET_SPEED(thisx);
         if (this->speed < 0.0f) {

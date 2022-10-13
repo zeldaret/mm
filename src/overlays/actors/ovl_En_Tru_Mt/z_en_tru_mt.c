@@ -414,12 +414,12 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     EnTruMt* this = THIS;
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (func_80B763C4(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

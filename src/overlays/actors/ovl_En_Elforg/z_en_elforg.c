@@ -81,21 +81,21 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
     switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
             if (gSaveContext.save.weekEventReg[8] & 0x80) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
             break;
 
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
             if (Flags_GetCollectible(play, STRAY_FAIRY_FLAG(thisx))) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
             break;
 
         default:
             if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(thisx))) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
             break;
@@ -374,7 +374,7 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, this->actor.scale.x * 0.9f);
         if (this->actor.scale.x < 0.001f) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -400,7 +400,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
 void EnElforg_FairyCollected(EnElforg* this, PlayState* play) {
     EnElforg_CirclePlayer(this, play);
     if (this->timer > 80) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -429,7 +429,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~0x20000000;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         gSaveContext.save.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
     } else {

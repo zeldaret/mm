@@ -173,7 +173,7 @@ void ObjLightswitch_Init(Actor* thisx, PlayState* play) {
     }
 
     if (isTriggered) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -315,7 +315,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
     this->colorAlpha -= 200;
     ObjLightswitch_SpawnEffects(this, play); // spawn burning fire effect
     if (this->colorAlpha < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
     }

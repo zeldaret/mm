@@ -368,7 +368,7 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
             this->actor.params = 1;
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x80);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Actor_SetFocus(&this->actor, 20.0f);
         Actor_MoveWithGravity(&this->actor);

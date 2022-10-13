@@ -466,7 +466,7 @@ void EnBbfall_Dead(EnBbfall* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
             Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);

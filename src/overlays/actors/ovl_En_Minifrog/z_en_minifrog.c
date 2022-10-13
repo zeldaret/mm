@@ -116,7 +116,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
             ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->timer = 30;
             this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
@@ -293,7 +293,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                     }
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
         }
     }

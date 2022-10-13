@@ -105,7 +105,7 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
 
     if (this->unk_2BC == ENBOMBERS_F0_0) {
         if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->unk_2BE++;
             func_80C03ACC(this);
@@ -137,12 +137,12 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_80C042F8(this);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -1097,7 +1097,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                     } while (0);
 
                     if ((s8)this->actor.colChkInfo.health <= 0) {
-                        Actor_MarkForDeath(this->actor.child);
+                        Actor_Kill(this->actor.child);
                         this->actor.child = NULL;
                         Enemy_StartFinishingBlow(play, &this->actor);
                         this->skelAnime.playSpeed = 2.0f;
@@ -1924,7 +1924,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         temp_a0_5 = play->actorCtx.actorLists[ACTORCAT_BG].first;
         while (temp_a0_5 != NULL) {
             if (temp_a0_5->id == ACTOR_BG_INIBS_MOVEBG) {
-                Actor_MarkForDeath(temp_a0_5);
+                Actor_Kill(temp_a0_5);
                 break;
             }
             temp_a0_5 = temp_a0_5->next;

@@ -714,7 +714,7 @@ void func_808FB42C(EnRr* this, PlayState* play) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_SHIELD_HERO);
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (this->unk_1E4 == 88) {
         Vec3f sp74;
 

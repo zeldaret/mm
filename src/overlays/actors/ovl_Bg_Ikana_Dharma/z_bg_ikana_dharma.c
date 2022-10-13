@@ -205,7 +205,7 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
     }
 
     if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f) != 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
         this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;

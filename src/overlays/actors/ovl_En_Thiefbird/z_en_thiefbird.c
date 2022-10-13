@@ -166,9 +166,9 @@ void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 1) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         func_80C11538(this);
     }
@@ -657,7 +657,7 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
             }
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -830,7 +830,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.x, 0x3000, 6, 0x1000);
     if (this->actor.playerHeightRel > 100.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -366,7 +366,7 @@ void EnBubble_Wait(EnBubble* this, PlayState* play) {
 void EnBubble_Pop(EnBubble* this, PlayState* play) {
     if (EnBubble_Explosion(this, play) > -1) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

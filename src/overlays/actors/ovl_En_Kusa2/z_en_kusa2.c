@@ -136,7 +136,7 @@ void func_80A5B334(EnKusa2* this, PlayState* play) {
 
         if (*ptr != NULL) {
             if (!Actor_HasParent(&(*ptr)->actor, play)) {
-                Actor_MarkForDeath(&(*ptr)->actor);
+                Actor_Kill(&(*ptr)->actor);
             }
             *ptr = NULL;
         }
@@ -379,7 +379,7 @@ s32 func_80A5BFD8(EnKusa2* this, PlayState* play) {
         func_80A5BD14(this, play, (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000000) ? 1 : 0);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         func_80A5BD94(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;
@@ -878,7 +878,7 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
     } else {
         Collider_InitCylinder(play, &this->collider);
         if (!func_80A5BA58(this, play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -1096,7 +1096,7 @@ void func_80A5DC98(EnKusa2* this, PlayState* play) {
         } else if (this->unk_1CA > 0) {
             this->unk_1CA--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -1241,7 +1241,7 @@ void func_80A5E210(EnKusa2* this, PlayState* play) {
         if (this->unk_1B8 != NULL) {
             this->unk_1B8->unk_28 = func_80A5C718;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1273,7 +1273,7 @@ void func_80A5E4BC(EnKusa2* this, PlayState* play) {
 
     this->unk_1CF -= 15;
     if (this->unk_1CF <= 15) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

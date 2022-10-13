@@ -79,7 +79,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
     if (this->unk16C > 0.0f) {
         this->unk16C -= 0.05f;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         if ((REG(15) != 0x190) && (play->msgCtx.unk12046 == 0)) {
             if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;

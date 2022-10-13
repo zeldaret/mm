@@ -282,7 +282,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
 
 void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     if (!EnAttackNiw_IsOnScreen(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -334,7 +334,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
 
 void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play) {
     if (!EnAttackNiw_IsOnScreen(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -376,7 +376,7 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.floorHeight <= BGCHECK_Y_MIN) { // under the world
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
 
     } else if ((this->actor.bgCheckFlags & 0x20) && // on or below water
                (this->actionFunc != EnAttackNiw_FlyAway)) {

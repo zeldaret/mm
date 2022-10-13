@@ -190,7 +190,7 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
     if (this->objBankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.shape.shadowScale = 1.8f;
         this->homeRoom = this->actor.room;
@@ -485,7 +485,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         func_80927818(this, play, 1);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_809291DC(this);
         }
@@ -576,7 +576,7 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         }
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_809291DC(this);
         }
@@ -590,7 +590,7 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_809291DC(this);
         }

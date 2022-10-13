@@ -212,19 +212,19 @@ void EnOssan_CheckValidSpawn(EnOssan* this) {
         case 2:
             if (gSaveContext.save.time <= CLOCK_TIME(21, 30) && gSaveContext.save.time > CLOCK_TIME(6, 00)) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
         case 3:
             if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             if (!(gSaveContext.save.time <= CLOCK_TIME(22, 00) && gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
                 if (this->actor.params != ENOSSAN_CURIOSITY_SHOP_MAN) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
             break;
@@ -267,13 +267,13 @@ void EnOssan_Init(Actor* thisx, PlayState* play) {
 
     //! @bug Condition is impossible, params cannot be both greater then 1 AND less then 0.
     if (this->actor.params > ENOSSAN_PART_TIME_WORKER && this->actor.params < ENOSSAN_CURIOSITY_SHOP_MAN) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     id = sObjectIds[this->actor.params];
     this->objIndex = Object_GetIndex(&play->objectCtx, id);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     EnOssan_CheckValidSpawn(this);

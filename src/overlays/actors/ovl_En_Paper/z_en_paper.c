@@ -154,7 +154,7 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
 
     func_80C1F87C(this);
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->timer--;
     }

@@ -52,7 +52,7 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     this->csAction = sCsActionIndices[itemIndex];
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->objectIndex = objectIndex;
     }
@@ -84,7 +84,7 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
                 this->actor.shape.rot.y += 0x3E8;
                 return;
             case 3:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             case 4:
                 this->actor.draw = DemoGetitem_Draw;

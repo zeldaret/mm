@@ -79,7 +79,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
     f32 phi_fv0;
 
     if (func_80183DE0(&this->skeletonInfo)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         ActorCutscene_Stop(0x7B);
         func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
     } else {

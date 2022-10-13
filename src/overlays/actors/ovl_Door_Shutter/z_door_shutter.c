@@ -234,7 +234,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     }
 
     // clang-format off
-    objId = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId); this->requiredObjBankIndex = objId; if (objId < 0) { Actor_MarkForDeath(&this->actor); return; }
+    objId = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId); this->requiredObjBankIndex = objId; if (objId < 0) { Actor_Kill(&this->actor); return; }
     // clang-format on
 
     DoorShutter_SetupAction(this, DoorShutter_SetupType);

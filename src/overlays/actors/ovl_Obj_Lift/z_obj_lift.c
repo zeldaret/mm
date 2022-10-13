@@ -102,7 +102,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, 1);
     if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
         this->unk_160 = Rand_Next() >> 0x10;
@@ -196,7 +196,7 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
             Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     }
 }

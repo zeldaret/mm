@@ -102,7 +102,7 @@ void ItemEtcetera_WaitForObject(ItemEtcetera* this, PlayState* play) {
 
 void func_8092009C(ItemEtcetera* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Actor_PickUp(&this->actor, play, this->getItemId, 30.0f, 50.0f);
     }
@@ -110,7 +110,7 @@ void func_8092009C(ItemEtcetera* this, PlayState* play) {
 
 void func_809200F8(ItemEtcetera* this, PlayState* play) {
     if (Flags_GetTreasure(play, ITEMETCETERA_GET_TREASUREFLAG(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

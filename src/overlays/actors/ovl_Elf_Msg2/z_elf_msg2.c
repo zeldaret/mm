@@ -46,7 +46,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
         if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 129) {
@@ -56,7 +56,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
             if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return true;
         }
     }
@@ -65,7 +65,7 @@ s32 func_8096EC4C(ElfMsg2* this, PlayState* play) {
     }
     if (Flags_GetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;
@@ -106,7 +106,7 @@ void func_8096EE64(ElfMsg2* this, PlayState* play) {
             }
         }
         if (this->actor.home.rot.z != 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
             }

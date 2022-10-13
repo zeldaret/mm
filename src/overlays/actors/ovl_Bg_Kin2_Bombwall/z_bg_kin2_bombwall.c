@@ -146,7 +146,7 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
     bombwallCollider = &this->collider;
     Collider_InitCylinder(play, bombwallCollider);
     if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
         Collider_SetCylinder(play, bombwallCollider, &this->dyna.actor, &sCylinderInit);
@@ -205,7 +205,7 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

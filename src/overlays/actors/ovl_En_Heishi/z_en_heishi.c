@@ -74,7 +74,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
         this->shouldSetHeadRotation = 1;
         if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
             !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
@@ -82,7 +82,7 @@ void EnHeishi_Init(Actor* thisx, PlayState* play) {
         this->colliderCylinder.dim.yShift = 0;
         if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
             ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -152,7 +152,7 @@ void EnHeishi_Update(Actor* thisx, PlayState* play) {
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((this->paramsCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actionFunc(this, play);
         Actor_MoveWithGravity(&this->actor);
