@@ -15,17 +15,28 @@ void EnHgo_Destroy(Actor* thisx, PlayState* play);
 void EnHgo_Update(Actor* thisx, PlayState* play);
 void EnHgo_Draw(Actor* thisx, PlayState* play);
 
-void func_80BD03EC(EnHgo* this);
-void func_80BD0410(EnHgo* this, PlayState* play);
-void func_80BD0434(EnHgo* this, PlayState* play);
-void func_80BD049C(EnHgo* this);
-void func_80BD04E0(EnHgo* this, PlayState* play);
+void EnHgo_SetupIdle(EnHgo* this);
+void EnHgo_Idle(EnHgo* this, PlayState* play);
+void EnHgo_InitCollision(EnHgo* this, PlayState* play);
+void EnHgo_SetupTalk(EnHgo* this);
+void EnHgo_Talk(EnHgo* this, PlayState* play);
 void EnHgo_SetupDialogueHandler(EnHgo* this);
 void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play);
-void func_80BD06FC(EnHgo* this, PlayState* play);
-s32 func_80BD0898(EnHgo* this, PlayState* play);
+void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play);
+s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play);
 s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
+
+#define TALK_FLAG_NONE 0
+#define TALK_FLAG_HAS_SPOKEN_WITH_HUMAN (1 << 0)
+#define TALK_FLAG_HAS_SPOKEN_WITH_OTHER_MASK_FORM (1 << 1)
+#define TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK (1 << 2)
+
+typedef enum {
+ /* 0 */ EYE_OPEN,
+ /* 1 */ EYE_HALF,
+ /* 2 */ EYE_CLOSED
+} EyeState;
 
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
@@ -41,12 +52,12 @@ const ActorInit En_Hgo_InitVars = {
 
 static AnimationInfo sAnimationInfo[] = {
     { &gHarfgibudArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfgibudAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfgibudKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHarfGibudConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfGibudUnusedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfgibudReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHarfgibudTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -88,16 +99,16 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
     thisx->targetMode = 6;
-    this->unk_30C = 0;
-    this->unk_30E = 0;
+    this->eyeIndex = 0;
+    this->blinkTimer = 0;
     this->textId = 0;
-    this->unk_310 = 0;
-    this->unk_312 = 0;
+    this->talkFlags = TALK_FLAG_NONE;
+    this->isInCutscene = false;
     if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
-        func_80BD049C(this);
+        EnHgo_SetupTalk(this);
     } else {
         thisx->draw = NULL;
-        func_80BD03EC(this);
+        EnHgo_SetupIdle(this);
     }
 }
 
@@ -107,35 +118,35 @@ void EnHgo_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BD03EC(EnHgo* this) {
+void EnHgo_SetupIdle(EnHgo* this) {
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actionFunc = func_80BD0410;
+    this->actionFunc = EnHgo_Idle;
 }
 
-void func_80BD0410(EnHgo* this, PlayState* play) {
+void EnHgo_Idle(EnHgo* this, PlayState* play) {
 }
 
-void func_80BD0420(EnHgo* this) {
-    this->actionFunc = func_80BD0434;
+void EnHgo_SetupInitCollision(EnHgo* this) {
+    this->actionFunc = EnHgo_InitCollision;
 }
 
-void func_80BD0434(EnHgo* this, PlayState* play) {
+void EnHgo_InitCollision(EnHgo* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.focus.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.focus.pos.z;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void func_80BD049C(EnHgo* this) {
+void EnHgo_SetupTalk(EnHgo* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = func_80BD04E0;
+    this->actionFunc = EnHgo_Talk;
 }
 
-void func_80BD04E0(EnHgo* this, PlayState* play) {
+void EnHgo_Talk(EnHgo* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (Player_GetMask(play) == PLAYER_MASK_GIBDO) {
-            if (!(this->unk_310 & 4)) {
-                this->unk_310 |= 4;
+            if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK)) {
+                this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK;
                 Message_StartTextbox(play, 0x15A5, &this->actor);
                 this->textId = 0x15A5; // That mask is a gibdo
 
@@ -144,8 +155,8 @@ void func_80BD04E0(EnHgo* this, PlayState* play) {
                 this->textId = 0x15A7; // can I research that mask
             }
         } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-            if (!(this->unk_310 & 1)) {
-                this->unk_310 |= 1;
+            if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_HUMAN)) {
+                this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_HUMAN;
                 Message_StartTextbox(play, 0x158F, &this->actor);
                 this->textId = 0x158F; // Isn't this a fairy
             } else {
@@ -153,8 +164,8 @@ void func_80BD04E0(EnHgo* this, PlayState* play) {
                 this->textId = 0x1593; // Never seen a fairy this lively
             }
         } else {
-            if (!(this->unk_310 & 2)) {
-                this->unk_310 |= 2;
+            if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_OTHER_MASK_FORM)) {
+                this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_OTHER_MASK_FORM;
                 Message_StartTextbox(play, 0x1595, &this->actor);
                 this->textId = 0x1595; // ghost radar is reacting
             } else {
@@ -182,12 +193,12 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
             break;
 
         case TEXT_STATE_5:
-            func_80BD06FC(this, play);
+            EnHgo_HandlePlayerChoice(this, play);
             break;
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                func_80BD049C(this);
+                EnHgo_SetupTalk(this);
             }
             break;
     }
@@ -196,7 +207,8 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-void func_80BD06FC(EnHgo* this, PlayState* play) {
+// Handles the next dialogue based on player's selection
+void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         switch (this->textId) {
             case 0x158F:
@@ -242,13 +254,13 @@ void func_80BD06FC(EnHgo* this, PlayState* play) {
                 break;
             case 0x15A7:
                 func_801477B4(play);
-                func_80BD049C(this);
+                EnHgo_SetupTalk(this);
                 break;
         }
     }
 }
 
-s32 func_80BD0898(EnHgo* this, PlayState* play) {
+s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
     s32 actionIndex;
 
     if (Cutscene_CheckActorAction(play, 486)) {
@@ -257,36 +269,36 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
             this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->unk_218 = 0;
+                    this->animIndex = 0;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->actor.draw = EnHgo_Draw;
-                    this->unk_218 = 1;
+                    this->animIndex = 1;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
                 case 3:
-                    this->unk_218 = 2;
+                    this->animIndex = 2;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                     break;
                 case 4:
-                    this->unk_218 = 3;
+                    this->animIndex = 3;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 5:
-                    this->unk_218 = 4;
+                    this->animIndex = 4;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                     break;
                 case 6:
-                    this->unk_218 = 5;
+                    this->animIndex = 5;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            switch (this->unk_218) {
+            switch (this->animIndex) {
                 case 1:
-                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
-                        this->unk_312 = 1;
+                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->isInCutscene == false)) {
+                        this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
@@ -294,11 +306,11 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
                     }
                     break;
                 case 2:
-                    this->unk_218 = 3;
+                    this->animIndex = 3;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 5:
-                    this->unk_218 = 6;
+                    this->animIndex = 6;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
             }
         }
@@ -307,29 +319,29 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
         return true;
     }
     if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
-        (this->actionFunc == func_80BD0410)) {
+        (this->actionFunc == EnHgo_Idle)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
                     this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);
-        func_80BD0420(this);
+        EnHgo_SetupInitCollision(this);
     }
     this->csAction = 0x63;
     return false;
 }
 
-void func_80BD0B8C(EnHgo* this, PlayState* play) {
+void EnHgo_FacePlayer(EnHgo* this, PlayState* play) {
     Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
-    if (this->unk_30E > 2) {
-        this->unk_30E--;
-    } else if (this->unk_30E == 2) {
-        this->unk_30C = 1;
-        this->unk_30E = 1;
-    } else if (this->unk_30E == 1) {
-        this->unk_30C = 2;
-        this->unk_30E = 0;
+    if (this->blinkTimer > 2) {
+        this->blinkTimer--;
+    } else if (this->blinkTimer == 2) {
+        this->eyeIndex = EYE_HALF;
+        this->blinkTimer = 1;
+    } else if (this->blinkTimer == 1) {
+        this->eyeIndex = EYE_CLOSED;
+        this->blinkTimer = 0;
     } else {
-        this->unk_30C = 0;
-        this->unk_30E = 60;
+        this->eyeIndex = EYE_OPEN;
+        this->blinkTimer = 60;
     }
 }
 
@@ -339,13 +351,13 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    if (func_80BD0898(this, play)) {
+    if (EnHgo_HandleCsAction(this, play)) {
         Actor_TrackNone(&this->headRot, &this->torsoRot);
-    } else if (this->actionFunc != func_80BD0410) {
-        if (this->actionFunc != func_80BD0434) {
+    } else if (this->actionFunc != EnHgo_Idle) {
+        if (this->actionFunc != EnHgo_InitCollision) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-            func_80BD0B8C(this, play);
+            EnHgo_FacePlayer(this, play);
         }
     }
 }
@@ -364,7 +376,7 @@ void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos,
     EnHgo* this = THIS;
 
     if (limbIndex == HARFGIBUD_HUMAN_LIMB_HEAD) {
-        Matrix_Get(&this->unk_1D8);
+        Matrix_Get(&this->mtxF);
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -374,10 +386,10 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_30C]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
-    Matrix_Put(&this->unk_1D8);
+    Matrix_Put(&this->mtxF);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gHarfgibudHumanEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);

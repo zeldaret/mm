@@ -419,7 +419,7 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
     if (limbIndex == HARFGIBUD_GIBDO_LIMB_EYEBROWS) {
-        Matrix_Get(&this->unk1D8);
+        Matrix_Get(&this->mtxF);
     } else if (limbIndex == HARFGIBUD_GIBDO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
@@ -432,7 +432,7 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
-    Matrix_Put(&this->unk1D8);
+    Matrix_Put(&this->mtxF);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gHarfgibudGibdoEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);

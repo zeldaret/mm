@@ -64,7 +64,7 @@
         <Animation Name="gHarfgibudLurchForwardAnim" Offset="0x9D44" />
         <Animation Name="gHarfgibudRecoilFromHitAnim" Offset="0xA164" />
         <Animation Name="gHarfgibudPanicAnim" Offset="0xAE1C" />
-        <TextureAnimation Name="object_harfgibud_Matanimheader_00AE50" Offset="0xAE50" />
+        <TextureAnimation Name="gHarfgibudUnusedTexAnim" Offset="0xAE50" />
         <Animation Name="gHarfgibudArmsFoldedAnim" Offset="0xB644" />
 
         <DList Name="gHarfgibudHumanPelvisDL" Offset="0xE860" />
@@ -121,11 +121,11 @@
         <Limb Name="gHarfgibudHumanRightFootLimb" Type="Standard" EnumName="HARFGIBUD_HUMAN_LIMB_RIGHT_FOOT" Offset="0x12A04" />
         <Skeleton Name="gHarfgibudHumanSkel" Type="Flex" LimbType="Standard" LimbNone="HARFGIBUD_HUMAN_LIMB_NONE" LimbMax="HARFGIBUD_HUMAN_LIMB_MAX" EnumName="HarfgibudHumanLimb" Offset="0x12A58" />
 
-        <Animation Name="object_harfgibud_Anim_013684" Offset="0x13684" />
-        <Animation Name="object_harfgibud_Anim_014220" Offset="0x14220" />
-        <Animation Name="object_harfgibud_Anim_014A9C" Offset="0x14A9C" />
-        <Animation Name="object_harfgibud_Anim_0152EC" Offset="0x152EC" />
-        <Animation Name="object_harfgibud_Anim_015C70" Offset="0x15C70" />
-        <Animation Name="object_harfgibud_Anim_0165F0" Offset="0x165F0" />
+        <Animation Name="gHarfgibudAstonishedAnim" Offset="0x13684" />
+        <Animation Name="gHarfgibudReachDownToLiftAnim" Offset="0x14220" />
+        <Animation Name="gHarfgibudTossAnim" Offset="0x14A9C" />
+        <Animation Name="gHarfgibudKneelDownAndHugAnim" Offset="0x152EC" />
+        <Animation Name="gHarfGibudConsoleAnim" Offset="0x15C70" />
+        <Animation Name="gHarfGibudUnusedAnim" Offset="0x165F0" />
     </File>
 </Root>
