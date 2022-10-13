@@ -452,8 +452,6 @@ beginseg
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
     include "build/src/code/z_camera.o"
-    include "build/data/code/z_camera.data.o"
-    include "build/data/code/z_camera.bss.o"
     include "build/src/code/z_collision_btltbls.o"
     pad_text
     include "build/src/code/z_collision_check.o"
