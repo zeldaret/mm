@@ -108,6 +108,18 @@ void Play_DisableMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
 }
 
+/**
+ * Converts an RGBA16 buffer to an Intensity Image
+ *
+ * @param[out] destI destination buffer
+ * @param[in] srcRgba16 source buffer
+ * @param[in] rgba16Width width of a full row fo the RGBA16
+ * @param[in] pixelLeft X coordinate of the top-left RGBA16 pixel to start with
+ * @param[in] pixelTop Y coordinate of the top-left RGBA16 pixel to start with
+ * @param[in] pixelRight X coordinate of the bottom-right RGBA16 pixel to end with
+ * @param[in] pixelBottom Y coordinate of the bottom-right RGBA16 pixel to end with
+ * @param[in] bitDepth bit depth for the intensity image
+ */
 void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16Width, s32 pixelLeft, s32 pixelTop,
                                         s32 pixelRight, s32 pixelBottom, s32 bitDepth) {
     s32 i;
@@ -600,6 +612,8 @@ void Play_UpdateTransition(PlayState* this) {
 
             if ((this->transitionCtx.transitionType == TRANS_TYPE_WIPE_FAST) ||
                 (this->transitionCtx.transitionType == TRANS_TYPE_FILL_WHITE_FAST)) {
+                //! @bug TRANS_TYPE_FILL_WHITE_FAST will never reach this code.
+                //! It is a non-instance type transition which doesn't run this case.
                 transWipeSpeed = 28;
             } else {
                 transWipeSpeed = 14;
@@ -2082,7 +2096,7 @@ void Play_Init(GameState* thisx) {
             gSaveContext.nextCutsceneIndex = 0xFFF0;
         }
 
-        // Not "First cycle" Termina Field
+        // "First cycle" Termina Field
         if (INV_CONTENT(ITEM_OCARINA) != ITEM_OCARINA) {
             if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
                 (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
