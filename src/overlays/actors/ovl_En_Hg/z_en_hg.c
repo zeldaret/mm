@@ -347,7 +347,8 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 break;
             case HG_ANIM_PANIC:
-                if ((this->cutsceneIdx == HG_CS_FIRST_ENCOUNTER) || (this->cutsceneIdx == HG_CS_ALTERNATIVE_ENCOUNTER)) {
+                if ((this->cutsceneIdx == HG_CS_FIRST_ENCOUNTER) ||
+                    (this->cutsceneIdx == HG_CS_ALTERNATIVE_ENCOUNTER)) {
                     func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
                 break;

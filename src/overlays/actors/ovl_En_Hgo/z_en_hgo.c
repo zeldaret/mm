@@ -33,9 +33,9 @@ void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos,
 #define TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK (1 << 2)
 
 typedef enum {
- /* 0 */ EYE_OPEN,
- /* 1 */ EYE_HALF,
- /* 2 */ EYE_CLOSED
+    /* 0 */ EYE_OPEN,
+    /* 1 */ EYE_HALF,
+    /* 2 */ EYE_CLOSED
 } EyeState;
 
 const ActorInit En_Hgo_InitVars = {
@@ -297,7 +297,8 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
                 case 1:
-                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->isInCutscene == false)) {
+                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
+                        (this->isInCutscene == false)) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
