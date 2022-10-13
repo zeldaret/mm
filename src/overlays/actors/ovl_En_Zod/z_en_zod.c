@@ -31,7 +31,7 @@ typedef enum {
     /* 3 */ ENZOD_ANIM_PLAYING_LENTO,
     /* 4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
     /* 5 */ ENZOD_ANIM_MAX,
-} EnZodAnimations;
+} EnZodAnimation;
 
 typedef enum {
     /* 1 */ ENZOD_INSTRUMENT_CYMBAL_1 = 1,
