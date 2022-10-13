@@ -41,7 +41,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80BA15A0(void) {
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && !(gSaveContext.save.weekEventReg[87] & 0x10)) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && !(gSaveContext.save.weekEventReg[87] & 0x10)) {
         return true;
     }
 
@@ -61,7 +61,7 @@ s32 func_80BA15A0(void) {
 }
 
 void func_80BA165C(void) {
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
         gSaveContext.save.weekEventReg[87] |= 0x10;
     }
 
@@ -88,7 +88,7 @@ s32 func_80BA16F4(ElfMsg6* this, PlayState* play) {
         return true;
     }
 
-    if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+    if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
         this->actor.textId = 0x256;
         return false;
     }
