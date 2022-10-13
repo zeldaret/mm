@@ -1,7 +1,7 @@
 /*
  * File: z_kaleido_collect.c
  * Overlay: ovl_kaleido_scope
- * Description: Pause Menu - Quest Page
+ * Description: Pause Menu - Quest Status Page
  */
 
 #include "z_kaleido_scope.h"
@@ -24,13 +24,13 @@ s16 sQuestHpPrimColorTargets[][4] = {
     { 255, 0, 0, 255 },
 };
 s16 sQuestRemainsEnvTargets[][3] = {
-    { 0, 0, 0 },    // QUEST_REMAINS_ODOWLA Target 1
+    { 0, 0, 0 },    // QUEST_REMAINS_ODOLWA Target 1
     { 0, 0, 0 },    // QUEST_REMAINS_GOHT Target 1
     { 0, 0, 0 },    // QUEST_REMAINS_GYORG Target 1
     { 0, 0, 0 },    // QUEST_REMAINS_TWINMOLD Target 1
     { 0, 0, 0 },    // Unused
     { 0, 0, 0 },    // Unused
-    { 0, 60, 0 },   // QUEST_REMAINS_ODOWLA Target 2
+    { 0, 60, 0 },   // QUEST_REMAINS_ODOLWA Target 2
     { 90, 0, 0 },   // QUEST_REMAINS_GOHT Target 2
     { 0, 40, 110 }, // QUEST_REMAINS_GYORG Target 2
     { 80, 40, 0 },  // QUEST_REMAINS_TWINMOLD Target 2
@@ -38,7 +38,7 @@ s16 sQuestRemainsEnvTargets[][3] = {
     { 90, 90, 0 },  // Unused
 };
 s16 sQuestRemainsEnvRed[] = {
-    255, // QUEST_REMAINS_ODOWLA
+    255, // QUEST_REMAINS_ODOLWA
     255, // QUEST_REMAINS_GOHT
     255, // QUEST_REMAINS_GYORG
     255, // QUEST_REMAINS_TWINMOLD
@@ -46,7 +46,7 @@ s16 sQuestRemainsEnvRed[] = {
     255, // Unused
 };
 s16 sQuestRemainsEnvGreen[] = {
-    255, // QUEST_REMAINS_ODOWLA
+    255, // QUEST_REMAINS_ODOLWA
     255, // QUEST_REMAINS_GOHT
     255, // QUEST_REMAINS_GYORG
     255, // QUEST_REMAINS_TWINMOLD
@@ -54,7 +54,7 @@ s16 sQuestRemainsEnvGreen[] = {
     255, // Unused
 };
 s16 sQuestRemainsEnvBlue[] = {
-    150, // QUEST_REMAINS_ODOWLA
+    150, // QUEST_REMAINS_ODOLWA
     150, // QUEST_REMAINS_GOHT
     150, // QUEST_REMAINS_GYORG
     150, // QUEST_REMAINS_TWINMOLD
@@ -131,7 +131,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     s16 var_v1;
     s16 i;
     s16 j;
-    s16 var_s3;
+    s16 k;
     s16 skullTokenDigits[3];
     u16 isDigitDrawn;
 
@@ -357,7 +357,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                         pauseCtx->ocarinaStaff->buttonIndex;
                 }
 
-                for (i = 0, var_s3 = 0; i < 8; i++, var_s3 += 4, j += 4) {
+                for (i = 0, k = 0; i < 8; i++, k += 4, j += 4) {
                     if (sQuestSongPlayedOcarinaButtons[i] == OCARINA_BTN_INVALID) {
                         break;
                     }
@@ -398,9 +398,9 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
             i = j;
 
-            for (var_s3 = 0; var_s3 < sp1CA; var_s3++, j += 4) {
+            for (k = 0; k < sp1CA; k++, j += 4) {
                 pauseCtx->questVtx[j + 0].v.ob[1] = pauseCtx->questVtx[j + 1].v.ob[1] =
-                    pauseCtx->ocarinaButtonsY[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]];
+                    pauseCtx->ocarinaButtonsY[gOcarinaSongButtons[sp1C8].buttonIndex[k]];
 
                 pauseCtx->questVtx[j + 2].v.ob[1] = pauseCtx->questVtx[j + 3].v.ob[1] =
                     pauseCtx->questVtx[j + 0].v.ob[1] - 12;
@@ -409,7 +409,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                 if (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG) {
                     // Draw ocarina buttons colored
-                    if (gOcarinaSongButtons[sp1C8].buttonIndex[var_s3] == OCARINA_BTN_A) {
+                    if (gOcarinaSongButtons[sp1C8].buttonIndex[k] == OCARINA_BTN_A) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 80, 150, 255, 200);
                     } else {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 50, 200);
@@ -422,7 +422,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
                 POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
-                    POLY_OPA_DISP, sOcarinaButtonTextures[gOcarinaSongButtons[sp1C8].buttonIndex[var_s3]], 16, 16, 0);
+                    POLY_OPA_DISP, sOcarinaButtonTextures[gOcarinaSongButtons[sp1C8].buttonIndex[k]], 16, 16, 0);
             }
 
             if (pauseCtx->mainState != PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG) {
@@ -442,45 +442,45 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                 // Draw the buttons colored as the player plays the song
                 j = i + 32;
-                var_s3 = 0;
-                for (; var_s3 < 8; var_s3++, j += 4) {
-                    if (sQuestSongPlayedOcarinaButtons[var_s3] == OCARINA_BTN_INVALID) {
+                k = 0;
+                for (; k < 8; k++, j += 4) {
+                    if (sQuestSongPlayedOcarinaButtons[k] == OCARINA_BTN_INVALID) {
                         continue;
                     }
 
-                    if (sQuestSongPlayedOcarinaButtonsAlpha[var_s3] != 255) {
-                        sQuestSongPlayedOcarinaButtonsAlpha[var_s3] += 50;
-                        if (sQuestSongPlayedOcarinaButtonsAlpha[var_s3] >= 255) {
-                            sQuestSongPlayedOcarinaButtonsAlpha[var_s3] = 255;
+                    if (sQuestSongPlayedOcarinaButtonsAlpha[k] != 255) {
+                        sQuestSongPlayedOcarinaButtonsAlpha[k] += 50;
+                        if (sQuestSongPlayedOcarinaButtonsAlpha[k] >= 255) {
+                            sQuestSongPlayedOcarinaButtonsAlpha[k] = 255;
                         }
                     }
 
                     pauseCtx->questVtx[j + 0].v.ob[1] = pauseCtx->questVtx[j + 1].v.ob[1] =
-                        pauseCtx->ocarinaButtonsY[sQuestSongPlayedOcarinaButtons[var_s3]];
+                        pauseCtx->ocarinaButtonsY[sQuestSongPlayedOcarinaButtons[k]];
 
                     pauseCtx->questVtx[j + 2].v.ob[1] = pauseCtx->questVtx[j + 3].v.ob[1] =
                         pauseCtx->questVtx[j + 0].v.ob[1] - 12;
 
                     gDPPipeSync(POLY_OPA_DISP++);
 
-                    if (sQuestSongPlayedOcarinaButtons[var_s3] == OCARINA_BTN_A) {
+                    if (sQuestSongPlayedOcarinaButtons[k] == OCARINA_BTN_A) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 80, 150, 255,
-                                        sQuestSongPlayedOcarinaButtonsAlpha[var_s3]);
+                                        sQuestSongPlayedOcarinaButtonsAlpha[k]);
                     } else {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 50,
-                                        sQuestSongPlayedOcarinaButtonsAlpha[var_s3]);
+                                        sQuestSongPlayedOcarinaButtonsAlpha[k]);
                     }
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
                     POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
-                        POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[var_s3]], 16, 16, 0);
+                        POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[k]], 16, 16, 0);
                 }
 
                 if (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_INIT) {
-                    for (var_s3 = 0; var_s3 < 8; var_s3++) {
-                        sQuestSongPlayedOcarinaButtons[var_s3] = OCARINA_BTN_INVALID;
-                        sQuestSongPlayedOcarinaButtonsAlpha[var_s3] = 0;
+                    for (k = 0; k < 8; k++) {
+                        sQuestSongPlayedOcarinaButtons[k] = OCARINA_BTN_INVALID;
+                        sQuestSongPlayedOcarinaButtonsAlpha[k] = 0;
                     }
 
                     sQuestSongPlayedOcarinaButtonsNum = 0;
@@ -520,8 +520,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[152], 24, 0);
 
         // Loop over two sets of digits, the first is shadowed, the second is colored
-        for (var_s3 = 0, i = 0; var_s3 < 2; var_s3++) {
-            if (var_s3 == 0) {
+        for (k = 0, i = 0; k < 2; k++) {
+            if (k == 0) {
                 // shadow
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, pauseCtx->alpha);
             } else {
@@ -594,10 +594,10 @@ typedef struct {
 void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     static s16 sQuestSongPlaybackDelayTimer = 0;
     static CursorPointDirection sCursorPointLinks[] = {
-        { CURSOR_NONE, QUEST_REMAINS_TWINMOLD, QUEST_REMAINS_GYORG, QUEST_REMAINS_GOHT },     // QUEST_REMAINS_ODOWLA
-        { QUEST_REMAINS_ODOWLA, QUEST_SHIELD, QUEST_REMAINS_TWINMOLD, CURSOR_TO_RIGHT },      // QUEST_REMAINS_GOHT
-        { QUEST_REMAINS_ODOWLA, QUEST_SWORD, QUEST_HEART_PIECE, QUEST_REMAINS_TWINMOLD },     // QUEST_REMAINS_GYORG
-        { QUEST_REMAINS_ODOWLA, QUEST_SHIELD, QUEST_REMAINS_GYORG, QUEST_REMAINS_GOHT },      // QUEST_REMAINS_TWINMOLD
+        { CURSOR_NONE, QUEST_REMAINS_TWINMOLD, QUEST_REMAINS_GYORG, QUEST_REMAINS_GOHT },     // QUEST_REMAINS_ODOLWA
+        { QUEST_REMAINS_ODOLWA, QUEST_SHIELD, QUEST_REMAINS_TWINMOLD, CURSOR_TO_RIGHT },      // QUEST_REMAINS_GOHT
+        { QUEST_REMAINS_ODOLWA, QUEST_SWORD, QUEST_HEART_PIECE, QUEST_REMAINS_TWINMOLD },     // QUEST_REMAINS_GYORG
+        { QUEST_REMAINS_ODOLWA, QUEST_SHIELD, QUEST_REMAINS_GYORG, QUEST_REMAINS_GOHT },      // QUEST_REMAINS_TWINMOLD
         { QUEST_REMAINS_GOHT, QUEST_BOMB_BAG, QUEST_SWORD, CURSOR_TO_RIGHT },                 // QUEST_SHIELD
         { QUEST_REMAINS_GYORG, QUEST_QUIVER, QUEST_SONG_STORMS, QUEST_SHIELD },               // QUEST_SWORD
         { QUEST_SONG_TIME, CURSOR_NONE, CURSOR_TO_LEFT, QUEST_SONG_LULLABY },                 // QUEST_SONG_SONATA
@@ -956,7 +956,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             pauseCtx->cursorPoint[PAUSE_QUEST] = QUEST_REMAINS_GOHT;
             if (CHECK_QUEST_ITEM(pauseCtx->cursorPoint[PAUSE_QUEST])) {
                 cursorItem = (ITEM_REMAINS_GOHT - 1) + pauseCtx->cursorPoint[PAUSE_QUEST];
-                if (pauseCtx->cursorPoint[PAUSE_QUEST] != QUEST_REMAINS_ODOWLA) {
+                if (pauseCtx->cursorPoint[PAUSE_QUEST] != QUEST_REMAINS_ODOLWA) {
                     // This condition is always true as `cursorPoint` is set three lines above
                     cursorItem = ITEM_MASK_GIANT;
                 }

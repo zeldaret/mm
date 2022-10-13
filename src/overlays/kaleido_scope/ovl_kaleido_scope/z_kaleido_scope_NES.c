@@ -1601,7 +1601,7 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
 }
 
 s16 sQuestVtxRectLeft[] = {
-    45,   // QUEST_REMAINS_ODOWLA
+    45,   // QUEST_REMAINS_ODOLWA
     78,   // QUEST_REMAINS_GOHT
     10,   // QUEST_REMAINS_GYORG
     45,   // QUEST_REMAINS_TWINMOLD
@@ -1622,27 +1622,28 @@ s16 sQuestVtxRectLeft[] = {
     -103, // QUEST_BOMBERS_NOTEBOOK
     7,    // QUEST_QUIVER
     82,   // QUEST_BOMB_BAG
-    -110, // unused
+    -110, // QUEST_SKULL_TOKEN (unused)
     -54,  // QUEST_HEART_PIECE
-    -98,  // played ocarina button index 0
-    -86,  // played ocarina button index 1
-    -74,  // played ocarina button index 2
-    -62,  // played ocarina button index 3
-    -50,  // played ocarina button index 4
-    -38,  // played ocarina button index 5
-    -26,  // played ocarina button index 6
-    -14,  // played ocarina button index 7
-    -98,  // ocarina button index 0
-    -86,  // ocarina button index 1
-    -74,  // ocarina button index 2
-    -62,  // ocarina button index 3
-    -50,  // ocarina button index 4
-    -38,  // ocarina button index 5
-    -26,  // ocarina button index 6
-    -14,  // ocarina button index 7
+    -98,  // ocarina song button index 0
+    -86,  // ocarina song button index 1
+    -74,  // ocarina song button index 2
+    -62,  // ocarina song button index 3
+    -50,  // ocarina song button index 4
+    -38,  // ocarina song button index 5
+    -26,  // ocarina song button index 6
+    -14,  // ocarina song button index 7
+    -98,  // ocarina input button index 0
+    -86,  // ocarina input button index 1
+    -74,  // ocarina input button index 2
+    -62,  // ocarina input button index 3
+    -50,  // ocarina input button index 4
+    -38,  // ocarina input button index 5
+    -26,  // ocarina input button index 6
+    -14,  // ocarina input button index 7
 };
+
 s16 sQuestVtxRectTop[] = {
-    62,  // QUEST_REMAINS_ODOWLA
+    62,  // QUEST_REMAINS_ODOLWA
     42,  // QUEST_REMAINS_GOHT
     42,  // QUEST_REMAINS_GYORG
     20,  // QUEST_REMAINS_TWINMOLD
@@ -1663,27 +1664,28 @@ s16 sQuestVtxRectTop[] = {
     54,  // QUEST_BOMBERS_NOTEBOOK
     -44, // QUEST_QUIVER
     -44, // QUEST_BOMB_BAG
-    34,  // unused
+    34,  // QUEST_SKULL_TOKEN (unused)
     58,  // QUEST_HEART_PIECE
-    -52, // played ocarina button index 0
-    -52, // played ocarina button index 1
-    -52, // played ocarina button index 2
-    -52, // played ocarina button index 3
-    -52, // played ocarina button index 4
-    -52, // played ocarina button index 5
-    -52, // played ocarina button index 6
-    -52, // played ocarina button index 7
-    -52, // ocarina button index 0
-    -52, // ocarina button index 1
-    -52, // ocarina button index 2
-    -52, // ocarina button index 3
-    -52, // ocarina button index 4
-    -52, // ocarina button index 5
-    -52, // ocarina button index 6
-    -52, // ocarina button index 7
+    -52, // ocarina song button index 0
+    -52, // ocarina song button index 1
+    -52, // ocarina song button index 2
+    -52, // ocarina song button index 3
+    -52, // ocarina song button index 4
+    -52, // ocarina song button index 5
+    -52, // ocarina song button index 6
+    -52, // ocarina song button index 7
+    -52, // ocarina input button index 0
+    -52, // ocarina input button index 1
+    -52, // ocarina input button index 2
+    -52, // ocarina input button index 3
+    -52, // ocarina input button index 4
+    -52, // ocarina input button index 5
+    -52, // ocarina input button index 6
+    -52, // ocarina input button index 7
 };
+
 s16 sQuestVtxWidths[] = {
-    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_ODOLWA
     32, // QUEST_REMAINS_GOHT
     32, // QUEST_REMAINS_GYORG
     32, // QUEST_REMAINS_TWINMOLD
@@ -1704,27 +1706,28 @@ s16 sQuestVtxWidths[] = {
     32, // QUEST_BOMBERS_NOTEBOOK
     32, // QUEST_QUIVER
     32, // QUEST_BOMB_BAG
-    24, // QUEST_HEART_PIECE
-    48, // played ocarina button index 0
-    16, // played ocarina button index 1
-    16, // played ocarina button index 2
-    16, // played ocarina button index 3
-    16, // played ocarina button index 4
-    16, // played ocarina button index 5
-    16, // played ocarina button index 6
-    16, // played ocarina button index 7
-    16, // ocarina button index 0
-    16, // ocarina button index 1
-    16, // ocarina button index 2
-    16, // ocarina button index 3
-    16, // ocarina button index 4
-    16, // ocarina button index 5
-    16, // ocarina button index 6
-    16, // ocarina button index 7
-    16, // QUEST_SKULL_TOKEN
+    24, // QUEST_SKULL_TOKEN (unused)
+    48, // QUEST_HEART_PIECE
+    16, // ocarina song button index 0
+    16, // ocarina song button index 1
+    16, // ocarina song button index 2
+    16, // ocarina song button index 3
+    16, // ocarina song button index 4
+    16, // ocarina song button index 5
+    16, // ocarina song button index 6
+    16, // ocarina song button index 7
+    16, // ocarina input button index 0
+    16, // ocarina input button index 1
+    16, // ocarina input button index 2
+    16, // ocarina input button index 3
+    16, // ocarina input button index 4
+    16, // ocarina input button index 5
+    16, // ocarina input button index 6
+    16, // ocarina input button index 7
 };
+
 s16 sQuestVtxHeights[] = {
-    32, // QUEST_REMAINS_ODOWLA
+    32, // QUEST_REMAINS_ODOLWA
     32, // QUEST_REMAINS_GOHT
     32, // QUEST_REMAINS_GYORG
     32, // QUEST_REMAINS_TWINMOLD
@@ -1745,25 +1748,26 @@ s16 sQuestVtxHeights[] = {
     32, // QUEST_BOMBERS_NOTEBOOK
     32, // QUEST_QUIVER
     32, // QUEST_BOMB_BAG
-    24, // QUEST_HEART_PIECE
-    48, // played ocarina button index 0
-    16, // played ocarina button index 1
-    16, // played ocarina button index 2
-    16, // played ocarina button index 3
-    16, // played ocarina button index 4
-    16, // played ocarina button index 5
-    16, // played ocarina button index 6
-    16, // played ocarina button index 7
-    16, // ocarina button index 0
-    16, // ocarina button index 1
-    16, // ocarina button index 2
-    16, // ocarina button index 3
-    16, // ocarina button index 4
-    16, // ocarina button index 5
-    16, // ocarina button index 6
-    16, // ocarina button index 7
-    16, // QUEST_SKULL_TOKEN
+    24, // QUEST_SKULL_TOKEN (unused)
+    48, // QUEST_HEART_PIECE
+    16, // ocarina song button index 0
+    16, // ocarina song button index 1
+    16, // ocarina song button index 2
+    16, // ocarina song button index 3
+    16, // ocarina song button index 4
+    16, // ocarina song button index 5
+    16, // ocarina song button index 6
+    16, // ocarina song button index 7
+    16, // ocarina input button index 0
+    16, // ocarina input button index 1
+    16, // ocarina input button index 2
+    16, // ocarina input button index 3
+    16, // ocarina input button index 4
+    16, // ocarina input button index 5
+    16, // ocarina input button index 6
+    16, // ocarina input button index 7
 };
+
 void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 i;
@@ -2184,7 +2188,7 @@ f32 sDungeonMapCursorsY[] = {
     -13.0f, // DUNGEON_FLOOR_INDEX_0 (bottom floor)
 };
 f32 sQuestStatusCursorsX[] = {
-    52.0f,  // QUEST_REMAINS_ODOWLA
+    52.0f,  // QUEST_REMAINS_ODOLWA
     80.0f,  // QUEST_REMAINS_GOHT
     24.0f,  // QUEST_REMAINS_GYORG
     52.0f,  // QUEST_REMAINS_TWINMOLD
@@ -2209,7 +2213,7 @@ f32 sQuestStatusCursorsX[] = {
     -21.0f, // QUEST_HEART_PIECE
 };
 f32 sQuestStatusCursorsY[] = {
-    33.0f,  // QUEST_REMAINS_ODOWLA
+    33.0f,  // QUEST_REMAINS_ODOLWA
     18.0f,  // QUEST_REMAINS_GOHT
     18.0f,  // QUEST_REMAINS_GYORG
     0.0f,   // QUEST_REMAINS_TWINMOLD
