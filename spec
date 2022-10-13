@@ -451,8 +451,6 @@ beginseg
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
     include "build/src/code/z_camera.o"
-    include "build/data/code/z_camera.data.o"
-    include "build/data/code/z_camera.bss.o"
     include "build/src/code/z_collision_btltbls.o"
     pad_text
     include "build/src/code/z_collision_check.o"
@@ -1284,8 +1282,7 @@ beginseg
     name "ovl_Bg_Umajump"
     compress
     include "build/src/overlays/actors/ovl_Bg_Umajump/z_bg_umajump.o"
-    include "build/data/ovl_Bg_Umajump/ovl_Bg_Umajump.data.o"
-    include "build/data/ovl_Bg_Umajump/ovl_Bg_Umajump.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Umajump/ovl_Bg_Umajump_reloc.o"
 endseg
 
 beginseg
@@ -3106,8 +3103,7 @@ beginseg
     name "ovl_Dm_Char08"
     compress
     include "build/src/overlays/actors/ovl_Dm_Char08/z_dm_char08.o"
-    include "build/data/ovl_Dm_Char08/ovl_Dm_Char08.data.o"
-    include "build/data/ovl_Dm_Char08/ovl_Dm_Char08.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Char08/ovl_Dm_Char08_reloc.o"
 endseg
 
 beginseg
@@ -3945,8 +3941,7 @@ beginseg
     name "ovl_Bg_Kin2_Picture"
     compress
     include "build/src/overlays/actors/ovl_Bg_Kin2_Picture/z_bg_kin2_picture.o"
-    include "build/data/ovl_Bg_Kin2_Picture/ovl_Bg_Kin2_Picture.data.o"
-    include "build/data/ovl_Bg_Kin2_Picture/ovl_Bg_Kin2_Picture.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Kin2_Picture/ovl_Bg_Kin2_Picture_reloc.o"
 endseg
 
 beginseg
@@ -4363,8 +4358,7 @@ beginseg
     name "ovl_En_Stone_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Stone_heishi/z_en_stone_heishi.o"
-    include "build/data/ovl_En_Stone_heishi/ovl_En_Stone_heishi.data.o"
-    include "build/data/ovl_En_Stone_heishi/ovl_En_Stone_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Stone_heishi/ovl_En_Stone_heishi_reloc.o"
 endseg
 
 beginseg
