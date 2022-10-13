@@ -300,6 +300,9 @@ void EnZod_UpdateDrumVels(EnZod* this) {
                 }
 
                 break;
+
+            default:
+                break;
         }
     }
 }
