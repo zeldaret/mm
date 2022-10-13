@@ -289,7 +289,7 @@ typedef struct {
 typedef struct {
     struct {
         s8 room;    // Room to switch to
-        s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
+        s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
     } /* 0x0 */ sides[2]; // 0 = front, 1 = back
     /* 0x4 */ s16   id;
     /* 0x6 */ Vec3s pos;
