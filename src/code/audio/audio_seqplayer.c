@@ -1668,8 +1668,8 @@ void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
                     if (cmdArgs[0] < 5) {
                         if (1) {}
                         if (gAudioCtx.customSeqFunctions[cmdArgs[0]] != NULL) {
-                            gCustomAudioSeqFunction = gAudioCtx.customSeqFunctions[cmdArgs[0]];
-                            scriptState->value = gCustomAudioSeqFunction(scriptState->value, channel);
+                            gAudioCustomSeqFunction = gAudioCtx.customSeqFunctions[cmdArgs[0]];
+                            scriptState->value = gAudioCustomSeqFunction(scriptState->value, channel);
                         }
                     }
                     break;

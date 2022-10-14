@@ -3076,10 +3076,10 @@ extern ActiveSequence gActiveSeqs[];
 // extern UNK_TYPE1 D_80200BCE;
 // extern UNK_TYPE1 D_80200BD0;
 extern AudioContext gAudioCtx; // at 0x80200C70
-extern void (*gCustomAudioUpdateFunction)(void);
-extern u32 (*gCustomAudioSeqFunction)(s8 value, SequenceChannel* channel);
-extern s32 (*gCustomAudioReverbFunction)(Sample*, s32, s8, s32);
-extern Acmd* (*gCustomAudioSynthFunction)(Acmd*, s32, s32);
+extern AudioCustomUpdateFunction gAudioCustomUpdateFunction;
+extern AudioCustomSeqFunction gAudioCustomSeqFunction;
+extern AudioCustomReverbFunction gAudioCustomReverbFunction;
+extern AudioCustomSynthFunction gAudioCustomSynthFunction;
 
 // post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];

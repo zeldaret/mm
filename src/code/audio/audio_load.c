@@ -1212,9 +1212,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     s32 i;
     s32 j;
 
-    gCustomAudioUpdateFunction = NULL;
-    gCustomAudioReverbFunction = NULL;
-    gCustomAudioSynthFunction = NULL;
+    gAudioCustomUpdateFunction = NULL;
+    gAudioCustomReverbFunction = NULL;
+    gAudioCustomSynthFunction = NULL;
 
     for (i = 0; i < ARRAY_COUNT(gAudioCtx.customSeqFunctions); i++) {
         gAudioCtx.customSeqFunctions[i] = NULL;

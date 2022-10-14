@@ -1272,4 +1272,9 @@ typedef struct {
     /* 0x2 */ u16 params;
 } SfxParams; // size = 0x4
 
+typedef void (*AudioCustomUpdateFunction)(void);
+typedef u32 (*AudioCustomSeqFunction)(s8 value, SequenceChannel* channel);
+typedef s32 (*AudioCustomReverbFunction)(Sample*, s32, s8, s32);
+typedef Acmd* (*AudioCustomSynthFunction)(Acmd*, s32, s32);
+
 #endif
