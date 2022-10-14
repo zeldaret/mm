@@ -2255,7 +2255,7 @@
     0x801D5FF4:("D_801D5FF4","UNK_TYPE4","",0x4),
     0x801D5FF8:("sCurCmdRdPos","UNK_TYPE1","",0x1),
     0x801D5FFC:("sAudioRandom","UNK_TYPE4","",0x4),
-    0x801D6000:("D_801D6000","UNK_PTR","",0x4),
+    0x801D6000:("sAudioOsCount","UNK_PTR","",0x4),
     0x801D6010:("D_801D6010","UNK_TYPE1","",0x1),
     0x801D6014:("D_801D6014","UNK_TYPE1","",0x1),
     0x801D6028:("D_801D6028","UNK_TYPE1","",0x1),

@@ -3,6 +3,8 @@
 
 #define AUDIO_MK_CMD(b0,b1,b2,b3) (_SHIFTL(b0, 24, 8) | _SHIFTL(b1, 16, 8) | _SHIFTL(b2, 8, 8) | _SHIFTL(b3, 0, 8))
 
+#include "audiothread_cmd.h"
+
 #define NO_LAYER ((SequenceLayer*)(-1))
 
 #define TATUMS_PER_BEAT 48
@@ -68,6 +70,10 @@ typedef enum {
 #define AUDIO_RELOCATED_ADDRESS_START K0BASE
 
 #define REVERB_INDEX_NONE -1
+
+// To be used with AudioThread_CountAndReleaseNotes()
+#define AUDIO_NOTE_RELEASE (1 << 0)
+#define AUDIO_NOTE_SAMPLE_NOTES (1 << 1)
 
 typedef enum {
     /* 0 */ REVERB_DATA_TYPE_SETTINGS, // Reverb Settings (Init)

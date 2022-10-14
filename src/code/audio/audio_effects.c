@@ -113,9 +113,9 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     static s32 activeVibratoCount = 0;
     f32 pitchChange;
     f32 depth;
-    f32 invExtent;
+    f32 invDepth;
     f32 result;
-    f32 scaledExtent;
+    f32 scaledDepth;
     VibratoSubStruct* subVib = vib->vibSubStruct;
 
     if (vib->delay != 0) {
@@ -158,12 +158,12 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     }
 
     pitchChange = AudioEffects_GetVibratoPitchChange(vib) + 32768.0f;
-    scaledExtent = vib->depth / 4096.0f;
-    depth = scaledExtent + 1.0f;
-    invExtent = 1.0f / depth;
+    scaledDepth = vib->depth / 4096.0f;
+    depth = scaledDepth + 1.0f;
+    invDepth = 1.0f / depth;
 
     // inverse linear interpolation
-    result = 1.0f / ((depth - invExtent) * pitchChange / 65536.0f + invExtent);
+    result = 1.0f / ((depth - invDepth) * pitchChange / 65536.0f + invDepth);
 
     activeVibratoFreqScaleSum += result;
     activeVibratoCount++;
