@@ -416,9 +416,9 @@ typedef struct {
     /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
     /* 0x210 */ f32 itemPageRoll;
-    /* 0x214 */ f32 MapPageRoll;
-    /* 0x218 */ f32 QuestPageRoll;
-    /* 0x21C */ f32 MaskPageRoll;
+    /* 0x214 */ f32 mapPageRoll;
+    /* 0x218 */ f32 questPageRoll;
+    /* 0x21C */ f32 maskPageRoll;
     /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;

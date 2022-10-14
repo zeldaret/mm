@@ -115,9 +115,9 @@ void KaleidoSetup_Init(PlayState* play) {
 
     pauseCtx->pageIndex = PAUSE_ITEM;
 
-    pauseCtx->MaskPageRoll = 160.0f;
-    pauseCtx->QuestPageRoll = 160.0f;
-    pauseCtx->MapPageRoll = 160.0f;
+    pauseCtx->maskPageRoll = 160.0f;
+    pauseCtx->questPageRoll = 160.0f;
+    pauseCtx->mapPageRoll = 160.0f;
     pauseCtx->itemPageRoll = 160.0f;
 
     pauseCtx->eye.x = -64.0f;
