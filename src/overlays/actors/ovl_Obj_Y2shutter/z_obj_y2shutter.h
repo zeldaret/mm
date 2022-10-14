@@ -7,8 +7,8 @@ struct ObjY2shutter;
 
 typedef struct ObjY2shutter {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s16 raiseTimer;
-    /* 0x15E */ u8 isStationary; // true if the door is neither raising nor lowering
+    /* 0x15C */ s16 openTimer;
+    /* 0x15E */ u8 isStationary; // true if the door is neither opening nor closing
     /* 0x15F */ u8 settleTimer;
 } ObjY2shutter; // size = 0x160
 

@@ -19,14 +19,14 @@ void ObjY2shutter_Draw(Actor* thisx, PlayState* play);
 typedef struct ShutterInfo {
     /* 0x00 */ Gfx* dList;
     /* 0x04 */ CollisionHeader* colHeader;
-    /* 0x08 */ f32 raisedOffsetY;
-    /* 0x0C */ f32 raiseVelocity;
-    /* 0x10 */ f32 raiseAccel;
-    /* 0x14 */ f32 lowerVelocity;
-    /* 0x18 */ f32 lowerAccel;
-    /* 0x1C */ u8 raiseStartSettleTimer;
-    /* 0x1D */ u8 raiseEndAndCloseSettleTimer;
-    /* 0x1E */ u8 raiseTimer;
+    /* 0x08 */ f32 openedOffsetY;
+    /* 0x0C */ f32 openVelocity;
+    /* 0x10 */ f32 openAccel;
+    /* 0x14 */ f32 closeVelocity;
+    /* 0x18 */ f32 closeAccel;
+    /* 0x1C */ u8 openStartSettleTimer;
+    /* 0x1D */ u8 openEndAndCloseSettleTimer;
+    /* 0x1E */ u8 openTimer;
 } ShutterInfo; // size = 0x20
 
 const ActorInit Obj_Y2shutter_InitVars = {
@@ -69,9 +69,9 @@ void ObjY2shutter_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void ObjY2shutter_SetupRaise(ObjY2shutter* this, ShutterInfo* info, ShutterType shutterType) {
-    this->raiseTimer = info->raiseTimer;
-    this->settleTimer = info->raiseStartSettleTimer;
+void ObjY2shutter_SetupOpen(ObjY2shutter* this, ShutterInfo* info, ShutterType shutterType) {
+    this->openTimer = info->openTimer;
+    this->settleTimer = info->openStartSettleTimer;
     if (shutterType == SHUTTER_BARRED) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
     }
@@ -86,8 +86,8 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     f32 targetVelocityY = 0.0f;
     f32 accelY = 0.0f;
 
-    sShutterInfo[0].raiseTimer = DREG(84) + 160;
-    sShutterInfo[1].raiseTimer = DREG(85) + 160;
+    sShutterInfo[0].openTimer = DREG(84) + 160;
+    sShutterInfo[1].openTimer = DREG(85) + 160;
 
     if (((shutterType == SHUTTER_BARRED) && (DREG(86) != 0)) || ((shutterType != SHUTTER_BARRED) && (DREG(87) != 0))) {
         if (shutterType == SHUTTER_BARRED) {
@@ -107,39 +107,39 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
         if (Flags_GetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor))) {
             s16 cutscene = this->dyna.actor.cutscene;
 
-            if (this->raiseTimer == 0) {
+            if (this->openTimer == 0) {
                 if ((cutscene >= 0) && !ActorCutscene_GetCanPlayNext(cutscene)) {
                     ActorCutscene_SetIntentToPlay(cutscene);
                 } else if (cutscene >= 0) {
                     ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->dyna.actor);
-                    this->raiseTimer = -1;
+                    this->openTimer = -1;
                 } else {
-                    ObjY2shutter_SetupRaise(this, info, shutterType);
+                    ObjY2shutter_SetupOpen(this, info, shutterType);
                 }
-            } else if (this->raiseTimer < 0) {
+            } else if (this->openTimer < 0) {
                 if (func_800F22C4(cutscene, &this->dyna.actor)) {
-                    ObjY2shutter_SetupRaise(this, info, shutterType);
+                    ObjY2shutter_SetupOpen(this, info, shutterType);
                 }
             } else {
-                targetPosY = this->dyna.actor.home.pos.y + info->raisedOffsetY;
-                targetVelocityY = info->raiseVelocity;
-                accelY = info->raiseAccel;
-                if (this->raiseTimer < 2) {
+                targetPosY = this->dyna.actor.home.pos.y + info->openedOffsetY;
+                targetVelocityY = info->openVelocity;
+                accelY = info->openAccel;
+                if (this->openTimer < 2) {
                     Flags_UnsetSwitch(play, OBJY2SHUTTER_GET_SWITCHFLAG(&this->dyna.actor));
                 } else {
-                    this->raiseTimer--;
+                    this->openTimer--;
                 }
             }
-        } else if (this->raiseTimer != 0) {
-            this->raiseTimer = 0;
-            this->settleTimer = info->raiseStartSettleTimer;
+        } else if (this->openTimer != 0) {
+            this->openTimer = 0;
+            this->settleTimer = info->openStartSettleTimer;
             if (shutterType == SHUTTER_BARRED) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_CLOSE);
             }
         } else {
             targetPosY = this->dyna.actor.home.pos.y;
-            targetVelocityY = info->lowerVelocity;
-            accelY = info->lowerAccel;
+            targetVelocityY = info->closeVelocity;
+            accelY = info->closeAccel;
         }
     }
 
@@ -151,7 +151,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
         this->dyna.actor.velocity.y = 0.0f;
         if (!this->isStationary) {
             this->isStationary = true;
-            this->settleTimer = info->raiseEndAndCloseSettleTimer;
+            this->settleTimer = info->openEndAndCloseSettleTimer;
             if (shutterType != SHUTTER_BARRED) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
             }
