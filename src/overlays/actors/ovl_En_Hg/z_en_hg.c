@@ -18,9 +18,9 @@ void EnHg_Draw(Actor* thisx, PlayState* play);
 void EnHg_SetupIdle(EnHg* this);
 void EnHg_Idle(EnHg* this, PlayState* play);
 void EnHg_SetupMoveTowardsPlayer(EnHg* this);
-void EnHg_MoveTowardsPlayer(EnHg* this, PlayState* play);
-void EnHg_SetupDetectPlayerDistanceFromHomePos(EnHg* this);
-void EnHg_DetectPlayerDistanceFromHomePos(EnHg* this, PlayState* play);
+void EnHg_ChasePlayer(EnHg* this, PlayState* play);
+void EnHg_SetupChasePlayerWait(EnHg* this);
+void EnHg_ChasePlayerWait(EnHg* this, PlayState* play);
 void EnHg_SetupReactToHit(EnHg* this);
 void EnHg_ReactToHit(EnHg* this, PlayState* play);
 void EnHg_PlayCutscene(EnHg* this, PlayState* play);
@@ -30,13 +30,15 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 typedef enum {
-    /* 0x00 */ HG_ANIM_NO_ACTION,
-    /* 0x03 */ HG_ANIM_LEAN_FORWARD = 3,
-    /* 0x04 */ HG_ANIM_REACH_FORWARD,
-    /* 0x05 */ HG_ANIM_CURL_UP,
-    /* 0x06 */ HG_ANIM_CROUCHED_PANIC,
-    /* 0x07 */ HG_ANIM_PANIC,
-} HgCsAnimation;
+    /* 0 */ HG_ANIM_IDLE,
+    /* 1 */ HG_ANIM_LURCH_FORWARD,
+    /* 2 */ HG_ANIM_RECOIL,
+    /* 3 */ HG_ANIM_LEAN_FORWARD,
+    /* 4 */ HG_ANIM_REACH_FORWARD,
+    /* 5 */ HG_ANIM_CURL_UP,
+    /* 6 */ HG_ANIM_CROUCHED_PANIC,
+    /* 7 */ HG_ANIM_PANIC,
+} HgAnimation;
 
 typedef enum {
     /* 0 */ HG_CS_FIRST_ENCOUNTER,
@@ -163,7 +165,7 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHg_SetupIdle(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
     this->actionFunc = EnHg_Idle;
 }
 
@@ -181,11 +183,11 @@ void EnHg_Idle(EnHg* this, PlayState* play) {
 }
 
 void EnHg_SetupMoveTowardsPlayer(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
-    this->actionFunc = EnHg_MoveTowardsPlayer;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
+    this->actionFunc = EnHg_ChasePlayer;
 }
 
-void EnHg_MoveTowardsPlayer(EnHg* this, PlayState* play) {
+void EnHg_ChasePlayer(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -199,17 +201,17 @@ void EnHg_MoveTowardsPlayer(EnHg* this, PlayState* play) {
         }
         if ((Math_Vec3f_DistXZ(&this->actor.world.pos, &this->actor.home.pos) > 200.0f) &&
             (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) > 200.0f)) {
-            EnHg_SetupDetectPlayerDistanceFromHomePos(this);
+            EnHg_SetupChasePlayerWait(this);
         }
     }
 }
 
-void EnHg_SetupDetectPlayerDistanceFromHomePos(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    this->actionFunc = EnHg_DetectPlayerDistanceFromHomePos;
+void EnHg_SetupChasePlayerWait(EnHg* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
+    this->actionFunc = EnHg_ChasePlayerWait;
 }
 
-void EnHg_DetectPlayerDistanceFromHomePos(EnHg* this, PlayState* play) {
+void EnHg_ChasePlayerWait(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Math_Vec3f_DistXZ(&player->actor.world.pos, &this->actor.home.pos) < 200.0f) {
@@ -218,13 +220,13 @@ void EnHg_DetectPlayerDistanceFromHomePos(EnHg* this, PlayState* play) {
 }
 
 void EnHg_SetupReactToHit(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_RECOIL);
     this->actionFunc = EnHg_ReactToHit;
 }
 
 void EnHg_ReactToHit(EnHg* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        EnHg_SetupDetectPlayerDistanceFromHomePos(this);
+        EnHg_SetupChasePlayerWait(this);
     }
 }
 
@@ -241,15 +243,15 @@ void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
 
 void EnHg_PlayRedeadSfx(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
-        if (this->actionFunc == EnHg_MoveTowardsPlayer || this->actionFunc == EnHg_ReactToHit ||
-            this->actionFunc == EnHg_DetectPlayerDistanceFromHomePos) {
+        if ((this->actionFunc == EnHg_ChasePlayer) || (this->actionFunc == EnHg_ReactToHit) ||
+            (this->actionFunc == EnHg_ChasePlayerWait)) {
             func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
         }
     }
 }
 
-void EnHg_SetupCollision(EnHg* this, PlayState* play) {
-    if (this->actor.colChkInfo.health) {
+void EnHg_UpdateCollision(EnHg* this, PlayState* play) {
+    if (this->actor.colChkInfo.health != 0) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             EnHg_SetupReactToHit(this);
@@ -268,14 +270,14 @@ void EnHg_SetupCutscene(EnHg* this) {
 }
 
 void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIdx])) {
-        ActorCutscene_Start(this->cutscenes[this->cutsceneIdx], &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
+        ActorCutscene_Start(this->cutscenes[this->cutsceneIndex], &this->actor);
         EnHg_SetupCsAction(this);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIdx]);
+        ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
     }
 }
 
@@ -294,30 +296,35 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->animIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
                     break;
+
                 case 2:
                     this->cutscenes[2] = 0;
                     this->animIndex = HG_ANIM_LEAN_FORWARD;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LEAN_FORWARD);
                     break;
+
                 case 3:
                     this->cutscenes[2] = 0;
                     this->animIndex = HG_ANIM_CURL_UP;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CURL_UP);
                     break;
+
                 case 4:
                     this->cutscenes[2] = 0;
                     this->animIndex = HG_ANIM_PANIC;
-                    if ((this->cutsceneIdx == HG_CS_GET_MASK) || (this->cutsceneIdx == HG_CS_SONG_OF_HEALING)) {
+                    if ((this->cutsceneIndex == HG_CS_GET_MASK) || (this->cutsceneIndex == HG_CS_SONG_OF_HEALING)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
                     break;
+
                 case 5:
-                    this->animIndex = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                    this->animIndex = HG_ANIM_LURCH_FORWARD;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
                     break;
+
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
                     Actor_MarkForDeath(&this->actor);
@@ -330,6 +337,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                         this->animIndex = HG_ANIM_REACH_FORWARD;
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_REACH_FORWARD);
                         break;
+
                     case HG_ANIM_CURL_UP:
                         this->animIndex = HG_ANIM_CROUCHED_PANIC;
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CROUCHED_PANIC);
@@ -337,27 +345,33 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                 }
             }
         }
+
         switch (this->animIndex) {
             case HG_ANIM_LEAN_FORWARD:
             case HG_ANIM_REACH_FORWARD:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
                 break;
+
             case HG_ANIM_CURL_UP:
             case HG_ANIM_CROUCHED_PANIC:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 break;
+
             case HG_ANIM_PANIC:
-                if ((this->cutsceneIdx == HG_CS_FIRST_ENCOUNTER) ||
-                    (this->cutsceneIdx == HG_CS_ALTERNATIVE_ENCOUNTER)) {
+                if ((this->cutsceneIndex == HG_CS_FIRST_ENCOUNTER) ||
+                    (this->cutsceneIndex == HG_CS_ALTERNATIVE_ENCOUNTER)) {
                     func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
                 break;
         }
+
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return;
+
     } else if (play->csCtx.state == 0) {
         EnHg_SetupIdle(this);
     }
+
     this->cutscenes[3] = 0x63;
 }
 
@@ -378,10 +392,11 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
             if (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
                 gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
-                    this->cutsceneIdx = HG_CS_SONG_OF_HEALING;
+                    this->cutsceneIndex = HG_CS_SONG_OF_HEALING;
                 } else {
-                    this->cutsceneIdx = HG_CS_GET_MASK;
+                    this->cutsceneIndex = HG_CS_GET_MASK;
                 }
+
                 EnHg_SetupCutscene(this);
             }
         } else {
@@ -389,10 +404,11 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
                 if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCsAction)) {
                     if (!(gSaveContext.save.weekEventReg[61] & 2)) {
                         gSaveContext.save.weekEventReg[61] |= 2;
-                        this->cutsceneIdx = HG_CS_FIRST_ENCOUNTER;
+                        this->cutsceneIndex = HG_CS_FIRST_ENCOUNTER;
                     } else {
-                        this->cutsceneIdx = HG_CS_ALTERNATIVE_ENCOUNTER;
+                        this->cutsceneIndex = HG_CS_ALTERNATIVE_ENCOUNTER;
                     }
+
                     EnHg_SetupCutscene(this);
                     return;
                 }
@@ -407,7 +423,7 @@ void EnHg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    EnHg_SetupCollision(this, play);
+    EnHg_UpdateCollision(this, play);
     EnHg_WaitForPlayerAction(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 0.0f, 5);
     EnHg_PlayRedeadSfx(this, play);

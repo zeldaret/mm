@@ -15,9 +15,9 @@ void EnHgo_Destroy(Actor* thisx, PlayState* play);
 void EnHgo_Update(Actor* thisx, PlayState* play);
 void EnHgo_Draw(Actor* thisx, PlayState* play);
 
-void EnHgo_SetupIdle(EnHgo* this);
-void EnHgo_Idle(EnHgo* this, PlayState* play);
-void EnHgo_InitCollision(EnHgo* this, PlayState* play);
+void EnHgo_SetupDoNothing(EnHgo* this);
+void EnHgo_DoNothing(EnHgo* this, PlayState* play);
+void EnHgo_UpdateCollision(EnHgo* this, PlayState* play);
 void EnHgo_SetupTalk(EnHgo* this);
 void EnHgo_Talk(EnHgo* this, PlayState* play);
 void EnHgo_SetupDialogueHandler(EnHgo* this);
@@ -38,6 +38,16 @@ typedef enum {
     /* 2 */ EYE_CLOSED
 } EyeState;
 
+typedef enum {
+    /* 0 */ HGO_ANIM_ARMS_FOLDED,
+    /* 1 */ HGO_ANIM_ASTONISHED,
+    /* 2 */ HGO_ANIM_KNEEL_DOWN_AND_HUG,
+    /* 3 */ HGO_ANIM_CONSOLE,
+    /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
+    /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
+    /* 6 */ HGO_ANIM_TOSS,
+} HgoAnimation;
+
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
@@ -55,7 +65,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gHarfgibudAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gHarfgibudKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &gHarfGibudConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHarfGibudUnusedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHarfGibudConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gHarfgibudReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &gHarfgibudTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
@@ -108,7 +118,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
         EnHgo_SetupTalk(this);
     } else {
         thisx->draw = NULL;
-        EnHgo_SetupIdle(this);
+        EnHgo_SetupDoNothing(this);
     }
 }
 
@@ -118,19 +128,19 @@ void EnHgo_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnHgo_SetupIdle(EnHgo* this) {
+void EnHgo_SetupDoNothing(EnHgo* this) {
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actionFunc = EnHgo_Idle;
+    this->actionFunc = EnHgo_DoNothing;
 }
 
-void EnHgo_Idle(EnHgo* this, PlayState* play) {
+void EnHgo_DoNothing(EnHgo* this, PlayState* play) {
 }
 
 void EnHgo_SetupInitCollision(EnHgo* this) {
-    this->actionFunc = EnHgo_InitCollision;
+    this->actionFunc = EnHgo_UpdateCollision;
 }
 
-void EnHgo_InitCollision(EnHgo* this, PlayState* play) {
+void EnHgo_UpdateCollision(EnHgo* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.focus.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.focus.pos.z;
@@ -215,43 +225,53 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 Message_StartTextbox(play, 0x1590, &this->actor);
                 this->textId = 0x1590;
                 break;
+
             case 0x1590:
                 if (gSaveContext.save.weekEventReg[14] & 4) {
                     Message_StartTextbox(play, 0x1591, &this->actor);
                     this->textId = 0x1591;
                     break;
                 }
+
                 Message_StartTextbox(play, 0x1592, &this->actor);
                 this->textId = 0x1592;
                 break;
+
             case 0x1591:
                 Message_StartTextbox(play, 0x1592, &this->actor);
                 this->textId = 0x1592;
                 break;
+
             case 0x1593:
                 Message_StartTextbox(play, 0x1594, &this->actor);
                 this->textId = 0x1594;
                 break;
+
             case 0x1595:
                 Message_StartTextbox(play, 0x1596, &this->actor);
                 this->textId = 0x1596;
                 break;
+
             case 0x1596:
                 Message_StartTextbox(play, 0x1597, &this->actor);
                 this->textId = 0x1597;
                 break;
+
             case 0x1598:
                 Message_StartTextbox(play, 0x1599, &this->actor);
                 this->textId = 0x1599;
                 break;
+
             case 0x15A5:
                 Message_StartTextbox(play, 0x15A6, &this->actor);
                 this->textId = 0x15A6;
                 break;
+
             case 0x15A6:
                 Message_StartTextbox(play, 0x15A7, &this->actor);
                 this->textId = 0x15A7;
                 break;
+
             case 0x15A7:
                 func_801477B4(play);
                 EnHgo_SetupTalk(this);
@@ -269,34 +289,39 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
             this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->animIndex = 0;
+                    this->animIndex = HGO_ANIM_ARMS_FOLDED;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
+
                 case 2:
                     this->actor.draw = EnHgo_Draw;
-                    this->animIndex = 1;
+                    this->animIndex = HGO_ANIM_ASTONISHED;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
+
                 case 3:
-                    this->animIndex = 2;
+                    this->animIndex = HGO_ANIM_KNEEL_DOWN_AND_HUG;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                     break;
+
                 case 4:
-                    this->animIndex = 3;
+                    this->animIndex = HGO_ANIM_CONSOLE;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
+
                 case 5:
-                    this->animIndex = 4;
+                    this->animIndex = HGO_ANIM_CONSOLE_HEAD_UP;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                     break;
+
                 case 6:
-                    this->animIndex = 5;
+                    this->animIndex = HGO_ANIM_REACH_DOWN_TO_LIFT;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
-                case 1:
+                case HGO_ANIM_ASTONISHED:
                     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
                         (this->isInCutscene == false)) {
                         this->isInCutscene = true;
@@ -306,12 +331,14 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
                         }
                     }
                     break;
-                case 2:
-                    this->animIndex = 3;
+
+                case HGO_ANIM_KNEEL_DOWN_AND_HUG:
+                    this->animIndex = HGO_ANIM_CONSOLE;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
-                case 5:
-                    this->animIndex = 6;
+
+                case HGO_ANIM_REACH_DOWN_TO_LIFT:
+                    this->animIndex = HGO_ANIM_TOSS;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
             }
         }
@@ -319,13 +346,15 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
         return true;
     }
+
     if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
-        (this->actionFunc == EnHgo_Idle)) {
+        (this->actionFunc == EnHgo_DoNothing)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
                     this->actor.focus.pos.z, 7, 0, 0, 0x7F5A);
         EnHgo_SetupInitCollision(this);
     }
+
     this->csAction = 0x63;
     return false;
 }
@@ -354,8 +383,8 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (EnHgo_HandleCsAction(this, play)) {
         Actor_TrackNone(&this->headRot, &this->torsoRot);
-    } else if (this->actionFunc != EnHgo_Idle) {
-        if (this->actionFunc != EnHgo_InitCollision) {
+    } else if (this->actionFunc != EnHgo_DoNothing) {
+        if (this->actionFunc != EnHgo_UpdateCollision) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             EnHgo_FacePlayer(this, play);

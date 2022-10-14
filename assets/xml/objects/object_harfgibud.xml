@@ -27,19 +27,19 @@
         <DList Name="gHarfgibudGibdoLeftUpperArmDL" Offset="0x6EA0" />
         <DList Name="gHarfgibudGibdoAbdomenDL" Offset="0x6F98" />
 
-        <Texture Name="gHarfgibudTLUT" OutName="harfgibud_tlut" Format="rgba16" Width="16" Height="16" Offset="0x70A0" />
-        <Texture Name="gHarfgibudBandageWrappingsTex" OutName="bandage_wrappings" Format="i8" Width="64" Height="32" Offset="0x72A0" />
-        <Texture Name="gHarfgibudSkinGradientTex" OutName="skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x7AA0" />
-        <Texture Name="gHarfgibudSideHairTex" OutName="side_hair" Format="ci8" Width="8" Height="16" Offset="0x7AE0" />
-        <Texture Name="gHarfgibudEarTex" OutName="ear" Format="ci8" Width="8" Height="8" Offset="0x7B60" />
-        <Texture Name="gHarfgibudLipTex" OutName="lip" Format="ci8" Width="8" Height="8" Offset="0x7BA0" />
-        <Texture Name="gHarfgibudBloodshotEyeTex" OutName="bloodshot_eye" Format="ci8" Width="32" Height="32" Offset="0x7BE0" />
-        <Texture Name="gHarfgibudHairTex" OutName="hair" Format="ci8" Width="16" Height="16" Offset="0x7FE0" />
-        <Texture Name="gHarfgibudEyebrowTex" OutName="eyebrow" Format="rgba16" Width="16" Height="16" Offset="0x80E0" />
-        <Texture Name="gHarfgibudUnusedTex" OutName="unused_1" Format="i8" Width="8" Height="8" Offset="0x82E0" />
-        <Texture Name="gHarfgibudShirtPieceTex" OutName="shirt_piece" Format="rgba16" Width="8" Height="8" Offset="0x8320" />
-        <Texture Name="gHarfgibudFingernailTex" OutName="fingernail" Format="ci8" Width="16" Height="8" Offset="0x83A0" />
-        <Texture Name="gHarfgibudLabCoatSleeveTex" OutName="lab_coat_sleeve" Format="i8" Width="8" Height="8" Offset="0x8420" />
+        <Texture Name="gHarfgibudGibdoTLUT" OutName="harfgibud_tlut" Format="rgba16" Width="16" Height="16" Offset="0x70A0" />
+        <Texture Name="gHarfgibudGibdoBandageWrappingsTex" OutName="bandage_wrappings" Format="i8" Width="64" Height="32" Offset="0x72A0" />
+        <Texture Name="gHarfgibudGibdoSkinGradientTex" OutName="skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x7AA0" />
+        <Texture Name="gHarfgibudGibdoSideHairTex" OutName="side_hair" Format="ci8" Width="8" Height="16" Offset="0x7AE0" />
+        <Texture Name="gHarfgibudGibdoEarTex" OutName="ear" Format="ci8" Width="8" Height="8" Offset="0x7B60" />
+        <Texture Name="gHarfgibudGibdoLipTex" OutName="lip" Format="ci8" Width="8" Height="8" Offset="0x7BA0" />
+        <Texture Name="gHarfgibudGibdoBloodshotEyeTex" OutName="bloodshot_eye" Format="ci8" Width="32" Height="32" Offset="0x7BE0" />
+        <Texture Name="gHarfgibudGibdoHairTex" OutName="hair" Format="ci8" Width="16" Height="16" Offset="0x7FE0" />
+        <Texture Name="gHarfgibudGibdoEyebrowTex" OutName="eyebrow" Format="rgba16" Width="16" Height="16" Offset="0x80E0" />
+        <Texture Name="gHarfgibudGibdoUnusedTex" OutName="unused_1" Format="i8" Width="8" Height="8" Offset="0x82E0" />
+        <Texture Name="gHarfgibudGibdoShirtPieceTex" OutName="shirt_piece" Format="rgba16" Width="8" Height="8" Offset="0x8320" />
+        <Texture Name="gHarfgibudGibdoFingernailTex" OutName="fingernail" Format="ci8" Width="16" Height="8" Offset="0x83A0" />
+        <Texture Name="gHarfgibudGibdoLabCoatSleeveTex" OutName="lab_coat_sleeve" Format="i8" Width="8" Height="8" Offset="0x8420" />
 
         <Limb Name="gHarfgibudGibdoRootLimb" Type="Standard" EnumName="HARFGIBUD_GIBDO_LIMB_ROOT" Offset="0x8460" />
         <Limb Name="gHarfgibudGibdoAbdomenLimb" Type="Standard" EnumName="HARFGIBUD_GIBDO_LIMB_ABDOMEN" Offset="0x846C" />
@@ -64,7 +64,7 @@
         <Animation Name="gHarfgibudLurchForwardAnim" Offset="0x9D44" />
         <Animation Name="gHarfgibudRecoilFromHitAnim" Offset="0xA164" />
         <Animation Name="gHarfgibudPanicAnim" Offset="0xAE1C" />
-        <TextureAnimation Name="gHarfgibudUnusedTexAnim" Offset="0xAE50" />
+        <TextureAnimation Name="gHarfgibudEyeTexAnim" Offset="0xAE50" />
         <Animation Name="gHarfgibudArmsFoldedAnim" Offset="0xB644" />
 
         <DList Name="gHarfgibudHumanPelvisDL" Offset="0xE860" />
@@ -126,6 +126,6 @@
         <Animation Name="gHarfgibudTossAnim" Offset="0x14A9C" />
         <Animation Name="gHarfgibudKneelDownAndHugAnim" Offset="0x152EC" />
         <Animation Name="gHarfGibudConsoleAnim" Offset="0x15C70" />
-        <Animation Name="gHarfGibudUnusedAnim" Offset="0x165F0" />
+        <Animation Name="gHarfGibudConsoleHeadUpAnim" Offset="0x165F0" />
     </File>
 </Root>
