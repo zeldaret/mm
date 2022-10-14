@@ -15,7 +15,7 @@ void EnZod_Destroy(Actor* thisx, PlayState* play);
 void EnZod_Update(Actor* thisx, PlayState* play);
 void EnZod_Draw(Actor* thisx, PlayState* play);
 
-void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode);
+void EnZod_ChangeAnim(EnZod* this, s16 nextAnimIndex, u8 mode);
 void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play);
 void func_80BAFB84(EnZod* this, PlayState* play);
 void func_80BAFDB4(EnZod* this, PlayState* play);
@@ -37,16 +37,13 @@ typedef enum {
     /* 1 */ ENZOD_INSTRUMENT_CYMBAL_1 = 1,
     /* 2 */ ENZOD_INSTRUMENT_CYMBAL_2,
     /* 3 */ ENZOD_INSTRUMENT_CYMBAL_3,
-} EnZodInstrumentCymbal;
-
-typedef enum {
-    /* 4 */ ENZOD_INSTRUMENT_DRUM_1 = 4,
+    /* 4 */ ENZOD_INSTRUMENT_DRUM_1,
     /* 5 */ ENZOD_INSTRUMENT_DRUM_2,
     /* 6 */ ENZOD_INSTRUMENT_DRUM_3,
     /* 7 */ ENZOD_INSTRUMENT_DRUM_4,
     /* 8 */ ENZOD_INSTRUMENT_DRUM_5,
     /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM,
-} EnZodInstrumentDrum;
+} EnZodInstrument;
 
 const ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
@@ -94,7 +91,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &gTijoPlayingLentoAnim, this->morphTable, this->JointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &gTijoPlayingLentoAnim, this->morphTable, this->jointTable,
                        OBJECT_ZOD_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gTijoPlayingLentoAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -113,21 +110,21 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
         this->drumScaleVels[i] = 0.01;
     }
 
-    EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
+    EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
     this->actionFunc = EnZod_PlayDrumsSequence;
 
-    switch (ENZOD_GET_F(thisx)) {
+    switch (ENZOD_GET_TYPE(thisx)) {
         case 1:
-            if (gSaveContext.save.weekEventReg[0x4E] & 1) {
+            if (gSaveContext.save.weekEventReg[78] & 1) {
                 this->actionFunc = func_80BAFDB4;
-                EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
+                EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
-                ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
+                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
                 break;
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(gSaveContext.save.weekEventReg[0x37] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
                 break;
             }
@@ -140,7 +137,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.weekEventReg[0x37] & 0x80) {
+            if (gSaveContext.save.weekEventReg[55] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -154,29 +151,29 @@ void EnZod_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnZod_RoomConversation(EnZod* this, PlayState* play) {
+void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
-        textId = 0x1227; // Huh? Who are you? You can't just come walkin' in here.
-        if (gSaveContext.save.weekEventReg[0x20] & 8) {
-            textId = 0x1229; // This is a problem. You just can't come in and hang out in our room!
+        textId = 0x1227; // Huh? Who are you? You can't just come...
+        if (gSaveContext.save.weekEventReg[32] & 8) {
+            textId = 0x1229; // This is a problem. You just can't come...
         } else {
-            gSaveContext.save.weekEventReg[0x20] |= 8;
+            gSaveContext.save.weekEventReg[32] |= 8;
         }
     } else if (this->stateFlags & TIJO_STATE_1) {
         textId = 0x1225; // Don't get mad, but i want you to hear this...
     } else {
-        textId = 0x1219; // Mikau? Where've you been? I was worried.
-        if (gSaveContext.save.weekEventReg[0x20] & 0x10) {
-            textId = 0x1226; // Ooh! Ooh! How's Lulu? Is she talking to you?
+        textId = 0x1219; // Mikau? Where've you been?...
+        if (gSaveContext.save.weekEventReg[32] & 0x10) {
+            textId = 0x1226; // Ooh! Ooh! How's Lulu? Is she talking...
         } else {
-            gSaveContext.save.weekEventReg[0x20] |= 0x10;
+            gSaveContext.save.weekEventReg[32] |= 0x10;
         }
         this->stateFlags |= TIJO_STATE_1;
     }
 
-    EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
+    EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
     Message_StartTextbox(play, textId, &this->actor);
 }
 
@@ -188,7 +185,7 @@ s32 EnZod_PlayerIsFacingTijo(EnZod* this, PlayState* play) {
     return false;
 }
 
-void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode) {
+void EnZod_ChangeAnim(EnZod* this, s16 nextAnimIndex, u8 mode) {
     if ((nextAnimIndex < ENZOD_ANIM_PLAYING_VIVACE) || (nextAnimIndex >= ENZOD_ANIM_MAX)) {
         nextAnimIndex = ENZOD_ANIM_PLAYING_LENTO;
     }
@@ -201,7 +198,7 @@ void EnZod_ChangeAnimation(EnZod* this, s16 nextAnimIndex, u8 mode) {
 void EnZod_UpdateAnimations(EnZod* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->nextAnimIndex == this->curAnimIndex) {
-            EnZod_ChangeAnimation(this, this->curAnimIndex, ANIMMODE_ONCE);
+            EnZod_ChangeAnim(this, this->curAnimIndex, ANIMMODE_ONCE);
             switch (this->curAnimIndex) {
                 case ENZOD_ANIM_PLAYING_LENTO:
                     if (Rand_ZeroFloat(1.0f) < 0.2f) {
@@ -217,7 +214,7 @@ void EnZod_UpdateAnimations(EnZod* this) {
             }
 
         } else {
-            EnZod_ChangeAnimation(this, this->nextAnimIndex, ANIMMODE_ONCE);
+            EnZod_ChangeAnim(this, this->nextAnimIndex, ANIMMODE_ONCE);
         }
         SkelAnime_Update(&this->skelAnime);
     }
@@ -315,7 +312,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1220); // There's a rumor that the ocean is getting weird...
+                        func_80151938(play, 0x1220); // There's a rumor that the ocean is getting...
                         break;
 
                     case 1:
@@ -362,7 +359,7 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                     default:
                         func_801477B4(play);
                         this->actionFunc = EnZod_PlayDrumsSequence;
-                        EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
+                        EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
                         break;
                 }
             }
@@ -376,7 +373,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        EnZod_RoomConversation(this, play);
+        EnZod_HandleRoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
         func_800B8614(&this->actor, play, 210.0f);
@@ -393,38 +390,38 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[0x4F] & 1) {
+        if (gSaveContext.save.weekEventReg[79] & 1) {
             textId = 0x1253; // And with that, we're all ready...
         } else {
-            textId = 0x1251; // What have you been doing? You're late, Mikau!
-            if (gSaveContext.save.weekEventReg[0x4E] & 0x20) {
-                textId = 0x1252; // Hurry up and go see Lulu.
+            textId = 0x1251; // What have you been doing? You're late...
+            if (gSaveContext.save.weekEventReg[78] & 0x20) {
+                textId = 0x1252; // Hurry up and go see...
             } else {
-                gSaveContext.save.weekEventReg[0x4E] |= 0x20;
+                gSaveContext.save.weekEventReg[78] |= 0x20;
             }
         }
     } else {
         textId = 0x1250; // If you want an autograph...
     }
 
-    EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
+    EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
     Message_StartTextbox(play, textId, &this->actor);
 }
 
 void func_80BAFADC(EnZod* this, PlayState* play) {
-    u8 msgState;
+    u8 talkState;
 
     EnZod_UpdateAnimations(this);
-    msgState = Message_GetState(&play->msgCtx);
-    if (msgState != TEXT_STATE_CLOSING) {
-        if ((msgState == 5) && Message_ShouldAdvance(play)) {
+    talkState = Message_GetState(&play->msgCtx);
+    if (talkState != TEXT_STATE_CLOSING) {
+        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             func_801477B4(play);
             this->actionFunc = func_80BAFB84;
-            EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
+            EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         }
     } else {
         this->actionFunc = func_80BAFB84;
-        EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
+        EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
     }
 }
 
@@ -442,7 +439,7 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
 void EnZod_DoNothing(EnZod* this, PlayState* play) {
 }
 
-void EnZod_RehearsalCutsceneTransition(EnZod* this, PlayState* play) {
+void EnZod_Rehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
@@ -452,7 +449,7 @@ void EnZod_RehearsalCutsceneTransition(EnZod* this, PlayState* play) {
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
             play->transitionType = TRANS_TYPE_05;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            gSaveContext.save.weekEventReg[0x4E] &= 0xFE;
+            gSaveContext.save.weekEventReg[78] &= (u8)~1;
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
@@ -461,16 +458,16 @@ void EnZod_RehearsalCutsceneTransition(EnZod* this, PlayState* play) {
     }
 }
 
-void EnZod_StartSession(EnZod* this, PlayState* play) {
+void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        EnZod_ChangeAnimation(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
-        this->actionFunc = EnZod_RehearsalCutsceneTransition;
+        EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
+        this->actionFunc = EnZod_Rehearse;
         ActorCutscene_Stop(this->actor.cutscene);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        gSaveContext.save.weekEventReg[0x4F] |= 1;
+        gSaveContext.save.weekEventReg[79] |= 1;
         Audio_QueueSeqCmd(NA_BGM_INDIGO_GO_SESSION | 0x8000);
     }
 }
@@ -480,14 +477,14 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B7298(play, NULL, 0x44);
-        Message_StartTextbox(play, 0x103A, &this->actor); // One... two... three...
-        this->actionFunc = EnZod_StartSession;
+        Message_StartTextbox(play, 0x103A, &this->actor); // One... two...
+        this->actionFunc = EnZod_SetupRehearse;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void EnZod_UpdateFog(EnZod* this, PlayState* play) {
+void func_80BAFE34(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if (this->fogNear < 799) {
         this->fogNear += 200;
@@ -514,7 +511,7 @@ void func_80BAFF14(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimations(this);
     if (Cutscene_CheckActorAction(play, 0x203) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 4)) {
-        this->actionFunc = EnZod_UpdateFog;
+        this->actionFunc = func_80BAFE34;
     }
 }
 
@@ -575,11 +572,11 @@ void EnZod_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 void EnZod_DrawDrums(EnZod* this, PlayState* play) {
-    s32 i;
     static Gfx* sTijoDrumsDLs[] = {
         gTijoDrumFrameDL, gTijoRideCymbalDL, gTijoCrashCymbalDL, gTijoHiHatDL, gTijoDrum1DL,
         gTijoDrum2DL,     gTijoDrum3DL,      gTijoDrum4DL,       gTijoDrum5DL, gTijoBassDrumDL,
     };
+    s32 i;
     f32 instrumentPosXs[] = { 0.0f, -2690.0f, 2310.0f, 3888.0f, -4160.0f, -2200.0f, -463.0f, 1397.0f, 3413.0f, 389.0f };
     f32 instrumentPosYs[] = { 0.0f, 6335.0f, 6703.0f, 5735.0f, 3098.0f, 3349.0f, 3748.0f, 3718.0f, 2980.0f, 1530.0f };
     f32 instrumentPosZs[] = { 0.0f, 4350.0f, 3200.0f, 1555.0f, 2874.0f, 3901.0f, 4722.0f, 4344.0f, 3200.0f, 3373.0f };
@@ -623,7 +620,7 @@ void EnZod_DrawDrums(EnZod* this, PlayState* play) {
 void EnZod_Draw(Actor* thisx, PlayState* play) {
     static TexturePtr sTijoEyesTextures[] = { &gTijoEyesOpen, &gTijoEyesHalfOpen, &gTijoEyesClosed };
     EnZod* this = THIS;
-    Gfx* gfxP;
+    Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -633,12 +630,12 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->fogNear, 1000);
     }
 
-    gfxP = POLY_OPA_DISP;
+    gfx = POLY_OPA_DISP;
 
-    gSPSegment(gfxP, 0x08, Lib_SegmentedToVirtual(sTijoEyesTextures[this->eyeIndex]));
-    gSPSegment(gfxP + 1, 0x09, Lib_SegmentedToVirtual(&gTijoMouthClosedTex));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sTijoEyesTextures[this->eyeIndex]));
+    gSPSegment(&gfx[1], 0x09, Lib_SegmentedToVirtual(&gTijoMouthClosedTex));
 
-    POLY_OPA_DISP = gfxP + 2;
+    POLY_OPA_DISP = &gfx[2];
 
     EnZod_DrawDrums(this, play);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

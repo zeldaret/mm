@@ -5,7 +5,7 @@
 #include "assets/objects/object_zod/object_zod.h"
 
 #define ENZOD_GET_ENTRANCE_INDEX(thisx) (((thisx)->params & 0xFE00) >> 9)
-#define ENZOD_GET_F(thisx) ((thisx)->params & 0xF)
+#define ENZOD_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
 struct EnZod;
 
@@ -14,7 +14,7 @@ typedef void (*EnZodActionFunc)(struct EnZod*, PlayState*);
 typedef struct EnZod {
     /* 0x000 */ Actor actor;
     /* 0x144 */ Vec3s morphTable[OBJECT_ZOD_LIMB_MAX];
-    /* 0x180 */ Vec3s JointTable[OBJECT_ZOD_LIMB_MAX];
+    /* 0x180 */ Vec3s jointTable[OBJECT_ZOD_LIMB_MAX];
     /* 0x1BC */ SkelAnime skelAnime;
     /* 0x200 */ ColliderCylinder collider;
     /* 0x24C */ s16 eyeIndex;
