@@ -840,9 +840,10 @@ void EnSt_Init(Actor* thisx, PlayState* play) {
     if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(play, ENST_GET_3F(&this->actor))) ||
         (this->unk_2C0 < 0)) {
         Actor_Kill(&this->actor);
-    } else {
-        this->actionFunc = func_808A6A78;
+        return;
     }
+
+    this->actionFunc = func_808A6A78;
 }
 
 void EnSt_Destroy(Actor* thisx, PlayState* play) {

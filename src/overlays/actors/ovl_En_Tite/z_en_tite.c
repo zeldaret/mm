@@ -669,11 +669,12 @@ void func_808951B8(EnTite* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->limbPos[i], 11, NA_SE_EN_EXTINCT);
         }
         Actor_Kill(&this->actor);
-    } else {
-        for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
-            Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
-            this->unk_33C[i].y += this->actor.gravity;
-        }
+        return;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
+        Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
+        this->unk_33C[i].y += this->actor.gravity;
     }
 }
 

@@ -487,9 +487,10 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[83] &= (u8)~4;
                 ActorCutscene_Stop(this->unk_2D6);
                 Actor_Kill(&this->actor);
-            } else {
-                func_809C4B6C(this);
+                return;
             }
+
+            func_809C4B6C(this);
         }
     }
 }

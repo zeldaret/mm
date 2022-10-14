@@ -103,9 +103,10 @@ void ItemEtcetera_WaitForObject(ItemEtcetera* this, PlayState* play) {
 void func_8092009C(ItemEtcetera* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         Actor_Kill(&this->actor);
-    } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 30.0f, 50.0f);
+        return;
     }
+
+    Actor_PickUp(&this->actor, play, this->getItemId, 30.0f, 50.0f);
 }
 
 void func_809200F8(ItemEtcetera* this, PlayState* play) {

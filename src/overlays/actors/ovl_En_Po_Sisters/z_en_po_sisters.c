@@ -715,9 +715,10 @@ void EnPoSisters_DeathStage2(EnPoSisters* this, PlayState* play) {
 
     if (this->deathTimer == 32) {
         Actor_Kill(&this->actor);
-    } else {
-        EnPoSisters_UpdateDeathFlameSwirl(this, this->deathTimer, &this->actor.world.pos);
+        return;
     }
+
+    EnPoSisters_UpdateDeathFlameSwirl(this, this->deathTimer, &this->actor.world.pos);
 }
 
 void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {

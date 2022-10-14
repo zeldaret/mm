@@ -1095,8 +1095,8 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
                           30);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
         } else {
-            // EnSnowman_SpawnBigSnowballFragmentEffects only fworks with snowballPos, so we need
-            // to copy the snowball actor's current position into snowballPos to make this fwork.
+            // EnSnowman_SpawnBigSnowballFragmentEffects only works with snowballPos, so we need
+            // to copy the snowball actor's current position into snowballPos to make this work.
             Math_Vec3f_Copy(&this->snowballPos, &this->actor.world.pos);
             EnSnowman_SpawnBigSnowballFragmentEffects(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_SNOWBALL_BROKEN);
@@ -1104,16 +1104,17 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_IT_REFLECTION_WOOD);
         Actor_Kill(&this->actor);
-    } else {
-        this->actor.shape.rot.x += 0xF00;
-        Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
-                                this->collider.dim.height - this->collider.dim.yShift, 0x1F);
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        return;
     }
+
+    this->actor.shape.rot.x += 0xF00;
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
+                            this->collider.dim.height - this->collider.dim.yShift, 0x1F);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 /**

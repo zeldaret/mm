@@ -471,11 +471,11 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
         }
         if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH) {
             Actor_Kill(&this->actor);
-        } else {
-            EnKusa_SetupCut(this);
-            this->isCut = true;
+            return;
         }
 
+        EnKusa_SetupCut(this);
+        this->isCut = true;
     } else {
         if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 12.0f)) {
             this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;

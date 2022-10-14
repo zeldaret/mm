@@ -270,11 +270,12 @@ void func_80931E58(ObjIcePoly* this, PlayState* play) {
         if (this->unk_14A == 1) {
             func_80931828(this, play);
             Actor_Kill(&this->actor);
-        } else {
-            this->unk_14A = 40;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT);
-            this->actionFunc = func_80931EEC;
+            return;
         }
+
+        this->unk_14A = 40;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT);
+        this->actionFunc = func_80931EEC;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }

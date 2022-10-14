@@ -53,9 +53,10 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
     if (objectIndex < 0) {
         Actor_Kill(&this->actor);
-    } else {
-        this->objectIndex = objectIndex;
+        return;
     }
+
+    this->objectIndex = objectIndex;
 }
 
 void DemoGetitem_Destroy(Actor* thisx, PlayState* play) {

@@ -69,9 +69,10 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, 0x1F);
             Actor_Kill(&this->actor);
-        } else {
-            Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
+            return;
         }
+
+        Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
     }
 }
 

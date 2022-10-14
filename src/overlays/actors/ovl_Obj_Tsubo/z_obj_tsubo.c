@@ -191,19 +191,20 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
     if (this->objBankIndex < 0) {
         Actor_Kill(&this->actor);
-    } else {
-        this->actor.shape.shadowScale = 1.8f;
-        this->homeRoom = this->actor.room;
-        if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
-            if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
-                this->unk_198 = true;
-            }
-        }
-        if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
-            this->unk_19A = -1;
-        }
-        func_80928914(this);
+        return;
     }
+
+    this->actor.shape.shadowScale = 1.8f;
+    this->homeRoom = this->actor.room;
+    if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
+        if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
+            this->unk_198 = true;
+        }
+    }
+    if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
+        this->unk_19A = -1;
+    }
+    func_80928914(this);
 }
 
 void ObjTsubo_Destroy(Actor* thisx, PlayState* play2) {
@@ -577,9 +578,10 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
             Actor_Kill(&this->actor);
-        } else {
-            func_809291DC(this);
+            return;
         }
+
+        func_809291DC(this);
     } else if (this->actor.bgCheckFlags & 0x40) {
         typeData->breakPot2(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
@@ -591,9 +593,10 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
             Actor_Kill(&this->actor);
-        } else {
-            func_809291DC(this);
+            return;
         }
+
+        func_809291DC(this);
     } else {
         Actor_MoveWithGravity(&this->actor);
         Math_StepToS(&D_80929504, D_80929500, 150);

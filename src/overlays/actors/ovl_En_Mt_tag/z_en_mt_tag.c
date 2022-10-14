@@ -461,15 +461,16 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
             Actor_Kill(&this->actor);
-        } else {
-            // Keep racing
-            func_8019F208();
-            func_801477B4(play);
-            func_800B7298(play, &this->actor, 6);
-            gSaveContext.eventInf[1] &= (u8)~8;
-            this->timer = 100;
-            this->actionFunc = EnMttag_Race;
+            return;
         }
+
+        // Keep racing
+        func_8019F208();
+        func_801477B4(play);
+        func_800B7298(play, &this->actor, 6);
+        gSaveContext.eventInf[1] &= (u8)~8;
+        this->timer = 100;
+        this->actionFunc = EnMttag_Race;
     }
 }
 

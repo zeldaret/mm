@@ -117,12 +117,13 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {
             Actor_Kill(&this->actor);
-        } else {
-            this->timer = 30;
-            this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
-            this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
-            this->actor.colChkInfo.mass = 30;
+            return;
         }
+
+        this->timer = 30;
+        this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
+        this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
+        this->actor.colChkInfo.mass = 30;
     } else { // Frogs in mountain village
         if (this->frogIndex == MINIFROG_YELLOW) {
             this->actor.textId = 0;

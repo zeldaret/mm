@@ -42,8 +42,11 @@ void func_808A7968(ObjWturn* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode >= 28 && play->msgCtx.ocarinaMode < 39) {
         Flags_UnsetSwitch(play, this->actor.params);
         Actor_Kill(&this->actor);
-    } else if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
-               (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
+        return;
+    }
+
+    if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
+        (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
         func_808A7A24(this);
     }
 }

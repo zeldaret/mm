@@ -200,7 +200,6 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     DoorShutter* this = THIS;
     s32 sp24;
     s32 i;
-    s8 objId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->doorType = DOORSHUTTER_GET_380(&this->actor);
@@ -233,9 +232,10 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         this->actor.room = -1;
     }
 
-    // clang-format off
-    objId = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId); this->requiredObjBankIndex = objId; if (objId < 0) { Actor_Kill(&this->actor); return; }
-    // clang-format on
+    if ((this->requiredObjBankIndex = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId)) < 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
 
     DoorShutter_SetupAction(this, DoorShutter_SetupType);
     this->unk_163 = sp24;

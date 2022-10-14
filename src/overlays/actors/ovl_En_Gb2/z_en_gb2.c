@@ -665,12 +665,13 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
                 if (this->unk_26E == 0x14FB) {
                     Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
                     Actor_Kill(&this->actor);
-                } else {
-                    this->actor.draw = NULL;
-                    this->unk_26C |= 0x100;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
-                    this->actionFunc = func_80B111AC;
+                    return;
                 }
+
+                this->actor.draw = NULL;
+                this->unk_26C |= 0x100;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actionFunc = func_80B111AC;
                 break;
         }
     }

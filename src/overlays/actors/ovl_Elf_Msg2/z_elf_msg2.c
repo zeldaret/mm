@@ -105,14 +105,16 @@ void func_8096EE64(ElfMsg2* this, PlayState* play) {
                 ActorCutscene_Stop(this->actor.cutscene);
             }
         }
+
         if (this->actor.home.rot.z != 1) {
             Actor_Kill(&this->actor);
             if (ELFMSG2_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG2_GET_SWITCHFLAG(&this->actor));
             }
-        } else {
-            ElfMsg2_SetupAction(this, func_8096EF98);
+            return;
         }
+
+        ElfMsg2_SetupAction(this, func_8096EF98);
     } else if ((this->actor.cutscene != -1) && (ActorCutscene_GetCurrentIndex() != this->actor.cutscene)) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);

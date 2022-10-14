@@ -879,17 +879,18 @@ void EnKusa2_Init(Actor* thisx, PlayState* play) {
         Collider_InitCylinder(play, &this->collider);
         if (!func_80A5BA58(this, play)) {
             Actor_Kill(&this->actor);
-        } else {
-            Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-            this->unk_1CE = D_80A5EAF0 & 7;
-            D_80A5EAF0++;
-            this->actor.shape.shadowAlpha = 0;
-            this->unk_1CF = 255;
-            this->actor.shape.shadowScale = 1.0f;
-            func_80A5D7A4(this);
+            return;
         }
+
+        Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+        this->unk_1CE = D_80A5EAF0 & 7;
+        D_80A5EAF0++;
+        this->actor.shape.shadowAlpha = 0;
+        this->unk_1CF = 255;
+        this->actor.shape.shadowScale = 1.0f;
+        func_80A5D7A4(this);
     }
 }
 

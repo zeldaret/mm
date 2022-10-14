@@ -153,21 +153,22 @@ void EnHeishi_Update(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((this->paramsCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_Kill(&this->actor);
-    } else {
-        this->actionFunc(this, play);
-        Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 29);
-        Actor_SetScale(&this->actor, 0.01f);
-        if (this->shouldSetHeadRotation) {
-            EnHeishi_SetHeadRotation(this);
-        }
-
-        Actor_SetFocus(&this->actor, 60.0f);
-        Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
-        Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
-        Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
-        CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
+        return;
     }
+
+    this->actionFunc(this, play);
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 29);
+    Actor_SetScale(&this->actor, 0.01f);
+    if (this->shouldSetHeadRotation) {
+        EnHeishi_SetHeadRotation(this);
+    }
+
+    Actor_SetFocus(&this->actor, 60.0f);
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 3000, 0);
+    Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 1000, 0);
+    Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
 }
 
 s32 EnHeishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

@@ -301,7 +301,10 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
 
     if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING)) {
         Actor_Kill(&this->actor);
-    } else if (this->unk_32E == 0) {
+        return;
+    }
+
+    if (this->unk_32E == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_32E = 1;
         } else {

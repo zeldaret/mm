@@ -147,13 +147,14 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, bombwallCollider);
     if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
-        Collider_SetCylinder(play, bombwallCollider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
-        Actor_SetFocus(&this->dyna.actor, 60.0f);
-        BgKin2Bombwall_SetupWait(this);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
+    Collider_SetCylinder(play, bombwallCollider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
+    Actor_SetFocus(&this->dyna.actor, 60.0f);
+    BgKin2Bombwall_SetupWait(this);
 }
 
 void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play) {

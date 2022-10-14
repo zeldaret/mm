@@ -379,10 +379,11 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
         func_80937C10(this);
         if (!func_80936D58(this, play)) {
             Actor_Kill(&this->dyna.actor);
-        } else {
-            func_800BC154(play, &play->actorCtx, &this->dyna.actor, 7);
-            func_80937DD8(this);
+            return;
         }
+
+        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 7);
+        func_80937DD8(this);
     } else {
         s32 params2 = OBJBEAN_GET_3F00(&this->dyna.actor);
         Path* path = &play->setupPathList[params2];
@@ -715,7 +716,10 @@ void func_80938670(ObjBean* this) {
 void func_8093868C(ObjBean* this, PlayState* play) {
     if (this->unk_1B2 <= 0) {
         Actor_Kill(&this->dyna.actor);
-    } else if (this->unk_1B2 <= 20) {
+        return;
+    }
+
+    if (this->unk_1B2 <= 20) {
         this->dyna.actor.scale.x *= 0.89f;
         this->dyna.actor.scale.y *= 0.89f;
         this->dyna.actor.scale.z *= 0.89f;

@@ -186,10 +186,11 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(play, this->switchFlags)) {
             Actor_Kill(&this->actor);
-        } else {
-            thisx->update = Actor_Noop;
-            EnBigpo_InitHiddenFire(this);
+            return;
         }
+
+        thisx->update = Actor_Noop;
+        EnBigpo_InitHiddenFire(this);
         return;
     }
 
@@ -820,7 +821,10 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
     DECR(this->idleTimer);
     if (Actor_HasParent(&this->actor, play)) {
         Actor_Kill(&this->actor);
-    } else if (this->idleTimer == 0) {
+        return;
+    }
+
+    if (this->idleTimer == 0) {
         // took too long, soul is leaving
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);

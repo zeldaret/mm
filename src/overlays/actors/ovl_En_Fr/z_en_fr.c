@@ -31,9 +31,10 @@ void EnFr_Init(Actor* thisx, PlayState* play) {
 
     if (Flags_GetSwitch(play, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_Kill(&this->actor);
-    } else {
-        this->actor.targetMode = ENFR_GET_TARGETMODE(&this->actor);
+        return;
     }
+
+    this->actor.targetMode = ENFR_GET_TARGETMODE(&this->actor);
 }
 
 void EnFr_Destroy(Actor* thisx, PlayState* play) {
@@ -44,7 +45,10 @@ void EnFr_Update(Actor* thisx, PlayState* play) {
 
     if (Flags_GetSwitch(play, ENFR_GET_SWITCHFLAG(&this->actor))) {
         Actor_Kill(&this->actor);
-    } else if (this->actor.xyzDistToPlayerSq < SQ(IREG(29))) {
+        return;
+    }
+
+    if (this->actor.xyzDistToPlayerSq < SQ(IREG(29))) {
         this->actor.flags &= ~ACTOR_FLAG_40000000;
     } else {
         this->actor.flags |= ACTOR_FLAG_40000000;

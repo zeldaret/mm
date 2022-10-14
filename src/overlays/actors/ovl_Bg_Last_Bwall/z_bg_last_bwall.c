@@ -154,14 +154,18 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->colliderTris);
     if (Flags_GetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
-    } else if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElement)) {
-        Actor_Kill(&this->dyna.actor);
-    } else {
-        BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot,
-                                 &this->colliderTris, D_80C18AC0[this->type]);
-        SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-        func_80C187E4(this);
+        return;
     }
+
+    if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElement)) {
+        Actor_Kill(&this->dyna.actor);
+        return;
+    }
+
+    BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->colliderTris,
+                             D_80C18AC0[this->type]);
+    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    func_80C187E4(this);
 }
 
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play) {

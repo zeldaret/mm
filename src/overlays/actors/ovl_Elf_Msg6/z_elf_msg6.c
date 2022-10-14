@@ -340,9 +340,10 @@ void func_80BA1F80(ElfMsg6* this, PlayState* play) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, NULL);
             Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
             Actor_Kill(&this->actor);
-        } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            return;
         }
+
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 

@@ -81,9 +81,10 @@ void func_80973DE0(ObjRoomtimer* this, PlayState* play) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
         Actor_Kill(&this->actor);
-    } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        return;
     }
+
+    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 }
 
 void ObjRoomtimer_Update(Actor* thisx, PlayState* play) {

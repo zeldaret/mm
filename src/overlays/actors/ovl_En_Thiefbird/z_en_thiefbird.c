@@ -167,11 +167,15 @@ void EnThiefbird_Init(Actor* thisx, PlayState* play) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
         Actor_Kill(&this->actor);
-    } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
-        Actor_Kill(&this->actor);
-    } else {
-        func_80C11538(this);
+        return;
     }
+
+    if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    func_80C11538(this);
 }
 
 void EnThiefbird_Destroy(Actor* thisx, PlayState* play) {

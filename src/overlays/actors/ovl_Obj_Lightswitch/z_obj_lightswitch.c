@@ -316,9 +316,10 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
     ObjLightswitch_SpawnEffects(this, play); // spawn burning fire effect
     if (this->colorAlpha < 0) {
         Actor_Kill(&this->actor);
-    } else {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
+        return;
     }
+
+    func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
 }
 
 void ObjLightswitch_Update(Actor* thisx, PlayState* play) {

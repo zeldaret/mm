@@ -583,7 +583,10 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
 
     if (this->unk_240 <= 0) {
         Actor_Kill(&this->actor);
-    } else if (this->unk_240 <= 60) {
+        return;
+    }
+
+    if (this->unk_240 <= 60) {
         if (sp40 & 4) {
             this->actor.draw = EnFish_Draw;
         } else {
@@ -879,9 +882,10 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
             this->actor.parent = NULL;
             if (this->actor.params == ENFISH_0) {
                 Actor_Kill(&this->actor);
-            } else {
-                func_8091D904(this);
+                return;
             }
+
+            func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
             Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }

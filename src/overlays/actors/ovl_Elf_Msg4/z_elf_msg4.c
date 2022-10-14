@@ -157,13 +157,19 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
         bgActor = this->elfMsg5;
         if ((bgActor != NULL) && (bgActor->update == NULL)) {
             Actor_Kill(&this->actor);
-        } else if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
+            return;
+        }
+
+        if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
             if (ELFMSG4_GET_SWITCHFLAG(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(thisx));
             }
             Actor_Kill(&this->actor);
-        } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-                   (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            return;
+        }
+
+        if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
+            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
             this->actionFunc(this, play);
         }
     }

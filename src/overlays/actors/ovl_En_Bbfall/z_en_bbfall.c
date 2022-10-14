@@ -467,11 +467,12 @@ void EnBbfall_Dead(EnBbfall* this, PlayState* play) {
         }
 
         Actor_Kill(&this->actor);
-    } else {
-        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
-            Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
-            this->bodyPartsVelocity[i].y += this->actor.gravity;
-        }
+        return;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
+        this->bodyPartsVelocity[i].y += this->actor.gravity;
     }
 }
 

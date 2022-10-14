@@ -217,7 +217,10 @@ void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {
                              &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
         }
         Actor_Kill(&this->actor);
-    } else if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
+        return;
+    }
+
+    if (!(player->stateFlags1 & PLAYER_STATE1_1000)) {
         Actor_Kill(&this->actor);
     }
 }

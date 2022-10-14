@@ -929,10 +929,11 @@ void func_80AEE374(EnTk* this, PlayState* play) {
     SubS_FindActorCustom(play, &this->actor, NULL, ACTORCAT_NPC, ACTOR_EN_TK, &sp30, func_80AEE300);
     if (sp30.unk_00 == 0) {
         Actor_Kill(&this->actor);
-    } else {
-        this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
-        this->actionFunc = func_80AEE414;
+        return;
     }
+
+    this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
+    this->actionFunc = func_80AEE414;
 }
 
 void func_80AEE414(EnTk* this, PlayState* play) {

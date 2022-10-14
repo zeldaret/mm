@@ -300,9 +300,10 @@ void func_80B9C1A0(ObjTaru* this, PlayState* play) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
         Actor_Kill(&this->dyna.actor);
-    } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        return;
     }
+
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
 }
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {

@@ -103,13 +103,14 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 1);
     if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
         Actor_Kill(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
-        this->unk_160 = Rand_Next() >> 0x10;
-        this->unk_162 = Rand_Next() >> 0x10;
-        this->unk_164 = Rand_Next() >> 0x10;
-        func_8093D760(this);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
+    this->unk_160 = Rand_Next() >> 0x10;
+    this->unk_162 = Rand_Next() >> 0x10;
+    this->unk_164 = Rand_Next() >> 0x10;
+    func_8093D760(this);
 }
 
 void ObjLift_Destroy(Actor* thisx, PlayState* play) {

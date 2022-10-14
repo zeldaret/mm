@@ -817,7 +817,10 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
 
     if (sp20 && (this->unk_36A <= 0)) {
         Actor_Kill(&this->actor);
-    } else if (this->actor.bgCheckFlags & 0x20) {
+        return;
+    }
+
+    if (this->actor.bgCheckFlags & 0x20) {
         func_80A6AAA4(this);
     } else if (this->actor.bgCheckFlags & 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_WALK);

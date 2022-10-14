@@ -94,16 +94,17 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     if (Flags_GetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_lightblock_Colheader_000B80);
-        Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        this->collider.dim.radius = typeVars->radius;
-        this->collider.dim.height = typeVars->height;
-        this->collider.dim.yShift = typeVars->yShift;
-        this->alpha = 255;
-        func_80AF3AC8(this);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_lightblock_Colheader_000B80);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    this->collider.dim.radius = typeVars->radius;
+    this->collider.dim.height = typeVars->height;
+    this->collider.dim.yShift = typeVars->yShift;
+    this->alpha = 255;
+    func_80AF3AC8(this);
 }
 
 void ObjLightblock_Destroy(Actor* thisx, PlayState* play) {
@@ -168,7 +169,10 @@ void func_80AF3C34(ObjLightblock* this, PlayState* play) {
         temp_a0 = this->dyna.actor.cutscene;
         ActorCutscene_Stop(temp_a0);
         Actor_Kill(&this->dyna.actor);
-    } else if (this->timer <= 60) {
+        return;
+    }
+
+    if (this->timer <= 60) {
         if (this->alpha > 40) {
             this->alpha -= 40;
         } else {

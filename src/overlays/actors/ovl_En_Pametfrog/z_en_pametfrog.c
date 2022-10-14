@@ -206,10 +206,11 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
         if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BIGPAMET, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0) == NULL) {
             Actor_Kill(&this->actor);
-        } else {
-            this->actor.params = GEKKO_PRE_SNAPPER;
-            EnPametfrog_SetupLookAround(this);
+            return;
         }
+
+        this->actor.params = GEKKO_PRE_SNAPPER;
+        EnPametfrog_SetupLookAround(this);
     }
 }
 

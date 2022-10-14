@@ -432,14 +432,15 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
         Actor_Kill(&this->actor);
         gSaveContext.save.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
-    } else {
-        func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
-        if (ActorCutscene_GetCurrentIndex() != 0x7C) {
-            if (ActorCutscene_GetCanPlayNext(0x7C)) {
-                ActorCutscene_Start(0x7C, &this->actor);
-            } else {
-                ActorCutscene_SetIntentToPlay(0x7C);
-            }
+        return;
+    }
+
+    func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+    if (ActorCutscene_GetCurrentIndex() != 0x7C) {
+        if (ActorCutscene_GetCanPlayNext(0x7C)) {
+            ActorCutscene_Start(0x7C, &this->actor);
+        } else {
+            ActorCutscene_SetIntentToPlay(0x7C);
         }
     }
 }

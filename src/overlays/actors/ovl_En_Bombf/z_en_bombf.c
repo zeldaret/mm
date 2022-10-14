@@ -440,7 +440,10 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
         if (this->actor.depthInWater >= 20.0f) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
             Actor_Kill(&this->actor);
-        } else if (this->actor.bgCheckFlags & 0x40) {
+            return;
+        }
+
+        if (this->actor.bgCheckFlags & 0x40) {
             this->actor.bgCheckFlags &= ~0x40;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }

@@ -138,8 +138,11 @@ void ElfMsg3_Update(Actor* thisx, PlayState* play) {
                 Flags_SetSwitch(play, ELFMSG3_GET_SWITCH(thisx));
             }
             Actor_Kill(&this->actor);
-        } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-                   (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            return;
+        }
+
+        if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
+            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
             this->actionFunc(this, play);
         }
     }

@@ -715,7 +715,10 @@ void func_808FB42C(EnRr* this, PlayState* play) {
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
         Actor_Kill(&this->actor);
-    } else if (this->unk_1E4 == 88) {
+        return;
+    }
+
+    if (this->unk_1E4 == 88) {
         Vec3f sp74;
 
         sp74.x = this->actor.world.pos.x;
