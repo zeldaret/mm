@@ -306,7 +306,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
 
     if (pauseCtx->state == 6) {
         if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
-            pauseCtx->cursorColorSet = 0;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
             if (pauseCtx->stickAdjX > 30) {
                 pauseCtx->unk_298 = 4.0f;
@@ -826,7 +826,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     s16 oldCursorPoint;
 
     if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
-        pauseCtx->cursorColorSet = 0;
+        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (gSaveContext.buttonStatus[EQUIP_SLOT_A] != BTN_DISABLED) {
@@ -937,7 +937,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             play_sound(NA_SE_SY_CURSOR);
         }
     } else if (pauseCtx->state == 0x17) {
-        pauseCtx->cursorColorSet = 4;
+        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (pauseCtx->stickAdjX > 30) {

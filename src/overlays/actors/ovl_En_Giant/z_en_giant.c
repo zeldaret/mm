@@ -110,7 +110,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
                 return true;
             }
             break;
