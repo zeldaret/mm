@@ -7,9 +7,9 @@ struct ObjY2shutter;
 
 typedef struct ObjY2shutter {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s16 unk_15C;
-    /* 0x15E */ u8 unk_15E;
-    /* 0x15F */ u8 unk_15F;
+    /* 0x15C */ s16 raiseTimer;
+    /* 0x15E */ u8 isStationary; // true if the door is neither raising nor lowering
+    /* 0x15F */ u8 settleTimer;
 } ObjY2shutter; // size = 0x160
 
 extern const ActorInit Obj_Y2shutter_InitVars;
