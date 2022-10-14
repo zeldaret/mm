@@ -58,11 +58,7 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    gElegyShellHumanDL,
-    gElegyShellGoronDL,
-    gElegyShellZoraDL,
-    gElegyShellDekuDL,
-    gElegyShellHumanDL,
+    gElegyShellHumanDL, gElegyShellGoronDL, gElegyShellZoraDL, gElegyShellDekuDL, gElegyShellHumanDL,
 };
 
 void EnTorch2_Init(Actor* thisx, PlayState* play) {
