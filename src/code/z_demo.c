@@ -991,7 +991,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
             D_801BB160 = CS_TEXTBOX_TYPE_1;
             D_801BB124 = cmd->base;
             if (cmd->type == CS_TEXTBOX_TYPE_BOSSES_REMAINS) {
-                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                     if (cmd->textId1 != 0xFFFF) {
                         Message_StartTextbox(play, cmd->textId1, NULL);

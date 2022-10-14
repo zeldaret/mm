@@ -137,8 +137,8 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
     pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
-    pauseCtx->cursorColorSet = 2;
-    pauseCtx->unk_2A0 = -1;
+    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
+    pauseCtx->ocarinaSongIndex = -1;
     pauseCtx->equipAnimScale = 320;
     pauseCtx->equipAnimShrinkRate = 40;
     pauseCtx->promptAlpha = 100;
