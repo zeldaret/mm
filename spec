@@ -1196,11 +1196,7 @@ beginseg
     name "ovl_Mir_Ray"
     compress
     include "build/src/overlays/actors/ovl_Mir_Ray/z_mir_ray.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Mir_Ray/ovl_Mir_Ray_reloc.o"
-#else
-    include "build/data/ovl_Mir_Ray/ovl_Mir_Ray.reloc.o"
-#endif
 endseg
 
 beginseg
