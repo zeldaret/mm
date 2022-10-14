@@ -451,8 +451,6 @@ beginseg
     include "build/src/code/z_bg_collect.o"
     include "build/src/code/z_bg_item.o"
     include "build/src/code/z_camera.o"
-    include "build/data/code/z_camera.data.o"
-    include "build/data/code/z_camera.bss.o"
     include "build/src/code/z_collision_btltbls.o"
     pad_text
     include "build/src/code/z_collision_check.o"
@@ -3947,8 +3945,7 @@ beginseg
     name "ovl_Bg_Kin2_Picture"
     compress
     include "build/src/overlays/actors/ovl_Bg_Kin2_Picture/z_bg_kin2_picture.o"
-    include "build/data/ovl_Bg_Kin2_Picture/ovl_Bg_Kin2_Picture.data.o"
-    include "build/data/ovl_Bg_Kin2_Picture/ovl_Bg_Kin2_Picture.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Kin2_Picture/ovl_Bg_Kin2_Picture_reloc.o"
 endseg
 
 beginseg
@@ -4140,8 +4137,7 @@ beginseg
     name "ovl_Obj_Y2shutter"
     compress
     include "build/src/overlays/actors/ovl_Obj_Y2shutter/z_obj_y2shutter.o"
-    include "build/data/ovl_Obj_Y2shutter/ovl_Obj_Y2shutter.data.o"
-    include "build/data/ovl_Obj_Y2shutter/ovl_Obj_Y2shutter.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Y2shutter/ovl_Obj_Y2shutter_reloc.o"
 endseg
 
 beginseg
