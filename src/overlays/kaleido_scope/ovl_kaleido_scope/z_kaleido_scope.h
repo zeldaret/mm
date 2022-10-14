@@ -74,6 +74,16 @@ typedef enum {
     /* 0x07 */ PAUSE_SAVEPROMPT_STATE_7
 } PauseSavePromptState;
 
+#define IS_PAUSE_STATE_GAMEOVER \
+    ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))
+
+#define IS_PAUSE_STATE_OWLWARP \
+    ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))
+
+#define IS_PAUSE_MAIN_STATE_SAVE_PROMPT                            \
+    ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \
+     (pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
+
 typedef enum {
     /* 0 */ PAUSE_EQUIP_C_LEFT,
     /* 1 */ PAUSE_EQUIP_C_DOWN,

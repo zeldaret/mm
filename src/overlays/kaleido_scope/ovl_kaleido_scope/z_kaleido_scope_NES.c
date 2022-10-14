@@ -1360,8 +1360,7 @@ void KaleidoScope_Update(PlayState* play) {
 
     // If stickAdj is held, set a delay to allow the cursor to read the next input.
     // The first delay is given a longer time than all subsequent delays.
-    if (!((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10)) &&
-        (pauseCtx->state != PAUSE_STATE_SAVEPROMPT)) {
+    if (!IS_PAUSE_STATE_GAMEOVER && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT)) {
         if (pauseCtx->stickAdjX < -30) {
             if (sStickXRepeatState == -1) {
                 sStickXRepeatTimer--;
@@ -1433,10 +1432,10 @@ void KaleidoScope_Update(PlayState* play) {
 
     // Process the Cursor input
     if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
-        !((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6)) &&
+        !IS_PAUSE_STATE_OWLWARP &&
         (((pauseCtx->state >= PAUSE_STATE_OPENING_3) && (pauseCtx->state <= PAUSE_STATE_SAVEPROMPT)) ||
          ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_2) && (pauseCtx->state <= PAUSE_STATE_UNPAUSE_SETUP)))) {
-        if (!((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+        if (!IS_PAUSE_STATE_GAMEOVER) {
             switch (pauseCtx->pageIndex) {
                 case PAUSE_ITEM:
                     KaleidoScope_UpdateItemCursor(play);
