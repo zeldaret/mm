@@ -10,12 +10,12 @@ typedef void (*DmHinaActionFunc)(struct DmHina*, PlayState*);
 typedef struct DmHina {
     /* 0x000 */ Actor actor;
     /* 0x144 */ DmHinaActionFunc actionFunc;
-    /* 0x148 */ f32 unk_148;
+    /* 0x148 */ f32 maskScale;
     /* 0x14C */ f32 scale; // used to scale the remains size, light orb size/color and env lights
-    /* 0x150 */ f32 envColorB;
-    /* 0x154 */ f32 bob;
+    /* 0x150 */ f32 drawOrbEffect;
+    /* 0x154 */ f32 oscilationFactor;
     /* 0x158 */ f32 blueWarpPosY;
-    /* 0x15C */ f32 unk_15C;
+    /* 0x15C */ f32 yDimScaleFactor; // Scale factor used in y-dimension
     /* 0x160 */ Vec3f subCamEye;
     /* 0x16C */ Vec3f subCamAt;
     /* 0x178 */ UNK_TYPE1 unused[2];

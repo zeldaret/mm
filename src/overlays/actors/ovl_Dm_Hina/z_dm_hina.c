@@ -21,6 +21,14 @@ void DmHina_AwaitMessageBoxClosing(DmHina* this, PlayState* play);
 void DmHina_SetupSubCamera(DmHina* this, PlayState* play);
 void DmHina_MoveSubCamera(DmHina* this, PlayState* play);
 
+#define PARAMS_REMAINS_ODOLWA 0
+#define PARAMS_REMAINS_GOHT 1
+#define PARAMS_REMAINS_GYORG 2
+#define PARAMS_REMAINS_TWINMOLD 3
+
+#define LIGHT_ORB_STATE_OFF 0
+#define LIGHT_ORB_STATE_ON 1
+
 const ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
     ACTORCAT_ITEMACTION,
@@ -39,8 +47,8 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
     this->isVisible = true;
     this->actionFunc = DmHina_WaitForPlayer;
     this->blueWarpPosY = this->actor.world.pos.y;
-    this->unk_148 = 0.0f;
-    this->unk_15C = 1.0f;
+    this->maskScale = 0.0f;
+    this->yDimScaleFactor = 1.0f;
     this->actor.focus.pos.x = this->actor.world.pos.x;
     this->actor.focus.pos.y = this->actor.world.pos.y;
     this->actor.focus.pos.z = this->actor.world.pos.z;
@@ -52,18 +60,18 @@ void DmHina_Destroy(Actor* thisx, PlayState* play) {
 void DmHina_WaitForPlayer(DmHina* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    Math_SmoothStepToF(&this->unk_148, 0.6f, 0.5f, 0.05f, 0.001f);
-    this->bob = Math_SinS((play->gameplayFrames * 1800)) * 8.0f;
-    if ((player->stateFlags1 & 0x400) && (this->actor.xzDistToPlayer < 80.0f)) {
+    Math_SmoothStepToF(&this->maskScale, 0.6f, 0.5f, 0.05f, 0.001f);
+    this->oscilationFactor = Math_SinS(play->gameplayFrames * 1800) * 8.0f;
+    if ((player->stateFlags1 & PLAYER_STATE1_400) && (this->actor.xzDistToPlayer < 80.0f)) {
         this->isVisible = false;
-        this->bob = 0.0f;
+        this->oscilationFactor = 0.0f;
         this->actor.world.pos.y += 40.0f;
         this->actionFunc = DmHina_AwaitMessageBoxClosing;
     }
 }
 
 void DmHina_AwaitMessageBoxClosing(DmHina* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->timer = 2;
         this->actionFunc = DmHina_SetupSubCamera;
     }
@@ -75,8 +83,8 @@ void DmHina_SetupSubCamera(DmHina* this, PlayState* play) {
         this->isVisible = true;
         Cutscene_Start(play, &play->csCtx);
         this->subCamId = Play_CreateSubCamera(play);
-        Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-        Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+        Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+        Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
         this->actionFunc = DmHina_MoveSubCamera;
     }
 }
@@ -86,32 +94,33 @@ void DmHina_MoveSubCamera(DmHina* this, PlayState* play) {
     this->subCamEye.y = this->blueWarpPosY + 260.0f;
     this->subCamEye.z = this->actor.world.pos.z + 100.0f;
     this->subCamAt.x = this->actor.world.pos.x;
-    this->subCamAt.y = this->actor.world.pos.y + (this->bob * this->unk_15C) + (40.0f * this->unk_15C);
+    this->subCamAt.y =
+        this->actor.world.pos.y + (this->oscilationFactor * this->yDimScaleFactor) + (40.0f * this->yDimScaleFactor);
     this->subCamAt.z = this->actor.world.pos.z;
-    Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     Math_SmoothStepToF(&this->actor.world.pos.y, this->blueWarpPosY + 300.0f, 0.5f, 2.0f, 0.1f);
-    if (((this->blueWarpPosY + 240.0f) < this->actor.world.pos.y) && (this->csState != 1)) {
-        this->csState = 1;
+    if (((this->blueWarpPosY + 240.0f) < this->actor.world.pos.y) && (this->csState != LIGHT_ORB_STATE_ON)) {
+        this->csState = LIGHT_ORB_STATE_ON;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_WHITE_OUT_INTO_KYOJIN);
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MASK_RISING - SFX_FLAG);
 }
 
-void func_80A1F75C(DmHina* this, PlayState* play) {
+void DmHina_SetupLightOrb(DmHina* this, PlayState* play) {
     s32 i;
     s16 light1Color;
 
     switch (this->csState) {
-        case 0:
+        case LIGHT_ORB_STATE_OFF:
             this->lightOrbAlpha = 0;
             this->scale = 0.0f;
             break;
 
-        case 1:
+        case LIGHT_ORB_STATE_ON:
             Math_SmoothStepToF(&this->scale, 1.0f, 0.4f, 0.05f, 0.001f);
             this->lightOrbAlpha = this->scale * 255.0f;
 
-            this->envColorB = Math_SinS(play->state.frames * 8000);
+            this->drawOrbEffect = Math_SinS(play->state.frames * 8000);
 
             for (i = 0; i < 3; i++) {
                 light1Color = this->scale * -255.0f;
@@ -123,7 +132,7 @@ void func_80A1F75C(DmHina* this, PlayState* play) {
             play->envCtx.lightSettings.fogNear = this->scale * -500.0f;
 
             if (play->envCtx.lightSettings.fogNear < -300) {
-                play->roomCtx.currRoom.segment = NULL;
+                play->roomCtx.curRoom.segment = NULL;
             }
 
             break;
@@ -134,25 +143,26 @@ void DmHina_Update(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
     this->actionFunc(this, play);
-    func_80A1F75C(this, play);
+    DmHina_SetupLightOrb(this, play);
 }
 
-void func_80A1F9AC(DmHina* this, PlayState* play) {
+void DmHina_DrawLightOrb(DmHina* this, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
-    if (this->csState != 0) {
+    if (this->csState != LIGHT_ORB_STATE_OFF) {
         OPEN_DISPS(gfxCtx);
 
         func_8012C2DC(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(this->scale * 100.0f) + 155, this->lightOrbAlpha);
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, (u8)(this->envColorB * 100.0f) + 50, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, (u8)(this->drawOrbEffect * 100.0f) + 50, 0);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
         Matrix_Translate(this->actor.world.pos.x,
-                         this->actor.world.pos.y + (this->bob * this->unk_15C) + (40.0f * this->unk_15C),
+                         this->actor.world.pos.y + (this->oscilationFactor * this->yDimScaleFactor) +
+                             (40.0f * this->yDimScaleFactor),
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(this->scale * 20.0f, this->scale * 20.0f, this->scale * 20.0f, MTXMODE_APPLY);
-        Matrix_RotateZF(Rand_ZeroFloat(6.2831855f), MTXMODE_APPLY);
+        Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
 
@@ -166,25 +176,26 @@ void DmHina_Draw(Actor* thisx, PlayState* play) {
 
     if (this->isVisible) {
         Matrix_Translate(this->actor.world.pos.x,
-                         this->actor.world.pos.y + (this->bob * this->unk_15C) + (40.0f * this->unk_15C),
+                         this->actor.world.pos.y + (this->oscilationFactor * this->yDimScaleFactor) +
+                             (40.0f * this->yDimScaleFactor),
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
-        scale = this->unk_148 * (1.0f - this->scale) * this->unk_15C;
+        scale = this->maskScale * (1.0f - this->scale) * this->yDimScaleFactor;
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         switch (this->actor.params) {
-            case 0:
+            case PARAMS_REMAINS_ODOLWA:
                 GetItem_Draw(play, GID_REMAINS_ODOLWA);
                 break;
-            case 1:
+            case PARAMS_REMAINS_GOHT:
                 GetItem_Draw(play, GID_REMAINS_GOHT);
                 break;
-            case 2:
+            case PARAMS_REMAINS_GYORG:
                 GetItem_Draw(play, GID_REMAINS_GYORG);
                 break;
-            case 3:
+            case PARAMS_REMAINS_TWINMOLD:
                 GetItem_Draw(play, GID_REMAINS_TWINMOLD);
                 break;
         }
-        func_80A1F9AC(this, play);
+        DmHina_DrawLightOrb(this, play);
     }
 }
