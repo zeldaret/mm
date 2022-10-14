@@ -576,7 +576,7 @@ void KaleidoScope_Update(PlayState* play) {
     size_t size0;
     size_t size1;
     size_t size2;
-    u16 i;
+    u16 itemId;
     u16 worldMapCursorPoint;
     void* iconItemLangSegment;
     s16 stepR;
@@ -615,9 +615,9 @@ void KaleidoScope_Update(PlayState* play) {
 
             gSegments[0x08] = PHYSICAL_TO_VIRTUAL(pauseCtx->iconItemSegment);
 
-            for (i = 0; i < 75; i++) {
-                if (!D_801C2410[(void)0, gSaveContext.save.playerForm][(s32)i]) {
-                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)i]), 0x400);
+            for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
+                if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
+                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]), 0x400);
                 }
             }
 
