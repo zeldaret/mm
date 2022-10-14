@@ -55,7 +55,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjY2shutter_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
-    ShutterInfo* info = &sShutterInfo[OBJY2SHUTTER_GET_SHUTTER_TYPE(thisx)];
+    ShutterInfo* info = &sShutterInfo[OBJY2SHUTTER_GET_TYPE(thisx)];
     ObjY2shutter* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -72,7 +72,7 @@ void ObjY2shutter_Destroy(Actor* thisx, PlayState* play) {
 void func_80B9AA20(ObjY2shutter* this, ShutterInfo* info, ShutterType shutterType) {
     this->unk_15C = info->unk_1E;
     this->unk_15F = info->unk_1C;
-    if (shutterType == BARRED_SHUTTER) {
+    if (shutterType == SHUTTER_BARRED) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_OPEN);
     }
 }
@@ -80,7 +80,7 @@ void func_80B9AA20(ObjY2shutter* this, ShutterInfo* info, ShutterType shutterTyp
 void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjY2shutter* this = THIS;
-    ShutterType shutterType = OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor);
+    ShutterType shutterType = OBJY2SHUTTER_GET_TYPE(&this->dyna.actor);
     ShutterInfo* info = &sShutterInfo[shutterType];
     f32 sp2C = this->dyna.actor.world.pos.y;
     f32 sp28 = 0.0f;
@@ -89,8 +89,8 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     sShutterInfo[0].unk_1E = DREG(84) + 0xA0;
     sShutterInfo[1].unk_1E = DREG(85) + 0xA0;
 
-    if (((shutterType == BARRED_SHUTTER) && (DREG(86) != 0)) || ((shutterType != BARRED_SHUTTER) && (DREG(87) != 0))) {
-        if (shutterType == BARRED_SHUTTER) {
+    if (((shutterType == SHUTTER_BARRED) && (DREG(86) != 0)) || ((shutterType != SHUTTER_BARRED) && (DREG(87) != 0))) {
+        if (shutterType == SHUTTER_BARRED) {
             DREG(86) = 0;
         } else {
             DREG(87) = 0;
@@ -148,13 +148,13 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
         if (!this->unk_15E) {
             this->unk_15E = true;
             this->unk_15F = info->unk_1D;
-            if (shutterType != BARRED_SHUTTER) {
+            if (shutterType != SHUTTER_BARRED) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALDOOR_STOP);
             }
         }
     } else {
         this->unk_15E = false;
-        if (shutterType != BARRED_SHUTTER) {
+        if (shutterType != SHUTTER_BARRED) {
             func_800B9010(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
         }
     }
@@ -165,7 +165,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
 
 void ObjY2shutter_Draw(Actor* thisx, PlayState* play) {
     ObjY2shutter* this = THIS;
-    ShutterInfo* info = &sShutterInfo[(OBJY2SHUTTER_GET_SHUTTER_TYPE(&this->dyna.actor))];
+    ShutterInfo* info = &sShutterInfo[(OBJY2SHUTTER_GET_TYPE(&this->dyna.actor))];
 
     Gfx_DrawDListOpa(play, info->dList);
 }

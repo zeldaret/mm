@@ -15,11 +15,11 @@ typedef struct ObjY2shutter {
 extern const ActorInit Obj_Y2shutter_InitVars;
 
 typedef enum {
-    /* 0x0 */ BARRED_SHUTTER,
-    /* 0x1 */ GRATED_SHUTTER,
+    /* 0x0 */ SHUTTER_BARRED,
+    /* 0x1 */ SHUTTER_GRATED,
 } ShutterType;
 
-#define OBJY2SHUTTER_GET_SHUTTER_TYPE(thisx) (((thisx)->params >> 7) & 1)
+#define OBJY2SHUTTER_GET_TYPE(thisx) (((thisx)->params >> 7) & 1)
 #define OBJY2SHUTTER_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
 
 #endif // Z_OBJ_Y2SHUTTER_H
