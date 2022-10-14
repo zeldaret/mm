@@ -775,8 +775,6 @@ wordReplace = {
     "D_801D15BC": "gZeroVec3s",
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
-    "D_04022B28": "gDoorSkel",
-    "D_04023100": "gDoorCol",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
