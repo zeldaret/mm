@@ -47,7 +47,7 @@ typedef enum {
     /* 0 */ EN_RZ_PATHSTATUS_NORMAL,   //!< not near waypoint
     /* 1 */ EN_RZ_PATHSTATUS_AT_POINT, //!< no path or new waypoint
     /* 2 */ EN_RZ_PATHSTATUS_END       //!< reached end of path
-} EnRzGetPathStatus;
+} EnRzPathStatus;
 
 const ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
@@ -269,7 +269,7 @@ s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
     return false;
 }
 
-EnRzGetPathStatus EnRz_PathStatus(EnRz* this) {
+EnRzPathStatus EnRz_GetPathStatus(EnRz* this) {
     Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
@@ -621,7 +621,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     this->actor.speedXZ = 1.5f;
 
-    switch (EnRz_PathStatus(this)) {
+    switch (EnRz_GetPathStatus(this)) {
         case EN_RZ_PATHSTATUS_END:
             EnRz_SetupPath(this, play);
             EnRz_StopToThink(this, play);
