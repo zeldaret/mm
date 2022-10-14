@@ -63,7 +63,7 @@
         <Limb Name="object_ha_Standardlimb_008BE0" Type="Standard" EnumName="OBJECT_HA_1_LIMB_17" Offset="0x8BE0" />
         <Limb Name="object_ha_Standardlimb_008BEC" Type="Standard" EnumName="OBJECT_HA_1_LIMB_18" Offset="0x8BEC" />
         <Limb Name="object_ha_Standardlimb_008BF8" Type="Standard" EnumName="OBJECT_HA_1_LIMB_19" Offset="0x8BF8" />
-        <Skeleton Name="object_ha_Skel_008C68" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HA_1_LIMB_NONE" LimbMax="OBJECT_HA_1_LIMB_MAX" EnumName="object_ha_1_Limbs" Offset="0x8C68" />
+        <Skeleton Name="object_ha_Skel_008C68" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HA_1_LIMB_NONE" LimbMax="OBJECT_HA_1_LIMB_MAX" EnumName="ObjectHa1Limb" Offset="0x8C68" />
         <Animation Name="object_ha_Anim_009208" Offset="0x9208" />
         <Animation Name="object_ha_Anim_009858" Offset="0x9858" />
         <Animation Name="object_ha_Anim_00A05C" Offset="0xA05C" />
@@ -130,6 +130,6 @@
         <Limb Name="object_ha_Standardlimb_015050" Type="Standard" EnumName="OBJECT_HA_2_LIMB_17" Offset="0x15050" />
         <Limb Name="object_ha_Standardlimb_01505C" Type="Standard" EnumName="OBJECT_HA_2_LIMB_18" Offset="0x1505C" />
         <Limb Name="object_ha_Standardlimb_015068" Type="Standard" EnumName="OBJECT_HA_2_LIMB_19" Offset="0x15068" />
-        <Skeleton Name="object_ha_Skel_0150D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HA_2_LIMB_NONE" LimbMax="OBJECT_HA_2_LIMB_MAX" EnumName="object_ha_2_Limbs" Offset="0x150D8" />
+        <Skeleton Name="object_ha_Skel_0150D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HA_2_LIMB_NONE" LimbMax="OBJECT_HA_2_LIMB_MAX" EnumName="ObjectHa2Limb" Offset="0x150D8" />
     </File>
 </Root>

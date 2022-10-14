@@ -13,10 +13,10 @@
 
 void EnMuto_Init(Actor* thisx, PlayState* play);
 void EnMuto_Destroy(Actor* thisx, PlayState* play);
-void EnMuto_Update(Actor* thisx, PlayState* play);
+void EnMuto_Update(Actor* thisx, PlayState* play2);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 arg1);
+void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
 void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
 void EnMuto_Idle(EnMuto* this, PlayState* play);

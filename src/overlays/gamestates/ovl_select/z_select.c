@@ -5,19 +5,17 @@
  */
 
 #include "z_select.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void MapSelect_LoadTitle(MapSelectState* this) {
-    {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    }
-
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+void MapSelect_LoadConsoleLogo(MapSelectState* this) {
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
-void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 opt) {
+void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     if (gSaveContext.fileNum == 0xFF) {
         Sram_InitDebugSave();
     }
@@ -27,472 +25,478 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entranceIndex, s32 opt) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-    gSaveContext.unk_3F1E = 0;
-    gSaveContext.unk_3F20 = 0;
-    gSaveContext.unk_3F22 = 0;
-    gSaveContext.unk_3F24 = 0;
+    gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+    gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibilityTimer = 0;
 
     Audio_QueueSeqCmd(NA_BGM_STOP);
-    gSaveContext.save.entranceIndex = entranceIndex;
+    gSaveContext.save.entrance = entrance;
 
-    if (opt != 0) {
-        gSaveContext.save.entranceIndex =
-            Entrance_CreateIndex((s32)gSaveContext.save.entranceIndex >> 9, opt, gSaveContext.save.entranceIndex & 0xF);
+    if (spawn != 0) {
+        gSaveContext.save.entrance =
+            Entrance_Create((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
     }
-    if (gSaveContext.save.entranceIndex == 0xC000) {
+    if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0)) {
         gSaveContext.save.day = 0;
         gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     }
 
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = 0xFFFF;
-    gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0xFFFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[RESPAWN_MODE_GORON].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_ZORA].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_DEKU].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_ZORA].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DEKU].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
     gWeatherMode = 0;
 
-    do {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    } while (0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 }
 
 // "Translation" (Actual name)
 static SceneSelectEntry sScenes[] = {
     // "0: OP Woods for Cutscene Use" (Forest Opening Scene)
-    { "  0:OP" GFXP_KATAKANA "ﾃﾞﾓ" GFXP_HIRAGANA "ﾖｳ ｼﾝﾘﾝ", MapSelect_LoadGame, 0x1C00 },
+    { "  0:OP" GFXP_KATAKANA "ﾃﾞﾓ" GFXP_HIRAGANA "ﾖｳ ｼﾝﾘﾝ", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "0-0: Lost Woods" (Lost Woods)
-    { "  0-0:" GFXP_HIRAGANA "ﾏﾖｲ ﾉ ﾓﾘ", MapSelect_LoadGame, 0xC400 },
+    { "  0-0:" GFXP_HIRAGANA "ﾏﾖｲ ﾉ ﾓﾘ", MapSelect_LoadGame, ENTRANCE(LOST_WOODS, 0) },
 
     // "1: Town Outskirts" (Termina Field)
-    { "  1:" GFXP_KATAKANA "ﾀｳﾝ " GFXP_HIRAGANA "ｺｳｶﾞｲ", MapSelect_LoadGame, 0x5400 },
+    { "  1:" GFXP_KATAKANA "ﾀｳﾝ " GFXP_HIRAGANA "ｺｳｶﾞｲ", MapSelect_LoadGame, ENTRANCE(TERMINA_FIELD, 0) },
 
     // "1-0: Astral Observatory" (Astral Observatory)
-    { "  1-0:" GFXP_HIRAGANA "ﾃﾝﾓﾝｶﾝｿｸｼﾞｮ", MapSelect_LoadGame, 0x4C00 },
+    { "  1-0:" GFXP_HIRAGANA "ﾃﾝﾓﾝｶﾝｿｸｼﾞｮ", MapSelect_LoadGame, ENTRANCE(ASTRAL_OBSERVATORY, 0) },
 
     // "1-1: Astral Observatory Telescope" (Astral Observatory - Telescope)
-    { "  1-1:" GFXP_HIRAGANA "ﾃﾝﾓﾝｶﾝｿｸｼﾞｮ ﾃﾞ ﾎﾞｳｴﾝｷｮｳ", MapSelect_LoadGame, 0x54A0 },
+    { "  1-1:" GFXP_HIRAGANA "ﾃﾝﾓﾝｶﾝｿｸｼﾞｮ ﾃﾞ ﾎﾞｳｴﾝｷｮｳ", MapSelect_LoadGame, ENTRANCE(TERMINA_FIELD, 10) },
 
     // "1-2: Ikana Graveyard" (Ikana Canyon Graveyard)
-    { "  1-2:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ﾉ ﾊｶﾊﾞ", MapSelect_LoadGame, 0x8000 },
+    { "  1-2:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ﾉ ﾊｶﾊﾞ", MapSelect_LoadGame, ENTRANCE(IKANA_GRAVEYARD, 0) },
 
     // "2: Romani Ranch" (Romani Ranch)
-    { "  2:" GFXP_KATAKANA "ﾛﾏﾆｰ " GFXP_HIRAGANA "ﾎﾞｸｼﾞｮｳ", MapSelect_LoadGame, 0x6400 },
+    { "  2:" GFXP_KATAKANA "ﾛﾏﾆｰ " GFXP_HIRAGANA "ﾎﾞｸｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(ROMANI_RANCH, 0) },
 
     // "3: Milk Road" (Milk Road)
-    { "  3:" GFXP_KATAKANA "ﾐﾙｸﾛｰﾄﾞ", MapSelect_LoadGame, 0x3E00 },
+    { "  3:" GFXP_KATAKANA "ﾐﾙｸﾛｰﾄﾞ", MapSelect_LoadGame, ENTRANCE(MILK_ROAD, 0) },
 
     // "4: Main Building" ("Ranch House)
-    { "  4:" GFXP_HIRAGANA "ｵﾓﾔ", MapSelect_LoadGame, 0x610 },
+    { "  4:" GFXP_HIRAGANA "ｵﾓﾔ", MapSelect_LoadGame, ENTRANCE(RANCH_HOUSE, 1) },
 
     // "5: Cow Shed" (Cow Shed)
-    { "  5:" GFXP_HIRAGANA "ｳｼｺﾞﾔ", MapSelect_LoadGame, 0x600 },
+    { "  5:" GFXP_HIRAGANA "ｳｼｺﾞﾔ", MapSelect_LoadGame, ENTRANCE(RANCH_HOUSE, 0) },
 
     // "6: Cucco Shed" (Cucco Shed)
-    { "  6:" GFXP_KATAKANA "ｺｯｺ " GFXP_HIRAGANA "ｺﾞﾔ", MapSelect_LoadGame, 0x7E00 },
+    { "  6:" GFXP_KATAKANA "ｺｯｺ " GFXP_HIRAGANA "ｺﾞﾔ", MapSelect_LoadGame, ENTRANCE(CUCCO_SHACK, 0) },
 
     // "7: Dog Racing Area" (Doggy Racetrack)
-    { "  7:" GFXP_KATAKANA "ﾄﾞｯｸﾞﾚｰｽ" GFXP_HIRAGANA "ｼﾞｮｳ", MapSelect_LoadGame, 0x7C00 },
+    { "  7:" GFXP_KATAKANA "ﾄﾞｯｸﾞﾚｰｽ" GFXP_HIRAGANA "ｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(DOGGY_RACETRACK, 0) },
 
     // "8: Gorman Track" (Gorman Track)
-    { "  8:" GFXP_KATAKANA "ｺﾞｰﾏﾝ ﾄﾗｯｸ", MapSelect_LoadGame, 0xCE00 },
+    { "  8:" GFXP_KATAKANA "ｺﾞｰﾏﾝ ﾄﾗｯｸ", MapSelect_LoadGame, ENTRANCE(GORMAN_TRACK, 0) },
 
     // "10: Mountain Village -Winter-" (Mountain Village - Winter)
-    { " 10:" GFXP_HIRAGANA "ﾔﾏｻﾞﾄ -ﾌﾕ-", MapSelect_LoadGame, 0x9A00 },
+    { " 10:" GFXP_HIRAGANA "ﾔﾏｻﾞﾄ -ﾌﾕ-", MapSelect_LoadGame, ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 0) },
 
     // "10-0: Mountain Village -Spring-" (Mountain Village - Spring)
-    { " 10-0:" GFXP_HIRAGANA "ﾔﾏｻﾞﾄ -ﾊﾙ-", MapSelect_LoadGame, 0xAE00 },
+    { " 10-0:" GFXP_HIRAGANA "ﾔﾏｻﾞﾄ -ﾊﾙ-", MapSelect_LoadGame, ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 0) },
 
     // "10-1: Mountain Village Blacksmith" (Mountain Smithy)
-    { " 10-1:" GFXP_HIRAGANA "ﾔﾏｻﾞﾄ ﾉ ｶｼﾞﾔ", MapSelect_LoadGame, 0x5200 },
+    { " 10-1:" GFXP_HIRAGANA "ﾔﾏｻﾞﾄ ﾉ ｶｼﾞﾔ", MapSelect_LoadGame, ENTRANCE(MOUNTAIN_SMITHY, 0) },
 
     // "11: Goron Village -Winter-" (Goron Village - Winter)
-    { " 11:" GFXP_KATAKANA "ｺﾞﾛﾝ" GFXP_HIRAGANA " ﾉ ｻﾄ -ﾌﾕ-", MapSelect_LoadGame, 0x9400 },
+    { " 11:" GFXP_KATAKANA "ｺﾞﾛﾝ" GFXP_HIRAGANA " ﾉ ｻﾄ -ﾌﾕ-", MapSelect_LoadGame, ENTRANCE(GORON_VILLAGE_WINTER, 0) },
 
     // "11-0: Goron Village -Spring-" (Goron Village - Spring)
-    { " 11-0:" GFXP_KATAKANA "ｺﾞﾛﾝ" GFXP_HIRAGANA " ﾉ ｻﾄ -ﾊﾙ-", MapSelect_LoadGame, 0x8A00 },
+    { " 11-0:" GFXP_KATAKANA "ｺﾞﾛﾝ" GFXP_HIRAGANA " ﾉ ｻﾄ -ﾊﾙ-", MapSelect_LoadGame, ENTRANCE(GORON_VILLAGE_SPRING, 0) },
 
     // "11-1: Goron Shrine" (Goron Shrine)
-    { " 11-1:" GFXP_KATAKANA "ｺﾞﾛﾝ" GFXP_HIRAGANA " ﾉ ﾎｺﾗ", MapSelect_LoadGame, 0x5E00 },
+    { " 11-1:" GFXP_KATAKANA "ｺﾞﾛﾝ" GFXP_HIRAGANA " ﾉ ﾎｺﾗ", MapSelect_LoadGame, ENTRANCE(GORON_SHRINE, 0) },
 
     // "11-2: Lone Peak Shrine" (Lone Peak Shrine)
-    { " 11-2:" GFXP_HIRAGANA "ﾊﾅﾚﾔﾏ ﾉ ﾎｺﾗ", MapSelect_LoadGame, 0x1500 },
+    { " 11-2:" GFXP_HIRAGANA "ﾊﾅﾚﾔﾏ ﾉ ﾎｺﾗ", MapSelect_LoadGame, ENTRANCE(GROTTOS, 16) },
 
     // "11-3: Goron Shop" (Goron Shop)
-    { " 11-3:" GFXP_KATAKANA "ｺﾞﾛﾝ " GFXP_HIRAGANA "ﾉ ﾐｾ", MapSelect_LoadGame, 0x7400 },
+    { " 11-3:" GFXP_KATAKANA "ｺﾞﾛﾝ " GFXP_HIRAGANA "ﾉ ﾐｾ", MapSelect_LoadGame, ENTRANCE(GORON_SHOP, 0) },
 
     // "12: Snowhead" (Snowhead)
-    { " 12:" GFXP_KATAKANA "ｽﾉｰﾍｯﾄﾞ", MapSelect_LoadGame, 0xB200 },
+    { " 12:" GFXP_KATAKANA "ｽﾉｰﾍｯﾄﾞ", MapSelect_LoadGame, ENTRANCE(SNOWHEAD, 0) },
 
     // "13: Blizzard Path" (Path to Goron Village - Part 1)
-    { " 13:" GFXP_HIRAGANA "ﾌﾌﾞｷ ﾉ ﾐﾁ", MapSelect_LoadGame, 0x3200 },
+    { " 13:" GFXP_HIRAGANA "ﾌﾌﾞｷ ﾉ ﾐﾁ", MapSelect_LoadGame, ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 0) },
 
     // "14: Snowball Path" (Path to Goron Village - Part 2)
-    { " 14:" GFXP_HIRAGANA "ﾕｷﾀﾞﾏ ﾉ ﾐﾁ", MapSelect_LoadGame, 0xB000 },
+    { " 14:" GFXP_HIRAGANA "ﾕｷﾀﾞﾏ ﾉ ﾐﾁ", MapSelect_LoadGame, ENTRANCE(PATH_TO_SNOWHEAD, 0) },
 
     // "15: Goron Racetrack" (Goron Racetrack)
-    { " 15:" GFXP_KATAKANA "ｺﾞﾛﾝﾚｰｽ " GFXP_HIRAGANA "ｼﾞｮｳ", MapSelect_LoadGame, 0xD000 },
+    { " 15:" GFXP_KATAKANA "ｺﾞﾛﾝﾚｰｽ " GFXP_HIRAGANA "ｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(GORON_RACETRACK, 0) },
 
     // "16: Goron Grave" (Darmani's Grave)
-    { " 16:" GFXP_KATAKANA "ｺﾞﾛﾝ " GFXP_HIRAGANA "ﾉ ﾊｶ", MapSelect_LoadGame, 0x9600 },
+    { " 16:" GFXP_KATAKANA "ｺﾞﾛﾝ " GFXP_HIRAGANA "ﾉ ﾊｶ", MapSelect_LoadGame, ENTRANCE(GORON_GRAVERYARD, 0) },
 
     // "17: Snow Field Battle -Winter-" (Path to Goron Village - Winter)
-    { " 17:" GFXP_HIRAGANA "ｾﾂｹﾞﾝ " GFXP_KATAKANA "ﾊﾞﾄﾙ " GFXP_HIRAGANA "-ﾌﾕ-", MapSelect_LoadGame, 0xB400 },
+    { " 17:" GFXP_HIRAGANA "ｾﾂｹﾞﾝ " GFXP_KATAKANA "ﾊﾞﾄﾙ " GFXP_HIRAGANA "-ﾌﾕ-", MapSelect_LoadGame,
+      ENTRANCE(PATH_TO_GORON_VILLAGE_WINTER, 0) },
 
     // "17-0: Snow Field Battle -Spring-" (Path to Goron Village - Spring)
-    { " 17-0:" GFXP_HIRAGANA "ｾﾂｹﾞﾝ " GFXP_KATAKANA "ﾊﾞﾄﾙ " GFXP_HIRAGANA "-ﾊﾙ-", MapSelect_LoadGame, 0xB600 },
+    { " 17-0:" GFXP_HIRAGANA "ｾﾂｹﾞﾝ " GFXP_KATAKANA "ﾊﾞﾄﾙ " GFXP_HIRAGANA "-ﾊﾙ-", MapSelect_LoadGame,
+      ENTRANCE(PATH_TO_GORON_VILLAGE_SPRING, 0) },
 
     // "20: Swampland" (Southern Swamp)
-    { " 20:" GFXP_HIRAGANA "ﾇﾏﾁ", MapSelect_LoadGame, 0x8400 },
+    { " 20:" GFXP_HIRAGANA "ﾇﾏﾁ", MapSelect_LoadGame, ENTRANCE(SOUTHERN_SWAMP_POISONED, 0) },
 
     // "20-0: Swampland - Afterwards" (Southern Swamp - After Odolwa)
-    { " 20-0:" GFXP_HIRAGANA "ﾇﾏﾁ ｿﾉｺﾞ", MapSelect_LoadGame, 0xC00 },
+    { " 20-0:" GFXP_HIRAGANA "ﾇﾏﾁ ｿﾉｺﾞ", MapSelect_LoadGame, ENTRANCE(SOUTHERN_SWAMP_CLEARED, 0) },
 
     // "20-1: Swamp Tourist Information" (Tourist Information)
-    { " 20-1:" GFXP_HIRAGANA "ﾇﾏ ﾉ ｶﾝｺｳｱﾝﾅｲ", MapSelect_LoadGame, 0xA800 },
+    { " 20-1:" GFXP_HIRAGANA "ﾇﾏ ﾉ ｶﾝｺｳｱﾝﾅｲ", MapSelect_LoadGame, ENTRANCE(TOURIST_INFORMATION, 0) },
 
     // "20-2: Magic Hags' Potion Shop" (Magic Hags' Potion Shop)
-    { " 20-2:" GFXP_HIRAGANA "ﾏﾎｳｵﾊﾞﾊﾞ ﾉ ｸｽﾘﾔ", MapSelect_LoadGame, 0x400 },
+    { " 20-2:" GFXP_HIRAGANA "ﾏﾎｳｵﾊﾞﾊﾞ ﾉ ｸｽﾘﾔ", MapSelect_LoadGame, ENTRANCE(MAGIC_HAGS_POTION_SHOP, 0) },
 
     // "21: Wood Mountain" (Woodfall)
-    { " 21:" GFXP_KATAKANA "ｳｯﾄﾞﾏｳﾝﾃﾝ", MapSelect_LoadGame, 0x8600 },
+    { " 21:" GFXP_KATAKANA "ｳｯﾄﾞﾏｳﾝﾃﾝ", MapSelect_LoadGame, ENTRANCE(WOODFALL, 0) },
 
     // "21-0: Deku Princess's Prison" (Deku Princess's Prison Cutscene: Tatl Apologizes)
-    { " 21-0:" GFXP_KATAKANA "ﾃﾞｸ" GFXP_HIRAGANA "ﾋﾒ ﾉ ﾛｳﾔ", MapSelect_LoadGame, 0x3010 },
+    { " 21-0:" GFXP_KATAKANA "ﾃﾞｸ" GFXP_HIRAGANA "ﾋﾒ ﾉ ﾛｳﾔ", MapSelect_LoadGame, ENTRANCE(WOODFALL_TEMPLE, 1) },
 
     // "22: Deku Castle" (Deku Palace)
-    { " 22:" GFXP_KATAKANA "ﾃﾞｸﾅｯﾂ " GFXP_HIRAGANA "ﾉ ｼﾛ", MapSelect_LoadGame, 0x5000 },
+    { " 22:" GFXP_KATAKANA "ﾃﾞｸﾅｯﾂ " GFXP_HIRAGANA "ﾉ ｼﾛ", MapSelect_LoadGame, ENTRANCE(DEKU_PALACE, 0) },
 
     // "22-0: Boe Hole 0" (Deku Palace Grotto 0 - Deku Baba & Butterflies, Entrance 1)
-    { " 22-0:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ0", MapSelect_LoadGame, 0x1460 },
+    { " 22-0:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ0", MapSelect_LoadGame, ENTRANCE(GROTTOS, 6) },
 
     // "22-1: Boe Hole 1" (Deku Palace Grotto 1 - Deku Baba & Butterflies, Entrance 2)
-    { " 22-1:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ1", MapSelect_LoadGame, 0x14E0 },
+    { " 22-1:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ1", MapSelect_LoadGame, ENTRANCE(GROTTOS, 14) },
 
     // "22-2: Boe Hole 2" (Deku Palace Grotto 2 - Skullwalltula Wall, Lower Entrance)
-    { " 22-2:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ2", MapSelect_LoadGame, 0x1480 },
+    { " 22-2:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ2", MapSelect_LoadGame, ENTRANCE(GROTTOS, 8) },
 
     // "22-3: Boe Hole 3" (Deku Palace Grotto 3 - Skullwalltula Wall, Upper Entrance)
-    { " 22-3:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ3", MapSelect_LoadGame, 0x14F0 },
+    { " 22-3:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ3", MapSelect_LoadGame, ENTRANCE(GROTTOS, 15) },
 
     // "22-4: Boe Hole 4" (Deku Palace Grotto 4 - Bean Seller)
-    { " 22-4:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ4", MapSelect_LoadGame, 0x14C0 },
+    { " 22-4:" GFXP_KATAKANA "ｸﾛｽｹ " GFXP_HIRAGANA "ﾉ ｱﾅ4", MapSelect_LoadGame, ENTRANCE(GROTTOS, 12) },
 
     // "24: Beast Path" (Road to Swamp)
-    { " 24:" GFXP_HIRAGANA "ｹﾓﾉﾐﾁ", MapSelect_LoadGame, 0x7A00 },
+    { " 24:" GFXP_HIRAGANA "ｹﾓﾉﾐﾁ", MapSelect_LoadGame, ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 0) },
 
     // "24-0: Forest Shooting Gallery" (Swamp Shooting Gallery)
-    { " 24-0:" GFXP_HIRAGANA "ﾓﾘ ﾉ ｼｬﾃｷｼﾞｮｳ", MapSelect_LoadGame, 0x4200 },
+    { " 24-0:" GFXP_HIRAGANA "ﾓﾘ ﾉ ｼｬﾃｷｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(SWAMP_SHOOTING_GALLERY, 0) },
 
     // "25: Deku King's Chamber" (Deku Palace Throne Room)
-    { " 25:" GFXP_KATAKANA "ﾃﾞｸ" GFXP_HIRAGANA "ｵｳ ﾉ ﾏ", MapSelect_LoadGame, 0x7600 },
+    { " 25:" GFXP_KATAKANA "ﾃﾞｸ" GFXP_HIRAGANA "ｵｳ ﾉ ﾏ", MapSelect_LoadGame, ENTRANCE(DEKU_KINGS_CHAMBER, 0) },
 
     // "26: Woods of Mystery" (Woods of Mystery)
-    { " 26:" GFXP_HIRAGANA "ﾌｼｷﾞ ﾉ ﾓﾘ", MapSelect_LoadGame, 0xC200 },
+    { " 26:" GFXP_HIRAGANA "ﾌｼｷﾞ ﾉ ﾓﾘ", MapSelect_LoadGame, ENTRANCE(WOODS_OF_MYSTERY, 0) },
 
     // "30: Great Bay Coast" (Great Bay Coast - Entrance Area)
-    { " 30:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ" GFXP_HIRAGANA " ﾉ ｶｲｶﾞﾝ", MapSelect_LoadGame, 0x6800 },
+    { " 30:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ" GFXP_HIRAGANA " ﾉ ｶｲｶﾞﾝ", MapSelect_LoadGame, ENTRANCE(GREAT_BAY_COAST, 0) },
 
     // "30-0: Ocean Laboratory" (Marine Research Lab)
-    { " 30-0:" GFXP_HIRAGANA "ｶｲﾖｳ ｹﾝｷｭｳｼﾞｮ", MapSelect_LoadGame, 0x5800 },
+    { " 30-0:" GFXP_HIRAGANA "ｶｲﾖｳ ｹﾝｷｭｳｼﾞｮ", MapSelect_LoadGame, ENTRANCE(MARINE_RESEARCH_LAB, 0) },
 
     // "30-1: Fisherman's House" (Fisherman's Hut)
-    { " 30-1:" GFXP_HIRAGANA "ﾘｮｳｼ ﾉ ｲｴ", MapSelect_LoadGame, 0x7200 },
+    { " 30-1:" GFXP_HIRAGANA "ﾘｮｳｼ ﾉ ｲｴ", MapSelect_LoadGame, ENTRANCE(FISHERMANS_HUT, 0) },
 
     // "30-2: Pointed Rock" (Twin Pillars)
-    { " 30-2:" GFXP_HIRAGANA "ﾄﾝｶﾞﾘ ｲﾜ", MapSelect_LoadGame, 0x4400 },
+    { " 30-2:" GFXP_HIRAGANA "ﾄﾝｶﾞﾘ ｲﾜ", MapSelect_LoadGame, ENTRANCE(PINNACLE_ROCK, 0) },
 
     // "31: Cape" (Great Bay Coast - River Area)
-    { " 31:" GFXP_HIRAGANA "ﾐｻｷ", MapSelect_LoadGame, 0x6A00 },
+    { " 31:" GFXP_HIRAGANA "ﾐｻｷ", MapSelect_LoadGame, ENTRANCE(ZORA_CAPE, 0) },
 
     // "32: Outside of Pirates' Fortress" (Pirates' Fortress - Exterior)
-    { " 32:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾏｴ", MapSelect_LoadGame, 0x7000 },
+    { " 32:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾏｴ", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_EXTERIOR, 0) },
 
     // "32-0: Pirates' Fortress" (Pirates' Fortress - Courtyard)
-    { " 32-0:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞ", MapSelect_LoadGame, 0x2200 },
+    { " 32-0:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞ", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS, 0) },
 
     // "32-1: Pirates' Fortress - Telescope" (Pirates' Fortress - Secret Entrance, Looking Through Telescope)
-    { " 32-1:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞ ﾎﾞｳｴﾝｷｮｳ", MapSelect_LoadGame, 0x22A0 },
+    { " 32-1:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞ ﾎﾞｳｴﾝｷｮｳ", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS, 10) },
 
     // "32-2: Pirates' Fortress - Interior 0" (Pirates' Fortress - Throne Room)
-    { " 32-2:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ0", MapSelect_LoadGame, 0x4000 },
+    { " 32-2:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ0", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 0) },
 
     // "32-3: Pirates' Fortress - Interior 1" (Pirates' Fortress - View of Throne Room, Wasp Nest)
-    { " 32-3:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ1", MapSelect_LoadGame, 0x4010 },
+    { " 32-3:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ1", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 1) },
 
     // "32-4: Pirates' Fortress - Interior 2" (Pirates' Fortress - Tempting Treasure Chest, Leading to 32-5)
-    { " 32-4:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ2", MapSelect_LoadGame, 0x4020 },
+    { " 32-4:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ2", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 2) },
 
     // "32-5: Pirates' Fortress - Interior 3" (Pirates' Fortress - Zora Egg Room, One Shell Blade)
-    { " 32-5:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ3", MapSelect_LoadGame, 0x4030 },
+    { " 32-5:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ3", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 3) },
 
     // "32-6: Pirates' Fortress - Interior 4" (Pirates' Fortress - Oil Drum Room, Leading to 32-7)
-    { " 32-6:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ4", MapSelect_LoadGame, 0x4040 },
+    { " 32-6:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ4", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 4) },
 
     // "32-7: Pirates' Fortress - Interior 5" (Pirates' Fortress - Zora Egg Room, One Shell Blade)
-    { " 32-7:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ5", MapSelect_LoadGame, 0x4050 },
+    { " 32-7:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ5", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 5) },
 
     // "32-8: Pirates' Fortress - Interior 6" (Pirates' Fortress - Fenced Indoor Walkway, Leading to 32-9)
-    { " 32-8:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ6", MapSelect_LoadGame, 0x4060 },
+    { " 32-8:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ6", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 6) },
 
     // "32-9: Pirates' Fortress - Interior 7" (Pirates' Fortress - Zora Egg Room, One Desbreko & Treasure Chest)
-    { " 32-9:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ7", MapSelect_LoadGame, 0x4070 },
+    { " 32-9:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ7", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 7) },
 
     // "32-10: Pirates' Fortress - Interior 8" (Pirates' Fortress - End of Secret Entrance: Telescope Room)
-    { " 32-10:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ8", MapSelect_LoadGame, 0x4080 },
+    { " 32-10:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ8", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 8) },
 
     // "32-11: Pirates' Fortress - Interior 9" (Pirates' Fortress - Start of Secret Entrance)
-    { " 32-11:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ9", MapSelect_LoadGame, 0x4090 },
+    { " 32-11:" GFXP_HIRAGANA "ｶｲｿﾞｸﾉﾄﾘﾃﾞﾅｲﾌﾞ9", MapSelect_LoadGame, ENTRANCE(PIRATES_FORTRESS_INTERIOR, 9) },
 
     // "33: Zora Shrine" (Zora Hall)
-    { " 33:" GFXP_KATAKANA "ｿﾞｰﾗ " GFXP_HIRAGANA "ﾉ ﾎｺﾗ", MapSelect_LoadGame, 0x6000 },
+    { " 33:" GFXP_KATAKANA "ｿﾞｰﾗ " GFXP_HIRAGANA "ﾉ ﾎｺﾗ", MapSelect_LoadGame, ENTRANCE(ZORA_HALL, 0) },
 
     // "33-0: Zora Shop" (Zora Shop)
-    { " 33-0:" GFXP_KATAKANA "ｿﾞｰﾗ " GFXP_HIRAGANA "ﾉ ﾐｾ", MapSelect_LoadGame, 0x9250 },
+    { " 33-0:" GFXP_KATAKANA "ｿﾞｰﾗ " GFXP_HIRAGANA "ﾉ ﾐｾ", MapSelect_LoadGame, ENTRANCE(ZORA_HALL_ROOMS, 5) },
 
     // "33-1: Zora Waiting Room" (Mikau & Tijo's Room)
-    { " 33-1:" GFXP_KATAKANA "ｿﾞｰﾗ " GFXP_HIRAGANA "ﾉ ﾋｶｴｼﾂ", MapSelect_LoadGame, 0x9200 },
+    { " 33-1:" GFXP_KATAKANA "ｿﾞｰﾗ " GFXP_HIRAGANA "ﾉ ﾋｶｴｼﾂ", MapSelect_LoadGame, ENTRANCE(ZORA_HALL_ROOMS, 0) },
 
     // "34: Great Bay" (Great Bay Cutscene: Pirates Approach Temple)
-    { " 34:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ", MapSelect_LoadGame, 0xBE00 },
+    { " 34:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ", MapSelect_LoadGame, ENTRANCE(GREAT_BAY_CUTSCENE, 0) },
 
     // "35: Mountain Stream Above Falls" (Waterfall Rapids)
-    { " 35:" GFXP_HIRAGANA "ﾀｷｳｴ ﾉ ｹｲﾘｭｳ", MapSelect_LoadGame, 0x8E00 },
+    { " 35:" GFXP_HIRAGANA "ﾀｷｳｴ ﾉ ｹｲﾘｭｳ", MapSelect_LoadGame, ENTRANCE(WATERFALL_RAPIDS, 0) },
 
     // "40: Rock Building Shaft" (Stone Tower)
-    { " 40:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ" GFXP_HIRAGANA " ﾉ ﾀﾃｱﾅ", MapSelect_LoadGame, 0xAA00 },
+    { " 40:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ" GFXP_HIRAGANA " ﾉ ﾀﾃｱﾅ", MapSelect_LoadGame, ENTRANCE(STONE_TOWER, 0) },
 
     // "40-0: Heaven & Earth Are Overturned" (Stone Tower Cutscene: Tower is Flipped)
-    { " 40-0:" GFXP_HIRAGANA "ﾃﾝﾁ ｷﾞｬｸﾃﾝ", MapSelect_LoadGame, 0xAC00 },
+    { " 40-0:" GFXP_HIRAGANA "ﾃﾝﾁ ｷﾞｬｸﾃﾝ", MapSelect_LoadGame, ENTRANCE(STONE_TOWER_INVERTED, 0) },
 
     // "41: Road to Ikana" (Road to Ikana)
-    { " 41:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ﾍﾉ ﾐﾁ", MapSelect_LoadGame, 0xA000 },
+    { " 41:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ﾍﾉ ﾐﾁ", MapSelect_LoadGame, ENTRANCE(ROAD_TO_IKANA, 0) },
 
     // "42: Ancient Castle of Ikana" (Ancient Castle of Ikana)
-    { " 42:" GFXP_KATAKANA "ｲｶｰﾅ" GFXP_HIRAGANA " ｺｼﾞｮｳ", MapSelect_LoadGame, 0x3400 },
+    { " 42:" GFXP_KATAKANA "ｲｶｰﾅ" GFXP_HIRAGANA " ｺｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(IKANA_CASTLE, 0) },
 
     // "42-0: Ancient Castle of Ikana - Interior" (Ancient Castle of Ikana - Interior)
-    { " 42-0:" GFXP_KATAKANA "ｲｶｰﾅ" GFXP_HIRAGANA " ﾉ ｺｼﾞｮｳ ﾅｲﾌﾞ", MapSelect_LoadGame, 0x3430 },
+    { " 42-0:" GFXP_KATAKANA "ｲｶｰﾅ" GFXP_HIRAGANA " ﾉ ｺｼﾞｮｳ ﾅｲﾌﾞ", MapSelect_LoadGame, ENTRANCE(IKANA_CASTLE, 3) },
 
     // "42-B: Ancient Castle of Ikana - Boss Room" (Ikana King's Throne)
     { " 42-B:" GFXP_KATAKANA "ｲｶｰﾅ" GFXP_HIRAGANA " ﾉ ｺｼﾞｮｳ " GFXP_KATAKANA "ﾎﾞｽ" GFXP_HIRAGANA "ﾍﾞﾔ",
-      MapSelect_LoadGame, 0xA600 },
+      MapSelect_LoadGame, ENTRANCE(IGOS_DU_IKANAS_LAIR, 0) },
 
     // "43: Ikana Canyon" (Ikana Canyon)
-    { " 43:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ｹｲｺｸ", MapSelect_LoadGame, 0x2000 },
+    { " 43:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ｹｲｺｸ", MapSelect_LoadGame, ENTRANCE(IKANA_CANYON, 0) },
 
     // "43-0: Ikana Canyon Cave" (Sharp's Cave)
-    { " 43-0:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ｹｲｺｸ ﾄﾞｳｸﾂ", MapSelect_LoadGame, 0x20E0 },
+    { " 43-0:" GFXP_KATAKANA "ｲｶｰﾅ " GFXP_HIRAGANA "ｹｲｺｸ ﾄﾞｳｸﾂ", MapSelect_LoadGame, ENTRANCE(IKANA_CANYON, 14) },
 
     // "43-1: Secom's House" (Sakon's Hideout)
-    { " 43-1:" GFXP_KATAKANA "ｾｺﾑ " GFXP_HIRAGANA "ﾉ ｲｴ", MapSelect_LoadGame, 0x9800 },
+    { " 43-1:" GFXP_KATAKANA "ｾｺﾑ " GFXP_HIRAGANA "ﾉ ｲｴ", MapSelect_LoadGame, ENTRANCE(SAKONS_HIDEOUT, 0) },
 
     // "43-2: Music Box House" (Music Box House)
-    { " 43-2:" GFXP_KATAKANA "ｵﾙｺﾞｰﾙ ﾊｳｽ", MapSelect_LoadGame, 0xA400 },
+    { " 43-2:" GFXP_KATAKANA "ｵﾙｺﾞｰﾙ ﾊｳｽ", MapSelect_LoadGame, ENTRANCE(MUSIC_BOX_HOUSE, 0) },
 
     // "50: Clock Town -East-" (East Clock Town)
-    { " 50:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ﾋｶﾞｼ-", MapSelect_LoadGame, 0xD200 },
+    { " 50:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ﾋｶﾞｼ-", MapSelect_LoadGame, ENTRANCE(EAST_CLOCK_TOWN, 0) },
 
     // "50-0: Town Target Range" (Shooting Gallery)
-    { " 50-0:" GFXP_HIRAGANA "ﾏﾁ ﾉ ｼｬﾃｷｼﾞｮｳ", MapSelect_LoadGame, 0x3A00 },
+    { " 50-0:" GFXP_HIRAGANA "ﾏﾁ ﾉ ｼｬﾃｷｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(TOWN_SHOOTING_GALLERY, 0) },
 
     // "50-1: Honey and Darling's Shop" (Honey & Darling's Shop)
-    { " 50-1:" GFXP_KATAKANA "ﾊﾆｰ ｱﾝﾄﾞ ﾀﾞｰﾘﾝ " GFXP_HIRAGANA "ﾉ ﾐｾ", MapSelect_LoadGame, 0x800 },
+    { " 50-1:" GFXP_KATAKANA "ﾊﾆｰ ｱﾝﾄﾞ ﾀﾞｰﾘﾝ " GFXP_HIRAGANA "ﾉ ﾐｾ", MapSelect_LoadGame,
+      ENTRANCE(HONEY_AND_DARLINGS_SHOP, 0) },
 
     // "50-2: Treasure Chest Shop" (Treasure Chest Shop)
-    { " 50-2:" GFXP_HIRAGANA "ﾀｶﾗﾊﾞｺﾔ", MapSelect_LoadGame, 0x2800 },
+    { " 50-2:" GFXP_HIRAGANA "ﾀｶﾗﾊﾞｺﾔ", MapSelect_LoadGame, ENTRANCE(TREASURE_CHEST_SHOP, 0) },
 
     // "50-3: Pots 'n' Pans Inn" (Stockpot Inn)
-    { " 50-3:" GFXP_KATAKANA "ﾅﾍﾞ" GFXP_HIRAGANA "ｶﾏ ﾃｲ", MapSelect_LoadGame, 0xBC00 },
+    { " 50-3:" GFXP_KATAKANA "ﾅﾍﾞ" GFXP_HIRAGANA "ｶﾏ ﾃｲ", MapSelect_LoadGame, ENTRANCE(STOCK_POT_INN, 0) },
 
     // "50-4: Mayor's House" (The Mayor's Residence)
-    { " 50-4:" GFXP_HIRAGANA "ﾁｮｳﾁｮｳ ﾉ ｲｴ", MapSelect_LoadGame, 0 },
+    { " 50-4:" GFXP_HIRAGANA "ﾁｮｳﾁｮｳ ﾉ ｲｴ", MapSelect_LoadGame, ENTRANCE(MAYORS_RESIDENCE, 0) },
 
     // "50-5: Milk Bar" (Milk Bar)
-    { " 50-5:" GFXP_KATAKANA "ﾐﾙｸﾊﾞｰ", MapSelect_LoadGame, 0x2400 },
+    { " 50-5:" GFXP_KATAKANA "ﾐﾙｸﾊﾞｰ", MapSelect_LoadGame, ENTRANCE(MILK_BAR, 0) },
 
     // "51: Clock Town -West-" (West Clock Town)
-    { " 51:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ﾆｼ-", MapSelect_LoadGame, 0xD400 },
+    { " 51:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ﾆｼ-", MapSelect_LoadGame, ENTRANCE(WEST_CLOCK_TOWN, 0) },
 
     // "51-0: Bomb Shop" (Bomb Shop)
-    { " 51-0:" GFXP_HIRAGANA "ﾊﾞｸﾀﾞﾝ ﾔ", MapSelect_LoadGame, 0xCA00 },
+    { " 51-0:" GFXP_HIRAGANA "ﾊﾞｸﾀﾞﾝ ﾔ", MapSelect_LoadGame, ENTRANCE(BOMB_SHOP, 0) },
 
     // "51-1: Maniac Mart" (Curiosity Shop)
-    { " 51-1:" GFXP_KATAKANA "ﾏﾆ" GFXP_HIRAGANA "ﾔ", MapSelect_LoadGame, 0xE00 },
+    { " 51-1:" GFXP_KATAKANA "ﾏﾆ" GFXP_HIRAGANA "ﾔ", MapSelect_LoadGame, ENTRANCE(CURIOSITY_SHOP, 0) },
 
     // "51-2: General Store" (Trading Post)
-    { " 51-2:" GFXP_HIRAGANA "ｻﾞｯｶ ﾔ", MapSelect_LoadGame, 0x6200 },
+    { " 51-2:" GFXP_HIRAGANA "ｻﾞｯｶ ﾔ", MapSelect_LoadGame, ENTRANCE(TRADING_POST, 0) },
 
     // "51-3: Sword Dojo" (Swordsman's School)
-    { " 51-3:" GFXP_HIRAGANA "ｹﾝﾄﾞｳｼﾞｮｳ", MapSelect_LoadGame, 0xA200 },
+    { " 51-3:" GFXP_HIRAGANA "ｹﾝﾄﾞｳｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(SWORDMANS_SCHOOL, 0) },
 
     // "51-4: Post House" (Post Office)
-    { " 51-4:" GFXP_HIRAGANA "ﾎﾟｽﾄﾊｳｽ", MapSelect_LoadGame, 0x5600 },
+    { " 51-4:" GFXP_HIRAGANA "ﾎﾟｽﾄﾊｳｽ", MapSelect_LoadGame, ENTRANCE(POST_OFFICE, 0) },
 
     // "51-5: Lottery Shop" (Lottery Shop)
-    { " 51-5:" GFXP_HIRAGANA "ﾀｶﾗｸｼﾞﾔ", MapSelect_LoadGame, 0x6C00 },
+    { " 51-5:" GFXP_HIRAGANA "ﾀｶﾗｸｼﾞﾔ", MapSelect_LoadGame, ENTRANCE(LOTTERY_SHOP, 0) },
 
     // "52: Clock Town -North-" (North Clock Town)
-    { " 52:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ｷﾀ-", MapSelect_LoadGame, 0xD600 },
+    { " 52:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ｷﾀ-", MapSelect_LoadGame, ENTRANCE(NORTH_CLOCK_TOWN, 0) },
 
     // "53: Clocktown -South-" (South Clock Town)
-    { " 53:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ﾐﾅﾐ-", MapSelect_LoadGame, 0xD800 },
+    { " 53:" GFXP_KATAKANA "ｸﾛｯｸﾀｳﾝ " GFXP_HIRAGANA "-ﾐﾅﾐ-", MapSelect_LoadGame, ENTRANCE(SOUTH_CLOCK_TOWN, 0) },
 
     // "53-0: Clock Tower Interior" (Clock Tower Interior)
-    { " 53-0:" GFXP_HIRAGANA "ﾄｹｲﾄｳﾅｲﾌﾞ", MapSelect_LoadGame, 0xC000 },
+    { " 53-0:" GFXP_HIRAGANA "ﾄｹｲﾄｳﾅｲﾌﾞ", MapSelect_LoadGame, ENTRANCE(CLOCK_TOWER_INTERIOR, 0) },
 
     // "54: Clock Tower Rooftop" (Clock Tower Rooftop)
-    { " 54:" GFXP_HIRAGANA "ﾄｹｲﾄｳ ｵｸｼﾞｮｳ", MapSelect_LoadGame, 0x2C00 },
+    { " 54:" GFXP_HIRAGANA "ﾄｹｲﾄｳ ｵｸｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(CLOCK_TOWER_ROOFTOP, 0) },
 
     // "55: Laundry Area" (Laundry Pool)
-    { " 55:" GFXP_HIRAGANA "ｾﾝﾀｸｼﾞｮｳ", MapSelect_LoadGame, 0xDA00 },
+    { " 55:" GFXP_HIRAGANA "ｾﾝﾀｸｼﾞｮｳ", MapSelect_LoadGame, ENTRANCE(LAUNDRY_POOL, 0) },
 
     // "55-0: Maniac Mart - Rear Entrance" (Curiosity Shop - Back Room)
-    { " 55-0:" GFXP_KATAKANA "ﾏﾆ" GFXP_HIRAGANA "ﾔ ﾉ ｳﾗｸﾞﾁ", MapSelect_LoadGame, 0xE10 },
+    { " 55-0:" GFXP_KATAKANA "ﾏﾆ" GFXP_HIRAGANA "ﾔ ﾉ ｳﾗｸﾞﾁ", MapSelect_LoadGame, ENTRANCE(CURIOSITY_SHOP, 1) },
 
     // "55-1: Maniac Mart - Peephole" (Curiosity Shop Back Room - Peephole)
-    { " 55-1:" GFXP_KATAKANA "ﾏﾆ" GFXP_HIRAGANA "ﾔ ﾉ ﾉｿﾞｷｱﾅ", MapSelect_LoadGame, 0xE20 },
+    { " 55-1:" GFXP_KATAKANA "ﾏﾆ" GFXP_HIRAGANA "ﾔ ﾉ ﾉｿﾞｷｱﾅ", MapSelect_LoadGame, ENTRANCE(CURIOSITY_SHOP, 2) },
 
     // "100: Wood Mountain Temple" (Woodfall Temple)
-    { "100:" GFXP_KATAKANA "ｳｯﾄﾞﾏｳﾝﾃﾝ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ", MapSelect_LoadGame, 0x3000 },
+    { "100:" GFXP_KATAKANA "ｳｯﾄﾞﾏｳﾝﾃﾝ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ", MapSelect_LoadGame, ENTRANCE(WOODFALL_TEMPLE, 0) },
 
     // "100-B: Wood Mountain Temple - Boss" (Odolwa's Lair)
-    { "100-B:" GFXP_KATAKANA "ｳｯﾄﾞﾏｳﾝﾃﾝ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame, 0x3800 },
+    { "100-B:" GFXP_KATAKANA "ｳｯﾄﾞﾏｳﾝﾃﾝ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame,
+      ENTRANCE(ODOLWAS_LAIR, 0) },
 
     // "101: Snowhead Temple" (Snowhead Temple)
-    { "101:" GFXP_KATAKANA "ｽﾉｰﾍｯﾄﾞ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ", MapSelect_LoadGame, 0x3C00 },
+    { "101:" GFXP_KATAKANA "ｽﾉｰﾍｯﾄﾞ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ", MapSelect_LoadGame, ENTRANCE(SNOWHEAD_TEMPLE, 0) },
 
     // "101-B: Snowhead Temple - Boss" (Goht's Lair)
-    { "101-B:" GFXP_KATAKANA "ｽﾉｰﾍｯﾄﾞ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame, 0x8200 },
+    { "101-B:" GFXP_KATAKANA "ｽﾉｰﾍｯﾄﾞ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame,
+      ENTRANCE(GOHTS_LAIR, 0) },
 
     // "102: Great Bay Temple" (Great Bay Temple)
-    { "102:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ", MapSelect_LoadGame, 0x8C00 },
+    { "102:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ", MapSelect_LoadGame, ENTRANCE(GREAT_BAY_TEMPLE, 0) },
 
     // "102-B: Great Bay Temple - Boss" (Gyorg's Lair)
-    { "102-B:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame, 0xB800 },
+    { "102-B:" GFXP_KATAKANA "ｸﾞﾚｰﾄﾍﾞｲ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame,
+      ENTRANCE(GYORGS_LAIR, 0) },
 
     // "103: Rock Building Temple -Top Side-" (Stone Tower Temple)
-    { "103:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ-ｵﾓﾃｰ", MapSelect_LoadGame, 0x2600 },
+    { "103:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ-ｵﾓﾃｰ", MapSelect_LoadGame,
+      ENTRANCE(STONE_TOWER_TEMPLE, 0) },
 
     // "103-0: Rock Building Temple -Underside-" (Stone Tower Temple - Flipped)
-    { "103-0:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ-ｳﾗｰ", MapSelect_LoadGame, 0x2A00 },
+    { "103-0:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ-ｳﾗｰ", MapSelect_LoadGame,
+      ENTRANCE(STONE_TOWER_TEMPLE_INVERTED, 0) },
 
     // "103-B: Rock Building Temple - Boss" (Twinmold's Lair)
-    { "103-B:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame, 0x6600 },
+    { "103-B:" GFXP_KATAKANA "ﾛｯｸﾋﾞﾙ " GFXP_HIRAGANA "ﾉ ｼﾝﾃﾞﾝ" GFXP_KATAKANA "-ﾎﾞｽ-", MapSelect_LoadGame,
+      ENTRANCE(TWINMOLDS_LAIR, 0) },
 
     // "104: Steppe" (On the Moon)
-    { "104:" GFXP_KATAKANA "ｿｳｹﾞﾝ", MapSelect_LoadGame, 0xC800 },
+    { "104:" GFXP_KATAKANA "ｿｳｹﾞﾝ", MapSelect_LoadGame, ENTRANCE(THE_MOON, 0) },
 
     // "104-0: Last Deku Dungeon" (Deku Trial)
-    { "104-0:" GFXP_KATAKANA "ﾗｽﾄ ﾃﾞｸ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, 0x4E00 },
+    { "104-0:" GFXP_KATAKANA "ﾗｽﾄ ﾃﾞｸ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, ENTRANCE(MOON_DEKU_TRIAL, 0) },
 
     // "104-1: Last Goron Dungeon" (Goron Trial)
-    { "104-1:" GFXP_KATAKANA "ﾗｽﾄ ｺﾞﾛﾝ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, 0x7800 },
+    { "104-1:" GFXP_KATAKANA "ﾗｽﾄ ｺﾞﾛﾝ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, ENTRANCE(MOON_GORON_TRIAL, 0) },
 
     // "104-2: Last Zora Dungeon" (Zora Trial)
-    { "104-2:" GFXP_KATAKANA "ﾗｽﾄ ｿﾞｰﾗ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, 0x8800 },
+    { "104-2:" GFXP_KATAKANA "ﾗｽﾄ ｿﾞｰﾗ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, ENTRANCE(MOON_ZORA_TRIAL, 0) },
 
     // "104-3: Last Link Dungeon" (Link Trial)
-    { "104-3:" GFXP_KATAKANA "ﾗｽﾄ ﾘﾝｸ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, 0xC600 },
+    { "104-3:" GFXP_KATAKANA "ﾗｽﾄ ﾘﾝｸ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, ENTRANCE(MOON_LINK_TRIAL, 0) },
 
     // "104-B: Last Dungeon -Boss-" (Majora's Lair)
-    { "104-B:" GFXP_KATAKANA "ﾗｽﾄﾀﾞﾝｼﾞｮﾝ -ﾎﾞｽ-", MapSelect_LoadGame, 0x200 },
+    { "104-B:" GFXP_KATAKANA "ﾗｽﾄﾀﾞﾝｼﾞｮﾝ -ﾎﾞｽ-", MapSelect_LoadGame, ENTRANCE(MAJORAS_LAIR, 0) },
 
     // "119: Deku Shrine" (Deku Shrine)
-    { "119:" GFXP_KATAKANA "ﾃﾞｸﾅｯﾂ " GFXP_HIRAGANA "ﾉ ﾎｺﾗ", MapSelect_LoadGame, 0x9E00 },
+    { "119:" GFXP_KATAKANA "ﾃﾞｸﾅｯﾂ " GFXP_HIRAGANA "ﾉ ﾎｺﾗ", MapSelect_LoadGame, ENTRANCE(DEKU_SHRINE, 0) },
 
     // "121: Secret Shrine" (Secret Shrine)
-    { "121:" GFXP_HIRAGANA "ﾋﾐﾂ ﾉ ﾎｺﾗ", MapSelect_LoadGame, 0xBA00 },
+    { "121:" GFXP_HIRAGANA "ﾋﾐﾂ ﾉ ﾎｺﾗ", MapSelect_LoadGame, ENTRANCE(SECRET_SHRINE, 0) },
 
     // "122: Opening Dungeon" (Pond Area Cutscene: Falling of the Cliff)
-    { "122:" GFXP_KATAKANA "ｵｰﾌﾟﾆﾝｸﾞ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, 0x2E00 },
+    { "122:" GFXP_KATAKANA "ｵｰﾌﾟﾆﾝｸﾞ ﾀﾞﾝｼﾞｮﾝ", MapSelect_LoadGame, ENTRANCE(OPENING_DUNGEON, 0) },
 
     // "123: Giants' Chamber" (Giants' Chamber)
-    { "123:" GFXP_HIRAGANA "ｷｮｼﾞﾝ ﾉ ﾏ", MapSelect_LoadGame, 0xCC00 },
+    { "123:" GFXP_HIRAGANA "ｷｮｼﾞﾝ ﾉ ﾏ", MapSelect_LoadGame, ENTRANCE(GIANTS_CHAMBER, 0) },
 
     // "126: Deku Minigame" (Deku Rupee Minigame)
-    { "126:" GFXP_KATAKANA "ﾃﾞｸﾅｯﾂ ﾐﾆｹﾞｰﾑ", MapSelect_LoadGame, 0x3600 },
+    { "126:" GFXP_KATAKANA "ﾃﾞｸﾅｯﾂ ﾐﾆｹﾞｰﾑ", MapSelect_LoadGame, ENTRANCE(DEKU_SCRUB_PLAYGROUND, 0) },
 
     // "127-0: Fairy Fountain 0" (Fairy Fountain - Clock Town)
-    { "127-0:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 0", MapSelect_LoadGame, 0x4600 },
+    { "127-0:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 0", MapSelect_LoadGame, ENTRANCE(FAIRY_FOUNTAIN, 0) },
 
     // "127-1: Fairy Fountain 1" (Fairy Fountain - Woodfall)
-    { "127-1:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 1", MapSelect_LoadGame, 0x4610 },
+    { "127-1:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 1", MapSelect_LoadGame, ENTRANCE(FAIRY_FOUNTAIN, 1) },
 
     // "127-2: Fairy Fountain 2" (Fairy Fountain - Snowhead)
-    { "127-2:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 2", MapSelect_LoadGame, 0x4620 },
+    { "127-2:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 2", MapSelect_LoadGame, ENTRANCE(FAIRY_FOUNTAIN, 2) },
 
     // "127-3: Fairy Fountain 3" (Fairy Fountain - Great Bay Coast)
-    { "127-3:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 3", MapSelect_LoadGame, 0x4630 },
+    { "127-3:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 3", MapSelect_LoadGame, ENTRANCE(FAIRY_FOUNTAIN, 3) },
 
     // "127-4: Fairy Fountain 4" (Fairy Fountain - Ikana Canyon)
-    { "127-4:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 4", MapSelect_LoadGame, 0x4640 },
+    { "127-4:" GFXP_HIRAGANA "ﾖｳｾｲ ﾉ ｲｽﾞﾐ 4", MapSelect_LoadGame, ENTRANCE(FAIRY_FOUNTAIN, 4) },
 
     // "128: Swamp Spider Manor" (Swamp Spider House)
-    { "128:" GFXP_HIRAGANA "ﾇﾏ ﾉ ｸﾓﾔｶﾀ", MapSelect_LoadGame, 0x4800 },
+    { "128:" GFXP_HIRAGANA "ﾇﾏ ﾉ ｸﾓﾔｶﾀ", MapSelect_LoadGame, ENTRANCE(SWAMP_SPIDER_HOUSE, 0) },
 
     // "129: Ocean Spider Manor" (Oceanside Spider House)
-    { "129:" GFXP_HIRAGANA "ｳﾐ ﾉ ｸﾓﾔｶﾀ", MapSelect_LoadGame, 0x4A00 },
+    { "129:" GFXP_HIRAGANA "ｳﾐ ﾉ ｸﾓﾔｶﾀ", MapSelect_LoadGame, ENTRANCE(OCEANSIDE_SPIDER_HOUSE, 0) },
 
     // "130: Beneath the Graves - Dampe" (Beneath the Graveyard)
-    { "130:" GFXP_HIRAGANA "ﾊｶ ﾉ ｼﾀ-" GFXP_KATAKANA "ﾀﾞﾝﾍﾟｲ-", MapSelect_LoadGame, 0x5A00 },
+    { "130:" GFXP_HIRAGANA "ﾊｶ ﾉ ｼﾀ-" GFXP_KATAKANA "ﾀﾞﾝﾍﾟｲ-", MapSelect_LoadGame, ENTRANCE(DAMPES_HOUSE, 0) },
 
     // "131: Beneath the Well" (Beneath the Well)
-    { "131:" GFXP_HIRAGANA "ｲﾄﾞ ﾉ ｼﾀ", MapSelect_LoadGame, 0x9000 },
+    { "131:" GFXP_HIRAGANA "ｲﾄﾞ ﾉ ｼﾀ", MapSelect_LoadGame, ENTRANCE(BENEATH_THE_WELL, 0) },
 
     // "132: Ghost Hut" (Ghost Hut)
-    { "132:" GFXP_HIRAGANA "ﾕｳﾚｲｺﾞﾔ", MapSelect_LoadGame, 0x9C00 },
+    { "132:" GFXP_HIRAGANA "ﾕｳﾚｲｺﾞﾔ", MapSelect_LoadGame, ENTRANCE(GHOST_HUT, 0) },
 
     // "133-0: Beneath the Graves 0" (Beneath the Graveyard - Part 1)
-    { "133-0:" GFXP_HIRAGANA "ﾊｶ ﾉ ｼﾀ0", MapSelect_LoadGame, 0xA00 },
+    { "133-0:" GFXP_HIRAGANA "ﾊｶ ﾉ ｼﾀ0", MapSelect_LoadGame, ENTRANCE(BENEATH_THE_GRAVERYARD, 0) },
 
     // "133-1: Beneath the Graves 1" (Beneath the Graveyard - Part 2)
-    { "133-1:" GFXP_HIRAGANA "ﾊｶ ﾉ ｼﾀ1", MapSelect_LoadGame, 0xA10 },
+    { "133-1:" GFXP_HIRAGANA "ﾊｶ ﾉ ｼﾀ1", MapSelect_LoadGame, ENTRANCE(BENEATH_THE_GRAVERYARD, 1) },
 
     // "134-0: Secret Grotto 0" (Secret Grotto - Four Gossip Stones)
-    { "134-0:" GFXP_HIRAGANA "ｶｸｼｱﾅ 0", MapSelect_LoadGame, 0x1400 },
+    { "134-0:" GFXP_HIRAGANA "ｶｸｼｱﾅ 0", MapSelect_LoadGame, ENTRANCE(GROTTOS, 0) },
 
     // "134-1: Secret Grotto 1" (Secret Grotto - Four Gossip Stones, Skulltula)
-    { "134-1:" GFXP_HIRAGANA "ｶｸｼｱﾅ 1", MapSelect_LoadGame, 0x1410 },
+    { "134-1:" GFXP_HIRAGANA "ｶｸｼｱﾅ 1", MapSelect_LoadGame, ENTRANCE(GROTTOS, 1) },
 
     // "134-2: Secret Grotto 2" (Secret Grotto - Four Gossip Stones, Water Puddles)
-    { "134-2:" GFXP_HIRAGANA "ｶｸｼｱﾅ 2", MapSelect_LoadGame, 0x1420 },
+    { "134-2:" GFXP_HIRAGANA "ｶｸｼｱﾅ 2", MapSelect_LoadGame, ENTRANCE(GROTTOS, 2) },
 
     // "134-3: Secret Grotto 3" (Secret Grotto - Four Gossip Stones, Water Puddle With Bugs)
-    { "134-3:" GFXP_HIRAGANA "ｶｸｼｱﾅ 3", MapSelect_LoadGame, 0x1430 },
+    { "134-3:" GFXP_HIRAGANA "ｶｸｼｱﾅ 3", MapSelect_LoadGame, ENTRANCE(GROTTOS, 3) },
 
     // "134-4: Secret Grotto 4" (Secret Grotto - Chest with Blue Rupee, Deku Babas)
-    { "134-4:" GFXP_HIRAGANA "ｶｸｼｱﾅ 4", MapSelect_LoadGame, 0x1440 },
+    { "134-4:" GFXP_HIRAGANA "ｶｸｼｱﾅ 4", MapSelect_LoadGame, ENTRANCE(GROTTOS, 4) },
 
     // "134-5: Secret Grotto 5" (Secret Grotto - Hot Spring, Deku Babas, Large Stones)
-    { "134-5:" GFXP_HIRAGANA "ｶｸｼｱﾅ5", MapSelect_LoadGame, 0x1450 },
+    { "134-5:" GFXP_HIRAGANA "ｶｸｼｱﾅ5", MapSelect_LoadGame, ENTRANCE(GROTTOS, 5) },
 
     // "134-7: Secret Grotto 7" (Secret Grotto - Two Dondogos)
-    { "134-7:" GFXP_HIRAGANA "ｶｸｼｱﾅ 7", MapSelect_LoadGame, 0x1470 },
+    { "134-7:" GFXP_HIRAGANA "ｶｸｼｱﾅ 7", MapSelect_LoadGame, ENTRANCE(GROTTOS, 7) },
 
     // "134-9: Secret Grotto 9" (Secret Grotto - Tall Grass With Box, Pot, Bugs)
-    { "134-9:" GFXP_HIRAGANA "ｶｸｼｱﾅ 9", MapSelect_LoadGame, 0x1490 },
+    { "134-9:" GFXP_HIRAGANA "ｶｸｼｱﾅ 9", MapSelect_LoadGame, ENTRANCE(GROTTOS, 9) },
 
     // "134-10: Secret Grotto 10" (Secret Grotto - Two Cows Surrounded by Grass)
-    { "134-10:" GFXP_HIRAGANA "ｶｸｼｱﾅ10", MapSelect_LoadGame, 0x14A0 },
+    { "134-10:" GFXP_HIRAGANA "ｶｸｼｱﾅ10", MapSelect_LoadGame, ENTRANCE(GROTTOS, 10) },
 
     // "134-11: Secret Grotto 11" (Secret Grotto - Watery Hole Filled with Underwater Babas, Fish)
-    { "134-11:" GFXP_HIRAGANA "ｶｸｼｱﾅ11", MapSelect_LoadGame, 0x14B0 },
+    { "134-11:" GFXP_HIRAGANA "ｶｸｼｱﾅ11", MapSelect_LoadGame, ENTRANCE(GROTTOS, 11) },
 
     // "134-13: Secret Grotto 13" (Secret Grotto - Peahat in Center)
-    { "134-13:" GFXP_HIRAGANA "ｶｸｼｱﾅ13", MapSelect_LoadGame, 0x14D0 },
+    { "134-13:" GFXP_HIRAGANA "ｶｸｼｱﾅ13", MapSelect_LoadGame, ENTRANCE(GROTTOS, 13) },
 
     // "X 1: SPOT00" (Opening Cutscene)
-    { "X 1:SPOT00", MapSelect_LoadGame, 0x1C00 },
+    { "X 1:SPOT00", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "Title" (Title Screen)
-    { "title", (void*)MapSelect_LoadTitle, 0x0000 },
+    { "title", (void*)MapSelect_LoadConsoleLogo, 0 },
 };
 
 void MapSelect_UpdateMenu(MapSelectState* this) {
@@ -505,19 +509,18 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
 
     if (this->verticalInputAccumulator == 0) {
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3EC0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
-                gSaveContext.unk_3DE0[i] = 0;
-                gSaveContext.unk_3E18[i] = 0;
-                gSaveContext.unk_3E50[i] = 0;
-                gSaveContext.unk_3E88[i] = 0;
-                gSaveContext.unk_3EC0[i] = 0;
+            for (i = 0; i < TIMER_ID_MAX; i++) {
+                gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+                gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerStartOsTimes[i] = 0;
+                gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerPausedOsTimes[i] = 0;
             }
             gSaveContext.minigameState = 0;
 
             if (this->scenes[this->currentScene].loadFunc != NULL) {
-                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entranceIndex,
-                                                          this->opt);
+                this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance, this->opt);
             }
         }
 
@@ -1025,7 +1028,7 @@ void MapSelect_Draw(MapSelectState* this) {
     func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 
     SET_FULLSCREEN_VIEWPORT(&this->view);
-    View_RenderView(&this->view, 0xF);
+    View_Apply(&this->view, VIEW_ALL);
     if (!this->state.running) {
         MapSelect_DrawLoadingScreen(this);
     } else {

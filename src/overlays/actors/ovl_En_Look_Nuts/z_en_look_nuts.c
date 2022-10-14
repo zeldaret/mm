@@ -5,6 +5,7 @@
  */
 
 #include "z_en_look_nuts.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
 #define FLAGS (ACTOR_FLAG_80000000)
 
@@ -295,7 +296,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
+        play->nextEntrance = Entrance_CreateFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -340,13 +341,14 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&effectVelOffset, &effectVel);
             Matrix_Pop();
             if (!this->isPlayerDetected) {
-                s16 drawFlag = 1;
+                s16 effectFlags = SOLDERSRCHBALL_INVISIBLE;
+
                 if (gSaveContext.save.isNight) {
-                    drawFlag = 0;
+                    effectFlags = 0;
                 }
                 if (Player_GetMask(play) != PLAYER_MASK_STONE) {
                     EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->isPlayerDetected,
-                                                 drawFlag);
+                                                 effectFlags);
                 }
             }
 

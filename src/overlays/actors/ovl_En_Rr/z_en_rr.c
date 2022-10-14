@@ -15,7 +15,7 @@
 void EnRr_Init(Actor* thisx, PlayState* play);
 void EnRr_Destroy(Actor* thisx, PlayState* play);
 void EnRr_Update(Actor* thisx, PlayState* play);
-void EnRr_Draw(Actor* thisx, PlayState* play);
+void EnRr_Draw(Actor* thisx, PlayState* play2);
 
 void func_808FAF94(EnRr* this, PlayState* play);
 void func_808FB088(EnRr* this, PlayState* play);
@@ -118,7 +118,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 45, 60, 250 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 55, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_LIKE_LIKE, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),

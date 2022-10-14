@@ -323,7 +323,7 @@ s32 func_80BE0D60(EnTab* this, PlayState* play) {
 
     this->unk_320++;
     if (this->unk_320 == 1) {
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00D568, 2);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_demo_bikkuri, 2);
     } else if (this->unk_320 > 20) {
         play->setPlayerTalkAnim(play, NULL, 0);
         this->unk_320 = 0;
@@ -552,7 +552,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + this->unk_30C;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_2FC & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_AP_NONE, this->unk_2FC & 7);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BE0620(this, play);

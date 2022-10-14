@@ -22,7 +22,7 @@
         <Limb Name="object_zoraegg_Standardlimb_004C54" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_04" Offset="0x4C54" />
         <Limb Name="object_zoraegg_Standardlimb_004C60" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_05" Offset="0x4C60" />
         <Limb Name="object_zoraegg_Standardlimb_004C6C" Type="Standard" EnumName="OBJECT_ZORAEGG_LIMB_06" Offset="0x4C6C" />
-        <Skeleton Name="object_zoraegg_Skel_004C90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZORAEGG_LIMB_NONE" LimbMax="OBJECT_ZORAEGG_LIMB_MAX" EnumName="object_zoraegg_Limbs" Offset="0x4C90" />
+        <Skeleton Name="object_zoraegg_Skel_004C90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZORAEGG_LIMB_NONE" LimbMax="OBJECT_ZORAEGG_LIMB_MAX" EnumName="ObjectZoraeggLimb" Offset="0x4C90" />
         <Animation Name="object_zoraegg_Anim_004D20" Offset="0x4D20" />
         <Animation Name="object_zoraegg_Anim_004E04" Offset="0x4E04" />
         <Animation Name="object_zoraegg_Anim_004FE4" Offset="0x4FE4" />
