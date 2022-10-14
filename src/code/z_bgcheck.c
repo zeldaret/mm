@@ -4611,7 +4611,6 @@ u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox) 
     return prop & 0x1F;
 }
 
-#ifdef NON_MATCHING
 /**
  * Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
  * same as WaterBox_GetSurfaceImpl, but tests if WaterBox properties & 0x80000 != 0
@@ -4621,62 +4620,60 @@ u32 WaterBox_GetLightSettingIndex(CollisionContext* colCtx, WaterBox* waterBox) 
 s32 func_800CA6F0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox,
                   s32* bgId) {
     CollisionHeader* colHeader;
-    u32 room;
-    WaterBox* curWaterBox;
     s32 i;
+    WaterBox* curWaterBox;
     BgActor* bgActor;
-
-    colHeader = colCtx->colHeader;
+    u32 room;
+    
     *outWaterBox = NULL;
     *bgId = BGCHECK_SCENE;
+    colHeader = colCtx->colHeader;
 
-    if (colHeader->numWaterBoxes == 0 || colHeader->waterBoxes == NULL) {
+    if ((colHeader->numWaterBoxes == 0) || (colHeader->waterBoxes == NULL)) {
         return false;
     }
     for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
          curWaterBox++) {
         room = WATERBOX_ROOM(curWaterBox->properties);
-        if (room == (u32)play->roomCtx.curRoom.num || room == 0x3F) {
-            if ((curWaterBox->properties & 0x80000) != 0) {
-                if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
-                    if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
-                        *outWaterBox = curWaterBox;
-                        *ySurface = curWaterBox->minPos.y;
-                        return true;
-                    }
-                }
+
+        if ((room != play->roomCtx.curRoom.num) && (room != 0x3F)) {
+            continue;
+        }
+        if (!(curWaterBox->properties & 0x80000)) {
+            continue;
+        }
+        if ((curWaterBox->minPos.x < x) && (x < curWaterBox->minPos.x + curWaterBox->xLength)) {
+            if ((curWaterBox->minPos.z < z) && (z < curWaterBox->minPos.z + curWaterBox->zLength)) {
+                *outWaterBox = curWaterBox;
+                *ySurface = curWaterBox->minPos.y;
+                return true;
             }
         }
     }
-
     for (i = 0; i < BG_ACTOR_MAX; i++) {
-        if ((colCtx->dyna.bgActorFlags[i] & 1) && !(colCtx->dyna.bgActorFlags[i] & 2)) {
-            WaterBox* boxes;
-            boxes = colCtx->dyna.waterBoxList.boxes;
-            bgActor = &colCtx->dyna.bgActors[i];
-            if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL) {
-                for (curWaterBox = boxes + bgActor->waterboxesStartIndex;
-                     curWaterBox < boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
-                     curWaterBox++) {
-                    if ((curWaterBox->properties & 0x80000) != 0) {
-                        if (curWaterBox->minPos.x < x && x < curWaterBox->minPos.x + curWaterBox->xLength) {
-                            if (curWaterBox->minPos.z < z && z < curWaterBox->minPos.z + curWaterBox->zLength) {
-                                *outWaterBox = curWaterBox;
-                                *ySurface = curWaterBox->minPos.y;
-                                *bgId = i;
-                                return true;
-                            }
-                        }
-                    }
+        if (!(colCtx->dyna.bgActorFlags[i] & 1) || (colCtx->dyna.bgActorFlags[i] & 2)) {
+            continue;
+        }
+        bgActor = &colCtx->dyna.bgActors[i];
+
+        for (curWaterBox = colCtx->dyna.waterBoxList.boxes + bgActor->waterboxesStartIndex;
+                curWaterBox < colCtx->dyna.waterBoxList.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
+                curWaterBox++) {
+            if (!(curWaterBox->properties & 0x80000)) {
+                continue;
+            }
+            if ((curWaterBox->minPos.x < x) && (x < curWaterBox->minPos.x + curWaterBox->xLength)) {
+                if ((curWaterBox->minPos.z < z) && (z < curWaterBox->minPos.z + curWaterBox->zLength)) {
+                    *outWaterBox = curWaterBox;
+                    *ySurface = curWaterBox->minPos.y;
+                    *bgId = i;
+                    return true;
                 }
             }
         }
     }
     return false;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/func_800CA6F0.s")
-#endif
 
 s32 func_800CA9D0(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox) {
     s32 bgId;
