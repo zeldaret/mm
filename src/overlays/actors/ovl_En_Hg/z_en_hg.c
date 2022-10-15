@@ -119,14 +119,14 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gHarfgibudIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gHarfgibudLurchForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gHarfgibudRecoilFromHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gHarfgibudLeanForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gHarfgibudReachForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHarfgibudCurlUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gHarfgibudCrouchedPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHarfgibudPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherLurchForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherRecoilFromHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherLeanForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherReachForwardAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherCurlUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherCrouchedPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherPanicAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static u32 sHasSoundPlayed = false;
@@ -137,8 +137,8 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudGibdoSkel, &gHarfgibudIdleAnim, this->jointTable,
-                       this->morphTable, HARFGIBUD_GIBDO_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPamelasFatherGibdoSkel, &gPamelasFatherIdleAnim, this->jointTable,
+                       this->morphTable, PAMELAS_FATHER_GIBDO_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -258,8 +258,8 @@ void EnHg_UpdateCollision(EnHg* this, PlayState* play) {
         }
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-        if (this->actionFunc != EnHg_ReactToHit && this->actionFunc != EnHg_PlayCutscene &&
-            this->actionFunc != EnHg_HandleCsAction) {
+        if ((this->actionFunc != EnHg_ReactToHit) && (this->actionFunc != EnHg_PlayCutscene) &&
+            (this->actionFunc != EnHg_HandleCsAction)) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
     }
@@ -435,9 +435,9 @@ s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnHg* this = THIS;
-    if (limbIndex == HARFGIBUD_GIBDO_LIMB_EYEBROWS) {
+    if (limbIndex == PAMELAS_FATHER_GIBDO_LIMB_EYEBROWS) {
         Matrix_Get(&this->mtxF);
-    } else if (limbIndex == HARFGIBUD_GIBDO_LIMB_HEAD) {
+    } else if (limbIndex == PAMELAS_FATHER_GIBDO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -451,6 +451,6 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mtxF);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudGibdoEyebrowsDL);
+    gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherGibdoEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

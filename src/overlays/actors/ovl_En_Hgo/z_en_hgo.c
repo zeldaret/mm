@@ -33,9 +33,9 @@ void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos,
 #define TALK_FLAG_HAS_SPOKEN_WITH_GIBDO_MASK (1 << 2)
 
 typedef enum {
-    /* 0 */ EYE_OPEN,
-    /* 1 */ EYE_HALF,
-    /* 2 */ EYE_CLOSED
+    /* 0 */ HGO_EYE_OPEN,
+    /* 1 */ HGO_EYE_HALF,
+    /* 2 */ HGO_EYE_CLOSED
 } EyeState;
 
 typedef enum {
@@ -61,13 +61,13 @@ const ActorInit En_Hgo_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gHarfgibudArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gHarfgibudAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHarfgibudKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gHarfGibudConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHarfGibudConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHarfgibudReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gHarfgibudTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gPamelasFatherAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gPamelasFatherReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gPamelasFatherTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -93,9 +93,9 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static TexturePtr sEyeTextures[] = {
-    gHarfgibudHumanEyeOpenTex,
-    gHarfgibudHumanEyeHalfTex,
-    gHarfgibudHumanEyeClosedTex,
+    gPamelasFatherHumanEyeOpenTex,
+    gPamelasFatherHumanEyeHalfTex,
+    gPamelasFatherHumanEyeClosedTex,
 };
 
 void EnHgo_Init(Actor* thisx, PlayState* play) {
@@ -103,8 +103,8 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gHarfgibudHumanSkel, &gHarfgibudArmsFoldedAnim, this->jointTable,
-                       this->morphTable, HARFGIBUD_HUMAN_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPamelasFatherHumanSkel, &gPamelasFatherArmsFoldedAnim,
+                       this->jointTable, this->morphTable, PAMELAS_FATHER_HUMAN_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
@@ -364,13 +364,13 @@ void EnHgo_FacePlayer(EnHgo* this, PlayState* play) {
     if (this->blinkTimer > 2) {
         this->blinkTimer--;
     } else if (this->blinkTimer == 2) {
-        this->eyeIndex = EYE_HALF;
+        this->eyeIndex = HGO_EYE_HALF;
         this->blinkTimer = 1;
     } else if (this->blinkTimer == 1) {
-        this->eyeIndex = EYE_CLOSED;
+        this->eyeIndex = HGO_EYE_CLOSED;
         this->blinkTimer = 0;
     } else {
-        this->eyeIndex = EYE_OPEN;
+        this->eyeIndex = HGO_EYE_OPEN;
         this->blinkTimer = 60;
     }
 }
@@ -395,7 +395,7 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
 s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHgo* this = THIS;
 
-    if (limbIndex == HARFGIBUD_HUMAN_LIMB_HEAD) {
+    if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
@@ -405,7 +405,7 @@ s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx) {
     EnHgo* this = THIS;
 
-    if (limbIndex == HARFGIBUD_HUMAN_LIMB_HEAD) {
+    if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
         Matrix_Get(&this->mtxF);
         Matrix_MultZero(&this->actor.focus.pos);
     }
@@ -421,6 +421,6 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mtxF);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gHarfgibudHumanEyebrowsDL);
+    gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherHumanEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

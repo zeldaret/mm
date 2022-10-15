@@ -17,8 +17,8 @@ typedef struct EnHg {
     /* 0x1D8 */ MtxF mtxF;
     /* 0x218 */ s32 cutsceneIndex;
     /* 0x21C */ s32 animIndex;
-    /* 0x220 */ Vec3s jointTable[HARFGIBUD_GIBDO_LIMB_MAX];
-    /* 0x292 */ Vec3s morphTable[HARFGIBUD_GIBDO_LIMB_MAX];
+    /* 0x220 */ Vec3s jointTable[PAMELAS_FATHER_GIBDO_LIMB_MAX];
+    /* 0x292 */ Vec3s morphTable[PAMELAS_FATHER_GIBDO_LIMB_MAX];
     /* 0x304 */ UNK_TYPE1 pad304[0xC];
     /* 0x310 */ u16 cutscenes[4];
 } EnHg; // size = 0x318
