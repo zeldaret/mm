@@ -1128,7 +1128,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
     if ((gSaveContext.save.entrance != 0xC200) || (gSaveContext.save.weekEventReg[12] & 8)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

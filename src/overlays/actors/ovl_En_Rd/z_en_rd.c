@@ -1068,7 +1068,7 @@ void EnRd_Dead(EnRd* this, PlayState* play) {
                 this->actor.scale.y -= (75.0f / 1000000.0f);
                 this->alpha -= 5;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             this->deathTimer--;

@@ -512,7 +512,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
     if (func_80BD2A30(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

@@ -205,7 +205,7 @@ void func_80AD0AB0(EnOsn* this) {
         this->unk_1FA -= 8;
         if (this->unk_1FA < 8) {
             this->unk_1FA = 0;
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -830,7 +830,8 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
+            break;
     }
 }
 

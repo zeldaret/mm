@@ -162,7 +162,7 @@ void func_80A94B20(PlayState* play) {
         ring = SubS_FindActor(play, ring, ACTORCAT_MISC, ACTOR_EN_TWIG);
         if (ring != NULL) {
             if (RACERING_GET_PARAM_F(ring) == 1) {
-                Actor_MarkForDeath(ring);
+                Actor_Kill(ring);
             }
             ring = ring->next;
         }
@@ -240,7 +240,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
             break;
     }
     if (phi_v1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

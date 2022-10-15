@@ -60,7 +60,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
@@ -117,7 +117,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     this->unk_174 = 0;
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 

@@ -125,11 +125,11 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
                 } else {
                     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EN_OCTAROCK_ROCK);
                 }
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             if (this->timer == -300) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
 

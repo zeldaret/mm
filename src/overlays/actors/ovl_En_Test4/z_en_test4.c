@@ -305,7 +305,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     }
 
     if (sIsLoaded || (gSaveContext.eventInf[2] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
         this->actor.room = -1;
@@ -319,7 +319,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
                 SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
                 this->unk_144 = 1;
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 gSaveContext.save.day = 1;
                 dayTemp = gSaveContext.save.day;
@@ -389,7 +389,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
             } else if (temp_a0 == CLOCK_TIME(6, 0)) {
                 if (CURRENT_DAY == 3) {
                     Interface_StartMoonCrash(play);
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
                 } else if (((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) &&
                            (CURRENT_DAY != 3)) {
@@ -413,7 +413,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
                     gSaveContext.respawnFlag = -4;
                     gSaveContext.eventInf[2] |= 0x80;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
 
@@ -457,7 +457,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_FADE_BLACK;
                     player->stateFlags1 |= 0x200;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 func_80A42198(this);
             } else {

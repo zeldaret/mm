@@ -217,7 +217,7 @@ asm/non_matchings/code/z_actor/func_800B64FC.s,func_800B64FC,0x800B64FC,0x22
 asm/non_matchings/code/z_actor/func_800B6584.s,func_800B6584,0x800B6584,0x21
 asm/non_matchings/code/z_actor/func_800B6608.s,func_800B6608,0x800B6608,0x1E
 asm/non_matchings/code/z_actor/func_800B6680.s,func_800B6680,0x800B6680,0x23
-asm/non_matchings/code/z_actor/Actor_MarkForDeath.s,Actor_MarkForDeath,0x800B670C,0x8
+asm/non_matchings/code/z_actor/Actor_Kill.s,Actor_Kill,0x800B670C,0x8
 asm/non_matchings/code/z_actor/Actor_SetWorldToHome.s,Actor_SetWorldToHome,0x800B672C,0xC
 asm/non_matchings/code/z_actor/Actor_SetFocus.s,Actor_SetFocus,0x800B675C,0x11
 asm/non_matchings/code/z_actor/Actor_SetWorldRotToShape.s,Actor_SetWorldRotToShape,0x800B67A0,0x8

@@ -104,12 +104,12 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_astr_obj_Colheader_002498);
     Collider_InitTris(play, &this->collider);
     if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(thisx))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
     this->dyna.actor.flags |= ACTOR_FLAG_10000000;
     if (!Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
     BgAstrBombwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->collider);

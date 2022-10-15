@@ -364,7 +364,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         }
         this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

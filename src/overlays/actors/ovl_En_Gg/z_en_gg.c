@@ -319,7 +319,7 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     break;
 
                 case 8:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
 
                 default:
@@ -647,7 +647,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

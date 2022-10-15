@@ -404,7 +404,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
             EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -443,7 +443,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
         } else {
             EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -460,16 +460,17 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            // Keep racing
-            func_8019F208();
-            func_801477B4(play);
-            func_800B7298(play, &this->actor, 6);
-            gSaveContext.eventInf[1] &= (u8)~8;
-            this->timer = 100;
-            this->actionFunc = EnMttag_Race;
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        // Keep racing
+        func_8019F208();
+        func_801477B4(play);
+        func_800B7298(play, &this->actor, 6);
+        gSaveContext.eventInf[1] &= (u8)~8;
+        this->timer = 100;
+        this->actionFunc = EnMttag_Race;
     }
 }
 
@@ -496,7 +497,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMttag_RaceStart;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

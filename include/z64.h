@@ -1027,7 +1027,7 @@ typedef struct PlayState {
     /* 0x18BF0 */ TransitionContext transitionCtx;
     /* 0x18E48 */ TransitionFade unk_18E48;
     /* 0x18E54 */ SceneTableEntry* loadedScene;
-    /* 0x18E58 */ UNK_PTR unk_18E58;
+    /* 0x18E58 */ void* unk_18E58;
     /* 0x18E5C */ TexturePtr pictoPhotoI8;
     /* 0x18E60 */ void* unk_18E60;
     /* 0x18E64 */ void* unk_18E64;

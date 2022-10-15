@@ -274,7 +274,7 @@ void func_80961E88(PlayState* play) {
     Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
-        Actor_MarkForDeath(explosive);
+        Actor_Kill(explosive);
         explosive = explosive->next;
     }
 }

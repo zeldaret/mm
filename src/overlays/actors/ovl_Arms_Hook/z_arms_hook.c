@@ -130,7 +130,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
 
     if ((this->actor.parent == NULL) || (!Player_IsHoldingHookshot(player))) {
         ArmsHook_DetachHookFromActor(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

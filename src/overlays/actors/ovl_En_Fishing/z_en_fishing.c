@@ -3865,7 +3865,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                         D_8090CCF0 = this->unk_1A4;
                                         D_809171D0 = this->unk_148;
                                         D_809171D2 = D_80917206;
-                                        Actor_MarkForDeath(&this->actor);
+                                        Actor_Kill(&this->actor);
                                     } else if ((this->unk_148 == 0) && (D_809171D0 == 0) &&
                                                ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
                                         this->unk_1CD = 1;
