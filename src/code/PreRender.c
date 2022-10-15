@@ -651,13 +651,15 @@ void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
     Gfx* sp6C;
     uObjBg* bg;
     u32 sp64;
-    Gfx* gfx = *gfxp;
+    Gfx* gfx;
     s32 sp5C;
 
     sp5C = (params->flags & 8) != 0;
     sp64 = (params->flags & 4) ? G_AC_THRESHOLD : G_AC_NONE;
 
-    bg = Graph_DlistAlloc(&gfx, sizeof(uObjBg));
+    bg = Graph_DlistAlloc(gfxp, sizeof(uObjBg));
+
+    gfx = *gfxp;
 
     bg->b.imageX = 0;
     bg->b.imageW = (params->width * (1 << 2)) + 1;
