@@ -7,8 +7,6 @@
 #include "z64collision_check.h"
 #include "unk.h"
 
-#define LENS_ACTOR_MAX 32
-
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 
@@ -381,6 +379,8 @@ typedef enum {
     /* 0 */ LENS_MODE_HIDE_ACTORS, // lens actors are visible by default, and hidden by using lens (for example, fake walls)
     /* 1 */ LENS_MODE_SHOW_ACTORS // lens actors are invisible by default, and shown by using lens (for example, invisible enemies)
 } LensMode;
+
+#define LENS_ACTOR_MAX 32
 
 // Target size when activated
 #define LENS_MASK_ACTIVE_SIZE 100
