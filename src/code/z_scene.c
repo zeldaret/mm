@@ -216,7 +216,7 @@ void Scene_HeaderCmdEntranceList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
-    // NOTE: these quest hint files are the same as OoT's.
+    // @note These quest hint files are identical to OoT's.
     // They are not relevant in this game and the system to process these scripts has been removed.
     static RomFile naviQuestHintFiles[2] = {
         { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
