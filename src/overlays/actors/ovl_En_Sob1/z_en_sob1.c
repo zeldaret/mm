@@ -396,18 +396,18 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
             this->shopType = BOMB_SHOP;
             break;
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
     }
 
     objIds = sObjectIds[this->shopType];
     this->mainObjIndex = Object_GetIndex(&play->objectCtx, objIds[0]);
     if (this->mainObjIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (!EnSob1_GetObjIndices(this, play, objIds)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);

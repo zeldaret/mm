@@ -398,7 +398,7 @@ void func_808CCCF0(EnVm* this, PlayState* play) {
         }
     } else if (this->unk_214 == 0) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

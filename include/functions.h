@@ -619,7 +619,7 @@ f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3);
 void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size);
 void* func_800B6608(PlayState* play, s16 id);
 void* func_800B6680(PlayState* play, s16 id);
-void Actor_MarkForDeath(Actor* actor);
+void Actor_Kill(Actor* actor);
 void Actor_SetWorldToHome(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 height);
 void Actor_SetWorldRotToShape(Actor* actor);

@@ -720,7 +720,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         }
     }
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {

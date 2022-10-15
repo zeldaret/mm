@@ -1410,7 +1410,7 @@ void func_80A266E0(ObjIceblock* this, PlayState* play) {
     func_80A2508C(this, play);
 
     if (sp20) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

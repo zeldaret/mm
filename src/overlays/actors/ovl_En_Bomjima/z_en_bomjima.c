@@ -152,7 +152,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
 
     if ((gSaveContext.save.weekEventReg[75] & 0x40) || (gSaveContext.save.weekEventReg[73] & 0x10) ||
         (gSaveContext.save.weekEventReg[85] & 2)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

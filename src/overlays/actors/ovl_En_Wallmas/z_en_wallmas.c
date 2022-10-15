@@ -171,7 +171,7 @@ void EnWallmas_Init(Actor* thisx, PlayState* play) {
 
     if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_FLAG) {
         if (Flags_GetSwitch(play, this->switchFlag)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -377,7 +377,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
 
     if (this->actor.playerHeightRel < -900.0f) {
         if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_FLAG) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -445,7 +445,7 @@ void EnWallmas_Die(EnWallmas* this, PlayState* play) {
     if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0015f)) {
         Actor_SetScale(&this->actor, 0.01f);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.scale.z = this->actor.scale.x;

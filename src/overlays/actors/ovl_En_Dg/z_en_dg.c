@@ -347,7 +347,7 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -430,7 +430,7 @@ void EnDg_UpdateTextId(EnDg* this) {
                 0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3538 to 0x3546.

@@ -297,7 +297,7 @@ void func_8088CC48(EnElf* this, PlayState* play) {
     this->unk_25C = 0;
     this->disappearTimer = 240;
     if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->unk_260)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -420,7 +420,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             break;
 
         case 8:
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
 
         case 3:
@@ -627,7 +627,7 @@ s32 func_8088DCA4(EnElf* this) {
         if (this->disappearTimer > -10) {
             Actor_SetScale(&this->actor, (this->disappearTimer + 10) * 0.008f * 0.1f);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return true;
         }
     }
@@ -658,7 +658,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         if (this->fairyFlags & 0x400) {
             Flags_SetCollectible(play, this->unk_260);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -717,7 +717,7 @@ void func_8088E018(EnElf* this, PlayState* play) {
         parentPos.y += (1500.0f * this->actor.scale.y) + 40.0f;
         func_8088D660(this, &parentPos, 0.2f);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
 }
@@ -762,7 +762,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
     }
 
     if (this->unk_224.y < -10.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -776,7 +776,7 @@ void func_8088E304(EnElf* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (this->unk_224.y > 200.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

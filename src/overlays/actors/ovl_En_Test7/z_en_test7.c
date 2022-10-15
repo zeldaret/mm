@@ -413,7 +413,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (play->playerActorCsIds[8] == -1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -921,7 +921,7 @@ void func_80AF30F4(EnTest7* this, PlayState* play) {
     if (this->unk_1E54 > 90) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

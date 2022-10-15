@@ -445,7 +445,7 @@ void func_80A32F48(EnPr* this, PlayState* play) {
     if (this->unk_2D2 != 0) {
         Math_SmoothStepToS(&this->unk_2D0, 0, 1, 15, 50);
         if (this->unk_2D0 < 2) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

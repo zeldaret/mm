@@ -810,7 +810,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
         if (func_80B50C78(this, this->path, this->unk_1EC)) {
             if (this->unk_1EC >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_318);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_1EC++;
             }
@@ -1020,7 +1020,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
         if (play->sceneId == SCENE_17SETUGEN2) {
             if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_318 = this->actor.cutscene;
                 this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
@@ -1036,10 +1036,10 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                     this->actionFunc = func_80B51760;
                 }
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (ENGK_GET_F(&this->actor) == ENGK_F_2) {
         if (!(gSaveContext.save.weekEventReg[22] & 4)) {
@@ -1048,7 +1048,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.flags &= ~ACTOR_FLAG_1;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (!(gSaveContext.save.weekEventReg[22] & 4)) {
         this->unk_2E4 = 0;

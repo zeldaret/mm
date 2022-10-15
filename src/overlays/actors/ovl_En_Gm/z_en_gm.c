@@ -1665,7 +1665,7 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
     EnGm* this = THIS;
 
     if (func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

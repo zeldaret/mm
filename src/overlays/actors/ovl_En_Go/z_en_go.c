@@ -1380,7 +1380,7 @@ void func_80A14430(EnGo* this, PlayState* play) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1390,7 +1390,7 @@ void func_80A1449C(EnGo* this, PlayState* play) {
         func_80A14104(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1505,7 +1505,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
                 break;
 
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }

@@ -269,7 +269,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->switchFlag != -1 && Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     EnTalkGibud_SetupIdle(this);
@@ -876,7 +876,7 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, PlayState* play) {
         }
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

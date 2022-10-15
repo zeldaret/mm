@@ -305,7 +305,7 @@ void func_808AEFD4(EnBombf* this, PlayState* play) {
             player->interactRangeActor = NULL;
             player->stateFlags1 &= ~PLAYER_STATE1_800;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -439,8 +439,11 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
     if ((this->actor.scale.x >= 0.01f) && (ENBOMBF_GET(&this->actor) != ENBOMBF_1)) {
         if (this->actor.depthInWater >= 20.0f) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
-            Actor_MarkForDeath(&this->actor);
-        } else if (this->actor.bgCheckFlags & 0x40) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if (this->actor.bgCheckFlags & 0x40) {
             this->actor.bgCheckFlags &= ~0x40;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }

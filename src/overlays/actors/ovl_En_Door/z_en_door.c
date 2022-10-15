@@ -420,7 +420,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         objectInfo = &sObjInfo[15];
         objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
         if (objectBankIndex != 0) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
     }

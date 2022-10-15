@@ -531,7 +531,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     }
 
     if (gSaveContext.save.weekEventReg[30] & 1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

@@ -126,7 +126,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
@@ -304,7 +304,7 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                     break;
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
         } else {

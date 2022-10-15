@@ -151,21 +151,21 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     switch (owlType) {
         case ENOWL_GET_TYPE_1:
             if ((switchFlag < 0x7F) && Flags_GetSwitch(play, switchFlag)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_2:
             if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_3:
             if (CHECK_QUEST_ITEM(QUEST_SONG_SOARING)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -429,7 +429,7 @@ void func_8095B1E4(EnOwl* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer > 6000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -740,7 +740,7 @@ void func_8095BF58(EnOwl* this, PlayState* play) {
 void func_8095BF78(EnOwl* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_20;
     if (this->actor.xzDistToPlayer > 6000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x80, 0x40);
@@ -1067,12 +1067,12 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_10000000) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (this->actor.world.pos.y < (this->unk_3F0 - 1000.0f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1083,7 +1083,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
         if (this->unk_3DC > 0) {
             this->unk_3DC--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
