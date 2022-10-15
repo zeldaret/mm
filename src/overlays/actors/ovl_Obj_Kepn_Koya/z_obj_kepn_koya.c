@@ -41,7 +41,7 @@ void ObjKepnKoya_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_kepn_koya_Colheader_00805C);
     if (this->dyna.bgId == BG_ACTOR_MAX) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
