@@ -31,7 +31,7 @@ typedef enum {
 typedef enum {
     /* 0 */ LIGHT_ORB_STATE_OFF,
     /* 1 */ LIGHT_ORB_STATE_ON
-};
+} LightOrbState;
 
 const ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
