@@ -120,11 +120,11 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->pathLocation == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

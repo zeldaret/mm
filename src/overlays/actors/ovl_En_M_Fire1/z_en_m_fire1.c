@@ -68,9 +68,10 @@ void EnMFire1_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (Math_StepToF(&this->timer, 1.0f, 0.2f)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
 }

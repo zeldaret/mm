@@ -121,7 +121,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
             }
 
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -136,7 +136,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
 
         default:
             if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
             break;

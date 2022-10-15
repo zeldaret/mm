@@ -201,7 +201,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                                 func_80B5C684(this, play);
                             }
                         } else {
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                         }
                     } else if ((D_80B5E888 != NULL) && (D_80B5E888->unk_32C & 1)) {
                         this->unk_360 = D_80B5E888;
@@ -219,7 +219,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
             break;
@@ -274,7 +274,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                 this->actor.update = func_80B5DAEC;
                 func_80B5C634(this, play);
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
     }
@@ -483,7 +483,7 @@ void func_80B5C634(EnOt* this, PlayState* play) {
 
 void func_80B5C64C(EnOt* this, PlayState* play) {
     if (gSaveContext.save.weekEventReg[26] & 8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

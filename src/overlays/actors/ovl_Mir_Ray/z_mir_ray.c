@@ -296,7 +296,7 @@ void MirRay_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
 
     if (MIRRAY_LOCATION(&this->actor) >= MIRRAY_MAX) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->sourcePt.x = dataEntry->sourcePoint.x;

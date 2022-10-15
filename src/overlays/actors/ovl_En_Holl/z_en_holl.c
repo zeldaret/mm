@@ -155,7 +155,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(&this->actor)];
 
         if (!(actorCtxBitmask & zActorBitmask)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         if (this == sInstancePlayingSound) {

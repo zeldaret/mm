@@ -149,11 +149,12 @@ void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play) {
 
     // Fall down and become transparent, then delete once invisible
     if (Math_StepToS(&this->alpha, 0, 8)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.gravity = -1.0f;
-        Actor_MoveWithGravity(&this->actor);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actor.gravity = -1.0f;
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void EnTorch2_Draw(Actor* thisx, PlayState* play2) {

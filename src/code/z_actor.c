@@ -1026,7 +1026,7 @@ void* func_800B6680(PlayState* play, s16 id) {
     return NULL;
 }
 
-void Actor_MarkForDeath(Actor* actor) {
+void Actor_Kill(Actor* actor) {
     actor->draw = NULL;
     actor->update = NULL;
     actor->flags &= ~ACTOR_FLAG_1;
@@ -2346,7 +2346,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         }
     } else {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
-            Actor_MarkForDeath(actor);
+            Actor_Kill(actor);
         } else {
             s32 tmp = (params->unk_08 == 0);
 
@@ -2872,7 +2872,7 @@ void func_800BA6FC(PlayState* play, ActorContext* actorCtx) {
 
         while (actor != NULL) {
             if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
-                Actor_MarkForDeath(actor);
+                Actor_Kill(actor);
             }
 
             actor = actor->next;
@@ -2896,7 +2896,7 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
                 } else {
-                    Actor_MarkForDeath(actor);
+                    Actor_Kill(actor);
                     Actor_Destroy(actor, play);
                     actor = actor->next;
                 }
@@ -2925,7 +2925,7 @@ void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
                 } else {
-                    Actor_MarkForDeath(actor);
+                    Actor_Kill(actor);
                     Actor_Destroy(actor, play);
                     actor = actor->next;
                 }
