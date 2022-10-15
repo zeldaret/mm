@@ -2621,7 +2621,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numInvisibleActors, Actor** invis
     Actor** invisibleActor;
     Gfx* spAC;
     void* spA8;
-    s32 spA4;
+    void* spA4;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     Gfx* tmp;
     s32 pad[2];
@@ -2644,7 +2644,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numInvisibleActors, Actor** invis
             PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, spA8);
 
             spAC = tmp;
-            func_80170200(&play->pauseBgPreRender, &spAC, spA8, (void*)spA4);
+            func_80170200(&play->pauseBgPreRender, &spAC, spA8, spA4);
             tmp = spAC;
         }
 
