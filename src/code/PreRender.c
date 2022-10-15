@@ -329,15 +329,12 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             gDPLoadMultiTile(gfx++, this->fbufSave, 0x0000, G_TX_RENDERTILE, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width,
                              this->height, uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
                              G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            if (1) {}
 
             // Load the coverage line
             gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
                              uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                              G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             //! FAKE
-            if (1) {}
-            // The two if (1) {}'s above can be removed with do {} while(0) around macros
             if (1) {}
             if (1) {}
 
@@ -526,66 +523,44 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801716C4.s")
-#if 0
 u32 func_801716C4(u8* arg0, u8* arg1, u8* arg2) {
-    s32 sp28[9];
-    s32* var_s2;
+    u8 sp28[8 * 4];
     u32 var_s0;
     u32 var_s1;
-    u8 temp_t9;
-    u8* temp_a3;
-    u8* temp_t0;
-    u8* temp_t1;
-    u8* temp_t2;
-    u8* temp_t3;
-    u8* temp_t4;
-    u8* temp_t5;
-    u8* temp_v0;
-    u8* temp_v1;
 
-    sp28[0] = 0;
-    sp28[1] = 0;
-    sp28[2] = 0;
-    sp28[3] = 0;
-    sp28[4] = 0;
-    sp28[5] = 0;
-    sp28[6] = 0;
-    sp28[7] = 0;
+    *(s32*)(&sp28[0 * 4]) = 0;
+    *(s32*)(&sp28[1 * 4]) = 0;
+    *(s32*)(&sp28[2 * 4]) = 0;
+    *(s32*)(&sp28[3 * 4]) = 0;
+    *(s32*)(&sp28[4 * 4]) = 0;
+    *(s32*)(&sp28[5 * 4]) = 0;
+    *(s32*)(&sp28[6 * 4]) = 0;
+    *(s32*)(&sp28[7 * 4]) = 0;
+
+    sp28[arg0[0]]++;
+    sp28[arg0[1]]++;
+    sp28[arg0[2]]++;
+
+    sp28[arg1[0]]++;
+    sp28[arg1[1]]++;
+    sp28[arg1[2]]++;
+
+    sp28[arg2[0]]++;
+    sp28[arg2[1]]++;
+    sp28[arg2[2]]++;
+
     var_s0 = 0;
     var_s1 = 0;
-    temp_v0 = &sp28[arg0[0]];
-    var_s2 = &sp28;
-    *temp_v0 += 1;
-
-    temp_v1 = &sp28[arg0[1]];
-    *temp_v1 += 1;
-
-    temp_a3 = &sp28[arg0[2]];
-    *temp_a3 += 1;
-    temp_t0 = &sp28[arg1[0]];
-    *temp_t0 += 1;
-    temp_t1 = &sp28[arg1[1]];
-    *temp_t1 += 1;
-    temp_t2 = &sp28[arg1[2]];
-    *temp_t2 += 1;
-    temp_t3 = &sp28[arg2[0]];
-    *temp_t3 += 1;
-    temp_t4 = &sp28[arg2[1]];
-    *temp_t4 += 1;
-    temp_t5 = &sp28[arg2[2]];
-    *temp_t5 += 1;
-loop_1:
-    temp_t9 = *var_s2;
-    var_s2 += 1;
-    var_s0 += temp_t9;
-    if (var_s0 < 5) {
-        var_s1 += 1;
-        goto loop_1;
+    while (true) {
+        var_s0 += sp28[var_s1];
+        if (var_s0 >= 5) {
+            break;
+        }
+        var_s1++;
     }
+
     return var_s1;
 }
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801717F8.s")
 
