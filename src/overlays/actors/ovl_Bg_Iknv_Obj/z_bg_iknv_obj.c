@@ -88,7 +88,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
     }
 }
 

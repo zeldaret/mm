@@ -220,7 +220,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
 
     this->type = EN_MA_YTS_GET_TYPE(thisx);
     if (!EnMaYts_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);

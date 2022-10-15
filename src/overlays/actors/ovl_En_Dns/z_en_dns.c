@@ -502,7 +502,7 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
     EnDns* this = THIS;
 
     if (!func_8092D068(this)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

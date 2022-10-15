@@ -174,7 +174,7 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
                 func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
                 break;
             case 3:
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 break;
         }
     }

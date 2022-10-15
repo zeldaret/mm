@@ -1096,7 +1096,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
                 this->actor.shape.yOffset = EN_S_GORO_ROLLEDUP_YOFFSET;
                 break;
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }
@@ -1311,7 +1311,7 @@ void EnSGoro_Init(Actor* thisx, PlayState* play) {
 
         this->loadedObjIndex = objIndex;
         if (objIndex < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.draw = EnSGoro_Draw;
