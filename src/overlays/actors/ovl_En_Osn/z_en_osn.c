@@ -831,6 +831,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
 
         default:
             Actor_Kill(&this->actor);
+            break;
     }
 }
 

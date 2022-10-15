@@ -214,7 +214,7 @@ void func_80966A68(EnWeatherTag* this, PlayState* play) {
     }
     if ((s16)this->unk154 < 0) { // cast req
         this->unk154 = 0;
-        // @BUG redudant code
+        // @bug redudant code
         Actor_Kill(&this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_Die);
     }

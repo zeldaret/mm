@@ -782,7 +782,7 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
     s32 isUnderWater = false;
 
     this->actor.shape.rot.y += 0x1388;
-    if ((this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
+    if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= BGCHECK_Y_MAX)) {
         Actor_Kill(&this->actor);
         return;
     }

@@ -83,17 +83,22 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
                 this->actor.draw = DemoGetitem_Draw;
                 Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
                 this->actor.shape.rot.y += 0x3E8;
-                return;
+                break;
+
             case 3:
                 Actor_Kill(&this->actor);
-                return;
+                break;
+
             case 4:
                 this->actor.draw = DemoGetitem_Draw;
                 Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
                 this->actor.shape.yOffset = Math_SinS(sp22) * 15.0f;
-                return;
+                break;
+
+            default:
+                this->actor.draw = NULL;
+                break;
         }
-        this->actor.draw = NULL;
     } else {
         this->actor.draw = NULL;
     }

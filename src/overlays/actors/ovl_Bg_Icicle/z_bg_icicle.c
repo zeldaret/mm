@@ -179,7 +179,6 @@ void BgIcicle_Fall(BgIcicle* this, PlayState* play) {
             this->actionFunc = BgIcicle_Regrow;
         } else {
             Actor_Kill(&this->dyna.actor);
-            return;
         }
     } else {
         Actor_MoveWithGravity(&this->dyna.actor);

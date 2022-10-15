@@ -802,7 +802,7 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->banditsCollisions[1]);
 }
 
-// ObjUm_MarkMyDonkeyAndMyselfForDeath, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
+// ObjUm_KillMyDonkeyAndMyself, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
 void func_80B79524(ObjUm* this) {
     Actor_Kill(&this->dyna.actor);
     if (this->donkey != NULL) {
