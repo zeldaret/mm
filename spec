@@ -4131,8 +4131,7 @@ beginseg
     name "ovl_Obj_Y2shutter"
     compress
     include "build/src/overlays/actors/ovl_Obj_Y2shutter/z_obj_y2shutter.o"
-    include "build/data/ovl_Obj_Y2shutter/ovl_Obj_Y2shutter.data.o"
-    include "build/data/ovl_Obj_Y2shutter/ovl_Obj_Y2shutter.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Y2shutter/ovl_Obj_Y2shutter_reloc.o"
 endseg
 
 beginseg

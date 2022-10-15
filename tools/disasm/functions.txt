@@ -14954,7 +14954,7 @@
     0x80B9A8E8:("ObjY2lift_Draw",),
     0x80B9A980:("ObjY2shutter_Init",),
     0x80B9A9EC:("ObjY2shutter_Destroy",),
-    0x80B9AA20:("func_80B9AA20",),
+    0x80B9AA20:("ObjY2shutter_SetupOpen",),
     0x80B9AA54:("ObjY2shutter_Update",),
     0x80B9AE00:("ObjY2shutter_Draw",),
     0x80B9AF50:("func_80B9AF50",),
