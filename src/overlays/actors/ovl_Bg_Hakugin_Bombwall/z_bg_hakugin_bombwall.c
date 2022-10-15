@@ -369,7 +369,7 @@ s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
                     return true;
                 }
             }
-        } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
             return true;
         }

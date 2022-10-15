@@ -143,7 +143,7 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play) {
 }
 
 void ObjDanpeilift_Teleport(ObjDanpeilift* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         ObjDanpeilift_UpdatePosition(this, this->curPoint);
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjDanpeilift_Move;
@@ -174,7 +174,7 @@ void ObjDanpeilift_Update(Actor* thisx, PlayState* play) {
         f32 target;
 
         this->isWeightOnPrev = this->isWeightOn;
-        this->isWeightOn = DynaPolyActor_IsInRidingMovingState(&this->dyna) ? 1 : 0;
+        this->isWeightOn = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? 1 : 0;
         if ((this->isWeightOn != this->isWeightOnPrev) && (this->maxHeight < 1.0f)) {
             this->cycle = -0x8000;
             this->maxHeight = 6.0f;

@@ -238,7 +238,7 @@ void func_809541B8(BgIngate* this, PlayState* play) {
                 this->actionFunc = func_809543D4;
             }
         }
-    } else if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->unk160 |= 4;
     }
 }

@@ -546,8 +546,8 @@ void BgDblueBalance_Update(Actor* thisx, PlayState* play) {
 void func_80B8330C(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
-    this->unk_180 = DynaPolyActor_IsInSwitchPressedState(&this->dyna);
-    this->unk_181 = DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna);
+    this->unk_180 = DynaPolyActor_IsSwitchPressed(&this->dyna);
+    this->unk_181 = DynaPolyActor_IsHeavySwitchPressed(&this->dyna);
 }
 
 void func_80B83344(BgDblueBalance* this) {

@@ -775,8 +775,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
         Message_StartTextbox(play, 0x288B, &this->actor);
     }
 
-    if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
-         (player->actor.bgCheckFlags & 1)) ||
+    if ((!DynaPolyActor_IsPlayerAbove((DynaPolyActor*)this->actor.child) && (player->actor.bgCheckFlags & 1)) ||
         (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] <= SECONDS_TO_TIMER(0)) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~0x400000;
         func_80961E88(play);

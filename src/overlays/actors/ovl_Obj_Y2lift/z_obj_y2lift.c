@@ -53,9 +53,9 @@ void ObjY2lift_Update(Actor* thisx, PlayState* play) {
     ObjY2lift* this = THIS;
     f32 temp_fv0 = this->dyna.actor.world.pos.y;
     f32 targetVelocityY = 0.0f;
-    s32 temp_v0 = DynaPolyActor_IsInRidingMovingState(&this->dyna);
+    s32 temp_v0 = DynaPolyActor_IsPlayerOnTop(&this->dyna);
 
-    if (temp_v0 || DynaPolyActor_IsInRidingFallingState(&this->dyna)) {
+    if (temp_v0 || DynaPolyActor_IsActorOnTop(&this->dyna)) {
         if (!this->unk15D) {
             this->unk15D = true;
             this->unk15F = 12;

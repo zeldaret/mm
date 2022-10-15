@@ -765,7 +765,7 @@ void func_80938804(ObjBean* this) {
 }
 
 void func_80938834(ObjBean* this, PlayState* play) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80938874(this);
     }
     func_80936F24(this);
@@ -784,7 +784,7 @@ void func_809388A8(ObjBean* this, PlayState* play) {
         func_80937268(this, play);
         func_809372A8(this);
         func_8093892C(this);
-    } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_800B9010(&this->dyna.actor, NA_SE_PL_PLANT_MOVE - SFX_FLAG);
     }
     func_80936F24(this);
@@ -797,7 +797,7 @@ void func_8093892C(ObjBean* this) {
 }
 
 void func_80938958(ObjBean* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingRotatingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerAbove(&this->dyna)) {
         func_80938804(this);
     }
     func_80936F24(this);
@@ -810,7 +810,7 @@ void func_80938998(ObjBean* this) {
 }
 
 void func_809389BC(ObjBean* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80937268(this, play);
         func_809372A8(this);
         func_80937238(this);

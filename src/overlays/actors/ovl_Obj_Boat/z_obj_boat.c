@@ -88,12 +88,12 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjBoat* this = THIS;
     Player* player = GET_PLAYER(play);
-    s32 temp = DynaPolyActor_IsInRidingMovingState(&this->dyna);
+    s32 temp = DynaPolyActor_IsPlayerOnTop(&this->dyna);
     f32 sp3C = 0.0f;
     s16 sp3A = this->dyna.actor.shape.rot.y;
     Vec3f sp2C;
 
-    if ((temp != 0) || ((DynaPolyActor_IsInRidingFallingState(&this->dyna)))) {
+    if ((temp != 0) || ((DynaPolyActor_IsActorOnTop(&this->dyna)))) {
         if ((this->unk_15F == 0) && (OBJBOAT_GET_4000(thisx) || ((temp != 0) && (this->unk_15C == this->unk_15E)))) {
             this->unk_15D = -this->unk_15D;
             if (this->unk_15D > 0) {

@@ -439,8 +439,8 @@ void ObjOshihiki_OnActor(ObjOshihiki* this, PlayState* play) {
         } else {
             dyna = DynaPoly_GetActor(&play->colCtx, this->floorBgIds[this->highestFloor]);
             if (dyna != NULL) {
-                DynaPolyActor_SetRidingFallingState(dyna);
-                DynaPolyActor_SetSwitchPressedState(dyna);
+                DynaPolyActor_SetActorOnTop(dyna);
+                DynaPolyActor_SetSwitchPressed(dyna);
                 if ((this->timer <= 0) && (fabsf(this->dyna.pushForce) > 0.001f) &&
                     ObjOshihiki_StrongEnough(this, play) && ObjOshihiki_NoSwitchPress(this, dyna, play) &&
                     !ObjOshihiki_CheckWall(play, this->dyna.yRotation, this->dyna.pushForce, this)) {
@@ -456,9 +456,9 @@ void ObjOshihiki_OnActor(ObjOshihiki* this, PlayState* play) {
         ObjOshihiki_SetupFall(this, play);
     } else {
         dyna = DynaPoly_GetActor(&play->colCtx, this->floorBgIds[this->highestFloor]);
-        if ((dyna != NULL) && (dyna->flags & 1)) {
-            DynaPolyActor_SetRidingFallingState(dyna);
-            DynaPolyActor_SetSwitchPressedState(dyna);
+        if ((dyna != NULL) && (dyna->transformFlags & DYNA_TRANSFORM_POS)) {
+            DynaPolyActor_SetActorOnTop(dyna);
+            DynaPolyActor_SetSwitchPressed(dyna);
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         } else {
             ObjOshihiki_SetupFall(this, play);

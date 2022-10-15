@@ -632,7 +632,7 @@ void func_80A22728(ObjSkateblock* this) {
 }
 
 void func_80A2273C(ObjSkateblock* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.y = (this->dyna.actor.home.pos.y - (600.0f * this->dyna.actor.scale.y)) - 10.0f;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
@@ -663,7 +663,7 @@ void func_80A227C0(ObjSkateblock* this, PlayState* play) {
         func_80A22308(this);
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         D_80A22A10 |= 1 << this->unk_1C0;
     }
 }

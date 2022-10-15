@@ -408,7 +408,7 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, PlayState* play) {
     Math_Vec3f_Copy(&originalWorldPos, &this->actor.world.pos);
     Math_Vec3f_Copy(&originalAxisUp, &this->axisUp);
     yaw = this->actor.shape.rot.y;
-    BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, this->actor.floorBgId, &this->actor);
+    DynaPolyActor_TransformCarriedActor(&play->colCtx, this->actor.floorBgId, &this->actor);
 
     if (yaw != this->actor.shape.rot.y) {
         yaw = this->actor.shape.rot.y - yaw;

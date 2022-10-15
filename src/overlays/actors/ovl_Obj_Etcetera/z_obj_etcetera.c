@@ -154,7 +154,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
             this->oscillationTimer = minOscillationTimer;
         }
     } else {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
@@ -186,7 +186,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
 }
 
 void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -208,11 +208,11 @@ void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
 void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, PlayState* play) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
-    // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
+    // it's more likely they used dyna given that DynaPolyActor_IsPlayerOnTop takes a DynaPolyActor.
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (DynaPolyActor_IsInRidingMovingState(dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;

@@ -91,7 +91,7 @@ void BgLotus_Wait(BgLotus* this, PlayState* play) {
     } else {
         this->dyna.actor.world.pos.y = this->height;
 
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             if (this->hasSpawnedRipples == 0) {
                 EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 1000, 1400, 0);
                 EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 1000, 1400, 8);

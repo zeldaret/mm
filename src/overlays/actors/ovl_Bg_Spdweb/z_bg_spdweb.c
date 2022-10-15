@@ -297,7 +297,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
                     return;
                 }
 
-                if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+                if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
                     sp3A = 300;
                     break;
                 }
@@ -305,7 +305,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         }
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         temp_f12 = 2.0f * sqrtf(CLAMP_MIN(sp3A, 0));
         if ((this->unk_164 < temp_f12) && (temp_f12 > 2.0f)) {
             this->unk_164 = temp_f12;
@@ -327,8 +327,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     Math_ApproachZeroF(&this->unk_164, 1.0f, 0.8f);
 
     if (this->unk_162 == 4) {
-        if ((this->unk_161 != 0) ||
-            ((DynaPolyActor_IsInRidingMovingState(&this->dyna) != 0) && (this->unk_164 > 2.0f))) {
+        if ((this->unk_161 != 0) || ((DynaPolyActor_IsPlayerOnTop(&this->dyna) != 0) && (this->unk_164 > 2.0f))) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
             player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;

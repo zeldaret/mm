@@ -429,7 +429,7 @@ void func_80A674C4(ObjDriftice* this, PlayState* play) {
 void ObjDriftice_Update(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->unk_248 < 0) {
             this->unk_248 = 1;
         } else {

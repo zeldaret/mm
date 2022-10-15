@@ -129,7 +129,7 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
     s32 pad;
     s16 quakeIndex;
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->timer <= 0) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);

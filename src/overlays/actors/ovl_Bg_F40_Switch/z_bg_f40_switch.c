@@ -56,7 +56,7 @@ void BgF40Switch_CheckAll(BgF40Switch* this, PlayState* play) {
             if (actor->id == ACTOR_BG_F40_SWITCH && actor->room == this->dyna.actor.room && actor->update != NULL) {
                 actorAsSwitch = (BgF40Switch*)actor;
                 actorAsSwitch->wasPressed = actorAsSwitch->isPressed;
-                isPressed = DynaPolyActor_IsInSwitchPressedState(&actorAsSwitch->dyna);
+                isPressed = DynaPolyActor_IsSwitchPressed(&actorAsSwitch->dyna);
                 if (actorAsSwitch->isPressed && actorAsSwitch->actionFunc == BgF40Switch_IdlePressed) {
                     // Switch is fully pressed - if there's nothing keeping it pressed, wait a short time before
                     // reverting to unpressed state.

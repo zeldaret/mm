@@ -3071,7 +3071,7 @@ void BgCheck_ResetFlagsIfLoadedActor(PlayState* play, DynaCollisionContext* dyna
         if ((dyna->bgActorFlags[i] & 1)) {
             dynaActor = DynaPoly_GetActor(&play->colCtx, i);
             if (dynaActor != NULL && &dynaActor->actor == actor) {
-                DynaPolyActor_ResetState((DynaPolyActor*)actor);
+                DynaPolyActor_UnsetAllInteractFlags((DynaPolyActor*)actor);
                 return;
             }
         }

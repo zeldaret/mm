@@ -120,7 +120,7 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
 
     if ((this->dyna.actor.xzDistToPlayer < (45.0f * this->dyna.actor.scale.x * 10.0f)) &&
         (this->dyna.actor.playerHeightRel < -21.0f)) {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             this->unk_172 &= ~8;
             this->unk_19C = 0.0f;
             this->unk_1A0 = 0.0f;
@@ -616,7 +616,7 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
         }
     }
 
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->dyna.actor.xzDistToPlayer < 45.0f) {
             if ((this->dyna.actor.playerHeightRel < -this->dyna.actor.velocity.y) &&
                 (this->dyna.actor.playerHeightRel >= -800.0f)) {

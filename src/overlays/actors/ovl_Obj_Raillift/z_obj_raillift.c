@@ -180,7 +180,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
 Will teleport to what ever curpoint is set to
 */
 void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         ObjRaillift_UpdatePosition(this, this->curPoint);
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjRaillift_Move;
@@ -230,7 +230,7 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
         s32 requiredScopeTemp;
 
         this->isWeightOnPrev = this->isWeightOn;
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             this->isWeightOn = true;
         } else {
             this->isWeightOn = false;

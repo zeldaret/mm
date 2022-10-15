@@ -512,7 +512,7 @@ void func_8088B630(EnArrow* this, PlayState* play) {
     SkelAnime_Update(&this->arrow.skelAnime);
 
     if (this->actor.wallBgId != BG_ACTOR_MAX) {
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, this->actor.wallBgId, &this->actor);
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, this->actor.wallBgId, &this->actor);
     }
 
     if (DECR(this->unk_260) == 0) {

@@ -1551,7 +1551,7 @@ s32 func_800B7678(PlayState* play, Actor* actor, Vec3f* pos, s32 flags) {
             }
 
             actor->bgCheckFlags |= 1;
-            BgCheck2_AttachToMesh(&play->colCtx, actor, (s32)actor->floorBgId);
+            DynaPolyActor_AttachCarriedActor(&play->colCtx, actor, (s32)actor->floorBgId);
         }
     } else {
         return func_800B761C(actor, distToFloor, flags);
@@ -1567,7 +1567,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
     Vec3f pos;
 
     if ((actor->floorBgId != BGCHECK_SCENE) && (actor->bgCheckFlags & 1)) {
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, actor->floorBgId, actor);
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, actor->floorBgId, actor);
     }
 
     if (flags & 1) {
@@ -3318,7 +3318,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
 
                 if ((actor != sp8C) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
-                    phi_s2_2 = (actor->flags & 1) != 0;
+                    phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
                     if (phi_s2_2) {
                         phi_s2_2 = temp_f0_2 < D_801ED8C8;
                     }

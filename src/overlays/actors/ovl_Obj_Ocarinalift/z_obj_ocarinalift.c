@@ -173,7 +173,7 @@ void func_80AC99C0(ObjOcarinalift* this) {
 }
 
 void func_80AC99D4(ObjOcarinalift* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80AC94C0(this, this->unk168);
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAMSC_1) &&
@@ -205,7 +205,7 @@ void func_80AC9AE0(ObjOcarinalift* this, PlayState* play) {
     if (func_800B8718(&this->dyna.actor, &play->state)) {
         func_80152434(play, 1);
         func_80AC9B48(this);
-    } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_800B8804(&this->dyna.actor, play, 40.0f);
     }
 }

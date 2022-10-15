@@ -6,7 +6,7 @@
 
 #include "z_en_test3.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_CAN_HOLD_SWITCH)
 
 #define THIS ((EnTest3*)thisx)
 

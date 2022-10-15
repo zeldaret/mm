@@ -606,10 +606,10 @@ asm/non_matchings/code/z_bgcheck/WaterBox_GetLightSettingIndex.s,WaterBox_GetLig
 asm/non_matchings/code/z_bgcheck/func_800CA6F0.s,func_800CA6F0,0x800CA6F0,0xB8
 asm/non_matchings/code/z_bgcheck/func_800CA9D0.s,func_800CA9D0,0x800CA9D0,0x11
 asm/non_matchings/code/z_bgcheck/func_800CAA14.s,func_800CAA14,0x800CAA14,0x2F
-asm/non_matchings/code/z_bg_collect/BgCheck2_UpdateActorPosition.s,BgCheck2_UpdateActorPosition,0x800CAAD0,0x4F
-asm/non_matchings/code/z_bg_collect/BgCheck2_UpdateActorYRotation.s,BgCheck2_UpdateActorYRotation,0x800CAC0C,0x25
-asm/non_matchings/code/z_bg_collect/BgCheck2_AttachToMesh.s,BgCheck2_AttachToMesh,0x800CACA0,0x23
-asm/non_matchings/code/z_bg_collect/BgCheck2_UpdateActorAttachedToMesh.s,BgCheck2_UpdateActorAttachedToMesh,0x800CAD2C,0x39
+asm/non_matchings/code/z_bg_collect/DynaPolyActor_UpdateCarriedActorPos.s,DynaPolyActor_UpdateCarriedActorPos,0x800CAAD0,0x4F
+asm/non_matchings/code/z_bg_collect/DynaPolyActor_UpdateCarriedActorRotY.s,DynaPolyActor_UpdateCarriedActorRotY,0x800CAC0C,0x25
+asm/non_matchings/code/z_bg_collect/DynaPolyActor_AttachCarriedActor.s,DynaPolyActor_AttachCarriedActor,0x800CACA0,0x23
+asm/non_matchings/code/z_bg_collect/DynaPolyActor_TransformCarriedActor.s,DynaPolyActor_TransformCarriedActor,0x800CAD2C,0x39
 asm/non_matchings/code/z_bg_item/DynaPoly_Init.s,DynaPoly_Init,0x800CAE10,0x9
 asm/non_matchings/code/z_bg_item/DynaPoly_LoadMesh.s,DynaPoly_LoadMesh,0x800CAE34,0x12
 asm/non_matchings/code/z_bg_item/DynaPoly_ResetState.s,DynaPoly_ResetState,0x800CAE7C,0x3
