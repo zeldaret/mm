@@ -58,11 +58,7 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    gameplay_keep_DL_01C430, // Human
-    gameplay_keep_DL_048DF0, // Zora
-    gameplay_keep_DL_089070, // Deku
-    gameplay_keep_DL_057B10, // Goron
-    gameplay_keep_DL_01C430, // Human
+    gElegyShellHumanDL, gElegyShellGoronDL, gElegyShellZoraDL, gElegyShellDekuDL, gElegyShellHumanDL,
 };
 
 void EnTorch2_Init(Actor* thisx, PlayState* play) {
@@ -163,7 +159,7 @@ void EnTorch2_UpdateDeath(Actor* thisx, PlayState* play) {
 void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTorch2* this = THIS;
-    Gfx* gfx = sShellDLists[thisx->params];
+    Gfx* gfx = sShellDLists[this->actor.params];
 
     OPEN_DISPS(play->state.gfxCtx);
     if (this->alpha == 0xFF) {
