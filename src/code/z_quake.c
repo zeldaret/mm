@@ -47,40 +47,40 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
     Vec3f* at = &req->camera->at;
     Vec3f* eye = &req->camera->eye;
     Vec3f atEyeOffset;
-    VecSph sph;
-    VecSph eyeToAtSph;
+    VecSph geo;
+    VecSph eyeToAtGeo;
 
     if (req->isRelativeToScreen) {
         atEyeOffset.x = 0;
         atEyeOffset.y = 0;
         atEyeOffset.z = 0;
-        OLib_Vec3fDiffToVecSphGeo(&eyeToAtSph, eye, at);
+        OLib_Vec3fDiffToVecGeo(&eyeToAtGeo, eye, at);
 
         // y shake
-        sph.r = req->y * y;
+        geo.r = req->y * y;
         // point unit vector up, then add on `req->orientation`
-        sph.pitch = eyeToAtSph.pitch + req->orientation.x + 0x4000;
-        sph.yaw = eyeToAtSph.yaw + req->orientation.y;
+        geo.pitch = eyeToAtGeo.pitch + req->orientation.x + 0x4000;
+        geo.yaw = eyeToAtGeo.yaw + req->orientation.y;
         // apply y shake
-        OLib_VecSphGeoAddToVec3f(&atEyeOffset, &atEyeOffset, &sph);
+        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
 
         // x shake
-        sph.r = req->x * x;
+        geo.r = req->x * x;
         // point unit vector left, then add on `req->orientation`
-        sph.pitch = eyeToAtSph.pitch + req->orientation.x;
-        sph.yaw = eyeToAtSph.yaw + req->orientation.y + 0x4000;
+        geo.pitch = eyeToAtGeo.pitch + req->orientation.x;
+        geo.yaw = eyeToAtGeo.yaw + req->orientation.y + 0x4000;
         // apply x shake
-        OLib_VecSphGeoAddToVec3f(&atEyeOffset, &atEyeOffset, &sph);
+        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
     } else {
         atEyeOffset.x = 0;
         atEyeOffset.y = req->y * y;
         atEyeOffset.z = 0;
 
-        sph.r = req->x * x;
-        sph.pitch = req->orientation.x;
-        sph.yaw = req->orientation.y;
+        geo.r = req->x * x;
+        geo.pitch = req->orientation.x;
+        geo.yaw = req->orientation.y;
 
-        OLib_VecSphGeoAddToVec3f(&atEyeOffset, &atEyeOffset, &sph);
+        OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
     }
 
     shake->atOffset = shake->eyeOffset = atEyeOffset;
@@ -877,9 +877,9 @@ void Distortion_Update(void) {
         screenPlanePhase += CAM_DEG_TO_BINANG(screenPlanePhaseStep);
 
         View_SetDistortionOrientation(&sDistortionRequest.play->view,
-                                      Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
-                                      Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
-                                      Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+                                      Math_CosS(depthPhase) * (DEG_TO_RAD(rotX) * xyScaleFactor),
+                                      Math_SinS(depthPhase) * (DEG_TO_RAD(rotY) * xyScaleFactor),
+                                      Math_SinS(screenPlanePhase) * (DEG_TO_RAD(rotZ) * zScaleFactor));
         View_SetDistortionScale(&sDistortionRequest.play->view,
                                 (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
                                 (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,

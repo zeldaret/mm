@@ -331,7 +331,7 @@ void EnRat_ChooseDirection(EnRat* this) {
     }
 
     angle = CLAMP(angle, -0x800, 0x800);
-    Matrix_RotateAxisF(angle * (M_PI / 0x8000), &this->axisUp, MTXMODE_NEW);
+    Matrix_RotateAxisF(BINANG_TO_RAD(angle), &this->axisUp, MTXMODE_NEW);
     Matrix_MultVec3f(&this->axisForwards, &newAxisForwards);
     Math_Vec3f_Copy(&this->axisForwards, &newAxisForwards);
     Math3D_CrossProduct(&this->axisUp, &this->axisForwards, &this->axisLeft);
