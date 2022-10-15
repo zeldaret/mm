@@ -58,8 +58,8 @@ void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 ar
         flags = 0x1C;
     }
 
-    func_80172758(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f,
-                  1.0f, 1.0f, flags);
+    Prerender_DrawBackground2D(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0,
+                               0.0f, 0.0f, 1.0f, 1.0f, flags);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -94,8 +94,8 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
 
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    func_80172758(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f, 1.0f,
-                  1.0f, 0xB);
+    Prerender_DrawBackground2D(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f,
+                               0.0f, 1.0f, 1.0f, 0xB);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -645,32 +645,48 @@ void func_801720C4(PreRender* this) {
 // TODO: ucode.h
 #define SP_UCODE_DATA_SIZE 0x800
 
-void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
+typedef struct {
+    /* 0x00 */ void* timg;
+    /* 0x04 */ void* tlut;
+    /* 0x08 */ u16 width;
+    /* 0x0A */ u16 height;
+    /* 0x0C */ u8 fmt;
+    /* 0x0D */ u8 siz;
+    /* 0x0E */ u16 tt;
+    /* 0x10 */ u16 tlutCount;
+    /* 0x14 */ f32 x;
+    /* 0x18 */ f32 y;
+    /* 0x1C */ f32 xScale;
+    /* 0x20 */ f32 yScale;
+    /* 0x24 */ u32 flags;
+} PreRenderBackground2DParams; // size = 0x28
+
+void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfxp) {
     Gfx* gfx;
     uObjBg* bg;
     u32 sp64;
     Gfx* gfxTemp;
     u32 sp5C;
 
-    sp5C = (params->flags & 8) != 0;
-    sp64 = (params->flags & 4) ? G_AC_THRESHOLD : G_AC_NONE;
+    sp5C = (bg2D->flags & 8) != 0;
+    sp64 = (bg2D->flags & 4) ? G_AC_THRESHOLD : G_AC_NONE;
 
     gfxTemp = *gfxp;
     bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
     gfx = gfxTemp;
 
     bg->b.imageX = 0;
-    bg->b.imageW = (params->width * (1 << 2)) + 1;
-    bg->b.frameX = params->x * (1 << 2);
+    bg->b.imageW = (bg2D->width * (1 << 2)) + 1;
+    bg->b.frameX = bg2D->x * (1 << 2);
 
     bg->b.imageY = 0;
-    bg->b.imageH = (params->height * (1 << 2)) + 1;
-    bg->b.frameY = params->y * (1 << 2);
+    bg->b.imageH = (bg2D->height * (1 << 2)) + 1;
+    bg->b.frameY = bg2D->y * (1 << 2);
 
-    bg->b.imagePtr = params->timg;
+    bg->b.imagePtr = bg2D->timg;
     bg->b.imageLoad = G_BGLT_LOADTILE;
-    bg->b.imageFmt = params->fmt;
-    bg->b.imageSiz = params->siz;
+    bg->b.imageFmt = bg2D->fmt;
+    bg->b.imageSiz = bg2D->siz;
     bg->b.imagePal = 0;
     bg->b.imageFlip = 0;
 
@@ -678,38 +694,38 @@ void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
         gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
     }
 
-    if ((params->fmt == G_IM_FMT_CI) && (params->tlut != NULL)) {
-        gDPLoadTLUT(gfx++, params->tlutCount, 256, params->tlut);
+    if ((bg2D->fmt == G_IM_FMT_CI) && (bg2D->tlut != NULL)) {
+        gDPLoadTLUT(gfx++, bg2D->tlutCount, 256, bg2D->tlut);
     } else {
         gDPPipeSync(gfx++);
     }
 
-    if (params->flags & 0x10) {
-        bg->b.frameW = params->width * (1 << 2);
-        bg->b.frameH = params->height * (1 << 2);
+    if (bg2D->flags & 0x10) {
+        bg->b.frameW = bg2D->width * (1 << 2);
+        bg->b.frameH = bg2D->height * (1 << 2);
 
         guS2DInitBg(bg);
 
-        if (!(params->flags & 1)) {
-            gDPSetOtherMode(gfx++, params->tt | G_CYC_COPY, sp64);
+        if (!(bg2D->flags & 1)) {
+            gDPSetOtherMode(gfx++, bg2D->tt | G_CYC_COPY, sp64);
         }
 
         gSPBgRectCopy(gfx++, bg);
     } else {
-        bg->b.frameW = (u32)(params->width * (1 << 2)) * params->xScale;
-        bg->b.frameH = (u32)(params->height * (1 << 2)) * params->yScale;
-        bg->b.tmemW = (1 << 10) / params->xScale;
-        bg->b.tmemH = (1 << 10) / params->yScale;
+        bg->b.frameW = (u32)(bg2D->width * (1 << 2)) * bg2D->xScale;
+        bg->b.frameH = (u32)(bg2D->height * (1 << 2)) * bg2D->yScale;
+        bg->b.tmemW = (1 << 10) / bg2D->xScale;
+        bg->b.tmemH = (1 << 10) / bg2D->yScale;
         bg->s.imageYorig = bg->b.imageY;
 
-        if (!(params->flags & 1)) {
-            gDPSetOtherMode(gfx++, params->tt | G_AD_DISABLE | G_CD_DISABLE | G_TC_FILT,
+        if (!(bg2D->flags & 1)) {
+            gDPSetOtherMode(gfx++, bg2D->tt | G_AD_DISABLE | G_CD_DISABLE | G_TC_FILT,
                             AA_EN | CVG_X_ALPHA | ALPHA_CVG_SEL |
                                 GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) |
                                 GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) | sp64);
         }
 
-        if (!(params->flags & 2)) {
+        if (!(bg2D->flags & 2)) {
             gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, 1, 0, 0, 0, TEXEL0, 0, 0, 0, 1);
         }
 
@@ -726,24 +742,24 @@ void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
     *gfxp = gfx;
 }
 
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 tlutCount,
-                   f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
-    PreRenderParams params;
-    PreRenderParams* paramsp = &params;
+void Prerender_DrawBackground2D(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt,
+                                u16 tlutCount, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
+    PreRenderBackground2DParams bg2D;
+    PreRenderBackground2DParams* bg2DPtr = &bg2D;
 
-    params.timg = timg;
-    params.tlut = tlut;
-    params.width = width;
-    params.height = height;
-    params.fmt = fmt;
-    params.siz = siz;
-    params.tt = tt;
-    params.tlutCount = tlutCount;
-    params.x = x;
-    params.y = y;
-    params.xScale = xScale;
-    params.yScale = yScale;
-    params.flags = flags;
+    bg2D.timg = timg;
+    bg2D.tlut = tlut;
+    bg2D.width = width;
+    bg2D.height = height;
+    bg2D.fmt = fmt;
+    bg2D.siz = siz;
+    bg2D.tt = tt;
+    bg2D.tlutCount = tlutCount;
+    bg2D.x = x;
+    bg2D.y = y;
+    bg2D.xScale = xScale;
+    bg2D.yScale = yScale;
+    bg2D.flags = flags;
 
-    func_801720FC(paramsp, gfxp);
+    Prerender_DrawBackground2DImpl(bg2DPtr, gfxp);
 }
