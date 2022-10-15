@@ -207,8 +207,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                         case TEXT_STATE_16:
                             itemAction = func_80123810(play);
                             scriptBranch = 0;
-                            if ((itemAction == PLAYER_IA_LETTER_TO_KAFEI) ||
-                                (itemAction == PLAYER_IA_LETTER_MAMA)) {
+                            if ((itemAction == PLAYER_IA_LETTER_TO_KAFEI) || (itemAction == PLAYER_IA_LETTER_MAMA)) {
                                 this->exchangeItemId = itemAction;
                                 this->behaviour++;
                                 scriptBranch = 1;
