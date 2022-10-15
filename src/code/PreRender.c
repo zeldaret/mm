@@ -364,12 +364,39 @@ void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp) {
 }
 
 /**
- * Applies an anti-alias filter where the middle pixel (index 7) correspond to (x, y) in this 3x5 rectangle
- *     _ _ _ _ _
- *   | 0 1 2 3 4 |
- *   | 5 6 7 8 9 |
- *   | A B C D E |
- *     ‾ ‾ ‾ ‾ ‾
+ * Applies the Video Interface anti-aliasing of silhouette edges to an image.
+ *
+ * This filter performs a linear interpolation on partially covered pixels between the current pixel color (called
+ * foreground color) and a "background" pixel color obtained by sampling fully covered pixels at the six highlighted
+ * points in the following 5x3 neighborhood:
+ *    _ _ _ _ _
+ *  |   o   o   |
+ *  | o   X   o |
+ *  |   o   o   |
+ *    ‾ ‾ ‾ ‾ ‾
+ * Whether a pixel is partially covered is determined by reading the coverage values associated with the image.
+ * Coverage is a measure of how many subpixels the last drawn primitive covered. A fully covered pixel is one with a
+ * full coverage value, the entire pixel was covered by the primitive.
+ * The background color is calculated as the average of the "penultimate" minimum and maximum colors in the 5x3
+ * neighborhood.
+ *
+ * The final color is calculated by interpolating the foreground and background color weighted by the coverage:
+ *      OutputColor = cvg * ForeGround + (1.0 - cvg) * BackGround
+ *
+ * This is a software implementation of the same algorithm used in the Video Interface hardware when Anti-Aliasing is
+ * enabled in the VI Control Register.
+ *
+ * Patent describing the algorithm:
+ *
+ * Gossett, C. P., & van Hook, T. J. (Filed 1995, Published 1998)
+ * Antialiasing of silhouette edges (USOO5742277A)
+ * U.S. Patent and Trademark Office
+ * Expired 2015-10-06
+ * https://patents.google.com/patent/US5742277A/en
+ *
+ * @param this  PreRender instance
+ * @param x     Center pixel x
+ * @param y     Center pixel y
  */
 void PreRender_AntiAliasFilter(PreRender* this, s32 x, s32 y) {
     s32 i;
@@ -523,6 +550,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
     }
 }
 
+// TODO: Could args be `windowR`,`windowG`,`windowB` from OoT's PreRender_DivotFilter()
 u32 func_801716C4(u8* arg0, u8* arg1, u8* arg2) {
     u8 sp28[8 * 4];
     u32 var_s0;
