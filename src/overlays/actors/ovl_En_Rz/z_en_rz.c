@@ -119,7 +119,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     switch (EN_RZ_GET_TYPE(thisx)) {
         case EN_RZ_TYPE_1:
             if (!(gSaveContext.save.weekEventReg[77] & 4)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             EnRz_ChangeAnim(play, this, EN_RZ_ANIM_SITTING, ANIMMODE_LOOP, 0.0f);
@@ -142,7 +142,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
         default: // EN_RZ_TYPE_0
             this->stateFlags |= EN_RZ_STATE_2;
             if (gSaveContext.save.weekEventReg[77] & 4) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             EnRz_ChangeAnim(play, this, EN_RZ_ANIM_WALKING, ANIMMODE_LOOP, 0.0f);
