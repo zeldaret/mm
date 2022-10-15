@@ -122,7 +122,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
 
     // check if already healed
     if (gSaveContext.save.weekEventReg[82] & 4) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -250,7 +250,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
     if (this->alpha > 10) {
         this->alpha -= 10;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

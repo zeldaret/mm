@@ -158,7 +158,7 @@ void func_80AC4D2C(BgIcefloe* this, PlayState* play) {
     }
     this->dyna.actor.scale.y -= 0.0026f;
     if (this->dyna.actor.scale.y <= 0.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

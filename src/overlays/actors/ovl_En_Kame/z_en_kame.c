@@ -600,7 +600,7 @@ void func_80AD8388(EnKame* this, PlayState* play) {
         this->actor.scale.x -= 0.001f;
         if (this->actor.scale.x <= 0.0f) {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->actor.scale.y = this->actor.scale.x;
             this->actor.scale.z = this->actor.scale.x;

@@ -64,7 +64,7 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
     niwObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_NIW);
     if (niwObjectIndex < 0) {
         // niw object does not exist, we need it for tranformation, despawn
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -72,7 +72,7 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
         // if breman mask was already used, replace with adult EnNiw
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

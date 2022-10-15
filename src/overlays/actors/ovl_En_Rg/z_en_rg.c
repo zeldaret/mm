@@ -758,7 +758,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->unk_31E = 0;
         this->actionFunc = func_80BF4EBC;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -157,7 +157,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     s32 pad;
 
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -277,7 +277,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     boss = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (boss != NULL) {
                         if (boss->id == ACTOR_EN_WATER_EFFECT) {
-                            Actor_MarkForDeath(boss);
+                            Actor_Kill(boss);
                         }
                         boss = boss->next;
                     }
@@ -559,7 +559,7 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
     }
 
     if (this->unk_1FA == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
