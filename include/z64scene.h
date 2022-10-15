@@ -261,7 +261,7 @@ typedef struct {
     /* 0x02 */ u8 unk2; // 3: Room is hot
     /* 0x03 */ u8 unk3;
     /* 0x04 */ s8 echo;
-    /* 0x05 */ u8 unk5;
+    /* 0x05 */ u8 lensMode;
     /* 0x06 */ u8 enablePosLights;
     /* 0x07 */ UNK_TYPE1 pad7[0x1];
     /* 0x08 */ RoomMesh* mesh;

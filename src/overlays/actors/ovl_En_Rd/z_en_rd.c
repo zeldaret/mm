@@ -266,7 +266,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_INVISIBLE) {
-        this->actor.flags |= ACTOR_FLAG_80;
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
     }
 
     if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_FROZEN) {

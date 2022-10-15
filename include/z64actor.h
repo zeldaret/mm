@@ -7,6 +7,8 @@
 #include "z64collision_check.h"
 #include "unk.h"
 
+#define LENS_ACTOR_MAX 32
+
 // This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
 #define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 
@@ -375,6 +377,11 @@ typedef struct ActorListEntry {
     /* 0x8 */ s32 unk_08;
 } ActorListEntry; // size = 0xC
 
+typedef enum {
+    /* 0 */ LENS_MODE_HIDE_ACTORS, // lens actors are visible by default, and hidden by using lens (for example, fake walls)
+    /* 1 */ LENS_MODE_SHOW_ACTORS // lens actors are invisible by default, and shown by using lens (for example, invisible enemies)
+} LensMode;
+
 // Target size when activated
 #define LENS_MASK_ACTIVE_SIZE 100
 
@@ -389,9 +396,9 @@ typedef struct ActorContext {
     /* 0x00B */ s8 lensActorsDrawn;
     /* 0x00C */ s16 unkC;
     /* 0x00E */ u8 totalLoadedActors;
-    /* 0x00F */ u8 undrawnActorCount;
+    /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
-    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
+    /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
@@ -1137,8 +1144,8 @@ typedef enum {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
-// Invisible
-#define ACTOR_FLAG_80            (1 << 7)
+// hidden or revealed by Lens of Truth (depending on room flags)
+#define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
 // Related to talk
 #define ACTOR_FLAG_100           (1 << 8)
 // 

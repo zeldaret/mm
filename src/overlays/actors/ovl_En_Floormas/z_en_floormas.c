@@ -163,7 +163,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
     this->actor.params = ENFLOORMAS_GET_7FFF(&this->actor);
 
     if (params != 0) {
-        this->actor.flags |= ACTOR_FLAG_80;
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         this->actor.draw = func_808D3754;
     }
 
@@ -558,7 +558,7 @@ void func_808D19D4(EnFloormas* this) {
     this->drawDmgEffAlpha = 0.0f;
     Actor_SetScale(&this->actor, 0.004f);
     this->actor.flags |= ACTOR_FLAG_10;
-    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
         this->actor.draw = func_808D3754;
     } else {
         this->actor.draw = EnFloormas_Draw;

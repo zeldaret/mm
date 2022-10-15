@@ -140,7 +140,7 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (this->actor.params & KEESE_INVISIBLE) {
-        this->actor.flags |= ACTOR_FLAG_80;
+        this->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
         this->actor.params = KEESE_GET_MAIN_TYPE(thisx);
         this->isInvisible = true;
     }

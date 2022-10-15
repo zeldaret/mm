@@ -642,7 +642,7 @@ void func_80B3F78C(EnDai* this, PlayState* play) {
     if (play->actorCtx.lensActorsDrawn) {
         this->unk_1CE |= 0x40;
     } else {
-        Actor_RecordUndrawnActor(play, &this->actor);
+        Actor_RecordLensActor(play, &this->actor);
         this->unk_1CE &= ~0x40;
     }
 
