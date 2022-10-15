@@ -2434,7 +2434,7 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this);
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this);
 void func_801720C4(PreRender* this);
 void func_801720FC(PreRenderParams* params, Gfx** gfxp);
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags);
+void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 tlutCount, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags);
 void THGA_Ct(TwoHeadGfxArena* thga, Gfx* start, size_t size);
 void THGA_Dt(TwoHeadGfxArena* thga);
 u32 THGA_IsCrash(TwoHeadGfxArena* thga);

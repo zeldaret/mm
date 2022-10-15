@@ -109,7 +109,7 @@ void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave) {
     func_8016FF90(this, gfxp, fbuf, fbufSave, 255, 255, 255, 255);
 }
 
-//! FAKE:
+//! FAKE: Same definition as `gSPTextureRectangle` but without the `_DW()` wrapper (do-while 0)
 #define gSPTextureRectangle_Alt(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy)                   \
     {                                                                                          \
         Gfx* _g = (Gfx*)(pkt);                                                                 \
@@ -190,6 +190,7 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
         // the intensity (I) channel of the loaded IA16 texture will be written as-is to the I8 color image, each pixel
         // in the final image is
         //  I = (cvg << 3) | (cvg >> 2)
+        // FAKE: See Alt definition above
         gSPTextureRectangle_Alt(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
                                 ult << 5, 1 << 10, 1 << 10);
 
@@ -641,10 +642,95 @@ void func_801720C4(PreRender* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801720FC.s")
+// TODO: ucode.h
+#define SP_UCODE_DATA_SIZE 0x800
 
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
-                   f32 y, f32 xScale, f32 yScale, u32 flags) {
+#ifdef NON_EQUIVALENT
+// See OoT's Room_DrawBackground2D()
+void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
+    Gfx* sp6C;
+    uObjBg* bg;
+    u32 sp64;
+    Gfx* gfx = *gfxp;
+    s32 sp5C;
+
+    sp5C = (params->flags & 8) != 0;
+    sp64 = (params->flags & 4) ? G_AC_THRESHOLD : G_AC_NONE;
+
+    bg = Graph_DlistAlloc(&gfx, sizeof(uObjBg));
+
+    bg->b.imageX = 0;
+    bg->b.imageW = (params->width * (1 << 2)) + 1;
+    bg->b.frameX = params->x * (1 << 2);
+
+    bg->b.imageY = 0;
+    bg->b.imageH = (params->height * (1 << 2)) + 1;
+    bg->b.frameY = params->y * (1 << 2);
+
+    bg->b.imagePtr = params->timg;
+    bg->b.imageLoad = G_BGLT_LOADTILE;
+    bg->b.imageFmt = params->fmt;
+    bg->b.imageSiz = params->siz;
+    bg->b.imagePal = 0;
+    bg->b.imageFlip = 0;
+
+    if (sp5C) {
+        gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
+    }
+
+    if ((params->fmt == G_IM_FMT_CI) && (params->tlut != NULL)) {
+        gDPLoadTLUT(gfx++, params->tlutCount, 256, params->tlut);
+    } else {
+        gDPPipeSync(gfx++);
+    }
+
+    if (params->flags & 0x10) {
+        bg->b.frameW = params->width * (1 << 2);
+        bg->b.frameH = params->height * (1 << 2);
+
+        guS2DInitBg(bg);
+
+        if (!(params->flags & 1)) {
+            gDPSetOtherMode(gfx++, params->tt | G_CYC_COPY, sp64);
+        }
+
+        gSPBgRectCopy(gfx++, bg);
+    } else {
+        bg->b.frameW = (u32)(params->width * (1 << 2)) * params->xScale;
+        bg->b.frameH = (u32)(params->height * (1 << 2)) * params->yScale;
+        bg->b.tmemW = (1 << 10) / params->xScale;
+        bg->b.tmemH = (1 << 10) / params->yScale;
+        bg->s.imageYorig = bg->b.imageY;
+
+        if (!(params->flags & 1)) {
+            gDPSetOtherMode(gfx++, params->tt | G_AD_DISABLE | G_CD_DISABLE | G_TC_FILT,
+                            sp64 | AA_EN | CVG_X_ALPHA | ALPHA_CVG_SEL |
+                                GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) |
+                                GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA));
+        }
+
+        if (!(params->flags & 2)) {
+            gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, 1, 0, 0, 0, TEXEL0, 0, 0, 0, 1);
+        }
+
+        gSPObjRenderMode(gfx++, G_OBJRM_ANTIALIAS | G_OBJRM_BILERP);
+        gSPBgRect1Cyc(gfx++, bg);
+    }
+
+    gDPPipeSync(gfx++);
+
+    if (sp5C) {
+        gSPLoadUcode(gfx++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
+    }
+
+    *gfxp = gfx;
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801720FC.s")
+#endif
+
+void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 tlutCount,
+                   f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
     PreRenderParams params;
     PreRenderParams* paramsp = &params;
 
@@ -655,7 +741,7 @@ void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8
     params.fmt = fmt;
     params.siz = siz;
     params.tt = tt;
-    params.unk_10 = arg8;
+    params.tlutCount = tlutCount;
     params.x = x;
     params.y = y;
     params.xScale = xScale;

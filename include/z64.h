@@ -712,7 +712,7 @@ typedef struct {
     /* 0x0C */ u8 fmt;
     /* 0x0D */ u8 siz;
     /* 0x0E */ u16 tt;
-    /* 0x10 */ u16 unk_10;
+    /* 0x10 */ u16 tlutCount;
     /* 0x14 */ f32 x;
     /* 0x18 */ f32 y;
     /* 0x1C */ f32 xScale;
