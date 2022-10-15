@@ -828,9 +828,9 @@ typedef enum {
 // TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
 // Leftover from OoT
 typedef enum {
-    NAVI_QUEST_HINTS_NONE,
-    NAVI_QUEST_HINTS_OVERWORLD,
-    NAVI_QUEST_HINTS_DUNGEON
+    /* 0 */ NAVI_QUEST_HINTS_NONE,
+    /* 1 */ NAVI_QUEST_HINTS_OVERWORLD,
+    /* 2 */ NAVI_QUEST_HINTS_DUNGEON
 } NaviQuestHintFileId;
 
 // SceneTableEntry commands
