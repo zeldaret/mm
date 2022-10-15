@@ -53,7 +53,7 @@ void OceffWipe2_Update(Actor* thisx, PlayState* play) {
     if (this->timer < 100) {
         this->timer++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

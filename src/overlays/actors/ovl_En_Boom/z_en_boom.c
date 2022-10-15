@@ -267,7 +267,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                     sp7C->flags &= ~ACTOR_FLAG_2000;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 

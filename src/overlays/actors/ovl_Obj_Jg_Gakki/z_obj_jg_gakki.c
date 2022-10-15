@@ -42,7 +42,7 @@ void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
     } else if ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_10YUKIYAMANOMURA)) {
         Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     Actor_SetScale(&this->actor, 0.01f);
 }

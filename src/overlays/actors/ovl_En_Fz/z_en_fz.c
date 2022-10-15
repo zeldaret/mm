@@ -663,7 +663,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
 
 void func_80933760(EnFz* this, PlayState* play) {
     if (this->unk_BCA == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

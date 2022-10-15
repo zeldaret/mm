@@ -92,7 +92,7 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = DmChar02_PerformCutsceneActions;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -151,7 +151,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
         Actor_PickUp(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     DmChar02_PlaySfxForCutscenes(this, play);
