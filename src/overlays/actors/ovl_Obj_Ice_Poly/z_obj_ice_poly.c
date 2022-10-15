@@ -178,7 +178,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
     s32 pad3;
     f32 sp58;
 
-    if (!(player->stateFlags2 & 0x4000) && (this->unk_14A != 0)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000) && (this->unk_14A != 0)) {
         this->unk_14A--;
     }
 
