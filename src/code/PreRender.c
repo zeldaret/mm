@@ -645,21 +645,19 @@ void func_801720C4(PreRender* this) {
 // TODO: ucode.h
 #define SP_UCODE_DATA_SIZE 0x800
 
-#ifdef NON_EQUIVALENT
-// See OoT's Room_DrawBackground2D()
 void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
-    Gfx* sp6C;
+    Gfx* gfx;
     uObjBg* bg;
     u32 sp64;
-    Gfx* gfx;
-    s32 sp5C;
+    Gfx* gfxTemp;
+    u32 sp5C;
 
     sp5C = (params->flags & 8) != 0;
     sp64 = (params->flags & 4) ? G_AC_THRESHOLD : G_AC_NONE;
 
-    bg = Graph_DlistAlloc(gfxp, sizeof(uObjBg));
-
-    gfx = *gfxp;
+    gfxTemp = *gfxp;
+    bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
+    gfx = gfxTemp;
 
     bg->b.imageX = 0;
     bg->b.imageW = (params->width * (1 << 2)) + 1;
@@ -706,9 +704,9 @@ void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
 
         if (!(params->flags & 1)) {
             gDPSetOtherMode(gfx++, params->tt | G_AD_DISABLE | G_CD_DISABLE | G_TC_FILT,
-                            sp64 | AA_EN | CVG_X_ALPHA | ALPHA_CVG_SEL |
+                            AA_EN | CVG_X_ALPHA | ALPHA_CVG_SEL |
                                 GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) |
-                                GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA));
+                                GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) | sp64);
         }
 
         if (!(params->flags & 2)) {
@@ -727,9 +725,6 @@ void func_801720FC(PreRenderParams* params, Gfx** gfxp) {
 
     *gfxp = gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801720FC.s")
-#endif
 
 void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 tlutCount,
                    f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
