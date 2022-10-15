@@ -1,11 +1,16 @@
+/**
+ * @file z_elf_message.c
+ *
+ * This file provides quest hints through Tatl.
+ *
+ * In Ocarina of Time, this was a more elaborate system that determined
+ * which hint to give based on a script.
+ * That system has been replaced with a single function that hardcodes the checks.
+ */
 #include "global.h"
 
 /**
  * Gets the relevant text ID for Tatl hints in first cycle.
- * 
- * In Ocarina of Time, this was a more elbaorate system that determined
- * which hint to give based on a script. 
- * That system has been replaced with this single function that hardcodes the checks.
  */
 u16 QuestHint_GetTatlTextId(PlayState* play) {
     if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {

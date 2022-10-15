@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x1 */ u8  naviQuestHintFileId;
     /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
@@ -824,6 +824,14 @@ typedef enum {
     /* 6 */ SCENE_DRAW_CFG_GREAT_BAY_TEMPLE,
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
+
+// TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
+// Leftover from OoT
+typedef enum {
+    NAVI_QUEST_HINTS_NONE,
+    NAVI_QUEST_HINTS_OVERWORLD,
+    NAVI_QUEST_HINTS_DUNGEON
+} NaviQuestHintFileId;
 
 // SceneTableEntry commands
 typedef enum {
