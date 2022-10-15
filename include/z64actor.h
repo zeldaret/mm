@@ -1144,7 +1144,7 @@ typedef enum {
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
-// hidden or revealed by Lens of Truth (depending on room flags)
+// hidden or revealed by Lens of Truth (depending on room lensMode)
 #define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
 // Related to talk
 #define ACTOR_FLAG_100           (1 << 8)
