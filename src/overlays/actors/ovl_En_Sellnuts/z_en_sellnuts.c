@@ -690,7 +690,7 @@ void func_80ADC37C(EnSellnuts* this, PlayState* play) {
 }
 
 void func_80ADC580(EnSellnuts* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
@@ -836,7 +836,7 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
         } else if (this->unk_34C == 17) {
             ActorCutscene_Stop(this->cutscene);
             gSaveContext.save.weekEventReg[73] |= 4;
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -948,7 +948,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     s32 pad2;
 
     if ((gSaveContext.save.weekEventReg[17] & 0x80) || (gSaveContext.save.weekEventReg[61] & 0x10)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -971,7 +971,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     this->actor.velocity.y = 0.0f;
     if (gSaveContext.save.weekEventReg[73] & 4) {
         if (ENSELLNUTS_GET_1(&this->actor)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_338 |= 2;

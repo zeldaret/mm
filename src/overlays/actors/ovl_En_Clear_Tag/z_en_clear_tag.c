@@ -615,7 +615,7 @@ void EnClearTag_Update(Actor* thisx, PlayState* play) {
     } else if (this->activeTimer != 0) {
         EnClearTag_UpdateEffects(this, play);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

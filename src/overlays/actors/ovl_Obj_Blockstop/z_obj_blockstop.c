@@ -33,7 +33,7 @@ void ObjBlockstop_Init(Actor* thisx, PlayState* play) {
     ObjBlockstop* this = THIS;
 
     if (Flags_GetSwitch(play, this->actor.params)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     this->actionFunc = ObjBlockstop_CheckForBlock;
 }
@@ -62,7 +62,7 @@ void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, PlayState* play) {
         if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
