@@ -63,7 +63,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
     } else if (size == LADDER_SIZE_24RUNG) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000868);
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 

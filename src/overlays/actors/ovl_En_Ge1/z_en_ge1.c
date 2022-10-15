@@ -308,7 +308,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
                     break;
 
                 case 7:
-                    Actor_MarkForDeath(&this->picto.actor);
+                    Actor_Kill(&this->picto.actor);
                     break;
 
                     // Twister cutscene

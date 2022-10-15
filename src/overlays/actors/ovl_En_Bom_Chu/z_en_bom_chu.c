@@ -350,7 +350,7 @@ void EnBomChu_Explode(EnBomChu* this, PlayState* play) {
 
 void EnBomChu_WaitForDeath(EnBomChu* this, PlayState* play) {
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -347,7 +347,7 @@ void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_190 == NULL) {
         if ((this->actionFunc != func_809AB610) && (this->actionFunc != func_809AB77C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }

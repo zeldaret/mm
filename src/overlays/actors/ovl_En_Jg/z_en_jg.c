@@ -632,7 +632,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
                 case 1:
                     this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
-                        Actor_MarkForDeath(this->drum);
+                        Actor_Kill(this->drum);
                         this->drum = NULL;
                     }
                     break;

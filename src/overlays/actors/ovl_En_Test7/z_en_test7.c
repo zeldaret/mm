@@ -413,12 +413,12 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (play->playerActorCsIds[8] == -1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     ActorCutscene_SetIntentToPlay(play->playerActorCsIds[8]);
-    player2->stateFlags1 |= 0x20;
+    player2->stateFlags1 |= PLAYER_STATE1_20;
     Lights_PointNoGlowSetInfo(&this->lightInfo, (Math_SinS(this->unk_1E8E) * 90.0f) + player->actor.world.pos.x,
                               player->actor.world.pos.y + 10.0f,
                               (Math_CosS(this->unk_1E8E) * 90.0f) + player->actor.world.pos.z, 255, 255, 255, 255);
@@ -759,7 +759,7 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
 
     this->unk_1E98 = player->actor.draw;
     player->actor.draw = NULL;
-    player->stateFlags2 |= 0x20000000;
+    player->stateFlags2 |= PLAYER_STATE2_20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
     if (play->roomCtx.curRoom.unk3 != 1) {
@@ -911,7 +911,7 @@ void func_80AF2F98(EnTest7* this, PlayState* play) {
         this->unk_148.unk_00 = this->unk_148.unk_04;
         this->unk_148.unk_08 = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
         this->unk_148.unk_0C = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
-        player->stateFlags2 &= ~0x20000000;
+        player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     }
 }
 
@@ -919,9 +919,9 @@ void func_80AF30F4(EnTest7* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_1E54 > 90) {
-        player->stateFlags1 &= ~0x20;
-        player->stateFlags1 &= ~0x20000000;
-        Actor_MarkForDeath(&this->actor);
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
+        Actor_Kill(&this->actor);
     }
 }
 

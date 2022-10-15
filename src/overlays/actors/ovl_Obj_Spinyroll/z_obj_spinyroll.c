@@ -500,7 +500,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
                ((sp34->x == sp30->x) && (sp34->y == sp30->y) && (sp34->z != sp30->z))) {
         this->unk_49C = false;
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 

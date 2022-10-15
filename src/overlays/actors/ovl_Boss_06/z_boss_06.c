@@ -101,7 +101,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 90, 140, 10, { 0, 0, 0 } },
 };
 
-static Vec3f D_809F40EC[] = {
+Vec3f D_809F40EC[] = {
     { 1081.0f, 235.0f, 3224.0f },
     { 676.0f, 235.0f, 3224.0f },
 };
@@ -212,7 +212,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             temp_s0 = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
             while (temp_s0 != NULL) {
                 if (temp_s0->id == ACTOR_EN_ARROW) {
-                    Actor_MarkForDeath(temp_s0);
+                    Actor_Kill(temp_s0);
                 }
                 temp_s0 = temp_s0->next;
             }
@@ -381,7 +381,7 @@ void func_809F2C44(Boss06* this, PlayState* play) {
     }
 
     if (D_809F4970->unk_153 == 2) {
-        Actor_MarkForDeath(this->actor.child);
+        Actor_Kill(this->actor.child);
         this->actor.child = NULL;
         func_809F2E14(this, play);
     }

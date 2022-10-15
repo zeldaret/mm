@@ -437,7 +437,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
             func_800B0EB0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
         }
     } else if (this->explodeTimer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     } else if (!(this->explodeTimer & 3)) {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 4);

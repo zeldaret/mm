@@ -105,7 +105,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
                                  &waterbox)) ||
         (ySurface <= this->actor.floorHeight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.world.pos.y = this->actor.home.pos.y = ySurface;
     }

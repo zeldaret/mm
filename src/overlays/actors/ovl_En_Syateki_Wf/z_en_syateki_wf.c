@@ -156,7 +156,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

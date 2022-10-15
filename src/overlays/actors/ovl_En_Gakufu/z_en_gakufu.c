@@ -115,9 +115,12 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
 
     songIndex = this->songIndex;
     ocarinaSongButtons = &gOcarinaSongButtons[songIndex];
+
+    //! FAKE:
+    if (1) {}
     songNumButtons = gOcarinaSongButtons[this->songIndex].numButtons;
 
-    for (i = 0; i < songNumButtons; i++) {
+    for (i = 0; i < (u8)songNumButtons; i++) {
         this->buttonIndex[i] = ocarinaSongButtons->buttonIndex[i];
     }
 

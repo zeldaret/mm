@@ -70,7 +70,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012788, &colHeader);
             this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
             if (!(gSaveContext.save.weekEventReg[14] & 4)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
             break;
 
@@ -90,7 +90,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             break;
     }
 }

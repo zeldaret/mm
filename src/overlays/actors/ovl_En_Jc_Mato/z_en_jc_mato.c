@@ -111,7 +111,7 @@ void EnJcMato_SetupIdle(EnJcMato* this) {
 void EnJcMato_Idle(EnJcMato* this, PlayState* play) {
     if (this->hitFlag) {
         if (DECR(this->despawnTimer) == 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

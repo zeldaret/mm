@@ -46,7 +46,7 @@ s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play) {
 
 s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play) {
     if (ObjDowsing_GetFlag(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;

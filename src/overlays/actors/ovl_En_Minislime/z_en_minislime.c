@@ -621,7 +621,7 @@ void EnMinislime_SetupDespawn(EnMinislime* this) {
 }
 
 void EnMinislime_Despawn(EnMinislime* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnMinislime_SetupMoveToGekko(EnMinislime* this) {

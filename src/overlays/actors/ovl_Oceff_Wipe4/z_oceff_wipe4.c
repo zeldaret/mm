@@ -53,7 +53,7 @@ void OceffWipe4_Update(Actor* thisx, PlayState* play) {
     if (this->counter < 50) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

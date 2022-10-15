@@ -131,7 +131,7 @@ void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
         }
     }
     if (SkelCurve_Update(play, &this->skelCurve)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

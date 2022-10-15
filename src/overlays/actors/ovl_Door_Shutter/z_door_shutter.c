@@ -200,7 +200,6 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     DoorShutter* this = THIS;
     s32 sp24;
     s32 i;
-    s8 objId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->doorType = DOORSHUTTER_GET_380(&this->actor);
@@ -233,9 +232,10 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         this->actor.room = -1;
     }
 
-    // clang-format off
-    objId = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId); this->requiredObjBankIndex = objId; if (objId < 0) { Actor_MarkForDeath(&this->actor); return; }
-    // clang-format on
+    if ((this->requiredObjBankIndex = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId)) < 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
 
     DoorShutter_SetupAction(this, DoorShutter_SetupType);
     this->unk_163 = sp24;
@@ -566,7 +566,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     this->unk_15C = 0;
     this->actor.velocity.y = 0.0f;
 
-    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & 0x800)) {
+    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
@@ -633,7 +633,8 @@ void DoorShutter_Update(Actor* thisx, PlayState* play) {
     DoorShutter* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x100004C0) || (this->actionFunc == DoorShutter_SetupType)) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
+        (this->actionFunc == DoorShutter_SetupType)) {
         this->actionFunc(this, play);
 
         if (this->unk_163 == 7) {

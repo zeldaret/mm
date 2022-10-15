@@ -157,7 +157,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
         this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (!BgNumaHana_SpawnOpenFlowerCollisionChild(this, play)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 

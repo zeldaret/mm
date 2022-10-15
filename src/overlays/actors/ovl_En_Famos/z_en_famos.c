@@ -723,7 +723,7 @@ void EnFamos_DeathFade(EnFamos* this, PlayState* play) {
         if (enBom != NULL) {
             enBom->parent = NULL;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

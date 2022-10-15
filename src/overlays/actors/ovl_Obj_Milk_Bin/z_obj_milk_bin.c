@@ -76,7 +76,7 @@ void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
         if (gSaveContext.save.weekEventReg[22] & 1) {
             if (((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == 1)) || (gSaveContext.save.day >= 3)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         }

@@ -396,7 +396,7 @@ void func_8091D070(EnButte* this) {
 
 void func_8091D090(EnButte* this, PlayState* play) {
     if (this->unk_24C <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

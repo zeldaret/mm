@@ -349,7 +349,7 @@ void EnCrow_Damaged(EnCrow* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
 
             if (this->actor.parent != NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             EnCrow_SetupDie(this);

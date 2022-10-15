@@ -65,7 +65,7 @@ void func_80A613C8(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

@@ -709,7 +709,7 @@ void BgHakuginPost_Init(Actor* thisx, PlayState* play) {
         func_80A9CA94(this);
     } else {
         func_80A9AFB4(this, play, &D_80A9E028);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

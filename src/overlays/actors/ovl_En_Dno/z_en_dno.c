@@ -222,7 +222,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
         actor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_DNO);
         if (actor != NULL) {
             if (actor != thisx) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 break;
             }
             actor = actor->next;
@@ -250,7 +250,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                 case EN_DNO_GET_C000_0:
                     func_80A71788(this, play);
                     if (!(gSaveContext.save.weekEventReg[23] & 0x20) || (gSaveContext.save.weekEventReg[93] & 2)) {
-                        Actor_MarkForDeath(thisx);
+                        Actor_Kill(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE_WITH_CANDLE,
                                                         &this->animIndex);
@@ -265,13 +265,13 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
 
                 case EN_DNO_GET_C000_1:
                     if (gSaveContext.save.weekEventReg[23] & 0x20) {
-                        Actor_MarkForDeath(thisx);
+                        Actor_Kill(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
                                                         &this->animIndex);
                         this->unk_460 = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
                         if (this->unk_460 == NULL) {
-                            Actor_MarkForDeath(thisx);
+                            Actor_Kill(thisx);
                         } else {
                             this->actionFunc = func_80A71B68;
                         }

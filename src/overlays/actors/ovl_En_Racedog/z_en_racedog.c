@@ -318,7 +318,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->selectionArrowGreenPrimColor = 255;

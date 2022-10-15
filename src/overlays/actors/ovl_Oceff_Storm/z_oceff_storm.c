@@ -150,7 +150,7 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
     if (this->counter < 70) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

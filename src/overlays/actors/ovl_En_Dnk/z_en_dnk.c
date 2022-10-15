@@ -242,7 +242,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
     if (this->unk_28E >= 0) {
         this->actionFunc = func_80A51648;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_2A2 = D_80A521A0;

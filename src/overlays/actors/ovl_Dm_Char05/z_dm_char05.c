@@ -338,7 +338,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -382,7 +382,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -425,7 +425,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:

@@ -487,7 +487,7 @@ void func_80A4EF74(EnMkk* this, PlayState* play) {
             this->actor.velocity.y = 0.0f;
             func_80A4EDF0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->alpha = newAlpha;

@@ -42,7 +42,7 @@ void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
     EnOkarinaEffect* this = THIS;
 
     if (play->envCtx.unk_F2[1]) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);
 }
@@ -73,7 +73,7 @@ void func_8096B1FC(EnOkarinaEffect* this, PlayState* play) {
             }
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

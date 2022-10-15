@@ -41,7 +41,7 @@ void EnTest5_Init(Actor* thisx, PlayState* play2) {
     // If not spawned above a water source, immediately despawn
     if (!WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
                               &water)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

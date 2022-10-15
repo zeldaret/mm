@@ -78,7 +78,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
         case WEATHERTAG_TYPE_UNK1:
             if (gSaveContext.save.weekEventReg[52] & 0x20) { // if cleared STT
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
             break;
@@ -214,15 +214,15 @@ void func_80966A68(EnWeatherTag* this, PlayState* play) {
     }
     if ((s16)this->unk154 < 0) { // cast req
         this->unk154 = 0;
-        // @BUG redudant code
-        Actor_MarkForDeath(&this->actor);
+        // redundant code
+        Actor_Kill(&this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_Die);
     }
     func_8096689C(this, play);
 }
 
 void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 // WEATHERTAG_TYPE_UNK1

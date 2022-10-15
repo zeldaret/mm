@@ -239,7 +239,7 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -349,14 +349,14 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
         this->unk_1AC--;
         if (this->unk_1AC <= 0) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     } else if (this->dyna.actor.cutscene >= 0) {
         if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

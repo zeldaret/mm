@@ -41,7 +41,7 @@ void ObjMuPict_Init(Actor* thisx, PlayState* play) {
     ObjMuPict* this = THIS;
 
     if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     func_80C06D90(this, play);
