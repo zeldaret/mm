@@ -1,10 +1,10 @@
 #ifndef Z64QUAKE_H
 #define Z64QUAKE_H
 
+#include "z64camera.h"
 #include "z64math.h"
 
 struct PlayState;
-struct Camera;
 
 typedef struct {
     /* 0x00 */ Vec3f atOffset;
@@ -13,8 +13,6 @@ typedef struct {
     /* 0x1A */ s16 fovOffset;
     /* 0x1C */ f32 maxOffset; // Set to scaled max data of struct (mag for Vec3f), never used
 } ShakeInfo; // size = 0x20
-
-
 
 typedef enum {
     /* 0 */ QUAKE_TYPE_NONE,
@@ -41,18 +39,18 @@ void Quake_Init(void);
 s16 Quake_Update(Camera* camera, ShakeInfo* camShake);
 
 #define DISTORTION_TYPE_HOT_ROOM (1 << 0) // Hot Room
-#define DISTORTION_TYPE_NON_ZORA_SWIMMING (1 << 2) // Non-Zora Swimming
-#define DISTORTION_TYPE_ZORA_SWIMMING (1 << 3) // Zora Swimming, Boss Warp Pad Part 1
+#define DISTORTION_TYPE_NON_ZORA_SWIMMING (1 << 2) // Non-Zora swimming
+#define DISTORTION_TYPE_ZORA_SWIMMING (1 << 3) // Zora swimming, also used for boss warp pad part 1
 
-#define DISTORTION_TYPE_UNDERWATER_ENTRY (1 << 4) // Entering water, Boss Warp Pad Part 2
-#define DISTORTION_TYPE_SONG_OF_TIME (1 << 5) // Song of Time Effects
+#define DISTORTION_TYPE_UNDERWATER_ENTRY (1 << 4) // Entering water, also used for boss warp pad part 2
+#define DISTORTION_TYPE_SONG_OF_TIME (1 << 5) // Song of Time effects
 #define DISTORTION_TYPE_ZORA_KICK (1 << 6) // PLAYER_MWA_ZORA_PUNCH_KICK
 #define DISTORTION_TYPE_UNK_ATTACK (1 << 7) // Impossible to achieve, inferred to be another `PLAYER_MWA_`, 
 
 #define DISTORTION_TYPE_GORON_BUTT (1 << 8) // PLAYER_MWA_GORON_PUNCH_BUTT
-#define DISTORTION_TYPE_MASK_TRANSFORM_1 (1 << 9) // Mask Transformation Part 1
-#define DISTORTION_TYPE_BOSS_WARP (1 << 10) // Boss Warp Pad Part 3
-#define DISTORTION_TYPE_MASK_TRANSFORM_2 (1 << 11) // Mask Transformation Part 2
+#define DISTORTION_TYPE_MASK_TRANSFORM_1 (1 << 9) // Mask transformation part 1
+#define DISTORTION_TYPE_BOSS_WARP (1 << 10) // Boss warp pad part 3
+#define DISTORTION_TYPE_MASK_TRANSFORM_2 (1 << 11) // Mask transformation part 2
 
 void Distortion_Request(s32 type);
 void Distortion_SetDuration(s16 duration);

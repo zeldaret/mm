@@ -33,7 +33,7 @@ typedef enum {
     /* 2 */ DISTORTION_SETUP
 } DistortionState;
 
-QuakeRequest sQuakeRequest[4];
+QuakeRequest sQuakeRequests[4];
 DistortionRequest sDistortionRequest;
 
 static s16 sQuakeUnused = 1;
@@ -154,14 +154,14 @@ s16 Quake_GetFreeIndex(void) {
     s32 index = 0;
     s32 timerMin = 0x10000; // UINT16_MAX + 1
 
-    for (i = 0; i < ARRAY_COUNT(sQuakeRequest); i++) {
-        if (sQuakeRequest[i].type == QUAKE_TYPE_NONE) {
+    for (i = 0; i < ARRAY_COUNT(sQuakeRequests); i++) {
+        if (sQuakeRequests[i].type == QUAKE_TYPE_NONE) {
             index = i;
             break;
         }
 
-        if (timerMin > sQuakeRequest[i].timer) {
-            timerMin = sQuakeRequest[i].timer;
+        if (timerMin > sQuakeRequests[i].timer) {
+            timerMin = sQuakeRequests[i].timer;
             index = i;
         }
     }
@@ -171,7 +171,7 @@ s16 Quake_GetFreeIndex(void) {
 
 QuakeRequest* Quake_RequestImpl(Camera* camera, u32 type) {
     s16 index = Quake_GetFreeIndex();
-    QuakeRequest* req = &sQuakeRequest[index];
+    QuakeRequest* req = &sQuakeRequests[index];
 
     __osMemset(req, 0, sizeof(QuakeRequest));
 
@@ -196,7 +196,7 @@ void Quake_Remove(QuakeRequest* req) {
 }
 
 QuakeRequest* Quake_GetRequest(s16 index) {
-    QuakeRequest* req = &sQuakeRequest[index & 3];
+    QuakeRequest* req = &sQuakeRequests[index & 3];
 
     if (req->type == QUAKE_TYPE_NONE) {
         return NULL;
@@ -360,9 +360,9 @@ u32 Quake_SetOrientation(s16 index, s16 isRelativeToScreen, Vec3s orientation) {
 void Quake_Init(void) {
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(sQuakeRequest); i++) {
-        sQuakeRequest[i].type = QUAKE_TYPE_NONE;
-        sQuakeRequest[i].timer = 0;
+    for (i = 0; i < ARRAY_COUNT(sQuakeRequests); i++) {
+        sQuakeRequests[i].type = QUAKE_TYPE_NONE;
+        sQuakeRequests[i].timer = 0;
     }
     sQuakeUnused = 1;
     sQuakeRequestCount = 0;
@@ -425,8 +425,8 @@ s16 Quake_Update(Camera* camera, ShakeInfo* camShake) {
     }
 
     numQuakesApplied = 0;
-    for (index = 0; index < ARRAY_COUNT(sQuakeRequest); index++) {
-        req = &sQuakeRequest[index];
+    for (index = 0; index < ARRAY_COUNT(sQuakeRequests); index++) {
+        req = &sQuakeRequests[index];
         if (req->type == QUAKE_TYPE_NONE) {
             continue;
         }
@@ -907,8 +907,8 @@ s32 Quake_GetNumActiveQuakes(void) {
     s32 numActiveQuakes = 0;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sQuakeRequest); i++) {
-        if (sQuakeRequest[i].type != QUAKE_TYPE_NONE) {
+    for (i = 0; i < ARRAY_COUNT(sQuakeRequests); i++) {
+        if (sQuakeRequests[i].type != QUAKE_TYPE_NONE) {
             numActiveQuakes++;
         }
     }
