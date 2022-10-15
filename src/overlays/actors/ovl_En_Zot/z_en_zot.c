@@ -186,14 +186,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
@@ -221,7 +221,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     }
 
     if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.save.weekEventReg[55] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -553,7 +553,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & 0x2000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_2000000)) {
         phi_v1 = func_80B96CE4(this);
     } else {
         phi_v1 = 0;
@@ -948,15 +948,15 @@ void func_80B9854C(EnZot* this, PlayState* play) {
 }
 
 void func_80B985EC(EnZot* this, PlayState* play) {
-    s32 itemActionParam;
+    s32 itemitemAction;
     Player* player = GET_PLAYER(play);
 
     func_80B98348(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_IA_NONE) {
+        itemitemAction = func_80123810(play);
+        if (itemitemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if ((itemActionParam == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+            if ((itemitemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
                 Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
                 if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
@@ -968,7 +968,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
                 player->actor.textId = 0x12AB;
             }
             this->actionFunc = func_80B98728;
-        } else if (itemActionParam < PLAYER_IA_NONE) {
+        } else if (itemitemAction < PLAYER_IA_NONE) {
             func_80151938(play, 0x12AB);
             this->actionFunc = func_80B98728;
         }

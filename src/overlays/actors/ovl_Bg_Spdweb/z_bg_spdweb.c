@@ -170,7 +170,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     this->unk_162 = 0;
 
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -230,7 +230,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
 
     if (this->unk_162 == 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -311,7 +311,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
             this->unk_164 = temp_f12;
             this->unk_162 = 12;
             if (sp3A > 50) {
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
         } else if (player->actor.speedXZ != 0.0f) {
@@ -332,7 +332,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
             player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_162 == 11) {
         if (this->unk_164 > 3.0f) {
@@ -373,7 +373,7 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
         if (ActorCutscene_GetLength(this->dyna.actor.cutscene) == -1) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -450,7 +450,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
                 this->dyna.actor.world.pos.z;
         }
         func_809CEE74(this);
-    } else if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+    } else if ((player->itemitemAction == 7) && (player->unk_B28 != 0)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);

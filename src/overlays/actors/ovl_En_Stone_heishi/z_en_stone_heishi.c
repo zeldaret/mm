@@ -265,19 +265,19 @@ void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi* this) {
 }
 
 void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
-    s32 itemActionParam;
+    s32 itemitemAction;
 
     SkelAnime_Update(&this->skelAnime);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_IA_NONE) {
+        itemitemAction = func_80123810(play);
+        if (itemitemAction > PLAYER_IA_NONE) {
             this->timer = 40;
             func_801477B4(play);
 
-            if ((itemActionParam == PLAYER_IA_BOTTLE_POTION_RED) || (itemActionParam == PLAYER_IA_BOTTLE_POTION_BLUE)) {
+            if ((itemitemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemitemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->playerGivesBluePotion = false;
-                if (itemActionParam == PLAYER_IA_BOTTLE_POTION_BLUE) {
+                if (itemitemAction == PLAYER_IA_BOTTLE_POTION_BLUE) {
                     this->playerGivesBluePotion = true;
                 }
                 EnStoneheishi_SetupDrinkBottleProcess(this);
@@ -290,7 +290,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
                 this->action = EN_STONE_ACTION_1;
                 this->actionFunc = func_80BC9680;
             }
-        } else if (itemActionParam < PLAYER_IA_NONE) {
+        } else if (itemitemAction < PLAYER_IA_NONE) {
             func_801477B4(play);
             func_80151BB4(play, 0x12);
             func_80BC94B0(this);

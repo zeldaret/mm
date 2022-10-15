@@ -194,7 +194,7 @@ s32 EnPst_HandleLetterDay2(EnPst* this) {
 }
 
 s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
-    s32 itemActionParam = 0;
+    s32 itemitemAction = 0;
     s32 scriptBranch = 0;
     EnPst* this = THIS;
 
@@ -205,17 +205,17 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                 case TEXT_STATE_5:
                     if (Message_ShouldAdvance(play)) {
                         case TEXT_STATE_16:
-                            itemActionParam = func_80123810(play);
+                            itemitemAction = func_80123810(play);
                             scriptBranch = 0;
-                            if ((itemActionParam == PLAYER_IA_LETTER_TO_KAFEI) ||
-                                (itemActionParam == PLAYER_IA_LETTER_MAMA)) {
-                                this->exchangeItemId = itemActionParam;
+                            if ((itemitemAction == PLAYER_IA_LETTER_TO_KAFEI) ||
+                                (itemitemAction == PLAYER_IA_LETTER_MAMA)) {
+                                this->exchangeItemId = itemitemAction;
                                 this->behaviour++;
                                 scriptBranch = 1;
-                            } else if (itemActionParam < PLAYER_IA_NONE) {
+                            } else if (itemitemAction < PLAYER_IA_NONE) {
                                 this->behaviour++;
                                 scriptBranch = 3;
-                            } else if (itemActionParam != PLAYER_IA_NONE) {
+                            } else if (itemitemAction != PLAYER_IA_NONE) {
                                 this->behaviour++;
                                 scriptBranch = 2;
                             }

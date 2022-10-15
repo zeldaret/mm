@@ -125,7 +125,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
 void ObjectKankyo_Destroy(Actor* thisx, PlayState* play) {
     ObjectKankyo* this = THIS;
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808DC18C(ObjectKankyo* this, PlayState* play) {

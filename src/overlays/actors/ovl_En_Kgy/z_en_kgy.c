@@ -518,19 +518,19 @@ void func_80B41A48(EnKgy* this, PlayState* play) {
 }
 
 void func_80B41ACC(EnKgy* this, PlayState* play) {
-    s32 itemActionParam;
+    s32 itemitemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam != PLAYER_IA_NONE) {
+        itemitemAction = func_80123810(play);
+        if (itemitemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80B41E18;
         }
 
-        if (itemActionParam > PLAYER_IA_NONE) {
+        if (itemitemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if (itemActionParam == PLAYER_IA_BOTTLE_GOLD_DUST) {
+            if (itemitemAction == PLAYER_IA_BOTTLE_GOLD_DUST) {
                 if (this->unk_29C & 0x10) {
                     this->actor.textId = 0xC55;
                     player->actor.textId = 0xC55;
@@ -547,7 +547,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
                 player->actor.textId = 0xC47;
             }
             this->unk_29C |= 8;
-        } else if (itemActionParam < PLAYER_IA_NONE) {
+        } else if (itemitemAction < PLAYER_IA_NONE) {
             if (this->unk_29C & 0x10) {
                 this->actor.textId = 0xC57;
             } else {
@@ -1149,10 +1149,10 @@ void func_80B43074(EnKgy* this, PlayState* play) {
     gSPMatrix(gfx, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (func_80B40D8C(play)) {
-        gSPDisplayList(&gfx[1], gameplay_keep_DL_001D00);
+        gSPDisplayList(&gfx[1], gRazorSwordHandleDL);
         gSPDisplayList(&gfx[2], object_kgy_DL_00F180);
     } else {
-        gSPDisplayList(&gfx[1], gameplay_keep_DL_0021A8);
+        gSPDisplayList(&gfx[1], gKokiriSwordHandleDL);
         gSPDisplayList(&gfx[2], object_kgy_DL_00E8F0);
     }
     POLY_OPA_DISP = &gfx[3];

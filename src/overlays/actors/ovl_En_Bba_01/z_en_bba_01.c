@@ -220,7 +220,7 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {
-        Actor_MarkForDeath(&this->enHy.actor);
+        Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
     Collider_InitCylinder(play, &this->enHy.collider);

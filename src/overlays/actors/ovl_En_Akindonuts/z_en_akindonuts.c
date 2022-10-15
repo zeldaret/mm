@@ -1040,41 +1040,41 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
-    s32 itemActionParam = func_80123810(play);
+    s32 itemitemAction = func_80123810(play);
 
-    if (itemActionParam > PLAYER_IA_NONE) {
-        if (itemActionParam == PLAYER_IA_DEED_LAND) {
+    if (itemitemAction > PLAYER_IA_NONE) {
+        if (itemitemAction == PLAYER_IA_DEED_LAND) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemitemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_IA_DEED_SWAMP) {
+        } else if (itemitemAction == PLAYER_IA_DEED_SWAMP) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemitemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_IA_DEED_MOUNTAIN) {
+        } else if (itemitemAction == PLAYER_IA_DEED_MOUNTAIN) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemitemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_IA_DEED_OCEAN) {
+        } else if (itemitemAction == PLAYER_IA_DEED_OCEAN) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemitemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1085,7 +1085,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             this->actionFunc = func_80BEF18C;
         }
         func_801477B4(play);
-    } else if (itemActionParam < PLAYER_IA_NONE) {
+    } else if (itemitemAction < PLAYER_IA_NONE) {
         this->unk_33C = D_80BF04AC[params];
         func_80151938(play, this->unk_33C);
         this->actionFunc = func_80BEF18C;
@@ -1099,10 +1099,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BED680;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BED3BC;
             }
@@ -1113,10 +1113,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEDB88;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BED8A4;
             }
@@ -1127,10 +1127,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE070;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BEDDAC;
             }
@@ -1141,10 +1141,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE530;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BEE274;
             }
@@ -1586,7 +1586,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEFD74(EnAkindonuts* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
@@ -1608,7 +1608,7 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
         this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
         if (this->path == NULL) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }

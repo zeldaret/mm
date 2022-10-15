@@ -575,7 +575,7 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
     Actor* sp1C = func_80BDE1A0(this, play, 4, 0xA4);
     Actor* temp_v0 = func_80BDE1A0(this, play, 4, 0x234);
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         this->unk_4C2 |= 0x400;
         if (this->unk_4C4 != sp22) {
             switch (sp22) {

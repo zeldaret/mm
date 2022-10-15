@@ -357,7 +357,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
             func_809CCE98(this, play);
             break;
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             break;
     }
 }

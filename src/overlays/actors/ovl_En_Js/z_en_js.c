@@ -126,7 +126,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
             if (func_809692A8(ENJS_GET_TYPE(&this->actor) + 4)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -372,34 +372,34 @@ s32 EnJs_GetRemainingMasks(void) {
     return count;
 }
 
-void EnJs_TakeMask(s32 actionParams, s32 childType) {
+void EnJs_TakeMask(s32 itemActions, s32 childType) {
     u8* masksGivenOnMoon = gSaveContext.masksGivenOnMoon;
     s32 temp = 0;
 
     if ((childType >= 0) && (childType < 9)) {
-        actionParams -= PLAYER_IA_MASK_TRUTH;
+        itemActions -= PLAYER_IA_MASK_TRUTH;
         childType *= 3;
-        if (actionParams < 8) {
-            masksGivenOnMoon[childType] |= 1 << actionParams;
-            masksGivenOnMoon[temp] |= 1 << actionParams;
+        if (itemActions < 8) {
+            masksGivenOnMoon[childType] |= 1 << itemActions;
+            masksGivenOnMoon[temp] |= 1 << itemActions;
             return;
         }
 
-        actionParams -= 8;
+        itemActions -= 8;
         childType++;
         temp++;
-        if (actionParams < 8) {
-            masksGivenOnMoon[childType] |= 1 << actionParams;
-            masksGivenOnMoon[temp] |= 1 << actionParams;
+        if (itemActions < 8) {
+            masksGivenOnMoon[childType] |= 1 << itemActions;
+            masksGivenOnMoon[temp] |= 1 << itemActions;
             return;
         }
 
-        actionParams -= 8;
+        itemActions -= 8;
         childType++;
         temp++;
-        if (actionParams < 6) {
-            masksGivenOnMoon[childType] |= 1 << actionParams;
-            masksGivenOnMoon[temp] |= 1 << actionParams;
+        if (itemActions < 6) {
+            masksGivenOnMoon[childType] |= 1 << itemActions;
+            masksGivenOnMoon[temp] |= 1 << itemActions;
         }
     }
 }
@@ -529,34 +529,34 @@ void func_8096971C(EnJs* this, PlayState* play) {
 }
 
 void func_80969748(EnJs* this, PlayState* play) {
-    s32 itemActionParam;
+    s32 itemitemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam != PLAYER_IA_NONE) {
+        itemitemAction = func_80123810(play);
+        if (itemitemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80969898;
         }
-        if (itemActionParam > PLAYER_IA_NONE) {
+        if (itemitemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if ((itemActionParam >= PLAYER_IA_MASK_TRUTH) && (itemActionParam <= PLAYER_IA_MASK_GIANT)) {
-                EnJs_TakeMask(itemActionParam, ENJS_GET_TYPE(&this->actor));
-                Inventory_UnequipItem(itemActionParam - 4);
+            if ((itemitemAction >= PLAYER_IA_MASK_TRUTH) && (itemitemAction <= PLAYER_IA_MASK_GIANT)) {
+                EnJs_TakeMask(itemitemAction, ENJS_GET_TYPE(&this->actor));
+                Inventory_UnequipItem(itemitemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2212;
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((itemActionParam >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemActionParam <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemitemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemitemAction <= PLAYER_IA_MASK_DEKU)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
             }
         }
-        if (itemActionParam <= PLAYER_IA_MINUS1) {
+        if (itemitemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x2216);
         }
     }
@@ -675,34 +675,34 @@ void func_80969B5C(EnJs* this, PlayState* play) {
 }
 
 void func_80969C54(EnJs* this, PlayState* play) {
-    s32 itemActionParam;
+    s32 itemitemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam != PLAYER_IA_NONE) {
+        itemitemAction = func_80123810(play);
+        if (itemitemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80969DA4;
         }
-        if (itemActionParam > PLAYER_IA_NONE) {
+        if (itemitemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if ((itemActionParam >= PLAYER_IA_MASK_TRUTH) && (itemActionParam <= PLAYER_IA_MASK_GIANT)) {
-                EnJs_TakeMask(itemActionParam, ENJS_GET_TYPE(&this->actor));
-                Inventory_UnequipItem(itemActionParam - 4);
+            if ((itemitemAction >= PLAYER_IA_MASK_TRUTH) && (itemitemAction <= PLAYER_IA_MASK_GIANT)) {
+                EnJs_TakeMask(itemitemAction, ENJS_GET_TYPE(&this->actor));
+                Inventory_UnequipItem(itemitemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2221;
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((itemActionParam >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemActionParam <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemitemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemitemAction <= PLAYER_IA_MASK_DEKU)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
             }
         }
-        if (itemActionParam <= PLAYER_IA_MINUS1) {
+        if (itemitemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x221E);
         }
     }

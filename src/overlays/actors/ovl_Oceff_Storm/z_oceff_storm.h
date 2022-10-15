@@ -21,6 +21,6 @@ extern const ActorInit Oceff_Storm_InitVars;
 
 typedef enum {
     /* 1 */ OCEFF_STORM_ACTION_PARAM_1 = 1
-} OceffStormActionParams;
+} OceffStormitemActions;
 
 #endif // Z_OCEFF_STORM_H

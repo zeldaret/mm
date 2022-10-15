@@ -827,7 +827,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 s32 func_80A8777C(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
     s32 ret = 0;
-    s32 itemActionParam;
+    s32 itemitemAction;
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
@@ -837,10 +837,10 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
             }
         // Fallthrough
         case TEXT_STATE_16:
-            itemActionParam = func_80123810(play);
-            if ((itemActionParam == PLAYER_IA_BOTTLE_POTION_RED) || (itemActionParam == PLAYER_IA_BOTTLE_POTION_BLUE)) {
+            itemitemAction = func_80123810(play);
+            if ((itemitemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemitemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->unk_34E |= 8;
-                if (itemActionParam == PLAYER_IA_BOTTLE_POTION_RED) {
+                if (itemitemAction == PLAYER_IA_BOTTLE_POTION_RED) {
                     this->unk_390 = 1;
                 } else {
                     this->unk_390 = 2;
@@ -848,9 +848,9 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 this->unk_378 = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
-            } else if (itemActionParam <= PLAYER_IA_MINUS1) {
+            } else if (itemitemAction <= PLAYER_IA_MINUS1) {
                 ret = 3;
-            } else if (itemActionParam != PLAYER_IA_NONE) {
+            } else if (itemitemAction != PLAYER_IA_NONE) {
                 ret = 2;
             }
             break;
@@ -1128,7 +1128,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
     if ((gSaveContext.save.entrance != 0xC200) || (gSaveContext.save.weekEventReg[12] & 8)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

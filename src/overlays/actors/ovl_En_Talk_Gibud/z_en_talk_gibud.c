@@ -49,7 +49,7 @@ void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, PlayState* play);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, PlayState* play);
 
 typedef struct {
-    /* 0x0 */ s32 itemActionParam;
+    /* 0x0 */ s32 itemitemAction;
     /* 0x4 */ s32 item;
     /* 0x8 */ s32 amount;
     /* 0xC */ s16 isBottledItem;
@@ -242,7 +242,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     this->playerStunWaitTimer = 0;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->grabWaitTimer = 0;
-    this->itemActionParam = PLAYER_IA_NONE;
+    this->itemitemAction = PLAYER_IA_NONE;
     this->drawDmgEffTimer = 0;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->isTalking = false;
@@ -269,7 +269,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->switchFlag != -1 && Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     EnTalkGibud_SetupIdle(this);
@@ -420,9 +420,9 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
-            if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
-                if ((player->unk_B62 != 0) && (player->stateFlags2 & 0x80)) {
-                    player->stateFlags2 &= ~0x80;
+            if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
+                if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
+                    player->stateFlags2 &= ~PLAYER_STATE2_80;
                     player->unk_AE8 = 100;
                 }
 
@@ -703,10 +703,10 @@ void EnTalkGibud_GetNextTextBoxId(EnTalkGibud* this, PlayState* play) {
     }
 }
 
-s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, s32 presentedItemActionParam) {
+s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, s32 presentedItemitemAction) {
     EnTalkGibudRequestedItem* requestedItem = &sRequestedItemTable[this->requestedItemIndex];
 
-    if (requestedItem->itemActionParam == presentedItemActionParam) {
+    if (requestedItem->itemitemAction == presentedItemitemAction) {
         if (!requestedItem->isBottledItem) {
             if (AMMO(requestedItem->item) >= requestedItem->amount) {
                 return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
@@ -723,15 +723,15 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, 
 
 void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 itemActionParam;
+    s32 itemitemAction;
 
-    if (this->itemActionParam == PLAYER_IA_NONE) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam != PLAYER_IA_NONE) {
-            this->itemActionParam = itemActionParam;
+    if (this->itemitemAction == PLAYER_IA_NONE) {
+        itemitemAction = func_80123810(play);
+        if (itemitemAction != PLAYER_IA_NONE) {
+            this->itemitemAction = itemitemAction;
         }
-        if (this->itemActionParam > PLAYER_IA_NONE) {
-            switch (EnTalkGibud_PresentedItemMatchesRequest(this, play, this->itemActionParam)) {
+        if (this->itemitemAction > PLAYER_IA_NONE) {
+            switch (EnTalkGibud_PresentedItemMatchesRequest(this, play, this->itemitemAction)) {
                 case EN_TALK_GIBUD_REQUESTED_ITEM_MET:
                     player->actor.textId = 0x138A;
                     this->textId = 0x138A;
@@ -751,7 +751,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
                     break;
             }
             func_801477B4(play);
-        } else if (this->itemActionParam < PLAYER_IA_NONE) {
+        } else if (this->itemitemAction < PLAYER_IA_NONE) {
             Message_StartTextbox(play, 0x1389, &this->actor);
             this->textId = 0x1389;
         }
@@ -787,7 +787,7 @@ void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupTalk(EnTalkGibud* this) {
-    this->itemActionParam = PLAYER_IA_NONE;
+    this->itemitemAction = PLAYER_IA_NONE;
     this->actionFunc = EnTalkGibud_Talk;
 }
 
@@ -824,8 +824,8 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
                     } else {
                         func_80123D50(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                     }
-                    player->stateFlags1 |= 0x20;
-                    player->stateFlags1 |= 0x20000000;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
+                    player->stateFlags1 |= PLAYER_STATE1_20000000;
                     this->actor.flags |= ACTOR_FLAG_100000;
                     EnTalkGibud_SetupDisappear(this);
                 } else {
@@ -868,15 +868,15 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, PlayState* play) {
             func_800B3030(play, &pos, &velocity, &accel, 100, 0, 1);
         }
         func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
-        player->stateFlags1 |= 0x20000000;
+        player->stateFlags1 |= PLAYER_STATE1_20000000;
         this->disappearanceTimer--;
     } else {
         if (this->switchFlag != -1) {
             Flags_SetSwitch(play, this->switchFlag);
         }
-        player->stateFlags1 &= ~0x20;
-        player->stateFlags1 &= ~0x20000000;
-        Actor_MarkForDeath(&this->actor);
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -895,8 +895,9 @@ s32 EnTalkGibud_PlayerInRangeWithCorrectState(EnTalkGibud* this, PlayState* play
     Player* player = GET_PLAYER(play);
 
     if ((Actor_DistanceToPoint(&player->actor, &this->actor.home.pos) < 150.0f) &&
-        !(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
-        !(player->stateFlags2 & (0x4000 | 0x80))) {
+        !(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
+                                 PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
+        !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
         return true;
     }
 
