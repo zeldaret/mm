@@ -121,7 +121,7 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, BG_DKJAIL_GET_SWITCH(thisx))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_dkjail_obj_Colheader_0011A8);
         Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
@@ -185,7 +185,7 @@ void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play) {
 
     this->fadeOutTimer--;
     if (this->fadeOutTimer <= 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
