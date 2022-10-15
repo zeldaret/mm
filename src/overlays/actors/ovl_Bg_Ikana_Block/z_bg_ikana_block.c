@@ -184,7 +184,7 @@ void BgIkanaBlock_Init(Actor* thisx, PlayState* play) {
     BgIkanaBlock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     this->unk_15C = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);

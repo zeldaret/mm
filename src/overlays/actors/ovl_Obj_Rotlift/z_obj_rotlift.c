@@ -111,7 +111,7 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
         ObjRotlift_MoveDekuFlowers(this);
     }
 
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
 
     modelInfo = &sModelInfo[type];
     DynaPolyActor_LoadMesh(play, &this->dyna, modelInfo->colHeader);

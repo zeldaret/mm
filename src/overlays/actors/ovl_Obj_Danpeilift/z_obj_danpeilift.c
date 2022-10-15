@@ -54,7 +54,7 @@ void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_obj_danpeilift_Colheader_000BA0);
     if (this->dyna.bgId == BG_ACTOR_MAX) {
         Actor_Kill(&this->dyna.actor);

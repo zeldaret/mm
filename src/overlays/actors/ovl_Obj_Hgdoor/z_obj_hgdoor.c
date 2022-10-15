@@ -70,7 +70,7 @@ void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         CollisionHeader_GetVirtual(&object_hgdoor_Colheader_001D10, &header);
     } else {

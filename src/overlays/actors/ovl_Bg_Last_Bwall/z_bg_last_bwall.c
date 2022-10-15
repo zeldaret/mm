@@ -149,7 +149,7 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80C18AC8);
     this->type = BGLASTBWALL_GET_TYPE(&this->dyna.actor);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80C18A48[this->type].colHeader);
     Collider_InitTris(play, &this->colliderTris);
     if (Flags_GetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor))) {

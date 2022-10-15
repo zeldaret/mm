@@ -63,7 +63,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_160 = RACERING_GET_PARAM_F(&this->dyna.actor);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if (sColHeaders[this->unk_160] != NULL) {
         DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[this->unk_160]);
     }

@@ -126,7 +126,7 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
         sp30 = false;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_goronswitch_Colheader_0005C8);
 
     Collider_InitCylinder(play, &this->collider);

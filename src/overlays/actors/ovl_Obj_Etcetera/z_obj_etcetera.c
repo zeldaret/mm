@@ -259,7 +259,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != NULL) {
             CollisionHeader_GetVirtual(thisCollisionHeader, &colHeader);

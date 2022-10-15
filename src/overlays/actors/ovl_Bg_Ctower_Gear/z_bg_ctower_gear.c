@@ -127,7 +127,7 @@ void BgCtowerGear_Init(Actor* thisx, PlayState* play) {
         Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     }
     if (type == BGCTOWERGEAR_WATER_WHEEL) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTowerWaterWheelCol);
     } else if (type == BGCTOWERGEAR_ORGAN) {
         DynaPolyActor_Init(&this->dyna, 0);

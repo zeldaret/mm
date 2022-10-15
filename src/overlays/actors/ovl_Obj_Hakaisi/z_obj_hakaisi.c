@@ -106,7 +106,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_hakaisi_Colheader_002FC4, &sp7C);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp7C);

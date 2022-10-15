@@ -317,7 +317,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.update = sTypeInfo[sp2C].update;
     this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, sTypeInfo[sp2C].colHeader);
 
     if (sp2C == 3) {

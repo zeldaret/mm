@@ -34,7 +34,7 @@ void BgFuKaiten_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(thisx, 1.0);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     CollisionHeader_GetVirtual(&object_fu_kaiten_Colheader_002D30, &header);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, header);
 

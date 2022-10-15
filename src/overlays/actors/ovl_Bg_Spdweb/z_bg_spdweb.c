@@ -150,7 +150,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     this->unk_161 = 0;
     this->switchFlag = BGSPDWEB_GET_SWITCHFLAG(&this->dyna.actor);
     thisx->params &= 0xFF;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if (this->dyna.actor.params == BGSPDWEB_FF_0) {
         Collider_InitAndSetTris(play, &this->collider, &this->dyna.actor, &sTrisInit1, this->colliderElements);

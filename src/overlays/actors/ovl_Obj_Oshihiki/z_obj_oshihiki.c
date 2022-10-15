@@ -196,7 +196,7 @@ void ObjOshihiki_SetColor(ObjOshihiki* this, PlayState* play) {
 void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
     ObjOshihiki* this = THIS;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((OBJOSHIHIKI_GET_FF00(&this->dyna.actor) >= OBJOSHIHIKI_FF00_0) &&
         (OBJOSHIHIKI_GET_FF00(&this->dyna.actor) < OBJOSHIHIKI_FF00_80)) {

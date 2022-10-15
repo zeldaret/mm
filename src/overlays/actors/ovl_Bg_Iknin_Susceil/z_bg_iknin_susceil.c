@@ -115,7 +115,7 @@ void BgIkninSusceil_Init(Actor* thisx, PlayState* play) {
     BgIkninSusceil* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_ikninside_obj_Colheader_00CBAC);
     this->animatedTexture = Lib_SegmentedToVirtual(object_ikninside_obj_Matanimheader_00C670);
     func_80C0AC74(this);

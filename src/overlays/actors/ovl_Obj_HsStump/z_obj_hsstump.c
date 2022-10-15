@@ -45,7 +45,7 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hsstump_Colheader_0011B0);
     switch (this->isHidden) {
         case true:

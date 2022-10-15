@@ -112,7 +112,7 @@ void BgF40Switch_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.scale.y = 0.165f;
     this->actionFunc = BgF40Switch_IdleUnpressed;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_switch_Colheader_000118);
     if (!sBgF40SwitchGlobalsInitialized) {
         sBgF40SwitchLastUpdateFrame = play->gameplayFrames;

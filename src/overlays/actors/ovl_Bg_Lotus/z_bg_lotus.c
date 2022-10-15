@@ -42,7 +42,7 @@ void BgLotus_Init(Actor* thisx, PlayState* play) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);

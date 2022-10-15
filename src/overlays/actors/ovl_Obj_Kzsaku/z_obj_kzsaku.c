@@ -41,7 +41,7 @@ void ObjKzsaku_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* col = NULL;
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_kzsaku_Colheader_001118, &col);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, thisx, col);

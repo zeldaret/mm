@@ -54,7 +54,7 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
     Vec3f sp24;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_kaizoku_obj_Colheader_009A88);
     if (thisx->params < 0) {
         this->dyna.actor.update = func_80B9B428;

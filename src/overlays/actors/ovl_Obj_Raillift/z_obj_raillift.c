@@ -66,7 +66,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     thisx->world.rot.x = 0;
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[type]);
     this->speed = OBJRAILLIFT_GET_SPEED(thisx);
     if (this->speed < 0.0f) {

@@ -323,7 +323,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
     Vec3f sp20;
 
     if (BgIngate_FindActor(this, play, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gSichitaiBoatCol);
         this->unk160 = 0;
         this->unk160 |= 0x8;

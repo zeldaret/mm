@@ -62,7 +62,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);
     this->unk160 = thisx->home.rot.z * 0.1f;
     if (this->unk160 < 0.01f) {

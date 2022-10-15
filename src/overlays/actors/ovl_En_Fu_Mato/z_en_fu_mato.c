@@ -75,7 +75,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
     Actor* actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
     EnFu* fu;
 
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     CollisionHeader_GetVirtual(&object_fu_mato_Colheader_0023D4, &sp2C);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp2C);
     Actor_SetScale(&this->dyna.actor, 0.1f);

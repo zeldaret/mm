@@ -165,15 +165,15 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->unk_1F0 = 0.0f;
     if (play->sceneId == SCENE_31MISAKI) {
         if (gSaveContext.save.weekEventReg[53] & 0x20) {
-            DynaPolyActor_Init(&this->dyna, 3);
+            DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         } else {
-            DynaPolyActor_Init(&this->dyna, 3);
+            DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAsleepCol);
         }
         this->dynapolyInitialized = true;
     } else if (play->sceneId == SCENE_SEA) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &sTurtleGreatBayTempleCol);
         this->dynapolyInitialized = true;
     }
@@ -296,7 +296,7 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
 
 void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_0) {
-        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         this->dyna.actor.flags |= ACTOR_FLAG_1;
         this->actionFunc = func_80AAF8F4;

@@ -75,7 +75,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
         sHasInitializedIsLoaded = true;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gDekuShrineSlidingDoorCol);
 
     this->index = BG_CRACE_MOVEBG_GET_INDEX(&this->dyna.actor);

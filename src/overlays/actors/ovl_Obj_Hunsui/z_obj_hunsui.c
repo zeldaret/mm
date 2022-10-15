@@ -205,7 +205,7 @@ void ObjHunsui_Init(Actor* thisx, PlayState* play) {
     this->unk_160 = OBJHUNSUI_GET_F000(thisx);
     this->unk_164 = OBJHUNSUI_GET_F80(thisx);
     this->unk_168 = OBJHUNSUI_GET_7F(thisx);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 
     if ((this->unk_160 != OBJHUNSUI_F000_5) && (this->unk_160 != OBJHUNSUI_F000_6)) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_hunsui_Colheader_000C74);

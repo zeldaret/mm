@@ -76,7 +76,7 @@ void BgTobira01_Init(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
     s32 pad;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
     gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);

@@ -920,7 +920,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockDynaColHeader);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);

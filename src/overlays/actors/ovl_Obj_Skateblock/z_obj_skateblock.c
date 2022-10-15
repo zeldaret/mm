@@ -489,7 +489,7 @@ void ObjSkateblock_Init(Actor* thisx, PlayState* play) {
     ObjSkateblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
     if (D_80A22A18 == NULL) {
         D_80A22A18 = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);

@@ -144,7 +144,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
 
     type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
 
     if (type == BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenFlowerOpenedFlowerCol);

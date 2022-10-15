@@ -344,7 +344,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
         }
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gFloorSwitchCol);
     }
     if (type == OBJSWITCH_TYPE_FLOOR) {

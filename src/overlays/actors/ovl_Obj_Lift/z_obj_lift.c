@@ -100,7 +100,7 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->unk_178 = this->dyna.actor.home.rot.z;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
         Actor_Kill(&this->dyna.actor);
         return;
