@@ -57,7 +57,7 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         func_80C0673C(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -129,7 +129,7 @@ void func_80C0685C(ObjMoonStone* this) {
 void func_80C06870(ObjMoonStone* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         gSaveContext.save.weekEventReg[74] |= 0x40;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

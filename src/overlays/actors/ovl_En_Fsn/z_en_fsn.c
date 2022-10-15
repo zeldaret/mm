@@ -1417,7 +1417,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_InitShop(this, play);
     } else {
         if ((gSaveContext.save.weekEventReg[33] & 8) || (gSaveContext.save.weekEventReg[79] & 0x40)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         Collider_InitCylinder(play, &this->collider);

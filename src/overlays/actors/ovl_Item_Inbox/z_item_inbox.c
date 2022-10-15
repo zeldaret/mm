@@ -41,7 +41,7 @@ void ItemInbox_Destroy(Actor* thisx, PlayState* play) {
 
 void ItemInbox_Idle(ItemInbox* this, PlayState* play) {
     if (Flags_GetTreasure(play, (this->actor.params >> 8) & 0x1F)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

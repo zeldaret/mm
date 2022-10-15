@@ -580,7 +580,7 @@ void func_80A5A534(Actor* thisx, PlayState* play) {
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_DC4++;

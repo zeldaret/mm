@@ -330,7 +330,7 @@ void func_80C204F0(EnHintSkb* this, PlayState* play) {
     }
 
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x10);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_80C20540(EnHintSkb* this) {
