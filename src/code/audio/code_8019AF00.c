@@ -1,5 +1,8 @@
 #include "global.h"
 
+
+
+
 typedef struct {
     /* 0x0 */ s8 x;
     /* 0x1 */ s8 y;

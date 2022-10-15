@@ -518,19 +518,19 @@ void func_80B41A48(EnKgy* this, PlayState* play) {
 }
 
 void func_80B41ACC(EnKgy* this, PlayState* play) {
-    s32 itemitemAction;
+    s32 itemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemitemAction = func_80123810(play);
-        if (itemitemAction != PLAYER_IA_NONE) {
+        itemAction = func_80123810(play);
+        if (itemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80B41E18;
         }
 
-        if (itemitemAction > PLAYER_IA_NONE) {
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if (itemitemAction == PLAYER_IA_BOTTLE_GOLD_DUST) {
+            if (itemAction == PLAYER_IA_BOTTLE_GOLD_DUST) {
                 if (this->unk_29C & 0x10) {
                     this->actor.textId = 0xC55;
                     player->actor.textId = 0xC55;
@@ -547,7 +547,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
                 player->actor.textId = 0xC47;
             }
             this->unk_29C |= 8;
-        } else if (itemitemAction < PLAYER_IA_NONE) {
+        } else if (itemAction < PLAYER_IA_NONE) {
             if (this->unk_29C & 0x10) {
                 this->actor.textId = 0xC57;
             } else {

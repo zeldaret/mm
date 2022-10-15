@@ -948,15 +948,15 @@ void func_80B9854C(EnZot* this, PlayState* play) {
 }
 
 void func_80B985EC(EnZot* this, PlayState* play) {
-    s32 itemitemAction;
+    s32 itemAction;
     Player* player = GET_PLAYER(play);
 
     func_80B98348(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemitemAction = func_80123810(play);
-        if (itemitemAction > PLAYER_IA_NONE) {
+        itemAction = func_80123810(play);
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if ((itemitemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+            if ((itemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
                 Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
                 if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
@@ -968,7 +968,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
                 player->actor.textId = 0x12AB;
             }
             this->actionFunc = func_80B98728;
-        } else if (itemitemAction < PLAYER_IA_NONE) {
+        } else if (itemAction < PLAYER_IA_NONE) {
             func_80151938(play, 0x12AB);
             this->actionFunc = func_80B98728;
         }

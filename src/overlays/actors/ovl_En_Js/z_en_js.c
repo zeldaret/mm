@@ -529,34 +529,34 @@ void func_8096971C(EnJs* this, PlayState* play) {
 }
 
 void func_80969748(EnJs* this, PlayState* play) {
-    s32 itemitemAction;
+    s32 itemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemitemAction = func_80123810(play);
-        if (itemitemAction != PLAYER_IA_NONE) {
+        itemAction = func_80123810(play);
+        if (itemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80969898;
         }
-        if (itemitemAction > PLAYER_IA_NONE) {
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if ((itemitemAction >= PLAYER_IA_MASK_TRUTH) && (itemitemAction <= PLAYER_IA_MASK_GIANT)) {
-                EnJs_TakeMask(itemitemAction, ENJS_GET_TYPE(&this->actor));
-                Inventory_UnequipItem(itemitemAction - 4);
+            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+                EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
+                Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2212;
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((itemitemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemitemAction <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemAction <= PLAYER_IA_MASK_DEKU)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
             }
         }
-        if (itemitemAction <= PLAYER_IA_MINUS1) {
+        if (itemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x2216);
         }
     }
@@ -675,34 +675,34 @@ void func_80969B5C(EnJs* this, PlayState* play) {
 }
 
 void func_80969C54(EnJs* this, PlayState* play) {
-    s32 itemitemAction;
+    s32 itemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 6, 0x1838, 0x64);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemitemAction = func_80123810(play);
-        if (itemitemAction != PLAYER_IA_NONE) {
+        itemAction = func_80123810(play);
+        if (itemAction != PLAYER_IA_NONE) {
             this->actionFunc = func_80969DA4;
         }
-        if (itemitemAction > PLAYER_IA_NONE) {
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
-            if ((itemitemAction >= PLAYER_IA_MASK_TRUTH) && (itemitemAction <= PLAYER_IA_MASK_GIANT)) {
-                EnJs_TakeMask(itemitemAction, ENJS_GET_TYPE(&this->actor));
-                Inventory_UnequipItem(itemitemAction - 4);
+            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+                EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
+                Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
                     player->actor.textId = 0x2221;
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((itemitemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemitemAction <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemAction <= PLAYER_IA_MASK_DEKU)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
             }
         }
-        if (itemitemAction <= PLAYER_IA_MINUS1) {
+        if (itemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x221E);
         }
     }

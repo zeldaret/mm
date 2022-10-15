@@ -49,7 +49,7 @@ void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, PlayState* play);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, PlayState* play);
 
 typedef struct {
-    /* 0x0 */ s32 itemitemAction;
+    /* 0x0 */ s32 itemAction;
     /* 0x4 */ s32 item;
     /* 0x8 */ s32 amount;
     /* 0xC */ s16 isBottledItem;
@@ -242,7 +242,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     this->playerStunWaitTimer = 0;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
     this->grabWaitTimer = 0;
-    this->itemitemAction = PLAYER_IA_NONE;
+    this->itemAction = PLAYER_IA_NONE;
     this->drawDmgEffTimer = 0;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->isTalking = false;
@@ -703,10 +703,10 @@ void EnTalkGibud_GetNextTextBoxId(EnTalkGibud* this, PlayState* play) {
     }
 }
 
-s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, s32 presentedItemitemAction) {
+s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, s32 presenteditemAction) {
     EnTalkGibudRequestedItem* requestedItem = &sRequestedItemTable[this->requestedItemIndex];
 
-    if (requestedItem->itemitemAction == presentedItemitemAction) {
+    if (requestedItem->itemAction == presenteditemAction) {
         if (!requestedItem->isBottledItem) {
             if (AMMO(requestedItem->item) >= requestedItem->amount) {
                 return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
@@ -723,15 +723,15 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, 
 
 void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 itemitemAction;
+    s32 itemAction;
 
-    if (this->itemitemAction == PLAYER_IA_NONE) {
-        itemitemAction = func_80123810(play);
-        if (itemitemAction != PLAYER_IA_NONE) {
-            this->itemitemAction = itemitemAction;
+    if (this->itemAction == PLAYER_IA_NONE) {
+        itemAction = func_80123810(play);
+        if (itemAction != PLAYER_IA_NONE) {
+            this->itemAction = itemAction;
         }
-        if (this->itemitemAction > PLAYER_IA_NONE) {
-            switch (EnTalkGibud_PresentedItemMatchesRequest(this, play, this->itemitemAction)) {
+        if (this->itemAction > PLAYER_IA_NONE) {
+            switch (EnTalkGibud_PresentedItemMatchesRequest(this, play, this->itemAction)) {
                 case EN_TALK_GIBUD_REQUESTED_ITEM_MET:
                     player->actor.textId = 0x138A;
                     this->textId = 0x138A;
@@ -751,7 +751,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
                     break;
             }
             func_801477B4(play);
-        } else if (this->itemitemAction < PLAYER_IA_NONE) {
+        } else if (this->itemAction < PLAYER_IA_NONE) {
             Message_StartTextbox(play, 0x1389, &this->actor);
             this->textId = 0x1389;
         }
@@ -787,7 +787,7 @@ void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupTalk(EnTalkGibud* this) {
-    this->itemitemAction = PLAYER_IA_NONE;
+    this->itemAction = PLAYER_IA_NONE;
     this->actionFunc = EnTalkGibud_Talk;
 }
 

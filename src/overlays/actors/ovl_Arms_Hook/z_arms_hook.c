@@ -109,7 +109,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
 
     if (Player_IsHoldingHookshot(player)) {
-        if ((player->heldItemitemAction != player->itemitemAction) || (player->actor.flags & ACTOR_FLAG_100) ||
+        if ((player->helditemAction != player->itemAction) || (player->actor.flags & ACTOR_FLAG_100) ||
             (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
