@@ -35,7 +35,7 @@ void AudioPlayback_InitSampleState(Note* note, NoteSampleState* sampleState, Not
     sampleState->bitField0.strongLeft = false;
     sampleState->bitField0.strongReverbRight = stereoData.strongReverbRight;
     sampleState->bitField0.strongReverbLeft = stereoData.strongReverbLeft;
-    if (stereoHeadsetEffects && (gAudioContext.soundMode == SOUNDMODE_HEADSET)) {
+    if (stereoHeadsetEffects && (gAudioCtx.soundMode == SOUNDMODE_HEADSET)) {
         halfPanIndex = pan >> 1;
         if (halfPanIndex > 0x3F) {
             halfPanIndex = 0x3F;
@@ -47,7 +47,7 @@ void AudioPlayback_InitSampleState(Note* note, NoteSampleState* sampleState, Not
 
         volLeft = gHeadsetPanVolume[pan];
         volRight = gHeadsetPanVolume[0x7F - pan];
-    } else if (stereoHeadsetEffects && (gAudioContext.soundMode == SOUNDMODE_STEREO)) {
+    } else if (stereoHeadsetEffects && (gAudioCtx.soundMode == SOUNDMODE_STEREO)) {
         strongLeft = strongRight = false;
         sampleState->haasEffectLeftDelaySize = 0;
         sampleState->haasEffectRightDelaySize = 0;
@@ -85,7 +85,7 @@ void AudioPlayback_InitSampleState(Note* note, NoteSampleState* sampleState, Not
                 break;
         }
 
-    } else if (gAudioContext.soundMode == SOUNDMODE_MONO) {
+    } else if (gAudioCtx.soundMode == SOUNDMODE_MONO) {
         sampleState->bitField0.strongReverbRight = false;
         sampleState->bitField0.strongReverbLeft = false;
         volLeft = 0.707f; // approx 1/sqrt(2)
@@ -170,9 +170,9 @@ void AudioPlayback_ProcessNotes(void) {
     f32 scale;
     s32 i;
 
-    for (i = 0; i < gAudioContext.numNotes; i++) {
-        note = &gAudioContext.notes[i];
-        sampleState = &gAudioContext.sampleStateList[gAudioContext.sampleStateOffset + i];
+    for (i = 0; i < gAudioCtx.numNotes; i++) {
+        note = &gAudioCtx.notes[i];
+        sampleState = &gAudioCtx.sampleStateList[gAudioCtx.sampleStateOffset + i];
         playbackState = &note->playbackState;
         if (playbackState->parentLayer != NO_LAYER) {
             if ((u32)playbackState->parentLayer < 0x7FFFFFFF) {
@@ -181,7 +181,7 @@ void AudioPlayback_ProcessNotes(void) {
 
             if ((note != playbackState->parentLayer->note) && (playbackState->status == PLAYBACK_STATUS_0)) {
                 playbackState->adsr.action.s.release = true;
-                playbackState->adsr.fadeOutVel = gAudioContext.audioBufferParameters.updatesPerFrameInv;
+                playbackState->adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
                 playbackState->priority = 1;
                 playbackState->status = PLAYBACK_STATUS_2;
                 goto out;
@@ -316,7 +316,7 @@ void AudioPlayback_ProcessNotes(void) {
             }
 
             subAttrs.frequency *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
-            subAttrs.frequency *= gAudioContext.audioBufferParameters.resampleRate;
+            subAttrs.frequency *= gAudioCtx.audioBufferParameters.resampleRate;
             subAttrs.velocity *= scale;
             AudioPlayback_InitSampleState(note, sampleState, &subAttrs);
             noteSampleState->bitField1.bookOffset = bookOffset;
@@ -347,18 +347,18 @@ Instrument* AudioPlayback_GetInstrumentInner(s32 fontId, s32 instId) {
     }
 
     if (!AudioLoad_IsFontLoadComplete(fontId)) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(0, fontId, AUDIO_ERROR_FONT_NOT_LOADED);
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(0, fontId, AUDIO_ERROR_FONT_NOT_LOADED);
         return NULL;
     }
 
-    if (instId >= gAudioContext.soundFontList[fontId].numInstruments) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(fontId, instId, AUDIO_ERROR_INVALID_INST_ID);
+    if (instId >= gAudioCtx.soundFontList[fontId].numInstruments) {
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(fontId, instId, AUDIO_ERROR_INVALID_INST_ID);
         return NULL;
     }
 
-    inst = gAudioContext.soundFontList[fontId].instruments[instId];
+    inst = gAudioCtx.soundFontList[fontId].instruments[instId];
     if (inst == NULL) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(fontId, instId, AUDIO_ERROR_NO_INST);
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(fontId, instId, AUDIO_ERROR_NO_INST);
         return inst;
     }
 
@@ -373,21 +373,21 @@ Drum* AudioPlayback_GetDrum(s32 fontId, s32 drumId) {
     }
 
     if (!AudioLoad_IsFontLoadComplete(fontId)) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(0, fontId, AUDIO_ERROR_FONT_NOT_LOADED);
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(0, fontId, AUDIO_ERROR_FONT_NOT_LOADED);
         return NULL;
     }
 
-    if (drumId >= gAudioContext.soundFontList[fontId].numDrums) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(fontId, drumId, AUDIO_ERROR_INVALID_DRUM_SFX_ID);
+    if (drumId >= gAudioCtx.soundFontList[fontId].numDrums) {
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(fontId, drumId, AUDIO_ERROR_INVALID_DRUM_SFX_ID);
         return NULL;
     }
-    if ((u32)gAudioContext.soundFontList[fontId].drums < AUDIO_RELOCATED_ADDRESS_START) {
+    if ((u32)gAudioCtx.soundFontList[fontId].drums < AUDIO_RELOCATED_ADDRESS_START) {
         return NULL;
     }
-    drum = gAudioContext.soundFontList[fontId].drums[drumId];
+    drum = gAudioCtx.soundFontList[fontId].drums[drumId];
 
     if (drum == NULL) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(fontId, drumId, AUDIO_ERROR_NO_DRUM_SFX);
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(fontId, drumId, AUDIO_ERROR_NO_DRUM_SFX);
     }
 
     return drum;
@@ -401,23 +401,23 @@ SoundEffect* AudioPlayback_GetSoundEffect(s32 fontId, s32 sfxId) {
     }
 
     if (!AudioLoad_IsFontLoadComplete(fontId)) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(0, fontId, AUDIO_ERROR_FONT_NOT_LOADED);
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(0, fontId, AUDIO_ERROR_FONT_NOT_LOADED);
         return NULL;
     }
 
-    if (sfxId >= gAudioContext.soundFontList[fontId].numSfx) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(fontId, sfxId, AUDIO_ERROR_INVALID_DRUM_SFX_ID);
+    if (sfxId >= gAudioCtx.soundFontList[fontId].numSfx) {
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(fontId, sfxId, AUDIO_ERROR_INVALID_DRUM_SFX_ID);
         return NULL;
     }
 
-    if ((u32)gAudioContext.soundFontList[fontId].soundEffects < AUDIO_RELOCATED_ADDRESS_START) {
+    if ((u32)gAudioCtx.soundFontList[fontId].soundEffects < AUDIO_RELOCATED_ADDRESS_START) {
         return NULL;
     }
 
-    soundEffect = &gAudioContext.soundFontList[fontId].soundEffects[sfxId];
+    soundEffect = &gAudioCtx.soundFontList[fontId].soundEffects[sfxId];
 
     if (soundEffect == NULL) {
-        gAudioContext.audioErrorFlags = AUDIO_ERROR(fontId, sfxId, AUDIO_ERROR_NO_DRUM_SFX);
+        gAudioCtx.audioErrorFlags = AUDIO_ERROR(fontId, sfxId, AUDIO_ERROR_NO_DRUM_SFX);
     }
 
     if (soundEffect->tunedSample.sample == NULL) {
@@ -438,24 +438,24 @@ s32 AudioPlayback_SetFontInstrument(s32 instrumentType, s32 fontId, s32 index, v
 
     switch (instrumentType) {
         case 0:
-            if (index >= gAudioContext.soundFontList[fontId].numDrums) {
+            if (index >= gAudioCtx.soundFontList[fontId].numDrums) {
                 return -3;
             }
-            gAudioContext.soundFontList[fontId].drums[index] = value;
+            gAudioCtx.soundFontList[fontId].drums[index] = value;
             break;
 
         case 1:
-            if (index >= gAudioContext.soundFontList[fontId].numSfx) {
+            if (index >= gAudioCtx.soundFontList[fontId].numSfx) {
                 return -3;
             }
-            gAudioContext.soundFontList[fontId].soundEffects[index] = *(SoundEffect*)value;
+            gAudioCtx.soundFontList[fontId].soundEffects[index] = *(SoundEffect*)value;
             break;
 
         default:
-            if (index >= gAudioContext.soundFontList[fontId].numInstruments) {
+            if (index >= gAudioCtx.soundFontList[fontId].numInstruments) {
                 return -3;
             }
-            gAudioContext.soundFontList[fontId].instruments[index] = value;
+            gAudioCtx.soundFontList[fontId].instruments[index] = value;
             break;
     }
 
@@ -488,7 +488,7 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
     if (note->playbackState.parentLayer != layer) {
         if (note->playbackState.parentLayer == NO_LAYER && note->playbackState.wantedParentLayer == NO_LAYER &&
             note->playbackState.prevParentLayer == layer && target != ADSR_STATE_DECAY) {
-            note->playbackState.adsr.fadeOutVel = gAudioContext.audioBufferParameters.updatesPerFrameInv;
+            note->playbackState.adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
             note->playbackState.adsr.action.s.release = true;
         }
         return;
@@ -549,16 +549,16 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
         note->playbackState.prevParentLayer = note->playbackState.parentLayer;
         note->playbackState.parentLayer = NO_LAYER;
         if (target == ADSR_STATE_RELEASE) {
-            note->playbackState.adsr.fadeOutVel = gAudioContext.audioBufferParameters.updatesPerFrameInv;
+            note->playbackState.adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
             note->playbackState.adsr.action.s.release = true;
             note->playbackState.status = PLAYBACK_STATUS_2;
         } else {
             note->playbackState.status = PLAYBACK_STATUS_1;
             note->playbackState.adsr.action.s.decay = true;
             if (layer->adsr.decayIndex == 0) {
-                note->playbackState.adsr.fadeOutVel = gAudioContext.adsrDecayTable[layer->channel->adsr.decayIndex];
+                note->playbackState.adsr.fadeOutVel = gAudioCtx.adsrDecayTable[layer->channel->adsr.decayIndex];
             } else {
-                note->playbackState.adsr.fadeOutVel = gAudioContext.adsrDecayTable[layer->adsr.decayIndex];
+                note->playbackState.adsr.fadeOutVel = gAudioCtx.adsrDecayTable[layer->adsr.decayIndex];
             }
             note->playbackState.adsr.sustain =
                 ((f32)(s32)(layer->channel->adsr.sustain) * note->playbackState.adsr.current) / 256.0f;
@@ -665,11 +665,11 @@ void AudioPlayback_InitNoteLists(NotePool* pool) {
 void AudioPlayback_InitNoteFreeList(void) {
     s32 i;
 
-    AudioPlayback_InitNoteLists(&gAudioContext.noteFreeLists);
-    for (i = 0; i < gAudioContext.numNotes; i++) {
-        gAudioContext.notes[i].listItem.u.value = &gAudioContext.notes[i];
-        gAudioContext.notes[i].listItem.prev = NULL;
-        AudioSeq_AudioListPushBack(&gAudioContext.noteFreeLists.disabled, &gAudioContext.notes[i].listItem);
+    AudioPlayback_InitNoteLists(&gAudioCtx.noteFreeLists);
+    for (i = 0; i < gAudioCtx.numNotes; i++) {
+        gAudioCtx.notes[i].listItem.u.value = &gAudioCtx.notes[i];
+        gAudioCtx.notes[i].listItem.prev = NULL;
+        AudioSeq_AudioListPushBack(&gAudioCtx.noteFreeLists.disabled, &gAudioCtx.notes[i].listItem);
     }
 }
 
@@ -683,22 +683,22 @@ void AudioPlayback_NotePoolClear(NotePool* pool) {
         switch (i) {
             case 0:
                 source = &pool->disabled;
-                dest = &gAudioContext.noteFreeLists.disabled;
+                dest = &gAudioCtx.noteFreeLists.disabled;
                 break;
 
             case 1:
                 source = &pool->decaying;
-                dest = &gAudioContext.noteFreeLists.decaying;
+                dest = &gAudioCtx.noteFreeLists.decaying;
                 break;
 
             case 2:
                 source = &pool->releasing;
-                dest = &gAudioContext.noteFreeLists.releasing;
+                dest = &gAudioCtx.noteFreeLists.releasing;
                 break;
 
             case 3:
                 source = &pool->active;
-                dest = &gAudioContext.noteFreeLists.active;
+                dest = &gAudioCtx.noteFreeLists.active;
                 break;
         }
 
@@ -729,22 +729,22 @@ void AudioPlayback_NotePoolFill(NotePool* pool, s32 count) {
 
         switch (i) {
             case 0:
-                source = &gAudioContext.noteFreeLists.disabled;
+                source = &gAudioCtx.noteFreeLists.disabled;
                 dest = &pool->disabled;
                 break;
 
             case 1:
-                source = &gAudioContext.noteFreeLists.decaying;
+                source = &gAudioCtx.noteFreeLists.decaying;
                 dest = &pool->decaying;
                 break;
 
             case 2:
-                source = &gAudioContext.noteFreeLists.releasing;
+                source = &gAudioCtx.noteFreeLists.releasing;
                 dest = &pool->releasing;
                 break;
 
             case 3:
-                source = &gAudioContext.noteFreeLists.active;
+                source = &gAudioCtx.noteFreeLists.active;
                 dest = &pool->active;
                 break;
         }
@@ -862,7 +862,7 @@ void AudioPlayback_NoteReleaseAndTakeOwnership(Note* note, SequenceLayer* layer)
     note->playbackState.wantedParentLayer = layer;
     note->playbackState.priority = layer->channel->notePriority;
 
-    note->playbackState.adsr.fadeOutVel = gAudioContext.audioBufferParameters.updatesPerFrameInv;
+    note->playbackState.adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
     note->playbackState.adsr.action.s.release = true;
 }
 
@@ -958,9 +958,9 @@ Note* AudioPlayback_AllocNote(SequenceLayer* layer) {
     }
 
     if (policy & 8) {
-        if (!(note = AudioPlayback_AllocNoteFromDisabled(&gAudioContext.noteFreeLists, layer)) &&
-            !(note = AudioPlayback_AllocNoteFromDecaying(&gAudioContext.noteFreeLists, layer)) &&
-            !(note = AudioPlayback_AllocNoteFromActive(&gAudioContext.noteFreeLists, layer))) {
+        if (!(note = AudioPlayback_AllocNoteFromDisabled(&gAudioCtx.noteFreeLists, layer)) &&
+            !(note = AudioPlayback_AllocNoteFromDecaying(&gAudioCtx.noteFreeLists, layer)) &&
+            !(note = AudioPlayback_AllocNoteFromActive(&gAudioCtx.noteFreeLists, layer))) {
             goto null_return;
         }
         return note;
@@ -968,13 +968,13 @@ Note* AudioPlayback_AllocNote(SequenceLayer* layer) {
 
     if (!(note = AudioPlayback_AllocNoteFromDisabled(&layer->channel->notePool, layer)) &&
         !(note = AudioPlayback_AllocNoteFromDisabled(&layer->channel->seqPlayer->notePool, layer)) &&
-        !(note = AudioPlayback_AllocNoteFromDisabled(&gAudioContext.noteFreeLists, layer)) &&
+        !(note = AudioPlayback_AllocNoteFromDisabled(&gAudioCtx.noteFreeLists, layer)) &&
         !(note = AudioPlayback_AllocNoteFromDecaying(&layer->channel->notePool, layer)) &&
         !(note = AudioPlayback_AllocNoteFromDecaying(&layer->channel->seqPlayer->notePool, layer)) &&
-        !(note = AudioPlayback_AllocNoteFromDecaying(&gAudioContext.noteFreeLists, layer)) &&
+        !(note = AudioPlayback_AllocNoteFromDecaying(&gAudioCtx.noteFreeLists, layer)) &&
         !(note = AudioPlayback_AllocNoteFromActive(&layer->channel->notePool, layer)) &&
         !(note = AudioPlayback_AllocNoteFromActive(&layer->channel->seqPlayer->notePool, layer)) &&
-        !(note = AudioPlayback_AllocNoteFromActive(&gAudioContext.noteFreeLists, layer))) {
+        !(note = AudioPlayback_AllocNoteFromActive(&gAudioCtx.noteFreeLists, layer))) {
         goto null_return;
     }
     return note;
@@ -988,8 +988,8 @@ void AudioPlayback_NoteInitAll(void) {
     Note* note;
     s32 i;
 
-    for (i = 0; i < gAudioContext.numNotes; i++) {
-        note = &gAudioContext.notes[i];
+    for (i = 0; i < gAudioCtx.numNotes; i++) {
+        note = &gAudioCtx.notes[i];
         note->sampleState = gZeroedSampleState;
         note->playbackState.priority = 0;
         note->playbackState.status = PLAYBACK_STATUS_0;
@@ -1006,7 +1006,7 @@ void AudioPlayback_NoteInitAll(void) {
         note->playbackState.stereoHeadsetEffects = false;
         note->playbackState.startSamplePos = 0;
         note->synthesisState.synthesisBuffers =
-            AudioHeap_AllocDmaMemory(&gAudioContext.miscPool, sizeof(NoteSynthesisBuffers));
-        note->playbackState.attributes.filterBuf = AudioHeap_AllocDmaMemory(&gAudioContext.miscPool, FILTER_SIZE);
+            AudioHeap_AllocDmaMemory(&gAudioCtx.miscPool, sizeof(NoteSynthesisBuffers));
+        note->playbackState.attributes.filterBuf = AudioHeap_AllocDmaMemory(&gAudioCtx.miscPool, FILTER_SIZE);
     }
 }

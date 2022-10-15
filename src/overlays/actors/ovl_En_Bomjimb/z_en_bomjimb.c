@@ -119,35 +119,35 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
                 if (gSaveContext.save.weekEventReg[11] & 1) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_1:
                 if (gSaveContext.save.weekEventReg[11] & 2) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_2:
                 if (gSaveContext.save.weekEventReg[11] & 4) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_3:
                 if (gSaveContext.save.weekEventReg[11] & 8) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_4:
                 if (gSaveContext.save.weekEventReg[11] & 0x10) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
@@ -156,7 +156,7 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
 
     if ((!(gSaveContext.save.weekEventReg[73] & 0x10) && !(gSaveContext.save.weekEventReg[85] & 2)) ||
         (gSaveContext.save.weekEventReg[75] & 0x40)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

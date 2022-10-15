@@ -43,7 +43,7 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc = EnSth2_UpdateSkelAnime;

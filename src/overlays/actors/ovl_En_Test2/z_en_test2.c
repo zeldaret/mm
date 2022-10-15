@@ -85,7 +85,7 @@ void EnTest2_Update(Actor* thisx, PlayState* play) {
 
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[this->actor.params]);
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (Object_IsLoaded(&play->objectCtx, objectIndex)) {
