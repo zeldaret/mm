@@ -2599,7 +2599,7 @@ void Actor_ResetLensActors(PlayState* play) {
     play->actorCtx.lensActorsDrawn = false;
 }
 
-s32 Actor_RecordLensActor(PlayState* play, Actor* actor) {
+s32 Actor_AddToLensActors(PlayState* play, Actor* actor) {
     if (play->actorCtx.numLensActors >= LENS_ACTOR_MAX) {
         return false;
     }
@@ -2817,7 +2817,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
                     ((play->roomCtx.curRoom.lensMode == LENS_MODE_HIDE_ACTORS) ||
                      (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) ||
                      (actor->room != play->roomCtx.curRoom.num))) {
-                    if (Actor_RecordLensActor(play, actor)) {}
+                    if (Actor_AddToLensActors(play, actor)) {}
                 } else {
                     Actor_Draw(play, actor);
                 }
@@ -2843,6 +2843,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     } else {
         Math_StepToC(&play->actorCtx.lensMaskSize, 0, 10);
     }
+
     if (play->actorCtx.lensMaskSize != 0) {
         play->actorCtx.lensActorsDrawn = true;
         Actor_DrawLensActors(play, play->actorCtx.numLensActors, play->actorCtx.lensActors);
