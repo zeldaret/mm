@@ -54,7 +54,7 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play) {
         this->unk144 = -1;
     }
     if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

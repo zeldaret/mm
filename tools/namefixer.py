@@ -115,6 +115,7 @@ wordReplace = {
     "Actor_IsActorFacingActorAndWithinRange": "Actor_ActorAIsFacingAndNearActorB",
     "Actor_IsActorFacingActor": "Actor_ActorAIsFacingActorB",
     "Actor_IsActorFacedByActor": "Actor_ActorBIsFacingActorA",
+    "Actor_MarkForDeath": "Actor_Kill",
     "func_800B84D0": "Actor_ProcessTalkRequest",
     "func_8017D668": "Math3D_PointDistToLine2D",
     "func_800BDFC0": "Gfx_DrawDListOpa",
@@ -764,6 +765,7 @@ wordReplace = {
     "play->actorCtx.unk4": "play->actorCtx.lensMaskSize",
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
+    "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
 
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",

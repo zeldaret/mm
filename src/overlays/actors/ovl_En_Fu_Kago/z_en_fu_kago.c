@@ -100,7 +100,7 @@ void EnFuKago_Init(Actor* thisx, PlayState* play) {
     }
 
     if (npc == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -342,7 +342,7 @@ void func_80AD0288(EnFuKago* this, PlayState* play) {
     scale->z = scale->x;
     scale->y = scale->x;
     if (scale->x == 0.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

@@ -1145,7 +1145,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
         }
 
         if (temp_v0 <= 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             this->unk_288 = 0;
         } else {
             this->unk_288 = temp_v0;

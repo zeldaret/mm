@@ -216,13 +216,57 @@ typedef enum PlayerDoorType {
     /*  5 */ PLAYER_DOORTYPE_PROXIMITY
 } PlayerDoorType;
 
+typedef enum PlayerAnimType {
+    /* 0 */ PLAYER_ANIMTYPE_0,
+    /* 1 */ PLAYER_ANIMTYPE_1,
+    /* 2 */ PLAYER_ANIMTYPE_2,
+    /* 3 */ PLAYER_ANIMTYPE_3,
+    /* 4 */ PLAYER_ANIMTYPE_4,
+    /* 5 */ PLAYER_ANIMTYPE_5,
+    /* 6 */ PLAYER_ANIMTYPE_MAX
+} PlayerAnimType;
+
+typedef enum PlayerModelType {
+    // left hand
+    /*  0 */ PLAYER_MODELTYPE_LH_OPEN,
+    /*  1 */ PLAYER_MODELTYPE_LH_CLOSED,
+    /*  2 */ PLAYER_MODELTYPE_LH_ONE_HAND_SWORD,
+    /*  3 */ PLAYER_MODELTYPE_LH_TWO_HAND_SWORD,
+    /*  4 */ PLAYER_MODELTYPE_LH_4,
+    /*  5 */ PLAYER_MODELTYPE_LH_BOTTLE,
+    // right hand
+    /*  6 */ PLAYER_MODELTYPE_RH_OPEN,
+    /*  7 */ PLAYER_MODELTYPE_RH_CLOSED,
+    /*  8 */ PLAYER_MODELTYPE_RH_SHIELD,
+    /*  9 */ PLAYER_MODELTYPE_RH_BOW,
+    /* 10 */ PLAYER_MODELTYPE_RH_INSTRUMENT,
+    /* 11 */ PLAYER_MODELTYPE_RH_HOOKSHOT,
+    // sheath
+    /* 12 */ PLAYER_MODELTYPE_SHEATH_12,
+    /* 13 */ PLAYER_MODELTYPE_SHEATH_13,
+    /* 14 */ PLAYER_MODELTYPE_SHEATH_14,
+    /* 15 */ PLAYER_MODELTYPE_SHEATH_15,
+    // waist
+    /* 16 */ PLAYER_MODELTYPE_WAIST,
+    /* 17 */ PLAYER_MODELTYPE_17, // NULL?
+    /* 18 */ PLAYER_MODELTYPE_MAX
+} PlayerModelType;
+
+typedef struct PlayerModelIndices {
+    /* 0x0 */ u8 modelAnimType; // PlayerAnimType enum
+    /* 0x1 */ u8 leftHandType; // PlayerModelType enum
+    /* 0x2 */ u8 rightHandType; // PlayerModelType enum
+    /* 0x3 */ u8 sheathType; // PlayerModelType enum
+    /* 0x4 */ u8 waistType; // PlayerModelType enum
+} PlayerModelIndices; // size = 0x5
+
 typedef enum PlayerModelGroup {
     /*  0 */ PLAYER_MODELGROUP_0,
     /*  1 */ PLAYER_MODELGROUP_1,
-    /*  2 */ PLAYER_MODELGROUP_ONE_HANDED_SWORD,
+    /*  2 */ PLAYER_MODELGROUP_ONE_HAND_SWORD,
     /*  3 */ PLAYER_MODELGROUP_DEFAULT, // non-specific models, for items that don't have particular link models
     /*  4 */ PLAYER_MODELGROUP_4,
-    /*  5 */ PLAYER_MODELGROUP_TWO_HANDED_SWORD,
+    /*  5 */ PLAYER_MODELGROUP_TWO_HAND_SWORD,
     /*  6 */ PLAYER_MODELGROUP_BOW,
     /*  7 */ PLAYER_MODELGROUP_EXPLOSIVES,
     /*  8 */ PLAYER_MODELGROUP_8,
@@ -234,6 +278,45 @@ typedef enum PlayerModelGroup {
     /* 14 */ PLAYER_MODELGROUP_ZORA_FINS,
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
+
+typedef enum PlayerEyeIndex {
+    /* 0 */ PLAYER_EYES_OPEN,
+    /* 1 */ PLAYER_EYES_HALF,
+    /* 2 */ PLAYER_EYES_CLOSED,
+    /* 3 */ PLAYER_EYES_ROLL_RIGHT,
+    /* 4 */ PLAYER_EYES_ROLL_LEFT,
+    /* 5 */ PLAYER_EYES_ROLL_UP,
+    /* 6 */ PLAYER_EYES_ROLL_DOWN,
+    /* 7 */ PLAYER_EYES_7,
+    /* 8 */ PLAYER_EYES_MAX
+} PlayerEyeIndex;
+
+typedef enum PlayerMouthIndex {
+    /* 0 */ PLAYER_MOUTH_CLOSED,
+    /* 1 */ PLAYER_MOUTH_TEETH,
+    /* 2 */ PLAYER_MOUTH_ANGRY,
+    /* 3 */ PLAYER_MOUTH_HAPPY,
+    /* 4 */ PLAYER_MOUTH_MAX
+} PlayerMouthIndex;
+
+typedef enum PlayerFacialExpression {
+    /*  0 */ PLAYER_FACE_0,
+    /*  1 */ PLAYER_FACE_1,
+    /*  2 */ PLAYER_FACE_2,
+    /*  3 */ PLAYER_FACE_3,
+    /*  4 */ PLAYER_FACE_4,
+    /*  5 */ PLAYER_FACE_5,
+    /*  6 */ PLAYER_FACE_6,
+    /*  7 */ PLAYER_FACE_7,
+    /*  8 */ PLAYER_FACE_8,
+    /*  9 */ PLAYER_FACE_9,
+    /* 10 */ PLAYER_FACE_10,
+    /* 11 */ PLAYER_FACE_11,
+    /* 12 */ PLAYER_FACE_12,
+    /* 13 */ PLAYER_FACE_13,
+    /* 14 */ PLAYER_FACE_14,
+    /* 15 */ PLAYER_FACE_15
+} PlayerFacialExpression;
 
 typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,
