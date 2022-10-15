@@ -16,18 +16,22 @@ void DmHina_Destroy(Actor* thisx, PlayState* play);
 void DmHina_Update(Actor* thisx, PlayState* play);
 void DmHina_Draw(Actor* thisx, PlayState* play);
 
-void DmHina_WaitForPlayer(DmHina* this, PlayState* play);
+void DmHina_Idle(DmHina* this, PlayState* play);
 void DmHina_AwaitMessageBoxClosing(DmHina* this, PlayState* play);
 void DmHina_SetupSubCamera(DmHina* this, PlayState* play);
 void DmHina_MoveSubCamera(DmHina* this, PlayState* play);
 
-#define PARAMS_REMAINS_ODOLWA 0
-#define PARAMS_REMAINS_GOHT 1
-#define PARAMS_REMAINS_GYORG 2
-#define PARAMS_REMAINS_TWINMOLD 3
+typedef enum {
+    /* 0 */ PARAMS_REMAINS_ODOLWA,
+    /* 1 */ PARAMS_REMAINS_GOHT,
+    /* 2 */ PARAMS_REMAINS_GYORG,
+    /* 3 */ PARAMS_REMAINS_TWINMOLD
+} DmHinaType;
 
-#define LIGHT_ORB_STATE_OFF 0
-#define LIGHT_ORB_STATE_ON 1
+typedef enum {
+    /* 0 */ LIGHT_ORB_STATE_OFF,
+    /* 1 */ LIGHT_ORB_STATE_ON
+};
 
 const ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
@@ -45,7 +49,7 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
     this->isVisible = true;
-    this->actionFunc = DmHina_WaitForPlayer;
+    this->actionFunc = DmHina_Idle;
     this->blueWarpPosY = this->actor.world.pos.y;
     this->maskScale = 0.0f;
     this->yDimScaleFactor = 1.0f;
@@ -57,7 +61,7 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
 void DmHina_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmHina_WaitForPlayer(DmHina* this, PlayState* play) {
+void DmHina_Idle(DmHina* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     Math_SmoothStepToF(&this->maskScale, 0.6f, 0.5f, 0.05f, 0.001f);
@@ -106,7 +110,7 @@ void DmHina_MoveSubCamera(DmHina* this, PlayState* play) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MASK_RISING - SFX_FLAG);
 }
 
-void DmHina_SetupLightOrb(DmHina* this, PlayState* play) {
+void DmHina_UpdateLightOrb(DmHina* this, PlayState* play) {
     s32 i;
     s16 light1Color;
 
@@ -143,7 +147,7 @@ void DmHina_Update(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
     this->actionFunc(this, play);
-    DmHina_SetupLightOrb(this, play);
+    DmHina_UpdateLightOrb(this, play);
 }
 
 void DmHina_DrawLightOrb(DmHina* this, PlayState* play) {
@@ -186,12 +190,15 @@ void DmHina_Draw(Actor* thisx, PlayState* play) {
             case PARAMS_REMAINS_ODOLWA:
                 GetItem_Draw(play, GID_REMAINS_ODOLWA);
                 break;
+
             case PARAMS_REMAINS_GOHT:
                 GetItem_Draw(play, GID_REMAINS_GOHT);
                 break;
+
             case PARAMS_REMAINS_GYORG:
                 GetItem_Draw(play, GID_REMAINS_GYORG);
                 break;
+
             case PARAMS_REMAINS_TWINMOLD:
                 GetItem_Draw(play, GID_REMAINS_TWINMOLD);
                 break;
