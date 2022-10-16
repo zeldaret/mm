@@ -164,7 +164,7 @@ f64 func_80086CEC(f64 param_1);
 s32 func_80086CF8(f32 param_1);
 s32 func_80086D08(f64 param_1);
 // void func_80086D18(void);
-// void func_80086D24(void);
+f64 func_80086D24(f64);
 s32 func_80086D30(f32 param_1);
 s32 func_80086D40(f64 param_1);
 // void func_80086D50(void);

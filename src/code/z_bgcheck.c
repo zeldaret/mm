@@ -2834,8 +2834,6 @@ void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPo
     }
 }
 
-f64 func_80086D24(f64);
-
 #ifdef NON_MATCHING
 /**
  * original name: DynaPolyInfo_expandSRT
