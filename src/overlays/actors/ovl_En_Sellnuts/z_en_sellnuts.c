@@ -417,9 +417,10 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
 void func_80ADB924(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u8 talkState = Message_GetState(&play->msgCtx);
+    PlayerItemAction itemAction;
 
     if (talkState == TEXT_STATE_16) {
-        PlayerItemAction itemAction = func_80123810(play);
+        itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
             if (itemAction == PLAYER_IA_MOON_TEAR) {

@@ -1324,7 +1324,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
     Vec3f diff;
     s32 pad;
 
-    if ((this->itemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
+    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
         Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
@@ -1421,7 +1421,7 @@ s32 Player_ActionToBottle(Player* player, PlayerItemAction itemAction) {
 }
 
 s32 Player_GetBottleHeld(Player* Player) {
-    return Player_ActionToBottle(Player, Player->itemAction);
+    return Player_ActionToBottle(Player, Player->heldItemAction);
 }
 
 s32 Player_ActionToExplosive(Player* player, PlayerItemAction itemAction) {
