@@ -968,7 +968,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
                 player->actor.textId = 0x12AB;
             }
             this->actionFunc = func_80B98728;
-        } else if (itemAction < PLAYER_IA_NONE) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x12AB);
             this->actionFunc = func_80B98728;
         }

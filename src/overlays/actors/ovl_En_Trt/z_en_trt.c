@@ -1412,7 +1412,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             func_801477B4(play);
-        } else if (itemGiven < PLAYER_IA_NONE) {
+        } else if (itemGiven <= PLAYER_IA_MINUS1) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {

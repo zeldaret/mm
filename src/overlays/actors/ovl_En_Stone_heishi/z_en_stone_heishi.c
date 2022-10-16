@@ -290,7 +290,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
                 this->action = EN_STONE_ACTION_1;
                 this->actionFunc = func_80BC9680;
             }
-        } else if (itemAction < PLAYER_IA_NONE) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             func_801477B4(play);
             func_80151BB4(play, 0x12);
             func_80BC94B0(this);

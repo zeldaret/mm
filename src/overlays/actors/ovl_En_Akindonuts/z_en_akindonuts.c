@@ -1085,7 +1085,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             this->actionFunc = func_80BEF18C;
         }
         func_801477B4(play);
-    } else if (itemAction < PLAYER_IA_NONE) {
+    } else if (itemAction <= PLAYER_IA_MINUS1) {
         this->unk_33C = D_80BF04AC[params];
         func_80151938(play, this->unk_33C);
         this->actionFunc = func_80BEF18C;
