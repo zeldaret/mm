@@ -92,15 +92,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static TexturePtr sEyeTextures[] = {
-    gPamelasFatherHumanEyeOpenTex,
-    gPamelasFatherHumanEyeHalfTex,
-    gPamelasFatherHumanEyeClosedTex,
-};
-
 void EnHgo_Init(Actor* thisx, PlayState* play) {
-    EnHgo* this = THIS;
     s32 pad;
+    EnHgo* this = THIS;
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gPamelasFatherHumanSkel, &gPamelasFatherArmsFoldedAnim,
@@ -359,7 +353,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
     return false;
 }
 
-void EnHgo_FacePlayer(EnHgo* this, PlayState* play) {
+void EnHgo_UpdateFace(EnHgo* this, PlayState* play) {
     Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     if (this->blinkTimer > 2) {
         this->blinkTimer--;
@@ -387,7 +381,7 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
         if (this->actionFunc != EnHgo_UpdateCollision) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-            EnHgo_FacePlayer(this, play);
+            EnHgo_UpdateFace(this, play);
         }
     }
 }
@@ -406,10 +400,16 @@ void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos,
     EnHgo* this = THIS;
 
     if (limbIndex == PAMELAS_FATHER_HUMAN_LIMB_HEAD) {
-        Matrix_Get(&this->mtxF);
+        Matrix_Get(&this->mf);
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
+
+static TexturePtr sEyeTextures[] = {
+    gPamelasFatherHumanEyeOpenTex,
+    gPamelasFatherHumanEyeHalfTex,
+    gPamelasFatherHumanEyeClosedTex,
+};
 
 void EnHgo_Draw(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
@@ -419,7 +419,7 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
-    Matrix_Put(&this->mtxF);
+    Matrix_Put(&this->mf);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherHumanEyebrowsDL);
     CLOSE_DISPS(play->state.gfxCtx);

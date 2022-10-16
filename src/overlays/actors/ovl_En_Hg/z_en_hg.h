@@ -14,7 +14,7 @@ typedef struct EnHg {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnHgActionFunc actionFunc;
-    /* 0x1D8 */ MtxF mtxF;
+    /* 0x1D8 */ MtxF mf;
     /* 0x218 */ s32 cutsceneIndex;
     /* 0x21C */ s32 animIndex;
     /* 0x220 */ Vec3s jointTable[PAMELAS_FATHER_GIBDO_LIMB_MAX];

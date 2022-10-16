@@ -54,10 +54,10 @@
         <Limb Name="gPamelasFatherGibdoHeadLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_HEAD" Offset="0x84D8" />
         <Limb Name="gPamelasFatherGibdoPelvisLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_PELVIS" Offset="0x84E4" />
         <Limb Name="gPamelasFatherGibdoLeftThighLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_LEFT_THIGH" Offset="0x84F0" />
-        <Limb Name="gPamelasFatherGibdoLeftLegLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_LEFT_LEG" Offset="0x84FC" />
+        <Limb Name="gPamelasFatherGibdoLeftShinLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_LEFT_SHIN" Offset="0x84FC" />
         <Limb Name="gPamelasFatherGibdoLeftFootLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_LEFT_FOOT" Offset="0x8508" />
         <Limb Name="gPamelasFatherGibdoRightThighLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_RIGHT_THIGH" Offset="0x8514" />
-        <Limb Name="gPamelasFatherGibdoRightLegLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_RIGHT_LEG" Offset="0x8520" />
+        <Limb Name="gPamelasFatherGibdoRightShinLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_RIGHT_SHIN" Offset="0x8520" />
         <Limb Name="gPamelasFatherGibdoRightFootLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_RIGHT_FOOT" Offset="0x852C" />
         <Skeleton Name="gPamelasFatherGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELAS_FATHER_GIBDO_LIMB_NONE" LimbMax="PAMELAS_FATHER_GIBDO_LIMB_MAX" EnumName="PamelasFatherGibdoLimb" Offset="0x8580" />
 
@@ -69,10 +69,10 @@
 
         <DList Name="gPamelasFatherHumanPelvisDL" Offset="0xE860" />
         <DList Name="gPamelasFatherHumanRightFootDL" Offset="0xE9E0" />
-        <DList Name="gPamelasFatherHumanRightLegDL" Offset="0xEB28" />
+        <DList Name="gPamelasFatherHumanRightShinDL" Offset="0xEB28" />
         <DList Name="gPamelasFatherHumanRightThighDL" Offset="0xEC48" />
         <DList Name="gPamelasFatherHumanLeftFootDL" Offset="0xEE50" />
-        <DList Name="gPamelasFatherHumanLeftLegDL" Offset="0xEF98" />
+        <DList Name="gPamelasFatherHumanLeftShinDL" Offset="0xEF98" />
         <DList Name="gPamelasFatherHumanLeftThighDL" Offset="0xF0B8" />
         <DList Name="gPamelasFatherHumanEyebrowsDL" Offset="0xF248" />
         <DList Name="gPamelasFatherHumanHeadDL" Offset="0xF2F0" />
@@ -114,10 +114,10 @@
         <Limb Name="gPamelasFatherHumanHeadLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_HEAD" Offset="0x129B0" />
         <Limb Name="gPamelasFatherHumanPelvisLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_PELVIS" Offset="0x129BC" />
         <Limb Name="gPamelasFatherHumanLeftThighLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_LEFT_THIGH" Offset="0x129C8" />
-        <Limb Name="gPamelasFatherHumanLeftLegLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_LEFT_LEG" Offset="0x129D4" />
+        <Limb Name="gPamelasFatherHumanLeftLegLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_LEFT_SHIN" Offset="0x129D4" />
         <Limb Name="gPamelasFatherHumanLeftFootLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_LEFT_FOOT" Offset="0x129E0" />
         <Limb Name="gPamelasFatherHumanRightThighLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_RIGHT_THIGH" Offset="0x129EC" />
-        <Limb Name="gPamelasFatherHumanRightLegLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_RIGHT_LEG" Offset="0x129F8" />
+        <Limb Name="gPamelasFatherHumanRightLegLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_RIGHT_SHIN" Offset="0x129F8" />
         <Limb Name="gPamelasFatherHumanRightFootLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_RIGHT_FOOT" Offset="0x12A04" />
         <Skeleton Name="gPamelasFatherHumanSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELAS_FATHER_HUMAN_LIMB_NONE" LimbMax="PAMELAS_FATHER_HUMAN_LIMB_MAX" EnumName="PamelasFatherHumanLimb" Offset="0x12A58" />
 
