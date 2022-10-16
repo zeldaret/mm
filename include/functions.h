@@ -2183,7 +2183,8 @@ void VisMono_Draw(VisMono* this, Gfx** gfxp);
 void func_801420C0(void* arg0);
 void func_801420F4(void* arg0);
 void func_80142100(void* arg0, Gfx** gfx, u32 arg2);
-s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* vtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
+                  s32 arg8);
 void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
 void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType);
 void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyType);
