@@ -2,6 +2,7 @@
 #define Z_EN_DNQ_H
 
 #include "global.h"
+#include "objects/object_dno/object_dno.h"
 #include "z64snap.h"
 
 struct EnDnq;
@@ -15,8 +16,8 @@ typedef struct EnDnq {
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ u8 unk_1DC;
     /* 0x1E0 */ s32 unk_1E0;
-    /* 0x1E4 */ Vec3s jointTable[33];
-    /* 0x2AA */ Vec3s morphTable[33];
+    /* 0x1E4 */ Vec3s jointTable[DEKU_KING_LIMB_MAX];
+    /* 0x2AA */ Vec3s morphTable[DEKU_KING_LIMB_MAX];
     /* 0x370 */ Vec3f unk_370;
     /* 0x37C */ u16 unk_37C;
     /* 0x37E */ s16 unk_37E;

@@ -361,8 +361,7 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
 void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    // TODO: Casting to remove warning for now
-    if (func_8010BF58(&this->actor, play, (s32)sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (func_8010BF58(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_100;
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
