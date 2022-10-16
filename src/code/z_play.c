@@ -430,7 +430,7 @@ void func_80169FDC(GameState* thisx) {
 s32 func_80169FFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    return this->roomCtx.curRoom.mesh->type0.type != 1;
+    return this->roomCtx.curRoom.roomShape->normal.base.type != 1;
 }
 
 s32 FrameAdvance_IsEnabled(GameState* thisx) {

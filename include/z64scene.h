@@ -13,6 +13,9 @@ typedef struct {
     /* 0x4 */ uintptr_t vromEnd;
 } RomFile; // size = 0x8
 
+#define ROOM_DRAW_OPA (1 << 0)
+#define ROOM_DRAW_XLU (1 << 1)
+
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  data1;
@@ -213,58 +216,132 @@ typedef struct {
     /* 0x4 */ void* segment;
 } SCmdMinimapChests; // size = 0x8
 
-typedef struct {
-    /* 0x0 */ Gfx* opaqueDl;
-    /* 0x4 */ Gfx* translucentDl;
-} RoomMeshType0Params; // size = 0x8
-
-// Fields TODO
-typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x1 */ u8 format; // 1 = single, 2 = multi
-} RoomMeshType1; // size = 0x2
-
-// Size TODO
-typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x10];
-} RoomMeshType1Params; // size = 0x10
+typedef enum {
+    /* 0 */ ROOM_SHAPE_TYPE_NORMAL,
+    /* 1 */ ROOM_SHAPE_TYPE_IMAGE,
+    /* 2 */ ROOM_SHAPE_TYPE_CULLABLE,
+    /* 3 */ ROOM_SHAPE_TYPE_NONE,
+    /* 4 */ ROOM_SHAPE_TYPE_MAX
+} RoomShapeType;
 
 typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x10];
-} RoomMeshType2Params; // size = 0x10
+    /* 0x00 */ u8 type;
+} RoomShapeBase; // size = 0x01
 
 typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x1 */ u8 count;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ RoomMeshType0Params* paramsStart;
-    /* 0x8 */ RoomMeshType0Params* paramsEnd;
-} RoomMeshType0; // size = 0xC
+    /* 0x0 */ Gfx* opa;
+    /* 0x4 */ Gfx* xlu;
+} RoomShapeDListsEntry; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x1 */ u8 count;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ RoomMeshType2Params* paramsStart;
-    /* 0x8 */ RoomMeshType2Params* paramsEnd;
-} RoomMeshType2; // size = 0xC
+    /* 0x0 */ RoomShapeBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ RoomShapeDListsEntry* entries;
+    /* 0x8 */ RoomShapeDListsEntry* entriesEnd;
+} RoomShapeNormal; // size = 0xC
+
+typedef enum {
+    /* 1 */ ROOM_SHAPE_IMAGE_AMOUNT_SINGLE = 1,
+    /* 2 */ ROOM_SHAPE_IMAGE_AMOUNT_MULTI
+} RoomShapeImageAmountType;
+
+typedef struct {
+    /* 0x00 */ RoomShapeBase base;
+    /* 0x01 */ u8    amountType; // RoomShapeImageAmountType
+    /* 0x04 */ RoomShapeDListsEntry* entry;
+} RoomShapeImageBase; // size = 0x08
+
+typedef struct {
+    /* 0x00 */ RoomShapeImageBase base;
+    /* 0x08 */ void* source;
+    /* 0x0C */ u32   unk_0C;
+    /* 0x10 */ void* tlut;
+    /* 0x14 */ u16   width;
+    /* 0x16 */ u16   height;
+    /* 0x18 */ u8    fmt;
+    /* 0x19 */ u8    siz;
+    /* 0x1A */ u16   tlutMode;
+    /* 0x1C */ u16   tlutCount;
+} RoomShapeImageSingle; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ u16   unk_00;
+    /* 0x02 */ u8    bgCamIndex; // for which bg cam index is this entry for
+    /* 0x04 */ void* source;
+    /* 0x08 */ u32   unk_0C;
+    /* 0x0C */ void* tlut;
+    /* 0x10 */ u16   width;
+    /* 0x12 */ u16   height;
+    /* 0x14 */ u8    fmt;
+    /* 0x15 */ u8    siz;
+    /* 0x16 */ u16   tlutMode;
+    /* 0x18 */ u16   tlutCount;
+} RoomShapeImageMultiBgEntry; // size = 0x1C
+
+typedef struct {
+    /* 0x00 */ RoomShapeImageBase base;
+    /* 0x08 */ u8    numBackgrounds;
+    /* 0x0C */ RoomShapeImageMultiBgEntry* backgrounds;
+} RoomShapeImageMulti; // size = 0x10
+
+typedef struct {
+    /* 0x00 */ Vec3s boundsSphereCenter;
+    /* 0x06 */ s16   boundsSphereRadius;
+    /* 0x08 */ Gfx* opa;
+    /* 0x0C */ Gfx* xlu;
+} RoomShapeCullableEntry; // size = 0x10
+
+#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 64
+
+
+typedef struct {
+    /* 0x0 */ RoomShapeBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ RoomShapeCullableEntry* entries;
+    /* 0x8 */ RoomShapeCullableEntry* entriesEnd;
+} RoomShapeCullable; // size = 0xC
 
 typedef union {
-    RoomMeshType0 type0;
-    RoomMeshType1 type1;
-    RoomMeshType2 type2;
-} RoomMesh; // size = 0xC
+    RoomShapeBase base;
+    RoomShapeNormal normal;
+    union {
+        RoomShapeImageBase base;
+        RoomShapeImageSingle single;
+        RoomShapeImageMulti multi;
+    } image;
+    RoomShapeCullable cullable;
+} RoomShape; // "Ground Shape"
+
+// TODO: Check which ones don't exist
+typedef enum {
+    /* 0 */ ROOM_BEHAVIOR_TYPE1_0,
+    /* 1 */ ROOM_BEHAVIOR_TYPE1_1,
+    /* 2 */ ROOM_BEHAVIOR_TYPE1_2,
+    /* 3 */ ROOM_BEHAVIOR_TYPE1_3, // unused
+    /* 4 */ ROOM_BEHAVIOR_TYPE1_4,
+    /* 5 */ ROOM_BEHAVIOR_TYPE1_5
+} RoomBehaviorType1;
+
+typedef enum {
+    /* 0 */ ROOM_BEHAVIOR_TYPE2_0,
+    /* 1 */ ROOM_BEHAVIOR_TYPE2_1,
+    /* 2 */ ROOM_BEHAVIOR_TYPE2_2,
+    /* 3 */ ROOM_BEHAVIOR_TYPE2_HOT,
+    /* 4 */ ROOM_BEHAVIOR_TYPE2_4,
+    /* 5 */ ROOM_BEHAVIOR_TYPE2_5,
+    /* 6 */ ROOM_BEHAVIOR_TYPE2_6
+} RoomBehaviorType2;
 
 typedef struct {
     /* 0x00 */ s8 num;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2; // 3: Room is hot
-    /* 0x03 */ u8 unk3;
+    /* 0x02 */ u8 behaviorType2;
+    /* 0x03 */ u8 behaviorType1;
     /* 0x04 */ s8 echo;
     /* 0x05 */ u8 unk5;
     /* 0x06 */ u8 enablePosLights;
     /* 0x07 */ UNK_TYPE1 pad7[0x1];
-    /* 0x08 */ RoomMesh* mesh;
+    /* 0x08 */ RoomShape* roomShape;
     /* 0x0C */ void* segment;
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
 } Room; // size = 0x14
@@ -274,7 +351,7 @@ typedef struct {
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
     /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
-    /* 0x31 */ s8 unk31;
+    /* 0x31 */ s8 status;
     /* 0x32 */ UNK_TYPE1 pad32[0x2];
     /* 0x34 */ void* activeRoomVram;
     /* 0x38 */ DmaRequest dmaRequest;

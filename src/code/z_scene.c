@@ -234,8 +234,8 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x08: Room Behavior
 void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.curRoom.unk3 = cmd->roomBehavior.gpFlag1;
-    play->roomCtx.curRoom.unk2 = cmd->roomBehavior.gpFlag2 & 0xFF;
+    play->roomCtx.curRoom.behaviorType1 = cmd->roomBehavior.gpFlag1;
+    play->roomCtx.curRoom.behaviorType2 = cmd->roomBehavior.gpFlag2 & 0xFF;
     play->roomCtx.curRoom.unk5 = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
     play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
@@ -244,7 +244,7 @@ void Scene_HeaderCmdRoomBehavior(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(PlayState* play, SceneCmd* cmd) {
-    play->roomCtx.curRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
+    play->roomCtx.curRoom.roomShape = Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // SceneTableEntry Header Command 0x0B:  Object List
@@ -460,7 +460,7 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
         altHeader = altHeaderList[gSaveContext.sceneLayer - 1];
 
         if (altHeader != NULL) {
-            Scene_ProcessHeader(play, Lib_SegmentedToVirtual(altHeader));
+            Scene_ExecuteCommands(play, Lib_SegmentedToVirtual(altHeader));
             (cmd + 1)->base.code = 0x14;
         }
     }
@@ -535,7 +535,7 @@ void Scene_SetExitFade(PlayState* play) {
 /**
  * Executes all of the commands in a scene or room header.
  */
-s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
+s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* header) {
     static void (*sceneCmdHandlers[])(PlayState*, SceneCmd*) = {
         Scene_HeaderCmdSpawnList,
         Scene_HeaderCmdActorList,

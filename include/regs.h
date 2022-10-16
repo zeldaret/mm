@@ -83,6 +83,12 @@
 #define R_PAUSE_OWLWARP_ALPHA             XREG(87)
 #define R_REVERSE_FLOOR_INDEX             XREG(94)
 #define R_MINIMAP_DISABLED                XREG(95)
+
+#define R_ROOM_CULL_DEBUG_MODE            iREG(86)
+#define R_ROOM_CULL_NUM_ENTRIES           iREG(87)
+#define R_ROOM_CULL_USED_ENTRIES          iREG(88)
+#define R_ROOM_CULL_DEBUG_TARGET          iREG(89)
+
 #define R_B_LABEL_DD                      WREG(0)
 #define R_OW_MINIMAP_X                    WREG(29)
 #define R_OW_MINIMAP_Y                    WREG(30)

@@ -96,7 +96,10 @@ typedef struct {
     /* 0x00 */ Vec3s pos;
     /* 0x06 */ Vec3s rot;
     /* 0x0C */ s16 fov;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x0E */ union {
+        s16 roomImageOverrideBgCamIndex;
+        s16 unk_0E;
+    };
     /* 0x10 */ s16 unk_10;
 } BgCamFuncData; // size = 0x12
 
