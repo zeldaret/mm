@@ -358,7 +358,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
                 gSaveContext.save.playerData.tatlTimer = 0;
             }
-            this->unk_266 = ElfMessage_GetFirstCycleHint(play);
+            this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
 
         case 1:
@@ -1449,7 +1449,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     s32 pad;
     EnElf* this = THIS;
     Player* player = GET_PLAYER(play);
-    u16 temp_v0 = ElfMessage_GetFirstCycleHint(play);
+    u16 temp_v0 = QuestHint_GetTatlTextId(play);
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
@@ -1458,7 +1458,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
     if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
         if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
-            player->tatlTextId = ElfMessage_GetFirstCycleHint(play);
+            player->tatlTextId = QuestHint_GetTatlTextId(play);
         }
     }
 
@@ -1470,7 +1470,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
-        if (thisx->textId == ElfMessage_GetFirstCycleHint(play)) {
+        if (thisx->textId == QuestHint_GetTatlTextId(play)) {
             this->fairyFlags |= 0x80;
             gSaveContext.save.playerData.tatlTimer = 3001;
         }
