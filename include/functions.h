@@ -1263,7 +1263,7 @@ void SoundSource_InitAll(PlayState* play);
 void SoundSource_UpdateAll(PlayState* play);
 void SoundSource_PlaySfxAtFixedWorldPos(PlayState* play, Vec3f* worldPos, u32 duration, u16 sfxId);
 void SoundSource_PlaySfxEachFrameAtFixedWorldPos(PlayState* play, Vec3f* worldPos, u32 duration, u16 sfxId);
-u16 ElfMessage_GetFirstCycleHint(PlayState* play);
+u16 QuestHint_GetTatlTextId(PlayState* play);
 
 u16 Text_GetFaceReaction(PlayState* play, u32 reactionSet);
 void EnvFlags_UnsetAll(PlayState* play);

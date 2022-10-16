@@ -1067,7 +1067,7 @@ struct PlayState {
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
-    /* 0x18868 */ void* unk_18868;
+    /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
