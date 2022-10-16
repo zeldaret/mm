@@ -281,7 +281,75 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawCullable.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawImageSingle.s")
+#define ROOM_IMAGE_NODRAW_BACKGROUND (1 << 0)
+#define ROOM_IMAGE_NODRAW_OPA (1 << 1)
+#define ROOM_IMAGE_NODRAW_XLU (1 << 2)
+
+// TODO: ucode.h
+#define SP_UCODE_DATA_SIZE 0x800
+
+void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
+    Camera* activeCam;
+    Gfx* gfx;
+    RoomShapeImageSingle* roomShape;
+    RoomShapeDListsEntry* entry;
+    u32 isFixedCamera;
+    u32 drawBackground;
+    u32 drawOpa;
+    u32 drawXlu;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    activeCam = GET_ACTIVE_CAM(play);
+    isFixedCamera = false;
+    roomShape = &room->roomShape->image.single;
+    entry = Lib_SegmentedToVirtual(roomShape->base.entry);
+    drawBackground = (flags & ROOM_DRAW_OPA) && isFixedCamera && (roomShape->source != NULL) &&
+                     !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_BACKGROUND);
+    drawOpa = (flags & ROOM_DRAW_OPA) && (entry->opa != NULL) && !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_OPA);
+    drawXlu = (flags & ROOM_DRAW_XLU) && (entry->xlu != NULL) && !(R_ROOM_IMAGE_NODRAW_FLAGS & ROOM_IMAGE_NODRAW_XLU);
+
+    if (drawOpa || drawBackground) {
+        gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
+
+        if (drawOpa) {
+            func_8012C28C(play->state.gfxCtx);
+            gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPDisplayList(POLY_OPA_DISP++, entry->opa);
+        }
+
+        if (drawBackground) {
+            gSPLoadUcodeL(POLY_OPA_DISP++, gspS2DEX2_fifo);
+
+            gfx = POLY_OPA_DISP;
+
+            {
+                Vec3f quakeOffset;
+
+                Camera_GetQuakeOffset(&quakeOffset, activeCam);
+
+                Prerender_DrawBackground2D(
+                    &gfx, roomShape->source, roomShape->tlut, roomShape->width, roomShape->height, roomShape->fmt,
+                    roomShape->siz, roomShape->tlutMode, roomShape->tlutCount,
+                    (quakeOffset.x + quakeOffset.z) * 1.2f + quakeOffset.y * 0.6f,
+                    quakeOffset.y * 2.4f + (quakeOffset.x + quakeOffset.z) * 0.3f, 1.0f, 1.0f, 0);
+            }
+
+            POLY_OPA_DISP = gfx;
+
+            gSPLoadUcode(POLY_OPA_DISP++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
+        }
+    }
+
+    if (drawXlu) {
+        gSPSegment(POLY_XLU_DISP++, 0x03, room->segment);
+        func_8012C2DC(play->state.gfxCtx);
+        gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPDisplayList(POLY_XLU_DISP++, entry->xlu);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 RoomShapeImageMultiBgEntry* Room_GetImageMultiBgEntry(RoomShapeImageMulti* roomShapeImageMulti, PlayState* play) {
     Camera* activeCam = GET_ACTIVE_CAM(play);

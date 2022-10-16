@@ -2599,8 +2599,8 @@ _DW({									\
         gsSPLoadUcodeEx((uc_start), (uc_dstart), SP_UCODE_DATA_SIZE)
 
 #define	gSPLoadUcodeL(pkt, ucode)					\
-        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&##ucode##TextStart),	\
-		            OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&ucode##TextStart),	\
+		            OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #define	gsSPLoadUcodeL(ucode)						\
         gsSPLoadUcode(OS_K0_TO_PHYSICAL(&##ucode##TextStart),		\
 		      OS_K0_TO_PHYSICAL(&##ucode##DataStart))
