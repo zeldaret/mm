@@ -66,27 +66,28 @@ typedef struct RoomShapeCullableEntryLinked {
     /* 0x0C */ struct RoomShapeCullableEntryLinked* next;
 } RoomShapeCullableEntryLinked; // size = 0x10
 
+// TODO: 127 is an arbitrarily chosen number to make the stack sorta work
+#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 127
+
 #ifdef NON_EQUIVALENT
-// Still a WIP, started with OoT function but lots has changed
-// Currently piecing together the new parts in MM
 void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullable* roomShape;
     RoomShapeCullableEntry* roomShapeCullableEntry;
+    RoomShapeCullableEntry* roomShapeCullableEntries;
+    RoomShapeCullableEntry* roomShapeCullableEntryIter;
+    f32 projectedW;
+    f32 entryBoundsNearZ;
     RoomShapeCullableEntryLinked linkedEntriesBuffer[ROOM_SHAPE_CULLABLE_MAX_ENTRIES];
     RoomShapeCullableEntryLinked* head = NULL;
     RoomShapeCullableEntryLinked* tail = NULL;
-    RoomShapeCullableEntryLinked* iter;
-    s32 pad;
-    RoomShapeCullableEntryLinked* insert;
-    s32 j;
     s32 i;
+    RoomShapeCullableEntryLinked* iter;
+    RoomShapeCullableEntryLinked* insert;
+    f32 var_fv1;
+    s32 pad;
     Vec3f pos;
     Vec3f projectedPos;
-    f32 projectedW;
-    s32 pad2;
-    RoomShapeCullableEntry* roomShapeCullableEntries;
-    RoomShapeCullableEntry* roomShapeCullableEntryIter;
-    f32 entryBoundsNearZ;
+    Gfx* displayList;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -99,8 +100,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         func_8012C268(play);
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
-
-    if (1) {}
 
     if (flags & ROOM_DRAW_XLU) {
         func_800BCC68(&sZeroVec, play);
@@ -125,7 +124,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
     if (play->roomCtx.unk78 < 0) {
         for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
-            Gfx* displayList;
+
             if (R_ROOM_CULL_DEBUG_MODE != 0) {
                 if (((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_UP_TO_TARGET) &&
                      (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
@@ -161,6 +160,8 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
     } else {
+        f32 var_fa1 = 1.0f / play->unk_187F0.z; // sp54
+
         // Pick and sort entries by depth
         for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
 
@@ -168,20 +169,30 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             pos.x = roomShapeCullableEntry->boundsSphereCenter.x;
             pos.y = roomShapeCullableEntry->boundsSphereCenter.y;
             pos.z = roomShapeCullableEntry->boundsSphereCenter.z;
-            SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &projectedPos, &projectedW);
+            SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &pos, &projectedPos);
+            // SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &projectedPos, &projectedW);
+
+            projectedPos.z *= var_fa1;
+
+            var_fv1 = ABS_ALT(roomShapeCullableEntry->boundsSphereRadius);
 
             // If the entry bounding sphere isn't fully before the rendered depth range
-            if (-(f32)roomShapeCullableEntry->boundsSphereRadius < projectedPos.z) {
+            if (-var_fv1 < projectedPos.z) {
 
                 // Compute the depth of the nearest point in the entry's bounding sphere
-                entryBoundsNearZ = projectedPos.z - roomShapeCullableEntry->boundsSphereRadius;
+                entryBoundsNearZ = projectedPos.z - var_fv1;
 
                 // If the entry bounding sphere isn't fully beyond the rendered depth range
                 if (entryBoundsNearZ < play->lightCtx.unkC) {
 
                     // This entry will be rendered
                     insert->entry = roomShapeCullableEntry;
-                    insert->boundsNearZ = entryBoundsNearZ;
+
+                    if (roomShapeCullableEntry->boundsSphereRadius < 0) {
+                        insert->boundsNearZ = FLT_MAX;
+                    } else {
+                        insert->boundsNearZ = entryBoundsNearZ;
+                    }
 
                     // Insert into the linked list, ordered by ascending depth of the nearest point in the bounding
                     // sphere
@@ -223,26 +234,31 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         R_ROOM_CULL_NUM_ENTRIES = roomShape->numEntries & 0xFFFF & 0xFFFF & 0xFFFF;
 
         // Draw entries, from nearest to furthest
-        for (i = 1; head != NULL; head = head->next, i++) {
-            Gfx* displayList;
+        i = 1;
 
-            roomShapeCullableEntry = head->entry;
+        if (flags & ROOM_DRAW_OPA) {
+            for (; head != NULL; head = head->next, i++) {
+                Gfx* displayList;
 
-            if (R_ROOM_CULL_DEBUG_MODE != ROOM_CULL_DEBUG_MODE_OFF) {
-                // Debug mode drawing
+                roomShapeCullableEntry = head->entry;
 
-                if (((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_UP_TO_TARGET) &&
-                     (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
-                    ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) && (i == R_ROOM_CULL_DEBUG_TARGET))) {
-                    if (flags & ROOM_DRAW_OPA) {
+                if (R_ROOM_CULL_DEBUG_MODE != ROOM_CULL_DEBUG_MODE_OFF) {
+                    // Debug mode drawing
+
+                    if (((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_UP_TO_TARGET) &&
+                         (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
+                        ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) &&
+                         (i == R_ROOM_CULL_DEBUG_TARGET))) {
+
+                        //! FAKE:
+                        if (insert) {}
+
                         displayList = roomShapeCullableEntry->opa;
                         if (displayList != NULL) {
                             gSPDisplayList(POLY_OPA_DISP++, displayList);
                         }
                     }
-                }
-            } else {
-                if (flags & ROOM_DRAW_OPA) {
+                } else {
                     displayList = roomShapeCullableEntry->opa;
                     if (displayList != NULL) {
                         gSPDisplayList(POLY_OPA_DISP++, displayList);
@@ -251,21 +267,32 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
 
-        for (i = 1; head != NULL; head = head->next, i++) {
-            Gfx* displayList;
+        if (flags & ROOM_DRAW_XLU) {
+            for (; head != NULL; head = head->prev) {
+                Gfx* displayList;
+                f32 temp_fv0;
+                f32 temp_fv1;
+                s32 var_a1;
 
-            roomShapeCullableEntry = head->entry;
+                roomShapeCullableEntry = head->entry;
+                displayList = roomShapeCullableEntry->xlu;
 
-            if (head->next != NULL) {
-                if (flags & ROOM_DRAW_XLU) {
-                    displayList = roomShapeCullableEntry->xlu;
-                    if (displayList != NULL) {
-                        gDPSetEnvColor(POLY_XLU_DISP++, 0xFF, 0xFF, 0xFF, iREG(93));
-                        gSPDisplayList(POLY_XLU_DISP++, displayList);
-                    }
-                } else {
-                    displayList = roomShapeCullableEntry->xlu;
-                    if (displayList != NULL) {
+                if (displayList != NULL) {
+                    if (roomShapeCullableEntry->boundsSphereRadius & 1) {
+
+                        temp_fv0 = head->boundsNearZ - (f32)(iREG(93) + 0xBB8);
+                        temp_fv1 = iREG(94) + 0x7D0;
+
+                        if (temp_fv0 < temp_fv1) {
+                            if (temp_fv0 < 0.0f) {
+                                var_a1 = 255;
+                            } else {
+                                var_a1 = 255 - (s32)((temp_fv0 / temp_fv1) * 255.0f);
+                            }
+                            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, var_a1);
+                            gSPDisplayList(POLY_XLU_DISP++, displayList);
+                        }
+                    } else {
                         gSPDisplayList(POLY_XLU_DISP++, displayList);
                     }
                 }

@@ -291,8 +291,6 @@ typedef struct {
     /* 0x0C */ Gfx* xlu;
 } RoomShapeCullableEntry; // size = 0x10
 
-#define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 64
-
 
 typedef struct {
     /* 0x0 */ RoomShapeBase base;
