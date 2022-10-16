@@ -49,13 +49,13 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     gDPSetEnvColor(POLY_OPA_DISP++, skyboxCtx->envR, skyboxCtx->envG, skyboxCtx->envB, 0);
 
     gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[0]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[300]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[600]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[900]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[1200]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[2]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[4]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[6]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[8]);
 
     if (skyboxId == SKYBOX_CUTSCENE_MAP) {
-        gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[1500]);
+        gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[10]);
     }
 
     gDPPipeSync(POLY_OPA_DISP++);
