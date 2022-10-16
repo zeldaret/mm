@@ -101,6 +101,13 @@ typedef VecSphGeo VecSph;
 // Pitch is 0 along the xz-plane (horizon)
 typedef VecSphGeo VecGeo;
 
+// To be used with OLib_Vec3fAdd()
+typedef enum {
+    /* 0 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
+    /* 1 */ OLIB_ADD, // Add `a` and `b` to dest
+    /* 2 */ OLIB_COPY // Copy `b` to dest
+} OlibVec3fAdd;
+
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
 #define F32_LERP(v0, v1, t) ((1.0f - (t)) * (f32)(v0) + (t) * (f32)(v1))
 #define F32_LERPIMP(v0, v1, t) ((f32)(v0) + (((f32)(v1) - (f32)(v0)) * (t)))

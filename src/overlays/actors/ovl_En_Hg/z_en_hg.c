@@ -175,7 +175,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -348,7 +348,7 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
-        if (player->stateFlags2 & 0x08000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             if (!D_80BD00C8) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }

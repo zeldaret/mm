@@ -308,12 +308,12 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.textId = 0x1653;
                 gSaveContext.save.weekEventReg[83] &= (u8)~1;
                 this->talkState = TEXT_STATE_5;
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
             }
 
             if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->unkState196 = 2;
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
@@ -609,7 +609,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
         this->subCamEyeNext.z = D_80971DCC[this->unk190].z;
 
         Math_Vec3f_Copy(&tempVec, &this->subCamEyeNext);
-        OLib_Vec3fAdd(&this->picto.actor.home, &tempVec, &this->subCamEyeNext, 1);
+        OLib_Vec3fAdd(&this->picto.actor.home, &tempVec, &this->subCamEyeNext, OLIB_ADD);
         Math_Vec3f_Copy(&this->subCamAtNext, &this->unk22C);
         Math_Vec3f_Copy(&this->subCamEye, &this->subCamEyeNext);
         Math_Vec3f_Copy(&this->subCamAt, &this->subCamAtNext);
@@ -722,7 +722,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         this->subCamEyeNext.y = D_80971FA0[this->unk190].y;
         this->subCamEyeNext.z = D_80971FA0[this->unk190].z;
         Math_Vec3f_Copy(&vec3fCopy, &this->subCamEyeNext);
-        OLib_Vec3fAdd(&this->picto.actor.home, &vec3fCopy, &this->subCamEyeNext, 1);
+        OLib_Vec3fAdd(&this->picto.actor.home, &vec3fCopy, &this->subCamEyeNext, OLIB_ADD);
         this->subCamAtNext.x = D_80971FE8[this->unk190].x + this->unk22C.x;
         this->subCamAtNext.y = D_80971FE8[this->unk190].y + this->unk22C.y;
         this->subCamAtNext.z = D_80971FE8[this->unk190].z + this->unk22C.z;
@@ -831,7 +831,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
     this->subCamEyeNext.y = D_80971E38[this->unk190].y;
     this->subCamEyeNext.z = D_80971E38[this->unk190].z;
     Math_Vec3f_Copy(&localVec3f, &this->subCamEyeNext);
-    OLib_Vec3fAdd(&this->picto.actor.home, &localVec3f, &this->subCamEyeNext, 1);
+    OLib_Vec3fAdd(&this->picto.actor.home, &localVec3f, &this->subCamEyeNext, OLIB_ADD);
 
     if (1) {}
     this->subCamAtNext.x = D_80971EEC[this->unk190].x + this->unk22C.x;
@@ -976,7 +976,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
         this->subCamEyeNext.z = D_80972030.z;
 
         Math_Vec3f_Copy(&tempunk238, &this->subCamEyeNext);
-        OLib_Vec3fAdd(&this->picto.actor.home, &tempunk238, &this->subCamEyeNext, 1);
+        OLib_Vec3fAdd(&this->picto.actor.home, &tempunk238, &this->subCamEyeNext, OLIB_ADD);
         this->subCamAtNext.x = ((f32)D_8097203C.x) + this->unk22C.x; // cast req
         this->subCamAtNext.y = ((f32)D_8097203C.y) + this->unk22C.y;
         this->subCamAtNext.z = ((f32)D_8097203C.z) + this->unk22C.z;

@@ -1170,7 +1170,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & (0x400 | 0x40)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_356 |= 0x400;
         if (this->unk_358 != textId) {
             if ((this->unk_384 == 0) || (this->unk_384 == 1)) {

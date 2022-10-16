@@ -307,7 +307,7 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_2DA != temp) {
             if (temp == 0x2954) {
                 this->unk_18C = func_80BD3118;

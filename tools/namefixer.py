@@ -296,7 +296,11 @@ wordReplace = {
     "func_800BC8B8": "Actor_DrawDoorLock",
     "func_800B86C8": "Actor_ChangeFocus",
     "func_800B90F4": "Actor_DeactivateLens",
+    "Actor_AddQuake": "Actor_RequestQuake",
     "func_800BC770": "Actor_RequestQuake",
+    "func_800BC848": "Actor_RequestQuakeAndRumble",
+    "func_800BC770": "Actor_AddQuake",
+    "func_800DF840": "Camera_ChangeMode",
     "zelda_malloc": "ZeldaArena_Malloc",
     "zelda_mallocR": "ZeldaArena_MallocR",
     "zelda_realloc": "ZeldaArena_Realloc",
@@ -550,6 +554,7 @@ wordReplace = {
     "func_800BE680": "Actor_DrawDamageEffects",
     "func_8012F22C": "Inventory_GetSkullTokenCount",
     "Quake_RemoveFromIdx": "Quake_RemoveRequest",
+    "OLib_DbCameraVec3fSum":"OLib_Vec3fAdd",
 
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",
@@ -606,6 +611,7 @@ wordReplace = {
     "EffectSsKiraKira_SpawnSmall": "EffectSsKirakira_SpawnSmall",
     "EffectSsKiraKira_SpawnDispersed": "EffectSsKirakira_SpawnDispersed",
     "EffectSsKiraKira_SpawnFocused": "EffectSsKirakira_SpawnFocused",
+    "Effect_Getplay": "Effect_GetPlayState",
     "Effect_GetGlobalCtx": "Effect_GetPlayState",
     "EffectSsHitMark_Spawn": "EffectSsHitmark_Spawn",
     "EffectSsHitMark_SpawnFixedScale": "EffectSsHitmark_SpawnFixedScale",
@@ -699,6 +705,7 @@ wordReplace = {
     "gSaveContext.equips": "gSaveContext.save.equips",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
+    "gSaveContext.equips.buttonItems": "gSaveContext.save.equips.buttonItems",
     "gSaveContext.unk_48C8": "gSaveContext.dungeonIndex",
     "gSaveContext.save.playerData.magicAcquired": "gSaveContext.save.playerData.isMagicAcquired",
     "gSaveContext.save.playerDatadoubleMagic": "gSaveContext.save.playerData.isDoubleMagicAcquired",
@@ -723,6 +730,7 @@ wordReplace = {
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",
+
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
     "csCtx.unk_12": "csCtx.currentCsIndex",
@@ -768,13 +776,10 @@ wordReplace = {
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
     "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
 
-    "D_801D15B0" : "gZeroVec3f",
-    "D_801D15BC" : "gZeroVec3s",
-    "D_801D1DE0" : "gIdentityMtx",
-    "D_801D1E20" : "gIdentityMtxF",
-    "D_04020658" : "gameplay_keep_Anim_020658",
-    "D_04022B28" : "gDoorSkel",
-    "D_04023100" : "gDoorCol",
+    "D_801D15B0": "gZeroVec3f",
+    "D_801D15BC": "gZeroVec3s",
+    "D_801D1DE0": "gIdentityMtx",
+    "D_801D1E20": "gIdentityMtxF",
 
     # Macros
     "CUR_EQUIP_VALUE_VOID": "GET_CUR_EQUIP_VALUE",
@@ -797,6 +802,11 @@ wordReplace = {
     "EXCH_ITEM_LETTER_MAMA": "PLAYER_AP_LETTER_MAMA",
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_AP_FISHING_ROD",
+
+    "RADF_TO_BINANG": "RAD_TO_BINANG",
+    "RADF_TO_DEGF": "RAD_TO_DEG",
+    # "BINANG_TO_RAD": "BINANG_TO_RAD_ALT",
+    "DEGF_TO_RADF": "DEG_TO_RAD",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames

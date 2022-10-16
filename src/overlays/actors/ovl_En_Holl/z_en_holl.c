@@ -310,7 +310,7 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
-        !(player->stateFlags1 & 0x200)) {
+        !(player->stateFlags1 & PLAYER_STATE1_200)) {
         this->actionFunc(this, play);
     }
 }

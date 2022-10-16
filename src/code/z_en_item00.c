@@ -487,7 +487,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     EnItem00* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s32 sp38 = player->stateFlags3 & 0x1000;
+    s32 sp38 = player->stateFlags3 & PLAYER_STATE3_1000;
     s32 getItemId = GI_NONE;
     s32 params;
 
