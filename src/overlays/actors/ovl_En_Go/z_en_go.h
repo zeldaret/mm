@@ -13,8 +13,8 @@ typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
 
 #define ENGO_GET_PATH(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
-#define ENGO_NUM_SNOW_EFFECTS 16
-#define ENGO_NUM_EFFECTS 32
+#define ENGO_SNOW_EFFECT_COUNT 16
+#define ENGO_EFFECT_COUNT 32
 
 extern const ActorInit En_Go_InitVars;
 
@@ -70,7 +70,7 @@ typedef struct EnGo {
     /* 0x3B6 */ s16 bodyRotY;
     /* 0x3B8 */ s16 indexCutscene;
     /* 0x3BA */ s16 loseAttentionTimer;
-    /* 0x3BC */ s16 eyeTimer;
+    /* 0x3BC */ s16 blinkTimer;
     /* 0x3BE */ s16 eyeTexIndex;
     /* 0x3C0 */ s16 cutsceneState;
     /* 0x3C2 */ s16 cutsceneDelayTimer;
@@ -79,7 +79,7 @@ typedef struct EnGo {
     /* 0x3C8 */ s16 limbRotTableZ[3];
     /* 0x3CE */ s16 limbRotTableY[3];
     /* 0x3D4 */ s16 surprisePhase;
-    /* 0x3D8 */ void* msgEventCb;
+    /* 0x3D8 */ void* msgEventFunc;
     /* 0x3DC */ s32 currAnimIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
@@ -87,7 +87,7 @@ typedef struct EnGo {
     /* 0x3EC */ s32 sleepState;
     /* 0x3F0 */ s32 springArrivalCutsceneActive;
     /* 0x3F4 */ s32 changedText;
-    /* 0x3F8 */ EnGoEffect effectTable[ENGO_NUM_EFFECTS];
+    /* 0x3F8 */ EnGoEffect effectTable[ENGO_EFFECT_COUNT];
 } EnGo; // size = 0xB78
 
 /**
@@ -106,7 +106,7 @@ typedef enum EnGoType {
     /* 5 */ ENGO_ASIDE_STORE,      // Shrine Goron Outside Store
     /* 6 */ ENGO_ASIDE_ELDERSROOM, // Shrine Goron Outside Elder's room
     /* 7 */ ENGO_ASIDE_ELDERSSON,  // Shrine Goron Stage Left of throne
-    /* 8 */ ENGO_PKEG_SELLER,      // PowderKeg Goron
+    /* 8 */ ENGO_MEDIGORON,        // Medigoron selling Powder Kegs
 } EnGoType;
 
 typedef enum EnGoGoronRaceSubtype {
