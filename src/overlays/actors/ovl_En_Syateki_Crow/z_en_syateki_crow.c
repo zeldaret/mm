@@ -96,7 +96,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     if ((path == NULL) || (EN_SYATEKI_CROW_GET_INDEX(&this->actor) >= 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

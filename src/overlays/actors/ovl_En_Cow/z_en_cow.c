@@ -118,7 +118,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             if (!(gSaveContext.save.weekEventReg[22] & 1) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 

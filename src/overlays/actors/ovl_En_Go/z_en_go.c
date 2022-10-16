@@ -525,7 +525,7 @@ void func_80A1213C(EnGo* this, PlayState* play) {
 s32 func_80A121F4(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (player->stateFlags3 & 0x2000000)) {
+    if ((player->transformation == PLAYER_FORM_GORON) && (player->stateFlags3 & PLAYER_STATE3_2000000)) {
         return false;
     }
     return true;
@@ -637,7 +637,7 @@ void func_80A12660(EnGo* this, PlayState* play) {
 void func_80A126BC(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags2 & 0x4000)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000)) {
         if (this->unk_3C6 != 0) {
             this->unk_3C6--;
         }
@@ -830,7 +830,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_392 != temp) {
             switch (temp) {
                 case 0xE1A:
@@ -1380,7 +1380,7 @@ void func_80A14430(EnGo* this, PlayState* play) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1390,7 +1390,7 @@ void func_80A1449C(EnGo* this, PlayState* play) {
         func_80A14104(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1505,7 +1505,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
                 break;
 
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }
