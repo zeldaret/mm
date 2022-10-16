@@ -329,7 +329,7 @@ void func_80151938(PlayState* play, u16 textId) {
     }
     msgCtx->unk1203C = msgCtx->unk1203A;
 
-    if (play->pauseCtx.unk_1F0 != 0) {
+    if (play->pauseCtx.bombersNotebookOpen) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
         func_80149C18(play);

@@ -76,7 +76,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
 
     if ((this->actor.params >= 0) && (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_10) ||
                                       CHECK_WEEKEVENTREG(WEEKEVENTREG_37_08) || (gSaveContext.unk_1014 != 0))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);

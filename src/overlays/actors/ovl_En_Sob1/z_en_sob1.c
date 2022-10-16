@@ -416,18 +416,18 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
             this->shopType = BOMB_SHOP;
             break;
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
     }
 
     objIds = sObjectIds[this->shopType];
     this->mainObjIndex = Object_GetIndex(&play->objectCtx, objIds[0]);
     if (this->mainObjIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (!EnSob1_GetObjIndices(this, play, objIds)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -466,7 +466,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
-    player->stateFlags2 &= ~0x20000000;
+    player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     play->interfaceCtx.unk_222 = 0;
     play->interfaceCtx.unk_224 = 0;
     EnSob1_SetupAction(this, EnSob1_Idle);
@@ -553,7 +553,7 @@ void EnSob1_Idle(EnSob1* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
         }
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         this->welcomeTextId = EnSob1_GetWelcome(this, play);
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         if (ENSOB1_GET_SHOPTYPE(&this->actor) == BOMB_SHOP) {
@@ -810,7 +810,7 @@ void EnSob1_Walking(EnSob1* this, PlayState* play) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
         }
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         this->welcomeTextId = EnSob1_GetWelcome(this, play);
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         this->wasTalkedToWhileWalking = true;
@@ -830,7 +830,7 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            player->stateFlags2 |= 0x20000000;
+            player->stateFlags2 |= PLAYER_STATE2_20000000;
             EnSob1_SetupAction(this, EnSob1_ContinueShopping);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
@@ -952,7 +952,7 @@ void EnSob1_SetupBuyItemWithFanfare(PlayState* play, EnSob1* this) {
     Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
-    player->stateFlags2 &= ~0x20000000;
+    player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
     EnSob1_SetupAction(this, EnSob1_BuyItemWithFanfare);
@@ -1113,7 +1113,7 @@ void EnSob1_ContinueShopping(EnSob1* this, PlayState* play) {
         item = this->items[this->cursorIndex];
         item->restockFunc(play, item);
         player->actor.shape.rot.y += 0x8000;
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(play, this, true);
         func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);

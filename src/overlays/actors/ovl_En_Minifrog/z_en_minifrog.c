@@ -106,15 +106,17 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     this->timer = 0;
 
     if (1) {}
+
     if (!EN_MINIFROG_IS_RETURNED(&this->actor)) {
         if ((this->frogIndex == MINIFROG_YELLOW) || CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->timer = 30;
-            this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
-            this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
-            this->actor.colChkInfo.mass = 30;
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->timer = 30;
+        this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
+        this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
+        this->actor.colChkInfo.mass = 30;
     } else { // Frogs in mountain village
         if (this->frogIndex == MINIFROG_YELLOW) {
             this->actor.textId = 0;
@@ -281,7 +283,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                     }
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
         }
     }

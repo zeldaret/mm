@@ -41,7 +41,7 @@ void ObjMuPict_Init(Actor* thisx, PlayState* play) {
     ObjMuPict* this = THIS;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     func_80C06D90(this, play);

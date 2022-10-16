@@ -103,7 +103,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
     }
     this->cutscene = this->actor.cutscene;
     if (this->cutscene == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     func_80C04B40(this);
 }

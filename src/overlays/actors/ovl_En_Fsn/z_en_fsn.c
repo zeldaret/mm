@@ -1416,7 +1416,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_InitShop(this, play);
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         Collider_InitCylinder(play, &this->collider);

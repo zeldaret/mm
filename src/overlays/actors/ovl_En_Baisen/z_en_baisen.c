@@ -72,14 +72,14 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 0) {
         this->unk290 = true;
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) && ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.targetMode = 6;
@@ -247,7 +247,7 @@ void EnBaisen_Update(Actor* thisx, PlayState* play) {
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((this->paramCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);

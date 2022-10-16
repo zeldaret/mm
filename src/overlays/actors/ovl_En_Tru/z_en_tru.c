@@ -1128,7 +1128,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
     if ((gSaveContext.save.entrance != ENTRANCE(WOODS_OF_MYSTERY, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

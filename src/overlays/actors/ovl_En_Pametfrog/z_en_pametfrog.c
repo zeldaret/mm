@@ -190,7 +190,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
@@ -202,11 +202,12 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
 
         if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BIGPAMET, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0) == NULL) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->actor.params = GEKKO_PRE_SNAPPER;
-            EnPametfrog_SetupLookAround(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->actor.params = GEKKO_PRE_SNAPPER;
+        EnPametfrog_SetupLookAround(this);
     }
 }
 
@@ -983,7 +984,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
     EnPametfrog_ShakeCamera(this, play, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

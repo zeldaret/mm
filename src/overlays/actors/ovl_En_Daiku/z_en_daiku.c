@@ -89,10 +89,10 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.yShift = 0;
         this->actor.flags |= ACTOR_FLAG_8000000;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_Vec3f_Copy(&this->unk_26C, &this->actor.world.pos);
@@ -136,7 +136,7 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
 void func_809437C8(EnDaiku* this) {
     if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
         if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -258,7 +258,7 @@ void EnDaiku_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

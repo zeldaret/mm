@@ -126,7 +126,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
             if (func_809692A8(ENJS_GET_TYPE(&this->actor) + 4)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;

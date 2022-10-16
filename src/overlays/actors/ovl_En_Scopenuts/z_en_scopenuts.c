@@ -240,7 +240,7 @@ void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->unk_350);
     if (this->actor.bgCheckFlags & 1) {
         SET_WEEKEVENTREG(WEEKEVENTREG_52_40);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -626,7 +626,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCC288(EnScopenuts* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
@@ -685,7 +685,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     EnScopenuts* this = THIS;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) && (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -705,20 +705,20 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->actor.gravity = -1.0f;
                 this->actor.draw = EnScopenuts_Draw;
@@ -731,10 +731,10 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80BCB230;
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

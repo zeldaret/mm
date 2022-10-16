@@ -108,7 +108,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80BD1F1C;
             func_80BD1570(this, 9, ANIMMODE_LOOP);
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
-                Actor_MarkForDeath(&this->picto.actor);
+                Actor_Kill(&this->picto.actor);
                 return;
             }
             break;
@@ -121,7 +121,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
         default:
             this->unk_320 |= 2;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
-                Actor_MarkForDeath(&this->picto.actor);
+                Actor_Kill(&this->picto.actor);
             }
             break;
     }

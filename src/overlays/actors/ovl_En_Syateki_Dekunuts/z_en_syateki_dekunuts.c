@@ -142,7 +142,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
                    DEKU_SCRUB_LIMB_MAX);
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

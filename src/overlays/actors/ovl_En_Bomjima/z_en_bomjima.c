@@ -152,7 +152,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) ||
         CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -471,7 +471,7 @@ void func_80BFF03C(EnBomjima* this, PlayState* play) {
     } else if (!ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
         ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
     } else {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
         this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
@@ -935,8 +935,8 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
         if ((this->action == EN_BOMJIMA_ACTION_4) || (this->unk_2CA == 1) ||
             ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
             this->unk_28E = 0;
-            if (player->stateFlags1 & 0x20) {
-                player->stateFlags1 &= ~0x20;
+            if (player->stateFlags1 & PLAYER_STATE1_20) {
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
             }
 
             if ((this->bombal == 0) || (this->bombal->actor.update == NULL) ||

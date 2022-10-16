@@ -153,10 +153,12 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
     } else {
         func_80BD8588(this, play);
         func_80BD8658(this);
+
         if (1) {}
+
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
@@ -199,7 +201,7 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
     Vec3f sp28;
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_04)) {
         path = &play->setupPathList[path->unk1];

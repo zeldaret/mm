@@ -105,11 +105,12 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
 
     if (this->unk_2BC == ENBOMBERS_F0_0) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->unk_2BE++;
-            func_80C03ACC(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->unk_2BE++;
+        func_80C03ACC(this);
     } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) &&
                (((this->unk_2BE == ENBOMBERS_F_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_01)) ||
                 ((this->unk_2BE == ENBOMBERS_F_1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_02)) ||
@@ -137,12 +138,13 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
                 }
             }
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            func_80C042F8(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        func_80C042F8(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

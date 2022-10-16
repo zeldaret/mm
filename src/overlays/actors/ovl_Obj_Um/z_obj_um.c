@@ -684,7 +684,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     // if (!AliensDefeated)
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -702,10 +702,10 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
-                gSaveContext.save.time <= CLOCK_TIME(6, 0) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
+                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
 
@@ -715,7 +715,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -729,7 +729,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -741,7 +741,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -768,7 +768,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->dyna.bgId == BGCHECK_SCENE) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -780,7 +780,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                               this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_DONKEY, ENHORSE_18));
 
     if (this->donkey == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -802,11 +802,11 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->banditsCollisions[1]);
 }
 
-// ObjUm_MarkMyDonkeyAndMyselfForDeath, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
+// ObjUm_KillMyDonkeyAndMyself, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
 void func_80B79524(ObjUm* this) {
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
     if (this->donkey != NULL) {
-        Actor_MarkForDeath(&this->donkey->actor);
+        Actor_Kill(&this->donkey->actor);
     }
 }
 

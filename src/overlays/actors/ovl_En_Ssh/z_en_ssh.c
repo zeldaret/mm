@@ -655,7 +655,7 @@ void EnSsh_Init(Actor* thisx, PlayState* play) {
     this->initialYaw = this->actor.world.rot.y;
     EnSsh_SetupAction(this, EnSsh_Start);
     if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
