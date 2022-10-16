@@ -597,7 +597,7 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
+            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId), (temp_v0 < 0))) {
                 play_sound(NA_SE_SY_ERROR);
                 return -1;
             } else {
