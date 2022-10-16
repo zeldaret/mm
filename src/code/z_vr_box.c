@@ -91,6 +91,9 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
                 temp1 += arg7;
             }
             break;
+
+        default:
+            break;
     }
 
     skyboxCtx->roomDL = &skyboxCtx->dListBuf[2 * arg8][0];
@@ -116,14 +119,14 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
         phi_a2_4 = 0;
         for (phi_t2_4 = 0, phi_ra = 0; phi_ra < 4; phi_ra++, phi_a2_4 += 0x1F) {
             for (phi_a0_4 = 0, phi_t1 = 0; phi_t1 < 4; phi_t1++, phi_a0_4 += 0x1F, phi_t2_4 += 4) {
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (u32)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
                                  G_TX_RENDERTILE, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (u32)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80, 1,
-                                 G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F, phi_a2_4 + 0x1F,
-                                 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP,
-                                 G_TX_NOMASK, G_TX_NOLOD);
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80,
+                                 1, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
+                                 phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
+                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
                 gSP1Quadrangle(skyboxCtx->roomDL++, D_801C5EC4[phi_t2_4 + 1], D_801C5EC4[phi_t2_4 + 2],
                                D_801C5EC4[phi_t2_4 + 3], D_801C5EC4[phi_t2_4 + 0], 3);
             }
@@ -132,14 +135,14 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
         phi_a2_4 = 0;
         for (phi_t2_4 = 0, phi_ra = 0; phi_ra < 2; phi_ra++, phi_a2_4 += 0x1F) {
             for (phi_a0_4 = 0, phi_t1 = 0; phi_t1 < 4; phi_t1++, phi_a0_4 += 0x1F, phi_t2_4 += 4) {
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (u32)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
                                  G_TX_RENDERTILE, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (u32)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80, 1,
-                                 G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F, phi_a2_4 + 0x1F,
-                                 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP,
-                                 G_TX_NOMASK, G_TX_NOLOD);
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80,
+                                 1, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
+                                 phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
+                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
                 gSP1Quadrangle(skyboxCtx->roomDL++, D_801C5EC4[phi_t2_4 + 1], D_801C5EC4[phi_t2_4 + 2],
                                D_801C5EC4[phi_t2_4 + 3], D_801C5EC4[phi_t2_4 + 0], 3);
             }
@@ -147,14 +150,14 @@ s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s3
         phi_a2_4 -= 0x1F;
         for (phi_ra = 0; phi_ra < 2; phi_ra++, phi_a2_4 -= 0x1F) {
             for (phi_a0_4 = 0, phi_t1 = 0; phi_t1 < 4; phi_t1++, phi_a0_4 += 0x1F, phi_t2_4 += 4) {
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (u32)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[0] + D_801C5E30[arg8], 0,
                                  G_TX_RENDERTILE, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
                                  phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
                                  G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
-                gDPLoadMultiTile(skyboxCtx->roomDL++, (u32)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80, 1,
-                                 G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F, phi_a2_4 + 0x1F,
-                                 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP,
-                                 G_TX_NOMASK, G_TX_NOLOD);
+                gDPLoadMultiTile(skyboxCtx->roomDL++, (uintptr_t)skyboxCtx->staticSegments[1] + D_801C5E30[arg8], 0x80,
+                                 1, G_IM_FMT_CI, G_IM_SIZ_8b, 128, 0, phi_a0_4, phi_a2_4, phi_a0_4 + 0x1F,
+                                 phi_a2_4 + 0x1F, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD,
+                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
                 gSP1Quadrangle(skyboxCtx->roomDL++, D_801C5EC4[phi_t2_4 + 1], D_801C5EC4[phi_t2_4 + 2],
                                D_801C5EC4[phi_t2_4 + 3], D_801C5EC4[phi_t2_4 + 0], 3);
             }
@@ -180,114 +183,120 @@ void func_80143148(SkyboxContext* skyboxCtx, s32 arg1) {
     }
 }
 
-void func_801431E8(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) {
+void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
     PlayState* play = (PlayState*)gameState;
     size_t size;
     void* offset;
-    s32 pad;
 
     skyboxCtx->rotZ = 0.0f;
 
-    if (skyType != 1) {
-        if (skyType != 2) {
-            return;
-        }
-    } else {
-        // Send a DMA request for the cloudy sky texture
-        skyboxCtx->staticSegments[0] = &D_80025D00;
-        size = SEGMENT_ROM_SIZE(d2_cloud_static);
-        offset = (void*)ALIGN8((u32)skyboxCtx->staticSegments[0] + size);
-        DmaMgr_SendRequest0(skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static), size);
+    switch (skyboxId) {
+        case 1:
+            // Send a DMA request for the cloudy sky texture
+            skyboxCtx->staticSegments[0] = &D_80025D00;
+            size = SEGMENT_ROM_SIZE(d2_cloud_static);
+            offset = (void*)ALIGN8((uintptr_t)skyboxCtx->staticSegments[0] + size);
+            DmaMgr_SendRequest0(skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static), size);
 
-        // Send a DMA request for the clear sky texture
-        skyboxCtx->staticSegments[1] = offset;
-        size = SEGMENT_ROM_SIZE(d2_fine_static);
-        offset = (void*)ALIGN8((u32)offset + size);
-        DmaMgr_SendRequest0(skyboxCtx->staticSegments[1], SEGMENT_ROM_START(d2_fine_static), size);
+            // Send a DMA request for the clear sky texture
+            skyboxCtx->staticSegments[1] = offset;
+            size = SEGMENT_ROM_SIZE(d2_fine_static);
+            offset = (void*)ALIGN8((uintptr_t)offset + size);
+            DmaMgr_SendRequest0(skyboxCtx->staticSegments[1], SEGMENT_ROM_START(d2_fine_static), size);
 
-        // Send a DMA request for the skybox palette
-        skyboxCtx->skyboxPaletteStaticSegment = offset;
-        size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
-        offset = (void*)ALIGN8((u32)offset + size);
-        DmaMgr_SendRequest0(skyboxCtx->skyboxPaletteStaticSegment, SEGMENT_ROM_START(d2_fine_pal_static), size);
+            // Send a DMA request for the skybox palette
+            skyboxCtx->skyboxPaletteStaticSegment = offset;
+            size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
+            offset = (void*)ALIGN8((uintptr_t)offset + size);
+            DmaMgr_SendRequest0(skyboxCtx->skyboxPaletteStaticSegment, SEGMENT_ROM_START(d2_fine_pal_static), size);
 
-        skyboxCtx->primR = 145;
-        skyboxCtx->primG = 120;
-        skyboxCtx->primB = 155;
+            skyboxCtx->primR = 145;
+            skyboxCtx->primG = 120;
+            skyboxCtx->primB = 155;
 
-        skyboxCtx->envR = 40;
-        skyboxCtx->envG = 0;
-        skyboxCtx->envB = 40;
+            skyboxCtx->envR = 40;
+            skyboxCtx->envG = 0;
+            skyboxCtx->envB = 40;
 
-        // Inverted Stone Tower Temple and Inverted Stone Tower
-        if ((play->sceneId == SCENE_F41) || (play->sceneId == SCENE_INISIE_R)) {
-            skyboxCtx->rotZ = 3.15000009537f;
-        }
+            // Inverted Stone Tower Temple and Inverted Stone Tower
+            if ((play->sceneId == SCENE_F41) || (play->sceneId == SCENE_INISIE_R)) {
+                skyboxCtx->rotZ = 3.15000009537f;
+            }
+            break;
+
+        case 2:
+            break;
+
+        default:
+            break;
     }
 }
 
-void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyType) {
+void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
     size_t size;
 
-    if (1) {}
+    switch (skyboxId) {
+        case 1:
+            osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-    if (skyType == 1) {
-        osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
+            if (play->envCtx.unk_10 == 0) {
+                // Send a DMA request for the clear sky texture
+                size = SEGMENT_ROM_SIZE(d2_fine_static);
 
-        if (play->envCtx.unk_10 == 0) {
-            // Send a DMA request for the clear sky texture
-            size = SEGMENT_ROM_SIZE(d2_fine_static);
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->staticSegments[0],
+                                       SEGMENT_ROM_START(d2_fine_static), size, 0, &skyboxCtx->loadQueue, NULL);
+            } else {
+                // Send a DMA request for the cloudy sky texture
+                size = SEGMENT_ROM_SIZE(d2_cloud_static);
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_fine_static),
-                                   size, 0, &skyboxCtx->loadQueue, NULL);
-        } else {
-            // Send a DMA request for the cloudy sky texture
-            size = SEGMENT_ROM_SIZE(d2_cloud_static);
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->staticSegments[0],
+                                       SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
+            }
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk188, skyboxCtx->staticSegments[0], SEGMENT_ROM_START(d2_cloud_static),
-                                   size, 0, &skyboxCtx->loadQueue, NULL);
-        }
+            osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
+            osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
-        osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
+            if (play->envCtx.unk_11 == 0) {
+                // Send a DMA request for the clear sky texture
+                size = SEGMENT_ROM_SIZE(d2_fine_static);
 
-        if (play->envCtx.unk_11 == 0) {
-            // Send a DMA request for the clear sky texture
-            size = SEGMENT_ROM_SIZE(d2_fine_static);
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->staticSegments[1],
+                                       SEGMENT_ROM_START(d2_fine_static), size, 0, &skyboxCtx->loadQueue, NULL);
+            } else {
+                // Send a DMA request for the cloudy sky texture
+                size = SEGMENT_ROM_SIZE(d2_cloud_static);
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->staticSegments[1], SEGMENT_ROM_START(d2_fine_static),
-                                   size, 0, &skyboxCtx->loadQueue, NULL);
-        } else {
-            // Send a DMA request for the cloudy sky texture
-            size = SEGMENT_ROM_SIZE(d2_cloud_static);
+                DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->staticSegments[1],
+                                       SEGMENT_ROM_START(d2_cloud_static), size, 0, &skyboxCtx->loadQueue, NULL);
+            }
 
-            DmaMgr_SendRequestImpl(&skyboxCtx->unk1A8, skyboxCtx->staticSegments[1], SEGMENT_ROM_START(d2_cloud_static),
-                                   size, 0, &skyboxCtx->loadQueue, NULL);
-        }
+            osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
+            osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
-        osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
+            size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
 
-        size = SEGMENT_ROM_SIZE(d2_fine_pal_static);
+            // Send a DMA request for the skybox palette
+            DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
+                                   SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
 
-        // Send a DMA request for the skybox palette
-        DmaMgr_SendRequestImpl(&skyboxCtx->unk1C8, skyboxCtx->skyboxPaletteStaticSegment,
-                               SEGMENT_ROM_START(d2_fine_pal_static), size, 0, &skyboxCtx->loadQueue, NULL);
+            osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
+            break;
 
-        osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
+        default:
+            break;
     }
 }
 
-void func_801434E4(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyType) {
+void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
     skyboxCtx->skyboxShouldDraw = 0;
     skyboxCtx->rotX = skyboxCtx->rotY = skyboxCtx->rotZ = 0.0f;
 
-    func_801431E8(gameState, skyboxCtx, skyType);
+    Skybox_Setup(gameState, skyboxCtx, skyboxId);
 
-    if (skyType != 0) {
+    if (skyboxId != 0) {
         skyboxCtx->dListBuf = THA_AllocEndAlign16(&gameState->heap, 0x3840);
 
-        if (skyType == 5) {
+        if (skyboxId == 5) {
             // Allocate enough space for the vertices for a 6 sided skybox (cube)
             skyboxCtx->roomVtx = THA_AllocEndAlign16(&gameState->heap, sizeof(Vtx) * 32 * 6);
             func_80143148(skyboxCtx, 6);
