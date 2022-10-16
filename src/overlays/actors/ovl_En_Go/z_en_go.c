@@ -333,7 +333,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
-s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex anim);
+s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex);
 s32 EnGo_CheckAndChangeCutscene(EnGo* this, s16 indexCutscene);
 s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play);
 
