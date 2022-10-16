@@ -1996,9 +1996,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 this->unk_1D78 = 3;
             }
             alpha = this->unk_1D7A;
-            if (alpha > 255) {
-                alpha = 255;
-            }
+            alpha = CLAMP_MAX(alpha, 255);
             func_809DA22C(play, alpha);
             break;
 
@@ -2010,9 +2008,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 func_809DA24C(play);
             } else {
                 alpha = this->unk_1D7A;
-                if (alpha > 255) {
-                    alpha = 255;
-                }
+                alpha = CLAMP_MAX(alpha, 255);
                 func_809DA22C(play, alpha);
             }
             break;
