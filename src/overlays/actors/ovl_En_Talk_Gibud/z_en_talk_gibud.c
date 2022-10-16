@@ -49,8 +49,8 @@ void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, PlayState* play);
 s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, PlayState* play);
 
 typedef struct {
-    /* 0x0 */ s32 itemAction;
-    /* 0x4 */ s32 item;
+    /* 0x0 */ PlayerItemAction itemAction;
+    /* 0x4 */ ItemId item;
     /* 0x8 */ s32 amount;
     /* 0xC */ s16 isBottledItem;
 } EnTalkGibudRequestedItem;
@@ -703,10 +703,10 @@ void EnTalkGibud_GetNextTextBoxId(EnTalkGibud* this, PlayState* play) {
     }
 }
 
-s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, s32 presenteditemAction) {
+s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, PlayState* play, PlayerItemAction presentedItemAction) {
     EnTalkGibudRequestedItem* requestedItem = &sRequestedItemTable[this->requestedItemIndex];
 
-    if (requestedItem->itemAction == presenteditemAction) {
+    if (requestedItem->itemAction == presentedItemAction) {
         if (!requestedItem->isBottledItem) {
             if (AMMO(requestedItem->item) >= requestedItem->amount) {
                 return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
