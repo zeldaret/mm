@@ -287,7 +287,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
         func_8091C0A0(this, &D_8091D324[this->unk_24E]);
     }
 
-    if ((ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) && (player->heldItemAction == PLAYER_IA_STICK) && (this->unk_252 <= 0) &&
+    if ((ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) && (player->heldItemAction == PLAYER_IA_STICK) &&
+        (this->unk_252 <= 0) &&
         ((Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
                                    this->actor.home.pos.z) < SQ(120.0f)) ||
          (this->actor.xzDistToPlayer < 60.0f))) {
