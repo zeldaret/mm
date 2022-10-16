@@ -26,8 +26,6 @@ typedef struct EnOsn {
     /* 0x1FA */ u8 unk_1FA;
 } EnOsn; // size = 0x1FB
 
-extern const ActorInit En_Osn_InitVars;
-
 #define ENOSN_GET_3(this) ((thisx)->params & 3) 
 
 #endif // Z_EN_OSN_H

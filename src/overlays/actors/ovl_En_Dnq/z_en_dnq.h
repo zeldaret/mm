@@ -35,6 +35,4 @@ typedef struct EnDnq {
     /* 0x3A4 */ s32 unk_3A4;
 } EnDnq; // size = 0x3A8
 
-extern const ActorInit En_Dnq_InitVars;
-
 #endif // Z_EN_DNQ_H

@@ -48,7 +48,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play);
 void func_80C10290(EnRecepgirl* this);
 void func_80C102D4(EnRecepgirl* this, PlayState* play);
 
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -316,7 +316,7 @@ So it is used as an index into the array `D_80C106B0`, and the element with that
 As we discussed last time, `D_80C106B0` is an array of [segmented pointers](data.md#segmented-pointers). Since they are in segment `6`, they are in the actor's object file. Which object? The InitVars tell us: namely,
 
 ```C
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,

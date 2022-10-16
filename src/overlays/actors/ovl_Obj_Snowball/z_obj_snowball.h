@@ -40,6 +40,4 @@ typedef struct ObjSnowball {
     /* 0x211 */ s8 unk_211;
 } ObjSnowball; // size = 0x214
 
-extern const ActorInit Obj_Snowball_InitVars;
-
 #endif // Z_OBJ_SNOWBALL_H

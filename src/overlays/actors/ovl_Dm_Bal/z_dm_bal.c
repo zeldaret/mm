@@ -18,7 +18,7 @@ void DmBal_Draw(Actor* thisx, PlayState* play);
 void func_80C1EAC4(DmBal* this);
 void func_80C1EAD8(DmBal* this, PlayState* play);
 
-const ActorInit Dm_Bal_InitVars = {
+ActorInit Dm_Bal_InitVars = {
     ACTOR_DM_BAL,
     ACTORCAT_NPC,
     FLAGS,

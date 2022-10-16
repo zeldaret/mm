@@ -18,6 +18,4 @@ typedef struct DmChar02 {
     /* 0x2F0 */ u32 unk_2F0;
 } DmChar02; // size = 0x2F4
 
-extern const ActorInit Dm_Char02_InitVars;
-
 #endif // Z_DM_CHAR02_H

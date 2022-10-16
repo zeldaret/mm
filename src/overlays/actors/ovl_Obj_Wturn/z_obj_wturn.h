@@ -14,6 +14,4 @@ typedef struct ObjWturn {
     /* 0x14A */ s16 unk_14A;
 } ObjWturn; // size = 0x14C
 
-extern const ActorInit Obj_Wturn_InitVars;
-
 #endif // Z_OBJ_WTURN_H

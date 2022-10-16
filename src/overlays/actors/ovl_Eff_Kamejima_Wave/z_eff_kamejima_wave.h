@@ -21,6 +21,4 @@ typedef enum params {
     /* 0x1 */ EFFKAMEJIMAWAVE_PARAMS_1
 } EffKamejimaWaveParams;
 
-extern const ActorInit Eff_Kamejima_Wave_InitVars;
-
 #endif // Z_EFF_KAMEJIMA_WAVE_H

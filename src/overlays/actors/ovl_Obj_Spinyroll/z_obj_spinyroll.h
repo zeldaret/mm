@@ -50,6 +50,4 @@ typedef struct ObjSpinyroll {
     /* 0x4E2 */ s16 unk_4E2;
 } ObjSpinyroll; // size = 0x4E4
 
-extern const ActorInit Obj_Spinyroll_InitVars;
-
 #endif // Z_OBJ_SPINYROLL_H

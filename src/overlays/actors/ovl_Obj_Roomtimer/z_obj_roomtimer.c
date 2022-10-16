@@ -18,7 +18,7 @@ void func_80973CD8(ObjRoomtimer* this, PlayState* play);
 void func_80973D3C(ObjRoomtimer* this, PlayState* play);
 void func_80973DE0(ObjRoomtimer* this, PlayState* play);
 
-const ActorInit Obj_Roomtimer_InitVars = {
+ActorInit Obj_Roomtimer_InitVars = {
     ACTOR_OBJ_ROOMTIMER,
     ACTORCAT_ENEMY,
     FLAGS,

@@ -16,6 +16,4 @@ typedef struct ObjHariko {
     /* 0x154 */ s16 unk154; // Set but not used
 } ObjHariko; // size = 0x158
 
-extern const ActorInit Obj_Hariko_InitVars;
-
 #endif // Z_OBJ_HARIKO_H

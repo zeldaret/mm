@@ -14,6 +14,4 @@ typedef struct EnDeath {
     /* 0x18C */ char unk_18C[0x7AC];
 } EnDeath; // size = 0x938
 
-extern const ActorInit En_Death_InitVars;
-
 #endif // Z_EN_DEATH_H

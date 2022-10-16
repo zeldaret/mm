@@ -108,6 +108,4 @@ typedef struct Boss02 {
     /* 0x1D7E */ s16 unk_1D7E;
 } Boss02; // size = 0x1D80
 
-extern const ActorInit Boss_02_InitVars;
-
 #endif // Z_BOSS_02_H

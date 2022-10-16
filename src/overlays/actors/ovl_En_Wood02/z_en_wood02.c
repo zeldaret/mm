@@ -38,7 +38,7 @@ typedef enum {
 static f32 sSpawnCos;
 static f32 sSpawnSin;
 
-const ActorInit En_Wood02_InitVars = {
+ActorInit En_Wood02_InitVars = {
     ACTOR_EN_WOOD02,
     ACTORCAT_PROP,
     FLAGS,

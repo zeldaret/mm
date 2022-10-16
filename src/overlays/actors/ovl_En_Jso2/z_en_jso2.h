@@ -14,6 +14,4 @@ typedef struct EnJso2 {
     /* 0x027C */ char unk_27C[0xE14];
 } EnJso2; // size = 0x1090
 
-extern const ActorInit En_Jso2_InitVars;
-
 #endif // Z_EN_JSO2_H

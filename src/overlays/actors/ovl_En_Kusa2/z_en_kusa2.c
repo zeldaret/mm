@@ -53,7 +53,7 @@ s16 D_80A60B0C;
 s16 D_80A60B0E;
 s16 D_80A60B10;
 
-const ActorInit En_Kusa2_InitVars = {
+ActorInit En_Kusa2_InitVars = {
     ACTOR_EN_KUSA2,
     ACTORCAT_PROP,
     FLAGS,

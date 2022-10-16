@@ -70,6 +70,4 @@ typedef struct BgHakuginPost {
     /* 0x186 */ s16 unk_186;
 } BgHakuginPost; // size = 0x188
 
-extern const ActorInit Bg_Hakugin_Post_InitVars;
-
 #endif // Z_BG_HAKUGIN_POST_H

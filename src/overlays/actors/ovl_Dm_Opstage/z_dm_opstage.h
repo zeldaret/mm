@@ -24,6 +24,4 @@ typedef struct DmOpstage {
     /* 0x1A4 */ Vec3f drawOffset;
 } DmOpstage; // size = 0x1B0
 
-extern const ActorInit Dm_Opstage_InitVars;
-
 #endif // Z_DM_OPSTAGE_H

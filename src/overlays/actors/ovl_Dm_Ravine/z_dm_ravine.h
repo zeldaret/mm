@@ -20,6 +20,4 @@ typedef struct DmRavine {
     /* 0x149 */ u8 isActive;
 } DmRavine; // size = 0x14C
 
-extern const ActorInit Dm_Ravine_InitVars;
-
 #endif // Z_DM_RAVINE_H
