@@ -739,6 +739,8 @@ wordReplace = {
     "globalCtx->envCtx.unk_C3": "play->envCtx.lightSettingOverride",
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
     "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
+    "play->interfaceCtx.unk_31A": "play->interfaceCtx.storyState",
+    "play->interfaceCtx.unk_31B": "play->interfaceCtx.storyType",
 
     # "play->actorCtx.flags": "play->actorCtx.sceneFlags",
     # "play->actorCtx.unk5": "play->actorCtx.flags",

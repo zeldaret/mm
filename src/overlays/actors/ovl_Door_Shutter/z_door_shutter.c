@@ -261,7 +261,8 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DoorShutter_SetupType(DoorShutter* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) && ((MREG(64) == 0) || (MREG(68) == 0))) {
+    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) &&
+        (!R_PLAY_FILL_SCREEN_ON || (R_PLAY_FILL_SCREEN_ALPHA == 0))) {
         this->actor.objBankIndex = this->requiredObjBankIndex;
         this->actor.draw = DoorShutter_Draw;
         DoorShutter_SetupDoor(this, play);

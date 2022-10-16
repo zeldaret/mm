@@ -27,7 +27,7 @@ void Setup_SetRegs(void) {
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
-    XREG(91) = 0;
+    R_STORY_FILL_SCREEN_ALPHA = 0;
     R_REVERSE_FLOOR_INDEX = 0;
     R_MINIMAP_DISABLED = false;
 
