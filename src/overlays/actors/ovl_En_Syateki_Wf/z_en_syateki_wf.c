@@ -13,7 +13,7 @@
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play);
-void EnSyatekiWf_Update(Actor* thisx, PlayState* play);
+void EnSyatekiWf_Update(Actor* thisx, PlayState* play2);
 void EnSyatekiWf_Draw(Actor* thisx, PlayState* play);
 
 void func_80A201CC(EnSyatekiWf* this);
@@ -156,7 +156,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

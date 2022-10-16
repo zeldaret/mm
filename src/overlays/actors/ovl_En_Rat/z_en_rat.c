@@ -762,7 +762,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play) {
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_OVERWORLD) {
         EnRat_SetupRevive(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

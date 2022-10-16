@@ -11,8 +11,8 @@
 
 #define THIS ((EnHanabi*)thisx)
 
-void EnHanabi_Init(Actor* thisx, PlayState* play);
-void EnHanabi_Destroy(Actor* thisx, PlayState* play);
+void EnHanabi_Init(Actor* thisx, PlayState* play2);
+void EnHanabi_Destroy(Actor* thisx, PlayState* play2);
 void EnHanabi_Update(Actor* thisx, PlayState* play);
 
 void func_80B23894(EnHanabi* this, PlayState* play);
@@ -305,7 +305,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
 void func_80B23894(EnHanabi* this, PlayState* play) {
     func_80B236C8(this, play);
     if (func_80B22F34(this->unk_148) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -12,7 +12,7 @@
 
 #define THIS ((BgIkanaDharma*)thisx)
 
-void BgIkanaDharma_Init(Actor* thisx, PlayState* play);
+void BgIkanaDharma_Init(Actor* thisx, PlayState* play2);
 void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Draw(Actor* thisx, PlayState* play);
@@ -204,13 +204,14 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
         }
     }
 
-    if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f) != 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
-        this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
-        BgIkanaDharma_SpawnEffects(this, play);
+    if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f)) {
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
+    this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
+    BgIkanaDharma_SpawnEffects(this, play);
 }
 
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {

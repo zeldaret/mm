@@ -22,8 +22,8 @@
 
 void EnWaterEffect_Init(Actor* thisx, PlayState* play);
 void EnWaterEffect_Destroy(Actor* thisx, PlayState* play);
-void EnWaterEffect_Update(Actor* thisx, PlayState* play);
-void EnWaterEffect_Draw(Actor* thisx, PlayState* play);
+void EnWaterEffect_Update(Actor* thisx, PlayState* play2);
+void EnWaterEffect_Draw(Actor* thisx, PlayState* play2);
 
 void func_80A59C04(Actor* thisx, PlayState* play2);
 void func_80A5A184(Actor* thisx, PlayState* play2);
@@ -580,7 +580,7 @@ void func_80A5A534(Actor* thisx, PlayState* play) {
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_DC4++;

@@ -13,7 +13,7 @@
 
 void EnDinofos_Init(Actor* thisx, PlayState* play);
 void EnDinofos_Destroy(Actor* thisx, PlayState* play);
-void EnDinofos_Update(Actor* thisx, PlayState* play);
+void EnDinofos_Update(Actor* thisx, PlayState* play2);
 void EnDinofos_Draw(Actor* thisx, PlayState* play);
 
 void func_8089B834(EnDinofos* this, PlayState* play);
@@ -1145,7 +1145,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
         }
 
         if (temp_v0 <= 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             this->unk_288 = 0;
         } else {
             this->unk_288 = temp_v0;

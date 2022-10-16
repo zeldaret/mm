@@ -12,7 +12,7 @@
 #define THIS ((ObjToge*)thisx)
 
 void ObjToge_Init(Actor* thisx, PlayState* play);
-void ObjToge_Destroy(Actor* thisx, PlayState* play);
+void ObjToge_Destroy(Actor* thisx, PlayState* play2);
 void ObjToge_Update(Actor* thisx, PlayState* play);
 void ObjToge_Draw(Actor* thisx, PlayState* play);
 
@@ -132,13 +132,13 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (OBJTOGE_GET_PATH(thisx) == 0xFF) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
     path = &play->setupPathList[OBJTOGE_GET_PATH(thisx)];
     if (path->count != 2) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 

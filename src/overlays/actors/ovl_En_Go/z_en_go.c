@@ -1843,7 +1843,7 @@ void EnGo_StretcherGoron_Setup(EnGo* this, PlayState* play) {
         EnGo_ChangeToStretchingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1858,7 +1858,7 @@ void EnGo_SpectatorGoron_Setup(EnGo* this, PlayState* play) {
         EnGo_ChangeToSpectatingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1995,7 +1995,7 @@ void EnGo_SetupAction(EnGo* this, PlayState* play) {
                 break;
 
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }

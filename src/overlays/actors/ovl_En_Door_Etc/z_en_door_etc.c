@@ -11,7 +11,7 @@
 
 #define THIS ((EnDoorEtc*)thisx)
 
-void EnDoorEtc_Init(Actor* thisx, PlayState* play);
+void EnDoorEtc_Init(Actor* thisx, PlayState* play2);
 void EnDoorEtc_Destroy(Actor* thisx, PlayState* play);
 void EnDoorEtc_Update(Actor* thisx, PlayState* play);
 
@@ -106,7 +106,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     }
     objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->objectIndex = objectIndex;
         this->dListIndex = objectInfo->dListIndex;
@@ -214,7 +214,7 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play) {
             this->actor.world.pos.z = door->world.pos.z;
             this->actor.shape.rot.y = door->shape.rot.y;
             this->actor.world.rot.y = door->world.rot.y;
-            Actor_MarkForDeath(door);
+            Actor_Kill(door);
             this->actionFunc = func_80AC21A0;
             this->actor.textId = 0x239B;
             Actor_SetFocus(&this->actor, 70.0f);
