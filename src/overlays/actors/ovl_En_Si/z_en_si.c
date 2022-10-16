@@ -110,7 +110,7 @@ void func_8098CB70(EnSi* this, PlayState* play) {
         this->actionFunc = func_8098CBDC;
     } else if (this->collider.base.ocFlags2 & 1) {
         func_8098CAD0(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actor.shape.rot.y += 0x38E;
@@ -119,7 +119,7 @@ void func_8098CB70(EnSi* this, PlayState* play) {
 void func_8098CBDC(EnSi* this, PlayState* play) {
     if (!CHECK_FLAG_ALL(this->actor.flags, 0x2000)) {
         func_8098CAD0(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
