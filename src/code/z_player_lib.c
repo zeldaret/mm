@@ -1177,7 +1177,7 @@ u8 D_801C07AC[] = {
 
 void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
-        if ((player->helditemAction < 0) || (player->helditemAction == player->itemAction)) {
+        if ((player->itemAction <= PLAYER_IA_MINUS1) || (player->itemAction == player->heldItemAction)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
@@ -1192,7 +1192,7 @@ void Player_SetModelsForHoldingShield(Player* player) {
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
                     player->modelAnimType = PLAYER_ANIMTYPE_2;
-                    player->helditemAction = -1;
+                    player->itemAction = PLAYER_IA_MINUS1;
                 }
             }
         }
@@ -1243,8 +1243,8 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
 }
 
 void func_80123C58(Player* player) {
-    player->helditemAction = player->itemAction;
-    Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemAction));
+    player->itemAction = player->heldItemAction;
+    Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
     player->unk_AA5 = 0;
 }
 
@@ -1255,7 +1255,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
-        Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemAction));
+        Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
         func_80123140(play, player);
         if (player->unk_B62 != 0) {
             player->unk_B62 = 1;
@@ -1268,10 +1268,10 @@ void func_80123D50(PlayState* play, Player* player, ItemId itemId, PlayerItemAct
 
     if (itemId != ITEM_BOTTLE) {
         player->heldItemId = itemId;
-        player->itemAction = itemAction;
+        player->heldItemAction = itemAction;
     }
 
-    player->helditemAction = itemAction;
+    player->itemAction = itemAction;
 }
 
 void func_80123DA4(Player* player) {
@@ -1363,7 +1363,7 @@ s32 Player_IsHoldingMirrorShield(PlayState* play) {
 }
 
 s32 Player_IsHoldingHookshot(Player* player) {
-    return player->itemAction == PLAYER_IA_HOOKSHOT;
+    return player->heldItemAction == PLAYER_IA_HOOKSHOT;
 }
 
 s32 func_801240DC(Player* player) {
@@ -1384,7 +1384,7 @@ s32 func_80124110(Player* player, PlayerItemAction itemAction) {
 }
 
 s32 func_80124148(Player* player) {
-    return func_80124110(player, player->itemAction);
+    return func_80124110(player, player->heldItemAction);
 }
 
 s32 Player_ActionToMeleeWeapon(PlayerItemAction itemAction) {
@@ -1397,12 +1397,12 @@ s32 Player_ActionToMeleeWeapon(PlayerItemAction itemAction) {
 }
 
 s32 Player_GetMeleeWeaponHeld(Player* player) {
-    return Player_ActionToMeleeWeapon(player->itemAction);
+    return Player_ActionToMeleeWeapon(player->heldItemAction);
 }
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on the itemActions for two-handed weapons being contiguous.
-    if ((player->itemAction >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->itemAction <= PLAYER_IA_STICK)) {
+    if ((player->heldItemAction >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->heldItemAction <= PLAYER_IA_STICK)) {
         return true;
     }
 
@@ -1436,7 +1436,7 @@ s32 Player_ActionToExplosive(Player* player, PlayerItemAction itemAction) {
 }
 
 s32 Player_GetExplosiveHeld(Player* player) {
-    return Player_ActionToExplosive(player, player->itemAction);
+    return Player_ActionToExplosive(player, player->heldItemAction);
 }
 
 s32 Player_ActionToSword(Actor* actor, PlayerItemAction itemAction) {

@@ -602,10 +602,10 @@ typedef struct Player {
     /* 0x144 */ s8 currentShield;
     /* 0x145 */ s8 currentBoots;
     /* 0x146 */ s8 heldItemButton;
-    /* 0x147 */ s8 itemAction; // PlayerItemAction enum
+    /* 0x147 */ s8 heldItemAction; // PlayerItemAction enum
     /* 0x148 */ u8 heldItemId; // ItemId enum
     /* 0x149 */ s8 prevBoots;
-    /* 0x14A */ s8 helditemAction;
+    /* 0x14A */ s8 itemAction; // PlayerItemAction enum
     /* 0x14B */ u8 transformation;
     /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
