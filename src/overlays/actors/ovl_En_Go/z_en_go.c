@@ -349,11 +349,11 @@ void EnGo_Idle(EnGo* this, PlayState* play);
 void EnGo_GraveBroGoron_GravemakerIdle(EnGo* this, PlayState* play);
 void EnGo_GraveBroGoron_FrozenIdle(EnGo* this, PlayState* play);
 
-void EnGo_UpdateToCoveringEarsAnimation(EnGo* this, PlayState* play);
-void EnGo_UpdateToShiveringAnimation(EnGo* this, PlayState* play);
-void EnGo_UpdateToStretchingAnimation(EnGo* this, PlayState* play);
-void EnGo_UpdateToSpectatingAnimation(EnGo* this, PlayState* play);
-void EnGo_UpdateToFrozenAnimation(EnGo* this, PlayState* play);
+void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play);
+void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play);
+void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play);
+void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play);
+void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play);
 
 void EnGo_Sleep(EnGo* this, PlayState* play);
 void EnGo_Talk(EnGo* this, PlayState* play);
@@ -364,7 +364,7 @@ void EnGo_AwaitThaw(EnGo* this, PlayState* play);
 s32 EnGo_CheckAndSetupTalk(EnGo* this, PlayState* play);
 
 void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play);
-void EnGo_Gatekeeper_UpdateToSnowballAnimation(EnGo* this, PlayState* play);
+void EnGo_Gatekeeper_ChangeToSnowballAnimation(EnGo* this, PlayState* play);
 
 void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play);
 s32 EnGo_GraveBroGoron_CheckAndSetupCutsceneSpringArrival(EnGo* this, PlayState* play);
@@ -384,7 +384,7 @@ void EnGo_UpdateEyes(EnGo* this);
 s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play);
 s32 EnGo_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* play);
 s32 EnGo_GraveBroGoron_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* play);
-void EnGo_GraveBroGoron_UpdateToSurprisedAnimation(EnGo* this, PlayState* play);
+void EnGo_GraveBroGoron_ChangeToSurprisedAnimation(EnGo* this, PlayState* play);
 
 s32 EnGo_UpdateRotationToTarget(EnGo* this, PlayState* play);
 
@@ -1148,7 +1148,7 @@ void EnGo_UpdateEyes(EnGo* this) {
 /**
  * Play the surprise animation then return to shivering.
  */
-void EnGo_GraveBroGoron_UpdateToSurprisedAnimation(EnGo* this, PlayState* play) {
+void EnGo_GraveBroGoron_ChangeToSurprisedAnimation(EnGo* this, PlayState* play) {
     if (this->surprisePhase == 0) {
         EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVERINGSURPRISED);
         this->surprisePhase++;
@@ -1191,7 +1191,7 @@ s32 EnGo_GraveBroGoron_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* 
 
                 case 0xE16: // Surprised, questioning if player is Darmani
                 case 0xE1E: // Surprised, seeing Darmani
-                    this->graveBroDialogActionFunc = EnGo_GraveBroGoron_UpdateToSurprisedAnimation;
+                    this->graveBroDialogActionFunc = EnGo_GraveBroGoron_ChangeToSurprisedAnimation;
                     break;
 
                 case 0xE1F: // Turn to player stating Darmani is not dead
@@ -1687,7 +1687,7 @@ s32 EnGo_Medigoron_CutsceneGivePowderKeg(Actor* thisx, PlayState* play) {
  *
  * @see EnGo_Idle
  */
-void EnGo_UpdateToStretchingAnimation(EnGo* this, PlayState* play) {
+void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play) {
     static Vec3f sStretchingGoronOffset = { 0.0f, 0.0f, 40.0f };
 
     static s32 sSubtypeToAnimIndex[] = {
@@ -1730,7 +1730,7 @@ void EnGo_UpdateToStretchingAnimation(EnGo* this, PlayState* play) {
  *
  * @see EnGo_Idle
  */
-void EnGo_UpdateToSpectatingAnimation(EnGo* this, PlayState* play) {
+void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
     static s32 sSubtypeToAnimIndex[] = { ENGO_ANIM_CHEER, ENGO_ANIM_SHOUT };
     s16 animFrame;
 
@@ -1754,7 +1754,7 @@ void EnGo_UpdateToSpectatingAnimation(EnGo* this, PlayState* play) {
  *
  * @see EnGo_Frozen
  */
-void EnGo_UpdateToFrozenAnimation(EnGo* this, PlayState* play) {
+void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInitFrozen);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->currAnimIndex = -1;
@@ -1773,7 +1773,7 @@ void EnGo_UpdateToFrozenAnimation(EnGo* this, PlayState* play) {
  *
  * @see EnGo_Gatekeeper_Snowball
  */
-void EnGo_Gatekeeper_UpdateToSnowballAnimation(EnGo* this, PlayState* play) {
+void EnGo_Gatekeeper_ChangeToSnowballAnimation(EnGo* this, PlayState* play) {
     s16 yawToPathPoint;
     Vec3f currentPos;
     Vec3f startingPathPoint;
@@ -1797,7 +1797,7 @@ void EnGo_Gatekeeper_UpdateToSnowballAnimation(EnGo* this, PlayState* play) {
  *
  * @see EnGo_Idle
  */
-void EnGo_UpdateToCoveringEarsAnimation(EnGo* this, PlayState* play) {
+void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, ENGO_ANIM_COVEREARS);
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = ENGO_FLAG_NONE;
@@ -1816,7 +1816,7 @@ void EnGo_UpdateToCoveringEarsAnimation(EnGo* this, PlayState* play) {
  *
  * @see EnGo_Idle
  */
-void EnGo_UpdateToShiveringAnimation(EnGo* this, PlayState* play) {
+void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = ENGO_FLAG_NONE;
@@ -1840,7 +1840,7 @@ void EnGo_StretcherGoron_Setup(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
-        EnGo_UpdateToStretchingAnimation(this, play);
+        EnGo_ChangeToStretchingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -1855,7 +1855,7 @@ void EnGo_StretcherGoron_Setup(EnGo* this, PlayState* play) {
 void EnGo_SpectatorGoron_Setup(EnGo* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
         (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
-        EnGo_UpdateToSpectatingAnimation(this, play);
+        EnGo_ChangeToSpectatingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -1875,11 +1875,11 @@ void EnGo_GatekeeperGoron_Setup(EnGo* this, PlayState* play) {
         if (this->gatekeeperPath != NULL) {
             this->indexPathPoint = 1;
         }
-        EnGo_Gatekeeper_UpdateToSnowballAnimation(this, play);
+        EnGo_Gatekeeper_ChangeToSnowballAnimation(this, play);
         this->actionFunc = EnGo_Gatekeeper_Snowball;
         this->msgEventFunc = EnGo_GatekeeperGoron_CutsceneOpenShrine;
     } else {
-        EnGo_UpdateToShiveringAnimation(this, play);
+        EnGo_ChangeToShiveringAnimation(this, play);
         this->actionFunc = EnGo_Idle;
         this->msgEventFunc = EnGo_GatekeeperGoron_CutsceneOpenShrine;
     }
@@ -1897,10 +1897,10 @@ void EnGo_GraveBroGoron_Setup(EnGo* this, PlayState* play) {
          !(gSaveContext.save.weekEventReg[21] & 0x8))) { // Thawed gravemaker's brother
         this->actor.child = EnGo_FindGravemaker(this, play);
         this->actor.child->child = &this->actor;
-        EnGo_UpdateToFrozenAnimation(this, play);
+        EnGo_ChangeToFrozenAnimation(this, play);
         this->actionFunc = EnGo_Frozen;
     } else {
-        EnGo_UpdateToShiveringAnimation(this, play);
+        EnGo_ChangeToShiveringAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     }
 }
@@ -1912,10 +1912,10 @@ void EnGo_GraveBroGoron_Setup(EnGo* this, PlayState* play) {
  */
 void EnGo_ShrineGoron_Setup(EnGo* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[22] & 0x4)) { // Elder's son has been calmed
-        EnGo_UpdateToCoveringEarsAnimation(this, play);
+        EnGo_ChangeToCoveringEarsAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
-        EnGo_UpdateToShiveringAnimation(this, play);
+        EnGo_ChangeToShiveringAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     }
 }
@@ -2145,11 +2145,11 @@ void EnGo_Thaw(EnGo* this, PlayState* play) {
         EnGo_MakeSteam(this);
     } else {
         ActorCutscene_Stop(this->actor.cutscene);
-        EnGo_UpdateToShiveringAnimation(this, play);
+        EnGo_ChangeToShiveringAnimation(this, play);
         if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEBRO) &&
             (ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEBRO_FROZEN)) {
             SubS_UpdateFlags(&this->actionFlags, 4, 7);
-            EnGo_UpdateToShiveringAnimation(unfrozenBro, play);
+            EnGo_ChangeToShiveringAnimation(unfrozenBro, play);
             unfrozenBro->actionFunc = EnGo_Idle;
         }
         this->actionFunc = EnGo_Idle;
@@ -2207,7 +2207,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
 
                     case 5:
                     case 6:
-                        EnGo_UpdateToFrozenAnimation(this, play);
+                        EnGo_ChangeToFrozenAnimation(this, play);
                         break;
                 }
             }
@@ -2234,7 +2234,7 @@ void EnGo_GraveBroGoron_CutsceneSpringArrival(EnGo* this, PlayState* play) {
                         this->iceBlockAlpha = (this->iceBlockScale / 0.9f) * 100.0f;
                         EnGo_MakeSteam(this);
                     } else if (this->actionFlags & ENGO_FLAG_FROZEN) {
-                        EnGo_UpdateToShiveringAnimation(this, play);
+                        EnGo_ChangeToShiveringAnimation(this, play);
                     }
                     break;
             }
@@ -2312,10 +2312,10 @@ void EnGo_Gatekeeper_Snowball(EnGo* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
 
         if (gSaveContext.save.day == 3) {
-            EnGo_UpdateToFrozenAnimation(this, play);
+            EnGo_ChangeToFrozenAnimation(this, play);
             this->actionFunc = EnGo_Frozen;
         } else {
-            EnGo_UpdateToShiveringAnimation(this, play);
+            EnGo_ChangeToShiveringAnimation(this, play);
             this->actionFunc = EnGo_Idle;
         }
     } else if (this->gatekeeperPath != NULL) {
