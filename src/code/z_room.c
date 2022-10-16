@@ -500,10 +500,8 @@ void Room_Init(PlayState* play, RoomContext* roomCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
-    u32 maxRoomSize;
-    RomFile* roomList;
+    u32 maxRoomSize = 0;
     u32 roomSize;
     s32 i;
     s32 j;
@@ -512,19 +510,16 @@ u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
     u32 frontRoomSize;
     u32 backRoomSize;
     u32 cumulRoomSize;
-    s32 index;
     s32 pad[2];
 
-    maxRoomSize = 0;
-//! FAKE: likely scoping issues
-dummy1:;
+    {
+        RomFile* roomList = play->roomList;
 
-    roomList = play->roomList;
-
-    for (i = 0; i < play->numRooms; i++) {
-        roomSize = roomList[i].vromEnd - roomList[i].vromStart;
-        if (maxRoomSize < roomSize) {
-            maxRoomSize = roomSize;
+        for (i = 0; i < play->numRooms; i++) {
+            roomSize = roomList[i].vromEnd - roomList[i].vromStart;
+            if (maxRoomSize < roomSize) {
+                maxRoomSize = roomSize;
+            }
         }
     }
 
@@ -555,17 +550,17 @@ dummy1:;
     roomCtx->status = 0;
 
     if ((gSaveContext.respawnFlag != 0) && (gSaveContext.respawnFlag != -2) && (gSaveContext.respawnFlag != -7)) {
+        s32 respawnMode;
+
         if ((gSaveContext.respawnFlag == -8) || (gSaveContext.respawnFlag == -5) || (gSaveContext.respawnFlag == -4) ||
             ((gSaveContext.respawnFlag < 0) && (gSaveContext.respawnFlag != -1) && (gSaveContext.respawnFlag != -6))) {
-            index = 0;
+            respawnMode = RESPAWN_MODE_DOWN;
         } else if (gSaveContext.respawnFlag < 0) {
-            index = 2;
+            respawnMode = RESPAWN_MODE_TOP;
         } else {
-            index = gSaveContext.respawnFlag - 1;
+            respawnMode = gSaveContext.respawnFlag - 1;
         }
-        frontRoom = gSaveContext.respawn[index].roomIndex;
-        //! FAKE: likely scoping issues
-    dummy2:;
+        frontRoom = gSaveContext.respawn[respawnMode].roomIndex;
     } else {
         frontRoom = play->setupEntranceList[play->curSpawn].room;
     }
@@ -574,9 +569,6 @@ dummy1:;
 
     return maxRoomSize;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
-#endif
 
 s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
     if (roomCtx->status == 0) {
