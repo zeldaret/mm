@@ -15,10 +15,11 @@ void EnSi_Destroy(Actor* thisx, PlayState* play);
 void EnSi_Update(Actor* thisx, PlayState* play);
 void EnSi_Draw(Actor* thisx, PlayState* play);
 
+void func_8098CA20(EnSi* this, PlayState* play);
+void func_8098CAD0(EnSi* this, PlayState* play);
 void func_8098CB70(EnSi* this, PlayState* play);
 void func_8098CBDC(EnSi* this, PlayState* play);
 
-#if 0
 const ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
     ACTORCAT_ITEMACTION,
@@ -31,18 +32,15 @@ const ActorInit En_Si_InitVars = {
     (ActorFunc)EnSi_Draw,
 };
 
-// static ColliderSphereInit sSphereInit = {
-static ColliderSphereInit D_8098CD80 = {
+static ColliderSphereInit sSphereInit = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_NO_PUSH | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
     { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
     { 0, { { 0, 0, 0 }, 10 }, 100 },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_8098CDAC = { 1, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_8098CDB8 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -77,24 +75,82 @@ static DamageTable D_8098CDB8 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-#endif
+void func_8098CA20(EnSi* thisx, PlayState* play) {
+    EnSi* this = THIS;
 
-extern ColliderSphereInit D_8098CD80;
-extern CollisionCheckInfoInit2 D_8098CDAC;
-extern DamageTable D_8098CDB8;
+    this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->collider.dim.worldSphere.center.y = this->actor.world.pos.y;
+    this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
+    this->collider.dim.worldSphere.radius = this->collider.dim.modelSphere.radius * this->collider.dim.scale;
+    if (this->actor.colChkInfo.health > 0) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    }
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CA20.s")
+void func_8098CAD0(EnSi* this, PlayState* play) {
+    s32 flag;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CAD0.s")
+    flag = (this->actor.params & 0xFC) >> 2;
+    if ((flag < 0x20) && (flag >= 0)) {
+        Flags_SetTreasure(play, flag);
+    }
+    Item_Give(play, 0x6E);
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= 0x1E) {
+        Message_StartTextbox(play, 0xFC, NULL);
+        Audio_PlayFanfare(0x922);
+        return;
+    }
+    Message_StartTextbox(play, 0x52, NULL);
+    Audio_PlayFanfare(NA_BGM_GET_SMALL_ITEM);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CB70.s")
+void func_8098CB70(EnSi* this, PlayState* play) {
+    if (CHECK_FLAG_ALL(this->actor.flags, 0x2000)) {
+        this->actionFunc = func_8098CBDC;
+    } else if (this->collider.base.ocFlags2 & 1) {
+        func_8098CAD0(this, play);
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    this->actor.shape.rot.y += 0x38E;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/func_8098CBDC.s")
+void func_8098CBDC(EnSi* this, PlayState* play) {
+    if (!CHECK_FLAG_ALL(this->actor.flags, 0x2000)) {
+        func_8098CAD0(this, play);
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Init.s")
+void EnSi_Init(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Destroy.s")
+    Collider_InitSphere(play, &this->collider);
+    Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    Actor_SetScale(&this->actor, 0.25f);
+    this->actionFunc = func_8098CB70;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Update.s")
+void EnSi_Destroy(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Si/EnSi_Draw.s")
+    Collider_DestroySphere(play, &this->collider);
+}
+
+void EnSi_Update(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
+
+    this->actionFunc(this, play);
+    func_8098CA20(this, play);
+    Actor_SetFocus(&this->actor, 0.0f);
+}
+
+void EnSi_Draw(Actor* thisx, PlayState* play) {
+    EnSi* this = THIS;
+    
+    func_800B8118(&this->actor, play, 0);
+    func_800B8050(&this->actor, play, 0);
+    GetItem_Draw(play, 0x56);
+}
