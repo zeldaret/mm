@@ -33,7 +33,7 @@ void DmRavine_Init(Actor* thisx, PlayState* play) {
     DmRavine* this = THIS;
 
     if (((((void)0, gSaveContext.save.weekEventReg[0]) & 0x10) | cREG(0)) != 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -71,7 +71,7 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
             }
             break;
         case DM_RAVINE_STATE_PENDING_DEATH:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             break;
     }
 }

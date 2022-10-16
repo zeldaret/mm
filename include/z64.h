@@ -112,17 +112,6 @@ typedef struct {
 } PolygonType2; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ s16 func;
-    /* 0x2 */ UNK_TYPE1 pad2[0x6];
-} CameraModeParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u32 validModes;
-    /* 0x4 */ UNK_TYPE1 pad4[0x4];
-    /* 0x8 */ CameraModeParams* modes;
-} CameraStateParams; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -286,13 +275,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef struct {
-    /* 0x0 */ s8 letterboxTarget;
-    /* 0x1 */ s8 letterboxMagnitude;
-    /* 0x2 */ s8 pillarboxTarget;
-    /* 0x3 */ s8 pillarboxMagnitude;
-} ShrinkWindowContext; // size = 0x4
-
 typedef void(*osCreateThread_func)(void*);
 
 typedef enum {
@@ -425,7 +407,7 @@ typedef struct {
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
     /* 0x1EE */ u16 debugEditor;
-    /* 0x1F0 */ u8 unk_1F0;
+    /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 unk_200;
     /* 0x202 */ u16 mode;
@@ -446,7 +428,7 @@ typedef struct {
     /* 0x238 */ s16 cursorPoint[5];
     /* 0x242 */ s16 cursorXIndex[5];
     /* 0x24C */ s16 cursorYIndex[5];
-    /* 0x256 */ s16 unk_256;
+    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
     /* 0x25C */ u16 unk_25C;
@@ -470,7 +452,7 @@ typedef struct {
     /* 0x298 */ f32 unk_298;
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
-    /* 0x2A0 */ s16 unk_2A0;
+    /* 0x2A0 */ s16 ocarinaSongIndex;
     /* 0x2A2 */ u8 worldMapPoints[20];
     /* 0x2B6 */ u8 unk_2B6;
     /* 0x2B7 */ u8 unk_2B7;
@@ -478,9 +460,9 @@ typedef struct {
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
-    /* 0x2BE */ s16 unk_2BE[5];
-    /* 0x2C8 */ u16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2BE */ s16 ocarinaButtonsY[5];
+    /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {
@@ -742,7 +724,7 @@ typedef struct {
 #define TRANS_TRIGGER_START 20 // start transition (exiting an area)
 #define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
 
-typedef enum {
+typedef enum TransitionMode {
     /*  0 */ TRANS_MODE_OFF,
     /*  1 */ TRANS_MODE_01,
     /*  2 */ TRANS_MODE_02,
@@ -763,7 +745,7 @@ typedef enum {
     /* 17 */ TRANS_MODE_17
 } TransitionMode;
 
-typedef enum {
+typedef enum TransitionType {
     /*  0 */ TRANS_TYPE_00,
     /*  1 */ TRANS_TYPE_01,
     /*  2 */ TRANS_TYPE_02,
@@ -1066,7 +1048,7 @@ struct PlayState {
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
-    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 arg2, s32 arg3);
+    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 itemId, s32 arg3);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1085,7 +1067,7 @@ struct PlayState {
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
-    /* 0x18868 */ void* unk_18868;
+    /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
@@ -1107,7 +1089,7 @@ struct PlayState {
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ char unk_18E58[0x10];
-    /* 0x18E68 */ s32 unk_18E68;
+    /* 0x18E68 */ void* unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 }; // size = 0x19258
 

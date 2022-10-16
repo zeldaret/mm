@@ -241,10 +241,10 @@ void EnFz_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider3);
 
     if ((this->actor.parent != NULL) && (this->unk_BC4 == 0) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
-        (this->actor.parent->update != NULL) && (((EnWiz*)this->actor.parent)->unk_448 != 0)) {
+        (this->actor.parent->update != NULL) && (((EnWiz*)this->actor.parent)->freezard != NULL)) {
         EnWiz* wiz = (EnWiz*)this->actor.parent;
 
-        wiz->unk_448 = 0;
+        wiz->freezard = NULL;
     }
 }
 
@@ -663,7 +663,7 @@ void func_809336C0(EnFz* this, PlayState* play) {
 
 void func_80933760(EnFz* this, PlayState* play) {
     if (this->unk_BCA == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

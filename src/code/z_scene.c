@@ -52,7 +52,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[0x04] = PHYSICAL_TO_VIRTUAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = VIRTUAL_TO_PHYSICAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
@@ -108,7 +108,7 @@ s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index) {
 void Object_LoadAll(ObjectContext* objectCtx) {
     s32 i;
     s32 id;
-    u32 vromSize;
+    uintptr_t vromSize;
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
@@ -124,7 +124,7 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 
 void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     u32 addr;
-    u32 vromSize;
+    uintptr_t vromSize;
     RomFile* fileTableEntry;
 
     objectCtx->status[iParm2].id = -id;
@@ -216,7 +216,9 @@ void Scene_HeaderCmdEntranceList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
-    static RomFile tatlMessageFiles[2] = {
+    // @note These quest hint files are identical to OoT's.
+    // They are not relevant in this game and the system to process these scripts has been removed.
+    static RomFile naviQuestHintFiles[2] = {
         { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
         { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
     };
@@ -224,11 +226,11 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepIndex != 0) {
         play->objectCtx.subKeepIndex = Object_Spawn(&play->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[0x05] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
     }
 
-    if (cmd->specialFiles.cUpElfMsgNum != 0) {
-        play->unk_18868 = Play_LoadScene(play, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
+    if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
+        play->naviQuestHints = Play_LoadScene(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -350,7 +352,7 @@ void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex) {
         { SEGMENT_ROM_START(scene_texture_07), SEGMENT_ROM_END(scene_texture_07) },
         { SEGMENT_ROM_START(scene_texture_08), SEGMENT_ROM_END(scene_texture_08) },
     };
-    u32 vromStart = sceneTextureFiles[fileIndex].vromStart;
+    uintptr_t vromStart = sceneTextureFiles[fileIndex].vromStart;
     size_t size = sceneTextureFiles[fileIndex].vromEnd - vromStart;
 
     if (size != 0) {
@@ -455,9 +457,9 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     SceneCmd** altHeaderList;
     SceneCmd* altHeader;
 
-    if (gSaveContext.sceneSetupIndex != 0) {
+    if (gSaveContext.sceneLayer != 0) {
         altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
-        altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
+        altHeader = altHeaderList[gSaveContext.sceneLayer - 1];
 
         if (altHeader != NULL) {
             Scene_ProcessHeader(play, Lib_SegmentedToVirtual(altHeader));
@@ -468,8 +470,8 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
-    play->csCtx.sceneCsCount = cmd->base.data1;
-    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->base.data2);
+    play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
+    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
@@ -492,8 +494,8 @@ void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd) {
     func_8010565C(play, cmd->minimapChests.num, cmd->minimapChests.segment);
 }
 
-// SceneTableEntry Header Command 0x1A: Sets Area Visited Flag
-void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
+// SceneTableEntry Header Command 0x19: Sets Region Visited Flag
+void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
     s16 j = 0;
     s16 i = 0;
 
@@ -502,7 +504,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
             i++;
             j = 0;
 
-            if (i == ARRAY_COUNT(gSceneIdsPerRegion)) {
+            if (i == REGION_MAX) {
                 break;
             }
         }
@@ -514,8 +516,9 @@ void Scene_HeaderCmdSetAreaVisitedFlag(PlayState* play, SceneCmd* cmd) {
         j++;
     }
 
-    if (i < ARRAY_COUNT(gSceneIdsPerRegion)) {
-        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
+    if (i < REGION_MAX) {
+        gSaveContext.save.regionsVisited =
+            (gBitFlags[i] | gSaveContext.save.regionsVisited) | gSaveContext.save.regionsVisited;
     }
 }
 
@@ -561,7 +564,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
         Scene_HeaderCmdEchoSetting,
         Scene_HeaderCmdCutsceneList,
         Scene_HeaderCmdAltHeaderList,
-        Scene_HeaderCmdSetAreaVisitedFlag,
+        Scene_HeaderCmdSetRegionVisitedFlag,
         Scene_HeaderCmdAnimatedMaterials,
         Scene_HeaderCmdActorCutsceneList,
         Scene_HeaderCmdMiniMap,

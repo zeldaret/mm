@@ -248,7 +248,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
     while (actor != NULL) {
         if ((actor->id == ACTOR_OBJ_HAKAISI) && func_80B70B04(this, actor->world.pos)) {
             if (Flags_GetSwitch(play, (actor->params & 0xFF00) >> 8)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->unk_22C = (ObjHakaisi*)actor;
@@ -256,7 +256,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
         }
         actor = actor->next;
     }
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 static InitChainEntry sInitChain[] = {
@@ -277,7 +277,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (Flags_GetSwitch(play, ENRAILSKB_GET_FF(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -296,7 +296,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
         this->unk_3F8 = 0;
     }
 
-    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -635,7 +635,7 @@ void func_80B71BB8(EnRailSkb* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

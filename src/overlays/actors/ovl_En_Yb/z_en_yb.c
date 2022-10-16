@@ -68,7 +68,7 @@ static ColliderCylinderInit sCylinderInit = {
 //  assumption: draw uses two different skeleton functions, might be incompatible
 static AnimationHeader* gYbUnusedAnimations[] = { &object_yb_Anim_000200 };
 
-static LinkAnimationHeader* gLinkAnimations[] = { &gameplay_keep_Linkanim_00DF28, &gameplay_keep_Linkanim_00CF98 };
+static LinkAnimationHeader* gLinkAnimations[] = { &gPlayerAnim_link_normal_wait_free, &gPlayerAnim_alink_dance_loop };
 
 static Vec3f D_80BFB2E8 = { 0.0f, 0.5f, 0.0f };
 
@@ -122,7 +122,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
 
     // check if already healed
     if (gSaveContext.save.weekEventReg[82] & 4) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -250,7 +250,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
     if (this->alpha > 10) {
         this->alpha -= 10;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -372,10 +372,10 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     }
 
     if (this->playerOcarinaOut & 1) {
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & 0x8000000) && this->actor.xzDistToPlayer < 180.0f &&
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && this->actor.xzDistToPlayer < 180.0f &&
                fabsf(this->actor.playerHeightRel) < 50.0f) {
         this->playerOcarinaOut |= 1;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);

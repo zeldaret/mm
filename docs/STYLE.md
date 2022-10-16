@@ -122,7 +122,7 @@ Floats usually need an `f` on the end to match, or IDO will use doubles. Our flo
   bar();
   ```
 
-**Exception**: After `Actor_MarkForDeath` or sometimes setting the action function, if it makes sense to do so (this expresses the finality a bit better).
+**Exception**: After `Actor_Kill` or sometimes setting the action function, if it makes sense to do so (this expresses the finality a bit better).
 
 ## Macros and enums
 

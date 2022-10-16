@@ -308,8 +308,8 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             }
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j + 0], 4, 0);
-            KaleidoScope_DrawQuadTextureRGBA32(play->state.gfxCtx,
-                                               gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
+            KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx,
+                                           gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
         }
     }
 
@@ -356,8 +356,8 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
     s16 moveCursorResult;
     s16 pad2;
 
-    pauseCtx->cursorColorSet = 0;
-    pauseCtx->nameColorSet = 0;
+    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
+    pauseCtx->nameColorSet = PAUSE_NAME_COLOR_SET_WHITE;
 
     if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_ITEM) &&
         !pauseCtx->itemDescriptionOn) {
@@ -369,7 +369,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
         // Move cursor left/right
         if (pauseCtx->cursorSpecialPos == 0) {
             // cursor is currently on a slot
-            pauseCtx->cursorColorSet = 2;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (ABS_ALT(pauseCtx->stickAdjX) > 30) {
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_ITEM];
@@ -563,7 +563,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             }
 
             cursorSlot = pauseCtx->cursorPoint[PAUSE_ITEM];
-            pauseCtx->cursorColorSet = 2;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_ITEM]];
@@ -573,7 +573,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
 
             if (cursorItem == ITEM_NONE) {
                 cursorItem = PAUSE_ITEM_NONE;
-                pauseCtx->cursorColorSet = 0;
+                pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
             }
 
             if ((cursorItem != (u32)PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
@@ -693,7 +693,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
             play_sound(NA_SE_SY_CURSOR);
         }
     } else if ((pauseCtx->unk_200 == 3) && (pauseCtx->pageIndex == PAUSE_ITEM)) {
-        pauseCtx->cursorColorSet = 2;
+        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
     }
 }
 

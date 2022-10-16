@@ -632,7 +632,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
                 case 1:
                     this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
-                        Actor_MarkForDeath(this->drum);
+                        Actor_Kill(this->drum);
                         this->drum = NULL;
                     }
                     break;
@@ -948,8 +948,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (!EN_JG_IS_IN_GORON_SHRINE(thisx)) {
-        if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7) &&
-            (play->csCtx.currentCsIndex == 0)) {
+        if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0)) {
             // This is the elder that appears in the cutscene for learning the full Goron Lullaby.
             this->animIndex = EN_JG_ANIM_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;

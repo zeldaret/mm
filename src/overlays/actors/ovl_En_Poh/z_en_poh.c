@@ -13,7 +13,7 @@
 
 void EnPoh_Init(Actor* thisx, PlayState* play);
 void EnPoh_Destroy(Actor* thisx, PlayState* play);
-void EnPoh_Update(Actor* thisx, PlayState* play);
+void EnPoh_Update(Actor* thisx, PlayState* play2);
 void EnPoh_Draw(Actor* thisx, PlayState* play);
 
 void func_80B2CAA4(EnPoh* this, PlayState* play);
@@ -653,7 +653,7 @@ void func_80B2E1D8(EnPoh* this) {
 void func_80B2E230(EnPoh* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -687,7 +687,7 @@ void func_80B2E3B0(EnPoh* this) {
 void func_80B2E3F8(EnPoh* this, PlayState* play) {
     func_80B2DDF8(this, -13);
     if (this->unk_197 == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

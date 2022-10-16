@@ -126,7 +126,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
@@ -158,8 +158,8 @@ void func_80BCF398(EnHg* this, PlayState* play) {
             !Cutscene_CheckActorAction(play, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 0) &&
-            (play->csCtx.frames == 20 || play->csCtx.frames == 60)) {
+        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
+            ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
@@ -175,7 +175,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -304,7 +304,7 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                     break;
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
         } else {
@@ -348,7 +348,7 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
-        if (player->stateFlags2 & 0x08000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             if (!D_80BD00C8) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }

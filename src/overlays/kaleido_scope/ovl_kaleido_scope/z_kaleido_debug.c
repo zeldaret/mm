@@ -472,7 +472,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 44, i = 0; i < 4; i++) {
         counterDigits[2] = 0;
-        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA + i)) {
+        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA + i)) {
             counterDigits[2] = 1;
         }
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 112);

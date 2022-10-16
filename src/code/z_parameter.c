@@ -1,5 +1,5 @@
 #include "global.h"
-
+#include "z64view.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
@@ -1293,7 +1293,9 @@ u8 Item_Give(PlayState* play, u8 item) {
     }
 
     if (item == ITEM_SKULL_TOKEN) {
-        SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_SKULL_TOKEN);
+        //! @bug: Sets QUEST_QUIVER instead of QUEST_SKULL_TOKEN
+        // Setting `QUEST_SKULL_TOKEN` will result in misplaced digits on the pause menu - Quest Status page.
+        SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_QUIVER);
         Inventory_IncrementSkullTokenCount(play->sceneId);
         return ITEM_NONE;
 
@@ -1567,7 +1569,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_REMAINS_ODOLWA) && (item <= ITEM_REMAINS_TWINMOLD)) {
-        SET_QUEST_ITEM(item - ITEM_REMAINS_ODOLWA + QUEST_REMAINS_ODOWLA);
+        SET_QUEST_ITEM(item - ITEM_REMAINS_ODOLWA + QUEST_REMAINS_ODOLWA);
         return ITEM_NONE;
 
     } else if (item == ITEM_RECOVERY_HEART) {
@@ -2385,7 +2387,7 @@ void Magic_Update(PlayState* play) {
             // Add magic until magicFillTarget is reached
             gSaveContext.save.playerData.magic += 0x10;
 
-            if ((gSaveContext.gameMode == 0) && (gSaveContext.sceneSetupIndex < 4)) {
+            if ((gSaveContext.gameMode == 0) && (gSaveContext.sceneLayer < 4)) {
                 play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
             }
 
@@ -2984,7 +2986,7 @@ void Interface_DrawTimers(PlayState* play) {
 
                     if (sTimerId == TIMER_ID_MOON_CRASH) {
                         gSaveContext.save.day = 4;
-                        if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneSetupIndex == 3)) {
+                        if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneLayer == 3)) {
                             play->nextEntrance = ENTRANCE(TERMINA_FIELD, 1);
                             gSaveContext.nextCutsceneIndex = 0xFFF0;
                             play->transitionTrigger = TRANS_TRIGGER_START;

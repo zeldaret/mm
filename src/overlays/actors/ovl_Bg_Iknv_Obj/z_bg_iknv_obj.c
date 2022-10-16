@@ -88,7 +88,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -131,7 +131,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((play->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 4) &&
+    if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 4) &&
         (play->csCtx.frames == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }

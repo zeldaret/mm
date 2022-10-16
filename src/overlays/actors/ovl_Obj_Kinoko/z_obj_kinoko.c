@@ -49,7 +49,7 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
         thisx->flags |= ACTOR_FLAG_1;
         if (Actor_HasParent(thisx, play)) {
             Flags_SetCollectible(play, OBJ_KINOKO_GET_FLAG(thisx));
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
         Actor_PickUp(thisx, play, GI_MAX, 20.0f, 10.0f);

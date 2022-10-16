@@ -13,7 +13,7 @@
 
 void EnMuto_Init(Actor* thisx, PlayState* play);
 void EnMuto_Destroy(Actor* thisx, PlayState* play);
-void EnMuto_Update(Actor* thisx, PlayState* play);
+void EnMuto_Update(Actor* thisx, PlayState* play2);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
 void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
@@ -75,7 +75,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         }
 
         if (gSaveContext.save.day != 3 || !gSaveContext.save.isNight) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
@@ -83,7 +83,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.yShift = 0;
 
         if (gSaveContext.save.weekEventReg[63] & 0x80 || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -255,7 +255,7 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->isInMayorsRoom && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

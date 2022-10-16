@@ -525,7 +525,7 @@ void func_80A1213C(EnGo* this, PlayState* play) {
 s32 func_80A121F4(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (player->stateFlags3 & 0x2000000)) {
+    if ((player->transformation == PLAYER_FORM_GORON) && (player->stateFlags3 & PLAYER_STATE3_2000000)) {
         return false;
     }
     return true;
@@ -539,7 +539,7 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneId == SCENE_16GORON_HOUSE) &&
-         (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
+         (gSaveContext.sceneLayer == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
         ret = true;
     }
     return ret;
@@ -637,7 +637,7 @@ void func_80A12660(EnGo* this, PlayState* play) {
 void func_80A126BC(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags2 & 0x4000)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000)) {
         if (this->unk_3C6 != 0) {
             this->unk_3C6--;
         }
@@ -711,7 +711,7 @@ s32 func_80A12868(EnGo* this, PlayState* play) {
 
 s32 func_80A12954(EnGo* this, PlayState* play) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
-        (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.currentCsIndex == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -830,7 +830,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_392 != temp) {
             switch (temp) {
                 case 0xE1A:
@@ -1380,7 +1380,7 @@ void func_80A14430(EnGo* this, PlayState* play) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1390,7 +1390,7 @@ void func_80A1449C(EnGo* this, PlayState* play) {
         func_80A14104(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1412,7 +1412,7 @@ void func_80A144F4(EnGo* this, PlayState* play) {
 
 void func_80A145AC(EnGo* this, PlayState* play) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
-        (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
           (play->csCtx.currentCsIndex == 0)) ||
          !(gSaveContext.save.weekEventReg[21] & 8))) {
         this->actor.child = func_80A13400(this, play);
@@ -1505,7 +1505,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
                 break;
 
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }

@@ -15,7 +15,7 @@
 void EnElfbub_Init(Actor* thisx, PlayState* play);
 void EnElfbub_Destroy(Actor* thisx, PlayState* play);
 void EnElfbub_Update(Actor* thisx, PlayState* play);
-void EnElfbub_Draw(Actor* thisx, PlayState* play);
+void EnElfbub_Draw(Actor* thisx, PlayState* play2);
 
 void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
@@ -57,7 +57,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     Actor* childActor;
 
     if (Flags_GetSwitch(play, ENELFBUB_GET_SWITCHFLAG(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -117,7 +117,7 @@ void EnElfbub_Pop(EnElfbub* this, PlayState* play) {
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
