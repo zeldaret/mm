@@ -69,30 +69,36 @@ typedef struct RoomShapeCullableEntryLinked {
 // TODO: 127 is an arbitrarily chosen number to make the stack sorta work
 #define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 127
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullable* roomShape;
     RoomShapeCullableEntry* roomShapeCullableEntry;
     RoomShapeCullableEntry* roomShapeCullableEntries;
     RoomShapeCullableEntry* roomShapeCullableEntryIter;
-    f32 projectedW;
+    Gfx* displayList;
     f32 entryBoundsNearZ;
     RoomShapeCullableEntryLinked linkedEntriesBuffer[ROOM_SHAPE_CULLABLE_MAX_ENTRIES];
     RoomShapeCullableEntryLinked* head = NULL;
     RoomShapeCullableEntryLinked* tail = NULL;
-    s32 i;
+    s32 var_a1;
     RoomShapeCullableEntryLinked* iter;
     RoomShapeCullableEntryLinked* insert;
     f32 var_fv1;
-    s32 pad;
+    s32 i;
     Vec3f pos;
     Vec3f projectedPos;
-    Gfx* displayList;
+    s32 pad2;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if (flags & ROOM_DRAW_OPA) {
         func_800BCBF4(&sZeroVec, play);
+
+        //! TODO: Fake
+        if (1) {}
+        if (1) {}
+        if (1) {}
+
         gSPSegment(POLY_OPA_DISP++, 0x03, room->segment);
         if (play->roomCtx.unk74 != NULL) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->roomCtx.unk74);
@@ -124,7 +130,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
     if (play->roomCtx.unk78 < 0) {
         for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
-
             if (R_ROOM_CULL_DEBUG_MODE != 0) {
                 if (((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_UP_TO_TARGET) &&
                      (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
@@ -161,6 +166,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         }
     } else {
         f32 var_fa1 = 1.0f / play->unk_187F0.z; // sp54
+        s32 pad5;
 
         // Pick and sort entries by depth
         for (i = 0; i < roomShape->numEntries; i++, roomShapeCullableEntry++) {
@@ -238,7 +244,8 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
         if (flags & ROOM_DRAW_OPA) {
             for (; head != NULL; head = head->next, i++) {
-                Gfx* displayList;
+                s32 pad3;
+                RoomShapeCullableEntry* roomShapeCullableEntry;
 
                 roomShapeCullableEntry = head->entry;
 
@@ -249,9 +256,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
                          (i <= R_ROOM_CULL_DEBUG_TARGET)) ||
                         ((R_ROOM_CULL_DEBUG_MODE == ROOM_CULL_DEBUG_MODE_ONLY_TARGET) &&
                          (i == R_ROOM_CULL_DEBUG_TARGET))) {
-
-                        //! FAKE:
-                        if (insert) {}
 
                         displayList = roomShapeCullableEntry->opa;
                         if (displayList != NULL) {
@@ -269,10 +273,8 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 
         if (flags & ROOM_DRAW_XLU) {
             for (; head != NULL; head = head->prev) {
-                Gfx* displayList;
                 f32 temp_fv0;
                 f32 temp_fv1;
-                s32 var_a1;
 
                 roomShapeCullableEntry = head->entry;
                 displayList = roomShapeCullableEntry->xlu;
