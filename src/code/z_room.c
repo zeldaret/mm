@@ -473,8 +473,83 @@ void Room_Init(PlayState* play, RoomContext* roomCtx) {
     }
 }
 
-// OoT func_80096FE8
+#ifdef NON_MATCHING
+u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
+    u32 maxRoomSize;
+    RomFile* roomList;
+    u32 roomSize;
+    s32 i;
+    s32 j;
+    s32 frontRoom;
+    s32 backRoom;
+    u32 frontRoomSize;
+    u32 backRoomSize;
+    u32 cumulRoomSize;
+    s32 index;
+    s32 pad[2];
+
+    maxRoomSize = 0;
+//! FAKE: likely scoping issues
+dummy1:;
+
+    roomList = play->roomList;
+
+    for (i = 0; i < play->numRooms; i++) {
+        roomSize = roomList[i].vromEnd - roomList[i].vromStart;
+        if (maxRoomSize < roomSize) {
+            maxRoomSize = roomSize;
+        }
+    }
+
+    if (play->doorCtx.numTransitionActors) {
+        RomFile* roomList = play->roomList;
+        TransitionActorEntry* transitionActor = &play->doorCtx.transitionActorList[0];
+
+        for (j = 0; j < play->doorCtx.numTransitionActors; j++) {
+            frontRoom = transitionActor->sides[0].room;
+            backRoom = transitionActor->sides[1].room;
+            frontRoomSize = (frontRoom < 0) ? 0 : roomList[frontRoom].vromEnd - roomList[frontRoom].vromStart;
+            backRoomSize = (backRoom < 0) ? 0 : roomList[backRoom].vromEnd - roomList[backRoom].vromStart;
+            cumulRoomSize = (frontRoom != backRoom) ? frontRoomSize + backRoomSize : frontRoomSize;
+
+            if (maxRoomSize < cumulRoomSize) {
+                maxRoomSize = cumulRoomSize;
+            }
+            transitionActor++;
+        }
+    }
+
+    roomCtx->roomMemPages[0] = THA_AllocEndAlign16(&play->state.heap, maxRoomSize);
+    if (roomCtx->roomMemPages[0] == NULL) {
+        __assert("../z_room.c", 1078);
+    }
+    roomCtx->roomMemPages[1] = (void*)((s32)roomCtx->roomMemPages[0] + maxRoomSize);
+    roomCtx->activeMemPage = 0;
+    roomCtx->status = 0;
+
+    if ((gSaveContext.respawnFlag != 0) && (gSaveContext.respawnFlag != -2) && (gSaveContext.respawnFlag != -7)) {
+        if ((gSaveContext.respawnFlag == -8) || (gSaveContext.respawnFlag == -5) || (gSaveContext.respawnFlag == -4) ||
+            ((gSaveContext.respawnFlag < 0) && (gSaveContext.respawnFlag != -1) && (gSaveContext.respawnFlag != -6))) {
+            index = 0;
+        } else if (gSaveContext.respawnFlag < 0) {
+            index = 2;
+        } else {
+            index = gSaveContext.respawnFlag - 1;
+        }
+        frontRoom = gSaveContext.respawn[index].roomIndex;
+        //! FAKE: likely scoping issues
+    dummy2:;
+    } else {
+        frontRoom = play->setupEntranceList[play->curSpawn].room;
+    }
+
+    Room_StartRoomTransition(play, roomCtx, frontRoom);
+
+    return maxRoomSize;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
+#endif
 
 s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
     if (roomCtx->status == 0) {
