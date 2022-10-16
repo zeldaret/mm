@@ -1615,7 +1615,7 @@
     0x800F048C:("SoundSource_Add",),
     0x800F0568:("SoundSource_PlaySfxAtFixedWorldPos",),
     0x800F0590:("SoundSource_PlaySfxEachFrameAtFixedWorldPos",),
-    0x800F05C0:("ElfMessage_GetFirstCycleHint",),
+    0x800F05C0:("QuestHint_GetTatlTextId",),
     0x800F07C0:("EnHy_ChangeAnim",),
     0x800F0888:("EnHy_FindNearestDoor",),
     0x800F0944:("EnHy_ChangeObjectAndAnim",),
