@@ -67,7 +67,8 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
         this->timer2 = 180;
     }
 
-    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (DECR(this->timer2) == 0)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) &&
+        (DECR(this->timer2) == 0)) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_88_40);
     }
 }
