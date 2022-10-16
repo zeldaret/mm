@@ -7,17 +7,33 @@
 struct EnGo;
 
 typedef void (*EnGoActionFunc)(struct EnGo*, PlayState*);
+typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENGO_GET_TYPE(thisx) (((thisx)->params & 0xF) & 0xFF)
 #define ENGO_GET_SUBTYPE(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
 
 #define ENGO_GET_PATH(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
+/** Count of effects used for snow.
+ * @see EnGoEffect
+ */
 #define ENGO_SNOW_EFFECT_COUNT 16
+
+/** Total count of all possible effects.
+ * @see EnGoEffect
+ */
 #define ENGO_EFFECT_COUNT 32
 
 extern const ActorInit En_Go_InitVars;
 
+/**
+ * Struct to track the state of various visual effects.
+ *
+ * A Goron's 'effectTable' is comprised of a number of these effects, which depending on the context in which they are
+ * used, take on the form of snow, dust, or steam. The functions using these objects have an expectation that they are
+ * iterating through the full effectTable, or half of the effectTable. See individual functions containing 'EnGoEffect*'
+ * parameters for more details.
+ */
 typedef struct EnGoEffect {
     /* 0x00 */ u8 effectType;
     /* 0x01 */ u8 alphaDenom;
@@ -31,6 +47,47 @@ typedef struct EnGoEffect {
     /* 0x38 */ f32 scaleXYDelta;
 } EnGoEffect; // size = 0x3C;
 
+/**
+ * Goron Type, identified by bits [3..0] of the actor's params
+ *
+ * - The ENGO_STRETCHER and ENGO_SPECTATOR types share the same subtype domain (EnGoRacetrackSubtype: [0,7])
+ * - ENGO_BROTHER types have their own subtype domain (EnGoBrotherSubtype: [0,1])
+ * - Others have no subtypes.
+ */
+typedef enum EnGoType {
+    /* 0 */ ENGO_F_0 = 0,
+    /* 1 */ ENGO_STRETCHER,        // Racers stretching before the race
+    /* 2 */ ENGO_SPECTATOR,        // Spectators to the race
+    /* 3 */ ENGO_GATEKEEPER,       // Gatekeeper to the Goron Shrine
+    /* 4 */ ENGO_GRAVEBRO,         // Gravemaker and Gravemaker's brother
+    /* 5 */ ENGO_ASIDE_STORE,      // Shrine Goron outside store
+    /* 6 */ ENGO_ASIDE_ELDERSROOM, // Shrine Goron outside Elder's room
+    /* 7 */ ENGO_ASIDE_ELDERSSON,  // Shrine Goron aside the Elder's Son
+    /* 8 */ ENGO_MEDIGORON,        // Medigoron selling Powder Kegs
+} EnGoType;
+
+/**
+ * Subtype for Gorons at the racetrack (ENGO_STRETCHER and ENGO_SPECTATOR)
+ */
+typedef enum EnGoRacetrackSubtype {
+    /* 0 */ ENGO_STRETCHER_A = 0,
+    /* 1 */ ENGO_STRETCHER_B,
+    /* 2 */ ENGO_STRETCHER_C,
+    /* 3 */ ENGO_STRETCHER_D,
+    /* 4 */ ENGO_STRETCHER_HAMSTRINGSIT,
+    /* 5 */ ENGO_STRETCHER_HAMSTRINGSTAND,
+    /* 6 */ ENGO_SPECTATOR_CHEER,
+    /* 7 */ ENGO_SPECTATOR_SHOUTING,
+} EnGoRacetrackSubtype;
+
+/**
+ * Subtype for Goron brothers outside Daramani's grave (ENGO_GRAVEBRO)
+ */
+typedef enum EnGoBrotherSubtype {
+    /* 0 */ ENGO_GRAVEBRO_GRAVEMAKER = 0,
+    /* 1 */ ENGO_GRAVEBRO_FROZEN,
+} EnGoBrotherSubtype;
+
 typedef struct EnGo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -38,7 +95,7 @@ typedef struct EnGo {
     /* 0x18C */ EnGoActionFunc interruptedActionFunc;
     /* 0x190 */ EnGoActionFunc graveBroDialogActionFunc;
     /* 0x194 */ ColliderCylinder colliderCylinder;
-    /* 0x1E0 */ UNK_TYPE1 unk1E0[0x4C];
+    /* 0x1E0 */ ColliderCylinder unusedCylinder;
     /* 0x22C */ ColliderSphere colliderSphere;
     /* 0x284 */ Path* gatekeeperPath;
     /* 0x288 */ s8 objIndexTaisou;
@@ -79,7 +136,7 @@ typedef struct EnGo {
     /* 0x3C8 */ s16 limbRotTableZ[3];
     /* 0x3CE */ s16 limbRotTableY[3];
     /* 0x3D4 */ s16 surprisePhase;
-    /* 0x3D8 */ void* msgEventFunc;
+    /* 0x3D8 */ MsgEventFunc msgEventFunc;
     /* 0x3DC */ s32 currAnimIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
@@ -89,40 +146,5 @@ typedef struct EnGo {
     /* 0x3F4 */ s32 changedText;
     /* 0x3F8 */ EnGoEffect effectTable[ENGO_EFFECT_COUNT];
 } EnGo; // size = 0xB78
-
-/**
- * Goron Type, identified by bits [3..0] of the actor's params
- *
- * - The ENGO_STRETCHER and ENGO_SPECTATOR types share the same subtype domain (EnGoGoronRaceSubtype: [0,7])
- * - ENGO_BROTHER types have their own subtype domain (EnGoBrotherSubtype: [0,1])
- * - Others have no subtypes.
- */
-typedef enum EnGoType {
-    /* 0 */ ENGO_F_0 = 0,
-    /* 1 */ ENGO_STRETCHER,        // Racers stretching before the Goron Race
-    /* 2 */ ENGO_SPECTATOR,        // Spectators to the Goron Race
-    /* 3 */ ENGO_GATEKEEPER,       // Gatekeeper to the Goron Shrine
-    /* 4 */ ENGO_GRAVEBRO,         // GraveMaker and Gravemaker's Brother
-    /* 5 */ ENGO_ASIDE_STORE,      // Shrine Goron Outside Store
-    /* 6 */ ENGO_ASIDE_ELDERSROOM, // Shrine Goron Outside Elder's room
-    /* 7 */ ENGO_ASIDE_ELDERSSON,  // Shrine Goron Stage Left of throne
-    /* 8 */ ENGO_MEDIGORON,        // Medigoron selling Powder Kegs
-} EnGoType;
-
-typedef enum EnGoGoronRaceSubtype {
-    /* 0 */ ENGO_STRETCHER_A = 0,
-    /* 1 */ ENGO_STRETCHER_B,
-    /* 2 */ ENGO_STRETCHER_C,
-    /* 3 */ ENGO_STRETCHER_D,
-    /* 4 */ ENGO_STRETCHER_HAMSTRINGSIT,
-    /* 5 */ ENGO_STRETCHER_HAMSTRINGSTAND,
-    /* 6 */ ENGO_SPECTATOR_CHEER,
-    /* 7 */ ENGO_SPECTATOR_SHOUTING,
-} EnGoGoronRaceSubtype;
-
-typedef enum EnGoBrotherSubtype {
-    /* 0 */ ENGO_GRAVEBRO_GRAVEMAKER = 0,
-    /* 1 */ ENGO_GRAVEBRO_FROZEN,
-} EnGoBrotherSubtype;
 
 #endif // Z_EN_GO_H
