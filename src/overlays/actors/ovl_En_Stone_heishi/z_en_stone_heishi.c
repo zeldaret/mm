@@ -265,12 +265,13 @@ void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi* this) {
 }
 
 void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
-    s32 itemAction;
+    PlayerItemAction itemAction;
 
     SkelAnime_Update(&this->skelAnime);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemAction = func_80123810(play);
+
         if (itemAction > PLAYER_IA_NONE) {
             this->timer = 40;
             func_801477B4(play);

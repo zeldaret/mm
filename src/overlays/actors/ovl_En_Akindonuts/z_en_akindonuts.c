@@ -1040,7 +1040,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
-    s32 itemAction = func_80123810(play);
+    PlayerItemAction itemAction = func_80123810(play);
 
     if (itemAction > PLAYER_IA_NONE) {
         if (itemAction == PLAYER_IA_DEED_LAND) {

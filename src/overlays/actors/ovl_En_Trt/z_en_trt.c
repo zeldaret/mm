@@ -1380,7 +1380,7 @@ void EnTrt_OpenEyesThenSetToBlink(EnTrt* this) {
 void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
     u8 talkState = talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
-    s32 itemGiven;
+    PlayerItemAction itemAction;
 
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
@@ -1391,16 +1391,16 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_16) {
-        itemGiven = func_80123810(play);
-        if (itemGiven > PLAYER_IA_NONE) {
-            if (itemGiven == PLAYER_IA_BOTTLE_MUSHROOM) {
+        itemAction = func_80123810(play);
+        if (itemAction > PLAYER_IA_NONE) {
+            if (itemAction == PLAYER_IA_BOTTLE_MUSHROOM) {
                 if (gSaveContext.save.weekEventReg[53] & 8) {
                     player->actor.textId = 0x888;
                 } else {
                     player->actor.textId = 0x883;
                 }
                 this->textId = player->actor.textId;
-                player->exchangeItemId = itemGiven;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
                 if (this->flags & ENTRT_GIVEN_MUSHROOM) {
@@ -1412,7 +1412,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             func_801477B4(play);
-        } else if (itemGiven <= PLAYER_IA_MINUS1) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {

@@ -576,9 +576,9 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
-s32 func_80123810(PlayState* play) {
+PlayerItemAction func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 temp_v0;
+    PlayerItemAction itemAction;
     ItemId itemId;
     s32 i;
 
@@ -587,7 +587,7 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
-            return -1;
+            return PLAYER_IA_MINUS1;
         }
     } else {
         gSaveContext.save.unk_06--;
@@ -602,19 +602,19 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
+            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId, i)) <= PLAYER_IA_MINUS1)) {
                 play_sound(NA_SE_SY_ERROR);
-                return -1;
+                return PLAYER_IA_MINUS1;
             } else {
                 s32 pad;
 
                 player->heldItemButton = i;
-                return temp_v0;
+                return itemAction;
             }
         }
     }
 
-    return 0;
+    return PLAYER_IA_NONE;
 }
 
 // Used to map action params to model groups

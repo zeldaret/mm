@@ -236,7 +236,7 @@ typedef enum {
 s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     EnBjt* this = THIS;
-    s32 itemAP;
+    PlayerItemAction itemAction;
     s32 scriptBranch = 0;
 
     switch (this->behaviour) {
@@ -249,19 +249,20 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                     }
                     // Fallthrough
                 case TEXT_STATE_16:
-                    itemAP = func_80123810(play);
-                    if ((itemAP == PLAYER_IA_DEED_LAND) || (itemAP == PLAYER_IA_LETTER_TO_KAFEI) ||
-                        (itemAP == PLAYER_IA_DEED_SWAMP) || (itemAP == PLAYER_IA_DEED_MOUNTAIN) ||
-                        (itemAP == PLAYER_IA_DEED_OCEAN) || (itemAP == PLAYER_IA_LETTER_MAMA)) {
+                    itemAction = func_80123810(play);
+
+                    if ((itemAction == PLAYER_IA_DEED_LAND) || (itemAction == PLAYER_IA_LETTER_TO_KAFEI) ||
+                        (itemAction == PLAYER_IA_DEED_SWAMP) || (itemAction == PLAYER_IA_DEED_MOUNTAIN) ||
+                        (itemAction == PLAYER_IA_DEED_OCEAN) || (itemAction == PLAYER_IA_LETTER_MAMA)) {
                         EnBjt_ChangeAnim(this, TOILET_HAND_ANIM_WAITING_MORPH);
                         this->playedSfx = false;
                         this->behaviour++;
                         scriptBranch = 1; // Right item
-                    } else if (itemAP < 0) {
+                    } else if (itemAction <= PLAYER_IA_MINUS1) {
                         this->playedSfx = false;
                         this->behaviour++;
                         scriptBranch = 3; // Not showing item
-                    } else if (itemAP != 0) {
+                    } else if (itemAction != PLAYER_IA_NONE) {
                         this->playedSfx = false;
                         this->behaviour++;
                         scriptBranch = 2; // Wrong item

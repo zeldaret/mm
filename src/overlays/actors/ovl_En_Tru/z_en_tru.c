@@ -827,7 +827,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 s32 func_80A8777C(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
     s32 ret = 0;
-    s32 itemAction;
+    PlayerItemAction itemAction;
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
@@ -838,6 +838,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
         // Fallthrough
         case TEXT_STATE_16:
             itemAction = func_80123810(play);
+
             if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->unk_34E |= 8;
                 if (itemAction == PLAYER_IA_BOTTLE_POTION_RED) {

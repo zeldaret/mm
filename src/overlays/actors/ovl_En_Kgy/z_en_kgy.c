@@ -518,7 +518,7 @@ void func_80B41A48(EnKgy* this, PlayState* play) {
 }
 
 void func_80B41ACC(EnKgy* this, PlayState* play) {
-    s32 itemAction;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);

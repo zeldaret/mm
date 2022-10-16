@@ -948,12 +948,13 @@ void func_80B9854C(EnZot* this, PlayState* play) {
 }
 
 void func_80B985EC(EnZot* this, PlayState* play) {
-    s32 itemAction;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     func_80B98348(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemAction = func_80123810(play);
+
         if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
             if ((itemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
