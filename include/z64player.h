@@ -779,7 +779,7 @@ typedef struct Player {
     /* 0x37E */ s8 doorTimer;
     /* 0x37F */ s8 doorNext; // used with spiral staircase
     /* 0x380 */ Actor* doorActor;
-    /* 0x384 */ s16 getItemId; // GetItemID enum
+    /* 0x384 */ s16 getItemId; // GetItemId enum
     /* 0x386 */ u16 getItemDirection;
     /* 0x388 */ Actor* interactRangeActor;
     /* 0x38C */ s8 mountSide;

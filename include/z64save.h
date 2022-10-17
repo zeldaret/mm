@@ -435,7 +435,7 @@ typedef enum SunsSongState {
 #define C_BTN_ITEM(btn)                                 \
     ((gSaveContext.buttonStatus[(btn)] != BTN_DISABLED) \
          ? BUTTON_ITEM_EQUIP(0, (btn))                  \
-         : ((gSaveContext.unk_3F22 == 0x10) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
+         : ((gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C) ? BUTTON_ITEM_EQUIP(0, (btn)) : ITEM_NONE))
 
 #define SET_CUR_FORM_BTN_ITEM(btn, item)             \
     if ((btn) == EQUIP_SLOT_B) {                     \
