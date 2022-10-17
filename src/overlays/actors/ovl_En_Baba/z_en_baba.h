@@ -58,6 +58,4 @@ typedef struct EnBaba {
     /* 0x43C */ s32 timePathHasReachedEnd;
 } EnBaba; // size = 0x440
 
-extern const ActorInit En_Baba_InitVars;
-
 #endif // Z_EN_BABA_H

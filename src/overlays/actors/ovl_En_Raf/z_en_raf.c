@@ -67,7 +67,7 @@ typedef enum {
     /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } EnRafPetalScaleType;
 
-const ActorInit En_Raf_InitVars = {
+ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
     ACTORCAT_PROP,
     FLAGS,
@@ -343,7 +343,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             zDiff = explosive->world.pos.z - this->dyna.actor.world.pos.z;
             if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
                 (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
-                Actor_MarkForDeath(explosive);
+                Actor_Kill(explosive);
                 this->grabTarget = EN_RAF_GRAB_TARGET_EXPLOSIVE;
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;

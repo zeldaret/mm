@@ -15,7 +15,7 @@
 void EnRr_Init(Actor* thisx, PlayState* play);
 void EnRr_Destroy(Actor* thisx, PlayState* play);
 void EnRr_Update(Actor* thisx, PlayState* play);
-void EnRr_Draw(Actor* thisx, PlayState* play);
+void EnRr_Draw(Actor* thisx, PlayState* play2);
 
 void func_808FAF94(EnRr* this, PlayState* play);
 void func_808FB088(EnRr* this, PlayState* play);
@@ -28,7 +28,7 @@ void func_808FB710(EnRr* this, PlayState* play);
 void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
-const ActorInit En_Rr_InitVars = {
+ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -118,7 +118,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 45, 60, 250 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 55, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_LIKE_LIKE, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
@@ -715,8 +715,11 @@ void func_808FB42C(EnRr* this, PlayState* play) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_SHIELD_HERO);
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_1E4 == 88) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_1E4 == 88) {
         Vec3f sp74;
 
         sp74.x = this->actor.world.pos.x;

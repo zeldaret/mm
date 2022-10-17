@@ -40,6 +40,4 @@ typedef struct EnGe1 {
     /* 0x2C8 */ EnGe1ActionFunc actionFunc;
 } EnGe1; // size = 0x2CC
 
-extern const ActorInit En_Ge1_InitVars;
-
 #endif // Z_EN_GE1_H

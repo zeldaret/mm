@@ -43,7 +43,7 @@ void EnWallmas_WaitForProximity(EnWallmas* this, PlayState* play);
 void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
-const ActorInit En_Wallmas_InitVars = {
+ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -123,7 +123,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 30, 40, 150 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 48, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_WALLMASTER, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 5500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
@@ -171,7 +171,7 @@ void EnWallmas_Init(Actor* thisx, PlayState* play) {
 
     if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_FLAG) {
         if (Flags_GetSwitch(play, this->switchFlag)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -377,7 +377,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
 
     if (this->actor.playerHeightRel < -900.0f) {
         if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_FLAG) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -445,7 +445,7 @@ void EnWallmas_Die(EnWallmas* this, PlayState* play) {
     if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0015f)) {
         Actor_SetScale(&this->actor, 0.01f);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.scale.z = this->actor.scale.x;

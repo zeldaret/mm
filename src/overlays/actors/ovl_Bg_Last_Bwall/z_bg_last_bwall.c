@@ -25,7 +25,7 @@ typedef struct {
 void BgLastBwall_Init(Actor* thisx, PlayState* play);
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play);
 void BgLastBwall_Update(Actor* thisx, PlayState* play);
-void BgLastBwall_Draw(Actor* thisx, PlayState* play);
+void BgLastBwall_Draw(Actor* thisx, PlayState* play2);
 
 void BgLastBwall_InitCollider(ColliderTrisInit* init, Vec3f* pos, Vec3s* rot, ColliderTris* collider,
                               BgLastBwallInitColliderStruct* arg4);
@@ -37,7 +37,7 @@ void func_80C18884(BgLastBwall* this, PlayState* play);
 void func_80C188C4(BgLastBwall* this, PlayState* play);
 void BgLastBwall_DoNothing(BgLastBwall* this, PlayState* play);
 
-const ActorInit Bg_Last_Bwall_InitVars = {
+ActorInit Bg_Last_Bwall_InitVars = {
     ACTOR_BG_LAST_BWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -153,15 +153,19 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80C18A48[this->type].colHeader);
     Collider_InitTris(play, &this->colliderTris);
     if (Flags_GetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElement)) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot,
-                                 &this->colliderTris, D_80C18AC0[this->type]);
-        SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-        func_80C187E4(this);
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    if (!Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderTrisElement)) {
+        Actor_Kill(&this->dyna.actor);
+        return;
+    }
+
+    BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->colliderTris,
+                             D_80C18AC0[this->type]);
+    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    func_80C187E4(this);
 }
 
 void BgLastBwall_Destroy(Actor* thisx, PlayState* play) {

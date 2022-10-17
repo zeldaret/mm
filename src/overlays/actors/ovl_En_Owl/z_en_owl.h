@@ -56,6 +56,4 @@ typedef struct EnOwl {
     /* 0x414 */ EnOwlFunc unk_414;
 } EnOwl; // size = 0x418
 
-extern const ActorInit En_Owl_InitVars;
-
 #endif // Z_EN_OWL_H

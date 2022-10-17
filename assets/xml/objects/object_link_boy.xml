@@ -63,22 +63,22 @@
         <Limb Name="gLinkFierceDeityRootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_ROOT" Offset="0xD6D4" />
         <Limb Name="gLinkFierceDeityWaistLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_WAIST" Offset="0xD6E4" />
         <Limb Name="gLinkFierceDeityLowerRootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LOWER_ROOT" Offset="0xD6F4" />
-        <Limb Name="gLinkFierceDeityRightThighLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_THIGH" Offset="0xD704" />
-        <Limb Name="gLinkFierceDeityRightShinLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_SHIN" Offset="0xD714" />
-        <Limb Name="gLinkFierceDeityRightFootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_FOOT" Offset="0xD724" />
-        <Limb Name="gLinkFierceDeityLeftThighLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_L_THIGH" Offset="0xD734" />
-        <Limb Name="gLinkFierceDeityLeftShinLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_L_SHIN" Offset="0xD744" />
-        <Limb Name="gLinkFierceDeityLeftFootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_L_FOOT" Offset="0xD754" />
+        <Limb Name="gLinkFierceDeityRightThighLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_RIGHT_THIGH" Offset="0xD704" />
+        <Limb Name="gLinkFierceDeityRightShinLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_RIGHT_SHIN" Offset="0xD714" />
+        <Limb Name="gLinkFierceDeityRightFootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_RIGHT_FOOT" Offset="0xD724" />
+        <Limb Name="gLinkFierceDeityLeftThighLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LEFT_THIGH" Offset="0xD734" />
+        <Limb Name="gLinkFierceDeityLeftShinLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LEFT_SHIN" Offset="0xD744" />
+        <Limb Name="gLinkFierceDeityLeftFootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LEFT_FOOT" Offset="0xD754" />
         <Limb Name="gLinkFierceDeityUpperRootLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_UPPER_ROOT" Offset="0xD764" />
         <Limb Name="gLinkFierceDeityHeadLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_HEAD" Offset="0xD774" />
         <Limb Name="gLinkFierceDeityHatLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_HAT" Offset="0xD784" />
         <Limb Name="gLinkFierceDeityCollarLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_COLLAR" Offset="0xD794" />
-        <Limb Name="gLinkFierceDeityLeftShoulderLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_L_SHOULDER" Offset="0xD7A4" />
-        <Limb Name="gLinkFierceDeityLeftForearmLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_L_FOREARM" Offset="0xD7B4" />
-        <Limb Name="gLinkFierceDeityLeftHandLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_L_HAND" Offset="0xD7C4" />
-        <Limb Name="gLinkFierceDeityRightShoulderLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_SHOULDER" Offset="0xD7D4" />
-        <Limb Name="gLinkFierceDeityRightForearmLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_FOREARM" Offset="0xD7E4" />
-        <Limb Name="gLinkFierceDeityRightHandLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_R_HAND" Offset="0xD7F4" />
+        <Limb Name="gLinkFierceDeityLeftShoulderLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LEFT_SHOULDER" Offset="0xD7A4" />
+        <Limb Name="gLinkFierceDeityLeftForearmLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LEFT_FOREARM" Offset="0xD7B4" />
+        <Limb Name="gLinkFierceDeityLeftHandLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_LEFT_HAND" Offset="0xD7C4" />
+        <Limb Name="gLinkFierceDeityRightShoulderLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_RIGHT_SHOULDER" Offset="0xD7D4" />
+        <Limb Name="gLinkFierceDeityRightForearmLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_RIGHT_FOREARM" Offset="0xD7E4" />
+        <Limb Name="gLinkFierceDeityRightHandLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_RIGHT_HAND" Offset="0xD7F4" />
         <Limb Name="gLinkFierceDeitySheathLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_SHEATH" Offset="0xD804" />
         <Limb Name="gLinkFierceDeityTorsoLimb" Type="LOD" EnumName="LINK_FIERCE_DEITY_LIMB_TORSO" Offset="0xD814" />
         <Skeleton Name="gLinkFierceDeitySkel" Type="Flex" LimbType="LOD" LimbNone="LINK_FIERCE_DEITY_LIMB_NONE" LimbMax="LINK_FIERCE_DEITY_LIMB_MAX" EnumName="LinkFierceDeityLimb" Offset="0xD878" />

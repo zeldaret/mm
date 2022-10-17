@@ -58,22 +58,22 @@
         <Limb Name="gLinkDekuRootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_ROOT" Offset="0xB880" />
         <Limb Name="gLinkDekuWaistLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_WAIST" Offset="0xB890" />
         <Limb Name="gLinkDekuLowerRootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LOWER_ROOT" Offset="0xB8A0" />
-        <Limb Name="gLinkDekuRightThighLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_THIGH" Offset="0xB8B0" />
-        <Limb Name="gLinkDekuRightShinLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_SHIN" Offset="0xB8C0" />
-        <Limb Name="gLinkDekuRightFootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_FOOT" Offset="0xB8D0" />
-        <Limb Name="gLinkDekuLeftThighLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_L_THIGH" Offset="0xB8E0" />
-        <Limb Name="gLinkDekuLeftShinLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_L_SHIN" Offset="0xB8F0" />
-        <Limb Name="gLinkDekuLeftFootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_L_FOOT" Offset="0xB900" />
+        <Limb Name="gLinkDekuRightThighLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_RIGHT_THIGH" Offset="0xB8B0" />
+        <Limb Name="gLinkDekuRightShinLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_RIGHT_SHIN" Offset="0xB8C0" />
+        <Limb Name="gLinkDekuRightFootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_RIGHT_FOOT" Offset="0xB8D0" />
+        <Limb Name="gLinkDekuLeftThighLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LEFT_THIGH" Offset="0xB8E0" />
+        <Limb Name="gLinkDekuLeftShinLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LEFT_SHIN" Offset="0xB8F0" />
+        <Limb Name="gLinkDekuLeftFootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LEFT_FOOT" Offset="0xB900" />
         <Limb Name="gLinkDekuUpperRootLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_UPPER_ROOT" Offset="0xB910" />
         <Limb Name="gLinkDekuHeadLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_HEAD" Offset="0xB920" />
         <Limb Name="gLinkDekuHatLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_HAT" Offset="0xB930" />
         <Limb Name="gLinkDekuCollarLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_COLLAR" Offset="0xB940" />
-        <Limb Name="gLinkDekuLeftShoulderLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_L_SHOULDER" Offset="0xB950" />
-        <Limb Name="gLinkDekuLeftForearmLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_L_FOREARM" Offset="0xB960" />
-        <Limb Name="gLinkDekuLeftHandLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_L_HAND" Offset="0xB970" />
-        <Limb Name="gLinkDekuRightShoulderLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_SHOULDER" Offset="0xB980" />
-        <Limb Name="gLinkDekuRightForearmLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_FOREARM" Offset="0xB990" />
-        <Limb Name="gLinkDekuRightHandLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_R_HAND" Offset="0xB9A0" />
+        <Limb Name="gLinkDekuLeftShoulderLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LEFT_SHOULDER" Offset="0xB950" />
+        <Limb Name="gLinkDekuLeftForearmLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LEFT_FOREARM" Offset="0xB960" />
+        <Limb Name="gLinkDekuLeftHandLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_LEFT_HAND" Offset="0xB970" />
+        <Limb Name="gLinkDekuRightShoulderLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_RIGHT_SHOULDER" Offset="0xB980" />
+        <Limb Name="gLinkDekuRightForearmLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_RIGHT_FOREARM" Offset="0xB990" />
+        <Limb Name="gLinkDekuRightHandLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_RIGHT_HAND" Offset="0xB9A0" />
         <Limb Name="gLinkDekuSheathLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_SHEATH" Offset="0xB9B0" />
         <Limb Name="gLinkDekuTorsoLimb" Type="LOD" EnumName="LINK_DEKU_LIMB_TORSO" Offset="0xB9C0" />
         <Skeleton Name="gLinkDekuSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_DEKU_LIMB_NONE" LimbMax="LINK_DEKU_LIMB_MAX" EnumName="LinkDekuLimb" Offset="0xBA24" />

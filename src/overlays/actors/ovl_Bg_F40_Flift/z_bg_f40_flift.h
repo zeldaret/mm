@@ -13,6 +13,4 @@ typedef struct BgF40Flift {
     /* 0x160 */ s32 timer;
 } BgF40Flift; // size = 0x164
 
-extern const ActorInit Bg_F40_Flift_InitVars;
-
 #endif // Z_BG_F40_FLIFT_H

@@ -56,7 +56,7 @@ void EnBox_Open(EnBox* this, PlayState* play);
 void func_80867FBC(func_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(func_80867BDC_a0* arg0, PlayState* play);
 
-const ActorInit En_Box_InitVars = {
+ActorInit En_Box_InitVars = {
     ACTOR_EN_BOX,
     ACTORCAT_CHEST,
     FLAGS,
@@ -482,7 +482,7 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
                                this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                                this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
                                -1);
-            func_801A3098(0x2B | 0x900);
+            Audio_PlayFanfare(NA_BGM_OPEN_CHEST | 0x900);
         }
 
         if (this->getItemId == GI_STRAY_FAIRY) {
@@ -604,7 +604,7 @@ void EnBox_Update(Actor* thisx, PlayState* play) {
         EnBox_ClipToGround(this, play);
     }
     if ((this->getItemId == GI_STRAY_FAIRY) && !Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
-        play->actorCtx.unk5 |= 8;
+        play->actorCtx.flags |= ACTORCTX_FLAG_3;
     }
     this->actionFunc(this, play);
     if (this->movementFlags & ENBOX_MOVE_0x80) {

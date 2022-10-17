@@ -10,6 +10,4 @@ typedef struct BgLbfshot {
     /* 0x15C */ UNK_TYPE1 pad15C[0x4];
 } BgLbfshot; // size = 0x160
 
-extern const ActorInit Bg_Lbfshot_InitVars;
-
 #endif // Z_BG_LBFSHOT_H

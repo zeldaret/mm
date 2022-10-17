@@ -152,6 +152,4 @@ typedef struct EnInvadepoh {
     /* 0x3BC */ s8 unk3BC;
 } EnInvadepoh; // size = 0x3C0
 
-extern const ActorInit En_Invadepoh_InitVars;
-
 #endif // Z_EN_INVADEPOH_H

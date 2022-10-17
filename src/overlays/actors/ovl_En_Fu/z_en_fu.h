@@ -52,6 +52,4 @@ typedef struct EnFu {
     /* 0x552 */ u16 unk_552;
 } EnFu; // size = 0x554
 
-extern const ActorInit En_Fu_InitVars;
-
 #endif // Z_EN_FU_H

@@ -21,6 +21,4 @@ typedef struct ObjIcePoly {
     /* 0x1E4 */ ColliderCylinder colliders2[2];
 } ObjIcePoly; // size = 0x27C
 
-extern const ActorInit Obj_Ice_Poly_InitVars;
-
 #endif // Z_OBJ_ICE_POLY_H

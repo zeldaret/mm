@@ -16,7 +16,7 @@
 
 #define THIS ((BgIkanaMirror*)thisx)
 
-void BgIkanaMirror_Init(Actor* thisx, PlayState* play);
+void BgIkanaMirror_Init(Actor* thisx, PlayState* play2);
 void BgIkanaMirror_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaMirror_Update(Actor* thisx, PlayState* play);
 void BgIkanaMirror_Draw(Actor* thisx, PlayState* play);
@@ -26,7 +26,7 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play);
 void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this);
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Mirror_InitVars = {
+ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,
     ACTORCAT_PROP,
     FLAGS,

@@ -54,7 +54,7 @@ typedef struct {
 
 // Maps scenes to SpiralObjectType
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 objectType;
 } SpiralSceneInfo;
 
@@ -67,7 +67,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play);
 void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
 
-const ActorInit Door_Spiral_InitVars = {
+ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
     FLAGS,
@@ -116,7 +116,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, PlayState* play) {
     this->spiralType = doorObjectInfo->spiralType;
 
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.currRoom.enablePosLights)) {
+        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.curRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
@@ -147,7 +147,7 @@ s32 DoorSpiral_GetObjectType(PlayState* play) {
     s32 type;
 
     for (i = 0; i < ARRAY_COUNT(spiralSceneInfo); sceneInfo++, i++) {
-        if (play->sceneNum == sceneInfo->sceneNum) {
+        if (play->sceneId == sceneInfo->sceneId) {
             break;
         }
     }
@@ -179,7 +179,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     s8 objBankId;
 
     if (this->actor.room != play->doorCtx.transitionActorList[transition].sides[0].room) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -191,7 +191,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     this->bankIndex = objBankId;
 
     if (objBankId < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

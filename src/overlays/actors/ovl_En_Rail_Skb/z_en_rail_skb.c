@@ -50,7 +50,7 @@ void func_80B726B4(EnRailSkb* this, PlayState* play);
 void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
-const ActorInit En_Rail_Skb_InitVars = {
+ActorInit En_Rail_Skb_InitVars = {
     ACTOR_EN_RAIL_SKB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -248,7 +248,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
     while (actor != NULL) {
         if ((actor->id == ACTOR_OBJ_HAKAISI) && func_80B70B04(this, actor->world.pos)) {
             if (Flags_GetSwitch(play, (actor->params & 0xFF00) >> 8)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->unk_22C = (ObjHakaisi*)actor;
@@ -256,7 +256,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
         }
         actor = actor->next;
     }
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 static InitChainEntry sInitChain[] = {
@@ -277,12 +277,12 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (Flags_GetSwitch(play, ENRAILSKB_GET_FF(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.speedXZ = 1.6f;
-    this->actor.hintId = 0x55;
+    this->actor.hintId = TATL_HINT_ID_STALCHILD;
     this->unk_3F2 = 0;
     this->unk_2E4 = -1;
     this->unk_3FC = 0;
@@ -296,7 +296,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
         this->unk_3F8 = 0;
     }
 
-    if ((play->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -635,7 +635,7 @@ void func_80B71BB8(EnRailSkb* this, PlayState* play) {
     }
 
     if (this->actor.bgCheckFlags & 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -825,7 +825,7 @@ void func_80B723F8(EnRailSkb* this) {
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->actor.flags |= ACTOR_FLAG_100000;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_HINT_ID_NONE;
     this->actor.textId = 0;
 }
 
@@ -926,7 +926,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 this->actor.flags |= ACTOR_FLAG_100000;
-                this->actor.hintId = 0xFF;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 func_80B71650(this);
             }
@@ -934,7 +934,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
             this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
             this->actor.flags &= ~ACTOR_FLAG_100000;
             this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
-            this->actor.hintId = 0x55;
+            this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             func_80B70FA0(this);
         }

@@ -33,7 +33,7 @@ void func_80A3A77C(EnElfgrp* this, PlayState* play);
 void func_80A3A7FC(EnElfgrp* this, PlayState* play);
 void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 
-const ActorInit En_Elfgrp_InitVars = {
+ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
     ACTORCAT_PROP,
     FLAGS,
@@ -99,7 +99,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                         break;
 
                     case ENELFGRP_2:
-                        if (gSaveContext.save.playerData.doubleMagic == true) {
+                        if (gSaveContext.save.playerData.isDoubleMagicAcquired == true) {
                             func_80A396B0(this, 1);
                         }
                         break;
@@ -156,7 +156,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                         func_80A396B0(this, 3);
                         this->unk_14A |= 2;
                     }
-                } else if (gSaveContext.save.playerData.magicAcquired == true) {
+                } else if (gSaveContext.save.playerData.isMagicAcquired == true) {
                     func_80A396B0(this, 1);
                 }
             } else {
@@ -205,13 +205,13 @@ s32 func_80A39C1C(PlayState* play, s32 arg1) {
     }
 
     if (arg1 == 0) {
-        if (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 1) {
+        if (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1) {
             return 25;
         }
         return 24;
     }
 
-    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
+    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
     if (temp_v1 < 10) {
         temp_v1 = 10;
     } else if (temp_v1 > 25) {
@@ -227,13 +227,13 @@ void func_80A39CD4(PlayState* play, s32 arg1, s32 arg2) {
 
     if (arg1 == 0) {
         if (arg2 == 25) {
-            gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 1;
+            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
         } else {
-            gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~1;
+            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~1;
         }
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= arg2 << ((arg1 * 5) - 4);
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg2 << ((arg1 * 5) - 4);
     }
 }
 
@@ -477,8 +477,7 @@ void func_80A3A610(EnElfgrp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_144 == 60) {
-        Parameter_AddMagic(play,
-                           ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
+        Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         gSaveContext.healthAccumulator = 320;
     }
 

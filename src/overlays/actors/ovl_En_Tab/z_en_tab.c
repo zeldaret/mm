@@ -66,7 +66,7 @@ s32 D_80BE1A0C[] = {
     0x0C103012, 0x14FFEC06, 0x00920000, 0x1300920C, 0x10300034, 0x0100050E, 0x2B100C10, 0x0E2B110C, 0x10000000,
 };
 
-const ActorInit En_Tab_InitVars = {
+ActorInit En_Tab_InitVars = {
     ACTOR_EN_TAB,
     ACTORCAT_NPC,
     FLAGS,
@@ -323,7 +323,7 @@ s32 func_80BE0D60(EnTab* this, PlayState* play) {
 
     this->unk_320++;
     if (this->unk_320 == 1) {
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00D568, ANIMMODE_ONCE);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_demo_bikkuri, ANIMMODE_ONCE);
     } else if (this->unk_320 > 20) {
         play->setPlayerTalkAnim(play, NULL, ANIMMODE_LOOP);
         this->unk_320 = 0;

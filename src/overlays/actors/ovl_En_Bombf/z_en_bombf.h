@@ -26,6 +26,4 @@ typedef struct EnBombf {
     /* 0x204 */ f32 unk_204;
 } EnBombf; // size = 0x208
 
-extern const ActorInit En_Bombf_InitVars;
-
 #endif // Z_EN_BOMBF_H

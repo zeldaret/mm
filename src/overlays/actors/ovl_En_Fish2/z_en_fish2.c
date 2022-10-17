@@ -16,7 +16,7 @@
 
 void EnFish2_Init(Actor* thisx, PlayState* play);
 void EnFish2_Destroy(Actor* thisx, PlayState* play);
-void EnFish2_Update(Actor* thisx, PlayState* play);
+void EnFish2_Update(Actor* thisx, PlayState* play2);
 void EnFish2_Draw(Actor* thisx, PlayState* play);
 
 void func_80B28B5C(EnFish2* this);
@@ -49,7 +49,7 @@ static s32 D_80B2B2EC = 0;
 static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
-const ActorInit En_Fish2_InitVars = {
+ActorInit En_Fish2_InitVars = {
     ACTOR_EN_FISH2,
     ACTORCAT_PROP,
     FLAGS,
@@ -527,7 +527,7 @@ void func_80B2951C(EnFish2* this) {
 
     this->unk_2B4 = 10;
     this->actor.speedXZ = 3.0f;
-    Actor_MarkForDeath(this->unk_350);
+    Actor_Kill(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_M_EAT);
@@ -806,7 +806,7 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
     if (D_80B2B2EC != 0) {
         D_80B2B2EC++;
         if (D_80B2B2EC > 200) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             ActorCutscene_Stop(this->unk_2BA[0]);
             return;
         }
@@ -863,7 +863,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;
         D_80B2B2F4 = NULL;
         ActorCutscene_Stop(this->unk_2BA[0]);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

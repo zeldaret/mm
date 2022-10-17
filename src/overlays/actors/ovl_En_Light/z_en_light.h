@@ -20,6 +20,4 @@ typedef struct EnLight {
     /* 0x14C */ LightInfo lightInfo;
 } EnLight; // size = 0x15C
 
-extern const ActorInit En_Light_InitVars;
-
 #endif // Z_EN_LIGHT_H

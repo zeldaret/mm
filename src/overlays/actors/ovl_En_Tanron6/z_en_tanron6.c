@@ -1,7 +1,7 @@
 /*
  * File: z_en_tanron6.c
  * Overlay: ovl_En_Tanron6
- * Description: Swarm of Giant Bees
+ * Description: Unused invisible enemy. Only draws a circle shadow.
  */
 
 #include "z_en_tanron6.h"
@@ -18,7 +18,7 @@ void EnTanron6_Draw(Actor* thisx, PlayState* play);
 void EnTanron6_DoNothing(EnTanron6* this);
 void func_80BE60D0(EnTanron6* this, PlayState* play);
 
-const ActorInit En_Tanron6_InitVars = {
+ActorInit En_Tanron6_InitVars = {
     ACTOR_EN_TANRON6,
     ACTORCAT_ENEMY,
     FLAGS,

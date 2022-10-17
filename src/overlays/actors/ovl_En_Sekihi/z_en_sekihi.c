@@ -24,7 +24,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play);
 void func_80A450B0(EnSekihi* this, PlayState* play);
 void EnSekihi_DoNothing(EnSekihi* this, PlayState* play);
 
-const ActorInit En_Sekihi_InitVars = {
+ActorInit En_Sekihi_InitVars = {
     ACTOR_EN_SEKIHI,
     ACTORCAT_PROP,
     FLAGS,
@@ -54,23 +54,24 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
     s32 objectIndex;
     s32 pad;
 
-    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
-            gSaveContext.save.weekEventReg[13] |= 0x20;
-        }
-        objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
-        if (objectIndex >= 0) {
-            this->objectIndex = objectIndex;
-        }
-        this->actionFunc = func_80A44DE8;
-        this->opaDList = sOpaDLists[params];
-        this->xluDList = sXluDLists[params];
-        this->dyna.actor.textId = sTextIds[params];
-        this->dyna.actor.focus.pos.y = this->dyna.actor.world.pos.y + 60.0f;
-        Actor_SetScale(&this->dyna.actor, 0.1f);
+    if (((params < SEKIHI_TYPE_0) || (params >= SEKIHI_TYPE_MAX)) || sOpaDLists[params] == NULL) {
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    if ((params == SEKIHI_TYPE_4) && ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30)) {
+        gSaveContext.save.weekEventReg[13] |= 0x20;
+    }
+    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
+    if (objectIndex >= 0) {
+        this->objectIndex = objectIndex;
+    }
+    this->actionFunc = func_80A44DE8;
+    this->opaDList = sOpaDLists[params];
+    this->xluDList = sXluDLists[params];
+    this->dyna.actor.textId = sTextIds[params];
+    this->dyna.actor.focus.pos.y = this->dyna.actor.world.pos.y + 60.0f;
+    Actor_SetScale(&this->dyna.actor, 0.1f);
 }
 
 void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
@@ -104,7 +105,7 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
 
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
         if ((params == SEKIHI_TYPE_4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     }
 }

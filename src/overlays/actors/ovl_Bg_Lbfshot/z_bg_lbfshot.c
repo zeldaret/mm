@@ -15,7 +15,7 @@ void BgLbfshot_Init(Actor* thisx, PlayState* play);
 void BgLbfshot_Destroy(Actor* thisx, PlayState* play);
 void BgLbfshot_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Lbfshot_InitVars = {
+ActorInit Bg_Lbfshot_InitVars = {
     ACTOR_BG_LBFSHOT,
     ACTORCAT_BG,
     FLAGS,

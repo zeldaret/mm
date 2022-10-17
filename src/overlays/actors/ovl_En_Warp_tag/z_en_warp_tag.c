@@ -24,7 +24,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play);
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
-const ActorInit En_Warp_tag_InitVars = {
+ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -59,7 +59,7 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
 
         } else {
             if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
 
             this->actionFunc = EnWarpTag_CheckDungeonKeepObject;
@@ -247,8 +247,8 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
         if (1) {}
-        gSaveContext.seqIndex = 0xFF;
-        gSaveContext.nightSeqIndex = 0xFF;
+        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }
 }
 

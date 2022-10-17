@@ -69,7 +69,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void);
 s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
-const ActorInit En_Ma_Yto_InitVars = {
+ActorInit En_Ma_Yto_InitVars = {
     ACTOR_EN_MA_YTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -163,7 +163,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     this->blinkTimer = 100;
     this->type = EN_MA_YTO_GET_TYPE(&this->actor);
     if (!EnMaYto_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -881,7 +881,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
     if (gSaveContext.save.weekEventReg[52] & 1) { // if (ProtectedCremia)
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(NA_BGM_FAILURE_1);
+        Audio_PlayFanfare(NA_BGM_FAILURE_1);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = EnMaYto_AfterMilkRunInit;

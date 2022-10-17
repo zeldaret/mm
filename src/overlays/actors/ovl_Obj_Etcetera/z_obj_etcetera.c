@@ -20,7 +20,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play);
 void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play);
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Etcetera_InitVars = {
+ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
     ACTORCAT_BG,
     FLAGS,

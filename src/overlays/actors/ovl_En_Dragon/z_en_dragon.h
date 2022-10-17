@@ -61,6 +61,4 @@ typedef struct EnDragon {
     /* 0x2FC */ ColliderJntSphElement colliderElements[8];
 } EnDragon; // size = 0x4FC
 
-extern const ActorInit En_Dragon_InitVars;
-
 #endif // Z_EN_DRAGON_H

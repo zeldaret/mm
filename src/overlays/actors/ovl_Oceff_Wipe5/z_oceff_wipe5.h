@@ -3,13 +3,13 @@
 
 #include "global.h"
 
+#define OCEFF_WIPE5_GET_SONG_TYPE(thisx) ((thisx)->params & 0xF)
+
 struct OceffWipe5;
 
 typedef struct OceffWipe5 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ s16 counter;
 } OceffWipe5; // size = 0x148
-
-extern const ActorInit Oceff_Wipe5_InitVars;
 
 #endif // Z_OCEFF_WIPE5_H

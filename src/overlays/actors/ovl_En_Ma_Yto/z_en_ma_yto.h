@@ -30,8 +30,6 @@ typedef struct EnMaYto {
     /* 0x322 */ u16 textId;
 } EnMaYto; // size = 0x324
 
-extern const ActorInit En_Ma_Yto_InitVars;
-
 typedef enum {
     /* 0 */ MA_YTO_TYPE_DEFAULT, // Strokes cow on day 1
     /* 1 */ MA_YTO_TYPE_BARN,

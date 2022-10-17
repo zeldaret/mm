@@ -12,7 +12,7 @@
 
 void EnThiefbird_Init(Actor* thisx, PlayState* play);
 void EnThiefbird_Destroy(Actor* thisx, PlayState* play);
-void EnThiefbird_Update(Actor* thisx, PlayState* play);
+void EnThiefbird_Update(Actor* thisx, PlayState* play2);
 void EnThiefbird_Draw(Actor* thisx, PlayState* play);
 
 void func_80C11538(EnThiefbird* this);
@@ -32,7 +32,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play);
 void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, PlayState* play);
 
-const ActorInit En_Thiefbird_InitVars = {
+ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -136,7 +136,7 @@ static s16 D_80C13664[] = { ITEM00_ARROWS_10,  ITEM00_BOMBS_B,   ITEM00_RUPEE_GR
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 35, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_TAKKURI, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
@@ -166,12 +166,16 @@ void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 1) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
-        Actor_MarkForDeath(&this->actor);
-    } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        func_80C11538(this);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    func_80C11538(this);
 }
 
 void EnThiefbird_Destroy(Actor* thisx, PlayState* play) {
@@ -658,7 +662,7 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
             }
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -831,7 +835,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.x, 0x3000, 6, 0x1000);
     if (this->actor.playerHeightRel > 100.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

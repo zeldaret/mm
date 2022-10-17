@@ -11,7 +11,7 @@
 
 #define THIS ((EnTest7*)thisx)
 
-void EnTest7_Init(Actor* thisx, PlayState* play);
+void EnTest7_Init(Actor* thisx, PlayState* play2);
 void EnTest7_Destroy(Actor* thisx, PlayState* play);
 void EnTest7_Update(Actor* thisx, PlayState* play);
 void EnTest7_Draw(Actor* thisx, PlayState* play);
@@ -34,7 +34,7 @@ void func_80AF2EC8(EnTest7* this, PlayState* play);
 void func_80AF2F98(EnTest7* this, PlayState* play);
 void func_80AF30F4(EnTest7* this, PlayState* play);
 
-const ActorInit En_Test7_InitVars = {
+ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -409,11 +409,11 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     } else {
         func_80AF082C(this, func_80AF19A8);
         EnTest7_SetupAction(this, func_80AF2854);
-        func_801A2E54(NA_BGM_SONG_OF_SOARING);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
     if (play->playerActorCsIds[8] == -1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -594,11 +594,11 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
     subCam->fov = ((subCam->fov - this->subCamFov) * sp1C) + this->subCamFov;
 
     if (this->unk_1E54 >= 100) {
-        MREG(64) = 1;
-        MREG(65) = 255;
-        MREG(66) = 255;
-        MREG(67) = 255;
-        MREG(68) = 255;
+        R_PLAY_FILL_SCREEN_ON = true;
+        R_PLAY_FILL_SCREEN_R = 255;
+        R_PLAY_FILL_SCREEN_G = 255;
+        R_PLAY_FILL_SCREEN_B = 255;
+        R_PLAY_FILL_SCREEN_ALPHA = 255;
         play->unk_18844 = 0;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
@@ -612,13 +612,13 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
     Color_RGB8 sp24 = { 64, 0, 0 };
     Color_RGB8 sp20 = { 220, 220, 255 };
 
-    if (MREG(64) != 0) {
+    if (R_PLAY_FILL_SCREEN_ON) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
-        MREG(64) = 0;
-        MREG(65) = 0;
-        MREG(66) = 0;
-        MREG(67) = 0;
-        MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ON = false;
+        R_PLAY_FILL_SCREEN_R = 0;
+        R_PLAY_FILL_SCREEN_G = 0;
+        R_PLAY_FILL_SCREEN_B = 0;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
     }
 
     sp1C = 1.0f - (sp2C / 10.0f);
@@ -658,7 +658,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
 
     this->unk_148.unk_10 -= 0x2EE0;
 
-    if (play->sceneNum == SCENE_SECOM) {
+    if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);
@@ -677,8 +677,8 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
 
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_02;
-    gSaveContext.seqIndex = 0xFF;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
 
 void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
@@ -762,7 +762,7 @@ void func_80AF2938(EnTest7* this, PlayState* play) {
     player->stateFlags2 |= PLAYER_STATE2_20000000;
     this->unk_144 |= 2;
     this->unk_148.unk_04 = 30.0f;
-    if (play->roomCtx.currRoom.unk3 != 1) {
+    if (play->roomCtx.curRoom.unk3 != 1) {
         func_80AF082C(this, func_80AF2AE8);
     } else {
         func_80AF082C(this, func_80AF2EC8);
@@ -921,7 +921,7 @@ void func_80AF30F4(EnTest7* this, PlayState* play) {
     if (this->unk_1E54 > 90) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

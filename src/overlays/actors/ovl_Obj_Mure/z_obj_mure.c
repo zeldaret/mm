@@ -20,7 +20,7 @@ void ObjMure_ActiveState(ObjMure* this, PlayState* play);
 void ObjMure_KillActors(ObjMure* this, PlayState* play);
 void ObjMure_CheckChildren(ObjMure* this, PlayState* play);
 
-const ActorInit Obj_Mure_InitVars = {
+ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -96,15 +96,15 @@ void ObjMure_Init(Actor* thisx, PlayState* play) {
     this->svNum = OBJ_MURE_GET_SVNUM(&this->actor);
     this->type = OBJ_MURE_GET_TYPE(&this->actor);
     if (this->ptn >= 4) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->type >= OBJMURE_TYPE_MAX) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (!func_808D7928(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc = ObjMure_InitialAction;
@@ -207,7 +207,7 @@ void ObjMure_KillActorsImpl(ObjMure* this, PlayState* play) {
                 break;
             case OBJMURE_CHILD_STATE_2:
                 if (this->children[i] != NULL) {
-                    Actor_MarkForDeath(this->children[i]);
+                    Actor_Kill(this->children[i]);
                     this->children[i] = NULL;
                 }
                 break;
@@ -216,7 +216,7 @@ void ObjMure_KillActorsImpl(ObjMure* this, PlayState* play) {
                     if (Actor_HasParent(this->children[i], play)) {
                         this->children[i] = NULL;
                     } else {
-                        Actor_MarkForDeath(this->children[i]);
+                        Actor_Kill(this->children[i]);
                         this->children[i] = NULL;
                     }
                 }

@@ -12,7 +12,7 @@
 
 #define THIS ((EnZot*)thisx)
 
-void EnZot_Init(Actor* thisx, PlayState* play);
+void EnZot_Init(Actor* thisx, PlayState* play2);
 void EnZot_Destroy(Actor* thisx, PlayState* play);
 void EnZot_Update(Actor* thisx, PlayState* play);
 void EnZot_Draw(Actor* thisx, PlayState* play);
@@ -32,7 +32,7 @@ void func_80B990A4(EnZot* this, PlayState* play);
 void func_80B992C0(EnZot* this, PlayState* play);
 void func_80B99384(EnZot* this, PlayState* play);
 
-const ActorInit En_Zot_InitVars = {
+ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
     ACTORCAT_NPC,
     FLAGS,
@@ -186,14 +186,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
@@ -221,7 +221,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     }
 
     if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.save.weekEventReg[55] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -22,7 +22,7 @@ typedef struct EnTrt {
     /* 0x338 */ s32 stickAccumX;
     /* 0x33C */ s32 stickAccumY;
     /* 0x340 */ EnGirlA* items[3];
-    /* 0x34C */ u8 cursorIdx;
+    /* 0x34C */ u8 cursorIndex;
     /* 0x350 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x388 */ StickDirectionPrompt stickRightPrompt;
     /* 0x3C0 */ f32 shopItemSelectedTween;
@@ -33,7 +33,7 @@ typedef struct EnTrt {
     /* 0x3D4 */ u8 arrowAnimState;
     /* 0x3D5 */ u8 stickAnimState;
     /* 0x3D6 */ s16 blinkTimer;
-    /* 0x3D8 */ s16 eyeTextureIdx;
+    /* 0x3D8 */ s16 eyeTexIndex;
     /* 0x3DC */ EnTrtBlinkFunc blinkFunc;
     /* 0x3E0 */ s16 cutscene;
     /* 0x3E2 */ s16 tmpGetMushroomCutscene;
@@ -63,7 +63,5 @@ typedef enum {
     /* 2 */ ENTRT_CUTSCENESTATE_PLAYING_SPECIAL, // Used to do/set extra flags (such as waiting mid animation)
     /* 3 */ ENTRT_CUTSCENESTATE_PLAYING
 } EnTrtCutsceneState;
-
-extern const ActorInit En_Trt_InitVars;
 
 #endif // Z_EN_TRT_H

@@ -14,7 +14,7 @@
 
 void EnBomjimb_Init(Actor* thisx, PlayState* play);
 void EnBomjimb_Destroy(Actor* thisx, PlayState* play);
-void EnBomjimb_Update(Actor* thisx, PlayState* play);
+void EnBomjimb_Update(Actor* thisx, PlayState* play2);
 void EnBomjimb_Draw(Actor* thisx, PlayState* play);
 
 void func_80C01494(EnBomjimb* this);
@@ -40,7 +40,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-const ActorInit En_Bomjimb_InitVars = {
+ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,
     ACTORCAT_NPC,
     FLAGS,
@@ -119,35 +119,35 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
                 if (gSaveContext.save.weekEventReg[11] & 1) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_1:
                 if (gSaveContext.save.weekEventReg[11] & 2) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_2:
                 if (gSaveContext.save.weekEventReg[11] & 4) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_3:
                 if (gSaveContext.save.weekEventReg[11] & 8) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_4:
                 if (gSaveContext.save.weekEventReg[11] & 0x10) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
@@ -156,7 +156,7 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
 
     if ((!(gSaveContext.save.weekEventReg[73] & 0x10) && !(gSaveContext.save.weekEventReg[85] & 2)) ||
         (gSaveContext.save.weekEventReg[75] & 0x40)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -691,7 +691,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     gSaveContext.save.bombersCaughtNum++;
 
     if (gSaveContext.save.bombersCaughtNum > 4) {
-        func_801A3098(0x922);
+        Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
     }

@@ -25,7 +25,7 @@ void func_80B7F360(BgIkanaBlock* this);
 void func_80B7F398(BgIkanaBlock* this, PlayState* play);
 void func_80B7F564(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Block_InitVars = {
+ActorInit Bg_Ikana_Block_InitVars = {
     ACTOR_BG_IKANA_BLOCK,
     ACTORCAT_BG,
     FLAGS,

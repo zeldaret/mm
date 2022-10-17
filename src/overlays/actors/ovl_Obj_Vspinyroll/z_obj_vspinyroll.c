@@ -13,7 +13,7 @@
 
 void ObjVspinyroll_Init(Actor* thisx, PlayState* play);
 void ObjVspinyroll_Destroy(Actor* thisx, PlayState* play);
-void ObjVspinyroll_Update(Actor* thisx, PlayState* play);
+void ObjVspinyroll_Update(Actor* thisx, PlayState* play2);
 void ObjVspinyroll_Draw(Actor* thisx, PlayState* play);
 
 void func_80A3CEC4(ObjVspinyroll* this);
@@ -27,7 +27,7 @@ void func_80A3D0E8(ObjVspinyroll* this);
 void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Vspinyroll_InitVars = {
+ActorInit Obj_Vspinyroll_InitVars = {
     ACTOR_OBJ_VSPINYROLL,
     ACTORCAT_PROP,
     FLAGS,

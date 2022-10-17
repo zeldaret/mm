@@ -29,6 +29,4 @@ typedef struct ObjHugebombiwa {
     /* 0x4B4 */ ObjHugebombiwaActionFunc actionFunc;
 } ObjHugebombiwa; // size = 0x4B8
 
-extern const ActorInit Obj_Hugebombiwa_InitVars;
-
 #endif // Z_OBJ_HUGEBOMBIWA_H

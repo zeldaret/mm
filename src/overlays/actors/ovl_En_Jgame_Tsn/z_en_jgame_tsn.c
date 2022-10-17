@@ -36,7 +36,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play);
 s32 func_80C149B0(PlayState* play, EnJgameTsnStruct* arg1);
 s32 func_80C14BCC(EnJgameTsn* this, PlayState* play);
 
-const ActorInit En_Jgame_Tsn_InitVars = {
+ActorInit En_Jgame_Tsn_InitVars = {
     ACTOR_EN_JGAME_TSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -112,7 +112,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     s32 i;
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1D8); i++) {
@@ -121,7 +121,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 
         path = &play->setupPathList[path->unk1];
         if (path == NULL) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -130,7 +130,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 
     path = &play->setupPathList[path->unk1];
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_200.points = Lib_SegmentedToVirtual(path->points);
@@ -155,7 +155,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->actor.flags & ACTOR_FLAG_10000) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            if (gSaveContext.unk_3DE0[4] > 0) {
+            if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 Message_StartTextbox(play, 0x10A2, &this->actor);
                 this->unk_300 = 0x10A2;
@@ -287,7 +287,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     play->interfaceCtx.unk_280 = 1;
     func_80112AFC(play);
     gSaveContext.save.weekEventReg[90] |= 0x20;
-    func_8010E9F0(4, 0x78);
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
     this->actionFunc = func_80C1418C;
 }
 
@@ -352,7 +352,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         func_80C14030(this);
     }
 
-    if (gSaveContext.unk_3DE0[4] == 0) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
         Message_StartTextbox(play, 0x10A1, &this->actor);
         this->unk_300 = 0x10A1;
         player->stateFlags1 |= PLAYER_STATE1_20;
@@ -479,7 +479,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x10A1:
                 func_801477B4(play);
                 gSaveContext.minigameState = 3;
-                gSaveContext.unk_3DD0[4] = 5;
+                gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
                 func_80C144E4(this);
                 break;

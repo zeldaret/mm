@@ -27,7 +27,7 @@ void EnCrow_SetupRespawn(EnCrow* this);
 void EnCrow_TurnAway(EnCrow* this, PlayState* play);
 void EnCrow_Respawn(EnCrow* this, PlayState* play);
 
-const ActorInit En_Crow_InitVars = {
+ActorInit En_Crow_InitVars = {
     ACTOR_EN_CROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -118,7 +118,7 @@ static s32 sDeadCount = 0;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 88, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GUAY, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -349,7 +349,7 @@ void EnCrow_Damaged(EnCrow* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
 
             if (this->actor.parent != NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             EnCrow_SetupDie(this);

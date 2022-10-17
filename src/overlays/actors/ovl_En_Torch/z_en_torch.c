@@ -13,7 +13,7 @@
 
 void EnTorch_Init(Actor* thisx, PlayState* play);
 
-const ActorInit En_Torch_InitVars = {
+ActorInit En_Torch_InitVars = {
     ACTOR_EN_TORCH,          ACTORCAT_ITEMACTION, FLAGS,           GAMEPLAY_KEEP,   sizeof(EnTorch),
     (ActorFunc)EnTorch_Init, (ActorFunc)NULL,     (ActorFunc)NULL, (ActorFunc)NULL,
 };
@@ -29,5 +29,5 @@ void EnTorch_Init(Actor* thisx, PlayState* play) {
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOX, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                 ENBOX_PARAMS(ENBOX_TYPE_SMALL, sChestContents[(returnData >> 0x5) & 0x7], returnData));
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }

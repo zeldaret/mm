@@ -32,6 +32,4 @@ typedef struct ObjSkateblock {
     /* 0x1C1 */ u8 unk_1C1;
 } ObjSkateblock; // size = 0x1C4
 
-extern const ActorInit Obj_Skateblock_InitVars;
-
 #endif // Z_OBJ_SKATEBLOCK_H

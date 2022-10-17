@@ -23,7 +23,7 @@ void func_80959C94(EnMk* this, PlayState* play);
 void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
-const ActorInit En_Mk_InitVars = {
+ActorInit En_Mk_InitVars = {
     ACTOR_EN_MK,
     ACTORCAT_NPC,
     FLAGS,
@@ -120,7 +120,7 @@ void EnMk_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80959524(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 7;
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_8095954C(EnMk* this, PlayState* play) {

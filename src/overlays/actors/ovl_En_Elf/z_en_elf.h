@@ -60,6 +60,4 @@ typedef enum {
     /* 0x07 */ ENELF_TYPE_7
 } FairyType;
 
-extern const ActorInit En_Elf_InitVars;
-
 #endif // Z_EN_ELF_H

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_goroiwa.h"
+#include "z64quake.h"
 #include "objects/object_goroiwa/object_goroiwa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -32,7 +33,7 @@ void func_80941FA4(EnGoroiwa* this, PlayState* play);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, PlayState* play);
 
-const ActorInit En_Goroiwa_InitVars = {
+ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -450,10 +451,11 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y <= sp7C)) {
         if (this->unk_1CA == 0) {
             if (this->actor.xzDistToPlayer < 400.0f) {
-                s16 sp72 = Quake_Add(GET_ACTIVE_CAM(play), 3);
-                Quake_SetSpeed(sp72, 0x4350);
-                Quake_SetQuakeValues(sp72, 3, 0, 0, 0);
-                Quake_SetCountdown(sp72, 7);
+                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+
+                Quake_SetSpeed(quakeIndex, 17232);
+                Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 7);
             }
 
             this->unk_1C4 = 0.0f;
@@ -963,12 +965,12 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     func_8093E9B0(this, play);
 
     if (sp28 == 0x7F8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (sp2C->count < 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1416,7 +1418,7 @@ void func_80942604(EnGoroiwa* this, PlayState* play) {
     if (this->unk_1C8 > 0) {
         this->unk_1C8--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

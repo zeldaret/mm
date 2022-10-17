@@ -58,6 +58,4 @@ typedef struct EnPm {
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
 } EnPm; // size = 0x3A0
 
-extern const ActorInit En_Pm_InitVars;
-
 #endif // Z_EN_PM_H

@@ -6,6 +6,7 @@
 
 #include "z_en_bsb.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -111,7 +112,7 @@ static DamageTable D_80C0F9E0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xD),
 };
 
-const ActorInit En_Bsb_InitVars = {
+ActorInit En_Bsb_InitVars = {
     ACTOR_EN_BSB,
     ACTORCAT_PROP,
     FLAGS,

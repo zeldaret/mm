@@ -20,7 +20,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play);
 void ArmsHook_Wait(ArmsHook* this, PlayState* play);
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play);
 
-const ActorInit Arms_Hook_InitVars = {
+ActorInit Arms_Hook_InitVars = {
     ACTOR_ARMS_HOOK,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -131,7 +131,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
 
     if ((this->actor.parent == NULL) || (!Player_IsHoldingHookshot(player))) {
         ArmsHook_DetachHookFromActor(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -141,7 +141,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
         (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
-        if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_400 | ACTOR_FLAG_200))) {
+        if ((touchedActor->update != NULL) && (touchedActor->flags & (ACTOR_FLAG_200 | ACTOR_FLAG_400))) {
             if (this->collider.info.atHitInfo->bumperFlags & BUMP_HOOKABLE) {
                 ArmsHook_AttachHookToActor(this, touchedActor);
                 if (CHECK_FLAG_ALL(touchedActor->flags, ACTOR_FLAG_400)) {
@@ -257,7 +257,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             if (SurfaceType_IsHookshotSurface(&play->colCtx, poly, bgId)) {
                 DynaPolyActor* dynaPolyActor;
 
-                if (bgId != BGCHECK_SCENE && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
+                if ((bgId != BGCHECK_SCENE) && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
                     ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                 }
                 func_808C1154(this);
@@ -294,7 +294,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
     f32 f0;
     Player* player = GET_PLAYER(play);
 
-    if (player->actor.draw != NULL && player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT) {
+    if ((player->actor.draw != NULL) && (player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT)) {
         Vec3f sp68;
         Vec3f sp5C;
         Vec3f sp50;

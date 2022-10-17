@@ -15,7 +15,7 @@
 
 void EnDodongo_Init(Actor* thisx, PlayState* play);
 void EnDodongo_Destroy(Actor* thisx, PlayState* play);
-void EnDodongo_Update(Actor* thisx, PlayState* play);
+void EnDodongo_Update(Actor* thisx, PlayState* play2);
 void EnDodongo_Draw(Actor* thisx, PlayState* play);
 
 void func_808773C4(EnDodongo* this);
@@ -35,7 +35,7 @@ void func_808786C8(EnDodongo* this, PlayState* play);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, PlayState* play);
 
-const ActorInit En_Dodongo_InitVars = {
+ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -273,7 +273,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 100, 100, 80 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 13, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_DODONGO, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1400, ICHAIN_STOP),
 };
@@ -729,7 +729,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_EAT);
         if (this->actor.child != NULL) {
-            Actor_MarkForDeath(this->actor.child);
+            Actor_Kill(this->actor.child);
             this->actor.child = NULL;
         }
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -931,7 +931,7 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
             } else {
                 Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_PURPLE);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

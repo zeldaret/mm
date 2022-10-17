@@ -50,6 +50,4 @@ typedef struct EnAkindonuts {
     /* 0x368 */ s16 unk_368;
 } EnAkindonuts; // size = 0x36C
 
-extern const ActorInit En_Akindonuts_InitVars;
-
 #endif // Z_EN_AKINDONUTS_H

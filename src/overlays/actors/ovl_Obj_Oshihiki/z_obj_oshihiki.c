@@ -25,7 +25,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_SetupFall(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play);
 
-const ActorInit Obj_Oshihiki_InitVars = {
+ActorInit Obj_Oshihiki_InitVars = {
     ACTOR_OBJ_OSHIHIKI,
     ACTORCAT_PROP,
     FLAGS,
@@ -205,7 +205,7 @@ void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
                 case OBJOSHIHIKI_F_0:
                 case OBJOSHIHIKI_F_1:
                 case OBJOSHIHIKI_F_2:
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
             }
         } else {
@@ -213,7 +213,7 @@ void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
                 case OBJOSHIHIKI_F_3:
                 case OBJOSHIHIKI_F_4:
                 case OBJOSHIHIKI_F_5:
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
             }
         }
@@ -293,7 +293,7 @@ s32 ObjOshihiki_CheckFloor(ObjOshihiki* this, PlayState* play) {
 
 s32 ObjOshihiki_CheckGround(ObjOshihiki* this, PlayState* play) {
     if (this->dyna.actor.world.pos.y <= BGCHECK_Y_MIN + 10.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 

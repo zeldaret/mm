@@ -80,7 +80,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
         Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, 0xBFF);
-        if (play->sceneNum == SCENE_KAKUSIANA) {
+        if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
     }
@@ -336,7 +336,7 @@ u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return sMaskItemIds[maskIdMinusOne];
 }
 
-u8 Player_GetCurMaskItemId(PlayState* play) {
+s32 Player_GetCurMaskItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
@@ -465,7 +465,7 @@ void func_80123140(PlayState* play, Player* player) {
     IREG(69) = bootRegs[16];
     MREG(95) = bootRegs[17];
 
-    if (play->roomCtx.currRoom.unk3 == 2) {
+    if (play->roomCtx.curRoom.unk3 == 2) {
         R_RUN_SPEED_LIMIT = 500;
     }
 
@@ -554,7 +554,7 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemID func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
@@ -597,14 +597,14 @@ u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 PlayerActionParam func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
     PlayerActionParam actionParam;
-    ItemID itemId;
+    ItemId itemId;
     s32 i;
 
     if (gSaveContext.save.unk_06 == 0) {
         if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button, BTN_A | BTN_B)) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
             return -1;
         }
     } else {
@@ -618,7 +618,7 @@ PlayerActionParam func_80123810(PlayState* play) {
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
-            Interface_ChangeAlpha(play->msgCtx.unk_120BC);
+            Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
             if ((itemId >= ITEM_FD) || ((actionParam = play->unk_18794(play, player, itemId)) <= PLAYER_AP_MINUS1)) {
                 play_sound(NA_SE_SY_ERROR);
@@ -666,7 +666,7 @@ u8 sActionModelGroups[PLAYER_AP_MAX] = {
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_DEKU_PRINCESS
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_GOLD_DUST
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_1C
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_SEA_HORSE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_SEAHORSE
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MUSHROOM
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_HYLIAN_LOACH
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_BUG
@@ -691,7 +691,7 @@ u8 sActionModelGroups[PLAYER_AP_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LETTER_MAMA
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_34
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_35
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_PENDANT_MEMORIES
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_PENDANT_OF_MEMORIES
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_37
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_38
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_39
@@ -818,8 +818,8 @@ Gfx* gPlayerWaistDLs[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* gPlayerHandHoldingShields[PLAYER_SHIELD_MAX - 1][2] = {
-    { object_link_child_DL_01DC28, object_link_child_DL_01DC28 },
-    { object_link_child_DL_01DC48, object_link_child_DL_01DC48 },
+    { gLinkHumanRightHandHoldingHylianShieldDL, gLinkHumanRightHandHoldingHylianShieldDL },
+    { gLinkHumanRightHandHoldingMirrorShieldDL, gLinkHumanRightHandHoldingMirrorShieldDL },
 };
 
 Gfx* gPlayerSheath12DLs[2 * PLAYER_FORM_MAX] = {
@@ -1005,8 +1005,8 @@ Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
 
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
-    0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
-                // dlist, maybe a typo?
+    //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
+    0x060038C0,
     gLinkZoraRightHandOpenDL,
     gLinkDekuRightHandDL,
     object_link_child_DL_018490,
@@ -1014,8 +1014,8 @@ Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
 
 Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
-    0x060038C0, // This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts
-                // dlist, maybe a typo?
+    //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
+    0x060038C0,
     gLinkZoraRightHandOpenDL,
     gLinkDekuRightHandDL,
     object_link_child_DL_017B40,
@@ -1281,7 +1281,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemID itemId, PlayerActionParam actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -1470,39 +1470,40 @@ PlayerSword Player_ActionToSword(Player* player, PlayerActionParam actionParam) 
 }
 
 s32 func_801242B4(Player* player) {
-    return (player->stateFlags1 & PLAYER_STATE1_8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
+    return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
-s32 func_801242DC(PlayState* play) {
+s32 Player_GetEnvTimerType(PlayState* play) {
     Player* player = GET_PLAYER(play);
     TextTriggerEntry* triggerEntry;
-    s32 envIndex;
+    s32 envTimerType;
 
-    if (play->roomCtx.currRoom.unk2 == 3) { // Room is hot
-        envIndex = 0;
+    if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
+        envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
-        envIndex = 3;
+        envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            envIndex = 1;
+            envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FLOOR - 1;
         } else {
-            envIndex = 2;
+            envTimerType = PLAYER_ENV_TIMER_SWIMMING - 1;
         }
     } else {
-        return 0;
+        return PLAYER_ENV_TIMER_NONE;
     }
 
     // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[envIndex];
+    triggerEntry = &sEnvironmentTextTriggers[envTimerType];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (envIndex == 0)) {
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) &&
+            (envTimerType == (PLAYER_ENV_TIMER_HOTROOM - 1))) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return envIndex + 1;
+    return envTimerType + 1;
 }
 
 void Player_UpdateBunnyEarsKinematics(Player* player) {
@@ -1642,6 +1643,8 @@ PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_HAPPY },        // PLAYER_FACE_15
 };
 
+// Note the correct pointer to pass as the jointTable is the jointTable pointer from the SkelAnime struct, not the
+// buffer from the Player struct itself since that one may be misaligned.
 void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, s32 lod,
                      PlayerTransformation playerForm, s32 boots, s32 face, OverrideLimbDrawFlex overrideLimbDraw,
                      PostLimbDrawFlex postLimbDraw, Actor* actor) {
@@ -1683,8 +1686,11 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
 }
 
 Vec3f D_801C08C0[PLAYER_FORM_MAX] = {
-    { 1304.0f, 0.0f, 0.0f }, { 1156.0f, 0.0f, 0.0f }, { 1406.0f, 0.0f, 0.0f },
-    { 408.0f, 0.0f, 0.0f },  { 695.0f, 0.0f, 0.0f },
+    { 1304.0f, 0.0f, 0.0f }, // PLAYER_FORM_FIERCE_DEITY
+    { 1156.0f, 0.0f, 0.0f }, // PLAYER_FORM_GORON
+    { 1406.0f, 0.0f, 0.0f }, // PLAYER_FORM_ZORA
+    { 408.0f, 0.0f, 0.0f },  // PLAYER_FORM_DEKU
+    { 695.0f, 0.0f, 0.0f }, // PLAYER_FORM_HUMAN
 };
 
 f32 D_801C08FC[PLAYER_FORM_MAX] = {
@@ -2555,7 +2561,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(player->giObjectSegment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
@@ -2817,13 +2823,13 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
 }
 
 void Player_DrawCouplesMask(PlayState* play, Player* player) {
-    gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
+    gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
 void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
-    static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
-    static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
+    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f bubbleAccel = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
     s32 i;
 
@@ -2836,6 +2842,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
 
         Matrix_MultVec3f(&D_801C0B90[i], &D_801F59B0[i]);
 
+        //! FAKE
         if (1) {}
 
         D_801F59B0[i].y += -10.0f * scaleY;
@@ -2848,7 +2855,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gEffBubble1Tex)] + SEGMENT_OFFSET(gEffBubble1Tex));
+            gSPSegment(&gfx[1], 0x08, VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gEffBubbleDL);
@@ -2863,8 +2870,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             s16 phi_s0 = speedXZ * 2000.0f;
             f32 temp_f20;
 
-            D_801C0BA8.y = speedXZ * 0.4f;
-            D_801C0BB4.y = -0.3f;
+            bubbleVelocity.y = speedXZ * 0.4f;
+            bubbleAccel.y = -0.3f;
 
             if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
@@ -2874,10 +2881,10 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             temp_f20 = speedXZ * 0.2f;
             temp_f20 = CLAMP_MAX(temp_f20, 4.0f);
 
-            D_801C0BA8.x = -Math_SinS(phi_s0) * temp_f20;
-            D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
+            bubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
+            bubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 20, 20, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &bubbleVelocity, &bubbleAccel, 20, 20, 3, 0);
             D_801F59C8[i] -= 400;
         }
     }
@@ -2945,7 +2952,7 @@ Vec3f D_801C0C30[] = {
     { 301.0f, -729.0f, 699.0f },
 };
 
-typedef struct {
+typedef struct struct_80128388_arg1 {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
@@ -2986,12 +2993,18 @@ Color_RGB8 D_801C0CA8[PLAYER_BOTTLE_MAX] = {
 };
 
 Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
-    { 0.0f, 0.0f, 0.0f },    { 300.0f, 300.0f, -230.0f }, { 0.0f, 90.0f, -50.0f },
-    { 0.0f, 20.0f, -60.0f }, { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },// PLAYER_FORM_FIERCE_DEITY
+    { 300.0f, 300.0f, -230.0f },// PLAYER_FORM_GORON
+    { 0.0f, 90.0f, -50.0f },// PLAYER_FORM_ZORA
+    { 0.0f, 20.0f, -60.0f }, // PLAYER_FORM_DEKU
+    { 0.0f, 0.0f, 0.0f },// PLAYER_FORM_HUMAN
 };
 Vec3f D_801C0D24[PLAYER_FORM_MAX] = {
-    { 200.0f, 300.0f, 0.0f }, { 200.0f, 200.0f, 0.0f }, { 200.0f, 300.0f, 0.0f },
-    { 200.0f, 150.0f, 0.0f }, { 200.0f, 200.0f, 0.0f },
+    { 200.0f, 300.0f, 0.0f },// PLAYER_FORM_FIERCE_DEITY
+    { 200.0f, 200.0f, 0.0f },// PLAYER_FORM_GORON
+    { 200.0f, 300.0f, 0.0f },// PLAYER_FORM_ZORA
+    { 200.0f, 150.0f, 0.0f },// PLAYER_FORM_DEKU
+    { 200.0f, 200.0f, 0.0f },// PLAYER_FORM_HUMAN
 };
 Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };

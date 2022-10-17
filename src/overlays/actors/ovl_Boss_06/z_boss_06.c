@@ -5,6 +5,7 @@
  */
 
 #include "z_boss_06.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
@@ -16,7 +17,7 @@
 void Boss06_Init(Actor* thisx, PlayState* play);
 void Boss06_Destroy(Actor* thisx, PlayState* play);
 void Boss06_Update(Actor* thisx, PlayState* play);
-void Boss06_Draw(Actor* thisx, PlayState* play);
+void Boss06_Draw(Actor* thisx, PlayState* play2);
 
 void func_809F24A8(Boss06* this);
 void func_809F24C8(Boss06* this, PlayState* play);
@@ -68,7 +69,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-const ActorInit Boss_06_InitVars = {
+ActorInit Boss_06_InitVars = {
     ACTOR_BOSS_06,
     ACTORCAT_BOSS,
     FLAGS,
@@ -211,7 +212,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             temp_s0 = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
             while (temp_s0 != NULL) {
                 if (temp_s0->id == ACTOR_EN_ARROW) {
-                    Actor_MarkForDeath(temp_s0);
+                    Actor_Kill(temp_s0);
                 }
                 temp_s0 = temp_s0->next;
             }
@@ -338,7 +339,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(27);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
         Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
@@ -380,7 +381,7 @@ void func_809F2C44(Boss06* this, PlayState* play) {
     }
 
     if (D_809F4970->unk_153 == 2) {
-        Actor_MarkForDeath(this->actor.child);
+        Actor_Kill(this->actor.child);
         this->actor.child = NULL;
         func_809F2E14(this, play);
     }

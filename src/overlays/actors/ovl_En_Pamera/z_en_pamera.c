@@ -69,7 +69,7 @@ void func_80BDA288(EnPamera* this);
 void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
-const ActorInit En_Pamera_InitVars = {
+ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
     ACTORCAT_NPC,
     FLAGS,
@@ -156,7 +156,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
         if (1) {}
         if (!(gSaveContext.save.weekEventReg[14] & 4) || (gSaveContext.save.weekEventReg[52] & 0x20) ||
             (gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         if (gSaveContext.save.weekEventReg[61] & 4) {
             if (!(gSaveContext.save.weekEventReg[59] & 1) ||
@@ -199,7 +199,7 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
     Vec3f sp28;
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (gSaveContext.save.weekEventReg[61] & 4) {
         path = &play->setupPathList[path->unk1];

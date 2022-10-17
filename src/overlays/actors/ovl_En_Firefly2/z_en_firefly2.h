@@ -10,6 +10,4 @@ typedef struct EnFirefly2 {
     /* 0x144 */ char unk_144[0x228];
 } EnFirefly2; // size = 0x36C
 
-extern const ActorInit En_Firefly2_InitVars;
-
 #endif // Z_EN_FIREFLY2_H

@@ -38,7 +38,7 @@ void func_808C7D34(EnDeath* this, PlayState* play);
 void func_808C7DCC(EnDeath* this, PlayState* play);
 
 #if 0
-const ActorInit En_Death_InitVars = {
+ActorInit En_Death_InitVars = {
     ACTOR_EN_DEATH,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -131,7 +131,7 @@ static CollisionCheckInfoInit2 D_808C9A30 = { 20, 28, 90, 20, 100 };
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808C9A60[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 26, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GOMESS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };

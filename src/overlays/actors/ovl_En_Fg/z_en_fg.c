@@ -24,7 +24,7 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect);
 
-const ActorInit En_Fg_InitVars = {
+ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
     ACTORCAT_NPC,
     FLAGS,
@@ -444,8 +444,8 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
     }
 }
 
-TexturePtr sDustTex[] = {
-    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+static TexturePtr sDustTextures[] = {
+    gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
@@ -475,7 +475,7 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
             Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             index = 0.5f * dustEffect->timer;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTex[index]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
             gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B338);
         }
     }

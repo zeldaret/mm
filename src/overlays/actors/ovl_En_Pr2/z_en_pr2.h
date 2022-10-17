@@ -51,6 +51,4 @@ typedef struct EnPr2 {
     /* 0x27C */ ColliderCylinder collider;
 } EnPr2; // size = 0x2C8
 
-extern const ActorInit En_Pr2_InitVars;
-
 #endif // Z_EN_PR2_H

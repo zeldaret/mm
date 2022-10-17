@@ -15,7 +15,7 @@
 void BgNumaHana_Init(Actor* thisx, PlayState* play);
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play);
 void BgNumaHana_Update(Actor* thisx, PlayState* play);
-void BgNumaHana_Draw(Actor* thisx, PlayState* play);
+void BgNumaHana_Draw(Actor* thisx, PlayState* play2);
 
 void BgNumaHana_SetupDoNothing(BgNumaHana* this);
 void BgNumaHana_DoNothing(BgNumaHana* this, PlayState* play);
@@ -30,7 +30,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
-const ActorInit Bg_Numa_Hana_InitVars = {
+ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
     ACTORCAT_BG,
     FLAGS,
@@ -157,7 +157,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
         this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (!BgNumaHana_SpawnOpenFlowerCollisionChild(this, play)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 

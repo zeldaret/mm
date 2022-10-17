@@ -13,7 +13,7 @@
 
 void ObjSpinyroll_Init(Actor* thisx, PlayState* play);
 void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play);
-void ObjSpinyroll_Update(Actor* thisx, PlayState* play);
+void ObjSpinyroll_Update(Actor* thisx, PlayState* play2);
 void ObjSpinyroll_Draw(Actor* thisx, PlayState* play);
 
 void func_80A1E9C4(ObjSpinyroll* this);
@@ -28,7 +28,7 @@ void func_80A1EC38(ObjSpinyroll* this, PlayState* play);
 void func_80A1ECC0(ObjSpinyroll* this);
 void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
-const ActorInit Obj_Spinyroll_InitVars = {
+ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,
     FLAGS,
@@ -500,7 +500,7 @@ void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
                ((sp34->x == sp30->x) && (sp34->y == sp30->y) && (sp34->z != sp30->z))) {
         this->unk_49C = false;
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 

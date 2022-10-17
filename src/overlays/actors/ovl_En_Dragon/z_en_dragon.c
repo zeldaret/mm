@@ -50,7 +50,7 @@ typedef enum {
 
 static s32 sNumPythonsDead = 0;
 
-const ActorInit En_Dragon_InitVars = {
+ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -242,7 +242,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
     this->pythonIndex = EN_DRAGON_GET_PYTHON_INDEX(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->action = DEEP_PYTHON_ACTION_IDLE;
-    this->actor.hintId = 0xE;
+    this->actor.hintId = TATL_HINT_ID_DEEP_PYTHON;
     this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
 
@@ -317,7 +317,8 @@ void EnDragon_SpawnBubbles(EnDragon* this, PlayState* play, Vec3f basePos) {
         sBubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
         scale = Rand_S16Offset(380, 240);
         EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &sBubbleVelocity, &sBubbleAccel,
-                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30, 0);
+                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30,
+                                          false);
     }
 }
 
@@ -719,7 +720,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         }
     }
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {

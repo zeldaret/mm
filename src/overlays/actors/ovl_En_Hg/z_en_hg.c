@@ -30,7 +30,7 @@ void func_80BCF95C(EnHg* this, PlayState* play);
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Hg_InitVars = {
+ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
     FLAGS,
@@ -126,7 +126,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
@@ -158,8 +158,8 @@ void func_80BCF398(EnHg* this, PlayState* play) {
             !Cutscene_CheckActorAction(play, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 0) &&
-            (play->csCtx.frames == 20 || play->csCtx.frames == 60)) {
+        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
+            ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
@@ -304,7 +304,7 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
                     break;
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
         } else {

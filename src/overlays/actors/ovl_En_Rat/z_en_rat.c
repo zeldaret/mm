@@ -35,7 +35,7 @@ typedef enum {
     /* -1 */ EN_RAT_HOOKED,
 } EnRatHookedState;
 
-const ActorInit En_Rat_InitVars = {
+ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -118,7 +118,7 @@ static TexturePtr sSparkTextures[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 97, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_REAL_BOMBCHU, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 5000, ICHAIN_STOP),
 };
@@ -762,7 +762,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play) {
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_OVERWORLD) {
         EnRat_SetupRevive(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -822,7 +822,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             if (this->damageReaction.hookedState == EN_RAT_HOOK_STARTED) {
                 // The player just hit the Real Bombchu with the Hookshot.
                 this->damageReaction.hookedState = EN_RAT_HOOKED;
-            } else if ((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) {
+            } else if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
                 // The player has hooked the Real Bombchu for more than one frame, but
                 // the actor flag indicating that the Hookshot is attached is *not* set.
                 EnRat_Explode(this, play);

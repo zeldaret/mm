@@ -94,7 +94,7 @@ typedef enum EnSGoroAnimation {
     /* 0xF */ EN_S_GORO_ANIM_IDLE_STAND
 } EnSGoroAnimation;
 
-const ActorInit En_S_Goro_InitVars = {
+ActorInit En_S_Goro_InitVars = {
     ACTOR_EN_S_GORO,
     ACTORCAT_NPC,
     FLAGS,
@@ -788,7 +788,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
             this->loadedObjIndex = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
             if (this->loadedObjIndex >= 0) {
-                gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->loadedObjIndex].segment);
+                gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
                 this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
                 return true;
@@ -797,7 +797,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
         this->loadedObjIndex = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->loadedObjIndex >= 0) {
-            gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->loadedObjIndex].segment);
+            gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
             this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -1096,7 +1096,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
                 this->actor.shape.yOffset = EN_S_GORO_ROLLEDUP_YOFFSET;
                 break;
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }
@@ -1311,7 +1311,7 @@ void EnSGoro_Init(Actor* thisx, PlayState* play) {
 
         this->loadedObjIndex = objIndex;
         if (objIndex < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.draw = EnSGoro_Draw;
@@ -1329,7 +1329,7 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->loadedObjIndex].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);

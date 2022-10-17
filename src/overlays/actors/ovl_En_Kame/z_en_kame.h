@@ -33,6 +33,4 @@ typedef struct EnKame {
     /* 0x340 */ ColliderCylinder collider;
 } EnKame; // size = 0x38C
 
-extern const ActorInit En_Kame_InitVars;
-
 #endif // Z_EN_KAME_H

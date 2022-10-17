@@ -19,7 +19,7 @@ void BgF40Flift_Draw(Actor* thisx, PlayState* play);
 void func_808D75F0(BgF40Flift* this, PlayState* play);
 void func_808D7714(BgF40Flift* this, PlayState* play);
 
-const ActorInit Bg_F40_Flift_InitVars = {
+ActorInit Bg_F40_Flift_InitVars = {
     ACTOR_BG_F40_FLIFT,
     ACTORCAT_BG,
     FLAGS,

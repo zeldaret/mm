@@ -21,7 +21,7 @@ void BgCtowerRot_DoorDoNothing(BgCtowerRot* this, PlayState* play);
 void BgCtowerRot_DoorIdle(BgCtowerRot* this, PlayState* play);
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, PlayState* play);
 
-const ActorInit Bg_Ctower_Rot_InitVars = {
+ActorInit Bg_Ctower_Rot_InitVars = {
     ACTOR_BG_CTOWER_ROT,
     ACTORCAT_BG,
     FLAGS,

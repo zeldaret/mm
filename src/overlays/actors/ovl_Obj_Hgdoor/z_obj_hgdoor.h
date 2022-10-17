@@ -16,9 +16,7 @@ typedef struct ObjHgdoor {
     /* 0x160 */ s16 cutscene;
     /* 0x162 */ s16 rotation;
     /* 0x164 */ s16 timer;
-    /* 0x166 */ u16 unk166;
+    /* 0x166 */ u16 csAction;
 } ObjHgdoor; // size = 0x168
-
-extern const ActorInit Obj_Hgdoor_InitVars;
 
 #endif // Z_OBJ_HGDOOR_H

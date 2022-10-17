@@ -91,22 +91,22 @@
         <Limb Name="gLinkZoraRootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_ROOT" Offset="0x12A90" />
         <Limb Name="gLinkZoraWaistLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_WAIST" Offset="0x12AA0" />
         <Limb Name="gLinkZoraLowerRootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LOWER_ROOT" Offset="0x12AB0" />
-        <Limb Name="gLinkZoraRightThighLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_THIGH" Offset="0x12AC0" />
-        <Limb Name="gLinkZoraRightShinLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_SHIN" Offset="0x12AD0" />
-        <Limb Name="gLinkZoraRightFootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_FOOT" Offset="0x12AE0" />
-        <Limb Name="gLinkZoraLeftThighLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_L_THIGH" Offset="0x12AF0" />
-        <Limb Name="gLinkZoraLeftShinLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_L_SHIN" Offset="0x12B00" />
-        <Limb Name="gLinkZoraLeftFootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_L_FOOT" Offset="0x12B10" />
+        <Limb Name="gLinkZoraRightThighLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_RIGHT_THIGH" Offset="0x12AC0" />
+        <Limb Name="gLinkZoraRightShinLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_RIGHT_SHIN" Offset="0x12AD0" />
+        <Limb Name="gLinkZoraRightFootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_RIGHT_FOOT" Offset="0x12AE0" />
+        <Limb Name="gLinkZoraLeftThighLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LEFT_THIGH" Offset="0x12AF0" />
+        <Limb Name="gLinkZoraLeftShinLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LEFT_SHIN" Offset="0x12B00" />
+        <Limb Name="gLinkZoraLeftFootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LEFT_FOOT" Offset="0x12B10" />
         <Limb Name="gLinkZoraUpperRootLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_UPPER_ROOT" Offset="0x12B20" />
         <Limb Name="gLinkZoraHeadLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_HEAD" Offset="0x12B30" />
         <Limb Name="gLinkZoraHatLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_HAT" Offset="0x12B40" />
         <Limb Name="gLinkZoraCollarLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_COLLAR" Offset="0x12B50" />
-        <Limb Name="gLinkZoraLeftShoulderLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_L_SHOULDER" Offset="0x12B60" />
-        <Limb Name="gLinkZoraLeftForearmLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_L_FOREARM" Offset="0x12B70" />
-        <Limb Name="gLinkZoraLeftHandLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_L_HAND" Offset="0x12B80" />
-        <Limb Name="gLinkZoraRightShoulderLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_SHOULDER" Offset="0x12B90" />
-        <Limb Name="gLinkZoraRightForearmLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_FOREARM" Offset="0x12BA0" />
-        <Limb Name="gLinkZoraRightHandLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_R_HAND" Offset="0x12BB0" />
+        <Limb Name="gLinkZoraLeftShoulderLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LEFT_SHOULDER" Offset="0x12B60" />
+        <Limb Name="gLinkZoraLeftForearmLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LEFT_FOREARM" Offset="0x12B70" />
+        <Limb Name="gLinkZoraLeftHandLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_LEFT_HAND" Offset="0x12B80" />
+        <Limb Name="gLinkZoraRightShoulderLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_RIGHT_SHOULDER" Offset="0x12B90" />
+        <Limb Name="gLinkZoraRightForearmLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_RIGHT_FOREARM" Offset="0x12BA0" />
+        <Limb Name="gLinkZoraRightHandLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_RIGHT_HAND" Offset="0x12BB0" />
         <Limb Name="gLinkZoraSheathLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_SHEATH" Offset="0x12BC0" />
         <Limb Name="gLinkZoraTorsoLimb" Type="LOD" EnumName="LINK_ZORA_LIMB_TORSO" Offset="0x12BD0" />
         <Skeleton Name="gLinkZoraSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_ZORA_LIMB_NONE" LimbMax="LINK_ZORA_LIMB_MAX" EnumName="LinkZoraLimb" Offset="0x12C34" />

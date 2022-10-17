@@ -18,6 +18,4 @@ typedef struct EnGamelupy {
     /* 0x1A0 */ s16 unk_1A0;
 } EnGamelupy; // size = 0x1A4
 
-extern const ActorInit En_Gamelupy_InitVars;
-
 #endif // Z_EN_GAMELUPY_H

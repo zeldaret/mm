@@ -13,7 +13,7 @@
 
 void ObjArmos_Init(Actor* thisx, PlayState* play);
 void ObjArmos_Destroy(Actor* thisx, PlayState* play);
-void ObjArmos_Update(Actor* thisx, PlayState* play);
+void ObjArmos_Update(Actor* thisx, PlayState* play2);
 void ObjArmos_Draw(Actor* thisx, PlayState* play);
 
 void func_809A54B4(ObjArmos* this);
@@ -23,7 +23,7 @@ void func_809A562C(ObjArmos* this, PlayState* play);
 void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
-const ActorInit Obj_Armos_InitVars = {
+ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,
     FLAGS,

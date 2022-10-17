@@ -27,7 +27,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play);
 s32 EnHgo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHgo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
 
-const ActorInit En_Hgo_InitVars = {
+ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
     FLAGS,
@@ -287,7 +287,7 @@ s32 func_80BD0898(EnHgo* this, PlayState* play) {
                 case 1:
                     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
                         this->unk_312 = 1;
-                        if ((gSaveContext.sceneSetupIndex == 0) &&
+                        if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
                         }

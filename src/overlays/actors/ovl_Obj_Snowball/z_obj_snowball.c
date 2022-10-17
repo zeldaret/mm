@@ -33,7 +33,7 @@ void func_80B04B48(ObjSnowball* this, PlayState* play);
 void func_80B04B60(ObjSnowball* this, PlayState* play);
 void func_80B04D34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Snowball_InitVars = {
+ActorInit Obj_Snowball_InitVars = {
     ACTOR_OBJ_SNOWBALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -510,7 +510,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     func_80B04338(this, play);
 
     if ((sp40 == 5) && Flags_GetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -621,7 +621,7 @@ void func_80B04648(ObjSnowball* this, PlayState* play) {
         if (this->actor.home.rot.y == 1) {
             func_80B04B48(this, play);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->unk_208 == 0x2D) {
         func_80B03688(this, play);
@@ -725,7 +725,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
         if (this->actor.home.rot.y == 1) {
             func_80B04B48(this, play);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         for (i = 0; i < ARRAY_COUNT(this->unk_1A8); i++) {

@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-const ActorInit Obj_Ghaka_InitVars = {
+ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
     ACTORCAT_PROP,
     FLAGS,
@@ -159,7 +159,7 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
     if (this->dyna.actor.floorPoly == 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
     if (gSaveContext.save.weekEventReg[20] & 0x20) {
         func_80B3C2C4(this, play);

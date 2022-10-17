@@ -32,7 +32,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, PlayState* play);
 
-const ActorInit En_Mushi2_InitVars = {
+ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -816,8 +816,11 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
     }
 
     if (sp20 && (this->unk_36A <= 0)) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->actor.bgCheckFlags & 0x20) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->actor.bgCheckFlags & 0x20) {
         func_80A6AAA4(this);
     } else if (this->actor.bgCheckFlags & 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_WALK);
@@ -1038,7 +1041,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
     }
 
     if (this->unk_368 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1105,7 +1108,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
             func_80A6A094(this);
             func_80A6A0D8(this);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1123,7 +1126,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         func_80A6A094(this);
         func_80A6A0D8(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

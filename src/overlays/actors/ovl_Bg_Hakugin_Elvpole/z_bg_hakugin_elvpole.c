@@ -18,7 +18,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play);
 
 void func_80ABD92C(BgHakuginElvpole* this, PlayState* play);
 
-const ActorInit Bg_Hakugin_Elvpole_InitVars = {
+ActorInit Bg_Hakugin_Elvpole_InitVars = {
     ACTOR_BG_HAKUGIN_ELVPOLE,
     ACTORCAT_BG,
     FLAGS,

@@ -43,6 +43,4 @@ typedef struct EnRailSkb {
     /* 0x403 */ u8 drawDmgEffType;
 } EnRailSkb; // size = 0x404
 
-extern const ActorInit En_Rail_Skb_InitVars;
-
 #endif // Z_EN_RAIL_SKB_H

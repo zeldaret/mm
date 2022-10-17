@@ -13,6 +13,4 @@ typedef struct EnCha {
     /* 0x190 */ EnChaActionFunc actionFunc;
 } EnCha; // size = 0x194
 
-extern const ActorInit En_Cha_InitVars;
-
 #endif // Z_EN_CHA_H

@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hariko.h"
+#include "z64quake.h"
 #include "assets/objects/object_hariko/object_hariko.h"
 
 #define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
@@ -22,7 +23,7 @@ void ObjHariko_SetupBobHead(ObjHariko* this);
 void ObjHariko_BobHead(ObjHariko* this, PlayState* play);
 void ObjHariko_CheckForQuakes(ObjHariko* this);
 
-const ActorInit Obj_Hariko_InitVars = {
+ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
     ACTORCAT_PROP,
     FLAGS,

@@ -47,6 +47,4 @@ typedef struct EnMag {
     /* 0x11F74 */ UNK_TYPE1 unk11F74[4];
 } EnMag; // size = 0x11F78
 
-extern const ActorInit En_Mag_InitVars;
-
 #endif // Z_EN_MAG_H

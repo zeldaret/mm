@@ -19,9 +19,9 @@ void EnDnb_Draw(Actor* thisx, PlayState* play);
 
 s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5);
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
-s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play);
+s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-const ActorInit En_Dnb_InitVars = {
+ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
     ACTORCAT_BG,
     FLAGS,
@@ -201,7 +201,7 @@ void func_80A5063C(EnDnb* this, PlayState* play) {
 void EnDnb_Draw(Actor* thisx, PlayState* play) {
     EnDnb* this = THIS;
 
-    if (play->actorCtx.unk4 != 0) {
+    if (play->actorCtx.lensMaskSize != 0) {
         func_80A50510(this, play);
     } else {
         func_80A5063C(this, play);
@@ -252,8 +252,8 @@ s32 func_80A5086C(EnDnbUnkStruct* arg0) {
 }
 
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
-    static TexturePtr D_80A50CBC[] = {
-        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+    static TexturePtr sDustTextures[] = {
+        gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
     };
     PlayState* play = play2;
     s32 isGfxSetup = false;
@@ -286,7 +286,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = (arg0->unk_01 / (f32)arg0->unk_02) * 8.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
 
             Matrix_Pop();

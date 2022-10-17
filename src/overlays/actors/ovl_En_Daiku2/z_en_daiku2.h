@@ -53,6 +53,4 @@ typedef struct EnDaiku2 {
     /* 0xD7C */ ColliderCylinder collider;
 } EnDaiku2; // size = 0xDC8
 
-extern const ActorInit En_Daiku2_InitVars;
-
 #endif // Z_EN_DAIKU2_H

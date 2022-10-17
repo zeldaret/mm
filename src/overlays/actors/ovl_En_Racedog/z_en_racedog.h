@@ -51,6 +51,4 @@ typedef struct EnRacedog {
     /* 0x2C4 */ f32 selectionArrowScale;
 } EnRacedog; // size = 0x2C8
 
-extern const ActorInit En_Racedog_InitVars;
-
 #endif // Z_EN_RACEDOG_H

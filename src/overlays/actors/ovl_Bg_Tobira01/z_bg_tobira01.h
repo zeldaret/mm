@@ -17,6 +17,4 @@ typedef struct BgTobira01 {
     /* 0x16C */ s32 unk_16C; // unused besides being set to 0
 } BgTobira01; // size = 0x170
 
-extern const ActorInit Bg_Tobira01_InitVars;
-
 #endif // Z_BG_TOBIRA01_H

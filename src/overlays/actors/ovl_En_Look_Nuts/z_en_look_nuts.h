@@ -35,6 +35,4 @@ typedef struct EnLookNuts {
     /* 0x244 */ ColliderCylinder collider;
 } EnLookNuts; // size = 0x290
 
-extern const ActorInit En_Look_Nuts_InitVars;
-
 #endif // Z_EN_LOOK_NUTS_H

@@ -16,16 +16,16 @@ typedef struct EnTruMt {
     /* 0x144 */ EnTruMtActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderSphere collider;
-    /* 0x1E4 */ Vec3s jointTable[OBJECT_TRU_LIMB_MAX];
-    /* 0x286 */ Vec3s morphTable[OBJECT_TRU_LIMB_MAX];
+    /* 0x1E4 */ Vec3s jointTable[KOUME_LIMB_MAX];
+    /* 0x286 */ Vec3s morphTable[KOUME_LIMB_MAX];
     /* 0x328 */ u16 unk_328;
     /* 0x32A */ UNK_TYPE1 unk32A[0xC];
     /* 0x336 */ Vec3s unk_336;
     /* 0x33C */ Vec3f unk_33C;
     /* 0x348 */ s16 unk_348;
     /* 0x34A */ s16 unk_34A;
-    /* 0x34C */ s16 unk_34C;
-    /* 0x34E */ s16 unk_34E;
+    /* 0x34C */ s16 eyeTexIndex;
+    /* 0x34E */ s16 blinkTimer;
     /* 0x350 */ Vec3f unk_350;
     /* 0x35C */ Vec3f unk_35C;
     /* 0x368 */ Path* path;
@@ -40,7 +40,5 @@ typedef struct EnTruMt {
     /* 0x398 */ Vec3f unk_398;
     /* 0x3A4 */ u8 unk_3A4;
 } EnTruMt; // size = 0x3A8
-
-extern const ActorInit En_Tru_Mt_InitVars;
 
 #endif // Z_EN_TRU_MT_H

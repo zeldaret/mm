@@ -14,7 +14,7 @@ void EnMFire1_Init(Actor* thisx, PlayState* play);
 void EnMFire1_Destroy(Actor* thisx, PlayState* play);
 void EnMFire1_Update(Actor* thisx, PlayState* play);
 
-const ActorInit En_M_Fire1_InitVars = {
+ActorInit En_M_Fire1_InitVars = {
     ACTOR_EN_M_FIRE1,
     ACTORCAT_MISC,
     FLAGS,
@@ -68,9 +68,10 @@ void EnMFire1_Update(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (Math_StepToF(&this->timer, 1.0f, 0.2f)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
 }

@@ -36,7 +36,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this);
 void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play);
 void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play);
 
-const ActorInit En_Neo_Reeba_InitVars = {
+ActorInit En_Neo_Reeba_InitVars = {
     ACTOR_EN_NEO_REEBA,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -134,7 +134,7 @@ void EnNeoReeba_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 2;
-    this->actor.hintId = 0x47;
+    this->actor.hintId = TATL_HINT_ID_LEEVER;
     this->actor.gravity = -0.5f;
 
     this->targetPos = gZeroVec3f;
@@ -466,7 +466,7 @@ void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, PlayState* play) {
         if (this->actor.scale.x < 0.01f) {
             func_800B3030(play, &this->actor.world.pos, &sDeadDbAccel, &sDeadDbVel, 120, 0, 0);
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         if (this->actionTimer <= 10) {

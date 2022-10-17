@@ -19,6 +19,4 @@ typedef struct ObjBigicicle {
     /* 0x198 */ ColliderCylinder collider2;
 } ObjBigicicle; // size = 0x1E4
 
-extern const ActorInit Obj_Bigicicle_InitVars;
-
 #endif // Z_OBJ_BIGICICLE_H
