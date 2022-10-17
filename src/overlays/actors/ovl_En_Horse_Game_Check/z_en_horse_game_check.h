@@ -55,6 +55,4 @@ typedef struct EnHorseGameCheck {
     /* 0x180 */ UNK_TYPE1 pad180[0x38];
 } EnHorseGameCheck; // size = 0x1B8
 
-extern const ActorInit En_Horse_Game_Check_InitVars;
-
 #endif // Z_EN_HORSE_GAME_CHECK_H

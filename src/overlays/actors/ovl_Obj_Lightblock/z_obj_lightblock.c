@@ -22,7 +22,7 @@ void func_80AF3BA0(ObjLightblock* this, PlayState* play);
 void func_80AF3C18(ObjLightblock* this);
 void func_80AF3C34(ObjLightblock* this, PlayState* play);
 
-const ActorInit Obj_Lightblock_InitVars = {
+ActorInit Obj_Lightblock_InitVars = {
     ACTOR_OBJ_LIGHTBLOCK,
     ACTORCAT_BG,
     FLAGS,

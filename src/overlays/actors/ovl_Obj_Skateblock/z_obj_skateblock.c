@@ -27,7 +27,7 @@ void func_80A2273C(ObjSkateblock* this, PlayState* play);
 void func_80A227A4(ObjSkateblock* this);
 void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
-const ActorInit Obj_Skateblock_InitVars = {
+ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,
     FLAGS,

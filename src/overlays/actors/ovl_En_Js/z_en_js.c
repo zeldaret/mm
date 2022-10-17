@@ -27,7 +27,7 @@ void func_8096A104(EnJs* this, PlayState* play);
 void func_8096A38C(EnJs* this, PlayState* play);
 void func_8096A6F4(EnJs* this, PlayState* play);
 
-const ActorInit En_Js_InitVars = {
+ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
     ACTORCAT_NPC,
     FLAGS,

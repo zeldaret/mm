@@ -23,7 +23,7 @@ void func_80BCEBC0(EffKamejimaWave* this, PlayState* play);
 void func_80BCED34(EffKamejimaWave* this, PlayState* play);
 void EffKamejimaWave_SetVtxAlpha(u8 alpha);
 
-const ActorInit Eff_Kamejima_Wave_InitVars = {
+ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
     ACTORCAT_ITEMACTION,
     FLAGS,

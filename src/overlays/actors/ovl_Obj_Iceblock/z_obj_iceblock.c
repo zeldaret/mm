@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-const ActorInit Obj_Iceblock_InitVars = {
+ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,
     FLAGS,

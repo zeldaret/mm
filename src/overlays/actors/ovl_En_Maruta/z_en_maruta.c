@@ -36,7 +36,7 @@ void func_80B38060(EnMaruta* this, Vec3f* arg1);
 void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
 void func_80B382E4(PlayState* play, Vec3f arg1);
 
-const ActorInit En_Maruta_InitVars = {
+ActorInit En_Maruta_InitVars = {
     ACTOR_EN_MARUTA,
     ACTORCAT_PROP,
     FLAGS,

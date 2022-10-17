@@ -39,6 +39,4 @@ typedef struct EnZow {
     /* 0x618 */ EnZowActionFunc actionFunc;
 } EnZow; // size = 0x61C
 
-extern const ActorInit En_Zow_InitVars;
-
 #endif // Z_EN_ZOW_H

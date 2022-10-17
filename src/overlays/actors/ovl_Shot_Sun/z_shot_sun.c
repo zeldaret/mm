@@ -19,7 +19,7 @@ void ShotSun_Update(Actor* thisx, PlayState* play);
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
-const ActorInit Shot_Sun_InitVars = {
+ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
     ACTORCAT_PROP,
     FLAGS,

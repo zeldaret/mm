@@ -47,7 +47,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-const ActorInit En_Col_Man_InitVars = {
+ActorInit En_Col_Man_InitVars = {
     ACTOR_EN_COL_MAN,
     ACTORCAT_MISC,
     FLAGS,

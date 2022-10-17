@@ -201,7 +201,7 @@ s16 D_80917272;
 u8 D_80917274;
 Vec3f D_80917278;
 
-const ActorInit En_Fishing_InitVars = {
+ActorInit En_Fishing_InitVars = {
     ACTOR_EN_FISHING,
     ACTORCAT_NPC,
     FLAGS,

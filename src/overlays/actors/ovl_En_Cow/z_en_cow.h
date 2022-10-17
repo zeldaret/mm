@@ -32,6 +32,4 @@ typedef struct EnCow {
     /* 0x0274 */ EnCowActionFunc actionFunc;
 } EnCow; // size = 0x278
 
-extern const ActorInit En_Cow_InitVars;
-
 #endif // Z_EN_COW_H

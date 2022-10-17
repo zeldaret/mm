@@ -23,6 +23,4 @@ typedef struct ObjTaru {
     /* 0x1AD */ s8 unk_1AD;
 } ObjTaru; // size = 0x1B0
 
-extern const ActorInit Obj_Taru_InitVars;
-
 #endif // Z_OBJ_TARU_H

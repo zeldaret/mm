@@ -27,7 +27,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 // --------------- 4 ---------------
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -121,8 +121,6 @@ typedef struct EnRecepgirl {
     /* 0x02A8 */ EnRecepgirlActionFunc actionFunc;
     /* 0x02AC */ char unk_2AC[0x8];
 } EnRecepgirl; // size = 0x2B4
-
-extern const ActorInit En_Recepgirl_InitVars;
 
 #endif // Z_EN_RECEPGIRL_H
 ```
@@ -337,7 +335,7 @@ For now, we do not want to consider the data that mips2c has kindly imported for
 
 ```C
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,

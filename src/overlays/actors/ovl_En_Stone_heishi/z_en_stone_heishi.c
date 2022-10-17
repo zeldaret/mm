@@ -27,7 +27,7 @@ void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi*);
 void EnStoneheishi_GiveItemReward(EnStoneheishi* this, PlayState* play);
 void EnStoneheishi_SetupDrinkBottleProcess(EnStoneheishi* this);
 
-const ActorInit En_Stone_heishi_InitVars = {
+ActorInit En_Stone_heishi_InitVars = {
     ACTOR_EN_STONE_HEISHI,
     ACTORCAT_NPC,
     FLAGS,

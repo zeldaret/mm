@@ -26,7 +26,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play);
 void func_80B3A498(ObjSnowball2* this);
 void func_80B3A500(ObjSnowball2* this, PlayState* play);
 
-const ActorInit Obj_Snowball2_InitVars = {
+ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,
     FLAGS,

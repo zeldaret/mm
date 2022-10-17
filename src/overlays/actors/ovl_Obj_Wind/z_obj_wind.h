@@ -10,6 +10,4 @@ typedef struct ObjWind {
     /* 0x144 */ char unk_144[0x4];
 } ObjWind; // size = 0x148
 
-extern const ActorInit Obj_Wind_InitVars;
-
 #endif // Z_OBJ_WIND_H

@@ -24,7 +24,7 @@ void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,

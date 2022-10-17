@@ -19,7 +19,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play);
 void func_80A42AB8(EnTest4* this, PlayState* play);
 void func_80A42F20(EnTest4* this, PlayState* play);
 
-const ActorInit En_Test4_InitVars = {
+ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
     ACTORCAT_SWITCH,
     FLAGS,

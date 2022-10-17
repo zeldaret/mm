@@ -35,7 +35,7 @@ s32 func_808F99B0(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
-const ActorInit En_Horse_Game_Check_InitVars = {
+ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
     ACTORCAT_BG,
     FLAGS,

@@ -16,7 +16,7 @@ void ObjShutter_Destroy(Actor* thisx, PlayState* play);
 void ObjShutter_Update(Actor* thisx, PlayState* play2);
 void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Shutter_InitVars = {
+ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
     ACTORCAT_PROP,
     FLAGS,

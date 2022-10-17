@@ -22,6 +22,4 @@ typedef struct EnOkarinaTag {
     /* 0x158 */ f32 unk158;
 } EnOkarinaTag; // size = 0x15C
 
-extern const ActorInit En_Okarina_Tag_InitVars;
-
 #endif // Z_EN_OKARINA_TAG_H

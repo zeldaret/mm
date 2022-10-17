@@ -18,7 +18,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play);
 
 void DmChar07_DoNothing(DmChar07* this, PlayState* play);
 
-const ActorInit Dm_Char07_InitVars = {
+ActorInit Dm_Char07_InitVars = {
     ACTOR_DM_CHAR07,
     ACTORCAT_ITEMACTION,
     FLAGS,

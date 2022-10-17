@@ -31,8 +31,6 @@ typedef struct EnMaYts {
     /* 0x338 */ u16 textId;
 } EnMaYts; // size = 0x33C
 
-extern const ActorInit En_Ma_Yts_InitVars;
-
 typedef enum {
     /* 0 */ MA_YTS_TYPE_BARN,
     /* 1 */ MA_YTS_TYPE_SITTING,

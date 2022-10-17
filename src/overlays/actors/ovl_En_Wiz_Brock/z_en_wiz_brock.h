@@ -25,6 +25,4 @@ typedef struct EnWizBrock {
     /* 0x1AC */ f32 alpha;
 } EnWizBrock; // size = 0x1B0
 
-extern const ActorInit En_Wiz_Brock_InitVars;
-
 #endif // Z_EN_WIZ_BROCK_H

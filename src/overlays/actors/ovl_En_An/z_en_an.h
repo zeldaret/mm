@@ -14,6 +14,4 @@ typedef struct EnAn {
     /* 0x18C */ char unk_18C[0x23C];
 } EnAn; // size = 0x3C8
 
-extern const ActorInit En_An_InitVars;
-
 #endif // Z_EN_AN_H

@@ -62,6 +62,4 @@ typedef struct EnRr {
     /* 0x324 */ EnRrStruct unk_324[5];
 } EnRr; // size = 0x3C4
 
-extern const ActorInit En_Rr_InitVars;
-
 #endif // Z_EN_RR_H

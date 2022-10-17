@@ -40,6 +40,4 @@ typedef struct EnSyatekiDekunuts {
     /* 0x26C */ UNK_TYPE1 unk_26C[0x4];
 } EnSyatekiDekunuts; // size = 0x270
 
-extern const ActorInit En_Syateki_Dekunuts_InitVars;
-
 #endif // Z_EN_SYATEKI_DEKUNUTS_H

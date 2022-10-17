@@ -25,7 +25,7 @@ void EnBomChu_Move(EnBomChu* this, PlayState* play);
 void EnBomChu_Explode(EnBomChu* this, PlayState* play);
 void EnBomChu_WaitForDeath(EnBomChu* this, PlayState* play);
 
-const ActorInit En_Bom_Chu_InitVars = {
+ActorInit En_Bom_Chu_InitVars = {
     ACTOR_EN_BOM_CHU,
     ACTORCAT_EXPLOSIVES,
     FLAGS,

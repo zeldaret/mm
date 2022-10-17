@@ -28,7 +28,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play);
 void EnBat_Die(EnBat* this, PlayState* play);
 void EnBat_Stunned(EnBat* this, PlayState* play);
 
-const ActorInit En_Bat_InitVars = {
+ActorInit En_Bat_InitVars = {
     ACTOR_EN_BAT,
     ACTORCAT_ENEMY,
     FLAGS,

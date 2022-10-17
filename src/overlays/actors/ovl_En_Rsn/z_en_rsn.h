@@ -16,6 +16,4 @@ typedef struct EnRsn {
     /* 0x1DE */ Vec3s unk1DE;
 } EnRsn; // size = 0x1E4
 
-extern const ActorInit En_Rsn_InitVars;
-
 #endif // Z_EN_RSN_H

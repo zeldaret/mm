@@ -37,7 +37,7 @@ void func_80BA0BB4(EnZob* this, PlayState* play);
 void func_80BA0C14(EnZob* this, PlayState* play);
 void func_80BA0CF4(EnZob* this, PlayState* play);
 
-const ActorInit En_Zob_InitVars = {
+ActorInit En_Zob_InitVars = {
     ACTOR_EN_ZOB,
     ACTORCAT_NPC,
     FLAGS,

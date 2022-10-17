@@ -34,6 +34,4 @@ typedef struct EnEncount1 {
     /* 0x160 */ f32 unk_160;
 } EnEncount1; // size = 0x164
 
-extern const ActorInit En_Encount1_InitVars;
-
 #endif // Z_EN_ENCOUNT1_H

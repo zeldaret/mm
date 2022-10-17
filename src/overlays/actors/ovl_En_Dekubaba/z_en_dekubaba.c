@@ -32,7 +32,7 @@ void func_808B3DA8(EnDekubaba* this, PlayState* play);
 void func_808B3EE8(EnDekubaba* this, PlayState* play);
 
 #if 0
-const ActorInit En_Dekubaba_InitVars = {
+ActorInit En_Dekubaba_InitVars = {
     ACTOR_EN_DEKUBABA,
     ACTORCAT_ENEMY,
     FLAGS,

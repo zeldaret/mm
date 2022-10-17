@@ -17,6 +17,4 @@ typedef struct BgIkanaBombwall {
     /* 0x1AC */ s8 unk_1AC;
 } BgIkanaBombwall; // size = 0x1B0
 
-extern const ActorInit Bg_Ikana_Bombwall_InitVars;
-
 #endif // Z_BG_IKANA_BOMBWALL_H

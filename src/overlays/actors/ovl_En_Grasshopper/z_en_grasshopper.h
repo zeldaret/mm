@@ -75,6 +75,4 @@ typedef struct EnGrasshopper {
     /* 0x0570 */ EnGrasshopperEffect effects[EN_GRASSHOPPER_EFFECT_COUNT];
 } EnGrasshopper; // size = 0x1870
 
-extern const ActorInit En_Grasshopper_InitVars;
-
 #endif // Z_EN_GRASSHOPPER_H

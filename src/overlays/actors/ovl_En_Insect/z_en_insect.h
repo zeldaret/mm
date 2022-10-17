@@ -25,6 +25,4 @@ typedef struct EnInsect {
     /* 0x316 */ s16 unk_316;
 } EnInsect; // size = 0x318
 
-extern const ActorInit En_Insect_InitVars;
-
 #endif // Z_EN_INSECT_H

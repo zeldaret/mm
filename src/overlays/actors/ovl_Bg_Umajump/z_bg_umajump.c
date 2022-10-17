@@ -18,7 +18,7 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Umajump_InitVars = {
+ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
     FLAGS,

@@ -26,6 +26,4 @@ typedef struct EnKnight {
     /* 0x68C */ char pad68C[0x48];
 } EnKnight; // size = 0x6D4
 
-extern const ActorInit En_Knight_InitVars;
-
 #endif // Z_EN_KNIGHT_H

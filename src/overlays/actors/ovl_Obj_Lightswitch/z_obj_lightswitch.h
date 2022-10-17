@@ -29,8 +29,6 @@ typedef struct ObjLightswitch {
 
 } ObjLightswitch; // size = 0x1C0
 
-extern const ActorInit Obj_Lightswitch_InitVars;
-
 #define LIGHTSWITCH_FACE_ASLEEP 0
 #define LIGHTSWITCH_FACE_WAKING 1
 #define LIGHTSWITCH_FACE_FULLAWAKE 2

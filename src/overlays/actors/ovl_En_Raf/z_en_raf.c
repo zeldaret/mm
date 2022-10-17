@@ -67,7 +67,7 @@ typedef enum {
     /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } EnRafPetalScaleType;
 
-const ActorInit En_Raf_InitVars = {
+ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
     ACTORCAT_PROP,
     FLAGS,

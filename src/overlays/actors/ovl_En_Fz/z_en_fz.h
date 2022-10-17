@@ -70,6 +70,4 @@ typedef struct EnFz {
     /* 0xBD9 */ u8 unk_BD9;
 } EnFz; /* size = 0xBDC */
 
-extern const ActorInit En_Fz_InitVars;
-
 #endif // Z_EN_FZ_H

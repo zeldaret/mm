@@ -41,6 +41,4 @@ typedef struct EnClearTag {
     /* 0x2E78 */ Vec3f subCamAt;
 } EnClearTag; // size = 0x2E84
 
-extern const ActorInit En_Clear_Tag_InitVars;
-
 #endif // Z_EN_CLEAR_TAG_H

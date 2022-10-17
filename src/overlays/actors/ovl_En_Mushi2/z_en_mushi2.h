@@ -45,6 +45,4 @@ typedef struct EnMushi2 {
     /* 0x370 */ s16 unk_370;
 } EnMushi2; // size = 0x374
 
-extern const ActorInit En_Mushi2_InitVars;
-
 #endif // Z_EN_MUSHI2_H

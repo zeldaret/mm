@@ -19,6 +19,4 @@ typedef struct EnDrs {
     /* 0x208 */ s8 moonMaskObjBankIndex;
 } EnDrs; // size = 0x20C */
 
-extern const ActorInit En_Drs_InitVars;
-
 #endif // Z_EN_DRS_H
