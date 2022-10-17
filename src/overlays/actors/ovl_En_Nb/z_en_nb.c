@@ -424,7 +424,7 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     TextState talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {
