@@ -57,7 +57,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play);
 void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play);
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play);
 
-const ActorInit En_Holl_InitVars = {
+ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
     ACTORCAT_DOOR,
     FLAGS,
@@ -155,7 +155,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(&this->actor)];
 
         if (!(actorCtxBitmask & zActorBitmask)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         if (this == sInstancePlayingSound) {
@@ -310,7 +310,7 @@ void EnHoll_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
-        !(player->stateFlags1 & 0x200)) {
+        !(player->stateFlags1 & PLAYER_STATE1_200)) {
         this->actionFunc(this, play);
     }
 }

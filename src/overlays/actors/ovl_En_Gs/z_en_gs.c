@@ -37,7 +37,7 @@ s32 func_809995A4(EnGs* this, PlayState* play);
 void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
-const ActorInit En_Gs_InitVars = {
+ActorInit En_Gs_InitVars = {
     ACTOR_EN_GS,
     ACTORCAT_PROP,
     FLAGS,
@@ -871,7 +871,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         if (this->actor.playerHeightRel < -12000.0f) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             sp7C = 0;
         }
     }
@@ -881,7 +881,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
 void func_80999A8C(EnGs* this, PlayState* play) {
     if (this->unk_1D4-- <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

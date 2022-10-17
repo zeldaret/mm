@@ -39,7 +39,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play);
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-const ActorInit Bg_Hakugin_Post_InitVars = {
+ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
     ACTORCAT_BG,
     FLAGS,
@@ -709,7 +709,7 @@ void BgHakuginPost_Init(Actor* thisx, PlayState* play) {
         func_80A9CA94(this);
     } else {
         func_80A9AFB4(this, play, &D_80A9E028);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

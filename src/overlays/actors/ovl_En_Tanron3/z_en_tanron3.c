@@ -31,7 +31,7 @@ static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 
 static Boss03* sGyorg = NULL;
 
-const ActorInit En_Tanron3_InitVars = {
+ActorInit En_Tanron3_InitVars = {
     ACTOR_EN_TANRON3,
     ACTORCAT_BOSS,
     FLAGS,
@@ -211,7 +211,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
 
                 // If the player gets eaten by Gyorg, or if the attack timer ran out,
                 // stop chasing the player for a little bit.
-                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & 0x80)) {
+                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & PLAYER_STATE2_80)) {
                     this->workTimer[WORK_TIMER_WAIT] = 150;
                     this->isNonHostile = true;
                 }
@@ -354,7 +354,7 @@ void EnTanron3_Die(EnTanron3* this, PlayState* play) {
     Actor_MoveWithoutGravityReverse(&this->actor);
     if (this->workTimer[WORK_TIMER_DIE] == 0) {
         EnTanron3_SpawnBubbles(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         if (Rand_ZeroOne() < 0.3f) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x60);
         }

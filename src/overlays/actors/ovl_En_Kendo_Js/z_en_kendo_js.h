@@ -32,6 +32,4 @@ typedef struct EnKendoJs {
     /* 0x292 */ u8 unk_292;
 } EnKendoJs; // size = 0x294
 
-extern const ActorInit En_Kendo_Js_InitVars;
-
 #endif // Z_EN_KENDO_JS_H

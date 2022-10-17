@@ -14,6 +14,4 @@ typedef struct ObjEntotu {
     /* 0x1C6 */ s16 unk_1C6;
 } ObjEntotu; // size = 0x1C8
 
-extern const ActorInit Obj_Entotu_InitVars;
-
 #endif // Z_OBJ_ENTOTU_H

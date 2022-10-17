@@ -16,7 +16,7 @@ void BgFuMizu_Destroy(Actor* thisx, PlayState* play);
 void BgFuMizu_Update(Actor* thisx, PlayState* play);
 void BgFuMizu_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Fu_Mizu_InitVars = {
+ActorInit Bg_Fu_Mizu_InitVars = {
     ACTOR_BG_FU_MIZU,
     ACTORCAT_BG,
     FLAGS,

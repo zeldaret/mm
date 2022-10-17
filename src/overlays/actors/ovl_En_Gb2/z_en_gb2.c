@@ -36,7 +36,7 @@ void func_80B111AC(EnGb2* this, PlayState* play);
 void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
-const ActorInit En_Gb2_InitVars = {
+ActorInit En_Gb2_InitVars = {
     ACTOR_EN_GB2,
     ACTORCAT_NPC,
     FLAGS,
@@ -652,25 +652,26 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
 
         switch (ENGB2_GET_7(&this->actor)) {
             case ENGB2_7_0:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case ENGB2_7_1:
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case ENGB2_7_2:
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
                 if (this->unk_26E == 0x14FB) {
                     Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
-                    Actor_MarkForDeath(&this->actor);
-                } else {
-                    this->actor.draw = NULL;
-                    this->unk_26C |= 0x100;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
-                    this->actionFunc = func_80B111AC;
+                    Actor_Kill(&this->actor);
+                    return;
                 }
+
+                this->actor.draw = NULL;
+                this->unk_26C |= 0x100;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actionFunc = func_80B111AC;
                 break;
         }
     }
@@ -869,7 +870,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
     EnGb2* this = THIS;
 
     if (func_80B0F660(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -885,9 +886,9 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
     switch (ENGB2_GET_7(&this->actor)) {
         case ENGB2_7_0:
             if (gSaveContext.save.weekEventReg[54] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else if (gSaveContext.save.weekEventReg[52] & 0x20) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             if (gSaveContext.save.entrance == ENTRANCE(GHOST_HUT, 1)) {
@@ -910,12 +911,12 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 
         case ENGB2_7_1:
             if ((play->curSpawn == 1) || (gSaveContext.save.weekEventReg[80] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
             if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -929,13 +930,13 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             this->unk_290 = 0;
             this->unk_282[0] = this->actor.cutscene;
             if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
             if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) &&
                 Flags_GetClear(play, 5)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -952,7 +953,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
     }
 }

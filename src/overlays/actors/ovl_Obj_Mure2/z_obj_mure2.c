@@ -18,7 +18,7 @@ void func_809613FC(ObjMure2* this, PlayState* play);
 void func_80961490(ObjMure2* this, PlayState* play);
 
 #if 0
-const ActorInit Obj_Mure2_InitVars = {
+ActorInit Obj_Mure2_InitVars = {
     ACTOR_OBJ_MURE2,
     ACTORCAT_PROP,
     FLAGS,

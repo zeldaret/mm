@@ -34,6 +34,4 @@ typedef struct ObjUsiyane {
     /* 0x744 */ s32 unk_744;
 } ObjUsiyane; // size = 0x748
 
-extern const ActorInit Obj_Usiyane_InitVars;
-
 #endif // Z_OBJ_USIYANE_H

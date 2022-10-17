@@ -16,7 +16,7 @@ void ObjDinner_Destroy(Actor* thisx, PlayState* play);
 void ObjDinner_Update(Actor* thisx, PlayState* play);
 void ObjDinner_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Dinner_InitVars = {
+ActorInit Obj_Dinner_InitVars = {
     ACTOR_OBJ_DINNER,
     ACTORCAT_PROP,
     FLAGS,
@@ -32,7 +32,7 @@ void ObjDinner_Init(Actor* thisx, PlayState* play) {
     ObjDinner* this = THIS;
 
     if (gSaveContext.save.isNight != true || (CURRENT_DAY == 3 && gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     Actor_SetScale(&this->actor, 0.1f);
 }

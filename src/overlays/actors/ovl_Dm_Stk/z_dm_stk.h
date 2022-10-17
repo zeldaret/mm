@@ -51,6 +51,4 @@ typedef struct DmStk {
     /* 0x33B */ u8 shouldDraw;
 } DmStk; // size = 0x33C
 
-extern const ActorInit Dm_Stk_InitVars;
-
 #endif // Z_DM_STK_H

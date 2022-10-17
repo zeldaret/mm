@@ -201,7 +201,7 @@ s16 D_80917272;
 u8 D_80917274;
 Vec3f D_80917278;
 
-const ActorInit En_Fishing_InitVars = {
+ActorInit En_Fishing_InitVars = {
     ACTOR_EN_FISHING,
     ACTORCAT_NPC,
     FLAGS,
@@ -2151,7 +2151,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
             Math_ApproachF(&D_809101C0, 195.0f, 1.0f, 1.0f);
 
-            if (player->stateFlags1 & 0x8000000) {
+            if (player->stateFlags1 & PLAYER_STATE1_8000000) {
                 D_80917204 = 0;
                 player->unk_B28 = 0;
             }
@@ -3865,7 +3865,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                         D_8090CCF0 = this->unk_1A4;
                                         D_809171D0 = this->unk_148;
                                         D_809171D2 = D_80917206;
-                                        Actor_MarkForDeath(&this->actor);
+                                        Actor_Kill(&this->actor);
                                     } else if ((this->unk_148 == 0) && (D_809171D0 == 0) &&
                                                ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
                                         this->unk_1CD = 1;

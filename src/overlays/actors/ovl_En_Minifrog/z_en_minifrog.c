@@ -26,7 +26,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-const ActorInit En_Minifrog_InitVars = {
+ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
     ACTORCAT_NPC,
     FLAGS,
@@ -116,13 +116,14 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
             ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->timer = 30;
-            this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
-            this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
-            this->actor.colChkInfo.mass = 30;
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->timer = 30;
+        this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
+        this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
+        this->actor.colChkInfo.mass = 30;
     } else { // Frogs in mountain village
         if (this->frogIndex == MINIFROG_YELLOW) {
             this->actor.textId = 0;
@@ -293,7 +294,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                     }
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
         }
     }

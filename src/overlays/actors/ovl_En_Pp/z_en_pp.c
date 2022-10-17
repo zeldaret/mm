@@ -115,7 +115,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_PP_DMGEFF_KNOCK_OFF_MASK),
 };
 
-const ActorInit En_Pp_InitVars = {
+ActorInit En_Pp_InitVars = {
     ACTOR_EN_PP,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -1072,7 +1072,7 @@ void EnPp_Dead(EnPp* this, PlayState* play) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0xE0);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1150,7 +1150,7 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
                                           &sMaskFireVelocityAndAccel[i], 70, 0, 2);
                         }
 
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                     }
                 }
                 break;
@@ -1225,7 +1225,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
     }
 
     if ((this->timer == 0) || (this->actor.bgCheckFlags & 1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

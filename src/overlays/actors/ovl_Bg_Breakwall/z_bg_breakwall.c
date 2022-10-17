@@ -45,7 +45,7 @@ void func_808B7B54(Actor* thisx, PlayState* play);
 void func_808B7D34(Actor* thisx, PlayState* play);
 void BgBreakwall_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Breakwall_InitVars = {
+ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL, ACTORCAT_ITEMACTION,           FLAGS,
     GAMEPLAY_KEEP,      sizeof(BgBreakwall),           (ActorFunc)BgBreakwall_Init,
     (ActorFunc)NULL,    (ActorFunc)BgBreakwall_Update, (ActorFunc)NULL,
@@ -216,7 +216,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     this->unk_15C = Object_GetIndex(&play->objectCtx, sp24->unk_00);
 
     if ((this->unk_15C < 0) || !sp24->unk_14(this, play)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -286,7 +286,7 @@ void func_808B782C(BgBreakwall* this, PlayState* play) {
 
 void func_808B78A4(BgBreakwall* this, PlayState* play) {
     if (gSaveContext.save.weekEventReg[55] & 0x80) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

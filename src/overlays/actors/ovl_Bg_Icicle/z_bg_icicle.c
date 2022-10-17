@@ -42,7 +42,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 120, 0, { 0, 0, 0 } },
 };
 
-const ActorInit Bg_Icicle_InitVars = {
+ActorInit Bg_Icicle_InitVars = {
     ACTOR_BG_ICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -178,8 +178,7 @@ void BgIcicle_Fall(BgIcicle* this, PlayState* play) {
             func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
             this->actionFunc = BgIcicle_Regrow;
         } else {
-            Actor_MarkForDeath(&this->dyna.actor);
-            return;
+            Actor_Kill(&this->dyna.actor);
         }
     } else {
         Actor_MoveWithGravity(&this->dyna.actor);
@@ -225,7 +224,7 @@ void BgIcicle_UpdateAttacked(BgIcicle* this, PlayState* play) {
             BgIcicle_Break(this, play, 40.0f);
         }
 
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

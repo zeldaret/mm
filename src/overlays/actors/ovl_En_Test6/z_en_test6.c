@@ -42,7 +42,7 @@ void func_80A92950(EnTest6* this, PlayState* play);
 
 EnTest6Struct D_80A94910[12];
 
-const ActorInit En_Test6_InitVars = {
+ActorInit En_Test6_InitVars = {
     ACTOR_EN_TEST6,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -302,7 +302,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
     if (((ENTEST6_GET(&this->actor) == ENTEST6_24) || (ENTEST6_GET(&this->actor) == ENTEST6_25) ||
          (ENTEST6_GET(&this->actor) == ENTEST6_26)) &&
         (play->playerActorCsIds[8] == -1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -398,7 +398,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     func_800B7298(play, NULL, 6);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_80A91760(EnTest6* this, PlayState* play) {
@@ -619,7 +619,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     func_800B7298(play, NULL, 6);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_80A92188(EnTest6* this, PlayState* play) {

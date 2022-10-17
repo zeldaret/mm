@@ -35,7 +35,7 @@ void func_80AADF54(PlayState* play, DmChar05* this);
 void func_80AAE030(PlayState* play, DmChar05* this);
 void func_80AAE114(PlayState* play, DmChar05* this);
 
-const ActorInit Dm_Char05_InitVars = {
+ActorInit Dm_Char05_InitVars = {
     ACTOR_DM_CHAR05,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -338,7 +338,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -382,7 +382,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -425,7 +425,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:

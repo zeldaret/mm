@@ -32,7 +32,7 @@ void func_8091B984(EnInsect* this, PlayState* play);
 
 s16 D_8091BD60 = 0;
 
-const ActorInit En_Insect_InitVars = {
+ActorInit En_Insect_InitVars = {
     ACTOR_EN_INSECT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -310,7 +310,7 @@ void func_8091B2D8(EnInsect* this, PlayState* play) {
         this->actor.draw = EnInsect_Draw;
     } else if (this->unk_312 == 0) {
         if (this->unk_30C & 4) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -355,7 +355,7 @@ void func_8091B440(EnInsect* this, PlayState* play) {
     }
 
     if (this->unk_312 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -436,7 +436,7 @@ void func_8091B984(EnInsect* this, PlayState* play) {
     }
 
     if (this->unk_312 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

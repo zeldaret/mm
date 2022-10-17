@@ -23,7 +23,7 @@ void func_80BE895C(EnBaisen* this, PlayState* play);
 void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
-const ActorInit En_Baisen_InitVars = {
+ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
     ACTORCAT_NPC,
     FLAGS,
@@ -73,7 +73,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
         this->unk290 = true;
         if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
             ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
@@ -81,7 +81,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.yShift = 0;
         if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
             ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.targetMode = 6;
@@ -249,7 +249,7 @@ void EnBaisen_Update(Actor* thisx, PlayState* play) {
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((this->paramCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);

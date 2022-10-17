@@ -19,6 +19,4 @@ typedef struct ObjLightblock {
     /* 0x1AE */ s8 collisionCounter;
 } ObjLightblock; // size = 0x1B0
 
-extern const ActorInit Obj_Lightblock_InitVars;
-
 #endif // Z_OBJ_LIGHTBLOCK_H

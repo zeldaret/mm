@@ -18,7 +18,7 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 void func_80AF76F0(EnSnowwd* this, PlayState* play);
 
 #if 0
-const ActorInit En_Snowwd_InitVars = {
+ActorInit En_Snowwd_InitVars = {
     ACTOR_EN_SNOWWD,
     ACTORCAT_PROP,
     FLAGS,

@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-const ActorInit En_Look_Nuts_InitVars = {
+ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -120,11 +120,11 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->pathLocation == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -355,7 +355,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(play);
 
-                if (!(player->stateFlags3 & 0x100) && !Play_InCsMode(play)) {
+                if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);

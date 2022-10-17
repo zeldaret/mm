@@ -23,6 +23,4 @@ typedef struct DoorSpiral {
     /* 0x14C */ DoorSpiralActionFunc actionFunc;
 } DoorSpiral; // size = 0x150
 
-extern const ActorInit Door_Spiral_InitVars;
-
 #endif // Z_DOOR_SPIRAL_H

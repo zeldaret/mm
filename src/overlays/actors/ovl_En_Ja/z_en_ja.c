@@ -50,7 +50,7 @@ s32 D_80BC366C[] = {
     0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-const ActorInit En_Ja_InitVars = {
+ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,
     ACTORCAT_NPC,
     FLAGS,

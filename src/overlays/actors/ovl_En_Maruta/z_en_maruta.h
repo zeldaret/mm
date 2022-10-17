@@ -27,6 +27,4 @@ typedef struct EnMaruta {
     /* 0x220 */ s16 unk_220;
 } EnMaruta; // size = 0x224
 
-extern const ActorInit En_Maruta_InitVars;
-
 #endif // Z_EN_MARUTA_H

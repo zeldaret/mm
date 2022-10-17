@@ -14,6 +14,4 @@ typedef struct EnTakaraya {
     /* 0x2AC */ char unk_2AC[0x10];
 } EnTakaraya; // size = 0x2BC
 
-extern const ActorInit En_Takaraya_InitVars;
-
 #endif // Z_EN_TAKARAYA_H

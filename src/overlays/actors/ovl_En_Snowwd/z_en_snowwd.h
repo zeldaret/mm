@@ -13,6 +13,4 @@ typedef struct EnSnowwd {
     /* 0x194 */ EnSnowwdActionFunc actionFunc;
 } EnSnowwd; // size = 0x198
 
-extern const ActorInit En_Snowwd_InitVars;
-
 #endif // Z_EN_SNOWWD_H

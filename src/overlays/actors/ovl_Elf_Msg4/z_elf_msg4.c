@@ -22,7 +22,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play);
 s32 ElfMsg4_GetTextId(ElfMsg4* this);
 s32 func_80AFD5E0(ElfMsg4* this);
 
-const ActorInit Elf_Msg4_InitVars = {
+ActorInit Elf_Msg4_InitVars = {
     ACTOR_ELF_MSG4,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -46,7 +46,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
         if (ELFMSG4_GET_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
@@ -54,7 +54,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
             if (ELFMSG4_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor));
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return true;
         }
     }
@@ -63,7 +63,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play) {
     }
     if (Flags_GetSwitch(play, ELFMSG4_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;
@@ -156,14 +156,20 @@ void ElfMsg4_Update(Actor* thisx, PlayState* play) {
     if (!func_80AFD380(this, play)) {
         bgActor = this->elfMsg5;
         if ((bgActor != NULL) && (bgActor->update == NULL)) {
-            Actor_MarkForDeath(&this->actor);
-        } else if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if ((bgActor != NULL) && (Actor_ProcessTalkRequest(bgActor, &play->state))) {
             if (ELFMSG4_GET_SWITCHFLAG(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG4_GET_SWITCHFLAG(thisx));
             }
-            Actor_MarkForDeath(&this->actor);
-        } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-                   (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
+            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
             this->actionFunc(this, play);
         }
     }

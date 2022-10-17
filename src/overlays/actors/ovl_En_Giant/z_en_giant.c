@@ -72,7 +72,7 @@ typedef enum {
     /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
 } GiantCsActionIndex;
 
-const ActorInit En_Giant_InitVars = {
+ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
     ACTORCAT_NPC,
     FLAGS,
@@ -110,7 +110,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
                 return true;
             }
             break;
@@ -184,7 +184,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
         if (!(gSaveContext.save.weekEventReg[25] & 2)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -210,7 +210,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
         this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         if (EnGiant_IsImprisoned(this)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 

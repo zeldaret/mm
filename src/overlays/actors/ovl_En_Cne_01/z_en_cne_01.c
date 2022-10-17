@@ -20,7 +20,7 @@ void EnCne01_Walk(EnHy* this, PlayState* play);
 void EnCne01_FaceForward(EnHy* this, PlayState* play);
 void EnCne01_Talk(EnHy* this, PlayState* play);
 
-const ActorInit En_Cne_01_InitVars = {
+ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -210,7 +210,7 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {
-        Actor_MarkForDeath(&this->enHy.actor);
+        Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
     Collider_InitCylinder(play, &this->enHy.collider);

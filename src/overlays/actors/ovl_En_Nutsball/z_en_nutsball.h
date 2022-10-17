@@ -12,6 +12,4 @@ typedef struct EnNutsball {
     /* 0x148 */ ColliderCylinder collider;
 } EnNutsball; // size = 0x194
 
-extern const ActorInit En_Nutsball_InitVars;
-
 #endif // Z_EN_NUTSBALL_H

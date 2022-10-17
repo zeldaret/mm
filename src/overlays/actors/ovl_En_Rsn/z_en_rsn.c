@@ -18,7 +18,7 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 
 void func_80C25D84(EnRsn* this, PlayState* play);
 
-const ActorInit En_Rsn_InitVars = {
+ActorInit En_Rsn_InitVars = {
     ACTOR_EN_RSN,
     ACTORCAT_NPC,
     FLAGS,

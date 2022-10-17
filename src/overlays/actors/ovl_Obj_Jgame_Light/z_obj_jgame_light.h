@@ -27,6 +27,4 @@ typedef struct ObjJgameLight {
     /* 0x1B8 */ u8 prevHealth;
 } ObjJgameLight; // size = 0x1BC
 
-extern const ActorInit Obj_Jgame_Light_InitVars;
-
 #endif // Z_OBJ_JGAME_LIGHT_H

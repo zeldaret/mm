@@ -18,7 +18,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 
 void func_80AABE34(DmChar04* this, PlayState* play);
 
-const ActorInit Dm_Char04_InitVars = {
+ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -16,6 +16,4 @@ typedef struct EnJcMato {
     /* 0x1A4 */ Vec3f pos;
 } EnJcMato; // size = 0x1B0
 
-extern const ActorInit En_Jc_Mato_InitVars;
-
 #endif // Z_EN_JC_MATO_H

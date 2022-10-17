@@ -25,7 +25,7 @@ void func_80B3D338(EnDnp* this, PlayState* play);
 void func_80B3D3F8(EnDnp* this, PlayState* play);
 void func_80B3D558(EnDnp* this, PlayState* play);
 
-const ActorInit En_Dnp_InitVars = {
+ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
     FLAGS,
@@ -300,8 +300,11 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING)) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_32E == 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_32E == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_32E = 1;
         } else {
@@ -379,7 +382,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         }
         this->actionFunc = func_80B3D2D4;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -20,7 +20,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2);
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-const ActorInit Dm_Char00_InitVars = {
+ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -528,7 +528,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     DmChar00* this = THIS;
 
     if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
     }
 
     this->unk_240 = D_80AA77A8[DMCHAR00_GET(thisx)];
@@ -648,7 +648,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                         break;
 
                     case 0x16:
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                         break;
 
                     case 0x17:

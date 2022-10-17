@@ -29,7 +29,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-const ActorInit En_Mm3_InitVars = {
+ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,
     FLAGS,
@@ -341,7 +341,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                         Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_ON);
                     } else {
@@ -383,7 +383,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (gSaveContext.timerStates[TIMER_ID_POSTMAN] == TIMER_STATE_POSTMAN_END) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags |= ACTOR_FLAG_10000;
         if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
             gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(15);
@@ -445,7 +445,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
         func_80151BB4(play, 0xB);

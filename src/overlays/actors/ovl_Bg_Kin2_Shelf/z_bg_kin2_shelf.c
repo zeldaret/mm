@@ -23,7 +23,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play);
 void func_80B70498(BgKin2Shelf* this);
 void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Shelf_InitVars = {
+ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
     ACTORCAT_BG,
     FLAGS,
@@ -260,7 +260,7 @@ void func_80B700C0(BgKin2Shelf* this, PlayState* play) {
         } else {
             Player* player = GET_PLAYER(play);
 
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     } else {
@@ -292,7 +292,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         this->unk_160 = 1.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (this->unk_164 & 8) {
@@ -339,7 +339,7 @@ void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         this->unk_160 = 1.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (this->unk_164 & 4) {

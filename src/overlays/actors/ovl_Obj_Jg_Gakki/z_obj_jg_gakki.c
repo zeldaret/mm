@@ -16,7 +16,7 @@ void ObjJgGakki_Destroy(Actor* thisx, PlayState* play);
 void ObjJgGakki_Update(Actor* thisx, PlayState* play);
 void ObjJgGakki_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Jg_Gakki_InitVars = {
+ActorInit Obj_Jg_Gakki_InitVars = {
     ACTOR_OBJ_JG_GAKKI,
     ACTORCAT_PROP,
     FLAGS,
@@ -42,7 +42,7 @@ void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {
     } else if ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_10YUKIYAMANOMURA)) {
         Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     Actor_SetScale(&this->actor, 0.01f);
 }

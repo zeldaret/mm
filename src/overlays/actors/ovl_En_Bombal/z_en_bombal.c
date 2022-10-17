@@ -25,7 +25,7 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
 void EnBombal_DrawEffects(EnBombal*, PlayState*);
 
-const ActorInit En_Bombal_InitVars = {
+ActorInit En_Bombal_InitVars = {
     ACTOR_EN_BOMBAL,
     ACTORCAT_PROP,
     FLAGS,
@@ -149,8 +149,11 @@ void func_80C05DE8(EnBombal* this, PlayState* play) {
             !(gSaveContext.save.weekEventReg[85] & 2)) {
             ActorCutscene_Stop(this->cutscene);
         }
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->timer < 10) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->timer < 10) {
         this->actor.colChkInfo.health = 0;
     }
 }

@@ -19,7 +19,7 @@ void ShotSun_Update(Actor* thisx, PlayState* play);
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play);
 void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play);
 
-const ActorInit Shot_Sun_InitVars = {
+ActorInit Shot_Sun_InitVars = {
     ACTOR_SHOT_SUN,
     ACTORCAT_PROP,
     FLAGS,
@@ -98,7 +98,7 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
         }
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, 0, 0, fairyType);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -164,8 +164,11 @@ void ShotSun_UpdateHyliaSun(ShotSun* this, PlayState* play) {
             }
         }
 
-        Actor_MarkForDeath(&this->actor);
-    } else if (!(this->actor.xzDistToPlayer > 120.0f)) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (!(this->actor.xzDistToPlayer > 120.0f)) {
         if ((gSaveContext.save.time >= CLOCK_TIME(6, 30)) && (gSaveContext.save.time < CLOCK_TIME(7, 30))) {
             cylinderPos.x = player->bodyPartsPos[7].x + (play->envCtx.unk_4 * (1.0f / 6.0f));
             cylinderPos.y = (player->bodyPartsPos[7].y - 30.0f) + (play->envCtx.unk_8 * (1.0f / 6.0f));

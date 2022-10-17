@@ -30,7 +30,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play);
 void func_80ACA7C4(EnTimeTag* this, PlayState* play);
 void func_80ACA840(EnTimeTag* this, PlayState* play);
 
-const ActorInit En_Time_Tag_InitVars = {
+ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -50,7 +50,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
     switch (ENTIMETAG_GET_E000(&this->actor)) {
         case 4:
             if ((gSaveContext.save.weekEventReg[8] & 0x40) || (CURRENT_DAY != 3)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.home.rot.x = 0;
@@ -91,7 +91,7 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = func_80AC9FD4;
         gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
-        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
             CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
             gSaveContext.save.weekEventReg[25] |= 2;
         }

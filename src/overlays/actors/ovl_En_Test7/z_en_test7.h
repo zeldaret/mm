@@ -62,6 +62,4 @@ typedef struct EnTest7 {
     /* 0x1E98 */ EnTest7UnkDrawFunc unk_1E98;
 } EnTest7; // size = 0x1E9C
 
-extern const ActorInit En_Test7_InitVars;
-
 #endif // Z_EN_TEST7_H

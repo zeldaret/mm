@@ -50,6 +50,4 @@ typedef struct EnFall {
     /* 0x160 */ EnFallActionFunc actionFunc;
 } EnFall; // size = 0x164
 
-extern const ActorInit En_Fall_InitVars;
-
 #endif // Z_EN_FALL_H

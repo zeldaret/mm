@@ -23,7 +23,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play);
 void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
-const ActorInit Bg_Astr_Bombwall_InitVars = {
+ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -104,12 +104,12 @@ void BgAstrBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_astr_obj_Colheader_002498);
     Collider_InitTris(play, &this->collider);
     if (Flags_GetSwitch(play, BGASTRBOMBWALL_GET_SWITCHFLAG(thisx))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
     this->dyna.actor.flags |= ACTOR_FLAG_10000000;
     if (!Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
     BgAstrBombwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->collider);

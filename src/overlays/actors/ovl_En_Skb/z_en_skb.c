@@ -145,7 +145,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Skb_InitVars = {
+ActorInit En_Skb_InitVars = {
     ACTOR_EN_SKB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -555,7 +555,7 @@ void func_8099599C(EnSkb* this, PlayState* play) {
     Math_ApproachF(&this->actor.shape.shadowScale, 0.0f, 1.0f, 2.5f);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -800,7 +800,7 @@ void func_80996474(EnSkb* this) {
 
 void func_809964A0(EnSkb* this, PlayState* play) {
     if (this->unk_3D0++ >= 19) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

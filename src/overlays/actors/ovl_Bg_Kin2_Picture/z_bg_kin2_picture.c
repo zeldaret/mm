@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_kin2_picture.h"
+#include "assets/objects/object_kin2_obj/object_kin2_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -15,14 +16,18 @@ void BgKin2Picture_Destroy(Actor* thisx, PlayState* play);
 void BgKin2Picture_Update(Actor* thisx, PlayState* play);
 void BgKin2Picture_Draw(Actor* thisx, PlayState* play);
 
-void func_80B6F4D4(BgKin2Picture* this, PlayState* play);
-void func_80B6F5B8(BgKin2Picture* this, PlayState* play);
-void func_80B6F640(BgKin2Picture* this, PlayState* play);
-void func_80B6F72C(BgKin2Picture* this, PlayState* play);
-void func_80B6F90C(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupWait(BgKin2Picture* this);
+void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this);
+void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupShiver(BgKin2Picture* this);
+void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupFall(BgKin2Picture* this);
+void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play);
+void BgKin2Picture_SetupDoNothing(BgKin2Picture* this);
+void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play);
 
-#if 0
-const ActorInit Bg_Kin2_Picture_InitVars = {
+ActorInit Bg_Kin2_Picture_InitVars = {
     ACTOR_BG_KIN2_PICTURE,
     ACTORCAT_PROP,
     FLAGS,
@@ -34,73 +39,307 @@ const ActorInit Bg_Kin2_Picture_InitVars = {
     (ActorFunc)BgKin2Picture_Draw,
 };
 
-// static ColliderTrisElementInit sTrisElementsInit[2] = {
-static ColliderTrisElementInit D_80B6F990[2] = {
+static ColliderTrisElementInit sTrisElementsInit[] = {
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x000138B0, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { -20.0f, 53.29999923706055f, 9.0f }, { -20.0f, 3.0f, 9.0f }, { 20.0f, 3.0f, 9.0f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x000138B0, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { -20.0f, 53.3f, 9.0f }, { -20.0f, 3.0f, 9.0f }, { 20.0f, 3.0f, 9.0f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x000138B0, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { -20.0f, 53.29999923706055f, 9.0f }, { 20.0f, 3.0f, 9.0f }, { 20.0f, 53.29999923706055f, 9.0f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x000138B0, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { -20.0f, 53.3f, 9.0f }, { 20.0f, 3.0f, 9.0f }, { 20.0f, 53.3f, 9.0f } } },
     },
 };
 
-// static ColliderTrisInit sTrisInit = {
-static ColliderTrisInit D_80B6FA08 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    ARRAY_COUNT(sTrisElementsInit), D_80B6F990, // sTrisElementsInit,
+static ColliderTrisInit sTrisInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_TRIS,
+    },
+    ARRAY_COUNT(sTrisElementsInit),
+    sTrisElementsInit,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B6FA24[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+static Vec3f sDustBasePos = { 0.0f, 23.0f, 0.0f };
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
+s32 BgKin2Picture_IsSkulltulaCollected(PlayState* play, s32 skulltulaParams) {
+    s32 flag = -1;
 
-extern ColliderTrisElementInit D_80B6F990[2];
-extern ColliderTrisInit D_80B6FA08;
-extern InitChainEntry D_80B6FA24[];
+    if ((u8)skulltulaParams & 3) {
+        flag = BG_KIN2_PICTURE_GET_3FC(skulltulaParams);
+    }
 
-extern UNK_TYPE D_06000658;
-extern UNK_TYPE D_06000798;
+    return (flag >= 0) && Flags_GetTreasure(play, flag);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6EFA0.s")
+void BgKin2Picture_SpawnSkulltula(BgKin2Picture* this, PlayState* play2) {
+    PlayState* play = play2;
+    s32 skulltulaSpawnParams;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6EFEC.s")
+    if (!BG_KIN2_PICTURE_SKULLTULA_COLLECTED(&this->dyna.actor)) { // Gold Skulltula is still here.
+        skulltulaSpawnParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
+        if (!BgKin2Picture_IsSkulltulaCollected(play, skulltulaSpawnParams) &&
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->dyna.actor.home.pos.x,
+                        this->dyna.actor.home.pos.y + 23.0f, this->dyna.actor.home.pos.z, 0,
+                        this->dyna.actor.home.rot.y, 0, skulltulaSpawnParams)) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F098.s")
+#define DUST_COUNT 20
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/BgKin2Picture_Init.s")
+void BgKin2Picture_SpawnDust(BgKin2Picture* this, PlayState* play) {
+    f32 offset;
+    Vec3f basePos;
+    Vec3f pos;
+    Vec3f velocity;
+    Vec3f accel;
+    s32 angle;
+    s32 scale;
+    s16 scaleStep;
+    s32 baseAngle;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/BgKin2Picture_Destroy.s")
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
+                                 this->dyna.actor.world.pos.y +
+                                     (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_MultVec3f(&sDustBasePos, &basePos);
+    pos.y = basePos.y - 7.0f;
+    velocity.y = 0.0f;
+    accel.y = 0.2f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F4C0.s")
+    for (i = 0, baseAngle = 0; i < DUST_COUNT; i++, baseAngle += (0x10000 / DUST_COUNT)) {
+        angle = (s32)(Rand_ZeroOne() * (0x10000 / DUST_COUNT)) + baseAngle;
+        offset = (Rand_ZeroOne() * 14.0f) + 4.0f;
+        pos.x = Math_SinS(angle) * offset;
+        pos.z = Math_CosS(angle) * offset;
+        velocity.x = (Rand_ZeroOne() - 0.5f) + (pos.x * (1.0f / 6.0f));
+        velocity.z = (Rand_ZeroOne() - 0.5f) + (pos.z * (1.0f / 6.0f));
+        pos.x += basePos.x;
+        pos.z += basePos.z;
+        accel.x = velocity.x * -0.09f;
+        accel.z = velocity.z * -0.09f;
+        scale = (s32)(Rand_ZeroOne() * 10.0f) + 10;
+        scaleStep = (s32)(Rand_ZeroOne() * 10.0f) + 15;
+        func_800B1210(play, &pos, &velocity, &accel, scale, scaleStep);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F4D4.s")
+void BgKin2Picture_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    BgKin2Picture* this = THIS;
+    s32 skulltulaParams;
+    Vec3f vertices[3];
+    s32 i;
+    s32 j;
+    ColliderTrisElementInit* element;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F5A4.s")
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseSkullkidPaintingCol);
+    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_InitTris(play, &this->colliderTris);
+    Collider_SetTris(play, &this->colliderTris, &this->dyna.actor, &sTrisInit, this->colliderElement);
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F5B8.s")
+    for (i = 0; i < ARRAY_COUNT(sTrisElementsInit); i++) {
+        for (j = 0; j < ARRAY_COUNT(vertices); j++) {
+            element = &sTrisInit.elements[i];
+            Matrix_MultVec3f(&element->dim.vtx[j], &vertices[j]);
+        }
+        Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F61C.s")
+    Actor_SetFocus(&this->dyna.actor, 23.0f);
+    skulltulaParams = BG_KIN2_PICTURE_SKULLTULA_SPAWN_PARAM(&this->dyna.actor);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F640.s")
+    if (BG_KIN2_PICTURE_SKULLTULA_COLLECTED(&this->dyna.actor) ||
+        BgKin2Picture_IsSkulltulaCollected(play, skulltulaParams)) {
+        this->skulltulaNoiseTimer = -1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F708.s")
+    BgKin2Picture_SetupWait(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F72C.s")
+void BgKin2Picture_Destroy(Actor* thisx, PlayState* play) {
+    BgKin2Picture* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F8F8.s")
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyTris(play, &this->colliderTris);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/func_80B6F90C.s")
+void BgKin2Picture_SetupWait(BgKin2Picture* this) {
+    this->actionFunc = BgKin2Picture_Wait;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/BgKin2Picture_Update.s")
+void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
+    // hit by projectile
+    if (this->colliderTris.base.acFlags & AC_HIT) {
+        this->colliderTris.base.acFlags &= ~AC_HIT;
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        BgKin2Picture_SetupPlayCutscene(this);
+    } else { // Gold Skulltula can be heard behind Skullkid's painting.
+        if (this->skulltulaNoiseTimer >= 0) {
+            if (this->skulltulaNoiseTimer == 0) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Picture/BgKin2Picture_Draw.s")
+                if (Rand_ZeroOne() < 0.1f) {
+                    this->skulltulaNoiseTimer = Rand_S16Offset(40, 80);
+                } else {
+                    this->skulltulaNoiseTimer = 8;
+                }
+            } else {
+                this->skulltulaNoiseTimer--;
+            }
+        }
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);
+    }
+}
+
+void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this) {
+    this->actionFunc = BgKin2Picture_PlayCutscene;
+}
+
+void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        this->cutsceneStarted = true;
+        BgKin2Picture_SetupShiver(this);
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    }
+}
+
+void BgKin2Picture_SetupShiver(BgKin2Picture* this) {
+    this->paintingTimer = 13;
+    this->xOffsetAngle = 0;
+    this->yOffsetAngle = 0;
+    this->actionFunc = BgKin2Picture_Shiver;
+}
+
+void BgKin2Picture_Shiver(BgKin2Picture* this, PlayState* play) {
+    s32 pad;
+    Vec3f basePosOffset;
+    Vec3f posOffset;
+
+    this->paintingTimer--;
+    if (this->paintingTimer <= 0) {
+        Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
+        BgKin2Picture_SetupFall(this);
+    } else {
+        this->xOffsetAngle += 0x7BAC;
+        this->yOffsetAngle += 0x4E20;
+        basePosOffset.x = Math_CosS(this->xOffsetAngle);
+        basePosOffset.y = Math_CosS(this->yOffsetAngle) * 0.2f;
+        basePosOffset.z = 0.0f;
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_MultVec3f(&basePosOffset, &posOffset);
+        Math_Vec3f_Sum(&this->dyna.actor.home.pos, &posOffset, &this->dyna.actor.world.pos);
+    }
+}
+
+void BgKin2Picture_SetupFall(BgKin2Picture* this) {
+    this->landTimer = 0;
+    this->step = 0;
+    this->paintingTimer = 4;
+    this->actionFunc = BgKin2Picture_Fall;
+}
+
+void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
+    if (this->paintingTimer > 0) {
+        this->paintingTimer--;
+
+        if (this->paintingTimer == 0) {
+            BgKin2Picture_SpawnSkulltula(this, play);
+        }
+    }
+
+    Actor_MoveWithGravity(&this->dyna.actor);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+
+    if (this->dyna.actor.bgCheckFlags & 1) {
+        Math_StepToS(&this->step, 0x7D0, 0x78);
+
+        if (this->landTimer < 3) {
+            this->landTimer++;
+
+            if (this->dyna.actor.velocity.y <= 0.01f) {
+                this->dyna.actor.velocity.y *= -0.7f;
+
+                if (this->dyna.actor.velocity.y > 6.0f) {
+                    this->dyna.actor.velocity.y = 6.0f;
+                }
+
+                if (this->landTimer < 3) {
+                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SMALL_WOODPLATE_BOUND_0);
+                }
+            }
+        }
+    }
+
+    Actor_SetFocus(&this->dyna.actor, 23.0f);
+
+    if (!this->hasSpawnedDust && (this->dyna.actor.shape.rot.x > 0x3300)) {
+        BgKin2Picture_SpawnDust(this, play);
+        this->hasSpawnedDust = true;
+    }
+
+    if (Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0x4000, this->step)) { // facing the floor
+        this->dyna.actor.shape.yOffset = 40.0f;
+
+        if (this->cutsceneStarted) {
+            ActorCutscene_Stop(this->dyna.actor.cutscene);
+        }
+
+        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOODPLATE_BROKEN);
+        BgKin2Picture_SetupDoNothing(this);
+    } else {
+        this->dyna.actor.shape.yOffset = Math_SinS(this->dyna.actor.shape.rot.x) * 40.0f;
+    }
+}
+
+void BgKin2Picture_SetupDoNothing(BgKin2Picture* this) {
+    this->actionFunc = BgKin2Picture_DoNothing;
+}
+
+void BgKin2Picture_DoNothing(BgKin2Picture* this, PlayState* play) {
+}
+
+void BgKin2Picture_Update(Actor* thisx, PlayState* play) {
+    BgKin2Picture* this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+void BgKin2Picture_Draw(Actor* thisx, PlayState* play) {
+    BgKin2Picture* this = THIS;
+
+    Gfx_DrawDListOpa(play, gOceanSpiderHouseSkullkidPaintingDL);
+}

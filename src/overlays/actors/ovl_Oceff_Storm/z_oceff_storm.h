@@ -17,8 +17,6 @@ typedef struct OceffStorm {
     /* 0x14C */ OceffStormActionFunc actionFunc;
 } OceffStorm; // size = 0x150
 
-extern const ActorInit Oceff_Storm_InitVars;
-
 typedef enum {
     /* 1 */ OCEFF_STORM_ACTION_PARAM_1 = 1
 } OceffStormActionParams;

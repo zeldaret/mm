@@ -21,7 +21,7 @@ void func_8098F5E4(ObjMure3* this, PlayState* play);
 void func_8098F66C(ObjMure3* this);
 void func_8098F680(ObjMure3* this, PlayState* play);
 
-const ActorInit Obj_Mure3_InitVars = {
+ActorInit Obj_Mure3_InitVars = {
     ACTOR_OBJ_MURE3,
     ACTORCAT_BG,
     FLAGS,
@@ -118,7 +118,7 @@ void func_8098F364(ObjMure3* this, s32 play) {
             if (((*collectible)->unk1A4 != 0) || ((*collectible)->actor.update == NULL)) {
                 this->unk164 |= (1 << i);
             } else {
-                Actor_MarkForDeath(&(*collectible)->actor);
+                Actor_Kill(&(*collectible)->actor);
             }
         }
         *collectible = NULL;
@@ -148,7 +148,7 @@ void ObjMure3_Init(Actor* thisx, PlayState* play) {
     ObjMure3* this = THIS;
 
     if (Flags_GetSwitch(play, OBJMURE3_PARAMS_7F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);

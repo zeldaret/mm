@@ -41,6 +41,4 @@ typedef struct EnDnb {
     /* 0x0D38 */ EnDnbUnkStruct unk_0D38[256];
 } EnDnb; // size = 0x3538
 
-extern const ActorInit En_Dnb_InitVars;
-
 #endif // Z_EN_DNB_H

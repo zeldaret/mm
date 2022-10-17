@@ -37,7 +37,7 @@ void func_80BA0BB4(EnZob* this, PlayState* play);
 void func_80BA0C14(EnZob* this, PlayState* play);
 void func_80BA0CF4(EnZob* this, PlayState* play);
 
-const ActorInit En_Zob_InitVars = {
+ActorInit En_Zob_InitVars = {
     ACTOR_EN_ZOB,
     ACTORCAT_NPC,
     FLAGS,
@@ -121,7 +121,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
             }
 
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -136,7 +136,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
 
         default:
             if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
             break;
@@ -525,7 +525,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                         func_801477B4(play);
                         this->actionFunc = func_80BA0318;
                         player->unk_A90 = &this->actor;
-                        player->stateFlags3 |= 0x20;
+                        player->stateFlags3 |= PLAYER_STATE3_20;
                         break;
                 }
             }

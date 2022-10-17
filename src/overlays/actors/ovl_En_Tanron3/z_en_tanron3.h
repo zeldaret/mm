@@ -41,6 +41,4 @@ typedef struct EnTanron3 {
     /* 0x2F8 */ EnTanron3ActionFunc actionFunc;
 } EnTanron3; // size = 0x2FC
 
-extern const ActorInit En_Tanron3_InitVars;
-
 #endif // Z_EN_TANRON3_H

@@ -32,6 +32,4 @@ typedef struct EnHanabi {
     /* 0x4654 */ EnHanabiActionFunc actionFunc;
 } EnHanabi; // size = 0x4658
 
-extern const ActorInit En_Hanabi_InitVars;
-
 #endif // Z_EN_HANABI_H

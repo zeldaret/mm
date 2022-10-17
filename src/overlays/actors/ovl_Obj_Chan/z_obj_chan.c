@@ -28,7 +28,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play);
 void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
-const ActorInit Obj_Chan_InitVars = {
+ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
     ACTORCAT_BG,
     FLAGS,
@@ -83,7 +83,7 @@ void ObjChan_Init(Actor* thisx, PlayState* play) {
 
     if (OBJCHAN_SUBTYPE(&this->actor) == OBJCHAN_SUBTYPE_CHANDELIER) {
         if (sObjChanLoaded) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->actor.room = -1;
@@ -169,7 +169,7 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
                                 true, &sp90)) {
         this->unk1CC = this->actor.world.pos.y - this->unk1C0.y;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -184,7 +184,7 @@ void ObjChan_InitChandelier(ObjChan* this2, PlayState* play) {
             temp_v0->myPotIndex = i;
             temp_v0->actor.cutscene = this->actor.cutscene;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -317,7 +317,7 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
                                               this->actor.cutscene, this->actor.unk20, NULL);
             }
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

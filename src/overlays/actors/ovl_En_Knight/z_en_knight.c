@@ -193,7 +193,7 @@ static ColliderCylinderInit D_809BDC64 = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Knight_InitVars = {
+ActorInit En_Knight_InitVars = {
     ACTOR_EN_KNIGHT,
     ACTORCAT_BOSS,
     FLAGS,

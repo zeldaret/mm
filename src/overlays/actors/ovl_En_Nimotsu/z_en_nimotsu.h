@@ -13,6 +13,4 @@ typedef struct EnNimotsu {
     /* 0x1DA */ s16 timer;
 } EnNimotsu; // size = 0x1DC
 
-extern const ActorInit En_Nimotsu_InitVars;
-
 #endif // Z_EN_NIMOTSU_H

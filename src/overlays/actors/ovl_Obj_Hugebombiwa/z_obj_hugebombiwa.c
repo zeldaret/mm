@@ -28,7 +28,7 @@ void func_80A55310(ObjHugebombiwa* this);
 void func_80A55564(ObjHugebombiwa* this, PlayState* play);
 void func_80A55B34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hugebombiwa_InitVars = {
+ActorInit Obj_Hugebombiwa_InitVars = {
     ACTOR_OBJ_HUGEBOMBIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -341,7 +341,7 @@ void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -524,7 +524,7 @@ void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
         ActorCutscene_Stop(this->actor.cutscene);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -620,7 +620,7 @@ void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
         ActorCutscene_Stop(this->actor.cutscene);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

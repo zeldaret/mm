@@ -14,6 +14,4 @@ typedef struct EnMm2 {
     /* 0x18C */ UNK_TYPE1 unk_18C[0x128];
 } EnMm2; // size = 0x2B4
 
-extern const ActorInit En_Mm2_InitVars;
-
 #endif // Z_EN_MM2_H

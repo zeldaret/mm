@@ -26,7 +26,7 @@ f32 D_809AAE10[20];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
-const ActorInit Obj_Grass_InitVars = {
+ActorInit Obj_Grass_InitVars = {
     ACTOR_OBJ_GRASS,
     ACTORCAT_PROP,
     FLAGS,

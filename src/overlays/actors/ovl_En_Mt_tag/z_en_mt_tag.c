@@ -28,7 +28,7 @@ typedef enum {
     GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND,
 } PlayerCheatStatus;
 
-const ActorInit En_Mt_tag_InitVars = {
+ActorInit En_Mt_tag_InitVars = {
     ACTOR_EN_MT_TAG,
     ACTORCAT_BG,
     FLAGS,
@@ -318,7 +318,7 @@ void EnMttag_RaceStart(EnMttag* this, PlayState* play) {
                 play->interfaceCtx.unk_280 = 1;
                 Audio_QueueSeqCmd(NA_BGM_GORON_RACE | 0x8000);
                 play->envCtx.unk_E4 = 0xFE;
-                player->stateFlags1 &= ~0x20;
+                player->stateFlags1 &= ~PLAYER_STATE1_20;
             } else if ((this->timer < 60) && (play->interfaceCtx.unk_280 == 8)) {
                 this->timer = 0;
                 gSaveContext.eventInf[1] |= 1;
@@ -404,7 +404,7 @@ void EnMttag_RaceFinish(EnMttag* this, PlayState* play) {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -443,7 +443,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
         } else {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -460,16 +460,17 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
             EnMttag_ExitRace(play, TRANS_TYPE_02, TRANS_TYPE_02);
             gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            // Keep racing
-            func_8019F208();
-            func_801477B4(play);
-            func_800B7298(play, &this->actor, 6);
-            gSaveContext.eventInf[1] &= (u8)~8;
-            this->timer = 100;
-            this->actionFunc = EnMttag_Race;
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        // Keep racing
+        func_8019F208();
+        func_801477B4(play);
+        func_800B7298(play, &this->actor, 6);
+        gSaveContext.eventInf[1] &= (u8)~8;
+        this->timer = 100;
+        this->actionFunc = EnMttag_Race;
     }
 }
 
@@ -479,7 +480,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
 
     if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
         player = GET_PLAYER(play);
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->raceInitialized = false;
         this->timer = 100;
 
@@ -496,7 +497,7 @@ void EnMttag_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMttag_RaceStart;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

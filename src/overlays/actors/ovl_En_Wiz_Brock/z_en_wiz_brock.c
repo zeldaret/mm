@@ -21,7 +21,7 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 
 s16 sPlatformIndex = 0;
 
-const ActorInit En_Wiz_Brock_InitVars = {
+ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
     ACTORCAT_PROP,
     FLAGS,
@@ -80,7 +80,7 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play) {
                            (BREG(56) / 1000.0f) + 0.002f);
             this->dyna.actor.scale.z = this->dyna.actor.scale.x;
             if (this->dyna.actor.scale.y < 0.001f) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
         }
     }

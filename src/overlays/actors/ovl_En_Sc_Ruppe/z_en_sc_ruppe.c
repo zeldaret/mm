@@ -23,7 +23,7 @@ typedef struct {
     /* 0x4 */ s16 amount;
 } RuppeInfo;
 
-const ActorInit En_Sc_Ruppe_InitVars = {
+ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
     ACTORCAT_NPC,
     FLAGS,
@@ -129,7 +129,7 @@ void func_80BD6B18(EnScRuppe* this, PlayState* play) {
 
     if (this->ruppeDisplayTime > 30) {
         if (func_80BD697C(this->ruppeIndex)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         f32 scale;

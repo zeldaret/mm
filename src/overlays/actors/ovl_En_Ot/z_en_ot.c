@@ -63,7 +63,7 @@ static EnOt* D_80B5E880;
 static EnOt* D_80B5E884;
 static EnOt* D_80B5E888;
 
-const ActorInit En_Ot_InitVars = {
+ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
     ACTORCAT_NPC,
     FLAGS,
@@ -201,7 +201,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                                 func_80B5C684(this, play);
                             }
                         } else {
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                         }
                     } else if ((D_80B5E888 != NULL) && (D_80B5E888->unk_32C & 1)) {
                         this->unk_360 = D_80B5E888;
@@ -219,7 +219,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
             break;
@@ -274,7 +274,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                 this->actor.update = func_80B5DAEC;
                 func_80B5C634(this, play);
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
     }
@@ -483,7 +483,7 @@ void func_80B5C634(EnOt* this, PlayState* play) {
 
 void func_80B5C64C(EnOt* this, PlayState* play) {
     if (gSaveContext.save.weekEventReg[26] & 8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -629,7 +629,7 @@ void func_80B5CCA0(EnOt* this, PlayState* play) {
     if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_NORMAL)) {
         Player* player = GET_PLAYER(play);
 
-        player->stateFlags2 |= 0x20000000;
+        player->stateFlags2 |= PLAYER_STATE2_20000000;
         func_80B5CCF4(this, play);
     }
 }
@@ -666,7 +666,7 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1069)) {
                 this->unk_32C |= 4;
                 ActorCutscene_Stop(this->cutscenes[0]);
-                player->stateFlags2 &= ~0x20000000;
+                player->stateFlags2 &= ~PLAYER_STATE2_20000000;
                 func_80B5CE6C(this, play);
             }
             break;

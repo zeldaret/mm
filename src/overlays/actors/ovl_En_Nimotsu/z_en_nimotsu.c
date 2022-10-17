@@ -18,7 +18,7 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play);
 
-const ActorInit En_Nimotsu_InitVars = {
+ActorInit En_Nimotsu_InitVars = {
     ACTOR_EN_NIMOTSU,
     ACTORCAT_PROP,
     FLAGS,

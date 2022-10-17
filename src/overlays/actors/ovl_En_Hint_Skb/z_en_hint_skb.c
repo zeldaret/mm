@@ -39,7 +39,7 @@ s32 func_80C21414(EnHintSkb* this);
 void func_80C21468(EnHintSkb* this, PlayState* play);
 void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2);
 
-const ActorInit En_Hint_Skb_InitVars = {
+ActorInit En_Hint_Skb_InitVars = {
     ACTOR_EN_HINT_SKB,
     ACTORCAT_NPC,
     FLAGS,
@@ -330,7 +330,7 @@ void func_80C204F0(EnHintSkb* this, PlayState* play) {
     }
 
     Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x10);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_80C20540(EnHintSkb* this) {

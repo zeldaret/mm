@@ -18,7 +18,7 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
 void func_808BCF54(ItemBHeart* this, PlayState* play);
 
-const ActorInit Item_B_Heart_InitVars = {
+ActorInit Item_B_Heart_InitVars = {
     ACTOR_ITEM_B_HEART,
     ACTORCAT_BOSS,
     FLAGS,
@@ -41,7 +41,7 @@ void ItemBHeart_Init(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
 
     if (Flags_GetCollectible(play, 0x1F)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -68,10 +68,11 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play) {
     if (!(this->unk_168 < 0.5f)) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, 0x1F);
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
     }
 }
 

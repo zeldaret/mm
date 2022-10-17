@@ -25,7 +25,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Crow_InitVars = {
+ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -96,7 +96,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     if ((path == NULL) || (EN_SYATEKI_CROW_GET_INDEX(&this->actor) >= 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

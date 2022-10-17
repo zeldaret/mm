@@ -24,6 +24,4 @@ typedef enum {
     /* 3 */ LADDER_SIZE_24RUNG,
 } BgLadderSize;
 
-extern const ActorInit Bg_Ladder_InitVars;
-
 #endif // Z_BG_LADDER_H

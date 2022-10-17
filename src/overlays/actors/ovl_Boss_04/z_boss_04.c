@@ -62,7 +62,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit Boss_04_InitVars = {
+ActorInit Boss_04_InitVars = {
     ACTOR_BOSS_04,
     ACTORCAT_BOSS,
     FLAGS,
@@ -157,7 +157,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     s32 pad;
 
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -252,7 +252,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
         case 0:
             this->unk_2C8 = 50;
             this->unk_2D0 = 2000.0f;
-            if ((player->stateFlags1 & 0x100000) && (this->actor.projectedPos.z > 0.0f) &&
+            if ((player->stateFlags1 & PLAYER_STATE1_100000) && (this->actor.projectedPos.z > 0.0f) &&
                 (fabsf(this->actor.projectedPos.x) < 300.0f) && (fabsf(this->actor.projectedPos.y) < 300.0f)) {
                 if ((this->unk_704 >= 15) && (ActorCutscene_GetCurrentIndex() == -1)) {
                     Actor* boss;
@@ -277,7 +277,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                     boss = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (boss != NULL) {
                         if (boss->id == ACTOR_EN_WATER_EFFECT) {
-                            Actor_MarkForDeath(boss);
+                            Actor_Kill(boss);
                         }
                         boss = boss->next;
                     }
@@ -559,7 +559,7 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
     }
 
     if (this->unk_1FA == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

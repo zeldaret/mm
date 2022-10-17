@@ -16,7 +16,7 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Takaraya_InitVars = {
+ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,
     ACTORCAT_NPC,
     FLAGS,

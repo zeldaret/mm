@@ -23,7 +23,7 @@ void func_809A481C(ObjToge* this, PlayState* play);
 void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, PlayState* play);
 
-const ActorInit Obj_Toge_InitVars = {
+ActorInit Obj_Toge_InitVars = {
     ACTOR_OBJ_TOGE,
     ACTORCAT_PROP,
     FLAGS,
@@ -132,13 +132,13 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (OBJTOGE_GET_PATH(thisx) == 0xFF) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
     path = &play->setupPathList[OBJTOGE_GET_PATH(thisx)];
     if (path->count != 2) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 

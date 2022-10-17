@@ -18,7 +18,7 @@ void DmChar09_Draw(Actor* thisx, PlayState* play);
 void DmChar09_DoNothing(DmChar09* this, PlayState* play);
 void func_80AB2268(DmChar09* this, PlayState* play);
 
-const ActorInit Dm_Char09_InitVars = {
+ActorInit Dm_Char09_InitVars = {
     ACTOR_DM_CHAR09,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -31,7 +31,7 @@ const ActorInit Dm_Char09_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_bee_Anim_00005C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
@@ -53,8 +53,8 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_bee_Skel_001398, &object_bee_Anim_00005C, this->jointTable,
-                   this->morphTable, OBJECT_BEE_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeFlyingAnim, this->jointTable, this->morphTable,
+                   OBJECT_BEE_LIMB_MAX);
     DmChar09_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;

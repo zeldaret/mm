@@ -44,7 +44,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-const ActorInit En_Ishi_InitVars = {
+ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
     ACTORCAT_PROP,
     FLAGS,
@@ -398,7 +398,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     func_8095D6E0(&this->actor, play);
 
     if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FE00(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -415,7 +415,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = D_8095F6C0[sp34];
 
     if ((sp30 == 0) && !func_8095D758(this, play, 0)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -425,7 +425,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     this->unk_196 = Object_GetIndex(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
     if (this->unk_196 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -490,7 +490,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp38], D_8095F6D0[sp38]);
         D_8095F6D8[sp38](&this->actor, play);
         D_8095F6E0[sp38](this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -604,7 +604,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -682,9 +682,9 @@ void func_8095F180(EnIshi* this) {
 
 void func_8095F194(EnIshi* this, PlayState* play) {
     if (this->actor.cutscene < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

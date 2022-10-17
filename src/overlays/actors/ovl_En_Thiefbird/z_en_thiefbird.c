@@ -32,7 +32,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play);
 void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, PlayState* play);
 
-const ActorInit En_Thiefbird_InitVars = {
+ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -166,12 +166,16 @@ void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 1) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
-        Actor_MarkForDeath(&this->actor);
-    } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        func_80C11538(this);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    func_80C11538(this);
 }
 
 void EnThiefbird_Destroy(Actor* thisx, PlayState* play) {
@@ -517,8 +521,9 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
         this->unk_18E--;
     }
 
-    if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000) &&
-        (Player_GetMask(play) != PLAYER_MASK_STONE) && (this->actor.depthInWater < -40.0f)) {
+    if ((this->unk_18E == 0) && (this->actor.xzDistToPlayer < 300.0f) &&
+        !(player->stateFlags1 & PLAYER_STATE1_800000) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
+        (this->actor.depthInWater < -40.0f)) {
         func_80C118E4(this);
     }
 }
@@ -561,9 +566,9 @@ void func_80C1193C(EnThiefbird* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, rot, 4, 0x1000, 0x100);
     }
 
-    if ((this->unk_18E == 0) || (player->stateFlags1 & 0x800000) || (Player_GetMask(play) == PLAYER_MASK_STONE) ||
-        (this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 1) ||
-        (this->actor.depthInWater > -40.0f)) {
+    if ((this->unk_18E == 0) || (player->stateFlags1 & PLAYER_STATE1_800000) ||
+        (Player_GetMask(play) == PLAYER_MASK_STONE) || (this->collider.base.atFlags & AT_HIT) ||
+        (this->actor.bgCheckFlags & 1) || (this->actor.depthInWater > -40.0f)) {
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
@@ -657,7 +662,7 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
             }
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -830,7 +835,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.x, 0x3000, 6, 0x1000);
     if (this->actor.playerHeightRel > 100.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

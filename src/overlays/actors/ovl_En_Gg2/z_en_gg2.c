@@ -27,7 +27,7 @@ void func_80B3B5D4(EnGg2* this, PlayState* play);
 s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-const ActorInit En_Gg2_InitVars = {
+ActorInit En_Gg2_InitVars = {
     ACTOR_EN_GG2,
     ACTORCAT_NPC,
     FLAGS,
@@ -356,12 +356,12 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     EnGg2* this = THIS;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (gSaveContext.save.weekEventReg[91] & 0x10) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -395,7 +395,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (play->sceneId == SCENE_10YUKIYAMANOMURA) {
         if (!(gSaveContext.save.weekEventReg[20] & 4) && (gSaveContext.save.weekEventReg[20] & 8) &&
@@ -405,13 +405,13 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         gSaveContext.save.weekEventReg[20] &= (u8)~4;
         gSaveContext.save.weekEventReg[20] &= (u8)~8;
         gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

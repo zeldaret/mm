@@ -55,7 +55,7 @@ void func_80993524(EnWf* this);
 void func_8099357C(EnWf* this, PlayState* play);
 s32 func_8099408C(PlayState* play, EnWf* this);
 
-const ActorInit En_Wf_InitVars = {
+ActorInit En_Wf_InitVars = {
     ACTOR_EN_WF,
     ACTORCAT_PROP,
     FLAGS,
@@ -309,7 +309,7 @@ void EnWf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (Flags_GetClear(play, this->actor.room)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1181,7 +1181,7 @@ void func_80992E0C(EnWf* this, PlayState* play) {
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         s32 i;
         Vec3f sp60;

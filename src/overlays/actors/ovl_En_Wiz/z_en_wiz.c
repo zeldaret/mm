@@ -80,7 +80,7 @@ typedef enum {
     /* 5 */ EN_WIZ_ANIM_DAMAGE,
 } EnWizAnimation;
 
-const ActorInit En_Wiz_InitVars = {
+ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -352,7 +352,7 @@ void EnWiz_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1183,7 +1183,7 @@ void EnWiz_Dead(EnWiz* this, PlayState* play) {
     if (this->alpha < 30) {
         EnWiz_SelectPlatform(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         if (this->switchFlag >= 0) {
             Flags_SetSwitch(play, this->switchFlag);
         }

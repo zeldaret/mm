@@ -21,7 +21,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, PlayState* play);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, PlayState* play);
 
-const ActorInit Bg_Iknv_Obj_InitVars = {
+ActorInit Bg_Iknv_Obj_InitVars = {
     ACTOR_BG_IKNV_OBJ,
     ACTORCAT_BG,
     FLAGS,
@@ -88,7 +88,7 @@ void BgIknvObj_Init(Actor* thisx, PlayState* play) {
             Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
     }
 }
 

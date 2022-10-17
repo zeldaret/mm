@@ -18,7 +18,7 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
-const ActorInit Bg_Ikninside_InitVars = {
+ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
     ACTORCAT_BG,
     FLAGS,
@@ -65,7 +65,7 @@ void BgIkninside_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
     if (Flags_GetSwitch(play, DMIKNINSIDE_GET_SWITCH(thisx))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

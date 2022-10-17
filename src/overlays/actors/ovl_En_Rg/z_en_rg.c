@@ -22,7 +22,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
 
-const ActorInit En_Rg_InitVars = {
+ActorInit En_Rg_InitVars = {
     ACTOR_EN_RG,
     ACTORCAT_NPC,
     FLAGS,
@@ -564,8 +564,9 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
             } while (phi_s0 != NULL);
         }
 
-        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) && (player->stateFlags3 & 0x80000) &&
-            (player->invincibilityTimer == 0) && func_80BF4220(this, play, &player->actor)) {
+        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) &&
+            (player->stateFlags3 & PLAYER_STATE3_80000) && (player->invincibilityTimer == 0) &&
+            func_80BF4220(this, play, &player->actor)) {
             this->unk_18C = &player->actor;
             this->unk_310 |= 0x800;
             D_80BF5C10 = 1;
@@ -586,7 +587,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
                 this->unk_320 = CLAMP_MAX(this->unk_320, 0x190);
             } else if (this->collider2.base.at->id == ACTOR_PLAYER) {
                 this->unk_326 = 0x28;
-                if (player->stateFlags3 & 0x1000) {
+                if (player->stateFlags3 & PLAYER_STATE3_1000) {
                     player->linearVelocity *= 0.5f;
                     player->unk_B08[0] = player->linearVelocity;
                     player->unk_B08[1] += player->linearVelocity * 0.05f;
@@ -758,7 +759,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->unk_31E = 0;
         this->actionFunc = func_80BF4EBC;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -21,6 +21,4 @@ typedef struct ObjDora {
     /* 0x3AA */ s16 unk3AA; // Set but not used
 } ObjDora; // size = 0x3AC
 
-extern const ActorInit Obj_Dora_InitVars;
-
 #endif // Z_OBJ_DORA_H

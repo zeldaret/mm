@@ -31,8 +31,6 @@ typedef struct ObjTsubo {
     /* 0x19B */ u8 unk_19B;
 } ObjTsubo; // size = 0x19C
 
-extern const ActorInit Obj_Tsubo_InitVars;
-
 typedef enum {
     /* 0 */ OBJ_TSUBO_TYPE_0,
     /* 1 */ OBJ_TSUBO_TYPE_1,

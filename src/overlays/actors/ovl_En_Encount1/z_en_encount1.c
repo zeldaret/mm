@@ -15,7 +15,7 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 
 void func_808E0954(EnEncount1* this, PlayState* play);
 
-const ActorInit En_Encount1_InitVars = {
+ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,
     ACTORCAT_PROP,
     FLAGS,
@@ -40,7 +40,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     EnEncount1* this = THIS;
 
     if (this->actor.params <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -128,7 +128,7 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
 
         case EN_ENCOUNT1_SKULLFISH_2:
             if ((this->path != NULL) && (!SubS_CopyPointFromPath(this->path, 0, &spawnPos))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
     }

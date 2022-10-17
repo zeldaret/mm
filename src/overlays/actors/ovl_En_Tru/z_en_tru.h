@@ -60,6 +60,4 @@ typedef struct EnTru {
     /* 0x394 */ EnTruUnkStruct unk_394[30];
 } EnTru; // size = 0x934
 
-extern const ActorInit En_Tru_InitVars;
-
 #endif // Z_EN_TRU_H
