@@ -17,6 +17,4 @@ typedef struct EnTest5 {
     /* 0x158 */ EnTest5ActionFunc actionFunc;    
 } EnTest5; // size = 0x15C
 
-extern const ActorInit En_Test5_InitVars;
-
 #endif // Z_EN_TEST5_H

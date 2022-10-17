@@ -15626,7 +15626,7 @@
     0x80BC15D0:("En_Nb_InitVars","UNK_TYPE1","",0x1),
     0x80BC15F0:("D_80BC15F0","UNK_TYPE1","",0x1),
     0x80BC161C:("D_80BC161C","UNK_TYPE1","",0x1),
-    0x80BC1628:("D_80BC1628","UNK_TYPE1","",0x1),
+    0x80BC1628:("sAnimationInfo","UNK_TYPE1","",0x1),
     0x80BC1690:("jtbl_80BC1690","UNK_PTR","",0x4),
     0x80BC16B8:("jtbl_80BC16B8","UNK_PTR","",0x4),
     0x80BC16D0:("jtbl_80BC16D0","UNK_PTR","",0x4),

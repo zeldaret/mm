@@ -17,6 +17,4 @@ typedef struct EnRecepgirl {
     /* 0x2AE */ Vec3s headRot;
 } EnRecepgirl; // size = 0x2B4
 
-extern const ActorInit En_Recepgirl_InitVars;
-
 #endif // Z_EN_RECEPGIRL_H

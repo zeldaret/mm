@@ -38,6 +38,4 @@ typedef struct EnKgy {
     /* 0x304 */ EnKgyActionFunc actionFunc;
 } EnKgy; // size = 0x308
 
-extern const ActorInit En_Kgy_InitVars;
-
 #endif // Z_EN_KGY_H

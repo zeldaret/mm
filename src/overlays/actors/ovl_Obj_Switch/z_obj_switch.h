@@ -60,8 +60,6 @@ typedef struct ObjSwitch {
     /* 0x254 */ f32 floorSwitchDownScale;
 } ObjSwitch; // size = 0x258
 
-extern const ActorInit Obj_Switch_InitVars;
-
 #define OBJ_SWITCH_GET_TYPE(thisx) ((thisx)->params&7)
 #define OBJ_SWITCH_GET_SUBTYPE(thisx) ((thisx)->params >> 4 & 7)
 #define OBJ_SWITCH_GET_SWITCH_FLAG(thisx) ((thisx)->params >> 8 & 0x7F)

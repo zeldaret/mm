@@ -16,6 +16,4 @@ typedef struct BgHakaBombwall {
     /* 0x1AC */ s8 csTimer;
 } BgHakaBombwall; // size = 0x1B0
 
-extern const ActorInit Bg_Haka_Bombwall_InitVars;
-
 #endif // Z_BG_HAKA_BOMBWALL_H

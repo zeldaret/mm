@@ -29,6 +29,4 @@ typedef enum {
     /* 4 */ TORCH2_STATE_DYING,
 } EnTorch2State;
 
-extern const ActorInit En_Torch2_InitVars;
-
 #endif // Z_EN_TORCH2_H

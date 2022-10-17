@@ -13,6 +13,4 @@ typedef struct BgDyYoseizo {
     /* 0x0148 */ char unk_148[0x33BC];
 } BgDyYoseizo; // size = 0x3504
 
-extern const ActorInit Bg_Dy_Yoseizo_InitVars;
-
 #endif // Z_BG_DY_YOSEIZO_H

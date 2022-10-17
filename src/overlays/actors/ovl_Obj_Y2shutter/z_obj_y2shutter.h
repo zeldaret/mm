@@ -12,8 +12,6 @@ typedef struct ObjY2shutter {
     /* 0x15F */ u8 settleTimer;
 } ObjY2shutter; // size = 0x160
 
-extern const ActorInit Obj_Y2shutter_InitVars;
-
 typedef enum {
     /* 0x0 */ SHUTTER_BARRED,
     /* 0x1 */ SHUTTER_GRATED,

@@ -52,6 +52,4 @@ typedef struct EnWallmas {
     /* 0x358 */ ColliderCylinder collider;
 } EnWallmas; // size = 0x3A4
 
-extern const ActorInit En_Wallmas_InitVars;
-
 #endif // Z_EN_WALLMAS_H

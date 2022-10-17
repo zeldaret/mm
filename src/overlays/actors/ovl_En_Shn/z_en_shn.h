@@ -43,6 +43,4 @@ typedef struct EnShn {
     /* 0x2EC */ s32 unk_2EC;
 } EnShn; // size = 0x2F0
 
-extern const ActorInit En_Shn_InitVars;
-
 #endif // Z_EN_SHN_H

@@ -64,6 +64,4 @@ typedef struct EnRaf {
     /* 0x41C */ EnRafEffect effects[EN_RAF_EFFECT_COUNT];
 } EnRaf; // size = 0xAE4
 
-extern const ActorInit En_Raf_InitVars;
-
 #endif // Z_EN_RAF_H

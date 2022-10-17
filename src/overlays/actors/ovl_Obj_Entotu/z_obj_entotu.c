@@ -16,7 +16,7 @@ void ObjEntotu_Destroy(Actor* thisx, PlayState* play);
 void ObjEntotu_Update(Actor* thisx, PlayState* play);
 void ObjEntotu_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Entotu_InitVars = {
+ActorInit Obj_Entotu_InitVars = {
     ACTOR_OBJ_ENTOTU,
     ACTORCAT_PROP,
     FLAGS,

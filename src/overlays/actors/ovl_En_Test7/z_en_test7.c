@@ -34,7 +34,7 @@ void func_80AF2EC8(EnTest7* this, PlayState* play);
 void func_80AF2F98(EnTest7* this, PlayState* play);
 void func_80AF30F4(EnTest7* this, PlayState* play);
 
-const ActorInit En_Test7_InitVars = {
+ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -594,11 +594,11 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
     subCam->fov = ((subCam->fov - this->subCamFov) * sp1C) + this->subCamFov;
 
     if (this->unk_1E54 >= 100) {
-        MREG(64) = 1;
-        MREG(65) = 255;
-        MREG(66) = 255;
-        MREG(67) = 255;
-        MREG(68) = 255;
+        R_PLAY_FILL_SCREEN_ON = true;
+        R_PLAY_FILL_SCREEN_R = 255;
+        R_PLAY_FILL_SCREEN_G = 255;
+        R_PLAY_FILL_SCREEN_B = 255;
+        R_PLAY_FILL_SCREEN_ALPHA = 255;
         play->unk_18844 = 0;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
@@ -612,13 +612,13 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
     Color_RGB8 sp24 = { 64, 0, 0 };
     Color_RGB8 sp20 = { 220, 220, 255 };
 
-    if (MREG(64) != 0) {
+    if (R_PLAY_FILL_SCREEN_ON) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
-        MREG(64) = 0;
-        MREG(65) = 0;
-        MREG(66) = 0;
-        MREG(67) = 0;
-        MREG(68) = 0;
+        R_PLAY_FILL_SCREEN_ON = false;
+        R_PLAY_FILL_SCREEN_R = 0;
+        R_PLAY_FILL_SCREEN_G = 0;
+        R_PLAY_FILL_SCREEN_B = 0;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
     }
 
     sp1C = 1.0f - (sp2C / 10.0f);

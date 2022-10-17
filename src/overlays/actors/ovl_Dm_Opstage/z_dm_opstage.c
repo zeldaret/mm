@@ -18,7 +18,7 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play);
 
-const ActorInit Dm_Opstage_InitVars = {
+ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
     ACTORCAT_ITEMACTION,
     FLAGS,

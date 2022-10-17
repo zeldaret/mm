@@ -21,6 +21,4 @@ typedef struct BgCtowerRot {
     /* 0x164 */ f32 timer;
 } BgCtowerRot; // size = 0x168
 
-extern const ActorInit Bg_Ctower_Rot_InitVars;
-
 #endif // Z_BG_CTOWER_ROT_H

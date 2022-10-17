@@ -28,7 +28,7 @@ typedef enum {
     /* 4 */ HEISHI_ANIM_STAND_UP
 } EnHeishiAnimation;
 
-const ActorInit En_Heishi_InitVars = {
+ActorInit En_Heishi_InitVars = {
     ACTOR_EN_HEISHI,
     ACTORCAT_NPC,
     FLAGS,

@@ -13,6 +13,4 @@ typedef struct BgIcefloe {
     /* 0x160 */ s32 timer;
 } BgIcefloe; // size = 0x164
 
-extern const ActorInit Bg_Icefloe_InitVars;
-
 #endif // Z_BG_ICEFLOE_H

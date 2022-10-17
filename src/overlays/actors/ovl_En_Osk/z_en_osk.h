@@ -24,6 +24,4 @@ typedef struct EnOsk {
     /* 0x260 */ EnOskActionFunc actionFunc;
 } EnOsk; // size = 0x264
 
-extern const ActorInit En_Osk_InitVars;
-
 #endif // Z_EN_OSK_H

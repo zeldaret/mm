@@ -21,7 +21,7 @@ void func_80A1F5AC(DmHina* this, PlayState* play);
 void func_80A1F63C(DmHina* this, PlayState* play);
 
 #if 0
-const ActorInit Dm_Hina_InitVars = {
+ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
     ACTORCAT_ITEMACTION,
     FLAGS,

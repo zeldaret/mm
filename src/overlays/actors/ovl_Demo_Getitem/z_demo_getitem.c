@@ -18,7 +18,7 @@ void func_80A4FB10(DemoGetitem* this, PlayState* play);
 void func_80A4FB68(DemoGetitem* this, PlayState* play2);
 void DemoGetitem_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Getitem_InitVars = {
+ActorInit Demo_Getitem_InitVars = {
     ACTOR_DEMO_GETITEM,
     ACTORCAT_BG,
     FLAGS,

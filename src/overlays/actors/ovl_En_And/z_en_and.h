@@ -14,6 +14,4 @@ typedef struct EnAnd {
     /* 0x18C */ char unk_18C[0x188];
 } EnAnd; // size = 0x314
 
-extern const ActorInit En_And_InitVars;
-
 #endif // Z_EN_AND_H

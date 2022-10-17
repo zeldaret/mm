@@ -32,6 +32,4 @@ typedef struct ObjBombiwa {
     /* 0x204 */ ObjBombiwaActionFunc actionFunc;
 } ObjBombiwa; // size = 0x208
 
-extern const ActorInit Obj_Bombiwa_InitVars;
-
 #endif // Z_OBJ_BOMBIWA_H

@@ -15,7 +15,7 @@ void DemoShd_Destroy(Actor* thisx, PlayState* play);
 void DemoShd_Update(Actor* thisx, PlayState* play);
 void DemoShd_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Shd_InitVars = {
+ActorInit Demo_Shd_InitVars = {
     ACTOR_DEMO_SHD,
     ACTORCAT_ENEMY,
     FLAGS,

@@ -19,6 +19,4 @@ typedef struct ObjGrassCarry {
     /* 0x19C */ ObjGrassCarryActionFunc actionFunc;
 } ObjGrassCarry; // size = 0x1A0
 
-extern const ActorInit Obj_Grass_Carry_InitVars;
-
 #endif // Z_OBJ_GRASS_CARRY_H

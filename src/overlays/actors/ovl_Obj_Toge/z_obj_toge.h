@@ -29,6 +29,4 @@ typedef struct ObjToge {
     /* 0x1CC */ f32 unk_1CC;
 } ObjToge; // size = 0x1D0
 
-extern const ActorInit Obj_Toge_InitVars;
-
 #endif // Z_OBJ_TOGE_H

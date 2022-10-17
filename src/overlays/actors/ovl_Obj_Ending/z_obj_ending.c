@@ -15,7 +15,7 @@ void ObjEnding_Init(Actor* thisx, PlayState* play);
 void ObjEnding_Update(Actor* thisx, PlayState* play);
 void ObjEnding_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Ending_InitVars = {
+ActorInit Obj_Ending_InitVars = {
     ACTOR_OBJ_ENDING,
     ACTORCAT_BG,
     FLAGS,

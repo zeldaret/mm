@@ -57,6 +57,4 @@ typedef struct EnGg {
     /* 0x344 */ EnGgStruct unk_344;
 } EnGg; // size = 0x390
 
-extern const ActorInit En_Gg_InitVars;
-
 #endif // Z_EN_GG_H

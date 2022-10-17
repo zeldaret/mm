@@ -17,7 +17,7 @@ void ItemInbox_Draw(Actor* thisx, PlayState* play);
 
 void ItemInbox_Idle(ItemInbox* this, PlayState* play);
 
-const ActorInit Item_Inbox_InitVars = {
+ActorInit Item_Inbox_InitVars = {
     ACTOR_ITEM_INBOX,
     ACTORCAT_NPC,
     FLAGS,

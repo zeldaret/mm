@@ -30,7 +30,7 @@ Boss04* D_80BB8450;
 f32 D_80BB8454;
 EnTanron2* D_80BB8458[82];
 
-const ActorInit En_Tanron2_InitVars = {
+ActorInit En_Tanron2_InitVars = {
     ACTOR_EN_TANRON2,
     ACTORCAT_BOSS,
     FLAGS,

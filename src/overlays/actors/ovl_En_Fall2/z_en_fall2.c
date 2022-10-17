@@ -21,7 +21,7 @@ void func_80C1B9D4(EnFall2* this, PlayState* play);
 void func_80C1B8F0(EnFall2* this);
 void func_80C1B9D4(EnFall2* this, PlayState* play);
 
-const ActorInit En_Fall2_InitVars = {
+ActorInit En_Fall2_InitVars = {
     ACTOR_EN_FALL2,
     ACTORCAT_ITEMACTION,
     FLAGS,

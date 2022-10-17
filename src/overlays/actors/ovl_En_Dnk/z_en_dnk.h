@@ -40,6 +40,4 @@ typedef struct EnDnk {
     /* 0x2A2 */ s16 unk_2A2;
 } EnDnk; // size = 0x2A4
 
-extern const ActorInit En_Dnk_InitVars;
-
 #endif // Z_EN_DNK_H

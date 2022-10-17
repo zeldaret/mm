@@ -29,7 +29,7 @@ void func_808CCB08(EnVm* this);
 void func_808CCB50(EnVm* this, PlayState* play);
 void func_808CCCF0(EnVm* this, PlayState* play);
 
-const ActorInit En_Vm_InitVars = {
+ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
     ACTORCAT_ENEMY,
     FLAGS,

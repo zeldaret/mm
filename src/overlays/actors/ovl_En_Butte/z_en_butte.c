@@ -53,7 +53,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-const ActorInit En_Butte_InitVars = {
+ActorInit En_Butte_InitVars = {
     ACTOR_EN_BUTTE,
     ACTORCAT_ITEMACTION,
     FLAGS,

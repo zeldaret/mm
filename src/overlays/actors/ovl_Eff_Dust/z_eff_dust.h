@@ -30,6 +30,4 @@ typedef enum {
     /* 0x5 */ EFF_DUST_TYPE_5
 } EffDustType;
 
-extern const ActorInit Eff_Dust_InitVars;
-
 #endif // Z_EFF_DUST_H

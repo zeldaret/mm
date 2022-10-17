@@ -34,7 +34,7 @@ void func_80B0A638(BossHakugin* this, PlayState* play);
 void func_80B0A8C4(BossHakugin* this, PlayState* play);
 
 #if 0
-const ActorInit Boss_Hakugin_InitVars = {
+ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
     ACTORCAT_BOSS,
     FLAGS,

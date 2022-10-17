@@ -16,7 +16,7 @@ void ObjY2lift_Destroy(Actor* thisx, PlayState* play);
 void ObjY2lift_Update(Actor* thisx, PlayState* play);
 void ObjY2lift_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Y2lift_InitVars = {
+ActorInit Obj_Y2lift_InitVars = {
     ACTOR_OBJ_Y2LIFT,
     ACTORCAT_BG,
     FLAGS,

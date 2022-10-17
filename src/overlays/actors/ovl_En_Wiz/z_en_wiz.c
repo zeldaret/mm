@@ -80,7 +80,7 @@ typedef enum {
     /* 5 */ EN_WIZ_ANIM_DAMAGE,
 } EnWizAnimation;
 
-const ActorInit En_Wiz_InitVars = {
+ActorInit En_Wiz_InitVars = {
     ACTOR_EN_WIZ,
     ACTORCAT_ENEMY,
     FLAGS,

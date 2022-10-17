@@ -34,7 +34,7 @@ void func_80B81BA0(Actor* thisx, PlayState* play);
 void func_80B81DAC(BgIkanaRotaryroom* this);
 void func_80B81DC8(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
+ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     ACTOR_BG_IKANA_ROTARYROOM,
     ACTORCAT_BG,
     FLAGS,

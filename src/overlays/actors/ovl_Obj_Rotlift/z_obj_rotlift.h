@@ -20,6 +20,4 @@ typedef struct ObjRotlift {
     /* 0x15C */ ObjEtcetera* dekuFlowers[2];
 } ObjRotlift; // size = 0x164
 
-extern const ActorInit Obj_Rotlift_InitVars;
-
 #endif // Z_OBJ_ROTLIFT_H

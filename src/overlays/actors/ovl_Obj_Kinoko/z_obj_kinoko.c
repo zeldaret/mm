@@ -16,7 +16,7 @@ void ObjKinoko_Destroy(Actor* thisx, PlayState* play);
 void ObjKinoko_Update(Actor* thisx, PlayState* play);
 void ObjKinoko_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Kinoko_InitVars = {
+ActorInit Obj_Kinoko_InitVars = {
     ACTOR_OBJ_KINOKO,
     ACTORCAT_ITEMACTION,
     FLAGS,

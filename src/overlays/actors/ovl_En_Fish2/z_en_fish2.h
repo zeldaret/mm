@@ -60,6 +60,4 @@ typedef struct EnFish2 {
     /* 0x03F8 */ EnFish2UnkStruct unk_3F8[200];
 } EnFish2; // size = 0x2018
 
-extern const ActorInit En_Fish2_InitVars;
-
 #endif // Z_EN_FISH2_H

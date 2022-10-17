@@ -18,6 +18,4 @@ typedef struct ObjToudai {
     /* 0x23A */ UNK_TYPE1 pad23A[6];
 } ObjToudai;// size = 0x240
 
-extern const ActorInit Obj_Toudai_InitVars;
-
 #endif // Z_OBJ_TOUDAI_H

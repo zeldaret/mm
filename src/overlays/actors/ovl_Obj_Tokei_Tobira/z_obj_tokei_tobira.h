@@ -14,6 +14,4 @@ typedef struct ObjTokeiTobira {
     /* 0x160 */ char unk_160[0x10];
 } ObjTokeiTobira; // size = 0x170
 
-extern const ActorInit Obj_Tokei_Tobira_InitVars;
-
 #endif // Z_OBJ_TOKEI_TOBIRA_H

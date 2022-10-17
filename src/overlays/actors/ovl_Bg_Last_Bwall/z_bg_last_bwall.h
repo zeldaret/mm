@@ -25,6 +25,4 @@ typedef struct BgLastBwall {
     /* 0x23A */ s16 cutscenes[1];
 } BgLastBwall; // size = 0x23C
 
-extern const ActorInit Bg_Last_Bwall_InitVars;
-
 #endif // Z_BG_LAST_BWALL_H

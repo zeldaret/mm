@@ -32,7 +32,7 @@ typedef enum {
     /* 4 */ EN_DNP_EYE_MAX,
 } EnDnpEyeIndex;
 
-const ActorInit En_Dnp_InitVars = {
+ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
     FLAGS,
