@@ -61,7 +61,7 @@ void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
 void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
-const ActorInit Obj_Um_InitVars = {
+ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,
     FLAGS,

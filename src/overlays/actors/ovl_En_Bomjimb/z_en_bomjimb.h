@@ -61,6 +61,4 @@ typedef struct EnBomjimb {
     /* 0x2E8 */ ColliderCylinder collider;
 } EnBomjimb; // size = 0x334
 
-extern const ActorInit En_Bomjimb_InitVars;
-
 #endif // Z_EN_BOMJIMB_H

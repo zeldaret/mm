@@ -20,7 +20,7 @@ void ObjMure_ActiveState(ObjMure* this, PlayState* play);
 void ObjMure_KillActors(ObjMure* this, PlayState* play);
 void ObjMure_CheckChildren(ObjMure* this, PlayState* play);
 
-const ActorInit Obj_Mure_InitVars = {
+ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
     ACTORCAT_ITEMACTION,
     FLAGS,

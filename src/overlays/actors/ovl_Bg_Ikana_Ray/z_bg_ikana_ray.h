@@ -16,6 +16,4 @@ typedef struct BgIkanaRay {
     /* 0x194 */ BgIkanaRayActionFunc actionFunc;
 } BgIkanaRay; // size = 0x198
 
-extern const ActorInit Bg_Ikana_Ray_InitVars;
-
 #endif // Z_BG_IKANA_RAY_H

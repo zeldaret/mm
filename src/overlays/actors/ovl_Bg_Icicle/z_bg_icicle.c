@@ -42,7 +42,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 13, 120, 0, { 0, 0, 0 } },
 };
 
-const ActorInit Bg_Icicle_InitVars = {
+ActorInit Bg_Icicle_InitVars = {
     ACTOR_BG_ICICLE,
     ACTORCAT_PROP,
     FLAGS,

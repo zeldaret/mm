@@ -30,7 +30,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play);
 void func_80BFC8F8(EnRz* this, PlayState* play);
 
 #if 0
-const ActorInit En_Rz_InitVars = {
+ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
     ACTORCAT_NPC,
     FLAGS,

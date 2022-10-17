@@ -18,7 +18,7 @@ void DmChar06_Draw(Actor* thisx, PlayState* play);
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
 void func_80AAE6F0(DmChar06* this, PlayState* play);
 
-const ActorInit Dm_Char06_InitVars = {
+ActorInit Dm_Char06_InitVars = {
     ACTOR_DM_CHAR06,
     ACTORCAT_ITEMACTION,
     FLAGS,

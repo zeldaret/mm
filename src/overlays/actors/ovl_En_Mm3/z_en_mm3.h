@@ -30,6 +30,4 @@ typedef struct EnMm3 {
     /* 0x2B4 */ u16 unk_2B4;
 } EnMm3; // size = 0x2B8
 
-extern const ActorInit En_Mm3_InitVars;
-
 #endif // Z_EN_MM3_H

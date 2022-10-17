@@ -46,7 +46,7 @@ void func_80A28A28(EnBigpamet* this);
 void func_80A28D80(EnBigpamet* this);
 void func_80A28ED4(EnBigpamet* this);
 
-const ActorInit En_Bigpamet_InitVars = {
+ActorInit En_Bigpamet_InitVars = {
     ACTOR_EN_BIGPAMET,
     ACTORCAT_BOSS,
     FLAGS,

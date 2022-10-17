@@ -34,7 +34,7 @@ void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play);
 void EnKujiya_SetupTurnToClosed(EnKujiya* this);
 void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play);
 
-const ActorInit En_Kujiya_InitVars = {
+ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,
     ACTORCAT_NPC,
     FLAGS,

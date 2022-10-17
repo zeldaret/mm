@@ -16,7 +16,7 @@ void ObjUsiyane_Destroy(Actor* thisx, PlayState* play);
 void ObjUsiyane_Update(Actor* thisx, PlayState* play);
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Usiyane_InitVars = {
+ActorInit Obj_Usiyane_InitVars = {
     ACTOR_OBJ_USIYANE,
     ACTORCAT_PROP,
     FLAGS,

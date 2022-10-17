@@ -24,6 +24,4 @@ typedef struct BgSpdweb {
     /* 0x2F8 */ Vec3s* unk_2F8;
 } BgSpdweb; // size = 0x2FC
 
-extern const ActorInit Bg_Spdweb_InitVars;
-
 #endif // Z_BG_SPDWEB_H

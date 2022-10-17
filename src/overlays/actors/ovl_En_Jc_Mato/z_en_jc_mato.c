@@ -20,7 +20,7 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, PlayState* play);
 void EnJcMato_SetupIdle(EnJcMato* this);
 void EnJcMato_Idle(EnJcMato* this, PlayState* play);
 
-const ActorInit En_Jc_Mato_InitVars = {
+ActorInit En_Jc_Mato_InitVars = {
     ACTOR_EN_JC_MATO,
     ACTORCAT_PROP,
     FLAGS,

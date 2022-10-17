@@ -72,7 +72,7 @@ typedef enum {
     /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
 } GiantCsActionIndex;
 
-const ActorInit En_Giant_InitVars = {
+ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
     ACTORCAT_NPC,
     FLAGS,

@@ -37,6 +37,4 @@ typedef struct EnJgameTsn {
     /* 0x300 */ u16 unk_300;
 } EnJgameTsn; // size = 0x304
 
-extern const ActorInit En_Jgame_Tsn_InitVars;
-
 #endif // Z_EN_JGAME_TSN_H

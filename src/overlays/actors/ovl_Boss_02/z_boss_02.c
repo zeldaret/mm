@@ -112,7 +112,7 @@ static DamageTable sRedTwinmoldDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit Boss_02_InitVars = {
+ActorInit Boss_02_InitVars = {
     ACTOR_BOSS_02,
     ACTORCAT_BOSS,
     FLAGS,
@@ -462,20 +462,20 @@ Vec3f D_809DFA2C[] = {
     { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f },
 };
 
-void func_809DA1D0(PlayState* play, u8 arg1, u8 arg2, u8 arg3, u8 arg4) {
-    MREG(64) = 1;
-    MREG(65) = arg1;
-    MREG(66) = arg2;
-    MREG(67) = arg3;
-    MREG(68) = arg4;
+void func_809DA1D0(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ON = true;
+    R_PLAY_FILL_SCREEN_R = red;
+    R_PLAY_FILL_SCREEN_G = green;
+    R_PLAY_FILL_SCREEN_B = blue;
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
-void func_809DA22C(PlayState* play, u8 arg1) {
-    MREG(68) = arg1;
+void func_809DA22C(PlayState* play, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
 void func_809DA24C(PlayState* play) {
-    MREG(64) = 0;
+    R_PLAY_FILL_SCREEN_ON = false;
 }
 
 void Boss02_SpawnEffectSand(TwinmoldEffect* effects, Vec3f* pos, f32 scale) {
@@ -1626,7 +1626,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
     Vec3f sp58;
     u8 sp57 = 0;
     f32 phi_f0_2;
-    s16 phi_v1;
+    s16 alpha;
 
     this->unk_1D14++;
 
@@ -1995,11 +1995,9 @@ void func_809DD934(Boss02* this, PlayState* play) {
             if (this->unk_1D7A >= 400) {
                 this->unk_1D78 = 3;
             }
-            phi_v1 = this->unk_1D7A;
-            if (phi_v1 > 255) {
-                phi_v1 = 255;
-            }
-            func_809DA22C(play, phi_v1);
+            alpha = this->unk_1D7A;
+            alpha = CLAMP_MAX(alpha, 255);
+            func_809DA22C(play, alpha);
             break;
 
         case 3:
@@ -2009,11 +2007,9 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 this->unk_1D78 = 0;
                 func_809DA24C(play);
             } else {
-                phi_v1 = this->unk_1D7A;
-                if (phi_v1 > 255) {
-                    phi_v1 = 255;
-                }
-                func_809DA22C(play, phi_v1);
+                alpha = this->unk_1D7A;
+                alpha = CLAMP_MAX(alpha, 255);
+                func_809DA22C(play, alpha);
             }
             break;
     }

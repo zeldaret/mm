@@ -60,6 +60,4 @@ typedef struct ObjOshihiki {
     /* 0x1C8 */ AnimatedMaterial* texture;
 } ObjOshihiki; // size = 0x1CC
 
-extern const ActorInit Obj_Oshihiki_InitVars;
-
 #endif // Z_OBJ_OSHIHIKI_H

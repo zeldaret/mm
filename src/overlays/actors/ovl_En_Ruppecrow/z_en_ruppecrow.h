@@ -37,6 +37,4 @@ typedef struct EnRuppecrow {
     /* 0x2D4 */ Vec3f limbPos[ENRUPPECROW_LIMB_POS_COUNT];
 } EnRuppecrow; // size = 0x304
 
-extern const ActorInit En_Ruppecrow_InitVars;
-
 #endif // Z_EN_RUPPECROW_H

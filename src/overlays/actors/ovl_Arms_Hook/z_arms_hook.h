@@ -20,6 +20,4 @@ typedef struct ArmsHook {
     /* 0x20C */ ArmsHookActionFunc actionFunc;
 } ArmsHook; // size = 0x210
 
-extern const ActorInit Arms_Hook_InitVars;
-
 #endif // Z_ARMS_HOOK_H

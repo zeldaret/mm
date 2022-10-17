@@ -22,6 +22,4 @@ typedef struct EnHakurock {
     /* 0x14C */ ColliderCylinder collider;
 } EnHakurock; // size = 0x198
 
-extern const ActorInit En_Hakurock_InitVars;
-
 #endif // Z_EN_HAKUROCK_H

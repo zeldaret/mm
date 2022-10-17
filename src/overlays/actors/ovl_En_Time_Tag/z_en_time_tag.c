@@ -30,7 +30,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play);
 void func_80ACA7C4(EnTimeTag* this, PlayState* play);
 void func_80ACA840(EnTimeTag* this, PlayState* play);
 
-const ActorInit En_Time_Tag_InitVars = {
+ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,

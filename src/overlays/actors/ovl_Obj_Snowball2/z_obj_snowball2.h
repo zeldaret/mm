@@ -24,6 +24,4 @@ typedef struct ObjSnowball2 {
     /* 0x1B0 */ UNK_TYPE1 unk1B0[4];
 } ObjSnowball2; // size = 0x1B4
 
-extern const ActorInit Obj_Snowball2_InitVars;
-
 #endif // Z_OBJ_SNOWBALL2_H

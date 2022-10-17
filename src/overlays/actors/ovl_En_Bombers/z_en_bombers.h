@@ -50,6 +50,4 @@ typedef struct EnBombers {
     /* 0x2C8 */ ColliderCylinder collider;
 } EnBombers; // size = 0x314
 
-extern const ActorInit En_Bombers_InitVars;
-
 #endif // Z_EN_BOMBERS_H

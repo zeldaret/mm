@@ -32,7 +32,7 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
-const ActorInit En_Daiku2_InitVars = {
+ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
     ACTORCAT_NPC,
     FLAGS,

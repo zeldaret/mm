@@ -14,7 +14,7 @@
 void ObjFunen_Init(Actor* thisx, PlayState* play);
 void ObjFunen_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Funen_InitVars = {
+ActorInit Obj_Funen_InitVars = {
     ACTOR_OBJ_FUNEN,       ACTORCAT_PROP,         FLAGS,
     OBJECT_FUNEN,          sizeof(ObjFunen),      (ActorFunc)ObjFunen_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw,

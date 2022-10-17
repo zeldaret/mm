@@ -20,6 +20,4 @@ typedef struct ObjHsStump {
     /* 0x168 */ f32 rotFactor;
 } ObjHsStump; // size = 0x16C
 
-extern const ActorInit Obj_HsStump_InitVars;
-
 #endif // Z_OBJ_HSSTUMP_H

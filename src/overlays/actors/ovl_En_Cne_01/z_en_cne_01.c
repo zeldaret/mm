@@ -20,7 +20,7 @@ void EnCne01_Walk(EnHy* this, PlayState* play);
 void EnCne01_FaceForward(EnHy* this, PlayState* play);
 void EnCne01_Talk(EnHy* this, PlayState* play);
 
-const ActorInit En_Cne_01_InitVars = {
+ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
     ACTORCAT_NPC,
     FLAGS,

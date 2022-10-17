@@ -23,6 +23,4 @@ typedef struct EnPart {
     /* 0x150 */ Gfx* dList;
 } EnPart; // size = 0x154
 
-extern const ActorInit En_Part_InitVars;
-
 #endif // Z_EN_PART_H

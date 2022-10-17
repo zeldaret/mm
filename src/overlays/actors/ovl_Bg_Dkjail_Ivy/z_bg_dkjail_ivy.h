@@ -17,6 +17,4 @@ typedef struct BgDkjailIvy {
     /* 0x1AD */ u8 alpha;
 } BgDkjailIvy; // size = 0x1B0
 
-extern const ActorInit Bg_Dkjail_Ivy_InitVars;
-
 #endif // Z_BG_DKJAIL_IVY_H

@@ -24,7 +24,7 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play);
 void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this);
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play);
 
-const ActorInit Bg_Haka_Bombwall_InitVars = {
+ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,

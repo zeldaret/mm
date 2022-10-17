@@ -178,7 +178,7 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
 extern s32 D_801BDA9C;
 
-const ActorInit En_Invadepoh_InitVars = {
+ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
     ACTORCAT_PROP,
     FLAGS,

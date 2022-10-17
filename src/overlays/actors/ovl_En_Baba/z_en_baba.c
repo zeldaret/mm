@@ -50,7 +50,7 @@ typedef enum {
     /* 2 */ BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH
 } BombShopLadyScheduleResult;
 
-const ActorInit En_Baba_InitVars = {
+ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
     ACTORCAT_NPC,
     FLAGS,

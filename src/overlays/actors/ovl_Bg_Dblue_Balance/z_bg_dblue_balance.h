@@ -44,6 +44,4 @@ typedef struct BgDblueBalance {
     /* 0x228 */ f32 unk_228;
 } BgDblueBalance; // size = 0x22C
 
-extern const ActorInit Bg_Dblue_Balance_InitVars;
-
 #endif // Z_BG_DBLUE_BALANCE_H

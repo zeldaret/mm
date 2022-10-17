@@ -43,6 +43,4 @@ typedef struct ObjVspinyroll {
     /* 0x3C8 */ s16 unk_3C8;
 } ObjVspinyroll; // size = 0x3CC
 
-extern const ActorInit Obj_Vspinyroll_InitVars;
-
 #endif // Z_OBJ_VSPINYROLL_H

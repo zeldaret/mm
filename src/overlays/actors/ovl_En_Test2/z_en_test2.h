@@ -15,6 +15,4 @@ typedef enum {
     /* 0xC */ EN_TEST2_PARAMS_C
 } EnTest2_Params;
 
-extern const ActorInit En_Test2_InitVars;
-
 #endif // Z_EN_TEST2_H

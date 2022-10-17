@@ -35,6 +35,4 @@ typedef struct EnNwc {
     /* 0x264 */ EnNwcActionFunc actionFunc;
 } EnNwc; // size = 0x268
 
-extern const ActorInit En_Nwc_InitVars;
-
 #endif // Z_EN_NWC_H

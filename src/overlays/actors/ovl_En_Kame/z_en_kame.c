@@ -41,7 +41,7 @@ void func_80AD8364(EnKame* this);
 void func_80AD8388(EnKame* this, PlayState* play);
 void func_80AD8D64(Actor* thisx, PlayState* play);
 
-const ActorInit En_Kame_InitVars = {
+ActorInit En_Kame_InitVars = {
     ACTOR_EN_KAME,
     ACTORCAT_ENEMY,
     FLAGS,

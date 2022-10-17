@@ -38,7 +38,7 @@ void func_808C7D34(EnDeath* this, PlayState* play);
 void func_808C7DCC(EnDeath* this, PlayState* play);
 
 #if 0
-const ActorInit En_Death_InitVars = {
+ActorInit En_Death_InitVars = {
     ACTOR_EN_DEATH,
     ACTORCAT_ENEMY,
     FLAGS,

@@ -30,6 +30,4 @@ typedef struct BgUmajump {
     /* 0x168 */ Actor* horse;
 } BgUmajump; // size = 0x16C
 
-extern const ActorInit Bg_Umajump_InitVars;
-
 #endif // Z_BG_UMAJUMP_H

@@ -30,7 +30,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play);
 
-const ActorInit En_Ginko_Man_InitVars = {
+ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
     ACTORCAT_NPC,
     FLAGS,

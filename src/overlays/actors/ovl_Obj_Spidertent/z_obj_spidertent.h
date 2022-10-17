@@ -27,6 +27,4 @@ typedef struct ObjSpidertent {
     /* 0x3C8 */ ObjSpidertentActionFunc actionFunc;
 } ObjSpidertent; // size = 0x3CC
 
-extern const ActorInit Obj_Spidertent_InitVars;
-
 #endif // Z_OBJ_SPIDERTENT_H

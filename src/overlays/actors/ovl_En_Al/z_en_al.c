@@ -85,7 +85,7 @@ s32 D_80BDFF24[] = {
     0x11390411, 0x390819FF, 0xB10E2B3C, 0x2D00080C, 0x19FFA700,
 };
 
-const ActorInit En_Al_InitVars = {
+ActorInit En_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
     FLAGS,

@@ -51,7 +51,7 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
-const ActorInit En_GirlA_InitVars = {
+ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
     ACTORCAT_PROP,
     FLAGS,

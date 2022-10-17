@@ -14,6 +14,4 @@ typedef struct EnDekubaba {
     /* 0x18C */ char unk_18C[0x290];
 } EnDekubaba; // size = 0x41C
 
-extern const ActorInit En_Dekubaba_InitVars;
-
 #endif // Z_EN_DEKUBABA_H

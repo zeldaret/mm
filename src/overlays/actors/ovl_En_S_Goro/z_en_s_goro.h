@@ -11,8 +11,6 @@ struct EnSGoro;
 
 typedef void (*EnSGoroActionFunc)(struct EnSGoro*, PlayState*);
 
-extern const ActorInit En_S_Goro_InitVars;
-
 typedef struct EnSGoro {
     /* 0x000 */ Actor actor;
     /* 0x144 */ Actor* otherGoron;

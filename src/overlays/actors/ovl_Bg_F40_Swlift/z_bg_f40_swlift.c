@@ -16,7 +16,7 @@ void BgF40Swlift_Update(Actor* thisx, PlayState* play);
 void BgF40Swlift_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_F40_Swlift_InitVars = {
+ActorInit Bg_F40_Swlift_InitVars = {
     ACTOR_BG_F40_SWLIFT,
     ACTORCAT_BG,
     FLAGS,

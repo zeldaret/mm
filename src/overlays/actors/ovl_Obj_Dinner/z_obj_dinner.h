@@ -10,6 +10,4 @@ typedef struct ObjDinner {
     /* 0x144 */ char unk_144[0x4];
 } ObjDinner; // size = 0x148
 
-extern const ActorInit Obj_Dinner_InitVars;
-
 #endif // Z_OBJ_DINNER_H

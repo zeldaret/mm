@@ -62,6 +62,4 @@ typedef struct EnIg {
     /* 0x408 */ s32 unk_408;
 } EnIg; // size = 0x40C
 
-extern const ActorInit En_Ig_InitVars;
-
 #endif // Z_EN_IG_H

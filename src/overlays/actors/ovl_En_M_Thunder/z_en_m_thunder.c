@@ -29,7 +29,7 @@ void EnMThunder_UnkType_Attack(EnMThunder* this, PlayState* play);
 
 #define ENMTHUNDER_TYPE_MAX 4
 
-const ActorInit En_M_Thunder_InitVars = {
+ActorInit En_M_Thunder_InitVars = {
     ACTOR_EN_M_THUNDER,
     ACTORCAT_ITEMACTION,
     FLAGS,
