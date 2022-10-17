@@ -1626,6 +1626,7 @@ Acmd* AudioSynth_LoadWaveSamples(Acmd* cmd, NoteSampleState* sampleState, NoteSy
  * The delay is small enough that the sound is still perceived as one sound, but the channel that is not delayed will
  * reach our ear first and give a sense of directionality. The sound is directed towards the opposite side of the delay.
  */
+#if 1
 Acmd* AudioSynth_ApplyHaasEffect(Acmd* cmd, NoteSampleState* sampleState, NoteSynthesisState* synthState, s32 size,
                                  s32 flags, s32 haasEffectDelaySide) {
     u16 dmemDest;
@@ -1695,3 +1696,6 @@ Acmd* AudioSynth_ApplyHaasEffect(Acmd* cmd, NoteSampleState* sampleState, NoteSy
 
     return cmd;
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_synthesis/AudioSynth_ApplyHaasEffect.s")
+#endif
