@@ -15,7 +15,7 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 
 void func_808E0954(EnEncount1* this, PlayState* play);
 
-const ActorInit En_Encount1_InitVars = {
+ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,
     ACTORCAT_PROP,
     FLAGS,

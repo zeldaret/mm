@@ -26,7 +26,7 @@ void func_809542A0(BgIngate* this, PlayState* play);
 void func_80954340(BgIngate* this, PlayState* play);
 void func_809543D4(BgIngate* this, PlayState* play);
 
-const ActorInit Bg_Ingate_InitVars = {
+ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
     ACTORCAT_BG,
     FLAGS,
@@ -215,11 +215,11 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
             Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
             play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
         } else {
             Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     }
     this->unk16E = ActorCutscene_GetCurrentIndex();

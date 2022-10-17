@@ -24,6 +24,4 @@ typedef struct BgIkanaBlock {
     /* 0x17F */ s8 unk_17F;
 } BgIkanaBlock; // size = 0x180
 
-extern const ActorInit Bg_Ikana_Block_InitVars;
-
 #endif // Z_BG_IKANA_BLOCK_H

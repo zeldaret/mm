@@ -30,6 +30,4 @@ typedef struct EnBombal {
     /* 0x1A4 */ EnBombalEffect effects[200];
 } EnBombal; // size = 0x2A44
 
-extern const ActorInit En_Bombal_InitVars;
-
 #endif // Z_EN_BOMBAL_H

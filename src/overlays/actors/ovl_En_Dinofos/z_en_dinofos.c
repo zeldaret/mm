@@ -57,7 +57,7 @@ void func_8089C398(EnDinofos* this);
 void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
-const ActorInit En_Dinofos_InitVars = {
+ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
     ACTORCAT_ENEMY,
     FLAGS,

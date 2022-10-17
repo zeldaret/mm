@@ -21,7 +21,7 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Teleport(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Wait(ObjDanpeilift* this, PlayState* play);
 
-const ActorInit Obj_Danpeilift_InitVars = {
+ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
     ACTORCAT_BG,
     FLAGS,

@@ -17,7 +17,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play);
 
 void EnRu_DoNothing(EnRu* this, PlayState* play);
 
-const ActorInit En_Ru_InitVars = {
+ActorInit En_Ru_InitVars = {
     ACTOR_EN_RU,
     ACTORCAT_NPC,
     FLAGS,

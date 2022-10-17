@@ -16,7 +16,7 @@ void EnBal_Update(Actor* thisx, PlayState* play);
 void EnBal_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Bal_InitVars = {
+ActorInit En_Bal_InitVars = {
     ACTOR_EN_BAL,
     ACTORCAT_NPC,
     FLAGS,

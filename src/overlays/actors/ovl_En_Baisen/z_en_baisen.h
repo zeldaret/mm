@@ -32,6 +32,4 @@ typedef struct EnBaisen {
     /* 0x2B0 */ ColliderCylinder collider;
 } EnBaisen; // size = 0x2FC
 
-extern const ActorInit En_Baisen_InitVars;
-
 #endif // Z_EN_BAISEN_H

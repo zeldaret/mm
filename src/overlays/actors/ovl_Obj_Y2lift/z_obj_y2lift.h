@@ -13,6 +13,4 @@ typedef struct ObjY2lift {
     /* 0x15F */ u8 unk15F;
 } ObjY2lift; // size = 0x160
 
-extern const ActorInit Obj_Y2lift_InitVars;
-
 #endif // Z_OBJ_Y2LIFT_H

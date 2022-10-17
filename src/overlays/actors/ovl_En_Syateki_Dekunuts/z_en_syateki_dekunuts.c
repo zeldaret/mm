@@ -39,7 +39,7 @@ typedef enum {
     /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP,
 } EnSyatekiDekunutsHeaddressType;
 
-const ActorInit En_Syateki_Dekunuts_InitVars = {
+ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
     ACTORCAT_ENEMY,
     FLAGS,

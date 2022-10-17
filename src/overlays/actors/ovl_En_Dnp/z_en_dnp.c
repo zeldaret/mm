@@ -25,7 +25,7 @@ void func_80B3D338(EnDnp* this, PlayState* play);
 void func_80B3D3F8(EnDnp* this, PlayState* play);
 void func_80B3D558(EnDnp* this, PlayState* play);
 
-const ActorInit En_Dnp_InitVars = {
+ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
     FLAGS,

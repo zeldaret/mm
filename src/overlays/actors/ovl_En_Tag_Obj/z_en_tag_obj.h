@@ -11,6 +11,4 @@ typedef struct EnTagObj {
     /* 0x194 */ s32 hasSpawnedSeahorse;
 } EnTagObj; // size = 0x198
 
-extern const ActorInit En_Tag_Obj_InitVars;
-
 #endif // Z_EN_TAG_OBJ_H

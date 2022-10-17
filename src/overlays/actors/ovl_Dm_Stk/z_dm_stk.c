@@ -150,7 +150,7 @@ typedef enum {
     /* 4 */ SK_DEKU_PIPES_CS_STATE_END
 } SkullKidDekuPipesCutsceneState;
 
-const ActorInit Dm_Stk_InitVars = {
+ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -1272,7 +1272,7 @@ void DmStk_ClockTower_DeflectHit(DmStk* this, PlayState* play) {
     this->deflectCount++;
     if (this->deflectCount >= 3) {
         this->deflectCount = 0;
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             // That won't do you any good
             Message_StartTextbox(play, 0x2013, &this->actor);
         }
@@ -1720,7 +1720,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
         this->tatlMessageTimer++;
         if (this->tatlMessageTimer > 800) {
             this->tatlMessageTimer = 0;
-            if (!(player->stateFlags2 & 0x8000000)) {
+            if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
                 // Why are you just standing around?
                 Message_StartTextbox(play, 0x2014, &this->actor);
             }

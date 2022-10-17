@@ -41,6 +41,4 @@ typedef struct EnTruMt {
     /* 0x3A4 */ u8 unk_3A4;
 } EnTruMt; // size = 0x3A8
 
-extern const ActorInit En_Tru_Mt_InitVars;
-
 #endif // Z_EN_TRU_MT_H

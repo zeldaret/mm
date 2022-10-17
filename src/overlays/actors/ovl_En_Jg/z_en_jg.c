@@ -64,7 +64,7 @@ typedef enum {
     /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
 } EnJgAction;
 
-const ActorInit En_Jg_InitVars = {
+ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
     ACTORCAT_NPC,
     FLAGS,

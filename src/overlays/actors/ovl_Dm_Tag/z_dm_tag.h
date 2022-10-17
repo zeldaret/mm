@@ -21,6 +21,4 @@ typedef struct DmTag {
     /* 0x1A8 */ DmTagMsgEventFunc msgEventCallback;
 } DmTag; // size = 0x1AC
 
-extern const ActorInit Dm_Tag_InitVars;
-
 #endif // Z_DM_TAG_H

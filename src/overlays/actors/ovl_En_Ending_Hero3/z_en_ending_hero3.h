@@ -16,6 +16,4 @@ typedef struct EnEndingHero3 {
     /* 0x258 */ u16 unk258;
 } EnEndingHero3; // size = 0x25C
 
-extern const ActorInit En_Ending_Hero3_InitVars;
-
 #endif // Z_EN_ENDING_HERO3_H

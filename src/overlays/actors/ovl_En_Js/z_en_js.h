@@ -29,6 +29,4 @@ typedef struct EnJs {
     /* 0x2C4 */ EnJsActionFunc actionFunc;
 } EnJs; // size = 0x2C8
 
-extern const ActorInit En_Js_InitVars;
-
 #endif // Z_EN_JS_H

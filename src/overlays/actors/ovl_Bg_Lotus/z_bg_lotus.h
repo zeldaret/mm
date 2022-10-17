@@ -16,6 +16,4 @@ typedef struct BgLotus {
     /* 0x168 */ s16 timer2;
 } BgLotus; // size = 0x16C
 
-extern const ActorInit Bg_Lotus_InitVars;
-
 #endif // Z_BG_LOTUS_H

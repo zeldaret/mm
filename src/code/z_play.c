@@ -1526,7 +1526,7 @@ void Play_InitScene(PlayState* this, s32 spawn) {
     this->actorCsCamList = NULL;
     this->setupEntranceList = NULL;
     this->setupExitList = NULL;
-    this->unk_18868 = NULL;
+    this->naviQuestHints = NULL;
     this->setupPathList = NULL;
     this->sceneMaterialAnims = NULL;
     this->roomCtx.unk74 = NULL;

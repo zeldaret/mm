@@ -16,7 +16,7 @@ void EnZod_Update(Actor* thisx, PlayState* play);
 void EnZod_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Zod_InitVars = {
+ActorInit En_Zod_InitVars = {
     ACTOR_EN_ZOD,
     ACTORCAT_NPC,
     FLAGS,

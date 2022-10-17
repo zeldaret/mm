@@ -70,6 +70,8 @@
 #define R_PAUSE_DBG_QUEST_CURSOR_ON       YREG(69)
 #define R_PAUSE_DBG_QUEST_CURSOR_X        YREG(70)
 #define R_PAUSE_DBG_QUEST_CURSOR_Y        YREG(71)
+#define R_C_UP_ICON_X                     YREG(88)
+#define R_C_UP_ICON_Y                     YREG(89)
 
 #define R_MAGIC_FILL_COLOR(i)             ZREG(0 + i)
 #define R_C_BTN_COLOR(i)                  ZREG(39 + i)
@@ -100,6 +102,7 @@
 #define R_MOON_CRASH_TIMER_Y              XREG(80)
 #define R_MOON_CRASH_TIMER_X              XREG(81)
 #define R_PAUSE_OWLWARP_ALPHA             XREG(87)
+#define R_STORY_FILL_SCREEN_ALPHA         XREG(91)
 #define R_REVERSE_FLOOR_INDEX             XREG(94)
 #define R_MINIMAP_DISABLED                XREG(95)
 

@@ -33,7 +33,7 @@ void func_80941FA4(EnGoroiwa* this, PlayState* play);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, PlayState* play);
 
-const ActorInit En_Goroiwa_InitVars = {
+ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -1134,7 +1134,7 @@ void func_80941A10(EnGoroiwa* this, PlayState* play) {
     s32 pad2;
 
     if (!func_8094156C(this, play)) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             s32 sp34 = this->actor.home.rot.z & 3;
 
             if (sp34 == 2) {
@@ -1264,7 +1264,7 @@ void func_80941FA4(EnGoroiwa* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (func_8094156C(this, play) == 0) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
@@ -1292,7 +1292,7 @@ void func_809420F0(EnGoroiwa* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (func_8094156C(this, play) == 0) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
@@ -1434,7 +1434,8 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     u32 temp_v0_2;
     CollisionPoly* tmp;
 
-    if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         if (this->unk_1CC > 0) {
             this->unk_1CC--;
         }
@@ -1515,7 +1516,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                 func_8093E938(this);
 
                 if ((this->unk_1E5 & 1) && (this->unk_1CC <= 0) &&
-                    (!(player->stateFlags3 & 0x2000000) || (player->transformation != PLAYER_FORM_GORON) ||
+                    (!(player->stateFlags3 & PLAYER_STATE3_2000000) || (player->transformation != PLAYER_FORM_GORON) ||
                      ((params != ENGOROIWA_C000_1) && (params != ENGOROIWA_C000_2)))) {
                     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
                 } else {

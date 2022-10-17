@@ -22,7 +22,7 @@ s32 func_80AFD380(ElfMsg4* this, PlayState* play);
 s32 ElfMsg4_GetTextId(ElfMsg4* this);
 s32 func_80AFD5E0(ElfMsg4* this);
 
-const ActorInit Elf_Msg4_InitVars = {
+ActorInit Elf_Msg4_InitVars = {
     ACTOR_ELF_MSG4,
     ACTORCAT_ITEMACTION,
     FLAGS,

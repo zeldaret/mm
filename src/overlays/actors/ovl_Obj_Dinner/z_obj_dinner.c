@@ -16,7 +16,7 @@ void ObjDinner_Destroy(Actor* thisx, PlayState* play);
 void ObjDinner_Update(Actor* thisx, PlayState* play);
 void ObjDinner_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Dinner_InitVars = {
+ActorInit Obj_Dinner_InitVars = {
     ACTOR_OBJ_DINNER,
     ACTORCAT_PROP,
     FLAGS,

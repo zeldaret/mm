@@ -19,7 +19,7 @@ void EnDai_Draw(Actor* thisx, PlayState* play);
 void func_80B3F00C(EnDai* this, PlayState* play);
 void func_80B3EF90(EnDai* this, PlayState* play);
 
-const ActorInit En_Dai_InitVars = {
+ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,
     FLAGS,
@@ -415,7 +415,7 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         func_80B3E5DC(this, 1);
         this->actionFunc = func_80B3EE8C;
-    } else if (!(player->stateFlags2 & 0x08000000)) {
+    } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
         func_80B3E96C(this, play);
         this->unk_A6C = 0;
     } else if (this->unk_A6C == 0) {
@@ -557,7 +557,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
         func_80B3E460(this);
     } else {
         this->actionFunc(this, play);
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {

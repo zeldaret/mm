@@ -16,6 +16,4 @@ typedef struct ObjSwprize {
     /* 0x148 */ s16 timer;
 } ObjSwprize; // size = 0x14C
 
-extern const ActorInit Obj_Swprize_InitVars;
-
 #endif // Z_OBJ_SWPRIZE_H

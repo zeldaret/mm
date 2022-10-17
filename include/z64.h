@@ -555,8 +555,8 @@ typedef struct {
         /* 0x318 */ u8 pictographBox;
         /* 0x319 */ u8 all;     // "another"; enables all item restrictions
     } restrictions; // size = 0xC
-    /* 0x31A */ u8 unk_31A;
-    /* 0x31B */ u8 unk_31B;
+    /* 0x31A */ u8 storyState;
+    /* 0x31B */ u8 storyType;
     /* 0x31C */ u8 unk_31C;
     /* 0x320 */ OSMesgQueue unk_320;
     /* 0x338 */ OSMesg unk_338;
@@ -985,7 +985,7 @@ typedef struct PlayState {
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
-    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 arg2, s32 arg3);
+    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 itemId, s32 arg3);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1004,7 +1004,7 @@ typedef struct PlayState {
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
-    /* 0x18868 */ void* unk_18868;
+    /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;

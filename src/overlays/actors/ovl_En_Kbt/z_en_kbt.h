@@ -23,6 +23,4 @@ typedef struct EnKbt {
     /* 0x288 */ EnKbtActionFunc actionFunc;
 } EnKbt; // size = 0x28C
 
-extern const ActorInit En_Kbt_InitVars;
-
 #endif // Z_EN_KBT_H

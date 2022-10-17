@@ -11,6 +11,4 @@ typedef struct TGSw {
     /* 0x144 */ TGSwActionFunc actionFunc;
 } TGSw; // size = 0x148
 
-extern const ActorInit TG_Sw_InitVars;
-
 #endif // Z_TG_SW_H

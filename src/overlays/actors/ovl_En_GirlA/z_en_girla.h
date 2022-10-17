@@ -107,8 +107,6 @@ typedef enum {
     /* 0x2B */ SI_MAX
 } EnGirlAShopItemId;
 
-extern const ActorInit En_GirlA_InitVars;
-
 /* 
 * Shopkeeper Common Defines 
 */

@@ -36,6 +36,4 @@ typedef struct DmGm {
     /* 0x2D4 */ s32 unk_2D4;
 } DmGm; // size = 0x2D8
 
-extern const ActorInit Dm_Gm_InitVars;
-
 #endif // Z_DM_GM_H

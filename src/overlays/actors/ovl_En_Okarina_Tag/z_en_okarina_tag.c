@@ -17,7 +17,7 @@ void EnOkarinaTag_Update(Actor* thisx, PlayState* play);
 void func_8093E518(EnOkarinaTag* this, PlayState* play);
 void func_8093E68C(EnOkarinaTag* this, PlayState* play);
 
-const ActorInit En_Okarina_Tag_InitVars = {
+ActorInit En_Okarina_Tag_InitVars = {
     ACTOR_EN_OKARINA_TAG,
     ACTORCAT_SWITCH,
     FLAGS,

@@ -29,6 +29,4 @@ typedef enum ObjOcarinaliftParams {
     /* 0x1 */ OBJOCARINALIFT_PARAMSC_1
 } ObjOcarinaliftParams;
 
-extern const ActorInit Obj_Ocarinalift_InitVars;
-
 #endif // Z_OBJ_OCARINALIFT_H

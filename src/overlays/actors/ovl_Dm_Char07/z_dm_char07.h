@@ -32,6 +32,4 @@ typedef struct DmChar07 {
     /* 0x2BA */ u8 isStage;
 } DmChar07; // size = 0x2BC
 
-extern const ActorInit Dm_Char07_InitVars;
-
 #endif // Z_DM_CHAR07_H

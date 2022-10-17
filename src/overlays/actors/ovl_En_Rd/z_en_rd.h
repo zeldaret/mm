@@ -72,6 +72,4 @@ typedef struct EnRd {
     /* 0x3F1 */ s8 unk_3F1; // related to player->unk_ADD
 } EnRd; // size = 0x3F4
 
-extern const ActorInit En_Rd_InitVars;
-
 #endif // Z_EN_RD_H

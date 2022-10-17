@@ -35,7 +35,7 @@ s32 func_808F99B0(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
-const ActorInit En_Horse_Game_Check_InitVars = {
+ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
     ACTORCAT_BG,
     FLAGS,
@@ -169,7 +169,7 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
     }
 
     D_801BDA9C = 0;
-    if (player->stateFlags1 & 0x800000) {
+    if (player->stateFlags1 & PLAYER_STATE1_800000) {
         D_801BDAA0 = 1;
     }
     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 2);

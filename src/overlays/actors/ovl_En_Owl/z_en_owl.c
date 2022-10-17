@@ -48,7 +48,7 @@ typedef enum {
     /* 0x01 */ OWL_OK
 } EnOwlMessageChoice;
 
-const ActorInit En_Owl_InitVars = {
+ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
     FLAGS,
@@ -478,7 +478,7 @@ void func_8095B3DC(EnOwl* this, PlayState* play) {
 void func_8095B480(EnOwl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x10000000) {
+    if (player->stateFlags3 & PLAYER_STATE3_10000000) {
         this->actor.textId = 0xBF1;
         EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &object_owl_Anim_00CDB0, 0.0f);
         this->eyeTexIndex = 0;
@@ -1066,7 +1066,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     EnOwl* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x10000000) {
+    if (player->stateFlags3 & PLAYER_STATE3_10000000) {
         Actor_Kill(&this->actor);
         return;
     }

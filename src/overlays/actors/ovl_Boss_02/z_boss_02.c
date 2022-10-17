@@ -113,7 +113,7 @@ static DamageTable sRedTwinmoldDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit Boss_02_InitVars = {
+ActorInit Boss_02_InitVars = {
     ACTOR_BOSS_02,
     ACTORCAT_BOSS,
     FLAGS,
@@ -1627,13 +1627,13 @@ void func_809DD934(Boss02* this, PlayState* play) {
     Vec3f sp58;
     u8 sp57 = 0;
     f32 phi_f0_2;
-    s16 phi_v1;
+    s16 alpha;
 
     this->unk_1D14++;
 
     switch (this->unk_1D18) {
         case 0:
-            if (player->stateFlags1 & 0x100) {
+            if (player->stateFlags1 & PLAYER_STATE1_100) {
                 Cutscene_Start(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
@@ -1756,7 +1756,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->subCamId = SUB_CAM_ID_DONE;
             Cutscene_End(play, &play->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
-            player->stateFlags1 &= ~0x100;
+            player->stateFlags1 &= ~PLAYER_STATE1_100;
             this->unk_1D70 = 0.01f;
             Play_DisableMotionBlur();
             break;
@@ -1996,11 +1996,9 @@ void func_809DD934(Boss02* this, PlayState* play) {
             if (this->unk_1D7A >= 400) {
                 this->unk_1D78 = 3;
             }
-            phi_v1 = this->unk_1D7A;
-            if (phi_v1 > 255) {
-                phi_v1 = 255;
-            }
-            func_809DA22C(play, phi_v1);
+            alpha = this->unk_1D7A;
+            alpha = CLAMP_MAX(alpha, 255);
+            func_809DA22C(play, alpha);
             break;
 
         case 3:
@@ -2010,11 +2008,9 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 this->unk_1D78 = 0;
                 func_809DA24C(play);
             } else {
-                phi_v1 = this->unk_1D7A;
-                if (phi_v1 > 255) {
-                    phi_v1 = 255;
-                }
-                func_809DA22C(play, phi_v1);
+                alpha = this->unk_1D7A;
+                alpha = CLAMP_MAX(alpha, 255);
+                func_809DA22C(play, alpha);
             }
             break;
     }

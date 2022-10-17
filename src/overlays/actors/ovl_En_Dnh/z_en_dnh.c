@@ -19,7 +19,7 @@ void func_80A50F38(EnDnh* this, PlayState* play);
 void func_80A50F9C(EnDnh* this, PlayState* play);
 
 #if 0
-const ActorInit En_Dnh_InitVars = {
+ActorInit En_Dnh_InitVars = {
     ACTOR_EN_DNH,
     ACTORCAT_NPC,
     FLAGS,

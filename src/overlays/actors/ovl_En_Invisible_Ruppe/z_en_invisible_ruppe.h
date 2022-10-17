@@ -18,6 +18,4 @@ typedef struct EnInvisibleRuppe {
     /* 0x194 */ EnInvisibleRuppeActionFunc actionFunc;
 } EnInvisibleRuppe; // size = 0x198
 
-extern const ActorInit En_Invisible_Ruppe_InitVars;
-
 #endif // Z_EN_INVISIBLE_RUPPE_H
