@@ -103,9 +103,9 @@ typedef VecSphGeo VecGeo;
 
 // To be used with OLib_Vec3fAdd()
 typedef enum {
-    /* 0 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
-    /* 1 */ OLIB_ADD, // Add `a` and `b` to dest
-    /* 2 */ OLIB_COPY // Copy `b` to dest
+    /* 0 */ OLIB_COPY, // Copy `b` to dest
+    /* 1 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
+    /* 2 */ OLIB_ADD // Add `a` and `b` to dest
 } OlibVec3fAdd;
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))

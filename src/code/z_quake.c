@@ -152,7 +152,7 @@ s16 Quake_CallbackType4(QuakeRequest* req, ShakeInfo* shake) {
 s16 Quake_GetFreeIndex(void) {
     s32 i;
     s32 index = 0;
-    s32 timerMin = 0x10000; // UINT16_MAX + 1
+    s32 timerMin = 0x10000; // timer is a short, so start with a value beyond its range (UINT16_MAX + 1)
 
     for (i = 0; i < ARRAY_COUNT(sQuakeRequests); i++) {
         if (sQuakeRequests[i].type == QUAKE_TYPE_NONE) {
@@ -209,6 +209,7 @@ QuakeRequest* Quake_GetRequest(s16 index) {
     return req;
 }
 
+// valueType for Quake_SetValue()
 #define QUAKE_SPEED (1 << 0)
 #define QUAKE_Y_OFFSET (1 << 1)
 #define QUAKE_X_OFFSET (1 << 2)
@@ -278,7 +279,7 @@ u32 Quake_SetValue(s16 index, s16 valueType, s16 value) {
 
 /**
  * @param index
- * @param speed For periodic types only, the angular frequency of the sine wave (binang / frame)
+ * @param speed for periodic types only, the angular frequency of the sine wave (binang / frame)
  * @return true if successfully applied, false if the request does not exist
  */
 u32 Quake_SetSpeed(s16 index, s16 speed) {
@@ -293,7 +294,7 @@ u32 Quake_SetSpeed(s16 index, s16 speed) {
 
 /**
  * @param index quake request index to apply
- * @param duration Number of frames to apply the quake
+ * @param duration number of frames to apply the quake
  * @return true if successfully applied, false if the request does not exist
  */
 u32 Quake_SetDuration(s16 index, s16 duration) {
@@ -308,7 +309,7 @@ u32 Quake_SetDuration(s16 index, s16 duration) {
 
 /**
  * @param index quake request index to get
- * @return Number of frames until the quake is finished
+ * @return number of frames until the quake is finished
  */
 s16 Quake_GetTimeLeft(s16 index) {
     QuakeRequest* req = Quake_GetRequest(index);
@@ -321,10 +322,10 @@ s16 Quake_GetTimeLeft(s16 index) {
 
 /**
  * @param index quake request index to apply
- * @param y Apply up/down shake
- * @param x Apply left/right shake
- * @param fov Apply zooming in/out shake (binang)
- * @param roll Apply rolling shake (binang)
+ * @param y apply up/down shake
+ * @param x apply left/right shake
+ * @param fov apply zooming in/out shake (binang)
+ * @param roll apply rolling shake (binang)
  * @return true if successfully applied, false if the request does not exist
  */
 u32 Quake_SetPerturbations(s16 index, s16 y, s16 x, s16 fov, s16 roll) {
@@ -342,7 +343,7 @@ u32 Quake_SetPerturbations(s16 index, s16 y, s16 x, s16 fov, s16 roll) {
 
 /**
  * @param index quake request index to apply
- * @param isRelativeToScreen Is the quake applied relative to the screen or in absolute world coordinates
+ * @param isRelativeToScreen is the quake applied relative to the screen or in absolute world coordinates
  * @param orientation orient the x/y shake to a different direction
  * @return true if successfully applied, false if the request does not exist
  */
