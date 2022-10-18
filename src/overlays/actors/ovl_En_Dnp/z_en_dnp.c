@@ -89,9 +89,9 @@ typedef enum {
     /* 18 */ EN_DNP_ANIM_WALK,        // Can be triggered by a cutscene, but no cutscene in the final game does so
     /* 19 */ EN_DNP_ANIM_ANGRY_START,
     /* 20 */ EN_DNP_ANIM_ANGRY_LOOP,
-    /* 21 */ EN_DNP_ANIM_JUMP_TO_KING,
-    /* 22 */ EN_DNP_ANIM_BOUNCE_ON_KING_START,
-    /* 23 */ EN_DNP_ANIM_BOUNCE_ON_KING_LOOP,
+    /* 21 */ EN_DNP_ANIM_JUMP,
+    /* 22 */ EN_DNP_ANIM_BOUNCE_START,
+    /* 23 */ EN_DNP_ANIM_BOUNCE_LOOP,
     /* 24 */ EN_DNP_ANIM_GLARE_START,
     /* 25 */ EN_DNP_ANIM_GLARE_LOOP
 } EnDnpAnimation;
@@ -118,9 +118,9 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gDekuPrincessAngryStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gDekuPrincessAngryLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessJumpToKingAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessBounceOnKingStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuPrincessBounceOnKingLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPrincessJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPrincessBounceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPrincessBounceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gDekuPrincessGlareStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gDekuPrincessGlareLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
@@ -157,11 +157,11 @@ s32 func_80B3CA20(EnDnp* this) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
-    } else if (this->animIndex == EN_DNP_ANIM_JUMP_TO_KING) {
+    } else if (this->animIndex == EN_DNP_ANIM_JUMP) {
         if (Animation_OnFrame(&this->skelAnime, 17.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
-    } else if (this->animIndex == EN_DNP_ANIM_BOUNCE_ON_KING_LOOP) {
+    } else if (this->animIndex == EN_DNP_ANIM_BOUNCE_LOOP) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
@@ -281,11 +281,11 @@ s32 func_80B3D044(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D11C(EnDnp* this, PlayState* play) {
-    static s32 D_80B3DE74[] = {
+    static s32 sCsAnimations[] = {
         EN_DNP_ANIM_JUMP_KICK,   EN_DNP_ANIM_CUTSCENE_IDLE, EN_DNP_ANIM_GREETING,
         EN_DNP_ANIM_THINK_START, EN_DNP_ANIM_WALK,          EN_DNP_ANIM_ARMS_TOGETHER_START,
         EN_DNP_ANIM_LAUGH_START, EN_DNP_ANIM_TURN_AROUND,   EN_DNP_ANIM_CUTSCENE_HURRY,
-        EN_DNP_ANIM_ANGRY_START, EN_DNP_ANIM_JUMP_TO_KING,  EN_DNP_ANIM_BOUNCE_ON_KING_START,
+        EN_DNP_ANIM_ANGRY_START, EN_DNP_ANIM_JUMP,          EN_DNP_ANIM_BOUNCE_START,
         EN_DNP_ANIM_GLARE_START, EN_DNP_ANIM_BOW,
     };
     s32 temp_v0;
@@ -301,7 +301,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
         temp_v0 = Cutscene_GetActorActionIndex(play, 101);
         val = play->csCtx.actorActions[temp_v0]->action;
         if (this->unk_324 != (u8)val) {
-            EnDnp_ChangeAnim(this, D_80B3DE74[val]);
+            EnDnp_ChangeAnim(this, sCsAnimations[val]);
             if (this->animIndex == EN_DNP_ANIM_CUTSCENE_IDLE) {
                 this->unk_322 |= 8;
             } else {
@@ -322,7 +322,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
         this->unk_324 = val;
         if (((this->animIndex == EN_DNP_ANIM_THINK_START) || (this->animIndex == EN_DNP_ANIM_ARMS_TOGETHER_START) ||
              (this->animIndex == EN_DNP_ANIM_LAUGH_START) || (this->animIndex == EN_DNP_ANIM_ANGRY_START) ||
-             (this->animIndex == EN_DNP_ANIM_BOUNCE_ON_KING_START) || (this->animIndex == EN_DNP_ANIM_GLARE_START)) &&
+             (this->animIndex == EN_DNP_ANIM_BOUNCE_START) || (this->animIndex == EN_DNP_ANIM_GLARE_START)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnDnp_ChangeAnim(this, this->animIndex + 1);
         }
