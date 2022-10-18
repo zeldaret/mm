@@ -13616,7 +13616,7 @@
     0x80B3C80C:("ObjGhaka_Update",),
     0x80B3C858:("ObjGhaka_Draw",),
     0x80B3CA20:("func_80B3CA20",),
-    0x80B3CC38:("func_80B3CC38",),
+    0x80B3CC38:("EnDnp_ChangeAnim",),
     0x80B3CC80:("func_80B3CC80",),
     0x80B3CD1C:("func_80B3CD1C",),
     0x80B3CDA4:("func_80B3CDA4",),
