@@ -1745,13 +1745,11 @@ void Magic_Reset(PlayState* play);
 s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type);
 void Interface_SetMinigamePerfect(PlayState* play, s16 minigamePerfectType);
 void Interface_StartMoonCrash(PlayState* play);
-// void func_8011F0E0(UNK_TYPE4 ctxt);
-// void func_80120F90(void);
-// void func_80121000(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE1 param_8, UNK_TYPE1 param_9, UNK_TYPE1 param_10, UNK_TYPE4 param_11, UNK_TYPE4 param_12, UNK_TYPE4 param_13, UNK_TYPE4 param_14);
-// void func_80121064(void);
-// void func_801210E0(void);
+void Interface_Draw(PlayState* play);
+void Interface_Update(PlayState* play);
 void Interface_Destroy(PlayState* play);
-void func_80121FC4(PlayState* play);
+void Interface_Init(PlayState* play);
+
 Path* Path_GetByIndex(PlayState* play, s16 index, s16 max);
 f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);

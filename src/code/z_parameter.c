@@ -3902,7 +3902,7 @@ TexturePtr D_801BFD8C[] = {
     gStoryGiantsLeavingTLUT,
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011F0E0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80120F90.s")
 
@@ -3912,11 +3912,11 @@ u8 D_801BFD94 = 0;
 s16 D_801BFD98 = 0;
 s16 D_801BFD9C = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801210E0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_Update.s")
 
 void Interface_Destroy(PlayState* play) {
     Map_Destroy(play);
     func_80174F9C(Interface_PostmanTimerCallback, NULL);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80121FC4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_Init.s")

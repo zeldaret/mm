@@ -1675,12 +1675,12 @@ asm/non_matchings/code/z_parameter/Interface_GetTimerDigits.s,Interface_GetTimer
 asm/non_matchings/code/z_parameter/Interface_DrawTimers.s,Interface_DrawTimers,0x8011CA64,0x654
 asm/non_matchings/code/z_parameter/Interface_UpdateBottleTimers.s,Interface_UpdateBottleTimers,0x8011E3B4,0xDF
 asm/non_matchings/code/z_parameter/Interface_DrawMinigameIcons.s,Interface_DrawMinigameIcons,0x8011E730,0x26C
-asm/non_matchings/code/z_parameter/func_8011F0E0.s,func_8011F0E0,0x8011F0E0,0x7AC
+asm/non_matchings/code/z_parameter/Interface_Draw.s,Interface_Draw,0x8011F0E0,0x7AC
 asm/non_matchings/code/z_parameter/func_80120F90.s,func_80120F90,0x80120F90,0x35
 asm/non_matchings/code/z_parameter/func_80121064.s,func_80121064,0x80121064,0x1F
-asm/non_matchings/code/z_parameter/func_801210E0.s,func_801210E0,0x801210E0,0x3AD
+asm/non_matchings/code/z_parameter/Interface_Update.s,Interface_Update,0x801210E0,0x3AD
 asm/non_matchings/code/z_parameter/Interface_Destroy.s,Interface_Destroy,0x80121F94,0xC
-asm/non_matchings/code/z_parameter/func_80121FC4.s,func_80121FC4,0x80121FC4,0x147
+asm/non_matchings/code/z_parameter/Interface_Init.s,Interface_Init,0x80121FC4,0x147
 asm/non_matchings/code/z_path/func_801224E0.s,func_801224E0,0x801224E0,0x11
 asm/non_matchings/code/z_path/func_80122524.s,func_80122524,0x80122524,0x2A
 asm/non_matchings/code/z_path/func_801225CC.s,func_801225CC,0x801225CC,0x25
