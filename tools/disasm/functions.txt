@@ -15704,7 +15704,7 @@
     0x80BD0660:("EnHgo_DefaultDialogueHandler",),
     0x80BD06FC:("EnHgo_HandlePlayerChoice",),
     0x80BD0898:("EnHgo_HandleCsAction",),
-    0x80BD0B8C:("EnHgo_UpdateFace",),
+    0x80BD0B8C:("EnHgo_UpdateModel",),
     0x80BD0C30:("EnHgo_Update",),
     0x80BD0CF0:("EnHgo_OverrideLimbDraw",),
     0x80BD0D38:("EnHgo_PostLimbDraw",),

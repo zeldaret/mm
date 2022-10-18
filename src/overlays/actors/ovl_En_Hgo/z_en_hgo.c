@@ -353,7 +353,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
     return false;
 }
 
-void EnHgo_UpdateFace(EnHgo* this, PlayState* play) {
+void EnHgo_UpdateModel(EnHgo* this, PlayState* play) {
     Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
     if (this->blinkTimer > 2) {
         this->blinkTimer--;
@@ -381,7 +381,7 @@ void EnHgo_Update(Actor* thisx, PlayState* play) {
         if (this->actionFunc != EnHgo_UpdateCollision) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-            EnHgo_UpdateFace(this, play);
+            EnHgo_UpdateModel(this, play);
         }
     }
 }
