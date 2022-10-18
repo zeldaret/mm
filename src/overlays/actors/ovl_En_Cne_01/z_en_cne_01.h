@@ -14,6 +14,4 @@ typedef struct EnCne01 {
     /* 0x3EC */ UNK_TYPE1 unk_3EC[0x230];
 } EnCne01; // size = 0x61C
 
-extern const ActorInit En_Cne_01_InitVars;
-
 #endif // Z_EN_CNE_01_H

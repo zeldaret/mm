@@ -41,7 +41,7 @@ void func_80AD8364(EnKame* this);
 void func_80AD8388(EnKame* this, PlayState* play);
 void func_80AD8D64(Actor* thisx, PlayState* play);
 
-const ActorInit En_Kame_InitVars = {
+ActorInit En_Kame_InitVars = {
     ACTOR_EN_KAME,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -114,7 +114,7 @@ static TexturePtr D_80AD8E34[] = { object_tl_Tex_0055A0, object_tl_Tex_0057A0, o
                                    object_tl_Tex_0057A0 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 1, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_SNAPPER, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -1, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
@@ -197,7 +197,7 @@ void func_80AD70EC(EnKame* this, PlayState* play) {
         this->unk_2A0 = 40;
     }
 
-    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(player->stateFlags1 & 0x800000) &&
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(player->stateFlags1 & PLAYER_STATE1_800000) &&
         (this->actor.xzDistToPlayer < 240.0f)) {
         func_80AD73A8(this);
     } else if (SkelAnime_Update(&this->skelAnime1)) {
@@ -218,7 +218,7 @@ void func_80AD71B4(EnKame* this) {
 void func_80AD7254(EnKame* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(player->stateFlags1 & 0x800000) &&
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(player->stateFlags1 & PLAYER_STATE1_800000) &&
         (this->actor.xzDistToPlayer < 240.0f)) {
         func_80AD73A8(this);
         return;
@@ -257,7 +257,7 @@ void func_80AD7424(EnKame* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (SkelAnime_Update(&this->skelAnime1)) {
-        if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(player->stateFlags1 & 0x800000) &&
+        if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(player->stateFlags1 & PLAYER_STATE1_800000) &&
             ((this->unk_29E == 0) || (this->actor.xzDistToPlayer < 120.0f))) {
             func_80AD76CC(this);
         } else {
@@ -600,7 +600,7 @@ void func_80AD8388(EnKame* this, PlayState* play) {
         this->actor.scale.x -= 0.001f;
         if (this->actor.scale.x <= 0.0f) {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x60);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->actor.scale.y = this->actor.scale.x;
             this->actor.scale.z = this->actor.scale.x;

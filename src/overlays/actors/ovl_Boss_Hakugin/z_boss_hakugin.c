@@ -5,6 +5,7 @@
  */
 
 #include "z_boss_hakugin.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -33,7 +34,7 @@ void func_80B0A638(BossHakugin* this, PlayState* play);
 void func_80B0A8C4(BossHakugin* this, PlayState* play);
 
 #if 0
-const ActorInit Boss_Hakugin_InitVars = {
+ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
     ACTORCAT_BOSS,
     FLAGS,

@@ -27,7 +27,7 @@ void func_80ACECFC(EnFuMato* this, PlayState* play);
 void func_80ACEFC4(EnFuMato* this);
 void func_80ACEFD8(EnFuMato* this, PlayState* play);
 
-const ActorInit En_Fu_Mato_InitVars = {
+ActorInit En_Fu_Mato_InitVars = {
     ACTOR_EN_FU_MATO,
     ACTORCAT_BG,
     FLAGS,
@@ -92,7 +92,7 @@ void EnFuMato_Init(Actor* thisx, PlayState* play) {
     }
 
     if (actor == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -192,7 +192,7 @@ void func_80ACE718(EnFuMato* this, PlayState* play) {
         Vec3f sp30 = { 0.0f, 2.0f, 0.0f };
 
         func_800B3030(play, &this->dyna.actor.world.pos, &sp3C, &sp30, 20, 40, 2);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -352,7 +352,7 @@ void func_80ACEFD8(EnFuMato* this, PlayState* play) {
     Math_SmoothStepToF(&scale->x, 0.0f, 0.1f, 0.005f, 0.005f);
     scale->y = scale->z = scale->x;
     if (scale->x == 0.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

@@ -22,7 +22,7 @@ void func_80BF61EC(EnOsk* this, PlayState* play);
 void func_80BF656C(EnOsk* this, PlayState* play);
 void func_80BF6A20(EnOsk* this, PlayState* play);
 
-const ActorInit En_Osk_InitVars = {
+ActorInit En_Osk_InitVars = {
     ACTOR_EN_OSK,
     ACTORCAT_NPC,
     FLAGS,

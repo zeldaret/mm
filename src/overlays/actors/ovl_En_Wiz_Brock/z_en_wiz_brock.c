@@ -1,7 +1,7 @@
 /*
  * File: z_en_wiz_brock.c
  * Overlay: ovl_En_Wiz_Brock
- * Description: Wizzrobe Warp Platform
+ * Description: Wizrobe Warp Platform
  */
 
 #include "z_en_wiz_brock.h"
@@ -11,13 +11,6 @@
 
 #define THIS ((EnWizBrock*)thisx)
 
-typedef enum {
-    PLATFORM_TYPE_INACTIVE,
-    PLATFORM_TYPE_FIRE,
-    PLATFORM_TYPE_ICE,
-    PLATFORM_TYPE_MAX,
-} PlatformType;
-
 void EnWizBrock_Init(Actor* thisx, PlayState* play);
 void EnWizBrock_Destroy(Actor* thisx, PlayState* play);
 void EnWizBrock_Update(Actor* thisx, PlayState* play);
@@ -26,9 +19,9 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play);
 void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, PlayState* play);
 void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play);
 
-s16 platformCount = 0;
+s16 sPlatformIndex = 0;
 
-const ActorInit En_Wiz_Brock_InitVars = {
+ActorInit En_Wiz_Brock_InitVars = {
     ACTOR_EN_WIZ_BROCK,
     ACTORCAT_PROP,
     FLAGS,
@@ -45,13 +38,13 @@ void EnWizBrock_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    CollisionHeader_GetVirtual(&object_wiz_Colheader_001690, &colHeader);
+    CollisionHeader_GetVirtual(&gWizrobePlatformCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->dyna.actor.colChkInfo.health = 3;
     this->unk_1A6 = 0;
     Actor_SetScale(&this->dyna.actor, 0.01f);
-    this->platformNum = platformCount++;
+    this->platformIndex = sPlatformIndex++;
     this->actionFunc = EnWizBrock_SetupUpdateStatus;
     this->dyna.actor.scale.x = this->dyna.actor.scale.y = this->dyna.actor.scale.z = 0.01f;
     this->alpha = 255.0f;
@@ -68,12 +61,12 @@ void EnWizBrock_SetupUpdateStatus(EnWizBrock* this, PlayState* play) {
 }
 
 /**
- * @brief Checks the platform status, when the Wizzrobe is defeated, which triggers timer to
+ * @brief Checks the platform status, when the Wizrobe is defeated, which triggers timer to
  *  count up to 30 at which point the platforms are despawned.
  */
 void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play) {
-    if (this->platformType == PLATFORM_TYPE_INACTIVE) {
-        if (this->dyna.actor.colChkInfo.health != PLATFORM_TYPE_MAX) {
+    if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE) {
+        if (this->dyna.actor.colChkInfo.health != EN_WIZ_BROCK_PLATFORM_TYPE_MAX) {
             this->platformType = this->dyna.actor.colChkInfo.health;
         }
     }
@@ -87,7 +80,7 @@ void EnWizBrock_UpdateStatus(EnWizBrock* this, PlayState* play) {
                            (BREG(56) / 1000.0f) + 0.002f);
             this->dyna.actor.scale.z = this->dyna.actor.scale.x;
             if (this->dyna.actor.scale.y < 0.001f) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
         }
     }
@@ -115,30 +108,30 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
-        Gfx_DrawDListOpa(play, gWizzrobePlatform);
+        Gfx_DrawDListOpa(play, gWizrobePlatformDL);
 
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s16)this->alpha);
-        Gfx_DrawDListXlu(play, gWizzrobePlatform);
+        Gfx_DrawDListXlu(play, gWizrobePlatformDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (this->platformType != PLATFORM_TYPE_INACTIVE) {
+    if (this->platformType != EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE) {
         OPEN_DISPS(play->state.gfxCtx);
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizzrobePlatformTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizrobePlatformCenterTexAnim));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
-        if (this->platformType == PLATFORM_TYPE_FIRE) {
+        if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_FIRE) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 00, 100, (s16)this->alpha);
         } else {
             gDPSetEnvColor(POLY_XLU_DISP++, 50, 00, 255, (s16)this->alpha);
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &gWizzrobePlatformCenter);
+        gSPDisplayList(POLY_XLU_DISP++, &gWizrobePlatformCenterDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

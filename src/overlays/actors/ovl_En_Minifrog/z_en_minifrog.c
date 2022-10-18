@@ -26,7 +26,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-const ActorInit En_Minifrog_InitVars = {
+ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
     ACTORCAT_NPC,
     FLAGS,
@@ -116,13 +116,14 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
         if ((this->frogIndex == MINIFROG_YELLOW) ||
             ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
               (u8)isFrogReturnedFlags[this->frogIndex]))) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->timer = 30;
-            this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
-            this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
-            this->actor.colChkInfo.mass = 30;
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->timer = 30;
+        this->actionFunc = EnMinifrog_SpawnGrowAndShrink;
+        this->actor.textId = 0xD81; // "Ah! Don Gero! It has been so long."
+        this->actor.colChkInfo.mass = 30;
     } else { // Frogs in mountain village
         if (this->frogIndex == MINIFROG_YELLOW) {
             this->actor.textId = 0;
@@ -293,7 +294,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                     }
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
         }
     }
@@ -411,7 +412,7 @@ void EnMinifrog_NextFrogReturned(EnMinifrog* this, PlayState* play) {
         this->actionFunc = EnMinifrog_ContinueChoirCutscene;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00DEA8, 0);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_normal_talk_free_wait, 0);
     }
 }
 
@@ -442,7 +443,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
         this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00DEA8, 0);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_link_normal_talk_free_wait, 0);
     } else if (this->timer <= 0) {
         this->actionFunc = EnMinifrog_NextFrogReturned;
         this->timer = 30;
@@ -462,7 +463,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
         this->timer = 5;
         func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
-        play->setPlayerTalkAnim(play, &gameplay_keep_Linkanim_00E2A8, 0);
+        play->setPlayerTalkAnim(play, &gPlayerAnim_pn_gakkiplay, 0);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }

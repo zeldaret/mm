@@ -28,6 +28,4 @@ typedef struct ObjBoyo {
     /* 0x1AC */ s16 unk_1AC;
 } ObjBoyo; // size = 0x1B0
 
-extern const ActorInit Obj_Boyo_InitVars;
-
 #endif // Z_OBJ_BOYO_H

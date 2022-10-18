@@ -17,9 +17,9 @@ typedef struct BgDblueMovebg {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgDblueMovebgActionFunc actionFunc;
     /* 0x160 */ s32 unk_160;
-    /* 0x164 */ Gfx* unk_164;
-    /* 0x168 */ Gfx* unk_168;
-    /* 0x16C */ TexturePtr unk_16C;
+    /* 0x164 */ Gfx* opaDList;
+    /* 0x168 */ Gfx* xluDList;
+    /* 0x16C */ AnimatedMaterial* texAnim;
     /* 0x170 */ s8 unk_170;
     /* 0x171 */ s8 unk_171;
     /* 0x172 */ u16 unk_172;
@@ -54,7 +54,5 @@ typedef struct BgDblueMovebg {
     /* 0x300 */ u8 unk_300[2][8];
     /* 0x310 */ UNK_TYPE1 unk310[0x60];
 } BgDblueMovebg; // size = 0x370
-
-extern const ActorInit Bg_Dblue_Movebg_InitVars;
 
 #endif // Z_BG_DBLUE_MOVEBG_H

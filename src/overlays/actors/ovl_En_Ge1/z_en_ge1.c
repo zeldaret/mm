@@ -15,7 +15,7 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play);
 void EnGe1_Update(Actor* thisx, PlayState* play);
 void EnGe1_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Ge1_InitVars = {
+ActorInit En_Ge1_InitVars = {
     ACTOR_EN_GE1,
     ACTORCAT_NPC,
     FLAGS,
@@ -73,10 +73,10 @@ typedef enum {
 } GerudoWhiteAnimations;
 
 void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
-void EnGe1_ShadowDraw(Actor* actor, Lights* lights, PlayState* play);
+void EnGe1_ShadowDraw(Actor* thisx, Lights* lights, PlayState* play);
 void EnGe1_Wait(EnGe1* this, PlayState* play);
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play);
-s32 EnGe1_ValidatePictograph(PlayState* play, Actor* this);
+s32 EnGe1_ValidatePictograph(PlayState* play, Actor* thisx);
 
 void EnGe1_Init(Actor* thisx, PlayState* play) {
     EnGe1* this = THIS;
@@ -308,7 +308,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
                     break;
 
                 case 7:
-                    Actor_MarkForDeath(&this->picto.actor);
+                    Actor_Kill(&this->picto.actor);
                     break;
 
                     // Twister cutscene

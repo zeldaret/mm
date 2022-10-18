@@ -24,6 +24,4 @@ typedef struct EnSyatekiOkuta {
     /* 0x2AA */ s16 unk_2AA;
 } EnSyatekiOkuta; // size = 0x2AC
 
-extern const ActorInit En_Syateki_Okuta_InitVars;
-
 #endif // Z_EN_SYATEKI_OKUTA_H

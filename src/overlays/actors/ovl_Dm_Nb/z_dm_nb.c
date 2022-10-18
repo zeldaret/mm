@@ -5,7 +5,6 @@
  */
 
 #include "z_dm_nb.h"
-#include "objects/object_nb/object_nb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -16,7 +15,7 @@ void DmNb_Destroy(Actor* thisx, PlayState* play);
 void DmNb_Update(Actor* thisx, PlayState* play);
 void DmNb_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Nb_InitVars = {
+ActorInit Dm_Nb_InitVars = {
     ACTOR_DM_NB,
     ACTORCAT_NPC,
     FLAGS,
@@ -28,7 +27,9 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-static AnimationInfoS sAnimationInfo[] = { { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 } };
+static AnimationInfoS sAnimationInfo[] = {
+    { &gNbIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+};
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
     s32 ret = false;
@@ -70,7 +71,7 @@ void DmNb_Init(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable, 8);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;

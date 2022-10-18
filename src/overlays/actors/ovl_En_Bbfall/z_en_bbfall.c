@@ -14,7 +14,7 @@
 void EnBbfall_Init(Actor* thisx, PlayState* play);
 void EnBbfall_Destroy(Actor* thisx, PlayState* play);
 void EnBbfall_Update(Actor* thisx, PlayState* play);
-void EnBbfall_Draw(Actor* thisx, PlayState* play);
+void EnBbfall_Draw(Actor* thisx, PlayState* play2);
 
 void EnBbfall_SetupWaitForPlayer(EnBbfall* this);
 void EnBbfall_WaitForPlayer(EnBbfall* this, PlayState* play);
@@ -35,7 +35,7 @@ typedef enum {
     /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD,
 } EnBbfallBodyPartDrawStatus;
 
-const ActorInit En_Bbfall_InitVars = {
+ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -143,7 +143,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 36, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_RED_BUBBLE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
@@ -466,12 +466,13 @@ void EnBbfall_Dead(EnBbfall* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
         }
 
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
-            Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
-            this->bodyPartsVelocity[i].y += this->actor.gravity;
-        }
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
+        this->bodyPartsVelocity[i].y += this->actor.gravity;
     }
 }
 

@@ -46,7 +46,7 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, PlayState* play);
 void func_80895E28(EnTite* this, PlayState* play);
 
-const ActorInit En_Tite_InitVars = {
+ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -125,7 +125,7 @@ static Color_RGBA8 D_80896B40 = { 180, 180, 180, 255 };
 static Vec3f D_80896B44 = { 0.0f, 0.45f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 70, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BLUE_TEKTITE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(terminalVelocity, -40, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
@@ -668,12 +668,13 @@ void func_808951B8(EnTite* this, PlayState* play) {
             func_800B3030(play, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->limbPos[i], 11, NA_SE_EN_EXTINCT);
         }
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
-            Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
-            this->unk_33C[i].y += this->actor.gravity;
-        }
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
+        Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
+        this->unk_33C[i].y += this->actor.gravity;
     }
 }
 

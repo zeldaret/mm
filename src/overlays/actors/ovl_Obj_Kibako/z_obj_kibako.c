@@ -12,8 +12,8 @@
 
 #define THIS ((ObjKibako*)thisx)
 
-void ObjKibako_Init(Actor* thisx, PlayState* play);
-void ObjKibako_Destroy(Actor* thisx, PlayState* play);
+void ObjKibako_Init(Actor* thisx, PlayState* play2);
+void ObjKibako_Destroy(Actor* thisx, PlayState* play2);
 void ObjKibako_Update(Actor* thisx, PlayState* play);
 
 void ObjKibako_Draw(Actor* thisx, PlayState* play);
@@ -36,7 +36,7 @@ static s16 D_80927384 = 0;
 static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
-const ActorInit Obj_Kibako_InitVars = {
+ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
     ACTORCAT_PROP,
     FLAGS,
@@ -127,7 +127,7 @@ void func_80926318(ObjKibako* this, PlayState* play) {
 }
 
 void func_80926394(ObjKibako* this, PlayState* play) {
-    if ((this->isDropCollected == 0) && (play->roomCtx.currRoom.num != this->unk199)) {
+    if ((this->isDropCollected == 0) && (play->roomCtx.curRoom.num != this->unk199)) {
         this->isDropCollected = 1;
     }
 }
@@ -151,7 +151,7 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->bankIndex = Object_GetIndex(&play->objectCtx, sObjectIdList[whichBankIndex]);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->unk199 = this->actor.room;
@@ -284,12 +284,12 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (this->collider.base.acFlags & AC_HIT) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Actor_MoveWithGravity(&this->actor);
         func_809262BC(this);
@@ -339,7 +339,7 @@ void ObjKibako_Held(ObjKibako* this, PlayState* play) {
 
     func_80926394(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (fabsf(this->actor.speedXZ) < 0.1f) {
             ObjKibako_SetupIdle(this);
             this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
@@ -388,14 +388,14 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         if (this->actor.bgCheckFlags & 0x40) {
             ObjKibako_WaterBreak(this, play);
             ObjKibako_SpawnCollectible(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             if (this->actor.velocity.y < -0.05f) {
                 this->actor.gravity = -2.3f;

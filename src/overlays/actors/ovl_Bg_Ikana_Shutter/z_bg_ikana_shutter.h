@@ -12,6 +12,4 @@ typedef struct BgIkanaShutter {
     /* 0x15C */ BgIkanaShutterActionFunc actionFunc;
 } BgIkanaShutter; // size = 0x160
 
-extern const ActorInit Bg_Ikana_Shutter_InitVars;
-
 #endif // Z_BG_IKANA_SHUTTER_H

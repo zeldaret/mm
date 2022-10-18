@@ -27,7 +27,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2);
 
 static f32 D_808DE5B0;
 
-const ActorInit Object_Kankyo_InitVars = {
+ActorInit Object_Kankyo_InitVars = {
     ACTOR_OBJECT_KANKYO,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -125,7 +125,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
 void ObjectKankyo_Destroy(Actor* thisx, PlayState* play) {
     ObjectKankyo* this = THIS;
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808DC18C(ObjectKankyo* this, PlayState* play) {
@@ -554,7 +554,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
 
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
                 gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             }
 
             Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
@@ -569,7 +569,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
@@ -588,7 +588,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
     ObjectKankyo* this = THIS;
     f32 tempA;
 
-    if (play->sceneNum == SCENE_KYOJINNOMA) {
+    if (play->sceneId == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
         tempA = Camera_GetWaterYPos(GET_ACTIVE_CAM(play));
@@ -629,14 +629,14 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 

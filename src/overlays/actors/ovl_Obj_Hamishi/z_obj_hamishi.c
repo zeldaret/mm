@@ -16,7 +16,7 @@ void ObjHamishi_Destroy(Actor* thisx, PlayState* play2);
 void ObjHamishi_Update(Actor* thisx, PlayState* play);
 void ObjHamishi_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hamishi_InitVars = {
+ActorInit Obj_Hamishi_InitVars = {
     ACTOR_OBJ_HAMISHI,
     ACTORCAT_PROP,
     FLAGS,
@@ -181,7 +181,7 @@ void ObjHamishi_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 2.3f);
 
     if (Flags_GetSwitch(play, OBJHAMISHI_GET_SWITCHFLAG(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -233,7 +233,7 @@ void ObjHamishi_Update(Actor* thisx, PlayState* play) {
                 func_809A10F4(this, play);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
                 Flags_SetSwitch(play, OBJHAMISHI_GET_SWITCHFLAG(&this->actor));
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     }

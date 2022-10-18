@@ -29,7 +29,7 @@ void func_809CD77C(EnBji01* this, PlayState* play);
 s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Bji_01_InitVars = {
+ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -357,7 +357,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
             func_809CCE98(this, play);
             break;
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             break;
     }
 }

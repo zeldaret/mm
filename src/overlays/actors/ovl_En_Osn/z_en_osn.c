@@ -16,7 +16,7 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play);
 void EnOsn_Update(Actor* thisx, PlayState* play);
 void EnOsn_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Osn_InitVars = {
+ActorInit En_Osn_InitVars = {
     ACTOR_EN_OSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -205,7 +205,7 @@ void func_80AD0AB0(EnOsn* this) {
         this->unk_1FA -= 8;
         if (this->unk_1FA < 8) {
             this->unk_1FA = 0;
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -731,7 +731,7 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
         }
 
-        if ((this->unk_1EC == 5) && (play->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0xB) &&
+        if ((this->unk_1EC == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0xB) &&
             (play->csCtx.frames == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
@@ -795,7 +795,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
                 this->unk_1EA |= 1;
             }
             this->unk_1F0 = 1;
-            if (play->sceneNum == SCENE_INSIDETOWER) {
+            if (play->sceneId == SCENE_INSIDETOWER) {
                 if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                     (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                     this->actionFunc = func_80AD16A8;
@@ -830,7 +830,8 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
+            break;
     }
 }
 

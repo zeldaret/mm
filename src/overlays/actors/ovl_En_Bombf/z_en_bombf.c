@@ -12,7 +12,7 @@
 
 #define THIS ((EnBombf*)thisx)
 
-void EnBombf_Init(Actor* thisx, PlayState* play);
+void EnBombf_Init(Actor* thisx, PlayState* play2);
 void EnBombf_Destroy(Actor* thisx, PlayState* play);
 void EnBombf_Update(Actor* thisx, PlayState* play);
 void EnBombf_Draw(Actor* thisx, PlayState* play);
@@ -24,7 +24,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play);
 void func_808AEF68(EnBombf* this, PlayState* play);
 void func_808AEFD4(EnBombf* this, PlayState* play);
 
-const ActorInit En_Bombf_InitVars = {
+ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
     ACTORCAT_PROP,
     FLAGS,
@@ -163,7 +163,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~0x800;
+                player->stateFlags1 &= ~PLAYER_STATE1_800;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
                    ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x13828) ||
@@ -200,7 +200,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~0x800;
+                player->stateFlags1 &= ~PLAYER_STATE1_800;
                 this->actor.world.pos = this->actor.home.pos;
             }
         }
@@ -217,7 +217,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
             this->actor.parent = NULL;
-            player->stateFlags1 &= ~0x800;
+            player->stateFlags1 &= ~PLAYER_STATE1_800;
             this->actor.world.pos = this->actor.home.pos;
         }
     }
@@ -299,13 +299,13 @@ void func_808AEFD4(EnBombf* this, PlayState* play) {
     if (this->timer == 0) {
         Player* player = GET_PLAYER(play);
 
-        if ((player->stateFlags1 & 0x800) && (&this->actor == player->heldActor)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_800) && (&this->actor == player->heldActor)) {
             player->actor.child = NULL;
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
-            player->stateFlags1 &= ~0x800;
+            player->stateFlags1 &= ~PLAYER_STATE1_800;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -439,8 +439,11 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
     if ((this->actor.scale.x >= 0.01f) && (ENBOMBF_GET(&this->actor) != ENBOMBF_1)) {
         if (this->actor.depthInWater >= 20.0f) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
-            Actor_MarkForDeath(&this->actor);
-        } else if (this->actor.bgCheckFlags & 0x40) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if (this->actor.bgCheckFlags & 0x40) {
             this->actor.bgCheckFlags &= ~0x40;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }

@@ -39,7 +39,7 @@ static s32 D_8092DCB0[] = {
     0x0E08330C, 0x09000015, 0x1C014016, 0x10000000, 0x0E082E0C, 0x10000000,
 };
 
-const ActorInit En_Dns_InitVars = {
+ActorInit En_Dns_InitVars = {
     ACTOR_EN_DNS,
     ACTORCAT_NPC,
     FLAGS,
@@ -398,7 +398,7 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
         if (!(gSaveContext.save.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(play)) {
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
             play_sound(NA_SE_SY_FOUND);
@@ -502,7 +502,7 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
     EnDns* this = THIS;
 
     if (!func_8092D068(this)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

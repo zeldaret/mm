@@ -28,7 +28,7 @@ void EnBat_DiveAttack(EnBat* this, PlayState* play);
 void EnBat_Die(EnBat* this, PlayState* play);
 void EnBat_Stunned(EnBat* this, PlayState* play);
 
-const ActorInit En_Bat_InitVars = {
+ActorInit En_Bat_InitVars = {
     ACTOR_EN_BAT,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -107,7 +107,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 10 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 96, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BAD_BAT, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
@@ -142,10 +142,10 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(thisx, 20.0f);
 
     if (sAlreadySpawned) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
     } else if (EnBat_IsGraveyardOnSecondDay(play)) {
         if (Flags_GetSwitch(play, this->switchFlag)) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         } else {
             this->actor.room = -1;
         }
@@ -178,7 +178,7 @@ void EnBat_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 EnBat_IsGraveyardOnSecondDay(PlayState* play) {
-    if ((CURRENT_DAY == 2) && (play->sceneNum == SCENE_BOTI)) {
+    if ((CURRENT_DAY == 2) && (play->sceneId == SCENE_BOTI)) {
         return true;
     } else {
         return false;
@@ -369,7 +369,7 @@ void EnBat_Die(EnBat* this, PlayState* play) {
 
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
 
             if (this->actor.room == -1) {
                 Actor* enemy = NULL;

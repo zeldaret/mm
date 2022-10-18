@@ -27,7 +27,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-const ActorInit En_Guruguru_InitVars = {
+ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
     ACTORCAT_NPC,
     FLAGS,
@@ -88,12 +88,12 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->actor.params == 1) {
         func_80BC6E10(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -321,11 +321,11 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
 
     if (!gSaveContext.save.isNight) {
         if (this->actor.params == 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->actor.params == 0 || this->actor.params == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

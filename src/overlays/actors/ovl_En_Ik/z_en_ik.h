@@ -48,6 +48,4 @@ typedef struct EnIk {
     /* 0x0550 */ IronKnuckleEffect effects[7];
 } EnIk; // size = 0x668
 
-extern const ActorInit En_Ik_InitVars;
-
 #endif // Z_EN_IK_H

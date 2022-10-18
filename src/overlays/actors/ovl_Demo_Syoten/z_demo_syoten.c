@@ -25,7 +25,7 @@ void func_80C17008(DemoSyoten* this, PlayState* play);
 void func_80C173B4(Actor* thisx, PlayState* play);
 void func_80C17690(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Syoten_InitVars = {
+ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,
     FLAGS,

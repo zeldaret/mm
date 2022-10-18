@@ -4,6 +4,7 @@
  * Description: Wave Created by Turtle Awakening
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_eff_kamejima_wave.h"
 #include "objects/object_kamejima/object_kamejima.h"
 
@@ -22,7 +23,7 @@ void func_80BCEBC0(EffKamejimaWave* this, PlayState* play);
 void func_80BCED34(EffKamejimaWave* this, PlayState* play);
 void EffKamejimaWave_SetVtxAlpha(u8 alpha);
 
-const ActorInit Eff_Kamejima_Wave_InitVars = {
+ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -56,7 +57,7 @@ void EffKamejimaWave_Init(Actor* thisx, PlayState* play) {
         this->actionFunc = func_80BCEC6C;
         sVtxAlpha = 255;
     }
-    D_80BCF1C4 = Lib_SegmentedToVirtual(object_kamejima_Matanimheader_001AF0);
+    D_80BCF1C4 = Lib_SegmentedToVirtual(gTurtleWaveTexAnim);
 }
 
 void EffKamejimaWave_Destroy(Actor* thisx, PlayState* play) {
@@ -137,7 +138,7 @@ void EffKamejimaWave_Update(Actor* thisx, PlayState* play) {
 }
 
 void EffKamejimaWave_SetVtxAlpha(u8 alpha) {
-    Vtx* vtx = Lib_SegmentedToVirtual(&object_kamejima_Vtx_000000);
+    Vtx* vtx = Lib_SegmentedToVirtual(&gTurtleWaveVtx);
 
     vtx[2].v.cn[3] = alpha;
     vtx[6].v.cn[3] = alpha;
@@ -165,7 +166,7 @@ void EffKamejimaWave_Draw(Actor* thisx, PlayState* play) {
     AnimatedMat_Draw(play, D_80BCF1C4);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, primColor.r, primColor.g, primColor.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, envColor.r, envColor.g, envColor.b, 255);
-    gSPDisplayList(POLY_XLU_DISP++, object_kamejima_DL_000140);
+    gSPDisplayList(POLY_XLU_DISP++, gTurtleWaveDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

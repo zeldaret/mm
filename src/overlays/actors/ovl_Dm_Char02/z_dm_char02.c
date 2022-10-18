@@ -18,7 +18,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play);
 
 void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play);
 
-const ActorInit Dm_Char02_InitVars = {
+ActorInit Dm_Char02_InitVars = {
     ACTOR_DM_CHAR02,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -75,7 +75,7 @@ void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play)
 }
 
 void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_OKUJOU) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.currentCsIndex == 1)) {
         DmChar02_PlaySfxForDroppingOcarinaCutscene(this, play);
     }
 }
@@ -92,7 +92,7 @@ void DmChar02_Init(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.01f);
         this->actionFunc = DmChar02_PerformCutsceneActions;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -151,7 +151,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
         Actor_PickUp(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     DmChar02_PlaySfxForCutscenes(this, play);

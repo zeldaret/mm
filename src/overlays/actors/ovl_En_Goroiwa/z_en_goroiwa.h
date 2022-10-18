@@ -81,6 +81,4 @@ typedef struct EnGoroiwa {
     /* 0x248 */ s32 unk_248;
 } EnGoroiwa; // size = 0x24C
 
-extern const ActorInit En_Goroiwa_InitVars;
-
 #endif // Z_EN_GOROIWA_H

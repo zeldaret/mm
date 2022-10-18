@@ -16,7 +16,7 @@ void EffStk_Update(Actor* thisx, PlayState* play);
 void EffStk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Eff_Stk_InitVars = {
+ActorInit Eff_Stk_InitVars = {
     ACTOR_EFF_STK,
     ACTORCAT_ITEMACTION,
     FLAGS,

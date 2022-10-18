@@ -50,6 +50,4 @@ typedef struct Boss06 {
     /* 0xA2C */ f32 unk_A2C;
 } Boss06; // size = 0xA30
 
-extern const ActorInit Boss_06_InitVars;
-
 #endif // Z_BOSS_06_H

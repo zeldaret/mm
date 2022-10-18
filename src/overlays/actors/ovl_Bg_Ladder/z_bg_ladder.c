@@ -20,7 +20,7 @@ void BgLadder_StartCutscene(BgLadder* this, PlayState* play);
 void BgLadder_FadeIn(BgLadder* this, PlayState* play);
 void BgLadder_DoNothing(BgLadder* this, PlayState* play);
 
-const ActorInit Bg_Ladder_InitVars = {
+ActorInit Bg_Ladder_InitVars = {
     ACTOR_BG_LADDER,
     ACTORCAT_PROP,
     FLAGS,
@@ -63,7 +63,7 @@ void BgLadder_Init(Actor* thisx, PlayState* play) {
     } else if (size == LADDER_SIZE_24RUNG) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_ladder_Colheader_000868);
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 

@@ -31,7 +31,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play);
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
-const ActorInit En_Hidden_Nuts_InitVars = {
+ActorInit En_Hidden_Nuts_InitVars = {
     ACTOR_EN_HIDDEN_NUTS,
     ACTORCAT_PROP,
     FLAGS,
@@ -95,12 +95,12 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (this->unk_21E == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -147,7 +147,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
-    if (player->stateFlags2 & 0x8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         if (this->unk_20A == 0) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             this->unk_20A = 1;
@@ -176,7 +176,8 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
             sp74.x += randPlusMinusPoint5Scaled(15.0f);
             sp74.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30, 1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
+                                              true);
         }
         this->unk_218 = 30;
     }
@@ -218,7 +219,8 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
             sp78.x += randPlusMinusPoint5Scaled(15.0f);
             sp78.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30, 1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
+                                              true);
         }
         this->unk_218 = 30;
     }
@@ -311,7 +313,7 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
     this->unk_208 = 1;
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.speedXZ = 2.0f;
@@ -375,7 +377,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
             if (this->unk_208 >= this->path->count) {
                 func_80BDBE70(this, play);
             } else if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     }
@@ -400,7 +402,7 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
         EffectSsHahen_SpawnBurst(play, &sp38, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -17,7 +17,7 @@ void func_80983678(ObjDemo* this, PlayState* play);
 void func_80983704(ObjDemo* this, PlayState* play);
 void func_80983634(PlayState* play);
 
-const ActorInit Obj_Demo_InitVars = {
+ActorInit Obj_Demo_InitVars = {
     ACTOR_OBJ_DEMO,
     ACTORCAT_PROP,
     FLAGS,
@@ -34,7 +34,7 @@ void ObjDemo_Init(Actor* thisx, PlayState* play) {
 
     thisx->params = OBJDEMO_GET_FF(thisx);
     if ((thisx->params != OBJDEMO_FF_FF) && (Flags_GetSwitch(play, thisx->params))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (thisx->shape.rot.x < 0) {
@@ -60,7 +60,7 @@ void ObjDemo_Init(Actor* thisx, PlayState* play) {
 }
 
 void func_80983634(PlayState* play) {
-    if ((play->sceneNum == SCENE_CASTLE) && (func_801A8A50(0) == NA_BGM_IKANA_CASTLE)) {
+    if ((play->sceneId == SCENE_CASTLE) && (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) == NA_BGM_IKANA_CASTLE)) {
         Audio_QueueSeqCmd(0x100100FF);
     }
 }
@@ -88,7 +88,7 @@ void func_80983704(ObjDemo* this, PlayState* play) {
             } else {
                 ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             }
-            if (play->sceneNum == SCENE_CASTLE) {
+            if (play->sceneId == SCENE_CASTLE) {
                 Audio_QueueSeqCmd(NA_BGM_IKANA_CASTLE | 0x8000);
             }
             this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
@@ -96,7 +96,7 @@ void func_80983704(ObjDemo* this, PlayState* play) {
                 if (this->actor.params != 0xFF) {
                     Flags_SetSwitch(play, this->actor.params);
                 }
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -109,7 +109,7 @@ void ObjDemo_Update(Actor* thisx, PlayState* play) {
     ObjDemo* this = THIS;
 
     if ((this->actor.params != 0xFF) && Flags_GetSwitch(play, this->actor.params)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);

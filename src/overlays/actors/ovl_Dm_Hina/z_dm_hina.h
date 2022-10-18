@@ -16,6 +16,4 @@ typedef struct DmHina {
     /* 0x160 */ char unk_160[0x24];
 } DmHina; // size = 0x184
 
-extern const ActorInit Dm_Hina_InitVars;
-
 #endif // Z_DM_HINA_H

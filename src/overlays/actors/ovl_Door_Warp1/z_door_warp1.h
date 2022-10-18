@@ -56,6 +56,4 @@ typedef struct DoorWarp1 {
     /* 0x208 */ u8 unk_208;
 } DoorWarp1; // size = 0x20C
 
-extern const ActorInit Door_Warp1_InitVars;
-
 #endif // Z_DOOR_WARP1_H

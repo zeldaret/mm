@@ -27,7 +27,7 @@ void func_80A2273C(ObjSkateblock* this, PlayState* play);
 void func_80A227A4(ObjSkateblock* this);
 void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
-const ActorInit Obj_Skateblock_InitVars = {
+ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -369,7 +369,7 @@ void func_80A21C88(ObjSkateblock* this, s32 arg1) {
 void func_80A21CB4(ObjSkateblock* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags2 &= ~0x10;
+    player->stateFlags2 &= ~PLAYER_STATE2_10;
     this->dyna.pushForce = 0.0f;
 }
 

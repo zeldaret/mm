@@ -31,7 +31,7 @@ void func_80BEF9F0(EnAkindonuts* this, PlayState* play);
 void func_80BEFAF0(EnAkindonuts* this, PlayState* play);
 void func_80BEFD74(EnAkindonuts* this, PlayState* play);
 
-const ActorInit En_Akindonuts_InitVars = {
+ActorInit En_Akindonuts_InitVars = {
     ACTOR_EN_AKINDONUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -1099,10 +1099,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BED680;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BED3BC;
             }
@@ -1113,10 +1113,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEDB88;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BED8A4;
             }
@@ -1127,10 +1127,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE070;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BEDDAC;
             }
@@ -1141,10 +1141,10 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE530;
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             } else if (ENAKINDONUTS_GET_4(&this->actor)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_2DC = func_80BEE274;
             }
@@ -1586,7 +1586,7 @@ void func_80BEFAF0(EnAkindonuts* this, PlayState* play) {
 }
 
 void func_80BEFD74(EnAkindonuts* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
@@ -1608,7 +1608,7 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
         this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
         if (this->path == NULL) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }

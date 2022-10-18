@@ -5,6 +5,7 @@
  */
 
 #include "z_en_part.h"
+#include "overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -18,7 +19,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play);
 void func_80865390(EnPart* this, PlayState* play);
 void func_808654C4(EnPart* this, PlayState* play);
 
-const ActorInit En_Part_InitVars = {
+ActorInit En_Part_InitVars = {
     ACTOR_EN_PART,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -78,7 +79,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
             pos.y = this->actor.floorHeight;
             func_800B3030(play, &pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.y * 1400.0f, 7, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_EXTINCT);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->unk146 <= 0) {
         switch (this->actor.params) {
@@ -96,11 +97,11 @@ void func_808654C4(EnPart* this, PlayState* play) {
                     effectVelocity.y = Rand_ZeroOne() + 1.0f;
                     effectScale = Rand_S16Offset(80, 100);
                     EffectSsDtBubble_SpawnColorProfile(play, &effectPos, &effectVelocity, &gZeroVec3f, effectScale, 25,
-                                                       0, 1);
+                                                       DTBUBBLE_COLOR_PROFILE_RED, true);
                 }
                 break;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->unk146--;
         this->zRot += this->unk14C;

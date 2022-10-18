@@ -15,14 +15,14 @@
 void ObjWarpstone_Init(Actor* thisx, PlayState* play);
 void ObjWarpstone_Destroy(Actor* thisx, PlayState* play);
 void ObjWarpstone_Update(Actor* thisx, PlayState* play);
-void ObjWarpstone_Draw(Actor* thisx, PlayState* play);
+void ObjWarpstone_Draw(Actor* thisx, PlayState* play2);
 void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc);
 s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
-const ActorInit Obj_Warpstone_InitVars = {
+ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
     ACTORCAT_ITEMACTION,
     FLAGS,

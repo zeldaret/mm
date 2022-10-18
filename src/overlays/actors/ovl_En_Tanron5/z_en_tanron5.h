@@ -25,6 +25,4 @@ typedef struct EnTanron5 {
     /* 0x1A1 */ u8 unk_1A1;
 } EnTanron5; // size = 0x1A4
 
-extern const ActorInit En_Tanron5_InitVars;
-
 #endif // Z_EN_TANRON5_H

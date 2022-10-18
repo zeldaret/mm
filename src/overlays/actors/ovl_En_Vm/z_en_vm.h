@@ -35,6 +35,4 @@ typedef struct EnVm {
     /* 0x300 */ ColliderTrisElement colliderTrisElements[1];
 } EnVm; // size = 0x35C
 
-extern const ActorInit En_Vm_InitVars;
-
 #endif // Z_EN_VM_H

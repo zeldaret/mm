@@ -15,7 +15,7 @@ void EnBoj05_Destroy(Actor* thisx, PlayState* play);
 void EnBoj05_Update(Actor* thisx, PlayState* play);
 void EnBoj05_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Boj_05_InitVars = {
+ActorInit En_Boj_05_InitVars = {
     ACTOR_EN_BOJ_05,
     ACTORCAT_NPC,
     FLAGS,

@@ -26,6 +26,4 @@ typedef struct EnDoor {
     /* 0x1C8 */ EnDoorActionFunc actionFunc;
 } EnDoor;
 
-extern const ActorInit En_Door_InitVars;
-
 #endif // Z_EN_DOOR_H

@@ -19,7 +19,7 @@ void EnEndingHero5_Draw(Actor* thisx, PlayState* play);
 void func_80C23980(EnEndingHero5* this);
 void func_80C2399C(EnEndingHero5* this, PlayState* play);
 
-const ActorInit En_Ending_Hero5_InitVars = {
+ActorInit En_Ending_Hero5_InitVars = {
     ACTOR_EN_ENDING_HERO5,
     ACTORCAT_NPC,
     FLAGS,

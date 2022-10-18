@@ -28,6 +28,4 @@ typedef struct DmChar01 {
     /* 0x34D */ u8 unk_34D;
 } DmChar01; // size = 0x350
 
-extern const ActorInit Dm_Char01_InitVars;
-
 #endif // Z_DM_CHAR01_H

@@ -29,7 +29,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-const ActorInit En_Mm3_InitVars = {
+ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,
     FLAGS,
@@ -249,13 +249,14 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 break;
 
             case 0x2791:
-                if (gSaveContext.unk_3DE0[0] == 1000) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] == SECONDS_TO_TIMER(10)) {
                     Message_StartTextbox(play, 0x2792, &this->actor);
                     this->unk_2B4 = 0x2792;
-                } else if ((gSaveContext.unk_3DE0[0] >= 1500)) {
+                } else if ((gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] >= SECONDS_TO_TIMER(15))) {
                     Message_StartTextbox(play, 0x2797, &this->actor);
                     this->unk_2B4 = 0x2797;
-                } else if ((gSaveContext.unk_3DE0[0] <= 1050) && (gSaveContext.unk_3DE0[0] >= 950)) {
+                } else if ((gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] <= SECONDS_TO_TIMER_PRECISE(10, 50)) &&
+                           (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] >= SECONDS_TO_TIMER_PRECISE(9, 50))) {
                     Message_StartTextbox(play, 0x2795, &this->actor);
                     this->unk_2B4 = 0x2795;
                 } else {
@@ -301,8 +302,8 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
     } else if ((this->unk_2AC > 0) && (this->unk_2B4 == 0x2791)) {
         this->unk_2AC--;
         if (this->unk_2AC == 0) {
-            if (gSaveContext.unk_3DE0[0] == 1000) {
-                func_801A3098(0x922);
+            if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] == SECONDS_TO_TIMER(10)) {
+                Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
                 play_sound(NA_SE_SY_ERROR);
             }
@@ -340,11 +341,11 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
-                        func_8010EA9C(0, 2);
+                        Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_ON);
                     } else {
-                        func_8010EA9C(0, 0);
+                        Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_OFF);
                     }
                     func_801477B4(play);
                     play_sound(NA_SE_SY_START_SHOT);
@@ -381,18 +382,20 @@ void func_80A6FBA0(EnMm3* this) {
 void func_80A6FBFC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.unk_3DD0[0] == 0x10) {
-        player->stateFlags1 &= ~0x20;
+    if (gSaveContext.timerStates[TIMER_ID_POSTMAN] == TIMER_STATE_POSTMAN_END) {
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags |= ACTOR_FLAG_10000;
-        if (gSaveContext.unk_3DE0[0] > 1500) {
-            gSaveContext.unk_3DE0[0] = 1500;
-        } else if ((((void)0, gSaveContext.unk_3DE0[0]) >= (OSTime)(995 - XREG(16))) &&
-                   (((void)0, gSaveContext.unk_3DE0[0]) <= (OSTime)(1005 + XREG(17)))) {
-            gSaveContext.unk_3DE0[0] = 1000;
+        if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
+            gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(15);
+        } else if ((((void)0, gSaveContext.timerCurTimes[TIMER_ID_POSTMAN]) >=
+                    (OSTime)(SECONDS_TO_TIMER_PRECISE(10, -5) - XREG(16))) &&
+                   (((void)0, gSaveContext.timerCurTimes[TIMER_ID_POSTMAN]) <=
+                    (OSTime)(SECONDS_TO_TIMER_PRECISE(10, 5) + XREG(17)))) {
+            gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(10);
         }
-    } else if (gSaveContext.unk_3DE0[0] > 1500) {
-        gSaveContext.unk_3DD0[0] = 15;
-        gSaveContext.unk_3DC8 = osGetTime();
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
+        gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_STOP;
+        gSaveContext.postmanTimerStopOsTime = osGetTime();
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -401,7 +404,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         Message_StartTextbox(play, 0x2791, &this->actor);
         this->unk_2B4 = 0x2791;
         this->unk_2AC = 7;
-        gSaveContext.unk_3DD0[0] = 0;
+        gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_OFF;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         play_sound(NA_SE_SY_START_SHOT);
         func_80A6F9C8(this);
@@ -442,7 +445,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
         func_80151BB4(play, 0xB);

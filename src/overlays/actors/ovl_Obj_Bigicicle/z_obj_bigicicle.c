@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-const ActorInit Obj_Bigicicle_InitVars = {
+ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -126,7 +126,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
 
     if (Flags_GetSwitch(play, this->actor.params)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -285,7 +285,7 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_GLASSBROKEN_IMPACT);
     ActorCutscene_Stop(this->actor.cutscene);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void ObjBigicicle_Update(Actor* thisx, PlayState* play) {

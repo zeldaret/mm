@@ -13,8 +13,6 @@ typedef struct ObjMilkBin {
     /* 0x198 */ s32 type;
 } ObjMilkBin; // size = 0x19C
 
-extern const ActorInit Obj_Milk_Bin_InitVars;
-
 typedef enum {
     /* 0 */ OBJ_MILK_BIN_TYPE_DEFAULT,
     /* 1 */ OBJ_MILK_BIN_TYPE_1, // This actor will kill itself if the player has obtained the milk bottle and the current time is the night of the second day onwards.

@@ -13,6 +13,4 @@ typedef struct EffStk {
     /* 0x14C */ EffStkActionFunc actionFunc;
 } EffStk; // size = 0x150
 
-extern const ActorInit Eff_Stk_InitVars;
-
 #endif // Z_EFF_STK_H

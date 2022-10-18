@@ -21,6 +21,4 @@ typedef struct EnGakufu {
     /* 0x150 */ EnGakufuActionFunc actionFunc;
 } EnGakufu; // size = 0x154
 
-extern const ActorInit En_Gakufu_InitVars;
-
 #endif // Z_EN_GAKUFU_H

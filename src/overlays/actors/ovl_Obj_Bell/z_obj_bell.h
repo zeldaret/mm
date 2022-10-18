@@ -20,6 +20,4 @@ typedef struct ObjBell {
     /* 0x224 */ UNK_TYPE1 unk_224[0x04];
 } ObjBell; // size = 0x228
 
-extern const ActorInit Obj_Bell_InitVars;
-
 #endif // Z_OBJ_BELL_H

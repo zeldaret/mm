@@ -32,7 +32,7 @@ void func_809C2C9C(EnAob01* this, PlayState* play);
 void func_809C2D0C(EnAob01* this, PlayState* play);
 s32 func_809C2EC4(EnAob01* this, PlayState* play);
 
-const ActorInit En_Aob_01_InitVars = {
+ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -489,7 +489,7 @@ void func_809C1EC8(EnAob01* this, PlayState* play) {
     func_809C10B0(this, 3);
     SubS_FillLimbRotTables(play, this->unk_2F8, this->unk_318, ARRAY_COUNT(this->unk_2F8));
     func_809C165C(this, play);
-    if (player->stateFlags1 & 0x20) {
+    if (player->stateFlags1 & PLAYER_STATE1_20) {
         func_809C1124();
     }
 }
@@ -671,7 +671,7 @@ void func_809C2730(EnAob01* this, PlayState* play) {
 void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
-        if (func_801A8A50(0) != 0x41) {
+        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
             play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
@@ -876,7 +876,7 @@ void func_809C2F34(EnAob01* this, PlayState* play) {
     player->actor.world.pos.z = 1464.0f;
     player->actor.shape.rot.y = player->actor.world.rot.y;
     player->actor.draw = NULL;
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     this->actor.world.pos.x = -4308.0f;
     this->actor.world.pos.z = 1620.0f;
     this->actor.prevPos = this->actor.world.pos;

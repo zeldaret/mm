@@ -15,6 +15,4 @@ typedef struct ElfMsg2 {
     /* 0x144 */ ElfMsg2ActionFunc actionFunc;
 } ElfMsg2; // size = 0x148
 
-extern const ActorInit Elf_Msg2_InitVars;
-
 #endif // Z_ELF_MSG2_H

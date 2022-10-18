@@ -76,6 +76,4 @@ typedef struct Boss04 {
     /* 0x74A */ u8 unk_74A;
 } Boss04; // size = 0x74C
 
-extern const ActorInit Boss_04_InitVars;
-
 #endif // Z_BOSS_04_H

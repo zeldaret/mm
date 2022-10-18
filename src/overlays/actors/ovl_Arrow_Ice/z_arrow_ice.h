@@ -18,6 +18,4 @@ typedef struct ArrowIce {
     /* 0x160 */ ArrowIceActionFunc actionFunc;
 } ArrowIce; // size = 0x164
 
-extern const ActorInit Arrow_Ice_InitVars;
-
 #endif // Z_ARROW_ICE_H

@@ -46,6 +46,4 @@ typedef struct EnSellnuts {
     /* 0x374 */ f32 unk_374;
 } EnSellnuts; // size = 0x378
 
-extern const ActorInit En_Sellnuts_InitVars;
-
 #endif // Z_EN_SELLNUTS_H

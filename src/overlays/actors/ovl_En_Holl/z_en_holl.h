@@ -71,6 +71,4 @@ typedef struct EnHoll {
 #define EN_HOLL_SCALE_ALPHA(playerDistFromCentralPlane) ((playerDistFromCentralPlane - sTransparencyPlaneDistance) * (255 / (sTranslucencyPlaneDistance - sTransparencyPlaneDistance)))
 #define EN_HOLL_SCALE_BG_COVER_ALPHA(playerDistFromCentralPlane) ((EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL - playerDistFromCentralPlane) * (255 / (EN_HOLL_ACTIVATION_PLANE_DISTANCE_VERTICAL - EN_HOLL_LOADING_PLANE_DISTANCE_VERTICAL)))
 
-extern const ActorInit En_Holl_InitVars;
-
 #endif // Z_EN_HOLL_H

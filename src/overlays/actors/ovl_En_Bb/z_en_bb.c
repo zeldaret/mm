@@ -35,7 +35,7 @@ typedef enum {
     /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
 } EnBbBodyPartDrawStatus;
 
-const ActorInit En_Bb_InitVars = {
+ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -114,7 +114,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 28, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BLUE_BUBBLE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 

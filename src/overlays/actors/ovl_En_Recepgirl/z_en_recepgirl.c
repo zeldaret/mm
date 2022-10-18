@@ -21,7 +21,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play);
 void EnRecepgirl_SetupTalk(EnRecepgirl* this);
 void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play);
 
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,

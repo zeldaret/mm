@@ -23,7 +23,7 @@ void EnBombers2_ChangeAnim(EnBombers2* this, s32 animIndex, f32 playSpeed);
 void func_80C04D00(EnBombers2* this);
 void func_80C050B8(EnBombers2* this, PlayState* play);
 
-const ActorInit En_Bombers2_InitVars = {
+ActorInit En_Bombers2_InitVars = {
     ACTOR_EN_BOMBERS2,
     ACTORCAT_NPC,
     FLAGS,
@@ -102,7 +102,7 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
     }
     this->cutscene = this->actor.cutscene;
     if (this->cutscene == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     func_80C04B40(this);
 }
