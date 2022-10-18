@@ -122,7 +122,7 @@ void func_80AD16A8(EnOsn*, PlayState*);
 void func_80AD14C8(EnOsn*, PlayState*);
 void func_80AD19A0(EnOsn* this, PlayState* play);
 
-void func_80AD0830(EnOsn* this, PlayState* play) {
+void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
@@ -134,44 +134,64 @@ s32 func_80AD08B0(PlayState* play) {
     switch (Player_GetMask(play)) {
         case PLAYER_MASK_GREAT_FAIRY:
             return 0x1FD6;
+
         case PLAYER_MASK_GIBDO:
             return 0x1FD8;
+
         case PLAYER_MASK_TRUTH:
             return 0x1FDA;
+
         case PLAYER_MASK_GIANT:
             return 0x1FDC;
+
         case PLAYER_MASK_KAFEIS_MASK:
             return 0x1FDE;
+
         case PLAYER_MASK_DON_GERO:
             return 0x1FE0;
+
         case PLAYER_MASK_BLAST:
             return 0x1FE2;
+
         case PLAYER_MASK_COUPLE:
             return 0x1FE4;
+
         case PLAYER_MASK_SCENTS:
             return 0x1FE6;
+
         case PLAYER_MASK_KAMARO:
             return 0x1FE8;
+
         case PLAYER_MASK_STONE:
             return 0x1FEA;
+
         case PLAYER_MASK_POSTMAN:
             return 0x1FEC;
+
         case PLAYER_MASK_BUNNY:
             return 0x1FEE;
+
         case PLAYER_MASK_CAPTAIN:
             return 0x1FF0;
+
         case PLAYER_MASK_BREMEN:
             return 0x1FF2;
+
         case PLAYER_MASK_CIRCUS_LEADER:
             return 0x1FF4;
+
         case PLAYER_MASK_KEATON:
             return 0x1FF6;
+
         case PLAYER_MASK_GARO:
             return 0x1FF8;
+
         case PLAYER_MASK_ALL_NIGHT:
             return 0x1FFA;
+
         case PLAYER_MASK_ROMANI:
             return 0x1FFC;
+
         default:
             return 0;
     }
@@ -179,32 +199,32 @@ s32 func_80AD08B0(PlayState* play) {
 
 void func_80AD0998(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_1EC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->unk_1EC == 0x12 && curFrame == lastFrame) {
-        this->unk_1EC = 0x13;
+    if ((this->animIndex == 0x12) && (curFrame == lastFrame)) {
+        this->animIndex = 0x13;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0x13);
     }
 }
 
 void func_80AD0A24(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_1EC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->unk_1EC == 0x15 && curFrame == lastFrame) {
-        this->unk_1EC = 0x16;
+    if ((this->animIndex == 0x15) && (curFrame == lastFrame)) {
+        this->animIndex = 0x16;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0x16);
     }
 }
 
 void func_80AD0AB0(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_1EC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (curFrame == lastFrame) {
-        this->unk_1FA -= 8;
-        if (this->unk_1FA < 8) {
-            this->unk_1FA = 0;
+        this->alpha -= 8;
+        if (this->alpha < 8) {
+            this->alpha = 0;
             Actor_Kill(&this->actor);
         }
     }
@@ -218,126 +238,146 @@ s32 func_80AD0B38(EnOsn* this, PlayState* play) {
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_GIBDO:
             if (!(this->unk_1F6 & 2)) {
                 this->unk_1F6 |= 2;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_TRUTH:
             if (!(this->unk_1F6 & 4)) {
                 this->unk_1F6 |= 4;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_GIANT:
             if (!(this->unk_1F6 & 8)) {
                 this->unk_1F6 |= 8;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_KAFEIS_MASK:
             if (!(this->unk_1F6 & 0x10)) {
                 this->unk_1F6 |= 0x10;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_DON_GERO:
             if (!(this->unk_1F6 & 0x20)) {
                 this->unk_1F6 |= 0x20;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_BLAST:
             if (!(this->unk_1F6 & 0x40)) {
                 this->unk_1F6 |= 0x40;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_COUPLE:
             if (!(this->unk_1F6 & 0x80)) {
                 this->unk_1F6 |= 0x80;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_SCENTS:
             if (!(this->unk_1F6 & 0x100)) {
                 this->unk_1F6 |= 0x100;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_KAMARO:
             if (!(this->unk_1F6 & 0x200)) {
                 this->unk_1F6 |= 0x200;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_STONE:
             if (!(this->unk_1F6 & 0x400)) {
                 this->unk_1F6 |= 0x400;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_POSTMAN:
             if (!(this->unk_1F6 & 0x800)) {
                 this->unk_1F6 |= 0x800;
                 return 0x1FD2;
             }
             break;
+
         case PLAYER_MASK_BUNNY:
             if (!(this->unk_1F6 & 0x1000)) {
                 this->unk_1F6 |= 0x1000;
                 return 0x1FD2;
             }
             break;
+
         case PLAYER_MASK_CAPTAIN:
             if (!(this->unk_1F6 & 0x2000)) {
                 this->unk_1F6 |= 0x2000;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_BREMEN:
             if (!(this->unk_1F6 & 0x4000)) {
                 this->unk_1F6 |= 0x4000;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_CIRCUS_LEADER:
             if (!(this->unk_1F6 & 0x8000)) {
                 this->unk_1F6 |= 0x8000;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_KEATON:
             if (!(this->unk_1F6 & 0x10000)) {
                 this->unk_1F6 |= 0x10000;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_GARO:
             if (!(this->unk_1F6 & 0x20000)) {
                 this->unk_1F6 |= 0x20000;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_ALL_NIGHT:
             if (!(this->unk_1F6 & 0x40000)) {
                 this->unk_1F6 |= 0x40000;
                 return 0x1FD1;
             }
             break;
+
         case PLAYER_MASK_ROMANI:
             if (!(this->unk_1F6 & 0x80000)) {
                 this->unk_1F6 |= 0x80000;
                 return 0x1FD1;
             }
             break;
+
         default:
             break;
     }
     this->unk_1EA |= 0x20;
-    if (gSaveContext.save.day == 3 && gSaveContext.save.time >= CLOCK_TIME(5, 0) &&
-        gSaveContext.save.time < CLOCK_TIME(6, 0)) {
+    if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+        (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
         return 0x2006;
     }
     return 0x1FCD;
@@ -605,11 +645,11 @@ void func_80AD1398(EnOsn* this) {
 }
 
 void func_80AD144C(EnOsn* this, PlayState* play) {
-    u32 sp1C = Flags_GetSwitch(play, 0);
+    u32 isFlagSet = Flags_GetSwitch(play, 0);
     this->cutscene = this->actor.cutscene;
 
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    if (sp1C == 0) {
+    if (isFlagSet == 0) {
         this->actionFunc = func_80AD16A8;
     } else {
         this->actionFunc = func_80AD14C8;
@@ -617,13 +657,13 @@ void func_80AD144C(EnOsn* this, PlayState* play) {
 }
 
 void func_80AD14C8(EnOsn* this, PlayState* play) {
-    s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
+    s16 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = func_80AD1634;
-        } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
-                   (temp_v1 > -0x4000)) {
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
+                   (yaw > -0x4000)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xFFFF;
         }
@@ -632,8 +672,8 @@ void func_80AD14C8(EnOsn* this, PlayState* play) {
             this->unk_1F4 = func_80AD0E10(this, play);
             Message_StartTextbox(play, this->unk_1F4, &this->actor);
             this->actionFunc = func_80AD19A0;
-        } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
-                   (temp_v1 > -0x4000)) {
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
+                   (yaw > -0x4000)) {
             func_800B863C(&this->actor, play);
         }
     }
@@ -643,12 +683,12 @@ void func_80AD1634(EnOsn* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
         this->actionFunc = func_80AD16A8;
-        return;
+    } else {
+        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+            ActorCutscene_Stop(0x7C);
+        }
+        ActorCutscene_SetIntentToPlay(this->cutscene);
     }
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    }
-    ActorCutscene_SetIntentToPlay(this->cutscene);
 }
 
 void func_80AD16A8(EnOsn* this, PlayState* play) {
@@ -657,94 +697,113 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 130)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 130);
-        this->unk_1F0 = 0;
-        if (this->unk_1ED != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_1ED = play->csCtx.actorActions[actionIndex]->action;
+        this->unk_1F0 = false;
+        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->unk_1EC = 2;
+                    this->animIndex = 2;
                     break;
+
                 case 2:
-                    this->unk_1EC = 1;
+                    this->animIndex = 1;
                     break;
+
                 case 3:
-                    this->unk_1EC = 7;
+                    this->animIndex = 7;
                     break;
+
                 case 4:
-                    this->unk_1EC = 3;
+                    this->animIndex = 3;
                     break;
+
                 case 5:
-                    this->unk_1EC = 6;
+                    this->animIndex = 6;
                     break;
+
                 case 6:
-                    this->unk_1EC = 5;
+                    this->animIndex = 5;
                     break;
+
                 case 7:
-                    this->unk_1EC = 4;
+                    this->animIndex = 4;
                     break;
+
                 case 8:
-                    this->unk_1EC = 0;
+                    this->animIndex = 0;
                     break;
                 case 10:
-                    this->unk_1EC = 8;
+                    this->animIndex = 8;
                     break;
+
                 case 11:
-                    this->unk_1EC = 9;
+                    this->animIndex = 9;
                     break;
                 case 13:
-                    this->unk_1EC = 0xA;
+                    this->animIndex = 0xA;
                     break;
+
                 case 15:
-                    this->unk_1EC = 0xB;
+                    this->animIndex = 0xB;
                     break;
+
                 case 16:
-                    this->unk_1EC = 0xC;
+                    this->animIndex = 0xC;
                     break;
+
                 case 17:
-                    this->unk_1EC = 0xD;
+                    this->animIndex = 0xD;
                     break;
+
                 case 18:
-                    this->unk_1EC = 0xE;
+                    this->animIndex = 0xE;
                     break;
+
                 case 19:
-                    this->unk_1EC = 0x11;
+                    this->animIndex = 0x11;
                     break;
+
                 case 20:
-                    this->unk_1EC = 0x12;
+                    this->animIndex = 0x12;
                     break;
+
                 case 21:
-                    this->unk_1EC = 0x14;
+                    this->animIndex = 0x14;
                     break;
+
                 case 22:
-                    this->unk_1EC = 0x15;
+                    this->animIndex = 0x15;
                     break;
+
                 case 23:
-                    this->unk_1EC = 0x17;
+                    this->animIndex = 0x17;
                     break;
+
                 case 24:
-                    this->unk_1EC = 0x18;
+                    this->animIndex = 0x18;
                     break;
+
                 default:
-                    this->unk_1EC = 0;
+                    this->animIndex = 0;
                     break;
             }
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
 
-        if ((this->unk_1EC == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0xB) &&
+        if ((this->animIndex == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0xB) &&
             (play->csCtx.frames == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
-        if (this->unk_1EC == 0x12) {
+        if (this->animIndex == 0x12) {
             func_80AD0998(this);
         }
-        if (this->unk_1EC == 0x15) {
+        if (this->animIndex == 0x15) {
             func_80AD0A24(this);
         }
-        if (this->unk_1EC == 0x18) {
+        if (this->animIndex == 0x18) {
             func_80AD0AB0(this);
         }
-        if ((this->unk_1EC == 0x14) &&
+        if ((this->animIndex == 0x14) &&
             (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
@@ -752,8 +811,8 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
     } else {
-        this->unk_1F0 = 1;
-        this->unk_1ED = 0x63;
+        this->unk_1F0 = true;
+        this->csAction = 0x63;
         func_80AD144C(this, play);
     }
 }
@@ -773,7 +832,7 @@ void func_80AD19A0(EnOsn* this, PlayState* play) {
     }
 }
 
-void EnOsn_Idle(EnOsn* this, PlayState* play) {
+void EnOsn_DoNothing(EnOsn* this, PlayState* play) {
 }
 
 void EnOsn_Init(Actor* thisx, PlayState* play) {
@@ -786,7 +845,8 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->unk_1FA = 255;
+    this->alpha = 255;
+
     switch (ENOSN_GET_3(&this->actor)) {
         case 0:
             if (((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
@@ -794,34 +854,32 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
                 (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                 this->unk_1EA |= 1;
             }
-            this->unk_1F0 = 1;
+            this->unk_1F0 = true;
             if (play->sceneId == SCENE_INSIDETOWER) {
                 if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                     (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                     this->actionFunc = func_80AD16A8;
-                    return;
-                }
-                if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3)) {
+                } else if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3)) {
                     func_80AD1398(this);
                     this->actionFunc = func_80AD1634;
-                    return;
+                } else {
+                    func_80AD144C(this, play);
                 }
+            } else {
                 func_80AD144C(this, play);
-                return;
             }
-            func_80AD144C(this, play);
             break;
 
         case 1:
-            this->unk_1EC = 0xF;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
-            this->actionFunc = EnOsn_Idle;
+            this->animIndex = 0xF;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnOsn_DoNothing;
             break;
 
         case 2:
-            this->unk_1EC = 0x10;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_1EC);
-            this->actionFunc = EnOsn_Idle;
+            this->animIndex = 0x10;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
+            this->actionFunc = EnOsn_DoNothing;
             break;
 
         case 3:
@@ -845,22 +903,24 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play) {
 void EnOsn_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOsn* this = THIS;
-    u32 sp34;
+    u32 isFlagSet;
 
-    sp34 = Flags_GetSwitch(play, 0);
+    isFlagSet = Flags_GetSwitch(play, 0);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
+
     if (!ENOSN_GET_3(&this->actor)) {
-        if (sp34 != 0) {
+        if (isFlagSet) {
             this->actor.flags |= ACTOR_FLAG_1;
-            func_80AD0830(this, play);
+            EnOsn_UpdateCollider(this, play);
             this->actor.draw = EnOsn_Draw;
         } else {
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
+
     Actor_TrackPlayer(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
 }
 
@@ -868,10 +928,10 @@ s32 EnOsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                            Gfx** gfx) {
     EnOsn* this = (EnOsn*)thisx;
 
-    if (this->unk_1F0 && limbIndex == 11) {
+    if (this->unk_1F0 && (limbIndex == 11)) {
         Matrix_RotateXS(this->unk_1D8.y, MTXMODE_APPLY);
     }
-    if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 10) {
+    if (((this->animIndex == 9) || (this->animIndex == 8)) && (limbIndex == 10)) {
         *dList = NULL;
     }
     return false;
@@ -883,9 +943,9 @@ void EnOsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     Vec3s sp28 = { 0x9920, -0x384, -0x320 };
 
     if (limbIndex == 11) {
-        Matrix_MultVec3f(&sp30, &thisx->focus.pos);
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
-    if (((this->unk_1EC == 17) || (this->unk_1EC == 21) || (this->unk_1EC == 22)) && (limbIndex == 6)) {
+    if (((this->animIndex == 17) || (this->animIndex == 21) || (this->animIndex == 22)) && (limbIndex == 6)) {
         Matrix_Push();
         Matrix_Translate(-400.0f, 1100.0f, -200.0f, MTXMODE_APPLY);
         Matrix_RotateXS(sp28.x, MTXMODE_APPLY);
@@ -909,13 +969,13 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->unk_1FA == 0xFF) {
+    if (this->alpha == 255) {
         func_8012C28C(play->state.gfxCtx);
-        if ((this->unk_1EC == 0xB) || (this->unk_1EC == 0xC) || (this->unk_1EC == 0x17) ||
+        if ((this->animIndex == 0xB) || (this->animIndex == 0xC) || (this->animIndex == 0x17) ||
             (play->msgCtx.currentTextId == 0x1FCA)) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD258C));
             gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
-        } else if ((this->unk_1EC == 7) || (this->unk_1EC == 3) || (this->unk_1EC == 0xD)) {
+        } else if ((this->animIndex == 7) || (this->animIndex == 3) || (this->animIndex == 0xD)) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2590));
             gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2598));
         } else {
@@ -931,7 +991,7 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
         func_8012C2DC(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
-        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->unk_1FA);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
         Scene_SetRenderModeXlu(play, 1, 2);
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
