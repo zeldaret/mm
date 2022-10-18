@@ -92,6 +92,6 @@ void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this) {
     }
 
     if (this->rTimer == 1) {
-        play->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
+        play->interfaceCtx.minigamePoints = sScores[this->rScoreIndex];
     }
 }

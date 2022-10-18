@@ -343,7 +343,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
             if (play->curSpawn == 6) {
                 func_80953F14(this, play);
                 if (gSaveContext.eventInf[3] & 0x20) {
-                    func_80112AFC(play);
+                    Interface_InitMinigame(play);
                 } else {
                     gSaveContext.eventInf[4] |= 2;
                 }

@@ -370,7 +370,7 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
         if (this->unk_2A6 == 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            play->interfaceCtx.unk_25C++;
+            play->interfaceCtx.minigamePoints++;
             syatekiMan->score++;
             syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_RED;
         } else {

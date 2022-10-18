@@ -35,6 +35,7 @@
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64effect.h"
+#include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
 #include "z64map.h"
@@ -506,10 +507,10 @@ typedef struct {
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ s16 magicConsumptionTimer; // For certain magic states, 1 unit of magic is consumed every time the timer reaches 0
     /* 0x25A */ u8 numHorseBoosts;
-    /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E;
-    /* 0x260 */ u16 hbaAmmo;
-    /* 0x262 */ u16 unk_262;
+    /* 0x25C */ u16 minigamePoints; // Points to add to the minigame score. Reset to 0 every frame.
+    /* 0x25E */ u16 minigameHiddenPoints; // Points to add to the secondary set of minigame points not displayed. Reset to 0 every frame.
+    /* 0x260 */ u16 minigameAmmo;
+    /* 0x262 */ u16 minigameUnusedPoints; // Associated with other minigame points, unused
     /* 0x264 */ s16 unk_264;
     /* 0x266 */ s16 aAlpha;
     /* 0x268 */ s16 bAlpha;
@@ -525,22 +526,22 @@ typedef struct {
     /* 0x27C */ s16 mapRoomNum;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;
-    /* 0x280 */ u8 unk_280;
-    /* 0x282 */ s16 unk_282;
-    /* 0x284 */ s16 unk_284;
-    /* 0x286 */ s16 unk_286;
-    /* 0x288 */ s16 unk_288;
-    /* 0x28A */ s16 unk_28A[8];
-    /* 0x29A */ u16 unk_29A[8];
-    /* 0x2AA */ s16 unk_2AA[8];
-    /* 0x2BC */ f32 unk_2BC[8];
-    /* 0x2DC */ f32 unk_2DC[8];
-    /* 0x2FC */ s16 unk_2FC[4];
-    /* 0x304 */ s16 unk_304;
-    /* 0x306 */ s16 unk_306;
-    /* 0x308 */ s16 unk_308;
-    /* 0x30A */ s16 unk_30A;
-    /* 0x30C */ s16 unk_30C;
+    /* 0x280 */ u8 minigameState;
+    /* 0x282 */ s16 minigameCountdownAlpha;
+    /* 0x284 */ s16 minigameCountdownScale;
+    /* 0x286 */ s16 isMinigamePerfect;
+    /* 0x288 */ s16 minigamePerfectType;
+    /* 0x28A */ s16 minigamePerfectState[MINIGAME_PERFECT_NUM_LETTERS];
+    /* 0x29A */ u16 minigamePerfectLetterEllipseAngle[MINIGAME_PERFECT_NUM_LETTERS];
+    /* 0x2AA */ s16 minigamePerfectLetterXOffset[MINIGAME_PERFECT_NUM_LETTERS];
+    /* 0x2BC */ f32 minigamePerfectLetterEllipseRadiusX[MINIGAME_PERFECT_NUM_LETTERS];
+    /* 0x2DC */ f32 minigamePerfectLetterEllipseRadiusY[MINIGAME_PERFECT_NUM_LETTERS];
+    /* 0x2FC */ s16 minigamePerfectPrimColor[4];
+    /* 0x304 */ s16 minigamePerfectLetterCount;
+    /* 0x306 */ s16 minigamePerfectUnused;
+    /* 0x308 */ s16 minigamePerfectColorTargetIndex;
+    /* 0x30A */ s16 minigamePerfectColorTimer;
+    /* 0x30C */ s16 minigamePerfectTimer;
     struct {
         /* 0x30E */ u8 unk_30E; // "h_gauge"
         /* 0x30F */ u8 bButton;

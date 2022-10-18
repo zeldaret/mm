@@ -94,7 +94,7 @@ s32 EnJcMato_CheckForHit(EnJcMato* this, PlayState* play) {
     if ((this->collider.base.acFlags & AC_HIT) && !this->hitFlag && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-        play->interfaceCtx.unk_25C = 1;
+        play->interfaceCtx.minigamePoints = 1;
         this->hitFlag = true;
         return 1;
     } else {

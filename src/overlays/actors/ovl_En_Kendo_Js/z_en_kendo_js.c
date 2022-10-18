@@ -297,14 +297,14 @@ void func_80B269A4(EnKendoJs* this, PlayState* play) {
 
         case 0x273B:
             func_801477B4(play);
-            func_80112AFC(play);
+            Interface_InitMinigame(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
             func_80B273D0(this);
             break;
 
         case 0x272D:
             func_801477B4(play);
-            gSaveContext.minigameState = 3;
+            gSaveContext.minigameStatus = MINIGAME_STATUS_END;
             func_80B276C4(this);
             func_80B276D8(this, play);
             break;
@@ -334,7 +334,7 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
                 }
 
                 if ((this->unk_288 == 0x272E) || (this->unk_288 == 0x272F) || (this->unk_288 == 0x2730)) {
-                    gSaveContext.minigameState = 3;
+                    gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                 }
 
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
@@ -625,14 +625,14 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
     if (this->unk_28E == 1) {
         if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) ||
             (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
-            play->interfaceCtx.unk_25C = 3;
+            play->interfaceCtx.minigamePoints = 3;
             if (gSaveContext.minigameScore >= 27) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
             }
         } else if (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H) {
-            play->interfaceCtx.unk_25C = 2;
+            play->interfaceCtx.minigamePoints = 2;
         } else {
-            play->interfaceCtx.unk_25C = 1;
+            play->interfaceCtx.minigamePoints = 1;
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
         this->unk_28E = 0;

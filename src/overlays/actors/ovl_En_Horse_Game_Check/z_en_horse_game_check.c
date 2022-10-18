@@ -122,7 +122,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     }
 
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
-    play->interfaceCtx.unk_280 = 1;
+    play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
 
     this->horse1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
                                          ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_4));
@@ -212,10 +212,10 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
 
     if ((this->unk_168 > 50) && !(this->unk_164 & 2)) {
         this->unk_164 |= 2;
-    } else if ((play->interfaceCtx.unk_280 >= 8) && !(this->unk_164 & 1)) {
+    } else if ((play->interfaceCtx.minigameState >= MINIGAME_STATE_COUNTDOWN_GO) && !(this->unk_164 & 1)) {
         this->unk_164 |= 1;
         horse->inRace = true;
-    } else if ((play->interfaceCtx.unk_280 >= 8) && !(this->unk_164 & 8)) {
+    } else if ((play->interfaceCtx.minigameState >= MINIGAME_STATE_COUNTDOWN_GO) && !(this->unk_164 & 8)) {
         EnHorse* horse = this->horse1;
 
         horse->inRace = true;
