@@ -2092,7 +2092,7 @@
     0x8010D9F4:("func_8010D9F4",),
     0x8010DC58:("func_8010DC58",),
     0x8010DE38:("func_8010DE38",),
-    0x8010E028:("func_8010E028",),
+    0x8010E028:("Interface_SetVertices",),
     0x8010E968:("Interface_PostmanTimerCallback",),
     0x8010E9F0:("Interface_StartTimer",),
     0x8010EA9C:("Interface_StartPostmanTimer",),

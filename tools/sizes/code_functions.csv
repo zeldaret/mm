@@ -1606,7 +1606,7 @@ asm/non_matchings/code/z_parameter/func_8010D7D0.s,func_8010D7D0,0x8010D7D0,0x89
 asm/non_matchings/code/z_parameter/func_8010D9F4.s,func_8010D9F4,0x8010D9F4,0x99
 asm/non_matchings/code/z_parameter/func_8010DC58.s,func_8010DC58,0x8010DC58,0x78
 asm/non_matchings/code/z_parameter/func_8010DE38.s,func_8010DE38,0x8010DE38,0x7C
-asm/non_matchings/code/z_parameter/func_8010E028.s,func_8010E028,0x8010E028,0x250
+asm/non_matchings/code/z_parameter/Interface_SetVertices.s,Interface_SetVertices,0x8010E028,0x250
 asm/non_matchings/code/z_parameter/Interface_PostmanTimerCallback.s,Interface_PostmanTimerCallback,0x8010E968,0x22
 asm/non_matchings/code/z_parameter/Interface_StartTimer.s,Interface_StartTimer,0x8010E9F0,0x2B
 asm/non_matchings/code/z_parameter/Interface_StartPostmanTimer.s,Interface_StartPostmanTimer,0x8010EA9C,0x2D

@@ -244,17 +244,63 @@ Gfx* func_8010D480(Gfx* displayListHead, void* texture, s16 textureWidth, s16 te
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DE38.s")
 
-s16 D_801BFA04[] = {
-    -14, -14, -24, -8, -12, -12, -7, -8, -7, -8, -12, 0,
+// Total number of non-minigame-perfect action quads
+#define ACTION_QUAD_BASE_COUNT 11
+
+s16 sActionVtxPosX[ACTION_QUAD_BASE_COUNT] = {
+    -14, // A Button
+    -14, // A Button Background
+    -24, // A Button Do-Action
+    -8,  // Three-Day Clock's Star (for the Minute Tracker)
+    -12, // Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+    -12, // Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+    -7,  // Three-Day Clock's Hour Digit Above the Sun
+    -8,  // Three-Day Clock's Hour Digit Above the Sun
+    -7,  // Three-Day Clock's Hour Digit Above the Moon
+    -8,  // Three-Day Clock's Hour Digit Above the Moon
+    -12, // Minigame Countdown Textures
 };
-s16 D_801BFA1C[] = {
-    0x1C, 0x1C, 0x30, 0x10, 0x18, 0x18, 0x10, 0x10, 0x10, 0x10, 0x18, 0,
+
+s16 sActionVtxWidths[ACTION_QUAD_BASE_COUNT] = {
+    28, // A Button
+    28, // A Button Background
+    48, // A Button Do-Action
+    16, // Three-Day Clock's Star (for the Minute Tracker)
+    24, // Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+    24, // Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+    16, // Three-Day Clock's Hour Digit Above the Sun
+    16, // Three-Day Clock's Hour Digit Above the Sun
+    16, // Three-Day Clock's Hour Digit Above the Moon
+    16, // Three-Day Clock's Hour Digit Above the Moon
+    24, // Minigame Countdown Textures
 };
-s16 D_801BFA34[] = {
-    14, 14, 8, 24, -82, -82, 58, 59, 58, 59, 32, 0,
+
+s16 sActionVtxPosY[ACTION_QUAD_BASE_COUNT] = {
+    14,  // A Button
+    14,  // A Button Background
+    8,   // A Button Do-Action
+    24,  // Three-Day Clock's Star (for the Minute Tracker)
+    -82, // Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+    -82, // Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+    58,  // Three-Day Clock's Hour Digit Above the Sun
+    59,  // Three-Day Clock's Hour Digit Above the Sun
+    58,  // Three-Day Clock's Hour Digit Above the Moon
+    59,  // Three-Day Clock's Hour Digit Above the Moon
+    32,  // Minigame Countdown Textures
 };
-s16 D_801BFA4C[] = {
-    0x1C, 0x1C, 0x10, 0x10, 0x18, 0x18, 0xB, 0xB, 0xB, 0xB, 0x20, 0,
+
+s16 sActionVtxHeights[ACTION_QUAD_BASE_COUNT] = {
+    28, // A Button
+    28, // A Button Background
+    16, // A Button Do-Action
+    16, // Three-Day Clock's Star (for the Minute Tracker)
+    24, // Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+    24, // Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+    11, // Three-Day Clock's Hour Digit Above the Sun
+    11, // Three-Day Clock's Hour Digit Above the Sun
+    11, // Three-Day Clock's Hour Digit Above the Moon
+    11, // Three-Day Clock's Hour Digit Above the Moon
+    32, // Minigame Countdown Textures
 };
 
 #define MINIGAME_PERFECT_VTX_WIDTH 32
@@ -272,6 +318,7 @@ s16 sMinigamePerfectLetterEllipseCenterX[MINIGAME_PERFECT_NUM_LETTERS] = {
     32,   // T
     55,   // !
 };
+
 s16 sMinigamePerfectLetterEllipseCenterY[MINIGAME_PERFECT_NUM_LETTERS] = {
     1,   // P
     -70, // E
@@ -283,7 +330,238 @@ s16 sMinigamePerfectLetterEllipseCenterY[MINIGAME_PERFECT_NUM_LETTERS] = {
     1,   // !
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010E028.s")
+/**
+ * interfaceCtx->actionVtx[0]   -> A Button
+ * interfaceCtx->actionVtx[4]   -> A Button Shadow
+ * interfaceCtx->actionVtx[8]   -> A Button Do-Action
+ * interfaceCtx->actionVtx[12]  -> Three-Day Clock's Star (for the Minute Tracker)
+ * interfaceCtx->actionVtx[16]  -> Three-Day Clock's Sun (for the Day Hours Tracker)
+ * interfaceCtx->actionVtx[20]  -> Three-Day Clock's Moon (for the Night Hours Tracker)
+ * interfaceCtx->actionVtx[24]  -> Three-Day Clock's Hour Digit Above the Sun (uses 8 vertices)
+ * interfaceCtx->actionVtx[32]  -> Three-Day Clock's Hour Digit Above the Moon (uses 8 vertices)
+ * interfaceCtx->actionVtx[40]  -> Minigame Countdown Textures
+ * interfaceCtx->actionVtx[44]  -> Minigame Perfect Letter P Shadow
+ * interfaceCtx->actionVtx[48]  -> Minigame Perfect Letter E Shadow
+ * interfaceCtx->actionVtx[52]  -> Minigame Perfect Letter R Shadow
+ * interfaceCtx->actionVtx[56]  -> Minigame Perfect Letter F Shadow
+ * interfaceCtx->actionVtx[60]  -> Minigame Perfect Letter E Shadow
+ * interfaceCtx->actionVtx[64]  -> Minigame Perfect Letter C Shadow
+ * interfaceCtx->actionVtx[68]  -> Minigame Perfect Letter T Shadow
+ * interfaceCtx->actionVtx[72]  -> Minigame Perfect Letter ! Shadow
+ * interfaceCtx->actionVtx[76]  -> Minigame Perfect Letter P Colored
+ * interfaceCtx->actionVtx[80]  -> Minigame Perfect Letter E Colored
+ * interfaceCtx->actionVtx[84]  -> Minigame Perfect Letter R Colored
+ * interfaceCtx->actionVtx[88]  -> Minigame Perfect Letter F Colored
+ * interfaceCtx->actionVtx[92]  -> Minigame Perfect Letter E Colored
+ * interfaceCtx->actionVtx[96]  -> Minigame Perfect Letter C Colored
+ * interfaceCtx->actionVtx[100] -> Minigame Perfect Letter T Colored
+ * interfaceCtx->actionVtx[104] -> Minigame Perfect Letter ! Colored
+ */
+
+#define BEATING_HEART_VTX_X -8
+#define BEATING_HEART_VTX_Y -8
+#define BEATING_HEART_VTX_WIDTH 16
+
+void Interface_SetVertices(PlayState* play) {
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    s16 i;
+    s16 j;
+    s16 k;
+    s16 shadowOffset;
+
+    play->interfaceCtx.actionVtx = GRAPH_ALLOC(
+        play->state.gfxCtx, (ACTION_QUAD_BASE_COUNT + (2 * MINIGAME_PERFECT_NUM_LETTERS)) * 4 * sizeof(Vtx));
+
+    // Loop over all non-minigame perfect vertices
+    // where (i) is the actionVtx index, (k) is the iterator
+    for (k = 0, i = 0; i < (ACTION_QUAD_BASE_COUNT * 4); i += 4, k++) {
+        // Left vertices x Pos
+        interfaceCtx->actionVtx[i + 0].v.ob[0] = interfaceCtx->actionVtx[i + 2].v.ob[0] = sActionVtxPosX[k];
+
+        // Right vertices x Pos
+        interfaceCtx->actionVtx[i + 1].v.ob[0] = interfaceCtx->actionVtx[i + 3].v.ob[0] =
+            interfaceCtx->actionVtx[i + 0].v.ob[0] + sActionVtxWidths[k];
+
+        // Top vertices y Pos
+        interfaceCtx->actionVtx[i + 0].v.ob[1] = interfaceCtx->actionVtx[i + 1].v.ob[1] = sActionVtxPosY[k];
+
+        // Bottom vertices y Pos
+        interfaceCtx->actionVtx[i + 2].v.ob[1] = interfaceCtx->actionVtx[i + 3].v.ob[1] =
+            interfaceCtx->actionVtx[i + 0].v.ob[1] - sActionVtxHeights[k];
+
+        // All vertices z Pos
+        interfaceCtx->actionVtx[i + 0].v.ob[2] = interfaceCtx->actionVtx[i + 1].v.ob[2] =
+            interfaceCtx->actionVtx[i + 2].v.ob[2] = interfaceCtx->actionVtx[i + 3].v.ob[2] = 0;
+
+        // Unused flag
+        interfaceCtx->actionVtx[i + 0].v.flag = interfaceCtx->actionVtx[i + 1].v.flag =
+            interfaceCtx->actionVtx[i + 2].v.flag = interfaceCtx->actionVtx[i + 3].v.flag = 0;
+
+        // Left and Top texture coordinates
+        interfaceCtx->actionVtx[i + 0].v.tc[0] = interfaceCtx->actionVtx[i + 0].v.tc[1] =
+            interfaceCtx->actionVtx[i + 1].v.tc[1] = interfaceCtx->actionVtx[i + 2].v.tc[0] = 0;
+
+        // Right vertices texture coordinates
+        interfaceCtx->actionVtx[i + 1].v.tc[0] = interfaceCtx->actionVtx[i + 3].v.tc[0] = sActionVtxWidths[k] << 5;
+
+        // Bottom vertices texture coordinates
+        interfaceCtx->actionVtx[i + 2].v.tc[1] = interfaceCtx->actionVtx[i + 3].v.tc[1] = sActionVtxHeights[k] << 5;
+
+        // Set color
+        interfaceCtx->actionVtx[i + 0].v.cn[0] = interfaceCtx->actionVtx[i + 1].v.cn[0] =
+            interfaceCtx->actionVtx[i + 2].v.cn[0] = interfaceCtx->actionVtx[i + 3].v.cn[0] =
+                interfaceCtx->actionVtx[i + 0].v.cn[1] = interfaceCtx->actionVtx[i + 1].v.cn[1] =
+                    interfaceCtx->actionVtx[i + 2].v.cn[1] = interfaceCtx->actionVtx[i + 3].v.cn[1] =
+                        interfaceCtx->actionVtx[i + 0].v.cn[2] = interfaceCtx->actionVtx[i + 1].v.cn[2] =
+                            interfaceCtx->actionVtx[i + 2].v.cn[2] = interfaceCtx->actionVtx[i + 3].v.cn[2] = 255;
+
+        // Set alpha
+        interfaceCtx->actionVtx[i + 0].v.cn[3] = interfaceCtx->actionVtx[i + 1].v.cn[3] =
+            interfaceCtx->actionVtx[i + 2].v.cn[3] = interfaceCtx->actionVtx[i + 3].v.cn[3] = 255;
+    }
+
+    // A button right and top texture coordinates
+    interfaceCtx->actionVtx[1].v.tc[0] = interfaceCtx->actionVtx[3].v.tc[0] = interfaceCtx->actionVtx[2].v.tc[1] =
+        interfaceCtx->actionVtx[3].v.tc[1] = 32 << 5;
+
+    // A button background right and top texture coordinates
+    interfaceCtx->actionVtx[5].v.tc[0] = interfaceCtx->actionVtx[7].v.tc[0] = interfaceCtx->actionVtx[6].v.tc[1] =
+        interfaceCtx->actionVtx[7].v.tc[1] = 32 << 5;
+
+    // Loop over vertices for the minigame-perfect letters
+    // Outer loop is to loop over 2 sets of letters: shadowed letters (j = 0) and colored letters (j = 1)
+    for (j = 0, shadowOffset = 2; j < 2; j++, shadowOffset -= 2) {
+        // Inner loop is to loop over letters (k) and actionVtx index (i)
+        for (k = 0; k < MINIGAME_PERFECT_NUM_LETTERS; k++, i += 4) {
+            if ((interfaceCtx->minigamePerfectType == MINIGAME_PERFECT_TYPE_1) ||
+                ((interfaceCtx->minigamePerfectType == MINIGAME_PERFECT_TYPE_3) &&
+                 (interfaceCtx->minigamePerfectState[0] == MINIGAME_PERFECT_STATE_EXIT))) {
+                // Left vertices x Pos
+                interfaceCtx->actionVtx[i + 0].v.ob[0] = interfaceCtx->actionVtx[i + 2].v.ob[0] =
+                    -((sMinigamePerfectLetterEllipseCenterX[k] - shadowOffset) + 16);
+
+                // Right vertices x Pos
+                interfaceCtx->actionVtx[i + 1].v.ob[0] = interfaceCtx->actionVtx[i + 3].v.ob[0] =
+                    interfaceCtx->actionVtx[i + 0].v.ob[0] + MINIGAME_PERFECT_VTX_WIDTH;
+
+                // Top vertices y Pos
+                interfaceCtx->actionVtx[i + 0].v.ob[1] = interfaceCtx->actionVtx[i + 1].v.ob[1] =
+                    (sMinigamePerfectLetterEllipseCenterY[k] - shadowOffset) + 16;
+
+                // Bottom vertices y Pos
+                interfaceCtx->actionVtx[i + 2].v.ob[1] = interfaceCtx->actionVtx[i + 3].v.ob[1] =
+                    interfaceCtx->actionVtx[i + 0].v.ob[1] - MINIGAME_PERFECT_VTX_HEIGHT;
+
+            } else if ((interfaceCtx->minigamePerfectType == MINIGAME_PERFECT_TYPE_2) ||
+                       (interfaceCtx->minigamePerfectType == MINIGAME_PERFECT_TYPE_3)) {
+                // Left vertices x Pos
+                interfaceCtx->actionVtx[i + 0].v.ob[0] = interfaceCtx->actionVtx[i + 2].v.ob[0] =
+                    -(interfaceCtx->minigamePerfectLetterXOffset[k] - shadowOffset + 16);
+
+                // Right vertices x Pos
+                interfaceCtx->actionVtx[i + 1].v.ob[0] = interfaceCtx->actionVtx[i + 3].v.ob[0] =
+                    interfaceCtx->actionVtx[i + 0].v.ob[0] + MINIGAME_PERFECT_VTX_WIDTH;
+
+                // Top vertices y Pos
+                interfaceCtx->actionVtx[i + 0].v.ob[1] = interfaceCtx->actionVtx[i + 1].v.ob[1] = 16 - shadowOffset;
+
+                // Bottom vertices y Pos
+                interfaceCtx->actionVtx[i + 2].v.ob[1] = interfaceCtx->actionVtx[i + 3].v.ob[1] =
+                    interfaceCtx->actionVtx[i + 0].v.ob[1] - MINIGAME_PERFECT_VTX_HEIGHT;
+
+            } else {
+                // Left vertices x Pos
+                interfaceCtx->actionVtx[i + 0].v.ob[0] = interfaceCtx->actionVtx[i + 2].v.ob[0] = -(216 - shadowOffset);
+
+                // Right vertices x Pos
+                interfaceCtx->actionVtx[i + 1].v.ob[0] = interfaceCtx->actionVtx[i + 3].v.ob[0] =
+                    interfaceCtx->actionVtx[i + 0].v.ob[0] + MINIGAME_PERFECT_VTX_WIDTH;
+
+                // Top vertices y Pos
+                interfaceCtx->actionVtx[i + 0].v.ob[1] = interfaceCtx->actionVtx[i + 1].v.ob[1] = 24 - shadowOffset;
+
+                // Bottom vertices y Pos
+                interfaceCtx->actionVtx[i + 2].v.ob[1] = interfaceCtx->actionVtx[i + 3].v.ob[1] =
+                    interfaceCtx->actionVtx[i + 0].v.ob[1] - MINIGAME_PERFECT_VTX_HEIGHT;
+            }
+
+            // All vertices z Pos
+            interfaceCtx->actionVtx[i + 0].v.ob[2] = interfaceCtx->actionVtx[i + 1].v.ob[2] =
+                interfaceCtx->actionVtx[i + 2].v.ob[2] = interfaceCtx->actionVtx[i + 3].v.ob[2] = 0;
+
+            // Unused flag
+            interfaceCtx->actionVtx[i + 0].v.flag = interfaceCtx->actionVtx[i + 1].v.flag =
+                interfaceCtx->actionVtx[i + 2].v.flag = interfaceCtx->actionVtx[i + 3].v.flag = 0;
+
+            // Left and Top texture coordinates
+            interfaceCtx->actionVtx[i + 0].v.tc[0] = interfaceCtx->actionVtx[i + 0].v.tc[1] =
+                interfaceCtx->actionVtx[i + 1].v.tc[1] = interfaceCtx->actionVtx[i + 2].v.tc[0] = 0;
+
+            // Right vertices texture coordinates
+            interfaceCtx->actionVtx[i + 1].v.tc[0] = interfaceCtx->actionVtx[i + 3].v.tc[0] = MINIGAME_PERFECT_VTX_WIDTH
+                                                                                              << 5;
+
+            // Bottom vertices texture coordinates
+            interfaceCtx->actionVtx[i + 2].v.tc[1] = interfaceCtx->actionVtx[i + 3].v.tc[1] =
+                MINIGAME_PERFECT_VTX_HEIGHT << 5;
+
+            // Set color
+            interfaceCtx->actionVtx[i + 0].v.cn[0] = interfaceCtx->actionVtx[i + 1].v.cn[0] =
+                interfaceCtx->actionVtx[i + 2].v.cn[0] = interfaceCtx->actionVtx[i + 3].v.cn[0] =
+                    interfaceCtx->actionVtx[i + 0].v.cn[1] = interfaceCtx->actionVtx[i + 1].v.cn[1] =
+                        interfaceCtx->actionVtx[i + 2].v.cn[1] = interfaceCtx->actionVtx[i + 3].v.cn[1] =
+                            interfaceCtx->actionVtx[i + 0].v.cn[2] = interfaceCtx->actionVtx[i + 1].v.cn[2] =
+                                interfaceCtx->actionVtx[i + 2].v.cn[2] = interfaceCtx->actionVtx[i + 3].v.cn[2] = 255;
+
+            // Set alpha
+            interfaceCtx->actionVtx[i + 0].v.cn[3] = interfaceCtx->actionVtx[i + 1].v.cn[3] =
+                interfaceCtx->actionVtx[i + 2].v.cn[3] = interfaceCtx->actionVtx[i + 3].v.cn[3] = 255;
+        }
+    }
+
+    // Beating Hearts Vertices
+    interfaceCtx->beatingHeartVtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Vtx));
+
+    // Left vertices x Pos
+    interfaceCtx->beatingHeartVtx[0].v.ob[0] = interfaceCtx->beatingHeartVtx[2].v.ob[0] = BEATING_HEART_VTX_X;
+
+    // Right vertices x Pos
+    interfaceCtx->beatingHeartVtx[1].v.ob[0] = interfaceCtx->beatingHeartVtx[3].v.ob[0] =
+        BEATING_HEART_VTX_X + BEATING_HEART_VTX_WIDTH;
+
+    // Top vertices y Pos
+    interfaceCtx->beatingHeartVtx[0].v.ob[1] = interfaceCtx->beatingHeartVtx[1].v.ob[1] =
+        BEATING_HEART_VTX_Y + BEATING_HEART_VTX_WIDTH;
+
+    // Bottom vertices y Pos
+    interfaceCtx->beatingHeartVtx[2].v.ob[1] = interfaceCtx->beatingHeartVtx[3].v.ob[1] = BEATING_HEART_VTX_Y;
+
+    // All vertices z Pos
+    interfaceCtx->beatingHeartVtx[0].v.ob[2] = interfaceCtx->beatingHeartVtx[1].v.ob[2] =
+        interfaceCtx->beatingHeartVtx[2].v.ob[2] = interfaceCtx->beatingHeartVtx[3].v.ob[2] = 0;
+
+    // unused flag
+    interfaceCtx->beatingHeartVtx[0].v.flag = interfaceCtx->beatingHeartVtx[1].v.flag =
+        interfaceCtx->beatingHeartVtx[2].v.flag = interfaceCtx->beatingHeartVtx[3].v.flag = 0;
+
+    // Texture Coordinates
+    interfaceCtx->beatingHeartVtx[0].v.tc[0] = interfaceCtx->beatingHeartVtx[0].v.tc[1] =
+        interfaceCtx->beatingHeartVtx[1].v.tc[1] = interfaceCtx->beatingHeartVtx[2].v.tc[0] = 0;
+    interfaceCtx->beatingHeartVtx[1].v.tc[0] = interfaceCtx->beatingHeartVtx[2].v.tc[1] =
+        interfaceCtx->beatingHeartVtx[3].v.tc[0] = interfaceCtx->beatingHeartVtx[3].v.tc[1] =
+            BEATING_HEART_VTX_WIDTH << 5;
+
+    // Set color
+    interfaceCtx->beatingHeartVtx[0].v.cn[0] = interfaceCtx->beatingHeartVtx[1].v.cn[0] =
+        interfaceCtx->beatingHeartVtx[2].v.cn[0] = interfaceCtx->beatingHeartVtx[3].v.cn[0] =
+            interfaceCtx->beatingHeartVtx[0].v.cn[1] = interfaceCtx->beatingHeartVtx[1].v.cn[1] =
+                interfaceCtx->beatingHeartVtx[2].v.cn[1] = interfaceCtx->beatingHeartVtx[3].v.cn[1] =
+                    interfaceCtx->beatingHeartVtx[0].v.cn[2] = interfaceCtx->beatingHeartVtx[1].v.cn[2] =
+                        interfaceCtx->beatingHeartVtx[2].v.cn[2] = interfaceCtx->beatingHeartVtx[3].v.cn[2] =
+                            interfaceCtx->beatingHeartVtx[0].v.cn[3] = interfaceCtx->beatingHeartVtx[1].v.cn[3] =
+                                interfaceCtx->beatingHeartVtx[2].v.cn[3] = interfaceCtx->beatingHeartVtx[3].v.cn[3] =
+                                    255;
+}
 
 s32 sPostmanTimerInputBtnAPressed = false;
 
