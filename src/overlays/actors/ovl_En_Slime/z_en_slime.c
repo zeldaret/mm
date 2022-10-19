@@ -36,7 +36,7 @@ void func_80A30C2C(EnSlime* this, PlayState* play);
 void func_80A30CEC(EnSlime* this, PlayState* play); //Action func
 
 #if 0
-ActorInit En_Slime_InitVars = {
+const ActorInit En_Slime_InitVars = {
     ACTOR_EN_SLIME,
     ACTORCAT_ENEMY,
     FLAGS,

@@ -33,4 +33,6 @@ typedef struct EnSlime {
     /* 0x1BC */ ColliderCylinder unk1BC;
 } EnSlime; /* size = 0x208 */
 
+extern const ActorInit En_Slime_InitVars;
+
 #endif // Z_EN_SLIME_H
