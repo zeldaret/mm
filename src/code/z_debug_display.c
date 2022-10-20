@@ -115,12 +115,12 @@ void func_800E992C(PlayState* play, Path* path) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#define R_DRAW_PATH_POINT 0 // bREG(82)
+#define R_DRAW_PATH_POINT 0    // bREG(82)
 #define R_DRAW_PATH_SCALE 1.0f // 1.0f + 0.1f * bREG(83)
-#define R_DRAW_PATH_RED 0 // bREG(84)
-#define R_DRAW_PATH_GREEN 0 // bREG(85)
-#define R_DRAW_PATH_BLUE 0 // bREG(86)
-#define R_DRAW_PATH_ALPHA 0 // bREG(87)
+#define R_DRAW_PATH_RED 0      // bREG(84)
+#define R_DRAW_PATH_GREEN 0    // bREG(85)
+#define R_DRAW_PATH_BLUE 0     // bREG(86)
+#define R_DRAW_PATH_ALPHA 0    // bREG(87)
 
 Vec3s D_801BB068[3][2] = {
     { { 20, 0, 0 }, { -20, 0, 0 } },
