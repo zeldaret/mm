@@ -41,13 +41,13 @@ void TransitionWipe5_Start(void* thisx) {
     }
     switch (this->unk_11) {
         case 0:
-            this->primColor.rgba = 0x000000FF;
+            this->primColor.rgba = RGBA8(0, 0, 0, 255);
             break;
         case 1:
-            this->primColor.rgba = 0xA0A0A0FF;
+            this->primColor.rgba = RGBA8(160, 160, 160, 255);
             break;
         default:
-            this->primColor.rgba = 0xA0A0A0FF;
+            this->primColor.rgba = RGBA8(160, 160, 160, 255);
             break;
     }
 }
@@ -65,10 +65,10 @@ void TransitionWipe5_Destroy(void* thisx) {
 void TransitionWipe5_Update(void* thisx, s32 updateRate) {
     TransitionWipe5* this = THIS;
 
-    if (!this->unk_10) {
+    if (this->unk_10 == 0) {
         this->isDone = true;
     } else {
-        this->unk_C = this->unk_C + ((this->unk_8 * 3.0f) / updateRate);
+        this->unk_C += (this->unk_8 * 3.0f) / updateRate;
         if (this->unk_C >= 1.0f) {
             this->unk_C = 1.0f;
             this->isDone = true;
@@ -90,14 +90,14 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
 
     gDPPipeSync(gfx++);
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
-    if (!this->unk_10) {
+    if (this->unk_10 == 0) {
         gDPSetOtherMode(gfx++,
                         G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
         func_8014116C(&gfx, D_0F000000, sp50, width, height, 1);
     } else {
-        if (alpha == 0xFF) {
+        if (alpha == 255) {
             gDPSetOtherMode(gfx++,
                             G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
                                 G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
@@ -129,11 +129,11 @@ void TransitionWipe5_SetType(void* thisx, s32 type) {
 
     if (type & 0x80) {
         this->unk_11 = 0;
-        this->unk_12 = (type & 1);
+        this->unk_12 = type & 1;
     } else if (type == 1) {
-        this->unk_10 = true;
+        this->unk_10 = 1;
     } else {
-        this->unk_10 = false;
+        this->unk_10 = 0;
     }
 }
 
