@@ -14,6 +14,4 @@ typedef struct EnTest3 {
     /* 0x770 */ char unk_770[0x648];
 } EnTest3; // size = 0xDB8
 
-extern const ActorInit En_Test3_InitVars;
-
 #endif // Z_EN_TEST3_H

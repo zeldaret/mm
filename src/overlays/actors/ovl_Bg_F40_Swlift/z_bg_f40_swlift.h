@@ -10,6 +10,4 @@ typedef struct BgF40Swlift {
     /* 0x144 */ char unk_144[0x1C];
 } BgF40Swlift; // size = 0x160
 
-extern const ActorInit Bg_F40_Swlift_InitVars;
-
 #endif // Z_BG_F40_SWLIFT_H

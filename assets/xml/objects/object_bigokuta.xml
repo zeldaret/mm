@@ -53,6 +53,6 @@
         <Limb Name="gBigOctoCenterSnoutLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_CENTER_SNOUT" Offset="0x6B50" />
         <Limb Name="gBigOctoRightSnoutLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_RIGHT_SNOUT" Offset="0x6B5C" />
         <Limb Name="gBigOctoLeftSnoutLimb" Type="Standard" EnumName="BIGOKUTA_LIMB_LEFT_SNOUT" Offset="0x6B68" />
-        <Skeleton Name="gBigOctoSkel" Type="Flex" LimbType="Standard" LimbNone="BIGOKUTA_LIMB_NONE" LimbMax="BIGOKUTA_LIMB_MAX" EnumName="BigokutaLimbs" Offset="0x6BC0" />
+        <Skeleton Name="gBigOctoSkel" Type="Flex" LimbType="Standard" LimbNone="BIGOKUTA_LIMB_NONE" LimbMax="BIGOKUTA_LIMB_MAX" EnumName="BigokutaLimb" Offset="0x6BC0" />
     </File>
 </Root>

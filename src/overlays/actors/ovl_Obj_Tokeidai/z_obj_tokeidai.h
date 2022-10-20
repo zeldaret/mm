@@ -62,6 +62,4 @@ typedef struct ObjTokeidai {
     /* 0x174 */ ObjTokeidaiActionFunc actionFunc;
 } ObjTokeidai; // size = 0x178
 
-extern const ActorInit Obj_Tokeidai_InitVars;
-
 #endif // Z_OBJ_TOKEIDAI_H

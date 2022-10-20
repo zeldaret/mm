@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_lift.h"
+#include "z64quake.h"
 #include "objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -26,7 +27,7 @@ void func_8093DB70(ObjLift* this);
 void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Lift_InitVars = {
+ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -101,14 +102,15 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
     DynaPolyActor_Init(&this->dyna, 1);
     if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
-        this->unk_160 = Rand_Next() >> 0x10;
-        this->unk_162 = Rand_Next() >> 0x10;
-        this->unk_164 = Rand_Next() >> 0x10;
-        func_8093D760(this);
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
+    this->unk_160 = Rand_Next() >> 0x10;
+    this->unk_162 = Rand_Next() >> 0x10;
+    this->unk_164 = Rand_Next() >> 0x10;
+    func_8093D760(this);
 }
 
 void ObjLift_Destroy(Actor* thisx, PlayState* play) {
@@ -125,17 +127,18 @@ void func_8093D760(ObjLift* this) {
 
 void func_8093D7A0(ObjLift* this, PlayState* play) {
     s32 pad;
-    s16 quake;
+    s16 quakeIndex;
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         if (this->timer <= 0) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
-                quake = Quake_Add(GET_ACTIVE_CAM(play), 1);
-                Quake_SetSpeed(quake, 10000);
-                Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-                Quake_SetCountdown(quake, 20);
+                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_1);
+                Quake_SetSpeed(quakeIndex, 10000);
+                Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 20);
+
                 func_8093D88C(this);
             }
         }
@@ -194,7 +197,7 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
             Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     }
 }

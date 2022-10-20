@@ -103,7 +103,7 @@
         <Limb Name="gBurlyGuyHeadLimb" Type="Standard" EnumName="BURLY_GUY_LIMB_HEAD" Offset="0xE788" />
 
         <!-- Burly Guy Skeleton -->
-        <Skeleton Name="gBurlyGuySkel" Type="Flex" LimbType="Standard" LimbNone="BURLY_GUY_LIMB_NONE" LimbMax="BURLY_GUY_LIMB_MAX" EnumName="BurlyGuyLimbs" Offset="0xE7D0" />
+        <Skeleton Name="gBurlyGuySkel" Type="Flex" LimbType="Standard" LimbNone="BURLY_GUY_LIMB_NONE" LimbMax="BURLY_GUY_LIMB_MAX" EnumName="BurlyGuyLimb" Offset="0xE7D0" />
 
         <!-- DisplayList for the Town Shooting Gallery Man's Head -->
         <DList Name="gTownShootingGalleryManHeadDL" Offset="0xF2D0" />

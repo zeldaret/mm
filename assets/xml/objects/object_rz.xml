@@ -66,6 +66,6 @@
         <Limb Name="object_rz_Standardlimb_00D860" Type="Standard" EnumName="OBJECT_RZ_LIMB_13" Offset="0xD860" />
         <Limb Name="object_rz_Standardlimb_00D86C" Type="Standard" EnumName="OBJECT_RZ_LIMB_14" Offset="0xD86C" />
         <Limb Name="object_rz_Standardlimb_00D878" Type="Standard" EnumName="OBJECT_RZ_LIMB_15" Offset="0xD878" />
-        <Skeleton Name="object_rz_Skel_00D8D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RZ_LIMB_NONE" LimbMax="OBJECT_RZ_LIMB_MAX" EnumName="object_rz_Limbs" Offset="0xD8D8" />
+        <Skeleton Name="object_rz_Skel_00D8D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RZ_LIMB_NONE" LimbMax="OBJECT_RZ_LIMB_MAX" EnumName="ObjectRzLimb" Offset="0xD8D8" />
     </File>
 </Root>

@@ -27,7 +27,7 @@
         <Limb Name="object_hintnuts_Standardlimb_002370" Type="Standard" EnumName="OBJECT_HINTNUTS_LIMB_07" Offset="0x2370" />
         <Limb Name="object_hintnuts_Standardlimb_00237C" Type="Standard" EnumName="OBJECT_HINTNUTS_LIMB_08" Offset="0x237C" />
         <Limb Name="object_hintnuts_Standardlimb_002388" Type="Standard" EnumName="OBJECT_HINTNUTS_LIMB_09" Offset="0x2388" />
-        <Skeleton Name="object_hintnuts_Skel_0023B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HINTNUTS_LIMB_NONE" LimbMax="OBJECT_HINTNUTS_LIMB_MAX" EnumName="object_hintnuts_Limbs" Offset="0x23B8" />
+        <Skeleton Name="object_hintnuts_Skel_0023B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_HINTNUTS_LIMB_NONE" LimbMax="OBJECT_HINTNUTS_LIMB_MAX" EnumName="ObjectHintnutsLimb" Offset="0x23B8" />
         <Animation Name="object_hintnuts_Anim_0024CC" Offset="0x24CC" />
         <Animation Name="object_hintnuts_Anim_0026C4" Offset="0x26C4" />
         <Animation Name="object_hintnuts_Anim_002894" Offset="0x2894" />

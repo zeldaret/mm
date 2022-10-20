@@ -23,7 +23,7 @@
         <Limb Name="object_mnk_Standardlimb_00511C" Type="Standard" EnumName="OBJECT_MNK_1_LIMB_02" Offset="0x511C" />
         <Limb Name="object_mnk_Standardlimb_005128" Type="Standard" EnumName="OBJECT_MNK_1_LIMB_03" Offset="0x5128" />
         <Limb Name="object_mnk_Standardlimb_005134" Type="Standard" EnumName="OBJECT_MNK_1_LIMB_04" Offset="0x5134" />
-        <Skeleton Name="object_mnk_Skel_005150" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_1_LIMB_NONE" LimbMax="OBJECT_MNK_1_LIMB_MAX" EnumName="object_mnk_1_Limbs" Offset="0x5150" />
+        <Skeleton Name="object_mnk_Skel_005150" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_1_LIMB_NONE" LimbMax="OBJECT_MNK_1_LIMB_MAX" EnumName="ObjectMnk1Limb" Offset="0x5150" />
         <Animation Name="object_mnk_Anim_005194" Offset="0x5194" />
         <Animation Name="object_mnk_Anim_0052C4" Offset="0x52C4" />
         <Animation Name="object_mnk_Anim_005390" Offset="0x5390" />
@@ -104,7 +104,7 @@
         <Limb Name="object_mnk_Standardlimb_019B0C" Type="Standard" EnumName="OBJECT_MNK_2_LIMB_14" Offset="0x19B0C" />
         <Limb Name="object_mnk_Standardlimb_019B18" Type="Standard" EnumName="OBJECT_MNK_2_LIMB_15" Offset="0x19B18" />
         <Limb Name="object_mnk_Standardlimb_019B24" Type="Standard" EnumName="OBJECT_MNK_2_LIMB_16" Offset="0x19B24" />
-        <Skeleton Name="object_mnk_Skel_019B88" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_2_LIMB_NONE" LimbMax="OBJECT_MNK_2_LIMB_MAX" EnumName="object_mnk_2_Limbs" Offset="0x19B88" />
+        <Skeleton Name="object_mnk_Skel_019B88" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_2_LIMB_NONE" LimbMax="OBJECT_MNK_2_LIMB_MAX" EnumName="ObjectMnk2Limb" Offset="0x19B88" />
         <Animation Name="object_mnk_Anim_01A4F8" Offset="0x1A4F8" />
         <Animation Name="object_mnk_Anim_01B468" Offset="0x1B468" />
         <Animation Name="object_mnk_Anim_01BB0C" Offset="0x1BB0C" />
@@ -121,6 +121,6 @@
         <Limb Name="object_mnk_Standardlimb_01D4E8" Type="Standard" EnumName="OBJECT_MNK_3_LIMB_01" Offset="0x1D4E8" />
         <Limb Name="object_mnk_Standardlimb_01D4F4" Type="Standard" EnumName="OBJECT_MNK_3_LIMB_02" Offset="0x1D4F4" />
         <Limb Name="object_mnk_Standardlimb_01D500" Type="Standard" EnumName="OBJECT_MNK_3_LIMB_03" Offset="0x1D500" />
-        <Skeleton Name="object_mnk_Skel_01D518" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_3_LIMB_NONE" LimbMax="OBJECT_MNK_3_LIMB_MAX" EnumName="object_mnk_3_Limbs" Offset="0x1D518" />
+        <Skeleton Name="object_mnk_Skel_01D518" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_3_LIMB_NONE" LimbMax="OBJECT_MNK_3_LIMB_MAX" EnumName="ObjectMnk3Limb" Offset="0x1D518" />
     </File>
 </Root>

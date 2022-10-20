@@ -32,7 +32,7 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
-const ActorInit En_Daiku2_InitVars = {
+ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
     ACTORCAT_NPC,
     FLAGS,
@@ -71,7 +71,7 @@ static ColliderCylinderInit sCylinderInit = {
 void func_80BE61D0(EnDaiku2* this) {
     if ((this->unk_27A != -1) && (this->unk_258 != 0)) {
         if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_268)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -93,7 +93,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {
         if (day == 3) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -105,7 +105,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_268);
         }
     } else if (day != 3) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

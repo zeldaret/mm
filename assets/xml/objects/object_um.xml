@@ -77,7 +77,7 @@
         <Limb Name="gUmCremiaRightHandLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_RIGHT_HAND" Offset="0x11D8C" />
         <Limb Name="gUmCremiaLowerBodyLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_LOWER_BODY" Offset="0x11D98" />
 
-        <Skeleton Name="gUmSkel" Type="Flex" LimbType="Standard" LimbNone="UM_LIMB_NONE" LimbMax="UM_LIMB_MAX" EnumName="ObjectUmLimbs" Offset="0x11DF8" />
+        <Skeleton Name="gUmSkel" Type="Flex" LimbType="Standard" LimbNone="UM_LIMB_NONE" LimbMax="UM_LIMB_MAX" EnumName="ObjectUmLimb" Offset="0x11DF8" />
 
         <Animation Name="gUmGallopAnim" Offset="0x1213C" />
         <Animation Name="gUmLookBackAnim" Offset="0x126C4" />

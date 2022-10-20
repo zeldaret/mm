@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pametfrog.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
@@ -66,7 +67,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play);
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 
-const ActorInit En_Pametfrog_InitVars = {
+ActorInit En_Pametfrog_InitVars = {
     ACTOR_EN_PAMETFROG,
     ACTORCAT_BOSS,
     FLAGS,
@@ -163,7 +164,7 @@ static ColliderJntSphInit sJntSphInit = {
 static CollisionCheckInfoInit sColChkInit = { 3, 30, 60, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 69, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GEKKO_SNAPPER, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(targetArrowOffset, -13221, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 7, ICHAIN_CONTINUE),
@@ -190,8 +191,8 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
                        GEKKO_LIMB_MAX);
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colElement);
     this->params = CLAMP(this->actor.params, 1, 4);
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
+        Actor_Kill(&this->actor);
         if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -204,11 +205,12 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
 
         if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BIGPAMET, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0) == NULL) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->actor.params = GEKKO_PRE_SNAPPER;
-            EnPametfrog_SetupLookAround(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->actor.params = GEKKO_PRE_SNAPPER;
+        EnPametfrog_SetupLookAround(this);
     }
 }
 
@@ -332,7 +334,7 @@ void EnPametfrog_ShakeCamera(EnPametfrog* this, PlayState* play, f32 magShakeXZ,
     subCamEye.x = (Math_SinS(subCamYaw) * magShakeXZ) + subCam->at.x;
     subCamEye.y = subCam->at.y + magShakeY;
     subCamEye.z = (Math_CosS(subCamYaw) * magShakeXZ) + subCam->at.z;
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCamEye);
 }
 
 void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
@@ -340,7 +342,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
         subCam = Play_GetCamera(play, this->subCamId);
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         func_800B724C(play, &this->actor, 6);
@@ -509,7 +511,7 @@ void EnPametfrog_SetupFallOffSnapper(EnPametfrog* this, PlayState* play) {
     subCamEye.x = (Math_SinS(yaw) * 300.0f) + this->actor.focus.pos.x;
     subCamEye.y = this->actor.focus.pos.y + 100.0f;
     subCamEye.z = (Math_CosS(yaw) * 300.0f) + this->actor.focus.pos.z;
-    Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FROG_DAMAGE);
     this->actionFunc = EnPametfrog_FallOffSnapper;
 }
@@ -839,7 +841,7 @@ void EnPametfrog_SetupFallInAir(EnPametfrog* this, PlayState* play) {
         subCamEye.x = this->actor.world.pos.x + (xzDist * this->unk_2DC.x);
         subCamEye.y = (this->actor.world.pos.y + this->actor.home.pos.y) * 0.5f;
         subCamEye.z = this->actor.world.pos.z + (xzDist * this->unk_2DC.z);
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.world.pos, &subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.world.pos, &subCamEye);
     }
 
     this->actionFunc = EnPametfrog_FallInAir;
@@ -857,7 +859,7 @@ void EnPametfrog_FallInAir(EnPametfrog* this, PlayState* play) {
     } else {
         this->spinYaw += 0xF00;
         if (this->subCamId != SUB_CAM_ID_DONE) {
-            Play_CameraSetAtEye(play, this->subCamId, &this->actor.world.pos,
+            Play_SetCameraAtEye(play, this->subCamId, &this->actor.world.pos,
                                 &Play_GetCamera(play, this->subCamId)->eye);
         }
 
@@ -906,7 +908,7 @@ void EnPametfrog_SetupDefeatGekko(EnPametfrog* this, PlayState* play) {
     subCamEye.x = this->actor.child->focus.pos.x + 150.0f * Math_SinS(yaw);
     subCamEye.y = this->actor.child->focus.pos.y + 20.0f;
     subCamEye.z = this->actor.child->focus.pos.z + 150.0f * Math_CosS(yaw);
-    Play_CameraSetAtEye(play, this->subCamId, &this->actor.child->focus.pos, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->actor.child->focus.pos, &subCamEye);
     this->actor.params = GEKKO_DEFEAT;
     this->timer = 38;
     this->actionFunc = EnPametfrog_DefeatGekko;
@@ -931,7 +933,7 @@ void EnPametfrog_SetupDefeatSnapper(EnPametfrog* this, PlayState* play) {
     subCamEye.x = this->actor.world.pos.x + Math_SinS(yaw) * 150.0f;
     subCamEye.y = this->actor.world.pos.y + 20.0f;
     subCamEye.z = this->actor.world.pos.z + Math_CosS(yaw) * 150.0f;
-    Play_CameraSetAtEye(play, this->subCamId, &this->actor.world.pos, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->actor.world.pos, &subCamEye);
     this->timer = 20;
     this->actionFunc = EnPametfrog_DefeatSnapper;
 }
@@ -963,7 +965,7 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     func_800B0DE0(play, &vec1, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 800, 50);
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_NPC_APPEAR);
-    Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+    Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 
     for (i = 0; i < 25; i++) {
         vel.x = randPlusMinusPoint5Scaled(5.0f);
@@ -985,7 +987,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
     EnPametfrog_ShakeCamera(this, play, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1035,7 +1037,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (SkelAnime_Update(&this->skelAnime) && !Play_InCsMode(play)) {
         if (!this->unk_2AE) {
-            func_801A2E54(NA_BGM_MINI_BOSS);
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
         }
         EnPametfrog_SetupJumpToLink(this);
@@ -1189,9 +1191,9 @@ void EnPametfrog_SetupCallSnapper(EnPametfrog* this, PlayState* play) {
     subCamEye.y = subCamAt.y + 4.0f;
 
     // Zooms in on Gekko
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
     this->timer = 0;
-    this->actor.hintId = 0x5F;
+    this->actor.hintId = TATL_HINT_ID_GEKKO_GIANT_SLIME;
     this->actionFunc = EnPametfrog_CallSnapper;
 }
 
@@ -1221,12 +1223,15 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
     subCamEye.z = (Math_CosS(yaw) * 500.0f) + subCamAt.z;
 
     // Zooms in on Snapper spawn point
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCamEye);
-    this->quake = Quake_Add(GET_ACTIVE_CAM(play), 6);
-    Quake_SetSpeed(this->quake, 18000);
-    Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
-    Quake_SetCountdown(this->quake, 15);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
+
+    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+    Quake_SetSpeed(this->quakeIndex, 18000);
+    Quake_SetQuakeValues(this->quakeIndex, 2, 0, 0, 0);
+    Quake_SetCountdown(this->quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+
     this->timer = 40;
     this->actionFunc = EnPametfrog_SnapperSpawn;
 }
@@ -1244,18 +1249,22 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
 
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.params = GEKKO_GET_SNAPPER;
-    Quake_RemoveFromIdx(this->quake);
-    this->quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
-    Quake_SetSpeed(this->quake, 20000);
-    Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
-    Quake_SetCountdown(this->quake, 12);
+
+    Quake_Remove(this->quakeIndex);
+
+    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    Quake_SetSpeed(this->quakeIndex, 20000);
+    Quake_SetQuakeValues(this->quakeIndex, 17, 0, 0, 0);
+    Quake_SetCountdown(this->quakeIndex, 12);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
 }
 
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     if (this->actor.params == GEKKO_INIT_SNAPPER) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnPametfrog_SetupRunToSnapper(this);
     }
 }
@@ -1267,7 +1276,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
             !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                 }
 
                 if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
@@ -1303,7 +1312,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                 EnPametfrog_ApplyMagicArrowEffects(this, play);
                 Enemy_StartFinishingBlow(play, &this->actor);
                 this->actor.flags &= ~ACTOR_FLAG_1;
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
                 EnPametfrog_SetupCutscene(this);
             } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ZORA_BARRIER) {
                 EnPametfrog_ApplyElectricStun(this);

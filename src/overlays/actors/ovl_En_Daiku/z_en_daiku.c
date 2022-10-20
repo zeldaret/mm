@@ -21,7 +21,7 @@ void func_80943BC0(EnDaiku* this);
 void func_80943BDC(EnDaiku* this, PlayState* play);
 void func_809438F8(EnDaiku* this, PlayState* play);
 
-const ActorInit En_Daiku_InitVars = {
+ActorInit En_Daiku_InitVars = {
     ACTOR_EN_DAIKU,
     ACTORCAT_NPC,
     FLAGS,
@@ -63,7 +63,7 @@ static AnimationHeader* sAnimations[] = {
     &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
 };
 
-static u8 sAnimModes[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
 };
@@ -90,10 +90,10 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
             ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_Vec3f_Copy(&this->unk_26C, &this->actor.world.pos);
@@ -131,13 +131,13 @@ void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
 
 void func_8094373C(EnDaiku* this, s32 arg1) {
     this->unk_284 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimModes[arg1], -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimationModes[arg1], -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
     if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
         if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -259,7 +259,7 @@ void EnDaiku_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

@@ -16,10 +16,7 @@ void EnScopecoin_Destroy(Actor* thisx, PlayState* play);
 void EnScopecoin_Update(Actor* thisx, PlayState* play);
 void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
-void func_80BFCFA0(EnScopecoin* this, PlayState* play);
-void func_80BFCFB8(EnScopecoin* this, PlayState* play);
-
-const ActorInit En_Scopecoin_InitVars = {
+ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
     ACTORCAT_NPC,
     FLAGS,
@@ -31,14 +28,14 @@ const ActorInit En_Scopecoin_InitVars = {
     (ActorFunc)EnScopecoin_Draw,
 };
 
-void func_80BFCFA0(EnScopecoin* this, PlayState* play) {
-    this->actor.shape.rot.y += 500;
+void EnScopecoin_Spin(EnScopecoin* this, PlayState* play) {
+    this->actor.shape.rot.y += 0x1F4;
 }
 
-void func_80BFCFB8(EnScopecoin* this, PlayState* play) {
-    if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
+void EnScopecoin_CheckCollectible(EnScopecoin* this, PlayState* play) {
+    if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
         Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_RED);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -47,31 +44,32 @@ void EnScopecoin_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 10.0f);
-    this->unk148 = (this->actor.params & 0xF);
-    if (this->unk148 < 0 || this->unk148 >= 8) {
-        this->unk148 = 0;
+
+    this->rupeeIndex = OBJMUPICT_GET_RUPEE_INDEX(&this->actor);
+    if ((this->rupeeIndex < 0) || (this->rupeeIndex > 7)) {
+        this->rupeeIndex = 0;
     }
 
-    if (play->actorCtx.unk5 & 2) {
-        if (this->unk148 == 2 || this->unk148 == 6) {
-            if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
-                Actor_MarkForDeath(&this->actor);
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+        if ((this->rupeeIndex == 2) || (this->rupeeIndex == 6)) {
+            if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
+                Actor_Kill(&this->actor);
                 return;
             }
         }
         this->actor.shape.yOffset = 700.0f;
-        this->actionFunc = func_80BFCFA0;
-        return;
-    }
-    if (this->unk148 == 2 || this->unk148 == 6) {
-        if (Flags_GetCollectible(play, (this->actor.params & 0x7F0) >> 4)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->actor.draw = NULL;
-            this->actionFunc = func_80BFCFB8;
-        }
+        this->actionFunc = EnScopecoin_Spin;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        if ((this->rupeeIndex == 2) || (this->rupeeIndex == 6)) {
+            if (Flags_GetCollectible(play, OBJMUPICT_GET_RUPEE_FLAG(&this->actor))) {
+                Actor_Kill(&this->actor);
+                return;
+            }
+            this->actor.draw = NULL;
+            this->actionFunc = EnScopecoin_CheckCollectible;
+        } else {
+            Actor_Kill(&this->actor);
+        }
     }
 }
 
@@ -84,9 +82,8 @@ void EnScopecoin_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-static TexturePtr D_80BFD280[] = {
-    gameplay_keep_Tex_061FC0, gameplay_keep_Tex_061FE0, gameplay_keep_Tex_062000, gameplay_keep_Tex_062040,
-    gameplay_keep_Tex_062020, gameplay_keep_Tex_062060, gameplay_keep_Tex_062000,
+static TexturePtr sRupeeTextures[] = {
+    gRupeeGreenTex, gRupeeBlueTex, gRupeeRedTex, gRupeeOrangeTex, gRupeePurpleTex, gRupeeSilverTex, gRupeeRedTex,
 };
 
 void EnScopecoin_Draw(Actor* thisx, PlayState* play) {
@@ -95,11 +92,12 @@ void EnScopecoin_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
+
     OPEN_DISPS(gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BFD280[this->unk148]));
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTextures[this->rupeeIndex]));
+    gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
 
     CLOSE_DISPS(gfxCtx);
 }

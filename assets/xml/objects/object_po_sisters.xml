@@ -65,6 +65,6 @@
         <Limb Name="gPoSistersLowerBodyLimb" Type="Standard" EnumName="POSISTERS_LIMB_LOWER_BODY" Offset="0x6590" />
 
         <!-- PoSister Skeleton -->
-        <Skeleton Name="gPoSistersSkel" Type="Normal" LimbType="Standard" LimbNone="POSISTERS_LIMB_NONE" LimbMax="POSISTERS_LIMB_MAX" EnumName="PoSistersLimbs" Offset="0x65C8" />
+        <Skeleton Name="gPoSistersSkel" Type="Normal" LimbType="Standard" LimbNone="POSISTERS_LIMB_NONE" LimbMax="POSISTERS_LIMB_MAX" EnumName="PoSistersLimb" Offset="0x65C8" />
     </File>
 </Root>

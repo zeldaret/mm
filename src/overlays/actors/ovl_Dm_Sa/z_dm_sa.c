@@ -18,7 +18,7 @@ void DmSa_Draw(Actor* thisx, PlayState* play);
 
 void DmSa_DoNothing(DmSa* this, PlayState* play);
 
-const ActorInit Dm_Sa_InitVars = {
+ActorInit Dm_Sa_InitVars = {
     ACTOR_DM_SA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -30,7 +30,7 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-static AnimationInfo D_80A2ED00[] = { { &gSkullKidTPoseAnim, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };
+static AnimationInfo sAnimationInfo[] = { { &gSkullKidTPoseAnim, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };
 
 void func_80A2E960(SkelAnime* arg0, AnimationInfo* animations, u16 index) {
     f32 frameCount;
@@ -53,7 +53,7 @@ void DmSa_Init(Actor* thisx, PlayState* play) {
     this->actor.targetArrowOffset = 3000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
-    func_80A2E960(&this->skelAnime, D_80A2ED00, 0);
+    func_80A2E960(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmSa_DoNothing;
 }

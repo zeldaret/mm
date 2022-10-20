@@ -12,7 +12,7 @@
 
 #define THIS ((EnZot*)thisx)
 
-void EnZot_Init(Actor* thisx, PlayState* play);
+void EnZot_Init(Actor* thisx, PlayState* play2);
 void EnZot_Destroy(Actor* thisx, PlayState* play);
 void EnZot_Update(Actor* thisx, PlayState* play);
 void EnZot_Draw(Actor* thisx, PlayState* play);
@@ -32,7 +32,7 @@ void func_80B990A4(EnZot* this, PlayState* play);
 void func_80B992C0(EnZot* this, PlayState* play);
 void func_80B99384(EnZot* this, PlayState* play);
 
-const ActorInit En_Zot_InitVars = {
+ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
     ACTORCAT_NPC,
     FLAGS,
@@ -186,14 +186,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
@@ -221,7 +221,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     }
 
     if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.save.weekEventReg[55] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -516,7 +516,7 @@ void func_80B975F8(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B973BC;
     } else {
-        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, PLAYER_AP_NONE);
     }
 }
 
@@ -553,7 +553,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & 0x2000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_2000000)) {
         phi_v1 = func_80B96CE4(this);
     } else {
         phi_v1 = 0;
@@ -931,7 +931,7 @@ void func_80B9849C(EnZot* this, PlayState* play) {
         }
         this->actionFunc = func_80B98728;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -941,7 +941,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
     }

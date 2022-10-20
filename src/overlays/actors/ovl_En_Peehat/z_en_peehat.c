@@ -15,7 +15,7 @@
 
 void EnPeehat_Init(Actor* thisx, PlayState* play);
 void EnPeehat_Destroy(Actor* thisx, PlayState* play);
-void EnPeehat_Update(Actor* thisx, PlayState* play);
+void EnPeehat_Update(Actor* thisx, PlayState* play2);
 void EnPeehat_Draw(Actor* thisx, PlayState* play);
 
 void func_80897498(EnPeehat* this);
@@ -38,7 +38,7 @@ void func_80898594(EnPeehat* this, PlayState* play);
 void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
-const ActorInit En_Peehat_InitVars = {
+ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -194,7 +194,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
             this->actor.shape.yOffset = -1000.0f;
         }
         Actor_SetScale(&this->actor, 0.036f);
-        this->actor.hintId = 0x48;
+        this->actor.hintId = TATL_HINT_ID_PEAHAT;
         func_80897498(this);
     } else {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -205,7 +205,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
         this->colliderCylinder.dim.radius = 20;
         this->colliderCylinder.dim.height = 15;
         this->colliderCylinder.dim.yShift = -5;
-        this->actor.hintId = 0x49;
+        this->actor.hintId = TATL_HINT_ID_PEAHAT_LARVA;
         this->colliderCylinder.base.ocFlags1 &= ~OC1_ON;
 
         func_80897A34(this);
@@ -438,7 +438,7 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
         if (!(this->actor.bgCheckFlags & 1)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (this->colliderTris.base.atFlags & AT_HIT) {
         this->colliderTris.base.atFlags &= ~AT_HIT;
         if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y) > 0) {
@@ -588,7 +588,7 @@ void func_80898338(EnPeehat* this, PlayState* play) {
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 40, 7, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_80897864(this);
         }
@@ -672,7 +672,7 @@ void func_808986A4(EnPeehat* this, PlayState* play) {
 
     if (this->unk_2B0 == 0) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xE0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -788,7 +788,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->colliderTris.base.atFlags & AT_ON) {
-        thisx->flags |= 0x1000000;
+        thisx->flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderTris.base);
         if (thisx->params == 0) {
             Vec3f sp74;

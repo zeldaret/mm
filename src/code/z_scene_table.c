@@ -123,15 +123,15 @@ SceneTableEntry gSceneTable[] = {
 };
 
 static EntranceTableEntry sMayorsResidenceEntrance0[] = {
-    { 0x12, 0x00, 0x4102 },
+    { SCENE_SONCHONOIE, 0, 0x4102 },
 };
 
 static EntranceTableEntry sMayorsResidenceEntrance1[] = {
-    { 0x12, 0x01, 0x4102 },
+    { SCENE_SONCHONOIE, 1, 0x4102 },
 };
 
 static EntranceTableEntry sMayorsResidenceEntrance2[] = {
-    { 0x12, 0x02, 0x4102 },
+    { SCENE_SONCHONOIE, 2, 0x4102 },
 };
 
 static EntranceTableEntry* sMayorsResidenceEntranceTable[] = {
@@ -141,7 +141,7 @@ static EntranceTableEntry* sMayorsResidenceEntranceTable[] = {
 };
 
 static EntranceTableEntry sMajorasLairEntrance0[] = {
-    { 0xF5, 0x00, 0x0387 },
+    { -SCENE_LAST_BS, 0, 0x0387 },
 };
 
 static EntranceTableEntry* sMajorasLairEntranceTable[] = {
@@ -149,7 +149,7 @@ static EntranceTableEntry* sMajorasLairEntranceTable[] = {
 };
 
 static EntranceTableEntry sMagicHagsPotionShopEntrance0[] = {
-    { 0x0A, 0x00, 0x4102 },
+    { SCENE_WITCH_SHOP, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sMagicHagsPotionShopEntranceTable[] = {
@@ -157,11 +157,11 @@ static EntranceTableEntry* sMagicHagsPotionShopEntranceTable[] = {
 };
 
 static EntranceTableEntry sRanchHouseEntrance0[] = {
-    { 0x10, 0x00, 0x0102 },
+    { SCENE_OMOYA, 0, 0x0102 },
 };
 
 static EntranceTableEntry sRanchHouseEntrance1[] = {
-    { 0x10, 0x01, 0x4102 },
+    { SCENE_OMOYA, 1, 0x4102 },
 };
 
 static EntranceTableEntry* sRanchHouseEntranceTable[] = {
@@ -170,7 +170,7 @@ static EntranceTableEntry* sRanchHouseEntranceTable[] = {
 };
 
 static EntranceTableEntry sHoneyAndDarlingsShopEntrance0[] = {
-    { 0x11, 0x00, 0x4102 },
+    { SCENE_BOWLING, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sHoneyAndDarlingsShopEntranceTable[] = {
@@ -178,11 +178,11 @@ static EntranceTableEntry* sHoneyAndDarlingsShopEntranceTable[] = {
 };
 
 static EntranceTableEntry sBeneathTheGraveryardEntrance0[] = {
-    { 0xF4, 0x00, 0x4102 },
+    { -SCENE_HAKASHITA, 0, 0x4102 },
 };
 
 static EntranceTableEntry sBeneathTheGraveryardEntrance1[] = {
-    { 0xF4, 0x01, 0x4102 },
+    { -SCENE_HAKASHITA, 1, 0x4102 },
 };
 
 static EntranceTableEntry* sBeneathTheGraveryardEntranceTable[] = {
@@ -191,47 +191,47 @@ static EntranceTableEntry* sBeneathTheGraveryardEntranceTable[] = {
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance0[] = {
-    { 0x00, 0x00, 0xCA14 },
+    { SCENE_20SICHITAI2, 0, 0xCA14 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance1[] = {
-    { 0x00, 0x01, 0x4102 },
+    { SCENE_20SICHITAI2, 1, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance2[] = {
-    { 0x00, 0x02, 0xC102 },
+    { SCENE_20SICHITAI2, 2, 0xC102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance3[] = {
-    { 0x00, 0x03, 0x4102 },
+    { SCENE_20SICHITAI2, 3, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance4[] = {
-    { 0x00, 0x04, 0x4102 },
+    { SCENE_20SICHITAI2, 4, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance5[] = {
-    { 0x00, 0x05, 0x4102 },
+    { SCENE_20SICHITAI2, 5, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance6[] = {
-    { 0x00, 0x06, 0x0102 },
+    { SCENE_20SICHITAI2, 6, 0x0102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance7[] = {
-    { 0x00, 0x07, 0x4102 },
+    { SCENE_20SICHITAI2, 7, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance8[] = {
-    { 0x00, 0x08, 0x4102 },
+    { SCENE_20SICHITAI2, 8, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance9[] = {
-    { 0x00, 0x09, 0x4A14 },
+    { SCENE_20SICHITAI2, 9, 0x4A14 },
 };
 
 static EntranceTableEntry sSouthernSwampClearedEntrance10[] = {
-    { 0x00, 0x0A, 0x4A14 },
+    { SCENE_20SICHITAI2, 10, 0x4A14 },
 };
 
 static EntranceTableEntry* sSouthernSwampClearedEntranceTable[] = {
@@ -242,19 +242,19 @@ static EntranceTableEntry* sSouthernSwampClearedEntranceTable[] = {
 };
 
 static EntranceTableEntry sCuriosityShopEntrance0[] = {
-    { 0x0D, 0x00, 0x4102 },
+    { SCENE_AYASHIISHOP, 0, 0x4102 },
 };
 
 static EntranceTableEntry sCuriosityShopEntrance1[] = {
-    { 0x0D, 0x01, 0x0102 },
+    { SCENE_AYASHIISHOP, 1, 0x0102 },
 };
 
 static EntranceTableEntry sCuriosityShopEntrance2[] = {
-    { 0x0D, 0x02, 0x8A95 },
+    { SCENE_AYASHIISHOP, 2, 0x8A95 },
 };
 
 static EntranceTableEntry sCuriosityShopEntrance3[] = {
-    { 0x0D, 0x03, 0x8102 },
+    { SCENE_AYASHIISHOP, 3, 0x8102 },
 };
 
 static EntranceTableEntry* sCuriosityShopEntranceTable[] = {
@@ -265,113 +265,113 @@ static EntranceTableEntry* sCuriosityShopEntranceTable[] = {
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance0[] = {
-    { 0x13, 0x00, 0xCA14 }, { 0x13, 0x00, 0x8A14 }, { 0x13, 0x00, 0x0A14 },
-    { 0x13, 0x00, 0x4A14 }, { 0x13, 0x00, 0x8102 },
+    { SCENE_IKANA, 0, 0xCA14 }, { SCENE_IKANA, 0, 0x8A14 }, { SCENE_IKANA, 0, 0x0A14 },
+    { SCENE_IKANA, 0, 0x4A14 }, { SCENE_IKANA, 0, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance1[] = {
-    { 0x13, 0x01, 0x4102 },
-    { 0x13, 0x01, 0x4102 },
-    { 0x13, 0x01, 0xCA14 },
-    { 0x13, 0x01, 0x4102 },
+    { SCENE_IKANA, 1, 0x4102 },
+    { SCENE_IKANA, 1, 0x4102 },
+    { SCENE_IKANA, 1, 0xCA14 },
+    { SCENE_IKANA, 1, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance2[] = {
-    { 0x13, 0x02, 0x4102 },
-    { 0x13, 0x02, 0x4102 },
-    { 0x13, 0x02, 0x4102 },
-    { 0x13, 0x02, 0x4102 },
+    { SCENE_IKANA, 2, 0x4102 },
+    { SCENE_IKANA, 2, 0x4102 },
+    { SCENE_IKANA, 2, 0x4102 },
+    { SCENE_IKANA, 2, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance3[] = {
-    { 0x13, 0x03, 0x4102 },
-    { 0x13, 0x03, 0x4102 },
-    { 0x13, 0x03, 0x4102 },
-    { 0x13, 0x03, 0x4102 },
+    { SCENE_IKANA, 3, 0x4102 },
+    { SCENE_IKANA, 3, 0x4102 },
+    { SCENE_IKANA, 3, 0x4102 },
+    { SCENE_IKANA, 3, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance4[] = {
-    { 0x13, 0x04, 0x4A14 },
-    { 0x13, 0x04, 0x4A14 },
-    { 0x13, 0x04, 0x4A14 },
-    { 0x13, 0x04, 0x4A14 },
+    { SCENE_IKANA, 4, 0x4A14 },
+    { SCENE_IKANA, 4, 0x4A14 },
+    { SCENE_IKANA, 4, 0x4A14 },
+    { SCENE_IKANA, 4, 0x4A14 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance5[] = {
-    { 0x13, 0x05, 0x4102 },
-    { 0x13, 0x05, 0x4102 },
-    { 0x13, 0x05, 0x4102 },
-    { 0x13, 0x05, 0x4102 },
+    { SCENE_IKANA, 5, 0x4102 },
+    { SCENE_IKANA, 5, 0x4102 },
+    { SCENE_IKANA, 5, 0x4102 },
+    { SCENE_IKANA, 5, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance6[] = {
-    { 0x13, 0x06, 0x4102 },
-    { 0x13, 0x06, 0x4102 },
-    { 0x13, 0x06, 0x4102 },
-    { 0x13, 0x06, 0x4102 },
+    { SCENE_IKANA, 6, 0x4102 },
+    { SCENE_IKANA, 6, 0x4102 },
+    { SCENE_IKANA, 6, 0x4102 },
+    { SCENE_IKANA, 6, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance7[] = {
-    { 0x13, 0x07, 0x4A14 },
-    { 0x13, 0x07, 0x4A14 },
-    { 0x13, 0x07, 0x4A14 },
-    { 0x13, 0x07, 0x4A14 },
+    { SCENE_IKANA, 7, 0x4A14 },
+    { SCENE_IKANA, 7, 0x4A14 },
+    { SCENE_IKANA, 7, 0x4A14 },
+    { SCENE_IKANA, 7, 0x4A14 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance8[] = {
-    { 0x13, 0x08, 0x4102 },
-    { 0x13, 0x08, 0x4102 },
-    { 0x13, 0x08, 0x4102 },
-    { 0x13, 0x08, 0x4102 },
+    { SCENE_IKANA, 8, 0x4102 },
+    { SCENE_IKANA, 8, 0x4102 },
+    { SCENE_IKANA, 8, 0x4102 },
+    { SCENE_IKANA, 8, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance9[] = {
-    { 0x13, 0x09, 0x4A14 },
-    { 0x13, 0x09, 0x4A14 },
-    { 0x13, 0x09, 0x4A14 },
-    { 0x13, 0x09, 0x4A14 },
+    { SCENE_IKANA, 9, 0x4A14 },
+    { SCENE_IKANA, 9, 0x4A14 },
+    { SCENE_IKANA, 9, 0x4A14 },
+    { SCENE_IKANA, 9, 0x4A14 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance10[] = {
-    { 0x13, 0x0A, 0x4A14 },
-    { 0x13, 0x0A, 0x4A14 },
-    { 0x13, 0x0A, 0x4A14 },
-    { 0x13, 0x0A, 0x4A14 },
+    { SCENE_IKANA, 10, 0x4A14 },
+    { SCENE_IKANA, 10, 0x4A14 },
+    { SCENE_IKANA, 10, 0x4A14 },
+    { SCENE_IKANA, 10, 0x4A14 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance11[] = {
-    { 0x13, 0x0B, 0x4102 },
-    { 0x13, 0x0B, 0x4102 },
-    { 0x13, 0x0B, 0x4102 },
-    { 0x13, 0x0B, 0x4102 },
+    { SCENE_IKANA, 11, 0x4102 },
+    { SCENE_IKANA, 11, 0x4102 },
+    { SCENE_IKANA, 11, 0x4102 },
+    { SCENE_IKANA, 11, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance12[] = {
-    { 0x13, 0x0C, 0x4102 },
-    { 0x13, 0x0C, 0x4102 },
-    { 0x13, 0x0C, 0x4102 },
-    { 0x13, 0x0C, 0x4102 },
+    { SCENE_IKANA, 12, 0x4102 },
+    { SCENE_IKANA, 12, 0x4102 },
+    { SCENE_IKANA, 12, 0x4102 },
+    { SCENE_IKANA, 12, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance13[] = {
-    { 0x13, 0x0D, 0x8102 },
-    { 0x13, 0x0D, 0x8102 },
-    { 0x13, 0x0D, 0x8102 },
-    { 0x13, 0x0D, 0x8102 },
+    { SCENE_IKANA, 13, 0x8102 },
+    { SCENE_IKANA, 13, 0x8102 },
+    { SCENE_IKANA, 13, 0x8102 },
+    { SCENE_IKANA, 13, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance14[] = {
-    { 0x13, 0x0E, 0x8102 },
-    { 0x13, 0x0E, 0x8102 },
-    { 0x13, 0x0E, 0x8102 },
-    { 0x13, 0x0E, 0x8102 },
+    { SCENE_IKANA, 14, 0x8102 },
+    { SCENE_IKANA, 14, 0x8102 },
+    { SCENE_IKANA, 14, 0x8102 },
+    { SCENE_IKANA, 14, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCanyonEntrance15[] = {
-    { 0x13, 0x0F, 0x8102 },
-    { 0x13, 0x0F, 0x8102 },
-    { 0x13, 0x0F, 0x8102 },
-    { 0x13, 0x0F, 0x0183 },
+    { SCENE_IKANA, 15, 0x8102 },
+    { SCENE_IKANA, 15, 0x8102 },
+    { SCENE_IKANA, 15, 0x8102 },
+    { SCENE_IKANA, 15, 0x0183 },
 };
 
 static EntranceTableEntry* sIkanaCanyonEntranceTable[] = {
@@ -382,66 +382,66 @@ static EntranceTableEntry* sIkanaCanyonEntranceTable[] = {
 };
 
 static EntranceTableEntry sPiratesFortressEntrance0[] = {
-    { 0x14, 0x00, 0x8102 },
-    { 0x14, 0x00, 0x8102 },
-    { 0x14, 0x00, 0x8102 },
+    { SCENE_KAIZOKU, 0, 0x8102 },
+    { SCENE_KAIZOKU, 0, 0x8102 },
+    { SCENE_KAIZOKU, 0, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance1[] = {
-    { 0x14, 0x01, 0x8102 },
-    { 0x14, 0x01, 0x8102 },
+    { SCENE_KAIZOKU, 1, 0x8102 },
+    { SCENE_KAIZOKU, 1, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance2[] = {
-    { 0x14, 0x02, 0x8102 },
+    { SCENE_KAIZOKU, 2, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance3[] = {
-    { 0x14, 0x03, 0x8102 },
+    { SCENE_KAIZOKU, 3, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance4[] = {
-    { 0x14, 0x04, 0x8102 },
+    { SCENE_KAIZOKU, 4, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance5[] = {
-    { 0x14, 0x05, 0x8102 },
+    { SCENE_KAIZOKU, 5, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance6[] = {
-    { 0x14, 0x06, 0x8102 },
+    { SCENE_KAIZOKU, 6, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance7[] = {
-    { 0x14, 0x07, 0x8102 },
+    { SCENE_KAIZOKU, 7, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance8[] = {
-    { 0x14, 0x08, 0x8102 },
+    { SCENE_KAIZOKU, 8, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance9[] = {
-    { 0x14, 0x09, 0x8102 },
+    { SCENE_KAIZOKU, 9, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance10[] = {
-    { 0x14, 0x0A, 0x8A95 },
+    { SCENE_KAIZOKU, 10, 0x8A95 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance11[] = {
-    { 0x14, 0x0B, 0x8102 },
+    { SCENE_KAIZOKU, 11, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance12[] = {
-    { 0x14, 0x0C, 0x8102 },
+    { SCENE_KAIZOKU, 12, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance13[] = {
-    { 0x14, 0x0D, 0x8102 },
+    { SCENE_KAIZOKU, 13, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressEntrance14[] = {
-    { 0x14, 0x0E, 0x8102 },
+    { SCENE_KAIZOKU, 14, 0x8102 },
 };
 
 static EntranceTableEntry* sPiratesFortressEntranceTable[] = {
@@ -452,8 +452,8 @@ static EntranceTableEntry* sPiratesFortressEntranceTable[] = {
 };
 
 static EntranceTableEntry sMilkBarEntrance0[] = {
-    { 0x15, 0x00, 0x4102 }, { 0x15, 0x00, 0x8102 }, { 0x15, 0x00, 0x8102 },
-    { 0x15, 0x00, 0x8102 }, { 0x15, 0x00, 0x8102 },
+    { SCENE_MILK_BAR, 0, 0x4102 }, { SCENE_MILK_BAR, 0, 0x8102 }, { SCENE_MILK_BAR, 0, 0x8102 },
+    { SCENE_MILK_BAR, 0, 0x8102 }, { SCENE_MILK_BAR, 0, 0x8102 },
 };
 
 static EntranceTableEntry* sMilkBarEntranceTable[] = {
@@ -461,11 +461,11 @@ static EntranceTableEntry* sMilkBarEntranceTable[] = {
 };
 
 static EntranceTableEntry sStoneTowerTempleEntrance0[] = {
-    { 0xEA, 0x00, 0xC102 },
+    { -SCENE_INISIE_N, 0, 0xC102 },
 };
 
 static EntranceTableEntry sStoneTowerTempleEntrance1[] = {
-    { 0xEA, 0x01, 0x4102 },
+    { -SCENE_INISIE_N, 1, 0x4102 },
 };
 
 static EntranceTableEntry* sStoneTowerTempleEntranceTable[] = {
@@ -474,11 +474,11 @@ static EntranceTableEntry* sStoneTowerTempleEntranceTable[] = {
 };
 
 static EntranceTableEntry sTreasureChestShopEntrance0[] = {
-    { 0x17, 0x00, 0x4102 },
+    { SCENE_TAKARAYA, 0, 0x4102 },
 };
 
 static EntranceTableEntry sTreasureChestShopEntrance1[] = {
-    { 0x17, 0x01, 0x0102 },
+    { SCENE_TAKARAYA, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sTreasureChestShopEntranceTable[] = {
@@ -486,41 +486,41 @@ static EntranceTableEntry* sTreasureChestShopEntranceTable[] = {
     sTreasureChestShopEntrance1,
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance0[] = {
-    { 0xE8, 0x00, 0xC102 },
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance0[] = {
+    { -SCENE_INISIE_R, 0, 0xC102 },
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance1[] = {
-    { 0xE8, 0x01, 0x8102 },
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance1[] = {
+    { -SCENE_INISIE_R, 1, 0x8102 },
 };
 
-static EntranceTableEntry sStoneTowerTempleReversedEntrance2[] = {
-    { 0xE8, 0x02, 0x8102 },
+static EntranceTableEntry sStoneTowerTempleInvertedEntrance2[] = {
+    { -SCENE_INISIE_R, 2, 0x8102 },
 };
 
-static EntranceTableEntry* sStoneTowerTempleReversedEntranceTable[] = {
-    sStoneTowerTempleReversedEntrance0,
-    sStoneTowerTempleReversedEntrance1,
-    sStoneTowerTempleReversedEntrance2,
+static EntranceTableEntry* sStoneTowerTempleInvertedEntranceTable[] = {
+    sStoneTowerTempleInvertedEntrance0,
+    sStoneTowerTempleInvertedEntrance1,
+    sStoneTowerTempleInvertedEntrance2,
 };
 
 static EntranceTableEntry sClockTowerRooftopEntrance0[] = {
-    { 0xE7, 0x00, 0x0102 },
-    { 0xE7, 0x00, 0x8102 },
-    { 0xE7, 0x00, 0x0102 },
-    { 0xE7, 0x00, 0x0102 },
+    { -SCENE_OKUJOU, 0, 0x0102 },
+    { -SCENE_OKUJOU, 0, 0x8102 },
+    { -SCENE_OKUJOU, 0, 0x0102 },
+    { -SCENE_OKUJOU, 0, 0x0102 },
 };
 
 static EntranceTableEntry sClockTowerRooftopEntrance1[] = {
-    { 0xE7, 0x01, 0x0102 },
-    { 0xE7, 0x01, 0x0102 },
-    { 0xE7, 0x01, 0x0102 },
+    { -SCENE_OKUJOU, 1, 0x0102 },
+    { -SCENE_OKUJOU, 1, 0x0102 },
+    { -SCENE_OKUJOU, 1, 0x0102 },
 };
 
 static EntranceTableEntry sClockTowerRooftopEntrance2[] = {
-    { 0xE7, 0x02, 0x858B },
-    { 0xE7, 0x02, 0x858B },
-    { 0xE7, 0x02, 0x8102 },
+    { -SCENE_OKUJOU, 2, 0x858B },
+    { -SCENE_OKUJOU, 2, 0x858B },
+    { -SCENE_OKUJOU, 2, 0x8102 },
 };
 
 static EntranceTableEntry* sClockTowerRooftopEntranceTable[] = {
@@ -530,24 +530,24 @@ static EntranceTableEntry* sClockTowerRooftopEntranceTable[] = {
 };
 
 static EntranceTableEntry sOpeningDungeonEntrance0[] = {
-    { 0xE6, 0x00, 0x0102 },
-    { 0xE6, 0x00, 0x8102 },
+    { -SCENE_OPENINGDAN, 0, 0x0102 },
+    { -SCENE_OPENINGDAN, 0, 0x8102 },
 };
 
 static EntranceTableEntry sOpeningDungeonEntrance1[] = {
-    { 0xE6, 0x01, 0x0102 },
+    { -SCENE_OPENINGDAN, 1, 0x0102 },
 };
 
 static EntranceTableEntry sOpeningDungeonEntrance2[] = {
-    { 0xE6, 0x02, 0x0102 },
+    { -SCENE_OPENINGDAN, 2, 0x0102 },
 };
 
 static EntranceTableEntry sOpeningDungeonEntrance3[] = {
-    { 0xE6, 0x03, 0x0102 },
+    { -SCENE_OPENINGDAN, 3, 0x0102 },
 };
 
 static EntranceTableEntry sOpeningDungeonEntrance4[] = {
-    { 0xE6, 0x04, 0x058B },
+    { -SCENE_OPENINGDAN, 4, 0x058B },
 };
 
 static EntranceTableEntry* sOpeningDungeonEntranceTable[] = {
@@ -556,15 +556,15 @@ static EntranceTableEntry* sOpeningDungeonEntranceTable[] = {
 };
 
 static EntranceTableEntry sWoodfallTempleEntrance0[] = {
-    { 0xE5, 0x00, 0x4102 },
+    { -SCENE_MITURIN, 0, 0x4102 },
 };
 
 static EntranceTableEntry sWoodfallTempleEntrance1[] = {
-    { 0xE5, 0x01, 0x0102 },
+    { -SCENE_MITURIN, 1, 0x0102 },
 };
 
 static EntranceTableEntry sWoodfallTempleEntrance2[] = {
-    { 0xE5, 0x02, 0x0102 },
+    { -SCENE_MITURIN, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sWoodfallTempleEntranceTable[] = {
@@ -574,13 +574,13 @@ static EntranceTableEntry* sWoodfallTempleEntranceTable[] = {
 };
 
 static EntranceTableEntry sPathToMountainVillageEntrance0[] = {
-    { 0x1C, 0x00, 0x8A14 },
-    { 0x1C, 0x00, 0x8A14 },
+    { SCENE_13HUBUKINOMITI, 0, 0x8A14 },
+    { SCENE_13HUBUKINOMITI, 0, 0x8A14 },
 };
 
 static EntranceTableEntry sPathToMountainVillageEntrance1[] = {
-    { 0x1C, 0x01, 0x8A14 },
-    { 0x1C, 0x01, 0x8A14 },
+    { SCENE_13HUBUKINOMITI, 1, 0x8A14 },
+    { SCENE_13HUBUKINOMITI, 1, 0x8A14 },
 };
 
 static EntranceTableEntry* sPathToMountainVillageEntranceTable[] = {
@@ -589,31 +589,31 @@ static EntranceTableEntry* sPathToMountainVillageEntranceTable[] = {
 };
 
 static EntranceTableEntry sIkanaCastleEntrance0[] = {
-    { 0xE3, 0x00, 0x4102 },
+    { -SCENE_CASTLE, 0, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCastleEntrance1[] = {
-    { 0xE3, 0x01, 0x4102 },
+    { -SCENE_CASTLE, 1, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaCastleEntrance2[] = {
-    { 0xE3, 0x02, 0x8102 },
+    { -SCENE_CASTLE, 2, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCastleEntrance3[] = {
-    { 0xE3, 0x03, 0x8102 },
+    { -SCENE_CASTLE, 3, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCastleEntrance4[] = {
-    { 0xE3, 0x04, 0x8102 },
+    { -SCENE_CASTLE, 4, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCastleEntrance5[] = {
-    { 0xE3, 0x05, 0x8102 },
+    { -SCENE_CASTLE, 5, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaCastleEntrance6[] = {
-    { 0xE3, 0x06, 0x8102 },
+    { -SCENE_CASTLE, 6, 0x8102 },
 };
 
 static EntranceTableEntry* sIkanaCastleEntranceTable[] = {
@@ -622,11 +622,11 @@ static EntranceTableEntry* sIkanaCastleEntranceTable[] = {
 };
 
 static EntranceTableEntry sDekuScrubPlaygroundEntrance0[] = {
-    { 0x1E, 0x00, 0x0102 },
+    { SCENE_DEKUTES, 0, 0x0102 },
 };
 
 static EntranceTableEntry sDekuScrubPlaygroundEntrance1[] = {
-    { 0x1E, 0x01, 0x0102 },
+    { SCENE_DEKUTES, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sDekuScrubPlaygroundEntranceTable[] = {
@@ -635,7 +635,7 @@ static EntranceTableEntry* sDekuScrubPlaygroundEntranceTable[] = {
 };
 
 static EntranceTableEntry sOdolwasLairEntrance0[] = {
-    { 0xE1, 0x00, 0x8102 },
+    { -SCENE_MITURIN_BS, 0, 0x8102 },
 };
 
 static EntranceTableEntry* sOdolwasLairEntranceTable[] = {
@@ -643,11 +643,11 @@ static EntranceTableEntry* sOdolwasLairEntranceTable[] = {
 };
 
 static EntranceTableEntry sTownShootingGalleryEntrance0[] = {
-    { 0x20, 0x00, 0x4102 },
+    { SCENE_SYATEKI_MIZU, 0, 0x4102 },
 };
 
 static EntranceTableEntry sTownShootingGalleryEntrance1[] = {
-    { 0x20, 0x01, 0x0102 },
+    { SCENE_SYATEKI_MIZU, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sTownShootingGalleryEntranceTable[] = {
@@ -656,11 +656,11 @@ static EntranceTableEntry* sTownShootingGalleryEntranceTable[] = {
 };
 
 static EntranceTableEntry sSnowheadTempleEntrance0[] = {
-    { 0xDF, 0x00, 0x4102 },
+    { -SCENE_HAKUGIN, 0, 0x4102 },
 };
 
 static EntranceTableEntry sSnowheadTempleEntrance1[] = {
-    { 0xDF, 0x01, 0x4102 },
+    { -SCENE_HAKUGIN, 1, 0x4102 },
 };
 
 static EntranceTableEntry* sSnowheadTempleEntranceTable[] = {
@@ -669,31 +669,31 @@ static EntranceTableEntry* sSnowheadTempleEntranceTable[] = {
 };
 
 static EntranceTableEntry sMilkRoadEntrance0[] = {
-    { 0x22, 0x00, 0xCA14 },
+    { SCENE_ROMANYMAE, 0, 0xCA14 },
 };
 
 static EntranceTableEntry sMilkRoadEntrance1[] = {
-    { 0x22, 0x01, 0x4A14 },
+    { SCENE_ROMANYMAE, 1, 0x4A14 },
 };
 
 static EntranceTableEntry sMilkRoadEntrance2[] = {
-    { 0x22, 0x02, 0x4A14 },
+    { SCENE_ROMANYMAE, 2, 0x4A14 },
 };
 
 static EntranceTableEntry sMilkRoadEntrance3[] = {
-    { 0x22, 0x03, 0x4A14 },
+    { SCENE_ROMANYMAE, 3, 0x4A14 },
 };
 
 static EntranceTableEntry sMilkRoadEntrance4[] = {
-    { 0x22, 0x04, 0x4A14 },
+    { SCENE_ROMANYMAE, 4, 0x4A14 },
 };
 
 static EntranceTableEntry sMilkRoadEntrance5[] = {
-    { 0x22, 0x05, 0x0102 },
+    { SCENE_ROMANYMAE, 5, 0x0102 },
 };
 
 static EntranceTableEntry sMilkRoadEntrance6[] = {
-    { 0x22, 0x06, 0x0102 },
+    { SCENE_ROMANYMAE, 6, 0x0102 },
 };
 
 static EntranceTableEntry* sMilkRoadEntranceTable[] = {
@@ -702,67 +702,67 @@ static EntranceTableEntry* sMilkRoadEntranceTable[] = {
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance0[] = {
-    { 0x23, 0x00, 0x8102 },
+    { SCENE_PIRATE, 0, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance1[] = {
-    { 0x23, 0x01, 0x8102 },
+    { SCENE_PIRATE, 1, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance2[] = {
-    { 0x23, 0x02, 0x8102 },
+    { SCENE_PIRATE, 2, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance3[] = {
-    { 0x23, 0x03, 0x8102 },
+    { SCENE_PIRATE, 3, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance4[] = {
-    { 0x23, 0x04, 0x8102 },
+    { SCENE_PIRATE, 4, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance5[] = {
-    { 0x23, 0x05, 0x8102 },
+    { SCENE_PIRATE, 5, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance6[] = {
-    { 0x23, 0x06, 0x8102 },
+    { SCENE_PIRATE, 6, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance7[] = {
-    { 0x23, 0x07, 0x8102 },
+    { SCENE_PIRATE, 7, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance8[] = {
-    { 0x23, 0x08, 0x8102 },
+    { SCENE_PIRATE, 8, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance9[] = {
-    { 0x23, 0x09, 0x8993 },
+    { SCENE_PIRATE, 9, 0x8993 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance10[] = {
-    { 0x23, 0x0A, 0x8102 },
+    { SCENE_PIRATE, 10, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance11[] = {
-    { 0x23, 0x0B, 0x8102 },
+    { SCENE_PIRATE, 11, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance12[] = {
-    { 0x23, 0x0C, 0x8102 },
+    { SCENE_PIRATE, 12, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance13[] = {
-    { 0x23, 0x0D, 0x8102 },
+    { SCENE_PIRATE, 13, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance14[] = {
-    { 0x23, 0x0E, 0x8102 },
+    { SCENE_PIRATE, 14, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressInteriorEntrance15[] = {
-    { 0x23, 0x0F, 0x8102 },
+    { SCENE_PIRATE, 15, 0x8102 },
 };
 
 static EntranceTableEntry* sPiratesFortressInteriorEntranceTable[] = {
@@ -775,7 +775,7 @@ static EntranceTableEntry* sPiratesFortressInteriorEntranceTable[] = {
 };
 
 static EntranceTableEntry sSwampShootingGalleryEntrance0[] = {
-    { 0x24, 0x00, 0x4102 },
+    { SCENE_SYATEKI_MORI, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sSwampShootingGalleryEntranceTable[] = {
@@ -783,11 +783,11 @@ static EntranceTableEntry* sSwampShootingGalleryEntranceTable[] = {
 };
 
 static EntranceTableEntry sPinnacleRockEntrance0[] = {
-    { 0x25, 0x00, 0x4A14 },
+    { SCENE_SINKAI, 0, 0x4A14 },
 };
 
 static EntranceTableEntry sPinnacleRockEntrance1[] = {
-    { 0x25, 0x01, 0x0A14 },
+    { SCENE_SINKAI, 1, 0x0A14 },
 };
 
 static EntranceTableEntry* sPinnacleRockEntranceTable[] = {
@@ -796,44 +796,44 @@ static EntranceTableEntry* sPinnacleRockEntranceTable[] = {
 };
 
 static EntranceTableEntry sFairyFountainEntrance0[] = {
-    { 0x26, 0x00, 0x4102 },
-    { 0x26, 0x00, 0x8102 },
+    { SCENE_YOUSEI_IZUMI, 0, 0x4102 },
+    { SCENE_YOUSEI_IZUMI, 0, 0x8102 },
 };
 
 static EntranceTableEntry sFairyFountainEntrance1[] = {
-    { 0x26, 0x01, 0x4102 },
+    { SCENE_YOUSEI_IZUMI, 1, 0x4102 },
 };
 
 static EntranceTableEntry sFairyFountainEntrance2[] = {
-    { 0x26, 0x02, 0x4102 },
+    { SCENE_YOUSEI_IZUMI, 2, 0x4102 },
 };
 
 static EntranceTableEntry sFairyFountainEntrance3[] = {
-    { 0x26, 0x03, 0x4102 },
+    { SCENE_YOUSEI_IZUMI, 3, 0x4102 },
 };
 
 static EntranceTableEntry sFairyFountainEntrance4[] = {
-    { 0x26, 0x04, 0x4102 },
+    { SCENE_YOUSEI_IZUMI, 4, 0x4102 },
 };
 
 static EntranceTableEntry sFairyFountainEntrance5[] = {
-    { 0x26, 0x05, 0x8183 },
+    { SCENE_YOUSEI_IZUMI, 5, 0x8183 },
 };
 
 static EntranceTableEntry sFairyFountainEntrance6[] = {
-    { 0x26, 0x06, 0x858B },
+    { SCENE_YOUSEI_IZUMI, 6, 0x858B },
 };
 
 static EntranceTableEntry sFairyFountainEntrance7[] = {
-    { 0x26, 0x07, 0x858B },
+    { SCENE_YOUSEI_IZUMI, 7, 0x858B },
 };
 
 static EntranceTableEntry sFairyFountainEntrance8[] = {
-    { 0x26, 0x08, 0x858B },
+    { SCENE_YOUSEI_IZUMI, 8, 0x858B },
 };
 
 static EntranceTableEntry sFairyFountainEntrance9[] = {
-    { 0x26, 0x09, 0x858B },
+    { SCENE_YOUSEI_IZUMI, 9, 0x858B },
 };
 
 static EntranceTableEntry* sFairyFountainEntranceTable[] = {
@@ -843,7 +843,7 @@ static EntranceTableEntry* sFairyFountainEntranceTable[] = {
 };
 
 static EntranceTableEntry sSwampSpiderHouseEntrance0[] = {
-    { 0xD9, 0x00, 0x4102 },
+    { -SCENE_KINSTA1, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sSwampSpiderHouseEntranceTable[] = {
@@ -851,7 +851,7 @@ static EntranceTableEntry* sSwampSpiderHouseEntranceTable[] = {
 };
 
 static EntranceTableEntry sOceansideSpiderHouseEntrance0[] = {
-    { 0xD8, 0x00, 0x4102 },
+    { -SCENE_KINDAN2, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sOceansideSpiderHouseEntranceTable[] = {
@@ -859,15 +859,15 @@ static EntranceTableEntry* sOceansideSpiderHouseEntranceTable[] = {
 };
 
 static EntranceTableEntry sAstralObservatoryEntrance0[] = {
-    { 0x29, 0x00, 0x0102 },
+    { SCENE_TENMON_DAI, 0, 0x0102 },
 };
 
 static EntranceTableEntry sAstralObservatoryEntrance1[] = {
-    { 0x29, 0x01, 0x4102 },
+    { SCENE_TENMON_DAI, 1, 0x4102 },
 };
 
 static EntranceTableEntry sAstralObservatoryEntrance2[] = {
-    { 0x29, 0x02, 0x8115 },
+    { SCENE_TENMON_DAI, 2, 0x8115 },
 };
 
 static EntranceTableEntry* sAstralObservatoryEntranceTable[] = {
@@ -877,7 +877,7 @@ static EntranceTableEntry* sAstralObservatoryEntranceTable[] = {
 };
 
 static EntranceTableEntry sMoonDekuTrialEntrance0[] = {
-    { 0xD6, 0x00, 0x0387 },
+    { -SCENE_LAST_DEKU, 0, 0x0387 },
 };
 
 static EntranceTableEntry* sMoonDekuTrialEntranceTable[] = {
@@ -885,47 +885,47 @@ static EntranceTableEntry* sMoonDekuTrialEntranceTable[] = {
 };
 
 static EntranceTableEntry sDekuPalaceEntrance0[] = {
-    { 0x2B, 0x00, 0x4102 },
+    { SCENE_22DEKUCITY, 0, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance1[] = {
-    { 0x2B, 0x01, 0x8A14 },
+    { SCENE_22DEKUCITY, 1, 0x8A14 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance2[] = {
-    { 0x2B, 0x02, 0xC102 },
+    { SCENE_22DEKUCITY, 2, 0xC102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance3[] = {
-    { 0x2B, 0x03, 0xC102 },
+    { SCENE_22DEKUCITY, 3, 0xC102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance4[] = {
-    { 0x2B, 0x04, 0x4102 },
+    { SCENE_22DEKUCITY, 4, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance5[] = {
-    { 0x2B, 0x05, 0x4102 },
+    { SCENE_22DEKUCITY, 5, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance6[] = {
-    { 0x2B, 0x06, 0x4102 },
+    { SCENE_22DEKUCITY, 6, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance7[] = {
-    { 0x2B, 0x07, 0x4102 },
+    { SCENE_22DEKUCITY, 7, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance8[] = {
-    { 0x2B, 0x08, 0x4102 },
+    { SCENE_22DEKUCITY, 8, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance9[] = {
-    { 0x2B, 0x09, 0x4102 },
+    { SCENE_22DEKUCITY, 9, 0x4102 },
 };
 
 static EntranceTableEntry sDekuPalaceEntrance10[] = {
-    { 0x2B, 0x0A, 0x4102 },
+    { SCENE_22DEKUCITY, 10, 0x4102 },
 };
 
 static EntranceTableEntry* sDekuPalaceEntranceTable[] = {
@@ -935,7 +935,7 @@ static EntranceTableEntry* sDekuPalaceEntranceTable[] = {
 };
 
 static EntranceTableEntry sMountainSmithyEntrance0[] = {
-    { 0x2C, 0x00, 0x4102 },
+    { SCENE_KAJIYA, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sMountainSmithyEntranceTable[] = {
@@ -943,79 +943,81 @@ static EntranceTableEntry* sMountainSmithyEntranceTable[] = {
 };
 
 static EntranceTableEntry sTerminaFieldEntrance0[] = {
-    { 0x2D, 0x00, 0x4102 }, { 0xD3, 0x00, 0x0A14 }, { 0xD3, 0x00, 0x0A14 }, { 0xD3, 0x00, 0x058B },
-    { 0x2D, 0x00, 0x0A14 }, { 0x2D, 0x00, 0x0A14 }, { 0x2D, 0x00, 0x058B }, { 0x2D, 0x00, 0x8102 },
-    { 0x2D, 0x00, 0x0102 }, { 0x2D, 0x00, 0x8102 },
+    { SCENE_00KEIKOKU, 0, 0x4102 },  { -SCENE_00KEIKOKU, 0, 0x0A14 }, { -SCENE_00KEIKOKU, 0, 0x0A14 },
+    { -SCENE_00KEIKOKU, 0, 0x058B }, { SCENE_00KEIKOKU, 0, 0x0A14 },  { SCENE_00KEIKOKU, 0, 0x0A14 },
+    { SCENE_00KEIKOKU, 0, 0x058B },  { SCENE_00KEIKOKU, 0, 0x8102 },  { SCENE_00KEIKOKU, 0, 0x0102 },
+    { SCENE_00KEIKOKU, 0, 0x8102 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance1[] = {
-    { 0x2D, 0x01, 0xCA14 }, { 0x2D, 0x01, 0x0A14 }, { 0x2D, 0x01, 0x058B }, { 0xD3, 0x01, 0x858B },
-    { 0x2D, 0x01, 0x0A14 }, { 0x2D, 0x01, 0x0A14 }, { 0x2D, 0x01, 0x058B }, { 0x2D, 0x01, 0x858B },
-    { 0x2D, 0x01, 0x0102 }, { 0x2D, 0x01, 0x8102 },
+    { SCENE_00KEIKOKU, 1, 0xCA14 },  { SCENE_00KEIKOKU, 1, 0x0A14 }, { SCENE_00KEIKOKU, 1, 0x058B },
+    { -SCENE_00KEIKOKU, 1, 0x858B }, { SCENE_00KEIKOKU, 1, 0x0A14 }, { SCENE_00KEIKOKU, 1, 0x0A14 },
+    { SCENE_00KEIKOKU, 1, 0x058B },  { SCENE_00KEIKOKU, 1, 0x858B }, { SCENE_00KEIKOKU, 1, 0x0102 },
+    { SCENE_00KEIKOKU, 1, 0x8102 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance2[] = {
-    { 0x2D, 0x02, 0xCA14 }, { 0xD3, 0x02, 0x0A14 }, { 0xD3, 0x02, 0x0A14 },
-    { 0xD3, 0x02, 0x058B }, { 0x2D, 0x02, 0x0A14 }, { 0x2D, 0x02, 0x0A14 },
+    { SCENE_00KEIKOKU, 2, 0xCA14 },  { -SCENE_00KEIKOKU, 2, 0x0A14 }, { -SCENE_00KEIKOKU, 2, 0x0A14 },
+    { -SCENE_00KEIKOKU, 2, 0x058B }, { SCENE_00KEIKOKU, 2, 0x0A14 },  { SCENE_00KEIKOKU, 2, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance3[] = {
-    { 0x2D, 0x03, 0xCA14 }, { 0xD3, 0x03, 0x0A14 }, { 0xD3, 0x03, 0x0A14 },
-    { 0xD3, 0x03, 0x058B }, { 0x2D, 0x03, 0x0A14 }, { 0x2D, 0x03, 0x0A14 },
+    { SCENE_00KEIKOKU, 3, 0xCA14 },  { -SCENE_00KEIKOKU, 3, 0x0A14 }, { -SCENE_00KEIKOKU, 3, 0x0A14 },
+    { -SCENE_00KEIKOKU, 3, 0x058B }, { SCENE_00KEIKOKU, 3, 0x0A14 },  { SCENE_00KEIKOKU, 3, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance4[] = {
-    { 0x2D, 0x04, 0xCA14 }, { 0xD3, 0x04, 0x0A14 }, { 0xD3, 0x04, 0x0A14 },
-    { 0xD3, 0x04, 0x058B }, { 0x2D, 0x04, 0x0A14 }, { 0x2D, 0x04, 0x0A14 },
+    { SCENE_00KEIKOKU, 4, 0xCA14 },  { -SCENE_00KEIKOKU, 4, 0x0A14 }, { -SCENE_00KEIKOKU, 4, 0x0A14 },
+    { -SCENE_00KEIKOKU, 4, 0x058B }, { SCENE_00KEIKOKU, 4, 0x0A14 },  { SCENE_00KEIKOKU, 4, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance5[] = {
-    { 0x2D, 0x05, 0xCA14 }, { 0xD3, 0x05, 0x0A14 }, { 0xD3, 0x05, 0x0A14 },
-    { 0xD3, 0x05, 0x858B }, { 0x2D, 0x05, 0x0A14 }, { 0x2D, 0x05, 0x0A14 },
+    { SCENE_00KEIKOKU, 5, 0xCA14 },  { -SCENE_00KEIKOKU, 5, 0x0A14 }, { -SCENE_00KEIKOKU, 5, 0x0A14 },
+    { -SCENE_00KEIKOKU, 5, 0x858B }, { SCENE_00KEIKOKU, 5, 0x0A14 },  { SCENE_00KEIKOKU, 5, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance6[] = {
-    { 0x2D, 0x06, 0x4102 }, { 0xD3, 0x06, 0x0A14 }, { 0xD3, 0x06, 0x0A14 },
-    { 0xD3, 0x06, 0x858B }, { 0x2D, 0x06, 0x0A14 }, { 0x2D, 0x06, 0x0A14 },
+    { SCENE_00KEIKOKU, 6, 0x4102 },  { -SCENE_00KEIKOKU, 6, 0x0A14 }, { -SCENE_00KEIKOKU, 6, 0x0A14 },
+    { -SCENE_00KEIKOKU, 6, 0x858B }, { SCENE_00KEIKOKU, 6, 0x0A14 },  { SCENE_00KEIKOKU, 6, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance7[] = {
-    { 0x2D, 0x07, 0x4102 }, { 0xD3, 0x07, 0x0A14 }, { 0xD3, 0x07, 0x0A14 },
-    { 0xD3, 0x07, 0x858B }, { 0x2D, 0x07, 0x0A14 }, { 0x2D, 0x07, 0x0A14 },
+    { SCENE_00KEIKOKU, 7, 0x4102 },  { -SCENE_00KEIKOKU, 7, 0x0A14 }, { -SCENE_00KEIKOKU, 7, 0x0A14 },
+    { -SCENE_00KEIKOKU, 7, 0x858B }, { SCENE_00KEIKOKU, 7, 0x0A14 },  { SCENE_00KEIKOKU, 7, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance8[] = {
-    { 0x2D, 0x08, 0x4102 }, { 0xD3, 0x08, 0x0A14 }, { 0xD3, 0x08, 0x0A14 },
-    { 0xD3, 0x08, 0x058B }, { 0x2D, 0x08, 0x0A14 }, { 0x2D, 0x08, 0x0A14 },
+    { SCENE_00KEIKOKU, 8, 0x4102 },  { -SCENE_00KEIKOKU, 8, 0x0A14 }, { -SCENE_00KEIKOKU, 8, 0x0A14 },
+    { -SCENE_00KEIKOKU, 8, 0x058B }, { SCENE_00KEIKOKU, 8, 0x0A14 },  { SCENE_00KEIKOKU, 8, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance9[] = {
-    { 0x2D, 0x09, 0x4102 }, { 0xD3, 0x09, 0x0A14 }, { 0xD3, 0x09, 0x0A14 },
-    { 0xD3, 0x09, 0x058B }, { 0x2D, 0x09, 0x0A14 }, { 0x2D, 0x09, 0x0A14 },
+    { SCENE_00KEIKOKU, 9, 0x4102 },  { -SCENE_00KEIKOKU, 9, 0x0A14 }, { -SCENE_00KEIKOKU, 9, 0x0A14 },
+    { -SCENE_00KEIKOKU, 9, 0x058B }, { SCENE_00KEIKOKU, 9, 0x0A14 },  { SCENE_00KEIKOKU, 9, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance10[] = {
-    { 0x2D, 0x0A, 0x8A95 }, { 0xD3, 0x0A, 0x0A14 }, { 0xD3, 0x0A, 0x0A14 },
-    { 0xD3, 0x0A, 0x058B }, { 0x2D, 0x0A, 0x0A14 }, { 0x2D, 0x0A, 0x0A95 },
+    { SCENE_00KEIKOKU, 10, 0x8A95 },  { -SCENE_00KEIKOKU, 10, 0x0A14 }, { -SCENE_00KEIKOKU, 10, 0x0A14 },
+    { -SCENE_00KEIKOKU, 10, 0x058B }, { SCENE_00KEIKOKU, 10, 0x0A14 },  { SCENE_00KEIKOKU, 10, 0x0A95 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance11[] = {
-    { 0x2D, 0x0B, 0x4A14 }, { 0xD3, 0x0B, 0x0A14 }, { 0xD3, 0x0B, 0x0A14 },
-    { 0xD3, 0x0B, 0x058B }, { 0x2D, 0x0B, 0x0A14 }, { 0x2D, 0x0B, 0x0A14 },
+    { SCENE_00KEIKOKU, 11, 0x4A14 },  { -SCENE_00KEIKOKU, 11, 0x0A14 }, { -SCENE_00KEIKOKU, 11, 0x0A14 },
+    { -SCENE_00KEIKOKU, 11, 0x058B }, { SCENE_00KEIKOKU, 11, 0x0A14 },  { SCENE_00KEIKOKU, 11, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance12[] = {
-    { 0x2D, 0x0C, 0x0A14 }, { 0xD3, 0x0C, 0x0A14 }, { 0xD3, 0x0C, 0x0A14 },
-    { 0xD3, 0x0C, 0x058B }, { 0x2D, 0x0C, 0x0A14 }, { 0x2D, 0x0C, 0x0A14 },
+    { SCENE_00KEIKOKU, 12, 0x0A14 },  { -SCENE_00KEIKOKU, 12, 0x0A14 }, { -SCENE_00KEIKOKU, 12, 0x0A14 },
+    { -SCENE_00KEIKOKU, 12, 0x058B }, { SCENE_00KEIKOKU, 12, 0x0A14 },  { SCENE_00KEIKOKU, 12, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance13[] = {
-    { 0x2D, 0x0D, 0x0A14 }, { 0xD3, 0x0D, 0x0A14 }, { 0xD3, 0x0D, 0x0A14 },
-    { 0xD3, 0x0D, 0x058B }, { 0x2D, 0x0D, 0x0A14 }, { 0x2D, 0x0D, 0x0A14 },
+    { SCENE_00KEIKOKU, 13, 0x0A14 },  { -SCENE_00KEIKOKU, 13, 0x0A14 }, { -SCENE_00KEIKOKU, 13, 0x0A14 },
+    { -SCENE_00KEIKOKU, 13, 0x058B }, { SCENE_00KEIKOKU, 13, 0x0A14 },  { SCENE_00KEIKOKU, 13, 0x0A14 },
 };
 
 static EntranceTableEntry sTerminaFieldEntrance14[] = {
-    { 0x2D, 0x0E, 0x858B },
+    { SCENE_00KEIKOKU, 14, 0x858B },
 };
 
 static EntranceTableEntry* sTerminaFieldEntranceTable[] = {
@@ -1026,7 +1028,7 @@ static EntranceTableEntry* sTerminaFieldEntranceTable[] = {
 };
 
 static EntranceTableEntry sPostOfficeEntrance0[] = {
-    { 0x2E, 0x00, 0x4102 },
+    { SCENE_POSTHOUSE, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sPostOfficeEntranceTable[] = {
@@ -1034,7 +1036,7 @@ static EntranceTableEntry* sPostOfficeEntranceTable[] = {
 };
 
 static EntranceTableEntry sMarineResearchLabEntrance0[] = {
-    { 0x2F, 0x00, 0x4102 },
+    { SCENE_LABO, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sMarineResearchLabEntranceTable[] = {
@@ -1042,11 +1044,11 @@ static EntranceTableEntry* sMarineResearchLabEntranceTable[] = {
 };
 
 static EntranceTableEntry sDampesHouseEntrance0[] = {
-    { 0x30, 0x00, 0x4102 },
+    { SCENE_DANPEI2TEST, 0, 0x4102 },
 };
 
 static EntranceTableEntry sDampesHouseEntrance1[] = {
-    { 0x30, 0x01, 0x0102 },
+    { SCENE_DANPEI2TEST, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sDampesHouseEntranceTable[] = {
@@ -1055,23 +1057,23 @@ static EntranceTableEntry* sDampesHouseEntranceTable[] = {
 };
 
 static EntranceTableEntry sGoronShrineEntrance0[] = {
-    { 0x32, 0x00, 0x4102 },
-    { 0x32, 0x00, 0x4102 },
+    { SCENE_16GORON_HOUSE, 0, 0x4102 },
+    { SCENE_16GORON_HOUSE, 0, 0x4102 },
 };
 
 static EntranceTableEntry sGoronShrineEntrance1[] = {
-    { 0x32, 0x01, 0x0102 },
-    { 0x32, 0x01, 0x0102 },
+    { SCENE_16GORON_HOUSE, 1, 0x0102 },
+    { SCENE_16GORON_HOUSE, 1, 0x0102 },
 };
 
 static EntranceTableEntry sGoronShrineEntrance2[] = {
-    { 0x32, 0x02, 0x058B },
-    { 0x32, 0x02, 0x058B },
+    { SCENE_16GORON_HOUSE, 2, 0x058B },
+    { SCENE_16GORON_HOUSE, 2, 0x058B },
 };
 
 static EntranceTableEntry sGoronShrineEntrance3[] = {
-    { 0x32, 0x03, 0x0102 },
-    { 0x32, 0x03, 0x0102 },
+    { SCENE_16GORON_HOUSE, 3, 0x0102 },
+    { SCENE_16GORON_HOUSE, 3, 0x0102 },
 };
 
 static EntranceTableEntry* sGoronShrineEntranceTable[] = {
@@ -1082,40 +1084,40 @@ static EntranceTableEntry* sGoronShrineEntranceTable[] = {
 };
 
 static EntranceTableEntry sZoraHallEntrance0[] = {
-    { 0x33, 0x00, 0x4993 },
-    { 0x33, 0x00, 0x8102 },
+    { SCENE_33ZORACITY, 0, 0x4993 },
+    { SCENE_33ZORACITY, 0, 0x8102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance1[] = {
-    { 0x33, 0x01, 0x4102 },
+    { SCENE_33ZORACITY, 1, 0x4102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance2[] = {
-    { 0x33, 0x02, 0x4102 },
+    { SCENE_33ZORACITY, 2, 0x4102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance3[] = {
-    { 0x33, 0x03, 0x4102 },
+    { SCENE_33ZORACITY, 3, 0x4102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance4[] = {
-    { 0x33, 0x04, 0x4102 },
+    { SCENE_33ZORACITY, 4, 0x4102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance5[] = {
-    { 0x33, 0x05, 0x4102 },
+    { SCENE_33ZORACITY, 5, 0x4102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance6[] = {
-    { 0x33, 0x06, 0x4102 },
+    { SCENE_33ZORACITY, 6, 0x4102 },
 };
 
 static EntranceTableEntry sZoraHallEntrance7[] = {
-    { 0x33, 0x07, 0x058B },
+    { SCENE_33ZORACITY, 7, 0x058B },
 };
 
 static EntranceTableEntry sZoraHallEntrance8[] = {
-    { 0x33, 0x08, 0x8183 },
+    { SCENE_33ZORACITY, 8, 0x8183 },
 };
 
 static EntranceTableEntry* sZoraHallEntranceTable[] = {
@@ -1124,11 +1126,11 @@ static EntranceTableEntry* sZoraHallEntranceTable[] = {
 };
 
 static EntranceTableEntry sTradingPostEntrance0[] = {
-    { 0x34, 0x00, 0x4102 },
+    { SCENE_8ITEMSHOP, 0, 0x4102 },
 };
 
 static EntranceTableEntry sTradingPostEntrance1[] = {
-    { 0x34, 0x01, 0x0102 },
+    { SCENE_8ITEMSHOP, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sTradingPostEntranceTable[] = {
@@ -1137,52 +1139,52 @@ static EntranceTableEntry* sTradingPostEntranceTable[] = {
 };
 
 static EntranceTableEntry sRomaniRanchEntrance0[] = {
-    { 0x35, 0x00, 0x4A14 }, { 0x35, 0x00, 0x0A14 }, { 0x35, 0x00, 0x8102 }, { 0x35, 0x00, 0x858B },
-    { 0x35, 0x00, 0x858B }, { 0x35, 0x00, 0x0102 }, { 0x35, 0x00, 0x8102 },
+    { SCENE_F01, 0, 0x4A14 }, { SCENE_F01, 0, 0x0A14 }, { SCENE_F01, 0, 0x8102 }, { SCENE_F01, 0, 0x858B },
+    { SCENE_F01, 0, 0x858B }, { SCENE_F01, 0, 0x0102 }, { SCENE_F01, 0, 0x8102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance1[] = {
-    { 0x35, 0x01, 0x0A14 },
+    { SCENE_F01, 1, 0x0A14 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance2[] = {
-    { 0x35, 0x02, 0x0102 },
+    { SCENE_F01, 2, 0x0102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance3[] = {
-    { 0x35, 0x03, 0x0102 },
+    { SCENE_F01, 3, 0x0102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance4[] = {
-    { 0x35, 0x04, 0x8102 },
+    { SCENE_F01, 4, 0x8102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance5[] = {
-    { 0x35, 0x05, 0x8102 },
+    { SCENE_F01, 5, 0x8102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance6[] = {
-    { 0x35, 0x06, 0x0A14 },
+    { SCENE_F01, 6, 0x0A14 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance7[] = {
-    { 0x35, 0x07, 0x0A14 },
+    { SCENE_F01, 7, 0x0A14 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance8[] = {
-    { 0x35, 0x08, 0x0A14 },
+    { SCENE_F01, 8, 0x0A14 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance9[] = {
-    { 0x35, 0x09, 0x0102 },
+    { SCENE_F01, 9, 0x0102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance10[] = {
-    { 0x35, 0x0A, 0x0102 },
+    { SCENE_F01, 10, 0x0102 },
 };
 
 static EntranceTableEntry sRomaniRanchEntrance11[] = {
-    { 0x35, 0x0B, 0x0102 },
+    { SCENE_F01, 11, 0x0102 },
 };
 
 static EntranceTableEntry* sRomaniRanchEntranceTable[] = {
@@ -1192,23 +1194,23 @@ static EntranceTableEntry* sRomaniRanchEntranceTable[] = {
 };
 
 static EntranceTableEntry sTwinmoldsLairEntrance0[] = {
-    { 0xCA, 0x00, 0x0102 },
+    { -SCENE_INISIE_BS, 0, 0x0102 },
 };
 
 static EntranceTableEntry sTwinmoldsLairEntrance1[] = {
-    { 0xCA, 0x01, 0x0102 },
+    { -SCENE_INISIE_BS, 1, 0x0102 },
 };
 
 static EntranceTableEntry sTwinmoldsLairEntrance2[] = {
-    { 0xCA, 0x02, 0x0102 },
+    { -SCENE_INISIE_BS, 2, 0x0102 },
 };
 
 static EntranceTableEntry sTwinmoldsLairEntrance3[] = {
-    { 0xCA, 0x03, 0x0102 },
+    { -SCENE_INISIE_BS, 3, 0x0102 },
 };
 
 static EntranceTableEntry sTwinmoldsLairEntrance4[] = {
-    { 0xCA, 0x04, 0x0102 },
+    { -SCENE_INISIE_BS, 4, 0x0102 },
 };
 
 static EntranceTableEntry* sTwinmoldsLairEntranceTable[] = {
@@ -1217,74 +1219,74 @@ static EntranceTableEntry* sTwinmoldsLairEntranceTable[] = {
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance0[] = {
-    { 0x37, 0x00, 0xCA14 },
-    { 0x37, 0x00, 0xCA14 },
-    { 0x37, 0x00, 0x8102 },
+    { SCENE_30GYOSON, 0, 0xCA14 },
+    { SCENE_30GYOSON, 0, 0xCA14 },
+    { SCENE_30GYOSON, 0, 0x8102 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance1[] = {
-    { 0x37, 0x01, 0xCA14 },
-    { 0x37, 0x01, 0xCA14 },
+    { SCENE_30GYOSON, 1, 0xCA14 },
+    { SCENE_30GYOSON, 1, 0xCA14 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance2[] = {
-    { 0x37, 0x02, 0x4993 },
-    { 0x37, 0x02, 0x4993 },
+    { SCENE_30GYOSON, 2, 0x4993 },
+    { SCENE_30GYOSON, 2, 0x4993 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance3[] = {
-    { 0x37, 0x03, 0x4A14 },
-    { 0x37, 0x03, 0x4A14 },
+    { SCENE_30GYOSON, 3, 0x4A14 },
+    { SCENE_30GYOSON, 3, 0x4A14 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance4[] = {
-    { 0x37, 0x04, 0x4102 },
-    { 0x37, 0x04, 0x4102 },
+    { SCENE_30GYOSON, 4, 0x4102 },
+    { SCENE_30GYOSON, 4, 0x4102 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance5[] = {
-    { 0x37, 0x05, 0x4993 },
-    { 0x37, 0x05, 0x4993 },
+    { SCENE_30GYOSON, 5, 0x4993 },
+    { SCENE_30GYOSON, 5, 0x4993 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance6[] = {
-    { 0x37, 0x06, 0x4993 },
-    { 0x37, 0x06, 0x4993 },
+    { SCENE_30GYOSON, 6, 0x4993 },
+    { SCENE_30GYOSON, 6, 0x4993 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance7[] = {
-    { 0x37, 0x07, 0x4102 },
-    { 0x37, 0x07, 0x4102 },
+    { SCENE_30GYOSON, 7, 0x4102 },
+    { SCENE_30GYOSON, 7, 0x4102 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance8[] = {
-    { 0x37, 0x08, 0x4102 },
-    { 0x37, 0x08, 0x4102 },
+    { SCENE_30GYOSON, 8, 0x4102 },
+    { SCENE_30GYOSON, 8, 0x4102 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance9[] = {
-    { 0x37, 0x09, 0x058B },
-    { 0x37, 0x09, 0x058B },
+    { SCENE_30GYOSON, 9, 0x058B },
+    { SCENE_30GYOSON, 9, 0x058B },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance10[] = {
-    { 0x37, 0x0A, 0x858B },
-    { 0x37, 0x0A, 0x858B },
+    { SCENE_30GYOSON, 10, 0x858B },
+    { SCENE_30GYOSON, 10, 0x858B },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance11[] = {
-    { 0x37, 0x0B, 0x0A14 },
-    { 0x37, 0x0B, 0x0A14 },
+    { SCENE_30GYOSON, 11, 0x0A14 },
+    { SCENE_30GYOSON, 11, 0x0A14 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance12[] = {
-    { 0x37, 0x0C, 0x0A14 },
-    { 0x37, 0x0C, 0x0A14 },
+    { SCENE_30GYOSON, 12, 0x0A14 },
+    { SCENE_30GYOSON, 12, 0x0A14 },
 };
 
 static EntranceTableEntry sGreatBayCoastEntrance13[] = {
-    { 0x37, 0x0D, 0x0A14 },
-    { 0x37, 0x0D, 0x0A14 },
+    { SCENE_30GYOSON, 13, 0x0A14 },
+    { SCENE_30GYOSON, 13, 0x0A14 },
 };
 
 static EntranceTableEntry* sGreatBayCoastEntranceTable[] = {
@@ -1295,53 +1297,53 @@ static EntranceTableEntry* sGreatBayCoastEntranceTable[] = {
 };
 
 static EntranceTableEntry sZoraCapeEntrance0[] = {
-    { 0x38, 0x00, 0x8A14 },
-    { 0x38, 0x00, 0x8A14 },
+    { SCENE_31MISAKI, 0, 0x8A14 },
+    { SCENE_31MISAKI, 0, 0x8A14 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance1[] = {
-    { 0x38, 0x01, 0x4993 },
-    { 0x38, 0x01, 0x4993 },
+    { SCENE_31MISAKI, 1, 0x4993 },
+    { SCENE_31MISAKI, 1, 0x4993 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance2[] = {
-    { 0x38, 0x02, 0x4102 },
-    { 0x38, 0x02, 0x4102 },
+    { SCENE_31MISAKI, 2, 0x4102 },
+    { SCENE_31MISAKI, 2, 0x4102 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance3[] = {
-    { 0x38, 0x03, 0x0993 },
-    { 0x38, 0x03, 0x0993 },
+    { SCENE_31MISAKI, 3, 0x0993 },
+    { SCENE_31MISAKI, 3, 0x0993 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance4[] = {
-    { 0x38, 0x04, 0x4102 },
-    { 0x38, 0x04, 0x4102 },
+    { SCENE_31MISAKI, 4, 0x4102 },
+    { SCENE_31MISAKI, 4, 0x4102 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance5[] = {
-    { 0x38, 0x05, 0x0102 },
-    { 0x38, 0x05, 0x0102 },
+    { SCENE_31MISAKI, 5, 0x0102 },
+    { SCENE_31MISAKI, 5, 0x0102 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance6[] = {
-    { 0x38, 0x06, 0x0A14 },
-    { 0x38, 0x06, 0x0A14 },
+    { SCENE_31MISAKI, 6, 0x0A14 },
+    { SCENE_31MISAKI, 6, 0x0A14 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance7[] = {
-    { 0x38, 0x07, 0x0A14 },
-    { 0x38, 0x07, 0x0A14 },
+    { SCENE_31MISAKI, 7, 0x0A14 },
+    { SCENE_31MISAKI, 7, 0x0A14 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance8[] = {
-    { 0x38, 0x08, 0x0A14 },
-    { 0x38, 0x08, 0x0A14 },
+    { SCENE_31MISAKI, 8, 0x0A14 },
+    { SCENE_31MISAKI, 8, 0x0A14 },
 };
 
 static EntranceTableEntry sZoraCapeEntrance9[] = {
-    { 0x38, 0x09, 0x0A14 },
-    { 0x38, 0x09, 0x0A14 },
+    { SCENE_31MISAKI, 9, 0x0A14 },
+    { SCENE_31MISAKI, 9, 0x0A14 },
 };
 
 static EntranceTableEntry* sZoraCapeEntranceTable[] = {
@@ -1350,7 +1352,7 @@ static EntranceTableEntry* sZoraCapeEntranceTable[] = {
 };
 
 static EntranceTableEntry sLotteryShopEntrance0[] = {
-    { 0x39, 0x00, 0x4102 },
+    { SCENE_TAKARAKUJI, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sLotteryShopEntranceTable[] = {
@@ -1358,31 +1360,31 @@ static EntranceTableEntry* sLotteryShopEntranceTable[] = {
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance0[] = {
-    { 0x3B, 0x00, 0x4993 },
+    { SCENE_TORIDE, 0, 0x4993 },
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance1[] = {
-    { 0x3B, 0x01, 0x8102 },
+    { SCENE_TORIDE, 1, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance2[] = {
-    { 0x3B, 0x02, 0x8993 },
+    { SCENE_TORIDE, 2, 0x8993 },
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance3[] = {
-    { 0x3B, 0x03, 0x8993 },
+    { SCENE_TORIDE, 3, 0x8993 },
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance4[] = {
-    { 0x3B, 0x04, 0x8102 },
+    { SCENE_TORIDE, 4, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance5[] = {
-    { 0x3B, 0x05, 0x8102 },
+    { SCENE_TORIDE, 5, 0x8102 },
 };
 
 static EntranceTableEntry sPiratesFortressExteriorEntrance6[] = {
-    { 0x3B, 0x06, 0x8102 },
+    { SCENE_TORIDE, 6, 0x8102 },
 };
 
 static EntranceTableEntry* sPiratesFortressExteriorEntranceTable[] = {
@@ -1392,7 +1394,7 @@ static EntranceTableEntry* sPiratesFortressExteriorEntranceTable[] = {
 };
 
 static EntranceTableEntry sFishermansHutEntrance0[] = {
-    { 0x3C, 0x00, 0x4102 },
+    { SCENE_FISHERMAN, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sFishermansHutEntranceTable[] = {
@@ -1400,7 +1402,7 @@ static EntranceTableEntry* sFishermansHutEntranceTable[] = {
 };
 
 static EntranceTableEntry sGoronShopEntrance0[] = {
-    { 0x3D, 0x00, 0x4102 },
+    { SCENE_GORONSHOP, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sGoronShopEntranceTable[] = {
@@ -1408,20 +1410,20 @@ static EntranceTableEntry* sGoronShopEntranceTable[] = {
 };
 
 static EntranceTableEntry sDekuKingsChamberEntrance0[] = {
-    { 0xC2, 0x00, 0xC102 },
-    { 0xC2, 0x00, 0x8102 },
+    { -SCENE_DEKU_KING, 0, 0xC102 },
+    { -SCENE_DEKU_KING, 0, 0x8102 },
 };
 
 static EntranceTableEntry sDekuKingsChamberEntrance1[] = {
-    { 0xC2, 0x01, 0xC102 },
+    { -SCENE_DEKU_KING, 1, 0xC102 },
 };
 
 static EntranceTableEntry sDekuKingsChamberEntrance2[] = {
-    { 0xC2, 0x02, 0x858B },
+    { -SCENE_DEKU_KING, 2, 0x858B },
 };
 
 static EntranceTableEntry sDekuKingsChamberEntrance3[] = {
-    { 0xC2, 0x03, 0x0102 },
+    { -SCENE_DEKU_KING, 3, 0x0102 },
 };
 
 static EntranceTableEntry* sDekuKingsChamberEntranceTable[] = {
@@ -1432,7 +1434,7 @@ static EntranceTableEntry* sDekuKingsChamberEntranceTable[] = {
 };
 
 static EntranceTableEntry sMoonGoronTrialEntrance0[] = {
-    { 0xC1, 0x00, 0x0387 },
+    { -SCENE_LAST_GORON, 0, 0x0387 },
 };
 
 static EntranceTableEntry* sMoonGoronTrialEntranceTable[] = {
@@ -1440,15 +1442,15 @@ static EntranceTableEntry* sMoonGoronTrialEntranceTable[] = {
 };
 
 static EntranceTableEntry sRoadToSouthernSwampEntrance0[] = {
-    { 0x40, 0x00, 0x8A14 },
+    { SCENE_24KEMONOMITI, 0, 0x8A14 },
 };
 
 static EntranceTableEntry sRoadToSouthernSwampEntrance1[] = {
-    { 0x40, 0x01, 0x8A14 },
+    { SCENE_24KEMONOMITI, 1, 0x8A14 },
 };
 
 static EntranceTableEntry sRoadToSouthernSwampEntrance2[] = {
-    { 0x40, 0x02, 0x0102 },
+    { SCENE_24KEMONOMITI, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sRoadToSouthernSwampEntranceTable[] = {
@@ -1458,11 +1460,11 @@ static EntranceTableEntry* sRoadToSouthernSwampEntranceTable[] = {
 };
 
 static EntranceTableEntry sDoggyRacetrackEntrance0[] = {
-    { 0x41, 0x00, 0xC102 },
+    { SCENE_F01_B, 0, 0xC102 },
 };
 
 static EntranceTableEntry sDoggyRacetrackEntrance1[] = {
-    { 0x41, 0x01, 0x0A14 },
+    { SCENE_F01_B, 1, 0x0A14 },
 };
 
 static EntranceTableEntry* sDoggyRacetrackEntranceTable[] = {
@@ -1471,12 +1473,12 @@ static EntranceTableEntry* sDoggyRacetrackEntranceTable[] = {
 };
 
 static EntranceTableEntry sCuccoShackEntrance0[] = {
-    { 0x42, 0x00, 0xC102 },
-    { 0x42, 0x00, 0x8102 },
+    { SCENE_F01C, 0, 0xC102 },
+    { SCENE_F01C, 0, 0x8102 },
 };
 
 static EntranceTableEntry sCuccoShackEntrance1[] = {
-    { 0x42, 0x01, 0x0A14 },
+    { SCENE_F01C, 1, 0x0A14 },
 };
 
 static EntranceTableEntry* sCuccoShackEntranceTable[] = {
@@ -1485,28 +1487,28 @@ static EntranceTableEntry* sCuccoShackEntranceTable[] = {
 };
 
 static EntranceTableEntry sIkanaGraveyardEntrance0[] = {
-    { 0x43, 0x00, 0x4A14 },
-    { 0x43, 0x00, 0x8102 },
+    { SCENE_BOTI, 0, 0x4A14 },
+    { SCENE_BOTI, 0, 0x8102 },
 };
 
 static EntranceTableEntry sIkanaGraveyardEntrance1[] = {
-    { 0x43, 0x01, 0x4102 },
+    { SCENE_BOTI, 1, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaGraveyardEntrance2[] = {
-    { 0x43, 0x02, 0x4102 },
+    { SCENE_BOTI, 2, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaGraveyardEntrance3[] = {
-    { 0x43, 0x03, 0x4102 },
+    { SCENE_BOTI, 3, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaGraveyardEntrance4[] = {
-    { 0x43, 0x04, 0x4102 },
+    { SCENE_BOTI, 4, 0x4102 },
 };
 
 static EntranceTableEntry sIkanaGraveyardEntrance5[] = {
-    { 0x43, 0x05, 0x058B },
+    { SCENE_BOTI, 5, 0x058B },
 };
 
 static EntranceTableEntry* sIkanaGraveyardEntranceTable[] = {
@@ -1515,7 +1517,7 @@ static EntranceTableEntry* sIkanaGraveyardEntranceTable[] = {
 };
 
 static EntranceTableEntry sGohtsLairEntrance0[] = {
-    { 0xBC, 0x00, 0x8102 },
+    { -SCENE_HAKUGIN_BS, 0, 0x8102 },
 };
 
 static EntranceTableEntry* sGohtsLairEntranceTable[] = {
@@ -1523,47 +1525,47 @@ static EntranceTableEntry* sGohtsLairEntranceTable[] = {
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance0[] = {
-    { 0x45, 0x00, 0xCA14 },
+    { SCENE_20SICHITAI, 0, 0xCA14 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance1[] = {
-    { 0x45, 0x01, 0x4102 },
+    { SCENE_20SICHITAI, 1, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance2[] = {
-    { 0x45, 0x02, 0xC102 },
+    { SCENE_20SICHITAI, 2, 0xC102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance3[] = {
-    { 0x45, 0x03, 0x4102 },
+    { SCENE_20SICHITAI, 3, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance4[] = {
-    { 0x45, 0x04, 0x4102 },
+    { SCENE_20SICHITAI, 4, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance5[] = {
-    { 0x45, 0x05, 0x4102 },
+    { SCENE_20SICHITAI, 5, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance6[] = {
-    { 0x45, 0x06, 0x0102 },
+    { SCENE_20SICHITAI, 6, 0x0102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance7[] = {
-    { 0x45, 0x07, 0x4102 },
+    { SCENE_20SICHITAI, 7, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance8[] = {
-    { 0x45, 0x08, 0x4102 },
+    { SCENE_20SICHITAI, 8, 0x4102 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance9[] = {
-    { 0x45, 0x09, 0x4A14 },
+    { SCENE_20SICHITAI, 9, 0x4A14 },
 };
 
 static EntranceTableEntry sSouthernSwampPoisonedEntrance10[] = {
-    { 0x45, 0x0A, 0x4A14 },
+    { SCENE_20SICHITAI, 10, 0x4A14 },
 };
 
 static EntranceTableEntry* sSouthernSwampPoisonedEntranceTable[] = {
@@ -1574,33 +1576,33 @@ static EntranceTableEntry* sSouthernSwampPoisonedEntranceTable[] = {
 };
 
 static EntranceTableEntry sWoodfallEntrance0[] = {
-    { 0x46, 0x00, 0xC102 },
-    { 0x46, 0x00, 0x0183 },
-    { 0x46, 0x00, 0xC102 },
+    { SCENE_21MITURINMAE, 0, 0xC102 },
+    { SCENE_21MITURINMAE, 0, 0x0183 },
+    { SCENE_21MITURINMAE, 0, 0xC102 },
 };
 
 static EntranceTableEntry sWoodfallEntrance1[] = {
-    { 0x46, 0x01, 0x4102 },
-    { 0x46, 0x01, 0x0183 },
-    { 0x46, 0x01, 0x4102 },
+    { SCENE_21MITURINMAE, 1, 0x4102 },
+    { SCENE_21MITURINMAE, 1, 0x0183 },
+    { SCENE_21MITURINMAE, 1, 0x4102 },
 };
 
 static EntranceTableEntry sWoodfallEntrance2[] = {
-    { 0x46, 0x02, 0x4102 },
-    { 0x46, 0x02, 0x0183 },
-    { 0x46, 0x02, 0x4102 },
+    { SCENE_21MITURINMAE, 2, 0x4102 },
+    { SCENE_21MITURINMAE, 2, 0x0183 },
+    { SCENE_21MITURINMAE, 2, 0x4102 },
 };
 
 static EntranceTableEntry sWoodfallEntrance3[] = {
-    { 0x46, 0x03, 0x4102 },
-    { 0x46, 0x03, 0x0183 },
-    { 0x46, 0x03, 0x4102 },
+    { SCENE_21MITURINMAE, 3, 0x4102 },
+    { SCENE_21MITURINMAE, 3, 0x0183 },
+    { SCENE_21MITURINMAE, 3, 0x4102 },
 };
 
 static EntranceTableEntry sWoodfallEntrance4[] = {
-    { 0x46, 0x04, 0x4102 },
-    { 0x46, 0x04, 0x0183 },
-    { 0x46, 0x04, 0x4102 },
+    { SCENE_21MITURINMAE, 4, 0x4102 },
+    { SCENE_21MITURINMAE, 4, 0x0183 },
+    { SCENE_21MITURINMAE, 4, 0x4102 },
 };
 
 static EntranceTableEntry* sWoodfallEntranceTable[] = {
@@ -1608,11 +1610,11 @@ static EntranceTableEntry* sWoodfallEntranceTable[] = {
 };
 
 static EntranceTableEntry sMoonZoraTrialEntrance0[] = {
-    { 0xB9, 0x00, 0x0387 },
+    { -SCENE_LAST_ZORA, 0, 0x0387 },
 };
 
 static EntranceTableEntry sMoonZoraTrialEntrance1[] = {
-    { 0xB9, 0x01, 0x0102 },
+    { -SCENE_LAST_ZORA, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sMoonZoraTrialEntranceTable[] = {
@@ -1621,24 +1623,24 @@ static EntranceTableEntry* sMoonZoraTrialEntranceTable[] = {
 };
 
 static EntranceTableEntry sGoronVillageSpringEntrance0[] = {
-    { 0x48, 0x00, 0xC102 },
-    { 0x48, 0x00, 0x8102 },
+    { SCENE_11GORONNOSATO2, 0, 0xC102 },
+    { SCENE_11GORONNOSATO2, 0, 0x8102 },
 };
 
 static EntranceTableEntry sGoronVillageSpringEntrance1[] = {
-    { 0x48, 0x01, 0x4102 },
+    { SCENE_11GORONNOSATO2, 1, 0x4102 },
 };
 
 static EntranceTableEntry sGoronVillageSpringEntrance2[] = {
-    { 0x48, 0x02, 0x4102 },
+    { SCENE_11GORONNOSATO2, 2, 0x4102 },
 };
 
 static EntranceTableEntry sGoronVillageSpringEntrance3[] = {
-    { 0x48, 0x03, 0x4102 },
+    { SCENE_11GORONNOSATO2, 3, 0x4102 },
 };
 
 static EntranceTableEntry sGoronVillageSpringEntrance4[] = {
-    { 0x48, 0x04, 0x0A14 },
+    { SCENE_11GORONNOSATO2, 4, 0x0A14 },
 };
 
 static EntranceTableEntry* sGoronVillageSpringEntranceTable[] = {
@@ -1647,15 +1649,15 @@ static EntranceTableEntry* sGoronVillageSpringEntranceTable[] = {
 };
 
 static EntranceTableEntry sGreatBayTempleEntrance0[] = {
-    { 0xB7, 0x00, 0x4102 },
+    { -SCENE_SEA, 0, 0x4102 },
 };
 
 static EntranceTableEntry sGreatBayTempleEntrance1[] = {
-    { 0xB7, 0x01, 0x0102 },
+    { -SCENE_SEA, 1, 0x0102 },
 };
 
 static EntranceTableEntry sGreatBayTempleEntrance2[] = {
-    { 0xB7, 0x02, 0x0102 },
+    { -SCENE_SEA, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sGreatBayTempleEntranceTable[] = {
@@ -1665,19 +1667,19 @@ static EntranceTableEntry* sGreatBayTempleEntranceTable[] = {
 };
 
 static EntranceTableEntry sWaterfallRapidsEntrance0[] = {
-    { 0x4A, 0x00, 0x4102 },
+    { SCENE_35TAKI, 0, 0x4102 },
 };
 
 static EntranceTableEntry sWaterfallRapidsEntrance1[] = {
-    { 0x4A, 0x01, 0x0A14 },
+    { SCENE_35TAKI, 1, 0x0A14 },
 };
 
 static EntranceTableEntry sWaterfallRapidsEntrance2[] = {
-    { 0x4A, 0x02, 0x0A14 },
+    { SCENE_35TAKI, 2, 0x0A14 },
 };
 
 static EntranceTableEntry sWaterfallRapidsEntrance3[] = {
-    { 0x4A, 0x03, 0x0A14 },
+    { SCENE_35TAKI, 3, 0x0A14 },
 };
 
 static EntranceTableEntry* sWaterfallRapidsEntranceTable[] = {
@@ -1688,11 +1690,11 @@ static EntranceTableEntry* sWaterfallRapidsEntranceTable[] = {
 };
 
 static EntranceTableEntry sBeneathTheWellEntrance0[] = {
-    { 0xB5, 0x00, 0x4102 },
+    { -SCENE_REDEAD, 0, 0x4102 },
 };
 
 static EntranceTableEntry sBeneathTheWellEntrance1[] = {
-    { 0xB5, 0x01, 0x4102 },
+    { -SCENE_REDEAD, 1, 0x4102 },
 };
 
 static EntranceTableEntry* sBeneathTheWellEntranceTable[] = {
@@ -1701,31 +1703,31 @@ static EntranceTableEntry* sBeneathTheWellEntranceTable[] = {
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance0[] = {
-    { 0x4C, 0x00, 0x0102 },
+    { SCENE_BANDROOM, 0, 0x0102 },
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance1[] = {
-    { 0x4C, 0x01, 0x0102 },
+    { SCENE_BANDROOM, 1, 0x0102 },
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance2[] = {
-    { 0x4C, 0x02, 0x0102 },
+    { SCENE_BANDROOM, 2, 0x0102 },
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance3[] = {
-    { 0x4C, 0x03, 0x0102 },
+    { SCENE_BANDROOM, 3, 0x0102 },
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance4[] = {
-    { 0x4C, 0x04, 0x858B },
+    { SCENE_BANDROOM, 4, 0x858B },
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance5[] = {
-    { 0x4C, 0x05, 0x0102 },
+    { SCENE_BANDROOM, 5, 0x0102 },
 };
 
 static EntranceTableEntry sZoraHallRoomsEntrance6[] = {
-    { 0x4C, 0x06, 0x0102 },
+    { SCENE_BANDROOM, 6, 0x0102 },
 };
 
 static EntranceTableEntry* sZoraHallRoomsEntranceTable[] = {
@@ -1734,23 +1736,23 @@ static EntranceTableEntry* sZoraHallRoomsEntranceTable[] = {
 };
 
 static EntranceTableEntry sGoronVillageWinterEntrance0[] = {
-    { 0x4D, 0x00, 0xC102 },
+    { SCENE_11GORONNOSATO, 0, 0xC102 },
 };
 
 static EntranceTableEntry sGoronVillageWinterEntrance1[] = {
-    { 0x4D, 0x01, 0x4102 },
+    { SCENE_11GORONNOSATO, 1, 0x4102 },
 };
 
 static EntranceTableEntry sGoronVillageWinterEntrance2[] = {
-    { 0x4D, 0x02, 0x4102 },
+    { SCENE_11GORONNOSATO, 2, 0x4102 },
 };
 
 static EntranceTableEntry sGoronVillageWinterEntrance3[] = {
-    { 0x4D, 0x03, 0x4102 },
+    { SCENE_11GORONNOSATO, 3, 0x4102 },
 };
 
 static EntranceTableEntry sGoronVillageWinterEntrance4[] = {
-    { 0x4D, 0x04, 0x0A14 },
+    { SCENE_11GORONNOSATO, 4, 0x0A14 },
 };
 
 static EntranceTableEntry* sGoronVillageWinterEntranceTable[] = {
@@ -1759,11 +1761,11 @@ static EntranceTableEntry* sGoronVillageWinterEntranceTable[] = {
 };
 
 static EntranceTableEntry sGoronGraveryardEntrance0[] = {
-    { 0x4E, 0x00, 0x4102 },
+    { SCENE_GORON_HAKA, 0, 0x4102 },
 };
 
 static EntranceTableEntry sGoronGraveryardEntrance1[] = {
-    { 0x4E, 0x01, 0x058B },
+    { SCENE_GORON_HAKA, 1, 0x058B },
 };
 
 static EntranceTableEntry* sGoronGraveryardEntranceTable[] = {
@@ -1772,7 +1774,7 @@ static EntranceTableEntry* sGoronGraveryardEntranceTable[] = {
 };
 
 static EntranceTableEntry sSakonsHideoutEntrance0[] = {
-    { 0x4F, 0x00, 0x4102 },
+    { SCENE_SECOM, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sSakonsHideoutEntranceTable[] = {
@@ -1780,39 +1782,39 @@ static EntranceTableEntry* sSakonsHideoutEntranceTable[] = {
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance0[] = {
-    { 0x50, 0x00, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA, 0, 0x4A14 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance1[] = {
-    { 0x50, 0x01, 0x4102 },
+    { SCENE_10YUKIYAMANOMURA, 1, 0x4102 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance2[] = {
-    { 0x50, 0x02, 0xCA14 },
+    { SCENE_10YUKIYAMANOMURA, 2, 0xCA14 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance3[] = {
-    { 0x50, 0x03, 0x4102 },
+    { SCENE_10YUKIYAMANOMURA, 3, 0x4102 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance4[] = {
-    { 0x50, 0x04, 0xCA14 },
+    { SCENE_10YUKIYAMANOMURA, 4, 0xCA14 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance5[] = {
-    { 0x50, 0x05, 0x4102 },
+    { SCENE_10YUKIYAMANOMURA, 5, 0x4102 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance6[] = {
-    { 0x50, 0x06, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA, 6, 0x4A14 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance7[] = {
-    { 0x50, 0x07, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA, 7, 0x4A14 },
 };
 
 static EntranceTableEntry sMountainVillageWinterEntrance8[] = {
-    { 0x50, 0x08, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA, 8, 0x4A14 },
 };
 
 static EntranceTableEntry* sMountainVillageWinterEntranceTable[] = {
@@ -1822,15 +1824,15 @@ static EntranceTableEntry* sMountainVillageWinterEntranceTable[] = {
 };
 
 static EntranceTableEntry sGhostHutEntrance0[] = {
-    { 0x51, 0x00, 0x4102 },
+    { SCENE_TOUGITES, 0, 0x4102 },
 };
 
 static EntranceTableEntry sGhostHutEntrance1[] = {
-    { 0x51, 0x01, 0x0102 },
+    { SCENE_TOUGITES, 1, 0x0102 },
 };
 
 static EntranceTableEntry sGhostHutEntrance2[] = {
-    { 0x51, 0x02, 0x0102 },
+    { SCENE_TOUGITES, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sGhostHutEntranceTable[] = {
@@ -1840,15 +1842,15 @@ static EntranceTableEntry* sGhostHutEntranceTable[] = {
 };
 
 static EntranceTableEntry sDekuShrineEntrance0[] = {
-    { 0x52, 0x00, 0x4102 },
+    { SCENE_DANPEI, 0, 0x4102 },
 };
 
 static EntranceTableEntry sDekuShrineEntrance1[] = {
-    { 0x52, 0x01, 0x0102 },
+    { SCENE_DANPEI, 1, 0x0102 },
 };
 
 static EntranceTableEntry sDekuShrineEntrance2[] = {
-    { 0x52, 0x02, 0x0102 },
+    { SCENE_DANPEI, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sDekuShrineEntranceTable[] = {
@@ -1858,15 +1860,15 @@ static EntranceTableEntry* sDekuShrineEntranceTable[] = {
 };
 
 static EntranceTableEntry sRoadToIkanaEntrance0[] = {
-    { 0x53, 0x00, 0x8A14 },
+    { SCENE_IKANAMAE, 0, 0x8A14 },
 };
 
 static EntranceTableEntry sRoadToIkanaEntrance1[] = {
-    { 0x53, 0x01, 0x8A14 },
+    { SCENE_IKANAMAE, 1, 0x8A14 },
 };
 
 static EntranceTableEntry sRoadToIkanaEntrance2[] = {
-    { 0x53, 0x02, 0x0A14 },
+    { SCENE_IKANAMAE, 2, 0x0A14 },
 };
 
 static EntranceTableEntry* sRoadToIkanaEntranceTable[] = {
@@ -1876,7 +1878,7 @@ static EntranceTableEntry* sRoadToIkanaEntranceTable[] = {
 };
 
 static EntranceTableEntry sMusicBoxHouseEntrance0[] = {
-    { 0x55, 0x00, 0x4102 },
+    { SCENE_MUSICHOUSE, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sMusicBoxHouseEntranceTable[] = {
@@ -1884,8 +1886,8 @@ static EntranceTableEntry* sMusicBoxHouseEntranceTable[] = {
 };
 
 static EntranceTableEntry sIgosDuIkanasLairEntrance0[] = {
-    { 0xAA, 0x00, 0x8102 },
-    { 0xAA, 0x00, 0x8102 },
+    { -SCENE_IKNINSIDE, 0, 0x8102 },
+    { -SCENE_IKNINSIDE, 0, 0x8102 },
 };
 
 static EntranceTableEntry* sIgosDuIkanasLairEntranceTable[] = {
@@ -1893,7 +1895,7 @@ static EntranceTableEntry* sIgosDuIkanasLairEntranceTable[] = {
 };
 
 static EntranceTableEntry sSwordmansSchoolEntrance0[] = {
-    { 0x54, 0x00, 0x4102 },
+    { SCENE_DOUJOU, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sSwordmansSchoolEntranceTable[] = {
@@ -1901,15 +1903,15 @@ static EntranceTableEntry* sSwordmansSchoolEntranceTable[] = {
 };
 
 static EntranceTableEntry sTouristInformationEntrance0[] = {
-    { 0x57, 0x00, 0x4102 },
+    { SCENE_MAP_SHOP, 0, 0x4102 },
 };
 
 static EntranceTableEntry sTouristInformationEntrance1[] = {
-    { 0x57, 0x01, 0x0102 },
+    { SCENE_MAP_SHOP, 1, 0x0102 },
 };
 
 static EntranceTableEntry sTouristInformationEntrance2[] = {
-    { 0x57, 0x02, 0x0102 },
+    { SCENE_MAP_SHOP, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sTouristInformationEntranceTable[] = {
@@ -1919,19 +1921,19 @@ static EntranceTableEntry* sTouristInformationEntranceTable[] = {
 };
 
 static EntranceTableEntry sStoneTowerEntrance0[] = {
-    { 0x58, 0x00, 0x4102 },
+    { SCENE_F40, 0, 0x4102 },
 };
 
 static EntranceTableEntry sStoneTowerEntrance1[] = {
-    { 0x58, 0x01, 0xCA14 },
+    { SCENE_F40, 1, 0xCA14 },
 };
 
 static EntranceTableEntry sStoneTowerEntrance2[] = {
-    { 0x58, 0x02, 0xC102 },
+    { SCENE_F40, 2, 0xC102 },
 };
 
 static EntranceTableEntry sStoneTowerEntrance3[] = {
-    { 0x58, 0x03, 0x4A14 },
+    { SCENE_F40, 3, 0x4A14 },
 };
 
 static EntranceTableEntry* sStoneTowerEntranceTable[] = {
@@ -1942,11 +1944,11 @@ static EntranceTableEntry* sStoneTowerEntranceTable[] = {
 };
 
 static EntranceTableEntry sStoneTowerInvertedEntrance0[] = {
-    { 0x59, 0x00, 0x4A14 },
+    { SCENE_F41, 0, 0x4A14 },
 };
 
 static EntranceTableEntry sStoneTowerInvertedEntrance1[] = {
-    { 0x59, 0x01, 0xC102 },
+    { SCENE_F41, 1, 0xC102 },
 };
 
 static EntranceTableEntry* sStoneTowerInvertedEntranceTable[] = {
@@ -1955,40 +1957,40 @@ static EntranceTableEntry* sStoneTowerInvertedEntranceTable[] = {
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance0[] = {
-    { 0x5A, 0x00, 0x4A14 },
-    { 0x5A, 0x00, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA2, 0, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA2, 0, 0x4A14 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance1[] = {
-    { 0x5A, 0x01, 0x4102 },
+    { SCENE_10YUKIYAMANOMURA2, 1, 0x4102 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance2[] = {
-    { 0x5A, 0x02, 0xCA14 },
+    { SCENE_10YUKIYAMANOMURA2, 2, 0xCA14 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance3[] = {
-    { 0x5A, 0x03, 0x4102 },
+    { SCENE_10YUKIYAMANOMURA2, 3, 0x4102 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance4[] = {
-    { 0x5A, 0x04, 0xCA14 },
+    { SCENE_10YUKIYAMANOMURA2, 4, 0xCA14 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance5[] = {
-    { 0x5A, 0x05, 0x4102 },
+    { SCENE_10YUKIYAMANOMURA2, 5, 0x4102 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance6[] = {
-    { 0x5A, 0x06, 0xCA14 },
+    { SCENE_10YUKIYAMANOMURA2, 6, 0xCA14 },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance7[] = {
-    { 0x5A, 0x07, 0x458B },
+    { SCENE_10YUKIYAMANOMURA2, 7, 0x458B },
 };
 
 static EntranceTableEntry sMountainVillageSpringEntrance8[] = {
-    { 0x5A, 0x08, 0x4A14 },
+    { SCENE_10YUKIYAMANOMURA2, 8, 0x4A14 },
 };
 
 static EntranceTableEntry* sMountainVillageSpringEntranceTable[] = {
@@ -1998,13 +2000,13 @@ static EntranceTableEntry* sMountainVillageSpringEntranceTable[] = {
 };
 
 static EntranceTableEntry sPathToSnowheadEntrance0[] = {
-    { 0x5B, 0x00, 0xCA14 },
-    { 0x5B, 0x00, 0xCA14 },
+    { SCENE_14YUKIDAMANOMITI, 0, 0xCA14 },
+    { SCENE_14YUKIDAMANOMITI, 0, 0xCA14 },
 };
 
 static EntranceTableEntry sPathToSnowheadEntrance1[] = {
-    { 0x5B, 0x01, 0xCA14 },
-    { 0x5B, 0x01, 0xCA14 },
+    { SCENE_14YUKIDAMANOMITI, 1, 0xCA14 },
+    { SCENE_14YUKIDAMANOMITI, 1, 0xCA14 },
 };
 
 static EntranceTableEntry* sPathToSnowheadEntranceTable[] = {
@@ -2013,23 +2015,23 @@ static EntranceTableEntry* sPathToSnowheadEntranceTable[] = {
 };
 
 static EntranceTableEntry sSnowheadEntrance0[] = {
-    { 0x5C, 0x00, 0xCA14 },
-    { 0x5C, 0x00, 0xCA14 },
+    { SCENE_12HAKUGINMAE, 0, 0xCA14 },
+    { SCENE_12HAKUGINMAE, 0, 0xCA14 },
 };
 
 static EntranceTableEntry sSnowheadEntrance1[] = {
-    { 0x5C, 0x01, 0x4102 },
-    { 0x5C, 0x01, 0x4102 },
+    { SCENE_12HAKUGINMAE, 1, 0x4102 },
+    { SCENE_12HAKUGINMAE, 1, 0x4102 },
 };
 
 static EntranceTableEntry sSnowheadEntrance2[] = {
-    { 0x5C, 0x02, 0x4102 },
-    { 0x5C, 0x02, 0x4102 },
+    { SCENE_12HAKUGINMAE, 2, 0x4102 },
+    { SCENE_12HAKUGINMAE, 2, 0x4102 },
 };
 
 static EntranceTableEntry sSnowheadEntrance3[] = {
-    { 0x5C, 0x03, 0x4102 },
-    { 0x5C, 0x03, 0x4102 },
+    { SCENE_12HAKUGINMAE, 3, 0x4102 },
+    { SCENE_12HAKUGINMAE, 3, 0x4102 },
 };
 
 static EntranceTableEntry* sSnowheadEntranceTable[] = {
@@ -2040,15 +2042,15 @@ static EntranceTableEntry* sSnowheadEntranceTable[] = {
 };
 
 static EntranceTableEntry sPathToGoronVillageWinterEntrance0[] = {
-    { 0x5D, 0x00, 0x8A14 },
+    { SCENE_17SETUGEN, 0, 0x8A14 },
 };
 
 static EntranceTableEntry sPathToGoronVillageWinterEntrance1[] = {
-    { 0x5D, 0x01, 0x8102 },
+    { SCENE_17SETUGEN, 1, 0x8102 },
 };
 
 static EntranceTableEntry sPathToGoronVillageWinterEntrance2[] = {
-    { 0x5D, 0x02, 0x0102 },
+    { SCENE_17SETUGEN, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sPathToGoronVillageWinterEntranceTable[] = {
@@ -2058,15 +2060,15 @@ static EntranceTableEntry* sPathToGoronVillageWinterEntranceTable[] = {
 };
 
 static EntranceTableEntry sPathToGoronVillageSpringEntrance0[] = {
-    { 0x5E, 0x00, 0x8A14 },
+    { SCENE_17SETUGEN2, 0, 0x8A14 },
 };
 
 static EntranceTableEntry sPathToGoronVillageSpringEntrance1[] = {
-    { 0x5E, 0x01, 0x8102 },
+    { SCENE_17SETUGEN2, 1, 0x8102 },
 };
 
 static EntranceTableEntry sPathToGoronVillageSpringEntrance2[] = {
-    { 0x5E, 0x02, 0x0102 },
+    { SCENE_17SETUGEN2, 2, 0x0102 },
 };
 
 static EntranceTableEntry* sPathToGoronVillageSpringEntranceTable[] = {
@@ -2076,11 +2078,11 @@ static EntranceTableEntry* sPathToGoronVillageSpringEntranceTable[] = {
 };
 
 static EntranceTableEntry sGyorgsLairEntrance0[] = {
-    { 0xA1, 0x00, 0x8102 },
+    { -SCENE_SEA_BS, 0, 0x8102 },
 };
 
 static EntranceTableEntry sGyorgsLairEntrance1[] = {
-    { 0xA1, 0x01, 0x8102 },
+    { -SCENE_SEA_BS, 1, 0x8102 },
 };
 
 static EntranceTableEntry* sGyorgsLairEntranceTable[] = {
@@ -2089,7 +2091,7 @@ static EntranceTableEntry* sGyorgsLairEntranceTable[] = {
 };
 
 static EntranceTableEntry sSecretShrineEntrance0[] = {
-    { 0xA0, 0x00, 0x4102 },
+    { -SCENE_RANDOM, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sSecretShrineEntranceTable[] = {
@@ -2097,28 +2099,28 @@ static EntranceTableEntry* sSecretShrineEntranceTable[] = {
 };
 
 static EntranceTableEntry sStockPotInnEntrance0[] = {
-    { 0x61, 0x00, 0x4102 },
-    { 0x61, 0x00, 0x8102 },
+    { SCENE_YADOYA, 0, 0x4102 },
+    { SCENE_YADOYA, 0, 0x8102 },
 };
 
 static EntranceTableEntry sStockPotInnEntrance1[] = {
-    { 0x61, 0x01, 0x4102 },
+    { SCENE_YADOYA, 1, 0x4102 },
 };
 
 static EntranceTableEntry sStockPotInnEntrance2[] = {
-    { 0x61, 0x02, 0x0102 },
+    { SCENE_YADOYA, 2, 0x0102 },
 };
 
 static EntranceTableEntry sStockPotInnEntrance3[] = {
-    { 0x61, 0x03, 0x0102 },
+    { SCENE_YADOYA, 3, 0x0102 },
 };
 
 static EntranceTableEntry sStockPotInnEntrance4[] = {
-    { 0x61, 0x04, 0x0102 },
+    { SCENE_YADOYA, 4, 0x0102 },
 };
 
 static EntranceTableEntry sStockPotInnEntrance5[] = {
-    { 0x61, 0x05, 0x0102 },
+    { SCENE_YADOYA, 5, 0x0102 },
 };
 
 static EntranceTableEntry* sStockPotInnEntranceTable[] = {
@@ -2127,7 +2129,7 @@ static EntranceTableEntry* sStockPotInnEntranceTable[] = {
 };
 
 static EntranceTableEntry sGreatBayCutsceneEntrance0[] = {
-    { 0x62, 0x00, 0x4102 },
+    { SCENE_KONPEKI_ENT, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sGreatBayCutsceneEntranceTable[] = {
@@ -2135,31 +2137,31 @@ static EntranceTableEntry* sGreatBayCutsceneEntranceTable[] = {
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance0[] = {
-    { 0x63, 0x00, 0x0102 },
+    { SCENE_INSIDETOWER, 0, 0x0102 },
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance1[] = {
-    { 0x63, 0x01, 0x0102 },
+    { SCENE_INSIDETOWER, 1, 0x0102 },
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance2[] = {
-    { 0x63, 0x02, 0x058B },
+    { SCENE_INSIDETOWER, 2, 0x058B },
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance3[] = {
-    { 0x63, 0x03, 0x0102 },
+    { SCENE_INSIDETOWER, 3, 0x0102 },
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance4[] = {
-    { 0x63, 0x04, 0x058B },
+    { SCENE_INSIDETOWER, 4, 0x058B },
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance5[] = {
-    { 0x63, 0x05, 0x0102 },
+    { SCENE_INSIDETOWER, 5, 0x0102 },
 };
 
 static EntranceTableEntry sClockTowerInteriorEntrance6[] = {
-    { 0x63, 0x06, 0x858B },
+    { SCENE_INSIDETOWER, 6, 0x858B },
 };
 
 static EntranceTableEntry* sClockTowerInteriorEntranceTable[] = {
@@ -2169,7 +2171,7 @@ static EntranceTableEntry* sClockTowerInteriorEntranceTable[] = {
 };
 
 static EntranceTableEntry sWoodsOfMysteryEntrance0[] = {
-    { 0x64, 0x00, 0x4102 },
+    { SCENE_26SARUNOMORI, 0, 0x4102 },
 };
 
 static EntranceTableEntry* sWoodsOfMysteryEntranceTable[] = {
@@ -2177,24 +2179,24 @@ static EntranceTableEntry* sWoodsOfMysteryEntranceTable[] = {
 };
 
 static EntranceTableEntry sLostWoodsEntrance0[] = {
-    { 0x9B, 0x00, 0x858B },
-    { 0x9B, 0x00, 0x8183 },
-    { 0x9B, 0x00, 0x858B },
-    { 0x9B, 0x00, 0x8102 },
+    { -SCENE_LOST_WOODS, 0, 0x858B },
+    { -SCENE_LOST_WOODS, 0, 0x8183 },
+    { -SCENE_LOST_WOODS, 0, 0x858B },
+    { -SCENE_LOST_WOODS, 0, 0x8102 },
 };
 
 static EntranceTableEntry sLostWoodsEntrance1[] = {
-    { 0x9B, 0x01, 0x058B },
-    { 0x9B, 0x01, 0x058B },
-    { 0x9B, 0x01, 0x058B },
-    { 0x9B, 0x01, 0x058B },
+    { -SCENE_LOST_WOODS, 1, 0x058B },
+    { -SCENE_LOST_WOODS, 1, 0x058B },
+    { -SCENE_LOST_WOODS, 1, 0x058B },
+    { -SCENE_LOST_WOODS, 1, 0x058B },
 };
 
 static EntranceTableEntry sLostWoodsEntrance2[] = {
-    { 0x9B, 0x02, 0x058B },
-    { 0x9B, 0x02, 0x058B },
-    { 0x9B, 0x02, 0x058B },
-    { 0x9B, 0x02, 0x058B },
+    { -SCENE_LOST_WOODS, 2, 0x058B },
+    { -SCENE_LOST_WOODS, 2, 0x058B },
+    { -SCENE_LOST_WOODS, 2, 0x058B },
+    { -SCENE_LOST_WOODS, 2, 0x058B },
 };
 
 static EntranceTableEntry* sLostWoodsEntranceTable[] = {
@@ -2204,7 +2206,7 @@ static EntranceTableEntry* sLostWoodsEntranceTable[] = {
 };
 
 static EntranceTableEntry sMoonLinkTrialEntrance0[] = {
-    { 0x66, 0x00, 0x0387 },
+    { SCENE_LAST_LINK, 0, 0x0387 },
 };
 
 static EntranceTableEntry* sMoonLinkTrialEntranceTable[] = {
@@ -2212,7 +2214,7 @@ static EntranceTableEntry* sMoonLinkTrialEntranceTable[] = {
 };
 
 static EntranceTableEntry sTheMoonEntrance0[] = {
-    { 0x67, 0x00, 0x0387 },
+    { SCENE_SOUGEN, 0, 0x0387 },
 };
 
 static EntranceTableEntry* sTheMoonEntranceTable[] = {
@@ -2220,11 +2222,11 @@ static EntranceTableEntry* sTheMoonEntranceTable[] = {
 };
 
 static EntranceTableEntry sBombShopEntrance0[] = {
-    { 0x68, 0x00, 0x4102 },
+    { SCENE_BOMYA, 0, 0x4102 },
 };
 
 static EntranceTableEntry sBombShopEntrance1[] = {
-    { 0x68, 0x01, 0x0102 },
+    { SCENE_BOMYA, 1, 0x0102 },
 };
 
 static EntranceTableEntry* sBombShopEntranceTable[] = {
@@ -2233,9 +2235,10 @@ static EntranceTableEntry* sBombShopEntranceTable[] = {
 };
 
 static EntranceTableEntry sGiantsChamberEntrance0[] = {
-    { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 },
-    { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 },
-    { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 }, { 0x69, 0x00, 0x0102 },
+    { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 },
+    { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 },
+    { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 },
+    { SCENE_KYOJINNOMA, 0, 0x0102 }, { SCENE_KYOJINNOMA, 0, 0x0102 },
 };
 
 static EntranceTableEntry* sGiantsChamberEntranceTable[] = {
@@ -2243,27 +2246,27 @@ static EntranceTableEntry* sGiantsChamberEntranceTable[] = {
 };
 
 static EntranceTableEntry sGormanTrackEntrance0[] = {
-    { 0x6A, 0x00, 0x4A14 },
+    { SCENE_KOEPONARACE, 0, 0x4A14 },
 };
 
 static EntranceTableEntry sGormanTrackEntrance1[] = {
-    { 0x6A, 0x01, 0x4A14 },
+    { SCENE_KOEPONARACE, 1, 0x4A14 },
 };
 
 static EntranceTableEntry sGormanTrackEntrance2[] = {
-    { 0x6A, 0x02, 0x4A14 },
+    { SCENE_KOEPONARACE, 2, 0x4A14 },
 };
 
 static EntranceTableEntry sGormanTrackEntrance3[] = {
-    { 0x6A, 0x03, 0x4A14 },
+    { SCENE_KOEPONARACE, 3, 0x4A14 },
 };
 
 static EntranceTableEntry sGormanTrackEntrance4[] = {
-    { 0x6A, 0x04, 0x0102 },
+    { SCENE_KOEPONARACE, 4, 0x0102 },
 };
 
 static EntranceTableEntry sGormanTrackEntrance5[] = {
-    { 0x6A, 0x05, 0x0A14 },
+    { SCENE_KOEPONARACE, 5, 0x0A14 },
 };
 
 static EntranceTableEntry* sGormanTrackEntranceTable[] = {
@@ -2272,18 +2275,18 @@ static EntranceTableEntry* sGormanTrackEntranceTable[] = {
 };
 
 static EntranceTableEntry sGoronRacetrackEntrance0[] = {
-    { 0x6B, 0x00, 0x4102 },
-    { 0x6B, 0x00, 0x4102 },
+    { SCENE_GORONRACE, 0, 0x4102 },
+    { SCENE_GORONRACE, 0, 0x4102 },
 };
 
 static EntranceTableEntry sGoronRacetrackEntrance1[] = {
-    { 0x6B, 0x01, 0x8A14 },
-    { 0x6B, 0x01, 0x8A14 },
+    { SCENE_GORONRACE, 1, 0x8A14 },
+    { SCENE_GORONRACE, 1, 0x8A14 },
 };
 
 static EntranceTableEntry sGoronRacetrackEntrance2[] = {
-    { 0x6B, 0x02, 0x0A14 },
-    { 0x6B, 0x02, 0x0A14 },
+    { SCENE_GORONRACE, 2, 0x0A14 },
+    { SCENE_GORONRACE, 2, 0x0A14 },
 };
 
 static EntranceTableEntry* sGoronRacetrackEntranceTable[] = {
@@ -2293,57 +2296,57 @@ static EntranceTableEntry* sGoronRacetrackEntranceTable[] = {
 };
 
 static EntranceTableEntry sEastClockTownEntrance0[] = {
-    { 0x6C, 0x00, 0x4102 },
-    { 0x6C, 0x00, 0x8102 },
-    { 0x6C, 0x00, 0x058B },
+    { SCENE_TOWN, 0, 0x4102 },
+    { SCENE_TOWN, 0, 0x8102 },
+    { SCENE_TOWN, 0, 0x058B },
 };
 
 static EntranceTableEntry sEastClockTownEntrance1[] = {
-    { 0x6C, 0x01, 0xCA14 },
+    { SCENE_TOWN, 1, 0xCA14 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance2[] = {
-    { 0x6C, 0x02, 0x4102 },
+    { SCENE_TOWN, 2, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance3[] = {
-    { 0x6C, 0x03, 0xC102 },
+    { SCENE_TOWN, 3, 0xC102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance4[] = {
-    { 0x6C, 0x04, 0x4102 },
+    { SCENE_TOWN, 4, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance5[] = {
-    { 0x6C, 0x05, 0xC102 },
+    { SCENE_TOWN, 5, 0xC102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance6[] = {
-    { 0x6C, 0x06, 0x4102 },
+    { SCENE_TOWN, 6, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance7[] = {
-    { 0x6C, 0x07, 0x4102 },
+    { SCENE_TOWN, 7, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance8[] = {
-    { 0x6C, 0x08, 0x4102 },
+    { SCENE_TOWN, 8, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance9[] = {
-    { 0x6C, 0x09, 0x4102 },
+    { SCENE_TOWN, 9, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance10[] = {
-    { 0x6C, 0x0A, 0x4102 },
+    { SCENE_TOWN, 10, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance11[] = {
-    { 0x6C, 0x0B, 0x4102 },
+    { SCENE_TOWN, 11, 0x4102 },
 };
 
 static EntranceTableEntry sEastClockTownEntrance12[] = {
-    { 0x6C, 0x0C, 0x4102 },
+    { SCENE_TOWN, 12, 0x4102 },
 };
 
 static EntranceTableEntry* sEastClockTownEntranceTable[] = {
@@ -2354,44 +2357,44 @@ static EntranceTableEntry* sEastClockTownEntranceTable[] = {
 };
 
 static EntranceTableEntry sWestClockTownEntrance0[] = {
-    { 0x6D, 0x00, 0x4102 },
-    { 0x6D, 0x00, 0x8102 },
+    { SCENE_ICHIBA, 0, 0x4102 },
+    { SCENE_ICHIBA, 0, 0x8102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance1[] = {
-    { 0x6D, 0x01, 0xC102 },
+    { SCENE_ICHIBA, 1, 0xC102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance2[] = {
-    { 0x6D, 0x02, 0xCA14 },
+    { SCENE_ICHIBA, 2, 0xCA14 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance3[] = {
-    { 0x6D, 0x03, 0x4102 },
+    { SCENE_ICHIBA, 3, 0x4102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance4[] = {
-    { 0x6D, 0x04, 0x4102 },
+    { SCENE_ICHIBA, 4, 0x4102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance5[] = {
-    { 0x6D, 0x05, 0x4102 },
+    { SCENE_ICHIBA, 5, 0x4102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance6[] = {
-    { 0x6D, 0x06, 0x4102 },
+    { SCENE_ICHIBA, 6, 0x4102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance7[] = {
-    { 0x6D, 0x07, 0x4102 },
+    { SCENE_ICHIBA, 7, 0x4102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance8[] = {
-    { 0x6D, 0x08, 0x4102 },
+    { SCENE_ICHIBA, 8, 0x4102 },
 };
 
 static EntranceTableEntry sWestClockTownEntrance9[] = {
-    { 0x6D, 0x09, 0x4A14 },
+    { SCENE_ICHIBA, 9, 0x4A14 },
 };
 
 static EntranceTableEntry* sWestClockTownEntranceTable[] = {
@@ -2401,36 +2404,36 @@ static EntranceTableEntry* sWestClockTownEntranceTable[] = {
 };
 
 static EntranceTableEntry sNorthClockTownEntrance0[] = {
-    { 0x6E, 0x00, 0x4102 },
-    { 0x6E, 0x00, 0x458B },
+    { SCENE_BACKTOWN, 0, 0x4102 },
+    { SCENE_BACKTOWN, 0, 0x458B },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance1[] = {
-    { 0x6E, 0x01, 0xC102 },
+    { SCENE_BACKTOWN, 1, 0xC102 },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance2[] = {
-    { 0x6E, 0x02, 0xC102 },
+    { SCENE_BACKTOWN, 2, 0xC102 },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance3[] = {
-    { 0x6E, 0x03, 0x4102 },
+    { SCENE_BACKTOWN, 3, 0x4102 },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance4[] = {
-    { 0x6E, 0x04, 0x4102 },
+    { SCENE_BACKTOWN, 4, 0x4102 },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance5[] = {
-    { 0x6E, 0x05, 0x8A14 },
+    { SCENE_BACKTOWN, 5, 0x8A14 },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance6[] = {
-    { 0x6E, 0x06, 0x8A14 },
+    { SCENE_BACKTOWN, 6, 0x8A14 },
 };
 
 static EntranceTableEntry sNorthClockTownEntrance7[] = {
-    { 0x6E, 0x07, 0x8A14 },
+    { SCENE_BACKTOWN, 7, 0x8A14 },
 };
 
 static EntranceTableEntry* sNorthClockTownEntranceTable[] = {
@@ -2439,51 +2442,51 @@ static EntranceTableEntry* sNorthClockTownEntranceTable[] = {
 };
 
 static EntranceTableEntry sSouthClockTownEntrance0[] = {
-    { 0x6F, 0x00, 0x4102 },
-    { 0x6F, 0x00, 0x8102 },
-    { 0x6F, 0x00, 0x0A14 },
-    { 0x6F, 0x00, 0x0102 },
+    { SCENE_CLOCKTOWER, 0, 0x4102 },
+    { SCENE_CLOCKTOWER, 0, 0x8102 },
+    { SCENE_CLOCKTOWER, 0, 0x0A14 },
+    { SCENE_CLOCKTOWER, 0, 0x0102 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance1[] = {
-    { 0x6F, 0x01, 0x4102 },
-    { 0x6F, 0x01, 0x8102 },
+    { SCENE_CLOCKTOWER, 1, 0x4102 },
+    { SCENE_CLOCKTOWER, 1, 0x8102 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance2[] = {
-    { 0x6F, 0x02, 0xC102 },
+    { SCENE_CLOCKTOWER, 2, 0xC102 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance3[] = {
-    { 0x6F, 0x03, 0xCA14 },
+    { SCENE_CLOCKTOWER, 3, 0xCA14 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance4[] = {
-    { 0x6F, 0x04, 0xC102 },
+    { SCENE_CLOCKTOWER, 4, 0xC102 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance5[] = {
-    { 0x6F, 0x05, 0xC102 },
+    { SCENE_CLOCKTOWER, 5, 0xC102 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance6[] = {
-    { 0x6F, 0x06, 0xCA14 },
+    { SCENE_CLOCKTOWER, 6, 0xCA14 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance7[] = {
-    { 0x6F, 0x07, 0xCA14 },
+    { SCENE_CLOCKTOWER, 7, 0xCA14 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance8[] = {
-    { 0x6F, 0x08, 0x4A14 },
+    { SCENE_CLOCKTOWER, 8, 0x4A14 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance9[] = {
-    { 0x6F, 0x09, 0x4A14 },
+    { SCENE_CLOCKTOWER, 9, 0x4A14 },
 };
 
 static EntranceTableEntry sSouthClockTownEntrance10[] = {
-    { 0x6F, 0x0A, 0x058B },
+    { SCENE_CLOCKTOWER, 10, 0x058B },
 };
 
 static EntranceTableEntry* sSouthClockTownEntranceTable[] = {
@@ -2493,15 +2496,15 @@ static EntranceTableEntry* sSouthClockTownEntranceTable[] = {
 };
 
 static EntranceTableEntry sLaundryPoolEntrance0[] = {
-    { 0x70, 0x00, 0xCA14 },
+    { SCENE_ALLEY, 0, 0xCA14 },
 };
 
 static EntranceTableEntry sLaundryPoolEntrance1[] = {
-    { 0x70, 0x01, 0x4A14 },
+    { SCENE_ALLEY, 1, 0x4A14 },
 };
 
 static EntranceTableEntry sLaundryPoolEntrance2[] = {
-    { 0x70, 0x02, 0x4102 },
+    { SCENE_ALLEY, 2, 0x4102 },
 };
 
 static EntranceTableEntry* sLaundryPoolEntranceTable[] = {
@@ -2511,71 +2514,71 @@ static EntranceTableEntry* sLaundryPoolEntranceTable[] = {
 };
 
 static EntranceTableEntry sGrottosEntrance0[] = {
-    { 0x07, 0x00, 0x0102 },
+    { SCENE_KAKUSIANA, 0, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance1[] = {
-    { 0x07, 0x01, 0x0102 },
+    { SCENE_KAKUSIANA, 1, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance2[] = {
-    { 0x07, 0x02, 0x0102 },
+    { SCENE_KAKUSIANA, 2, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance3[] = {
-    { 0x07, 0x03, 0x0102 },
+    { SCENE_KAKUSIANA, 3, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance4[] = {
-    { 0x07, 0x04, 0x0102 },
+    { SCENE_KAKUSIANA, 4, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance5[] = {
-    { 0x07, 0x05, 0x0102 },
+    { SCENE_KAKUSIANA, 5, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance6[] = {
-    { 0x07, 0x06, 0x0102 },
+    { SCENE_KAKUSIANA, 6, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance7[] = {
-    { 0x07, 0x07, 0x0102 },
+    { SCENE_KAKUSIANA, SCENE_KAKUSIANA, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance8[] = {
-    { 0x07, 0x08, 0x0102 },
+    { SCENE_KAKUSIANA, 8, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance9[] = {
-    { 0x07, 0x09, 0x0102 },
+    { SCENE_KAKUSIANA, 9, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance10[] = {
-    { 0x07, 0x0A, 0x0102 },
+    { SCENE_KAKUSIANA, 10, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance11[] = {
-    { 0x07, 0x0B, 0x0102 },
+    { SCENE_KAKUSIANA, 11, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance12[] = {
-    { 0x07, 0x0C, 0x0102 },
+    { SCENE_KAKUSIANA, 12, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance13[] = {
-    { 0x07, 0x0D, 0x0102 },
+    { SCENE_KAKUSIANA, 13, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance14[] = {
-    { 0x07, 0x0E, 0x0102 },
+    { SCENE_KAKUSIANA, 14, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance15[] = {
-    { 0x07, 0x0F, 0x0102 },
+    { SCENE_KAKUSIANA, 15, 0x0102 },
 };
 
 static EntranceTableEntry sGrottosEntrance16[] = {
-    { 0x07, 0x10, 0x0102 },
+    { SCENE_KAKUSIANA, 16, 0x0102 },
 };
 
 static EntranceTableEntry* sGrottosEntranceTable[] = {
@@ -2586,63 +2589,73 @@ static EntranceTableEntry* sGrottosEntranceTable[] = {
 };
 
 static EntranceTableEntry sCutsceneEntrance0[] = {
-    { 0xF8, 0x00, 0x0102 }, { 0xF8, 0x00, 0x0102 }, { 0xF8, 0x00, 0x8102 }, { 0xF8, 0x00, 0x0102 },
-    { 0xF8, 0x00, 0x058B }, { 0xF8, 0x00, 0x058B }, { 0xF8, 0x00, 0x058B }, { 0xF8, 0x00, 0x058B },
-    { 0xF8, 0x00, 0x0183 }, { 0xF8, 0x00, 0x0183 }, { 0xF8, 0x00, 0x8102 }, { 0xF8, 0x00, 0x0102 },
+    { -SCENE_SPOT00, 0, 0x0102 }, { -SCENE_SPOT00, 0, 0x0102 }, { -SCENE_SPOT00, 0, 0x8102 },
+    { -SCENE_SPOT00, 0, 0x0102 }, { -SCENE_SPOT00, 0, 0x058B }, { -SCENE_SPOT00, 0, 0x058B },
+    { -SCENE_SPOT00, 0, 0x058B }, { -SCENE_SPOT00, 0, 0x058B }, { -SCENE_SPOT00, 0, 0x0183 },
+    { -SCENE_SPOT00, 0, 0x0183 }, { -SCENE_SPOT00, 0, 0x8102 }, { -SCENE_SPOT00, 0, 0x0102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance1[] = {
-    { 0xF8, 0x01, 0x0183 }, { 0xF8, 0x01, 0x0102 }, { 0xF8, 0x01, 0x8102 }, { 0xF8, 0x01, 0x0102 },
-    { 0xF8, 0x01, 0x8102 }, { 0xF8, 0x01, 0x058B }, { 0xF8, 0x01, 0x058B }, { 0xF8, 0x01, 0x058B },
-    { 0xF8, 0x01, 0x058B }, { 0xF8, 0x01, 0x8102 }, { 0xF8, 0x01, 0x8102 }, { 0xF8, 0x01, 0x0102 },
+    { -SCENE_SPOT00, 1, 0x0183 }, { -SCENE_SPOT00, 1, 0x0102 }, { -SCENE_SPOT00, 1, 0x8102 },
+    { -SCENE_SPOT00, 1, 0x0102 }, { -SCENE_SPOT00, 1, 0x8102 }, { -SCENE_SPOT00, 1, 0x058B },
+    { -SCENE_SPOT00, 1, 0x058B }, { -SCENE_SPOT00, 1, 0x058B }, { -SCENE_SPOT00, 1, 0x058B },
+    { -SCENE_SPOT00, 1, 0x8102 }, { -SCENE_SPOT00, 1, 0x8102 }, { -SCENE_SPOT00, 1, 0x0102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance2[] = {
-    { 0xF8, 0x02, 0x0183 }, { 0xF8, 0x02, 0x0102 }, { 0xF8, 0x02, 0x8102 }, { 0xF8, 0x02, 0x0102 },
-    { 0xF8, 0x02, 0x8102 }, { 0xF8, 0x02, 0x058B }, { 0xF8, 0x02, 0x058B }, { 0xF8, 0x02, 0x058B },
-    { 0xF8, 0x02, 0x058B }, { 0xF8, 0x02, 0x858B }, { 0xF8, 0x02, 0x8102 },
+    { -SCENE_SPOT00, 2, 0x0183 }, { -SCENE_SPOT00, 2, 0x0102 }, { -SCENE_SPOT00, 2, 0x8102 },
+    { -SCENE_SPOT00, 2, 0x0102 }, { -SCENE_SPOT00, 2, 0x8102 }, { -SCENE_SPOT00, 2, 0x058B },
+    { -SCENE_SPOT00, 2, 0x058B }, { -SCENE_SPOT00, 2, 0x058B }, { -SCENE_SPOT00, 2, 0x058B },
+    { -SCENE_SPOT00, 2, 0x858B }, { -SCENE_SPOT00, 2, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance3[] = {
-    { 0xF8, 0x03, 0x0183 }, { 0xF8, 0x03, 0x0102 }, { 0xF8, 0x03, 0x8102 }, { 0xF8, 0x03, 0x0102 },
-    { 0xF8, 0x03, 0x058B }, { 0xF8, 0x03, 0x058B }, { 0xF8, 0x03, 0x058B }, { 0xF8, 0x03, 0x058B },
-    { 0xF8, 0x03, 0x058B }, { 0xF8, 0x03, 0x058B }, { 0xF8, 0x03, 0x8102 },
+    { -SCENE_SPOT00, 3, 0x0183 }, { -SCENE_SPOT00, 3, 0x0102 }, { -SCENE_SPOT00, 3, 0x8102 },
+    { -SCENE_SPOT00, 3, 0x0102 }, { -SCENE_SPOT00, 3, 0x058B }, { -SCENE_SPOT00, 3, 0x058B },
+    { -SCENE_SPOT00, 3, 0x058B }, { -SCENE_SPOT00, 3, 0x058B }, { -SCENE_SPOT00, 3, 0x058B },
+    { -SCENE_SPOT00, 3, 0x058B }, { -SCENE_SPOT00, 3, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance4[] = {
-    { 0xF8, 0x04, 0x0183 }, { 0xF8, 0x04, 0x0102 }, { 0xF8, 0x04, 0x8102 }, { 0xF8, 0x04, 0x0102 },
-    { 0xF8, 0x04, 0x058B }, { 0xF8, 0x04, 0x058B }, { 0xF8, 0x04, 0x058B }, { 0xF8, 0x04, 0x058B },
-    { 0xF8, 0x04, 0x058B }, { 0xF8, 0x04, 0x058B }, { 0xF8, 0x04, 0x8102 },
+    { -SCENE_SPOT00, 4, 0x0183 }, { -SCENE_SPOT00, 4, 0x0102 }, { -SCENE_SPOT00, 4, 0x8102 },
+    { -SCENE_SPOT00, 4, 0x0102 }, { -SCENE_SPOT00, 4, 0x058B }, { -SCENE_SPOT00, 4, 0x058B },
+    { -SCENE_SPOT00, 4, 0x058B }, { -SCENE_SPOT00, 4, 0x058B }, { -SCENE_SPOT00, 4, 0x058B },
+    { -SCENE_SPOT00, 4, 0x058B }, { -SCENE_SPOT00, 4, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance5[] = {
-    { 0xF8, 0x05, 0x0183 }, { 0xF8, 0x05, 0x0102 }, { 0xF8, 0x05, 0x8102 }, { 0xF8, 0x05, 0x0102 },
-    { 0xF8, 0x05, 0x058B }, { 0xF8, 0x05, 0x058B }, { 0xF8, 0x05, 0x058B }, { 0xF8, 0x05, 0x058B },
-    { 0xF8, 0x05, 0x058B }, { 0xF8, 0x05, 0x858B }, { 0xF8, 0x05, 0x8102 },
+    { -SCENE_SPOT00, 5, 0x0183 }, { -SCENE_SPOT00, 5, 0x0102 }, { -SCENE_SPOT00, 5, 0x8102 },
+    { -SCENE_SPOT00, 5, 0x0102 }, { -SCENE_SPOT00, 5, 0x058B }, { -SCENE_SPOT00, 5, 0x058B },
+    { -SCENE_SPOT00, 5, 0x058B }, { -SCENE_SPOT00, 5, 0x058B }, { -SCENE_SPOT00, 5, 0x058B },
+    { -SCENE_SPOT00, 5, 0x858B }, { -SCENE_SPOT00, 5, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance6[] = {
-    { 0xF8, 0x06, 0x0183 }, { 0xF8, 0x06, 0x0102 }, { 0xF8, 0x06, 0x8102 }, { 0xF8, 0x06, 0x0102 },
-    { 0xF8, 0x06, 0x058B }, { 0xF8, 0x06, 0x058B }, { 0xF8, 0x06, 0x058B }, { 0xF8, 0x06, 0x058B },
-    { 0xF8, 0x06, 0x058B }, { 0xF8, 0x06, 0x858B }, { 0xF8, 0x06, 0x8102 },
+    { -SCENE_SPOT00, 6, 0x0183 }, { -SCENE_SPOT00, 6, 0x0102 }, { -SCENE_SPOT00, 6, 0x8102 },
+    { -SCENE_SPOT00, 6, 0x0102 }, { -SCENE_SPOT00, 6, 0x058B }, { -SCENE_SPOT00, 6, 0x058B },
+    { -SCENE_SPOT00, 6, 0x058B }, { -SCENE_SPOT00, 6, 0x058B }, { -SCENE_SPOT00, 6, 0x058B },
+    { -SCENE_SPOT00, 6, 0x858B }, { -SCENE_SPOT00, 6, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance7[] = {
-    { 0xF8, 0x07, 0x0183 }, { 0xF8, 0x07, 0x0102 }, { 0xF8, 0x07, 0x8102 }, { 0xF8, 0x07, 0x0102 },
-    { 0xF8, 0x07, 0x058B }, { 0xF8, 0x07, 0x058B }, { 0xF8, 0x07, 0x058B }, { 0xF8, 0x07, 0x058B },
-    { 0xF8, 0x07, 0x058B }, { 0xF8, 0x07, 0x858B }, { 0xF8, 0x07, 0x8102 },
+    { -SCENE_SPOT00, 7, 0x0183 }, { -SCENE_SPOT00, 7, 0x0102 }, { -SCENE_SPOT00, 7, 0x8102 },
+    { -SCENE_SPOT00, 7, 0x0102 }, { -SCENE_SPOT00, 7, 0x058B }, { -SCENE_SPOT00, 7, 0x058B },
+    { -SCENE_SPOT00, 7, 0x058B }, { -SCENE_SPOT00, 7, 0x058B }, { -SCENE_SPOT00, 7, 0x058B },
+    { -SCENE_SPOT00, 7, 0x858B }, { -SCENE_SPOT00, 7, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance8[] = {
-    { 0xF8, 0x08, 0x0183 }, { 0xF8, 0x08, 0x0102 }, { 0xF8, 0x08, 0x8102 }, { 0xF8, 0x08, 0x0102 },
-    { 0xF8, 0x08, 0x058B }, { 0xF8, 0x08, 0x058B }, { 0xF8, 0x08, 0x058B }, { 0xF8, 0x08, 0x058B },
-    { 0xF8, 0x08, 0x058B }, { 0xF8, 0x08, 0x858B }, { 0xF8, 0x08, 0x8102 },
+    { -SCENE_SPOT00, 8, 0x0183 }, { -SCENE_SPOT00, 8, 0x0102 }, { -SCENE_SPOT00, 8, 0x8102 },
+    { -SCENE_SPOT00, 8, 0x0102 }, { -SCENE_SPOT00, 8, 0x058B }, { -SCENE_SPOT00, 8, 0x058B },
+    { -SCENE_SPOT00, 8, 0x058B }, { -SCENE_SPOT00, 8, 0x058B }, { -SCENE_SPOT00, 8, 0x058B },
+    { -SCENE_SPOT00, 8, 0x858B }, { -SCENE_SPOT00, 8, 0x8102 },
 };
 
 static EntranceTableEntry sCutsceneEntrance9[] = {
-    { 0xF8, 0x09, 0x0183 }, { 0xF8, 0x09, 0x0102 }, { 0xF8, 0x09, 0x8102 }, { 0xF8, 0x09, 0x0102 },
-    { 0xF8, 0x09, 0x058B }, { 0xF8, 0x09, 0x058B }, { 0xF8, 0x09, 0x058B }, { 0xF8, 0x09, 0x058B },
-    { 0xF8, 0x09, 0x058B }, { 0xF8, 0x09, 0x858B }, { 0xF8, 0x09, 0x8102 },
+    { -SCENE_SPOT00, 9, 0x0183 }, { -SCENE_SPOT00, 9, 0x0102 }, { -SCENE_SPOT00, 9, 0x8102 },
+    { -SCENE_SPOT00, 9, 0x0102 }, { -SCENE_SPOT00, 9, 0x058B }, { -SCENE_SPOT00, 9, 0x058B },
+    { -SCENE_SPOT00, 9, 0x058B }, { -SCENE_SPOT00, 9, 0x058B }, { -SCENE_SPOT00, 9, 0x058B },
+    { -SCENE_SPOT00, 9, 0x858B }, { -SCENE_SPOT00, 9, 0x8102 },
 };
 
 static EntranceTableEntry* sCutsceneEntranceTable[] = {
@@ -2678,7 +2691,7 @@ static SceneEntranceTableEntry sSceneEntranceTable[] = {
     /* 0x12 */ SCENE_ENTRANCE(sMilkBarEntranceTable, "Z2_MILK_BAR"),
     /* 0x13 */ SCENE_ENTRANCE(sStoneTowerTempleEntranceTable, "Z2_INISIE_N"),
     /* 0x14 */ SCENE_ENTRANCE(sTreasureChestShopEntranceTable, "Z2_TAKARAYA"),
-    /* 0x15 */ SCENE_ENTRANCE(sStoneTowerTempleReversedEntranceTable, "Z2_INISIE_R"),
+    /* 0x15 */ SCENE_ENTRANCE(sStoneTowerTempleInvertedEntranceTable, "Z2_INISIE_R"),
     /* 0x16 */ SCENE_ENTRANCE(sClockTowerRooftopEntranceTable, "Z2_OKUJOU"),
     /* 0x17 */ SCENE_ENTRANCE(sOpeningDungeonEntranceTable, "Z2_OPENINGDAN"),
     /* 0x18 */ SCENE_ENTRANCE(sWoodfallTempleEntranceTable, "Z2_MITURIN"),
@@ -2772,37 +2785,37 @@ static SceneEntranceTableEntry sSceneEntranceTable[] = {
 /**
  * Returns a pointer to an entrance table from a given entrance index.
  */
-EntranceTableEntry* Entrance_GetTableEntry(u16 entranceIndex) {
-    u32 entranceIndex2 = entranceIndex;
-    EntranceTableEntry** tableEntryP = sSceneEntranceTable[entranceIndex2 >> 9].table;
-    EntranceTableEntry* tableEntry = tableEntryP[(entranceIndex2 >> 4) & 0x1F];
+EntranceTableEntry* Entrance_GetTableEntry(u16 entrance) {
+    u32 entranceIndex = entrance;
+    EntranceTableEntry** tableEntryP = sSceneEntranceTable[entranceIndex >> 9].table;
+    EntranceTableEntry* tableEntry = tableEntryP[(entranceIndex >> 4) & 0x1F];
 
-    return &tableEntry[entranceIndex2 & 0xF];
+    return &tableEntry[entranceIndex & 0xF];
 }
 
 /**
  * Returns the scene index from a given entrance index.
  */
-s32 Entrance_GetSceneNum(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetSceneId(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
-    return tableEntry->sceneNum;
+    return tableEntry->sceneId;
 }
 
 /**
  * Returns the absolute value scene index (since for some reason some of them are negative) from a given entrance index.
  */
-s32 Entrance_GetSceneNumAbsolute(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetSceneIdAbsolute(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
-    return ABS_ALT(tableEntry->sceneNum);
+    return ABS_ALT(tableEntry->sceneId);
 }
 
 /**
  * Returns the spawn index from a given entrance index.
  */
-s32 Entrance_GetSpawnNum(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetSpawnNum(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
     return tableEntry->spawnNum;
 }
@@ -2810,8 +2823,8 @@ s32 Entrance_GetSpawnNum(u16 entranceIndex) {
 /**
  * Returns the transition effect flags from a given entrance index.
  */
-s32 Entrance_GetTransitionFlags(u16 entranceIndex) {
-    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entranceIndex);
+s32 Entrance_GetTransitionFlags(u16 entrance) {
+    EntranceTableEntry* tableEntry = Entrance_GetTableEntry(entrance);
 
     return tableEntry->flags;
 }

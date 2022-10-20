@@ -3574,7 +3574,7 @@ _DW({									\
 
 #define	gDPLoadTextureBlock(pkt, timg, fmt, siz, width, height,		\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz##_LOAD_BLOCK, 1, timg);	\
 	gDPSetTile(pkt, fmt, siz##_LOAD_BLOCK, 0, 0, G_TX_LOADTILE, 	\
 		0 , cmt, maskt, shiftt, cms, masks, shifts);		\
@@ -3590,7 +3590,7 @@ _DW({									\
 	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0,			\
 		((width)-1) << G_TEXTURE_IMAGE_FRAC,			\
 		((height)-1) << G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 #define	gDPLoadTextureBlockYuv(pkt, timg, fmt, siz, width, height,	\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\

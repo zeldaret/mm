@@ -18,7 +18,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2);
 void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
-const ActorInit En_Sth2_InitVars = {
+ActorInit En_Sth2_InitVars = {
     ACTOR_EN_STH2,
     ACTORCAT_NPC,
     FLAGS,
@@ -40,10 +40,10 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
 
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc = EnSth2_UpdateSkelAnime;

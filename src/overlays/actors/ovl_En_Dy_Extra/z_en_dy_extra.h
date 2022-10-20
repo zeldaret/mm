@@ -15,10 +15,8 @@ typedef struct EnDyExtra {
     /* 0x14C */ s16 unk14C;
     /* 0x14E */ s16 unk14E;
     /* 0x150 */ f32 unk150;
-    /* 0x154 */ char unk154[0xC];
+    /* 0x154 */ UNK_TYPE1 unk154[0xC];
     /* 0x160 */ Vec3f unk160;
 } EnDyExtra; // size = 0x16C
-
-extern const ActorInit En_Dy_Extra_InitVars;
 
 #endif // Z_EN_DY_EXTRA_H

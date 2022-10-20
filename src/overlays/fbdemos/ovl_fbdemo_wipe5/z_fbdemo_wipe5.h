@@ -14,6 +14,4 @@ typedef struct {
     /* 0x13 */ u8 isDone;
 } TransitionWipe5; // size = 0x14
 
-extern const TransitionInit TransitionWipe5_InitVars;
-
 #endif

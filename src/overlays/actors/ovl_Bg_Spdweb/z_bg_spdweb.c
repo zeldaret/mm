@@ -24,7 +24,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-const ActorInit Bg_Spdweb_InitVars = {
+ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,
     ACTORCAT_BG,
     FLAGS,
@@ -170,7 +170,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     this->unk_162 = 0;
 
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -230,7 +230,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
 
     if (this->unk_162 == 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -311,7 +311,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
             this->unk_164 = temp_f12;
             this->unk_162 = 12;
             if (sp3A > 50) {
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
         } else if (player->actor.speedXZ != 0.0f) {
@@ -332,13 +332,13 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
             player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_162 == 11) {
         if (this->unk_164 > 3.0f) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
         } else {
-            Audio_StopSfxById(NA_SE_EV_WEB_VIBRATION);
+            AudioSfx_StopById(NA_SE_EV_WEB_VIBRATION);
         }
     }
 
@@ -350,23 +350,20 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
-#ifdef NON_MATCHING
 void func_809CE830(BgSpdweb* this, PlayState* play) {
     Vec3f spDC;
     Vec3f spD0;
     Vec3f spC4;
-    f32 spB0;
-    f32 spA4;
-    f32 sp9C;
-    f32 sp94;
-    f32 sp90;
-    f32 temp_f20;
-    f32 temp_f22;
-    f32 temp_f28;
-    f32 temp_f30;
     s32 i;
-    s16 temp_s0;
     s16 temp_s3;
+    s16 temp_s0;
+    f32 cosF2;
+    f32 sinF2;
+    f32 cosQ;
+    f32 sinQ;
+    f32 cosF1;
+    f32 sinF1;
+    f32 temp_f28;
 
     if (this->unk_162 != 0) {
         this->unk_162--;
@@ -376,44 +373,40 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
         if (ActorCutscene_GetLength(this->dyna.actor.cutscene) == -1) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
     if ((this->unk_162 % 3) == 0) {
         temp_s3 = Rand_ZeroOne() * 0x2AAA;
-        spB0 = Math_CosS(this->dyna.actor.shape.rot.x);
-        temp_f20 = Math_SinS(this->dyna.actor.shape.rot.x);
-        temp_f30 = Math_CosS(this->dyna.actor.shape.rot.y);
-        spA4 = Math_SinS(this->dyna.actor.shape.rot.y);
-        if (1) {}
+        cosQ = Math_CosS(this->dyna.actor.shape.rot.x);
+        sinQ = Math_SinS(this->dyna.actor.shape.rot.x);
+        cosF1 = Math_CosS(this->dyna.actor.shape.rot.y);
+        sinF1 = Math_SinS(this->dyna.actor.shape.rot.y);
 
-        spC4.x = this->dyna.actor.world.pos.x + ((90.0f * temp_f20) * spA4);
-        spC4.y = this->dyna.actor.world.pos.y + (90.0f * spB0);
-        spC4.z = this->dyna.actor.world.pos.z + ((90.0f * temp_f20) * temp_f30);
-
-        sp94 = temp_f20 * spA4;
-        sp90 = temp_f20 * temp_f30;
+        spC4.x = this->dyna.actor.world.pos.x + 90.0f * sinQ * sinF1;
+        spC4.y = this->dyna.actor.world.pos.y + 90.0f * cosQ;
+        spC4.z = this->dyna.actor.world.pos.z + 90.0f * sinQ * cosF1;
 
         for (i = 0; i < 6; i++) {
             temp_s0 = (s32)randPlusMinusPoint5Scaled(0x2800) + temp_s3;
-            temp_f20 = Math_SinS(temp_s0);
-            temp_f22 = Math_CosS(temp_s0);
+            sinF2 = Math_SinS(temp_s0);
+            cosF2 = Math_CosS(temp_s0);
 
-            spD0.x = spC4.x + (90.0f * ((sp94 * temp_f22) + (temp_f30 * temp_f20)));
-            spD0.y = spC4.y + ((90.0f * spB0) * temp_f22);
-            spD0.z = spC4.z + (90.0f * ((sp90 * temp_f22) - (spA4 * temp_f20)));
+            spD0.x = spC4.x + 90.0f * ((cosF1 * sinF2) + (sinQ * sinF1 * cosF2));
+            spD0.y = spC4.y + 90.0f * cosQ * cosF2;
+            spD0.z = spC4.z + 90.0f * ((sinQ * cosF1 * cosF2) - (sinF1 * sinF2));
 
             temp_f28 = Math_Vec3f_DistXYZ(&this->dyna.actor.home.pos, &spD0) * (1.0f / 90.0f);
             if (temp_f28 < 0.65f) {
                 temp_f28 = 1.0f - temp_f28;
-                temp_f20 = Math_SinS(BINANG_ROT180(temp_s0));
-                temp_f22 = Math_CosS(BINANG_ROT180(temp_s0));
+                sinF2 = Math_SinS(BINANG_ROT180(temp_s0));
+                cosF2 = Math_CosS(BINANG_ROT180(temp_s0));
             }
 
-            spDC.x = (6.5f * temp_f28) * ((temp_f30 * temp_f20) + (temp_f22 * sp94));
-            spDC.y = temp_f22 * ((6.5f * temp_f28) * spB0);
-            spDC.z = (6.5f * temp_f28) * ((temp_f22 * sp90) - (spA4 * temp_f20));
+            spDC.x = 6.5f * temp_f28 * ((cosF1 * sinF2) + (sinQ * sinF1 * cosF2));
+            spDC.y = 6.5f * temp_f28 * cosQ * cosF2;
+            spDC.z = 6.5f * temp_f28 * ((sinQ * cosF1 * cosF2) - (sinF1 * sinF2));
 
             EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x3C,
                                  8, 0xE);
@@ -423,9 +416,6 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE830.s")
-#endif
 
 void func_809CEBC0(BgSpdweb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);

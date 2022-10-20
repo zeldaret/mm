@@ -69,7 +69,7 @@ static u8 D_80AEF800[] = {
     /* 0xE */ SCHEDULE_CMD_RET_NONE(),
 };
 
-const ActorInit En_Tk_InitVars = {
+ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,
     ACTORCAT_NPC,
     FLAGS,
@@ -209,11 +209,11 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
 
     if (Flags_GetSwitch(play, this->unk_2B1)) {
         if (this->unk_2B0 == 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->unk_2B0 == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -252,7 +252,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     switch (this->unk_2B0) {
         case 4:
             if (D_80AF0050 != 0) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             D_80AF0050 = 1;
@@ -271,7 +271,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
     }
 }
@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, EXCH_ITEM_NONE, 0x4000, 0x4000);
+        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_AP_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -679,7 +679,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
                 if (ENTK_GET_F(actor) == 1) {
                     Math_Vec3f_Copy(&this->unk_2EC, &actor->world.pos);
                     Math_Vec3s_Copy(&this->unk_2F8, &actor->world.rot);
-                    Actor_MarkForDeath(actor);
+                    Actor_Kill(actor);
                     this->unk_2CA |= 0x40;
                     break;
                 }
@@ -696,10 +696,10 @@ void func_80AED940(EnTk* this, PlayState* play) {
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, EXCH_ITEM_NONE, 0x4000, 0x4000);
+            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_AP_NONE, 0x4000, 0x4000);
         }
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
     }
 }
 
@@ -735,7 +735,7 @@ void func_80AEDD4C(EnTk* this, PlayState* play) {
     if (this->unk_2E8 <= 0) {
         ActorCutscene_Stop(this->cutscenes[1]);
         func_801477B4(play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -928,11 +928,12 @@ void func_80AEE374(EnTk* this, PlayState* play) {
 
     SubS_FindActorCustom(play, &this->actor, NULL, ACTORCAT_NPC, ACTOR_EN_TK, &sp30, func_80AEE300);
     if (sp30.unk_00 == 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
-        this->actionFunc = func_80AEE414;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
+    this->actionFunc = func_80AEE414;
 }
 
 void func_80AEE414(EnTk* this, PlayState* play) {

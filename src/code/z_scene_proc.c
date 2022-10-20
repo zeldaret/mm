@@ -459,8 +459,8 @@ void AnimatedMat_DrawStep(PlayState* play, AnimatedMaterial* matAnim, u32 step) 
 /**
  * Draws an animated material with a step to only the OPA buffer.
  */
-void AnimatedMat_DrawStepOpa(PlayState* play, AnimatedMaterial* textures, u32 step) {
-    AnimatedMat_DrawMain(play, textures, 1, step, 1);
+void AnimatedMat_DrawStepOpa(PlayState* play, AnimatedMaterial* matAnim, u32 step) {
+    AnimatedMat_DrawMain(play, matAnim, 1, step, 1);
 }
 
 /**

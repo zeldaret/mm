@@ -31,7 +31,7 @@ void EnClearTag_Draw(Actor* thisx, PlayState* play);
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
-const ActorInit En_Clear_Tag_InitVars = {
+ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -558,8 +558,8 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
         case 1:
             Cutscene_Start(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             func_800B7298(play, &this->actor, 4);
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             this->subCamEye.x = mainCam->eye.x;
@@ -595,7 +595,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -615,7 +615,7 @@ void EnClearTag_Update(Actor* thisx, PlayState* play) {
     } else if (this->activeTimer != 0) {
         EnClearTag_UpdateEffects(this, play);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

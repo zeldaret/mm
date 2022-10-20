@@ -13,6 +13,6 @@
         <Limb Name="gBhRightWingToEdgeLimb" Type="Standard" EnumName="OBJECT_BH_LIMB_RIGHT_WING_TO_EDGE" Offset="0x1E28" />
         <Limb Name="gBhLeftWingToBodyLimb" Type="Standard" EnumName="OBJECT_BH_LIMB_LEFT_WING_TO_BODY" Offset="0x1E34" />
         <Limb Name="gBhLeftWingToEdgeLimb" Type="Standard" EnumName="OBJECT_BH_LIMB_LEFT_WING_TO_EDGE" Offset="0x1E40" />
-        <Skeleton Name="gBhSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BH_LIMB_NONE" LimbMax="OBJECT_BH_LIMB_MAX" EnumName="ObjectBhLimbs" Offset="0x1E60" />
+        <Skeleton Name="gBhSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BH_LIMB_NONE" LimbMax="OBJECT_BH_LIMB_MAX" EnumName="ObjectBhLimb" Offset="0x1E60" />
     </File>
 </Root>

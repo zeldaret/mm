@@ -4,8 +4,8 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
@@ -17,7 +17,7 @@
 void Boss06_Init(Actor* thisx, PlayState* play);
 void Boss06_Destroy(Actor* thisx, PlayState* play);
 void Boss06_Update(Actor* thisx, PlayState* play);
-void Boss06_Draw(Actor* thisx, PlayState* play);
+void Boss06_Draw(Actor* thisx, PlayState* play2);
 
 void func_809F24A8(Boss06* this);
 void func_809F24C8(Boss06* this, PlayState* play);
@@ -28,11 +28,11 @@ void func_809F2E34(Boss06* this, PlayState* play);
 void func_809F2ED0(Boss06* this, PlayState* play);
 void func_809F2EE8(Boss06* this, PlayState* play);
 
-static Vec3f D_809F4370[128];
-static EnKnight* D_809F4970;
-static s32 D_809F4974;
-static s32 D_809F4978;
-static s32 D_809F497C;
+Vec3f D_809F4370[128];
+EnKnight* D_809F4970;
+s32 D_809F4974;
+s32 D_809F4978;
+s32 D_809F497C;
 
 static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0xF),
@@ -69,7 +69,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-const ActorInit Boss_06_InitVars = {
+ActorInit Boss_06_InitVars = {
     ACTOR_BOSS_06,
     ACTORCAT_BOSS,
     FLAGS,
@@ -101,7 +101,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 90, 140, 10, { 0, 0, 0 } },
 };
 
-static Vec3f D_809F40EC[] = {
+Vec3f D_809F40EC[] = {
     { 1081.0f, 235.0f, 3224.0f },
     { 676.0f, 235.0f, 3224.0f },
 };
@@ -201,8 +201,8 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             Cutscene_Start(play, &play->csCtx);
             func_800B7298(play, &this->actor, 7);
             this->subCamId = Play_CreateSubCamera(play);
-            Play_CameraChangeStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-            Play_CameraChangeStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
             D_809F4970->unk_151 = 1;
             this->unk_1C9 = 1;
             this->unk_1C8 = 1;
@@ -212,7 +212,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             temp_s0 = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
             while (temp_s0 != NULL) {
                 if (temp_s0->id == ACTOR_EN_ARROW) {
-                    Actor_MarkForDeath(temp_s0);
+                    Actor_Kill(temp_s0);
                 }
                 temp_s0 = temp_s0->next;
             }
@@ -339,8 +339,8 @@ void func_809F24C8(Boss06* this, PlayState* play) {
     }
 
     if (this->subCamId != SUB_CAM_ID_DONE) {
-        ShrinkWindow_SetLetterboxTarget(27);
-        Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+        ShrinkWindow_Letterbox_SetSizeTarget(27);
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 #else
@@ -381,7 +381,7 @@ void func_809F2C44(Boss06* this, PlayState* play) {
     }
 
     if (D_809F4970->unk_153 == 2) {
-        Actor_MarkForDeath(this->actor.child);
+        Actor_Kill(this->actor.child);
         this->actor.child = NULL;
         func_809F2E14(this, play);
     }
@@ -625,7 +625,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
                     Matrix_Pop();
                 }

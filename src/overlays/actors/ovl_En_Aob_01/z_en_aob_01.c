@@ -32,7 +32,7 @@ void func_809C2C9C(EnAob01* this, PlayState* play);
 void func_809C2D0C(EnAob01* this, PlayState* play);
 s32 func_809C2EC4(EnAob01* this, PlayState* play);
 
-const ActorInit En_Aob_01_InitVars = {
+ActorInit En_Aob_01_InitVars = {
     ACTOR_EN_AOB_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -44,7 +44,7 @@ const ActorInit En_Aob_01_InitVars = {
     (ActorFunc)EnAob01_Draw,
 };
 
-static AnimationInfo D_809C3790[6] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
@@ -144,12 +144,12 @@ void func_809C1304(EnAob01* this, PlayState* play) {
 
 s32 func_809C1424(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(D_809C3790[this->unk_43C].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_43C].animation);
 
     if (this->unk_43C == 1) {
         if (curFrame == lastFrame) {
             this->unk_43C = 2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
             return true;
         }
     } else if (this->unk_43C == 2) {
@@ -160,18 +160,18 @@ s32 func_809C1424(EnAob01* this) {
 
 s32 func_809C14D0(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(D_809C3790[this->unk_43C].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_43C].animation);
 
     if ((this->unk_43C == 0) || (this->unk_43C == 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 3;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             return true;
         }
     } else if (this->unk_43C == 3) {
         if (curFrame == lastFrame) {
             this->unk_43C = 4;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 4);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
             return true;
         }
     } else if (this->unk_43C == 4) {
@@ -182,12 +182,12 @@ s32 func_809C14D0(EnAob01* this) {
 
 s32 func_809C15BC(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(D_809C3790[this->unk_43C].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_43C].animation);
 
     if ((this->unk_43C != 0) && (this->unk_43C != 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 5;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 5);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
             return true;
         }
     } else {
@@ -329,7 +329,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             this->unk_2D2 |= 0x40;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             break;
 
         case 0x3525:
@@ -344,7 +344,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                 this->unk_2D2 |= 0x40;
                 this->unk_2D2 |= 0x10;
                 this->unk_43C = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
             }
 
@@ -359,7 +359,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             this->unk_2D2 |= 4;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             break;
 
         case 0x3527:
@@ -371,7 +371,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
             }
 
@@ -379,7 +379,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                 this->unk_210 = 0x3537;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
             }
 
@@ -416,7 +416,7 @@ void func_809C1C9C(EnAob01* this, PlayState* play) {
         gSaveContext.save.weekEventReg[63] &= (u8)~2;
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
-        play->nextEntranceIndex = 0x7C10;
+        play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_64;
         gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 2;
@@ -489,7 +489,7 @@ void func_809C1EC8(EnAob01* this, PlayState* play) {
     func_809C10B0(this, 3);
     SubS_FillLimbRotTables(play, this->unk_2F8, this->unk_318, ARRAY_COUNT(this->unk_2F8));
     func_809C165C(this, play);
-    if (player->stateFlags1 & 0x20) {
+    if (player->stateFlags1 & PLAYER_STATE1_20) {
         func_809C1124();
     }
 }
@@ -556,7 +556,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
                 this->unk_2D2 |= 0x10;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 Message_StartTextbox(play, 0x354B, &this->actor);
             }
             this->unk_2D2 &= ~8;
@@ -671,8 +671,8 @@ void func_809C2730(EnAob01* this, PlayState* play) {
 void func_809C2788(EnAob01* this, PlayState* play) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, play)) {
-        if (func_801A8A50(0) != 0x41) {
-            play->nextEntranceIndex = 0x7C10;
+        if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_HORSE_GOAL) {
+            play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
             gSaveContext.nextTransitionType = TRANS_TYPE_03;
@@ -734,7 +734,7 @@ void func_809C28B8(EnAob01* this, PlayState* play) {
                 this->unk_210 = 0x352D;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
         }
 
@@ -876,7 +876,7 @@ void func_809C2F34(EnAob01* this, PlayState* play) {
     player->actor.world.pos.z = 1464.0f;
     player->actor.shape.rot.y = player->actor.world.rot.y;
     player->actor.draw = NULL;
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     this->actor.world.pos.x = -4308.0f;
     this->actor.world.pos.z = 1620.0f;
     this->actor.prevPos = this->actor.world.pos;
@@ -930,7 +930,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (gSaveContext.eventInf[0] & 7) {

@@ -29,7 +29,7 @@ void func_808CCB08(EnVm* this);
 void func_808CCB50(EnVm* this, PlayState* play);
 void func_808CCCF0(EnVm* this, PlayState* play);
 
-const ActorInit En_Vm_InitVars = {
+ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -144,14 +144,14 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 25, 100, MASS_IMMOVABLE };
 
 TexturePtr D_808CD58C[] = {
-    gameplay_keep_Tex_03F300, gameplay_keep_Tex_03FB00, gameplay_keep_Tex_040300, gameplay_keep_Tex_040B00,
-    gameplay_keep_Tex_041300, gameplay_keep_Tex_041B00, gameplay_keep_Tex_042300, gameplay_keep_Tex_042B00,
+    gEffEnemyDeathFlame1Tex, gEffEnemyDeathFlame2Tex, gEffEnemyDeathFlame3Tex, gEffEnemyDeathFlame4Tex,
+    gEffEnemyDeathFlame5Tex, gEffEnemyDeathFlame6Tex, gEffEnemyDeathFlame7Tex, gEffEnemyDeathFlame8Tex,
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 14, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 57, ICHAIN_STOP),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BEAMOS, ICHAIN_STOP),
 };
 
 s32 D_808CD5B8 = false;
@@ -398,7 +398,7 @@ void func_808CCCF0(EnVm* this, PlayState* play) {
         }
     } else if (this->unk_214 == 0) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -532,7 +532,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(&gfx[3], 0, 0, 255, 255, 255, 168);
         gDPSetEnvColor(&gfx[4], 0, 0, 255, 0);
         gSPSegment(&gfx[5], 0x08, D_808CD58C[play->gameplayFrames & 7]);
-        gSPDisplayList(&gfx[6], gameplay_keep_DL_044300);
+        gSPDisplayList(&gfx[6], gEffEnemyDeathFlameDL);
 
         POLY_XLU_DISP = &gfx[7];
     }

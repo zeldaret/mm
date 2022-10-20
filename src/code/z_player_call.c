@@ -14,7 +14,7 @@ void PlayerCall_Destroy(Actor* thisx, PlayState* play);
 void PlayerCall_Update(Actor* thisx, PlayState* play);
 void PlayerCall_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Player_InitVars = {
+ActorInit Player_InitVars = {
     ACTOR_PLAYER,
     ACTORCAT_PLAYER,
     FLAGS,
