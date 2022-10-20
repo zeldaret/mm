@@ -152,7 +152,7 @@
         <Animation Name="gOdolwaJumpAnim" Offset="0x12EBC" /> <!-- Original name is "jmp_jmp02" -->
         <Animation Name="gOdolwaFallingSlashAnim" Offset="0x13480" /> <!-- Original name is "jmp_jmp03" -->
         <Animation Name="gOdolwaKickAnim" Offset="0x1407C" /> <!-- Original name is "jmp_kick" -->
-        <Animation Name="gOdolwaStunAnim" Offset="0x14F14" /> <!-- Original name is "jmp_piyo" -->
+        <Animation Name="gOdolwaStunAnim" Offset="0x14F14" /> <!-- Original name is "jmp_piyo" ("weakly moving") -->
         <Animation Name="gOdolwaShieldBashAnim" Offset="0x15A30" /> <!-- Original name is "jmp_punch" -->
         <Animation Name="gOdolwaRunAnim" Offset="0x16168" /> <!-- Original name is "jmp_run" -->
         <Animation Name="gOdolwaSpinAttackAnim" Offset="0x164CC" /> <!-- Original name is "jmp_spin" -->
