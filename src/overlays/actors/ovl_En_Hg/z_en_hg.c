@@ -376,14 +376,14 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
 void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
-        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
-            if (!D_80BD00C8) {
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-            }
-            D_80BD00C8 = true;
-        } else {
-            D_80BD00C8 = false;
+    // If the player has gone upstairs this interaction will not trigger
+    if ((this->actor.colChkInfo.health != 1) || (fabsf(this->actor.playerHeightRel) >= 80.0f)) {
+        return;
+    }
+
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
+        if (!sHasSoundPlayed) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
         sHasSoundPlayed = true;
     } else {
