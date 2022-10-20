@@ -11,6 +11,7 @@ typedef void (*DebugDispObject_DrawFunc)(DebugDispObject*, void*, PlayState*);
 
 void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, PlayState*);
 void DebugDisplay_DrawPolygon(DebugDispObject*, void*, PlayState*);
+Gfx* func_800E99B0(GraphicsContext* gfxCtx, Path* path);
 
 DebugDispObject* DebugDisplay_Init(void) {
     sDebugObjectListHead = NULL;
@@ -102,24 +103,89 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, PlayState* p
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 D_801BB068[] = {
-    0x00140000, 0x0000FFEC, 0x00000000, 0x00000014, 0x00000000, 0xFFEC0000, 0x00000000, 0x00140000, 0x0000FFEC,
-};
-
-s32 D_801BB08C = 0;
-
-Gfx* func_800E99B0(GraphicsContext* gfxCtx, s32 arg1);
-
-void func_800E992C(PlayState* play, s32 arg1) {
+void func_800E992C(PlayState* play, Path* path) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C560(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(play->state.gfxCtx, arg1));
+    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(play->state.gfxCtx, path));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_display/func_800E99B0.s")
+#define R_DRAW_PATH_POINT 0 // bREG(82)
+#define R_DRAW_PATH_SCALE 1.0f // 1.0f + 0.1f * bREG(83)
+#define R_DRAW_PATH_RED 0 // bREG(84)
+#define R_DRAW_PATH_GREEN 0 // bREG(85)
+#define R_DRAW_PATH_BLUE 0 // bREG(86)
+#define R_DRAW_PATH_ALPHA 0 // bREG(87)
+
+Vec3s D_801BB068[3][2] = {
+    { { 20, 0, 0 }, { -20, 0, 0 } },
+    { { 0, 20, 0 }, { 0, -20, 0 } },
+    { { 0, 0, 20 }, { 0, 0, -20 } },
+};
+
+Gfx* func_800E99B0(GraphicsContext* gfxCtx, Path* path) {
+    Gfx* sp2C;
+    Gfx* var_t2;
+    Vtx* var_v1;
+    Vtx* sp20;
+    Vec3s* var_a2;
+    s32 var_t4;
+    Vtx* temp;
+    s32 i;
+    s32 j;
+
+    if (path != NULL) {
+        var_t2 = GRAPH_ALLOC(gfxCtx, ALIGN16(((path->count - 1) * 4 + 1) * sizeof(Gfx))); // Gfx
+        var_v1 = GRAPH_ALLOC(gfxCtx, ALIGN16(path->count * 6 * sizeof(Vtx)));             // Vtx
+
+        sp2C = var_t2;
+        sp20 = var_v1;
+        var_a2 = Lib_SegmentedToVirtual(path->points);
+
+        for (var_t4 = 0; var_t4 < path->count; var_t4++, var_a2++) {
+            temp = sp20;
+            sp20 = var_v1;
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < 2; j++) {
+                    var_v1->v.ob[0] = var_a2->x + (s32)(D_801BB068[i][j].x * R_DRAW_PATH_SCALE);
+                    var_v1->v.ob[1] = var_a2->y + (s32)(D_801BB068[i][j].y * R_DRAW_PATH_SCALE);
+                    var_v1->v.ob[2] = var_a2->z + (s32)(D_801BB068[i][j].z * R_DRAW_PATH_SCALE);
+                    var_v1->v.flag = 0;
+                    var_v1->v.tc[0] = 0;
+                    var_v1->v.tc[1] = 0;
+                    var_v1->v.cn[0] = 0x80 + R_DRAW_PATH_RED;
+                    var_v1->v.cn[1] = 0x80 + R_DRAW_PATH_GREEN;
+                    var_v1->v.cn[2] = 0x80 + R_DRAW_PATH_BLUE;
+                    var_v1->v.cn[3] = 0x80 + R_DRAW_PATH_ALPHA;
+                    var_v1++;
+                }
+            }
+
+            if (R_DRAW_PATH_POINT == 0) {
+                if (var_t4 > 0) {
+                    gSPVertex(var_t2++, temp, 12, 0);
+                    gSP2Triangles(var_t2++, 0, 7, 1, 0, 0, 6, 7, 0);
+                    gSP2Triangles(var_t2++, 2, 3, 8, 0, 3, 9, 8, 0);
+                    gSP2Triangles(var_t2++, 4, 11, 10, 0, 4, 5, 11, 0);
+                }
+            } else {
+                if ((var_t4 > 0) && (var_t4 == R_DRAW_PATH_POINT)) {
+                    gSPVertex(var_t2++, temp, 12, 0);
+                    gSP2Triangles(var_t2++, 0, 7, 1, 0, 0, 6, 7, 0);
+                    gSP2Triangles(var_t2++, 2, 3, 8, 0, 3, 9, 8, 0);
+                    gSP2Triangles(var_t2++, 4, 11, 10, 0, 4, 5, 11, 0);
+                }
+            }
+        }
+        gSPEndDisplayList(var_t2++);
+    } else {
+        sp2C = var_t2 = GRAPH_ALLOC(gfxCtx, ALIGN16(sizeof(Gfx)));
+        gSPEndDisplayList(var_t2++);
+    }
+    return sp2C;
+}
