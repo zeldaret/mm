@@ -155,6 +155,4 @@ extern GraphicsContext* __gfxCtx;
 #define ALIGNED8
 #endif
 
-#define RGBA8(r, g, b, a) ((((r) & 0xFF) << 24) | (((g) & 0xFF) << 16) | (((b) & 0xFF) << 8) | (((a) & 0xFF) << 0))
-
 #endif // MACROS_H
