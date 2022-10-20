@@ -73,10 +73,19 @@ BgSpecialSceneMaxObjects sCustomDynapolyMem[] = {
 // TODO: All these bss variables are localized to one function and can
 // likely be made into in-function static bss variables in the future
 
+ 
+
 Vec3f D_801ED9F0[3]; // polyVerts
 Vec3f D_801EDA18[3]; // polyVerts
 Vec3f D_801EDA80[3]; // polyVerts
 Vec3f D_801EDB48[3]; // polyVerts
+
+#ifndef NON_MATCHING
+Vec3f D_801EDB70[3]; // polyVerts;
+Plane D_801EDB98; // plane;       
+Sphere16 D_801EDBA8; // sphere;      
+TriNorm D_801EDBB0; // tri;        
+#endif
 
 char D_801ED950[80];
 char D_801ED9A0[80];
@@ -380,6 +389,8 @@ s32 CollisionPoly_CheckZIntersectApprox(CollisionPoly* poly, Vec3s* vtxList, f32
                                             y, zIntersect);
 }
 
+#ifdef NON_MATCHING
+// Matches, but needs in-function static bss
 s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
     static Vec3f polyVerts[3]; // D_801EDB70
     static Plane plane;        // D_801EDB98
@@ -429,7 +440,14 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
     }
     return false;
 }
+#else
+s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_LineVsPoly.s")
+#endif
 
+
+#ifdef NON_MATCHING
+// Matches, but needs in-function static bss
 s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius) {
     static Sphere16 sphere; // D_801EDBA8
     static TriNorm tri;     // D_801EDBB0
@@ -444,6 +462,10 @@ s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, 
     sphere.radius = radius;
     return Math3D_ColSphereTri(&sphere, &tri, &intersect);
 }
+#else
+s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_bgcheck/CollisionPoly_SphVsPoly.s")
+#endif
 
 /**
  * Add poly to StaticLookup table
