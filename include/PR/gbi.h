@@ -2575,7 +2575,6 @@ _DW({									\
  * uc_start  = ucode text section start
  * uc_dstart = ucode data section start
  */
-#define SP_UCODE_DATA_SIZE      0x800
 
 #define	gSPLoadUcodeEx(pkt, uc_start, uc_dstart, uc_dsize)		\
 _DW({									\

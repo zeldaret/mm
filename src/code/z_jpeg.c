@@ -24,22 +24,22 @@ extern u64 njpgdspMainDataStart[];
  */
 void Jpeg_ScheduleDecoderTask(JpegContext* jpegCtx) {
     static OSTask_t sJpegTask = {
-        M_NJPEGTASK,          // type
-        0,                    // flags
-        NULL,                 // ucode_boot
-        0,                    // ucode_boot_size
-        njpgdspMainTextStart, // ucode
-        0x1000,               // ucode_size
-        njpgdspMainDataStart, // ucode_data
-        0x800,                // ucode_data_size
-        NULL,                 // dram_stack
-        0,                    // dram_stack_size
-        NULL,                 // output_buff
-        NULL,                 // output_buff_size
-        NULL,                 // data_ptr
-        sizeof(JpegTaskData), // data_size
-        NULL,                 // yield_data_ptr
-        0x200,                // yield_data_size
+        M_NJPEGTASK,                            // type
+        0,                                      // flags
+        NULL,                                   // ucode_boot
+        0,                                      // ucode_boot_size
+        njpgdspMainTextStart,                   // ucode
+        SP_UCODE_SIZE,                          // ucode_size
+        njpgdspMainDataStart,                   // ucode_data
+        SP_UCODE_DATA_SIZE,                     // ucode_data_size
+        NULL,                                   // dram_stack
+        0,                                      // dram_stack_size
+        NULL,                                   // output_buff
+        NULL,                                   // output_buff_size
+        NULL,                                   // data_ptr
+        sizeof(JpegTaskData),                   // data_size
+        NULL,                                   // yield_data_ptr
+        sizeof(jpegCtx->workBuf->yieldData),    // yield_data_size
     };
 
     JpegWork* workBuf = jpegCtx->workBuf;
