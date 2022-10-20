@@ -57,6 +57,4 @@ typedef struct ObjChan {
     /* 0x1E0 */ s16 cutscenes[2];
 } ObjChan; // size = 0x1E4
 
-extern const ActorInit Obj_Chan_InitVars;
-
 #endif // Z_OBJ_CHAN_H

@@ -23,7 +23,7 @@ void func_80AF6944(EnGamelupy* this);
 void func_80AF6994(EnGamelupy* this);
 void func_80AF6A38(EnGamelupy* this);
 
-const ActorInit En_Gamelupy_InitVars = {
+ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
     ACTORCAT_PROP,
     FLAGS,

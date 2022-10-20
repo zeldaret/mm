@@ -32,7 +32,7 @@ s32 D_80BA36B0;
 s32 D_80BA36B4;
 f32 D_80BA36B8;
 
-const ActorInit Obj_Nozoki_InitVars = {
+ActorInit Obj_Nozoki_InitVars = {
     ACTOR_OBJ_NOZOKI,
     ACTORCAT_ITEMACTION,
     FLAGS,

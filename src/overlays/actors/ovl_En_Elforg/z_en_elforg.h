@@ -55,6 +55,4 @@ typedef struct EnElforg {
     /* 0x22C */ EnElforgActionFunc actionFunc;
 } EnElforg; // size = 0x230
 
-extern const ActorInit En_Elforg_InitVars;
-
 #endif // Z_EN_ELFORG_H

@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-const ActorInit Obj_Ghaka_InitVars = {
+ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
     ACTORCAT_PROP,
     FLAGS,
@@ -89,7 +89,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -136,7 +136,7 @@ void func_80B3C624(ObjGhaka* this, PlayState* play) {
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
 
     if (stepTemp) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         func_80B3C2C4(this, play);
         gSaveContext.save.weekEventReg[20] |= 0x20;

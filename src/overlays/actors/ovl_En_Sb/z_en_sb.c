@@ -25,7 +25,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play);
 void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
-const ActorInit En_Sb_InitVars = {
+ActorInit En_Sb_InitVars = {
     ACTOR_EN_SB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -377,7 +377,7 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, 5);
     EnSb_UpdateDamage(this, play);
-    if (player->stateFlags1 & 0x8000000) {
+    if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         if (this->vulnerableTimer == 0) {
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);

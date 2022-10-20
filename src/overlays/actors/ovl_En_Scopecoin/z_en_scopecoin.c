@@ -16,7 +16,7 @@ void EnScopecoin_Destroy(Actor* thisx, PlayState* play);
 void EnScopecoin_Update(Actor* thisx, PlayState* play);
 void EnScopecoin_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Scopecoin_InitVars = {
+ActorInit En_Scopecoin_InitVars = {
     ACTOR_EN_SCOPECOIN,
     ACTORCAT_NPC,
     FLAGS,

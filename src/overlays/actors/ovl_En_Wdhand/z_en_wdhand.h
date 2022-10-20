@@ -14,6 +14,4 @@ typedef struct EnWdhand {
     /* 0x1EC */ char unk_1EC[0x268];
 } EnWdhand; // size = 0x454
 
-extern const ActorInit En_Wdhand_InitVars;
-
 #endif // Z_EN_WDHAND_H

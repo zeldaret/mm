@@ -23,6 +23,4 @@ typedef struct EnHg {
     /* 0x310 */ u16 cutscenes[4];
 } EnHg; // size = 0x318
 
-extern const ActorInit En_Hg_InitVars;
-
 #endif // Z_EN_HG_H

@@ -27,6 +27,4 @@ typedef struct EnScopecrow {
     /* 0x264 */ s16 unk_264;
 } EnScopecrow; // size = 0x268
 
-extern const ActorInit En_Scopecrow_InitVars;
-
 #endif // Z_EN_SCOPECROW_H

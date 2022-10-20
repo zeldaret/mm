@@ -38,7 +38,7 @@ void func_80BADE14(EnSuttari* this, PlayState* play);
 void func_80BADE8C(EnSuttari* this, PlayState* play);
 void func_80BADF3C(EnSuttari* this, PlayState* play);
 
-const ActorInit En_Suttari_InitVars = {
+ActorInit En_Suttari_InitVars = {
     ACTOR_EN_SUTTARI,
     ACTORCAT_NPC,
     FLAGS,
@@ -861,9 +861,9 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             if (!(gSaveContext.save.weekEventReg[83] & 4) && !(this->flags1 & 0x1000)) {
                 if (ActorCutscene_GetCanPlayNext(this->cutscenes[0])) {
                     ActorCutscene_Start(this->cutscenes[0], &this->actor);
-                    if (!(player->stateFlags1 & 0x10000000)) {
+                    if (!(player->stateFlags1 & PLAYER_STATE1_10000000)) {
                         this->flags2 |= 0x10;
-                        player->stateFlags1 |= 0x10000000;
+                        player->stateFlags1 |= PLAYER_STATE1_10000000;
                     }
                     this->flags1 |= 0x1000;
                     this->flags2 |= 2;
@@ -926,9 +926,9 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
                 if (this->flags2 & 2) {
                     this->flags2 &= ~2;
                 }
-                if (!(player->stateFlags1 & 0x10000000)) {
+                if (!(player->stateFlags1 & PLAYER_STATE1_10000000)) {
                     this->flags2 |= 0x10;
-                    player->stateFlags1 |= 0x10000000;
+                    player->stateFlags1 |= PLAYER_STATE1_10000000;
                 }
                 this->textId = 0x2A30;
                 Message_StartTextbox(play, this->textId, &this->actor);
@@ -1201,7 +1201,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 0x40) && (play->msgCtx.currentTextId != 0x2A31)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_40) && (play->msgCtx.currentTextId != 0x2A31)) {
         this->flags1 |= 0x8000;
         this->actor.speedXZ = 0.0f;
     } else {
@@ -1209,7 +1209,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
         func_80BABA90(this, 1, 1);
         if ((this->flags1 & 0x4000) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             this->flags2 &= ~0x10;
-            player->stateFlags1 &= ~0x10000000;
+            player->stateFlags1 &= ~PLAYER_STATE1_10000000;
             this->flags1 &= ~0x4000;
             ActorCutscene_Stop(this->cutscenes[1]);
             play->msgCtx.msgMode = 0x43;
@@ -1476,7 +1476,7 @@ void EnSuttari_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actionFunc(this, play);
-    if ((this->flags1 & 8) && (this->flags2 & 0x10) && (player->stateFlags1 & 0x10000000)) {
+    if ((this->flags1 & 8) && (this->flags2 & 0x10) && (player->stateFlags1 & PLAYER_STATE1_10000000)) {
         player->actor.freezeTimer = 3;
     }
     if (!(this->flags1 & 0x8000)) {

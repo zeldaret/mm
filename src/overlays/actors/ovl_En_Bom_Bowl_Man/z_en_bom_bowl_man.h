@@ -57,6 +57,4 @@ typedef struct EnBomBowlMan {
     /* 0x02F8 */ s32 unk_2F8;
 } EnBomBowlMan; // size = 0x2FC
 
-extern const ActorInit En_Bom_Bowl_Man_InitVars;
-
 #endif // Z_EN_BOM_BOWL_MAN_H

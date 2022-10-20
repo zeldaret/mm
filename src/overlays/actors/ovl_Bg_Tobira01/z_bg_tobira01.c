@@ -16,7 +16,7 @@ void BgTobira01_Destroy(Actor* thisx, PlayState* play);
 void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Tobira01_InitVars = {
+ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
     ACTORCAT_PROP,
     FLAGS,
@@ -67,7 +67,8 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
         this->timer2 = 180;
     }
 
-    if (!(player->stateFlags1 & 0x40) && (gSaveContext.save.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && (gSaveContext.save.weekEventReg[88] & 0x40) &&
+        (DECR(this->timer2) == 0)) {
         gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     }
 }

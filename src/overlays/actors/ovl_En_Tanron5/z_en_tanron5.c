@@ -23,7 +23,7 @@ void func_80BE5C10(Actor* thisx, PlayState* play);
 
 s32 D_80BE5D80 = 0;
 
-const ActorInit En_Tanron5_InitVars = {
+ActorInit En_Tanron5_InitVars = {
     ACTOR_EN_TANRON5,
     ACTORCAT_BOSS,
     FLAGS,

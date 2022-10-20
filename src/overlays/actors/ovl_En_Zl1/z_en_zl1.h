@@ -10,6 +10,4 @@ typedef struct EnZl1 {
     /* 0x144 */ char unk_144[0xC0];
 } EnZl1; // size = 0x204
 
-extern const ActorInit En_Zl1_InitVars;
-
 #endif // Z_EN_ZL1_H

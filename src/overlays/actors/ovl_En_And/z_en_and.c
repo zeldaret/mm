@@ -18,7 +18,7 @@ void EnAnd_Draw(Actor* thisx, PlayState* play);
 void func_80C18C50(EnAnd* this, PlayState* play);
 
 #if 0
-const ActorInit En_And_InitVars = {
+ActorInit En_And_InitVars = {
     ACTOR_EN_AND,
     ACTORCAT_NPC,
     FLAGS,

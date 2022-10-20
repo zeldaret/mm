@@ -89,7 +89,7 @@ static AnimationSpeedInfo sAnimations[] = {
     { &gDekuButlerGrieveAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-const ActorInit En_Dno_InitVars = {
+ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
     ACTORCAT_NPC,
     FLAGS,

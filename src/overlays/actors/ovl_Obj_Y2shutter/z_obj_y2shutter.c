@@ -29,7 +29,7 @@ typedef struct ShutterInfo {
     /* 0x1E */ u8 openTimer;
 } ShutterInfo; // size = 0x20
 
-const ActorInit Obj_Y2shutter_InitVars = {
+ActorInit Obj_Y2shutter_InitVars = {
     ACTOR_OBJ_Y2SHUTTER,
     ACTORCAT_BG,
     FLAGS,

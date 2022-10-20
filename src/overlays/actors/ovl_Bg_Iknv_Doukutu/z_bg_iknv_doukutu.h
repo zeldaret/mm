@@ -23,6 +23,4 @@ typedef struct BgIknvDoukutu {
     /* 0x164 */ BgIknvDoukutuActionFunc actionFunc;
 } BgIknvDoukutu;// size = 0x168
 
-extern const ActorInit Bg_Iknv_Doukutu_InitVars;
-
 #endif // Z_BG_IKNV_DOUKUTU_H

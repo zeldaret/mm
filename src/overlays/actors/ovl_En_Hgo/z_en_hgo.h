@@ -27,6 +27,4 @@ typedef struct EnHgo {
     /* 0x316 */ u16 csAction;
 } EnHgo; // size = 0x318
 
-extern const ActorInit En_Hgo_InitVars;
-
 #endif // Z_EN_HGO_H
