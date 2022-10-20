@@ -10,6 +10,4 @@ typedef struct ObjYado {
     /* 0x144 */ u8 isNight;
 } ObjYado; // size = 0x148
 
-extern const ActorInit Obj_Yado_InitVars;
-
 #endif // Z_OBJ_YADO_H

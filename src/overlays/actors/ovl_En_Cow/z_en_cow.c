@@ -12,7 +12,7 @@
 
 void EnCow_Init(Actor* thisx, PlayState* play);
 void EnCow_Destroy(Actor* thisx, PlayState* play);
-void EnCow_Update(Actor* thisx, PlayState* play);
+void EnCow_Update(Actor* thisx, PlayState* play2);
 void EnCow_Draw(Actor* thisx, PlayState* play);
 
 void EnCow_TalkEnd(EnCow* this, PlayState* play);
@@ -24,10 +24,10 @@ void EnCow_Talk(EnCow* this, PlayState* play);
 void EnCow_Idle(EnCow* this, PlayState* play);
 
 void EnCow_DoTail(EnCow* this, PlayState* play);
-void EnCow_UpdateTail(Actor* this, PlayState* play);
-void EnCow_DrawTail(Actor* this, PlayState* play);
+void EnCow_UpdateTail(Actor* thisx, PlayState* play);
+void EnCow_DrawTail(Actor* thisx, PlayState* play);
 
-const ActorInit En_Cow_InitVars = {
+ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,
     ACTORCAT_NPC,
     FLAGS,
@@ -118,7 +118,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             if (!(gSaveContext.save.weekEventReg[22] & 1) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 

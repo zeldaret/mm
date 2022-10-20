@@ -25,7 +25,7 @@ void func_80C17008(DemoSyoten* this, PlayState* play);
 void func_80C173B4(Actor* thisx, PlayState* play);
 void func_80C17690(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Syoten_InitVars = {
+ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -183,19 +183,19 @@ void func_80C168D0(DemoSyoten* this, PlayState* play) {
     s32 pad;
     Path* path = this->unk_3E8;
     Vec3s* points;
-    Vec3f sp30;
-    Vec3f sp24;
-    f32 sp20;
+    Vec3f worldPos;
+    Vec3f projectedPos;
+    f32 invW;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(this->unk_3E8->points);
         points += this->unk_3EC;
-        Math_Vec3s_ToVec3f(&sp30, points);
-        Actor_GetProjectedPos(play, &sp30, &sp24, &sp20);
-        Math_Vec3f_Copy(&sp30, &this->actor.projectedPos);
-        sp30.z = sp30.y;
-        sp24.z = sp24.y;
-        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&sp24, &sp30);
+        Math_Vec3s_ToVec3f(&worldPos, points);
+        Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
+        Math_Vec3f_Copy(&worldPos, &this->actor.projectedPos);
+        worldPos.z = worldPos.y;
+        projectedPos.z = projectedPos.y;
+        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&projectedPos, &worldPos);
     }
 }
 

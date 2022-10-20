@@ -13,7 +13,7 @@
 
 void EnDinofos_Init(Actor* thisx, PlayState* play);
 void EnDinofos_Destroy(Actor* thisx, PlayState* play);
-void EnDinofos_Update(Actor* thisx, PlayState* play);
+void EnDinofos_Update(Actor* thisx, PlayState* play2);
 void EnDinofos_Draw(Actor* thisx, PlayState* play);
 
 void func_8089B834(EnDinofos* this, PlayState* play);
@@ -57,7 +57,7 @@ void func_8089C398(EnDinofos* this);
 void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
-const ActorInit En_Dinofos_InitVars = {
+ActorInit En_Dinofos_InitVars = {
     ACTOR_EN_DINOFOS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -253,7 +253,7 @@ static s32 D_8089E350 = 0;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 16, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_DINOLFOS, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_STOP),
 };
@@ -365,7 +365,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
     if (this->subCamId != SUB_CAM_ID_DONE) {
         Camera* subCam = Play_GetCamera(play, this->subCamId);
 
-        Play_CameraSetAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
@@ -488,7 +488,7 @@ void func_8089B288(EnDinofos* this, PlayState* play) {
     this->unk_290--;
     Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, this->unk_2AC);
     Math_Vec3f_StepTo(&subCam->at, &this->unk_2C8, this->unk_2A8);
-    Play_CameraSetAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCam->at, &subCam->eye);
     if (this->unk_290 == 0) {
         func_8089B320(this);
     }
@@ -511,7 +511,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
     Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
     this->unk_290++;
     if (this->unk_290 == 10) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
     }
 
     subCamAt.x = this->actor.world.pos.x;
@@ -522,7 +522,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
         subCamAt.y = subCam->at.y;
     }
 
-    Play_CameraSetAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
+    Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCam->eye);
     if (this->actor.bgCheckFlags & 1) {
         func_8089B4A4(this);
     }
@@ -530,7 +530,7 @@ void func_8089B3D4(EnDinofos* this, PlayState* play) {
 
 void func_8089B4A4(EnDinofos* this) {
     if (this->unk_290 < 10) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
     }
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00C974);
     this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y + 0x200) * 123.0f) + this->actor.world.pos.x;
@@ -547,22 +547,22 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
 
     this->unk_290++;
     if (this->unk_290 < 8) {
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
     }
 
     if (this->skelAnime.curFrame > 35.0f) {
-        if ((play->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
+        if ((play->sceneId == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
             play->envCtx.lightSettingOverride = 11;
         }
 
         Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
-        Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
+        Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
         if (this->skelAnime.curFrame <= 55.0f) {
             func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         }
     }
 
-    if ((play->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
+    if ((play->sceneId == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
         play->envCtx.lightSettingOverride = 0xFF;
     }
 
@@ -1053,7 +1053,7 @@ void func_8089CB10(EnDinofos* this, PlayState* play) {
         worldSphere->center.z = this->limbPos[10].z;
     }
 
-    if (play->sceneNum == SCENE_MITURIN) {
+    if (play->sceneId == SCENE_MITURIN) {
         play->envCtx.lightSettingOverride = 11;
     }
 
@@ -1114,7 +1114,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
 void func_8089CF00(EnDinofos* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0017B8);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
-    if (play->sceneNum == SCENE_MITURIN) {
+    if (play->sceneId == SCENE_MITURIN) {
         play->envCtx.lightSettingOverride = 255;
     }
     this->actionFunc = func_8089CF70;
@@ -1145,7 +1145,7 @@ void func_8089D018(EnDinofos* this, PlayState* play) {
         }
 
         if (temp_v0 <= 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             this->unk_288 = 0;
         } else {
             this->unk_288 = temp_v0;
@@ -1215,7 +1215,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;
             subCamEye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.z;
-            Play_CameraSetAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
+            Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCamEye);
             func_8089CFAC(this);
         } else {
             func_8089B100(this, play);
@@ -1279,13 +1279,13 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             }
 
             if (this->actor.cutscene != -1) {
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
             }
         }
 
         func_8089ACEC(this, play);
         func_8089AD70(this);
-        if (play->sceneNum == SCENE_MITURIN) {
+        if (play->sceneId == SCENE_MITURIN) {
             play->envCtx.lightSettingOverride = 255;
         }
 

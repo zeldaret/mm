@@ -1,7 +1,7 @@
 /*
  * File: z_dm_gm.c
  * Overlay: ovl_Dm_Gm
- * Description: Anju (cutscene) (duplicate of Dm_An?)
+ * Description: Complete duplicate of Dm_An
  */
 
 #include "z_dm_gm.h"
@@ -21,7 +21,7 @@ void func_80C24A00(DmGm* this, PlayState* play);
 void func_80C24BD0(DmGm* this, PlayState* play);
 void func_80C25000(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Gm_InitVars = {
+ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -33,7 +33,7 @@ const ActorInit Dm_Gm_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -83,7 +83,7 @@ s32 func_80C24428(DmGm* this, PlayState* play, s32 arg2) {
     if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         this->unk_2C8 = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
     return ret;
@@ -183,7 +183,7 @@ void func_80C248A8(DmGm* this, PlayState* play) {
         this->unk_2AE |= 1;
         this->actor.draw = func_80C25000;
 
-        if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+        if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C24838(play);
             func_80C24428(this, play, 1);
             this->actionFunc = func_80C24BD0;

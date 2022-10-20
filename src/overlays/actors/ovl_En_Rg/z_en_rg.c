@@ -22,7 +22,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
 
-const ActorInit En_Rg_InitVars = {
+ActorInit En_Rg_InitVars = {
     ACTOR_EN_RG,
     ACTORCAT_NPC,
     FLAGS,
@@ -123,8 +123,8 @@ AnimationInfoS D_80BF5914[] = {
     { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-TexturePtr D_80BF5934[] = {
-    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+static TexturePtr sDustTextures[] = {
+    gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
 Color_RGBA8 D_80BF5954[] = {
@@ -190,7 +190,7 @@ void func_80BF3920(EnRgStruct* ptr, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = temp_f20 * 7.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF5934[idx]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[idx]));
             gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
             Matrix_Pop();
@@ -564,8 +564,9 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
             } while (phi_s0 != NULL);
         }
 
-        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) && (player->stateFlags3 & 0x80000) &&
-            (player->invincibilityTimer == 0) && func_80BF4220(this, play, &player->actor)) {
+        if ((phi_s0 == NULL) && (D_80BF5C10 == 0) && (this->unk_326 == 0) &&
+            (player->stateFlags3 & PLAYER_STATE3_80000) && (player->invincibilityTimer == 0) &&
+            func_80BF4220(this, play, &player->actor)) {
             this->unk_18C = &player->actor;
             this->unk_310 |= 0x800;
             D_80BF5C10 = 1;
@@ -586,7 +587,7 @@ void func_80BF4AB8(EnRg* this, PlayState* play) {
                 this->unk_320 = CLAMP_MAX(this->unk_320, 0x190);
             } else if (this->collider2.base.at->id == ACTOR_PLAYER) {
                 this->unk_326 = 0x28;
-                if (player->stateFlags3 & 0x1000) {
+                if (player->stateFlags3 & PLAYER_STATE3_1000) {
                     player->linearVelocity *= 0.5f;
                     player->unk_B08[0] = player->linearVelocity;
                     player->unk_B08[1] += player->linearVelocity * 0.05f;
@@ -724,7 +725,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
 void EnRg_Init(Actor* thisx, PlayState* play) {
     EnRg* this = THIS;
 
-    if (gSaveContext.save.entranceIndex == 0xD010) {
+    if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
@@ -758,7 +759,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->unk_31E = 0;
         this->actionFunc = func_80BF4EBC;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

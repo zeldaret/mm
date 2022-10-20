@@ -58,10 +58,10 @@ void ObjUm_Update(Actor* thisx, PlayState* play);
 void ObjUm_Draw(Actor* thisx, PlayState* play);
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
-void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index);
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
-const ActorInit Obj_Um_InitVars = {
+ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,
     FLAGS,
@@ -679,12 +679,12 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->wheelRot = 0;
     ObjUm_DefaultAnim(this, play);
 
-    this->type = OBJ_UM_PARSE_TYPE(thisx);
-    this->initialPathIndex = OBJ_UM_PARSE_PATH_INDEX(thisx);
+    this->type = OBJ_UM_GET_TYPE(thisx);
+    this->initialPathIndex = OBJ_UM_GET_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -705,7 +705,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             if ((gSaveContext.save.weekEventReg[34] & 0x80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
                 gSaveContext.save.time <= CLOCK_TIME(6, 0) || (gSaveContext.save.weekEventReg[52] & 1) ||
                 (gSaveContext.save.weekEventReg[52] & 2)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
 
@@ -715,7 +715,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
         if (!(gSaveContext.save.weekEventReg[31] & 0x80) || (gSaveContext.save.weekEventReg[52] & 1)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -729,7 +729,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
         if (!(gSaveContext.save.weekEventReg[31] & 0x80)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -741,7 +741,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
         if (!(gSaveContext.save.weekEventReg[52] & 1) || (gSaveContext.save.weekEventReg[59] & 2)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -751,7 +751,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
-        func_801A3098(NA_BGM_CLEAR_EVENT);
+        Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     } else {
         this->type = OBJ_UM_TYPE_TERMINA_FIELD;
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
@@ -768,7 +768,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->dyna.bgId == BGCHECK_SCENE) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -780,7 +780,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                               this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_DONKEY, ENHORSE_18));
 
     if (this->donkey == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -795,18 +795,18 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 
     for (i = 0; i < ARRAY_COUNT(this->potPos); i++) {
-        Audio_StopSfxByPos(&this->potPos[i]);
+        AudioSfx_StopByPos(&this->potPos[i]);
     }
 
     Collider_DestroyCylinder(play, &this->banditsCollisions[0]);
     Collider_DestroyCylinder(play, &this->banditsCollisions[1]);
 }
 
-// ObjUm_MarkMyDonkeyAndMyselfForDeath, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
+// ObjUm_KillMyDonkeyAndMyself, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
 void func_80B79524(ObjUm* this) {
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
     if (this->donkey != NULL) {
-        Actor_MarkForDeath(&this->donkey->actor);
+        Actor_Kill(&this->donkey->actor);
     }
 }
 
@@ -833,7 +833,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 player = GET_PLAYER(play);
                 func_8019F208();
                 gSaveContext.save.weekEventReg[31] |= 0x80;
-                play->nextEntranceIndex = 0x64B0;
+                play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
                     D_801BDAA0 = 1;
                 }
@@ -992,7 +992,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
 
     this->dyna.actor.flags |= ACTOR_FLAG_1;
     SkelAnime_Update(&this->skelAnime);
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
     if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= CLOCK_TIME(19, 0))) {
         if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
@@ -1121,9 +1121,9 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
         }
     }
 
-    if (this->currentAnimIndex == OBJ_UM_ANIM_TROT) {
+    if (this->animIndex == OBJ_UM_ANIM_TROT) {
         this->dyna.actor.speedXZ = 4.0f;
-    } else if (this->currentAnimIndex == OBJ_UM_ANIM_GALLOP) {
+    } else if (this->animIndex == OBJ_UM_ANIM_GALLOP) {
         this->dyna.actor.speedXZ = 8.0f;
     }
 
@@ -1133,14 +1133,14 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x3E8;
     this->flags &= ~OBJ_UM_FLAG_WAITING;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
 
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             if (gSaveContext.save.weekEventReg[31] & 0x80) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
-                play->nextEntranceIndex = 0x3E50;
+                play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_03;
                 play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1156,7 +1156,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
 }
 
 void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -1185,9 +1185,9 @@ void func_80B7A070(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7A0E0(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     if (gSaveContext.save.time != this->lastTime) {
-        ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
+        ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A070);
     }
 }
@@ -1199,7 +1199,7 @@ void func_80B7A144(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_0100;
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= PLAYER_STATE1_20;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     ObjUm_SetupAction(this, ObjUm_RanchStartCs);
 }
 
@@ -1227,7 +1227,7 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7A240(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1238,12 +1238,12 @@ void func_80B7A240(ObjUm* this, PlayState* play) {
 
 void func_80B7A2AC(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x3E8;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
 
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            play->nextEntranceIndex = 0xCE40;
+            play->nextEntrance = ENTRANCE(GORMAN_TRACK, 4);
             play->transitionType = TRANS_TYPE_64;
             gSaveContext.nextTransitionType = TRANS_TYPE_03;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1265,7 +1265,7 @@ void func_80B7A394(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
     if (gSaveContext.save.time != this->lastTime) {
-        ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
+        ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 }
@@ -1290,25 +1290,25 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0x7FFF);
     this->wheelRot += 0x7D0;
     this->flags |= OBJ_UM_FLAG_0010;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_GALLOP);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_GALLOP);
 
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            gSaveContext.seqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (!this->areAllPotsBroken) {
-                    play->nextEntranceIndex = 0x3E60;
+                    play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[52] |= 1;
                     gSaveContext.save.weekEventReg[52] &= (u8)~2;
                 } else {
-                    play->nextEntranceIndex = 0x6480;
+                    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1333,7 +1333,7 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x7D0;
     this->flags |= OBJ_UM_FLAG_0010;
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_GALLOP);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_GALLOP);
 
     if (ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
         this->unk_4DC = 1;
@@ -1387,7 +1387,7 @@ void func_80B7A7AC(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_0010;
     func_80B78DF0(this, play);
     this->flags |= 4;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_GALLOP);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_GALLOP);
     ObjUm_SetupAction(this, func_80B7A614);
 }
 
@@ -1488,7 +1488,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 }
 
 void func_80B7AB78(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
@@ -1500,7 +1500,7 @@ void func_80B7AB78(ObjUm* this, PlayState* play) {
 void func_80B7ABE4(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x3E8;
 
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_FINISH:
             func_80B79524(this);
@@ -1543,14 +1543,14 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
     this->wheelRot += 0x3E8;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_TROT);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(false);
         gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
-        play->nextEntranceIndex = 0x5400;
+        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1566,7 +1566,7 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
@@ -1577,7 +1577,7 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
 }
 
 void ObjUm_TerminaFieldIdle(ObjUm* this, PlayState* play) {
-    ObjUm_UpdateAnim(this, play, OBJ_UM_ANIM_IDLE);
+    ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -1627,7 +1627,7 @@ void func_80B7AF30(ObjUm* this, PlayState* play) {
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gUmTrotAnim);
-    this->currentAnimIndex = OBJ_UM_ANIM_TROT;
+    this->animIndex = OBJ_UM_ANIM_TROT;
 }
 
 typedef struct {
@@ -1643,45 +1643,45 @@ struct_80B7C25C sUmAnims[] = {
     { &gUmLookBackAnim, false }, // OBJ_UM_ANIM_LOOK_BACK
 };
 
-void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index) {
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
     s32 changeAnim;
     s32 temp;
-    s32 indexTemp = index;
+    s32 indexTemp = animIndex;
     f32 animPlaybackSpeed = 0.0f;
 
-    if (sUmAnims[index].doesMove) {
+    if (sUmAnims[animIndex].doesMove) {
         this->flags |= OBJ_UM_FLAG_MOVING;
     } else {
         this->flags &= ~OBJ_UM_FLAG_MOVING;
     }
 
-    if (index == OBJ_UM_ANIM_TROT) {
+    if (animIndex == OBJ_UM_ANIM_TROT) {
         animPlaybackSpeed = this->dyna.actor.speedXZ * 0.25f;
-    } else if (index == OBJ_UM_ANIM_GALLOP) {
+    } else if (animIndex == OBJ_UM_ANIM_GALLOP) {
         animPlaybackSpeed = this->dyna.actor.speedXZ * 0.2f;
-    } else if (index == OBJ_UM_ANIM_IDLE) {
+    } else if (animIndex == OBJ_UM_ANIM_IDLE) {
         animPlaybackSpeed = 1.0f;
     }
     this->skelAnime.playSpeed = animPlaybackSpeed;
 
     if (this->flags & OBJ_UM_FLAG_LOOK_BACK) {
         this->skelAnime.playSpeed = 1.0f;
-        index = OBJ_UM_ANIM_MINUS_1;
+        animIndex = OBJ_UM_ANIM_MINUS_1;
     }
 
-    changeAnim = (index != this->currentAnimIndex);
+    changeAnim = (animIndex != this->animIndex);
     if (SkelAnime_Update(&this->skelAnime) || changeAnim) {
-        this->currentAnimIndex = index;
+        this->animIndex = animIndex;
 
-        if (index != OBJ_UM_ANIM_MINUS_1) {
+        if (animIndex != OBJ_UM_ANIM_MINUS_1) {
             if (this->donkey != NULL) {
-                this->donkey->unk_538 = index;
+                this->donkey->unk_538 = animIndex;
             }
 
             if (changeAnim) {
-                Animation_MorphToPlayOnce(&this->skelAnime, sUmAnims[index].anim, -3.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, sUmAnims[animIndex].anim, -3.0f);
             } else {
-                Animation_PlayOnce(&this->skelAnime, sUmAnims[index].anim);
+                Animation_PlayOnce(&this->skelAnime, sUmAnims[animIndex].anim);
             }
         } else {
             EnHorse* donkey = this->donkey;
@@ -1691,10 +1691,10 @@ void ObjUm_UpdateAnim(ObjUm* this, PlayState* play, ObjUmAnimimations index) {
             }
 
             if (changeAnim) {
-                temp = 3 - index; // OBJ_UM_ANIM_LOOK_BACK
+                temp = 3 - animIndex; // OBJ_UM_ANIM_LOOK_BACK
                 Animation_MorphToPlayOnce(&this->skelAnime, sUmAnims[temp].anim, -10.0f);
             } else {
-                temp = 3 - index; // OBJ_UM_ANIM_LOOK_BACK
+                temp = 3 - animIndex; // OBJ_UM_ANIM_LOOK_BACK
                 Animation_PlayOnce(&this->skelAnime, sUmAnims[temp].anim);
             }
         }

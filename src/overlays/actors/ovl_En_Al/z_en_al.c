@@ -85,7 +85,7 @@ s32 D_80BDFF24[] = {
     0x11390411, 0x390819FF, 0xB10E2B3C, 0x2D00080C, 0x19FFA700,
 };
 
-const ActorInit En_Al_InitVars = {
+ActorInit En_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
     FLAGS,
@@ -119,7 +119,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_al_Anim_000C54, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, 0 },
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00ACA0, 1.0f, 0, -1, 2, 0 },
     { &object_al_Anim_00ACA0, -1.0f, 0, -1, 2, 0 }, { &object_al_Anim_00CA28, 1.0f, 0, -1, 0, -4 },
@@ -178,7 +178,7 @@ s32 func_80BDE27C(EnAl* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_4F8 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_4C8 = this->skelAnime.playSpeed;
     }
 
@@ -575,7 +575,7 @@ s32 func_80BDF064(EnAl* this, PlayState* play) {
     Actor* sp1C = func_80BDE1A0(this, play, 4, 0xA4);
     Actor* temp_v0 = func_80BDE1A0(this, play, 4, 0x234);
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         this->unk_4C2 |= 0x400;
         if (this->unk_4C4 != sp22) {
             switch (sp22) {
@@ -659,7 +659,7 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             break;
 
         case 2:
-            this->unk_4F0 = EXCH_ITEM_NONE;
+            this->unk_4F0 = PLAYER_AP_NONE;
             this->unk_4EA = 0;
             func_80BDE27C(this, 2);
             break;
@@ -672,7 +672,7 @@ s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_4F0 = EXCH_ITEM_NONE;
+    this->unk_4F0 = PLAYER_AP_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 

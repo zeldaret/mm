@@ -1,7 +1,7 @@
 /*
  * File: z_en_hs2.c
  * Overlay: ovl_En_Hs2
- * Description: Blue Target Spot (?)
+ * Description: Near-empty actor. Does nothing, but can be targeted.
  */
 
 #include "z_en_hs2.h"
@@ -17,7 +17,7 @@ void EnHs2_Draw(Actor* thisx, PlayState* play);
 
 void EnHs2_DoNothing(EnHs2* this, PlayState* play);
 
-const ActorInit En_Hs2_InitVars = {
+ActorInit En_Hs2_InitVars = {
     ACTOR_EN_HS2,
     ACTORCAT_NPC,
     FLAGS,

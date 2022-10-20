@@ -29,6 +29,4 @@ typedef struct EnLiftNuts {
     /* 0x356 */ s16 unk_356;
 } EnLiftNuts; // size = 0x358
 
-extern const ActorInit En_Lift_Nuts_InitVars;
-
 #endif // Z_EN_LIFT_NUTS_H

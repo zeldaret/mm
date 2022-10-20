@@ -11,6 +11,4 @@ typedef struct ObjJgGakki {
     /* 0x188 */ ColliderCylinder collider;
 } ObjJgGakki; // size = 0x1D4
 
-extern const ActorInit Obj_Jg_Gakki_InitVars;
-
 #endif // Z_OBJ_JG_GAKKI_H

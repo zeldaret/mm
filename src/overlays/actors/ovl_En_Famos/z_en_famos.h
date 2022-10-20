@@ -15,8 +15,8 @@ typedef struct EnFamosRock {
     /* 0x20 */ f32   scale;
 } EnFamosRock; // size = 0x24
 
-#define GET_FAMOS_PATH(thisx) (thisx->params)
-#define GET_FAMOS_AGGRO_DISTANCE(thisx) (thisx->shape.rot.x)
+#define FAMOS_GET_PATH(thisx) ((thisx)->params)
+#define FAMOS_GET_AGGRO_DISTANCE(thisx) ((thisx)->shape.rot.x)
 
 // stateTimer gets reused:
 //   after spotting player, counts frames until first attack (8)

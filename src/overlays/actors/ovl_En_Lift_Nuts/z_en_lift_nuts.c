@@ -49,7 +49,7 @@ void func_80AEB934(EnLiftNuts* this, PlayState* play);
 void func_80AEB974(EnLiftNuts* this);
 void func_80AEB9E0(EnLiftNuts* this, PlayState* play);
 
-const ActorInit En_Lift_Nuts_InitVars = {
+ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,
     ACTORCAT_NPC,
     FLAGS,

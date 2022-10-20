@@ -51,7 +51,7 @@
         <Limb Name="object_bg_Standardlimb_008F48" Type="Standard" EnumName="OBJECT_BG_1_LIMB_15" Offset="0x8F48" />
         <Limb Name="object_bg_Standardlimb_008F54" Type="Standard" EnumName="OBJECT_BG_1_LIMB_16" Offset="0x8F54" />
         <Limb Name="object_bg_Standardlimb_008F60" Type="Standard" EnumName="OBJECT_BG_1_LIMB_17" Offset="0x8F60" />
-        <Skeleton Name="object_bg_Skel_008FC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_1_LIMB_NONE" LimbMax="OBJECT_BG_1_LIMB_MAX" EnumName="object_bg_1_Limbs" Offset="0x8FC8" />
+        <Skeleton Name="object_bg_Skel_008FC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_1_LIMB_NONE" LimbMax="OBJECT_BG_1_LIMB_MAX" EnumName="ObjectBg1Limb" Offset="0x8FC8" />
         <Animation Name="object_bg_Anim_009890" Offset="0x9890" />
         <Animation Name="object_bg_Anim_009F20" Offset="0x9F20" />
         <Animation Name="object_bg_Anim_00A280" Offset="0xA280" />
@@ -107,6 +107,6 @@
         <Limb Name="object_bg_Standardlimb_011AE0" Type="Standard" EnumName="OBJECT_BG_2_LIMB_15" Offset="0x11AE0" />
         <Limb Name="object_bg_Standardlimb_011AEC" Type="Standard" EnumName="OBJECT_BG_2_LIMB_16" Offset="0x11AEC" />
         <Limb Name="object_bg_Standardlimb_011AF8" Type="Standard" EnumName="OBJECT_BG_2_LIMB_17" Offset="0x11AF8" />
-        <Skeleton Name="object_bg_Skel_011B60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_2_LIMB_NONE" LimbMax="OBJECT_BG_2_LIMB_MAX" EnumName="object_bg_2_Limbs" Offset="0x11B60" />
+        <Skeleton Name="object_bg_Skel_011B60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_2_LIMB_NONE" LimbMax="OBJECT_BG_2_LIMB_MAX" EnumName="ObjectBg2Limb" Offset="0x11B60" />
     </File>
 </Root>

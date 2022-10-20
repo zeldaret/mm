@@ -22,7 +22,7 @@ void func_808F3690(EnIn* this, PlayState* play);
 void func_808F5A34(EnIn* this, PlayState* play);
 s32 func_808F5994(EnIn* this, PlayState* play, Vec3f* arg2, s16 arg3);
 
-const ActorInit En_In_InitVars = {
+ActorInit En_In_InitVars = {
     ACTOR_EN_IN,
     ACTORCAT_NPC,
     FLAGS,
@@ -118,7 +118,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -146,19 +146,19 @@ static TrackOptionsSet sTrackOptions = {
     { 0x1770, 4, 1, 6 },
 };
 
-s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
+s32 EnIn_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret = false;
 
     if (animIndex >= 0 && animIndex < 18) {
         ret = true;
-        frameCount = sAnimations[animIndex].frameCount;
+        frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
+            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
     return ret;
 }
@@ -274,7 +274,7 @@ void EnIn_DoNothing(EnIn* this, PlayState* play) {
 
 void func_808F3618(EnIn* this, PlayState* play) {
     if (ENIN_GET_PATH(&this->actor) != 0x3F) {
-        func_808F30B0(&this->skelAnime, 9);
+        EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_9);
     }
     if (ENIN_GET_PATH(&this->actor) != 0x3F) {
         this->actionFunc = func_808F3690;
@@ -388,7 +388,7 @@ void func_808F3AD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -412,7 +412,7 @@ void func_808F3BD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -436,7 +436,7 @@ void func_808F3CD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -819,7 +819,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3475:
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
-                    play->nextEntranceIndex = 0xCE50;
+                    play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_05;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
@@ -871,8 +871,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x3476:
                     Actor_ContinueText(play, &this->actor, 0x3477);
-                    func_808F30B0(&this->skelAnime, 1);
-                    func_808F30B0(&this->unk4A4->skelAnime, 7);
+                    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
+                    EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     ret = false;
                     break;
                 case 0x3477:
@@ -881,8 +881,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     ret = false;
                     break;
                 case 0x347A:
-                    func_808F30B0(&this->skelAnime, 1);
-                    func_808F30B0(&this->unk4A4->skelAnime, 7);
+                    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
+                    EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     if (INV_CONTENT(ITEM_MASK_GARO) == ITEM_MASK_GARO) {
                         Actor_ContinueText(play, &this->actor, 0x347E);
                         ret = false;
@@ -1066,14 +1066,14 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3475:
                     SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
-                    play->nextEntranceIndex = 0xCE50;
+                    play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_05;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
-                    func_808F30B0(&this->skelAnime, 1);
-                    func_808F30B0(&this->unk4A4->skelAnime, 7);
+                    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
+                    EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     if (INV_CONTENT(ITEM_MASK_GARO) == ITEM_MASK_GARO) {
                         Actor_ContinueText(play, &this->actor, 0x34A1);
                         ret = false;
@@ -1118,8 +1118,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
                 case 0x3499:
                     Actor_ContinueText(play, &this->actor, 0x349A);
-                    func_808F30B0(&this->skelAnime, 1);
-                    func_808F30B0(&this->unk4A4->skelAnime, 7);
+                    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
+                    EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     ret = false;
                     break;
                 case 0x349A:
@@ -1240,7 +1240,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         }
         return 0;
     }
-    if (!func_800B8934(play, &this->actor)) {
+    if (!Actor_OnScreen(play, &this->actor)) {
         return 0;
     }
     yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
@@ -1358,7 +1358,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_in_Skel_014EA8, NULL, this->jointTable, this->morphTable, 20);
-    func_808F30B0(&this->skelAnime, 0);
+    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
     Collider_InitCylinder(play, &this->colliderCylinder);
     Collider_SetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -1395,9 +1395,9 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                 this->unk23C = 0;
                 D_801BDAA0 = 0;
                 if (GET_RACE_FLAGS == RACE_FLAG_2) {
-                    func_808F30B0(&this->skelAnime, 6);
+                    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_6);
                 } else {
-                    func_808F30B0(&this->skelAnime, 4);
+                    EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_4);
                 }
                 if (GET_RACE_FLAGS == RACE_FLAG_2) {
                     this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
@@ -1414,29 +1414,29 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                     this->unk4AC |= 2;
                     if (type == ENIN_BLUE_SHIRT) {
                         if (func_808F33B8()) {
-                            func_808F30B0(&this->skelAnime, 0);
+                            EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                             this->actionFunc = func_808F5A94;
                         } else {
                             if (gSaveContext.save.weekEventReg[52] & 1) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
-                                Actor_MarkForDeath(&this->actor);
+                                Actor_Kill(&this->actor);
                             } else {
-                                func_808F30B0(&this->skelAnime, 0);
+                                EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                                 this->actionFunc = func_808F5A94;
                             }
                         }
                     } else {
                         if (gSaveContext.save.weekEventReg[52] & 1) {
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                         } else {
-                            func_808F30B0(&this->skelAnime, 7);
+                            EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_7);
                             this->actionFunc = func_808F5B58;
                         }
                     }
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
         } else {

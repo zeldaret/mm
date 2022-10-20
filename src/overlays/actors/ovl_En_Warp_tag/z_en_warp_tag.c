@@ -24,7 +24,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play);
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
-const ActorInit En_Warp_tag_InitVars = {
+ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -51,15 +51,15 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetFocus(&this->dyna.actor, 0.0f);
 
-    if (GET_WARPTAG_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
+    if (WARPTAG_GET_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
         this->dyna.actor.flags &= ~ACTOR_FLAG_1;
 
-        if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
+        if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
             if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
 
             this->actionFunc = EnWarpTag_CheckDungeonKeepObject;
@@ -93,7 +93,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
 void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
-        if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
+        if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
             func_800B7298(play, NULL, 0x51);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
@@ -112,8 +112,8 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
         //   this actor doesnt have that flag set default, or in init, and this is called shortly after init
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
-        // also GET_WARPTAG_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(play, D_809C1000[GET_WARPTAG_3C0(&this->dyna.actor)]); // unk message function
+        // also WARPTAG_GET_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
+        func_80152434(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]); // unk message function
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
@@ -144,7 +144,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     Player* player;
     s32 playerSpawnIndex;
     s32 new15E;
-    s32 entranceIndex;
+    s32 entrance;
     u32 playerSpawnIndexPerForm[PLAYER_FORM_MAX];
     u8 playerForm;
     s16 playerParams;
@@ -176,11 +176,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         player->actor.world.pos.z = this->dyna.actor.world.pos.z + (diffZ * distance);
 
         if (Math_StepToS(&this->unkValue15E, 0x2710, 0xC8)) {
-            player->stateFlags3 |= 0x1;
+            player->stateFlags3 |= PLAYER_STATE3_1;
             player->actor.gravity = -0.5f;
 
             if (this->dyna.actor.playerHeightRel < -80.0f) {
-                playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY] = GET_WARPTAG_EXIT_INDEX(&this->dyna.actor);
+                playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY] = WARPTAG_GET_EXIT_INDEX(&this->dyna.actor);
                 playerSpawnIndexPerForm[PLAYER_FORM_HUMAN] = playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY];
                 playerSpawnIndexPerForm[PLAYER_FORM_GORON] = this->dyna.actor.world.rot.x;
                 playerSpawnIndexPerForm[PLAYER_FORM_ZORA] = this->dyna.actor.world.rot.y;
@@ -192,7 +192,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                     playerForm = player->transformation;
                 }
 
-                entranceIndex = gSaveContext.save.entranceIndex;
+                entrance = gSaveContext.save.entrance;
 
                 playerSpawnIndex = playerSpawnIndexPerForm[playerForm];
                 playerActorEntry = &play->linkActorEntry[playerSpawnIndex];
@@ -200,7 +200,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 newRespawnPos.y = playerActorEntry->pos.y;
                 newRespawnPos.z = playerActorEntry->pos.z;
 
-                if (GET_WARPTAG_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
+                if (WARPTAG_GET_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
                     playerParams = 0x9FF;
                 } else { // not used by any known variant
                     playerParams = 0x8FF;
@@ -209,7 +209,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
                 // especially because we are converting from deg to binang, but isnt home.rot.y already in binang??
                 Play_SetRespawnData(
-                    &play->state, 0, entranceIndex, // parameter 3 is called "sceneSetup"
+                    &play->state, 0, entrance, // parameter 3 is called "sceneSetup"
                     play->setupEntranceList[playerSpawnIndex].room, playerParams, &newRespawnPos,
                     ((((playerActorEntry->rot.y >> 7) & 0x1FF) / 180.0f) * 32768.0f)); // DEG_TO_BINANG ?
 
@@ -241,14 +241,14 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
     }
 
     if (this->grottoExitDelay++ == 10) {
-        play->nextEntranceIndex = play->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
+        play->nextEntrance = play->setupExitList[WARPTAG_GET_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
         if (1) {}
-        gSaveContext.seqIndex = 0xFF;
-        gSaveContext.nightSeqIndex = 0xFF;
+        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }
 }
 

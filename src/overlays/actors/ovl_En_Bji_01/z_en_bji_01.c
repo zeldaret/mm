@@ -29,7 +29,7 @@ void func_809CD77C(EnBji01* this, PlayState* play);
 s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Bji_01_InitVars = {
+ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -62,7 +62,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 /* Animations struct */
-static AnimationSpeedInfo D_809CDC7C[] = {
+static AnimationSpeedInfo sAnimationInfo[] = {
     { &object_bji_Anim_000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Looking through telescope */
     { &object_bji_Anim_005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, /* Breathing? Unused? */
     { &object_bji_Anim_000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Talking */
@@ -82,7 +82,7 @@ void func_809CCDE0(EnBji01* this, PlayState* play) {
 }
 
 void func_809CCE98(EnBji01* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
@@ -109,7 +109,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
         } else {
             this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, play, 60.0f, 10.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 60.0f, 10.0f, PLAYER_AP_NONE);
     }
 }
 
@@ -162,7 +162,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         this->textId = 0x5F1;
                     }
                     func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                  EXCH_ITEM_NONE);
+                                  PLAYER_AP_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;
@@ -191,7 +191,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
             }
             break;
     }
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
@@ -237,7 +237,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 3, &this->animIndex);
                         func_80151938(play, 0x5DF);
                         break;
                     case 0x5E4:
@@ -287,16 +287,17 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
             func_809CCE98(this, play);
             break;
     }
-    if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    if ((this->animIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
     }
 }
 
 void func_809CD634(EnBji01* this, PlayState* play) {
-    func_801A5BD0(0x6F);
+    AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
+                       (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     Audio_QueueSeqCmd(0xE0000101);
-    play->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
+    play->nextEntrance = ENTRANCE(TERMINA_FIELD, 10); /* Telescope entrance */
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
     func_80169EFC(&play->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnBji01_DoNothing;
@@ -306,7 +307,7 @@ void EnBji01_DoNothing(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD6C0(EnBji01* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
     this->actionFunc = func_809CD70C;
 }
 
@@ -336,27 +337,27 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 0;
     this->actor.child = NULL;
-    this->animationIndex = -1;
+    this->animIndex = -1;
 
     Actor_SetScale(&this->actor, 0.01f);
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
-    switch (gSaveContext.save.entranceIndex) {
-        case 0x4C00: /* Observatory from ECT */
-        case 0x4C10: /* Observatory from Termina Field door */
+    switch (gSaveContext.save.entrance) {
+        case ENTRANCE(ASTRAL_OBSERVATORY, 0): /* ECT entrance*/
+        case ENTRANCE(ASTRAL_OBSERVATORY, 1): /* TF door entrance */
             this->actor.params = SHIKASHI_TYPE_DEFAULT;
             func_809CCE98(this, play);
             break;
-        case 0x4C20: /* Observatory from Termina Field telescope */
+        case ENTRANCE(ASTRAL_OBSERVATORY, 2): /* Telescope entrance */
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_801A5BD0(0);
+            AudioSfx_MuteBanks(0);
             Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE;
             func_809CCE98(this, play);
             break;
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             break;
     }
 }

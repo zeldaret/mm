@@ -16,7 +16,7 @@ void EnGuardNuts_Destroy(Actor* thisx, PlayState* play);
 void EnGuardNuts_Update(Actor* thisx, PlayState* play);
 void EnGuardNuts_Draw(Actor* thisx, PlayState* play);
 
-void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 index);
+void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 animIndex);
 void EnGuardNuts_SetupWait(EnGuardNuts* this);
 void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play);
 void func_80ABB540(EnGuardNuts* this);
@@ -25,7 +25,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
-const ActorInit En_Guard_Nuts_InitVars = {
+ActorInit En_Guard_Nuts_InitVars = {
     ACTOR_EN_GUARD_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -72,7 +72,7 @@ static AnimationHeader* sAnimations[] = {
     &gDekuPalaceGuardWalkAnim,
 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 static TexturePtr sEyeTextures[] = {
     gDekuPalaceGuardEyeOpenTex,
@@ -126,13 +126,13 @@ void EnGuardNuts_Destroy(Actor* thisx, PlayState* play) {
  * @brief Changes the animation to the provided index. Updates animIndex and animFrameCount for the animation.
  *
  * @param this
- * @param index the index of sAnimations to change to
+ * @param animIndex the index of sAnimations to change to
  */
-void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 index) {
-    this->animIndex = index;
+void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 animIndex) {
+    this->animIndex = animIndex;
     this->animFrameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animFrameCount,
-                     sAnimModes[this->animIndex], -2.0f);
+                     sAnimationModes[this->animIndex], -2.0f);
 }
 
 void EnGuardNuts_SetupWait(EnGuardNuts* this) {

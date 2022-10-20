@@ -57,7 +57,7 @@
         <Limb Name="gShikashiRightForearmLimb" Type="Standard" EnumName="SHIKASHI_LIMB_RIGHT_FOREARM" Offset="0x572C" />
         <Limb Name="gShikashiRightHandLimb" Type="Standard" EnumName="SHIKASHI_LIMB_RIGHT_HAND" Offset="0x5738" />
         <Limb Name="gShikashiHeadLimb" Type="Standard" EnumName="SHIKASHI_LIMB_HEAD" Offset="0x5744" />
-        <Skeleton Name="gShikashiSkel" Type="Flex" LimbType="Standard" LimbNone="SHIKASHI_LIMB_NONE" LimbMax="SHIKASHI_LIMB_MAX" EnumName="ShikashiLimbs" Offset="0x578C" />
+        <Skeleton Name="gShikashiSkel" Type="Flex" LimbType="Standard" LimbNone="SHIKASHI_LIMB_NONE" LimbMax="SHIKASHI_LIMB_MAX" EnumName="ShikashiLimb" Offset="0x578C" />
 
         <Animation Name="object_bji_Anim_005B58" Offset="0x5B58" />
     </File>

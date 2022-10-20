@@ -25,11 +25,11 @@ void EnDragon_Attack(EnDragon* this, PlayState* play);
 void EnDragon_Dead(EnDragon* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY,
-    /* 1 */ DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY,
-    /* 2 */ DEEP_PYTHON_ANIMATION_VERTICAL_SWAY,
-    /* 3 */ DEEP_PYTHON_ANIMATION_IDLE
-} DeepPythonAnimationIndex;
+    /* 0 */ DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY,
+    /* 1 */ DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY,
+    /* 2 */ DEEP_PYTHON_ANIM_VERTICAL_SWAY,
+    /* 3 */ DEEP_PYTHON_ANIM_IDLE
+} DeepPythonAnimation;
 
 typedef enum {
     /* 0 */ DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED,
@@ -50,7 +50,7 @@ typedef enum {
 
 static s32 sNumPythonsDead = 0;
 
-const ActorInit En_Dragon_InitVars = {
+ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -242,7 +242,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
     this->pythonIndex = EN_DRAGON_GET_PYTHON_INDEX(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->action = DEEP_PYTHON_ACTION_IDLE;
-    this->actor.hintId = 0xE;
+    this->actor.hintId = TATL_HINT_ID_DEEP_PYTHON;
     this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
 
@@ -264,18 +264,18 @@ static AnimationHeader* sAnimations[] = {
 
 static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
-void EnDragon_ChangeAnimation(EnDragon* this, s32 animationIndex) {
+void EnDragon_ChangeAnim(EnDragon* this, s32 animIndex) {
     f32 startFrame;
 
-    this->animationIndex = animationIndex;
-    this->endFrame = Animation_GetLastFrame(sAnimations[animationIndex]);
+    this->animIndex = animIndex;
+    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
     startFrame = 0.0f;
-    if (this->animationIndex == DEEP_PYTHON_ANIMATION_IDLE) {
+    if (this->animIndex == DEEP_PYTHON_ANIM_IDLE) {
         startFrame = this->endFrame;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[animationIndex], 1.0f, startFrame, this->endFrame,
-                     sAnimationModes[this->animationIndex], -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, startFrame, this->endFrame,
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 static Color_RGBA8 sBubblePrimColors[] = {
@@ -317,7 +317,8 @@ void EnDragon_SpawnBubbles(EnDragon* this, PlayState* play, Vec3f basePos) {
         sBubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
         scale = Rand_S16Offset(380, 240);
         EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &sBubbleVelocity, &sBubbleAccel,
-                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30, 0);
+                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30,
+                                          false);
     }
 }
 
@@ -329,7 +330,7 @@ void EnDragon_RetreatOnceTimerEnds(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetupRetreatOrIdle(EnDragon* this) {
-    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
+    EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_IDLE);
     this->state = 0;
     this->unk_2CC = 0;
     this->hasGrabbedPlayer = false;
@@ -397,8 +398,8 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
             Math_ApproachF(&this->actor.world.pos.z, extendedPos.z, 0.3f, 50.0f);
             if ((fabsf(this->actor.world.pos.x - extendedPos.x) < 4.0f) &&
                 (fabsf(this->actor.world.pos.z - extendedPos.z) < 4.0f)) {
-                if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
-                    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
+                if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
+                    EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
                 }
 
                 this->state = DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED;
@@ -419,8 +420,8 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
         if (yaw < 0x5000) {
             // Player is in front of the jaw
             if ((this->endFrame <= currentFrame) && (this->largeSwayWaitTimer == 0)) {
-                if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
-                    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
+                if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
+                    EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
                 }
 
                 this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY;
@@ -430,7 +431,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
         } else {
             // Player is in behind the jaw
             if (this->state == DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY) {
-                EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY);
+                EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY);
                 this->largeSwayWaitTimer = Rand_ZeroFloat(20.0f) + this->endFrame;
                 this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY;
             }
@@ -449,7 +450,7 @@ void EnDragon_SetSubCamEyeAt(EnDragon* this, PlayState* play, Vec3f subCamEye, V
     this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
     Math_Vec3f_Copy(&this->subCamEye, &subCamEye);
     Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
-    Play_CameraSetAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
 }
 
 void EnDragon_SetupGrab(EnDragon* this, PlayState* play) {
@@ -471,7 +472,7 @@ void EnDragon_SetupGrab(EnDragon* this, PlayState* play) {
         this->state = DEEP_PYTHON_GRAB_STATE_START;
         this->grabTimer = 0;
         this->hasGrabbedPlayer = false;
-        EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
+        EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_IDLE);
         this->actionFunc = EnDragon_Grab;
     }
 }
@@ -548,8 +549,8 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetupAttack(EnDragon* this) {
-    if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
-        EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
+    if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
+        EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
     }
 
     this->behindJawRetreatTimer = 0;
@@ -603,21 +604,21 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
 
     if ((this->state <= DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
-        if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
-            EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
+        if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
+            EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
         }
 
         this->state++;
     }
 
     if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) ||
-        (!(player->stateFlags2 & 0x80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
+        (!(player->stateFlags2 & PLAYER_STATE2_80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
         ActorCutscene_Stop(this->grabCutsceneIndex);
-        if (player->stateFlags2 & 0x80) {
+        if (player->stateFlags2 & PLAYER_STATE2_80) {
             player->unk_AE8 = 100;
         }
 
@@ -719,7 +720,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         }
     }
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {

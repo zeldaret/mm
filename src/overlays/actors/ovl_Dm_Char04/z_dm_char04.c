@@ -18,7 +18,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 
 void func_80AABE34(DmChar04* this, PlayState* play);
 
-const ActorInit Dm_Char04_InitVars = {
+ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -30,10 +30,10 @@ const ActorInit Dm_Char04_InitVars = {
     (ActorFunc)DmChar04_Draw,
 };
 
-void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
+void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 animIndex) {
     f32 endFrame;
 
-    animation += index;
+    animation += animIndex;
 
     if (animation->frameCount < 0.0f) {
         endFrame = Animation_GetLastFrame(animation->animation);
@@ -44,7 +44,7 @@ void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 ind
                      animation->mode, animation->morphFrames);
 }
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
@@ -72,7 +72,7 @@ void DmChar04_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
                    this->morphTable, 7);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 15.0f);
-    DmChar04_ChangeAnim(&this->skelAnime, sAnimations, 0);
+    DmChar04_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80AABE34;
 }
@@ -90,11 +90,11 @@ void func_80AABE34(DmChar04* this, PlayState* play) {
             if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
                 this->csAction = play->csCtx.actorActions[actionIndex]->action;
                 if (play->csCtx.actorActions[actionIndex]->action == 1) {
-                    this->animationIndex = 0;
+                    this->animIndex = 0;
                 } else {
-                    this->animationIndex = 0;
+                    this->animIndex = 0;
                 }
-                DmChar04_ChangeAnim(&this->skelAnime, &sAnimations[this->animationIndex], 0);
+                DmChar04_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);

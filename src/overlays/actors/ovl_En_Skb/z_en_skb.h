@@ -36,6 +36,4 @@ typedef struct EnSkb {
     /* 0x3E6 */ u8 drawDmgEffType;
 } EnSkb; // size = 0x3E8
 
-extern const ActorInit En_Skb_InitVars;
-
 #endif // Z_EN_SKB_H

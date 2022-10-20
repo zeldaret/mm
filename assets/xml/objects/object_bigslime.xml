@@ -88,7 +88,7 @@
         <Limb Name="gGekkoJawLimb" Type="Standard" EnumName="GEKKO_LIMB_JAW" Offset="0xDF18" />
         <Limb Name="gGekkoLeftEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_EYE" Offset="0xDF24" />
         <Limb Name="gGekkoRightEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_EYE" Offset="0xDF30" />
-        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" LimbNone="GEKKO_LIMB_NONE" LimbMax="GEKKO_LIMB_MAX" EnumName="GekkoLimbs" Offset="0xDF98" />
+        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" LimbNone="GEKKO_LIMB_NONE" LimbMax="GEKKO_LIMB_MAX" EnumName="GekkoLimb" Offset="0xDF98" />
 
         <Animation Name="gGekkoWindupPunchAnim" Offset="0xF048" />
         <Animation Name="gGekkoSwimUpAnim" Offset="0xF3F0" />

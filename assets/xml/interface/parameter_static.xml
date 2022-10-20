@@ -75,9 +75,9 @@
         <Texture Name="gAmmoDigit9Tex" OutName="ammo_digit_9" Format="ia8" Width="8" Height="8" Offset="0x4CE0"/>
         <Texture Name="gAmmoDigitHalfTex" OutName="ammo_digit_half" Format="ia8" Width="16" Height="8" Offset="0x4D20"/>
             
-        <Texture Name="gMagicBarEndTex" OutName="magic_bar_end" Format="ia8" Width="8" Height="16" Offset="0x4DA0"/>
-        <Texture Name="gMagicBarMidTex" OutName="magic_bar_mid" Format="ia8" Width="24" Height="16" Offset="0x4E20"/>
-        <Texture Name="gMagicBarFillTex" OutName="magic_bar_fill" Format="ia8" Width="8" Height="8" Offset="0x4FA0"/>
+        <Texture Name="gMagicMeterEndTex" OutName="magic_meter_end" Format="ia8" Width="8" Height="16" Offset="0x4DA0"/>
+        <Texture Name="gMagicMeterMidTex" OutName="magic_meter_mid" Format="ia8" Width="24" Height="16" Offset="0x4E20"/>
+        <Texture Name="gMagicMeterFillTex" OutName="magic_meter_fill" Format="ia8" Width="8" Height="8" Offset="0x4FA0"/>
 
         <!-- The analog clock from day one until midnight of the final day -->
         <Texture Name="gThreeDayClockDiamondTex" OutName="three_day_clock_diamond" Format="ia8" Width="40" Height="32" Offset="0x4FE0"/>
@@ -127,6 +127,7 @@
         <Texture Name="gMinigameLetterTTex" OutName="minigame_letter_t" Format="i4" Width="32" Height="33" Offset="0x8578"/>
         <Texture Name="gMinigameExclamationTex" OutName="minigame_exclamation" Format="i4" Width="32" Height="33" Offset="0x8788"/>
 
+        <!-- Similar to stray fairy icons in icon_item_dungeon_static, except with a turned head -->
         <Texture Name="gStrayFairyWoodfallIconTex" OutName="stray_fairy_woodfall_icon" Format="rgba32" Width="32" Height="24" Offset="0x8998"/>
         <Texture Name="gStrayFairySnowheadIconTex" OutName="stray_fairy_snowhead_icon" Format="rgba32" Width="32" Height="24" Offset="0x9598"/>
         <Texture Name="gStrayFairyGreatBayIconTex" OutName="stray_fairy_great_bay_icon" Format="rgba32" Width="32" Height="24" Offset="0xA198"/>

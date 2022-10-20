@@ -5,8 +5,8 @@
 
 struct EnPoFusen;
 
-#define GET_FUSE_LEN_PARAM(thisx) ((thisx)->params & 0x3FF)
-#define GET_IS_FUSE_TYPE_PARAM(thisx) ((thisx)->params & 0x8000)
+#define ENPOFUSEN_GET_FUSE_LEN(thisx) ((thisx)->params & 0x3FF)
+#define ENPOFUSEN_IS_FUSE_TYPE(thisx) ((thisx)->params & 0x8000)
 
 typedef void (*EnPoFusenActionFunc)(struct EnPoFusen*, PlayState*);
 
@@ -29,7 +29,5 @@ typedef struct EnPoFusen {
     /* 0x26E */ s16 randBaseRotChange;
     /* 0x270 */ s16 fuse;
 } EnPoFusen; // size = 0x274
-
-extern const ActorInit En_Po_Fusen_InitVars;
 
 #endif // Z_EN_PO_FUSEN_H

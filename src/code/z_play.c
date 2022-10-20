@@ -1,4 +1,7 @@
 #include "global.h"
+#include "z64quake.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80165460.s")
 
@@ -34,7 +37,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801660B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Fini.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Destroy.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
 
@@ -46,7 +49,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166B30.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167814.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80167DE4.s")
 
@@ -56,7 +59,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80168DAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Main.s")
 
 s32 Play_InCsMode(PlayState* this) {
     return (this->csCtx.state != 0) || Player_InCsMode(this);
@@ -74,39 +77,217 @@ s32 Play_InCsMode(PlayState* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_SceneInit.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169474.s")
+void Play_GetScreenPos(PlayState* this, Vec3f* worldPos, Vec3f* screenPos) {
+    f32 invW;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CreateSubCamera.s")
+    // screenPos temporarily stores the projectedPos
+    Actor_GetProjectedPos(this, worldPos, screenPos, &invW);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCamId.s")
+    screenPos->x = (SCREEN_WIDTH / 2) + (screenPos->x * invW * (SCREEN_WIDTH / 2));
+    screenPos->y = (SCREEN_HEIGHT / 2) - (screenPos->y * invW * (SCREEN_HEIGHT / 2));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeStatus.s")
+s16 Play_CreateSubCamera(PlayState* this) {
+    s16 subCamId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearCamera.s")
+    for (subCamId = CAM_ID_SUB_FIRST; subCamId < NUM_CAMS; subCamId++) {
+        if (this->cameraPtrs[subCamId] == NULL) {
+            break;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearAllSubCameras.s")
+    // if no subCameras available
+    if (subCamId == NUM_CAMS) {
+        return CAM_ID_NONE;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
+    this->cameraPtrs[subCamId] = &this->subCameras[subCamId - CAM_ID_SUB_FIRST];
+    Camera_Init(this->cameraPtrs[subCamId], &this->view, &this->colCtx, this);
+    this->cameraPtrs[subCamId]->camId = subCamId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEye.s")
+    return subCamId;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEyeUp.s")
+s16 Play_GetActiveCamId(PlayState* this) {
+    return this->activeCamId;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetFov.s")
+s32 Play_ChangeCameraStatus(PlayState* this, s16 camId, s16 status) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetRoll.s")
+    if (status == CAM_STATUS_ACTIVE) {
+        this->activeCamId = camIdx;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CopyCamera.s")
+    return Camera_ChangeStatus(this->cameraPtrs[camIdx], status);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169A50.s")
+void Play_ClearCamera(PlayState* this, s16 camId) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeSetting.s")
+    if (this->cameraPtrs[camIdx] != NULL) {
+        Camera_ChangeStatus(this->cameraPtrs[camIdx], CAM_STATUS_INACTIVE);
+        this->cameraPtrs[camIdx] = NULL;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169AFC.s")
+void Play_ClearAllSubCameras(PlayState* this) {
+    s16 subCamId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraGetUID.s")
+    for (subCamId = CAM_ID_SUB_FIRST; subCamId < NUM_CAMS; subCamId++) {
+        if (this->cameraPtrs[subCamId] != NULL) {
+            Play_ClearCamera(this, subCamId);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
+    this->activeCamId = CAM_ID_MAIN;
+}
+
+Camera* Play_GetCamera(PlayState* this, s16 camId) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+
+    return this->cameraPtrs[camIdx];
+}
+
+/**
+ * @return bit-packed success if each of the params were applied
+ */
+s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
+    s32 successfullySet = 0;
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    Camera* camera = this->cameraPtrs[camIdx];
+
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
+    successfullySet <<= 1;
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
+
+    camera->dist = Math3D_Distance(at, eye);
+
+    if (camera->focalActor != NULL) {
+        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+    } else {
+        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+    }
+
+    camera->atLerpStepScale = 0.01f;
+
+    return successfullySet;
+}
+
+/**
+ * @return bit-packed success if each of the params were applied
+ */
+s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec3f* up) {
+    s32 successfullySet = 0;
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    Camera* camera = this->cameraPtrs[camIdx];
+
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_AT, at);
+    successfullySet <<= 1;
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_EYE, eye);
+    successfullySet <<= 1;
+    successfullySet |= Camera_SetViewParam(camera, CAM_VIEW_UP, up);
+
+    camera->dist = Math3D_Distance(at, eye);
+
+    if (camera->focalActor != NULL) {
+        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+    } else {
+        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+    }
+
+    camera->atLerpStepScale = 0.01f;
+
+    return successfullySet;
+}
+
+/**
+ * @return true if the fov was successfully set
+ */
+s32 Play_SetCameraFov(PlayState* this, s16 camId, f32 fov) {
+    s32 successfullySet = Camera_SetViewParam(this->cameraPtrs[camId], CAM_VIEW_FOV, &fov) & 1;
+
+    if (1) {}
+    return successfullySet;
+}
+
+s32 Play_SetCameraRoll(PlayState* this, s16 camId, s16 roll) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    Camera* camera = this->cameraPtrs[camIdx];
+
+    camera->roll = roll;
+
+    return 1;
+}
+
+void Play_CopyCamera(PlayState* this, s16 destCamId, s16 srcCamId) {
+    s16 srcCamId2 = (srcCamId == CAM_ID_NONE) ? this->activeCamId : srcCamId;
+    s16 destCamId1 = (destCamId == CAM_ID_NONE) ? this->activeCamId : destCamId;
+
+    Camera_Copy(this->cameraPtrs[destCamId1], this->cameraPtrs[srcCamId2]);
+}
+
+// Same as Play_ChangeCameraSetting but also calls Camera_InitPlayerSettings
+s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
+    Camera* camera;
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+
+    camera = this->cameraPtrs[camIdx];
+    Camera_InitPlayerSettings(camera, player);
+    return Camera_ChangeSetting(camera, setting);
+}
+
+s32 Play_ChangeCameraSetting(PlayState* this, s16 camId, s16 setting) {
+    return Camera_ChangeSetting(Play_GetCamera(this, camId), setting);
+}
+
+// Related to bosses and fishing
+void func_80169AFC(PlayState* this, s16 camId, s16 timer) {
+    s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
+    s16 i;
+
+    Play_ClearCamera(this, camIdx);
+
+    for (i = CAM_ID_SUB_FIRST; i < NUM_CAMS; i++) {
+        if (this->cameraPtrs[i] != NULL) {
+            Play_ClearCamera(this, i);
+        }
+    }
+
+    if (timer <= 0) {
+        Play_ChangeCameraStatus(this, CAM_ID_MAIN, CAM_STATUS_ACTIVE);
+        this->cameraPtrs[CAM_ID_MAIN]->childCamId = this->cameraPtrs[CAM_ID_MAIN]->doorTimer2 = 0;
+    }
+}
+
+s16 Play_GetCameraUID(PlayState* this, s16 camId) {
+    Camera* camera = this->cameraPtrs[camId];
+
+    if (camera != NULL) {
+        return camera->uid;
+    } else {
+        return -1;
+    }
+}
+
+// Unused in both MM and OoT, purpose is very unclear
+s16 func_80169BF8(PlayState* this, s16 camId, s16 uid) {
+    Camera* camera = this->cameraPtrs[camId];
+
+    if (camera != NULL) {
+        return 0;
+    } else if (camera->uid != uid) {
+        return 0;
+    } else if (camera->status != CAM_STATUS_ACTIVE) {
+        return 2;
+    } else {
+        return 1;
+    }
+}
 
 u16 Play_GetActorCsCamSetting(PlayState* this, s32 csCamDataIndex) {
     ActorCsCamInfo* actorCsCamList = &this->actorCsCamList[csCamDataIndex];
@@ -124,38 +305,38 @@ Vec3s* Play_GetActorCsCamFuncData(PlayState* this, s32 csCamDataIndex) {
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first
  * enters.
  */
-s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
+s16 Play_GetOriginalSceneId(s16 sceneId) {
     // Inverted Stone Tower Temple -> Stone Tower Temple
-    if (sceneNum == SCENE_INISIE_R) {
+    if (sceneId == SCENE_INISIE_R) {
         return SCENE_INISIE_N;
     }
 
     // Purified Southern Swamp -> Poisoned Sothern Swamp
-    if (sceneNum == SCENE_20SICHITAI2) {
+    if (sceneId == SCENE_20SICHITAI2) {
         return SCENE_20SICHITAI;
     }
 
     // Spring Mountain Village -> Winter Mountain Village
-    if (sceneNum == SCENE_10YUKIYAMANOMURA2) {
+    if (sceneId == SCENE_10YUKIYAMANOMURA2) {
         return SCENE_10YUKIYAMANOMURA;
     }
 
     // Spring Goron Village -> Winter Goron Village
-    if (sceneNum == SCENE_11GORONNOSATO2) {
+    if (sceneId == SCENE_11GORONNOSATO2) {
         return SCENE_11GORONNOSATO;
     }
 
     // Spring Path to Goron Village -> Winter Path to Goron Village
-    if (sceneNum == SCENE_17SETUGEN2) {
+    if (sceneId == SCENE_17SETUGEN2) {
         return SCENE_17SETUGEN;
     }
 
     // Inverted Stone Tower -> Stone Tower
-    if (sceneNum == SCENE_F41) {
+    if (sceneId == SCENE_F41) {
         return SCENE_F40;
     }
 
-    return sceneNum;
+    return sceneId;
 }
 
 /**
@@ -166,48 +347,48 @@ void Play_SaveCycleSceneFlags(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
     CycleSceneFlags* cycleSceneFlags;
 
-    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(this->sceneNum)];
-    cycleSceneFlags->chest = this->actorCtx.flags.chest;
-    cycleSceneFlags->switch0 = this->actorCtx.flags.switches[0];
-    cycleSceneFlags->switch1 = this->actorCtx.flags.switches[1];
+    cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(this->sceneId)];
+    cycleSceneFlags->chest = this->actorCtx.sceneFlags.chest;
+    cycleSceneFlags->switch0 = this->actorCtx.sceneFlags.switches[0];
+    cycleSceneFlags->switch1 = this->actorCtx.sceneFlags.switches[1];
 
-    if (this->sceneNum == SCENE_INISIE_R) { // Inverted Stone Tower Temple
-        cycleSceneFlags = &gSaveContext.cycleSceneFlags[this->sceneNum];
+    if (this->sceneId == SCENE_INISIE_R) { // Inverted Stone Tower Temple
+        cycleSceneFlags = &gSaveContext.cycleSceneFlags[this->sceneId];
     }
 
-    cycleSceneFlags->collectible = this->actorCtx.flags.collectible[0];
-    cycleSceneFlags->clearedRoom = this->actorCtx.flags.clearedRoom;
+    cycleSceneFlags->collectible = this->actorCtx.sceneFlags.collectible[0];
+    cycleSceneFlags->clearedRoom = this->actorCtx.sceneFlags.clearedRoom;
 }
 
-void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entranceIndex, s32 roomIndex, s32 playerParams,
-                         Vec3f* pos, s16 yaw) {
+void Play_SetRespawnData(GameState* thisx, s32 respawnMode, u16 entrance, s32 roomIndex, s32 playerParams, Vec3f* pos,
+                         s16 yaw) {
     PlayState* this = (PlayState*)thisx;
 
-    gSaveContext.respawn[respawnMode].entranceIndex = Entrance_CreateIndex(entranceIndex >> 9, 0, entranceIndex & 0xF);
+    gSaveContext.respawn[respawnMode].entrance = Entrance_Create(entrance >> 9, 0, entrance & 0xF);
     gSaveContext.respawn[respawnMode].roomIndex = roomIndex;
     gSaveContext.respawn[respawnMode].pos = *pos;
     gSaveContext.respawn[respawnMode].yaw = yaw;
     gSaveContext.respawn[respawnMode].playerParams = playerParams;
-    gSaveContext.respawn[respawnMode].tempSwitchFlags = this->actorCtx.flags.switches[2];
-    gSaveContext.respawn[respawnMode].unk_18 = this->actorCtx.flags.collectible[1];
-    gSaveContext.respawn[respawnMode].tempCollectFlags = this->actorCtx.flags.collectible[2];
+    gSaveContext.respawn[respawnMode].tempSwitchFlags = this->actorCtx.sceneFlags.switches[2];
+    gSaveContext.respawn[respawnMode].unk_18 = this->actorCtx.sceneFlags.collectible[1];
+    gSaveContext.respawn[respawnMode].tempCollectFlags = this->actorCtx.sceneFlags.collectible[2];
 }
 
 void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams) {
     PlayState* this = (PlayState*)thisx;
     Player* player = GET_PLAYER(this);
 
-    if (this->sceneNum != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entranceIndex),
-                            this->roomCtx.currRoom.num, playerParams, &player->actor.world.pos,
+    if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
+        Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entrance),
+                            this->roomCtx.curRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
     }
 }
 
 // Override respawn data in Sakon's Hideout
 void func_80169ECC(PlayState* this) {
-    if (this->sceneNum == SCENE_SECOM) {
-        this->nextEntranceIndex = 0x2060;
+    if (this->sceneId == SCENE_SECOM) {
+        this->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
         gSaveContext.respawnFlag = -7;
     }
 }
@@ -217,10 +398,10 @@ void func_80169ECC(PlayState* this) {
 void func_80169EFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.flags.switches[2];
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].unk_18 = this->actorCtx.flags.collectible[1];
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].tempCollectFlags = this->actorCtx.flags.collectible[2];
-    this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].tempSwitchFlags = this->actorCtx.sceneFlags.switches[2];
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].unk_18 = this->actorCtx.sceneFlags.collectible[1];
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].tempCollectFlags = this->actorCtx.sceneFlags.collectible[2];
+    this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(this);
     this->transitionTrigger = TRANS_TRIGGER_START;
@@ -232,7 +413,7 @@ void func_80169EFC(GameState* thisx) {
 void func_80169F78(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    this->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_TOP].entranceIndex;
+    this->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_TOP].entrance;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(this);
     this->transitionTrigger = TRANS_TRIGGER_START;
@@ -249,7 +430,7 @@ void func_80169FDC(GameState* thisx) {
 s32 func_80169FFC(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    return this->roomCtx.currRoom.mesh->type0.type != 1;
+    return this->roomCtx.curRoom.mesh->type0.type != 1;
 }
 
 s32 FrameAdvance_IsEnabled(GameState* thisx) {
@@ -359,13 +540,13 @@ void Play_AssignPlayerActorCsIdsFromScene(GameState* thisx, s32 startActorCsId) 
     }
 }
 
-// These regs are used by Gameplay_Draw, and several actors, purpose as yet unclear.
-void func_8016A268(GameState* thisx, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5) {
-    MREG(64) = arg1;
-    MREG(65) = arg2;
-    MREG(66) = arg3;
-    MREG(67) = arg4;
-    MREG(68) = arg5;
+// Set values to fill screen
+void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ON = fillScreenOn;
+    R_PLAY_FILL_SCREEN_R = red;
+    R_PLAY_FILL_SCREEN_G = green;
+    R_PLAY_FILL_SCREEN_B = blue;
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")

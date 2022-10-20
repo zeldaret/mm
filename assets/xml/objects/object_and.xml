@@ -67,7 +67,7 @@
         <Limb Name="object_and_Standardlimb_00B2F8" Type="Standard" EnumName="OBJECT_AND_LIMB_17" Offset="0xB2F8" />
         <Limb Name="object_and_Standardlimb_00B304" Type="Standard" EnumName="OBJECT_AND_LIMB_18" Offset="0xB304" />
         <Limb Name="object_and_Standardlimb_00B310" Type="Standard" EnumName="OBJECT_AND_LIMB_19" Offset="0xB310" />
-        <Skeleton Name="object_and_Skel_00B380" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AND_LIMB_NONE" LimbMax="OBJECT_AND_LIMB_MAX" EnumName="object_and_Limbs" Offset="0xB380" />
+        <Skeleton Name="object_and_Skel_00B380" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AND_LIMB_NONE" LimbMax="OBJECT_AND_LIMB_MAX" EnumName="ObjectAndLimb" Offset="0xB380" />
         <Animation Name="object_and_Anim_00DA58" Offset="0xDA58" />
         <Animation Name="object_and_Anim_00EE00" Offset="0xEE00" />
         <Animation Name="object_and_Anim_00F6C4" Offset="0xF6C4" />

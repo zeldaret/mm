@@ -14,6 +14,4 @@ typedef struct EnOkuta {
     /* 0x18C */ char unk_18C[0x1A8];
 } EnOkuta; // size = 0x334
 
-extern const ActorInit En_Okuta_InitVars;
-
 #endif // Z_EN_OKUTA_H

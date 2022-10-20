@@ -11,7 +11,7 @@ typedef void (*ObjMureActionFunc)(struct ObjMure*, PlayState*);
 
 typedef struct {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x53];
+    /* 0x144 */ UNK_TYPE1 unk_144[0x53];
     /* 0x197 */ u8 unk_197;
 } ObjMureChild; // size = 0x198
 
@@ -29,11 +29,9 @@ typedef struct ObjMure {
     /* 0x1A0 */ s16 unk_1A0;
 } ObjMure; // size = 0x1A4
 
-extern const ActorInit Obj_Mure_InitVars;
-
-#define OBJ_MURE_GET_CHNUM(params) ((params >> 12) & 0xF)
-#define OBJ_MURE_GET_PTN(params) ((params >> 8) & 0x7)
-#define OBJ_MURE_GET_SVNUM(params) ((params >> 5) & 0x3)
-#define OBJ_MURE_GET_TYPE(params) (params & 0x1F)
+#define OBJ_MURE_GET_CHNUM(thisx) (((thisx)->params >> 12) & 0xF)
+#define OBJ_MURE_GET_PTN(thisx) (((thisx)->params >> 8) & 0x7)
+#define OBJ_MURE_GET_SVNUM(thisx) (((thisx)->params >> 5) & 0x3)
+#define OBJ_MURE_GET_TYPE(thisx) ((thisx)->params & 0x1F)
 
 #endif // Z_OBJ_MURE_H

@@ -89,7 +89,7 @@ static s32 D_80BF33F0[] = {
     0x10000000,
 };
 
-const ActorInit En_Ig_InitVars = {
+ActorInit En_Ig_InitVars = {
     ACTOR_EN_IG,
     ACTORCAT_NPC,
     FLAGS,
@@ -143,7 +143,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_dai_Anim_0048B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_dai_Anim_0048B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_dai_Anim_005100, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -237,7 +237,7 @@ s32 func_80BF1284(EnIg* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_3FC = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_3D4 = this->skelAnime.playSpeed;
     }
 
@@ -469,7 +469,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
     u16 temp = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & 0xC40) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400 | PLAYER_STATE1_800)) {
         this->unk_3D0 |= 0x400;
         if (this->unk_3D2 != temp) {
             if ((this->unk_3FC == 2) || (this->unk_3FC == 3)) {
@@ -950,7 +950,7 @@ void EnIg_Update(Actor* thisx, PlayState* play) {
         func_80BF1258(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
-        func_8013C964(&this->actor, play, 60.0f, 30.0f, EXCH_ITEM_NONE, this->unk_3D0 & 7);
+        func_8013C964(&this->actor, play, 60.0f, 30.0f, PLAYER_AP_NONE, this->unk_3D0 & 7);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BF1354(this, play);
