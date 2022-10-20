@@ -1,9 +1,10 @@
 ﻿<Root>
+    <!-- Assets for the Odolwa boss fight (Odolwa itself, its bugs and moths, its title card, etc.) -->
     <File Name="object_boss01" Segment="6">
         <!-- Odolwa Animations -->
-        <Animation Name="object_boss01_Anim_000C44" Offset="0xC44" />
-        <Animation Name="object_boss01_Anim_001884" Offset="0x1884" />
-        <Animation Name="object_boss01_Anim_001A14" Offset="0x1A14" />
+        <Animation Name="gOdolwaVerticalSlashAnim" Offset="0xC44" /> <!-- Original name is "jmp_at01" -->
+        <Animation Name="gOdolwaHorizontalSlashAnim" Offset="0x1884" /> <!-- Original name is "jmp_at02" -->
+        <Animation Name="gOdolwaAtAttentionAnim" Offset="0x1A14" /> <!-- Unused. Original name is "jmp_base" -->
 
         <!-- Odolwa Limb DisplayLists -->
         <DList Name="gOdolwaPelvisDL" Offset="0x5E80" />
@@ -38,36 +39,50 @@
         <DList Name="gOdolwaRightThighDL" Offset="0x8500" />
 
         <!-- Odolwa Textures -->
-        <Texture Name="object_boss01_TLUT_008678" OutName="tlut_008678" Format="rgba16" Width="4" Height="4" Offset="0x8678" />
-        <Texture Name="object_boss01_TLUT_008698" OutName="tlut_008698" Format="rgba16" Width="4" Height="4" Offset="0x8698" />
-        <Texture Name="object_boss01_TLUT_0086B8" OutName="tlut_0086B8" Format="rgba16" Width="4" Height="4" Offset="0x86B8" />
-        <Texture Name="object_boss01_TLUT_0086D8" OutName="tlut_0086D8" Format="rgba16" Width="4" Height="4" Offset="0x86D8" />
-        <Texture Name="object_boss01_TLUT_0086F8" OutName="tlut_0086F8" Format="rgba16" Width="4" Height="4" Offset="0x86F8" />
-        <Texture Name="object_boss01_TLUT_008718" OutName="tlut_008718" Format="rgba16" Width="4" Height="4" Offset="0x8718" />
-        <Texture Name="object_boss01_Tex_008738" OutName="tex_008738" Format="ci4" Width="64" Height="64" Offset="0x8738" />
-        <Texture Name="object_boss01_Tex_008F38" OutName="tex_008F38" Format="ci4" Width="64" Height="64" Offset="0x8F38" />
-        <Texture Name="object_boss01_Tex_009738" OutName="tex_009738" Format="ci4" Width="64" Height="64" Offset="0x9738" />
-        <Texture Name="object_boss01_Tex_009F38" OutName="tex_009F38" Format="ci4" Width="64" Height="64" Offset="0x9F38" />
-        <Texture Name="object_boss01_Tex_00A738" OutName="tex_00A738" Format="rgba16" Width="16" Height="16" Offset="0xA738" />
-        <Texture Name="object_boss01_Tex_00A938" OutName="tex_00A938" Format="rgba16" Width="16" Height="16" Offset="0xA938" />
-        <Texture Name="object_boss01_Tex_00AB38" OutName="tex_00AB38" Format="ci4" Width="64" Height="64" Offset="0xAB38" />
-        <Texture Name="object_boss01_Tex_00B338" OutName="tex_00B338" Format="ci4" Width="64" Height="64" Offset="0xB338" />
-        <Texture Name="object_boss01_Tex_00BB38" OutName="tex_00BB38" Format="rgba16" Width="16" Height="16" Offset="0xBB38" />
-        <Texture Name="object_boss01_Tex_00BD38" OutName="tex_00BD38" Format="i8" Width="32" Height="32" Offset="0xBD38" />
-        <Texture Name="object_boss01_Tex_00C138" OutName="tex_00C138" Format="i4" Width="32" Height="32" Offset="0xC138" />
+        <Texture Name="gOdolwaPantsAndSwordHiltTLUT" OutName="odolwa_pants_and_sword_hilt_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8678" />
+        <Texture Name="gOdolwaFaceAndShoeTLUT" OutName="odolwa_face_and_shoe_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8698" />
+        <Texture Name="gOdolwaSkinTLUT" OutName="odolwa_skin_tlut" Format="rgba16" Width="4" Height="4" Offset="0x86B8" />
+        <Texture Name="gOdolwaEarBangleAndShieldTLUT" OutName="odolwa_ear_bangle_and_shield_tlut" Format="rgba16" Width="4" Height="4" Offset="0x86D8" />
+        <Texture Name="gOdolwaClothTLUT" OutName="odolwa_cloth_tlut" Format="rgba16" Width="4" Height="4" Offset="0x86F8" />
+        <Texture Name="gOdolwaTorsoTLUT" OutName="odolwa_torso_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8718" />
+        <Texture Name="gOdolwaPantsAndSwordHiltTex" OutName="odolwa_pants_and_sword_hilt" Format="ci4" Width="64" Height="64" Offset="0x8738" />
+        <Texture Name="gOdolwaFaceAndShoeTex" OutName="odolwa_face_and_shoe" Format="ci4" Width="64" Height="64" Offset="0x8F38" />
+        <Texture Name="gOdolwaSkinTex" OutName="odolwa_skin" Format="ci4" Width="64" Height="64" Offset="0x9738" />
+        <Texture Name="gOdolwaEarBangleAndShieldTex" OutName="odolwa_ear_bangle_and_shield" Format="ci4" Width="64" Height="64" Offset="0x9F38" />
+        <Texture Name="gOdolwaEarringTex" OutName="odolwa_earring" Format="rgba16" Width="16" Height="16" Offset="0xA738" />
+        <Texture Name="gOdolwaHairTex" OutName="odolwa_hair" Format="rgba16" Width="16" Height="16" Offset="0xA938" />
+        <Texture Name="gOdolwaClothTex" OutName="odolwa_cloth" Format="ci4" Width="64" Height="64" Offset="0xAB38" />
+        <Texture Name="gOdolwaTorsoTex" OutName="odolwa_torso" Format="ci4" Width="64" Height="64" Offset="0xB338" />
+        <Texture Name="gOdolwaSwordBladeTex" OutName="odolwa_sword_blade" Format="rgba16" Width="16" Height="16" Offset="0xBB38" />
 
-        <DList Name="object_boss01_DL_00C498" Offset="0xC498" />
-        <DList Name="object_boss01_DL_00C5E0" Offset="0xC5E0" />
-        <Texture Name="object_boss01_Tex_00C668" OutName="tex_00C668" Format="i8" Width="16" Height="16" Offset="0xC668" />
-        <DList Name="object_boss01_DL_00C7A8" Offset="0xC7A8" />
-        <DList Name="object_boss01_DL_00C7C8" Offset="0xC7C8" />
-        <!-- <Blob Name="object_boss01_Blob_00C7F8" Size="0x1400" Offset="0xC7F8" /> -->
-        <DList Name="object_boss01_DL_00DC58" Offset="0xDC58" />
-        <DList Name="object_boss01_DL_00DCD0" Offset="0xDCD0" />
-        <Texture Name="object_boss01_Tex_00DCE8" OutName="tex_00DCE8" Format="rgba16" Width="16" Height="32" Offset="0xDCE8" />
-        <DList Name="object_boss01_DL_00E3E8" Offset="0xE3E8" />
-        <Texture Name="object_boss01_TLUT_00E558" OutName="tlut_00E558" Format="rgba16" Width="4" Height="4" Offset="0xE558" />
-        <Texture Name="object_boss01_Tex_00E578" OutName="tex_00E578" Format="ci4" Width="64" Height="64" Offset="0xE578" />
+        <!-- Assets for the trail that follows Odolwa's sword when he slashes -->
+        <Texture Name="gOdolwaSwordTrailTex" OutName="odolwa_sword_trail" Format="i8" Width="32" Height="32" Offset="0xBD38" />
+        <Texture Name="gOdolwaSwordTrailMaskTex" OutName="odolwa_sword_trail_mask" Format="i4" Width="32" Height="32" Offset="0xC138" />
+        <Array Name="gOdolwaSwordTrailVtx" Count="22" Offset="0xC338">
+            <Vtx/>
+        </Array>
+        <DList Name="gOdolwaSwordTrailDL" Offset="0xC498" />
+
+        <!-- Assets for Odolwa's glowing eyes -->
+        <DList Name="gOdolwaEyeDL" Offset="0xC5E0" />
+        <Texture Name="gOdolwaEyeTex" OutName="odolwa_eye" Format="i8" Width="16" Height="16" Offset="0xC668" />
+
+        <!-- DisplayLists for Odolwa's dynamic shadow -->
+        <DList Name="gOdolwaShadowMaterialDL" Offset="0xC7A8" />
+        <DList Name="gOdolwaShadowModelDL" Offset="0xC7C8" />
+
+        <!-- Odolwa Title Card -->
+        <Texture Name="gOdolwaTitleCardTex" OutName="odolwa_title_card" Format="ia8" Width="128" Height="40" Offset="0xC7F8" />
+
+        <!-- Assets for the moths Odolwa can summon -->
+        <DList Name="gOdolwaMothMaterialDL" Offset="0xDC58" />
+        <DList Name="gOdolwaMothModelDL" Offset="0xDCD0" />
+        <Texture Name="gOdolwaMothTex" OutName="odolwa_moth" Format="rgba16" Width="16" Height="32" Offset="0xDCE8" />
+
+        <!-- Assets for the blocks that fall from the ceiling during the Odolwa fight -->
+        <DList Name="gOdolwaFallingBlockDL" Offset="0xE3E8" /> <!-- Original name is "iwa01_model" ("rock; boulder") -->
+        <Texture Name="gOdolwaFallingBlockTLUT" OutName="odolwa_falling_block_tlut" Format="rgba16" Width="4" Height="4" Offset="0xE558" />
+        <Texture Name="gOdolwaFallingBlockTex" OutName="odolwa_falling_block" Format="ci4" Width="64" Height="64" Offset="0xE578" />
         
         <!-- Odolwa Limbs -->
         <Limb Name="gOdolwaRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_ROOT" Offset="0xED78" />
@@ -125,35 +140,42 @@
         <!-- Odolwa Skeleton -->
         <Skeleton Name="gOdolwaSkel" Type="Flex" LimbType="Standard" LimbNone="ODOLWA_LIMB_NONE" LimbMax="ODOLWA_LIMB_MAX" EnumName="OdolwaLimb" Offset="0xF0A8" />
 
-        <Animation Name="object_boss01_Anim_00F918" Offset="0xF918" />
-        <Animation Name="object_boss01_Anim_00FDEC" Offset="0xFDEC" />
-        <Animation Name="object_boss01_Anim_00FF94" Offset="0xFF94" />
-        <Animation Name="object_boss01_Anim_010150" Offset="0x10150" />
-        <Animation Name="object_boss01_Anim_010980" Offset="0x10980" />
-        <Animation Name="object_boss01_Anim_0124CC" Offset="0x124CC" />
-        <Animation Name="object_boss01_Anim_012B70" Offset="0x12B70" />
-        <Animation Name="object_boss01_Anim_012D10" Offset="0x12D10" />
-        <Animation Name="object_boss01_Anim_012EBC" Offset="0x12EBC" />
-        <Animation Name="object_boss01_Anim_013480" Offset="0x13480" />
-        <Animation Name="object_boss01_Anim_01407C" Offset="0x1407C" />
-        <Animation Name="object_boss01_Anim_014F14" Offset="0x14F14" />
-        <Animation Name="object_boss01_Anim_015A30" Offset="0x15A30" />
-        <Animation Name="object_boss01_Anim_016168" Offset="0x16168" />
-        <Animation Name="object_boss01_Anim_0164CC" Offset="0x164CC" />
-        <Animation Name="object_boss01_Anim_018438" Offset="0x18438" />
-        <Animation Name="object_boss01_Anim_019C10" Offset="0x19C10" />
-        <Animation Name="object_boss01_Anim_01AAF4" Offset="0x1AAF4" />
-        <Animation Name="object_boss01_Anim_01AF18" Offset="0x1AF18" />
-        <Animation Name="object_boss01_Anim_01BA94" Offset="0x1BA94" />
-        <Animation Name="object_boss01_Anim_01C700" Offset="0x1C700" />
-        <Animation Name="object_boss01_Anim_01CE88" Offset="0x1CE88" />
-        <Animation Name="object_boss01_Anim_01D8C8" Offset="0x1D8C8" />
-        <Animation Name="object_boss01_Anim_01E68C" Offset="0x1E68C" />
-        <Animation Name="object_boss01_Anim_01EEA8" Offset="0x1EEA8" />
-        <Animation Name="object_boss01_Anim_01F6A4" Offset="0x1F6A4" />
-        <Animation Name="object_boss01_Anim_01FC10" Offset="0x1FC10" />
-        <Animation Name="object_boss01_Anim_0204AC" Offset="0x204AC" />
-        <!-- <Blob Name="object_boss01_Blob_0206F0" Size="0x100" Offset="0x206F0" /> -->
+        <!-- Odolwa Animations -->
+        <Animation Name="gOdolwaGlitchyFlailAnim" Offset="0xF918" /> <!-- Unused and glitchy. Original name might be "jmp_crym" -->
+        <Animation Name="gOdolwaDamageStartAnim" Offset="0xFDEC" /> <!-- Original name is "jmp_dam02" -->
+        <Animation Name="gOdolwaShieldGuardAnim" Offset="0xFF94" /> <!-- Original name is "jmp_def" -->
+        <Animation Name="gOdolwaSwordGuardAnim" Offset="0x10150" /> <!-- Original name is "jmp_def02" -->
+        <Animation Name="gOdolwaDamageLoopAnim" Offset="0x10980" /> <!-- Original name is "jmp_dm01" -->
+        <Animation Name="gOdolwaDeathAnim" Offset="0x124CC" /> <!-- Original name is "jmp_down" -->
+        <Animation Name="gOdolwaMothSummonDanceAnim" Offset="0x12B70" /> <!-- Named "dance_bug" in MM3D, but it was probably renamed by Grezzo, since it doesn't fit with other names. -->
+        <Animation Name="gOdolwaCrouchAnim" Offset="0x12D10" /> <!-- Original name is "jmp_jmp01" -->
+        <Animation Name="gOdolwaJumpAnim" Offset="0x12EBC" /> <!-- Original name is "jmp_jmp02" -->
+        <Animation Name="gOdolwaFallingSlashAnim" Offset="0x13480" /> <!-- Original name is "jmp_jmp03" -->
+        <Animation Name="gOdolwaKickAnim" Offset="0x1407C" /> <!-- Original name is "jmp_kick" -->
+        <Animation Name="gOdolwaStunAnim" Offset="0x14F14" /> <!-- Original name is "jmp_piyo" -->
+        <Animation Name="gOdolwaShieldBashAnim" Offset="0x15A30" /> <!-- Original name is "jmp_punch" -->
+        <Animation Name="gOdolwaRunAnim" Offset="0x16168" /> <!-- Original name is "jmp_run" -->
+        <Animation Name="gOdolwaSpinAttackAnim" Offset="0x164CC" /> <!-- Original name is "jmp_spin" -->
+        <Animation Name="gOdolwaReadyAnim" Offset="0x18438" /> <!-- Original name is "jmp_stop" -->
+        <Animation Name="gOdolwaIntroSlashAnim" Offset="0x19C10" /> <!-- Original name is "jmp_stop02" -->
+        <Animation Name="gOdolwaSpinSwordAnim" Offset="0x1AAF4" /> <!-- MM3D name is "dance_roll", but it was probably renamed. Might have originally been "jmp_stop03" from surrounding context. -->
+        <Animation Name="gOdolwaVerticalHopAnim" Offset="0x1AF18" /> <!-- MM3D name is "dance_jump", but it was probably renamed. Might have originally been "jmp_stop04" from surrounding context. -->
+        <Animation Name="gOdolwaHipShakeDanceAnim" Offset="0x1BA94" /> <!-- MM3D name is "dance_moth", but it was probably renamed. Might have originally been "jmp_stop05" from surrounding context. -->
+        <Animation Name="gOdolwaUpAndDownDanceAnim" Offset="0x1C700" /> <!-- MM3D name is "dance_fire", but it was probably renamed. Might have originally been "jmp_stop06" from surrounding context. -->
+        <Animation Name="gOdolwaArmSwingDanceAnim" Offset="0x1CE88" /> <!-- Original name is "jmp_stop07" -->
+        <Animation Name="gOdolwaThurstAttackAnim" Offset="0x1D8C8" /> <!-- Original name is "jmp_stop08" -->
+        <Animation Name="gOdolwaDoubleSlashAnim" Offset="0x1E68C" /> <!-- Original name is "jmp_stop09" -->
+        <Animation Name="gOdolwaSideToSideHopAnim" Offset="0x1EEA8" /> <!-- Original name is "jmp_stop10" -->
+        <Animation Name="gOdolwaSideToSideDanceAnim" Offset="0x1F6A4" /> <!-- Not present in MM3D, but might have been originally named "jmp_stop11" from surrounding context. -->
+        <Animation Name="gOdolwaSpinDanceAnim" Offset="0x1FC10" /> <!-- Original name is "jmp_stop12" -->
+        <Animation Name="gOdolwaJumpDanceAnim" Offset="0x204AC" /> <!-- Not present in MM3D, but might have been originally named "jmp_stop13" from surrounding context. -->
+
+        <!-- Unused vertices of unknown purpose. They seem similar to the vertices used for the bug's body. -->
+        <Array Name="gOdolwaUnusedVtx" Count="16" Offset="0x206F0">
+            <Vtx/>
+        </Array>
+
+        <!-- Odolwa Bug Limb DisplayLists -->
         <DList Name="gOdolwaBugLightBodyDL" Offset="0x21230" />
         <DList Name="gOdolwaBugDarkBodyDL" Offset="0x213A8" />
         <DList Name="gOdolwaBugFrontLeftLegUpperDL" Offset="0x21518" />
@@ -168,12 +190,18 @@
         <DList Name="gOdolwaBugMiddleLeftLegLowerDL" Offset="0x21678" />
         <DList Name="gOdolwaBugFrontRightLegUpperDL" Offset="0x216A8" />
         <DList Name="gOdolwaBugFrontRightLegLowerDL" Offset="0x216C8" />
-        <Texture Name="object_boss01_TLUT_021700" OutName="tlut_021700" Format="rgba16" Width="4" Height="4" Offset="0x21700" />
-        <Texture Name="object_boss01_Tex_021720" OutName="tex_021720" Format="ci4" Width="16" Height="32" Offset="0x21720" />
-        <Texture Name="object_boss01_Tex_021820" OutName="tex_021820" Format="rgba16" Width="32" Height="32" Offset="0x21820" />
-        <Texture Name="object_boss01_Tex_022020" OutName="tex_022020" Format="rgba16" Width="8" Height="8" Offset="0x22020" />
-        <DList Name="object_boss01_DL_0220A0" Offset="0x220A0" />
-        <DList Name="object_boss01_DL_022118" Offset="0x22118" />
+
+        <!-- Odolwa Bug Textures -->
+        <Texture Name="gOdolwaBugUndersideTLUT" OutName="odolwa_bug_underside_tlut" Format="rgba16" Width="4" Height="4" Offset="0x21700" />
+        <Texture Name="gOdolwaBugUndersideTex" OutName="odolwa_bug_underside" Format="ci4" Width="16" Height="32" Offset="0x21720" />
+        <Texture Name="gOdolwaBugBodyTex" OutName="odolwa_bug_body" Format="rgba16" Width="32" Height="32" Offset="0x21820" />
+        <Texture Name="gOdolwaBugLegTex" OutName="odolwa_bug_leg" Format="rgba16" Width="8" Height="8" Offset="0x22020" />
+
+        <!-- Material DisplayLists for the bug's legs. The bright one is only used for the cutscene where the bugs first fall down. -->
+        <DList Name="gOdolwaBugDullLegMaterialDL" Offset="0x220A0" />
+        <DList Name="gOdolwaBugBrightLegMaterialDL" Offset="0x22118" />
+
+        <!-- Odolwa Bug Limbs -->
         <Limb Name="gOdolwaBugRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_ROOT" Offset="0x22190" />
         <Limb Name="gOdolwaBugBodyLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BODY" Offset="0x2219C" />
         <Limb Name="gOdolwaBugFrontRightLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_RIGHT_LEG_ROOT" Offset="0x221A8" />
@@ -194,7 +222,11 @@
         <Limb Name="gOdolwaBugFrontLeftLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LEG_ROOT" Offset="0x2225C" />
         <Limb Name="gOdolwaBugFrontLeftLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LEG_UPPER" Offset="0x22268" />
         <Limb Name="gOdolwaBugFrontLeftLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LEG_LOWER" Offset="0x22274" />
+
+        <!-- Odolwa Bug Skeleton -->
         <Skeleton Name="gOdolwaBugSkel" Type="Flex" LimbType="Standard" LimbNone="ODOLWA_BUG_LIMB_NONE" LimbMax="ODOLWA_BUG_LIMB_MAX" EnumName="OdolwaBugLimb" Offset="0x222D0" />
-        <Animation Name="object_boss01_Anim_022550" Offset="0x22550" />
+
+        <!-- Odolwa Bug Animation -->
+        <Animation Name="gOdolwaBugCrawlAnim" Offset="0x22550" /> <!-- Original name is "mbug_wait" -->
     </File>
 </Root>
