@@ -754,7 +754,8 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     if (*this->ptr_1EC == 300) {
         player->stateFlags1 |= PLAYER_STATE1_20;
 
-        if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+        if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) <
+            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
         }
         Flags_SetSwitch(play, 0x41);
@@ -773,7 +774,8 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
     s32 pad;
 
     if (this->unk_354 == 10) {
-        if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) > gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+        if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >
+            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Message_StartTextbox(play, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {
@@ -906,12 +908,12 @@ void func_80AEB974(EnLiftNuts* this) {
     }
 }
 
-void func_80AEB9E0(EnLiftNuts *this, PlayState *play) {
+void func_80AEB9E0(EnLiftNuts* this, PlayState* play) {
     Vec3f worldPos = this->actor.world.pos;
     Vec3f velocity;
     Vec3f accel;
-    Color_RGBA8 primColor = {170, 130, 90, 255};
-    Color_RGBA8 envColor = {100, 60, 20, 255};
+    Color_RGBA8 primColor = { 170, 130, 90, 255 };
+    Color_RGBA8 envColor = { 100, 60, 20, 255 };
     s32 i;
 
     accel.y = 0.0f;
