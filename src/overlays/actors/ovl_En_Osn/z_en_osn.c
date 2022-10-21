@@ -16,6 +16,34 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play);
 void EnOsn_Update(Actor* thisx, PlayState* play);
 void EnOsn_Draw(Actor* thisx, PlayState* play);
 
+#define OSN_STATE_SPECIAL_CONVERSTATION (1 << 0)
+#define OSN_STATE_MET_HUMAN (1 << 1)
+#define OSN_STATE_MET_DEKU (1 << 2)
+#define OSN_STATE_MET_GORON (1 << 3)
+#define OSN_STATE_MET_ZORA (1 << 4)
+#define OSN_STATE_END_CONVERSATION (1 << 5)
+
+#define OSN_MASK_TEXT_GREAT_FAIRY (1 << 0)
+#define OSN_MASK_TEXT_GIBDO (1 << 1)
+#define OSN_MASK_TEXT_TRUTH (1 << 2)
+#define OSN_MASK_TEXT_GIANT (1 << 3)
+#define OSN_MASK_TEXT_KAFEIS (1 << 4)
+#define OSN_MASK_TEXT_DON_GERO (1 << 5)
+#define OSN_MASK_TEXT_BLAST (1 << 6)
+#define OSN_MASK_TEXT_COUPLE (1 << 7)
+#define OSN_MASK_TEXT_SCENTS (1 << 8)
+#define OSN_MASK_TEXT_KAMARO (1 << 9)
+#define OSN_MASK_TEXT_STONE (1 << 10)
+#define OSN_MASK_TEXT_POSTMAN (1 << 11)
+#define OSN_MASK_TEXT_BUNNY (1 << 12)
+#define OSN_MASK_TEXT_CAPTAIN (1 << 13)
+#define OSN_MASK_TEXT_BREMEN (1 << 14)
+#define OSN_MASK_TEXT_CIRCUS_LEADER (1 << 15)
+#define OSN_MASK_TEXT_KEATON (1 << 16)
+#define OSN_MASK_TEXT_GARO (1 << 17)
+#define OSN_MASK_TEXT_ALL_NIGHT (1 << 18)
+#define OSN_MASK_TEXT_ROMANI (1 << 19)
+
 typedef enum {
     /*  0 */ OSN_ANIM_IDLE,
     /*  1 */ OSN_ANIM_ARMS_OUT,
@@ -76,8 +104,8 @@ static AnimationInfo sAnimationInfo[] = {
     { &gHappyMaskSalesmanLyingDownAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &gHappyMaskSalesmanLyingDownAnim, 0.0f, 1.0f, 1.0f, ANIMMODE_ONCE, 0.0f },
     { &gHappyMaskSalesmanMaskLookAtAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHappyMaskSalesmanTurnStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gHappyMaskSalesmanTurnLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanTurnAroundStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanTurnAroundLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gHappyMaskSalesmanWalkAwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &gHappyMaskSalesmanMaskLookFromStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
     { &gHappyMaskSalesmanMaskLookFromLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
@@ -146,10 +174,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-void func_80AD1634(EnOsn*, PlayState*);
-void func_80AD16A8(EnOsn*, PlayState*);
-void func_80AD14C8(EnOsn*, PlayState*);
-void func_80AD19A0(EnOsn* this, PlayState* play);
+void EnOsn_StartCutscene(EnOsn* this, PlayState* play);
+void EnOsn_HandleCsAction(EnOsn* this, PlayState* play);
+void EnOsn_Idle(EnOsn* this, PlayState* play);
+void EnOsn_Talk(EnOsn* this, PlayState* play);
 
 void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
@@ -159,7 +187,7 @@ void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 func_80AD08B0(PlayState* play) {
+s32 EnOsn_GetMaskText(PlayState* play) {
     switch (Player_GetMask(play)) {
         case PLAYER_MASK_GREAT_FAIRY:
             return 0x1FD6;
@@ -226,7 +254,7 @@ s32 func_80AD08B0(PlayState* play) {
     }
 }
 
-void func_80AD0998(EnOsn* this) {
+void EnOsn_TurnAround(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
@@ -236,7 +264,7 @@ void func_80AD0998(EnOsn* this) {
     }
 }
 
-void func_80AD0A24(EnOsn* this) {
+void EnOsn_LookFromMask(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
@@ -246,7 +274,7 @@ void func_80AD0A24(EnOsn* this) {
     }
 }
 
-void func_80AD0AB0(EnOsn* this) {
+void EnOsn_FadeOut(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
@@ -259,144 +287,144 @@ void func_80AD0AB0(EnOsn* this) {
     }
 }
 
-s32 func_80AD0B38(EnOsn* this, PlayState* play) {
+s32 EnOsn_GetInitialMaskText(EnOsn* this, PlayState* play) {
     switch (Player_GetMask(play)) {
         case PLAYER_MASK_GREAT_FAIRY:
-            if (!(this->unk_1F6 & 1)) {
-                this->unk_1F6 |= 1;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_GREAT_FAIRY)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_GREAT_FAIRY;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_GIBDO:
-            if (!(this->unk_1F6 & 2)) {
-                this->unk_1F6 |= 2;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_GIBDO)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_GIBDO;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_TRUTH:
-            if (!(this->unk_1F6 & 4)) {
-                this->unk_1F6 |= 4;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_TRUTH)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_TRUTH;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_GIANT:
-            if (!(this->unk_1F6 & 8)) {
-                this->unk_1F6 |= 8;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_GIANT)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_GIANT;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_KAFEIS_MASK:
-            if (!(this->unk_1F6 & 0x10)) {
-                this->unk_1F6 |= 0x10;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_KAFEIS)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_KAFEIS;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_DON_GERO:
-            if (!(this->unk_1F6 & 0x20)) {
-                this->unk_1F6 |= 0x20;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_DON_GERO)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_DON_GERO;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_BLAST:
-            if (!(this->unk_1F6 & 0x40)) {
-                this->unk_1F6 |= 0x40;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_BLAST)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_BLAST;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_COUPLE:
-            if (!(this->unk_1F6 & 0x80)) {
-                this->unk_1F6 |= 0x80;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_COUPLE)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_COUPLE;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_SCENTS:
-            if (!(this->unk_1F6 & 0x100)) {
-                this->unk_1F6 |= 0x100;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_SCENTS)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_SCENTS;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_KAMARO:
-            if (!(this->unk_1F6 & 0x200)) {
-                this->unk_1F6 |= 0x200;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_KAMARO)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_KAMARO;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_STONE:
-            if (!(this->unk_1F6 & 0x400)) {
-                this->unk_1F6 |= 0x400;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_STONE)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_STONE;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_POSTMAN:
-            if (!(this->unk_1F6 & 0x800)) {
-                this->unk_1F6 |= 0x800;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_POSTMAN)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_POSTMAN;
                 return 0x1FD2;
             }
             break;
 
         case PLAYER_MASK_BUNNY:
-            if (!(this->unk_1F6 & 0x1000)) {
-                this->unk_1F6 |= 0x1000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_BUNNY)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_BUNNY;
                 return 0x1FD2;
             }
             break;
 
         case PLAYER_MASK_CAPTAIN:
-            if (!(this->unk_1F6 & 0x2000)) {
-                this->unk_1F6 |= 0x2000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_CAPTAIN)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_CAPTAIN;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_BREMEN:
-            if (!(this->unk_1F6 & 0x4000)) {
-                this->unk_1F6 |= 0x4000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_BREMEN)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_BREMEN;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_CIRCUS_LEADER:
-            if (!(this->unk_1F6 & 0x8000)) {
-                this->unk_1F6 |= 0x8000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_CIRCUS_LEADER)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_CIRCUS_LEADER;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_KEATON:
-            if (!(this->unk_1F6 & 0x10000)) {
-                this->unk_1F6 |= 0x10000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_KEATON)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_KEATON;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_GARO:
-            if (!(this->unk_1F6 & 0x20000)) {
-                this->unk_1F6 |= 0x20000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_GARO)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_GARO;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_ALL_NIGHT:
-            if (!(this->unk_1F6 & 0x40000)) {
-                this->unk_1F6 |= 0x40000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_ALL_NIGHT)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_ALL_NIGHT;
                 return 0x1FD1;
             }
             break;
 
         case PLAYER_MASK_ROMANI:
-            if (!(this->unk_1F6 & 0x80000)) {
-                this->unk_1F6 |= 0x80000;
+            if (!(this->maskTextFlags & OSN_MASK_TEXT_ROMANI)) {
+                this->maskTextFlags |= OSN_MASK_TEXT_ROMANI;
                 return 0x1FD1;
             }
             break;
@@ -404,7 +432,7 @@ s32 func_80AD0B38(EnOsn* this, PlayState* play) {
         default:
             break;
     }
-    this->unk_1EA |= 0x20;
+    this->stateFlags |= OSN_STATE_END_CONVERSATION;
     if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
         (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
         return 0x2006;
@@ -412,12 +440,12 @@ s32 func_80AD0B38(EnOsn* this, PlayState* play) {
     return 0x1FCD;
 }
 
-s32 func_80AD0E10(EnOsn* this, PlayState* play) {
+s32 EnOsn_GetInitialText(EnOsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) && CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
-        if (this->unk_1EA & 1) {
-            this->unk_1EA |= 0x20;
+        if (this->stateFlags & OSN_STATE_SPECIAL_CONVERSTATION) {
+            this->stateFlags |= OSN_STATE_END_CONVERSATION;
             if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
                 (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
@@ -430,28 +458,28 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
         }
 
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (this->unk_1EA & 4) {
-                this->unk_1EA |= 0x20;
+            if (this->stateFlags & OSN_STATE_MET_DEKU) {
+                this->stateFlags |= OSN_STATE_END_CONVERSATION;
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
             }
-            this->unk_1EA |= 4;
+            this->stateFlags |= OSN_STATE_MET_DEKU;
             return 0x1FC8;
         }
 
         if (player->transformation == PLAYER_FORM_GORON) {
-            if (this->unk_1EA & 8) {
-                this->unk_1EA |= 0x20;
+            if (this->stateFlags & OSN_STATE_MET_GORON) {
+                this->stateFlags |= OSN_STATE_END_CONVERSATION;
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
             }
-            this->unk_1EA |= 8;
+            this->stateFlags |= OSN_STATE_MET_GORON;
             if (gSaveContext.save.weekEventReg[76] & 0x20) {
                 return 0x1FC8;
             }
@@ -461,15 +489,15 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
         }
 
         if (player->transformation == PLAYER_FORM_ZORA) {
-            if (this->unk_1EA & 0x10) {
-                this->unk_1EA |= 0x20;
+            if (this->stateFlags & OSN_STATE_MET_ZORA) {
+                this->stateFlags |= OSN_STATE_END_CONVERSATION;
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
             }
-            this->unk_1EA |= 0x10;
+            this->stateFlags |= OSN_STATE_MET_ZORA;
             if (gSaveContext.save.weekEventReg[76] & 0x40) {
                 return 0x1FC8;
             }
@@ -478,22 +506,22 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
         }
 
         if (Player_GetMask(play) == PLAYER_MASK_NONE) {
-            if (this->unk_1EA & 2) {
-                this->unk_1EA |= 0x20;
+            if (this->stateFlags & OSN_STATE_MET_HUMAN) {
+                this->stateFlags |= OSN_STATE_END_CONVERSATION;
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
             }
-            this->unk_1EA |= 2;
+            this->stateFlags |= OSN_STATE_MET_HUMAN;
             return 0x1FC8;
         }
 
-        return func_80AD0B38(this, play);
+        return EnOsn_GetInitialMaskText(this, play);
     }
 
-    this->unk_1EA |= 0x20;
+    this->stateFlags |= OSN_STATE_END_CONVERSATION;
     if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
         (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
         return 0x2004;
@@ -502,123 +530,123 @@ s32 func_80AD0E10(EnOsn* this, PlayState* play) {
     return 0x1FAE;
 }
 
-void func_80AD10FC(EnOsn* this, PlayState* play) {
-    switch (this->unk_1F4) {
+void EnOsn_HandleConversation(EnOsn* this, PlayState* play) {
+    switch (this->textId) {
         case 0x1FC8:
-            this->unk_1F4 = 0x1FC9;
+            this->textId = 0x1FC9;
             break;
 
         case 0x1FC9:
-            this->unk_1F4 = 0x1FCA;
+            this->textId = 0x1FCA;
             break;
 
         case 0x1FCA:
-            if ((gSaveContext.save.day == 3 && gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
-                gSaveContext.save.time < CLOCK_TIME(6, 0)) {
-                this->unk_1F4 = 0x2007;
+            if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+                this->textId = 0x2007;
             } else {
-                this->unk_1F4 = 0x1FCB;
+                this->textId = 0x1FCB;
             }
             break;
 
         case 0x1FCB:
         case 0x2007:
-            this->unk_1F4 = 0x1FCC;
-            this->unk_1EA |= 0x20;
+            this->textId = 0x1FCC;
+            this->stateFlags |= OSN_STATE_END_CONVERSATION;
             break;
 
         case 0x1FCE:
         case 0x1FD0:
-            this->unk_1F4 = 0x1FCF;
+            this->textId = 0x1FCF;
             break;
 
         case 0x1FCF:
-            this->unk_1F4 = 0x1FCA;
+            this->textId = 0x1FCA;
             break;
 
         case 0x1FD1:
         case 0x1FD2:
-            this->unk_1F4 = func_80AD08B0(play);
+            this->textId = EnOsn_GetMaskText(play);
             break;
 
         case 0x1FD6:
-            this->unk_1F4 = 0x1FD7;
+            this->textId = 0x1FD7;
             break;
 
         case 0x1FD8:
-            this->unk_1F4 = 0x1FD9;
+            this->textId = 0x1FD9;
             break;
 
         case 0x1FDA:
-            this->unk_1F4 = 0x1FDB;
+            this->textId = 0x1FDB;
             break;
 
         case 0x1FDC:
-            this->unk_1F4 = 0x1FDD;
+            this->textId = 0x1FDD;
             break;
 
         case 0x1FDE:
-            this->unk_1F4 = 0x1FDF;
+            this->textId = 0x1FDF;
             break;
 
         case 0x1FE0:
-            this->unk_1F4 = 0x1FE1;
+            this->textId = 0x1FE1;
             break;
 
         case 0x1FE2:
-            this->unk_1F4 = 0x1FE3;
+            this->textId = 0x1FE3;
             break;
 
         case 0x1FE4:
-            this->unk_1F4 = 0x1FE5;
+            this->textId = 0x1FE5;
             break;
 
         case 0x1FE6:
-            this->unk_1F4 = 0x1FE7;
+            this->textId = 0x1FE7;
             break;
 
         case 0x1FE8:
-            this->unk_1F4 = 0x1FE9;
+            this->textId = 0x1FE9;
             break;
 
         case 0x1FEA:
-            this->unk_1F4 = 0x1FEB;
+            this->textId = 0x1FEB;
             break;
 
         case 0x1FEC:
-            this->unk_1F4 = 0x1FED;
+            this->textId = 0x1FED;
             break;
 
         case 0x1FEE:
-            this->unk_1F4 = 0x1FEF;
+            this->textId = 0x1FEF;
             break;
 
         case 0x1FF0:
-            this->unk_1F4 = 0x1FF1;
+            this->textId = 0x1FF1;
             break;
 
         case 0x1FF2:
-            this->unk_1F4 = 0x1FF3;
+            this->textId = 0x1FF3;
             break;
 
         case 0x1FF4:
-            this->unk_1F4 = 0x1FF5;
+            this->textId = 0x1FF5;
             break;
 
         case 0x1FF6:
-            this->unk_1F4 = 0x1FF7;
+            this->textId = 0x1FF7;
             break;
 
         case 0x1FF8:
-            this->unk_1F4 = 0x1FF9;
+            this->textId = 0x1FF9;
             break;
 
         case 0x1FFA:
-            this->unk_1F4 = 0x1FFB;
+            this->textId = 0x1FFB;
             break;
 
         case 0x1FFC:
-            this->unk_1F4 = 0x1FFD;
+            this->textId = 0x1FFD;
             break;
 
         case 0x1FD7:
@@ -632,7 +660,7 @@ void func_80AD10FC(EnOsn* this, PlayState* play) {
         case 0x1FF7:
         case 0x1FF9:
         case 0x1FFB:
-            this->unk_1F4 = 0x1FD3;
+            this->textId = 0x1FD3;
             break;
 
         case 0x1FD9:
@@ -643,24 +671,24 @@ void func_80AD10FC(EnOsn* this, PlayState* play) {
         case 0x1FEF:
         case 0x1FF5:
         case 0x1FFD:
-            this->unk_1F4 = 0x1FD4;
+            this->textId = 0x1FD4;
             break;
 
         case 0x1FE5:
-            this->unk_1F4 = 0x1FFE;
+            this->textId = 0x1FFE;
             break;
 
         case 0x1FD3:
         case 0x1FD4:
         case 0x1FFE:
-            this->unk_1F4 = 0x1FD5;
-            this->unk_1EA |= 0x20;
+            this->textId = 0x1FD5;
+            this->stateFlags |= OSN_STATE_END_CONVERSATION;
     }
 
-    Message_StartTextbox(play, this->unk_1F4, &this->actor);
+    Message_StartTextbox(play, this->textId, &this->actor);
 }
 
-void func_80AD1398(EnOsn* this) {
+void EnOsn_InitCutscene(EnOsn* this) {
     this->cutscene = this->actor.cutscene;
     if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
@@ -673,45 +701,43 @@ void func_80AD1398(EnOsn* this) {
     }
 }
 
-void func_80AD144C(EnOsn* this, PlayState* play) {
+void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
     u32 isFlagSet = Flags_GetSwitch(play, 0);
+
     this->cutscene = this->actor.cutscene;
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
-    if (isFlagSet == 0) {
-        this->actionFunc = func_80AD16A8;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
+    if (!isFlagSet) {
+        this->actionFunc = EnOsn_HandleCsAction;
     } else {
-        this->actionFunc = func_80AD14C8;
+        this->actionFunc = EnOsn_Idle;
     }
 }
 
-void func_80AD14C8(EnOsn* this, PlayState* play) {
+void EnOsn_Idle(EnOsn* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->actionFunc = func_80AD1634;
+            this->actionFunc = EnOsn_StartCutscene;
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
                    (yaw > -0x4000)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xFFFF;
         }
-    } else {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->unk_1F4 = func_80AD0E10(this, play);
-            Message_StartTextbox(play, this->unk_1F4, &this->actor);
-            this->actionFunc = func_80AD19A0;
-        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
-                   (yaw > -0x4000)) {
-            func_800B863C(&this->actor, play);
-        }
+    } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->textId = EnOsn_GetInitialText(this, play);
+        Message_StartTextbox(play, this->textId, &this->actor);
+        this->actionFunc = EnOsn_Talk;
+    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) && (yaw > -0x4000)) {
+        func_800B863C(&this->actor, play);
     }
 }
 
-void func_80AD1634(EnOsn* this, PlayState* play) {
+void EnOsn_StartCutscene(EnOsn* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
-        this->actionFunc = func_80AD16A8;
+        this->actionFunc = EnOsn_HandleCsAction;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -720,7 +746,7 @@ void func_80AD1634(EnOsn* this, PlayState* play) {
     }
 }
 
-void func_80AD16A8(EnOsn* this, PlayState* play) {
+void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
     u8 pad;
     s32 actionIndex;
 
@@ -827,15 +853,15 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
         }
 
         if (this->animIndex == OSN_ANIM_TURN_AROUND_START) {
-            func_80AD0998(this);
+            EnOsn_TurnAround(this);
         }
 
         if (this->animIndex == OSN_ANIM_MASK_LOOK_FROM_START) {
-            func_80AD0A24(this);
+            EnOsn_LookFromMask(this);
         }
 
         if (this->animIndex == OSN_ANIM_WALK_AWAY_END) {
-            func_80AD0AB0(this);
+            EnOsn_FadeOut(this);
         }
 
         if ((this->animIndex == OSN_ANIM_WALK_AWAY) &&
@@ -848,21 +874,21 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
     } else {
         this->shouldRotateHead = true;
         this->csAction = 0x63;
-        func_80AD144C(this, play);
+        EnOsn_ChooseAction(this, play);
     }
 }
 
-void func_80AD19A0(EnOsn* this, PlayState* play) {
+void EnOsn_Talk(EnOsn* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
-        if (this->unk_1EA & 0x20) {
-            this->unk_1EA &= ~0x20;
+        if (this->stateFlags & OSN_STATE_END_CONVERSATION) {
+            this->stateFlags &= ~OSN_STATE_END_CONVERSATION;
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
-            this->actionFunc = func_80AD14C8;
+            this->actionFunc = EnOsn_Idle;
         } else {
-            func_80AD10FC(this, play);
+            EnOsn_HandleConversation(this, play);
         }
     }
 }
@@ -883,43 +909,43 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
     this->alpha = 255;
 
     switch (ENOSN_GET_3(&this->actor)) {
-        case 0:
+        case OSN_TYPE_CHOOSE:
             if (((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                  (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3))) ||
                 (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
-                this->unk_1EA |= 1;
+                this->stateFlags |= OSN_STATE_SPECIAL_CONVERSTATION;
             }
             this->shouldRotateHead = true;
             if (play->sceneId == SCENE_INSIDETOWER) {
                 if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                     (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
-                    this->actionFunc = func_80AD16A8;
+                    this->actionFunc = EnOsn_HandleCsAction;
                 } else if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3)) {
-                    func_80AD1398(this);
-                    this->actionFunc = func_80AD1634;
+                    EnOsn_InitCutscene(this);
+                    this->actionFunc = EnOsn_StartCutscene;
                 } else {
-                    func_80AD144C(this, play);
+                    EnOsn_ChooseAction(this, play);
                 }
             } else {
-                func_80AD144C(this, play);
+                EnOsn_ChooseAction(this, play);
             }
             break;
 
-        case 1:
+        case OSN_TYPE_LIE_FACE_DOWN:
             this->animIndex = OSN_ANIM_LYING_DOWN_FACE_UP;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnOsn_DoNothing;
             break;
 
-        case 2:
+        case OSN_TYPE_LIE_FACE_UP:
             this->animIndex = OSN_ANIM_LYING_DOWN_FACE_DOWN;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnOsn_DoNothing;
             break;
 
-        case 3:
+        case OSN_TYPE_CUTSCENE:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->actionFunc = func_80AD16A8;
+            this->actionFunc = EnOsn_HandleCsAction;
             break;
 
         default:

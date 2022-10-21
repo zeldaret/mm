@@ -5,8 +5,8 @@
         <Animation Name="gHappyMaskSalesmanLyingDownAnim" Offset="0xC4" /> <!-- Frame 0: Face up, Frame 1: Face down--> <!-- Original name is "om_downpose" -->
         <Animation Name="gHappyMaskSalesmanOrganPlayAnim" Offset="0x1034" /> <!-- Original name is "om_ensou" -->
         <Animation Name="gHappyMaskSalesmOrganTalkAnim" Offset="0x1614" /> <!-- Original name is "om_ensou_taiki" -->
-        <Animation Name="gHappyMaskSalesmanTurnStartAnim" Offset="0x1D6C" /> <!-- Original name is "om_furimuki" -->
-        <Animation Name="gHappyMaskSalesmanTurnLoopAnim" Offset="0x2634" /> <!-- Original name is "om_furimuki_loop" -->
+        <Animation Name="gHappyMaskSalesmanTurnAroundStartAnim" Offset="0x1D6C" /> <!-- Original name is "om_furimuki" -->
+        <Animation Name="gHappyMaskSalesmanTurnAroundLoopAnim" Offset="0x2634" /> <!-- Original name is "om_furimuki_loop" -->
         <Animation Name="gHappyMaskSalesmanArmsOutAnim" Offset="0x2F74" /> <!-- Original name is "om_gozonji" -->
         <Animation Name="gHappyMaskSalesmanBowingAnim" Offset="0x37C4" /> <!-- Original name is "om_hajime" -->
         <Animation Name="gHappyMaskSalesmanChokeAnim" Offset="0x3A1C" /> <!-- Original name is "om_kubisime_loop" -->
@@ -62,9 +62,9 @@
         <Texture Name="gHappyMaskSalesmanShoeTex" OutName="happy_mask_salesman_shoe" Format="ci8" Width="16" Height="8" Offset="0x13CF8" />
         <Texture Name="gHappyMaskSalesmanRobeBackTex" OutName="happy_mask_salesman_robe_back" Format="ci8" Width="16" Height="16" Offset="0x13D78" />
         <Texture Name="gHappyMaskSalesmanShirtTex" OutName="happy_mask_salesman_shirt" Format="ci8" Width="16" Height="16" Offset="0x13E78" />
+        <Texture Name="gHappyMaskSalesmaeClothesEndTex" OutName="happy_mask_salesman_clothes_ends" Format="ci8" Width="8" Height="8" Offset="0x13F78" />
 
         <!-- Happy Mask Salesman Backpack Textures, TLUTs are above -->
-        <Texture Name="gHappyMaskSalesmaeClothesEndTex" OutName="happy_mask_salesman_clothes_ends" Format="ci8" Width="8" Height="8" Offset="0x13F78" />
         <Texture Name="gHappyMaskSalesmanBackpackTopTex" OutName="happy_mask_salesman_backpack_top" Format="ci8" Width="16" Height="32" Offset="0x13FB8" />
         <Texture Name="gHappyMaskSalesmanBackpackPocketTex" OutName="happy_mask_salesman_backpack_pocket" Format="ci8" Width="16" Height="32" Offset="0x141B8" />
         <Texture Name="gHappyMaskSalesmanBackpackPocketTopTex" OutName="happy_mask_salesman_backpack_pocket_top" Format="ci8" Width="16" Height="16" Offset="0x143B8" />
