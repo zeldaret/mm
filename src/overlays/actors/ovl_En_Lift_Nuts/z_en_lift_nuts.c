@@ -388,9 +388,9 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         this->textId = 0x27EE;
                     }
                 } else {
-                    if (((void)0, gSaveContext.unk_3DE0[4]) >=
+                    if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >=
                         gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
-                        if (gSaveContext.unk_3DE0[4] < 0x2EE0) {
+                        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < 0x2EE0) {
                             Message_StartTextbox(play, 0x27F9, &this->actor);
                             this->textId = 0x27F9;
                         } else {
@@ -703,7 +703,7 @@ void func_80AEAFA0(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEB114(EnLiftNuts* this) {
-    func_801A2BB8(NA_BGM_MINI_GAME_2);
+    func_801A2BB8(NA_BGM_TIMED_MINI_GAME);
     this->actionFunc = func_80AEB148;
 }
 
@@ -713,7 +713,7 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
     if (player->stateFlags3 & PLAYER_STATE3_200) {
         this->actor.speedXZ = 2.0f;
         gSaveContext.eventInf[3] |= 0x10;
-        func_8010E9F0(4, 0);
+        Interface_StartTimer(4, 0);
         func_80AE9B4C(1, 2);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
         func_80AEB280(this);
@@ -723,7 +723,7 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
 void func_80AEB1C8(EnLiftNuts* this) {
     this->actor.speedXZ = 2.0f;
     gSaveContext.eventInf[3] |= 0x10;
-    func_8010E9F0(4, 0);
+    Interface_StartTimer(4, 0);
     func_80AE9B4C(1, 2);
     this->actionFunc = func_80AEB230;
 }
@@ -731,7 +731,7 @@ void func_80AEB1C8(EnLiftNuts* this) {
 void func_80AEB230(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.unk_3DE0[4] > 0) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > 0) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         func_80AEB280(this);
     }
@@ -746,7 +746,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
 
     if (((player->actor.bgCheckFlags & 1) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
          player->actor.world.pos.y < 20.0f) ||
-        gSaveContext.unk_3DE0[4] >= 0x2EE0) {
+        gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= 0x2EE0) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         Flags_SetSwitch(play, 0x41);
         func_80AEB3E0(this, play);
@@ -754,7 +754,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     if (*this->ptr_1EC == 300) {
         player->stateFlags1 |= PLAYER_STATE1_20;
 
-        if (((void)0, gSaveContext.unk_3DE0[4]) < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+        if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) < gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
         }
         Flags_SetSwitch(play, 0x41);
@@ -765,7 +765,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
 void func_80AEB3E0(EnLiftNuts* this, PlayState* play) {
     play_sound(NA_SE_SY_FOUND);
     this->unk_354 = 0;
-    gSaveContext.unk_3DD0[4] = 6;
+    gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
     this->actionFunc = func_80AEB428;
 }
 
@@ -774,7 +774,7 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
     OSTime time;
 
     if (this->unk_354 == 10) {
-        time = gSaveContext.unk_3DE0[4];
+        time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
         if (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] < time) {
             Message_StartTextbox(play, 0x27EA, &this->actor);
             this->textId = 0x27EA;
@@ -787,12 +787,12 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
         }
     } else if (this->unk_354 == 30) {
         gSaveContext.eventInf[3] &= (u8)~0x10;
-        gSaveContext.respawn[0].entranceIndex = 0x3610;
+        gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(DEKU_SCRUB_PLAYGROUND, 1);
         gSaveContext.nextCutsceneIndex = 0;
         func_80169EFC(&play->state);
         gSaveContext.respawnFlag = -2;
-        play->transitionType = 0x40;
-        gSaveContext.nextTransitionType = 2;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     }
     this->unk_354++;
 }
