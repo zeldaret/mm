@@ -23,7 +23,7 @@ void func_8093E05C(ObjHsblock* this);
 void func_8093E0E8(ObjHsblock* this);
 void func_8093E10C(ObjHsblock* this, PlayState* play);
 
-const ActorInit Obj_Hsblock_InitVars = {
+ActorInit Obj_Hsblock_InitVars = {
     ACTOR_OBJ_HSBLOCK,
     ACTORCAT_BG,
     FLAGS,

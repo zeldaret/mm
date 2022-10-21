@@ -13,7 +13,7 @@
 void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play);
 void ObjMakeoshihiki_Update(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Makeoshihiki_InitVars = {
+ActorInit Obj_Makeoshihiki_InitVars = {
     ACTOR_OBJ_MAKEOSHIHIKI,
     ACTORCAT_PROP,
     FLAGS,
@@ -68,7 +68,7 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play) {
     childPoint = &this->pathPoints[childPointIndex];
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_OSHIHIKI, childPoint->x, childPoint->y,
                            childPoint->z, 0, 0, 0, 0xFFF1) == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

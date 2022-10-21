@@ -21,7 +21,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play);
 void func_80A66384(EnWarpUzu* this, PlayState* play);
 void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play);
 
-const ActorInit En_Warp_Uzu_InitVars = {
+ActorInit En_Warp_Uzu_InitVars = {
     ACTOR_EN_WARP_UZU,
     ACTORCAT_PROP,
     FLAGS,

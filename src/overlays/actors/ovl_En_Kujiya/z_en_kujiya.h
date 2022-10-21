@@ -14,6 +14,4 @@ typedef struct EnKujiya {
     /* 0x14A */ s16 textId;
 } EnKujiya; // size = 0x14C
 
-extern const ActorInit En_Kujiya_InitVars;
-
 #endif // Z_EN_KUJIYA_H

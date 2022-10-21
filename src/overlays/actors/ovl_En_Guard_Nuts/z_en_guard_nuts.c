@@ -25,7 +25,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
-const ActorInit En_Guard_Nuts_InitVars = {
+ActorInit En_Guard_Nuts_InitVars = {
     ACTOR_EN_GUARD_NUTS,
     ACTORCAT_NPC,
     FLAGS,

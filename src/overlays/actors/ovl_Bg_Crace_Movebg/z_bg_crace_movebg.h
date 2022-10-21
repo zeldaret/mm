@@ -38,6 +38,4 @@ typedef struct BgCraceMovebg {
     /* 0x188 */ Vec3f prevPlayerPos;
 } BgCraceMovebg; // size = 0x194
 
-extern const ActorInit Bg_Crace_Movebg_InitVars;
-
 #endif // Z_BG_CRACE_MOVEBG_H

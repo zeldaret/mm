@@ -67,7 +67,7 @@ typedef enum {
     /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } EnRafPetalScaleType;
 
-const ActorInit En_Raf_InitVars = {
+ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
     ACTORCAT_PROP,
     FLAGS,
@@ -310,7 +310,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
-             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & 0x8000000) &&
+             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
@@ -343,7 +343,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             zDiff = explosive->world.pos.z - this->dyna.actor.world.pos.z;
             if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
                 (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
-                Actor_MarkForDeath(explosive);
+                Actor_Kill(explosive);
                 this->grabTarget = EN_RAF_GRAB_TARGET_EXPLOSIVE;
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;
@@ -372,7 +372,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & 0x80) &&
+    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & PLAYER_STATE2_80) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -414,7 +414,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
     targetChewScale = (BREG(51) / 100.0f) + 0.2f;
     Math_ApproachF(&this->chewScale, targetChewScale, 0.2f, 0.03f);
 
-    if ((player->stateFlags2 & 0x80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -432,7 +432,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
                 play->damagePlayer(play, -2);
                 func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
-                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
+                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->actor.freezeTimer = 10;
                     EnRaf_SetupThrow(this, play);
                     return;

@@ -50,7 +50,7 @@ s32 func_80BA4B24(EnToto* this, PlayState* play);
 s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
 
-const ActorInit En_Toto_InitVars = {
+ActorInit En_Toto_InitVars = {
     ACTOR_EN_TOTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -186,7 +186,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
         (gSaveContext.save.time < CLOCK_TIME(21, 30))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
@@ -333,7 +333,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     } else {
         player = GET_PLAYER(play);
-        if (player->stateFlags1 & 0x400 && player->unk_AE7 != 0) {
+        if ((player->stateFlags1 & PLAYER_STATE1_400) && player->unk_AE7 != 0) {
             func_80151BB4(play, 48);
             func_80151BB4(play, 9);
             func_80151BB4(play, 10);
@@ -510,7 +510,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
     if (player->actor.world.pos.z > -270.0f) {
         if (this->spotlights != NULL) {
-            Actor_MarkForDeath(this->spotlights);
+            Actor_Kill(this->spotlights);
         }
         this->unk2B6 = 1;
         return this->text->unk1;
@@ -612,11 +612,11 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
             actor = &GET_PLAYER(play)->actor;
             actor = actor->next;
             while (actor != NULL) {
-                Actor_MarkForDeath(actor);
+                Actor_Kill(actor);
                 actor = actor->next;
             }
             if (this->spotlights != NULL) {
-                Actor_MarkForDeath(this->spotlights);
+                Actor_Kill(this->spotlights);
             }
             func_800B7298(play, NULL, 0x45);
             if (this->unk2B3 == 0xF) {

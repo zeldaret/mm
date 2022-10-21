@@ -25,7 +25,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play);
 void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
-const ActorInit En_Twig_InitVars = {
+ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,
     FLAGS,
@@ -70,7 +70,7 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
     this->dyna.actor.bgCheckFlags |= 0x400;
     switch (this->unk_160) {
         case 0:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             break;
         case 1:
             if (!sRingsHaveSpawned) {
@@ -82,11 +82,11 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
             }
             if (RACERING_GET_PARAM_1F0(&this->dyna.actor) != 0) {
                 if (!(gSaveContext.save.weekEventReg[24] & 4)) {
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
                 }
             } else if (gSaveContext.save.weekEventReg[24] & 4) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
             Actor_SetScale(&this->dyna.actor, 4.2f);
@@ -213,7 +213,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                 sCurrentRing = -1;
             }
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
     this->unk_170 += 180.0f / 0x10000;

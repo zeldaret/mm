@@ -16,7 +16,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play);
 void EnLiftNuts_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Lift_Nuts_InitVars = {
+ActorInit En_Lift_Nuts_InitVars = {
     ACTOR_EN_LIFT_NUTS,
     ACTORCAT_NPC,
     FLAGS,

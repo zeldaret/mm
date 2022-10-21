@@ -21,6 +21,4 @@ typedef struct BgFireWall {
     /* 0x164 */ ColliderCylinder collider;
 } BgFireWall; // size = 0x1B0
 
-extern const ActorInit Bg_Fire_Wall_InitVars;
-
 #endif // Z_BG_FIRE_WALL_H

@@ -32,6 +32,4 @@ typedef struct EnHintSkb {
     /* 0x3E9 */ u8 drawDmgEffType;
 } EnHintSkb; // size = 0x3EC
 
-extern const ActorInit En_Hint_Skb_InitVars;
-
 #endif // Z_EN_HINT_SKB_H

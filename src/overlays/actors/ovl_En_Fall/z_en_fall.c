@@ -62,7 +62,7 @@ typedef struct {
 
 EnFallDebrisEffect debrisEffects[EN_FALL_DEBRIS_EFFECT_COUNT];
 
-const ActorInit En_Fall_InitVars = {
+ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -178,7 +178,7 @@ void EnFall_Init(Actor* thisx, PlayState* play) {
     }
 
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->objIndex = objectIndex;
@@ -221,7 +221,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 if (!(gSaveContext.save.weekEventReg[25] & 2)) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 break;
 
@@ -230,7 +230,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
                 if (gSaveContext.save.weekEventReg[25] & 2) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 break;
 
@@ -280,12 +280,12 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actionFunc = EnFall_MoonsTear_Fall;
                 Actor_SetScale(&this->actor, 0.02f);
                 if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 moon = EnFall_MoonsTear_GetTerminaFieldMoon(play);
                 this->actor.child = moon;
                 if (moon == NULL) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 break;
 
@@ -324,7 +324,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                 break;
 
             case 2:
-                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                     if (gSaveContext.save.weekEventReg[93] & 4) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {

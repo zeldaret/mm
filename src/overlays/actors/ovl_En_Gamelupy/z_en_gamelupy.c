@@ -23,7 +23,7 @@ void func_80AF6944(EnGamelupy* this);
 void func_80AF6994(EnGamelupy* this);
 void func_80AF6A38(EnGamelupy* this);
 
-const ActorInit En_Gamelupy_InitVars = {
+ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
     ACTORCAT_PROP,
     FLAGS,
@@ -149,7 +149,7 @@ void func_80AF6A78(EnGamelupy* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_19C > 30) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->unk_19C++;
         this->actor.world.pos = player->actor.world.pos;

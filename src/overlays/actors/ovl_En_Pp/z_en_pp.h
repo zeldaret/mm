@@ -80,6 +80,4 @@ typedef struct EnPp {
     /* 0x5DC */ Vec3f damagedVelocity;
 } EnPp; // size = 0x5EC
 
-extern const ActorInit En_Pp_InitVars;
-
 #endif // Z_EN_PP_H

@@ -30,11 +30,18 @@ typedef enum {
 } EquipState;
 
 typedef enum {
-  /* 0 */ DEBUG_EDITOR_NONE,
-  /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
-  /* 2 */ DEBUG_EDITOR_INVENTORY,
-  /* 3 */ DEBUG_EDITOR_EVENTS
+    /* 0 */ DEBUG_EDITOR_NONE,
+    /* 1 */ DEBUG_EDITOR_INVENTORY_INIT,
+    /* 2 */ DEBUG_EDITOR_INVENTORY,
+    /* 3 */ DEBUG_EDITOR_EVENTS
 } DebugEditor;
+
+#define PAUSE_NAME_COLOR_SET_WHITE 0
+#define PAUSE_NAME_COLOR_SET_GREY 1
+
+#define PAUSE_CURSOR_COLOR_SET_WHITE 0
+#define PAUSE_CURSOR_COLOR_SET_YELLOW 2
+#define PAUSE_CURSOR_COLOR_SET_BLUE 4
 
 // To be used for Item-Page cursor and Mask-Page cursor
 typedef enum {
@@ -51,8 +58,8 @@ typedef enum {
 
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
-void KaleidoScope_DrawQuadTextureRGBA32(GraphicsContext* gfxCtx, TexturePtr texture, u16 width, u16 height, u16 point);
-void KaleidoScope_SetView(PauseContext* pauseCtx, f32 x, f32 y, f32 z);
+void KaleidoScope_DrawTexQuadRGBA32(GraphicsContext* gfxCtx, TexturePtr texture, u16 width, u16 height, u16 point);
+void KaleidoScope_SetView(PauseContext* pauseCtx, f32 eyeX, f32 eyeY, f32 eyeZ);
 void func_80821A04(PlayState* play);
 
 // Map
@@ -60,6 +67,10 @@ void KaleidoScope_DrawDungeonMap(PlayState* play);
 void KaleidoScope_UpdateDungeonCursor(PlayState* play);
 void KaleidoScope_DrawWorldMap(PlayState* play);
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play);
+
+// Collect
+void KaleidoScope_DrawQuestStatus(PlayState* play);
+void KaleidoScope_UpdateQuestCursor(PlayState* play);   
 
 // Item
 void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx);
@@ -71,6 +82,9 @@ void KaleidoScope_UpdateItemEquip(PlayState* play);
 void KaleidoScope_DrawMaskSelect(PlayState* play);
 void KaleidoScope_UpdateMaskCursor(PlayState* play);
 void KaleidoScope_UpdateMaskEquip(PlayState* play);
+
+// Prompt
+void KaleidoScope_UpdatePrompt(PlayState* play);
 
 // Debug
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
