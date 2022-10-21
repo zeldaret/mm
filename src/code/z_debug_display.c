@@ -119,19 +119,19 @@ void DebugDisplay_DrawPath(PlayState* play, Path* path) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#define R_DRAW_PATH_SEGMENT 0       // bREG(82)
-#define R_DRAW_PATH_SCALE   1.0f    // (1.0f + 0.1f * bREG(83))
-#define R_DRAW_PATH_RED     0       // bREG(84)
-#define R_DRAW_PATH_GREEN   0       // bREG(85)
-#define R_DRAW_PATH_BLUE    0       // bREG(86)
-#define R_DRAW_PATH_ALPHA   0       // bREG(87)
+#define R_DRAW_PATH_SEGMENT 0  // bREG(82)
+#define R_DRAW_PATH_SCALE 1.0f // (1.0f + 0.1f * bREG(83))
+#define R_DRAW_PATH_RED 0      // bREG(84)
+#define R_DRAW_PATH_GREEN 0    // bREG(85)
+#define R_DRAW_PATH_BLUE 0     // bREG(86)
+#define R_DRAW_PATH_ALPHA 0    // bREG(87)
 
 /**
  * Offsets of the points of the triaxial shape used for visualising paths
  */
 Vec3s sDebugPathVtxOffsets[][2] = {
     { { 20, 0, 0 }, { -20, 0, 0 } },
-    { { 0, 20, 0 }, { 0, -20, 0 } }, 
+    { { 0, 20, 0 }, { 0, -20, 0 } },
     { { 0, 0, 20 }, { 0, 0, -20 } },
 };
 
@@ -142,7 +142,7 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
     Gfx* gfxHead;
     Gfx* gfx;
     Vtx* curVtx;
-    Vtx* curBaseVtx; // First Vtx for the current point
+    Vtx* curBaseVtx;  // First Vtx for the current point
     Vtx* prevBaseVtx; // First Vtx for the previous point
     Vec3s* curPoint;
     s32 segment; // of path ending at the current point, 1-indexed
@@ -164,8 +164,8 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
             curBaseVtx = curVtx;
 
             // Add a vertex for each point in the triaxial shape
-            for (i = 0; i < 3; i++) {
-                for (j = 0; j < 2; j++) {
+            for (i = 0; i < ARRAY_COUNT(sDebugPathVtxOffsets); i++) {
+                for (j = 0; j < ARRAY_COUNT(sDebugPathVtxOffsets[0]); j++) {
                     curVtx->v.ob[0] = curPoint->x + (s32)(sDebugPathVtxOffsets[i][j].x * R_DRAW_PATH_SCALE);
                     curVtx->v.ob[1] = curPoint->y + (s32)(sDebugPathVtxOffsets[i][j].y * R_DRAW_PATH_SCALE);
                     curVtx->v.ob[2] = curPoint->z + (s32)(sDebugPathVtxOffsets[i][j].z * R_DRAW_PATH_SCALE);
@@ -180,7 +180,8 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
                 }
             }
 
-            // Draw the path segment ending at point `R_DRAW_PATH_SEGMENT`, or the whole path if `R_DRAW_PATH_SEGMENT` is 0
+            // Draw the path segment ending at point `R_DRAW_PATH_SEGMENT`, or the whole path if `R_DRAW_PATH_SEGMENT`
+            // is 0
             if (R_DRAW_PATH_SEGMENT == 0) {
                 if (segment > 0) {
                     gSPVertex(gfx++, prevBaseVtx, 12, 0);
