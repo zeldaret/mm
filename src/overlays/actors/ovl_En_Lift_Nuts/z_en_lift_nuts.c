@@ -197,7 +197,7 @@ void func_80AE9BCC(EnLiftNuts* this, PlayState* play) {
     if ((this->actionFunc != func_80AEB934) && (this->actionFunc != func_80AEB8A4) &&
         (this->actionFunc != func_80AEACF8) && (this->actionFunc != func_80AEAC64) &&
         (this->actionFunc != func_80AEA044) && (this->actionFunc != func_80AEB598) &&
-        (this->actionFunc != func_80AEB698) && (func_80AE9B4C(0, 3) == 0) && (func_80AE9B8C() == 3) &&
+        (this->actionFunc != func_80AEB698) && !func_80AE9B4C(0, 3) && (func_80AE9B8C() == 3) &&
         (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && (this->actor.xzDistToPlayer < 150.0f)) {
         func_80AEB828(this);
     }
