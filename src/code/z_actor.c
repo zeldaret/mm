@@ -2495,12 +2495,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     DynaPoly_UpdateBgActorTransforms(play, &play->colCtx.dyna);
 }
 
-void func_800E992C(PlayState* play, Path* path);
-
 void Actor_Draw(PlayState* play, Actor* actor) {
     Lights* light;
-
-    if (bREG(80)) func_800E992C(play, &play->setupPathList[bREG(81)]);
 
     OPEN_DISPS(play->state.gfxCtx);
 
