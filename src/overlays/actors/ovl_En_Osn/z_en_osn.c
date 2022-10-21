@@ -908,7 +908,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->alpha = 255;
 
-    switch (ENOSN_GET_3(&this->actor)) {
+    switch (ENOSN_GET_TYPE(&this->actor)) {
         case OSN_TYPE_CHOOSE:
             if (((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                  (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 3))) ||
@@ -964,14 +964,13 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play) {
 void EnOsn_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnOsn* this = THIS;
-    u32 isFlagSet;
+    u32 isFlagSet = Flags_GetSwitch(play, 0);
 
-    isFlagSet = Flags_GetSwitch(play, 0);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
 
-    if (!ENOSN_GET_3(&this->actor)) {
+    if (ENOSN_GET_TYPE(&this->actor) == OSN_TYPE_CHOOSE) {
         if (isFlagSet) {
             this->actor.flags |= ACTOR_FLAG_1;
             EnOsn_UpdateCollider(this, play);

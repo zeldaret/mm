@@ -7,6 +7,8 @@ struct EnOsn;
 
 typedef void (*EnOsnActionFunc)(struct EnOsn*, PlayState*);
 
+#define ENOSN_GET_TYPE(this) ((thisx)->params & 3) 
+
 typedef enum {
     /* 0 */ OSN_TYPE_CHOOSE, // Will choose between Idle and Cutscene
     /* 1 */ OSN_TYPE_LIE_FACE_DOWN,
@@ -32,7 +34,5 @@ typedef struct EnOsn {
     /* 0x1F6 */ s32 maskTextFlags;
     /* 0x1FA */ u8 alpha;
 } EnOsn; // size = 0x1FB
-
-#define ENOSN_GET_3(this) ((thisx)->params & 3) 
 
 #endif // Z_EN_OSN_H
