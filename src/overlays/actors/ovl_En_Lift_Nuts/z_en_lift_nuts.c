@@ -141,6 +141,7 @@ s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
                 return true;
             }
             break;
+
         case 1:
             if (D_80AEBF6C == 0) {
                 this->unk_34E = 1;
@@ -148,6 +149,7 @@ s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
                 return true;
             }
             break;
+
         case 2:
             if (D_80AEBF6C == 1) {
                 this->unk_34E = 0;
@@ -155,6 +157,7 @@ s32 func_80AE9AC4(EnLiftNuts* this, s32 arg1) {
                 return true;
             }
             break;
+
         default:
             break;
     }
@@ -334,6 +337,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                             this->textId = 0x27DA;
                         }
                         break;
+
                     case 2:
                         if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
@@ -354,6 +358,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                             }
                         }
                         break;
+
                     case 3:
                         if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
@@ -413,10 +418,12 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         Message_StartTextbox(play, 0x27E7, &this->actor);
                         this->textId = 0x27E7;
                         break;
+
                     case 2:
                         Message_StartTextbox(play, 0x27E8, &this->actor);
                         this->textId = 0x27E8;
                         break;
+
                     case 3:
                         Message_StartTextbox(play, 0x27E9, &this->actor);
                         this->textId = 0x27E9;
@@ -463,6 +470,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
                     this->textId = 0x27E3;
                 }
                 break;
+
             case 0x238D:
                 if (play->msgCtx.choiceIndex == 0) { // Yes
                     player->stateFlags1 |= PLAYER_STATE1_20;
@@ -471,6 +479,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
                     func_80AE9FC8(this);
                 }
                 break;
+
             default:
                 func_80AE9FC8(this);
                 break;
@@ -500,11 +509,13 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
             case 0x27E4:
                 func_80AE9FC8(this);
                 break;
+
             case 0x27E5:
                 func_801477B4(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 func_80AEAEAC(this);
                 break;
+
             case 0x27E6:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 switch (CURRENT_DAY) {
@@ -512,57 +523,68 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                         Message_StartTextbox(play, 0x27E7, &this->actor);
                         this->textId = 0x27E7;
                         break;
+
                     case 2:
                         Message_StartTextbox(play, 0x27E8, &this->actor);
                         this->textId = 0x27E8;
                         break;
+
                     case 3:
                         Message_StartTextbox(play, 0x27E9, &this->actor);
                         this->textId = 0x27E9;
                         break;
                 }
                 break;
+
             case 0x27E7:
             case 0x27E8:
             case 0x27E9:
                 Message_StartTextbox(play, 0x27FA, &this->actor);
                 this->textId = 0x27FA;
                 break;
+
             case 0x27FA:
                 func_801477B4(play);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AEB114(this);
                 break;
+
             case 0x27EE:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0x10);
                 Message_StartTextbox(play, 0x27EF, &this->actor);
                 this->textId = 0x27EF;
                 break;
+
             case 0x27EF:
                 func_801477B4(play);
                 func_80AEB584(this);
                 func_80AEB598(this, play);
                 break;
+
             case 0x27F1:
                 Message_StartTextbox(play, 0x27F2, &this->actor);
                 this->textId = 0x27F2;
                 break;
+
             case 0x27F2:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 Message_StartTextbox(play, 0x27F3, &this->actor);
                 this->textId = 0x27F3;
                 break;
+
             case 0x27F4:
                 func_801477B4(play);
                 func_80AEB584(this);
                 func_80AEB598(this, play);
                 break;
+
             case 0x27F5:
                 func_801477B4(play);
                 func_80AE9B4C(1, 0);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 func_80AE9FC8(this);
                 break;
+
             case 0x27F9:
                 Message_StartTextbox(play, 0x27ED, &this->actor);
                 this->textId = 0x27ED;
@@ -603,12 +625,15 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
         case 2:
         case 3:
             break;
+
         case 4:
             func_80AEA7A4(this, play);
             break;
+
         case 5:
             func_80AEA910(this, play);
             break;
+
         case 6:
             if (Message_ShouldAdvance(play)) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
@@ -620,15 +645,18 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
             }
             break;
     }
+
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x2000, 0x500);
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->textId) {
             case 0x27EE:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
                 break;
+
             case 0x27EF:
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 break;
+
             case 0x27F4:
                 if (this->unk_354 == 0) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
@@ -751,6 +779,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
         Flags_SetSwitch(play, 0x41);
         func_80AEB3E0(this, play);
     }
+
     if (*this->ptr_1EC == 300) {
         player->stateFlags1 |= PLAYER_STATE1_20;
 
@@ -841,12 +870,15 @@ void func_80AEB698(EnLiftNuts* this, PlayState* play) {
             case 1:
                 gSaveContext.save.weekEventReg[14] |= 0x10;
                 break;
+
             case 2:
                 gSaveContext.save.weekEventReg[14] |= 0x20;
                 break;
+
             case 3:
                 gSaveContext.save.weekEventReg[14] |= 0x40;
                 break;
+
             default:
                 break;
         }
@@ -892,13 +924,16 @@ void func_80AEB974(EnLiftNuts* this) {
         default:
             this->unk_1E4 = 0;
             break;
+
         case 0x27EE:
         case 0x27EF:
             this->unk_1E4 = 1;
             break;
+
         case 0x27F5:
             this->unk_1E4 = 2;
             break;
+
         case 0x27F4:
             if (this->unk_354 == 0) {
                 this->unk_1E4 = 2;
@@ -959,7 +994,7 @@ s32 EnLiftNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == OBJECT_DNT_LIMB_1A) {
-        *dList = sDLists[this->unk_1E4];
+        *dList = D_80AEBF18[this->unk_1E4];
     }
     return false;
 }
