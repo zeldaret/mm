@@ -289,7 +289,7 @@ void CollisionPoly_GetVertices(CollisionPoly* poly, Vec3s* vtxList, Vec3f* dest)
 void CollisionPoly_GetVerticesByBgId(CollisionPoly* poly, s32 bgId, CollisionContext* colCtx, Vec3f* dest) {
     Vec3s* vtxList;
 
-    if (poly == NULL || bgId > BG_ACTOR_MAX || dest == NULL) {
+    if ((poly == NULL) || (bgId > BG_ACTOR_MAX) || (dest == NULL)) {
         if (dest != NULL) {
             // @bug: dest[2] x and y are not set to 0
             dest[0].x = dest[0].y = dest[0].z = dest[1].x = dest[1].y = dest[1].z = dest[2].z = 0.0f;
@@ -390,16 +390,16 @@ s32 CollisionPoly_CheckZIntersectApprox(CollisionPoly* poly, Vec3s* vtxList, f32
 #ifdef NON_MATCHING
 // Matches, but needs in-function static bss
 s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
-    static Vec3f polyVerts[3]; // D_801EDB70
-    static Plane plane;        // D_801EDB98
+    static Vec3f sPolyVerts[3]; // D_801EDB70
+    static Plane sPlane;        // D_801EDB98
     f32 planeDistA;
     f32 planeDistB;
     f32 dpA;
     f32 dpB;
     f32 originDist;
 
-    plane.originDist = a0->poly->dist;
-    originDist = plane.originDist;
+    sPlane.originDist = a0->poly->dist;
+    originDist = sPlane.originDist;
     planeDistA = originDist;
     planeDistB = originDist;
 
@@ -421,19 +421,19 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0) {
         return false;
     }
 
-    CollisionPoly_GetNormalF(a0->poly, &plane.normal.x, &plane.normal.y, &plane.normal.z);
-    CollisionPoly_GetVertices(a0->poly, a0->vtxList, polyVerts);
+    CollisionPoly_GetNormalF(a0->poly, &sPlane.normal.x, &sPlane.normal.y, &sPlane.normal.z);
+    CollisionPoly_GetVertices(a0->poly, a0->vtxList, sPolyVerts);
     Math3D_Lerp(a0->posA, a0->posB, planeDistA / (planeDistA - planeDistB), a0->planeIntersect);
 
-    if ((fabsf(plane.normal.x) > 0.5f &&
-         Math3D_TriChkPointParaXDist(&polyVerts[0], &polyVerts[1], &polyVerts[2], a0->planeIntersect->y,
-                                     a0->planeIntersect->z, 0.0f, a0->checkDist, plane.normal.x)) ||
-        (fabsf(plane.normal.y) > 0.5f &&
-         Math3D_TriChkPointParaYDist(&polyVerts[0], &polyVerts[1], &polyVerts[2], a0->planeIntersect->z,
-                                     a0->planeIntersect->x, 0.0f, a0->checkDist, plane.normal.y)) ||
-        (fabsf(plane.normal.z) > 0.5f &&
-         Math3D_TriChkLineSegParaZDist(&polyVerts[0], &polyVerts[1], &polyVerts[2], a0->planeIntersect->x,
-                                       a0->planeIntersect->y, 0.0f, a0->checkDist, plane.normal.z))) {
+    if (((fabsf(sPlane.normal.x) > 0.5f) &&
+         Math3D_TriChkPointParaXDist(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->y,
+                                     a0->planeIntersect->z, 0.0f, a0->checkDist, sPlane.normal.x)) ||
+        ((fabsf(sPlane.normal.y) > 0.5f) &&
+         Math3D_TriChkPointParaYDist(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->z,
+                                     a0->planeIntersect->x, 0.0f, a0->checkDist, sPlane.normal.y)) ||
+        ((fabsf(sPlane.normal.z) > 0.5f) &&
+         Math3D_TriChkLineSegParaZDist(&sPolyVerts[0], &sPolyVerts[1], &sPolyVerts[2], a0->planeIntersect->x,
+                                       a0->planeIntersect->y, 0.0f, a0->checkDist, sPlane.normal.z))) {
         return true;
     }
     return false;
@@ -446,18 +446,18 @@ s32 CollisionPoly_LineVsPoly(BgLineVsPolyTest* a0);
 #ifdef NON_MATCHING
 // Matches, but needs in-function static bss
 s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius) {
-    static Sphere16 sphere; // D_801EDBA8
-    static TriNorm tri;     // D_801EDBB0
+    static Sphere16 sSphere; // D_801EDBA8
+    static TriNorm sTri;     // D_801EDBB0
     Vec3f intersect;
 
-    CollisionPoly_GetVertices(poly, vtxList, tri.vtx);
-    CollisionPoly_GetNormalF(poly, &tri.plane.normal.x, &tri.plane.normal.y, &tri.plane.normal.z);
-    tri.plane.originDist = poly->dist;
-    sphere.center.x = center->x;
-    sphere.center.y = center->y;
-    sphere.center.z = center->z;
-    sphere.radius = radius;
-    return Math3D_ColSphereTri(&sphere, &tri, &intersect);
+    CollisionPoly_GetVertices(poly, vtxList, sTri.vtx);
+    CollisionPoly_GetNormalF(poly, &sTri.plane.normal.x, &sTri.plane.normal.y, &sTri.plane.normal.z);
+    sTri.plane.originDist = poly->dist;
+    sSphere.center.x = center->x;
+    sSphere.center.y = center->y;
+    sSphere.center.z = center->z;
+    sSphere.radius = radius;
+    return Math3D_ColSphereTri(&sSphere, &sTri, &intersect);
 }
 #else
 s32 CollisionPoly_SphVsPoly(CollisionPoly* poly, Vec3s* vtxList, Vec3f* center, f32 radius);
@@ -761,7 +761,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         zMin -= radius;
         zMax += radius;
 
-        if (resultPos.z < zMin || resultPos.z > zMax) {
+        if ((resultPos.z < zMin) || (resultPos.z > zMax)) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -849,7 +849,7 @@ s32 BgCheck_SphVsStaticWall(StaticLookup* lookup, CollisionContext* colCtx, u16 
         xMin -= radius;
         xMax += radius;
 
-        if (resultPos.x < xMin || xMax < resultPos.x) {
+        if ((resultPos.x < xMin) || (xMax < resultPos.x)) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {
@@ -1120,7 +1120,7 @@ s32 BgCheck_SphVsFirstStaticPoly(StaticLookup* lookup, u16 xpFlags, CollisionCon
         return true;
     }
 
-    if ((lookup->ceiling.head) != SS_NULL && !(bciFlags & BGCHECK_IGNORE_CEILING) &&
+    if ((lookup->ceiling.head != SS_NULL) && !(bciFlags & BGCHECK_IGNORE_CEILING) &&
         BgCheck_SphVsFirstStaticPolyList(&colCtx->polyNodes.tbl[lookup->ceiling.head], xpFlags, colCtx, center, radius,
                                          outPoly, actor)) {
         return true;
@@ -1656,7 +1656,7 @@ CollisionHeader* BgCheck_GetCollisionHeader(CollisionContext* colCtx, s32 bgId) 
     if (bgId == BGCHECK_SCENE) {
         return colCtx->colHeader;
     }
-    if (bgId < 0 || bgId > BG_ACTOR_MAX) {
+    if ((bgId < 0) || (bgId > BG_ACTOR_MAX)) {
         return NULL;
     }
     if (!(colCtx->dyna.bgActorFlags[bgId] & 1)) {
@@ -1735,7 +1735,7 @@ f32 BgCheck_RaycastFloorImpl(PlayState* play, CollisionContext* colCtx, u16 xpFl
         }
     }
 
-    if (yIntersect != BGCHECK_Y_MIN && func_800C9B68(colCtx, *outPoly, *outBgId)) {
+    if ((yIntersect != BGCHECK_Y_MIN) && func_800C9B68(colCtx, *outPoly, *outBgId)) {
         yIntersect -= 1.0f;
     }
     return yIntersect;
@@ -1938,7 +1938,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     dz = posNext->z - posPrev->z;
 
     // if there's movement on the xz plane, and argA flag is 0,
-    if ((dx != 0.0f || dz != 0.0f) && (argA & 1) == 0) {
+    if (((dx != 0.0f) || (dz != 0.0f)) && !(argA & 1)) {
         if ((checkHeight + dy) < 5.0f) {
             //! @bug checkHeight is not applied to posPrev/posNext
             result = BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, posPrev, posNext, &posIntersect, &poly,
@@ -2534,9 +2534,9 @@ void ScaleRotPos_SetValue(ScaleRotPos* srp, Vec3f* scale, Vec3s* rot, Vec3f* pos
  * ScaleRotPos equality test
  */
 s32 ScaleRotPos_IsEqual(ScaleRotPos* a, ScaleRotPos* b) {
-    if (a->scale.x != b->scale.x || a->scale.y != b->scale.y || a->scale.z != b->scale.z || a->rot.x != b->rot.x ||
-        a->rot.y != b->rot.y || a->rot.z != b->rot.z || a->pos.x != b->pos.x || a->pos.y != b->pos.y ||
-        a->pos.z != b->pos.z) {
+    if ((a->scale.x != b->scale.x) || (a->scale.y != b->scale.y) || (a->scale.z != b->scale.z) ||
+        (a->rot.x != b->rot.x) || (a->rot.y != b->rot.y) || (a->rot.z != b->rot.z) || (a->pos.x != b->pos.x) ||
+        (a->pos.y != b->pos.y) || (a->pos.z != b->pos.z)) {
         return false;
     }
     return true;
@@ -2664,7 +2664,7 @@ void DynaPoly_SetBgActorPrevTransform(PlayState* play, BgActor* bgActor) {
  * Is BgActor Id
  */
 s32 DynaPoly_IsBgIdBgActor(s32 bgId) {
-    if (bgId < 0 || bgId >= BG_ACTOR_MAX) {
+    if ((bgId < 0) || (bgId >= BG_ACTOR_MAX)) {
         return false;
     }
     return true;
@@ -2960,7 +2960,7 @@ void DynaPoly_ExpandSRT(PlayState* play, DynaCollisionContext* dyna, s32 bgId, s
             dyna->bgActors[bgId].curTransform.pos.x, dyna->bgActors[bgId].curTransform.pos.y,
             dyna->bgActors[bgId].curTransform.pos.z);
 
-        if (pbgdata->numVertices != 0 && pbgdata->numPolygons != 0) {
+        if ((pbgdata->numVertices != 0) && (pbgdata->numPolygons != 0)) {
             s32 j;
             numVtxInverse = 1.0f / pbgdata->numVertices;
             newCenterPoint.x = newCenterPoint.y = newCenterPoint.z = 0.0f;
@@ -3093,7 +3093,7 @@ void BgCheck_ResetFlagsIfLoadedActor(PlayState* play, DynaCollisionContext* dyna
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         if ((dyna->bgActorFlags[i] & 1)) {
             dynaActor = DynaPoly_GetActor(&play->colCtx, i);
-            if (dynaActor != NULL && &dynaActor->actor == actor) {
+            if ((dynaActor != NULL) && (&dynaActor->actor == actor)) {
                 DynaPolyActor_ResetState((DynaPolyActor*)actor);
                 return;
             }
@@ -3124,7 +3124,7 @@ void DynaPoly_Setup(PlayState* play, DynaCollisionContext* dyna) {
             BgActor_Init(play, &dyna->bgActors[i]);
             dyna->bitFlag |= DYNAPOLY_INVALIDATE_LOOKUP;
         }
-        if (dyna->bgActors[i].actor != NULL && dyna->bgActors[i].actor->update == NULL) {
+        if ((dyna->bgActors[i].actor != NULL) && (dyna->bgActors[i].actor->update == NULL)) {
             // Delete BgActor
             actor = DynaPoly_GetActor(&play->colCtx, i);
             if (actor == NULL) {
@@ -3589,7 +3589,7 @@ s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32*
         }
         bgActor = &colCtx->dyna.bgActors[i];
 
-        if (bgActor->minY > resultPos.y || bgActor->maxY < resultPos.y) {
+        if ((bgActor->minY > resultPos.y) || (bgActor->maxY < resultPos.y)) {
             continue;
         }
 
@@ -4040,7 +4040,7 @@ u32 SurfaceType_GetData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId,
     SurfaceType* surfaceTypes;
 
     colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
-    if (colHeader == NULL || poly == NULL) {
+    if ((colHeader == NULL) || (poly == NULL)) {
         return 0;
     }
     surfaceTypes = colHeader->surfaceTypeList;
@@ -4280,7 +4280,7 @@ u32 func_800C9BB8(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
 u16 SurfaceType_GetSfx(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     s32 id = func_800C9BB8(colCtx, poly, bgId);
 
-    if (id < 0 || id > 14) {
+    if ((id < 0) || (id > 14)) {
         return NA_SE_PL_WALK_GROUND - SFX_FLAG;
     }
     return sSurfaceTypeSfx[id];
@@ -4292,7 +4292,7 @@ u16 SurfaceType_GetSfx(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) 
 s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3) {
     s32 id = func_800C9BB8(colCtx, poly, bgId);
 
-    if (id < 0 || id > 14) {
+    if ((id < 0) || (id > 14)) {
         return 0;
     }
     return D_801B46C0[id] & arg3;
@@ -4430,11 +4430,11 @@ s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f3
     *bgId = BGCHECK_SCENE;
     colHeader = colCtx->colHeader;
 
-    if (colHeader->numWaterBoxes != 0 && colHeader->waterBoxes != NULL) {
+    if ((colHeader->numWaterBoxes != 0) && (colHeader->waterBoxes != NULL)) {
         for (curWaterBox = colHeader->waterBoxes; curWaterBox < colHeader->waterBoxes + colHeader->numWaterBoxes;
              curWaterBox++) {
             room = 0x3F & (curWaterBox->properties >> 13);
-            if (room == play->roomCtx.curRoom.num || room == 0x3F) {
+            if ((room == play->roomCtx.curRoom.num) || (room == 0x3F)) {
                 if (curWaterBox->properties & 0x80000) {
                     continue;
                 }
@@ -4454,7 +4454,7 @@ s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f3
             continue;
         }
         bgActor = &colCtx->dyna.bgActors[i];
-        if (bgActor->colHeader->numWaterBoxes != 0 && bgActor->colHeader->waterBoxes != NULL) {
+        if ((bgActor->colHeader->numWaterBoxes != 0) && (bgActor->colHeader->waterBoxes != NULL)) {
             for (curWaterBox = colCtx->dyna.waterBoxList.boxes + bgActor->waterboxesStartIndex;
                  curWaterBox <
                  colCtx->dyna.waterBoxList.boxes + bgActor->waterboxesStartIndex + bgActor->colHeader->numWaterBoxes;
@@ -4507,7 +4507,7 @@ s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, 
     colHeader = colCtx->colHeader;
 
     //! @bug: check skips testing BgActor waterboxes
-    if (colHeader->numWaterBoxes == 0 || colHeader->waterBoxes == NULL) {
+    if ((colHeader->numWaterBoxes == 0) || (colHeader->waterBoxes == NULL)) {
         *outWaterBox = NULL;
         return -1;
     }
@@ -4516,7 +4516,7 @@ s32 WaterBox_GetSurface2(PlayState* play, CollisionContext* colCtx, Vec3f* pos, 
         waterBox = &colHeader->waterBoxes[i];
 
         room = WATERBOX_ROOM(waterBox->properties);
-        if (!(room == play->roomCtx.curRoom.num || room == 0x3F)) {
+        if ((room != play->roomCtx.curRoom.num) && (room != 0x3F)) {
             continue;
         }
         if ((waterBox->properties & 0x80000)) {
