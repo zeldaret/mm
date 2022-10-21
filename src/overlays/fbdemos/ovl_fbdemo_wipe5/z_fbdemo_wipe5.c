@@ -82,7 +82,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
     s32 height = gScreenHeight;
     s32 sp50 = D_801FBB90;
     TransitionWipe5* this = THIS;
-    s32 alpha = ((1.0f - this->unk_0C) * 255.0f);
+    s32 alpha = (1.0f - this->unk_0C) * 255.0f;
 
     gDPPipeSync(gfx++);
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
