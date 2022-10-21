@@ -16,6 +16,35 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play);
 void EnOsn_Update(Actor* thisx, PlayState* play);
 void EnOsn_Draw(Actor* thisx, PlayState* play);
 
+typedef enum {
+    /*  0 */ OSN_ANIM_IDLE,
+    /*  1 */ OSN_ANIM_ARMS_OUT,
+    /*  2 */ OSN_ANIM_BOWING,
+    /*  3 */ OSN_ANIM_REMINISCE,
+    /*  4 */ OSN_ANIM_HANDS_CLASPED,
+    /*  5 */ OSN_ANIM_BELIEVE,
+    /*  6 */ OSN_ANIM_THINK,
+    /*  7 */ OSN_ANIM_SHAKE_HEAD,
+    /*  8 */ OSN_ANIM_ORGAN_TALK,
+    /*  9 */ OSN_ANIM_ORGAN_PLAY,
+    /* 10 */ OSN_ANIM_SHAKE,
+    /* 11 */ OSN_ANIM_CHOKE,
+    /* 12 */ OSN_ANIM_DESPAIR,
+    /* 13 */ OSN_ANIM_FAST_BOWS,
+    /* 14 */ OSN_ANIM_HAND_OUT,
+    /* 15 */ OSN_ANIM_LYING_DOWN_FACE_UP,
+    /* 16 */ OSN_ANIM_LYING_DOWN_FACE_DOWN,
+    /* 17 */ OSN_ANIM_MASK_LOOK_AT,
+    /* 18 */ OSN_ANIM_TURN_AROUND_START,
+    /* 19 */ OSN_ANIM_TURN_AROUND_LOOP,
+    /* 20 */ OSN_ANIM_WALK_AWAY,
+    /* 21 */ OSN_ANIM_MASK_LOOK_FROM_START,
+    /* 22 */ OSN_ANIM_MASK_LOOK_FROM_LOOP,
+    /* 23 */ OSN_ANIM_HAND_OUT_2,    // Exact same as OSN_ANIM_HAND_OUT
+    /* 24 */ OSN_ANIM_WALK_AWAY_END, // Only the last frame of OSN_ANIM_WALK_AWAY
+    /* 25 */ OSN_ANIM_MAX
+} OsnAnimation;
+
 ActorInit En_Osn_InitVars = {
     ACTOR_EN_OSN,
     ACTORCAT_NPC,
@@ -29,31 +58,31 @@ ActorInit En_Osn_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_009BB8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_00AC60, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_001614, 1.0f, 1.0f, 39.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_001034, 1.0f, 1.0f, 70.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_00AE9C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_003A1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_0055F8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_007220, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_0000C4, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_osn_Anim_0000C4, 0.0f, 1.0f, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_osn_Anim_006D48, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_001D6C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_osn_Anim_002634, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_008D80, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_osn_Anim_005D78, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_osn_Anim_006564, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_00A444, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_osn_Anim_008D80, 0.0f, 77.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanArmsOutAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanBowingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanReminisceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanHandsClaspedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanBelieveAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanThinkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanShakeHeadAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmOrganTalkAnim, 1.0f, 1.0f, 39.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanOrganPlayAnim, 1.0f, 1.0f, 70.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanShakeAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanChokeAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanDespairAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanFastBowsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanHandOutAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanLyingDownAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanLyingDownAnim, 0.0f, 1.0f, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanMaskLookAtAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanTurnStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanTurnLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanWalkAwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanMaskLookFromStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gHappyMaskSalesmanMaskLookFromLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanHandOutAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanWalkAwayAnim, 0.0f, 77.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -201,9 +230,9 @@ void func_80AD0998(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animIndex == 0x12) && (curFrame == lastFrame)) {
-        this->animIndex = 0x13;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0x13);
+    if ((this->animIndex == OSN_ANIM_TURN_AROUND_START) && (curFrame == lastFrame)) {
+        this->animIndex = OSN_ANIM_TURN_AROUND_LOOP;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_TURN_AROUND_LOOP);
     }
 }
 
@@ -211,9 +240,9 @@ void func_80AD0A24(EnOsn* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animIndex == 0x15) && (curFrame == lastFrame)) {
-        this->animIndex = 0x16;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0x16);
+    if ((this->animIndex == OSN_ANIM_MASK_LOOK_FROM_START) && (curFrame == lastFrame)) {
+        this->animIndex = OSN_ANIM_MASK_LOOK_FROM_LOOP;
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_MASK_LOOK_FROM_LOOP);
     }
 }
 
@@ -697,113 +726,119 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
 
     if (Cutscene_CheckActorAction(play, 130)) {
         actionIndex = Cutscene_GetActorActionIndex(play, 130);
-        this->unk_1F0 = false;
+        this->shouldRotateHead = false;
         if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
             this->csAction = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->animIndex = 2;
+                    this->animIndex = OSN_ANIM_BOWING;
                     break;
 
                 case 2:
-                    this->animIndex = 1;
+                    this->animIndex = OSN_ANIM_ARMS_OUT;
                     break;
 
                 case 3:
-                    this->animIndex = 7;
+                    this->animIndex = OSN_ANIM_SHAKE_HEAD;
                     break;
 
                 case 4:
-                    this->animIndex = 3;
+                    this->animIndex = OSN_ANIM_REMINISCE;
                     break;
 
                 case 5:
-                    this->animIndex = 6;
+                    this->animIndex = OSN_ANIM_THINK;
                     break;
 
                 case 6:
-                    this->animIndex = 5;
+                    this->animIndex = OSN_ANIM_BELIEVE;
                     break;
 
                 case 7:
-                    this->animIndex = 4;
+                    this->animIndex = OSN_ANIM_HANDS_CLASPED;
                     break;
 
                 case 8:
-                    this->animIndex = 0;
+                    this->animIndex = OSN_ANIM_IDLE;
                     break;
+
                 case 10:
-                    this->animIndex = 8;
+                    this->animIndex = OSN_ANIM_ORGAN_TALK;
                     break;
 
                 case 11:
-                    this->animIndex = 9;
+                    this->animIndex = OSN_ANIM_ORGAN_PLAY;
                     break;
+
                 case 13:
-                    this->animIndex = 0xA;
+                    this->animIndex = OSN_ANIM_SHAKE;
                     break;
 
                 case 15:
-                    this->animIndex = 0xB;
+                    this->animIndex = OSN_ANIM_CHOKE;
                     break;
 
                 case 16:
-                    this->animIndex = 0xC;
+                    this->animIndex = OSN_ANIM_DESPAIR;
                     break;
 
                 case 17:
-                    this->animIndex = 0xD;
+                    this->animIndex = OSN_ANIM_FAST_BOWS;
                     break;
 
                 case 18:
-                    this->animIndex = 0xE;
+                    this->animIndex = OSN_ANIM_HAND_OUT;
                     break;
 
                 case 19:
-                    this->animIndex = 0x11;
+                    this->animIndex = OSN_ANIM_MASK_LOOK_AT;
                     break;
 
                 case 20:
-                    this->animIndex = 0x12;
+                    this->animIndex = OSN_ANIM_TURN_AROUND_START;
                     break;
 
                 case 21:
-                    this->animIndex = 0x14;
+                    this->animIndex = OSN_ANIM_WALK_AWAY;
                     break;
 
                 case 22:
-                    this->animIndex = 0x15;
+                    this->animIndex = OSN_ANIM_MASK_LOOK_FROM_START;
                     break;
 
                 case 23:
-                    this->animIndex = 0x17;
+                    this->animIndex = OSN_ANIM_HAND_OUT_2;
                     break;
 
                 case 24:
-                    this->animIndex = 0x18;
+                    this->animIndex = OSN_ANIM_WALK_AWAY_END;
                     break;
 
                 default:
-                    this->animIndex = 0;
+                    this->animIndex = OSN_ANIM_IDLE;
                     break;
             }
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
 
-        if ((this->animIndex == 5) && (play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 0xB) &&
-            (play->csCtx.frames == 400)) {
+        if ((this->animIndex == OSN_ANIM_BELIEVE) && (play->sceneId == SCENE_SPOT00) &&
+            (gSaveContext.sceneLayer == 0xB) && (play->csCtx.frames == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
-        if (this->animIndex == 0x12) {
+
+        if (this->animIndex == OSN_ANIM_TURN_AROUND_START) {
             func_80AD0998(this);
         }
-        if (this->animIndex == 0x15) {
+
+        if (this->animIndex == OSN_ANIM_MASK_LOOK_FROM_START) {
             func_80AD0A24(this);
         }
-        if (this->animIndex == 0x18) {
+
+        if (this->animIndex == OSN_ANIM_WALK_AWAY_END) {
             func_80AD0AB0(this);
         }
-        if ((this->animIndex == 0x14) &&
+
+        if ((this->animIndex == OSN_ANIM_WALK_AWAY) &&
             (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
@@ -811,7 +846,7 @@ void func_80AD16A8(EnOsn* this, PlayState* play) {
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
     } else {
-        this->unk_1F0 = true;
+        this->shouldRotateHead = true;
         this->csAction = 0x63;
         func_80AD144C(this, play);
     }
@@ -841,7 +876,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_osn_Skel_0202F0, &object_osn_Anim_0201BC, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gHappyMaskSalesmanSkel, &gHappyMaskSalesmanIdleAnim, NULL, NULL, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -854,7 +889,7 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
                 (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
                 this->unk_1EA |= 1;
             }
-            this->unk_1F0 = true;
+            this->shouldRotateHead = true;
             if (play->sceneId == SCENE_INSIDETOWER) {
                 if ((gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 2)) ||
                     (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 6))) {
@@ -871,13 +906,13 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 1:
-            this->animIndex = 0xF;
+            this->animIndex = OSN_ANIM_LYING_DOWN_FACE_UP;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnOsn_DoNothing;
             break;
 
         case 2:
-            this->animIndex = 0x10;
+            this->animIndex = OSN_ANIM_LYING_DOWN_FACE_DOWN;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnOsn_DoNothing;
             break;
@@ -921,17 +956,18 @@ void EnOsn_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_TrackPlayer(play, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->torsoRot, this->actor.focus.pos);
 }
 
 s32 EnOsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
     EnOsn* this = (EnOsn*)thisx;
 
-    if (this->unk_1F0 && (limbIndex == 11)) {
-        Matrix_RotateXS(this->unk_1D8.y, MTXMODE_APPLY);
+    if (this->shouldRotateHead && (limbIndex == HAPPY_MASK_SALESMAN_LIMB_HEAD)) {
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
     }
-    if (((this->animIndex == 9) || (this->animIndex == 8)) && (limbIndex == 10)) {
+    if (((this->animIndex == OSN_ANIM_ORGAN_PLAY) || (this->animIndex == OSN_ANIM_ORGAN_TALK)) &&
+        (limbIndex == HAPPY_MASK_SALESMAN_LIMB_BACKPACK)) {
         *dList = NULL;
     }
     return false;
@@ -939,31 +975,33 @@ s32 EnOsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
 void EnOsn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnOsn* this = (EnOsn*)thisx;
-    Vec3f sp30 = { 0.0f, 0.0f, 0.0f };
-    Vec3s sp28 = { 0x9920, -0x384, -0x320 };
+    Vec3f headOffset = { 0.0f, 0.0f, 0.0f };
+    Vec3s leftHandRot = { 0x9920, -0x384, -0x320 };
 
-    if (limbIndex == 11) {
-        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
+    if (limbIndex == HAPPY_MASK_SALESMAN_LIMB_HEAD) {
+        Matrix_MultVec3f(&headOffset, &this->actor.focus.pos);
     }
-    if (((this->animIndex == 17) || (this->animIndex == 21) || (this->animIndex == 22)) && (limbIndex == 6)) {
+    if (((this->animIndex == OSN_ANIM_MASK_LOOK_AT) || (this->animIndex == OSN_ANIM_MASK_LOOK_FROM_START) ||
+         (this->animIndex == OSN_ANIM_MASK_LOOK_FROM_LOOP)) &&
+        (limbIndex == HAPPY_MASK_SALESMAN_LIMB_LEFT_HAND)) {
         Matrix_Push();
         Matrix_Translate(-400.0f, 1100.0f, -200.0f, MTXMODE_APPLY);
-        Matrix_RotateXS(sp28.x, MTXMODE_APPLY);
-        Matrix_RotateYS(sp28.y, MTXMODE_APPLY);
-        Matrix_RotateZS(sp28.z, MTXMODE_APPLY);
+        Matrix_RotateXS(leftHandRot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(leftHandRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(leftHandRot.z, MTXMODE_APPLY);
 
         gSPMatrix((*gfx)++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, &object_osn_DL_0192A0);
+        gSPDisplayList((*gfx)++, &gHappyMaskSalesmanMajorasMaskDL);
         Matrix_Pop();
     }
 }
 
 void EnOsn_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80AD2588 = object_osn_Tex_0166F8;
-    static TexturePtr D_80AD258C = object_osn_Tex_016EF8;
-    static TexturePtr D_80AD2590 = object_osn_Tex_0176F8;
-    static TexturePtr D_80AD2594 = object_osn_Tex_017EF8;
-    static TexturePtr D_80AD2598 = object_osn_Tex_0182F8;
+    static TexturePtr sEyeClosedHappyTex = gHappyMaskSalesmanEyeClosedHappyTex;
+    static TexturePtr sEyeOpenTex = gHappyMaskSalesmanEyeOpenTex;
+    static TexturePtr sEyeClosedAngryTex = gHappyMaskSalesmanEyeClosedAngryTex;
+    static TexturePtr sSmileTex = gHappyMaskSalesmanSmileTex;
+    static TexturePtr sFrownTex = gHappyMaskSalesmanFrownTex;
     s32 pad;
     EnOsn* this = THIS;
 
@@ -971,16 +1009,17 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
 
     if (this->alpha == 255) {
         func_8012C28C(play->state.gfxCtx);
-        if ((this->animIndex == 0xB) || (this->animIndex == 0xC) || (this->animIndex == 0x17) ||
-            (play->msgCtx.currentTextId == 0x1FCA)) {
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD258C));
-            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
-        } else if ((this->animIndex == 7) || (this->animIndex == 3) || (this->animIndex == 0xD)) {
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2590));
-            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2598));
+        if ((this->animIndex == OSN_ANIM_CHOKE) || (this->animIndex == OSN_ANIM_DESPAIR) ||
+            (this->animIndex == OSN_ANIM_HAND_OUT_2) || (play->msgCtx.currentTextId == 0x1FCA)) {
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeOpenTex));
+            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sSmileTex));
+        } else if ((this->animIndex == OSN_ANIM_SHAKE_HEAD) || (this->animIndex == OSN_ANIM_REMINISCE) ||
+                   (this->animIndex == OSN_ANIM_FAST_BOWS)) {
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeClosedAngryTex));
+            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sFrownTex));
         } else {
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
-            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeClosedHappyTex));
+            gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sSmileTex));
         }
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
         Scene_SetRenderModeXlu(play, 0, 1);
@@ -989,8 +1028,8 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
                                EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
         func_8012C2DC(play->state.gfxCtx);
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD2588));
-        gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeClosedHappyTex));
+        gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(sSmileTex));
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
         Scene_SetRenderModeXlu(play, 1, 2);
         POLY_XLU_DISP =
