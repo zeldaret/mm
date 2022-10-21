@@ -30,13 +30,13 @@ void TransitionWipe5_Start(void* thisx) {
     this->isDone = false;
     switch (this->unk_12) {
         case 0:
-            this->unk_8 = 0.02f;
+            this->unk_08 = 0.02f;
             break;
         case 1:
-            this->unk_8 = 0.05f;
+            this->unk_08 = 0.05f;
             break;
         default:
-            this->unk_8 = 0.2f;
+            this->unk_08 = 0.2f;
             break;
     }
     switch (this->unk_11) {
@@ -68,9 +68,9 @@ void TransitionWipe5_Update(void* thisx, s32 updateRate) {
     if (this->unk_10 == 0) {
         this->isDone = true;
     } else {
-        this->unk_C += (this->unk_8 * 3.0f) / updateRate;
-        if (this->unk_C >= 1.0f) {
-            this->unk_C = 1.0f;
+        this->unk_0C += (this->unk_08 * 3.0f) / updateRate;
+        if (this->unk_0C >= 1.0f) {
+            this->unk_0C = 1.0f;
             this->isDone = true;
         }
     }
@@ -82,7 +82,7 @@ void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
     s32 height = gScreenHeight;
     s32 sp50 = D_801FBB90;
     TransitionWipe5* this = THIS;
-    s32 alpha = ((1.0f - this->unk_C) * 255.0f);
+    s32 alpha = ((1.0f - this->unk_0C) * 255.0f);
 
     gDPPipeSync(gfx++);
     gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
