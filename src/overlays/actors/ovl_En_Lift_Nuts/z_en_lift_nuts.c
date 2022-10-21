@@ -496,6 +496,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 Message_StartTextbox(play, 0x27E2, &this->actor);
                 this->textId = 0x27E2;
                 break;
+
             case 0x27E3:
             case 0x27E4:
                 func_80AE9FC8(this);
