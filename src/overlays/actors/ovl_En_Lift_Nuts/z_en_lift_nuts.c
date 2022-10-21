@@ -83,7 +83,7 @@ static AnimationInfo sAnimations[] = {
     { &object_dnt_Anim_0029E8, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
-static Gfx* sDLists[] = {
+Gfx* D_80AEBF18[] = {
     object_dnt_DL_008290,
     object_dnt_DL_001350,
     object_dnt_DL_001420,
@@ -672,7 +672,7 @@ void func_80AEAF8C(EnLiftNuts* this) {
 void func_80AEAFA0(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 dist;
-    f32 fv0;
+    f32 temp_fv0;
     s16 yaw;
     s16 sp28;
     s16 yawDiff;
@@ -688,15 +688,15 @@ void func_80AEAFA0(EnLiftNuts* this, PlayState* play) {
         }
     }
     if (dist < 5.0f) {
-        fv0 = 10.0f;
+        temp_fv0 = 10.0f;
     } else if (dist < 30.0f) {
-        fv0 = 40.0f;
+        temp_fv0 = 40.0f;
     } else {
-        fv0 = 80.0f;
+        temp_fv0 = 80.0f;
     }
 
     play->actorCtx.unk268 = 1;
-    func_800B6F20(play, &play->actorCtx.unk_26C, fv0, yaw);
+    func_800B6F20(play, &play->actorCtx.unk_26C, temp_fv0, yaw);
     if (dist < 5.0f) {
         func_80AEA0B4(this);
     }
