@@ -9,15 +9,15 @@
         <!-- Odolwa Limb DisplayLists -->
         <DList Name="gOdolwaPelvisDL" Offset="0x5E80" />
         <DList Name="gOdolwaHeadDL" Offset="0x5F98" />
-        <DList Name="gOdolwaCenterHairTipDL" Offset="0x61E8" />
-        <DList Name="gOdolwaCenterHairMiddleDL" Offset="0x62A8" />
-        <DList Name="gOdolwaCenterHairBaseDL" Offset="0x6368" />
-        <DList Name="gOdolwaLeftHairTipDL" Offset="0x6408" />
-        <DList Name="gOdolwaLeftHairMiddleDL" Offset="0x64C8" />
-        <DList Name="gOdolwaLeftHairBaseDL" Offset="0x6588" />
-        <DList Name="gOdolwaRightHairTipDL" Offset="0x6628" />
-        <DList Name="gOdolwaRightHairMiddleDL" Offset="0x66E8" />
-        <DList Name="gOdolwaRightHairBaseDL" Offset="0x67A8" />
+        <DList Name="gOdolwaCenterPlumeTipDL" Offset="0x61E8" />
+        <DList Name="gOdolwaCenterPlumeMiddleDL" Offset="0x62A8" />
+        <DList Name="gOdolwaCenterPlumeBaseDL" Offset="0x6368" />
+        <DList Name="gOdolwaLeftPlumeTipDL" Offset="0x6408" />
+        <DList Name="gOdolwaLeftPlumeMiddleDL" Offset="0x64C8" />
+        <DList Name="gOdolwaLeftPlumeBaseDL" Offset="0x6588" />
+        <DList Name="gOdolwaRightPlumeTipDL" Offset="0x6628" />
+        <DList Name="gOdolwaRightPlumeMiddleDL" Offset="0x66E8" />
+        <DList Name="gOdolwaRightPlumeBaseDL" Offset="0x67A8" />
         <DList Name="gOdolwaLeftEarringDL" Offset="0x6848" />
         <DList Name="gOdolwaRightEarringDL" Offset="0x68F8" />
         <DList Name="gOdolwaSwordDL" Offset="0x69A8" />
@@ -50,7 +50,7 @@
         <Texture Name="gOdolwaSkinTex" OutName="odolwa_skin" Format="ci4" Width="64" Height="64" Offset="0x9738" />
         <Texture Name="gOdolwaEarBangleAndShieldTex" OutName="odolwa_ear_bangle_and_shield" Format="ci4" Width="64" Height="64" Offset="0x9F38" />
         <Texture Name="gOdolwaEarringTex" OutName="odolwa_earring" Format="rgba16" Width="16" Height="16" Offset="0xA738" />
-        <Texture Name="gOdolwaHairTex" OutName="odolwa_hair" Format="rgba16" Width="16" Height="16" Offset="0xA938" />
+        <Texture Name="gOdolwaPlumeTex" OutName="odolwa_plume" Format="rgba16" Width="16" Height="16" Offset="0xA938" />
         <Texture Name="gOdolwaClothTex" OutName="odolwa_cloth" Format="ci4" Width="64" Height="64" Offset="0xAB38" />
         <Texture Name="gOdolwaTorsoTex" OutName="odolwa_torso" Format="ci4" Width="64" Height="64" Offset="0xB338" />
         <Texture Name="gOdolwaSwordBladeTex" OutName="odolwa_sword_blade" Format="rgba16" Width="16" Height="16" Offset="0xBB38" />
@@ -121,27 +121,27 @@
         <Limb Name="gOdolwaRightEarringLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_EARRING" Offset="0xEF04" />
         <Limb Name="gOdolwaLeftEarringRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_EARRING_ROOT" Offset="0xEF10" />
         <Limb Name="gOdolwaLeftEarringLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_EARRING" Offset="0xEF1C" />
-        <Limb Name="gOdolwaRightHairRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_HAIR_ROOT" Offset="0xEF28" />
-        <Limb Name="gOdolwaRightHairBaseLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_HAIR_BASE" Offset="0xEF34" />
-        <Limb Name="gOdolwaRightLowerHairRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_LOWER_HAIR_ROOT" Offset="0xEF40" />
-        <Limb Name="gOdolwaRightHairMiddleLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_HAIR_MIDDLE" Offset="0xEF4C" />
-        <Limb Name="gOdolwaRightHairTipLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_HAIR_TIP" Offset="0xEF58" />
-        <Limb Name="gOdolwaLeftHairRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_HAIR_ROOT" Offset="0xEF64" />
-        <Limb Name="gOdolwaLeftHairBaseLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_HAIR_BASE" Offset="0xEF70" />
-        <Limb Name="gOdolwaLeftLowerHairRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_LOWER_HAIR_ROOT" Offset="0xEF7C" />
-        <Limb Name="gOdolwaLeftHairMiddleLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_HAIR_MIDDLE" Offset="0xEF88" />
-        <Limb Name="gOdolwaLeftHairTipLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_HAIR_TIP" Offset="0xEF94" />
-        <Limb Name="gOdolwaCenterHairRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_HAIR_ROOT" Offset="0xEFA0" />
-        <Limb Name="gOdolwaCenterHairBaseLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_HAIR_BASE" Offset="0xEFAC" />
-        <Limb Name="gOdolwaCenterLowerHairRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_LOWER_HAIR_ROOT" Offset="0xEFB8" />
-        <Limb Name="gOdolwaCenterHairMiddleLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_HAIR_MIDDLE" Offset="0xEFC4" />
-        <Limb Name="gOdolwaCenterHairTipLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_HAIR_TIP" Offset="0xEFD0" />
+        <Limb Name="gOdolwaRightPlumeRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_PLUME_ROOT" Offset="0xEF28" />
+        <Limb Name="gOdolwaRightPlumeBaseLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_PLUME_BASE" Offset="0xEF34" />
+        <Limb Name="gOdolwaRightLowerPlumeRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_LOWER_PLUME_ROOT" Offset="0xEF40" />
+        <Limb Name="gOdolwaRightPlumeMiddleLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_PLUME_MIDDLE" Offset="0xEF4C" />
+        <Limb Name="gOdolwaRightPlumeTipLimb" Type="Standard" EnumName="ODOLWA_LIMB_RIGHT_PLUME_TIP" Offset="0xEF58" />
+        <Limb Name="gOdolwaLeftPlumeRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_PLUME_ROOT" Offset="0xEF64" />
+        <Limb Name="gOdolwaLeftPlumeBaseLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_PLUME_BASE" Offset="0xEF70" />
+        <Limb Name="gOdolwaLeftLowerPlumeRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_LOWER_PLUME_ROOT" Offset="0xEF7C" />
+        <Limb Name="gOdolwaLeftPlumeMiddleLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_PLUME_MIDDLE" Offset="0xEF88" />
+        <Limb Name="gOdolwaLeftPlumeTipLimb" Type="Standard" EnumName="ODOLWA_LIMB_LEFT_PLUME_TIP" Offset="0xEF94" />
+        <Limb Name="gOdolwaCenterPlumeRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_PLUME_ROOT" Offset="0xEFA0" />
+        <Limb Name="gOdolwaCenterPlumeBaseLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_PLUME_BASE" Offset="0xEFAC" />
+        <Limb Name="gOdolwaCenterLowerPlumeRootLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_LOWER_PLUME_ROOT" Offset="0xEFB8" />
+        <Limb Name="gOdolwaCenterPlumeMiddleLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_PLUME_MIDDLE" Offset="0xEFC4" />
+        <Limb Name="gOdolwaCenterPlumeTipLimb" Type="Standard" EnumName="ODOLWA_LIMB_CENTER_PLUME_TIP" Offset="0xEFD0" />
 
         <!-- Odolwa Skeleton -->
         <Skeleton Name="gOdolwaSkel" Type="Flex" LimbType="Standard" LimbNone="ODOLWA_LIMB_NONE" LimbMax="ODOLWA_LIMB_MAX" EnumName="OdolwaLimb" Offset="0xF0A8" />
 
         <!-- Odolwa Animations -->
-        <Animation Name="gOdolwaGlitchyFlailAnim" Offset="0xF918" /> <!-- Unused and glitchy. Original name might be "jmp_crym" -->
+        <Animation Name="gOdolwaClimbAnim" Offset="0xF918" /> <!-- Unused and glitchy. Original name might be "jmp_crym" -->
         <Animation Name="gOdolwaDamageStartAnim" Offset="0xFDEC" /> <!-- Original name is "jmp_dam02" -->
         <Animation Name="gOdolwaShieldGuardAnim" Offset="0xFF94" /> <!-- Original name is "jmp_def" -->
         <Animation Name="gOdolwaSwordGuardAnim" Offset="0x10150" /> <!-- Original name is "jmp_def02" -->
@@ -178,18 +178,18 @@
         <!-- Odolwa Bug Limb DisplayLists -->
         <DList Name="gOdolwaBugLightBodyDL" Offset="0x21230" />
         <DList Name="gOdolwaBugDarkBodyDL" Offset="0x213A8" />
-        <DList Name="gOdolwaBugFrontLeftLegUpperDL" Offset="0x21518" />
-        <DList Name="gOdolwaBugFrontLeftLegLowerDL" Offset="0x21538" />
-        <DList Name="gOdolwaBugBackRightLegUpperDL" Offset="0x21570" />
-        <DList Name="gOdolwaBugBackRightLegLowerDL" Offset="0x21590" />
-        <DList Name="gOdolwaBugBackLeftLegUpperDL" Offset="0x215C0" />
-        <DList Name="gOdolwaBugBackLeftLegLowerDL" Offset="0x215E0" />
-        <DList Name="gOdolwaBugMiddleRightLegUpperDL" Offset="0x21608" />
-        <DList Name="gOdolwaBugMiddleRightLegLowerDL" Offset="0x21628" />
-        <DList Name="gOdolwaBugMiddleLeftLegUpperDL" Offset="0x21658" />
-        <DList Name="gOdolwaBugMiddleLeftLegLowerDL" Offset="0x21678" />
-        <DList Name="gOdolwaBugFrontRightLegUpperDL" Offset="0x216A8" />
-        <DList Name="gOdolwaBugFrontRightLegLowerDL" Offset="0x216C8" />
+        <DList Name="gOdolwaBugFrontLeftUpperLegDL" Offset="0x21518" />
+        <DList Name="gOdolwaBugFrontLeftLowerLegDL" Offset="0x21538" />
+        <DList Name="gOdolwaBugBackRightUpperLegDL" Offset="0x21570" />
+        <DList Name="gOdolwaBugBackRightLowerLegDL" Offset="0x21590" />
+        <DList Name="gOdolwaBugBackLeftUpperLegDL" Offset="0x215C0" />
+        <DList Name="gOdolwaBugBackLeftLowerLegDL" Offset="0x215E0" />
+        <DList Name="gOdolwaBugMiddleRightUpperLegDL" Offset="0x21608" />
+        <DList Name="gOdolwaBugMiddleRightLowerLegDL" Offset="0x21628" />
+        <DList Name="gOdolwaBugMiddleLeftUpperLegDL" Offset="0x21658" />
+        <DList Name="gOdolwaBugMiddleLeftLowerLegDL" Offset="0x21678" />
+        <DList Name="gOdolwaBugFrontRightUpperLegDL" Offset="0x216A8" />
+        <DList Name="gOdolwaBugFrontRightLowerLegDL" Offset="0x216C8" />
 
         <!-- Odolwa Bug Textures -->
         <Texture Name="gOdolwaBugUndersideTLUT" OutName="odolwa_bug_underside_tlut" Format="rgba16" Width="4" Height="4" Offset="0x21700" />
@@ -205,23 +205,23 @@
         <Limb Name="gOdolwaBugRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_ROOT" Offset="0x22190" />
         <Limb Name="gOdolwaBugBodyLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BODY" Offset="0x2219C" />
         <Limb Name="gOdolwaBugFrontRightLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_RIGHT_LEG_ROOT" Offset="0x221A8" />
-        <Limb Name="gOdolwaBugFrontRightLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_RIGHT_LEG_UPPER" Offset="0x221B4" />
-        <Limb Name="gOdolwaBugFrontRightLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_RIGHT_LEG_LOWER" Offset="0x221C0" />
+        <Limb Name="gOdolwaBugFrontRightUpperLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_RIGHT_UPPER_LEG" Offset="0x221B4" />
+        <Limb Name="gOdolwaBugFrontRightLowerLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_RIGHT_LOWER_LEG" Offset="0x221C0" />
         <Limb Name="gOdolwaBugMiddleLeftLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_LEFT_LEG_ROOT" Offset="0x221CC" />
-        <Limb Name="gOdolwaBugMiddleLeftLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_LEFT_LEG_UPPER" Offset="0x221D8" />
-        <Limb Name="gOdolwaBugMiddleLeftLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_LEFT_LEG_LOWER" Offset="0x221E4" />
+        <Limb Name="gOdolwaBugMiddleLeftUpperLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_LEFT_UPPER_LEG" Offset="0x221D8" />
+        <Limb Name="gOdolwaBugMiddleLeftLowerLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_LEFT_LOWER_LEG" Offset="0x221E4" />
         <Limb Name="gOdolwaBugMiddleRightLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_RIGHT_LEG_ROOT" Offset="0x221F0" />
-        <Limb Name="gOdolwaBugMiddleRightLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_RIGHT_LEG_UPPER" Offset="0x221FC" />
-        <Limb Name="gOdolwaBugMiddleRightLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_RIGHT_LEG_LOWER" Offset="0x22208" />
+        <Limb Name="gOdolwaBugMiddleRightUpperLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_RIGHT_UPPER_LEG" Offset="0x221FC" />
+        <Limb Name="gOdolwaBugMiddleRightLowerLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_MIDDLE_RIGHT_LOWER_LEG" Offset="0x22208" />
         <Limb Name="gOdolwaBugBackLeftLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_LEFT_LEG_ROOT" Offset="0x22214" />
-        <Limb Name="gOdolwaBugBackLeftLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_LEFT_LEG_UPPER" Offset="0x22220" />
-        <Limb Name="gOdolwaBugBackLeftLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_LEFT_LEG_LOWER" Offset="0x2222C" />
+        <Limb Name="gOdolwaBugBackLeftUpperLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_LEFT_UPPER_LEG" Offset="0x22220" />
+        <Limb Name="gOdolwaBugBackLeftLowerLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_LEFT_LOWER_LEG" Offset="0x2222C" />
         <Limb Name="gOdolwaBugBackRightLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_RIGHT_LEG_ROOT" Offset="0x22238" />
-        <Limb Name="gOdolwaBugBackRightLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_RIGHT_LEG_UPPER" Offset="0x22244" />
-        <Limb Name="gOdolwaBugBackRightLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_RIGHT_LEG_LOWER" Offset="0x22250" />
+        <Limb Name="gOdolwaBugBackRightUpperLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_RIGHT_UPPER_LEG" Offset="0x22244" />
+        <Limb Name="gOdolwaBugBackRightLowerLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_BACK_RIGHT_LOWER_LEG" Offset="0x22250" />
         <Limb Name="gOdolwaBugFrontLeftLegRootLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LEG_ROOT" Offset="0x2225C" />
-        <Limb Name="gOdolwaBugFrontLeftLegUpperLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LEG_UPPER" Offset="0x22268" />
-        <Limb Name="gOdolwaBugFrontLeftLegLowerLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LEG_LOWER" Offset="0x22274" />
+        <Limb Name="gOdolwaBugFrontLeftUpperLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_UPPER_LEG" Offset="0x22268" />
+        <Limb Name="gOdolwaBugFrontLeftLowerLegLimb" Type="Standard" EnumName="ODOLWA_BUG_LIMB_FRONT_LEFT_LOWER_LEG" Offset="0x22274" />
 
         <!-- Odolwa Bug Skeleton -->
         <Skeleton Name="gOdolwaBugSkel" Type="Flex" LimbType="Standard" LimbNone="ODOLWA_BUG_LIMB_NONE" LimbMax="ODOLWA_BUG_LIMB_MAX" EnumName="OdolwaBugLimb" Offset="0x222D0" />
