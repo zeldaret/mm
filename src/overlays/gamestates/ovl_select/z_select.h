@@ -5,12 +5,12 @@
 
 struct MapSelectState;
 
-typedef void (*Select_LoadFunc)(struct MapSelectState*, u32, s32);
+typedef void (*SelectLoadFunc)(struct MapSelectState*, u32, s32);
 
 typedef struct {
     /* 0x00 */ char* name;
-    /* 0x04 */ Select_LoadFunc loadFunc;
-    /* 0x08 */ s32 entranceIndex;
+    /* 0x04 */ SelectLoadFunc loadFunc;
+    /* 0x08 */ s32 entrance;
 } SceneSelectEntry; // size = 0xC
 
 typedef struct MapSelectState {

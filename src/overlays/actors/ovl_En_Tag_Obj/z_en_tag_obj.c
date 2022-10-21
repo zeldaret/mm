@@ -1,7 +1,7 @@
 /*
  * File: z_en_tag_obj.c
  * Overlay: ovl_En_Tag_Obj
- * Description:
+ * Description: Unused Seahorse Spawner
  */
 
 #include "z_en_tag_obj.h"
@@ -34,7 +34,7 @@ static ColliderCylinderInit sUnusedColliderInit = {
     { 20, 30, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Tag_Obj_InitVars = {
+ActorInit En_Tag_Obj_InitVars = {
     ACTOR_EN_TAG_OBJ,
     ACTORCAT_PROP,
     FLAGS,

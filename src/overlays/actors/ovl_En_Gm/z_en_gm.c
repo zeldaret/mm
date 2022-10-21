@@ -155,7 +155,7 @@ static s32 D_80951C2C[] = { 0x0E295A2D, 0x000A0C10 };
 
 static s32 D_80951C34[] = { 0x0E29622D, 0x000A0C10 };
 
-const ActorInit En_Gm_InitVars = {
+ActorInit En_Gm_InitVars = {
     ACTOR_EN_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -209,7 +209,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS D_80951CC0[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_in2_Anim_009CDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_in2_Anim_00A5E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -317,7 +317,7 @@ s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
     if (phi_v1) {
         if (tmp >= 0) {
             this->unk_3E8 = arg2;
-            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80951CC0, arg2);
+            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
             this->unk_3A8 = this->skelAnime.playSpeed;
         }
     }
@@ -328,8 +328,8 @@ s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
 s32 func_8094E0F8(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_260 != play->roomCtx.currRoom.num) && (play->roomCtx.unk31 == 0)) {
-        this->unk_260 = play->roomCtx.currRoom.num;
+    if ((this->unk_260 != play->roomCtx.curRoom.num) && (play->roomCtx.unk31 == 0)) {
+        this->unk_260 = play->roomCtx.curRoom.num;
         this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, play);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
@@ -762,7 +762,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (this->unk_3F8 == 0) {
-            if ((play->sceneNum == SCENE_MILK_BAR) && (gSaveContext.sceneSetupIndex == 2)) {
+            if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneLayer == 2)) {
                 func_8094E054(this, play, 0);
                 this->unk_258 = 255;
             }
@@ -771,7 +771,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
         }
         ret = true;
     } else if (this->unk_3F8 != 0) {
-        if (play->sceneNum == SCENE_MILK_BAR) {
+        if (play->sceneId == SCENE_MILK_BAR) {
             this->unk_400 = 0;
         }
         this->unk_3F8 = 0;
@@ -892,7 +892,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
     Actor* al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     Actor* toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
 
-    if (player->stateFlags1 & 0x440) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_3A4 |= 0x400;
         if (this->unk_3A6 != sp32) {
             switch (sp32) {
@@ -963,7 +963,8 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         this->unk_18C(this, play);
     }
 
-    if ((this->unk_3E8 == 6) && !(play->actorCtx.unk5 & 0x20) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
+    if ((this->unk_3E8 == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
+        Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
     }
 
@@ -1411,7 +1412,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
             toto = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_TOTO);
             if ((al != NULL) && (al->update != NULL) && (toto != NULL) && (toto->update != NULL) &&
-                !(player->stateFlags1 & 0x40)) {
+                !(player->stateFlags1 & PLAYER_STATE1_40)) {
                 if (DECR(this->unk_3B8) == 0) {
                     if (al == this->unk_268) {
                         this->unk_268 = toto;
@@ -1664,7 +1665,7 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
     EnGm* this = THIS;
 
     if (func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1710,7 +1711,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
             func_8094DFF8(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, EXCH_ITEM_NONE, this->unk_3A4 & 7);
+            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_AP_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);

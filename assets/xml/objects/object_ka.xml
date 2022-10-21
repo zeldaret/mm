@@ -58,7 +58,7 @@
         <Limb Name="object_ka_Standardlimb_006520" Type="Standard" EnumName="OBJECT_KA_LIMB_19" Offset="0x6520" />
         <Limb Name="object_ka_Standardlimb_00652C" Type="Standard" EnumName="OBJECT_KA_LIMB_1A" Offset="0x652C" />
         <Limb Name="object_ka_Standardlimb_006538" Type="Standard" EnumName="OBJECT_KA_LIMB_1B" Offset="0x6538" />
-        <Skeleton Name="object_ka_Skel_0065B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KA_LIMB_NONE" LimbMax="OBJECT_KA_LIMB_MAX" EnumName="object_ka_Limbs" Offset="0x65B0" />
+        <Skeleton Name="object_ka_Skel_0065B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KA_LIMB_NONE" LimbMax="OBJECT_KA_LIMB_MAX" EnumName="ObjectKaLimb" Offset="0x65B0" />
         <Animation Name="object_ka_Anim_00686C" Offset="0x686C" />
         <Animation Name="object_ka_Anim_006A6C" Offset="0x6A6C" />
         <Animation Name="object_ka_Anim_0071EC" Offset="0x71EC" />

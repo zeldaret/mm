@@ -67,7 +67,7 @@ typedef struct EnPp {
     /* 0x400 */ f32 attackRange;
     /* 0x404 */ s32 hasBeenDamaged;
     /* 0x408 */ Vec3f bodyPartsPos[11];
-    /* 0x48C */ s16 bodyPartsPosCount;
+    /* 0x48C */ s16 bodyPartsPosIndex;
     /* 0x490 */ f32 maskAccelY;
     /* 0x494 */ ColliderJntSph maskCollider;
     /* 0x4B4 */ ColliderJntSphElement maskColliderElements[1];
@@ -79,7 +79,5 @@ typedef struct EnPp {
     /* 0x5DC */ s32 animIndex;
     /* 0x5DC */ Vec3f damagedVelocity;
 } EnPp; // size = 0x5EC
-
-extern const ActorInit En_Pp_InitVars;
 
 #endif // Z_EN_PP_H

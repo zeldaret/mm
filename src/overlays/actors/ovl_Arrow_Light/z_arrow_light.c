@@ -21,7 +21,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
-const ActorInit Arrow_Light_InitVars = {
+ActorInit Arrow_Light_InitVars = {
     ACTOR_ARROW_LIGHT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -56,7 +56,7 @@ void ArrowLight_Init(Actor* thisx, PlayState* play) {
 }
 
 void ArrowLight_Destroy(Actor* thisx, PlayState* play) {
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
@@ -64,7 +64,7 @@ void ArrowLight_Charge(ArrowLight* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -129,7 +129,7 @@ void ArrowLight_Hit(ArrowLight* this, PlayState* play) {
     }
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 }
@@ -139,7 +139,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play) {
     s32 pad[2];
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -162,7 +162,7 @@ void ArrowLight_Fly(ArrowLight* this, PlayState* play) {
     }
     if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->alpha -= 25;
@@ -173,7 +173,7 @@ void ArrowLight_Update(Actor* thisx, PlayState* play) {
     ArrowLight* this = THIS;
 
     if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);

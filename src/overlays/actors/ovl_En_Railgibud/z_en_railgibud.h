@@ -33,7 +33,7 @@ typedef struct EnRailgibud {
     /* 0x3EE */ s16 shouldWalkForwardNextFrame; // Only used by the "main" Gibdo
     /* 0x3F0 */ union {
                     s16 grabState;
-                    s16 cutsceneAnimationIndex;
+                    s16 cutsceneAnimIndex;
                 };
     /* 0x3F2 */ union {
                     s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
@@ -54,7 +54,5 @@ typedef struct EnRailgibud {
     /* 0x404 */ u8 drawDmgEffType;
     /* 0x405 */ s8 unk_405; // related to player->unk_ADD
 } EnRailgibud; // size = 0x408
-
-extern const ActorInit En_Railgibud_InitVars;
 
 #endif // Z_EN_RAILGIBUD_H

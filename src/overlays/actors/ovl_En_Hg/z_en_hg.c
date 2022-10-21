@@ -30,7 +30,7 @@ void func_80BCF95C(EnHg* this, PlayState* play);
 s32 EnHg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Hg_InitVars = {
+ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
     FLAGS,
@@ -101,7 +101,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
@@ -126,7 +126,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
     if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
@@ -148,7 +148,7 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BCF354(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BCF398;
 }
 
@@ -158,15 +158,15 @@ void func_80BCF398(EnHg* this, PlayState* play) {
             !Cutscene_CheckActorAction(play, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 0) &&
-            (play->csCtx.frames == 20 || play->csCtx.frames == 60)) {
+        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
+            ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
 }
 
 void func_80BCF468(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80BCF4AC;
 }
 
@@ -175,7 +175,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_8000000) && Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -190,7 +190,7 @@ void func_80BCF4AC(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF5F0(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BCF634;
 }
 
@@ -203,7 +203,7 @@ void func_80BCF634(EnHg* this, PlayState* play) {
 }
 
 void func_80BCF68C(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80BCF6D0;
 }
 
@@ -277,51 +277,51 @@ void func_80BCF95C(EnHg* this, PlayState* play) {
             this->cutscenes[3] = play->csCtx.actorActions[actionIndex]->action;
             switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->currentAnimation = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                    this->animIndex = 0;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 3;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                    this->animIndex = 3;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 5;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+                    this->animIndex = 5;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
-                    this->currentAnimation = 7;
+                    this->animIndex = 7;
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
                     break;
                 case 5:
-                    this->currentAnimation = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                    this->animIndex = 1;
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
                 case 6:
                     gSaveContext.save.weekEventReg[75] |= 0x20;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
             }
         } else {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                switch (this->currentAnimation) {
+                switch (this->animIndex) {
                     case 3:
-                        this->currentAnimation = 4;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                        this->animIndex = 4;
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                         break;
                     case 5:
-                        this->currentAnimation = 6;
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+                        this->animIndex = 6;
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
                         break;
                 }
             }
         }
-        switch (this->currentAnimation) {
+        switch (this->animIndex) {
             case 3:
             case 4:
                 func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
@@ -348,7 +348,7 @@ void func_80BCFC0C(EnHg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->actor.colChkInfo.health == 1 && !(fabsf(this->actor.playerHeightRel) >= 80.0f)) {
-        if (player->stateFlags2 & 0x08000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             if (!D_80BD00C8) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }

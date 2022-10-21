@@ -16,6 +16,4 @@ typedef struct EnBsb {
     /* 0x02E0 */ char unk2E0[0xE78];
 } EnBsb; // size = 0x1158
 
-extern const ActorInit En_Bsb_InitVars;
-
 #endif // Z_EN_BSB_H

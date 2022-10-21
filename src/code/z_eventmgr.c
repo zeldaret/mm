@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64shrink_window.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_eventmgr/func_800F1460.s")
 

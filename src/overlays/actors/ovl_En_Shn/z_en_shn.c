@@ -51,7 +51,7 @@ static UNK_TYPE D_80AE70B8[] = {
 static UNK_TYPE D_80AE71C4[] = { 0x00374000, 0x1C2C09DB, 0x0C2F0000, 0x0C0F09DC, 0x0C0F09DD, 0x0C0F09DE, 0x0C0F09DF,
                                  0x0C113740, 0x102C09E0, 0x0C2F0000, 0x0C0F09E1, 0x0C0F09E2, 0x0C100000 };
 
-const ActorInit En_Shn_InitVars = {
+ActorInit En_Shn_InitVars = {
     ACTOR_EN_SHN,
     ACTORCAT_NPC,
     FLAGS,
@@ -68,8 +68,8 @@ void func_80AE6130(EnShn* this) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80AE615C(EnShn* this, s32 arg1) {
-    static AnimationInfoS sAnimations[] = {
+s32 func_80AE615C(EnShn* this, s32 animIndex) {
+    static AnimationInfoS sAnimationInfo[] = {
         { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
         { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
         { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
@@ -78,12 +78,12 @@ s32 func_80AE615C(EnShn* this, s32 arg1) {
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
 
-    if (arg1 != this->unk_2E8) {
+    if (animIndex != this->unk_2E8) {
         phi_v0 = 1;
     }
     if (phi_v0 != 0) {
-        this->unk_2E8 = arg1;
-        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        this->unk_2E8 = animIndex;
+        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->playSpeed = this->skelAnime.playSpeed;
     }
     return phi_v1;
@@ -201,7 +201,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_1DA != temp) {
             if ((this->unk_1D8 & 0x80) || (this->unk_1D8 & 0x100)) {
                 this->unk_1D8 |= 8;
@@ -260,7 +260,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
         case 6:
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(play, &this->actor, 7);
-            play->nextEntranceIndex = 0x8460;
+            play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_03;
@@ -293,10 +293,10 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
     if (this->unk_1D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_1D8 &= ~0x180;
-            if (player->exchangeItemId == EXCH_ITEM_PICTO_BOX) {
+            if (player->exchangeItemId == PLAYER_AP_PICTO_BOX) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
-            } else if (player->exchangeItemId != EXCH_ITEM_NONE) {
+            } else if (player->exchangeItemId != PLAYER_AP_NONE) {
                 this->unk_1D8 |= 0x100;
                 this->unk_2E4 = player->exchangeItemId;
             }
@@ -360,7 +360,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
-    if (gSaveContext.save.entranceIndex != 0xA820) {
+    if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 2)) {
         SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_2BE = 0;
     } else {
@@ -382,7 +382,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE6130(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
-    func_8013C964(&this->actor, play, 120.0f, 40.0f, EXCH_ITEM_NONE, this->unk_1D8 & 7);
+    func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_AP_NONE, this->unk_1D8 & 7);
 }
 
 s32 EnShn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

@@ -23,7 +23,7 @@ void func_80BE895C(EnBaisen* this, PlayState* play);
 void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
-const ActorInit En_Baisen_InitVars = {
+ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
     ACTORCAT_NPC,
     FLAGS,
@@ -57,9 +57,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
 
-static AnimationHeader* D_80BE8E4C[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
+static AnimationHeader* sAnimations[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 void EnBaisen_Init(Actor* thisx, PlayState* play) {
     EnBaisen* this = THIS;
@@ -73,7 +73,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
         this->unk290 = true;
         if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
             ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
@@ -81,7 +81,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.yShift = 0;
         if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
             ((gSaveContext.save.day == 3) && (gSaveContext.save.isNight))) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.targetMode = 6;
@@ -100,11 +100,11 @@ void EnBaisen_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnBaisen_ChangeAnimation(EnBaisen* this, s32 animIndex) {
+void EnBaisen_ChangeAnim(EnBaisen* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(D_80BE8E4C[animIndex]);
-    Animation_Change(&this->skelAnime, D_80BE8E4C[this->animIndex], 1.0f, 0.0f, this->frameCount,
-                     sAnimModes[this->animIndex], -10.0f);
+    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void func_80BE871C(EnBaisen* this) {
@@ -138,10 +138,10 @@ void func_80BE87B0(EnBaisen* this, PlayState* play) {
 void func_80BE87FC(EnBaisen* this) {
     if (this->paramCopy == 0) {
         this->textIdIndex = 2;
-        EnBaisen_ChangeAnimation(this, 2);
+        EnBaisen_ChangeAnim(this, 2);
         this->unk29E = this->actor.world.rot.y;
     } else {
-        EnBaisen_ChangeAnimation(this, 0);
+        EnBaisen_ChangeAnim(this, 0);
     }
 
     this->actor.textId = sTextIds[this->textIdIndex];
@@ -190,12 +190,12 @@ void func_80BE89D8(EnBaisen* this, PlayState* play) {
     if (&this->actor == this->unk2A4) {
         this->unk29E = this->actor.world.rot.y;
         if (this->animIndex == 0) {
-            EnBaisen_ChangeAnimation(this, 1);
+            EnBaisen_ChangeAnim(this, 1);
         }
     } else {
         this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
         if (this->animIndex != 0) {
-            EnBaisen_ChangeAnimation(this, 0);
+            EnBaisen_ChangeAnim(this, 0);
         }
     }
     if ((play->msgCtx.currentTextId == 0x2AC6) || (play->msgCtx.currentTextId == 0x2AC7) ||
@@ -212,14 +212,14 @@ void func_80BE8AAC(EnBaisen* this, PlayState* play) {
     if ((this->textIdIndex % 2) != 0) {
         this->unk29E = this->actor.world.rot.y;
         if (this->animIndex == 0) {
-            EnBaisen_ChangeAnimation(this, 1);
+            EnBaisen_ChangeAnim(this, 1);
         }
     } else {
         if (this->unk2A4 != NULL) {
             this->unk29E = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk2A4->world.pos);
         }
         if (this->animIndex != 0) {
-            EnBaisen_ChangeAnimation(this, 0);
+            EnBaisen_ChangeAnim(this, 0);
         }
     }
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -249,7 +249,7 @@ void EnBaisen_Update(Actor* thisx, PlayState* play) {
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if ((this->paramCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);

@@ -6,27 +6,21 @@ typedef struct {
 } OcarinaControlStick; // size = 0x2
 
 typedef struct {
-    /* 0x0 */ u16 playerIO;
-    /* 0x2 */ u16 channelMask;
-    /* 0x4 */ u8 channelIO[3 * 33 + 1];
-} NatureAmbienceDataIO; // size = 0x68
-
-typedef struct {
     /* 0x0 */ Vec3f* pos;
     /* 0x4 */ f32 freqScale;
     /* 0x8 */ s8 reverbAdd;
 } SfxSettings; // size = 0x9
 
 typedef struct {
-    /* 0x0 */ f32 vol;
+    /* 0x0 */ f32 volume;
     /* 0x4 */ f32 freqScale;
     /* 0x8 */ s8 reverb;
     /* 0x9 */ s8 panSigned;
     /* 0xA */ s8 stereoBits;
     /* 0xB */ u8 filter;
-    /* 0xC */ u8 unk_0C;
-    /* 0xD */ u8 unk_0D;
-} SfxPlayerState; // size = 0xE
+    /* 0xC */ u8 combFilterGain;
+    /* 0xD */ u8 zVolume;
+} SfxChannelState; // size = 0xE
 
 typedef enum {
     /* 0x0 */ SFX_CHANNEL_PLAYER0, // SfxPlayerBank
@@ -67,8 +61,30 @@ typedef struct {
 } FreqLerp; // size = 0x10
 
 s32 AudioOcarina_MemoryGameNextNote(void);
+
+void AudioSfx_ProcessSfxSettings(void);
+void func_8019FEDC(void);
+void Audio_StepFreqLerp(FreqLerp* lerp);
+
 s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
-void func_801A3238(s8 playerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
+
+void Audio_StartMorningSceneSequence(u16 seqId);
+void Audio_StartSceneSequence(u16 seqId);
+void Audio_PlaySequenceWithSeqPlayerIO(s8 playerIndex, u16 seqId, u8 fadeInDuration, s8 ioPort, u8 ioData);
+void func_801A4428(u8 reverbIndex);
+void func_801A3038(void);
+void Audio_PlayAmbience(u8 ambienceId);
+void Audio_SetSfxVolumeExceptSystemAndOcarinaBanks(u8 volume);
+
+void Audio_UpdateRiverSoundVolumes(void);
+void func_801A1290(void);
+void func_801A1904(void);
+void func_801A1E0C(void);
+void func_801A2090(void);
+void Audio_UpdateSceneSequenceResumePoint(void);
+void func_801A312C(void);
+void func_801A3AC0(void);
+void Audio_ResetRequestedSceneSeqId(void);
 
 // Sfx bss
 SfxSettings sSfxSettings[8];
@@ -90,8 +106,8 @@ u8 sGanonsTowerVol;
 f32* sSfxVolumeCur;
 f32 sSfxVolumeTarget;
 f32 sSfxVolumeRate;
-u16 sSceneSeqId1;
-SfxPlayerState sSfxChannelState[16];
+u16 sRequestedSceneSeqId;
+SfxChannelState sSfxChannelState[16];
 
 // Sequence bss
 u8 D_801FD3A8;
@@ -99,7 +115,7 @@ u8 D_801FD3A9;
 u8 sRiverSoundBgmTimer;
 u8 sFanfareState;
 u16 sFanfareSeqId;
-u8 sMuteOnlySfxAndNatureSeq;
+u8 sMuteOnlySfxAndAmbienceSeq;
 u8 sAllPlayersMutedExceptOcaAndSys;
 u8 sAudioPauseState;
 u8 sSpatialSeqIsActive[4];
@@ -125,7 +141,7 @@ u8 sSpatialSubBgmFadeTimer;
 u8 D_801FD434;
 u8 sSpatialSeqPlayerIndex;
 u8 sSpatialSeqFadeTimer;
-u16 D_801FD438;
+u16 sPrevAmbienceSeqId;
 
 // AudioOcarina bss
 OcarinaStaff sPlayingStaff;
@@ -154,7 +170,8 @@ OcarinaNote sScarecrowsLongSongSecondNote;
 u16 sCustomSequencePc;
 
 // Sfx Data
-u8 D_801D6600[] = {
+// If the Sfx Bank has more than 255 values (max value of u8)
+u8 gIsLargeSfxBank[] = {
     true, false, true, true, false, false, true,
 };
 u8 D_801D6608[] = {
@@ -192,7 +209,7 @@ u8 sEnterGanonsTowerTimer = 0;
 u16 sSfxVolumeDuration = 0;
 
 // System Data
-s8 sAudioFileSelectSetting = AUDIO_FS_STEREO;
+s8 sSoundMode = SOUNDMODE_STEREO;
 s8 sAudioIsWindowOpen = false;
 s8 sAudioCutsceneFlag = false;
 s8 sSpecReverb = 0;
@@ -201,11 +218,14 @@ s8 sAudioCodeReverb = 0;
 
 // Sequence Data
 u8 sPrevSeqMode = 0;
-f32 sAudioEnemyDist = 0.0f;
-s8 sAudioEnemyVol = 127;
+f32 sBgmEnemyDist = 0.0f;
+s8 sBgmEnemyVolume = 127;
 u16 sPrevMainBgmSeqId = NA_BGM_DISABLED;
-u8 sBgmPlayerIOPort7 = 0;
-u8 sSceneSeqId2 = NA_BGM_GENERAL_SFX;
+
+#define SEQ_RESUME_POINT_NONE 0xC0
+u8 sSeqResumePoint = 0;
+u8 sPrevSceneSeqId = NA_BGM_GENERAL_SFX;
+
 u32 sNumFramesStill = 0;
 u32 sNumFramesMoving = 0;
 u8 sAudioBaseFilter = 0;
@@ -216,768 +236,893 @@ s8 gUnderwaterSfxReverbAdd = 0;
 Vec3f* sRiverSoundBgmPos = NULL;
 f32 sRiverSoundXZDistToPlayer = 2000.0f;
 u8 sObjSoundMainBgmSeqId = NA_BGM_GENERAL_SFX;
+
+// Allows enemy bgm
+#define SEQ_FLAG_ENEMY (1 << 0)
+
+#define SEQ_FLAG_FANFARE (1 << 1)
+#define SEQ_FLAG_FANFARE_KAMARO (1 << 2)
+
+// required for Audio_RestorePrevBgm to restore a sequence after Audio_PlayBgm_StorePrevBgm
+#define SEQ_FLAG_RESTORE (1 << 3)
+
+/**
+ * These two sequence flags work together to implement a “resume playing from where you left off” system for scene
+ * sequences when leaving and returning to a scene. For a scene to resume playing from the point where it left off, it
+ * must have `SEQ_FLAG_RESUME` attached to it. Then, if the scene changes and the new scene sequence contain
+ * `SEQ_FLAG_RESUME_PREV`, the point from the previous scene sequence will be stored. Then, when returning to the
+ * scene with the sequence `SEQ_FLAG_RESUME`, then the sequence will resume playing from where it left off.
+ *
+ * TODO: Confirm which sequences properly implement this system after sequence extraction
+ */
+#define SEQ_FLAG_RESUME (1 << 4)
+#define SEQ_FLAG_RESUME_PREV (1 << 5)
+
+/**
+ * Will write a value of 1 to ioPort 7 when called through the scene. How it's used depends on the sequence:
+ * NA_BGM_FILE_SELECT - ioPort 7 skips the harp intro when a value of 1 is written to it.
+ */
+#define SEQ_FLAG_SKIP_HARP_INTRO (1 << 6)
+
+// Unused, repurposed for SubBgm
+#define SEQ_FLAG_NO_AMBIENCE (1 << 7)
+
 u8 sSeqFlags[] = {
-    0x3,  // NA_BGM_GENERAL_SFX
-    0x1,  // NA_BGM_NATURE_AMBIENCE
-    0x1,  // NA_BGM_TERMINA_FIELD
-    0x8,  // NA_BGM_CHASE
-    0,    // NA_BGM_MAJORAS_THEME
-    0,    // NA_BGM_CLOCK_TOWER
-    0x1,  // NA_BGM_STONE_TOWER_TEMPLE
-    0x1,  // NA_BGM_INV_STONE_TOWER_TEMPLE
-    0x2,  // NA_BGM_FAILURE_0
-    0x2,  // NA_BGM_FAILURE_1
-    0,    // NA_BGM_HAPPY_MASK_SALESMAN
-    0,    // NA_BGM_SONG_OF_HEALING
-    0x1,  // NA_BGM_SWAMP_REGION
-    0,    // NA_BGM_ALIEN_INVASION
-    0x2,  // NA_BGM_SWAMP_CRUISE
-    0,    // NA_BGM_SHARPS_CURSE
-    0x1,  // NA_BGM_GREAT_BAY_REGION
-    0x1,  // NA_BGM_IKANA_REGION
-    0,    // NA_BGM_DEKU_KING
-    0x1,  // NA_BGM_MOUNTAIN_REGION
-    0,    // NA_BGM_PIRATES_FORTRESS
-    0,    // NA_BGM_CLOCK_TOWN_DAY_1
-    0,    // NA_BGM_CLOCK_TOWN_DAY_2
-    0,    // NA_BGM_CLOCK_TOWN_DAY_3
-    0x40, // NA_BGM_FILE_SELECT
-    0x10, // NA_BGM_CLEAR_EVENT
-    0,    // NA_BGM_ENEMY
-    0x8,  // NA_BGM_BOSS
-    0x1,  // NA_BGM_WOODFALL_TEMPLE
-    0,    // NA_BGM_MARKET
-    0,    // NA_BGM_OPENING
-    0x20, // NA_BGM_INSIDE_A_HOUSE
-    0x2,  // NA_BGM_GAME_OVER
-    0,    // NA_BGM_CLEAR_BOSS
-    0x2,  // NA_BGM_GET_ITEM
-    0x2,  // NA_BGM_GATE_OPEN
-    0x2,  // NA_BGM_GET_HEART
-    0x8,  // NA_BGM_TIMED_MINI_GAME
-    0,    // NA_BGM_GORON_RACE
-    0,    // NA_BGM_MUSIC_BOX_HOUSE
-    0,    // NA_BGM_FAIRY_FOUNTAIN
-    0,    // NA_BGM_ZELDAS_LULLABY
-    0,    // NA_BGM_ROSA_SISTERS
-    0x2,  // NA_BGM_OPEN_CHEST
-    0,    // NA_BGM_MARINE_RESEARCH_LAB
-    0x40, // NA_BGM_GIANTS_THEME
-    0,    // NA_BGM_SONG_OF_STORMS
-    0,    // NA_BGM_ROMANI_RANCH
-    0,    // NA_BGM_GORON_VILLAGE
-    0,    // NA_BGM_MAYORS_OFFICE
-    0x2,  // NA_BGM_OCA_EPONA
-    0x2,  // NA_BGM_OCA_SUNS
-    0x2,  // NA_BGM_OCA_TIME
-    0x2,  // NA_BGM_OCA_STORM
-    0x10, // NA_BGM_ZORA_HALL
-    0x2,  // NA_BGM_GET_NEW_MASK
-    0x8,  // NA_BGM_MINI_BOSS
-    0x2,  // NA_BGM_GET_SMALL_ITEM
-    0,    // NA_BGM_ASTRAL_OBSERVATORY
-    0x1,  // NA_BGM_CAVERN
-    0x11, // NA_BGM_MILK_BAR
-    0x2,  // NA_BGM_ZELDA_APPEAR
-    0,    // NA_BGM_SARIAS_SONG
-    0,    // NA_BGM_GORON_GOAL
-    0,    // NA_BGM_HORSE
-    0,    // NA_BGM_HORSE_GOAL
-    0,    // NA_BGM_INGO
-    0,    // NA_BGM_KOTAKE_POTION_SHOP
-    0x20, // NA_BGM_SHOP
-    0x2,  // NA_BGM_OWL
-    0x20, // NA_BGM_MINI_GAME
-    0x2,  // NA_BGM_OCA_SOARING
-    0x2,  // NA_BGM_OCA_HEALING
-    0x2,  // NA_BGM_INVERTED_SONG_OF_TIME
-    0x2,  // NA_BGM_SONG_OF_DOUBLE_TIME
-    0x2,  // NA_BGM_SONATA_OF_AWAKENING
-    0x2,  // NA_BGM_GORON_LULLABY
-    0x2,  // NA_BGM_NEW_WAVE_BOSSA_NOVA
-    0x2,  // NA_BGM_ELEGY_OF_EMPTINESS
-    0x2,  // NA_BGM_OATH_TO_ORDER
-    0,    // NA_BGM_SWORD_TRAINING_HALL
-    0x2,  // NA_BGM_GORON_LULLABY_INTRO
-    0x2,  // NA_BGM_OCA_FAIRY
-    0x2,  // NA_BGM_BREMEN_MARCH
-    0x2,  // NA_BGM_BALLAD_OF_THE_WIND_FISH
-    0x8,  // NA_BGM_SONG_OF_SOARING
-    0,    // NA_BGM_MILK_BAR_DUPLICATE
-    0,    // NA_BGM_FINAL_HOURS
-    0x2,  // NA_BGM_MIKAU_RIFF
-    0x2,  // NA_BGM_MIKAU_FINALE
-    0,    // NA_BGM_FROG_SONG
-    0x2,  // NA_BGM_OCA_SONATA
-    0x2,  // NA_BGM_OCA_LULLABY
-    0x2,  // NA_BGM_OCA_NEW_WAVE
-    0x2,  // NA_BGM_OCA_ELEGY
-    0x2,  // NA_BGM_OCA_OATH
-    0,    // NA_BGM_MAJORAS_LAIR
-    0x2,  // NA_BGM_OCA_LULLABY_INTRO
-    0x2,  // NA_BGM_OCA_GUITAR_BASS_SESSION
-    0x2,  // NA_BGM_PIANO_SESSION
-    0x2,  // NA_BGM_INDIGO_GO_SESSION
-    0x1,  // NA_BGM_SNOWHEAD_TEMPLE
-    0x1,  // NA_BGM_GREAT_BAY_TEMPLE
-    0x2,  // NA_BGM_NEW_WAVE_SAXOPHONE
-    0x2,  // NA_BGM_NEW_WAVE_VOCAL
-    0,    // NA_BGM_MAJORAS_WRATH
-    0,    // NA_BGM_MAJORAS_INCARNATION
-    0,    // NA_BGM_MAJORAS_MASK
-    0x2,  // NA_BGM_BASS_PLAY
-    0x2,  // NA_BGM_DRUMS_PLAY
-    0x2,  // NA_BGM_PIANO_PLAY
-    0x1,  // NA_BGM_IKANA_CASTLE
-    0,    // NA_BGM_GATHERING_GIANTS
-    0x4,  // NA_BGM_KAMARO_DANCE
-    0,    // NA_BGM_CREMIA_CARRIAGE
-    0x2,  // NA_BGM_KEATON_QUIZ
-    0,    // NA_BGM_END_CREDITS_1
-    0,    // NA_BGM_OPENING_LOOP
-    0,    // NA_BGM_TITLE_THEME
-    0x2,  // NA_BGM_DUNGEON_APPEAR
-    0x2,  // NA_BGM_WOODFALL_CLEAR
-    0x2,  // NA_BGM_SNOWHEAD_CLEAR
-    0,    //
-    0,    // NA_BGM_INTO_THE_MOON
-    0,    // NA_BGM_GOODBYE_GIANT
-    0,    // NA_BGM_TATL_AND_TAEL
-    0,    // NA_BGM_MOONS_DESTRUCTION
-    0,    // NA_BGM_END_CREDITS_2
+    SEQ_FLAG_FANFARE | SEQ_FLAG_ENEMY, // NA_BGM_GENERAL_SFX
+    SEQ_FLAG_ENEMY,                    // NA_BGM_AMBIENCE
+    SEQ_FLAG_ENEMY,                    // NA_BGM_TERMINA_FIELD
+    SEQ_FLAG_RESTORE,                  // NA_BGM_CHASE
+    0,                                 // NA_BGM_MAJORAS_THEME
+    0,                                 // NA_BGM_CLOCK_TOWER
+    SEQ_FLAG_ENEMY,                    // NA_BGM_STONE_TOWER_TEMPLE
+    SEQ_FLAG_ENEMY,                    // NA_BGM_INV_STONE_TOWER_TEMPLE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_FAILURE_0
+    SEQ_FLAG_FANFARE,                  // NA_BGM_FAILURE_1
+    0,                                 // NA_BGM_HAPPY_MASK_SALESMAN
+    0,                                 // NA_BGM_SONG_OF_HEALING
+    SEQ_FLAG_ENEMY,                    // NA_BGM_SWAMP_REGION
+    0,                                 // NA_BGM_ALIEN_INVASION
+    SEQ_FLAG_FANFARE,                  // NA_BGM_SWAMP_CRUISE
+    0,                                 // NA_BGM_SHARPS_CURSE
+    SEQ_FLAG_ENEMY,                    // NA_BGM_GREAT_BAY_REGION
+    SEQ_FLAG_ENEMY,                    // NA_BGM_IKANA_REGION
+    0,                                 // NA_BGM_DEKU_KING
+    SEQ_FLAG_ENEMY,                    // NA_BGM_MOUNTAIN_REGION
+    0,                                 // NA_BGM_PIRATES_FORTRESS
+    0,                                 // NA_BGM_CLOCK_TOWN_DAY_1
+    0,                                 // NA_BGM_CLOCK_TOWN_DAY_2
+    0,                                 // NA_BGM_CLOCK_TOWN_DAY_3
+    SEQ_FLAG_SKIP_HARP_INTRO,          // NA_BGM_FILE_SELECT
+    SEQ_FLAG_RESUME,                   // NA_BGM_CLEAR_EVENT
+    0,                                 // NA_BGM_ENEMY
+    SEQ_FLAG_RESTORE,                  // NA_BGM_BOSS
+    SEQ_FLAG_ENEMY,                    // NA_BGM_WOODFALL_TEMPLE
+    0,                                 // NA_BGM_MARKET
+    0,                                 // NA_BGM_OPENING
+    SEQ_FLAG_RESUME_PREV,              // NA_BGM_INSIDE_A_HOUSE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GAME_OVER
+    0,                                 // NA_BGM_CLEAR_BOSS
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_ITEM
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GATE_OPEN
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_HEART
+    SEQ_FLAG_RESTORE,                  // NA_BGM_TIMED_MINI_GAME
+    0,                                 // NA_BGM_GORON_RACE
+    0,                                 // NA_BGM_MUSIC_BOX_HOUSE
+    0,                                 // NA_BGM_FAIRY_FOUNTAIN
+    0,                                 // NA_BGM_ZELDAS_LULLABY
+    0,                                 // NA_BGM_ROSA_SISTERS
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OPEN_CHEST
+    0,                                 // NA_BGM_MARINE_RESEARCH_LAB
+    SEQ_FLAG_SKIP_HARP_INTRO,          // NA_BGM_GIANTS_THEME
+    0,                                 // NA_BGM_SONG_OF_STORMS
+    0,                                 // NA_BGM_ROMANI_RANCH
+    0,                                 // NA_BGM_GORON_VILLAGE
+    0,                                 // NA_BGM_MAYORS_OFFICE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_EPONA
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_SUNS
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_TIME
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_STORM
+    SEQ_FLAG_RESUME,                   // NA_BGM_ZORA_HALL
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_NEW_MASK
+    SEQ_FLAG_RESTORE,                  // NA_BGM_MINI_BOSS
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GET_SMALL_ITEM
+    0,                                 // NA_BGM_ASTRAL_OBSERVATORY
+    SEQ_FLAG_ENEMY,                    // NA_BGM_CAVERN
+    SEQ_FLAG_RESUME | SEQ_FLAG_ENEMY,  // NA_BGM_MILK_BAR
+    SEQ_FLAG_FANFARE,                  // NA_BGM_ZELDA_APPEAR
+    0,                                 // NA_BGM_SARIAS_SONG
+    0,                                 // NA_BGM_GORON_GOAL
+    0,                                 // NA_BGM_HORSE
+    0,                                 // NA_BGM_HORSE_GOAL
+    0,                                 // NA_BGM_INGO
+    0,                                 // NA_BGM_KOTAKE_POTION_SHOP
+    SEQ_FLAG_RESUME_PREV,              // NA_BGM_SHOP
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OWL
+    SEQ_FLAG_RESUME_PREV,              // NA_BGM_MINI_GAME
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_SOARING
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_HEALING
+    SEQ_FLAG_FANFARE,                  // NA_BGM_INVERTED_SONG_OF_TIME
+    SEQ_FLAG_FANFARE,                  // NA_BGM_SONG_OF_DOUBLE_TIME
+    SEQ_FLAG_FANFARE,                  // NA_BGM_SONATA_OF_AWAKENING
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GORON_LULLABY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_NEW_WAVE_BOSSA_NOVA
+    SEQ_FLAG_FANFARE,                  // NA_BGM_ELEGY_OF_EMPTINESS
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OATH_TO_ORDER
+    0,                                 // NA_BGM_SWORD_TRAINING_HALL
+    SEQ_FLAG_FANFARE,                  // NA_BGM_GORON_LULLABY_INTRO
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_FAIRY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_BREMEN_MARCH
+    SEQ_FLAG_FANFARE,                  // NA_BGM_BALLAD_OF_THE_WIND_FISH
+    SEQ_FLAG_RESTORE,                  // NA_BGM_SONG_OF_SOARING
+    0,                                 // NA_BGM_MILK_BAR_DUPLICATE
+    0,                                 // NA_BGM_FINAL_HOURS
+    SEQ_FLAG_FANFARE,                  // NA_BGM_MIKAU_RIFF
+    SEQ_FLAG_FANFARE,                  // NA_BGM_MIKAU_FINALE
+    0,                                 // NA_BGM_FROG_SONG
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_SONATA
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_LULLABY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_NEW_WAVE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_ELEGY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_OATH
+    0,                                 // NA_BGM_MAJORAS_LAIR
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_LULLABY_INTRO
+    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_GUITAR_BASS_SESSION
+    SEQ_FLAG_FANFARE,                  // NA_BGM_PIANO_SESSION
+    SEQ_FLAG_FANFARE,                  // NA_BGM_INDIGO_GO_SESSION
+    SEQ_FLAG_ENEMY,                    // NA_BGM_SNOWHEAD_TEMPLE
+    SEQ_FLAG_ENEMY,                    // NA_BGM_GREAT_BAY_TEMPLE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_NEW_WAVE_SAXOPHONE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_NEW_WAVE_VOCAL
+    0,                                 // NA_BGM_MAJORAS_WRATH
+    0,                                 // NA_BGM_MAJORAS_INCARNATION
+    0,                                 // NA_BGM_MAJORAS_MASK
+    SEQ_FLAG_FANFARE,                  // NA_BGM_BASS_PLAY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_DRUMS_PLAY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_PIANO_PLAY
+    SEQ_FLAG_ENEMY,                    // NA_BGM_IKANA_CASTLE
+    0,                                 // NA_BGM_GATHERING_GIANTS
+    SEQ_FLAG_FANFARE_KAMARO,           // NA_BGM_KAMARO_DANCE
+    0,                                 // NA_BGM_CREMIA_CARRIAGE
+    SEQ_FLAG_FANFARE,                  // NA_BGM_KEATON_QUIZ
+    0,                                 // NA_BGM_END_CREDITS_1
+    0,                                 // NA_BGM_OPENING_LOOP
+    0,                                 // NA_BGM_TITLE_THEME
+    SEQ_FLAG_FANFARE,                  // NA_BGM_DUNGEON_APPEAR
+    SEQ_FLAG_FANFARE,                  // NA_BGM_WOODFALL_CLEAR
+    SEQ_FLAG_FANFARE,                  // NA_BGM_SNOWHEAD_CLEAR
+    0,                                 //
+    0,                                 // NA_BGM_INTO_THE_MOON
+    0,                                 // NA_BGM_GOODBYE_GIANT
+    0,                                 // NA_BGM_TATL_AND_TAEL
+    0,                                 // NA_BGM_MOONS_DESTRUCTION
+    0,                                 // NA_BGM_END_CREDITS_2
 };
 
-s8 sSpecReverbs[20] = {
+s8 sSpecReverbs[] = {
     0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-NatureAmbienceDataIO sNatureAmbienceData[20] = {
-    // natureSeqId: 0
+#define AMBIENCE_CHANNEL_PROPERTIES_ENTRIES_MAX 33
+
+typedef struct {
+    /* 0x0 */ u16 initChannelMask;     // bitwise flag for 16 channels, channels to initialize
+    /* 0x2 */ u16 initMuteChannelMask; // bitwise flag for 16 channels, channels to mute upon initialization
+    /* 0x4 */ u8 channelProperties[3 * AMBIENCE_CHANNEL_PROPERTIES_ENTRIES_MAX + 1];
+} AmbienceDataIO; // size = 0x68
+
+AmbienceDataIO sAmbienceData[20] = {
+    // AMBIENCE_ID_00
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_09),
-            NATURE_IO_CRITTER_0_BEND_PITCH(64),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(32),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_09),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(32),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_1_BEND_PITCH(0),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_10),
-            NATURE_IO_CRITTER_2_BEND_PITCH(112),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(48),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_10),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(48),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_03),
-            NATURE_IO_CRITTER_3_BEND_PITCH(127),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_3_PORT5(16),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_03),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_3_PORT5(16),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_00),
-            NATURE_IO_CRITTER_4_BEND_PITCH(127),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_4_PORT5(16),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_00),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_4_PORT5(16),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_5_BEND_PITCH(127),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_5_PORT5(16),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_5_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 1
+    // AMBIENCE_ID_01
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(64),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(32),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(32),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_16),
-            NATURE_IO_CRITTER_1_BEND_PITCH(0),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_16),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_12),
-            NATURE_IO_CRITTER_2_BEND_PITCH(112),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_2_PORT5(48),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_12),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_2_PORT5(48),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_15),
-            NATURE_IO_CRITTER_3_BEND_PITCH(127),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_3_PORT5(16),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_15),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_3_PORT5(16),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_06),
-            NATURE_IO_CRITTER_4_BEND_PITCH(127),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_4_PORT5(16),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_06),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_4_PORT5(16),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_5_BEND_PITCH(127),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_5_PORT5(16),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_5_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 2
+    // AMBIENCE_ID_02
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(64),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(48),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(48),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_10),
-            NATURE_IO_CRITTER_1_BEND_PITCH(0),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_10),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_2_BEND_PITCH(48),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(32),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(48),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(32),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_03),
-            NATURE_IO_CRITTER_3_BEND_PITCH(127),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_3_PORT5(16),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_03),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_3_PORT5(16),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_4_BEND_PITCH(64),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_4_PORT5(0),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_4_PORT5(0),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_5_BEND_PITCH(127),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_5_PORT5(63),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_5_PORT5(63),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 3
+    // AMBIENCE_ID_03
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_09),
-            NATURE_IO_CRITTER_0_BEND_PITCH(64),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(32),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_09),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(32),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_1_BEND_PITCH(64),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_1_PORT5(48),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_1_PORT5(48),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_10),
-            NATURE_IO_CRITTER_2_BEND_PITCH(32),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(32),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_10),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(32),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(32),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_14),
-            NATURE_IO_CRITTER_3_BEND_PITCH(64),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_3_PORT5(16),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_14),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_3_PORT5(16),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_00),
-            NATURE_IO_CRITTER_4_BEND_PITCH(127),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_4_PORT5(16),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_00),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_4_PORT5(16),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_5_BEND_PITCH(127),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_5_PORT5(16),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_5_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 4
+    // AMBIENCE_ID_04
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(64),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(32),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(32),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_02),
-            NATURE_IO_CRITTER_1_BEND_PITCH(64),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_02),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_12),
-            NATURE_IO_CRITTER_2_BEND_PITCH(112),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(48),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_12),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(48),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_13),
-            NATURE_IO_CRITTER_3_BEND_PITCH(64),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_3_PORT5(16),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_13),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_3_PORT5(16),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_4_BEND_PITCH(64),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_4_PORT5(16),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_4_PORT5(16),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_02),
-            NATURE_IO_CRITTER_5_BEND_PITCH(112),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_5_PORT5(48),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_02),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_5_PORT5(48),
 
             // Channel 14
-            NATURE_IO_RAIN_PORT4(63),
+            AMBIENCE_IO_RAIN_PORT4(63),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
 
         },
     },
 
-    // natureSeqId: 5
+    // AMBIENCE_ID_05
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_09),
-            NATURE_IO_CRITTER_0_BEND_PITCH(64),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(32),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_09),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(64),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(32),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_1_BEND_PITCH(0),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_10),
-            NATURE_IO_CRITTER_2_BEND_PITCH(112),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(48),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_10),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(48),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_13),
-            NATURE_IO_CRITTER_3_BEND_PITCH(127),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_3_PORT5(63),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_13),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_3_PORT5(63),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_00),
-            NATURE_IO_CRITTER_4_BEND_PITCH(127),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_4_PORT5(16),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_00),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_4_PORT5(16),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_5_BEND_PITCH(127),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_5_PORT5(16),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_5_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 6
+    // AMBIENCE_ID_06
     {
-        0xC0FF, // PlayerIO Data
-        0xC0FE, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_5) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) | (1 << AMBIENCE_CHANNEL_CRITTER_2) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_3) | (1 << AMBIENCE_CHANNEL_CRITTER_4) | (1 << AMBIENCE_CHANNEL_CRITTER_5) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_11),
-            NATURE_IO_CRITTER_0_BEND_PITCH(112),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_0_PORT5(48),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_11),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_0_PORT5(48),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_15),
-            NATURE_IO_CRITTER_1_BEND_PITCH(112),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_1_PORT5(63),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_15),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_1_PORT5(63),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_11),
-            NATURE_IO_CRITTER_2_BEND_PITCH(48),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(16),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_11),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(48),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(16),
 
             // Channel 4
-            NATURE_IO_CRITTER_3_TYPE(NATURE_CRITTER_14),
-            NATURE_IO_CRITTER_3_BEND_PITCH(48),
-            NATURE_IO_CRITTER_3_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_3_PORT5(16),
+            AMBIENCE_IO_CRITTER_3_TYPE(AMBIENCE_CRITTER_14),
+            AMBIENCE_IO_CRITTER_3_BEND_PITCH(48),
+            AMBIENCE_IO_CRITTER_3_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_3_PORT5(16),
 
             // Channel 5
-            NATURE_IO_CRITTER_4_TYPE(NATURE_CRITTER_11),
-            NATURE_IO_CRITTER_4_BEND_PITCH(127),
-            NATURE_IO_CRITTER_4_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_4_PORT5(32),
+            AMBIENCE_IO_CRITTER_4_TYPE(AMBIENCE_CRITTER_11),
+            AMBIENCE_IO_CRITTER_4_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_4_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_4_PORT5(32),
 
             // Channel 6
-            NATURE_IO_CRITTER_5_TYPE(NATURE_CRITTER_02),
-            NATURE_IO_CRITTER_5_BEND_PITCH(127),
-            NATURE_IO_CRITTER_5_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_5_PORT5(48),
+            AMBIENCE_IO_CRITTER_5_TYPE(AMBIENCE_CRITTER_02),
+            AMBIENCE_IO_CRITTER_5_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_5_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_5_PORT5(48),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 7
+    // AMBIENCE_ID_07
     {
-        0xC001, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 8
+    // AMBIENCE_ID_08
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_0_BEND_PITCH(127),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 9
+    // AMBIENCE_ID_09
     {
-        0xC00F, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_16),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(2),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_16),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(2),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_12),
-            NATURE_IO_CRITTER_1_BEND_PITCH(112),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(0),
-            NATURE_IO_CRITTER_1_PORT5(48),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_12),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(0),
+            AMBIENCE_IO_CRITTER_1_PORT5(48),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_15),
-            NATURE_IO_CRITTER_2_BEND_PITCH(127),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(16),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_15),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 10
+    // AMBIENCE_ID_0A
     {
-        0xC081, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_6) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_1),
-            NATURE_IO_STREAM_0_PORT3(8),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_1),
+            AMBIENCE_IO_STREAM_0_PORT3(8),
 
             // Channel 7
-            NATURE_IO_CRITTER_6_TYPE(NATURE_CRITTER_11),
-            NATURE_IO_CRITTER_6_BEND_PITCH(112),
-            NATURE_IO_CRITTER_6_NUM_LAYERS(2),
-            NATURE_IO_CRITTER_6_PORT5(32),
+            AMBIENCE_IO_CRITTER_6_TYPE(AMBIENCE_CRITTER_11),
+            AMBIENCE_IO_CRITTER_6_BEND_PITCH(112),
+            AMBIENCE_IO_CRITTER_6_NUM_LAYERS(2),
+            AMBIENCE_IO_CRITTER_6_PORT5(32),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 11
+    // AMBIENCE_ID_0B
     {
-        0xC00F, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_CRITTER_2) | (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_3),
-            NATURE_IO_STREAM_0_PORT3(8),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_3),
+            AMBIENCE_IO_STREAM_0_PORT3(8),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_0_BEND_PITCH(127),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_00),
-            NATURE_IO_CRITTER_1_BEND_PITCH(127),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(2),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_00),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(2),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // Channel 3
-            NATURE_IO_CRITTER_2_TYPE(NATURE_CRITTER_06),
-            NATURE_IO_CRITTER_2_BEND_PITCH(127),
-            NATURE_IO_CRITTER_2_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_2_PORT5(16),
+            AMBIENCE_IO_CRITTER_2_TYPE(AMBIENCE_CRITTER_06),
+            AMBIENCE_IO_CRITTER_2_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_2_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_2_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 12
+    // AMBIENCE_ID_0C
     {
-        0xC007, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_CRITTER_1) |
+         (1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_00),
-            NATURE_IO_CRITTER_0_BEND_PITCH(127),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_00),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // Channel 2
-            NATURE_IO_CRITTER_1_TYPE(NATURE_CRITTER_01),
-            NATURE_IO_CRITTER_1_BEND_PITCH(127),
-            NATURE_IO_CRITTER_1_NUM_LAYERS(3),
-            NATURE_IO_CRITTER_1_PORT5(16),
+            AMBIENCE_IO_CRITTER_1_TYPE(AMBIENCE_CRITTER_01),
+            AMBIENCE_IO_CRITTER_1_BEND_PITCH(127),
+            AMBIENCE_IO_CRITTER_1_NUM_LAYERS(3),
+            AMBIENCE_IO_CRITTER_1_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 13
+    // AMBIENCE_ID_0D
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 14
+    // AMBIENCE_ID_0E
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 15
+    // AMBIENCE_ID_0F
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 16
+    // AMBIENCE_ID_10
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 17
+    // AMBIENCE_ID_11
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 18
+    // AMBIENCE_ID_12
     {
-        0xC000, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
             // Channel 0
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
         },
     },
 
-    // natureSeqId: 19
+    // AMBIENCE_ID_13
     {
-        0xC003, // PlayerIO Data
-        0xC000, // Channel Mask
+        // Init channel mask
+        ((1 << AMBIENCE_CHANNEL_STREAM_0) | (1 << AMBIENCE_CHANNEL_CRITTER_0) | (1 << AMBIENCE_CHANNEL_RAIN) |
+         (1 << AMBIENCE_CHANNEL_LIGHTNING)),
+        // Init mute channel mask
+        ((1 << AMBIENCE_CHANNEL_RAIN) | (1 << AMBIENCE_CHANNEL_LIGHTNING)),
         {
-            NATURE_IO_STREAM_0_TYPE(NATURE_STREAM_0),
-            NATURE_IO_STREAM_0_PORT3(0),
+            AMBIENCE_IO_STREAM_0_TYPE(AMBIENCE_STREAM_0),
+            AMBIENCE_IO_STREAM_0_PORT3(0),
 
             // Channel 1
-            NATURE_IO_CRITTER_0_TYPE(NATURE_CRITTER_04),
-            NATURE_IO_CRITTER_0_BEND_PITCH(0),
-            NATURE_IO_CRITTER_0_NUM_LAYERS(1),
-            NATURE_IO_CRITTER_0_PORT5(16),
+            AMBIENCE_IO_CRITTER_0_TYPE(AMBIENCE_CRITTER_04),
+            AMBIENCE_IO_CRITTER_0_BEND_PITCH(0),
+            AMBIENCE_IO_CRITTER_0_NUM_LAYERS(1),
+            AMBIENCE_IO_CRITTER_0_PORT5(16),
 
             // End
-            NATURE_IO_ENTRIES_END,
+            AMBIENCE_IO_ENTRIES_END,
 
         },
     },
@@ -2495,7 +2640,7 @@ void AudioOcarina_PlayControllerInput(u8 isOcarinaSfxSuppressedWhenCancelled) {
             // Add vibrato of the ocarina note based on the x control stick
             sCurOcarinaVibrato = ABS_ALT(sOcarinaInputStickRel.x) >> 2;
             // Sets vibrato to io port 6
-            Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 6, sCurOcarinaVibrato);
+            AudioThread_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 6, sCurOcarinaVibrato);
         } else {
             // no bending or vibrato for recording state OCARINA_RECORD_SCARECROW_SPAWN
             sCurOcarinaBendIndex = 0;
@@ -2507,15 +2652,16 @@ void AudioOcarina_PlayControllerInput(u8 isOcarinaSfxSuppressedWhenCancelled) {
         if ((sCurOcarinaPitch != OCARINA_PITCH_NONE) && (sPrevOcarinaPitch != sCurOcarinaPitch)) {
             // Sets ocarina instrument Id to io port 7, which is used
             // as an index in seq 0 to get the true instrument Id
-            Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 7, sOcarinaInstrumentId - 1);
+            AudioThread_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 7,
+                                   sOcarinaInstrumentId - 1);
             // Sets pitch to io port 5
-            Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 5, sCurOcarinaPitch);
-            Audio_PlaySfxGeneral(NA_SE_OC_OCARINA, &gSfxDefaultPos, 4, &sCurOcarinaBendFreq, &sDefaultOcarinaVolume,
-                                 &gSfxDefaultReverb);
+            AudioThread_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 5, sCurOcarinaPitch);
+            AudioSfx_PlaySfx(NA_SE_OC_OCARINA, &gSfxDefaultPos, 4, &sCurOcarinaBendFreq, &sDefaultOcarinaVolume,
+                             &gSfxDefaultReverb);
         } else if ((sPrevOcarinaPitch != OCARINA_PITCH_NONE) && (sCurOcarinaPitch == OCARINA_PITCH_NONE) &&
                    !isOcarinaSfxSuppressedWhenCancelled) {
             // Stops ocarina sound when transitioning from playing to not playing a note
-            Audio_StopSfxById(NA_SE_OC_OCARINA);
+            AudioSfx_StopById(NA_SE_OC_OCARINA);
         }
     }
 }
@@ -2540,10 +2686,10 @@ void AudioOcarina_ResetAndMute(void) {
     sOcarinaInputButtonStart = 0xFFFF;
 
     AudioOcarina_PlayControllerInput(false);
-    Audio_StopSfxById(NA_SE_OC_OCARINA);
+    AudioSfx_StopById(NA_SE_OC_OCARINA);
 
     if (gAudioSpecId != 12) {
-        Audio_SetSfxBanksMute(0);
+        AudioSfx_MuteBanks(0);
     }
 
     sPlaybackState = 0;
@@ -2553,7 +2699,7 @@ void AudioOcarina_ResetAndMute(void) {
     sOcarinaFlags = 0;
 
     // return to full volume for both bgm players after ocarina is finished
-    Audio_ClearFlagForBgmVolumeLow(SFX_CHANNEL_OCARINA);
+    AudioSfx_RestoreBgmVolume(SFX_CHANNEL_OCARINA);
     // return to full volume for all sfx channels except system & ocarina banks
     Audio_SetSfxVolumeExceptSystemAndOcarinaBanks(0x7F);
 }
@@ -2587,7 +2733,7 @@ void AudioOcarina_SetOcarinaDisableTimer(u8 unused, u8 timer) {
     sOcarinaUnused = unused;
 }
 
-u32 AudioOcarina_SetInstrument(u8 ocarinaInstrumentId) {
+void AudioOcarina_SetInstrument(u8 ocarinaInstrumentId) {
     if ((sOcarinaInstrumentId != ocarinaInstrumentId) || (ocarinaInstrumentId == OCARINA_INSTRUMENT_DEFAULT)) {
         Audio_QueueSeqCmd(0x80000000 | ((u32)(SEQ_PLAYER_SFX) << 24) | ((u32)(1) << 16) |
                           ((u32)(SFX_CHANNEL_OCARINA) << 8) | (u32)(ocarinaInstrumentId));
@@ -2602,7 +2748,7 @@ u32 AudioOcarina_SetInstrument(u8 ocarinaInstrumentId) {
             // lowers volume of all sfx channels except system & ocarina banks
             Audio_SetSfxVolumeExceptSystemAndOcarinaBanks(0x40);
             // lowers volume of bgm players while playing ocarina
-            Audio_SetFlagForBgmVolumeLow(SFX_CHANNEL_OCARINA);
+            AudioSfx_LowerBgmVolume(SFX_CHANNEL_OCARINA);
         }
     }
 }
@@ -2612,7 +2758,7 @@ void AudioOcarina_SetPlaybackSong(s8 songIndexPlusOne, u8 playbackState) {
 
     if (songIndexPlusOne == 0) {
         sPlaybackState = 0;
-        Audio_StopSfxById(NA_SE_OC_OCARINA);
+        AudioSfx_StopById(NA_SE_OC_OCARINA);
         return;
     }
 
@@ -2700,7 +2846,7 @@ void AudioOcarina_PlaybackSong(void) {
                 sPlaybackStaffPos = 0;
                 sPlaybackPitch = OCARINA_PITCH_NONE;
             } else {
-                Audio_StopSfxById(NA_SE_OC_OCARINA);
+                AudioSfx_StopById(NA_SE_OC_OCARINA);
             }
             return;
         } else {
@@ -2716,7 +2862,7 @@ void AudioOcarina_PlaybackSong(void) {
         // Update vibrato
         sNotePlaybackVibrato = sPlaybackSong[sPlaybackNotePos].vibrato;
         // Sets vibrato to io port 6
-        Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 6, sNotePlaybackVibrato);
+        AudioThread_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 6, sNotePlaybackVibrato);
 
         // Update bend
         if (sNotePlaybackBend != sPlaybackSong[sPlaybackNotePos].bend) {
@@ -2746,14 +2892,14 @@ void AudioOcarina_PlaybackSong(void) {
                 sPlaybackStaffPos++;
                 // Sets ocarina instrument Id to io port 7, which is used
                 // as an index in seq 0 to get the true instrument Id
-                Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 7,
-                                 sOcarinaInstrumentId - 1);
-                Audio_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 5,
-                                 sPlaybackPitch & OCARINA_BUTTON_MASK_PITCH);
-                Audio_PlaySfxGeneral(NA_SE_OC_OCARINA, &gSfxDefaultPos, 4, &sRelativeNotePlaybackBend,
-                                     &sRelativeNotePlaybackVolume, &gSfxDefaultReverb);
+                AudioThread_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 7,
+                                       sOcarinaInstrumentId - 1);
+                AudioThread_QueueCmdS8(0x6 << 24 | SEQ_PLAYER_SFX << 16 | SFX_CHANNEL_OCARINA << 8 | 5,
+                                       sPlaybackPitch & OCARINA_BUTTON_MASK_PITCH);
+                AudioSfx_PlaySfx(NA_SE_OC_OCARINA, &gSfxDefaultPos, 4, &sRelativeNotePlaybackBend,
+                                 &sRelativeNotePlaybackVolume, &gSfxDefaultReverb);
             } else {
-                Audio_StopSfxById(NA_SE_OC_OCARINA);
+                AudioSfx_StopById(NA_SE_OC_OCARINA);
             }
         }
         sPlaybackNotePos++;
@@ -3073,7 +3219,7 @@ void AudioOcarina_TerminaWallGenerateNotes(void) {
             j = 0;
 
             for (; i < 8; i++) {
-                randomButtonIndex = Audio_NextRandom() % ARRAY_COUNT(sButtonToPitchMap);
+                randomButtonIndex = AudioThread_NextRandom() % ARRAY_COUNT(sButtonToPitchMap);
                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = sButtonToPitchMap[randomButtonIndex];
                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 19;
                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 80;
@@ -3094,7 +3240,7 @@ void AudioOcarina_TerminaWallGenerateNotes(void) {
             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].length = 0;
             AudioOcarina_MapSongFromPitchToButton(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL, 8);
         } else {
-            j = Audio_NextRandom() % ARRAY_COUNT(sOoTOcarinaSongNotes);
+            j = AudioThread_NextRandom() % ARRAY_COUNT(sOoTOcarinaSongNotes);
             ocarinaNote = sOoTOcarinaSongNotes[j];
 
             for (; ocarinaNote[i].length != 0; i++) {
@@ -3140,7 +3286,7 @@ s32 AudioOcarina_MemoryGameNextNote(void) {
         return true;
     }
 
-    randomButtonIndex = Audio_NextRandom();
+    randomButtonIndex = AudioThread_NextRandom();
     randomPitch = sButtonToPitchMap[randomButtonIndex % ARRAY_COUNT(sButtonToPitchMap)];
 
     if (sOcarinaSongNotes[OCARINA_SONG_MEMORY_GAME][sOcarinaMemoryGameAppendPos - 1].pitch == randomPitch) {
@@ -3165,7 +3311,7 @@ s32 AudioOcarina_MemoryGameNextNote(void) {
 #undef OCARINA_SONG_MEMORY_GAME
 
 void AudioOcarina_Update(void) {
-    sOcarinaUpdateTaskStart = gAudioContext.totalTaskCount;
+    sOcarinaUpdateTaskStart = gAudioCtx.totalTaskCount;
     if (sOcarinaInstrumentId != OCARINA_INSTRUMENT_OFF) {
         if (sIsOcarinaInputEnabled == true) {
             AudioOcarina_ReadControllerInput();
@@ -3234,7 +3380,7 @@ void AudioOcarina_PlayLongScarecrowAfterCredits(void) {
             break;
 
         case 1:
-            Audio_SetSfxBanksMute(0);
+            AudioSfx_MuteBanks(0);
             AudioOcarina_SetInstrument(sScarecrowAfterCreditsIntrumentId);
             AudioOcarina_SetPlaybackSong(OCARINA_SONG_SCARECROW_LONG + 1, 1);
             sScarecrowAfterCreditsIntrumentId++;
@@ -3253,9 +3399,9 @@ u8 sRequestCustomSequence = false;
 
 void AudioOcarina_SetCustomSequence(void) {
     // Never passes true as sRequestCustomSequence is never set true
-    if (sRequestCustomSequence && gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].enabled &&
-        ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].soundScriptIO[0] == 0xFF)) {
-        gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].seqData = sCustomSequenceScript;
+    if (sRequestCustomSequence && gAudioCtx.seqPlayers[SEQ_PLAYER_FANFARE].enabled &&
+        ((u8)gAudioCtx.seqPlayers[SEQ_PLAYER_FANFARE].soundScriptIO[0] == (u8)SEQ_IO_VAL_NONE)) {
+        gAudioCtx.seqPlayers[SEQ_PLAYER_FANFARE].seqData = sCustomSequenceScript;
         sRequestCustomSequence = false;
     }
 }
@@ -3475,51 +3621,490 @@ void AudioOcarina_ResetStaffs(void) {
     D_801D8534 = 0;
 }
 
-s8 D_801D8B30[] = {
-    0,  2,  4,   6,   8,   10,  12,  14,  16,  18,  20,  22,  24,  25,  26,  27,  28,  29,  30, 31, 32, 33,
-    34, 35, 36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52, 53, 54, 55,
-    56, 56, 57,  57,  58,  58,  59,  59,  60,  60,  60,  61,  61,  61,  62,  62,  62,  63,  63, 63, 64, 64,
-    64, 65, 65,  65,  66,  66,  66,  67,  67,  67,  68,  68,  69,  69,  70,  70,  71,  71,  72, 73, 74, 75,
-    76, 77, 78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94, 95, 96, 97,
-    98, 99, 100, 101, 102, 103, 105, 107, 109, 111, 113, 115, 117, 119, 121, 123, 125, 127,
-};
-f32 sBigBellsVolume[8] = {
-    1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f,
-};
-u8 sBgmPlayers[2] = { SEQ_PLAYER_BGM_MAIN, SEQ_PLAYER_BGM_SUB };
-f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
+void Audio_Noop1(s32 arg0) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019DFF8.s")
+void Audio_Noop2(s32 arg0, s32 arg1) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E000.s")
+void Audio_Noop3(void) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E00C.s")
+void Audio_Update(void) {
+    if ((func_801A9768() == 0) && (func_801A982C() == 0)) {
+        AudioOcarina_SetCustomSequence();
+        AudioOcarina_Update();
+        func_801A5118();
+        Audio_StepFreqLerp(&sRiverFreqScaleLerp);
+        Audio_StepFreqLerp(&sWaterfallFreqScaleLerp);
+        Audio_UpdateRiverSoundVolumes();
+        Audio_UpdateSceneSequenceResumePoint();
+        func_801A312C();
+        func_8019FEDC();
+        func_801A1E0C();
+        func_801A1904();
+        func_801A2090();
+        func_801A3AC0();
+        func_801A1290();
+        Audio_ResetRequestedSceneSeqId();
+        AudioSfx_ProcessRequests();
+        func_801A89D0();
+        AudioSfx_ProcessActiveSfx();
+        func_801A8D5C();
+        AudioSfx_ProcessSfxSettings();
+        AudioThread_ScheduleProcessCmds();
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E014.s")
+void Audio_Noop4(s32 arg0) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E0FC.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E104.s")
+void Audio_Noop5(s32 arg0, s32 arg1) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E110.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E14C.s")
+f32 AudioSfx_ComputeVolume(u8 bankId, u8 entryIndex) {
+    SfxBankEntry* bankEntry = &gSfxBanks[bankId][entryIndex];
+    f32 minDist;
+    f32 phi_f14;
+    f32 baseDist;
+    f32 phi_f12;
+    f32 volume; // Also acts as intermediate volumeSquared
+    s32 pad[3];
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E324.s")
+    if (bankEntry->sfxParams & SFX_FLAG_VOLUME_NO_DIST) {
+        return 1.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E4B0.s")
+    if (bankEntry->dist > 10000.0f) {
+        volume = 0.0f;
+    } else {
+        if (bankEntry->sfxParams & SFX_PARAM_DIST_RANGE_MASK_UPPER) {
+            phi_f12 = 0.35f;
+            phi_f14 = 0.65f;
+        } else {
+            phi_f12 = 0.81f;
+            phi_f14 = 0.19f;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E634.s")
+        switch (bankEntry->sfxParams & SFX_PARAM_DIST_RANGE_MASK) {
+            case 0:
+                baseDist = 500.0f;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019E864.s")
+            case 1:
+                baseDist = 666.6667f;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019EA40.s")
+            case 2:
+                baseDist = 952.381f;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019EB2C.s")
+            case 3:
+                baseDist = 3846.154f;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F024.s")
+            case 4:
+                baseDist = 1000.0f;
+                break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F05C.s")
+            case 5:
+                baseDist = 666.6667f;
+                break;
+
+            case 6:
+                baseDist = 500.0f;
+                break;
+
+            case 7:
+                baseDist = 400.0f;
+                break;
+        }
+
+        minDist = baseDist / 5.0f;
+
+        if (bankEntry->dist < minDist) {
+            volume = 1.0f;
+        } else if (bankEntry->dist < baseDist) {
+            volume =
+                ((((baseDist - minDist) - (bankEntry->dist - minDist)) / (baseDist - minDist)) * phi_f14) + phi_f12;
+        } else {
+            volume = (1.0f - ((bankEntry->dist - baseDist) / (10000.0f - baseDist))) * phi_f12;
+        }
+
+        volume = SQ(volume);
+    }
+
+    return volume;
+}
+
+s8 AudioSfx_ComputeReverb(u8 bankId, u8 entryIndex, u8 channelIndex) {
+    s8 distAdd = 0;
+    s32 scriptAdd = 0;
+    SfxBankEntry* entry = &gSfxBanks[bankId][entryIndex];
+    s32 reverb;
+
+    if (!(entry->sfxParams & SFX_FLAG_REVERB_NO_DIST)) {
+        if (entry->dist < 2500.0f) {
+            distAdd = *entry->posZ > 0.0f ? (entry->dist / 2500.0f) * 70.0f : (entry->dist / 2500.0f) * 91.0f;
+        } else {
+            distAdd = 70;
+        }
+    }
+
+    if (IS_SEQUENCE_CHANNEL_VALID(gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex])) {
+        scriptAdd = gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1];
+        if (gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1] <= SEQ_IO_VAL_NONE) {
+            scriptAdd = 0;
+        }
+    }
+
+    reverb = (*entry->reverbAdd & 0x7F) + distAdd;
+
+    if (entry->state != SFX_STATE_READY) {
+        reverb += scriptAdd;
+    }
+
+    if ((bankId != BANK_OCARINA) || (SFX_INDEX(entry->sfxId) >= 2)) {
+        reverb += sAudioEnvReverb + (sAudioCodeReverb & 0x3F) + sSpecReverb;
+    }
+
+    if (reverb > 0x7F) {
+        reverb = 0x7F;
+    }
+
+    return reverb;
+}
+
+s8 AudioSfx_ComputePanSigned(f32 x, f32 z, u8 token) {
+    f32 absX = ABS_ALT(x);
+    f32 absZ = ABS_ALT(z);
+    f32 pan;
+
+    if (absX > 8000.0f) {
+        absX = 8000.0f;
+    }
+
+    if (absZ > 8000.0f) {
+        absZ = 8000.0f;
+    }
+
+    if ((x == 0.0f) && (z == 0.0f)) {
+        pan = 0.5f;
+    } else if (absZ <= absX) {
+        pan = (16000.0f - absX) / (4.5f * (16000.0f - absZ));
+        if (x >= 0.0f) {
+            pan = 1.0f - pan;
+        }
+    } else {
+        pan = (x / (3.6f * absZ)) + 0.5f;
+    }
+
+    if ((absZ < 50.0f) && (absX < 50.0f)) {
+        pan = ((pan - 0.5f) * SQ(absX / 50.0f)) + 0.5f;
+    }
+
+    return (pan * 127.0f) + 0.5f;
+}
+
+f32 AudioSfx_ComputeFreqScale(u8 bankId, u8 entryIndex) {
+    s32 applyRandScaling = false;
+    SfxBankEntry* entry = &gSfxBanks[bankId][entryIndex];
+    f32 dist;
+    f32 freq = 1.0f;
+
+    if (entry->sfxParams & SFX_PARAM_RAND_FREQ_LOWER) {
+        freq = 1.0f - ((gAudioCtx.audioRandom & 0xF) / 192.0f);
+    }
+
+    switch (bankId) {
+        case BANK_VOICE:
+            if (((entry->sfxId & 0xFF) < 0x40) && (sAudioBaseFilter2 != 0)) {
+                applyRandScaling = true;
+            } else if (((entry->sfxId & 0xFF) >= 0x40) && (sAudioExtraFilter2 != 0)) {
+                applyRandScaling = true;
+            }
+            break;
+
+        case BANK_PLAYER:
+        case BANK_ITEM:
+            if (sAudioBaseFilter2 != 0) {
+                applyRandScaling = true;
+            }
+            break;
+
+        case BANK_ENV:
+        case BANK_ENEMY:
+            if (((*entry->reverbAdd & 0x80) != 0) | (sAudioExtraFilter2 != 0)) {
+                applyRandScaling = true;
+            }
+            break;
+
+        case BANK_SYSTEM:
+        case BANK_OCARINA:
+            break;
+
+        default:
+            break;
+    }
+
+    if ((applyRandScaling == true) && !(entry->sfxParams & SFX_PARAM_RAND_FREQ_SCALE)) {
+        freq *= 1.0293 - ((gAudioCtx.audioRandom & 0xF) / 144.0f);
+    }
+
+    dist = entry->dist;
+    if (!(entry->sfxParams & SFX_FLAG_VOLUME_NO_DIST) && !(entry->sfxParams & SFX_FLAG_FREQ_NO_DIST)) {
+        if (dist >= 10000.0f) {
+            freq += 0.2f;
+        } else {
+            freq += (0.2f * (dist / 10000.0f));
+        }
+    }
+
+    if ((entry->sfxParams & SFX_PARAM_RAND_FREQ_RAISE_MASK) != (0 << SFX_PARAM_RAND_FREQ_RAISE_SHIFT)) {
+        freq += (entry->randFreq / 192.0f);
+    }
+
+    return freq;
+}
+
+u8 AudioSfx_ComputeSurroundSoundFilter(f32 behindScreenZ, SfxBankEntry* entry, s8 panSigned) {
+    u8 lowPassCutoff;
+    u8 highPassCutoff;
+    u16* sfxParams;
+    f32 distParam;
+    f32 dist;
+
+    // Remnant of OoT
+    if (*entry->posZ < behindScreenZ) {
+        lowPassCutoff = 0;
+    } else {
+        lowPassCutoff = 0;
+    }
+
+    sfxParams = &entry->sfxParams;
+
+    if (*sfxParams & SFX_FLAG_SURROUND_LOWPASS_FILTER) {
+        lowPassCutoff = 0xF;
+    }
+
+    switch ((*sfxParams & SFX_PARAM_DIST_RANGE_MASK)) {
+        case 0:
+            distParam = 15.0f;
+            break;
+
+        case 1:
+            distParam = 12.0f;
+            break;
+
+        case 2:
+            distParam = 9.0f;
+            break;
+
+        case 3:
+            distParam = 6.0f;
+            break;
+
+        case 4:
+            distParam = 18.0f;
+            break;
+
+        case 5:
+            distParam = 21.0f;
+            break;
+
+        case 6:
+            distParam = 24.0f;
+            break;
+
+        case 7:
+            distParam = 27.0f;
+            break;
+
+        default:
+            break;
+    }
+
+    if (!(entry->sfxFlags & SFX_FLAG2_SURROUND_NO_HIGHPASS_FILTER)) {
+        if (entry->dist > 1923.077f) {
+            dist = 1923.077f;
+        } else {
+            dist = entry->dist;
+        }
+
+        highPassCutoff = (distParam * dist) / (2 * 1923.077f);
+    } else {
+        highPassCutoff = 0;
+    }
+
+    return (lowPassCutoff << 4) + highPassCutoff;
+}
+
+s8 AudioSfx_ComputeCombFilter(f32 posY, u16 sfxParams) {
+    s8 combFilterGain;
+
+    if (posY < 0.0f) {
+        if (posY < -625.0f) {
+            combFilterGain = -32;
+        } else {
+            combFilterGain = (s8)(((625.0f + posY) / 625.0f) * 31.0f) + 0xE0;
+        }
+    } else if (posY > 1250.0f) {
+        combFilterGain = 127;
+    } else {
+        combFilterGain = (posY / 1250.0f) * 126.0f;
+    }
+
+    return combFilterGain | 1;
+}
+
+void AudioSfx_SetProperties(u8 bankId, u8 entryIndex, u8 channelIndex) {
+    static s8 sZVolumes[] = {
+        0,  2,  4,   6,   8,   10,  12,  14,  16,  18,  20,  22,  24,  25,  26,  27,  28,  29,  30, 31, 32, 33,
+        34, 35, 36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52, 53, 54, 55,
+        56, 56, 57,  57,  58,  58,  59,  59,  60,  60,  60,  61,  61,  61,  62,  62,  62,  63,  63, 63, 64, 64,
+        64, 65, 65,  65,  66,  66,  66,  67,  67,  67,  68,  68,  69,  69,  70,  70,  71,  71,  72, 73, 74, 75,
+        76, 77, 78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94, 95, 96, 97,
+        98, 99, 100, 101, 102, 103, 105, 107, 109, 111, 113, 115, 117, 119, 121, 123, 125, 127,
+    };
+    f32 volume = 1.0f;
+    s8 volumeS8;
+    s8 reverb = 0;
+    f32 freqScale = 1.0f;
+    s8 panSigned = 0x40;
+    u8 pad;
+    u8 filter = 0;
+    s8 combFilterGain = 0;
+    s8 zVolume = -1;
+    f32 behindScreenZ;
+    u8 baseFilter = 0;
+    SfxBankEntry* entry = &gSfxBanks[bankId][entryIndex];
+    s32 pad2;
+
+    switch (bankId) {
+        case BANK_PLAYER:
+        case BANK_ITEM:
+        case BANK_ENV:
+        case BANK_ENEMY:
+        case BANK_VOICE:
+            if (sSoundMode == SOUNDMODE_SURROUND_EXTERNAL) {
+                combFilterGain = AudioSfx_ComputeCombFilter(*entry->posY, entry->sfxParams);
+            }
+            // fallthrough
+        case BANK_OCARINA:
+            entry->dist = sqrtf(entry->dist * 10.0f);
+            volume = AudioSfx_ComputeVolume(bankId, entryIndex) * *entry->volume;
+            reverb = AudioSfx_ComputeReverb(bankId, entryIndex, channelIndex);
+            panSigned = AudioSfx_ComputePanSigned(*entry->posX, *entry->posZ, entry->token);
+            freqScale = AudioSfx_ComputeFreqScale(bankId, entryIndex) * *entry->freqScale;
+
+            if (sSoundMode == SOUNDMODE_SURROUND_EXTERNAL) {
+                if (*entry->posZ >= 0.0f) {
+                    if (*entry->posZ < 200.0f) {
+                        zVolume = 32.0f - ((*entry->posZ / 300.0f) * 32.0f);
+                    } else {
+                        zVolume = 0;
+                    }
+                } else if (*entry->posZ < 0.0f) {
+                    if (*entry->posZ > -300.0f) {
+                        zVolume = 32.0f - ((*entry->posZ / 300.0f) * 95.0f);
+                    } else {
+                        zVolume = 127;
+                    }
+                }
+                zVolume = sZVolumes[zVolume];
+            }
+
+            if (sAudioBaseFilter != 0) {
+                if ((bankId == BANK_PLAYER) || (bankId == BANK_ITEM) ||
+                    ((bankId == BANK_VOICE) && (((entry->sfxId & 0xFF) < 0x40) || ((entry->sfxId & 0xFF) >= 0x80)))) {
+                    baseFilter = sAudioBaseFilter;
+                    if (sAudioExtraFilter) {
+                        reverb >>= 2;
+                    }
+                }
+            }
+
+            if (((*entry->reverbAdd & 0x80) | baseFilter | sAudioExtraFilter |
+                 (entry->sfxFlags & SFX_FLAG2_APPLY_LOWPASS_FILTER)) != 0) {
+                filter = ((((*entry->reverbAdd & 0x80) >> 2) | baseFilter | sAudioExtraFilter |
+                           ((entry->sfxFlags & SFX_FLAG2_APPLY_LOWPASS_FILTER) >> 2)) *
+                          2);
+                filter &= 0xFF;
+            } else if ((sSoundMode == SOUNDMODE_SURROUND_EXTERNAL) && !(entry->sfxParams & SFX_FLAG_VOLUME_NO_DIST)) {
+                filter = AudioSfx_ComputeSurroundSoundFilter(behindScreenZ, entry, panSigned);
+            }
+            break;
+
+        case BANK_SYSTEM:
+            break;
+    }
+
+    if (sSfxChannelState[channelIndex].volume != volume) {
+        volumeS8 = (u8)(volume * 127.0f);
+        sSfxChannelState[channelIndex].volume = volume;
+    } else {
+        volumeS8 = -1;
+    }
+
+    //! FAKE:
+    if (1) {}
+
+    // CHAN_UPD_SCRIPT_IO (slot 2, sets volume)
+    AudioThread_QueueCmdS8((0x6 << 24) | (SEQ_PLAYER_SFX << 16) | (channelIndex << 8) | 2, volumeS8);
+
+    if (sSfxChannelState[channelIndex].reverb != reverb) {
+        sSfxChannelState[channelIndex].reverb = reverb;
+    }
+    if (sSfxChannelState[channelIndex].freqScale != freqScale) {
+        sSfxChannelState[channelIndex].freqScale = freqScale;
+    }
+    if (sSfxChannelState[channelIndex].stereoBits != 0) {
+        sSfxChannelState[channelIndex].stereoBits = 0;
+    }
+    if (sSfxChannelState[channelIndex].filter != filter) {
+        sSfxChannelState[channelIndex].filter = filter;
+    }
+    if (sSfxChannelState[channelIndex].combFilterGain != combFilterGain) {
+        sSfxChannelState[channelIndex].combFilterGain = combFilterGain;
+    }
+    if (sSfxChannelState[channelIndex].zVolume != zVolume) {
+        sSfxChannelState[channelIndex].zVolume = zVolume;
+    }
+    if (sSfxChannelState[channelIndex].panSigned != panSigned) {
+        sSfxChannelState[channelIndex].panSigned = panSigned;
+    }
+}
+
+u32 AudioSfx_SetFreqAndStereoBits(u8 seqScriptValIn, SequenceChannel* channel) {
+    channel->stereoData.asByte = sSfxChannelState[seqScriptValIn].stereoBits;
+    channel->freqScale = sSfxChannelState[seqScriptValIn].freqScale;
+    channel->changes.s.freqScale = true;
+
+    return seqScriptValIn;
+}
+
+void AudioSfx_ResetSfxChannelState(void) {
+    SfxChannelState* state;
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(sSfxChannelState); i++) {
+        state = &sSfxChannelState[i];
+        state->volume = 1.0f;
+        state->freqScale = 1.0f;
+        state->reverb = 0;
+        state->panSigned = 0x40;
+        state->stereoBits = 0;
+        state->filter = 0xFF;
+        state->combFilterGain = 0xFF;
+        state->zVolume = 0xFF;
+    }
+
+    sSfxChannelState[SFX_CHANNEL_OCARINA].combFilterGain = 0;
+    sPrevSeqMode = SEQ_MODE_DEFAULT;
+    sAudioCodeReverb = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/play_sound.s")
 
@@ -3533,9 +4118,75 @@ f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F230.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F258.s")
+SfxSettings* AudioSfx_AddSfxSetting(Vec3f* pos) {
+    SfxSettings* sfxSettings;
+    u8 i = 0;
+    u8 sfxSettingIndex = 0xFF;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F300.s")
+    for (; i < ARRAY_COUNT(sSfxSettings); i++) {
+        sfxSettings = &sSfxSettings[i];
+
+        if ((sfxSettings->pos == NULL) && (sfxSettingIndex == 0xFF)) {
+            sfxSettingIndex = i;
+        }
+
+        if (sfxSettings->pos == pos) {
+            return sfxSettings;
+        }
+    }
+
+    if (sfxSettingIndex != 0xFF) {
+        sSfxSettingsFlags |= 1 << sfxSettingIndex;
+        sfxSettings = &sSfxSettings[sfxSettingIndex];
+        sfxSettings->pos = pos;
+        return sfxSettings;
+    }
+
+    return NULL;
+}
+
+void AudioSfx_ProcessSfxSettings(void) {
+    SfxBankEntry* entry;
+    u8 sfxSettingsFlags;
+    u8 sfxSettingIndex = 0;
+    u8 bankId;
+    u8 entryIndex;
+    s32 found;
+
+    if (sSfxSettingsFlags != 0) {
+        sfxSettingsFlags = sSfxSettingsFlags;
+
+        while (sfxSettingsFlags != 0) {
+            bankId = BANK_ENV;
+            if ((sfxSettingsFlags & (1 << sfxSettingIndex))) {
+
+                found = false;
+                while ((bankId <= BANK_ENEMY) && !found) {
+                    entryIndex = gSfxBanks[bankId]->next;
+
+                    while (entryIndex != 0xFF) {
+                        entry = &gSfxBanks[bankId][entryIndex];
+                        entryIndex = 0xFF;
+                        if (entry->posX == &sSfxSettings[sfxSettingIndex].pos->x) {
+                            found = true;
+                        } else {
+                            entryIndex = entry->next;
+                        }
+                    }
+                    bankId++;
+                }
+
+                if (!found) {
+                    sSfxSettingsFlags ^= (1 << sfxSettingIndex);
+                    sSfxSettings[sfxSettingIndex].pos = NULL;
+                }
+
+                sfxSettingsFlags ^= (1 << sfxSettingIndex);
+            }
+            sfxSettingIndex++;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F420.s")
 
@@ -3543,7 +4194,17 @@ f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F540.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F570.s")
+void AudioSfx_LowerSfxSettingsReverb(Vec3f* pos, s8 isReverbLowered) {
+    SfxSettings* sfxSettings = AudioSfx_AddSfxSetting(pos);
+
+    if (sfxSettings != NULL) {
+        if (isReverbLowered) {
+            sfxSettings->reverbAdd = -0x80;
+        } else {
+            sfxSettings->reverbAdd = 0;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F5AC.s")
 
@@ -3585,15 +4246,15 @@ f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
  * Used for EnRiverSound
  */
 void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale) {
-    if (!Audio_IsSfxPlaying(NA_SE_EV_RIVER_STREAM - SFX_FLAG)) {
+    if (!AudioSfx_IsPlaying(NA_SE_EV_RIVER_STREAM - SFX_FLAG)) {
         sRiverFreqScaleLerp.value = freqScale;
     } else if (freqScale != sRiverFreqScaleLerp.value) {
         sRiverFreqScaleLerp.target = freqScale;
         sRiverFreqScaleLerp.remainingFrames = 40;
         sRiverFreqScaleLerp.step = (sRiverFreqScaleLerp.target - sRiverFreqScaleLerp.value) / 40;
     }
-    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &D_801DB4B0,
-                         &gSfxDefaultReverb);
+    AudioSfx_PlaySfx(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &gSfxDefaultFreqAndVolScale,
+                     &gSfxDefaultReverb);
 }
 
 /**
@@ -3601,15 +4262,15 @@ void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale) {
  * Used for Zora's River Waterfall
  */
 void Audio_PlaySfxForWaterfall(Vec3f* pos, f32 freqScale) {
-    if (!Audio_IsSfxPlaying(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG)) {
+    if (!AudioSfx_IsPlaying(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG)) {
         sWaterfallFreqScaleLerp.value = freqScale;
     } else if (freqScale != sWaterfallFreqScaleLerp.value) {
         sWaterfallFreqScaleLerp.target = freqScale;
         sWaterfallFreqScaleLerp.remainingFrames = 40;
         sWaterfallFreqScaleLerp.step = (sWaterfallFreqScaleLerp.target - sWaterfallFreqScaleLerp.value) / 40;
     }
-    Audio_PlaySfxGeneral(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, pos, 4, &sWaterfallFreqScaleLerp.value,
-                         &sWaterfallFreqScaleLerp.value, &gSfxDefaultReverb);
+    AudioSfx_PlaySfx(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, pos, 4, &sWaterfallFreqScaleLerp.value,
+                     &sWaterfallFreqScaleLerp.value, &gSfxDefaultReverb);
 }
 
 /**
@@ -3626,6 +4287,9 @@ void Audio_StepFreqLerp(FreqLerp* lerp) {
     }
 }
 
+f32 sBigBellsVolume[8] = {
+    1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f,
+};
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0124.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0184.s")
@@ -3652,7 +4316,7 @@ void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
 
     for (channelIndex = 0; channelIndex < 16; channelIndex++) {
         // CHAN_UPD_PAN_UNSIGNED
-        Audio_QueueCmdS8(((u8)(u32)channelIndex << 8) | 0x7000000, pan);
+        AudioThread_QueueCmdS8(((u8)(u32)channelIndex << 8) | 0x7000000, pan);
     }
 
     // Lowest room in Ganon's Tower (Entrance Room)
@@ -3692,27 +4356,25 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
                           (u8)(lowPassFilterCutoff));
 
         // Sets the reverb
-        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
+        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
              channelIndex++) {
-            if (&gAudioContext.sequenceChannelNone !=
-                gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
+            if (&gAudioCtx.sequenceChannelNone != gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
                 // soundScriptIO[5] was set to 0x40 in channels 0, 1, and 4 (BGM no longer in OoT)
-                if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
-                    0xFF) {
+                if ((u8)gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
+                    (u8)SEQ_IO_VAL_NONE) {
                     // Higher volume leads to lower reverb
-                    reverb =
-                        (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
-                          targetVolume) +
-                         0x7F);
+                    reverb = (((u16)gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
+                               targetVolume) +
+                              0x7F);
 
                     if (reverb > 0x7F) {
                         reverb = 0x7F;
                     }
 
                     // CHAN_UPD_REVERB
-                    Audio_QueueCmdS8(_SHIFTL(5, 24, 8) | _SHIFTL(SEQ_PLAYER_BGM_MAIN, 16, 8) |
-                                         _SHIFTL(channelIndex, 8, 8),
-                                     (u8)reverb);
+                    AudioThread_QueueCmdS8(_SHIFTL(5, 24, 8) | _SHIFTL(SEQ_PLAYER_BGM_MAIN, 16, 8) |
+                                               _SHIFTL(channelIndex, 8, 8),
+                                           (u8)reverb);
                 }
             }
         }
@@ -3768,7 +4430,29 @@ void Audio_UpdateRiverSoundVolumes(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A05F0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0654.s")
+void AudioSfx_SetChannelIO(Vec3f* pos, u16 sfxId, u8 ioData) {
+    u8 channelIndex = 0;
+    u8 bankId = SFX_BANK_SHIFT(sfxId);
+    u8 entryIndex;
+    u8 i;
+
+    for (i = 0; i < bankId; i++) {
+        channelIndex += gChannelsPerBank[gSfxChannelLayout][i];
+    }
+
+    for (i = 0; i < gChannelsPerBank[gSfxChannelLayout][bankId]; i++) {
+        entryIndex = gActiveSfx[bankId][i].entryIndex;
+
+        if (entryIndex != 0xFF) {
+            if ((sfxId == gSfxBanks[bankId][entryIndex].sfxId) && (&pos->x == gSfxBanks[bankId][entryIndex].posX)) {
+                AudioThread_QueueCmdS8(_SHIFTL(6, 24, 8) | _SHIFTL(SEQ_PLAYER_SFX, 16, 8) |
+                                           _SHIFTL(channelIndex, 8, 8) | _SHIFTL(6, 0, 8),
+                                       ioData);
+            }
+        }
+        channelIndex++;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0810.s")
 
@@ -3814,7 +4498,7 @@ void func_801A09D4(Vec3f* pos, f32 xzDistToPlayer) {
         if (channelIndex != 9) {
             Audio_QueueSeqCmd(((u32)(6) << 28) | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(2) << 16) |
                               ((u32)(channelIndex) << 8) | ((u8)(127.0f * volumeRel)));
-            Audio_QueueCmdS8(0x03000000 | ((u8)((u32)channelIndex) << 8), pan);
+            AudioThread_QueueCmdS8(0x03000000 | ((u8)((u32)channelIndex) << 8), pan);
         }
     }
 }
@@ -3837,8 +4521,51 @@ void Audio_ClearSariaBgmAtPos(Vec3f* pos) {
     }
 }
 
-void Audio_SplitBgmChannels(s8 volumeSplit);
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SplitBgmChannels.s")
+/**
+ * Turns on and off channels from both bgm players in a way that splits
+ * equally between the two bgm channels. Split based on note priority
+ */
+void Audio_SplitBgmChannels(s8 volumeSplit) {
+    u8 volume;
+    u8 notePriority;
+    u16 channelBits;
+    u8 sBgmPlayers[2] = { SEQ_PLAYER_BGM_MAIN, SEQ_PLAYER_BGM_SUB };
+    u8 i;
+    u8 channelIndex;
+
+    if ((Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) == NA_BGM_DISABLED) &&
+        (Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) != NA_BGM_ROMANI_RANCH)) {
+        for (i = 0; i < ARRAY_COUNT(sBgmPlayers); i++) {
+            if (i == 0) {
+                // Main Bgm SeqPlayer
+                volume = volumeSplit;
+            } else {
+                // Sub Bgm SeqPlayer
+                volume = 0x7F - volumeSplit;
+            }
+
+            if (volume > 100) {
+                notePriority = 11;
+            } else if (volume < 20) {
+                notePriority = 2;
+            } else {
+                notePriority = ((volume - 20) / 10) + 2;
+            }
+
+            channelBits = 0;
+            for (channelIndex = 0; channelIndex < SEQ_NUM_CHANNELS; channelIndex++) {
+                if (gAudioCtx.seqPlayers[sBgmPlayers[i]].channels[channelIndex]->notePriority < notePriority) {
+                    // If the note currently playing in the channel is a high enough priority,
+                    // then keep the channel on by setting a channelBit
+                    // If this condition fails, then the channel will be shut off
+                    channelBits += (1 << channelIndex);
+                }
+            }
+
+            Audio_QueueSeqCmd(0xA0000000 | ((u32)(sBgmPlayers[i]) << 24) | ((u32)(channelBits)));
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0E44.s")
 
@@ -3890,7 +4617,7 @@ void Audio_PlaySariaBgm(Vec3f* pos, u16 seqId, u16 distMax) {
 
     if (sRiverSoundBgmPos == NULL) {
         sRiverSoundBgmPos = pos;
-        func_801A3238(SEQ_PLAYER_BGM_SUB, seqId, 0, 7, 2);
+        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_SUB, seqId, 0, 7, 2);
     } else {
         prevDist = sqrtf(SQ(sRiverSoundBgmPos->z) + SQ(sRiverSoundBgmPos->x));
         if (dist < prevDist) {
@@ -3927,15 +4654,80 @@ void Audio_ClearSariaBgm2(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A246C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2544.s")
+void Audio_PlayMorningSceneSequence(u16 seqId, u8 dayMinusOne) {
+    Audio_StartMorningSceneSequence(seqId);
+    Audio_QueueSeqCmd(0x70000000 | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(4) << 0x10) | (u32)(dayMinusOne));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A257C.s")
+void Audio_StartMorningSceneSequence(u16 seqId) {
+    if (seqId != NA_BGM_AMBIENCE) {
+        Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_AMBIENCE) << 24) | ((0) << 16));
+        Audio_StartSceneSequence(seqId);
+        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 0, 1);
+    } else {
+        Audio_PlayAmbience(AMBIENCE_ID_08);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A25E4.s")
+void Audio_PlaySceneSequence(u16 seqId, u8 dayMinusOne) {
+    if (sRequestedSceneSeqId != seqId) {
+        if (seqId == NA_BGM_AMBIENCE) {
+            Audio_PlayAmbience(AMBIENCE_ID_08);
+        } else if ((seqId != NA_BGM_FINAL_HOURS) || (sPrevMainBgmSeqId == NA_BGM_DISABLED)) {
+            Audio_StartSceneSequence(seqId);
+            Audio_QueueSeqCmd(0x70000000 | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(4) << 0x10) |
+                              (u32)(dayMinusOne));
+        }
+        sRequestedSceneSeqId = seqId;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2670.s")
+void Audio_StartSceneSequence(u16 seqId) {
+    u8 fadeInDuration = 0;
+    u8 skipHarpIntro;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2778.s")
+    if ((sSeqFlags[sPrevSceneSeqId] & SEQ_FLAG_RESUME_PREV) && (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_RESUME)) {
+        // Resume the sequence from the point where it left off last time it was played in the scene
+        if ((sSeqResumePoint & 0x3F) != 0) {
+            fadeInDuration = 30;
+        }
+
+        // Write the sequence resumePoint to resume from into ioPort 7
+        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, fadeInDuration, 7, sSeqResumePoint);
+
+        sSeqResumePoint = 0;
+    } else {
+        // Start the sequence from the beginning
+
+        // Writes to ioPort 7. See `SEQ_FLAG_SKIP_HARP_INTRO` for writing a value of 1 to ioPort 7.
+        if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_SKIP_HARP_INTRO) {
+            skipHarpIntro = 1;
+        } else {
+            skipHarpIntro = (u8)SEQ_IO_VAL_NONE;
+        }
+        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 7, skipHarpIntro);
+
+        if (!(sSeqFlags[seqId] & SEQ_FLAG_RESUME_PREV)) {
+            // Reset the sequence resumePoint
+            sSeqResumePoint = SEQ_RESUME_POINT_NONE;
+        }
+    }
+    sPrevSceneSeqId = seqId & 0xFF;
+}
+
+void Audio_UpdateSceneSequenceResumePoint(void) {
+    u16 seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
+
+    if ((seqId != NA_BGM_DISABLED) && (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_RESUME)) {
+        if (sSeqResumePoint != SEQ_RESUME_POINT_NONE) {
+            // Get the current point to resume from
+            sSeqResumePoint = gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].soundScriptIO[3];
+        } else {
+            // Initialize the point to resume from to the start of the sequence
+            sSeqResumePoint = 0;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A27E8.s")
 
@@ -3949,35 +4741,238 @@ void Audio_ClearSariaBgm2(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2C44.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2C88.s")
+void Audio_PlaySequenceInCutscene(u16 seqId) {
+    if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_FANFARE) {
+        Audio_PlayFanfare(seqId);
+    } else if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_FANFARE_KAMARO) {
+        Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_FANFARE) << 24) | ((u32)(0) << 0x10) | (u32)(seqId));
+    } else if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_NO_AMBIENCE) {
+        Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_SUB) << 24) | ((u32)(0) << 0x10) | (u32)(seqId));
+    } else {
+        Audio_PlaySequenceWithSeqPlayerIO(SEQ_PLAYER_BGM_MAIN, seqId, 0, 7, SEQ_IO_VAL_NONE);
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 1, 0x7F, 0);
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F, 0);
+        Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_FANFARE) << 24) | ((0) << 16));
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2D54.s")
+void Audio_StopSequenceInCutscene(u16 seqId) {
+    if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_FANFARE) {
+        Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_FANFARE) << 24) | ((0) << 16));
+    } else if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_FANFARE_KAMARO) {
+        Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_FANFARE) << 24) | ((0) << 16));
+    } else if (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_NO_AMBIENCE) {
+        Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_BGM_SUB) << 24) | ((0) << 16));
+    } else {
+        Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_BGM_MAIN) << 24) | ((0) << 16));
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_IsSequencePlaying.s")
+s32 Audio_IsSequencePlaying(u8 seqId) {
+    u8 playerIndex = SEQ_PLAYER_BGM_MAIN;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2E54.s")
+    if (sSeqFlags[seqId & 0xFF] & SEQ_FLAG_FANFARE) {
+        playerIndex = SEQ_PLAYER_FANFARE;
+    } else if (sSeqFlags[seqId & 0xFF] & SEQ_FLAG_FANFARE_KAMARO) {
+        playerIndex = SEQ_PLAYER_FANFARE;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2ED8.s")
+    if (seqId == (Audio_GetActiveSequence(playerIndex) & 0xFF)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2F88.s")
+void Audio_PlayBgm_StorePrevBgm(u16 seqId) {
+    u16 curSeqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2FC4.s")
+    if (curSeqId == NA_BGM_DISABLED) {
+        curSeqId = NA_BGM_GENERAL_SFX;
+    }
+
+    if (curSeqId != seqId) {
+        Audio_SetSequenceMode(SEQ_MODE_IGNORE);
+
+        // Ensure the sequence about to be stored isn't also storing a separate sequence
+        if (!(sSeqFlags[curSeqId] & SEQ_FLAG_RESTORE)) {
+            sPrevMainBgmSeqId = curSeqId;
+        }
+
+        Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(0) << 0x10) | (u32)(seqId + 0x8000));
+    }
+}
+
+/**
+ * To be used in conjunction with Audio_PlayBgm_StorePrevBgm
+ */
+void Audio_RestorePrevBgm(void) {
+    if ((Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_DISABLED) &&
+        (sSeqFlags[Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) & 0xFF] & SEQ_FLAG_RESTORE)) {
+        if ((sPrevMainBgmSeqId == NA_BGM_DISABLED) || (sPrevMainBgmSeqId == NA_BGM_GENERAL_SFX)) {
+            Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_BGM_MAIN) << 24) | ((0) << 16));
+        } else {
+            if (sPrevMainBgmSeqId == NA_BGM_AMBIENCE) {
+                sPrevMainBgmSeqId = sPrevAmbienceSeqId;
+            }
+            Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(0) << 0x10) |
+                              (u32)(sPrevMainBgmSeqId + 0x8000));
+        }
+        sPrevMainBgmSeqId = NA_BGM_DISABLED;
+    }
+}
+
+// Unused
+void Audio_PlayAmbience_StorePrevBgm(u8 ambienceId) {
+    u16 seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
+
+    if (seqId != NA_BGM_AMBIENCE) {
+        sPrevMainBgmSeqId = seqId;
+    }
+
+    Audio_PlayAmbience(ambienceId);
+}
+
+// Unused
+void Audio_ForceRestorePreviousBgm(void) {
+    if (sPrevMainBgmSeqId != NA_BGM_DISABLED) {
+        Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(0) << 0x10) |
+                          (u32)(sPrevMainBgmSeqId + 0x8000));
+    }
+
+    sPrevMainBgmSeqId = NA_BGM_DISABLED;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3000.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3038.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3098.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_PlayFanfare.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A312C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A31EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3238.s")
+void Audio_PlaySequenceWithSeqPlayerIO(s8 playerIndex, u16 seqId, u8 fadeInDuration, s8 ioPort, u8 ioData) {
+    u16 flaggedSeqId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A32CC.s")
+    Audio_QueueSeqCmd(0x70000000 | ((u32)(playerIndex) << 24) | ((u32)(ioPort) << 0x10) | (u32)(ioData));
+    if ((seqId & 0xFF) < 2) {
+        flaggedSeqId = seqId;
+    } else {
+        flaggedSeqId = seqId | 0x8000;
+    }
+    Audio_QueueSeqCmd(0x00000000 | ((u32)(playerIndex) << 24) | ((u32)(fadeInDuration) << 0x10) | (u32)(flaggedSeqId));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3590.s")
+void Audio_SetSequenceMode(u8 seqMode) {
+    s32 volumeFadeInTimer;
+    u16 seqId;
+    u8 volumeFadeOutTimer;
+
+    if ((sPrevMainBgmSeqId == NA_BGM_DISABLED) && (sPrevMainBgmSeqId == NA_BGM_DISABLED)) {
+        // clang-format off
+        if (sAudioCutsceneFlag || sSpatialSeqIsActive[SEQ_PLAYER_BGM_SUB]) { \
+            seqMode = SEQ_MODE_IGNORE;
+        }
+        // clang-format on
+
+        seqId = gActiveSeqs[SEQ_PLAYER_BGM_MAIN].seqId;
+
+        if ((seqId == NA_BGM_DISABLED) || (sSeqFlags[(u8)(seqId & 0xFF)] & SEQ_FLAG_ENEMY) ||
+            ((sPrevSeqMode & 0x7F) == SEQ_MODE_ENEMY)) {
+            if (seqMode != (sPrevSeqMode & 0x7F)) {
+                if (seqMode == SEQ_MODE_ENEMY) {
+                    // If only seqMode = SEQ_MODE_ENEMY (Start)
+                    if (gActiveSeqs[SEQ_PLAYER_BGM_SUB].volScales[1] - sBgmEnemyVolume < 0) {
+                        volumeFadeInTimer = -(gActiveSeqs[SEQ_PLAYER_BGM_SUB].volScales[1] - sBgmEnemyVolume);
+                    } else {
+                        volumeFadeInTimer = gActiveSeqs[SEQ_PLAYER_BGM_SUB].volScales[1] - sBgmEnemyVolume;
+                    }
+
+                    Audio_SetVolumeScale(SEQ_PLAYER_BGM_SUB, 3, sBgmEnemyVolume, volumeFadeInTimer);
+                    Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_SUB) << 24) | ((u32)(10) << 0x10) |
+                                      (u32)(NA_BGM_ENEMY | 0x800));
+
+                    if (seqId >= NA_BGM_TERMINA_FIELD) {
+                        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F - sBgmEnemyVolume, 10);
+                        Audio_SplitBgmChannels(sBgmEnemyVolume);
+                    }
+                } else if ((sPrevSeqMode & 0x7F) == SEQ_MODE_ENEMY) {
+                    // If only sPrevSeqMode = SEQ_MODE_ENEMY (End)
+                    Audio_QueueSeqCmd(0x100000FF | ((u8)(SEQ_PLAYER_BGM_SUB) << 24) | ((10) << 16));
+
+                    if (seqMode == SEQ_MODE_IGNORE) {
+                        volumeFadeOutTimer = 0;
+                    } else {
+                        volumeFadeOutTimer = 10;
+                    }
+
+                    Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F, volumeFadeOutTimer);
+                    Audio_SplitBgmChannels(0);
+                }
+
+                sPrevSeqMode = seqMode + 0x80;
+            } else {
+                if (seqMode == SEQ_MODE_ENEMY) {
+                    // If both seqMode = sPrevSeqMode = SEQ_MODE_ENEMY
+                    if ((Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) == NA_BGM_DISABLED) &&
+                        (seqId != NA_BGM_DISABLED) && (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_ENEMY)) {
+                        Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_BGM_SUB) << 24) | ((u32)(10) << 0x10) |
+                                          (u32)(NA_BGM_ENEMY | 0x800));
+                        sPrevSeqMode = seqMode + 0x80;
+                    }
+                }
+            }
+        } else {
+            // Remnant of OoT's Hyrule Field Sequence
+            if (seqMode == SEQ_MODE_DEFAULT) {
+                if (sPrevSeqMode == SEQ_MODE_STILL) {
+                    sNumFramesMoving = 0;
+                }
+                sNumFramesStill = 0;
+                sNumFramesMoving++;
+            } else {
+                sNumFramesStill++;
+            }
+
+            if ((seqMode == SEQ_MODE_STILL) && (sNumFramesStill < 30) && (sNumFramesMoving > 20)) {
+                seqMode = SEQ_MODE_DEFAULT;
+            }
+
+            sPrevSeqMode = seqMode;
+            Audio_QueueSeqCmd(0x70000000 | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(2) << 0x10) | (u32)(seqMode));
+        }
+    }
+}
+
+void Audio_UpdateEnemyBgmVolume(f32 dist) {
+    f32 adjDist;
+    u16 seqId = gActiveSeqs[SEQ_PLAYER_BGM_MAIN].seqId;
+
+    if (sPrevSeqMode == (SEQ_MODE_ENEMY | 0x80)) {
+        if (dist != sBgmEnemyDist) {
+            // clamp (dist - 150.0f) between 0 and 350
+            if (dist < 150.0f) {
+                adjDist = 0.0f;
+            } else if (dist > 500.0f) {
+                adjDist = 350.0f;
+            } else {
+                adjDist = dist - 150.0f;
+            }
+
+            sBgmEnemyVolume = ((350.0f - adjDist) * 127.0f) / 350.0f;
+            Audio_SetVolumeScale(SEQ_PLAYER_BGM_SUB, 3, sBgmEnemyVolume, 10);
+
+            if ((seqId >= NA_BGM_TERMINA_FIELD) && !(sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_FANFARE_KAMARO)) {
+                Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, (0x7F - sBgmEnemyVolume), 10);
+            }
+        }
+
+        Audio_SplitBgmChannels(sBgmEnemyVolume);
+    }
+    sBgmEnemyDist = dist;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A36F0.s")
 
@@ -4007,7 +5002,9 @@ void Audio_ClearSariaBgm2(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3EC0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SetCutsceneFlag.s")
+void Audio_SetCutsceneFlag(s8 flag) {
+    sAudioCutsceneFlag = flag;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3F6C.s")
 
@@ -4015,7 +5012,7 @@ void Audio_ClearSariaBgm2(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3FFC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/audio_setBGM.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SetSpec.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4058.s")
 
@@ -4037,27 +5034,143 @@ void Audio_ClearSariaBgm2(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_PreNMI.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A44C4.s")
+void Audio_ResetRequestedSceneSeqId(void) {
+    sRequestedSceneSeqId = NA_BGM_DISABLED;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A44D4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A46F8.s")
 
+f32 sSfxOriginalPos[] = { 0.0f, 0.0f, 0.0f };
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4748.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A479C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A47DC.s")
+void Audio_SetAmbienceChannelIO(u8 channelIndexRange, u8 ioPort, u8 ioData) {
+    u8 firstChannelIndex;
+    u8 lastChannelIndex;
+    u8 channelIndex;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A48E0.s")
+    if ((gActiveSeqs[SEQ_PLAYER_AMBIENCE].seqId != NA_BGM_AMBIENCE) && func_801A8ABC(NA_BGM_AMBIENCE, 0xF00000FF)) {
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4A28.s")
+    // channelIndexRange = 01 on ioPort 1
+    if ((((channelIndexRange << 8) + (u32)ioPort) == ((1 << 8) | (u32)1)) &&
+        (Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) != NA_BGM_ROMANI_RANCH)) {
+        D_801FD3A8 = 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4B80.s")
+    firstChannelIndex = channelIndexRange >> 4;
+    lastChannelIndex = channelIndexRange & 0xF;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4C30.s")
+    if (firstChannelIndex == 0) {
+        firstChannelIndex = channelIndexRange & 0xF;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4C54.s")
+    for (channelIndex = firstChannelIndex; channelIndex <= lastChannelIndex; channelIndex++) {
+        Audio_QueueSeqCmd(0x80000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(ioPort) << 16) |
+                          ((u32)(channelIndex) << 8) | (u32)(ioData));
+    }
+}
+
+void Audio_StartAmbience(u16 initChannelMask, u16 initMuteChannelMask) {
+    u8 channelIndex;
+
+    Audio_QueueSeqCmd(0x70000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(SEQ_PLAYER_IO_PORT_0) << 0x10) |
+                      (u32)(1));
+    Audio_QueueSeqCmd(0x70000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(SEQ_PLAYER_IO_PORT_4) << 0x10) |
+                      (u32)((u8)(initChannelMask >> 8)));
+    Audio_QueueSeqCmd(0x70000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(SEQ_PLAYER_IO_PORT_5) << 0x10) |
+                      (u32)((u8)(initChannelMask & 0xFF)));
+    Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, 0x7F, 1);
+
+    if ((Audio_GetActiveSequence(SEQ_PLAYER_AMBIENCE) != NA_BGM_DISABLED) &&
+        (Audio_GetActiveSequence(SEQ_PLAYER_AMBIENCE) != NA_BGM_AMBIENCE)) {
+        Audio_StopSequence(SEQ_PLAYER_AMBIENCE, 0);
+        AudioThread_QueueCmdS32(0xF8 << 24, 0);
+    }
+
+    if (Audio_GetActiveSequence(SEQ_PLAYER_BGM_SUB) == (NA_BGM_ENEMY | 0x800)) {
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F, 1);
+    }
+
+    Audio_QueueSeqCmd(0x00000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(0) << 0x10) | (u32)(NA_BGM_AMBIENCE));
+
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
+        if (!(initMuteChannelMask & (1 << channelIndex)) && (initChannelMask & (1 << channelIndex))) {
+            Audio_QueueSeqCmd(0x80000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(CHANNEL_IO_PORT_1) << 16) |
+                              ((u32)(channelIndex) << 8) | (u32)(1));
+        }
+    }
+}
+
+void Audio_PlayAmbience(u8 ambienceId) {
+    u8 i = 0;
+    u8 channelIndex;
+    u8 ioPort;
+    u8 ioData;
+
+    if (!((gActiveSeqs[SEQ_PLAYER_AMBIENCE].seqId != NA_BGM_DISABLED) &&
+          (sSeqFlags[gActiveSeqs[SEQ_PLAYER_AMBIENCE].seqId & 0xFF & 0xFF] & SEQ_FLAG_NO_AMBIENCE))) {
+        if (gActiveSeqs[SEQ_PLAYER_AMBIENCE].seqId != NA_BGM_AMBIENCE) {
+            sPrevAmbienceSeqId = gActiveSeqs[SEQ_PLAYER_AMBIENCE].seqId;
+        }
+
+        Audio_StartAmbience(sAmbienceData[ambienceId].initChannelMask, sAmbienceData[ambienceId].initMuteChannelMask);
+
+        while ((sAmbienceData[ambienceId].channelProperties[i] != 0xFF) &&
+               (i < ARRAY_COUNT(sAmbienceData[ambienceId].channelProperties))) {
+            channelIndex = sAmbienceData[ambienceId].channelProperties[i++];
+            ioPort = sAmbienceData[ambienceId].channelProperties[i++];
+            ioData = sAmbienceData[ambienceId].channelProperties[i++];
+            Audio_QueueSeqCmd(0x80000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(ioPort) << 16) |
+                              ((u32)(channelIndex) << 8) | (u32)(ioData));
+        }
+
+        Audio_QueueSeqCmd(0x80000000 | ((u32)(SEQ_PLAYER_AMBIENCE) << 24) | ((u32)(CHANNEL_IO_PORT_7) << 16) |
+                          ((u32)(AMBIENCE_CHANNEL_SOUND_MODE) << 8) | (u32)(sSoundMode));
+    }
+}
+
+u32 Audio_SetAmbienceRandomBend(u8 seqScriptValIn, SequenceChannel* channel) {
+    u32 seqScriptValOut = seqScriptValIn;
+
+    gAudioCtx.seqPlayers[SEQ_PLAYER_AMBIENCE].applyBend = true;
+
+    if ((seqScriptValIn == 0) || (seqScriptValIn == 0xFF)) {
+        gAudioCtx.seqPlayers[SEQ_PLAYER_AMBIENCE].bend = 1.0f;
+    } else {
+        seqScriptValOut = AudioThread_NextRandom();
+        gAudioCtx.seqPlayers[SEQ_PLAYER_AMBIENCE].bend = 1.0293 - ((gAudioCtx.audioRandom & 0xF) / 144.0f);
+
+        return seqScriptValOut;
+    }
+
+#ifdef AVOID_UB
+    return seqScriptValOut;
+#endif
+}
+
+void Audio_Init(void) {
+    AudioLoad_Init(NULL, 0);
+}
+
+void AudioSfx_Init(u16 fadeTimer) {
+    u8 channelIndex;
+
+    AudioThread_ScheduleProcessCmds();
+    Audio_StartSequence(SEQ_PLAYER_SFX, NA_BGM_GENERAL_SFX, 0x70, fadeTimer);
+
+    for (channelIndex = 0; channelIndex < ARRAY_COUNT(sSfxChannelState); channelIndex++) {
+        AudioThread_QueueCmdS32(0x10 << 24 | SEQ_PLAYER_SFX << 16 | ((u8)(u32)channelIndex << 8),
+                                &sSfxChannelState[channelIndex]);
+    }
+
+    AudioThread_QueueCmdS32(0xE4000000, AudioSfx_SetFreqAndStereoBits);
+    AudioThread_QueueCmdS32(0xE4000001, Audio_SetAmbienceRandomBend);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A4D00.s")
 

@@ -13,7 +13,7 @@
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play);
-void EnSyatekiWf_Update(Actor* thisx, PlayState* play);
+void EnSyatekiWf_Update(Actor* thisx, PlayState* play2);
 void EnSyatekiWf_Draw(Actor* thisx, PlayState* play);
 
 void func_80A201CC(EnSyatekiWf* this);
@@ -101,7 +101,7 @@ static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Wf_InitVars = {
+ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -113,7 +113,7 @@ const ActorInit En_Syateki_Wf_InitVars = {
     (ActorFunc)EnSyatekiWf_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gWolfosWaitingAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
     { &gWolfosRunningAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &gWolfosRunningAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
@@ -151,12 +151,12 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_WF_GET_NUMBER(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_WF_GET_INDEX(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -186,7 +186,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
                        this->morphTable, WOLFOS_NORMAL_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.hintId = 0x4C;
+    this->actor.hintId = TATL_HINT_ID_WOLFOS;
 
     func_80A201CC(this);
 }
@@ -224,7 +224,7 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.draw = NULL;
     this->unk_2A4 = 1;
     this->unk_298 = 0;
-    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor));
+    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_INDEX(&this->actor));
     this->actionFunc = func_80A20284;
 }
 
@@ -236,7 +236,7 @@ void func_80A20284(EnSyatekiWf* this, PlayState* play) {
         if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_298 == 1)) {
             func_80A200E0(this);
             func_80A2030C(this);
-        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor))) {
+        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_INDEX(&this->actor))) {
             this->unk_298 = 1;
         }
     }
@@ -257,7 +257,7 @@ void func_80A20320(EnSyatekiWf* this, PlayState* play) {
 }
 
 void func_80A20378(EnSyatekiWf* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actor.speedXZ = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
@@ -328,7 +328,7 @@ void func_80A20670(EnSyatekiWf* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
     this->actor.speedXZ = 5.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80A206DC;
 }
 
@@ -340,7 +340,7 @@ void func_80A206DC(EnSyatekiWf* this, PlayState* play) {
 
 void func_80A20710(EnSyatekiWf* this) {
     this->actor.speedXZ = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     this->actionFunc = func_80A2075C;
 }
 
@@ -354,7 +354,7 @@ void func_80A2079C(EnSyatekiWf* this) {
     this->unk_29A = 40;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
     this->actionFunc = func_80A20800;
 }
 
@@ -374,7 +374,7 @@ void func_80A20858(EnSyatekiWf* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
     EffectSsExtra_Spawn(play, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
     syatekiMan->score += 100;
     this->actionFunc = func_80A208F8;
 }
@@ -424,7 +424,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
         this->unk_34C.base.acFlags &= ~AC_HIT;
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             func_80A20858(this, play);
         } else {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);

@@ -118,7 +118,7 @@ s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 
 s32 D_80B2C490[] = { 0x2C27850C, 0x10000000 };
 
-const ActorInit En_Pst_InitVars = {
+ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
     ACTORCAT_PROP,
     FLAGS,
@@ -224,7 +224,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
             }
             break;
         case POSTBOX_BEHAVIOUR_TAKE_ITEM:
-            if (this->exchangeItemId == EXCH_ITEM_LETTER_TO_KAFEI) {
+            if (this->exchangeItemId == PLAYER_AP_LETTER_TO_KAFEI) {
                 scriptBranch = 1;
             }
             break;
@@ -253,7 +253,7 @@ s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
                 return NULL;
         }
     } else if (this->stateFlags & 0x20) {
-        if (this->exchangeItemId == EXCH_ITEM_LETTER_MAMA) {
+        if (this->exchangeItemId == PLAYER_AP_LETTER_MAMA) {
             return D_80B2C488;
         } else {
             return D_80B2C490;
@@ -284,10 +284,10 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     if (this->stateFlags & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->stateFlags &= ~0x30;
-            if (player->exchangeItemId == EXCH_ITEM_LETTER_TO_KAFEI) {
+            if (player->exchangeItemId == PLAYER_AP_LETTER_TO_KAFEI) {
                 this->stateFlags |= 0x10;
                 this->exchangeItemId = player->exchangeItemId;
-            } else if (player->exchangeItemId != EXCH_ITEM_NONE) {
+            } else if (player->exchangeItemId != PLAYER_AP_NONE) {
                 this->stateFlags |= 0x20;
                 this->exchangeItemId = player->exchangeItemId;
             }

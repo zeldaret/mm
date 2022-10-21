@@ -32,7 +32,7 @@ typedef struct {
 
 static PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-const ActorInit En_Bom_InitVars = {
+ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
     ACTORCAT_EXPLOSIVES,
     FLAGS,
@@ -139,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->flashSpeedScale = 7;
     this->isPowderKeg = ENBOM_GETX_1(&this->actor);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 |= 1;
+        play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
     } else {
         this->timer = 70;
@@ -188,7 +188,7 @@ void EnBom_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider2);
     Collider_DestroyCylinder(play, &this->collider1);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 &= ~1;
+        play->actorCtx.flags &= ~ACTORCTX_FLAG_0;
     }
 }
 
@@ -301,7 +301,7 @@ void func_80871058(EnBom* this, PlayState* play) {
 void func_808714D4(EnBom* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actionFunc = func_80871058;
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
@@ -377,7 +377,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
 
     if (this->timer == 0) {
         func_80123590(play, &this->actor);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if ((this->timer & 1) == 0) {
@@ -433,12 +433,12 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 2) {
+    if (player->stateFlags1 & PLAYER_STATE1_2) {
         return;
     }
 
     if (Player_GetMask(play) == PLAYER_MASK_GIANT) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
@@ -451,7 +451,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
             if (this->isPowderKeg) {
                 gSaveContext.powderKegTimer = 0;
             }
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     } else {
         thisx->gravity = -1.2f;
@@ -541,7 +541,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
-                thisx->flags |= (0x100000 | 0x20);
+                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
@@ -610,7 +610,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
 
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateXS(0x4000, MTXMODE_APPLY);
@@ -619,7 +619,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
             gDPPipeSync(POLY_OPA_DISP++);
             gDPSetEnvColor(POLY_OPA_DISP++, (s8)this->unk_1F4, 0, 40, 255);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, (s8)this->unk_1F4, 0, 40, 255);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015DB0);
+            gSPDisplayList(POLY_OPA_DISP++, gBombBodyDL);
         } else {
             Vec3f sp58;
             Vec3f sp4C;

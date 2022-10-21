@@ -13,10 +13,10 @@
 
 void EnMuto_Init(Actor* thisx, PlayState* play);
 void EnMuto_Destroy(Actor* thisx, PlayState* play);
-void EnMuto_Update(Actor* thisx, PlayState* play);
+void EnMuto_Update(Actor* thisx, PlayState* play2);
 void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 arg1);
+void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
 void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
 void EnMuto_Idle(EnMuto* this, PlayState* play);
@@ -24,7 +24,7 @@ void EnMuto_SetupDialogue(EnMuto* this, PlayState* play);
 void EnMuto_InDialogue(EnMuto* this, PlayState* play);
 s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Muto_InitVars = {
+ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -75,7 +75,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         }
 
         if (gSaveContext.save.day != 3 || !gSaveContext.save.isNight) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
@@ -83,7 +83,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.yShift = 0;
 
         if (gSaveContext.save.weekEventReg[63] & 0x80 || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -255,7 +255,7 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->isInMayorsRoom && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

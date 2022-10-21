@@ -68,7 +68,7 @@
         <Limb Name="gGiantRightHandLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_HAND" Offset="0x7968" />
 
         <!-- Giant Skeleton -->
-        <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" LimbNone="GIANT_LIMB_NONE" LimbMax="GIANT_LIMB_MAX" EnumName="EnGiantLimbs" Offset="0x79B0" />
+        <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" LimbNone="GIANT_LIMB_NONE" LimbMax="GIANT_LIMB_MAX" EnumName="EnGiantLimb" Offset="0x79B0" />
 
         <!-- Giant Animations -->
         <Animation Name="gGiantLookUpStartAnim" Offset="0x8394" /> <!-- Original name is "kyo_kaoage" ("raising face") -->

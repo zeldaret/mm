@@ -6,6 +6,7 @@
 
 #include "z_en_fishing.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
@@ -15,12 +16,12 @@
 
 #define WATER_SURFACE_Y(play) play->colCtx.colHeader->waterBoxes->minPos.y
 
-void EnFishing_Init(Actor* thisx, PlayState* play);
-void EnFishing_Destroy(Actor* thisx, PlayState* play);
-void EnFishing_UpdateFish(Actor* thisx, PlayState* play);
+void EnFishing_Init(Actor* thisx, PlayState* play2);
+void EnFishing_Destroy(Actor* thisx, PlayState* play2);
+void EnFishing_UpdateFish(Actor* thisx, PlayState* play2);
 void EnFishing_DrawFish(Actor* thisx, PlayState* play);
 
-void EnFishing_UpdateOwner(Actor* thisx, PlayState* play);
+void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2);
 void EnFishing_DrawOwner(Actor* thisx, PlayState* play);
 
 typedef struct {
@@ -200,7 +201,7 @@ s16 D_80917272;
 u8 D_80917274;
 Vec3f D_80917278;
 
-const ActorInit En_Fishing_InitVars = {
+ActorInit En_Fishing_InitVars = {
     ACTOR_EN_FISHING,
     ACTORCAT_NPC,
     FLAGS,
@@ -830,7 +831,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         thisx->focus.pos = thisx->world.pos;
         thisx->focus.pos.y += 75.0f;
-        thisx->flags |= 9;
+        thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
 
         if (sLinkAge != 1) {
             // HIGH_SCORE(HS_FISHING) from OoT
@@ -960,7 +961,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         this->unk_150 = 100;
         func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
         thisx->targetMode = 0;
-        thisx->flags |= 9;
+        thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     } else {
         this->unk_150 = 10;
@@ -2150,7 +2151,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
             Math_ApproachF(&D_809101C0, 195.0f, 1.0f, 1.0f);
 
-            if (player->stateFlags1 & 0x8000000) {
+            if (player->stateFlags1 & PLAYER_STATE1_8000000) {
                 D_80917204 = 0;
                 player->unk_B28 = 0;
             }
@@ -3864,7 +3865,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                         D_8090CCF0 = this->unk_1A4;
                                         D_809171D0 = this->unk_148;
                                         D_809171D2 = D_80917206;
-                                        Actor_MarkForDeath(&this->actor);
+                                        Actor_Kill(&this->actor);
                                     } else if ((this->unk_148 == 0) && (D_809171D0 == 0) &&
                                                ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
                                         this->unk_1CD = 1;
@@ -5166,11 +5167,11 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamAt.y = mainCam->at.y;
             sSubCamAt.z = mainCam->at.z;
             D_8090CD4C = 2;
-            Interface_ChangeAlpha(12);
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
             sSubCamVelFactor = 0.0f;
             // fallthrough
         case 2:
-            ShrinkWindow_SetLetterboxTarget(27);
+            ShrinkWindow_Letterbox_SetSizeTarget(27);
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;

@@ -47,7 +47,7 @@ s32 D_80BD3DF8[] = { 0x00330100, 0x050E28FE, 0x0C100E28, -0x03F3F000 };
 
 s32 D_80BD3E08[] = { 0x0E28FD0C, 0x0F29540C, 0x10000000 };
 
-const ActorInit En_Ah_InitVars = {
+ActorInit En_Ah_InitVars = {
     ACTOR_EN_AH,
     ACTORCAT_NPC,
     FLAGS,
@@ -81,7 +81,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_ah_Anim_002280, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -146,7 +146,7 @@ s32 func_80BD2B0C(EnAh* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_300 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_2DC = this->skelAnime.playSpeed;
     }
     return ret;
@@ -307,7 +307,7 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_2DA != temp) {
             if (temp == 0x2954) {
                 this->unk_18C = func_80BD3118;
@@ -512,7 +512,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     EnAh* this = THIS;
 
     if (func_80BD2A30(this, play, ACTORCAT_NPC, ACTOR_EN_AH)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -554,7 +554,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + 60;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_2D8 & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_AP_NONE, this->unk_2D8 & 7);
         if (!(this->unk_2D8 & 0x10)) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);

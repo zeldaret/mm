@@ -22,7 +22,7 @@ typedef struct EnBji01 {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[SHIKASHI_LIMB_MAX]; 
     /* 0x238 */ Vec3s morphTable[SHIKASHI_LIMB_MAX];
-    /* 0x298 */ s32 animationIndex;
+    /* 0x298 */ s32 animIndex;
     /* 0x29C */ s16 eyeTexIndex;
     /* 0x29E */ s16 blinkSeqIndex;
     /* 0x2A0 */ s16 blinkTimer;
@@ -34,7 +34,5 @@ typedef struct EnBji01 {
     /* 0x2AC */ s16 cutscenes[1];
     /* 0x2B0 */ ObjMoonStone* moonsTear;
 } EnBji01; // size = 0x2B4
-
-extern const ActorInit En_Bji_01_InitVars;
 
 #endif // Z_EN_BJI_01_H

@@ -72,7 +72,7 @@
         <Limb Name="object_bsb_Standardlimb_00C36C" Type="Standard" EnumName="OBJECT_BSB_LIMB_12" Offset="0xC36C" />
         <Limb Name="object_bsb_Standardlimb_00C378" Type="Standard" EnumName="OBJECT_BSB_LIMB_13" Offset="0xC378" />
         <Limb Name="object_bsb_Standardlimb_00C384" Type="Standard" EnumName="OBJECT_BSB_LIMB_14" Offset="0xC384" />
-        <Skeleton Name="object_bsb_Skel_00C3E0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BSB_LIMB_NONE" LimbMax="OBJECT_BSB_LIMB_MAX" EnumName="object_bsb_Limbs" Offset="0xC3E0" />
+        <Skeleton Name="object_bsb_Skel_00C3E0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BSB_LIMB_NONE" LimbMax="OBJECT_BSB_LIMB_MAX" EnumName="ObjectBsbLimb" Offset="0xC3E0" />
         <Animation Name="object_bsb_Anim_00C790" Offset="0xC790" />
         <Animation Name="object_bsb_Anim_00CD88" Offset="0xCD88" />
         <Animation Name="object_bsb_Anim_00D3CC" Offset="0xD3CC" />

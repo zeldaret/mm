@@ -30,7 +30,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play);
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
-const ActorInit En_Bigokuta_InitVars = {
+ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,
     FLAGS,
@@ -88,7 +88,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 89, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BIG_OCTO, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 33, ICHAIN_STOP),
 };
 
@@ -106,7 +106,7 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
 
     if (gSaveContext.save.weekEventReg[20] & 2 ||
         ((this->picto.actor.params != 0xFF) && Flags_GetSwitch(play, this->picto.actor.params))) {
-        Actor_MarkForDeath(&this->picto.actor);
+        Actor_Kill(&this->picto.actor);
     } else {
         this->picto.actor.world.pos.y -= 99.0f;
         EnBigokuta_SetupIdle(this);
@@ -381,7 +381,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
             func_800B724C(play, &this->picto.actor, 7);
         } else {
             player = GET_PLAYER(play);
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= PLAYER_STATE1_20;
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -443,7 +443,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                     bubblePos.z = this->picto.actor.world.pos.z + (2.0f * bubbleVel.z);
 
                     EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &bubbleVel, &D_80AC45A4, &D_80AC45B0,
-                                                      &D_80AC45B8, Rand_S16Offset(150, 50), 25, 0);
+                                                      &D_80AC45B8, Rand_S16Offset(150, 50), 25, false);
                 }
 
                 if (this->picto.actor.params != 0xFF) {
@@ -451,14 +451,14 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 }
 
                 ActorCutscene_Stop(this->cutscene);
-                Actor_MarkForDeath(&this->picto.actor);
+                Actor_Kill(&this->picto.actor);
 
                 if (!(gSaveContext.eventInf[4] & 2) && !(gSaveContext.eventInf[3] & 0x20)) {
                     func_800B724C(play, &this->picto.actor, 6);
                 } else {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 &= ~0x20;
+                    player->stateFlags1 &= ~PLAYER_STATE1_20;
                 }
             }
 
@@ -485,7 +485,7 @@ s32 EnBigokuta_IsNearSwampBoat(EnBigokuta* this, PlayState* play) {
 void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
     if ((this->bodyCollider.base.acFlags & AC_ON) &&
         ((this->bodyCollider.base.acFlags & AC_HIT) ||
-         ((play->sceneNum == SCENE_20SICHITAI || play->sceneNum == SCENE_20SICHITAI2) &&
+         ((play->sceneId == SCENE_20SICHITAI || play->sceneId == SCENE_20SICHITAI2) &&
           EnBigokuta_IsNearSwampBoat(this, play)))) {
         Enemy_StartFinishingBlow(play, &this->picto.actor);
 
@@ -517,7 +517,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
     EnBigokuta* this = THIS;
 
     if (!EnBigokuta_IsInWater(this, play)) {
-        Actor_MarkForDeath(&this->picto.actor);
+        Actor_Kill(&this->picto.actor);
         return;
     }
 

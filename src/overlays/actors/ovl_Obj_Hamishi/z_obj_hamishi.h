@@ -21,6 +21,4 @@ typedef struct ObjHamishi {
     /* 0x1A2 */ u8 unk_1A2;
 } ObjHamishi; // size = 0x1A4
 
-extern const ActorInit Obj_Hamishi_InitVars;
-
 #endif // Z_OBJ_HAMISHI_H

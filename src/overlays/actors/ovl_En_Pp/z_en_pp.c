@@ -115,7 +115,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_PP_DMGEFF_KNOCK_OFF_MASK),
 };
 
-const ActorInit En_Pp_InitVars = {
+ActorInit En_Pp_InitVars = {
     ACTOR_EN_PP,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -1072,7 +1072,7 @@ void EnPp_Dead(EnPp* this, PlayState* play) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0xE0);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1110,7 +1110,7 @@ void EnPp_Mask_SetupDetach(EnPp* this, PlayState* play) {
  * Moves the mask through the air and eventually makes it burst into flames.
  */
 void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
-    if (((this->actor.flags & ACTOR_FLAG_2000) != ACTOR_FLAG_2000) || (this->action == EN_PP_ACTION_MASK_DEAD)) {
+    if (!CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000) || (this->action == EN_PP_ACTION_MASK_DEAD)) {
         switch (this->actionVar.maskDetachState) {
             case EN_PP_MASK_DETACH_STATE_START:
                 this->action = EN_PP_ACTION_MASK_DEAD;
@@ -1150,7 +1150,7 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
                                           &sMaskFireVelocityAndAccel[i], 70, 0, 2);
                         }
 
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                     }
                 }
                 break;
@@ -1225,7 +1225,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
     }
 
     if ((this->timer == 0) || (this->actor.bgCheckFlags & 1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1539,10 +1539,10 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             (limbIndex == HIPLOOP_LIMB_CENTER_WING_BASE) || (limbIndex == HIPLOOP_LIMB_CENTER_WING_MIDDLE) ||
             (limbIndex == HIPLOOP_LIMB_BACK_LEFT_LOWER_LEG) || (limbIndex == HIPLOOP_LIMB_RIGHT_EYE) ||
             (limbIndex == HIPLOOP_LIMB_LEFT_EYE)) {
-            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosCount]);
-            this->bodyPartsPosCount++;
-            if (this->bodyPartsPosCount >= ARRAY_COUNT(this->bodyPartsPos)) {
-                this->bodyPartsPosCount = 0;
+            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
+            this->bodyPartsPosIndex++;
+            if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+                this->bodyPartsPosIndex = 0;
             }
 
             if ((this->action == EN_PP_ACTION_SPAWN_BODY_PARTS) && (this->deadBodyPartsSpawnedCount < 6) &&

@@ -20,7 +20,7 @@ void func_809C42A8(EnEncount4* this, PlayState* play);
 void func_809C4598(EnEncount4* this, PlayState* play);
 void func_809C464C(EnEncount4* this, PlayState* play);
 
-const ActorInit En_Encount4_InitVars = {
+ActorInit En_Encount4_InitVars = {
     ACTOR_EN_ENCOUNT4,
     ACTORCAT_PROP,
     FLAGS,

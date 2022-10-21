@@ -5,6 +5,7 @@
  */
 
 #include "z_en_go.h"
+#include "z64quake.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/object_taisou/object_taisou.h"
@@ -77,7 +78,7 @@ static s32 D_80A163EC[4] = { 0x100060E, 0xE040C12, 0x100E0E05, 0xC121000 };
 static s32 D_80A163FC[4] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
 static s32 D_80A1640C[2] = { 0xE023A0C, 0x12100000 };
 
-const ActorInit En_Go_InitVars = {
+ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,
     ACTORCAT_NPC,
     FLAGS,
@@ -186,7 +187,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -299,8 +300,8 @@ void func_80A1143C(EnGoStruct* ptr, Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4
 }
 
 void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
-    static TexturePtr D_80A16644[] = {
-        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+    static TexturePtr sDustTextures[] = {
+        gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
     };
     static Color_RGBA8 D_80A16664[] = {
         { 255, 255, 255, 0 },
@@ -341,7 +342,7 @@ void func_80A115B4(EnGoStruct* ptr, PlayState* play) {
             Matrix_ReplaceRotation(&play->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[(s32)(temp * 7.0f)]));
             gSPDisplayList(POLY_XLU_DISP++, gGoronDustModelDL);
 
             Matrix_Pop();
@@ -524,7 +525,7 @@ void func_80A1213C(EnGo* this, PlayState* play) {
 s32 func_80A121F4(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (player->stateFlags3 & 0x2000000)) {
+    if ((player->transformation == PLAYER_FORM_GORON) && (player->stateFlags3 & PLAYER_STATE3_2000000)) {
         return false;
     }
     return true;
@@ -537,8 +538,8 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
     if (((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
-        (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneNum == SCENE_16GORON_HOUSE) &&
-         (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
+        (!(gSaveContext.save.weekEventReg[22] & 4) && (play->sceneId == SCENE_16GORON_HOUSE) &&
+         (gSaveContext.sceneLayer == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
         ret = true;
     }
     return ret;
@@ -636,7 +637,7 @@ void func_80A12660(EnGo* this, PlayState* play) {
 void func_80A126BC(EnGo* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags2 & 0x4000)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_4000)) {
         if (this->unk_3C6 != 0) {
             this->unk_3C6--;
         }
@@ -710,7 +711,7 @@ s32 func_80A12868(EnGo* this, PlayState* play) {
 
 s32 func_80A12954(EnGo* this, PlayState* play) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
-        (play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.currentCsIndex == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -793,7 +794,7 @@ s32 func_80A12C48(EnGo* this, PlayState* play, s32 arg2) {
     if (objIdx2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx2].segment);
         this->unk_3DC = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
         this->unk_398 = this->skelAnime.playSpeed;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIdx].segment);
     }
@@ -829,7 +830,7 @@ s32 func_80A12E80(EnGo* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_392 != temp) {
             switch (temp) {
                 case 0xE1A:
@@ -987,7 +988,7 @@ Actor* func_80A13400(EnGo* this, PlayState* play) {
 }
 
 void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
-    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.unk5 & 1) || arg2) {
+    if ((gSaveContext.save.weekEventReg[18] & 0x80) || (play->actorCtx.flags & ACTORCTX_FLAG_0) || arg2) {
         this->colliderSphere.dim.modelSphere.radius = 300;
     } else {
         this->colliderSphere.dim.modelSphere.radius = 380;
@@ -1045,16 +1046,16 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
     return ret;
 }
 
-void func_80A136B8(PlayState* play, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
+void func_80A136B8(PlayState* play, s16 speed, s16 verticalMag, s16 countdown) {
+    s16 quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
 
-    Quake_SetCountdown(sp26, arg3);
-    Quake_SetSpeed(sp26, arg1);
-    Quake_SetQuakeValues(sp26, arg2, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, countdown);
+    Quake_SetSpeed(quakeIndex, speed);
+    Quake_SetQuakeValues(quakeIndex, verticalMag, 0, 0, 0);
 }
 
 void func_80A13728(EnGo* this, PlayState* play) {
-    func_80A136B8(play, 0x6C77, 7, 20);
+    func_80A136B8(play, 27767, 7, 20);
     play->actorCtx.unk2 = 4;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, 0, 0, 0, 0);
@@ -1373,21 +1374,23 @@ void func_80A143A8(EnGo* this, PlayState* play) {
 }
 
 void func_80A14430(EnGo* this, PlayState* play) {
-    if (((gSaveContext.save.entranceIndex == 0xD000) || (gSaveContext.save.entranceIndex == 0xD020)) &&
+    if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
+         (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
         (gSaveContext.save.weekEventReg[33] & 0x80)) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
 void func_80A1449C(EnGo* this, PlayState* play) {
-    if ((gSaveContext.save.entranceIndex == 0xD010) || (gSaveContext.save.entranceIndex == 0x1C00)) {
+    if ((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) ||
+        (gSaveContext.save.entrance == ENTRANCE(CUTSCENE, 0))) {
         func_80A14104(this, play);
         this->actionFunc = func_80A149B0;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1409,7 +1412,7 @@ void func_80A144F4(EnGo* this, PlayState* play) {
 
 void func_80A145AC(EnGo* this, PlayState* play) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
-        (((play->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
+        (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
           (play->csCtx.currentCsIndex == 0)) ||
          !(gSaveContext.save.weekEventReg[21] & 8))) {
         this->actor.child = func_80A13400(this, play);
@@ -1502,7 +1505,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
                 break;
 
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }
@@ -1511,7 +1514,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
 void func_80A149B0(EnGo* this, PlayState* play) {
     s16 sp26 = this->actor.world.rot.y;
 
-    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entranceIndex == 0xD010)) {
+    if ((ENGO_GET_F(&this->actor) == ENGO_F_2) && (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (func_80A1222C(this, play)) {
@@ -1926,10 +1929,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             phi_f0 = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
     } else if ((this->unk_390 & 0x200) && (this->unk_3EC != 0)) {
         phi_f0 = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, phi_f0, 20.0f, EXCH_ITEM_NONE, this->unk_390 & 7);
+        func_8013C964(&this->actor, play, phi_f0, 20.0f, PLAYER_AP_NONE, this->unk_390 & 7);
     }
 
     if ((ENGO_GET_F(&this->actor) != ENGO_F_8) && (ENGO_GET_F(&this->actor) != ENGO_F_2) &&

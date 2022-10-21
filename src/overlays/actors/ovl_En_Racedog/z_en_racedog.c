@@ -28,7 +28,7 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
 void EnRacedog_UpdateRaceVariables(EnRacedog* this);
 void EnRacedog_CheckForFinish(EnRacedog* this);
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
-s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates);
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play);
 void EnRacedog_PlaySfxWalk(EnRacedog* this);
 
@@ -69,7 +69,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,
@@ -204,26 +204,26 @@ static DamageTable sDamageTable = {
 };
 
 typedef enum {
-    /*  0 */ RACEDOG_ANIMATION_IDLE,
-    /*  1 */ RACEDOG_ANIMATION_WALK_1, // unused
-    /*  2 */ RACEDOG_ANIMATION_RUN,
-    /*  3 */ RACEDOG_ANIMATION_BARK,               // unused
-    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_ONCE,      // unused
-    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN,           // unused
-    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1, // unused
-    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,    // unused
-    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2, // unused
-    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3, // unused
-    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4, // unused
-    /* 11 */ RACEDOG_ANIMATION_WALK_BACKWARDS,     // unused
-    /* 12 */ RACEDOG_ANIMATION_JUMP,
-    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,   // unused
-    /* 14 */ RACEDOG_ANIMATION_JUMP_ATTACK, // unused
-    /* 15 */ RACEDOG_ANIMATION_SWIM,        // unused
-    /* 16 */ RACEDOG_ANIMATION_MAX
-} RacedogAnimationIndex;
+    /*  0 */ RACEDOG_ANIM_IDLE,
+    /*  1 */ RACEDOG_ANIM_WALK_1, // unused
+    /*  2 */ RACEDOG_ANIM_RUN,
+    /*  3 */ RACEDOG_ANIM_BARK,               // unused
+    /*  4 */ RACEDOG_ANIM_SIT_DOWN_ONCE,      // unused
+    /*  5 */ RACEDOG_ANIM_SIT_DOWN,           // unused
+    /*  6 */ RACEDOG_ANIM_LYING_DOWN_START_1, // unused
+    /*  7 */ RACEDOG_ANIM_LYING_DOWN_LOOP,    // unused
+    /*  8 */ RACEDOG_ANIM_LYING_DOWN_START_2, // unused
+    /*  9 */ RACEDOG_ANIM_LYING_DOWN_START_3, // unused
+    /* 10 */ RACEDOG_ANIM_LYING_DOWN_START_4, // unused
+    /* 11 */ RACEDOG_ANIM_WALK_BACKWARDS,     // unused
+    /* 12 */ RACEDOG_ANIM_JUMP,
+    /* 13 */ RACEDOG_ANIM_LONG_JUMP,   // unused
+    /* 14 */ RACEDOG_ANIM_JUMP_ATTACK, // unused
+    /* 15 */ RACEDOG_ANIM_SWIM,        // unused
+    /* 16 */ RACEDOG_ANIM_MAX
+} RacedogAnimation;
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
@@ -238,10 +238,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 index) {
+void EnRacedog_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animationInfo += index;
+    animationInfo += animIndex;
     if (animationInfo->frameCount < 0) {
         frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
@@ -318,7 +318,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->selectionArrowGreenPrimColor = 255;
@@ -354,8 +354,8 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
-    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_IDLE);
-    sAnimations[RACEDOG_ANIMATION_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
+    EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
+    sAnimationInfo[RACEDOG_ANIM_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = EnRacedog_RaceStart;
 }
 
@@ -376,7 +376,7 @@ void EnRacedog_RaceStart(EnRacedog* this, PlayState* play) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_RUN);
+        EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
         this->actionFunc = EnRacedog_Race;
     }
 }
@@ -601,9 +601,9 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
-        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 0.9f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
-        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 1.0f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
     }
 }
 

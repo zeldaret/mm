@@ -472,7 +472,7 @@ static UNK_TYPE D_80AFB764[] = {
     0x52801210,
 };
 
-const ActorInit En_Pm_InitVars = {
+ActorInit En_Pm_InitVars = {
     ACTOR_EN_PM,
     ACTORCAT_NPC,
     FLAGS,
@@ -526,7 +526,7 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_mm_Anim_00A4E0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -718,7 +718,7 @@ s32 func_80AF7E98(EnPm* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_384 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_35C = this->skelAnime.playSpeed;
     }
 
@@ -1017,7 +1017,7 @@ s32 func_80AF86F0(EnPm* this, PlayState* play) {
 s32 func_80AF87C4(EnPm* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 9) &&
+    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 9) &&
         (play->curSpawn == 1)) {
         if (!this->unk_380) {
             func_80AF7E98(this, 0);
@@ -1170,7 +1170,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & (0x400 | 0x40)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_356 |= 0x400;
         if (this->unk_358 != textId) {
             if ((this->unk_384 == 0) || (this->unk_384 == 1)) {
@@ -1380,7 +1380,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         if (scheduleOutput->result == 24) {
             Flags_UnsetSwitch(play, 0);
             Flags_UnsetSwitch(play, 1);
-            this->unk_394 = EXCH_ITEM_NONE;
+            this->unk_394 = PLAYER_AP_NONE;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
         }
@@ -1481,7 +1481,7 @@ s32 func_80AF98A0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0, -0x3F46, 0,
                            0) != NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         ret = true;
     }
     return ret;
@@ -1568,7 +1568,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_394 = EXCH_ITEM_NONE;
+    this->unk_394 = PLAYER_AP_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 

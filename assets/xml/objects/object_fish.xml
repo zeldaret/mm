@@ -35,7 +35,7 @@
         <Limb Name="object_fish_Standardlimb_002960" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0D" Offset="0x2960" />
         <Limb Name="object_fish_Standardlimb_00296C" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0E" Offset="0x296C" />
         <Limb Name="object_fish_Standardlimb_002978" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0F" Offset="0x2978" />
-        <Skeleton Name="gFishingFishSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_1_LIMB_NONE" LimbMax="OBJECT_FISH_1_LIMB_MAX" EnumName="object_fish_1_Limbs" Offset="0x29C0" />
+        <Skeleton Name="gFishingFishSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_1_LIMB_NONE" LimbMax="OBJECT_FISH_1_LIMB_MAX" EnumName="ObjectFish1Limb" Offset="0x29C0" />
         <Texture Name="object_fish_Tex_0029D0" OutName="tex_0029D0" Format="rgba16" Width="8" Height="16" Offset="0x29D0" />
         <Texture Name="object_fish_Tex_002AD0" OutName="tex_002AD0" Format="rgba16" Width="8" Height="8" Offset="0x2AD0" />
         <DList Name="object_fish_DL_002BD0" Offset="0x2BD0" />
@@ -73,7 +73,7 @@
         <Limb Name="object_fish_Standardlimb_0085B4" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_06" Offset="0x85B4" />
         <Limb Name="object_fish_Standardlimb_0085C0" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_07" Offset="0x85C0" />
         <Limb Name="object_fish_Standardlimb_0085CC" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_08" Offset="0x85CC" />
-        <Skeleton Name="gFishingOwnerSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_2_LIMB_NONE" LimbMax="OBJECT_FISH_2_LIMB_MAX" EnumName="object_fish_2_Limbs" Offset="0x85F8" />
+        <Skeleton Name="gFishingOwnerSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_2_LIMB_NONE" LimbMax="OBJECT_FISH_2_LIMB_MAX" EnumName="ObjectFish2Limb" Offset="0x85F8" />
         <DList Name="gFishingRippleSetupDL" Offset="0x8610" />
         <DList Name="gFishingRippleVtxDL" Offset="0x8678" />
         <Texture Name="object_fish_Tex_008690" OutName="tex_008690" Format="i4" Width="32" Height="32" Offset="0x8690" />
@@ -131,7 +131,7 @@
         <Limb Name="object_fish_Standardlimb_011008" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_09" Offset="0x11008" />
         <Limb Name="object_fish_Standardlimb_011014" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_0A" Offset="0x11014" />
         <Limb Name="object_fish_Standardlimb_011020" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_0B" Offset="0x11020" />
-        <Skeleton Name="gFishingLoachSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_3_LIMB_NONE" LimbMax="OBJECT_FISH_3_LIMB_MAX" EnumName="object_fish_3_Limbs" Offset="0x11058" />
+        <Skeleton Name="gFishingLoachSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_3_LIMB_NONE" LimbMax="OBJECT_FISH_3_LIMB_MAX" EnumName="ObjectFish3Limb" Offset="0x11058" />
         <Blob Name="object_fish_Blob_011064" Size="0xC" Offset="0x11064" />
         <Texture Name="gFishingRodSegmentStripTex" OutName="tex_011070" Format="rgba16" Width="16" Height="8" Offset="0x11070" />
         <Texture Name="gFishingRodSegmentBlackTex" OutName="tex_011170" Format="rgba16" Width="16" Height="8" Offset="0x11170" />

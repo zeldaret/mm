@@ -26,7 +26,7 @@ void func_80B359DC(EnGg* this, PlayState* play);
 void func_80B363E8(EnGgStruct* ptr, PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 void func_80B364D4(EnGgStruct* ptr, PlayState* play);
 
-const ActorInit En_Gg_InitVars = {
+ActorInit En_Gg_InitVars = {
     ACTOR_EN_GG,
     ACTORCAT_NPC,
     FLAGS,
@@ -95,7 +95,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, { &object_gg_Anim_00D528, 1.0f, 0.0f, 0.0f, 2, -10.0f },
     { &object_gg_Anim_00D174, 1.0f, 0.0f, 0.0f, 2, -10.0f }, { &object_gg_Anim_00ECC0, 1.0f, 0.0f, 0.0f, 2, -10.0f },
     { &object_gg_Anim_00BAF0, 1.0f, 0.0f, 0.0f, 0, -10.0f }, { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, 0, -10.0f },
@@ -170,46 +170,46 @@ void func_80B35250(EnGg* this) {
     this->unk_2E4 = 20;
     this->unk_2E2 = 0;
     this->unk_2E6 = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80B35450;
 }
 
 void func_80B352A4(EnGg* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E6].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E6].animation);
 
     if (sp26 == lastFrame) {
         switch (this->actor.textId) {
             case 0xCE5:
                 this->unk_2E6 = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0xCE6:
             case 0xCEC:
                 this->unk_2E6 = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                 break;
 
             case 0xCE8:
                 this->unk_2E6 = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 break;
 
             case 0xCE9:
                 this->unk_2E6 = 3;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 break;
 
             case 0xCED:
             case 0xCEE:
                 this->unk_2E6 = 4;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
                 break;
 
             default:
                 this->unk_2E6 = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                 break;
         }
         gSaveContext.save.weekEventReg[19] |= 0x80;
@@ -219,7 +219,7 @@ void func_80B352A4(EnGg* this, PlayState* play) {
             this->skelAnime.playSpeed = 2.0f;
         } else {
             this->unk_2E6 = 4;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
         }
     }
 }
@@ -231,7 +231,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
-            func_800B90F4(play);
+            Actor_DeactivateLens(play);
         }
         this->unk_308 = 1;
         this->actionFunc = func_80B352A4;
@@ -319,14 +319,14 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     break;
 
                 case 8:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
 
                 default:
                     this->unk_2DA = 0;
                     break;
             }
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_2DA);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_2DA);
         }
 
         if (this->unk_2DA == 14) {
@@ -366,11 +366,11 @@ void func_80B3584C(EnGg* this) {
 
 void func_80B358D8(EnGg* this, PlayState* play) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2DA].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2DA].animation);
 
     if ((this->unk_2E6 == 14) && (sp1E == lastFrame)) {
         this->unk_2E6 = 15;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 15);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 15);
     }
 }
 
@@ -390,11 +390,11 @@ void func_80B359DC(EnGg* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (this->unk_306 == 0) {
-            if (player->stateFlags2 & 0x8000000) {
+            if (player->stateFlags2 & PLAYER_STATE2_8000000) {
                 this->unk_306 = 1;
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
-        } else if (!(player->stateFlags2 & 0x8000000)) {
+        } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_306 = 0;
         }
 
@@ -647,7 +647,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -682,7 +682,7 @@ void EnGg_Destroy(Actor* thisx, PlayState* play) {
 void EnGg_Update(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_80;
         this->actor.flags |= ACTOR_FLAG_1;
     } else {

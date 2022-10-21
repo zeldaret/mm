@@ -25,7 +25,7 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
 void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
 s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Po_Fusen_InitVars = {
+ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
     ACTORCAT_PROP,
     FLAGS,
@@ -111,7 +111,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
     if (!EnPoFusen_CheckParent(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     heightTemp = this->actor.floorHeight + 90.0f;
@@ -129,7 +129,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     this->limb9Rot = 0x71C;
     this->randBaseRotChange = 0;
 
-    if (GET_IS_FUSE_TYPE_PARAM(&this->actor)) {
+    if (ENPOFUSEN_IS_FUSE_TYPE(&this->actor)) {
         EnPoFusen_InitFuse(this);
         return;
     }
@@ -147,7 +147,7 @@ u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
     Actor* actorPtr;
 
     actorPtr = play->actorCtx.actorLists[ACTORCAT_NPC].first;
-    if (GET_IS_FUSE_TYPE_PARAM(&this->actor)) {
+    if (ENPOFUSEN_IS_FUSE_TYPE(&this->actor)) {
         return true;
     }
 
@@ -168,7 +168,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     }
 
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
+    this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 20.0f;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
@@ -238,12 +238,12 @@ void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
                 this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnPoFusen_InitFuse(EnPoFusen* this) {
     s16 rotZ = this->actor.shape.rot.z;
-    this->fuse = GET_FUSE_LEN_PARAM(&this->actor);
+    this->fuse = ENPOFUSEN_GET_FUSE_LEN(&this->actor);
     this->actor.shape.rot.z = 0;
     this->randScaleChange = rotZ & 0xFFFF;
     this->actionFunc = EnPoFusen_IdleFuse;

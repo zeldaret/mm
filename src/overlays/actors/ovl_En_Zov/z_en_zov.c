@@ -28,7 +28,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play);
 void func_80BD1F1C(EnZov* this, PlayState* play);
 s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx);
 
-const ActorInit En_Zov_InitVars = {
+ActorInit En_Zov_InitVars = {
     ACTOR_EN_ZOV,
     ACTORCAT_NPC,
     FLAGS,
@@ -108,7 +108,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80BD1F1C;
             func_80BD1570(this, 9, ANIMMODE_LOOP);
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->picto.actor);
+                Actor_Kill(&this->picto.actor);
                 return;
             }
             break;
@@ -121,7 +121,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
         default:
             this->unk_320 |= 2;
             if ((gSaveContext.save.weekEventReg[55] & 0x80) || (gSaveContext.save.weekEventReg[53] & 0x20)) {
-                Actor_MarkForDeath(&this->picto.actor);
+                Actor_Kill(&this->picto.actor);
             }
             break;
     }
@@ -423,7 +423,7 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
                 break;
 
             case 0x1039:
-                play->nextEntranceIndex = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
+                play->nextEntrance = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
                 play->transitionType = TRANS_TYPE_05;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 gSaveContext.save.weekEventReg[78] |= 1;

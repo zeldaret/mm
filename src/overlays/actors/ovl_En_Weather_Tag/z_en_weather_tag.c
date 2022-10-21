@@ -35,7 +35,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play);
 void func_809674C8(EnWeatherTag* this, PlayState* play);
 void func_80967608(EnWeatherTag* this, PlayState* play);
 
-const ActorInit En_Weather_Tag_InitVars = {
+ActorInit En_Weather_Tag_InitVars = {
     ACTOR_EN_WEATHER_TAG,
     ACTORCAT_PROP,
     FLAGS,
@@ -69,7 +69,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
     // flag: is targetable. Should do nothing as not set by default above
     this->actor.flags &= ~ACTOR_FLAG_1;
 
-    switch (WEATHER_TAG_TYPE(this)) {
+    switch (WEATHER_TAG_TYPE(&this->actor)) {
         case WEATHERTAG_TYPE_UNK0:
             this->unk154 = 0;
             this->fadeDistance = this->actor.world.rot.x;
@@ -78,7 +78,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
         case WEATHERTAG_TYPE_UNK1:
             if (gSaveContext.save.weekEventReg[52] & 0x20) { // if cleared STT
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
             break;
@@ -101,7 +101,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966BF4);
             break;
         case WEATHERTAG_TYPE_WATERMURK:
-            pathID = WEATHER_TAG_PATHID(this);
+            pathID = WEATHER_TAG_PATHID(&this->actor);
             path = &play->setupPathList[pathID];
             this->pathPoints = Lib_SegmentedToVirtual(path->points);
             this->pathCount = path->count;
@@ -119,7 +119,7 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(&this->actor) > Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
         if (play->envCtx.unk_1F == play->envCtx.unk_20) {
             D_801BDBB8 = 1;
             if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
@@ -147,7 +147,7 @@ u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
-    if (WEATHER_TAG_RANGE100(this) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
+    if (WEATHER_TAG_RANGE100(&this->actor) < Actor_XZDistanceBetweenActors(&player->actor, &this->actor)) {
         if (play->envCtx.unk_1F == play->envCtx.unk_20) {
             D_801BDBB8 = 1;
             if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
@@ -199,7 +199,7 @@ void func_8096689C(EnWeatherTag* this, PlayState* play) {
 // WEATHERTAG_TYPE_UNK0
 void func_80966A08(EnWeatherTag* this, PlayState* play) {
     this->unk154 += this->unk158;
-    if (this->unk154 >= 0x8001) {
+    if (this->unk154 > 0x8000) {
         this->unk154 = 0x8000;
         EnWeatherTag_SetupAction(this, func_80966A68);
     }
@@ -214,15 +214,15 @@ void func_80966A68(EnWeatherTag* this, PlayState* play) {
     }
     if ((s16)this->unk154 < 0) { // cast req
         this->unk154 = 0;
-        // @BUG redudant code
-        Actor_MarkForDeath(&this->actor);
+        // redundant code
+        Actor_Kill(&this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_Die);
     }
     func_8096689C(this, play);
 }
 
 void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 // WEATHERTAG_TYPE_UNK1
@@ -346,13 +346,12 @@ void func_80966F74(EnWeatherTag* this, PlayState* play) {
 // all of them have shorter distances though, like 0xA and 0x6, so their locations are important
 void func_80966FEC(EnWeatherTag* this, PlayState* play) {
     // weirdly, not the same as the other param lookup used in the rest of the file, which is float
-    s32 distance = WEATHER_TAG_RANGE100INT(this);
+    s32 distance = WEATHER_TAG_RANGE100INT(&this->actor);
     if (distance > 0) {
         D_801F4E7A = distance;
     }
 
-    // unique pirates fortress behavior?
-    if ((play->sceneNum == SCENE_KAIZOKU) && (play->actorCtx.unk5 & 2)) {
+    if ((play->sceneId == SCENE_KAIZOKU) && (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         EnWeatherTag_SetupAction(this, func_80967060);
     }
 }
@@ -424,7 +423,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play) {
                               &this->actor.world.pos, false);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
-    range = WEATHER_TAG_RANGE100(this);
+    range = WEATHER_TAG_RANGE100(&this->actor);
 
     if (distance < range) {
         play->envCtx.sandstormState = 6;
@@ -448,7 +447,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play) {
 void func_809674C8(EnWeatherTag* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
+    if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(&this->actor)) {
         if (CURRENT_DAY == 2) {
             if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
                 (play->envCtx.unk_F2[2] == 0)) {
@@ -471,7 +470,8 @@ void func_809674C8(EnWeatherTag* this, PlayState* play) {
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN 2
 void func_80967608(EnWeatherTag* this, PlayState* play) {
-    if ((WEATHER_TAG_RANGE100(this) + 10.0f) < Actor_XZDistanceBetweenActors(&GET_PLAYER(play)->actor, &this->actor)) {
+    if ((WEATHER_TAG_RANGE100(&this->actor) + 10.0f) <
+        Actor_XZDistanceBetweenActors(&GET_PLAYER(play)->actor, &this->actor)) {
         gWeatherMode = 0;
         EnWeatherTag_SetupAction(this, func_809674C8);
     }
@@ -481,9 +481,10 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.unk5 & 2) && (play->msgCtx.msgMode != 0) && (play->msgCtx.currentTextId == 0x5E6) &&
-        (!FrameAdvance_IsEnabled(&play->state)) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-        (ActorCutscene_GetCurrentIndex() == -1) && (play->csCtx.state == 0)) {
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+        (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
+        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
+        (play->csCtx.state == 0)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
         if (REG(15) != 0) {

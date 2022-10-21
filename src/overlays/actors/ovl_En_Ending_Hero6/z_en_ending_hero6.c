@@ -24,7 +24,7 @@ void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
-const ActorInit En_Ending_Hero6_InitVars = {
+ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
     ACTORCAT_NPC,
     FLAGS,

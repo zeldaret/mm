@@ -59,7 +59,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play);
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play);
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex);
 void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
 void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
@@ -69,7 +69,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void);
 s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
-const ActorInit En_Ma_Yto_InitVars = {
+ActorInit En_Ma_Yto_InitVars = {
     ACTOR_EN_MA_YTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -161,9 +161,9 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 
     this->unk31E = 0;
     this->blinkTimer = 100;
-    this->type = EN_MA_YTO_PARSE_TYPE(this->actor.params);
+    this->type = EN_MA_YTO_GET_TYPE(&this->actor);
     if (!EnMaYto_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -304,7 +304,7 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, PlayState* play) {
     while (npcActor != NULL) {
         if (npcActor->id == ACTOR_EN_MA_YTS) {
             EnMaYts* romani = (EnMaYts*)npcActor;
-            s16 romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
+            s16 romaniType = EN_MA_YTS_GET_TYPE(&romani->actor);
 
             if ((this->type == MA_YTO_TYPE_DINNER && romaniType == MA_YTS_TYPE_SITTING) ||
                 (this->type == MA_YTO_TYPE_BARN && romaniType == MA_YTS_TYPE_BARN)) {
@@ -380,10 +380,10 @@ void EnMaYto_KeepLookingForRomani(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_SetupDefaultWait(EnMaYto* this) {
     if (this->actor.shape.rot.y == this->actor.home.rot.y) {
-        this->currentAnim = 11;
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     } else {
-        this->currentAnim = 1;
+        this->animIndex = 1;
         EnMaYto_ChangeAnim(this, 1);
     }
 
@@ -398,8 +398,8 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
 
     direction = rotY - this->actor.yawTowardsPlayer;
     if (Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) == 0 &&
-        this->currentAnim == 1) {
-        this->currentAnim = 11;
+        this->animIndex == 1) {
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     }
 
@@ -881,7 +881,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
     if (gSaveContext.save.weekEventReg[52] & 1) { // if (ProtectedCremia)
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(NA_BGM_FAILURE_1);
+        Audio_PlayFanfare(NA_BGM_FAILURE_1);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = EnMaYto_AfterMilkRunInit;
@@ -1002,7 +1002,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -1091,11 +1091,9 @@ void EnMaYto_SetupPostMilkRunEnd(EnMaYto* this) {
 
 void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
     if (this->unk310 == 3) {
-        // Termina Field
-        play->nextEntranceIndex = 0x54D0;
+        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 13);
     } else {
-        // Romani Ranch
-        play->nextEntranceIndex = 0x6480;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1270,10 +1268,10 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
     }
 }
 
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {

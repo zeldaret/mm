@@ -22,7 +22,7 @@ void func_80A4CC54(ObjFireshield* this);
 void func_80A4CCBC(ObjFireshield* this);
 void func_80A4CD28(ObjFireshield* this);
 
-const ActorInit Obj_Fireshield_InitVars = {
+ActorInit Obj_Fireshield_InitVars = {
     ACTOR_OBJ_FIRESHIELD,
     ACTORCAT_PROP,
     FLAGS,

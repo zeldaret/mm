@@ -10,7 +10,7 @@
 
 #define THIS ((EnTanron4*)thisx)
 
-void EnTanron4_Init(Actor* thisx, PlayState* play);
+void EnTanron4_Init(Actor* thisx, PlayState* play2);
 void EnTanron4_Destroy(Actor* thisx, PlayState* play);
 void EnTanron4_Update(Actor* thisx, PlayState* play);
 void EnTanron4_Draw(Actor* thisx, PlayState* play);
@@ -31,7 +31,7 @@ typedef enum {
     /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET,
 } SeagullTimers;
 
-const ActorInit En_Tanron4_InitVars = {
+ActorInit En_Tanron4_InitVars = {
     ACTOR_EN_TANRON4,
     ACTORCAT_ITEMACTION,
     FLAGS,

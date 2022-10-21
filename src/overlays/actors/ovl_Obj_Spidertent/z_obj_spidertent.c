@@ -23,7 +23,7 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play);
 void func_80B30AD4(ObjSpidertent* this);
 void func_80B30AF8(ObjSpidertent* this, PlayState* play);
 
-const ActorInit Obj_Spidertent_InitVars = {
+ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
     ACTORCAT_BG,
     FLAGS,
@@ -565,7 +565,7 @@ void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->collider);
 
     if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -695,15 +695,11 @@ void func_80B30AD4(ObjSpidertent* this) {
     this->actionFunc = func_80B30AF8;
 }
 
-#ifdef NON_MATCHING
 void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
     ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
-    TriNorm* triNorm;
     s32 i;
     s32 j;
     s32 pad;
-    Vec3f sp60;
-    f32 sp5C;
 
     this->unk_3C6++;
 
@@ -762,10 +758,10 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
-    if (this->unk_3C1 >= 0x20) {
+    if (this->unk_3C1 >= 32) {
         if (this->unk_3C7 > 0) {
             this->unk_3C7--;
-        } else if (this->unk_3C1 >= 0x33) {
+        } else if (this->unk_3C1 > 50) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 2);
         } else {
@@ -781,23 +777,24 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            triNorm = &this->collider.elements[i].dim;
+            TriNorm* triNorm = &this->collider.elements[i].dim;
+            Vec3f sp60;
+            f32 sp5C;
 
             for (j = 0; j < ARRAY_COUNT(this->unk_3B0); j++) {
-                if (!(this->unk_3B0[j] < 5.0f) && !(this->unk_3C0 & (1 << j)) &&
-                    func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
+                if ((this->unk_3B0[j] < 5.0f) || (this->unk_3C0 & (1 << j))) {
+                    continue;
+                }
+                if (func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
                     func_80B300F4(this, play, triNorm, &sp60, sp5C, j);
                 }
             }
         }
     } else if (this->unk_3C1 <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AF8.s")
-#endif
 
 void ObjSpidertent_Update(Actor* thisx, PlayState* play) {
     ObjSpidertent* this = THIS;

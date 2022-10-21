@@ -25,13 +25,11 @@ typedef enum {
 
 typedef struct DmChar07 {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ char pad15C[0x14C];
+    /* 0x15C */ UNK_TYPE1 pad15C[0x14C];
     /* 0x2A8 */ DmChar07ActionFunc actionFunc;
-    /* 0x2AC */ char pad2AC[0xD];
+    /* 0x2AC */ UNK_TYPE1 pad2AC[0xD];
     /* 0x2B9 */ u8 spotlightFlags;
     /* 0x2BA */ u8 isStage;
 } DmChar07; // size = 0x2BC
-
-extern const ActorInit Dm_Char07_InitVars;
 
 #endif // Z_DM_CHAR07_H

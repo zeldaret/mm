@@ -40,7 +40,7 @@ typedef enum {
 } UpgradeType;
 
 typedef enum {
-    /* 0x00 */ QUEST_REMAINS_ODOWLA,
+    /* 0x00 */ QUEST_REMAINS_ODOLWA,
     /* 0x01 */ QUEST_REMAINS_GOHT,
     /* 0x02 */ QUEST_REMAINS_GYORG,
     /* 0x03 */ QUEST_REMAINS_TWINMOLD,
@@ -59,11 +59,28 @@ typedef enum {
     /* 0x10 */ QUEST_SONG_STORMS,
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK, // Obtained Bombers Notebook
-    /* 0x13 */ QUEST_SKULL_TOKEN,
-    /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
+    /* 0x13 */ QUEST_QUIVER,
+    /* 0x14 */ QUEST_BOMB_BAG,
+    /* 0x15 */ QUEST_SKULL_TOKEN,
+    /* 0x16 */ QUEST_HEART_PIECE,  // for `pauseCtx->cursorPoint[PAUSE_QUEST]`
+    /* 0x17 */ QUEST_17, // Used in a conditional for quest cursors
+    /* 0x18 */ QUEST_SONG_LULLABY_INTRO,
     /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
     /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C
 } QuestItem;
+
+typedef enum {
+    /* -1 */ DUNGEON_NONE = -1,
+    /*  0 */ DUNGEON_BOSS_KEY,
+    /*  1 */ DUNGEON_COMPASS,
+    /*  2 */ DUNGEON_MAP,
+    /*  3 */ DUNGEON_STRAY_FAIRIES,
+    /*  4 */ DUNGEON_FLOOR_INDEX_4, // Top Floor
+    /*  5 */ DUNGEON_FLOOR_INDEX_3,
+    /*  6 */ DUNGEON_FLOOR_INDEX_2,
+    /*  7 */ DUNGEON_FLOOR_INDEX_1,
+    /*  8 */ DUNGEON_FLOOR_INDEX_0 // Bottom Floor
+} DungeonItem;
 
 typedef enum {
     /* 0x00 */ SLOT_OCARINA,
@@ -210,7 +227,7 @@ typedef enum {
     /* 0x59 */ ITEM_WALLET_DEFAULT,
     /* 0x5A */ ITEM_WALLET_ADULT,
     /* 0x5B */ ITEM_WALLET_GIANT,
-    /* 0x5C */ ITEM_FISHING_POLE,
+    /* 0x5C */ ITEM_FISHING_ROD,
     /* 0x5D */ ITEM_REMAINS_ODOLWA,
     /* 0x5E */ ITEM_REMAINS_GOHT,
     /* 0x5F */ ITEM_REMAINS_GYORG,
@@ -285,7 +302,7 @@ typedef enum {
     /* 0xF2 */ ITEM_F2,
     /* 0xFD */ ITEM_FD = 0xFD,
     /* 0xFF */ ITEM_NONE = 0xFF
-} ItemID;
+} ItemId;
 
 #define BOTTLE_FIRST 0
 #define BOTTLE_MAX 6
@@ -428,7 +445,7 @@ typedef enum {
     /* 0xB8 */ GI_TINGLE_MAP_GREAT_BAY,
     /* 0xB9 */ GI_TINGLE_MAP_STONE_TOWER,
     /* 0xBA */ GI_MAX
-} GetItemID;
+} GetItemId;
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
@@ -550,26 +567,6 @@ typedef enum {
     /* 0x74 */ GID_PICTO_BOX,
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
     /* 0x76 */ GID_MAX
-} GetItemDrawID;
-
-// This enum may not be real, and actionparam is just used directly.
-// Keep using it for now.
-// TODO: fill
-typedef enum {
-    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
-    /* 0x00 */ EXCH_ITEM_NONE,
-    /* 0x13 */ EXCH_ITEM_PICTO_BOX = 0x13,
-    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
-    /* 0x2A */ EXCH_ITEM_MOON_TEAR = 0x2A,
-    /* 0x2B */ EXCH_ITEM_DEED_LAND,
-    /* 0x2C */ EXCH_ITEM_ROOM_KEY,
-    /* 0x2D */ EXCH_ITEM_LETTER_TO_KAFEI,
-    /* 0x2E */ EXCH_ITEM_2E,
-    /* 0x2F */ EXCH_ITEM_DEED_SWAMP,
-    /* 0x30 */ EXCH_ITEM_DEED_MOUNTAIN,
-    /* 0x31 */ EXCH_ITEM_DEED_OCEAN,
-    /* 0x32 */ EXCH_ITEM_32,
-    /* 0x33 */ EXCH_ITEM_LETTER_MAMA
-} ExchangeItemID;
+} GetItemDrawId;
 
 #endif

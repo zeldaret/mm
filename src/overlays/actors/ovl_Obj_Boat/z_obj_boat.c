@@ -16,9 +16,9 @@ void ObjBoat_Destroy(Actor* thisx, PlayState* play);
 void ObjBoat_Update(Actor* thisx, PlayState* play);
 void ObjBoat_Draw(Actor* thisx, PlayState* play);
 
-void func_80B9B428(Actor* thisx, PlayState* play);
+void func_80B9B428(Actor* thisx, PlayState* play2);
 
-const ActorInit Obj_Boat_InitVars = {
+ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
     ACTORCAT_BG,
     FLAGS,

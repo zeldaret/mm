@@ -18,7 +18,7 @@ void DmBal_Draw(Actor* thisx, PlayState* play);
 void func_80C1EAC4(DmBal* this);
 void func_80C1EAD8(DmBal* this, PlayState* play);
 
-const ActorInit Dm_Bal_InitVars = {
+ActorInit Dm_Bal_InitVars = {
     ACTOR_DM_BAL,
     ACTORCAT_NPC,
     FLAGS,
@@ -30,7 +30,7 @@ const ActorInit Dm_Bal_InitVars = {
     (ActorFunc)DmBal_Draw,
 };
 
-static AnimationInfo D_80C1F170[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
     { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
@@ -86,14 +86,14 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                 case 1:
                     this->unk_336 = 0;
                     this->eyeIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80C1F170, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->unk_336 = 1;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80C1F170, 12);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
                     break;
                 case 3:
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80C1F170, 13);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 13);
                     break;
             }
         } else if (D_80C1F2C0 == 3) {
