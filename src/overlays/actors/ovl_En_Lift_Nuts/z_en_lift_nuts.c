@@ -771,11 +771,9 @@ void func_80AEB3E0(EnLiftNuts* this, PlayState* play) {
 
 void func_80AEB428(EnLiftNuts* this, PlayState* play) {
     s32 pad;
-    OSTime time;
 
     if (this->unk_354 == 10) {
-        time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
-        if (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] < time) {
+        if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) > gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Message_StartTextbox(play, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {
@@ -908,21 +906,13 @@ void func_80AEB974(EnLiftNuts* this) {
     }
 }
 
-void func_80AEB9E0(EnLiftNuts* this, PlayState* play) {
-    static Color_RGBA8 sPrimColor = { 170, 130, 90, 255 };
-    static Color_RGBA8 sEnvColor = { 100, 60, 20, 255 };
-
-    Vec3f worldPos;
+void func_80AEB9E0(EnLiftNuts *this, PlayState *play) {
+    Vec3f worldPos = this->actor.world.pos;
     Vec3f velocity;
     Vec3f accel;
-    Color_RGBA8 primColor;
-    Color_RGBA8 envColor;
+    Color_RGBA8 primColor = {170, 130, 90, 255};
+    Color_RGBA8 envColor = {100, 60, 20, 255};
     s32 i;
-
-    worldPos = this->actor.world.pos;
-
-    primColor = sPrimColor;
-    envColor = sEnvColor;
 
     accel.y = 0.0f;
 
