@@ -194,7 +194,6 @@ s32 func_80AE9B8C() {
 }
 
 void func_80AE9BCC(EnLiftNuts* this, PlayState* play) {
-
     if ((this->actionFunc != func_80AEB934) && (this->actionFunc != func_80AEB8A4) &&
         (this->actionFunc != func_80AEACF8) && (this->actionFunc != func_80AEAC64) &&
         (this->actionFunc != func_80AEA044) && (this->actionFunc != func_80AEB598) &&
