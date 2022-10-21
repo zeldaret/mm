@@ -262,15 +262,15 @@ void EnSkb_Destroy(Actor* thisx, PlayState* play) {
         (this->actor.parent->id == ACTOR_EN_ENCOUNT4)) {
         EnEncount4* encount = (EnEncount4*)this->actor.parent;
 
-        if (encount->unk14C > 0) {
-            encount->unk14C--;
+        if (encount->unk_14C > 0) {
+            encount->unk_14C--;
         }
 
         if (this->actor.colChkInfo.health == 0) {
-            encount->unk14E++;
+            encount->unk_14E++;
         } else {
-            encount->unk14C = 0;
-            encount->unk14E = encount->unk14C;
+            encount->unk_14C = 0;
+            encount->unk_14E = encount->unk_14C;
         }
     }
 
