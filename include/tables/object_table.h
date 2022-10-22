@@ -358,7 +358,7 @@
 /* 0x15C */ DEFINE_OBJECT(object_boss03, OBJECT_BOSS03)
 /* 0x15D */ DEFINE_OBJECT(object_boss04, OBJECT_BOSS04)
 /* 0x15E */ DEFINE_OBJECT(object_boss05, OBJECT_BOSS05)
-/* 0x15F */ DEFINE_OBJECT_NULL(object_boss07, OBJECT_UNSET_15F)
+/* 0x15F */ DEFINE_OBJECT_NULL(object_boss07, OBJECT_UNSET_15F) // unused duplicate with size 0
 /* 0x160 */ DEFINE_OBJECT(object_boss07, OBJECT_BOSS07)
 /* 0x161 */ DEFINE_OBJECT(object_raf, OBJECT_RAF)
 /* 0x162 */ DEFINE_OBJECT(object_funen, OBJECT_FUNEN)
