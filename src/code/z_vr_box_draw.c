@@ -25,7 +25,7 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
 
     func_8012C6AC(gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0B, skyboxCtx->skyboxPaletteStaticSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x0B, skyboxCtx->paletteStaticSegment);
     gSPTexture(POLY_OPA_DISP++, 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON);
 
     sSkyboxDrawMatrix = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
@@ -40,7 +40,7 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     gSPMatrix(POLY_OPA_DISP++, sSkyboxDrawMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetColorDither(POLY_OPA_DISP++, G_CD_MAGICSQ);
     gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
-    gDPLoadTLUT_pal256(POLY_OPA_DISP++, skyboxCtx->skyboxPaletteStaticSegment);
+    gDPLoadTLUT_pal256(POLY_OPA_DISP++, skyboxCtx->paletteStaticSegment);
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
     gDPSetTextureConvert(POLY_OPA_DISP++, G_TC_FILT);
     gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, TEXEL0, PRIMITIVE_ALPHA, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0,
