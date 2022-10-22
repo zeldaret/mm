@@ -66,7 +66,7 @@ s32 D_80BE1A0C[] = {
     0x0C103012, 0x14FFEC06, 0x00920000, 0x1300920C, 0x10300034, 0x0100050E, 0x2B100C10, 0x0E2B110C, 0x10000000,
 };
 
-const ActorInit En_Tab_InitVars = {
+ActorInit En_Tab_InitVars = {
     ACTOR_EN_TAB,
     ACTORCAT_NPC,
     FLAGS,

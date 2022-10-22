@@ -40,7 +40,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow*, PlayState*);
 void EnRuppecrow_UpdateSpeed(EnRuppecrow*, PlayState*);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow*, PlayState*);
 
-const ActorInit En_Ruppecrow_InitVars = {
+ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
     ACTORCAT_ENEMY,
     FLAGS,

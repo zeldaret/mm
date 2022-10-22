@@ -39,7 +39,7 @@ static s32 D_8092DCB0[] = {
     0x0E08330C, 0x09000015, 0x1C014016, 0x10000000, 0x0E082E0C, 0x10000000,
 };
 
-const ActorInit En_Dns_InitVars = {
+ActorInit En_Dns_InitVars = {
     ACTOR_EN_DNS,
     ACTORCAT_NPC,
     FLAGS,

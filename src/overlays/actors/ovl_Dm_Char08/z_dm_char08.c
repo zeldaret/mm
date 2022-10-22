@@ -51,7 +51,7 @@ typedef enum {
     /* 6 */ TURTLE_ANIM_YAWN,
 } TurtleAnimation;
 
-const ActorInit Dm_Char08_InitVars = {
+ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
     ACTORCAT_BG,
     FLAGS,

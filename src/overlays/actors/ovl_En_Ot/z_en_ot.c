@@ -63,7 +63,7 @@ static EnOt* D_80B5E880;
 static EnOt* D_80B5E884;
 static EnOt* D_80B5E888;
 
-const ActorInit En_Ot_InitVars = {
+ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
     ACTORCAT_NPC,
     FLAGS,

@@ -17,7 +17,7 @@ void EnHs2_Draw(Actor* thisx, PlayState* play);
 
 void EnHs2_DoNothing(EnHs2* this, PlayState* play);
 
-const ActorInit En_Hs2_InitVars = {
+ActorInit En_Hs2_InitVars = {
     ACTOR_EN_HS2,
     ACTORCAT_NPC,
     FLAGS,

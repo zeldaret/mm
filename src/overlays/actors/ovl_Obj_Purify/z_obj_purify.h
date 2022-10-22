@@ -16,8 +16,6 @@ typedef struct ObjPurify {
     /* 0x168 */ f32 unk168[2];
 } ObjPurify; // size = 0x170
 
-extern const ActorInit Obj_Purify_InitVars;
-
 #define OBJPURIFY_GET_INFO_INDEX(thisx) ((thisx)->params & 0xF)
 #define OBJPURIFY_GET_UNK_FLAG(thisx) (((thisx)->params >> 0xC) & 1)
 

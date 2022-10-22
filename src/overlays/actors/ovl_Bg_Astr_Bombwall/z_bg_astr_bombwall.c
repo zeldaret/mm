@@ -23,7 +23,7 @@ void func_80C0A418(BgAstrBombwall* this, PlayState* play);
 void func_80C0A458(BgAstrBombwall* this, PlayState* play);
 void func_80C0A4BC(BgAstrBombwall* this, PlayState* play);
 
-const ActorInit Bg_Astr_Bombwall_InitVars = {
+ActorInit Bg_Astr_Bombwall_InitVars = {
     ACTOR_BG_ASTR_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,

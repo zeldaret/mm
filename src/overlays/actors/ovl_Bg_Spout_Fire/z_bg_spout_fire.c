@@ -22,7 +22,7 @@ void func_80A60CDC(BgSpoutFire* this, PlayState* play);
 void func_80A60D10(BgSpoutFire* this, PlayState* play);
 void func_80A60E08(BgSpoutFire* this, PlayState* play);
 
-const ActorInit Bg_Spout_Fire_InitVars = {
+ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,
     ACTORCAT_BG,
     FLAGS,

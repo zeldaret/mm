@@ -15,6 +15,4 @@ typedef struct BgFuKaiten {
     /* 0x16C */ s16 bounce;
 } BgFuKaiten; // size = 0x170
 
-extern const ActorInit Bg_Fu_Kaiten_InitVars;
-
 #endif // Z_BG_FU_KAITEN_H

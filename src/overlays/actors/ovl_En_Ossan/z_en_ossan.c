@@ -92,7 +92,7 @@ typedef enum {
     /* 12 */ ANI_ANIM_MAX
 } AniAnimation;
 
-const ActorInit En_Ossan_InitVars = {
+ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
     FLAGS,

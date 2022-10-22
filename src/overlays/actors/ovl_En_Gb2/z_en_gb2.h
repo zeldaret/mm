@@ -38,6 +38,4 @@ typedef struct EnGb2 {
     /* 0x290 */ s16 unk_290;
 } EnGb2; // size = 0x294
 
-extern const ActorInit En_Gb2_InitVars;
-
 #endif // Z_EN_GB2_H

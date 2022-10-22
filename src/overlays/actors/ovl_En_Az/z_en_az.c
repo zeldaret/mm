@@ -92,7 +92,7 @@ static AnimationSpeedInfo sAnimationInfo[] = {
     { &gBeaverIdleFaceRightAnim, 1.0f, ANIMMODE_LOOP, -5.0f },
 };
 
-const ActorInit En_Az_InitVars = {
+ActorInit En_Az_InitVars = {
     ACTOR_EN_AZ,
     ACTORCAT_NPC,
     FLAGS,

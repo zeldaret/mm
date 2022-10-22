@@ -48,6 +48,4 @@ typedef struct EnSt {
     /* 0x49C */ Vec3s morphTable[30];
 } EnSt; // size = 0x550
 
-extern const ActorInit En_St_InitVars;
-
 #endif // Z_EN_ST_H

@@ -46,7 +46,7 @@ static u8 sMsgEventScript[] = {
     0x10, 0x2C, 0x29, 0x49, 0x0C, 0x2F, 0x00, 0x00, 0x0C, 0x2D, 0x00, 0x0D, 0x12, 0x10, 0x2D, 0x00, 0x0D, 0x12, 0x10,
 };
 
-const ActorInit En_Bjt_InitVars = {
+ActorInit En_Bjt_InitVars = {
     ACTOR_EN_BJT,
     ACTORCAT_NPC,
     FLAGS,
@@ -362,8 +362,7 @@ s32 EnBjt_ChooseAnimation(EnBjt* this, PlayState* play) {
 void EnBjt_Talk(EnBjt* this, PlayState* play) {
     s16 yaw = this->actor.yawTowardsPlayer;
 
-    // TODO: Casting to remove warning for now
-    if (func_8010BF58(&this->actor, play, (s32)sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
+    if (func_8010BF58(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_100;
         SubS_UpdateFlags(&this->stateFlags, 3, 7);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;

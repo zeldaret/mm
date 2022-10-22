@@ -51,6 +51,4 @@ typedef struct EnAz {
     /* 0x3D6 */ s16 unk_3D6;
 } EnAz; // size = 0x3D8
 
-extern const ActorInit En_Az_InitVars;
-
 #endif // Z_EN_AZ_H

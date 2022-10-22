@@ -8,7 +8,6 @@
  */
 
 #include "z_en_dnq.h"
-#include "objects/object_dno/object_dno.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -26,7 +25,7 @@ static s32 D_80A53400[] = {
     0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000, 0x0E08A10C, 0x0F08A20C, 0x10000000,
 };
 
-const ActorInit En_Dnq_InitVars = {
+ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,
     FLAGS,
@@ -61,26 +60,26 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_dno_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dno_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dno_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dno_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dno_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingSurpriseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingJumpedOnStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingJumpedOnLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingJumpedOnEndAnim, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingJumpedOnEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingLyingDownTwitchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingWailLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingWailStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingMarchAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingSpinScepterAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingIntimidateAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingPointScepterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingJumpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
@@ -420,7 +419,8 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dno_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
+                       DEKU_KING_LIMB_MAX);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);

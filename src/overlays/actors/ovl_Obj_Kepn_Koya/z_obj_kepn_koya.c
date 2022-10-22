@@ -16,7 +16,7 @@ void ObjKepnKoya_Destroy(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Update(Actor* thisx, PlayState* play);
 void ObjKepnKoya_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Kepn_Koya_InitVars = {
+ActorInit Obj_Kepn_Koya_InitVars = {
     ACTOR_OBJ_KEPN_KOYA,
     ACTORCAT_PROP,
     FLAGS,

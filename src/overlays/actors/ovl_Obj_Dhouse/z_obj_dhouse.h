@@ -45,6 +45,4 @@ typedef struct ObjDhouse {
     /* 0x1370 */ s16 unk_1370;
 } ObjDhouse; // size = 0x1374
 
-extern const ActorInit Obj_Dhouse_InitVars;
-
 #endif // Z_OBJ_DHOUSE_H

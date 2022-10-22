@@ -36,7 +36,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play);
 s32 func_80C149B0(PlayState* play, EnJgameTsnStruct* arg1);
 s32 func_80C14BCC(EnJgameTsn* this, PlayState* play);
 
-const ActorInit En_Jgame_Tsn_InitVars = {
+ActorInit En_Jgame_Tsn_InitVars = {
     ACTOR_EN_JGAME_TSN,
     ACTORCAT_NPC,
     FLAGS,

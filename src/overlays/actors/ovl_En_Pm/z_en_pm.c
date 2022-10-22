@@ -472,7 +472,7 @@ static UNK_TYPE D_80AFB764[] = {
     0x52801210,
 };
 
-const ActorInit En_Pm_InitVars = {
+ActorInit En_Pm_InitVars = {
     ACTOR_EN_PM,
     ACTORCAT_NPC,
     FLAGS,

@@ -13,6 +13,4 @@ typedef struct EnHs2 {
     /* 0x394 */ EnHs2ActionFunc actionFunc;
 } EnHs2; // size = 0x398
 
-extern const ActorInit En_Hs2_InitVars;
-
 #endif // Z_EN_HS2_H
