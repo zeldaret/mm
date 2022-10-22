@@ -23,7 +23,7 @@ void func_80BE895C(EnBaisen* this, PlayState* play);
 void func_80BE8AAC(EnBaisen* this, PlayState* play);
 void func_80BE89D8(EnBaisen* this, PlayState* play);
 
-const ActorInit En_Baisen_InitVars = {
+ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
     ACTORCAT_NPC,
     FLAGS,

@@ -46,6 +46,4 @@ typedef struct EnRz {
     /* 0x430 */ EnRzActionFunc actionFunc;
 } EnRz; // size = 0x434
 
-extern const ActorInit En_Rz_InitVars;
-
 #endif // Z_EN_RZ_H

@@ -71,7 +71,7 @@ static TexturePtr sEyeSwitchTextures[][4] = {
 
 static s32 sIsSegmentTableInit = false;
 
-const ActorInit Obj_Switch_InitVars = {
+ActorInit Obj_Switch_InitVars = {
     ACTOR_OBJ_SWITCH,
     ACTORCAT_SWITCH,
     FLAGS,

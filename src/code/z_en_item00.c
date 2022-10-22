@@ -23,7 +23,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
-const ActorInit En_Item00_InitVars = {
+ActorInit En_Item00_InitVars = {
     ACTOR_EN_ITEM00,
     ACTORCAT_MISC,
     FLAGS,
@@ -487,7 +487,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     EnItem00* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s32 sp38 = player->stateFlags3 & 0x1000;
+    s32 sp38 = player->stateFlags3 & PLAYER_STATE3_1000;
     s32 getItemId = GI_NONE;
     s32 params;
 

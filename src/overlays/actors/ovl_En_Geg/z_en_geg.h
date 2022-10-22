@@ -46,6 +46,4 @@ typedef struct EnGeg {
     /* 0x4E4 */ Vec3f unk_4E4;
 } EnGeg; // size = 0x4F0
 
-extern const ActorInit En_Geg_InitVars;
-
 #endif // Z_EN_GEG_H

@@ -25,7 +25,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play);
 void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
-const ActorInit Obj_Moon_Stone_InitVars = {
+ActorInit Obj_Moon_Stone_InitVars = {
     ACTOR_OBJ_MOON_STONE,
     ACTORCAT_PROP,
     FLAGS,
@@ -137,7 +137,7 @@ void ObjMoonStone_Update(Actor* thisx, PlayState* play) {
     ObjMoonStone* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x10000282)) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000))) {
         this->actionFunc(this, play);
     }
 }

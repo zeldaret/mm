@@ -20,6 +20,4 @@ typedef struct DmSa {
     /* 0x2F0 */ u32 alpha;
 } DmSa; // size = 0x2F4
 
-extern const ActorInit Dm_Sa_InitVars;
-
 #endif // Z_DM_SA_H

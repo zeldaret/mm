@@ -50,6 +50,4 @@ typedef enum {
     /* 0x1A */ WOOD_TREE_SPECIAL = 0x1A
 } WoodType;
 
-extern const ActorInit En_Wood02_InitVars;
-
 #endif // Z_EN_WOOD02_H

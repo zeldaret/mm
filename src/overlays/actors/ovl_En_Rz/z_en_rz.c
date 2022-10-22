@@ -49,7 +49,7 @@ typedef enum {
     /* 2 */ EN_RZ_PATHSTATUS_END       //!< reached end of path
 } EnRzPathStatus;
 
-const ActorInit En_Rz_InitVars = {
+ActorInit En_Rz_InitVars = {
     ACTOR_EN_RZ,
     ACTORCAT_NPC,
     FLAGS,

@@ -28,7 +28,7 @@ void func_808FB710(EnRr* this, PlayState* play);
 void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
-const ActorInit En_Rr_InitVars = {
+ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -296,7 +296,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
     f32 sp30;
     f32 sp2C;
 
-    if (player->stateFlags2 & 0x80) {
+    if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -571,7 +571,8 @@ void func_808FAF94(EnRr* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 10, 500, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((this->unk_1E6 == 0) && !(player->stateFlags2 & 0x80) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
+    if ((this->unk_1E6 == 0) && !(player->stateFlags2 & PLAYER_STATE2_80) &&
+        (Player_GetMask(play) != PLAYER_MASK_STONE) &&
         (this->actor.xzDistToPlayer < (8421.053f * this->actor.scale.x))) {
         func_808FA260(this);
     } else if ((this->actor.xzDistToPlayer < 400.0f) && (this->actor.speedXZ == 0.0f)) {
@@ -812,7 +813,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
     if (this->unk_1FC > 0) {
         Player* player = GET_PLAYER(play);
 
-        if (!(player->stateFlags2 & 0x80)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_80)) {
             this->unk_1FC--;
             if (this->unk_1FC == 0) {
                 this->collider1.base.ocFlags1 |= OC1_TYPE_PLAYER;

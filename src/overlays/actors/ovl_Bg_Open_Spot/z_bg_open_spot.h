@@ -10,6 +10,4 @@ typedef struct BgOpenSpot {
     /* 0x144 */ AnimatedMaterial* texScrolls;
 } BgOpenSpot; // size = 0x148
 
-extern const ActorInit Bg_Open_Spot_InitVars;
-
 #endif // Z_BG_OPEN_SPOT_H

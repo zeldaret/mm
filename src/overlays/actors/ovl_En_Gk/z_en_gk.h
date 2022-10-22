@@ -56,6 +56,4 @@ typedef struct EnGk {
     /* 0x354 */ f32 unk_354;
 } EnGk; // size = 0x358
 
-extern const ActorInit En_Gk_InitVars;
-
 #endif // Z_EN_GK_H

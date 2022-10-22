@@ -18,8 +18,6 @@ typedef struct ShotSun {
     /* 0x194 */ Vec3s hitboxPos;
     /* 0x19A */ s16 timer;
     /* 0x19C */ s8 unk_19C; // leftover from OOT secret ocarina occurrence function.
-} ShotSun;                  // size = 0x1A0
-
-extern const ActorInit Shot_Sun_InitVars;
+} ShotSun; // size = 0x1A0
 
 #endif // Z_SHOT_SUN_H

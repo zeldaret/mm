@@ -211,7 +211,7 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
     { 142, 126, 127 }, { 130, 111, 145 },
 };
 
-const ActorInit En_Bigslime_InitVars = {
+ActorInit En_Bigslime_InitVars = {
     ACTOR_EN_BIGSLIME,
     ACTORCAT_BOSS,
     FLAGS,
@@ -728,7 +728,7 @@ void EnBigslime_SetMinislimeBreakLocation(EnBigslime* this) {
 void EnBigslime_SetPlayerParams(EnBigslime* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags2 & 0x80) {
+    if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
         func_800B8D98(play, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f);
@@ -1709,7 +1709,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
 
         scale = 0.5f - cos_rad(-this->windupPunchTimer * (M_PI / 5)) * 0.5f;
         if (this->windupPunchTimer == -5) {
-            if (player->stateFlags2 & 0x80) {
+            if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
                 player->unk_AE8 = 100;
             }

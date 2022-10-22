@@ -50,7 +50,7 @@ typedef enum {
 
 static s32 sNumPythonsDead = 0;
 
-const ActorInit En_Dragon_InitVars = {
+ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -612,13 +612,13 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     }
 
     if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) ||
-        (!(player->stateFlags2 & 0x80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
+        (!(player->stateFlags2 & PLAYER_STATE2_80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
         ActorCutscene_Stop(this->grabCutsceneIndex);
-        if (player->stateFlags2 & 0x80) {
+        if (player->stateFlags2 & PLAYER_STATE2_80) {
             player->unk_AE8 = 100;
         }
 

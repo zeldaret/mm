@@ -38,6 +38,4 @@ typedef struct EnAh {
     /* 0x300 */ s32 unk_300;
 } EnAh; // size = 0x304
 
-extern const ActorInit En_Ah_InitVars;
-
 #endif // Z_EN_AH_H

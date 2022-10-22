@@ -28,7 +28,7 @@ void func_80B139F4(ObjDhouse* this, PlayState* play);
 void func_80B13C08(Actor* thisx, PlayState* play);
 void func_80B13E40(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Dhouse_InitVars = {
+ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
     ACTORCAT_BG,
     FLAGS,

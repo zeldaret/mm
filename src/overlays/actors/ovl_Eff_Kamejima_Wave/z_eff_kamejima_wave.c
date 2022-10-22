@@ -4,6 +4,7 @@
  * Description: Wave Created by Turtle Awakening
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_eff_kamejima_wave.h"
 #include "objects/object_kamejima/object_kamejima.h"
 
@@ -22,7 +23,7 @@ void func_80BCEBC0(EffKamejimaWave* this, PlayState* play);
 void func_80BCED34(EffKamejimaWave* this, PlayState* play);
 void EffKamejimaWave_SetVtxAlpha(u8 alpha);
 
-const ActorInit Eff_Kamejima_Wave_InitVars = {
+ActorInit Eff_Kamejima_Wave_InitVars = {
     ACTOR_EFF_KAMEJIMA_WAVE,
     ACTORCAT_ITEMACTION,
     FLAGS,

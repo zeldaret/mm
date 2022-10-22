@@ -54,6 +54,4 @@ typedef struct EnSnowman {
     /* 0x32C */ ColliderCylinder collider;
 } EnSnowman; // size = 0x378
 
-extern const ActorInit En_Snowman_InitVars;
-
 #endif // Z_EN_SNOWMAN_H

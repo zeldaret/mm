@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -270,10 +271,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             gSaveContext.save.playerForm = PLAYER_FORM_DEKU;
             break;
         case 0x17:
-            player->stateFlags2 |= 0x4000000;
+            player->stateFlags2 |= PLAYER_STATE2_4000000;
             break;
         case 0x18:
-            player->stateFlags2 &= ~0x4000000;
+            player->stateFlags2 &= ~PLAYER_STATE2_4000000;
             break;
         case 0x19:
             sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;
