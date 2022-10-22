@@ -35,7 +35,7 @@ typedef enum {
     /* 0xF */ DORA_DMGEFF_LIGHT
 } ObjDoraDamageEffect;
 
-const ActorInit Obj_Dora_InitVars = {
+ActorInit Obj_Dora_InitVars = {
     ACTOR_OBJ_DORA,
     ACTORCAT_NPC,
     FLAGS,

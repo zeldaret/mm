@@ -81,6 +81,4 @@ typedef struct EnKusa2 {
     /* 0x1D1 */ s8 unk_1D1;
 } EnKusa2; // size = 0x1D4
 
-extern const ActorInit En_Kusa2_InitVars;
-
 #endif // Z_EN_KUSA2_H

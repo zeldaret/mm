@@ -23,7 +23,7 @@ void ObjKzsaku_Idle(ObjKzsaku* this, PlayState* play);
 void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play);
 void func_80C08CB0(ObjKzsaku* this, PlayState* play);
 
-const ActorInit Obj_Kzsaku_InitVars = {
+ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
     ACTORCAT_PROP,
     FLAGS,

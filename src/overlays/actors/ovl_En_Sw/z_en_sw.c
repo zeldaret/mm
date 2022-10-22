@@ -28,7 +28,7 @@ void func_808DB100(EnSw* this, PlayState* play);
 void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
-const ActorInit En_Sw_InitVars = {
+ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,
     FLAGS,

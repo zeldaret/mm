@@ -41,7 +41,7 @@ s16 D_80929504 = 0;
 s16 D_80929508 = 0;
 s16 D_8092950C = 0;
 
-const ActorInit Obj_Tsubo_InitVars = {
+ActorInit Obj_Tsubo_InitVars = {
     ACTOR_OBJ_TSUBO,
     ACTORCAT_PROP,
     FLAGS,

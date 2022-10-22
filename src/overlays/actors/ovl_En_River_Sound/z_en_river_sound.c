@@ -14,7 +14,7 @@ void EnRiverSound_Init(Actor* thisx, PlayState* play);
 void EnRiverSound_Update(Actor* thisx, PlayState* play);
 void EnRiverSound_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_River_Sound_InitVars = {
+ActorInit En_River_Sound_InitVars = {
     ACTOR_EN_RIVER_SOUND,
     ACTORCAT_ITEMACTION,
     FLAGS,

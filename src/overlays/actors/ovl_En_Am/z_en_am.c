@@ -37,7 +37,7 @@ void func_808B0894(EnAm* this, PlayState* play);
 void func_808B0B4C(EnAm* this, PlayState* play);
 void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Am_InitVars = {
+ActorInit En_Am_InitVars = {
     ACTOR_EN_AM,
     ACTORCAT_ENEMY,
     FLAGS,

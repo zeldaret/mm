@@ -358,7 +358,6 @@ extern u16 viRetrace;
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 extern u64 aspMainTextStart[];
-extern ActorInit En_A_Obj_InitVars;
 extern ColliderCylinderInit enAObjCylinderInit;
 extern InitChainEntry enAObjInitVar;
 extern Gfx* enAObjDisplayLists[2];

@@ -40,7 +40,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play);
 void func_808A1C50(DoorShutter* this, PlayState* play);
 void DoorShutter_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Door_Shutter_InitVars = {
+ActorInit Door_Shutter_InitVars = {
     ACTOR_DOOR_SHUTTER,
     ACTORCAT_DOOR,
     FLAGS,
@@ -261,7 +261,8 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DoorShutter_SetupType(DoorShutter* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) && ((MREG(64) == 0) || (MREG(68) == 0))) {
+    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) &&
+        (!R_PLAY_FILL_SCREEN_ON || (R_PLAY_FILL_SCREEN_ALPHA == 0))) {
         this->actor.objBankIndex = this->requiredObjBankIndex;
         this->actor.draw = DoorShutter_Draw;
         DoorShutter_SetupDoor(this, play);

@@ -28,7 +28,7 @@ void func_80A1EC38(ObjSpinyroll* this, PlayState* play);
 void func_80A1ECC0(ObjSpinyroll* this);
 void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
-const ActorInit Obj_Spinyroll_InitVars = {
+ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,
     FLAGS,

@@ -115,7 +115,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_PP_DMGEFF_KNOCK_OFF_MASK),
 };
 
-const ActorInit En_Pp_InitVars = {
+ActorInit En_Pp_InitVars = {
     ACTOR_EN_PP,
     ACTORCAT_ENEMY,
     FLAGS,

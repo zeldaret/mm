@@ -555,8 +555,8 @@ typedef struct {
         /* 0x318 */ u8 pictographBox;
         /* 0x319 */ u8 all;     // "another"; enables all item restrictions
     } restrictions; // size = 0xC
-    /* 0x31A */ u8 unk_31A;
-    /* 0x31B */ u8 unk_31B;
+    /* 0x31A */ u8 storyState;
+    /* 0x31B */ u8 storyType;
     /* 0x31C */ u8 unk_31C;
     /* 0x320 */ OSMesgQueue unk_320;
     /* 0x338 */ OSMesg unk_338;

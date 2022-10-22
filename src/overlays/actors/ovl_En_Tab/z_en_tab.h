@@ -45,6 +45,4 @@ typedef struct EnTab {
     /* 0x338 */ s32 unk_338;
 } EnTab; // size = 0x33C
 
-extern const ActorInit En_Tab_InitVars;
-
 #endif // Z_EN_TAB_H

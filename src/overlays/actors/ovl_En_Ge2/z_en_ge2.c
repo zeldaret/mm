@@ -27,7 +27,7 @@ void func_80B8C644(EnGe2* this, PlayState* play);
 void func_80B8C9B8(EnGe2* this, PlayState* play);
 
 #if 0
-const ActorInit En_Ge2_InitVars = {
+ActorInit En_Ge2_InitVars = {
     ACTOR_EN_GE2,
     ACTORCAT_NPC,
     FLAGS,
