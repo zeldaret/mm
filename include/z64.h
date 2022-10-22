@@ -410,15 +410,15 @@ typedef struct {
     /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
     /* 0x200 */ u16 mainState;
-    /* 0x202 */ u16 switchPageMode;
+    /* 0x202 */ u16 nextPageMode; // (2 * prev pageIndex) + (scroll left ? 1 : 0)
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ f32 itemPageRoll;
-    /* 0x214 */ f32 mapPageRoll;
-    /* 0x218 */ f32 questPageRoll;
-    /* 0x21C */ f32 maskPageRoll;
+    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen 
+    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen 
+    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen 
+    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen 
     /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;

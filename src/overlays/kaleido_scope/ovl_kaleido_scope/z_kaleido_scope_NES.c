@@ -64,29 +64,29 @@ s16 sGameOverEnvB = 0;
 
 s16 sInDungeonScene = false;
 
-f32 D_8082B8B8[] = {
-    -4.0f, // From PAUSE_ITEM to PAUSE_MAP (switching right)
-    4.0f,  // From PAUSE_ITEM to PAUSE_MASK (switching left)
-    4.0f,  // From PAUSE_MAP to PAUSE_QUEST (switching right)
-    4.0f,  // From PAUSE_MAP to PAUSE_ITEM (switching left)
-    4.0f,  // From PAUSE_QUEST to PAUSE_MASK (switching right)
-    -4.0f, // From PAUSE_QUEST to PAUSE_MAP (switching left)
-    -4.0f, // From PAUSE_MASK to PAUSE_ITEM (switching right)
-    -4.0f, // From PAUSE_MASK to PAUSE_QUEST (switching left)
+f32 sPageSwitchEyeDx[] = {
+    -PAUSE_EYE_DIST * (PAUSE_MAP_X - PAUSE_ITEM_X) / 16, // From PAUSE_ITEM to PAUSE_MAP (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_X - PAUSE_ITEM_X) / 16,  // From PAUSE_ITEM to PAUSE_MASK (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_X - PAUSE_MAP_X) / 16,  // From PAUSE_MAP to PAUSE_QUEST (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_X - PAUSE_MAP_X) / 16,   // From PAUSE_MAP to PAUSE_ITEM (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_X - PAUSE_QUEST_X) / 16, // From PAUSE_QUEST to PAUSE_MASK (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MAP_X - PAUSE_QUEST_X) / 16,  // From PAUSE_QUEST to PAUSE_MAP (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_X - PAUSE_MASK_X) / 16,  // From PAUSE_MASK to PAUSE_ITEM (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_X - PAUSE_MASK_X) / 16, // From PAUSE_MASK to PAUSE_QUEST (switching left)
 };
 
-f32 D_8082B8D8[] = {
-    -4.0f, // From PAUSE_ITEM to PAUSE_MAP (switching right)
-    -4.0f, // From PAUSE_ITEM to PAUSE_MASK (switching left)
-    -4.0f, // From PAUSE_MAP to PAUSE_QUEST (switching right)
-    4.0f,  // From PAUSE_MAP to PAUSE_ITEM (switching left)
-    4.0f,  // From PAUSE_QUEST to PAUSE_MASK (switching right)
-    4.0f,  // From PAUSE_QUEST to PAUSE_MAP (switching left)
-    4.0f,  // From PAUSE_MASK to PAUSE_ITEM (switching right)
-    -4.0f, // From PAUSE_MASK to PAUSE_QUEST (switching left)
+f32 sPageSwitchEyeDz[] = {
+    -PAUSE_EYE_DIST * (PAUSE_MAP_Z - PAUSE_ITEM_Z) / 16, // From PAUSE_ITEM to PAUSE_MAP (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_Z - PAUSE_ITEM_Z) / 16,  // From PAUSE_ITEM to PAUSE_MASK (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_Z - PAUSE_MAP_Z) / 16,  // From PAUSE_MAP to PAUSE_QUEST (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_Z - PAUSE_MAP_Z) / 16,   // From PAUSE_MAP to PAUSE_ITEM (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_Z - PAUSE_QUEST_Z) / 16, // From PAUSE_QUEST to PAUSE_MASK (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MAP_Z - PAUSE_QUEST_Z) / 16,  // From PAUSE_QUEST to PAUSE_MAP (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_Z - PAUSE_MASK_Z) / 16,  // From PAUSE_MASK to PAUSE_ITEM (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_Z - PAUSE_MASK_Z) / 16, // From PAUSE_MASK to PAUSE_QUEST (switching left)
 };
 
-u16 D_8082B8F8[] = {
+u16 sPageSwitchNextPageIndex[] = {
     PAUSE_MAP,   // From PAUSE_ITEM (switching right)
     PAUSE_MASK,  // From PAUSE_ITEM (switching left)
     PAUSE_QUEST, // From PAUSE_MAP (switching right)
@@ -522,8 +522,8 @@ void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount);
 void KaleidoScope_UpdateOpening(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
 
-    pauseCtx->eye.x += D_8082B8B8[pauseCtx->switchPageMode] * 2.0f;
-    pauseCtx->eye.z += D_8082B8D8[pauseCtx->switchPageMode] * 2.0f;
+    pauseCtx->eye.x += sPageSwitchEyeDx[pauseCtx->nextPageMode] * 2.0f;
+    pauseCtx->eye.z += sPageSwitchEyeDz[pauseCtx->nextPageMode] * 2.0f;
     pauseCtx->switchPageTimer += 8;
 
     if (pauseCtx->switchPageTimer == 64) {
@@ -544,14 +544,14 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_DISABLED;
         }
 
-        pauseCtx->pageIndex = D_8082B8F8[pauseCtx->switchPageMode];
+        pauseCtx->pageIndex = sPageSwitchNextPageIndex[pauseCtx->nextPageMode];
         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
         pauseCtx->state++; // PAUSE_STATE_MAIN
         pauseCtx->alpha = 255;
         func_80115844(play, 3);
     } else if (pauseCtx->switchPageTimer == 64) {
-        pauseCtx->pageIndex = D_8082B8F8[pauseCtx->switchPageMode];
-        pauseCtx->switchPageMode = (pauseCtx->pageIndex * 2) + 1;
+        pauseCtx->pageIndex = sPageSwitchNextPageIndex[pauseCtx->nextPageMode];
+        pauseCtx->nextPageMode = (pauseCtx->pageIndex * 2) + 1;
     }
 }
 
@@ -907,7 +907,7 @@ void KaleidoScope_Update(PlayState* play) {
                             interfaceCtx->unk_264 = 255;
                             pauseCtx->state = PAUSE_STATE_OFF;
                             Game_SetFramerateDivisor(&play->state, 3);
-                            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_MAX;
+                            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                             Object_LoadAll(&play->objectCtx);
                             BgCheck_InitCollisionHeaders(&play->colCtx, play);
                             STOP_GAMESTATE(&play->state);
@@ -993,7 +993,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             stepR = ABS_ALT(sGameOverEnvR - 255) / sGameOverColorTimer;
             stepG = ABS_ALT(sGameOverEnvG - 130) / sGameOverColorTimer;
-            stepB = ABS_ALT(sGameOverEnvB) / sGameOverColorTimer;
+            stepB = ABS_ALT(sGameOverEnvB - 0) / sGameOverColorTimer;
             if (sGameOverEnvR >= 255) {
                 sGameOverEnvR -= stepR;
             } else {
@@ -1064,7 +1064,7 @@ void KaleidoScope_Update(PlayState* play) {
                     play_sound(NA_SE_SY_DECIDE);
                     pauseCtx->state = PAUSE_STATE_OFF;
                     Game_SetFramerateDivisor(&play->state, 3);
-                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_MAX;
+                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
                 } else {
@@ -1096,7 +1096,7 @@ void KaleidoScope_Update(PlayState* play) {
             if (sramCtx->status == 0) {
                 pauseCtx->state = PAUSE_STATE_OFF;
                 Game_SetFramerateDivisor(&play->state, 3);
-                R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_MAX;
+                R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                 Object_LoadAll(&play->objectCtx);
                 BgCheck_InitCollisionHeaders(&play->colCtx, play);
             }
@@ -1136,7 +1136,7 @@ void KaleidoScope_Update(PlayState* play) {
 
                     pauseCtx->state = PAUSE_STATE_OFF;
                     Game_SetFramerateDivisor(&play->state, 3);
-                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_MAX;
+                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
 
@@ -1329,7 +1329,7 @@ void KaleidoScope_Update(PlayState* play) {
         case PAUSE_STATE_UNPAUSE_CLOSE:
             pauseCtx->state = PAUSE_STATE_OFF;
             Game_SetFramerateDivisor(&play->state, 3);
-            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_MAX;
+            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
             Object_LoadAll(&play->objectCtx);
             BgCheck_InitCollisionHeaders(&play->colCtx, play);
 

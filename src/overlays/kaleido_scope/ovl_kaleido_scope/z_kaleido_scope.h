@@ -16,6 +16,18 @@ typedef enum {
     /* 4 */ PAUSE_WORLD_MAP
 } PauseMenuPage;
 
+// Direction of pause pages
+#define PAUSE_ITEM_X (0)
+#define PAUSE_ITEM_Z (-1)
+#define PAUSE_MAP_X (1)
+#define PAUSE_MAP_Z (0)
+#define PAUSE_QUEST_X (0)
+#define PAUSE_QUEST_Z (1)
+#define PAUSE_MASK_X (-1)
+#define PAUSE_MASK_Z (0)
+
+#define PAUSE_EYE_DIST (64.0f)
+
 typedef enum {
     /* 0x00 */ PAUSE_STATE_OFF,
     /* 0x01 */ PAUSE_STATE_OPENING_0,
@@ -109,7 +121,8 @@ typedef enum {
     /* 1 */ PAUSE_BG_PRERENDER_SETUP, // The current frame is only drawn for the purpose of serving as the pause background.
     /* 2 */ PAUSE_BG_PRERENDER_PROCESS, // The previous frame was PAUSE_BG_PRERENDER_DRAW, now apply prerender filters.
     /* 3 */ PAUSE_BG_PRERENDER_DONE, // The pause background is ready to be used.
-    /* 4 */ PAUSE_BG_PRERENDER_MAX // Inactive, do nothing.
+    /* 4 */ PAUSE_BG_PRERENDER_UNK4,
+    /* 5 */ PAUSE_BG_PRERENDER_MAX
 } PauseBgPreRenderState;
 
 #define PAUSE_NAME_COLOR_SET_WHITE 0

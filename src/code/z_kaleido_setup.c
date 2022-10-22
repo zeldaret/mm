@@ -4,9 +4,24 @@
 #include "z64view.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-s16 D_801BDB00[] = { PAUSE_MAP, PAUSE_QUEST, PAUSE_MASK, PAUSE_ITEM };
-f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
-f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
+s16 sKaleidoSetupRightPageIndex[] = {
+    PAUSE_MAP,   // PAUSE_ITEM
+    PAUSE_QUEST, // PAUSE_MAP
+    PAUSE_MASK,  // PAUSE_QUEST
+    PAUSE_ITEM,  // PAUSE_MASK
+};
+f32 sKaleidoSetupRightPageEyeX[] = {
+    PAUSE_EYE_DIST * -PAUSE_MAP_X,   // PAUSE_ITEM
+    PAUSE_EYE_DIST * -PAUSE_QUEST_X, // PAUSE_MAP
+    PAUSE_EYE_DIST * -PAUSE_MASK_X,  // PAUSE_QUEST
+    PAUSE_EYE_DIST * -PAUSE_ITEM_X,  // PAUSE_MASK
+};
+f32 sKaleidoSetupRightPageEyeZ[] = {
+    PAUSE_EYE_DIST * -PAUSE_MAP_Z,   // PAUSE_ITEM
+    PAUSE_EYE_DIST * -PAUSE_QUEST_Z, // PAUSE_MAP
+    PAUSE_EYE_DIST * -PAUSE_MASK_Z,  // PAUSE_QUEST
+    PAUSE_EYE_DIST * -PAUSE_ITEM_Z,  // PAUSE_MASK
+};
 
 void func_800F4A10(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -16,9 +31,11 @@ void func_800F4A10(PlayState* play) {
 
     pauseCtx->switchPageTimer = 0;
     pauseCtx->mainState = PAUSE_MAIN_STATE_SWITCHING_PAGE;
-    pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
-    pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
-    pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
+
+    // Set eye position and pageIndex such that scrolling left brings to the desired page
+    pauseCtx->eye.x = sKaleidoSetupRightPageEyeX[pauseCtx->pageIndex];
+    pauseCtx->eye.z = sKaleidoSetupRightPageEyeZ[pauseCtx->pageIndex];
+    pauseCtx->pageIndex = sKaleidoSetupRightPageIndex[pauseCtx->pageIndex];
     pauseCtx->infoPanelOffsetY = -40;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
@@ -87,7 +104,8 @@ void KaleidoSetup_Update(PlayState* play) {
                                     pauseCtx->itemDescriptionOn = false;
                                     pauseCtx->state = PAUSE_STATE_OPENING_0;
                                     func_800F4A10(play);
-                                    pauseCtx->switchPageMode = pauseCtx->pageIndex * 2 + 1;
+                                    // Set next page mode to scroll left
+                                    pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
                                     func_801A3A7C(1);
                                 }
 
