@@ -368,7 +368,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
         action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;
         if (this->actionIndex != action) {
             this->actionIndex = action;
-            switch (action & 0xFFFF) {
+            switch (this->actionIndex) {
                 case 1:
                     func_80BFBA1C(play, this, EN_RZ_ANIM_STANDING);
                     break;
@@ -388,6 +388,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
         }
         return true;
     }
+
     return false;
 }
 
