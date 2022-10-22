@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static Gfx* D_8096ABCC[] = {
-    gMoonChildMajorasMaskDL, gMoonChildOdalwasMaskDL,   gMoonChildGohtsMaskDL,
+    gMoonChildMajorasMaskDL, gMoonChildOdolwasMaskDL,   gMoonChildGohtsMaskDL,
     gMoonChildGyorgsMaskDL,  gMoonChildTwinmoldsMaskDL,
 };
 
