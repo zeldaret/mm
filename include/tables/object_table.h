@@ -6,6 +6,13 @@
  *    - Argument 1: Enum value for this object
  *
  * DEFINE_OBJECT_UNSET and DEFINE_OBJECT_NULL are needed to define empty entries from the original game
+ * 
+ * DEFINE_OBJECT_UNSET is used to declare a placeholder enum value which maps to an entry with zeroes in `gObjectTable`
+ *    - Argument 0: Enum value for this object
+ * 
+ * DEFINE_OBJECT_NULL is used to declare a placeholder enum value which maps to a zero-size entry in `gObjectTable`
+ *    - Argument 0: Name of the object segment in spec
+ *    - Argument 1: Enum value for this object
  */
 /* 0x000 */ DEFINE_OBJECT_UNSET(OBJECT_UNSET_0)
 /* 0x001 */ DEFINE_OBJECT(gameplay_keep, GAMEPLAY_KEEP)
