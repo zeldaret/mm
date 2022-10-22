@@ -44,7 +44,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-const ActorInit En_Ishi_InitVars = {
+ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
     ACTORCAT_PROP,
     FLAGS,

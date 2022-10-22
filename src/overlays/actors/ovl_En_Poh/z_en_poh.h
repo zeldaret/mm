@@ -37,6 +37,4 @@ typedef struct EnPoh {
     /* 0x3D8 */ MtxF unk_3D8;
 } EnPoh; // size = 0x418
 
-extern const ActorInit En_Poh_InitVars;
-
 #endif // Z_EN_POH_H

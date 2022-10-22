@@ -28,7 +28,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play);
 void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
-const ActorInit Obj_Chan_InitVars = {
+ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
     ACTORCAT_BG,
     FLAGS,

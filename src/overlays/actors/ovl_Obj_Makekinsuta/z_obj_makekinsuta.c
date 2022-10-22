@@ -18,7 +18,7 @@ s32 func_8099FA40(ObjMakekinsuta* this, PlayState* play);
 void func_8099FB64(Actor* thisx, PlayState* play);
 void func_8099FD7C(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Makekinsuta_InitVars = {
+ActorInit Obj_Makekinsuta_InitVars = {
     ACTOR_OBJ_MAKEKINSUTA,
     ACTORCAT_ITEMACTION,
     FLAGS,

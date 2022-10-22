@@ -29,7 +29,7 @@ void func_80C0AD44(BgIkninSusceil* this);
 void func_80C0AD64(BgIkninSusceil* this, PlayState* play);
 void func_80C0AE5C(BgIkninSusceil* this, PlayState* play);
 
-const ActorInit Bg_Iknin_Susceil_InitVars = {
+ActorInit Bg_Iknin_Susceil_InitVars = {
     ACTOR_BG_IKNIN_SUSCEIL,
     ACTORCAT_BG,
     FLAGS,

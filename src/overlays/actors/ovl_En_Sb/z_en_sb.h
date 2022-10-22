@@ -33,6 +33,4 @@ typedef struct EnSb {
     /* 0x253 */ u8 isDrawn;
 } EnSb; // size = 0x254
 
-extern const ActorInit En_Sb_InitVars;
-
 #endif // Z_EN_SB_H

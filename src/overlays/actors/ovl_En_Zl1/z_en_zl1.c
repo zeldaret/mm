@@ -15,7 +15,7 @@ void EnZl1_Destroy(Actor* thisx, PlayState* play);
 void EnZl1_Update(Actor* thisx, PlayState* play);
 void EnZl1_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Zl1_InitVars = {
+ActorInit En_Zl1_InitVars = {
     ACTOR_EN_ZL1,
     ACTORCAT_NPC,
     FLAGS,

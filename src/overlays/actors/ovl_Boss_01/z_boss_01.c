@@ -234,7 +234,7 @@ static ColliderCylinderInit D_809D7CA0 = {
     { 8, 15, 10, { 0, 0, 0 } },
 };
 
-const ActorInit Boss_01_InitVars = {
+ActorInit Boss_01_InitVars = {
     ACTOR_BOSS_01,
     ACTORCAT_BOSS,
     FLAGS,

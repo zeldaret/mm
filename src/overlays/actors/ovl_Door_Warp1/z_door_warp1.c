@@ -49,7 +49,7 @@ void func_808BB8D4(DoorWarp1* this, PlayState* play, s32 arg2);
 static s16 D_808BC000;
 static f32 D_808BC004;
 
-const ActorInit Door_Warp1_InitVars = {
+ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
     ACTORCAT_ITEMACTION,
     FLAGS,

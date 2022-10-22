@@ -118,7 +118,7 @@ s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 
 s32 D_80B2C490[] = { 0x2C27850C, 0x10000000 };
 
-const ActorInit En_Pst_InitVars = {
+ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
     ACTORCAT_PROP,
     FLAGS,

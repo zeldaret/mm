@@ -18,7 +18,7 @@ void func_80C229AC(DmTag* this, PlayState* play);
 void func_80C229EC(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
-const ActorInit Dm_Tag_InitVars = {
+ActorInit Dm_Tag_InitVars = {
     ACTOR_DM_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,

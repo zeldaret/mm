@@ -42,7 +42,7 @@ void func_80A92950(EnTest6* this, PlayState* play);
 
 EnTest6Struct D_80A94910[12];
 
-const ActorInit En_Test6_InitVars = {
+ActorInit En_Test6_InitVars = {
     ACTOR_EN_TEST6,
     ACTORCAT_ITEMACTION,
     FLAGS,

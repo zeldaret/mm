@@ -150,7 +150,7 @@ typedef enum {
     /* 4 */ SK_DEKU_PIPES_CS_STATE_END
 } SkullKidDekuPipesCutsceneState;
 
-const ActorInit Dm_Stk_InitVars = {
+ActorInit Dm_Stk_InitVars = {
     ACTOR_DM_STK,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -14,6 +14,4 @@ typedef struct EnPoComposer {
     /* 0x238 */ char unk_238[0x108];
 } EnPoComposer; // size = 0x340
 
-extern const ActorInit En_Po_Composer_InitVars;
-
 #endif // Z_EN_PO_COMPOSER_H

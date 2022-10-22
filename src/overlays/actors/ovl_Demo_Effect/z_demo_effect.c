@@ -25,7 +25,7 @@ void func_808CDDE0(DemoEffect* this, PlayState* play);
 void func_808CDFF8(Actor* thisx, PlayState* play);
 void func_808CE078(Actor* thisx, PlayState* play2);
 
-const ActorInit Demo_Effect_InitVars = {
+ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
     ACTORCAT_BG,
     FLAGS,
