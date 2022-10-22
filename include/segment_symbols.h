@@ -126,13 +126,13 @@ DECLARE_OVERLAY_SEGMENT(Effect_Ss_Sbn)
 
 #define DEFINE_OBJECT(name, _enumValue) DECLARE_ROM_SEGMENT(name)
 #define DEFINE_OBJECT_UNSET(_enumValue)
-#define DEFINE_OBJECT_NULL(_name, _enumValue)
+#define DEFINE_OBJECT_SIZE_ZERO(_name, _enumValue)
 
 #include "tables/object_table.h"
 
 #undef DEFINE_OBJECT
 #undef DEFINE_OBJECT_UNSET
-#undef DEFINE_OBJECT_NULL
+#undef DEFINE_OBJECT_SIZE_ZERO
 
 DECLARE_ROM_SEGMENT(scene_texture_01)
 DECLARE_ROM_SEGMENT(scene_texture_02)

@@ -5,12 +5,12 @@
  *    - Argument 0: Name of the object segment in spec
  *    - Argument 1: Enum value for this object
  *
- * DEFINE_OBJECT_UNSET and DEFINE_OBJECT_NULL are needed to define empty entries from the original game
+ * DEFINE_OBJECT_UNSET and DEFINE_OBJECT_SIZE_ZERO are needed to define empty entries from the original game
  * 
  * DEFINE_OBJECT_UNSET is used to declare a placeholder enum value which maps to an entry with zeroes in `gObjectTable`
  *    - Argument 0: Enum value for this object
  * 
- * DEFINE_OBJECT_NULL is used to declare a placeholder enum value which maps to a zero-size entry in `gObjectTable`
+ * DEFINE_OBJECT_SIZE_ZERO is used to declare a placeholder enum value which maps to a zero-size entry in `gObjectTable`
  *    - Argument 0: Name of the object segment in spec
  *    - Argument 1: Enum value for this object
  */
@@ -365,7 +365,7 @@
 /* 0x15C */ DEFINE_OBJECT(object_boss03, OBJECT_BOSS03)
 /* 0x15D */ DEFINE_OBJECT(object_boss04, OBJECT_BOSS04)
 /* 0x15E */ DEFINE_OBJECT(object_boss05, OBJECT_BOSS05)
-/* 0x15F */ DEFINE_OBJECT_NULL(object_boss07, OBJECT_UNSET_15F) // unused duplicate with size 0
+/* 0x15F */ DEFINE_OBJECT_SIZE_ZERO(object_boss07, OBJECT_UNSET_15F) // unused duplicate with size 0
 /* 0x160 */ DEFINE_OBJECT(object_boss07, OBJECT_BOSS07)
 /* 0x161 */ DEFINE_OBJECT(object_raf, OBJECT_RAF)
 /* 0x162 */ DEFINE_OBJECT(object_funen, OBJECT_FUNEN)
