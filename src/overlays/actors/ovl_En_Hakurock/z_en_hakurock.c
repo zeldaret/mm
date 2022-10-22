@@ -353,7 +353,7 @@ void EnHakurock_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011100);
-    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011178);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }
