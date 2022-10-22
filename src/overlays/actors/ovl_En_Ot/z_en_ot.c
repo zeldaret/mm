@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ot.h"
-#include "prevent_bss_reordering.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -59,9 +58,9 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 
-static EnOt* D_80B5E880;
-static EnOt* D_80B5E884;
-static EnOt* D_80B5E888;
+EnOt* D_80B5E880;
+EnOt* D_80B5E884;
+EnOt* D_80B5E888;
 
 ActorInit En_Ot_InitVars = {
     ACTOR_EN_OT,
