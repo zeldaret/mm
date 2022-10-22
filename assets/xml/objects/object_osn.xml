@@ -4,24 +4,24 @@
         <!-- Happy Mask Salesman Animations -->
         <Animation Name="gHappyMaskSalesmanLyingDownAnim" Offset="0xC4" /> <!-- Frame 0: Face up, Frame 1: Face down--> <!-- Original name is "om_downpose" -->
         <Animation Name="gHappyMaskSalesmanOrganPlayAnim" Offset="0x1034" /> <!-- Original name is "om_ensou" -->
-        <Animation Name="gHappyMaskSalesmOrganTalkAnim" Offset="0x1614" /> <!-- Original name is "om_ensou_taiki" -->
+        <Animation Name="gHappyMaskSalesmanOrganTalkAnim" Offset="0x1614" /> <!-- Original name is "om_ensou_taiki" -->
         <Animation Name="gHappyMaskSalesmanTurnAroundStartAnim" Offset="0x1D6C" /> <!-- Original name is "om_furimuki" -->
         <Animation Name="gHappyMaskSalesmanTurnAroundLoopAnim" Offset="0x2634" /> <!-- Original name is "om_furimuki_loop" -->
         <Animation Name="gHappyMaskSalesmanArmsOutAnim" Offset="0x2F74" /> <!-- Original name is "om_gozonji" -->
         <Animation Name="gHappyMaskSalesmanBowingAnim" Offset="0x37C4" /> <!-- Original name is "om_hajime" -->
         <Animation Name="gHappyMaskSalesmanChokeAnim" Offset="0x3A1C" /> <!-- Original name is "om_kubisime_loop" -->
-        <Animation Name="gHappyMaskSalesmanReminisceAnim" Offset="0x4320" /> <!-- Original name is "om_nanto" -->
-        <Animation Name="gHappyMaskSalesmanHandsClaspedAnim" Offset="0x4C8C" /> <!-- Original name is "om_niginigi" -->
-        <Animation Name="gHappyMaskSalesmanDespairAnim" Offset="0x55F8" /> <!-- Original name is "om_noo_loop" -->
+        <Animation Name="gHappyMaskSalesmanReminisceAnim" Offset="0x4320" /> <!-- Rock calmly with hands together out front --> <!-- Original name is "om_nanto" -->
+        <Animation Name="gHappyMaskSalesmanHandsClaspedAnim" Offset="0x4C8C" /> <!-- Stand still with hands clasped together out front --> <!-- Original name is "om_niginigi" -->
+        <Animation Name="gHappyMaskSalesmanDespairAnim" Offset="0x55F8" /> <!-- Rock wildly with both hands on head --> <!-- Original name is "om_noo_loop" -->
         <Animation Name="gHappyMaskSalesmanMaskLookFromStartAnim" Offset="0x5D78" /> <!-- Look away from held mask --> <!-- Original name is "om_omfurim" -->
         <Animation Name="gHappyMaskSalesmanMaskLookFromLoopAnim" Offset="0x6564" /> <!-- Original name is "om_omfurim_loop" -->
         <Animation Name="gHappyMaskSalesmanMaskLookAtAnim" Offset="0x6D48" /> <!-- Original name is "om_ommotu_loop" -->
         <Animation Name="gHappyMaskSalesmanFastBowsAnim" Offset="0x7220" /> <!-- Original name is "om_onegai_loop" -->
         <Animation Name="gHappyMaskSalesmanWalkAwayAnim" Offset="0x8D80" /> <!-- Original name is "om_saru" -->
-        <Animation Name="gHappyMaskSalesmanBelieveAnim" Offset="0x94E4" /> <!-- Original name is "om_sinjina" -->
-        <Animation Name="gHappyMaskSalesmanThinkAnim" Offset="0x9BB8" /> <!-- Original name is "om_souieba" -->
+        <Animation Name="gHappyMaskSalesmanBelieveAnim" Offset="0x94E4" /> <!-- Both arms outstreched while looking up --> <!-- Original name is "om_sinjina" -->
+        <Animation Name="gHappyMaskSalesmanThinkAnim" Offset="0x9BB8" /> <!-- Stand still with hand on chin --> <!-- --> <!-- Original name is "om_souieba" -->
         <Animation Name="gHappyMaskSalesmanHandOutAnim" Offset="0xA444" /> <!-- Original name is "om_tewodasu_loop" -->
-        <Animation Name="gHappyMaskSalesmanShakeHeadAnim" Offset="0xAC60" /> <!-- Original name is "om_watasi" -->
+        <Animation Name="gHappyMaskSalesmanShakeHeadAnim" Offset="0xAC60" /> <!-- Shake head with hand on forehead --> <!-- Original name is "om_watasi" -->
         <Animation Name="gHappyMaskSalesmanShakeAnim" Offset="0xAE9C" /> <!-- Original name is "om_yusaburu" -->
 
         <!-- Happy Mask Salesman DLists -->
@@ -32,8 +32,8 @@
         <DList Name="gHappyMaskSalesmanLeftThighDL" Offset="0xFFC0" />
         <DList Name="gHappyMaskSalesmanLeftShinDL" Offset="0x102C0" />
         <DList Name="gHappyMaskSalesmanLeftFootDL" Offset="0x10518" />
-        <DList Name="gHappyMaskSalesmanStomachDL" Offset="0x10750" />
-        <DList Name="gHappyMaskSalesmanTorsoDL" Offset="0x10AB0" />
+        <DList Name="gHappyMaskSalesmanAbdomenDL" Offset="0x10750" />
+        <DList Name="gHappyMaskSalesmanChestDL" Offset="0x10AB0" />
         <DList Name="gHappyMaskSalesmanHeadDL" Offset="0x10ED0" />
         <DList Name="gHappyMaskSalesmanBackpackDL" Offset="0x114B8" />
         <DList Name="gHappyMaskSalesmanRightUpperArmDL" Offset="0x12088" />
@@ -112,8 +112,8 @@
 
         <!-- Happy Mask Salesman Skeleton -->
         <Limb Name="gHappyMaskSalesmanRootLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_ROOT" Offset="0x201D0" />
-        <Limb Name="gHappyMaskSalesmanStomachLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_STOMACH" Offset="0x201DC" />
-        <Limb Name="gHappyMaskSalesmanTorsoLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_TORSO" Offset="0x201E8" />
+        <Limb Name="gHappyMaskSalesmanAbdomenLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_ABDOMEN" Offset="0x201DC" />
+        <Limb Name="gHappyMaskSalesmanChestLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_CHEST" Offset="0x201E8" />
         <Limb Name="gHappyMaskSalesmanLeftUpperArmLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_LEFT_UPPER_ARM" Offset="0x201F4" />
         <Limb Name="gHappyMaskSalesmanLeftForearmLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_LEFT_FOREARM" Offset="0x20200" />
         <Limb Name="gHappyMaskSalesmanLeftHandLimb" Type="Standard" EnumName="HAPPY_MASK_SALESMAN_LIMB_LEFT_HAND" Offset="0x2020C" />

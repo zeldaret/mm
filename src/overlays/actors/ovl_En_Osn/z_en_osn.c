@@ -16,6 +16,11 @@ void EnOsn_Destroy(Actor* thisx, PlayState* play);
 void EnOsn_Update(Actor* thisx, PlayState* play);
 void EnOsn_Draw(Actor* thisx, PlayState* play);
 
+void EnOsn_Idle(EnOsn* this, PlayState* play);
+void EnOsn_StartCutscene(EnOsn* this, PlayState* play);
+void EnOsn_HandleCsAction(EnOsn* this, PlayState* play);
+void EnOsn_Talk(EnOsn* this, PlayState* play);
+
 #define OSN_STATE_SPECIAL_CONVERSTATION (1 << 0)
 #define OSN_STATE_MET_HUMAN (1 << 1)
 #define OSN_STATE_MET_DEKU (1 << 2)
@@ -94,7 +99,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gHappyMaskSalesmanBelieveAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gHappyMaskSalesmanThinkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gHappyMaskSalesmanShakeHeadAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gHappyMaskSalesmOrganTalkAnim, 1.0f, 1.0f, 39.0f, ANIMMODE_LOOP, 0.0f },
+    { &gHappyMaskSalesmanOrganTalkAnim, 1.0f, 1.0f, 39.0f, ANIMMODE_LOOP, 0.0f },
     { &gHappyMaskSalesmanOrganPlayAnim, 1.0f, 1.0f, 70.0f, ANIMMODE_LOOP, 0.0f },
     { &gHappyMaskSalesmanShakeAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &gHappyMaskSalesmanChokeAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
@@ -173,11 +178,6 @@ static DamageTable sDamageTable = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
-
-void EnOsn_StartCutscene(EnOsn* this, PlayState* play);
-void EnOsn_HandleCsAction(EnOsn* this, PlayState* play);
-void EnOsn_Idle(EnOsn* this, PlayState* play);
-void EnOsn_Talk(EnOsn* this, PlayState* play);
 
 void EnOsn_UpdateCollider(EnOsn* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
