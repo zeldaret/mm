@@ -851,8 +851,7 @@ void func_80AEB684(EnLiftNuts* this) {
 
 void func_80AEB698(EnLiftNuts* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20)) &&
-            CURRENT_DAY == 3) {
+        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20)) && CURRENT_DAY == 3) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 13);
             Message_StartTextbox(play, 0x27F5, &this->actor);
             this->textId = 0x27F5;
