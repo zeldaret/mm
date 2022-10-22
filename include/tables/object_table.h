@@ -10,7 +10,7 @@
  * DEFINE_OBJECT_UNSET is used to declare a placeholder enum value which maps to an entry with zeroes in `gObjectTable`
  *    - Argument 0: Enum value for this object
  * 
- * DEFINE_OBJECT_SIZE_ZERO is used to declare a placeholder enum value which maps to a zero-size entry in `gObjectTable`
+ * DEFINE_OBJECT_SIZE_ZERO is used to declare a placeholder enum value which maps to a zero-size entry in `gObjectTable`, with no corresponding segment in the rom.
  *    - Argument 0: Name of the object segment in spec
  *    - Argument 1: Enum value for this object
  */
