@@ -149,8 +149,8 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
 
     if (path != NULL) {
         // count - 1 segments, 1 gSPVertex and 3 gSP2Triangles for each, plus a gSPEndDisplayList
-        gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(((path->count - 1) * 4 + 1) * sizeof(Gfx)));
-        curVtx = GRAPH_ALLOC(gfxCtx, ALIGN16(path->count * 6 * sizeof(Vtx)));
+        gfx = GRAPH_ALLOC(gfxCtx, ((path->count - 1) * 4 + 1) * sizeof(Gfx));
+        curVtx = GRAPH_ALLOC(gfxCtx, path->count * 6 * sizeof(Vtx));
 
         gfxHead = gfx;
         curBaseVtx = curVtx;
