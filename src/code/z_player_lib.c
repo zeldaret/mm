@@ -617,7 +617,7 @@ PlayerItemAction func_80123810(PlayState* play) {
     return PLAYER_IA_NONE;
 }
 
-// Used to map action params to model groups
+// Used to map item actions to model groups
 u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NONE
     PLAYER_MODELGROUP_13,             // PLAYER_IA_LAST_USED
@@ -636,7 +636,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_BOMB
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_POWDER_KEG
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_BOMBCHU
-    PLAYER_MODELGROUP_8,              // PLAYER_AP_11
+    PLAYER_MODELGROUP_8,              // PLAYER_IA_11
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NUT
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PICTO_BOX
     PLAYER_MODELGROUP_INSTRUMENT,     // PLAYER_IA_OCARINA
@@ -647,7 +647,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_ZORA_EGG
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_DEKU_PRINCESS
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_GOLD_DUST
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_1C
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_1C
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_SEAHORSE
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MUSHROOM
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_HYLIAN_LOACH
@@ -669,14 +669,14 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_SWAMP
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_MOUNTAIN
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_OCEAN
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_32
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_32
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LETTER_MAMA
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_34
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_35
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_34
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_35
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PENDANT_OF_MEMORIES
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_37
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_38
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_39
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_37
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_38
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_39
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_TRUTH
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_KAFEIS_MASK
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_ALL_NIGHT
@@ -1412,7 +1412,7 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
 s32 Player_ActionToBottle(Player* player, PlayerItemAction itemAction) {
     s32 bottle = itemAction - PLAYER_IA_BOTTLE;
 
-    // Relies on bottle-related action params to be contiguous
+    // Relies on bottle-related item actions to be contiguous
     if ((bottle >= (PLAYER_IA_BOTTLE - PLAYER_IA_BOTTLE)) && (bottle <= (PLAYER_IA_BOTTLE_FAIRY - PLAYER_IA_BOTTLE))) {
         return bottle;
     }
@@ -1427,7 +1427,7 @@ s32 Player_GetBottleHeld(Player* Player) {
 s32 Player_ActionToExplosive(Player* player, PlayerItemAction itemAction) {
     s32 explosive = itemAction - PLAYER_IA_BOMB;
 
-    // Relies on explosive-related action params to be contiguous
+    // Relies on explosive-related item actions to be contiguous
     if ((explosive >= (PLAYER_IA_BOMB - PLAYER_IA_BOMB)) && (explosive <= (PLAYER_IA_BOMBCHU - PLAYER_IA_BOMB))) {
         return explosive;
     }
