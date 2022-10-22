@@ -32,7 +32,9 @@ ActorInit Dm_Char03_InitVars = {
     (ActorFunc)DmChar03_Draw,
 };
 
-AnimationInfo sAnimationInfo[] = { { &object_osn_Anim_020530, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f } };
+AnimationInfo sAnimationInfo[] = {
+    { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+};
 
 void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frame;
