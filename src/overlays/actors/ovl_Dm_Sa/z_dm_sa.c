@@ -86,7 +86,7 @@ Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {
     Gfx* dList;
     Gfx* dListHead;
 
-    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2); //! @bug this does not allocate enough for 3 Gfx commands
+    dList = dListHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx)); //! @bug this does not allocate enough for 3 Gfx commands
     gDPSetRenderMode(dListHead++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
     gDPSetEnvColor(dListHead++, 0, 0, 0, alpha);
     gSPEndDisplayList(dListHead++);
@@ -98,7 +98,7 @@ Gfx* func_80A2EBB0(GraphicsContext* gfxCtx, u32 alpha) {
     Gfx* dList;
     Gfx* dListHead;
 
-    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    dList = dListHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
     gDPSetEnvColor(dListHead++, 0, 0, 0, alpha);
     gSPEndDisplayList(dListHead++);
 

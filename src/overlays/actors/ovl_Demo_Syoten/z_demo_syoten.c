@@ -484,7 +484,7 @@ void func_80C173B4(Actor* thisx, PlayState* play) {
 
     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
 
-    matrix = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_144.unk_18->unk_1));
+    matrix = GRAPH_ALLOC(play->state.gfxCtx, this->unk_144.unk_18->unk_1 * sizeof(Mtx));
 
     if (matrix != NULL) {
         func_8012C2DC(play->state.gfxCtx);

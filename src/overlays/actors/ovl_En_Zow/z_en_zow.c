@@ -589,7 +589,7 @@ void EnZow_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_80BDDA7C(GraphicsContext* gfxCtx) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
 
     gSPEndDisplayList(gfx);
 

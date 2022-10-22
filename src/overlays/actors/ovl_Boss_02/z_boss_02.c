@@ -1347,7 +1347,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     f32 sp9C;
     f32 sp98;
 
-    mtxIter = mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 23);
+    mtxIter = mtx = GRAPH_ALLOC(play->state.gfxCtx, 23 * sizeof(Mtx));
 
     OPEN_DISPS(play->state.gfxCtx);
 

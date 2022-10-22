@@ -1614,7 +1614,7 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
     Gfx* dList;
     Gfx* dListHead;
 
-    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
     gSPEndDisplayList(dListHead++);
 
     return dList;

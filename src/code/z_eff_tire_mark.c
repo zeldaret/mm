@@ -226,7 +226,7 @@ void EffectTireMark_Draw(void* thisx, GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
     if (this->numElements >= 2) {
-        vtx = GRAPH_ALLOC(gfxCtx, ALIGN16(this->numElements * sizeof(Vtx[2])));
+        vtx = GRAPH_ALLOC(gfxCtx, this->numElements * sizeof(Vtx[2]));
 
         if (vtx != NULL) {
             gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

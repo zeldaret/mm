@@ -1579,7 +1579,7 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
             (!Cutscene_CheckActorAction(play, 201) ||
              (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action != 6)) &&
             (!(player->stateFlags1 & PLAYER_STATE1_100000) || (kREG(90) < this->actor.projectedPos.z))) {
-            Gfx* dListHead = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+            Gfx* dListHead = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
             f32 alphaScale;
             s32 envAlpha;
 

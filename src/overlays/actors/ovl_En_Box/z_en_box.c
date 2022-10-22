@@ -658,14 +658,14 @@ void EnBox_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 Gfx* EnBox_SetRenderMode1(GraphicsContext* gfxCtx) {
-    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
 
     gSPEndDisplayList(dl);
     return dl;
 }
 
 Gfx* EnBox_SetRenderMode2(GraphicsContext* gfxCtx) {
-    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* dl = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
     Gfx* cur = dl;
 
     gDPSetRenderMode(
@@ -678,7 +678,7 @@ Gfx* EnBox_SetRenderMode2(GraphicsContext* gfxCtx) {
 }
 
 Gfx* EnBox_SetRenderMode3(GraphicsContext* gfxCtx) {
-    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* dl = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
     Gfx* cur = dl;
 
     gDPSetRenderMode(cur++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);

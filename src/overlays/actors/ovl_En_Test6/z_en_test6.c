@@ -240,7 +240,7 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
 void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
     Gfx* gfx2 = gfx;
     Hilite* sp70;
     Vec3f sp64;

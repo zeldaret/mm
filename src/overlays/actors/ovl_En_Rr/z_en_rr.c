@@ -881,7 +881,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     Vec3f spA4;
     f32 temp_f20;
 
-    matrix = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 4);
+    matrix = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
 
     OPEN_DISPS(play->state.gfxCtx);
 

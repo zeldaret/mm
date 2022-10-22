@@ -957,7 +957,7 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     s32 sp40;
 
     if (this->unk_144 & 1) {
-        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_18CC.unk_18->unk_1));
+        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_18CC.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
             func_8018450C(play, &this->unk_18CC, mtx, func_80AF31D0, NULL, &this->actor);

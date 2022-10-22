@@ -1109,9 +1109,9 @@ void func_8012CA38(GraphicsContext* gfxCtx) {
 Gfx* Gfx_BranchTexScroll(Gfx** gfxp, u32 x, u32 y, s32 width, s32 height) {
     Gfx* displayList = Graph_DlistAlloc(gfxp, 3 * sizeof(Gfx));
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
-    gSPEndDisplayList(displayList + 2);
+    gDPTileSync(&displayList[0]);
+    gDPSetTileSize(&displayList[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
+    gSPEndDisplayList(&displayList[2]);
 
     return displayList;
 }
@@ -1125,99 +1125,69 @@ Gfx* func_8012CB28(GraphicsContext* gfxCtx, u32 x, u32 y) {
 }
 
 Gfx* Gfx_TexScroll(GraphicsContext* gfxCtx, u32 x, u32 y, s32 width, s32 height) {
-    Gfx* displayList;
-
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 4;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    Gfx* displayList = GRAPH_ALLOC(gfxCtx, 3 * sizeof(Gfx));
 
     x %= 2048;
     y %= 2048;
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
-    gSPEndDisplayList(displayList + 2);
+    gDPTileSync(&displayList[0]);
+    gDPSetTileSize(&displayList[1], 0, x, y, (x + ((width - 1) << 2)), (y + ((height - 1) << 2)));
+    gSPEndDisplayList(&displayList[2]);
 
     return displayList;
 }
 
 Gfx* Gfx_TwoTexScroll(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2, u32 x2,
                       u32 y2, s32 width2, s32 height2) {
-    Gfx* displayList;
-
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 6;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    Gfx* displayList = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
 
     x1 %= 2048;
     y1 %= 2048;
     x2 %= 2048;
     y2 %= 2048;
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
-    gDPTileSync(displayList + 2);
-    gDPSetTileSize(displayList + 3, tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
-    gSPEndDisplayList(displayList + 4);
+    gDPTileSync(&displayList[0]);
+    gDPSetTileSize(&displayList[1], tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
+    gDPTileSync(&displayList[2]);
+    gDPSetTileSize(&displayList[3], tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
+    gSPEndDisplayList(&displayList[4]);
 
     return displayList;
 }
 
 Gfx* Gfx_TwoTexScrollEnvColor(GraphicsContext* gfxCtx, s32 tile1, u32 x1, u32 y1, s32 width1, s32 height1, s32 tile2,
                               u32 x2, u32 y2, s32 width2, s32 height2, s32 r, s32 g, s32 b, s32 a) {
-    Gfx* displayList;
-
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 6;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
+    Gfx* displayList = GRAPH_ALLOC(gfxCtx, 6 * sizeof(Gfx));
 
     x1 %= 2048;
     y1 %= 2048;
     x2 %= 2048;
     y2 %= 2048;
 
-    gDPTileSync(displayList);
-    gDPSetTileSize(displayList + 1, tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
-    gDPTileSync(displayList + 2);
-    gDPSetTileSize(displayList + 3, tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
-    gDPSetEnvColor(displayList + 4, r, g, b, a);
-    gSPEndDisplayList(displayList + 5);
+    gDPTileSync(&displayList[0]);
+    gDPSetTileSize(&displayList[1], tile1, x1, y1, (x1 + ((width1 - 1) << 2)), (y1 + ((height1 - 1) << 2)));
+    gDPTileSync(&displayList[2]);
+    gDPSetTileSize(&displayList[3], tile2, x2, y2, (x2 + ((width2 - 1) << 2)), (y2 + ((height2 - 1) << 2)));
+    gDPSetEnvColor(&displayList[4], r, g, b, a);
+    gSPEndDisplayList(&displayList[5]);
 
     return displayList;
 }
 
 Gfx* Gfx_EnvColor(GraphicsContext* gfxCtx, s32 r, s32 g, s32 b, s32 a) {
-    Gfx* displayList;
+    Gfx* displayList = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 2;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
-
-    gDPSetEnvColor(displayList, r, g, b, a);
-    gSPEndDisplayList(displayList + 1);
+    gDPSetEnvColor(&displayList[0], r, g, b, a);
+    gSPEndDisplayList(&displayList[1]);
 
     return displayList;
 }
 
 Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s32 a) {
-    Gfx* displayList;
+    Gfx* displayList = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
 
-    {
-        Gfx* _g = (Gfx*)gfxCtx->polyOpa.d - 2;
-        displayList = _g;
-        gfxCtx->polyOpa.d = _g;
-    }
-
-    gDPSetPrimColor(displayList, 0, lodfrac, r, g, b, a);
-    gSPEndDisplayList(displayList + 1);
+    gDPSetPrimColor(&displayList[0], 0, lodfrac, r, g, b, a);
+    gSPEndDisplayList(&displayList[1]);
 
     return displayList;
 }

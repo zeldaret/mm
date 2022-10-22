@@ -113,7 +113,7 @@ void AnimatedMat_DrawTwoTexScroll(PlayState* play, s32 segment, void* params) {
  * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID.
  */
 void AnimatedMat_SetColor(PlayState* play, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
-    Gfx* colorDList = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* colorDList = GRAPH_ALLOC(play->state.gfxCtx, 3 * sizeof(Gfx));
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -719,7 +719,7 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
         BgCheck_UnsetContextFlags(&play->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     }
 
-    dList = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 18);
+    dList = GRAPH_ALLOC(play->state.gfxCtx, 18 * sizeof(Gfx));
 
     AnimatedMat_Draw(play, play->sceneMaterialAnims);
 

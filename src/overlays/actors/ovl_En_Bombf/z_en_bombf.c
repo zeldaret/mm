@@ -451,7 +451,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_808AF86C(GraphicsContext* gfxCtx, PlayState* play) {
-    Gfx* head = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
+    Gfx* head = GRAPH_ALLOC(gfxCtx, 6 * sizeof(Gfx));
     Gfx* gfx = head;
 
     Matrix_ReplaceRotation(&play->billboardMtxF);
