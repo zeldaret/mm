@@ -1721,16 +1721,14 @@ void func_800B8050(Actor* actor, PlayState* play, s32 flag) {
     Hilite* hilite = func_800BCBF4(&actor->world.pos, play);
 
     if (flag != 0) {
-        Gfx* displayListHead;
-        Gfx* displayList = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-
-        displayListHead = displayList;
+        Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+        Gfx* gfxHead = gfx;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
-        gSPEndDisplayList(displayListHead);
-        gSPSegment(POLY_OPA_DISP++, 0x07, displayList);
+        gDPSetHilite1Tile(gfxHead++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(gfxHead++);
+        gSPSegment(POLY_OPA_DISP++, 0x07, gfx);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1740,16 +1738,14 @@ void func_800B8118(Actor* actor, PlayState* play, s32 flag) {
     Hilite* hilite = func_800BCC68(&actor->world.pos, play);
 
     if (flag != 0) {
-        Gfx* displayListHead;
-        Gfx* displayList = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-
-        displayListHead = displayList;
+        Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+        Gfx* gfxHead = gfx;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
-        gSPEndDisplayList(displayListHead);
-        gSPSegment(POLY_XLU_DISP++, 0x07, displayList);
+        gDPSetHilite1Tile(gfxHead++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(gfxHead++);
+        gSPSegment(POLY_XLU_DISP++, 0x07, gfx);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -4190,19 +4186,17 @@ Gfx D_801AEFA0[] = {
 };
 
 Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
-    Gfx* displayListHead;
-    Gfx* displayList;
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfxHead = gfx;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
-
-    gDPSetRenderMode(displayListHead++,
+    gDPSetRenderMode(gfxHead++,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
                          G_RM_FOG_SHADE_A,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-    gSPEndDisplayList(displayListHead++);
+    gSPEndDisplayList(gfxHead++);
 
-    return displayList;
+    return gfx;
 }
 
 // unused

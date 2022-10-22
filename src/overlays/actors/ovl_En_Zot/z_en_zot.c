@@ -1345,11 +1345,12 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_80B99580(GraphicsContext* gfxCtx) {
-    Gfx* dList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfxHead = gfx;
 
-    gSPEndDisplayList(dList);
+    gSPEndDisplayList(gfxHead++);
 
-    return dList;
+    return gfx;
 }
 
 s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

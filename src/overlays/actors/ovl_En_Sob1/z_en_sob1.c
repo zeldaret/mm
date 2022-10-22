@@ -1611,13 +1611,12 @@ void EnSob1_BombShopkeeper_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dL
 }
 
 Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
-    Gfx* dList;
-    Gfx* dListHead;
+    Gfx* gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfxHead = gfx;
 
-    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
-    gSPEndDisplayList(dListHead++);
+    gSPEndDisplayList(gfxHead++);
 
-    return dList;
+    return gfx;
 }
 
 void EnSob1_ZoraShopkeeper_Draw(Actor* thisx, PlayState* play) {
