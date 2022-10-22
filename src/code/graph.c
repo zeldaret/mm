@@ -174,8 +174,8 @@ retry:
     task->ucodeBootSize = SysUcode_GetUCodeBootSize();
     task->ucode = SysUcode_GetUCode();
     task->ucodeData = SysUcode_GetUCodeData();
-    task->ucodeSize = 0x1000;
-    task->ucodeDataSize = 0x800;
+    task->ucodeSize = SP_UCODE_SIZE;
+    task->ucodeDataSize = SP_UCODE_DATA_SIZE;
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
