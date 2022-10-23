@@ -318,8 +318,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     if (pauseCtx->pageIndex == PAUSE_ITEM) {
         if ((pauseCtx->state == PAUSE_STATE_MAIN) &&
             ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
-            (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
-            !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+            (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) && !IS_PAUSE_STATE_GAMEOVER) {
             func_8012C628(play->state.gfxCtx);
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 

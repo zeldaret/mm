@@ -9,6 +9,4 @@ typedef struct ObjHana {
     /* 0x000 */ Actor actor;
 } ObjHana; // size = 0x144
 
-extern const ActorInit Obj_Hana_InitVars;
-
 #endif // Z_OBJ_HANA_H

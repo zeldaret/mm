@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
+#include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
@@ -177,25 +178,25 @@ s16 sGameOverEnvB = 0;
 s16 sInDungeonScene = false;
 
 f32 sPageSwitchEyeDx[] = {
-    -4.0f, // From PAUSE_ITEM to PAUSE_MAP (switching right)
-    4.0f,  // From PAUSE_ITEM to PAUSE_MASK (switching left)
-    4.0f,  // From PAUSE_MAP to PAUSE_QUEST (switching right)
-    4.0f,  // From PAUSE_MAP to PAUSE_ITEM (switching left)
-    4.0f,  // From PAUSE_QUEST to PAUSE_MASK (switching right)
-    -4.0f, // From PAUSE_QUEST to PAUSE_MAP (switching left)
-    -4.0f, // From PAUSE_MASK to PAUSE_ITEM (switching right)
-    -4.0f, // From PAUSE_MASK to PAUSE_QUEST (switching left)
+    -PAUSE_EYE_DIST * (PAUSE_MAP_X - PAUSE_ITEM_X) / 16, // From PAUSE_ITEM to PAUSE_MAP (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_X - PAUSE_ITEM_X) / 16,  // From PAUSE_ITEM to PAUSE_MASK (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_X - PAUSE_MAP_X) / 16,  // From PAUSE_MAP to PAUSE_QUEST (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_X - PAUSE_MAP_X) / 16,   // From PAUSE_MAP to PAUSE_ITEM (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_X - PAUSE_QUEST_X) / 16, // From PAUSE_QUEST to PAUSE_MASK (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MAP_X - PAUSE_QUEST_X) / 16,  // From PAUSE_QUEST to PAUSE_MAP (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_X - PAUSE_MASK_X) / 16,  // From PAUSE_MASK to PAUSE_ITEM (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_X - PAUSE_MASK_X) / 16, // From PAUSE_MASK to PAUSE_QUEST (switching left)
 };
 
 f32 sPageSwitchEyeDz[] = {
-    -4.0f, // From PAUSE_ITEM to PAUSE_MAP (switching right)
-    -4.0f, // From PAUSE_ITEM to PAUSE_MASK (switching left)
-    -4.0f, // From PAUSE_MAP to PAUSE_QUEST (switching right)
-    4.0f,  // From PAUSE_MAP to PAUSE_ITEM (switching left)
-    4.0f,  // From PAUSE_QUEST to PAUSE_MASK (switching right)
-    4.0f,  // From PAUSE_QUEST to PAUSE_MAP (switching left)
-    4.0f,  // From PAUSE_MASK to PAUSE_ITEM (switching right)
-    -4.0f, // From PAUSE_MASK to PAUSE_QUEST (switching left)
+    -PAUSE_EYE_DIST * (PAUSE_MAP_Z - PAUSE_ITEM_Z) / 16, // From PAUSE_ITEM to PAUSE_MAP (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_Z - PAUSE_ITEM_Z) / 16,  // From PAUSE_ITEM to PAUSE_MASK (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_Z - PAUSE_MAP_Z) / 16,  // From PAUSE_MAP to PAUSE_QUEST (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_Z - PAUSE_MAP_Z) / 16,   // From PAUSE_MAP to PAUSE_ITEM (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_MASK_Z - PAUSE_QUEST_Z) / 16, // From PAUSE_QUEST to PAUSE_MASK (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_MAP_Z - PAUSE_QUEST_Z) / 16,  // From PAUSE_QUEST to PAUSE_MAP (switching left)
+    -PAUSE_EYE_DIST*(PAUSE_ITEM_Z - PAUSE_MASK_Z) / 16,  // From PAUSE_MASK to PAUSE_ITEM (switching right)
+    -PAUSE_EYE_DIST*(PAUSE_QUEST_Z - PAUSE_MASK_Z) / 16, // From PAUSE_MASK to PAUSE_QUEST (switching left)
 };
 
 u16 sPageSwitchNextPageIndex[] = {
@@ -3014,7 +3015,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             stepR = ABS_ALT(sGameOverEnvR - 255) / sGameOverColorTimer;
             stepG = ABS_ALT(sGameOverEnvG - 130) / sGameOverColorTimer;
-            stepB = ABS_ALT(sGameOverEnvB) / sGameOverColorTimer;
+            stepB = ABS_ALT(sGameOverEnvB - 0) / sGameOverColorTimer;
             if (sGameOverEnvR >= 255) {
                 sGameOverEnvR -= stepR;
             } else {

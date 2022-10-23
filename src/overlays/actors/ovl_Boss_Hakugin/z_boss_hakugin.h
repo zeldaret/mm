@@ -36,6 +36,4 @@ typedef struct BossHakugin {
     /* 0x3734 */ char unk_3734[0xDC];
 } BossHakugin; // size = 0x3810
 
-extern const ActorInit Boss_Hakugin_InitVars;
-
 #endif // Z_BOSS_HAKUGIN_H

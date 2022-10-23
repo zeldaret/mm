@@ -13,6 +13,4 @@ typedef struct EnInvadepohDemo {
     /* 0x148 */ char unk_148[0x180];
 } EnInvadepohDemo; // size = 0x2C8
 
-extern const ActorInit En_Invadepoh_Demo_InitVars;
-
 #endif // Z_EN_INVADEPOH_DEMO_H
