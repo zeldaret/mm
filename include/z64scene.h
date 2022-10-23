@@ -70,7 +70,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x1 */ u8  naviQuestHintFileId;
     /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
@@ -900,6 +900,14 @@ typedef enum {
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
 
+// TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
+// Leftover from OoT
+typedef enum {
+    /* 0 */ NAVI_QUEST_HINTS_NONE,
+    /* 1 */ NAVI_QUEST_HINTS_OVERWORLD,
+    /* 2 */ NAVI_QUEST_HINTS_DUNGEON
+} NaviQuestHintFileId;
+
 // SceneTableEntry commands
 typedef enum {
     /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
@@ -957,8 +965,8 @@ typedef enum {
 #define SCENE_CMD_ENTRANCE_LIST(entranceList) \
     { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
 
-#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
-    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+#define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
 #define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \

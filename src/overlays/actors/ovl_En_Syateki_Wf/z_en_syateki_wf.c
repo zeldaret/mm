@@ -101,7 +101,7 @@ static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Wf_InitVars = {
+ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
     ACTORCAT_ENEMY,
     FLAGS,

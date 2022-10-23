@@ -27,7 +27,7 @@ typedef struct EnTest2ModelInfo {
     /* 0x8 */ AnimatedMaterial* animMat;
 } EnTest2ModelInfo; // size = 0xC
 
-const ActorInit En_Test2_InitVars = {
+ActorInit En_Test2_InitVars = {
     ACTOR_EN_TEST2,
     ACTORCAT_BG,
     FLAGS,

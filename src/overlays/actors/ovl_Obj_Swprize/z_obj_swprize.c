@@ -23,7 +23,7 @@ void func_80C25710(ObjSwprize* this);
 void func_80C2572C(ObjSwprize* this, PlayState* play);
 void ObjSwprize_SetupDoNothing(ObjSwprize* this);
 
-const ActorInit Obj_Swprize_InitVars = {
+ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,
     FLAGS,

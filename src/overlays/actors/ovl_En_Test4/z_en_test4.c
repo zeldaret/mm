@@ -4,6 +4,7 @@
  * Description: Three-Day Timer
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test4.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -19,7 +20,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play);
 void func_80A42AB8(EnTest4* this, PlayState* play);
 void func_80A42F20(EnTest4* this, PlayState* play);
 
-const ActorInit En_Test4_InitVars = {
+ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
     ACTORCAT_SWITCH,
     FLAGS,

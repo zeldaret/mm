@@ -38,7 +38,7 @@ void func_80BADE14(EnSuttari* this, PlayState* play);
 void func_80BADE8C(EnSuttari* this, PlayState* play);
 void func_80BADF3C(EnSuttari* this, PlayState* play);
 
-const ActorInit En_Suttari_InitVars = {
+ActorInit En_Suttari_InitVars = {
     ACTOR_EN_SUTTARI,
     ACTORCAT_NPC,
     FLAGS,

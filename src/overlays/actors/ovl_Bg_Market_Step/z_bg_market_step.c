@@ -14,7 +14,7 @@
 void BgMarketStep_Init(Actor* thisx, PlayState* play);
 void BgMarketStep_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Market_Step_InitVars = {
+ActorInit Bg_Market_Step_InitVars = {
     ACTOR_BG_MARKET_STEP,  ACTORCAT_BG,           FLAGS,
     OBJECT_MARKET_OBJ,     sizeof(BgMarketStep),  (ActorFunc)BgMarketStep_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)BgMarketStep_Draw,

@@ -15,6 +15,4 @@ typedef struct BgAstrBombwall {
     /* 0x180 */ ColliderTrisElement colliderElements[2];
     /* 0x238 */ s16 cutscenes[1];
 } BgAstrBombwall;
-extern const ActorInit Bg_Astr_Bombwall_InitVars;
-
 #endif // Z_BG_ASTR_BOMBWALL_H

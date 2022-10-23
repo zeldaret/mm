@@ -1981,7 +1981,7 @@ Gfx* D_801C0B20[] = {
     gameplay_keep_DL_00B260,
     gameplay_keep_DL_005A10,
     gameplay_keep_DL_005360,
-    gameplay_keep_DL_0056C0,
+    gDekuMaskDL,
     object_mask_boy_DL_000900,
     object_mask_goron_DL_0014A0,
     object_mask_zora_DL_000DB0,

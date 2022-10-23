@@ -69,7 +69,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-const ActorInit Boss_06_InitVars = {
+ActorInit Boss_06_InitVars = {
     ACTOR_BOSS_06,
     ACTORCAT_BOSS,
     FLAGS,
@@ -182,7 +182,7 @@ void func_809F24A8(Boss06* this) {
 }
 
 #ifdef NON_MATCHING
-// Weird loading of 1
+// The 1 constant from the switch branch is reused in case 2 for some reason.
 void func_809F24C8(Boss06* this, PlayState* play) {
     s16 sp4E = 0;
     Player* player = GET_PLAYER(play);

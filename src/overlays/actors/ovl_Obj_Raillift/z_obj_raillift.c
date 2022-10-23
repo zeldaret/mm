@@ -28,7 +28,7 @@ void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Wait(ObjRaillift* this, PlayState* play);
 void ObjRaillift_Move(ObjRaillift* this, PlayState* play);
 
-const ActorInit Obj_Raillift_InitVars = {
+ActorInit Obj_Raillift_InitVars = {
     ACTOR_OBJ_RAILLIFT,
     ACTORCAT_BG,
     FLAGS,

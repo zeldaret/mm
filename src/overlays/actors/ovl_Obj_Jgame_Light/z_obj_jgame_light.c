@@ -27,7 +27,7 @@ void func_80C15474(ObjJgameLight* this, PlayState* play);
 void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play);
 void func_80C15718(ObjJgameLight* this, PlayState* play);
 
-const ActorInit Obj_Jgame_Light_InitVars = {
+ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
     ACTORCAT_PROP,
     FLAGS,

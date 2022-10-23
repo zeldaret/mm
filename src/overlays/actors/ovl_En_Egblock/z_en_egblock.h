@@ -14,6 +14,4 @@ typedef struct EnEgblock {
     /* 0x1A4 */ char unk_1A4[0xC10];
 } EnEgblock; // size = 0xDB4
 
-extern const ActorInit En_Egblock_InitVars;
-
 #endif // Z_EN_EGBLOCK_H

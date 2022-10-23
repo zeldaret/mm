@@ -97,7 +97,7 @@ typedef enum {
     /* 4 */ EN_RD_GRAB_END,
 } EnRdGrabState;
 
-const ActorInit En_Rd_InitVars = {
+ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
     ACTORCAT_ENEMY,
     FLAGS,

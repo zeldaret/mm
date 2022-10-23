@@ -16,7 +16,7 @@ void EnTest5_Update(Actor* thisx, PlayState* play2);
 void EnTest5_HandleBottleAction(EnTest5* this, PlayState* play);
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc);
 
-const ActorInit En_Test5_InitVars = {
+ActorInit En_Test5_InitVars = {
     ACTOR_EN_TEST5,
     ACTORCAT_ITEMACTION,
     FLAGS,

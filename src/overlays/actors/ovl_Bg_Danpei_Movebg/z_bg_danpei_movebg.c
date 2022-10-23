@@ -15,7 +15,7 @@ void BgDanpeiMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_Danpei_Movebg_InitVars = {
+ActorInit Bg_Danpei_Movebg_InitVars = {
     ACTOR_BG_DANPEI_MOVEBG,
     ACTORCAT_BG,
     FLAGS,

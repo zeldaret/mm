@@ -59,7 +59,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define COLUMN_CENTER 1
 #define COLUMN_RIGHT 2
 
-const ActorInit En_Syateki_Man_InitVars = {
+ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
     FLAGS,

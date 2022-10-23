@@ -15,6 +15,4 @@ typedef struct BgSpoutFire {
     /* 0x14C */ ColliderCylinder collider;
 } BgSpoutFire; // size = 0x198
 
-extern const ActorInit Bg_Spout_Fire_InitVars;
-
 #endif // Z_BG_SPOUT_FIRE_H
