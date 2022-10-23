@@ -172,7 +172,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                 // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and
                 // always return true
                 if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
-                    !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+                    !IS_PAUSE_STATE_GAMEOVER) {
                     KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
                     if (!sStrayFairyIconAlphaScaleState) {
@@ -268,7 +268,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and always return
         // true
         if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
-            !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+            !IS_PAUSE_STATE_GAMEOVER) {
 
             func_8012C628(play->state.gfxCtx);
 
@@ -543,8 +543,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     // Draw the world map image
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
         ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
-        YREG(6) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
-        !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+        YREG(6) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) && !IS_PAUSE_STATE_GAMEOVER) {
 
         // Draw the world map image flat
         // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
@@ -652,7 +651,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6)) {
+    if (IS_PAUSE_STATE_OWLWARP) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -662,7 +661,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     func_8012C8AC(play->state.gfxCtx);
 
-    if (!((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))) {
+    if (!IS_PAUSE_STATE_OWLWARP) {
         // Browsing the world map regions on the pause menu
         gDPLoadTextureBlock(POLY_OPA_DISP++, gWorldMapDotTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -733,7 +732,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     // Find and draw Player's face at the current region based on the current scene
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
         (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
-        !((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))) {
+        !IS_PAUSE_STATE_GAMEOVER) {
         j = 0;
         n = 0;
 

@@ -16,6 +16,18 @@ typedef enum {
     /* 4 */ PAUSE_WORLD_MAP
 } PauseMenuPage;
 
+// Direction of pause pages
+#define PAUSE_ITEM_X (0)
+#define PAUSE_ITEM_Z (-1)
+#define PAUSE_MAP_X (1)
+#define PAUSE_MAP_Z (0)
+#define PAUSE_QUEST_X (0)
+#define PAUSE_QUEST_Z (1)
+#define PAUSE_MASK_X (-1)
+#define PAUSE_MASK_Z (0)
+
+#define PAUSE_EYE_DIST (64.0f)
+
 typedef enum {
     /* 0x00 */ PAUSE_STATE_OFF,
     /* 0x01 */ PAUSE_STATE_OPENING_0,
@@ -52,10 +64,10 @@ typedef enum {
     /* 0x01 */ PAUSE_MAIN_STATE_SWITCHING_PAGE,
     /* 0x02 */ PAUSE_MAIN_STATE_SONG_PLAYBACK,
     /* 0x03 */ PAUSE_MAIN_STATE_EQUIP_ITEM,
-    /* 0x04 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_INIT,
-    /* 0x05 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING,
-    /* 0x06 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_DONE,
-    /* 0x07 */ PAUSE_MAIN_STATE_SONG_PLAYER_PLAYING_UNUSED,
+    /* 0x04 */ PAUSE_MAIN_STATE_SONG_PROMPT_INIT,
+    /* 0x05 */ PAUSE_MAIN_STATE_SONG_PROMPT,
+    /* 0x06 */ PAUSE_MAIN_STATE_SONG_PROMPT_DONE,
+    /* 0x07 */ PAUSE_MAIN_STATE_SONG_PROMPT_UNUSED,
     /* 0x08 */ PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG, // Await input but the cursor is on a song
     /* 0x09 */ PAUSE_MAIN_STATE_SONG_PLAYBACK_INIT,
     /* 0x0F */ PAUSE_MAIN_STATE_EQUIP_MASK = 0xF,
@@ -73,6 +85,16 @@ typedef enum {
     /* 0x06 */ PAUSE_SAVEPROMPT_STATE_6,
     /* 0x07 */ PAUSE_SAVEPROMPT_STATE_7
 } PauseSavePromptState;
+
+#define IS_PAUSE_STATE_GAMEOVER \
+    ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_0) && (pauseCtx->state <= PAUSE_STATE_GAMEOVER_10))
+
+#define IS_PAUSE_STATE_OWLWARP \
+    ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))
+
+#define IS_PAUSE_MAIN_STATE_SAVE_PROMPT                            \
+    ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \
+     (pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
 
 typedef enum {
     /* 0 */ PAUSE_EQUIP_C_LEFT,
@@ -96,10 +118,11 @@ typedef enum {
 
 // TODO: Taken from OoT. Verify in MM
 typedef enum {
-    /* 1 */ PAUSE_BG_PRERENDER_DRAW = 1, // The current frame is only drawn for the purpose of serving as the pause background.
-    /* 2 */ PAUSE_BG_PRERENDER_FILTER, // The previous frame was PAUSE_BG_PRERENDER_DRAW, now apply prerender filters.
+    /* 0 */ PAUSE_BG_PRERENDER_OFF,
+    /* 1 */ PAUSE_BG_PRERENDER_SETUP, // The current frame is only drawn for the purpose of serving as the pause background.
+    /* 2 */ PAUSE_BG_PRERENDER_PROCESS, // The previous frame was PAUSE_BG_PRERENDER_SETUP, now apply prerender filters.
     /* 3 */ PAUSE_BG_PRERENDER_DONE, // The pause background is ready to be used.
-    /* 4 */ PAUSE_BG_PRERENDER_OFF, // Inactive, do nothing.
+    /* 4 */ PAUSE_BG_PRERENDER_UNK4,
     /* 5 */ PAUSE_BG_PRERENDER_MAX
 } PauseBgPreRenderState;
 
