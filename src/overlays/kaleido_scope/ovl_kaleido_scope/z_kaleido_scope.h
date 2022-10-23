@@ -92,7 +92,7 @@ typedef enum {
 #define IS_PAUSE_STATE_OWLWARP \
     ((pauseCtx->state >= PAUSE_STATE_OWLWARP_2) && (pauseCtx->state <= PAUSE_STATE_OWLWARP_6))
 
-#define IS_PAUSE_MAIN_STATE_SAVE_PROMPT                            \
+#define IS_PAUSE_MAIN_STATE_SONG_PROMPT                            \
     ((pauseCtx->mainState >= PAUSE_MAIN_STATE_SONG_PROMPT_INIT) && \
      (pauseCtx->mainState <= PAUSE_MAIN_STATE_SONG_PROMPT_DONE))
 

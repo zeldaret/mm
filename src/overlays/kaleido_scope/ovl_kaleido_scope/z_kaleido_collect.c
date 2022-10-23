@@ -390,7 +390,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
                         POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[i]], 16, 16, 0);
                 }
             }
-        } else if (IS_PAUSE_MAIN_STATE_SAVE_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
+        } else if (IS_PAUSE_MAIN_STATE_SONG_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
             // Draw the buttons for playing a song
             sp1C8 = pauseCtx->ocarinaSongIndex;
             sp1CA = gOcarinaSongButtons[sp1C8].numButtons;
