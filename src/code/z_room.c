@@ -328,7 +328,7 @@ void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
     OPEN_DISPS(play->state.gfxCtx);
 
     activeCam = GET_ACTIVE_CAM(play);
-    isFixedCamera = false;
+    isFixedCamera = false; // Condition is inferred from OoT
     roomShape = &room->roomShape->image.single;
     entry = Lib_SegmentedToVirtual(roomShape->base.entry);
     drawBackground = (flags & ROOM_DRAW_OPA) && isFixedCamera && (roomShape->source != NULL) &&
@@ -422,7 +422,7 @@ void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags) {
     OPEN_DISPS(play->state.gfxCtx);
 
     activeCam = GET_ACTIVE_CAM(play);
-    isFixedCamera = false;
+    isFixedCamera = false; // Condition is inferred from OoT
     roomShape = &room->roomShape->image.multi;
     dListsEntry = Lib_SegmentedToVirtual(roomShape->base.entry);
 
