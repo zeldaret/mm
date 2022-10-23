@@ -386,10 +386,10 @@ typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
-    /* 0x170 */ u8* unk_170;
-    /* 0x174 */ u8* unk_174;
-    /* 0x178 */ u8* unk_178;
-    /* 0x17C */ u8* unk_17C;
+    /* 0x170 */ u8* iconItemAltSegment;
+    /* 0x174 */ u8* iconItemLangSegment;
+    /* 0x178 */ u8* nameSegment;
+    /* 0x17C */ u8* iconItemVtxSegment;
     /* 0x180 */ Vtx* itemPageVtx;
     /* 0x184 */ Vtx* mapPageVtx;
     /* 0x188 */ Vtx* questPageVtx;
@@ -402,24 +402,24 @@ typedef struct {
     /* 0x1A4 */ Vtx* unk_1A4;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
-    /* 0x1B0 */ DmaRequest unk_1B0;
+    /* 0x1B0 */ UNK_TYPE1 unk_1B0[0x20];
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
     /* 0x1EE */ u16 debugEditor;
     /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
-    /* 0x200 */ u16 unk_200;
-    /* 0x202 */ u16 mode;
+    /* 0x200 */ u16 mainState;
+    /* 0x202 */ u16 nextPageMode; // (2 * prev pageIndex) + (scroll left ? 1 : 0)
     /* 0x204 */ u16 pageIndex;
-    /* 0x206 */ u16 unk_206;
-    /* 0x208 */ u16 unk_208;
+    /* 0x206 */ u16 switchPageTimer;
+    /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ f32 unk_210;
-    /* 0x214 */ f32 unk_214;
-    /* 0x218 */ f32 unk_218;
-    /* 0x21C */ f32 unk_21C;
-    /* 0x220 */ f32 unk_220;
+    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen 
+    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen 
+    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen 
+    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen 
+    /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
     /* 0x228 */ UNK_TYPE1 unk_228[0x8];
@@ -431,7 +431,7 @@ typedef struct {
     /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
-    /* 0x25C */ u16 unk_25C;
+    /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];
     /* 0x272 */ u16 equipTargetItem;
@@ -440,7 +440,7 @@ typedef struct {
     /* 0x278 */ s16 equipAnimX;
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
-    /* 0x27E */ s16 unk_27E;
+    /* 0x27E */ s16 infoPanelOffsetY;
     /* 0x280 */ u16 unk_280;
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
@@ -454,9 +454,9 @@ typedef struct {
     /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 ocarinaSongIndex;
     /* 0x2A2 */ u8 worldMapPoints[20];
-    /* 0x2B6 */ u8 unk_2B6;
-    /* 0x2B7 */ u8 unk_2B7;
-    /* 0x2B8 */ u8 unk_2B8;
+    /* 0x2B6 */ u8 unk_2B6; // unused red?
+    /* 0x2B7 */ u8 unk_2B7; // unused green?
+    /* 0x2B8 */ u8 unk_2B8; // unused blue?
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button

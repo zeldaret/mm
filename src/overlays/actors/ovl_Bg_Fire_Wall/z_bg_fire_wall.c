@@ -193,7 +193,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
     if (this->actionFunc != func_809AC970) {
         if (this->actor.parent != NULL) {
             EnEncount4* parent = (EnEncount4*)this->actor.parent;
-            if ((parent->actor.update != NULL) && (parent->unk_150 != 0)) {
+            if ((parent->actor.update != NULL) && (parent->timer != 0)) {
                 this->actionFunc = func_809AC970;
             }
         }

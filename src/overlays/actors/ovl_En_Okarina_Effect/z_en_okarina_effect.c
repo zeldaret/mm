@@ -58,7 +58,7 @@ void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
 
 void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
     DECR(this->unk144);
-    if ((play->pauseCtx.state == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         (play->msgCtx.msgLength == 0) && !FrameAdvance_IsEnabled(&play->state) && (this->unk144 == 0)) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
