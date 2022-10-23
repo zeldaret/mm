@@ -70,6 +70,7 @@ typedef struct RoomShapeCullableEntryLinked {
 #define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 127
 
 #ifdef NON_MATCHING
+// Small regalloc, likely related to temp usage and scoping
 void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     RoomShapeCullable* roomShape;
     RoomShapeCullableEntry* roomShapeCullableEntry;
@@ -313,9 +314,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
 #define ROOM_IMAGE_NODRAW_BACKGROUND (1 << 0)
 #define ROOM_IMAGE_NODRAW_OPA (1 << 1)
 #define ROOM_IMAGE_NODRAW_XLU (1 << 2)
-
-// TODO: ucode.h
-#define SP_UCODE_DATA_SIZE 0x800
 
 void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags) {
     Camera* activeCam;
@@ -596,7 +594,6 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
     return 0;
 }
 
-// TODO: better name
 s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
     if (roomCtx->status == 1) {
         if (osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK) == 0) {

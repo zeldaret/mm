@@ -247,50 +247,49 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ RoomShapeBase base;
-    /* 0x01 */ u8    amountType; // RoomShapeImageAmountType
+    /* 0x01 */ u8 amountType; // RoomShapeImageAmountType
     /* 0x04 */ RoomShapeDListsEntry* entry;
 } RoomShapeImageBase; // size = 0x08
 
 typedef struct {
     /* 0x00 */ RoomShapeImageBase base;
     /* 0x08 */ void* source;
-    /* 0x0C */ u32   unk_0C;
+    /* 0x0C */ u32 unk_0C;
     /* 0x10 */ void* tlut;
-    /* 0x14 */ u16   width;
-    /* 0x16 */ u16   height;
-    /* 0x18 */ u8    fmt;
-    /* 0x19 */ u8    siz;
-    /* 0x1A */ u16   tlutMode;
-    /* 0x1C */ u16   tlutCount;
+    /* 0x14 */ u16 width;
+    /* 0x16 */ u16 height;
+    /* 0x18 */ u8 fmt;
+    /* 0x19 */ u8 siz;
+    /* 0x1A */ u16 tlutMode;
+    /* 0x1C */ u16 tlutCount;
 } RoomShapeImageSingle; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u16   unk_00;
-    /* 0x02 */ u8    bgCamIndex; // for which bg cam index is this entry for
+    /* 0x00 */ u16 unk_00;
+    /* 0x02 */ u8 bgCamIndex; // for which bg cam index is this entry for
     /* 0x04 */ void* source;
-    /* 0x08 */ u32   unk_0C;
+    /* 0x08 */ u32 unk_0C;
     /* 0x0C */ void* tlut;
-    /* 0x10 */ u16   width;
-    /* 0x12 */ u16   height;
-    /* 0x14 */ u8    fmt;
-    /* 0x15 */ u8    siz;
-    /* 0x16 */ u16   tlutMode;
-    /* 0x18 */ u16   tlutCount;
+    /* 0x10 */ u16 width;
+    /* 0x12 */ u16 height;
+    /* 0x14 */ u8 fmt;
+    /* 0x15 */ u8 siz;
+    /* 0x16 */ u16 tlutMode;
+    /* 0x18 */ u16 tlutCount;
 } RoomShapeImageMultiBgEntry; // size = 0x1C
 
 typedef struct {
     /* 0x00 */ RoomShapeImageBase base;
-    /* 0x08 */ u8    numBackgrounds;
+    /* 0x08 */ u8 numBackgrounds;
     /* 0x0C */ RoomShapeImageMultiBgEntry* backgrounds;
 } RoomShapeImageMulti; // size = 0x10
 
 typedef struct {
     /* 0x00 */ Vec3s boundsSphereCenter;
-    /* 0x06 */ s16   boundsSphereRadius;
+    /* 0x06 */ s16 boundsSphereRadius;
     /* 0x08 */ Gfx* opa;
     /* 0x0C */ Gfx* xlu;
 } RoomShapeCullableEntry; // size = 0x10
-
 
 typedef struct {
     /* 0x0 */ RoomShapeBase base;
@@ -309,6 +308,9 @@ typedef union {
     } image;
     RoomShapeCullable cullable;
 } RoomShape; // "Ground Shape"
+
+// TODO: update ZAPD
+#define SCENE_CMD_MESH SCENE_CMD_ROOM_SHAPE
 
 // TODO: Check which ones don't exist
 typedef enum {
@@ -463,77 +465,6 @@ typedef struct {
     /* 0x00B */ u8 subKeepIndex;
     /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
 } ObjectContext; // size = 0x958
-
-typedef struct {
-    /* 0x0 */ u8 headerType;
-} MeshHeaderBase; // size = 0x1
-
-typedef struct {
-    /* 0x0 */ MeshHeaderBase base;
-    /* 0x1 */ u8 numEntries;
-    /* 0x4 */ u32 dListStart;
-    /* 0x8 */ u32 dListEnd;
-} MeshHeader0; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u32 opaqueDList;
-    /* 0x4 */ u32 translucentDList;
-} MeshEntry0; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ MeshHeaderBase base;
-    /* 0x1 */ u8 format;
-    /* 0x4 */ u32 entryRecord;
-} MeshHeader1Base; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ MeshHeader1Base base;
-    /* 0x08 */ u32 imagePtr;
-    /* 0x0C */ u32 unknown;
-    /* 0x10 */ u32 unknown2;
-    /* 0x14 */ u16 bgWidth;
-    /* 0x16 */ u16 bgHeight;
-    /* 0x18 */ u8 imageFormat;
-    /* 0x19 */ u8 imageSize;
-    /* 0x1A */ u16 imagePal;
-    /* 0x1C */ u16 imageFlip;
-} MeshHeader1Single; // size = 0x20
-
-typedef struct {
-    /* 0x0 */ MeshHeader1Base base;
-    /* 0x8 */ u8 bgCnt;
-    /* 0xC */ u32 bgRecordPtr;
-} MeshHeader1Multi; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u16 unknown;
-    /* 0x02 */ s8 bgID;
-    /* 0x04 */ u32 imagePtr;
-    /* 0x08 */ u32 unknown2;
-    /* 0x0C */ u32 unknown3;
-    /* 0x10 */ u16 bgWidth;
-    /* 0x12 */ u16 bgHeight;
-    /* 0x14 */ u8 imageFmt;
-    /* 0x15 */ u8 imageSize;
-    /* 0x16 */ u16 imagePal;
-    /* 0x18 */ u16 imageFlip;
-} BackgroundRecord; // size = 0x1C
-
-typedef struct {
-    /* 0x0 */ s16 playerXMax; 
-    /* 0x2 */ s16 playerZMax;
-    /* 0x4 */ s16 playerXMin; 
-    /* 0x6 */ s16 playerZMin;
-    /* 0x8 */ u32 opaqueDList;
-    /* 0xC */ u32 translucentDList;
-} MeshEntry2; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ MeshHeaderBase base;
-    /* 0x1 */ u8 numEntries;
-    /* 0x4 */ u32 dListStart;
-    /* 0x8 */ u32 dListEnd;
-} MeshHeader2; // size = 0xC 
 
 typedef struct {
     /* 0x0 */ u8 count; // number of points in the path
@@ -920,7 +851,7 @@ typedef enum {
     /* 0x07 */ SCENE_CMD_ID_SPECIAL_FILES,
     /* 0x08 */ SCENE_CMD_ID_ROOM_BEHAVIOR,
     /* 0x09 */ SCENE_CMD_ID_UNK_09,
-    /* 0x0A */ SCENE_CMD_ID_MESH,
+    /* 0x0A */ SCENE_CMD_ID_ROOM_SHAPE,
     /* 0x0B */ SCENE_CMD_ID_OBJECT_LIST,
     /* 0x0C */ SCENE_CMD_ID_LIGHT_LIST,
     /* 0x0D */ SCENE_CMD_ID_PATH_LIST,
@@ -979,8 +910,8 @@ typedef enum {
 #define SCENE_CMD_UNK_09() \
     { SCENE_CMD_ID_UNK_09, 0, CMD_W(0) }
 
-#define SCENE_CMD_MESH(meshHeader) \
-    { SCENE_CMD_ID_MESH, 0, CMD_PTR(meshHeader) }
+#define SCENE_CMD_ROOM_SHAPE(roomShape) \
+    { SCENE_CMD_ID_ROOM_SHAPE, 0, CMD_PTR(roomShape) }
 
 #define SCENE_CMD_OBJECT_LIST(numObjects, objectList) \
     { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
