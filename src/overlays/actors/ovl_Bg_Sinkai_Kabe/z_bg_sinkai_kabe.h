@@ -17,6 +17,4 @@ typedef struct BgSinkaiKabe {
     /* 0x16C */ s32 pythonIndex;
 } BgSinkaiKabe; // size = 0x170
 
-extern const ActorInit Bg_Sinkai_Kabe_InitVars;
-
 #endif // Z_BG_SINKAI_KABE_H

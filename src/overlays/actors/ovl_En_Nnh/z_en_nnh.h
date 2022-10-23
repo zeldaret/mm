@@ -13,6 +13,4 @@ typedef struct EnNnh {
     /* 0x190 */ EnNnhActionFunc actionFunc;
 } EnNnh; // size = 0x194
 
-extern const ActorInit En_Nnh_InitVars;
-
 #endif // Z_EN_NNH_H

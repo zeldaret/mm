@@ -18,8 +18,6 @@ typedef struct EnWarptag {
     /* 0x160 */ EnWarptagActionFunc actionFunc;
 } EnWarptag; // size = 0x164
 
-extern const ActorInit En_Warp_tag_InitVars;
-
 // Only two known Variants:
 //  Goron Trial (MOON):    0x03C1
 //  Deku Playground:       0x83C0

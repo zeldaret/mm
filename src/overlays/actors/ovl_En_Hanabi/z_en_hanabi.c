@@ -21,7 +21,7 @@ void func_80B23910(EnHanabi* this, PlayState* play);
 void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hanabi_InitVars = {
+ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -305,7 +305,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
 void func_80B23894(EnHanabi* this, PlayState* play) {
     func_80B236C8(this, play);
     if (func_80B22F34(this->unk_148) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

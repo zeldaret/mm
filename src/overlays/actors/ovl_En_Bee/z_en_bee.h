@@ -31,6 +31,4 @@ typedef struct EnBee {
     /* 0x23C */ ColliderCylinder collider;
 } EnBee; // size = 0x288
 
-extern const ActorInit En_Bee_InitVars;
-
 #endif // Z_EN_BEE_H

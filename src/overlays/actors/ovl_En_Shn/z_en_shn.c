@@ -51,7 +51,7 @@ static UNK_TYPE D_80AE70B8[] = {
 static UNK_TYPE D_80AE71C4[] = { 0x00374000, 0x1C2C09DB, 0x0C2F0000, 0x0C0F09DC, 0x0C0F09DD, 0x0C0F09DE, 0x0C0F09DF,
                                  0x0C113740, 0x102C09E0, 0x0C2F0000, 0x0C0F09E1, 0x0C0F09E2, 0x0C100000 };
 
-const ActorInit En_Shn_InitVars = {
+ActorInit En_Shn_InitVars = {
     ACTOR_EN_SHN,
     ACTORCAT_NPC,
     FLAGS,
@@ -201,7 +201,7 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_1DA != temp) {
             if ((this->unk_1D8 & 0x80) || (this->unk_1D8 & 0x100)) {
                 this->unk_1D8 |= 8;

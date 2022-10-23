@@ -43,6 +43,4 @@ typedef struct EnThiefbird {
     /* 0x3F0 */ EnThiefbirdUnkStruct unk_3F0[40];
 } EnThiefbird; // size = 0x990
 
-extern const ActorInit En_Thiefbird_InitVars;
-
 #endif // Z_EN_THIEFBIRD_H

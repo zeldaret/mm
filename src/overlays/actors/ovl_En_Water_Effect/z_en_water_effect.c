@@ -30,7 +30,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2);
 void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
-const ActorInit En_Water_Effect_InitVars = {
+ActorInit En_Water_Effect_InitVars = {
     ACTOR_EN_WATER_EFFECT,
     ACTORCAT_BOSS,
     FLAGS,
@@ -580,7 +580,7 @@ void func_80A5A534(Actor* thisx, PlayState* play) {
     s32 i;
 
     if (this->unk_E38 < 1.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_DC4++;

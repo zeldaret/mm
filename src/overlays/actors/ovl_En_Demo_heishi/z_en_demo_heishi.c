@@ -30,7 +30,7 @@ typedef enum {
     /*  4 */ DEMOHEISHI_ANIM_STAND_UP
 } EnDemoheishiAnimation;
 
-const ActorInit En_Demo_heishi_InitVars = {
+ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
     ACTORCAT_NPC,
     FLAGS,

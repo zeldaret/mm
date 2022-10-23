@@ -57,7 +57,7 @@ s16 D_80936CDC;
 s16 D_80936CDE;
 s16 D_80936CE0;
 
-const ActorInit En_Kusa_InitVars = {
+ActorInit En_Kusa_InitVars = {
     ACTOR_EN_KUSA,
     ACTORCAT_PROP,
     FLAGS,
@@ -385,7 +385,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
     if (!EnKusa_SnapToFloor(this, play, 0.0f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (EnKusa_GetWaterBox(this, play)) {
@@ -394,7 +394,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
 
     this->objIndex = Object_GetIndex(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -470,12 +470,12 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
             }
         }
         if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            EnKusa_SetupCut(this);
-            this->isCut = true;
+            Actor_Kill(&this->actor);
+            return;
         }
 
+        EnKusa_SetupCut(this);
+        this->isCut = true;
     } else {
         if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 12.0f)) {
             this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
@@ -560,7 +560,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         switch (KUSA_GET_TYPE(&this->actor)) {
             case ENKUSA_TYPE_BUSH:
             case ENKUSA_TYPE_GRASS:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case ENKUSA_TYPE_REGROWING_GRASS:

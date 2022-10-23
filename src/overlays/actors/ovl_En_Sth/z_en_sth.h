@@ -32,6 +32,4 @@ typedef struct EnSth {
     /* 0x2A0 */ EnSthActionFunc actionFunc;
 } EnSth; // size = 0x2A4
 
-extern const ActorInit En_Sth_InitVars;
-
 #endif // Z_EN_STH_H

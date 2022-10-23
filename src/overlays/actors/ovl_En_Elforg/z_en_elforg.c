@@ -22,7 +22,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play);
 void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play);
 
-const ActorInit En_Elforg_InitVars = {
+ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -81,21 +81,21 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
     switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
             if (gSaveContext.save.weekEventReg[8] & 0x80) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
             break;
 
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
             if (Flags_GetCollectible(play, STRAY_FAIRY_FLAG(thisx))) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
             break;
 
         default:
             if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(thisx))) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
             break;
@@ -374,7 +374,7 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, this->actor.scale.x * 0.9f);
         if (this->actor.scale.x < 0.001f) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -400,7 +400,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
 void EnElforg_FairyCollected(EnElforg* this, PlayState* play) {
     EnElforg_CirclePlayer(this, play);
     if (this->timer > 80) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -425,21 +425,22 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
 
     EnElforg_CirclePlayer(this, play);
     player->actor.freezeTimer = 100;
-    player->stateFlags1 |= 0x20000000;
+    player->stateFlags1 |= PLAYER_STATE1_20000000;
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         player->actor.freezeTimer = 0;
-        player->stateFlags1 &= ~0x20000000;
-        Actor_MarkForDeath(&this->actor);
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
+        Actor_Kill(&this->actor);
         gSaveContext.save.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
-    } else {
-        func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
-        if (ActorCutscene_GetCurrentIndex() != 0x7C) {
-            if (ActorCutscene_GetCanPlayNext(0x7C)) {
-                ActorCutscene_Start(0x7C, &this->actor);
-            } else {
-                ActorCutscene_SetIntentToPlay(0x7C);
-            }
+        return;
+    }
+
+    func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+    if (ActorCutscene_GetCurrentIndex() != 0x7C) {
+        if (ActorCutscene_GetCanPlayNext(0x7C)) {
+            ActorCutscene_Start(0x7C, &this->actor);
+        } else {
+            ActorCutscene_SetIntentToPlay(0x7C);
         }
     }
 }
@@ -480,7 +481,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
 
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
-                player->stateFlags1 |= 0x20000000;
+                player->stateFlags1 |= PLAYER_STATE1_20000000;
                 // Bring me back to North Clock Town!
                 Message_StartTextbox(play, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;

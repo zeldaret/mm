@@ -39,6 +39,4 @@ typedef struct EnDinofos {
     /* 0x5C4 */ ColliderQuad colliderQuad;
 } EnDinofos; // size = 0x644
 
-extern const ActorInit En_Dinofos_InitVars;
-
 #endif // Z_EN_DINOFOS_H

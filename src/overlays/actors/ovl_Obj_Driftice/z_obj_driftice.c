@@ -25,7 +25,7 @@ void func_80A67450(ObjDriftice* this, PlayState* play);
 void func_80A674A8(ObjDriftice* this);
 void func_80A674C4(ObjDriftice* this, PlayState* play);
 
-const ActorInit Obj_Driftice_InitVars = {
+ActorInit Obj_Driftice_InitVars = {
     ACTOR_OBJ_DRIFTICE,
     ACTORCAT_BG,
     FLAGS,

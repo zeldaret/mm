@@ -23,6 +23,4 @@ typedef struct EnEndingHero6 {
     /* 0x290 */ s16 isIdle;
 } EnEndingHero6; // size = 0x294
 
-extern const ActorInit En_Ending_Hero6_InitVars;
-
 #endif // Z_EN_ENDING_HERO6_H

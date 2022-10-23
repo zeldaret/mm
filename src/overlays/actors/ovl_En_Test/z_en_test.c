@@ -16,7 +16,7 @@ void EnTest_Destroy(Actor* thisx, PlayState* play);
 void EnTest_Update(Actor* thisx, PlayState* play);
 void EnTest_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Test_InitVars = {
+ActorInit En_Test_InitVars = {
     ACTOR_EN_TEST,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -175,7 +175,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
 
         if ((thisx->floorPoly == NULL) || (thisx->floorHeight == BGCHECK_Y_MIN)) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
 
@@ -208,7 +208,7 @@ void EnTest_Update(Actor* thisx, PlayState* play) {
     if (func_80183DE0(&this->skeletonInfo) && (this->actor.parent == NULL) && (this->actor.params != -1)) {
         this->unk_209++;
         if (this->unk_209 > 20) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
