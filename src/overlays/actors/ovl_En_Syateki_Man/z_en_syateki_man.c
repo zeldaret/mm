@@ -1090,7 +1090,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         func_801A2C20();
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
         if (this->score == 2120) {
-            Interface_SetMinigamePerfect(play, MINIGAME_PERFECT_TYPE_2);
+            Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_2);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_6;
             this->actionFunc = EnSyatekiMan_Swamp_AddBonusPoints;
         } else {
@@ -1156,7 +1156,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    if (!play->interfaceCtx.isMinigamePerfect) {
+    if (!play->interfaceCtx.perfectLettersOn) {
         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
@@ -1359,7 +1359,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->actionFunc = EnSyatekiMan_Town_EndGame;
             if (this->score == 50) {
                 Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
-                Interface_SetMinigamePerfect(play, MINIGAME_PERFECT_TYPE_1);
+                Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_1);
             }
         }
     }
@@ -1368,7 +1368,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
     if (this->shootingGameState == SG_GAME_STATE_RUNNING) {
         this->octorokFlags = 0;
-        if ((this->talkWaitTimer <= 0) && !play->interfaceCtx.isMinigamePerfect) {
+        if ((this->talkWaitTimer <= 0) && !play->interfaceCtx.perfectLettersOn) {
             Flags_SetAllTreasure(play, this->score);
             this->talkWaitTimer = 15;
             if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {

@@ -1740,7 +1740,7 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange);
 void Magic_Add(PlayState* play, s16 magicToAdd);
 void Magic_Reset(PlayState* play);
 s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type);
-void Interface_SetMinigamePerfect(PlayState* play, s16 minigamePerfectType);
+void Interface_SetPerfectLetters(PlayState* play, s16 perfectLettersType);
 void Interface_StartMoonCrash(PlayState* play);
 void Interface_Draw(PlayState* play);
 void Interface_Update(PlayState* play);

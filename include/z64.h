@@ -529,19 +529,19 @@ typedef struct {
     /* 0x280 */ u8 minigameState;
     /* 0x282 */ s16 minigameCountdownAlpha;
     /* 0x284 */ s16 minigameCountdownScale;
-    /* 0x286 */ s16 isMinigamePerfect;
-    /* 0x288 */ s16 minigamePerfectType;
-    /* 0x28A */ s16 minigamePerfectState[MINIGAME_PERFECT_NUM_LETTERS];
-    /* 0x29A */ u16 minigamePerfectLetterEllipseAngle[MINIGAME_PERFECT_NUM_LETTERS];
-    /* 0x2AA */ s16 minigamePerfectLetterXOffset[MINIGAME_PERFECT_NUM_LETTERS];
-    /* 0x2BC */ f32 minigamePerfectLetterEllipseRadiusX[MINIGAME_PERFECT_NUM_LETTERS];
-    /* 0x2DC */ f32 minigamePerfectLetterEllipseRadiusY[MINIGAME_PERFECT_NUM_LETTERS];
-    /* 0x2FC */ s16 minigamePerfectPrimColor[4];
-    /* 0x304 */ s16 minigamePerfectLetterCount;
-    /* 0x306 */ s16 minigamePerfectUnused;
-    /* 0x308 */ s16 minigamePerfectColorTargetIndex;
-    /* 0x30A */ s16 minigamePerfectColorTimer;
-    /* 0x30C */ s16 minigamePerfectTimer;
+    /* 0x286 */ s16 perfectLettersOn;
+    /* 0x288 */ s16 perfectLettersType;
+    /* 0x28A */ s16 perfectLettersState[PERFECT_LETTERS_NUM_LETTERS];
+    /* 0x29A */ u16 perfectLettersAngles[PERFECT_LETTERS_NUM_LETTERS]; // Angle that follows the projectory of an ellipse
+    /* 0x2AA */ s16 perfectLettersOffsetX[PERFECT_LETTERS_NUM_LETTERS];
+    /* 0x2BC */ f32 perfectLettersSemiAxisX[PERFECT_LETTERS_NUM_LETTERS];
+    /* 0x2DC */ f32 perfectLettersSemiAxisY[PERFECT_LETTERS_NUM_LETTERS];
+    /* 0x2FC */ s16 perfectLettersPrimColor[4];
+    /* 0x304 */ s16 perfectLettersCount;
+    /* 0x306 */ s16 perfectLettersUnused;
+    /* 0x308 */ s16 perfectLettersColorTargetIndex;
+    /* 0x30A */ s16 perfectLettersColorTimer;
+    /* 0x30C */ s16 perfectLettersTimer;
     struct {
         /* 0x30E */ u8 unk_30E; // "h_gauge"
         /* 0x30F */ u8 bButton;
