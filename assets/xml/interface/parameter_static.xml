@@ -119,13 +119,13 @@
         <Texture Name="gMinigameCountdown3Tex" OutName="minigame_countdown_3" Format="ia8" Width="24" Height="32" Offset="0x7828"/>
 
         <!-- The letters of "PERFECT!" -->
-        <Texture Name="gPerfectLetterPTex" OutName="minigame_letter_p" Format="i4" Width="32" Height="33" Offset="0x7B28"/>
-        <Texture Name="gPerfectLetterETex" OutName="minigame_letter_e" Format="i4" Width="32" Height="33" Offset="0x7D38"/>
-        <Texture Name="gPerfectLetterRTex" OutName="minigame_letter_r" Format="i4" Width="32" Height="33" Offset="0x7F48"/>
-        <Texture Name="gPerfectLetterFTex" OutName="minigame_letter_f" Format="i4" Width="32" Height="33" Offset="0x8158"/>
-        <Texture Name="gPerfectLetterCTex" OutName="minigame_letter_c" Format="i4" Width="32" Height="33" Offset="0x8368"/>
-        <Texture Name="gPerfectLetterTTex" OutName="minigame_letter_t" Format="i4" Width="32" Height="33" Offset="0x8578"/>
-        <Texture Name="gPerfectLetterExclamationTex" OutName="minigame_exclamation" Format="i4" Width="32" Height="33" Offset="0x8788"/>
+        <Texture Name="gPerfectLetterPTex" OutName="letter_perfect_p" Format="i4" Width="32" Height="33" Offset="0x7B28"/>
+        <Texture Name="gPerfectLetterETex" OutName="letter_perfect_e" Format="i4" Width="32" Height="33" Offset="0x7D38"/>
+        <Texture Name="gPerfectLetterRTex" OutName="letter_perfect_r" Format="i4" Width="32" Height="33" Offset="0x7F48"/>
+        <Texture Name="gPerfectLetterFTex" OutName="letter_perfect_f" Format="i4" Width="32" Height="33" Offset="0x8158"/>
+        <Texture Name="gPerfectLetterCTex" OutName="letter_perfect_c" Format="i4" Width="32" Height="33" Offset="0x8368"/>
+        <Texture Name="gPerfectLetterTTex" OutName="letter_perfect_t" Format="i4" Width="32" Height="33" Offset="0x8578"/>
+        <Texture Name="gPerfectLetterExclamationTex" OutName="letter_perfect_exclamation" Format="i4" Width="32" Height="33" Offset="0x8788"/>
 
         <!-- Similar to stray fairy icons in icon_item_dungeon_static, except with a turned head -->
         <Texture Name="gStrayFairyWoodfallIconTex" OutName="stray_fairy_woodfall_icon" Format="rgba32" Width="32" Height="24" Offset="0x8998"/>
