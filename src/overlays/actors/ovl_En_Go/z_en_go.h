@@ -24,8 +24,6 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
  */
 #define ENGO_EFFECT_COUNT 32
 
-extern const ActorInit En_Go_InitVars;
-
 /**
  * Struct to track the state of various visual effects.
  *
