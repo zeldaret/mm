@@ -2461,7 +2461,6 @@ extern TriNorm D_801EDBB0;
 // extern UNK_TYPE1 D_801EDBD8;
 // extern UNK_TYPE1 D_801EDBDC;
 // extern UNK_TYPE1 D_801EDBE0;
-extern s16 D_801EDBF0;
 // extern UNK_TYPE1 D_801EDBF4;
 // extern UNK_TYPE1 D_801EDBF8;
 // extern UNK_TYPE1 D_801EDC00;
