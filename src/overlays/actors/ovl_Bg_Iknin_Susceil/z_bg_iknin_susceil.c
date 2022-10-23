@@ -29,7 +29,7 @@ void func_80C0AD44(BgIkninSusceil* this);
 void func_80C0AD64(BgIkninSusceil* this, PlayState* play);
 void func_80C0AE5C(BgIkninSusceil* this, PlayState* play);
 
-const ActorInit Bg_Iknin_Susceil_InitVars = {
+ActorInit Bg_Iknin_Susceil_InitVars = {
     ACTOR_BG_IKNIN_SUSCEIL,
     ACTORCAT_BG,
     FLAGS,
@@ -226,7 +226,8 @@ void BgIkninSusceil_Update(Actor* thisx, PlayState* play) {
     BgIkninSusceil* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & 0x100) && (player->unk_B48 > 1000.0f)) {
+    if ((this->unk168 == 0) && (this->unk166 > 0) && (player->stateFlags3 & PLAYER_STATE3_100) &&
+        (player->unk_B48 > 1000.0f)) {
         this->unk168 = 2;
         if ((func_80C0A95C(this, play) != 0) && (this->actionFunc != func_80C0AE5C)) {
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
@@ -242,7 +243,7 @@ void BgIkninSusceil_Update(Actor* thisx, PlayState* play) {
 
     if ((this->dyna.actor.home.pos.y + 70.0f) < this->dyna.actor.world.pos.y) {
         this->unk166 = 0;
-    } else if (player->stateFlags3 & 0x100) {
+    } else if (player->stateFlags3 & PLAYER_STATE3_100) {
         this->unk166 = 3;
     } else {
         if (this->unk166 > 0) {

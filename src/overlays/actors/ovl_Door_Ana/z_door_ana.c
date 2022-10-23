@@ -20,7 +20,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play);
 void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
 void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
-const ActorInit Door_Ana_InitVars = {
+ActorInit Door_Ana_InitVars = {
     ACTOR_DOOR_ANA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -131,7 +131,8 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
         if ((this->actor.targetMode != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & 0x80000000) && (player->unk_AE7 == 0)) {
+            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & PLAYER_STATE1_80000000) &&
+            (player->unk_AE7 == 0)) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
@@ -157,10 +158,10 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
-        } else if (!Play_InCsMode(play) && !(player->stateFlags1 & 0x08800000) &&
+        } else if (!Play_InCsMode(play) && !(player->stateFlags1 & (PLAYER_STATE1_8000000 | PLAYER_STATE1_800000)) &&
                    (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
                    (this->actor.playerHeightRel <= 15.0f)) {
-            player->stateFlags1 |= 0x80000000;
+            player->stateFlags1 |= PLAYER_STATE1_80000000;
             this->actor.targetMode = 1;
 
         } else {

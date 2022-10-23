@@ -23,7 +23,7 @@ void func_80BA2048(ElfMsg6* this, PlayState* play);
 void func_80BA215C(ElfMsg6* this, PlayState* play);
 void func_80BA21C4(ElfMsg6* this, PlayState* play);
 
-const ActorInit Elf_Msg6_InitVars = {
+ActorInit Elf_Msg6_InitVars = {
     ACTOR_ELF_MSG6,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -147,7 +147,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
         case 0:
             this->actionFunc = func_80BA1E30;
             if (func_80BA16F4(this, play)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -156,21 +156,21 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80BA1F80;
             if ((this->actor.cutscene == -1) || ((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) &&
                                                  Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor)))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
             switch (ELFMSG6_GET_F0(&this->actor)) {
                 case 0:
                     if (gSaveContext.save.inventory.items[ITEM_HOOKSHOT] != ITEM_HOOKSHOT) {
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                         return;
                     }
                     break;
 
                 case 1:
                     if (gSaveContext.save.weekEventReg[83] & 2) {
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                         return;
                     }
                     break;
@@ -179,19 +179,19 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
 
         case 2:
             if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
             if (gSaveContext.save.weekEventReg[8] & 0x40) {
                 if (gSaveContext.save.weekEventReg[88] & 0x20) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 this->actor.textId = 0x25B;
             } else {
                 if (!(gSaveContext.save.weekEventReg[74] & 0x20) || (gSaveContext.save.weekEventReg[79] & 0x10)) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 this->actor.textId = 0x224;
@@ -204,7 +204,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
                  Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
                 (gSaveContext.save.weekEventReg[88] & 0x10) || (gSaveContext.save.weekEventReg[91] & 1) ||
                 (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actionFunc = func_80BA2048;
@@ -272,7 +272,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[88] |= 0x20;
                 break;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -315,7 +315,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
                 break;
         }
         func_80BA165C();
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -331,7 +331,7 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
 
 void func_80BA1F80(ElfMsg6* this, PlayState* play) {
     if (((ELFMSG6_GET_F0(&this->actor)) == 1) && (gSaveContext.save.weekEventReg[83] & 2)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -339,10 +339,11 @@ void func_80BA1F80(ElfMsg6* this, PlayState* play) {
         if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, NULL);
             Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
@@ -357,14 +358,14 @@ void func_80BA2048(ElfMsg6* this, PlayState* play) {
         if (ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
         (gSaveContext.save.weekEventReg[88] & 0x10) || (gSaveContext.save.weekEventReg[91] & 1) ||
         (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -375,7 +376,7 @@ void func_80BA2048(ElfMsg6* this, PlayState* play) {
 
 void func_80BA215C(ElfMsg6* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -392,13 +393,13 @@ void func_80BA21C4(ElfMsg6* this, PlayState* play) {
         if (ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) && Flags_GetSwitch(play, ELFMSG6_SWITCHFLAG(&this->actor))) ||
         CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

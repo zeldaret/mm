@@ -14,6 +14,4 @@ typedef struct BgInibsMovebg {
     /* 0x164 */ AnimatedMaterial* sandTexAnim;
 } BgInibsMovebg; // size = 0x168
 
-extern const ActorInit Bg_Inibs_Movebg_InitVars;
-
 #endif // Z_BG_INIBS_MOVEBG_H

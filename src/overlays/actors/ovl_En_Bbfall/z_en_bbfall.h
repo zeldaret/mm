@@ -33,6 +33,4 @@ typedef struct EnBbfall {
     /* 0x3A4 */ ColliderJntSphElement colliderElements[3];
 } EnBbfall; // size = 0x464
 
-extern const ActorInit En_Bbfall_InitVars;
-
 #endif // Z_EN_BBFALL_H

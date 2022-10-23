@@ -25,7 +25,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_SetupFall(ObjOshihiki* this, PlayState* play);
 void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play);
 
-const ActorInit Obj_Oshihiki_InitVars = {
+ActorInit Obj_Oshihiki_InitVars = {
     ACTOR_OBJ_OSHIHIKI,
     ACTORCAT_PROP,
     FLAGS,
@@ -205,7 +205,7 @@ void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
                 case OBJOSHIHIKI_F_0:
                 case OBJOSHIHIKI_F_1:
                 case OBJOSHIHIKI_F_2:
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
             }
         } else {
@@ -213,7 +213,7 @@ void ObjOshihiki_Init(Actor* thisx, PlayState* play) {
                 case OBJOSHIHIKI_F_3:
                 case OBJOSHIHIKI_F_4:
                 case OBJOSHIHIKI_F_5:
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
             }
         }
@@ -293,7 +293,7 @@ s32 ObjOshihiki_CheckFloor(ObjOshihiki* this, PlayState* play) {
 
 s32 ObjOshihiki_CheckGround(ObjOshihiki* this, PlayState* play) {
     if (this->dyna.actor.world.pos.y <= BGCHECK_Y_MIN + 10.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
@@ -406,11 +406,11 @@ void ObjOshihiki_OnScene(ObjOshihiki* this, PlayState* play) {
                     return;
                 }
             }
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     } else if (fabsf(this->dyna.pushForce) > 0.001f) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -466,7 +466,7 @@ void ObjOshihiki_OnActor(ObjOshihiki* this, PlayState* play) {
     }
 
     if (!sp20 && (fabsf(this->dyna.pushForce) > 0.001f)) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -494,7 +494,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play) {
     if (!ObjOshihiki_CheckFloor(this, play)) {
         this->dyna.actor.home.pos.x = this->dyna.actor.world.pos.x;
         this->dyna.actor.home.pos.z = this->dyna.actor.world.pos.z;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         this->pushDist = 0.0f;
         this->pushSpeed = 0.0f;
@@ -508,7 +508,7 @@ void ObjOshihiki_Push(ObjOshihiki* this, PlayState* play) {
 
         this->dyna.actor.home.pos.x = this->dyna.actor.world.pos.x;
         this->dyna.actor.home.pos.z = this->dyna.actor.world.pos.z;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         this->pushDist = 0.0f;
         this->pushSpeed = 0.0f;
@@ -542,7 +542,7 @@ void ObjOshihiki_Fall(ObjOshihiki* this, PlayState* play) {
 
     if (fabsf(this->dyna.pushForce) > 0.001f) {
         this->dyna.pushForce = 0.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
     }
 
     Actor_MoveWithGravity(&this->dyna.actor);

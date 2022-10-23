@@ -16,7 +16,7 @@ void ObjUsiyane_Destroy(Actor* thisx, PlayState* play);
 void ObjUsiyane_Update(Actor* thisx, PlayState* play);
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Usiyane_InitVars = {
+ActorInit Obj_Usiyane_InitVars = {
     ACTOR_OBJ_USIYANE,
     ACTORCAT_PROP,
     FLAGS,
@@ -88,7 +88,7 @@ s32 func_80C07CD0(void) {
 
 void func_80C07DC4(ObjUsiyane* this, PlayState* play) {
     if (func_80C07CD0()) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -166,7 +166,7 @@ void func_80C081C8(ObjUsiyane* this, PlayState* play) {
         }
 
     } else if (this->unk_740 >= 70) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
     this->unk_740++;
 }
@@ -213,7 +213,7 @@ void ObjUsiyane_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             break;
     }
 }

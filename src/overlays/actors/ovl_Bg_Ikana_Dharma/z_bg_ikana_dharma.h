@@ -19,6 +19,4 @@ typedef struct BgIkanaDharma {
     /* 0x1AC */ s8 cutsceneFramesRemaining;
 } BgIkanaDharma; // size = 0x1B0
 
-extern const ActorInit Bg_Ikana_Dharma_InitVars;
-
 #endif // Z_BG_IKANA_DHARMA_H

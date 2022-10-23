@@ -15,7 +15,7 @@ void OceffWipe5_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe5_Update(Actor* thisx, PlayState* play);
 void OceffWipe5_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Oceff_Wipe5_InitVars = {
+ActorInit Oceff_Wipe5_InitVars = {
     ACTOR_OCEFF_WIPE5,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -51,7 +51,7 @@ void OceffWipe5_Update(Actor* thisx, PlayState* play) {
     if (this->counter < 100) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

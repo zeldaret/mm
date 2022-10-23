@@ -25,7 +25,7 @@ void func_80C042F8(EnBombers* this);
 void func_80C04354(EnBombers* this, PlayState* play);
 void func_80C043C8(EnBombers* this, PlayState* play);
 
-const ActorInit En_Bombers_InitVars = {
+ActorInit En_Bombers_InitVars = {
     ACTOR_EN_BOMBERS,
     ACTORCAT_NPC,
     FLAGS,
@@ -105,11 +105,12 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
 
     if (this->unk_2BC == ENBOMBERS_F0_0) {
         if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            this->unk_2BE++;
-            func_80C03ACC(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        this->unk_2BE++;
+        func_80C03ACC(this);
     } else if (((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) &&
                (((this->unk_2BE == ENBOMBERS_F_0) && (gSaveContext.save.weekEventReg[76] & 1)) ||
                 ((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.save.weekEventReg[76] & 2)) ||
@@ -137,12 +138,13 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            func_80C042F8(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        func_80C042F8(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -50,7 +50,7 @@ typedef enum {
     /* 2 */ BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH
 } BombShopLadyScheduleResult;
 
-const ActorInit En_Baba_InitVars = {
+ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
     ACTORCAT_NPC,
     FLAGS,
@@ -514,7 +514,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -525,7 +525,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
         } else if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_IDLE) &&
                    (gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7))) {
             if (gSaveContext.save.weekEventReg[81] & 2) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -540,7 +540,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             this->stateFlags |= BOMB_SHOP_LADY_STATE_AUTOTALK;
             this->actionFunc = EnBaba_Idle;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else {

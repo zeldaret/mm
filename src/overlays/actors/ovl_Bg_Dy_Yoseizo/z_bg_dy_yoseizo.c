@@ -26,7 +26,7 @@ void func_80A0B8CC(BgDyYoseizo* this, PlayState* play);
 void func_80A0BB08(BgDyYoseizo* this, PlayState* play);
 
 #if 0
-const ActorInit Bg_Dy_Yoseizo_InitVars = {
+ActorInit Bg_Dy_Yoseizo_InitVars = {
     ACTOR_BG_DY_YOSEIZO,
     ACTORCAT_PROP,
     FLAGS,

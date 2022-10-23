@@ -3311,7 +3311,7 @@ s32 AudioOcarina_MemoryGameNextNote(void) {
 #undef OCARINA_SONG_MEMORY_GAME
 
 void AudioOcarina_Update(void) {
-    sOcarinaUpdateTaskStart = gAudioContext.totalTaskCount;
+    sOcarinaUpdateTaskStart = gAudioCtx.totalTaskCount;
     if (sOcarinaInstrumentId != OCARINA_INSTRUMENT_OFF) {
         if (sIsOcarinaInputEnabled == true) {
             AudioOcarina_ReadControllerInput();
@@ -3399,9 +3399,9 @@ u8 sRequestCustomSequence = false;
 
 void AudioOcarina_SetCustomSequence(void) {
     // Never passes true as sRequestCustomSequence is never set true
-    if (sRequestCustomSequence && gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].enabled &&
-        ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].soundScriptIO[0] == (u8)SEQ_IO_VAL_NONE)) {
-        gAudioContext.seqPlayers[SEQ_PLAYER_FANFARE].seqData = sCustomSequenceScript;
+    if (sRequestCustomSequence && gAudioCtx.seqPlayers[SEQ_PLAYER_FANFARE].enabled &&
+        ((u8)gAudioCtx.seqPlayers[SEQ_PLAYER_FANFARE].soundScriptIO[0] == (u8)SEQ_IO_VAL_NONE)) {
+        gAudioCtx.seqPlayers[SEQ_PLAYER_FANFARE].seqData = sCustomSequenceScript;
         sRequestCustomSequence = false;
     }
 }
@@ -3753,9 +3753,9 @@ s8 AudioSfx_ComputeReverb(u8 bankId, u8 entryIndex, u8 channelIndex) {
         }
     }
 
-    if (IS_SEQUENCE_CHANNEL_VALID(gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex])) {
-        scriptAdd = gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1];
-        if (gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1] <= SEQ_IO_VAL_NONE) {
+    if (IS_SEQUENCE_CHANNEL_VALID(gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex])) {
+        scriptAdd = gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1];
+        if (gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[1] <= SEQ_IO_VAL_NONE) {
             scriptAdd = 0;
         }
     }
@@ -3815,7 +3815,7 @@ f32 AudioSfx_ComputeFreqScale(u8 bankId, u8 entryIndex) {
     f32 freq = 1.0f;
 
     if (entry->sfxParams & SFX_PARAM_RAND_FREQ_LOWER) {
-        freq = 1.0f - ((gAudioContext.audioRandom & 0xF) / 192.0f);
+        freq = 1.0f - ((gAudioCtx.audioRandom & 0xF) / 192.0f);
     }
 
     switch (bankId) {
@@ -3850,7 +3850,7 @@ f32 AudioSfx_ComputeFreqScale(u8 bankId, u8 entryIndex) {
     }
 
     if ((applyRandScaling == true) && !(entry->sfxParams & SFX_PARAM_RAND_FREQ_SCALE)) {
-        freq *= 1.0293 - ((gAudioContext.audioRandom & 0xF) / 144.0f);
+        freq *= 1.0293 - ((gAudioCtx.audioRandom & 0xF) / 144.0f);
     }
 
     dist = entry->dist;
@@ -4356,18 +4356,16 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
                           (u8)(lowPassFilterCutoff));
 
         // Sets the reverb
-        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
+        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
              channelIndex++) {
-            if (&gAudioContext.sequenceChannelNone !=
-                gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
+            if (&gAudioCtx.sequenceChannelNone != gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
                 // soundScriptIO[5] was set to 0x40 in channels 0, 1, and 4 (BGM no longer in OoT)
-                if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
+                if ((u8)gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
                     (u8)SEQ_IO_VAL_NONE) {
                     // Higher volume leads to lower reverb
-                    reverb =
-                        (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
-                          targetVolume) +
-                         0x7F);
+                    reverb = (((u16)gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
+                               targetVolume) +
+                              0x7F);
 
                     if (reverb > 0x7F) {
                         reverb = 0x7F;
@@ -4556,7 +4554,7 @@ void Audio_SplitBgmChannels(s8 volumeSplit) {
 
             channelBits = 0;
             for (channelIndex = 0; channelIndex < SEQ_NUM_CHANNELS; channelIndex++) {
-                if (gAudioContext.seqPlayers[sBgmPlayers[i]].channels[channelIndex]->notePriority < notePriority) {
+                if (gAudioCtx.seqPlayers[sBgmPlayers[i]].channels[channelIndex]->notePriority < notePriority) {
                     // If the note currently playing in the channel is a high enough priority,
                     // then keep the channel on by setting a channelBit
                     // If this condition fails, then the channel will be shut off
@@ -4723,7 +4721,7 @@ void Audio_UpdateSceneSequenceResumePoint(void) {
     if ((seqId != NA_BGM_DISABLED) && (sSeqFlags[seqId & 0xFF & 0xFF] & SEQ_FLAG_RESUME)) {
         if (sSeqResumePoint != SEQ_RESUME_POINT_NONE) {
             // Get the current point to resume from
-            sSeqResumePoint = gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].soundScriptIO[3];
+            sSeqResumePoint = gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].soundScriptIO[3];
         } else {
             // Initialize the point to resume from to the start of the sequence
             sSeqResumePoint = 0;
@@ -5139,13 +5137,13 @@ void Audio_PlayAmbience(u8 ambienceId) {
 u32 Audio_SetAmbienceRandomBend(u8 seqScriptValIn, SequenceChannel* channel) {
     u32 seqScriptValOut = seqScriptValIn;
 
-    gAudioContext.seqPlayers[SEQ_PLAYER_AMBIENCE].applyBend = true;
+    gAudioCtx.seqPlayers[SEQ_PLAYER_AMBIENCE].applyBend = true;
 
     if ((seqScriptValIn == 0) || (seqScriptValIn == 0xFF)) {
-        gAudioContext.seqPlayers[SEQ_PLAYER_AMBIENCE].bend = 1.0f;
+        gAudioCtx.seqPlayers[SEQ_PLAYER_AMBIENCE].bend = 1.0f;
     } else {
         seqScriptValOut = AudioThread_NextRandom();
-        gAudioContext.seqPlayers[SEQ_PLAYER_AMBIENCE].bend = 1.0293 - ((gAudioContext.audioRandom & 0xF) / 144.0f);
+        gAudioCtx.seqPlayers[SEQ_PLAYER_AMBIENCE].bend = 1.0293 - ((gAudioCtx.audioRandom & 0xF) / 144.0f);
 
         return seqScriptValOut;
     }

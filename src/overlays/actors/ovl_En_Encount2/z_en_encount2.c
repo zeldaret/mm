@@ -25,7 +25,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-const ActorInit En_Encount2_InitVars = {
+ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
     ACTORCAT_PROP,
     FLAGS,
@@ -121,7 +121,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -181,7 +181,7 @@ void EnEncount2_Die(EnEncount2* this, PlayState* play) {
         if (this->switchFlag >= 0) {
             Flags_SetSwitch(play, this->switchFlag);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

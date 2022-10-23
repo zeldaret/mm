@@ -26,7 +26,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play);
 void func_80B3A498(ObjSnowball2* this);
 void func_80B3A500(ObjSnowball2* this, PlayState* play);
 
-const ActorInit Obj_Snowball2_InitVars = {
+ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,
     FLAGS,
@@ -365,7 +365,7 @@ void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
         func_80B38E88(this, play);
         func_80B39108(this, play);
         func_80B39B5C(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     } else {
         if (sp38 && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 2)) {
@@ -464,7 +464,7 @@ void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
         func_80B38E88(this, play);
         func_80B39108(this, play);
         func_80B39B5C(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -570,7 +570,7 @@ void func_80B3A500(ObjSnowball2* this, PlayState* play) {
     }
 
     if (this->unk_1AC <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

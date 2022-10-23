@@ -40,6 +40,4 @@ typedef struct BgNumaHana {
     /* 0x33E */ s16 transitionTimer;
 } BgNumaHana; // size = 0x340
 
-extern const ActorInit Bg_Numa_Hana_InitVars;
-
 #endif // Z_BG_NUMA_HANA_H

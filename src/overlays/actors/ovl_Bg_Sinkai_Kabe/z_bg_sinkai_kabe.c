@@ -24,7 +24,7 @@ void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
-const ActorInit Bg_Sinkai_Kabe_InitVars = {
+ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -103,7 +103,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
                                           this->dyna.actor.unk20, NULL);
         }
 
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     this->actionFunc = BgSinkaiKabe_WaitForPlayer;
@@ -140,7 +140,7 @@ void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play) {
     }
 
     if (this->deepPython == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
