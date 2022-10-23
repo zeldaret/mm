@@ -122,8 +122,8 @@ void AnimatedMat_SetColor(PlayState* play, s32 segment, F3DPrimColor* primColorR
     if (sMatAnimFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, gfx); }
     // clang-format on
 
-    gDPSetPrimColor(gfx++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g,
-                    primColorResult->b, (u8)(primColorResult->a * sMatAnimAlphaRatio));
+    gDPSetPrimColor(gfx++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g, primColorResult->b,
+                    (u8)(primColorResult->a * sMatAnimAlphaRatio));
 
     if (envColor != NULL) {
         gDPSetEnvColor(gfx++, envColor->r, envColor->g, envColor->b, envColor->a);
