@@ -1095,13 +1095,12 @@ Vec3f* Camera_CalcUpVec(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll) {
     Vec3f rollMtxRow3;
     f32 pad;
 
-    // Axis to rotate roll
+    // Axis to roll around
     u.x = cosP * sinY;
     u.y = sinP;
     u.z = cosP * cosY;
 
-    // Matrix to adjust the Up vector based on roll.
-    // A roll of 0 will generate the identity matrix.
+    // Matrix to apply the roll to the Up vector without roll
     rollMtxRow1.x = ((1.0f - SQ(u.x)) * cosR) + SQ(u.x);
     rollMtxRow1.y = ((u.x * u.y) * (1.0f - cosR)) - (u.z * sinR);
     rollMtxRow1.z = ((u.z * u.x) * (1.0f - cosR)) + (u.y * sinR);
@@ -1114,7 +1113,7 @@ Vec3f* Camera_CalcUpVec(Vec3f* viewUp, s16 pitch, s16 yaw, s16 roll) {
     rollMtxRow3.y = ((u.y * u.z) * (1.0f - cosR)) + (u.x * sinR);
     rollMtxRow3.z = ((1.0f - SQ(u.z)) * cosR) + SQ(u.z);
 
-    // Default Up vector with no adjustments for roll
+    // Up without roll
     baseUp.x = -sinP * sinY;
     baseUp.y = cosP;
     baseUp.z = -sinP * cosY;
@@ -1327,7 +1326,7 @@ s32 Camera_CalcAtDefault(Camera* camera, VecSph* eyeAtDir, f32 yOffset, s16 calc
     return 1;
 }
 
-s32 Camera_CalcAtForScreen(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* focalActorPosY, f32 deltaYMax) {
+s32 Camera_CalcLookAtForScreen(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* focalActorPosY, f32 deltaYMax) {
     f32 deltaY;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1373,7 +1372,7 @@ s32 Camera_CalcAtForScreen(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* f
     return 1;
 }
 
-s32 Camera_CalcAtForNormal1(Camera* camera, VecSph* arg1, f32 yOffset, f32 forwardDist) {
+s32 Camera_CalcLookAtForNormal1(Camera* camera, VecSph* arg1, f32 yOffset, f32 forwardDist) {
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1409,8 +1408,8 @@ s32 Camera_CalcAtForNormal1(Camera* camera, VecSph* arg1, f32 yOffset, f32 forwa
 /**
  * Adjusts the camera's at position for Camera_Parallel1
  */
-s32 Camera_CalcAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
-                             s16 flags) {
+s32 Camera_CalcLookAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 xzOffsetMax, f32* focalActorPosY,
+                                 s16 flags) {
     f32 pad;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1489,8 +1488,8 @@ s32 Camera_CalcAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 xzOf
     return 1;
 }
 
-s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f32 yOffset, f32 distance,
-                                   f32* yPosOffset, VecSph* outPlayerToTargetDir, s16 flags) {
+s32 Camera_CalcLookAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targetPos, f32 yOffset, f32 distance,
+                                       f32* yPosOffset, VecSph* outPlayerToTargetDir, s16 flags) {
     Vec3f* at = &camera->at;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1560,7 +1559,7 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targ
 
             if (temp_f0_6 > 0.34906584f) { // (M_PI / 9)
                 phi_f16 = 1.0f - sin_rad(temp_f0_6 - 0.34906584f);
-            } else if (temp_f0_6 < -0.17453292f) {
+            } else if (temp_f0_6 < -0.17453292f) { // (M_PI / 18)
                 phi_f16 = 1.0f - sin_rad(-0.17453292f - temp_f0_6);
             } else {
                 phi_f16 = 1.0f;
@@ -1582,8 +1581,8 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecSph* eyeAtDir, Vec3f* targ
     return 1;
 }
 
-s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset, f32 arg4, f32 arg5, f32* arg6,
-                                VecSph* arg7, s16 flags) {
+s32 Camera_CalcLookAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset, f32 arg4, f32 arg5, f32* arg6,
+                                    VecSph* arg7, s16 flags) {
     PosRot* focalActorPosRot = &camera->focalActorPosRot;
     Vec3f focalActorAtOffsetTarget;
     Vec3f atTarget;
@@ -1622,9 +1621,10 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
         Camera_ScaledStepToCeilVec3f(&focalActorAtOffsetTarget, &camera->focalActorAtOffset, camera->xzOffsetUpdateRate,
                                      camera->yOffsetUpdateRate, 0.1f);
     } else {
-        //! FAKE
+        //! FAKE:
         if (focalActorPosRot->pos.x) {}
 
+        //! FAKE: unnecessary temp?
         new_var2 = *arg1;
         sp4C = new_var2;
         deltaY = focalActorPosRot->pos.y - *arg6;
@@ -1643,9 +1643,9 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
 
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
-            if (0.34906584f < temp_f0_3) {
+            if (temp_f0_3 > 0.34906584f) { // (M_PI / 9)
                 phi_f14 = 1.0f - sin_rad(temp_f0_3 - 0.34906584f);
-            } else if (temp_f0_3 < -0.17453292f) {
+            } else if (temp_f0_3 < -0.17453292f) { // (M_PI / 18)
                 phi_f14 = 1.0f - sin_rad(-0.17453292f - temp_f0_3);
             } else {
                 phi_f14 = 1.0f;
@@ -1666,7 +1666,7 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
     return true;
 }
 
-s32 Camera_CalcAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yPosOffset, s16 calcSlope) {
+s32 Camera_CalcLookAtForHorse(Camera* camera, VecSph* eyeAtDir, f32 yOffset, f32* yPosOffset, s16 calcSlope) {
     Vec3f* at = &camera->at;
     Vec3f posOffsetTarget;
     Vec3f atTarget;
@@ -1832,8 +1832,8 @@ s16 Camera_CalcDefaultYaw(Camera* camera, s16 yaw, s16 target, f32 attenuationYa
     return yaw + (s16)(yawDiffToTarget * attenuationYawDiffAdj * attenuationSpeedRatio * yawUpdRate);
 }
 
-void Camera_CalcDefaultEyeAndSwing(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg4,
-                                   SwingAnimation* swing2, s16* flags) {
+void Camera_CalcDefaultSwing(Camera* camera, VecSph* arg1, VecSph* arg2, f32 arg3, f32 arg4, SwingAnimation* swing2,
+                             s16* flags) {
     SwingAnimation* swing = swing2;
     Vec3f* eye = &camera->eye;
     Vec3f* at = &camera->at;
@@ -2184,12 +2184,12 @@ s32 Camera_Normal1(Camera* camera) {
             phi_f16_2 = spD4;
         }
 
-        Camera_CalcAtForNormal1(camera, &sp9C, phi_f2_2, 25.0f * phi_f16_2 * camera->speedRatio);
+        Camera_CalcLookAtForNormal1(camera, &sp9C, phi_f2_2, 25.0f * phi_f16_2 * camera->speedRatio);
         rwData->unk_10 = 120.0f;
         spD0 = phi_f16_2;
     } else if ((roData->interfaceFlags & NORMAL1_FLAG_7) && (rwData->unk_0A < 0)) {
         phi_f0_4 = rwData->unk_0A / -1200.0f; // May be used to swap $f registers
-        Camera_CalcAtForNormal1(
+        Camera_CalcLookAtForNormal1(
             camera, &sp9C,
             phi_f2_2 - ((phi_f2_2 - ((0.8f - ((68.0f / sp88) * -0.2f)) * sp88 * -0.45f)) * phi_f0_4 * 0.75f),
             10.0f * phi_f0_4);
@@ -2199,7 +2199,7 @@ s32 Camera_Normal1(Camera* camera) {
         if (0) {}
     } else if (roData->interfaceFlags & NORMAL1_FLAG_3) {
         spD0 = phi_f16_2;
-        Camera_CalcAtForScreen(camera, &sp9C, roData->unk_00, &rwData->unk_00, rwData->unk_10);
+        Camera_CalcLookAtForScreen(camera, &sp9C, roData->unk_00, &rwData->unk_00, rwData->unk_10);
         if (rwData->unk_10 > 20.0f) {
             rwData->unk_10 -= 0.2f;
         }
@@ -2328,8 +2328,8 @@ s32 Camera_Normal1(Camera* camera) {
     if ((camera->status == CAM_STATUS_ACTIVE) && !(roData->interfaceFlags & NORMAL1_FLAG_4) && (spC4 <= 0.9f)) {
 
         if (func_800CBA7C(camera) == 0) {
-            Camera_CalcDefaultEyeAndSwing(camera, &spB4, &sp9C, roData->unk_04, roData->unk_0C,
-                                          &D_801EDC30[camera->camId], &rwData->unk_0C);
+            Camera_CalcDefaultSwing(camera, &spB4, &sp9C, roData->unk_04, roData->unk_0C, &D_801EDC30[camera->camId],
+                                    &rwData->unk_0C);
             sp58 = BgCheck_CameraRaycastFloor2(&camera->play->colCtx, &sp60, &sp5C, sp4C);
             if ((roData->interfaceFlags & NORMAL1_FLAG_3) && func_800CB924(camera)) {
                 phi_f16_2 = 25.0f;
@@ -2508,7 +2508,7 @@ s32 Camera_Normal3(Camera* camera) {
     if ((roData->interfaceFlags & NORMAL3_FLAG_6) || (player->rideActor == NULL)) {
         Camera_CalcAtDefault(camera, &sp68, roData->yOffset, 1);
     } else {
-        Camera_CalcAtForHorse(camera, &sp68, roData->yOffset, &rwData->yPosOffset, 1);
+        Camera_CalcLookAtForHorse(camera, &sp68, roData->yOffset, &rwData->yPosOffset, 1);
     }
 
     sp88 = (roData->distMax + roData->distMin) * 0.5f;
@@ -2711,7 +2711,7 @@ s32 Camera_Normal0(Camera* camera) {
         Camera_CalcAtDefault(camera, &sp78, roData->unk_00, roData->interfaceFlags & NORMAL0_FLAG_0);
         rwData->unk_28 = 120.0f;
     } else {
-        Camera_CalcAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_24, rwData->unk_28);
+        Camera_CalcLookAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_24, rwData->unk_28);
         if (rwData->unk_28 > 20.0f) {
             rwData->unk_28 -= 0.2f;
         }
@@ -3037,11 +3037,11 @@ s32 Camera_Parallel1(Camera* camera) {
         Camera_CalcAtDefault(camera, &sp78, roData->unk_00, 0);
         rwData->timer1 = 200.0f;
     } else if (!(roData->interfaceFlags & PARALLEL1_FLAG_7) && !sp72) {
-        Camera_CalcAtForParallel(camera, &sp78, roData->unk_00, roData->unk_08, &rwData->unk_04,
-                                 roData->interfaceFlags & (PARALLEL1_FLAG_6 | PARALLEL1_FLAG_0));
+        Camera_CalcLookAtForParallel(camera, &sp78, roData->unk_00, roData->unk_08, &rwData->unk_04,
+                                     roData->interfaceFlags & (PARALLEL1_FLAG_6 | PARALLEL1_FLAG_0));
         rwData->timer1 = 200.0f;
     } else {
-        Camera_CalcAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_04, rwData->timer1);
+        Camera_CalcLookAtForScreen(camera, &sp78, roData->unk_00, &rwData->unk_04, rwData->timer1);
         if (rwData->timer1 > 10.0f) {
             rwData->timer1--;
         }
@@ -3494,8 +3494,8 @@ s32 Camera_Jump3(Camera* camera) {
     if (sp60 < 50.0f) {
         sp5C = camera->waterYPos - spC0;
 
-        Camera_CalcAtForScreen(camera, &sp94, roData->unk_00, &sp5C,
-                               ((sp60 < 0.0f) ? 1.0f : 1.0f - (sp60 / 50.0f)) * 50.0f);
+        Camera_CalcLookAtForScreen(camera, &sp94, roData->unk_00, &sp5C,
+                                   ((sp60 < 0.0f) ? 1.0f : 1.0f - (sp60 / 50.0f)) * 50.0f);
     } else {
         Camera_CalcAtDefault(camera, &sp94, roData->unk_00, roData->interfaceFlags);
     }
@@ -3549,8 +3549,8 @@ s32 Camera_Jump3(Camera* camera) {
 
     if ((camera->status == CAM_STATUS_ACTIVE) && !(roData->interfaceFlags & JUMP3_FLAG_6)) {
         if (func_800CBA7C(camera) == 0) {
-            Camera_CalcDefaultEyeAndSwing(camera, &spAC, &sp9C, roData->unk_04, roData->unk_0C,
-                                          &D_801EDC30[camera->camId], &rwData->unk_10);
+            Camera_CalcDefaultSwing(camera, &spAC, &sp9C, roData->unk_04, roData->unk_0C, &D_801EDC30[camera->camId],
+                                    &rwData->unk_10);
         }
 
         if (roData->interfaceFlags & JUMP3_FLAG_2) {
@@ -3789,9 +3789,9 @@ s32 Camera_Battle1(Camera* camera) {
     // spF8 should be set with swc1 twice, not once
 
     // sp94 is loading in too early
-    Camera_CalcAtForEnemyLockOn(camera, &sp94.r, sp40, roData->unk_00, roData->unk_2C, 1.0f - spEC, &rwData->unk_04,
-                                &spA4,
-                                (sp84 ? (BATTLE1_FLAG_7 | BATTLE1_FLAG_0) : BATTLE1_FLAG_0) | roData->interfaceFlags);
+    Camera_CalcLookAtForEnemyLockOn(
+        camera, &sp94.r, sp40, roData->unk_00, roData->unk_2C, 1.0f - spEC, &rwData->unk_04, &spA4,
+        (sp84 ? (BATTLE1_FLAG_7 | BATTLE1_FLAG_0) : BATTLE1_FLAG_0) | roData->interfaceFlags);
 
     sp88 = spA4.yaw;
     OLib_Vec3fDiffToVecSphGeo(&spBC, sp4C, sp48);
@@ -4147,8 +4147,8 @@ s32 Camera_KeepOn1(Camera* camera) {
         sp70 = true;
     }
 
-    Camera_CalcAtForFriendlyLockOn(camera, &spC0, sp30, roData->unk_00, roData->unk_08, &rwData->unk_08, &spD0,
-                                   roData->interfaceFlags | (sp70 ? KEEPON1_FLAG_7 : 0));
+    Camera_CalcLookAtForFriendlyLockOn(camera, &spC0, sp30, roData->unk_00, roData->unk_08, &rwData->unk_08, &spD0,
+                                       roData->interfaceFlags | (sp70 ? KEEPON1_FLAG_7 : 0));
     sp124 = sp3C->pos;
     sp124.y += sp60;
     OLib_Vec3fDiffToVecSphGeo(&spD0, &sp124, sp30);
