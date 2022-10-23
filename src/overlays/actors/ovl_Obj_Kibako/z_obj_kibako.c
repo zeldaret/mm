@@ -36,7 +36,7 @@ static s16 D_80927384 = 0;
 static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
-const ActorInit Obj_Kibako_InitVars = {
+ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
     ACTORCAT_PROP,
     FLAGS,

@@ -21,7 +21,7 @@ void func_80965DB4(EnMm* this, PlayState* play);
 void func_8096611C(EnMm* this, PlayState* play);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
 
-const ActorInit En_Mm_InitVars = {
+ActorInit En_Mm_InitVars = {
     ACTOR_EN_MM,
     ACTORCAT_ITEMACTION,
     FLAGS,

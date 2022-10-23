@@ -26,6 +26,4 @@ typedef enum SekihiType {
     /* 0x5 */ SEKIHI_TYPE_MAX
 } SekihiType;
 
-extern const ActorInit En_Sekihi_InitVars;
-
 #endif // Z_EN_SEKIHI_H

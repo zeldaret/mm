@@ -20,6 +20,4 @@ typedef struct DmNb {
     /* 0x1F8 */ s32 unk1F8;
 } DmNb; // size = 0x1FC
 
-extern const ActorInit Dm_Nb_InitVars;
-
 #endif // Z_DM_NB_H

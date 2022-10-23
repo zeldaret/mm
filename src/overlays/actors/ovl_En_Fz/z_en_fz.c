@@ -49,7 +49,7 @@ void func_809340BC(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5,
 void func_80934178(EnFz* this, PlayState* play);
 void func_80934464(EnFz* this, PlayState* play);
 
-const ActorInit En_Fz_InitVars = {
+ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
     ACTORCAT_ENEMY,
     FLAGS,

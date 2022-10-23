@@ -67,7 +67,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play);
 void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
 
-const ActorInit Door_Spiral_InitVars = {
+ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
     FLAGS,

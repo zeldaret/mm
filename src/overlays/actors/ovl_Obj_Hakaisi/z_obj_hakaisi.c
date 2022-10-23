@@ -37,7 +37,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play);
 void func_80B1544C(Actor* thisx, PlayState* play);
 void func_80B154A0(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hakaisi_InitVars = {
+ActorInit Obj_Hakaisi_InitVars = {
     ACTOR_OBJ_HAKAISI,
     ACTORCAT_PROP,
     FLAGS,

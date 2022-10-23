@@ -29,7 +29,7 @@ void func_809AB6FC(ObjGrassCarry* this);
 void func_809AB77C(ObjGrassCarry* this, PlayState* play);
 void func_809ABB7C(Actor* this, PlayState* play);
 
-const ActorInit Obj_Grass_Carry_InitVars = {
+ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,
     ACTORCAT_PROP,
     FLAGS,

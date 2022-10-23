@@ -23,7 +23,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play);
 void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
-const ActorInit En_Hs_InitVars = {
+ActorInit En_Hs_InitVars = {
     ACTOR_EN_HS,
     ACTORCAT_NPC,
     FLAGS,

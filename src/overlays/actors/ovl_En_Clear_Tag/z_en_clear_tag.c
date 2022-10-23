@@ -31,7 +31,7 @@ void EnClearTag_Draw(Actor* thisx, PlayState* play);
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
-const ActorInit En_Clear_Tag_InitVars = {
+ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -34,7 +34,7 @@ void func_80AF2EC8(EnTest7* this, PlayState* play);
 void func_80AF2F98(EnTest7* this, PlayState* play);
 void func_80AF30F4(EnTest7* this, PlayState* play);
 
-const ActorInit En_Test7_InitVars = {
+ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
     ACTORCAT_ITEMACTION,
     FLAGS,

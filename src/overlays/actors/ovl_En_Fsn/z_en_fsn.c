@@ -69,7 +69,7 @@ typedef enum {
     /* 13 */ FSN_ANIM_MAX
 } FsnAnimation;
 
-const ActorInit En_Fsn_InitVars = {
+ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
     ACTORCAT_NPC,
     FLAGS,

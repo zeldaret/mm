@@ -62,7 +62,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Tokeidai_InitVars = {
+ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
     FLAGS,

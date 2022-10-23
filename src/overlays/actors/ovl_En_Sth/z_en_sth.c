@@ -27,7 +27,7 @@ void func_80B67DA0(EnSth* this, PlayState* play);
 void func_80B680A8(Actor* thisx, PlayState* play);
 void func_80B6849C(Actor* thisx, PlayState* play);
 
-const ActorInit En_Sth_InitVars = {
+ActorInit En_Sth_InitVars = {
     ACTOR_EN_STH,
     ACTORCAT_NPC,
     FLAGS,

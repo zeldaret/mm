@@ -21,6 +21,4 @@ typedef struct ArrowFire {
 } ArrowFire; // size = 0x264
 
 
-extern const ActorInit Arrow_Fire_InitVars;
-
 #endif // Z_ARROW_FIRE_H

@@ -2268,8 +2268,7 @@ beginseg
     name "ovl_En_Encount4"
     compress
     include "build/src/overlays/actors/ovl_En_Encount4/z_en_encount4.o"
-    include "build/data/ovl_En_Encount4/ovl_En_Encount4.data.o"
-    include "build/data/ovl_En_Encount4/ovl_En_Encount4.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Encount4/ovl_En_Encount4_reloc.o"
 endseg
 
 beginseg
@@ -3234,8 +3233,7 @@ beginseg
     name "ovl_fbdemo_wipe5"
     compress
     include "build/src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.o"
-    include "build/data/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5.data.o"
-    include "build/data/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5.reloc.o"
+    include "build/src/overlays/fbdemos/ovl_fbdemo_wipe5/ovl_fbdemo_wipe5_reloc.o"
 endseg
 
 beginseg
@@ -3449,8 +3447,7 @@ beginseg
     name "ovl_En_Lift_Nuts"
     compress
     include "build/src/overlays/actors/ovl_En_Lift_Nuts/z_en_lift_nuts.o"
-    include "build/data/ovl_En_Lift_Nuts/ovl_En_Lift_Nuts.data.o"
-    include "build/data/ovl_En_Lift_Nuts/ovl_En_Lift_Nuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Lift_Nuts/ovl_En_Lift_Nuts_reloc.o"
 endseg
 
 beginseg
@@ -4696,8 +4693,7 @@ beginseg
     name "ovl_En_Rz"
     compress
     include "build/src/overlays/actors/ovl_En_Rz/z_en_rz.o"
-    include "build/data/ovl_En_Rz/ovl_En_Rz.data.o"
-    include "build/data/ovl_En_Rz/ovl_En_Rz.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Rz/ovl_En_Rz_reloc.o"
 endseg
 
 beginseg

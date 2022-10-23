@@ -110,7 +110,7 @@ u8 D_80BC15C8[] = {
     0x0E, 0x23, 0x62, 0x2D, 0x00, 0x0E, 0x0C, 0x10,
 };
 
-const ActorInit En_Nb_InitVars = {
+ActorInit En_Nb_InitVars = {
     ACTOR_EN_NB,
     ACTORCAT_NPC,
     FLAGS,

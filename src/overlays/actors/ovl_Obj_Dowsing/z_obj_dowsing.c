@@ -17,7 +17,7 @@ void ObjDowsing_Update(Actor* thisx, PlayState* play);
 s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play);
 s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play);
 
-const ActorInit Obj_Dowsing_InitVars = {
+ActorInit Obj_Dowsing_InitVars = {
     ACTOR_OBJ_DOWSING,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -30,7 +30,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play);
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
-const ActorInit En_Bigokuta_InitVars = {
+ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,
     FLAGS,

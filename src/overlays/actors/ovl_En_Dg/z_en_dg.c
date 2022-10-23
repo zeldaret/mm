@@ -36,7 +36,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
-const ActorInit En_Dg_InitVars = {
+ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
     FLAGS,

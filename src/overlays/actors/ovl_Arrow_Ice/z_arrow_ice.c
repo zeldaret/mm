@@ -23,7 +23,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 s32 unused; // Needed for bss
 
-const ActorInit Arrow_Ice_InitVars = {
+ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
     FLAGS,

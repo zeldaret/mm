@@ -76,7 +76,7 @@ static UNK_TYPE D_80A889A4[] = {
     0x550C1000,
 };
 
-const ActorInit En_Tru_InitVars = {
+ActorInit En_Tru_InitVars = {
     ACTOR_EN_TRU,
     ACTORCAT_NPC,
     FLAGS,

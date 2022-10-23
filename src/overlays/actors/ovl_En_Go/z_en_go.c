@@ -179,7 +179,7 @@ static s32 sMsgScriptGoronStretcherHamstring[] = { 0x100060E, 0xE060C12, 0x100E0
 // MsgEvent script for any sleeping Goron.
 static s32 sMsgScriptGoronSleeping[] = { 0xE023A0C, 0x12100000 };
 
-const ActorInit En_Go_InitVars = {
+ActorInit En_Go_InitVars = {
     ACTOR_EN_GO,
     ACTORCAT_NPC,
     FLAGS,

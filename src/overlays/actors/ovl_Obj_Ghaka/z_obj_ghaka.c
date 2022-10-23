@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-const ActorInit Obj_Ghaka_InitVars = {
+ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
     ACTORCAT_PROP,
     FLAGS,

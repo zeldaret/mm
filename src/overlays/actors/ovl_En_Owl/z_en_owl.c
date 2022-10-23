@@ -48,7 +48,7 @@ typedef enum {
     /* 0x01 */ OWL_OK
 } EnOwlMessageChoice;
 
-const ActorInit En_Owl_InitVars = {
+ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
     FLAGS,
