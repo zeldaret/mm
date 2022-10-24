@@ -13,6 +13,4 @@ typedef struct EnKitan {
     /* 0x2D8 */ EnKitanActionFunc actionFunc;
 } EnKitan; // size = 0x2DC
 
-extern const ActorInit En_Kitan_InitVars;
-
 #endif // Z_EN_KITAN_H

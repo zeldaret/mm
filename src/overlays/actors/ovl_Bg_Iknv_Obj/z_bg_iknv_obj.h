@@ -22,6 +22,4 @@ typedef enum {
     /* 2 */ IKNV_OBJ_SAKON_DOOR,  // door to Sakon's Hideout
 } BgIknvObjType;
 
-extern const ActorInit Bg_Iknv_Obj_InitVars;
-
 #endif // Z_BG_IKNV_OBJ_H

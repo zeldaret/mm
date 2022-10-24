@@ -27,6 +27,4 @@ typedef struct EnAm {
     /* 0x334 */ ColliderCylinder interactCollider; // Collider for when an interactable Armos is docile
 } EnAm; // size = 0x380
 
-extern const ActorInit En_Am_InitVars;
-
 #endif // Z_EN_AM_H

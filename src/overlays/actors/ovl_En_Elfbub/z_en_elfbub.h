@@ -21,6 +21,4 @@ typedef struct EnElfbub {
     /* 0x1A0 */ EnElfbubActionFunc actionFunc;
 } EnElfbub; // size = 0x1A4
 
-extern const ActorInit En_Elfbub_InitVars;
-
 #endif // Z_EN_ELFBUB_H

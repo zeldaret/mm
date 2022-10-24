@@ -49,6 +49,4 @@ typedef struct EnPametfrog {
     /* 0x3A4 */ ColliderJntSphElement colElement[2];
 } EnPametfrog; // size = 0x424
 
-extern const ActorInit En_Pametfrog_InitVars;
-
 #endif // Z_EN_PAMETFROG_H

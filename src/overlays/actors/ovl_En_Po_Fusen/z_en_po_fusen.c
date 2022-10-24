@@ -25,7 +25,7 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
 void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
 s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Po_Fusen_InitVars = {
+ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
     ACTORCAT_PROP,
     FLAGS,
@@ -111,7 +111,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
     if (!EnPoFusen_CheckParent(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     heightTemp = this->actor.floorHeight + 90.0f;
@@ -238,7 +238,7 @@ void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
                 this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnPoFusen_InitFuse(EnPoFusen* this) {

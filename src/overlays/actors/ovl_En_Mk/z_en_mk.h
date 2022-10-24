@@ -21,6 +21,4 @@ typedef struct EnMk {
     /* 0x280 */ EnMkActionFunc actionFunc;
 } EnMk; // size = 0x284
 
-extern const ActorInit En_Mk_InitVars;
-
 #endif // Z_EN_MK_H

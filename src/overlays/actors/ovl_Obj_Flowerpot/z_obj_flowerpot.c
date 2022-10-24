@@ -31,7 +31,7 @@ s16 D_80A1DA3C;
 s16 D_80A1DA3E;
 s16 D_80A1DA40;
 
-const ActorInit Obj_Flowerpot_InitVars = {
+ActorInit Obj_Flowerpot_InitVars = {
     ACTOR_OBJ_FLOWERPOT,
     ACTORCAT_PROP,
     FLAGS,
@@ -464,7 +464,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         }
         func_80A1BD80(this, play);
         func_80A1B994(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((this->collider.elements[0].info.bumperFlags & BUMP_HIT) &&
                (this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x058BFFBC)) {
         if (!(this->unk_1EA & 2)) {
@@ -475,7 +475,7 @@ void func_80A1C838(ObjFlowerpot* this, PlayState* play) {
         }
         func_80A1BA44(this, play);
         func_80A1B994(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         if (this->collider.elements[1].info.bumperFlags & BUMP_HIT) {
             if (!(this->unk_1EA & 2)) {
@@ -610,7 +610,7 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
         }
         func_80A1BA44(this, play);
         func_80A1B994(this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -624,7 +624,7 @@ void func_80A1CEF4(ObjFlowerpot* this2, PlayState* play) {
         func_80A1BD80(this, play);
         func_80A1B994(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

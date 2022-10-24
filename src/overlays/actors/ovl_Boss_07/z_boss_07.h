@@ -15,6 +15,20 @@ struct Boss07;
 
 typedef void (*Boss07ActionFunc)(struct Boss07*, struct PlayState*);
 
+typedef enum {
+    /*   0 */ MAJORAS_BOSS,
+    /*  10 */ MAJORAS_MASK = 10,
+    /*  11 */ MAJORAS_MASK_CS,
+    /*  20 */ MAJORAS_INCARNATION = 20,
+    /*  21 */ MAJORAS_AFTERIMAGE,
+    /*  30 */ MAJORAS_WRATH = 30,
+    /* 100 */ MAJORAS_REMAINS_SHOT = 100,
+    /* 101 */ MAJORAS_INCARNATION_SHOT,
+    /* 150 */ MAJORAS_STATIC = 150,
+    /* 180 */ MAJORAS_TOP = 180,
+    /* 200 */ MAJORAS_REMAINS = 200,
+} MajoraParams;
+
 typedef struct {
     Vec3f base;
     Vec3f pos[MAJORAS_TENT_LENGTH];
@@ -161,21 +175,5 @@ typedef struct Boss07 {
     /* 0xAC14 */ f32 subCamEyeModY;
     /* 0xAC18 */ UNK_TYPE1 unkAC18[8]; // probably floats
 } Boss07; // size = 0xAC20
-
-extern const ActorInit Boss_07_InitVars;
-
-typedef enum {
-    /*   0 */ MAJORAS_BOSS,
-    /*  10 */ MAJORAS_MASK = 10,
-    /*  11 */ MAJORAS_MASK_CS,
-    /*  20 */ MAJORAS_INCARNATION = 20,
-    /*  21 */ MAJORAS_AFTERIMAGE,
-    /*  30 */ MAJORAS_WRATH = 30,
-    /* 100 */ MAJORAS_REMAINS_SHOT = 100,
-    /* 101 */ MAJORAS_INCARNATION_SHOT,
-    /* 150 */ MAJORAS_STATIC = 150,
-    /* 180 */ MAJORAS_TOP = 180,
-    /* 200 */ MAJORAS_REMAINS = 200,
-} MajoraParams;
 
 #endif // Z_BOSS_07_H

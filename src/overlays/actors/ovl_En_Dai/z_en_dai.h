@@ -46,6 +46,4 @@ typedef struct EnDai {
     /* 0xA70 */ s32 unk_A70;
 } EnDai; // size = 0xA74
 
-extern const ActorInit En_Dai_InitVars;
-
 #endif // Z_EN_DAI_H

@@ -17,6 +17,4 @@ typedef struct EnKaizoku {
     /* 0x2F6 */ char unk_2F6[0x2FA];
 } EnKaizoku; // size = 0x5F0
 
-extern const ActorInit En_Kaizoku_InitVars;
-
 #endif // Z_EN_KAIZOKU_H

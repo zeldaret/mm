@@ -5,10 +5,10 @@
  */
 
 #include "z_boss_07.h"
+#include "z64shrink_window.h"
 #include "overlays/actors/ovl_Obj_Tsubo/z_obj_tsubo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -370,7 +370,7 @@ static s16 sShotPrimColors[4][3] = {
 
 #include "z_boss_07_dmgtbl.inc"
 
-const ActorInit Boss_07_InitVars = {
+ActorInit Boss_07_InitVars = {
     ACTOR_BOSS_07,
     ACTORCAT_BOSS,
     FLAGS,
@@ -3500,7 +3500,7 @@ void Boss07_Incarnation_Death(Boss07* this, PlayState* play) {
             if (this->timer_ABC8 == 40) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, this->subCamIndex, MAJORAS_WRATH);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
     }
@@ -3585,7 +3585,7 @@ void Boss07_Afterimage_Update(Actor* thisx, PlayState* play2) {
     Boss07* this = THIS;
 
     if (DECR(this->timers[0]) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4682,7 +4682,7 @@ void Boss07_Mask_Death(Boss07* this, PlayState* play) {
         case MAJORAS_MASK_DEATH_STATE_2:
             Actor_Spawn(&play->actorCtx, play, ACTOR_BOSS_07, 0.0f, 0.0f, 0.0f, 0, this->actor.shape.rot.y,
                         this->subCamIndex, MAJORAS_INCARNATION);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             break;
     }
 
@@ -5181,7 +5181,7 @@ void Boss07_Projectile_Update(Actor* thisx, PlayState* play2) {
         this->actor.shape.rot.z += 0x1200;
         if ((this->actor.bgCheckFlags & 0x19) || (this->spawnCollider.base.atFlags & AT_HIT) ||
             (this->spawnCollider.base.atFlags & AT_HIT) || sKillProjectiles) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, this->shotColorIndex, CLEAR_TAG_SMALL_LIGHT_RAYS);
         }
@@ -5682,7 +5682,7 @@ void Boss07_Top_Ground(Boss07* this, PlayState* play) {
         if (bomb != NULL) {
             bomb->timer = 0;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (this->timers[1] == 25) {
         this->dmgFogEffectTimer = 25;
         func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_EXPLOSIVES);
@@ -5830,7 +5830,7 @@ void Boss07_Top_Update(Actor* thisx, PlayState* play2) {
         this->topSpinAngle += 2.0f * M_PI;
     }
     if (sMajorasWrath->actionFunc == Boss07_Wrath_Death) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     Math_ApproachF(&this->actor.scale.x, (sREG(77) * 0.001f) + 0.06f, 1.0f, 0.012f);
     Actor_SetScale(&this->actor, this->actor.scale.x);

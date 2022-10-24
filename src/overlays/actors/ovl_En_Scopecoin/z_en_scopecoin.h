@@ -16,6 +16,4 @@ typedef struct EnScopecoin {
     /* 0x148 */ s16 rupeeIndex;
 } EnScopecoin; // size = 0x14C
 
-extern const ActorInit En_Scopecoin_InitVars;
-
 #endif // Z_EN_SCOPECOIN_H
