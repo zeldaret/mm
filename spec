@@ -514,7 +514,7 @@ beginseg
     pad_text
     include "build/data/code/code_801C2410.data.o"
     include "build/src/code/z_scene.o"
-    include "build/src/code/z_scene_dlftbls.o"
+    include "build/src/code/object_table.o"
     include "build/src/code/z_scene_proc.o"
     include "build/src/code/z_scene_table.o"
     include "build/src/code/z_schedule.o"
