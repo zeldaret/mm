@@ -17,6 +17,4 @@ typedef struct DmChar03 {
     /* 0x190 */ Vec3f offset;
 } DmChar03; // size = 0x19C
 
-extern const ActorInit Dm_Char03_InitVars;
-
 #endif // Z_DM_CHAR03_H

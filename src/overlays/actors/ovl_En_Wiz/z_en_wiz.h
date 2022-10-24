@@ -77,6 +77,4 @@ typedef struct EnWiz {
     /* 0x8D0 */ Vec3s ghostJointTables[10][WIZROBE_LIMB_MAX];
 } EnWiz; // size = 0xD80
 
-extern const ActorInit En_Wiz_InitVars;
-
 #endif // Z_EN_WIZ_H

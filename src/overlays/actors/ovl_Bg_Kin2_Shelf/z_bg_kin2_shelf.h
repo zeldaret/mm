@@ -19,6 +19,4 @@ typedef struct BgKin2Shelf {
     /* 0x167 */ s8 unk_167;
 } BgKin2Shelf; // size = 0x168
 
-extern const ActorInit Bg_Kin2_Shelf_InitVars;
-
 #endif // Z_BG_KIN2_SHELF_H

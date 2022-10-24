@@ -19,7 +19,7 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play);
 void func_80981B48(OceffStorm* this, PlayState* play);
 void OceffStorm_Draw2(Actor* thisx, PlayState* play);
 
-const ActorInit Oceff_Storm_InitVars = {
+ActorInit Oceff_Storm_InitVars = {
     ACTOR_OCEFF_STORM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -150,7 +150,7 @@ void OceffStorm_DefaultAction(OceffStorm* this, PlayState* play) {
     if (this->counter < 70) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

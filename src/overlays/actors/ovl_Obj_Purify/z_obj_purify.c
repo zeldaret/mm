@@ -41,7 +41,7 @@ typedef struct ObjPurifyInfo {
     /* 0x24 */ s32 isDekuCity;
 } ObjPurifyInfo; // size = 0x28
 
-const ActorInit Obj_Purify_InitVars = {
+ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,
     FLAGS,
@@ -135,11 +135,11 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
     }
     this->objIndex = Object_GetIndex(&play->objectCtx, info->objectId);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else if (sp20 == 0) {
         func_80A84EAC(this);
     } else if (ObjPurify_IsPurified(this)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         func_80A84EAC(this);
     }
@@ -183,7 +183,7 @@ void func_80A84FA0(ObjPurify* this) {
 
 void func_80A84FB4(ObjPurify* this, PlayState* play) {
     if (ObjPurify_IsPurified(this)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

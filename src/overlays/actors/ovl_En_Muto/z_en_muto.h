@@ -30,6 +30,4 @@ typedef struct EnMuto {
     /* 0x294 */ ColliderCylinder collider;
 } EnMuto; // size = 0x2E0
 
-extern const ActorInit En_Muto_InitVars;
-
 #endif // Z_EN_MUTO_H

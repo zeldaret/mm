@@ -24,6 +24,4 @@ typedef struct ObjNozoki {
     /* 0x160 */ ObjNozokiActionFunc actionFunc;
 } ObjNozoki; // size = 0x164
 
-extern const ActorInit Obj_Nozoki_InitVars;
-
 #endif // Z_OBJ_NOZOKI_H

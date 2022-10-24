@@ -37,7 +37,7 @@ s32 D_809C6100 = 0;
 
 s32 D_809C6104 = 0;
 
-const ActorInit En_Bom_Bowl_Man_InitVars = {
+ActorInit En_Bom_Bowl_Man_InitVars = {
     ACTOR_EN_BOM_BOWL_MAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -101,11 +101,11 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         func_809C52B4(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -158,7 +158,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 void func_809C4B6C(EnBomBowlMan* this) {
     if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -369,7 +369,7 @@ void func_809C5310(EnBomBowlMan* this, PlayState* play) {
                 func_809C53A4(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -486,10 +486,11 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
                 gSaveContext.save.weekEventReg[84] |= 0x80;
                 gSaveContext.save.weekEventReg[83] &= (u8)~4;
                 ActorCutscene_Stop(this->unk_2D6);
-                Actor_MarkForDeath(&this->actor);
-            } else {
-                func_809C4B6C(this);
+                Actor_Kill(&this->actor);
+                return;
             }
+
+            func_809C4B6C(this);
         }
     }
 }

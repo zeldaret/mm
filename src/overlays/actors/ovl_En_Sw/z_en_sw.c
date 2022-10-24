@@ -28,7 +28,7 @@ void func_808DB100(EnSw* this, PlayState* play);
 void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
-const ActorInit En_Sw_InitVars = {
+ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,
     FLAGS,
@@ -738,7 +738,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
 void func_808DA350(EnSw* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 0x200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_LAUGH);
         Math_Vec3f_Copy(&this->unk_374, &player->actor.world.pos);
         this->unk_410 &= ~0x20;
@@ -1023,7 +1023,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
             }
 
             if (count == ARRAY_COUNT(this->unk_464)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             Math_ApproachF(&this->actor.scale.x, 0.0f, 0.08f, 1.0f);
@@ -1038,7 +1038,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
                                        0, this->actor.params) != NULL) {
                     play_sound(NA_SE_SY_KINSTA_MARK_APPEAR);
                 }
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             func_808D94D0(this, play, 0, 0, 0x1554);
         }
@@ -1210,7 +1210,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 break;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

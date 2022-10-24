@@ -22,7 +22,7 @@ void func_808F3690(EnIn* this, PlayState* play);
 void func_808F5A34(EnIn* this, PlayState* play);
 s32 func_808F5994(EnIn* this, PlayState* play, Vec3f* arg2, s16 arg3);
 
-const ActorInit En_In_InitVars = {
+ActorInit En_In_InitVars = {
     ACTOR_EN_IN,
     ACTORCAT_NPC,
     FLAGS,
@@ -1421,7 +1421,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
-                                Actor_MarkForDeath(&this->actor);
+                                Actor_Kill(&this->actor);
                             } else {
                                 EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                                 this->actionFunc = func_808F5A94;
@@ -1429,14 +1429,14 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                         }
                     } else {
                         if (gSaveContext.save.weekEventReg[52] & 1) {
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                         } else {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_7);
                             this->actionFunc = func_808F5B58;
                         }
                     }
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
         } else {

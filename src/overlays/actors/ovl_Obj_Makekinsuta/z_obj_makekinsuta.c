@@ -18,7 +18,7 @@ s32 func_8099FA40(ObjMakekinsuta* this, PlayState* play);
 void func_8099FB64(Actor* thisx, PlayState* play);
 void func_8099FD7C(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Makekinsuta_InitVars = {
+ActorInit Obj_Makekinsuta_InitVars = {
     ACTOR_OBJ_MAKEKINSUTA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -54,7 +54,7 @@ void ObjMakekinsuta_Init(Actor* thisx, PlayState* play) {
         this->unk144 = -1;
     }
     if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -37,7 +37,7 @@ void func_80A84338(Actor* thisx, PlayState* play);
 
 static Vec3f D_80A849D0[0x40];
 
-const ActorInit Obj_Mine_InitVars = {
+ActorInit Obj_Mine_InitVars = {
     ACTOR_OBJ_MINE,
     ACTORCAT_PROP,
     FLAGS,

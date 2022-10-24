@@ -23,7 +23,7 @@ void func_809A562C(ObjArmos* this, PlayState* play);
 void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, PlayState* play);
 
-const ActorInit Obj_Armos_InitVars = {
+ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,
     FLAGS,
@@ -252,7 +252,7 @@ void func_809A54E0(ObjArmos* this, PlayState* play) {
             func_809A518C(this, sp20);
             func_809A5610(this);
         } else {
-            GET_PLAYER(play)->stateFlags2 &= ~0x10;
+            GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     }
@@ -289,7 +289,7 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
             sp20 = true;
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (!sp20) {
@@ -309,7 +309,7 @@ void func_809A57D8(ObjArmos* this) {
 
 void func_809A57F4(ObjArmos* this, PlayState* play) {
     if (fabsf(this->dyna.pushForce) > 0.1f) {
-        GET_PLAYER(play)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }

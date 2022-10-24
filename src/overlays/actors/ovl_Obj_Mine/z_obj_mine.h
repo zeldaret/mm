@@ -86,6 +86,4 @@ typedef struct ObjMine {
     union { ObjMineTestStruct2 chain2; ObjMineUnkStruct chain1;};
 } ObjMine; // size = 0x13B4
 
-extern const ActorInit Obj_Mine_InitVars;
-
 #endif // Z_OBJ_MINE_H

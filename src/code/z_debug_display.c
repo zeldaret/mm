@@ -11,6 +11,7 @@ typedef void (*DebugDispObject_DrawFunc)(DebugDispObject*, void*, PlayState*);
 
 void DebugDisplay_DrawSpriteI8(DebugDispObject*, void*, PlayState*);
 void DebugDisplay_DrawPolygon(DebugDispObject*, void*, PlayState*);
+Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path);
 
 DebugDispObject* DebugDisplay_Init(void) {
     sDebugObjectListHead = NULL;
@@ -102,24 +103,107 @@ void DebugDisplay_DrawPolygon(DebugDispObject* dispObj, void* arg1, PlayState* p
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 D_801BB068[] = {
-    0x00140000, 0x0000FFEC, 0x00000000, 0x00000014, 0x00000000, 0xFFEC0000, 0x00000000, 0x00140000, 0x0000FFEC,
-};
+/**
+ * Visualise a path, see DebugDisplay_PathDisplayList for details.
+ */
 
-s32 D_801BB08C = 0;
-
-Gfx* func_800E99B0(GraphicsContext* gfxCtx, s32 arg1);
-
-void func_800E992C(PlayState* play, s32 arg1) {
+void DebugDisplay_DrawPath(PlayState* play, Path* path) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C560(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, func_800E99B0(play->state.gfxCtx, arg1));
+    gSPDisplayList(POLY_XLU_DISP++, DebugDisplay_PathDisplayList(play->state.gfxCtx, path));
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_debug_display/func_800E99B0.s")
+#define R_DRAW_PATH_SEGMENT 0  // bREG(82)
+#define R_DRAW_PATH_SCALE 1.0f // (1.0f + 0.1f * bREG(83))
+#define R_DRAW_PATH_RED 0      // bREG(84)
+#define R_DRAW_PATH_GREEN 0    // bREG(85)
+#define R_DRAW_PATH_BLUE 0     // bREG(86)
+#define R_DRAW_PATH_ALPHA 0    // bREG(87)
+
+/**
+ * Offsets of the points of the triaxial shape used for visualising paths
+ */
+Vec3s sDebugPathVtxOffsets[][2] = {
+    { { 20, 0, 0 }, { -20, 0, 0 } },
+    { { 0, 20, 0 }, { 0, -20, 0 } },
+    { { 0, 0, 20 }, { 0, 0, -20 } },
+};
+
+/**
+ * Constructs a displaylist to show a Path, by extruding the three-axis shape defined by `sPathDebugVtx` along it.
+ */
+Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
+    Gfx* gfxHead;
+    Gfx* gfx;
+    Vtx* curVtx;
+    Vtx* curBaseVtx;  // First Vtx for the current point
+    Vtx* prevBaseVtx; // First Vtx for the previous point
+    Vec3s* curPoint;
+    s32 segment; // of path ending at the current point, 1-indexed
+
+    if (path != NULL) {
+        // count - 1 segments, 1 gSPVertex and 3 gSP2Triangles for each, plus a gSPEndDisplayList
+        gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(((path->count - 1) * 4 + 1) * sizeof(Gfx)));
+        curVtx = GRAPH_ALLOC(gfxCtx, ALIGN16(path->count * 6 * sizeof(Vtx)));
+
+        gfxHead = gfx;
+        curBaseVtx = curVtx;
+        curPoint = Lib_SegmentedToVirtual(path->points);
+
+        for (segment = 0; segment < path->count; segment++, curPoint++) {
+            s32 i;
+            s32 j;
+
+            prevBaseVtx = curBaseVtx;
+            curBaseVtx = curVtx;
+
+            // Add a vertex for each point in the triaxial shape
+            for (i = 0; i < ARRAY_COUNT(sDebugPathVtxOffsets); i++) {
+                for (j = 0; j < ARRAY_COUNT(sDebugPathVtxOffsets[0]); j++) {
+                    curVtx->v.ob[0] = curPoint->x + (s32)(sDebugPathVtxOffsets[i][j].x * R_DRAW_PATH_SCALE);
+                    curVtx->v.ob[1] = curPoint->y + (s32)(sDebugPathVtxOffsets[i][j].y * R_DRAW_PATH_SCALE);
+                    curVtx->v.ob[2] = curPoint->z + (s32)(sDebugPathVtxOffsets[i][j].z * R_DRAW_PATH_SCALE);
+                    curVtx->v.flag = 0;
+                    curVtx->v.tc[0] = 0;
+                    curVtx->v.tc[1] = 0;
+                    curVtx->v.cn[0] = 128 + R_DRAW_PATH_RED;
+                    curVtx->v.cn[1] = 128 + R_DRAW_PATH_GREEN;
+                    curVtx->v.cn[2] = 128 + R_DRAW_PATH_BLUE;
+                    curVtx->v.cn[3] = 128 + R_DRAW_PATH_ALPHA;
+                    curVtx++;
+                }
+            }
+
+            // Draw the path segment ending at point `R_DRAW_PATH_SEGMENT`, or the whole path if `R_DRAW_PATH_SEGMENT`
+            // is 0
+            if (R_DRAW_PATH_SEGMENT == 0) {
+                if (segment > 0) {
+                    gSPVertex(gfx++, prevBaseVtx, 12, 0);
+                    gSP2Triangles(gfx++, 0, 7, 1, 0, 0, 6, 7, 0);
+                    gSP2Triangles(gfx++, 2, 3, 8, 0, 3, 9, 8, 0);
+                    gSP2Triangles(gfx++, 4, 11, 10, 0, 4, 5, 11, 0);
+                }
+            } else {
+                if ((segment > 0) && (segment == R_DRAW_PATH_SEGMENT)) {
+                    gSPVertex(gfx++, prevBaseVtx, 12, 0);
+                    gSP2Triangles(gfx++, 0, 7, 1, 0, 0, 6, 7, 0);
+                    gSP2Triangles(gfx++, 2, 3, 8, 0, 3, 9, 8, 0);
+                    gSP2Triangles(gfx++, 4, 11, 10, 0, 4, 5, 11, 0);
+                }
+            }
+        }
+
+        gSPEndDisplayList(gfx++);
+    } else {
+        // No path, trivial displaylist
+        gfxHead = gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(sizeof(Gfx)));
+        gSPEndDisplayList(gfx++);
+    }
+    return gfxHead;
+}
