@@ -129,6 +129,7 @@ extern GraphicsContext* __gfxCtx;
 #define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
 
 #define SQ(x) ((x) * (x))
+#define CUBE(x) ((x) * (x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
 #define DECR(x) ((x) == 0 ? 0 : --(x))
@@ -136,6 +137,9 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
+
+#define RAND_BITS(n) ((s32)Rand_Next() >> (0x20 - n))
+#define RANDU_BITS(n) (Rand_Next() >> (0x20 - n))
 
 #define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
