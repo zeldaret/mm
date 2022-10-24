@@ -56,7 +56,7 @@
 #define R_MOTION_BLUR_ENABLED             SREG(91)
 #define R_MOTION_BLUR_PRIORITY_ALPHA      SREG(92)
 #define R_MOTION_BLUR_PRIORITY_ENABLED    SREG(93)
-#define R_PAUSE_MENU_MODE                 SREG(94)
+#define R_PAUSE_BG_PRERENDER_STATE        SREG(94)
 
 #define R_PLAY_FILL_SCREEN_ON             MREG(64)
 #define R_PLAY_FILL_SCREEN_R              MREG(65)
@@ -126,7 +126,5 @@
 #define R_ITEM_AMMO_Y(i)                  VREG(68 + i)
 #define R_ITEM_ICON_WIDTH(i)              VREG(76 + i)
 #define R_ITEM_BTN_WIDTH(i)               VREG(80 + i)
-
-
 
 #endif

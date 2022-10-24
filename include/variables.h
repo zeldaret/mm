@@ -797,7 +797,7 @@ extern TexturePtr gItemIcons[];
 extern u8 gItemSlots[];
 extern s16 gItemPrices[];
 extern u16 gSceneIdsPerRegion[11][27];
-extern u32 D_801C2410[];
+extern u8 gPlayerFormItemRestrictions[PLAYER_FORM_MAX][114];
 extern s16 gPlayerFormObjectIndices[8];
 extern RomFile gObjectTable[643];
 extern SceneTableEntry gSceneTable[];
@@ -826,7 +826,7 @@ extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
 // extern UNK_TYPE2 D_801C6A8C;
 // extern UNK_TYPE2 D_801C6A90;
 // extern UNK_TYPE2 D_801C6A94;
-// extern UNK_TYPE1 D_801C6A98;
+extern u8 D_801C6A98[5][5];
 // extern UNK_TYPE1 D_801C6AB8;
 // extern UNK_TYPE1 D_801C6B28;
 // extern UNK_TYPE1 D_801CED40;
