@@ -451,15 +451,15 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_808AF86C(GraphicsContext* gfxCtx, PlayState* play) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
-    Gfx* gfxHead = gfx;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
-    gSPMatrix(gfxHead++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPEndDisplayList(gfxHead++);
+    gSPMatrix(gfx++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPEndDisplayList(gfx++);
 
-    return gfx;
+    return gfxHead;
 }
 
 void EnBombf_Draw(Actor* thisx, PlayState* play) {

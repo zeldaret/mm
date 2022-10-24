@@ -83,24 +83,24 @@ void DmSa_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx)); //! @bug this does not allocate enough for 3 Gfx commands;
-    Gfx* gfxHead = gfx;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx)); //! @bug this does not allocate enough for 3 Gfx commands;
+    Gfx* gfx = gfxHead;
 
-    gDPSetRenderMode(gfxHead++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
-    gDPSetEnvColor(gfxHead++, 0, 0, 0, alpha);
-    gSPEndDisplayList(gfxHead++);
+    gDPSetRenderMode(gfx++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
+    gDPSetEnvColor(gfx++, 0, 0, 0, alpha);
+    gSPEndDisplayList(gfx++);
 
-    return gfx;
+    return gfxHead;
 }
 
 Gfx* func_80A2EBB0(GraphicsContext* gfxCtx, u32 alpha) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
-    Gfx* gfxHead = gfx;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gDPSetEnvColor(gfxHead++, 0, 0, 0, alpha);
-    gSPEndDisplayList(gfxHead++);
+    gDPSetEnvColor(gfx++, 0, 0, 0, alpha);
+    gSPEndDisplayList(gfx++);
 
-    return gfx;
+    return gfxHead;
 }
 
 void DmSa_Draw(Actor* thisx, PlayState* play) {

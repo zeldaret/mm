@@ -240,8 +240,8 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
 void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-    Gfx* gfxHead = gfx;
+    Gfx* gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
     Hilite* sp70;
     Vec3f sp64;
 
@@ -253,14 +253,14 @@ void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (gfx != NULL) {
+    if (gfxHead != NULL) {
         func_8012C28C(play->state.gfxCtx);
 
-        gDPSetTileSize(gfxHead++, 1, sp70->h.x1 & 0xFFFF, sp70->h.y1 & 0xFFFF, (sp70->h.x1 + 60) & 0xFFFF,
+        gDPSetTileSize(gfx++, 1, sp70->h.x1 & 0xFFFF, sp70->h.y1 & 0xFFFF, (sp70->h.x1 + 60) & 0xFFFF,
                        (sp70->h.y1 + 60) & 0xFFFF);
-        gSPEndDisplayList(gfxHead++);
+        gSPEndDisplayList(gfx++);
 
-        gSPSegment(POLY_OPA_DISP++, 0x07, gfx);
+        gSPSegment(POLY_OPA_DISP++, 0x07, gfxHead);
 
         Matrix_Translate(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.018f, ptr->unk_04 * 0.018f, ptr->unk_04 * 0.018f, MTXMODE_APPLY);

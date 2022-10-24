@@ -202,7 +202,7 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
         gSPEndDisplayList(gfx++);
     } else {
         // No path, trivial displaylist
-        gfxHead = gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+        gfx = gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
         gSPEndDisplayList(gfx++);
     }
     return gfxHead;

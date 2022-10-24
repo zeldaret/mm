@@ -709,8 +709,8 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
     };
     s32 lodFrac;
     s32 i;
-    Gfx* gfxHead;
     Gfx* gfx;
+    Gfx* gfxHead;
 
     if (Flags_GetSwitch(play, 0x33) && Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) &&
         Flags_GetSwitch(play, 0x36)) {
@@ -719,16 +719,16 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
         BgCheck_UnsetContextFlags(&play->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     }
 
-    gfx = GRAPH_ALLOC(play->state.gfxCtx, 18 * sizeof(Gfx));
+    gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 18 * sizeof(Gfx));
 
     AnimatedMat_Draw(play, play->sceneMaterialAnims);
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (gfxHead = gfx, i = 0; i < 9; i++, gfxHead += 2) {
+    for (gfx = gfxHead, i = 0; i < 9; i++, gfx += 2) {
         lodFrac = 0;
 
-        bcopy(greatBayTempleColorSetDL, gfxHead, sizeof(greatBayTempleColorSetDL));
+        bcopy(greatBayTempleColorSetDL, gfx, sizeof(greatBayTempleColorSetDL));
 
         switch (i) {
             case 0:
@@ -779,11 +779,11 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
                 break;
         }
 
-        gDPSetPrimColor(gfxHead, 0, lodFrac, 255, 255, 255, 255);
+        gDPSetPrimColor(gfx, 0, lodFrac, 255, 255, 255, 255);
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, gfx);
-    gSPSegment(POLY_XLU_DISP++, 0x06, gfx);
+    gSPSegment(POLY_OPA_DISP++, 0x06, gfxHead);
+    gSPSegment(POLY_XLU_DISP++, 0x06, gfxHead);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
