@@ -1,7 +1,7 @@
 /*
  * File: z_obj_mine.c
  * Overlay: ovl_Obj_Mine
- * Description: Spike metal Mine
+ * Description: Spike metal mine
  */
 
 #include "z_obj_mine.h"
@@ -141,10 +141,10 @@ void func_80A81384(ObjMine* this, PlayState* play) {
     f32 y = this->collider.elements[0].dim.worldSphere.center.y - 15.0f;
     f32 z = this->collider.elements[0].dim.worldSphere.center.z;
 
-    EnBom* bom = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, x, y, z, 0, 0, 0, 0);
+    EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, x, y, z, 0, 0, 0, 0);
 
-    if (bom != NULL) {
-        bom->timer = 0;
+    if (bomb != NULL) {
+        bomb->timer = 0;
     }
 }
 
@@ -153,10 +153,10 @@ s32 func_80A8140C(ObjMine* this) {
         return true;
     }
 
-    if ((this->collider.base.ocFlags1 & OC2_UNK1)) {
-        Actor* mine = this->collider.base.oc;
+    if ((this->collider.base.ocFlags1 & OC1_HIT)) {
+        Actor* hitActor = this->collider.base.oc;
 
-        if ((mine->id == ACTOR_OBJ_MINE) && (mine->room == this->actor.room)) {
+        if ((hitActor->id == ACTOR_OBJ_MINE) && (hitActor->room == this->actor.room)) {
             return true;
         }
     }
@@ -189,8 +189,8 @@ void func_80A8146C(ObjMine* this, s16* arg1, s16* arg2) {
 
 void func_80A81544(ObjMine* this, Vec3f* arg1) {
     Actor* ac = this->collider.base.ac;
-    Vec3f sp20;
 
+    // dmgFlag check is (DMG_DEKU_BUBBLE | DMG_FIRE_ARROW | DMG_ICE_ARROW | DMG_FIRE_ARROW | DMG_NORMAL_ARROW)
     if ((this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0x13820)) {
         Matrix_Push();
         Matrix_RotateYS(ac->shape.rot.y, MTXMODE_NEW);
@@ -198,6 +198,7 @@ void func_80A81544(ObjMine* this, Vec3f* arg1) {
         Matrix_MultVecZ(1.0f, arg1);
         Matrix_Pop();
     } else {
+            Vec3f sp20;
         Sphere16* sphere = &this->collider.elements[0].dim.worldSphere;
 
         sp20.x = sphere->center.x - ac->world.pos.x;
@@ -259,7 +260,7 @@ s32 func_80A81714(Vec3f* arg0, Vec3f* arg1, f32 arg2) {
     Math_Vec3f_Copy(&sp30, arg0);
     Math3D_CrossProduct(arg0, arg1, &sp3C);
     if (func_80A8120C(&sp3C, &sp24)) {
-        Matrix_RotateAxisS(arg2 * 10430.378f, &sp24, MTXMODE_NEW);
+        Matrix_RotateAxisS(RADF_TO_BINANG(arg2), &sp24, MTXMODE_NEW);
         Matrix_MultVec3f(&sp30, arg0);
     } else {
         Matrix_RotateXFNew(arg2);
@@ -330,7 +331,7 @@ void func_80A81A00(ObjMine* this) {
 }
 
 void func_80A81AA4(ObjMine* this) {
-    s32 params = this->actor.params & 0x3F;
+    s32 params = OBJMINE_GET_PARAM_003F(&this->actor);
     f32 temp_f0 = -((params * 12.0f) + 10.0f);
 
     this->actor.world.pos.x = (this->chain1.unk_00.y.x * temp_f0) + this->actor.home.pos.x;
@@ -339,7 +340,7 @@ void func_80A81AA4(ObjMine* this) {
 }
 
 void func_80A81B14(ObjMine* this) {
-    s32 params = this->actor.params & 0x3F;
+    s32 params = OBJMINE_GET_PARAM_003F(&this->actor);
     f32 temp_f0 = 1.0f / ((params * 12.0f) + 10.0f);
     f32 x = this->actor.world.pos.x - this->actor.home.pos.x;
     f32 z = this->actor.world.pos.z - this->actor.home.pos.z;
@@ -407,11 +408,11 @@ void func_80A81D70(ObjMine* this, s32 arg1) {
 void func_80A81DEC(ObjMine* this) {
     ObjMineTestStruct2* ptr = &this->chain2;
     s32 pad;
-    s32 temp_v0 = this->actor.params & 0x3F;
+    s32 temp_v0 = OBJMINE_GET_PARAM_003F(&this->actor);
     
 
     if (temp_v0 == 0) {
-        this->actor.world.pos.y = (this->actor.home.pos.y + 12.0f) + 10.0f;
+        this->actor.world.pos.y = this->actor.home.pos.y + 12.0f + 10.0f;
     } else {
         ObjMineUnkStruct2* ptr2 = &ptr->unk_44[temp_v0 - 1];
         Vec3f sp1C;
@@ -457,11 +458,12 @@ void func_80A81E7C(ObjMine* this, PlayState* play) {
 }
 
 #ifdef NON_MATCHING
+// Probably equivalent, but nightmare loop unrolls. 
 void func_80A81FFC(ObjMine *this) {
     s32 i;
     ObjMineTestStruct2 *temp_s1 = &this->chain2;
     ObjMineUnkStruct2 *var_s0;
-    s32 temp_s6 = this->actor.params & 0x3F;
+    s32 temp_s6 = OBJMINE_GET_PARAM_003F(&this->actor);
     s16 var_s3 = 0;
     f32 temp_fs2 = 1.0f / (f32) temp_s6;
     Vec3f sp90;
@@ -540,7 +542,7 @@ void func_80A828A8(ObjMine* this) {
     Vec3f spE0;
     Vec3f spD4;
     Vec3f spC8;
-    s32 spC4 = this->actor.params & 0x3F;
+    s32 spC4 = OBJMINE_GET_PARAM_003F(&this->actor);
     ObjMineTestStruct2* sp70 = &this->chain2;
     ObjMineUnkStruct2* temp_s0;
     Vec3f* phi_s3;
@@ -621,10 +623,10 @@ void func_80A82C28(ObjMine* this, PlayState* play) {
 void ObjMine_Init(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
     s32 pad;
-    s32 sp44 = this->actor.params & 0xFF;
+    s32 sp44 = OBJMINE_GET_PARAM_00FF(&this->actor);
     Path* path;
     s32 sp3C;
-    s32 sp38 = (this->actor.params >> 0xC) & 3;
+    s32 sp38 = OBJMINE_GET_PARAM_3000(&this->actor);
     s32 sp34;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -636,7 +638,7 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
     if (sp38 == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 45.0f);
         this->actor.shape.shadowAlpha = 140;
-        this->unk_1A8 = D_80A845A4[(this->actor.params >> 8) & 7];
+        this->unk_1A8 = D_80A845A4[OBJMINE_GET_PARAM_0700(&this->actor)];
         if (sp44 == 0xFF) {
             func_80A82F84(this);
         } else {
@@ -654,7 +656,7 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
         this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp3C,
                                                               &this->actor, &this->actor.world.pos);
     } else {
-        sp34 = this->actor.params & 0x3F;
+        sp34 = OBJMINE_GET_PARAM_003F(&this->actor);
         this->actor.update = func_80A83E7C;
         this->actor.uncullZoneScale = (sp34 * 21.0f) + 150.0f;
         this->actor.uncullZoneDownward = (sp34 * 21.0f) + 150.0f;
@@ -779,7 +781,7 @@ void func_80A832BC(ObjMine* this) {
 
 void func_80A832D0(ObjMine* this, PlayState* play) {
     s32 pad;
-    s32 spA0 = this->actor.params & 0x3F;
+    s32 spA0 = OBJMINE_GET_PARAM_003F(&this->actor);
     ObjMineUnkStruct* unkStruct = &this->chain1;
     ObjMineUnkStruct3* temp;
     s32 i;
@@ -1040,7 +1042,7 @@ void func_80A83FBC(Actor* thisx, PlayState* play) {
 void func_80A84088(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjMine* this = THIS;
-    s32 temp_s5 = this->actor.params & 0x3F;
+    s32 temp_s5 = OBJMINE_GET_PARAM_003F(&this->actor);
     ObjMineUnkStruct3* temp;
     ObjMineUnkStruct* ptr = &this->chain1;
     s32 i;
@@ -1096,7 +1098,7 @@ void func_80A84088(Actor* thisx, PlayState* play) {
 void func_80A84338(Actor* thisx, PlayState* play) {
     s32 pad1;
     ObjMine* this = THIS;
-    s32 temp_s7 = this->actor.params & 0x3F;
+    s32 temp_s7 = OBJMINE_GET_PARAM_003F(&this->actor);
     ObjMineTestStruct2* pad2 = &this->chain2;
     s32 i;
     Gfx* gfx;

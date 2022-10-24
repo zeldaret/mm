@@ -7,6 +7,11 @@ struct ObjMine;
 
 typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 
+#define OBJMINE_GET_PARAM_003F(thisx) ((thisx)->params & 0x3F)
+#define OBJMINE_GET_PARAM_00FF(thisx) ((thisx)->params & 0xFF)
+#define OBJMINE_GET_PARAM_0700(thisx) ((thisx)->params >> 8 & 7)
+#define OBJMINE_GET_PARAM_3000(thisx) ((thisx)->params >> 0xC & 3)
+
 typedef struct {
     Vec3f x;
     Vec3f y;
@@ -36,7 +41,7 @@ typedef struct {
     /* 0x54 */ s16 unk_54;
     /* 0x58 */ f32 unk_58;
     /* 0x5C */ f32 unk_5C;
-    /* 0x60 */ ObjMineUnkStruct3 unk_60[1];
+    /* 0x60 */ ObjMineUnkStruct3* unk_60;
 } ObjMineUnkStruct; // size = ?? 0x44??? 48 array???
 
 // probably fake
