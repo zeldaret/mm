@@ -887,8 +887,8 @@ void Play_UpdateTransition(PlayState* this) {
     }
 }
 
-// Stack issues
 #ifdef NON_MATCHING
+// Stack issues
 void Play_UpdateGame(PlayState* this) {
     Input* input = this->state.input;
     u8 freezeFlashTimer;
@@ -996,7 +996,7 @@ void Play_UpdateGame(PlayState* this) {
     }
 
     if (!sp5C || gDbgCamEnabled) {
-        s32 sp54; // camId
+        s32 sp54;   // camId
         Vec3s sp48; // InputDir
 
         this->nextCamera = this->activeCamId;
@@ -1097,6 +1097,7 @@ void Play_PostWorldDraw(PlayState* this) {
 }
 
 #ifdef NON_MATCHING
+// Stack issues and 1 small issue around Play_PostWorldDraw
 void Play_DrawGame(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     Lights* sp268;
