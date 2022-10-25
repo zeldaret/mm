@@ -751,9 +751,9 @@ void func_809DAB78(Boss02* this, PlayState* play) {
         this->unk_01BC[this->unk_014E].y = this->actor.world.pos.y;
         this->unk_01BC[this->unk_014E].z = this->actor.world.pos.z;
 
-        this->unk_0B1C[this->unk_014E].x = BINANG_TO_RAD(this->actor.world.rot.x);
-        this->unk_0B1C[this->unk_014E].y = BINANG_TO_RAD(this->actor.world.rot.y);
-        this->unk_0B1C[this->unk_014E].z = BINANG_TO_RAD(this->actor.world.rot.z);
+        this->unk_0B1C[this->unk_014E].x = BINANG_TO_RAD_ALT(this->actor.world.rot.x);
+        this->unk_0B1C[this->unk_014E].y = BINANG_TO_RAD_ALT(this->actor.world.rot.y);
+        this->unk_0B1C[this->unk_014E].z = BINANG_TO_RAD_ALT(this->actor.world.rot.z);
     }
 
     if ((this->unk_0144 < 10) && (otherTwinmold->unk_0144 >= 20)) {

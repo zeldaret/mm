@@ -890,10 +890,9 @@ void Play_UpdateTransition(PlayState* this) {
 // Stack issues
 #ifdef NON_MATCHING
 void Play_UpdateGame(PlayState* this) {
-    PlayState* this2 = this;
-    u8 sp60;
-    s32 sp5C = 0;
-    Input* sp58 = this->state.input;
+    Input* input = this->state.input;
+    u8 freezeFlashTimer;
+    s32 sp5C = false;
 
     gSegments[4] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.mainKeepIndex].segment);
     gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
@@ -907,7 +906,7 @@ void Play_UpdateGame(PlayState* this) {
     }
     Actor_SetMovementScale(this->state.framerateDivisor);
 
-    if (FrameAdvance_Update(&this->frameAdvCtx, &sp58[1])) {
+    if (FrameAdvance_Update(&this->frameAdvCtx, &input[1])) {
         if ((this->transitionMode == TRANS_MODE_OFF) && (this->transitionTrigger != TRANS_TRIGGER_OFF)) {
             this->transitionMode = TRANS_MODE_SETUP;
         }
@@ -923,6 +922,7 @@ void Play_UpdateGame(PlayState* this) {
                         Game_SetFramerateDivisor(&this->state, 1);
                     }
                     break;
+
                 case 3:
                     func_801647AC(&sTrnsnUnk);
                     break;
@@ -944,12 +944,12 @@ void Play_UpdateGame(PlayState* this) {
             AnimationContext_Reset(&this->animationCtx);
             Object_UpdateBank(&this->objectCtx);
 
-            if ((sp5C == 0) && (IREG(72) == 0)) {
+            if (!sp5C && (IREG(72) == 0)) {
                 this->gameplayFrames++;
                 Rumble_SetUpdateEnabled(true);
                 if ((this->actorCtx.freezeFlashTimer != 0) && (this->actorCtx.freezeFlashTimer-- < 5)) {
-                    sp60 = this->actorCtx.freezeFlashTimer;
-                    if ((sp60 > 0) && ((sp60 % 2) != 0)) {
+                    freezeFlashTimer = this->actorCtx.freezeFlashTimer;
+                    if ((freezeFlashTimer > 0) && ((freezeFlashTimer % 2) != 0)) {
                         this->envCtx.fillScreen = true;
                         this->envCtx.screenFillColor[0] = this->envCtx.screenFillColor[1] =
                             this->envCtx.screenFillColor[2] = 150;
@@ -976,8 +976,8 @@ void Play_UpdateGame(PlayState* this) {
                 Rumble_SetUpdateEnabled(false);
             }
 
-            Room_nop8012D510(this, &this->roomCtx.curRoom, &sp58[1], 0);
-            Room_nop8012D510(this, &this->roomCtx.prevRoom, &sp58[1], 1);
+            Room_nop8012D510(this, &this->roomCtx.curRoom, &input[1], 0);
+            Room_nop8012D510(this, &this->roomCtx.prevRoom, &input[1], 1);
             SkyboxDraw_Update(&this->skyboxCtx);
 
             if ((this->pauseCtx.state != 0) || (this->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
@@ -997,7 +997,6 @@ void Play_UpdateGame(PlayState* this) {
 
     if (!sp5C || gDbgCamEnabled) {
         s32 sp54; // camId
-        s32 sp50;
         Vec3s sp48; // InputDir
 
         this->nextCamera = this->activeCamId;
@@ -1103,22 +1102,21 @@ void Play_DrawGame(PlayState* this) {
     Lights* sp268;
     Vec3f sp25C;
     u8 sp25B = false;
-    f32 var_fv0; // fogFar
 
-    if (R_PAUSE_BG_PRERENDER_STATE >= PAUSE_BG_PRERENDER_MAX) {
+    if (R_PAUSE_BG_PRERENDER_STATE >= PAUSE_BG_PRERENDER_UNK4) {
         PreRender_ApplyFiltersSlowlyDestroy(&this->pauseBgPreRender);
         R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
     }
 
     if ((R_PAUSE_BG_PRERENDER_STATE <= PAUSE_BG_PRERENDER_SETUP) && (gTrnsnUnkState < 2)) {
         if (this->skyboxCtx.skyboxShouldDraw || (this->roomCtx.curRoom.mesh->type0.type == 1)) {
-            func_8012CF0C(gfxCtx, 0, 1, 0, 0, 0);
+            func_8012CF0C(gfxCtx, false, true, 0, 0, 0);
         } else {
-            func_8012CF0C(gfxCtx, 1, 1, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g,
+            func_8012CF0C(gfxCtx, true, true, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g,
                           this->lightCtx.fogColor.b);
         }
     } else {
-        func_8012CF0C(gfxCtx, 0, 0, 0, 0, 0);
+        func_8012CF0C(gfxCtx, false, false, 0, 0, 0);
     }
 
     OPEN_DISPS(gfxCtx);
@@ -1139,241 +1137,260 @@ void Play_DrawGame(PlayState* this) {
     gSPSegment(POLY_XLU_DISP++, 0x02, this->sceneSegment);
     gSPSegment(OVERLAY_DISP++, 0x02, this->sceneSegment);
 
-    ShrinkWindow_Draw(gfxCtx);
+    if (1) {
+        f32 var_fv0; // fogFar
 
-    POLY_OPA_DISP = Play_SetFog(this, POLY_OPA_DISP);
-    POLY_XLU_DISP = Play_SetFog(this, POLY_XLU_DISP);
+        ShrinkWindow_Draw(gfxCtx);
 
-    // fogFar
-    var_fv0 = this->lightCtx.fogFar;
-    if (var_fv0 > 12800.0f) {
-        var_fv0 = 12800.0f;
-    }
+        POLY_OPA_DISP = Play_SetFog(this, POLY_OPA_DISP);
+        POLY_XLU_DISP = Play_SetFog(this, POLY_XLU_DISP);
 
-    View_SetPerspective(&this->view, this->view.fovy, this->view.zNear, var_fv0);
-
-    View_Apply(&this->view, 0xF);
-
-    // The billboard matrix temporarily stores the viewing matrix
-    Matrix_MtxToMtxF(&this->view.viewing, &this->billboardMtxF);
-    Matrix_MtxToMtxF(&this->view.projection, &this->viewProjectionMtxF);
-
-    this->projectionMtxFDiagonal.x = this->viewProjectionMtxF.xx;
-    this->projectionMtxFDiagonal.y = this->viewProjectionMtxF.yy;
-    this->projectionMtxFDiagonal.z = -this->viewProjectionMtxF.zz;
-
-    SkinMatrix_MtxFMtxFMult(&this->viewProjectionMtxF, &this->billboardMtxF, &this->viewProjectionMtxF);
-
-    this->billboardMtxF.mf[3][2] = this->billboardMtxF.mf[3][1] = this->billboardMtxF.mf[3][0] =
-        this->billboardMtxF.mf[2][3] = this->billboardMtxF.mf[1][3] = this->billboardMtxF.mf[0][3] = 0.0f;
-
-    Matrix_Transpose(&this->billboardMtxF);
-
-    this->billboardMtx = GRAPH_ALLOC(this->state.gfxCtx, 0x80);
-
-    Matrix_MtxFToMtx(&this->billboardMtxF, this->billboardMtx);
-    Matrix_RotateYF(BINANG_TO_RAD((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(this)) + 0x8000)), MTXMODE_NEW);
-    Matrix_ToMtx(this->billboardMtx + 1);
-
-    gSPSegment(POLY_OPA_DISP++, 0x01, this->billboardMtx);
-    gSPSegment(POLY_XLU_DISP++, 0x01, this->billboardMtx);
-    gSPSegment(OVERLAY_DISP++, 0x01, this->billboardMtx);
-
-    {
-        Gfx* sp218;
-        Gfx* sp214 = POLY_OPA_DISP;
-
-        sp218 = Graph_GfxPlusOne(sp214);
-        gSPDisplayList(OVERLAY_DISP++, sp218);
-
-        if (((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) || (this->transitionMode == TRANS_TYPE_INSTANT)) ||
-            D_801D0D54) {
-            View spA8;
-
-            View_Init(&spA8, gfxCtx);
-            spA8.flags = 0xA;
-
-            SET_FULLSCREEN_VIEWPORT(&spA8);
-
-            View_ApplyTo(&spA8, &sp218);
-            this->transitionCtx.draw(&this->transitionCtx.instanceData, &sp218);
+        // fogFar
+        var_fv0 = this->lightCtx.fogFar;
+        if (var_fv0 > 12800.0f) {
+            var_fv0 = 12800.0f;
         }
 
-        TransitionFade_Draw(&this->unk_18E48, &sp218);
+        View_SetPerspective(&this->view, this->view.fovy, this->view.zNear, var_fv0);
 
-        if (gVisMonoColor.a != 0) {
-            sVisMono.primColor.rgba = gVisMonoColor.rgba;
-            VisMono_Draw(&sVisMono, &sp218);
-        }
+        View_Apply(&this->view, 0xF);
 
-        gSPEndDisplayList(sp218++);
-        Graph_BranchDlist(sp214, sp218);
-        POLY_OPA_DISP = sp218;
-    }
+        // The billboard matrix temporarily stores the viewing matrix
+        Matrix_MtxToMtxF(&this->view.viewing, &this->billboardMtxF);
+        Matrix_MtxToMtxF(&this->view.projection, &this->viewProjectionMtxF);
 
-    if (gTrnsnUnkState == 3) {
-        Gfx* sp90 = POLY_OPA_DISP;
+        this->projectionMtxFDiagonal.x = this->viewProjectionMtxF.xx;
+        this->projectionMtxFDiagonal.y = this->viewProjectionMtxF.yy;
+        this->projectionMtxFDiagonal.z = -this->viewProjectionMtxF.zz;
 
-        TransitionUnk_Draw(&sTrnsnUnk, &sp90);
-        POLY_OPA_DISP = sp90;
-        sp25B = true;
-        goto Play_Draw_PostWorldDraw;
-    }
+        SkinMatrix_MtxFMtxFMult(&this->viewProjectionMtxF, &this->billboardMtxF, &this->viewProjectionMtxF);
 
-    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+        this->billboardMtxF.mf[3][2] = this->billboardMtxF.mf[3][1] = this->billboardMtxF.mf[3][0] =
+            this->billboardMtxF.mf[2][3] = this->billboardMtxF.mf[1][3] = this->billboardMtxF.mf[0][3] = 0.0f;
 
-    if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
-        MsgEvent_SendNullTask();
-        if (!gSaveContext.screenScaleFlag) {
-            PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
-        }
-        R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_DONE;
-        SREG(33) |= 1;
-    } else {
-        if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) {
-            Gfx* sp8C = POLY_OPA_DISP;
+        Matrix_Transpose(&this->billboardMtxF);
 
-            if (this->pauseBgPreRender.unk_4D == 2) {
-                func_80170B28(&this->pauseBgPreRender, &sp8C);
-            } else {
-                func_80170798(&this->pauseBgPreRender, &sp8C);
+        this->billboardMtx = GRAPH_ALLOC(this->state.gfxCtx, 2 * sizeof(Mtx));
+
+        Matrix_MtxFToMtx(&this->billboardMtxF, this->billboardMtx);
+        Matrix_RotateYF(BINANG_TO_RAD((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(this)) + 0x8000)), MTXMODE_NEW);
+        Matrix_ToMtx(this->billboardMtx + 1);
+
+        gSPSegment(POLY_OPA_DISP++, 0x01, this->billboardMtx);
+        gSPSegment(POLY_XLU_DISP++, 0x01, this->billboardMtx);
+        gSPSegment(OVERLAY_DISP++, 0x01, this->billboardMtx);
+
+        if (1) {
+            Gfx* sp218;
+            Gfx* sp214 = POLY_OPA_DISP;
+
+            sp218 = Graph_GfxPlusOne(sp214);
+            gSPDisplayList(OVERLAY_DISP++, sp218);
+
+            if (((this->transitionMode == TRANS_MODE_INSTANCE_RUNNING) ||
+                 (this->transitionMode == TRANS_TYPE_INSTANT)) ||
+                D_801D0D54) {
+                View spA8;
+
+                View_Init(&spA8, gfxCtx);
+                spA8.flags = 0xA;
+
+                SET_FULLSCREEN_VIEWPORT(&spA8);
+
+                View_ApplyTo(&spA8, &sp218);
+                this->transitionCtx.draw(&this->transitionCtx.instanceData, &sp218);
             }
 
-            gSPDisplayList(sp8C++, D_0E000000.syncSegments);
-            POLY_OPA_DISP = sp8C;
-            sp25B = true;
-            goto Play_Draw_PostWorldDraw;
+            TransitionFade_Draw(&this->unk_18E48, &sp218);
+
+            if (gVisMonoColor.a != 0) {
+                sVisMono.primColor.rgba = gVisMonoColor.rgba;
+                VisMono_Draw(&sVisMono, &sp218);
+            }
+
+            gSPEndDisplayList(sp218++);
+            Graph_BranchDlist(sp214, sp218);
+            POLY_OPA_DISP = sp218;
         }
 
-        if (!this->unk_18844) {
-            if (this->skyboxId && !this->envCtx.skyboxDisabled) {
-                if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
-                    Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
-                                    this->view.eye.y, this->view.eye.z);
-                } else if (!this->skyboxCtx.skyboxShouldDraw) {
-                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
-                                    this->view.eye.z);
+        if (gTrnsnUnkState == 3) {
+            Gfx* sp90 = POLY_OPA_DISP;
+
+            TransitionUnk_Draw(&sTrnsnUnk, &sp90);
+            POLY_OPA_DISP = sp90;
+            sp25B = true;
+            goto PostWorldDraw;
+        }
+
+        PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+
+        if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
+            MsgEvent_SendNullTask();
+            if (!gSaveContext.screenScaleFlag) {
+                PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
+            }
+            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_DONE;
+            SREG(33) |= 1;
+        } else {
+            if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) {
+                Gfx* sp8C = POLY_OPA_DISP;
+
+                if (this->pauseBgPreRender.unk_4D == 2) {
+                    func_80170B28(&this->pauseBgPreRender, &sp8C);
+                } else {
+                    func_80170798(&this->pauseBgPreRender, &sp8C);
+                }
+
+                gSPDisplayList(sp8C++, D_0E000000.syncSegments);
+                POLY_OPA_DISP = sp8C;
+                sp25B = true;
+                goto PostWorldDraw;
+            }
+
+            if (this->unk_18844 == 0) {
+                if (1) {
+                    if (this->skyboxId && !this->envCtx.skyboxDisabled) {
+                        if ((this->skyboxId == 1) || (this->skyboxId == 3)) {
+                            Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
+                            SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13,
+                                            this->view.eye.x, this->view.eye.y, this->view.eye.z);
+                        } else if (!this->skyboxCtx.skyboxShouldDraw) {
+                            SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x,
+                                            this->view.eye.y, this->view.eye.z);
+                        }
+                    }
+
+                    func_800FE390(this);
+                }
+
+                sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
+
+                if (this->roomCtx.curRoom.enablePosLights || (MREG(93) != 0)) {
+                    sp268->enablePosLights = true;
+                }
+
+                Lights_BindAll(sp268, this->lightCtx.listHead, NULL, this);
+                Lights_Draw(sp268, gfxCtx);
+
+                if (1) {
+                    u32 roomDrawFlags = ((1) ? 1 : 0) | (((void)0, 1) ? 2 : 0); // FAKE:
+
+                    Scene_Draw(this);
+                    if (this->roomCtx.unk78) {
+                        Room_Draw(this, &this->roomCtx.curRoom, roomDrawFlags & 3);
+                        Room_Draw(this, &this->roomCtx.prevRoom, roomDrawFlags & 3);
+                    }
+                }
+
+                if (this->skyboxCtx.skyboxShouldDraw) {
+                    Vec3f sp78;
+
+                    if (1) {}
+                    Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                    SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                                    this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                }
+
+                // envCtx.precipitation[PRECIP_RAIN_CUR]
+                if (this->envCtx.unk_F2[1] != 0) {
+                    Environment_DrawRain(this, &this->view, gfxCtx);
                 }
             }
 
-            func_800FE390(this);
-            sp268 = LightContext_NewLights(&this->lightCtx, gfxCtx);
-
-            if (this->roomCtx.curRoom.enablePosLights || (MREG(93) != 0)) {
-                sp268->enablePosLights = true;
+            if (1) {
+                Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, 1);
             }
 
-            Lights_BindAll(sp268, this->lightCtx.listHead, NULL, this);
-            Lights_Draw(sp268, gfxCtx);
-
-            Scene_Draw(this);
-
-            if (this->roomCtx.unk78) {
-                //! FAKE: Regalloc around here. s64 solves the regalloc,
-                //        but much too large on the stack. Need:
-                //        `if (stuff that evaluates to 0 but not trivially)`
-                s64 roomDrawFlags = 3;
-
-                Room_Draw(this, &this->roomCtx.curRoom, roomDrawFlags);
-                Room_Draw(this, &this->roomCtx.prevRoom, roomDrawFlags);
+            if (1) {
+                Actor_DrawAll(this, &this->actorCtx);
             }
 
-            if (this->skyboxCtx.skyboxShouldDraw) {
-                Vec3f sp78;
+            if (1) {
+                if (!this->envCtx.sunMoonDisabled) {
+                    sp25C.x = this->view.eye.x + this->envCtx.unk_4;
+                    sp25C.y = this->view.eye.y + this->envCtx.unk_8;
+                    sp25C.z = this->view.eye.z + this->envCtx.unk_C;
+                    Environment_DrawSunLensFlare(this, &this->envCtx, &this->view, gfxCtx, sp25C);
+                }
 
-                if (1) {}
-                Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
-                SkyboxDraw_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
-                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                Environment_DrawCustomLensFlare(this);
             }
 
-            // envCtx.precipitation[PRECIP_RAIN_CUR]
-            if (this->envCtx.unk_F2[1] != 0) {
-                Environment_DrawRain(this, &this->view, gfxCtx);
+            if (1) {
+                if (R_PLAY_FILL_SCREEN_ON) {
+                    Environment_FillScreen(gfxCtx, R_PLAY_FILL_SCREEN_R, R_PLAY_FILL_SCREEN_G, R_PLAY_FILL_SCREEN_B,
+                                           R_PLAY_FILL_SCREEN_ALPHA, 3);
+                }
+
+                switch (this->envCtx.fillScreen) {
+                    case 1:
+                        Environment_FillScreen(gfxCtx, this->envCtx.screenFillColor[0], this->envCtx.screenFillColor[1],
+                                               this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3], 3);
+                        break;
+
+                    default:
+                        break;
+                }
             }
-        }
 
-        Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, 1);
+            if (1) {
+                if (this->envCtx.sandstormState != 0) {
+                    Environment_DrawSandstorm(this, this->envCtx.sandstormState);
+                }
+            }
 
-        Actor_DrawAll(this, &this->actorCtx);
+            if (this->worldCoverAlpha != 0) {
+                Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, 3);
+            }
 
-        if (!this->envCtx.sunMoonDisabled) {
-            sp25C.x = this->view.eye.x + this->envCtx.unk_4;
-            sp25C.y = this->view.eye.y + this->envCtx.unk_8;
-            sp25C.z = this->view.eye.z + this->envCtx.unk_C;
-            Environment_DrawSunLensFlare(this, &this->envCtx, &this->view, gfxCtx, sp25C);
-        }
+            if (1) {
+                DebugDisplay_DrawObjects(this);
+            }
 
-        Environment_DrawCustomLensFlare(this);
+            Play_DrawMotionBlur(this);
 
-        if (R_PLAY_FILL_SCREEN_ON) {
-            Environment_FillScreen(gfxCtx, R_PLAY_FILL_SCREEN_R, R_PLAY_FILL_SCREEN_G, R_PLAY_FILL_SCREEN_B,
-                                   R_PLAY_FILL_SCREEN_ALPHA, 3);
-        }
+            if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) || (gTrnsnUnkState == 1)) ||
+                (R_PICTOGRAPH_PHOTO_STATE == 1)) {
+                Gfx* sp74;
+                Gfx* sp70 = POLY_OPA_DISP;
 
-        switch (this->envCtx.fillScreen) {
-            case 1:
-                Environment_FillScreen(gfxCtx, this->envCtx.screenFillColor[0], this->envCtx.screenFillColor[1],
-                                       this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3], 3);
-                break;
-            default:
-                break;
-        }
+                sp74 = Graph_GfxPlusOne(sp70);
+                gSPDisplayList(OVERLAY_DISP++, sp74);
+                this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
 
-        if (this->envCtx.sandstormState != 0) {
-            Environment_DrawSandstorm(this, this->envCtx.sandstormState);
-        }
+                if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) {
+                    R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_PROCESS;
+                    this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                    this->pauseBgPreRender.cvgSave = this->unk_18E58;
+                } else if (R_PICTOGRAPH_PHOTO_STATE == PICTOGRAPH_PHOTO_STATE_SETUP) {
+                    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_PROCESS;
+                    this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                    this->pauseBgPreRender.cvgSave = this->unk_18E58;
+                } else {
+                    gTrnsnUnkState = 2;
+                    this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                    this->pauseBgPreRender.cvgSave = NULL;
+                }
 
-        if (this->worldCoverAlpha != 0) {
-            Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, 3);
-        }
+                func_801705B4(&this->pauseBgPreRender, &sp74);
 
-        DebugDisplay_DrawObjects(this);
-        Play_DrawMotionBlur(this);
+                if (this->pauseBgPreRender.cvgSave != NULL) {
+                    func_80170730(&this->pauseBgPreRender, &sp74);
+                }
 
-        if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) || (gTrnsnUnkState == 1)) ||
-            (R_PICTOGRAPH_PHOTO_STATE == 1)) {
-            Gfx* sp74;
-            Gfx* sp70 = POLY_OPA_DISP;
-
-            sp74 = Graph_GfxPlusOne(sp70);
-            gSPDisplayList(OVERLAY_DISP++, sp74);
-            this->pauseBgPreRender.fbuf = gfxCtx->curFrameBuffer;
-
-            if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) {
-                R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_PROCESS;
-                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
-                this->pauseBgPreRender.cvgSave = this->unk_18E58;
-            } else if (R_PICTOGRAPH_PHOTO_STATE == PICTOGRAPH_PHOTO_STATE_SETUP) {
-                R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_PROCESS;
-                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
-                this->pauseBgPreRender.cvgSave = this->unk_18E58;
+                gSPEndDisplayList(sp74++);
+                Graph_BranchDlist(sp70, sp74);
+                POLY_OPA_DISP = sp74;
+                this->unk_18B49 = 2;
+                SREG(33) |= 1;
             } else {
-                gTrnsnUnkState = 2;
-                this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
-                this->pauseBgPreRender.cvgSave = NULL;
+            PostWorldDraw:
+                if (1) {
+                    Play_PostWorldDraw(this);
+                }
             }
-
-            func_801705B4(&this->pauseBgPreRender, &sp74);
-
-            if (this->pauseBgPreRender.cvgSave != NULL) {
-                func_80170730(&this->pauseBgPreRender, &sp74);
-            }
-
-            gSPEndDisplayList(sp74++);
-            Graph_BranchDlist(sp70, sp74);
-            POLY_OPA_DISP = sp74;
-            this->unk_18B49 = 2;
-            SREG(33) |= 1;
-        } else {
-        Play_Draw_PostWorldDraw:
-            Play_PostWorldDraw(this);
         }
     }
-
-    //! Fake: regalloc around here
-    if (this && this && this) {}
 
     if ((this->view.unk164 != 0) && !gDbgCamEnabled) {
         Vec3s sp4C;
