@@ -2931,17 +2931,17 @@ void Interface_UpdatePerfectLettersType1(PlayState* play) {
     // Update letter positions
     for (count = 0, i = 0; i < interfaceCtx->perfectLettersCount; i++, count += 4) {
         if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_INIT) {
-            // Initialize letter positions along the parameteric ellipse curve
+            // Initialize letter positions along the elliptical spirals
             interfaceCtx->perfectLettersAngles[i] = sPerfectLettersType1AngleOffScreenTargets[i] + 0xA000;
             interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_ENTER;
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_ENTER) {
-            // Swirl inwards along a swirlic parametric ellipse equation to the spelt-out word
+            // Swirl inwards along elliptical spirals to form the spelt-out word
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
             if (interfaceCtx->perfectLettersAngles[i] == sPerfectLettersType1AngleOffScreenTargets[i]) {
                 interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_STATIONARY;
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_SPREAD) {
-            // Swirl outwards along a swirlic parametric ellipse equation offscreen
+            // Swirl outwards along elliptical spirals offscreen
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
             if (interfaceCtx->perfectLettersAngles[i] == (u16)(sPerfectLettersType1AngleOffScreenTargets[i] - 0x8000)) {
                 interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_OFF;
@@ -3066,7 +3066,7 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
     // Update letter positions
     for (i = 0; i < interfaceCtx->perfectLettersCount; i++, j += 4) {
         if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_INIT) {
-            // Initialize letter positions along the parameteric ellipse curve
+            // Initialize letter positions along the elliptical spirals
             interfaceCtx->perfectLettersAngles[i] = i * (0x10000 / PERFECT_LETTERS_NUM_LETTERS);
             interfaceCtx->perfectLettersSemiAxisX[i] = 200.0f;
             interfaceCtx->perfectLettersSemiAxisY[i] = 200.0f;
@@ -3074,7 +3074,7 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
             interfaceCtx->perfectLettersOffsetX[i] = 0;
             interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_ENTER;
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_ENTER) {
-            // Swirl inwards to the center of the screen
+            // Swirl inwards along elliptical spirals to the center of the screen
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
             interfaceCtx->perfectLettersSemiAxisX[i] -= 8.0f;
             interfaceCtx->perfectLettersSemiAxisY[i] -= 8.0f;
@@ -3088,14 +3088,11 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
                 if (i == (PERFECT_LETTERS_NUM_LETTERS - 1)) {
                     // The last letter has reached the center of the screen
                     interfaceCtx->perfectLettersColorTimer = 5;
-                    interfaceCtx->perfectLettersState[7] = PERFECT_LETTERS_STATE_SPREAD;
-                    interfaceCtx->perfectLettersState[6] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[5] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[4] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[3] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[2] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[1] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[0] = interfaceCtx->perfectLettersState[7];
+                    interfaceCtx->perfectLettersState[0] = interfaceCtx->perfectLettersState[1] =
+                        interfaceCtx->perfectLettersState[2] = interfaceCtx->perfectLettersState[3] =
+                            interfaceCtx->perfectLettersState[4] = interfaceCtx->perfectLettersState[5] =
+                                interfaceCtx->perfectLettersState[6] = interfaceCtx->perfectLettersState[7] =
+                                    PERFECT_LETTERS_STATE_SPREAD;
                 }
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_SPREAD) {
@@ -3218,7 +3215,7 @@ s16 sPerfectLettersType3OffsetXSpellingTargets[PERFECT_LETTERS_NUM_LETTERS] = {
     -85, // !
 };
 
-// Targets to sweep each letter's angle along an parametric ellipse equation offscreen
+// Targets to sweep each letter's angle along an elliptical spiral offscreen
 u16 sPerfectLettersType3AngleOffScreenTargets[PERFECT_LETTERS_NUM_LETTERS] = {
     6 * PERFECT_LETTERS_ANGLE_PER_LETTER, // P
     7 * PERFECT_LETTERS_ANGLE_PER_LETTER, // E
@@ -3246,7 +3243,7 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
     // Update letter positions
     for (i = 0; i < interfaceCtx->perfectLettersCount; i++, j += 4) {
         if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_INIT) {
-            // Initialize letter positions along the parameteric ellipse curve
+            // Initialize letter positions along the elliptical spirals
             interfaceCtx->perfectLettersAngles[i] = i * (0x10000 / PERFECT_LETTERS_NUM_LETTERS);
             interfaceCtx->perfectLettersSemiAxisX[i] = 200.0f;
             interfaceCtx->perfectLettersSemiAxisY[i] = 200.0f;
@@ -3254,7 +3251,7 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
             interfaceCtx->perfectLettersOffsetX[i] = 0;
             interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_ENTER;
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_ENTER) {
-            // Swirl inwards along a swirlic parametric ellipse equation to the center of the screen
+            // Swirl inwards along elliptical spirals to the center of the screen
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
             interfaceCtx->perfectLettersSemiAxisX[i] -= 8.0f;
             interfaceCtx->perfectLettersSemiAxisY[i] -= 8.0f;
@@ -3267,15 +3264,12 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
 
                 if (i == (PERFECT_LETTERS_NUM_LETTERS - 1)) {
                     // The last letter has reached the center of the screen
-                    interfaceCtx->perfectLettersState[7] = PERFECT_LETTERS_STATE_SPREAD;
                     interfaceCtx->perfectLettersColorTimer = 5;
-                    interfaceCtx->perfectLettersState[6] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[5] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[4] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[3] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[2] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[1] = interfaceCtx->perfectLettersState[7];
-                    interfaceCtx->perfectLettersState[0] = interfaceCtx->perfectLettersState[7];
+                    interfaceCtx->perfectLettersState[0] = interfaceCtx->perfectLettersState[1] =
+                        interfaceCtx->perfectLettersState[2] = interfaceCtx->perfectLettersState[3] =
+                            interfaceCtx->perfectLettersState[4] = interfaceCtx->perfectLettersState[5] =
+                                interfaceCtx->perfectLettersState[6] = interfaceCtx->perfectLettersState[7] =
+                                    PERFECT_LETTERS_STATE_SPREAD;
                 }
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_SPREAD) {
@@ -3289,7 +3283,7 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
                 interfaceCtx->perfectLettersOffsetX[i] += colorStepR;
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_EXIT) {
-            // Swirl outwards along a swirlic parametric ellipse equation offscreen
+            // Swirl outwards along elliptical spirals offscreen
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
             if (interfaceCtx->perfectLettersAngles[i] == (u16)(sPerfectLettersType3AngleOffScreenTargets[i] - 0x8000)) {
                 interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_OFF;
@@ -3401,7 +3395,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
     for (vtxOffset = 0, i = 0; i < PERFECT_LETTERS_NUM_LETTERS; vtxOffset += 4, i++) {
         if (interfaceCtx->perfectLettersState[i] != PERFECT_LETTERS_STATE_OFF) {
 
-            // The positions follow the path of a parametric ellipse equation
+            // The positions follow the path of an elliptical spiral
             letterX = Math_SinS(interfaceCtx->perfectLettersAngles[i]) * interfaceCtx->perfectLettersSemiAxisX[i];
             letterY = Math_CosS(interfaceCtx->perfectLettersAngles[i]) * interfaceCtx->perfectLettersSemiAxisY[i];
 
