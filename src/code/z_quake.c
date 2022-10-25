@@ -43,7 +43,7 @@ f32 Quake_Random(void) {
     return 2.0f * (Rand_ZeroOne() - 0.5f);
 }
 
-void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
+void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 yOffset, f32 xOffset) {
     Vec3f* at = &req->camera->at;
     Vec3f* eye = &req->camera->eye;
     Vec3f atEyeOffset;
@@ -57,7 +57,7 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
         OLib_Vec3fDiffToVecGeo(&eyeToAtGeo, eye, at);
 
         // y shake
-        geo.r = req->y * y;
+        geo.r = req->y * yOffset;
         // point unit vector up, then add on `req->orientation`
         geo.pitch = eyeToAtGeo.pitch + req->orientation.x + 0x4000;
         geo.yaw = eyeToAtGeo.yaw + req->orientation.y;
@@ -65,7 +65,7 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
         OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
 
         // x shake
-        geo.r = req->x * x;
+        geo.r = req->x * xOffset;
         // point unit vector left, then add on `req->orientation`
         geo.pitch = eyeToAtGeo.pitch + req->orientation.x;
         geo.yaw = eyeToAtGeo.yaw + req->orientation.y + 0x4000;
@@ -73,10 +73,10 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
         OLib_AddVecGeoToVec3f(&atEyeOffset, &atEyeOffset, &geo);
     } else {
         atEyeOffset.x = 0;
-        atEyeOffset.y = req->y * y;
+        atEyeOffset.y = req->y * yOffset;
         atEyeOffset.z = 0;
 
-        geo.r = req->x * x;
+        geo.r = req->x * xOffset;
         geo.pitch = req->orientation.x;
         geo.yaw = req->orientation.y;
 
@@ -84,8 +84,8 @@ void Quake_UpdateShakeInfo(QuakeRequest* req, ShakeInfo* shake, f32 y, f32 x) {
     }
 
     shake->atOffset = shake->eyeOffset = atEyeOffset;
-    shake->upRollOffset = req->upRollOffset * y;
-    shake->fovOffset = req->fov * y;
+    shake->upRollOffset = req->upRollOffset * yOffset;
+    shake->fovOffset = req->fov * yOffset;
 }
 
 s16 Quake_CallbackType1(QuakeRequest* req, ShakeInfo* shake) {
@@ -152,7 +152,7 @@ s16 Quake_CallbackType4(QuakeRequest* req, ShakeInfo* shake) {
 s16 Quake_GetFreeIndex(void) {
     s32 i;
     s32 index = 0;
-    s32 timerMin = 0x10000; // timer is a short, so start with a value beyond its range (UINT16_MAX + 1)
+    s32 timerMin = UINT16_MAX + 1; // timer is a short, so start with a value beyond its range
 
     for (i = 0; i < ARRAY_COUNT(sQuakeRequests); i++) {
         if (sQuakeRequests[i].type == QUAKE_TYPE_NONE) {
