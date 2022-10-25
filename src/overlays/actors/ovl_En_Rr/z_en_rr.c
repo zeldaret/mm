@@ -874,14 +874,12 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 void EnRr_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnRr* this = THIS;
-    Mtx* mtx;
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
     Vec3f* vecPtr;
     s32 i;
     EnRrStruct* ptr;
     Vec3f spA4;
     f32 temp_f20;
-
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
 
     OPEN_DISPS(play->state.gfxCtx);
 
