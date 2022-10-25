@@ -40,7 +40,7 @@ void EnAni_IdleInPain(EnAni* this, PlayState* play);
 void EnAni_Talk(EnAni* this, PlayState* play);
 void EnAni_IdleStanding(EnAni* this, PlayState* play);
 
-const ActorInit En_Ani_InitVars = {
+ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
     ACTORCAT_NPC,
     FLAGS,

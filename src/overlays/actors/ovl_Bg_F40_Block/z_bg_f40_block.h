@@ -19,6 +19,4 @@ typedef struct BgF40Block {
     /* 0x16C */ BgF40BlockActionFunc actionFunc;
 } BgF40Block; // size = 0x170
 
-extern const ActorInit Bg_F40_Block_InitVars;
-
 #endif // Z_BG_F40_BLOCK_H

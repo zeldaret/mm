@@ -41,7 +41,7 @@ typedef enum {
 
 u8 sIsLoaded[32];
 
-const ActorInit Bg_Crace_Movebg_InitVars = {
+ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,

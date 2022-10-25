@@ -44,7 +44,7 @@ typedef enum {
     /* 2 */ KEESE_AURA_ICE
 } KeeseAuraType;
 
-const ActorInit En_Firefly_InitVars = {
+ActorInit En_Firefly_InitVars = {
     ACTOR_EN_FIREFLY,
     ACTORCAT_ENEMY,
     FLAGS,

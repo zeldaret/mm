@@ -28,7 +28,7 @@ void func_8086F57C(EnOkuta* this, PlayState* play);
 void func_8086F694(EnOkuta* this, PlayState* play);
 
 #if 0
-const ActorInit En_Okuta_InitVars = {
+ActorInit En_Okuta_InitVars = {
     ACTOR_EN_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,

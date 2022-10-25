@@ -28,7 +28,7 @@ void EnBba01_Walk(EnHy* this, PlayState* play);
 void EnBba01_FaceFoward(EnHy* this, PlayState* play);
 void EnBba01_Talk(EnHy* this, PlayState* play);
 
-const ActorInit En_Bba_01_InitVars = {
+ActorInit En_Bba_01_InitVars = {
     ACTOR_EN_BBA_01,
     ACTORCAT_NPC,
     FLAGS,

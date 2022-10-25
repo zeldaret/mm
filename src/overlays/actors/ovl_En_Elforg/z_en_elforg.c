@@ -22,7 +22,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play);
 void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play);
 
-const ActorInit En_Elforg_InitVars = {
+ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
     ACTORCAT_ITEMACTION,
     FLAGS,

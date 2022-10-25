@@ -33,7 +33,7 @@ void func_80BCC288(EnScopenuts* this, PlayState* play);
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-const ActorInit En_Scopenuts_InitVars = {
+ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
     ACTORCAT_NPC,
     FLAGS,

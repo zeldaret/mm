@@ -50,6 +50,4 @@ typedef struct EnSw {
     /* 0x4A0 */ s32 unk_4A0;
 } EnSw; // size = 0x4A4
 
-extern const ActorInit En_Sw_InitVars;
-
 #endif // Z_EN_SW_H

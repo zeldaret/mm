@@ -277,7 +277,7 @@ u8* D_8086778C[] = {
     D_80867734, D_8086773C, D_80867744, D_8086775C, D_80867778, D_8086777C, D_80867780, D_80867784,
 };
 
-const ActorInit En_Door_InitVars = {
+ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
     ACTORCAT_DOOR,
     FLAGS,

@@ -38,7 +38,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play);
 void func_80B32C34(EnZoraegg* this, PlayState* play);
 void func_80B32D08(EnZoraegg* this, PlayState* play);
 
-const ActorInit En_Zoraegg_InitVars = {
+ActorInit En_Zoraegg_InitVars = {
     ACTOR_EN_ZORAEGG,
     ACTORCAT_ITEMACTION,
     FLAGS,

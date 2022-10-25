@@ -61,7 +61,7 @@ static Color_RGBA8 sPoSisterEnvColors[] = {
     { 0, 150, 0, 255 },   // Amy
 };
 
-const ActorInit En_Po_Sisters_InitVars = {
+ActorInit En_Po_Sisters_InitVars = {
     ACTOR_EN_PO_SISTERS,
     ACTORCAT_ENEMY,
     FLAGS,

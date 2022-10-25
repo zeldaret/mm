@@ -22,7 +22,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play);
 void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
-const ActorInit Obj_Comb_InitVars = {
+ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
     ACTORCAT_PROP,
     FLAGS,

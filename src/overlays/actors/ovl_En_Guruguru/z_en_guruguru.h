@@ -30,6 +30,4 @@ typedef struct EnGuruguru {
     /* 0x278 */ ColliderCylinder collider;
 } EnGuruguru; // size = 0x2C4
 
-extern const ActorInit En_Guruguru_InitVars;
-
 #endif // Z_EN_GURUGURU_H

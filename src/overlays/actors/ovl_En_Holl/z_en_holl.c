@@ -57,7 +57,7 @@ void EnHoll_TransparentIdle(EnHoll* this, PlayState* play);
 void EnHoll_VerticalBgCoverIdle(EnHoll* this, PlayState* play);
 void EnHoll_RoomTransitionIdle(EnHoll* this, PlayState* play);
 
-const ActorInit En_Holl_InitVars = {
+ActorInit En_Holl_InitVars = {
     ACTOR_EN_HOLL,
     ACTORCAT_DOOR,
     FLAGS,

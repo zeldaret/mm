@@ -69,7 +69,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,

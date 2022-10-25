@@ -41,7 +41,7 @@ enum EnNiwState {
     /*  4 */ NWC_STATE_RUNNING,          // running from the player after failed breman march
 };
 
-const ActorInit En_Nwc_InitVars = {
+ActorInit En_Nwc_InitVars = {
     ACTOR_EN_NWC,
     ACTORCAT_PROP,
     FLAGS,

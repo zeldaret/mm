@@ -399,7 +399,7 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(play) && (play->pauseCtx.state == 0) &&
+            if (!Player_InCsMode(play) && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
                 (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && LifeMeter_IsCritical() && !Play_InCsMode(play)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }

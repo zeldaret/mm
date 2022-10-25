@@ -43,7 +43,9 @@
         <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
         <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
         <DList Name="gameplay_keep_DL_005360" Offset="0x5360" />
-        <DList Name="gameplay_keep_DL_0056C0" Offset="0x56C0" />
+
+        <DList Name="gDekuMaskDL" Offset="0x56C0" />
+
         <DList Name="gameplay_keep_DL_005A10" Offset="0x5A10" />
         <Blob Name="gameplay_keep_Blob_005DB8" Size="0x200" Offset="0x5DB8" />
         <Texture Name="gameplay_keep_TLUT_005FB8" OutName="tlut_005FB8" Format="rgba16" Width="16" Height="16" Offset="0x5FB8" />

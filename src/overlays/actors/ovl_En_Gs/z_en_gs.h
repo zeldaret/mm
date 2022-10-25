@@ -57,6 +57,4 @@ typedef struct EnGs {
     /* 0x21E */ s16 quakeDuration;
 } EnGs; // size = 0x220
 
-extern const ActorInit En_Gs_InitVars;
-
 #endif // Z_EN_GS_H

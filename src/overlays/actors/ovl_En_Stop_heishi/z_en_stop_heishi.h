@@ -14,6 +14,4 @@ typedef struct EnStopheishi {
     /* 0x258 */ char unk_258[0x90];
 } EnStopheishi; // size = 0x2E8
 
-extern const ActorInit En_Stop_heishi_InitVars;
-
 #endif // Z_EN_STOP_HEISHI_H
