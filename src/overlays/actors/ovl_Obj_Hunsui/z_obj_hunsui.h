@@ -54,6 +54,4 @@ typedef struct ObjHunsui {
     /* 0x1B4 */ BgDblueMovebg* unk_1B4;
 } ObjHunsui; // size = 0x1B8
 
-extern const ActorInit Obj_Hunsui_InitVars;
-
 #endif // Z_OBJ_HUNSUI_H

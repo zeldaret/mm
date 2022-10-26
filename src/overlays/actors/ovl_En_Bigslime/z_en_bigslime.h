@@ -125,6 +125,4 @@ typedef struct EnBigslime {
     /* 0x0A54 */ EnBigslimeIceShardEffect iceShardEffect[BIGSLIME_NUM_ICE_SHARD]; // 312 = 162 (bigslime) + 10 * 15 (minislime)
 } EnBigslime; // size = 0x3634
 
-extern const ActorInit En_Bigslime_InitVars;
-
 #endif // Z_EN_BIGSLIME_H

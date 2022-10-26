@@ -26,6 +26,4 @@ typedef struct BgIngate {
     /* 0x18C */ s32 timePathElapsedTime;
 } BgIngate; // size = 0x190
 
-extern const ActorInit Bg_Ingate_InitVars;
-
 #endif // Z_BG_INGATE_H

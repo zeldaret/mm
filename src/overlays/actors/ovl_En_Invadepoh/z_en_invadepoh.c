@@ -109,7 +109,7 @@ void EnInvadepoh_func_80B499BC(EnInvadepoh* this);
 void EnInvadepoh_func_80B49A00(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_func_80B49C38(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_func_80B49DFC(EnInvadepoh* this, PlayState* play);
-void EnInvadepoh_func_80B4A350(EnInvadepoh* this, PlayState* play); 
+void EnInvadepoh_func_80B4A350(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_func_80B4A570(EnInvadepoh* this);
 void EnInvadepoh_func_80B4A5E4(EnInvadepoh* this, PlayState* play);
 void EnInvadepoh_func_80B4A67C(EnInvadepoh* this, PlayState* play);
@@ -177,6 +177,7 @@ ColliderCylinderInit D_80B4E8B0 = {
     },
     { 40, 95, 10, { 0, 0, 0 } },
 };
+
 ColliderCylinderInit D_80B4E8DC = {
     {
         COLTYPE_NONE,
@@ -196,6 +197,7 @@ ColliderCylinderInit D_80B4E8DC = {
     },
     { 18, 46, 0, { 0, 0, 0 } },
 };
+
 ColliderCylinderInit D_80B4E908 = {
     {
         COLTYPE_NONE,
@@ -215,8 +217,11 @@ ColliderCylinderInit D_80B4E908 = {
     },
     { 13, 19, 0, { 0, 0, 0 } },
 };
+
 Vec3f D_80B4E934 = { 216.0f, -20.0f, 1395.0f };
+
 s32 D_80B4E940 = 0;
+
 TexturePtr sRomaniEyeTextures[5] = {
     gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
@@ -227,10 +232,10 @@ TexturePtr sRomaniMouthTextures[4] = {
     gRomaniMouthSmileTex,
 };
 s8 D_80B4E968 = 0;
+
 TexturePtr sCremiaEyeTextures[6] = {
     gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
-
 TexturePtr sCremiaMouthTextures[4] = {
     gCremiaMouthNormalTex,
     gCremiaMouthSlightSmileTex,
@@ -238,6 +243,7 @@ TexturePtr sCremiaMouthTextures[4] = {
     gCremiaMouthHangingOpenTex,
 };
 s8 D_80B4E994 = 0;
+
 s8 D_80B4E998 = 0;
 
 MtxF D_80B502A0;
@@ -262,7 +268,8 @@ void EnInvadepoh_func_80B439B0(s32 arg0, s32 arg1) {
     if ((arg0 % 2) == 0) {
         gSaveContext.save.unk_E88[arg0 >> 1] = (gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
     } else {
-        gSaveContext.save.unk_E88[arg0 >> 1] = (gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);
+        gSaveContext.save.unk_E88[arg0 >> 1] =
+            (gSaveContext.save.unk_E88[arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);
     }
 }
 
@@ -598,7 +605,8 @@ void EnInvadepoh_func_80B44700(EnInvadepoh* this) {
     } else if ((gSaveContext.save.time >= CLOCK_TIME(20, 14) + 15) || (gSaveContext.save.time < CLOCK_TIME(6, 00))) {
         this->unk_320 = 1.0f;
     } else {
-        f32 temp = (gSaveContext.save.time - CLOCK_TIME(20, 00)) * (1.0f / (CLOCK_TIME(20, 14) + 15 - CLOCK_TIME(20, 00)));
+        f32 temp =
+            (gSaveContext.save.time - CLOCK_TIME(20, 00)) * (1.0f / (CLOCK_TIME(20, 14) + 15 - CLOCK_TIME(20, 00)));
 
         this->unk_320 = temp;
         this->unk_320 = CLAMP(this->unk_320, 0.0f, 1.0f);
@@ -881,9 +889,9 @@ void EnInvadepoh_func_80B452EC(EnInvadepoh* this, PlayState* play) {
     s32 var_s3;
 
     for (var_s3 = 0; var_s3 < this->unk_379; var_s3++) {
-        D_80B50320[var_s3] =
-            (EnInvadepoh*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
-                                      this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(var_s2, ENINVADEPOH_ALIEN_INVADER, var_s3));
+        D_80B50320[var_s3] = (EnInvadepoh*)Actor_Spawn(
+            &play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(var_s2, ENINVADEPOH_ALIEN_INVADER, var_s3));
         if (var_s2 != 0xFF) {
             Path* temp_v0 = &play->setupPathList[var_s2];
 
@@ -893,18 +901,21 @@ void EnInvadepoh_func_80B452EC(EnInvadepoh* this, PlayState* play) {
 }
 
 void EnInvadepoh_func_80B453F4(EnInvadepoh* this, PlayState* play, s32 arg2) {
-    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x, this->actor.home.pos.y,
-                       this->actor.home.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_COW, arg2));
+    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
+                       this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
+                       ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_COW, arg2));
 }
 
 void EnInvadepoh_func_80B45460(EnInvadepoh* this, PlayState* play) {
-    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x, this->actor.home.pos.y,
-                       this->actor.home.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_ROMANI_ABDUCTED, 0));
+    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, this->actor.home.pos.x,
+                       this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0,
+                       ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_ROMANI_ABDUCTED, 0));
 }
 
 void EnInvadepoh_func_80B454BC(EnInvadepoh* this, PlayState* play) {
-    D_80B503F0 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
-                             this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_LIGHT_BALL, 0));
+    D_80B503F0 =
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_INVADEPOH, this->actor.world.pos.x, this->actor.world.pos.y,
+                    this->actor.world.pos.z, 0, 0, 0, ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_LIGHT_BALL, 0));
 }
 
 void EnInvadepoh_func_80B45518(Vec3f* arg0) {
@@ -1024,7 +1035,7 @@ void EnInvadepoh_func_80B459E8(EnInvadePohFaceInfo* arg0, EnInvadepohFaceAnim* a
     arg0->curFrame = 0;
     arg0->curIndex = arg1->frames->index[0];
     if (arg0->curAnimType == 2) {
-        EnInvadepohFaceAnimLoopDelayed* temp = (EnInvadepohFaceAnimLoopDelayed*) arg1;
+        EnInvadepohFaceAnimLoopDelayed* temp = (EnInvadepohFaceAnimLoopDelayed*)arg1;
 
         arg0->delayTimer = Rand_S16Offset(temp->minDelay, temp->maxDelay);
     }
@@ -1041,7 +1052,7 @@ void EnInvadepoh_func_80B45A4C(EnInvadePohFaceInfo* arg0, EnInvadepohFaceAnim** 
 }
 
 void EnInvadepoh_func_80B45A94(EnInvadePohFaceInfo* arg0, EnInvadepohFaceAnim** arg1) {
-    EnInvadepohFaceAnimLoop* temp_v0 = (EnInvadepohFaceAnimLoop*) arg0->curAnim;
+    EnInvadepohFaceAnimLoop* temp_v0 = (EnInvadepohFaceAnimLoop*)arg0->curAnim;
     EnInvadepohFaceFrame* temp_v1 = temp_v0->anim.frames;
 
     if (arg0->curFrame < (temp_v1->count - 1)) {
@@ -1055,7 +1066,7 @@ void EnInvadepoh_func_80B45A94(EnInvadePohFaceInfo* arg0, EnInvadepohFaceAnim** 
 }
 
 void EnInvadepoh_func_80B45B1C(EnInvadePohFaceInfo* arg0, EnInvadepohFaceAnim** arg1) {
-    EnInvadepohFaceAnimLoopDelayed* temp_v0 = (EnInvadepohFaceAnimLoopDelayed*) arg0->curAnim;
+    EnInvadepohFaceAnimLoopDelayed* temp_v0 = (EnInvadepohFaceAnimLoopDelayed*)arg0->curAnim;
     EnInvadepohFaceFrame* temp_v1 = temp_v0->loop.anim.frames;
 
     if (arg0->curFrame < (temp_v1->count - 1)) {
@@ -1064,7 +1075,8 @@ void EnInvadepoh_func_80B45B1C(EnInvadePohFaceInfo* arg0, EnInvadepohFaceAnim** 
     } else if (arg0->delayTimer > 0) {
         arg0->delayTimer--;
     } else {
-        EnInvadepohFaceAnim* temp_a1 = arg1[EnInvadepoh_func_80B45980(temp_v0->loop.nextAnims, temp_v0->loop.nextCount)];
+        EnInvadepohFaceAnim* temp_a1 =
+            arg1[EnInvadepoh_func_80B45980(temp_v0->loop.nextAnims, temp_v0->loop.nextCount)];
 
         EnInvadepoh_func_80B459E8(arg0, temp_a1);
     }
@@ -1092,17 +1104,16 @@ EnInvadepohFaceAnimNext D_80B4EA04[4] = {
     { 5, 1.0f },
 };
 EnInvadepohFaceAnimNext D_80B4EA24[1] = { 1, 1.0f };
-EnInvadepohFaceAnimLoopDelayed D_80B4EA2C = { {{2, &D_80B4E9C4}, 4, D_80B4EA04}, 40, 60 };
-EnInvadepohFaceAnimLoop D_80B4EA40 = { {1, &D_80B4E9CC}, 1, D_80B4EA24 };
-EnInvadepohFaceAnimLoop D_80B4EA50 = { {1, &D_80B4E9D4}, 1, D_80B4EA24 };
-EnInvadepohFaceAnimLoop D_80B4EA60 = { {1, &D_80B4E9DC}, 1, D_80B4EA24 };
-EnInvadepohFaceAnimLoop D_80B4EA70 = { {1, &D_80B4E9E4}, 1, D_80B4EA24 };
+EnInvadepohFaceAnimLoopDelayed D_80B4EA2C = { { { 2, &D_80B4E9C4 }, 4, D_80B4EA04 }, 40, 60 };
+EnInvadepohFaceAnimLoop D_80B4EA40 = { { 1, &D_80B4E9CC }, 1, D_80B4EA24 };
+EnInvadepohFaceAnimLoop D_80B4EA50 = { { 1, &D_80B4E9D4 }, 1, D_80B4EA24 };
+EnInvadepohFaceAnimLoop D_80B4EA60 = { { 1, &D_80B4E9DC }, 1, D_80B4EA24 };
+EnInvadepohFaceAnimLoop D_80B4EA70 = { { 1, &D_80B4E9E4 }, 1, D_80B4EA24 };
 EnInvadepohFaceAnim D_80B4EA80 = { 0, &D_80B4E9EC };
 EnInvadepohFaceAnim D_80B4EA88 = { 0, &D_80B4E9F4 };
 EnInvadepohFaceAnim* D_80B4EA90[8] = {
-    &D_80B4E9FC, &D_80B4EA2C.loop.anim, &D_80B4EA40.anim,
-    &D_80B4EA50.anim, &D_80B4EA60.anim, &D_80B4EA70.anim,
-    &D_80B4EA80, &D_80B4EA88,
+    &D_80B4E9FC,      &D_80B4EA2C.loop.anim, &D_80B4EA40.anim, &D_80B4EA50.anim,
+    &D_80B4EA60.anim, &D_80B4EA70.anim,      &D_80B4EA80,      &D_80B4EA88,
 };
 
 s8 D_80B4EAB0[1] = { 0 };
@@ -1142,14 +1153,13 @@ EnInvadepohFaceAnimNext D_80B4EB60[4] = {
     { 5, 1.0f },
 };
 EnInvadepohFaceAnimNext D_80B4EB80[1] = { 1, 1.0f };
-EnInvadepohFaceAnimLoopDelayed D_80B4EB88 = { {{2, &D_80B4EB30}, 4, D_80B4EB60}, 40, 60 };
-EnInvadepohFaceAnimLoop D_80B4EB9C = { {1, &D_80B4EB38}, 1, D_80B4EB80 };
-EnInvadepohFaceAnimLoop D_80B4EBAC = { {1, &D_80B4EB40}, 1, D_80B4EB80 };
-EnInvadepohFaceAnimLoop D_80B4EBBC = { {1, &D_80B4EB48}, 1, D_80B4EB80 };
-EnInvadepohFaceAnimLoop D_80B4EBCC = { {1, &D_80B4EB50}, 1, D_80B4EB80 };
+EnInvadepohFaceAnimLoopDelayed D_80B4EB88 = { { { 2, &D_80B4EB30 }, 4, D_80B4EB60 }, 40, 60 };
+EnInvadepohFaceAnimLoop D_80B4EB9C = { { 1, &D_80B4EB38 }, 1, D_80B4EB80 };
+EnInvadepohFaceAnimLoop D_80B4EBAC = { { 1, &D_80B4EB40 }, 1, D_80B4EB80 };
+EnInvadepohFaceAnimLoop D_80B4EBBC = { { 1, &D_80B4EB48 }, 1, D_80B4EB80 };
+EnInvadepohFaceAnimLoop D_80B4EBCC = { { 1, &D_80B4EB50 }, 1, D_80B4EB80 };
 EnInvadepohFaceAnim* D_80B4EBDC[6] = {
-    &D_80B4EB58, &D_80B4EB88.loop.anim, &D_80B4EB9C.anim,
-    &D_80B4EBAC.anim, &D_80B4EBBC.anim, &D_80B4EBCC.anim,
+    &D_80B4EB58, &D_80B4EB88.loop.anim, &D_80B4EB9C.anim, &D_80B4EBAC.anim, &D_80B4EBBC.anim, &D_80B4EBCC.anim,
 };
 
 s8 D_80B4EBF4[1] = { 0 };
@@ -1383,7 +1393,7 @@ void EnInvadepoh_func_80B46414(Actor* thisx, PlayState* play) {
     }
     this->unk_2F4 = Object_GetIndex(&play->objectCtx, OBJECT_UCH);
     if (this->unk_2F4 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1399,10 +1409,11 @@ void EnInvadepoh_func_80B46520(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(&this->actor, D_80B4EC34);
     this->actor.update = EnInvadepoh_func_80B47FA8;
-    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0, ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_COW_TAIL, 0));
+    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0,
+                       ENINVADEPOH_SET_PARAMS(0, ENINVADEPOH_COW_TAIL, 0));
     this->unk_2F4 = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->unk_2F4 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1420,7 +1431,7 @@ void EnInvadepoh_func_80B465CC(Actor* thisx, PlayState* play2) {
     this->actor.update = EnInvadepoh_func_80B481C4;
     this->unk_2F4 = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->unk_2F4 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1430,7 +1441,7 @@ InitChainEntry D_80B4EC54[5] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 void EnInvadepoh_func_80B46644(Actor* thisx, PlayState* play) {
-    // PlayState* play = play2; Stack management problems 
+    // PlayState* play = play2; Stack management problems
     EnInvadepoh* this = (EnInvadepoh*)thisx;
     s32 temp_v1 = ENINVADEPOH_GET_PARAM_F0(&this->actor);
 
@@ -1463,25 +1474,25 @@ void EnInvadepoh_func_80B46644(Actor* thisx, PlayState* play) {
     }
     this->unk_2F4 = Object_GetIndex(&play->objectCtx, OBJECT_MA1);
     if (this->unk_2F4 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (temp_v1 == ENINVADEPOH_ROMANI_CONFUSED) {
         if (gSaveContext.save.weekEventReg[22] & 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (temp_v1 == ENINVADEPOH_ROMANI_NIGHT_1) {
         if ((gSaveContext.save.time < CLOCK_TIME(6, 00)) && (gSaveContext.save.time >= CLOCK_TIME(2, 15))) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (temp_v1 == ENINVADEPOH_ROMANI_UNKNOWN) {
         // nothing
     } else if (temp_v1 == ENINVADEPOH_ROMANI_REWARD) {
         if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (temp_v1 == ENINVADEPOH_ROMANI_NIGHT_3) {
         if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         D_80B503F4 = this;
     }
@@ -1509,7 +1520,7 @@ void EnInvadepoh_func_80B468B4(Actor* thisx, PlayState* play2) {
         this->actor.world.pos.y += 1500.0f;
         EnInvadepoh_func_80B49628(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1533,7 +1544,7 @@ void EnInvadepoh_func_80B469C4(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     this->unk_2F4 = Object_GetIndex(&play->objectCtx, OBJECT_DOG);
     if (this->unk_2F4 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1558,10 +1569,10 @@ void EnInvadepoh_func_80B46A80(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     this->unk_2F4 = Object_GetIndex(&play->objectCtx, OBJECT_MA2);
     if (this->unk_2F4 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     D_80B503F8 = this;
 }
@@ -1665,18 +1676,18 @@ void EnInvadepoh_func_80B46D28(Actor* thisx, PlayState* play2) {
 void EnInvadepoh_Destroy(Actor* thisx, PlayState* play) {
     static ActorFunc D_80B4ECE8[14] = {
         EnInvadepoh_func_80B46BB0, // Event handler
-        EnInvadepoh_func_80B46BC0, // Alien invader 
+        EnInvadepoh_func_80B46BC0, // Alien invader
         EnInvadepoh_func_80B46C08, // Abducted cow
         EnInvadepoh_func_80B46C34, // Cow tail
-        EnInvadepoh_func_80B46C50, // Abducted Romani 
+        EnInvadepoh_func_80B46C50, // Abducted Romani
         EnInvadepoh_func_80B46C50, // Confused Romani
         EnInvadepoh_func_80B46C7C, // Light ball
         EnInvadepoh_func_80B46C50, // Night 1 Romani
-        EnInvadepoh_func_80B46C50, // Unknown Romani 
+        EnInvadepoh_func_80B46C50, // Unknown Romani
         EnInvadepoh_func_80B46C50, // Reward Romani
         EnInvadepoh_func_80B46C94, // Dog
         EnInvadepoh_func_80B46CC0, // Night 3 Cremia
-        EnInvadepoh_func_80B46CF4, // Night 3 Romani 
+        EnInvadepoh_func_80B46CF4, // Night 3 Romani
         EnInvadepoh_func_80B46D28, // Alien abductor
     };
 
@@ -1833,7 +1844,7 @@ void EnInvadepoh_func_80B47278(EnInvadepoh* this) {
 
 void EnInvadepoh_func_80B47298(EnInvadepoh* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
-    gSaveContext.nextCutsceneIndex = 0xFFF3; 
+    gSaveContext.nextCutsceneIndex = 0xFFF3;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;
     gSaveContext.nextTransitionType = TRANS_TYPE_72;
@@ -1957,11 +1968,11 @@ void EnInvadepoh_func_80B4770C(EnInvadepoh* this) {
     this->unk_2A0.base.atFlags |= AT_ON;
     this->unk_2A0.base.acFlags |= AC_ON;
     this->unk_2A0.base.ocFlags1 |= OC1_ON;
-    this->unk_389 = 0xFF;
+    this->unk_389 = 255;
     this->actor.draw = EnInvadepoh_func_80B4DB14;
     this->unk_38B = 1;
     this->unk_38C = 0;
-    this->unk_38D = 0xFF;
+    this->unk_38D = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
     this->actionFunc = EnInvadepoh_func_80B477B4;
 }
@@ -1982,7 +1993,7 @@ void EnInvadepoh_func_80B47830(EnInvadepoh* this) {
     this->unk_2A0.base.ocFlags1 |= OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienJerkingAnim);
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x10);
-    this->unk_389 = 0xFF;
+    this->unk_389 = 255;
     this->actor.draw = EnInvadepoh_func_80B4DB14;
     this->unk_38B = 1;
     this->unk_38C = 0;
@@ -2007,12 +2018,12 @@ void EnInvadepoh_func_80B47938(EnInvadepoh* this) {
     this->unk_2A0.base.ocFlags1 &= ~OC1_ON;
     Animation_PlayLoop(&this->skelAnime, &gAlienDeathAnim);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->unk_2F0 = 0xA;
-    this->unk_389 = 0xFF;
+    this->unk_2F0 = 10;
+    this->unk_389 = 255;
     this->actor.draw = EnInvadepoh_func_80B4DB14;
     this->unk_38B = 1;
     this->unk_38C = 0;
-    this->unk_38D = 0xFF;
+    this->unk_38D = 255;
     this->actor.flags |= ACTOR_FLAG_80000000;
     this->actionFunc = EnInvadepoh_func_80B479E8;
 }
@@ -2034,7 +2045,7 @@ void EnInvadepoh_func_80B479E8(EnInvadepoh* this, PlayState* play) {
         temp = &D_80B4ED30[this->unk_2F2];
         if (temp->x > 0.0f) {
             this->unk_38B = 1;
-            this->unk_38D = 0xFF;
+            this->unk_38D = 255;
             Math_Vec3f_Copy(&this->actor.scale, temp);
         } else {
             this->unk_38B = 0;
@@ -2081,7 +2092,8 @@ void EnInvadepoh_func_80B47BAC(Actor* thisx, PlayState* play2) {
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B45080();
         this->actor.update = EnInvadepoh_func_80B47D30;
-        SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->unk_188, this->unk_212, ALIEN_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gAlienSkel, &gAlienFloatAnim, this->unk_188, this->unk_212,
+                           ALIEN_LIMB_MAX);
         this->skelAnime.curFrame = (ENINVADEPOH_GET_PARAM_7(&this->actor)) * this->skelAnime.endFrame / 8.0f;
         EnInvadepoh_func_80B444BC(this, play);
         EnInvadepoh_func_80B442E4(this);
@@ -2097,7 +2109,7 @@ void EnInvadepoh_func_80B47BAC(Actor* thisx, PlayState* play2) {
                 EnInvadepoh_func_80B47568(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -2113,7 +2125,7 @@ void EnInvadepoh_func_80B47D30(Actor* thisx, PlayState* play2) {
             thisx->gravity = 0.0f;
             EnInvadepoh_func_80B47830(this);
         } else if ((this->actionFunc == EnInvadepoh_func_80B474DC) || (this->actionFunc == EnInvadepoh_func_80B473E4)) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
     } else if (this->unk_2A0.base.acFlags & AC_HIT) {
@@ -2178,7 +2190,7 @@ void EnInvadepoh_func_80B48060(Actor* thisx, PlayState* play2) {
     s32 sp6C;
 
     if ((D_80B503F0 == NULL) || (this->actor.parent == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     sp6C = ENINVADEPOH_GET_PARAM_7(&this->actor);
@@ -2210,7 +2222,8 @@ void EnInvadepoh_func_80B481C4(Actor* thisx, PlayState* play2) {
         Actor_SetObjectDependency(play, &this->actor);
         this->actor.update = EnInvadepoh_func_80B4827C;
         this->actor.draw = EnInvadepoh_func_80B4E1B0;
-        SkelAnime_InitFlex(play, &this->skelAnime, &gCowTailSkel, NULL, this->unk_188, this->unk_212, COW_TAIL_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gCowTailSkel, NULL, this->unk_188, this->unk_212,
+                           COW_TAIL_LIMB_MAX);
         Animation_PlayLoop(&this->skelAnime, &gCowTailSwishAnim);
     }
 }
@@ -2220,7 +2233,7 @@ void EnInvadepoh_func_80B4827C(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     if ((D_80B503F0 == NULL) || (this->actor.parent == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         SkelAnime_Update(&this->skelAnime);
     }
@@ -2326,7 +2339,8 @@ void EnInvadepoh_func_80B48620(Actor* thisx, PlayState* play2) {
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B44F58();
         this->actor.update = EnInvadepoh_func_80B4873C;
-        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->unk_188, this->unk_212, ROMANI_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->unk_188, this->unk_212,
+                           ROMANI_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 0x1388, 0.05f, 0.3f,
                                   0.12f);
         Animation_PlayLoop(&this->skelAnime, &gRomaniIdleAnim);
@@ -2340,7 +2354,7 @@ void EnInvadepoh_func_80B4873C(Actor* thisx, PlayState* play2) {
     EnInvadePohUnkStruct_324* temp_v1 = &this->unk_324;
 
     if (this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);
@@ -2392,7 +2406,7 @@ void EnInvadepoh_func_80B48948(EnInvadepoh* this) {
     EnInvadePohUnkStruct_324* sp24 = &this->unk_324;
     f32 sp28 = Rand_ZeroOne();
 
-    this->unk_2F0 = Rand_S16Offset(0x96, 0x96);
+    this->unk_2F0 = Rand_S16Offset(150, 150);
     if (sp28 < 0.5f) {
         this->unk_374 = 0;
         Math_Vec3s_Copy(&sp24->unk_26, &gZeroVec3s);
@@ -2521,7 +2535,8 @@ void EnInvadepoh_func_80B48FB0(Actor* thisx, PlayState* play2) {
         this->actor.update = EnInvadepoh_func_80B490F0;
         this->actor.draw = EnInvadepoh_func_80B4E324;
         this->actor.textId = 0x3330; // ........
-        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->unk_188, this->unk_212, ROMANI_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->unk_188, this->unk_212,
+                           ROMANI_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_func_80B444F4(this, play);
         EnInvadepoh_func_80B4407C(this, 0);
@@ -2721,7 +2736,7 @@ void EnInvadepoh_func_80B49904(EnInvadepoh* this) {
     this->unk_3A4 = 0.01f;
     this->actor.gravity = 1.0f;
     this->unk_3AA = 0xBB8;
-    this->unk_2F0 = 0x3C;
+    this->unk_2F0 = 60;
     this->actionFunc = EnInvadepoh_func_80B4994C;
 }
 
@@ -2732,7 +2747,7 @@ void EnInvadepoh_func_80B4994C(EnInvadepoh* this, PlayState* play) {
     if (this->unk_2F0 > 0) {
         this->unk_2F0--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -2820,7 +2835,7 @@ void EnInvadepoh_func_80B49C38(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->unk_320 >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -2865,7 +2880,8 @@ void EnInvadepoh_func_80B49F88(Actor* thisx, PlayState* play2) {
         this->actor.objBankIndex = this->unk_2F4;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212, ROMANI_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212,
+                           ROMANI_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 0x64, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_func_80B44540(this, play);
         EnInvadepoh_func_80B44570(this);
@@ -2889,7 +2905,7 @@ void EnInvadepoh_func_80B49F88(Actor* thisx, PlayState* play2) {
             this->actor.draw = EnInvadepoh_func_80B4E324;
             EnInvadepoh_func_80B49BD0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3088,7 +3104,8 @@ void EnInvadepoh_func_80B4A9C8(Actor* thisx, PlayState* play2) {
         this->actor.objBankIndex = this->unk_2F4;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212, ROMANI_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212,
+                           ROMANI_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_func_80B44620(this, play2);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 00))) {
@@ -3260,7 +3277,8 @@ void EnInvadepoh_func_80B4B0C4(Actor* thisx, PlayState* play2) {
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B44F58();
         this->actor.update = EnInvadepoh_func_80B4B218;
-        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212, ROMANI_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212,
+                           ROMANI_LIMB_MAX);
         Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 0x7D0, 0.08f, 0.3f, 0.03f);
         temp_s0->unk_30 = 0.08f;
@@ -3409,7 +3427,8 @@ void EnInvadepoh_func_80B4B8BC(Actor* thisx, PlayState* play2) {
     if (Object_IsLoaded(&play->objectCtx, this->unk_2F4) && 1) {
         this->actor.objBankIndex = this->unk_2F4;
         Actor_SetObjectDependency(play, &this->actor);
-        SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, &gDogWalkAnim, this->unk_188, this->unk_212, DOG_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, &gDogWalkAnim, this->unk_188, this->unk_212,
+                           DOG_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, NULL, 0, NULL, 0, &gZeroVec3s, 0xBB8, 0.1f, 0.0f, 0.0f);
         EnInvadepoh_func_80B44664(this, play);
         EnInvadepoh_func_80B4407C(this, 0);
@@ -3424,7 +3443,7 @@ void EnInvadepoh_func_80B4B8BC(Actor* thisx, PlayState* play2) {
         } else if (D_80B4E940 == 1) {
             this->actor.update = EnInvadepoh_func_80B4BA30;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3552,7 +3571,7 @@ void EnInvadepoh_func_80B4BC4C(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.save.time > CLOCK_TIME(20, 15)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((sp50 != NULL) && (sp50->actionFunc == EnInvadepoh_func_80B4CB0C)) {
         EnInvadepoh_func_80B4C1BC(this);
     }
@@ -3621,7 +3640,8 @@ void EnInvadepoh_func_80B4C3A0(Actor* thisx, PlayState* play2) {
         this->actor.objBankIndex = this->unk_2F4;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B44FEC();
-        SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->unk_188, this->unk_212, CREMIA_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->unk_188, this->unk_212,
+                           CREMIA_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD; // Good night... See you...tomorrow...OK?
         if (sp38 < CLOCK_TIME(20, 01) + 30) {
@@ -3642,7 +3662,7 @@ void EnInvadepoh_func_80B4C3A0(Actor* thisx, PlayState* play2) {
             this->actor.draw = EnInvadepoh_func_80B4E7BC;
             EnInvadepoh_func_80B4BBE0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3745,7 +3765,7 @@ void EnInvadepoh_func_80B4C730(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->unk_320 >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((sp68 != NULL) && (sp68->actionFunc == EnInvadepoh_func_80B4C058)) {
         EnInvadepoh_func_80B4CC70(this);
     }
@@ -3814,7 +3834,8 @@ void EnInvadepoh_func_80B4CE54(Actor* thisx, PlayState* play2) {
         this->actor.objBankIndex = this->unk_2F4;
         Actor_SetObjectDependency(play, &this->actor);
         EnInvadepoh_func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212, ROMANI_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->unk_188, this->unk_212,
+                           ROMANI_LIMB_MAX);
         EnInvadepoh_func_80B45C04(&this->unk_324, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         EnInvadepoh_func_80B446D0(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -3831,7 +3852,7 @@ void EnInvadepoh_func_80B4CE54(Actor* thisx, PlayState* play2) {
             this->actor.draw = EnInvadepoh_func_80B4E324;
             EnInvadepoh_func_80B4C6C8(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3881,11 +3902,11 @@ void EnInvadepoh_func_80B4D15C(EnInvadepoh* this) {
 
     Animation_PlayLoop(&this->skelAnime, &gAlienHoldingCowAnim);
     this->skelAnime.curFrame = (ENINVADEPOH_GET_PARAM_7(&this->actor)) * this->skelAnime.endFrame * 0.25f;
-    this->unk_389 = 0xFF;
+    this->unk_389 = 255;
     this->actor.draw = EnInvadepoh_func_80B4DB14;
     this->unk_38B = 1;
     this->unk_38C = 0;
-    this->unk_38D = 0xFF;
+    this->unk_38D = 255;
     this->unk_300 = D_80B4EE0C[sp28].unk0;
     this->unk_304 = sp28 * 0x5555;
     this->actor.world.pos.x = Math_SinS(this->unk_304) * 80.0f + this->actor.home.pos.x;
@@ -3903,7 +3924,7 @@ void EnInvadepoh_func_80B4D290(EnInvadepoh* this, PlayState* play) {
     f32 sp28;
 
     if (D_80B503F0 == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Math_StepToF(&this->actor.velocity.y, 15.0f, this->unk_300);
@@ -3923,18 +3944,18 @@ void EnInvadepoh_func_80B4D290(EnInvadepoh* this, PlayState* play) {
         sp2C->shape.rot.y = this->actor.shape.rot.y;
     }
     if (sp28 < 5.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
 void EnInvadepoh_func_80B4D3E4(EnInvadepoh* this) {
     Animation_PlayLoop(&this->skelAnime, &gAlienHoldingCowAnim);
     this->skelAnime.curFrame = (ENINVADEPOH_GET_PARAM_7(&this->actor)) * this->skelAnime.endFrame * 0.25f;
-    this->unk_389 = 0xFF;
+    this->unk_389 = 255;
     this->actor.draw = NULL;
     this->unk_38B = 1;
     this->unk_38C = 0;
-    this->unk_38D = 0xFF;
+    this->unk_38D = 255;
     this->unk_306 = 0x190;
     this->unk_304 = 0;
     this->unk_2F0 = 200;
@@ -3986,7 +4007,7 @@ void EnInvadepoh_func_80B4D480(EnInvadepoh* this, PlayState* play) {
         }
     }
     if ((this->unk_2F0 <= 0) || sp2C) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4049,6 +4070,7 @@ void EnInvadepoh_func_80B4D7B8(PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_02E510);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -4065,14 +4087,14 @@ void EnInvadepoh_func_80B4D9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     static Vec3f D_80B4EE24 = { 2000.0f, 1000.0f, 0.0f };
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if ((limbIndex == 12) && (this->unk_38D != 0)) {
+    if ((limbIndex == ALIEN_LIMB_LEFT_EYE) && (this->unk_38D != 0)) {
         Matrix_Push();
         Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateYS(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
         Matrix_Get(&D_80B502A0);
         Matrix_Pop();
-    } else if ((limbIndex == 13) && (this->unk_38D != 0)) {
+    } else if ((limbIndex == ALIEN_LIMB_RIGHT_EYE) && (this->unk_38D != 0)) {
         Matrix_Push();
         Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateYS(-0x47D0, MTXMODE_APPLY);
@@ -4090,10 +4112,11 @@ void EnInvadepoh_func_80B4DB14(Actor* thisx, PlayState* play2) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C2DC(play->state.gfxCtx);
     Matrix_Push();
     if (this->unk_38B != 0) {
-        if (this->unk_389 == 0xFF) {
+        if (this->unk_389 == 255) {
             func_8012C28C(play->state.gfxCtx);
             AnimatedMat_Draw(play, sAlienEmptyTexAnim);
             Scene_SetRenderModeXlu(play, 0, 1);
@@ -4113,8 +4136,10 @@ void EnInvadepoh_func_80B4DB14(Actor* thisx, PlayState* play2) {
             Gfx* ptr;
 
             AnimatedMat_Draw(play, sAlienEyeBeamTexAnim);
+
             OPEN_DISPS(play->state.gfxCtx);
             ptr = POLY_XLU_DISP;
+
             gDPPipeSync(ptr++);
             gDPSetPrimColor(ptr++, 0, 0xFF, 240, 180, 100, 60);
             gDPSetEnvColor(ptr++, 255, 255, 255, 100.0f / 170.0f * this->unk_38D);
@@ -4146,30 +4171,40 @@ void EnInvadepoh_func_80B4DB14(Actor* thisx, PlayState* play2) {
 
         OPEN_DISPS(play->state.gfxCtx);
         ptr = POLY_XLU_DISP;
+
         ptr = func_8012C868(ptr);
+
         gDPSetDither(ptr++, G_CD_NOISE);
         gDPSetCombineLERP(ptr++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
+
         Matrix_Mult(&play->billboardMtxF, MTXMODE_NEW);
         Matrix_MultVecZ(60.0f, &sp80);
+
         sp74.x = this->actor.world.pos.x + sp80.x;
         sp74.y = this->actor.world.pos.y + sp80.y + 68.0f;
         sp74.z = this->actor.world.pos.z + sp80.z;
+
         Matrix_Translate(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
+
         temp = 100.0f / 255.0f * this->unk_389;
+
         gSPDisplayList(ptr++, gameplay_keep_DL_029CB0);
         gDPSetPrimColor(ptr++, 0, 0, 240, 180, 100, temp);
         gSPMatrix(ptr++, Matrix_NewMtx(play->state.gfxCtx), 2);
         gSPDisplayList(ptr++, gameplay_keep_DL_029CF0);
+
         POLY_XLU_DISP = ptr;
 
-        if ((this->unk_389 > 0x80) && EnInvadepoh_func_80B456A8(play, &sp74)) {
+        if ((this->unk_389 > 128) && EnInvadepoh_func_80B456A8(play, &sp74)) {
             func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp74, 10.0f, 9.0f, 0, 0);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     Matrix_Pop();
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -4219,11 +4254,13 @@ void EnInvadepoh_func_80B4E2AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     static Vec3f D_80B4EE30 = { 400.0f, 270.0f, 0.0f };
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    if (limbIndex == 19) {
+    if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
+
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (limbIndex == 14) {
+    } else if (limbIndex == ROMANI_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80B4EE30, &this->actor.focus.pos);
     }
 }
@@ -4232,11 +4269,13 @@ void EnInvadepoh_func_80B4E324(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x09, sRomaniMouthTextures[this->unk_324.mouthAnim.curIndex]);
     gSPSegment(POLY_OPA_DISP++, 0x08, sRomaniEyeTextures[this->unk_324.eyeAnim.curIndex]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_func_80B4E200, EnInvadepoh_func_80B4E2AC, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -4257,6 +4296,7 @@ void EnInvadepoh_func_80B4E3F0(Actor* thisx, PlayState* play2) {
     Matrix_RotateZS(this->unk_304, MTXMODE_APPLY);
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C2DC(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
@@ -4266,11 +4306,13 @@ void EnInvadepoh_func_80B4E3F0(Actor* thisx, PlayState* play2) {
     if (EnInvadepoh_func_80B456A8(play, &sp5C)) {
         func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp5C, 20.0f, 9.0f, 0, 0);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 s32 EnInvadepoh_func_80B4E5B0(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if ((limbIndex == DOG_LIMB_HEAD) || (limbIndex == DOG_LIMB_RIGHT_FACE_HAIR) || (limbIndex == DOG_LIMB_LEFT_FACE_HAIR)) {
+    if ((limbIndex == DOG_LIMB_HEAD) || (limbIndex == DOG_LIMB_RIGHT_FACE_HAIR) ||
+        (limbIndex == DOG_LIMB_LEFT_FACE_HAIR)) {
         EnInvadepoh* this = (EnInvadepoh*)thisx;
 
         rot->x += this->unk_324.unk_20.x;
@@ -4292,10 +4334,12 @@ void EnInvadepoh_func_80B4E660(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_func_80B4E5B0, EnInvadepoh_func_80B4E61C, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -4326,10 +4370,12 @@ void EnInvadepoh_func_80B4E7BC(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x09, sCremiaMouthTextures[this->unk_324.mouthAnim.curIndex]);
     gSPSegment(POLY_OPA_DISP++, 0x08, sCremiaEyeTextures[this->unk_324.eyeAnim.curIndex]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_func_80B4E6E4, EnInvadepoh_func_80B4E784, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

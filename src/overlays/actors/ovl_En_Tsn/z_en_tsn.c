@@ -29,7 +29,7 @@ void func_80AE0D10(EnTsn* this, PlayState* play);
 void func_80AE0D78(EnTsn* this, PlayState* play);
 void func_80AE0F84(Actor* thisx, PlayState* play);
 
-const ActorInit En_Tsn_InitVars = {
+ActorInit En_Tsn_InitVars = {
     ACTOR_EN_TSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -88,7 +88,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:
             if (gSaveContext.save.weekEventReg[26] & 8) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0x106E;
@@ -107,7 +107,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
         if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_0) {
             this->actionFunc = func_80AE0D78;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     }
@@ -116,7 +116,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     this->unk_220 = 0;
 
     if (this->unk_1D8 == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
         func_800BC154(play, &play->actorCtx, &this->actor, 6);
     }
@@ -145,7 +145,7 @@ void EnTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     if (gSaveContext.save.weekEventReg[55] & 0x80) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -291,7 +291,7 @@ void func_80AE0304(EnTsn* this, PlayState* play) {
 void func_80AE0418(EnTsn* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         Message_StartTextbox(play, 0x107D, NULL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

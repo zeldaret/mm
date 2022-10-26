@@ -28,6 +28,4 @@ typedef struct EnDemoheishi {
     /* 0x274 */ ColliderCylinder colliderCylinder;
 } EnDemoheishi; //size = 0x2C0
 
-extern const ActorInit En_Demo_heishi_InitVars;
-
 #endif // Z_EN_DEMO_HEISHI_H

@@ -60,7 +60,7 @@ void func_80938C1C(Actor* thisx, PlayState* play);
 void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Bean_InitVars = {
+ActorInit Obj_Bean_InitVars = {
     ACTOR_OBJ_BEAN,
     ACTORCAT_BG,
     FLAGS,
@@ -378,11 +378,12 @@ void ObjBean_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
         func_80937C10(this);
         if (!func_80936D58(this, play)) {
-            Actor_MarkForDeath(&this->dyna.actor);
-        } else {
-            func_800BC154(play, &play->actorCtx, &this->dyna.actor, 7);
-            func_80937DD8(this);
+            Actor_Kill(&this->dyna.actor);
+            return;
         }
+
+        func_800BC154(play, &play->actorCtx, &this->dyna.actor, 7);
+        func_80937DD8(this);
     } else {
         s32 params2 = OBJBEAN_GET_3F00(&this->dyna.actor);
         Path* path = &play->setupPathList[params2];
@@ -509,7 +510,7 @@ void func_80937DEC(ObjBean* this, PlayState* play) {
     }
 
     if (this->unk_1FF && Flags_GetSwitch(play, OBJBEAN_GET_3F80(&this->dyna.actor, 1))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -714,8 +715,11 @@ void func_80938670(ObjBean* this) {
 
 void func_8093868C(ObjBean* this, PlayState* play) {
     if (this->unk_1B2 <= 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else if (this->unk_1B2 <= 20) {
+        Actor_Kill(&this->dyna.actor);
+        return;
+    }
+
+    if (this->unk_1B2 <= 20) {
         this->dyna.actor.scale.x *= 0.89f;
         this->dyna.actor.scale.y *= 0.89f;
         this->dyna.actor.scale.z *= 0.89f;

@@ -32,6 +32,4 @@ typedef struct EnBjt {
 } EnBjt; // size = 0x25C
 
 
-extern const ActorInit En_Bjt_InitVars;
-
 #endif // Z_EN_BJT_H

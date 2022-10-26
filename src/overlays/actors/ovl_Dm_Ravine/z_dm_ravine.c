@@ -16,7 +16,7 @@ void DmRavine_DoNothing(DmRavine* this, PlayState* play);
 void DmRavine_Update(Actor* thisx, PlayState* play);
 void DmRavine_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Ravine_InitVars = {
+ActorInit Dm_Ravine_InitVars = {
     ACTOR_DM_RAVINE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -33,7 +33,7 @@ void DmRavine_Init(Actor* thisx, PlayState* play) {
     DmRavine* this = THIS;
 
     if (((((void)0, gSaveContext.save.weekEventReg[0]) & 0x10) | cREG(0)) != 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -71,7 +71,7 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
             }
             break;
         case DM_RAVINE_STATE_PENDING_DEATH:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             break;
     }
 }

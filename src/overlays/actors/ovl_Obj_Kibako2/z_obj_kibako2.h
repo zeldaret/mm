@@ -25,6 +25,4 @@ typedef struct ObjKibako2 {
     /* 0x1AD */ s8 skulltulaNoiseTimer;
 } ObjKibako2; // size = 0x1B0
 
-extern const ActorInit Obj_Kibako2_InitVars;
-
 #endif // Z_OBJ_KIBAKO2_H

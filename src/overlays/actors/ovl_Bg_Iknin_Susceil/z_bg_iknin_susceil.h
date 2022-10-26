@@ -19,6 +19,4 @@ typedef struct BgIkninSusceil {
     /* 0x16A */ UNK_TYPE2 unk16A;
 } BgIkninSusceil; // size = 0x16C
 
-extern const ActorInit Bg_Iknin_Susceil_InitVars;
-
 #endif // Z_BG_IKNIN_SUSCEIL_H

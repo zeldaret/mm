@@ -36,6 +36,4 @@ typedef struct EnFloormas {
     /* 0x354 */ ColliderCylinder collider;
 } EnFloormas; // size = 0x3A0
 
-extern const ActorInit En_Floormas_InitVars;
-
 #endif // Z_EN_FLOORMAS_H

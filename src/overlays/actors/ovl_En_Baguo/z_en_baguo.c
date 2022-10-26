@@ -41,7 +41,7 @@ typedef enum {
     /* 0x1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
-const ActorInit En_Baguo_InitVars = {
+ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -299,7 +299,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
 
 void EnBaguo_PostDetonation(EnBaguo* this, PlayState* play) {
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->timer >= 26) {

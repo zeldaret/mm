@@ -89,7 +89,7 @@ static s32 D_80BF33F0[] = {
     0x10000000,
 };
 
-const ActorInit En_Ig_InitVars = {
+ActorInit En_Ig_InitVars = {
     ACTOR_EN_IG,
     ACTORCAT_NPC,
     FLAGS,
@@ -469,7 +469,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
     u16 temp = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & 0xC40) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400 | PLAYER_STATE1_800)) {
         this->unk_3D0 |= 0x400;
         if (this->unk_3D2 != temp) {
             if ((this->unk_3FC == 2) || (this->unk_3FC == 3)) {

@@ -155,7 +155,4 @@ typedef enum {
 
 #define ENINVADEPOH_SET_PARAMS(p7F00, pF0, p7) (((p7) & 7) | (((p7F00) << 8) & 0x7F00) | (((pF0) << 4) & 0xF0))
 
-
-extern ActorInit En_Invadepoh_InitVars;
-
 #endif // Z_EN_INVADEPOH_H
