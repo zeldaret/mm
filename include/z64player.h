@@ -70,6 +70,14 @@ typedef enum {
     /* 0x19 */ PLAYER_MASK_MAX
 } PlayerMask;
 
+typedef enum {
+    /* 0 */ PLAYER_ENV_TIMER_NONE,
+    /* 1 */ PLAYER_ENV_TIMER_HOTROOM,
+    /* 2 */ PLAYER_ENV_TIMER_UNDERWATER_FLOOR,
+    /* 3 */ PLAYER_ENV_TIMER_SWIMMING,
+    /* 4 */ PLAYER_ENV_TIMER_UNDERWATER_FREE
+} PlayerEnvTimerType;
+
 typedef enum PlayerActionParam {
     /*   -1 */ PLAYER_AP_MINUS1 = -1,
     /* 0x00 */ PLAYER_AP_NONE,
@@ -89,7 +97,8 @@ typedef enum PlayerActionParam {
     /* 0x0E */ PLAYER_AP_BOMB,
     /* 0x0F */ PLAYER_AP_POWDER_KEG,
     /* 0x10 */ PLAYER_AP_BOMBCHU,
-    /* 0x12 */ PLAYER_AP_NUT = 0x12,
+    /* 0x11 */ PLAYER_AP_11,
+    /* 0x12 */ PLAYER_AP_NUT,
     /* 0x13 */ PLAYER_AP_PICTO_BOX,
     /* 0x14 */ PLAYER_AP_OCARINA,
     /* 0x15 */ PLAYER_AP_BOTTLE,
@@ -99,7 +108,8 @@ typedef enum PlayerActionParam {
     /* 0x19 */ PLAYER_AP_BOTTLE_ZORA_EGG,
     /* 0x1A */ PLAYER_AP_BOTTLE_DEKU_PRINCESS,
     /* 0x1B */ PLAYER_AP_BOTTLE_GOLD_DUST,
-    /* 0x1D */ PLAYER_AP_BOTTLE_SEAHORSE = 0x1D,
+    /* 0x1C */ PLAYER_AP_BOTTLE_1C,
+    /* 0x1D */ PLAYER_AP_BOTTLE_SEAHORSE,
     /* 0x1E */ PLAYER_AP_BOTTLE_MUSHROOM,
     /* 0x1F */ PLAYER_AP_BOTTLE_HYLIAN_LOACH,
     /* 0x20 */ PLAYER_AP_BOTTLE_BUG,
@@ -120,9 +130,15 @@ typedef enum PlayerActionParam {
     /* 0x2F */ PLAYER_AP_DEED_SWAMP,
     /* 0x30 */ PLAYER_AP_DEED_MOUNTAIN,
     /* 0x31 */ PLAYER_AP_DEED_OCEAN,
-    /* 0x33 */ PLAYER_AP_LETTER_MAMA = 0x33,
-    /* 0x36 */ PLAYER_AP_PENDANT_OF_MEMORIES = 0x36,
-    /* 0x3A */ PLAYER_AP_MASK_TRUTH = 0x3A,
+    /* 0x32 */ PLAYER_AP_32,
+    /* 0x33 */ PLAYER_AP_LETTER_MAMA,
+    /* 0x34 */ PLAYER_AP_34,
+    /* 0x35 */ PLAYER_AP_35,
+    /* 0x36 */ PLAYER_AP_PENDANT_OF_MEMORIES,
+    /* 0x37 */ PLAYER_AP_37,
+    /* 0x38 */ PLAYER_AP_38,
+    /* 0x39 */ PLAYER_AP_39,
+    /* 0x3A */ PLAYER_AP_MASK_TRUTH,
     /* 0x3B */ PLAYER_AP_MASK_KAFEIS_MASK,
     /* 0x3C */ PLAYER_AP_MASK_ALL_NIGHT,
     /* 0x3D */ PLAYER_AP_MASK_BUNNY,
@@ -147,7 +163,7 @@ typedef enum PlayerActionParam {
     /* 0x50 */ PLAYER_AP_MASK_ZORA,
     /* 0x51 */ PLAYER_AP_MASK_DEKU,
     /* 0x52 */ PLAYER_AP_LENS,
-    /* 0xFD */ PLAYER_AP_MAX = 0xFD
+    /* 0x53 */ PLAYER_AP_MAX
 } PlayerActionParam;
 
 typedef enum {
@@ -187,6 +203,134 @@ typedef enum {
     /* 33 */ PLAYER_MWA_BIG_SPIN_2H,           // Fully-charged two-handed spin
     /* 34 */ PLAYER_MWA_MAX
 } PlayerMeleeWeaponAnimation;
+
+typedef enum PlayerAnimType {
+    /* 0 */ PLAYER_ANIMTYPE_0,
+    /* 1 */ PLAYER_ANIMTYPE_1,
+    /* 2 */ PLAYER_ANIMTYPE_2,
+    /* 3 */ PLAYER_ANIMTYPE_3,
+    /* 4 */ PLAYER_ANIMTYPE_4,
+    /* 5 */ PLAYER_ANIMTYPE_5,
+    /* 6 */ PLAYER_ANIMTYPE_MAX
+} PlayerAnimType;
+
+typedef enum PlayerModelType {
+    // left hand
+    /*  0 */ PLAYER_MODELTYPE_LH_OPEN,
+    /*  1 */ PLAYER_MODELTYPE_LH_CLOSED,
+    /*  2 */ PLAYER_MODELTYPE_LH_ONE_HAND_SWORD,
+    /*  3 */ PLAYER_MODELTYPE_LH_TWO_HAND_SWORD,
+    /*  4 */ PLAYER_MODELTYPE_LH_4,
+    /*  5 */ PLAYER_MODELTYPE_LH_BOTTLE,
+    // right hand
+    /*  6 */ PLAYER_MODELTYPE_RH_OPEN,
+    /*  7 */ PLAYER_MODELTYPE_RH_CLOSED,
+    /*  8 */ PLAYER_MODELTYPE_RH_SHIELD,
+    /*  9 */ PLAYER_MODELTYPE_RH_BOW,
+    /* 10 */ PLAYER_MODELTYPE_RH_INSTRUMENT,
+    /* 11 */ PLAYER_MODELTYPE_RH_HOOKSHOT,
+    // sheath
+    /* 12 */ PLAYER_MODELTYPE_SHEATH_12,
+    /* 13 */ PLAYER_MODELTYPE_SHEATH_13,
+    /* 14 */ PLAYER_MODELTYPE_SHEATH_14,
+    /* 15 */ PLAYER_MODELTYPE_SHEATH_15,
+    // waist
+    /* 16 */ PLAYER_MODELTYPE_WAIST,
+    /* 17 */ PLAYER_MODELTYPE_17, // NULL?
+    /* 18 */ PLAYER_MODELTYPE_MAX
+} PlayerModelType;
+
+typedef struct PlayerModelIndices {
+    /* 0x0 */ u8 modelAnimType; // PlayerAnimType enum
+    /* 0x1 */ u8 leftHandType; // PlayerModelType enum
+    /* 0x2 */ u8 rightHandType; // PlayerModelType enum
+    /* 0x3 */ u8 sheathType; // PlayerModelType enum
+    /* 0x4 */ u8 waistType; // PlayerModelType enum
+} PlayerModelIndices; // size = 0x5
+
+typedef enum PlayerModelGroup {
+    /*  0 */ PLAYER_MODELGROUP_0,
+    /*  1 */ PLAYER_MODELGROUP_1,
+    /*  2 */ PLAYER_MODELGROUP_ONE_HAND_SWORD,
+    /*  3 */ PLAYER_MODELGROUP_DEFAULT, // non-specific models, for items that don't have particular link models
+    /*  4 */ PLAYER_MODELGROUP_4,
+    /*  5 */ PLAYER_MODELGROUP_TWO_HAND_SWORD,
+    /*  6 */ PLAYER_MODELGROUP_BOW,
+    /*  7 */ PLAYER_MODELGROUP_EXPLOSIVES,
+    /*  8 */ PLAYER_MODELGROUP_8,
+    /*  9 */ PLAYER_MODELGROUP_HOOKSHOT,
+    /* 10 */ PLAYER_MODELGROUP_STICK,
+    /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
+    /* 12 */ PLAYER_MODELGROUP_BOTTLE,
+    /* 13 */ PLAYER_MODELGROUP_13,
+    /* 14 */ PLAYER_MODELGROUP_ZORA_FINS,
+    /* 15 */ PLAYER_MODELGROUP_MAX
+} PlayerModelGroup;
+
+typedef enum {
+    /* 0 */ PLAYER_EYES_OPEN,
+    /* 1 */ PLAYER_EYES_HALF,
+    /* 2 */ PLAYER_EYES_CLOSED,
+    /* 3 */ PLAYER_EYES_ROLL_RIGHT,
+    /* 4 */ PLAYER_EYES_ROLL_LEFT,
+    /* 5 */ PLAYER_EYES_ROLL_UP,
+    /* 6 */ PLAYER_EYES_ROLL_DOWN,
+    /* 7 */ PLAYER_EYES_7,
+    /* 8 */ PLAYER_EYES_MAX
+} PlayerEyeIndex;
+
+typedef enum {
+    /* 0 */ PLAYER_MOUTH_CLOSED,
+    /* 1 */ PLAYER_MOUTH_TEETH,
+    /* 2 */ PLAYER_MOUTH_ANGRY,
+    /* 3 */ PLAYER_MOUTH_HAPPY,
+    /* 4 */ PLAYER_MOUTH_MAX
+} PlayerMouthIndex;
+
+typedef enum {
+    /*  0 */ PLAYER_FACE_0,
+    /*  1 */ PLAYER_FACE_1,
+    /*  2 */ PLAYER_FACE_2,
+    /*  3 */ PLAYER_FACE_3,
+    /*  4 */ PLAYER_FACE_4,
+    /*  5 */ PLAYER_FACE_5,
+    /*  6 */ PLAYER_FACE_6,
+    /*  7 */ PLAYER_FACE_7,
+    /*  8 */ PLAYER_FACE_8,
+    /*  9 */ PLAYER_FACE_9,
+    /* 10 */ PLAYER_FACE_10,
+    /* 11 */ PLAYER_FACE_11,
+    /* 12 */ PLAYER_FACE_12,
+    /* 13 */ PLAYER_FACE_13,
+    /* 14 */ PLAYER_FACE_14,
+    /* 15 */ PLAYER_FACE_15
+} PlayerFacialExpression;
+
+typedef enum {
+    /* 0x00 */ PLAYER_LIMB_NONE,
+    /* 0x01 */ PLAYER_LIMB_ROOT,
+    /* 0x02 */ PLAYER_LIMB_WAIST,
+    /* 0x03 */ PLAYER_LIMB_LOWER_ROOT,
+    /* 0x04 */ PLAYER_LIMB_RIGHT_THIGH,
+    /* 0x05 */ PLAYER_LIMB_RIGHT_SHIN,
+    /* 0x06 */ PLAYER_LIMB_RIGHT_FOOT,
+    /* 0x07 */ PLAYER_LIMB_LEFT_THIGH,
+    /* 0x08 */ PLAYER_LIMB_LEFT_SHIN,
+    /* 0x09 */ PLAYER_LIMB_LEFT_FOOT,
+    /* 0x0A */ PLAYER_LIMB_UPPER_ROOT,
+    /* 0x0B */ PLAYER_LIMB_HEAD,
+    /* 0x0C */ PLAYER_LIMB_HAT,
+    /* 0x0D */ PLAYER_LIMB_COLLAR,
+    /* 0x0E */ PLAYER_LIMB_LEFT_SHOULDER,
+    /* 0x0F */ PLAYER_LIMB_LEFT_FOREARM,
+    /* 0x10 */ PLAYER_LIMB_LEFT_HAND,
+    /* 0x11 */ PLAYER_LIMB_RIGHT_SHOULDER,
+    /* 0x12 */ PLAYER_LIMB_RIGHT_FOREARM,
+    /* 0x13 */ PLAYER_LIMB_RIGHT_HAND,
+    /* 0x14 */ PLAYER_LIMB_SHEATH,
+    /* 0x15 */ PLAYER_LIMB_TORSO,
+    /* 0x16 */ PLAYER_LIMB_MAX
+} PlayerLimb;
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -237,7 +381,6 @@ typedef void (*PlayerFuncD58)(struct PlayState*, struct Player*);
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 alpha;
-    /* 0x02 */ char unk_02[2]; // probably alignment padding
     /* 0x04 */ MtxF mf;
 } struct_80122D44_arg1_unk_04; // size = 0x44
 
@@ -412,7 +555,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_400        (1 << 10)
 // 
 #define PLAYER_STATE3_800        (1 << 11)
-// 
+// being curled?
 #define PLAYER_STATE3_1000       (1 << 12)
 // 
 #define PLAYER_STATE3_2000       (1 << 13)
@@ -459,15 +602,15 @@ typedef struct Player {
     /* 0x144 */ s8 currentShield;
     /* 0x145 */ s8 currentBoots;
     /* 0x146 */ s8 heldItemButton;
-    /* 0x147 */ s8 itemActionParam;
-    /* 0x148 */ u8 heldItemId;
+    /* 0x147 */ s8 itemActionParam; // PlayerActionParam enum
+    /* 0x148 */ u8 heldItemId; // ItemId enum
     /* 0x149 */ s8 prevBoots;
     /* 0x14A */ s8 heldItemActionParam;
     /* 0x14B */ u8 transformation;
-    /* 0x14C */ u8 modelGroup;
+    /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
     /* 0x14E */ s8 unk_14E;
-    /* 0x14F */ u8 modelAnimType;
+    /* 0x14F */ u8 modelAnimType; // PlayerAnimType enum
     /* 0x150 */ u8 leftHandType;
     /* 0x151 */ u8 rightHandType;
     /* 0x152 */ u8 sheathType;
@@ -594,7 +737,7 @@ typedef struct Player {
     /* 0xAD0 */ f32 linearVelocity;
     /* 0xAD4 */ s16 currentYaw;
     /* 0xAD6 */ s16 targetYaw;
-    /* 0xAD8 */ u16 unk_AD8;
+    /* 0xAD8 */ u16 underwaterTimer;
     /* 0xADA */ s8 meleeWeaponAnimation;
     /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;

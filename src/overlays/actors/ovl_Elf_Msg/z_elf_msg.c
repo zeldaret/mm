@@ -18,7 +18,7 @@ void ElfMsg_Update(Actor* thisx, PlayState* play);
 void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc);
 void func_8092E284(ElfMsg* this, PlayState* play);
 
-const ActorInit Elf_Msg_InitVars = {
+ActorInit Elf_Msg_InitVars = {
     ACTOR_ELF_MSG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -46,7 +46,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
         if (ELFMSG_GET_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
@@ -54,7 +54,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
             if (ELFMSG_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor));
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return true;
         }
     }
@@ -63,7 +63,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
     }
     if (Flags_GetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;
@@ -139,9 +139,12 @@ void ElfMsg_Update(Actor* thisx, PlayState* play) {
             if (ELFMSG_GET_SWITCHFLAG(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(thisx));
             }
-            Actor_MarkForDeath(&this->actor);
-        } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-                   (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
+            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
             this->actionFunc(this, play);
         }
     }

@@ -29,7 +29,7 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
-const ActorInit En_Ma_Yts_InitVars = {
+ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -220,7 +220,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
 
     this->type = EN_MA_YTS_GET_TYPE(thisx);
     if (!EnMaYts_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);

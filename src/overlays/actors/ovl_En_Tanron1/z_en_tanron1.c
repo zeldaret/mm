@@ -18,7 +18,7 @@ void EnTanron1_Draw(Actor* thisx, PlayState* play);
 void func_80BB5318(EnTanron1* this, PlayState* play);
 void func_80BB5AAC(EnTanron1* this, PlayState* play);
 
-const ActorInit En_Tanron1_InitVars = {
+ActorInit En_Tanron1_InitVars = {
     ACTOR_EN_TANRON1,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -405,6 +405,8 @@ void func_80BB5AAC(EnTanron1* this, PlayState* play) {
         Matrix_RotateYS(ptr->unk_1A, MTXMODE_APPLY);
         Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
+
+        if (1) {}
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);

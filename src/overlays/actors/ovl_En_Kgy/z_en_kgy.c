@@ -31,7 +31,7 @@ void func_80B425A0(EnKgy* this, PlayState* play);
 void func_80B42714(EnKgy* this, PlayState* play);
 void func_80B42D28(EnKgy* this, PlayState* play);
 
-const ActorInit En_Kgy_InitVars = {
+ActorInit En_Kgy_InitVars = {
     ACTOR_EN_KGY,
     ACTORCAT_NPC,
     FLAGS,
@@ -151,33 +151,33 @@ ObjIcePoly* EnKgy_FindIceBlock(PlayState* play) {
 }
 
 void func_80B40C74(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 1;
+    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
     if (CURRENT_DAY == 1) {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 2;
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 2;
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~2;
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~2;
     }
 }
 
 void func_80B40D00(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 4;
+    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 4;
 }
 
 void func_80B40D30(PlayState* play) {
-    gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~7;
+    gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
 }
 
 s32 func_80B40D64(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 1;
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1;
 }
 
 s32 func_80B40D8C(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 4;
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 4;
 }
 
 s32 func_80B40DB4(PlayState* play) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -1149,10 +1149,10 @@ void func_80B43074(EnKgy* this, PlayState* play) {
     gSPMatrix(gfx, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (func_80B40D8C(play)) {
-        gSPDisplayList(&gfx[1], gameplay_keep_DL_001D00);
+        gSPDisplayList(&gfx[1], gRazorSwordHandleDL);
         gSPDisplayList(&gfx[2], object_kgy_DL_00F180);
     } else {
-        gSPDisplayList(&gfx[1], gameplay_keep_DL_0021A8);
+        gSPDisplayList(&gfx[1], gKokiriSwordHandleDL);
         gSPDisplayList(&gfx[2], object_kgy_DL_00E8F0);
     }
     POLY_OPA_DISP = &gfx[3];

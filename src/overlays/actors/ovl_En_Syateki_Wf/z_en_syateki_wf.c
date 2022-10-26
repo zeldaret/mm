@@ -13,7 +13,7 @@
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play);
-void EnSyatekiWf_Update(Actor* thisx, PlayState* play);
+void EnSyatekiWf_Update(Actor* thisx, PlayState* play2);
 void EnSyatekiWf_Draw(Actor* thisx, PlayState* play);
 
 void func_80A201CC(EnSyatekiWf* this);
@@ -101,7 +101,7 @@ static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Wf_InitVars = {
+ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -151,12 +151,12 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_WF_GET_NUMBER(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_WF_GET_INDEX(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -224,7 +224,7 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.draw = NULL;
     this->unk_2A4 = 1;
     this->unk_298 = 0;
-    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor));
+    syatekiMan->wolfosFlags &= ~(1 << EN_SYATEKI_WF_GET_INDEX(&this->actor));
     this->actionFunc = func_80A20284;
 }
 
@@ -236,7 +236,7 @@ void func_80A20284(EnSyatekiWf* this, PlayState* play) {
         if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->unk_298 == 1)) {
             func_80A200E0(this);
             func_80A2030C(this);
-        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_NUMBER(&this->actor))) {
+        } else if (syatekiMan->wolfosFlags & (1 << EN_SYATEKI_WF_GET_INDEX(&this->actor))) {
             this->unk_298 = 1;
         }
     }
@@ -424,7 +424,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
         this->unk_34C.base.acFlags &= ~AC_HIT;
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
-            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             func_80A20858(this, play);
         } else {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);

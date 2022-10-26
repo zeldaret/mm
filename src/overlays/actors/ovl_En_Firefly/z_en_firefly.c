@@ -14,7 +14,7 @@
 
 void EnFirefly_Init(Actor* thisx, PlayState* play);
 void EnFirefly_Destroy(Actor* thisx, PlayState* play);
-void EnFirefly_Update(Actor* thisx, PlayState* play);
+void EnFirefly_Update(Actor* thisx, PlayState* play2);
 void EnFirefly_Draw(Actor* thisx, PlayState* play);
 
 void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play);
@@ -44,7 +44,7 @@ typedef enum {
     /* 2 */ KEESE_AURA_ICE
 } KeeseAuraType;
 
-const ActorInit En_Firefly_InitVars = {
+ActorInit En_Firefly_InitVars = {
     ACTOR_EN_FIREFLY,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -411,7 +411,7 @@ void EnFirefly_Die(EnFirefly* this, PlayState* play) {
 
     if (this->timer == 0) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xA0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

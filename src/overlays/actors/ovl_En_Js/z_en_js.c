@@ -27,7 +27,7 @@ void func_8096A104(EnJs* this, PlayState* play);
 void func_8096A38C(EnJs* this, PlayState* play);
 void func_8096A6F4(EnJs* this, PlayState* play);
 
-const ActorInit En_Js_InitVars = {
+ActorInit En_Js_InitVars = {
     ACTOR_EN_JS,
     ACTORCAT_NPC,
     FLAGS,
@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static Gfx* D_8096ABCC[] = {
-    gMoonChildMajorasMaskDL, gMoonChildOdalwasMaskDL,   gMoonChildGohtsMaskDL,
+    gMoonChildMajorasMaskDL, gMoonChildOdolwasMaskDL,   gMoonChildGohtsMaskDL,
     gMoonChildGyorgsMaskDL,  gMoonChildTwinmoldsMaskDL,
 };
 
@@ -126,7 +126,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80969B5C;
             func_80968A5C(this);
             if (func_809692A8(ENJS_GET_TYPE(&this->actor) + 4)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -272,7 +272,7 @@ s32 func_80968E38(s32 arg0) {
     s32 i;
     s32 count;
     u8 mask;
-    u8* maskMaskBit = gSaveContext.maskMaskBit;
+    u8* masksGivenOnMoon = gSaveContext.masksGivenOnMoon;
 
     if (((arg0 < 0) || (arg0 >= 9))) {
         return 0;
@@ -282,21 +282,21 @@ s32 func_80968E38(s32 arg0) {
 
     arg0 *= 3;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
-        if (maskMaskBit[arg0] & mask) {
+        if (masksGivenOnMoon[arg0] & mask) {
             count++;
         }
     }
 
     arg0++;
     for (mask = 1, i = 0; i < 8; i++, mask <<= 1) {
-        if (maskMaskBit[arg0] & mask) {
+        if (masksGivenOnMoon[arg0] & mask) {
             count++;
         }
     }
 
     arg0++;
     for (mask = 1, i = 0; i < 5; i++, mask <<= 1) {
-        if (maskMaskBit[arg0] & mask) {
+        if (masksGivenOnMoon[arg0] & mask) {
             count++;
         }
     }
@@ -373,15 +373,15 @@ s32 EnJs_GetRemainingMasks(void) {
 }
 
 void EnJs_TakeMask(s32 actionParams, s32 childType) {
-    u8* maskMaskBit = gSaveContext.maskMaskBit;
+    u8* masksGivenOnMoon = gSaveContext.masksGivenOnMoon;
     s32 temp = 0;
 
     if ((childType >= 0) && (childType < 9)) {
         actionParams -= PLAYER_AP_MASK_TRUTH;
         childType *= 3;
         if (actionParams < 8) {
-            maskMaskBit[childType] |= 1 << actionParams;
-            maskMaskBit[temp] |= 1 << actionParams;
+            masksGivenOnMoon[childType] |= 1 << actionParams;
+            masksGivenOnMoon[temp] |= 1 << actionParams;
             return;
         }
 
@@ -389,8 +389,8 @@ void EnJs_TakeMask(s32 actionParams, s32 childType) {
         childType++;
         temp++;
         if (actionParams < 8) {
-            maskMaskBit[childType] |= 1 << actionParams;
-            maskMaskBit[temp] |= 1 << actionParams;
+            masksGivenOnMoon[childType] |= 1 << actionParams;
+            masksGivenOnMoon[temp] |= 1 << actionParams;
             return;
         }
 
@@ -398,8 +398,8 @@ void EnJs_TakeMask(s32 actionParams, s32 childType) {
         childType++;
         temp++;
         if (actionParams < 6) {
-            maskMaskBit[childType] |= 1 << actionParams;
-            maskMaskBit[temp] |= 1 << actionParams;
+            masksGivenOnMoon[childType] |= 1 << actionParams;
+            masksGivenOnMoon[temp] |= 1 << actionParams;
         }
     }
 }
@@ -457,15 +457,15 @@ s32 func_8096933C(s32 arg0) {
 }
 
 void func_80969400(s32 arg0) {
-    u8* maskMaskBit = gSaveContext.maskMaskBit;
-    u8* temp_v0 = &gSaveContext.maskMaskBit[arg0 * 3];
+    u8* masksGivenOnMoon = gSaveContext.masksGivenOnMoon;
+    u8* temp_v0 = &gSaveContext.masksGivenOnMoon[arg0 * 3];
 
     if ((arg0 >= 0) && (arg0 < 9)) {
-        maskMaskBit[0] &= ~temp_v0[0];
-        maskMaskBit[1] &= ~temp_v0[1];
+        masksGivenOnMoon[0] &= ~temp_v0[0];
+        masksGivenOnMoon[1] &= ~temp_v0[1];
 
         temp_v0[2] &= 0xF;
-        maskMaskBit[2] &= ~temp_v0[2];
+        masksGivenOnMoon[2] &= ~temp_v0[2];
 
         temp_v0[0] = 0;
         temp_v0[1] = 0;

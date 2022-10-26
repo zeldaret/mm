@@ -5,6 +5,7 @@
  */
 
 #include "z_en_stop_heishi.h"
+#include "z64quake.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -19,7 +20,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play);
 void func_80AE85C4(EnStopheishi* this, PlayState* play);
 
 #if 0
-const ActorInit En_Stop_heishi_InitVars = {
+ActorInit En_Stop_heishi_InitVars = {
     ACTOR_EN_STOP_HEISHI,
     ACTORCAT_NPC,
     FLAGS,

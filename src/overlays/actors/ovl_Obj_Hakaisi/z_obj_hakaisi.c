@@ -37,7 +37,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play);
 void func_80B1544C(Actor* thisx, PlayState* play);
 void func_80B154A0(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hakaisi_InitVars = {
+ActorInit Obj_Hakaisi_InitVars = {
     ACTOR_OBJ_HAKAISI,
     ACTORCAT_PROP,
     FLAGS,
@@ -120,13 +120,13 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->dyna.actor.floorPoly == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.floorHeight,
@@ -406,7 +406,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play) {
     if (this->dyna.actor.bgCheckFlags & 2) {
         func_80B14B6C(this, play, this->dyna.actor.world.pos, 40);
         func_80B14CF8(play, this->dyna.actor.world.pos, 100, 30, 10);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     Matrix_RotateAxisS(this->unk_19C, &this->unk_184, MTXMODE_NEW);

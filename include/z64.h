@@ -112,17 +112,6 @@ typedef struct {
 } PolygonType2; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ s16 func;
-    /* 0x2 */ UNK_TYPE1 pad2[0x6];
-} CameraModeParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u32 validModes;
-    /* 0x4 */ UNK_TYPE1 pad4[0x4];
-    /* 0x8 */ CameraModeParams* modes;
-} CameraStateParams; // size = 0xC
-
-typedef struct {
     /* 0x0 */ s16 x;
     /* 0x2 */ s16 y;
     /* 0x4 */ s16 z;
@@ -286,13 +275,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-typedef struct {
-    /* 0x0 */ s8 letterboxTarget;
-    /* 0x1 */ s8 letterboxMagnitude;
-    /* 0x2 */ s8 pillarboxTarget;
-    /* 0x3 */ s8 pillarboxMagnitude;
-} ShrinkWindowContext; // size = 0x4
-
 typedef void(*osCreateThread_func)(void*);
 
 typedef enum {
@@ -404,10 +386,10 @@ typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
-    /* 0x170 */ u8* unk_170;
-    /* 0x174 */ u8* unk_174;
-    /* 0x178 */ u8* unk_178;
-    /* 0x17C */ u8* unk_17C;
+    /* 0x170 */ u8* iconItemAltSegment;
+    /* 0x174 */ u8* iconItemLangSegment;
+    /* 0x178 */ u8* nameSegment;
+    /* 0x17C */ u8* iconItemVtxSegment;
     /* 0x180 */ Vtx* itemPageVtx;
     /* 0x184 */ Vtx* mapPageVtx;
     /* 0x188 */ Vtx* questPageVtx;
@@ -420,37 +402,36 @@ typedef struct {
     /* 0x1A4 */ Vtx* unk_1A4;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
-    /* 0x1B0 */ DmaRequest unk_1B0;
+    /* 0x1B0 */ UNK_TYPE1 unk_1B0[0x20];
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
     /* 0x1EE */ u16 debugEditor;
-    /* 0x1F0 */ u8 unk_1F0;
+    /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
-    /* 0x200 */ u16 unk_200;
-    /* 0x202 */ u16 mode;
+    /* 0x200 */ u16 mainState;
+    /* 0x202 */ u16 nextPageMode; // (2 * prev pageIndex) + (scroll left ? 1 : 0)
     /* 0x204 */ u16 pageIndex;
-    /* 0x206 */ u16 unk_206;
-    /* 0x208 */ u16 unk_208;
+    /* 0x206 */ u16 switchPageTimer;
+    /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ f32 unk_210;
-    /* 0x214 */ f32 unk_214;
-    /* 0x218 */ f32 unk_218;
-    /* 0x21C */ f32 unk_21C;
-    /* 0x220 */ f32 unk_220;
+    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen 
+    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen 
+    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen 
+    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen 
+    /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
-    /* 0x228 */ s32 unk_228;
-    /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 stickRelX;
-    /* 0x234 */ s32 stickRelY;
+    /* 0x228 */ UNK_TYPE1 unk_228[0x8];
+    /* 0x230 */ s32 stickAdjX;
+    /* 0x234 */ s32 stickAdjY;
     /* 0x238 */ s16 cursorPoint[5];
-    /* 0x242 */ s16 cursorX[5];
-    /* 0x24C */ s16 cursorY[5];
-    /* 0x256 */ s16 unk_256;
+    /* 0x242 */ s16 cursorXIndex[5];
+    /* 0x24C */ s16 cursorYIndex[5];
+    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
     /* 0x25A */ s16 pageSwitchTimer;
-    /* 0x25C */ u16 unk_25C;
+    /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];
     /* 0x272 */ u16 equipTargetItem;
@@ -459,7 +440,7 @@ typedef struct {
     /* 0x278 */ s16 equipAnimX;
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
-    /* 0x27E */ s16 unk_27E;
+    /* 0x27E */ s16 infoPanelOffsetY;
     /* 0x280 */ u16 unk_280;
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
@@ -471,17 +452,17 @@ typedef struct {
     /* 0x298 */ f32 unk_298;
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
-    /* 0x2A0 */ s16 unk_2A0;
+    /* 0x2A0 */ s16 ocarinaSongIndex;
     /* 0x2A2 */ u8 worldMapPoints[20];
-    /* 0x2B6 */ u8 unk_2B6;
-    /* 0x2B7 */ u8 unk_2B7;
-    /* 0x2B8 */ u8 unk_2B8;
+    /* 0x2B6 */ u8 unk_2B6; // unused red?
+    /* 0x2B7 */ u8 unk_2B7; // unused green?
+    /* 0x2B8 */ u8 unk_2B8; // unused blue?
     /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
     /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
     /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
-    /* 0x2BE */ s16 unk_2BE[5];
-    /* 0x2C8 */ u16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2BE */ s16 ocarinaButtonsY[5];
+    /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {
@@ -574,8 +555,8 @@ typedef struct {
         /* 0x318 */ u8 pictographBox;
         /* 0x319 */ u8 all;     // "another"; enables all item restrictions
     } restrictions; // size = 0xC
-    /* 0x31A */ u8 unk_31A;
-    /* 0x31B */ u8 unk_31B;
+    /* 0x31A */ u8 storyState;
+    /* 0x31B */ u8 storyType;
     /* 0x31C */ u8 unk_31C;
     /* 0x320 */ OSMesgQueue unk_320;
     /* 0x338 */ OSMesg unk_338;
@@ -743,7 +724,7 @@ typedef struct {
 #define TRANS_TRIGGER_START 20 // start transition (exiting an area)
 #define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
 
-typedef enum {
+typedef enum TransitionMode {
     /*  0 */ TRANS_MODE_OFF,
     /*  1 */ TRANS_MODE_01,
     /*  2 */ TRANS_MODE_02,
@@ -764,7 +745,7 @@ typedef enum {
     /* 17 */ TRANS_MODE_17
 } TransitionMode;
 
-typedef enum {
+typedef enum TransitionType {
     /*  0 */ TRANS_TYPE_00,
     /*  1 */ TRANS_TYPE_01,
     /*  2 */ TRANS_TYPE_02,
@@ -898,63 +879,6 @@ typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec
 typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
 
 typedef struct {
-    /* 0x00 */ Vec3f atOffset;
-    /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rollOffset;
-    /* 0x1A */ s16 zoom;
-} ShakeInfo; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ s16 randIdx;
-    /* 0x02 */ s16 countdownMax;
-    /* 0x04 */ Camera* camera;
-    /* 0x08 */ u32 callbackIdx;
-    /* 0x0C */ s16 verticalMag;
-    /* 0x0E */ s16 horizontalMag;
-    /* 0x10 */ s16 zoom;
-    /* 0x12 */ s16 rollOffset;
-    /* 0x14 */ Vec3s shakePlaneOffset; // angle deviations from shaking in the perpendicular plane
-    /* 0x1A */ s16 speed;
-    /* 0x1C */ s16 isShakePerpendicular;
-    /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 camId;
-} QuakeRequest; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ Vec3f atOffset;
-    /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rollOffset;
-    /* 0x1A */ s16 zoom;
-    /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
-} QuakeCamCalc; // size = 0x20
-
-typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
-
-#define QUAKE_SPEED (1 << 0)
-#define QUAKE_VERTICAL_MAG (1 << 1)
-#define QUAKE_HORIZONTAL_MAG (1 << 2)
-#define QUAKE_ZOOM (1 << 3)
-#define QUAKE_ROLL_OFFSET (1 << 4)
-#define QUAKE_SHAKE_PLANE_OFFSET_X (1 << 5)
-#define QUAKE_SHAKE_PLANE_OFFSET_Y (1 << 6)
-#define QUAKE_SHAKE_PLANE_OFFSET_Z (1 << 7)
-#define QUAKE_COUNTDOWN (1 << 8)
-#define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
-
-typedef struct {
-    /* 0x0 */ PlayState* play;
-    /* 0x4 */ s32 type; // bitfield, highest set bit determines type
-    /* 0x8 */ s16 countdown;
-    /* 0xA */ s16 state;
-} DistortionContext; // size = 0xC
-
-typedef enum {
-    /* 0 */ DISTORTION_INACTIVE,
-    /* 1 */ DISTORTION_ACTIVE,
-    /* 2 */ DISTORTION_SETUP
-} DistortionState;
-
-typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
     /* 0x001 */ UNK_TYPE1 pad1[0x13];
     /* 0x014 */ OSContStatus statuses[4];
@@ -1056,10 +980,9 @@ struct FireObj {
 }; // size = 0x8B
 
 typedef struct {
-    /* 0x0 */ u8   seqIndex;
-    /* 0x1 */ u8   nightSeqIndex;
-    /* 0x2 */ u8   unk_02;
-} SoundContext; // size = 0x3
+    /* 0x0 */ u8   seqId;
+    /* 0x1 */ u8   ambienceId;
+} SequenceContext; // size = 0x2
 
 typedef struct {
     /* 0x0 */ s32 enabled;
@@ -1084,7 +1007,7 @@ typedef struct {
 
 struct PlayState {
     /* 0x00000 */ GameState state;
-    /* 0x000A4 */ s16 sceneNum;
+    /* 0x000A4 */ s16 sceneId;
     /* 0x000A6 */ u8 sceneConfig;
     /* 0x000A7 */ char unk_A7[0x9];
     /* 0x000B0 */ void* sceneSegment;
@@ -1095,7 +1018,7 @@ struct PlayState {
     /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
     /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
-    /* 0x00814 */ SoundContext soundCtx;
+    /* 0x00814 */ SequenceContext sequenceCtx;
     /* 0x00818 */ LightContext lightCtx;
     /* 0x00828 */ FrameAdvanceContext frameAdvCtx;
     /* 0x00830 */ CollisionContext colCtx;
@@ -1125,7 +1048,7 @@ struct PlayState {
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
-    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 arg2, s32 arg3);
+    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 itemId, s32 arg3);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1144,7 +1067,7 @@ struct PlayState {
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
-    /* 0x18868 */ void* unk_18868;
+    /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
@@ -1166,7 +1089,7 @@ struct PlayState {
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ char unk_18E58[0x10];
-    /* 0x18E68 */ s32 unk_18E68;
+    /* 0x18E68 */ void* unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 }; // size = 0x19258
 

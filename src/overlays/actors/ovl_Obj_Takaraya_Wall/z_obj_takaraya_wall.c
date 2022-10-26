@@ -18,7 +18,7 @@ void ObjTakarayaWall_Draw(Actor* thisx, PlayState* play);
 void func_80AD9B04(ObjTakarayaWall* this, PlayState* play);
 
 #if 0
-const ActorInit Obj_Takaraya_Wall_InitVars = {
+ActorInit Obj_Takaraya_Wall_InitVars = {
     ACTOR_OBJ_TAKARAYA_WALL,
     ACTORCAT_BG,
     FLAGS,

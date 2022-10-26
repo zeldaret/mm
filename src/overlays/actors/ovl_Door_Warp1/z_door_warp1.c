@@ -49,7 +49,7 @@ void func_808BB8D4(DoorWarp1* this, PlayState* play, s32 arg2);
 static s16 D_808BC000;
 static f32 D_808BC004;
 
-const ActorInit Door_Warp1_InitVars = {
+ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -75,13 +75,13 @@ void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
 s32 func_808B849C(DoorWarp1* this, PlayState* play) {
     s32 ret = 0;
 
-    if ((play->sceneNum == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+    if ((play->sceneId == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
         ret = 1;
-    } else if ((play->sceneNum == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
+    } else if ((play->sceneId == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
         ret = 2;
-    } else if ((play->sceneNum == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
+    } else if ((play->sceneId == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
         ret = 3;
-    } else if ((play->sceneNum == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
+    } else if ((play->sceneId == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
         ret = 4;
     }
     return ret;
@@ -161,8 +161,8 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((play->sceneNum == SCENE_MITURIN_BS) || (play->sceneNum == SCENE_HAKUGIN_BS) ||
-        (play->sceneNum == SCENE_INISIE_BS) || (play->sceneNum == SCENE_SEA_BS)) {
+    if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
+        (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
         func_800FE484();
         play->interfaceCtx.restrictions.unk_312 = 1;
         play->interfaceCtx.restrictions.songOfSoaring = 1;
@@ -239,7 +239,7 @@ void func_808B8C48(DoorWarp1* this, PlayState* play) {
                               this->dyna.actor.world.pos.z, 200, 255, 255, 255);
     Lights_PointNoGlowSetInfo(&this->unk_1F4, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                               this->dyna.actor.world.pos.z, 200, 255, 255, 255);
-    if (((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_2) && CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) ||
+    if (((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_2) && CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) ||
         ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_3) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) ||
         ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_4) && CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) ||
         ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_5) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD))) {
@@ -268,7 +268,7 @@ void func_808B8E78(DoorWarp1* this, PlayState* play) {
     this->unk_1A8 = 0.0f;
     this->unk_1AC = 0.0f;
     this->unk_1A4 = 700.0f;
-    if (play->sceneNum == SCENE_INISIE_N) {
+    if (play->sceneId == SCENE_INISIE_N) {
         DoorWarp1_SetupAction(this, func_808B96A0);
     } else if (gSaveContext.save.weekEventReg[86] & 0x80) {
         this->unk_1D4 = 0;
@@ -307,12 +307,12 @@ void func_808B90CC(DoorWarp1* this, PlayState* play) {
     s16 sp2E = 0;
     f32 phi_f0 = 0.0f;
 
-    if (play->sceneNum == SCENE_MITURIN) {
+    if (play->sceneId == SCENE_MITURIN) {
         sp2E = -10;
         phi_f0 = -5.0f;
-    } else if (play->sceneNum == SCENE_HAKUGIN) {
+    } else if (play->sceneId == SCENE_HAKUGIN) {
         sp2E = -20;
-    } else if (play->sceneNum == SCENE_SEA) {
+    } else if (play->sceneId == SCENE_SEA) {
         sp2E = -20;
     }
 
@@ -551,7 +551,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
         return;
     }
 
-    switch (play->sceneNum) {
+    switch (play->sceneId) {
         case SCENE_MITURIN_BS:
             gSaveContext.save.unk_ECC[0] =
                 (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFFFFFF00) | (((u8)gSaveContext.save.unk_ECC[1]) & 0xFF);
@@ -598,7 +598,7 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 
-        Interface_ChangeAlpha(1);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
         func_800B7298(play, &this->dyna.actor, 9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
@@ -635,16 +635,16 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
     u8 phi_a0;
     s32 phi_v0_3;
 
-    if ((play->sceneNum == SCENE_MITURIN_BS) || (play->sceneNum == SCENE_HAKUGIN_BS) ||
-        (play->sceneNum == SCENE_INISIE_BS) || (play->sceneNum == SCENE_SEA_BS)) {
-        D_801F4DE2 = play->sceneNum;
-        if (play->sceneNum == SCENE_MITURIN_BS) {
+    if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
+        (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
+        D_801F4DE2 = play->sceneId;
+        if (play->sceneId == SCENE_MITURIN_BS) {
             phi_v0_2 = 0;
-        } else if (play->sceneNum == SCENE_HAKUGIN_BS) {
+        } else if (play->sceneId == SCENE_HAKUGIN_BS) {
             phi_v0_2 = 1;
-        } else if (play->sceneNum == SCENE_INISIE_BS) {
+        } else if (play->sceneId == SCENE_INISIE_BS) {
             phi_v0_2 = 2;
-        } else if (play->sceneNum == SCENE_SEA_BS) {
+        } else if (play->sceneId == SCENE_SEA_BS) {
             phi_v0_2 = 3;
         } else {
             phi_v0_2 = 0;
@@ -871,7 +871,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
 
         play->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
         if (play->envCtx.lightSettings.fogNear < -300) {
-            play->roomCtx.currRoom.segment = NULL;
+            play->roomCtx.curRoom.segment = NULL;
         }
     }
 }
@@ -882,7 +882,7 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play) {
     f32 phi_f2;
 
     phi_f2 = 200.0f;
-    if (play->sceneNum == SCENE_SEA) {
+    if (play->sceneId == SCENE_SEA) {
         phi_f2 = 85.0f;
     }
 
@@ -1039,12 +1039,12 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
         return;
     }
 
-    if (play->sceneNum != SCENE_MITURIN) {
-        if (play->sceneNum == SCENE_HAKUGIN) {
+    if (play->sceneId != SCENE_MITURIN) {
+        if (play->sceneId == SCENE_HAKUGIN) {
             sp60 = 1;
-        } else if (play->sceneNum == SCENE_SEA) {
+        } else if (play->sceneId == SCENE_SEA) {
             sp60 = 2;
-        } else if (play->sceneNum == SCENE_INISIE_R) {
+        } else if (play->sceneId == SCENE_INISIE_R) {
             sp60 = 3;
         }
     }

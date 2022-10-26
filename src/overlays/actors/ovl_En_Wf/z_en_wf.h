@@ -37,6 +37,4 @@ typedef struct EnWf {
     /* 0x49C */ ColliderCylinder collider3;
 } EnWf; // size = 0x4E8
 
-extern const ActorInit En_Wf_InitVars;
-
 #endif // Z_EN_WF_H

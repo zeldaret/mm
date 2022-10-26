@@ -69,7 +69,7 @@ typedef enum {
     /* 13 */ FSN_ANIM_MAX
 } FsnAnimation;
 
-const ActorInit En_Fsn_InitVars = {
+ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -393,7 +393,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
-    Interface_ChangeAlpha(50);
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
@@ -1157,7 +1157,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
-            Interface_ChangeAlpha(50);
+            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
             item = this->items[this->cursorIndex];
@@ -1417,7 +1417,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_InitShop(this, play);
     } else {
         if ((gSaveContext.save.weekEventReg[33] & 8) || (gSaveContext.save.weekEventReg[79] & 0x40)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         Collider_InitCylinder(play, &this->collider);

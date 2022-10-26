@@ -52,7 +52,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-const ActorInit En_Trt2_InitVars = {
+ActorInit En_Trt2_InitVars = {
     ACTOR_EN_TRT2,
     ACTORCAT_NPC,
     FLAGS,
@@ -243,7 +243,7 @@ void func_80AD381C(EnTrt2* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -251,7 +251,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
     Vec3s sp30;
 
     if (this->unk_3D9 == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->path != NULL) {
@@ -468,7 +468,7 @@ void func_80AD4298(EnTrt2* this, PlayState* play) {
 
     if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_3B2 = 6;
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -481,8 +481,8 @@ void func_80AD4298(EnTrt2* this, PlayState* play) {
 void func_80AD431C(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 &= ~0x20;
-    Actor_MarkForDeath(&this->actor);
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
+    Actor_Kill(&this->actor);
 }
 
 void func_80AD434C(EnTrt2* this, PlayState* play) {
@@ -743,33 +743,33 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->unk_3BC = func_80AD4608;
 
     if (gSaveContext.save.weekEventReg[12] & 8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (gSaveContext.save.weekEventReg[84] & 0x40) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if ((play->sceneNum == SCENE_20SICHITAI) || (play->sceneNum == SCENE_20SICHITAI2)) {
+    if ((play->sceneId == SCENE_20SICHITAI) || (play->sceneId == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
             if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
                 gSaveContext.save.weekEventReg[15] |= 0x80;
                 this->unk_3B2 = 3;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (gSaveContext.save.day == 2) {
         if (gSaveContext.save.weekEventReg[15] & 0x80) {
             this->unk_3B2 = 4;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (gSaveContext.save.day == 3) {
@@ -790,7 +790,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
     D_80AD5910[this->unk_3B2](this, play);
     Actor_MoveWithGravity(&this->actor);
 
-    if (play->sceneNum != SCENE_20SICHITAI) {
+    if (play->sceneId != SCENE_20SICHITAI) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
     }
 

@@ -33,7 +33,7 @@ void func_80A3A77C(EnElfgrp* this, PlayState* play);
 void func_80A3A7FC(EnElfgrp* this, PlayState* play);
 void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 
-const ActorInit En_Elfgrp_InitVars = {
+ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
     ACTORCAT_PROP,
     FLAGS,
@@ -205,13 +205,13 @@ s32 func_80A39C1C(PlayState* play, s32 arg1) {
     }
 
     if (arg1 == 0) {
-        if (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 1) {
+        if (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1) {
             return 25;
         }
         return 24;
     }
 
-    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
+    temp_v1 = (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 >> (((arg1 - 1) * 5) + 1)) & 0x1F;
     if (temp_v1 < 10) {
         temp_v1 = 10;
     } else if (temp_v1 > 25) {
@@ -227,13 +227,13 @@ void func_80A39CD4(PlayState* play, s32 arg1, s32 arg2) {
 
     if (arg1 == 0) {
         if (arg2 == 25) {
-            gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= 1;
+            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= 1;
         } else {
-            gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~1;
+            gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~1;
         }
     } else {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= arg2 << ((arg1 * 5) - 4);
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~(0x1F << ((arg1 * 5) - 4));
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg2 << ((arg1 * 5) - 4);
     }
 }
 
@@ -483,11 +483,11 @@ void func_80A3A610(EnElfgrp* this, PlayState* play) {
 
     if (this->unk_144 > 0) {
         player->actor.freezeTimer = 100;
-        player->stateFlags1 |= 0x20000000;
+        player->stateFlags1 |= PLAYER_STATE1_20000000;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIRY_GROUP_HEAL - SFX_FLAG);
     } else {
         player->actor.freezeTimer = 0;
-        player->stateFlags1 &= ~0x20000000;
+        player->stateFlags1 &= ~PLAYER_STATE1_20000000;
         this->actionFunc = func_80A3A600;
         this->unk_14A |= 8;
     }
@@ -499,7 +499,7 @@ void func_80A3A6F4(EnElfgrp* this, PlayState* play) {
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         player->actor.freezeTimer = 100;
-        player->stateFlags1 |= 0x20000000;
+        player->stateFlags1 |= PLAYER_STATE1_20000000;
         this->unk_144 = func_80A39FBC(play);
         this->actionFunc = func_80A3A610;
         this->unk_14A &= ~8;
@@ -510,7 +510,7 @@ void func_80A3A77C(EnElfgrp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->actor.freezeTimer = 100;
-    player->stateFlags1 |= 0x20000000;
+    player->stateFlags1 |= PLAYER_STATE1_20000000;
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->unk_144 = func_80A39FBC(play);
         this->actionFunc = func_80A3A610;
@@ -558,7 +558,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             player->actor.freezeTimer = 100;
-            player->stateFlags1 |= 0x20000000;
+            player->stateFlags1 |= PLAYER_STATE1_20000000;
             Message_StartTextbox(play, this->actor.textId, &this->actor);
             this->actionFunc = func_80A3A77C;
             gSaveContext.save.weekEventReg[9] |= this->unk_146;

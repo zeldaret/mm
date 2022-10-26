@@ -56,6 +56,4 @@ typedef struct EnSsh {
     /* 0x5C8 */ s16 blinkTimer;
 } EnSsh; // size = 0x5CC
 
-extern const ActorInit En_Ssh_InitVars;
-
 #endif // Z_EN_SSH_H

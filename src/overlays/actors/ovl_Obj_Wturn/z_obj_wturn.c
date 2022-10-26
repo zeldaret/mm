@@ -22,7 +22,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play);
 void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
-const ActorInit Obj_Wturn_InitVars = {
+ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,       ACTORCAT_ITEMACTION,        FLAGS,
     GAMEPLAY_KEEP,         sizeof(ObjWturn),           (ActorFunc)ObjWturn_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,
@@ -41,9 +41,12 @@ void func_808A7954(ObjWturn* this) {
 void func_808A7968(ObjWturn* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode >= 28 && play->msgCtx.ocarinaMode < 39) {
         Flags_UnsetSwitch(play, this->actor.params);
-        Actor_MarkForDeath(&this->actor);
-    } else if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneNum == SCENE_F40)) ||
-               (!Flags_GetSwitch(play, this->actor.params) && (play->sceneNum == SCENE_F41))) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
+        (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
         func_808A7A24(this);
     }
 }
@@ -112,7 +115,7 @@ void func_808A7C78(ObjWturn* this, PlayState* play) {
         play->transitionType = TRANS_TYPE_64;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
         gSaveContext.nextCutsceneIndex = 0;
-        if (play->sceneNum == SCENE_F40) {
+        if (play->sceneId == SCENE_F40) {
             play->nextEntrance = ENTRANCE(STONE_TOWER_INVERTED, 0);
         } else {
             play->nextEntrance = ENTRANCE(STONE_TOWER, 1);

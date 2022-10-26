@@ -15,9 +15,9 @@
 
 #define THIS ((EnHorse*)thisx)
 
-void EnHorse_Init(Actor* thisx, PlayState* play);
+void EnHorse_Init(Actor* thisx, PlayState* play2);
 void EnHorse_Destroy(Actor* thisx, PlayState* play);
-void EnHorse_Update(Actor* thisx, PlayState* play);
+void EnHorse_Update(Actor* thisx, PlayState* play2);
 void EnHorse_Draw(Actor* thisx, PlayState* play);
 
 void func_8087D540(Actor* thisx, PlayState* play);
@@ -144,7 +144,7 @@ static SkeletonHeader* sSkeletonHeaders[] = {
     NULL, NULL, &object_horse_link_child_Skel_00A480, NULL, NULL,
 };
 
-const ActorInit En_Horse_InitVars = {
+ActorInit En_Horse_InitVars = {
     ACTOR_EN_HORSE,
     ACTORCAT_BG,
     FLAGS,
@@ -721,7 +721,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->unk_528 = 80.0f;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_1EC |= 1;
@@ -743,7 +743,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_BANDIT;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_1EC |= 1;
@@ -751,7 +751,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     } else {
         this->type = HORSE_TYPE_EPONA;
         this->boostSpeed = 15;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.params &= ~(ENHORSE_PARAM_DONKEY | ENHORSE_PARAM_4000 | ENHORSE_PARAM_BANDIT);
@@ -792,8 +792,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneNum == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneSetupIndex(play))) {
+    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneLayer(play))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -878,8 +878,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         func_80112AFC(play);
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
-        if ((play->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
-            Actor_MarkForDeath(&this->actor);
+        if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
+            Actor_Kill(&this->actor);
         }
     } else if (thisx->params == ENHORSE_16) {
         func_8087C9F8(this);
@@ -1569,7 +1569,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneSetupIndex(play))) {
+            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneLayer(play))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -3271,7 +3271,7 @@ void func_80884604(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
 }
 
 void func_808846B4(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808846DC(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
@@ -3498,7 +3498,7 @@ void EnHorse_ObstructMovement(EnHorse* this, PlayState* play, s32 obstacleType, 
             this->unk_1EC |= 0x80;
             this->actor.world.pos = this->actor.prevPos;
             this->actor.speedXZ = 0.0f;
-        } else if ((play->sceneNum != SCENE_KOEPONARACE) || (this->unk_1EC & 2)) {
+        } else if ((play->sceneId != SCENE_KOEPONARACE) || (this->unk_1EC & 2)) {
             this->unk_1EC &= ~2;
             this->actor.world.pos = this->lastPos;
             this->stateFlags |= ENHORSE_OBSTACLE;
@@ -3822,7 +3822,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
         }
 
         if (((movingFast == false) && (intersectDist < 80.0f)) || ((movingFast == true) && (intersectDist < 150.0f))) {
-            if ((play->sceneNum != SCENE_KOEPONARACE) && (Math_CosS(sp7E) < 0.9f) && (this->playerControlled == true)) {
+            if ((play->sceneId != SCENE_KOEPONARACE) && (Math_CosS(sp7E) < 0.9f) && (this->playerControlled == true)) {
                 if (movingFast == false) {
                     this->stateFlags |= ENHORSE_FORCE_REVERSING;
                 } else if (movingFast == true) {
@@ -3876,7 +3876,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
                                COLPOLY_GET_NORMAL(obstacleFloor->normal.z), obstacleFloor->dist,
                                &this->actor.world.pos) > 40.0f)) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
-            (play->sceneNum != SCENE_KOEPONARACE)) {
+            (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
@@ -3888,7 +3888,7 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
     if ((temp_f0 < 0.81915206f) || SurfaceType_IsHorseBlocked(&play->colCtx, obstacleFloor, bgId) ||
         (func_800C99D4(&play->colCtx, obstacleFloor, bgId) == 7)) {
         if ((Math_CosS(sp7E) < 0.9f) && (movingFast == true) && (this->playerControlled == true) &&
-            (this->action != ENHORSE_ACTION_STOPPING) && (play->sceneNum != SCENE_KOEPONARACE)) {
+            (this->action != ENHORSE_ACTION_STOPPING) && (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
@@ -3951,13 +3951,13 @@ void EnHorse_UpdateBgCheckInfo(EnHorse* this, PlayState* play) {
     if ((temp_f0 < 0.81915206f) || SurfaceType_IsHorseBlocked(&play->colCtx, obstacleFloor, bgId) ||
         (func_800C99D4(&play->colCtx, obstacleFloor, bgId) == 7)) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
-            (play->sceneNum != SCENE_KOEPONARACE)) {
+            (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }
     } else if (behindObstacleHeight < -70.0f) {
         if ((movingFast == true) && (this->playerControlled == true) && (this->action != ENHORSE_ACTION_STOPPING) &&
-            (play->sceneNum != SCENE_KOEPONARACE)) {
+            (play->sceneId != SCENE_KOEPONARACE)) {
             this->stateFlags |= ENHORSE_FORCE_REVERSING;
             EnHorse_StartBraking(this, play);
         }

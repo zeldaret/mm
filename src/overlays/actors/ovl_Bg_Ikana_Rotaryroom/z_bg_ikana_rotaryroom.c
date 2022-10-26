@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_ikana_rotaryroom.h"
+#include "z64quake.h"
 #include "overlays/actors/ovl_Bg_Ikana_Block/z_bg_ikana_block.h"
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -33,7 +34,7 @@ void func_80B81BA0(Actor* thisx, PlayState* play);
 void func_80B81DAC(BgIkanaRotaryroom* this);
 void func_80B81DC8(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Rotaryroom_InitVars = {
+ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     ACTOR_BG_IKANA_ROTARYROOM,
     ACTORCAT_BG,
     FLAGS,
@@ -831,11 +832,11 @@ void func_80B81A80(Actor* thisx, PlayState* play) {
 
         func_80B81B84(this);
     } else if (this->unk_584 == 15) {
-        s16 sp26 = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(sp26, 0x7B30);
-        Quake_SetQuakeValues(sp26, 6, 0, 100, 0);
-        Quake_SetCountdown(sp26, 22);
+        Quake_SetSpeed(quakeIndex, 31536);
+        Quake_SetQuakeValues(quakeIndex, 6, 0, 100, 0);
+        Quake_SetCountdown(quakeIndex, 22);
     }
 }
 
@@ -858,11 +859,11 @@ void func_80B81BA0(Actor* thisx, PlayState* play) {
     thisx->shape.rot.x += 0x1F4;
 
     if (!(this->unk_584 & 7)) {
-        s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(quake, 0x7B30);
-        Quake_SetQuakeValues(quake, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
-        Quake_SetCountdown(quake, 15);
+        Quake_SetSpeed(quakeIndex, 31536);
+        Quake_SetQuakeValues(quakeIndex, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
+        Quake_SetCountdown(quakeIndex, 15);
     }
 
     if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
@@ -928,11 +929,11 @@ void func_80B81DC8(Actor* thisx, PlayState* play) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         func_80B818B4(this);
     } else if (this->unk_584 == 19) {
-        s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-        Quake_SetSpeed(quake, 0x4E20);
-        Quake_SetQuakeValues(quake, 5, 0, 40, 60);
-        Quake_SetCountdown(quake, 17);
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetQuakeValues(quakeIndex, 5, 0, 40, 60);
+        Quake_SetCountdown(quakeIndex, 17);
     }
 }
 

@@ -5,14 +5,15 @@
  */
 
 #include "z_en_test6.h"
+#include "z64quake.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnTest6*)thisx)
 
-void EnTest6_Init(Actor* thisx, PlayState* play);
-void EnTest6_Destroy(Actor* thisx, PlayState* play);
+void EnTest6_Init(Actor* thisx, PlayState* play2);
+void EnTest6_Destroy(Actor* thisx, PlayState* play2);
 void EnTest6_Update(Actor* thisx, PlayState* play);
 void EnTest6_Draw(Actor* thisx, PlayState* play);
 
@@ -41,7 +42,7 @@ void func_80A92950(EnTest6* this, PlayState* play);
 
 EnTest6Struct D_80A94910[12];
 
-const ActorInit En_Test6_InitVars = {
+ActorInit En_Test6_InitVars = {
     ACTOR_EN_TEST6,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -301,7 +302,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
     if (((ENTEST6_GET(&this->actor) == ENTEST6_24) || (ENTEST6_GET(&this->actor) == ENTEST6_25) ||
          (ENTEST6_GET(&this->actor) == ENTEST6_26)) &&
         (play->playerActorCsIds[8] == -1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -396,8 +397,8 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
     func_80A90C34();
-    Distortion_ClearType(0x20);
-    Actor_MarkForDeath(&this->actor);
+    Distortion_ClearType(DISTORTION_TYPE_5);
+    Actor_Kill(&this->actor);
 }
 
 void func_80A91760(EnTest6* this, PlayState* play) {
@@ -462,7 +463,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                     }
                 }
                 func_80A90C08(0x78);
-                Distortion_SetType(0x20);
+                Distortion_SetType(DISTORTION_TYPE_5);
                 Distortion_SetCountdown(80);
                 play->unk_18844 = 1;
                 this->unk_274 = 95;
@@ -517,7 +518,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
             if (this->unk_27A == 10) {
                 this->unk_14C = 0.1f;
                 func_80A90C34();
-                Distortion_ClearType(0x20);
+                Distortion_ClearType(DISTORTION_TYPE_5);
                 play->unk_18844 = 0;
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
@@ -617,8 +618,8 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     ActorCutscene_Stop(play->playerActorCsIds[8]);
     func_800B7298(play, NULL, 6);
     func_80A90C34();
-    Distortion_ClearType(0x20);
-    Actor_MarkForDeath(&this->actor);
+    Distortion_ClearType(DISTORTION_TYPE_5);
+    Actor_Kill(&this->actor);
 }
 
 void func_80A92188(EnTest6* this, PlayState* play) {
@@ -684,13 +685,13 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
         case 115:
             func_80A90C08(0x14);
-            Distortion_SetType(0x20);
+            Distortion_SetType(DISTORTION_TYPE_5);
             Distortion_SetCountdown(90);
             this->unk_274 = 2;
             break;
 
         case 110:
-            func_801A3098(0x4A);
+            Audio_PlayFanfare(NA_BGM_SONG_OF_DOUBLE_TIME);
             break;
 
         case 38:
@@ -715,7 +716,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
         case 14:
         case 15:
             func_80A90C08(0x32);
-            Distortion_ClearType(0x20);
+            Distortion_ClearType(DISTORTION_TYPE_5);
             this->unk_274 = 0;
             break;
 

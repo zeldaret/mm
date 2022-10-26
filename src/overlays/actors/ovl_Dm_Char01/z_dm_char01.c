@@ -14,7 +14,7 @@
 
 void DmChar01_Init(Actor* thisx, PlayState* play);
 void DmChar01_Destroy(Actor* thisx, PlayState* play);
-void DmChar01_Update(Actor* thisx, PlayState* play);
+void DmChar01_Update(Actor* thisx, PlayState* play2);
 void DmChar01_Draw(Actor* thisx, PlayState* play);
 
 void func_80AA8698(DmChar01* this, PlayState* play);
@@ -35,7 +35,7 @@ s16 D_80AAAE26;
 
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
-const ActorInit Dm_Char01_InitVars = {
+ActorInit Dm_Char01_InitVars = {
     ACTOR_DM_CHAR01,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -73,7 +73,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
                 break;
             }
 
-            if (gSaveContext.sceneSetupIndex == 0) {
+            if (gSaveContext.sceneLayer == 0) {
                 play->envCtx.unk_1F = 5;
                 play->envCtx.unk_20 = 5;
             }
@@ -87,7 +87,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodfallSceneryPoisonWaterDamageCol);
 
             this->unk_34D = true;
-            if (gSaveContext.sceneSetupIndex == 1) {
+            if (gSaveContext.sceneLayer == 1) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8C28;
             } else {
@@ -97,7 +97,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case DMCHAR01_1:
-            if ((gSaveContext.save.weekEventReg[20] & 2) || (gSaveContext.sceneSetupIndex == 1)) {
+            if ((gSaveContext.save.weekEventReg[20] & 2) || (gSaveContext.sceneLayer == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
             } else {
@@ -124,7 +124,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.world.rot.y += 0x8000;
             this->dyna.actor.shape.rot.y += 0x8000;
             if (!(gSaveContext.save.weekEventReg[20] & 1)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
 
@@ -164,7 +164,7 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
         return;
     }
 
-    if ((player->stateFlags2 & 0x8000000) && (player2->actor.world.pos.x > -40.0f) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (player2->actor.world.pos.x > -40.0f) &&
         (player2->actor.world.pos.x < 40.0f) && (player2->actor.world.pos.z > 1000.0f) &&
         (player2->actor.world.pos.z < 1078.0f)) {
         if (!D_80AAAAB4) {
@@ -411,7 +411,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    if (gSaveContext.sceneSetupIndex == 1) {
+                    if (gSaveContext.sceneLayer == 1) {
                         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWaterTexAnim));
                         Gfx_DrawDListOpa(play, gWoodfallSceneryFloorDL);
                         Gfx_DrawDListXlu(play, gWoodfallSceneryPurifiedWaterDL);

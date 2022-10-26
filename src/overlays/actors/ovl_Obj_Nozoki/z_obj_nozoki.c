@@ -32,7 +32,7 @@ s32 D_80BA36B0;
 s32 D_80BA36B4;
 f32 D_80BA36B8;
 
-const ActorInit Obj_Nozoki_InitVars = {
+ActorInit Obj_Nozoki_InitVars = {
     ACTOR_OBJ_NOZOKI,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -71,7 +71,7 @@ void ObjNozoki_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->unk_15F = this->dyna.actor.cutscene;
 
-    if (play->sceneNum == SCENE_AYASHIISHOP) {
+    if (play->sceneId == SCENE_AYASHIISHOP) {
         this->unk_15C = 4;
         ObjNozoki_SetupAction(this, func_80BA3230);
         this->dyna.actor.colChkInfo.cylRadius = -40;
@@ -96,7 +96,7 @@ void func_80BA2514(ObjNozoki* this, PlayState* play) {
     s32 sp24 = Object_GetIndex(&play->objectCtx, D_80BA34B8[this->unk_15C]);
 
     if (sp24 < 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -328,7 +328,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
 
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             if (sp34 <= 5.0f) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
         } else if (!(play->actorCtx.flags & ACTORCTX_FLAG_5) && (GET_PLAYER(play)->actor.id == ACTOR_PLAYER) &&
                    Flags_GetSwitch(play, OBJNOZOKI_GET_SWITCHFLAG2(&this->dyna.actor)) && (sp38 < 20.0f)) {
@@ -347,7 +347,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
 
                 sp38 = this->dyna.actor.home.pos.y - this->dyna.actor.world.pos.y;
                 if (sp38 >= 100.0f) {
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                 }
 
                 this->dyna.actor.shape.rot.x = -0x1F40 - (s16)(sp38 * 400.0f);

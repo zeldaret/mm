@@ -58,10 +58,10 @@ void ObjUm_Update(Actor* thisx, PlayState* play);
 void ObjUm_Draw(Actor* thisx, PlayState* play);
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
-void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation index);
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
-const ActorInit Obj_Um_InitVars = {
+ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,
     FLAGS,
@@ -684,7 +684,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
     // if (!AliensDefeated)
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -705,7 +705,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             if ((gSaveContext.save.weekEventReg[34] & 0x80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
                 gSaveContext.save.time <= CLOCK_TIME(6, 0) || (gSaveContext.save.weekEventReg[52] & 1) ||
                 (gSaveContext.save.weekEventReg[52] & 2)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
 
@@ -715,7 +715,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
         if (!(gSaveContext.save.weekEventReg[31] & 0x80) || (gSaveContext.save.weekEventReg[52] & 1)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -729,7 +729,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
         if (!(gSaveContext.save.weekEventReg[31] & 0x80)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -741,7 +741,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
         if (!(gSaveContext.save.weekEventReg[52] & 1) || (gSaveContext.save.weekEventReg[59] & 2)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -751,7 +751,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
-        func_801A3098(NA_BGM_CLEAR_EVENT);
+        Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     } else {
         this->type = OBJ_UM_TYPE_TERMINA_FIELD;
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
@@ -768,7 +768,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->dyna.bgId == BGCHECK_SCENE) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -780,7 +780,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                               this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_DONKEY, ENHORSE_18));
 
     if (this->donkey == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -802,11 +802,11 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->banditsCollisions[1]);
 }
 
-// ObjUm_MarkMyDonkeyAndMyselfForDeath, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
+// ObjUm_KillMyDonkeyAndMyself, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
 void func_80B79524(ObjUm* this) {
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
     if (this->donkey != NULL) {
-        Actor_MarkForDeath(&this->donkey->actor);
+        Actor_Kill(&this->donkey->actor);
     }
 }
 
@@ -1295,9 +1295,9 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            gSaveContext.seqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 
             if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (!this->areAllPotsBroken) {

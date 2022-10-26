@@ -472,7 +472,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
     // Loop over columns (i), (counterDigits[1] stores rectLeft)
     for (counterDigits[1] = 44, i = 0; i < 4; i++) {
         counterDigits[2] = 0;
-        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA + i)) {
+        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA + i)) {
             counterDigits[2] = 1;
         }
         KaleidoScope_DrawDigit(play, counterDigits[2], counterDigits[1], 112);
@@ -663,8 +663,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
     s16 value;
     s32 dBtnInput = input->cur.button & (BTN_DUP | BTN_DDOWN | BTN_DLEFT | BTN_DRIGHT);
 
-    pauseCtx->stickRelX = input->rel.stick_x;
-    pauseCtx->stickRelY = input->rel.stick_y;
+    pauseCtx->stickAdjX = input->rel.stick_x;
+    pauseCtx->stickAdjY = input->rel.stick_y;
 
     // Handles navigating the menu to different sections with the D-Pad
     // When the same direction is held, registers the input periodically based on a timer

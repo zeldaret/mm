@@ -50,7 +50,7 @@ typedef enum {
     /* 2 */ BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH
 } BombShopLadyScheduleResult;
 
-const ActorInit En_Baba_InitVars = {
+ActorInit En_Baba_InitVars = {
     ACTOR_EN_BABA,
     ACTORCAT_NPC,
     FLAGS,
@@ -503,18 +503,18 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     this->stateFlags |= BOMB_SHOP_LADY_STATE_DRAW_SHADOW;
     this->actor.flags |= ACTOR_FLAG_1;
 
-    if (play->sceneNum == SCENE_BOMYA) {
+    if (play->sceneId == SCENE_BOMYA) {
         this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
         this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnBaba_Idle;
-    } else if (play->sceneNum == SCENE_BACKTOWN) {
+    } else if (play->sceneId == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
             (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
             (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
             if ((gSaveContext.save.weekEventReg[58] & 0x40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -525,7 +525,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
         } else if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_IDLE) &&
                    (gSaveContext.save.entrance == ENTRANCE(NORTH_CLOCK_TOWN, 7))) {
             if (gSaveContext.save.weekEventReg[81] & 2) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -540,7 +540,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             this->stateFlags |= BOMB_SHOP_LADY_STATE_AUTOTALK;
             this->actionFunc = EnBaba_Idle;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else {

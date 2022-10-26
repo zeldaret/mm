@@ -10,7 +10,7 @@
 
 #define THIS ((EnFloormas*)thisx)
 
-void EnFloormas_Init(Actor* thisx, PlayState* play);
+void EnFloormas_Init(Actor* thisx, PlayState* play2);
 void EnFloormas_Destroy(Actor* thisx, PlayState* play);
 void EnFloormas_Update(Actor* thisx, PlayState* play);
 void EnFloormas_Draw(Actor* thisx, PlayState* play);
@@ -59,7 +59,7 @@ void func_808D2D30(EnFloormas* this, PlayState* play);
 void func_808D2DC0(EnFloormas* this, PlayState* play);
 void func_808D3754(Actor* thisx, PlayState* play);
 
-const ActorInit En_Floormas_InitVars = {
+ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -178,7 +178,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
         &play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x, this->actor.world.pos.y,
         this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.unk20, NULL);
     if (this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -186,8 +186,8 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
                                                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
                                                       params + 0x10, -1, this->actor.unk20, NULL);
     if (this->actor.child == NULL) {
-        Actor_MarkForDeath(this->actor.parent);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(this->actor.parent);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -745,7 +745,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
 
     Math_Vec3f_Sum(&player->actor.world.pos, &this->actor.home.pos, &this->actor.world.pos);
 
-    if (!(player->stateFlags2 & 0x80) || (player->invincibilityTimer < 0)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->invincibilityTimer < 0)) {
         EnFloormas* parent = (EnFloormas*)this->actor.parent;
         EnFloormas* child = (EnFloormas*)this->actor.child;
 
@@ -898,7 +898,7 @@ void func_808D2A20(EnFloormas* this) {
     if ((parent->actionFunc == func_808D2AA8) && (child->actionFunc == func_808D2AA8)) {
         func_808D2AB8(parent);
         func_808D2AB8(child);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.draw = NULL;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
@@ -917,7 +917,7 @@ void func_808D2AB8(EnFloormas* this) {
 }
 
 void func_808D2AF4(EnFloormas* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808D2B18(EnFloormas* this) {

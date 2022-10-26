@@ -51,7 +51,7 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
-const ActorInit En_GirlA_InitVars = {
+ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
     ACTORCAT_PROP,
     FLAGS,
@@ -160,14 +160,14 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
 
     //! @bug: Condition is impossible, && should be an ||
-    if (params >= SI_MAX && params < SI_POTION_RED_1) {
-        Actor_MarkForDeath(&this->actor);
+    if ((params >= SI_MAX) && (params < SI_POTION_RED_1)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

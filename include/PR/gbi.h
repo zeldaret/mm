@@ -2599,11 +2599,11 @@ _DW({									\
         gsSPLoadUcodeEx((uc_start), (uc_dstart), SP_UCODE_DATA_SIZE)
 
 #define	gSPLoadUcodeL(pkt, ucode)					\
-        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&##ucode##TextStart),	\
-		            OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&ucode##TextStart),	\
+		            OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #define	gsSPLoadUcodeL(ucode)						\
-        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&##ucode##TextStart),		\
-		      OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&ucode##TextStart),		\
+		      OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #endif
 
 #ifdef	F3DEX_GBI_2
@@ -3572,7 +3572,7 @@ _DW({									\
 
 #define	gDPLoadTextureBlock(pkt, timg, fmt, siz, width, height,		\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz##_LOAD_BLOCK, 1, timg);	\
 	gDPSetTile(pkt, fmt, siz##_LOAD_BLOCK, 0, 0, G_TX_LOADTILE, 	\
 		0 , cmt, maskt, shiftt, cms, masks, shifts);		\
@@ -3588,7 +3588,7 @@ _DW({									\
 	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0,			\
 		((width)-1) << G_TEXTURE_IMAGE_FRAC,			\
 		((height)-1) << G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 #define	gDPLoadTextureBlockYuv(pkt, timg, fmt, siz, width, height,	\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\

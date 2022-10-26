@@ -5,13 +5,14 @@
  */
 
 #include "z_bg_ikana_dharma.h"
+#include "z64quake.h"
 #include "assets/objects/object_ikana_obj/object_ikana_obj.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIkanaDharma*)thisx)
 
-void BgIkanaDharma_Init(Actor* thisx, PlayState* play);
+void BgIkanaDharma_Init(Actor* thisx, PlayState* play2);
 void BgIkanaDharma_Destroy(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play);
 void BgIkanaDharma_Draw(Actor* thisx, PlayState* play);
@@ -23,7 +24,7 @@ void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play);
 void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this);
 void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Dharma_InitVars = {
+ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,
     ACTORCAT_BG,
     FLAGS,
@@ -203,13 +204,14 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
         }
     }
 
-    if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f) != 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
-        this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
-        BgIkanaDharma_SpawnEffects(this, play);
+    if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f)) {
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
+    this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
+    BgIkanaDharma_SpawnEffects(this, play);
 }
 
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
@@ -226,11 +228,12 @@ void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {
             Actor_MoveWithGravity(&this->dyna.actor);
             Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
             if (this->dyna.actor.bgCheckFlags & 2) {
-                s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-                Quake_SetSpeed(quake, 21536);
-                Quake_SetQuakeValues(quake, 4, 0, 0, 0);
-                Quake_SetCountdown(quake, 12);
+                Quake_SetSpeed(quakeIndex, 21536);
+                Quake_SetQuakeValues(quakeIndex, 4, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 12);
+
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {

@@ -24,7 +24,7 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play);
 void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this);
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play);
 
-const ActorInit Bg_Haka_Bombwall_InitVars = {
+ActorInit Bg_Haka_Bombwall_InitVars = {
     ACTOR_BG_HAKA_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -161,7 +161,7 @@ void BgHakaBombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
     if (Flags_GetSwitch(play, BGHAKABOMBWALL_GET_7F(thisx))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_000148);
         Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
@@ -218,7 +218,7 @@ void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play) {
     this->csTimer--;
     if (this->csTimer <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

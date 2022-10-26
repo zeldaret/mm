@@ -12,8 +12,8 @@
 
 #define THIS ((EnBigpo*)thisx)
 
-void EnBigpo_Init(Actor* thisx, PlayState* play);
-void EnBigpo_Destroy(Actor* thisx, PlayState* play);
+void EnBigpo_Init(Actor* thisx, PlayState* play2);
+void EnBigpo_Destroy(Actor* thisx, PlayState* play2);
 void EnBigpo_Update(Actor* thisx, PlayState* play);
 void EnBigpo_UpdateFire(Actor* thisx, PlayState* play);
 
@@ -82,9 +82,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play);
 void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play);
 void EnBigpo_RevealedFire(Actor* thisx, PlayState* play);
 
-extern const ActorInit En_Bigpo_InitVars;
-
-const ActorInit En_Bigpo_InitVars = {
+ActorInit En_Bigpo_InitVars = {
     ACTOR_EN_BIGPO,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -185,11 +183,12 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     thisx->params &= 0xFF;
     if (thisx->params == ENBIGPO_POSSIBLEFIRE) {
         if (Flags_GetSwitch(play, this->switchFlags)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            thisx->update = Actor_Noop;
-            EnBigpo_InitHiddenFire(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        thisx->update = Actor_Noop;
+        EnBigpo_InitHiddenFire(this);
         return;
     }
 
@@ -215,12 +214,12 @@ void EnBigpo_Init(Actor* thisx, PlayState* play2) {
     this->mainColor.a = 0; // fully invisible
 
     if ((this->switchFlags != 0xFF) && (Flags_GetSwitch(play, this->switchFlags))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (thisx->params == ENBIGPO_REGULAR) { // the well poe, starts immediately
         thisx->flags &= ~ACTOR_FLAG_10;     // always update OFF
-        this->unkBool204 = true;
+        this->storePrevBgm = true;
         EnBigpo_InitWellBigpo(this);
     } else if (thisx->params == ENBIGPO_SUMMONED) { // dampe type
         EnBigpo_InitDampeMainPo(this);
@@ -439,9 +438,9 @@ void EnBigpo_SpawnCutsceneStage6(EnBigpo* this, PlayState* play) {
  */
 void EnBigpo_SpawnCutsceneStage7(EnBigpo* this) {
     this->idleTimer = 15;
-    if (this->unkBool204 == false) {
-        func_801A2E54(NA_BGM_MINI_BOSS);
-        this->unkBool204 = true;
+    if (this->storePrevBgm == false) {
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+        this->storePrevBgm = true;
     }
     this->actionFunc = EnBigpo_SpawnCutsceneStage8;
 }
@@ -525,9 +524,9 @@ void EnBigpo_WarpingIn(EnBigpo* this, PlayState* play) {
     this->mainColor.a = this->idleTimer * (255.0f / 32.0f);
     if (this->idleTimer == 32) {
         this->mainColor.a = 255; // fully visible
-        if (this->unkBool204 == false) {
-            func_801A2E54(NA_BGM_MINI_BOSS);
-            this->unkBool204 = true;
+        if (this->storePrevBgm == false) {
+            Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
+            this->storePrevBgm = true;
         }
         EnBigpo_SetupIdleFlying(this);
     }
@@ -819,8 +818,11 @@ void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
 void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
     DECR(this->idleTimer);
     if (Actor_HasParent(&this->actor, play)) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->idleTimer == 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->idleTimer == 0) {
         // took too long, soul is leaving
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);
@@ -838,7 +840,7 @@ void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
 void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, PlayState* play) {
     EnBigpo_AdjustPoAlpha(this, -13);
     if (this->mainColor.a == 0) { // fully invisible
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -981,7 +983,7 @@ void EnBigpo_WaitingForDampe(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_Die(EnBigpo* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnBigpo_SetupFireRevealed(EnBigpo* this) {
@@ -1045,7 +1047,7 @@ void EnBigpo_FlameCircleCutscene(EnBigpo* this, PlayState* play) {
         EnBigpo* parentPoh = (EnBigpo*)this->actor.parent;
         Flags_SetSwitch(play, this->switchFlags);
         Math_Vec3f_Copy(&parentPoh->fires[this->unk20C].pos, &this->actor.world.pos);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         if (this->unk20C == 0) {
             parentPoh->actor.draw = EnBigpo_DrawCircleFlames;
             Actor_SetScale(&parentPoh->actor, 0.01f);
@@ -1124,7 +1126,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
-                func_801A2ED8();
+                Audio_RestorePrevBgm();
             }
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DAMAGE);

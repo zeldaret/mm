@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x1 */ u8  naviQuestHintFileId;
     /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
@@ -153,16 +153,16 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  bgmId;
-    /* 0x2 */ UNK_TYPE1 pad2[4];
-    /* 0x6 */ u8  nighttimeSFX;
-    /* 0x7 */ u8  musicSeq;
+    /* 0x1 */ u8  specId;
+    /* 0x2 */ UNK_TYPE1 unk_02[4];
+    /* 0x6 */ u8  ambienceId;
+    /* 0x7 */ u8  seqId;
 } SCmdSoundSettings; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  data1;
-    /* 0x2 */ UNK_TYPE1 pad2[5];
+    /* 0x2 */ UNK_TYPE1 unk_02[5];
     /* 0x7 */ u8  echo;
 } SCmdEchoSettings; // size = 0x8
 
@@ -174,9 +174,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cameraMovement;
-    /* 0x4 */ u32 area;
-} SCmdMiscSettings; // size = 0x8
+    /* 0x1 */ u8  sceneCsCount;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -186,9 +186,8 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  data1;
-    /* 0x4 */ u32 data2;
-} SCmdWorldMapVisited; // size = 0x8
+    /* 0x1 */ UNK_TYPE1 pad[7];
+} SCmdRegionVisited; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -271,7 +270,7 @@ typedef struct {
 } Room; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ Room currRoom;
+    /* 0x00 */ Room curRoom;
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
     /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
@@ -290,7 +289,7 @@ typedef struct {
 typedef struct {
     struct {
         s8 room;    // Room to switch to
-        s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
+        s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
     } /* 0x0 */ sides[2]; // 0 = front, 1 = back
     /* 0x4 */ s16   id;
     /* 0x6 */ Vec3s pos;
@@ -316,7 +315,7 @@ typedef struct {
 } EntranceEntry; // size = 0x2
 
 typedef struct {
-    /* 0x0 */ s8 sceneNum;
+    /* 0x0 */ s8 sceneId;
     /* 0x1 */ s8 spawnNum;
     /* 0x2 */ u16 flags;
 } EntranceTableEntry; // size = 0x4
@@ -523,15 +522,58 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdMiscSettings      miscSettings;
+    /* Command: 0x17 */ SCmdCutsceneList      cutsceneList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
-    /* Command: 0x19 */ SCmdWorldMapVisited   worldMapVisited;
+    /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
     /* Command: 0x1B */ SCmdCutsceneActorList cutsceneActorList;
     /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
     /* Command: 0x1D */ // Unused
     /* Command: 0x1E */ SCmdMinimapChests     minimapChests;
 } SceneCmd; // size = 0x8
+
+// Sets cursor point options on the world map
+typedef enum {
+    /* 0x0 */ REGION_GREAT_BAY,
+    /* 0x1 */ REGION_ZORA_HALL,
+    /* 0x2 */ REGION_ROMANI_RANCH,
+    /* 0x3 */ REGION_DEKU_PALACE,
+    /* 0x4 */ REGION_WOODFALL,
+    /* 0x5 */ REGION_CLOCK_TOWN,
+    /* 0x6 */ REGION_SNOWHEAD,
+    /* 0x7 */ REGION_IKANA_GRAVEYARD,
+    /* 0x8 */ REGION_IKANA_CANYON,
+    /* 0x9 */ REGION_GORON_VILLAGE,
+    /* 0xA */ REGION_STONE_TOWER,
+    /* 0xB */ REGION_MAX
+} RegionId;
+
+// Sets warp points for owl statues
+typedef enum {
+    /* 0x0 */ OWL_WARP_GREAT_BAY_COAST,
+    /* 0x1 */ OWL_WARP_ZORA_CAPE,
+    /* 0x2 */ OWL_WARP_SNOWHEAD,
+    /* 0x3 */ OWL_WARP_MOUNTAIN_VILLAGE,
+    /* 0x4 */ OWL_WARP_CLOCK_TOWN,
+    /* 0x5 */ OWL_WARP_MILK_ROAD,
+    /* 0x6 */ OWL_WARP_WOODFALL,
+    /* 0x7 */ OWL_WARP_SOUTHERN_SWAMP,
+    /* 0x8 */ OWL_WARP_IKANA_CANYON,
+    /* 0x9 */ OWL_WARP_STONE_TOWER,
+    /* 0xA */ OWL_WARP_ENTRANCE, // Special index for warping to the entrance of a scene
+    /* 0xB */ OWL_WARP_MAX
+} OwlWarpId;
+
+// Sets cloud visibility on the world map
+typedef enum {
+    /* 0 */ TINGLE_MAP_CLOCK_TOWN,
+    /* 1 */ TINGLE_MAP_WOODFALL,
+    /* 2 */ TINGLE_MAP_SNOWHEAD,
+    /* 3 */ TINGLE_MAP_ROMANI_RANCH,
+    /* 4 */ TINGLE_MAP_GREAT_BAY,
+    /* 5 */ TINGLE_MAP_STONE_TOWER,
+    /* 6 */ TINGLE_MAP_MAX
+} TingleMapId;
 
 typedef enum {
     /* 0x00 */ SCENE_20SICHITAI2, // Southern Swamp (Clear)
@@ -767,7 +809,7 @@ typedef enum {
 /*
 * 0xFE00:  Index into sSceneEntranceTable (Scene)
 * 0x01F0:  Index into the scenes specific entrance table (Spawn)
-* 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneSetupIndex
+* 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneLayer
 */
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
 
@@ -782,6 +824,14 @@ typedef enum {
     /* 6 */ SCENE_DRAW_CFG_GREAT_BAY_TEMPLE,
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
+
+// TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
+// Leftover from OoT
+typedef enum {
+    /* 0 */ NAVI_QUEST_HINTS_NONE,
+    /* 1 */ NAVI_QUEST_HINTS_OVERWORLD,
+    /* 2 */ NAVI_QUEST_HINTS_DUNGEON
+} NaviQuestHintFileId;
 
 // SceneTableEntry commands
 typedef enum {
@@ -810,14 +860,14 @@ typedef enum {
     /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
     /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
-    /* 0x19 */ SCENE_CMD_ID_MISC_SETTINGS,
+    /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
     /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
     /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
     /* 0x1D */ SCENE_CMD_ID_UNUSED_1D,
     /* 0x1E */ SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO,
     /* 0x1F */ SCENE_CMD_MAX
-} SceneCommandTypeID;
+} SceneCommandTypeId;
 
 #define SCENE_CMD_SPAWN_LIST(numSpawns, spawnList) \
     { SCENE_CMD_ID_SPAWN_LIST, numSpawns, CMD_PTR(spawnList) }
@@ -840,14 +890,14 @@ typedef enum {
 #define SCENE_CMD_ENTRANCE_LIST(entranceList) \
     { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
 
-#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
-    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+#define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
-#define SCENE_CMD_ROOM_BEHAVIOR(currRoomUnk3, currRoomUnk2, currRoomUnk5, msgCtxunk12044, enablePosLights,  \
+#define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \
     {                                                                                                       \
-        SCENE_CMD_ID_ROOM_BEHAVIOR, currRoomUnk3,                                                           \
-            currRoomUnk2 | _SHIFTL(currRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
+        SCENE_CMD_ID_ROOM_BEHAVIOR, curRoomUnk3,                                                           \
+            curRoomUnk2 | _SHIFTL(curRoomUnk5, 8, 1) | _SHIFTL(msgCtxunk12044, 10, 1) | \
                 _SHIFTL(enablePosLights, 11, 1) | _SHIFTL(kankyoContextUnkE2, 12, 1)                        \
     }
 
@@ -887,8 +937,8 @@ typedef enum {
 #define SCENE_CMD_END() \
     { SCENE_CMD_ID_END, 0, CMD_W(0) }
 
-#define SCENE_CMD_SOUND_SETTINGS(audioSessionId, nighttimeSfx, bgmId) \
-    { SCENE_CMD_ID_SOUND_SETTINGS, audioSessionId, CMD_BBBB(0, 0, nighttimeSfx, bgmId) }
+#define SCENE_CMD_SOUND_SETTINGS(specId, ambienceId, seqId) \
+    { SCENE_CMD_ID_SOUND_SETTINGS, specId, CMD_BBBB(0, 0, ambienceId, seqId) }
 
 #define SCENE_CMD_ECHO_SETTINGS(echo) \
     { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
@@ -899,8 +949,9 @@ typedef enum {
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
 
-#define SCENE_CMD_MISC_SETTINGS() \
-    { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
+#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED // TODO: ZAPD Capatability
+#define SCENE_CMD_SET_REGION_VISITED() \
+    { SCENE_CMD_ID_SET_REGION_VISITED, 0, CMD_W(0) }
 
 #define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
     { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }

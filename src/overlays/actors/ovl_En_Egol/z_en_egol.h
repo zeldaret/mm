@@ -14,6 +14,4 @@ typedef struct EnEgol {
     /* 0x02AC */ char unk_2AC[0x1BC4];
 } EnEgol; // size = 0x1E70
 
-extern const ActorInit En_Egol_InitVars;
-
 #endif // Z_EN_EGOL_H

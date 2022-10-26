@@ -28,7 +28,7 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
 void EnRacedog_UpdateRaceVariables(EnRacedog* this);
 void EnRacedog_CheckForFinish(EnRacedog* this);
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
-s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates);
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play);
 void EnRacedog_PlaySfxWalk(EnRacedog* this);
 
@@ -69,7 +69,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,
@@ -318,7 +318,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->selectionArrowGreenPrimColor = 255;

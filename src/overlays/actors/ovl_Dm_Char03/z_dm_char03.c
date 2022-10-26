@@ -20,7 +20,7 @@ void func_80AAB644(DmChar03* this, PlayState* play);
 void DmChar03_DoNothing(DmChar03* this, PlayState* play);
 void func_80AABA84(PlayState* play, DmChar03* this);
 
-const ActorInit Dm_Char03_InitVars = {
+ActorInit Dm_Char03_InitVars = {
     ACTOR_DM_CHAR03,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -32,7 +32,9 @@ const ActorInit Dm_Char03_InitVars = {
     (ActorFunc)DmChar03_Draw,
 };
 
-AnimationInfo sAnimationInfo[] = { { &object_osn_Anim_020530, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f } };
+AnimationInfo sAnimationInfo[] = {
+    { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+};
 
 void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frame;
@@ -106,7 +108,7 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
                 case 3:
                     this->unk_18E = false;
                     shouldChangeAnim = false;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
                 case 4:
                     Item_Give(play, ITEM_MASK_DEKU);

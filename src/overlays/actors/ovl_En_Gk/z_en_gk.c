@@ -33,7 +33,7 @@ void func_80B5253C(EnGk* this, PlayState* play);
 void func_80B525E0(EnGk* this, PlayState* play);
 void func_80B52654(EnGk* this, PlayState* play);
 
-const ActorInit En_Gk_InitVars = {
+ActorInit En_Gk_InitVars = {
     ACTOR_EN_GK,
     ACTORCAT_NPC,
     FLAGS,
@@ -118,7 +118,7 @@ Color_RGBA8 D_80B533A4 = { 50, 150, 150, 0 };
 u16 func_80B50410(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->sceneNum == SCENE_17SETUGEN2) {
+    if (play->sceneId == SCENE_17SETUGEN2) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[40] & 0x80)) {
                 switch (this->unk_31C) {
@@ -164,7 +164,7 @@ u16 func_80B50410(EnGk* this, PlayState* play) {
             this->unk_1E4 |= 1;
             return 0xE81;
         }
-    } else if (play->sceneNum == SCENE_GORONRACE) {
+    } else if (play->sceneId == SCENE_GORONRACE) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
@@ -247,11 +247,11 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!(this->unk_1E4 & 0x40)) {
-        if (player->stateFlags2 & 0x8000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             this->unk_1E4 |= 0x40;
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
-    } else if (!(player->stateFlags2 & 0x8000000)) {
+    } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
         this->unk_1E4 &= ~0x40;
     }
 
@@ -645,7 +645,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
                 this->unk_1E4 |= 2;
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
-                   (gSaveContext.save.entrance != 0xD010)) {
+                   (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
             func_800B863C(&this->actor, play);
         }
 
@@ -810,7 +810,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
         if (func_80B50C78(this, this->path, this->unk_1EC)) {
             if (this->unk_1EC >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_318);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_1EC++;
             }
@@ -1018,15 +1018,15 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
     if (ENGK_GET_F(&this->actor) == ENGK_F_1) {
         this->unk_2E4 = 5;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
-        if (play->sceneNum == SCENE_17SETUGEN2) {
+        if (play->sceneId == SCENE_17SETUGEN2) {
             if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_318 = this->actor.cutscene;
                 this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
                 this->actionFunc = func_80B51760;
             }
-        } else if (play->sceneNum == SCENE_GORONRACE) {
+        } else if (play->sceneId == SCENE_GORONRACE) {
             if (gSaveContext.save.weekEventReg[33] & 0x80) {
                 if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
                     this->actionFunc = func_80B51760;
@@ -1036,10 +1036,10 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                     this->actionFunc = func_80B51760;
                 }
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (ENGK_GET_F(&this->actor) == ENGK_F_2) {
         if (!(gSaveContext.save.weekEventReg[22] & 4)) {
@@ -1048,7 +1048,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.flags &= ~ACTOR_FLAG_1;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (!(gSaveContext.save.weekEventReg[22] & 4)) {
         this->unk_2E4 = 0;

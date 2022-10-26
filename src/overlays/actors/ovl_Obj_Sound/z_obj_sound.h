@@ -10,6 +10,4 @@ typedef struct ObjSound {
     /* 0x144 */ char unk_144[0x4];
 } ObjSound; // size = 0x148
 
-extern const ActorInit Obj_Sound_InitVars;
-
 #endif // Z_OBJ_SOUND_H

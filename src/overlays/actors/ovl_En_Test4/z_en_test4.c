@@ -4,6 +4,7 @@
  * Description: Three-Day Timer
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test4.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -19,7 +20,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play);
 void func_80A42AB8(EnTest4* this, PlayState* play);
 void func_80A42F20(EnTest4* this, PlayState* play);
 
-const ActorInit En_Test4_InitVars = {
+ActorInit En_Test4_InitVars = {
     ACTOR_EN_TEST4,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -305,7 +306,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     }
 
     if (sIsLoaded || (gSaveContext.eventInf[2] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
         this->actor.room = -1;
@@ -319,7 +320,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
                 SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
                 this->unk_144 = 1;
                 gSaveContext.save.time = CLOCK_TIME(6, 0);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 gSaveContext.save.day = 1;
                 dayTemp = gSaveContext.save.day;
@@ -333,7 +334,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
             func_80A41D70(this, play);
             if ((gSaveContext.cutsceneTrigger == 0) && (sCutscenes[this->unk_144] >= 0) &&
                 !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-                player->stateFlags1 |= 0x200;
+                player->stateFlags1 |= PLAYER_STATE1_200;
             }
         } else {
             if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
@@ -388,8 +389,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 func_80A41FA4(this, play);
             } else if (temp_a0 == CLOCK_TIME(6, 0)) {
                 if (CURRENT_DAY == 3) {
-                    func_8011C808(play);
-                    Actor_MarkForDeath(&this->actor);
+                    Interface_StartMoonCrash(play);
+                    Actor_Kill(&this->actor);
                     gSaveContext.eventInf[1] |= 0x80;
                 } else if (((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) &&
                            (CURRENT_DAY != 3)) {
@@ -399,7 +400,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
                                         0xBFF, &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(&play->state);
-                    if (player->stateFlags1 & 0x800000) {
+                    if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
                         if ((rideActor->type == HORSE_TYPE_EPONA) || (rideActor->type == HORSE_TYPE_2)) {
@@ -413,12 +414,12 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
                     gSaveContext.respawnFlag = -4;
                     gSaveContext.eventInf[2] |= 0x80;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
 
             if ((sCutscenes[this->unk_144] >= 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-                player->stateFlags1 |= 0x200;
+                player->stateFlags1 |= PLAYER_STATE1_200;
                 this->unk_146 = gSaveContext.save.time;
             } else {
                 if (this->unk_144 == 0) {
@@ -436,7 +437,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
             if (CURRENT_DAY == 3) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
                     ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
-                     (play->sceneNum == SCENE_CLOCKTOWER))) {
+                     (play->sceneId == SCENE_CLOCKTOWER))) {
                     s32 playerParams;
                     u32 entrance = gSaveContext.save.entrance;
 
@@ -448,7 +449,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
 
-                    if ((play->sceneNum == SCENE_TENMON_DAI) || (play->sceneNum == SCENE_00KEIKOKU)) {
+                    if ((play->sceneId == SCENE_TENMON_DAI) || (play->sceneId == SCENE_00KEIKOKU)) {
                         play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
                     } else {
                         play->nextEntrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
@@ -456,8 +457,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_02;
-                    player->stateFlags1 |= 0x200;
-                    Actor_MarkForDeath(&this->actor);
+                    player->stateFlags1 |= PLAYER_STATE1_200;
+                    Actor_Kill(&this->actor);
                 }
                 func_80A42198(this);
             } else {
@@ -494,7 +495,7 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
             gSaveContext.save.time += CLOCK_TIME_MINUTE;
             this->unk_146 = gSaveContext.save.time;
             play->numSetupActors = -play->numSetupActors;
-            player->stateFlags1 &= ~0x200;
+            player->stateFlags1 &= ~PLAYER_STATE1_200;
         }
     } else {
         this->actionFunc = func_80A42AB8;
@@ -507,9 +508,9 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
         if (sCurrentCs >= 0) {
             ActorCutscene_Stop(sCurrentCs);
         }
-        gSaveContext.unk_3F22 = 0;
+        gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
         gSaveContext.eventInf[1] &= (u8)~0x80;
-        Interface_ChangeAlpha(50);
+        Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 }
 
@@ -563,7 +564,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play) {
     EnTest4* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 2)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_2)) {
         this->actionFunc(this, play);
 
         if (func_800FE4B8(play) != 0) {

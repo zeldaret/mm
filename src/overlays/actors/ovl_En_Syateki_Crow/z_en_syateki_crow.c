@@ -11,7 +11,7 @@
 
 #define THIS ((EnSyatekiCrow*)thisx)
 
-void EnSyatekiCrow_Init(Actor* thisx, PlayState* play);
+void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2);
 void EnSyatekiCrow_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiCrow_Update(Actor* thisx, PlayState* play);
 void EnSyatekiCrow_Draw(Actor* thisx, PlayState* play);
@@ -25,7 +25,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play);
 
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Crow_InitVars = {
+ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -83,7 +83,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
         path = &play->setupPathList[path->unk1];
     }
 
-    for (i = 0; i < EN_SYATEKI_CROW_GET_NUMBER(&this->actor); i++) {
+    for (i = 0; i < EN_SYATEKI_CROW_GET_INDEX(&this->actor); i++) {
         path = &play->setupPathList[path->unk1];
     }
 
@@ -95,8 +95,8 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     this->collider.elements[0].dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
-    if ((path == NULL) || (EN_SYATEKI_CROW_GET_NUMBER(&this->actor) >= 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((path == NULL) || (EN_SYATEKI_CROW_GET_INDEX(&this->actor) >= 0x80)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -133,7 +133,7 @@ void EnSyatekiCrow_WaitForSpawn(EnSyatekiCrow* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if ((syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) && (this->isActive == true) &&
-        (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor)))) {
+        (syatekiMan->guayFlags & (1 << EN_SYATEKI_CROW_GET_INDEX(&this->actor)))) {
         EnSyatekiCrow_SetupWaitToMove(this);
     } else if (syatekiMan->shootingGameState != SG_GAME_STATE_RUNNING) {
         this->isActive = true;
@@ -202,7 +202,7 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
         this->currentPointIndex++;
     } else {
         this->isActive = false;
-        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_INDEX(&this->actor));
         EnSyatekiCrow_SetupWaitForSpawn(this);
     }
 
@@ -241,7 +241,7 @@ void EnSyatekiCrow_Dead(EnSyatekiCrow* this, PlayState* play) {
     if (this->deathTimer > 20) {
         func_800B3030(play, &this->actor.world.pos, &sZeroVec, &sZeroVec, this->actor.scale.x * 10000.0f, 0, 0);
         syatekiMan->guayHitCounter++;
-        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_NUMBER(&this->actor));
+        syatekiMan->guayFlags &= ~(1 << EN_SYATEKI_CROW_GET_INDEX(&this->actor));
         EnSyatekiCrow_SetupWaitForSpawn(this);
     }
 

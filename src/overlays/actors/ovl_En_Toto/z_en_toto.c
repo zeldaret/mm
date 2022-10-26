@@ -50,7 +50,7 @@ s32 func_80BA4B24(EnToto* this, PlayState* play);
 s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
 
-const ActorInit En_Toto_InitVars = {
+ActorInit En_Toto_InitVars = {
     ACTOR_EN_TOTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -184,15 +184,15 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    if (play->sceneNum == SCENE_MILK_BAR &&
-        (gSaveContext.save.time >= CLOCK_TIME(6, 0) && gSaveContext.save.time < CLOCK_TIME(21, 30))) {
-        Actor_MarkForDeath(&this->actor);
+    if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
+        (gSaveContext.save.time < CLOCK_TIME(21, 30))) {
+        Actor_Kill(&this->actor);
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_zm_Skel_00A978,
-                       ((play->sceneNum == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
+                       ((play->sceneId == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
                        this->jointTable, this->morphTable, 18);
     func_80BA36C0(this, play, 0);
     this->actor.shape.rot.x = 0;
@@ -220,7 +220,7 @@ void func_80BA383C(EnToto* this, PlayState* play) {
 void func_80BA3930(EnToto* this, PlayState* play) {
     AnimationHeader* animationHeader = &object_zm_Anim_00C880;
 
-    if (play->sceneNum == SCENE_SONCHONOIE) {
+    if (play->sceneId == SCENE_SONCHONOIE) {
         animationHeader = &object_zm_Anim_003AA8;
     }
     Animation_MorphToLoop(&this->skelAnime, animationHeader, -4.0f);
@@ -242,7 +242,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     func_80BA383C(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BA36C0(this, play, 1);
-        if (play->sceneNum != SCENE_SONCHONOIE) {
+        if (play->sceneId != SCENE_SONCHONOIE) {
             Flags_SetSwitch(play, this->actor.params & 0x7F);
         } else if (player->transformation == PLAYER_FORM_DEKU) {
             Flags_SetSwitch(play, this->actor.home.rot.x);
@@ -252,9 +252,9 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
     }
 
     //! @TODO: 0xED02 nor 0xED01 match CLOCK_TIME macro
-    if ((play->sceneNum == SCENE_MILK_BAR &&
-         !(gSaveContext.save.time >= CLOCK_TIME(6, 0) && gSaveContext.save.time < 0xED02)) ||
-        (play->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
+    if (((play->sceneId == SCENE_MILK_BAR) &&
+         !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < 0xED02))) ||
+        ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= ACTOR_FLAG_10000;
@@ -262,7 +262,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         } else {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_800B8614(&this->actor, play, 50.0f);
-            if (play->sceneNum == SCENE_SONCHONOIE) {
+            if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(play, this->actor.home.rot.x)) {
                         this->text = D_80BA5068;
@@ -286,7 +286,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
 }
 
 void func_80BA3BFC(EnToto* this, PlayState* play) {
-    if (play->sceneNum == SCENE_SONCHONOIE) {
+    if (play->sceneId == SCENE_SONCHONOIE) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
         this->unk2B4 = 0;
     } else {
@@ -333,7 +333,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         }
     } else {
         player = GET_PLAYER(play);
-        if (player->stateFlags1 & 0x400 && player->unk_AE7 != 0) {
+        if ((player->stateFlags1 & PLAYER_STATE1_400) && player->unk_AE7 != 0) {
             func_80151BB4(play, 48);
             func_80151BB4(play, 9);
             func_80151BB4(play, 10);
@@ -510,7 +510,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
     if (player->actor.world.pos.z > -270.0f) {
         if (this->spotlights != NULL) {
-            Actor_MarkForDeath(this->spotlights);
+            Actor_Kill(this->spotlights);
         }
         this->unk2B6 = 1;
         return this->text->unk1;
@@ -612,11 +612,11 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
             actor = &GET_PLAYER(play)->actor;
             actor = actor->next;
             while (actor != NULL) {
-                Actor_MarkForDeath(actor);
+                Actor_Kill(actor);
                 actor = actor->next;
             }
             if (this->spotlights != NULL) {
-                Actor_MarkForDeath(this->spotlights);
+                Actor_Kill(this->spotlights);
             }
             func_800B7298(play, NULL, 0x45);
             if (this->unk2B3 == 0xF) {

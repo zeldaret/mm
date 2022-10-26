@@ -15,7 +15,7 @@ void EnZos_Destroy(Actor* thisx, PlayState* play);
 void EnZos_Update(Actor* thisx, PlayState* play);
 void EnZos_Draw(Actor* thisx, PlayState* play);
 
-void EnZos_ChangeAnim(EnZos* this, s16 arg1, u8 arg2);
+void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode);
 void func_80BBB2C4(EnZos* this, PlayState* play);
 void func_80BBB354(EnZos* this, PlayState* play);
 void func_80BBB4CC(EnZos* this, PlayState* play);
@@ -50,7 +50,7 @@ typedef enum {
     /* 13 */ EN_ZOS_ANIM_MAX
 } EnZosAnimation;
 
-const ActorInit En_Zos_InitVars = {
+ActorInit En_Zos_InitVars = {
     ACTOR_EN_ZOS,
     ACTORCAT_NPC,
     FLAGS,
@@ -101,7 +101,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             if (gSaveContext.save.weekEventReg[78] & 1) {
@@ -121,7 +121,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 
         default:
             if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
             break;

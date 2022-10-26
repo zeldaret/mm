@@ -248,8 +248,8 @@ typedef struct {
 } EffectSsInit; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u32 vromStart;
-    /* 0x04 */ u32 vromEnd;
+    /* 0x00 */ uintptr_t vromStart;
+    /* 0x04 */ uintptr_t vromEnd;
     /* 0x08 */ void* vramStart;
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr;
@@ -257,7 +257,6 @@ typedef struct {
     /* 0x18 */ u8 unk18; // Always 1?
 } EffectSsOverlay; // size = 0x1C
 
-//! TODO: Review reuse of vec/gfx/actor fields across all effects
 typedef struct EffectSs {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
