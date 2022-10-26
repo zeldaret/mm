@@ -69,6 +69,11 @@ typedef enum {
     /* 0xFE */ AUDIOCMD_OP_GLOBAL_DISABLE_ALL_SEQPLAYERS
 } AudioThreadCmdOp;
 
+#define AUDIO_MK_CMD(b0,b1,b2,b3) (_SHIFTL(b0, 24, 8) | _SHIFTL(b1, 16, 8) | _SHIFTL(b2, 8, 8) | _SHIFTL(b3, 0, 8))
+
+#define AUDIOCMD_ALL_SEQPLAYERS 0xFF
+#define AUDIOCMD_ALL_CHANNELS 0xFF
+
 // ==== Audio Thread Channel Commands ====
 
 /**
@@ -396,7 +401,7 @@ typedef enum {
  * @param flags set `& 1` to load the sequence, set `& 2` to load the soundfonts
  * @param data
  */
-#define AUDIOCMD_GLOBAL_SYNC_LOAD_SEQ_PARTS(seqId, flags, AUDIOCMD_OP_GLOBAL_SYNC_LOAD_SEQ_PARTS) \
+#define AUDIOCMD_GLOBAL_SYNC_LOAD_SEQ_PARTS(seqId, flags, data) \
     AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SYNC_LOAD_SEQ_PARTS, 0, seqId, flags), data)
 
 /**
@@ -435,11 +440,49 @@ typedef enum {
  *
  * @param seqPlayerIndex the index of the seqPlayer to modify
  * @param threadCmdChannelMask (u16) bitfield for 16 channels. Turn bit on to allow audio thread commands of type
- * "Channel" to process that channel with "SEQ_CHANNEL_ALL" set.
+ * "Channel" to process that channel with `AUDIOCMD_ALL_CHANNELS` set.
  */
 #define AUDIOCMD_GLOBAL_SET_CHANNEL_MASK(seqPlayerIndex, threadCmdChannelMask)                       \
     AudioThread_QueueCmdU16(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_CHANNEL_MASK, seqPlayerIndex, 0, 0), \
                             threadCmdChannelMask)
+
+/**
+ * Set a drum ptr within a soundfont
+ *
+ * @param fontId the id of the soundfont to set the drum in
+ * @param drumId the id of the drum to set
+ * @param drumPtr (s32) the ptr to the `Drum` struct
+ */
+#define AUDIOCMD_GLOBAL_SET_DRUM_FONT(fontId, drumId, drumPtr) \
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_DRUM_FONT, 0, fontId, drumId), drumPtr)
+
+/**
+ * Set a soundeffect ptr within a soundfont
+ *
+ * @param fontId the id of the soundfont to set the sound effect in
+ * @param soundEffectId the id of the sound effect to set
+ * @param soundEffectPtr (s32) the ptr to the `SoundEffect` struct
+ */
+#define AUDIOCMD_GLOBAL_SET_SFX_FONT(fontId, soundEffectId, soundEffectPtr) \
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_SFX_FONT, 0, fontId, soundEffectId), soundEffectPtr)
+
+/**
+ * Set an instrument ptr within a soundfont
+ *
+ * @param fontId the id of the soundfont to set the instrument in
+ * @param instId the id of the instrument to set
+ * @param instPtr (s32) the ptr to the `Instrument` struct
+ */
+#define AUDIOCMD_GLOBAL_SET_INSTRUMENT_FONT(fontId, instId, instPtr) \
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_SET_INSTRUMENT_FONT, 0, fontId, instId), instPtr)
+
+/**
+ * Pop the persistent cache of the specified table
+ *
+ * @param tableType (s32) see the `SampleBankTableType` enum
+ */
+#define AUDIOCMD_GLOBAL_POP_PERSISTENT_CACHE(tableType) \
+    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_POP_PERSISTENT_CACHE, 0, 0, 0), tableType)
 
 /**
  * Pop the persistent cache of the specified table

@@ -1,8 +1,6 @@
 #ifndef Z64_AUDIO_H
 #define Z64_AUDIO_H
 
-#define AUDIO_MK_CMD(b0,b1,b2,b3) (_SHIFTL(b0, 24, 8) | _SHIFTL(b1, 16, 8) | _SHIFTL(b2, 8, 8) | _SHIFTL(b3, 0, 8))
-
 #include "audiothread_cmd.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
@@ -10,9 +8,7 @@
 #define TATUMS_PER_BEAT 48
 
 #define IS_SEQUENCE_CHANNEL_VALID(ptr) ((uintptr_t)(ptr) != (uintptr_t)&gAudioCtx.sequenceChannelNone)
-#define SEQ_ALL_SEQPLAYERS 0xFF
 #define SEQ_NUM_CHANNELS 16
-#define SEQ_ALL_CHANNELS 0xFF
 #define SEQ_IO_VAL_NONE -1
 
 typedef enum {

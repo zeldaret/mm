@@ -24,12 +24,12 @@ AudioTask* AudioThread_UpdateImpl(void) {
     s32 numAbiCmds;
     s32 pad;
     s32 j;
-    s32 sp5C;
+    s32 dmaCount;
     s16* curAiBuffer;
     OSTask_t* task;
     s32 index;
-    u32 sp4C;
-    s32 sp48;
+    u32 msg;
+    s32 validCount;
     s32 i;
 
     gAudioCtx.totalTaskCount++;
@@ -67,22 +67,22 @@ AudioTask* AudioThread_UpdateImpl(void) {
         gAudioCustomUpdateFunction();
     }
 
-    sp5C = gAudioCtx.curAudioFrameDmaCount;
+    dmaCount = gAudioCtx.curAudioFrameDmaCount;
     for (i = 0; i < gAudioCtx.curAudioFrameDmaCount; i++) {
         if (osRecvMesg(&gAudioCtx.curAudioFrameDmaQueue, NULL, OS_MESG_NOBLOCK) == 0) {
-            sp5C--;
+            dmaCount--;
         }
     }
 
-    if (sp5C != 0) {
-        for (i = 0; i < sp5C; i++) {
+    if (dmaCount != 0) {
+        for (i = 0; i < dmaCount; i++) {
             osRecvMesg(&gAudioCtx.curAudioFrameDmaQueue, NULL, OS_MESG_BLOCK);
         }
     }
 
-    sp48 = gAudioCtx.curAudioFrameDmaQueue.validCount;
-    if (sp48 != 0) {
-        for (i = 0; i < sp48; i++) {
+    validCount = gAudioCtx.curAudioFrameDmaQueue.validCount;
+    if (validCount != 0) {
+        for (i = 0; i < validCount; i++) {
             osRecvMesg(&gAudioCtx.curAudioFrameDmaQueue, NULL, OS_MESG_NOBLOCK);
         }
     }
@@ -133,10 +133,10 @@ AudioTask* AudioThread_UpdateImpl(void) {
     j = 0;
     if (gAudioCtx.resetStatus == 0) {
         // msg = 0000RREE R = read pos, E = End Pos
-        while (osRecvMesg(gAudioCtx.threadCmdProcQueueP, (OSMesg*)&sp4C, OS_MESG_NOBLOCK) != -1) {
+        while (osRecvMesg(gAudioCtx.threadCmdProcQueueP, (OSMesg*)&msg, OS_MESG_NOBLOCK) != -1) {
             //! FAKE:
             if (1) {}
-            AudioThread_ProcessCmds(sp4C);
+            AudioThread_ProcessCmds(msg);
             j++;
         }
         if ((j == 0) && gAudioCtx.threadCmdQueueFinished) {
@@ -230,7 +230,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
             break;
 
         case AUDIOCMD_OP_GLOBAL_MUTE:
-            if (cmd->arg0 == SEQ_ALL_SEQPLAYERS) {
+            if (cmd->arg0 == AUDIOCMD_ALL_SEQPLAYERS) {
                 for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
                     gAudioCtx.seqPlayers[i].muted = true;
                     gAudioCtx.seqPlayers[i].recalculateVolume = true;
@@ -254,7 +254,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
                 }
             }
 
-            if (cmd->arg0 == SEQ_ALL_SEQPLAYERS) {
+            if (cmd->arg0 == AUDIOCMD_ALL_SEQPLAYERS) {
                 for (i = 0; i < gAudioCtx.audioBufferParameters.numSequencePlayers; i++) {
                     gAudioCtx.seqPlayers[i].muted = false;
                     gAudioCtx.seqPlayers[i].recalculateVolume = true;
@@ -421,11 +421,11 @@ void AudioThread_QueueCmdU16(u32 opArgs, u16 data) {
 }
 
 s32 AudioThread_ScheduleProcessCmds(void) {
-    static s32 D_801D5FF4 = 0;
+    static s32 sMaxWriteReadDiff = 0;
     s32 ret;
 
-    if (D_801D5FF4 < (u8)((gAudioCtx.threadCmdWritePos - gAudioCtx.threadCmdReadPos) + 0x100)) {
-        D_801D5FF4 = (u8)((gAudioCtx.threadCmdWritePos - gAudioCtx.threadCmdReadPos) + 0x100);
+    if (sMaxWriteReadDiff < (u8)((gAudioCtx.threadCmdWritePos - gAudioCtx.threadCmdReadPos) + 0x100)) {
+        sMaxWriteReadDiff = (u8)((gAudioCtx.threadCmdWritePos - gAudioCtx.threadCmdReadPos) + 0x100);
     }
 
     ret = osSendMesg(gAudioCtx.threadCmdProcQueueP,
@@ -473,7 +473,7 @@ void AudioThread_ProcessCmd(AudioCmd* cmd) {
             return;
         }
 
-        if (cmd->arg1 == SEQ_ALL_CHANNELS) {
+        if (cmd->arg1 == AUDIOCMD_ALL_CHANNELS) {
             threadCmdChannelMask = gAudioCtx.threadCmdChannelMask[cmd->arg0];
             for (channelIndex = 0; channelIndex < SEQ_NUM_CHANNELS; channelIndex++) {
                 if (threadCmdChannelMask & 1) {
@@ -965,7 +965,7 @@ u32 AudioThread_NextRandom(void) {
     static u32 sAudioOsCount = 0x11111111;
     u32 count = osGetCount();
 
-    sAudioRandom = ((gAudioCtx.totalTaskCount + sAudioRandom + count) * (gAudioCtx.audioRandom + 0x1234567));
+    sAudioRandom = (gAudioCtx.totalTaskCount + sAudioRandom + count) * (gAudioCtx.audioRandom + 0x1234567);
     sAudioRandom = (sAudioRandom & 1) + (sAudioRandom * 2) + sAudioOsCount;
     sAudioOsCount = count;
 

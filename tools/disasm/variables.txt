@@ -2252,7 +2252,7 @@
     0x801D5FE8:("gAudioCtxInitalized","UNK_TYPE4","",0x4),
     0x801D5FEC:("D_801D5FEC","UNK_TYPE4","",0x4),
     0x801D5FF0:("sWaitingAudioTask","UNK_TYPE4","",0x4),
-    0x801D5FF4:("D_801D5FF4","UNK_TYPE4","",0x4),
+    0x801D5FF4:("sMaxWriteReadDiff","UNK_TYPE4","",0x4),
     0x801D5FF8:("sCurCmdRdPos","UNK_TYPE1","",0x1),
     0x801D5FFC:("sAudioRandom","UNK_TYPE4","",0x4),
     0x801D6000:("sAudioOsCount","UNK_PTR","",0x4),

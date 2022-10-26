@@ -1059,7 +1059,7 @@ extern s32 gAudioCtxInitalized;
 // extern UNK_TYPE4 D_801D5FEC;
 // extern UNK_TYPE4 D_801D6190;
 // extern UNK_TYPE4 D_801D6194;
-extern u8 D_801D6200[1024];
+extern u8 D_801D6200[0x400];
 extern u8 gIsLargeSfxBank[7];
 extern u8 D_801D6608[7];
 extern u8 gChannelsPerBank[4][7];
