@@ -35,7 +35,7 @@ s32 func_808F99B0(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
-const ActorInit En_Horse_Game_Check_InitVars = {
+ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
     ACTORCAT_BG,
     FLAGS,
@@ -60,7 +60,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
@@ -117,7 +117,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     this->unk_174 = 0;
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
@@ -169,7 +169,7 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
     }
 
     D_801BDA9C = 0;
-    if (player->stateFlags1 & 0x800000) {
+    if (player->stateFlags1 & PLAYER_STATE1_800000) {
         D_801BDAA0 = 1;
     }
     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 2);

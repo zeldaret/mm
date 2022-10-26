@@ -41,7 +41,7 @@ typedef enum {
 
 u8 sIsLoaded[32];
 
-const ActorInit Bg_Crace_Movebg_InitVars = {
+ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -92,7 +92,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
             for (j = 0; j < sLoadedDoorCount; j++) {
                 if (sIsLoaded[j] == this->index) {
                     this->stateFlags |= BG_CRACE_MOVEBG_FLAG_ALREADY_LOADED;
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
                 }
             }
@@ -125,7 +125,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             break;
     }
 }

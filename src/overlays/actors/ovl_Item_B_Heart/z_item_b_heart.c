@@ -1,3 +1,9 @@
+/*
+ * File: z_item_b_heart.c
+ * Overlay: ovl_Item_B_heart
+ * Description: Boss heart container
+ */
+
 #include "z_item_b_heart.h"
 #include "objects/object_gi_hearts/object_gi_hearts.h"
 
@@ -12,15 +18,17 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
 void func_808BCF54(ItemBHeart* this, PlayState* play);
 
-ActorInit Item_B_Heart_InitVars = { ACTOR_ITEM_B_HEART,
-                                    ACTORCAT_BOSS,
-                                    FLAGS,
-                                    OBJECT_GI_HEARTS,
-                                    sizeof(ItemBHeart),
-                                    (ActorFunc)ItemBHeart_Init,
-                                    (ActorFunc)ItemBHeart_Destroy,
-                                    (ActorFunc)ItemBHeart_Update,
-                                    (ActorFunc)ItemBHeart_Draw };
+ActorInit Item_B_Heart_InitVars = {
+    ACTOR_ITEM_B_HEART,
+    ACTORCAT_BOSS,
+    FLAGS,
+    OBJECT_GI_HEARTS,
+    sizeof(ItemBHeart),
+    (ActorFunc)ItemBHeart_Init,
+    (ActorFunc)ItemBHeart_Destroy,
+    (ActorFunc)ItemBHeart_Update,
+    (ActorFunc)ItemBHeart_Draw,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 0, ICHAIN_CONTINUE),
@@ -34,7 +42,7 @@ void ItemBHeart_Init(Actor* thisx, PlayState* play2) {
     ItemBHeart* this = (ItemBHeart*)thisx;
 
     if (Flags_GetCollectible(play, 0x1F)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -60,10 +68,11 @@ void ItemBHeart_Update(Actor* thisx, PlayState* play2) {
     }
     if (Actor_HasParent(&this->actor, play)) {
         Flags_SetCollectible(play, 0x1F);
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
 }
 
 void func_808BCF54(ItemBHeart* this, PlayState* play) {
@@ -78,6 +87,7 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
     Actor* var_v0;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     var_v0 = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     while (var_v0 != NULL) {
         if ((var_v0->id == ACTOR_DOOR_WARP1) && (this->actor.projectedPos.z < var_v0->projectedPos.z)) {
@@ -94,9 +104,10 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gGiHeartContainerDL);
     } else {
         func_8012C28C(play->state.gfxCtx);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gGiHeartBorderDL);
         gSPDisplayList(POLY_OPA_DISP++, gGiHeartContainerDL);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

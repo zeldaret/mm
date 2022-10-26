@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_lotus.c
+ * Overlay: ovl_Bg_Lotus
+ * Description: Lily pad
+ */
+
 #include "z_bg_lotus.h"
 #include "objects/object_lotus/object_lotus.h"
 
@@ -10,20 +16,21 @@ void BgLotus_Destroy(Actor* thisx, PlayState* play2);
 void BgLotus_Update(Actor* thisx, PlayState* play2);
 void BgLotus_Draw(Actor* thisx, PlayState* play);
 
-void func_80AD6830(BgLotus* this);
 void func_80AD68DC(BgLotus* this, PlayState* play);
 void func_80AD6A88(BgLotus* this, PlayState* play);
 void func_80AD6B68(BgLotus* this, PlayState* play);
 
-ActorInit Bg_Lotus_InitVars = { ACTOR_BG_LOTUS,
-                                ACTORCAT_BG,
-                                FLAGS,
-                                OBJECT_LOTUS,
-                                sizeof(BgLotus),
-                                (ActorFunc)BgLotus_Init,
-                                (ActorFunc)BgLotus_Destroy,
-                                (ActorFunc)BgLotus_Update,
-                                (ActorFunc)BgLotus_Draw };
+ActorInit Bg_Lotus_InitVars = {
+    ACTOR_BG_LOTUS,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_LOTUS,
+    sizeof(BgLotus),
+    (ActorFunc)BgLotus_Init,
+    (ActorFunc)BgLotus_Destroy,
+    (ActorFunc)BgLotus_Update,
+    (ActorFunc)BgLotus_Draw,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
@@ -39,7 +46,7 @@ void BgLotus_Init(Actor* thisx, PlayState* play2) {
     DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
-    this->unk_168 = 0x60;
+    this->unk_168 = 96;
     this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
     this->actionFunc = func_80AD68DC;
 }
@@ -53,7 +60,7 @@ void BgLotus_Destroy(Actor* thisx, PlayState* play2) {
 
 void func_80AD6830(BgLotus* this) {
     if (this->dyna.actor.params == 0) {
-        f32 temp_fv1 = sin_rad(this->unk_166 * (M_PI / 4.0f)) * ((0.014f * (this->unk_166 / (f32)8)) + 0.01f);
+        f32 temp_fv1 = sin_rad(this->unk_166 * (M_PI / 4.0f)) * ((0.014f * ((f32)this->unk_166 / 8)) + 0.01f);
 
         this->dyna.actor.scale.x = (1.0f + temp_fv1) * 0.1f;
         this->dyna.actor.scale.z = (1.0f - temp_fv1) * 0.1f;
@@ -69,7 +76,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
         this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = (Math_CosS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.z;
         if (this->unk_168 == 0) {
-            this->unk_168 = 0x60;
+            this->unk_168 = 96;
             this->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
         }
     }
@@ -132,7 +139,7 @@ void func_80AD6B68(BgLotus* this, PlayState* play) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->dyna.actor.world.pos.y = MAX(this->dyna.actor.floorHeight, this->unk_160);
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;
-        this->unk_168 = 0x60;
+        this->unk_168 = 96;
         this->actionFunc = func_80AD68DC;
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;

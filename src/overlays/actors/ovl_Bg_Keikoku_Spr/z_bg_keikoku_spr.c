@@ -1,3 +1,9 @@
+/*
+ * File: z_bg_keikoku_spr.c
+ * Overlay: ovl_Bg_Keikoku_Spr
+ * Description: Termina Field fountain textures (unused)
+ */
+
 #include "z_bg_keikoku_spr.h"
 #include "objects/object_keikoku_obj/object_keikoku_obj.h"
 
@@ -46,7 +52,7 @@ void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000100);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0003F8));
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000300);

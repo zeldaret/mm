@@ -39,7 +39,7 @@ typedef enum {
     /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP,
 } EnSyatekiDekunutsHeaddressType;
 
-const ActorInit En_Syateki_Dekunuts_InitVars = {
+ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -142,7 +142,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
                    DEKU_SCRUB_LIMB_MAX);
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

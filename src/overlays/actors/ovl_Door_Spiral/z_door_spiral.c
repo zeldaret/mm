@@ -1,3 +1,9 @@
+/*
+ * File: z_door_spiral.c
+ * Overlay: ovl_Door_Spiral
+ * Description: Floor-changing spiral staircase
+ */
+
 #include "z_door_spiral.h"
 #include "assets/objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "assets/objects/object_numa_obj/object_numa_obj.h"
@@ -14,12 +20,6 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play2);
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play2);
 void DoorSpiral_Update(Actor* thisx, PlayState* play2);
 void DoorSpiral_Draw(Actor* thisx, PlayState* play2);
-
-void func_809A2B60(DoorSpiral* this, DoorSpiralActionFunc actionFunc);
-s32 func_809A2B70(DoorSpiral* this, PlayState* play);
-s32 func_809A2EA0(DoorSpiral* this, PlayState* play);
-s32 func_809A2BF8(PlayState* play);
-f32 func_809A2E08(PlayState* play, DoorSpiral* this, f32 arg2, f32 arg3, f32 arg4);
 
 void func_809A2DB0(DoorSpiral* this, PlayState* play);
 void func_809A2FF8(DoorSpiral* this, PlayState* play);
@@ -82,12 +82,12 @@ void func_809A2B60(DoorSpiral* this, DoorSpiralActionFunc actionFunc) {
 }
 
 s32 func_809A2B70(DoorSpiral* this, PlayState* play) {
-    DoorSpiralUnkStruct2* temp = &D_809A32D0[this->unk147];
+    DoorSpiralUnkStruct2* temp = &D_809A32D0[this->unk_147];
 
-    this->unk148 = temp->unk_2;
-    if ((this->unk148 == 7) || ((this->unk148 == 2) && play->roomCtx.curRoom.enablePosLights)) {
-        if (this->unk148 == 2) {
-            this->unk148 = 3;
+    this->unk_148 = temp->unk_2;
+    if ((this->unk_148 == 7) || ((this->unk_148 == 2) && play->roomCtx.curRoom.enablePosLights)) {
+        if (this->unk_148 == 2) {
+            this->unk_148 = 3;
         }
         this->actor.flags |= ACTOR_FLAG_10000000;
     }
@@ -118,18 +118,18 @@ s32 func_809A2BF8(PlayState* play) {
 void DoorSpiral_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DoorSpiral* this = (DoorSpiral*)thisx;
-    s32 temp1 = (u16)thisx->params >> 0xA;
+    s32 temp1 = DOORSPIRAL_GET_PARAM_FC00(thisx);
 
     if (thisx->room != play->doorCtx.transitionActorList[temp1].sides[0].room) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
     Actor_ProcessInitChain(thisx, D_809A3308);
-    this->unk145 = (thisx->params >> 8) & 3;
-    this->unk146 = (thisx->params >> 7) & 1;
-    this->unk147 = func_809A2BF8(play);
-    if ((this->unk149 = Object_GetIndex(&play->objectCtx, D_809A32D0[this->unk147].id)) < 0) {
-        Actor_MarkForDeath(thisx);
+    this->unk_145 = DOORSPIRAL_GET_PARAM_0300(thisx);
+    this->unk_146 = DOORSPIRAL_GET_PARAM_0080(thisx);
+    this->unk_147 = func_809A2BF8(play);
+    if ((this->unk_149 = Object_GetIndex(&play->objectCtx, D_809A32D0[this->unk_147].id)) < 0) {
+        Actor_Kill(thisx);
         return;
     }
     func_809A2B60(this, func_809A2DB0);
@@ -139,14 +139,14 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play2) {
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     DoorSpiral* this = (DoorSpiral*)thisx;
-    s32 temp1 = (u16)this->actor.params >> 0xA;
+    s32 temp1 = DOORSPIRAL_GET_PARAM_FC00(&this->actor);
 
     play->doorCtx.transitionActorList[temp1].id = -play->doorCtx.transitionActorList[temp1].id;
 }
 
 void func_809A2DB0(DoorSpiral* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->unk149)) {
-        this->actor.objBankIndex = this->unk149;
+    if (Object_IsLoaded(&play->objectCtx, this->unk_149)) {
+        this->actor.objBankIndex = this->unk_149;
         func_809A2B70(this, play);
     }
 }
@@ -173,7 +173,7 @@ s32 func_809A2EA0(DoorSpiral* this, PlayState* play) {
     s16 var_v0;
 
     if (Player_InCsMode(play) == 0) {
-        temp_fv0 = func_809A2E08(play, this, 0.0f, D_809A3250[this->unk148].unk_E, D_809A3250[this->unk148].unk_F);
+        temp_fv0 = func_809A2E08(play, this, 0.0f, D_809A3250[this->unk_148].unk_E, D_809A3250[this->unk_148].unk_F);
         if (fabsf(temp_fv0) < 64.0f) {
             var_v0 = sp24->actor.shape.rot.y - this->actor.shape.rot.y;
             if (temp_fv0 > 0.0f) {
@@ -188,17 +188,17 @@ s32 func_809A2EA0(DoorSpiral* this, PlayState* play) {
 }
 
 void func_809A2FF8(DoorSpiral* this, PlayState* play) {
-    if (this->pad144 != 0) {
+    if (this->unk_144) {
         func_809A2B60(this, func_809A3098);
     } else if (func_809A2EA0(this, play) != 0) {
         Player* player = GET_PLAYER(play);
         s32 temp1;
 
         player->doorType = 4;
-        player->doorDirection = this->unk146;
+        player->doorDirection = this->unk_146;
         player->doorActor = &this->actor;
-        temp1 = (u16)this->actor.params >> 0xA;
-        player->doorNext = (u16)play->doorCtx.transitionActorList[temp1].params >> 0xA;
+        temp1 = DOORSPIRAL_GET_PARAM_FC00(&this->actor);
+        player->doorNext = DOORSPIRAL_GET_PARAM_FC00(&play->doorCtx.transitionActorList[temp1]);
         func_80122F28(player);
     }
 }
@@ -206,14 +206,13 @@ void func_809A2FF8(DoorSpiral* this, PlayState* play) {
 void func_809A3098(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x20000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         func_809A2B60(this, func_809A2DB0);
-        this->pad144 = 0;
+        this->unk_144 = false;
     }
 }
 
-void DoorSpiral_Update(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
+void DoorSpiral_Update(Actor* thisx, PlayState* play) {
     DoorSpiral* this = (DoorSpiral*)thisx;
     Player* player = GET_PLAYER(play);
 
@@ -223,19 +222,21 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void DoorSpiral_Draw(Actor* thisx, PlayState* play2) {
-    PlayState* play = play2;
+void DoorSpiral_Draw(Actor* thisx, PlayState* play) {
+    s32 pad; // can be playstate recast
     DoorSpiral* this = (DoorSpiral*)thisx;
 
-    if (this->actor.objBankIndex == this->unk149) {
-        DoorSpiralUnkStruct1* sp2C = &D_809A3250[this->unk148];
-        Gfx* sp28 = sp2C->unk_0[this->unk146];
+    if (this->actor.objBankIndex == this->unk_149) {
+        DoorSpiralUnkStruct1* sp2C = &D_809A3250[this->unk_148];
+        Gfx* sp28 = sp2C->unk_0[this->unk_146];
 
         if (sp28 != NULL) {
             OPEN_DISPS(play->state.gfxCtx);
+
             func_8012C28C(play->state.gfxCtx);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
-            gSPDisplayList(POLY_OPA_DISP++, sp2C->unk_0[this->unk146]);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, sp2C->unk_0[this->unk_146]);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }

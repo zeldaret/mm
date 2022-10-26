@@ -1,3 +1,9 @@
+/*
+ * File: z_Bg_Tobira01.c
+ * Overlay: ovl_Bg_Tobira01
+ * Description: Door to Goron Shrine
+ */
+
 #include "z_bg_tobira01.h"
 #include "objects/object_spot11_obj/object_spot11_obj.h"
 
@@ -10,17 +16,17 @@ void BgTobira01_Destroy(Actor* thisx, PlayState* play2);
 void BgTobira01_Update(Actor* thisx, PlayState* play2);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-void func_80B12430(BgTobira01* this, PlayState* play);
-
-ActorInit Bg_Tobira01_InitVars = { ACTOR_BG_TOBIRA01,
-                                   ACTORCAT_PROP,
-                                   FLAGS,
-                                   OBJECT_SPOT11_OBJ,
-                                   sizeof(BgTobira01),
-                                   (ActorFunc)BgTobira01_Init,
-                                   (ActorFunc)BgTobira01_Destroy,
-                                   (ActorFunc)BgTobira01_Update,
-                                   (ActorFunc)BgTobira01_Draw };
+ActorInit Bg_Tobira01_InitVars = {
+    ACTOR_BG_TOBIRA01,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_SPOT11_OBJ,
+    sizeof(BgTobira01),
+    (ActorFunc)BgTobira01_Init,
+    (ActorFunc)BgTobira01_Destroy,
+    (ActorFunc)BgTobira01_Update,
+    (ActorFunc)BgTobira01_Draw,
+};
 
 void func_80B12430(BgTobira01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -52,13 +58,13 @@ void func_80B12430(BgTobira01* this, PlayState* play) {
     }
     this->unk_160 = CLAMP(this->unk_160, 0, 60);
     if (temp_v0 != this->unk_160) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, 0x2143);
-        this->dyna.actor.world.pos.y = this->unk_164 = (this->unk_160 * 1.6666666f) + this->dyna.actor.home.pos.y;
-        this->unk_162 = 0xB4;
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+        this->dyna.actor.world.pos.y = this->unk_164 = (this->unk_160 * (5.0f / 3.0f)) + this->dyna.actor.home.pos.y;
+        this->unk_162 = 180;
     }
     if (!(player->stateFlags1 & PLAYER_STATE1_40) && (gSaveContext.save.weekEventReg[88] & 0x40) &&
         (DECR(this->unk_162) == 0)) {
-        gSaveContext.save.weekEventReg[88] &= 0xBF;
+        gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     }
 }
 
@@ -68,7 +74,7 @@ void BgTobira01_Init(Actor* thisx, PlayState* play2) {
 
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
-    gSaveContext.save.weekEventReg[88] &= 0xBF;
+    gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->unk_162 = gSaveContext.save.isNight;
     this->unk_160 = 0;
@@ -91,8 +97,10 @@ void BgTobira01_Update(Actor* thisx, PlayState* play2) {
 
 void BgTobira01_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
+
     func_8012C28C(play->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), 2);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_spot11_obj_DL_000088);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -14,6 +14,4 @@ typedef struct ObjMine {
     /* 0x01A8 */ char unk_1A8[0x120C];
 } ObjMine; // size = 0x13B4
 
-extern const ActorInit Obj_Mine_InitVars;
-
 #endif // Z_OBJ_MINE_H

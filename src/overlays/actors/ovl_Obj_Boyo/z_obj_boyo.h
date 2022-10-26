@@ -5,19 +5,18 @@
 
 typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ColliderCylinder unk144;            /* inferred */
-    /* 0x190 */ AnimatedMaterial *unk190;           /* inferred */
-    /* 0x194 */ s16 unk194;                         /* inferred */
-    /* 0x196 */ s16 unk196;                         /* inferred */
-    /* 0x198 */ f32 unk198;                         /* inferred */
-    /* 0x19C */ f32 unk19C;                         /* inferred */
-    /* 0x1A0 */ f32 unk1A0;                         /* inferred */
-    /* 0x1A4 */ s16 unk1A4;                         /* inferred */
-    /* 0x1A6 */ s16 unk1A6;                         /* inferred */
-    /* 0x1A8 */ s16 unk1A8;                         /* inferred */
-    /* 0x1AA */ s16 unk1AA;                         /* inferred */
-    /* 0x1AC */ s16 unk1AC;                         /* inferred */
-    /* 0x1AE */ char pad1AE[2];
-} ObjBoyo;
+    /* 0x144 */ ColliderCylinder unk_144; 
+    /* 0x190 */ AnimatedMaterial *unk_190;
+    /* 0x194 */ s16 unk_194;              
+    /* 0x196 */ s16 unk_196;              
+    /* 0x198 */ f32 unk_198;              
+    /* 0x19C */ f32 unk_19C;              
+    /* 0x1A0 */ f32 unk_1A0;              
+    /* 0x1A4 */ s16 unk_1A4;              
+    /* 0x1A6 */ s16 unk_1A6;              
+    /* 0x1A8 */ s16 unk_1A8;              
+    /* 0x1AA */ s16 unk_1AA;              
+    /* 0x1AC */ s16 unk_1AC;              
+} ObjBoyo; // size = 0x1B0
 
 #endif // Z_OBJ_BOYO_H

@@ -23,7 +23,7 @@ void func_80C1F4E8(EnPaper* this);
 void func_80C1F55C(EnPaper* this, EnPaperStruct* arg1);
 void func_80C1F6E0(EnPaper* this, EnPaperStruct* arg1);
 
-const ActorInit En_Paper_InitVars = {
+ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -154,10 +154,11 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
 
     func_80C1F87C(this);
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->timer--;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->timer--;
 }
 
 void EnPaper_Draw(Actor* thisx, PlayState* play) {

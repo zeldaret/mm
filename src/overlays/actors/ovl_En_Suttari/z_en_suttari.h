@@ -60,6 +60,4 @@ typedef struct EnSuttari {
     /* 0x45A */ s16 cutsceneIdx;
 } EnSuttari; // size = 0x45C
 
-extern const ActorInit En_Suttari_InitVars;
-
 #endif // Z_EN_SUTTARI_H

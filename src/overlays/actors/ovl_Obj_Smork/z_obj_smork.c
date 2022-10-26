@@ -16,7 +16,7 @@ void ObjSmork_Destroy(Actor* thisx, PlayState* play);
 void ObjSmork_Update(Actor* thisx, PlayState* play);
 void ObjSmork_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Smork_InitVars = {
+ActorInit Obj_Smork_InitVars = {
     ACTOR_OBJ_SMORK,
     ACTORCAT_PROP,
     FLAGS,

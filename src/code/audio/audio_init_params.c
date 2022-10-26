@@ -14,7 +14,7 @@ const s16 gAudioTatumInit[] = {
 #define SOUNDFONT_2_SIZE 0xCE0
 
 // Sizes of everything on the init pool
-#define AI_BUFFERS_SIZE (AIBUF_SIZE * ARRAY_COUNT(gAudioContext.aiBuffers))
+#define AI_BUFFERS_SIZE (AIBUF_SIZE * ARRAY_COUNT(gAudioCtx.aiBuffers))
 #define SOUNDFONT_LIST_SIZE (NUM_SOUNDFONTS * sizeof(SoundFont))
 
 // 0x19BD0
