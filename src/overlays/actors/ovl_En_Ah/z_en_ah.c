@@ -47,7 +47,7 @@ s32 D_80BD3DF8[] = { 0x00330100, 0x050E28FE, 0x0C100E28, -0x03F3F000 };
 
 s32 D_80BD3E08[] = { 0x0E28FD0C, 0x0F29540C, 0x10000000 };
 
-const ActorInit En_Ah_InitVars = {
+ActorInit En_Ah_InitVars = {
     ACTOR_EN_AH,
     ACTORCAT_NPC,
     FLAGS,
@@ -307,7 +307,7 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if (player->stateFlags1 & 0x40) {
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
         if (this->unk_2DA != temp) {
             if (temp == 0x2954) {
                 this->unk_18C = func_80BD3118;

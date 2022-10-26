@@ -24,7 +24,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play);
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
-const ActorInit En_Warp_tag_InitVars = {
+ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -176,7 +176,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
         player->actor.world.pos.z = this->dyna.actor.world.pos.z + (diffZ * distance);
 
         if (Math_StepToS(&this->unkValue15E, 0x2710, 0xC8)) {
-            player->stateFlags3 |= 0x1;
+            player->stateFlags3 |= PLAYER_STATE3_1;
             player->actor.gravity = -0.5f;
 
             if (this->dyna.actor.playerHeightRel < -80.0f) {

@@ -37,6 +37,4 @@ typedef struct EnPamera {
     /* 0x326 */ u16 unk_326;
 } EnPamera; // size = 0x328
 
-extern const ActorInit En_Pamera_InitVars;
-
 #endif // Z_EN_PAMERA_H

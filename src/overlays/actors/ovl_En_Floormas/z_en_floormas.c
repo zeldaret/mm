@@ -59,7 +59,7 @@ void func_808D2D30(EnFloormas* this, PlayState* play);
 void func_808D2DC0(EnFloormas* this, PlayState* play);
 void func_808D3754(Actor* thisx, PlayState* play);
 
-const ActorInit En_Floormas_InitVars = {
+ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -745,7 +745,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
 
     Math_Vec3f_Sum(&player->actor.world.pos, &this->actor.home.pos, &this->actor.world.pos);
 
-    if (!(player->stateFlags2 & 0x80) || (player->invincibilityTimer < 0)) {
+    if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->invincibilityTimer < 0)) {
         EnFloormas* parent = (EnFloormas*)this->actor.parent;
         EnFloormas* child = (EnFloormas*)this->actor.child;
 

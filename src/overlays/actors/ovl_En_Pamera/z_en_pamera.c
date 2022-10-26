@@ -69,7 +69,7 @@ void func_80BDA288(EnPamera* this);
 void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
-const ActorInit En_Pamera_InitVars = {
+ActorInit En_Pamera_InitVars = {
     ACTOR_EN_PAMERA,
     ACTORCAT_NPC,
     FLAGS,

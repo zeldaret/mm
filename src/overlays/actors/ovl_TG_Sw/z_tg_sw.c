@@ -18,7 +18,7 @@ void TGSw_Draw(Actor* thisx, PlayState* play);
 
 void TGSw_ActionExecuteOneShot(struct TGSw* this, PlayState* play);
 
-const ActorInit TG_Sw_InitVars = {
+ActorInit TG_Sw_InitVars = {
     ACTOR_TG_SW,
     ACTORCAT_PROP,
     FLAGS,

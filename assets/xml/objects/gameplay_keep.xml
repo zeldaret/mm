@@ -12,7 +12,7 @@
         <DList Name="gameplay_keep_DL_001B20" Offset="0x1B20" />
         <DList Name="gameplay_keep_DL_001BC8" Offset="0x1BC8" />
         <DList Name="gameplay_keep_DL_001C60" Offset="0x1C60" />
-        <DList Name="gameplay_keep_DL_001D00" Offset="0x1D00" />
+        <DList Name="gRazorSwordHandleDL" Offset="0x1D00" />
         <DList Name="gameplay_keep_DL_001D28" Offset="0x1D28" />
         <DList Name="gameplay_keep_DL_001DC8" Offset="0x1DC8" />
         <DList Name="gameplay_keep_DL_001E58" Offset="0x1E58" />
@@ -20,8 +20,8 @@
         <DList Name="gameplay_keep_DL_001FA8" Offset="0x1FA8" />
         <DList Name="gameplay_keep_DL_002038" Offset="0x2038" />
         <DList Name="gameplay_keep_DL_0020C8" Offset="0x20C8" />
-        <DList Name="gameplay_keep_DL_002168" Offset="0x2168" />
-        <DList Name="gameplay_keep_DL_0021A8" Offset="0x21A8" />
+        <DList Name="gRazorSwordBladeDL" Offset="0x2168" />
+        <DList Name="gKokiriSwordHandleDL" Offset="0x21A8" />
         <DList Name="gameplay_keep_DL_002480" Offset="0x2480" />
         <DList Name="gameplay_keep_DL_002508" Offset="0x2508" />
         <DList Name="gameplay_keep_DL_002590" Offset="0x2590" />
@@ -30,7 +30,7 @@
         <DList Name="gameplay_keep_DL_002728" Offset="0x2728" />
         <DList Name="gameplay_keep_DL_0027B0" Offset="0x27B0" />
         <DList Name="gameplay_keep_DL_002838" Offset="0x2838" />
-        <DList Name="gameplay_keep_DL_0028C0" Offset="0x28C0" />
+        <DList Name="gKokiriSwordBladeDL" Offset="0x28C0" />
         <Texture Name="gameplay_keep_TLUT_002908" OutName="tlut_002908" Format="rgba16" Width="16" Height="16" Offset="0x2908" />
         <Texture Name="gameplay_keep_Tex_002B08" OutName="tex_002B08" Format="rgba16" Width="8" Height="8" Offset="0x2B08" />
         <Texture Name="gameplay_keep_Tex_002B88" OutName="tex_002B88" Format="rgba16" Width="16" Height="16" Offset="0x2B88" />
@@ -38,11 +38,14 @@
         <Texture Name="gameplay_keep_Tex_002DC8" OutName="tex_002DC8" Format="i8" Width="8" Height="8" Offset="0x2DC8" />
         <Texture Name="gameplay_keep_Tex_002E08" OutName="tex_002E08" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
         <Texture Name="gameplay_keep_Tex_003008" OutName="tex_003008" Format="i8" Width="8" Height="8" Offset="0x3008" />
-        <Blob Name="gameplay_keep_Blob_003050" Size="0x20" Offset="0x3050" />
+        <DList Name="gKokiriSwordDL" Offset="0x3050" />
+        <DList Name="gRazorSwordDL" Offset="0x3060" />
         <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
         <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
         <DList Name="gameplay_keep_DL_005360" Offset="0x5360" />
-        <DList Name="gameplay_keep_DL_0056C0" Offset="0x56C0" />
+
+        <DList Name="gDekuMaskDL" Offset="0x56C0" />
+
         <DList Name="gameplay_keep_DL_005A10" Offset="0x5A10" />
         <Blob Name="gameplay_keep_Blob_005DB8" Size="0x200" Offset="0x5DB8" />
         <Texture Name="gameplay_keep_TLUT_005FB8" OutName="tlut_005FB8" Format="rgba16" Width="16" Height="16" Offset="0x5FB8" />
@@ -1220,7 +1223,7 @@
         <DList Name="gameplay_keep_DL_054C90" Offset="0x54C90" />
         <Texture Name="gameplay_keep_Tex_054D90" OutName="tex_054D90" Format="i4" Width="16" Height="16" Offset="0x54D90" />
         <Texture Name="gameplay_keep_Tex_054E10" OutName="tex_054E10" Format="i8" Width="16" Height="16" Offset="0x54E10" />
-        <Blob Name="gameplay_keep_Blob_054F10" Size="0x10" Offset="0x54F10" />
+        <TextureAnimation Name="gameplay_keep_Matanimheader_054F18" Offset="0x54F18" />
         <Texture Name="gameplay_keep_Tex_054F20" OutName="tex_054F20" Format="i8" Width="32" Height="32" Offset="0x54F20" />
         <DList Name="gameplay_keep_DL_055360" Offset="0x55360" />
         <DList Name="gameplay_keep_DL_055620" Offset="0x55620" />
@@ -1491,7 +1494,7 @@
         <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
         <Texture Name="gEffBubble1Tex" OutName="eff_bubble_1" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
         <Texture Name="gEffBubble2Tex" OutName="eff_bubble_2" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
-        
+
         <!-- Electric spark textures from Zora-Form attack -->
         <Texture Name="gElectricSpark1Tex" OutName="electric_spark_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
         <Texture Name="gElectricSpark2Tex" OutName="electric_spark_2" Format="i4" Width="32" Height="32" Offset="0x91FE0" />

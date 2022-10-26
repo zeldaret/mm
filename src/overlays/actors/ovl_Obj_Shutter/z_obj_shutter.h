@@ -11,6 +11,4 @@ typedef struct ObjShutter {
     /* 0x148 */ f32 verticalOffset;
 } ObjShutter; // size = 0x14C
 
-extern const ActorInit Obj_Shutter_InitVars;
-
 #endif // Z_OBJ_SHUTTER_H

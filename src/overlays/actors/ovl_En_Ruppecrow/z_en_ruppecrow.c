@@ -40,7 +40,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow*, PlayState*);
 void EnRuppecrow_UpdateSpeed(EnRuppecrow*, PlayState*);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow*, PlayState*);
 
-const ActorInit En_Ruppecrow_InitVars = {
+ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -240,7 +240,7 @@ s32 EnRuppecrow_CanSpawnBlueRupees(PlayState* play) {
         case PLAYER_FORM_ZORA:
             return false;
         case PLAYER_FORM_HUMAN:
-            if (player->stateFlags1 & 0x800000) {
+            if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 return true;
             } else {
                 return false;
@@ -268,7 +268,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, PlayState* play) {
     EnItem00* rupee;
     s16 rupeeIndex = this->rupeeIndex;
 
-    if (!(player->stateFlags3 & 0x1000)) {
+    if (!(player->stateFlags3 & PLAYER_STATE3_1000)) {
         xOffset = (this->rupeeIndex & 1) ? 10.0f : -10.0f;
     } else {
         xOffset = 0.0f;
@@ -407,7 +407,7 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
             this->speedModifier = 7.0f;
             break;
         case PLAYER_FORM_GORON:
-            if (player->stateFlags3 & 0x1000) { // Goron Link is curled
+            if (player->stateFlags3 & PLAYER_STATE3_1000) { // Goron Link is curled
                 this->speedModifier = 19.0f;
             } else {
                 this->speedModifier = 7.0f;
@@ -417,7 +417,7 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
             this->speedModifier = 7.0f;
             break;
         case PLAYER_FORM_HUMAN:
-            if (player->stateFlags1 & 0x800000) {
+            if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 this->speedModifier = 16.0f;
             } else {
                 this->speedModifier = 7.0f;
@@ -507,7 +507,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
         this->actionFunc = EnRuppecrow_HandleSongCutscene;
     }
 
-    if (player->stateFlags2 & 0x8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.1f, 1.0f);
     } else {
         Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.1f, 0.1f);

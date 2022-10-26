@@ -107,7 +107,7 @@ static DamageTable D_80A80DAC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Egol_InitVars = {
+ActorInit En_Egol_InitVars = {
     ACTOR_EN_EGOL,
     ACTORCAT_ENEMY,
     FLAGS,

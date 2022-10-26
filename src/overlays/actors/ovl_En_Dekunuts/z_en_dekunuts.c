@@ -39,7 +39,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play);
 void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, PlayState* play);
 
-const ActorInit En_Dekunuts_InitVars = {
+ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
     ACTORCAT_ENEMY,
     FLAGS,

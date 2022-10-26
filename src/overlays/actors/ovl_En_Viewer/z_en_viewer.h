@@ -27,6 +27,4 @@ typedef enum {
     /* 0x2 */ ENVIEWER_PARAMS_2
 } EnViewerParams;
 
-extern const ActorInit En_Viewer_InitVars;
-
 #endif // Z_EN_VIEWER_H

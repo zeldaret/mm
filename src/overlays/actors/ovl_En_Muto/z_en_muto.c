@@ -24,7 +24,7 @@ void EnMuto_SetupDialogue(EnMuto* this, PlayState* play);
 void EnMuto_InDialogue(EnMuto* this, PlayState* play);
 s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Muto_InitVars = {
+ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
     ACTORCAT_NPC,
     FLAGS,

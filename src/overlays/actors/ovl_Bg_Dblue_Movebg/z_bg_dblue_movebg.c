@@ -45,7 +45,7 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
-const ActorInit Bg_Dblue_Movebg_InitVars = {
+ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -390,7 +390,7 @@ void func_80A2A32C(BgDblueMovebg* this, PlayState* play) {
             this->unk_172 |= 8;
             this->actionFunc = func_80A2A444;
         } else {
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     }
@@ -410,7 +410,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     this->dyna.actor.shape.rot.y =
         (s32)((this->unk_18C + temp_v0) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
-    if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
             (Math_SinS(this->dyna.actor.shape.rot.y - this->unk_18E) * this->unk_184) + this->dyna.actor.home.pos.x;
         player->actor.world.pos.z =
@@ -420,7 +420,7 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
     }
 
     if (sp20) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         Flags_SetSwitch(play, this->unk_1C0);
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
@@ -498,7 +498,7 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
     this->dyna.actor.shape.rot.y =
         (s32)((this->unk_18C + sp26) * 0.1f * (0x10000 / 360.0f)) + this->dyna.actor.home.rot.y;
 
-    if ((player->stateFlags2 & 0x10) && (this->unk_184 > 0.0f)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_10) && (this->unk_184 > 0.0f)) {
         player->actor.world.pos.x =
             (Math_SinS(this->dyna.actor.shape.rot.y - this->unk_18E) * this->unk_184) + this->dyna.actor.home.pos.x;
         player->actor.world.pos.z =
@@ -516,8 +516,8 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
             Flags_UnsetSwitch(play, this->unk_1C0);
         }
 
-        player->stateFlags1 |= 0x20;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags1 |= PLAYER_STATE1_20;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         this->unk_18C = (this->unk_18C + sp26 + 3600) % 3600;
@@ -565,12 +565,12 @@ void func_80A2AAB8(BgDblueMovebg* this, PlayState* play) {
 
         if (this->unk_1D0 == 1) {
             this->dyna.pushForce = 0.0f;
-            player->stateFlags1 |= 0x20;
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags1 |= PLAYER_STATE1_20;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
         }
 
         if (this->unk_1D0 <= 0) {
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->actionFunc = func_80A2A714;
         }
     }

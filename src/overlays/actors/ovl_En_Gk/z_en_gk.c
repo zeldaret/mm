@@ -33,7 +33,7 @@ void func_80B5253C(EnGk* this, PlayState* play);
 void func_80B525E0(EnGk* this, PlayState* play);
 void func_80B52654(EnGk* this, PlayState* play);
 
-const ActorInit En_Gk_InitVars = {
+ActorInit En_Gk_InitVars = {
     ACTOR_EN_GK,
     ACTORCAT_NPC,
     FLAGS,
@@ -247,11 +247,11 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!(this->unk_1E4 & 0x40)) {
-        if (player->stateFlags2 & 0x8000000) {
+        if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             this->unk_1E4 |= 0x40;
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         }
-    } else if (!(player->stateFlags2 & 0x8000000)) {
+    } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
         this->unk_1E4 &= ~0x40;
     }
 

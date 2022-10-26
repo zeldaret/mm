@@ -31,6 +31,4 @@ typedef struct EnBigokuta {
     /* 0x3AC */ ColliderCylinder bodyCollider;
 } EnBigokuta; // size = 0x3F8
 
-extern const ActorInit En_Bigokuta_InitVars;
-
 #endif // Z_EN_BIGOKUTA_H

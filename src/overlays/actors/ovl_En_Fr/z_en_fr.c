@@ -14,7 +14,7 @@ void EnFr_Init(Actor* thisx, PlayState* play);
 void EnFr_Destroy(Actor* thisx, PlayState* play);
 void EnFr_Update(Actor* thisx, PlayState* play);
 
-const ActorInit En_Fr_InitVars = {
+ActorInit En_Fr_InitVars = {
     ACTOR_EN_FR,
     ACTORCAT_ITEMACTION,
     FLAGS,
