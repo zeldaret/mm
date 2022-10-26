@@ -1,22 +1,22 @@
 /*
- * File: z_obj_boyo.c
- * Overlay: ovl_Obj_Boyo
- * Description: Unused Bumper
+ * File: z_en_boyo.c
+ * Overlay: ovl_En_Boyo
+ * Description: Unused trap
  */
 
 #include "z_obj_boyo.h"
-#include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_boyo/object_boyo.h"
+#include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
+#include "assets/objects/object_boyo/object_boyo.h"
 
-#define FLAGS (ACTOR_FLAG_10)
+#define FLAGS 0x00000010
 
 #define THIS ((ObjBoyo*)thisx)
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play);
 void ObjBoyo_Destroy(Actor* thisx, PlayState* play2);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
-void ObjBoyo_Draw(Actor* thisx, PlayState* play);
+void ObjBoyo_Draw(Actor* thisx, PlayState* play2);
 
 ActorInit Obj_Boyo_InitVars = {
     ACTOR_OBJ_BOYO,
@@ -58,126 +58,129 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play) {
-    ObjBoyo* this = THIS;
+    ObjBoyo* this = (ObjBoyo*)thisx;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitCylinder(play, &this->collider);
-    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_InitCylinder(play, &this->unk_144);
+    Collider_SetCylinder(play, &this->unk_144, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->unk_144);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_190 = Lib_SegmentedToVirtual(object_boyo_Matanimheader_000E88);
 }
 
 void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjBoyo* this = THIS;
+    ObjBoyo* this = (ObjBoyo*)thisx;
 
-    Collider_DestroyCylinder(play, &this->collider);
+    Collider_DestroyCylinder(play, &this->unk_144);
 }
 
-void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
-    target->unk_B80 = 30.0f;
-    target->unk_B84 = this->actor.yawTowardsPlayer;
+void func_809A5DC0(ObjBoyo* this, Actor* actor) {
+    Player* player = (Player*)actor;
+
+    player->unk_B80 = 30.0f;
+    player->unk_B84 = this->actor.yawTowardsPlayer;
 }
 
-void ObjBoyo_UpdatePirateBumpValues(ObjBoyo* src, EnKaizoku* target) {
-    target->unk_2F0 = 30.0f;
-    target->unk_2F4 = Actor_YawBetweenActors(&src->actor, &target->actor);
+void func_809A5DE0(ObjBoyo* this, Actor* actor) {
+    EnKaizoku* pirate = (EnKaizoku*)actor;
+
+    pirate->unk_2F0 = 30.0f;
+    pirate->unk_2F4 = Actor_YawBetweenActors(&this->actor, &pirate->actor);
 }
 
-void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {
-    target->timer = 0;
+void func_809A5E14(ObjBoyo* this, Actor* actor) {
+    EnBom* bomb = (EnBom*)actor;
+
+    bomb->timer = 0;
 }
 
-BumperCollideInfo sBumperCollideInfo[] = {
-    { ACTOR_PLAYER, (BumperCollideActorFunc)ObjBoyo_UpdatePlayerBumpValues },
-    { ACTOR_EN_KAIZOKU, (BumperCollideActorFunc)ObjBoyo_UpdatePirateBumpValues },
-    { ACTOR_EN_BOM, (BumperCollideActorFunc)ObjBoyo_UpdateBombBumpValues },
+typedef struct {
+    s16 actorId;
+    void (*hitFunc)(ObjBoyo* this, Actor* actor);
+} ObjBoyoHitInfo;
+
+static ObjBoyoHitInfo sActorHitInfo[] = {
+    { ACTOR_PLAYER, func_809A5DC0 },
+    { ACTOR_EN_KAIZOKU, func_809A5DE0 },
+    { ACTOR_EN_BOM, func_809A5E14 },
 };
 
-Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, PlayState* play, s32* num) {
-    Actor* collideActor;
-    BumperCollideInfo* collideInfo;
-    s32 i;
+Actor* func_809A5E24(ObjBoyo* this, PlayState* play, s32* index) {
+    if (this->unk_144.base.ocFlags2 & OC2_HIT_PLAYER) {
+        *index = 0;
+        return (Actor*)GET_PLAYER(play);
+    } else if (this->unk_144.base.ocFlags1 & OC1_HIT) {
+        Actor* hitActor = this->unk_144.base.oc;
+        ObjBoyoHitInfo* hitInfo = &sActorHitInfo[1];
+        s32 i;
 
-    if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
-        *num = 0;
-        return &GET_PLAYER(play)->actor;
-    }
-
-    if (this->collider.base.ocFlags1 & OC2_UNK1) {
-        for (collideActor = this->collider.base.oc, collideInfo = &sBumperCollideInfo[1], i = 1; i < 3;
-             collideInfo++, i++) {
-            if (collideInfo->id == collideActor->id) {
-                *num = i;
-                return collideActor;
+        for (i = 1; i < ARRAY_COUNT(sActorHitInfo); i++, hitInfo++) {
+            if (hitInfo->actorId == hitActor->id) {
+                *index = i;
+                return hitActor;
             }
         }
     }
-
     return NULL;
 }
 
 void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    ObjBoyo* this = THIS;
-    Actor* target;
-    s32 num;
+    ObjBoyo* this = (ObjBoyo*)thisx;
+    Actor* hitActor;
+    s32 index;
 
-    target = ObjBoyo_GetCollidedActor(this, play, &num);
-
-    if (target != NULL) {
-        sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);
+    hitActor = func_809A5E24(this, play, &index);
+    if (hitActor != NULL) {
+        sActorHitInfo[index].hitFunc(this, hitActor);
         this->unk_194 = 100;
         this->unk_196 = 3;
-        this->unk_198 = 0.01f;
-        this->unk_19C = this->unk_1A0 = 0.03f;
+        this->unk_198 = 1.0f / 100.0f;
+        this->unk_19C = 0.03f;
+        this->unk_1A0 = 0.03f;
         this->unk_1A4 = 0x3F40;
-        this->unk_1A6 = 2000;
+        this->unk_1A6 = 0x7D0;
         this->unk_1A8 = 0;
         this->unk_1AA = 0x2DF7;
-        this->unk_1AC = 600;
+        this->unk_1AC = 0x258;
     }
-
     if (this->unk_194 > 0) {
         this->unk_194 -= this->unk_196;
         this->unk_1AA += this->unk_1AC;
         this->unk_1A8 += this->unk_1AA;
 
         this->actor.scale.x = this->actor.scale.z =
-            (Math_CosS(this->unk_1A8 + this->unk_1A4) * this->unk_194 * this->unk_19C * this->unk_198) + 0.1f;
+            0.1f + (Math_CosS(this->unk_1A8 + this->unk_1A4) * this->unk_194 * this->unk_19C * this->unk_198);
         this->actor.scale.y =
-            (Math_CosS(this->unk_1A8 + this->unk_1A6) * this->unk_194 * this->unk_1A0 * this->unk_198) + 0.1f;
+            0.1f + (Math_CosS(this->unk_1A8 + this->unk_1A6) * this->unk_194 * this->unk_1A0 * this->unk_198);
     } else {
         Actor_SetScale(&this->actor, 0.1f);
-
-        if (this->collider.base.acFlags & AC_HIT) {
+        if (this->unk_144.base.acFlags & AC_HIT) {
             this->unk_194 = 30;
             this->unk_196 = 2;
-            this->unk_198 = 0.033333335f;
+            this->unk_198 = 1.0f / 30.0f;
             this->unk_19C = 0.012f;
             this->unk_1A0 = 0.006f;
             this->unk_1A4 = 0x3F40;
-            this->unk_1A6 = 2000;
+            this->unk_1A6 = 0x7D0;
             this->unk_1A8 = 0;
-            this->unk_1AA = 15000;
-            this->unk_1AC = 1600;
+            this->unk_1AA = 0x3A98;
+            this->unk_1AC = 0x640;
         }
     }
-
-    this->collider.base.acFlags &= ~AC_HIT;
-    this->collider.base.ocFlags1 &= ~OC1_HIT;
-    this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
-
-    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-
-    if (thisx->xzDistToPlayer < 2000.0f) {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    this->unk_144.base.acFlags &= ~AC_HIT;
+    this->unk_144.base.ocFlags1 &= ~OC1_HIT;
+    this->unk_144.base.ocFlags2 &= ~OC2_HIT_PLAYER;
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_144.base);
+    if (this->actor.xzDistToPlayer < 2000.0f) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_144.base);
     }
 }
 
-void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
-    ObjBoyo* this = THIS;
+void ObjBoyo_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjBoyo* this = (ObjBoyo*)thisx;
 
     AnimatedMat_Draw(play, this->unk_190);
     Gfx_DrawDListOpa(play, object_boyo_DL_000300);

@@ -1,7 +1,7 @@
 /*
  * File: z_bg_lotus.c
  * Overlay: ovl_Bg_Lotus
- * Description: Southern Swamp Lilypads
+ * Description: Lily pad
  */
 
 #include "z_bg_lotus.h"
@@ -11,14 +11,14 @@
 
 #define THIS ((BgLotus*)thisx)
 
-void BgLotus_Init(Actor* thisx, PlayState* play);
-void BgLotus_Destroy(Actor* thisx, PlayState* play);
-void BgLotus_Update(Actor* thisx, PlayState* play);
+void BgLotus_Init(Actor* thisx, PlayState* play2);
+void BgLotus_Destroy(Actor* thisx, PlayState* play2);
+void BgLotus_Update(Actor* thisx, PlayState* play2);
 void BgLotus_Draw(Actor* thisx, PlayState* play);
 
-void BgLotus_Wait(BgLotus* this, PlayState* play);
-void BgLotus_Sink(BgLotus* this, PlayState* play);
-void BgLotus_WaitToAppear(BgLotus* this, PlayState* play);
+void func_80AD68DC(BgLotus* this, PlayState* play);
+void func_80AD6A88(BgLotus* this, PlayState* play);
+void func_80AD6B68(BgLotus* this, PlayState* play);
 
 ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
@@ -36,137 +36,123 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgLotus_Init(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
-    s32 pad;
-    s32 bgId;
+void BgLotus_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgLotus* this = (BgLotus*)thisx;
+    s32 sp2C;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &thisx->floorPoly, &bgId,
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
-    this->timer2 = 96;
+    this->unk_168 = 96;
     this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
-    this->actionFunc = BgLotus_Wait;
+    this->actionFunc = func_80AD68DC;
 }
 
-void BgLotus_Destroy(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
+void BgLotus_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgLotus* this = (BgLotus*)thisx;
 
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void BgLotus_SetScaleXZ(BgLotus* this) {
-    f32 scale;
-
+void func_80AD6830(BgLotus* this) {
     if (this->dyna.actor.params == 0) {
-        scale = sin_rad(this->timer * 0.7853982f) * ((0.014f * ((f32)this->timer / 8)) + 0.01f);
-        this->dyna.actor.scale.x = (1.0f + scale) * 0.1f;
-        this->dyna.actor.scale.z = (1.0f - scale) * 0.1f;
+        f32 temp_fv1 = sin_rad(this->unk_166 * (M_PI / 4.0f)) * ((0.014f * ((f32)this->unk_166 / 8)) + 0.01f);
+
+        this->dyna.actor.scale.x = (1.0f + temp_fv1) * 0.1f;
+        this->dyna.actor.scale.z = (1.0f - temp_fv1) * 0.1f;
     }
 }
 
-void BgLotus_Wait(BgLotus* this, PlayState* play) {
-    f32 moveDist; // distance for the xz position of the lilypad to move
+void func_80AD68DC(BgLotus* this, PlayState* play) {
+    f32 sp34;
 
-    this->timer2--;
-
-    moveDist = sin_rad(this->timer2 * 0.06544985f) * 6.0f;
-
+    this->unk_168--;
+    sp34 = sin_rad(this->unk_168 * (M_PI / 48.0f)) * 6.0f;
     if (this->dyna.actor.params == 0) {
-        this->dyna.actor.world.pos.x =
-            (Math_SinS(this->dyna.actor.world.rot.y) * moveDist) + this->dyna.actor.home.pos.x;
-        this->dyna.actor.world.pos.z =
-            (Math_CosS(this->dyna.actor.world.rot.y) * moveDist) + this->dyna.actor.home.pos.z;
-
-        if (this->timer2 == 0) {
-            this->timer2 = 96;
+        this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;
+        this->dyna.actor.world.pos.z = (Math_CosS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.z;
+        if (this->unk_168 == 0) {
+            this->unk_168 = 96;
             this->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
         }
     }
-
-    if (this->height < this->dyna.actor.floorHeight) {
+    if (this->unk_160 < this->dyna.actor.floorHeight) {
         this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
     } else {
-        this->dyna.actor.world.pos.y = this->height;
-
+        this->dyna.actor.world.pos.y = this->unk_160;
         if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-            if (this->hasSpawnedRipples == 0) {
+            if (!this->unk_164) {
                 EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 1000, 1400, 0);
                 EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 1000, 1400, 8);
-                this->timer = 40;
+                this->unk_166 = 40;
             }
             if (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) {
-                this->timer = 40;
+                this->unk_166 = 40;
                 this->dyna.actor.flags |= ACTOR_FLAG_10;
-                this->actionFunc = BgLotus_Sink;
+                this->actionFunc = func_80AD6A88;
                 return;
             }
-
-            this->hasSpawnedRipples = 1;
+            this->unk_164 = true;
         } else {
-            this->hasSpawnedRipples = 0;
+            this->unk_164 = false;
         }
     }
-
-    if (this->timer > 0) {
-        this->timer--;
+    if (this->unk_166 > 0) {
+        this->unk_166--;
     }
-
-    BgLotus_SetScaleXZ(this);
+    func_80AD6830(this);
 }
 
-void BgLotus_Sink(BgLotus* this, PlayState* play) {
-    if (this->height < this->dyna.actor.world.pos.y) {
-        this->dyna.actor.world.pos.y = this->height;
+void func_80AD6A88(BgLotus* this, PlayState* play) {
+    if (this->unk_160 < this->dyna.actor.world.pos.y) {
+        this->dyna.actor.world.pos.y = this->unk_160;
     }
-
     this->dyna.actor.world.pos.y -= 1.0f;
-
     if (this->dyna.actor.world.pos.y <= this->dyna.actor.floorHeight) {
         this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
-        this->timer = 0;
+        this->unk_166 = 0;
     }
-
-    if (this->timer > 0) {
-        this->timer--;
-        BgLotus_SetScaleXZ(this);
+    if (this->unk_166 > 0) {
+        this->unk_166--;
+        func_80AD6830(this);
     } else {
-        if (Math_StepToF(&this->dyna.actor.scale.x, 0, 0.0050000003539f)) {
+        if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 0.1f * 0.05f)) {
             this->dyna.actor.draw = NULL;
-            this->timer = 100;
+            this->unk_166 = 100;
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
-            this->actionFunc = BgLotus_WaitToAppear;
+            this->actionFunc = func_80AD6B68;
         }
-
         this->dyna.actor.scale.z = this->dyna.actor.scale.x;
     }
 }
 
-void BgLotus_WaitToAppear(BgLotus* this, PlayState* play) {
-    if (this->timer > 0) {
-        this->timer--;
+void func_80AD6B68(BgLotus* this, PlayState* play) {
+    if (this->unk_166 > 0) {
+        this->unk_166--;
     } else if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
         this->dyna.actor.draw = BgLotus_Draw;
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
-        this->dyna.actor.world.pos.y = CLAMP_MIN(this->height, this->dyna.actor.floorHeight);
+        this->dyna.actor.world.pos.y = MAX(this->dyna.actor.floorHeight, this->unk_160);
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;
-        this->timer2 = 96;
-        this->actionFunc = BgLotus_Wait;
+        this->unk_168 = 96;
+        this->actionFunc = func_80AD68DC;
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
     }
 }
 
-void BgLotus_Update(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
-    s32 pad;
-    WaterBox* waterBox;
+void BgLotus_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    BgLotus* this = (BgLotus*)thisx;
+    WaterBox* sp2C;
 
     WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                           &this->height, &waterBox);
+                           &this->unk_160, &sp2C);
     this->actionFunc(this, play);
 }
 

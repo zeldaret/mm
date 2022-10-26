@@ -1,7 +1,7 @@
 /*
  * File: z_bg_keikoku_spr.c
  * Overlay: ovl_Bg_Keikoku_Spr
- * Description: Termina Field Fountain Water
+ * Description: Termina Field fountain textures (unused)
  */
 
 #include "z_bg_keikoku_spr.h"
@@ -14,7 +14,7 @@
 void BgKeikokuSpr_Init(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
-void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play);
+void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play2);
 
 ActorInit Bg_Keikoku_Spr_InitVars = {
     ACTOR_BG_KEIKOKU_SPR,
@@ -36,7 +36,9 @@ static InitChainEntry sInitChain[] = {
 };
 
 void BgKeikokuSpr_Init(Actor* thisx, PlayState* play) {
-    Actor_ProcessInitChain(thisx, sInitChain);
+    BgKeikokuSpr* this = (BgKeikokuSpr*)thisx;
+
+    Actor_ProcessInitChain(&this->actor, sInitChain);
 }
 
 void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play) {
@@ -45,11 +47,10 @@ void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play) {
 void BgKeikokuSpr_Update(Actor* thisx, PlayState* play) {
 }
 
-void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play) {
-    s32 pad;
+void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
 
     OPEN_DISPS(play->state.gfxCtx);
-
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000100);
@@ -57,6 +58,5 @@ void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000300);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0005F8));
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000500);
-
     CLOSE_DISPS(play->state.gfxCtx);
 }
