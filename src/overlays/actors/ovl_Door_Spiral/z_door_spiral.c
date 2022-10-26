@@ -18,8 +18,8 @@
 
 void DoorSpiral_Init(Actor* thisx, PlayState* play2);
 void DoorSpiral_Destroy(Actor* thisx, PlayState* play2);
-void DoorSpiral_Update(Actor* thisx, PlayState* play2);
-void DoorSpiral_Draw(Actor* thisx, PlayState* play2);
+void DoorSpiral_Update(Actor* thisx, PlayState* play);
+void DoorSpiral_Draw(Actor* thisx, PlayState* play);
 
 void func_809A2DB0(DoorSpiral* this, PlayState* play);
 void func_809A2FF8(DoorSpiral* this, PlayState* play);
