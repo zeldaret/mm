@@ -485,14 +485,6 @@ typedef enum {
     AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_POP_PERSISTENT_CACHE, 0, 0, 0), tableType)
 
 /**
- * Pop the persistent cache of the specified table
- *
- * @param tableType (s32) see the `SampleBankTableType` enum
- */
-#define AUDIOCMD_GLOBAL_POP_PERSISTENT_CACHE(tableType) \
-    AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_GLOBAL_POP_PERSISTENT_CACHE, 0, 0, 0), tableType)
-
-/**
  * Set a custom function.
  *
  * @param functionType
