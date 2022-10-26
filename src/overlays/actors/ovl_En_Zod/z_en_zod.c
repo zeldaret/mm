@@ -155,18 +155,18 @@ void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
-        textId = 0x1227; // Huh? Who are you? You can't just come...
+        textId = 0x1227;
         if (gSaveContext.save.weekEventReg[32] & 8) {
-            textId = 0x1229; // This is a problem. You just can't come...
+            textId = 0x1229;
         } else {
             gSaveContext.save.weekEventReg[32] |= 8;
         }
     } else if (this->stateFlags & TIJO_STATE_1) {
-        textId = 0x1225; // Don't get mad, but i want you to hear this...
+        textId = 0x1225;
     } else {
-        textId = 0x1219; // Mikau? Where've you been?...
+        textId = 0x1219;
         if (gSaveContext.save.weekEventReg[32] & 0x10) {
-            textId = 0x1226; // Ooh! Ooh! How's Lulu? Is she talking...
+            textId = 0x1226;
         } else {
             gSaveContext.save.weekEventReg[32] |= 0x10;
         }
@@ -312,12 +312,12 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1220); // There's a rumor that the ocean is getting...
+                        func_80151938(play, 0x1220);
                         break;
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1223); // Oh, yeah, that's right. There aren't any secrets...
+                        func_80151938(play, 0x1223);
                         break;
                 }
             }
@@ -391,17 +391,17 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (gSaveContext.save.weekEventReg[79] & 1) {
-            textId = 0x1253; // And with that, we're all ready...
+            textId = 0x1253;
         } else {
-            textId = 0x1251; // What have you been doing? You're late...
+            textId = 0x1251;
             if (gSaveContext.save.weekEventReg[78] & 0x20) {
-                textId = 0x1252; // Hurry up and go see...
+                textId = 0x1252;
             } else {
                 gSaveContext.save.weekEventReg[78] |= 0x20;
             }
         }
     } else {
-        textId = 0x1250; // If you want an autograph...
+        textId = 0x1250;
     }
 
     EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
@@ -477,7 +477,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B7298(play, NULL, 0x44);
-        Message_StartTextbox(play, 0x103A, &this->actor); // One... two...
+        Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
