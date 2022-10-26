@@ -332,21 +332,21 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
                     case 0x1220:
                     case 0x1221:
                     case 0x1227:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1219:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->nextAnimIndex = ENZOD_ANIM_ARMS_FOLDED;
                         break;
 
                     case 0x121D:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->nextAnimIndex = ENZOD_ANIM_READY_TO_PLAY;
                         break;
 
                     case 0x1223:
-                        func_80151938(play, (play->msgCtx.currentTextId + 1) & 0xFFFF);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->nextAnimIndex = ENZOD_ANIM_PLAYING_VIVACE;
                         break;
 
