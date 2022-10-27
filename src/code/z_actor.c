@@ -4545,7 +4545,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
 
                 alpha = effectAlpha * 100.0f;
                 if (alpha > 100.0f) {
@@ -4568,7 +4568,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
                 }
                 break;
 
@@ -4627,7 +4627,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 lightOrbsScale = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
                 alpha = effectAlpha * 255.0f;
                 if (alpha > 255.0f) {
@@ -4658,7 +4658,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
                 break;
 
@@ -4676,7 +4676,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                 gSPSegment(POLY_XLU_DISP++, 0x08,
                            Lib_SegmentedToVirtual(sElectricSparkTextures[play->gameplayFrames % 4]));
 
-                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkDL);
+                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkMaterialDL);
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 255), (u8)(sREG(17) + 255), (u8)(sREG(18) + 150),
                                 (u8)(sREG(19) + 255));
@@ -4698,7 +4698,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
 
                     // second electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
@@ -4710,7 +4710,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
                 }
 
                 break;

@@ -934,14 +934,14 @@
         <DList Name="gEffDustDL" Offset="0x23130" />
         <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
-        <DList Name="gLightOrb1DL" Offset="0x23348" />
-        <DList Name="gLightOrb2DL" Offset="0x233B8" />
-        <DList Name="gLightOrbVtxDL" Offset="0x23428" />
-        <DList Name="gElectricSparkDL" Offset="0x23480" />
-        <DList Name="gElectricSparkVtxDL" Offset="0x234F0" />
+        <DList Name="gLightOrbMaterial1DL" Offset="0x23348" />
+        <DList Name="gLightOrbMaterial2DL" Offset="0x233B8" />
+        <DList Name="gLightOrbModelDL" Offset="0x23428" />
+        <DList Name="gElectricSparkMaterialDL" Offset="0x23480" />
+        <DList Name="gElectricSparkModelDL" Offset="0x234F0" />
         <Texture Name="gLightOrbTex" OutName="light_orb" Format="i8" Width="64" Height="64" Offset="0x23508" />
 
-        <!-- EnMThunder (Spin Attack and Sword Beams)-->
+        <!-- EnMThunder (Spin Attack and Sword Beams) -->
         <!-- Spin Attack -->
         <Texture Name="gSpinAttack1Tex" OutName="spin_attack_1" Format="i8" Width="64" Height="32" Offset="0x24510" />
         <Texture Name="gSpinAttack2Tex" OutName="spin_attack_2" Format="i8" Width="64" Height="32" Offset="0x24D10" />
@@ -1154,8 +1154,8 @@
         <DList Name="gEffIceFragment3DL" Offset="0x50D10" />
         <Texture Name="gEffIceSmokeTex" OutName="eff_ice_smoke" Format="i4" Width="32" Height="32" Offset="0x50E80" />
         <DList Name="gEffIceSmokeDL" Offset="0x510B0" />
-        <DList Name="gFrozenSteamDL" Offset="0x51180" />
-        <DList Name="gFrozenSteamVtxDL" Offset="0x51238" />
+        <DList Name="gFrozenSteamMaterialDL" Offset="0x51180" />
+        <DList Name="gFrozenSteamModelDL" Offset="0x51238" />
         <Animation Name="gameplay_keep_Anim_05140C" Offset="0x5140C" />
         <DList Name="gameplay_keep_DL_051420" Offset="0x51420" />
         <DList Name="gameplay_keep_DL_0514C0" Offset="0x514C0" />

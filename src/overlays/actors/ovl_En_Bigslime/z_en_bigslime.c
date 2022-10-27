@@ -2986,16 +2986,16 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     // Draw Bigslime
     gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeDynamicVtx[this->dynamicVtxState]);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeNormalDL);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeNormalMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeModelDL);
 
     // Draw frozen Bigslime
     if ((this->actionFunc == EnBigslime_Freeze) || (this->actionFunc == EnBigslime_FrozenGround) ||
         (this->actionFunc == EnBigslime_FrozenFall) || (this->actionFunc == EnBigslime_Melt)) {
         AnimatedMat_Draw(play, this->bigslimeFrozenTexAnim);
         gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeTargetVtx);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeFrozenVtxDL);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeFrozenMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeModelDL);
     }
 
     // Draw bubbles inside Bigslime
