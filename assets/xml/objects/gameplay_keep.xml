@@ -932,14 +932,14 @@
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
         <Collision Name="gDoorCol" Offset="0x23100" />
         <DList Name="gEffDustDL" Offset="0x23130" />
-        <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
-        <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
+        <DList Name="gEffFlash1DL" Offset="0x23210" />
+        <DList Name="gEffFlash2DL" Offset="0x23288" />
         <DList Name="gLightOrbMaterial1DL" Offset="0x23348" />
         <DList Name="gLightOrbMaterial2DL" Offset="0x233B8" />
         <DList Name="gLightOrbModelDL" Offset="0x23428" />
         <DList Name="gElectricSparkMaterialDL" Offset="0x23480" />
         <DList Name="gElectricSparkModelDL" Offset="0x234F0" />
-        <Texture Name="gLightOrbTex" OutName="light_orb" Format="i8" Width="64" Height="64" Offset="0x23508" />
+        <Texture Name="gFlashTex" OutName="flash" Format="i8" Width="64" Height="64" Offset="0x23508" />
 
         <!-- EnMThunder (Spin Attack and Sword Beams) -->
         <!-- Spin Attack -->
