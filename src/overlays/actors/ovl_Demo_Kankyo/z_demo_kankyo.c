@@ -639,7 +639,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gLightOrbMaterial1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
                 Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
