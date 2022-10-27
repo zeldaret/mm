@@ -1039,14 +1039,14 @@
         <Texture Name="gEffShockwaveTex" OutName="eff_shockwave" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gEffShockwaveDL" Offset="0x30100" />
         <DList Name="gEffBubbleDL" Offset="0x301B0" />
-        <Texture Name="gEffFireFootprint1Tex" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
-        <Texture Name="gEffFireFootprint2Tex" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
-        <Texture Name="gEffFireFootprint3Tex" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
-        <Texture Name="gEffFireFootprint4Tex" OutName="tex_030E70" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
-        <Texture Name="gEffFireFootprint5Tex" OutName="tex_031270" Format="ia8" Width="32" Height="32" Offset="0x31270" />
-        <Texture Name="gEffFireFootprint6Tex" OutName="tex_031670" Format="ia8" Width="32" Height="32" Offset="0x31670" />
-        <Texture Name="gEffFireFootprint7Tex" OutName="tex_031A70" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
-        <Texture Name="gEffFireFootprint8Tex" OutName="tex_031E70" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
+        <Texture Name="gEffFireFootprint1Tex" OutName="eff_fire_footprint_1" Format="ia8" Width="32" Height="32" Offset="0x30270" />
+        <Texture Name="gEffFireFootprint2Tex" OutName="eff_fire_footprint_2" Format="ia8" Width="32" Height="32" Offset="0x30670" />
+        <Texture Name="gEffFireFootprint3Tex" OutName="eff_fire_footprint_3" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
+        <Texture Name="gEffFireFootprint4Tex" OutName="eff_fire_footprint_4" Format="ia8" Width="32" Height="32" Offset="0x30E70" />
+        <Texture Name="gEffFireFootprint5Tex" OutName="eff_fire_footprint_5" Format="ia8" Width="32" Height="32" Offset="0x31270" />
+        <Texture Name="gEffFireFootprint6Tex" OutName="eff_fire_footprint_6" Format="ia8" Width="32" Height="32" Offset="0x31670" />
+        <Texture Name="gEffFireFootprint7Tex" OutName="eff_fire_footprint_7" Format="ia8" Width="32" Height="32" Offset="0x31A70" />
+        <Texture Name="gEffFireFootprint8Tex" OutName="eff_fire_footprint_8" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
         <DList Name="gEffFireFootprintDL" Offset="0x32270" />
         <Texture Name="gameplay_keep_Tex_032310" OutName="tex_032310" Format="rgba32" Width="16" Height="64" Offset="0x32310" />
         <Texture Name="gEffHitmarkWhiteMetal1Tex" OutName="eff_hitmark_white_metal_1" Format="i4" Width="32" Height="24" Offset="0x33310" />
