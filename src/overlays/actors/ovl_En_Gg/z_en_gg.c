@@ -530,7 +530,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
     Matrix_Pop();
@@ -554,7 +554,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
     Matrix_Pop();
@@ -607,7 +607,7 @@ void func_80B3610C(EnGgStruct* ptr, PlayState* play) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+            gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         }
 
         Matrix_Pop();

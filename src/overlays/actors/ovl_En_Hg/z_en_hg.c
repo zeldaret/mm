@@ -47,7 +47,7 @@ typedef enum {
     /* 3 */ HG_CS_SONG_OF_HEALING,
 } HgCsIndex;
 
-const ActorInit En_Hg_InitVars = {
+ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
     ACTORCAT_PROP,
     FLAGS,

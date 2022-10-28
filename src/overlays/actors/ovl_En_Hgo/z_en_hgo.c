@@ -48,7 +48,7 @@ typedef enum {
     /* 6 */ HGO_ANIM_TOSS,
 } HgoAnimation;
 
-const ActorInit En_Hgo_InitVars = {
+ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
     FLAGS,

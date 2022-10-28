@@ -589,11 +589,12 @@ void EnZow_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_80BDDA7C(GraphicsContext* gfxCtx) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gSPEndDisplayList(gfx);
+    gSPEndDisplayList(gfx++);
 
-    return gfx;
+    return gfxHead;
 }
 
 Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };

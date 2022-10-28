@@ -1579,7 +1579,7 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
             (!Cutscene_CheckActorAction(play, 201) ||
              (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action != 6)) &&
             (!(player->stateFlags1 & PLAYER_STATE1_100000) || (kREG(90) < this->actor.projectedPos.z))) {
-            Gfx* dListHead = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+            Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
             f32 alphaScale;
             s32 envAlpha;
 
@@ -1592,19 +1592,19 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 
             alphaScale = (this->disappearTimer < 0) ? (this->disappearTimer * 0.0011666666f) + 1.0f : 1.0f;
 
-            gSPSegment(POLY_XLU_DISP++, 0x08, dListHead);
+            gSPSegment(POLY_XLU_DISP++, 0x08, gfx);
 
-            gDPPipeSync(dListHead++);
-            gDPSetPrimColor(dListHead++, 0, 0x01, (u8)(s8)this->innerColor.r, (u8)(s8)this->innerColor.g,
+            gDPPipeSync(gfx++);
+            gDPSetPrimColor(gfx++, 0, 0x01, (u8)(s8)this->innerColor.r, (u8)(s8)this->innerColor.g,
                             (u8)(s8)this->innerColor.b, (u8)(s8)(this->innerColor.a * alphaScale));
 
             if (this->fairyFlags & 4) {
-                gDPSetRenderMode(dListHead++, G_RM_PASS, G_RM_CLD_SURF2);
+                gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_CLD_SURF2);
             } else {
-                gDPSetRenderMode(dListHead++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
+                gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
             }
 
-            gSPEndDisplayList(dListHead);
+            gSPEndDisplayList(gfx);
 
             gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->outerColor.r, (u8)(s8)this->outerColor.g,
                            (u8)(s8)this->outerColor.b, (u8)(s8)(envAlpha * alphaScale));
