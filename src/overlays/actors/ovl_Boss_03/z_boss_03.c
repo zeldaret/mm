@@ -2593,7 +2593,7 @@ void Boss03_SeaweedDraw(Actor* thisx, PlayState* play) {
     Boss03* this = THIS;
     s16 i;
     // Why 10 Mtxs? This seems to only use the first 6 elements
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 10);
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 10 * sizeof(Mtx));
 
     OPEN_DISPS(play->state.gfxCtx);
 

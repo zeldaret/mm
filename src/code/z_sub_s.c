@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return NULL;
