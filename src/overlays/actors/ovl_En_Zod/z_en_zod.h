@@ -13,8 +13,8 @@ typedef void (*EnZodActionFunc)(struct EnZod*, PlayState*);
 
 typedef struct EnZod {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Vec3s morphTable[OBJECT_ZOD_LIMB_MAX];
-    /* 0x180 */ Vec3s jointTable[OBJECT_ZOD_LIMB_MAX];
+    /* 0x144 */ Vec3s morphTable[TIJO_LIMB_MAX];
+    /* 0x180 */ Vec3s jointTable[TIJO_LIMB_MAX];
     /* 0x1BC */ SkelAnime skelAnime;
     /* 0x200 */ ColliderCylinder collider;
     /* 0x24C */ s16 eyeIndex;

@@ -64,7 +64,7 @@
         <Limb Name="gTijoRightHandLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_RIGHT_LIMB" Offset="0xD628" />
 
         <!-- Tijo Skeleton -->
-        <Skeleton Name="gTijoSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOD_LIMB_NONE" LimbMax="OBJECT_ZOD_LIMB_MAX" EnumName="ObjectZodLimb" Offset="0xD658" />
+        <Skeleton Name="gTijoSkel" Type="Flex" LimbType="Standard" LimbNone="TIJO_LIMB_NONE" LimbMax="TIJO_LIMB_MAX" EnumName="TijoLimb" Offset="0xD658" />
 
         <!-- Tijo Andantino Animation -->
         <Animation Name="gTijoPlayingAndantinoAnim" Offset="0xD9B0" />

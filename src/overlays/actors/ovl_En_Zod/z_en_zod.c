@@ -92,7 +92,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &gTijoPlayingLentoAnim, this->morphTable, this->jointTable,
-                       OBJECT_ZOD_LIMB_MAX);
+                       TIJO_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gTijoPlayingLentoAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
@@ -105,7 +105,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     this->actor.textId = 0;
     this->unk_298 = 0;
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->drumScales); i++) {
         this->drumScales[i] = 0.0f;
         this->drumScaleVels[i] = 0.01;
     }
