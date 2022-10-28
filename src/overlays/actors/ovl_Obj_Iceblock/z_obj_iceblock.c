@@ -921,7 +921,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockDynaCol);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockCol);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
