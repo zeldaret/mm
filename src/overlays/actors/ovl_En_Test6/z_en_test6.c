@@ -1272,7 +1272,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
                 }
             }
             Lights_PointSetPosition(&this->lights[0].info, player->actor.world.pos.x, player->actor.world.pos.y - 10.0f,

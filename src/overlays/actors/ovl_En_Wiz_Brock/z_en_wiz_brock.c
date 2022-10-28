@@ -121,7 +121,7 @@ void EnWizBrock_Draw(Actor* thisx, PlayState* play) {
 
     if (this->platformType != EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE) {
         OPEN_DISPS(play->state.gfxCtx);
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWizrobePlatformCenterTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWizrobePlatformCenterTexAnim));
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
         if (this->platformType == EN_WIZ_BROCK_PLATFORM_TYPE_FIRE) {
