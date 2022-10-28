@@ -2322,7 +2322,7 @@ void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2
 
 void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
     s32 pad;
-    Mtx* sp90 = GRAPH_ALLOC(play->state.gfxCtx, 6 * sizeof(Mtx));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 6 * sizeof(Mtx));
     Vec3f sp84;
     Vec3f sp78;
     Vec3f* iter = D_801C0C0C;
@@ -2332,7 +2332,7 @@ void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
+    gSPSegment(POLY_OPA_DISP++, 0x0B, mtx);
 
     Matrix_MultVec3f(&D_801C0C00, &D_801C0C54[1].unk_08);
     Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[2].unk_08);
@@ -2346,7 +2346,7 @@ void Player_DrawGreatFairysMask(PlayState* play, Player* player) {
 
         Matrix_Push();
         Matrix_Translate(iter->x, iter->y, iter->z, MTXMODE_APPLY);
-        func_80128388(D_801F58B0[i], D_801C0C54, 3, &sp90);
+        func_80128388(D_801F58B0[i], D_801C0C54, 3, &mtx);
         Matrix_Pop();
         iter++;
         iter2++;
