@@ -406,18 +406,18 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
         case DMCHAR01_0:
             switch (this->unk_34C) {
                 case 0:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPoisonWaterTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPoisonWaterTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryPoisonWaterDL);
                     break;
 
                 case 1:
                     if (gSaveContext.sceneLayer == 1) {
-                        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWaterTexAnim));
+                        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPurifiedWaterTexAnim));
                         Gfx_DrawDListOpa(play, gWoodfallSceneryFloorDL);
                         Gfx_DrawDListXlu(play, gWoodfallSceneryPurifiedWaterDL);
                         Matrix_Translate(0.0f, 10.0f, 0.0f, MTXMODE_APPLY);
                     }
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryDynamicPoisonWaterTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryDynamicPoisonWaterTexAnim));
 
                     OPEN_DISPS(play->state.gfxCtx);
 
@@ -451,7 +451,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                     break;
 
                 case 2:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWaterTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPurifiedWaterTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryFloorDL);
                     Gfx_DrawDListXlu(play, gWoodfallSceneryPurifiedWaterDL);
                     break;
@@ -461,23 +461,23 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
         case DMCHAR01_1:
             switch (this->unk_34C) {
                 case 0:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPoisonWallsTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPoisonWallsTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryPoisonWallsDL);
                     break;
 
                 case 1:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWallsTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPurifiedWallsTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryPurifiedWallsDL);
                     break;
             }
             break;
 
         case DMCHAR01_2:
-            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryTempleTexAnim));
+            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryTempleTexAnim));
             Gfx_DrawDListOpa(play, gWoodfallSceneryTempleDL);
 
             if ((this->unk_34C != 0) && ((u8)this->unk_348 != 0)) {
-                AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryWaterFlowingOverTempleTexAnim));
+                AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryWaterFlowingOverTempleTexAnim));
 
                 OPEN_DISPS(play->state.gfxCtx);
 

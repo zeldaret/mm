@@ -5,7 +5,7 @@
         <DList Name="gIceBlockCubeEndDL" Offset="0x310" />
         <!-- this TexAnim is for the cube surface -->
         <TextureAnimation Name="gIceBlockCubeSublimatingAirTexAnim" Offset="0x328" />
-        <Collision Name="gIceBlockDynaColHeader" Offset="0x438" />
+        <Collision Name="gIceBlockCol" Offset="0x438" />
 
         <!-- IceArrow Freezes Octarock into a floating Iceberg platform -->
         <DList Name="gIceBlockIceBergDL" Offset="0x7F0" />
@@ -21,8 +21,8 @@
 
         <!-- These two appear to be identical (but different hash) -->
         <!-- first is used in CubeDL and ShardDL -->
-        <Texture Name="gIceBlockIceTex1" OutName="ice_texture_1" Format="i4" Width="64" Height="64" Offset="0xAE0" />
+        <Texture Name="gIceBlockIce1Tex" OutName="iceblock_ice_1" Format="i4" Width="64" Height="64" Offset="0xAE0" />
         <!-- second is used in CubeDL and IceBergDL -->
-        <Texture Name="gIceBlockIceTex2" OutName="ice_texture_2" Format="i4" Width="64" Height="64" Offset="0x12E0" />
+        <Texture Name="gIceBlockIce2Tex" OutName="iceblock_ice_2" Format="i4" Width="64" Height="64" Offset="0x12E0" />
     </File>
 </Root>

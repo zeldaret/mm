@@ -1336,8 +1336,8 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     Boss02* this = THIS;
     s32 i;
     s32 idx;
-    Mtx* mtx;
-    Mtx* mtxIter;
+    Mtx* mtxHead = GRAPH_ALLOC(play->state.gfxCtx, 23 * sizeof(Mtx));
+    Mtx* mtx = mtxHead;
     s32 phi_v0;
     f32 phi_f12;
     f32 spAC;
@@ -1346,8 +1346,6 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     f32 spA0;
     f32 sp9C;
     f32 sp98;
-
-    mtxIter = mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 23);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1359,7 +1357,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldBlueSkinTex));
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtxHead);
 
     if (!sIsInGiantMode) {
         sp98 = -500.0f;
@@ -1396,7 +1394,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
 
     spA4 = 0.0f;
     spA0 = 0.0f;
-    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtxIter++) {
+    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtx++) {
         if (this->unk_0195 != 0) {
             phi_v0 = (D_809DF5E4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         } else {
@@ -1415,9 +1413,9 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateXFApply(-(M_PI / 2));
-        Matrix_ToMtx(mtxIter);
+        Matrix_ToMtx(mtx);
 
-        gSPMatrix(POLY_OPA_DISP++, mtxIter, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((this->unk_0156 & 1) && (i >= this->unk_0158) && (this->unk_015A >= i)) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 0x384, 0x44B);
@@ -1578,7 +1576,7 @@ void Boss02_DrawEffects(PlayState* play) {
     for (i = 0, flag = false; i < ARRAY_COUNT(sEffects); i++, effect++) {
         if (effect->type == TWINMOLD_EFFECT_FLASH) {
             if (!flag) { //! @bug - dev forgot to set flag to 1, should only apply to first entry?
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
             }
 
@@ -1589,7 +1587,7 @@ void Boss02_DrawEffects(PlayState* play) {
             Matrix_Scale(effect->scale * D_809DF5B0, effect->scale * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
         }
     }
 
