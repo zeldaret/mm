@@ -178,7 +178,7 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
 extern s32 D_801BDA9C;
 
-const ActorInit En_Invadepoh_InitVars = {
+ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
     ACTORCAT_PROP,
     FLAGS,
@@ -1688,7 +1688,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, PlayState* play) {
     }
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_UCH);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1698,7 +1698,7 @@ void EnInvadepoh_InitParentCow(EnInvadepoh* this, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x30);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1707,7 +1707,7 @@ void EnInvadepoh_InitChildCow(EnInvadepoh* this, PlayState* play) {
     this->actor.update = func_80B481C4;
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1743,27 +1743,27 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
 
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA1);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (temp == 5) {
         if (gSaveContext.save.weekEventReg[22] & 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (temp == 7) {
         if (gSaveContext.save.time < CLOCK_TIME(6, 0) && gSaveContext.save.time >= CLOCK_TIME(2, 15)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (temp != 8) {
         if (temp == 9) {
             if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         } else if (temp == 0xC) {
             if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             D_80B503F4 = this;
         }
@@ -1784,7 +1784,7 @@ void func_80B468B4(EnInvadepoh* this, PlayState* play) {
         this->actor.world.pos.y += 1500.0f;
         func_80B49628(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1799,7 +1799,7 @@ void EnInvadepoh_InitDog(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 24.0f);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_DOG);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1815,10 +1815,10 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA2);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     D_80B503F8 = this;
 }
@@ -2297,7 +2297,7 @@ void func_80B47BAC(Actor* thisx, PlayState* play) {
                 func_80B47568(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -2313,7 +2313,7 @@ void func_80B47D30(Actor* thisx, PlayState* play) {
             thisx->gravity = 0.0f;
             func_80B47830(this);
         } else if ((this->actionFunc == func_80B474DC) || (this->actionFunc == func_80B473E4)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
@@ -2376,7 +2376,7 @@ void func_80B48060(Actor* thisx, PlayState* play) {
     MtxF unkMtx;
 
     if (D_80B503F0 == NULL || this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2416,7 +2416,7 @@ void func_80B4827C(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = THIS;
 
     if (D_80B503F0 == NULL || this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2534,7 +2534,7 @@ void func_80B4873C(Actor* thisx, PlayState* play) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     if (this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);
@@ -2940,7 +2940,7 @@ void func_80B4994C(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -3030,7 +3030,7 @@ void func_80B49C38(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->clockTime >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -3103,7 +3103,7 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E324;
             func_80B49BD0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3654,7 +3654,7 @@ void func_80B4B8BC(Actor* thisx, PlayState* play) {
         } else if (D_80B4E940 == 1) {
             this->actor.update = func_80B4BA30;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             if (!this) {}
         }
     }
@@ -3788,7 +3788,7 @@ void func_80B4BC4C(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.save.time > CLOCK_TIME(20, 15)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((temp_t6 != NULL) && (temp_t6->actionFunc == func_80B4CB0C)) {
         func_80B4C1BC(this);
     }
@@ -3892,7 +3892,7 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E7BC;
             func_80B4BBE0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -4003,7 +4003,7 @@ void func_80B4C730(EnInvadepoh* this, PlayState* play) {
     }
 
     if (this->clockTime >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -4101,7 +4101,7 @@ void func_80B4CE54(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E324;
             func_80B4C6C8(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -4168,7 +4168,7 @@ void func_80B4D290(EnInvadepoh* this, PlayState* play) {
     f32 sp28;
 
     if (D_80B503F0 == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -4190,7 +4190,7 @@ void func_80B4D290(EnInvadepoh* this, PlayState* play) {
     }
 
     if (sp28 < 5.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4257,7 +4257,7 @@ void func_80B4D480(EnInvadepoh* this, PlayState* play) {
     }
 
     if ((this->actionTimer <= 0) || sp2C) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4525,7 +4525,7 @@ void func_80B4E3F0(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     if (func_80B456A8(play, &sp5C)) {
         func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp5C, 20.0f, 9.0f, 0, 0);
     }

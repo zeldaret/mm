@@ -70,6 +70,4 @@ typedef struct EnSyatekiMan {
     /* 0x284 */ s16 prevTextId;
 } EnSyatekiMan; // size = 0x288
 
-extern const ActorInit En_Syateki_Man_InitVars;
-
 #endif // Z_EN_SYATEKI_MAN_H

@@ -41,7 +41,7 @@ typedef struct {
     /* 0x1F */ u8 params;
 } MirRayDataEntry; // size = 0x20
 
-const ActorInit Mir_Ray_InitVars = {
+ActorInit Mir_Ray_InitVars = {
     ACTOR_MIR_RAY,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -296,7 +296,7 @@ void MirRay_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
 
     if (MIRRAY_LOCATION(&this->actor) >= MIRRAY_MAX) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->sourcePt.x = dataEntry->sourcePoint.x;

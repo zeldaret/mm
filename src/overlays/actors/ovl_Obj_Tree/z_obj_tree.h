@@ -19,6 +19,4 @@ typedef struct ObjTree {
     /* 0x1B4 */ s16 timer;
 } ObjTree; // size = 0x1B8
 
-extern const ActorInit Obj_Tree_InitVars;
-
 #endif // Z_OBJ_TREE_H

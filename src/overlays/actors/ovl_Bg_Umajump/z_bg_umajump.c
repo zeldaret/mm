@@ -18,7 +18,7 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Umajump_InitVars = {
+ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
     FLAGS,
@@ -107,13 +107,13 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
         this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
 
         if (this->objectIndex < 0) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
 
         if ((thisx->params == BG_UMAJUMP_TYPE_3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, thisx->world.pos.x, thisx->world.pos.y,
                         thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, thisx->shape.rot.z, 0x3E);
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     }
 }
@@ -187,7 +187,7 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                     this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
                     this->dyna.actor.shape.rot.z, 0x3E);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     if (this->dyna.actor.params == BG_UMAJUMP_TYPE_5) {

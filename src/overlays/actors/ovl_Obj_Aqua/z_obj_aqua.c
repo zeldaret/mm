@@ -24,7 +24,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play);
 
 void func_80ACBD34(ObjAqua* this);
 
-const ActorInit Obj_Aqua_InitVars = {
+ActorInit Obj_Aqua_InitVars = {
     ACTOR_OBJ_AQUA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -184,10 +184,10 @@ void func_80ACBC8C(ObjAqua* this, PlayState* play) {
         } else {
             func_80ACB6A0(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->counter <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -207,7 +207,7 @@ void func_80ACBD48(ObjAqua* this, PlayState* play) {
     if (this->actor.shape.shadowAlpha > 2) {
         this->actor.shape.shadowAlpha -= 2;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -232,7 +232,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play) {
                              (Rand_ZeroOne() * 0.1f) + 0.03f);
     }
     if (this->counter <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

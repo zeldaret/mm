@@ -50,6 +50,4 @@ typedef struct EnDno {
     /* 0x468 */ u8 unk_468;
 } EnDno; // size = 0x46C
 
-extern const ActorInit En_Dno_InitVars;
-
 #endif // Z_EN_DNO_H

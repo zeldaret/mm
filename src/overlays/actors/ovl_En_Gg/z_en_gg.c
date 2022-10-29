@@ -26,7 +26,7 @@ void func_80B359DC(EnGg* this, PlayState* play);
 void func_80B363E8(EnGgStruct* ptr, PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 void func_80B364D4(EnGgStruct* ptr, PlayState* play);
 
-const ActorInit En_Gg_InitVars = {
+ActorInit En_Gg_InitVars = {
     ACTOR_EN_GG,
     ACTORCAT_NPC,
     FLAGS,
@@ -319,7 +319,7 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     break;
 
                 case 8:
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     return;
 
                 default:
@@ -390,11 +390,11 @@ void func_80B359DC(EnGg* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         if (this->unk_306 == 0) {
-            if (player->stateFlags2 & 0x8000000) {
+            if (player->stateFlags2 & PLAYER_STATE2_8000000) {
                 this->unk_306 = 1;
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             }
-        } else if (!(player->stateFlags2 & 0x8000000)) {
+        } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_306 = 0;
         }
 
@@ -530,7 +530,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
     Matrix_Pop();
@@ -554,7 +554,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     }
 
     Matrix_Pop();
@@ -607,7 +607,7 @@ void func_80B3610C(EnGgStruct* ptr, PlayState* play) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+            gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         }
 
         Matrix_Pop();
@@ -647,7 +647,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     EnGg* this = THIS;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

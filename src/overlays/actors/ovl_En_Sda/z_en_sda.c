@@ -20,7 +20,7 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 
 Vec3f D_80947EA0[16];
 
-const ActorInit En_Sda_InitVars = {
+ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,
     FLAGS,
@@ -93,7 +93,7 @@ void EnSda_Update(Actor* thisx, PlayState* play) {
 void EnSda_Draw(Actor* thisx, PlayState* play) {
     EnSda* this = THIS;
     Player* player;
-    u8* shadowTexture = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
+    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
 
     if (this->actor.params == ENSDA_1) {
         player = (Player*)this->actor.parent;
@@ -102,10 +102,10 @@ void EnSda_Draw(Actor* thisx, PlayState* play) {
     }
 
     player->actor.shape.shadowAlpha = 0;
-    func_8094702C(this, shadowTexture, player, play);
+    func_8094702C(this, shadowTex, player, play);
 
     if (KREG(0) < 5) {
-        func_80947668(shadowTexture, player, play);
+        func_80947668(shadowTex, player, play);
     }
 }
 

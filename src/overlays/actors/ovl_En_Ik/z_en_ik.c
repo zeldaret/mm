@@ -74,7 +74,7 @@ static Gfx* sIronKnuckleArmorType[3][3] = {
     { gIronKnuckleWhiteArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL, gIronKnuckleGoldArmorMaterialDL },
 };
 
-const ActorInit En_Ik_InitVars = {
+ActorInit En_Ik_InitVars = {
     ACTOR_EN_IK,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -694,7 +694,7 @@ void EnIk_Die(EnIk* this, PlayState* play) {
             if (this->timer == 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
                 ActorCutscene_Stop(this->actor.cutscene);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     } else if (Animation_OnFrame(&this->skelAnime, 23.0f)) {

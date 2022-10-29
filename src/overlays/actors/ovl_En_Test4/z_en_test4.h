@@ -23,6 +23,4 @@ typedef enum {
     /* 1 */ TEST4_STATE_1
 } EnTest4State;
 
-extern const ActorInit En_Test4_InitVars;
-
 #endif // Z_EN_TEST4_H

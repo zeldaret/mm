@@ -21,7 +21,7 @@ s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-const ActorInit En_Dnb_InitVars = {
+ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
     ACTORCAT_BG,
     FLAGS,

@@ -72,6 +72,4 @@ typedef enum {
     /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
 
-extern const ActorInit En_Ossan_InitVars;
-
 #endif // Z_EN_OSSAN_H

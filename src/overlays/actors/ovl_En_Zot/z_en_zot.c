@@ -32,7 +32,7 @@ void func_80B990A4(EnZot* this, PlayState* play);
 void func_80B992C0(EnZot* this, PlayState* play);
 void func_80B99384(EnZot* this, PlayState* play);
 
-const ActorInit En_Zot_InitVars = {
+ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
     ACTORCAT_NPC,
     FLAGS,
@@ -186,14 +186,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
@@ -221,7 +221,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     }
 
     if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.save.weekEventReg[55] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -553,7 +553,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & 0x2000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_2000000)) {
         phi_v1 = func_80B96CE4(this);
     } else {
         phi_v1 = 0;
@@ -1345,11 +1345,12 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_80B99580(GraphicsContext* gfxCtx) {
-    Gfx* dList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gSPEndDisplayList(dList);
+    gSPEndDisplayList(gfx++);
 
-    return dList;
+    return gfxHead;
 }
 
 s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

@@ -24,7 +24,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play);
 void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
-const ActorInit Obj_Taru_InitVars = {
+ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,
     ACTORCAT_BG,
     FLAGS,
@@ -204,7 +204,7 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
 
     if (OBJ_TARU_GET_80(thisx)) {
         if (Flags_GetSwitch(play, OBJ_TARU_GET_7F(thisx))) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         } else {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_001CB0);
         }
@@ -292,17 +292,18 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
 
 void func_80B9C174(ObjTaru* this, PlayState* play) {
     func_80B9BD84(this, play);
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
 }
 
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
 }
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {

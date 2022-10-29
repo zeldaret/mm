@@ -144,7 +144,7 @@ static SkeletonHeader* sSkeletonHeaders[] = {
     NULL, NULL, &object_horse_link_child_Skel_00A480, NULL, NULL,
 };
 
-const ActorInit En_Horse_InitVars = {
+ActorInit En_Horse_InitVars = {
     ACTOR_EN_HORSE,
     ACTORCAT_BG,
     FLAGS,
@@ -721,7 +721,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->unk_528 = 80.0f;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_1EC |= 1;
@@ -743,7 +743,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_BANDIT;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_1EC |= 1;
@@ -751,7 +751,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     } else {
         this->type = HORSE_TYPE_EPONA;
         this->boostSpeed = 15;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.params &= ~(ENHORSE_PARAM_DONKEY | ENHORSE_PARAM_4000 | ENHORSE_PARAM_BANDIT);
@@ -793,7 +793,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     }
 
     if (((play->sceneId == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneLayer(play))) {
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -879,7 +879,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
         if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (thisx->params == ENHORSE_16) {
         func_8087C9F8(this);
@@ -1569,7 +1569,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneLayer(play))) {
+            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || (Cutscene_GetSceneLayer(play) == 0))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -3271,7 +3271,7 @@ void func_80884604(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
 }
 
 void func_808846B4(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808846DC(EnHorse* this, PlayState* play, CsCmdActorAction* action) {

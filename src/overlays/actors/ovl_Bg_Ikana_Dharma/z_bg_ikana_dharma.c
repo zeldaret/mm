@@ -24,7 +24,7 @@ void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play);
 void BgIkanaDharma_SetupWaitForCutsceneToEnd(BgIkanaDharma* this);
 void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Dharma_InitVars = {
+ActorInit Bg_Ikana_Dharma_InitVars = {
     ACTOR_BG_IKANA_DHARMA,
     ACTORCAT_BG,
     FLAGS,
@@ -204,13 +204,14 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
         }
     }
 
-    if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f) != 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
-        this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
-        BgIkanaDharma_SpawnEffects(this, play);
+    if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f)) {
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
+    this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
+    BgIkanaDharma_SpawnEffects(this, play);
 }
 
 void BgIkanaDharma_Update(Actor* thisx, PlayState* play) {

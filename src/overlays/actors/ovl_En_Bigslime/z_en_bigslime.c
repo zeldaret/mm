@@ -211,7 +211,7 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
     { 142, 126, 127 }, { 130, 111, 145 },
 };
 
-const ActorInit En_Bigslime_InitVars = {
+ActorInit En_Bigslime_InitVars = {
     ACTOR_EN_BIGSLIME,
     ACTORCAT_BOSS,
     FLAGS,
@@ -341,7 +341,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->actor.params = CLAMP(this->actor.params, 1, 4);
 
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -360,17 +360,17 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
                                                                   ACTOR_EN_MINISLIME, 0.0f, 0.0f, 0.0f, 0, 0, 0, i);
             if (this->minislime[i] == NULL) {
                 for (i = i - 1; i >= 0; i--) {
-                    Actor_MarkForDeath(&this->minislime[i]->actor);
+                    Actor_Kill(&this->minislime[i]->actor);
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         }
 
-        this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(&gMinislimeFrozenTexAnim);
-        this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(&gBigslimeFrozenTexAnim);
-        this->iceShardTexAnim = Lib_SegmentedToVirtual(&gBigslimeIceShardTexAnim);
+        this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(gMinislimeFrozenTexAnim);
+        this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
+        this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
         this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.shape.shadowAlpha = 255;
@@ -728,7 +728,7 @@ void EnBigslime_SetMinislimeBreakLocation(EnBigslime* this) {
 void EnBigslime_SetPlayerParams(EnBigslime* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags2 & 0x80) {
+    if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
         func_800B8D98(play, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f);
@@ -1709,7 +1709,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
 
         scale = 0.5f - cos_rad(-this->windupPunchTimer * (M_PI / 5)) * 0.5f;
         if (this->windupPunchTimer == -5) {
-            if (player->stateFlags2 & 0x80) {
+            if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
                 player->unk_AE8 = 100;
             }
@@ -2509,7 +2509,7 @@ void EnBigslime_Despawn(EnBigslime* this, PlayState* play) {
             this->minislime[i]->actor.params = MINISLIME_DESPAWN;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -2986,16 +2986,16 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     // Draw Bigslime
     gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeDynamicVtx[this->dynamicVtxState]);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeNormalDL);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
+    gSPDisplayList(POLY_XLU_DISP++, gBigslimeNormalMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, gBigslimeModelDL);
 
     // Draw frozen Bigslime
     if ((this->actionFunc == EnBigslime_Freeze) || (this->actionFunc == EnBigslime_FrozenGround) ||
         (this->actionFunc == EnBigslime_FrozenFall) || (this->actionFunc == EnBigslime_Melt)) {
         AnimatedMat_Draw(play, this->bigslimeFrozenTexAnim);
         gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeTargetVtx);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeFrozenVtxDL);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gBigslimeFrozenMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, gBigslimeModelDL);
     }
 
     // Draw bubbles inside Bigslime
@@ -3014,7 +3014,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
             billboardMtxF->zw =
                 dynamicVtx->n.ob[2] * this->actor.scale.z * bubblesInfoPtr->scaleVtx + this->actor.world.pos.z;
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &gBigslimeBubbleDL);
+            gSPDisplayList(POLY_XLU_DISP++, gBigslimeBubbleDL);
         }
     }
     CLOSE_DISPS(play->state.gfxCtx);
@@ -3133,12 +3133,12 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
         Matrix_Translate(this->frozenPos.x, this->frozenPos.y, this->frozenPos.z, MTXMODE_NEW);
         Matrix_Scale(this->shockwaveScale, this->shockwaveScale, this->shockwaveScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeShockwaveDL);
+        gSPDisplayList(POLY_XLU_DISP++, gBigslimeShockwaveDL);
     }
 
     // Draw Ice Shards
     AnimatedMat_Draw(play, this->iceShardTexAnim);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardDL);
+    gSPDisplayList(POLY_XLU_DISP++, gBigslimeIceShardDL);
 
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
@@ -3147,7 +3147,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
                                          &iceShardEffect->rot);
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gBigslimeIceShardVtxDL);
         }
     }
 

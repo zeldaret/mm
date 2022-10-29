@@ -29,6 +29,4 @@ typedef struct EnTsn {
     /* 0x230 */ s16 unk_230;
 } EnTsn; // size = 0x234
 
-extern const ActorInit En_Tsn_InitVars;
-
 #endif // Z_EN_TSN_H

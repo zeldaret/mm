@@ -278,7 +278,7 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 
 /* Start of Gyorg's Init and actionFuncs section */
 
-const ActorInit Boss_03_InitVars = {
+ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
     ACTORCAT_BOSS,
     FLAGS,
@@ -457,7 +457,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
                            0, ENDOORWARP1_FF_1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2593,7 +2593,7 @@ void Boss03_SeaweedDraw(Actor* thisx, PlayState* play) {
     Boss03* this = THIS;
     s16 i;
     // Why 10 Mtxs? This seems to only use the first 6 elements
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 10);
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 10 * sizeof(Mtx));
 
     OPEN_DISPS(play->state.gfxCtx);
 

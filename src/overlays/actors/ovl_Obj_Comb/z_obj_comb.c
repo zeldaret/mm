@@ -22,7 +22,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play);
 void func_8098E098(ObjComb* this);
 void func_8098E0B8(ObjComb* this, PlayState* play);
 
-const ActorInit Obj_Comb_InitVars = {
+ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
     ACTORCAT_PROP,
     FLAGS,
@@ -335,7 +335,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     Collider_InitJntSph(play, &this->collider);
 
     if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (gSaveContext.save.weekEventReg[83] & 2)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -383,7 +383,7 @@ void func_8098DC60(ObjComb* this, PlayState* play) {
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0182C29C) {
             func_8098CEAC(this, play);
             func_8098DA74(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             s32 dmgFlags = this->collider.elements->info.acHitInfo->toucher.dmgFlags;
 
@@ -489,7 +489,7 @@ void func_8098E098(ObjComb* this) {
 void func_8098E0B8(ObjComb* this, PlayState* play) {
     this->unk_1B4--;
     if (this->unk_1B4 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
