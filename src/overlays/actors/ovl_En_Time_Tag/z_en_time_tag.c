@@ -169,11 +169,11 @@ void EnTimeTag_Diary_AfterOcarina(EnTimeTag* this, PlayState* play) {
         return;
     }
 
-    if (ENTIMETAG_GET_DIARY_SONG(&this->actor) != TIMETAG_DIARY_SONG_EVAN_PART1) {
-        // TIMETAG_DIARY_SONG_EVAN_PART2
+    if (ENTIMETAG_GET_DIARY_SONG(&this->actor) != DIARY_SONG_EVAN_PART1) {
+        // DIARY_SONG_EVAN_PART2
         Message_ContinueTextbox(play, 0x1230);
     } else {
-        // TIMETAG_DIARY_SONG_EVAN_PART1
+        // DIARY_SONG_EVAN_PART1
         Message_ContinueTextbox(play, 0x122D);
     }
 
@@ -215,14 +215,14 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
                         // Display ocarina Staff
                         func_80152434(play, 0x3F);
                         this->actionFunc = EnTimeTag_Diary_TeachEvanSongSnippets;
-                        ENTIMETAG_GET_DIARY_SONG(&this->actor) = TIMETAG_DIARY_SONG_EVAN_PART1;
+                        ENTIMETAG_GET_DIARY_SONG(&this->actor) = DIARY_SONG_EVAN_PART1;
                         break;
 
                     case 0x122E: // Mikau diary part 3
                         // Display ocarina Staff
                         func_80152434(play, 0x40);
                         this->actionFunc = EnTimeTag_Diary_TeachEvanSongSnippets;
-                        ENTIMETAG_GET_DIARY_SONG(&this->actor) = TIMETAG_DIARY_SONG_EVAN_PART2;
+                        ENTIMETAG_GET_DIARY_SONG(&this->actor) = DIARY_SONG_EVAN_PART2;
                         break;
                 }
             }
@@ -251,10 +251,10 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
 void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            if (ENTIMETAG_GET_DIARY_TYPE(&this->actor) == TIMETAG_DIARY_LULU) {
+            if (ENTIMETAG_GET_DIARY_TYPE(&this->actor) == DIARY_LULU) {
                 Message_StartTextbox(play, 0x101C, &this->actor);
             } else {
-                // TIMETAG_DIARY_MIKAU
+                // DIARY_MIKAU
                 Message_StartTextbox(play, 0x122B, &this->actor);
             }
             ENTIMETAG_GET_DIARY_TIMER(&this->actor) = 1;

@@ -30,13 +30,13 @@ typedef enum {
 } TimeTagType;
 
 typedef enum {
-    /* 0 */ TIMETAG_DIARY_MIKAU,
-    /* 1 */ TIMETAG_DIARY_LULU
+    /* 0 */ DIARY_MIKAU,
+    /* 1 */ DIARY_LULU
 } DiaryType;
 
 typedef enum {
-    /* 0 */ TIMETAG_DIARY_SONG_EVAN_PART1,
-    /* 1 */ TIMETAG_DIARY_SONG_EVAN_PART2
+    /* 0 */ DIARY_SONG_EVAN_PART1,
+    /* 1 */ DIARY_SONG_EVAN_PART2
 } DiarySong;
 
 typedef enum {
@@ -57,7 +57,7 @@ typedef enum {
     /* 14 */ KICKOUT_TEXT_TYPE_SWORDSMANS_SCHOOL, // need to cut the moon, must leave
     /* 15 */ KICKOUT_TEXT_TYPE_TREASURE_CHEST_SHOP, // already time to close shop
     /* 16 */ KICKOUT_TEXT_TYPE_DOGGY_RACETRACK, // no more for today
-} EnTimeTagKickOutTextType;
+} KickOutTextType;
 
 typedef struct EnTimeTag {
     /* 0x000 */ Actor actor;
