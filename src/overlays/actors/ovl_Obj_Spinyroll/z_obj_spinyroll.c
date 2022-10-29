@@ -11,24 +11,24 @@
 
 #define THIS ((ObjSpinyroll*)thisx)
 
-void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSpinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSpinyroll_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSpinyroll_Init(Actor* thisx, PlayState* play);
+void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play);
+void ObjSpinyroll_Update(Actor* thisx, PlayState* play2);
+void ObjSpinyroll_Draw(Actor* thisx, PlayState* play);
 
 void func_80A1E9C4(ObjSpinyroll* this);
-void func_80A1E9E0(ObjSpinyroll* this, GlobalContext* globalCtx);
-void func_80A1EA4C(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1E9E0(ObjSpinyroll* this, PlayState* play);
+void func_80A1EA4C(ObjSpinyroll* this, PlayState* play);
 void func_80A1EAAC(ObjSpinyroll* this);
-void func_80A1EAE0(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EAE0(ObjSpinyroll* this, PlayState* play);
 void func_80A1EB40(ObjSpinyroll* this);
-void func_80A1EB54(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EB54(ObjSpinyroll* this, PlayState* play);
 void func_80A1EC24(ObjSpinyroll* this);
-void func_80A1EC38(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1EC38(ObjSpinyroll* this, PlayState* play);
 void func_80A1ECC0(ObjSpinyroll* this);
-void func_80A1ECD4(ObjSpinyroll* this, GlobalContext* globalCtx);
+void func_80A1ECD4(ObjSpinyroll* this, PlayState* play);
 
-const ActorInit Obj_Spinyroll_InitVars = {
+ActorInit Obj_Spinyroll_InitVars = {
     ACTOR_OBJ_SPINYROLL,
     ACTORCAT_PROP,
     FLAGS,
@@ -118,7 +118,7 @@ static ColliderTrisInit sTrisInit = {
         OC2_NONE,
         COLSHAPE_TRIS,
     },
-    6,
+    ARRAY_COUNT(sTrisElementsInit),
     sTrisElementsInit,
 };
 
@@ -143,12 +143,12 @@ static InitChainEntry sInitChain[] = {
 
 s16 D_80A1F20C[] = { 0xFA0, -0xFA0 };
 
-void func_80A1DA50(GlobalContext* globalCtx, ObjSpinyroll* this, Vec3f* arg2, Vec3f* arg3) {
+void func_80A1DA50(PlayState* play, ObjSpinyroll* this, Vec3f* arg2, Vec3f* arg3) {
     Vec3f sp1C;
 
     Math_Vec3f_Sum(arg2, arg3, &sp1C);
     Math_Vec3f_Scale(&sp1C, 0.5f);
-    EffectSsHitMark_SpawnFixedScale(globalCtx, 3, &sp1C);
+    EffectSsHitmark_SpawnFixedScale(play, 3, &sp1C);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
 }
 
@@ -272,26 +272,25 @@ void func_80A1DFA0(ObjSpinyroll* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4.unk_00); i++) {
         for (j = 0, phi_f12 = temp_f0; j < this->unk_3A4.unk_F4; j++, phi_f12 -= temp_f2) {
-            this->unk_3A4.unk_00[i].unk_00[j].unk_00 = phi_f12;
+            this->unk_3A4.unk_00[i][j].unk_00 = phi_f12;
         }
     }
 }
 
-#ifdef NON_MATCHING
-// globalCtx not in s reg, something with ptr->unk_F0 = temp_s1; line
-s32 func_80A1E074(ObjSpinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3) {
+s32 func_80A1E074(ObjSpinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
+    f32 temp_f0;
+    ObjSpinyrollStruct* ptr = &this->unk_3A4;
+    f32 temp_f20;
     s32 i;
     s32 j;
-    ObjSpinyrollStruct2* ptr = &this->unk_3A4;
-    f32 temp_f0;
-    f32 temp_f20;
     Vec3f spC8;
     Vec3f spBC;
     Vec3f spB0;
-    ObjSpinyrollStruct* temp_s1;
+    ObjSpinyrollSubStruct* temp_s1;
     f32 temp_f22;
     f32 temp_f24;
     f32 temp;
+    s32 pad;
     s32 sp98;
 
     spC8.y = this->dyna.actor.world.pos.y + 10.0f;
@@ -304,21 +303,19 @@ s32 func_80A1E074(ObjSpinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32
         temp = D_80A1F1F4[i];
         temp_f22 = temp * this->unk_4C4.x;
         temp_f24 = temp * this->unk_4C4.z;
-        temp_s1 = &ptr->unk_00[i];
 
         for (j = 0; j < ptr->unk_F4; j++) {
-            spC8.x =
-                (temp_s1->unk_00[j].unk_00 * Math_CosS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.x;
-            spC8.z =
-                (temp_s1->unk_00[j].unk_00 * -Math_SinS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.z;
+            temp_s1 = &ptr->unk_00[i][j];
+            spC8.x = (temp_s1->unk_00 * Math_CosS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.x;
+            spC8.z = (temp_s1->unk_00 * -Math_SinS(this->dyna.actor.world.rot.y)) + this->dyna.actor.world.pos.z;
 
             spBC.x = temp_f22 + spC8.x;
             spBC.z = temp_f24 + spC8.z;
 
-            if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spC8, &spBC, &spB0, &temp_s1->unk_00[j].unk_04, 1, 0, 0, 1,
-                                        &temp_s1->unk_00[j].bgId, &this->dyna.actor, 0.0f)) {
+            if (BgCheck_EntityLineTest3(&play->colCtx, &spC8, &spBC, &spB0, &temp_s1->unk_04, 1, 0, 0, 1,
+                                        &temp_s1->bgId, &this->dyna.actor, 0.0f)) {
                 if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
-                    func_80A1DA50(globalCtx, this, &spC8, &spB0);
+                    func_80A1DA50(play, this, &spC8, &spB0);
                 }
 
                 temp_f0 = Math3D_Vec3fDistSq(&spC8, &spB0);
@@ -334,15 +331,11 @@ s32 func_80A1E074(ObjSpinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32
 
     return sp98;
 }
-#else
-s32 func_80A1E074(ObjSpinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spinyroll/func_80A1E074.s")
-#endif
 
-s32 func_80A1E2D8(ObjSpinyroll* this, GlobalContext* globalCtx, s32 arg2) {
+s32 func_80A1E2D8(ObjSpinyroll* this, PlayState* play, s32 arg2) {
     Vec3f sp1C;
 
-    if (func_80A1E074(this, globalCtx, &sp1C, arg2)) {
+    if (func_80A1E074(this, play, &sp1C, arg2)) {
         this->dyna.actor.world.pos.x += sp1C.x;
         this->dyna.actor.world.pos.z += sp1C.z;
         return true;
@@ -363,10 +356,9 @@ s32 func_80A1E394(CollisionContext* colCtx, f32* arg1, CollisionPoly** polyOut, 
     return BgCheck_EntityCheckCeiling(colCtx, arg1, arg4, 24.0f, polyOut, bgId, &this->dyna.actor);
 }
 
-#ifdef NON_MATCHING
-s32 func_80A1E3D8(ObjSpinyroll* this, GlobalContext* globalCtx, f32* arg2, s32 arg3) {
-    f32 temp_f20;
-    ObjSpinyrollStruct2* spC8;
+s32 func_80A1E3D8(ObjSpinyroll* this, PlayState* play, f32* arg2, s32 arg3) {
+    f32 phi_f26;
+    ObjSpinyrollStruct* spC8 = &this->unk_3A4;
     f32 phi_f22;
     ObjSpinyrollColFunc spC0;
     s32 i;
@@ -374,11 +366,12 @@ s32 func_80A1E3D8(ObjSpinyroll* this, GlobalContext* globalCtx, f32* arg2, s32 a
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
-    ObjSpinyrollStruct* temp_s0;
-    f32 phi_f26;
+    ObjSpinyrollSubStruct* temp_s0;
+    f32 temp_f20;
+    s32 pad;
     s32 sp84;
-
-    spC8 = &this->unk_3A4;
+    s32 pad2;
+    f32* temp;
 
     if (this->unk_4C4.y > 0.0f) {
         spC0 = func_80A1E394;
@@ -393,24 +386,25 @@ s32 func_80A1E3D8(ObjSpinyroll* this, GlobalContext* globalCtx, f32* arg2, s32 a
     phi_f22 = FLT_MAX;
     spC8->unk_F0 = NULL;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_3A4.unk_00); i++) {
-        sp94.z = D_80A1F1FC[i];
-        temp_s0 = &spC8->unk_00[i];
+    for (i = 0, temp = D_80A1F1FC; i < ARRAY_COUNT(this->unk_3A4.unk_00); i++, temp++) {
+        sp94.z = *temp;
 
         for (j = 0; j < spC8->unk_F4; j++) {
-            sp94.x = temp_s0->unk_00[j].unk_00;
+            temp_s0 = &spC8->unk_00[i][j];
+
+            sp94.x = temp_s0->unk_00;
             func_80A1DAAC(&spAC, &sp94, this->dyna.actor.world.rot.y);
 
             spAC.x += this->dyna.actor.world.pos.x;
             spAC.z += this->dyna.actor.world.pos.z;
 
-            if (spC0(&globalCtx->colCtx, &spA0.y, &temp_s0->unk_00[j].unk_04, &temp_s0->unk_00[j].bgId, &spAC, this)) {
+            if (spC0(&play->colCtx, &spA0.y, &temp_s0->unk_04, &temp_s0->bgId, &spAC, this)) {
                 temp_f20 = fabsf(spA0.y - spAC.y);
                 if (temp_f20 <= 24.0f) {
                     if (arg3 && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
                         spA0.x = spAC.x;
                         spA0.z = spAC.z;
-                        func_80A1DA50(globalCtx, this, &spAC, &spA0);
+                        func_80A1DA50(play, this, &spAC, &spA0);
                     }
 
                     if (temp_f20 < phi_f22) {
@@ -425,30 +419,26 @@ s32 func_80A1E3D8(ObjSpinyroll* this, GlobalContext* globalCtx, f32* arg2, s32 a
     }
     return sp84;
 }
-#else
-s32 func_80A1E3D8(ObjSpinyroll* this, GlobalContext* globalCtx, f32* arg2, s32 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spinyroll/func_80A1E3D8.s")
-#endif
 
-s32 func_80A1E648(ObjSpinyroll* this, GlobalContext* globalCtx, s32 arg2) {
+s32 func_80A1E648(ObjSpinyroll* this, PlayState* play, s32 arg2) {
     f32 sp1C;
 
-    if (func_80A1E3D8(this, globalCtx, &sp1C, arg2)) {
+    if (func_80A1E3D8(this, play, &sp1C, arg2)) {
         this->dyna.actor.world.pos.y += sp1C;
         return true;
     }
     return false;
 }
 
-DynaPolyActor* func_80A1E694(ObjSpinyroll* this, GlobalContext* globalCtx) {
+DynaPolyActor* func_80A1E694(ObjSpinyroll* this, PlayState* play) {
     if (this->unk_3A4.unk_F0 != NULL) {
-        return DynaPoly_GetActor(&globalCtx->colCtx, this->unk_3A4.unk_F0->unk_00[0].bgId);
+        return DynaPoly_GetActor(&play->colCtx, this->unk_3A4.unk_F0->bgId);
     }
     return NULL;
 }
 
-s32 func_80A1E6D4(ObjSpinyroll* this, GlobalContext* globalCtx) {
-    DynaPolyActor* temp_v0 = func_80A1E694(this, globalCtx);
+s32 func_80A1E6D4(ObjSpinyroll* this, PlayState* play) {
+    DynaPolyActor* temp_v0 = func_80A1E694(this, play);
 
     if ((temp_v0 != NULL) && (Math3D_Vec3fDistSq(&temp_v0->actor.world.pos, &temp_v0->actor.prevPos) > SQ(0.01f))) {
         return true;
@@ -456,7 +446,7 @@ s32 func_80A1E6D4(ObjSpinyroll* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpinyroll_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjSpinyroll* this = THIS;
     f32 sp44;
@@ -480,10 +470,10 @@ void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.actor.uncullZoneScale = 250.0f * sp44;
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spinyroll_Colheader_000E68);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_spinyroll_Colheader_000E68);
 
-    Collider_InitTris(globalCtx, &this->collider);
-    Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements);
+    Collider_InitTris(play, &this->collider);
+    Collider_SetTris(play, &this->collider, &this->dyna.actor, &sTrisInit, this->colliderElements);
 
     if (OBJSPINYROLL_GET_7F(&this->dyna.actor) == OBJSPINYROLL_GET_7F_7F) {
         func_80A1E9C4(this);
@@ -494,7 +484,7 @@ void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A1DFA0(this);
     this->unk_4A4 = D_80A1F1C4[OBJSPINYROLL_GET_380(thisx)];
 
-    path = &globalCtx->setupPathList[OBJSPINYROLL_GET_7F(&this->dyna.actor)];
+    path = &play->setupPathList[OBJSPINYROLL_GET_7F(&this->dyna.actor)];
     points = Lib_SegmentedToVirtual(path->points);
 
     sp34 = &points[0];
@@ -510,7 +500,7 @@ void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {
                ((sp34->x == sp30->x) && (sp34->y == sp30->y) && (sp34->z != sp30->z))) {
         this->unk_49C = false;
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -519,11 +509,11 @@ void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A1EAAC(this);
 }
 
-void ObjSpinyroll_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpinyroll_Destroy(Actor* thisx, PlayState* play) {
     ObjSpinyroll* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyTris(play, &this->collider);
 }
 
 void func_80A1E9C4(ObjSpinyroll* this) {
@@ -531,7 +521,7 @@ void func_80A1E9C4(ObjSpinyroll* this) {
     this->actionFunc = func_80A1E9E0;
 }
 
-void func_80A1E9E0(ObjSpinyroll* this, GlobalContext* globalCtx) {
+void func_80A1E9E0(ObjSpinyroll* this, PlayState* play) {
     this->unk_4DA += 0x6E;
     if (this->unk_4DA > 0xFA0) {
         this->unk_4DA = 0xFA0;
@@ -544,7 +534,7 @@ void func_80A1EA10(ObjSpinyroll* this) {
     this->dyna.actor.speedXZ = 0.0f;
 }
 
-void func_80A1EA4C(ObjSpinyroll* this, GlobalContext* globalCtx) {
+void func_80A1EA4C(ObjSpinyroll* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->unk_4DA, 0, this->unk_4DE)) {
         if (this->unk_4E2 > 0) {
             this->unk_4E2--;
@@ -561,7 +551,7 @@ void func_80A1EAAC(ObjSpinyroll* this) {
     this->dyna.actor.speedXZ = 0.0f;
 }
 
-void func_80A1EAE0(ObjSpinyroll* this, GlobalContext* globalCtx) {
+void func_80A1EAE0(ObjSpinyroll* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->unk_4DA, this->unk_4DC, 0x6E)) {
         if (!this->unk_49C) {
             func_80A1EB40(this);
@@ -575,11 +565,11 @@ void func_80A1EB40(ObjSpinyroll* this) {
     this->actionFunc = func_80A1EB54;
 }
 
-void func_80A1EB54(ObjSpinyroll* this, GlobalContext* globalCtx) {
+void func_80A1EB54(ObjSpinyroll* this, PlayState* play) {
     s32 sp24 = func_80A1DEB8(this);
 
-    if (func_80A1E2D8(this, globalCtx, 1)) {
-        if (func_80A1E694(this, globalCtx) != NULL) {
+    if (func_80A1E2D8(this, play, 1)) {
+        if (func_80A1E694(this, play) != NULL) {
             func_80A1DCCC(this);
             this->unk_4DE = 0x7D0;
             func_80A1EC24(this);
@@ -601,12 +591,12 @@ void func_80A1EC24(ObjSpinyroll* this) {
     this->actionFunc = func_80A1EC38;
 }
 
-void func_80A1EC38(ObjSpinyroll* this, GlobalContext* globalCtx) {
+void func_80A1EC38(ObjSpinyroll* this, PlayState* play) {
     s32 sp24 = true;
 
     Math_ScaledStepToS(&this->unk_4DA, 0, this->unk_4DE);
 
-    if (func_80A1E2D8(this, globalCtx, 0) && func_80A1E6D4(this, globalCtx)) {
+    if (func_80A1E2D8(this, play, 0) && func_80A1E6D4(this, play)) {
         sp24 = false;
     }
 
@@ -620,10 +610,10 @@ void func_80A1ECC0(ObjSpinyroll* this) {
     this->actionFunc = func_80A1ECD4;
 }
 
-void func_80A1ECD4(ObjSpinyroll* this, GlobalContext* globalCtx) {
+void func_80A1ECD4(ObjSpinyroll* this, PlayState* play) {
     s32 sp24 = func_80A1DEB8(this);
 
-    if (func_80A1E648(this, globalCtx, 1)) {
+    if (func_80A1E648(this, play, 1)) {
         func_80A1DE84(this);
         func_80A1DCCC(this);
         this->unk_4DE = 0x7D0;
@@ -636,8 +626,8 @@ void func_80A1ECD4(ObjSpinyroll* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjSpinyroll_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjSpinyroll_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjSpinyroll* this = THIS;
 
     if (this->collider.base.atFlags & AT_HIT) {
@@ -645,17 +635,17 @@ void ObjSpinyroll_Update(Actor* thisx, GlobalContext* globalCtx2) {
         func_80A1DCCC(this);
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     this->unk_4E0 += this->unk_4DA;
     func_80A1DC5C(this);
     func_80A1DB2C(thisx);
 
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSpinyroll_Draw(Actor* thisx, PlayState* play) {
     ObjSpinyroll* this = THIS;
     f32 temp_f26;
     f32 temp_f28;
@@ -667,9 +657,9 @@ void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx) {
     f32 temp_f30;
     Vec3s sp84;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     temp_f26 = Math_CosS(this->dyna.actor.shape.rot.y) * 120.0f;
     temp_f28 = Math_SinS(this->dyna.actor.shape.rot.y) * -120.0f;
@@ -694,15 +684,15 @@ void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx) {
     sp84.z = this->dyna.actor.shape.rot.z;
 
     for (i = 0; i < phi_s4; i++) {
-        Matrix_SetStateRotationAndTranslation(phi_f22, temp_f30, phi_f24, &sp84);
+        Matrix_SetTranslateRotateYXZ(phi_f22, temp_f30, phi_f24, &sp84);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_spinyroll_DL_000460);
 
         phi_f22 += temp_f26;
         phi_f24 += temp_f28;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

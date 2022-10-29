@@ -11,31 +11,31 @@
 
 #define THIS ((EnHorseGameCheck*)thisx)
 
-void EnHorseGameCheck_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseGameCheck_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseGameCheck_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHorseGameCheck_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHorseGameCheck_Init(Actor* thisx, PlayState* play);
+void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play);
+void EnHorseGameCheck_Update(Actor* thisx, PlayState* play);
+void EnHorseGameCheck_Draw(Actor* thisx, PlayState* play);
 
-s32 func_808F8AA0(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F8C24(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F8C5C(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F8C70(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F8CCC(EnHorseGameCheck* this, GlobalContext* globalCtx2);
-s32 func_808F8E94(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F96E4(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F9830(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F9868(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F987C(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F990C(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F9944(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F9958(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F999C(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F99B0(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F99C4(EnHorseGameCheck* this, GlobalContext* globalCtx);
-s32 func_808F99D8(EnHorseGameCheck* this, GlobalContext* globalCtx);
+s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F8C24(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F8C5C(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F8C70(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2);
+s32 func_808F8E94(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F96E4(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F9830(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F9868(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F987C(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F990C(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F9944(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F9958(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F999C(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F99B0(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
+s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
-const ActorInit En_Horse_Game_Check_InitVars = {
+ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
     ACTORCAT_BG,
     FLAGS,
@@ -49,7 +49,7 @@ const ActorInit En_Horse_Game_Check_InitVars = {
 
 #include "overlays/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.c"
 
-s32 func_808F8AA0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     s32 pad[3];
     CollisionHeader* sp78 = NULL;
     MtxF sp38;
@@ -60,120 +60,120 @@ s32 func_808F8AA0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 0);
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
     CollisionHeader_GetVirtual(&object_horse_game_check_Colheader_003918, &sp78);
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp78);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp78);
     this->unk_15C = ENHORSEGAMECHECK_FF_5;
     this->dyna.actor.floorPoly = NULL;
     this->dyna.actor.world.pos.y += 100.0f;
 
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor2(
-        globalCtx, &globalCtx->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
+    this->dyna.actor.floorHeight =
+        BgCheck_EntityRaycastFloor2(play, &play->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
     this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight + 3.0f;
     func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.floorHeight,
                   this->dyna.actor.world.pos.z, &sp38);
 
-    Matrix_SetCurrentState(&sp38);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Put(&sp38);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.y, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&sp38);
+    Matrix_Get(&sp38);
 
-    func_8018219C(&sp38, &this->dyna.actor.shape.rot, 1);
+    Matrix_MtxFToYXZRot(&sp38, &this->dyna.actor.shape.rot, true);
     this->dyna.actor.world.rot = this->dyna.actor.shape.rot;
     return true;
 }
 
-s32 func_808F8C24(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+s32 func_808F8C24(EnHorseGameCheck* this, PlayState* play) {
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     return true;
 }
 
-s32 func_808F8C5C(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F8C5C(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
-s32 func_808F8C70(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    if (Matrix_NewMtx(globalCtx->state.gfxCtx) == NULL) {
+s32 func_808F8C70(EnHorseGameCheck* this, PlayState* play) {
+    if (Matrix_NewMtx(play->state.gfxCtx) == NULL) {
         return true;
     } else {
-        Gfx_DrawDListXlu(globalCtx, object_horse_game_check_DL_003030);
-        Gfx_DrawDListOpa(globalCtx, object_horse_game_check_DL_0030C0);
+        Gfx_DrawDListXlu(play, object_horse_game_check_DL_003030);
+        Gfx_DrawDListOpa(play, object_horse_game_check_DL_0030C0);
     }
     return true;
 }
 
-s32 func_808F8CCC(EnHorseGameCheck* this, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
+    PlayState* play = play2;
     s32 pad;
-    Vec3f sp4C = { -1262.0f, 15.0f, 780.0f };
-    Vec3f sp40 = { -1262.0f, -26.0f, 470.0f };
+    Vec3f mainCamEye = { -1262.0f, 15.0f, 780.0f };
+    Vec3f mainCamAt = { -1262.0f, -26.0f, 470.0f };
 
     this->unk_164 = 0;
     this->unk_168 = 0;
     this->unk_174 = 0;
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
-    func_8010E9F0(4, 0);
-    globalCtx->interfaceCtx.unk_280 = 1;
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
+    play->interfaceCtx.unk_280 = 1;
 
-    this->horse1 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0,
-                                         0x7FFF, 0, 0x2004);
+    this->horse1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
+                                         ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_4));
     if (this->horse1 == NULL) {
         __assert("../z_en_horse_game_check.c", 1517);
     }
 
-    this->horse2 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0,
-                                         0x7FFF, 0, 0x2005);
+    this->horse2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
+                                         ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_5));
     if (this->horse2 == NULL) {
         __assert("../z_en_horse_game_check.c", 1526);
     }
 
     this->unk_17C = -1;
-    func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 10);
-    Play_CameraSetAtEye(globalCtx, 0, &sp40, &sp4C);
-    Play_CameraSetFov(globalCtx, 0, 45.0f);
+    Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_FREE0);
+    Play_SetCameraAtEye(play, CAM_ID_MAIN, &mainCamAt, &mainCamEye);
+    Play_SetCameraFov(play, CAM_ID_MAIN, 45.0f);
     func_800FE484();
     return false;
 }
 
-s32 func_808F8E94(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    gSaveContext.unk_3DD0[4] = 0;
+s32 func_808F8E94(EnHorseGameCheck* this, PlayState* play) {
+    gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     return true;
 }
 
-s32 func_808F8EB0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if (globalCtx->nextEntranceIndex == 0xCE20) {
+    if (play->nextEntrance == ENTRANCE(GORMAN_TRACK, 2)) {
         return false;
     }
 
     if (GET_RACE_FLAGS == RACE_FLAG_3) {
-        globalCtx->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     } else if (GET_RACE_FLAGS == RACE_FLAG_2) {
-        globalCtx->unk_1887F = 0x50;
-        gSaveContext.nextTransition = 3;
+        play->transitionType = TRANS_TYPE_80;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
     } else if (GET_RACE_FLAGS == RACE_FLAG_4) {
         SET_RACE_FLAGS(RACE_FLAG_3);
-        globalCtx->unk_1887F = 2;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     }
 
     D_801BDA9C = 0;
-    if (player->stateFlags1 & 0x800000) {
+    if (player->stateFlags1 & PLAYER_STATE1_800000) {
         D_801BDAA0 = 1;
     }
-    globalCtx->nextEntranceIndex = 0xCE20;
-    globalCtx->sceneLoadFlag = 0x14;
+    play->nextEntrance = ENTRANCE(GORMAN_TRACK, 2);
+    play->transitionTrigger = TRANS_TRIGGER_START;
     return false;
 }
 
@@ -198,9 +198,9 @@ f32 D_808F9BCC[] = {
     5368.0f,
 };
 
-s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
     s32 pad[2];
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 pad2;
     EnHorse* horse = (EnHorse*)player->rideActor;
     s32 pad3[2];
@@ -212,10 +212,10 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
 
     if ((this->unk_168 > 50) && !(this->unk_164 & 2)) {
         this->unk_164 |= 2;
-    } else if ((globalCtx->interfaceCtx.unk_280 >= 8) && !(this->unk_164 & 1)) {
+    } else if ((play->interfaceCtx.unk_280 >= 8) && !(this->unk_164 & 1)) {
         this->unk_164 |= 1;
         horse->inRace = true;
-    } else if ((globalCtx->interfaceCtx.unk_280 >= 8) && !(this->unk_164 & 8)) {
+    } else if ((play->interfaceCtx.unk_280 >= 8) && !(this->unk_164 & 8)) {
         EnHorse* horse = this->horse1;
 
         horse->inRace = true;
@@ -228,7 +228,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
 
     if ((this->unk_17C != -1) && ((this->unk_168 - this->unk_17C) > 10)) {
         this->unk_17C = -1;
-        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 4);
+        Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_HORSE);
     }
 
     this->unk_168++;
@@ -242,17 +242,17 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         if (this->unk_174 > 0) {
             this->unk_174--;
         } else {
-            func_808F8EB0(this, globalCtx);
+            func_808F8EB0(this, play);
         }
         return true;
     }
 
-    if (gSaveContext.unk_3DE0[4] >= 0x4650) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(180)) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
-        gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_4)
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
+        SET_RACE_FLAGS(RACE_FLAG_4);
         this->unk_174 = 60;
     }
 
@@ -277,15 +277,15 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         }
     }
 
-    horseGameCheck = (EnHorseGameCheck*)DynaPoly_GetActor(&globalCtx->colCtx, this->horse1->unk_24C);
+    horseGameCheck = (EnHorseGameCheck*)DynaPoly_GetActor(&play->colCtx, this->horse1->unk_24C);
     if ((this->unk_164 & 0x4000) && (horseGameCheck != NULL) &&
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x40000)) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
-        gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_3)
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
+        SET_RACE_FLAGS(RACE_FLAG_3);
         this->unk_174 = 60;
     }
 
@@ -310,15 +310,15 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         }
     }
 
-    horseGameCheck = (EnHorseGameCheck*)DynaPoly_GetActor(&globalCtx->colCtx, this->horse2->unk_24C);
+    horseGameCheck = (EnHorseGameCheck*)DynaPoly_GetActor(&play->colCtx, this->horse2->unk_24C);
     if ((this->unk_164 & 0x200000) && (horseGameCheck != NULL) &&
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x02000000)) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x02000000;
-        gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_3)
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
+        SET_RACE_FLAGS(RACE_FLAG_3);
         this->unk_174 = 60;
     }
 
@@ -339,21 +339,21 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         this->unk_164 |= 0x80;
     }
 
-    horseGameCheck = (EnHorseGameCheck*)DynaPoly_GetActor(&globalCtx->colCtx, horse->unk_24C);
+    horseGameCheck = (EnHorseGameCheck*)DynaPoly_GetActor(&play->colCtx, horse->unk_24C);
     if ((this->unk_164 & 0x80) && (horseGameCheck != NULL) &&
         (horseGameCheck->dyna.actor.id == ACTOR_EN_HORSE_GAME_CHECK) &&
         (horseGameCheck->unk_15C == ENHORSEGAMECHECK_FF_7) && !(this->unk_164 & 0x800)) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x800;
-        gSaveContext.unk_3DD0[4] = 6;
-        SET_RACE_FLAGS(RACE_FLAG_2)
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
+        SET_RACE_FLAGS(RACE_FLAG_2);
         this->unk_174 = 60;
     }
     return true;
 }
 
-s32 func_808F96E4(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F96E4(EnHorseGameCheck* this, PlayState* play) {
     s32 pad[3];
     CollisionHeader* sp78 = NULL;
     MtxF sp38;
@@ -362,33 +362,33 @@ s32 func_808F96E4(EnHorseGameCheck* this, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&ovl_En_Horse_Game_Check_Colheader_0010C8, &sp78);
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp78);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp78);
     this->unk_15C = ENHORSEGAMECHECK_FF_7;
     this->dyna.actor.floorPoly = NULL;
     this->dyna.actor.world.pos.y += 100.0f;
 
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor2(
-        globalCtx, &globalCtx->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
+    this->dyna.actor.floorHeight =
+        BgCheck_EntityRaycastFloor2(play, &play->colCtx, &this->dyna.actor.floorPoly, &this->dyna.actor.world.pos);
     this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight + 1.0f;
     func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.floorHeight,
                   this->dyna.actor.world.pos.z, &sp38);
 
-    Matrix_SetCurrentState(&sp38);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Put(&sp38);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.y, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&sp38);
+    Matrix_Get(&sp38);
 
-    func_8018219C(&sp38, &this->dyna.actor.shape.rot, 1);
+    Matrix_MtxFToYXZRot(&sp38, &this->dyna.actor.shape.rot, true);
     this->dyna.actor.world.rot = this->dyna.actor.shape.rot;
     return true;
 }
 
-s32 func_808F9830(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+s32 func_808F9830(EnHorseGameCheck* this, PlayState* play) {
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     return true;
 }
 
-s32 func_808F9868(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F9868(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
@@ -397,7 +397,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
 
-s32 func_808F987C(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F987C(EnHorseGameCheck* this, PlayState* play) {
     s32 pad[3];
     CollisionHeader* sp28 = NULL;
     s32 pad2;
@@ -408,39 +408,39 @@ s32 func_808F987C(EnHorseGameCheck* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.x = 1.0f;
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_horse_game_check_Colheader_002FB8, &sp28);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp28);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp28);
     this->unk_15C = ENHORSEGAMECHECK_FF_8;
     return true;
 }
 
-s32 func_808F990C(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+s32 func_808F990C(EnHorseGameCheck* this, PlayState* play) {
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     return true;
 }
 
-s32 func_808F9944(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F9944(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
-s32 func_808F9958(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_horse_game_check_DL_0014B0);
-    Gfx_DrawDListOpa(globalCtx, object_horse_game_check_DL_0013A0);
+s32 func_808F9958(EnHorseGameCheck* this, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_horse_game_check_DL_0014B0);
+    Gfx_DrawDListOpa(play, object_horse_game_check_DL_0013A0);
     return true;
 }
 
-s32 func_808F999C(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F999C(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
-s32 func_808F99B0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F99B0(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
-s32 func_808F99C4(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
-s32 func_808F99D8(EnHorseGameCheck* this, GlobalContext* globalCtx) {
+s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play) {
     return true;
 }
 
@@ -460,7 +460,7 @@ EnHorseGameCheckUnkFunc D_808F9C5C[] = {
     NULL, NULL, NULL, NULL, NULL, func_808F8C70, NULL, NULL, func_808F9958, func_808F99D8,
 };
 
-void EnHorseGameCheck_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHorseGameCheck_Init(Actor* thisx, PlayState* play) {
     EnHorseGameCheck* this = THIS;
 
     this->unk_15C = ENHORSEGAMECHECK_GET_FF(&this->dyna.actor);
@@ -471,30 +471,30 @@ void EnHorseGameCheck_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (D_808F9BE4[this->unk_15C] != NULL) {
-        D_808F9BE4[this->unk_15C](this, globalCtx);
+        D_808F9BE4[this->unk_15C](this, play);
     }
 }
 
-void EnHorseGameCheck_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHorseGameCheck_Destroy(Actor* thisx, PlayState* play) {
     EnHorseGameCheck* this = THIS;
 
     if (D_808F9C0C[this->unk_15C] != NULL) {
-        D_808F9C0C[this->unk_15C](this, globalCtx);
+        D_808F9C0C[this->unk_15C](this, play);
     }
 }
 
-void EnHorseGameCheck_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnHorseGameCheck_Update(Actor* thisx, PlayState* play) {
     EnHorseGameCheck* this = THIS;
 
     if (D_808F9C34[this->unk_15C] != NULL) {
-        D_808F9C34[this->unk_15C](this, globalCtx);
+        D_808F9C34[this->unk_15C](this, play);
     }
 }
 
-void EnHorseGameCheck_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnHorseGameCheck_Draw(Actor* thisx, PlayState* play) {
     EnHorseGameCheck* this = THIS;
 
     if (D_808F9C5C[this->unk_15C] != NULL) {
-        D_808F9C5C[this->unk_15C](this, globalCtx);
+        D_808F9C5C[this->unk_15C](this, play);
     }
 }

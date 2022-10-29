@@ -10,17 +10,17 @@
 
 #define THIS ((EnSda*)thisx)
 
-void EnSda_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSda_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSda_Init(Actor* thisx, PlayState* play);
+void EnSda_Destroy(Actor* thisx, PlayState* play);
+void EnSda_Update(Actor* thisx, PlayState* play);
+void EnSda_Draw(Actor* thisx, PlayState* play);
 
-void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext* globalCtx);
-void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx);
+void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* play);
+void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 
 Vec3f D_80947EA0[16];
 
-const ActorInit En_Sda_InitVars = {
+ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,
     FLAGS,
@@ -72,40 +72,40 @@ static s32 sPad[2] = { 0, 0 };
 
 #include "overlays/ovl_En_Sda/ovl_En_Sda.c"
 
-void EnSda_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Init(Actor* thisx, PlayState* play) {
 }
 
-void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnSda_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Update(Actor* thisx, PlayState* play) {
     EnSda* this = THIS;
     Player* player;
 
     if (this->actor.params == ENSDA_1) {
         player = (Player*)this->actor.parent;
     } else {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
     }
     this->actor.world.pos = player->actor.world.pos;
 }
 
-void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Draw(Actor* thisx, PlayState* play) {
     EnSda* this = THIS;
     Player* player;
-    u8* shadowTexture = GRAPH_ALLOC(globalCtx->state.gfxCtx, 64 * 64);
+    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
 
     if (this->actor.params == ENSDA_1) {
         player = (Player*)this->actor.parent;
     } else {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
     }
 
     player->actor.shape.shadowAlpha = 0;
-    func_8094702C(this, shadowTexture, player, globalCtx);
+    func_8094702C(this, shadowTex, player, play);
 
     if (KREG(0) < 5) {
-        func_80947668(shadowTexture, player, globalCtx);
+        func_80947668(shadowTex, player, play);
     }
 }
 
@@ -138,7 +138,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
                 sp88.z = D_80947EA0[i].z - player->actor.world.pos.z;
             }
 
-            Matrix_MultiplyVector3fByState(&sp88, &sp7C);
+            Matrix_MultVec3f(&sp88, &sp7C);
             sp7C.x *= (1.0f + (BREG(49) / 100.0f));
             sp7C.y *= (1.0f + (BREG(49) / 100.0f));
             temp_t0 = sp7C.x + 32.0f;
@@ -209,7 +209,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
     }
 }
 
-void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext* globalCtx) {
+void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* play) {
     s16 temp_t0;
     s16 temp_t1;
     s16 temp_v0;
@@ -240,7 +240,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
         }
     }
 
-    Matrix_SetStateXRotation((BREG(50) + 70) / 100.0f);
+    Matrix_RotateXFNew((BREG(50) + 70) / 100.0f);
 
     for (i = 0; i < 18; i++) {
         if (D_80947AFC[i] >= 0) {
@@ -258,31 +258,31 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
     }
 
     if (this->actor.params != ENSDA_1) {
-        func_8018219C(&player->shieldMf, &sp178, false);
+        Matrix_MtxFToYXZRot(&player->shieldMf, &sp178, false);
 
         sp178.y += (KREG(87) * 0x8000) + 0x8000;
         sp178.x *= (KREG(88) - 1);
 
-        Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&D_80947A60, &sp16C);
-        Matrix_RotateY(sp178.y, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(sp178.x, MTXMODE_APPLY);
+        Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
+        Matrix_MultVec3f(&D_80947A60, &sp16C);
+        Matrix_RotateYS(sp178.y, MTXMODE_NEW);
+        Matrix_RotateXS(sp178.x, MTXMODE_APPLY);
 
         for (i = 0; i < 22; i++) {
-            Matrix_MultiplyVector3fByState(&D_80947B10[i], &sp188);
+            Matrix_MultVec3f(&D_80947B10[i], &sp188);
             sp64[i].x = (((KREG(82) / 100.0f) + 4.0f) * sp188.x) + sp16C.x;
             sp64[i].y = (((KREG(82) / 100.0f) + 4.0f) * sp188.y) + sp16C.y;
             sp64[i].z = (((KREG(82) / 100.0f) + 4.0f) * sp188.z) + sp16C.z;
         }
 
-        Matrix_SetStateXRotation((BREG(50) + 70) / 100.0f);
+        Matrix_RotateXFNew((BREG(50) + 70) / 100.0f);
 
         for (i = 0; i < 22; i++) {
             sp194.x = sp64[i].x - player->actor.world.pos.x;
             sp194.y = sp64[i].y - player->actor.world.pos.y + KREG(80) + 16.0f;
             sp194.z = sp64[i].z - player->actor.world.pos.z;
 
-            Matrix_MultiplyVector3fByState(&sp194, &sp188);
+            Matrix_MultVec3f(&sp194, &sp188);
 
             sp188.x *= (1.0f + (KREG(90) / 100.0f));
             sp188.y *= (1.0f + (KREG(90) / 100.0f));
@@ -315,32 +315,31 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
     }
 }
 
-void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void func_80947668(u8* shadowTexture, Player* player, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 tempx;
     f32 tempz;
     s16 i;
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C448(globalCtx->state.gfxCtx);
+    func_8012C448(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 0, 0, 0, (BREG(52) + 50));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
 
-    Matrix_InsertTranslation(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_InsertYRotation_f(BREG(51) / 100.0f, MTXMODE_APPLY);
+    Matrix_Translate(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateYF(BREG(51) / 100.0f, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 1.0f, (BREG(63) / 10.0f) + 1.0f, MTXMODE_APPLY);
 
     tempx = (BREG(62) / 10.0f) + 2.0f;
     tempz = ((player->actor.world.pos.y - player->actor.floorHeight + BREG(54)) * (BREG(55) - 5) / 10.0f) + BREG(58) -
             20.0f;
 
-    Matrix_InsertTranslation(tempx, 0.0f, tempz, MTXMODE_APPLY);
+    Matrix_Translate(tempx, 0.0f, tempz, MTXMODE_APPLY);
     Matrix_Scale(((BREG(56) - 250) / 1000.0f) + 0.6f, 1.0f, ((BREG(59) - 250) / 1000.0f) + 0.6f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, ovl_En_Sda_DL_1498);
     gDPLoadTextureBlock(POLY_XLU_DISP++, shadowTexture, G_IM_FMT_I, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
@@ -348,7 +347,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
 
     for (i = 0; i < KREG(78); i++) {
         Matrix_Scale((KREG(79) / 100.0f) + 1.0f, 1.0f, (KREG(79) / 100.0f) + 1.0f, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, ovl_En_Sda_DL_14B8);
     }
 

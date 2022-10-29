@@ -13,24 +13,24 @@
 
 #define THIS ((EnTanron2*)thisx)
 
-void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTanron2_Init(Actor* thisx, PlayState* play);
+void EnTanron2_Destroy(Actor* thisx, PlayState* play);
+void EnTanron2_Update(Actor* thisx, PlayState* play);
+void EnTanron2_Draw(Actor* thisx, PlayState* play2);
 
 void func_80BB69C0(EnTanron2* this);
-void func_80BB69FC(EnTanron2* this, GlobalContext* globalCtx);
-void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx);
+void func_80BB69FC(EnTanron2* this, PlayState* play);
+void func_80BB6BD8(EnTanron2* this, PlayState* play);
 void func_80BB6F64(EnTanron2* this);
-void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx);
-void func_80BB7408(EnTanron2* this, GlobalContext* globalCtx);
-void func_80BB7B90(Actor* thisx, GlobalContext* globalCtx);
+void func_80BB6F78(EnTanron2* this, PlayState* play);
+void func_80BB7408(EnTanron2* this, PlayState* play);
+void func_80BB7B90(Actor* thisx, PlayState* play);
 
 Boss04* D_80BB8450;
 f32 D_80BB8454;
 EnTanron2* D_80BB8458[82];
 
-const ActorInit En_Tanron2_InitVars = {
+ActorInit En_Tanron2_InitVars = {
     ACTOR_EN_TANRON2,
     ACTORCAT_BOSS,
     FLAGS,
@@ -120,7 +120,7 @@ static ColliderCylinderInit sCylinderInit2 = {
 Color_RGBA8 D_80BB81E8 = { 255, 255, 255, 255 };
 Color_RGBA8 D_80BB81EC = { 255, 100, 100, 255 };
 
-void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron2_Init(Actor* thisx, PlayState* play) {
     EnTanron2* this = THIS;
 
     D_80BB8450 = (Boss04*)this->actor.parent;
@@ -128,7 +128,7 @@ void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 100) {
         this->actor.update = func_80BB7B90;
-        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 5);
+        func_800BC154(play, &play->actorCtx, &this->actor, 5);
         return;
     }
 
@@ -140,8 +140,8 @@ void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 5;
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
+    Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
+    Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
 
     if ((KREG(64) != 0) || (gSaveContext.eventInf[6] & 1)) {
         func_80BB69C0(this);
@@ -155,12 +155,12 @@ void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_14C = -this->unk_14C;
     }
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 60.0f, 60.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 4);
     this->actor.floorHeight += 20.0f;
     this->unk_148 = Rand_ZeroFloat(32.0f);
 }
 
-void EnTanron2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron2_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BB69C0(EnTanron2* this) {
@@ -173,7 +173,7 @@ void func_80BB69C0(EnTanron2* this) {
     this->unk_158 = 0;
 }
 
-void func_80BB69FC(EnTanron2* this, GlobalContext* globalCtx) {
+void func_80BB69FC(EnTanron2* this, PlayState* play) {
     f32 sp34;
     f32 sp30;
     f32 sp2C;
@@ -213,8 +213,8 @@ void func_80BB6B80(EnTanron2* this) {
     this->collider1.dim.yShift = -25;
 }
 
-void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80BB6BD8(EnTanron2* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 sp32;
     f32 sp2C;
     f32 sp28;
@@ -261,8 +261,8 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
                     }
                     break;
             }
-            Matrix_RotateY(sp32, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(this->actor.speedXZ, &this->actor.velocity);
+            Matrix_RotateYS(sp32, MTXMODE_NEW);
+            Matrix_MultVecZ(this->actor.speedXZ, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
             this->unk_14E = 5;
         }
@@ -295,7 +295,7 @@ void func_80BB6F64(EnTanron2* this) {
     this->actionFunc = func_80BB6F78;
 }
 
-void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx) {
+void func_80BB6F78(EnTanron2* this, PlayState* play) {
     switch (this->unk_158) {
         case 0:
             if (D_80BB8450->unk_708 == 13) {
@@ -352,16 +352,16 @@ void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
+void func_80BB71C8(EnTanron2* this, PlayState* play) {
     s32 i;
     Vec3f spA8;
     Vec3f sp9C;
     Vec3f sp90;
 
     for (i = 0; i < 15; i++) {
-        Matrix_InsertYRotation_f(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
-        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
+        Matrix_RotateYF(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
+        Matrix_RotateXFApply(Rand_ZeroFloat(6.2831855f));
+        Matrix_MultVecZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
         sp90.x = this->actor.world.pos.x + spA8.x;
         sp90.y = this->actor.world.pos.y + spA8.y;
         sp90.z = this->actor.world.pos.z + spA8.z;
@@ -370,22 +370,22 @@ void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
         sp9C.y = spA8.y * -0.03f;
         sp9C.z = spA8.z * -0.03f;
 
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC,
-                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+        EffectSsDtBubble_SpawnCustomColor(play, &sp90, &spA8, &sp9C, &D_80BB81E8, &D_80BB81EC,
+                                          Rand_ZeroFloat(100.0f) + 200.0f, Rand_ZeroFloat(5.0f) + 15.0f, false);
     }
 }
 
-void func_80BB7398(EnTanron2* this, GlobalContext* globalCtx) {
+void func_80BB7398(EnTanron2* this, PlayState* play) {
     this->actionFunc = func_80BB7408;
     if ((s8)this->actor.colChkInfo.health <= 0) {
-        Enemy_StartFinishingBlow(globalCtx, &this->actor);
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_IKURA_DEAD);
+        Enemy_StartFinishingBlow(play, &this->actor);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_IKURA_DEAD);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
     }
 }
 
-void func_80BB7408(EnTanron2* this, GlobalContext* globalCtx) {
+void func_80BB7408(EnTanron2* this, PlayState* play) {
     this->actor.world.pos.x += this->actor.velocity.x;
     this->actor.world.pos.y += this->actor.velocity.y;
     this->actor.world.pos.z += this->actor.velocity.z;
@@ -394,8 +394,8 @@ void func_80BB7408(EnTanron2* this, GlobalContext* globalCtx) {
     if (this->actor.world.pos.y <= this->actor.floorHeight) {
         this->actor.world.pos.y = this->actor.floorHeight;
         if ((s8)this->actor.colChkInfo.health <= 0) {
-            Actor_MarkForDeath(&this->actor);
-            func_80BB71C8(this, globalCtx);
+            Actor_Kill(&this->actor);
+            func_80BB71C8(this, play);
             D_80BB8450->unk_6F6--;
             D_80BB8450->unk_2E2 += 4;
             D_80BB8450->unk_2E0 += 4;
@@ -412,10 +412,10 @@ void func_80BB7408(EnTanron2* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
+void func_80BB7578(EnTanron2* this, PlayState* play) {
     ColliderInfo* acHitInfo;
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 pad2;
     s32 pad3;
     u8 damage;
@@ -430,22 +430,22 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                 if ((player->unk_730 != 0) && (&this->actor != player->unk_730)) {
                     player->unk_730 = &this->actor;
-                    globalCtx->actorCtx.targetContext.arrowPointedActor = &this->actor;
-                    globalCtx->actorCtx.targetContext.targetedActor = &this->actor;
+                    play->actorCtx.targetContext.arrowPointedActor = &this->actor;
+                    play->actorCtx.targetContext.targetedActor = &this->actor;
                 }
             } else {
                 this->unk_154 = 15;
                 if (this->actionFunc != func_80BB69FC) {
-                    Matrix_RotateY(this->actor.yawTowardsPlayer, MTXMODE_NEW);
+                    Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
                     if ((acHitInfo->toucher.dmgFlags & 0x300000) != 0) {
                         this->unk_154 = 10;
-                        Matrix_GetStateTranslationAndScaledZ(-10.0f, &this->actor.velocity);
+                        Matrix_MultVecZ(-10.0f, &this->actor.velocity);
                     } else {
                         this->unk_156 = 15;
-                        Matrix_GetStateTranslationAndScaledZ(-20.0f, &this->actor.velocity);
+                        Matrix_MultVecZ(-20.0f, &this->actor.velocity);
                         damage = this->actor.colChkInfo.damage;
                         this->actor.colChkInfo.health -= damage;
-                        func_80BB7398(this, globalCtx);
+                        func_80BB7398(this, play);
                     }
                 } else {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
@@ -464,18 +464,18 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
     block_18:
         func_80BB6B80(this);
         this->unk_158 = 2;
-        Matrix_RotateY(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
-                                   this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
-                       MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(10.0f, &this->actor.velocity);
+        Matrix_RotateYS(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
+                                    this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
+                        MTXMODE_NEW);
+        Matrix_MultVecZ(10.0f, &this->actor.velocity);
         this->unk_152 = Rand_ZeroFloat(100.0f) + 200.0f;
     } else if (D_80BB8450->unk_1F6 == 10) {
-        Actor_MarkForDeath(&this->actor);
-        func_80BB71C8(this, globalCtx);
+        Actor_Kill(&this->actor);
+        func_80BB71C8(this, play);
     }
 }
 
-void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron2_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTanron2* this = THIS;
     s32 pad2[2];
@@ -504,7 +504,7 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_156--;
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actionFunc != func_80BB69FC) {
         if ((this->actor.world.pos.x < (D_80BB8450->unk_6D8 + 20.0f)) ||
@@ -521,20 +521,20 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_14A += this->unk_14C;
-    func_80BB7578(this, globalCtx);
+    func_80BB7578(this, play);
 
     if (this->unk_159 != 0) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             if (this->unk_15A == 0) {
                 Collider_UpdateCylinder(&this->actor, &this->collider2);
-                CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+                CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
             } else {
                 this->unk_15A--;
             }
         }
 
         Collider_UpdateCylinder(&this->actor, &this->collider1);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
     }
 
     if (!(this->unk_148 & 0x1F)) {
@@ -564,7 +564,7 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_159 = 1;
     }
 
-    input = CONTROLLER3(globalCtx);
+    input = CONTROLLER3(&play->state);
     if (CHECK_BTN_ALL(input->press.button, BTN_L)) {
         this->unk_158 = 1;
     }
@@ -574,30 +574,30 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BB7B90(Actor* thisx, GlobalContext* globalCtx) {
+void func_80BB7B90(Actor* thisx, PlayState* play) {
     EnTanron2* this = THIS;
 
-    D_80BB8454 = (Math_SinS(globalCtx->gameplayFrames * 0x3000) * 0.1f) + 1.0f;
+    D_80BB8454 = (Math_SinS(play->gameplayFrames * 0x3000) * 0.1f) + 1.0f;
     if (D_80BB8450->unk_1F6 == 11) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     s32 i;
     s32 j;
     s32 found;
     Actor* tanron2;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
-    gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_003450);
+    gSPDisplayList(POLY_XLU_DISP++, gWartBubbleMaterialDL);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 150);
 
-    tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
+    tanron2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
 
     for (i = 0; i < ARRAY_COUNT(D_80BB8458); i++) {
         D_80BB8458[i] = NULL;
@@ -624,60 +624,56 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     for (i = 0; i < ARRAY_COUNT(D_80BB8458); i++) {
         if (D_80BB8458[i] != NULL) {
-            Matrix_InsertTranslation(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
-                                     D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_Translate(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
+                             D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
+            Matrix_RotateZS(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
             Matrix_Scale(0.13f, 0.14299999f, 0.13f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
+            Matrix_RotateZS(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_0034C8);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gWartBubbleModelDL);
         }
     }
 
-    func_8012C448(globalCtx->state.gfxCtx);
+    func_8012C448(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
-    gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004510);
+    gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);
 
-    tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
+    tanron2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z, MTXMODE_NEW);
             Matrix_Scale(0.6f, 0.0f, 0.6f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004550);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gWartShadowModelDL);
         }
         tanron2 = tanron2->next;
     }
 
-    func_8012C974(globalCtx->state.gfxCtx);
+    func_8012C974(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
 
-    tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
+    tanron2 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0) &&
             (tanron2->world.pos.y <= tanron2->floorHeight)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
+                             MTXMODE_NEW);
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0377B0);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gEffWaterRippleDL);
         }
         tanron2 = tanron2->next;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

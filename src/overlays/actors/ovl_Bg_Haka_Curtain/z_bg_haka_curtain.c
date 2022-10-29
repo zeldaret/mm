@@ -11,22 +11,22 @@
 
 #define THIS ((BgHakaCurtain*)thisx)
 
-void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgHakaCurtain_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgHakaCurtain_Init(Actor* thisx, PlayState* play);
+void BgHakaCurtain_Destroy(Actor* thisx, PlayState* play);
+void BgHakaCurtain_Update(Actor* thisx, PlayState* play);
+void BgHakaCurtain_Draw(Actor* thisx, PlayState* play);
 
 void func_80B6DC98(BgHakaCurtain* this);
-void func_80B6DCAC(BgHakaCurtain* this, GlobalContext* globalCtx);
+void func_80B6DCAC(BgHakaCurtain* this, PlayState* play);
 void func_80B6DCEC(BgHakaCurtain* this);
-void func_80B6DD00(BgHakaCurtain* this, GlobalContext* globalCtx);
+void func_80B6DD00(BgHakaCurtain* this, PlayState* play);
 void func_80B6DD5C(BgHakaCurtain* this);
-void func_80B6DD70(BgHakaCurtain* this, GlobalContext* globalCtx);
-void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx);
-void func_80B6DEA8(BgHakaCurtain* this, GlobalContext* globalCtx);
+void func_80B6DD70(BgHakaCurtain* this, PlayState* play);
+void func_80B6DD9C(BgHakaCurtain* this, PlayState* play);
+void func_80B6DEA8(BgHakaCurtain* this, PlayState* play);
 void func_80B6DE80(BgHakaCurtain* this);
 
-const ActorInit Bg_Haka_Curtain_InitVars = {
+ActorInit Bg_Haka_Curtain_InitVars = {
     ACTOR_BG_HAKA_CURTAIN,
     ACTORCAT_BG,
     FLAGS,
@@ -45,31 +45,31 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakaCurtain_Init(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_001588);
-    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_001588);
+    if (Flags_GetClear(play, this->dyna.actor.room)) {
         func_80B6DE80(this);
         return;
     }
     func_80B6DC98(this);
 }
 
-void BgHakaCurtain_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakaCurtain_Destroy(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B6DC98(BgHakaCurtain* this) {
     this->actionFunc = func_80B6DCAC;
 }
 
-void func_80B6DCAC(BgHakaCurtain* this, GlobalContext* globalCtx) {
-    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
+void func_80B6DCAC(BgHakaCurtain* this, PlayState* play) {
+    if (Flags_GetClear(play, this->dyna.actor.room)) {
         func_80B6DCEC(this);
     }
 }
@@ -78,7 +78,7 @@ void func_80B6DCEC(BgHakaCurtain* this) {
     this->actionFunc = func_80B6DD00;
 }
 
-void func_80B6DD00(BgHakaCurtain* this, GlobalContext* globalCtx) {
+void func_80B6DD00(BgHakaCurtain* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         func_80B6DD5C(this);
@@ -91,7 +91,7 @@ void func_80B6DD5C(BgHakaCurtain* this) {
     this->actionFunc = func_80B6DD70;
 }
 
-void func_80B6DD70(BgHakaCurtain* this, GlobalContext* globalCtx) {
+void func_80B6DD70(BgHakaCurtain* this, PlayState* play) {
 }
 
 void func_80B6DD80(BgHakaCurtain* this) {
@@ -99,7 +99,7 @@ void func_80B6DD80(BgHakaCurtain* this) {
     this->dyna.actor.velocity.y = 0.0f;
 }
 
-void func_80B6DD9C(BgHakaCurtain* this, GlobalContext* globalCtx) {
+void func_80B6DD9C(BgHakaCurtain* this, PlayState* play) {
     if (this->dyna.actor.world.pos.y < this->dyna.actor.home.pos.y + 150.0f - 30.0f) {
         Math_StepToF(&this->dyna.actor.velocity.y, 1.6f, 0.12f);
     } else {
@@ -118,22 +118,22 @@ void func_80B6DE80(BgHakaCurtain* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 150.0f;
 }
 
-void func_80B6DEA8(BgHakaCurtain* this, GlobalContext* globalCtx) {
+void func_80B6DEA8(BgHakaCurtain* this, PlayState* play) {
 }
 
-void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakaCurtain_Update(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
     CsCmdActorAction* actorAction;
 
-    if (Cutscene_CheckActorAction(globalCtx, 469)) {
-        actorAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 469)];
-        if (actorAction->startFrame == globalCtx->csCtx.frames && actorAction->action == 2) {
+    if (Cutscene_CheckActorAction(play, 469)) {
+        actorAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 469)];
+        if (actorAction->startFrame == play->csCtx.frames && actorAction->action == 2) {
             func_80B6DD80(this);
         }
     }
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_haka_obj_DL_001410);
+void BgHakaCurtain_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_haka_obj_DL_001410);
 }

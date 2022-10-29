@@ -10,16 +10,16 @@
 
 #define THIS ((EnDnh*)thisx)
 
-void EnDnh_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDnh_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDnh_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDnh_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDnh_Init(Actor* thisx, PlayState* play);
+void EnDnh_Destroy(Actor* thisx, PlayState* play);
+void EnDnh_Update(Actor* thisx, PlayState* play);
+void EnDnh_Draw(Actor* thisx, PlayState* play);
 
-void func_80A50F38(EnDnh* this, GlobalContext* globalCtx);
-void func_80A50F9C(EnDnh* this, GlobalContext* globalCtx);
+void func_80A50F38(EnDnh* this, PlayState* play);
+void func_80A50F9C(EnDnh* this, PlayState* play);
 
 #if 0
-const ActorInit En_Dnh_InitVars = {
+ActorInit En_Dnh_InitVars = {
     ACTOR_EN_DNH,
     ACTORCAT_NPC,
     FLAGS,

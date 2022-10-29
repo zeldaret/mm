@@ -43,7 +43,7 @@
         <Limb Name="object_ikn_demo_Standardlimb_00388C" Type="Standard" EnumName="OBJECT_IKN_DEMO_1_LIMB_0E" Offset="0x388C" />
         <Limb Name="object_ikn_demo_Standardlimb_003898" Type="Standard" EnumName="OBJECT_IKN_DEMO_1_LIMB_0F" Offset="0x3898" />
         <Limb Name="object_ikn_demo_Standardlimb_0038A4" Type="Standard" EnumName="OBJECT_IKN_DEMO_1_LIMB_10" Offset="0x38A4" />
-        <Skeleton Name="object_ikn_demo_Skel_0038F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_1_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_1_LIMB_MAX" EnumName="object_ikn_demo_1_Limbs" Offset="0x38F0" />
+        <Skeleton Name="object_ikn_demo_Skel_0038F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_1_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_1_LIMB_MAX" EnumName="ObjectIknDemo1Limb" Offset="0x38F0" />
         <Animation Name="object_ikn_demo_Anim_003CAC" Offset="0x3CAC" />
         <Animation Name="object_ikn_demo_Anim_004208" Offset="0x4208" />
         <Animation Name="object_ikn_demo_Anim_004514" Offset="0x4514" />
@@ -63,7 +63,7 @@
         <Limb Name="object_ikn_demo_Standardlimb_007B0C" Type="Standard" EnumName="OBJECT_IKN_DEMO_2_LIMB_04" Offset="0x7B0C" />
         <Limb Name="object_ikn_demo_Standardlimb_007B18" Type="Standard" EnumName="OBJECT_IKN_DEMO_2_LIMB_05" Offset="0x7B18" />
         <Limb Name="object_ikn_demo_Standardlimb_007B24" Type="Standard" EnumName="OBJECT_IKN_DEMO_2_LIMB_06" Offset="0x7B24" />
-        <Skeleton Name="object_ikn_demo_Skel_007B48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_2_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_2_LIMB_MAX" EnumName="object_ikn_demo_2_Limbs" Offset="0x7B48" />
+        <Skeleton Name="object_ikn_demo_Skel_007B48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_2_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_2_LIMB_MAX" EnumName="ObjectIknDemo2Limb" Offset="0x7B48" />
         <Animation Name="object_ikn_demo_Anim_0081A8" Offset="0x81A8" />
         <Animation Name="object_ikn_demo_Anim_0083F4" Offset="0x83F4" />
         <Animation Name="object_ikn_demo_Anim_008724" Offset="0x8724" />
@@ -89,7 +89,7 @@
         <Limb Name="object_ikn_demo_Standardlimb_00B454" Type="Standard" EnumName="OBJECT_IKN_DEMO_3_LIMB_04" Offset="0xB454" />
         <Limb Name="object_ikn_demo_Standardlimb_00B460" Type="Standard" EnumName="OBJECT_IKN_DEMO_3_LIMB_05" Offset="0xB460" />
         <Limb Name="object_ikn_demo_Standardlimb_00B46C" Type="Standard" EnumName="OBJECT_IKN_DEMO_3_LIMB_06" Offset="0xB46C" />
-        <Skeleton Name="object_ikn_demo_Skel_00B490" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_3_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_3_LIMB_MAX" EnumName="object_ikn_demo_3_Limbs" Offset="0xB490" />
+        <Skeleton Name="object_ikn_demo_Skel_00B490" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_3_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_3_LIMB_MAX" EnumName="ObjectIknDemo3Limb" Offset="0xB490" />
         <Animation Name="object_ikn_demo_Anim_00B704" Offset="0xB704" />
         <Animation Name="object_ikn_demo_Anim_00B8C0" Offset="0xB8C0" />
         <Animation Name="object_ikn_demo_Anim_00B9E4" Offset="0xB9E4" />

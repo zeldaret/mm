@@ -5,7 +5,7 @@
 
 struct ObjWarpstone;
 
-typedef s32 (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, GlobalContext* globalCtx);
+typedef s32 (*ObjWarpstoneActionFunc)(struct ObjWarpstone* this, PlayState* play);
 
 typedef enum {
     /* 0 */ SEK_MODEL_CLOSED,
@@ -26,9 +26,7 @@ typedef struct ObjWarpstone {
     /* 0x1AC */ ObjWarpstoneActionFunc actionFunc;
 } ObjWarpstone; // size = 0x1B0
 
-extern const ActorInit Obj_Warpstone_InitVars;
-
-#define OBJ_WARPSTONE_GET_ID(this) ((u16)(this->dyna.actor.params & 0xF))
-#define OBJ_WARPSTONE_IS_ACTIVATED(owlId) (((void)0, gSaveContext.save.playerData.owlActivationFlags) & (u16)gBitFlags[owlId])
+#define OBJ_WARPSTONE_GET_ID(thisx) ((u16)((thisx)->params & 0xF))
+#define OBJ_WARPSTONE_IS_ACTIVATED(owlId) (((void)0, gSaveContext.save.playerData.owlActivationFlags) & (u16)gBitFlags[(owlId)])
 
 #endif // Z_OBJ_WARPSTONE_H

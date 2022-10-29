@@ -7,7 +7,7 @@
 
 struct EnStopheishi;
 
-typedef void (*EnStopheishiActionFunc)(struct EnStopheishi*, GlobalContext*);
+typedef void (*EnStopheishiActionFunc)(struct EnStopheishi*, PlayState*);
 
 typedef struct EnStopheishi {
     /* 0x0000 */ Actor actor;
@@ -42,7 +42,5 @@ typedef struct EnStopheishi {
     /* 0x028C */ Vec3f unk_290;
     /* 0x029C */ ColliderCylinder collider;
 } EnStopheishi; // size = 0x2E8
-
-extern const ActorInit En_Stop_heishi_InitVars;
 
 #endif // Z_EN_STOP_HEISHI_H

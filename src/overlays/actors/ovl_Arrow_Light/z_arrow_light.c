@@ -11,17 +11,17 @@
 
 #define THIS ((ArrowLight*)thisx)
 
-void ArrowLight_Init(Actor* thisx, GlobalContext* globalCtx);
-void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ArrowLight_Update(Actor* thisx, GlobalContext* globalCtx);
-void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ArrowLight_Init(Actor* thisx, PlayState* play);
+void ArrowLight_Destroy(Actor* thisx, PlayState* play);
+void ArrowLight_Update(Actor* thisx, PlayState* play);
+void ArrowLight_Draw(Actor* thisx, PlayState* play);
 
-void ArrowLight_Charge(ArrowLight* this, GlobalContext* globalCtx);
-void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx);
+void ArrowLight_Charge(ArrowLight* this, PlayState* play);
+void ArrowLight_Fly(ArrowLight* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
-const ActorInit Arrow_Light_InitVars = {
+ActorInit Arrow_Light_InitVars = {
     ACTOR_ARROW_LIGHT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -43,7 +43,7 @@ void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void ArrowLight_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ArrowLight_Init(Actor* thisx, PlayState* play) {
     ArrowLight* this = (ArrowLight*)thisx;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->radius = 0;
@@ -55,16 +55,16 @@ void ArrowLight_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->screenFillIntensity = 0.0f;
 }
 
-void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    func_80115D5C(&globalCtx->state);
+void ArrowLight_Destroy(Actor* thisx, PlayState* play) {
+    Magic_Reset(play);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
-void ArrowLight_Charge(ArrowLight* this, GlobalContext* globalCtx) {
+void ArrowLight_Charge(ArrowLight* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -88,7 +88,7 @@ void ArrowLight_Lerp(Vec3f* firedPos, Vec3f* pos, f32 scale) {
     VEC3F_LERPIMPDST(firedPos, firedPos, pos, scale);
 }
 
-void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
+void ArrowLight_Hit(ArrowLight* this, PlayState* play) {
     f32 scale;
     u16 timer;
 
@@ -129,17 +129,17 @@ void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
     }
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 }
 
-void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx) {
+void ArrowLight_Fly(ArrowLight* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
     s32 pad[2];
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -162,38 +162,38 @@ void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx) {
     }
     if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->alpha -= 25;
     }
 }
 
-void ArrowLight_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ArrowLight_Update(Actor* thisx, PlayState* play) {
     ArrowLight* this = THIS;
 
-    if ((globalCtx->msgCtx.msgMode == 0xE) || (globalCtx->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
+        Actor_Kill(&this->actor);
         return;
     }
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ArrowLight_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ArrowLight* this = (ArrowLight*)thisx;
-    u32 frames = globalCtx->state.frames;
+    u32 frames = play->state.frames;
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->timer < 255)) {
         Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        Matrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
-        Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
+        Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->screenFillIntensity > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
@@ -205,26 +205,26 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
 
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 128);
 
-        Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);
         if (this->timer != 0) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {
-            Matrix_InsertTranslation(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1500.0f, 0.0f, MTXMODE_APPLY);
         }
         Matrix_Scale(this->radius * 0.2f, this->height * 4.0f, this->radius * 0.2f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightArrowMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - ((frames * 5) % 512), 0, 4, 32, 1,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 511 - ((frames * 5) % 512), 0, 4, 32, 1,
                                         511 - ((frames * 10) % 512), 511 - ((frames * 30) % 512), 8, 16));
         gSPDisplayList(POLY_XLU_DISP++, gLightArrowModelDL);
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }

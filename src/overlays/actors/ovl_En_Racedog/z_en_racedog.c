@@ -15,26 +15,26 @@
 
 #define THIS ((EnRacedog*)thisx)
 
-void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRacedog_Init(Actor* thisx, PlayState* play);
+void EnRacedog_Destroy(Actor* thisx, PlayState* play);
+void EnRacedog_Update(Actor* thisx, PlayState* play);
+void EnRacedog_Draw(Actor* thisx, PlayState* play);
 
-void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx);
-void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx);
+void EnRacedog_RaceStart(EnRacedog* this, PlayState* play);
+void EnRacedog_Race(EnRacedog* this, PlayState* play);
 void EnRacedog_UpdateTextId(EnRacedog* this);
 void EnRacedog_UpdateSpeed(EnRacedog* this);
 void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
 void EnRacedog_UpdateRaceVariables(EnRacedog* this);
 void EnRacedog_CheckForFinish(EnRacedog* this);
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
-s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
-void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx);
-void EnRacedog_PlayWalkSfx(EnRacedog* this);
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates);
+void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play);
+void EnRacedog_PlaySfxWalk(EnRacedog* this);
 
 /**
- * Dogs can be in three conditions, which is indicated by the message it says when
- * you pick it up prior to entering the race.
+ * Dogs can be in three conditions, which is, for the most part, indicated by the
+ * message it says when you pick it up prior to entering the race.
  * If it starts with "Ruff!", it's in good condition.
  * If it starts with "Rrr-Ruff!", it's in normal condition.
  * If it starts with "Hoo-whine", it's in bad condition.
@@ -42,29 +42,20 @@ void EnRacedog_PlayWalkSfx(EnRacedog* this);
  * - 0x3538 - 0x353D: Good condition
  * - 0x353E - 0x3541: Normal condition
  * - 0x3542 - 0x3546: Bad condition
+ *
+ * There are two caveats, though, that are useful to keep in mind:
+ * - Because of differences between how EnDg computes the text ID and how EnRacedog
+ *   computes it, there are two dogs whose text upon picking them up does not
+ *   accurately reflect their condition during the race. Check the comment above
+ *   EnRacedog_UpdateTextId for more information on this phenomenon.
+ * - Note that text ID 0x353D is actually used for the Romani Ranch dog; its text
+ *   just so happens to be in the middle of the race dog text block. In EnDg, the
+ *   dog that gets this text ID will instead use text ID 0x3538 when the player
+ *   picks it up. Since EnRacedog cannot be picked up, however, it can use 0x353D
+ *   as an additional good condition text ID.
  */
 #define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
-
-typedef enum {
-    /*  0 */ RACEDOG_ANIMATION_IDLE,
-    /*  1 */ RACEDOG_ANIMATION_WALK_1,
-    /*  2 */ RACEDOG_ANIMATION_RUN,
-    /*  3 */ RACEDOG_ANIMATION_BARK,
-    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,
-    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,
-    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1,
-    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,
-    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2,
-    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3,
-    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4,
-    /* 11 */ RACEDOG_ANIMATION_WALK_2,
-    /* 12 */ RACEDOG_ANIMATION_JUMP,
-    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,
-    /* 14 */ RACEDOG_ANIMATION_JUMP_2,
-    /* 15 */ RACEDOG_ANIMATION_WALK_3,
-    /* 16 */ RACEDOG_ANIMATION_MAX
-} RacedogAnimationIndex;
 
 /**
  * Stores various information for each dog in the race, mostly related to speed.
@@ -78,7 +69,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,
@@ -212,7 +203,27 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+typedef enum {
+    /*  0 */ RACEDOG_ANIM_IDLE,
+    /*  1 */ RACEDOG_ANIM_WALK_1, // unused
+    /*  2 */ RACEDOG_ANIM_RUN,
+    /*  3 */ RACEDOG_ANIM_BARK,               // unused
+    /*  4 */ RACEDOG_ANIM_SIT_DOWN_ONCE,      // unused
+    /*  5 */ RACEDOG_ANIM_SIT_DOWN,           // unused
+    /*  6 */ RACEDOG_ANIM_LYING_DOWN_START_1, // unused
+    /*  7 */ RACEDOG_ANIM_LYING_DOWN_LOOP,    // unused
+    /*  8 */ RACEDOG_ANIM_LYING_DOWN_START_2, // unused
+    /*  9 */ RACEDOG_ANIM_LYING_DOWN_START_3, // unused
+    /* 10 */ RACEDOG_ANIM_LYING_DOWN_START_4, // unused
+    /* 11 */ RACEDOG_ANIM_WALK_BACKWARDS,     // unused
+    /* 12 */ RACEDOG_ANIM_JUMP,
+    /* 13 */ RACEDOG_ANIM_LONG_JUMP,   // unused
+    /* 14 */ RACEDOG_ANIM_JUMP_ATTACK, // unused
+    /* 15 */ RACEDOG_ANIM_SWIM,        // unused
+    /* 16 */ RACEDOG_ANIM_MAX
+} RacedogAnimation;
+
+static AnimationInfoS sAnimationInfo[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
@@ -220,17 +231,17 @@ static AnimationInfoS sAnimations[] = {
     { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
     { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
     { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDogJump2Anim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },  { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 index) {
+void EnRacedog_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animationInfo += index;
+    animationInfo += animIndex;
     if (animationInfo->frameCount < 0) {
         frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
@@ -241,12 +252,12 @@ void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationIn
                      animationInfo->startFrame, frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-void EnRacedog_UpdateCollision(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_UpdateCollision(EnRacedog* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
 }
 
 /**
@@ -255,27 +266,27 @@ void EnRacedog_UpdateCollision(EnRacedog* this, GlobalContext* globalCtx) {
  */
 s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
     Vec3s* point;
-    f32 xDiffRand;
-    f32 zDiffRand;
-    f32 xDiff;
-    f32 zDiff;
+    f32 diffXRand;
+    f32 diffZRand;
+    f32 diffX;
+    f32 diffZ;
 
     if (path != NULL) {
         point = Lib_SegmentedToVirtual(path->points);
         point = &point[pointIndex];
-        xDiffRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
-        zDiffRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
-        xDiff = point->x - pos->x;
-        zDiff = point->z - pos->z;
+        diffXRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
+        diffZRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        diffX = point->x - pos->x;
+        diffZ = point->z - pos->z;
     } else {
-        xDiffRand = 0.0f;
-        zDiffRand = 0.0f;
-        xDiff = 0.0f;
-        zDiff = 0.0f;
+        diffXRand = 0.0f;
+        diffZRand = 0.0f;
+        diffX = 0.0f;
+        diffZ = 0.0f;
     }
 
-    *distSQ = SQ(xDiff) + SQ(zDiff);
-    return RADF_TO_BINANG(Math_Acot2F(zDiffRand, xDiffRand));
+    *distSQ = SQ(diffX) + SQ(diffZ);
+    return RADF_TO_BINANG(Math_Acot2F(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -290,24 +301,24 @@ void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
     }
 }
 
-void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnRacedog_Init(Actor* thisx, PlayState* play) {
     EnRacedog* this = THIS;
     ColliderCylinder* collider = &this->collider;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, DOG_LIMB_MAX);
-    Collider_InitCylinder(globalCtx, collider);
-    Collider_SetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, DOG_LIMB_MAX);
+    Collider_InitCylinder(play, collider);
+    Collider_SetCylinder(play, collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->path = SubS_GetPathByIndex(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->selectionArrowGreenPrimColor = 255;
@@ -343,29 +354,29 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
-    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_IDLE);
-    sAnimations[RACEDOG_ANIMATION_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
+    EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
+    sAnimationInfo[RACEDOG_ANIM_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = EnRacedog_RaceStart;
 }
 
-void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnRacedog_Destroy(Actor* thisx, PlayState* play) {
     EnRacedog* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 /**
  * This function makes the dog wait at the starting line until the race actually begins.
  * It's also responsible for playing the starting shot sound once the race begins.
  */
-void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_RaceStart(EnRacedog* this, PlayState* play) {
     if (DECR(this->raceStartTimer) == 0) {
         this->raceStartTimer = Rand_S16Offset(50, 50);
         if (this->extraTimeBeforeRaceStart == 0) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_RUN);
+        EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
         this->actionFunc = EnRacedog_Race;
     }
 }
@@ -373,7 +384,7 @@ void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
 /**
  * This function handles the dog's behavior and state for the entire time the race is going.
  */
-void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_Race(EnRacedog* this, PlayState* play) {
     s16 yRotation;
     f32 distSq;
 
@@ -409,26 +420,34 @@ void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx) {
     }
 
     EnRacedog_UpdateRunAnimationPlaySpeed(this);
-    EnRacedog_PlayWalkSfx(this);
-    EnRacedog_SpawnFloorDustRing(this, globalCtx);
+    EnRacedog_PlaySfxWalk(this);
+    EnRacedog_SpawnFloorDustRing(this, play);
 }
 
 /**
  * Updates the text ID in sDogInfo based on what was set in the weekEventRegs by
  * En_Aob_01. This makes it so sDogInfo can be used in other functions to determine
  * the condition of the dog.
+ *
+ * Note that the text IDs generated by this function are off-by-one compared to the
+ * similar function in EnDg. The end result of this is that one of the dogs that says
+ * it's in good condition when you pick it up is actually in normal condition once the
+ * race starts, and one of the dogs that says it's in normal condition when you pick
+ * it up is actually in bad condition. It's unknown whether this is a simple oversight
+ * or an intentional choice to introduce a bit of extra variance to the race.
  */
 void EnRacedog_UpdateTextId(EnRacedog* this) {
+    // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in the
+    // range of 0x3539 to 0x3546.
     if (this->index % 2) {
         sDogInfo[this->index].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
+            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
     } else {
-        sDogInfo[this->index].textId =
-            ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
+        sDogInfo[this->index].textId = ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
     }
 
-    // This makes sure the text ID is something in the range of 0x3539 to 0x3547.
-    if ((sDogInfo[this->index].textId >= 0x3547) || (sDogInfo[this->index].textId < 0x3539)) {
+    // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.
+    if ((sDogInfo[this->index].textId > 0x3546) || (sDogInfo[this->index].textId < 0x3539)) {
         sDogInfo[this->index].textId = 0x353E;
     }
 
@@ -582,9 +601,9 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
-        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 0.9f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
-        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 1.0f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
     }
 }
 
@@ -637,7 +656,7 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     return true;
 }
 
-void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
     Vec3f pos;
@@ -646,11 +665,11 @@ void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx) {
         pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
         pos.y = this->actor.world.pos.y;
         pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
-        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
+        Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
 
-void EnRacedog_PlayWalkSfx(EnRacedog* this) {
+void EnRacedog_PlaySfxWalk(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if ((curFrame == 1) || (curFrame == 7)) {
@@ -658,16 +677,16 @@ void EnRacedog_PlayWalkSfx(EnRacedog* this) {
     }
 }
 
-void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnRacedog_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRacedog* this = THIS;
     Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedDogInfo.index;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
-    EnRacedog_UpdateCollision(this, globalCtx);
+    EnRacedog_UpdateCollision(this, play);
     EnRacedog_GetFloorRot(this, &floorRot);
     Math_ApproachF(&this->curRot.x, floorRot.x, 0.2f, 0.1f);
 
@@ -704,56 +723,55 @@ void EnRacedog_UpdateSelectionArrow(EnRacedog* this) {
     }
 }
 
-void EnRacedog_DrawSelectionArrow(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_DrawSelectionArrow(EnRacedog* this, PlayState* play) {
     Vec3s rotation = gZeroVec3s;
     s32 shouldDrawSelectionArrow = (this->index == this->selectedDogIndex) ? true : false;
 
     if (shouldDrawSelectionArrow) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
         EnRacedog_UpdateSelectionArrow(this);
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
-                                              this->actor.world.pos.z, &rotation);
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
+                                     &rotation);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->selectionArrowGreenPrimColor, 0, 255);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, this->selectionArrowGreenEnvColor, 0, 255);
         Matrix_Scale(this->selectionArrowScale * 2.0f, this->selectionArrowScale * 2.0f,
                      this->selectionArrowScale * 2.0f, MTXMODE_APPLY);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowEmptyDL);
         gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowDL);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-s32 EnRacedog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnRacedog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
 }
 
-void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnRacedog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnRacedog* this = THIS;
     Vec3f focusOffset = { 0.0f, 20.0f, 0.0f };
 
     if (limbIndex == DOG_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&focusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&focusOffset, &this->actor.focus.pos);
     }
 
     if (limbIndex == DOG_LIMB_TAIL) {
-        EnRacedog_DrawSelectionArrow(this, globalCtx);
+        EnRacedog_DrawSelectionArrow(this, play);
     }
 }
 
-void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnRacedog_Draw(Actor* thisx, PlayState* play) {
     EnRacedog* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -787,13 +805,13 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->curRot.x);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateXFApply(this->curRot.x);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRacedog_OverrideLimbDraw, EnRacedog_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

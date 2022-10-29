@@ -2,37 +2,11 @@
 #define Z_EN_MA_YTO_H
 
 #include "global.h"
-#include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
+#include "objects/object_ma2/object_ma2.h"
 
 struct EnMaYto;
 
-typedef void (*EnMaYtoActionFunc)(struct EnMaYto*, GlobalContext*);
-
-typedef enum {
-    /* 00 */ MA2_LIMB_NONE,
-    /* 01 */ MA2_LIMB_ROOT,
-    /* 02 */ MA2_LIMB_TORSO,
-    /* 03 */ MA2_LIMB_ARM_LEFT,
-    /* 04 */ MA2_LIMB_FOREARM_LEFT,
-    /* 05 */ MA2_LIMB_HAND_LEFT,
-    /* 06 */ MA2_LIMB_ARM_RIGHT,
-    /* 07 */ MA2_LIMB_FOREARM_RIGHT,
-    /* 08 */ MA2_LIMB_HAND_RIGHT,
-    /* 09 */ MA2_LIMB_HEAD,
-    /* 10 */ MA2_LIMB_HAIR,
-    /* 11 */ MA2_LIMB_PELVIS,
-    /* 12 */ MA2_LIMB_TIGHT_LEFT,
-    /* 13 */ MA2_LIMB_LEG_LEFT,
-    /* 14 */ MA2_LIMB_FOOT_LEFT,
-    /* 15 */ MA2_LIMB_TIGHT_RIGHT,
-    /* 16 */ MA2_LIMB_LEG_RIGHT,
-    /* 17 */ MA2_LIMB_FOOT_RIGHT,
-    /* 18 */ MA2_LIMB_DRESS_0,
-    /* 19 */ MA2_LIMB_DRESS_1,
-    /* 20 */ MA2_LIMB_DRESS_2,
-    /* 21 */ MA2_LIMB_DRESS_3,
-    /* 22 */ MA2_LIMB_MAX
-} ObjectMa2Limbs;
+typedef void (*EnMaYtoActionFunc)(struct EnMaYto*, PlayState*);
 
 typedef struct EnMaYto {
     /* 0x000 */ Actor actor;
@@ -42,11 +16,11 @@ typedef struct EnMaYto {
     /* 0x1D8 */ struct_800BD888_arg1 unk_1D8;
     /* 0x200 */ s32 unk200; // unused
     /* 0x204 */ s32 type;
-    /* 0x208 */ Vec3s jointTable[MA2_LIMB_MAX];
-    /* 0x28C */ Vec3s morphTable[MA2_LIMB_MAX];
+    /* 0x208 */ Vec3s jointTable[CREMIA_LIMB_MAX];
+    /* 0x28C */ Vec3s morphTable[CREMIA_LIMB_MAX];
     /* 0x310 */ s16 unk310; // state?
     /* 0x312 */ UNK_TYPE1 unk_312[0x2];
-    /* 0x314 */ s16 currentAnim; // Used only in DefaultWait
+    /* 0x314 */ s16 animIndex; // Used only in DefaultWait
     /* 0x316 */ s16 overrideEyeTexIndex; // If non-zero, then this index will be used instead of eyeTexIndex
     /* 0x318 */ s16 mouthTexIndex;
     /* 0x31A */ s16 eyeTexIndex;
@@ -56,8 +30,6 @@ typedef struct EnMaYto {
     /* 0x322 */ u16 textId;
 } EnMaYto; // size = 0x324
 
-extern const ActorInit En_Ma_Yto_InitVars;
-
 typedef enum {
     /* 0 */ MA_YTO_TYPE_DEFAULT, // Strokes cow on day 1
     /* 1 */ MA_YTO_TYPE_BARN,
@@ -66,7 +38,7 @@ typedef enum {
     /* 4 */ MA_YTO_TYPE_4  // HugCutscene? Doesn't seem to work properly in-game
 } EnMaYtoType;
 
-#define EN_MA_YTO_PARSE_TYPE(params) (((params)&0xF000) >> 12)
+#define EN_MA_YTO_GET_TYPE(thisx) (((thisx)->params & 0xF000) >> 12)
 #define EN_MA_YTO_PARAM(enMaYtsType, arg1) (((enMaYtsType) << 12) | ((arg1) << 8))
 
 #endif // Z_EN_MA_YTO_H

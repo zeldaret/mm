@@ -5,7 +5,7 @@
 
 struct EnSth;
 
-typedef void (*EnSthActionFunc)(struct EnSth*, GlobalContext*);
+typedef void (*EnSthActionFunc)(struct EnSth*, PlayState*);
 
 #define ENSTH_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENSTH_GET_100(thisx) ((thisx)->params & 0x100)
@@ -31,7 +31,5 @@ typedef struct EnSth {
     /* 0x29F */ u8 unk_29F;
     /* 0x2A0 */ EnSthActionFunc actionFunc;
 } EnSth; // size = 0x2A4
-
-extern const ActorInit En_Sth_InitVars;
 
 #endif // Z_EN_STH_H

@@ -5,14 +5,16 @@
 
 struct BgIkninside;
 
-typedef void (*BgIkninsideActionFunc)(struct BgIkninside*, GlobalContext*);
+#define DMIKNINSIDE_GET_SWITCH(thisx) (((thisx)->params & 0xFE00) >> 9)
+
+typedef void (*BgIkninsideActionFunc)(struct BgIkninside*, PlayState*);
 
 typedef struct BgIkninside {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x68];
-    /* 0x01AC */ BgIkninsideActionFunc actionFunc;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderCylinder collider;
+    /* 0x1A8 */ UNK_TYPE1 pad_1A8[2];
+    /* 0x1AA */ s16 timer;
+    /* 0x1AC */ BgIkninsideActionFunc actionFunc;
 } BgIkninside; // size = 0x1B0
-
-extern const ActorInit Bg_Ikninside_InitVars;
 
 #endif // Z_BG_IKNINSIDE_H

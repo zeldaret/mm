@@ -5,7 +5,7 @@
 
 struct EnBomChu;
 
-typedef void (*EnBomChuActionFunc)(struct EnBomChu*, GlobalContext*);
+typedef void (*EnBomChuActionFunc)(struct EnBomChu*, PlayState*);
 
 typedef struct EnBomChu {
     /* 0x000 */ Actor actor;
@@ -24,7 +24,5 @@ typedef struct EnBomChu {
     /* 0x184 */ s32 blure2Index;
     /* 0x188 */ ColliderSphere collider;
 } EnBomChu; // size = 0x1E0
-
-extern const ActorInit En_Bom_Chu_InitVars;
 
 #endif // Z_EN_BOM_CHU_H

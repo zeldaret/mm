@@ -11,21 +11,21 @@
 
 #define THIS ((BgIkanaBlock*)thisx)
 
-void BgIkanaBlock_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaBlock_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgIkanaBlock_Init(Actor* thisx, PlayState* play);
+void BgIkanaBlock_Destroy(Actor* thisx, PlayState* play);
+void BgIkanaBlock_Update(Actor* thisx, PlayState* play);
 
 void func_80B7F00C(BgIkanaBlock* this);
-void func_80B7F034(BgIkanaBlock* this, GlobalContext* globalCtx);
+void func_80B7F034(BgIkanaBlock* this, PlayState* play);
 void func_80B7F0A4(BgIkanaBlock* this);
-void func_80B7F0D0(BgIkanaBlock* this, GlobalContext* globalCtx);
+void func_80B7F0D0(BgIkanaBlock* this, PlayState* play);
 void func_80B7F1A8(BgIkanaBlock* this);
-void func_80B7F290(BgIkanaBlock* this, GlobalContext* globalCtx);
+void func_80B7F290(BgIkanaBlock* this, PlayState* play);
 void func_80B7F360(BgIkanaBlock* this);
-void func_80B7F398(BgIkanaBlock* this, GlobalContext* globalCtx);
-void func_80B7F564(Actor* thisx, GlobalContext* globalCtx);
+void func_80B7F398(BgIkanaBlock* this, PlayState* play);
+void func_80B7F564(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Ikana_Block_InitVars = {
+ActorInit Bg_Ikana_Block_InitVars = {
     ACTOR_BG_IKANA_BLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -78,15 +78,15 @@ void func_80B7EB30(BgIkanaBlock* this) {
     }
 }
 
-s32 func_80B7EB64(BgIkanaBlock* this, GlobalContext* globalCtx) {
+s32 func_80B7EB64(BgIkanaBlock* this, PlayState* play) {
     return !(this->unk_17C & 8);
 }
 
-s32 func_80B7EB7C(BgIkanaBlock* this, GlobalContext* globalCtx) {
+s32 func_80B7EB7C(BgIkanaBlock* this, PlayState* play) {
     return this->unk_17B > 10;
 }
 
-s32 func_80B7EB94(BgIkanaBlock* this, GlobalContext* globalCtx) {
+s32 func_80B7EB94(BgIkanaBlock* this, PlayState* play) {
     s32 pad;
     Vec3f sp70;
     Vec3f sp64;
@@ -111,7 +111,7 @@ s32 func_80B7EB94(BgIkanaBlock* this, GlobalContext* globalCtx) {
     sp70.y = this->dyna.actor.world.pos.y + this->unk_170 + 2.0f;
     sp70.z = this->dyna.actor.world.pos.z;
 
-    Matrix_RotateY(phi_a0, MTXMODE_NEW);
+    Matrix_RotateYS(phi_a0, MTXMODE_NEW);
 
     if (sp4C) {
         phi_f12 = 89.0f;
@@ -119,32 +119,32 @@ s32 func_80B7EB94(BgIkanaBlock* this, GlobalContext* globalCtx) {
         phi_f12 = 119.0f;
     }
 
-    Matrix_GetStateTranslationAndScaledZ(phi_f12, &sp64);
+    Matrix_MultVecZ(phi_f12, &sp64);
 
     sp64.x += this->dyna.actor.world.pos.x;
     sp64.y += this->dyna.actor.world.pos.y + this->unk_170 + 2.0f;
     sp64.z += this->dyna.actor.world.pos.z;
 
-    return !BgCheck_EntityLineTest3(&globalCtx->colCtx, &sp70, &sp64, &sp58, &sp54, true, false, false, true, &sp50,
+    return !BgCheck_EntityLineTest3(&play->colCtx, &sp70, &sp64, &sp58, &sp54, true, false, false, true, &sp50,
                                     &this->dyna.actor, 0.0f);
 }
 
-s32 func_80B7ECFC(BgIkanaBlock* this, GlobalContext* globalCtx) {
-    return func_80B7EB64(this, globalCtx) && func_80B7EB7C(this, globalCtx) && func_80B7EB94(this, globalCtx);
+s32 func_80B7ECFC(BgIkanaBlock* this, PlayState* play) {
+    return func_80B7EB64(this, play) && func_80B7EB7C(this, play) && func_80B7EB94(this, play);
 }
 
 void func_80B7ED54(BgIkanaBlock* this) {
     s32 pad;
     Vec3f sp18;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledY(30.0f, &sp18);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_MultVecY(30.0f, &sp18);
     this->unk_170 = sp18.y - 30.0f;
 }
 
-s32 func_80B7EDC4(BgIkanaBlock* this, GlobalContext* globalCtx) {
+s32 func_80B7EDC4(BgIkanaBlock* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
     s32 sp2C;
@@ -153,26 +153,26 @@ s32 func_80B7EDC4(BgIkanaBlock* this, GlobalContext* globalCtx) {
     sp30.y = this->dyna.actor.world.pos.y + this->unk_170 + 40.0f;
     sp30.z = this->dyna.actor.world.pos.z;
 
-    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5_2(
-        globalCtx, &globalCtx->colCtx, &this->dyna.actor.floorPoly, &sp2C, &this->dyna.actor, &sp30);
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &this->dyna.actor.floorPoly,
+                                                                 &sp2C, &this->dyna.actor, &sp30);
     this->dyna.actor.floorBgId = sp2C;
 
     return ((this->dyna.actor.world.pos.y + this->unk_170) - this->dyna.actor.floorHeight) < 2.0f;
 }
 
-s32 func_80B7EE70(BgIkanaBlock* this, GlobalContext* globalCtx) {
-    if (func_80B7EDC4(this, globalCtx)) {
+s32 func_80B7EE70(BgIkanaBlock* this, PlayState* play) {
+    if (func_80B7EDC4(this, play)) {
         this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight - this->unk_170;
         return true;
     }
     return false;
 }
 
-s32 func_80B7EEB4(BgIkanaBlock* this, GlobalContext* globalCtx) {
-    func_80B7EDC4(this, globalCtx);
+s32 func_80B7EEB4(BgIkanaBlock* this, PlayState* play) {
+    func_80B7EDC4(this, play);
 
     if (this->dyna.actor.floorHeight > (BGCHECK_Y_MIN + 1.0f)) {
-        if (DynaPoly_GetActor(&globalCtx->colCtx, this->dyna.actor.floorBgId)) {
+        if (DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight - this->unk_170;
             return true;
         }
@@ -180,23 +180,23 @@ s32 func_80B7EEB4(BgIkanaBlock* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void BgIkanaBlock_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaBlock_Init(Actor* thisx, PlayState* play) {
     BgIkanaBlock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
-    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
+    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     this->unk_15C = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
     this->unk_174 = this->dyna.actor.shape.rot;
     func_80B7ED54(this);
     func_80B7F00C(this);
 }
 
-void BgIkanaBlock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaBlock_Destroy(Actor* thisx, PlayState* play) {
     BgIkanaBlock* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B7F00C(BgIkanaBlock* this) {
@@ -205,13 +205,13 @@ void func_80B7F00C(BgIkanaBlock* this) {
     this->actionFunc = func_80B7F034;
 }
 
-void func_80B7F034(BgIkanaBlock* this, GlobalContext* globalCtx) {
+void func_80B7F034(BgIkanaBlock* this, PlayState* play) {
     if (this->unk_17D > 0) {
         this->unk_17D--;
     }
 
-    if (func_80B7EEB4(this, globalCtx)) {
-        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    if (func_80B7EEB4(this, play)) {
+        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B7F564;
         func_80B7F0A4(this);
     }
@@ -224,7 +224,7 @@ void func_80B7F0A4(BgIkanaBlock* this) {
     this->actionFunc = func_80B7F0D0;
 }
 
-void func_80B7F0D0(BgIkanaBlock* this, GlobalContext* globalCtx) {
+void func_80B7F0D0(BgIkanaBlock* this, PlayState* play) {
     s32 sp24 = 0;
     s32 phi_v1;
 
@@ -233,14 +233,14 @@ void func_80B7F0D0(BgIkanaBlock* this, GlobalContext* globalCtx) {
 
     if (this->unk_17C & 4) {
         sp24 = 1;
-    } else if (func_80B7ECFC(this, globalCtx)) {
+    } else if (func_80B7ECFC(this, play)) {
         sp24 = 2;
     }
 
     if ((sp24 != 2) && (this->unk_17A & (0x8 | 0x4 | 0x2 | 0x1))) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 
@@ -285,22 +285,22 @@ void func_80B7F1A8(BgIkanaBlock* this) {
     this->actionFunc = func_80B7F290;
 }
 
-void func_80B7F290(BgIkanaBlock* this, GlobalContext* globalCtx) {
+void func_80B7F290(BgIkanaBlock* this, PlayState* play) {
     s32 pad;
 
     Math_StepToF(&this->unk_16C, 2.0f, 0.4f);
 
     if (Math_StepToF(this->unk_164, this->unk_168, this->unk_16C)) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
-        if (!func_80B7EB94(this, globalCtx)) {
+        if (!func_80B7EB94(this, play)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
-        if (func_80B7EDC4(this, globalCtx)) {
+        if (func_80B7EDC4(this, play)) {
             func_80B7F0A4(this);
         } else {
             func_80B7F360(this);
@@ -318,7 +318,7 @@ void func_80B7F360(BgIkanaBlock* this) {
     this->actionFunc = func_80B7F398;
 }
 
-void func_80B7F398(BgIkanaBlock* this, GlobalContext* globalCtx) {
+void func_80B7F398(BgIkanaBlock* this, PlayState* play) {
     if (this->unk_17D > 0) {
         this->unk_17D--;
         return;
@@ -333,16 +333,16 @@ void func_80B7F398(BgIkanaBlock* this, GlobalContext* globalCtx) {
 
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
 
-    if (func_80B7EE70(this, globalCtx)) {
+    if (func_80B7EE70(this, play)) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-        Actor_PlaySfxAtPos(
-            &this->dyna.actor,
-            SurfaceType_GetSfx(&globalCtx->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) + SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->dyna.actor,
+                           SurfaceType_GetSfx(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) +
+                               SFX_FLAG);
         func_80B7F0A4(this);
     }
 }
 
-void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaBlock_Update(Actor* thisx, PlayState* play) {
     BgIkanaBlock* this = THIS;
 
     if ((this->dyna.actor.shape.rot.x != this->unk_174.x) || (this->dyna.actor.shape.rot.y != this->unk_174.y) ||
@@ -351,7 +351,7 @@ void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80B7ED54(this);
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     Actor_SetFocus(&this->dyna.actor, 30.0f);
 
@@ -369,18 +369,18 @@ void BgIkanaBlock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B7F564(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B7F564(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIkanaBlock* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    AnimatedMat_DrawStep(globalCtx, this->unk_15C, 0);
+    func_8012C28C(play->state.gfxCtx);
+    AnimatedMat_DrawStep(play, this->unk_15C, 0);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0xFF, 0xFF, 255, 255, 255, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_dangeon_keep_DL_0182A8);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

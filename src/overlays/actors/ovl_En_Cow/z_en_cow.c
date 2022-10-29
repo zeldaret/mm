@@ -10,24 +10,24 @@
 
 #define THIS ((EnCow*)thisx)
 
-void EnCow_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnCow_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnCow_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnCow_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnCow_Init(Actor* thisx, PlayState* play);
+void EnCow_Destroy(Actor* thisx, PlayState* play);
+void EnCow_Update(Actor* thisx, PlayState* play2);
+void EnCow_Draw(Actor* thisx, PlayState* play);
 
-void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx);
-void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx);
-void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx);
-void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx);
-void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx);
-void EnCow_Talk(EnCow* this, GlobalContext* globalCtx);
-void EnCow_Idle(EnCow* this, GlobalContext* globalCtx);
+void EnCow_TalkEnd(EnCow* this, PlayState* play);
+void EnCow_GiveMilkEnd(EnCow* this, PlayState* play);
+void EnCow_GiveMilkWait(EnCow* this, PlayState* play);
+void EnCow_GiveMilk(EnCow* this, PlayState* play);
+void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play);
+void EnCow_Talk(EnCow* this, PlayState* play);
+void EnCow_Idle(EnCow* this, PlayState* play);
 
-void EnCow_DoTail(EnCow* this, GlobalContext* globalCtx);
-void EnCow_UpdateTail(Actor* this, GlobalContext* globalCtx);
-void EnCow_DrawTail(Actor* this, GlobalContext* globalCtx);
+void EnCow_DoTail(EnCow* this, PlayState* play);
+void EnCow_UpdateTail(Actor* thisx, PlayState* play);
+void EnCow_DrawTail(Actor* thisx, PlayState* play);
 
-const ActorInit En_Cow_InitVars = {
+ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,
     ACTORCAT_NPC,
     FLAGS,
@@ -97,7 +97,7 @@ void EnCow_SetTailPos(EnCow* this) {
     this->actor.world.pos.z += vec.z;
 }
 
-void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnCow_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnCow* this = THIS;
 
@@ -106,23 +106,23 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (EN_COW_TYPE(thisx)) {
         case EN_COW_TYPE_DEFAULT:
         case EN_COW_TYPE_ABDUCTED:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable,
+            SkelAnime_InitFlex(play, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable,
                                COW_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &gCowChewAnim);
 
-            Collider_InitAndSetCylinder(globalCtx, &this->colliders[0], &this->actor, &sCylinderInit);
-            Collider_InitAndSetCylinder(globalCtx, &this->colliders[1], &this->actor, &sCylinderInit);
+            Collider_InitAndSetCylinder(play, &this->colliders[0], &this->actor, &sCylinderInit);
+            Collider_InitAndSetCylinder(play, &this->colliders[1], &this->actor, &sCylinderInit);
             EnCow_SetColliderPos(this);
 
             this->actionFunc = EnCow_Idle;
 
             if (!(gSaveContext.save.weekEventReg[22] & 1) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_COW, this->actor.world.pos.x,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_COW, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                                EN_COW_TYPE_TAIL);
 
@@ -134,7 +134,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_801A5080(4);
             break;
         case EN_COW_TYPE_TAIL:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowTailSkel, NULL, this->jointTable, this->morphTable,
+            SkelAnime_InitFlex(play, &this->skelAnime, &gCowTailSkel, NULL, this->jointTable, this->morphTable,
                                COW_TAIL_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &gCowTailIdleAnim);
 
@@ -156,16 +156,16 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     gSaveContext.save.weekEventReg[87] &= (u8)~1;
 }
 
-void EnCow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnCow_Destroy(Actor* thisx, PlayState* play) {
     EnCow* this = THIS;
 
     if (this->actor.params == EN_COW_TYPE_DEFAULT) { //! @bug EN_COW_TYPE_ABDUCTED do not destroy their cylinders
-        Collider_DestroyCylinder(globalCtx, &this->colliders[0]);
-        Collider_DestroyCylinder(globalCtx, &this->colliders[1]);
+        Collider_DestroyCylinder(play, &this->colliders[0]);
+        Collider_DestroyCylinder(play, &this->colliders[1]);
     }
 }
 
-void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
+void EnCow_UpdateAnimation(EnCow* this, PlayState* play) {
     if (this->animationTimer > 0) {
         this->animationTimer--;
     } else {
@@ -199,53 +199,53 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+void EnCow_TalkEnd(EnCow* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_801477B4(globalCtx);
+        func_801477B4(play);
         this->actionFunc = EnCow_Idle;
     }
 }
 
-void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
+void EnCow_GiveMilkEnd(EnCow* this, PlayState* play) {
+    if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnCow_Idle;
     }
 }
 
-void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void EnCow_GiveMilkWait(EnCow* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = EnCow_GiveMilkEnd;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
-void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+void EnCow_GiveMilk(EnCow* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_801477B4(globalCtx);
+        func_801477B4(play);
         this->actionFunc = EnCow_GiveMilkWait;
-        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, play, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
-void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        if (Interface_HasEmptyBottle()) {
-            func_80151938(globalCtx, 0x32C9); // Text to give milk.
+void EnCow_CheckForEmptyBottle(EnCow* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        if (Inventory_HasEmptyBottle()) {
+            func_80151938(play, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
         } else {
-            func_80151938(globalCtx, 0x32CA); // Text if you don't have an empty bottle.
+            func_80151938(play, 0x32CA); // Text if you don't have an empty bottle.
             this->actionFunc = EnCow_TalkEnd;
         }
     }
 }
 
-void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void EnCow_Talk(EnCow* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->actor.textId == 0x32C8) { // Text to give milk after playing Epona's Song.
             this->actionFunc = EnCow_CheckForEmptyBottle;
         } else if (this->actor.textId == 0x32C9) { // Text to give milk.
@@ -255,15 +255,15 @@ void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
         }
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, globalCtx, 170.0f);
+        func_800B8614(&this->actor, play, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
 
-    EnCow_UpdateAnimation(this, globalCtx);
+    EnCow_UpdateAnimation(this, play);
 }
 
-void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.ocarinaMode == 0) || (globalCtx->msgCtx.ocarinaMode == 4)) {
+void EnCow_Idle(EnCow* this, PlayState* play) {
+    if ((play->msgCtx.ocarinaMode == 0) || (play->msgCtx.ocarinaMode == 4)) {
         if (D_801BDAA4 != 0) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
@@ -273,10 +273,10 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                 D_801BDAA4 = 0;
                 this->actionFunc = EnCow_Talk;
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, globalCtx, 170.0f);
+                func_800B8614(&this->actor, play, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
-                EnCow_UpdateAnimation(this, globalCtx);
+                EnCow_UpdateAnimation(this, play);
                 return;
             } else {
                 this->flags |= EN_COW_FLAG_WONT_GIVE_MILK;
@@ -291,13 +291,13 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
         if (func_801A5100() == 4) {
             if (!(gSaveContext.save.weekEventReg[87] & 1)) {
                 gSaveContext.save.weekEventReg[87] |= 1;
-                if (Interface_HasEmptyBottle()) {
+                if (Inventory_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, globalCtx, 170.0f);
+                func_800B8614(&this->actor, play, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }
         } else {
@@ -305,10 +305,10 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
         }
     }
 
-    EnCow_UpdateAnimation(this, globalCtx);
+    EnCow_UpdateAnimation(this, play);
 }
 
-void EnCow_DoTail(EnCow* this, GlobalContext* globalCtx) {
+void EnCow_DoTail(EnCow* this, PlayState* play) {
     if (this->animationTimer > 0) {
         this->animationTimer--;
     } else {
@@ -328,19 +328,19 @@ void EnCow_DoTail(EnCow* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnCow_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnCow* this = THIS;
     s16 targetX;
     s16 targetY;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[0].base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[1].base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliders[0].base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliders[1].base);
 
     Actor_MoveWithGravity(&this->actor);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &gCowChewAnim) {
@@ -353,7 +353,7 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT(Math_Vec3f_Yaw(&thisx->world.pos, &player->actor.world.pos)) < 0xC000) {
@@ -379,7 +379,7 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_SmoothStepToS(&this->headTilt.y, targetY, 10, 200, 10);
 }
 
-void EnCow_UpdateTail(Actor* thisx, GlobalContext* globalCtx) {
+void EnCow_UpdateTail(Actor* thisx, PlayState* play) {
     s32 pad;
     EnCow* this = THIS;
 
@@ -393,10 +393,10 @@ void EnCow_UpdateTail(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-s32 EnCow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnCow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnCow* this = THIS;
 
     if (limbIndex == COW_LIMB_HEAD) {
@@ -410,26 +410,26 @@ s32 EnCow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnCow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnCow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnCow* this = THIS;
 
     if (limbIndex == COW_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_8099D63C, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_8099D63C, &this->actor.focus.pos);
     }
 }
 
-void EnCow_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnCow_Draw(Actor* thisx, PlayState* play) {
     EnCow* this = THIS;
 
-    func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C5B0(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCow_OverrideLimbDraw, EnCow_PostLimbDraw, &this->actor);
 }
 
-void EnCow_DrawTail(Actor* thisx, GlobalContext* globalCtx) {
+void EnCow_DrawTail(Actor* thisx, PlayState* play) {
     EnCow* this = THIS;
 
-    func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    func_8012C5B0(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }

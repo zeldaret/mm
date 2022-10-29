@@ -7,14 +7,12 @@
 
 struct ObjRoomtimer;
 
-typedef void (*ObjRoomtimerActionFunc)(struct ObjRoomtimer*, GlobalContext*);
+typedef void (*ObjRoomtimerActionFunc)(struct ObjRoomtimer*, PlayState*);
 
 typedef struct ObjRoomtimer {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjRoomtimerActionFunc actionFunc;
-    /* 0x0148 */ s32 switchFlag;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjRoomtimerActionFunc actionFunc;
+    /* 0x148 */ s32 switchFlag;
 } ObjRoomtimer; // size = 0x14C
-
-extern const ActorInit Obj_Roomtimer_InitVars;
 
 #endif // Z_OBJ_ROOMTIMER_H

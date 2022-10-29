@@ -5,7 +5,7 @@
 
 struct EnSt;
 
-typedef void (*EnStActionFunc)(struct EnSt*, GlobalContext*);
+typedef void (*EnStActionFunc)(struct EnSt*, PlayState*);
 
 #define ENST_GET_3F(thisx) (((thisx)->params & 0x3F) & 0xFF)
 #define ENST_GET_1C0(thisx) ((((thisx)->params & 0x1C0) >> 6) & 0xFF)
@@ -47,7 +47,5 @@ typedef struct EnSt {
     /* 0x3E8 */ Vec3s jointTable[30];
     /* 0x49C */ Vec3s morphTable[30];
 } EnSt; // size = 0x550
-
-extern const ActorInit En_St_InitVars;
 
 #endif // Z_EN_ST_H

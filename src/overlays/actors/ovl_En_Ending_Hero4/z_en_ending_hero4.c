@@ -11,15 +11,15 @@
 
 #define THIS ((EnEndingHero4*)thisx)
 
-void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero4_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero4_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEndingHero4_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEndingHero4_Init(Actor* thisx, PlayState* play);
+void EnEndingHero4_Destroy(Actor* thisx, PlayState* play);
+void EnEndingHero4_Update(Actor* thisx, PlayState* play);
+void EnEndingHero4_Draw(Actor* thisx, PlayState* play);
 
 void func_80C23748(EnEndingHero4* this);
-void func_80C23764(EnEndingHero4* this, GlobalContext* globalCtx);
+void func_80C23764(EnEndingHero4* this, PlayState* play);
 
-const ActorInit En_Ending_Hero4_InitVars = {
+ActorInit En_Ending_Hero4_InitVars = {
     ACTOR_EN_ENDING_HERO4,
     ACTORCAT_NPC,
     FLAGS,
@@ -31,20 +31,20 @@ const ActorInit En_Ending_Hero4_InitVars = {
     (ActorFunc)EnEndingHero4_Draw,
 };
 
-void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero4_Init(Actor* thisx, PlayState* play) {
     EnEndingHero4* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierCheerWithSpear, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierCheerWithSpear, this->jointTable,
                        this->morphTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C23748(this);
 }
 
-void EnEndingHero4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero4_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80C23748(EnEndingHero4* this) {
@@ -52,23 +52,23 @@ void func_80C23748(EnEndingHero4* this) {
     this->actionFunc = func_80C23764;
 }
 
-void func_80C23764(EnEndingHero4* this, GlobalContext* globalCtx) {
+void func_80C23764(EnEndingHero4* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void EnEndingHero4_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero4_Update(Actor* thisx, PlayState* play) {
     EnEndingHero4* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-void EnEndingHero4_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnEndingHero4_Draw(Actor* thisx, PlayState* play) {
     EnEndingHero4* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }

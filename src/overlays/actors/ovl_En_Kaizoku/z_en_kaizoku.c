@@ -10,9 +10,9 @@
 
 #define THIS ((EnKaizoku*)thisx)
 
-void EnKaizoku_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKaizoku_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKaizoku_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnKaizoku_Init(Actor* thisx, PlayState* play);
+void EnKaizoku_Destroy(Actor* thisx, PlayState* play);
+void EnKaizoku_Update(Actor* thisx, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
@@ -51,7 +51,7 @@ static DamageTable D_80B8AB3C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-const ActorInit En_Kaizoku_InitVars = {
+ActorInit En_Kaizoku_InitVars = {
     ACTOR_EN_KAIZOKU,
     ACTORCAT_ENEMY,
     FLAGS,

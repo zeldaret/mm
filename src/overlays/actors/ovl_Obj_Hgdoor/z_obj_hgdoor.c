@@ -11,22 +11,22 @@
 
 #define THIS ((ObjHgdoor*)thisx)
 
-void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjHgdoor_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjHgdoor_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjHgdoor_Init(Actor* thisx, PlayState* play);
+void ObjHgdoor_Destroy(Actor* thisx, PlayState* play);
+void ObjHgdoor_Update(Actor* thisx, PlayState* play);
+void ObjHgdoor_Draw(Actor* thisx, PlayState* play);
 
-void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this);
-void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx);
-void func_80BD42AC(ObjHgdoor* this);
-void func_80BD42C0(ObjHgdoor* this, GlobalContext* globalCtx);
-void func_80BD433C(ObjHgdoor* this);
-void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx);
-void func_80BD4460(ObjHgdoor* this);
-void func_80BD4478(ObjHgdoor* this, GlobalContext* globalCtx);
-s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx);
+void ObjHgdoor_SetupIdle(ObjHgdoor* this);
+void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupCutscene(ObjHgdoor* this);
+void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupCsAction(ObjHgdoor* this);
+void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play);
+void ObjHgdoor_SetupStopCs(ObjHgdoor* this);
+void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
+s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play);
 
-const ActorInit Obj_Hgdoor_InitVars = {
+ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
     ACTORCAT_PROP,
     FLAGS,
@@ -38,12 +38,10 @@ const ActorInit Obj_Hgdoor_InitVars = {
     (ActorFunc)ObjHgdoor_Draw,
 };
 
-static s16 D_80BD4690 = 0;
-static s32 unused = 0;
-static s32 unused2 = 0;
+static s16 sOpenFlag = 0;
 
-void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+void ObjHgdoor_SetChild(ObjHgdoor* this, PlayState* play) {
+    Actor* actorIterator = play->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if ((actorIterator->id == ACTOR_OBJ_HGDOOR) && (&this->dyna.actor != actorIterator)) {
@@ -54,8 +52,8 @@ void ObjHgdoor_SetChild(ObjHgdoor* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+void ObjHgdoor_SetParent(ObjHgdoor* this, PlayState* play) {
+    Actor* actorIterator = play->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actorIterator) {
         if (actorIterator->id == ACTOR_EN_HG) {
@@ -66,7 +64,7 @@ void ObjHgdoor_SetParent(ObjHgdoor* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
     ObjHgdoor* this = THIS;
     s32 pad;
     CollisionHeader* header = NULL;
@@ -78,42 +76,42 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         CollisionHeader_GetVirtual(&object_hgdoor_Colheader_0018C0, &header);
     }
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, header);
     this->rotation = 0;
     this->timer = 0;
     this->cutscene = this->dyna.actor.cutscene;
-    ObjHgdoor_SetupCheckShouldOpen(this);
+    ObjHgdoor_SetupIdle(this);
 }
 
-void ObjHgdoor_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHgdoor_Destroy(Actor* thisx, PlayState* play) {
     ObjHgdoor* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void ObjHgdoor_SetupCheckShouldOpen(ObjHgdoor* this) {
-    this->actionFunc = ObjHgdoor_CheckShouldOpen;
+void ObjHgdoor_SetupIdle(ObjHgdoor* this) {
+    this->actionFunc = ObjHgdoor_Idle;
 }
 
-void ObjHgdoor_CheckShouldOpen(ObjHgdoor* this, GlobalContext* globalCtx) {
+void ObjHgdoor_Idle(ObjHgdoor* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20) &&
         (this->dyna.actor.xzDistToPlayer < 100.0f) && (this->dyna.actor.playerHeightRel < 40.0f) &&
         OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
-        ObjHgdoor_SetChild(this, globalCtx);
-        ObjHgdoor_SetParent(this, globalCtx);
-        func_80BD42AC(this);
+        ObjHgdoor_SetChild(this, play);
+        ObjHgdoor_SetParent(this, play);
+        ObjHgdoor_SetupCutscene(this);
     }
 }
 
-void func_80BD42AC(ObjHgdoor* this) {
-    this->actionFunc = func_80BD42C0;
+void ObjHgdoor_SetupCutscene(ObjHgdoor* this) {
+    this->actionFunc = ObjHgdoor_PlayCutscene;
 }
 
-void func_80BD42C0(ObjHgdoor* this, GlobalContext* globalCtx) {
+void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->dyna.actor);
-        func_80BD433C(this);
-        func_80BD433C((ObjHgdoor*)this->dyna.actor.child);
+        ObjHgdoor_SetupCsAction(this);
+        ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
     } else {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -122,50 +120,58 @@ void func_80BD42C0(ObjHgdoor* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BD433C(ObjHgdoor* this) {
-    this->unk166 = 0x63;
-    this->actionFunc = func_80BD4358;
+void ObjHgdoor_SetupCsAction(ObjHgdoor* this) {
+    this->csAction = 0x63;
+    this->actionFunc = ObjHgdoor_HandleCsAction;
 }
 
-void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
+void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 483)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 483);
-        if (this->unk166 != globalCtx->csCtx.actorActions[actionIndex]->action) {
-            this->unk166 = globalCtx->csCtx.actorActions[actionIndex]->action;
-            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_CheckActorAction(play, 483)) {
+        actionIndex = Cutscene_GetActorActionIndex(play, 483);
+        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = play->csCtx.actorActions[actionIndex]->action;
+            switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
                         this->dyna.actor.parent->colChkInfo.health = 1;
                     }
-                    D_80BD4690 = 1;
+                    sOpenFlag = 1;
                     break;
+
                 case 2:
                     break;
             }
         }
-        if ((D_80BD4690 == 1) && (func_80BD44D0(this, globalCtx))) {
-            func_80BD4460(this);
+        if ((sOpenFlag == 1) && ObjHgdoor_Rotate(this, play)) {
+            ObjHgdoor_SetupStopCs(this);
         }
     } else {
-        this->unk166 = 0x63;
+        this->csAction = 0x63;
     }
 }
 
-void func_80BD4460(ObjHgdoor* this) {
+void ObjHgdoor_SetupStopCs(ObjHgdoor* this) {
     this->timer = 0;
-    this->actionFunc = func_80BD4478;
+    this->actionFunc = ObjHgdoor_StopCs;
 }
 
-void func_80BD4478(ObjHgdoor* this, GlobalContext* globalCtx) {
-    if (this->timer++ > 80 && !ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Stop(this->cutscene);
+void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
+    if (this->timer++ > 80) {
+        if (!ActorCutscene_GetCanPlayNext(this->cutscene)) {
+            ActorCutscene_Stop(this->cutscene);
+        }
     }
 }
 
-s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx) {
+/**
+ * @brief Function to increment the rotation angle of the door
+ *
+ * @return true when door is fully open, false otherwise
+ */
+s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play) {
     if (this->rotation < 0x5555) {
         this->rotation += 0x1388;
     } else {
@@ -175,7 +181,7 @@ s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80BD4500(ObjHgdoor* this) {
+void ObjHgdoor_Open(ObjHgdoor* this) {
     this->dyna.actor.shape.rot.y = this->dyna.actor.home.rot.y;
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
         this->dyna.actor.shape.rot.y += this->rotation;
@@ -184,18 +190,18 @@ void func_80BD4500(ObjHgdoor* this) {
     }
 }
 
-void ObjHgdoor_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHgdoor_Update(Actor* thisx, PlayState* play) {
     ObjHgdoor* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    func_80BD4500(this);
+    this->actionFunc(this, play);
+    ObjHgdoor_Open(this);
 }
 
-void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+void ObjHgdoor_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJHGDOOR_IS_RIGHT_DOOR(thisx)) {
         gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001AB0);
         gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001BA8);
@@ -204,5 +210,5 @@ void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001768);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

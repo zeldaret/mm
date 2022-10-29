@@ -5,7 +5,7 @@
 
 struct EnRr;
 
-typedef void (*EnRrActionFunc)(struct EnRr*, GlobalContext*);
+typedef void (*EnRrActionFunc)(struct EnRr*, PlayState*);
 
 enum {
     /* 0 */ ENRR_0,
@@ -61,7 +61,5 @@ typedef struct EnRr {
     /* 0x234 */ Vec3f limbPos[20];
     /* 0x324 */ EnRrStruct unk_324[5];
 } EnRr; // size = 0x3C4
-
-extern const ActorInit En_Rr_InitVars;
 
 #endif // Z_EN_RR_H

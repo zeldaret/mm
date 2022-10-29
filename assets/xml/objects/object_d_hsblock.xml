@@ -1,10 +1,11 @@
 ﻿<Root>
+    <!-- Assets for the hookshot post -->
     <File Name="object_d_hsblock" Segment="6">
-        <DList Name="object_d_hsblock_DL_000210" Offset="0x210" />
-        <DList Name="object_d_hsblock_DL_000470" Offset="0x470" />
-        <Collision Name="object_d_hsblock_Colheader_000578" Offset="0x578" />
-        <Collision Name="object_d_hsblock_Colheader_000730" Offset="0x730" />
-        <Texture Name="object_d_hsblock_Tex_000760" OutName="tex_000760" Format="i4" Width="64" Height="64" Offset="0x760" />
-        <Texture Name="object_d_hsblock_Tex_000F60" OutName="tex_000F60" Format="i8" Width="32" Height="64" Offset="0xF60" />
+        <DList Name="gHookshotPostDL" Offset="0x210" />
+        <DList Name="gHookshotTargetDL" Offset="0x470" />
+        <Collision Name="gHookshotTargetCol" Offset="0x578" />
+        <Collision Name="gHookshotPostCol" Offset="0x730" />
+        <Texture Name="gHookshotTargetTex" OutName="tex_000760" Format="i4" Width="64" Height="64" Offset="0x760" />
+        <Texture Name="gHookshotPostTex" OutName="tex_000F60" Format="i8" Width="32" Height="64" Offset="0xF60" />
     </File>
 </Root>

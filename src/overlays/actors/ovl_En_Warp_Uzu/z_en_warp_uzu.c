@@ -11,17 +11,17 @@
 
 #define THIS ((EnWarpUzu*)thisx)
 
-void EnWarpUzu_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWarpUzu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWarpUzu_Init(Actor* thisx, PlayState* play);
+void EnWarpUzu_Destroy(Actor* thisx, PlayState* play);
+void EnWarpUzu_Update(Actor* thisx, PlayState* play);
+void EnWarpUzu_Draw(Actor* thisx, PlayState* play);
 
-void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx);
-void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx);
-void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx);
-void EnWarpUzu_DoNothing(EnWarpUzu* this, GlobalContext* globalCtx);
+void func_80A66208(EnWarpUzu* this, PlayState* play);
+void func_80A66278(EnWarpUzu* this, PlayState* play);
+void func_80A66384(EnWarpUzu* this, PlayState* play);
+void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play);
 
-const ActorInit En_Warp_Uzu_InitVars = {
+ActorInit En_Warp_Uzu_InitVars = {
     ACTOR_EN_WARP_UZU,
     ACTORCAT_PROP,
     FLAGS,
@@ -60,77 +60,77 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void EnWarpUzu_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnWarpUzu_Init(Actor* thisx, PlayState* play) {
     EnWarpUzu* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
     thisx->targetMode = 0;
-    func_80A66208(this, globalCtx);
+    func_80A66208(this, play);
 }
 
-void EnWarpUzu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnWarpUzu_Destroy(Actor* thisx, PlayState* play) {
     EnWarpUzu* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 static Vec3f D_80A664FC = { 0.0f, 53.0f, -29.0f };
-void func_80A66208(EnWarpUzu* this, GlobalContext* globalCtx) {
+void func_80A66208(EnWarpUzu* this, PlayState* play) {
     Vec3f sp24;
 
     this->actor.textId = 0;
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&D_80A664FC, &sp24);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_MultVec3f(&D_80A664FC, &sp24);
     Math_Vec3f_Sum(&this->actor.world.pos, &sp24, &this->actor.focus.pos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.shape.rot);
     this->actionFunc = func_80A66278;
 }
 
-void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
+void func_80A66278(EnWarpUzu* this, PlayState* play) {
     Player* player;
     s16 temp_v0;
     s16 phi_a0;
     s16 phi_v1;
 
     do {
-        player = GET_PLAYER(globalCtx);
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_80A66384(this, globalCtx);
+        player = GET_PLAYER(play);
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            func_80A66384(this, play);
         } else {
             phi_a0 = ABS((s16)(Actor_YawBetweenActors(&this->actor, &player->actor) - this->actor.shape.rot.y));
             temp_v0 = player->actor.shape.rot.y - this->actor.shape.rot.y;
             phi_v1 = ABS(temp_v0);
             if (phi_a0 >= 0x2AAB) {
                 if (phi_v1 < 0x238E) {
-                    func_800B8614(&this->actor, globalCtx, 70.0f);
+                    func_800B8614(&this->actor, play, 70.0f);
                 }
             }
         }
     } while (0);
 }
 
-void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
-    globalCtx->nextEntranceIndex = 0x22A0;
-    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = globalCtx->nextEntranceIndex;
-    func_80169EFC(&globalCtx->state);
+void func_80A66384(EnWarpUzu* this, PlayState* play) {
+    play->nextEntrance = ENTRANCE(PIRATES_FORTRESS, 10);
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
+    func_80169EFC(&play->state);
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }
 
-void EnWarpUzu_DoNothing(EnWarpUzu* this, GlobalContext* globalCtx) {
+void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play) {
 }
 
-void EnWarpUzu_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnWarpUzu_Update(Actor* thisx, PlayState* play) {
     EnWarpUzu* this = THIS;
     s32 pad;
 
     this->actor.uncullZoneForward = 1000.0f;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void EnWarpUzu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, object_warp_uzu_DL_000EC0);
+void EnWarpUzu_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, object_warp_uzu_DL_000EC0);
 }

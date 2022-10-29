@@ -1,5 +1,7 @@
 #include "global.h"
 #include "system_malloc.h"
+#include "z64rumble.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -52,7 +54,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
                 sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
                 sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
                 sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &dlist, arg1);
+                VisMono_Draw(&sMonoColors, &dlist);
             }
         }
     }
@@ -139,7 +141,7 @@ void Game_Update(GameState* gameState) {
 
     gameState->main(gameState);
 
-    if (R_PAUSE_MENU_MODE != 2) {
+    if (R_PAUSE_BG_PRERENDER_STATE != PAUSE_BG_PRERENDER_PROCESS) {
         GameState_Draw(gameState, gfxCtx);
         func_801736DC(gfxCtx);
     }
@@ -191,7 +193,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
 
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
     gameState->gfxCtx = gfxCtx;
-    gameState->frames = 0U;
+    gameState->frames = 0;
     gameState->main = NULL;
     gameState->destroy = NULL;
     gameState->running = 1;
@@ -199,8 +201,8 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
-    gameState->nextGameStateInit = NULL;
-    gameState->nextGameStateSize = 0U;
+    gameState->init = NULL;
+    gameState->size = 0;
 
     {
         s32 requiredScopeTemp;
@@ -213,40 +215,40 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         func_80140CE0(&D_801F8010);
         func_801420C0(&D_801F8020);
-        func_801418B0(&sMonoColors);
+        VisMono_Init(&sMonoColors);
         func_80140898(&D_801F8048);
         func_801773A0(&D_801F7FF0);
-        func_8013ED9C();
+        Rumble_Init();
 
         osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
     }
 }
 
 void GameState_Destroy(GameState* gameState) {
-    func_80172BC0();
-    func_8019E014();
+    AudioMgr_StopAllSfxExceptSystem();
+    Audio_Update();
     osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
     if (gameState->destroy != NULL) {
         gameState->destroy(gameState);
     }
 
-    func_8013EDD0();
+    Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
     func_80140D04(&D_801F8010);
     func_801420F4(&D_801F8020);
-    func_80141900(&sMonoColors);
+    VisMono_Destroy(&sMonoColors);
     func_80140900(&D_801F8048);
     THA_Dt(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);
 }
 
-GameStateFunc GameState_GetNextStateInit(GameState* gameState) {
-    return gameState->nextGameStateInit;
+GameStateFunc GameState_GetInit(GameState* gameState) {
+    return gameState->init;
 }
 
-size_t GameState_GetNextStateSize(GameState* gameState) {
-    return gameState->nextGameStateSize;
+size_t GameState_GetSize(GameState* gameState) {
+    return gameState->size;
 }
 
 u32 GameState_IsRunning(GameState* gameState) {

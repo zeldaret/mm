@@ -6,6 +6,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
+#include "z_title_setup.h"
 
 FaultAddrConvClient sGraphFaultAddrConvClient;
 FaultClient sGraphFaultClient;
@@ -63,44 +64,45 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
 }
 
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
-    GameStateFunc gameStateInit = GameState_GetNextStateInit(gameState);
+    GameStateFunc gameStateInit = GameState_GetInit(gameState);
 
-    if (gameStateInit == (GameStateFunc)TitleSetup_Init) {
+    if (gameStateInit == Setup_Init) {
         return &gGameStateOverlayTable[0];
     }
-    if (gameStateInit == (GameStateFunc)Select_Init) {
+    if (gameStateInit == MapSelect_Init) {
         return &gGameStateOverlayTable[1];
     }
-    if (gameStateInit == (GameStateFunc)Title_Init) {
+    if (gameStateInit == ConsoleLogo_Init) {
         return &gGameStateOverlayTable[2];
     }
-    if (gameStateInit == (GameStateFunc)Play_Init) {
+    if (gameStateInit == Play_Init) {
         return &gGameStateOverlayTable[3];
     }
-    if (gameStateInit == (GameStateFunc)Opening_Init) {
+    if (gameStateInit == TitleSetup_Init) {
         return &gGameStateOverlayTable[4];
     }
-    if (gameStateInit == (GameStateFunc)FileChoose_Init) {
+    if (gameStateInit == FileSelect_Init) {
         return &gGameStateOverlayTable[5];
     }
-    if (gameStateInit == (GameStateFunc)Daytelop_Init) {
+    if (gameStateInit == DayTelop_Init) {
         return &gGameStateOverlayTable[6];
     }
+
     return NULL;
 }
 
 void* Graph_FaultAddrConvFunc(void* address, void* param) {
     uintptr_t addr = address;
-    GameStateOverlay* gamestateOvl = &gGameStateOverlayTable[0];
+    GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
     uintptr_t ramConv;
     void* ramStart;
     uintptr_t diff;
     s32 i;
 
-    for (i = 0; i < graphNumGameStates; i++, gamestateOvl++) {
-        diff = VRAM_PTR_SIZE(gamestateOvl);
-        ramStart = gamestateOvl->loadedRamAddr;
-        ramConv = (uintptr_t)gamestateOvl->vramStart - (uintptr_t)ramStart;
+    for (i = 0; i < graphNumGameStates; i++, gameStateOvl++) {
+        diff = VRAM_PTR_SIZE(gameStateOvl);
+        ramStart = gameStateOvl->loadedRamAddr;
+        ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
         if (ramStart != NULL) {
             if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
@@ -172,8 +174,8 @@ retry:
     task->ucodeBootSize = SysUcode_GetUCodeBootSize();
     task->ucode = SysUcode_GetUCode();
     task->ucodeData = SysUcode_GetUCodeData();
-    task->ucodeSize = 0x1000;
-    task->ucodeDataSize = 0x800;
+    task->ucodeSize = SP_UCODE_SIZE;
+    task->ucodeDataSize = SP_UCODE_DATA_SIZE;
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
@@ -230,12 +232,12 @@ void Graph_UpdateGame(GameState* gameState) {
     Game_UpdateInput(gameState);
     Game_IncrementFrameCount(gameState);
     if (SREG(20) < 3) {
-        func_8019E014();
+        Audio_Update();
     }
 }
 
 /**
- *  Run the gamestate logic, then finalize the gfx buffer
+ *  Run the game state logic, then finalize the gfx buffer
  *  and run the graphics task for this frame.
  */
 void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {

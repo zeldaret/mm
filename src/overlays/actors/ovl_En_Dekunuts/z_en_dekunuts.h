@@ -6,7 +6,7 @@
 
 struct EnDekunuts;
 
-typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, GlobalContext*);
+typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, PlayState*);
 
 #define ENDEKUNUTS_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
 
@@ -35,7 +35,5 @@ typedef struct EnDekunuts {
     /* 0x21C */ Vec3f limbPos[8];
     /* 0x27C */ ColliderCylinder collider;
 } EnDekunuts; // size = 0x2C8
-
-extern const ActorInit En_Dekunuts_InitVars;
 
 #endif // Z_EN_DEKUNUTS_H

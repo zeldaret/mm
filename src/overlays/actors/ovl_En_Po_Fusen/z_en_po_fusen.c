@@ -12,24 +12,20 @@
 
 #define THIS ((EnPoFusen*)thisx)
 
-#define GET_FUSE_LEN_PARAM(this) (((Actor*)(this))->params & 0x3FF)
-#define GET_IS_FUSE_TYPE_PARAM(this) (((Actor*)(this))->params & 0x8000)
+void EnPoFusen_Init(Actor* thisx, PlayState* play);
+void EnPoFusen_Destroy(Actor* thisx, PlayState* play);
+void EnPoFusen_Update(Actor* thisx, PlayState* play);
+void EnPoFusen_Draw(Actor* thisx, PlayState* play);
 
-void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx);
+u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play);
 void EnPoFusen_InitNoFuse(EnPoFusen* this);
 void EnPoFusen_InitFuse(EnPoFusen* this);
-void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx);
-void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
-void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
-s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx);
+void EnPoFusen_Pop(EnPoFusen* this, PlayState* play);
+void EnPoFusen_Idle(EnPoFusen* this, PlayState* play);
+void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play);
+s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Po_Fusen_InitVars = {
+ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
     ACTORCAT_PROP,
     FLAGS,
@@ -96,7 +92,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
     f32 heightTemp;
 
@@ -104,18 +100,18 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 6;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    Collider_InitSphere(globalCtx, &this->collider);
-    Collider_SetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
+    Collider_InitSphere(play, &this->collider);
+    Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(globalCtx, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040,
-                       this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(play, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040, this->jointTable,
+                       this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
-    if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
-        Actor_MarkForDeath(&this->actor);
+    if (!EnPoFusen_CheckParent(this, play)) {
+        Actor_Kill(&this->actor);
     }
 
     heightTemp = this->actor.floorHeight + 90.0f;
@@ -123,9 +119,9 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.home.pos.y = heightTemp;
     }
 
-    this->randScaleChange = ((Rand_Next() % 0xFFFEU) - 0x7FFF);
-    this->randYRotChange = ((Rand_Next() % 0x4B0U) - 0x258);
-    this->avgBaseRotation = 0x1555;
+    this->randScaleChange = (Rand_Next() % 0xFFFE) - 0x7FFF;
+    this->randYRotChange = (Rand_Next() % 0x4B0) - 0x258;
+    this->avgBaseRotation = 0x10000 / 12;
     this->limb3Rot = 0;
     this->limb46Rot = 0;
     this->limb57Rot = 0;
@@ -133,7 +129,7 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->limb9Rot = 0x71C;
     this->randBaseRotChange = 0;
 
-    if (GET_IS_FUSE_TYPE_PARAM(this)) {
+    if (ENPOFUSEN_IS_FUSE_TYPE(&this->actor)) {
         EnPoFusen_InitFuse(this);
         return;
     }
@@ -141,50 +137,49 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen_InitNoFuse(this);
 }
 
-void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoFusen_Destroy(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
-    Collider_DestroySphere(globalCtx, &this->collider);
+
+    Collider_DestroySphere(play, &this->collider);
 }
 
-u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx) {
+u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
     Actor* actorPtr;
 
-    actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
-    if (GET_IS_FUSE_TYPE_PARAM(this)) {
-        return 1;
+    actorPtr = play->actorCtx.actorLists[ACTORCAT_NPC].first;
+    if (ENPOFUSEN_IS_FUSE_TYPE(&this->actor)) {
+        return true;
     }
 
-    if (actorPtr != 0) {
-        do {
-            if (actorPtr->id == ACTOR_EN_MA4) {
-                this->actor.parent = actorPtr;
-                return 1;
-            }
-            actorPtr = actorPtr->next;
-        } while (actorPtr != 0);
+    while (actorPtr != NULL) {
+        if (actorPtr->id == ACTOR_EN_MA4) {
+            this->actor.parent = actorPtr;
+            return true;
+        }
+        actorPtr = actorPtr->next;
     }
 
-    return 0;
+    return false;
 }
 
-u16 EnPoFusen_CheckCollision(EnPoFusen* this, GlobalContext* globalCtx) {
+u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     if (this->actionFunc == EnPoFusen_IdleFuse) {
-        return 0;
+        return false;
     }
 
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
-    this->collider.dim.worldSphere.center.y = (this->actor.world.pos.y + 20.0f);
+    this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 20.0f;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
         this->collider.base.acFlags &= ~AC_HIT;
-        return 1;
+        return true;
     }
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 
-    return 0;
+    return false;
 }
 
 void EnPoFusen_InitNoFuse(EnPoFusen* this) {
@@ -192,7 +187,7 @@ void EnPoFusen_InitNoFuse(EnPoFusen* this) {
     this->actionFunc = EnPoFusen_Idle;
 }
 
-void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx) {
+void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
     f32 shadowScaleTmp;
     f32 shadowAlphaTmp;
     f32 heightOffset;
@@ -239,38 +234,37 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
     this->actionFunc = EnPoFusen_Pop;
 }
 
-void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx) {
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
-                this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
+void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
+                this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnPoFusen_InitFuse(EnPoFusen* this) {
     s16 rotZ = this->actor.shape.rot.z;
-    this->fuse = GET_FUSE_LEN_PARAM(this);
+    this->fuse = ENPOFUSEN_GET_FUSE_LEN(&this->actor);
     this->actor.shape.rot.z = 0;
-    this->randScaleChange = rotZ & 0xFFFFu;
+    this->randScaleChange = rotZ & 0xFFFF;
     this->actionFunc = EnPoFusen_IdleFuse;
 }
 
-void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx) {
-    EnPoFusen_Idle(this, globalCtx);
+void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play) {
+    EnPoFusen_Idle(this, play);
     if (this->fuse-- == 0) {
         EnPoFusen_IncrementRomaniPop(this);
     }
 }
 
-void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoFusen_Update(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
-    this->actionFunc(this, globalCtx);
-    if (EnPoFusen_CheckCollision(this, globalCtx) != 0) {
+    this->actionFunc(this, play);
+    if (EnPoFusen_CheckCollision(this, play)) {
         EnPoFusen_IncrementRomaniPop(this);
     }
 }
 
-s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPoFusen* this = THIS;
     f32 zScale;
     f32 yScale;
@@ -288,10 +282,10 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
-        Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
+        Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
         Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-zRot, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(-xRot, MTXMODE_APPLY);
+        Matrix_RotateZS(-zRot, MTXMODE_APPLY);
+        Matrix_RotateXS(-xRot, MTXMODE_APPLY);
     } else if (limbIndex == 3) {
         rot->y += this->limb3Rot;
     } else if (limbIndex == 6) {
@@ -309,16 +303,16 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return false;
 }
 
-void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnPoFusen_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void EnPoFusen_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnPoFusen_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnPoFusen_Draw(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawTransformFlexOpa(play, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
                                    EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_TransformLimbDraw,
                                    &this->actor);
 }

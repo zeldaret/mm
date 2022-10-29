@@ -5,7 +5,7 @@
 
 struct EnPeehat;
 
-typedef void (*EnPeehatActionFunc)(struct EnPeehat*, GlobalContext*);
+typedef void (*EnPeehatActionFunc)(struct EnPeehat*, PlayState*);
 
 typedef struct EnPeehat {
     /* 0x000 */ Actor actor;
@@ -34,7 +34,5 @@ typedef struct EnPeehat {
     /* 0x468 */ ColliderTris colliderTris;
     /* 0x488 */ ColliderTrisElement colliderTriElements[2];
 } EnPeehat; // size = 0x540
-
-extern const ActorInit En_Peehat_InitVars;
 
 #endif // Z_EN_PEEHAT_H

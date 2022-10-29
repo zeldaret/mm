@@ -11,17 +11,17 @@
 
 #define THIS ((EnRecepgirl*)thisx)
 
-void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnRecepgirl_Init(Actor* thisx, PlayState* play);
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play);
+void EnRecepgirl_Update(Actor* thisx, PlayState* play);
+void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 void EnRecepgirl_SetupWait(EnRecepgirl* this);
-void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx);
+void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play);
 void EnRecepgirl_SetupTalk(EnRecepgirl* this);
-void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx);
+void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play);
 
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -41,27 +41,27 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 
-static s32 texturesDesegmented = false;
+static s32 sTexturesDesegmented = false;
 
-void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Init(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable,
                        this->morphTable, 24);
 
-    if (!texturesDesegmented) {
+    if (!sTexturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
             sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
-        texturesDesegmented = true;
+        sTexturesDesegmented = true;
     }
 
     this->eyeTexIndex = 2;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+    if (Flags_GetSwitch(play, this->actor.params)) {
         this->actor.textId = 0x2ADC; // hear directions again?
     } else {
         this->actor.textId = 0x2AD9; // "Welcome..."
@@ -70,7 +70,7 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRecepgirl_SetupWait(this);
 }
 
-void EnRecepgirl_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnRecepgirl_UpdateEyes(EnRecepgirl* this) {
@@ -91,7 +91,7 @@ void EnRecepgirl_SetupWait(EnRecepgirl* this) {
     this->actionFunc = EnRecepgirl_Wait;
 }
 
-void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx) {
+void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
@@ -100,13 +100,13 @@ void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnRecepgirl_SetupTalk(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, globalCtx, 60.0f);
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+        func_800B8614(&this->actor, play, 60.0f);
+        if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
-        } else if (Flags_GetSwitch(globalCtx, this->actor.params)) {
+        } else if (Flags_GetSwitch(play, this->actor.params)) {
             this->actor.textId = 0x2ADC; // hear directions again?
         } else {
             this->actor.textId = 0x2AD9; // "Welcome..."
@@ -119,8 +119,8 @@ void EnRecepgirl_SetupTalk(EnRecepgirl* this) {
     this->actionFunc = EnRecepgirl_Talk;
 }
 
-void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
-    u8 temp_v0_2;
+void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
+    u8 talkState;
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->skelAnime.animation == &object_bg_Anim_00A280) {
@@ -140,13 +140,13 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
-    if (temp_v0_2 == 2) {
+    talkState = Message_GetState(&play->msgCtx);
+    if (talkState == TEXT_STATE_CLOSING) {
         this->actor.textId = 0x2ADC; // hear directions again?
         EnRecepgirl_SetupWait(this);
-    } else if ((temp_v0_2 == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Flags_SetSwitch(globalCtx, this->actor.params);
+            Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
             if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
@@ -168,22 +168,21 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
             }
         }
-        func_80151938(globalCtx, this->actor.textId);
+        func_80151938(play, this->actor.textId);
     }
 }
 
-void EnRecepgirl_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnRecepgirl* this = THIS;
     Vec3s sp30;
 
-    this->actionFunc(this, globalCtx);
-    func_800E9250(globalCtx, &this->actor, &this->headRot, &sp30, this->actor.focus.pos);
+    this->actionFunc(this, play);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &sp30, this->actor.focus.pos);
     EnRecepgirl_UpdateEyes(this);
 }
 
-s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 Actor* thisx) {
+s32 EnRecepgirl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
@@ -192,26 +191,26 @@ s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnRecepgirl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnRecepgirl_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->headRot.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_RotateYS(0x400 - this->headRot.x, MTXMODE_APPLY);
+        Matrix_MultVecX(500.0f, &this->actor.focus.pos);
     }
 }
 
-void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
     EnRecepgirl* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[this->eyeTexIndex]);
 
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnRecepgirl_OverrideLimbDraw, NULL,
                                    EnRecepgirl_TransformLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

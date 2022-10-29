@@ -3,11 +3,11 @@
 Mtx* sSkyboxDrawMatrix;
 
 Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
-    Matrix_InsertTranslation(x, y, z, MTXMODE_NEW);
+    Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(skyboxCtx->rotX);
-    Matrix_InsertYRotation_f(skyboxCtx->rotY, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(skyboxCtx->rotZ, MTXMODE_APPLY);
+    Matrix_RotateXFApply(skyboxCtx->rotX);
+    Matrix_RotateYF(skyboxCtx->rotY, MTXMODE_APPLY);
+    Matrix_RotateZF(skyboxCtx->rotZ, MTXMODE_APPLY);
     return Matrix_ToMtx(sSkyboxDrawMatrix);
 }
 
@@ -25,22 +25,22 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
 
     func_8012C6AC(gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0B, skyboxCtx->skyboxPaletteStaticSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x0B, skyboxCtx->paletteStaticSegment);
     gSPTexture(POLY_OPA_DISP++, 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON);
 
     sSkyboxDrawMatrix = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
-    Matrix_InsertTranslation(x, y, z, MTXMODE_NEW);
+    Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(skyboxCtx->rotX);
-    Matrix_InsertYRotation_f(skyboxCtx->rotY, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(skyboxCtx->rotZ, MTXMODE_APPLY);
+    Matrix_RotateXFApply(skyboxCtx->rotX);
+    Matrix_RotateYF(skyboxCtx->rotY, MTXMODE_APPLY);
+    Matrix_RotateZF(skyboxCtx->rotZ, MTXMODE_APPLY);
     Matrix_ToMtx(sSkyboxDrawMatrix);
 
     gSPMatrix(POLY_OPA_DISP++, sSkyboxDrawMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetColorDither(POLY_OPA_DISP++, G_CD_MAGICSQ);
     gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_BILERP);
-    gDPLoadTLUT_pal256(POLY_OPA_DISP++, skyboxCtx->skyboxPaletteStaticSegment);
+    gDPLoadTLUT_pal256(POLY_OPA_DISP++, skyboxCtx->paletteStaticSegment);
     gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_RGBA16);
     gDPSetTextureConvert(POLY_OPA_DISP++, G_TC_FILT);
     gDPSetCombineLERP(POLY_OPA_DISP++, TEXEL1, TEXEL0, PRIMITIVE_ALPHA, TEXEL0, TEXEL1, TEXEL0, PRIMITIVE, TEXEL0,
@@ -49,13 +49,13 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     gDPSetEnvColor(POLY_OPA_DISP++, skyboxCtx->envR, skyboxCtx->envG, skyboxCtx->envB, 0);
 
     gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[0]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[300]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[600]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[900]);
-    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[1200]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[2]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[4]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[6]);
+    gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[8]);
 
     if (skyboxId == SKYBOX_CUTSCENE_MAP) {
-        gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[1500]);
+        gSPDisplayList(POLY_OPA_DISP++, &skyboxCtx->dListBuf[10]);
     }
 
     gDPPipeSync(POLY_OPA_DISP++);

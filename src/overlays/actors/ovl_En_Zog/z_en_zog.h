@@ -5,7 +5,7 @@
 
 struct EnZog;
 
-typedef void (*EnZogActionFunc)(struct EnZog*, GlobalContext*);
+typedef void (*EnZogActionFunc)(struct EnZog*, PlayState*);
 
 #define ENZOG_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENZOG_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
@@ -39,7 +39,5 @@ typedef struct EnZog {
     /* 0x324 */ s16 unk_324;
     /* 0x328 */ EnZogActionFunc actionFunc;
 } EnZog; // size = 0x32C
-
-extern const ActorInit En_Zog_InitVars;
 
 #endif // Z_EN_ZOG_H

@@ -11,12 +11,12 @@
 
 #define THIS ((BgFuKaiten*)thisx)
 
-void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgFuKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgFuKaiten_Init(Actor* thisx, PlayState* play);
+void BgFuKaiten_Destroy(Actor* thisx, PlayState* play);
+void BgFuKaiten_Update(Actor* thisx, PlayState* play);
+void BgFuKaiten_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Fu_Kaiten_InitVars = {
+ActorInit Bg_Fu_Kaiten_InitVars = {
     ACTOR_BG_FU_KAITEN,
     ACTORCAT_BG,
     FLAGS,
@@ -28,7 +28,7 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Draw,
 };
 
-void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgFuKaiten_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgFuKaiten* this = THIS;
     CollisionHeader* header = NULL;
@@ -36,7 +36,7 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(thisx, 1.0);
     DynaPolyActor_Init(&this->dyna, 3);
     CollisionHeader_GetVirtual(&object_fu_kaiten_Colheader_002D30, &header);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, header);
 
     this->bounceHeight = 0.0;
     this->rotationSpeed = 0;
@@ -44,10 +44,10 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->bounce = 0;
 }
 
-void BgFuKaiten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgFuKaiten_Destroy(Actor* thisx, PlayState* play) {
     BgFuKaiten* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgFuKaiten_UpdateRotation(BgFuKaiten* this) {
@@ -67,19 +67,19 @@ void BgFuKaiten_UpdateHeight(BgFuKaiten* this) {
     this->dyna.actor.world.pos.y -= this->bounceHeight * Math_CosS(this->bounce);
 }
 
-void BgFuKaiten_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgFuKaiten_Update(Actor* thisx, PlayState* play) {
     BgFuKaiten* this = THIS;
 
     BgFuKaiten_UpdateRotation(this);
     BgFuKaiten_UpdateHeight(this);
 }
 
-void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void BgFuKaiten_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_fu_kaiten_DL_0005D0);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

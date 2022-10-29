@@ -10,10 +10,10 @@
 
 #define THIS ((ObjGrassUnit*)thisx)
 
-void ObjGrassUnit_Init(Actor* thisx, GlobalContext* globalCtx);
+void ObjGrassUnit_Init(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Obj_Grass_Unit_InitVars = {
+ActorInit Obj_Grass_Unit_InitVars = {
     ACTOR_OBJ_GRASS_UNIT,
     ACTORCAT_BG,
     FLAGS,

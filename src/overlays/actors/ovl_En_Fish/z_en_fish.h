@@ -5,7 +5,7 @@
 
 struct EnFish;
 
-typedef void (*EnFishUnkFunc)(Actor*, GlobalContext*);
+typedef void (*EnFishUnkFunc)(Actor*, PlayState*);
 
 enum {
     /* -1 */ ENFISH_MINUS1 = -1,
@@ -47,7 +47,5 @@ typedef struct EnFish {
     /* 0x278 */ s8 unk_278;
     /* 0x279 */ s8 unk_279;
 } EnFish; // size = 0x27C
-
-extern const ActorInit En_Fish_InitVars;
 
 #endif // Z_EN_FISH_H

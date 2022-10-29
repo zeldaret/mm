@@ -5,23 +5,43 @@
  */
 
 #include "z_obj_tsubo.h"
+#include "overlays/actors/ovl_En_Sw/z_en_sw.h"
+#include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
+#include "objects/object_tsubo/object_tsubo.h"
+#include "objects/object_racetsubo/object_racetsubo.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_4000000)
 
 #define THIS ((ObjTsubo*)thisx)
 
-void ObjTsubo_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjTsubo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjTsubo_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjTsubo_Init(Actor* thisx, PlayState* play);
+void ObjTsubo_Destroy(Actor* thisx, PlayState* play2);
+void ObjTsubo_Update(Actor* thisx, PlayState* play);
+void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
-void func_80928928(ObjTsubo* this, GlobalContext* globalCtx);
-void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx);
-void func_80928D80(ObjTsubo* this, GlobalContext* globalCtx);
-void func_80928F18(ObjTsubo* this, GlobalContext* globalCtx);
-void func_8092926C(ObjTsubo* this, GlobalContext* globalCtx);
+void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
+void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
+void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2);
+void func_80928914(ObjTsubo* this);
+void func_80928928(ObjTsubo* this, PlayState* play);
+void func_809289B4(ObjTsubo* this);
+void func_809289E4(ObjTsubo* this, PlayState* play);
+void func_80928D6C(ObjTsubo* this);
+void func_80928D80(ObjTsubo* this, PlayState* play);
+void func_80928E74(ObjTsubo* this);
+void func_80928F18(ObjTsubo* this, PlayState* play);
+void func_809291DC(ObjTsubo* this);
+void func_8092926C(ObjTsubo* this, PlayState* play);
 
-#if 0
-const ActorInit Obj_Tsubo_InitVars = {
+s16 D_80929500 = 0;
+s16 D_80929504 = 0;
+s16 D_80929508 = 0;
+s16 D_8092950C = 0;
+
+ActorInit Obj_Tsubo_InitVars = {
     ACTOR_OBJ_TSUBO,
     ACTORCAT_PROP,
     FLAGS,
@@ -33,79 +53,641 @@ const ActorInit Obj_Tsubo_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_809295B0 = {
-    { COLTYPE_HARD, AT_ON | AT_TYPE_PLAYER, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00400000, 0x00, 0x02 }, { 0x05CBFFBE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+typedef struct {
+    /* 0x00 */ s16 objId;
+    /* 0x04 */ f32 scale;
+    /* 0x08 */ Gfx* modelDL;
+    /* 0x0C */ Gfx* shardDL;
+    /* 0x10 */ s16 radius;
+    /* 0x12 */ s16 height;
+    /* 0x14 */ ObjTsuboUnkFunc breakPot1;
+    /* 0x18 */ ObjTsuboUnkFunc breakPot2;
+    /* 0x1C */ ObjTsuboUnkFunc breakPot3;
+
+} ObjTsuboData;
+
+ObjTsuboData sPotTypeData[4] = {
+    { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
+      ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45,
+      ObjTsubo_RacePotBreak1, ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
+    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, ObjTsubo_PotBreak1,
+      ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
+      ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+};
+
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HARD,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00400000, 0x00, 0x02 },
+        { 0x05CBFFBE, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 12, 30, 0, { 0, 0, 0 } },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_809295DC[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-#endif
+s32 func_809275C0(ObjTsubo* this, PlayState* play) {
+    s32 chestFlag = -1;
+    s32 skulltulaParams = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
 
-extern ColliderCylinderInit D_809295B0;
-extern InitChainEntry D_809295DC[];
+    if (ENSW_GETS_3(skulltulaParams)) {
+        chestFlag = ENSW_GETS_3FC(skulltulaParams);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_809275C0.s")
+    return (chestFlag < 0) == true || !Flags_GetTreasure(play, chestFlag);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_8092762C.s")
+void func_8092762C(ObjTsubo* this, PlayState* play) {
+    if (!OBJ_TSUBO_P0010(&this->actor) && (OBJ_TSUBO_ZROT(&this->actor) != 2)) {
+        Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, OBJ_TSUBO_P000F(&this->actor) << 4);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927690.s")
+void func_80927690(ObjTsubo* this, PlayState* play) {
+    s32 itemDrop;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927714.s")
+    if (!this->unk_197 && (OBJ_TSUBO_ZROT(&this->actor) != 2)) {
+        itemDrop = func_800A8150(OBJ_TSUBO_P003F(&this->actor));
+        if (itemDrop > ITEM00_NO_DROP) {
+            Item_DropCollectible(play, &this->actor.world.pos, (OBJ_TSUBO_PFE00(&this->actor) << 8) | itemDrop);
+            this->unk_197 = true;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_8092776C.s")
+void ObjTsubo_SpawnBoes(ObjTsubo* this, PlayState* play, s32 arg2) {
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MKK, this->actor.world.pos.x, this->actor.world.pos.y,
+                this->actor.world.pos.z, 0, 0, 0, 2);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927818.s")
+void ObjTsubo_SpawnGoldSkulltula(ObjTsubo* this, PlayState* play, s32 arg2) {
+    Actor* child;
+    s32 params;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927864.s")
+    if (func_809275C0(this, play)) {
+        params = (OBJ_TSUBO_P001F(&this->actor) << 2) | 0xFF01;
+        child = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
+                            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, params);
+        if (child != NULL) {
+            child->parent = &this->actor;
+            child->velocity.y = 0.0f;
+            child->speedXZ = 0.0f;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_8092788C.s")
+void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
+    if (OBJ_TSUBO_ZROT(&this->actor) == 1) {
+        ObjTsubo_SpawnBoes(this, play, arg2);
+    } else if (OBJ_TSUBO_ZROT(&this->actor) == 2) {
+        ObjTsubo_SpawnGoldSkulltula(this, play, arg2);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/ObjTsubo_Init.s")
+s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
+    return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/ObjTsubo_Destroy.s")
+void func_8092788C(ObjTsubo* this, PlayState* play) {
+    if (!this->unk_197 && (play->roomCtx.curRoom.num != this->homeRoom)) {
+        this->unk_197 = true;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927A78.s")
+void ObjTsubo_Init(Actor* thisx, PlayState* play) {
+    ObjTsubo* this = (ObjTsubo*)thisx;
+    s32 pad;
+    s32 type = OBJ_TSUBO_GET_TYPE(&this->actor);
+    s32 pad2;
+    s32 sp2C = OBJ_TSUBO_ZROT(&this->actor);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927D2C.s")
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Actor_SetScale(&this->actor, sPotTypeData[type].scale);
+    this->actor.shape.rot.z = 0;
+    this->actor.world.rot.z = 0;
+    Collider_InitCylinder(play, &this->cylinderCollider);
+    Collider_SetCylinder(play, &this->cylinderCollider, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
+    this->cylinderCollider.dim.radius = sPotTypeData[type].radius;
+    this->cylinderCollider.dim.height = sPotTypeData[type].height;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
+    if (this->objBankIndex < 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80927FCC.s")
+    this->actor.shape.shadowScale = 1.8f;
+    this->homeRoom = this->actor.room;
+    if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
+        if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
+            this->unk_198 = true;
+        }
+    }
+    if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
+        this->unk_19A = -1;
+    }
+    func_80928914(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_809282F0.s")
+void ObjTsubo_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = (PlayState*)play2;
+    ObjTsubo* this = (ObjTsubo*)thisx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_8092860C.s")
+    Collider_DestroyCylinder(play, &this->cylinderCollider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928904.s")
+void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
+    s16 rot;
+    s32 i;
+    s32 phi_s0;
+    s32 pad;
+    Vec3f pos;
+    Vec3f vel;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
+    f32 randf;
+    f32 sin;
+    f32 cos;
+    f32 scale;
+    s32 pad2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928914.s")
+    for (i = 0, rot = 0; i < 18; rot += 0x4E20, i++) {
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 8.0f;
+        pos.y = Rand_ZeroOne() * 12.0f + 2.0f;
+        pos.z = cos * 8.0f;
+        vel.x = pos.x * 0.23f;
+        vel.y = Rand_ZeroOne() * 5.0f + 2.5f;
+        vel.z = pos.z * 0.23f;
+        Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+        randf = Rand_ZeroOne();
+        if (randf < 0.2f) {
+            phi_s0 = 0x60;
+        } else if (randf < 0.6f) {
+            phi_s0 = 0x40;
+        } else {
+            phi_s0 = 0x20;
+        }
+        scale = Rand_ZeroOne() * 110.0f + 15.0f;
+        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -260, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
+                             typeData->objId, typeData->shardDL);
+    }
+    func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 20, 50, true);
+    func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928928.s")
+void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play) {
+    s16 rot;
+    s32 phi_s0;
+    s32 i;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
+    Vec3f pos;
+    Vec3f vel;
+    f32 randf;
+    f32 sin;
+    f32 cos;
+    f32 scale;
+    s32 pad[2];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_809289B4.s")
+    for (i = 0, rot = 0; i < 20; rot += 0x4E20, i++) {
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 10.0f;
+        pos.y = Rand_ZeroOne() * 20.0f + 2.0f;
+        pos.z = cos * 10.0f;
+        vel.x = pos.x * 0.3f;
+        vel.y = Rand_ZeroOne() * 10.0f + 2.0f;
+        vel.z = pos.z * 0.3f;
+        Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+        randf = Rand_ZeroOne();
+        if (randf < 0.2f) {
+            phi_s0 = 0xE0;
+        } else if (randf < 0.6f) {
+            phi_s0 = 0xC0;
+        } else {
+            phi_s0 = 0xA0;
+        }
+        scale = Rand_ZeroOne() * 160.0f + 15.0f;
+        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -340, phi_s0, 20, 0, 0, scale, 0, 0, 50, -1,
+                             typeData->objId, typeData->shardDL);
+    }
+    func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 40, 50, true);
+    func_800BBFB0(play, &this->actor.world.pos, 50.0f, 2, 20, 80, true);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_809289E4.s")
+void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
+    PlayState* play = (PlayState*)play2;
+    s16 rot;
+    s32 i;
+    s32 phi_s0;
+    Vec3f pos;
+    Vec3f vel;
+    Vec3f* worldPos = &this->actor.world.pos;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
+    f32 sin;
+    f32 cos;
+    f32 scale;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928D6C.s")
+    pos.y = worldPos->y + this->actor.depthInWater;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928D80.s")
+    for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
+        pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f + worldPos->x;
+        pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 15.0f + worldPos->z;
+        EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
+    }
+    pos.x = worldPos->x;
+    pos.z = worldPos->z;
+    EffectSsGRipple_Spawn(play, &pos, 200, 600, 0);
+    for (i = 0, rot = 0; i < 13; rot += 0x4E20, i++) {
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 8.0f;
+        pos.y = (Rand_ZeroOne() * 5.0f) + 2.0f;
+        pos.z = cos * 8.0f;
+        vel.x = pos.x * 0.2f;
+        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
+        vel.z = pos.z * 0.2f;
+        Math_Vec3f_Sum(&pos, worldPos, &pos);
+        if (Rand_ZeroOne() < .2f) {
+            phi_s0 = 0x40;
+        } else {
+            phi_s0 = 0x20;
+        }
+        scale = Rand_ZeroOne() * 105.0f + 10.0f;
+        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1, typeData->objId,
+                             typeData->shardDL);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928E74.s")
+void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2) {
+    PlayState* play = (PlayState*)play2;
+    s32 pad;
+    s16 rot;
+    s32 i;
+    Vec3f pos;
+    Vec3f vel;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
+    Vec3f* worldPos = &this->actor.world.pos;
+    f32 sin;
+    f32 cos;
+    s32 phi_s0;
+    s16 scale;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_80928F18.s")
+    pos.y = this->actor.world.pos.y + this->actor.depthInWater;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_809291DC.s")
+    for (rot = 0, i = 0; i < 5; i++, rot += 0x10000 / 5) {
+        pos.x = Math_SinS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->x;
+        pos.z = Math_CosS((s32)(Rand_ZeroOne() * 6000) + rot) * 30.0f + worldPos->z;
+        EffectSsGSplash_Spawn(play, &pos, NULL, NULL, 0, 350);
+    }
+    pos.x = worldPos->x;
+    pos.z = worldPos->z;
+    EffectSsGRipple_Spawn(play, &pos, 300, 700, 0);
+    for (i = 0, rot = 0; i < 15; rot += 0x4E20, i++) {
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * 10.0f;
+        pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
+        pos.z = cos * 10.0f;
+        vel.x = pos.x * 0.3f;
+        vel.y = (Rand_ZeroOne() * 4.0f) + 2.0f;
+        vel.z = pos.z * 0.3f;
+        Math_Vec3f_Sum(&pos, worldPos, &pos);
+        if (Rand_ZeroOne() < 0.2f) {
+            phi_s0 = 0xC0;
+        } else {
+            phi_s0 = 0xA0;
+        }
+        scale = (Rand_ZeroOne() * 150.0f) + 10.0f;
+        EffectSsKakera_Spawn(play, &pos, &vel, worldPos, -170, phi_s0, 50, 5, 0, scale, 0, 0, 70, -1, typeData->objId,
+                             typeData->shardDL);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_8092926C.s")
+void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
+    PlayState* play = (PlayState*)play2;
+    s32 i;
+    s16 rot;
+    s32 phi_s0;
+    Vec3f pos;
+    Vec3f vel;
+    ObjTsuboData* typeData = &sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)];
+    f32 randf;
+    f32 temp_f20;
+    f32 cos;
+    f32 sin;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/ObjTsubo_Update.s")
+    for (i = 0, rot = 0; i < 13; i++, rot += 0x4E20) {
+        randf = Rand_ZeroOne();
+        temp_f20 = (1.0f - SQ(randf)) * 4.8f + 3.2f;
+        if (this) {}
+        sin = Math_SinS(rot);
+        cos = Math_CosS(rot);
+        pos.x = sin * temp_f20;
+        pos.y = (Rand_ZeroOne() * 15.0f) + 2.0f;
+        pos.z = cos * temp_f20;
+        vel.x = pos.x * 0.4f;
+        vel.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
+        vel.z = pos.z * 0.4f;
+        Math_Vec3f_Sum(&pos, &this->actor.world.pos, &pos);
+        if (Rand_ZeroOne() < 0.2f) {
+            phi_s0 = 0x40;
+        } else {
+            phi_s0 = 0x20;
+        }
+        EffectSsKakera_Spawn(play, &pos, &vel, &this->actor.world.pos, -170, phi_s0, 50, 3, 0,
+                             (Rand_ZeroOne() * 105.0f) + 10.0f, 0, 0, 70, -1, typeData->objId, typeData->shardDL);
+    }
+    for (i = 0; i < 7; i++) {
+        EffectSsBubble_Spawn(play, &this->actor.world.pos, 20.0f, 30.0f, 40.0f, (Rand_ZeroOne() * 0.06f) + 0.09f);
+        EffectSsBubble_Spawn(play, &this->actor.world.pos, 10.0f, 10.0f, 10.0f, (Rand_ZeroOne() * 0.08f) + 0.09f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Tsubo/func_809294B0.s")
+void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2) {
+}
+
+void func_80928914(ObjTsubo* this) {
+    this->actionFunc = func_80928928;
+}
+
+void func_80928928(ObjTsubo* this, PlayState* play) {
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+    if (Object_IsLoaded(&play->objectCtx, this->objBankIndex)) {
+        this->actor.objBankIndex = this->objBankIndex;
+        func_809289B4(this);
+    }
+}
+
+void func_809289B4(ObjTsubo* this) {
+    this->actor.draw = ObjTsubo_Draw;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->unk_195 = false;
+    this->actionFunc = func_809289E4;
+}
+
+void func_809289E4(ObjTsubo* this, PlayState* play) {
+    ObjTsuboData* typeData;
+    s32 pad;
+    s32 type = OBJ_TSUBO_GET_TYPE(&this->actor);
+    s32 pad2;
+    s32 acHit = (this->cylinderCollider.base.acFlags & AC_HIT) != 0;
+
+    if (acHit) {
+        this->cylinderCollider.base.acFlags &= ~AC_HIT;
+    }
+    if (this->cylinderCollider.base.ocFlags1 & OC1_HIT) {
+        this->cylinderCollider.base.ocFlags1 &= ~OC1_HIT;
+    }
+    if (Actor_HasParent(&this->actor, play)) {
+        this->actor.room = -1;
+        this->actor.flags |= ACTOR_FLAG_10;
+        if ((type != OBJ_TSUBO_TYPE_3) && func_800A817C(OBJ_TSUBO_P003F(&this->actor))) {
+            func_80927690(this, play);
+        }
+        func_80927818(this, play, 0);
+        //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+        //! player->currentMask, but in this case is garbage in the collider
+        func_800B8E58((Player*)&this->actor, NA_SE_PL_PULL_UP_POT);
+        func_80928D6C(this);
+    } else if ((this->unk_19B != 0) ||
+               (acHit && (this->cylinderCollider.info.acHitInfo->toucher.dmgFlags & 0x058BFFBC))) {
+        typeData = &sPotTypeData[type];
+        this->unk_19B = 0;
+        if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 15.0f)) {
+            typeData->breakPot3(this, play);
+        } else {
+            typeData->breakPot1(this, play);
+        }
+        if (type == OBJ_TSUBO_TYPE_3) {
+            func_8092762C(this, play);
+        } else {
+            func_80927690(this, play);
+        }
+        func_80927818(this, play, 1);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
+            Actor_Kill(&this->actor);
+        } else {
+            func_809291DC(this);
+        }
+    } else {
+        if (!this->unk_195) {
+            Actor_MoveWithGravity(&this->actor);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
+                this->unk_195 = true;
+                this->actor.flags &= ~ACTOR_FLAG_10;
+            }
+        }
+        if ((this->actor.xzDistToPlayer < 800.0f) || (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1))) {
+            Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->cylinderCollider.base);
+            if (this->actor.xzDistToPlayer < 150.0f) {
+                CollisionCheck_SetOC(play, &play->colChkCtx, &this->cylinderCollider.base);
+                if (this->actor.xzDistToPlayer < 100.0f) {
+                    s16 yawDiff = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
+                    s32 absYawDiff = ABS_ALT(yawDiff);
+
+                    if (absYawDiff > (0x10000 / 3)) {
+                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void func_80928D6C(ObjTsubo* this) {
+    this->actionFunc = func_80928D80;
+}
+
+void func_80928D80(ObjTsubo* this, PlayState* play) {
+    s32 pad;
+    Vec3f pos;
+    s32 bgId;
+
+    func_8092788C(this, play);
+    if (Actor_HasNoParent(&this->actor, play)) {
+        this->actor.room = play->roomCtx.curRoom.num;
+        Actor_MoveWithGravity(&this->actor);
+        this->actor.flags &= ~ACTOR_FLAG_4000000;
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        func_80928E74(this);
+    } else {
+        pos.x = this->actor.world.pos.x;
+        pos.y = this->actor.world.pos.y + 20.0f;
+        pos.z = this->actor.world.pos.z;
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &pos);
+    }
+}
+
+void func_80928E74(ObjTsubo* this) {
+    this->unk_194 = 80;
+    this->actor.colChkInfo.mass = 180;
+    D_80929500 = (Rand_ZeroOne() - 0.78f) * 4500.0f;
+    D_80929508 = (Rand_ZeroOne() - 0.5f) * 2000.0f;
+    D_80929504 = 0;
+    D_8092950C = 0;
+    this->actionFunc = func_80928F18;
+}
+
+void func_80928F18(ObjTsubo* this, PlayState* play) {
+    s32 pad;
+    ObjTsuboData* typeData;
+    s32 type = OBJ_TSUBO_GET_TYPE(&this->actor);
+    s32 pad2;
+    s32 atHit = (this->cylinderCollider.base.atFlags & AT_HIT) != 0;
+
+    if (atHit) {
+        this->cylinderCollider.base.atFlags &= ~AT_HIT;
+    }
+    func_8092788C(this, play);
+
+    if (this->unk_194 > 0) {
+        this->unk_194--;
+    }
+    typeData = &sPotTypeData[type];
+    if ((this->actor.bgCheckFlags & 0xB) || atHit || (this->unk_194 <= 0)) {
+        typeData->breakPot1(this, play);
+        if (type == OBJ_TSUBO_TYPE_3) {
+            func_8092762C(this, play);
+        } else {
+            func_80927690(this, play);
+        }
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        func_809291DC(this);
+    } else if (this->actor.bgCheckFlags & 0x40) {
+        typeData->breakPot2(this, play);
+        if (type == OBJ_TSUBO_TYPE_3) {
+            func_8092762C(this, play);
+        } else {
+            func_80927690(this, play);
+        }
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+        if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        func_809291DC(this);
+    } else {
+        Actor_MoveWithGravity(&this->actor);
+        Math_StepToS(&D_80929504, D_80929500, 150);
+        Math_StepToS(&D_8092950C, D_80929508, 150);
+        this->actor.shape.rot.x += D_80929504;
+        this->actor.shape.rot.y += D_8092950C;
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
+        Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->cylinderCollider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->cylinderCollider.base);
+    }
+}
+
+void func_809291DC(ObjTsubo* this) {
+    this->actor.draw = NULL;
+    this->actor.flags |= ACTOR_FLAG_10;
+
+    Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
+    this->actor.shape.rot.z = 0;
+    this->actor.world.rot.z = 0;
+    this->unk_197 = false;
+    this->actor.shape.rot.x = this->actor.home.rot.x;
+    this->actor.world.rot.x = this->actor.home.rot.x;
+    this->actor.velocity.y = 0.0f;
+    this->actor.speedXZ = 0.0f;
+    this->actor.shape.rot.y = this->actor.home.rot.y;
+    this->actor.world.rot.y = this->actor.home.rot.y;
+    Actor_SetScale(&this->actor, 0.0f);
+    this->unk_194 = 127;
+    this->actionFunc = func_8092926C;
+}
+
+void func_8092926C(ObjTsubo* this, PlayState* play) {
+    f32 scale;
+
+    if (this->unk_194 > 0) {
+        this->unk_194--;
+        if (this->unk_194 == 0) {
+            this->actor.draw = ObjTsubo_Draw;
+        }
+    } else {
+        scale = sPotTypeData[OBJ_TSUBO_GET_TYPE(&this->actor)].scale;
+        if (Math_StepToF(&this->actor.scale.x, scale, scale * 0.1f)) {
+            this->actor.flags |= ACTOR_FLAG_4000000;
+            func_809289B4(this);
+        }
+        this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;
+    }
+}
+
+void ObjTsubo_Update(Actor* thisx, PlayState* play) {
+    ObjTsubo* this = (ObjTsubo*)thisx;
+
+    this->actionFunc(this, play);
+    if (this->actor.draw == NULL) {
+        this->actor.shape.shadowDraw = NULL;
+    } else if (this->actor.projectedPos.z < 811.0f) {
+        if (this->actor.projectedPos.z > 300.0f) {
+            this->actor.shape.shadowAlpha = (811 - (s32)this->actor.projectedPos.z) >> 1;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        } else if (this->actor.projectedPos.z > -10.0f) {
+            this->actor.shape.shadowAlpha = 255;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        } else {
+            this->actor.shape.shadowDraw = NULL;
+        }
+    } else {
+        this->actor.shape.shadowDraw = NULL;
+    }
+    if (!this->unk_197) {
+        if (this->unk_198) {
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
+            this->actor.flags |= ACTOR_FLAG_10;
+        }
+        if (this->unk_19A >= 0) {
+            if (this->unk_19A == 0) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                if (Rand_ZeroOne() < 0.1f) {
+                    this->unk_19A = Rand_S16Offset(40, 80);
+                } else {
+                    this->unk_19A = 8;
+                }
+            } else {
+                this->unk_19A--;
+            }
+        }
+    }
+}
+
+void ObjTsubo_Draw(Actor* thisx, PlayState* play2) {
+    PlayState* play = (PlayState*)play2;
+
+    Gfx_DrawDListOpa(play, sPotTypeData[OBJ_TSUBO_GET_TYPE(thisx)].modelDL);
+}

@@ -11,15 +11,15 @@
 
 #define THIS ((ObjBell*)thisx)
 
-void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjBell_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjBell_Init(Actor* thisx, PlayState* play);
+void ObjBell_Destroy(Actor* thisx, PlayState* play);
+void ObjBell_Update(Actor* thisx, PlayState* play);
+void ObjBell_Draw(Actor* thisx, PlayState* play);
 
 s32 func_80A356D8(ObjBell* this);
-s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx);
+s32 func_80A357A8(ObjBell* this, PlayState* play);
 
-const ActorInit Obj_Bell_InitVars = {
+ActorInit Obj_Bell_InitVars = {
     ACTOR_OBJ_BELL,
     ACTORCAT_PROP,
     FLAGS,
@@ -165,7 +165,7 @@ s32 func_80A356D8(ObjBell* this) {
     return false;
 }
 
-s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
+s32 func_80A357A8(ObjBell* this, PlayState* play) {
     f32 temp_f0;
     s16 temp_v1;
 
@@ -176,7 +176,7 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
         if (ABS_ALT(temp_v1) < 0x3FFC) {
             if (this->unk_214 == 0) {
                 if (temp_f0 > 0.18f) {
-                    func_800B8D98(globalCtx, &this->dyna.actor, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer,
+                    func_800B8D98(play, &this->dyna.actor, 8.0f * temp_f0, this->dyna.actor.yawTowardsPlayer,
                                   11.0f * temp_f0);
                     this->unk_214 = 30;
                 }
@@ -203,96 +203,96 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_80A358FC(ObjBell* this, GlobalContext* globalCtx) {
+void func_80A358FC(ObjBell* this, PlayState* play) {
     this->collider1.dim.worldSphere.radius = (this->collider1.dim.modelSphere.radius * this->collider1.dim.scale);
     this->collider2.dim.worldSphere.radius = (this->collider2.dim.modelSphere.radius * this->collider2.dim.scale);
     if (DECR(this->unk_20E) == 0) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
     }
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);
 }
 
-void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
-    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+void func_80A359B4(Actor* thisx, PlayState* play) {
+    Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
-    Matrix_RotateY(thisx->world.rot.y, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(thisx->world.rot.x, MTXMODE_APPLY);
-    Matrix_RotateY(-thisx->world.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    Matrix_Translate(0.0f, 2600.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_RotateYS(thisx->world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateXS(thisx->world.rot.x, MTXMODE_APPLY);
+    Matrix_RotateYS(-thisx->world.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -2600.0f, 0.0f, MTXMODE_APPLY);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000698);
     gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_0008D0);
     gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000960);
     gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_0007A8);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
-    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+void func_80A35B18(Actor* thisx, PlayState* play) {
+    Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000570);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
-    Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
+void func_80A35BD4(Actor* thisx, PlayState* play) {
+    Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y - 4.0f, thisx->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_f52_obj_DL_000840);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBell_Init(Actor* thisx, PlayState* play) {
     ObjBell* this = THIS;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_f52_obj_Colheader_001BA8);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_f52_obj_Colheader_001BA8);
     Actor_SetScale(&this->dyna.actor, 0.08f);
-    Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);
-    Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->dyna.actor, &sCylinderInit2);
+    Collider_InitAndSetSphere(play, &this->collider1, &this->dyna.actor, &sCylinderInit1);
+    Collider_InitAndSetSphere(play, &this->collider2, &this->dyna.actor, &sCylinderInit2);
     CollisionCheck_SetInfo2(&this->dyna.actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
 }
 
-void ObjBell_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBell_Destroy(Actor* thisx, PlayState* play) {
     ObjBell* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroySphere(globalCtx, &this->collider1);
-    Collider_DestroySphere(globalCtx, &this->collider2);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroySphere(play, &this->collider1);
+    Collider_DestroySphere(play, &this->collider2);
 }
 
-void ObjBell_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBell_Update(Actor* thisx, PlayState* play) {
     ObjBell* this = THIS;
 
     if (this->unk_214 != 0) {
         this->unk_214--;
     }
-    func_80A357A8(this, globalCtx);
+    func_80A357A8(this, play);
     func_80A356D8(this);
-    func_80A358FC(this, globalCtx);
+    func_80A358FC(this, play);
 }
 
-void ObjBell_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBell_Draw(Actor* thisx, PlayState* play) {
     ObjBell* this = THIS;
     Vec3f sp30;
     Vec3f sp24;
 
-    func_80A35B18(thisx, globalCtx);
-    func_80A35BD4(thisx, globalCtx);
-    func_80A359B4(thisx, globalCtx);
+    func_80A35B18(thisx, play);
+    func_80A35BD4(thisx, play);
+    func_80A359B4(thisx, play);
     Math_Vec3s_ToVec3f(&sp30, &this->collider1.dim.modelSphere.center);
-    Matrix_MultiplyVector3fByState(&sp30, &sp24);
+    Matrix_MultVec3f(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider1.dim.worldSphere.center, &sp24);
     Math_Vec3s_ToVec3f(&sp30, &this->collider2.dim.modelSphere.center);
-    Matrix_MultiplyVector3fByState(&sp30, &sp24);
+    Matrix_MultVec3f(&sp30, &sp24);
     Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp24);
 }

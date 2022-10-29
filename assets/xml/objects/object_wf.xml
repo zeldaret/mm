@@ -62,7 +62,7 @@
         <Limb Name="gWolfosWhiteFrontLeftClawLimb" Type="Standard" EnumName="WOLFOS_WHITE_LIMB_FRONT_LEFT_CLAW" Offset="0x3B60" />
 
         <!-- White Wolfos Skeleton -->
-        <Skeleton Name="gWolfosWhiteSkel" Type="Flex" LimbType="Standard" LimbNone="WOLFOS_WHITE_LIMB_NONE" LimbMax="WOLFOS_WHITE_LIMB_MAX" EnumName="WolfosWhiteLimbs" Offset="0x3BC0" />
+        <Skeleton Name="gWolfosWhiteSkel" Type="Flex" LimbType="Standard" LimbNone="WOLFOS_WHITE_LIMB_NONE" LimbMax="WOLFOS_WHITE_LIMB_MAX" EnumName="WolfosWhiteLimb" Offset="0x3BC0" />
 
         <!-- Wolfos/White Wolfos Animations -->
         <Animation Name="gWolfosSlashingAnim" Offset="0x4638" /> <!-- Original name is "wolfman_attack" -->
@@ -132,7 +132,7 @@
         <Limb Name="gWolfosNormalFrontLeftClawLimb" Type="Standard" EnumName="WOLFOS_NORMAL_LIMB_FRONT_LEFT_CLAW" Offset="0x9570" />
 
         <!-- Wolfos Skeleton -->
-        <Skeleton Name="gWolfosNormalSkel" Type="Flex" LimbType="Standard" LimbNone="WOLFOS_NORMAL_LIMB_NONE" LimbMax="WOLFOS_NORMAL_LIMB_MAX" EnumName="WolfosNormalLimbs" Offset="0x95D0" />
+        <Skeleton Name="gWolfosNormalSkel" Type="Flex" LimbType="Standard" LimbNone="WOLFOS_NORMAL_LIMB_NONE" LimbMax="WOLFOS_NORMAL_LIMB_MAX" EnumName="WolfosNormalLimb" Offset="0x95D0" />
 
         <!-- Wolfos/White Wolfos Animations -->
         <Animation Name="gWolfosSidesteppingAnim" Offset="0x9808" /> <!-- Original name is "wolfman_side_walk" -->

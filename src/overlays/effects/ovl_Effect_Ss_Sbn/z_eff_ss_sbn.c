@@ -22,10 +22,10 @@
 
 #define PARAMS ((EffectSsSbnInitParams*)initParamsx)
 
-u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsSbn_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsSbn_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsSbn_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsSbn_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this);
+void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Sbn_InitVars = {
     EFFECT_SS_SBN,
@@ -44,7 +44,7 @@ static TexturePtr sTextures[] = {
     gEffPoppedDekuBubble4Tex, gEffPoppedDekuBubble5Tex,
 };
 
-u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsSbn_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsSbnInitParams* initParams = PARAMS;
     CollisionPoly* colPoly;
     MtxF mtx;
@@ -120,15 +120,15 @@ u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* 
     return 1;
 }
 
-void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsSbn_DrawSliding(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mtx;
     f32 scale = this->rScale * 0.001f;
     s32 pad;
 
     func_800C0094(this->gfx, this->pos.x, this->pos.y, this->pos.z, &mtx);
     SkinMatrix_MulYRotation(&mtx, this->rRotAngle);
-    Matrix_InsertMatrix(&mtx, MTXMODE_NEW);
+    Matrix_Mult(&mtx, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
 
@@ -149,26 +149,26 @@ void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this
         this->rScroll += this->rScrollStep;
     } else {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffPoppedDekuBubbleSliding12Tex));
-        if ((this->rScrollStep >= 2) && ((globalCtx->state.frames % 2) == 0)) {
+        if ((this->rScrollStep >= 2) && ((play->state.frames % 2) == 0)) {
             this->rScrollStep--;
         }
         this->rScroll += this->rScrollStep;
     }
     gSPSegment(POLY_XLU_DISP++, 0x09,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, this->rScroll, 0x20, 0x20));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, this->rScroll, 0x20, 0x20));
     gSPDisplayList(POLY_XLU_DISP++, gEffPoppedDekuBubbleSlidingDL);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsSbn_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsSbn_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mtx;
     f32 scale = this->rScale * 0.001f;
 
     func_800C0094(this->gfx, this->pos.x, this->pos.y, this->pos.z, &mtx);
     SkinMatrix_MulYRotation(&mtx, this->rRotAngle);
-    Matrix_InsertMatrix(&mtx, MTXMODE_NEW);
+    Matrix_Mult(&mtx, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     Matrix_Scale(0.05f, 0.05f, 0.05f, MTXMODE_APPLY);
 
@@ -194,7 +194,7 @@ void EffectSsSbn_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsSbn_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsSbn_Update(PlayState* play, u32 index, EffectSs* this) {
     if (this->life < 10) {
         this->rAlpha -= 20;
     } else if (this->life >= 45) {

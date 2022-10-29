@@ -11,22 +11,22 @@
 
 #define THIS ((ObjSnowball2*)thisx)
 
-void ObjSnowball2_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSnowball2_Init(Actor* thisx, PlayState* play);
+void ObjSnowball2_Destroy(Actor* thisx, PlayState* play);
+void ObjSnowball2_Update(Actor* thisx, PlayState* play);
+void ObjSnowball2_Draw(Actor* thisx, PlayState* play);
 
 void func_80B38E20(ObjSnowball2* this);
 void func_80B39C78(ObjSnowball2* this);
-void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B39C9C(ObjSnowball2* this, PlayState* play);
 void func_80B39F60(ObjSnowball2* this);
-void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B39FA8(ObjSnowball2* this, PlayState* play);
 void func_80B3A0D8(ObjSnowball2* this);
-void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B3A13C(ObjSnowball2* this, PlayState* play);
 void func_80B3A498(ObjSnowball2* this);
-void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B3A500(ObjSnowball2* this, PlayState* play);
 
-const ActorInit Obj_Snowball2_InitVars = {
+ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,7 +61,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -79,27 +79,26 @@ Gfx* D_80B3A91C[] = {
 Vec3f D_80B3A92C = { 0.0f, 0.3f, 0.0f };
 
 void func_80B38E20(ObjSnowball2* this) {
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x,
-                                          this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
-                                          this->actor.world.pos.z, &this->actor.shape.rot);
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x,
+                                 this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
+                                 this->actor.world.pos.z, &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }
 
-void func_80B38E88(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B38E88(ObjSnowball2* this, PlayState* play) {
     s32 temp_v0;
 
     if (this->unk_1AE == 0) {
         temp_v0 = func_800A8150(ENOBJSNOWBALL2_GET_3F(&this->actor));
         if (temp_v0 >= 0) {
-            Item_DropCollectible(globalCtx, &this->actor.world.pos,
-                                 (ENOBJSNOWBALL2_GET_7F00(&this->actor) << 8) | temp_v0);
+            Item_DropCollectible(play, &this->actor.world.pos, (ENOBJSNOWBALL2_GET_7F00(&this->actor) << 8) | temp_v0);
             this->unk_1AE = 1;
         }
     }
 }
 
-void func_80B38EFC(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B38EFC(ObjSnowball2* this, PlayState* play) {
     s32 pad;
     s32 i;
     Vec3f spA4;
@@ -120,12 +119,12 @@ void func_80B38EFC(ObjSnowball2* this, GlobalContext* globalCtx) {
         spA4.y = sp98.y * -0.06f;
         spA4.z = sp98.z * -0.06f;
 
-        func_800B0E48(globalCtx, &sp8C, &sp98, &spA4, &D_80B3A914, &D_80B3A918, (s32)(Rand_ZeroOne() * 40.0f) + 10,
+        func_800B0E48(play, &sp8C, &sp98, &spA4, &D_80B3A914, &D_80B3A918, (s32)(Rand_ZeroOne() * 40.0f) + 10,
                       (s32)(Rand_ZeroOne() * 30.0f) + 10);
     }
 }
 
-void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B39108(ObjSnowball2* this, PlayState* play) {
     s32 phi_s5;
     s16 phi_s1;
     s32 phi_v0;
@@ -145,7 +144,7 @@ void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
     for (i = 0, phi_s5 = 0; i < 11; i++, phi_s5 += (0x10000 / 11)) {
         temp_s3 = (s32)(Rand_ZeroOne() * 5957.0f) + phi_s5;
 
-        if (((u32)Rand_Next() >> 0x1E) == 0) {
+        if ((Rand_Next() >> 0x1E) == 0) {
             phi_s1 = 0x20;
         } else {
             phi_s1 = 0x40;
@@ -177,20 +176,20 @@ void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
             phi_v0 = 0;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50,
-                             -1, OBJECT_GOROIWA, D_80B3A91C[i & 3]);
+        EffectSsKakera_Spawn(play, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50, -1,
+                             OBJECT_GOROIWA, D_80B3A91C[i & 3]);
 
         spD0.x += (Rand_ZeroOne() - 0.5f) * 40.0f;
         spD0.y += (Rand_ZeroOne() - 0.3f) * 45.0f;
         spD0.z += (Rand_ZeroOne() - 0.5f) * 40.0f;
 
-        func_800B0E48(globalCtx, &spD0, &gZeroVec3f, &D_80B3A92C, &D_80B3A914, &D_80B3A918,
+        func_800B0E48(play, &spD0, &gZeroVec3f, &D_80B3A92C, &D_80B3A914, &D_80B3A918,
                       (s32)(Rand_ZeroOne() * 70.0f) + 10, (s32)(Rand_ZeroOne() * 100.0f) + 10);
     }
     spD0.y = (temp_f2 * temp_f20) + spC8;
 }
 
-void func_80B39470(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B39470(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
     Vec3f sp58;
     s32 phi_s0;
@@ -201,29 +200,29 @@ void func_80B39470(Actor* thisx, GlobalContext* globalCtx) {
     for (phi_s0 = 0, i = 0; i < 5; i++, phi_s0 += (0x10000 / 5)) {
         sp58.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.x;
         sp58.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.z;
-        EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 200);
+        EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 200);
     }
 
     sp58.x = this->actor.world.pos.x;
     sp58.z = this->actor.world.pos.z;
-    EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 300);
+    EffectSsGSplash_Spawn(play, &sp58, NULL, NULL, 0, 300);
 }
 
-void func_80B395C4(GlobalContext* this, Vec3f* arg1) {
-    EffectSsGRipple_Spawn(this, arg1, 200, 700, 0);
+void func_80B395C4(PlayState* play, Vec3f* arg1) {
+    EffectSsGRipple_Spawn(play, arg1, 200, 700, 0);
 }
 
-void func_80B395EC(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B395EC(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
     Vec3f sp18;
 
     sp18.x = this->actor.world.pos.x;
     sp18.y = this->actor.world.pos.y + this->actor.depthInWater;
     sp18.z = this->actor.world.pos.z;
-    func_80B395C4(globalCtx, &sp18);
+    func_80B395C4(play, &sp18);
 }
 
-void func_80B39638(GlobalContext* globalCtx, Vec3f* arg1) {
+void func_80B39638(PlayState* play, Vec3f* arg1) {
     static s16 D_80B3A938 = 0;
     f32 temp_f20;
     f32 temp_f22;
@@ -234,7 +233,7 @@ void func_80B39638(GlobalContext* globalCtx, Vec3f* arg1) {
     f32 temp_f2;
     s32 i;
 
-    D_80B3A938 += (s16)((u32)Rand_Next() >> 0x11);
+    D_80B3A938 += (s16)(Rand_Next() >> 0x11);
 
     for (i = 0; i < 2; i++) {
         D_80B3A938 += 0x8000;
@@ -255,20 +254,20 @@ void func_80B39638(GlobalContext* globalCtx, Vec3f* arg1) {
         sp80.y = sp8C.y * -0.025f;
         sp80.z = sp8C.z * -0.02f;
 
-        EffectSsIceSmoke_Spawn(globalCtx, &sp98, &sp8C, &sp80, (s32)(Rand_ZeroOne() * 30.0f) + 68);
+        EffectSsIceSmoke_Spawn(play, &sp98, &sp8C, &sp80, (s32)(Rand_ZeroOne() * 30.0f) + 68);
     }
 }
 
-void func_80B39834(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B39834(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 0.0f, 20.0f, 30.0f, (Rand_ZeroOne() * 0.11f) + 0.03f);
+        EffectSsBubble_Spawn(play, &this->actor.world.pos, 0.0f, 20.0f, 30.0f, (Rand_ZeroOne() * 0.11f) + 0.03f);
     }
 }
 
-void func_80B39908(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B39908(ObjSnowball2* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -290,20 +289,20 @@ void func_80B39908(ObjSnowball2* this, GlobalContext* globalCtx) {
             spAC.y = spA0.y * -0.06f;
             spAC.z = spA0.z * -0.06f;
 
-            func_800B0E48(globalCtx, &sp94, &spA0, &spAC, &D_80B3A914, &D_80B3A918, (s32)(Rand_ZeroOne() * 40.0f) + 10,
+            func_800B0E48(play, &sp94, &spA0, &spAC, &D_80B3A914, &D_80B3A918, (s32)(Rand_ZeroOne() * 40.0f) + 10,
                           (s32)(Rand_ZeroOne() * 30.0f) + 10);
         }
     }
 }
 
-void func_80B39B28(ObjSnowball2* this, GlobalContext* globalCtx) {
-    if ((this->unk_1AE == 0) && (globalCtx->roomCtx.currRoom.num != this->unk_1AF)) {
+void func_80B39B28(ObjSnowball2* this, PlayState* play) {
+    if ((this->unk_1AE == 0) && (play->roomCtx.curRoom.num != this->unk_1AF)) {
         this->unk_1AE = 1;
     }
 }
 
-void func_80B39B5C(ObjSnowball2* this, GlobalContext* globalCtx) {
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
+void func_80B39B5C(ObjSnowball2* this, PlayState* play) {
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
 }
 
 static InitChainEntry sInitChain[] = {
@@ -312,27 +311,27 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
 };
 
-void ObjSnowball2_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball2_Init(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitJntSph(globalCtx, &this->collider);
+    Collider_InitJntSph(play, &this->collider);
     this->actor.shape.rot.x = 0;
     this->actor.shape.rot.z = 0;
-    this->actor.shape.rot.y = (u32)Rand_Next() >> 0x10;
+    this->actor.shape.rot.y = Rand_Next() >> 0x10;
     ActorShape_Init(&this->actor.shape, 200.0f, NULL, 12.5f);
     this->actor.shape.shadowAlpha = 130;
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     func_80B38E20(this);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_1AF = this->actor.room;
     func_80B39C78(this);
 }
 
-void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball2_Destroy(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_80B39C78(ObjSnowball2* this) {
@@ -341,7 +340,7 @@ void func_80B39C78(ObjSnowball2* this) {
     this->actionFunc = func_80B39C9C;
 }
 
-void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B39C9C(ObjSnowball2* this, PlayState* play) {
     s32 pad;
     s32 sp38 = (this->collider.base.acFlags & AC_HIT) != 0;
     s32 pad2;
@@ -350,47 +349,46 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.room = -1;
         this->actor.flags |= ACTOR_FLAG_10;
         if (func_800A817C(ENOBJSNOWBALL2_GET_3F(&this->actor))) {
-            func_80B38E88(this, globalCtx);
+            func_80B38E88(this, play);
         }
-        func_80B38EFC(this, globalCtx);
-        func_800B8E58(GET_PLAYER(globalCtx), NA_SE_PL_PULL_UP_SNOWBALL);
+        func_80B38EFC(this, play);
+        func_800B8E58(GET_PLAYER(play), NA_SE_PL_PULL_UP_SNOWBALL);
         func_80B39F60(this);
     } else if ((this->actor.bgCheckFlags & 0x20) &&
                ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
         func_80B3A498(this);
     } else if (sp38 && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0583FFBC)) {
-        func_80B38E88(this, globalCtx);
-        func_80B39108(this, globalCtx);
-        func_80B39B5C(this, globalCtx);
-        Actor_MarkForDeath(&this->actor);
+        func_80B38E88(this, play);
+        func_80B39108(this, play);
+        func_80B39B5C(this, play);
+        Actor_Kill(&this->actor);
         return;
     } else {
         if (sp38 && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 2)) {
-            func_80B39908(this, globalCtx);
+            func_80B39908(this, play);
         }
 
         if (this->unk_1AD == 0) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
-            if ((this->actor.bgCheckFlags & 1) &&
-                (DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL)) {
+            Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+            if ((this->actor.bgCheckFlags & 1) && (DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_1AD = 1;
                 this->actor.flags &= ~ACTOR_FLAG_10;
             }
         }
 
         if (this->actor.xzDistToPlayer < 800.0f) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {
-                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, GET_PLAYER(globalCtx)->actor.world.rot.y)) >=
+                    if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, GET_PLAYER(play)->actor.world.rot.y)) >=
                         0x5556) {
-                        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -405,32 +403,32 @@ void func_80B39F60(ObjSnowball2* this) {
     this->actionFunc = func_80B39FA8;
 }
 
-void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B39FA8(ObjSnowball2* this, PlayState* play) {
     s32 pad;
     Vec3f sp30;
     s32 sp2C;
 
-    func_80B39B28(this, globalCtx);
+    func_80B39B28(this, play);
 
     if (this->unk_1AC > 0) {
         this->unk_1AC--;
-        func_80B38EFC(this, globalCtx);
+        func_80B38EFC(this, play);
     }
 
-    if (Actor_HasNoParent(&this->actor, globalCtx)) {
-        this->actor.room = globalCtx->roomCtx.currRoom.num;
+    if (Actor_HasNoParent(&this->actor, play)) {
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.speedXZ *= 3.8f;
         this->actor.velocity.y *= 0.4f;
         this->actor.gravity = -2.8f;
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
         func_80B3A0D8(this);
     } else {
         sp30.x = this->actor.world.pos.x;
         sp30.y = this->actor.world.pos.y + 20.0f;
         sp30.z = this->actor.world.pos.z;
         this->actor.floorHeight =
-            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+            BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
     }
 }
 
@@ -442,7 +440,7 @@ void func_80B3A0D8(ObjSnowball2* this) {
     this->actionFunc = func_80B3A13C;
 }
 
-void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B3A13C(ObjSnowball2* this, PlayState* play) {
     s32 pad;
     s32 sp38 = (this->collider.base.atFlags & AT_HIT) != 0;
     s32 sp34 = (this->collider.base.ocFlags1 & OC1_HIT) != 0;
@@ -460,13 +458,13 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
         this->unk_1AC--;
     }
 
-    func_80B39B28(this, globalCtx);
+    func_80B39B28(this, play);
 
     if ((((this->actor.bgCheckFlags & 9) || sp38) && !(this->actor.bgCheckFlags & 0x20)) || (this->unk_1AC <= 0)) {
-        func_80B38E88(this, globalCtx);
-        func_80B39108(this, globalCtx);
-        func_80B39B5C(this, globalCtx);
-        Actor_MarkForDeath(&this->actor);
+        func_80B38E88(this, play);
+        func_80B39108(this, play);
+        func_80B39B5C(this, play);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -474,18 +472,18 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 0x60) {
         if ((this->actor.bgCheckFlags & 0x40) || (this->actor.speedXZ > 3.0f)) {
             if (this->actor.depthInWater < (1200.0f * this->actor.scale.y)) {
-                func_80B39470(&this->actor, globalCtx);
-                func_80B395EC(&this->actor, globalCtx);
+                func_80B39470(&this->actor, play);
+                func_80B395EC(&this->actor, play);
             }
             if (this->actor.bgCheckFlags & 0x40) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
             }
-        } else if ((((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) &&
+        } else if ((((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) &&
                    (this->actor.depthInWater < (1200.0f * this->actor.scale.y))) {
-            func_80B395EC(&this->actor, globalCtx);
+            func_80B395EC(&this->actor, play);
         }
 
-        func_80B39834(&this->actor, globalCtx);
+        func_80B39834(&this->actor, play);
         this->unk_1A8 >>= 1;
         this->unk_1AA >>= 1;
 
@@ -509,15 +507,15 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
     this->actor.shape.rot.x += this->unk_1A8;
     this->actor.shape.rot.y += this->unk_1AA;
     func_80B38E20(this);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (sp30) {
         func_80B3A498(this);
     } else {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -533,7 +531,7 @@ void func_80B3A498(ObjSnowball2* this) {
     this->actionFunc = func_80B3A500;
 }
 
-void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx) {
+void func_80B3A500(ObjSnowball2* this, PlayState* play) {
     f32 phi_f0;
     s32 pad;
     f32 temp_f14 = this->actor.home.pos.y - this->actor.world.pos.y;
@@ -567,12 +565,12 @@ void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx) {
     this->actor.velocity.y += this->actor.gravity;
     this->actor.world.pos.y += this->actor.velocity.y;
 
-    if (((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) {
-        func_80B395C4(globalCtx, &this->actor.home.pos);
+    if (((play->gameplayFrames % 16) == 0) || ((Rand_Next() >> 0x10) == 0)) {
+        func_80B395C4(play, &this->actor.home.pos);
     }
 
     if (this->unk_1AC <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -583,24 +581,24 @@ void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx) {
         this->actor.scale.z = this->actor.scale.x;
 
         if ((this->unk_1AC >= 6) && (temp_f14 < temp_f12)) {
-            func_80B39638(globalCtx, &this->actor.home.pos);
+            func_80B39638(play, &this->actor.home.pos);
         }
 
         if (this->unk_1AC == 10) {
-            func_80B38E88(this, globalCtx);
+            func_80B38E88(this, play);
         }
 
         func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         func_80B38E20(this);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball2_Update(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actor.projectedPos.z < 460.0f) {
         if (this->actor.projectedPos.z > 200.0f) {
@@ -617,8 +615,8 @@ void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball2_Draw(Actor* thisx, PlayState* play) {
     ObjSnowball2* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_008B90);
+    Gfx_DrawDListOpa(play, object_goroiwa_DL_008B90);
 }

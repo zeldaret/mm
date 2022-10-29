@@ -11,10 +11,10 @@
 
 #define THIS ((EnWood02*)thisx)
 
-void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWood02_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWood02_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWood02_Init(Actor* thisx, PlayState* play);
+void EnWood02_Destroy(Actor* thisx, PlayState* play);
+void EnWood02_Update(Actor* thisx, PlayState* play2);
+void EnWood02_Draw(Actor* thisx, PlayState* play);
 
 /**
  * WOOD_SPAWN_SPAWNER is also used by some individual trees: EnWood02_Update also checks for parent before running any
@@ -38,7 +38,7 @@ typedef enum {
 static f32 sSpawnCos;
 static f32 sSpawnSin;
 
-const ActorInit En_Wood02_InitVars = {
+ActorInit En_Wood02_InitVars = {
     ACTOR_EN_WOOD02,
     ACTORCAT_PROP,
     FLAGS,
@@ -98,11 +98,10 @@ Gfx* D_808C4D70[] = {
     object_wood02_DL_000700,
 };
 
-s32 EnWood02_SpawnZoneCheck(EnWood02* this, GlobalContext* globalCtx, Vec3f* arg2) {
+s32 EnWood02_SpawnZoneCheck(EnWood02* this, PlayState* play, Vec3f* arg2) {
     f32 phi_f12;
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, arg2, &this->actor.projectedPos,
-                                 &this->actor.projectedW);
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg2, &this->actor.projectedPos, &this->actor.projectedW);
 
     if (this->actor.projectedW == 0.0f) {
         phi_f12 = 1000.0f;
@@ -122,7 +121,7 @@ s32 EnWood02_SpawnZoneCheck(EnWood02* this, GlobalContext* globalCtx, Vec3f* arg
 
 /** Spawns similar-looking trees or bushes only when the player is sufficiently close. Presumably done this way to keep
  * memory usage down in Hyrule Field. */
-void EnWood02_SpawnOffspring(EnWood02* this, GlobalContext* globalCtx) {
+void EnWood02_SpawnOffspring(EnWood02* this, PlayState* play) {
     EnWood02* child;
     s32 extraRot;
     Vec3f childPos;
@@ -144,7 +143,7 @@ void EnWood02_SpawnOffspring(EnWood02* this, GlobalContext* globalCtx) {
             childPos.y = this->actor.home.pos.y;
             childPos.z = (sSpawnDistance[i] * sSpawnCos) + this->actor.home.pos.z;
 
-            if (EnWood02_SpawnZoneCheck(this, globalCtx, &childPos)) {
+            if (EnWood02_SpawnZoneCheck(this, play, &childPos)) {
                 if (this->unk_14A[i] & 0x80) {
                     unk = 0;
                 } else {
@@ -152,9 +151,9 @@ void EnWood02_SpawnOffspring(EnWood02* this, GlobalContext* globalCtx) {
                 }
 
                 childParams = ((this->unk_144 << 8) & 0xFF00) | (this->actor.params + 1);
-                child = (EnWood02*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_WOOD02,
-                                                      childPos.x, childPos.y, childPos.z, this->actor.world.rot.x,
-                                                      sSpawnAngle[i], unk, childParams);
+                child = (EnWood02*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_WOOD02, childPos.x,
+                                                      childPos.y, childPos.z, this->actor.world.rot.x, sSpawnAngle[i],
+                                                      unk, childParams);
                 if (child != NULL) {
                     child->unk_14A[0] = i;
                     this->unk_14A[i] |= 1;
@@ -167,7 +166,7 @@ void EnWood02_SpawnOffspring(EnWood02* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnWood02_Init(Actor* thisx, PlayState* play) {
     s16 spawnType = 0;
     f32 actorScale = 1.0f;
     EnWood02* this = THIS;
@@ -192,14 +191,14 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
     if ((this->actor.params < WOOD_BUSH_GREEN_SMALL) || (this->actor.params == WOOD_TREE_SPECIAL)) {
-        Collider_InitCylinder(globalCtx, &this->collider);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitCylinder(play, &this->collider);
+        Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     }
 
     if ((this->actor.params == WOOD_TREE_SPECIAL) && !gSaveContext.save.isNight && (this->unk_144 != -1) &&
-        !Flags_GetCollectible(globalCtx, this->unk_144)) {
+        !Flags_GetCollectible(play, this->unk_144)) {
         this->actor.child =
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ANI, this->actor.world.pos.x,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ANI, this->actor.world.pos.x,
                                this->actor.world.pos.y + 120.0f, this->actor.world.pos.z - 15.0f, 0, 0, 0, 1);
         if (this->actor.child != NULL) {
             this->actor.child->cutscene = this->actor.cutscene;
@@ -296,7 +295,7 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (spawnType == WOOD_SPAWN_SPAWNER) {
-            EnWood02_SpawnOffspring(this, globalCtx);
+            EnWood02_SpawnOffspring(this, play);
             sSpawnCos = Math_CosS(sSpawnAngle[5] + this->actor.world.rot.y + extraRot);
             sSpawnSin = Math_SinS(sSpawnAngle[5] + this->actor.world.rot.y + extraRot);
             this->actor.world.pos.x += sSpawnSin * sSpawnDistance[5];
@@ -308,12 +307,12 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         // Snap to floor, or remove if over void
         this->actor.world.pos.y += 200.0f;
-        floorY = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &outPoly, &bgId, &this->actor, &this->actor.world.pos);
+        floorY = BgCheck_EntityRaycastFloor5(&play->colCtx, &outPoly, &bgId, &this->actor, &this->actor.world.pos);
 
         if (floorY > BGCHECK_Y_MIN) {
             this->actor.world.pos.y = floorY;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -323,33 +322,33 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 }
 
-void EnWood02_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnWood02_Destroy(Actor* thisx, PlayState* play) {
     EnWood02* this = THIS;
 
     if ((this->actor.params < WOOD_BUSH_GREEN_SMALL) || (this->actor.params == WOOD_TREE_SPECIAL)) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+        Collider_DestroyCylinder(play, &this->collider);
     }
 }
 
-void func_808C4458(EnWood02* this, GlobalContext* globalCtx, Vec3f* arg2, u16 arg3) {
+void func_808C4458(EnWood02* this, PlayState* play, Vec3f* arg2, u16 arg3) {
     s32 pad[2];
     s32 sp24;
 
     if (this->unk_148 != 0) {
-        if ((this->unk_144 == -1) || !Flags_GetCollectible(globalCtx, this->unk_144)) {
+        if ((this->unk_144 == -1) || !Flags_GetCollectible(play, this->unk_144)) {
             if ((this->unk_148 < 0) && (this->unk_148 >= -0x10)) {
                 if (arg3 & 1) {
-                    Item_DropCollectibleRandom(globalCtx, &this->actor, arg2, ((-1 - this->unk_148) * 0x10) | 0x8000);
+                    Item_DropCollectibleRandom(play, &this->actor, arg2, ((-1 - this->unk_148) * 0x10) | 0x8000);
                 } else {
-                    Item_DropCollectibleRandom(globalCtx, &this->actor, arg2, (-1 - this->unk_148) * 0x10);
+                    Item_DropCollectibleRandom(play, &this->actor, arg2, (-1 - this->unk_148) * 0x10);
                 }
             } else if (this->unk_148 > 0) {
                 sp24 = func_800A8150(this->unk_148 - 1);
                 if (sp24 >= 0) {
                     if (this->unk_144 == -1) {
-                        Item_DropCollectible(globalCtx, arg2, sp24);
+                        Item_DropCollectible(play, arg2, sp24);
                     } else {
-                        Item_DropCollectible(globalCtx, arg2, ((this->unk_144 & 0x7F) << 8) | sp24);
+                        Item_DropCollectible(play, arg2, ((this->unk_144 & 0x7F) << 8) | sp24);
                     }
                 }
             }
@@ -358,14 +357,14 @@ void func_808C4458(EnWood02* this, GlobalContext* globalCtx, Vec3f* arg2, u16 ar
     }
 }
 
-void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnWood02_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnWood02* this = THIS;
     f32 wobbleAmplitude;
 
     // Despawn extra trees in a group if out of range
     if ((this->spawnType == WOOD_SPAWN_SPAWNED) && (thisx->parent != NULL)) {
-        if (!(thisx->flags & 0x40) && (this->unk_151 != 2)) {
+        if (!(thisx->flags & ACTOR_FLAG_40) && (this->unk_151 != 2)) {
             s32 index = this->unk_14A[0];
             s32 phi_v0 = 0;
 
@@ -375,12 +374,12 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             ((EnWood02*)thisx->parent)->unk_14A[index] = phi_v0;
 
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
         this->unk_151 = 0;
     } else if (this->spawnType == WOOD_SPAWN_SPAWNER) {
-        EnWood02_SpawnOffspring(this, globalCtx);
+        EnWood02_SpawnOffspring(this, play);
     }
 
     if ((thisx->params < WOOD_BUSH_GREEN_SMALL) || (thisx->params == WOOD_TREE_SPECIAL)) {
@@ -394,7 +393,7 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             dropsSpawnPt.y += 200.0f;
 
-            func_808C4458(this, globalCtx, &dropsSpawnPt, 0);
+            func_808C4458(this, play, &dropsSpawnPt, 0);
 
             // Spawn falling leaves
             if (this->unk_146 >= -1) {
@@ -408,8 +407,8 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 Actor_PlaySfxAtPos(thisx, NA_SE_EV_TREE_SWING);
 
                 for (i = 3; i >= 0; i--) {
-                    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y,
-                                dropsSpawnPt.z, 0, randPlusMinusPoint5Scaled(0xFFFF), 0, leavesParams);
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z,
+                                0, randPlusMinusPoint5Scaled(0xFFFF), 0, leavesParams);
                 }
             }
 
@@ -419,7 +418,7 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             if ((thisx->params == WOOD_TREE_SPECIAL) && (this->unk_144 != -1)) {
-                Flags_SetCollectible(globalCtx, this->unk_144);
+                Flags_SetCollectible(play, this->unk_144);
                 this->unk_144 = -1;
             }
             this->unk_146 = -0x15;
@@ -428,17 +427,17 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         if (thisx->xzDistToPlayer < 600.0f) {
             Collider_UpdateCylinder(thisx, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     } else if ((thisx->params < WOOD_LEAF_GREEN) || (thisx->params == WOOD_TREE_SPECIAL)) { // not leaves
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         if ((this->unk_146 >= -1) && (((player->rideActor == NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 20.0f) &&
                                        (player->linearVelocity != 0.0f)) ||
                                       ((player->rideActor != NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 60.0f) &&
                                        (player->rideActor->speedXZ != 0.0f)))) {
-            func_808C4458(this, globalCtx, &thisx->world.pos, 1);
+            func_808C4458(this, play, &thisx->world.pos, 1);
             this->unk_146 = -0x15;
             Actor_PlaySfxAtPos(thisx, NA_SE_EV_TREE_SWING);
         }
@@ -450,7 +449,7 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
         thisx->shape.rot.z = Math_SinS(this->unk_146 * 0xBB8) * 16384.0f;
         this->unk_14A[0]--;
         if (this->unk_14A[0] == 0) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     }
 
@@ -463,24 +462,22 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void EnWood02_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    s16 type;
-    s16 pad;
+void EnWood02_Draw(Actor* thisx, PlayState* play) {
+    EnWood02* this = THIS;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     u8 red;
     u8 green;
     u8 blue;
 
     OPEN_DISPS(gfxCtx);
-    type = thisx->params;
 
-    if ((type == WOOD_TREE_OVAL_GREEN_SPAWNER) || (type == WOOD_TREE_OVAL_GREEN_SPAWNED) ||
-        (type == WOOD_TREE_OVAL_GREEN) || (type == WOOD_LEAF_GREEN)) {
+    if ((thisx->params == WOOD_TREE_OVAL_GREEN_SPAWNER) || (thisx->params == WOOD_TREE_OVAL_GREEN_SPAWNED) ||
+        (thisx->params == WOOD_TREE_OVAL_GREEN) || (thisx->params == WOOD_LEAF_GREEN)) {
         red = 50;
         green = 170;
         blue = 70;
-    } else if ((type == WOOD_TREE_OVAL_YELLOW_SPAWNER) || (type == WOOD_TREE_OVAL_YELLOW_SPAWNED) ||
-               (type == WOOD_LEAF_YELLOW)) {
+    } else if ((thisx->params == WOOD_TREE_OVAL_YELLOW_SPAWNER) || (thisx->params == WOOD_TREE_OVAL_YELLOW_SPAWNED) ||
+               (thisx->params == WOOD_LEAF_YELLOW)) {
         red = 180;
         green = 155;
         blue = 0;
@@ -495,18 +492,18 @@ void EnWood02_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, 127);
 
-        Gfx_DrawDListOpa(globalCtx, object_wood02_DL_000700);
-    } else if (D_808C4D70[THIS->drawType & 0xF] != NULL) {
-        Gfx_DrawDListOpa(globalCtx, D_808C4D54[THIS->drawType & 0xF]);
+        Gfx_DrawDListOpa(play, object_wood02_DL_000700);
+    } else if (D_808C4D70[this->drawType & 0xF] != NULL) {
+        Gfx_DrawDListOpa(play, D_808C4D54[this->drawType & 0xF]);
 
         gDPSetEnvColor(POLY_XLU_DISP++, red, green, blue, 0);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[THIS->drawType & 0xF]);
+        gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
         func_8012C2DC(gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[THIS->drawType & 0xF]);
+        gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);
     }
 
     CLOSE_DISPS(gfxCtx);

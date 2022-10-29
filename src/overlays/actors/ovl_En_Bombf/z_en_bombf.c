@@ -5,25 +5,26 @@
  */
 
 #include "z_en_bombf.h"
+#include "z64rumble.h"
 #include "objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
 
 #define THIS ((EnBombf*)thisx)
 
-void EnBombf_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBombf_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBombf_Init(Actor* thisx, PlayState* play2);
+void EnBombf_Destroy(Actor* thisx, PlayState* play);
+void EnBombf_Update(Actor* thisx, PlayState* play);
+void EnBombf_Draw(Actor* thisx, PlayState* play);
 
 void EnBombf_SetupAction(EnBombf* this, EnBombfActionFunc actionFunc);
 void func_808AEAB8(EnBombf* this, s16 arg1);
-void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx);
-void func_808AEE3C(EnBombf* this, GlobalContext* globalCtx);
-void func_808AEF68(EnBombf* this, GlobalContext* globalCtx);
-void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx);
+void func_808AEAE0(EnBombf* this, PlayState* play);
+void func_808AEE3C(EnBombf* this, PlayState* play);
+void func_808AEF68(EnBombf* this, PlayState* play);
+void func_808AEFD4(EnBombf* this, PlayState* play);
 
-const ActorInit En_Bombf_InitVars = {
+ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
     ACTORCAT_PROP,
     FLAGS,
@@ -78,7 +79,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_NONE,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -86,18 +87,18 @@ void EnBombf_SetupAction(EnBombf* this, EnBombfActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void EnBombf_Init(Actor* thisx, GlobalContext* globalCtx2) {
+void EnBombf_Init(Actor* thisx, PlayState* play2) {
     f32 yOffset = 0.0f;
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
     EnBombf* this = THIS;
 
     Actor_SetScale(thisx, 0.01f);
     this->unk_1F8 = 1;
 
-    Collider_InitCylinder(globalCtx, &this->colliderCylinder);
-    Collider_InitJntSph(globalCtx, &this->colliderJntSph);
-    Collider_SetCylinder(globalCtx, &this->colliderCylinder, thisx, &sCylinderInit);
-    Collider_SetJntSph(globalCtx, &this->colliderJntSph, thisx, &sJntSphInit, this->colliderJntSphElements);
+    Collider_InitCylinder(play, &this->colliderCylinder);
+    Collider_InitJntSph(play, &this->colliderJntSph);
+    Collider_SetCylinder(play, &this->colliderCylinder, thisx, &sCylinderInit);
+    Collider_SetJntSph(play, &this->colliderJntSph, thisx, &sJntSphInit, this->colliderJntSphElements);
 
     if (ENBOMBF_GET(thisx) == ENBOMBF_0) {
         yOffset = 1000.0f;
@@ -114,7 +115,7 @@ void EnBombf_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->timer = 140;
         this->unk_1FE = 15;
         thisx->gravity = -1.5f;
-        func_800BC154(globalCtx, &globalCtx->actorCtx, thisx, 3);
+        func_800BC154(play, &play->actorCtx, thisx, 3);
         thisx->colChkInfo.mass = 200;
         thisx->flags &= ~ACTOR_FLAG_1;
         EnBombf_SetupAction(this, func_808AEE3C);
@@ -129,30 +130,30 @@ void EnBombf_Init(Actor* thisx, GlobalContext* globalCtx2) {
     thisx->uncullZoneForward += 31000.0f;
 }
 
-void EnBombf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBombf_Destroy(Actor* thisx, PlayState* play) {
     EnBombf* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
-    Collider_DestroyJntSph(globalCtx, &this->colliderJntSph);
+    Collider_DestroyCylinder(play, &this->colliderCylinder);
+    Collider_DestroyJntSph(play, &this->colliderJntSph);
 }
 
 void func_808AEAB8(EnBombf* this, s16 arg1) {
     EnBombf_SetupAction(this, func_808AEAE0);
 }
 
-void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
+void func_808AEAE0(EnBombf* this, PlayState* play) {
     s32 pad;
     s32 pad2;
     EnBombf* bombf;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 pad3;
 
     if (this->unk_204 >= 1.0f) {
-        if (Actor_HasParent(&this->actor, globalCtx)) {
-            bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
+        if (Actor_HasParent(&this->actor, play)) {
+            bombf = (EnBombf*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOMBF, this->actor.world.pos.x,
                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
             if (bombf != NULL) {
-                func_800B8C20(&this->actor, &bombf->actor, globalCtx);
+                func_800B8C20(&this->actor, &bombf->actor, play);
                 this->timer = 180;
                 this->unk_204 = 0.0f;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
@@ -162,7 +163,7 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~0x800;
+                player->stateFlags1 &= ~PLAYER_STATE1_800;
             }
         } else if ((this->colliderCylinder.base.acFlags & AC_HIT) &&
                    ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0x13828) ||
@@ -170,7 +171,7 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
                      (player->transformation == PLAYER_FORM_GORON) && (player->actor.speedXZ > 15.0f)))) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {
-                bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
+                bombf = (EnBombf*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOMBF, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
                 if (bombf != NULL) {
                     bombf->unk_1F8 = 1;
@@ -181,8 +182,8 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
                 }
             }
         } else {
-            if (func_80123F48(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
-                bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
+            if (Player_IsBurningStickInRange(play, &this->actor.world.pos, 30.0f, 50.0f)) {
+                bombf = (EnBombf*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOMBF, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
                 if (bombf != NULL) {
                     bombf->timer = 100;
@@ -191,15 +192,15 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
                     this->unk_204 = 0.0f;
                 }
             } else {
-                if (!Actor_HasParent(&this->actor, globalCtx)) {
-                    Actor_LiftActor(&this->actor, globalCtx);
+                if (!Actor_HasParent(&this->actor, play)) {
+                    Actor_LiftActor(&this->actor, play);
                     return;
                 }
                 player->actor.child = NULL;
                 player->heldActor = NULL;
                 player->interactRangeActor = NULL;
                 this->actor.parent = NULL;
-                player->stateFlags1 &= ~0x800;
+                player->stateFlags1 &= ~PLAYER_STATE1_800;
                 this->actor.world.pos = this->actor.home.pos;
             }
         }
@@ -211,19 +212,19 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
             }
         }
 
-        if (Actor_HasParent(&this->actor, globalCtx)) {
+        if (Actor_HasParent(&this->actor, play)) {
             player->actor.child = NULL;
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
             this->actor.parent = NULL;
-            player->stateFlags1 &= ~0x800;
+            player->stateFlags1 &= ~PLAYER_STATE1_800;
             this->actor.world.pos = this->actor.home.pos;
         }
     }
 }
 
-void func_808AEE3C(EnBombf* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void func_808AEE3C(EnBombf* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->unk_204 = 0.0f;
         EnBombf_SetupAction(this, func_808AEF68);
         this->actor.room = -1;
@@ -238,77 +239,77 @@ void func_808AEE3C(EnBombf* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 1.5f, 0.0f);
     if (this->actor.bgCheckFlags & 2) {
-        func_800B8EF4(globalCtx, &this->actor);
+        func_800B8EF4(play, &this->actor);
         if (this->actor.velocity.y < -6.0f) {
             this->actor.velocity.y *= -0.3f;
             this->actor.bgCheckFlags &= ~1;
         }
     } else if (this->timer >= 4) {
-        Actor_LiftActor(&this->actor, globalCtx);
+        Actor_LiftActor(&this->actor, play);
     }
 }
 
-void func_808AEF68(EnBombf* this, GlobalContext* globalCtx) {
-    if (Actor_HasNoParent(&this->actor, globalCtx)) {
+void func_808AEF68(EnBombf* this, PlayState* play) {
+    if (Actor_HasNoParent(&this->actor, play)) {
         EnBombf_SetupAction(this, func_808AEE3C);
         this->actor.bgCheckFlags &= ~1;
-        func_808AEE3C(this, globalCtx);
+        func_808AEE3C(this, play);
     } else {
         this->actor.velocity.y = 0.0f;
     }
 }
 
-void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx) {
+void func_808AEFD4(EnBombf* this, PlayState* play) {
     if (this->colliderJntSph.elements->dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Request(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
     this->colliderJntSph.elements->dim.modelSphere.radius = 100;
     this->colliderJntSph.elements->dim.worldSphere.radius = 100;
 
     if (ENBOMBF_GET(&this->actor) == ENBOMBF_1) {
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderJntSph.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderJntSph.base);
     }
 
-    if (globalCtx->envCtx.lightSettings.diffuseColor1[0] != 0) {
-        globalCtx->envCtx.lightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.lightSettings.diffuseColor1[0] != 0) {
+        play->envCtx.lightSettings.diffuseColor1[0] -= 25;
     }
 
-    if (globalCtx->envCtx.lightSettings.diffuseColor1[1] != 0) {
-        globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.lightSettings.diffuseColor1[1] != 0) {
+        play->envCtx.lightSettings.diffuseColor1[1] -= 25;
     }
 
-    if (globalCtx->envCtx.lightSettings.diffuseColor1[2] != 0) {
-        globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.lightSettings.diffuseColor1[2] != 0) {
+        play->envCtx.lightSettings.diffuseColor1[2] -= 25;
     }
 
-    if (globalCtx->envCtx.lightSettings.ambientColor[0] != 0) {
-        globalCtx->envCtx.lightSettings.ambientColor[0] -= 25;
+    if (play->envCtx.lightSettings.ambientColor[0] != 0) {
+        play->envCtx.lightSettings.ambientColor[0] -= 25;
     }
 
-    if (globalCtx->envCtx.lightSettings.ambientColor[1] != 0) {
-        globalCtx->envCtx.lightSettings.ambientColor[1] -= 25;
+    if (play->envCtx.lightSettings.ambientColor[1] != 0) {
+        play->envCtx.lightSettings.ambientColor[1] -= 25;
     }
 
-    if (globalCtx->envCtx.lightSettings.ambientColor[2] != 0) {
-        globalCtx->envCtx.lightSettings.ambientColor[2] -= 25;
+    if (play->envCtx.lightSettings.ambientColor[2] != 0) {
+        play->envCtx.lightSettings.ambientColor[2] -= 25;
     }
 
     if (this->timer == 0) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
-        if ((player->stateFlags1 & 0x800) && (&this->actor == player->heldActor)) {
+        if ((player->stateFlags1 & PLAYER_STATE1_800) && (&this->actor == player->heldActor)) {
             player->actor.child = NULL;
             player->heldActor = NULL;
             player->interactRangeActor = NULL;
-            player->stateFlags1 &= ~0x800;
+            player->stateFlags1 &= ~PLAYER_STATE1_800;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBombf_Update(Actor* thisx, PlayState* play) {
     Vec3f sp8C = { 0.0f, 0.0f, 0.0f };
     Vec3f sp80 = { 0.0f, 0.1f, 0.0f };
     Vec3f sp74 = { 0.0f, 0.0f, 0.0f };
@@ -322,12 +323,12 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->timer--;
     }
 
-    if ((this->unk_1FC == 0) && !Actor_HasParent(&this->actor, globalCtx) &&
+    if ((this->unk_1FC == 0) && !Actor_HasParent(&this->actor, play) &&
         ((this->actor.xzDistToPlayer >= 20.0f) || (fabsf(this->actor.playerHeightRel) >= 80.0f))) {
         this->unk_1FC = 1;
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (ENBOMBF_GET(&this->actor) == ENBOMBF_0) {
         Actor_MoveWithGravity(&this->actor);
@@ -335,7 +336,7 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.gravity != 0.0f) {
         DREG(6) = 1;
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
         DREG(6) = 0;
     }
 
@@ -354,7 +355,7 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_BOUND);
             Actor_MoveWithGravity(&this->actor);
             DREG(6) = 1;
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 5.0f, 10.0f, 0.0f, 0x1F);
             DREG(6) = 0;
             this->actor.speedXZ *= 0.7f;
             this->actor.bgCheckFlags &= ~8;
@@ -364,7 +365,7 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
             ((this->colliderCylinder.base.ocFlags1 & OC1_HIT) && (this->colliderCylinder.base.oc->category == 5))) {
             this->unk_1F8 = 1;
             this->timer = 0;
-        } else if ((this->timer > 100) && func_80123F48(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
+        } else if ((this->timer > 100) && Player_IsBurningStickInRange(play, &this->actor.world.pos, 30.0f, 50.0f)) {
             this->timer = 100;
         }
 
@@ -374,12 +375,12 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
             sp68.y += 25.0f;
 
             if (this->timer < 127) {
-                if ((globalCtx->gameplayFrames % 2) == 0) {
-                    EffectSsGSpk_SpawnFuse(globalCtx, &this->actor, &sp68, &sp8C, &sp74);
+                if ((play->gameplayFrames % 2) == 0) {
+                    EffectSsGSpk_SpawnFuse(play, &this->actor, &sp68, &sp8C, &sp74);
                 }
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
                 sp68.y += 3.0f;
-                func_800B0DE0(globalCtx, &sp68, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
+                func_800B0DE0(play, &sp68, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
             }
 
             if ((this->timer == 3) || (this->timer == 30) || (this->timer == 50) || (this->timer == 70)) {
@@ -400,20 +401,20 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
                 sp68 = this->actor.world.pos;
                 sp68.y += 10.0f;
 
-                if (Actor_HasParent(&this->actor, globalCtx)) {
+                if (Actor_HasParent(&this->actor, play)) {
                     sp68.y += 30.0f;
                 }
 
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_EXPLOSION);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
-                globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.diffuseColor1[1] =
-                    globalCtx->envCtx.lightSettings.diffuseColor1[2] = 250;
-                globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.ambientColor[1] =
-                    globalCtx->envCtx.lightSettings.ambientColor[2] = 250;
+                play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
+                    play->envCtx.lightSettings.diffuseColor1[2] = 250;
+                play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
+                    play->envCtx.lightSettings.ambientColor[2] = 250;
 
-                func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
+                Camera_AddQuake(&play->mainCamera, 2, 11, 8);
 
                 this->actor.params = ENBOMBF_1;
                 this->timer = 10;
@@ -430,60 +431,62 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (ENBOMBF_GET(&this->actor) <= ENBOMBF_0) {
         Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
         if ((this->unk_204 >= 1.0f) && (this->unk_1FC != 0)) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->colliderCylinder.base);
         }
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderCylinder.base);
     }
 
     if ((this->actor.scale.x >= 0.01f) && (ENBOMBF_GET(&this->actor) != ENBOMBF_1)) {
         if (this->actor.depthInWater >= 20.0f) {
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
-            Actor_MarkForDeath(&this->actor);
-        } else if (this->actor.bgCheckFlags & 0x40) {
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if (this->actor.bgCheckFlags & 0x40) {
             this->actor.bgCheckFlags &= ~0x40;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
         }
     }
 }
 
-Gfx* func_808AF86C(GraphicsContext* gfxCtx, GlobalContext* globalCtx) {
-    Gfx* head = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
-    Gfx* gfx = head;
+Gfx* func_808AF86C(GraphicsContext* gfxCtx, PlayState* play) {
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(gfx++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPEndDisplayList(gfx++);
 
-    return head;
+    return gfxHead;
 }
 
-void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBombf_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBombf* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (ENBOMBF_GET(&this->actor) <= ENBOMBF_0) {
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
         if (ENBOMBF_GET(&this->actor) != ENBOMBF_0) {
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000340);
             gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000530);
 
-            Matrix_InsertTranslation(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(this->unk_204, this->unk_204, this->unk_204, MTXMODE_APPLY);
         }
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 200, 255, 200, 255);
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, (s8)this->unk_200, 20, 10, 0);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         {
-            Gfx* gfx = func_808AF86C(globalCtx->state.gfxCtx, globalCtx);
+            Gfx* gfx = func_808AF86C(play->state.gfxCtx, play);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gfx));
         }
@@ -493,5 +496,5 @@ void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Collider_UpdateSpheres(0, &this->colliderJntSph);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

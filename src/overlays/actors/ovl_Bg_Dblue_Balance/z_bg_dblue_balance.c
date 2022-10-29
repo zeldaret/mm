@@ -1,9 +1,10 @@
 /*
  * File: z_bg_dblue_balance.c
  * Overlay: ovl_Bg_Dblue_Balance
- * Description: Great Bay Temple - See-Saw
+ * Description: Great Bay Temple - Seesaw and Waterwheel w/ Platforms
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_balance.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 
@@ -11,25 +12,25 @@
 
 #define THIS ((BgDblueBalance*)thisx)
 
-void BgDblueBalance_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueBalance_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueBalance_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgDblueBalance_Init(Actor* thisx, PlayState* play);
+void BgDblueBalance_Destroy(Actor* thisx, PlayState* play);
+void BgDblueBalance_Update(Actor* thisx, PlayState* play);
+void BgDblueBalance_Draw(Actor* thisx, PlayState* play);
 
 void func_80B82DC4(BgDblueBalance* this);
-void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx);
-void func_80B8330C(Actor* thisx, GlobalContext* globalCtx);
+void func_80B82DE0(BgDblueBalance* this, PlayState* play);
+void func_80B8330C(Actor* thisx, PlayState* play);
 void func_80B83344(BgDblueBalance* this);
-void func_80B8335C(BgDblueBalance* this, GlobalContext* globalCtx);
+void func_80B8335C(BgDblueBalance* this, PlayState* play);
 void func_80B833A8(BgDblueBalance* this);
-void func_80B833C4(BgDblueBalance* this, GlobalContext* globalCtx);
-void func_80B83518(Actor* thisx, GlobalContext* globalCtx);
-void func_80B83758(Actor* thisx, GlobalContext* globalCtx);
+void func_80B833C4(BgDblueBalance* this, PlayState* play);
+void func_80B83518(Actor* thisx, PlayState* play);
+void func_80B83758(Actor* thisx, PlayState* play);
 
 AnimatedMaterial* D_80B83C70;
 AnimatedMaterial* D_80B83C74;
 
-const ActorInit Bg_Dblue_Balance_InitVars = {
+ActorInit Bg_Dblue_Balance_InitVars = {
     ACTOR_BG_DBLUE_BALANCE,
     ACTORCAT_BG,
     FLAGS,
@@ -42,19 +43,19 @@ const ActorInit Bg_Dblue_Balance_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ Gfx* unk_00;
-    /* 0x04 */ CollisionHeader* unk_04;
+    /* 0x00 */ Gfx* opaDList;
+    /* 0x04 */ CollisionHeader* colHeader;
     /* 0x08 */ u32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ ActorFunc unk_14;
-    /* 0x18 */ ActorFunc unk_18;
-} BgDblueBalanceStruct2;
+    /* 0x14 */ ActorFunc update;
+    /* 0x18 */ ActorFunc draw;
+} BgDblueBalanceTypeInfo; // size = 0x1C
 
-BgDblueBalanceStruct2 D_80B83A20[] = {
+BgDblueBalanceTypeInfo sTypeInfo[] = {
     {
-        object_dblue_object_DL_00B8F8,
-        &object_dblue_object_Colheader_00BC08,
+        gGreatBayTempleObjectSeesawShaftDL,
+        &gGreatBayTempleObjectSeesawShaftCol,
         0x10,
         360.0f,
         300.0f,
@@ -62,8 +63,8 @@ BgDblueBalanceStruct2 D_80B83A20[] = {
         BgDblueBalance_Draw,
     },
     {
-        object_dblue_object_DL_00BF48,
-        &object_dblue_object_Colheader_00C180,
+        gGreatBayTempleObjectLargeSeesawPlatformDL,
+        &gGreatBayTempleObjectLargeSeesawPlatformCol,
         0x10,
         210.0f,
         190.0f,
@@ -71,8 +72,8 @@ BgDblueBalanceStruct2 D_80B83A20[] = {
         BgDblueBalance_Draw,
     },
     {
-        object_dblue_object_DL_00C4B8,
-        &object_dblue_object_Colheader_00C700,
+        gGreatBayTempleObjectSmallSeesawPlatformDL,
+        &gGreatBayTempleObjectSmallSeesawPlatformCol,
         0x10,
         180.0f,
         180.0f,
@@ -80,8 +81,8 @@ BgDblueBalanceStruct2 D_80B83A20[] = {
         BgDblueBalance_Draw,
     },
     {
-        object_dblue_object_DL_001E68,
-        &object_dblue_object_Colheader_002E78,
+        gGreatBayTempleObjectWaterwheelWithPlatformsDL,
+        &gGreatBayTempleObjectWaterwheelWithPlatformsCol,
         0x30,
         1500.0f,
         1500.0f,
@@ -110,45 +111,45 @@ void func_80B823B0(BgDblueBalance* this) {
     s32 pad;
     Vec3f sp28;
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
 
     sp28.x = -138.28f;
     sp28.y = 0.0f;
     sp28.z = 0.0f;
 
     if (this->unk_15C != NULL) {
-        Matrix_MultiplyVector3fByState(&sp28, &this->unk_15C->dyna.actor.world.pos);
+        Matrix_MultVec3f(&sp28, &this->unk_15C->dyna.actor.world.pos);
     }
 
     sp28.x = 138.28f;
     if (this->unk_160 != NULL) {
-        Matrix_MultiplyVector3fByState(&sp28, &this->unk_160->dyna.actor.world.pos);
+        Matrix_MultVec3f(&sp28, &this->unk_160->dyna.actor.world.pos);
     }
 }
 
-s32 func_80B82454(BgDblueBalance* this, GlobalContext* globalCtx) {
+s32 func_80B82454(BgDblueBalance* this, PlayState* play) {
     s32 pad;
     s32 sp58 = true;
     BgDblueBalance* balance;
     Vec3f sp48;
     Vec3f sp3C;
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
 
     sp48.x = -138.28f;
     sp48.y = 0.0f;
     sp48.z = 0.0f;
 
-    Matrix_MultiplyVector3fByState(&sp48, &sp3C);
+    Matrix_MultVec3f(&sp48, &sp3C);
 
-    this->unk_15C = (BgDblueBalance*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_DBLUE_BALANCE, sp3C.x,
-                                                 sp3C.y, sp3C.z, 0, this->dyna.actor.shape.rot.y, 0, 0x100);
+    this->unk_15C = (BgDblueBalance*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_DBLUE_BALANCE, sp3C.x, sp3C.y, sp3C.z,
+                                                 0, this->dyna.actor.shape.rot.y, 0, 0x100);
     if (this->unk_15C == NULL) {
         sp58 = false;
     } else {
@@ -157,10 +158,10 @@ s32 func_80B82454(BgDblueBalance* this, GlobalContext* globalCtx) {
     }
 
     sp48.x = 138.28f;
-    Matrix_MultiplyVector3fByState(&sp48, &sp3C);
+    Matrix_MultVec3f(&sp48, &sp3C);
 
-    this->unk_160 = (BgDblueBalance*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_DBLUE_BALANCE, sp3C.x,
-                                                 sp3C.y, sp3C.z, 0, this->dyna.actor.shape.rot.y, 0, 0x200);
+    this->unk_160 = (BgDblueBalance*)Actor_Spawn(&play->actorCtx, play, ACTOR_BG_DBLUE_BALANCE, sp3C.x, sp3C.y, sp3C.z,
+                                                 0, this->dyna.actor.shape.rot.y, 0, 0x200);
     if (this->unk_160 == NULL) {
         sp58 = false;
     } else {
@@ -171,13 +172,13 @@ s32 func_80B82454(BgDblueBalance* this, GlobalContext* globalCtx) {
     return sp58;
 }
 
-void func_80B8259C(BgDblueBalance* this, GlobalContext* globalCtx) {
+void func_80B8259C(BgDblueBalance* this, PlayState* play) {
     s32 pad;
     WaterBox* sp30;
     f32 sp2C;
 
-    if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
-                               this->dyna.actor.world.pos.z, &sp2C, &sp30)) {
+    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &sp2C,
+                               &sp30)) {
         this->dyna.actor.depthInWater = sp2C - this->dyna.actor.world.pos.y;
         this->unk_228 = sp2C;
         if ((this->dyna.actor.depthInWater < 150.0f) && (this->dyna.actor.depthInWater > -150.0f)) {
@@ -212,20 +213,20 @@ void func_80B8264C(BgDblueBalance* this) {
         }
     }
 
-    Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
 
     for (i = 0, phi_s0 = &this->unk_188[0], phi_s2 = 0; i < ARRAY_COUNT(this->unk_188);
          i++, phi_s2 += 0x2000, phi_s0++) {
         phi_s0->unk_0C = this->dyna.actor.shape.rot.x + phi_s2;
 
-        Matrix_StatePush();
-        Matrix_InsertXRotation_s(phi_s0->unk_0C, MTXMODE_NEW);
-        Matrix_InsertTranslation(-545.0f, 0.0f, 270.0f, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&sp78);
-        Matrix_StatePop();
-        Matrix_MultiplyVector3fByState(&sp78, &phi_s0->unk_00);
+        Matrix_Push();
+        Matrix_RotateXS(phi_s0->unk_0C, MTXMODE_NEW);
+        Matrix_Translate(-545.0f, 0.0f, 270.0f, MTXMODE_APPLY);
+        Matrix_MultZero(&sp78);
+        Matrix_Pop();
+        Matrix_MultVec3f(&sp78, &phi_s0->unk_00);
 
         temp_f0 = (sp78.z - 135.0f);
         if (sp78.z > 135.0f) {
@@ -246,8 +247,8 @@ void func_80B8264C(BgDblueBalance* this) {
     }
 }
 
-void func_80B828E4(BgDblueBalance* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, BGDBLUEBALANCE_GET_7F(&this->dyna.actor)) && (this->unk_17D <= 0)) {
+void func_80B828E4(BgDblueBalance* this, PlayState* play) {
+    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor)) && (this->unk_17D <= 0)) {
         if (this->unk_183 >= 252) {
             this->unk_183 = 255;
         } else {
@@ -260,7 +261,7 @@ void func_80B828E4(BgDblueBalance* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B8296C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
+void func_80B8296C(PlayState* play, Vec3f* arg1, f32 arg2) {
     s32 i;
     Vec3f sp60;
     f32 temp_f0;
@@ -270,13 +271,13 @@ void func_80B8296C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
         sp60.x = ((Rand_ZeroOne() - 0.5f) * temp_f20) + arg1->x;
         sp60.y = arg1->y;
         sp60.z = ((Rand_ZeroOne() - 0.5f) * temp_f20) + arg1->z;
-        EffectSsGRipple_Spawn(globalCtx, &sp60, 500, 2000, D_80B83A90[i]);
+        EffectSsGRipple_Spawn(play, &sp60, 500, 2000, D_80B83A90[i]);
     }
 
     for (i = 0; i < ARRAY_COUNT(D_80B83A94); i++) {
         temp_f0 = Rand_ZeroOne();
         temp_f20 = 1.0f - SQ(temp_f0);
-        if (Rand_Next() > 0) {
+        if ((s32)Rand_Next() > 0) {
             temp_f20 = -temp_f20;
         }
 
@@ -285,12 +286,12 @@ void func_80B8296C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
 
         temp_f0 = Rand_ZeroOne();
         temp_f20 = 1.0f - SQ(temp_f0);
-        if (Rand_Next() > 0) {
+        if ((s32)Rand_Next() > 0) {
             temp_f20 = -temp_f20;
         }
         sp60.z = (temp_f20 * arg2) + arg1->z;
 
-        EffectSsGRipple_Spawn(globalCtx, &sp60, 400, 800, D_80B83A94[i]);
+        EffectSsGRipple_Spawn(play, &sp60, 400, 800, D_80B83A94[i]);
     }
 }
 
@@ -301,28 +302,28 @@ s32 func_80B82B00(s16 arg0, s16 arg1, s16 arg2) {
     return (arg0 < arg2 || arg1 >= arg2);
 }
 
-void BgDblueBalance_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueBalance* this = THIS;
     s32 sp2C = BGDBLUEBALANCE_GET_300(&this->dyna.actor);
     s32 pad2;
-    s32 sp24 = Flags_GetSwitch(globalCtx, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
+    s32 sp24 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->dyna.actor.flags = D_80B83A20[sp2C].unk_08;
-    this->dyna.actor.uncullZoneScale = D_80B83A20[sp2C].unk_0C;
-    this->dyna.actor.uncullZoneDownward = D_80B83A20[sp2C].unk_10;
-    this->dyna.actor.update = D_80B83A20[sp2C].unk_14;
-    this->dyna.actor.draw = D_80B83A20[sp2C].unk_18;
+    this->dyna.actor.flags = sTypeInfo[sp2C].unk_08;
+    this->dyna.actor.uncullZoneScale = sTypeInfo[sp2C].unk_0C;
+    this->dyna.actor.uncullZoneDownward = sTypeInfo[sp2C].unk_10;
+    this->dyna.actor.update = sTypeInfo[sp2C].update;
+    this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, D_80B83A20[sp2C].unk_04);
+    DynaPolyActor_LoadMesh(play, &this->dyna, sTypeInfo[sp2C].colHeader);
 
     if (sp2C == 3) {
-        D_80B83C70 = Lib_SegmentedToVirtual(object_dblue_object_Matanimheader_00CE00);
+        D_80B83C70 = Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim);
     } else if (sp2C == 0) {
-        D_80B83C74 = Lib_SegmentedToVirtual(object_dblue_object_Matanimheader_00D250);
+        D_80B83C74 = Lib_SegmentedToVirtual(gGreatBayTempleObjectSeesawSplashTexAnim);
     }
 
     if (sp2C == 0) {
@@ -333,8 +334,8 @@ void BgDblueBalance_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dyna.actor.shape.rot.z = 0x1C72;
             this->unk_174 = 0x1C72;
         }
-        func_80B82454(this, globalCtx);
-        func_80B8259C(this, globalCtx);
+        func_80B82454(this, play);
+        func_80B8259C(this, play);
         func_80B82DC4(this);
     } else if (sp2C == 3) {
         this->unk_16C = sp24;
@@ -348,12 +349,12 @@ void BgDblueBalance_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgDblueBalance_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueBalance_Destroy(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueBalance* this = THIS;
     s32 sp1C = BGDBLUEBALANCE_GET_300(&this->dyna.actor);
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 
     if (sp1C == 0) {
         if (this->unk_15C != NULL) {
@@ -378,7 +379,7 @@ void func_80B82DC4(BgDblueBalance* this) {
     this->actionFunc = func_80B82DE0;
 }
 
-void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
+void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
     s32 pad;
     f32 sp88 = Math_CosS(this->dyna.actor.shape.rot.z * 2.2499313f);
     Actor* actor = &this->dyna.actor;
@@ -396,7 +397,7 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
     BgDblueBalance* sp3C;
     Vec3f sp30;
 
-    if (Flags_GetSwitch(globalCtx, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
         if (this->unk_17D > 0) {
             this->unk_17D--;
         } else {
@@ -466,7 +467,7 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
     phi_f2 = this->unk_178;
     temp2 = this->unk_17A;
     if ((phi_f2 * temp2) <= 0.0f) {
-        func_801A7328(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG);
+        AudioSfx_StopByPosAndId(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG);
     }
 
     phi_f2 *= 0.0022222223f;
@@ -486,16 +487,16 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
             if (this->unk_182) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp5C = this->unk_15C;
-                Matrix_StatePush();
-                Matrix_RotateY(BINANG_SUB(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(45.0f, &sp60);
-                Matrix_StatePop();
+                Matrix_Push();
+                Matrix_RotateYS(BINANG_SUB(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
+                Matrix_MultVecZ(45.0f, &sp60);
+                Matrix_Pop();
 
                 sp50.x = sp5C->dyna.actor.world.pos.x + sp60.x;
                 sp50.y = this->unk_228;
                 sp50.z = sp5C->dyna.actor.world.pos.z + sp60.z;
 
-                func_80B8296C(globalCtx, &sp50, 70.0f);
+                func_80B8296C(play, &sp50, 70.0f);
             } else {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
             }
@@ -511,16 +512,16 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
             if (this->unk_182) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp3C = this->unk_160;
-                Matrix_StatePush();
-                Matrix_RotateY(BINANG_ADD(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(30.0f, &sp40);
-                Matrix_StatePop();
+                Matrix_Push();
+                Matrix_RotateYS(BINANG_ADD(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
+                Matrix_MultVecZ(30.0f, &sp40);
+                Matrix_Pop();
 
                 sp30.x = sp3C->dyna.actor.world.pos.x + sp40.x;
                 sp30.y = this->unk_228;
                 sp30.z = sp3C->dyna.actor.world.pos.z + sp40.z;
 
-                func_80B8296C(globalCtx, &sp30, 47.0f);
+                func_80B8296C(play, &sp30, 47.0f);
             } else {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
             }
@@ -532,17 +533,17 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
     func_80B823B0(this);
 }
 
-void BgDblueBalance_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueBalance_Update(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
     this->unk_17A = this->unk_178;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
-    func_80B828E4(this, globalCtx);
+    func_80B828E4(this, play);
 }
 
-void func_80B8330C(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B8330C(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
     this->unk_180 = DynaPolyActor_IsInSwitchPressedState(&this->dyna);
@@ -554,8 +555,8 @@ void func_80B83344(BgDblueBalance* this) {
     this->actionFunc = func_80B8335C;
 }
 
-void func_80B8335C(BgDblueBalance* this, GlobalContext* globalCtx) {
-    if (!Flags_GetSwitch(globalCtx, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
+void func_80B8335C(BgDblueBalance* this, PlayState* play) {
+    if (!Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
         this->unk_178 = -0x14;
         func_80B833A8(this);
     }
@@ -567,7 +568,7 @@ void func_80B833A8(BgDblueBalance* this) {
     this->actionFunc = func_80B833C4;
 }
 
-void func_80B833C4(BgDblueBalance* this, GlobalContext* globalCtx) {
+void func_80B833C4(BgDblueBalance* this, PlayState* play) {
     s32 pad;
     s32 sp28 = false;
     s16 sp26;
@@ -616,12 +617,12 @@ void func_80B833C4(BgDblueBalance* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B83518(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B83518(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
-    this->unk_170 = Flags_GetSwitch(globalCtx, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
+    this->unk_170 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->unk_17F == 2) {
         this->unk_17E--;
@@ -641,46 +642,46 @@ void func_80B83518(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_16C = this->unk_170;
 }
 
-void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueBalance* this = THIS;
-    BgDblueBalanceStruct2* ptr2 = &D_80B83A20[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
+    BgDblueBalanceTypeInfo* ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
     BgDblueBalance* sp38;
     Gfx* gfx;
 
-    Gfx_DrawDListOpa(globalCtx, ptr2->unk_00);
+    Gfx_DrawDListOpa(play, ptr2->opaDList);
 
     if (!(BGDBLUEBALANCE_GET_300(&this->dyna.actor)) && (this->unk_160 != NULL)) {
-        AnimatedMat_Draw(globalCtx, D_80B83C74);
+        AnimatedMat_Draw(play, D_80B83C74);
         sp38 = this->unk_160;
-        Matrix_SetStateRotationAndTranslation(sp38->dyna.actor.world.pos.x, sp38->dyna.actor.world.pos.y,
-                                              sp38->dyna.actor.world.pos.z, &sp38->dyna.actor.shape.rot);
-        Matrix_InsertTranslation(30.0f, 15.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_SetTranslateRotateYXZ(sp38->dyna.actor.world.pos.x, sp38->dyna.actor.world.pos.y,
+                                     sp38->dyna.actor.world.pos.z, &sp38->dyna.actor.shape.rot);
+        Matrix_Translate(30.0f, 15.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(sp38->dyna.actor.scale.x, sp38->dyna.actor.scale.y, sp38->dyna.actor.scale.z, MTXMODE_APPLY);
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         gfx = POLY_XLU_DISP;
 
         gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
-        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(gfx++, 0, 0, 0, this->unk_183);
-        gSPDisplayList(gfx++, object_dblue_object_DL_00D110);
+        gSPDisplayList(gfx++, gGreatBayTempleObjectSeesawSplashDL);
 
         POLY_XLU_DISP = gfx;
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void func_80B83758(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B83758(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueBalance* this = THIS;
     f32 temp_f0;
     Gfx* gfx;
     s32 i;
     BgDblueBalanceStruct* ptr;
-    BgDblueBalanceStruct2* ptr2;
+    BgDblueBalanceTypeInfo* ptr2;
     s32 temp;
 
     if (this->unk_178 != 0) {
@@ -694,13 +695,13 @@ void func_80B83758(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        ptr2 = &D_80B83A20[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
-        Gfx_DrawDListOpa(globalCtx, ptr2->unk_00);
+        ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
+        Gfx_DrawDListOpa(play, ptr2->opaDList);
 
         if (this->unk_183 != 0) {
-            AnimatedMat_Draw(globalCtx, D_80B83C70);
+            AnimatedMat_Draw(play, D_80B83C70);
 
-            OPEN_DISPS(globalCtx->state.gfxCtx);
+            OPEN_DISPS(play->state.gfxCtx);
 
             gfx = POLY_XLU_DISP;
 
@@ -708,22 +709,21 @@ void func_80B83758(Actor* thisx, GlobalContext* globalCtx) {
 
             for (i = 0, ptr = &this->unk_188[0]; i < ARRAY_COUNT(this->unk_188); i++, ptr++) {
                 if (ptr->unk_0E != 0) {
-                    Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-                    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-                    Matrix_InsertXRotation_s(ptr->unk_0C, MTXMODE_APPLY);
+                    Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+                    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+                    Matrix_RotateXS(ptr->unk_0C, MTXMODE_APPLY);
                     Matrix_Scale(ptr->unk_10, ptr->unk_10, ptr->unk_10, MTXMODE_APPLY);
 
                     temp = ptr->unk_0E * (f32)this->unk_183 * 0.003921569f;
                     gDPSetEnvColor(gfx++, 0, 0, 0, temp);
-                    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
+                    gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPDisplayList(gfx++, gGreatBayTempleObjectWaterwheelSplashDL);
                 }
             }
 
             POLY_XLU_DISP = gfx;
 
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+            CLOSE_DISPS(play->state.gfxCtx);
         }
     }
 }

@@ -11,7 +11,7 @@
 
 struct EnRuppecrow;
 
-typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, GlobalContext*);
+typedef void (*EnRuppecrowActionFunc)(struct EnRuppecrow*, PlayState*);
 
 typedef struct EnRuppecrow {
     /* 0x000 */ Actor actor;
@@ -36,7 +36,5 @@ typedef struct EnRuppecrow {
     /* 0x2D0 */ f32 iceSfxTimer;
     /* 0x2D4 */ Vec3f limbPos[ENRUPPECROW_LIMB_POS_COUNT];
 } EnRuppecrow; // size = 0x304
-
-extern const ActorInit En_Ruppecrow_InitVars;
 
 #endif // Z_EN_RUPPECROW_H

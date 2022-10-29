@@ -10,13 +10,13 @@
 
 #define THIS ((EnHitTag*)thisx)
 
-void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnHitTag_Init(Actor* thisx, PlayState* play);
+void EnHitTag_Destroy(Actor* thisx, PlayState* play);
+void EnHitTag_Update(Actor* thisx, PlayState* play);
 
-void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx);
+void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play);
 
-const ActorInit En_Hit_Tag_InitVars = {
+ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -48,45 +48,45 @@ static ColliderCylinderInit sCylinderInit = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-void EnHitTag_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHitTag_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnHitTag* this = THIS;
 
     Actor_SetScale(&this->actor, 1.0f);
     this->actionFunc = EnHitTag_WaitForHit;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    if (Flags_GetSwitch(globalCtx, ENHITTAG_GET_SWITCHFLAG(thisx))) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetSwitch(play, ENHITTAG_GET_SWITCHFLAG(thisx))) {
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnHitTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHitTag_Destroy(Actor* thisx, PlayState* play) {
     EnHitTag* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnHitTag_WaitForHit(EnHitTag* this, GlobalContext* globalCtx) {
+void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play) {
     Vec3f dropLocation;
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
         play_sound(NA_SE_SY_GET_RUPY);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         dropLocation.x = this->actor.world.pos.x;
         dropLocation.y = this->actor.world.pos.y;
         dropLocation.z = this->actor.world.pos.z;
 
         for (i = 0; i < 3; i++) {
-            Item_DropCollectible(globalCtx, &dropLocation, ITEM00_RUPEE_GREEN);
+            Item_DropCollectible(play, &dropLocation, ITEM00_RUPEE_GREEN);
         }
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void EnHitTag_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnHitTag_Update(Actor* thisx, PlayState* play) {
     EnHitTag* this = THIS;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

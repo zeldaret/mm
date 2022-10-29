@@ -13,12 +13,12 @@
 
 #define THIS ((ObjSyokudai*)thisx)
 
-void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSyokudai_Init(Actor* thisx, PlayState* play);
+void ObjSyokudai_Destroy(Actor* thisx, PlayState* play);
+void ObjSyokudai_Update(Actor* thisx, PlayState* play2);
+void ObjSyokudai_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Syokudai_InitVars = {
+ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
     ACTORCAT_PROP,
     FLAGS,
@@ -87,25 +87,25 @@ static Gfx* sDLists[] = {
 
 static s32 sNumLitTorchesInGroup;
 
-void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSyokudai_Init(Actor* thisx, PlayState* play) {
     ObjSyokudai* this = THIS;
     s32 pad;
     s32 type = OBJ_SYOKUDAI_GET_TYPE(thisx);
     s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    func_800B4AEC(globalCtx, thisx, 50.0f);
+    func_800B4AEC(play, thisx, 50.0f);
     ActorShape_Init(&thisx->shape, 0.0f, func_800B4B50, 1.0f);
-    Collider_InitAndSetCylinder(globalCtx, &this->standCollider, thisx, &sStandColliderInit);
+    Collider_InitAndSetCylinder(play, &this->standCollider, thisx, &sStandColliderInit);
     this->standCollider.base.colType = sColTypes[OBJ_SYOKUDAI_GET_TYPE(thisx)];
-    Collider_InitAndSetCylinder(globalCtx, &this->flameCollider, thisx, &sFlameColliderInit);
+    Collider_InitAndSetCylinder(play, &this->flameCollider, thisx, &sFlameColliderInit);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
     Lights_PointGlowSetInfo(&this->lightInfo, thisx->world.pos.x, thisx->world.pos.y + OBJ_SYOKUDAI_GLOW_HEIGHT,
                             thisx->world.pos.z, 0xFF, 0xFF, 0xB4, -1);
-    this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
+    this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
 
     if (OBJ_SYOKUDAI_GET_START_LIT(thisx) ||
-        ((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH || switchFlag != 0x7F) && Flags_GetSwitch(globalCtx, switchFlag))) {
+        ((type != OBJ_SYOKUDAI_TYPE_NO_SWITCH || switchFlag != 0x7F) && Flags_GetSwitch(play, switchFlag))) {
 
         s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
 
@@ -120,16 +120,16 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetFocus(thisx, 60.0f);
 }
 
-void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSyokudai_Destroy(Actor* thisx, PlayState* play) {
     ObjSyokudai* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->standCollider);
-    Collider_DestroyCylinder(globalCtx, &this->flameCollider);
-    LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
+    Collider_DestroyCylinder(play, &this->standCollider);
+    Collider_DestroyCylinder(play, &this->flameCollider);
+    LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
 
-void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjSyokudai* this = THIS;
     s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
     s32 switchFlag = OBJ_SYOKUDAI_GET_SWITCH_FLAG(thisx);
@@ -147,7 +147,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
                 ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
-                    Flags_SetSwitch(globalCtx, switchFlag);
+                    Flags_SetSwitch(play, switchFlag);
                 }
             } else {
                 ActorCutscene_SetIntentToPlay(thisx->cutscene);
@@ -157,13 +157,13 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
     } else {
-        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, thisx->world.pos.x, thisx->world.pos.z, &waterSurface,
                                    &waterBox) &&
             ((waterSurface - thisx->world.pos.y) > OBJ_SYOKUDAI_FLAME_HEIGHT)) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
             if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
-                Flags_UnsetSwitch(globalCtx, switchFlag);
+                Flags_UnsetSwitch(play, switchFlag);
                 if (groupSize != 0) {
                     this->snuffTimer = OBJ_SYOKUDAI_SNUFF_GROUP_BY_WATER;
                 }
@@ -171,13 +171,13 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
         } else {
             s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
             u32 flameColliderHurtboxDmgFlags = 0;
-            player = GET_PLAYER(globalCtx);
+            player = GET_PLAYER(play);
 
             if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {
                 this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
             }
             if (groupSize != 0) {
-                if (Flags_GetSwitch(globalCtx, switchFlag)) {
+                if (Flags_GetSwitch(play, switchFlag)) {
                     if (this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) {
                         if (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
@@ -199,7 +199,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             } else if (player->itemActionParam == PLAYER_AP_STICK) {
                 Vec3f stickTipSeparationVec;
 
-                Math_Vec3f_Diff(&player->swordInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
+                Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
                 stickTipSeparationVec.y -= OBJ_SYOKUDAI_STICK_IGNITION_HEIGHT;
                 if (SQXYZ(stickTipSeparationVec) < SQ(OBJ_SYOKUDAI_STICK_IGNITION_RADIUS)) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_STICK;
@@ -243,7 +243,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         } else if (thisx->cutscene >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
-                            Flags_SetSwitch(globalCtx, switchFlag);
+                            Flags_SetSwitch(play, switchFlag);
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {
@@ -254,17 +254,17 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                                 OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) + OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS;
                         }
                     }
-                    Audio_PlaySfxGeneral(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                         &D_801DB4B8);
+                    AudioSfx_PlaySfx(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                     &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                 }
             }
         }
     }
     Collider_UpdateCylinder(thisx, &this->standCollider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->standCollider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->standCollider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->standCollider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->standCollider.base);
     Collider_UpdateCylinder(thisx, &this->flameCollider);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->flameCollider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->flameCollider.base);
     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_OUT) && (--this->snuffTimer == OBJ_SYOKUDAI_SNUFF_OUT) &&
         (type != OBJ_SYOKUDAI_TYPE_SWITCH_CAUSES_FLAME)) {
         sNumLitTorchesInGroup--;
@@ -285,15 +285,15 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->flameTexScroll++;
 }
 
-void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
     ObjSyokudai* this = THIS;
     s32 pad;
     s32 groupSize = OBJ_SYOKUDAI_GET_GROUP_SIZE(thisx);
     f32 flameScale;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
         s32 snuffTimerInitial = OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize);
@@ -306,18 +306,18 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
             flameScale = (f32)this->snuffTimer / OBJ_SYOKUDAI_SNUFF_DEFAULT;
         }
         flameScale *= 0.0027f;
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
                                     (this->flameTexScroll * -OBJ_SYOKUDAI_SNUFF_DEFAULT) & 0x1FF, 0x20, 0x80));
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-        Matrix_InsertTranslation(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y),
-                       MTXMODE_APPLY);
+        Matrix_Translate(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
+        Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - thisx->shape.rot.y), MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

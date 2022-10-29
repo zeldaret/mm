@@ -20,7 +20,7 @@ typedef enum {
 
 struct EnRacedog;
 
-typedef void (*EnRacedogActionFunc)(struct EnRacedog*, GlobalContext*);
+typedef void (*EnRacedogActionFunc)(struct EnRacedog*, PlayState*);
 
 typedef struct EnRacedog {
     /* 0x000 */ Actor actor;
@@ -50,7 +50,5 @@ typedef struct EnRacedog {
     /* 0x2C0 */ s32 selectionArrowGreenEnvColor;
     /* 0x2C4 */ f32 selectionArrowScale;
 } EnRacedog; // size = 0x2C8
-
-extern const ActorInit En_Racedog_InitVars;
 
 #endif // Z_EN_RACEDOG_H

@@ -5,7 +5,7 @@
 
 struct EnDinofos;
 
-typedef void (*EnDinofosActionFunc)(struct EnDinofos*, GlobalContext*);
+typedef void (*EnDinofosActionFunc)(struct EnDinofos*, PlayState*);
 
 typedef struct EnDinofos {
     /* 0x000 */ Actor actor;
@@ -38,7 +38,5 @@ typedef struct EnDinofos {
     /* 0x384 */ ColliderJntSphElement colliderJntSphElement[9];
     /* 0x5C4 */ ColliderQuad colliderQuad;
 } EnDinofos; // size = 0x644
-
-extern const ActorInit En_Dinofos_InitVars;
 
 #endif // Z_EN_DINOFOS_H

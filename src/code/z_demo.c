@@ -1,14 +1,17 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "z64quake.h"
+#include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
-void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx);
-void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx);
+void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx);
+void func_800EA258(PlayState* play, CutsceneContext* csCtx);
+void func_800ED9C4(PlayState* play, CutsceneContext* csCtx);
+void func_800EA2B8(PlayState* play, CutsceneContext* csCtx);
+void func_800ED980(PlayState* play, CutsceneContext* csCtx);
+void func_800EDA04(PlayState* play, CutsceneContext* csCtx);
+void func_800EDA84(PlayState* play, CutsceneContext* csCtx);
 
 // Unused
 UNK_TYPE4 D_801BB120 = 0;
@@ -28,14 +31,14 @@ UNK_TYPE D_801F4DDC;
 u8 D_801F4DE0;
 s16 D_801F4DE2;
 
-void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_Init(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
 
     csCtx->state = CS_STATE_0;
     csCtx->frames = 0;
     csCtx->unk_0C = 0.0f;
-    globalCtx->csCtx.sceneCsCount = 0;
-    globalCtx->csCtx.currentCsIndex = 0;
+    play->csCtx.sceneCsCount = 0;
+    play->csCtx.currentCsIndex = 0;
 
     for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
         D_801F4DC8[i] = 0;
@@ -46,18 +49,18 @@ void Cutscene_Init(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     Audio_SetCutsceneFlag(false);
 }
 
-void Cutscene_Start(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_Start(PlayState* play, CutsceneContext* csCtx) {
     csCtx->state = CS_STATE_1;
     csCtx->playerAction = NULL;
 }
 
-void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_End(PlayState* play, CutsceneContext* csCtx) {
     if (csCtx->state != CS_STATE_4) {
         csCtx->state = CS_STATE_3;
     }
 }
 
-typedef void (*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* csCtx);
+typedef void (*CutsceneStateHandler)(PlayState* play, CutsceneContext* csCtx);
 
 CutsceneStateHandler sCsStateHandlers1[] = {
     Cutscene_DoNothing, // CS_STATE_0
@@ -67,9 +70,9 @@ CutsceneStateHandler sCsStateHandlers1[] = {
     Cutscene_DoNothing, // CS_STATE_4
 };
 
-void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_Update1(PlayState* play, CutsceneContext* csCtx) {
     if (gSaveContext.save.cutscene < 0xFFF0) {
-        sCsStateHandlers1[csCtx->state](globalCtx, csCtx);
+        sCsStateHandlers1[csCtx->state](play, csCtx);
     }
 }
 
@@ -81,8 +84,8 @@ CutsceneStateHandler sCsStateHandlers2[] = {
     func_800ED980,      // CS_STATE_4
 };
 
-void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (globalCtx->sceneLoadFlag == 0x14)) {
+void Cutscene_Update2(PlayState* play, CutsceneContext* csCtx) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (play->transitionTrigger == TRANS_TRIGGER_START)) {
         gSaveContext.cutsceneTrigger = 0;
     }
 
@@ -92,32 +95,32 @@ void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 
     if (gSaveContext.save.cutscene >= 0xFFF0) {
-        func_800EDA84(globalCtx, csCtx);
-        sCsStateHandlers2[csCtx->state](globalCtx, csCtx);
+        func_800EDA84(play, csCtx);
+        sCsStateHandlers2[csCtx->state](play, csCtx);
     }
 }
 
-void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx) {
 }
 
-s32 func_800EA220(GlobalContext* globalCtx, CutsceneContext* csCtx, f32 target) {
+s32 func_800EA220(PlayState* play, CutsceneContext* csCtx, f32 target) {
     return Math_StepToF(&csCtx->unk_0C, target, 0.1f);
 }
 
-void func_800EA258(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    Interface_ChangeAlpha(1);
-    ShrinkWindow_SetLetterboxTarget(32);
-    if (func_800EA220(globalCtx, csCtx, 1.0f)) {
+void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
+    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+    ShrinkWindow_Letterbox_SetSizeTarget(32);
+    if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
         csCtx->state++;
     }
 }
 
-void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    func_800ED980(globalCtx, csCtx);
-    Interface_ChangeAlpha(1);
-    ShrinkWindow_SetLetterboxTarget(32);
-    if (func_800EA220(globalCtx, csCtx, 1.0f)) {
+void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
+    func_800ED980(play, csCtx);
+    Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+    ShrinkWindow_Letterbox_SetSizeTarget(32);
+    if (func_800EA220(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
         csCtx->state++;
     }
@@ -126,14 +129,12 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 /* Start of command handling section */
 
 // Command 0x96: Miscellaneous commands.
-void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
-    Player* player = GET_PLAYER(globalCtx2);
-    GlobalContext* globalCtx = globalCtx2;
-    u8 isStartFrame = false;
+    Player* player = GET_PLAYER(play);
     f32 progress;
+    u8 isStartFrame = false;
     SceneTableEntry* loadedScene;
-    u16 time;
 
     if ((csCtx->frames < cmd->startFrame) || ((csCtx->frames >= cmd->endFrame) && (cmd->endFrame != cmd->startFrame))) {
         return;
@@ -148,33 +149,33 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
     switch (cmd->base) {
         case 0x1:
             if (isStartFrame) {
-                func_800FD78C(globalCtx);
-                globalCtx->envCtx.unk_F2[0] = 0x3C;
+                func_800FD78C(play);
+                play->envCtx.unk_F2[0] = 0x3C;
             }
             break;
         case 0x2:
             if (isStartFrame) {
-                func_801A47DC(NATURE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
-                Environment_AddLightningBolts(globalCtx, 3);
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
+                Environment_AddLightningBolts(play, 3);
                 D_801F4E68 = 1;
             }
             break;
         case 0x3:
-            if (globalCtx->envCtx.lightSettings.fogFar < 12800) {
-                globalCtx->envCtx.lightSettings.fogFar += 35;
+            if (play->envCtx.lightSettings.fogFar < 12800) {
+                play->envCtx.lightSettings.fogFar += 35;
             }
             break;
         case 0x4:
             if (isStartFrame) {
-                globalCtx->envCtx.unk_19 = 1;
-                globalCtx->envCtx.unk_17 = 1;
-                globalCtx->envCtx.unk_18 = 0;
-                globalCtx->envCtx.unk_1A = 0x3C;
-                globalCtx->envCtx.unk_21 = 1;
-                globalCtx->envCtx.unk_1F = 0;
-                globalCtx->envCtx.unk_20 = 1;
-                globalCtx->envCtx.unk_24 = 0x3C;
-                globalCtx->envCtx.unk_22 = globalCtx->envCtx.unk_24;
+                play->envCtx.unk_19 = 1;
+                play->envCtx.unk_17 = 1;
+                play->envCtx.unk_18 = 0;
+                play->envCtx.unk_1A = 0x3C;
+                play->envCtx.unk_21 = 1;
+                play->envCtx.unk_1F = 0;
+                play->envCtx.unk_20 = 1;
+                play->envCtx.unk_24 = 0x3C;
+                play->envCtx.unk_22 = play->envCtx.unk_24;
             }
             break;
         case 0x5:
@@ -184,16 +185,16 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x7:
             if (isStartFrame) {
-                loadedScene = globalCtx->loadedScene;
+                loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
-                    func_80151A68(globalCtx, loadedScene->titleTextId);
+                    func_80151A68(play, loadedScene->titleTextId);
                 }
             }
             break;
         case 0x8:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 6, 4, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
@@ -217,32 +218,32 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             D_801F6D30.a = 255 * progress;
             break;
         case 0xC:
-            globalCtx->roomCtx.currRoom.segment = NULL;
+            play->roomCtx.curRoom.segment = NULL;
             break;
         case 0xD:
-            if (globalCtx->state.frames & 8) {
-                if (globalCtx->envCtx.lightSettings.ambientColor[0] < 40) {
-                    globalCtx->envCtx.lightSettings.ambientColor[0] += 2;
-                    globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 3;
-                    globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 3;
+            if (play->state.frames & 8) {
+                if (play->envCtx.lightSettings.ambientColor[0] < 40) {
+                    play->envCtx.lightSettings.ambientColor[0] += 2;
+                    play->envCtx.lightSettings.diffuseColor1[1] -= 3;
+                    play->envCtx.lightSettings.diffuseColor1[2] -= 3;
                 }
             } else {
-                if (globalCtx->envCtx.lightSettings.ambientColor[0] > 2) {
-                    globalCtx->envCtx.lightSettings.ambientColor[0] -= 2;
-                    globalCtx->envCtx.lightSettings.diffuseColor1[1] += 3;
-                    globalCtx->envCtx.lightSettings.diffuseColor1[2] += 3;
+                if (play->envCtx.lightSettings.ambientColor[0] > 2) {
+                    play->envCtx.lightSettings.ambientColor[0] -= 2;
+                    play->envCtx.lightSettings.diffuseColor1[1] += 3;
+                    play->envCtx.lightSettings.diffuseColor1[2] += 3;
                 }
             }
             break;
         case 0xE:
-            globalCtx->unk_18845 = 1;
+            play->unk_18845 = 1;
             break;
         case 0xF:
-            globalCtx->unk_18845 = 0;
+            play->unk_18845 = 0;
             break;
         case 0x10:
             if (isStartFrame) {
-                globalCtx->envCtx.sandstormState = 1;
+                play->envCtx.sandstormState = 1;
             }
             func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
@@ -251,32 +252,29 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x12:
             if (!gSaveContext.save.isNight) {
-                time = gSaveContext.save.time;
-                gSaveContext.save.time = time - (u16)REG(15);
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)REG(15);
             } else {
-                time = gSaveContext.save.time;
-                gSaveContext.save.time = time - (u16)(2 * REG(15));
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * REG(15));
             }
             break;
         case 0x13:
-            // AudioOcarina_PlayLongScarecrowAfterCredits
-            func_8019D758();
+            AudioOcarina_PlayLongScarecrowAfterCredits();
             csCtx->frames = cmd->startFrame - 1;
             break;
         case 0x14:
-            EnvFlags_Set(globalCtx, 3);
+            EnvFlags_Set(play, 3);
             break;
         case 0x15:
-            EnvFlags_Set(globalCtx, 4);
+            EnvFlags_Set(play, 4);
             break;
         case 0x16:
             gSaveContext.save.playerForm = PLAYER_FORM_DEKU;
             break;
         case 0x17:
-            player->stateFlags2 |= 0x4000000;
+            player->stateFlags2 |= PLAYER_STATE2_4000000;
             break;
         case 0x18:
-            player->stateFlags2 &= ~0x4000000;
+            player->stateFlags2 &= ~PLAYER_STATE2_4000000;
             break;
         case 0x19:
             sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;
@@ -286,7 +284,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x1A:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 20, 10, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
@@ -294,15 +292,15 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x1B:
             if (isStartFrame) {
-                globalCtx->nextEntranceIndex = 0x1C00;
+                play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
-                globalCtx->sceneLoadFlag = 0x14;
-                globalCtx->unk_1887F = 3;
+                play->transitionTrigger = TRANS_TRIGGER_START;
+                play->transitionType = TRANS_TYPE_03;
             }
             break;
         case 0x1C:
             if (isStartFrame) {
-                globalCtx->envCtx.unk_17 = 0xD;
+                play->envCtx.unk_17 = 0xD;
             }
             break;
         case 0x1D:
@@ -316,12 +314,12 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x21:
             if (isStartFrame) {
-                Sram_SaveSpecialEnterClockTown(globalCtx);
+                Sram_SaveSpecialEnterClockTown(play);
             }
             break;
         case 0x22:
             if (isStartFrame) {
-                func_80144A94(&globalCtx->sramCtx);
+                func_80144A94(&play->sramCtx);
             }
             break;
         case 0x23:
@@ -329,17 +327,16 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
                 D_801BB15C = csCtx->frames;
 
                 if (REG(15) != 0) {
-                    time = gSaveContext.save.time;
-                    gSaveContext.save.time = (u16)REG(15) + time;
-                    time = gSaveContext.save.time;
-                    gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
+                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+                    gSaveContext.save.time =
+                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
                 }
             }
             break;
         case 0x24:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isStartFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(globalCtx), 6);
+                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 2, 1, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
@@ -351,13 +348,10 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
 
             gSaveContext.save.day = 9;
 
-            {
-                GameState* gameState = &globalCtx->state;
-                gameState->running = false;
-            }
-            SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
+            STOP_GAMESTATE(&play->state);
+            SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
 
-            Sram_SaveSpecialNewDay(globalCtx);
+            Sram_SaveSpecialNewDay(play);
             break;
 
         case 0x27:
@@ -371,33 +365,33 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
 }
 
 // Command 0x97: Set Environment Lighting
-void Cutscene_Command_SetLighting(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdEnvLighting* cmd) {
+void Cutscene_Command_SetLighting(PlayState* play, CutsceneContext* csCtx, CsCmdEnvLighting* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         if (cmd->setting != 0x20) {
-            globalCtx->envCtx.lightSettingOverride = cmd->setting - 1;
-            globalCtx->envCtx.lightBlend = 1.0f;
+            play->envCtx.lightSettingOverride = cmd->setting - 1;
+            play->envCtx.lightBlend = 1.0f;
         } else {
-            globalCtx->envCtx.lightSettingOverride = 0xFF;
+            play->envCtx.lightSettingOverride = 0xFF;
         }
     }
 }
 
 // Command 0x12C: Plays a sequence (Background music or Fanfare)
-void Cutscene_Command_PlaySequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
+void Cutscene_Command_PlaySequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if (csCtx->frames == cmd->startFrame) {
-        func_801A2C88(cmd->sequence - 1);
+        Audio_PlaySequenceInCutscene(cmd->sequence - 1);
     }
 }
 
 // Command 0x12D: Stops a sequence (Background music or Fanfare)
-void Cutscene_Command_StopSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
+void Cutscene_Command_StopSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-        func_801A2D54(cmd->sequence - 1);
+        Audio_StopSequenceInCutscene(cmd->sequence - 1);
     }
 }
 
 // Command 0x9C: Fade a sequence (Background music or Fanfare) over duration
-void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceFade* cmd) {
+void Cutscene_Command_FadeSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceFade* cmd) {
     if ((csCtx->frames == cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
@@ -410,16 +404,14 @@ void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* cs
 }
 
 // Command 0x12E: Play Ambience sequence
-void Cutscene_Command_PlayAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_PlayAmbienceSequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
-        // Audio_PlayNatureAmbienceSequence
-        // nightSeqIndex is natureAmbienceId
-        func_801A4A28(globalCtx->soundCtx.nightSeqIndex);
+        Audio_PlayAmbience(play->sequenceCtx.ambienceId);
     }
 }
 
 // Command 0x130:
-void func_800EAD48(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void func_800EAD48(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(2);
@@ -427,7 +419,7 @@ void func_800EAD48(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 }
 
 // Command 0x131:
-void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void func_800EAD7C(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(1);
@@ -437,7 +429,7 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #ifdef NON_MATCHING
 // needs in-function static bss
 // audio related
-void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 seqId;
     u8 dayMinusOne;
 
@@ -464,40 +456,39 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 break;
 
             case 4:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_1);
-                func_801A246C(SEQ_PLAYER_NATURE, 1);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_1);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 1);
                 break;
 
             case 5:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_0);
-                func_801A246C(SEQ_PLAYER_NATURE, 0);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_0);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 0);
                 break;
 
             case 6:
-                // func_801A246C(SEQ_PLAYER_NATURE, TYPE_2);
-                func_801A246C(SEQ_PLAYER_NATURE, 2);
+                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_2);
+                func_801A246C(SEQ_PLAYER_AMBIENCE, 2);
                 break;
 
             case 7:
-                // Audio_GetActiveSequence
-                seqId = func_801A8A50(0);
+                seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case 8:
                 if (seqId != NA_BGM_DISABLED) {
-                    // Audio_PlayBgmForDayScene
-                    func_801A25E4(seqId, dayMinusOne);
+                    Audio_PlaySceneSequence(seqId, dayMinusOne);
                 }
                 break;
         }
     }
 }
 #else
+void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
 #endif
 
 // Command 0x12F: Fade Ambience sequence
-void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_FadeAmbienceSequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
@@ -506,18 +497,18 @@ void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneCon
 }
 
 // Command 0x190: Rumble
-void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdRumble* cmd) {
+void Cutscene_Command_Rumble(PlayState* play, CutsceneContext* csCtx, CsCmdRumble* cmd) {
     switch (cmd->type) {
         case 1:
             if (csCtx->frames == cmd->startFrame) {
-                func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
             }
             break;
 
         case 2:
             if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-                if ((csCtx->frames == cmd->startFrame) || (globalCtx->state.frames % 64 == 0)) {
-                    func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                if ((csCtx->frames == cmd->startFrame) || (play->state.frames % 64 == 0)) {
+                    Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
                 }
             }
             break;
@@ -525,29 +516,29 @@ void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, C
 }
 
 // Command 0x9B:
-void Cutscene_Command_FadeColorScreen(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdFadeScreen* cmd) {
+void Cutscene_Command_FadeColorScreen(PlayState* play, CutsceneContext* csCtx, CsCmdFadeScreen* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         f32 alpha;
 
-        globalCtx->envCtx.fillScreen = true;
+        play->envCtx.fillScreen = true;
         alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
         if (((cmd->unk0 == 1)) || (cmd->unk0 == 2)) {
-            globalCtx->envCtx.screenFillColor[0] = cmd->color.r;
-            globalCtx->envCtx.screenFillColor[1] = cmd->color.g;
-            globalCtx->envCtx.screenFillColor[2] = cmd->color.b;
+            play->envCtx.screenFillColor[0] = cmd->color.r;
+            play->envCtx.screenFillColor[1] = cmd->color.g;
+            play->envCtx.screenFillColor[2] = cmd->color.b;
 
             if (cmd->unk0 == 2) {
-                globalCtx->envCtx.screenFillColor[3] = (1.0f - alpha) * 255.0f;
+                play->envCtx.screenFillColor[3] = (1.0f - alpha) * 255.0f;
             } else {
-                globalCtx->envCtx.screenFillColor[3] = 255.0f * alpha;
+                play->envCtx.screenFillColor[3] = 255.0f * alpha;
             }
         }
     }
 }
 
 // Command 0x9D: Set Time of Day & Environment Time
-void Cutscene_Command_SetTime(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdDayTime* cmd) {
+void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayTime* cmd) {
     u16 nextTime;
     u16 hourAsMinutes;
     u16 minutes;
@@ -558,48 +549,48 @@ void Cutscene_Command_SetTime(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 
         nextTime = hourAsMinutes + minutes;
         gSaveContext.save.time = nextTime;
-        gSaveContext.environmentTime = nextTime;
+        gSaveContext.skyboxTime = nextTime;
     }
 }
 
-void Cutscene_TerminatorImpl(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     csCtx->state = CS_STATE_4;
     func_80165690();
     Audio_SetCutsceneFlag(false);
-    gSaveContext.unk_3F48 = 1;
+    gSaveContext.cutsceneTransitionControl = 1;
 
     if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
-        gSaveContext.unk_3F1E = 1;
+        gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
     gSaveContext.save.cutscene = 0;
     if (cmd->base == 1) {
-        globalCtx->nextEntranceIndex = globalCtx->csCtx.sceneCsList[globalCtx->csCtx.currentCsIndex].nextEntranceIndex;
+        play->nextEntrance = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntrance;
         gSaveContext.nextCutsceneIndex = 0;
-        globalCtx->sceneLoadFlag = 0x14;
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (gSaveContext.gameMode != 1) {
-            Scene_SetExitFade(globalCtx);
+            Scene_SetExitFade(play);
         } else {
             D_801BB12C++;
             if (D_801BB12C >= 2) {
                 D_801BB12C = 0;
             }
-            globalCtx->unk_1887F = 4;
+            play->transitionType = TRANS_TYPE_04;
         }
 
-        if ((globalCtx->nextEntranceIndex & 0xF) > 0) {
-            gSaveContext.nextCutsceneIndex = (globalCtx->nextEntranceIndex & 0xF) + 0xFFEF;
+        if ((play->nextEntrance & 0xF) > 0) {
+            gSaveContext.nextCutsceneIndex = (play->nextEntrance & 0xF) + 0xFFEF;
         }
 
-        globalCtx->nextEntranceIndex &= ~0xF;
+        play->nextEntrance &= ~0xF;
     }
 }
 
 // Command 0x15E
-void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
         if (csCtx->frames == cmd->startFrame) {
-            Cutscene_TerminatorImpl(globalCtx, csCtx, cmd);
+            Cutscene_TerminatorImpl(play, csCtx, cmd);
         }
     } else if (cmd->base == 2) {
         if (csCtx->frames == cmd->startFrame) {
@@ -608,44 +599,44 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
             switch (D_801F4DE2) {
                 case 0x1F:
                     if (gSaveContext.save.weekEventReg[20] & 2) {
-                        globalCtx->nextEntranceIndex = 0x3010;
-                        globalCtx->sceneLoadFlag = 0x14;
-                        globalCtx->unk_1887F = 3;
+                        play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     } else {
-                        globalCtx->nextEntranceIndex = 0x8600;
+                        play->nextEntrance = ENTRANCE(WOODFALL, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
-                        globalCtx->sceneLoadFlag = 0x14;
-                        globalCtx->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     }
                     break;
 
                 case 0x44:
                     if (gSaveContext.save.weekEventReg[33] & 0x80) {
-                        globalCtx->nextEntranceIndex = 0xAE70;
-                        globalCtx->sceneLoadFlag = 0x14;
-                        globalCtx->unk_1887F = 3;
+                        play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     } else {
-                        globalCtx->nextEntranceIndex = 0xAE00;
+                        play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
-                        globalCtx->sceneLoadFlag = 0x14;
-                        globalCtx->unk_1887F = 3;
+                        play->transitionTrigger = TRANS_TRIGGER_START;
+                        play->transitionType = TRANS_TYPE_03;
                     }
                     break;
 
                 case 0x5F:
                     gSaveContext.save.weekEventReg[55] |= 0x80;
-                    globalCtx->nextEntranceIndex = 0x6A80;
+                    play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
-                    globalCtx->sceneLoadFlag = 0x14;
-                    globalCtx->unk_1887F = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
                     break;
 
                 case 0x36:
                     gSaveContext.save.weekEventReg[52] |= 0x20;
-                    globalCtx->nextEntranceIndex = 0x2000;
+                    play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
-                    globalCtx->sceneLoadFlag = 0x14;
-                    globalCtx->unk_1887F = 3;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_03;
                     break;
             }
         }
@@ -654,142 +645,123 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
 
 // Command 0x15F: Chooses between a cutscene or a rotating mask depending on whether the player has the corresponding
 // mask
-void Cutscene_Command_ChooseCreditsScenes(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, true) != 0xFF)) {
+void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(SEQ_PLAYER_BGM_MAIN, true) != 0xFF)) {
         switch (cmd->base) {
             case 1:
-                Cutscene_TerminatorImpl(globalCtx, csCtx, cmd);
+                Cutscene_TerminatorImpl(play, csCtx, cmd);
                 break;
 
             case 2:
                 if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-                    // Milk bar
-                    globalCtx->nextEntranceIndex = 0x2400;
+                    play->nextEntrance = ENTRANCE(MILK_BAR, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C00;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 3:
                 if (INV_CONTENT(ITEM_MASK_GREAT_FAIRY) == ITEM_MASK_GREAT_FAIRY) {
-                    // Fairy's fountain
-                    globalCtx->nextEntranceIndex = 0x4600;
+                    play->nextEntrance = ENTRANCE(FAIRY_FOUNTAIN, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C10;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 1);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 4:
                 if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) {
-                    // Romani ranch
-                    globalCtx->nextEntranceIndex = 0x6400;
+                    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C20;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 2);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 5:
                 if (INV_CONTENT(ITEM_MASK_BLAST) == ITEM_MASK_BLAST) {
-                    // West clock town
-                    globalCtx->nextEntranceIndex = 0xD400;
+                    play->nextEntrance = ENTRANCE(WEST_CLOCK_TOWN, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C30;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 3);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 6:
                 if (INV_CONTENT(ITEM_MASK_CIRCUS_LEADER) == ITEM_MASK_CIRCUS_LEADER) {
-                    // Milk bar
-                    globalCtx->nextEntranceIndex = 0x2400;
+                    play->nextEntrance = ENTRANCE(MILK_BAR, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C50;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 5);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 7:
                 if (INV_CONTENT(ITEM_MASK_BREMEN) == ITEM_MASK_BREMEN) {
-                    // Milk bar
-                    globalCtx->nextEntranceIndex = 0x2400;
+                    play->nextEntrance = ENTRANCE(MILK_BAR, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF3;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C60;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 6);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 8:
-                // Ikana canyon
-                globalCtx->nextEntranceIndex = 0x2000;
+                play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF3;
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 9:
                 if (INV_CONTENT(ITEM_MASK_COUPLE) == ITEM_MASK_COUPLE) {
-                    // Termina field
-                    globalCtx->nextEntranceIndex = 0x5400;
+                    play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C70;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 7);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 10:
                 if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-                    // Cucco shack
-                    globalCtx->nextEntranceIndex = 0x7E00;
+                    play->nextEntrance = ENTRANCE(CUCCO_SHACK, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C40;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 4);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
 
             case 11:
                 if (INV_CONTENT(ITEM_MASK_POSTMAN) == ITEM_MASK_POSTMAN) {
-                    // Termina field
-                    globalCtx->nextEntranceIndex = 0x5410;
+                    play->nextEntrance = ENTRANCE(TERMINA_FIELD, 1);
                     gSaveContext.nextCutsceneIndex = 0xFFF8;
                 } else {
-                    // SPOT00
-                    globalCtx->nextEntranceIndex = 0x1C80;
+                    play->nextEntrance = ENTRANCE(CUTSCENE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF9;
                 }
-                globalCtx->sceneLoadFlag = 0x14;
+                play->transitionTrigger = TRANS_TRIGGER_START;
                 break;
         }
     }
 }
 
 // Command 0x99: Motion blur
-void Cutscene_Command_MotionBlur(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
             func_8016566C(180);
@@ -808,8 +780,8 @@ void Cutscene_Command_MotionBlur(GlobalContext* globalCtx, CutsceneContext* csCt
 }
 
 // Command 0x9A: Gives Tatl to the player
-void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    Player* player = GET_PLAYER(globalCtx);
+void Cutscene_Command_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    Player* player = GET_PLAYER(play);
 
     if (csCtx->frames == cmd->startFrame) {
         if (cmd->base == 1) {
@@ -817,112 +789,112 @@ void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext
             if (player->tatlActor != NULL) {
                 return;
             }
-            player->tatlActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, player->actor.world.pos.x,
+            player->tatlActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x,
                                             player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
         }
     }
 }
 
 // Command 0x98
-void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         f32 temp_f0;
 
-        globalCtx->envCtx.fillScreen = true;
+        play->envCtx.fillScreen = true;
         temp_f0 = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
 
         switch (cmd->base) {
             case 1:
             case 5:
-                globalCtx->envCtx.screenFillColor[0] = 160;
-                globalCtx->envCtx.screenFillColor[1] = 160;
-                globalCtx->envCtx.screenFillColor[2] = 160;
+                play->envCtx.screenFillColor[0] = 160;
+                play->envCtx.screenFillColor[1] = 160;
+                play->envCtx.screenFillColor[2] = 160;
                 if (cmd->base == 1) {
-                    globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
                     if (temp_f0 == 0.0f) {
                         func_8019F128(NA_SE_EV_S_STONE_FLASH);
                     }
                 } else {
-                    globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
                 }
                 break;
 
             case 2:
             case 6:
-                globalCtx->envCtx.screenFillColor[0] = 0;
-                globalCtx->envCtx.screenFillColor[1] = 0;
-                globalCtx->envCtx.screenFillColor[2] = 255;
+                play->envCtx.screenFillColor[0] = 0;
+                play->envCtx.screenFillColor[1] = 0;
+                play->envCtx.screenFillColor[2] = 255;
                 if (cmd->base == 2) {
-                    globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
                 } else {
-                    globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
                 }
                 break;
 
             case 3:
             case 7:
-                globalCtx->envCtx.screenFillColor[0] = 255;
-                globalCtx->envCtx.screenFillColor[1] = 0;
-                globalCtx->envCtx.screenFillColor[2] = 0;
+                play->envCtx.screenFillColor[0] = 255;
+                play->envCtx.screenFillColor[1] = 0;
+                play->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 3) {
-                    globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
                 } else {
-                    globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
                 }
                 break;
 
             case 4:
             case 8:
-                globalCtx->envCtx.screenFillColor[0] = 0;
-                globalCtx->envCtx.screenFillColor[1] = 255;
-                globalCtx->envCtx.screenFillColor[2] = 0;
+                play->envCtx.screenFillColor[0] = 0;
+                play->envCtx.screenFillColor[1] = 255;
+                play->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 4) {
-                    globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
                 } else {
-                    globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
                 }
                 break;
 
             case 9:
-                gSaveContext.unk_3F48 = 1;
+                gSaveContext.cutsceneTransitionControl = 1;
                 break;
 
             case 10:
             case 11:
-                globalCtx->envCtx.screenFillColor[0] = 0;
-                globalCtx->envCtx.screenFillColor[1] = 0;
-                globalCtx->envCtx.screenFillColor[2] = 0;
+                play->envCtx.screenFillColor[0] = 0;
+                play->envCtx.screenFillColor[1] = 0;
+                play->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 10) {
-                    globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
                 } else {
-                    globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
                 }
                 break;
 
             case 12:
-                globalCtx->envCtx.screenFillColor[0] = (160.0f * (1.0f - temp_f0));
-                globalCtx->envCtx.screenFillColor[1] = globalCtx->envCtx.screenFillColor[0];
-                globalCtx->envCtx.screenFillColor[2] = globalCtx->envCtx.screenFillColor[0];
-                globalCtx->envCtx.screenFillColor[3] = 255;
+                play->envCtx.screenFillColor[0] = (160.0f * (1.0f - temp_f0));
+                play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[0];
+                play->envCtx.screenFillColor[2] = play->envCtx.screenFillColor[0];
+                play->envCtx.screenFillColor[3] = 255;
                 break;
 
             case 13:
-                globalCtx->envCtx.screenFillColor[0] = (160.0f * temp_f0);
-                globalCtx->envCtx.screenFillColor[1] = globalCtx->envCtx.screenFillColor[0];
-                globalCtx->envCtx.screenFillColor[2] = globalCtx->envCtx.screenFillColor[0];
-                globalCtx->envCtx.screenFillColor[3] = 255;
+                play->envCtx.screenFillColor[0] = (160.0f * temp_f0);
+                play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[0];
+                play->envCtx.screenFillColor[2] = play->envCtx.screenFillColor[0];
+                play->envCtx.screenFillColor[3] = 255;
                 break;
         }
     }
 }
 
 // Command 0x5A: Camera
-s32 Cutscene_Command_Camera(GlobalContext* globalCtx, u8* cmd) {
+s32 Cutscene_Command_Camera(PlayState* play, u8* cmd) {
     s32 sp1C = 0;
 
     bcopy(cmd, &sp1C, sizeof(s32));
     cmd += sizeof(s32);
-    if (func_8016A168() == 0) {
+    if (!Play_IsDebugCamEnabled()) {
         func_80161998(cmd, &sCutsceneCameraInfo);
     }
     return sp1C + sizeof(s32);
@@ -1000,9 +972,9 @@ s32 Cutscene_CountNormalMasks(void) {
 }
 
 // Command 0xA: Textbox
-void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
+void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
-    u8 dialogState;
+    u8 talkState;
     s32 pad;
     u16 originalCsFrames;
     s32 pad2;
@@ -1019,24 +991,24 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             D_801BB160 = CS_TEXTBOX_TYPE_1;
             D_801BB124 = cmd->base;
             if (cmd->type == CS_TEXTBOX_TYPE_BOSSES_REMAINS) {
-                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                     if (cmd->textId1 != 0xFFFF) {
-                        Message_StartTextbox(globalCtx, cmd->textId1, NULL);
+                        Message_StartTextbox(play, cmd->textId1, NULL);
                     }
                 } else {
-                    Message_StartTextbox(globalCtx, cmd->base, NULL);
+                    Message_StartTextbox(play, cmd->base, NULL);
                 }
             } else if (cmd->type == CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS) {
                 if (Cutscene_CountNormalMasks() == 20) {
                     if (cmd->textId1 != 0xFFFF) {
-                        Message_StartTextbox(globalCtx, cmd->textId1, NULL);
+                        Message_StartTextbox(play, cmd->textId1, NULL);
                     }
                 } else {
-                    Message_StartTextbox(globalCtx, cmd->base, NULL);
+                    Message_StartTextbox(play, cmd->base, NULL);
                 }
             } else {
-                Message_StartTextbox(globalCtx, cmd->base, NULL);
+                Message_StartTextbox(play, cmd->base, NULL);
             }
         } else {
             goto else_label;
@@ -1044,7 +1016,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     } else if (D_801BB128 != cmd->base) {
         D_801BB160 = CS_TEXTBOX_TYPE_LEARN_SONG;
         D_801BB128 = cmd->base;
-        func_80152434(globalCtx, cmd->base);
+        func_80152434(play, cmd->base);
     } else {
     else_label:
         if (csCtx->frames >= cmd->endFrame) {
@@ -1052,17 +1024,18 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             // a textbox that is expected to be closed by the user is still open.
 
             originalCsFrames = csCtx->frames;
-            dialogState = Message_GetState(&globalCtx->msgCtx);
-            if ((dialogState != 2) && (dialogState != 0) && (dialogState != 7) && (dialogState != 8)) {
+            talkState = Message_GetState(&play->msgCtx);
+            if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
+                (talkState != TEXT_STATE_8)) {
                 csCtx->frames--;
-                if ((dialogState == 4) && Message_ShouldAdvance(globalCtx)) {
-                    if (globalCtx->msgCtx.choiceIndex == 0) {
+                if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
+                    if (play->msgCtx.choiceIndex == 0) {
                         if (cmd->base == 0x33BD) {
                             func_8019F230();
                         }
 
                         if (cmd->textId1 != 0xFFFF) {
-                            func_80151938(globalCtx, cmd->textId1);
+                            func_80151938(play, cmd->textId1);
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId2 != 0xFFFF) {
@@ -1070,7 +1043,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                                 }
                             }
                         } else {
-                            func_801477B4(globalCtx);
+                            func_801477B4(play);
                             csCtx->frames++;
                         }
                     } else {
@@ -1079,7 +1052,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                         }
 
                         if (cmd->textId2 != 0xFFFF) {
-                            func_80151938(globalCtx, cmd->textId2);
+                            func_80151938(play, cmd->textId2);
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId1 != 0xFFFF) {
@@ -1087,24 +1060,24 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                                 }
                             }
                         } else {
-                            func_801477B4(globalCtx);
+                            func_801477B4(play);
                             csCtx->frames++;
                         }
                     }
                 }
 
-                if (dialogState == 5 && Message_ShouldAdvance(globalCtx)) {
-                    func_80152434(globalCtx, cmd->base);
+                if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+                    func_80152434(play, cmd->base);
                 }
             }
 
-            if ((dialogState == 2) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
+            if ((talkState == TEXT_STATE_CLOSING) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
                 csCtx->frames--;
                 D_801BB124++;
             }
 
             if (originalCsFrames == csCtx->frames) {
-                Interface_ChangeAlpha(1);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 D_801BB124 = 0;
                 D_801BB128 = 0;
                 func_80161C0C();
@@ -1134,8 +1107,6 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     }
 }
 
-#ifdef NON_MATCHING
-// Some stack issues, and a few instructions in the "wrong" places
 /**
  * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneously (for most
  * commands).
@@ -1162,16 +1133,15 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  *
  * TODO: consider changing the type of `cutscenePtr` to `uintptr_t` when this function matches.
  */
-void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr) {
+void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
-    s16 phi_s0;
-    s32 totalEntries;
     s32 j;
-    u32 cmdType; // sp5C
     s32 pad;
-    s32 cmdEntries;       // sp58
-    s32 cutsceneEndFrame; // sp50
-    s16 phi_s0_23;
+    s32 totalEntries;
+    u32 cmdType;
+    s32 cmdEntries;
+    s32 pad2;
+    s32 cutsceneEndFrame;
     CsCmdBase* cmd;
 
     // Read the command list count and the ending frame for this cutscene
@@ -1180,7 +1150,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     bcopy(cutscenePtr, &cutsceneEndFrame, sizeof(s32));
     cutscenePtr += sizeof(s32);
 
-    if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_4)) {
+    if (((u16)cutsceneEndFrame < csCtx->frames) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
+        (csCtx->state != CS_STATE_4)) {
         csCtx->state = CS_STATE_3;
         return;
     }
@@ -1199,14 +1170,14 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
         // Check special cases of command types. This are generic ActorActions
         // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
         if (((cmdType >= 100) && (cmdType < 150)) || (cmdType == 201) || ((cmdType >= 450) && (cmdType < 600))) {
-            for (phi_s0 = 0; phi_s0 < ARRAY_COUNT(D_801F4DC8); phi_s0++) {
-                if ((u16)cmdType == D_801F4DC8[phi_s0]) {
-                    func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
+            for (j = 0; j < ARRAY_COUNT(D_801F4DC8); j = (s16)(j + 1)) {
+                if (D_801F4DC8[j] == (u16)cmdType) {
+                    func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
-                } else if (D_801F4DC8[phi_s0] == 0) {
-                    D_801F4DC8[phi_s0] = cmdType;
-                    func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
+                } else if (D_801F4DC8[j] == 0) {
+                    D_801F4DC8[j] = cmdType;
+                    func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
                 }
@@ -1218,7 +1189,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Misc(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_Misc(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1227,7 +1198,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_SetLighting(globalCtx, csCtx, (CsCmdEnvLighting*)cutscenePtr);
+                    Cutscene_Command_SetLighting(play, csCtx, (CsCmdEnvLighting*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdEnvLighting);
                 }
                 break;
@@ -1236,7 +1207,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_PlaySequence(globalCtx, csCtx, (CsCmdSequenceChange*)cutscenePtr);
+                    Cutscene_Command_PlaySequence(play, csCtx, (CsCmdSequenceChange*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceChange);
                 }
                 break;
@@ -1245,7 +1216,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_StopSequence(globalCtx, csCtx, (CsCmdSequenceChange*)cutscenePtr);
+                    Cutscene_Command_StopSequence(play, csCtx, (CsCmdSequenceChange*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceChange);
                 }
                 break;
@@ -1254,7 +1225,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeSequence(globalCtx, csCtx, (CsCmdSequenceFade*)cutscenePtr);
+                    Cutscene_Command_FadeSequence(play, csCtx, (CsCmdSequenceFade*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceFade);
                 }
                 break;
@@ -1263,7 +1234,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_PlayAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_PlayAmbienceSequence(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1272,7 +1243,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_FadeAmbienceSequence(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1281,7 +1252,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAD48(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    func_800EAD48(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1290,7 +1261,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAD7C(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    func_800EAD7C(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1299,7 +1270,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EADB0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    func_800EADB0(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1308,7 +1279,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Rumble(globalCtx, csCtx, (CsCmdRumble*)cutscenePtr);
+                    Cutscene_Command_Rumble(play, csCtx, (CsCmdRumble*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdRumble);
                 }
                 break;
@@ -1317,7 +1288,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeColorScreen(globalCtx, csCtx, (CsCmdFadeScreen*)cutscenePtr);
+                    Cutscene_Command_FadeColorScreen(play, csCtx, (CsCmdFadeScreen*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdFadeScreen);
                 }
                 break;
@@ -1326,7 +1297,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_SetTime(globalCtx, csCtx, (CsCmdDayTime*)cutscenePtr);
+                    Cutscene_Command_SetTime(play, csCtx, (CsCmdDayTime*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdDayTime);
                 }
                 break;
@@ -1336,22 +1307,22 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
-                    if ((csCtx->frames >= cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
-                        csCtx->playerAction = (CsCmdActorAction*)cutscenePtr;
+                    if ((cmd->startFrame <= csCtx->frames) && (csCtx->frames < cmd->endFrame)) {
+                        csCtx->playerAction = (CsCmdActorAction*)cmd;
                     }
                     cutscenePtr += sizeof(CsCmdActorAction);
                 }
                 break;
 
             case CS_CMD_CAMERA:
-                cutscenePtr = &cutscenePtr[Cutscene_Command_Camera(globalCtx, cutscenePtr)];
+                cutscenePtr += Cutscene_Command_Camera(play, cutscenePtr);
                 break;
 
             case CS_CMD_TERMINATOR:
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Terminator(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_Terminator(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1360,7 +1331,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_ChooseCreditsScenes(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_ChooseCreditsScenes(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1371,7 +1342,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if (cmd->base != 0xFFFF) {
-                        Cutscene_Command_Textbox(globalCtx, csCtx, (CsCmdTextbox*)cutscenePtr);
+                        Cutscene_Command_Textbox(play, csCtx, (CsCmdTextbox*)cmd);
                     }
                     cutscenePtr += sizeof(CsCmdTextbox);
                 }
@@ -1381,7 +1352,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_TransitionFX(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_TransitionFX(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1390,7 +1361,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_MotionBlur(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_MotionBlur(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1399,7 +1370,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_GiveTatlToPlayer(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_GiveTatlToPlayer(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1417,30 +1388,26 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
         }
     }
 }
-#else
-void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
-#endif
 
 /* End of command handling section */
 
-void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
+void func_800ED980(PlayState* play, CutsceneContext* csCtx) {
     if (gSaveContext.save.cutscene >= 0xFFF0) {
         csCtx->frames++;
-        Cutscene_ProcessCommands(globalCtx, csCtx, (u8*)globalCtx->csCtx.csData);
+        Cutscene_ProcessCommands(play, csCtx, (u8*)play->csCtx.csData);
     }
 }
 
-void func_800ED9C4(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if (func_800EA220(globalCtx, csCtx, 0.0f)) {
+void func_800ED9C4(PlayState* play, CutsceneContext* csCtx) {
+    if (func_800EA220(play, csCtx, 0.0f)) {
         Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_0;
     }
 }
 
 // unused
-void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if (func_800EA220(globalCtx, csCtx, 0.0f)) {
+void func_800EDA04(PlayState* play, CutsceneContext* csCtx) {
+    if (func_800EA220(play, csCtx, 0.0f)) {
         s16 i;
 
         csCtx->playerAction = NULL;
@@ -1457,8 +1424,8 @@ void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
-void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(&globalCtx->state)) {
+void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(play)) {
         gSaveContext.save.cutscene = 0xFFFD;
     }
 
@@ -1478,29 +1445,27 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
             Audio_SetCutsceneFlag(true);
 
             csCtx->frames = 0xFFFF;
-            csCtx->csCamId = ActorCutscene_GetCurrentCamera(0x7F);
-            func_8016119C(Play_GetCamera(globalCtx, csCtx->csCamId), &sCutsceneCameraInfo);
+            csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
+            func_8016119C(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {
-                Interface_ChangeAlpha(1);
-                ShrinkWindow_SetLetterboxTarget(32);
-                ShrinkWindow_SetLetterboxMagnitude(0x20);
+                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+                ShrinkWindow_Letterbox_SetSizeTarget(32);
+                ShrinkWindow_Letterbox_SetSize(32);
                 csCtx->state++;
             }
 
-            func_800ED980(globalCtx, csCtx);
+            func_800ED980(play, csCtx);
         }
 
         gSaveContext.cutsceneTrigger = 0;
     }
 }
 
-#ifdef NON_MATCHING
 // HandleFlags?
-// regalloc
-void func_800EDBE0(GlobalContext* globalCtx) {
-    CutsceneEntry* temp_a3;
+void func_800EDBE0(PlayState* play) {
+    s32 pad;
     s16 sp2A;
     SceneTableEntry* sp24;
     s32 temp_v0_3;
@@ -1510,15 +1475,16 @@ void func_800EDBE0(GlobalContext* globalCtx) {
         if (sp2A != -1) {
             temp_v0_3 = func_800F2138(sp2A);
             if (temp_v0_3 != -1) {
-                temp_a3 = ((void)0, globalCtx->csCtx.sceneCsList);
-                if ((temp_a3[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
-                    if (temp_a3[temp_v0_3].unk7 == 0xFE) {
+                if ((play->csCtx.sceneCsList[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
+                    if (play->csCtx.sceneCsList[temp_v0_3].unk7 == 0xFE) {
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
-                    } else if (!((1 << (temp_a3[temp_v0_3].unk7 % 8)) &
-                                 gSaveContext.save.weekEventReg[temp_a3[temp_v0_3].unk7 / 8])) {
-                        gSaveContext.save.weekEventReg[(temp_a3[temp_v0_3].unk7 / 8)] |=
-                            1 << (temp_a3[temp_v0_3].unk7 % 8);
+                    } else if (!(((void)0,
+                                  gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
+                                 (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8)))) {
+                        gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)] =
+                            ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
+                            (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8));
                         ActorCutscene_Start(sp2A, NULL);
                         gSaveContext.showTitleCard = false;
                     }
@@ -1530,31 +1496,29 @@ void func_800EDBE0(GlobalContext* globalCtx) {
     }
 
     if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
-        sp24 = globalCtx->loadedScene;
+        sp24 = play->loadedScene;
         if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
-            if ((Entrance_GetTransitionFlags(gSaveContext.sceneSetupIndex + gSaveContext.save.entranceIndex) &
+            if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
+                                             ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(globalCtx, sp24->titleTextId);
+                func_80151A68(play, sp24->titleTextId);
             }
         }
 
         gSaveContext.showTitleCard = true;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EDBE0.s")
-#endif
 
-void func_800EDDB0(GlobalContext* globalCtx) {
+void func_800EDDB0(PlayState* play) {
 }
 
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex) {
+void Cutscene_LoadCutsceneData(PlayState* play, u8 csIndex) {
     if (dREG(95) == 0) {
-        globalCtx->csCtx.currentCsIndex = csIndex;
-        globalCtx->csCtx.csData = Lib_SegmentedToVirtual(globalCtx->csCtx.sceneCsList[csIndex].segmentedData);
+        play->csCtx.currentCsIndex = csIndex;
+        play->csCtx.csData = Lib_SegmentedToVirtual(play->csCtx.sceneCsList[csIndex].segmentedData);
     }
 
     gSaveContext.cutsceneTrigger = 1;
@@ -1566,10 +1530,10 @@ void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex) {
  * Interpolates the actor's position based on the corresponding actor action's position
  * and the current cutscene frame
  */
-void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
-    CsCmdActorAction* entry = globalCtx->csCtx.actorActions[actorActionIndex];
+    CsCmdActorAction* entry = play->csCtx.actorActions[actorActionIndex];
     f32 progress;
 
     start.x = entry->startPos.x;
@@ -1579,7 +1543,7 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
     end.y = entry->endPos.y;
     end.z = entry->endPos.z;
 
-    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.frames);
 
     VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, progress);
 }
@@ -1588,10 +1552,10 @@ void Cutscene_ActorTranslate(Actor* actor, GlobalContext* globalCtx, s32 actorAc
  * Interpolates the actor's position based on the corresponding actor action's position
  * and the current cutscene frame, and sets the actor's yaw using the actor action yaw
  */
-void Cutscene_ActorTranslateAndYaw(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
-    Cutscene_ActorTranslate(actor, globalCtx, actorActionIndex);
+void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 actorActionIndex) {
+    Cutscene_ActorTranslate(actor, play, actorActionIndex);
 
-    actor->world.rot.y = globalCtx->csCtx.actorActions[actorActionIndex]->urot.y;
+    actor->world.rot.y = play->csCtx.actorActions[actorActionIndex]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1599,21 +1563,21 @@ void Cutscene_ActorTranslateAndYaw(Actor* actor, GlobalContext* globalCtx, s32 a
  * Interpolates the actor's position and yaw based on the corresponding actor action's
  * position and the current cutscene frame
  */
-void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
     f32 progress;
 
-    start.x = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.x;
-    start.y = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.y;
-    start.z = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.z;
-    end.x = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.x;
-    end.y = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.y;
-    end.z = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.z;
+    start.x = play->csCtx.actorActions[actorActionIndex]->startPos.x;
+    start.y = play->csCtx.actorActions[actorActionIndex]->startPos.y;
+    start.z = play->csCtx.actorActions[actorActionIndex]->startPos.z;
+    end.x = play->csCtx.actorActions[actorActionIndex]->endPos.x;
+    end.y = play->csCtx.actorActions[actorActionIndex]->endPos.y;
+    end.z = play->csCtx.actorActions[actorActionIndex]->endPos.z;
 
-    entry = globalCtx->csCtx.actorActions[actorActionIndex];
-    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    entry = play->csCtx.actorActions[actorActionIndex];
+    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.frames);
 
     VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, progress);
 
@@ -1625,19 +1589,19 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, GlobalContext* globalCtx,
  * Interpolates the actor's XZ position and yaw based on the corresponding actor action's
  * position and the current cutscene frame
  */
-void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCtx, s32 actorActionIndex) {
+void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex) {
     Vec3f start;
     Vec3f end;
     CsCmdActorAction* entry;
     f32 progress;
 
-    start.x = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.x;
-    start.z = globalCtx->csCtx.actorActions[actorActionIndex]->startPos.z;
-    end.x = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.x;
-    end.z = globalCtx->csCtx.actorActions[actorActionIndex]->endPos.z;
+    start.x = play->csCtx.actorActions[actorActionIndex]->startPos.x;
+    start.z = play->csCtx.actorActions[actorActionIndex]->startPos.z;
+    end.x = play->csCtx.actorActions[actorActionIndex]->endPos.x;
+    end.z = play->csCtx.actorActions[actorActionIndex]->endPos.z;
 
-    entry = globalCtx->csCtx.actorActions[actorActionIndex];
-    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, globalCtx->csCtx.frames);
+    entry = play->csCtx.actorActions[actorActionIndex];
+    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.frames);
 
     actor->world.pos.x = start.x + (end.x - start.x) * progress;
     actor->world.pos.z = start.z + (end.z - start.z) * progress;
@@ -1646,16 +1610,16 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCt
     actor->shape.rot.y = actor->world.rot.y;
 }
 
-s32 Cutscene_GetSceneSetupIndex(GlobalContext* globalCtx) {
-    s32 sceneSetupIndex = 0;
+s32 Cutscene_GetSceneLayer(PlayState* play) {
+    s32 sceneLayer = 0;
 
-    if (gSaveContext.sceneSetupIndex > 0) {
-        sceneSetupIndex = gSaveContext.sceneSetupIndex;
+    if (gSaveContext.sceneLayer > 0) {
+        sceneLayer = gSaveContext.sceneLayer;
     }
-    return sceneSetupIndex;
+    return sceneLayer;
 }
 
-s32 Cutscene_GetActorActionIndex(GlobalContext* globalCtx, u16 actorActionCmd) {
+s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd) {
     s32 i;
     s32 index = -1;
 
@@ -1668,20 +1632,20 @@ s32 Cutscene_GetActorActionIndex(GlobalContext* globalCtx, u16 actorActionCmd) {
     return index;
 }
 
-s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
-    if (globalCtx->csCtx.state != CS_STATE_0) {
-        s32 index = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
+s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd) {
+    if (play->csCtx.state != CS_STATE_0) {
+        s32 index = Cutscene_GetActorActionIndex(play, actorActionCmd);
 
         if (index != -1) {
-            return globalCtx->csCtx.actorActions[index] != NULL;
+            return play->csCtx.actorActions[index] != NULL;
         }
     }
 
     return false;
 }
 
-u8 Cutscene_IsPlaying(GlobalContext* globalCtx) {
-    return (gSaveContext.cutsceneTrigger != 0) || (globalCtx->csCtx.state != CS_STATE_0);
+u8 Cutscene_IsPlaying(PlayState* play) {
+    return (gSaveContext.cutsceneTrigger != 0) || (play->csCtx.state != CS_STATE_0);
 }
 
 /* End of actor utilities section */

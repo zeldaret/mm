@@ -23,25 +23,33 @@
 #include "sfx.h"
 #include "message_data_static.h"
 
+#include "gfxprint.h"
+#include "sys_matrix.h"
 #include "z64actor.h"
 #include "z64animation.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
+#include "z64camera.h"
 #include "z64collision_check.h"
+#include "z64curve.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64effect.h"
 #include "z64item.h"
 #include "z64light.h"
+#include "z64map.h"
 #include "z64math.h"
+#include "z64message.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
 #include "z64save.h"
 #include "z64scene.h"
+#include "z64schedule.h"
 #include "z64skin.h"
 #include "z64subs.h"
 #include "z64transition.h"
+#include "z64view.h"
 #include "regs.h"
 
 #define Z_THREAD_ID_IDLE     1
@@ -62,10 +70,13 @@
 #define Z_PRIORITY_DMAMGR   17
 #define Z_PRIORITY_IRQMGR   18
 
-#define EQUIP_SLOT_B 0
-#define EQUIP_SLOT_C_LEFT 1
-#define EQUIP_SLOT_C_DOWN 2
-#define EQUIP_SLOT_C_RIGHT 3
+typedef enum {
+    /* 0 */ EQUIP_SLOT_B,
+    /* 1 */ EQUIP_SLOT_C_LEFT,
+    /* 2 */ EQUIP_SLOT_C_DOWN,
+    /* 3 */ EQUIP_SLOT_C_RIGHT,
+    /* 4 */ EQUIP_SLOT_A
+} EquipSlot;
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
@@ -87,29 +98,18 @@ typedef struct {
 } AnimatedMaterial; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ Vec3s pos;
-    /* 0x06 */ s16   unk_06;
-    /* 0x08 */ Gfx*  opa;
-    /* 0x0C */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x8
+    /* 0x0 */ Vec3s pos;
+    /* 0x6 */ s16   unk_06;
+    /* 0x8 */ Gfx*  opa;
+    /* 0xC */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u8    type;
-    /* 0x01 */ u8    num; // number of dlist entries
-    /* 0x04 */ void* start;
-    /* 0x08 */ void* end;
+    /* 0x0 */ u8    type;
+    /* 0x1 */ u8    num; // number of dlist entries
+    /* 0x4 */ void* start;
+    /* 0x8 */ void* end;
 } PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 func;
-    /* 0x2 */ UNK_TYPE1 pad2[0x6];
-} CameraModeParams; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u32 validModes;
-    /* 0x4 */ UNK_TYPE1 pad4[0x4];
-    /* 0x8 */ CameraModeParams* modes;
-} CameraStateParams; // size = 0xC
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -145,7 +145,7 @@ typedef struct {
     /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
     /* 0xC */ u8 lightParamsIndex;
-} FireObjInitParams; // size = 0xD
+} FireObjInitParams; // size = 0x10
 
 typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
@@ -158,25 +158,6 @@ typedef struct FireObjLightParams {
     /* 0x2 */ Color_RGB8 color;
     /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
-
-#define FONT_CHAR_TEX_WIDTH  16
-#define FONT_CHAR_TEX_HEIGHT 16
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
-
-// Font textures are loaded into here
-typedef struct {
-    /* 0x00000 */ u8 charBuf[2][FONT_CHAR_TEX_SIZE * 120];
-    /* 0x07800 */ u8 iconBuf[FONT_CHAR_TEX_SIZE];
-    /* 0x07880 */ u8 fontBuf[FONT_CHAR_TEX_SIZE * 320];
-    /* 0x11880 */ union {
-        u8 schar[640];
-        u16 wchar[640];
-    } msgBuf;
-    /* 0x11D80 */ u8* messageStart;
-    /* 0x11D84 */ u8* messageEnd;
-    /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
-} Font; // size = 0x11D8C
 
 // Game Info aka. Static Context
 // Data normally accessed through REG macros (see regs.h)
@@ -191,17 +172,17 @@ typedef struct {
 } GameInfo; // size = 0x15D4
 
 typedef struct {
-    /* 0x0000 */ u32    size;
-    /* 0x0004 */ void*  bufp;
-    /* 0x0008 */ void*  head;
-    /* 0x000C */ void*  tail;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ void*  bufp;
+    /* 0x8 */ void*  head;
+    /* 0xC */ void*  tail;
 } TwoHeadArena; // size = 0x10
 
 typedef struct {
-    /* 0x0000 */ u32    size;
-    /* 0x0004 */ Gfx*   bufp;
-    /* 0x0008 */ Gfx*   p;
-    /* 0x000C */ Gfx*   d;
+    /* 0x0 */ u32    size;
+    /* 0x4 */ Gfx*   bufp;
+    /* 0x8 */ Gfx*   p;
+    /* 0xC */ Gfx*   d;
 } TwoHeadGfxArena; // size = 0x10
 
 typedef struct {
@@ -288,39 +269,11 @@ typedef enum IRQ_TYPE {
 } IRQ_TYPE;
 
 typedef struct {
-    /* 0x00 */ u32 textSize;
-    /* 0x04 */ u32 dataSize;
-    /* 0x08 */ u32 rodataSize;
-    /* 0x0C */ u32 bssSize;
-    /* 0x10 */ u32 nRelocations;
-    /* 0x14 */ u32 relocations[1];
-} OverlayRelocationSection; // size >= 0x18
-
-typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;
     /* 0x08 */ OSTime duration;
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
-
-typedef struct {
-    /* 0x00 */ s16 intPart[16];
-    /* 0x20 */ u16 fracPart[16];
-} RSPMatrix; // size = 0x40
-
-typedef struct {
-    /* 0x0 */ s8 letterboxTarget;
-    /* 0x1 */ s8 letterboxMagnitude;
-    /* 0x2 */ s8 pillarboxTarget;
-    /* 0x3 */ s8 pillarboxMagnitude;
-} ShrinkWindowContext; // size = 0x4
-
-typedef struct {
-    /* 0x0 */ s32 topY;
-    /* 0x4 */ s32 bottomY;
-    /* 0x8 */ s32 leftX;
-    /* 0xC */ s32 rightX;
-} Viewport; // size = 0x10
 
 typedef void(*osCreateThread_func)(void*);
 
@@ -382,13 +335,6 @@ typedef struct {
     /* 0x1A */ s16 unk1A;
 } s80874650; // size = 0x1C
 
-typedef struct {
-    /* 0x00 */ f32 x[4];
-    /* 0x10 */ f32 y[4];
-    /* 0x20 */ f32 z[4];
-    /* 0x30 */ f32 w[4];
-} z_Matrix; // size = 0x40
-
 typedef union {
     F3DVertexColor color;
     F3DVertexNormal normal;
@@ -426,27 +372,6 @@ typedef struct {
     /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
 
-typedef struct GfxPrint {
-    /* 0x00 */ struct GfxPrint *(*callback)(struct GfxPrint*, const char*, size_t);
-    /* 0x04 */ Gfx* dlist;
-    /* 0x08 */ u16 posX;
-    /* 0x0A */ u16 posY;
-    /* 0x0C */ u16 baseX;
-    /* 0x0E */ u8 baseY;
-    /* 0x0F */ u8 flag;
-    /* 0x10 */ Color_RGBA8_u32 color;
-    /* 0x14 */ char unk_14[0x1C]; // unused
-} GfxPrint; // size = 0x30
-
-typedef enum {
-    GFXPRINT_FLAG1 = 1,
-    GFXPRINT_USE_RGBA16 = 2,
-    GFXPRINT_FLAG4 = 4,
-    GFXPRINT_UPDATE_MODE = 8,
-    GFXPRINT_FLAG64 = 0x40,
-    GFXPRINT_OPEN = 0x80
-} GfxPrintFlag;
-
 typedef struct {
     /* 0x00 */ u8 countdown;
     /* 0x01 */ u8 playSfxEachFrame;
@@ -455,44 +380,16 @@ typedef struct {
     /* 0x10 */ Vec3f projectedPos;
 } SoundSource; // size = 0x1C
 
-typedef struct {
-    /* 0x000 */ u32 magic;
-    /* 0x004 */ GraphicsContext* gfxCtx;
-    /* 0x008 */ Viewport viewport;
-    /* 0x018 */ f32 fovy;
-    /* 0x01C */ f32 zNear;
-    /* 0x020 */ f32 zFar;
-    /* 0x024 */ f32 scale;
-    /* 0x028 */ Vec3f eye;
-    /* 0x034 */ Vec3f at;
-    /* 0x040 */ Vec3f up;
-    /* 0x04C */ UNK_TYPE1 pad4C[0x4];
-    /* 0x050 */ Vp vp;
-    /* 0x060 */ Mtx projection;
-    /* 0x0A0 */ Mtx viewing;
-    /* 0x0E0 */ Mtx unkE0;
-    /* 0x120 */ Mtx* projectionPtr;
-    /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f distortionDirRot;
-    /* 0x134 */ Vec3f distortionScale;
-    /* 0x140 */ f32 distortionSpeed;
-    /* 0x144 */ Vec3f curDistortionDirRot;
-    /* 0x150 */ Vec3f curDistortionScale;
-    /* 0x15C */ u16 normal;
-    /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
-    /* 0x164 */ UNK_TYPE4 unk164;
-} View; // size = 0x168
-
 typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
-    /* 0x170 */ u8* unk_170;
-    /* 0x174 */ u8* unk_174;
-    /* 0x178 */ u8* unk_178;
-    /* 0x17C */ u8* unk_17C;
+    /* 0x170 */ u8* iconItemAltSegment;
+    /* 0x174 */ u8* iconItemLangSegment;
+    /* 0x178 */ u8* nameSegment;
+    /* 0x17C */ u8* iconItemVtxSegment;
     /* 0x180 */ Vtx* itemPageVtx;
     /* 0x184 */ Vtx* mapPageVtx;
     /* 0x188 */ Vtx* questPageVtx;
@@ -505,68 +402,67 @@ typedef struct {
     /* 0x1A4 */ Vtx* unk_1A4;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
-    /* 0x1B0 */ DmaRequest unk_1B0;
+    /* 0x1B0 */ UNK_TYPE1 unk_1B0[0x20];
     /* 0x1D0 */ OSMesgQueue loadQueue;
     /* 0x1E8 */ OSMesg loadMsg;
     /* 0x1EC */ u16 state;
-    /* 0x1EE */ u16 debugState;
-    /* 0x1F0 */ u8 unk_1F0;
+    /* 0x1EE */ u16 debugEditor;
+    /* 0x1F0 */ u8 bombersNotebookOpen;
     /* 0x1F4 */ Vec3f eye;
-    /* 0x200 */ u16 unk_200;
-    /* 0x202 */ u16 mode;
+    /* 0x200 */ u16 mainState;
+    /* 0x202 */ u16 nextPageMode; // (2 * prev pageIndex) + (scroll left ? 1 : 0)
     /* 0x204 */ u16 pageIndex;
-    /* 0x206 */ u16 unk_206;
-    /* 0x208 */ u16 unk_208;
+    /* 0x206 */ u16 switchPageTimer;
+    /* 0x208 */ u16 savePromptState;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ f32 unk_210;
-    /* 0x214 */ f32 unk_214;
-    /* 0x218 */ f32 unk_218;
-    /* 0x21C */ f32 unk_21C;
-    /* 0x220 */ f32 unk_220;
+    /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen 
+    /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen 
+    /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen 
+    /* 0x21C */ f32 maskPageRoll; // rotation (-z) of the mask page into the screen 
+    /* 0x220 */ f32 roll;
     /* 0x224 */ u16 alpha;
     /* 0x226 */ s16 offsetY;
-    /* 0x228 */ s32 unk_228;
-    /* 0x22C */ s32 unk_22C;
-    /* 0x230 */ s32 unk_230;
-    /* 0x234 */ s32 unk_234;
-    /* 0x238 */ s16 unk_238[5];
-    /* 0x242 */ s16 unk_242[5];
-    /* 0x24C */ s16 unk_24C[5];
-    /* 0x256 */ s16 unk_256;
-    /* 0x258 */ s16 unk_258;
-    /* 0x25A */ s16 unk_25A;
-    /* 0x25C */ u16 unk_25C;
-    /* 0x25E */ u16 unk_25E[5]; // ItemId
-    /* 0x268 */ u16 unk_268[5];
+    /* 0x228 */ UNK_TYPE1 unk_228[0x8];
+    /* 0x230 */ s32 stickAdjX;
+    /* 0x234 */ s32 stickAdjY;
+    /* 0x238 */ s16 cursorPoint[5];
+    /* 0x242 */ s16 cursorXIndex[5];
+    /* 0x24C */ s16 cursorYIndex[5];
+    /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
+    /* 0x258 */ s16 cursorSpecialPos;
+    /* 0x25A */ s16 pageSwitchTimer;
+    /* 0x25C */ u16 namedItem;
+    /* 0x25E */ u16 cursorItem[5];
+    /* 0x268 */ u16 cursorSlot[5];
     /* 0x272 */ u16 equipTargetItem;
     /* 0x274 */ u16 equipTargetSlot;
     /* 0x276 */ u16 equipTargetCBtn;
     /* 0x278 */ s16 equipAnimX;
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
-    /* 0x27E */ s16 unk_27E;
+    /* 0x27E */ s16 infoPanelOffsetY;
     /* 0x280 */ u16 unk_280;
-    /* 0x282 */ u16 unk_282;
-    /* 0x284 */ s16 unk_284;
+    /* 0x282 */ u16 nameColorSet;
+    /* 0x284 */ s16 cursorColorSet;
     /* 0x286 */ s16 unk_286;
     /* 0x288 */ f32 unk_288;
     /* 0x28C */ f32 unk_28C;
     /* 0x290 */ f32 unk_290;
     /* 0x294 */ f32 unk_294;
     /* 0x298 */ f32 unk_298;
-    /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ s16 unk_29E;
-    /* 0x2A0 */ s16 unk_2A0;
+    /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
+    /* 0x29E */ s16 promptAlpha;
+    /* 0x2A0 */ s16 ocarinaSongIndex;
     /* 0x2A2 */ u8 worldMapPoints[20];
-    /* 0x2B6 */ u8 unk_2B6;
-    /* 0x2B7 */ u8 unk_2B7;
-    /* 0x2B8 */ u8 unk_2B8;
-    /* 0x2B9 */ u8 unk_2B9;
-    /* 0x2BA */ s16 unk_2BA;
-    /* 0x2BC */ s16 unk_2BC;
-    /* 0x2BE */ s16 unk_2BE[5];
-    /* 0x2C8 */ u16 unk_2C8;
-    /* 0x2CA */ s16 unk_2CA;
+    /* 0x2B6 */ u8 unk_2B6; // unused red?
+    /* 0x2B7 */ u8 unk_2B7; // unused green?
+    /* 0x2B8 */ u8 unk_2B8; // unused blue?
+    /* 0x2B9 */ u8 itemDescriptionOn; // helpful description of item given through a message box
+    /* 0x2BA */ s16 equipAnimScale; // scale of item icon while moving being equipped to c-button
+    /* 0x2BC */ s16 equipAnimShrinkRate; // rate the scale is shrinking for the item icon while moving being equipped to c-button
+    /* 0x2BE */ s16 ocarinaButtonsY[5];
+    /* 0x2C8 */ u16 unk_2C8; // Uses PauseMenuPage enum for Owl Warp. Never set.
+    /* 0x2CA */ s16 unk_2CA; // Uses OwlWarpId enum for Owl Warp. Never set.
 } PauseContext; // size = 0x2D0
 
 typedef struct {
@@ -589,7 +485,7 @@ typedef struct {
     /* 0x214 */ u16 unk_214;
     /* 0x218 */ f32 unk_218;
     /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21E */ s16 bButtonDoAction;
     /* 0x220 */ s16 unk_220;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
@@ -608,7 +504,7 @@ typedef struct {
     /* 0x252 */ s16 lifeSizeChange;
     /* 0x254 */ s16 lifeSizeChangeDirection; // 1 means shrinking, 0 growing
     /* 0x256 */ s16 unk_256;
-    /* 0x258 */ s16 unk_258;
+    /* 0x258 */ s16 magicConsumptionTimer; // For certain magic states, 1 unit of magic is consumed every time the timer reaches 0
     /* 0x25A */ u8 numHorseBoosts;
     /* 0x25C */ u16 unk_25C;
     /* 0x25E */ u16 unk_25E;
@@ -625,7 +521,7 @@ typedef struct {
     /* 0x274 */ s16 minimapAlpha;
     /* 0x276 */ s16 startAlpha;
     /* 0x278 */ s16 unk_278;
-    /* 0x27A */ s16 unk_27A;
+    /* 0x27A */ s16 dungeonOrBossAreaMapIndex;
     /* 0x27C */ s16 mapRoomNum;
     /* 0x27E */ u8 unk_27E;
     /* 0x27F */ u8 unk_27F;
@@ -659,8 +555,8 @@ typedef struct {
         /* 0x318 */ u8 pictographBox;
         /* 0x319 */ u8 all;     // "another"; enables all item restrictions
     } restrictions; // size = 0xC
-    /* 0x31A */ u8 unk_31A;
-    /* 0x31B */ u8 unk_31B;
+    /* 0x31A */ u8 storyState;
+    /* 0x31B */ u8 storyType;
     /* 0x31C */ u8 unk_31C;
     /* 0x320 */ OSMesgQueue unk_320;
     /* 0x338 */ OSMesg unk_338;
@@ -743,34 +639,34 @@ typedef struct {
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
     /* 0xEE */ u8 unk_EE[4];
-    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo particle count
+    /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
 
 typedef struct {
-    /* 0x00000 */ View view;
-    /* 0x00168 */ void* skyboxStaticSegment[4];
-    /* 0x00178 */ void* skyboxPaletteStaticSegment;
-    /* 0x0017C */ Gfx* dListBuf;
-    /* 0x00180 */ Gfx* roomDL;
-    /* 0x00184 */ Vtx* roomVtx;
-    /* 0x00188 */ DmaRequest unk188;
-    /* 0x001A8 */ DmaRequest unk1A8;
-    /* 0x001C8 */ DmaRequest unk1C8;
-    /* 0x001E8 */ OSMesgQueue loadQueue;
-    /* 0x00200 */ OSMesg loadMsg;
-    /* 0x00204 */ s16 skyboxShouldDraw;
-    /* 0x00208 */ f32 rotX;
-    /* 0x0020C */ f32 rotY;
-    /* 0x00210 */ f32 rotZ;
-    /* 0x00214 */ Vec3f eye;
-    /* 0x00220 */ s16 angle;
-    /* 0x00222 */ u8 primR;
-    /* 0x00223 */ u8 primG;
-    /* 0x00224 */ u8 primB;
-    /* 0x00225 */ u8 envR;
-    /* 0x00226 */ u8 envG;
-    /* 0x00227 */ u8 envB;
+    /* 0x000 */ View view;
+    /* 0x168 */ void* staticSegments[4];
+    /* 0x178 */ void* paletteStaticSegment;
+    /* 0x17C */ Gfx (*dListBuf)[150];
+    /* 0x180 */ Gfx* roomDL;
+    /* 0x184 */ Vtx* roomVtx;
+    /* 0x188 */ DmaRequest unk188;
+    /* 0x1A8 */ DmaRequest unk1A8;
+    /* 0x1C8 */ DmaRequest unk1C8;
+    /* 0x1E8 */ OSMesgQueue loadQueue;
+    /* 0x200 */ OSMesg loadMsg;
+    /* 0x204 */ s16 skyboxShouldDraw;
+    /* 0x208 */ f32 rotX;
+    /* 0x20C */ f32 rotY;
+    /* 0x210 */ f32 rotZ;
+    /* 0x214 */ Vec3f eye;
+    /* 0x220 */ s16 angle;
+    /* 0x222 */ u8 primR;
+    /* 0x223 */ u8 primG;
+    /* 0x224 */ u8 primB;
+    /* 0x225 */ u8 envR;
+    /* 0x226 */ u8 envG;
+    /* 0x227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
 typedef enum {
@@ -778,8 +674,8 @@ typedef enum {
 } SkyboxId;
 
 typedef struct ListAlloc {
-    /* 0x00 */ struct ListAlloc* prev;
-    /* 0x04 */ struct ListAlloc* next;
+    /* 0x0 */ struct ListAlloc* prev;
+    /* 0x4 */ struct ListAlloc* next;
 } ListAlloc; // size = 0x8
 
 typedef struct {
@@ -824,96 +720,63 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-typedef struct {
-    /* 0x00000 */ View view;
-    /* 0x00168 */ Font font;
-    /* 0x11EF4 */ char unk_11EF4[0x4];
-    /* 0x11EF8 */ UNK_PTR unk11EF8;
-    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
-    /* 0x11F04 */ u16 currentTextId;
-    /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
-    /* 0x11F0A */ u8 unk11F0A;
-    /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
-    /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
-    /* 0x11F1A */ s16 unk11F1A[3];
-    /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
-    /* 0x11F22 */ u8 msgMode;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ union {
-        u8  schar[206];
-        u16 wchar[103];
-    } decodedBuffer;
-    /* 0x11FF2 */ u16 unk11FF2;
-    /* 0x11FF4 */ s16 unk11FF4;
-    /* 0x11FF6 */ s16 unk11FF6;
-    /* 0x11FF8 */ UNK_TYPE1 unk11FF8[0x6];
-    /* 0x11FFE */ s16 unk11FFE[0x3];
-    /* 0x12004 */ s16 unk12004;
-    /* 0x12006 */ s16 unk12006;
-    /* 0x12008 */ u8 unk12008[0x16];
-    /* 0x1201E */ s16 unk1201E;
-    /* 0x12020 */ u8 unk12020;
-    /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ u8 unk12022;
-    /* 0x12023 */ u8 unk12023;
-    /* 0x12024 */ s16 unk12024;
-    /* 0x12026 */ u16 unk12026;
-    /* 0x12028 */ u16 songPlayed;
-    /* 0x1202A */ u16 ocarinaMode;
-    /* 0x1202C */ u16 ocarinaAction;
-    /* 0x1202E */ u16 unk1202E;
-    /* 0x12030 */ s16 unk_12030;
-    /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
-    /* 0x12034 */ UNK_TYPE1 pad12034[0x6];
-    /* 0x1203A */ s16 unk1203A;
-    /* 0x1203C */ s16 unk1203C;
-    /* 0x1203E */ s16 pad1203E;
-    /* 0x12040 */ Actor* unkActor;
-    /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ s16 unk12046;
-    /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0x1];
-    /* 0x1204A */ s16 unk1204A[0x5];
-    /* 0x12054 */ s16 unk12054[3]; // First, second and third digits in lottery code guess
-    /* 0x1205A */ UNK_TYPE1 pad1205A[0xE];
-    /* 0x12068 */ s16 unk12068;
-    /* 0x1206A */ s16 unk1206A;
-    /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ s32 unk12070;
-    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
-    /* 0x12078 */ s32 bankRupeesSelected;
-    /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ MessageTableEntry* messageEntryTable;
-    /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
-    /* 0x12088 */ UNK_TYPE4 unk12088;
-    /* 0x1208C */ MessageTableEntry* messageTableStaff;
-    /* 0x12090 */ s16 unk12090;
-    /* 0x12092 */ s16 unk12092;
-    /* 0x12094 */ s8 unk12094;
-    /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
-    /* 0x12098 */ f32 unk12098; // Text_Scale?
-    /* 0x1209C */ s16 unk1209C;
-    /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
-    /* 0x120A0 */ s32 unk120A0;
-    /* 0x120A4 */ UNK_TYPE1 unk120A4[0xC];
-    /* 0x120B0 */ u8 unk120B0;
-    /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xC];
-    /* 0x120BE */ s16 unk120BE;
-    /* 0x120C0 */ s16 unk120C0;
-    /* 0x120C2 */ s16 unk120C2;
-    /* 0x120C4 */ s32 unk120C4;
-    /* 0x120C8 */ s16 unk120C8;
-    /* 0x120CA */ s16 unk120CA;
-    /* 0x120CC */ s16 unk120CC;
-    /* 0x120CE */ s16 unk120CE;
-    /* 0x120D0 */ s16 unk120D0;
-    /* 0x120D2 */ s16 unk120D2;
-    /* 0x120D4 */ s16 unk120D4;
-    /* 0x120D6 */ s16 unk120D6;
-    /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
-} MessageContext; // size = 0x120E0
+#define TRANS_TRIGGER_OFF 0 // transition is not active
+#define TRANS_TRIGGER_START 20 // start transition (exiting an area)
+#define TRANS_TRIGGER_END -20 // transition is ending (arriving in a new area)
+
+typedef enum TransitionMode {
+    /*  0 */ TRANS_MODE_OFF,
+    /*  1 */ TRANS_MODE_01,
+    /*  2 */ TRANS_MODE_02,
+    /*  3 */ TRANS_MODE_03,
+    /*  4 */ TRANS_MODE_04,
+    /*  5 */ TRANS_MODE_05,
+    /*  6 */ TRANS_MODE_06,
+    /*  7 */ TRANS_MODE_07,
+    /*  8 */ TRANS_MODE_08,
+    /*  9 */ TRANS_MODE_09,
+    /* 10 */ TRANS_MODE_10,
+    /* 11 */ TRANS_MODE_11,
+    /* 12 */ TRANS_MODE_12,
+    /* 13 */ TRANS_MODE_13,
+    /* 14 */ TRANS_MODE_14,
+    /* 15 */ TRANS_MODE_15,
+    /* 16 */ TRANS_MODE_16,
+    /* 17 */ TRANS_MODE_17
+} TransitionMode;
+
+typedef enum TransitionType {
+    /*  0 */ TRANS_TYPE_00,
+    /*  1 */ TRANS_TYPE_01,
+    /*  2 */ TRANS_TYPE_02,
+    /*  3 */ TRANS_TYPE_03,
+    /*  4 */ TRANS_TYPE_04,
+    /*  5 */ TRANS_TYPE_05,
+    /*  6 */ TRANS_TYPE_06,
+    /*  7 */ TRANS_TYPE_07,
+    /*  8 */ TRANS_TYPE_08,
+    /*  9 */ TRANS_TYPE_09, 
+    /* 10 */ TRANS_TYPE_10,
+    /* 11 */ TRANS_TYPE_11,
+    /* 12 */ TRANS_TYPE_12,
+    /* 13 */ TRANS_TYPE_13,
+    /* 14 */ TRANS_TYPE_14,
+    /* 15 */ TRANS_TYPE_15,
+    /* 16 */ TRANS_TYPE_16,
+    /* 17 */ TRANS_TYPE_17,
+    /* 18 */ TRANS_TYPE_18,
+    /* 19 */ TRANS_TYPE_19,
+    /* 20 */ TRANS_TYPE_20,
+    /* 21 */ TRANS_TYPE_21,
+    /* 64 */ TRANS_TYPE_64 = 64,
+    /* 70 */ TRANS_TYPE_70 = 70,
+    /* 72 */ TRANS_TYPE_72 = 72,
+    /* 73 */ TRANS_TYPE_73,
+    /* 80 */ TRANS_TYPE_80 = 80,
+    /* 86 */ TRANS_TYPE_86 = 86
+} TransitionType;
+
+#define TRANS_NEXT_TYPE_DEFAULT 0xFF
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
@@ -985,8 +848,8 @@ typedef struct GameState {
     /* 0x00 */ GraphicsContext* gfxCtx;
     /* 0x04 */ GameStateFunc main;
     /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc nextGameStateInit;
-    /* 0x10 */ size_t nextGameStateSize;
+    /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
+    /* 0x10 */ size_t size;
     /* 0x14 */ Input input[4];
     /* 0x74 */ TwoHeadArena heap;
     /* 0x84 */ GameAlloc alloc;
@@ -998,12 +861,6 @@ typedef struct GameState {
     /* 0xA3 */ u8 unk_A3;
 } GameState; // size = 0xA4
 
-typedef struct PreNMIContext {
-    /* 0x00 */ GameState state;
-    /* 0xA4 */ u32 timer;
-    /* 0xA8 */ UNK_TYPE4 unkA8;
-} PreNMIContext; // size = 0xAC
-
 typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;
@@ -1011,153 +868,15 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } PreNmiBuff; // size = 0x18 (actually osAppNmiBuffer is 0x40 bytes large but the rest is unused)
 
-typedef struct GlobalContext GlobalContext;
+typedef struct PlayState PlayState;
 
-typedef s32 (*ColChkResetFunc)(GlobalContext*, Collider*);
-typedef void (*ColChkBloodFunc)(GlobalContext*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
+typedef s32 (*ColChkResetFunc)(PlayState*, Collider*);
+typedef void (*ColChkBloodFunc)(PlayState*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(PlayState*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(PlayState*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
-
-typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
-
-typedef struct {
-    /* 0x00 */ draw_func unk0;
-    /* 0x04 */ u32 unk4;
-    /* 0x08 */ u32 unk8;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ u32 unk10;
-    /* 0x14 */ u32 unk14;
-    /* 0x18 */ u32 unk18;
-    /* 0x1C */ u32 unk1C;
-    /* 0x20 */ u32 unk20;
-} s801BB170; // size = 0x24
-
-typedef struct Camera {
-    /* 0x000 */ char paramData[0x50];
-    /* 0x050 */ Vec3f at;
-    /* 0x05C */ Vec3f eye;
-    /* 0x068 */ Vec3f up;
-    /* 0x074 */ Vec3f eyeNext;
-    /* 0x080 */ Vec3f skyboxOffset;
-    /* 0x08C */ struct GlobalContext* globalCtx;
-    /* 0x090 */ struct Player* player;
-    /* 0x094 */ PosRot playerPosRot;
-    /* 0x0A8 */ struct Actor* target;
-    /* 0x0AC */ PosRot targetPosRot;
-    /* 0x0C0 */ f32 rUpdateRateInv;
-    /* 0x0C4 */ f32 pitchUpdateRateInv;
-    /* 0x0C8 */ f32 yawUpdateRateInv;
-    /* 0x0CC */ f32 yOffsetUpdateRate;
-    /* 0x0D0 */ f32 xzOffsetUpdateRate;
-    /* 0x0D4 */ f32 fovUpdateRate;
-    /* 0x0D8 */ f32 xzSpeed;
-    /* 0x0DC */ f32 dist;
-    /* 0x0E0 */ f32 speedRatio;
-    /* 0x0E4 */ Vec3f posOffset;
-    /* 0x0F0 */ Vec3f playerPosDelta;
-    /* 0x0FC */ f32 fov;
-    /* 0x100 */ f32 atLERPStepScale;
-    /* 0x104 */ f32 playerGroundY;
-    /* 0x108 */ Vec3f floorNorm;
-    /* 0x114 */ f32 waterYPos;
-    /* 0x118 */ s32 waterPrevCamIdx;
-    /* 0x11C */ s32 waterPrevCamSetting;
-    /* 0x120 */ s16 waterQuakeId;
-    /* 0x122 */ s16 unk122;
-    /* 0x124 */ void* data0;
-    /* 0x128 */ void* data1;
-    /* 0x12C */ s16 data2;
-    /* 0x12E */ s16 data3;
-    /* 0x130 */ s16 uid;
-    /* 0x132 */ UNK_TYPE1 pad132[2];
-    /* 0x134 */ Vec3s inputDir;
-    /* 0x13A */ Vec3s camDir;
-    /* 0x140 */ s16 status;
-    /* 0x142 */ s16 setting;
-    /* 0x144 */ s16 mode;
-    /* 0x146 */ s16 bgCheckId;
-    /* 0x148 */ s16 camDataIdx;
-    /* 0x14A */ s16 flags1;
-    /* 0x14C */ s16 flags2;
-    /* 0x14E */ s16 childCamIdx;
-    /* 0x150 */ s16 unk150;
-    /* 0x152 */ s16 unk152;
-    /* 0x154 */ s16 prevSetting;
-    /* 0x156 */ s16 nextCamDataIdx;
-    /* 0x158 */ s16 nextBGCheckId;
-    /* 0x15A */ s16 roll;
-    /* 0x15C */ s16 paramFlags;
-    /* 0x15E */ s16 animState;
-    /* 0x160 */ s16 unk160;
-    /* 0x162 */ s16 timer;
-    /* 0x164 */ s16 camId;
-    /* 0x166 */ s16 prevCamDataIdx;
-    /* 0x168 */ s16 unk168;
-    /* 0x16A */ s16 unk16A;
-    /* 0x16C */ Vec3f meshActorPos;
-} Camera; // size = 0x178
-
-typedef s32(*camera_update_func)(Camera* camera);
-
-typedef struct {
-    /* 0x00 */ Vec3f atOffset;
-    /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rollOffset;
-    /* 0x1A */ s16 zoom;
-} ShakeInfo; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ s16 randIdx;
-    /* 0x02 */ s16 countdownMax;
-    /* 0x04 */ Camera* camera;
-    /* 0x08 */ u32 callbackIdx;
-    /* 0x0C */ s16 verticalMag;
-    /* 0x0E */ s16 horizontalMag;
-    /* 0x10 */ s16 zoom;
-    /* 0x12 */ s16 rollOffset;
-    /* 0x14 */ Vec3s shakePlaneOffset; // angle deviations from shaking in the perpendicular plane
-    /* 0x1A */ s16 speed;
-    /* 0x1C */ s16 isShakePerpendicular;
-    /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 camId;
-} QuakeRequest; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ Vec3f atOffset;
-    /* 0x0C */ Vec3f eyeOffset;
-    /* 0x18 */ s16 rollOffset;
-    /* 0x1A */ s16 zoom;
-    /* 0x1C */ f32 max; // Set to scaled max data of struct (mag for Vec3f), never used
-} QuakeCamCalc; // size = 0x20
-
-typedef s16 (*QuakeCallbackFunc)(QuakeRequest*, ShakeInfo*);
-
-#define QUAKE_SPEED (1 << 0)
-#define QUAKE_VERTICAL_MAG (1 << 1)
-#define QUAKE_HORIZONTAL_MAG (1 << 2)
-#define QUAKE_ZOOM (1 << 3)
-#define QUAKE_ROLL_OFFSET (1 << 4)
-#define QUAKE_SHAKE_PLANE_OFFSET_X (1 << 5)
-#define QUAKE_SHAKE_PLANE_OFFSET_Y (1 << 6)
-#define QUAKE_SHAKE_PLANE_OFFSET_Z (1 << 7)
-#define QUAKE_COUNTDOWN (1 << 8)
-#define QUAKE_IS_SHAKE_PERPENDICULAR (1 << 9)
-
-typedef struct {
-    /* 0x0 */ GlobalContext* globalCtx;
-    /* 0x4 */ s32 type; // bitfield, highest set bit determines type
-    /* 0x8 */ s16 countdown;
-    /* 0xA */ s16 state;
-} DistortionContext; // size = 0xC
-
-typedef enum {
-    /* 0 */ DISTORTION_INACTIVE,
-    /* 1 */ DISTORTION_ACTIVE,
-    /* 2 */ DISTORTION_SETUP
-} DistortionState;
+typedef void(*room_draw_func)(PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
@@ -1202,7 +921,7 @@ struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfo lightInfo;
     /* 0x12 */ u8 lightParamsIndex;
-}; // size = 0x13
+}; // size = 0x14
 
 #define OS_SC_RETRACE_MSG       1
 #define OS_SC_DONE_MSG          2
@@ -1223,7 +942,7 @@ typedef struct {
     /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
     /* 0x130 */ OSThread thread;
 } AudioMgr; // size = 0x2E0
- 
+
 typedef struct {
     /* 0x00 */ MtxF displayMatrix;
     /* 0x40 */ Actor* actor;
@@ -1261,22 +980,20 @@ struct FireObj {
 }; // size = 0x8B
 
 typedef struct {
-    /* 0x00 */ u8   seqIndex;
-    /* 0x01 */ u8   nightSeqIndex;
-    /* 0x02 */ u8   unk_02;
-} SoundContext; // size = 0x3
+    /* 0x0 */ u8   seqId;
+    /* 0x1 */ u8   ambienceId;
+} SequenceContext; // size = 0x2
 
 typedef struct {
-    /* 0x00 */ s32 enabled;
-    /* 0x04 */ s32 timer;
+    /* 0x0 */ s32 enabled;
+    /* 0x4 */ s32 timer;
 } FrameAdvanceContext; // size = 0x8
 
 typedef enum {
-    /* 00 */ GAMEOVER_INACTIVE,
-    /* 01 */ GAMEOVER_DEATH_START,
-    /* 02 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
-    /* 03 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
-
+    /*  0 */ GAMEOVER_INACTIVE,
+    /*  1 */ GAMEOVER_DEATH_START,
+    /*  2 */ GAMEOVER_DEATH_WAIT_GROUND,    // wait for player to fall and hit the ground
+    /*  3 */ GAMEOVER_DEATH_FADE_OUT,       // wait before fading out
     /* 20 */ GAMEOVER_REVIVE_START = 20,
     /* 21 */ GAMEOVER_REVIVE_RUMBLE,
     /* 22 */ GAMEOVER_REVIVE_WAIT_GROUND,   // wait for player to fall and hit the ground
@@ -1285,23 +1002,23 @@ typedef enum {
 } GameOverState;
 
 typedef struct {
-    /* 0x00 */ u16 state;
-} GameOverContext; // size = 0x02
+    /* 0x0 */ u16 state;
+} GameOverContext; // size = 0x2
 
-struct GlobalContext {
+struct PlayState {
     /* 0x00000 */ GameState state;
-    /* 0x000A4 */ s16 sceneNum;
+    /* 0x000A4 */ s16 sceneId;
     /* 0x000A6 */ u8 sceneConfig;
     /* 0x000A7 */ char unk_A7[0x9];
     /* 0x000B0 */ void* sceneSegment;
     /* 0x000B4 */ char unk_B4[0x4];
     /* 0x000B8 */ View view;
     /* 0x00220 */ Camera mainCamera;
-    /* 0x00398 */ Camera subCameras[3];
-    /* 0x00800 */ Camera* cameraPtrs[4];
-    /* 0x00810 */ s16 activeCamera;
+    /* 0x00398 */ Camera subCameras[NUM_CAMS - CAM_ID_SUB_FIRST];
+    /* 0x00800 */ Camera* cameraPtrs[NUM_CAMS];
+    /* 0x00810 */ s16 activeCamId;
     /* 0x00812 */ s16 nextCamera;
-    /* 0x00814 */ SoundContext soundCtx;
+    /* 0x00814 */ SequenceContext sequenceCtx;
     /* 0x00818 */ LightContext lightCtx;
     /* 0x00828 */ FrameAdvanceContext frameAdvCtx;
     /* 0x00830 */ CollisionContext colCtx;
@@ -1320,19 +1037,19 @@ struct GlobalContext {
     /* 0x17D88 */ ObjectContext objectCtx;
     /* 0x186E0 */ RoomContext roomCtx;
     /* 0x18760 */ DoorContext doorCtx;
-    /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
-    /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ void (*unk_18770)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
-    /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
-    /* 0x18780 */ void (*func_18780)(Player* player, struct GlobalContext* globalCtx);
-    /* 0x18784 */ s32 (*damagePlayer)(struct GlobalContext* globalCtx, s32 damage);
-    /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
-    /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
-    /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
+    /* 0x18768 */ void (*playerInit)(Player* player, struct PlayState* play, FlexSkeletonHeader* skelHeader);
+    /* 0x1876C */ void (*playerUpdate)(Player* player, struct PlayState* play, Input* input);
+    /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
+    /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
+    /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
+    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, s32 mode);
+    /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
+    /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
+    /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
+    /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
+    /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1, Actor* actor);
+    /* 0x18794 */ s32 (*unk_18794)(struct PlayState* play, Player* player, s32 itemId, s32 arg3);
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
@@ -1346,33 +1063,33 @@ struct GlobalContext {
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
-    /* 0x18858 */ CsCamData* csCamData;
+    /* 0x18858 */ ActorCsCamInfo* actorCsCamList;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
-    /* 0x18868 */ void* unk_18868;
+    /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
     /* 0x18874 */ u8 skyboxId;
-    /* 0x18875 */ s8 sceneLoadFlag; // "fade_direction"
+    /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
-    /* 0x1887A */ u16 nextEntranceIndex;
-    /* 0x1887C */ s8 unk_1887C;
+    /* 0x1887A */ u16 nextEntrance;
+    /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F; // fadeTransition
+    /* 0x1887F */ u8 transitionType; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ u8 unk_18B49;
-    /* 0x18B4A */ u8 unk_18B4A;
+    /* 0x18B4A */ u8 transitionMode;
     /* 0x18B4C */ PreRender pauseBgPreRender;
     /* 0x18B9C */ char unk_18B9C[0x2B8];
     /* 0x18E54 */ SceneTableEntry* loadedScene;
     /* 0x18E58 */ char unk_18E58[0x10];
-    /* 0x18E68 */ s32 unk_18E68;
+    /* 0x18E68 */ void* unk_18E68;
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 }; // size = 0x19258
 
@@ -1398,43 +1115,27 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8; // game script pointer?
-} struct_80133038_arg2; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 color;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 type;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 color;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u32 useRgba;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x08 */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 useRgba;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8 primColor;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8020; // size = 0x10
 
 typedef struct {
     /* 0x00 */ u32 unk_00;
     /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8 primColor;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x08 */ Color_RGBA8_u32 primColor;
+    /* 0x0C */ Color_RGBA8_u32 envColor;
     /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* monoDl;
+    /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
-
-typedef enum {
-    MTXMODE_NEW,  // generates a new matrix
-    MTXMODE_APPLY // applies transformation to the current matrix
-} MatrixMode;
-
-typedef struct {
-    /* 0x00 */ u16 intPart[4][4];
-    /* 0x20 */ u16 fracPart[4][4];
-} MatrixInternal; // size = 0x40
 
 typedef struct DebugDispObject {
     /* 0x00 */ Vec3f pos;
@@ -1452,9 +1153,9 @@ typedef struct {
 } TargetRangeParams; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8* value;
-    /* 0x04 */ const char* name;
-} FlagSetEntry; // size = 0x08
+    /* 0x0 */ u8* value;
+    /* 0x4 */ const char* name;
+} FlagSetEntry; // size = 0x8
 
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
@@ -1467,21 +1168,21 @@ enum fram_command {
        Writes Contents in FLASHRAM_MODE_WRITE
        After execution, sets FRAM_MODE to FRAM_MODE_NOP */
     FRAM_COMMAND_EXECUTE = 0xD2000000,
-    /* flashram->erase_offset = (command & 0xffff) * 128; */
+    /* flashram->erase_offset = (command & 0xFFFF) * 128; */
     FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
     /* flashram->mode = FLASHRAM_MODE_ERASE;
-       flashram->status = 0x1111800800c20000LL; */
+       flashram->status = 0x1111800800C20000LL; */
     FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
-    /* flashram->erase_offset = (command & 0xffff) * 128;
-       flashram->status = 0x1111800400c20000LL; */
+    /* flashram->erase_offset = (command & 0xFFFF) * 128;
+       flashram->status = 0x1111800400C20000LL; */
     FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
     /* flashram->mode = FLASHRAM_MODE_WRITE; */
     FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
     /* flashram->mode = FLASHRAM_MODE_STATUS;
-       flashram->status = 0x1111800100c20000LL; */
+       flashram->status = 0x1111800100C20000LL; */
     FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
     /* flashram->mode = FLASHRAM_MODE_READ;
-       flashram->status = 0x11118004f0000000LL; */
+       flashram->status = 0x11118004F0000000LL; */
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000

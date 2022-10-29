@@ -105,7 +105,7 @@ void Skin_Free(GameState* gameState, Skin* skin) {
             ZeldaArena_Free(skin->vtxTable);
         }
 
-        SkelAnime_Free(&skin->skelAnime, (GlobalContext*)gameState);
+        SkelAnime_Free(&skin->skelAnime, (PlayState*)gameState);
     }
 }
 

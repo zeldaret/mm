@@ -8,7 +8,7 @@
 #include "unk.h"
 
 struct GraphicsContext;
-struct GlobalContext;
+struct PlayState;
 
 #define SPARK_COUNT 3
 #define BLURE_COUNT 25
@@ -19,9 +19,9 @@ struct GlobalContext;
 
 /* G Effect Regs */
 
-#define rgTexIdx regs[0]
+#define rgTexIndex regs[0]
 #define rgScale regs[1]
-#define rgTexIdxStep regs[2]
+#define rgTexIndexStep regs[2]
 #define rgPrimColorR regs[3]
 #define rgPrimColorG regs[4]
 #define rgPrimColorB regs[5]
@@ -30,13 +30,13 @@ struct GlobalContext;
 #define rgEnvColorG regs[8]
 #define rgEnvColorB regs[9]
 #define rgEnvColorA regs[10]
-#define rgObjBankIdx regs[11]
+#define rgObjBankIndex regs[11]
 
 typedef struct {
-    /* 0x00 */ u8 active;
-    /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2;
-} EffectStatus; // size = 0x03
+    /* 0x0 */ u8 active;
+    /* 0x1 */ u8 unk1;
+    /* 0x2 */ u8 unk2;
+} EffectStatus; // size = 0x3
 
 typedef struct {
     /* 0x00 */ Vec3f velocity;
@@ -199,7 +199,7 @@ typedef struct {
 } EffectTireMark; // size = 0x60C
 
 typedef struct {
-    /* 0x0000 */ struct GlobalContext* globalCtx;
+    /* 0x0000 */ struct PlayState* play;
     struct {
         EffectStatus status;
         EffectSpark effect;
@@ -227,29 +227,29 @@ typedef struct {
 } EffectInfo; // size = 0x14
 
 typedef enum {
-    /* 0x00 */ EFFECT_SPARK,
-    /* 0x01 */ EFFECT_BLURE1,
-    /* 0x02 */ EFFECT_BLURE2,
-    /* 0x03 */ EFFECT_SHIELD_PARTICLE,
-    /* 0x04 */ EFFECT_TIRE_MARK
+    /* 0 */ EFFECT_SPARK,
+    /* 1 */ EFFECT_BLURE1,
+    /* 2 */ EFFECT_BLURE2,
+    /* 3 */ EFFECT_SHIELD_PARTICLE,
+    /* 4 */ EFFECT_TIRE_MARK
 } EffectType;
 
 /* Effect Soft Sprites */
 
 struct EffectSs;
 
-typedef u32 (*EffectSsInitFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* effectSs, void* initParams);
-typedef void(*EffectSsUpdateFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
-typedef void(*EffectSsDrawFunc)(struct GlobalContext* globalCtx, u32 index, struct EffectSs* particle);
+typedef u32 (*EffectSsInitFunc)(struct PlayState* play, u32 index, struct EffectSs* effectSs, void* initParams);
+typedef void(*EffectSsUpdateFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
+typedef void(*EffectSsDrawFunc)(struct PlayState* play, u32 index, struct EffectSs* particle);
 
 typedef struct {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ EffectSsInitFunc init;
-} EffectSsInit; // size = 0x08
+    /* 0x0 */ u32 type;
+    /* 0x4 */ EffectSsInitFunc init;
+} EffectSsInit; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u32 vromStart;
-    /* 0x04 */ u32 vromEnd;
+    /* 0x00 */ uintptr_t vromStart;
+    /* 0x04 */ uintptr_t vromEnd;
     /* 0x08 */ void* vramStart;
     /* 0x0C */ void* vramEnd;
     /* 0x10 */ void* loadedRamAddr;
@@ -257,7 +257,6 @@ typedef struct {
     /* 0x18 */ u8 unk18; // Always 1?
 } EffectSsOverlay; // size = 0x1C
 
-//! TODO: Review reuse of vec/gfx/actor fields across all effects
 typedef struct EffectSs {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;

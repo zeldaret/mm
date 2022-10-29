@@ -3,17 +3,27 @@
 
 #include "global.h"
 
+#define SCRUPPE_GET_TYPE(thisx) ((thisx)->params & 0x1F)
+
 struct EnScRuppe;
 
-typedef void (*EnScRuppeActionFunc)(struct EnScRuppe*, GlobalContext*);
+typedef void (*EnScRuppeActionFunc)(struct EnScRuppe*, PlayState*);
 
 typedef struct EnScRuppe {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x4C];
-    /* 0x0190 */ EnScRuppeActionFunc actionFunc;
-    /* 0x0194 */ char unk_194[0x4];
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ EnScRuppeActionFunc actionFunc;
+    /* 0x194 */ s16 ruppeDisplayTime;
+    /* 0x196 */ s16 ruppeIndex;
 } EnScRuppe; // size = 0x198
 
-extern const ActorInit En_Sc_Ruppe_InitVars;
+typedef enum {
+    /* 0 */ RUPEE_GREEN,
+    /* 1 */ RUPEE_BLUE,
+    /* 2 */ RUPEE_RED,
+    /* 3 */ RUPEE_ORANGE,
+    /* 4 */ RUPEE_PURPLE,
+    /* 5 */ RUPEE_UNUSED,
+} RupeeType;
 
 #endif // Z_EN_SC_RUPPE_H

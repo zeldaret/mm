@@ -10,12 +10,12 @@
 
 #define THIS ((EnFirefly2*)thisx)
 
-void EnFirefly2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnFirefly2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnFirefly2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnFirefly2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFirefly2_Init(Actor* thisx, PlayState* play);
+void EnFirefly2_Destroy(Actor* thisx, PlayState* play);
+void EnFirefly2_Update(Actor* thisx, PlayState* play);
+void EnFirefly2_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Firefly2_InitVars = {
+ActorInit En_Firefly2_InitVars = {
     ACTOR_EN_FIREFLY2,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -27,11 +27,11 @@ const ActorInit En_Firefly2_InitVars = {
     (ActorFunc)EnFirefly2_Draw,
 };
 
-void EnFirefly2_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnFirefly2_Init(Actor* thisx, PlayState* play) {
 }
-void EnFirefly2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnFirefly2_Destroy(Actor* thisx, PlayState* play) {
 }
-void EnFirefly2_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnFirefly2_Update(Actor* thisx, PlayState* play) {
 }
-void EnFirefly2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnFirefly2_Draw(Actor* thisx, PlayState* play) {
 }
