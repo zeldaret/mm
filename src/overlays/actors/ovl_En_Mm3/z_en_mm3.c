@@ -271,7 +271,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 break;
 
             case 0x2793:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80A6FE1C(this);
                 func_80A6FE30(this, play);
                 break;
@@ -347,7 +347,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                     } else {
                         Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_OFF);
                     }
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     play_sound(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {

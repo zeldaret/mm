@@ -580,7 +580,7 @@ void func_80BFF430(EnBomjima* this, PlayState* play) {
             Actor_ChangeFocus(&this->actor, play, &bombal->actor);
             gSaveContext.save.weekEventReg[83] &= (u8)~4;
             func_80BFE65C(this);
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80BFEA94;
         }
     }
@@ -594,7 +594,7 @@ void func_80BFF4F4(EnBomjima* this) {
 
 void func_80BFF52C(EnBomjima* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if (play->msgCtx.choiceIndex == 0) {
             Player* player = GET_PLAYER(play);
 
@@ -608,7 +608,7 @@ void func_80BFF52C(EnBomjima* this, PlayState* play) {
             } else {
                 this->actor.textId = D_80C00A70[this->unk_2C8];
             }
-            func_80151938(play, this->actor.textId);
+            Message_ContinueTextbox(play, this->actor.textId);
             play_sound(NA_SE_SY_FOUND);
             func_80BFE494(this, 15, 1.0f);
             this->action = EN_BOMJIMA_ACTION_5;
@@ -626,7 +626,7 @@ void func_80BFF52C(EnBomjima* this, PlayState* play) {
                 this->actor.textId = D_80C00A70[this->unk_2C8];
                 this->unk_2EA = 1;
             }
-            func_80151938(play, this->actor.textId);
+            Message_ContinueTextbox(play, this->actor.textId);
             func_80C00234(this);
         }
     }
@@ -637,7 +637,7 @@ void func_80BFF6CC(EnBomjima* this, PlayState* play) {
 
     if (this->animLastFrame <= curFrame) {
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80BFE494(this, 1, 1.0f);
             this->actionFunc = func_80BFF754;
         }
@@ -735,14 +735,14 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
         } else {
             this->actor.textId = D_80C00A70[this->unk_2C8];
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         this->actionFunc = func_80BFFB40;
     }
 }
 
 void func_80BFFB40(EnBomjima* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BFE494(this, 15, 1.0f);
         D_80C009F0 = 100;
         this->unk_2DC = 0;
@@ -768,7 +768,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_290, this->unk_2DC, 1, 5000, 0);
     if (D_80C009F0 >= 104) {
         D_80C009F0 = 0;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -944,13 +944,13 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
                 func_80BFF3F0(this);
             } else {
                 func_80BFE65C(this);
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BFEA94;
             }
             return;
         }
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         switch (this->unk_2CA) {
             case 0:
@@ -984,7 +984,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
                     }
                     this->actor.textId = D_80C00A70[this->unk_2C8];
                 }
-                func_80151938(play, this->actor.textId);
+                Message_ContinueTextbox(play, this->actor.textId);
                 if ((this->unk_2C8 == 7) || (this->unk_2C8 == 12)) {
                     func_80BFF4F4(this);
                 }
@@ -993,7 +993,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
             case 3:
                 this->unk_2C8++;
                 this->actor.textId = D_80C00A8C[this->unk_2C8];
-                func_80151938(play, this->actor.textId);
+                Message_ContinueTextbox(play, this->actor.textId);
                 if (this->unk_2C8 >= 2) {
                     func_80BFE494(this, 17, 1.0f);
                 }

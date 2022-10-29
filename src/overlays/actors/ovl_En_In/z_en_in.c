@@ -1188,7 +1188,7 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 ret = true;
             }
             break;
@@ -1210,7 +1210,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         *arg3 = 1;
         return 0;
     }

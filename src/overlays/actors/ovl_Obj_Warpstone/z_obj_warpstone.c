@@ -146,7 +146,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
                 play->msgCtx.unk120D4 = 0;
                 gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(&this->dyna.actor);
             } else {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
             }
         }
     } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {

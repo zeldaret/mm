@@ -469,7 +469,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                     ActorCutscene_Stop(this->actor.cutscene);
                 }
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C1476C(this, play);
                 func_80C1410C(this, play);
                 break;
@@ -477,7 +477,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x109F:
             case 0x10A0:
             case 0x10A1:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 gSaveContext.minigameState = 3;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
@@ -485,7 +485,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x10A3:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80C14540(this);
                 func_80C14554(this, play);
                 break;

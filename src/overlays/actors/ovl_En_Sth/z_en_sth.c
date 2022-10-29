@@ -202,7 +202,7 @@ void func_80B671A0(EnSth* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B67208;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
 }
 
@@ -316,17 +316,17 @@ void func_80B67540(EnSth* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1134:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1132:
                     case 0x113A:
                     case 0x113F:
-                        func_80151938(play, 0x1133);
+                        Message_ContinueTextbox(play, 0x1133);
                         break;
 
                     case 0x1133:
-                        func_80151938(play, 0x1136);
+                        Message_ContinueTextbox(play, 0x1136);
                         func_80B670A4(this, 6);
                         break;
 
@@ -359,23 +359,23 @@ void func_80B67540(EnSth* this, PlayState* play) {
                                 this->actor.home.rot.z = 4;
                                 break;
                         }
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B67458;
                         func_80B67458(this, play);
                         break;
 
                     case 0x113C:
-                        func_80151938(play, 0x113B);
+                        Message_ContinueTextbox(play, 0x113B);
                         break;
 
                     case 0x1141:
-                        func_80151938(play, 0x1140);
+                        Message_ContinueTextbox(play, 0x1140);
                         func_80B670A4(this, 3);
                         break;
 
                     default:
                         this->actionFunc = func_80B677BC;
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->unk_29C |= 2;
                         break;
                 }
@@ -405,7 +405,7 @@ void func_80B67838(EnSth* this, PlayState* play) {
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         this->actionFunc = func_80B678A8;
-        func_801477B4(play);
+        Message_CloseTextbox(play);
     }
     this->unk_294.x = -0x1388;
 }
@@ -498,13 +498,13 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x90C:
                 func_80B670A4(this, 2);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x916:
             case 0x919:
                 func_80B670A4(this, 3);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x8FC:
@@ -512,13 +512,13 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
             case 0x900:
             case 0x90A:
             case 0x90D:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x901:
             case 0x90B:
             case 0x917:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B67B50;
                 func_80B67B50(this, play);
                 break;
@@ -537,7 +537,7 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
 
             default:
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B67DA0;
                 break;
         }

@@ -694,11 +694,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
             case 0x911:
             case 0x912:
             case 0x914:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = EnSsh_Idle;
                 break;
         }

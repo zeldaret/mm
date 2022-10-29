@@ -198,43 +198,43 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x107F:
             case 0x1081:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1080:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_001198, -10.0f);
                 break;
 
             case 0x1082:
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                 gSaveContext.save.weekEventReg[25] |= 0x80;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80AE0304;
                 this->actor.textId = 0;
                 break;
 
             case 0x1083:
                 gSaveContext.save.weekEventReg[25] |= 0x80;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80AE0304;
                 this->actor.textId = 0;
                 break;
 
             case 0x1084:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_000964, -10.0f);
                 break;
 
             case 0x1085:
             case 0x1086:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1089:
             case 0x1093:
                 gSaveContext.save.weekEventReg[26] |= 1;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                 this->actionFunc = func_80AE0304;
                 this->actor.textId = 0;
@@ -242,24 +242,24 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
 
             case 0x1087:
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_001198, -10.0f);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1088:
                 gSaveContext.save.weekEventReg[26] |= 1;
                 if (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                     this->actionFunc = func_80AE0304;
                     this->actor.textId = 0;
                 } else {
-                    func_80151938(play, 0x1093);
+                    Message_ContinueTextbox(play, 0x1093);
                     Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                 }
                 break;
 
             case 0x107E:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80AE0304;
                 this->actor.textId = 0;
                 break;
@@ -321,7 +321,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
         }
 
         if (sp24 > 0) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80AE0704;
             if (sp24 == 19) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
@@ -356,7 +356,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
         }
 
         if (sp24 < 0) {
-            func_80151938(play, 0x1078);
+            Message_ContinueTextbox(play, 0x1078);
             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
             this->actionFunc = func_80AE0704;
         }
@@ -364,7 +364,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0698(EnTsn* this, PlayState* play) {
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     this->actionFunc = func_80AE0C88;
     this->unk_220 &= ~2;
     this->actor.focus.pos = this->actor.world.pos;
@@ -390,9 +390,9 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
                         if (gSaveContext.save.weekEventReg[25] & 0x40) {
-                            func_80151938(play, 0x1074);
+                            Message_ContinueTextbox(play, 0x1074);
                         } else {
-                            func_80151938(play, 0x106F);
+                            Message_ContinueTextbox(play, 0x106F);
                         }
                         this->unk_220 |= 2;
                         gSaveContext.save.weekEventReg[25] |= 0x40;
@@ -404,30 +404,30 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x1070:
                     case 0x1071:
                     case 0x1072:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1076:
                     case 0x1079:
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_000964, -10.0f);
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x107A:
-                        func_80151938(play, 0x10A6);
+                        Message_ContinueTextbox(play, 0x10A6);
                         break;
 
                     case 0x1075:
                     case 0x1078:
                         player->exchangeItemId = 0;
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
 
                     case 0x107C:
                         if (Inventory_HasEmptyBottle()) {
                             gSaveContext.save.weekEventReg[26] |= 8;
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80AE0460;
                             func_80AE0460(this, play);
                             this->unk_220 &= ~2;
@@ -436,19 +436,19 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                             this->actor.flags &= ~ACTOR_FLAG_100;
                             REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
                         } else {
-                            func_80151938(play, 0x10A8);
+                            Message_ContinueTextbox(play, 0x10A8);
                         }
                         break;
 
                     case 0x1073:
                     case 0x1074:
-                        func_80151938(play, 0xFF);
+                        Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80AE04FC;
                         break;
 
                     case 0x107B:
                         player->exchangeItemId = 0;
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
 
@@ -464,7 +464,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x108A:
                     case 0x1091:
                         gSaveContext.save.weekEventReg[26] |= 4;
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->unk_220 |= 2;
                         this->actor.textId = 0x1091;
                         break;
@@ -474,14 +474,14 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                     case 0x108D:
                     case 0x108E:
                     case 0x108F:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1092:
                         if (gSaveContext.save.weekEventReg[26] & 8) {
                             func_80AE0698(this, play);
                         } else {
-                            func_80151938(play, 0x10A7);
+                            Message_ContinueTextbox(play, 0x10A7);
                             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_000964, -10.0f);
                         }
                         break;
@@ -542,7 +542,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
 
 void func_80AE0D10(EnTsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actionFunc = func_80AE0D78;
         ActorCutscene_Stop(this->actor.cutscene);
     }

@@ -534,7 +534,7 @@ void func_80962660(EnFu* this, PlayState* play) {
             case 0x287D:
                 gSaveContext.save.weekEventReg[63] |= 1;
                 gSaveContext.save.weekEventReg[63] &= (u8)~2;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
@@ -560,7 +560,7 @@ void func_80962660(EnFu* this, PlayState* play) {
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80963540(this);
                 func_80963560(this, play);
                 break;
@@ -843,7 +843,7 @@ void func_80963350(EnFu* this, PlayState* play) {
     if ((this->unk_54A == 0) &&
         (((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) ||
          ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && (play->msgCtx.stateTimer == 1)))) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->unk_54A = 2;
         D_80964C24 = 1;
     }

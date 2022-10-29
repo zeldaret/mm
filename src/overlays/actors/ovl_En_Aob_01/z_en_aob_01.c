@@ -797,7 +797,7 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
 void func_809C2C9C(EnAob01* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_210 = 0x354C;
-        func_80151938(play, this->unk_210);
+        Message_ContinueTextbox(play, this->unk_210);
         this->actionFunc = func_809C1D64;
     } else {
         func_800B85E0(&this->actor, play, 400.0f, -1);

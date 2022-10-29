@@ -3414,7 +3414,7 @@ void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
         if (this->textId == 0x3333) {
             func_80B4AEC0(this);
         } else if (this->textId == 0x3334) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_80B4B024(this);
         }
     }
@@ -3429,7 +3429,7 @@ void func_80B4AEDC(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
         if (this->actionTimer == 0) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
         }
     }
     if (Actor_HasParent(&this->actor, play)) {

@@ -23,7 +23,7 @@ void GameOver_Update(PlayState* play) {
 
     switch (gameOverCtx->state) {
         case GAMEOVER_DEATH_START:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
 
             for (timerId = 0; timerId < TIMER_ID_MAX; timerId++) {
                 gSaveContext.timerStates[timerId] = TIMER_STATE_OFF;

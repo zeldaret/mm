@@ -113,7 +113,7 @@ void func_809529AC(EnMs* this, PlayState* play) {
 
 void func_80952A1C(EnMs* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_80151938(play, 0x936U);
+        Message_ContinueTextbox(play, 0x936U);
         this->actionFunc = func_809527F8;
     } else {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
@@ -167,7 +167,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
             return;
         }
         if (Message_ShouldAdvance(play) != 0) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             return;
@@ -182,19 +182,19 @@ void func_809527F8(EnMs* this, PlayState* play) {
 
             }
             func_8019F230();
-            func_80151938(play, 0x934U);
+            Message_ContinueTextbox(play, 0x934U);
             // Duplicate return node #17. Try simplifying control flow for better match
             return;
         }
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if ((s32) gSaveContext.save.playerData.rupees < 0xA) {
             play_sound(0x4806U);
-            func_80151938(play, 0x935U);
+            Message_ContinueTextbox(play, 0x935U);
             return;
         }
         if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
             play_sound(0x4806U);
-            func_80151938(play, 0x937U);
+            Message_ContinueTextbox(play, 0x937U);
             return;
         }
         func_8019F208();
@@ -256,7 +256,7 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
@@ -273,19 +273,19 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     if ((s32) gSaveContext.save.playerData.rupees >= 0xA) {
         goto block_13;
     }
     play_sound(0x4806U);
-    func_80151938(play, 0x935U);
+    Message_ContinueTextbox(play, 0x935U);
     return;
 block_13:
     if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] < 0x14) {
         goto block_15;
     }
     play_sound(0x4806U);
-    func_80151938(play, 0x937U);
+    Message_ContinueTextbox(play, 0x937U);
     return;
 block_15:
     func_8019F208();
@@ -295,7 +295,7 @@ block_15:
     return;
 block_16:
     func_8019F230();
-    func_80151938(play, 0x934U);
+    Message_ContinueTextbox(play, 0x934U);
 block_17:
     return;
 }
@@ -316,7 +316,7 @@ The simplest sort of block label to eliminate is one that is only used once, and
         goto block_13;
     }
     play_sound(0x4806U);
-    func_80151938(play, 0x935U);
+    Message_ContinueTextbox(play, 0x935U);
     return;
 block_13:
 ```
@@ -326,7 +326,7 @@ Currently, this says to jump over the code block `play_sound...` if the conditio
 ```C
     if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(play, 0x935U);
+        Message_ContinueTextbox(play, 0x935U);
         return;
     }
 ```
@@ -359,7 +359,7 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         goto block_17;
     }
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
@@ -376,16 +376,16 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     
     if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(play, 0x935U);
+        Message_ContinueTextbox(play, 0x935U);
         return;
     }
     if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
-        func_80151938(play, 0x937U);
+        Message_ContinueTextbox(play, 0x937U);
         return;
     }
 
@@ -396,7 +396,7 @@ block_11:
     return;
 block_16:
     func_8019F230();
-    func_80151938(play, 0x934U);
+    Message_ContinueTextbox(play, 0x934U);
 block_17:
     return;
 }
@@ -428,7 +428,7 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
@@ -445,16 +445,16 @@ block_7:
     }
     goto block_16;
 block_11:
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     
     if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
-        func_80151938(play, 0x935U);
+        Message_ContinueTextbox(play, 0x935U);
         return;
     }
     if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
-        func_80151938(play, 0x937U);
+        Message_ContinueTextbox(play, 0x937U);
         return;
     }
 
@@ -465,7 +465,7 @@ block_11:
     return;
 block_16:
     func_8019F230();
-    func_80151938(play, 0x934U);   
+    Message_ContinueTextbox(play, 0x934U);   
 }
 ```
 
@@ -495,16 +495,16 @@ So let us rewrite the entire second half as a switch:
 ```C
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             
             if (gSaveContext.save.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x935U);
+                Message_ContinueTextbox(play, 0x935U);
                 return;
             }
             if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x937U);
+                Message_ContinueTextbox(play, 0x937U);
                 return;
             }
 
@@ -518,7 +518,7 @@ So let us rewrite the entire second half as a switch:
         case 1:
         default:
             func_8019F230();
-            func_80151938(play, 0x934U);
+            Message_ContinueTextbox(play, 0x934U);
             break;
     }
 ```
@@ -531,14 +531,14 @@ There's a couple of other obvious things here:
 ```C
     switch (play->msgCtx.choiceIndex) {
         case 0:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             
             if (gSaveContext.save.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x935U);
+                Message_ContinueTextbox(play, 0x935U);
             } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
-                func_80151938(play, 0x937U);
+                Message_ContinueTextbox(play, 0x937U);
             } else {
                 func_8019F208();
                 Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
@@ -550,7 +550,7 @@ There's a couple of other obvious things here:
         case 1:
         default:
             func_8019F230();
-            func_80151938(play, 0x934U);
+            Message_ContinueTextbox(play, 0x934U);
             break;
     }
 ```
@@ -588,7 +588,7 @@ block_5:
     if (Message_ShouldAdvance(play) == 0) {
         return;
     }
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809529AC;
     return;
@@ -596,14 +596,14 @@ block_7:
     if (Message_ShouldAdvance(play) != 0) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 
                 if (gSaveContext.save.playerData.rupees < 0xA) {
                     play_sound(0x4806U);
-                    func_80151938(play, 0x935U);
+                    Message_ContinueTextbox(play, 0x935U);
                 } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                     play_sound(0x4806U);
-                    func_80151938(play, 0x937U);
+                    Message_ContinueTextbox(play, 0x937U);
                 } else {
                     func_8019F208();
                     Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
@@ -615,7 +615,7 @@ block_7:
             case 1:
             default:
                 func_8019F230();
-                func_80151938(play, 0x934U);
+                Message_ContinueTextbox(play, 0x934U);
                 break;
         }
     }
@@ -652,7 +652,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) == 0) {
                 return;
             }
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
             break;
@@ -661,14 +661,14 @@ void func_809527F8(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) != 0) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
 
                         if (gSaveContext.save.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x935U);
+                            Message_ContinueTextbox(play, 0x935U);
                         } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x937U);
+                            Message_ContinueTextbox(play, 0x937U);
                         } else {
                             func_8019F208();
                             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
@@ -680,7 +680,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                     case 1:
                     default:
                         func_8019F230();
-                        func_80151938(play, 0x934U);
+                        Message_ContinueTextbox(play, 0x934U);
                         break;
                 }
             }
@@ -703,7 +703,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
 
         case 5:
             if (Message_ShouldAdvance(play) != 0) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 Actor_PickUp((Actor *) this, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
             }
@@ -713,14 +713,14 @@ void func_809527F8(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) != 0) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
 
                         if (gSaveContext.save.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x935U);
+                            Message_ContinueTextbox(play, 0x935U);
                         } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
-                            func_80151938(play, 0x937U);
+                            Message_ContinueTextbox(play, 0x937U);
                         } else {
                             func_8019F208();
                             Actor_PickUp((Actor *) this, play, 0x35, 90.0f, 10.0f);
@@ -732,7 +732,7 @@ void func_809527F8(EnMs* this, PlayState* play) {
                     case 1:
                     default:
                         func_8019F230();
-                        func_80151938(play, 0x934U);
+                        Message_ContinueTextbox(play, 0x934U);
                         break;
                 }
             }

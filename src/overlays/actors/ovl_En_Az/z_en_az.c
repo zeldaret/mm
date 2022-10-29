@@ -1293,7 +1293,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
         }
     }
     if (this->unk_378 == 3) {
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         this->unk_378 = 2;
     } else if (this->unk_378 == 5) {
         Message_StartTextbox(play, this->actor.textId, &this->actor);
@@ -1420,7 +1420,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x10D7:
-                        func_80151938(play, 0x10D8);
+                        Message_ContinueTextbox(play, 0x10D8);
                         break;
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
@@ -1434,7 +1434,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                             if (gSaveContext.save.weekEventReg[24] & 4) {
                                 gSaveContext.save.weekEventReg[24] &= (u8)~4;
                             }
-                            func_80151938(play, 0x10D9);
+                            Message_ContinueTextbox(play, 0x10D9);
                         }
                         break;
                     case 0x10D9:

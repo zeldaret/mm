@@ -48,6 +48,7 @@
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
+#define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
 
 #define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
