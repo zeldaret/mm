@@ -355,8 +355,8 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
     this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
-        this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play,
-                                                                ACTOR_EN_MINISLIME, 0.0f, 0.0f, 0.0f, 0, 0, 0, i);
+        this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MINISLIME,
+                                                              0.0f, 0.0f, 0.0f, 0, 0, 0, i);
         if (this->minislime[i] == NULL) {
             for (i = i - 1; i >= 0; i--) {
                 Actor_Kill(&this->minislime[i]->actor);
