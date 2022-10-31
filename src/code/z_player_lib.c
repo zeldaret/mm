@@ -1690,7 +1690,7 @@ Vec3f D_801C08C0[PLAYER_FORM_MAX] = {
     { 1156.0f, 0.0f, 0.0f }, // PLAYER_FORM_GORON
     { 1406.0f, 0.0f, 0.0f }, // PLAYER_FORM_ZORA
     { 408.0f, 0.0f, 0.0f },  // PLAYER_FORM_DEKU
-    { 695.0f, 0.0f, 0.0f }, // PLAYER_FORM_HUMAN
+    { 695.0f, 0.0f, 0.0f },  // PLAYER_FORM_HUMAN
 };
 
 f32 D_801C08FC[PLAYER_FORM_MAX] = {
@@ -2114,7 +2114,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                             : ((player->skelAnime.animation == &gPlayerAnim_pg_wait)
                                    ? D_801C0628
                                    : ((player->skelAnime.animation == &gPlayerAnim_pg_punchC) ? D_801C07C0
-                                                                                                      : D_801C0460));
+                                                                                              : D_801C0460));
 
                     func_80124618(phi_a0, player->skelAnime.curFrame, player->unk_AF0);
                 } else {
@@ -2993,18 +2993,18 @@ Color_RGB8 D_801C0CA8[PLAYER_BOTTLE_MAX] = {
 };
 
 Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
-    { 0.0f, 0.0f, 0.0f },// PLAYER_FORM_FIERCE_DEITY
-    { 300.0f, 300.0f, -230.0f },// PLAYER_FORM_GORON
-    { 0.0f, 90.0f, -50.0f },// PLAYER_FORM_ZORA
-    { 0.0f, 20.0f, -60.0f }, // PLAYER_FORM_DEKU
-    { 0.0f, 0.0f, 0.0f },// PLAYER_FORM_HUMAN
+    { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
+    { 300.0f, 300.0f, -230.0f }, // PLAYER_FORM_GORON
+    { 0.0f, 90.0f, -50.0f },     // PLAYER_FORM_ZORA
+    { 0.0f, 20.0f, -60.0f },     // PLAYER_FORM_DEKU
+    { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_HUMAN
 };
 Vec3f D_801C0D24[PLAYER_FORM_MAX] = {
-    { 200.0f, 300.0f, 0.0f },// PLAYER_FORM_FIERCE_DEITY
-    { 200.0f, 200.0f, 0.0f },// PLAYER_FORM_GORON
-    { 200.0f, 300.0f, 0.0f },// PLAYER_FORM_ZORA
-    { 200.0f, 150.0f, 0.0f },// PLAYER_FORM_DEKU
-    { 200.0f, 200.0f, 0.0f },// PLAYER_FORM_HUMAN
+    { 200.0f, 300.0f, 0.0f }, // PLAYER_FORM_FIERCE_DEITY
+    { 200.0f, 200.0f, 0.0f }, // PLAYER_FORM_GORON
+    { 200.0f, 300.0f, 0.0f }, // PLAYER_FORM_ZORA
+    { 200.0f, 150.0f, 0.0f }, // PLAYER_FORM_DEKU
+    { 200.0f, 200.0f, 0.0f }, // PLAYER_FORM_HUMAN
 };
 Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
@@ -3612,8 +3612,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
         if ((*dList1 != NULL) && ((player->currentMask != PLAYER_MASK_NONE)) &&
             ((((player->transformation == PLAYER_FORM_HUMAN)) &&
-              ((&gPlayerAnim_cl_setmask != player->skelAnime.animation) ||
-               (player->skelAnime.curFrame >= 12.0f))) ||
+              ((&gPlayerAnim_cl_setmask != player->skelAnime.animation) || (player->skelAnime.curFrame >= 12.0f))) ||
              ((player->transformation != PLAYER_FORM_HUMAN) && ((s32)player->currentMask >= PLAYER_MASK_FIERCE_DEITY) &&
               (player->currentMask != (player->transformation + PLAYER_MASK_FIERCE_DEITY)) &&
               (player->skelAnime.curFrame >= 10.0f)))) {

@@ -473,7 +473,8 @@ void func_800AE5A0(PlayState* play);
 void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE8EC(PlayState* play);
-void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 angle, CollisionPoly* colPoly, s32 bgId);
+void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 arg4,
+                   CollisionPoly* colPoly, s32 bgId);
 void func_800AEF44(EffectTireMark* this);
 void EffectTireMark_Init(void* thisx, void* initParamsx);
 void EffectTireMark_Destroy(void* thisx);
@@ -1807,7 +1808,7 @@ void Player_SetModelsForHoldingShield(Player* player);
 void Player_SetModels(Player* player, PlayerModelGroup modelGroup);
 void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
-void Player_SetEquipmentData(PlayState* play, Player* this);
+void Player_SetEquipmentData(PlayState* play, Player* player);
 void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam);
 void func_80123DA4(Player* player);
 void func_80123DC0(Player* player);
