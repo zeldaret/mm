@@ -37,7 +37,7 @@ void func_80B8760C(EnKaizoku* this, PlayState* play);
 void func_80B8798C(EnKaizoku* this, PlayState* play);
 void func_80B88CD8(EnKaizoku* this);
 void func_80B87D3C(EnKaizoku* this, PlayState* play);
-void func_80B87CF8(PlayState*, Vec3f*);
+void func_80B87CF8(PlayState* play, Vec3f* pos);
 void func_80B87E9C(EnKaizoku* this, PlayState* play);
 void func_80B87FDC(EnKaizoku* this, PlayState* play2);
 void func_80B88CD8(EnKaizoku* this);
@@ -487,7 +487,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->picto.actor.world.pos.x = this->picto.actor.home.pos.x;
             this->picto.actor.world.pos.z = this->picto.actor.home.pos.z;
             Message_StartTextbox(play, D_80B8A8D0[sp54], &this->picto.actor);
-            this->unk_2C8 += 1;
+            this->unk_2C8++;
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
             player->actor.shape.rot.y = player->actor.world.rot.y =
                 Math_Vec3f_Yaw(&player->actor.world.pos, &this->picto.actor.world.pos);
@@ -497,7 +497,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             this->picto.actor.draw = EnKaizoku_Draw;
             this->unk_598 = 0;
             func_801A0238(0, 0xA);
-            this->unk_59C += 1;
+            this->unk_59C++;
 
         case 1:
             player->actor.shape.rot.y = player->actor.world.rot.y =
@@ -516,7 +516,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 func_801477B4(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_11);
                 this->unk_598 = 0;
-                this->unk_59C += 1;
+                this->unk_59C++;
                 this->picto.actor.gravity = -2.0f;
             }
             break;
@@ -1091,8 +1091,8 @@ void func_80B87C7C(EnKaizoku* this) {
     this->actionFunc = func_80B87D3C;
 }
 
-void func_80B87CF8(PlayState* arg0, Vec3f* arg1) {
-    EffectSsKirakira_SpawnSmall(arg0, arg1, &D_80B8AC60, &D_80B8AC6C, &D_80B8AC58, &D_80B8AC5C);
+void func_80B87CF8(PlayState* play, Vec3f* pos) {
+    EffectSsKirakira_SpawnSmall(play, pos, &D_80B8AC60, &D_80B8AC6C, &D_80B8AC58, &D_80B8AC5C);
 }
 
 void func_80B87D3C(EnKaizoku* this, PlayState* play) {
@@ -2057,7 +2057,9 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         limbIndex == KAIZOKU_LIMB_12 || limbIndex == KAIZOKU_LIMB_13 || limbIndex == KAIZOKU_LIMB_14 ||
         limbIndex == KAIZOKU_LIMB_15 || limbIndex == KAIZOKU_LIMB_16 || limbIndex == KAIZOKU_LIMB_17) {
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
-        if (++this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+
+        this->bodyPartsPosIndex++;
+        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
             this->bodyPartsPosIndex = 0;
         }
     }
