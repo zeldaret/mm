@@ -9,6 +9,28 @@ struct EnKaizoku;
 
 typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 
+typedef enum EnKaizokuAnimation {
+    /*  0 */ EN_KAIZOKU_ANIM_0,
+    /*  1 */ EN_KAIZOKU_ANIM_1,
+    /*  2 */ EN_KAIZOKU_ANIM_2,
+    /*  3 */ EN_KAIZOKU_ANIM_3,
+    /*  4 */ EN_KAIZOKU_ANIM_4,
+    /*  5 */ EN_KAIZOKU_ANIM_5,
+    /*  6 */ EN_KAIZOKU_ANIM_6,
+    /*  7 */ EN_KAIZOKU_ANIM_7,
+    /*  8 */ EN_KAIZOKU_ANIM_8,
+    /*  9 */ EN_KAIZOKU_ANIM_9,
+    /* 10 */ EN_KAIZOKU_ANIM_10,
+    /* 11 */ EN_KAIZOKU_ANIM_11,
+    /* 12 */ EN_KAIZOKU_ANIM_12,
+    /* 13 */ EN_KAIZOKU_ANIM_13,
+    /* 14 */ EN_KAIZOKU_ANIM_14,
+    /* 15 */ EN_KAIZOKU_ANIM_15,
+    /* 16 */ EN_KAIZOKU_ANIM_16,
+    /* 17 */ EN_KAIZOKU_ANIM_17,
+    /* 18 */ EN_KAIZOKU_ANIM_18,
+} EnKaizokuAnimation;
+
 typedef struct EnKaizoku {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;
@@ -35,9 +57,9 @@ typedef struct EnKaizoku {
     /* 0x2D6 */ s16 unk_2D6;
     /* 0x2D8 */ u8 unk_2D8;
     /* 0x2D9 */ u8 unk_2D9;
-    /* 0x2DC */ f32 unk_2DC;
+    /* 0x2DC */ f32 frameCount;
     /* 0x2E0 */ f32 unk_2E0;
-    /* 0x2E4 */ s32 unk_2E4;
+    /* 0x2E4 */ EnKaizokuAnimation animIndex;
     /* 0x2E8 */ s32 unk_2E8;
     /* 0x2EC */ s32 unk_2EC;
     /* 0x2F0 */ f32 unk_2F0;
