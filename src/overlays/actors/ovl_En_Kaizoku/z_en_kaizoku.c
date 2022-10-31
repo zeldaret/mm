@@ -238,8 +238,8 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnKaizoku_Init(Actor* thisx, PlayState* play) {
-    EnKaizoku* this = THIS;
     s32 pad;
+    EnKaizoku* this = THIS;
     Player* player = GET_PLAYER(play);
     EffectBlureInit1 blureInit;
 
