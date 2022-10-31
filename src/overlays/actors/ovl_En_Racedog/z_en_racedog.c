@@ -28,13 +28,13 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
 void EnRacedog_UpdateRaceVariables(EnRacedog* this);
 void EnRacedog_CheckForFinish(EnRacedog* this);
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
-s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates);
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play);
-void EnRacedog_PlayWalkSfx(EnRacedog* this);
+void EnRacedog_PlaySfxWalk(EnRacedog* this);
 
 /**
- * Dogs can be in three conditions, which is indicated by the message it says when
- * you pick it up prior to entering the race.
+ * Dogs can be in three conditions, which is, for the most part, indicated by the
+ * message it says when you pick it up prior to entering the race.
  * If it starts with "Ruff!", it's in good condition.
  * If it starts with "Rrr-Ruff!", it's in normal condition.
  * If it starts with "Hoo-whine", it's in bad condition.
@@ -42,29 +42,20 @@ void EnRacedog_PlayWalkSfx(EnRacedog* this);
  * - 0x3538 - 0x353D: Good condition
  * - 0x353E - 0x3541: Normal condition
  * - 0x3542 - 0x3546: Bad condition
+ *
+ * There are two caveats, though, that are useful to keep in mind:
+ * - Because of differences between how EnDg computes the text ID and how EnRacedog
+ *   computes it, there are two dogs whose text upon picking them up does not
+ *   accurately reflect their condition during the race. Check the comment above
+ *   EnRacedog_UpdateTextId for more information on this phenomenon.
+ * - Note that text ID 0x353D is actually used for the Romani Ranch dog; its text
+ *   just so happens to be in the middle of the race dog text block. In EnDg, the
+ *   dog that gets this text ID will instead use text ID 0x3538 when the player
+ *   picks it up. Since EnRacedog cannot be picked up, however, it can use 0x353D
+ *   as an additional good condition text ID.
  */
 #define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
-
-typedef enum {
-    /*  0 */ RACEDOG_ANIMATION_IDLE,
-    /*  1 */ RACEDOG_ANIMATION_WALK_1,
-    /*  2 */ RACEDOG_ANIMATION_RUN,
-    /*  3 */ RACEDOG_ANIMATION_BARK,
-    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,
-    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,
-    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1,
-    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,
-    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2,
-    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3,
-    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4,
-    /* 11 */ RACEDOG_ANIMATION_WALK_2,
-    /* 12 */ RACEDOG_ANIMATION_JUMP,
-    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,
-    /* 14 */ RACEDOG_ANIMATION_JUMP_2,
-    /* 15 */ RACEDOG_ANIMATION_WALK_3,
-    /* 16 */ RACEDOG_ANIMATION_MAX
-} RacedogAnimationIndex;
 
 /**
  * Stores various information for each dog in the race, mostly related to speed.
@@ -78,7 +69,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,
@@ -212,7 +203,27 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+typedef enum {
+    /*  0 */ RACEDOG_ANIM_IDLE,
+    /*  1 */ RACEDOG_ANIM_WALK_1, // unused
+    /*  2 */ RACEDOG_ANIM_RUN,
+    /*  3 */ RACEDOG_ANIM_BARK,               // unused
+    /*  4 */ RACEDOG_ANIM_SIT_DOWN_ONCE,      // unused
+    /*  5 */ RACEDOG_ANIM_SIT_DOWN,           // unused
+    /*  6 */ RACEDOG_ANIM_LYING_DOWN_START_1, // unused
+    /*  7 */ RACEDOG_ANIM_LYING_DOWN_LOOP,    // unused
+    /*  8 */ RACEDOG_ANIM_LYING_DOWN_START_2, // unused
+    /*  9 */ RACEDOG_ANIM_LYING_DOWN_START_3, // unused
+    /* 10 */ RACEDOG_ANIM_LYING_DOWN_START_4, // unused
+    /* 11 */ RACEDOG_ANIM_WALK_BACKWARDS,     // unused
+    /* 12 */ RACEDOG_ANIM_JUMP,
+    /* 13 */ RACEDOG_ANIM_LONG_JUMP,   // unused
+    /* 14 */ RACEDOG_ANIM_JUMP_ATTACK, // unused
+    /* 15 */ RACEDOG_ANIM_SWIM,        // unused
+    /* 16 */ RACEDOG_ANIM_MAX
+} RacedogAnimation;
+
+static AnimationInfoS sAnimationInfo[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
@@ -220,17 +231,17 @@ static AnimationInfoS sAnimations[] = {
     { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
     { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
     { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDogJump2Anim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },  { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 index) {
+void EnRacedog_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     f32 frameCount;
 
-    animationInfo += index;
+    animationInfo += animIndex;
     if (animationInfo->frameCount < 0) {
         frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
@@ -255,27 +266,27 @@ void EnRacedog_UpdateCollision(EnRacedog* this, PlayState* play) {
  */
 s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
     Vec3s* point;
-    f32 xDiffRand;
-    f32 zDiffRand;
-    f32 xDiff;
-    f32 zDiff;
+    f32 diffXRand;
+    f32 diffZRand;
+    f32 diffX;
+    f32 diffZ;
 
     if (path != NULL) {
         point = Lib_SegmentedToVirtual(path->points);
         point = &point[pointIndex];
-        xDiffRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
-        zDiffRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
-        xDiff = point->x - pos->x;
-        zDiff = point->z - pos->z;
+        diffXRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
+        diffZRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        diffX = point->x - pos->x;
+        diffZ = point->z - pos->z;
     } else {
-        xDiffRand = 0.0f;
-        zDiffRand = 0.0f;
-        xDiff = 0.0f;
-        zDiff = 0.0f;
+        diffXRand = 0.0f;
+        diffZRand = 0.0f;
+        diffX = 0.0f;
+        diffZ = 0.0f;
     }
 
-    *distSQ = SQ(xDiff) + SQ(zDiff);
-    return RADF_TO_BINANG(Math_Acot2F(zDiffRand, xDiffRand));
+    *distSQ = SQ(diffX) + SQ(diffZ);
+    return RADF_TO_BINANG(Math_Acot2F(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -307,7 +318,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->selectionArrowGreenPrimColor = 255;
@@ -343,8 +354,8 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
-    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_IDLE);
-    sAnimations[RACEDOG_ANIMATION_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
+    EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
+    sAnimationInfo[RACEDOG_ANIM_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = EnRacedog_RaceStart;
 }
 
@@ -365,7 +376,7 @@ void EnRacedog_RaceStart(EnRacedog* this, PlayState* play) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_RUN);
+        EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
         this->actionFunc = EnRacedog_Race;
     }
 }
@@ -409,7 +420,7 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
     }
 
     EnRacedog_UpdateRunAnimationPlaySpeed(this);
-    EnRacedog_PlayWalkSfx(this);
+    EnRacedog_PlaySfxWalk(this);
     EnRacedog_SpawnFloorDustRing(this, play);
 }
 
@@ -417,18 +428,26 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
  * Updates the text ID in sDogInfo based on what was set in the weekEventRegs by
  * En_Aob_01. This makes it so sDogInfo can be used in other functions to determine
  * the condition of the dog.
+ *
+ * Note that the text IDs generated by this function are off-by-one compared to the
+ * similar function in EnDg. The end result of this is that one of the dogs that says
+ * it's in good condition when you pick it up is actually in normal condition once the
+ * race starts, and one of the dogs that says it's in normal condition when you pick
+ * it up is actually in bad condition. It's unknown whether this is a simple oversight
+ * or an intentional choice to introduce a bit of extra variance to the race.
  */
 void EnRacedog_UpdateTextId(EnRacedog* this) {
+    // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in the
+    // range of 0x3539 to 0x3546.
     if (this->index % 2) {
         sDogInfo[this->index].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
+            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
     } else {
-        sDogInfo[this->index].textId =
-            ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
+        sDogInfo[this->index].textId = ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
     }
 
-    // This makes sure the text ID is something in the range of 0x3539 to 0x3547.
-    if ((sDogInfo[this->index].textId >= 0x3547) || (sDogInfo[this->index].textId < 0x3539)) {
+    // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.
+    if ((sDogInfo[this->index].textId > 0x3546) || (sDogInfo[this->index].textId < 0x3539)) {
         sDogInfo[this->index].textId = 0x353E;
     }
 
@@ -582,9 +601,9 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
-        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 0.9f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
-        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 1.0f;
+        sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
     }
 }
 
@@ -650,7 +669,7 @@ void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play) {
     }
 }
 
-void EnRacedog_PlayWalkSfx(EnRacedog* this) {
+void EnRacedog_PlaySfxWalk(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if ((curFrame == 1) || (curFrame == 7)) {

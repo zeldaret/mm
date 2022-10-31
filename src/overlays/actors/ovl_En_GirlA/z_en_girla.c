@@ -51,7 +51,7 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
-const ActorInit En_GirlA_InitVars = {
+ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
     ACTORCAT_PROP,
     FLAGS,
@@ -138,16 +138,16 @@ static ShopItemEntry sShopItemEntries[] = {
       EnGirlA_BuyBottleItem, EnGirlA_BuyFanfare },
     { OBJECT_GI_BOTTLE, GID_BOTTLE, func_800B8050, 1, 0x29F8, 0x29F9, GI_BOTTLE_STOLEN, EnGirlA_CanBuyBottleStolen,
       EnGirlA_BuyBottle, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_4, GID_SWORD_GREAT_FAIRY, func_800B8050, 4, 0x29F2, 0x29F3, GI_SWORD_GREAT_FAIRY,
+    { OBJECT_GI_SWORD_4, GID_SWORD_GREAT_FAIRY, func_800B8050, 4, 0x29F2, 0x29F3, GI_SWORD_GREAT_FAIRY_STOLEN,
       EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_1, GID_SWORD_KOKIRI, func_800B8050, 1, 0x29F4, 0x29F5, GI_SWORD_KOKIRI, EnGirlA_CanBuySword,
+    { OBJECT_GI_SWORD_1, GID_SWORD_KOKIRI, func_800B8050, 1, 0x29F4, 0x29F5, GI_SWORD_KOKIRI_STOLEN,
+      EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SWORD_2, GID_SWORD_RAZOR, func_800B8050, 2, 0x29F4, 0x29F5, GI_SWORD_RAZOR_STOLEN, EnGirlA_CanBuySword,
       EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_2, GID_SWORD_RAZOR, func_800B8050, 2, 0x29F4, 0x29F5, GI_SWORD_RAZOR, EnGirlA_CanBuySword,
-      EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_3, GID_SWORD_GILDED, func_800B8050, 3, 0x29F4, 0x29F5, GI_SWORD_GILDED, EnGirlA_CanBuySword,
-      EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_HERO_2, EnGirlA_CanBuyShieldHero,
-      EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SWORD_3, GID_SWORD_GILDED, func_800B8050, 3, 0x29F4, 0x29F5, GI_SWORD_GILDED_STOLEN,
+      EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_HERO_STOLEN,
+      EnGirlA_CanBuyShieldHero, EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
     { OBJECT_GI_SHIELD_3, GID_SHIELD_MIRROR, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_MIRROR,
       EnGirlA_CanBuyShieldMirror, EnGirlA_BuyShieldMirror, EnGirlA_BuyFanfare },
 };
@@ -160,14 +160,14 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
 
     //! @bug: Condition is impossible, && should be an ||
-    if (params >= SI_MAX && params < SI_POTION_RED_1) {
-        Actor_MarkForDeath(&this->actor);
+    if ((params >= SI_MAX) && (params < SI_POTION_RED_1)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

@@ -35,7 +35,7 @@ void func_80AADF54(PlayState* play, DmChar05* this);
 void func_80AAE030(PlayState* play, DmChar05* this);
 void func_80AAE114(PlayState* play, DmChar05* this);
 
-const ActorInit Dm_Char05_InitVars = {
+ActorInit Dm_Char05_InitVars = {
     ACTOR_DM_CHAR05,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -47,7 +47,7 @@ const ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
@@ -76,9 +76,9 @@ void func_80AAC63C(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_010B0, NULL, NULL, NULL, 0);
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
-        func_80AAC5A0(&this->skelAnime, &sAnimations[0], 0);
+        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[0], 0);
     } else {
-        func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
+        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
     }
     this->actionFunc = func_80AACC48;
 }
@@ -88,7 +88,7 @@ void func_80AAC6E4(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_042B0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimations[1], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -97,7 +97,7 @@ void func_80AAC770(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dmask_Skel_001D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimations[3], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[3], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -106,7 +106,7 @@ void func_80AAC7FC(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_013D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimations[4], 0);
+    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[4], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -338,7 +338,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -347,7 +347,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -382,7 +382,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -391,7 +391,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -425,7 +425,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
                         case 5:
                             sp2F = false;
-                            Actor_MarkForDeath(&this->actor);
+                            Actor_Kill(&this->actor);
                             break;
 
                         default:
@@ -434,7 +434,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -470,7 +470,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -484,7 +484,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 if (this->unk_18C == 4) {
                     this->unk_18C++;
-                    func_80AAC5A0(&this->skelAnime, &sAnimations[this->unk_18C], 0);
+                    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                 }
             }
             break;
@@ -544,20 +544,20 @@ void func_80AAD4A8(DmChar05* this, PlayState* play) {
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_3) {
-        if (play->sceneNum == SCENE_OKUJOU) {
-            if (gSaveContext.sceneSetupIndex == 2) {
+        if (play->sceneId == SCENE_OKUJOU) {
+            if (gSaveContext.sceneLayer == 2) {
                 if (play->csCtx.currentCsIndex == 0) {
                     func_80AAD3F8(this, play);
                 } else if (play->csCtx.currentCsIndex == 1) {
                     func_80AAD450(this, play);
                 }
             }
-        } else if (play->sceneNum == SCENE_SPOT00) {
-            if (gSaveContext.sceneSetupIndex == 9) {
+        } else if (play->sceneId == SCENE_SPOT00) {
+            if (gSaveContext.sceneLayer == 9) {
                 if ((play->csCtx.currentCsIndex == 0) && (play->csCtx.frames == 255)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER);
                 }
-            } else if ((gSaveContext.sceneSetupIndex == 0xB) && (play->csCtx.frames == 115)) {
+            } else if ((gSaveContext.sceneLayer == 0xB) && (play->csCtx.frames == 115)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EVIL_POWER_PREDEMO);
             }
         }
@@ -718,7 +718,7 @@ void func_80AADD9C(PlayState* play, DmChar05* this) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, GID_44);
+        GetItem_Draw(play, GID_MASK_GORON);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -731,7 +731,7 @@ void func_80AADE78(PlayState* play, DmChar05* this) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, GID_45);
+        GetItem_Draw(play, GID_MASK_ZORA);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -744,7 +744,7 @@ void func_80AADF54(PlayState* play, DmChar05* this) {
         Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, GID_6B);
+        GetItem_Draw(play, GID_MASK_GIBDO);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -758,7 +758,7 @@ void func_80AAE030(PlayState* play, DmChar05* this) {
             Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
             Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
             Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-            GetItem_Draw(play, GID_03);
+            GetItem_Draw(play, GID_MASK_COUPLE);
         }
 
         if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {
@@ -768,17 +768,18 @@ void func_80AAE030(PlayState* play, DmChar05* this) {
 }
 
 void func_80AAE114(PlayState* play, DmChar05* this) {
-    s32 sp34;
-    s16 sp24[] = {
-        GID_02, GID_MASK_GREAT_FAIRY, GID_70, GID_3A, GID_0E, GID_0F, GID_3E, GID_71,
+    s32 getItemDrawIndex;
+    s16 getItemDrawIds[] = {
+        GID_MASK_KAMARO,        GID_MASK_GREAT_FAIRY, GID_MASK_ROMANI, GID_MASK_BLAST,
+        GID_MASK_CIRCUS_LEADER, GID_MASK_BREMEN,      GID_MASK_BUNNY,  GID_MASK_POSTMAN,
     };
 
-    sp34 = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
+    getItemDrawIndex = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
     if (this->actor.objBankIndex == this->unk_18F) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
-        GetItem_Draw(play, sp24[sp34]);
+        GetItem_Draw(play, getItemDrawIds[getItemDrawIndex]);
     }
 
     if (Object_IsLoaded(&play->objectCtx, this->unk_18F)) {

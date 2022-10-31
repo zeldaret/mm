@@ -10,7 +10,7 @@
         <Limb Name="object_tl_Standardlimb_001A20" Type="Standard" EnumName="OBJECT_TL_1_LIMB_01" Offset="0x1A20" />
         <Limb Name="object_tl_Standardlimb_001A2C" Type="Standard" EnumName="OBJECT_TL_1_LIMB_02" Offset="0x1A2C" />
         <Limb Name="object_tl_Standardlimb_001A38" Type="Standard" EnumName="OBJECT_TL_1_LIMB_03" Offset="0x1A38" />
-        <Skeleton Name="object_tl_Skel_001A50" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TL_1_LIMB_NONE" LimbMax="OBJECT_TL_1_LIMB_MAX" EnumName="object_tl_1_Limbs" Offset="0x1A50" />
+        <Skeleton Name="object_tl_Skel_001A50" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TL_1_LIMB_NONE" LimbMax="OBJECT_TL_1_LIMB_MAX" EnumName="ObjectTl1Limb" Offset="0x1A50" />
         <Animation Name="object_tl_Anim_001C68" Offset="0x1C68" />
         <Animation Name="object_tl_Anim_002510" Offset="0x2510" />
         <Animation Name="object_tl_Anim_0027D8" Offset="0x27D8" />
@@ -55,7 +55,7 @@
         <Limb Name="object_tl_Standardlimb_007C1C" Type="Standard" EnumName="OBJECT_TL_2_LIMB_0A" Offset="0x7C1C" />
         <Limb Name="object_tl_Standardlimb_007C28" Type="Standard" EnumName="OBJECT_TL_2_LIMB_0B" Offset="0x7C28" />
         <Limb Name="object_tl_Standardlimb_007C34" Type="Standard" EnumName="OBJECT_TL_2_LIMB_0C" Offset="0x7C34" />
-        <Skeleton Name="object_tl_Skel_007C70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TL_2_LIMB_NONE" LimbMax="OBJECT_TL_2_LIMB_MAX" EnumName="object_tl_2_Limbs" Offset="0x7C70" />
+        <Skeleton Name="object_tl_Skel_007C70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TL_2_LIMB_NONE" LimbMax="OBJECT_TL_2_LIMB_MAX" EnumName="ObjectTl2Limb" Offset="0x7C70" />
         <Animation Name="object_tl_Anim_00823C" Offset="0x823C" />
     </File>
 </Root>

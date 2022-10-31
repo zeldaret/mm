@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-const ActorInit Obj_Ghaka_InitVars = {
+ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
     ACTORCAT_PROP,
     FLAGS,
@@ -89,7 +89,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -97,13 +97,13 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
 void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (talkState == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             func_80B3C260(this);
         }
-    } else if (talkState == 4) {
+    } else if (talkState == TEXT_STATE_CHOICE) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -111,16 +111,19 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
                     this->dyna.actor.textId = 0xCF5;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
+
                 case 1:
                     func_8019F208();
                     this->dyna.actor.textId = 0xCF7;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
+
                 case 2:
                     func_8019F230();
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_80B3C260(this);
+                    break;
             }
         }
     }
@@ -133,7 +136,7 @@ void func_80B3C624(ObjGhaka* this, PlayState* play) {
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
 
     if (stepTemp) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         func_80B3C2C4(this, play);
         gSaveContext.save.weekEventReg[20] |= 0x20;
@@ -156,7 +159,7 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
     if (this->dyna.actor.floorPoly == 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
     if (gSaveContext.save.weekEventReg[20] & 0x20) {
         func_80B3C2C4(this, play);

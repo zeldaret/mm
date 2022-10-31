@@ -5,7 +5,7 @@
  */
 
 #include "z_en_ma_yto.h"
-#include "objects/object_ma2/object_ma2.h"
+#include "overlays/actors/ovl_En_Ma_Yts/z_en_ma_yts.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
@@ -59,7 +59,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play);
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play);
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex);
 void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
 void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
@@ -69,7 +69,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void);
 s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
-const ActorInit En_Ma_Yto_InitVars = {
+ActorInit En_Ma_Yto_InitVars = {
     ACTOR_EN_MA_YTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -106,30 +106,41 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationSpeedInfo sAnimationInfo[] = {
-    { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, -6.0f },  //
-    { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, -6.0f },  //
-    { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, -6.0f },  //
-    { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, -10.0f }, //
-    { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, -8.0f },  //
-    { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &gCremiaIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gCremiaSpreadArmsStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gCremiaSpreadArmsStartAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
+    { &gCremiaSpreadArmsLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSpreadArmsLoopAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gCremiaWalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaWalkAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaThinkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaThinkAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaPetCowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaPetCowAnim, 1.0f, ANIMMODE_LOOP, -10.0f },
+    { &gCremiaSittingPetCowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSittingPetCowAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaSittingAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSittingAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaHugStartAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaHugStartAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaHugLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaHugLoopAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
+    { &gCremiaClapAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gCremiaClapAnim, 1.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 static TexturePtr sMouthTextures[] = {
-    object_ma2_Tex_014AD8,
-    object_ma2_Tex_014ED8,
-    object_ma2_Tex_0152D8,
-    object_ma2_Tex_0156D8,
+    gCremiaMouthNormalTex,
+    gCremiaMouthSlightSmileTex,
+    gCremiaMouthFrownTex,
+    gCremiaMouthHangingOpenTex,
 };
 
 static TexturePtr sEyesTextures[] = {
-    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
-    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
+    gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
 
 void EnMaYto_Init(Actor* thisx, PlayState* play) {
@@ -150,15 +161,14 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 
     this->unk31E = 0;
     this->blinkTimer = 100;
-    this->type = EN_MA_YTO_PARSE_TYPE(this->actor.params);
+    this->type = EN_MA_YTO_GET_TYPE(&this->actor);
     if (!EnMaYto_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ma2_Skel_015C28, NULL, this->jointTable, this->morphTable,
-                       MA2_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, NULL, this->jointTable, this->morphTable, CREMIA_LIMB_MAX);
     EnMaYto_InitAnimation(this, play);
 
     Collider_InitCylinder(play, &this->collider);
@@ -294,7 +304,7 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, PlayState* play) {
     while (npcActor != NULL) {
         if (npcActor->id == ACTOR_EN_MA_YTS) {
             EnMaYts* romani = (EnMaYts*)npcActor;
-            s16 romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
+            s16 romaniType = EN_MA_YTS_GET_TYPE(&romani->actor);
 
             if ((this->type == MA_YTO_TYPE_DINNER && romaniType == MA_YTS_TYPE_SITTING) ||
                 (this->type == MA_YTO_TYPE_BARN && romaniType == MA_YTS_TYPE_BARN)) {
@@ -370,10 +380,10 @@ void EnMaYto_KeepLookingForRomani(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_SetupDefaultWait(EnMaYto* this) {
     if (this->actor.shape.rot.y == this->actor.home.rot.y) {
-        this->currentAnim = 11;
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     } else {
-        this->currentAnim = 1;
+        this->animIndex = 1;
         EnMaYto_ChangeAnim(this, 1);
     }
 
@@ -388,8 +398,8 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
 
     direction = rotY - this->actor.yawTowardsPlayer;
     if (Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) == 0 &&
-        this->currentAnim == 1) {
-        this->currentAnim = 11;
+        this->animIndex == 1) {
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     }
 
@@ -409,30 +419,30 @@ void EnMaYto_SetupDefaultDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnMaYto_DefaultHandlePlayerChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_DefaultChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->unk31E = 0;
                 EnMaYto_SetupDefaultWait(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3000, 0x100);
-    if (this->textId == 0x3395 && this->skelAnime.animation == &object_ma2_Anim_00AF7C &&
+    if (this->textId == 0x3395 && this->skelAnime.animation == &gCremiaSpreadArmsStartAnim &&
         Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         EnMaYto_ChangeAnim(this, 4);
     }
@@ -541,24 +551,24 @@ void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_DinnerDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnMaYto_DinnerHandlePlayerChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_DinnerChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 EnMaYto_SetupDinnerWait(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
     }
 }
@@ -731,22 +741,22 @@ void EnMaYto_SetupBarnDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_BarnDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_BarnChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 this->unk31E = 0;
                 EnMaYto_SetupBarnWait(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
     }
 }
@@ -871,7 +881,7 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
     if (gSaveContext.save.weekEventReg[52] & 1) { // if (ProtectedCremia)
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(NA_BGM_FAILURE_1);
+        Audio_PlayFanfare(NA_BGM_FAILURE_1);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = EnMaYto_AfterMilkRunInit;
@@ -911,15 +921,15 @@ void EnMaYto_SetupAfterMilkRunDialogueHandler(EnMaYto* this) {
 
 void EnMaYto_AfterMilkRunDialogueHandler(EnMaYto* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 6:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
+        case TEXT_STATE_DONE:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnMaYto_AfterMilkRunChooseNextDialogue(this, play);
             break;
     }
@@ -992,7 +1002,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -1049,7 +1059,7 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
         }
 
         Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
-        if (D_80B915F0 == 2 && this->skelAnime.animation == &object_ma2_Anim_001FD0 &&
+        if (D_80B915F0 == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);
         }
@@ -1063,14 +1073,14 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 }
 
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 || Message_GetState(&play->msgCtx) == 5) {
-        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == 5) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE || Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+        if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
             func_800B7298(play, &this->actor, 7);
             func_801477B4(play);
         }
     }
 
-    if (Message_GetState(&play->msgCtx) == 0 && play->msgCtx.unk120B1 == 0) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE && play->msgCtx.unk120B1 == 0) {
         EnMaYto_SetupPostMilkRunEnd(this);
     }
 }
@@ -1081,16 +1091,14 @@ void EnMaYto_SetupPostMilkRunEnd(EnMaYto* this) {
 
 void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
     if (this->unk310 == 3) {
-        // Termina Field
-        play->nextEntranceIndex = 0x54D0;
+        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 13);
     } else {
-        // Romani Ranch
-        play->nextEntranceIndex = 0x6480;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
     }
     gSaveContext.nextCutsceneIndex = 0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
@@ -1260,10 +1268,10 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
     }
 }
 
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {
@@ -1425,20 +1433,19 @@ s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     EnMaYto* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == MA2_LIMB_HEAD) {
+    if (limbIndex == CREMIA_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
 
         rot->x += sp4.y;
         rot->z += sp4.x;
-    } else if (limbIndex == MA2_LIMB_TORSO) {
-        if (this->skelAnime.animation != &object_ma2_Anim_007E28 &&
-            this->skelAnime.animation != &object_ma2_Anim_003D54) {
+    } else if (limbIndex == CREMIA_LIMB_TORSO) {
+        if (this->skelAnime.animation != &gCremiaSittingPetCowAnim &&
+            this->skelAnime.animation != &gCremiaSittingLookDownAnim) {
             sp4 = this->unk_1D8.unk_0E;
 
             rot->x += sp4.y;
-            if (this->skelAnime.animation == &object_ma2_Anim_00A174 ||
-                this->skelAnime.animation == &object_ma2_Anim_0070EC ||
-                this->skelAnime.animation == &object_ma2_Anim_003D54) {
+            if (this->skelAnime.animation == &gCremiaIdleAnim || this->skelAnime.animation == &gCremiaSittingAnim ||
+                this->skelAnime.animation == &gCremiaSittingLookDownAnim) {
                 rot->z += sp4.x;
             }
         }
@@ -1449,7 +1456,7 @@ s32 EnMaYto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 void EnMaYto_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYto* this = THIS;
 
-    if (limbIndex == MA2_LIMB_HEAD) {
+    if (limbIndex == CREMIA_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -1461,7 +1468,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.save.weekEventReg[22] & 1)) { // Aliens defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBox);
+        gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }
     func_8012C28C(play->state.gfxCtx);
 

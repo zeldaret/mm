@@ -19,9 +19,9 @@ void DmAn_Update(Actor* thisx, PlayState* play);
 void func_80C1C958(DmAn* this, PlayState* play);
 void func_80C1CAB0(DmAn* this, PlayState* play);
 void func_80C1CC80(DmAn* this, PlayState* play);
-void func_80C1D0B0(Actor* this, PlayState* play);
+void func_80C1D0B0(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_An_InitVars = {
+ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
     ACTORCAT_NPC,
     FLAGS,
@@ -33,7 +33,7 @@ const ActorInit Dm_An_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -83,7 +83,7 @@ s32 func_80C1C4D8(DmAn* this, PlayState* play, s32 arg2) {
     if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         this->unk_2C8 = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
     return ret;
@@ -160,7 +160,7 @@ Actor* func_80C1C8E8(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || NULL) {
+        if (tempActor == NULL || false) {
             foundActor = NULL;
             break;
         }
@@ -183,7 +183,7 @@ void func_80C1C958(DmAn* this, PlayState* play) {
         this->unk_2AE |= 1;
         this->actor.draw = func_80C1D0B0;
 
-        if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+        if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C1C8E8(play);
             func_80C1C4D8(this, play, 1);
             this->actionFunc = func_80C1CC80;

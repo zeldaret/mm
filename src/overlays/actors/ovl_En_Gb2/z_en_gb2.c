@@ -36,7 +36,7 @@ void func_80B111AC(EnGb2* this, PlayState* play);
 void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
-const ActorInit En_Gb2_InitVars = {
+ActorInit En_Gb2_InitVars = {
     ACTOR_EN_GB2,
     ACTORCAT_NPC,
     FLAGS,
@@ -356,21 +356,21 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 
 void func_80B0FE18(PlayState* play) {
     func_800FD750(0x38);
-    play->nextEntranceIndex = 0x9C10;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->nextEntrance = ENTRANCE(GHOST_HUT, 1);
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FE7C(PlayState* play) {
-    play->nextEntranceIndex = 0x9C20;
-    play->unk_1887F = 0x40;
-    gSaveContext.nextTransition = 0x40;
-    play->sceneLoadFlag = 0x14;
+    play->nextEntrance = ENTRANCE(GHOST_HUT, 2);
+    play->transitionType = TRANS_TYPE_64;
+    gSaveContext.nextTransitionType = TRANS_TYPE_64;
+    play->transitionTrigger = TRANS_TRIGGER_START;
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.unk1202E == 7)) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_SONG_ELEGY) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
         play->msgCtx.ocarinaMode = 4;
         gSaveContext.eventInf[4] |= 0x80;
         this->unk_26E = 0x14D1;
@@ -386,13 +386,13 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FFA8(EnGb2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
                 gSaveContext.eventInf[4] &= (u8)~0x80;
@@ -403,7 +403,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (this->unk_26E == 0x14D5) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
@@ -432,7 +432,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     func_8019F208();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_800B7298(play, NULL, 7);
                     this->actionFunc = func_80B11344;
                     break;
@@ -459,7 +459,7 @@ void func_80B10240(EnGb2* this, PlayState* play) {
                            D_80B119B0[this->unk_280].unk_04.y, D_80B119B0[this->unk_280].unk_04.z, 0, 0, 0,
                            this->unk_27E);
         if (this->unk_280 == 0) {
-            func_8010E9F0(1, 180);
+            Interface_StartTimer(TIMER_ID_MINIGAME_1, 180);
         }
         this->actionFunc = func_80B10344;
     } else {
@@ -487,7 +487,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
     if (this->unk_26C & 0x200) {
         if (this->unk_280 == 3) {
             this->unk_26C &= ~0x200;
-            gSaveContext.unk_3DD0[1] = 5;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             func_800FE498();
             gSaveContext.eventInf[4] |= 0x40;
             func_80B0FE7C(play);
@@ -506,7 +506,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
     }
 
     if (gSaveContext.save.playerData.health < 49) {
-        gSaveContext.unk_3DD0[1] = 5;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x20;
 
@@ -519,8 +519,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
 
         func_80B0FE7C(play);
-    } else if (gSaveContext.unk_3DE0[1] == 0) {
-        gSaveContext.unk_3DD0[1] = 5;
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x10;
 
@@ -548,13 +548,13 @@ void func_80B10584(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10634(EnGb2* this, PlayState* play) {
-    u8 temp_v0 = Message_GetState(&play->msgCtx);
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (temp_v0 == 5) {
+    if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
                 play->msgCtx.msgMode = 0x43;
-                play->msgCtx.unk12023 = 4;
+                play->msgCtx.stateTimer = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
                     this->unk_26E = 0x14DE;
@@ -572,7 +572,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && Message_ShouldAdvance(play)) {
+    } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.playerData.rupees < this->unk_288) {
@@ -584,7 +584,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     func_8019F208();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
-                    play->msgCtx.unk12023 = 4;
+                    play->msgCtx.stateTimer = 4;
                     func_800B7298(play, NULL, 7);
                     this->actionFunc = func_80B11344;
                 }
@@ -652,25 +652,26 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
 
         switch (ENGB2_GET_7(&this->actor)) {
             case ENGB2_7_0:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case ENGB2_7_1:
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case ENGB2_7_2:
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
                 if (this->unk_26E == 0x14FB) {
                     Flags_SetSwitch(play, ENGB2_GET_7F8(&this->actor));
-                    Actor_MarkForDeath(&this->actor);
-                } else {
-                    this->actor.draw = NULL;
-                    this->unk_26C |= 0x100;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
-                    this->actionFunc = func_80B111AC;
+                    Actor_Kill(&this->actor);
+                    return;
                 }
+
+                this->actor.draw = NULL;
+                this->unk_26C |= 0x100;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actionFunc = func_80B111AC;
                 break;
         }
     }
@@ -746,11 +747,11 @@ void func_80B10DAC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10E98(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
                 this->actionFunc = func_80B10B5C;
@@ -790,10 +791,10 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 }
 
 void func_80B110F8(EnGb2* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             play->msgCtx.msgMode = 0x43;
-            play->msgCtx.unk12023 = 4;
+            play->msgCtx.stateTimer = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;
         } else {
@@ -806,11 +807,11 @@ void func_80B110F8(EnGb2* this, PlayState* play) {
 void func_80B111AC(EnGb2* this, PlayState* play) {
     s32 index;
 
-    if (play->roomCtx.currRoom.num == 1) {
+    if (play->roomCtx.curRoom.num == 1) {
         return;
     }
 
-    switch (play->roomCtx.currRoom.num) {
+    switch (play->roomCtx.curRoom.num) {
         case 2:
             index = 1;
             break;
@@ -837,7 +838,7 @@ void func_80B111AC(EnGb2* this, PlayState* play) {
 }
 
 void func_80B11268(EnGb2* this, PlayState* play) {
-    if (play->roomCtx.currRoom.num == 1) {
+    if (play->roomCtx.curRoom.num == 1) {
         this->unk_290 = 0;
         this->unk_282[0] = this->actor.cutscene;
         if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) && Flags_GetClear(play, 5)) {
@@ -869,7 +870,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
     EnGb2* this = THIS;
 
     if (func_80B0F660(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -885,12 +886,12 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
     switch (ENGB2_GET_7(&this->actor)) {
         case ENGB2_7_0:
             if (gSaveContext.save.weekEventReg[54] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else if (gSaveContext.save.weekEventReg[52] & 0x20) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
-            if (gSaveContext.save.entranceIndex == 0x9C10) {
+            if (gSaveContext.save.entrance == ENTRANCE(GHOST_HUT, 1)) {
                 func_800FE484();
                 this->actionFunc = func_80B10240;
                 break;
@@ -910,12 +911,12 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 
         case ENGB2_7_1:
             if ((play->curSpawn == 1) || (gSaveContext.save.weekEventReg[80] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
             if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -929,13 +930,13 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             this->unk_290 = 0;
             this->unk_282[0] = this->actor.cutscene;
             if (Flags_GetSwitch(play, ENGB2_GET_7F8(thisx))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
             if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) &&
                 Flags_GetClear(play, 5)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -952,7 +953,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
     }
 }

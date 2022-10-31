@@ -49,6 +49,6 @@
         <Limb Name="object_tite_Standardlimb_00399C" Type="Standard" EnumName="OBJECT_TITE_LIMB_16" Offset="0x399C" />
         <Limb Name="object_tite_Standardlimb_0039A8" Type="Standard" EnumName="OBJECT_TITE_LIMB_17" Offset="0x39A8" />
         <Limb Name="object_tite_Standardlimb_0039B4" Type="Standard" EnumName="OBJECT_TITE_LIMB_18" Offset="0x39B4" />
-        <Skeleton Name="object_tite_Skel_003A20" Type="Normal" LimbType="Standard" LimbNone="OBJECT_TITE_LIMB_NONE" LimbMax="OBJECT_TITE_LIMB_MAX" EnumName="object_tite_Limbs" Offset="0x3A20" />
+        <Skeleton Name="object_tite_Skel_003A20" Type="Normal" LimbType="Standard" LimbNone="OBJECT_TITE_LIMB_NONE" LimbMax="OBJECT_TITE_LIMB_MAX" EnumName="ObjectTiteLimb" Offset="0x3A20" />
     </File>
 </Root>

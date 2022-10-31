@@ -35,6 +35,4 @@ typedef struct EnPeehat {
     /* 0x488 */ ColliderTrisElement colliderTriElements[2];
 } EnPeehat; // size = 0x540
 
-extern const ActorInit En_Peehat_InitVars;
-
 #endif // Z_EN_PEEHAT_H

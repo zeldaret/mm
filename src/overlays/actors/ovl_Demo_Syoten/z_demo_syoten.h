@@ -37,6 +37,4 @@ typedef struct DemoSyoten {
     /* 0x3F4 */ DemoSyotenActionFunc actionFunc;
 } DemoSyoten; // size = 0x3F8
 
-extern const ActorInit Demo_Syoten_InitVars;
-
 #endif // Z_DEMO_SYOTEN_H

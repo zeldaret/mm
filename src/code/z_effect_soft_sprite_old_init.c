@@ -50,7 +50,7 @@ void EffectSs_DrawGEffect(PlayState* play, EffectSs* this, TexturePtr texture) {
     SkinMatrix_SetScale(&mfScale, scale, scale, scale);
     SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTrans11DA0);
     SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfScale, &mfResult);
-    gSegments[0x06] = PHYSICAL_TO_VIRTUAL(object);
+    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(object);
     gSPSegment(POLY_XLU_DISP++, 0x06, object);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
@@ -91,63 +91,76 @@ void EffectSsDust_Spawn(PlayState* play, u16 drawFlags, Vec3f* pos, Vec3f* veloc
 
 void func_800B0DE0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0E48(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0EB0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 0, pos, velocity, accel, primColor, envColor, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG0, pos, velocity, accel, primColor, envColor, scale, scaleStep, life,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0F18(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG1, pos, velocity, accel, primColor, envColor, scale, scaleStep, life,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0F80(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 2, pos, velocity, accel, primColor, envColor, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG2, pos, velocity, accel, primColor, envColor, scale, scaleStep, life,
+                       DUST_UPDATE_NORMAL);
 }
 
 void func_800B0FE8(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 1);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG0, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_FIRE);
 }
 
 void func_800B1054(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
                    Color_RGBA8* envColor, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10, 1);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG1, pos, velocity, accel, primColor, envColor, scale, scaleStep, 10,
+                       DUST_UPDATE_FIRE);
 }
 
 static Color_RGBA8 sDustBrownPrim = { 170, 130, 90, 255 };
 static Color_RGBA8 sDustBrownEnv = { 100, 60, 20, 255 };
 
 void func_800B10C0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
-    EffectSsDust_Spawn(play, 4, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, 100, 5, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG0, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, 100, 5, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1130(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel) {
-    EffectSsDust_Spawn(play, 5, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, 100, 5, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG1, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, 100, 5, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B11A0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 4, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG0, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1210(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep) {
-    EffectSsDust_Spawn(play, 5, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, 10, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG1, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, 10, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1280(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 4, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG0, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, life, DUST_UPDATE_NORMAL);
 }
 void func_800B12F0(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep, s16 life) {
-    EffectSsDust_Spawn(play, 5, pos, velocity, accel, &sDustBrownPrim, &sDustBrownEnv, scale, scaleStep, life, 0);
+    EffectSsDust_Spawn(play, DUST_DRAWFLAG_RAND_COLOR_OFFSET | DUST_DRAWFLAG1, pos, velocity, accel, &sDustBrownPrim,
+                       &sDustBrownEnv, scale, scaleStep, life, DUST_UPDATE_NORMAL);
 }
 
 void func_800B1360(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
@@ -285,7 +298,7 @@ void EffectSsBomb2_SpawnLayered(PlayState* play, Vec3f* pos, Vec3f* velocity, Ve
 // EffectSsBlast Spawn Functions
 
 void EffectSsBlast_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                         Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 sclaeStepDecay, s16 life) {
+                         Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 scaleStepDecay, s16 life) {
     EffectSsBlastInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -295,7 +308,7 @@ void EffectSsBlast_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
     Color_RGBA8_Copy(&initParams.envColor, envColor);
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.sclaeStepDecay = sclaeStepDecay;
+    initParams.scaleStepDecay = scaleStepDecay;
     initParams.life = life;
 
     EffectSs_Spawn(play, EFFECT_SS_BLAST, 128, &initParams);
@@ -335,7 +348,7 @@ void EffectSsGSpk_SpawnAccel(PlayState* play, Actor* actor, Vec3f* pos, Vec3f* v
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.updateMode = 0;
+    initParams.updateMode = GSPK_UPDATEMODE_NORMAL;
 
     EffectSs_Spawn(play, EFFECT_SS_G_SPK, 128, &initParams);
 }
@@ -353,7 +366,7 @@ void EffectSsGSpk_SpawnNoAccel(PlayState* play, Actor* actor, Vec3f* pos, Vec3f*
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.updateMode = 1;
+    initParams.updateMode = GSPK_UPDATEMODE_NO_ACCEL;
 
     EffectSs_Spawn(play, EFFECT_SS_G_SPK, 128, &initParams);
 }
@@ -391,7 +404,7 @@ void EffectSsGSpk_SpawnSmall(PlayState* play, Actor* actor, Vec3f* pos, Vec3f* v
 
 // EffectSsDFire Spawn Functions
 void EffectSsDFire_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life) {
+                         s16 alpha, s16 alphaStep, s16 fadeDelay, s32 life) {
     EffectSsDFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -400,8 +413,8 @@ void EffectSsDFire_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
     initParams.alpha = alpha;
+    initParams.alphaStep = alphaStep;
     initParams.fadeDelay = fadeDelay;
-    initParams.unk_2C = arg8;
     initParams.life = life;
 
     EffectSs_Spawn(play, EFFECT_SS_D_FIRE, 128, &initParams);
@@ -492,7 +505,7 @@ void EffectSsDtBubble_SpawnColorProfile(PlayState* play, Vec3f* pos, Vec3f* velo
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
-    initParams.customColor = 0;
+    initParams.customColor = false;
     initParams.colorProfile = colorProfile;
     initParams.scale = scale;
     initParams.life = life;
@@ -513,7 +526,7 @@ void EffectSsDtBubble_SpawnCustomColor(PlayState* play, Vec3f* pos, Vec3f* veloc
     initParams.scale = scale;
     initParams.life = life;
     initParams.randXZ = randXZ;
-    initParams.customColor = 1;
+    initParams.customColor = true;
 
     EffectSs_Spawn(play, EFFECT_SS_DT_BUBBLE, 128, &initParams);
 }
@@ -659,15 +672,15 @@ void EffectSsHitmark_SpawnCustomScale(PlayState* play, s32 type, s16 scale, Vec3
  * param determines where the ligntning should go
  * 0: dont attach to any actor. spawns at the position specified by pos
  * 1: spawn at one of Player's body parts, chosen at random
- * 2: spawn at one of Phantom Ganon's body parts, chosen at random
+ * 2 - 6: spawn at one of Goht's body parts
  */
-void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 param) {
+void EffectSsFhgFlash_SpawnShock(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, u8 params) {
     EffectSsFhgFlashInitParams initParams;
 
     initParams.actor = actor;
     Math_Vec3f_Copy(&initParams.pos, pos);
     initParams.scale = scale;
-    initParams.param = param;
+    initParams.params = params;
     initParams.type = FHGFLASH_SHOCK;
 
     EffectSs_Spawn(play, EFFECT_SS_FHG_FLASH, 128, &initParams);
@@ -689,16 +702,16 @@ void EffectSsKFire_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
 
 // EffectSsSolderSrchBall Spawn Functions
 
-void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused,
-                                  s16* linkDetected, s16 drawFlag) {
+void EffectSsSolderSrchBall_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
+                                  s16* playerDetected, s16 flags) {
     EffectSsSolderSrchBallInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
-    initParams.unused = unused;
-    initParams.linkDetected = linkDetected;
-    initParams.drawFlag = drawFlag;
+    initParams.scale = scale;
+    initParams.playerDetected = playerDetected;
+    initParams.flags = flags;
 
     EffectSs_Spawn(play, EFFECT_SS_SOLDER_SRCH_BALL, 128, &initParams);
 }
@@ -780,15 +793,15 @@ void EffectSsIcePiece_SpawnBurst(PlayState* play, Vec3f* refPos, f32 scale) {
 
 // EffectSsEnIce Spawn Functions
 
-void EffectSsEnIce_SpawnFlyingVec3f(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
-                                    f32 scale) {
+void EffectSsEnIce_SpawnFlying(PlayState* play, Actor* actor, Vec3f* pos, Color_RGBA8* prim, Color_RGBA8* env,
+                               f32 scale) {
     EffectSsEnIceInitParams initParams;
 
     initParams.actor = actor;
     Math_Vec3f_Copy(&initParams.pos, pos);
     Color_RGBA8_Copy(&initParams.primColor, prim);
     Color_RGBA8_Copy(&initParams.envColor, env);
-    initParams.type = 0;
+    initParams.type = ENICE_TYPE_FLYING;
     initParams.scale = scale;
 
     if (actor != NULL) {
@@ -802,7 +815,7 @@ void func_800B2B44(PlayState* play, Actor* actor, Vec3f* pos, f32 scale) {
     static Color_RGBA8 primColor = { 150, 150, 150, 250 };
     static Color_RGBA8 envColor = { 235, 245, 255, 255 };
 
-    EffectSsEnIce_SpawnFlyingVec3f(play, actor, pos, &primColor, &envColor, scale);
+    EffectSsEnIce_SpawnFlying(play, actor, pos, &primColor, &envColor, scale);
 }
 
 void func_800B2B7C(PlayState* play, Actor* actor, Vec3s* arg2, f32 scale) {
@@ -823,7 +836,7 @@ void EffectSsEnIce_Spawn(PlayState* play, Vec3f* pos, f32 scale, Vec3f* velocity
     Color_RGBA8_Copy(&initParams.envColor, envColor);
     initParams.scale = scale;
     initParams.life = life;
-    initParams.type = 1;
+    initParams.type = ENICE_TYPE_NORMAL;
 
     EffectSs_Spawn(play, EFFECT_SS_EN_ICE, 128, &initParams);
 }
@@ -872,14 +885,14 @@ void EffectSsFireTail_SpawnFlameOnPlayer(PlayState* play, f32 scale, s16 bodyPar
 
 // EffectSsEnFire Spawn Functions
 
-void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 arg4, s16 flags,
+void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 scale, s16 params, s16 flags,
                                s16 bodyPart) {
     EffectSsEnFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     initParams.actor = actor;
     initParams.scale = scale;
-    initParams.unk_12 = arg4;
+    initParams.params = params;
     initParams.flags = flags;
     initParams.bodyPart = bodyPart;
 
@@ -890,7 +903,7 @@ void EffectSsEnFire_SpawnVec3f(PlayState* play, Actor* actor, Vec3f* pos, s16 sc
     EffectSs_Spawn(play, EFFECT_SS_EN_FIRE, 128, &initParams);
 }
 
-void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 scale, s16 arg4, s16 flags,
+void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 scale, s16 params, s16 flags,
                                s16 bodyPart) {
     EffectSsEnFireInitParams initParams;
 
@@ -899,8 +912,8 @@ void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 sc
     initParams.pos.z = pos->z;
     initParams.actor = actor;
     initParams.scale = scale;
-    initParams.unk_12 = arg4;
-    initParams.flags = flags | 0x8000;
+    initParams.params = params;
+    initParams.flags = flags | ENFIRE_FLAGS_BODYPART_POS_VEC3S;
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {
@@ -927,7 +940,7 @@ void EffectSsExtra_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* ac
 // EffectSsDeadDb Spawn Functions
 
 void EffectSsDeadDb_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* prim,
-                          Color_RGBA8* env, s16 scale, s16 scaleStep, s32 unk) {
+                          Color_RGBA8* env, s16 scale, s16 scaleStep, s32 life) {
     EffectSsDeadDbInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -942,7 +955,7 @@ void EffectSsDeadDb_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* a
     initParams.envColor.r = env->r;
     initParams.envColor.g = env->g;
     initParams.envColor.b = env->b;
-    initParams.unk_30 = unk;
+    initParams.life = life;
 
     EffectSs_Spawn(play, EFFECT_SS_DEAD_DB, 120, &initParams);
 }
@@ -978,7 +991,7 @@ void EffectSsDeadDd_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* a
     initParams.envColor.r = env->r;
     initParams.envColor.g = env->g;
     initParams.envColor.b = env->b;
-    initParams.type = 0;
+    initParams.type = DEADDD_TYPE_0;
     initParams.alphaStep = alphaStep;
     initParams.life = life;
 

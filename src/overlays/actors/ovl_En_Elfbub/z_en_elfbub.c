@@ -15,12 +15,12 @@
 void EnElfbub_Init(Actor* thisx, PlayState* play);
 void EnElfbub_Destroy(Actor* thisx, PlayState* play);
 void EnElfbub_Update(Actor* thisx, PlayState* play);
-void EnElfbub_Draw(Actor* thisx, PlayState* play);
+void EnElfbub_Draw(Actor* thisx, PlayState* play2);
 
 void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
 
-const ActorInit En_Elfbub_InitVars = {
+ActorInit En_Elfbub_InitVars = {
     ACTOR_EN_ELFBUB,
     ACTORCAT_MISC,
     FLAGS,
@@ -57,12 +57,12 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     Actor* childActor;
 
     if (Flags_GetSwitch(play, ENELFBUB_GET_SWITCHFLAG(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
-    this->actor.hintId = 0x16;
+    this->actor.hintId = TATL_HINT_ID_IGOS_DU_IKANA;
     Actor_SetScale(&this->actor, 1.25f);
 
     this->actionFunc = EnElfbub_Idle;
@@ -73,10 +73,10 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
-    childActor = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x,
-                                    this->actor.world.pos.y + 12.0f, this->actor.world.pos.z, this->actor.world.rot.x,
-                                    this->actor.world.rot.y, this->actor.world.rot.z,
-                                    ((ENELFBUB_GET_SWITCHFLAG(&this->actor) & 0x7F) << 9) | STRAY_FAIRY_TYPE_BUBBLE);
+    childActor = Actor_SpawnAsChild(
+        &play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x, this->actor.world.pos.y + 12.0f,
+        this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
+        STRAY_FAIRY_PARAMS(ENELFBUB_GET_SWITCHFLAG(&this->actor), 0, STRAY_FAIRY_TYPE_BUBBLE));
     if (childActor != NULL) {
         childActor->parent = &this->actor;
     }
@@ -113,11 +113,11 @@ void EnElfbub_Pop(EnElfbub* this, PlayState* play) {
             velocity.y = Rand_ZeroOne() * 7.0f;
             velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
             EffectSsDtBubble_SpawnCustomColor(play, &pos, &velocity, &sAccel, &sPrimColor, &sEnvColor,
-                                              Rand_S16Offset(100, 50), 25, 0);
+                                              Rand_S16Offset(100, 50), 25, false);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -161,7 +161,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
     Matrix_RotateZS(this->zRot * -1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
+    gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

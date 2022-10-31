@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ma_yts.h"
-#include "objects/object_ma1/object_ma1.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
@@ -30,7 +29,7 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
-const ActorInit En_Ma_Yts_InitVars = {
+ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -79,45 +78,45 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
 };
 
 static AnimationSpeedInfo sAnimationInfo[] = {
-    { &object_ma1_Anim_009E58, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_009E58, 1.0f, ANIMMODE_LOOP, -6.0f }, // Idle anim
-    { &object_ma1_Anim_018948, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_ma1_Anim_018948, 1.0f, ANIMMODE_ONCE, -6.0f }, // Starts holding hands anim
-    { &object_ma1_Anim_01B76C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_01B76C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Holnding hands anim
-    { &object_ma1_Anim_007328, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_007328, 1.0f, ANIMMODE_LOOP, -6.0f }, // Walking anim
-    { &object_ma1_Anim_014088, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_014088, 1.0f, ANIMMODE_LOOP, -6.0f }, //
-    { &object_ma1_Anim_002A8C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_002A8C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Looking around anim
-    { &object_ma1_Anim_015B7C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_015B7C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Shoot arrow anim
-    { &object_ma1_Anim_007D98, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_007D98, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting anim
-    { &object_ma1_Anim_00852C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_00852C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting traumatized anim
-    { &object_ma1_Anim_008F6C, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_ma1_Anim_008F6C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting sad anim
-    { &object_ma1_Anim_0180DC, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_ma1_Anim_0180DC, 1.0f, ANIMMODE_ONCE, -6.0f }, // Turns around anim
+    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
+    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSingLoopAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniRunAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniWalkAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniShootBowAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSittingAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSittingHeadShakeAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gRomaniSittingLookDownAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
+    { &gRomaniTurnAroundAndFlickHairAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gRomaniTurnAroundAndFlickHairAnim, 1.0f, ANIMMODE_ONCE, -6.0f },
 };
 
 static TexturePtr sMouthTextures[] = {
-    object_ma1_Tex_0127C8,
-    object_ma1_Tex_012BC8,
-    object_ma1_Tex_012FC8,
-    object_ma1_Tex_0133C8,
+    gRomaniMouthHappyTex,
+    gRomaniMouthFrownTex,
+    gRomaniMouthHangingOpenTex,
+    gRomaniMouthSmileTex,
 };
 
 static TexturePtr sEyeTextures[] = {
-    object_ma1_Tex_00FFC8, object_ma1_Tex_0107C8, object_ma1_Tex_010FC8, object_ma1_Tex_0117C8, object_ma1_Tex_011FC8,
+    gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
 
-void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B8D12C(EnMaYts* this, PlayState* play) {
@@ -219,14 +218,13 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
     s32 pad;
 
-    this->type = EN_MA_YTS_PARSE_TYPE(thisx);
+    this->type = EN_MA_YTS_GET_TYPE(thisx);
     if (!EnMaYts_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, NULL, this->jointTable, this->morphTable,
-                       MA1_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, NULL, this->jointTable, this->morphTable, ROMANI_LIMB_MAX);
     EnMaYts_InitAnimation(this, play);
 
     Collider_InitCylinder(play, &this->collider);
@@ -354,21 +352,21 @@ void EnMaYts_SetupDialogueHandler(EnMaYts* this) {
 
 void EnMaYts_DialogueHandler(EnMaYts* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5: // End message block
+        case TEXT_STATE_5: // End message block
             EnMaYts_ChooseNextDialogue(this, play);
             break;
 
-        case 6: // End conversation
+        case TEXT_STATE_DONE: // End conversation
             if (Message_ShouldAdvance(play)) {
                 EnMaYts_SetupStartDialogue(this);
             }
             break;
 
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
+        case TEXT_STATE_CHOICE:
             break;
     }
 }
@@ -505,14 +503,13 @@ s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     EnMaYts* this = THIS;
     Vec3s sp4;
 
-    if (limbIndex == MA1_LIMB_HEAD) {
+    if (limbIndex == ROMANI_LIMB_HEAD) {
         sp4 = this->unk_1D8.unk_08;
         rot->x += sp4.y;
-        if ((this->skelAnime.animation == &object_ma1_Anim_009E58) ||
-            (this->skelAnime.animation == &object_ma1_Anim_007D98)) {
+        if ((this->skelAnime.animation == &gRomaniIdleAnim) || (this->skelAnime.animation == &gRomaniSittingAnim)) {
             rot->z += sp4.x;
         }
-    } else if (limbIndex == MA1_LIMB_TORSO) {
+    } else if (limbIndex == ROMANI_LIMB_TORSO) {
         sp4 = this->unk_1D8.unk_0E;
         rot->x += sp4.y;
         rot->z += sp4.x;
@@ -524,12 +521,12 @@ s32 EnMaYts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMaYts* this = THIS;
 
-    if (limbIndex == MA1_LIMB_HEAD) {
+    if (limbIndex == ROMANI_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
-    } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
+    } else if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         if (this->hasBow == true) {
             OPEN_DISPS(play->state.gfxCtx);
-            gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
+            gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -556,7 +553,7 @@ void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0043A0);
+    gSPDisplayList(POLY_OPA_DISP++, gRomaniSleepingDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

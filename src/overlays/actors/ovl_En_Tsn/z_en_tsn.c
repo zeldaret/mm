@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tsn.h"
+#include "z64snap.h"
 #include "objects/object_tsn/object_tsn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
@@ -28,7 +29,7 @@ void func_80AE0D10(EnTsn* this, PlayState* play);
 void func_80AE0D78(EnTsn* this, PlayState* play);
 void func_80AE0F84(Actor* thisx, PlayState* play);
 
-const ActorInit En_Tsn_InitVars = {
+ActorInit En_Tsn_InitVars = {
     ACTOR_EN_TSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -87,7 +88,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:
             if (gSaveContext.save.weekEventReg[26] & 8) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0x106E;
@@ -106,7 +107,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
         if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_0) {
             this->actionFunc = func_80AE0D78;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     }
@@ -115,7 +116,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     this->unk_220 = 0;
 
     if (this->unk_1D8 == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
         func_800BC154(play, &play->actorCtx, &this->actor, 6);
     }
@@ -144,7 +145,7 @@ void EnTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     if (gSaveContext.save.weekEventReg[55] & 0x80) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -193,7 +194,7 @@ void func_80AE0010(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x107F:
             case 0x1081:
@@ -290,7 +291,7 @@ void func_80AE0304(EnTsn* this, PlayState* play) {
 void func_80AE0418(EnTsn* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         Message_StartTextbox(play, 0x107D, NULL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -299,7 +300,7 @@ void func_80AE0460(EnTsn* this, PlayState* play) {
         ENTSN_SET_Z(&this->unk_1D8->actor, false);
         this->actionFunc = func_80AE0418;
     } else {
-        Actor_PickUp(&this->actor, play, GI_SEAHORSE, 2000.0f, 1000.0f);
+        Actor_PickUp(&this->actor, play, GI_SEAHORSE_CAUGHT, 2000.0f, 1000.0f);
     }
 }
 
@@ -313,7 +314,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
     s32 sp24;
     Player* player = GET_PLAYER(play);
 
-    if (Message_GetState(&play->msgCtx) == 0x10) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         sp24 = func_80123810(play);
         if (sp24 != 0) {
             gSaveContext.save.weekEventReg[26] |= 2;
@@ -324,12 +325,12 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
             this->actionFunc = func_80AE0704;
             if (sp24 == 19) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
-                    if (func_8013A4C4(1 | 8)) {
+                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
                         return;
                     }
 
-                    if (func_8013A4C4(1 | 2 | 8)) {
+                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
                         player->actor.textId = 0x10A9;
                         return;
                     }
@@ -381,10 +382,10 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
     }
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 2:
+        case TEXT_STATE_CLOSING:
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x106E:
@@ -501,6 +502,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
                 }
             }
+            break;
     }
 
     if (this->unk_220 & 2) {
@@ -539,7 +541,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE0D10(EnTsn* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80AE0D78;
         ActorCutscene_Stop(this->actor.cutscene);

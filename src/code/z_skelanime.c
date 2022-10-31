@@ -8,9 +8,9 @@ s32 SkelAnime_LoopFull(SkelAnime* skelAnime);
 s32 SkelAnime_LoopPartial(SkelAnime* skelAnime);
 s32 SkelAnime_Once(SkelAnime* skelAnime);
 void Animation_PlayLoop(SkelAnime* skelAnime, AnimationHeader* animation);
-void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* pos, s16 angle);
+void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle);
 void LinkAnimation_Change(PlayState* play, SkelAnime* skelAnime, LinkAnimationHeader* animation, f32 playSpeed,
-                          f32 frame, f32 frameCount, u8 animationMode, f32 morphFrames);
+                          f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
 void SkelAnime_CopyFrameTable(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 
 static AnimationEntryCallback sAnimationLoadDone[] = {
@@ -200,7 +200,7 @@ void SkelAnime_DrawFlexLod(PlayState* play, void** skeleton, Vec3s* jointTable, 
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * dListCount));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return;
@@ -418,7 +418,7 @@ void SkelAnime_DrawFlexOpa(PlayState* play, void** skeleton, Vec3s* jointTable, 
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * dListCount));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return;
@@ -560,7 +560,7 @@ void SkelAnime_DrawTransformFlexOpa(PlayState* play, void** skeleton, Vec3s* joi
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * dListCount));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
@@ -822,7 +822,7 @@ Gfx* SkelAnime_DrawFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32
         return NULL;
     }
 
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * dListCount));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     gSPSegment(gfx++, 0x0D, mtx);
 
@@ -924,30 +924,30 @@ s16 Animation_GetLastFrame2(LegacyAnimationHeader* animation) {
 }
 
 /**
- * Linearly interpolates the start and tactoret frame tables with the given weight, putting the result in dst
+ * Linearly interpolates the start and target frame tables with the given weight, putting the result in dst
  */
-void SkelAnime_InterpFrameTable(s32 limbCount, Vec3s* dst, Vec3s* start, Vec3s* tactoret, f32 weight) {
+void SkelAnime_InterpFrameTable(s32 limbCount, Vec3s* dst, Vec3s* start, Vec3s* target, f32 weight) {
     s32 i;
     s16 diff;
     s16 base;
 
     if (weight < 1.0f) {
-        for (i = 0; i < limbCount; i++, dst++, start++, tactoret++) {
+        for (i = 0; i < limbCount; i++, dst++, start++, target++) {
             base = start->x;
-            diff = tactoret->x - base;
+            diff = target->x - base;
             dst->x = (s16)(diff * weight) + base;
             base = start->y;
-            diff = tactoret->y - base;
+            diff = target->y - base;
             dst->y = (s16)(diff * weight) + base;
             base = start->z;
-            diff = tactoret->z - base;
+            diff = target->z - base;
             dst->z = (s16)(diff * weight) + base;
         }
     } else {
-        for (i = 0; i < limbCount; i++, dst++, tactoret++) {
-            dst->x = tactoret->x;
-            dst->y = tactoret->y;
-            dst->z = tactoret->z;
+        for (i = 0; i < limbCount; i++, dst++, target++) {
+            dst->x = target->x;
+            dst->y = target->y;
+            dst->z = target->z;
         }
     }
 }

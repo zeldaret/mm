@@ -18,7 +18,7 @@ void EnScopecrow_Draw(Actor* thisx, PlayState* play);
 void func_80BCD590(EnScopecrow* this, PlayState* play);
 void func_80BCD640(EnScopecrow* this, PlayState* play);
 
-const ActorInit En_Scopecrow_InitVars = {
+ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
     ACTORCAT_NPC,
     FLAGS,
@@ -214,11 +214,12 @@ f32 func_80BCD4D0(Path* path, s32 count, Vec3f* arg2, Vec3s* arg3) {
 }
 
 void func_80BCD590(EnScopecrow* this, PlayState* play) {
-    Vec3f sp1C;
+    Vec3f screenPos;
 
-    func_80169474(play, &this->actor.world.pos, &sp1C);
+    Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
 
-    if ((sp1C.x >= 130.0f) && (sp1C.x < 190.0f) && (sp1C.y >= 90.0f) && (sp1C.y < 150.0f)) {
+    if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f) &&
+        (screenPos.y < (SCREEN_HEIGHT - 90.0f))) {
         this->actor.draw = EnScopecrow_Draw;
         this->actionFunc = func_80BCD640;
     }
@@ -243,7 +244,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
             }
 
             if (this->unk_1FC >= (this->path->count - 1)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_1FC++;
             }
@@ -287,19 +288,19 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
             this->actor.world.pos = sp3C;
             this->actor.world.pos.y = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp4C, &sp3C);
             if (this->actor.world.pos.y == BGCHECK_Y_MIN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             func_80BCD2BC(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                            OBJECT_CROW_LIMB_MAX);
         ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
@@ -322,11 +323,11 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnScopecrow_Destroy(Actor* thisx, PlayState* play) {

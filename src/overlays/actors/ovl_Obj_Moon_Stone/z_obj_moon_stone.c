@@ -25,7 +25,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play);
 void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
-const ActorInit Obj_Moon_Stone_InitVars = {
+ActorInit Obj_Moon_Stone_InitVars = {
     ACTOR_OBJ_MOON_STONE,
     ACTORCAT_PROP,
     FLAGS,
@@ -57,7 +57,7 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         func_80C0673C(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -127,9 +127,9 @@ void func_80C0685C(ObjMoonStone* this) {
 }
 
 void func_80C06870(ObjMoonStone* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 6 && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         gSaveContext.save.weekEventReg[74] |= 0x40;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -137,7 +137,7 @@ void ObjMoonStone_Update(Actor* thisx, PlayState* play) {
     ObjMoonStone* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x10000282)) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000))) {
         this->actionFunc(this, play);
     }
 }
@@ -148,11 +148,11 @@ void ObjMoonStone_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
     func_8012C2DC(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_gi_reserve00_Matanimheader_001C60));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_gi_reserve00_DL_000D78);
+    gSPDisplayList(POLY_OPA_DISP++, gGiMoonsTearItemDL);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_gi_reserve00_DL_000C80);
+    gSPDisplayList(POLY_XLU_DISP++, gGiMoonsTearGlowDL);
     CLOSE_DISPS(play->state.gfxCtx);
 }

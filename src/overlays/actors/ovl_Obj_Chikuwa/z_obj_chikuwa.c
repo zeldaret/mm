@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_chikuwa.h"
+#include "z64quake.h"
 #include "objects/object_d_lift/object_d_lift.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -16,7 +17,7 @@ void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
 void ObjChikuwa_Update(Actor* thisx, PlayState* play);
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Chikuwa_InitVars = {
+ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
     ACTORCAT_BG,
     FLAGS,
@@ -65,7 +66,7 @@ void ObjChikuwa_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.scale.z = 0.05f;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_d_lift_Colheader_000F00);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
 
     this->dyna.actor.home.rot.y += 0x2000;
     this->dyna.actor.home.rot.y &= 0xC000;
@@ -158,9 +159,9 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
     ObjChikuwa* this = THIS;
     ObjChikuwaStruct* temp;
     f32 temp_fs0;
-    s16 var_s2;
+    s16 quakeVerticalMag;
     s32 i;
-    s32 quake;
+    s32 quakeIndex;
 
     this->unk_29E++;
 
@@ -173,16 +174,16 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
             func_809B17D0(play, this, &temp->unk_00);
             temp_fs0 = Math3D_Vec3fDistSq(&temp->unk_00, &GET_PLAYER(play)->actor.world.pos);
             if (temp_fs0 < SQ(240.0f)) {
-                quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
                 if (temp_fs0 < SQ(120.0f)) {
-                    var_s2 = 4;
+                    quakeVerticalMag = 4;
                 } else {
-                    var_s2 = 3;
+                    quakeVerticalMag = 3;
                 }
 
-                Quake_SetSpeed(quake, 0x4350);
-                Quake_SetQuakeValues(quake, var_s2, 0, 0, 0);
-                Quake_SetCountdown(quake, 7);
+                Quake_SetSpeed(quakeIndex, 17232);
+                Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 7);
             }
         }
     }
@@ -210,7 +211,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, object_d_lift_DL_000D10);
+                gSPDisplayList(POLY_OPA_DISP++, gDampeGraveBrownElevatorDL);
             }
         }
     }
@@ -224,7 +225,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, object_d_lift_DL_000D10);
+                gSPDisplayList(POLY_OPA_DISP++, gDampeGraveBrownElevatorDL);
             }
         }
     }

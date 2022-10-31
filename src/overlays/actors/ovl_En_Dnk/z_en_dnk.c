@@ -24,7 +24,7 @@ void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -93,7 +93,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -138,18 +138,18 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     s32 sp30 = false;
 
     if (animIndex >= 0) {
-        if (animIndex < ARRAY_COUNT(sAnimations)) {
+        if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
             sp30 = true;
-            frameCount = sAnimations[animIndex].frameCount;
+            frameCount = sAnimationInfo[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
+                frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
             }
-            frame = sAnimations[animIndex].startFrame;
+            frame = sAnimationInfo[animIndex].startFrame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed, frame,
-                             frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
+            Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed, frame,
+                             frameCount, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
         }
     }
     return sp30;
@@ -171,7 +171,7 @@ s32 func_80A515C4(EnDnk* this) {
 
 void func_80A51648(EnDnk* this, PlayState* play) {
     if (SubS_IsObjectLoaded(this->unk_28E, play) == true) {
-        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->unk_28E].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
@@ -242,7 +242,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play) {
     if (this->unk_28E >= 0) {
         this->actionFunc = func_80A51648;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_2A2 = D_80A521A0;
@@ -447,8 +447,8 @@ void func_80A52074(EnDnk* this, PlayState* play) {
 }
 
 void func_80A52134(EnDnk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneNum == SCENE_SPOT00) &&
-        (gSaveContext.sceneSetupIndex == 2)) {
+    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+        (gSaveContext.sceneLayer == 2)) {
         func_80A52074(this, play);
     }
 }

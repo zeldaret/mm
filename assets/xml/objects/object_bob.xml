@@ -15,7 +15,7 @@
         <Limb Name="object_bob_Standardlimb_000090" Type="Standard" EnumName="OBJECT_BOB_LIMB_0D" Offset="0x90" />
         <Limb Name="object_bob_Standardlimb_00009C" Type="Standard" EnumName="OBJECT_BOB_LIMB_0E" Offset="0x9C" />
         <Limb Name="object_bob_Standardlimb_0000A8" Type="Standard" EnumName="OBJECT_BOB_LIMB_0F" Offset="0xA8" />
-        <Skeleton Name="object_bob_Skel_0000F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOB_LIMB_NONE" LimbMax="OBJECT_BOB_LIMB_MAX" EnumName="object_bob_Limbs" Offset="0xF0" />
+        <Skeleton Name="object_bob_Skel_0000F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOB_LIMB_NONE" LimbMax="OBJECT_BOB_LIMB_MAX" EnumName="ObjectBobLimb" Offset="0xF0" />
         <Texture Name="object_bob_TLUT_000108" OutName="tlut_000108" Format="rgba16" Width="16" Height="16" Offset="0x108" />
         <Texture Name="object_bob_Tex_000308" OutName="tex_000308" Format="ci8" Width="8" Height="8" Offset="0x308" />
         <Texture Name="object_bob_Tex_000348" OutName="tex_000348" Format="ci8" Width="8" Height="8" Offset="0x348" />

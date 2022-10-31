@@ -25,8 +25,6 @@ typedef struct EnKusa {
     /* 0x198 */ u8 isInWater;
 } EnKusa; // size = 0x19C
 
-extern const ActorInit En_Kusa_InitVars;
-
 #define KUSA_GET_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0x7F)
 #define KUSA_GET_RAND_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0xF)
 #define KUSA_SHOULD_SPAWN_BUGS(thisx) (((thisx)->params >> 0x4) & 1)
@@ -34,6 +32,6 @@ extern const ActorInit En_Kusa_InitVars;
 #define KUSA_GET_PARAMS_3F(thisx) (((thisx)->params >> 0x2) & 0x3F)
 
 
-#define GET_KUSA_TYPE(thisx)((thisx)->params & 0x3)
+#define KUSA_GET_TYPE(thisx)((thisx)->params & 0x3)
 
 #endif // Z_EN_KUSA_H

@@ -16,7 +16,7 @@ void ObjShutter_Destroy(Actor* thisx, PlayState* play);
 void ObjShutter_Update(Actor* thisx, PlayState* play2);
 void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Shutter_InitVars = {
+ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
     ACTORCAT_PROP,
     FLAGS,
@@ -43,11 +43,11 @@ static u8 sScheduleScript[] = {
 void ObjShutter_Update(Actor* thisx, PlayState* play2) {
     ObjShutter* this = THIS;
     PlayState* play = play2;
-    ScheduleResult schedule;
+    ScheduleOutput scheduleOutput;
 
-    Schedule_RunScript(play, sScheduleScript, &schedule);
-    if (schedule.result == 1) {
-        if (this->scheduleResult != schedule.result) {
+    Schedule_RunScript(play, sScheduleScript, &scheduleOutput);
+    if (scheduleOutput.result == 1) {
+        if (this->scheduleResult != scheduleOutput.result) {
             this->actor.velocity.y = 0.0f;
         }
         if ((this->verticalOffset >= 80.0f) || (this->scheduleResult == 0)) {
@@ -57,7 +57,7 @@ void ObjShutter_Update(Actor* thisx, PlayState* play2) {
             this->verticalOffset += 10.0f;
         }
     } else {
-        if (this->scheduleResult != schedule.result) {
+        if (this->scheduleResult != scheduleOutput.result) {
             this->actor.velocity.y = 0.0f;
         }
         if (this->verticalOffset != 0.0f) {
@@ -72,7 +72,7 @@ void ObjShutter_Update(Actor* thisx, PlayState* play2) {
             }
         }
     }
-    this->scheduleResult = schedule.result;
+    this->scheduleResult = scheduleOutput.result;
 }
 
 void ObjShutter_Draw(Actor* thisx, PlayState* play) {

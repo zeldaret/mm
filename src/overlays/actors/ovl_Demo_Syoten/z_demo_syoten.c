@@ -25,7 +25,7 @@ void func_80C17008(DemoSyoten* this, PlayState* play);
 void func_80C173B4(Actor* thisx, PlayState* play);
 void func_80C17690(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Syoten_InitVars = {
+ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -74,7 +74,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
     switch (DEMOSYOTEN_GET_F(&this->actor)) {
         case DEMOSYOTEN_F_0:
             func_80183430(&this->unk_144, &object_syoten_Blob_001328, &object_syoten_Blob_00023C, this->unk_174,
-                          this->unk_2A6, 0);
+                          this->unk_2A6, NULL);
             func_801835EC(&this->unk_144, &object_syoten_Blob_00023C);
             this->actor.draw = NULL;
             this->actionFunc = func_80C16A74;
@@ -183,19 +183,19 @@ void func_80C168D0(DemoSyoten* this, PlayState* play) {
     s32 pad;
     Path* path = this->unk_3E8;
     Vec3s* points;
-    Vec3f sp30;
-    Vec3f sp24;
-    f32 sp20;
+    Vec3f worldPos;
+    Vec3f projectedPos;
+    f32 invW;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(this->unk_3E8->points);
         points += this->unk_3EC;
-        Math_Vec3s_ToVec3f(&sp30, points);
-        Actor_GetProjectedPos(play, &sp30, &sp24, &sp20);
-        Math_Vec3f_Copy(&sp30, &this->actor.projectedPos);
-        sp30.z = sp30.y;
-        sp24.z = sp24.y;
-        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&sp24, &sp30);
+        Math_Vec3s_ToVec3f(&worldPos, points);
+        Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
+        Math_Vec3f_Copy(&worldPos, &this->actor.projectedPos);
+        worldPos.z = worldPos.y;
+        projectedPos.z = projectedPos.y;
+        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&projectedPos, &worldPos);
     }
 }
 
@@ -480,16 +480,16 @@ s32 func_80C170F8(PlayState* play, UNK_TYPE arg1, s32 arg2, UNK_TYPE arg3, UNK_T
 void func_80C173B4(Actor* thisx, PlayState* play) {
     s32 pad;
     DemoSyoten* this = THIS;
-    Mtx* matrix;
+    Mtx* mtx;
 
     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
 
-    matrix = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_144.unk_18->unk_1));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_144.unk_18->unk_1 * sizeof(Mtx));
 
-    if (matrix != NULL) {
+    if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-        func_8018450C(play, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
+        func_8018450C(play, &this->unk_144, mtx, (void*)func_80C170F8, 0, &this->actor);
     }
 }
 

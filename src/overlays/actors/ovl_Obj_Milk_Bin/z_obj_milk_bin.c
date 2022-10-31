@@ -13,10 +13,10 @@
 
 void ObjMilkBin_Init(Actor* thisx, PlayState* play);
 void ObjMilkBin_Destroy(Actor* thisx, PlayState* play);
-void ObjMilkBin_Update(Actor* thisx, PlayState* play);
+void ObjMilkBin_Update(Actor* thisx, PlayState* play2);
 void ObjMilkBin_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Milk_Bin_InitVars = {
+ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
     ACTORCAT_PROP,
     FLAGS,
@@ -76,7 +76,7 @@ void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
         if (gSaveContext.save.weekEventReg[22] & 1) {
             if (((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == 1)) || (gSaveContext.save.day >= 3)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         }

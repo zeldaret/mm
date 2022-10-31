@@ -48,7 +48,7 @@ typedef enum {
     /* 0x01 */ OWL_OK
 } EnOwlMessageChoice;
 
-const ActorInit En_Owl_InitVars = {
+ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
     FLAGS,
@@ -151,21 +151,21 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     switch (owlType) {
         case ENOWL_GET_TYPE_1:
             if ((switchFlag < 0x7F) && Flags_GetSwitch(play, switchFlag)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_2:
             if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_3:
             if (CHECK_QUEST_ITEM(QUEST_SONG_SOARING)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -229,7 +229,7 @@ s32 func_8095A978(EnOwl* this, PlayState* play, u16 textId, f32 targetDist, f32 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, targetDist, arg4, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, targetDist, arg4, PLAYER_AP_NONE);
     }
 
     return false;
@@ -242,7 +242,7 @@ s32 func_8095A9FC(EnOwl* this, PlayState* play, u16 textId) {
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_AP_NONE);
     }
 
     return false;
@@ -324,7 +324,7 @@ void func_8095ACEC(EnOwl* this) {
 }
 
 void func_8095AD54(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
                 func_80151938(play, 0x7D1);
@@ -340,14 +340,14 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
 }
 
 void func_8095AE00(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80151938(play, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80151938(play, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
@@ -356,14 +356,14 @@ void func_8095AE60(EnOwl* this, PlayState* play) {
 void func_8095AEC0(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (func_8095A978(this, play, 0x7D0, 360.0f, 200.0f)) {
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFunc = func_8095AE60;
     }
 }
 
 void func_8095AF2C(EnOwl* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 if (play->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
@@ -375,7 +375,7 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             func_8095ACEC(this);
             this->actionFunc = func_8095ABF0;
             break;
@@ -385,7 +385,7 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
 void func_8095AFEC(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (func_8095A978(this, play, 0xBF6, 200.0f, 100.0f)) {
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFunc = func_8095AF2C;
         this->unk_406 = 0;
         this->actionFlags |= 0x40;
@@ -429,7 +429,7 @@ void func_8095B1E4(EnOwl* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer > 6000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -478,7 +478,7 @@ void func_8095B3DC(EnOwl* this, PlayState* play) {
 void func_8095B480(EnOwl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x10000000) {
+    if (player->stateFlags3 & PLAYER_STATE3_10000000) {
         this->actor.textId = 0xBF1;
         EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &object_owl_Anim_00CDB0, 0.0f);
         this->eyeTexIndex = 0;
@@ -500,12 +500,12 @@ void func_8095B574(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->actionFlags |= 0x40;
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 400.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_AP_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -606,7 +606,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEC:
@@ -645,7 +645,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
@@ -713,16 +713,16 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
     func_8095A920(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_8095BA84;
-        func_801A3098(NA_BGM_OWL);
+        Audio_PlayFanfare(NA_BGM_OWL);
         this->unk_406 = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
-            func_800B8500(&this->actor, play, 200.0f, 200.0f, EXCH_ITEM_NONE);
+            func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_AP_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 200.0f, EXCH_ITEM_NONE);
+        func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_AP_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -740,7 +740,7 @@ void func_8095BF58(EnOwl* this, PlayState* play) {
 void func_8095BF78(EnOwl* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_20;
     if (this->actor.xzDistToPlayer > 6000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x80, 0x40);
@@ -1066,13 +1066,13 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     EnOwl* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x10000000) {
-        Actor_MarkForDeath(&this->actor);
+    if (player->stateFlags3 & PLAYER_STATE3_10000000) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (this->actor.world.pos.y < (this->unk_3F0 - 1000.0f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1083,7 +1083,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
         if (this->unk_3DC > 0) {
             this->unk_3DC--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }

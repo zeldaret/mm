@@ -37,7 +37,7 @@ void func_80BA0BB4(EnZob* this, PlayState* play);
 void func_80BA0C14(EnZob* this, PlayState* play);
 void func_80BA0CF4(EnZob* this, PlayState* play);
 
-const ActorInit En_Zob_InitVars = {
+ActorInit En_Zob_InitVars = {
     ACTOR_EN_ZOB,
     ACTORCAT_NPC,
     FLAGS,
@@ -121,7 +121,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
             }
 
             if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -136,7 +136,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
 
         default:
             if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
             break;
@@ -316,11 +316,11 @@ void func_80B9FE1C(EnZob* this, PlayState* play) {
 void func_80B9FE5C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (play->msgCtx.ocarinaMode == 3) {
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FDDC;
         func_80B9FC70(this, 0);
-    } else if (Message_GetState(&play->msgCtx) == 11) {
-        play->msgCtx.unk11F10 = 0;
+    } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
+        play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, ANIMMODE_ONCE);
@@ -330,7 +330,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == 7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
         func_80152434(play, 0x42);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
@@ -345,8 +345,8 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
         func_80B9F7E4(this, 1, ANIMMODE_LOOP);
         func_80152434(play, 0x3E);
         func_80B9FC70(this, 1);
-    } else if (Message_GetState(&play->msgCtx) == 11) {
-        play->msgCtx.unk11F10 = 0;
+    } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
+        play->msgCtx.msgLength = 0;
         this->actionFunc = func_80B9FE1C;
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, ANIMMODE_ONCE);
@@ -356,7 +356,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Message_GetState(&play->msgCtx) == 7) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
         func_80152434(play, 0x41);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
@@ -367,7 +367,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1212)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 1:
@@ -385,7 +385,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1208:
@@ -395,7 +395,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x120C:
-                        play->msgCtx.unk11F10 = 0;
+                        play->msgCtx.msgLength = 0;
                         this->actionFunc = func_80B9FD24;
                         func_80B9F7E4(this, 8, ANIMMODE_LOOP);
                         func_80B9FC70(this, 3);
@@ -452,7 +452,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     switch (Message_GetState(&play->msgCtx)) {
-        case 4:
+        case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1205)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
@@ -469,7 +469,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
             }
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x11F8:
@@ -525,7 +525,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                         func_801477B4(play);
                         this->actionFunc = func_80BA0318;
                         player->unk_A90 = &this->actor;
-                        player->stateFlags3 |= 0x20;
+                        player->stateFlags3 |= PLAYER_STATE3_20;
                         break;
                 }
             }
@@ -623,24 +623,25 @@ void func_80BA09E0(EnZob* this, PlayState* play) {
 }
 
 void func_80BA0A04(EnZob* this, PlayState* play) {
-    u8 temp_v0;
-
     func_80B9F86C(this);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    temp_v0 = Message_GetState(&play->msgCtx);
-    if (temp_v0 != 2) {
-        if ((temp_v0 == 5) && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                func_801477B4(play);
+                this->actionFunc = func_80BA0AD8;
+                this->unk_304 = 0;
+                func_80B9F7E4(this, 6, ANIMMODE_ONCE);
+            }
+            break;
+
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80BA0AD8;
             this->unk_304 = 0;
             func_80B9F7E4(this, 6, ANIMMODE_ONCE);
-        }
-    } else {
-        this->actionFunc = func_80BA0AD8;
-        this->unk_304 = 0;
-        func_80B9F7E4(this, 6, ANIMMODE_ONCE);
+            break;
     }
 }
 

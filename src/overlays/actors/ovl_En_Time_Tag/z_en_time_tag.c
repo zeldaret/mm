@@ -30,7 +30,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play);
 void func_80ACA7C4(EnTimeTag* this, PlayState* play);
 void func_80ACA840(EnTimeTag* this, PlayState* play);
 
-const ActorInit En_Time_Tag_InitVars = {
+ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -50,7 +50,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
     switch (ENTIMETAG_GET_E000(&this->actor)) {
         case 4:
             if ((gSaveContext.save.weekEventReg[8] & 0x40) || (CURRENT_DAY != 3)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.home.rot.x = 0;
@@ -90,8 +90,8 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = func_80AC9FD4;
-        gSaveContext.unk_3DD0[3] = 0;
-        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+        gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
+        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
             CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
             gSaveContext.save.weekEventReg[25] |= 2;
         }
@@ -103,11 +103,11 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
 void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
     EnTimeTag* this2 = this;
 
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.unk1202E == 4)) {
+    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80AC9FE4;
             ActorCutscene_SetIntentToPlay(this2->actor.cutscene);
-            gSaveContext.unk_3DD0[3] = 0;
+            gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
         play->msgCtx.ocarinaMode = 4;
     }
@@ -134,7 +134,7 @@ void func_80ACA184(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA208(EnTimeTag* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80ACA268;
     }
@@ -171,17 +171,17 @@ void func_80ACA348(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
-    if ((play->msgCtx.unk11F00->unk01 == 0) && (play->msgCtx.msgMode == 0x1B)) {
+    if ((play->msgCtx.unk11F00->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
-        play->msgCtx.unk11F10 = 0;
+        play->msgCtx.msgLength = 0;
         play->msgCtx.msgMode = 0;
     }
 }
 
 void func_80ACA418(EnTimeTag* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 5:
+        case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x101C:
@@ -216,7 +216,7 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80ACA5F8;
             break;
     }
@@ -262,9 +262,9 @@ void func_80ACA714(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA724(EnTimeTag* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 5) {
-        play->nextEntranceIndex = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
-        play->sceneLoadFlag = 0x14;
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+        play->nextEntrance = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (!ENTIMETAG_GET_E000(&this->actor)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
         }
@@ -284,7 +284,7 @@ void func_80ACA840(EnTimeTag* this, PlayState* play) {
     s16 temp_ft4;
     s16 temp_hi;
 
-    if ((play->sceneNum != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
+    if ((play->sceneId != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
         temp_ft4 = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
         temp_hi = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
         if (gSaveContext.save.weekEventReg[63] & 1) {

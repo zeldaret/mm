@@ -19,7 +19,7 @@ void EnEndingHero4_Draw(Actor* thisx, PlayState* play);
 void func_80C23748(EnEndingHero4* this);
 void func_80C23764(EnEndingHero4* this, PlayState* play);
 
-const ActorInit En_Ending_Hero4_InitVars = {
+ActorInit En_Ending_Hero4_InitVars = {
     ACTOR_EN_ENDING_HERO4,
     ACTORCAT_NPC,
     FLAGS,
@@ -38,7 +38,7 @@ void EnEndingHero4_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkeleton, &gSoldierCheerWithSpear, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierCheerWithSpear, this->jointTable,
                        this->morphTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C23748(this);

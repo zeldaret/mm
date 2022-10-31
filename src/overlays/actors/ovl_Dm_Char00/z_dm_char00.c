@@ -15,12 +15,12 @@
 void DmChar00_Init(Actor* thisx, PlayState* play);
 void DmChar00_Destroy(Actor* thisx, PlayState* play);
 void DmChar00_Update(Actor* thisx, PlayState* play);
-void DmChar00_Draw(Actor* thisx, PlayState* play);
+void DmChar00_Draw(Actor* thisx, PlayState* play2);
 
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-const ActorInit Dm_Char00_InitVars = {
+ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -32,7 +32,7 @@ const ActorInit Dm_Char00_InitVars = {
     (ActorFunc)DmChar00_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
@@ -120,13 +120,13 @@ static AnimationInfo sAnimations[] = {
     { &object_delf_Anim_000E44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
 };
 
-DmChar00Struct D_80AA77A8[] = {
+Color_RGBAf D_80AA77A8[] = {
     { 250.0f, 255.0f, 230.0f, 255.0f },
     { 63.0f, 18.0f, 93.0f, 255.0f },
     { 255.0f, 235.0f, 220.0f, 255.0f },
 };
 
-DmChar00Struct D_80AA77D8[] = {
+Color_RGBAf D_80AA77D8[] = {
     { 220.0f, 160.0f, 80.0f, 255.0f },
     { 250.0f, 40.0f, 10.0f, 255.0f },
     { 255.0f, 235.0f, 220.0f, 255.0f },
@@ -449,15 +449,15 @@ void func_80AA5E2C(DmChar00* this, PlayState* play) {
 
 void func_80AA5EBC(DmChar00* this, PlayState* play) {
     if (play->csCtx.state != 0) {
-        switch (play->sceneNum) {
+        switch (play->sceneId) {
             case SCENE_LOST_WOODS:
-                if (gSaveContext.sceneSetupIndex == 1) {
+                if (gSaveContext.sceneLayer == 1) {
                     func_80AA561C(this, play);
                 }
                 break;
 
             case SCENE_OPENINGDAN:
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA5720(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -469,7 +469,7 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                 break;
 
             case SCENE_OKUJOU:
-                if (gSaveContext.sceneSetupIndex == 0) {
+                if (gSaveContext.sceneLayer == 0) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA58CC(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -477,7 +477,7 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                     } else if (play->csCtx.currentCsIndex == 2) {
                         func_80AA5960(this, play);
                     }
-                } else if (gSaveContext.sceneSetupIndex == 2) {
+                } else if (gSaveContext.sceneLayer == 2) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA59E4(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -487,13 +487,13 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                 break;
 
             case SCENE_00KEIKOKU:
-                if (gSaveContext.sceneSetupIndex == 3) {
+                if (gSaveContext.sceneLayer == 3) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA5AF4(this, play);
                     } else if (play->csCtx.currentCsIndex == 2) {
                         func_80AA5E2C(this, play);
                     }
-                } else if (gSaveContext.sceneSetupIndex == 7) {
+                } else if (gSaveContext.sceneLayer == 7) {
                     if (play->csCtx.currentCsIndex == 0) {
                         func_80AA5BF8(this, play);
                     } else if (play->csCtx.currentCsIndex == 1) {
@@ -503,19 +503,19 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
                 break;
 
             case SCENE_MITURIN:
-                if ((gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 1)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
                     func_80AA5DC8(this, play);
                 }
                 break;
 
             case SCENE_INSIDETOWER:
-                if ((gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
                     func_80AA5D10(this, play);
                 }
                 break;
 
             case SCENE_PIRATE:
-                if ((gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
                     func_80AA5D6C(this, play);
                 }
                 break;
@@ -527,8 +527,8 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DmChar00* this = THIS;
 
-    if ((play->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
-        Actor_MarkForDeath(thisx);
+    if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
+        Actor_Kill(thisx);
     }
 
     this->unk_240 = D_80AA77A8[DMCHAR00_GET(thisx)];
@@ -542,7 +542,7 @@ void DmChar00_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
                    this->morphTable, 7);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
-    func_80AA5580(&this->skelAnime, sAnimations, 0);
+    func_80AA5580(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(thisx, 0.01f);
     this->actionFunc = func_80AA67F8;
 }
@@ -648,7 +648,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                         break;
 
                     case 0x16:
-                        Actor_MarkForDeath(&this->actor);
+                        Actor_Kill(&this->actor);
                         break;
 
                     case 0x17:
@@ -783,7 +783,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                         this->unk_261 = 0;
                         break;
                 }
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
@@ -796,7 +796,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x4:
             case 0x5:
                 this->unk_261 += 4;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 this->skelAnime.curFrame = 37.0f;
                 break;
 
@@ -805,7 +805,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x14:
             case 0x15:
                 this->unk_261 += 2;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
 
             case 0xA:
@@ -833,18 +833,18 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x50:
             case 0x53:
                 this->unk_261 += 1;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
 
             case 0x2D:
                 this->unk_261 = 19;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
 
             case 0x46:
             case 0x4D:
                 this->unk_261 = 0;
-                func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+                func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
                 break;
         }
     }
@@ -853,10 +853,10 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state == 0) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
-            func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+            func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
         }
 
         Math_SmoothStepToF(&this->actor.world.pos.x, 0.0f, 0.5f, 0.5f, 0.001f);
@@ -865,7 +865,7 @@ void func_80AA67F8(DmChar00* this, PlayState* play) {
 
         if (player->actor.world.pos.z < -625.0f) {
             this->unk_261 = 43;
-            func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
+            func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
             this->actionFunc = func_80AA695C;
             this->skelAnime.playSpeed = 1.5f;
         }
@@ -899,7 +899,7 @@ s32 DmChar00_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     Vec3f sp1C;
 
     if (limbIndex == 6) {
-        sp28 = ((Math_SinS(this->unk_262 * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * 124.99999f);
+        sp28 = ((Math_SinS(this->unk_262 * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
         Matrix_MultVec3f(&D_80AA7808, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
@@ -912,11 +912,11 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     DmChar00* this = THIS;
     s32 phi_a0;
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
-    if ((play->csCtx.state == 0) && ((play->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
-                                     (play->roomCtx.currRoom.num != 0) || (play->csCtx.currentCsIndex != 1) ||
-                                     (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
+    if ((play->csCtx.state == 0) &&
+        ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||
+         (play->csCtx.currentCsIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }
 
@@ -934,13 +934,13 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     gSPSegment(POLY_XLU_DISP++, 0x08, &gfx[0]);
 
     gDPPipeSync(gfx++);
-    gDPSetPrimColor(gfx++, 0, 0x01, (u8)this->unk_240.unk_00, (u8)this->unk_240.unk_04, (u8)this->unk_240.unk_08,
-                    (u8)(this->unk_240.unk_0C * 1));
+    gDPSetPrimColor(gfx++, 0, 0x01, (u8)this->unk_240.r, (u8)this->unk_240.g, (u8)this->unk_240.b,
+                    (u8)(this->unk_240.a * 1));
     gDPSetRenderMode(gfx++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPEndDisplayList(gfx);
 
-    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->unk_250.unk_00, (u8)(s8)this->unk_250.unk_04,
-                   (u8)(s8)this->unk_250.unk_08, (u8)(s8)((f32)phi_a0 * 1));
+    gDPSetEnvColor(POLY_XLU_DISP++, (u8)(s8)this->unk_250.r, (u8)(s8)this->unk_250.g, (u8)(s8)this->unk_250.b,
+                   (u8)(s8)((f32)phi_a0 * 1));
     gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
 
     POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

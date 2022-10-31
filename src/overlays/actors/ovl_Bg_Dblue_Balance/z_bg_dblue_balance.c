@@ -1,9 +1,10 @@
 /*
  * File: z_bg_dblue_balance.c
  * Overlay: ovl_Bg_Dblue_Balance
- * Description: Great Bay Temple - See-Saw
+ * Description: Great Bay Temple - Seesaw and Waterwheel w/ Platforms
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_balance.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 
@@ -29,7 +30,7 @@ void func_80B83758(Actor* thisx, PlayState* play);
 AnimatedMaterial* D_80B83C70;
 AnimatedMaterial* D_80B83C74;
 
-const ActorInit Bg_Dblue_Balance_InitVars = {
+ActorInit Bg_Dblue_Balance_InitVars = {
     ACTOR_BG_DBLUE_BALANCE,
     ACTORCAT_BG,
     FLAGS,
@@ -42,19 +43,19 @@ const ActorInit Bg_Dblue_Balance_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ Gfx* unk_00;
-    /* 0x04 */ CollisionHeader* unk_04;
+    /* 0x00 */ Gfx* opaDList;
+    /* 0x04 */ CollisionHeader* colHeader;
     /* 0x08 */ u32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ ActorFunc unk_14;
-    /* 0x18 */ ActorFunc unk_18;
-} BgDblueBalanceStruct2;
+    /* 0x14 */ ActorFunc update;
+    /* 0x18 */ ActorFunc draw;
+} BgDblueBalanceTypeInfo; // size = 0x1C
 
-BgDblueBalanceStruct2 D_80B83A20[] = {
+BgDblueBalanceTypeInfo sTypeInfo[] = {
     {
-        object_dblue_object_DL_00B8F8,
-        &object_dblue_object_Colheader_00BC08,
+        gGreatBayTempleObjectSeesawShaftDL,
+        &gGreatBayTempleObjectSeesawShaftCol,
         0x10,
         360.0f,
         300.0f,
@@ -62,8 +63,8 @@ BgDblueBalanceStruct2 D_80B83A20[] = {
         BgDblueBalance_Draw,
     },
     {
-        object_dblue_object_DL_00BF48,
-        &object_dblue_object_Colheader_00C180,
+        gGreatBayTempleObjectLargeSeesawPlatformDL,
+        &gGreatBayTempleObjectLargeSeesawPlatformCol,
         0x10,
         210.0f,
         190.0f,
@@ -71,8 +72,8 @@ BgDblueBalanceStruct2 D_80B83A20[] = {
         BgDblueBalance_Draw,
     },
     {
-        object_dblue_object_DL_00C4B8,
-        &object_dblue_object_Colheader_00C700,
+        gGreatBayTempleObjectSmallSeesawPlatformDL,
+        &gGreatBayTempleObjectSmallSeesawPlatformCol,
         0x10,
         180.0f,
         180.0f,
@@ -80,8 +81,8 @@ BgDblueBalanceStruct2 D_80B83A20[] = {
         BgDblueBalance_Draw,
     },
     {
-        object_dblue_object_DL_001E68,
-        &object_dblue_object_Colheader_002E78,
+        gGreatBayTempleObjectWaterwheelWithPlatformsDL,
+        &gGreatBayTempleObjectWaterwheelWithPlatformsCol,
         0x30,
         1500.0f,
         1500.0f,
@@ -310,19 +311,19 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
-    this->dyna.actor.flags = D_80B83A20[sp2C].unk_08;
-    this->dyna.actor.uncullZoneScale = D_80B83A20[sp2C].unk_0C;
-    this->dyna.actor.uncullZoneDownward = D_80B83A20[sp2C].unk_10;
-    this->dyna.actor.update = D_80B83A20[sp2C].unk_14;
-    this->dyna.actor.draw = D_80B83A20[sp2C].unk_18;
+    this->dyna.actor.flags = sTypeInfo[sp2C].unk_08;
+    this->dyna.actor.uncullZoneScale = sTypeInfo[sp2C].unk_0C;
+    this->dyna.actor.uncullZoneDownward = sTypeInfo[sp2C].unk_10;
+    this->dyna.actor.update = sTypeInfo[sp2C].update;
+    this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, D_80B83A20[sp2C].unk_04);
+    DynaPolyActor_LoadMesh(play, &this->dyna, sTypeInfo[sp2C].colHeader);
 
     if (sp2C == 3) {
-        D_80B83C70 = Lib_SegmentedToVirtual(object_dblue_object_Matanimheader_00CE00);
+        D_80B83C70 = Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim);
     } else if (sp2C == 0) {
-        D_80B83C74 = Lib_SegmentedToVirtual(object_dblue_object_Matanimheader_00D250);
+        D_80B83C74 = Lib_SegmentedToVirtual(gGreatBayTempleObjectSeesawSplashTexAnim);
     }
 
     if (sp2C == 0) {
@@ -466,7 +467,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
     phi_f2 = this->unk_178;
     temp2 = this->unk_17A;
     if ((phi_f2 * temp2) <= 0.0f) {
-        func_801A7328(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG);
+        AudioSfx_StopByPosAndId(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG);
     }
 
     phi_f2 *= 0.0022222223f;
@@ -644,11 +645,11 @@ void func_80B83518(Actor* thisx, PlayState* play) {
 void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueBalance* this = THIS;
-    BgDblueBalanceStruct2* ptr2 = &D_80B83A20[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
+    BgDblueBalanceTypeInfo* ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
     BgDblueBalance* sp38;
     Gfx* gfx;
 
-    Gfx_DrawDListOpa(play, ptr2->unk_00);
+    Gfx_DrawDListOpa(play, ptr2->opaDList);
 
     if (!(BGDBLUEBALANCE_GET_300(&this->dyna.actor)) && (this->unk_160 != NULL)) {
         AnimatedMat_Draw(play, D_80B83C74);
@@ -665,7 +666,7 @@ void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(gfx++, 0, 0, 0, this->unk_183);
-        gSPDisplayList(gfx++, object_dblue_object_DL_00D110);
+        gSPDisplayList(gfx++, gGreatBayTempleObjectSeesawSplashDL);
 
         POLY_XLU_DISP = gfx;
 
@@ -680,7 +681,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
     Gfx* gfx;
     s32 i;
     BgDblueBalanceStruct* ptr;
-    BgDblueBalanceStruct2* ptr2;
+    BgDblueBalanceTypeInfo* ptr2;
     s32 temp;
 
     if (this->unk_178 != 0) {
@@ -694,8 +695,8 @@ void func_80B83758(Actor* thisx, PlayState* play) {
     }
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        ptr2 = &D_80B83A20[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
-        Gfx_DrawDListOpa(play, ptr2->unk_00);
+        ptr2 = &sTypeInfo[BGDBLUEBALANCE_GET_300(&this->dyna.actor)];
+        Gfx_DrawDListOpa(play, ptr2->opaDList);
 
         if (this->unk_183 != 0) {
             AnimatedMat_Draw(play, D_80B83C70);
@@ -716,7 +717,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
                     temp = ptr->unk_0E * (f32)this->unk_183 * 0.003921569f;
                     gDPSetEnvColor(gfx++, 0, 0, 0, temp);
                     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
+                    gSPDisplayList(gfx++, gGreatBayTempleObjectWaterwheelSplashDL);
                 }
             }
 

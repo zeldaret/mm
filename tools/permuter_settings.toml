@@ -1,3 +1,5 @@
+compiler_type = "ido"
+
 [preserve_macros]
 "g[DS]P.*" = "void"
 "gs[DS]P.*" = "void"
@@ -11,6 +13,8 @@ CLOSE_DISPS = "void"
 ABS = "int"
 ABS_ALT = "int"
 SQ = "int"
+ARRAY_COUNT = "int"
+ARRAY_COUNTU = "int"
 CLAMP = "int"
 CLOCK_TIME = "int"
 CURRENT_DAY = "int"

@@ -5,6 +5,7 @@
  */
 
 #include "z_door_shutter.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
@@ -23,7 +24,7 @@
 
 #define THIS ((DoorShutter*)thisx)
 
-void DoorShutter_Init(Actor* thisx, PlayState* play);
+void DoorShutter_Init(Actor* thisx, PlayState* play2);
 void DoorShutter_Destroy(Actor* thisx, PlayState* play);
 void DoorShutter_Update(Actor* thisx, PlayState* play);
 
@@ -39,7 +40,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play);
 void func_808A1C50(DoorShutter* this, PlayState* play);
 void DoorShutter_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Door_Shutter_InitVars = {
+ActorInit Door_Shutter_InitVars = {
     ACTOR_DOOR_SHUTTER,
     ACTORCAT_DOOR,
     FLAGS,
@@ -74,11 +75,11 @@ typedef struct {
 } ShutterInfo; // size = 0xC
 
 ShutterInfo D_808A21B0[] = {
-    { object_bdoor_DL_0000C0, NULL, 130, 12, 50, 15 },
+    { gBossDoorDL, NULL, 130, 12, 50, 15 },
     { gameplay_keep_DL_077990, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_numa_obj_DL_007150, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_hakugin_obj_DL_000128, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
-    { object_dblue_object_DL_017D00, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
+    { gGreatBayTempleObjectDoorDL, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikana_obj_DL_014A40, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_redead_obj_DL_0001A0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_ikninside_obj_DL_004440, object_ikninside_obj_DL_005260, 130, 0, 20, 15 },
@@ -100,7 +101,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
@@ -114,8 +115,8 @@ ShutterSceneInfo D_808A2258[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 dungeonScene;
-    /* 0x02 */ s16 bossScene;
+    /* 0x00 */ s16 dungeonSceneId;
+    /* 0x02 */ s16 bossSceneId;
     /* 0x04 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
@@ -129,8 +130,7 @@ Vec3f D_808A22C4 = { 120.0f, 0.0f, 0.0f };
 Vec3f D_808A22D0 = { -90.0f, 0.0f, 0.0f };
 
 TexturePtr D_808A22DC[] = {
-    object_bdoor_Tex_006BA0, object_bdoor_Tex_005BA0, object_bdoor_Tex_0005C0,
-    object_bdoor_Tex_004BA0, object_bdoor_Tex_003BA0,
+    gBossDoorDefaultTex, gBossDoorWoodfallTex, gBossDoorSnowheadTex, gBossDoorGreatBayTex, gBossDoorStoneTowerTex,
 };
 
 void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc) {
@@ -200,7 +200,6 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
     DoorShutter* this = THIS;
     s32 sp24;
     s32 i;
-    s8 objId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->doorType = DOORSHUTTER_GET_380(&this->actor);
@@ -210,7 +209,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         ShutterSceneInfo* shutterSceneInfo = &D_808A2258[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A2258) - 1; i++, shutterSceneInfo++) {
-            if (play->sceneNum == shutterSceneInfo->sceneNum) {
+            if (play->sceneId == shutterSceneInfo->sceneId) {
                 break;
             }
         }
@@ -223,7 +222,7 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         BossDoorInfo* bossDoorInfo = &D_808A22A0[0];
 
         for (i = 0; i < ARRAY_COUNT(D_808A22A0) - 1; i++, bossDoorInfo++) {
-            if ((play->sceneNum == bossDoorInfo->dungeonScene) || (play->sceneNum == bossDoorInfo->bossScene)) {
+            if ((play->sceneId == bossDoorInfo->dungeonSceneId) || (play->sceneId == bossDoorInfo->bossSceneId)) {
                 break;
             }
         }
@@ -233,9 +232,10 @@ void DoorShutter_Init(Actor* thisx, PlayState* play2) {
         this->actor.room = -1;
     }
 
-    // clang-format off
-    objId = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId); this->requiredObjBankIndex = objId; if (objId < 0) { Actor_MarkForDeath(&this->actor); return; }
-    // clang-format on
+    if ((this->requiredObjBankIndex = Object_GetIndex(&play->objectCtx, D_808A2180[sp24].objectId)) < 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
 
     DoorShutter_SetupAction(this, DoorShutter_SetupType);
     this->unk_163 = sp24;
@@ -261,7 +261,8 @@ void DoorShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void DoorShutter_SetupType(DoorShutter* this, PlayState* play) {
-    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) && ((MREG(64) == 0) || (MREG(68) == 0))) {
+    if (Object_IsLoaded(&play->objectCtx, this->requiredObjBankIndex) &&
+        (!R_PLAY_FILL_SCREEN_ON || (R_PLAY_FILL_SCREEN_ALPHA == 0))) {
         this->actor.objBankIndex = this->requiredObjBankIndex;
         this->actor.draw = DoorShutter_Draw;
         DoorShutter_SetupDoor(this, play);
@@ -373,7 +374,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
                 }
             } else if (this->unk_166 != 0) {
                 if (this->doorType == 5) {
-                    if (!CHECK_DUNGEON_ITEM(0, gSaveContext.mapIndex)) {
+                    if (!CHECK_DUNGEON_ITEM(DUNGEON_BOSS_KEY, gSaveContext.mapIndex)) {
                         player->doorType = -1;
                         this->actor.textId = 0x1803;
                     }
@@ -538,7 +539,7 @@ void func_808A1784(DoorShutter* this, PlayState* play) {
         } else {
             DoorShutter_SetupAction(this, func_808A1090);
         }
-        func_801A2ED8();
+        Audio_RestorePrevBgm();
     }
 }
 
@@ -554,9 +555,9 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
             play->doorCtx.transitionActorList[DOORSHUTTER_GET_FC00(&this->actor)].sides[(sp44.z < 0.0f) ? 0 : 1].room;
 
         if (room != this->actor.room) {
-            Room temp = play->roomCtx.currRoom;
+            Room temp = play->roomCtx.curRoom;
 
-            play->roomCtx.currRoom = play->roomCtx.prevRoom;
+            play->roomCtx.curRoom = play->roomCtx.prevRoom;
             play->roomCtx.prevRoom = temp;
             play->roomCtx.activeMemPage ^= 1;
         }
@@ -566,7 +567,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
     this->unk_15C = 0;
     this->actor.velocity.y = 0.0f;
 
-    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & 0x800)) {
+    if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
@@ -600,7 +601,7 @@ s32 func_808A1A70(DoorShutter* this) {
 }
 
 void func_808A1B48(DoorShutter* this, PlayState* play) {
-    s16 quake;
+    s16 quakeIndex;
 
     if (func_808A1A70(this)) {
         if (this->actor.velocity.y > 20.0f) {
@@ -608,11 +609,14 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 45.0f, 10, 8.0f, 500, 10, 0);
         }
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, 0), 3);
-        Quake_SetSpeed(quake, -32536);
-        Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-        Quake_SetCountdown(quake, 10);
+
+        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, -32536);
+        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
         func_808A1884(this, play);
     }
 }
@@ -630,7 +634,8 @@ void DoorShutter_Update(Actor* thisx, PlayState* play) {
     DoorShutter* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x100004C0) || (this->actionFunc == DoorShutter_SetupType)) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
+        (this->actionFunc == DoorShutter_SetupType)) {
         this->actionFunc(this, play);
 
         if (this->unk_163 == 7) {

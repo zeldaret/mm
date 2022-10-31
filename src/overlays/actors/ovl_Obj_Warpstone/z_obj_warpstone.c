@@ -15,14 +15,14 @@
 void ObjWarpstone_Init(Actor* thisx, PlayState* play);
 void ObjWarpstone_Destroy(Actor* thisx, PlayState* play);
 void ObjWarpstone_Update(Actor* thisx, PlayState* play);
-void ObjWarpstone_Draw(Actor* thisx, PlayState* play);
+void ObjWarpstone_Draw(Actor* thisx, PlayState* play2);
 void ObjWarpstone_SetupAction(ObjWarpstone* this, ObjWarpstoneActionFunc actionFunc);
 s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play);
 s32 ObjWarpstone_OpenedIdle(ObjWarpstone* this, PlayState* play);
 
-const ActorInit Obj_Warpstone_InitVars = {
+ActorInit Obj_Warpstone_InitVars = {
     ACTOR_OBJ_WARPSTONE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -138,7 +138,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
     if (this->isTalking) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, play)) {
             this->isTalking = false;
-        } else if ((Message_GetState(&play->msgCtx) == 4) && Message_ShouldAdvance(play)) {
+        } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
             if (play->msgCtx.choiceIndex != 0) {
                 func_8019F208();
                 play->msgCtx.msgMode = 0x4D;
@@ -181,11 +181,11 @@ void ObjWarpstone_Draw(Actor* thisx, PlayState* play2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 255);
         Matrix_RotateZF((((play->gameplayFrames * 1500) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         Matrix_Pop();
         Matrix_RotateZF((~((play->gameplayFrames * 1200) & 0xFFFF) * M_PI) / 0x8000, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

@@ -6,6 +6,7 @@
  */
 
 #include "z_en_ani.h"
+#include "z64quake.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -39,7 +40,7 @@ void EnAni_IdleInPain(EnAni* this, PlayState* play);
 void EnAni_Talk(EnAni* this, PlayState* play);
 void EnAni_IdleStanding(EnAni* this, PlayState* play);
 
-const ActorInit En_Ani_InitVars = {
+ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
     ACTORCAT_NPC,
     FLAGS,
@@ -128,7 +129,7 @@ void EnAni_Init(Actor* thisx, PlayState* play) {
     this->treeReachTimer = 0;
     this->blinkFunc = EnAni_DefaultBlink;
 
-    if (GET_ANI_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
+    if (ANI_GET_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
         Animation_Change(&this->skelAnime, &gAniTreeHangingAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gAniTreeHangingAnim), ANIMMODE_ONCE, 0.0f);
         this->actionFunc = EnAni_HangInTree;
@@ -175,7 +176,7 @@ void EnAni_IdleStanding(EnAni* this, PlayState* play) {
 
 void EnAni_Talk(EnAni* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Message_GetState(&play->msgCtx) == 2 && play->msgCtx.currentTextId == 0x6DE) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) && play->msgCtx.currentTextId == 0x6DE) {
         this->actionFunc = EnAni_IdleInPain;
     }
 }
@@ -209,7 +210,7 @@ void EnAni_LandOnFoot(EnAni* this, PlayState* play) {
 
 void EnAni_FallToGround(EnAni* this, PlayState* play) {
     s32 pad;
-    s16 quakeValue;
+    s16 quakeIndex;
 
     if (this->actor.bgCheckFlags & 1) { // hit the ground
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -219,10 +220,12 @@ void EnAni_FallToGround(EnAni* this, PlayState* play) {
         // the animation gets cut short, (first 16 frames only) only the landing part is seen
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
-        quakeValue = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], 3);
-        Quake_SetSpeed(quakeValue, 0x6978);
-        Quake_SetQuakeValues(quakeValue, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeValue, 0x14);
+
+        quakeIndex = Quake_Add(play->cameraPtrs[CAM_ID_MAIN], QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 27000);
+        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 20);
+
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_HAMMER_HIT);
     }
 
@@ -308,7 +311,7 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentCamera(this->actor.cutscene)),
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.cutscene)),
                                    &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);

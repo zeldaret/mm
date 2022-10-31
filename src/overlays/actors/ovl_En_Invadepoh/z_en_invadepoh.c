@@ -4,7 +4,6 @@
  * Description: Ranch nighttime actors
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -171,7 +170,7 @@ void func_80B4BA30(Actor* thisx, PlayState* play);
 void func_80B4C568(Actor* thisx, PlayState* play);
 void func_80B4CFFC(Actor* thisx, PlayState* play);
 void func_80B46184(unkStruct80B50350* unkStruct);
-s32 func_80B450C0(f32* arg0, f32* arg1, f32 arg2, f32 arg3, f32 arg4);
+s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed);
 s32 func_80B4516C(EnInvadepoh* this);
 void func_80B45A4C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 void func_80B45A94(EnInvadePohStruct* s, unkstructInvadepoh4** u);
@@ -179,7 +178,7 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
 extern s32 D_801BDA9C;
 
-const ActorInit En_Invadepoh_InitVars = {
+ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
     ACTORCAT_PROP,
     FLAGS,
@@ -255,29 +254,28 @@ static Vec3f D_80B4E934 = { 216.0f, -20.0f, 1395.0f };
 
 static s32 D_80B4E940 = 0;
 
-static TexturePtr D_80B4E944[] = {
-    object_ma1_Tex_00FFC8, object_ma1_Tex_0107C8, object_ma1_Tex_010FC8, object_ma1_Tex_0117C8, object_ma1_Tex_011FC8,
+static TexturePtr sRomaniEyeTextures[] = {
+    gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
 
-static TexturePtr D_80B4E958[] = {
-    object_ma1_Tex_0127C8,
-    object_ma1_Tex_012BC8,
-    object_ma1_Tex_012FC8,
-    object_ma1_Tex_0133C8,
+static TexturePtr sRomaniMouthTextures[] = {
+    gRomaniMouthHappyTex,
+    gRomaniMouthFrownTex,
+    gRomaniMouthHangingOpenTex,
+    gRomaniMouthSmileTex,
 };
 
 static s8 D_80B4E968 = 0;
 
-static TexturePtr D_80B4E96C[] = {
-    object_ma2_Tex_011AD8, object_ma2_Tex_0122D8, object_ma2_Tex_012AD8,
-    object_ma2_Tex_0132D8, object_ma2_Tex_013AD8, object_ma2_Tex_0142D8,
+static TexturePtr sCremiaEyeTextures[] = {
+    gCremiaEyeOpenTex, gCremiaEyeHalfTex, gCremiaEyeClosedTex, gCremiaEyeHappyTex, gCremiaEyeAngryTex, gCremiaEyeSadTex,
 };
 
-static TexturePtr D_80B4E984[] = {
-    object_ma2_Tex_014AD8,
-    object_ma2_Tex_014ED8,
-    object_ma2_Tex_0152D8,
-    object_ma2_Tex_0156D8,
+static TexturePtr sCremiaMouthTextures[] = {
+    gCremiaMouthNormalTex,
+    gCremiaMouthSlightSmileTex,
+    gCremiaMouthFrownTex,
+    gCremiaMouthHangingOpenTex,
 };
 
 static s8 D_80B4E994 = 0;
@@ -327,7 +325,7 @@ static unkstructInvadepoh1 D_80B4EA24[] = {
     { 1, 1.0f },
 };
 
-static unkstructInvadepoh4 D_80B4EA2C = { 2, &D_80B4E9C4, 4, D_80B4EA04, 0x28, 0x3c };
+static unkstructInvadepoh4 D_80B4EA2C = { 2, &D_80B4E9C4, 4, D_80B4EA04, 0x28, 0x3C };
 
 static unkstructInvadepoh3 D_80B4EA40 = {
     1,
@@ -1198,11 +1196,11 @@ void func_80B44F58(void) {
 
     if (!D_80B4E968) {
         D_80B4E968 = true;
-        for (i = 0, iter = D_80B4E944; i < ARRAY_COUNT(D_80B4E944); i++, iter++) {
+        for (i = 0, iter = sRomaniEyeTextures; i < ARRAY_COUNT(sRomaniEyeTextures); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
 
-        for (i = 0, iter = D_80B4E958; i < ARRAY_COUNT(D_80B4E958); i++, iter++) {
+        for (i = 0, iter = sRomaniMouthTextures; i < ARRAY_COUNT(sRomaniMouthTextures); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
     }
@@ -1214,11 +1212,11 @@ void func_80B44FEC(void) {
 
     if (!D_80B4E994) {
         D_80B4E994 = true;
-        for (i = 0, iter = D_80B4E96C; i < ARRAY_COUNT(D_80B4E96C); i++, iter++) {
+        for (i = 0, iter = sCremiaEyeTextures; i < ARRAY_COUNT(sCremiaEyeTextures); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
 
-        for (i = 0, iter = D_80B4E984; i < ARRAY_COUNT(D_80B4E984); i++, iter++) {
+        for (i = 0, iter = sCremiaMouthTextures; i < ARRAY_COUNT(sCremiaMouthTextures); i++, iter++) {
             *iter = Lib_SegmentedToVirtual(*iter);
         }
     }
@@ -1365,16 +1363,16 @@ void func_80B45648(EnInvadepoh* this) {
     }
 }
 
-s32 func_80B456A8(PlayState* play, Vec3f* vec) {
-    Vec3f multDest;
-    f32 wDest;
+s32 func_80B456A8(PlayState* play, Vec3f* worldPos) {
+    Vec3f projectedPos;
+    f32 invW;
 
-    Actor_GetProjectedPos(play, vec, &multDest, &wDest);
-    if (((multDest.z > 1.0f) && (fabsf(multDest.x * wDest) < 1.0f)) && (fabsf(multDest.y * wDest) < 1.0f)) {
-        s32 wX = (multDest.x * wDest * 160.0f) + 160.0f;
-        s32 wY = (multDest.y * wDest * -120.0f) + 120.0f;
-        s32 wZ = (s32)(multDest.z * wDest * 16352.0f) + 0x3FE0;
-        s32 zBuf = func_80178A94(wX, wY);
+    Actor_GetProjectedPos(play, worldPos, &projectedPos, &invW);
+    if (((projectedPos.z > 1.0f) && (fabsf(projectedPos.x * invW) < 1.0f)) && (fabsf(projectedPos.y * invW) < 1.0f)) {
+        s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+        s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+        s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
+        s32 zBuf = func_80178A94(screenPosX, screenPosY);
         if (wZ < zBuf) {
             return true;
         }
@@ -1659,10 +1657,10 @@ void func_80B4627C(EnInvadepoh* this, PlayState* play) {
             func_80B46F88(this);
         }
     } else if (D_80B4E940 == 3) {
-        if (gSaveContext.save.entranceIndex == 0x6460) {
+        if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 6)) {
             func_80B471C0(this);
 
-        } else if (gSaveContext.save.entranceIndex == 0x6470) {
+        } else if (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 7)) {
             func_80B47248(this);
         } else {
             func_80B47248(this);
@@ -1690,7 +1688,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, PlayState* play) {
     }
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_UCH);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1700,7 +1698,7 @@ void EnInvadepoh_InitParentCow(EnInvadepoh* this, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x30);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1709,7 +1707,7 @@ void EnInvadepoh_InitChildCow(EnInvadepoh* this, PlayState* play) {
     this->actor.update = func_80B481C4;
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1745,27 +1743,27 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
 
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA1);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (temp == 5) {
         if (gSaveContext.save.weekEventReg[22] & 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (temp == 7) {
         if (gSaveContext.save.time < CLOCK_TIME(6, 0) && gSaveContext.save.time >= CLOCK_TIME(2, 15)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (temp != 8) {
         if (temp == 9) {
-            if (gSaveContext.save.entranceIndex != 0x6460) {
-                Actor_MarkForDeath(&this->actor);
+            if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
+                Actor_Kill(&this->actor);
                 return;
             }
         } else if (temp == 0xC) {
             if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             D_80B503F4 = this;
         }
@@ -1786,7 +1784,7 @@ void func_80B468B4(EnInvadepoh* this, PlayState* play) {
         this->actor.world.pos.y += 1500.0f;
         func_80B49628(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1801,7 +1799,7 @@ void EnInvadepoh_InitDog(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 24.0f);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_DOG);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1817,10 +1815,10 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA2);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
     D_80B503F8 = this;
 }
@@ -1991,15 +1989,15 @@ void func_80B470E0(EnInvadepoh* this) {
 
 void func_80B47108(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer == 100) {
-        func_801A3098(NA_BGM_CLEAR_EVENT);
+        Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     }
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        play->nextEntranceIndex = 0x6460;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 6);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x49;
-        gSaveContext.nextTransition = 0x48;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_73;
+        gSaveContext.nextTransitionType = TRANS_TYPE_72;
         D_801BDAA0 = 1;
         D_801BDA9C = 0;
         func_80B47248(this);
@@ -2013,11 +2011,11 @@ void func_80B471C0(EnInvadepoh* this) {
 
 void func_80B471E0(EnInvadepoh* this, PlayState* play) {
     if (D_80B4E998) {
-        play->nextEntranceIndex = 0x6470;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 7);
         gSaveContext.nextCutsceneIndex = 0;
-        play->sceneLoadFlag = 0x14;
-        play->unk_1887F = 0x48;
-        gSaveContext.nextTransition = 0x48;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_72;
+        gSaveContext.nextTransitionType = TRANS_TYPE_72;
         func_80B47248(this);
     }
 }
@@ -2036,11 +2034,11 @@ void func_80B47278(EnInvadepoh* this) {
 }
 
 void func_80B47298(EnInvadepoh* this, PlayState* play) {
-    play->nextEntranceIndex = 0x6400;
+    play->nextEntrance = ENTRANCE(ROMANI_RANCH, 0);
     gSaveContext.nextCutsceneIndex = 0xFFF3;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x48;
-    gSaveContext.nextTransition = 0x48;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_72;
+    gSaveContext.nextTransitionType = TRANS_TYPE_72;
     gSaveContext.save.weekEventReg[89] |= 0x10;
     func_80B47304(this);
 }
@@ -2299,7 +2297,7 @@ void func_80B47BAC(Actor* thisx, PlayState* play) {
                 func_80B47568(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -2315,7 +2313,7 @@ void func_80B47D30(Actor* thisx, PlayState* play) {
             thisx->gravity = 0.0f;
             func_80B47830(this);
         } else if ((this->actionFunc == func_80B474DC) || (this->actionFunc == func_80B473E4)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
@@ -2378,7 +2376,7 @@ void func_80B48060(Actor* thisx, PlayState* play) {
     MtxF unkMtx;
 
     if (D_80B503F0 == NULL || this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2418,7 +2416,7 @@ void func_80B4827C(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = THIS;
 
     if (D_80B503F0 == NULL || this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2427,7 +2425,7 @@ void func_80B4827C(Actor* thisx, PlayState* play) {
 
 void func_80B482D4(EnInvadepoh* this) {
     this->actionTimer = 40;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_002A8C, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniLookAroundAnim, -10.0f);
     this->actor.draw = NULL;
     this->actionFunc = func_80B48324;
 }
@@ -2443,7 +2441,7 @@ void func_80B48324(EnInvadepoh* this, PlayState* play) {
 
 void func_80B48374(EnInvadepoh* this) {
     this->actionTimer = 60;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_002A8C, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniLookAroundAnim, -10.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B483CC;
 }
@@ -2475,7 +2473,7 @@ void func_80B4843C(EnInvadepoh* this) {
     this->behaviorInfo.unk44 = 0.1f;
     this->behaviorInfo.unk48 = 2000;
     this->actionTimer = 50;
-    Animation_Change(&this->skelAnime, &object_ma1_Anim_007328, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -5.0f);
+    Animation_Change(&this->skelAnime, &gRomaniRunAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -5.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B484EC;
 }
@@ -2505,7 +2503,7 @@ void func_80B48588(EnInvadepoh* this) {
     this->behaviorInfo.unk42 = 0;
     this->behaviorInfo.unk44 = 0.28f;
     this->behaviorInfo.unk48 = 7000;
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actor.draw = func_80B4E324;
     this->actionFunc = func_80B48610;
 }
@@ -2522,10 +2520,10 @@ void func_80B48620(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4873C;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58, this->jointTable,
-                           this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->jointTable, this->morphTable,
+                           ROMANI_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 5000, 0.05f, 0.3f, 0.12f);
-        Animation_PlayLoop(&this->skelAnime, &object_ma1_Anim_009E58);
+        Animation_PlayLoop(&this->skelAnime, &gRomaniIdleAnim);
         func_80B482D4(this);
     }
 }
@@ -2536,7 +2534,7 @@ void func_80B4873C(Actor* thisx, PlayState* play) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     if (this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);
@@ -2558,7 +2556,7 @@ void func_80B487B4(EnInvadepoh* this) {
     substruct->unk26.z = 0;
     substruct->unk30 = 0.1f;
     substruct->unk2C = 800;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
     this->actionFunc = func_80B48848;
 }
 
@@ -2618,7 +2616,7 @@ void func_80B48948(EnInvadepoh* this) {
         substruct->unk2C = 1000;
     }
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actionFunc = func_80B48AD4;
 }
 
@@ -2689,7 +2687,7 @@ void func_80B48DE4(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     this->actor.speedXZ = 0.0f;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->behaviorInfo.unk4C = 0;
     substruct->unk30 = 0.05f;
     substruct->unk2C = 1200;
@@ -2726,8 +2724,8 @@ void func_80B48FB0(Actor* thisx, PlayState* play) {
         this->actor.update = func_80B490F0;
         this->actor.draw = func_80B4E324;
         this->actor.textId = 0x3330;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_009E58, this->jointTable,
-                           this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniIdleAnim, this->jointTable, this->morphTable,
+                           ROMANI_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 6, D_80B4EB00, 2, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B444F4(this, play);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -2942,7 +2940,7 @@ void func_80B4994C(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -2996,7 +2994,7 @@ void func_80B49B1C(Actor* thisx, PlayState* play) {
 void func_80B49BD0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3032,7 +3030,7 @@ void func_80B49C38(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->clockTime >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -3040,7 +3038,7 @@ void func_80B49DA0(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
     this->behaviorInfo.unk4C = 0;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->actionFunc = func_80B49DFC;
 }
 
@@ -3078,8 +3076,8 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
-                           this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
+                           ROMANI_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03, 0.3, 0.03);
         func_80B44540(this, play);
         func_80B44570(this);
@@ -3105,7 +3103,7 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E324;
             func_80B49BD0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3145,7 +3143,7 @@ void func_80B4A1B8(Actor* thisx, PlayState* play) {
 void func_80B4A2C0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3204,7 +3202,7 @@ void func_80B4A350(EnInvadepoh* this, PlayState* play) {
 void func_80B4A570(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_ma1_Anim_002A8C, -10.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gRomaniLookAroundAnim, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3223,7 +3221,7 @@ void func_80B4A5E4(EnInvadepoh* this, PlayState* play) {
 void func_80B4A614(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, 0.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3266,7 +3264,7 @@ void func_80B4A7C0(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
     this->behaviorInfo.unk4C = 0;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, 0.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
     this->actionFunc = func_80B4A81C;
 }
 
@@ -3309,8 +3307,8 @@ void func_80B4A9C8(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
-                           this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
+                           ROMANI_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 1, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B44620(this, play);
         if ((sp38 < CLOCK_TIME(2, 15)) || (sp38 >= CLOCK_TIME(6, 0))) {
@@ -3402,7 +3400,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 }
 
 void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
             if (gSaveContext.save.weekEventReg[22] & 2) {
                 EnInvadepoh_SetTextID(this, play, 0x3334);
@@ -3455,7 +3453,7 @@ void func_80B4AF94(EnInvadepoh* this, PlayState* play) {
         func_80151BB4(play, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, play, 2000.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -3468,7 +3466,8 @@ void func_80B4B048(EnInvadepoh* this, PlayState* play) {
     if (play->msgCtx.unk120B1 == 0) {
         if (play->msgCtx.msgMode == 0) {
             D_80B4E998 = 1;
-        } else if ((Message_GetState(&play->msgCtx) == 6) || (Message_GetState(&play->msgCtx) == 5)) {
+        } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
+                   (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
             D_80B4E998 = 1;
         }
     }
@@ -3484,9 +3483,9 @@ void func_80B4B0C4(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
         this->actor.update = func_80B4B218;
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
-                           this->morphTable, 23);
-        Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, 0.0f);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
+                           ROMANI_LIMB_MAX);
+        Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, 0.0f);
         substruct = &this->behaviorInfo;
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 2000, 0.08f, 0.3f, 0.03f);
         substruct->unk30 = 0.08f;
@@ -3655,7 +3654,7 @@ void func_80B4B8BC(Actor* thisx, PlayState* play) {
         } else if (D_80B4E940 == 1) {
             this->actor.update = func_80B4BA30;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             if (!this) {}
         }
     }
@@ -3692,17 +3691,14 @@ void func_80B4BA84(Actor* thisx, PlayState* play) {
         sp2C = this->unk3BC;
         this->unk3BC = func_80B44234(this, &D_80B5040C->actor.world.pos);
         if (sp2C != this->unk3BC) {
-            phi_v0 = this->pathIndex;
             phi_v0 = this->unk3BC - this->pathIndex;
-            temp_v0_3 = phi_v0;
-            if (temp_v0_3 < 0) {
+            if (phi_v0 < 0) {
                 phi_v0 += this->endPoint;
             }
 
-            temp_v0_3 = this->endPoint >> 1;
-            if (temp_v0_3 < phi_v0) {
+            if ((this->endPoint >> 1) < phi_v0) {
                 this->direction = DIRECTION_BACKWARD;
-            } else if (phi_v0 < temp_v0_3) {
+            } else if (phi_v0 < (this->endPoint >> 1)) {
                 this->direction = DIRECTION_FORWARD;
             }
         }
@@ -3720,7 +3716,7 @@ void func_80B4BA84(Actor* thisx, PlayState* play) {
 void func_80B4BBE0(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_016720, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gCremiaWalkAnim, -6.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -3792,7 +3788,7 @@ void func_80B4BC4C(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.save.time > CLOCK_TIME(20, 15)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((temp_t6 != NULL) && (temp_t6->actionFunc == func_80B4CB0C)) {
         func_80B4C1BC(this);
     }
@@ -3801,7 +3797,7 @@ void func_80B4BC4C(EnInvadepoh* this, PlayState* play) {
 void func_80B4BFFC(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_00A174, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C058;
 }
@@ -3833,7 +3829,7 @@ void func_80B4C058(EnInvadepoh* this, PlayState* play) {
 void func_80B4C1BC(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma2_Anim_00A174, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gCremiaIdleAnim, -6.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4C218;
 }
@@ -3873,8 +3869,8 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44FEC();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma2_Skel_015C28, &object_ma2_Anim_016720, this->jointTable,
-                           this->morphTable, 22);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gCremiaSkel, &gCremiaWalkAnim, this->jointTable, this->morphTable,
+                           CREMIA_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EBDC, 1, D_80B4EC08, 0, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         this->actor.textId = 0x33CD;
         if (currentTime < 0xD5A0) {
@@ -3896,7 +3892,7 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E7BC;
             func_80B4BBE0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3936,7 +3932,7 @@ void func_80B4C5C0(Actor* thisx, PlayState* play) {
 void func_80B4C6C8(EnInvadepoh* this) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_014088, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniWalkAnim, -10.0f);
     substruct->unk26.x = 0;
     substruct->unk26.y = 0;
     substruct->unk26.z = 0;
@@ -4007,7 +4003,7 @@ void func_80B4C730(EnInvadepoh* this, PlayState* play) {
     }
 
     if (this->clockTime >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -4019,7 +4015,7 @@ void func_80B4C730(EnInvadepoh* this, PlayState* play) {
 void func_80B4CAB0(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 4000;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4CB0C;
 }
@@ -4048,7 +4044,7 @@ void func_80B4CB0C(EnInvadepoh* this, PlayState* play) {
 void func_80B4CC70(EnInvadepoh* this) {
     this->behaviorInfo.unk30 = 0.08f;
     this->behaviorInfo.unk2C = 2000;
-    Animation_MorphToLoop(&this->skelAnime, &object_ma1_Anim_009E58, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gRomaniIdleAnim, -10.0f);
     this->behaviorInfo.unk4C = 0;
     this->actionFunc = func_80B4CCCC;
 }
@@ -4087,8 +4083,8 @@ void func_80B4CE54(Actor* thisx, PlayState* play) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(play, &this->actor);
         func_80B44F58();
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_ma1_Skel_013928, &object_ma1_Anim_014088, this->jointTable,
-                           this->morphTable, 23);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gRomaniSkel, &gRomaniWalkAnim, this->jointTable, this->morphTable,
+                           ROMANI_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, D_80B4EA90, 1, D_80B4EB00, 3, &gZeroVec3s, 100, 0.03f, 0.3f, 0.03f);
         func_80B446D0(this, play);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -4105,7 +4101,7 @@ void func_80B4CE54(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E324;
             func_80B4C6C8(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -4172,7 +4168,7 @@ void func_80B4D290(EnInvadepoh* this, PlayState* play) {
     f32 sp28;
 
     if (D_80B503F0 == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -4194,7 +4190,7 @@ void func_80B4D290(EnInvadepoh* this, PlayState* play) {
     }
 
     if (sp28 < 5.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4261,7 +4257,7 @@ void func_80B4D480(EnInvadepoh* this, PlayState* play) {
     }
 
     if ((this->actionTimer <= 0) || sp2C) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4470,13 +4466,13 @@ void func_80B4E1B0(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B4E200(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 14) {
+    if (limbIndex == ROMANI_LIMB_HEAD) {
         EnInvadepoh* this = THIS; // both of these needed to match
 
         rot->x += this->behaviorInfo.unk20.y;
         rot->y += this->behaviorInfo.unk20.z;
         rot->z += this->behaviorInfo.unk20.x;
-    } else if (limbIndex == 13) {
+    } else if (limbIndex == ROMANI_LIMB_TORSO) {
         EnInvadepoh* this = THIS; // both of these needed to match
 
         rot->x += (s16)(this->behaviorInfo.unk34 * this->behaviorInfo.unk20.y);
@@ -4488,11 +4484,11 @@ s32 func_80B4E200(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_80B4E2AC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnInvadepoh* this = THIS;
 
-    if (limbIndex == 19) {
+    if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         OPEN_DISPS(play->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
+        gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
         CLOSE_DISPS(play->state.gfxCtx);
-    } else if (limbIndex == 14) {
+    } else if (limbIndex == ROMANI_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80B4EE30, &this->actor.focus.pos);
     }
 }
@@ -4502,8 +4498,8 @@ void func_80B4E324(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E958[this->behaviorInfo.unk10.unkF]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E944[this->behaviorInfo.unk0.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sRomaniMouthTextures[this->behaviorInfo.unk10.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sRomaniEyeTextures[this->behaviorInfo.unk0.unkF]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80B4E200, func_80B4E2AC, &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);
@@ -4529,7 +4525,7 @@ void func_80B4E3F0(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     if (func_80B456A8(play, &sp5C)) {
         func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp5C, 20.0f, 9.0f, 0, 0);
     }
@@ -4597,8 +4593,8 @@ void func_80B4E7BC(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
     func_8012C28C(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_80B4E984[this->behaviorInfo.unk10.unkF]);
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B4E96C[this->behaviorInfo.unk0.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sCremiaMouthTextures[this->behaviorInfo.unk10.unkF]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sCremiaEyeTextures[this->behaviorInfo.unk0.unkF]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80B4E6E4, func_80B4E784, &this->actor);
     CLOSE_DISPS(play->state.gfxCtx);

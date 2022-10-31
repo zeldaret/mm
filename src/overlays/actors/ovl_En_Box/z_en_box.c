@@ -56,7 +56,7 @@ void EnBox_Open(EnBox* this, PlayState* play);
 void func_80867FBC(func_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(func_80867BDC_a0* arg0, PlayState* play);
 
-const ActorInit En_Box_InitVars = {
+ActorInit En_Box_InitVars = {
     ACTOR_EN_BOX,
     ACTORCAT_CHEST,
     FLAGS,
@@ -146,7 +146,7 @@ void func_80867C8C(func_80867BDC_a0* arg0, PlayState* play) {
             func_8012C2DC(play->state.gfxCtx);
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+            gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
         }
         Matrix_Pop();
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -218,9 +218,9 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.world.rot.x = 0;
     }
     thisx->shape.rot.x = this->dyna.actor.world.rot.x;
-    this->getItem = ENBOX_GET_ITEM(thisx);
+    this->getItemId = ENBOX_GET_ITEM(thisx);
 
-    if (Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor)) || this->getItem == GI_NONE) {
+    if (Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor)) || this->getItemId == GI_NONE) {
         this->alpha = 255;
         this->iceSmokeTimer = 100;
         EnBox_SetupAction(this, EnBox_Open);
@@ -272,7 +272,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
     }
 
-    if ((this->getItem == GI_STRAY_FAIRY) && !Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
+    if ((this->getItemId == GI_STRAY_FAIRY) && !Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
     }
 
@@ -482,13 +482,13 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
                                this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                                this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
                                -1);
-            func_801A3098(0x2B | 0x900);
+            Audio_PlayFanfare(NA_BGM_OPEN_CHEST | 0x900);
         }
 
-        if (this->getItem == GI_STRAY_FAIRY) {
+        if (this->getItemId == GI_STRAY_FAIRY) {
             this->movementFlags |= ENBOX_MOVE_0x20;
         } else {
-            if ((this->getItem == GI_HEART_PIECE) || (this->getItem == GI_BOTTLE)) {
+            if ((this->getItemId == GI_HEART_PIECE) || (this->getItemId == GI_BOTTLE)) {
                 Flags_SetCollectible(play, this->collectableFlag);
             }
             Flags_SetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor));
@@ -498,17 +498,17 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
         if (offset.z > -50.0f && offset.z < 0.0f && fabsf(offset.y) < 10.0f && fabsf(offset.x) < 20.0f &&
             Player_IsFacingActor(&this->dyna.actor, 0x3000, play)) {
-            if (((this->getItem == GI_HEART_PIECE) || (this->getItem == GI_BOTTLE)) &&
+            if (((this->getItemId == GI_HEART_PIECE) || (this->getItemId == GI_BOTTLE)) &&
                 Flags_GetCollectible(play, this->collectableFlag)) {
-                this->getItem = GI_RECOVERY_HEART;
+                this->getItemId = GI_RECOVERY_HEART;
             }
-            if ((this->getItem == GI_MASK_CAPTAIN) && (INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN)) {
-                this->getItem = GI_RECOVERY_HEART;
+            if ((this->getItemId == GI_MASK_CAPTAIN) && (INV_CONTENT(ITEM_MASK_CAPTAIN) == ITEM_MASK_CAPTAIN)) {
+                this->getItemId = GI_RECOVERY_HEART;
             }
-            if ((this->getItem == GI_MASK_GIANT) && (INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT)) {
-                this->getItem = GI_RECOVERY_HEART;
+            if ((this->getItemId == GI_MASK_GIANT) && (INV_CONTENT(ITEM_MASK_GIANT) == ITEM_MASK_GIANT)) {
+                this->getItemId = GI_RECOVERY_HEART;
             }
-            Actor_PickUpNearby(&this->dyna.actor, play, -this->getItem);
+            Actor_PickUpNearby(&this->dyna.actor, play, -this->getItemId);
         }
         if (Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
             EnBox_SetupAction(this, EnBox_Open);
@@ -538,7 +538,7 @@ void EnBox_Open(EnBox* this, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_ELFORG, this->dyna.actor.world.pos.x,
                                this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x,
                                this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
-                               ((ENBOX_GET_CHEST_FLAG(&this->dyna.actor) & 0x7F) << 9) | STRAY_FAIRY_TYPE_CHEST);
+                               STRAY_FAIRY_PARAMS(ENBOX_GET_CHEST_FLAG(&this->dyna.actor), 0, STRAY_FAIRY_TYPE_CHEST));
         } else if (this->movementFlags & ENBOX_MOVE_0x40) {
             this->movementFlags &= ~ENBOX_MOVE_0x40;
         }
@@ -603,8 +603,8 @@ void EnBox_Update(Actor* thisx, PlayState* play) {
         this->movementFlags &= ~ENBOX_MOVE_STICK_TO_GROUND;
         EnBox_ClipToGround(this, play);
     }
-    if ((this->getItem == GI_STRAY_FAIRY) && !Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
-        play->actorCtx.unk5 |= 8;
+    if ((this->getItemId == GI_STRAY_FAIRY) && !Flags_GetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor))) {
+        play->actorCtx.flags |= ACTORCTX_FLAG_3;
     }
     this->actionFunc(this, play);
     if (this->movementFlags & ENBOX_MOVE_0x80) {
@@ -615,7 +615,7 @@ void EnBox_Update(Actor* thisx, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x1C);
     }
     Actor_SetFocus(&this->dyna.actor, 40.0f);
-    if ((this->getItem == GI_ICE_TRAP) && (this->actionFunc == EnBox_Open) && (this->skelAnime.curFrame > 45.0f) &&
+    if ((this->getItemId == GI_ICE_TRAP) && (this->actionFunc == EnBox_Open) && (this->skelAnime.curFrame > 45.0f) &&
         (this->iceSmokeTimer < 100)) {
         EnBox_SpawnIceSmoke(this, play);
     }
@@ -633,7 +633,7 @@ void EnBox_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         if (this->type == ENBOX_TYPE_BIG_ORNATE) {
             gSPDisplayList((*gfx)++, &gBoxChestBaseOrnateDL);
         } else if (Actor_IsSmallChest(this)) {
-            if (this->getItem == GI_KEY_SMALL) {
+            if (this->getItemId == GI_KEY_SMALL) {
                 gSPDisplayList((*gfx)++, &gBoxChestBaseGildedDL);
             } else {
                 gSPDisplayList((*gfx)++, &gBoxChestBaseDL);
@@ -646,7 +646,7 @@ void EnBox_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         if (this->type == ENBOX_TYPE_BIG_ORNATE) {
             gSPDisplayList((*gfx)++, &gBoxChestLidOrnateDL);
         } else if (Actor_IsSmallChest(this)) {
-            if (this->getItem == GI_KEY_SMALL) {
+            if (this->getItemId == GI_KEY_SMALL) {
                 gSPDisplayList((*gfx)++, &gBoxChestLidGildedDL);
             } else {
                 gSPDisplayList((*gfx)++, &gBoxChestLidDL);
@@ -658,32 +658,34 @@ void EnBox_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 }
 
 Gfx* EnBox_SetRenderMode1(GraphicsContext* gfxCtx) {
-    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gSPEndDisplayList(dl);
-    return dl;
+    gSPEndDisplayList(gfx++);
+
+    return gfxHead;
 }
 
 Gfx* EnBox_SetRenderMode2(GraphicsContext* gfxCtx) {
-    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
-    Gfx* cur = dl;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
     gDPSetRenderMode(
-        cur++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A,
+        gfx++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A,
         AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
             GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
 
-    gSPEndDisplayList(cur++);
-    return dl;
+    gSPEndDisplayList(gfx++);
+    return gfxHead;
 }
 
 Gfx* EnBox_SetRenderMode3(GraphicsContext* gfxCtx) {
-    Gfx* dl = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
-    Gfx* cur = dl;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gDPSetRenderMode(cur++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
-    gSPEndDisplayList(cur++);
-    return dl;
+    gDPSetRenderMode(gfx++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
+    gSPEndDisplayList(gfx++);
+    return gfxHead;
 }
 
 void EnBox_Draw(Actor* thisx, PlayState* play) {

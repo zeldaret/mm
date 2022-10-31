@@ -18,7 +18,7 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play2);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Boyo_InitVars = {
+ActorInit Obj_Boyo_InitVars = {
     ACTOR_OBJ_BOYO,
     ACTORCAT_PROP,
     FLAGS,

@@ -11,7 +11,7 @@
 
 #define THIS ((BgIngate*)thisx)
 
-void BgIngate_Init(Actor* thisx, PlayState* play);
+void BgIngate_Init(Actor* thisx, PlayState* play2);
 void BgIngate_Destroy(Actor* thisx, PlayState* play);
 void BgIngate_Update(Actor* thisx, PlayState* play);
 void BgIngate_Draw(Actor* thisx, PlayState* play);
@@ -26,7 +26,7 @@ void func_809542A0(BgIngate* this, PlayState* play);
 void func_80954340(BgIngate* this, PlayState* play);
 void func_809543D4(BgIngate* this, PlayState* play);
 
-const ActorInit Bg_Ingate_InitVars = {
+ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
     ACTORCAT_BG,
     FLAGS,
@@ -123,14 +123,14 @@ s32 func_80953BEC(BgIngate* this) {
 }
 
 s32 func_80953DA8(BgIngate* this, PlayState* play) {
-    Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (gSaveContext.eventInf[3] & 0x20) {
         func_800B7298(play, &this->dyna.actor, 7);
     } else {
         gSaveContext.eventInf[4] |= 2;
     }
-    Camera_ChangeSetting(camera, CAM_SET_BOAT_CRUISE);
+    Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
     play->unk_1887C = 0x63;
 
     return false;
@@ -178,7 +178,7 @@ void func_80953F8C(BgIngate* this, PlayState* play) {
 
 void func_80953F9C(BgIngate* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    Camera* camera = Play_GetCamera(play, CAM_ID_MAIN);
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (!(gSaveContext.eventInf[4] & 1)) {
 
@@ -214,12 +214,12 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
     }
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
-            Camera_ChangeSetting(camera, CAM_SET_NORMAL0);
-            player->stateFlags1 |= 0x20;
-            play->actorCtx.unk5 &= ~0x4;
+            Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
+            player->stateFlags1 |= PLAYER_STATE1_20;
+            play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
         } else {
-            Camera_ChangeSetting(camera, CAM_SET_BOAT_CRUISE);
-            player->stateFlags1 &= ~0x20;
+            Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     }
     this->unk16E = ActorCutscene_GetCurrentIndex();
@@ -245,15 +245,15 @@ void func_809541B8(BgIngate* this, PlayState* play) {
 
 void func_809542A0(BgIngate* this, PlayState* play) {
     if (gSaveContext.eventInf[5] & 1) {
-        play->nextEntranceIndex = 0xA820;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
         gSaveContext.eventInf[5] &= (u8)~1;
     } else {
-        play->nextEntranceIndex = 0xA810;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
     }
     gSaveContext.nextCutsceneIndex = 0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 3;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
     this->actionFunc = func_80953F8C;
     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();
@@ -273,7 +273,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
 void func_809543D4(BgIngate* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 4) || (talkState == 5)) && Message_ShouldAdvance(play)) {
+    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;
@@ -364,7 +364,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         }
         this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

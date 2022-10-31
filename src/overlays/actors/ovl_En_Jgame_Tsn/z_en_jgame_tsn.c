@@ -36,7 +36,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play);
 s32 func_80C149B0(PlayState* play, EnJgameTsnStruct* arg1);
 s32 func_80C14BCC(EnJgameTsn* this, PlayState* play);
 
-const ActorInit En_Jgame_Tsn_InitVars = {
+ActorInit En_Jgame_Tsn_InitVars = {
     ACTOR_EN_JGAME_TSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -48,7 +48,7 @@ const ActorInit En_Jgame_Tsn_InitVars = {
     (ActorFunc)EnJgameTsn_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_tsn_Anim_0092FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
     { &object_tsn_Anim_000964, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
     { &object_tsn_Anim_001198, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
@@ -94,7 +94,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.velocity.y = 0.0f;
 
-    if (gSaveContext.save.entranceIndex == 0x68D0) {
+    if (gSaveContext.save.entrance == ENTRANCE(GREAT_BAY_COAST, 13)) {
         this->actor.flags |= ACTOR_FLAG_10000;
     }
 
@@ -112,7 +112,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     s32 i;
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1D8); i++) {
@@ -121,7 +121,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 
         path = &play->setupPathList[path->unk1];
         if (path == NULL) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -130,7 +130,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
 
     path = &play->setupPathList[path->unk1];
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_200.points = Lib_SegmentedToVirtual(path->points);
@@ -145,7 +145,7 @@ void EnJgameTsn_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80C13B74(EnJgameTsn* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80C13BB8;
 }
 
@@ -155,16 +155,16 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->actor.flags & ACTOR_FLAG_10000) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            if (gSaveContext.unk_3DE0[4] > 0) {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+            if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 Message_StartTextbox(play, 0x10A2, &this->actor);
                 this->unk_300 = 0x10A2;
             } else if (gSaveContext.minigameScore < 20) {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
                 Message_StartTextbox(play, 0x10A2, &this->actor);
                 this->unk_300 = 0x10A2;
             } else {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 Message_StartTextbox(play, 0x10A3, &this->actor);
                 this->unk_300 = 0x10A3;
             }
@@ -174,11 +174,11 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
             this->unk_300 = 0x1094;
         } else if (this->unk_2F8 == 0) {
             this->unk_2F8 = 1;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             Message_StartTextbox(play, 0x1095, &this->actor);
             this->unk_300 = 0x1095;
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             Message_StartTextbox(play, 0x1096, &this->actor);
             this->unk_300 = 0x1096;
         }
@@ -189,7 +189,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
         func_800B8614(&this->actor, play, 80.0f);
     }
 
-    if ((player->actor.bgCheckFlags & 1) && !(player->stateFlags1 & 0x2000) && (this->unk_2FE == 0) &&
+    if ((player->actor.bgCheckFlags & 1) && !(player->stateFlags1 & PLAYER_STATE1_2000) && (this->unk_2FE == 0) &&
         (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) && func_80C149B0(play, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
@@ -211,11 +211,11 @@ void func_80C13E90(EnJgameTsn* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if (((gSaveContext.save.time > CLOCK_TIME(4, 0)) && (gSaveContext.save.time < CLOCK_TIME(7, 0))) ||
             ((gSaveContext.save.time > CLOCK_TIME(16, 0)) && (gSaveContext.save.time < CLOCK_TIME(19, 0)))) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
             Message_StartTextbox(play, 0x1094, &this->actor);
             this->unk_300 = 0x1094;
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
             Message_StartTextbox(play, 0x1098, &this->actor);
             this->unk_300 = 0x1098;
         }
@@ -251,21 +251,21 @@ void func_80C14030(EnJgameTsn* this) {
 
 void func_80C14044(EnJgameTsn* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
+        case TEXT_STATE_NONE:
+        case TEXT_STATE_1:
+        case TEXT_STATE_CLOSING:
+        case TEXT_STATE_3:
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             func_80C14684(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             func_80C147B4(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                     ActorCutscene_Stop(this->actor.cutscene);
@@ -282,12 +282,12 @@ void func_80C14044(EnJgameTsn* this, PlayState* play) {
 void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     func_801A2BB8(0x25);
     play->interfaceCtx.unk_280 = 1;
     func_80112AFC(play);
     gSaveContext.save.weekEventReg[90] |= 0x20;
-    func_8010E9F0(4, 0x78);
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
     this->actionFunc = func_80C1418C;
 }
 
@@ -296,7 +296,7 @@ void func_80C1418C(EnJgameTsn* this, PlayState* play) {
 
     if (play->interfaceCtx.unk_280 == 8) {
         func_80C141DC(this);
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
     }
 }
 
@@ -335,27 +335,27 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
     this->unk_2FC++;
 
     if ((player->actor.bgCheckFlags & 2) && func_80C149B0(play, &this->unk_200)) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         Message_StartTextbox(play, 0x109F, &this->actor);
         this->unk_300 = 0x109F;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
     } else if ((player->actor.bgCheckFlags & 0x40) || (player->actor.bgCheckFlags & 0x20)) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         Message_StartTextbox(play, 0x10A0, &this->actor);
         this->unk_300 = 0x10A0;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
     }
 
-    if (gSaveContext.unk_3DE0[4] == 0) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
         Message_StartTextbox(play, 0x10A1, &this->actor);
         this->unk_300 = 0x10A1;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
@@ -367,10 +367,10 @@ void func_80C144E4(EnJgameTsn* this) {
 }
 
 void func_80C144F8(EnJgameTsn* this, PlayState* play) {
-    play->nextEntranceIndex = 0x68D0;
-    play->sceneLoadFlag = 0x14;
-    play->unk_1887F = 0x50;
-    gSaveContext.nextTransition = 3;
+    play->nextEntrance = ENTRANCE(GREAT_BAY_COAST, 13);
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_80;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
 }
 
 void func_80C14540(EnJgameTsn* this) {
@@ -412,12 +412,12 @@ void func_80C14684(EnJgameTsn* this, PlayState* play) {
                 this->unk_300 = 0x109E;
                 Rupees_ChangeBy(-20);
             } else {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 Message_StartTextbox(play, 0x109D, &this->actor);
                 this->unk_300 = 0x109D;
             }
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
             Message_StartTextbox(play, 0x109C, &this->actor);
             this->unk_300 = 0x109C;
         }
@@ -460,7 +460,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x109A:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
                 Message_StartTextbox(play, 0x109B, &this->actor);
                 this->unk_300 = 0x109B;
                 break;
@@ -479,7 +479,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
             case 0x10A1:
                 func_801477B4(play);
                 gSaveContext.minigameState = 3;
-                gSaveContext.unk_3DD0[4] = 5;
+                gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
                 gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
                 func_80C144E4(this);
                 break;

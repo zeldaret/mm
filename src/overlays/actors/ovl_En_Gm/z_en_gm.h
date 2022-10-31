@@ -33,7 +33,7 @@ typedef struct EnGm {
     /* 0x262 */ s8 unk_262;
     /* 0x264 */ s32* unk_264;
     /* 0x268 */ Actor* unk_268;
-    /* 0x26C */ UNK_TYPE1 unk26C[0xC];
+    /* 0x26C */ UNK_TYPE1 unk_26C[0xC];
     /* 0x278 */ Vec3f unk_278;
     /* 0x284 */ Vec3f unk_284;
     /* 0x290 */ Vec3f unk_290;
@@ -69,13 +69,11 @@ typedef struct EnGm {
     /* 0x3E4 */ EnGmUnkFunc unk_3E4;
     /* 0x3E8 */ s32 unk_3E8;
     /* 0x3EC */ UNK_TYPE1 unk3EC[0x4];
-    /* 0x3F0 */ s32 unk_3F0;
+    /* 0x3F0 */ s32 prevTalkState;
     /* 0x3F4 */ s32 unk_3F4;
     /* 0x3F8 */ s32 unk_3F8;
     /* 0x3FC */ s32 unk_3FC;
     /* 0x400 */ s32 unk_400;
 } EnGm; // size = 0x404
-
-extern const ActorInit En_Gm_InitVars;
 
 #endif // Z_EN_GM_H

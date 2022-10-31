@@ -24,7 +24,7 @@
 
 #define THIS ((EnDoor*)thisx)
 
-void EnDoor_Init(Actor* thisx, PlayState* play);
+void EnDoor_Init(Actor* thisx, PlayState* play2);
 void EnDoor_Destroy(Actor* thisx, PlayState* play);
 void EnDoor_Update(Actor* thisx, PlayState* play);
 void EnDoor_Draw(Actor* thisx, PlayState* play);
@@ -277,7 +277,7 @@ u8* D_8086778C[] = {
     D_80867734, D_8086773C, D_80867744, D_8086775C, D_80867778, D_8086777C, D_80867780, D_80867784,
 };
 
-const ActorInit En_Door_InitVars = {
+ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
     ACTORCAT_DOOR,
     FLAGS,
@@ -290,7 +290,7 @@ const ActorInit En_Door_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 dListIndex;
     /* 0x04 */ s16 objectId;
 } EnDoorInfo;
@@ -405,7 +405,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         objectInfo = &sObjInfo[17 + this->switchFlag];
     } else {
         for (i = 0; i < ARRAY_COUNT(sObjInfo) - 34; i++, objectInfo++) {
-            if (play->sceneNum == objectInfo->sceneNum) {
+            if (play->sceneId == objectInfo->sceneId) {
                 break;
             }
         }
@@ -420,7 +420,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         objectInfo = &sObjInfo[15];
         objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
         if (objectBankIndex != 0) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
     }
@@ -480,7 +480,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     if (this->unk_1A1 != 0) {
         this->actionFunc = func_80867144;
         Animation_PlayOnceSetSpeed(&this->skelAnime, sAnimations[this->animIndex],
-                                   (player->stateFlags1 & 0x8000000) ? 0.75f : 1.5f);
+                                   (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
             gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
             Flags_SetSwitch(play, this->switchFlag);
@@ -532,7 +532,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
-                    ScheduleResult sp30;
+                    ScheduleOutput sp30;
 
                     if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
                         this->dyna.actor.textId = sp30.result + 0x1800;

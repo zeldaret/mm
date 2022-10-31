@@ -2,10 +2,12 @@
  * File: z_en_dnq.c
  * Overlay: ovl_En_Dnq
  * Description: Deku King
+ *
+ * This actor's name is probably short for "Dekunuts Queen". This is likely a misnamed actor,
+ * since it uses assets from object_dno (probably short for "Dekunuts Ou (king)").
  */
 
 #include "z_en_dnq.h"
-#include "objects/object_dnq/object_dnq.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -23,11 +25,11 @@ static s32 D_80A53400[] = {
     0x0C0E089D, 0x0C0F089E, 0x0C111202, 0x100E089F, 0x0C100000, 0x0E08A10C, 0x0F08A20C, 0x10000000,
 };
 
-const ActorInit En_Dnq_InitVars = {
+ActorInit En_Dnq_InitVars = {
     ACTOR_EN_DNQ,
     ACTORCAT_NPC,
     FLAGS,
-    OBJECT_DNQ,
+    OBJECT_DNO,
     sizeof(EnDnq),
     (ActorFunc)EnDnq_Init,
     (ActorFunc)EnDnq_Destroy,
@@ -57,31 +59,32 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS D_80A5349C[] = {
-    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+static AnimationInfoS sAnimationInfo[] = {
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingSurpriseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingJumpedOnStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingJumpedOnLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingJumpedOnEndAnim, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingJumpedOnEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingLyingDownTwitchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingWailLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingWailStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingMarchAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingSpinScepterAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuKingIntimidateAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingPointScepterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingJumpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-void func_80A52530(PlayState* play, EnDnq* this) {
-    func_8013A530(play, &this->actor, 10, &this->actor.focus.pos, &this->actor.world.rot, 120.0f, 480.0f, 0x38E3);
+s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
+    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
+                                   480.0f, 0x38E3);
 }
 
 s32 func_80A5257C(EnDnq* this, s32 arg1) {
@@ -104,14 +107,14 @@ s32 func_80A5257C(EnDnq* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_398 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A5349C, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
     }
 
     return ret;
 }
 
 void func_80A52604(EnDnq* this, PlayState* play) {
-    Collider_UpdateCylinder(&this->actor, &this->collider);
+    Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
@@ -120,7 +123,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (!(this->unk_37C & 0x20)) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->picto.actor.flags &= ~ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
             this->unk_37C |= 0x20;
         }
@@ -128,7 +131,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->picto.actor.flags |= ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
             this->unk_37C &= ~0x20;
             SubS_UpdateFlags(&this->unk_37C, 3, 7);
@@ -196,10 +199,10 @@ s32 func_80A52944(EnDnq* this) {
     if (this->unk_386 == 0) {
         func_80A5257C(this, 12);
         this->unk_38C = 1;
-        this->actor.shape.rot.y = this->actor.world.rot.y;
+        this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
         this->unk_386 = 1;
         phi_v1 = this->unk_38C * 0x2000;
-        this->actor.shape.rot.y += phi_v1;
+        this->picto.actor.shape.rot.y += phi_v1;
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_386++;
         if (this->unk_386 >= 6) {
@@ -214,8 +217,8 @@ s32 func_80A52944(EnDnq* this) {
             func_80A5257C(this, 13);
             this->skelAnime.curFrame = 0.0f;
         }
-        this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.shape.rot.y += phi_v1;
+        this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
+        this->picto.actor.shape.rot.y += phi_v1;
     }
 
     this->unk_38A = 0;
@@ -233,7 +236,7 @@ s32 func_80A52A78(EnDnq* this, PlayState* play) {
         this->unk_388 = play->state.frames % 5;
     }
 
-    this->actor.shape.rot.y = this->actor.world.rot.y;
+    this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
     if (this->unk_38C != 0) {
         this->unk_38C--;
     }
@@ -256,7 +259,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->targetActor == &this->picto.actor)) {
         switch (temp) {
             case 0x89B:
                 func_80A5257C(this, 18);
@@ -300,9 +303,9 @@ void func_80A52C6C(EnDnq* this, PlayState* play) {
     Vec3f sp1C;
 
     Math_Vec3f_Copy(&sp1C, &player->actor.world.pos);
-    Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.world.rot.y, &sp34, &sp28);
+    Lib_Vec3f_TranslateAndRotateY(&this->picto.actor.world.pos, this->picto.actor.world.rot.y, &sp34, &sp28);
     Math_Vec3f_Copy(&this->unk_370, &sp28);
-    this->actor.xzDistToPlayer = Math_Vec3f_DistXZ(&sp28, &sp1C);
+    this->picto.actor.xzDistToPlayer = Math_Vec3f_DistXZ(&sp28, &sp1C);
 }
 
 s32* func_80A52CF8(EnDnq* this, PlayState* play) {
@@ -320,7 +323,7 @@ s32* func_80A52CF8(EnDnq* this, PlayState* play) {
 s32 func_80A52D44(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_37C & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if ((this->unk_37C & 7) && Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
         this->unk_380 = func_80A52CF8(this, play);
         this->actionFunc = func_80A52FB8;
@@ -332,7 +335,7 @@ s32 func_80A52D44(EnDnq* this, PlayState* play) {
 
 void func_80A52DC8(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+    s16 yaw = this->picto.actor.yawTowardsPlayer - this->picto.actor.world.rot.y;
 
     if (yaw <= 0x3800) {
         SubS_UpdateFlags(&this->unk_37C, 3, 7);
@@ -343,44 +346,44 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
         if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
-            (Message_GetState(&play->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
+            (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
             }
         }
 
-        this->unk_394 = this->actor.xzDistToPlayer;
+        this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
-        if (this->actor.xzDistToPlayer < this->unk_390) {
+        if (this->picto.actor.xzDistToPlayer < this->unk_390) {
             player->unk_B2B = 0x1A;
         }
 
-        this->actor.xzDistToPlayer = this->unk_394;
+        this->picto.actor.xzDistToPlayer = this->unk_394;
 
         if (gSaveContext.save.weekEventReg[83] & 8) {
             func_80A52A78(this, play);
         } else if (this->unk_3A4 == 0) {
-            Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
+            Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 3, 0x2AA8);
             func_80A526F8(this);
         } else {
             func_80A52944(this);
         }
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
+        Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 3, 0x2AA8);
         this->unk_390 = 70.0f;
     }
 }
 
 void func_80A52FB8(EnDnq* this, PlayState* play) {
-    s16 sp2E = this->actor.yawTowardsPlayer;
+    s16 sp2E = this->picto.actor.yawTowardsPlayer;
 
-    if (func_8010BF58(&this->actor, play, this->unk_380, NULL, &this->unk_1E0)) {
+    if (func_8010BF58(&this->picto.actor, play, this->unk_380, NULL, &this->unk_1E0)) {
         SubS_UpdateFlags(&this->unk_37C, 3, 7);
         this->unk_386 = 0;
         this->actionFunc = func_80A52DC8;
     } else {
-        Math_ApproachS(&this->actor.shape.rot.y, sp2E, 3, 0x2AA8);
+        Math_ApproachS(&this->picto.actor.shape.rot.y, sp2E, 3, 0x2AA8);
     }
 }
 
@@ -400,7 +403,7 @@ void func_80A53038(EnDnq* this, PlayState* play) {
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KINGNUTS_DAMAGE);
+            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
         if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&
@@ -408,21 +411,22 @@ void func_80A53038(EnDnq* this, PlayState* play) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, temp_v0);
     }
 }
 
 void EnDnq_Init(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable, 33);
+    ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
+                       DEKU_KING_LIMB_MAX);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    Actor_SetScale(&this->actor, 0.02f);
-    this->actor.targetMode = 1;
+    Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
+    Actor_SetScale(&this->picto.actor, 0.02f);
+    this->picto.actor.targetMode = 1;
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_UpdateFlags(&this->unk_37C, 3, 7);
@@ -431,7 +435,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     } else {
         this->unk_3A4 = 0;
     }
-    this->unk_144 = func_80A52530;
+    this->picto.validationFunc = EnDnq_ValidatePictograph;
     this->actionFunc = func_80A52DC8;
 }
 
@@ -451,13 +455,13 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
         func_80A52B68(this, play);
         SkelAnime_Update(&this->skelAnime);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-        this->unk_394 = this->actor.xzDistToPlayer;
+        Actor_UpdateBgCheckInfo(play, &this->picto.actor, 30.0f, 12.0f, 0.0f, 4);
+        this->unk_394 = this->picto.actor.xzDistToPlayer;
         func_80A52C6C(this, play);
-        func_8013C964(&this->actor, play, this->unk_390, fabsf(this->actor.playerHeightRel) + 1.0f, EXCH_ITEM_NONE,
-                      this->unk_37C & 7);
-        this->actor.xzDistToPlayer = this->unk_394;
-        Actor_SetFocus(&this->actor, 46.0f);
+        func_8013C964(&this->picto.actor, play, this->unk_390, fabsf(this->picto.actor.playerHeightRel) + 1.0f,
+                      PLAYER_AP_NONE, this->unk_37C & 7);
+        this->picto.actor.xzDistToPlayer = this->unk_394;
+        Actor_SetFocus(&this->picto.actor, 46.0f);
         func_80A52604(this, play);
     }
 }
@@ -467,5 +471,5 @@ void EnDnq_Draw(Actor* thisx, PlayState* play) {
 
     func_8012C28C(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
-                          NULL, &this->actor);
+                          NULL, &this->picto.actor);
 }

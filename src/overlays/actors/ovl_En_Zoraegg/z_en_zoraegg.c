@@ -38,7 +38,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play);
 void func_80B32C34(EnZoraegg* this, PlayState* play);
 void func_80B32D08(EnZoraegg* this, PlayState* play);
 
-const ActorInit En_Zoraegg_InitVars = {
+ActorInit En_Zoraegg_InitVars = {
     ACTOR_EN_ZORAEGG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -98,14 +98,14 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
     switch (ENZORAEGG_GET_1F(&this->actor)) {
         case ENZORAEGG_1F_00:
             if (Flags_GetSwitch(play, ENZORAEGG_GET_FE00(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENZORAEGG_1F_11:
             if (func_80B319A8(play) >= 7) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 this->actor.home.rot.z = 1;
                 return;
             }
@@ -119,7 +119,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_08:
         case ENZORAEGG_1F_09:
             if (gSaveContext.save.weekEventReg[19] & 0x40) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -132,7 +132,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_0F:
         case ENZORAEGG_1F_10:
             if (!(gSaveContext.save.weekEventReg[19] & 0x40)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -206,13 +206,13 @@ void EnZoraegg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B319A8(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 7;
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_80B319D0(PlayState* play, s32 arg1) {
     if ((arg1 < 8) && (arg1 >= 0)) {
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 &= ~7;
-        gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 |= arg1;
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 &= ~7;
+        gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 |= arg1;
     }
 }
 
@@ -326,7 +326,7 @@ void func_80B32084(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32094(EnZoraegg* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == 2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actionFunc = func_80B320E0;
     }
     func_80B31C40(this, play);
@@ -335,7 +335,7 @@ void func_80B32094(EnZoraegg* this, PlayState* play) {
 void func_80B320E0(EnZoraegg* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         Flags_SetSwitch(play, ENZORAEGG_GET_FE00(&this->actor));
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B32094;
         Message_StartTextbox(play, 0x24B, &this->actor);
@@ -406,7 +406,7 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
         if (temp_v0 != NULL) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, temp_v0);
             gSaveContext.eventInf[3] |= 8;
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if ((func_80B319A8(play) >= 7) &&
                (fabsf(player->actor.world.pos.x - this->actor.world.pos.x) < (100.0f * this->actor.scale.x)) &&
@@ -571,7 +571,7 @@ void func_80B32B3C(EnZoraegg* this, PlayState* play) {
 void func_80B32B70(EnZoraegg* this, PlayState* play) {
     func_80B31C40(this, play);
     if (Cutscene_CheckActorAction(play, 0x1C9)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -584,7 +584,7 @@ void func_80B32BB8(EnZoraegg* this, PlayState* play) {
     }
 
     if (Cutscene_CheckActorAction(play, 0x1C9)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

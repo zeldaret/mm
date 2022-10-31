@@ -35,7 +35,7 @@ s32 func_808F99B0(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99C4(EnHorseGameCheck* this, PlayState* play);
 s32 func_808F99D8(EnHorseGameCheck* this, PlayState* play);
 
-const ActorInit En_Horse_Game_Check_InitVars = {
+ActorInit En_Horse_Game_Check_InitVars = {
     ACTOR_EN_HORSE_GAME_CHECK,
     ACTORCAT_BG,
     FLAGS,
@@ -60,7 +60,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
@@ -109,71 +109,71 @@ s32 func_808F8C70(EnHorseGameCheck* this, PlayState* play) {
 s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     PlayState* play = play2;
     s32 pad;
-    Vec3f sp4C = { -1262.0f, 15.0f, 780.0f };
-    Vec3f sp40 = { -1262.0f, -26.0f, 470.0f };
+    Vec3f mainCamEye = { -1262.0f, 15.0f, 780.0f };
+    Vec3f mainCamAt = { -1262.0f, -26.0f, 470.0f };
 
     this->unk_164 = 0;
     this->unk_168 = 0;
     this->unk_174 = 0;
 
     if (GET_RACE_FLAGS != RACE_FLAG_START) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return false;
     }
 
-    func_8010E9F0(4, 0);
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
     play->interfaceCtx.unk_280 = 1;
 
-    this->horse1 =
-        (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x2004);
+    this->horse1 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1149.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
+                                         ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_4));
     if (this->horse1 == NULL) {
         __assert("../z_en_horse_game_check.c", 1517);
     }
 
-    this->horse2 =
-        (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0, 0x7FFF, 0, 0x2005);
+    this->horse2 = (EnHorse*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_HORSE, -1376.0f, -106.0f, 470.0f, 0, 0x7FFF, 0,
+                                         ENHORSE_PARAMS(ENHORSE_PARAM_BANDIT, ENHORSE_5));
     if (this->horse2 == NULL) {
         __assert("../z_en_horse_game_check.c", 1526);
     }
 
     this->unk_17C = -1;
     Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_FREE0);
-    Play_CameraSetAtEye(play, 0, &sp40, &sp4C);
-    Play_CameraSetFov(play, 0, 45.0f);
+    Play_SetCameraAtEye(play, CAM_ID_MAIN, &mainCamAt, &mainCamEye);
+    Play_SetCameraFov(play, CAM_ID_MAIN, 45.0f);
     func_800FE484();
     return false;
 }
 
 s32 func_808F8E94(EnHorseGameCheck* this, PlayState* play) {
-    gSaveContext.unk_3DD0[4] = 0;
+    gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     return true;
 }
 
 s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->nextEntranceIndex == 0xCE20) {
+    if (play->nextEntrance == ENTRANCE(GORMAN_TRACK, 2)) {
         return false;
     }
 
     if (GET_RACE_FLAGS == RACE_FLAG_3) {
-        play->unk_1887F = 0x40;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = TRANS_TYPE_64;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     } else if (GET_RACE_FLAGS == RACE_FLAG_2) {
-        play->unk_1887F = 0x50;
-        gSaveContext.nextTransition = 3;
+        play->transitionType = TRANS_TYPE_80;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
     } else if (GET_RACE_FLAGS == RACE_FLAG_4) {
         SET_RACE_FLAGS(RACE_FLAG_3);
-        play->unk_1887F = 2;
-        gSaveContext.nextTransition = 2;
+        play->transitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_02;
     }
 
     D_801BDA9C = 0;
-    if (player->stateFlags1 & 0x800000) {
+    if (player->stateFlags1 & PLAYER_STATE1_800000) {
         D_801BDAA0 = 1;
     }
-    play->nextEntranceIndex = 0xCE20;
-    play->sceneLoadFlag = 0x14;
+    play->nextEntrance = ENTRANCE(GORMAN_TRACK, 2);
+    play->transitionTrigger = TRANS_TRIGGER_START;
     return false;
 }
 
@@ -247,11 +247,11 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         return true;
     }
 
-    if (gSaveContext.unk_3DE0[4] >= 0x4650) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(180)) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
-        gSaveContext.unk_3DD0[4] = 6;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_RACE_FLAGS(RACE_FLAG_4);
         this->unk_174 = 60;
     }
@@ -284,7 +284,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x40000;
-        gSaveContext.unk_3DD0[4] = 6;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_RACE_FLAGS(RACE_FLAG_3);
         this->unk_174 = 60;
     }
@@ -317,7 +317,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x02000000;
-        gSaveContext.unk_3DD0[4] = 6;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_RACE_FLAGS(RACE_FLAG_3);
         this->unk_174 = 60;
     }
@@ -346,7 +346,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, PlayState* play) {
         Audio_QueueSeqCmd(0x8041);
         play_sound(NA_SE_SY_START_SHOT);
         this->unk_164 |= 0x800;
-        gSaveContext.unk_3DD0[4] = 6;
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         SET_RACE_FLAGS(RACE_FLAG_2);
         this->unk_174 = 60;
     }

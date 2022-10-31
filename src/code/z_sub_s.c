@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return NULL;
@@ -480,13 +480,13 @@ void SubS_TimePathing_ComputeInitialY(PlayState* play, Path* path, s32 waypoint,
     }
 }
 
-Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 max) {
+Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
     Path* path;
     s32 i = 0;
 
     do {
         path = &play->setupPathList[pathIndex];
-        if (i >= max) {
+        if (i >= limit) {
             break;
         }
         pathIndex = path->unk1;
@@ -531,24 +531,24 @@ Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s1
     return closestActor;
 }
 
-s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     s32 endFrame;
     s32 startFrame;
 
-    animations += index;
-    endFrame = animations->frameCount;
-    if (animations->frameCount < 0) {
-        endFrame = Animation_GetLastFrame(&animations->animation->common);
+    animationInfo += animIndex;
+    endFrame = animationInfo->frameCount;
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
-    startFrame = animations->startFrame;
+    startFrame = animationInfo->startFrame;
     if (startFrame >= endFrame || startFrame < 0) {
         return false;
     }
-    if (animations->playSpeed < 0.0f) {
+    if (animationInfo->playSpeed < 0.0f) {
         SWAP(s32, endFrame, startFrame);
     }
-    Animation_Change(skelAnime, animations->animation, animations->playSpeed, startFrame, endFrame, animations->mode,
-                     animations->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
     return true;
 }
 
@@ -830,43 +830,52 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             xzRange = actor->xzDistToPlayer + 1.0f;
             ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
             break;
+
         case 2:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 3:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 4:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
-            actor->flags |= 0x10000;
+            actor->flags |= ACTOR_FLAG_10000;
             ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
+
         case 5:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
-                actor->flags |= 0x10000;
+                actor->flags |= ACTOR_FLAG_10000;
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 6:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                actor->flags |= 0x10000;
+                actor->flags |= ACTOR_FLAG_10000;
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
+        default:
+            break;
     }
+
     return ret;
 }
 
@@ -1348,21 +1357,21 @@ s32 SubS_ActorPathing_SetNextPoint(PlayState* play, ActorPathing* actorPath) {
     return reupdate;
 }
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
-                                     s32* curIndex) {
-    AnimationSpeedInfo* animation = &animations[nextIndex];
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex,
+                                     s32* curAnimIndex) {
+    AnimationSpeedInfo* animation = &animationInfo[nextAnimIndex];
     f32 startFrame = skelAnime->curFrame;
     f32 endFrame;
     f32 morphFrames;
 
-    if ((*curIndex < 0) || (nextIndex == *curIndex)) {
+    if ((*curAnimIndex < 0) || (nextAnimIndex == *curAnimIndex)) {
         morphFrames = 0.0f;
-        if (*curIndex < 0) {
+        if (*curAnimIndex < 0) {
             startFrame = 0.0f;
         }
     } else {
         morphFrames = animation->morphFrames;
-        if (nextIndex != *curIndex) {
+        if (nextAnimIndex != *curAnimIndex) {
             startFrame = 0.0f;
         }
     }
@@ -1374,7 +1383,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     }
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, startFrame, endFrame, animation->mode,
                      morphFrames);
-    *curIndex = nextIndex;
+    *curAnimIndex = nextAnimIndex;
 }
 
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {

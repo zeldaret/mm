@@ -58,14 +58,14 @@ void Room_DrawType1Mesh(PlayState* play, Room* room, u32 flags) {
     } else if (mesh->format == 2) {
         func_8012E32C(play, room, flags);
     } else {
-        __assert("../z_room.c", 0x3c5);
+        __assert("../z_room.c", 965);
     }
 }
 
 void Room_Init(PlayState* play, RoomContext* roomCtx) {
     s32 i;
-    roomCtx->currRoom.num = -1;
-    roomCtx->currRoom.segment = NULL;
+    roomCtx->curRoom.num = -1;
+    roomCtx->curRoom.segment = NULL;
     roomCtx->unk78 = 1;
     roomCtx->unk79 = 0;
     for (i = 0; i < 3; i++) {
@@ -79,15 +79,14 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
     if (roomCtx->unk31 == 0) {
         s32 size;
 
-        roomCtx->prevRoom = roomCtx->currRoom;
-        roomCtx->currRoom.num = index;
-        roomCtx->currRoom.segment = NULL;
+        roomCtx->prevRoom = roomCtx->curRoom;
+        roomCtx->curRoom.num = index;
+        roomCtx->curRoom.segment = NULL;
         roomCtx->unk31 = 1;
 
         size = play->roomList[index].vromEnd - play->roomList[index].vromStart;
-        roomCtx->activeRoomVram =
-            (void*)(((s32)roomCtx->roomMemPages[roomCtx->activeMemPage] - (size + 8) * roomCtx->activeMemPage + 8) &
-                    0xfffffff0);
+        roomCtx->activeRoomVram = (void*)(ALIGN16((u32)roomCtx->roomMemPages[roomCtx->activeMemPage] -
+                                                  (size + 8) * roomCtx->activeMemPage - 7));
 
         osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
         DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
@@ -104,17 +103,16 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
     if (roomCtx->unk31 == 1) {
         if (!osRecvMesg(&roomCtx->loadQueue, NULL, OS_MESG_NOBLOCK)) {
             roomCtx->unk31 = 0;
-            roomCtx->currRoom.segment = roomCtx->activeRoomVram;
+            roomCtx->curRoom.segment = roomCtx->activeRoomVram;
             // TODO: Segment number enum
-            gSegments[0x03] = PHYSICAL_TO_VIRTUAL(roomCtx->activeRoomVram);
+            gSegments[0x03] = VIRTUAL_TO_PHYSICAL(roomCtx->activeRoomVram);
 
-            Scene_ProcessHeader(play, (SceneCmd*)roomCtx->currRoom.segment);
+            Scene_ProcessHeader(play, (SceneCmd*)roomCtx->curRoom.segment);
             func_80123140(play, GET_PLAYER(play));
             Actor_SpawnTransitionActors(play, &play->actorCtx);
 
-            if (((play->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
-                (play->sceneNum != SCENE_IKNINSIDE)) {
-                play->envCtx.lightSettingOverride = 0xff;
+            if (((play->sceneId != SCENE_IKANA) || (roomCtx->curRoom.num != 1)) && (play->sceneId != SCENE_IKNINSIDE)) {
+                play->envCtx.lightSettingOverride = 0xFF;
                 play->envCtx.unk_E0 = 0;
             }
             func_800FEAB0();
@@ -132,7 +130,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {
         // TODO: Segment number enum
-        gSegments[0x03] = PHYSICAL_TO_VIRTUAL(room->segment);
+        gSegments[0x03] = VIRTUAL_TO_PHYSICAL(room->segment);
         roomDrawFuncs[room->mesh->type0.type](play, room, flags);
     }
     return;
@@ -143,9 +141,9 @@ void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
     roomCtx->prevRoom.segment = NULL;
     func_800BA798(play, &play->actorCtx);
     Actor_SpawnTransitionActors(play, &play->actorCtx);
-    if (-1 < roomCtx->currRoom.num) {
-        Map_InitRoomData(play, roomCtx->currRoom.num);
+    if (roomCtx->curRoom.num > -1) {
+        Map_InitRoomData(play, roomCtx->curRoom.num);
         Minimap_SavePlayerRoomInitInfo(play);
     }
-    func_801A3CD8(play->roomCtx.currRoom.echo);
+    func_801A3CD8(play->roomCtx.curRoom.echo);
 }

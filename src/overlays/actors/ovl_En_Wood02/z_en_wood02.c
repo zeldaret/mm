@@ -13,7 +13,7 @@
 
 void EnWood02_Init(Actor* thisx, PlayState* play);
 void EnWood02_Destroy(Actor* thisx, PlayState* play);
-void EnWood02_Update(Actor* thisx, PlayState* play);
+void EnWood02_Update(Actor* thisx, PlayState* play2);
 void EnWood02_Draw(Actor* thisx, PlayState* play);
 
 /**
@@ -38,7 +38,7 @@ typedef enum {
 static f32 sSpawnCos;
 static f32 sSpawnSin;
 
-const ActorInit En_Wood02_InitVars = {
+ActorInit En_Wood02_InitVars = {
     ACTOR_EN_WOOD02,
     ACTORCAT_PROP,
     FLAGS,
@@ -312,7 +312,7 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         if (floorY > BGCHECK_Y_MIN) {
             this->actor.world.pos.y = floorY;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -364,7 +364,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
 
     // Despawn extra trees in a group if out of range
     if ((this->spawnType == WOOD_SPAWN_SPAWNED) && (thisx->parent != NULL)) {
-        if (!(thisx->flags & 0x40) && (this->unk_151 != 2)) {
+        if (!(thisx->flags & ACTOR_FLAG_40) && (this->unk_151 != 2)) {
             s32 index = this->unk_14A[0];
             s32 phi_v0 = 0;
 
@@ -374,7 +374,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
 
             ((EnWood02*)thisx->parent)->unk_14A[index] = phi_v0;
 
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
         this->unk_151 = 0;
@@ -449,7 +449,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
         thisx->shape.rot.z = Math_SinS(this->unk_146 * 0xBB8) * 16384.0f;
         this->unk_14A[0]--;
         if (this->unk_14A[0] == 0) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     }
 

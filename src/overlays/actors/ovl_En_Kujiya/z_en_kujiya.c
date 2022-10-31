@@ -34,7 +34,7 @@ void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play);
 void EnKujiya_SetupTurnToClosed(EnKujiya* this);
 void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play);
 
-const ActorInit En_Kujiya_InitVars = {
+ActorInit En_Kujiya_InitVars = {
     ACTOR_EN_KUJIYA,
     ACTORCAT_NPC,
     FLAGS,
@@ -183,24 +183,24 @@ void EnKujiya_SetupTalk(EnKujiya* this) {
 
 void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
-        case 0:
+        case TEXT_STATE_NONE:
             break;
 
-        case 4:
+        case TEXT_STATE_CHOICE:
             EnKujiya_HandlePlayerChoice(this, play);
             break;
 
-        case 5:
+        case TEXT_STATE_5:
             EnKujiya_ChooseNextDialogue(this, play);
             break;
 
-        case 6:
+        case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 EnKujiya_SetupWait(this);
             }
             break;
 
-        case 17:
+        case TEXT_STATE_17:
             if (Message_ShouldAdvance(play)) {
                 Inventory_SaveLotteryCodeGuess(play);
                 Message_StartTextbox(play, 0x2B60, &this->actor);
@@ -227,7 +227,7 @@ void EnKujiya_SetupFinishGivePrize(EnKujiya* this) {
 }
 
 void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 6) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         EnKujiya_SetupWait(this);
     }
 }

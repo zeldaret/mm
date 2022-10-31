@@ -27,7 +27,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-const ActorInit En_Guruguru_InitVars = {
+ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
     ACTORCAT_NPC,
     FLAGS,
@@ -62,9 +62,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BC79CC[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
-static u8 D_80BC79D4[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
-static f32 D_80BC79D8[] = { 1.0f, 1.0f };
+static AnimationHeader* sAnimations[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static f32 sPlaySpeeds[] = { 1.0f, 1.0f };
 static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
 static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
 
@@ -88,12 +88,12 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->actor.params == 1) {
         func_80BC6E10(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -105,17 +105,17 @@ void EnGuruguru_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnGuruguru_ChangeAnimation(EnGuruguru* this, s32 arg1) {
-    this->frameCount = Animation_GetLastFrame(D_80BC79CC[arg1]);
-    Animation_Change(&this->skelAnime, D_80BC79CC[arg1], D_80BC79D8[arg1], 0.0f, this->frameCount, D_80BC79D4[arg1],
-                     -4.0f);
+void EnGuruguru_ChangeAnim(EnGuruguru* this, s32 animIndex) {
+    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], sPlaySpeeds[animIndex], 0.0f, this->frameCount,
+                     sAnimationModes[animIndex], -4.0f);
 }
 
 void EnGuruguru_DoNothing(EnGuruguru* this, PlayState* play) {
 }
 
 void func_80BC6E10(EnGuruguru* this) {
-    EnGuruguru_ChangeAnimation(this, 0);
+    EnGuruguru_ChangeAnim(this, 0);
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
@@ -191,7 +191,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     } else if (this->unusedTimer == 0) {
         this->unusedTimer = 6;
-        if (Message_GetState(&play->msgCtx) != 5) {
+        if (Message_GetState(&play->msgCtx) != TEXT_STATE_5) {
             if (this->unk266 == 0) {
                 if (this->headZRotTarget != 0) {
                     this->headZRotTarget = 0;
@@ -207,7 +207,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             }
         }
     }
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
@@ -295,7 +295,7 @@ void func_80BC7440(EnGuruguru* this, PlayState* play) {
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
         this->unk268 = 0;
         gSaveContext.save.weekEventReg[38] |= 0x40;
         this->actionFunc = func_80BC7520;
@@ -309,7 +309,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
     }
 }
 
@@ -321,11 +321,11 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
 
     if (!gSaveContext.save.isNight) {
         if (this->actor.params == 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->actor.params == 0 || this->actor.params == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

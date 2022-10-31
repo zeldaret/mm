@@ -19,6 +19,4 @@ typedef struct MirRay3 {
     /* 0x260 */ f32 unk_260;
 } MirRay3; // size = 0x264
 
-extern const ActorInit Mir_Ray3_InitVars;
-
 #endif // Z_MIR_RAY3_H

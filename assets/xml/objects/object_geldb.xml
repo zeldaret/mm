@@ -71,7 +71,7 @@
         <Limb Name="object_geldb_Standardlimb_00A788" Type="Standard" EnumName="OBJECT_GELDB_LIMB_15" Offset="0xA788" />
         <Limb Name="object_geldb_Standardlimb_00A794" Type="Standard" EnumName="OBJECT_GELDB_LIMB_16" Offset="0xA794" />
         <Limb Name="object_geldb_Standardlimb_00A7A0" Type="Standard" EnumName="OBJECT_GELDB_LIMB_17" Offset="0xA7A0" />
-        <Skeleton Name="object_geldb_Skel_00A808" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GELDB_LIMB_NONE" LimbMax="OBJECT_GELDB_LIMB_MAX" EnumName="object_geldb_Limbs" Offset="0xA808" />
+        <Skeleton Name="object_geldb_Skel_00A808" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GELDB_LIMB_NONE" LimbMax="OBJECT_GELDB_LIMB_MAX" EnumName="ObjectGeldbLimb" Offset="0xA808" />
         <Animation Name="object_geldb_Anim_00AA8C" Offset="0xAA8C" />
         <Animation Name="object_geldb_Anim_00B0E4" Offset="0xB0E4" />
     </File>

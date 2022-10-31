@@ -23,7 +23,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 s32 unused; // Needed for bss
 
-const ActorInit Arrow_Ice_InitVars = {
+ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -57,7 +57,7 @@ void ArrowIce_Init(Actor* thisx, PlayState* play) {
 }
 
 void ArrowIce_Destroy(Actor* thisx, PlayState* play) {
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
@@ -65,7 +65,7 @@ void ArrowIce_Charge(ArrowIce* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -136,7 +136,7 @@ void ArrowIce_Hit(ArrowIce* this, PlayState* play) {
 
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -146,7 +146,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     s32 pad;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     // copy position and rotation from arrow
@@ -166,7 +166,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
         this->alpha = 255;
     } else if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->alpha -= 25;
         }
@@ -177,7 +177,7 @@ void ArrowIce_Update(Actor* thisx, PlayState* play) {
     ArrowIce* this = THIS;
 
     if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     } else {
         this->actionFunc(this, play);

@@ -51,9 +51,9 @@ typedef struct EnTest7 {
     /* 0x1E54 */ s32 unk_1E54;
     /* 0x1E58 */ EnTest7UnkFunc unk_1E58;
     /* 0x1E5C */ EnTest7ActionFunc actionFunc;
-    /* 0x1E60 */ Vec3f unk_1E60;
-    /* 0x1E6C */ Vec3f unk_1E6C;
-    /* 0x1E78 */ f32 unk_1E78;
+    /* 0x1E60 */ Vec3f subCamEye;
+    /* 0x1E6C */ Vec3f subCamAt;
+    /* 0x1E78 */ f32 subCamFov;
     /* 0x1E7C */ LightNode* lightNode;
     /* 0x1E80 */ LightInfo lightInfo;
     /* 0x1E8E */ s16 unk_1E8E;
@@ -61,7 +61,5 @@ typedef struct EnTest7 {
     /* 0x1E94 */ f32 unk_1E94;
     /* 0x1E98 */ EnTest7UnkDrawFunc unk_1E98;
 } EnTest7; // size = 0x1E9C
-
-extern const ActorInit En_Test7_InitVars;
 
 #endif // Z_EN_TEST7_H

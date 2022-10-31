@@ -24,7 +24,7 @@ void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
-const ActorInit En_Ending_Hero6_InitVars = {
+ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
     ACTORCAT_NPC,
     FLAGS,
@@ -37,9 +37,9 @@ const ActorInit En_Ending_Hero6_InitVars = {
 };
 
 static FlexSkeletonHeader* sSkeletons[] = {
-    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150,
-    &gSoldierSkeleton,         &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
-    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150, &gSoldierSkel,
+    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+    &object_daiku_Skel_00A850,
 };
 
 static AnimationHeader* sAnimations[] = {

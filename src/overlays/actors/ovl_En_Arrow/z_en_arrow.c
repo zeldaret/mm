@@ -22,7 +22,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play);
 void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
-const ActorInit En_Arrow_InitVars = {
+ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -135,11 +135,11 @@ void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyQuad(play, &this->collider);
 
     if ((this->unk_264 != NULL) && (this->unk_264->update != NULL)) {
-        this->unk_264->flags &= ~0x8000;
+        this->unk_264->flags &= ~ACTOR_FLAG_8000;
     }
 
     if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6) && (this->actor.child == NULL)) {
-        func_80115D5C(&play->state);
+        Magic_Reset(play);
     }
 }
 
@@ -162,15 +162,15 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             this->bubble.unk_148++;
             if (this->bubble.unk_148 > 20) {
                 this->actionFunc = func_8088ACE0;
-                func_80115D5C(&play->state);
+                Magic_Reset(play);
             }
         }
     } else {
         if ((this->actor.params != ENARROW_8) && (player->unk_D57 == 0)) {
             if (this->actor.params == ENARROW_7) {
-                func_80115D5C(&play->state);
+                Magic_Reset(play);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -202,7 +202,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             this->bubble.unk_144 = CLAMP_MIN(this->bubble.unk_144, 3.5f);
             func_8088A514(this);
             this->unk_260 = 99;
-            func_80115D5C(&play->state);
+            Magic_Reset(play);
         } else if (this->actor.params >= ENARROW_6) {
             if ((this->actor.params == ENARROW_8) && (this->actor.world.rot.x < 0)) {
                 Actor_SetScale(&this->actor, 0.009f);
@@ -298,7 +298,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
         if ((this->actor.params == ENARROW_4) || (this->actor.params == ENARROW_3)) {
             if ((this->actor.params == ENARROW_4) && (func_8088B6B0 != this->actionFunc)) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BG_ICEFLOE, sp44.x, sp44.y, sp44.z, 0, 0, 0, 300);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -306,18 +306,15 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
             this->collider.info.toucher.dmgFlags = 0x20;
 
             if (this->actor.child != NULL) {
-                Actor_MarkForDeath(this->actor.child);
+                Actor_Kill(this->actor.child);
                 return;
             }
 
-            func_80115D5C(&play->state);
+            Magic_Reset(play);
         }
     }
 }
 
-#ifdef NON_MATCHING
-// Stack. Scoped variable required to fix code gen at the bottom, likely sp60/54 there,
-// but sp50 must be declared below those so maybe not?
 void func_8088ACE0(EnArrow* this, PlayState* play) {
     CollisionPoly* spAC;
     s32 spA8;
@@ -329,8 +326,6 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
     f32 sp78;
     f32 sp74;
     f32 temp_f12_2;
-    Vec3f sp60;
-    Vec3f sp54;
     s32 sp50;
 
     if ((DECR(this->unk_260) == 0) ||
@@ -362,7 +357,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 EffectSs_Spawn(play, EFFECT_SS_SBN, 128, &sp84);
             }
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -387,18 +382,19 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             }
             EffectSsStone1_Spawn(play, &this->actor.world.pos, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sp82);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             EffectSsHitmark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
 
             if (sp50 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
 
-                if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) && (sp7C->flags & 0x4000)) {
+                if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&
+                    (sp7C->flags & ACTOR_FLAG_4000)) {
                     this->unk_264 = sp7C;
                     func_8088A894(this, play);
                     Math_Vec3f_Diff(&sp7C->world.pos, &this->actor.world.pos, &this->unk_268);
-                    sp7C->flags |= 0x8000;
+                    sp7C->flags |= ACTOR_FLAG_8000;
                     this->collider.base.atFlags &= ~AT_HIT;
                     this->actor.speedXZ *= 0.5f;
                     this->actor.velocity.y *= 0.5f;
@@ -470,9 +466,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             Actor_MoveWithGravity(&this->actor);
         }
 
-        this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp9C,
-                                                   &this->actor.wallPoly, true, true, true, true, &spA8);
-        if (this->unk_262 != 0) {
+        if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
+                                                        &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8))) {
             func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
             this->actor.wallBgId = spA8;
@@ -485,7 +480,8 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
     if (this->unk_264 != NULL) {
         if (this->unk_264->update != NULL) {
-            s32 pad;
+            Vec3f sp60;
+            Vec3f sp54;
 
             Math_Vec3f_Sum(&this->unk_228, &this->unk_268, &sp60);
             Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &sp54);
@@ -496,14 +492,14 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 this->unk_264->world.pos.z = ((sp54.z <= sp9C.z) ? 1.0f : -1.0f) + sp9C.z;
 
                 Math_Vec3f_Diff(&this->unk_264->world.pos, &this->actor.world.pos, &this->unk_268);
-                this->unk_264->flags &= ~0x8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_8000;
                 this->unk_264 = NULL;
             } else {
                 Math_Vec3f_Sum(&this->actor.world.pos, &this->unk_268, &this->unk_264->world.pos);
             }
 
             if ((this->unk_262 != 0) && (this->unk_264 != NULL)) {
-                this->unk_264->flags &= ~0x8000;
+                this->unk_264->flags &= ~ACTOR_FLAG_8000;
                 this->unk_264 = NULL;
             }
         } else {
@@ -511,9 +507,6 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Arrow/func_8088ACE0.s")
-#endif
 
 void func_8088B630(EnArrow* this, PlayState* play) {
     SkelAnime_Update(&this->arrow.skelAnime);
@@ -523,7 +516,7 @@ void func_8088B630(EnArrow* this, PlayState* play) {
     }
 
     if (DECR(this->unk_260) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -533,7 +526,7 @@ void func_8088B6B0(EnArrow* this, PlayState* play) {
     func_8088AA98(this, play);
 
     if (DECR(this->unk_260) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -588,7 +581,7 @@ void func_8088B88C(PlayState* play, EnArrow* this, EnArrowUnkStruct* arg2) {
         Matrix_MultVec3f(&sp4C[1], &sp34);
         if (this->actor.params < ENARROW_8) {
             sp30 = this->actor.params < ENARROW_6;
-            if (this->unk_264 == 0) {
+            if (this->unk_264 == NULL) {
                 sp30 &= func_80126440(play, &this->collider, &this->unk_244, &sp40, &sp34);
             } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) &&
                        (sp40.z == this->unk_244.tip.z) && (sp34.x == this->unk_244.base.x) &&

@@ -28,6 +28,4 @@ typedef struct EnTest {
     /* 0x20C */ EnTestStruct unk_20C[20];
 } EnTest; // size = 0x6BC
 
-extern const ActorInit En_Test_InitVars;
-
 #endif // Z_EN_TEST_H

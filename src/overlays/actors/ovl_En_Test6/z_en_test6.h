@@ -34,9 +34,9 @@ typedef struct EnTest6 {
     /* 0x18C */ DbCameraUnkStruct unk_18C;
     /* 0x20C */ Vec3f unk_20C[6];
     /* 0x254 */ Vec3f (*unk_254)[64];
-    /* 0x258 */ Vec3f unk_258;
-    /* 0x264 */ Vec3f unk_264;
-    /* 0x270 */ f32 unk_270;
+    /* 0x258 */ Vec3f subCamAt;
+    /* 0x264 */ Vec3f subCamEye;
+    /* 0x270 */ f32 subCamFov;
     /* 0x274 */ s16 unk_274;
     /* 0x276 */ s16 unk_276;
     /* 0x278 */ s16 unk_278;
@@ -45,10 +45,8 @@ typedef struct EnTest6 {
     /* 0x27E */ s16 unk_27E;
     /* 0x280 */ s16 unk_280;
     /* 0x282 */ s16 unk_282;
-    /* 0x284 */ s16 unk_284;
+    /* 0x284 */ s16 subCamId;
     /* 0x286 */ s16 unk_286;
 } EnTest6; // size = 0x288
-
-extern const ActorInit En_Test6_InitVars;
 
 #endif // Z_EN_TEST6_H

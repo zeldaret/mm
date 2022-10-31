@@ -62,7 +62,7 @@ typedef struct {
 
 EnFallDebrisEffect debrisEffects[EN_FALL_DEBRIS_EFFECT_COUNT];
 
-const ActorInit En_Fall_InitVars = {
+ActorInit En_Fall_InitVars = {
     ACTOR_EN_FALL,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -178,7 +178,7 @@ void EnFall_Init(Actor* thisx, PlayState* play) {
     }
 
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->objIndex = objectIndex;
@@ -221,7 +221,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 if (!(gSaveContext.save.weekEventReg[25] & 2)) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 break;
 
@@ -230,7 +230,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
                 if (gSaveContext.save.weekEventReg[25] & 2) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 break;
 
@@ -279,13 +279,13 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actor.draw = NULL;
                 this->actionFunc = EnFall_MoonsTear_Fall;
                 Actor_SetScale(&this->actor, 0.02f);
-                if (!(play->actorCtx.unk5 & 2)) {
-                    Actor_MarkForDeath(&this->actor);
+                if (!(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+                    Actor_Kill(&this->actor);
                 }
                 moon = EnFall_MoonsTear_GetTerminaFieldMoon(play);
                 this->actor.child = moon;
                 if (moon == NULL) {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
                 break;
 
@@ -315,7 +315,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
 void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
     static s32 sGiantsCutsceneState = 0;
 
-    if (play->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 1 && play->csCtx.currentCsIndex == 0) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
         switch (sGiantsCutsceneState) {
             case 0:
                 if (play->csCtx.state != 0) {
@@ -324,7 +324,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                 break;
 
             case 2:
-                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+                if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                     if (gSaveContext.save.weekEventReg[93] & 4) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
@@ -341,11 +341,11 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                         ActorCutscene_SetIntentToPlay(0xB);
                     }
                 } else if (play->csCtx.frames > 1600) {
-                    play->nextEntranceIndex = 0x2C00;
+                    play->nextEntrance = ENTRANCE(CLOCK_TOWER_ROOFTOP, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
-                    play->sceneLoadFlag = 0x14;
-                    play->unk_1887F = 2;
-                    gSaveContext.nextTransition = 2;
+                    play->transitionTrigger = TRANS_TRIGGER_START;
+                    play->transitionType = TRANS_TYPE_02;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_02;
                     sGiantsCutsceneState = 9;
                 }
                 break;
@@ -408,7 +408,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
         }
     }
 
-    if (play->sceneNum == SCENE_OKUJOU && gSaveContext.sceneSetupIndex == 2) {
+    if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneLayer == 2)) {
         switch (play->csCtx.currentCsIndex) {
             case 0:
                 switch (play->csCtx.frames) {
@@ -452,7 +452,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
 }
 
 void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
-    if (play->csCtx.state != 0 && play->sceneNum == SCENE_OKUJOU) {
+    if (play->csCtx.state != 0 && play->sceneId == SCENE_OKUJOU) {
         func_800B9010(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
     }
 }
@@ -574,7 +574,7 @@ void EnFall_Fireball_SetPerVertexAlpha(f32 fireballAlpha) {
 void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
 
-    if (play->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && play->csCtx.currentCsIndex == 2) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 2)) {
         play->skyboxCtx.rotY -= 0.05f;
     }
 

@@ -122,7 +122,7 @@ static DamageTable D_80B8AB3C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-const ActorInit En_Kaizoku_InitVars = {
+ActorInit En_Kaizoku_InitVars = {
     ACTOR_EN_KAIZOKU,
     ACTORCAT_ENEMY,
     FLAGS,

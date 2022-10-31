@@ -50,14 +50,12 @@ typedef struct EnPm {
     /* 0x37C */ EnPmFunc unk_37C;
     /* 0x380 */ s32 unk_380;
     /* 0x384 */ s32 unk_384;
-    /* 0x388 */ s32 unk_388;
+    /* 0x388 */ s32 prevTalkState;
     /* 0x38C */ s32 unk_38C;
-    /* 0x390 */ UNK_TYPE1 unk390[0x4];
+    /* 0x390 */ UNK_TYPE1 unk_390[0x4];
     /* 0x394 */ s32 unk_394;
     /* 0x398 */ s32 unk_398;
-    /* 0x39C */ UNK_TYPE1 unk39C[0x4];
+    /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
 } EnPm; // size = 0x3A0
-
-extern const ActorInit En_Pm_InitVars;
 
 #endif // Z_EN_PM_H
