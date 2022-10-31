@@ -173,7 +173,7 @@ static ColliderQuadInit sQuadInit = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-static AnimationHeader* sAnimations[] = {
+static AnimationHeader* sAnimations[EN_KAIZOKU_ANIM_MAX] = {
     &object_kz_Anim_00F8E4, // EN_KAIZOKU_ANIM_0
     &object_kz_Anim_00EF9C, // EN_KAIZOKU_ANIM_1
     &object_kz_Anim_00E1C8, // EN_KAIZOKU_ANIM_2
@@ -195,7 +195,7 @@ static AnimationHeader* sAnimations[] = {
     &object_kz_Anim_001E9C, // EN_KAIZOKU_ANIM_18
 };
 
-static u8 sAnimationModes[] = {
+static u8 sAnimationModes[EN_KAIZOKU_ANIM_MAX] = {
     ANIMMODE_LOOP, // EN_KAIZOKU_ANIM_0
     ANIMMODE_LOOP, // EN_KAIZOKU_ANIM_1
     ANIMMODE_ONCE, // EN_KAIZOKU_ANIM_2
@@ -215,26 +215,6 @@ static u8 sAnimationModes[] = {
     ANIMMODE_ONCE, // EN_KAIZOKU_ANIM_16
     ANIMMODE_LOOP, // EN_KAIZOKU_ANIM_17
     ANIMMODE_ONCE, // EN_KAIZOKU_ANIM_18
-};
-
-Color_RGBA8 D_80B8AC58 = { 200, 160, 120, 255 };
-Color_RGBA8 D_80B8AC5C = { 130, 90, 50, 255 };
-
-Vec3f D_80B8AC60 = { 0.0f, -1.5f, 0.0f };
-Vec3f D_80B8AC6C = { 0.0f, -0.2f, 0.0f };
-Vec3f D_80B8AC78 = { 300.0f, 0.0f, 0.0f };
-Vec3f D_80B8AC84 = { 0.0f, -3000.0f, 0.0f };
-Vec3f D_80B8AC90 = { 400.0f, 0.0f, 0.0f };
-Vec3f D_80B8AC9C = { 1600.0f, -4000.0f, 0.0f };
-Vec3f D_80B8ACA8 = { -3000.0f, -2000.0f, 1300.0f };
-Vec3f D_80B8ACB4 = { -3000.0f, -2000.0f, -1300.0f };
-Vec3f D_80B8ACC0 = { 1000.0f, 1000.0f, 0.0f };
-
-static TexturePtr sEyeTextures[] = {
-    gKaizokuEyeOpenTex,
-    gKaizokuEyeHalfTex,
-    gKaizokuEyeClosedTex,
-    gKaizokuEyeHalfTex,
 };
 
 void EnKaizoku_Init(Actor* thisx, PlayState* play) {
@@ -1091,6 +1071,12 @@ void func_80B87C7C(EnKaizoku* this) {
     this->actionFunc = func_80B87D3C;
 }
 
+Color_RGBA8 D_80B8AC58 = { 200, 160, 120, 255 };
+Color_RGBA8 D_80B8AC5C = { 130, 90, 50, 255 };
+
+Vec3f D_80B8AC60 = { 0.0f, -1.5f, 0.0f };
+Vec3f D_80B8AC6C = { 0.0f, -0.2f, 0.0f };
+
 void func_80B87CF8(PlayState* play, Vec3f* pos) {
     EffectSsKirakira_SpawnSmall(play, pos, &D_80B8AC60, &D_80B8AC6C, &D_80B8AC58, &D_80B8AC5C);
 }
@@ -1744,8 +1730,6 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     s32 sp64 = 0;
     Vec3f sp58;
     s32 i;
-    Vec3f sp48;
-    Player* player;
 
     if (gSaveContext.save.playerData.health <= 0x10) {
         this->unk_420.info.toucher.damage = 0;
@@ -1907,11 +1891,12 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         }
     } else if (this->unk_3D4.base.acFlags & AC_HIT) {
         if ((this->unk_2B0 != 6) && (this->unk_2B0 != 14) && (this->unk_2B0 != 15)) {
-            player = GET_PLAYER(play);
+            Vec3f pos;
+            Player* player = GET_PLAYER(play);
 
-            sp48.x = this->unk_3D4.info.bumper.hitPos.x;
-            sp48.y = this->unk_3D4.info.bumper.hitPos.y;
-            sp48.z = this->unk_3D4.info.bumper.hitPos.z;
+            pos.x = this->unk_3D4.info.bumper.hitPos.x;
+            pos.y = this->unk_3D4.info.bumper.hitPos.y;
+            pos.z = this->unk_3D4.info.bumper.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
                 player->unk_B84 = this->picto.actor.yawTowardsPlayer;
@@ -1920,11 +1905,27 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
 
             this->unk_3D4.base.acFlags &= ~AC_HIT;
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_IT_SHIELD_BOUND);
-            EffectSsHitmark_SpawnFixedScale(play, 3, &sp48);
-            CollisionCheck_SpawnShieldParticlesMetal(play, &sp48);
+            EffectSsHitmark_SpawnFixedScale(play, 3, &pos);
+            CollisionCheck_SpawnShieldParticlesMetal(play, &pos);
         }
     }
 }
+
+Vec3f D_80B8AC78 = { 300.0f, 0.0f, 0.0f };
+Vec3f D_80B8AC84 = { 0.0f, -3000.0f, 0.0f };
+Vec3f D_80B8AC90 = { 400.0f, 0.0f, 0.0f };
+
+Vec3f D_80B8AC9C = { 1600.0f, -4000.0f, 0.0f };
+Vec3f D_80B8ACA8 = { -3000.0f, -2000.0f, 1300.0f };
+Vec3f D_80B8ACB4 = { -3000.0f, -2000.0f, -1300.0f };
+Vec3f D_80B8ACC0 = { 1000.0f, 1000.0f, 0.0f };
+
+static TexturePtr sEyeTextures[] = {
+    gKaizokuEyeOpenTex,
+    gKaizokuEyeHalfTex,
+    gKaizokuEyeClosedTex,
+    gKaizokuEyeHalfTex,
+};
 
 void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     EnKaizoku* this = THIS;

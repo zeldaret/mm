@@ -32,6 +32,7 @@ typedef enum EnKaizokuAnimation {
     /* 16 */ EN_KAIZOKU_ANIM_16,
     /* 17 */ EN_KAIZOKU_ANIM_17,
     /* 18 */ EN_KAIZOKU_ANIM_18,
+    /* 19 */ EN_KAIZOKU_ANIM_MAX
 } EnKaizokuAnimation;
 
 typedef struct EnKaizoku {
