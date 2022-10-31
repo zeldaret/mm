@@ -1984,7 +1984,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&this->unk_2F0, 1.0f, 5.0f);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f, 31);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f, 0x1F);
     Collider_UpdateCylinder(&this->picto.actor, &this->unk_3D4);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_3D4.base);
     if (this->unk_2D0 < 2 && this->unk_2B0 != 0) {
