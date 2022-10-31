@@ -362,7 +362,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
         }
     } else if (func_800BE184(play, &this->picto.actor, 100.0f, 0x5DC0, 0x2AA8, this->picto.actor.shape.rot.y)) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
-        if ((this->picto.actor.bgCheckFlags & 8) && (ABS_ALT(sp32) < 12000) &&
+        if ((this->picto.actor.bgCheckFlags & 8) && (ABS_ALT(sp32) < 0x2EE0) &&
             (this->picto.actor.xzDistToPlayer < 90.0f)) {
             if (this->unk_2B0 != 6) {
                 func_80B87C7C(this);
