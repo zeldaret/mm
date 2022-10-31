@@ -645,9 +645,9 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ View view;
-    /* 0x168 */ void* skyboxStaticSegment[4];
-    /* 0x178 */ void* skyboxPaletteStaticSegment;
-    /* 0x17C */ Gfx* dListBuf;
+    /* 0x168 */ void* staticSegments[4];
+    /* 0x178 */ void* paletteStaticSegment;
+    /* 0x17C */ Gfx (*dListBuf)[150];
     /* 0x180 */ Gfx* roomDL;
     /* 0x184 */ Vtx* roomVtx;
     /* 0x188 */ DmaRequest unk188;

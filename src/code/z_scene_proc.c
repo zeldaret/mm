@@ -113,23 +113,23 @@ void AnimatedMat_DrawTwoTexScroll(PlayState* play, s32 segment, void* params) {
  * Generates a displaylist that sets the prim and env color, and stores it in the provided segment ID.
  */
 void AnimatedMat_SetColor(PlayState* play, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor) {
-    Gfx* colorDList = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 3 * sizeof(Gfx));
 
     OPEN_DISPS(play->state.gfxCtx);
 
     // clang-format off
-    if (sMatAnimFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, colorDList); }
-    if (sMatAnimFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, colorDList); }
+    if (sMatAnimFlags & 1) { gSPSegment(POLY_OPA_DISP++, segment, gfx); }
+    if (sMatAnimFlags & 2) { gSPSegment(POLY_XLU_DISP++, segment, gfx); }
     // clang-format on
 
-    gDPSetPrimColor(colorDList++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g,
-                    primColorResult->b, (u8)(primColorResult->a * sMatAnimAlphaRatio));
+    gDPSetPrimColor(gfx++, 0, primColorResult->lodFrac, primColorResult->r, primColorResult->g, primColorResult->b,
+                    (u8)(primColorResult->a * sMatAnimAlphaRatio));
 
     if (envColor != NULL) {
-        gDPSetEnvColor(colorDList++, envColor->r, envColor->g, envColor->b, envColor->a);
+        gDPSetEnvColor(gfx++, envColor->r, envColor->g, envColor->b, envColor->a);
     }
 
-    gSPEndDisplayList(colorDList++);
+    gSPEndDisplayList(gfx++);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -709,8 +709,8 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
     };
     s32 lodFrac;
     s32 i;
-    Gfx* dListHead;
-    Gfx* dList;
+    Gfx* gfx;
+    Gfx* gfxHead;
 
     if (Flags_GetSwitch(play, 0x33) && Flags_GetSwitch(play, 0x34) && Flags_GetSwitch(play, 0x35) &&
         Flags_GetSwitch(play, 0x36)) {
@@ -719,16 +719,16 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
         BgCheck_UnsetContextFlags(&play->colCtx, BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW);
     }
 
-    dList = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 18);
+    gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 18 * sizeof(Gfx));
 
     AnimatedMat_Draw(play, play->sceneMaterialAnims);
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (dListHead = dList, i = 0; i < 9; i++, dListHead += 2) {
+    for (gfx = gfxHead, i = 0; i < 9; i++, gfx += 2) {
         lodFrac = 0;
 
-        bcopy(greatBayTempleColorSetDL, dListHead, sizeof(greatBayTempleColorSetDL));
+        bcopy(greatBayTempleColorSetDL, gfx, sizeof(greatBayTempleColorSetDL));
 
         switch (i) {
             case 0:
@@ -779,11 +779,11 @@ void Scene_DrawConfigGreatBayTemple(PlayState* play) {
                 break;
         }
 
-        gDPSetPrimColor(dListHead, 0, lodFrac, 255, 255, 255, 255);
+        gDPSetPrimColor(gfx, 0, lodFrac, 255, 255, 255, 255);
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x06, dList);
-    gSPSegment(POLY_XLU_DISP++, 0x06, dList);
+    gSPSegment(POLY_OPA_DISP++, 0x06, gfxHead);
+    gSPSegment(POLY_XLU_DISP++, 0x06, gfxHead);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

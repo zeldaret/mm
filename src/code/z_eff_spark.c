@@ -120,7 +120,7 @@ s32 EffectSpark_Update(void* thisx) {
 }
 
 void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
-    Vtx* vertices;
+    Vtx* vtx;
     EffectSpark* this = (EffectSpark*)thisx;
     PlayState* play = Effect_GetPlayState();
     s32 i;
@@ -162,8 +162,8 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
         gSPSetGeometryMode(POLY_XLU_DISP++, G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH);
         gDPPipeSync(POLY_XLU_DISP++);
 
-        vertices = GRAPH_ALLOC(gfxCtx, ALIGN16(this->numElements * sizeof(Vtx[4])));
-        if (vertices == NULL) {
+        vtx = GRAPH_ALLOC(gfxCtx, this->numElements * (4 * sizeof(Vtx)));
+        if (vtx == NULL) {
             goto end;
         }
 
@@ -202,49 +202,49 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
             SkinMatrix_MtxFMtxFMult(&spEC, &play->billboardMtxF, &sp6C);
             SkinMatrix_MtxFMtxFMult(&sp6C, &spAC, &sp12C);
 
-            vertices[j].v.ob[0] = -32;
-            vertices[j].v.ob[1] = -32;
-            vertices[j].v.ob[2] = 0;
-            vertices[j].v.cn[0] = sp1D3;
-            vertices[j].v.cn[1] = sp1D2;
-            vertices[j].v.cn[2] = sp1D1;
-            vertices[j].v.cn[3] = sp1D0;
-            vertices[j].v.tc[0] = 0;
-            vertices[j].v.tc[1] = 1024;
-            vertices[j].v.flag = 0;
+            vtx[j].v.ob[0] = -32;
+            vtx[j].v.ob[1] = -32;
+            vtx[j].v.ob[2] = 0;
+            vtx[j].v.cn[0] = sp1D3;
+            vtx[j].v.cn[1] = sp1D2;
+            vtx[j].v.cn[2] = sp1D1;
+            vtx[j].v.cn[3] = sp1D0;
+            vtx[j].v.tc[0] = 0;
+            vtx[j].v.tc[1] = 1024;
+            vtx[j].v.flag = 0;
 
-            vertices[j + 1].v.ob[0] = 32;
-            vertices[j + 1].v.ob[1] = 32;
-            vertices[j + 1].v.ob[2] = 0;
-            vertices[j + 1].v.cn[0] = sp1CF;
-            vertices[j + 1].v.cn[1] = sp1CE;
-            vertices[j + 1].v.cn[2] = sp1CD;
-            vertices[j + 1].v.cn[3] = sp1CC;
-            vertices[j + 1].v.tc[0] = 1024;
-            vertices[j + 1].v.tc[1] = 0;
-            vertices[j + 1].v.flag = 0;
+            vtx[j + 1].v.ob[0] = 32;
+            vtx[j + 1].v.ob[1] = 32;
+            vtx[j + 1].v.ob[2] = 0;
+            vtx[j + 1].v.cn[0] = sp1CF;
+            vtx[j + 1].v.cn[1] = sp1CE;
+            vtx[j + 1].v.cn[2] = sp1CD;
+            vtx[j + 1].v.cn[3] = sp1CC;
+            vtx[j + 1].v.tc[0] = 1024;
+            vtx[j + 1].v.tc[1] = 0;
+            vtx[j + 1].v.flag = 0;
 
-            vertices[j + 2].v.ob[0] = -32;
-            vertices[j + 2].v.ob[1] = 32;
-            vertices[j + 2].v.ob[2] = 0;
-            vertices[j + 2].v.cn[0] = sp1CB;
-            vertices[j + 2].v.cn[1] = sp1CA;
-            vertices[j + 2].v.cn[2] = sp1C9;
-            vertices[j + 2].v.cn[3] = sp1C8;
-            vertices[j + 2].v.tc[0] = 0;
-            vertices[j + 2].v.tc[1] = 0;
-            vertices[j + 2].v.flag = 0;
+            vtx[j + 2].v.ob[0] = -32;
+            vtx[j + 2].v.ob[1] = 32;
+            vtx[j + 2].v.ob[2] = 0;
+            vtx[j + 2].v.cn[0] = sp1CB;
+            vtx[j + 2].v.cn[1] = sp1CA;
+            vtx[j + 2].v.cn[2] = sp1C9;
+            vtx[j + 2].v.cn[3] = sp1C8;
+            vtx[j + 2].v.tc[0] = 0;
+            vtx[j + 2].v.tc[1] = 0;
+            vtx[j + 2].v.flag = 0;
 
-            vertices[j + 3].v.ob[0] = 32;
-            vertices[j + 3].v.ob[1] = -32;
-            vertices[j + 3].v.ob[2] = 0;
-            vertices[j + 3].v.cn[0] = sp1C7;
-            vertices[j + 3].v.cn[1] = sp1C6;
-            vertices[j + 3].v.cn[2] = sp1C5;
-            vertices[j + 3].v.cn[3] = sp1C4;
-            vertices[j + 3].v.tc[0] = 1024;
-            vertices[j + 3].v.tc[1] = 1024;
-            vertices[j + 3].v.flag = 0;
+            vtx[j + 3].v.ob[0] = 32;
+            vtx[j + 3].v.ob[1] = -32;
+            vtx[j + 3].v.ob[2] = 0;
+            vtx[j + 3].v.cn[0] = sp1C7;
+            vtx[j + 3].v.cn[1] = sp1C6;
+            vtx[j + 3].v.cn[2] = sp1C5;
+            vtx[j + 3].v.cn[3] = sp1C4;
+            vtx[j + 3].v.tc[0] = 1024;
+            vtx[j + 3].v.tc[1] = 1024;
+            vtx[j + 3].v.flag = 0;
 
             j += 4;
 
@@ -254,7 +254,7 @@ void EffectSpark_Draw(void* thisx, GraphicsContext* gfxCtx) {
             }
 
             gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPVertex(POLY_XLU_DISP++, &vertices[4 * i], 4, 0);
+            gSPVertex(POLY_XLU_DISP++, &vtx[4 * i], 4, 0);
             gSP2Triangles(POLY_XLU_DISP++, 2, 0, 3, 0, 2, 3, 1, 0);
         }
 

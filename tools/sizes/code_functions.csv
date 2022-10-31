@@ -2294,7 +2294,7 @@ asm/non_matchings/code/code_801420C0/func_801420F4.s,func_801420F4,0x801420F4,0x
 asm/non_matchings/code/code_801420C0/func_80142100.s,func_80142100,0x80142100,0xD0
 asm/non_matchings/code/z_vr_box/func_80142440.s,func_80142440,0x80142440,0x342
 asm/non_matchings/code/z_vr_box/func_80143148.s,func_80143148,0x80143148,0x28
-asm/non_matchings/code/z_vr_box/func_801431E8.s,func_801431E8,0x801431E8,0x4F
+asm/non_matchings/code/z_vr_box/Skybox_Setup.s,Skybox_Setup,0x801431E8,0x4F
 asm/non_matchings/code/z_vr_box/func_80143324.s,func_80143324,0x80143324,0x70
 asm/non_matchings/code/z_vr_box/Skybox_Init.s,Skybox_Init,0x801434E4,0x2F
 asm/non_matchings/code/z_vr_box_draw/func_801435A0.s,func_801435A0,0x801435A0,0x21
