@@ -2,39 +2,12 @@
 #define Z_EN_KAIZOKU_H
 
 #include "global.h"
+#include "objects/object_kz/object_kz.h"
 
 struct EnKaizoku;
 
 typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
 typedef s32 (*EnKaizokuUnkFunc)(PlayState*, Actor*);
-
-typedef enum {
-    /* 00 */ KAIZOKU_LIMB_0,
-    /* 01 */ KAIZOKU_LIMB_1,
-    /* 02 */ KAIZOKU_LIMB_2,
-    /* 03 */ KAIZOKU_LIMB_3,
-    /* 04 */ KAIZOKU_LIMB_4,
-    /* 05 */ KAIZOKU_LIMB_5,
-    /* 06 */ KAIZOKU_LIMB_6,
-    /* 07 */ KAIZOKU_LIMB_7,
-    /* 08 */ KAIZOKU_LIMB_8,
-    /* 09 */ KAIZOKU_LIMB_9,
-    /* 00 */ KAIZOKU_LIMB_10,
-    /* 11 */ KAIZOKU_LIMB_11,
-    /* 12 */ KAIZOKU_LIMB_12,
-    /* 13 */ KAIZOKU_LIMB_13,
-    /* 14 */ KAIZOKU_LIMB_14,
-    /* 15 */ KAIZOKU_LIMB_15,
-    /* 16 */ KAIZOKU_LIMB_16,
-    /* 17 */ KAIZOKU_LIMB_17,
-    /* 18 */ KAIZOKU_LIMB_18,
-    /* 19 */ KAIZOKU_LIMB_19,
-    /* 20 */ KAIZOKU_LIMB_20,
-    /* 21 */ KAIZOKU_LIMB_21,
-    /* 22 */ KAIZOKU_LIMB_22,
-    /* 23 */ KAIZOKU_LIMB_23,
-    /* 24 */ KAIZOKU_LIMB_MAX,
-} ObjectKaizokuLimbs;
 
 typedef struct EnKaizoku {
     /* 0x000 */ Actor actor;

@@ -52,30 +52,32 @@
         <DList Name="object_kz_DL_00CD78" Offset="0xCD78" />
         <DList Name="object_kz_DL_00CE30" Offset="0xCE30" />
         <DList Name="object_kz_DL_00CF20" Offset="0xCF20" />
-        <Limb Name="object_kz_Standardlimb_00D6B8" Type="Standard" EnumName="OBJECT_KZ_LIMB_01" Offset="0xD6B8" />
-        <Limb Name="object_kz_Standardlimb_00D6C4" Type="Standard" EnumName="OBJECT_KZ_LIMB_02" Offset="0xD6C4" />
-        <Limb Name="object_kz_Standardlimb_00D6D0" Type="Standard" EnumName="OBJECT_KZ_LIMB_03" Offset="0xD6D0" />
-        <Limb Name="object_kz_Standardlimb_00D6DC" Type="Standard" EnumName="OBJECT_KZ_LIMB_04" Offset="0xD6DC" />
-        <Limb Name="object_kz_Standardlimb_00D6E8" Type="Standard" EnumName="OBJECT_KZ_LIMB_05" Offset="0xD6E8" />
-        <Limb Name="object_kz_Standardlimb_00D6F4" Type="Standard" EnumName="OBJECT_KZ_LIMB_06" Offset="0xD6F4" />
-        <Limb Name="object_kz_Standardlimb_00D700" Type="Standard" EnumName="OBJECT_KZ_LIMB_07" Offset="0xD700" />
-        <Limb Name="object_kz_Standardlimb_00D70C" Type="Standard" EnumName="OBJECT_KZ_LIMB_08" Offset="0xD70C" />
-        <Limb Name="object_kz_Standardlimb_00D718" Type="Standard" EnumName="OBJECT_KZ_LIMB_09" Offset="0xD718" />
-        <Limb Name="object_kz_Standardlimb_00D724" Type="Standard" EnumName="OBJECT_KZ_LIMB_0A" Offset="0xD724" />
-        <Limb Name="object_kz_Standardlimb_00D730" Type="Standard" EnumName="OBJECT_KZ_LIMB_0B" Offset="0xD730" />
-        <Limb Name="object_kz_Standardlimb_00D73C" Type="Standard" EnumName="OBJECT_KZ_LIMB_0C" Offset="0xD73C" />
-        <Limb Name="object_kz_Standardlimb_00D748" Type="Standard" EnumName="OBJECT_KZ_LIMB_0D" Offset="0xD748" />
-        <Limb Name="object_kz_Standardlimb_00D754" Type="Standard" EnumName="OBJECT_KZ_LIMB_0E" Offset="0xD754" />
-        <Limb Name="object_kz_Standardlimb_00D760" Type="Standard" EnumName="OBJECT_KZ_LIMB_0F" Offset="0xD760" />
-        <Limb Name="object_kz_Standardlimb_00D76C" Type="Standard" EnumName="OBJECT_KZ_LIMB_10" Offset="0xD76C" />
-        <Limb Name="object_kz_Standardlimb_00D778" Type="Standard" EnumName="OBJECT_KZ_LIMB_11" Offset="0xD778" />
-        <Limb Name="object_kz_Standardlimb_00D784" Type="Standard" EnumName="OBJECT_KZ_LIMB_12" Offset="0xD784" />
-        <Limb Name="object_kz_Standardlimb_00D790" Type="Standard" EnumName="OBJECT_KZ_LIMB_13" Offset="0xD790" />
-        <Limb Name="object_kz_Standardlimb_00D79C" Type="Standard" EnumName="OBJECT_KZ_LIMB_14" Offset="0xD79C" />
-        <Limb Name="object_kz_Standardlimb_00D7A8" Type="Standard" EnumName="OBJECT_KZ_LIMB_15" Offset="0xD7A8" />
-        <Limb Name="object_kz_Standardlimb_00D7B4" Type="Standard" EnumName="OBJECT_KZ_LIMB_16" Offset="0xD7B4" />
-        <Limb Name="object_kz_Standardlimb_00D7C0" Type="Standard" EnumName="OBJECT_KZ_LIMB_17" Offset="0xD7C0" />
-        <Skeleton Name="object_kz_Skel_00D828" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KZ_LIMB_NONE" LimbMax="OBJECT_KZ_LIMB_MAX" EnumName="ObjectKzLimb" Offset="0xD828" />
+
+        <Limb Name="object_kz_Standardlimb_00D6B8" Type="Standard" EnumName="KAIZOKU_LIMB_01" Offset="0xD6B8" />
+        <Limb Name="object_kz_Standardlimb_00D6C4" Type="Standard" EnumName="KAIZOKU_LIMB_02" Offset="0xD6C4" />
+        <Limb Name="object_kz_Standardlimb_00D6D0" Type="Standard" EnumName="KAIZOKU_LIMB_03" Offset="0xD6D0" />
+        <Limb Name="object_kz_Standardlimb_00D6DC" Type="Standard" EnumName="KAIZOKU_LIMB_04" Offset="0xD6DC" />
+        <Limb Name="object_kz_Standardlimb_00D6E8" Type="Standard" EnumName="KAIZOKU_LIMB_05" Offset="0xD6E8" />
+        <Limb Name="object_kz_Standardlimb_00D6F4" Type="Standard" EnumName="KAIZOKU_LIMB_06" Offset="0xD6F4" />
+        <Limb Name="object_kz_Standardlimb_00D700" Type="Standard" EnumName="KAIZOKU_LIMB_07" Offset="0xD700" />
+        <Limb Name="object_kz_Standardlimb_00D70C" Type="Standard" EnumName="KAIZOKU_LIMB_08" Offset="0xD70C" />
+        <Limb Name="object_kz_Standardlimb_00D718" Type="Standard" EnumName="KAIZOKU_LIMB_09" Offset="0xD718" />
+        <Limb Name="object_kz_Standardlimb_00D724" Type="Standard" EnumName="KAIZOKU_LIMB_0A" Offset="0xD724" />
+        <Limb Name="object_kz_Standardlimb_00D730" Type="Standard" EnumName="KAIZOKU_LIMB_0B" Offset="0xD730" />
+        <Limb Name="object_kz_Standardlimb_00D73C" Type="Standard" EnumName="KAIZOKU_LIMB_0C" Offset="0xD73C" />
+        <Limb Name="object_kz_Standardlimb_00D748" Type="Standard" EnumName="KAIZOKU_LIMB_0D" Offset="0xD748" />
+        <Limb Name="object_kz_Standardlimb_00D754" Type="Standard" EnumName="KAIZOKU_LIMB_0E" Offset="0xD754" />
+        <Limb Name="object_kz_Standardlimb_00D760" Type="Standard" EnumName="KAIZOKU_LIMB_0F" Offset="0xD760" />
+        <Limb Name="object_kz_Standardlimb_00D76C" Type="Standard" EnumName="KAIZOKU_LIMB_10" Offset="0xD76C" />
+        <Limb Name="object_kz_Standardlimb_00D778" Type="Standard" EnumName="KAIZOKU_LIMB_11" Offset="0xD778" />
+        <Limb Name="object_kz_Standardlimb_00D784" Type="Standard" EnumName="KAIZOKU_LIMB_12" Offset="0xD784" />
+        <Limb Name="object_kz_Standardlimb_00D790" Type="Standard" EnumName="KAIZOKU_LIMB_13" Offset="0xD790" />
+        <Limb Name="object_kz_Standardlimb_00D79C" Type="Standard" EnumName="KAIZOKU_LIMB_14" Offset="0xD79C" />
+        <Limb Name="object_kz_Standardlimb_00D7A8" Type="Standard" EnumName="KAIZOKU_LIMB_15" Offset="0xD7A8" />
+        <Limb Name="object_kz_Standardlimb_00D7B4" Type="Standard" EnumName="KAIZOKU_LIMB_16" Offset="0xD7B4" />
+        <Limb Name="object_kz_Standardlimb_00D7C0" Type="Standard" EnumName="KAIZOKU_LIMB_17" Offset="0xD7C0" />
+        <Skeleton Name="object_kz_Skel_00D828" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
+
         <Animation Name="object_kz_Anim_00DBE4" Offset="0xDBE4" />
         <Animation Name="object_kz_Anim_00E1C8" Offset="0xE1C8" />
         <Animation Name="object_kz_Anim_00E8BC" Offset="0xE8BC" />
