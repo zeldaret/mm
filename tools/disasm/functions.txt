@@ -14660,7 +14660,7 @@
     0x80B85900:("func_80B85900",),
     0x80B85A00:("func_80B85A00",),
     0x80B85E18:("func_80B85E18",),
-    0x80B85EA0:("func_80B85EA0",),
+    0x80B85EA0:("EnKaizoku_ValidatePictograph",),
     0x80B85F48:("func_80B85F48",),
     0x80B85FA8:("func_80B85FA8",),
     0x80B86804:("func_80B86804",),

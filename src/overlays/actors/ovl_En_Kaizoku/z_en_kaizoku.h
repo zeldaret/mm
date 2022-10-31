@@ -2,16 +2,15 @@
 #define Z_EN_KAIZOKU_H
 
 #include "global.h"
+#include "z64snap.h"
 #include "objects/object_kz/object_kz.h"
 
 struct EnKaizoku;
 
 typedef void (*EnKaizokuActionFunc)(struct EnKaizoku*, PlayState*);
-typedef s32 (*EnKaizokuUnkFunc)(PlayState*, Actor*);
 
 typedef struct EnKaizoku {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnKaizokuUnkFunc unk_144;
+    /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ Vec3s jointTable[KAIZOKU_LIMB_MAX];
     /* 0x21C */ Vec3s morphTable[KAIZOKU_LIMB_MAX];
