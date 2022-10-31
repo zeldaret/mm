@@ -668,7 +668,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
                 func_80B85E18(this, 15);
                 textId = this->unk_2CA * 4 + this->unk_2C8;
                 Message_StartTextbox(play, D_80B8A8D0[textId], &this->picto.actor);
-                Actor_PlaySfxAtPos(&this->picto.actor, 0x39B9);
+                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_LAST2_SHOUT);
                 this->unk_598 = 0;
                 this->unk_59C++;
             }
@@ -1051,7 +1051,7 @@ void func_80B87C7C(EnKaizoku* this) {
     func_80B85E18(this, 8);
     this->picto.actor.speedXZ = 6.5f;
     this->picto.actor.velocity.y = 15.0f;
-    Actor_PlaySfxAtPos(&this->picto.actor, 0x386C);
+    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
     this->unk_3D4.info.elemType = 4;
     this->unk_3D4.base.colType = 10;
@@ -1090,7 +1090,7 @@ void func_80B87D3C(EnKaizoku* this, PlayState* play) {
 void func_80B87E28(EnKaizoku* this) {
     func_80B85E18(this, 8);
     this->picto.actor.speedXZ = -8.0f;
-    Actor_PlaySfxAtPos(&this->picto.actor, 0x386C);
+    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->unk_3D4.info.elemType = ELEMTYPE_UNK4;
     this->unk_3D4.base.colType = COLTYPE_NONE;
     this->unk_420.info.elemType = ELEMTYPE_UNK4;
@@ -1112,7 +1112,7 @@ void func_80B87E9C(EnKaizoku* this, PlayState* play) {
         }
     }
     if (!(play->state.frames & 0x5F)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, 0x39B7U);
+        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
     }
 }
 
@@ -1121,7 +1121,7 @@ void func_80B87F70(EnKaizoku* this) {
     this->unk_2D0 = 0;
     this->unk_420.base.atFlags &= ~AT_BOUNCED;
     this->picto.actor.speedXZ = 0.0f;
-    AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, 0x39B7);
+    AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
     this->unk_2B0 = 9;
     this->actionFunc = func_80B87FDC;
 }
@@ -1139,7 +1139,7 @@ void func_80B87FDC(EnKaizoku* this, PlayState* play2) {
     this->picto.actor.speedXZ = 0.0f;
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, 0x3998);
+        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
         this->unk_2D2 = 1;
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
         this->unk_2D2 = -1;
@@ -1189,7 +1189,7 @@ void func_80B88214(EnKaizoku* this) {
     this->unk_2B2 = 0;
     this->picto.actor.speedXZ = 10.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
-    Actor_PlaySfxAtPos(&this->picto.actor, 0x386C);
+    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->unk_2B0 = 5;
     this->actionFunc = func_80B88278;
 }
@@ -1208,7 +1208,7 @@ void func_80B88278(EnKaizoku* this, PlayState* play) {
         }
     }
     if (!(play->gameplayFrames & 0x5F)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, 0x39B7);
+        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
     }
 }
 
@@ -1279,11 +1279,11 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
             }
 
             if (!(play->gameplayFrames & 0x5F)) {
-                Actor_PlaySfxAtPos(&this->picto.actor, 0x39B7U);
+                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
             }
 
             if (this->skelAnime.curFrame != 0.0f && ((sp30 < 0 && sp2C > 0) || (sp30 < 4 && sp2C >= 5))) {
-                Actor_PlaySfxAtPos(&this->picto.actor, 0x39A0U);
+                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
     }
@@ -1318,7 +1318,7 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
             }
         }
         if (!(play->gameplayFrames & 0x5F)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, 0x39B7U);
+            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
         }
     }
 }
@@ -1355,7 +1355,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
             Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->unk_580, 3.0f, 2, 2.0f, 0, 0, 0);
             this->unk_2D2 = 1;
             this->picto.actor.speedXZ = 10.0f;
-            Actor_PlaySfxAtPos(&this->picto.actor, 0x3998U);
+            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
         } else if (Animation_OnFrame(&this->skelAnime, 21.0f)) {
             this->picto.actor.speedXZ = 0.0f;
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
@@ -1482,12 +1482,12 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
         temp_ft5 = this->skelAnime.curFrame + this->skelAnime.playSpeed;
         if (this->skelAnime.curFrame != 0.0f) {
             if (((temp_ft4 < 0 && temp_ft5 > 0) || (temp_ft4 < 5 && temp_ft5 > 5))) {
-                Actor_PlaySfxAtPos(&this->picto.actor, 0x39A0U);
+                Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
 
         if (!(play->gameplayFrames & 0x5F)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, 0x39B7U);
+            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
         }
 
         if (this->picto.actor.xzDistToPlayer <= 65.0f) {
@@ -1516,7 +1516,7 @@ void func_80B891B8(EnKaizoku* this) {
         this->unk_2BA = 0;
     }
 
-    Actor_PlaySfxAtPos(&this->picto.actor, 0x389E);
+    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_COMMON_FREEZE);
     this->unk_2D8 = 1;
 
     if ((this->unk_2BA != 11) && (this->unk_2BA != 10)) {
@@ -1576,7 +1576,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
         this->picto.actor.flags |= ACTOR_FLAG_400;
     }
 
-    Actor_PlaySfxAtPos(&this->picto.actor, 0x3999U);
+    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DAMAGE);
     this->unk_2B0 = 14;
     this->actionFunc = func_80B894C0;
 }
@@ -1620,7 +1620,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     this->unk_2D8 = 1;
     func_800B7298(play, &this->picto.actor, 0x7B);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
-    Actor_PlaySfxAtPos(&this->picto.actor, 0x399A);
+    Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
     this->picto.actor.flags |= ACTOR_FLAG_8000000;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
@@ -1693,7 +1693,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
         this->unk_2D8 = 0;
         func_80B86B58(this);
     } else if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
-        Actor_PlaySfxAtPos(&this->picto.actor, 0x387A);
+        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 }
 
@@ -1759,7 +1759,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     if ((this->unk_3D4.base.acFlags & AC_HIT) && this->unk_2B0 > 0 && this->unk_2D0 < 2 && this->unk_2B0 != 6 &&
         this->unk_2B0 != 12 && this->unk_2B0 != 14 && this->unk_2B0 != 15) {
         Actor_SetDropFlag(&this->picto.actor, &this->unk_3D4.info);
-        AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, 0x39B7);
+        AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
 
         switch (this->picto.actor.colChkInfo.damageEffect) {
             case 5:
@@ -1862,7 +1862,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 player->unk_B80 = 15.0f;
             }
             this->unk_3D4.base.acFlags &= ~AC_HIT;
-            Actor_PlaySfxAtPos(&this->picto.actor, 0x1806);
+            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_IT_SHIELD_BOUND);
             EffectSsHitmark_SpawnFixedScale(play, 3, &sp48);
             CollisionCheck_SpawnShieldParticlesMetal(play, &sp48);
         }
