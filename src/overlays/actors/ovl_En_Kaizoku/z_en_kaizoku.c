@@ -1185,7 +1185,7 @@ void func_80B87FDC(EnKaizoku* this, PlayState* play2) {
 
             this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
-            if (BREG(12) * 0.1f + 0.39999998f < Rand_ZeroOne()) {
+            if (BREG(12) * 0.1f + 0.01f * 40.0f < Rand_ZeroOne()) {
                 func_80B87900(this);
             } else if (sp2E <= 0x2710) {
                 if (sp2C > 0x4000) {
@@ -1401,7 +1401,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
         }
 
         this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
-        if (BREG(12) * 0.1f + 0.39999998f < Rand_ZeroOne()) {
+        if (BREG(12) * 0.1f + 0.01f * 40.0f < Rand_ZeroOne()) {
             func_80B87900(this);
             return;
         }
