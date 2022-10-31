@@ -173,10 +173,10 @@ static ColliderQuadInit sQuadInit = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-u32 D_80B8ABF8[] = {
-    0x0600F8E4, 0x0600EF9C, 0x0600E1C8, 0x0600DBE4, 0x060058B8, 0x06004860, 0x06002730,
-    0x06001578, 0x06001390, 0x060003CC, 0x06000F5C, 0x0600E8BC, 0x0600ED1C, 0x06005644,
-    0x0600F288, 0x060043E4, 0x06003A3C, 0x06002BA0, 0x06001E9C,
+AnimationHeader* D_80B8ABF8[] = {
+    &object_kz_Anim_00F8E4, &object_kz_Anim_00EF9C, &object_kz_Anim_00E1C8, &object_kz_Anim_00DBE4, &object_kz_Anim_0058B8, &object_kz_Anim_004860, &object_kz_Anim_002730,
+    &object_kz_Anim_001578, &object_kz_Anim_001390, &object_kz_Anim_0003CC, &object_kz_Anim_000F5C, &object_kz_Anim_00E8BC, &object_kz_Anim_00ED1C, &object_kz_Anim_005644,
+    &object_kz_Anim_00F288, &object_kz_Anim_0043E4, &object_kz_Anim_003A3C, &object_kz_Anim_002BA0, &object_kz_Anim_001E9C,
 };
 
 u8 D_80B8AC44[] = {
@@ -198,16 +198,12 @@ Vec3f D_80B8ACA8 = { -3000.0f, -2000.0f, 1300.0f };
 Vec3f D_80B8ACB4 = { -3000.0f, -2000.0f, -1300.0f };
 Vec3f D_80B8ACC0 = { 1000.0f, 1000.0f, 0.0f };
 
-u32 D_80B8ACCC[] = {
-    0x060093B8,
-    0x06009978,
-    0x0600A0F8,
-    0x06009978,
+TexturePtr D_80B8ACCC[] = {
+    gKaizokuEyeOpenTex,
+    gKaizokuEyeHalfTex,
+    gKaizokuEyeClosedTex,
+    gKaizokuEyeHalfTex,
 };
-
-extern AnimationHeader D_060058B8;
-
-extern FlexSkeletonHeader D_0600D828;
 
 void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     EnKaizoku* this = THIS;
@@ -233,7 +229,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->unk_2EC = this->picto.actor.world.rot.z;
     this->picto.actor.world.rot.z = 0;
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_0600D828, &D_060058B8, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_kz_Skel_00D828, &object_kz_Anim_0058B8, this->jointTable, this->morphTable,
                        KAIZOKU_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->unk_3D4, &this->picto.actor, &sCylinderInit);
     Collider_InitAndSetQuad(play, &this->unk_420, &this->picto.actor, &sQuadInit);
@@ -1861,7 +1857,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             sp48.x = this->unk_3D4.info.bumper.hitPos.x;
             sp48.y = this->unk_3D4.info.bumper.hitPos.y;
             sp48.z = this->unk_3D4.info.bumper.hitPos.z;
-            if (player->transformation != 4) {
+            if (player->transformation != PLAYER_FORM_HUMAN) {
                 player->unk_B84 = this->picto.actor.yawTowardsPlayer;
                 player->unk_B80 = 15.0f;
             }
@@ -2022,8 +2018,6 @@ void func_80B8A6B0(PlayState* play, s32 limbIndex, Actor* thisx) {
     }
 }
 
-extern u32 D_80B8ACCC[];
-
 void func_80B8A718(Actor* thisx, PlayState* play) {
     f32 pad[4];
     f32 sp34;
@@ -2038,6 +2032,7 @@ void func_80B8A718(Actor* thisx, PlayState* play) {
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, func_80B8A318, func_80B8A468, func_80B8A6B0,
                                    &this->picto.actor);
+
     if (this->unk_2B8 != 0) {
         sp34 = this->unk_2B8 * 0.05f;
         if (this->unk_2BA == 0xB || this->unk_2BA == 0xA) {

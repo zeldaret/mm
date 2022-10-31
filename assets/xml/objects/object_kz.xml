@@ -12,6 +12,7 @@
         <Animation Name="object_kz_Anim_004860" Offset="0x4860" />
         <Animation Name="object_kz_Anim_005644" Offset="0x5644" />
         <Animation Name="object_kz_Anim_0058B8" Offset="0x58B8" />
+
         <Texture Name="object_kz_TLUT_0058D0" OutName="tlut_0058D0" Format="rgba16" Width="16" Height="16" Offset="0x58D0" />
         <Texture Name="object_kz_Tex_005AD0" OutName="tex_005AD0" Format="ci8" Width="8" Height="8" Offset="0x5AD0" />
         <Texture Name="object_kz_Tex_005B10" OutName="tex_005B10" Format="ci8" Width="8" Height="8" Offset="0x5B10" />
@@ -20,6 +21,7 @@
         <Texture Name="object_kz_Tex_005D50" OutName="tex_005D50" Format="ci8" Width="16" Height="16" Offset="0x5D50" />
         <Texture Name="object_kz_Tex_005E50" OutName="tex_005E50" Format="i8" Width="16" Height="16" Offset="0x5E50" />
         <Texture Name="object_kz_Tex_005F50" OutName="tex_005F50" Format="i8" Width="8" Height="16" Offset="0x5F50" />
+
         <DList Name="object_kz_DL_007CB0" Offset="0x7CB0" />
         <DList Name="object_kz_DL_008130" Offset="0x8130" />
         <DList Name="object_kz_DL_008268" Offset="0x8268" />
@@ -30,19 +32,21 @@
         <DList Name="object_kz_DL_008B10" Offset="0x8B10" />
         <DList Name="object_kz_DL_008D80" Offset="0x8D80" />
         <DList Name="object_kz_DL_008E80" Offset="0x8E80" />
+
         <!-- <Texture Name="object_kz_TLUT_009100" OutName="tlut_009100" Format="rgba16" Width="16" Height="16" Offset="0x9100" /> -->
         <!-- <Blob Name="object_kz_Blob_009300" Size="0x38" Offset="0x9300" /> -->
         <Texture Name="object_kz_Tex_009338" OutName="tex_009338" Format="ci8" Width="8" Height="16" Offset="0x9338" />
-        <!-- <Blob Name="object_kz_Blob_0093B8" Size="0x400" Offset="0x93B8" /> -->
+        <Texture Name="gKaizokuEyeOpenTex" OutName="kaizoku_eye_open" Format="ci8" Width="32" Height="32" Offset="0x93B8" TlutOffset="0x9100" />
         <Texture Name="object_kz_Tex_0097B8" OutName="tex_0097B8" Format="i8" Width="16" Height="16" Offset="0x97B8" />
         <Texture Name="object_kz_Tex_0098B8" OutName="tex_0098B8" Format="ci8" Width="8" Height="16" Offset="0x98B8" />
         <Texture Name="object_kz_Tex_009938" OutName="tex_009938" Format="ci8" Width="8" Height="8" Offset="0x9938" />
-        <!-- <Blob Name="object_kz_Blob_009978" Size="0x400" Offset="0x9978" /> -->
+        <Texture Name="gKaizokuEyeHalfTex" OutName="kaizoku_eye_half" Format="ci8" Width="32" Height="32" Offset="0x9978" TlutOffset="0x9100" />
         <Texture Name="object_kz_Tex_009D78" OutName="tex_009D78" Format="i8" Width="8" Height="16" Offset="0x9D78" />
         <Texture Name="object_kz_Tex_009DF8" OutName="tex_009DF8" Format="ci8" Width="16" Height="16" Offset="0x9DF8" />
         <Texture Name="object_kz_Tex_009EF8" OutName="tex_009EF8" Format="ci8" Width="16" Height="16" Offset="0x9EF8" />
         <Texture Name="object_kz_Tex_009FF8" OutName="tex_009FF8" Format="ci8" Width="16" Height="16" Offset="0x9FF8" />
-        <!-- <Blob Name="object_kz_Blob_00A0F8" Size="0x400" Offset="0xA0F8" /> -->
+        <Texture Name="gKaizokuEyeClosedTex" OutName="kaizoku_eye_closed" Format="ci8" Width="32" Height="32" Offset="0xA0F8" TlutOffset="0x9100" />
+
         <DList Name="object_kz_DL_00C318" Offset="0xC318" />
         <DList Name="object_kz_DL_00C4D8" Offset="0xC4D8" />
         <DList Name="object_kz_DL_00C698" Offset="0xC698" />
