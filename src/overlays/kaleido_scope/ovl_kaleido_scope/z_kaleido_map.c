@@ -13,7 +13,7 @@
 extern s16 D_8082B7F0[];
 extern s16 D_8082B838[];
 
-extern TexturePtr D_09007500; // gPlayerFace
+extern TexturePtr D_09007500; // gPlayerFaceIcon
 
 #define WORLD_MAP_IMAGE_TEX_WIDTH 216
 #define WORLD_MAP_IMAGE_TEX_HEIGHT 128
@@ -168,11 +168,11 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     // Loop over dungeonItems (i) and vtxIndex (j)
     for (i = DUNGEON_BOSS_KEY, j = 4; i <= DUNGEON_STRAY_FAIRIES; i++, j += 4) {
         if (i == DUNGEON_STRAY_FAIRIES) {
-            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
-                // If (pauseCtx->state == 6), then the other conditions are redundant and
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
+                // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and
                 // always return true
-                if ((pauseCtx->state == 6) && (pauseCtx->state != 7) &&
-                    !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+                if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
+                    !IS_PAUSE_STATE_GAMEOVER) {
                     KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
                     if (!sStrayFairyIconAlphaScaleState) {
@@ -264,11 +264,11 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     func_80108AF8(play);
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
-        // If (pauseCtx->state == 6), then the other conditions are redundant and always return
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
+        // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and always return
         // true
-        if ((pauseCtx->state == 6) && (pauseCtx->state != 7) &&
-            !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+        if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
+            !IS_PAUSE_STATE_GAMEOVER) {
 
             func_8012C628(play->state.gfxCtx);
 
@@ -304,8 +304,8 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s16 i;
     s16 oldCursorPoint;
 
-    if (pauseCtx->state == 6) {
-        if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+    if (pauseCtx->state == PAUSE_STATE_MAIN) {
+        if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
             pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
             if (pauseCtx->stickAdjX > 30) {
@@ -539,9 +539,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
     // Draw the world map image
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == 6) &&
-        ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) && YREG(6) && (pauseCtx->state != 7) &&
-        !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
+        ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
+        YREG(6) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) && !IS_PAUSE_STATE_GAMEOVER) {
 
         // Draw the world map image flat
         // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
@@ -649,7 +649,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         }
     }
 
-    if ((pauseCtx->state >= 0x15) && (pauseCtx->state <= 0x19)) {
+    if (IS_PAUSE_STATE_OWLWARP) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -659,7 +659,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     func_8012C8AC(play->state.gfxCtx);
 
-    if (!((pauseCtx->state >= 0x15) && (pauseCtx->state <= 0x19))) {
+    if (!IS_PAUSE_STATE_OWLWARP) {
         // Browsing the world map regions on the pause menu
         gDPLoadTextureBlock(POLY_OPA_DISP++, gWorldMapDotTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -728,10 +728,11 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
     }
 
     // Find and draw Player's face at the current region based on the current scene
-    // If (pauseCtx->state == 6), then the other pauseCtx->state conditions are redundant
+    // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other pauseCtx->state conditions are redundant
     // and always return true
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0) && (pauseCtx->state == 6) &&
-        (pauseCtx->state != 7) && !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+        (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
+        !IS_PAUSE_STATE_GAMEOVER) {
         j = 0;
         n = 0;
 
@@ -825,7 +826,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
-    if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+        (pauseCtx->pageIndex == PAUSE_MAP)) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
@@ -936,7 +938,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if (pauseCtx->state == 0x17) {
+    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_SELECT) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 

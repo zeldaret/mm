@@ -3,7 +3,7 @@
     <File Name="object_ob" Segment="6">
     
         <!-- Moonchild Mask DisplayLists -->
-        <DList Name="gMoonChildOdalwasMaskDL" Offset="0x690" />
+        <DList Name="gMoonChildOdolwasMaskDL" Offset="0x690" />
         <DList Name="gMoonChildGyorgsMaskDL" Offset="0x1D80" />
         <DList Name="gMoonChildGohtsMaskDL" Offset="0x3AD0" />
         <DList Name="gMoonChildTwinmoldsMaskDL" Offset="0x5020" />
@@ -18,16 +18,16 @@
         <Texture Name="gMoonChildMajorasMaskSpike4Tex" OutName="moonchild_majoras_mask_spike_4" Format="rgba16" Width="16" Height="16" Offset="0x7DE0" />
         <Texture Name="gMoonChildMajorasMaskBackTex" OutName="moonchild_majoras_mask_back" Format="rgba16" Width="32" Height="32" Offset="0x7FE0" />
         <Texture Name="gMoonChildMajorasMaskEyesTex" OutName="moonchild_majoras_mask_eyes" Format="rgba16" Width="32" Height="32" Offset="0x87E0" />
-        <Texture Name="gMoonChildOdalwasMaskFaceTLUT" OutName="moonchild_odalwas_mask_face_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8FE0" />
-        <Texture Name="gMoonChildOdalwasMaskEarTLUT" OutName="moonchild_odalwas_mask_ear_tlut" Format="rgba16" Width="4" Height="4" Offset="0x9000" />
+        <Texture Name="gMoonChildOdolwasMaskFaceTLUT" OutName="moonchild_odolwas_mask_face_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8FE0" />
+        <Texture Name="gMoonChildOdolwasMaskEarTLUT" OutName="moonchild_odolwas_mask_ear_tlut" Format="rgba16" Width="4" Height="4" Offset="0x9000" />
         <Texture Name="gMoonChildGyorgsMaskSkinTLUT" OutName="moonchild_gyorgs_mask_skin_tlut" Format="rgba16" Width="4" Height="4" Offset="0x9020" />
         <Texture Name="gMoonChildGyorgsMaskMouthTLUT" OutName="moonchild_gyorgs_mask_mouth_tlut" Format="rgba16" Width="4" Height="4" Offset="0x9040" />
         <Texture Name="gMoonChildGyorgsMaskToothHornTLUT" OutName="moonchild_gyorgs_mask_tooth_horn_tlut" Format="rgba16" Width="4" Height="4" Offset="0x9060" />
         <Texture Name="gMoonChildTwinmoldsMaskSkinTLUT" OutName="moonchild_twinmolds_mask_skin_tlut" Format="rgba16" Width="4" Height="4" Offset="0x9080" />
         <Texture Name="gMoonChildTwinmoldsMaskSnoutTLUT" OutName="moonchild_twinmolds_snout_tlut" Format="rgba16" Width="4" Height="4" Offset="0x90A0" />
-        <Texture Name="gMoonChildOdalwasMaskHairTex" OutName="moonchild_odalwas_mask_hair" Format="rgba16" Width="16" Height="16" Offset="0x90C0" />
-        <Texture Name="gMoonChildOdalwasMaskFaceTex" OutName="moonchild_odalwas_mask_face" Format="ci4" Width="64" Height="64" Offset="0x92C0" />
-        <Texture Name="gMoonChildOdalwasMaskEarTex" OutName="moonchild_odalwas_mask_ear" Format="ci4" Width="64" Height="64" Offset="0x9AC0" />
+        <Texture Name="gMoonChildOdolwasMaskPlumeTex" OutName="moonchild_odolwas_mask_plume" Format="rgba16" Width="16" Height="16" Offset="0x90C0" />
+        <Texture Name="gMoonChildOdolwasMaskFaceTex" OutName="moonchild_odolwas_mask_face" Format="ci4" Width="64" Height="64" Offset="0x92C0" />
+        <Texture Name="gMoonChildOdolwasMaskEarTex" OutName="moonchild_odolwas_mask_ear" Format="ci4" Width="64" Height="64" Offset="0x9AC0" />
         <Texture Name="gMoonChildGyorgsTwinmoldsMaskEyeTex" OutName="moonchild_gyorgs_twinmolds_mask_eye" Format="rgba16" Width="32" Height="32" Offset="0xA2C0" />
         <Texture Name="gMoonChildGyorgsMaskSkinTex" OutName="moonchild_gyorgs_mask_skin" Format="ci4" Width="64" Height="64" Offset="0xAAC0" />
         <Texture Name="gMoonChildGyorgsMaskMouthTex" OutName="moonchild_gyorgs_mask_mouth" Format="ci4" Width="64" Height="64" Offset="0xB2C0" />
