@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kaizoku.h"
+#include "z64snap.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
@@ -252,7 +253,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
         this->unk_2BC = -1;
     }
     if (this->unk_2BC >= 0 && Flags_GetSwitch(play, this->unk_2BC)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->unk_3D4.dim.radius = 20;
@@ -270,7 +271,7 @@ void EnKaizoku_Destroy(Actor* thisx, PlayState* play) {
     Effect_Destroy(play, this->unk_3D0);
     Collider_DestroyCylinder(play, &this->unk_3D4);
     Collider_DestroyQuad(play, &this->unk_420);
-    func_801A2ED8();
+    Audio_RestorePrevBgm();
 }
 
 s32 func_80B85858(EnKaizoku* this, PlayState* play) {
@@ -397,8 +398,8 @@ void func_80B85E18(EnKaizoku* this, s32 arg1) {
 s32 func_80B85EA0(PlayState* play, Actor* actor) {
     s32 ret;
 
-    ret = func_8013A530(play, actor, 9, &actor->focus.pos, &actor->shape.rot, 10.0f, 400.0f, -1);
-    ret |= func_8013A530(play, actor, 0xB, &actor->focus.pos, &actor->shape.rot, 10.0f, 1200.0f, -1);
+    ret = Snap_ValidatePictograph(play, actor, PICTOGRAPH_PIRATE_GOOD, &actor->focus.pos, &actor->shape.rot, 10.0f, 400.0f, -1);
+    ret |= Snap_ValidatePictograph(play, actor, PICTOGRAPH_PIRATE_TOO_FAR, &actor->focus.pos, &actor->shape.rot, 10.0f, 1200.0f, -1);
     return ret;
 }
 
@@ -429,7 +430,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
             ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
             func_800B7298(play, &this->actor, 0x15);
-            this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+            this->unk_59E = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
             this->actor.shape.rot.y = this->actor.world.rot.y = this->actor.yawTowardsPlayer;
 
             sp54 = (this->unk_2CA * 4) + this->unk_2C8;
@@ -524,7 +525,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 this->unk_598 = 0;
                 this->unk_59C++;
                 func_801A0238(0x7F, 0);
-                func_801A2E54(0x38);
+                Audio_PlayBgm_StorePrevBgm(0x38);
                 func_80B85E18(this, 0xD);
             }
             break;
@@ -608,7 +609,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
     if (this->unk_59E != 0) {
         this->unk_5BC.y = 1.0f;
         this->unk_5BC.z = 0.0f;
-        Play_CameraSetAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
+        Play_SetCameraAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
     }
 }
 
@@ -622,7 +623,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
     }
 
     func_800B7298(play, &this->actor, 0x60);
-    this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+    this->unk_59E = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
     this->unk_2B2 = 30;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_598 = 0;
@@ -674,10 +675,10 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
                 func_800B7298(play, &this->actor, 6);
                 ActorCutscene_Stop(this->unk_2D6);
                 this->unk_59E = 0;
-                play->nextEntranceIndex = play->setupExitList[this->unk_2D4];
+                play->nextEntrance = play->setupExitList[this->unk_2D4];
                 gSaveContext.nextCutsceneIndex = 0;
                 Scene_SetExitFade(play);
-                play->sceneLoadFlag = 0x14;
+                play->transitionTrigger = 0x14;
                 this->unk_59C++;
                 this->unk_2B0 = 16;
             }
@@ -689,7 +690,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
         this->unk_5BC.x = 0.0f;
         this->unk_5BC.y = 1.0f;
         this->unk_5BC.z = 0.0f;
-        Play_CameraSetAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
+        Play_SetCameraAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
     }
 }
 
@@ -812,7 +813,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     if (this->unk_2BC >= 0) {
                         Flags_SetSwitch(play, this->unk_2BC);
                     }
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
             break;
@@ -828,7 +829,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
         this->unk_5BC.x = 0.0f;
         this->unk_5BC.z = 0.0f;
         this->unk_5BC.y = 1.0f;
-        Play_CameraSetAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
+        Play_SetCameraAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
     }
 }
 
@@ -1111,7 +1112,7 @@ void func_80B87F70(EnKaizoku* this) {
     this->unk_2D0 = 0;
     this->unk_420.base.atFlags &= ~AT_BOUNCED;
     this->actor.speedXZ = 0.0f;
-    func_801A7328(&this->actor.projectedPos, 0x39B7);
+    AudioSfx_StopByPosAndId(&this->actor.projectedPos, 0x39B7);
     this->unk_2B0 = 9;
     this->actionFunc = func_80B87FDC;
 }
@@ -1648,7 +1649,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
                 return;
             }
             ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
-            this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+            this->unk_59E = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
         }
 
         Math_Vec3f_Copy(&this->unk_3C4, &gZeroVec3f);
@@ -1672,7 +1673,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
             this->unk_5BC.x = 0.0f;
             this->unk_5BC.y = 1.0f;
             this->unk_5BC.z = 0.0f;
-            Play_CameraSetAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
+            Play_SetCameraAtEyeUp(play, this->unk_59E, &this->unk_5B0, &this->unk_5A4, &this->unk_5BC);
         }
     }
 
@@ -1710,7 +1711,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 this->actionFunc = func_80B86804;
             } else {
                 ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
-                this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+                this->unk_59E = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
                 this->actionFunc = func_80B86804;
             }
             return;
@@ -1728,7 +1729,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->actionFunc = func_80B86804;
                 } else {
                     ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
-                    this->unk_59E = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+                    this->unk_59E = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
                     this->actionFunc = func_80B86804;
                 }
                 return;
@@ -1748,7 +1749,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     if ((this->unk_3D4.base.acFlags & AC_HIT) && this->unk_2B0 > 0 && this->unk_2D0 < 2 && this->unk_2B0 != 6 &&
         this->unk_2B0 != 12 && this->unk_2B0 != 14 && this->unk_2B0 != 15) {
         Actor_SetDropFlag(&this->actor, &this->unk_3D4.info);
-        func_801A7328(&this->actor.projectedPos, 0x39B7);
+        AudioSfx_StopByPosAndId(&this->actor.projectedPos, 0x39B7);
 
         switch (this->actor.colChkInfo.damageEffect) {
             case 5:
