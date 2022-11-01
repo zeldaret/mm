@@ -67,7 +67,7 @@
         <Limb Name="object_kz_Standardlimb_00D70C" Type="Standard" EnumName="KAIZOKU_LIMB_08" Offset="0xD70C" />
         <Limb Name="object_kz_Standardlimb_00D718" Type="Standard" EnumName="KAIZOKU_LIMB_09" Offset="0xD718" />
         <Limb Name="object_kz_Standardlimb_00D724" Type="Standard" EnumName="KAIZOKU_LIMB_0A" Offset="0xD724" />
-        <Limb Name="object_kz_Standardlimb_00D730" Type="Standard" EnumName="KAIZOKU_LIMB_0B" Offset="0xD730" />
+        <Limb Name="object_kz_Standardlimb_00D730" Type="Standard" EnumName="KAIZOKU_LIMB_R_SWORD" Offset="0xD730" />
         <Limb Name="object_kz_Standardlimb_00D73C" Type="Standard" EnumName="KAIZOKU_LIMB_0C" Offset="0xD73C" />
         <Limb Name="object_kz_Standardlimb_00D748" Type="Standard" EnumName="KAIZOKU_LIMB_0D" Offset="0xD748" />
         <Limb Name="object_kz_Standardlimb_00D754" Type="Standard" EnumName="KAIZOKU_LIMB_0E" Offset="0xD754" />
@@ -75,10 +75,10 @@
         <Limb Name="object_kz_Standardlimb_00D76C" Type="Standard" EnumName="KAIZOKU_LIMB_10" Offset="0xD76C" />
         <Limb Name="object_kz_Standardlimb_00D778" Type="Standard" EnumName="KAIZOKU_LIMB_11" Offset="0xD778" />
         <Limb Name="object_kz_Standardlimb_00D784" Type="Standard" EnumName="KAIZOKU_LIMB_12" Offset="0xD784" />
-        <Limb Name="object_kz_Standardlimb_00D790" Type="Standard" EnumName="KAIZOKU_LIMB_13" Offset="0xD790" />
+        <Limb Name="object_kz_Standardlimb_00D790" Type="Standard" EnumName="KAIZOKU_LIMB_L_FOOT" Offset="0xD790" />
         <Limb Name="object_kz_Standardlimb_00D79C" Type="Standard" EnumName="KAIZOKU_LIMB_14" Offset="0xD79C" />
         <Limb Name="object_kz_Standardlimb_00D7A8" Type="Standard" EnumName="KAIZOKU_LIMB_15" Offset="0xD7A8" />
-        <Limb Name="object_kz_Standardlimb_00D7B4" Type="Standard" EnumName="KAIZOKU_LIMB_16" Offset="0xD7B4" />
+        <Limb Name="object_kz_Standardlimb_00D7B4" Type="Standard" EnumName="KAIZOKU_LIMB_R_FOOT" Offset="0xD7B4" />
         <Limb Name="object_kz_Standardlimb_00D7C0" Type="Standard" EnumName="KAIZOKU_LIMB_17" Offset="0xD7C0" />
         <Skeleton Name="gKaizokuSkel" Type="Flex" LimbType="Standard" LimbNone="KAIZOKU_LIMB_NONE" LimbMax="KAIZOKU_LIMB_MAX" EnumName="KaizokuLimb" Offset="0xD828" />
 

@@ -41,9 +41,9 @@ typedef struct EnKaizoku {
     /* 0x18C */ Vec3s jointTable[KAIZOKU_LIMB_MAX];
     /* 0x21C */ Vec3s morphTable[KAIZOKU_LIMB_MAX];
     /* 0x2AC */ EnKaizokuActionFunc actionFunc;
-    /* 0x2B0 */ s16 unk_2B0;
+    /* 0x2B0 */ s16 action;
     /* 0x2B2 */ s16 unk_2B2;
-    /* 0x2B4 */ s16 unk_2B4;
+    /* 0x2B4 */ s16 lookTimer;
     /* 0x2B6 */ s16 unk_2B6;
     /* 0x2B8 */ s16 unk_2B8;
     /* 0x2BA */ s16 drawDmgEffType;
@@ -56,7 +56,7 @@ typedef struct EnKaizoku {
     /* 0x2CC */ s16 eyeIndex;
     /* 0x2CE */ s16 blinkTimer;
     /* 0x2D0 */ s16 unk_2D0;
-    /* 0x2D2 */ s16 unk_2D2;
+    /* 0x2D2 */ s16 swordState;
     /* 0x2D4 */ s16 exitIndex;
     /* 0x2D6 */ s16 unk_2D6;
     /* 0x2D8 */ u8 unk_2D8;
@@ -72,15 +72,14 @@ typedef struct EnKaizoku {
     /* 0x304 */ Vec3f unk_304;
     /* 0x310 */ Vec3f bodyPartsPos[15];
     /* 0x3C4 */ Vec3f unk_3C4;
-    /* 0x3D0 */ s32 unk_3D0;
-    /* 0x3D4 */ ColliderCylinder unk_3D4;
-    /* 0x420 */ ColliderQuad unk_420;
-    /* 0x4A0 */ UNK_TYPE1 pad_4A0[0xD8];
-    /* 0x578 */ s16 unk_578;
-    /* 0x57A */ s16 unk_57A;
-    /* 0x57C */ s16 unk_57C;
-    /* 0x580 */ Vec3f unk_580;
-    /* 0x58C */ Vec3f unk_58C;
+    /* 0x3D0 */ s32 blureIndex;
+    /* 0x3D4 */ ColliderCylinder bodyCollider;
+    /* 0x420 */ ColliderQuad swordCollider;
+    /* 0x4A0 */ ColliderTris blockCollider; // Unused. Inferred from OoT
+    /* 0x4C0 */ ColliderTrisElement blockElements[2]; // Unused. Inferred from OoT
+    /* 0x578 */ Vec3s headRot;
+    /* 0x580 */ Vec3f rightFootPos;
+    /* 0x58C */ Vec3f leftFootPos;
     /* 0x598 */ s32 unk_598;
     /* 0x59C */ s16 unk_59C;
     /* 0x59E */ s16 subCamId;

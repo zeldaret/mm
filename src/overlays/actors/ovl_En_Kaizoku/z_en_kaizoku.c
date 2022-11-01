@@ -52,6 +52,47 @@ void func_80B887AC(EnKaizoku* this, PlayState* play);
 void func_80B88278(EnKaizoku* this, PlayState* play);
 void func_80B88378(EnKaizoku* this, PlayState* play);
 
+#if 0
+typedef enum {
+    /*  0 */ KAIZOKU_WAIT, // TODO: check
+    /*  1 */ KAIZOKU_DEFEAT, // TODO: check
+    /*  2 */ KAIZOKU_DAMAGED, // TODO: check
+    /*  3 */ KAIZOKU_JUMP, // TODO: check
+    /*  4 */ KAIZOKU_ROLL_BACK, // TODO: check
+    /*  5 */ KAIZOKU_READY, // TODO: check
+    /*  6 */ KAIZOKU_BLOCK, // TODO: check
+    /*  7 */ KAIZOKU_SLASH, // TODO: check
+    /*  8 */ KAIZOKU_ADVANCE, // TODO: check
+    /*  9 */ KAIZOKU_PIVOT, // TODO: check
+    /* 10 */ KAIZOKU_CIRCLE, // TODO: check
+    /* 11 */ KAIZOKU_UNUSED, // TODO: check
+    /* 12 */ KAIZOKU_SPIN_ATTACK, // TODO: check
+    /* 13 */ KAIZOKU_SIDESTEP, // TODO: check
+    /* 14 */ KAIZOKU_ROLL_FORWARD, // TODO: check
+    /* 15 */ KAIZOKU_STUNNED, // TODO: check
+    /* 16 */ KAIZOKU_SPIN_DODGE // TODO: check
+} EnKaizokuAction;
+#endif
+typedef enum EnKaizokuAction {
+    /*  0 */ KAIZOKU_ACTION_0,
+    /*  1 */ KAIZOKU_ACTION_1,
+    /*  2 */ KAIZOKU_ACTION_2,
+    /*  3 */ KAIZOKU_ACTION_3,
+    /*  4 */ KAIZOKU_ACTION_4,
+    /*  5 */ KAIZOKU_ACTION_5,
+    /*  6 */ KAIZOKU_ACTION_6,
+    /*  7 */ KAIZOKU_ACTION_7,
+    /*  8 */ KAIZOKU_ACTION_8,
+    /*  9 */ KAIZOKU_ACTION_9,
+    /* 10 */ KAIZOKU_ACTION_10,
+    /* 11 */ KAIZOKU_ACTION_11,
+    /* 12 */ KAIZOKU_ACTION_12,
+    /* 13 */ KAIZOKU_ACTION_13,
+    /* 14 */ KAIZOKU_ACTION_14,
+    /* 15 */ KAIZOKU_ACTION_15,
+    /* 16 */ KAIZOKU_ACTION_16
+} EnKaizokuAction;
+
 u16 D_80B8A8D0[] = {
     0x11A4, 0x11A5, 0x11A6, 0x11A7, 0x11A8, 0x11A9, 0x11AA, 0x11AB, 0x11AC, 0x11AD,
 };
@@ -86,39 +127,51 @@ Color_RGBA8 D_80B8AB30[] = {
     { 135, 195, 80, 255 },
 };
 
+typedef enum EnKaizokuDamageEffect {
+    /* 0x0 */ KAIZOKU_DMGEFF_NONE,
+    /* 0x1 */ KAIZOKU_DMGEFF_1,
+    /* 0x2 */ KAIZOKU_DMGEFF_2,
+    /* 0x3 */ KAIZOKU_DMGEFF_FREEZE,
+    /* 0x4 */ KAIZOKU_DMGEFF_4,
+    /* 0x5 */ KAIZOKU_DMGEFF_5,
+    /* 0xD */ KAIZOKU_DMGEFF_D = 0xD,
+    /* 0xE */ KAIZOKU_DMGEFF_E,
+    /* 0xF */ KAIZOKU_DMGEFF_F
+} EnKaizokuDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(0, 0x1),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0x1),
-    /* Goron punch    */ DMG_ENTRY(1, 0xE),
-    /* Sword          */ DMG_ENTRY(1, 0xE),
-    /* Goron pound    */ DMG_ENTRY(0, 0xD),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xE),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xE),
-    /* Deku launch    */ DMG_ENTRY(2, 0xE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xE),
-    /* Zora punch     */ DMG_ENTRY(1, 0xE),
-    /* Spin attack    */ DMG_ENTRY(1, 0xD),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xE),
+    /* Deku Nut       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_1),
+    /* Deku Stick     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_F),
+    /* Horse trample  */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_F),
+    /* Zora boomerang */ DMG_ENTRY(0, KAIZOKU_DMGEFF_1),
+    /* Normal arrow   */ DMG_ENTRY(1, KAIZOKU_DMGEFF_F),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, KAIZOKU_DMGEFF_1),
+    /* Goron punch    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
+    /* Sword          */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
+    /* Goron pound    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_D),
+    /* Fire arrow     */ DMG_ENTRY(2, KAIZOKU_DMGEFF_2),
+    /* Ice arrow      */ DMG_ENTRY(2, KAIZOKU_DMGEFF_FREEZE),
+    /* Light arrow    */ DMG_ENTRY(2, KAIZOKU_DMGEFF_4),
+    /* Goron spikes   */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
+    /* Deku spin      */ DMG_ENTRY(0, KAIZOKU_DMGEFF_1),
+    /* Deku bubble    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
+    /* Deku launch    */ DMG_ENTRY(2, KAIZOKU_DMGEFF_E),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_1),
+    /* Zora barrier   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_5),
+    /* Normal shield  */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
+    /* Zora punch     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
+    /* Spin attack    */ DMG_ENTRY(1, KAIZOKU_DMGEFF_D),
+    /* Sword beam     */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, KAIZOKU_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, KAIZOKU_DMGEFF_E),
 };
 
 ActorInit En_Kaizoku_InitVars = {
@@ -243,8 +296,8 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.damageTable = &sDamageTable;
     SkelAnime_InitFlex(play, &this->skelAnime, &gKaizokuSkel, &object_kz_Anim_0058B8, this->jointTable,
                        this->morphTable, KAIZOKU_LIMB_MAX);
-    Collider_InitAndSetCylinder(play, &this->unk_3D4, &this->picto.actor, &sCylinderInit);
-    Collider_InitAndSetQuad(play, &this->unk_420, &this->picto.actor, &sQuadInit);
+    Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->picto.actor, &sCylinderInit);
+    Collider_InitAndSetQuad(play, &this->swordCollider, &this->picto.actor, &sQuadInit);
     blureInit.p1StartColor[0] = blureInit.p1StartColor[1] = blureInit.p1StartColor[2] = blureInit.p1StartColor[3] =
         blureInit.p2StartColor[0] = blureInit.p2StartColor[1] = blureInit.p2StartColor[2] = blureInit.p1EndColor[0] =
             blureInit.p1EndColor[1] = blureInit.p1EndColor[2] = blureInit.p2EndColor[0] = blureInit.p2EndColor[1] =
@@ -254,7 +307,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     blureInit.elemDuration = 8;
     blureInit.unkFlag = 0;
     blureInit.calcMode = 2;
-    Effect_Add(play, &this->unk_3D0, EFFECT_BLURE1, 0, 0, &blureInit);
+    Effect_Add(play, &this->blureIndex, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->picto.actor, 0.0125f);
     this->picto.actor.flags |= ACTOR_FLAG_8000000;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
@@ -267,9 +320,9 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->unk_3D4.dim.radius = 20;
-    this->unk_3D4.dim.height = 65;
-    this->unk_3D4.dim.yShift = 0;
+    this->bodyCollider.dim.radius = 20;
+    this->bodyCollider.dim.height = 65;
+    this->bodyCollider.dim.yShift = 0;
     this->unk_2D6 = this->picto.actor.cutscene;
     this->picto.actor.world.pos.y = player->actor.world.pos.y + 160.0f;
     this->picto.validationFunc = EnKaizoku_ValidatePictograph;
@@ -280,30 +333,30 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
 void EnKaizoku_Destroy(Actor* thisx, PlayState* play) {
     EnKaizoku* this = THIS;
 
-    Effect_Destroy(play, this->unk_3D0);
-    Collider_DestroyCylinder(play, &this->unk_3D4);
-    Collider_DestroyQuad(play, &this->unk_420);
+    Effect_Destroy(play, this->blureIndex);
+    Collider_DestroyCylinder(play, &this->bodyCollider);
+    Collider_DestroyQuad(play, &this->swordCollider);
     Audio_RestorePrevBgm();
 }
 
 s32 func_80B85858(EnKaizoku* this, PlayState* play) {
     Actor* itemAction;
     Player* player = GET_PLAYER(play);
-    s16 sp1E = this->unk_2B0;
+    s16 prevAction = this->action;
 
     for (itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first; itemAction != NULL;
          itemAction = itemAction->next) {
         //! FAKE:
         if (1) {}
         if (((itemAction->id == ACTOR_ARMS_HOOK) || (itemAction->id == ACTOR_EN_ARROW)) && (player->unk_D57)) {
-            if (((itemAction->id != ACTOR_ARMS_HOOK) || (this->unk_2B0 != 13)) && (this->unk_2B0 != 6)) {
+            if (((itemAction->id != ACTOR_ARMS_HOOK) || (this->action != KAIZOKU_ACTION_13)) && (this->action != KAIZOKU_ACTION_6)) {
                 func_80B87C7C(this);
             }
             break;
         }
     }
 
-    if (sp1E != this->unk_2B0) {
+    if (prevAction != this->action) {
         return true;
     } else {
         return false;
@@ -311,15 +364,15 @@ s32 func_80B85858(EnKaizoku* this, PlayState* play) {
 }
 
 void func_80B85900(EnKaizoku* this) {
-    if (this->unk_2B0 == 1) {
-        this->unk_57A = Math_SinS(this->unk_2B4 * 0x1068) * 8920.0f;
-    } else if (this->unk_2B0 != 13) {
-        if ((this->unk_2B0 == 9) || (this->unk_2B0 == 11)) {
-            Math_SmoothStepToS(&this->unk_57A, this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y, 1,
+    if (this->action == KAIZOKU_ACTION_1) {
+        this->headRot.y = Math_SinS(this->lookTimer * 0x1068) * 0x22D8;
+    } else if (this->action != KAIZOKU_ACTION_13) {
+        if ((this->action == KAIZOKU_ACTION_9) || (this->action == KAIZOKU_ACTION_11)) {
+            Math_SmoothStepToS(&this->headRot.y, this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y, 1,
                                500, 0);
-            this->unk_57A = CLAMP(this->unk_57A, -0x256F, 0x256F);
+            this->headRot.y = CLAMP(this->headRot.y, -0x256F, 0x256F);
         } else {
-            this->unk_57A = 0;
+            this->headRot.y = 0;
         }
     }
 }
@@ -332,7 +385,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
 
     if (func_800BE184(play, &this->picto.actor, 100.0f, 0x2710, 0x4000, this->picto.actor.shape.rot.y)) {
         if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
-            if (this->unk_2B0 != 2) {
+            if (this->action != KAIZOKU_ACTION_2) {
                 func_80B874D8(this, play);
             }
             return true;
@@ -344,17 +397,17 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
         if ((this->picto.actor.bgCheckFlags & 8) && (ABS_ALT(sp32) < 0x2EE0) &&
             (this->picto.actor.xzDistToPlayer < 90.0f)) {
-            if (this->unk_2B0 != 6) {
+            if (this->action != KAIZOKU_ACTION_6) {
                 func_80B87C7C(this);
             }
             return true;
         } else if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
-            if (this->unk_2B0 != 2) {
+            if (this->action != KAIZOKU_ACTION_2) {
                 func_80B874D8(this, play);
             }
         } else if (this->picto.actor.xzDistToPlayer < BREG(11) + 180.0f) {
             func_80B87900(this);
-        } else if (this->unk_2B0 != 7) {
+        } else if (this->action != KAIZOKU_ACTION_7) {
             func_80B87E28(this);
         }
         return true;
@@ -368,7 +421,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
             if ((explosiveActor->id == ACTOR_EN_BOM_CHU) &&
                 (Actor_DistanceBetweenActors(&this->picto.actor, explosiveActor) < 80.0f) &&
                 (BINANG_ADD(this->picto.actor.shape.rot.y - explosiveActor->world.rot.y, 0x8000) < 0x4000)) {
-                if (this->unk_2B0 != 6) {
+                if (this->action != KAIZOKU_ACTION_6) {
                     func_80B87C7C(this);
                 }
             } else {
@@ -378,7 +431,7 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
             return true;
         }
 
-        if (this->unk_2B0 != 7) {
+        if (this->action != KAIZOKU_ACTION_7) {
             func_80B87E28(this);
         }
         return true;
@@ -395,11 +448,11 @@ s32 func_80B85A00(EnKaizoku* this, PlayState* play, s16 arg2) {
             sp2A = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
             if (this->picto.actor.xzDistToPlayer <= 65.0f && !Actor_OtherIsTargeted(play, &this->picto.actor) &&
                 ABS_ALT(sp2A) < 0x5000) {
-                if (this->unk_2B0 != 9) {
+                if (this->action != KAIZOKU_ACTION_9) {
                     func_80B87F70(this);
                     return 1;
                 }
-            } else if (this->unk_2B0 != 3) {
+            } else if (this->action != KAIZOKU_ACTION_3) {
                 func_80B88CD8(this);
             }
         }
@@ -429,7 +482,7 @@ void func_80B85F48(EnKaizoku* this) {
     Math_Vec3f_Copy(&this->unk_2F8, &gZeroVec3f);
     Math_Vec3f_Copy(&this->unk_304, &gZeroVec3f);
     this->unk_2D8 = 1;
-    this->unk_2B0 = 0;
+    this->action = KAIZOKU_ACTION_0;
     this->actionFunc = func_80B85FA8;
 }
 
@@ -508,8 +561,8 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
                     this->picto.actor.velocity.y = 0.0f;
                     func_800B7298(play, &this->picto.actor, 4);
-                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->unk_58C, 3.0f, 2, 2.0f, 0, 0, 0);
-                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->unk_580, 3.0f, 2, 2.0f, 0, 0, 0);
+                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+                    Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
                     Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_ONGND);
                 }
 
@@ -650,7 +703,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
     this->unk_598 = 0;
     this->unk_59C = 0;
     this->unk_2D8 = 0;
-    this->unk_2B0 = 0;
+    this->action = KAIZOKU_ACTION_0;
     this->actionFunc = func_80B868B8;
     this->picto.actor.speedXZ = 0.0f;
 }
@@ -701,7 +754,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
                 Scene_SetExitFade(play);
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 this->unk_59C++;
-                this->unk_2B0 = 16;
+                this->action = KAIZOKU_ACTION_16;
             }
 
             break;
@@ -717,7 +770,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
 
 void func_80B86B58(EnKaizoku* this) {
     this->unk_2D8 = 0;
-    this->unk_2B0 = 0;
+    this->action = KAIZOKU_ACTION_0;
     this->actionFunc = func_80B86B74;
 }
 
@@ -861,7 +914,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
 void func_80B872A4(EnKaizoku* this) {
     this->picto.actor.speedXZ = 0.0f;
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_0);
-    this->unk_2B0 = 1;
+    this->action = KAIZOKU_ACTION_1;
     this->actionFunc = func_80B872F4;
     this->picto.actor.shape.shadowScale = 90.0f;
 }
@@ -869,7 +922,7 @@ void func_80B872A4(EnKaizoku* this) {
 void func_80B872F4(EnKaizoku* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((this->unk_2B4 == 0) && !func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
+    if ((this->lookTimer == 0) && !func_80B85858(this, play) && !func_80B85A00(this, play, false)) {
         s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
 
         if ((this->picto.actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != 0) && (yawDiff >= 0x1F40)) {
@@ -911,7 +964,7 @@ void func_80B874D8(EnKaizoku* this, PlayState* play) {
     this->skelAnime.playSpeed = 1.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
     this->unk_2B2 = 6;
-    this->unk_2B0 = 2;
+    this->action = KAIZOKU_ACTION_2;
     this->unk_2E0 = 0.0f;
     this->actionFunc = func_80B8760C;
 }
@@ -988,15 +1041,15 @@ void func_80B8760C(EnKaizoku* this, PlayState* play) {
 void func_80B87900(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_7);
 
-    if (this->unk_2D2 != 0) {
-        this->unk_2D2 = -1;
+    if (this->swordState != 0) {
+        this->swordState = -1;
     }
     this->unk_2D8 = 0;
     this->picto.actor.speedXZ = 0.0f;
     this->unk_2B2 = Rand_S16Offset(10, 10);
-    this->unk_3D4.base.acFlags |= AC_HARD;
-    this->unk_2B4 = 12;
-    this->unk_2B0 = 12;
+    this->bodyCollider.base.acFlags |= AC_HARD;
+    this->lookTimer = 12;
+    this->action = KAIZOKU_ACTION_12;
     this->actionFunc = func_80B8798C;
 }
 
@@ -1008,47 +1061,47 @@ void func_80B8798C(EnKaizoku* this, PlayState* play) {
     if (this->unk_2B2 == 0) {
         this->skelAnime.playSpeed = 1.0f;
     }
-    if (this->unk_2B4 == 0) {
+    if (this->lookTimer == 0) {
         this->unk_2D8 = 0;
         temp_v0 = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
         if (ABS_ALT(temp_v0) <= 0x4000 && this->picto.actor.xzDistToPlayer < 40.0f &&
             fabsf(this->picto.actor.playerHeightRel) < 50.0f) {
             if (func_800BE184(play, &this->picto.actor, 100.0f, 10000, 0x4000, this->picto.actor.shape.rot.y)) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
-                    this->unk_3D4.base.acFlags &= ~AC_HARD;
+                    this->bodyCollider.base.acFlags &= ~AC_HARD;
                     func_80B874D8(this, play);
                 } else if (!(play->gameplayFrames & 1)) {
                     func_80B87900(this);
                 } else {
-                    this->unk_3D4.base.acFlags &= ~AC_HARD;
+                    this->bodyCollider.base.acFlags &= ~AC_HARD;
                     func_80B87E28(this);
                 }
             } else {
                 temp_v0 = player->actor.shape.rot.y - this->picto.actor.shape.rot.y;
                 if (ABS_ALT(temp_v0) < 0x4000) {
-                    this->unk_3D4.base.acFlags &= ~AC_HARD;
+                    this->bodyCollider.base.acFlags &= ~AC_HARD;
                     func_80B87F70(this);
                 } else {
-                    this->unk_3D4.base.acFlags &= ~AC_HARD;
+                    this->bodyCollider.base.acFlags &= ~AC_HARD;
                     func_80B88CD8(this);
                 }
             }
         } else {
-            this->unk_3D4.base.acFlags &= ~AC_HARD;
+            this->bodyCollider.base.acFlags &= ~AC_HARD;
             func_80B88CD8(this);
         }
     } else if (this->unk_2B2 == 0 &&
                func_800BE184(play, &this->picto.actor, 100.0f, 10000, 0x4000, this->picto.actor.shape.rot.y)) {
         if (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) {
-            this->unk_3D4.base.acFlags &= ~AC_HARD;
+            this->bodyCollider.base.acFlags &= ~AC_HARD;
             func_80B874D8(this, play);
         } else if (!func_80B85858(this, play)) {
             if (!(play->gameplayFrames & 1)) {
                 if (this->picto.actor.xzDistToPlayer < 100.0f && Rand_ZeroOne() > 0.7f) {
-                    this->unk_3D4.base.acFlags &= ~AC_HARD;
+                    this->bodyCollider.base.acFlags &= ~AC_HARD;
                     func_80B87C7C(this);
                 } else {
-                    this->unk_3D4.base.acFlags &= ~AC_HARD;
+                    this->bodyCollider.base.acFlags &= ~AC_HARD;
                     func_80B87E28(this);
                 }
             } else {
@@ -1064,10 +1117,10 @@ void func_80B87C7C(EnKaizoku* this) {
     this->picto.actor.velocity.y = 15.0f;
     Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
-    this->unk_3D4.info.elemType = ELEMTYPE_UNK4;
-    this->unk_3D4.base.colType = COLTYPE_NONE;
-    this->unk_420.info.elemType = ELEMTYPE_UNK4;
-    this->unk_2B0 = 6;
+    this->bodyCollider.info.elemType = ELEMTYPE_UNK4;
+    this->bodyCollider.base.colType = COLTYPE_NONE;
+    this->swordCollider.info.elemType = ELEMTYPE_UNK4;
+    this->action = KAIZOKU_ACTION_6;
     this->actionFunc = func_80B87D3C;
 }
 
@@ -1086,15 +1139,15 @@ void func_80B87D3C(EnKaizoku* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 1, 0xFA0, 1);
     if (this->picto.actor.velocity.y >= 5.0f) {
-        func_80B87CF8(play, &this->unk_58C);
-        func_80B87CF8(play, &this->unk_580);
+        func_80B87CF8(play, &this->leftFootPos);
+        func_80B87CF8(play, &this->rightFootPos);
     }
 
     this->unk_2D8 = 0;
     if ((this->frameCount <= curFrame) && (this->picto.actor.bgCheckFlags & 3)) {
-        this->unk_3D4.info.elemType = ELEMTYPE_UNK1;
-        this->unk_3D4.base.colType = COLTYPE_HIT3;
-        this->unk_420.info.elemType = ELEMTYPE_UNK2;
+        this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+        this->bodyCollider.base.colType = COLTYPE_HIT3;
+        this->swordCollider.info.elemType = ELEMTYPE_UNK2;
         this->picto.actor.shape.rot.x = 0;
         this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
         this->picto.actor.speedXZ = 0.0f;
@@ -1108,10 +1161,10 @@ void func_80B87E28(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_8);
     this->picto.actor.speedXZ = -8.0f;
     Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
-    this->unk_3D4.info.elemType = ELEMTYPE_UNK4;
-    this->unk_3D4.base.colType = COLTYPE_NONE;
-    this->unk_420.info.elemType = ELEMTYPE_UNK4;
-    this->unk_2B0 = 7;
+    this->bodyCollider.info.elemType = ELEMTYPE_UNK4;
+    this->bodyCollider.base.colType = COLTYPE_NONE;
+    this->swordCollider.info.elemType = ELEMTYPE_UNK4;
+    this->action = KAIZOKU_ACTION_7;
     this->actionFunc = func_80B87E9C;
     this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 }
@@ -1136,10 +1189,10 @@ void func_80B87E9C(EnKaizoku* this, PlayState* play) {
 void func_80B87F70(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_9);
     this->unk_2D0 = 0;
-    this->unk_420.base.atFlags &= ~AT_BOUNCED;
+    this->swordCollider.base.atFlags &= ~AT_BOUNCED;
     this->picto.actor.speedXZ = 0.0f;
     AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
-    this->unk_2B0 = 9;
+    this->action = KAIZOKU_ACTION_9;
     this->actionFunc = func_80B87FDC;
 }
 
@@ -1157,14 +1210,14 @@ void func_80B87FDC(EnKaizoku* this, PlayState* play2) {
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
         Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
-        this->unk_2D2 = 1;
+        this->swordState = 1;
     } else if (Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        this->unk_2D2 = -1;
+        this->swordState = -1;
     }
 
-    if (this->unk_420.base.atFlags & AT_BOUNCED) {
-        this->unk_2D2 = -1;
-        this->unk_420.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
+    if (this->swordCollider.base.atFlags & AT_BOUNCED) {
+        this->swordState = -1;
+        this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
         func_80B87E28(this);
         return;
     }
@@ -1175,7 +1228,7 @@ void func_80B87FDC(EnKaizoku* this, PlayState* play2) {
             func_80B872A4(this);
 
             if (sp2C > 0x4000) {
-                this->unk_2B4 = 20;
+                this->lookTimer = 20;
             }
         } else {
             if (Rand_ZeroOne() > 0.7f || this->picto.actor.xzDistToPlayer >= 120.0f) {
@@ -1207,7 +1260,7 @@ void func_80B88214(EnKaizoku* this) {
     this->picto.actor.speedXZ = 10.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
     Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_TEKU_JUMP);
-    this->unk_2B0 = 5;
+    this->action = KAIZOKU_ACTION_5;
     this->actionFunc = func_80B88278;
 }
 
@@ -1231,7 +1284,7 @@ void func_80B88278(EnKaizoku* this, PlayState* play) {
 
 void func_80B8833C(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_4);
-    this->unk_2B0 = 4;
+    this->action = KAIZOKU_ACTION_4;
     this->actionFunc = func_80B88378;
 }
 
@@ -1308,7 +1361,7 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
 
 void func_80B88770(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_3);
-    this->unk_2B0 = 0xA;
+    this->action = KAIZOKU_ACTION_10;
     this->actionFunc = func_80B887AC;
 }
 
@@ -1342,9 +1395,9 @@ void func_80B887AC(EnKaizoku* this, PlayState* play) {
 
 void func_80B88910(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_10);
-    this->unk_420.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
+    this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
     this->unk_2D0 = 0;
-    this->unk_2B0 = 11;
+    this->action = KAIZOKU_ACTION_11;
     this->actionFunc = func_80B88964;
     this->picto.actor.speedXZ = 0.0f;
 }
@@ -1357,8 +1410,8 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
     s32 pad;
 
     if (this->unk_2D0 < 2) {
-        if (this->unk_420.base.atFlags & AT_BOUNCED) {
-            this->unk_420.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
+        if (this->swordCollider.base.atFlags & AT_BOUNCED) {
+            this->swordCollider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
             this->unk_2D0 = 1;
             this->skelAnime.playSpeed = 1.0f;
         }
@@ -1368,15 +1421,15 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     } else {
         if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->unk_58C, 3.0f, 2, 2.0f, 0, 0, 0);
-            Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->unk_580, 3.0f, 2, 2.0f, 0, 0, 0);
-            this->unk_2D2 = 1;
+            Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+            Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
+            this->swordState = 1;
             this->picto.actor.speedXZ = 10.0f;
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_ATTACK);
         } else if (Animation_OnFrame(&this->skelAnime, 21.0f)) {
             this->picto.actor.speedXZ = 0.0f;
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-            this->unk_2D2 = -1;
+            this->swordState = -1;
         }
     }
 
@@ -1385,7 +1438,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
         if (!Actor_IsFacingPlayer(&this->picto.actor, 0x1554)) {
             func_80B872A4(this);
             this->unk_2B2 = Rand_ZeroOne() * 5.0f + 5.0f;
-            this->unk_2B4 = 46;
+            this->lookTimer = 46;
             return;
         }
 
@@ -1428,7 +1481,7 @@ void func_80B88CD8(EnKaizoku* this) {
     this->skelAnime.playSpeed = 1.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
     this->unk_2B2 = Rand_ZeroOne() * 30.0f + 30.0f;
-    this->unk_2B0 = 3;
+    this->action = KAIZOKU_ACTION_3;
     this->actionFunc = func_80B88D6C;
     this->unk_2E0 = 0.0f;
 }
@@ -1519,12 +1572,13 @@ void func_80B88D6C(EnKaizoku* this, PlayState* play) {
     }
 }
 
+// EnKaizoku_SetupStunned
 void func_80B891B8(EnKaizoku* this) {
     if (this->picto.actor.bgCheckFlags & 1) {
         this->picto.actor.speedXZ = 0.0f;
     }
 
-    if (this->unk_2B0 == 11) {
+    if (this->action == KAIZOKU_ACTION_11) {
         EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_5);
     }
 
@@ -1543,10 +1597,11 @@ void func_80B891B8(EnKaizoku* this) {
         this->unk_2B6 = 40;
     }
 
-    this->unk_2B0 = 13;
+    this->action = KAIZOKU_ACTION_13;
     this->actionFunc = func_80B89280;
 }
 
+// EnKaizoku_Stunned
 void func_80B89280(EnKaizoku* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) {
         if (this->unk_2B8 != 0 && this->unk_2B8 < 60) {
@@ -1586,7 +1641,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
     Matrix_RotateYS(this->picto.actor.yawTowardsPlayer, MTXMODE_NEW);
     Matrix_MultVecZ(-10.0f, &sp34);
     Math_Vec3f_Copy(&this->unk_3C4, &sp34);
-    this->unk_2B4 = 0;
+    this->lookTimer = 0;
     this->unk_2D8 = 0;
     this->picto.actor.speedXZ = 0.0f;
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_5);
@@ -1602,7 +1657,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
     }
 
     Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DAMAGE);
-    this->unk_2B0 = 14;
+    this->action = KAIZOKU_ACTION_14;
     this->actionFunc = func_80B894C0;
 }
 
@@ -1621,7 +1676,7 @@ void func_80B894C0(EnKaizoku* this, PlayState* play) {
         }
 
         if (this->picto.actor.xzDistToPlayer <= 65.0f && ((play->gameplayFrames % 8) != 0)) {
-            this->unk_420.info.elemType = ELEMTYPE_UNK2;
+            this->swordCollider.info.elemType = ELEMTYPE_UNK2;
             func_80B87F70(this);
         } else {
             func_80B87E28(this);
@@ -1653,7 +1708,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
     this->unk_598 = 0;
     this->unk_59C = 0;
-    this->unk_2B0 = 15;
+    this->action = KAIZOKU_ACTION_15;
     this->actionFunc = func_80B8971C;
 }
 
@@ -1732,13 +1787,13 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     s32 i;
 
     if (gSaveContext.save.playerData.health <= 0x10) {
-        this->unk_420.info.toucher.damage = 0;
+        this->swordCollider.info.toucher.damage = 0;
     } else {
-        this->unk_420.info.toucher.damage = 4;
+        this->swordCollider.info.toucher.damage = 4;
     }
 
-    if (!(this->unk_420.base.atFlags & AT_BOUNCED) && (this->unk_420.base.atFlags & AT_HIT)) {
-        if ((gSaveContext.save.playerData.health <= 0x10) && (this->unk_2B0 != 16)) {
+    if (!(this->swordCollider.base.atFlags & AT_BOUNCED) && (this->swordCollider.base.atFlags & AT_HIT)) {
+        if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
             this->unk_2D0 = 2;
             this->subCamId = 0;
             this->picto.actor.flags |= ACTOR_FLAG_100000;
@@ -1752,10 +1807,10 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 this->actionFunc = func_80B86804;
             }
             return;
-        } else if ((this->unk_2B0 == 11) && (this->unk_420.base.at == &GET_PLAYER(play)->actor)) {
+        } else if ((this->action == KAIZOKU_ACTION_11) && (this->swordCollider.base.at == &GET_PLAYER(play)->actor)) {
             func_800B8D98(play, &this->picto.actor, 3.0f, this->picto.actor.yawTowardsPlayer, 1.0f);
             Health_ChangeBy(play, -0xC);
-            if ((gSaveContext.save.playerData.health <= 0x10) && (this->unk_2B0 != 16)) {
+            if ((gSaveContext.save.playerData.health <= 0x10) && (this->action != KAIZOKU_ACTION_16)) {
                 Health_ChangeBy(play, 0x10);
                 this->unk_2D0 = 2;
                 this->subCamId = 0;
@@ -1773,23 +1828,23 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             }
         }
 
-        if (this->unk_420.base.at->id == ACTOR_OBJ_TARU) {
-            this->unk_420.base.at->home.rot.z = 1;
+        if (this->swordCollider.base.at->id == ACTOR_OBJ_TARU) {
+            this->swordCollider.base.at->home.rot.z = 1;
         }
     }
 
     if ((this->picto.actor.bgCheckFlags & 8) && (this->picto.actor.wallBgId != BG_ACTOR_MAX) &&
-        ((this->unk_2B0 == 2) || (this->unk_2B0 == 3) || (this->unk_2B0 == 4) || (this->unk_2B0 == 1))) {
+        ((this->action == KAIZOKU_ACTION_2) || (this->action == KAIZOKU_ACTION_3) || (this->action == KAIZOKU_ACTION_4) || (this->action == KAIZOKU_ACTION_1))) {
         func_80B87F70(this);
     }
 
-    if ((this->unk_3D4.base.acFlags & AC_HIT) && (this->unk_2B0 > 0) && (this->unk_2D0 < 2) && (this->unk_2B0 != 6) &&
-        (this->unk_2B0 != 12) && (this->unk_2B0 != 14) && (this->unk_2B0 != 15)) {
-        Actor_SetDropFlag(&this->picto.actor, &this->unk_3D4.info);
+    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_6) &&
+        (this->action != KAIZOKU_ACTION_12) && (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
+        Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.info);
         AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
 
         switch (this->picto.actor.colChkInfo.damageEffect) {
-            case 5:
+            case KAIZOKU_DMGEFF_5:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->unk_2B8 == 0)) {
@@ -1797,52 +1852,52 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                 }
                 /* fallthrough */
-            case 1:
+            case KAIZOKU_DMGEFF_1:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->unk_2B8 == 0) {
                     Actor_SetColorFilter(&this->picto.actor, 0, 120, 0, 40);
-                    this->unk_3D4.info.elemType = ELEMTYPE_UNK1;
-                    this->unk_3D4.base.colType = COLTYPE_HIT3;
-                    this->unk_420.info.elemType = ELEMTYPE_UNK2;
+                    this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+                    this->bodyCollider.base.colType = COLTYPE_HIT3;
+                    this->swordCollider.info.elemType = ELEMTYPE_UNK2;
                     func_80B891B8(this);
                 }
                 break;
 
-            case 15:
-                if ((this->unk_2B0 != 5) && (this->unk_2B0 != 7) && (this->unk_2B0 < 14)) {
+            case KAIZOKU_DMGEFF_F:
+                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) && (this->action < KAIZOKU_ACTION_14)) {
                     sp64 = 1;
                 }
                 break;
 
-            case 14:
+            case KAIZOKU_DMGEFF_E:
                 sp64 = 1;
                 break;
 
-            case 13:
-                if (this->unk_2B0 == 13) {
+            case KAIZOKU_DMGEFF_D:
+                if (this->action == KAIZOKU_ACTION_13) {
                     sp64 = 1;
-                } else if (this->unk_2B0 != 6) {
+                } else if (this->action != KAIZOKU_ACTION_6) {
                     func_80B87C7C(this);
                 }
                 break;
 
-            case 2:
-                if (this->unk_2B0 != 5 && this->unk_2B0 != 7 && this->unk_2B0 < 14) {
+            case KAIZOKU_DMGEFF_2:
+                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) && (this->action < KAIZOKU_ACTION_14)) {
                     this->unk_2B8 = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                     sp64 = 1;
                 }
                 break;
 
-            case 3:
+            case KAIZOKU_DMGEFF_FREEZE:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->unk_2B8 == 0)) {
                     Actor_ApplyDamage(&this->picto.actor);
-                    this->unk_3D4.info.elemType = ELEMTYPE_UNK1;
-                    this->unk_3D4.base.colType = COLTYPE_HIT3;
-                    this->unk_420.info.elemType = ELEMTYPE_UNK4;
+                    this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+                    this->bodyCollider.base.colType = COLTYPE_HIT3;
+                    this->swordCollider.info.elemType = ELEMTYPE_UNK4;
                     this->unk_2B8 = 80;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                     this->drawDmgEffScale = 0.0f;
@@ -1856,7 +1911,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 }
                 break;
 
-            case 4:
+            case KAIZOKU_DMGEFF_4:
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->unk_2B8 == 0)) {
@@ -1878,9 +1933,9 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 return;
             }
 
-            this->unk_3D4.info.elemType = ELEMTYPE_UNK1;
-            this->unk_3D4.base.colType = COLTYPE_HIT3;
-            this->unk_420.info.elemType = ELEMTYPE_UNK4;
+            this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
+            this->bodyCollider.base.colType = COLTYPE_HIT3;
+            this->swordCollider.info.elemType = ELEMTYPE_UNK4;
             Math_Vec3f_Copy(&sp58, &this->picto.actor.focus.pos);
             for (i = 0; i < 3; i++) {
                 sp58.y += Rand_ZeroFloat(20.0f);
@@ -1889,21 +1944,21 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
 
             func_80B893CC(this, play);
         }
-    } else if (this->unk_3D4.base.acFlags & AC_HIT) {
-        if ((this->unk_2B0 != 6) && (this->unk_2B0 != 14) && (this->unk_2B0 != 15)) {
+    } else if (this->bodyCollider.base.acFlags & AC_HIT) {
+        if ((this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
             Vec3f pos;
             Player* player = GET_PLAYER(play);
 
-            pos.x = this->unk_3D4.info.bumper.hitPos.x;
-            pos.y = this->unk_3D4.info.bumper.hitPos.y;
-            pos.z = this->unk_3D4.info.bumper.hitPos.z;
+            pos.x = this->bodyCollider.info.bumper.hitPos.x;
+            pos.y = this->bodyCollider.info.bumper.hitPos.y;
+            pos.z = this->bodyCollider.info.bumper.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
                 player->unk_B84 = this->picto.actor.yawTowardsPlayer;
                 player->unk_B80 = 15.0f;
             }
 
-            this->unk_3D4.base.acFlags &= ~AC_HIT;
+            this->bodyCollider.base.acFlags &= ~AC_HIT;
             Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_IT_SHIELD_BOUND);
             EffectSsHitmark_SpawnFixedScale(play, 3, &pos);
             CollisionCheck_SpawnShieldParticlesMetal(play, &pos);
@@ -1911,14 +1966,15 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     }
 }
 
-Vec3f D_80B8AC78 = { 300.0f, 0.0f, 0.0f };
-Vec3f D_80B8AC84 = { 0.0f, -3000.0f, 0.0f };
-Vec3f D_80B8AC90 = { 400.0f, 0.0f, 0.0f };
+static Vec3f sFootOffset = { 300.0f, 0.0f, 0.0f };
 
-Vec3f D_80B8AC9C = { 1600.0f, -4000.0f, 0.0f };
-Vec3f D_80B8ACA8 = { -3000.0f, -2000.0f, 1300.0f };
-Vec3f D_80B8ACB4 = { -3000.0f, -2000.0f, -1300.0f };
-Vec3f D_80B8ACC0 = { 1000.0f, 1000.0f, 0.0f };
+static Vec3f sSwordTipOffset = { 0.0f, -3000.0f, 0.0f };
+static Vec3f sSwordHiltOffset = { 400.0f, 0.0f, 0.0f };
+
+static Vec3f sSwordQuadOffset1 = { 1600.0f, -4000.0f, 0.0f };
+static Vec3f sSwordQuadOffset0 = { -3000.0f, -2000.0f, 1300.0f };
+static Vec3f sSwordQuadOffset3 = { -3000.0f, -2000.0f, -1300.0f };
+static Vec3f sSwordQuadOffset2 = { 1000.0f, 1000.0f, 0.0f };
 
 static TexturePtr sEyeTextures[] = {
     gKaizokuEyeOpenTex,
@@ -1937,7 +1993,7 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (this->unk_2B0 != 0) {
+    if (this->action != KAIZOKU_ACTION_0) {
         func_80B85900(this);
     }
 
@@ -1947,8 +2003,8 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     if (this->unk_2B2 != 0) {
         this->unk_2B2--;
     }
-    if (this->unk_2B4 != 0) {
-        this->unk_2B4--;
+    if (this->lookTimer != 0) {
+        this->lookTimer--;
     }
     if (this->unk_2B6 != 0) {
         this->unk_2B6--;
@@ -1962,10 +2018,10 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->picto.actor);
-    if (this->unk_2B0 != 0) {
+    if (this->action != KAIZOKU_ACTION_0) {
         func_80B89A08(this, play);
     }
-    if (this->unk_2B0 != 0) {
+    if (this->action != KAIZOKU_ACTION_0) {
         Actor_SetFocus(&this->picto.actor, 60.0f);
     }
 
@@ -1989,13 +2045,13 @@ void EnKaizoku_Update(Actor* thisx, PlayState* play2) {
     }
 
     Actor_UpdateBgCheckInfo(play, &this->picto.actor, 35.0f, 40.0f, 35.0f, 0x1F);
-    Collider_UpdateCylinder(&this->picto.actor, &this->unk_3D4);
-    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_3D4.base);
-    if ((this->unk_2D0 < 2) && (this->unk_2B0 != 0)) {
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->unk_3D4.base);
+    Collider_UpdateCylinder(&this->picto.actor, &this->bodyCollider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
+    if ((this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_0)) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
     }
-    if (this->unk_2D2 > 0) {
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->unk_420.base);
+    if (this->swordState > 0) {
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->swordCollider.base);
     }
 }
 
@@ -2009,9 +2065,9 @@ s32 EnKaizoku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     }
 
     if (limbIndex == KAIZOKU_LIMB_03) {
-        rot->z += this->unk_578;
-        rot->x += this->unk_57A;
-        rot->y += this->unk_57C;
+        rot->z += this->headRot.x;
+        rot->x += this->headRot.y;
+        rot->y += this->headRot.z;
     } else if (limbIndex == KAIZOKU_LIMB_06) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetEnvColor(POLY_OPA_DISP++, D_80B8AB24[this->unk_2EC].r, D_80B8AB24[this->unk_2EC].g,
@@ -2023,44 +2079,46 @@ s32 EnKaizoku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
+
     return false;
 }
 
 void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    Vec3f sp4C;
-    Vec3f sp40;
+    Vec3f swordTip;
+    Vec3f swordHilt;
     EnKaizoku* this = THIS;
 
-    if (limbIndex == KAIZOKU_LIMB_0B) {
-        Matrix_MultVec3f(&D_80B8AC9C, &this->unk_420.dim.quad[1]);
-        Matrix_MultVec3f(&D_80B8ACA8, &this->unk_420.dim.quad[0]);
-        Matrix_MultVec3f(&D_80B8ACB4, &this->unk_420.dim.quad[3]);
-        Matrix_MultVec3f(&D_80B8ACC0, &this->unk_420.dim.quad[2]);
-        Collider_SetQuadVertices(&this->unk_420, &this->unk_420.dim.quad[0], &this->unk_420.dim.quad[1],
-                                 &this->unk_420.dim.quad[2], &this->unk_420.dim.quad[3]);
-        Matrix_MultVec3f(&D_80B8AC84, &sp4C);
-        Matrix_MultVec3f(&D_80B8AC90, &sp40);
-        if ((this->unk_2D2 == 1) && ((this->unk_2B0 == 9) || (this->unk_2B0 == 11))) {
-            EffectBlure_AddVertex(Effect_GetByIndex(this->unk_3D0), &sp4C, &sp40);
-        } else if (this->unk_2D2 != 0) {
-            EffectBlure_AddSpace(Effect_GetByIndex(this->unk_3D0));
-            this->unk_2D2 = 0;
+    if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
+        Matrix_MultVec3f(&sSwordQuadOffset1, &this->swordCollider.dim.quad[1]);
+        Matrix_MultVec3f(&sSwordQuadOffset0, &this->swordCollider.dim.quad[0]);
+        Matrix_MultVec3f(&sSwordQuadOffset3, &this->swordCollider.dim.quad[3]);
+        Matrix_MultVec3f(&sSwordQuadOffset2, &this->swordCollider.dim.quad[2]);
+        Collider_SetQuadVertices(&this->swordCollider, &this->swordCollider.dim.quad[0], &this->swordCollider.dim.quad[1],
+                                 &this->swordCollider.dim.quad[2], &this->swordCollider.dim.quad[3]);
+        Matrix_MultVec3f(&sSwordTipOffset, &swordTip);
+        Matrix_MultVec3f(&sSwordHiltOffset, &swordHilt);
+
+        if ((this->swordState == 1) && ((this->action == KAIZOKU_ACTION_9) || (this->action == KAIZOKU_ACTION_11))) {
+            EffectBlure_AddVertex(Effect_GetByIndex(this->blureIndex), &swordTip, &swordHilt);
+        } else if (this->swordState != 0) {
+            EffectBlure_AddSpace(Effect_GetByIndex(this->blureIndex));
+            this->swordState = 0;
         }
     } else {
-        Actor_SetFeetPos(&this->picto.actor, limbIndex, KAIZOKU_LIMB_13, &D_80B8AC78, KAIZOKU_LIMB_16, &D_80B8AC78);
+        Actor_SetFeetPos(&this->picto.actor, limbIndex, KAIZOKU_LIMB_L_FOOT, &sFootOffset, KAIZOKU_LIMB_R_FOOT, &sFootOffset);
     }
 
-    if (limbIndex == KAIZOKU_LIMB_13) {
-        Matrix_MultVec3f(&D_80B8AC78, &this->unk_58C);
-    } else if (limbIndex == KAIZOKU_LIMB_16) {
-        Matrix_MultVec3f(&D_80B8AC78, &this->unk_580);
+    if (limbIndex == KAIZOKU_LIMB_L_FOOT) {
+        Matrix_MultVec3f(&sFootOffset, &this->leftFootPos);
+    } else if (limbIndex == KAIZOKU_LIMB_R_FOOT) {
+        Matrix_MultVec3f(&sFootOffset, &this->rightFootPos);
     }
 
     if (limbIndex == KAIZOKU_LIMB_02 || limbIndex == KAIZOKU_LIMB_06 || limbIndex == KAIZOKU_LIMB_07 ||
         limbIndex == KAIZOKU_LIMB_08 || limbIndex == KAIZOKU_LIMB_0A || limbIndex == KAIZOKU_LIMB_0C ||
         limbIndex == KAIZOKU_LIMB_0D || limbIndex == KAIZOKU_LIMB_0F || limbIndex == KAIZOKU_LIMB_11 ||
-        limbIndex == KAIZOKU_LIMB_12 || limbIndex == KAIZOKU_LIMB_13 || limbIndex == KAIZOKU_LIMB_14 ||
-        limbIndex == KAIZOKU_LIMB_15 || limbIndex == KAIZOKU_LIMB_16 || limbIndex == KAIZOKU_LIMB_17) {
+        limbIndex == KAIZOKU_LIMB_12 || limbIndex == KAIZOKU_LIMB_L_FOOT || limbIndex == KAIZOKU_LIMB_14 ||
+        limbIndex == KAIZOKU_LIMB_15 || limbIndex == KAIZOKU_LIMB_R_FOOT || limbIndex == KAIZOKU_LIMB_17) {
         Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
 
         this->bodyPartsPosIndex++;
@@ -2073,7 +2131,7 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnKaizoku_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnKaizoku* this = THIS;
 
-    if (limbIndex == KAIZOKU_LIMB_0B) {
+    if (limbIndex == KAIZOKU_LIMB_R_SWORD) {
         Matrix_Scale(this->unk_2F8.x, this->unk_2F8.y, this->unk_2F8.z, MTXMODE_APPLY);
     }
     if (limbIndex == KAIZOKU_LIMB_10) {
