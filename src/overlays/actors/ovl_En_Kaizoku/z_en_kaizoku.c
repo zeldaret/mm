@@ -15,64 +15,39 @@ void EnKaizoku_Destroy(Actor* thisx, PlayState* play);
 void EnKaizoku_Update(Actor* thisx, PlayState* play2);
 void EnKaizoku_Draw(Actor* thisx, PlayState* play);
 
-void func_80B85F48(EnKaizoku* this);
 s32 EnKaizoku_ValidatePictograph(PlayState* play, Actor* actor);
-void func_80B87C7C(EnKaizoku* this);
-void func_80B88CD8(EnKaizoku* this);
-void func_80B87900(EnKaizoku* this);
-void func_80B87E28(EnKaizoku* this);
-void func_80B87F70(EnKaizoku* this);
-void func_80B874D8(EnKaizoku* this, PlayState* play);
+void func_80B85F48(EnKaizoku* this);
 void func_80B85FA8(EnKaizoku* this, PlayState* play);
-void func_80B85FA8(EnKaizoku* this, PlayState* play);
-void func_80B872A4(EnKaizoku* this);
 void func_80B868B8(EnKaizoku* this, PlayState* play);
-void func_80B86B74(EnKaizoku* this, PlayState* play);
-void func_80B872F4(EnKaizoku* this, PlayState* play);
-void func_80B88214(EnKaizoku* this);
-void func_80B8833C(EnKaizoku* this);
-void func_80B88770(EnKaizoku* this);
-void func_80B88910(EnKaizoku* this);
-void func_80B8760C(EnKaizoku* this, PlayState* play);
-void func_80B8798C(EnKaizoku* this, PlayState* play);
-void func_80B88CD8(EnKaizoku* this);
-void func_80B87D3C(EnKaizoku* this, PlayState* play);
-void func_80B87CF8(PlayState* play, Vec3f* pos);
-void func_80B87E9C(EnKaizoku* this, PlayState* play);
-void func_80B87FDC(EnKaizoku* this, PlayState* play2);
-void func_80B88CD8(EnKaizoku* this);
-void func_80B87E28(EnKaizoku* this);
 void func_80B86B58(EnKaizoku* this);
-void func_80B8971C(EnKaizoku* this, PlayState* play);
-void func_80B894C0(EnKaizoku* this, PlayState* play);
-void func_80B89280(EnKaizoku* this, PlayState* play);
-void func_80B88D6C(EnKaizoku* this, PlayState* play);
-void func_80B88964(EnKaizoku* this, PlayState* play);
-void func_80B887AC(EnKaizoku* this, PlayState* play);
+void func_80B86B74(EnKaizoku* this, PlayState* play);
+void func_80B872A4(EnKaizoku* this);
+void func_80B872F4(EnKaizoku* this, PlayState* play);
+void func_80B8760C(EnKaizoku* this, PlayState* play);
+void func_80B87900(EnKaizoku* this);
+void func_80B8798C(EnKaizoku* this, PlayState* play);
+void func_80B874D8(EnKaizoku* this, PlayState* play);
+void func_80B87C7C(EnKaizoku* this);
+void func_80B87CF8(PlayState* play, Vec3f* pos);
+void func_80B87D3C(EnKaizoku* this, PlayState* play);
+void func_80B87E28(EnKaizoku* this);
+void func_80B87E9C(EnKaizoku* this, PlayState* play);
+void func_80B87F70(EnKaizoku* this);
+void func_80B87FDC(EnKaizoku* this, PlayState* play2);
+void func_80B88214(EnKaizoku* this);
 void func_80B88278(EnKaizoku* this, PlayState* play);
+void func_80B8833C(EnKaizoku* this);
 void func_80B88378(EnKaizoku* this, PlayState* play);
+void func_80B88770(EnKaizoku* this);
+void func_80B887AC(EnKaizoku* this, PlayState* play);
+void func_80B88910(EnKaizoku* this);
+void func_80B88964(EnKaizoku* this, PlayState* play);
+void func_80B88CD8(EnKaizoku* this);
+void func_80B88D6C(EnKaizoku* this, PlayState* play);
+void func_80B89280(EnKaizoku* this, PlayState* play);
+void func_80B894C0(EnKaizoku* this, PlayState* play);
+void func_80B8971C(EnKaizoku* this, PlayState* play);
 
-#if 0
-typedef enum {
-    /*  0 */ KAIZOKU_WAIT, // TODO: check
-    /*  1 */ KAIZOKU_DEFEAT, // TODO: check
-    /*  2 */ KAIZOKU_DAMAGED, // TODO: check
-    /*  3 */ KAIZOKU_JUMP, // TODO: check
-    /*  4 */ KAIZOKU_ROLL_BACK, // TODO: check
-    /*  5 */ KAIZOKU_READY, // TODO: check
-    /*  6 */ KAIZOKU_BLOCK, // TODO: check
-    /*  7 */ KAIZOKU_SLASH, // TODO: check
-    /*  8 */ KAIZOKU_ADVANCE, // TODO: check
-    /*  9 */ KAIZOKU_PIVOT, // TODO: check
-    /* 10 */ KAIZOKU_CIRCLE, // TODO: check
-    /* 11 */ KAIZOKU_UNUSED, // TODO: check
-    /* 12 */ KAIZOKU_SPIN_ATTACK, // TODO: check
-    /* 13 */ KAIZOKU_SIDESTEP, // TODO: check
-    /* 14 */ KAIZOKU_ROLL_FORWARD, // TODO: check
-    /* 15 */ KAIZOKU_STUNNED, // TODO: check
-    /* 16 */ KAIZOKU_SPIN_DODGE // TODO: check
-} EnKaizokuAction;
-#endif
 typedef enum EnKaizokuAction {
     /*  0 */ KAIZOKU_ACTION_0,
     /*  1 */ KAIZOKU_ACTION_1,
