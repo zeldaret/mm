@@ -324,7 +324,8 @@ s32 func_80B85858(EnKaizoku* this, PlayState* play) {
         //! FAKE:
         if (1) {}
         if (((itemAction->id == ACTOR_ARMS_HOOK) || (itemAction->id == ACTOR_EN_ARROW)) && (player->unk_D57)) {
-            if (((itemAction->id != ACTOR_ARMS_HOOK) || (this->action != KAIZOKU_ACTION_13)) && (this->action != KAIZOKU_ACTION_6)) {
+            if (((itemAction->id != ACTOR_ARMS_HOOK) || (this->action != KAIZOKU_ACTION_13)) &&
+                (this->action != KAIZOKU_ACTION_6)) {
                 func_80B87C7C(this);
             }
             break;
@@ -1809,12 +1810,14 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
     }
 
     if ((this->picto.actor.bgCheckFlags & 8) && (this->picto.actor.wallBgId != BG_ACTOR_MAX) &&
-        ((this->action == KAIZOKU_ACTION_2) || (this->action == KAIZOKU_ACTION_3) || (this->action == KAIZOKU_ACTION_4) || (this->action == KAIZOKU_ACTION_1))) {
+        ((this->action == KAIZOKU_ACTION_2) || (this->action == KAIZOKU_ACTION_3) ||
+         (this->action == KAIZOKU_ACTION_4) || (this->action == KAIZOKU_ACTION_1))) {
         func_80B87F70(this);
     }
 
-    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->unk_2D0 < 2) && (this->action != KAIZOKU_ACTION_6) &&
-        (this->action != KAIZOKU_ACTION_12) && (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
+    if ((this->bodyCollider.base.acFlags & AC_HIT) && (this->action > KAIZOKU_ACTION_0) && (this->unk_2D0 < 2) &&
+        (this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_12) &&
+        (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
         Actor_SetDropFlag(&this->picto.actor, &this->bodyCollider.info);
         AudioSfx_StopByPosAndId(&this->picto.actor.projectedPos, NA_SE_EN_PIRATE_BREATH);
 
@@ -1840,7 +1843,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 break;
 
             case KAIZOKU_DMGEFF_F:
-                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) && (this->action < KAIZOKU_ACTION_14)) {
+                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) &&
+                    (this->action < KAIZOKU_ACTION_14)) {
                     sp64 = 1;
                 }
                 break;
@@ -1858,7 +1862,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 break;
 
             case KAIZOKU_DMGEFF_2:
-                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) && (this->action < KAIZOKU_ACTION_14)) {
+                if ((this->action != KAIZOKU_ACTION_5) && (this->action != KAIZOKU_ACTION_7) &&
+                    (this->action < KAIZOKU_ACTION_14)) {
                     this->unk_2B8 = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                     sp64 = 1;
@@ -1920,7 +1925,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             func_80B893CC(this, play);
         }
     } else if (this->bodyCollider.base.acFlags & AC_HIT) {
-        if ((this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_14) && (this->action != KAIZOKU_ACTION_15)) {
+        if ((this->action != KAIZOKU_ACTION_6) && (this->action != KAIZOKU_ACTION_14) &&
+            (this->action != KAIZOKU_ACTION_15)) {
             Vec3f pos;
             Player* player = GET_PLAYER(play);
 
@@ -2068,8 +2074,9 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVec3f(&sSwordQuadOffset0, &this->swordCollider.dim.quad[0]);
         Matrix_MultVec3f(&sSwordQuadOffset3, &this->swordCollider.dim.quad[3]);
         Matrix_MultVec3f(&sSwordQuadOffset2, &this->swordCollider.dim.quad[2]);
-        Collider_SetQuadVertices(&this->swordCollider, &this->swordCollider.dim.quad[0], &this->swordCollider.dim.quad[1],
-                                 &this->swordCollider.dim.quad[2], &this->swordCollider.dim.quad[3]);
+        Collider_SetQuadVertices(&this->swordCollider, &this->swordCollider.dim.quad[0],
+                                 &this->swordCollider.dim.quad[1], &this->swordCollider.dim.quad[2],
+                                 &this->swordCollider.dim.quad[3]);
         Matrix_MultVec3f(&sSwordTipOffset, &swordTip);
         Matrix_MultVec3f(&sSwordHiltOffset, &swordHilt);
 
@@ -2080,7 +2087,8 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             this->swordState = 0;
         }
     } else {
-        Actor_SetFeetPos(&this->picto.actor, limbIndex, KAIZOKU_LIMB_L_FOOT, &sFootOffset, KAIZOKU_LIMB_R_FOOT, &sFootOffset);
+        Actor_SetFeetPos(&this->picto.actor, limbIndex, KAIZOKU_LIMB_L_FOOT, &sFootOffset, KAIZOKU_LIMB_R_FOOT,
+                         &sFootOffset);
     }
 
     if (limbIndex == KAIZOKU_LIMB_L_FOOT) {
