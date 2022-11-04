@@ -2220,7 +2220,7 @@ void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg
 // void func_8014CCB4(void);
 void func_8014CDF0(OSTime time, s16 *digits);
 // void func_8014CFDC(void);
-void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos);
+void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos);
 // void func_8014D62C(void);
 // void func_8014D7B4(void);
 void func_80150A84(PlayState* play);
@@ -2237,7 +2237,7 @@ void func_80152434(PlayState* play, u16 arg2);
 u8 Message_GetState(MessageContext* msgCtx);
 // void func_8015268C(void);
 // void func_80152C64(void);
-void func_80152CAC(GlobalContext* globalCtx);
+void func_80152CAC(PlayState* play);
 // void func_80152EC0(void);
 // void func_80152FB8(void);
 // void func_80153750(void);

@@ -720,15 +720,15 @@ void func_8014AAD0(PlayState* play) {
             msgCtx->msgMode = 0x27;
             return;
         } else if (msgCtx->ocarinaAction == 0x34) {
-            AudioOcarina_SetInstrumentId(1);
-            AudioOcarina_SetInstrumentId(1);
+            AudioOcarina_SetInstrument(1);
+            AudioOcarina_SetInstrument(1);
             msgCtx->unk11F00 = AudioOcarina_GetPlaybackStaff();
             msgCtx->unk11F00->pos = 0;
             D_801C6A74 = D_801C6A78 = 0;
             func_80147564(play);
             msgCtx->stateTimer = 3;
             msgCtx->msgMode = 0x29;
-            func_8019C398(0x19, 1);
+            AudioOcarina_SetPlaybackSong(0x19, 1);
             return;
         }
         if (msgCtx->ocarinaAction == 0x35) {
@@ -736,15 +736,15 @@ void func_8014AAD0(PlayState* play) {
             return;
         }
         if (msgCtx->ocarinaAction == 0x36) {
-            AudioOcarina_SetInstrumentId(1);
-            AudioOcarina_SetInstrumentId(1);
+            AudioOcarina_SetInstrument(1);
+            AudioOcarina_SetInstrument(1);
             msgCtx->unk11F00 = AudioOcarina_GetPlaybackStaff();
             msgCtx->unk11F00->pos = 0;
             D_801C6A74 = D_801C6A78 = 0;
             func_80147564(play);
             msgCtx->stateTimer = 3;
             msgCtx->msgMode = 0x2E;
-            func_8019C398(0x17, 1);
+            AudioOcarina_SetPlaybackSong(0x17, 1);
             return;
         }
         if (msgCtx->ocarinaAction == 0x37) {
@@ -925,7 +925,7 @@ void func_8014CFDC(PlayState* play) {
             } else {
                 msgCtx->msgBufPos += 2;
                 if ((font->msgBuf.schar[msgCtx->msgBufPos] < 0xC8) || (font->msgBuf.schar[msgCtx->msgBufPos] >= 0xD8)) {
-                    msgCtx->unk11F16 = D_801CFF94[font->msgBuf.schar[msgCtx->msgBufPos]];
+                    msgCtx->unk11F16 = D_801CFF94[(u8)font->msgBuf.schar[msgCtx->msgBufPos]];
                 } else {
                     msgCtx->unk11F16 = 0xFE;
                 }
@@ -1141,12 +1141,12 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     if (gSaveContext.options.language == 0) {
         Message_FindMessage(play, arg1);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
+        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[(int)font->messageStart],
                             font->messageEnd);
     } else {
         Message_FindMessageNES(play, arg1);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
+        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[(int)font->messageStart],
                             font->messageEnd);
     }
     msgCtx->unk12022 = 0;
@@ -1428,44 +1428,44 @@ void func_80152CAC(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->ocarinaAction == 2) {
-        AudioOcarina_SetInstrumentId(0xA);
+        AudioOcarina_SetInstrument(0xA);
     } else {
         if (msgCtx->ocarinaAction == 9) {
-            AudioOcarina_SetInstrumentId(0xD);
+            AudioOcarina_SetInstrument(0xD);
         } else if (msgCtx->ocarinaAction == 7) {
-            AudioOcarina_SetInstrumentId(6);
+            AudioOcarina_SetInstrument(6);
         } else if (msgCtx->ocarinaAction == 0xA) {
-            AudioOcarina_SetInstrumentId(2);
+            AudioOcarina_SetInstrument(2);
         } else if (msgCtx->ocarinaAction == 0xC) {
-            AudioOcarina_SetInstrumentId(1);
+            AudioOcarina_SetInstrument(1);
         } else if (msgCtx->ocarinaAction == 3) {
-            AudioOcarina_SetInstrumentId(0xF);
+            AudioOcarina_SetInstrument(0xF);
         } else if (msgCtx->ocarinaAction == 0x10) {
-            AudioOcarina_SetInstrumentId(0xC);
+            AudioOcarina_SetInstrument(0xC);
         } else if (msgCtx->ocarinaAction == 6) {
-            AudioOcarina_SetInstrumentId(6);
+            AudioOcarina_SetInstrument(6);
         } else if (msgCtx->ocarinaAction == 5) {
-            AudioOcarina_SetInstrumentId(5);
+            AudioOcarina_SetInstrument(5);
         } else {
-            AudioOcarina_SetInstrumentId(1);
+            AudioOcarina_SetInstrument(1);
         }
     }
     if ((msgCtx->ocarinaAction == 0x3B) || (msgCtx->ocarinaAction == 0x3C)) {
-        AudioOcarina_SetInstrumentId(0xC);
-        func_8019C398(0xF, 0x83);
+        AudioOcarina_SetInstrument(0xC);
+        AudioOcarina_SetPlaybackSong(0xF, 0x83);
         return;
     }
     if ((msgCtx->ocarinaAction == 0x3D) || (msgCtx->ocarinaAction == 0x3E)) {
-        AudioOcarina_SetInstrumentId(0xE);
-        func_8019C398((msgCtx->ocarinaAction - 0x29), 0x84);
+        AudioOcarina_SetInstrument(0xE);
+        AudioOcarina_SetPlaybackSong((msgCtx->ocarinaAction - 0x29), 0x84);
         return;
     }
     if ((msgCtx->ocarinaAction == 0x3F) || (msgCtx->ocarinaAction == 0x40)) {
-        AudioOcarina_SetInstrumentId(8);
-        func_8019C398((msgCtx->ocarinaAction - 0x2B), 0x44);
+        AudioOcarina_SetInstrument(8);
+        AudioOcarina_SetPlaybackSong((msgCtx->ocarinaAction - 0x2B), 0x44);
         return;
     }
-    func_8019C398((msgCtx->ocarinaAction - 1), 2);
+    AudioOcarina_SetPlaybackSong((msgCtx->ocarinaAction - 1), 2);
 }
 
 // Spawn song effect?
