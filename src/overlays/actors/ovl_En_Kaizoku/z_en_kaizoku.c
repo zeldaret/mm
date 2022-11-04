@@ -1150,8 +1150,8 @@ void func_80B87E9C(EnKaizoku* this, PlayState* play) {
 
     this->unk_2D8 = 0;
     if (this->frameCount <= curFrame) {
-        if (this->picto.actor.xzDistToPlayer < 170.0f && this->picto.actor.xzDistToPlayer > 140.0f &&
-            Rand_ZeroOne() < 0.2f) {
+        if ((this->picto.actor.xzDistToPlayer < 170.0f) && (this->picto.actor.xzDistToPlayer > 140.0f) &&
+            (Rand_ZeroOne() < 0.2f)) {
             func_80B88910(this);
         } else {
             func_80B87900(this);
@@ -1328,7 +1328,7 @@ void func_80B88378(EnKaizoku* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_BREATH);
             }
 
-            if (this->skelAnime.curFrame != 0.0f && ((sp30 < 0 && sp2C > 0) || (sp30 < 4 && sp2C >= 5))) {
+            if ((this->skelAnime.curFrame != 0.0f) && ((sp30 < 0 && sp2C > 0) || (sp30 < 4 && sp2C >= 5))) {
                 Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_GERUDOFT_WALK);
             }
         }
