@@ -2242,7 +2242,7 @@ void func_80152CAC(PlayState* play);
 // void func_80152FB8(void);
 // void func_80153750(void);
 // void func_80153E7C(void);
-void func_80153EF0(PlayState* play, Gfx **arg1);
+void func_80153EF0(PlayState* play, Gfx **gfxp);
 void func_801541D4(PlayState* play, Gfx** gfxp);
 // void func_80156758(void);
 void func_8015680C(PlayState* play);

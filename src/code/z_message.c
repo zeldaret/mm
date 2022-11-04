@@ -126,14 +126,14 @@ extern s16 D_801CFD3C;
 extern s16 D_801CFD40;
 extern s16 D_801CFD44;
 
-void func_80147F18(PlayState *play, Gfx **gfxp, s16 arg2, s16 arg3) {
+void func_80147F18(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
     s16 sp44;
     s32 sp10;
     s32 spC;
     s32 sp8;
     s32 sp4;
-    Gfx *gfx;
-    MessageContext *msgCtx = &play->msgCtx;
+    Gfx* gfx;
+    MessageContext* msgCtx = &play->msgCtx;
     s16 temp_a0;
     s16 temp_a2_3;
     s16 temp_a3;
@@ -160,8 +160,8 @@ void func_80147F18(PlayState *play, Gfx **gfxp, s16 arg2, s16 arg3) {
     s32 temp_v1_2;
     s32 temp_v1_3;
     s32 temp_v1_4;
-    void *temp_a0_3;
-    void *temp_v1;
+    void* temp_a0_3;
+    void* temp_v1;
     s32 phi_v0;
     s32 phi_a0;
     s16 phi_a2;
@@ -200,50 +200,50 @@ void func_80147F18(PlayState *play, Gfx **gfxp, s16 arg2, s16 arg3) {
         temp_a2_3 = D_801CFD30;
         temp_t2 = D_801CFD10[D_801CFD38][2];
         temp_t7 = temp_a2_3 - temp_t2;
-        sp44 = (s16) (phi_v0 / (s32) temp_a3);
+        sp44 = (s16)(phi_v0 / (s32)temp_a3);
         if (temp_t7 < 0) {
             phi_v0_3 = -temp_t7;
         } else {
             phi_v0_3 = temp_t7;
         }
-        if ((s32) temp_a0 >= (s32) temp_t3) {
-            phi_a0 = (temp_a0 - (s16) temp_lo) << 0x10;
+        if ((s32)temp_a0 >= (s32)temp_t3) {
+            phi_a0 = (temp_a0 - (s16)temp_lo) << 0x10;
         } else {
-            phi_a0 = (temp_a0 + (s16) temp_lo) << 0x10;
+            phi_a0 = (temp_a0 + (s16)temp_lo) << 0x10;
         }
         temp_a0_2 = phi_a0 >> 0x10;
-        if ((s32) temp_t1 >= (s32) temp_t4) {
+        if ((s32)temp_t1 >= (s32)temp_t4) {
             phi_t1 = (temp_t1 - sp44) << 0x10;
         } else {
             phi_t1 = (temp_t1 + sp44) << 0x10;
         }
         temp_t1_2 = phi_t1 >> 0x10;
-        if ((s32) temp_a2_3 >= (s32) temp_t2) {
-            D_801CFD28 = (s16) temp_a0_2;
-            phi_a2 = (s16) (temp_a2_3 - (s16) (phi_v0_3 / (s32) temp_a3));
+        if ((s32)temp_a2_3 >= (s32)temp_t2) {
+            D_801CFD28 = (s16)temp_a0_2;
+            phi_a2 = (s16)(temp_a2_3 - (s16)(phi_v0_3 / (s32)temp_a3));
         } else {
-            D_801CFD28 = (s16) temp_a0_2;
-            phi_a2 = (s16) (temp_a2_3 + (s16) (phi_v0_3 / (s32) temp_a3));
+            D_801CFD28 = (s16)temp_a0_2;
+            phi_a2 = (s16)(temp_a2_3 + (s16)(phi_v0_3 / (s32)temp_a3));
         }
-        sp10 = (s32) temp_t3;
+        sp10 = (s32)temp_t3;
         temp_a0_3 = D_801CFD1C[D_801CFD38];
         temp_t3_2 = D_801CFD3C;
         temp_t6 = D_801CFD1C[D_801CFD38][0];
         temp_v1_2 = temp_t3_2 - temp_t6;
-        sp4 = (s32) temp_t6;
+        sp4 = (s32)temp_t6;
         if (temp_v1_2 < 0) {
             D_801CFD30 = phi_a2;
-            D_801CFD2C = (s16) temp_t1_2;
-            sp8 = (s32) temp_t2;
+            D_801CFD2C = (s16)temp_t1_2;
+            sp8 = (s32)temp_t2;
             phi_v0_4 = -temp_v1_2;
         } else {
             D_801CFD30 = phi_a2;
-            D_801CFD2C = (s16) temp_t1_2;
-            sp8 = (s32) temp_t2;
+            D_801CFD2C = (s16)temp_t1_2;
+            sp8 = (s32)temp_t2;
             phi_v0_4 = temp_v1_2;
         }
-        spC = (s32) temp_t4;
-        temp_lo_2 = phi_v0_4 / (s32) temp_a3;
+        spC = (s32)temp_t4;
+        temp_lo_2 = phi_v0_4 / (s32)temp_a3;
         temp_t4_2 = D_801CFD40;
         temp_t1_3 = D_801CFD1C[D_801CFD38][1];
         temp_v1_3 = temp_t4_2 - temp_t1_3;
@@ -252,7 +252,7 @@ void func_80147F18(PlayState *play, Gfx **gfxp, s16 arg2, s16 arg3) {
         } else {
             phi_v0_5 = temp_v1_3;
         }
-        temp_lo_3 = phi_v0_5 / (s32) temp_a3;
+        temp_lo_3 = phi_v0_5 / (s32)temp_a3;
         temp_t5 = D_801CFD44;
         temp_t2_2 = D_801CFD1C[D_801CFD38][2];
         temp_v1_4 = temp_t5 - temp_t2_2;
@@ -261,33 +261,33 @@ void func_80147F18(PlayState *play, Gfx **gfxp, s16 arg2, s16 arg3) {
         } else {
             phi_v0_6 = temp_v1_4;
         }
-        if ((s32) temp_t3_2 >= sp4) {
-            phi_t3 = (s16) (temp_t3_2 - (s16) temp_lo_2);
+        if ((s32)temp_t3_2 >= sp4) {
+            phi_t3 = (s16)(temp_t3_2 - (s16)temp_lo_2);
         } else {
-            phi_t3 = (s16) (temp_t3_2 + (s16) temp_lo_2);
+            phi_t3 = (s16)(temp_t3_2 + (s16)temp_lo_2);
         }
         D_801CFD3C = phi_t3;
-        if ((s32) temp_t4_2 >= (s32) temp_t1_3) {
-            phi_t4 = (s16) (temp_t4_2 - (s16) temp_lo_3);
+        if ((s32)temp_t4_2 >= (s32)temp_t1_3) {
+            phi_t4 = (s16)(temp_t4_2 - (s16)temp_lo_3);
         } else {
-            phi_t4 = (s16) (temp_t4_2 + (s16) temp_lo_3);
+            phi_t4 = (s16)(temp_t4_2 + (s16)temp_lo_3);
         }
         D_801CFD40 = phi_t4;
-        if ((s32) temp_t5 >= (s32) temp_t2_2) {
-            phi_t5 = (s16) (temp_t5 - (s16) (phi_v0_6 / (s32) temp_a3));
+        if ((s32)temp_t5 >= (s32)temp_t2_2) {
+            phi_t5 = (s16)(temp_t5 - (s16)(phi_v0_6 / (s32)temp_a3));
         } else {
-            phi_t5 = (s16) (temp_t5 + (s16) (phi_v0_6 / (s32) temp_a3));
+            phi_t5 = (s16)(temp_t5 + (s16)(phi_v0_6 / (s32)temp_a3));
         }
         D_801CFD44 = phi_t5;
         temp_a3_2 = temp_a3 - 1;
         D_801CFD34 = temp_a3_2;
         if (temp_a3_2 == 0) {
-            D_801CFD28 = (s16) sp10;
-            D_801CFD2C = (s16) spC;
-            D_801CFD30 = (s16) sp8;
+            D_801CFD28 = (s16)sp10;
+            D_801CFD2C = (s16)spC;
+            D_801CFD30 = (s16)sp8;
             D_801CFD38 = D_801CFD38 ^ 1;
             D_801CFD34 = 0xC;
-            D_801CFD3C = (s16) sp4;
+            D_801CFD3C = (s16)sp4;
             D_801CFD40 = temp_t1_3;
             D_801CFD44 = temp_t2_2;
         }
@@ -786,13 +786,13 @@ extern s16 D_801CFF88[];
 
 void func_8014C70C(PlayState* play, u16 arg1, s16 arg2) {
     MessageContext* msgCtx = &play->msgCtx;
-    u16 *new_var2 = &arg1;
-    
+    u16* new_var2 = &arg1;
+
     if (arg1 == 0x83) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
-    } else  if ((arg1 >= 0x84) && (arg1 < 0x8B)) {
+    } else if ((arg1 >= 0x84) && (arg1 < 0x8B)) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
@@ -834,7 +834,7 @@ void func_8014C70C(PlayState* play, u16 arg1, s16 arg2) {
                       0x900U);
     }
 
-    if(1){}
+    if (1) {}
     if (play->pauseCtx.bombersNotebookOpen != 0) {
         msgCtx->unk12010 = ((msgCtx->unk12010 * 1.4f) + 2.0f);
         msgCtx->unk12014 = (msgCtx->unk12014 * 1.4f);
@@ -1373,7 +1373,8 @@ void func_8015268C(PlayState* play, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
-    if (((u32)msgCtx->unk11F0A == 0) || (msgCtx->unk11F0A == 2) || (msgCtx->unk11F0A == 9) || (msgCtx->unk11F0A == 0xA)) {
+    if (((u32)msgCtx->unk11F0A == 0) || (msgCtx->unk11F0A == 2) || (msgCtx->unk11F0A == 9) ||
+        (msgCtx->unk11F0A == 0xA)) {
         gDPSetRenderMode(gfx++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
     } else if (msgCtx->unk11F0A == 3) {
         gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
@@ -1415,7 +1416,7 @@ void func_8015268C(PlayState* play, Gfx** gfxp) {
                                G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(gfx++, 0x0138, 0x0298, 0x0178, 0x0318, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
     }
-    
+
     *gfxp = gfx++;
 }
 
