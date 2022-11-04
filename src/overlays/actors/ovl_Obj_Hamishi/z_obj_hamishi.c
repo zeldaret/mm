@@ -11,12 +11,12 @@
 
 #define THIS ((ObjHamishi*)thisx)
 
-void ObjHamishi_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjHamishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjHamishi_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjHamishi_Init(Actor* thisx, PlayState* play);
+void ObjHamishi_Destroy(Actor* thisx, PlayState* play2);
+void ObjHamishi_Update(Actor* thisx, PlayState* play);
+void ObjHamishi_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hamishi_InitVars = {
+ActorInit Obj_Hamishi_InitVars = {
     ACTOR_OBJ_HAMISHI,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,11 +61,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-void func_809A0F20(Actor* thisx, GlobalContext* globalCtx) {
+void func_809A0F20(Actor* thisx, PlayState* play) {
     ObjHamishi* this = THIS;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 }
 
@@ -91,7 +91,7 @@ void func_809A0F78(ObjHamishi* this) {
     }
 }
 
-void func_809A10F4(ObjHamishi* this, GlobalContext* globalCtx) {
+void func_809A10F4(ObjHamishi* this, PlayState* play) {
     s32 i;
     Vec3f spC8;
     Vec3f spBC;
@@ -125,15 +125,15 @@ void func_809A10F4(ObjHamishi* this, GlobalContext* globalCtx) {
             gravity = -320;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spBC, &spC8, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0, D_809A1AD4[i],
-                             3, 0, 70, 1, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
+        EffectSsKakera_Spawn(play, &spBC, &spC8, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0, D_809A1AD4[i], 3, 0,
+                             70, 1, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
     }
 
-    func_800BBFB0(globalCtx, &this->actor.world.pos, 140.0f, 6, 180, 90, 1);
-    func_800BBFB0(globalCtx, &this->actor.world.pos, 140.0f, 12, 80, 90, 1);
+    func_800BBFB0(play, &this->actor.world.pos, 140.0f, 6, 180, 90, 1);
+    func_800BBFB0(play, &this->actor.world.pos, 140.0f, 12, 80, 90, 1);
 }
 
-void func_809A13A0(ObjHamishi* this, GlobalContext* globalCtx) {
+void func_809A13A0(ObjHamishi* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
     s32 sp24;
@@ -143,29 +143,29 @@ void func_809A13A0(ObjHamishi* this, GlobalContext* globalCtx) {
     sp28.z = this->actor.world.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
 }
 
-s32 func_809A1408(ObjHamishi* this, GlobalContext* globalCtx) {
+s32 func_809A1408(ObjHamishi* this, PlayState* play) {
     s32 pad;
     WaterBox* sp30;
     f32 sp2C;
     s32 sp28;
 
-    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
-                                &sp30, &sp28) &&
+    if (WaterBox_GetSurfaceImpl(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
+                                &sp28) &&
         (this->actor.world.pos.y < sp2C)) {
         return true;
     }
     return false;
 }
 
-void ObjHamishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHamishi_Init(Actor* thisx, PlayState* play) {
     ObjHamishi* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    if (globalCtx->csCtx.state != 0) {
+    if (play->csCtx.state != 0) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
@@ -175,28 +175,31 @@ void ObjHamishi_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.home.rot.y = this->actor.shape.rot.y;
     }
 
-    func_809A0F20(&this->actor, globalCtx);
+    func_809A0F20(&this->actor, play);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    func_809A13A0(this, globalCtx);
+    func_809A13A0(this, play);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 2.3f);
 
-    if (Flags_GetSwitch(globalCtx, OBJHAMISHI_GET_SWITCHFLAG(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetSwitch(play, OBJHAMISHI_GET_SWITCHFLAG(&this->actor))) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     this->actor.shape.yOffset = 80.0f;
 
-    if (func_809A1408(this, globalCtx)) {
+    if (func_809A1408(this, play)) {
         this->unk_1A2 |= 1;
     }
 }
 
-void ObjHamishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+void ObjHamishi_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjHamishi* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHamishi_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjHamishi* this = THIS;
     s32 sp24 = (this->collider.base.acFlags & AC_HIT) != 0;
@@ -227,10 +230,10 @@ void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx) {
                 this->unk_190 = 2.0f;
                 this->unk_194 = 400.0f;
             } else {
-                func_809A10F4(this, globalCtx);
-                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
-                Flags_SetSwitch(globalCtx, OBJHAMISHI_GET_SWITCHFLAG(&this->actor));
-                Actor_MarkForDeath(&this->actor);
+                func_809A10F4(this, play);
+                SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
+                Flags_SetSwitch(play, OBJHAMISHI_GET_SWITCHFLAG(&this->actor));
+                Actor_Kill(&this->actor);
             }
         }
     }
@@ -248,41 +251,41 @@ void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk_1A0 > 0) {
             this->unk_1A0--;
         } else if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.xzDistToPlayer < 1000.0f)) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->actor.xzDistToPlayer < 600.0f) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 }
 
-void ObjHamishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHamishi_Draw(Actor* thisx, PlayState* play) {
     ObjHamishi* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if ((thisx->projectedPos.z <= 2150.0f) || ((this->unk_1A2 & 1) && (thisx->projectedPos.z < 2250.0f))) {
         thisx->shape.shadowAlpha = 160;
-        func_8012C28C(globalCtx->state.gfxCtx);
+        func_8012C28C(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 170, 130, 255);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
     } else if (thisx->projectedPos.z < 2250.0f) {
         f32 sp20 = (2250.0f - thisx->projectedPos.z) * 2.55f;
 
         thisx->shape.shadowAlpha = sp20 * 0.627451f;
-        func_8012C2DC(globalCtx->state.gfxCtx);
+        func_8012C2DC(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 170, 130, (s32)sp20);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
     } else {
         thisx->shape.shadowAlpha = 0;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

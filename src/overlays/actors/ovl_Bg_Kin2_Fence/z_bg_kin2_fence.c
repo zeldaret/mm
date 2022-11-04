@@ -11,23 +11,23 @@
 
 #define THIS ((BgKin2Fence*)thisx)
 
-void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKin2Fence_Init(Actor* thisx, PlayState* play);
+void BgKin2Fence_Destroy(Actor* thisx, PlayState* play);
+void BgKin2Fence_Update(Actor* thisx, PlayState* play);
+void BgKin2Fence_Draw(Actor* thisx, PlayState* play);
 
 void BgKin2Fence_SetupHandleMaskCode(BgKin2Fence* this);
-void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this);
-void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupWaitBeforeOpen(BgKin2Fence* this);
-void BgKin2Fence_WaitBeforeOpen(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_WaitBeforeOpen(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupRaiseFence(BgKin2Fence* this);
-void BgKin2Fence_RaiseFence(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_RaiseFence(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
-void BgKin2Fence_DoNothing(BgKin2Fence* this, GlobalContext* globalCtx);
+void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Fence_InitVars = {
+ActorInit Bg_Kin2_Fence_InitVars = {
     ACTOR_BG_KIN2_FENCE,
     ACTORCAT_BG,
     FLAGS,
@@ -95,7 +95,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    4,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -120,24 +120,17 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
-    ColliderJntSphElement* elements = this->collider.elements;
+    s32 i;
 
-    if (elements[0].info.bumperFlags & BUMP_HIT) {
-        return 0;
-    }
-    if (elements[1].info.bumperFlags & BUMP_HIT) {
-        return 1;
-    }
-    if (elements[2].info.bumperFlags & BUMP_HIT) {
-        return 2;
-    }
-    if (elements[3].info.bumperFlags & BUMP_HIT) {
-        return 3;
+    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+            return i;
+        }
     }
     return -1;
 }
 
-void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s32 mask) {
+void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, PlayState* play, s32 mask) {
     s32 i;
     Vec3f sp58;
     s32 pad[2];
@@ -147,19 +140,19 @@ void BgKin2Fence_SpawnEyeSparkles(BgKin2Fence* this, GlobalContext* globalCtx, s
 
     for (i = 0; i < 2; i++) {
         Matrix_MultVec3f(&eyeSparkleSpawnPositions[mask][i], &sp58);
-        EffectSsKirakira_SpawnDispersed(globalCtx, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
+        EffectSsKirakira_SpawnDispersed(play, &sp58, &gZeroVec3f, &gZeroVec3f, &primColor, &envColor, 6000, -10);
     }
 }
 
-void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
     BgKin2Fence* this = THIS;
     s32 i = 0;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kin2_obj_Colheader_000908);
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseFireplaceGrateCol);
+    Collider_InitJntSph(play, &this->collider);
+    Collider_SetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
@@ -168,18 +161,18 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_UpdateSpheres(i, &this->collider);
     }
 
-    if (Flags_GetSwitch(globalCtx, this->dyna.actor.params & 0x7F)) {
+    if (Flags_GetSwitch(play, this->dyna.actor.params & 0x7F)) {
         BgKin2Fence_SetupDoNothing(this);
         return;
     }
     BgKin2Fence_SetupHandleMaskCode(this);
 }
 
-void BgKin2Fence_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Fence_Destroy(Actor* thisx, PlayState* play) {
     BgKin2Fence* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void BgKin2Fence_SetupHandleMaskCode(BgKin2Fence* this) {
@@ -187,7 +180,7 @@ void BgKin2Fence_SetupHandleMaskCode(BgKin2Fence* this) {
     this->actionFunc = BgKin2Fence_HandleMaskCode;
 }
 
-void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, PlayState* play) {
     s32 hitMask;
     s32 nextMask;
 
@@ -198,7 +191,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
             if (hitMask == nextMask) {
                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                 this->masksHit += 1;
-                BgKin2Fence_SpawnEyeSparkles(this, globalCtx, nextMask);
+                BgKin2Fence_SpawnEyeSparkles(this, play, nextMask);
             } else {
                 play_sound(NA_SE_SY_ERROR);
                 this->masksHit = 0;
@@ -215,7 +208,7 @@ void BgKin2Fence_HandleMaskCode(BgKin2Fence* this, GlobalContext* globalCtx) {
             this->cooldownTimer -= 1;
             return;
         }
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -223,10 +216,10 @@ void BgKin2Fence_SetupPlayOpenCutscene(BgKin2Fence* this) {
     this->actionFunc = BgKin2Fence_PlayOpenCutscene;
 }
 
-void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_PlayOpenCutscene(BgKin2Fence* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(globalCtx, this->dyna.actor.params & 0x7F);
+        Flags_SetSwitch(play, this->dyna.actor.params & 0x7F);
         BgKin2Fence_SetupWaitBeforeOpen(this);
         return;
     }
@@ -238,7 +231,7 @@ void BgKin2Fence_SetupWaitBeforeOpen(BgKin2Fence* this) {
     this->actionFunc = BgKin2Fence_WaitBeforeOpen;
 }
 
-void BgKin2Fence_WaitBeforeOpen(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_WaitBeforeOpen(BgKin2Fence* this, PlayState* play) {
     if (this->waitBeforeOpenTimer > 0) {
         this->waitBeforeOpenTimer -= 1;
     } else {
@@ -250,7 +243,7 @@ void BgKin2Fence_SetupRaiseFence(BgKin2Fence* this) {
     this->actionFunc = BgKin2Fence_RaiseFence;
 }
 
-void BgKin2Fence_RaiseFence(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_RaiseFence(BgKin2Fence* this, PlayState* play) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 58.0f, 5.0f)) {
         BgKin2Fence_SetupDoNothing(this);
     }
@@ -260,15 +253,15 @@ void BgKin2Fence_SetupDoNothing(BgKin2Fence* this) {
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 58.0f;
 }
 
-void BgKin2Fence_DoNothing(BgKin2Fence* this, GlobalContext* globalCtx) {
+void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play) {
 }
 
-void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Fence_Update(Actor* thisx, PlayState* play) {
     BgKin2Fence* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, gOceanSpiderHouseFireplaceGrateDL);
+void BgKin2Fence_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, gOceanSpiderHouseFireplaceGrateDL);
 }

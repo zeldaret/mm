@@ -10,13 +10,13 @@
 
 #define THIS ((EnTalk*)thisx)
 
-void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx);
-void func_80BDE058(EnTalk* this, GlobalContext* globalCtx);
-void func_80BDE090(EnTalk* this, GlobalContext* globalCtx);
+void EnTalk_Init(Actor* thisx, PlayState* play);
+void EnTalk_Destroy(Actor* thisx, PlayState* play);
+void EnTalk_Update(Actor* thisx, PlayState* play);
+void func_80BDE058(EnTalk* this, PlayState* play);
+void func_80BDE090(EnTalk* this, PlayState* play);
 
-const ActorInit En_Talk_InitVars = {
+ActorInit En_Talk_InitVars = {
     ACTOR_EN_TALK,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -28,7 +28,7 @@ const ActorInit En_Talk_InitVars = {
     (ActorFunc)NULL,
 };
 
-void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTalk_Init(Actor* thisx, PlayState* play) {
     EnTalk* this = THIS;
     s8 targetMode = this->actor.home.rot.x - 0x1;
 
@@ -41,29 +41,29 @@ void EnTalk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.textId = ENTALK_GET_TEXT_ID(&this->actor);
 }
 
-void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTalk_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
-    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
+void func_80BDE058(EnTalk* this, PlayState* play) {
+    if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->actionFunc = func_80BDE090;
     }
 }
 
-void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void func_80BDE090(EnTalk* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BDE058;
         return;
     }
 
-    if ((this->actor.xzDistToPlayer < 40.0f && Player_IsFacingActor(&this->actor, 0x3000, globalCtx)) ||
+    if ((this->actor.xzDistToPlayer < 40.0f && Player_IsFacingActor(&this->actor, 0x3000, play)) ||
         this->actor.isTargeted) {
-        func_800B8614(&this->actor, globalCtx, 120.0f);
+        func_800B8614(&this->actor, play, 120.0f);
     }
 }
 
-void EnTalk_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTalk_Update(Actor* thisx, PlayState* play) {
     EnTalk* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

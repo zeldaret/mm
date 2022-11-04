@@ -4,18 +4,20 @@
  * Description: "Master" instance of grass for unit spawned by Obj_Grass_Unit
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_grass.h"
 #include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjGrass*)thisx)
 
-void ObjGrass_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjGrass_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjGrass_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjGrass_Init(Actor* thisx, PlayState* play);
+void ObjGrass_Destroy(Actor* thisx, PlayState* play);
+void ObjGrass_Update(Actor* thisx, PlayState* play);
+void ObjGrass_Draw(Actor* thisx, PlayState* play);
 
 ObjGrassStruct1* D_809AADA0[4];
 f32 D_809AADB0[4];
@@ -24,7 +26,7 @@ f32 D_809AAE10[20];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
-const ActorInit Obj_Grass_InitVars = {
+ActorInit Obj_Grass_InitVars = {
     ACTOR_OBJ_GRASS,
     ACTORCAT_PROP,
     FLAGS,
@@ -65,19 +67,19 @@ Vec3f D_809AAB4C[] = {
 
 s16 D_809AAB7C[] = { 0x6C, 0x66, 0x60, 0x54, 0x42, 0x37, 0x2A, 0x26 };
 
-s32 func_809A9110(GlobalContext* globalCtx, Vec3f* arg1) {
+s32 func_809A9110(PlayState* play, Vec3f* arg1) {
     f32 sp2C;
     Vec3f sp20;
 
-    SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, arg1, &sp20, &sp2C);
+    SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, &sp20, &sp2C);
 
-    if ((globalCtx->unk_187F0.z * -130.13191f) < sp20.z) {
+    if ((play->unk_187F0.z * -130.13191f) < sp20.z) {
         if (sp2C < 1.0f) {
             sp2C = 1.0f;
         }
 
-        if (((fabsf(sp20.x) - (130.13191f * globalCtx->unk_187F0.x)) < sp2C) &&
-            ((fabsf(sp20.y) - (130.13191f * globalCtx->unk_187F0.y)) < sp2C)) {
+        if (((fabsf(sp20.x) - (130.13191f * play->unk_187F0.x)) < sp2C) &&
+            ((fabsf(sp20.y) - (130.13191f * play->unk_187F0.y)) < sp2C)) {
             return true;
         }
     }
@@ -95,13 +97,13 @@ void func_809A91FC(MtxF* matrix) {
     }
 }
 
-void func_809A92D0(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
+void func_809A92D0(ObjGrassStruct1_1* ptr, PlayState* play) {
     if (!(ptr->unk_0E & 0x10)) {
-        Item_DropCollectibleRandom(globalCtx, NULL, &ptr->unk_00, ptr->unk_0E * 0x10);
+        Item_DropCollectibleRandom(play, NULL, &ptr->unk_00, ptr->unk_0E * 0x10);
     }
 }
 
-void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
+void func_809A9314(ObjGrassStruct1_1* ptr, PlayState* play) {
     Vec3f spBC;
     Vec3f spB0;
     s32 i;
@@ -118,7 +120,7 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.y = Rand_ZeroOne() * 10.0f;
         spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
-        EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
+        EffectSsKakera_Spawn(play, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
                              D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddle);
 
         spB0.x = ptr->unk_00.x + (ptr2->x * 16.0f);
@@ -129,20 +131,20 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.y = Rand_ZeroOne() * 10.0f;
         spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
-        EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
+        EffectSsKakera_Spawn(play, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
                              D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTip);
     }
 }
 
-void ObjGrass_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjGrass_Init(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
     s32 i;
 
     Actor_SetScale(&this->actor, 0.4f);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        Collider_InitCylinder(globalCtx, &this->unk_2948[i].collider);
-        Collider_SetCylinder(globalCtx, &this->unk_2948[i].collider, &this->actor, &sCylinderInit);
+        Collider_InitCylinder(play, &this->unk_2948[i].collider);
+        Collider_SetCylinder(play, &this->unk_2948[i].collider, &this->actor, &sCylinderInit);
     }
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -153,12 +155,12 @@ void ObjGrass_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3290 = Rand_Next() >> 0x10;
 }
 
-void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjGrass_Destroy(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        Collider_DestroyCylinder(globalCtx, &this->unk_2948[i].collider);
+        Collider_DestroyCylinder(play, &this->unk_2948[i].collider);
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3298); i++) {
@@ -171,23 +173,23 @@ void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_809A9790(ObjGrass* this, GlobalContext* globalCtx) {
+void func_809A9790(ObjGrass* this, PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
         ObjGrassStruct1_1* ptr = this->unk_2948[i].unk_4C;
 
         if ((ptr != NULL) && (this->unk_2948[i].collider.base.acFlags & AC_HIT)) {
-            func_809A9314(ptr, globalCtx);
-            func_809A92D0(ptr, globalCtx);
+            func_809A9314(ptr, play);
+            func_809A92D0(ptr, play);
             ptr->unk_0F |= 4;
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_00, 20, NA_SE_EV_PLANT_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &ptr->unk_00, 20, NA_SE_EV_PLANT_BROKEN);
         }
     }
 }
 
-void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809A983C(ObjGrass* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 i;
     s32 j;
     s32 x;
@@ -287,8 +289,8 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
             ptr3->collider.dim.pos.x = ptr2->unk_00.x;
             ptr3->collider.dim.pos.y = ptr2->unk_00.y;
             ptr3->collider.dim.pos.z = ptr2->unk_00.z;
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &ptr3->collider.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &ptr3->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &ptr3->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &ptr3->collider.base);
             ptr2->unk_0F |= 2;
             ptr3->unk_4C = ptr2;
         } else {
@@ -375,15 +377,15 @@ void func_809A9DB8(ObjGrass* this) {
     }
 }
 
-void ObjGrass_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjGrass_Update(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
 
-    func_809A9790(this, globalCtx);
-    func_809A983C(this, globalCtx);
+    func_809A9790(this, play);
+    func_809A983C(this, play);
     func_809A9DB8(this);
 }
 
-void func_809AA278(ObjGrass* this, GlobalContext* globalCtx) {
+void func_809AA278(ObjGrass* this, PlayState* play) {
     ObjGrassStruct1* ptr;
     ObjGrassStruct1_1* ptr2;
     s32 i;
@@ -394,9 +396,9 @@ void func_809AA278(ObjGrass* this, GlobalContext* globalCtx) {
     for (i = 0; i < this->unk_2944; i++) {
         ptr = &this->unk_144[i];
 
-        temp_f22 = Math3D_Vec3fDistSq(&ptr->unk_00, &GET_ACTIVE_CAM(globalCtx)->eye);
+        temp_f22 = Math3D_Vec3fDistSq(&ptr->unk_00, &GET_ACTIVE_CAM(play)->eye);
 
-        if ((temp_f22 < SQ(1280.0f)) && func_809A9110(globalCtx, &ptr->unk_00)) {
+        if ((temp_f22 < SQ(1280.0f)) && func_809A9110(play, &ptr->unk_00)) {
             ptr->unk_FE |= 1;
 
             for (j = 0; j < ptr->unk_FC; j++) {
@@ -410,7 +412,7 @@ void func_809AA278(ObjGrass* this, GlobalContext* globalCtx) {
                     if (temp_f22 < SQ(980.0f)) {
                         ptr2->unk_10 = 255;
                     } else {
-                        distSq = Math3D_Vec3fDistSq(&ptr2->unk_00, &GET_ACTIVE_CAM(globalCtx)->eye);
+                        distSq = Math3D_Vec3fDistSq(&ptr2->unk_00, &GET_ACTIVE_CAM(play)->eye);
                         if ((distSq <= SQ(1080.0f)) || ((ptr2->unk_0F & 8) && (distSq < SQ(1180.0f)))) {
                             ptr2->unk_10 = 255;
                         } else if (distSq >= SQ(1180.0f)) {
@@ -427,9 +429,9 @@ void func_809AA278(ObjGrass* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
+void func_809AA54C(Actor* thisx, PlayState* play2) {
     ObjGrass* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
     Lights* temp_s0;
     ObjGrassStruct1* ptr;
     s32 i;
@@ -437,9 +439,9 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3s sp70 = { 0, 0, 0 };
     ObjGrassStruct1_1* ptr2;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
     gSPDisplayList(POLY_OPA_DISP++, gObjGrass_D_809AA9F0);
@@ -448,9 +450,9 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
         ptr = &this->unk_144[i];
 
         if (ptr->unk_FE & 1) {
-            temp_s0 = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
-            Lights_BindAll(temp_s0, globalCtx->lightCtx.listHead, &ptr->unk_00, globalCtx);
-            Lights_Draw(temp_s0, globalCtx->state.gfxCtx);
+            temp_s0 = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
+            Lights_BindAll(temp_s0, play->lightCtx.listHead, &ptr->unk_00, play);
+            Lights_Draw(temp_s0, play->state.gfxCtx);
 
             for (j = 0; j < ptr->unk_FC; j++) {
                 ptr2 = &ptr->unk_0C[j];
@@ -463,7 +465,7 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
                         func_809A91FC(&this->unk_2F88[j]);
                     }
 
-                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(POLY_OPA_DISP++, gObjGrass_D_809AAAE0);
                 }
@@ -471,10 +473,10 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
+void func_809AA798(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
     ObjGrassStruct1* ptr;
     ObjGrassStruct1_1* ptr2;
@@ -482,9 +484,9 @@ void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
     s32 j;
     Vec3s sp6C = { 0, 0, 0 };
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, gObjGrass_D_809AAA68);
 
@@ -500,7 +502,7 @@ void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
                     Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp6C);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
-                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr2->unk_10);
                     gSPDisplayList(POLY_XLU_DISP++, gObjGrass_D_809AAAE0);
@@ -509,13 +511,13 @@ void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void ObjGrass_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjGrass_Draw(Actor* thisx, PlayState* play) {
     ObjGrass* this = THIS;
 
-    func_809AA278(this, globalCtx);
-    func_809AA54C(thisx, globalCtx);
-    func_809AA798(thisx, globalCtx);
+    func_809AA278(this, play);
+    func_809AA54C(thisx, play);
+    func_809AA798(thisx, play);
 }

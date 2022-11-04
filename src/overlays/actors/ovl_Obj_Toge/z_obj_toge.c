@@ -11,19 +11,19 @@
 
 #define THIS ((ObjToge*)thisx)
 
-void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjToge_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjToge_Init(Actor* thisx, PlayState* play);
+void ObjToge_Destroy(Actor* thisx, PlayState* play2);
+void ObjToge_Update(Actor* thisx, PlayState* play);
+void ObjToge_Draw(Actor* thisx, PlayState* play);
 
 void func_809A4744(ObjToge* this);
-void func_809A477C(ObjToge* this, GlobalContext* globalCtx);
+void func_809A477C(ObjToge* this, PlayState* play);
 void func_809A4804(ObjToge* this);
-void func_809A481C(ObjToge* this, GlobalContext* globalCtx);
+void func_809A481C(ObjToge* this, PlayState* play);
 void func_809A488C(ObjToge* this);
-void func_809A48AC(ObjToge* this, GlobalContext* globalCtx);
+void func_809A48AC(ObjToge* this, PlayState* play);
 
-const ActorInit Obj_Toge_InitVars = {
+ActorInit Obj_Toge_InitVars = {
     ACTOR_OBJ_TOGE,
     ACTORCAT_PROP,
     FLAGS,
@@ -68,22 +68,22 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_STOP),
 };
 
-void func_809A41C0(ObjToge* this, GlobalContext* globalCtx) {
+void func_809A41C0(ObjToge* this, PlayState* play) {
     Vec3f sp1C = this->actor.world.pos;
 
     sp1C.y += 10.0f;
     sp1C.z += 10.0f;
-    func_800B2B44(globalCtx, &this->actor, &sp1C, 1.8f);
+    func_800B2B44(play, &this->actor, &sp1C, 1.8f);
 
     sp1C.x += 10.0f;
     sp1C.z -= 20.0f;
-    func_800B2B44(globalCtx, &this->actor, &sp1C, 1.8f);
+    func_800B2B44(play, &this->actor, &sp1C, 1.8f);
 
     sp1C.x -= 20.0f;
-    func_800B2B44(globalCtx, &this->actor, &sp1C, 1.8f);
+    func_800B2B44(play, &this->actor, &sp1C, 1.8f);
 }
 
-void func_809A42A0(ObjToge* this, GlobalContext* globalCtx) {
+void func_809A42A0(ObjToge* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
     s16 phi_s0;
@@ -93,20 +93,20 @@ void func_809A42A0(ObjToge* this, GlobalContext* globalCtx) {
     for (i = 0, phi_s0 = 0; i < 5; i++, phi_s0 += 0x3333) {
         sp54.x = (Math_SinS(phi_s0) * 15.0f) + this->actor.world.pos.x;
         sp54.z = (Math_CosS(phi_s0) * 15.0f) + this->actor.world.pos.z;
-        func_800B2B44(globalCtx, &this->actor, &sp54, (Rand_ZeroOne() * 0.6f) + 2.8f);
+        func_800B2B44(play, &this->actor, &sp54, (Rand_ZeroOne() * 0.6f) + 2.8f);
     }
 }
 
-void func_809A43A8(ObjToge* this, GlobalContext* globalCtx) {
+void func_809A43A8(ObjToge* this, PlayState* play) {
     if (!OBJTOGE_GET_4000(&this->actor)) {
-        func_809A41C0(this, globalCtx);
+        func_809A41C0(this, play);
     } else {
-        func_809A42A0(this, globalCtx);
+        func_809A42A0(this, play);
     }
 }
 
-s32 func_809A43EC(ObjToge* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 func_809A43EC(ObjToge* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 temp_fv1 = player->actor.world.pos.x - this->unk_1B8;
     f32 temp_fa0 = player->actor.world.pos.z - this->unk_1BC;
     f32 temp = -(this->unk_1CC * temp_fa0) + (temp_fv1 * this->unk_1C8);
@@ -115,7 +115,7 @@ s32 func_809A43EC(ObjToge* this, GlobalContext* globalCtx) {
     return fabsf(temp) <= this->unk_1C0 && fabsf(temp2) <= this->unk_1C4;
 }
 
-void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjToge_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjToge* this = THIS;
     Path* path;
@@ -129,16 +129,16 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp3E = thisx->home.rot.z;
     thisx->home.rot.z = thisx->world.rot.z = thisx->shape.rot.z = 0;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_InitCylinder(play, &this->collider);
 
     if (OBJTOGE_GET_PATH(thisx) == 0xFF) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
-    path = &globalCtx->setupPathList[OBJTOGE_GET_PATH(thisx)];
+    path = &play->setupPathList[OBJTOGE_GET_PATH(thisx)];
     if (path->count != 2) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
@@ -166,7 +166,7 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_1B4 = false;
     }
 
-    Collider_SetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
+    Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
     thisx->colChkInfo.mass = MASS_IMMOVABLE;
 
@@ -182,11 +182,11 @@ void ObjToge_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjToge_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjToge_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjToge* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_809A4744(ObjToge* this) {
@@ -195,7 +195,7 @@ void func_809A4744(ObjToge* this) {
     this->unk_1B2 = D_809A4CFC[OBJTOGE_GET_3800(&this->actor)];
 }
 
-void func_809A477C(ObjToge* this, GlobalContext* globalCtx) {
+void func_809A477C(ObjToge* this, PlayState* play) {
     if (this->unk_1B2 > 0) {
         this->unk_1B2--;
     }
@@ -217,11 +217,11 @@ void func_809A4804(ObjToge* this) {
     this->unk_1B0 = 0;
 }
 
-void func_809A481C(ObjToge* this, GlobalContext* globalCtx) {
+void func_809A481C(ObjToge* this, PlayState* play) {
     if (this->unk_1B0 >= 0x1770) {
         this->unk_1B0 = 0x1770;
         func_809A488C(this);
-    } else if ((this->unk_1B0 > 0) || func_809A43EC(this, globalCtx)) {
+    } else if ((this->unk_1B0 > 0) || func_809A43EC(this, play)) {
         this->unk_1B0 += 200;
     }
     this->actor.shape.rot.y += this->unk_1B0;
@@ -232,7 +232,7 @@ void func_809A488C(ObjToge* this) {
     this->actionFunc = func_809A48AC;
 }
 
-void func_809A48AC(ObjToge* this, GlobalContext* globalCtx) {
+void func_809A48AC(ObjToge* this, PlayState* play) {
     s32 pad;
     s32 sp30 = this->unk_194 ^ 1;
 
@@ -244,8 +244,7 @@ void func_809A48AC(ObjToge* this, GlobalContext* globalCtx) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, D_809A4D0C[OBJTOGE_GET_4000(&this->actor)] * 30.0f, 0.0f,
-                            0x81);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, D_809A4D0C[OBJTOGE_GET_4000(&this->actor)] * 30.0f, 0.0f, 0x81);
 
     if (this->actor.bgCheckFlags & 8) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[this->unk_194]);
@@ -273,13 +272,13 @@ void func_809A48AC(ObjToge* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjToge_Update(Actor* thisx, PlayState* play) {
     ObjToge* this = THIS;
     ColliderCylinder* collider = &this->collider;
 
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
-            func_809A43A8(this, globalCtx);
+            func_809A43A8(this, play);
             Actor_SetColorFilter(&this->actor, 0, 250, 0, 250);
         }
         collider->base.acFlags &= ~AC_HIT;
@@ -287,28 +286,28 @@ void ObjToge_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.colorFilterTimer == 0) {
         if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
-            func_800B8DD4(globalCtx, &this->actor, 6.0f, this->actor.yawTowardsPlayer, 6.0f, 4);
+            func_800B8DD4(play, &this->actor, 6.0f, this->actor.yawTowardsPlayer, 6.0f, 4);
         }
 
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
 
         Collider_UpdateCylinder(&this->actor, &this->collider);
         if (this->actor.xzDistToPlayer < 1000.0f) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 
     if ((this->actor.flags & ACTOR_FLAG_40) || (this->actor.xzDistToPlayer < 300.0f)) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &collider->base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &collider->base);
     } else {
         this->collider.base.ocFlags1 &= ~OC1_HIT;
         this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
     }
 }
 
-void ObjToge_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjToge_Draw(Actor* thisx, PlayState* play) {
     ObjToge* this = THIS;
 
-    func_800B8050(&this->actor, globalCtx, 1);
-    Gfx_DrawDListOpa(globalCtx, object_trap_DL_001400);
+    func_800B8050(&this->actor, play, 1);
+    Gfx_DrawDListOpa(play, object_trap_DL_001400);
 }

@@ -11,26 +11,26 @@
 
 #define THIS ((EnTimeTag*)thisx)
 
-void EnTimeTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTimeTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTimeTag_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnTimeTag_Init(Actor* thisx, PlayState* play);
+void EnTimeTag_Destroy(Actor* thisx, PlayState* play);
+void EnTimeTag_Update(Actor* thisx, PlayState* play);
 
-void func_80AC9FD4(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80AC9FE4(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA0A8(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA12C(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA184(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA268(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA348(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA3C0(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA5F8(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA714(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA724(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA7C4(EnTimeTag* this, GlobalContext* globalCtx);
-void func_80ACA840(EnTimeTag* this, GlobalContext* globalCtx);
+void func_80AC9FD4(EnTimeTag* this, PlayState* play);
+void func_80AC9FE4(EnTimeTag* this, PlayState* play);
+void func_80ACA0A8(EnTimeTag* this, PlayState* play);
+void func_80ACA12C(EnTimeTag* this, PlayState* play);
+void func_80ACA184(EnTimeTag* this, PlayState* play);
+void func_80ACA268(EnTimeTag* this, PlayState* play);
+void func_80ACA348(EnTimeTag* this, PlayState* play);
+void func_80ACA3C0(EnTimeTag* this, PlayState* play);
+void func_80ACA418(EnTimeTag* this, PlayState* play);
+void func_80ACA5F8(EnTimeTag* this, PlayState* play);
+void func_80ACA714(EnTimeTag* this, PlayState* play);
+void func_80ACA724(EnTimeTag* this, PlayState* play);
+void func_80ACA7C4(EnTimeTag* this, PlayState* play);
+void func_80ACA840(EnTimeTag* this, PlayState* play);
 
-const ActorInit En_Time_Tag_InitVars = {
+ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -42,7 +42,7 @@ const ActorInit En_Time_Tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-void EnTimeTag_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTimeTag_Init(Actor* thisx, PlayState* play) {
     EnTimeTag* this = THIS;
 
     this->actionFunc = func_80ACA840;
@@ -50,7 +50,7 @@ void EnTimeTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (ENTIMETAG_GET_E000(&this->actor)) {
         case 4:
             if ((gSaveContext.save.weekEventReg[8] & 0x40) || (CURRENT_DAY != 3)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.home.rot.x = 0;
@@ -80,18 +80,18 @@ void EnTimeTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnTimeTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTimeTag_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80AC9FD4(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80AC9FD4(EnTimeTag* this, PlayState* play) {
 }
 
-void func_80AC9FE4(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = func_80AC9FD4;
-        gSaveContext.unk_3DD0[3] = 0;
-        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+        gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
+        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
             CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
             gSaveContext.save.weekEventReg[25] |= 2;
         }
@@ -100,28 +100,28 @@ void func_80AC9FE4(EnTimeTag* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80ACA0A8(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
     EnTimeTag* this2 = this;
 
-    if ((globalCtx->msgCtx.ocarinaMode == 3) && (globalCtx->msgCtx.unk1202E == 4)) {
+    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80AC9FE4;
             ActorCutscene_SetIntentToPlay(this2->actor.cutscene);
-            gSaveContext.unk_3DD0[3] = 0;
+            gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
-        globalCtx->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = 4;
     }
 }
 
-void func_80ACA12C(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA12C(EnTimeTag* this, PlayState* play) {
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
         this->actionFunc = func_80ACA268;
         this->actor.textId = 0xC02;
-        Item_Give(globalCtx, ITEM_SONG_SOARING);
+        Item_Give(play, ITEM_SONG_SOARING);
     }
 }
 
-void func_80ACA184(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA184(EnTimeTag* this, PlayState* play) {
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         ActorCutscene_Stop(0x7C);
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -133,68 +133,68 @@ void func_80ACA184(EnTimeTag* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80ACA208(EnTimeTag* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        func_801477B4(globalCtx);
+void func_80ACA208(EnTimeTag* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        func_801477B4(play);
         this->actionFunc = func_80ACA268;
     }
 }
 
-void func_80ACA268(EnTimeTag* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void func_80ACA268(EnTimeTag* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->actor.textId == 0) {
             this->actionFunc = func_80ACA184;
         } else {
             this->actionFunc = func_80ACA208;
         }
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx) &&
-               (Flags_GetSwitch(globalCtx, ENTIMETAG_GET_SWITCHFLAG(&this->actor)) ||
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
+               (Flags_GetSwitch(play, ENTIMETAG_GET_SWITCHFLAG(&this->actor)) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_SOARING))) {
         this->actor.flags |= ACTOR_FLAG_1;
-        func_800B8614(&this->actor, globalCtx, 110.0f);
+        func_800B8614(&this->actor, play, 110.0f);
     }
 }
 
-void func_80ACA348(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA348(EnTimeTag* this, PlayState* play) {
     if (this->actor.home.rot.x > 0) {
         this->actor.home.rot.x--;
         return;
     }
 
     if (this->actor.home.rot.z != 0) {
-        func_80151938(globalCtx, 0x1230);
+        func_80151938(play, 0x1230);
     } else {
-        func_80151938(globalCtx, 0x122D);
+        func_80151938(play, 0x122D);
     }
 
     this->actionFunc = func_80ACA418;
 }
 
-void func_80ACA3C0(EnTimeTag* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk11F00->state == 0) && (globalCtx->msgCtx.msgMode == 0x1B)) {
+void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
+    if ((play->msgCtx.unk11F00->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
-        globalCtx->msgCtx.unk11F10 = 0;
-        globalCtx->msgCtx.msgMode = 0;
+        play->msgCtx.msgLength = 0;
+        play->msgCtx.msgMode = 0;
     }
 }
 
-void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
-        case 5:
-            if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.currentTextId) {
+void func_80ACA418(EnTimeTag* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                switch (play->msgCtx.currentTextId) {
                     case 0x101C:
                     case 0x101D:
                     case 0x101E:
                     case 0x122D:
-                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
+                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x101F:
                     case 0x122A:
                     case 0x1230:
-                        func_801477B4(globalCtx);
+                        func_801477B4(play);
                         this->actionFunc = func_80ACA5F8;
                         if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                             ActorCutscene_Stop(this->actor.cutscene);
@@ -202,13 +202,13 @@ void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0x122B:
-                        func_80152434(globalCtx, 0x3F);
+                        func_80152434(play, 0x3F);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 0;
                         break;
 
                     case 0x122E:
-                        func_80152434(globalCtx, 0x40);
+                        func_80152434(play, 0x40);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 1;
                         break;
@@ -216,7 +216,7 @@ void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 2:
+        case TEXT_STATE_CLOSING:
             this->actionFunc = func_80ACA5F8;
             break;
     }
@@ -236,35 +236,35 @@ void func_80ACA418(EnTimeTag* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80ACA5F8(EnTimeTag* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void func_80ACA5F8(EnTimeTag* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             if (ENTIMETAG_GET_SWITCHFLAG(&this->actor) == 1) {
-                Message_StartTextbox(globalCtx, 0x101C, &this->actor);
+                Message_StartTextbox(play, 0x101C, &this->actor);
             } else {
-                Message_StartTextbox(globalCtx, 0x122B, &this->actor);
+                Message_StartTextbox(play, 0x122B, &this->actor);
             }
             this->actor.home.rot.x = 1;
         } else {
-            Message_StartTextbox(globalCtx, 0x122A, &this->actor);
+            Message_StartTextbox(play, 0x122A, &this->actor);
             if (0) {}
-            ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 4;
-            Actor_ChangeFocus(&this->actor, globalCtx, GET_PLAYER(globalCtx)->tatlActor);
+            ((EnElf*)GET_PLAYER(play)->tatlActor)->unk_264 |= 4;
+            Actor_ChangeFocus(&this->actor, play, GET_PLAYER(play)->tatlActor);
             this->actor.home.rot.x = 0;
         }
         this->actionFunc = func_80ACA418;
-    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, globalCtx)) {
-        func_800B8614(&this->actor, globalCtx, 110.0f);
+    } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
+        func_800B8614(&this->actor, play, 110.0f);
     }
 }
 
-void func_80ACA714(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA714(EnTimeTag* this, PlayState* play) {
 }
 
-void func_80ACA724(EnTimeTag* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
-        globalCtx->sceneLoadFlag = 0x14;
+void func_80ACA724(EnTimeTag* this, PlayState* play) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
+        play->nextEntrance = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
+        play->transitionTrigger = TRANS_TRIGGER_START;
         if (!ENTIMETAG_GET_E000(&this->actor)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
         }
@@ -272,19 +272,19 @@ void func_80ACA724(EnTimeTag* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80ACA7C4(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA7C4(EnTimeTag* this, PlayState* play) {
     if (!(gSaveContext.save.weekEventReg[63] & 1) && !(gSaveContext.save.weekEventReg[63] & 2)) {
-        func_800B7298(globalCtx, &this->actor, 7);
-        Message_StartTextbox(globalCtx, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
+        func_800B7298(play, &this->actor, 7);
+        Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
         this->actionFunc = func_80ACA724;
     }
 }
 
-void func_80ACA840(EnTimeTag* this, GlobalContext* globalCtx) {
+void func_80ACA840(EnTimeTag* this, PlayState* play) {
     s16 temp_ft4;
     s16 temp_hi;
 
-    if ((globalCtx->sceneNum != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
+    if ((play->sceneId != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
         temp_ft4 = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
         temp_hi = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
         if (gSaveContext.save.weekEventReg[63] & 1) {
@@ -294,16 +294,16 @@ void func_80ACA840(EnTimeTag* this, GlobalContext* globalCtx) {
                 gSaveContext.save.weekEventReg[63] |= 2;
             }
         } else if ((temp_ft4 == this->actor.home.rot.x) && (temp_hi == this->actor.home.rot.y) &&
-                   !Play_InCsMode(globalCtx)) {
-            func_800B7298(globalCtx, &this->actor, 7);
-            Message_StartTextbox(globalCtx, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
+                   !Play_InCsMode(play)) {
+            func_800B7298(play, &this->actor, 7);
+            Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
             this->actionFunc = func_80ACA724;
         }
     }
 }
 
-void EnTimeTag_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTimeTag_Update(Actor* thisx, PlayState* play) {
     EnTimeTag* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

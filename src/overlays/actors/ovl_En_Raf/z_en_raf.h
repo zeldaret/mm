@@ -16,7 +16,7 @@ typedef enum {
 
 struct EnRaf;
 
-typedef void (*EnRafActionFunc)(struct EnRaf*, GlobalContext*);
+typedef void (*EnRafActionFunc)(struct EnRaf*, PlayState*);
 
 typedef struct {
     /* 0x00 */ u8 isEnabled;
@@ -63,7 +63,5 @@ typedef struct EnRaf {
     /* 0x3D0 */ ColliderCylinder collider;
     /* 0x41C */ EnRafEffect effects[EN_RAF_EFFECT_COUNT];
 } EnRaf; // size = 0xAE4
-
-extern const ActorInit En_Raf_InitVars;
 
 #endif // Z_EN_RAF_H

@@ -1,69 +1,84 @@
 ﻿<Root>
+    <!-- Assets for Evan, the pianist of The Indigo-Go's. -->
     <File Name="object_zos" Segment="6">
-        <Animation Name="object_zos_Anim_001CFC" Offset="0x1CFC" />
-        <Animation Name="object_zos_Anim_0048D4" Offset="0x48D4" />
-        <Animation Name="object_zos_Anim_005E04" Offset="0x5E04" />
-        <Animation Name="object_zos_Anim_007334" Offset="0x7334" />
-        <Animation Name="object_zos_Anim_007C40" Offset="0x7C40" />
-        <Animation Name="object_zos_Anim_008630" Offset="0x8630" />
-        <Animation Name="object_zos_Anim_0090CC" Offset="0x90CC" />
-        <Animation Name="object_zos_Anim_009830" Offset="0x9830" />
-        <Animation Name="object_zos_Anim_00A164" Offset="0xA164" />
-        <DList Name="object_zos_DL_00D2B0" Offset="0xD2B0" />
-        <DList Name="object_zos_DL_00D3E0" Offset="0xD3E0" />
-        <DList Name="object_zos_DL_00D658" Offset="0xD658" />
-        <DList Name="object_zos_DL_00D7A8" Offset="0xD7A8" />
-        <DList Name="object_zos_DL_00D900" Offset="0xD900" />
-        <DList Name="object_zos_DL_00DA90" Offset="0xDA90" />
-        <DList Name="object_zos_DL_00DB90" Offset="0xDB90" />
-        <DList Name="object_zos_DL_00DCE8" Offset="0xDCE8" />
-        <DList Name="object_zos_DL_00DE78" Offset="0xDE78" />
-        <DList Name="object_zos_DL_00E328" Offset="0xE328" />
-        <DList Name="object_zos_DL_00E400" Offset="0xE400" />
-        <DList Name="object_zos_DL_00E4C8" Offset="0xE4C8" />
-        <DList Name="object_zos_DL_00E700" Offset="0xE700" />
-        <DList Name="object_zos_DL_00E8A0" Offset="0xE8A0" />
-        <DList Name="object_zos_DL_00EA80" Offset="0xEA80" />
-        <DList Name="object_zos_DL_00EC98" Offset="0xEC98" />
-        <DList Name="object_zos_DL_00EE38" Offset="0xEE38" />
-        <Texture Name="object_zos_TLUT_00F018" OutName="tlut_00F018" Format="rgba16" Width="16" Height="16" Offset="0xF018" />
-        <Texture Name="object_zos_Tex_00F218" OutName="tex_00F218" Format="rgba16" Width="32" Height="32" Offset="0xF218" />
-        <Texture Name="object_zos_Tex_00FA18" OutName="tex_00FA18" Format="ci8" Width="16" Height="16" Offset="0xFA18" />
-        <Texture Name="object_zos_Tex_00FB18" OutName="tex_00FB18" Format="rgba16" Width="8" Height="8" Offset="0xFB18" />
-        <Texture Name="object_zos_Tex_00FB98" OutName="tex_00FB98" Format="rgba16" Width="8" Height="8" Offset="0xFB98" />
-        <Texture Name="object_zos_Tex_00FC18" OutName="tex_00FC18" Format="rgba16" Width="8" Height="8" Offset="0xFC18" />
-        <Texture Name="object_zos_Tex_00FC98" OutName="tex_00FC98" Format="rgba16" Width="32" Height="32" Offset="0xFC98" />
-        <Texture Name="object_zos_Tex_010498" OutName="tex_010498" Format="rgba16" Width="16" Height="32" Offset="0x10498" />
-        <Texture Name="object_zos_Tex_010898" OutName="tex_010898" Format="rgba16" Width="8" Height="8" Offset="0x10898" />
-        <Texture Name="object_zos_Tex_010918" OutName="tex_010918" Format="rgba16" Width="32" Height="32" Offset="0x10918" />
-        <Texture Name="object_zos_Tex_011118" OutName="tex_011118" Format="rgba16" Width="32" Height="32" Offset="0x11118" />
-        <Texture Name="object_zos_Tex_011918" OutName="tex_011918" Format="rgba16" Width="32" Height="32" Offset="0x11918" />
-        <!-- <Blob Name="object_zos_Blob_012118" Size="0xF70" Offset="0x12118" /> -->
-        <DList Name="object_zos_DL_013088" Offset="0x13088" />
-        <DList Name="object_zos_DL_0136E0" Offset="0x136E0" />
-        <Texture Name="object_zos_Tex_013728" OutName="tex_013728" Format="rgba16" Width="32" Height="32" Offset="0x13728" />
-        <Texture Name="object_zos_Tex_013F28" OutName="tex_013F28" Format="rgba16" Width="32" Height="32" Offset="0x13F28" />
-        <Texture Name="object_zos_Tex_014728" OutName="tex_014728" Format="rgba16" Width="32" Height="32" Offset="0x14728" />
-        <Texture Name="object_zos_Tex_014F28" OutName="tex_014F28" Format="rgba16" Width="16" Height="16" Offset="0x14F28" />
-        <Limb Name="object_zos_Standardlimb_015128" Type="Standard" EnumName="OBJECT_ZOS_LIMB_01" Offset="0x15128" />
-        <Limb Name="object_zos_Standardlimb_015134" Type="Standard" EnumName="OBJECT_ZOS_LIMB_02" Offset="0x15134" />
-        <Limb Name="object_zos_Standardlimb_015140" Type="Standard" EnumName="OBJECT_ZOS_LIMB_03" Offset="0x15140" />
-        <Limb Name="object_zos_Standardlimb_01514C" Type="Standard" EnumName="OBJECT_ZOS_LIMB_04" Offset="0x1514C" />
-        <Limb Name="object_zos_Standardlimb_015158" Type="Standard" EnumName="OBJECT_ZOS_LIMB_05" Offset="0x15158" />
-        <Limb Name="object_zos_Standardlimb_015164" Type="Standard" EnumName="OBJECT_ZOS_LIMB_06" Offset="0x15164" />
-        <Limb Name="object_zos_Standardlimb_015170" Type="Standard" EnumName="OBJECT_ZOS_LIMB_07" Offset="0x15170" />
-        <Limb Name="object_zos_Standardlimb_01517C" Type="Standard" EnumName="OBJECT_ZOS_LIMB_08" Offset="0x1517C" />
-        <Limb Name="object_zos_Standardlimb_015188" Type="Standard" EnumName="OBJECT_ZOS_LIMB_09" Offset="0x15188" />
-        <Limb Name="object_zos_Standardlimb_015194" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0A" Offset="0x15194" />
-        <Limb Name="object_zos_Standardlimb_0151A0" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0B" Offset="0x151A0" />
-        <Limb Name="object_zos_Standardlimb_0151AC" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0C" Offset="0x151AC" />
-        <Limb Name="object_zos_Standardlimb_0151B8" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0D" Offset="0x151B8" />
-        <Limb Name="object_zos_Standardlimb_0151C4" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0E" Offset="0x151C4" />
-        <Limb Name="object_zos_Standardlimb_0151D0" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0F" Offset="0x151D0" />
-        <Limb Name="object_zos_Standardlimb_0151DC" Type="Standard" EnumName="OBJECT_ZOS_LIMB_10" Offset="0x151DC" />
-        <Limb Name="object_zos_Standardlimb_0151E8" Type="Standard" EnumName="OBJECT_ZOS_LIMB_11" Offset="0x151E8" />
-        <Skeleton Name="object_zos_Skel_015238" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOS_LIMB_NONE" LimbMax="OBJECT_ZOS_LIMB_MAX" EnumName="object_zos_Limbs" Offset="0x15238" />
-        <Animation Name="object_zos_Anim_01621C" Offset="0x1621C" />
-        <Animation Name="object_zos_Anim_016980" Offset="0x16980" />
+        <!-- Evan Animations -->
+        <Animation Name="gEvanSlowPlayAnim" Offset="0x1CFC" /> <!-- Original name is "ev_ensou_loop" ("musical performance​") -->
+        <Animation Name="gEvanInspiredAnim" Offset="0x48D4" /> <!-- Original name is "zK_furimuki" ("to turn around") -->
+        <Animation Name="gEvanPlayRightAnim" Offset="0x5E04" /> <!-- Original name is "zK_play01" -->
+        <Animation Name="gEvanPlayLeftAnim" Offset="0x7334" /> <!-- Original name is "zK_play02" -->
+        <Animation Name="gEeanTalkFootTapAnim" Offset="0x7C40" /> <!-- Original name is "zK_talk01" -->
+        <Animation Name="gEvanTalkLookDownAnim" Offset="0x8630" /> <!-- Original name is "zK_talk02" -->
+        <Animation Name="gEvanTalkArmsOutAnim" Offset="0x90CC" /> <!-- Original name is "zK_talk03" -->
+        <Animation Name="gEvanTalkHandsOnHipsAnim" Offset="0x9830" /> <!-- Original name is "zK_talk04" -->
+        <Animation Name="gEvanLeanOnKeyboardAnim" Offset="0xA164" /> <!-- Original name is "zK_wait01" -->
+
+        <!-- Evan Limb DisplayLists -->
+        <DList Name="gEvanPelvisDL" Offset="0xD2B0" />
+        <DList Name="gEvanTorsoDL" Offset="0xD3E0" />
+        <DList Name="gEvanRightUpperArmDL" Offset="0xD658" />
+        <DList Name="gEvanRightForearmDL" Offset="0xD7A8" />
+        <DList Name="gEvanRightHandDL" Offset="0xD900" />
+        <DList Name="gEvanLeftUpperArmDL" Offset="0xDA90" />
+        <DList Name="gEvanLeftForearmDL" Offset="0xDB90" />
+        <DList Name="gEvanLeftHandDL" Offset="0xDCE8" />
+        <DList Name="gEvanHeadDL" Offset="0xDE78" />
+        <DList Name="gEvanUpperHeadFinDL" Offset="0xE328" />
+        <DList Name="gEvanLowerHeadFinDL" Offset="0xE400" />
+        <DList Name="gEvanRightThighDL" Offset="0xE4C8" />
+        <DList Name="gEvanRightShinDL" Offset="0xE700" />
+        <DList Name="gEvanRightFootDL" Offset="0xE8A0" />
+        <DList Name="gEvanLeftThighDL" Offset="0xEA80" />
+        <DList Name="gEvanLeftShinDL" Offset="0xEC98" />
+        <DList Name="gEvanLeftFootDL" Offset="0xEE38" />
+
+        <!-- Evan Textures -->
+        <Texture Name="gEvanFingersTLUT" OutName="evan_fingers_tlut" Format="rgba16" Width="16" Height="16" Offset="0xF018" />
+        <Texture Name="gEvanSpottedSkinTex" OutName="evan_spotted_skin" Format="rgba16" Width="32" Height="32" Offset="0xF218" />
+        <Texture Name="gEvanFingersTex" OutName="evan_fingers" Format="ci8" Width="16" Height="16" Offset="0xFA18" />
+        <Texture Name="gEvanMouthEdgeTex" OutName="evan_mouth_edge" Format="rgba16" Width="8" Height="8" Offset="0xFB18" />
+        <Texture Name="gEvanMouthAndFinsTex" OutName="evan_mouth_and_fins" Format="rgba16" Width="8" Height="8" Offset="0xFB98" />
+        <Texture Name="gEvanSkinTex" OutName="evan_skin" Format="rgba16" Width="8" Height="8" Offset="0xFC18" />
+        <Texture Name="gEvanHeadphoneClamTex" OutName="evan_headphone_clam" Format="rgba16" Width="32" Height="32" Offset="0xFC98" />
+        <Texture Name="gEvanHeadphoneBoneTex" OutName="evan_headphone_bone" Format="rgba16" Width="16" Height="32" Offset="0x10498" />
+        <Texture Name="gEvanArmbandTex" OutName="evan_armband" Format="rgba16" Width="8" Height="8" Offset="0x10898" />
+        <Texture Name="gEvanEyeOpenTex" OutName="evan_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x10918" />
+        <Texture Name="gEvanEyeHalfTex" OutName="evan_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x11118" />
+        <Texture Name="gEvanEyeClosedTex" OutName="evan_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x11918" />
+
+        <!-- Evan's Keyboard DisplayLists -->
+        <DList Name="gEvanKeyboardDL" Offset="0x13088" /> <!-- Original name is "zK_gakki_model" -->
+        <DList Name="gEvanUnknownWhiteTriangleDL" Offset="0x136E0" /> <!-- The purpose of this is unknown. It cannot be seen in-game. -->
+
+        <!-- Evan's Keyboard Textures -->
+        <Texture Name="gEvanKeyboardRibKeysTex" OutName="evan_keyboard_rib_keys" Format="rgba16" Width="32" Height="32" Offset="0x13728" />
+        <Texture Name="gEvanKeyboardSkullTex" OutName="evan_keyboard_skull" Format="rgba16" Width="32" Height="32" Offset="0x13F28" />
+        <Texture Name="gEvanKeyboardBoneTex" OutName="evan_keyboard_bone" Format="rgba16" Width="32" Height="32" Offset="0x14728" />
+        <Texture Name="gEvanKeyboardOtherKeysTex" OutName="evan_keyboard_other_keys" Format="rgba16" Width="16" Height="16" Offset="0x14F28" />
+
+        <!-- Evan Limbs -->
+        <Limb Name="gEvanPelvisLimb" Type="Standard" EnumName="EVAN_LIMB_PELVIS" Offset="0x15128" />
+        <Limb Name="gEvanLeftThighLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_THIGH" Offset="0x15134" />
+        <Limb Name="gEvanLeftShinLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_SHIN" Offset="0x15140" />
+        <Limb Name="gEvanLeftFootLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_FOOT" Offset="0x1514C" />
+        <Limb Name="gEvanRightThighLimb" Type="Standard" EnumName="EVAN_LIMB_RIGHT_THIGH" Offset="0x15158" />
+        <Limb Name="gEvanRightShinLimb" Type="Standard" EnumName="EVAN_LIMB_RIGHT_SHIN" Offset="0x15164" />
+        <Limb Name="gEvanRightFootLimb" Type="Standard" EnumName="EVAN_LIMB_RIGHT_FOOT" Offset="0x15170" />
+        <Limb Name="gEvanTorsoLimb" Type="Standard" EnumName="EVAN_LIMB_TORSO" Offset="0x1517C" />
+        <Limb Name="gEvanHeadLimb" Type="Standard" EnumName="EVAN_LIMB_HEAD" Offset="0x15188" />
+        <Limb Name="gEvanUpperHeadFinLimb" Type="Standard" EnumName="EVAN_LIMB_UPPER_HEAD_FIN" Offset="0x15194" />
+        <Limb Name="gEvanLowerHeadFinLimb" Type="Standard" EnumName="EVAN_LIMB_LOWER_HEAD_FIN" Offset="0x151A0" />
+        <Limb Name="gEvanLeftUpperArmLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_UPPER_ARM" Offset="0x151AC" />
+        <Limb Name="gEvanLeftForearmLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_FOREARM" Offset="0x151B8" />
+        <Limb Name="gEvanLeftHandLimb" Type="Standard" EnumName="EVAN_LIMB_LEFT_HAND" Offset="0x151C4" />
+        <Limb Name="gEvanRightUpperArmLimb" Type="Standard" EnumName="EVAN_LIMB_RIGHT_UPPER_ARM" Offset="0x151D0" />
+        <Limb Name="gEvanRightForearmLimb" Type="Standard" EnumName="EVAN_LIMB_RIGHT_FOREARM" Offset="0x151DC" />
+        <Limb Name="gEvanRightHandLimb" Type="Standard" EnumName="EVAN_LIMB_RIGHT_HAND" Offset="0x151E8" />
+
+        <!-- Evan Skeleton -->
+        <Skeleton Name="gEvanSkel" Type="Flex" LimbType="Standard" LimbNone="EVAN_LIMB_NONE" LimbMax="EVAN_LIMB_MAX" EnumName="EvanLimb" Offset="0x15238" />
+
+        <!-- Evan Animations -->
+        <Animation Name="gEvanLeanOnKeyboardAndSighAnim" Offset="0x1621C" /> <!-- Original name is "zK_wait02" -->
+        <Animation Name="gEvanHandsOnHipsAnim" Offset="0x16980" /> <!-- Original name is "zK_wait03" -->
     </File>
 </Root>

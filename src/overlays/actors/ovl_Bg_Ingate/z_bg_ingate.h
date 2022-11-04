@@ -5,7 +5,7 @@
 
 struct BgIngate;
 
-typedef void (*BgIngateActionFunc)(struct BgIngate*, GlobalContext*);
+typedef void (*BgIngateActionFunc)(struct BgIngate*, PlayState*);
 
 #define BGINGATE_GET_FF(thisx) ((thisx)->params & 0xFF)
 
@@ -25,7 +25,5 @@ typedef struct BgIngate {
     /* 0x188 */ s32 timePathWaypoint;
     /* 0x18C */ s32 timePathElapsedTime;
 } BgIngate; // size = 0x190
-
-extern const ActorInit Bg_Ingate_InitVars;
 
 #endif // Z_BG_INGATE_H

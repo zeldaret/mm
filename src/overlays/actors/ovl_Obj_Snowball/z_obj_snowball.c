@@ -12,28 +12,28 @@
 
 #define THIS ((ObjSnowball*)thisx)
 
-void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSnowball_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSnowball_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSnowball_Init(Actor* thisx, PlayState* play);
+void ObjSnowball_Destroy(Actor* thisx, PlayState* play);
+void ObjSnowball_Update(Actor* thisx, PlayState* play);
+void ObjSnowball_Draw(Actor* thisx, PlayState* play);
 
-void func_80B02CD0(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B02D58(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B02DB0(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B02E54(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04338(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04540(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B0457C(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04608(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04648(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B046E4(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04B48(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04B60(ObjSnowball* this, GlobalContext* globalCtx);
-void func_80B04D34(Actor* thisx, GlobalContext* globalCtx);
+void func_80B02CD0(ObjSnowball* this, PlayState* play);
+void func_80B02D58(ObjSnowball* this, PlayState* play);
+void func_80B02DB0(ObjSnowball* this, PlayState* play);
+void func_80B02E54(ObjSnowball* this, PlayState* play);
+void func_80B04338(ObjSnowball* this, PlayState* play);
+void func_80B04350(ObjSnowball* this, PlayState* play);
+void func_80B04540(ObjSnowball* this, PlayState* play);
+void func_80B0457C(ObjSnowball* this, PlayState* play);
+void func_80B04608(ObjSnowball* this, PlayState* play);
+void func_80B04648(ObjSnowball* this, PlayState* play);
+void func_80B046E4(ObjSnowball* this, PlayState* play);
+void func_80B047C0(ObjSnowball* this, PlayState* play);
+void func_80B04B48(ObjSnowball* this, PlayState* play);
+void func_80B04B60(ObjSnowball* this, PlayState* play);
+void func_80B04D34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Snowball_InitVars = {
+ActorInit Obj_Snowball_InitVars = {
     ACTOR_OBJ_SNOWBALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -68,7 +68,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -101,42 +101,41 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-void func_80B02CD0(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B02CD0(ObjSnowball* this, PlayState* play) {
     ObjSnowballStruct2* ptr = &D_80B04F84[this->actor.home.rot.y];
 
-    Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ptr->unk_00, this->actor.home.pos.x,
-                                  this->actor.home.pos.y, this->actor.home.pos.z, this->actor.home.rot.x, 0,
-                                  this->actor.home.rot.z, ptr->unk_02, -1, this->actor.unk20, NULL);
+    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
+                                  this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
+                                  ptr->unk_02, -1, this->actor.unk20, NULL);
 }
 
-void func_80B02D58(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B02D58(ObjSnowball* this, PlayState* play) {
     s32 temp_v0 = func_800A8150(OBJSNOWBALL_GET_3F(&this->actor));
 
     if (temp_v0 >= 0) {
-        Item_DropCollectible(globalCtx, &this->actor.home.pos, (OBJSNOWBALL_GET_7F00(&this->actor) << 8) | temp_v0);
+        Item_DropCollectible(play, &this->actor.home.pos, (OBJSNOWBALL_GET_7F00(&this->actor) << 8) | temp_v0);
     }
 }
 
-void func_80B02DB0(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B02DB0(ObjSnowball* this, PlayState* play) {
     s32 pad;
     ObjSnowballStruct2* ptr = &D_80B04F84[this->actor.home.rot.y];
 
-    Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ptr->unk_00, this->actor.home.pos.x,
-                                  this->actor.home.pos.y, this->actor.home.pos.z, this->actor.home.rot.x, 0,
-                                  this->actor.home.rot.z, this->actor.params | ptr->unk_02,
+    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
+                                  this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
+                                  this->actor.params | ptr->unk_02,
                                   ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.unk20, NULL);
 }
 
-void func_80B02E54(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B02E54(ObjSnowball* this, PlayState* play) {
     ObjSnowballStruct2* ptr = &D_80B04F84[this->actor.home.rot.y];
 
-    Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ptr->unk_00, this->actor.home.pos.x,
-                                  this->actor.home.pos.y, this->actor.home.pos.z, this->actor.home.rot.x, 0,
-                                  this->actor.home.rot.z, this->actor.params | ptr->unk_02, -1, this->actor.unk20,
-                                  NULL);
+    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
+                                  this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
+                                  this->actor.params | ptr->unk_02, -1, this->actor.unk20, NULL);
 }
 
-void func_80B02EE4(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B02EE4(ObjSnowball* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -156,12 +155,12 @@ void func_80B02EE4(ObjSnowball* this, GlobalContext* globalCtx) {
         spAC.y = spA0.y * -0.06f;
         spAC.z = spA0.z * -0.06f;
 
-        func_800B0E48(globalCtx, &sp94, &spA0, &spAC, &D_80B04FB4, &D_80B04FB8, (s32)(Rand_ZeroOne() * 30.0f) + 15,
+        func_800B0E48(play, &sp94, &spA0, &spAC, &D_80B04FB4, &D_80B04FB8, (s32)(Rand_ZeroOne() * 30.0f) + 15,
                       (s32)(Rand_ZeroOne() * 40.0f) + 30);
     }
 }
 
-void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B030F8(ObjSnowball* this, PlayState* play) {
     s32 pad;
     f32 temp_f28 = sqrtf(this->unk_20C);
     Vec3f spFC;
@@ -228,7 +227,7 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
 
         scale = ((Rand_ZeroOne() * 15.0f) + 30.0f) * this->unk_20C;
 
-        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1,
                              OBJECT_GOROIWA, temp_s2);
         if ((this->unk_210 == 0) && (temp_s7 >= 3)) {
             spFC.x += (Rand_ZeroOne() * 120.0f) - 60.0f;
@@ -237,7 +236,7 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
 
             temp_s0 = (s32)(Rand_ZeroOne() * 50.0f * temp_f28) + 40;
             temp_s1 = (s32)(Rand_ZeroOne() * 60.0f * temp_f28) + 50;
-            func_800B0E48(globalCtx, &spFC, &gZeroVec3f, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, temp_s0, temp_s1);
+            func_800B0E48(play, &spFC, &gZeroVec3f, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, temp_s0, temp_s1);
         }
     }
 
@@ -268,12 +267,12 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
             spE4.y = spF0.y * -0.05f;
             spE4.z = spF0.z * -0.02f;
 
-            EffectSsIceSmoke_Spawn(globalCtx, &spFC, &spF0, &spE4, ((s32)(Rand_ZeroOne() * 170.0f) + 150) * temp_f28);
+            EffectSsIceSmoke_Spawn(play, &spFC, &spF0, &spE4, ((s32)(Rand_ZeroOne() * 170.0f) + 150) * temp_f28);
         }
     }
 }
 
-void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B03688(ObjSnowball* this, PlayState* play) {
     s32 i;
     Vec3f spB8;
     Vec3f spAC;
@@ -306,7 +305,7 @@ void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
 
             temp_s3 = (s32)(Rand_ZeroOne() * 60.0f * temp_f22) + 70;
 
-            func_800B0E48(globalCtx, &spB8, &spAC, &spA0, &D_80B04FB4, &D_80B04FB8, temp_s3,
+            func_800B0E48(play, &spB8, &spAC, &spA0, &D_80B04FB4, &D_80B04FB8, temp_s3,
                           (s32)(Rand_ZeroOne() * 70.0f * temp_f22) + 70);
         }
     } else {
@@ -328,12 +327,12 @@ void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
             spB8.y = (Rand_ZeroOne() * 20.0f) + this->actor.home.pos.y;
             spB8.z = (spB8.z * temp_f20) + this->actor.home.pos.z;
 
-            EffectSsIceSmoke_Spawn(globalCtx, &spB8, &spAC, &spA0, (s32)(Rand_ZeroOne() * 140.0f * temp_f22) + 100);
+            EffectSsIceSmoke_Spawn(play, &spB8, &spAC, &spA0, (s32)(Rand_ZeroOne() * 140.0f * temp_f22) + 100);
         }
     }
 }
 
-void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
+void func_80B03A80(PlayState* play, f32 arg1, Vec3f* arg2) {
     f32 temp_f30 = sqrtf(arg1);
     Vec3f spD8;
     Vec3f spCC;
@@ -389,7 +388,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
             phi_s0 = 0x40;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spD8, &spCC, &spD8, phi_s2, phi_s0, 30, 0, 0,
+        EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, phi_s2, phi_s0, 30, 0, 0,
                              ((Rand_ZeroOne() * 15.0f) + 25.0f) * arg1, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, temp_s1);
 
         spD8.x += (Rand_ZeroOne() * 80.0f) - 40.0f;
@@ -398,12 +397,12 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
 
         phi_s0 = (s32)(Rand_ZeroOne() * 60.0f * temp_f30) + 60;
 
-        func_800B0E48(globalCtx, &spD8, &gZeroVec3f, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, phi_s0,
+        func_800B0E48(play, &spD8, &gZeroVec3f, &D_80B04FBC, &D_80B04FB4, &D_80B04FB8, phi_s0,
                       (s32)(Rand_ZeroOne() * 30.0f * temp_f30) + 60);
     }
 }
 
-void func_80B03E2C(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B03E2C(ObjSnowball* this, PlayState* play) {
     ObjSnowballStruct* ptr;
     s32 i;
 
@@ -432,23 +431,23 @@ void func_80B03E2C(ObjSnowball* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B03FF8(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B03FF8(ObjSnowball* this, PlayState* play) {
     s32 pad;
     s16 rotY = this->actor.home.rot.y;
     ObjSnowballStruct2* sp18 = &D_80B04F84[rotY];
 
     if (sp18->unk_04 != NULL) {
-        sp18->unk_04(this, globalCtx);
+        sp18->unk_04(this, play);
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
-        Flags_SetSwitch(globalCtx, OBJSNOWBALL_GET_3F(&this->actor));
+        Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
     }
 }
 
-void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball_Init(Actor* thisx, PlayState* play) {
     ObjSnowball* this = THIS;
     Sphere16* sphere;
     ColliderJntSphElementDim* elementDim;
@@ -485,8 +484,8 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.targetMode = 3;
     }
 
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    Collider_InitJntSph(play, &this->collider);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->actor.colChkInfo.mass = MASS_HEAVY;
 
     sphere = &this->collider.elements[0].dim.worldSphere;
@@ -501,31 +500,31 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp48.z = this->actor.home.pos.z;
 
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp44, &this->actor, &sp48);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &sp44, &this->actor, &sp48);
     if (this->actor.floorHeight < (this->actor.home.pos.y - 10.0f)) {
         this->actor.floorPoly = NULL;
     } else {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 13.0f);
     }
 
-    func_80B04338(this, globalCtx);
+    func_80B04338(this, play);
 
-    if ((sp40 == 5) && Flags_GetSwitch(globalCtx, OBJSNOWBALL_GET_3F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+    if ((sp40 == 5) && Flags_GetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor))) {
+        Actor_Kill(&this->actor);
     }
 }
 
-void ObjSnowball_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball_Destroy(Actor* thisx, PlayState* play) {
     ObjSnowball* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
-void func_80B04338(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B04338(ObjSnowball* this, PlayState* play) {
     this->actionFunc = func_80B04350;
 }
 
-void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B04350(ObjSnowball* this, PlayState* play) {
     s32 pad;
     s32 flag = (this->collider.base.acFlags & AC_HIT) != 0;
 
@@ -551,14 +550,14 @@ void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.cutscene < 0) {
-            func_80B03FF8(this, globalCtx);
+            func_80B03FF8(this, play);
             if (this->unk_20A == 0) {
-                func_80B04608(this, globalCtx);
+                func_80B04608(this, play);
             } else {
-                func_80B046E4(this, globalCtx);
+                func_80B046E4(this, play);
             }
         } else {
-            func_80B04540(this, globalCtx);
+            func_80B04540(this, play);
         }
         return;
     }
@@ -566,7 +565,7 @@ void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx) {
     if (flag &&
         !(this->collider.elements->info.acHitInfo->toucher.dmgFlags & (0x10000 | 0x2000 | 0x1000 | 0x800 | 0x20))) {
         if (this->unk_209 <= 0) {
-            func_80B02EE4(this, globalCtx);
+            func_80B02EE4(this, play);
             if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x1000000) {
                 this->unk_209 = 25;
             } else {
@@ -580,39 +579,39 @@ void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx) {
         this->unk_209--;
     }
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void func_80B04540(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B04540(ObjSnowball* this, PlayState* play) {
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     this->actionFunc = func_80B0457C;
 }
 
-void func_80B0457C(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B0457C(ObjSnowball* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        func_80B03FF8(this, globalCtx);
+        func_80B03FF8(this, play);
         this->unk_20B = 1;
         if (this->unk_20A == 0) {
-            func_80B04608(this, globalCtx);
+            func_80B04608(this, play);
         } else {
-            func_80B046E4(this, globalCtx);
+            func_80B046E4(this, play);
         }
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void func_80B04608(ObjSnowball* this, GlobalContext* globalCtx) {
-    func_80B030F8(this, globalCtx);
+void func_80B04608(ObjSnowball* this, PlayState* play) {
+    func_80B030F8(this, play);
     this->actor.draw = NULL;
     this->unk_208 = 50;
     this->actor.floorPoly = NULL;
     this->actionFunc = func_80B04648;
 }
 
-void func_80B04648(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B04648(ObjSnowball* this, PlayState* play) {
     this->unk_208--;
     if (this->unk_208 <= 0) {
         if (this->unk_20B != 0) {
@@ -620,26 +619,26 @@ void func_80B04648(ObjSnowball* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.home.rot.y == 1) {
-            func_80B04B48(this, globalCtx);
+            func_80B04B48(this, play);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->unk_208 == 0x2D) {
-        func_80B03688(this, globalCtx);
+        func_80B03688(this, play);
     }
 }
 
-void func_80B046E4(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B046E4(ObjSnowball* this, PlayState* play) {
     Vec3f sp44;
     s32 i;
 
-    func_80B03E2C(this, globalCtx);
+    func_80B03E2C(this, play);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1A8); i++) {
         sp44.x = this->unk_1A8[i].unk_00.x;
         sp44.y = this->unk_1A8[i].unk_00.y - (60.0f * this->unk_20C);
         sp44.z = this->unk_1A8[i].unk_00.z;
-        func_80B03A80(globalCtx, this->unk_20C, &sp44);
+        func_80B03A80(play, this->unk_20C, &sp44);
     }
 
     this->actor.draw = func_80B04D34;
@@ -648,7 +647,7 @@ void func_80B046E4(ObjSnowball* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B047C0;
 }
 
-void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B047C0(ObjSnowball* this, PlayState* play) {
     static Vec3f D_80B04FD8 = { 0.0f, 1.0f, 0.0f };
     static Vec3f D_80B04FE4 = { 0.0f, 0.0f, 1.0f };
     s32 pad;
@@ -684,7 +683,7 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
             sp9C.y = ptr->unk_00.y + 25.0f;
             sp9C.z = ptr->unk_00.z;
 
-            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &sp98, &this->actor, &sp9C);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_RotateZYX(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);
@@ -710,7 +709,7 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
                     sp70.x = ptr->unk_00.x;
                     sp70.y = ptr->unk_00.y - sp84;
                     sp70.z = ptr->unk_00.z;
-                    func_80B03A80(globalCtx, this->unk_20C, &sp70);
+                    func_80B03A80(play, this->unk_20C, &sp70);
                 }
             }
         }
@@ -724,9 +723,9 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
         }
 
         if (this->actor.home.rot.y == 1) {
-            func_80B04B48(this, globalCtx);
+            func_80B04B48(this, play);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         for (i = 0; i < ARRAY_COUNT(this->unk_1A8); i++) {
@@ -743,25 +742,25 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B04B48(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B04B48(ObjSnowball* this, PlayState* play) {
     this->actionFunc = func_80B04B60;
 }
 
-void func_80B04B60(ObjSnowball* this, GlobalContext* globalCtx) {
+void func_80B04B60(ObjSnowball* this, PlayState* play) {
 }
 
-void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjSnowball* this = THIS;
     s32 sp24 = false;
 
     if (this->actor.home.rot.y == 1) {
         if (this->unk_211 != 0) {
-            if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
+            if (Actor_TextboxIsClosing(&this->actor, play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10;
                 this->unk_211 = 0;
             }
-        } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->unk_211 = 1;
         } else if (this->actor.isTargeted) {
@@ -769,10 +768,10 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (sp24 && (this->actionFunc == func_80B04350)) {
-        func_800B8614(&this->actor, globalCtx, 100.0f);
+        func_800B8614(&this->actor, play, 100.0f);
     }
 
     if ((this->actor.floorPoly != NULL) && (this->actor.projectedPos.z < 920.0f)) {
@@ -790,13 +789,13 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjSnowball_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSnowball_Draw(Actor* thisx, PlayState* play) {
     ObjSnowball* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_008B90);
+    Gfx_DrawDListOpa(play, object_goroiwa_DL_008B90);
 }
 
-void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
+void func_80B04D34(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjSnowball* this = THIS;
     ObjSnowballStruct* ptr;
@@ -814,12 +813,12 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
 
             Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_0082D0);
+            Gfx_DrawDListOpa(play, object_goroiwa_DL_0082D0);
 
             if ((ptr->unk_28 != NULL) && (ptr->unk_2C > 0)) {
-                OPEN_DISPS(globalCtx->state.gfxCtx);
+                OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(globalCtx->state.gfxCtx);
+                func_8012C448(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);
@@ -829,11 +828,11 @@ void func_80B04D34(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_Put(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
-                CLOSE_DISPS(globalCtx->state.gfxCtx);
+                CLOSE_DISPS(play->state.gfxCtx);
             }
         }
     }

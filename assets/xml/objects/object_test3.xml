@@ -63,6 +63,6 @@
         <Limb Name="object_test3_Lodlimb_00F768" Type="LOD" EnumName="OBJECT_TEST3_LIMB_13" Offset="0xF768" />
         <Limb Name="object_test3_Lodlimb_00F778" Type="LOD" EnumName="OBJECT_TEST3_LIMB_14" Offset="0xF778" />
         <Limb Name="object_test3_Lodlimb_00F788" Type="LOD" EnumName="OBJECT_TEST3_LIMB_15" Offset="0xF788" />
-        <Skeleton Name="object_test3_Skel_00F7EC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TEST3_LIMB_NONE" LimbMax="OBJECT_TEST3_LIMB_MAX" EnumName="object_test3_Limbs" Offset="0xF7EC" />
+        <Skeleton Name="object_test3_Skel_00F7EC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TEST3_LIMB_NONE" LimbMax="OBJECT_TEST3_LIMB_MAX" EnumName="ObjectTest3Limb" Offset="0xF7EC" />
     </File>
 </Root>

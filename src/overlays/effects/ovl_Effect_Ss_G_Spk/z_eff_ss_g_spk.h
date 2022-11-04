@@ -3,6 +3,11 @@
 
 #include "global.h"
 
+typedef enum EffectSsGSpkUpdatemode {
+    /* 0 */ GSPK_UPDATEMODE_NORMAL,
+    /* 1 */ GSPK_UPDATEMODE_NO_ACCEL
+} EffectSsGSpkUpdatemode;
+
 typedef struct {
     /* 0x00 */ Actor* actor;
     /* 0x04 */ Vec3f pos;

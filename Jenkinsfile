@@ -20,6 +20,12 @@ pipeline {
                 sh 'bash -c "tools/reloc_spec_check.sh"'
             }
         }
+        stage('Install Python dependencies') {
+            steps {
+                echo 'Installing Python dependencies'
+                sh 'python3 -m pip install -r requirements.txt'
+            }
+        }
         stage('Copy ROM') {
             steps {
                 echo 'Setting up ROM...'
@@ -93,7 +99,7 @@ pipeline {
                 branch 'master'
             }
             agent{
-                label 'master'
+                label 'zeldaret_website'
             }
             steps {
                 unstash 'reports'

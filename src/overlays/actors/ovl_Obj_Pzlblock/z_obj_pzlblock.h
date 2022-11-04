@@ -5,7 +5,7 @@
 
 struct ObjPzlblock;
 
-typedef void (*ObjPzlblockActionFunc)(struct ObjPzlblock*, GlobalContext*);
+typedef void (*ObjPzlblockActionFunc)(struct ObjPzlblock*, PlayState*);
 
 #define OBJPZLBLOCK_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define OBJPZLBLOCK_GET_700(thisx) (((thisx)->params >> 8) & 7)
@@ -24,7 +24,5 @@ typedef struct ObjPzlblock {
     /* 0x178 */ s16 unk_178;
     /* 0x17A */ s8 unk_17A;
 } ObjPzlblock; // size = 0x17C
-
-extern const ActorInit Obj_Pzlblock_InitVars;
 
 #endif // Z_OBJ_PZLBLOCK_H

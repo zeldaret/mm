@@ -10,48 +10,48 @@
 
 #define THIS ((EnGirlA*)thisx)
 
-void EnGirlA_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGirlA_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGirlA_Init(Actor* thisx, PlayState* play);
+void EnGirlA_Destroy(Actor* thisx, PlayState* play);
+void EnGirlA_Update(Actor* thisx, PlayState* play);
+void EnGirlA_Draw(Actor* thisx, PlayState* play);
 
-void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx);
-void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx);
+void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play);
+void EnGirlA_Update2(EnGirlA* this, PlayState* play);
 
-s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyArrows(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyNuts(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombBagCuriosityShop(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombBag20BombShop(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombBag30BombShop(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBombs(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyBottleStolen(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuySword(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this);
-s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this);
+s32 EnGirlA_CanBuyPotionRed(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyArrows(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyNuts(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyShieldHero(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyStick(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyMaskAllNight(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombBagCuriosityShop(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombBag20BombShop(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombBag30BombShop(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombchus(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBombs(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyBottleStolen(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuySword(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyShieldMirror(PlayState* play, EnGirlA* this);
+s32 EnGirlA_CanBuyFairy(PlayState* play, EnGirlA* this);
 
-void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyArrows(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyNuts(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyShieldHero(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyStick(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBombchus(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBombs(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyBottle(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuySword(GlobalContext* globalCtx, EnGirlA* this);
-void EnGirlA_BuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_BuyBottleItem(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyArrows(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyNuts(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyShieldHero(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyStick(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyMaskAllNight(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBombBag(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBombchus(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBombs(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyBottle(PlayState* play, EnGirlA* this);
+void EnGirlA_BuySword(PlayState* play, EnGirlA* this);
+void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
-void EnGirlA_BuyFanfare(GlobalContext* globalCtx, EnGirlA* this);
+void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
-const ActorInit En_GirlA_InitVars = {
+ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
     ACTORCAT_PROP,
     FLAGS,
@@ -138,16 +138,16 @@ static ShopItemEntry sShopItemEntries[] = {
       EnGirlA_BuyBottleItem, EnGirlA_BuyFanfare },
     { OBJECT_GI_BOTTLE, GID_BOTTLE, func_800B8050, 1, 0x29F8, 0x29F9, GI_BOTTLE_STOLEN, EnGirlA_CanBuyBottleStolen,
       EnGirlA_BuyBottle, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_4, GID_SWORD_GREAT_FAIRY, func_800B8050, 4, 0x29F2, 0x29F3, GI_SWORD_GREAT_FAIRY,
+    { OBJECT_GI_SWORD_4, GID_SWORD_GREAT_FAIRY, func_800B8050, 4, 0x29F2, 0x29F3, GI_SWORD_GREAT_FAIRY_STOLEN,
       EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_1, GID_SWORD_KOKIRI, func_800B8050, 1, 0x29F4, 0x29F5, GI_SWORD_KOKIRI, EnGirlA_CanBuySword,
+    { OBJECT_GI_SWORD_1, GID_SWORD_KOKIRI, func_800B8050, 1, 0x29F4, 0x29F5, GI_SWORD_KOKIRI_STOLEN,
+      EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SWORD_2, GID_SWORD_RAZOR, func_800B8050, 2, 0x29F4, 0x29F5, GI_SWORD_RAZOR_STOLEN, EnGirlA_CanBuySword,
       EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_2, GID_SWORD_RAZOR, func_800B8050, 2, 0x29F4, 0x29F5, GI_SWORD_RAZOR, EnGirlA_CanBuySword,
-      EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SWORD_3, GID_SWORD_GILDED, func_800B8050, 3, 0x29F4, 0x29F5, GI_SWORD_GILDED, EnGirlA_CanBuySword,
-      EnGirlA_BuySword, EnGirlA_BuyFanfare },
-    { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_HERO_2, EnGirlA_CanBuyShieldHero,
-      EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SWORD_3, GID_SWORD_GILDED, func_800B8050, 3, 0x29F4, 0x29F5, GI_SWORD_GILDED_STOLEN,
+      EnGirlA_CanBuySword, EnGirlA_BuySword, EnGirlA_BuyFanfare },
+    { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_HERO_STOLEN,
+      EnGirlA_CanBuyShieldHero, EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
     { OBJECT_GI_SHIELD_3, GID_SHIELD_MIRROR, func_800B8050, 1, 0x29F6, 0x29F7, GI_SHIELD_MIRROR,
       EnGirlA_CanBuyShieldMirror, EnGirlA_BuyShieldMirror, EnGirlA_BuyFanfare },
 };
@@ -156,18 +156,18 @@ void EnGirlA_SetupAction(EnGirlA* this, EnGirlAActionFunc action) {
     this->actionFunc = action;
 }
 
-void EnGirlA_InitObjIndex(EnGirlA* this, GlobalContext* globalCtx) {
+void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
 
     //! @bug: Condition is impossible, && should be an ||
-    if (params >= SI_MAX && params < SI_POTION_RED_1) {
-        Actor_MarkForDeath(&this->actor);
+    if ((params >= SI_MAX) && (params < SI_POTION_RED_1)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    this->objIndex = Object_GetIndex(&globalCtx->objectCtx, sShopItemEntries[params].objectId);
+    this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -175,207 +175,207 @@ void EnGirlA_InitObjIndex(EnGirlA* this, GlobalContext* globalCtx) {
     this->mainActionFunc = EnGirlA_InitalUpdate;
 }
 
-void EnGirlA_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnGirlA_Init(Actor* thisx, PlayState* play) {
     EnGirlA* this = THIS;
 
-    EnGirlA_InitObjIndex(this, globalCtx);
+    EnGirlA_InitObjIndex(this, play);
 }
 
-void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnGirlA_Destroy(Actor* thisx, PlayState* play) {
 }
 
-s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!Interface_HasEmptyBottle()) {
+s32 EnGirlA_CanBuyPotionRed(PlayState* play, EnGirlA* this) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!Interface_HasEmptyBottle()) {
+s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this) {
     if (!(gSaveContext.save.weekEventReg[53] & 8)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (!(gSaveContext.save.weekEventReg[53] & 0x10)) {
         return CANBUY_RESULT_SUCCESS_2;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyArrows(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyArrows(PlayState* play, EnGirlA* this) {
     if (GET_CUR_UPG_VALUE(UPG_QUIVER) == 0) {
         return CANBUY_RESULT_CANNOT_GET_NOW_2;
     }
     if (AMMO(ITEM_BOW) >= CUR_CAPACITY(UPG_QUIVER)) {
         return CANBUY_RESULT_NO_ROOM_2;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyNuts(PlayState* play, EnGirlA* this) {
     if (CUR_CAPACITY(UPG_NUTS) != 0 && CUR_CAPACITY(UPG_NUTS) <= AMMO(ITEM_NUT)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (func_80114978(ITEM_NUT) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_NUT) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
+s32 EnGirlA_CanBuyShieldHero(PlayState* play, EnGirlA* this) {
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
-s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyStick(PlayState* play, EnGirlA* this) {
     if (CUR_CAPACITY(UPG_STICKS) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (func_80114978(ITEM_STICK) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_STICK) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+s32 EnGirlA_CanBuyMaskAllNight(PlayState* play, EnGirlA* this) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyBombBagCuriosityShop(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyBombBagCuriosityShop(PlayState* play, EnGirlA* this) {
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) >= 2) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyBombBag20BombShop(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyBombBag20BombShop(PlayState* play, EnGirlA* this) {
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 1) {
         return CANBUY_RESULT_ALREADY_HAVE;
     }
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) >= 2) {
         return CANBUY_RESULT_HAVE_BETTER;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
-s32 EnGirlA_CanBuyBombBag30BombShop(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyBombBag30BombShop(PlayState* play, EnGirlA* this) {
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 2) {
         return CANBUY_RESULT_ALREADY_HAVE;
     }
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 3) {
         return CANBUY_RESULT_HAVE_BETTER;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
-s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyBombchus(PlayState* play, EnGirlA* this) {
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (AMMO(ITEM_BOMBCHU) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (func_80114978(ITEM_BOMBCHU) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_BOMBCHU) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyBombs(GlobalContext* globalCtx, EnGirlA* this) {
+s32 EnGirlA_CanBuyBombs(PlayState* play, EnGirlA* this) {
     if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (AMMO(ITEM_BOMB) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-s32 EnGirlA_CanBuyBottleStolen(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+s32 EnGirlA_CanBuyBottleStolen(PlayState* play, EnGirlA* this) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
-s32 EnGirlA_CanBuySword(GlobalContext* globalCtx, EnGirlA* this) {
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+s32 EnGirlA_CanBuySword(PlayState* play, EnGirlA* this) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
-s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
+s32 EnGirlA_CanBuyShieldMirror(PlayState* play, EnGirlA* this) {
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
         return CANBUY_RESULT_NO_ROOM;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_1;
 }
 
-s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!Interface_HasEmptyBottle()) {
+s32 EnGirlA_CanBuyFairy(PlayState* play, EnGirlA* this) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
+    if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
     return CANBUY_RESULT_SUCCESS_2;
 }
 
-void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_BuyBottleItem(PlayState* play, EnGirlA* this) {
     switch (this->actor.params) {
         case SI_POTION_RED_1:
         case SI_POTION_RED_2:
@@ -383,134 +383,134 @@ void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this) {
         case SI_POTION_RED_4:
         case SI_POTION_RED_5:
         case SI_POTION_RED_6:
-            Item_Give(globalCtx, ITEM_POTION_RED);
+            Item_Give(play, ITEM_POTION_RED);
             break;
         case SI_POTION_GREEN_1:
         case SI_POTION_GREEN_2:
         case SI_POTION_GREEN_3:
-            Item_Give(globalCtx, ITEM_POTION_GREEN);
+            Item_Give(play, ITEM_POTION_GREEN);
             break;
         case SI_POTION_BLUE:
-            Item_Give(globalCtx, ITEM_POTION_BLUE);
+            Item_Give(play, ITEM_POTION_BLUE);
             break;
         case SI_FAIRY_1:
         case SI_FAIRY_2:
-            Item_Give(globalCtx, ITEM_FAIRY);
+            Item_Give(play, ITEM_FAIRY);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyArrows(GlobalContext* globalCtx, EnGirlA* this) {
-    func_80115A14(ITEM_BOW, this->itemParams);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+void EnGirlA_BuyArrows(PlayState* play, EnGirlA* this) {
+    Inventory_ChangeAmmo(ITEM_BOW, this->itemParams);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_BuyNuts(PlayState* play, EnGirlA* this) {
     switch (this->itemParams) {
         case 5:
-            Item_Give(globalCtx, ITEM_NUTS_5);
+            Item_Give(play, ITEM_NUTS_5);
             break;
         case 10:
-            Item_Give(globalCtx, ITEM_NUTS_10);
+            Item_Give(play, ITEM_NUTS_10);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
-    Item_Give(globalCtx, ITEM_SHIELD_HERO);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+void EnGirlA_BuyShieldHero(PlayState* play, EnGirlA* this) {
+    Item_Give(play, ITEM_SHIELD_HERO);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyStick(GlobalContext* globalCtx, EnGirlA* this) {
-    Item_Give(globalCtx, ITEM_STICK);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+void EnGirlA_BuyStick(PlayState* play, EnGirlA* this) {
+    Item_Give(play, ITEM_STICK);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
-    Item_Give(globalCtx, ITEM_MASK_ALL_NIGHT);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+void EnGirlA_BuyMaskAllNight(PlayState* play, EnGirlA* this) {
+    Item_Give(play, ITEM_MASK_ALL_NIGHT);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_BuyBombBag(PlayState* play, EnGirlA* this) {
     //! @bug: Bomb Bag parameters in sShopItemEntries are 1 2 3, not 20 21 22
     switch (this->itemParams) {
         case 20:
-            Item_Give(globalCtx, ITEM_BOMB_BAG_20);
+            Item_Give(play, ITEM_BOMB_BAG_20);
             break;
         case 21:
-            Item_Give(globalCtx, ITEM_BOMB_BAG_30);
+            Item_Give(play, ITEM_BOMB_BAG_30);
             break;
         case 22:
-            Item_Give(globalCtx, ITEM_BOMB_BAG_40);
+            Item_Give(play, ITEM_BOMB_BAG_40);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_BuyBombchus(PlayState* play, EnGirlA* this) {
     if (this->itemParams == 10) {
-        Item_Give(globalCtx, ITEM_BOMBCHUS_10);
+        Item_Give(play, ITEM_BOMBCHUS_10);
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyBombs(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_BuyBombs(PlayState* play, EnGirlA* this) {
     switch (this->itemParams) {
         case 5:
-            Item_Give(globalCtx, ITEM_BOMBS_5);
+            Item_Give(play, ITEM_BOMBS_5);
             break;
         case 10:
-            Item_Give(globalCtx, ITEM_BOMBS_10);
+            Item_Give(play, ITEM_BOMBS_10);
             break;
         case 20:
-            Item_Give(globalCtx, ITEM_BOMBS_20);
+            Item_Give(play, ITEM_BOMBS_20);
             break;
         case 30:
-            Item_Give(globalCtx, ITEM_BOMBS_30);
+            Item_Give(play, ITEM_BOMBS_30);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyBottle(GlobalContext* globalCtx, EnGirlA* this) {
-    Item_Give(globalCtx, ITEM_BOTTLE);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+void EnGirlA_BuyBottle(PlayState* play, EnGirlA* this) {
+    Item_Give(play, ITEM_BOTTLE);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuySword(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_BuySword(PlayState* play, EnGirlA* this) {
     switch (this->itemParams) {
         case 1:
-            Item_Give(globalCtx, ITEM_SWORD_KOKIRI);
+            Item_Give(play, ITEM_SWORD_KOKIRI);
             break;
         case 2:
-            Item_Give(globalCtx, ITEM_SWORD_RAZOR);
+            Item_Give(play, ITEM_SWORD_RAZOR);
             break;
         case 3:
-            Item_Give(globalCtx, ITEM_SWORD_GILDED);
+            Item_Give(play, ITEM_SWORD_GILDED);
             break;
         case 4:
-            Item_Give(globalCtx, ITEM_SWORD_GREAT_FAIRY);
+            Item_Give(play, ITEM_SWORD_GREAT_FAIRY);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_BuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
-    Item_Give(globalCtx, ITEM_SHIELD_MIRROR);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this) {
+    Item_Give(play, ITEM_SHIELD_MIRROR);
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-// Fanfare is handled by ovl_en_ossan
-void EnGirlA_BuyFanfare(GlobalContext* globalCtx, EnGirlA* this) {
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+// Fanfare is handled by the shopkeeper
+void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this) {
+    Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 
-void EnGirlA_DoNothing(EnGirlA* this, GlobalContext* globalCtx) {
+void EnGirlA_DoNothing(EnGirlA* this, PlayState* play) {
 }
 
-void EnGirlA_InitItem(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_InitItem(PlayState* play, EnGirlA* this) {
     ShopItemEntry* shopItem = &sShopItemEntries[this->actor.params];
 
     this->actor.textId = shopItem->descriptionTextId;
@@ -518,34 +518,34 @@ void EnGirlA_InitItem(GlobalContext* globalCtx, EnGirlA* this) {
     this->actor.draw = EnGirlA_Draw;
 }
 
-void EnGirlA_Bought(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_Bought(PlayState* play, EnGirlA* this) {
     this->isOutOfStock = true;
     this->actor.draw = NULL;
 }
 
-void EnGirlA_Restock(GlobalContext* globalCtx, EnGirlA* this) {
+void EnGirlA_Restock(PlayState* play, EnGirlA* this) {
     this->isOutOfStock = false;
     this->actor.draw = EnGirlA_Draw;
 }
 
 // Left over from OOT
-s32 EnGirlA_TrySetMaskItemDescription(EnGirlA* this, GlobalContext* globalCtx) {
+s32 EnGirlA_TrySetMaskItemDescription(EnGirlA* this, PlayState* play) {
     return false;
 }
 
-void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
+void EnGirlA_InitalUpdate(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
     ShopItemEntry* shopItem = &sShopItemEntries[params];
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
+    if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objIndex;
         this->actor.textId = shopItem->descriptionTextId;
         this->choiceTextId = shopItem->choiceTextId;
 
         // EnGirlA_TrySetMaskItemDescription always returns false
-        if (!EnGirlA_TrySetMaskItemDescription(this, globalCtx)) {
-            EnGirlA_InitItem(globalCtx, this);
+        if (!EnGirlA_TrySetMaskItemDescription(this, play)) {
+            EnGirlA_InitItem(play, this);
         }
 
         this->boughtFunc = EnGirlA_Bought;
@@ -573,12 +573,12 @@ void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx) {
+void EnGirlA_Update2(EnGirlA* this, PlayState* play) {
     Actor_SetScale(&this->actor, 0.25f);
     this->actor.shape.yOffset = 24.0f;
     this->actor.shape.shadowScale = 4.0f;
-    EnGirlA_TrySetMaskItemDescription(this, globalCtx);
-    this->actionFunc(this, globalCtx);
+    EnGirlA_TrySetMaskItemDescription(this, play);
+    this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, 5.0f);
     this->actor.shape.rot.x = 0;
     if (this->isSelected) {
@@ -588,18 +588,18 @@ void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnGirlA_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnGirlA_Update(Actor* thisx, PlayState* play) {
     EnGirlA* this = THIS;
 
-    this->mainActionFunc(this, globalCtx);
+    this->mainActionFunc(this, play);
 }
 
-void EnGirlA_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnGirlA_Draw(Actor* thisx, PlayState* play) {
     EnGirlA* this = THIS;
 
     Matrix_RotateYS(this->rotY, MTXMODE_APPLY);
     if (this->drawFunc != NULL) {
-        this->drawFunc(&this->actor, globalCtx, 0);
+        this->drawFunc(&this->actor, play, 0);
     }
-    GetItem_Draw(globalCtx, this->getItemDrawId);
+    GetItem_Draw(play, this->getItemDrawId);
 }

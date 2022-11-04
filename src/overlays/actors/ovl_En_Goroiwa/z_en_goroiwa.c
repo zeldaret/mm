@@ -5,6 +5,7 @@
  */
 
 #include "z_en_goroiwa.h"
+#include "z64quake.h"
 #include "objects/object_goroiwa/object_goroiwa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -12,27 +13,27 @@
 
 #define THIS ((EnGoroiwa*)thisx)
 
-void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGoroiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGoroiwa_Init(Actor* thisx, PlayState* play);
+void EnGoroiwa_Destroy(Actor* thisx, PlayState* play);
+void EnGoroiwa_Update(Actor* thisx, PlayState* play);
+void EnGoroiwa_Draw(Actor* thisx, PlayState* play);
 
 void func_809419D0(EnGoroiwa* this);
-void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941A10(EnGoroiwa* this, PlayState* play);
 void func_809421E0(EnGoroiwa* this);
-void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_8094220C(EnGoroiwa* this, PlayState* play);
 void func_809425CC(EnGoroiwa* this);
-void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80942604(EnGoroiwa* this, PlayState* play);
 void func_80941DB4(EnGoroiwa* this);
-void func_80941E28(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941E28(EnGoroiwa* this, PlayState* play);
 void func_80941EB4(EnGoroiwa* this);
-void func_80941F10(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941F10(EnGoroiwa* this, PlayState* play);
 void func_80941F54(EnGoroiwa* this);
-void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_80941FA4(EnGoroiwa* this, PlayState* play);
 void func_80942084(EnGoroiwa* this);
-void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx);
+void func_809420F0(EnGoroiwa* this, PlayState* play);
 
-const ActorInit En_Goroiwa_InitVars = {
+ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -67,7 +68,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -144,12 +145,12 @@ void func_8093E938(EnGoroiwa* this) {
     this->collider.elements->dim.worldSphere.radius = this->unk_1DC - 1.0f;
 }
 
-void func_8093E9B0(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_8093E9B0(EnGoroiwa* this, PlayState* play) {
     s32 pad[2];
     s32 params = ENGOROIWA_GET_C000(&this->actor);
 
-    Collider_InitJntSph(globalCtx, &this->collider);
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    Collider_InitJntSph(play, &this->collider);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     func_8093E938(this);
     this->collider.elements[0].dim.worldSphere.radius = this->unk_1DC - 1.0f;
 
@@ -182,13 +183,13 @@ s32 func_8093EAD4(Vec3f* arg0, Vec3f* arg1) {
     return true;
 }
 
-void func_8093EB58(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_8093EB58(EnGoroiwa* this, PlayState* play) {
     this->unk_1E4 = (this->actor.home.rot.x >> 1) & 3;
 }
 
-f32 func_8093EB74(EnGoroiwa* this, GlobalContext* globalCtx) {
+f32 func_8093EB74(EnGoroiwa* this, PlayState* play) {
     s32 i;
-    Path* path = &globalCtx->setupPathList[ENGOROIWA_GET_FF(&this->actor)];
+    Path* path = &play->setupPathList[ENGOROIWA_GET_FF(&this->actor)];
     s32 temp_s4 = path->count;
     f32 temp_f20 = 0.0f;
     Vec3f sp54;
@@ -253,15 +254,15 @@ void func_8093EDB0(EnGoroiwa* this) {
     this->unk_1D8 += this->unk_1DA;
 }
 
-void func_8093EDD8(EnGoroiwa* this, GlobalContext* globalCtx) {
-    this->unk_1D4 = globalCtx->setupPathList[ENGOROIWA_GET_FF(&this->actor)].count - 1;
+void func_8093EDD8(EnGoroiwa* this, PlayState* play) {
+    this->unk_1D4 = play->setupPathList[ENGOROIWA_GET_FF(&this->actor)].count - 1;
     this->unk_1D6 = 0;
     this->unk_1D8 = 1;
     this->unk_1DA = 1;
 }
 
-void func_8093EE18(EnGoroiwa* this, GlobalContext* globalCtx) {
-    this->unk_1D4 = globalCtx->setupPathList[ENGOROIWA_GET_FF(&this->actor)].count - 1;
+void func_8093EE18(EnGoroiwa* this, PlayState* play) {
+    this->unk_1D4 = play->setupPathList[ENGOROIWA_GET_FF(&this->actor)].count - 1;
     this->unk_1D6 = this->actor.home.rot.y;
     this->unk_1D8 = this->unk_1D6 + 1;
     this->unk_1DA = 1;
@@ -294,7 +295,7 @@ s32 func_8093EEDC(EnGoroiwa* this) {
     return 0;
 }
 
-void func_8093EF54(GlobalContext* globalCtx, Vec3f* arg1, Color_RGBA8* arg2, Color_RGBA8* arg3, f32 arg4) {
+void func_8093EF54(PlayState* play, Vec3f* arg1, Color_RGBA8* arg2, Color_RGBA8* arg3, f32 arg4) {
     Vec3f spC4;
     f32 temp_f0;
     f32 temp_f20;
@@ -322,12 +323,12 @@ void func_8093EF54(GlobalContext* globalCtx, Vec3f* arg1, Color_RGBA8* arg2, Col
         temp_f20 = Rand_ZeroOne(); spC4.z = (Math_CosS(phi_s0) * (temp_f24 * ((temp_f20 * 0.5f) + 0.5f))) + arg1->z;
         // clang-format on
 
-        func_800B0E48(globalCtx, &spC4, &D_80942E48, &D_80942E54, arg2, arg3, (Rand_ZeroOne() * temp_f28) + temp_f26,
+        func_800B0E48(play, &spC4, &D_80942E48, &D_80942E54, arg2, arg3, (Rand_ZeroOne() * temp_f28) + temp_f26,
                       temp_f26);
     }
 }
 
-void func_8093F198(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
+void func_8093F198(PlayState* play, Vec3f* arg1, f32 arg2) {
     Vec3f sp74;
     f32 temp_f20;
     s32 temp_f16;
@@ -343,10 +344,10 @@ void func_8093F198(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2) {
     for (i = 0, phi_s0 = 0; i < temp_f16; i++, phi_s0 += temp_lo) {
         sp74.x = (Math_SinS((s32)(Rand_ZeroOne() * temp_lo) + phi_s0) * temp_f20) + arg1->x;
         sp74.z = (Math_CosS((s32)(Rand_ZeroOne() * temp_lo) + phi_s0) * temp_f20) + arg1->z;
-        EffectSsGSplash_Spawn(globalCtx, &sp74, NULL, NULL, 0, 0x15E);
+        EffectSsGSplash_Spawn(play, &sp74, NULL, NULL, 0, 0x15E);
     }
 
-    EffectSsGRipple_Spawn(globalCtx, arg1, 0x1F4, 0x384, 4);
+    EffectSsGRipple_Spawn(play, arg1, 0x1F4, 0x384, 4);
 }
 
 s32 func_8093F34C(EnGoroiwa* this) {
@@ -433,7 +434,7 @@ s32 func_8093F5EC(EnGoroiwa* this) {
     return false;
 }
 
-s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
+s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     f32 temp_f14;
     Vec3s* sp80 = &this->unk_1D0[this->unk_1D8];
     f32 sp7C = sp80->y;
@@ -450,10 +451,11 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y <= sp7C)) {
         if (this->unk_1CA == 0) {
             if (this->actor.xzDistToPlayer < 400.0f) {
-                s16 sp72 = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
-                Quake_SetSpeed(sp72, 0x4350);
-                Quake_SetQuakeValues(sp72, 3, 0, 0, 0);
-                Quake_SetCountdown(sp72, 7);
+                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+
+                Quake_SetSpeed(quakeIndex, 17232);
+                Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
+                Quake_SetCountdown(quakeIndex, 7);
             }
 
             this->unk_1C4 = 0.0f;
@@ -469,8 +471,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
                 sp60.y = this->actor.world.pos.y + 50.0f;
                 sp60.z = this->actor.world.pos.z;
 
-                temp_f14 =
-                    BgCheck_EntityRaycastFloor5_2(globalCtx, &globalCtx->colCtx, &poly, &bgId, &this->actor, &sp60);
+                temp_f14 = BgCheck_EntityRaycastFloor5_2(play, &play->colCtx, &poly, &bgId, &this->actor, &sp60);
                 temp_f2 = temp_f14 - this->actor.world.pos.y;
 
                 if (fabsf(temp_f2) < (fabsf(this->actor.velocity.y) + 0.01f)) {
@@ -479,7 +480,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
                         sp48.y = temp_f14 + 10.0f;
                         sp48.z = this->actor.world.pos.z;
 
-                        func_8093EF54(globalCtx, &sp48, &D_80942E30[ENGOROIWA_GET_C000(&this->actor)],
+                        func_8093EF54(play, &sp48, &D_80942E30[ENGOROIWA_GET_C000(&this->actor)],
                                       &D_80942E3C[ENGOROIWA_GET_C000(&this->actor)], this->actor.scale.x);
                     }
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGBALL_BOUND);
@@ -501,8 +502,8 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
         WaterBox* sp44;
         f32 sp40;
 
-        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                   &sp40, &sp44)) {
+        if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp40,
+                                   &sp44)) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= sp40) {
                 this->unk_1E5 |= 0x20;
                 if (sp40 < (this->unk_1DC + sp78)) {
@@ -512,7 +513,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
                         sp34.x = this->actor.world.pos.x;
                         sp34.y = sp40;
                         sp34.z = this->actor.world.pos.z;
-                        func_8093F198(globalCtx, &sp34, this->actor.scale.x);
+                        func_8093F198(play, &sp34, this->actor.scale.x);
                     }
                     this->actor.velocity.y *= 0.2f;
                 }
@@ -528,7 +529,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_8093FAA4(EnGoroiwa* this, PlayState* play) {
     f32 temp;
     f32 tmp2;
     f32 sp7C;
@@ -578,7 +579,7 @@ void func_8093FC00(EnGoroiwa* this) {
     }
 }
 
-void func_8093FC6C(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_8093FC6C(EnGoroiwa* this, PlayState* play) {
     s32 i;
     Vec3f spC0;
     Vec3f spB4;
@@ -622,8 +623,7 @@ void func_8093FC6C(EnGoroiwa* this, GlobalContext* globalCtx) {
         spA8.y = spB4.y * -0.05f;
         spA8.z = spB4.z * -0.02f;
 
-        EffectSsIceSmoke_Spawn(globalCtx, &spC0, &spB4, &spA8,
-                               ((s32)(Rand_ZeroOne() * 170.0f) + 150) * temp_f24 * 10.0f);
+        EffectSsIceSmoke_Spawn(play, &spC0, &spB4, &spA8, ((s32)(Rand_ZeroOne() * 170.0f) + 150) * temp_f24 * 10.0f);
     }
 
     for (i = 0, phi_s0 = 0; i < sp80; i++, phi_s0 += temp) {
@@ -644,11 +644,11 @@ void func_8093FC6C(EnGoroiwa* this, GlobalContext* globalCtx) {
         spC0.y = (Rand_ZeroOne() * 20.0f) + this->actor.world.pos.y;
         spC0.z = (spC0.z * temp_f20) + this->actor.world.pos.z;
 
-        EffectSsIceSmoke_Spawn(globalCtx, &spC0, &spB4, &spA8, (s32)(Rand_ZeroOne() * 1400.0f * temp_f24) + 100);
+        EffectSsIceSmoke_Spawn(play, &spC0, &spB4, &spA8, (s32)(Rand_ZeroOne() * 1400.0f * temp_f24) + 100);
     }
 }
 
-void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80940090(EnGoroiwa* this, PlayState* play) {
     s32 pad;
     s32 pad2;
     s32 i;
@@ -720,7 +720,7 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
             spF4.z = sp100.z * 0.16f * phi_f22;
 
             Math_Vec3f_Sum(&sp100, &sp10C, &sp100);
-            EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_s2, phi_s0, 30, 0, 0,
+            EffectSsKakera_Spawn(play, &sp100, &spF4, &sp100, phi_s2, phi_s0, 30, 0, 0,
                                  ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1,
                                  OBJECT_GOROIWA, phi_s1);
             if (this->unk_1E6 == 0) {
@@ -728,18 +728,18 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
                 sp100.y += ((Rand_ZeroOne() * 1400.0f) - 600.0f) * this->actor.scale.y;
                 sp100.z += ((Rand_ZeroOne() * 1200.0f) - 600.0f) * this->actor.scale.z;
 
-                func_800B0E48(globalCtx, &sp100, &D_80942E48, &D_80942E54, &D_80942E30[sp120], &D_80942E3C[sp120],
+                func_800B0E48(play, &sp100, &D_80942E48, &D_80942E54, &D_80942E30[sp120], &D_80942E3C[sp120],
                               (Rand_ZeroOne() * 50.0f) + (400.0f * spEC), (Rand_ZeroOne() * 60.0f) + (500.0f * spEC));
             }
         }
 
         if (this->unk_1E6 != 0) {
-            func_8093FC6C(this, globalCtx);
+            func_8093FC6C(this, play);
         }
     }
 }
 
-void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
+void func_80940588(PlayState* play, Vec3f* arg1, Gfx* arg2[], Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
     Gfx* phi_s7;
     Vec3f sp100;
     Vec3f spF4;
@@ -801,20 +801,20 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
             }
         }
 
-        EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_fp, phi_s0, 30, 0, 0,
+        EffectSsKakera_Spawn(play, &sp100, &spF4, &sp100, phi_fp, phi_s0, 30, 0, 0,
                              ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, OBJECT_GOROIWA, phi_s7);
 
         for (j = 0; j < 2; j++) {
             spE8.x = (((Rand_ZeroOne() * 1000.0f) - 500.0f) * arg5) + sp100.x;
             spE8.y = (((Rand_ZeroOne() * 1300.0f) - 500.0f) * arg5) + sp100.y;
             spE8.z = (((Rand_ZeroOne() * 1000.0f) - 500.0f) * arg5) + sp100.z;
-            func_800B0E48(globalCtx, &spE8, &D_80942E48, &D_80942E54, arg3, arg4, (Rand_ZeroOne() * 80.0f) + spB0,
+            func_800B0E48(play, &spE8, &D_80942E48, &D_80942E54, arg3, arg4, (Rand_ZeroOne() * 80.0f) + spB0,
                           (Rand_ZeroOne() * 70.0f) + spAC);
         }
     }
 }
 
-void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
+void func_80940A1C(PlayState* play, Vec3f* arg1, Gfx** arg2, Color_RGBA8* arg3, Color_RGBA8* arg4, f32 arg5) {
     s32 i;
     Vec3f spE8;
     Vec3f spDC;
@@ -872,19 +872,19 @@ void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA
             }
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spE8, &spDC, &spE8, phi_s2, phi_s0, 30, 0, 0,
+        EffectSsKakera_Spawn(play, &spE8, &spDC, &spE8, phi_s2, phi_s0, 30, 0, 0,
                              ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, phi_s1);
 
         spE8.x += ((Rand_ZeroOne() * 800.0f) - 400.0f) * arg5;
         spE8.y += ((Rand_ZeroOne() * 800.0f) - 250.0f) * arg5;
         spE8.z += ((Rand_ZeroOne() * 800.0f) - 400.0f) * arg5;
 
-        func_800B0E48(globalCtx, &spE8, &D_80942E48, &D_80942E54, arg3, arg4, (Rand_ZeroOne() * 60.0f) + spAC,
+        func_800B0E48(play, &spE8, &D_80942E48, &D_80942E54, arg3, arg4, (Rand_ZeroOne() * 60.0f) + spAC,
                       (Rand_ZeroOne() * 30.0f) + spAC);
     }
 }
 
-void func_80940E38(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80940E38(EnGoroiwa* this, PlayState* play) {
     f32 sp5C;
     s32 pad;
     f32 sp54;
@@ -909,7 +909,7 @@ void func_80940E38(EnGoroiwa* this, GlobalContext* globalCtx) {
                 sp48.y = this->actor.world.pos.y + 20.0f;
                 sp48.z = (Math_CosS(sp46) * sp54) + this->actor.world.pos.z;
 
-                func_800B0E48(globalCtx, &sp48, &D_80942E48, &D_80942E54, &D_80942E38, &D_80942E44,
+                func_800B0E48(play, &sp48, &D_80942E48, &D_80942E54, &D_80942E38, &D_80942E44,
                               (Rand_ZeroOne() * 600.0f) + (600.0f * (this->actor.scale.x + 0.1f) * 0.5f),
                               (s32)(Rand_ZeroOne() * 50.0f) + 30);
             }
@@ -917,7 +917,7 @@ void func_80940E38(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80941060(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80941060(EnGoroiwa* this, PlayState* play) {
     Vec3f spAC;
     Vec3f spA0;
     Vec3f sp94;
@@ -937,21 +937,21 @@ void func_80941060(EnGoroiwa* this, GlobalContext* globalCtx) {
         spAC.y = spA0.y * -0.06f;
         spAC.z = spA0.z * -0.06f;
 
-        func_800B0E48(globalCtx, &sp94, &spA0, &spAC, &D_80942E38, &D_80942E44, (s32)(Rand_ZeroOne() * 30.0f) + 15,
+        func_800B0E48(play, &sp94, &spA0, &spAC, &D_80942E38, &D_80942E44, (s32)(Rand_ZeroOne() * 30.0f) + 15,
                       (s32)(Rand_ZeroOne() * 40.0f) + 30);
     }
 }
 
-void func_80941274(EnGoroiwa* this, GlobalContext* globalCtx) {
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EV_SNOWBALL_BROKEN);
+void func_80941274(EnGoroiwa* this, PlayState* play) {
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EV_SNOWBALL_BROKEN);
 }
 
-void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     EnGoroiwa* this = THIS;
     f32 temp_f0;
     s32 params = ENGOROIWA_GET_FF(&this->actor);
     s32 sp28 = params * 8;
-    Path* sp2C = &globalCtx->setupPathList[params];
+    Path* sp2C = &play->setupPathList[params];
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.world.rot.x = 0;
@@ -962,15 +962,15 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.z = 0;
     func_8093E8A0(this);
     func_8093E91C(this);
-    func_8093E9B0(this, globalCtx);
+    func_8093E9B0(this, play);
 
     if (sp28 == 0x7F8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (sp2C->count < 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -981,22 +981,22 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 595.0f, ActorShadow_DrawCircle, 9.4f);
     this->actor.shape.shadowAlpha = 200;
-    func_8093EB58(this, globalCtx);
+    func_8093EB58(this, play);
 
     this->unk_1D0 = Lib_SegmentedToVirtual(sp2C->points);
 
-    func_8093EE18(this, globalCtx);
+    func_8093EE18(this, play);
     func_8093EE64(this, this->actor.home.rot.y);
     func_8093EEBC(this);
     func_8093EC50(this);
 
     if (ENGOROIWA_GET_3000(&this->actor) == ENGOROIWA_3000_2) {
-        temp_f0 = func_8093EB74(this, globalCtx);
+        temp_f0 = func_8093EB74(this, play);
 
         if (temp_f0 < 0.1f) {
             this->unk_1E0 = 0.0f;
         } else {
-            this->unk_1E0 = (D_80942DFC[this->unk_1E4] * ((s32)globalCtx->state.framerateDivisor * 0.5f)) / temp_f0;
+            this->unk_1E0 = (D_80942DFC[this->unk_1E4] * ((s32)play->state.framerateDivisor * 0.5f)) / temp_f0;
             this->unk_1E0 *= 0.020000001f;
             if (this->unk_1E0 > 0.00037f) {
                 this->unk_1E0 = 0.00037f;
@@ -1006,18 +1006,18 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Effect_Add(globalCtx, &this->unk_248, 4, 0, 0, &D_80942E8C);
+    Effect_Add(play, &this->unk_248, 4, 0, 0, &D_80942E8C);
     func_809419D0(this);
 }
 
-void EnGoroiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnGoroiwa_Destroy(Actor* thisx, PlayState* play) {
     EnGoroiwa* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->collider);
-    Effect_Destroy(globalCtx, this->unk_248);
+    Collider_DestroyJntSph(play, &this->collider);
+    Effect_Destroy(play, this->unk_248);
 }
 
-s32 func_8094156C(EnGoroiwa* this, GlobalContext* globalCtx) {
+s32 func_8094156C(EnGoroiwa* this, PlayState* play) {
     Actor* actor = &this->actor;
     s32 params = ENGOROIWA_GET_C000(&this->actor);
     EnGoroiwaStruct* ptr;
@@ -1075,9 +1075,9 @@ s32 func_8094156C(EnGoroiwa* this, GlobalContext* globalCtx) {
             sp80.x = this->actor.world.pos.x;
             sp80.y = this->actor.world.pos.y + this->unk_1DC;
             sp80.z = this->actor.world.pos.z;
-            func_80940588(globalCtx, &sp80, D_80942E0C[params], &D_80942E30[params], &D_80942E3C[params],
+            func_80940588(play, &sp80, D_80942E0C[params], &D_80942E30[params], &D_80942E3C[params],
                           this->actor.scale.x);
-            func_80941274(this, globalCtx);
+            func_80941274(this, play);
             phi_s0_2 = true;
         } else if (((params == ENGOROIWA_C000_1) &&
                     (this->collider.elements->info.acHitInfo->toucher.dmgFlags & (0x400 | 0x100))) ||
@@ -1087,12 +1087,12 @@ s32 func_8094156C(EnGoroiwa* this, GlobalContext* globalCtx) {
             if ((params == ENGOROIWA_C000_2) && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x800)) {
                 this->unk_1E6 = 1;
             }
-            func_80940090(this, globalCtx);
-            func_80941274(this, globalCtx);
+            func_80940090(this, play);
+            func_80941274(this, play);
             func_809425CC(this);
             phi_s0_2 = true;
         } else if ((params == ENGOROIWA_C000_2) && (this->unk_1E7 <= 0)) {
-            func_80941060(this, globalCtx);
+            func_80941060(this, play);
             this->unk_1E7 = 10;
         }
     }
@@ -1103,7 +1103,7 @@ s32 func_8094156C(EnGoroiwa* this, GlobalContext* globalCtx) {
         }
 
         if (phi_s0_2) {
-            Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0x20);
+            Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x20);
         }
     }
     return phi_s0_2;
@@ -1115,7 +1115,7 @@ void func_809419D0(EnGoroiwa* this) {
     this->unk_1C4 = 1.0f;
 }
 
-void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80941A10(EnGoroiwa* this, PlayState* play) {
     static EnGoroiwaUnkFunc D_80942E94[] = {
         &func_8093F498,
         &func_8093F34C,
@@ -1127,24 +1127,24 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
         { NA_SE_EV_BIGBALL_ROLL - SFX_FLAG, NA_SE_EV_BIGBALL_ROLL_SR - SFX_FLAG },
     };
     s32 pad;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 sp44 = ENGOROIWA_GET_400(&this->actor);
     s32 sp40 = ENGOROIWA_GET_3000(&this->actor);
     s16 y;
     s32 pad2;
 
-    if (!func_8094156C(this, globalCtx)) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+    if (!func_8094156C(this, play)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             s32 sp34 = this->actor.home.rot.z & 3;
 
             if (sp34 == 2) {
-                func_80940090(this, globalCtx);
+                func_80940090(this, play);
                 if (sp40 == ENGOROIWA_3000_2) {
                     func_8093E8A0(this);
                     func_8093E91C(this);
                 }
-                func_80941274(this, globalCtx);
-                func_8093EDD8(this, globalCtx);
+                func_80941274(this, play);
+                func_8093EDD8(this, play);
                 func_8093EE64(this, 0);
                 func_8093EEBC(this);
             } else {
@@ -1158,7 +1158,7 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
                 }
             }
 
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+            func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
 
             if (sp34 == 2) {
                 func_80941EB4(this);
@@ -1178,8 +1178,8 @@ void func_80941A10(EnGoroiwa* this, GlobalContext* globalCtx) {
                 s32 sp30 = ENGOROIWA_GET_300(&this->actor);
 
                 if ((sp30 == ENGOROIWA_300_1) && ((this->unk_1D8 == 0) || (this->unk_1D8 == this->unk_1D4))) {
-                    func_80940090(this, globalCtx);
-                    func_80941274(this, globalCtx);
+                    func_80940090(this, play);
+                    func_80941274(this, play);
                 }
 
                 if (((sp30 == ENGOROIWA_300_1) || (sp30 == ENGOROIWA_300_0)) && (sp40 == ENGOROIWA_3000_2) &&
@@ -1223,7 +1223,7 @@ void func_80941DB4(EnGoroiwa* this) {
     this->unk_1C4 = 1.0f;
 }
 
-void func_80941E28(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80941E28(EnGoroiwa* this, PlayState* play) {
     func_8093F34C(this);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
         if ((this->unk_1E5 & 8) && ((this->actor.home.rot.z & 3) == 1)) {
@@ -1243,8 +1243,8 @@ void func_80941EB4(EnGoroiwa* this) {
     this->unk_1C4 = 0.0f;
 }
 
-void func_80941F10(EnGoroiwa* this, GlobalContext* globalCtx) {
-    if (!func_8094156C(this, globalCtx)) {
+void func_80941F10(EnGoroiwa* this, PlayState* play) {
+    if (!func_8094156C(this, play)) {
         if (this->unk_1C8 > 0) {
             this->unk_1C8--;
         } else {
@@ -1260,12 +1260,12 @@ void func_80941F54(EnGoroiwa* this) {
     this->actor.velocity.y = fabsf(this->actor.speedXZ) * 0.1f;
 }
 
-void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80941FA4(EnGoroiwa* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if (func_8094156C(this, globalCtx) == 0) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+    if (func_8094156C(this, play) == 0) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
+            func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
@@ -1288,17 +1288,17 @@ void func_80942084(EnGoroiwa* this) {
     this->unk_1E5 &= ~0x20;
 }
 
-void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809420F0(EnGoroiwa* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if (func_8094156C(this, globalCtx) == 0) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
-            func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
+    if (func_8094156C(this, play) == 0) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
+            func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
             func_800B8E58(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
             }
-        } else if (func_8093F6F8(this, globalCtx)) {
+        } else if (func_8093F6F8(this, play)) {
             func_8093FC00(this);
             func_809419D0(this);
             this->unk_1E5 &= ~0x10;
@@ -1312,7 +1312,7 @@ void func_809421E0(EnGoroiwa* this) {
     func_8093EAB0(this, 0);
 }
 
-void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_8094220C(EnGoroiwa* this, PlayState* play) {
     s32 pad;
     EnGoroiwaStruct* ptr;
     s32 i;
@@ -1346,7 +1346,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
             spC4.y = ptr->unk_00.y + 25.0f;
             spC4.z = ptr->unk_00.z;
 
-            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
+            ptr->unk_18 = BgCheck_EntityRaycastFloor5(&play->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_RotateZYX(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);
@@ -1374,7 +1374,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
                     sp9C.x = ptr->unk_00.x;
                     sp9C.y = (ptr->unk_00.y - ptr->unk_10) + 10.0f;
                     sp9C.z = ptr->unk_00.z;
-                    func_80940A1C(globalCtx, &sp9C, D_80942E0C[params], &D_80942E30[params], &D_80942E3C[params],
+                    func_80940A1C(play, &sp9C, D_80942E0C[params], &D_80942E30[params], &D_80942E3C[params],
                                   this->actor.scale.x);
                 }
             }
@@ -1409,7 +1409,7 @@ void func_809425CC(EnGoroiwa* this) {
     this->unk_1C8 = 100;
 }
 
-void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80942604(EnGoroiwa* this, PlayState* play) {
     s32 pad;
     s16 sp22 = this->actor.shape.shadowAlpha;
 
@@ -1418,14 +1418,14 @@ void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx) {
     if (this->unk_1C8 > 0) {
         this->unk_1C8--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGoroiwa* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 bgId;
     s32 sp5C = false;
     Vec3f sp50;
@@ -1434,7 +1434,8 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     u32 temp_v0_2;
     CollisionPoly* tmp;
 
-    if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         if (this->unk_1CC > 0) {
             this->unk_1CC--;
         }
@@ -1452,7 +1453,7 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 tmp = this->actor.floorPoly;
                 if (tmp != NULL) {
-                    temp_v0_2 = func_800C99D4(&globalCtx->colCtx, tmp, this->actor.floorBgId);
+                    temp_v0_2 = func_800C99D4(&play->colCtx, tmp, this->actor.floorBgId);
 
                     if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
                         if (!(this->unk_1E5 & 0x40)) {
@@ -1460,7 +1461,7 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
                             sp50.y = this->actor.floorHeight;
                             sp50.z = this->actor.world.pos.z;
                             sp4C = (((Rand_ZeroOne() * 36.0f) + 250.0f) * this->actor.scale.x) + 10.0f;
-                            func_800AE930(&globalCtx->colCtx, Effect_GetByIndex(this->unk_248), &sp50, sp4C,
+                            func_800AE930(&play->colCtx, Effect_GetByIndex(this->unk_248), &sp50, sp4C,
                                           this->actor.world.rot.y, this->actor.floorPoly, this->actor.floorBgId);
                         }
                         sp48 = false;
@@ -1473,26 +1474,26 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_800AEF44(Effect_GetByIndex(this->unk_248));
         }
 
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
 
         if (this->actor.update != NULL) {
             func_8093EC50(this);
 
             if (sp5C) {
-                func_80940E38(this, globalCtx);
+                func_80940E38(this, play);
             }
 
             switch (ENGOROIWA_GET_400(&this->actor)) {
                 case ENGOROIWA_400_1:
-                    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x1C);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x1C);
                     break;
 
                 case ENGOROIWA_400_0:
                     sp50.x = this->actor.world.pos.x;
                     sp50.y = this->actor.world.pos.y + 50.0f;
                     sp50.z = this->actor.world.pos.z;
-                    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly,
-                                                                          &bgId, &this->actor, &sp50);
+                    this->actor.floorHeight =
+                        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &sp50);
                     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
                         this->actor.floorBgId = bgId;
                         if (this->actor.world.pos.y <= (this->actor.floorHeight + 2.0f)) {
@@ -1507,7 +1508,7 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
                     break;
             }
 
-            func_8093FAA4(this, globalCtx);
+            func_8093FAA4(this, play);
 
             if (this->actor.flags & ACTOR_FLAG_40) {
                 s32 params = ENGOROIWA_GET_C000(&this->actor);
@@ -1515,21 +1516,21 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
                 func_8093E938(this);
 
                 if ((this->unk_1E5 & 1) && (this->unk_1CC <= 0) &&
-                    (!(player->stateFlags3 & 0x2000000) || (player->transformation != PLAYER_FORM_GORON) ||
+                    (!(player->stateFlags3 & PLAYER_STATE3_2000000) || (player->transformation != PLAYER_FORM_GORON) ||
                      ((params != ENGOROIWA_C000_1) && (params != ENGOROIWA_C000_2)))) {
-                    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
                 } else {
                     this->collider.base.atFlags &= ~AT_HIT;
                 }
 
                 if (this->unk_1E5 & 2) {
-                    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
                 } else {
                     this->collider.base.acFlags &= ~AC_HIT;
                 }
 
                 if ((this->unk_1E5 & 4) && (this->unk_1CC <= 0)) {
-                    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 } else {
                     this->collider.base.ocFlags1 &= ~OC1_HIT;
                 }
@@ -1542,7 +1543,7 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
+void func_80942B1C(EnGoroiwa* this, PlayState* play) {
     s32 pad;
     s32 pad2;
     s32 i;
@@ -1568,12 +1569,12 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Gfx_DrawDListOpa(globalCtx, phi_fp);
+            Gfx_DrawDListOpa(play, phi_fp);
 
             if ((ptr->unk_28 != 0) && (ptr->unk_2C > 0)) {
-                OPEN_DISPS(globalCtx->state.gfxCtx);
+                OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(globalCtx->state.gfxCtx);
+                func_8012C448(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);
@@ -1583,17 +1584,17 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
                 Matrix_Put(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
-                CLOSE_DISPS(globalCtx->state.gfxCtx);
+                CLOSE_DISPS(play->state.gfxCtx);
             }
         }
     }
 }
 
-void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnGoroiwa_Draw(Actor* thisx, PlayState* play) {
     static Gfx* D_80942EB4[] = {
         object_goroiwa_DL_005C20,
         object_goroiwa_DL_003B40,
@@ -1603,8 +1604,8 @@ void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 params = ENGOROIWA_GET_C000(&this->actor);
 
     if (this->actionFunc == func_8094220C) {
-        func_80942B1C(this, globalCtx);
+        func_80942B1C(this, play);
     } else if (this->actionFunc != func_80942604) {
-        Gfx_DrawDListOpa(globalCtx, D_80942EB4[params]);
+        Gfx_DrawDListOpa(play, D_80942EB4[params]);
     }
 }

@@ -5,15 +5,13 @@
 
 struct DoorAna;
 
-typedef void (*DoorAnaActionFunc)(struct DoorAna*, GlobalContext*);
+typedef void (*DoorAnaActionFunc)(struct DoorAna*, PlayState*);
 
 typedef struct DoorAna {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder bombCollider;
     /* 0x190 */ DoorAnaActionFunc actionFunc;
 } DoorAna; // size = 0x194
-
-extern const ActorInit Door_Ana_InitVars;
 
 #define DOORANA_TYPE_BITMASK            0x300
 #define DOORANA_TYPE_VISIBLE            0x000

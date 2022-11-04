@@ -10,12 +10,12 @@
 
 #define THIS ((EnZl1*)thisx)
 
-void EnZl1_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnZl1_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnZl1_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnZl1_Init(Actor* thisx, PlayState* play);
+void EnZl1_Destroy(Actor* thisx, PlayState* play);
+void EnZl1_Update(Actor* thisx, PlayState* play);
+void EnZl1_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Zl1_InitVars = {
+ActorInit En_Zl1_InitVars = {
     ACTOR_EN_ZL1,
     ACTORCAT_NPC,
     FLAGS,
@@ -27,11 +27,11 @@ const ActorInit En_Zl1_InitVars = {
     (ActorFunc)EnZl1_Draw,
 };
 
-void EnZl1_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnZl1_Init(Actor* thisx, PlayState* play) {
 }
-void EnZl1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnZl1_Destroy(Actor* thisx, PlayState* play) {
 }
-void EnZl1_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnZl1_Update(Actor* thisx, PlayState* play) {
 }
-void EnZl1_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnZl1_Draw(Actor* thisx, PlayState* play) {
 }

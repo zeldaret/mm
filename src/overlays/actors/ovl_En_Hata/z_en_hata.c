@@ -11,12 +11,12 @@
 
 #define THIS ((EnHata*)thisx)
 
-void EnHata_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHata_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2);
-void EnHata_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHata_Init(Actor* thisx, PlayState* play);
+void EnHata_Destroy(Actor* thisx, PlayState* play);
+void EnHata_Update(Actor* thisx, PlayState* play2);
+void EnHata_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hata_InitVars = {
+ActorInit En_Hata_InitVars = {
     ACTOR_EN_HATA,
     ACTORCAT_PROP,
     FLAGS,
@@ -28,45 +28,45 @@ const ActorInit En_Hata_InitVars = {
     (ActorFunc)EnHata_Draw,
 };
 
-void EnHata_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHata_Init(Actor* thisx, PlayState* play) {
     EnHata* this = THIS;
     s32 rand;
     f32 endFrame;
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable,
                    OBJECT_HATA_LIMB_MAX);
     endFrame = Animation_GetLastFrame(&object_hata_Anim_000444);
     Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, 0.0f);
     rand = Rand_ZeroFloat(endFrame);
     this->skelAnime.curFrame = rand;
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hata_Colheader_0000C0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_hata_Colheader_0000C0);
     Actor_SetScale(&this->dyna.actor, 0.013f);
     this->dyna.actor.uncullZoneScale = 500.0f;
     this->dyna.actor.uncullZoneDownward = 500.0f;
     this->dyna.actor.uncullZoneForward = 2200.0f;
 }
 
-void EnHata_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHata_Destroy(Actor* thisx, PlayState* play) {
     EnHata* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnHata_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnHata* this = THIS;
     Vec3f sp34;
     f32 phi_fv0;
     s32 pad;
 
-    phi_fv0 = CLAMP(globalCtx->envCtx.windSpeed / 120.0f, 0.0f, 1.0f);
+    phi_fv0 = CLAMP(play->envCtx.windSpeed / 120.0f, 0.0f, 1.0f);
     this->skelAnime.playSpeed = 2.75f * phi_fv0;
     this->skelAnime.playSpeed += 1.0f + Rand_ZeroFloat(1.25f);
 
-    sp34.x = globalCtx->envCtx.windDir.x;
-    sp34.y = globalCtx->envCtx.windDir.y + ((1.0f - phi_fv0) * 240.0f);
+    sp34.x = play->envCtx.windDir.x;
+    sp34.y = play->envCtx.windDir.y + ((1.0f - phi_fv0) * 240.0f);
     sp34.y = CLAMP(sp34.y, -118.0f, 118.0f);
-    sp34.z = globalCtx->envCtx.windDir.z;
+    sp34.z = play->envCtx.windDir.z;
 
     phi_fv0 = CLAMP(phi_fv0, 0.1f, 0.4f);
     Math_ApproachF(&this->unk_2A4.x, sp34.x, phi_fv0, 1000.0f);
@@ -81,8 +81,7 @@ void EnHata_Update(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 EnHata_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 EnHata_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnHata* this = THIS;
 
     if ((limbIndex == OBJECT_HATA_LIMB_04) || (limbIndex == OBJECT_HATA_LIMB_0D)) {
@@ -92,10 +91,10 @@ s32 EnHata_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     return false;
 }
 
-void EnHata_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnHata_Draw(Actor* thisx, PlayState* play) {
     EnHata* this = THIS;
 
-    func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnHata_OverrideLimbDraw, NULL,
+    func_8012C5B0(play->state.gfxCtx);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnHata_OverrideLimbDraw, NULL,
                       &this->dyna.actor);
 }

@@ -10,15 +10,15 @@
 
 #define THIS ((EnTanron1*)thisx)
 
-void EnTanron1_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron1_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTanron1_Init(Actor* thisx, PlayState* play);
+void EnTanron1_Destroy(Actor* thisx, PlayState* play);
+void EnTanron1_Update(Actor* thisx, PlayState* play);
+void EnTanron1_Draw(Actor* thisx, PlayState* play);
 
-void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx);
-void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx);
+void func_80BB5318(EnTanron1* this, PlayState* play);
+void func_80BB5AAC(EnTanron1* this, PlayState* play);
 
-const ActorInit En_Tanron1_InitVars = {
+ActorInit En_Tanron1_InitVars = {
     ACTOR_EN_TANRON1,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -34,7 +34,7 @@ static u64 sPad = { 0 };
 
 #include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
-void EnTanron1_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron1_Init(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;
 
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -46,7 +46,7 @@ void EnTanron1_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnTanron1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron1_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BB4E50(EnTanron1Struct* arg0, Vec3f* arg1, s16 arg2) {
@@ -71,10 +71,10 @@ void func_80BB4E50(EnTanron1Struct* arg0, Vec3f* arg1, s16 arg2) {
     }
 }
 
-void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron1_Update(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;
     Actor* temp_a0;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s16 i;
     EnTanron1Struct* ptr = &this->unk_160[0];
     Vec3f temp;
@@ -108,7 +108,7 @@ void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
             phi_f18 = 10.0f;
 
             while (phi_f18 < 1000.0f) {
-                temp_a0 = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+                temp_a0 = play->actorCtx.actorLists[ACTORCAT_PROP].first;
                 while (temp_a0 != NULL) {
                     if (temp_a0->id != ACTOR_OBJ_SYOKUDAI) {
                         temp_a0 = temp_a0->next;
@@ -150,9 +150,9 @@ void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
-        this->unk_14C.x = player->swordInfo[0].tip.x;
-        this->unk_14C.y = player->swordInfo[0].tip.y;
-        this->unk_14C.z = player->swordInfo[0].tip.z;
+        this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
+        this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
+        this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;
 
         this->unk_158 = 0x5000;
         this->unk_15C = 50.0f;
@@ -160,7 +160,7 @@ void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_144 = 100;
         }
     } else {
-        temp_a0 = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+        temp_a0 = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
         while (temp_a0 != NULL) {
             if (temp_a0->params == 1) {
                 temp_a0 = temp_a0->next;
@@ -179,17 +179,17 @@ void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
             break;
         }
     }
-    func_80BB5318(this, globalCtx);
+    func_80BB5318(this, play);
 }
 
-void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron1_Draw(Actor* thisx, PlayState* play) {
     EnTanron1* this = THIS;
 
-    func_80BB5AAC(this, globalCtx);
+    func_80BB5AAC(this, play);
 }
 
-void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80BB5318(EnTanron1* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     EnTanron1Struct* ptr = NULL;
     f32 phi_f28 = 0.0f;
     Vec3f* phi_s2 = NULL;
@@ -207,15 +207,15 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
     f32 temp_f30 = this->unk_15C;
 
     if (player->unk_ADC != 0) {
-        phi_s2 = &player->swordInfo[0].tip;
-        if (player->swordAnimation >= 30) {
+        phi_s2 = &player->meleeWeaponInfo[0].tip;
+        if (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) {
             phi_f28 = 2500.0f;
         } else {
             phi_f28 = 400.0f;
         }
     }
 
-    temp_v0 = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+    temp_v0 = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
     while (temp_v0 != NULL) {
         if (temp_v0->params != 1) {
             temp_v0 = temp_v0->next;
@@ -258,7 +258,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                         temp.z = player->actor.world.pos.z - ptr->unk_00.z;
 
                         if ((SQXYZ(temp) < 400.0f) && (player->transformation != PLAYER_FORM_DEKU)) {
-                            func_800B8D10(globalCtx, &this->actor, 0.0f, 0, 0.0f, 1, 1);
+                            func_800B8D10(play, &this->actor, 0.0f, 0, 0.0f, 1, 1);
                         }
                     }
 
@@ -338,10 +338,9 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                             if (Rand_ZeroOne() < 0.5f) {
                                 ptr->unk_34 = randPlusMinusPoint5Scaled(12.0f);
                             }
-                            ptr->unk_3C = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp98, &ptr->unk_00);
+                            ptr->unk_3C = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp98, &ptr->unk_00);
                             sp9C = ptr->unk_00.y;
-                            WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C,
-                                                 &spA0);
+                            WaterBox_GetSurface1(play, &play->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C, &spA0);
                             if ((sp9C < ptr->unk_00.y) && (ptr->unk_3C < sp9C)) {
                                 ptr->unk_3C = sp9C;
                             }
@@ -353,7 +352,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
     }
 
     if (spB4 != NULL) {
-        SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, spB4, &this->unk_3360, &spB0);
+        SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, spB4, &this->unk_3360, &spB0);
         if (spB8 >= (s16)(KREG(39) + 20)) {
             Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
         } else if (spBA >= 20) {
@@ -362,15 +361,15 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
+void func_80BB5AAC(EnTanron1* this, PlayState* play) {
     EnTanron1Struct* ptrBase = &this->unk_160[0];
     s16 i;
     u8 flag = 0;
     EnTanron1Struct* ptr = ptrBase;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     for (i = 0; i < this->actor.params; i++, ptr++) {
         if (ptr->unk_24 == 1) {
@@ -383,8 +382,7 @@ void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
             Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
             Matrix_Scale(1.2f, ptr->unk_2C, 1.2f, MTXMODE_APPLY);
 
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
         }
     }
@@ -408,9 +406,11 @@ void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
         Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        if (1) {}
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -11,14 +11,14 @@
 
 #define THIS ((ObjBoat*)thisx)
 
-void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBoat_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjBoat_Init(Actor* thisx, PlayState* play);
+void ObjBoat_Destroy(Actor* thisx, PlayState* play);
+void ObjBoat_Update(Actor* thisx, PlayState* play);
+void ObjBoat_Draw(Actor* thisx, PlayState* play);
 
-void func_80B9B428(Actor* thisx, GlobalContext* globalCtx);
+void func_80B9B428(Actor* thisx, PlayState* play2);
 
-const ActorInit Obj_Boat_InitVars = {
+ActorInit Obj_Boat_InitVars = {
     ACTOR_OBJ_BOAT,
     ACTORCAT_BG,
     FLAGS,
@@ -47,7 +47,7 @@ s16 func_80B9AF50(ObjBoat* this, Vec3f* arg0) {
     return ((this->unk_15D > 0) ? yaw : (yaw + 0x8000));
 }
 
-void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoat_Init(Actor* thisx, PlayState* play) {
     s32 pad[2];
     Path* path;
     ObjBoat* this = THIS;
@@ -55,11 +55,11 @@ void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 3);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kaizoku_obj_Colheader_009A88);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_kaizoku_obj_Colheader_009A88);
     if (thisx->params < 0) {
         this->dyna.actor.update = func_80B9B428;
     } else {
-        path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJBOAT_GET_PATH(thisx)];
         this->unk_163 = path->count - 1;
         this->unk_164 = Lib_SegmentedToVirtual(path->points);
         this->unk_15D = 1;
@@ -71,10 +71,10 @@ void ObjBoat_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjBoat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoat_Destroy(Actor* thisx, PlayState* play) {
     ObjBoat* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B9B124(ObjBoat* this) {
@@ -84,10 +84,10 @@ void func_80B9B124(ObjBoat* this) {
     this->dyna.actor.shape.rot.z = Math_SinS(this->unk_160 * 2) * 50.0f;
 }
 
-void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoat_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjBoat* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 temp = DynaPolyActor_IsInRidingMovingState(&this->dyna);
     f32 sp3C = 0.0f;
     s16 sp3A = this->dyna.actor.shape.rot.y;
@@ -136,19 +136,19 @@ void ObjBoat_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B9B124(this);
 }
 
-void func_80B9B428(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void func_80B9B428(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjBoat* this = THIS;
 
-    if (Cutscene_CheckActorAction(globalCtx, 511)) {
-        CsCmdActorAction* actionIndex = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 511)];
+    if (Cutscene_CheckActorAction(play, 511)) {
+        CsCmdActorAction* actionIndex = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 511)];
         if (this->unk_15F != actionIndex->action) {
             this->dyna.actor.shape.rot.x = actionIndex->urot.x;
             if (actionIndex->action != 1) {
-                Path* path = &globalCtx->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
+                Path* path = &play->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
 
                 if (actionIndex->action == 3) {
-                    path = &globalCtx->setupPathList[path->unk1];
+                    path = &play->setupPathList[path->unk1];
                 }
                 this->unk_163 = path->count;
                 this->unk_164 = Lib_SegmentedToVirtual(path->points);
@@ -184,8 +184,8 @@ void func_80B9B428(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void ObjBoat_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoat_Draw(Actor* thisx, PlayState* play) {
     ObjBoat* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, object_kaizoku_obj_DL_007630);
+    Gfx_DrawDListOpa(play, object_kaizoku_obj_DL_007630);
 }

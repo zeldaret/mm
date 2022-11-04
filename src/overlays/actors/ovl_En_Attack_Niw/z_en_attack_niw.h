@@ -6,7 +6,7 @@
 
 struct EnAttackNiw;
 
-typedef void (*EnAttackNiwActionFunc)(struct EnAttackNiw*, GlobalContext*);
+typedef void (*EnAttackNiwActionFunc)(struct EnAttackNiw*, PlayState*);
 
 typedef struct EnAttackNiw {
     /* 0x000 */ Actor actor;
@@ -53,8 +53,6 @@ typedef struct EnAttackNiw {
     /* 0x2D8 */ f32 targetXZSpeed;
     /* 0x2DC */ f32 targetHeight; // never set, but sent to Actor_SetFocus 
 } EnAttackNiw; // size = 0x2E0
-
-extern const ActorInit En_Attack_Niw_InitVars;
 
 
 #define ATTACK_NIW_REGULAR  0    // spawned by EnNiw

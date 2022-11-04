@@ -5,7 +5,7 @@
 
 struct EnDaiku;
 
-typedef void (*EnDaikuActionFunc)(struct EnDaiku*, GlobalContext*);
+typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 
 #define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF);
 #define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
@@ -44,7 +44,5 @@ typedef struct EnDaiku {
     /* 0x28E */ UNK_TYPE1 unk_28E[0xE];
     /* 0x29C */ ColliderCylinder collider;
 } EnDaiku; // size = 0x2E8
-
-extern const ActorInit En_Daiku_InitVars;
 
 #endif // Z_EN_DAIKU_H

@@ -8,7 +8,7 @@
 
 struct EnNwc;
 
-typedef void (*EnNwcActionFunc)(struct EnNwc*, GlobalContext*);
+typedef void (*EnNwcActionFunc)(struct EnNwc*, PlayState*);
 
 typedef struct EnNwc {
     /* 0x000 */ Actor actor;
@@ -34,7 +34,5 @@ typedef struct EnNwc {
     /* 0x262 */ s16 upperBodyRotY;
     /* 0x264 */ EnNwcActionFunc actionFunc;
 } EnNwc; // size = 0x268
-
-extern const ActorInit En_Nwc_InitVars;
 
 #endif // Z_EN_NWC_H

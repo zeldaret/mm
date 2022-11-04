@@ -12,16 +12,16 @@
 
 #define THIS ((DemoTreLgt*)thisx)
 
-void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoTreLgt_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx);
-void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoTreLgt_Init(Actor* thisx, PlayState* play);
+void DemoTreLgt_Destroy(Actor* thisx, PlayState* play);
+void DemoTreLgt_Update(Actor* thisx, PlayState* play);
+void DemoTreLgt_Draw(Actor* thisx, PlayState* play);
 
 void DemoTreLgt_SetupWait(DemoTreLgt* this);
 
-void DemoTreLgt_Wait(DemoTreLgt* this, GlobalContext* globalCtx);
-void DemoTreLgt_SetupAnimate(DemoTreLgt* this, GlobalContext* globalCtx, f32 frame);
-void DemoTreLgt_Animate(DemoTreLgt* this, GlobalContext* globalCtx);
+void DemoTreLgt_Wait(DemoTreLgt* this, PlayState* play);
+void DemoTreLgt_SetupAnimate(DemoTreLgt* this, PlayState* play, f32 frame);
+void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play);
 
 typedef struct {
     f32 unk0;
@@ -35,7 +35,7 @@ static DemoTreLgtInfo D_808E1490[2] = {
     { 1.0f, 136.0f, 220.0f, 50.0f },
 };
 
-const ActorInit Demo_Tre_Lgt_InitVars = {
+ActorInit Demo_Tre_Lgt_InitVars = {
     ACTOR_DEMO_TRE_LGT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -62,10 +62,10 @@ static DemoTreLgtActionFunc sActionFuncs[] = {
     DemoTreLgt_Animate,
 };
 
-void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DemoTreLgt_Init(Actor* thisx, PlayState* play) {
     DemoTreLgt* this = THIS;
 
-    SkelCurve_Init(globalCtx, &this->skelCurve, &gBoxLightCurveSkel, sBoxLightAnimations[0]);
+    SkelCurve_Init(play, &this->skelCurve, &gBoxLightCurveSkel, sBoxLightAnimations[0]);
     this->colorAlpha1 = 255;
     this->colorAlpha2 = 255;
     this->status = 0;
@@ -78,34 +78,34 @@ void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx) {
     DemoTreLgt_SetupWait(this);
 }
 
-void DemoTreLgt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DemoTreLgt_Destroy(Actor* thisx, PlayState* play) {
     DemoTreLgt* this = THIS;
 
-    SkelCurve_Destroy(globalCtx, &this->skelCurve);
+    SkelCurve_Destroy(play, &this->skelCurve);
 }
 
 void DemoTreLgt_SetupWait(DemoTreLgt* this) {
     this->action = DEMO_TRE_LGT_ACTION_WAIT;
 }
 
-void DemoTreLgt_Wait(DemoTreLgt* this, GlobalContext* globalCtx) {
+void DemoTreLgt_Wait(DemoTreLgt* this, PlayState* play) {
     EnBox* chest = (EnBox*)this->actor.parent;
 
     if (chest != NULL) {
         if (Animation_OnFrame(&chest->skelAnime, 10.0f)) {
-            DemoTreLgt_SetupAnimate(this, globalCtx, chest->skelAnime.curFrame);
+            DemoTreLgt_SetupAnimate(this, play, chest->skelAnime.curFrame);
         }
     }
 }
 
-void DemoTreLgt_SetupAnimate(DemoTreLgt* this, GlobalContext* globalCtx, f32 frame) {
+void DemoTreLgt_SetupAnimate(DemoTreLgt* this, PlayState* play, f32 frame) {
     this->action = DEMO_TRE_LGT_ACTION_ANIMATE;
     SkelCurve_SetAnim(&this->skelCurve, sBoxLightAnimations[this->animationType], 1.0f,
                       D_808E1490[this->animationType].unk4 + D_808E1490[this->animationType].unk8, frame, 1.0f);
-    SkelCurve_Update(globalCtx, &this->skelCurve);
+    SkelCurve_Update(play, &this->skelCurve);
 }
 
-void DemoTreLgt_Animate(DemoTreLgt* this, GlobalContext* globalCtx) {
+void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
     f32 curFrame = this->skelCurve.curFrame;
 
     if (curFrame < D_808E1490[this->animationType].unk4) {
@@ -130,26 +130,26 @@ void DemoTreLgt_Animate(DemoTreLgt* this, GlobalContext* globalCtx) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
         }
     }
-    if (SkelCurve_Update(globalCtx, &this->skelCurve)) {
-        Actor_MarkForDeath(&this->actor);
+    if (SkelCurve_Update(play, &this->skelCurve)) {
+        Actor_Kill(&this->actor);
     }
 }
 
-void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DemoTreLgt_Update(Actor* thisx, PlayState* play) {
     DemoTreLgt* this = THIS;
 
-    sActionFuncs[this->action](this, globalCtx);
+    sActionFuncs[this->action](this, play);
 }
 
-s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, Actor* thisx) {
+s32 DemoTreLgt_OverrideLimbDraw(PlayState* play, SkelCurve* skelCuve, s32 limbIndex, Actor* thisx) {
     s32 pad;
     DemoTreLgt* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (globalCtx->state.frames * 2) % 256, 0, 64, 32, 1,
-                                (globalCtx->state.frames * -2) % 256, 0, 64, 32));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, (play->state.frames * 2) % 256, 0, 64, 32, 1,
+                                (play->state.frames * -2) % 256, 0, 64, 32));
 
     if (limbIndex == OBJECT_BOX_LIGHT_LIMB_01) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 180, this->colorAlpha1);
@@ -158,20 +158,20 @@ s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelCurve* skelCuve, s
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 180, this->colorAlpha2);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
     return true;
 }
 
-void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void DemoTreLgt_Draw(Actor* thisx, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     DemoTreLgt* this = THIS;
 
     OPEN_DISPS(gfxCtx);
     if (this->action == DEMO_TRE_LGT_ACTION_ANIMATE) {
         func_8012C2DC(gfxCtx);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 255, 0, 0);
-        SkelCurve_Draw(&this->actor, globalCtx, &this->skelCurve, DemoTreLgt_OverrideLimbDraw, NULL, 1, &this->actor);
+        SkelCurve_Draw(&this->actor, play, &this->skelCurve, DemoTreLgt_OverrideLimbDraw, NULL, 1, &this->actor);
     }
     CLOSE_DISPS(gfxCtx);
 }

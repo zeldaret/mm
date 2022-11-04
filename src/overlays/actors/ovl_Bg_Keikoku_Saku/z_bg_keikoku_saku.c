@@ -11,16 +11,16 @@
 
 #define THIS ((BgKeikokuSaku*)thisx)
 
-void BgKeikokuSaku_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKeikokuSaku_Init(Actor* thisx, PlayState* play);
+void BgKeikokuSaku_Destroy(Actor* thisx, PlayState* play);
+void BgKeikokuSaku_Update(Actor* thisx, PlayState* play);
+void BgKeikokuSaku_Draw(Actor* thisx, PlayState* play);
 
-void func_80A5389C(BgKeikokuSaku* this, GlobalContext* globalCtx);
-void func_80A538E0(BgKeikokuSaku* this, GlobalContext* globalCtx);
-void func_80A53994(BgKeikokuSaku* this, GlobalContext* globalCtx);
+void func_80A5389C(BgKeikokuSaku* this, PlayState* play);
+void func_80A538E0(BgKeikokuSaku* this, PlayState* play);
+void func_80A53994(BgKeikokuSaku* this, PlayState* play);
 
-const ActorInit Bg_Keikoku_Saku_InitVars = {
+ActorInit Bg_Keikoku_Saku_InitVars = {
     ACTOR_BG_KEIKOKU_SAKU,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -32,35 +32,35 @@ const ActorInit Bg_Keikoku_Saku_InitVars = {
     (ActorFunc)BgKeikokuSaku_Draw,
 };
 
-void BgKeikokuSaku_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgKeikokuSaku* this = THIS;
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_keikoku_obj_Colheader_002300, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     this->switchFlag = BGKEIKOKUSAKU_GET_SWITCHFLAG(thisx);
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         this->dyna.actor.world.pos.z = 2659.0f;
     } else {
         this->actionFunc = func_80A5389C;
     }
 }
 
-void BgKeikokuSaku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSaku_Destroy(Actor* thisx, PlayState* play) {
     BgKeikokuSaku* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80A5389C(BgKeikokuSaku* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+void func_80A5389C(BgKeikokuSaku* this, PlayState* play) {
+    if (Flags_GetSwitch(play, this->switchFlag)) {
         this->actionFunc = func_80A538E0;
     }
 }
 
-void func_80A538E0(BgKeikokuSaku* this, GlobalContext* globalCtx) {
+void func_80A538E0(BgKeikokuSaku* this, PlayState* play) {
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
     this->dyna.actor.world.pos.z -= 2.0f + BREG(8);
     if (this->dyna.actor.world.pos.z < (BREG(9) + 2660.0f)) {
@@ -70,13 +70,13 @@ void func_80A538E0(BgKeikokuSaku* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A53994(BgKeikokuSaku* this, GlobalContext* globalCtx) {
+void func_80A53994(BgKeikokuSaku* this, PlayState* play) {
     if (this->timer == 0) {
         this->actionFunc = func_80A5389C;
     }
 }
 
-void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSaku_Update(Actor* thisx, PlayState* play) {
     BgKeikokuSaku* this = THIS;
 
     if (this->timer) {
@@ -88,15 +88,15 @@ void BgKeikokuSaku_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.scale.x = (BREG(10) / 1000.0f) + 0.1f;
     this->dyna.actor.scale.y = (BREG(11) / 1000.0f) + 0.1f;
     this->dyna.actor.scale.z = (BREG(12) / 1000.0f) + 0.1f;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgKeikokuSaku_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void BgKeikokuSaku_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C2DC(play->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_001640);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -67,7 +67,7 @@
         <Limb Name="object_zob_Standardlimb_010790" Type="Standard" EnumName="OBJECT_ZOB_LIMB_15" Offset="0x10790" />
         <Limb Name="object_zob_Standardlimb_01079C" Type="Standard" EnumName="OBJECT_ZOB_LIMB_16" Offset="0x1079C" />
         <Limb Name="object_zob_Standardlimb_0107A8" Type="Standard" EnumName="OBJECT_ZOB_LIMB_17" Offset="0x107A8" />
-        <Skeleton Name="object_zob_Skel_010810" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOB_LIMB_NONE" LimbMax="OBJECT_ZOB_LIMB_MAX" EnumName="object_zob_Limbs" Offset="0x10810" />
+        <Skeleton Name="object_zob_Skel_010810" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOB_LIMB_NONE" LimbMax="OBJECT_ZOB_LIMB_MAX" EnumName="ObjectZobLimb" Offset="0x10810" />
         <Animation Name="object_zob_Anim_011144" Offset="0x11144" />
     </File>
 </Root>

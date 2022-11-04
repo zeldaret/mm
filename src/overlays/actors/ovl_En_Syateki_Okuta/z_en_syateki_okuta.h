@@ -8,7 +8,7 @@
 
 struct EnSyatekiOkuta;
 
-typedef void (*EnSyatekiOkutaActionFunc)(struct EnSyatekiOkuta*, GlobalContext*);
+typedef void (*EnSyatekiOkutaActionFunc)(struct EnSyatekiOkuta*, PlayState*);
 
 typedef struct EnSyatekiOkuta {
     /* 0x000 */ Actor actor;
@@ -23,7 +23,5 @@ typedef struct EnSyatekiOkuta {
     /* 0x2A8 */ UNK_TYPE1 unk_2A8[0x2];
     /* 0x2AA */ s16 unk_2AA;
 } EnSyatekiOkuta; // size = 0x2AC
-
-extern const ActorInit En_Syateki_Okuta_InitVars;
 
 #endif // Z_EN_SYATEKI_OKUTA_H

@@ -5,7 +5,7 @@
 
 struct ArrowLight;
 
-typedef void (*ArrowLightActionFunc)(struct ArrowLight*, GlobalContext*);
+typedef void (*ArrowLightActionFunc)(struct ArrowLight*, PlayState*);
 
 typedef struct ArrowLight {
     /* 0x000 */ Actor actor;
@@ -18,7 +18,5 @@ typedef struct ArrowLight {
     /* 0x160 */ ArrowLightActionFunc actionFunc;
 } ArrowLight; // size = 0x164
 
-
-extern const ActorInit Arrow_Light_InitVars;
 
 #endif // Z_ARROW_LIGHT_H

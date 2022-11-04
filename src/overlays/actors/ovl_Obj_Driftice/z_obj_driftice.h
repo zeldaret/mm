@@ -5,7 +5,7 @@
 
 struct ObjDriftice;
 
-typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, GlobalContext*);
+typedef void (*ObjDrifticeActionFunc)(struct ObjDriftice*, PlayState*);
 
 #define OBJDRIFTICE_GET_3(thisx) ((thisx)->params & 3)
 #define OBJDRIFTICE_GET_1FC(thisx) (((thisx)->params >> 2) & 0x7F)
@@ -42,20 +42,20 @@ typedef struct {
 } ObjDrifticeStruct; // size = 0xCC
 
 typedef struct ObjDriftice {
-    /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ObjDrifticeActionFunc actionFunc;
-    /* 0x0160 */ s32 unk_160;
-    /* 0x0164 */ s32 unk_164;
-    /* 0x0168 */ s32 unk_168;
-    /* 0x016C */ Vec3s* unk_16C;
-    /* 0x0170 */ ObjDrifticeStruct unk_170;
-    /* 0x023C */ f32 unk_23C;
-    /* 0x0240 */ f32 unk_240;
-    /* 0x0244 */ s16 unk_244;
-    /* 0x0248 */ s32 unk_248;
-    /* 0x024C */ s32 unk_24C;
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ObjDrifticeActionFunc actionFunc;
+    /* 0x160 */ s32 unk_160;
+    /* 0x164 */ s32 unk_164;
+    /* 0x168 */ s32 unk_168;
+    /* 0x16C */ Vec3s* unk_16C;
+    /* 0x170 */ ObjDrifticeStruct unk_170;
+    /* 0x23C */ f32 unk_23C;
+    /* 0x240 */ f32 unk_240;
+    /* 0x244 */ s16 unk_244;
+    /* 0x248 */ s32 unk_248;
+    /* 0x24C */ s32 unk_24C;
 } ObjDriftice; // size = 0x250
 
-extern const ActorInit Obj_Driftice_InitVars;
+extern ActorInit Obj_Driftice_InitVars;
 
 #endif // Z_OBJ_DRIFTICE_H

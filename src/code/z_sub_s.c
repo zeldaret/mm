@@ -17,12 +17,12 @@ s32 D_801C5DBC[] = { 0, 1 }; // Unused
 /**
  * Finds the first EnDoor instance with unk_1A4 == 5 and the specified switchFlag.
  */
-EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 switchFlag) {
+EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
     Actor* actor = NULL;
     EnDoor* door;
 
     while (true) {
-        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        actor = SubS_FindActor(play, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
         if (actor == NULL) {
@@ -44,7 +44,7 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 switchFlag) {
     return door;
 }
 
-Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+Gfx* SubS_DrawTransformFlexLimb(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable,
                                 OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                                 TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx) {
     StandardLimb* limb;
@@ -62,11 +62,11 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     pos.z = limb->jointPos.z;
     newDList = limbDList = limb->dList;
 
-    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
-        transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
+        transformLimbDraw(play, limbIndex, actor, &gfx);
 
         if (newDList != NULL) {
             Matrix_ToMtx(*mtx);
@@ -80,15 +80,15 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
         Matrix_Pop();
     }
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
+        postLimbDraw(play, limbIndex, &limbDList, &rot, actor, &gfx);
     }
     if (limb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+        gfx = SubS_DrawTransformFlexLimb(play, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
     Matrix_Pop();
     if (limb->sibling != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+        gfx = SubS_DrawTransformFlexLimb(play, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
     return gfx;
@@ -103,7 +103,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
  * coordinates.
  * Note that the `TransformLimbDraw` does not have a NULL check, so must be provided even if empty.
  */
-Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount,
                             OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* rootLimb;
@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return NULL;
@@ -128,11 +128,11 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     newDlist = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if (overrideLimbDraw == NULL || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
-        transformLimbDraw(globalCtx, 1, actor, &gfx);
+        transformLimbDraw(play, 1, actor, &gfx);
 
         if (newDlist != NULL) {
             Matrix_ToMtx(mtx);
@@ -147,21 +147,21 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     }
 
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, 1, &limbDList, &rot, actor, &gfx);
+        postLimbDraw(play, 1, &limbDList, &rot, actor, &gfx);
     }
 
     if (rootLimb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
-                                         postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(play, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                                         transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_Pop();
     return gfx;
 }
 
-s32 SubS_InCsMode(GlobalContext* globalCtx) {
+s32 SubS_InCsMode(PlayState* play) {
     s32 inCsMode = false;
 
-    if (Play_InCsMode(globalCtx)) {
+    if (Play_InCsMode(play)) {
         inCsMode = true;
     }
 
@@ -434,14 +434,14 @@ s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 way
 /**
  * Computes the initial Y component of a time based path
  *
- * @param[in] globalCtx
+ * @param[in] play
  * @param[in] path
  * @param[in] waypoint the current waypoint, this and the previous two points will be used to compute the target pos
  * @param[out] targetPos the computed position to move to, only the Y component has meaning
  *
  * @note Same note as SubS_TimePathing_Update()
  */
-void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 waypoint, Vec3f* targetPos) {
+void SubS_TimePathing_ComputeInitialY(PlayState* play, Path* path, s32 waypoint, Vec3f* targetPos) {
     Vec3s* points = Lib_SegmentedToVirtual(path->points);
     Vec3f posA;
     Vec3f posB;
@@ -475,19 +475,18 @@ void SubS_TimePathing_ComputeInitialY(GlobalContext* globalCtx, Path* path, s32 
     posB = *targetPos;
     posA.y = max;
     posB.y = min;
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &posResult, &outPoly, true, true, true, true,
-                                &bgId)) {
+    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &posResult, &outPoly, true, true, true, true, &bgId)) {
         targetPos->y = posResult.y;
     }
 }
 
-Path* SubS_GetAdditionalPath(GlobalContext* globalCtx, u8 pathIndex, s32 max) {
+Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
     Path* path;
     s32 i = 0;
 
     do {
-        path = &globalCtx->setupPathList[pathIndex];
-        if (i >= max) {
+        path = &play->setupPathList[pathIndex];
+        if (i >= limit) {
             break;
         }
         pathIndex = path->unk1;
@@ -500,7 +499,7 @@ Path* SubS_GetAdditionalPath(GlobalContext* globalCtx, u8 pathIndex, s32 max) {
 /**
  * Finds the nearest actor instance of a specified Id and category to an actor.
  */
-Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
     Actor* actorTmp;
     f32 dist;
@@ -509,7 +508,7 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     s32 isSetup = false;
 
     do {
-        actorIter = SubS_FindActor(globalCtx, actorIter, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
         actorTmp = actorIter;
         if (actorTmp == NULL) {
@@ -532,24 +531,24 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     return closestActor;
 }
 
-s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     s32 endFrame;
     s32 startFrame;
 
-    animations += index;
-    endFrame = animations->frameCount;
-    if (animations->frameCount < 0) {
-        endFrame = Animation_GetLastFrame(&animations->animation->common);
+    animationInfo += animIndex;
+    endFrame = animationInfo->frameCount;
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
-    startFrame = animations->startFrame;
+    startFrame = animationInfo->startFrame;
     if (startFrame >= endFrame || startFrame < 0) {
         return false;
     }
-    if (animations->playSpeed < 0.0f) {
+    if (animationInfo->playSpeed < 0.0f) {
         SWAP(s32, endFrame, startFrame);
     }
-    Animation_Change(skelAnime, animations->animation, animations->playSpeed, startFrame, endFrame, animations->mode,
-                     animations->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
     return true;
 }
 
@@ -586,7 +585,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     return reached;
 }
 
-Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s32* startPointIndex) {
+Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
     s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
@@ -599,7 +598,7 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     }
 
     while (pathIndex != 0xFF) {
-        path = &globalCtx->setupPathList[pathIndex];
+        path = &play->setupPathList[pathIndex];
         if (sPathDayFlags[day] & path->unk2) {
             found = true;
             break;
@@ -817,57 +816,66 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
+s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
     s32 ret = false;
     s16 x;
     s16 y;
     f32 xzDistToPlayerTemp;
 
-    Actor_GetScreenPos(globalCtx, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &x, &y);
 
     switch (type) {
         case 1:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_PickUp(actor, globalCtx, itemId, xzRange, yRange);
+            ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
             break;
+
         case 2:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 3:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 4:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
-            actor->flags |= 0x10000;
-            ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            actor->flags |= ACTOR_FLAG_10000;
+            ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
+
         case 5:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
-                actor->flags |= 0x10000;
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                actor->flags |= ACTOR_FLAG_10000;
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 6:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                actor->flags |= 0x10000;
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                actor->flags |= ACTOR_FLAG_10000;
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
+        default:
+            break;
     }
+
     return ret;
 }
 
@@ -1090,8 +1098,8 @@ s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
 }
 
-Path* SubS_GetPathByIndex(GlobalContext* globalCtx, s16 pathIndex, s16 max) {
-    return (pathIndex != max) ? &globalCtx->setupPathList[pathIndex] : NULL;
+Path* SubS_GetPathByIndex(PlayState* play, s16 pathIndex, s16 max) {
+    return (pathIndex != max) ? &play->setupPathList[pathIndex] : NULL;
 }
 
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst) {
@@ -1153,22 +1161,22 @@ s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* dis
     return Math_Atan2S(diffX, diffZ);
 }
 
-s8 SubS_IsObjectLoaded(s8 index, GlobalContext* globalCtx) {
-    return !Object_IsLoaded(&globalCtx->objectCtx, index) ? false : true;
+s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
+    return !Object_IsLoaded(&play->objectCtx, index) ? false : true;
 }
 
-s8 SubS_GetObjectIndex(s16 id, GlobalContext* globalCtx) {
-    return Object_GetIndex(&globalCtx->objectCtx, id);
+s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
+    return Object_GetIndex(&play->objectCtx, id);
 }
 
 /**
  * Finds the first actor instance of a specified Id and category.
  */
-Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, s16 actorId) {
     Actor* actor = actorListStart;
 
     if (actor == NULL) {
-        actor = globalCtx->actorCtx.actorLists[actorCategory].first;
+        actor = play->actorCtx.actorLists[actorCategory].first;
     }
 
     while (actor != NULL && actorId != actor->id) {
@@ -1178,9 +1186,9 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     return actor;
 }
 
-s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
+s32 SubS_FillLimbRotTables(PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
     s32 i;
-    u32 frames = globalCtx->gameplayFrames;
+    u32 frames = play->gameplayFrames;
 
     for (i = 0; i < numLimbs; i++) {
         limbRotTableY[i] = (i * 50 + 0x814) * frames;
@@ -1190,7 +1198,7 @@ s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* li
     return true;
 }
 
-s32 SubS_IsFloorAbove(GlobalContext* globalCtx, Vec3f* pos, f32 distAbove) {
+s32 SubS_IsFloorAbove(PlayState* play, Vec3f* pos, f32 distAbove) {
     CollisionPoly* outPoly;
     Vec3f posA;
     Vec3f posB;
@@ -1199,8 +1207,7 @@ s32 SubS_IsFloorAbove(GlobalContext* globalCtx, Vec3f* pos, f32 distAbove) {
 
     posA = posB = *pos;
     posB.y += distAbove;
-    return BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &posResult, &outPoly, false, true, false, true,
-                                   &bgId);
+    return BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &posResult, &outPoly, false, true, false, true, &bgId);
 }
 
 s32 SubS_CopyPointFromPathList(Path* paths, s32 pathIndex, s32 pointIndex, Vec3f* dst) {
@@ -1220,12 +1227,11 @@ u8 SubS_GetPathCountFromPathList(Path* paths, s32 pathIndex) {
     return path->count;
 }
 
-void SubS_ActorPathing_Init(GlobalContext* globalCtx, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath,
-                            Path* paths, s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex,
-                            u8 flags) {
+void SubS_ActorPathing_Init(PlayState* play, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath, Path* paths,
+                            s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex, u8 flags) {
     Path* path;
 
-    actorPath->setupPathList = globalCtx->setupPathList;
+    actorPath->setupPathList = play->setupPathList;
     actorPath->pathIndex = pathIndex;
     path = &paths[pathIndex];
     actorPath->points = Lib_SegmentedToVirtual(path->points);
@@ -1250,9 +1256,9 @@ void SubS_ActorPathing_Init(GlobalContext* globalCtx, Vec3f* worldPos, Actor* ac
     actorPath->prevFlags = flags;
 }
 
-s32 SubS_ActorPathing_Update(GlobalContext* globalCtx, ActorPathing* actorPath,
-                             ActorPathingComputeFunc computePointInfoFunc, ActorPathingUpdateFunc updateActorInfoFunc,
-                             ActorPathingUpdateFunc moveFunc, ActorPathingUpdateFunc setNextPointFunc) {
+s32 SubS_ActorPathing_Update(PlayState* play, ActorPathing* actorPath, ActorPathingComputeFunc computePointInfoFunc,
+                             ActorPathingUpdateFunc updateActorInfoFunc, ActorPathingUpdateFunc moveFunc,
+                             ActorPathingUpdateFunc setNextPointFunc) {
     s32 shouldSetNextPoint;
     s32 reupdate;
 
@@ -1272,24 +1278,24 @@ s32 SubS_ActorPathing_Update(GlobalContext* globalCtx, ActorPathing* actorPath,
     do {
         shouldSetNextPoint = false;
         if (actorPath->computePointInfoFunc != NULL) {
-            actorPath->computePointInfoFunc(globalCtx, actorPath);
+            actorPath->computePointInfoFunc(play, actorPath);
         }
         if (actorPath->updateActorInfoFunc != NULL) {
-            shouldSetNextPoint = actorPath->updateActorInfoFunc(globalCtx, actorPath);
+            shouldSetNextPoint = actorPath->updateActorInfoFunc(play, actorPath);
         }
         if (shouldSetNextPoint) {
             if (actorPath->setNextPointFunc != NULL) {
-                reupdate = actorPath->setNextPointFunc(globalCtx, actorPath);
+                reupdate = actorPath->setNextPointFunc(play, actorPath);
             }
         } else if (actorPath->moveFunc != NULL) {
-            reupdate = actorPath->moveFunc(globalCtx, actorPath);
+            reupdate = actorPath->moveFunc(play, actorPath);
         }
     } while (reupdate);
     actorPath->prevFlags = actorPath->flags;
     return false;
 }
 
-void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* actorPath) {
+void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath) {
     Vec3f diff;
 
     actorPath->curPoint.x = actorPath->points[actorPath->curPointIndex].x + actorPath->pointOffset.x;
@@ -1305,17 +1311,17 @@ void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* 
     actorPath->rotToCurPoint.z = 0;
 }
 
-s32 SubS_ActorPathing_MoveWithGravity(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 SubS_ActorPathing_MoveWithGravity(PlayState* play, ActorPathing* actorPath) {
     Actor_MoveWithGravity(actorPath->actor);
     return false;
 }
 
-s32 SubS_ActorPathing_MoveWithoutGravityReverse(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 SubS_ActorPathing_MoveWithoutGravityReverse(PlayState* play, ActorPathing* actorPath) {
     Actor_MoveWithoutGravityReverse(actorPath->actor);
     return false;
 }
 
-s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 SubS_ActorPathing_SetNextPoint(PlayState* play, ActorPathing* actorPath) {
     s32 reupdate = true;
 
     Math_Vec3f_Copy(&actorPath->prevPoint, &actorPath->curPoint);
@@ -1351,21 +1357,21 @@ s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actor
     return reupdate;
 }
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
-                                     s32* curIndex) {
-    AnimationSpeedInfo* animation = &animations[nextIndex];
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex,
+                                     s32* curAnimIndex) {
+    AnimationSpeedInfo* animation = &animationInfo[nextAnimIndex];
     f32 startFrame = skelAnime->curFrame;
     f32 endFrame;
     f32 morphFrames;
 
-    if ((*curIndex < 0) || (nextIndex == *curIndex)) {
+    if ((*curAnimIndex < 0) || (nextAnimIndex == *curAnimIndex)) {
         morphFrames = 0.0f;
-        if (*curIndex < 0) {
+        if (*curAnimIndex < 0) {
             startFrame = 0.0f;
         }
     } else {
         morphFrames = animation->morphFrames;
-        if (nextIndex != *curIndex) {
+        if (nextAnimIndex != *curAnimIndex) {
             startFrame = 0.0f;
         }
     }
@@ -1377,7 +1383,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     }
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, startFrame, endFrame, animation->mode,
                      morphFrames);
-    *curIndex = nextIndex;
+    *curAnimIndex = nextAnimIndex;
 }
 
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
@@ -1484,18 +1490,18 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
  * The callback should return `true` when the actor is succesfully verified.
  */
-Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
-                            s16 actorId, void* verifyData, VerifyActor verifyActor) {
+Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
+                            void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
-        actorIter = globalCtx->actorCtx.actorLists[actorCategory].first;
+        actorIter = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actorIter != NULL && (actorId != actorIter->id ||
-                                 (actorId == actorIter->id &&
-                                  (verifyActor == NULL ||
-                                   (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
+    while (actorIter != NULL &&
+           (actorId != actorIter->id ||
+            (actorId == actorIter->id &&
+             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 
@@ -1503,18 +1509,18 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
+s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
                   func_8013E748_VerifyFunc verifyFunc) {
     s32 ret = false;
 
-    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(globalCtx, actor, data))) {
-        ret = func_800B8500(actor, globalCtx, xzRange, yRange, exchangeItemId);
+    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(play, actor, data))) {
+        ret = func_800B8500(actor, play, xzRange, yRange, exchangeItemId);
     }
     return ret;
 }
 
-s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, void* data) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
+    Player* player = GET_PLAYER(play);
     Vec3s* yawTols = (Vec3s*)data;
     s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
@@ -1533,13 +1539,13 @@ s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, voi
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
                   s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+    return func_8013E748(actor, play, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
 /**

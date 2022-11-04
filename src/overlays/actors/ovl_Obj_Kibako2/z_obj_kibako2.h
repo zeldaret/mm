@@ -9,13 +9,13 @@
 #define KIBAKO2_CONTENTS(thisx) (((thisx)->params >> 0xF) & 1)
 
 typedef enum {
-    /*  0   */ CONTENTS_COLLECTIBLE,
-    /*  1   */ CONTENTS_SKULLTULA
+    /* 0 */ OBJKIBAKO2_CONTENTS_COLLECTIBLE,
+    /* 1 */ OBJKIBAKO2_CONTENTS_SKULLTULA
 } ObjKibako2Contents;
 
 struct ObjKibako2;
 
-typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2*, GlobalContext*);
+typedef void (*ObjKibako2ActionFunc)(struct ObjKibako2*, PlayState*);
 
 typedef struct ObjKibako2 {
     /* 0x000 */ DynaPolyActor dyna;
@@ -24,7 +24,5 @@ typedef struct ObjKibako2 {
     /* 0x1AC */ s8 unk_1AC;
     /* 0x1AD */ s8 skulltulaNoiseTimer;
 } ObjKibako2; // size = 0x1B0
-
-extern const ActorInit Obj_Kibako2_InitVars;
 
 #endif // Z_OBJ_KIBAKO2_H

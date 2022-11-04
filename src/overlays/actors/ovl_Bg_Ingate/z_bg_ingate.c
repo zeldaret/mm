@@ -11,22 +11,22 @@
 
 #define THIS ((BgIngate*)thisx)
 
-void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIngate_Init(Actor* thisx, PlayState* play2);
+void BgIngate_Destroy(Actor* thisx, PlayState* play);
+void BgIngate_Update(Actor* thisx, PlayState* play);
+void BgIngate_Draw(Actor* thisx, PlayState* play);
 
-Actor* BgIngate_FindActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
+Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId);
 s32 func_80953BEC(BgIngate* this);
 void func_80953B40(BgIngate* this);
-void func_80953F8C(BgIngate* this, GlobalContext* globalCtx);
-void func_80953F9C(BgIngate* this, GlobalContext* globalCtx);
-void func_809541B8(BgIngate* this, GlobalContext* globalCtx);
-void func_809542A0(BgIngate* this, GlobalContext* globalCtx);
-void func_80954340(BgIngate* this, GlobalContext* globalCtx);
-void func_809543D4(BgIngate* this, GlobalContext* globalCtx);
+void func_80953F8C(BgIngate* this, PlayState* play);
+void func_80953F9C(BgIngate* this, PlayState* play);
+void func_809541B8(BgIngate* this, PlayState* play);
+void func_809542A0(BgIngate* this, PlayState* play);
+void func_80954340(BgIngate* this, PlayState* play);
+void func_809543D4(BgIngate* this, PlayState* play);
 
-const ActorInit Bg_Ingate_InitVars = {
+ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
     ACTORCAT_BG,
     FLAGS,
@@ -42,17 +42,17 @@ const ActorInit Bg_Ingate_InitVars = {
  * @brief Searches for an actor based on the parameters given to the function. Returns Actor* of actor found or NULL
  *
  * @param this
- * @param globalCtx
+ * @param play
  * @param actorCat - Category of Actor
  * @param actorId - ID of actor to search for
  * @return Actor*
  */
-Actor* BgIngate_FindActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
+Actor* BgIngate_FindActor(BgIngate* this, PlayState* play, u8 actorCat, s16 actorId) {
     Actor* foundActor = NULL;
     Actor* tempActor;
 
     while (true) {
-        foundActor = SubS_FindActor(globalCtx, foundActor, actorCat, actorId);
+        foundActor = SubS_FindActor(play, foundActor, actorCat, actorId);
 
         if ((foundActor == NULL) || (((this != (BgIngate*)foundActor)) && (foundActor->update != NULL))) {
             break;
@@ -122,34 +122,34 @@ s32 func_80953BEC(BgIngate* this) {
     return false;
 }
 
-s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+s32 func_80953DA8(BgIngate* this, PlayState* play) {
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (gSaveContext.eventInf[3] & 0x20) {
-        func_800B7298(globalCtx, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, 7);
     } else {
         gSaveContext.eventInf[4] |= 2;
     }
-    func_800DFAC8(camera, 47);
-    globalCtx->unk_1887C = 0x63;
+    Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
+    play->unk_1887C = 0x63;
 
     return false;
 }
 
-void func_80953E38(GlobalContext* globalCtx) {
-    func_800DFAC8(Play_GetCamera(globalCtx, CAM_ID_MAIN), 1);
+void func_80953E38(PlayState* play) {
+    Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_NORMAL0);
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
         gSaveContext.eventInf[4] &= (u8)~2;
     }
 
-    globalCtx->unk_1887C = -1;
+    play->unk_1887C = -1;
 }
 
-void func_80953EA4(BgIngate* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80953EA4(BgIngate* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    func_800B7298(globalCtx, &this->dyna.actor, 0x3A);
+    func_800B7298(play, &this->dyna.actor, 0x3A);
     player->unk_3A0.x = this->dyna.actor.world.pos.x;
     player->unk_3A0.z = this->dyna.actor.world.pos.z;
     this->unk160 &= ~0x4;
@@ -157,15 +157,15 @@ void func_80953EA4(BgIngate* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80954340;
 }
 
-void func_80953F14(BgIngate* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80953F14(BgIngate* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     player->actor.shape.rot.y = this->dyna.actor.shape.rot.y;
     player->actor.world.rot.y = player->actor.shape.rot.y;
     player->currentYaw = player->actor.shape.rot.y;
     player->actor.focus.rot.y = player->actor.shape.rot.y;
     this->unk160 |= 0x10;
-    func_80953DA8(this, globalCtx);
+    func_80953DA8(this, play);
     if (this->timePath != NULL) {
         func_80953B40(this);
     }
@@ -173,28 +173,28 @@ void func_80953F14(BgIngate* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80953F9C;
 }
 
-void func_80953F8C(BgIngate* this, GlobalContext* globalCtx) {
+void func_80953F8C(BgIngate* this, PlayState* play) {
 }
 
-void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-    Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+void func_80953F9C(BgIngate* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
     if (!(gSaveContext.eventInf[4] & 1)) {
 
         if (!(gSaveContext.eventInf[3] & 0x20) && (this->unk160 & 0x10) && (this->unk16C == 0)) {
             this->dyna.actor.textId = 0x9E3;
-            Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
+            Message_StartTextbox(play, this->dyna.actor.textId, NULL);
             this->unk160 &= ~0x10;
         }
 
         if (this->unk160 & 2) {
 
             if (this->timePath->unk1 != 0xFF) {
-                func_80953E38(globalCtx);
-                func_800B7298(globalCtx, &this->dyna.actor, 7);
+                func_80953E38(play);
+                func_800B7298(play, &this->dyna.actor, 7);
                 this->dyna.actor.textId = 0x9E4;
-                Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
+                Message_StartTextbox(play, this->dyna.actor.textId, NULL);
                 this->unk16C += 1;
                 gSaveContext.save.weekEventReg[90] |= 0x40;
                 this->actionFunc = func_809543D4;
@@ -214,27 +214,27 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
     }
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
-            func_800DFAC8(camera, 1);
-            player->stateFlags1 |= 0x20;
-            globalCtx->actorCtx.unk5 &= ~0x4;
+            Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
+            player->stateFlags1 |= PLAYER_STATE1_20;
+            play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
         } else {
-            func_800DFAC8(camera, 47);
-            player->stateFlags1 &= ~0x20;
+            Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     }
     this->unk16E = ActorCutscene_GetCurrentIndex();
 }
 
-void func_809541B8(BgIngate* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809541B8(BgIngate* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (this->unk160 & 0x4) {
         if ((player->transformation == PLAYER_FORM_HUMAN) && (player->actor.bgCheckFlags & 1) &&
             (this->dyna.actor.xzDistToPlayer < 40.0f)) {
             if (this->dyna.actor.playerHeightRel > 15.0f) {
-                func_800B7298(globalCtx, &this->dyna.actor, 7);
+                func_800B7298(play, &this->dyna.actor, 7);
                 this->dyna.actor.textId = 0x9E6;
-                Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
+                Message_StartTextbox(play, this->dyna.actor.textId, NULL);
                 this->actionFunc = func_809543D4;
             }
         }
@@ -243,93 +243,93 @@ void func_809541B8(BgIngate* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
+void func_809542A0(BgIngate* this, PlayState* play) {
     if (gSaveContext.eventInf[5] & 1) {
-        globalCtx->nextEntranceIndex = 0xA820;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 2);
         gSaveContext.eventInf[5] &= (u8)~1;
     } else {
-        globalCtx->nextEntranceIndex = 0xA810;
+        play->nextEntrance = ENTRANCE(TOURIST_INFORMATION, 1);
     }
     gSaveContext.nextCutsceneIndex = 0;
-    globalCtx->sceneLoadFlag = 0x14;
-    globalCtx->unk_1887F = 3;
-    gSaveContext.nextTransition = 3;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_03;
     this->actionFunc = func_80953F8C;
     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();
 }
 
-void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
+void func_80954340(BgIngate* this, PlayState* play) {
     if (!DECR(this->unk16A)) {
         if (this->timePath != NULL) {
-            func_800B7298(globalCtx, &this->dyna.actor, 6);
-            this->timePath = &globalCtx->setupPathList[this->timePath->unk1];
-            func_80953F14(this, globalCtx);
+            func_800B7298(play, &this->dyna.actor, 6);
+            this->timePath = &play->setupPathList[this->timePath->unk1];
+            func_80953F14(this, play);
             func_800FE484();
         }
     }
 }
 
-void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
-    u8 talkState = Message_GetState(&globalCtx->msgCtx);
+void func_809543D4(BgIngate* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
 
-    if (((talkState == 4) || (talkState == 5)) && Message_ShouldAdvance(globalCtx)) {
+    if (((talkState == TEXT_STATE_CHOICE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;
-                func_80151938(globalCtx, this->dyna.actor.textId);
+                func_80151938(play, this->dyna.actor.textId);
                 break;
             case 0x9E5:
-                if (globalCtx->msgCtx.choiceIndex == 0) {
-                    func_800B7298(globalCtx, &this->dyna.actor, 6);
+                if (play->msgCtx.choiceIndex == 0) {
+                    func_800B7298(play, &this->dyna.actor, 6);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
                     func_800FE498();
                     func_8019F208();
                 } else {
                     if (this->timePath != NULL) {
-                        this->timePath = &globalCtx->setupPathList[this->timePath->unk1];
+                        this->timePath = &play->setupPathList[this->timePath->unk1];
                     }
-                    func_80953F14(this, globalCtx);
+                    func_80953F14(this, play);
                     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
                     func_8019F230();
                 }
-                func_801477B4(globalCtx);
+                func_801477B4(play);
                 break;
             case 0x9E6:
-                if (globalCtx->msgCtx.choiceIndex == 0) {
-                    func_80953EA4(this, globalCtx);
+                if (play->msgCtx.choiceIndex == 0) {
+                    func_80953EA4(this, play);
                     gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
                     func_8019F208();
                 } else {
-                    func_800B7298(globalCtx, &this->dyna.actor, 6);
+                    func_800B7298(play, &this->dyna.actor, 6);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
                     func_800FE498();
                     func_8019F230();
                 }
-                func_801477B4(globalCtx);
+                func_801477B4(play);
                 break;
         }
     }
 }
 
-void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void BgIngate_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     BgIngate* this = THIS;
     s32 phi_a2;
     Vec3s* sp38;
     Vec3f sp2C;
     Vec3f sp20;
 
-    if (BgIngate_FindActor(this, globalCtx, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
+    if (BgIngate_FindActor(this, play, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
         DynaPolyActor_Init(&this->dyna, 3);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gSichitaiBoatCol);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gSichitaiBoatCol);
         this->unk160 = 0;
         this->unk160 |= 0x8;
         this->unk160 |= 0x10;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->timePath = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (gSaveContext.save.weekEventReg[20] & 2) {
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
@@ -340,10 +340,10 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->actionFunc = func_809541B8;
         } else {
             phi_a2 = 0;
-            if (globalCtx->curSpawn == 6) {
-                func_80953F14(this, globalCtx);
+            if (play->curSpawn == 6) {
+                func_80953F14(this, play);
                 if (gSaveContext.eventInf[3] & 0x20) {
-                    func_80112AFC(globalCtx);
+                    func_80112AFC(play);
                 } else {
                     gSaveContext.eventInf[4] |= 2;
                 }
@@ -351,7 +351,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->actionFunc = func_80953F8C;
             }
         }
-        this->timePath = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
         if (this->timePath != NULL) {
             sp38 = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
@@ -362,32 +362,32 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->dyna.actor.world.pos.y = -15.0f;
             this->dyna.actor.world.pos.z = sp2C.z;
         }
-        this->timePath = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIngate_Destroy(Actor* thisx, PlayState* play) {
     BgIngate* this = THIS;
 
     if (this->unk160 & 8) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
-void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIngate_Update(Actor* thisx, PlayState* play) {
     BgIngate* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void BgIngate_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoat);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

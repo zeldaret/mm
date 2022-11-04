@@ -10,12 +10,12 @@
 
 #define THIS ((EnKitan*)thisx)
 
-void EnKitan_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKitan_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKitan_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnKitan_Init(Actor* thisx, PlayState* play);
+void EnKitan_Destroy(Actor* thisx, PlayState* play);
+void EnKitan_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Kitan_InitVars = {
+ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
     ACTORCAT_NPC,
     FLAGS,

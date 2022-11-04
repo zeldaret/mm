@@ -11,11 +11,11 @@
 
 #define THIS ((ObjEnding*)thisx)
 
-void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjEnding_Init(Actor* thisx, PlayState* play);
+void ObjEnding_Update(Actor* thisx, PlayState* play);
+void ObjEnding_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Ending_InitVars = {
+ActorInit Obj_Ending_InitVars = {
     ACTOR_OBJ_ENDING,
     ACTORCAT_BG,
     FLAGS,
@@ -36,7 +36,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEnding_Init(Actor* thisx, PlayState* play) {
     ObjEnding* this = THIS;
     AnimatedMaterial* animMat;
 
@@ -48,23 +48,23 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjEnding_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEnding_Update(Actor* thisx, PlayState* play) {
 }
 
-void ObjEnding_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjEnding_Draw(Actor* thisx, PlayState* play) {
     ObjEnding* this = THIS;
     Gfx* dl1;
     Gfx* dl2;
 
     if (this->animMat != NULL) {
-        AnimatedMat_Draw(globalCtx, this->animMat);
+        AnimatedMat_Draw(play, this->animMat);
     }
     dl1 = this->modelInfo->dLists[0];
     if (dl1 != NULL) {
-        Gfx_DrawDListOpa(globalCtx, dl1);
+        Gfx_DrawDListOpa(play, dl1);
     }
     dl2 = this->modelInfo->dLists[1];
     if (dl2 != NULL) {
-        Gfx_DrawDListXlu(globalCtx, dl2);
+        Gfx_DrawDListXlu(play, dl2);
     }
 }

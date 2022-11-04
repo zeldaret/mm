@@ -12,17 +12,17 @@
 
 #define THIS ((DemoKankyo*)thisx)
 
-void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx);
-void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoKankyo_Init(Actor* thisx, PlayState* play);
+void DemoKankyo_Destroy(Actor* thisx, PlayState* play);
+void DemoKankyo_Update(Actor* thisx, PlayState* play);
+void DemoKankyo_Draw(Actor* thisx, PlayState* play);
 
-void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx);
+void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play);
 
 static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at once
 static s16 sLostWoodsSkyFishParticleNum = 0;
 
-const ActorInit Demo_Kankyo_InitVars = {
+ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -40,7 +40,7 @@ void DemoKankyo_SetupAction(DemoKankyo* this, DemoKankyoActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
+void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, PlayState* play) {
     s32 pad;
     s32 i;
     f32 randSkyfishParticleNum;
@@ -53,16 +53,16 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     f32 posCenterY;
     f32 posCenterZ;
     Vec3f eyeToAt;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
-    if (globalCtx->roomCtx.unk7A[1] != 0) {
-        if (globalCtx->envCtx.unk_F2[3] != 0) {
-            globalCtx->envCtx.unk_F2[3]--;
+    if (play->roomCtx.unk7A[1] != 0) {
+        if (play->envCtx.unk_F2[3] != 0) {
+            play->envCtx.unk_F2[3]--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
-    } else if (globalCtx->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
-        globalCtx->envCtx.unk_F2[3] += 16;
+    } else if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
+        play->envCtx.unk_F2[3] += 16;
     }
 
     // note: DemoKankyo can crash if placed in an area that snows (ObjectKankyo)
@@ -70,12 +70,12 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     // causing DemoKankyo to write beyond its efffect array boundry
     // this crash can occur if the two actors are in different scenes connected by an exit
     // e.g. if you add DemoKankyo to GoronShrine, you will crash entering/leaving through door
-    for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
+    for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
         repositionLimit = 130.0f;
 
-        eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
-        eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
-        eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
+        eyeToAt.x = play->view.at.x - play->view.eye.x;
+        eyeToAt.y = play->view.at.y - play->view.eye.y;
+        eyeToAt.z = play->view.at.z - play->view.eye.z;
         eyeToAtMag = sqrtf(SQXYZ(eyeToAt));
         eyeToAtNormX = eyeToAt.x / eyeToAtMag;
         eyeToAtNormY = eyeToAt.y / eyeToAtMag;
@@ -83,9 +83,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
 
         switch (this->effects[i].state) {
             case DEMO_KANKYO_STATE_INIT:
-                this->effects[i].posBase.x = globalCtx->view.eye.x + (eyeToAtNormX * 80.0f);
-                this->effects[i].posBase.y = globalCtx->view.eye.y + (eyeToAtNormY * 80.0f);
-                this->effects[i].posBase.z = globalCtx->view.eye.z + (eyeToAtNormZ * 80.0f);
+                this->effects[i].posBase.x = play->view.eye.x + (eyeToAtNormX * 80.0f);
+                this->effects[i].posBase.y = play->view.eye.y + (eyeToAtNormY * 80.0f);
+                this->effects[i].posBase.z = play->view.eye.z + (eyeToAtNormZ * 80.0f);
 
                 this->effects[i].posOffset.x = (Rand_ZeroOne() - 0.5f) * 160.0f;
                 this->effects[i].posOffset.y = 30.0f;
@@ -109,9 +109,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
             case DEMO_KANKYO_STATE_SINGLE:
             case DEMO_KANKYO_STATE_SKYFISH:
                 this->effects[i].alphaClock++;
-                posCenterX = globalCtx->view.eye.x + (eyeToAtNormX * 80.0f);
-                posCenterY = globalCtx->view.eye.y + (eyeToAtNormY * 80.0f);
-                posCenterZ = globalCtx->view.eye.z + (eyeToAtNormZ * 80.0f);
+                posCenterX = play->view.eye.x + (eyeToAtNormX * 80.0f);
+                posCenterY = play->view.eye.y + (eyeToAtNormY * 80.0f);
+                posCenterZ = play->view.eye.z + (eyeToAtNormZ * 80.0f);
                 this->effects[i].posOffsetPrev.x = this->effects[i].posOffset.x;
                 this->effects[i].posOffsetPrev.y = this->effects[i].posOffset.y;
                 this->effects[i].posOffsetPrev.z = this->effects[i].posOffset.z;
@@ -278,8 +278,8 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
     }
 }
 
-void DemoKakyo_GiantObjectCheck(DemoKankyo* this, GlobalContext* globalCtx) {
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objectId)) {
+void DemoKakyo_GiantObjectCheck(DemoKankyo* this, PlayState* play) {
+    if (Object_IsLoaded(&play->objectCtx, this->objectId)) {
         this->isSafeToDrawGiants = true;
         this->actor.objBankIndex = this->objectId;
         DemoKankyo_SetupAction(this, DemoKakyo_MoonSparklesActionFunc);
@@ -289,7 +289,7 @@ void DemoKakyo_GiantObjectCheck(DemoKankyo* this, GlobalContext* globalCtx) {
 /*
  * used by Moon AND giants types
  */
-void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx) {
+void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play) {
     s32 i;
     Vec3f eyeToAt;
     f32 eyeToAtNormX;
@@ -304,13 +304,13 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     s32 pad1;
     Vec3f worldPos;
 
-    if (globalCtx->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
-        globalCtx->envCtx.unk_F2[3] += 16;
+    if (play->envCtx.unk_F2[3] < DEMOKANKYO_EFFECT_COUNT) {
+        play->envCtx.unk_F2[3] += 16;
     }
 
-    eyeToAt.x = globalCtx->view.at.x - globalCtx->view.eye.x;
-    eyeToAt.y = globalCtx->view.at.y - globalCtx->view.eye.y;
-    eyeToAt.z = globalCtx->view.at.z - globalCtx->view.eye.z;
+    eyeToAt.x = play->view.at.x - play->view.eye.x;
+    eyeToAt.y = play->view.at.y - play->view.eye.y;
+    eyeToAt.z = play->view.at.z - play->view.eye.z;
     eyeToAtMag = sqrtf(SQXYZ(eyeToAt));
     eyeToAtNormX = eyeToAt.x / eyeToAtMag;
     eyeToAtNormY = eyeToAt.y / eyeToAtMag;
@@ -318,12 +318,12 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
 
     halfScreenHeight = SCREEN_HEIGHT / 2;
 
-    for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
+    for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
         switch (this->effects[i].state) {
             case DEMO_KANKYO_STATE_INIT:
-                this->effects[i].posBase.x = globalCtx->view.eye.x + (eyeToAtNormX * halfScreenHeight);
-                this->effects[i].posBase.y = globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight);
-                this->effects[i].posBase.z = globalCtx->view.eye.z + (eyeToAtNormZ * halfScreenHeight);
+                this->effects[i].posBase.x = play->view.eye.x + (eyeToAtNormX * halfScreenHeight);
+                this->effects[i].posBase.y = play->view.eye.y + (eyeToAtNormY * halfScreenHeight);
+                this->effects[i].posBase.z = play->view.eye.z + (eyeToAtNormZ * halfScreenHeight);
 
                 this->effects[i].posOffset.x = (Rand_ZeroOne() - 0.5f) * (2.0f * halfScreenHeight);
                 this->effects[i].posOffset.y = (Rand_ZeroOne() - 0.5f) * (2.0f * halfScreenHeight);
@@ -351,12 +351,12 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_MOON) { // this function gets reused for giants too
                     this->effects[i].posBase.y =
-                        globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight) + (SCREEN_HEIGHT / 3);
+                        play->view.eye.y + (eyeToAtNormY * halfScreenHeight) + (SCREEN_HEIGHT / 3);
                 }
 
-                newEye.x = globalCtx->view.eye.x + (eyeToAtNormX * halfScreenHeight);
-                newEye.y = globalCtx->view.eye.y + (eyeToAtNormY * halfScreenHeight);
-                newEye.z = globalCtx->view.eye.z + (eyeToAtNormZ * halfScreenHeight);
+                newEye.x = play->view.eye.x + (eyeToAtNormX * halfScreenHeight);
+                newEye.y = play->view.eye.y + (eyeToAtNormY * halfScreenHeight);
+                newEye.z = play->view.eye.z + (eyeToAtNormZ * halfScreenHeight);
 
                 Math_SmoothStepToF(&this->effects[i].scale, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->effects[i].speed, this->effects[i].speedTarget, 0.5f, 0.2f, 0.02f);
@@ -403,7 +403,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
                 worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
 
-                randZeroOne = Math_Vec3f_DistXZ(&worldPos, &globalCtx->view.eye) / 200.0f;
+                randZeroOne = Math_Vec3f_DistXZ(&worldPos, &play->view.eye) / 200.0f;
                 randZeroOne = CLAMP(randZeroOne, 0.0f, 1.0f);
                 halfScreenWidth = 100.0f + randZeroOne + 60.0f; // range 160 to 161...? thats about half screen width
 
@@ -433,7 +433,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
     }
 }
 
-void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DemoKankyo_Init(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
     s32 pad;
     s32 i;
@@ -454,13 +454,13 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
                 DemoKankyo_SetupAction(this, DemoKakyo_LostWoodsSparkleActionFunc);
                 sLostWoodsSparklesMutex = true;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             break;
 
         case DEMO_KANKYO_TYPE_GIANTS:
             this->isSafeToDrawGiants = false;
-            objId = Object_GetIndex(&globalCtx->objectCtx, sObjectBubbleIndex);
+            objId = Object_GetIndex(&play->objectCtx, sObjectBubbleIndex);
             DemoKankyo_SetupAction(this, DemoKakyo_GiantObjectCheck);
             break;
 
@@ -481,20 +481,20 @@ void DemoKankyo_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void DemoKankyo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DemoKankyo_Destroy(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
-void DemoKankyo_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DemoKankyo_Update(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     DemoKankyo* this = THIS;
     s16 i;
     f32 scaleAlpha;
@@ -502,24 +502,24 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f screenPos;
 
     // if not underwater
-    if (!(globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100)) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+    if (!(play->cameraPtrs[CAM_ID_MAIN]->stateFlags & CAM_STATE_UNDERWATER)) {
+        OPEN_DISPS(play->state.gfxCtx);
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+        gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
-        for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
+        for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
 
-            func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
+            Play_GetScreenPos(play, &worldPos, &screenPos);
 
             // checking if particle is on screen
-            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
-                screenPos.y < SCREEN_HEIGHT) {
+            if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+                (screenPos.y < SCREEN_HEIGHT)) {
                 Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->effects[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
@@ -570,22 +570,22 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-                Matrix_RotateZF(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+                Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+                gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
             }
         }
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
 // draw, giants and moon
-void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     DemoKankyo* this = THIS;
     s16 i;
     f32 alphaScale;
@@ -594,21 +594,21 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
         Vec3f worldPos;
         Vec3f screenPos;
         s32 pad;
-        GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+        GraphicsContext* gfxCtx = play->state.gfxCtx;
 
         OPEN_DISPS(gfxCtx);
         func_8012C2DC(gfxCtx);
 
-        for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
+        for (i = 0; i < play->envCtx.unk_F2[3]; i++) {
             worldPos.x = this->effects[i].posBase.x + this->effects[i].posOffset.x;
             worldPos.y = this->effects[i].posBase.y + this->effects[i].posOffset.y;
             worldPos.z = this->effects[i].posBase.z + this->effects[i].posOffset.z;
 
-            func_80169474(globalCtx, &worldPos, &screenPos); // unnamed Play_ function, func_800C016C from OoT
+            Play_GetScreenPos(play, &worldPos, &screenPos);
 
             // checking if effect is on screen
-            if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
-                screenPos.y < SCREEN_HEIGHT) {
+            if ((screenPos.x >= 0.0f) && (screenPos.x < SCREEN_WIDTH) && (screenPos.y >= 0.0f) &&
+                (screenPos.y < SCREEN_HEIGHT)) {
                 Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 alphaScale = this->effects[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
@@ -616,7 +616,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 }
                 Matrix_Scale(this->effects[i].scale * alphaScale, this->effects[i].scale * alphaScale,
                              this->effects[i].scale * alphaScale, MTXMODE_APPLY);
-                alphaScale = Math_Vec3f_DistXYZ(&worldPos, &globalCtx->view.eye) / 300.0f;
+                alphaScale = Math_Vec3f_DistXYZ(&worldPos, &play->view.eye) / 300.0f;
                 alphaScale = CLAMP(1.0f - alphaScale, 0.0f, 1.0f);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
@@ -639,19 +639,19 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
-                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
-                Matrix_RotateZF(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
+                Matrix_RotateZF(DEGF_TO_RADF(play->state.frames * 20.0f), MTXMODE_APPLY);
 
-                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
-                    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
+                    gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
             }
         }
@@ -660,17 +660,17 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-void DemoKankyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DemoKankyo_Draw(Actor* thisx, PlayState* play) {
     DemoKankyo* this = THIS;
 
     switch (this->actor.params) {
         case DEMO_KANKYO_TYPE_LOSTWOODS:
-            DemoKakyo_DrawLostWoodsSparkle(&this->actor, globalCtx);
+            DemoKakyo_DrawLostWoodsSparkle(&this->actor, play);
             break;
 
         case DEMO_KANKYO_TYPE_GIANTS:
         case DEMO_KANKYO_TYPE_MOON:
-            DemoKankyo_DrawMoonAndGiant(&this->actor, globalCtx);
+            DemoKankyo_DrawMoonAndGiant(&this->actor, play);
             break;
     }
 }

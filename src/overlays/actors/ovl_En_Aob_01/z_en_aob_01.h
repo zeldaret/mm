@@ -6,7 +6,7 @@
 
 struct EnAob01;
 
-typedef void (*EnAob01ActionFunc)(struct EnAob01*, GlobalContext*);
+typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 
 #define ENAOB01_GET_7E00_1(thisx) ((thisx)->params & 0x7E00)
 #define ENAOB01_GET_7E00_2(thisx) (((thisx)->params & 0x7E00) >> 9)
@@ -41,7 +41,5 @@ typedef struct EnAob01 {
     /* 0x43C */ s32 unk_43C;
     /* 0x440 */ s16 unk_440;
 } EnAob01; // size = 0x444
-
-extern const ActorInit En_Aob_01_InitVars;
 
 #endif // Z_EN_AOB_01_H

@@ -11,12 +11,12 @@
 
 #define THIS ((ObjTokeiTurret*)thisx)
 
-void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjTokeiTurret_Init(Actor* thisx, PlayState* play);
+void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play);
+void ObjTokeiTurret_Update(Actor* thisx, PlayState* play);
+void ObjTokeiTurret_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Tokei_Turret_InitVars = {
+ActorInit Obj_Tokei_Turret_InitVars = {
     ACTOR_OBJ_TOKEI_TURRET,
     ACTORCAT_BG,
     FLAGS,
@@ -33,7 +33,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTokeiTurret_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjTokeiTurret* this = THIS;
     s32 tier;
@@ -46,41 +46,41 @@ void ObjTokeiTurret_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 240.0f;
 
         if (tier == TURRET_TIER_BASE) {
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTownTurretBaseCol);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTownTurretBaseCol);
         } else {
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClockTownTurretPlatformCol);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gClockTownTurretPlatformCol);
         }
     } else {
         this->dyna.actor.uncullZoneDownward = this->dyna.actor.uncullZoneScale = 1300.0;
     }
 }
 
-void ObjTokeiTurret_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTokeiTurret_Destroy(Actor* thisx, PlayState* play) {
     ObjTokeiTurret* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void ObjTokeiTurret_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTokeiTurret_Update(Actor* thisx, PlayState* play) {
 }
 
-void ObjTokeiTurret_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjTokeiTurret_Draw(Actor* thisx, PlayState* play) {
     ObjTokeiTurret* this = THIS;
     Gfx* gfx;
 
     if (OBJ_TOKEI_TURRET_TIER_TYPE(thisx) == TURRET_TIER_TOP) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         gfx = POLY_OPA_DISP;
         gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
-        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
         gSPDisplayList(gfx++, gClockTownTurretPlatformTopDL);
         POLY_OPA_DISP = gfx;
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     } else if (OBJ_TOKEI_TURRET_TIER_TYPE(thisx) == TURRET_TIER_BASE) {
-        Gfx_DrawDListOpa(globalCtx, gClockTownTurretPlatformBaseDL);
+        Gfx_DrawDListOpa(play, gClockTownTurretPlatformBaseDL);
     } else {
-        Gfx_DrawDListOpa(globalCtx, gClockTownFlagsDL);
+        Gfx_DrawDListOpa(play, gClockTownFlagsDL);
     }
 }

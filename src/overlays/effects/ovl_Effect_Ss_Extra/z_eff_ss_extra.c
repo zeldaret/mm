@@ -10,9 +10,9 @@
 
 #define PARAMS ((EffectSsExtraInitParams*)initParamsx)
 
-u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsExtra_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
 static s16 sScores[] = { 30, 60, 100 };
 
@@ -28,16 +28,16 @@ static TexturePtr sPointTextures[] = { gYabusamePoint30Tex, gYabusamePoint60Tex,
 #define rScoreIndex regs[2]
 #define rScale regs[3]
 
-u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     s32 pad;
     EffectSsExtraInitParams* params = PARAMS;
     s32 objIndex;
 
-    objIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_YABUSAME_POINT);
-    if ((objIndex >= 0) && (Object_IsLoaded(&globalCtx->objectCtx, objIndex))) {
+    objIndex = Object_GetIndex(&play->objectCtx, OBJECT_YABUSAME_POINT);
+    if ((objIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objIndex))) {
         void* segBackup = gSegments[6];
 
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
 
         this->pos = params->pos;
         this->velocity = params->velocity;
@@ -56,35 +56,35 @@ u32 EffectSsExtra_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     return 0;
 }
 
-void EffectSsExtra_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
     f32 scale;
     void* storedSegment;
 
     scale = this->rScale / 100.0f;
-    storedSegment = globalCtx->objectCtx.status[this->rObjId].segment;
+    storedSegment = play->objectCtx.status[this->rObjId].segment;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(storedSegment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(storedSegment);
 
     gSPSegment(POLY_XLU_DISP++, 0x06, storedSegment);
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+    func_8012C2DC(play->state.gfxCtx);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sPointTextures[this->rScoreIndex]));
 
     gSPDisplayList(POLY_XLU_DISP++, &gYabusamePointDL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EffectSsExtra_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this) {
     if (this->rTimer != 0) {
         this->rTimer--;
     } else {
@@ -92,6 +92,6 @@ void EffectSsExtra_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     }
 
     if (this->rTimer == 1) {
-        globalCtx->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
+        play->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
     }
 }

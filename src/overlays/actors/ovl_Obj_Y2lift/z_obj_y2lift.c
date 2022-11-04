@@ -11,12 +11,12 @@
 
 #define THIS ((ObjY2lift*)thisx)
 
-void ObjY2lift_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2lift_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjY2lift_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjY2lift_Init(Actor* thisx, PlayState* play);
+void ObjY2lift_Destroy(Actor* thisx, PlayState* play);
+void ObjY2lift_Update(Actor* thisx, PlayState* play);
+void ObjY2lift_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Y2lift_InitVars = {
+ActorInit Obj_Y2lift_InitVars = {
     ACTOR_OBJ_Y2LIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -35,21 +35,21 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 800, ICHAIN_STOP),
 };
 
-void ObjY2lift_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjY2lift_Init(Actor* thisx, PlayState* play) {
     ObjY2lift* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gPirateLiftPlatformCol);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gPirateLiftPlatformCol);
 }
 
-void ObjY2lift_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjY2lift_Destroy(Actor* thisx, PlayState* play) {
     ObjY2lift* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjY2lift_Update(Actor* thisx, PlayState* play) {
     ObjY2lift* this = THIS;
     f32 temp_fv0 = this->dyna.actor.world.pos.y;
     f32 targetVelocityY = 0.0f;
@@ -90,6 +90,6 @@ void ObjY2lift_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjY2lift_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, gPirateLiftPlatformDL);
+void ObjY2lift_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, gPirateLiftPlatformDL);
 }

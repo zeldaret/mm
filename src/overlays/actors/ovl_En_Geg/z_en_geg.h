@@ -5,7 +5,7 @@
 
 struct EnGeg;
 
-typedef void (*EnGegActionFunc)(struct EnGeg*, GlobalContext*);
+typedef void (*EnGegActionFunc)(struct EnGeg*, PlayState*);
 
 typedef struct EnGeg {
     /* 0x000 */ Actor actor;
@@ -45,7 +45,5 @@ typedef struct EnGeg {
     /* 0x4E0 */ s16 unk_4E0;
     /* 0x4E4 */ Vec3f unk_4E4;
 } EnGeg; // size = 0x4F0
-
-extern const ActorInit En_Geg_InitVars;
 
 #endif // Z_EN_GEG_H

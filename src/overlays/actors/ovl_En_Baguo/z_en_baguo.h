@@ -6,7 +6,7 @@
 
 struct EnBaguo;
 
-typedef void (*EnBaguoActionFunc)(struct EnBaguo*, GlobalContext*);
+typedef void (*EnBaguoActionFunc)(struct EnBaguo*, PlayState*);
 
 /**
  * When a Nejiron explodes, rock particles fly out from where it exploded.
@@ -43,7 +43,5 @@ typedef struct EnBaguo {
     /* 0x1FC */ ColliderJntSphElement colliderElements[1];
     /* 0x23C */ NejironEffect effects[EN_BAGUO_EFFECT_COUNT];
 } EnBaguo; // size = 0x8CC
-
-extern const ActorInit En_Baguo_InitVars;
 
 #endif // Z_EN_BAGUO_H

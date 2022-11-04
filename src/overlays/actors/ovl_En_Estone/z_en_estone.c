@@ -10,16 +10,16 @@
 
 #define THIS ((EnEstone*)thisx)
 
-void EnEstone_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEstone_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEstone_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEstone_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEstone_Init(Actor* thisx, PlayState* play);
+void EnEstone_Destroy(Actor* thisx, PlayState* play);
+void EnEstone_Update(Actor* thisx, PlayState* play);
+void EnEstone_Draw(Actor* thisx, PlayState* play);
 
-void func_80A9A1DC(EnEstone* this, GlobalContext* globalCtx);
-void func_80A9A4B0(EnEstone* this, GlobalContext* globalCtx);
+void func_80A9A1DC(EnEstone* this, PlayState* play);
+void func_80A9A4B0(EnEstone* this, PlayState* play);
 
 #if 0
-const ActorInit En_Estone_InitVars = {
+ActorInit En_Estone_InitVars = {
     ACTOR_EN_ESTONE,
     ACTORCAT_PROP,
     FLAGS,

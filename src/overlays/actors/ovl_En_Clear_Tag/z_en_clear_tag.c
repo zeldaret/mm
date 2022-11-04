@@ -23,15 +23,15 @@ typedef enum {
     /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
 } ClearTagEffectType;
 
-void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_Init(Actor* thisx, PlayState* play);
+void EnClearTag_Destroy(Actor* thisx, PlayState* play);
+void EnClearTag_Update(Actor* thisx, PlayState* play);
+void EnClearTag_Draw(Actor* thisx, PlayState* play);
 
-void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx);
-void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx);
+void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
+void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
-const ActorInit En_Clear_Tag_InitVars = {
+ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -406,14 +406,14 @@ void EnClearTag_CreateSplashEffect(EnClearTag* this, Vec3f* pos, s16 effectsTime
  * EnClearTag destructor.
  * No Operation takes place.
  */
-void EnClearTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnClearTag_Destroy(Actor* thisx, PlayState* play) {
 }
 
 /**
  * EnClearTag constructor.
  * This initializes effects, and sets up ClearTag instance data.
  */
-void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnClearTag_Init(Actor* thisx, PlayState* play) {
     s32 pad[3];
     EnClearTag* this = THIS;
     f32 lightRayMaxScale;
@@ -463,7 +463,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             // Initialize flash effect
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 30.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 30.0f, 100.0f, 4);
             pos = this->actor.world.pos;
             EnClearTag_CreateFlashEffect(this, &pos, sFlashMaxScale[thisx->params], this->actor.floorHeight);
 
@@ -531,8 +531,8 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Camera* mainCam;
     s32 pad;
 
@@ -556,21 +556,21 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
             break;
         case 1:
-            Cutscene_Start(globalCtx, &globalCtx->csCtx);
-            this->subCamId = Play_CreateSubCamera(globalCtx);
-            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
-            func_800B7298(globalCtx, &this->actor, 4);
-            mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+            Cutscene_Start(play, &play->csCtx);
+            this->subCamId = Play_CreateSubCamera(play);
+            Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
+            func_800B7298(play, &this->actor, 4);
+            mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             this->subCamEye.x = mainCam->eye.x;
             this->subCamEye.y = mainCam->eye.y;
             this->subCamEye.z = mainCam->eye.z;
             this->subCamAt.x = mainCam->at.x;
             this->subCamAt.y = mainCam->at.y;
             this->subCamAt.z = mainCam->at.z;
-            Message_StartTextbox(globalCtx, 0xF, NULL);
+            Message_StartTextbox(play, 0xF, NULL);
             this->cameraState = 2;
-            func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
+            func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;
@@ -579,23 +579,23 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
 
             player->actor.speedXZ = 0.0f;
-            if (Message_GetState(&globalCtx->msgCtx) == 0) {
-                mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+            if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
+                mainCam = Play_GetCamera(play, CAM_ID_MAIN);
                 mainCam->eye = this->subCamEye;
                 mainCam->eyeNext = this->subCamEye;
                 mainCam->at = this->subCamAt;
-                func_80169AFC(globalCtx, this->subCamId, 0);
-                Cutscene_End(globalCtx, &globalCtx->csCtx);
-                func_800B7298(globalCtx, &this->actor, 6);
+                func_80169AFC(play, this->subCamId, 0);
+                Cutscene_End(play, &play->csCtx);
+                func_800B7298(play, &this->actor, 6);
                 this->cameraState = 0;
-                this->subCamId = CAM_ID_MAIN;
+                this->subCamId = SUB_CAM_ID_DONE;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->subCamId != CAM_ID_MAIN) {
-        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
+    if (this->subCamId != SUB_CAM_ID_DONE) {
+        Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -603,7 +603,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
  * EnClear_Tag update function.
  * Decides whether to update or to mark for death
  */
-void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnClearTag_Update(Actor* thisx, PlayState* play) {
     EnClearTag* this = THIS;
 
     if (this->activeTimer != 0) {
@@ -611,11 +611,11 @@ void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params < 0) {
-        EnClearTag_UpdateCamera(this, globalCtx);
+        EnClearTag_UpdateCamera(this, play);
     } else if (this->activeTimer != 0) {
-        EnClearTag_UpdateEffects(this, globalCtx);
+        EnClearTag_UpdateEffects(this, play);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -623,8 +623,8 @@ void EnClearTag_Update(Actor* thisx, GlobalContext* globalCtx) {
  * EnClearTag draw function.
  * Setups DrawEffects
  */
-void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    EnClearTag_DrawEffects(thisx, globalCtx);
+void EnClearTag_Draw(Actor* thisx, PlayState* play) {
+    EnClearTag_DrawEffects(thisx, play);
 }
 
 /**
@@ -633,7 +633,7 @@ void EnClearTag_Draw(Actor* thisx, GlobalContext* globalCtx) {
  * Moves and bounces debris effects.
  * Fades most effects out of view. When effects are completely faded away they are removed.
  */
-void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
+void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play) {
     EnClearTagEffect* effect = this->effect;
     s16 i;
     f32 originalYPosition;
@@ -665,7 +665,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                     sphereCenter.y += 5.0f;
 
                     // Check if the debris has hit the ground.
-                    if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
+                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &sphereCenter, 11.0f)) {
                         effect->pos.y = originalYPosition;
 
                         // Bounce the debris effect.
@@ -793,7 +793,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
  * Each effect type is drawn before the next. The function will apply a material that
  * applies to all effects of that type while drawing the first effect of that type.
  */
-void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
+void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
     u8 isMaterialApplied = false;
     s16 i;
     s16 j;
@@ -801,14 +801,14 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
     WaterBox* waterBox;
     f32 ySurface;
     MtxF mtxF;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     EnClearTag* this = THIS;
     EnClearTagEffect* effect = this->effect;
     EnClearTagEffect* firstEffect = this->effect;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     // Draw all Debris effects.
     for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
@@ -888,11 +888,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                            128);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s8)effect->primColor.r, (s8)effect->primColor.g,
                             (s8)effect->primColor.b, (s8)effect->primColor.a);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -914,11 +913,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
             // Draw the fire effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 200, 20, 0, (s8)effect->primColor.a);
-            gSPSegment(
-                POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
@@ -940,7 +938,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Draw the flash billboard effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);
@@ -997,8 +995,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
                 ySurface = effect->pos.y;
-                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->pos.x + vec.x, effect->pos.z + vec.z,
-                                         &ySurface, &waterBox)) {
+                if (WaterBox_GetSurface1(play, &play->colCtx, effect->pos.x + vec.x, effect->pos.z + vec.z, &ySurface,
+                                         &waterBox)) {
                     if ((effect->pos.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_Translate(effect->pos.x + vec.x, ySurface, effect->pos.z + vec.z, MTXMODE_NEW);
@@ -1013,5 +1011,5 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

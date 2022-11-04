@@ -10,14 +10,14 @@
 
 #define THIS ((EnDrs*)thisx)
 
-void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDrs_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDrs_Init(Actor* thisx, PlayState* play);
+void EnDrs_Destroy(Actor* thisx, PlayState* play);
+void EnDrs_Update(Actor* thisx, PlayState* play);
+void EnDrs_Draw(Actor* thisx, PlayState* play);
 
-void EnDrs_Idle(EnDrs* this, GlobalContext* globalCtx);
+void EnDrs_Idle(EnDrs* this, PlayState* play);
 
-const ActorInit En_Drs_InitVars = {
+ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
     ACTORCAT_PROP,
     FLAGS,
@@ -51,22 +51,22 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
+static AnimationInfoS sAnimationInfo = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
-void EnDrs_CollisionUpdate(EnDrs* this, GlobalContext* globalCtx) {
+void EnDrs_CollisionUpdate(EnDrs* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void EnDrs_Setup(EnDrs* this, GlobalContext* globalCtx) {
+void EnDrs_Setup(EnDrs* this, PlayState* play) {
     s32 pad[2];
 
-    if ((this->moonMaskObjBankIndex >= 0) && SubS_IsObjectLoaded(this->moonMaskObjBankIndex, globalCtx)) {
+    if ((this->moonMaskObjBankIndex >= 0) && SubS_IsObjectLoaded(this->moonMaskObjBankIndex, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
+        SkelAnime_InitFlex(play, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
                            this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimations, 0);
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimationInfo, 0);
+        Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.draw = EnDrs_Draw;
@@ -74,53 +74,53 @@ void EnDrs_Setup(EnDrs* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnDrs_Idle(EnDrs* this, GlobalContext* globalCtx) {
+void EnDrs_Idle(EnDrs* this, PlayState* play) {
 }
 
-void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDrs_Init(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    this->moonMaskObjBankIndex = SubS_GetObjectIndex(OBJECT_MSMO, globalCtx);
+    this->moonMaskObjBankIndex = SubS_GetObjectIndex(OBJECT_MSMO, play);
     this->actionFunc = EnDrs_Setup;
 }
 
-void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDrs_Destroy(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDrs_Update(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     if (this->actor.draw != NULL) {
         SkelAnime_Update(&this->skelAnime);
-        EnDrs_CollisionUpdate(this, globalCtx);
+        EnDrs_CollisionUpdate(this, play);
     }
 }
 
-void EnDrs_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDrs* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
     s8 temp = this->moonMaskObjBankIndex;
     s8 temp2 = this->actor.objBankIndex;
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
     if (!(gSaveContext.save.weekEventReg[87] & 2) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[temp].segment);
+        OPEN_DISPS(play->state.gfxCtx);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[temp2].segment);
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp2].segment);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void EnDrs_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDrs_Draw(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    func_8012C5B0(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, EnDrs_PostLimbDraw, &this->actor);
+    func_8012C5B0(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          EnDrs_PostLimbDraw, &this->actor);
 }

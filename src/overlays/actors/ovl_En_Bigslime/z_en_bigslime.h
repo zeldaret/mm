@@ -7,7 +7,7 @@
 
 struct EnBigslime;
 
-typedef void (*EnBigslimeActionFunc)(struct EnBigslime*, GlobalContext*);
+typedef void (*EnBigslimeActionFunc)(struct EnBigslime*, PlayState*);
 
 #define BIGSLIME_NUM_VTX 162 // Number of vertices
 #define BIGSLIME_NUM_FACES 320 // Number of triangles
@@ -124,7 +124,5 @@ typedef struct EnBigslime {
     /* 0x0A50 */ AnimatedMaterial* iceShardTexAnim;
     /* 0x0A54 */ EnBigslimeIceShardEffect iceShardEffect[BIGSLIME_NUM_ICE_SHARD]; // 312 = 162 (bigslime) + 10 * 15 (minislime)
 } EnBigslime; // size = 0x3634
-
-extern const ActorInit En_Bigslime_InitVars;
 
 #endif // Z_EN_BIGSLIME_H

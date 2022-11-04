@@ -10,17 +10,17 @@
 
 #define THIS ((BgKin2Bombwall*)thisx)
 
-void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKin2Bombwall_Init(Actor* thisx, PlayState* play);
+void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play);
+void BgKin2Bombwall_Update(Actor* thisx, PlayState* play);
+void BgKin2Bombwall_Draw(Actor* thisx, PlayState* play);
 
 void BgKin2Bombwall_SetupWait(BgKin2Bombwall* this);
-void BgKin2Bombwall_Wait(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void BgKin2Bombwall_Wait(BgKin2Bombwall* this, PlayState* play);
 void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this);
-void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play);
 void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this);
-void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx);
+void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play);
 
 ActorInit Bg_Kin2_Bombwall_InitVars = {
     ACTOR_BG_KIN2_BOMBWALL,
@@ -54,7 +54,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 60, 60, 0, { 0, 0, 0 } },
 };
 
-s32 BgKin2Bombwall_IsHitFromNearby(BgKin2Bombwall* this, GlobalContext* globalCtx) {
+s32 BgKin2Bombwall_IsHitFromNearby(BgKin2Bombwall* this, PlayState* play) {
     Actor* bombwallCollider;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -74,7 +74,7 @@ static Vec3f sDustAccel = { 0.0f, 0.33f, 0.0f };
 static s8 sRandomYOffsets[] = { -60, -34, -8, 18, 44 };
 static s16 sScales[] = { 25, 23, 21, 19, 17, 15, 13, 10 }; // Scales for random explosion debris.
 
-void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx) {
+void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, PlayState* play) {
     s32 i;
     Vec3f pos;
     Vec3f velocity;
@@ -119,14 +119,13 @@ void BgKin2Bombwall_SpawnEffects(BgKin2Bombwall* this, GlobalContext* globalCtx)
             if (k < 2 || (s32)Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
-                func_800B0E48(globalCtx, &pos, &gZeroVec3f, &sDustAccel, &sPrimColor, &sEnvColor,
-                              (Rand_Next() >> 0x1B) + 70,
+                func_800B0E48(play, &pos, &gZeroVec3f, &sDustAccel, &sPrimColor, &sEnvColor, (Rand_Next() >> 0x1B) + 70,
                               (Rand_Next() >> 0x1A) + 60); // for dust spawn
             } else {
                 phi_s1 = 0;
             }
-            EffectSsKakera_Spawn(globalCtx, &pos, &velocity, &pos, -550, phi_s0, 30, 0, 0, sScales[k], phi_s1, 0, 50,
-                                 -1, OBJECT_KIN2_OBJ, gOceanSpiderHouseBombableWallDebrisDL);
+            EffectSsKakera_Spawn(play, &pos, &velocity, &pos, -550, phi_s0, 30, 0, 0, sScales[k], phi_s1, 0, 50, -1,
+                                 OBJECT_KIN2_OBJ, gOceanSpiderHouseBombableWallDebrisDL);
         }
     }
 }
@@ -138,43 +137,44 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
-void BgKin2Bombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
     BgKin2Bombwall* this = THIS;
     ColliderCylinder* bombwallCollider;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     bombwallCollider = &this->collider;
-    Collider_InitCylinder(globalCtx, bombwallCollider);
-    if (Flags_GetSwitch(globalCtx, BG_KIN2_BOMBWALL_SWITCH_FLAG(this))) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gOceanSpiderHouseBombableWallCol);
-        Collider_SetCylinder(globalCtx, bombwallCollider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
-        Actor_SetFocus(&this->dyna.actor, 60.0f);
-        BgKin2Bombwall_SetupWait(this);
+    Collider_InitCylinder(play, bombwallCollider);
+    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
+    Collider_SetCylinder(play, bombwallCollider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
+    Actor_SetFocus(&this->dyna.actor, 60.0f);
+    BgKin2Bombwall_SetupWait(this);
 }
 
-void BgKin2Bombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play) {
     BgKin2Bombwall* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void BgKin2Bombwall_SetupWait(BgKin2Bombwall* this) {
     this->actionFunc = BgKin2Bombwall_Wait;
 }
 
-void BgKin2Bombwall_Wait(BgKin2Bombwall* this, GlobalContext* globalCtx) {
-    if (BgKin2Bombwall_IsHitFromNearby(this, globalCtx)) {
+void BgKin2Bombwall_Wait(BgKin2Bombwall* this, PlayState* play) {
+    if (BgKin2Bombwall_IsHitFromNearby(this, play)) {
         this->collider.base.acFlags &= ~AC_HIT;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         BgKin2Bombwall_SetupPlayCutscene(this);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -182,14 +182,14 @@ void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this) {
     this->actionFunc = BgKin2Bombwall_PlayCutscene;
 }
 
-void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx) {
+void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(globalCtx, BG_KIN2_BOMBWALL_SWITCH_FLAG(this));
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
-        BgKin2Bombwall_SpawnEffects(this, globalCtx);
+        BgKin2Bombwall_SpawnEffects(this, play);
         BgKin2Bombwall_SetupEndCutscene(this);
 
     } else {
@@ -202,23 +202,23 @@ void BgKin2Bombwall_SetupEndCutscene(BgKin2Bombwall* this) {
     this->actionFunc = BgKin2Bombwall_EndCutscene;
 }
 
-void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, GlobalContext* globalCtx) {
+void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgKin2Bombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Bombwall_Update(Actor* thisx, PlayState* play) {
     BgKin2Bombwall* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgKin2Bombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Bombwall_Draw(Actor* thisx, PlayState* play) {
     BgKin2Bombwall* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, gOceanSpiderHouseBombableWallDL);
-    Gfx_DrawDListXlu(globalCtx, gOceanSpiderHouseBombableWallCrackDL);
+    Gfx_DrawDListOpa(play, gOceanSpiderHouseBombableWallDL);
+    Gfx_DrawDListXlu(play, gOceanSpiderHouseBombableWallCrackDL);
 }

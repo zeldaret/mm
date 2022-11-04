@@ -6,7 +6,7 @@
 
 struct DemoTreLgt;
 
-typedef void (*DemoTreLgtActionFunc)(struct DemoTreLgt* this, GlobalContext* globalCtx);
+typedef void (*DemoTreLgtActionFunc)(struct DemoTreLgt* this, PlayState* play);
 
 typedef struct DemoTreLgt {
     /* 0x000 */ Actor actor;
@@ -17,7 +17,5 @@ typedef struct DemoTreLgt {
     /* 0x170 */ u8 status;
     /* 0x174 */ s32 animationType;
 } DemoTreLgt; // size = 0x178
-
-extern const ActorInit Demo_Tre_Lgt_InitVars;
 
 #endif // Z_DEMO_TRE_LGT_H

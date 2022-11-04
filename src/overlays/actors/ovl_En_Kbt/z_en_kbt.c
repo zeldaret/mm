@@ -10,19 +10,19 @@
 
 #define THIS ((EnKbt*)thisx)
 
-void EnKbt_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnKbt_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnKbt_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnKbt_Init(Actor* thisx, PlayState* play);
+void EnKbt_Destroy(Actor* thisx, PlayState* play);
+void EnKbt_Update(Actor* thisx, PlayState* play);
+void EnKbt_Draw(Actor* thisx, PlayState* play);
 
-s32 func_80B33E64(GlobalContext* globalCtx);
-s32 func_80B33E8C(GlobalContext* globalCtx);
+s32 func_80B33E64(PlayState* play);
+s32 func_80B33E8C(PlayState* play);
 void func_80B33EF0(EnKbt* this, s16 arg1);
-Actor* func_80B3403C(GlobalContext* globalCtx);
-void func_80B34314(EnKbt* this, GlobalContext* globalCtx);
-void func_80B34598(EnKbt* this, GlobalContext* globalCtx);
+Actor* func_80B3403C(PlayState* play);
+void func_80B34314(EnKbt* this, PlayState* play);
+void func_80B34598(EnKbt* this, PlayState* play);
 
-const ActorInit En_Kbt_InitVars = {
+ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
     ACTORCAT_NPC,
     FLAGS,
@@ -34,11 +34,11 @@ const ActorInit En_Kbt_InitVars = {
     (ActorFunc)EnKbt_Draw,
 };
 
-void EnKbt_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnKbt_Init(Actor* thisx, PlayState* play) {
     EnKbt* this = THIS;
 
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_kbt_Skel_00DEE8, &object_kbt_Anim_004274, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_kbt_Skel_00DEE8, &object_kbt_Anim_004274, this->jointTable,
                        this->morphTable, OBJECT_KBT_LIMB_MAX);
     this->unk_27C = 0;
     this->actor.home.rot.z = 0;
@@ -46,13 +46,13 @@ void EnKbt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_27F = 0;
     this->unk_280 = 13;
     this->unk_282 = 13;
-    this->unk_278 = func_80B3403C(globalCtx);
+    this->unk_278 = func_80B3403C(play);
     this->unk_284 = 0;
     this->actor.textId = 0;
-    if (func_80B33E64(globalCtx)) {
+    if (func_80B33E64(play)) {
         func_80B33EF0(this, 6);
         this->unk_282 = 11;
-        if (func_80B33E8C(globalCtx)) {
+        if (func_80B33E8C(play)) {
             this->actor.textId = 0xC50;
         } else {
             this->actor.textId = 0xC4E;
@@ -67,16 +67,16 @@ void EnKbt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
-void EnKbt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnKbt_Destroy(Actor* thisx, PlayState* play) {
 }
 
-s32 func_80B33E64(GlobalContext* globalCtx) {
-    return gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 1;
+s32 func_80B33E64(PlayState* play) {
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1;
 }
 
-s32 func_80B33E8C(GlobalContext* globalCtx) {
+s32 func_80B33E8C(PlayState* play) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -106,8 +106,8 @@ void func_80B33EF0(EnKbt* this, s16 arg1) {
     }
 }
 
-Actor* func_80B3403C(GlobalContext* globalCtx) {
-    Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
+Actor* func_80B3403C(PlayState* play) {
+    Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
         if (npc->id == ACTOR_EN_KGY) {
@@ -234,14 +234,14 @@ void func_80B3415C(EnKbt* this) {
     }
 }
 
-void func_80B34314(EnKbt* this, GlobalContext* globalCtx) {
+void func_80B34314(EnKbt* this, PlayState* play) {
     s32 playerForm;
 
     func_80B34078(this);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B34598;
-        Actor_ChangeFocus(&this->actor, globalCtx, this->unk_278);
+        Actor_ChangeFocus(&this->actor, play, this->unk_278);
         this->unk_278->textId = this->actor.textId;
         this->unk_27C &= ~4;
         if (this->actor.textId == 0xC4E) {
@@ -270,13 +270,13 @@ void func_80B34314(EnKbt* this, GlobalContext* globalCtx) {
                     this->actor.textId = 0xC37;
                 }
             } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-                if (func_80B33E8C(globalCtx)) {
+                if (func_80B33E8C(play)) {
                     this->actor.textId = 0xC50;
                 } else {
                     this->actor.textId = 0xC4E;
                 }
             }
-            func_800B8614(&this->actor, globalCtx, 260.0f);
+            func_800B8614(&this->actor, play, 260.0f);
         }
     }
     func_80B3415C(this);
@@ -289,7 +289,7 @@ void func_80B34574(EnKbt* this) {
     this->actionFunc = func_80B34314;
 }
 
-void func_80B34598(EnKbt* this, GlobalContext* globalCtx) {
+void func_80B34598(EnKbt* this, PlayState* play) {
     func_80B34078(this);
 
     switch (this->actor.textId) {
@@ -333,7 +333,7 @@ void func_80B34598(EnKbt* this, GlobalContext* globalCtx) {
             this->unk_27E = 4;
             this->unk_27F = 0;
             this->unk_282 = 11;
-            if (func_80B33E8C(globalCtx)) {
+            if (func_80B33E8C(play)) {
                 this->actor.textId = 0xC50;
             } else if (this->unk_27C & 0x10) {
                 this->actor.textId = 0xC4F;
@@ -516,13 +516,13 @@ void func_80B34598(EnKbt* this, GlobalContext* globalCtx) {
     func_80B3415C(this);
 }
 
-void EnKbt_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnKbt_Update(Actor* thisx, PlayState* play) {
     EnKbt* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-s32 EnKbt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnKbt_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKbt* this = THIS;
 
     if (!(this->unk_27C & 1) && (limbIndex == OBJECT_KBT_LIMB_0E)) {
@@ -533,7 +533,7 @@ s32 EnKbt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
 Vec3f D_80B34B84 = { 500.0f, 500.0f, 0.0f };
 
-void EnKbt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnKbt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnKbt* this = THIS;
 
     if (limbIndex == OBJECT_KBT_LIMB_09) {
@@ -550,14 +550,14 @@ TexturePtr D_80B34B98[] = {
     object_kbt_Tex_00B5B8, object_kbt_Tex_00BDB8, object_kbt_Tex_00C5B8, object_kbt_Tex_00CDB8, object_kbt_Tex_00D5B8,
 };
 
-void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnKbt_Draw(Actor* thisx, PlayState* play) {
     EnKbt* this = THIS;
     Gfx* gfx;
     TexturePtr tex;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
 
@@ -569,8 +569,8 @@ void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = &gfx[2];
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnKbt_OverrideLimbDraw, EnKbt_PostLimbDraw, &this->actor);
 }

@@ -12,20 +12,20 @@
 
 #define THIS ((ObjPzlblock*)thisx)
 
-void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjPzlblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjPzlblock_Update(Actor* thisx, GlobalContext* globalCtx);
+void ObjPzlblock_Init(Actor* thisx, PlayState* play);
+void ObjPzlblock_Destroy(Actor* thisx, PlayState* play);
+void ObjPzlblock_Update(Actor* thisx, PlayState* play);
 
 void func_809A3A48(ObjPzlblock* this);
-void func_809A3A74(ObjPzlblock* this, GlobalContext* globalCtx);
+void func_809A3A74(ObjPzlblock* this, PlayState* play);
 void func_809A3BA4(ObjPzlblock* this);
-void func_809A3BC0(ObjPzlblock* this, GlobalContext* globalCtx);
+void func_809A3BC0(ObjPzlblock* this, PlayState* play);
 void func_809A3D1C(ObjPzlblock* this);
-void func_809A3D38(ObjPzlblock* this, GlobalContext* globalCtx);
-void func_809A3E58(Actor* thisx, GlobalContext* globalCtx);
-void func_809A3F0C(Actor* thisx, GlobalContext* globalCtx);
+void func_809A3D38(ObjPzlblock* this, PlayState* play);
+void func_809A3E58(Actor* thisx, PlayState* play);
+void func_809A3F0C(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Pzlblock_InitVars = {
+ActorInit Obj_Pzlblock_InitVars = {
     ACTOR_OBJ_PZLBLOCK,
     ACTORCAT_PROP,
     FLAGS,
@@ -63,9 +63,9 @@ Color_RGB8 D_809A4088[] = {
     { 0, 255, 255 },   { 255, 0, 255 },   { 0, 0, 0 },   { 255, 255, 255 },
 };
 
-s32 func_809A33E0(ObjPzlblock* this, GlobalContext* globalCtx, s16 arg2) {
-    return !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 1) ||
-           !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 28);
+s32 func_809A33E0(ObjPzlblock* this, PlayState* play, s16 arg2) {
+    return !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 1) ||
+           !DynaPolyActor_ValidateMove(play, &this->dyna, 30, arg2, 28);
 }
 
 s32 func_809A3448(ObjPzlblock* this) {
@@ -191,7 +191,7 @@ void func_809A376C(ObjPzlblock* this, s32 arg1) {
     this->unk_16C = arg1;
 }
 
-void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjPzlblock_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPzlblock* this = THIS;
     s32 sp2C = OBJPZLBLOCK_GET_ROTZ(&this->dyna.actor);
@@ -207,11 +207,11 @@ void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    this->unk_17A = Object_GetIndex(&globalCtx->objectCtx, sp24->unk_00);
+    this->unk_17A = Object_GetIndex(&play->objectCtx, sp24->unk_00);
 
     if (sp28 == 0) {
         func_809A3D1C(this);
-    } else if (Flags_GetSwitch(globalCtx, OBJPZLBLOCK_GET_7F(&this->dyna.actor))) {
+    } else if (Flags_GetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor))) {
         if (sp2C == 0) {
             this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp28 * 60);
             func_809A3D1C(this);
@@ -232,10 +232,10 @@ void ObjPzlblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjPzlblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjPzlblock_Destroy(Actor* thisx, PlayState* play) {
     ObjPzlblock* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_809A3A48(ObjPzlblock* this) {
@@ -247,7 +247,7 @@ void func_809A3A48(ObjPzlblock* this) {
     this->unk_160 = 4;
 }
 
-void func_809A3A74(ObjPzlblock* this, GlobalContext* globalCtx) {
+void func_809A3A74(ObjPzlblock* this, PlayState* play) {
     s32 i;
     s32 sp20 = func_809A3448(this);
 
@@ -261,14 +261,14 @@ void func_809A3A74(ObjPzlblock* this, GlobalContext* globalCtx) {
 
     if (sp20 != -1) {
         if ((this->unk_16E[sp20] >= 11) && func_809A34E0(this, sp20) && func_809A35EC(this, sp20)) {
-            if (!func_809A33E0(this, globalCtx, (this->dyna.pushForce > 0.0f) ? 90 : 120)) {
+            if (!func_809A33E0(this, play, (this->dyna.pushForce > 0.0f) ? 90 : 120)) {
                 func_809A376C(this, sp20);
                 func_809A3BA4(this);
                 return;
             }
         }
 
-        GET_PLAYER(globalCtx)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -278,28 +278,28 @@ void func_809A3BA4(ObjPzlblock* this) {
     this->unk_160 = 5;
 }
 
-void func_809A3BC0(ObjPzlblock* this, GlobalContext* globalCtx) {
+void func_809A3BC0(ObjPzlblock* this, PlayState* play) {
     if (Math_StepToF(this->unk_164, this->unk_168, 2.3f)) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
         s32 params = OBJPZLBLOCK_GET_ROTZ(&this->dyna.actor);
         s32 pad;
         s32 sp20 = 0;
 
         if ((params == 4) || (params == 5) || (params == 6)) {
-            if (!func_809A35EC(this, this->unk_16C) || func_809A33E0(this, globalCtx, 0x5A)) {
+            if (!func_809A35EC(this, this->unk_16C) || func_809A33E0(this, play, 0x5A)) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A35EC(this, this->unk_16C)) {
-            if (func_809A33E0(this, globalCtx, 0x5A)) {
+            if (func_809A33E0(this, play, 0x5A)) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
-            Flags_SetSwitch(globalCtx, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
+            Flags_SetSwitch(play, OBJPZLBLOCK_GET_7F(&this->dyna.actor));
             sp20 = 1;
         }
 
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         if (sp20 == 0) {
             func_809A3A48(this);
@@ -316,58 +316,58 @@ void func_809A3D1C(ObjPzlblock* this) {
     this->unk_160 = 4;
 }
 
-void func_809A3D38(ObjPzlblock* this, GlobalContext* globalCtx) {
+void func_809A3D38(ObjPzlblock* this, PlayState* play) {
     if (fabsf(this->dyna.pushForce) > 0.1f) {
-        GET_PLAYER(globalCtx)->stateFlags2 &= ~0x10;
+        GET_PLAYER(play)->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
 
-void ObjPzlblock_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjPzlblock_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjPzlblock* this = THIS;
 
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 15.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, 4);
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_17A)) {
+    if (Object_IsLoaded(&play->objectCtx, this->unk_17A)) {
         ObjPzlblockStruct* sp2C = &D_809A4060[OBJPZLBLOCK_GET_1000(&this->dyna.actor)];
 
         this->dyna.actor.objBankIndex = this->unk_17A;
-        Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sp2C->unk_04);
+        Actor_SetObjectDependency(play, &this->dyna.actor);
+        DynaPolyActor_LoadMesh(play, &this->dyna, sp2C->unk_04);
         this->dyna.actor.update = func_809A3E58;
         this->dyna.actor.draw = func_809A3F0C;
     }
 }
 
-void func_809A3E58(Actor* thisx, GlobalContext* globalCtx) {
+void func_809A3E58(Actor* thisx, PlayState* play) {
     ObjPzlblock* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
     if (this->unk_160 != 0) {
-        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->unk_160);
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 15.0f, 30.0f, 0.0f, this->unk_160);
         if (((this->actionFunc == func_809A3A74) || (this->actionFunc == func_809A3D38)) &&
-            (this->dyna.actor.bgCheckFlags & 1) && !DynaPoly_GetActor(&globalCtx->colCtx, this->dyna.actor.floorBgId)) {
+            (this->dyna.actor.bgCheckFlags & 1) && !DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId)) {
             this->unk_160 = 0;
         }
     }
 }
 
-void func_809A3F0C(Actor* thisx, GlobalContext* globalCtx) {
+void func_809A3F0C(Actor* thisx, PlayState* play) {
     ObjPzlblockStruct* sp2C = &D_809A4060[OBJPZLBLOCK_GET_1000(thisx)];
     Color_RGB8* sp28 = &D_809A4088[OBJPZLBLOCK_GET_700(thisx)];
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sp28->r, sp28->g, sp28->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, sp2C->unk_08);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

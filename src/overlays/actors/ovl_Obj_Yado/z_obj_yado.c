@@ -11,12 +11,12 @@
 
 #define THIS ((ObjYado*)thisx)
 
-void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjYado_Init(Actor* thisx, PlayState* play);
+void ObjYado_Destroy(Actor* thisx, PlayState* play);
+void ObjYado_Update(Actor* thisx, PlayState* play);
+void ObjYado_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Yado_InitVars = {
+ActorInit Obj_Yado_InitVars = {
     ACTOR_OBJ_YADO,
     ACTORCAT_BG,
     FLAGS,
@@ -34,7 +34,7 @@ static InitChainEntry sInitChain[] = {
 
 AnimatedMaterial* D_80C16470;
 
-void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjYado_Init(Actor* thisx, PlayState* play) {
     ObjYado* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -42,32 +42,32 @@ void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isNight = gSaveContext.save.isNight;
 }
 
-void ObjYado_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjYado_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void ObjYado_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjYado_Update(Actor* thisx, PlayState* play) {
     ObjYado* this = THIS;
 
     this->isNight = gSaveContext.save.isNight;
 }
 
-void ObjYado_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjYado_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjYado* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (this->isNight) {
-        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 95, 95, 70, 155));
-        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 0, 40, 40, 255));
+        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(play->state.gfxCtx, 128, 95, 95, 70, 155));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(play->state.gfxCtx, 128, 0, 40, 40, 255));
     } else {
-        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 255, 255, 215, 110));
-        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 128, 255, 255, 215, 255));
+        gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(play->state.gfxCtx, 128, 255, 255, 215, 110));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Gfx_PrimColor(play->state.gfxCtx, 128, 255, 255, 215, 255));
     }
 
-    AnimatedMat_Draw(globalCtx, D_80C16470);
-    Gfx_DrawDListOpa(globalCtx, object_yado_obj_DL_000430);
-    Gfx_DrawDListXlu(globalCtx, object_yado_obj_DL_000320);
+    AnimatedMat_Draw(play, D_80C16470);
+    Gfx_DrawDListOpa(play, object_yado_obj_DL_000430);
+    Gfx_DrawDListXlu(play, object_yado_obj_DL_000320);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

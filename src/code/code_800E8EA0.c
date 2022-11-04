@@ -1,7 +1,7 @@
 #include "global.h"
 
-void Actor_ContinueText(GlobalContext* globalCtx, Actor* actor, u16 textId) {
-    func_80151938(globalCtx, textId);
+void Actor_ContinueText(PlayState* play, Actor* actor, u16 textId) {
+    func_80151938(play, textId);
     actor->textId = textId;
 }
 
@@ -77,16 +77,15 @@ s32 Actor_TrackPoint(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRo
  *
  * @note same note as Actor_TrackPlayer
  */
-s32 Actor_TrackPlayerSetFocusHeight(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot,
-                                    f32 focusHeight) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 Actor_TrackPlayerSetFocusHeight(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusHeight) {
+    Player* player = GET_PLAYER(play);
     s16 yaw;
     Vec3f target;
 
     actor->focus.pos = actor->world.pos;
     actor->focus.pos.y += focusHeight;
 
-    if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
+    if (!((play->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
             Actor_TrackNone(headRot, torsoRot);
@@ -94,8 +93,8 @@ s32 Actor_TrackPlayerSetFocusHeight(GlobalContext* globalCtx, Actor* actor, Vec3
         }
     }
 
-    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
-        target = globalCtx->view.eye;
+    if ((play->csCtx.state != 0) || gDbgCamEnabled) {
+        target = play->view.eye;
     } else {
         target = player->actor.focus.pos;
     }
@@ -121,14 +120,14 @@ s32 Actor_TrackPlayerSetFocusHeight(GlobalContext* globalCtx, Actor* actor, Vec3
  * @note if in a cutscene or debug camera is enabled, the computed rotation will instead turn towards the view eye no
  * matter the yaw.
  */
-s32 Actor_TrackPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 Actor_TrackPlayer(PlayState* play, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos) {
+    Player* player = GET_PLAYER(play);
     s16 yaw;
     Vec3f target;
 
     actor->focus.pos = focusPos;
 
-    if (!((globalCtx->csCtx.state != 0) || gDbgCamEnabled)) {
+    if (!((play->csCtx.state != 0) || gDbgCamEnabled)) {
         yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
         if (yaw >= 0x4300) {
             Actor_TrackNone(headRot, torsoRot);
@@ -136,8 +135,8 @@ s32 Actor_TrackPlayer(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Ve
         }
     }
 
-    if ((globalCtx->csCtx.state != 0) || gDbgCamEnabled) {
-        target = globalCtx->view.eye;
+    if ((play->csCtx.state != 0) || gDbgCamEnabled) {
+        target = play->view.eye;
     } else {
         target = player->actor.focus.pos;
     }

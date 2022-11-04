@@ -5,28 +5,30 @@
  */
 
 #include "z_obj_hugebombiwa.h"
+#include "z64quake.h"
+#include "z64rumble.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHugebombiwa*)thisx)
 
-void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjHugebombiwa_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjHugebombiwa_Init(Actor* thisx, PlayState* play);
+void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2);
+void ObjHugebombiwa_Update(Actor* thisx, PlayState* play);
+void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play);
 
 void func_80A54BF0(ObjHugebombiwa* this);
-void func_80A54C04(ObjHugebombiwa* this, GlobalContext* globalCtx);
+void func_80A54C04(ObjHugebombiwa* this, PlayState* play);
 void func_80A54CD8(ObjHugebombiwa* this);
-void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx);
+void func_80A54CEC(ObjHugebombiwa* this, PlayState* play);
 void func_80A54E10(ObjHugebombiwa* this);
-void func_80A55064(ObjHugebombiwa* this, GlobalContext* globalCtx);
+void func_80A55064(ObjHugebombiwa* this, PlayState* play);
 void func_80A55310(ObjHugebombiwa* this);
-void func_80A55564(ObjHugebombiwa* this, GlobalContext* globalCtx);
-void func_80A55B34(Actor* thisx, GlobalContext* globalCtx);
+void func_80A55564(ObjHugebombiwa* this, PlayState* play);
+void func_80A55B34(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hugebombiwa_InitVars = {
+ActorInit Obj_Hugebombiwa_InitVars = {
     ACTOR_OBJ_HUGEBOMBIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -60,7 +62,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static Vec3f D_80A55D2C = { 0.0f, 0.3f, 0.0f };
 
-void func_80A53BE0(GlobalContext* globalCtx, Vec3f* arg1) {
+void func_80A53BE0(PlayState* play, Vec3f* arg1) {
     Vec3f spBC;
     Vec3f spB0;
     s32 i;
@@ -105,12 +107,12 @@ void func_80A53BE0(GlobalContext* globalCtx, Vec3f* arg1) {
             if (1) {}
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spBC, &spB0, &spBC, gravity, phi_v0, 15, 0, 0, phi_v1, 1, 0, life, -1,
+        EffectSsKakera_Spawn(play, &spBC, &spB0, &spBC, gravity, phi_v0, 15, 0, 0, phi_v1, 1, 0, life, -1,
                              OBJECT_BOMBIWA, object_bombiwa_DL_001990);
     }
 }
 
-void func_80A53E60(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
+void func_80A53E60(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
     static Color_RGBA8 D_80A55D38 = { 210, 210, 210, 255 };
     static Color_RGBA8 D_80A55D3C = { 140, 140, 140, 255 };
     static f32 D_80A55D40[] = { 3.0f, 5.0f, 9.0f, 18.0f };
@@ -163,7 +165,7 @@ void func_80A53E60(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
             phi_v1 = temp_f0;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spDC, &spD0, &spDC, phi_s2, phi_v0, 15, 0, 0, phi_v1, 1, 0, phi_s0, -1,
+        EffectSsKakera_Spawn(play, &spDC, &spD0, &spDC, phi_s2, phi_v0, 15, 0, 0, phi_v1, 1, 0, phi_s0, -1,
                              OBJECT_BOMBIWA, object_bombiwa_DL_001990);
 
         spDC.x += (Rand_ZeroOne() - 0.5f) * 270.0f;
@@ -172,11 +174,11 @@ void func_80A53E60(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
 
         phi_s0 = (Rand_ZeroOne() * 160.0f) + 140.0f;
         phi_s1 = (Rand_ZeroOne() * 180.0f) + 120.0f;
-        func_800B0E48(globalCtx, &spDC, &gZeroVec3f, &D_80A55D2C, &D_80A55D38, &D_80A55D3C, phi_s0, phi_s1);
+        func_800B0E48(play, &spDC, &gZeroVec3f, &D_80A55D2C, &D_80A55D38, &D_80A55D3C, phi_s0, phi_s1);
     }
 }
 
-void func_80A541F4(ObjHugebombiwa* this, GlobalContext* globalCtx) {
+void func_80A541F4(ObjHugebombiwa* this, PlayState* play) {
     static s16 D_80A55D50[] = { 24, 17, 13, 7, 6, 5, 3, 2 };
     s32 i;
     s32 pad[2];
@@ -207,7 +209,7 @@ void func_80A541F4(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         spE8.y = (Rand_ZeroOne() * 18.0f) + 10.0f;
         spE8.z = temp_f24 * 10.0f;
 
-        EffectSsKakera_Spawn(globalCtx, &spF4, &spE8, &spF4, -650, 37, 15, 0, 0, D_80A55D50[i & 7], 1, 0, 60, -1,
+        EffectSsKakera_Spawn(play, &spF4, &spE8, &spF4, -650, 37, 15, 0, 0, D_80A55D50[i & 7], 1, 0, 60, -1,
                              OBJECT_BOMBIWA, object_bombiwa_DL_0009E0);
 
         spDC.x = ((Rand_ZeroOne() - 0.5f) * 230.0f) + spF4.x;
@@ -222,7 +224,7 @@ void func_80A541F4(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         spC4.y = 0.24f;
         spC4.z = temp_f24 * -0.07f;
 
-        func_800B12F0(globalCtx, &spDC, &spD0, &spC4, (s32)(Rand_ZeroOne() * 800.0f) + 1000, -49, 20);
+        func_800B12F0(play, &spDC, &spD0, &spC4, (s32)(Rand_ZeroOne() * 800.0f) + 1000, -49, 20);
 
         spDC.x = ((Rand_ZeroOne() - 0.5f) * 160.0f) + spF4.x;
         spDC.y = ((Rand_ZeroOne() - 0.2f) * 140.0f) + spF4.y;
@@ -236,12 +238,12 @@ void func_80A541F4(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         spC4.y = 0.3f;
         spC4.z = temp_f24 * -0.09f;
 
-        func_800B12F0(globalCtx, &spDC, &spD0, &spC4, (s32)(Rand_ZeroOne() * 100.0f) + 40,
+        func_800B12F0(play, &spDC, &spD0, &spC4, (s32)(Rand_ZeroOne() * 100.0f) + 40,
                       (s32)(Rand_ZeroOne() * 200.0f) + 20, 10);
     }
 }
 
-void func_80A54600(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
+void func_80A54600(PlayState* play, Vec3f* arg1, f32 arg2, f32 arg3) {
     static f32 D_80A55D60[] = { 3.0f, 5.0f, 9.0f, 18.0f };
     static s8 D_80A55D70 = 0;
     Vec3f spCC;
@@ -278,7 +280,7 @@ void func_80A54600(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
             phi_v0 = temp;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spCC, &spC0, &spCC, phi_v1, 33, 15, 0, 0, phi_v0, 1, 0, 70, -1, OBJECT_BOMBIWA,
+        EffectSsKakera_Spawn(play, &spCC, &spC0, &spCC, phi_v1, 33, 15, 0, 0, phi_v0, 1, 0, 70, -1, OBJECT_BOMBIWA,
                              object_bombiwa_DL_0009E0);
 
         spCC.x += (Rand_ZeroOne() - 0.5f) * 270.0f;
@@ -287,18 +289,19 @@ void func_80A54600(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3) {
 
         temp_s0 = (Rand_ZeroOne() * 160.0f) + 140.0f;
         temp_s1 = (Rand_ZeroOne() * 180.0f) + 120.0f;
-        func_800B1210(globalCtx, &spCC, &gZeroVec3f, &D_80A55D2C, temp_s0, temp_s1);
+        func_800B1210(play, &spCC, &gZeroVec3f, &D_80A55D2C, temp_s0, temp_s1);
     }
 }
 
-void func_80A54980(ObjHugebombiwa* this, GlobalContext* globalCtx, s32 arg2) {
+void ObjHugebombiwa_AddQuake(ObjHugebombiwa* this, PlayState* play, s32 quakeVerticalMag) {
     s32 pad[2];
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 0x4E20);
-    Quake_SetQuakeValues(quake, arg2, 0, 0, 0);
-    Quake_SetCountdown(quake, 7);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 7);
+
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
 
 s32 func_80A54A0C(ObjHugebombiwa* this) {
@@ -330,19 +333,19 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 900, ICHAIN_STOP),
 };
 
-void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHugebombiwa_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjHugebombiwa* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor))) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     if ((ENHUGEBOMBIWA_GET_100(&this->actor)) == 1) {
@@ -358,18 +361,18 @@ void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A54BF0(this);
 }
 
-void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjHugebombiwa_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjHugebombiwa* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_80A54BF0(ObjHugebombiwa* this) {
     this->actionFunc = func_80A54C04;
 }
 
-void func_80A54C04(ObjHugebombiwa* this, GlobalContext* globalCtx) {
+void func_80A54C04(ObjHugebombiwa* this, PlayState* play) {
     s32 pad;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -393,36 +396,36 @@ void func_80A54C04(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         }
     }
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 void func_80A54CD8(ObjHugebombiwa* this) {
     this->actionFunc = func_80A54CEC;
 }
 
-void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
+void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
     s32 pad;
 
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        Flags_SetSwitch(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
+        Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
-            ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_17SETUGEN2))) {
+            ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_17SETUGEN2))) {
             gSaveContext.save.weekEventReg[19] |= 2;
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         } else {
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
-            func_80A53BE0(globalCtx, &this->actor.world.pos);
+            func_80A53BE0(play, &this->actor.world.pos);
             func_80A54E10(this);
         } else {
-            func_80A541F4(this, globalCtx);
+            func_80A541F4(this, play);
             func_80A55310(this);
         }
     } else {
@@ -475,7 +478,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
     this->actionFunc = func_80A55064;
 }
 
-void func_80A55064(ObjHugebombiwa* this, GlobalContext* globalCtx) {
+void func_80A55064(ObjHugebombiwa* this, PlayState* play) {
     s32 i;
     s32 pad;
     Vec3f spA4;
@@ -507,13 +510,13 @@ void func_80A55064(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         spA4.y = ptr->unk_0C.y + 60.0f;
         spA4.z = ptr->unk_0C.z;
 
-        temp_f0 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp9C, &sp98, &this->actor, &spA4);
+        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp9C, &sp98, &this->actor, &spA4);
         if ((temp_f0 <= BGCHECK_Y_MIN + 10.0f) || ((ptr->unk_0C.y - (350.0f * ptr->unk_00.y)) < temp_f0)) {
             this->unk_4B0++;
             ptr->unk_24 = 1;
-            func_80A53E60(globalCtx, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 9.8f);
-            if ((globalCtx->gameplayFrames % 4) == 0) {
-                func_80A54980(this, globalCtx, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+            func_80A53E60(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 9.8f);
+            if ((play->gameplayFrames % 4) == 0) {
+                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
@@ -521,7 +524,7 @@ void func_80A55064(ObjHugebombiwa* this, GlobalContext* globalCtx) {
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
         ActorCutscene_Stop(this->actor.cutscene);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -571,7 +574,7 @@ void func_80A55310(ObjHugebombiwa* this) {
     this->actionFunc = func_80A55564;
 }
 
-void func_80A55564(ObjHugebombiwa* this, GlobalContext* globalCtx) {
+void func_80A55564(ObjHugebombiwa* this, PlayState* play) {
     s32 i;
     EnHugebombiwaStruct* ptr;
     Vec3f spA4;
@@ -603,13 +606,13 @@ void func_80A55564(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         spA4.y = ptr->unk_0C.y + 60.0f;
         spA4.z = ptr->unk_0C.z;
 
-        temp_f0 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp9C, &sp98, &this->actor, &spA4);
+        temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp9C, &sp98, &this->actor, &spA4);
         if ((temp_f0 <= BGCHECK_Y_MIN + 10.0f) || (ptr->unk_0C.y < temp_f0)) {
             this->unk_4B0++;
             ptr->unk_24 = 1;
-            func_80A54600(globalCtx, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 10.1f);
-            if ((globalCtx->gameplayFrames % 4) == 0) {
-                func_80A54980(this, globalCtx, (s32)(Rand_ZeroOne() * 5.5f) + 1);
+            func_80A54600(play, &ptr->unk_0C, ptr->unk_18, ptr->unk_00.y * 10.1f);
+            if ((play->gameplayFrames % 4) == 0) {
+                ObjHugebombiwa_AddQuake(this, play, (s32)(Rand_ZeroOne() * 5.5f) + 1);
             }
         }
     }
@@ -617,46 +620,43 @@ void func_80A55564(ObjHugebombiwa* this, GlobalContext* globalCtx) {
     this->unk_4B2--;
     if ((this->unk_4B0 >= 20) || (this->unk_4B2 <= 0)) {
         ActorCutscene_Stop(this->actor.cutscene);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void ObjHugebombiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHugebombiwa_Update(Actor* thisx, PlayState* play) {
     ObjHugebombiwa* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjHugebombiwa_Draw(Actor* thisx, PlayState* play) {
     ObjHugebombiwa* this = THIS;
     s32 pad[8];
     f32 sp38;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
         if (this->actor.projectedPos.z <= 4300.0f) {
-            func_8012C28C(globalCtx->state.gfxCtx);
+            func_8012C28C(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0xFF, 255, 255, 255, 255);
             gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_002F60);
 
-            func_8012C2DC(globalCtx->state.gfxCtx);
+            func_8012C2DC(play->state.gfxCtx);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_003110);
 
         } else if (this->actor.projectedPos.z < 4500.0f) {
             sp38 = (4500.0f - this->actor.projectedPos.z) * 1.275f;
-            func_8012C2DC(globalCtx->state.gfxCtx);
+            func_8012C2DC(play->state.gfxCtx);
 
             gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, (s32)sp38);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_002F60);
         }
@@ -674,7 +674,7 @@ void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y, ptr->unk_0C.z, &ptr->unk_1C);
                 Matrix_Scale(ptr->unk_00.x, ptr->unk_00.x, ptr->unk_00.x, MTXMODE_APPLY);
 
-                gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(gfx++, object_bombiwa_DL_001990);
             }
         }
@@ -682,21 +682,21 @@ void ObjHugebombiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_OPA_DISP = gfx;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A55B34(Actor* thisx, PlayState* play) {
     ObjHugebombiwa* this = THIS;
     s32 i;
     Gfx* gfx;
     EnHugebombiwaStruct* ptr;
 
     if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
-        Gfx_DrawDListOpa(globalCtx, object_bombiwa_DL_001820);
+        Gfx_DrawDListOpa(play, object_bombiwa_DL_001820);
         return;
     }
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
@@ -713,11 +713,11 @@ void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
 
-        gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, object_bombiwa_DL_0009E0);
     }
 
     POLY_OPA_DISP = gfx;
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

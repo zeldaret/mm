@@ -4,7 +4,7 @@
         <DList Name="object_f53_obj_DL_000148" Offset="0x148" />
         <DList Name="object_f53_obj_DL_000158" Offset="0x158" />
         <Texture Name="object_f53_obj_Tex_000168" OutName="tex_000168" Format="rgba16" Width="32" Height="64" Offset="0x168" />
-        <DList Name="object_f53_obj_DL_0011E0" Offset="0x11E0" />
+        <DList Name="gBankShutterDL" Offset="0x11E0" />
         <Texture Name="object_f53_obj_Tex_001278" OutName="tex_001278" Format="rgba16" Width="32" Height="32" Offset="0x1278" />
         <!-- <Blob Name="object_f53_obj_Blob_001A78" Size="0x78" Offset="0x1A78" /> -->
         <DList Name="object_f53_obj_DL_001AF0" Offset="0x1AF0" />

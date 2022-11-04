@@ -1,5 +1,8 @@
 #include "global.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "message_data_static.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #if 0
 
@@ -43,8 +46,8 @@ void func_80147520(void) {
         D_801CFCA4[7] = D_801CFCA4[8] = 0;
 }
 
-void func_80147564(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80147564(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->unk1204A[0] = 0xBD;
     msgCtx->unk1204A[1] = 0xB8;
@@ -66,9 +69,9 @@ void func_80147564(GlobalContext* globalCtx) {
     D_801F6B20 = 0xA;
 }
 
-s32 Message_ShouldAdvance(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    Input* controller = CONTROLLER1(&globalCtx->state);
+s32 Message_ShouldAdvance(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
+    Input* controller = CONTROLLER1(&play->state);
 
     if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
@@ -85,9 +88,9 @@ s32 Message_ShouldAdvance(GlobalContext* globalCtx) {
     }
 }
 
-s32 Message_ShouldAdvanceSilent(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    Input* controller = CONTROLLER1(&globalCtx->state);
+s32 Message_ShouldAdvanceSilent(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
+    Input* controller = CONTROLLER1(&play->state);
 
     if (msgCtx->unk12020 == 0x10 || msgCtx->unk12020 == 0x11) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
@@ -97,11 +100,11 @@ s32 Message_ShouldAdvanceSilent(GlobalContext* globalCtx) {
     }
 }
 
-void func_801477B4(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_801477B4(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
-    if (globalCtx->msgCtx.unk11F10 != 0) {
-        msgCtx->unk12023 = 2;
+    if (play->msgCtx.msgLength != 0) {
+        msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
         play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
@@ -123,14 +126,14 @@ extern s16 D_801CFD3C;
 extern s16 D_801CFD40;
 extern s16 D_801CFD44;
 
-void func_80147F18(GlobalContext *globalCtx, Gfx **gfxp, s16 arg2, s16 arg3) {
+void func_80147F18(PlayState *play, Gfx **gfxp, s16 arg2, s16 arg3) {
     s16 sp44;
     s32 sp10;
     s32 spC;
     s32 sp8;
     s32 sp4;
     Gfx *gfx;
-    MessageContext *msgCtx = &globalCtx->msgCtx;
+    MessageContext *msgCtx = &play->msgCtx;
     s16 temp_a0;
     s16 temp_a2_3;
     s16 temp_a3;
@@ -311,10 +314,10 @@ void func_80147F18(GlobalContext *globalCtx, Gfx **gfxp, s16 arg2, s16 arg3) {
 // I'll try to decomp all equivalent functions
 // before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
-void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
+void func_80148B98(PlayState* play, u8 arg1) {
     static s16 held = 0;
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    Input* curInput = CONTROLLER1(&globalCtx->state);
+    MessageContext* msgCtx = &play->msgCtx;
+    Input* curInput = CONTROLLER1(&play->state);
 
     if ((curInput->rel.stick_y > 29) && held == 0) {
         held = 1;
@@ -344,8 +347,8 @@ void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
 #endif
 
-void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80148CBC(PlayState* play, UNK_PTR puParm2, u8 arg2) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->unk11FF4 = 0x30;
     if (arg2 == 1) {
@@ -353,7 +356,7 @@ void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
     } else {
         msgCtx->unk11FF6 = msgCtx->unk11FFE[msgCtx->choiceIndex];
     }
-    func_80147818(globalCtx, puParm2, msgCtx->unk11FF4, msgCtx->unk11FF6);
+    func_80147818(play, puParm2, msgCtx->unk11FF4, msgCtx->unk11FF6);
 }
 
 // Function is actually matching
@@ -362,16 +365,16 @@ void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
 // I'll try to decomp all equivalent functions
 // before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
-void func_80148D64(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80148D64(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
     static s16 D_801CFD84;
 
-    if (globalCtx->msgCtx.unk120A4[1] < -0x1D) {
+    if (play->msgCtx.unk120A4[1] < -0x1D) {
         msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]--;
         if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] < '0') {
             msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '9';
         }
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->unk120A4[1] >= 0x1E) {
@@ -379,7 +382,7 @@ void func_80148D64(GlobalContext* globalCtx) {
         if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] > '9') {
             msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '0';
         }
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
     } else {
@@ -411,15 +414,15 @@ void func_80148D64(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148D64.s")
 #endif
 
-void func_80149048(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80149048(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->unk120A4[1] < -29) {
         msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]--;
         if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] < 0x30) {
             msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = 0x39;
         }
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
     } else if (msgCtx->unk120A4[1] > 29) {
@@ -427,7 +430,7 @@ void func_80149048(GlobalContext* globalCtx) {
         if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] >= 0x3A) {
             msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = 0x30;
         }
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
     }
@@ -443,8 +446,8 @@ extern s16 D_801CFD88;
 // I'll try to decomp all equivalent functions
 // before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
-void func_801491DC(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_801491DC(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
     static s16 D_801CFD88;
 
     if (msgCtx->unk120A4[1] < -29) {
@@ -453,7 +456,7 @@ void func_801491DC(GlobalContext* globalCtx) {
             msgCtx->unk12054[msgCtx->unk120C2] = 5;
         }
         msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x30;
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
         return;
@@ -464,7 +467,7 @@ void func_801491DC(GlobalContext* globalCtx) {
             msgCtx->unk12054[msgCtx->unk120C2] = 1;
         }
         msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x30;
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
         return;
@@ -501,8 +504,8 @@ void func_801491DC(GlobalContext* globalCtx) {
 // I'll try to decomp all equivalent functions
 // before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
-void func_80149454(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80149454(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
     static s16 D_801CFD8C;
 
     if (msgCtx->unk120A4[1] < -29) {
@@ -511,7 +514,7 @@ void func_80149454(GlobalContext* globalCtx) {
             msgCtx->unk12054[msgCtx->unk120C2] = 9;
         }
         msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x30;
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
         return;
@@ -522,7 +525,7 @@ void func_80149454(GlobalContext* globalCtx) {
             msgCtx->unk12054[msgCtx->unk120C2] = 0;
         }
         msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x30;
-        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadCharNES(play, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
                          msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
         return;
@@ -559,17 +562,17 @@ void func_80149454(GlobalContext* globalCtx) {
 // I'll try to decomp all equivalent functions
 // before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
-void func_801496C8(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_801496C8(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
     static s16 D_801CFD90; // held
 
-    if (globalCtx->msgCtx.unk120A4[1] < -0x1D) {
+    if (play->msgCtx.unk120A4[1] < -0x1D) {
         msgCtx->unk12054[msgCtx->unk120C2]--;
         if (msgCtx->unk12054[msgCtx->unk120C2] < 0) {
             msgCtx->unk12054[msgCtx->unk120C2] = 3;
         }
         msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x824F;
-        Font_LoadChar(globalCtx, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadChar(play, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
                       msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
         return;
@@ -580,7 +583,7 @@ void func_801496C8(GlobalContext* globalCtx) {
             msgCtx->unk12054[msgCtx->unk120C2] = 0;
         }
         msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x824F;
-        Font_LoadChar(globalCtx, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
+        Font_LoadChar(play, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
                       msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
         play_sound(NA_SE_SY_RUPY_COUNT);
         return;
@@ -614,8 +617,8 @@ void func_801496C8(GlobalContext* globalCtx) {
 extern s32 D_801F6B00;
 extern s32 D_801F6B04;
 
-void func_8014995C(GlobalContext* globalCtx, TexturePtr arg1, Gfx** gfxp) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_8014995C(PlayState* play, TexturePtr arg1, Gfx** gfxp) {
+    MessageContext* msgCtx = &play->msgCtx;
     Gfx* gfx = *gfxp;
     s16 temp_t0 = msgCtx->unk11FF4;
     s16 temp_t1 = msgCtx->unk11FF6;
@@ -624,7 +627,7 @@ void func_8014995C(GlobalContext* globalCtx, TexturePtr arg1, Gfx** gfxp) {
     gDPLoadTextureBlock_4b(gfx++, arg1, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    if ((msgCtx->unk11F0A != 5) && (msgCtx->unk11F0A != 0xD) && (globalCtx->pauseCtx.unk_1F0 == 0)) {
+    if ((msgCtx->unk11F0A != 5) && (msgCtx->unk11F0A != 0xD) && (play->pauseCtx.bombersNotebookOpen == 0)) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, msgCtx->unk1201E);
         gSPTextureRectangle(gfx++, (temp_t0 + 1) << 2, (temp_t1 + 1) << 2, ((temp_t0 + D_801F6B00 + 1)) << 2,
                             ((temp_t1 + D_801F6B00 + 1)) << 2, G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
@@ -643,40 +646,40 @@ extern f32 D_801CFDA4[];
 extern f32 D_801CFDC8[];
 extern s16 D_801CFD94;
 
-void func_80149C18(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80149C18(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
-    if (globalCtx->pauseCtx.unk_1F0 == 0) {
-        D_801CFD94 = (s16)(s32)(D_801CFDA4[msgCtx->unk12023] * 256.0f);
-        D_801CFD9C = (s16)(s32)(1024.0f / D_801CFDA4[msgCtx->unk12023]);
-        D_801CFD98 = (s16)(s32)(D_801CFDC8[msgCtx->unk12023] * 64.0f);
-        D_801CFDA0 = (s16)(s32)(1024.0f / D_801CFDC8[msgCtx->unk12023]);
+    if (play->pauseCtx.bombersNotebookOpen == 0) {
+        D_801CFD94 = (s16)(s32)(D_801CFDA4[msgCtx->stateTimer] * 256.0f);
+        D_801CFD9C = (s16)(s32)(1024.0f / D_801CFDA4[msgCtx->stateTimer]);
+        D_801CFD98 = (s16)(s32)(D_801CFDC8[msgCtx->stateTimer] * 64.0f);
+        D_801CFDA0 = (s16)(s32)(1024.0f / D_801CFDC8[msgCtx->stateTimer]);
         msgCtx->unk1206A = msgCtx->unk12006 + ((0x40 - D_801CFD98) / 2);
         msgCtx->unk1203C += msgCtx->unk1203A / 8;
-        msgCtx->unk12023++;
+        msgCtx->stateTimer++;
     } else {
-        msgCtx->unk12023 = 8;
+        msgCtx->stateTimer = 8;
         D_801CFD94 = 0x200;
         D_801CFD9C = 0x200;
         D_801CFD98 = 0x59;
         D_801CFDA0 = 0x2DB;
         msgCtx->unk1206A = msgCtx->unk12006 + ((0x5A - D_801CFD98) / 2);
     }
-    if (msgCtx->unk12023 == 8) {
+    if (msgCtx->stateTimer == 8) {
         msgCtx->unk12068 = msgCtx->unk12004;
         msgCtx->unk1206A = msgCtx->unk12006;
         msgCtx->msgMode = 3;
         msgCtx->unk1203C = msgCtx->unk1203A;
     }
-    if (globalCtx->pauseCtx.unk_1F0 == 0) {
+    if (play->pauseCtx.bombersNotebookOpen == 0) {
         msgCtx->unk12068 = msgCtx->unk12004 + ((0x100 - D_801CFD94) / 2);
         return;
     }
     msgCtx->unk12068 = msgCtx->unk12004 + ((0x200 - D_801CFD94) / 2);
 }
 
-void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_FindMessage(PlayState* play, u16 textId) {
+    MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
     MessageTableEntry* msgEntry = msgCtx->messageEntryTable;
     const char* segment = msgEntry->segment;
@@ -708,11 +711,11 @@ void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
 extern s16 D_801C6A74;
 extern s16 D_801C6A78;
 
-void func_8014AAD0(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_8014AAD0(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->msgMode == 6) {
-        globalCtx->msgCtx.ocarinaMode = 1;
+        play->msgCtx.ocarinaMode = 1;
         if (msgCtx->ocarinaAction == 0x33) {
             msgCtx->msgMode = 0x27;
             return;
@@ -722,8 +725,8 @@ void func_8014AAD0(GlobalContext* globalCtx) {
             msgCtx->unk11F00 = AudioOcarina_GetPlaybackStaff();
             msgCtx->unk11F00->pos = 0;
             D_801C6A74 = D_801C6A78 = 0;
-            func_80147564(globalCtx);
-            msgCtx->unk12023 = 3;
+            func_80147564(play);
+            msgCtx->stateTimer = 3;
             msgCtx->msgMode = 0x29;
             func_8019C398(0x19, 1);
             return;
@@ -738,8 +741,8 @@ void func_8014AAD0(GlobalContext* globalCtx) {
             msgCtx->unk11F00 = AudioOcarina_GetPlaybackStaff();
             msgCtx->unk11F00->pos = 0;
             D_801C6A74 = D_801C6A78 = 0;
-            func_80147564(globalCtx);
-            msgCtx->unk12023 = 3;
+            func_80147564(play);
+            msgCtx->stateTimer = 3;
             msgCtx->msgMode = 0x2E;
             func_8019C398(0x17, 1);
             return;
@@ -781,8 +784,8 @@ extern s16 D_801CFF70[];
 extern s16 D_801CFF7C[];
 extern s16 D_801CFF88[];
 
-void func_8014C70C(GlobalContext* globalCtx, u16 arg1, s16 arg2) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_8014C70C(PlayState* play, u16 arg1, s16 arg2) {
+    MessageContext* msgCtx = &play->msgCtx;
     u16 *new_var2 = &arg1;
     
     if (arg1 == 0x83) {
@@ -832,19 +835,19 @@ void func_8014C70C(GlobalContext* globalCtx, u16 arg1, s16 arg2) {
     }
 
     if(1){}
-    if (globalCtx->pauseCtx.unk_1F0 != 0) {
+    if (play->pauseCtx.bombersNotebookOpen != 0) {
         msgCtx->unk12010 = ((msgCtx->unk12010 * 1.4f) + 2.0f);
         msgCtx->unk12014 = (msgCtx->unk12014 * 1.4f);
     }
     msgCtx->unk12022 = 1;
 }
 
-void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
+    MessageContext* msgCtx = &play->msgCtx;
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
 
-    Font_LoadChar(globalCtx, codePointIndex, temp1);
+    Font_LoadChar(play, codePointIndex, temp1);
     msgCtx->decodedBuffer.wchar[decodedBufPos] = codePointIndex;
     temp1 += FONT_CHAR_TEX_SIZE;
     temp2 += (16.0f * msgCtx->unk12098);
@@ -853,21 +856,21 @@ void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset,
 }
 
 // Message_LoadRupees JPN ?
-void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 t = *decodedBufPos;
     s32 k = *offset;
     f32 f = *arg3;
 
-    Font_LoadChar(globalCtx, 0x838B, k); // 0x838b = ル in S-JIS
+    Font_LoadChar(play, 0x838B, k); // 0x838B = ル in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x838B;
     t += 1;
-    Font_LoadChar(globalCtx, 0x8373, k); // 0x8373 = ピ in S-JIS
+    Font_LoadChar(play, 0x8373, k); // 0x8373 = ピ in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t += 1;
-    Font_LoadChar(globalCtx, 0x815C, k); // Ox815C = ― in S-JIS
+    Font_LoadChar(play, 0x815C, k); // Ox815C = ― in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x815C;
 
@@ -907,9 +910,9 @@ void func_8014CDF0(OSTime time, s16* digits) {
 
 extern s16 D_801CFF94[];
 
-void func_8014CFDC(GlobalContext* globalCtx) {
+void func_8014CFDC(PlayState* play) {
     Font* font;
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+    MessageContext* msgCtx = &play->msgCtx;
 
     font = &msgCtx->font;
     if (msgCtx->msgBufPos == 0) {
@@ -945,14 +948,14 @@ void func_8014CFDC(GlobalContext* globalCtx) {
 
         msgCtx->msgBufPos++;
         if (msgCtx->unk11F16 != 0xFE) {
-            func_8014C70C(globalCtx, msgCtx->unk11F16, (msgCtx->unk1206A + 0xA));
+            func_8014C70C(play, msgCtx->unk11F16, (msgCtx->unk1206A + 0xA));
         }
     }
 }
 
 // Message_LoadTimeBeforeMoonCrash
-void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
+    MessageContext* msgCtx = &play->msgCtx;
     s16 i;
     s16 p = *decodedBufPos;
     s32 o = *offset;
@@ -985,23 +988,23 @@ void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s
     }
 
     for (i = 0; i < 4; i++) {
-        Font_LoadChar(globalCtx, digits[i] + 0x824F, o); // 0x824F = ０ in S-JIS
+        Font_LoadChar(play, digits[i] + 0x824F, o); // 0x824F = ０ in S-JIS
         o += FONT_CHAR_TEX_SIZE;
         msgCtx->decodedBuffer.wchar[p] = digits[i] + 0x824F;
         p++;
         if (i == 1) {
             // Hours (時間)
-            Font_LoadChar(globalCtx, 0x8E9E, o);
+            Font_LoadChar(play, 0x8E9E, o);
             o += FONT_CHAR_TEX_SIZE;
             msgCtx->decodedBuffer.wchar[p] = 0x8E9E;
             p++;
-            Font_LoadChar(globalCtx, 0x8AD4, o);
+            Font_LoadChar(play, 0x8AD4, o);
             o += FONT_CHAR_TEX_SIZE;
             msgCtx->decodedBuffer.wchar[p] = 0x8E9E;
             p++;
         } else if (i == 3) {
             // Minutes (分)
-            Font_LoadChar(globalCtx, 0x95AA, o);
+            Font_LoadChar(play, 0x95AA, o);
             o += FONT_CHAR_TEX_SIZE;
             msgCtx->decodedBuffer.wchar[p] = 0x95AA;
         }
@@ -1013,56 +1016,51 @@ void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s
 }
 
 // JPN Area names
-extern u16 D_801D0188[11][9];
+extern u16 D_801D0188[OWL_WARP_MAX][9];
 // Area Names lengths
-extern s16 D_801D0250[11];
+extern s16 D_801D0250[OWL_WARP_MAX];
 
 // Message_LoadAreaText
-void func_8014D62C(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decodedBufPos) {
-    s16* unk_238Ptr;
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    s16 p = *decodedBufPos;
-    s32 o = *offset;
-    f32 f = *arg2;
-    s16 i;
-    s16 currentArea;
+void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
+    MessageContext* msgCtx = &play->msgCtx;
+    PauseContext* pauseCtx = &play->pauseCtx;
     s16 stringLimit;
+    s16 temp_s1 = *decodedBufPos;
+    s32 temp_s2 = *offset;
+    f32 sp3C = *arg2;
+    s16 owlWarpId;
+    s16 i;
 
-    unk_238Ptr = globalCtx->pauseCtx.unk_238;
-    if ((func_8010A0A4(globalCtx) != 0) || (globalCtx->sceneNum == SCENE_SECOM)) {
-        currentArea = 10;
+    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+        owlWarpId = OWL_WARP_ENTRANCE;
     } else {
-        currentArea = unk_238Ptr[4];
+        owlWarpId = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
+    }
+    stringLimit = D_801D0250[owlWarpId];
+
+    for (i = 0; i < stringLimit; i++, temp_s1++, temp_s2 += FONT_CHAR_TEX_SIZE) {
+        msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[owlWarpId][i];
+        Font_LoadChar(play, D_801D0188[owlWarpId][i], temp_s2);
     }
 
-    stringLimit = D_801D0250[currentArea];
-    if (stringLimit > 0) {
-        i = 0;
-        do {
-            msgCtx->decodedBuffer.wchar[p] = D_801D0188[currentArea][i];
-            Font_LoadChar(globalCtx, D_801D0188[currentArea][i], o);
-            i++;
-            p++;
-            o += FONT_CHAR_TEX_SIZE;
-        } while (i < stringLimit);
-    }
-    p--;
-    f += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
-    *decodedBufPos = p;
-    *offset = o;
-    *arg2 = f;
+    temp_s1--;
+    sp3C += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
+
+    *decodedBufPos = temp_s1;
+    *offset = temp_s2;
+    *arg2 = sp3C;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
 
-void func_80150A84(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80150A84(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
     u8 offset = msgCtx->unk11F0A;
     u8 t;
     if (D_801CFC78[offset] != 0xE) {
         DmaMgr_SendRequest0(msgCtx->unk11EF8, &((u8*)SEGMENT_ROM_START(message_static))[D_801CFC78[offset] * 0x1000],
                             0x1000);
-        if (globalCtx->pauseCtx.unk_1F0 == 0) {
+        if (play->pauseCtx.bombersNotebookOpen == 0) {
             if ((&D_801CFC78[offset] == &D_801CFC78[t = 0]) || (&D_801CFC78[offset] == &D_801CFC78[t = 6]) ||
                 (&D_801CFC78[offset] == &D_801CFC78[t = 10]) || (&D_801CFC78[offset] == &D_801CFC78[t = 11])) {
                 msgCtx->unk12034 = 0;
@@ -1109,16 +1107,16 @@ void func_80150A84(GlobalContext* globalCtx) {
 extern s8 D_801C6A70;
 extern s32 D_801F6B08;
 
-void func_801514B0(GlobalContext* globalCtx, u16 arg1, u8 arg2) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
+    MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     f32 temp = 1024.0f;
 
     msgCtx->ocarinaAction = 0xFFFF;
 
     if (msgCtx->msgMode == 0) {
-        gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
+        gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
     }
     msgCtx->unk12092 = 0;
     D_801C6A70 = 0;
@@ -1141,13 +1139,13 @@ void func_801514B0(GlobalContext* globalCtx, u16 arg1, u8 arg2) {
     }
     msgCtx->currentTextId = arg1;
     if (gSaveContext.options.language == 0) {
-        Message_FindMessage(globalCtx, arg1);
-        msgCtx->unk11F10 = font->messageEnd;
+        Message_FindMessage(play, arg1);
+        msgCtx->msgLength = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
                             font->messageEnd);
     } else {
-        Message_FindMessageNES(globalCtx, arg1);
-        msgCtx->unk11F10 = font->messageEnd;
+        Message_FindMessageNES(play, arg1);
+        msgCtx->msgLength = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
                             font->messageEnd);
     }
@@ -1172,67 +1170,67 @@ void func_801514B0(GlobalContext* globalCtx, u16 arg1, u8 arg2) {
     msgCtx->unk1201E = 0xFF;
     msgCtx->unkActor = NULL;
     msgCtx->msgMode = 1;
-    msgCtx->unk12023 = 0;
+    msgCtx->stateTimer = 0;
     msgCtx->unk12024 = 0;
-    globalCtx->msgCtx.ocarinaMode = 0;
+    play->msgCtx.ocarinaMode = 0;
     msgCtx->unk120D2 = 0xFF;
     msgCtx->unk120CE = msgCtx->unk120D0 = msgCtx->unk120D2;
 }
 
-void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->ocarinaAction = 0xFFFF;
-    func_80150D08(globalCtx, textId);
+    func_80150D08(play, textId);
     msgCtx->unkActor = Actor;
     msgCtx->msgMode = 1;
-    msgCtx->unk12023 = 0;
+    msgCtx->stateTimer = 0;
     msgCtx->unk12024 = 0;
-    globalCtx->msgCtx.ocarinaMode = 0;
+    play->msgCtx.ocarinaMode = 0;
 }
 
-void func_80151938(GlobalContext* globalCtx, u16 textId) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+void func_80151938(PlayState* play, u16 textId) {
+    MessageContext* msgCtx = &play->msgCtx;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    msgCtx->unk11F10 = 0;
-    func_80150D08(globalCtx, textId);
-    func_80150A84(globalCtx);
+    msgCtx->msgLength = 0;
+    func_80150D08(play, textId);
+    func_80150A84(play);
     msgCtx->msgMode = 5;
-    msgCtx->unk12023 = 8;
+    msgCtx->stateTimer = 8;
     msgCtx->unk12024 = 0;
 
     if (interfaceCtx->unk_222 == 0) {
         if (textId != 0x1B93) {
-            func_8011552C(globalCtx, 0x10);
+            func_8011552C(play, 0x10);
         } else if (textId != 0xF8) {
-            func_8011552C(globalCtx, 6);
+            func_8011552C(play, 6);
         }
     }
     msgCtx->unk1203C = msgCtx->unk1203A;
 
-    if (globalCtx->pauseCtx.unk_1F0 != 0) {
+    if (play->pauseCtx.bombersNotebookOpen) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
-        func_80149C18(globalCtx);
-        msgCtx->unk12023 = 1;
+        func_80149C18(play);
+        msgCtx->stateTimer = 1;
     }
 }
 
-void func_80151A68(GlobalContext* globalCtx, u16 textId) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80151A68(PlayState* play, u16 textId) {
+    MessageContext* msgCtx = &play->msgCtx;
 
-    msgCtx->unk11F10 = 0;
-    func_80150D08(globalCtx, textId);
-    func_80150A84(globalCtx);
-    func_8015B198(globalCtx);
+    msgCtx->msgLength = 0;
+    func_80150D08(play, textId);
+    func_80150A84(play);
+    func_8015B198(play);
     msgCtx->msgMode = 0x45;
     msgCtx->unk12024 = 0;
     msgCtx->unk1203C = msgCtx->unk1203A = msgCtx->unk1201E = 0;
-    msgCtx->unk12023 = 0x1E;
+    msgCtx->stateTimer = 30;
 
     // Day/Dawn/Night.. Messages
-    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7)) {
+    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6)) {
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
@@ -1243,12 +1241,12 @@ void func_80151A68(GlobalContext* globalCtx, u16 textId) {
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
         msgCtx->unk11F1A[0] = msgCtx->unk11F1A[1] = msgCtx->unk11F1A[2] = 0;
-        Interface_ChangeAlpha(1);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     }
 }
 
-void func_80151BB4(GlobalContext* globalCtx, u8 arg1) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80151BB4(PlayState* play, u8 arg1) {
+    MessageContext* msgCtx = &play->msgCtx;
     u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
@@ -1264,8 +1262,8 @@ void func_80151BB4(GlobalContext* globalCtx, u8 arg1) {
     }
 }
 
-u32 func_80151C9C(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+u32 func_80151C9C(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     while (true) {
         if (msgCtx->unk120B1 == 0) {
@@ -1280,7 +1278,7 @@ u32 func_80151C9C(GlobalContext* globalCtx) {
                 (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
 
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                func_80151938(globalCtx, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
+                func_80151938(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
@@ -1290,98 +1288,88 @@ u32 func_80151C9C(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
-void func_80152434(GlobalContext* globalCtx, u16 arg2) {
-    globalCtx->msgCtx.unk12046 = 0;
-    func_80151DA4(globalCtx, arg2);
+void func_80152434(PlayState* play, u16 arg2) {
+    play->msgCtx.unk12046 = 0;
+    func_80151DA4(play, arg2);
 }
 
-void func_80152464(GlobalContext* globalCtx, u16 arg1) {
-    globalCtx->msgCtx.unk12046 = 1;
-    func_80151DA4(globalCtx, arg1);
+void func_80152464(PlayState* play, u16 arg1) {
+    play->msgCtx.unk12046 = 1;
+    func_80151DA4(play, arg1);
 }
 
-typedef enum{ 
-    /*  0 */ TEXT_STATE_NONE,
-    /*  1 */ TEXT_STATE_1,
-    /*  2 */ TEXT_STATE_2,
-    /*  3 */ TEXT_STATE_3,
-    /*  4 */ TEXT_STATE_4,
-    /*  5 */ TEXT_STATE_5,
-    /*  6 */ TEXT_STATE_6,
-    /*  7 */ TEXT_STATE_7,
-    /*  8 */ TEXT_STATE_8,
-    /*  9 */ TEXT_STATE_9,
-    /* 10 */ TEXT_STATE_10,
-    /* 11 */ TEXT_STATE_11,
-    /* 12 */ TEXT_STATE_12,
-    /* 13 */ TEXT_STATE_13,
-    /* 14 */ TEXT_STATE_14,
-    /* 15 */ TEXT_STATE_15,
-    /* 16 */ TEXT_STATE_16,
-    /* 17 */ TEXT_STATE_17,
-    /* 18 */ TEXT_STATE_18,
-} TextState;
-
-
+/**
+ * @return u8 A value of the TextState enum representing the current state of the on-screen message
+ */
 u8 Message_GetState(MessageContext* msgCtx) {
-    if (msgCtx->unk11F10 == 0) {
-        return 0;
+    if (msgCtx->msgLength == 0) {
+        return TEXT_STATE_NONE;
     }
 
     if (msgCtx->msgMode == 0x42) {
         if (msgCtx->unk11F14 != 0xFFFF) {
-            return 1;
+            return TEXT_STATE_1;
         }
+
         if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
-            return 4;
+            return TEXT_STATE_CHOICE;
         }
         if ((msgCtx->unk12020 == 0x40) || (msgCtx->unk12020 == 0x42) || (msgCtx->unk12020 == 0x30)) {
-            return 5;
+            return TEXT_STATE_5;
         }
         if (msgCtx->unk12020 == 0x41) {
-            return 0x10;
+            return TEXT_STATE_16;
         }
-        if (((s32)msgCtx->unk12020 >= 0x50) && ((s32)msgCtx->unk12020 < 0x58)) {
-            return 3;
+        if ((msgCtx->unk12020 >= 0x50) && (msgCtx->unk12020 < 0x58)) {
+            return TEXT_STATE_3;
         }
         if ((msgCtx->unk12020 == 0x60) || (msgCtx->unk12020 == 0x61)) {
-            return 0xE;
+            return TEXT_STATE_14;
         }
         if (msgCtx->unk12020 == 0x62) {
-            return 0xF;
+            return TEXT_STATE_15;
         }
         if (msgCtx->unk12020 == 0x63) {
-            return 0x11;
+            return TEXT_STATE_17;
         }
         if (msgCtx->unk12020 == 0x12) {
-            return 0x12;
+            return TEXT_STATE_18;
         }
-        return 6;
-    } else if (msgCtx->msgMode == 0x41) {
-        return 0xA;
-    } else if (msgCtx->msgMode == 0x1B) {
-        return 7;
-    } else if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
-        return 8;
-    } else if (msgCtx->msgMode == 0x20) {
-        return 9;
-    } else if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
-        return 0xB;
-    } else if (msgCtx->msgMode == 0x3D) {
-        return 0xC;
-    } else if (msgCtx->msgMode == 0x40) {
-        return 0xD;
-    } else if ((msgCtx->msgMode == 0x43) && (msgCtx->unk12023 == 1) && (msgCtx->unk120B1 == 0)) {
-        return 2;
+        return TEXT_STATE_DONE;
     }
-    return 3;
-}
 
+    if (msgCtx->msgMode == 0x41) {
+        return TEXT_STATE_10;
+    }
+    if (msgCtx->msgMode == 0x1B) {
+        return TEXT_STATE_7;
+    }
+    if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
+        return TEXT_STATE_8;
+    }
+    if (msgCtx->msgMode == 0x20) {
+        return TEXT_STATE_9;
+    }
+    if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
+        return TEXT_STATE_11;
+    }
+    if (msgCtx->msgMode == 0x3D) {
+        return TEXT_STATE_12;
+    }
+    if (msgCtx->msgMode == 0x40) {
+        return TEXT_STATE_13;
+    }
+    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+        return TEXT_STATE_CLOSING;
+    }
+
+    return TEXT_STATE_3;
+}
 
 extern u64 D_020029A0[];
 
-void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_8015268C(PlayState* play, Gfx** gfxp) {
+    MessageContext* msgCtx = &play->msgCtx;
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
@@ -1433,11 +1421,11 @@ void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp) {
 
 void func_80152C64(View* view) {
     SET_FULLSCREEN_VIEWPORT(view);
-    func_8013FBC8(view);
+    View_ApplyOrthoToOverlay(view);
 }
 
-void func_80152CAC(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80152CAC(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
 
     if (msgCtx->ocarinaAction == 2) {
         AudioOcarina_SetInstrumentId(0xA);
@@ -1481,21 +1469,21 @@ void func_80152CAC(GlobalContext* globalCtx) {
 }
 
 // Spawn song effect?
-void func_80152EC0(GlobalContext* globalCtx) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
-    Player* player = GET_PLAYER(globalCtx);
+void func_80152EC0(PlayState* play) {
+    MessageContext* msgCtx = &play->msgCtx;
+    Player* player = GET_PLAYER(play);
 
     if (1) {}
     if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) &&
         ((msgCtx->ocarinaAction < 0x43) || (msgCtx->ocarinaAction >= 0x47))) {
         msgCtx->unk120B0 = 1;
         if (msgCtx->songPlayed != 0x16) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_801D02D8[msgCtx->songPlayed], player->actor.world.pos.x,
+            Actor_Spawn(&play->actorCtx, play, D_801D02D8[msgCtx->songPlayed], player->actor.world.pos.x,
                         player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, D_801D02F8[msgCtx->songPlayed]);
             return;
         }
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OCEFF_WIPE4, player->actor.world.pos.x,
-                    player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_OCEFF_WIPE4, player->actor.world.pos.x, player->actor.world.pos.y,
+                    player->actor.world.pos.z, 0, 0, 0, 0);
     }
 }
 
@@ -1503,22 +1491,22 @@ void func_80152EC0(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80153750.s")
 
-void func_80153E7C(GlobalContext* globalCtx, void* arg1) {
-    if ((gSaveContext.options.language == 0) && (globalCtx->msgCtx.unk12090 == 0)) {
-        func_8014ADBC(globalCtx, arg1);
+void func_80153E7C(PlayState* play, void* arg1) {
+    if ((gSaveContext.options.language == 0) && (play->msgCtx.unk12090 == 0)) {
+        func_8014ADBC(play, arg1);
         return;
     }
-    if (globalCtx->msgCtx.unk12090 != 0) {
-        func_8015E7EC(globalCtx, arg1);
+    if (play->msgCtx.unk12090 != 0) {
+        func_8015E7EC(play, arg1);
         return;
     }
-    func_8015966C(globalCtx, arg1, 0);
+    func_8015966C(play, arg1, 0);
 }
 
 extern u64 D_02002AA0[];
 
-void func_80153EF0(GlobalContext* globalCtx, Gfx** gfxp) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void func_80153EF0(PlayState* play, Gfx** gfxp) {
+    MessageContext* msgCtx = &play->msgCtx;
     Gfx* gfx;
 
     gfx = *gfxp;
@@ -1542,24 +1530,24 @@ void func_80153EF0(GlobalContext* globalCtx, Gfx** gfxp) {
         msgCtx->unk11FF8 = XREG(75);
     }
     msgCtx->unk11FFA = XREG(74);
-    func_8015966C(globalCtx, &gfx, 0);
+    func_8015966C(play, &gfx, 0);
     *gfxp = gfx++;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801541D4.s")
 
-void func_80156758(GlobalContext* globalCtx) {
+void func_80156758(PlayState* play) {
     Gfx* nextDisplayList;
     Gfx* polyOpa;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
     polyOpa = POLY_OPA_DISP;
     nextDisplayList = Graph_GfxPlusOne(polyOpa);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
-    if ((globalCtx->msgCtx.currentTextId != 0x5E6) || !Play_InCsMode(globalCtx)) {
-        func_801541D4(globalCtx, &nextDisplayList);
+    if ((play->msgCtx.currentTextId != 0x5E6) || !Play_InCsMode(play)) {
+        func_801541D4(play, &nextDisplayList);
     }
 
     gSPEndDisplayList(nextDisplayList++);
@@ -1570,28 +1558,28 @@ void func_80156758(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
 
-void func_801586A4(GlobalContext* globalCtx) {
-    globalCtx->msgCtx.messageEntryTableNes = D_801C6B98;
-    globalCtx->msgCtx.messageTableStaff = D_801CFB08;
+void func_801586A4(PlayState* play) {
+    play->msgCtx.messageEntryTableNes = D_801C6B98;
+    play->msgCtx.messageTableStaff = D_801CFB08;
 }
 
-void Message_Init(GlobalContext* globalCtx) {
+void Message_Init(PlayState* play) {
     Font* font;
-    MessageContext* messageCtx = &globalCtx->msgCtx;
+    MessageContext* messageCtx = &play->msgCtx;
 
-    func_801586A4(globalCtx);
-    globalCtx->msgCtx.ocarinaMode = 0;
+    func_801586A4(play);
+    play->msgCtx.ocarinaMode = 0;
     messageCtx->msgMode = 0;
-    messageCtx->unk11F10 = 0;
+    messageCtx->msgLength = 0;
     messageCtx->currentTextId = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;
     messageCtx->ocarinaAction = messageCtx->unk11FF2 = 0;
     messageCtx->unk1201E = 0xFF;
-    View_Init(&messageCtx->view, globalCtx->state.gfxCtx);
-    messageCtx->unk11EF8 = THA_AllocEndAlign16(&globalCtx->state.heap, 0x13C00);
-    font = &globalCtx->msgCtx.font;
-    Font_LoadOrderedFont(&globalCtx->msgCtx.font);
+    View_Init(&messageCtx->view, play->state.gfxCtx);
+    messageCtx->unk11EF8 = THA_AllocEndAlign16(&play->state.heap, 0x13C00);
+    font = &play->msgCtx.font;
+    Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;
     messageCtx->unk12090 = messageCtx->unk12092 = 0;
     messageCtx->unk12094 = 0;

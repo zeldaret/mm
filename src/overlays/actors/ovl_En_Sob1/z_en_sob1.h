@@ -11,7 +11,7 @@
 
 struct EnSob1;
 
-typedef void (*EnSob1ActionFunc)(struct EnSob1*, GlobalContext*);
+typedef void (*EnSob1ActionFunc)(struct EnSob1*, PlayState*);
 typedef void (*EnSob1BlinkFunc)(struct EnSob1*);
 
 #define ENSOB1_GET_SHOPTYPE(thisx) ((thisx)->params & 0x1F)
@@ -28,7 +28,7 @@ typedef struct EnSob1 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnSob1ActionFunc actionFunc;
-    /* 0x18C */ EnSob1ActionFunc tmpActionFunc; // Used to restore back to correct browsing function
+    /* 0x18C */ EnSob1ActionFunc prevActionFunc; // Used to restore back to correct browsing function
     /* 0x190 */ EnSob1ActionFunc changeObjectFunc;
     /* 0x194 */ ColliderCylinder collider;
     /* 0x1E0 */ Path* path;
@@ -87,9 +87,5 @@ typedef enum {
     /* 1 */ ENSOB1_CUTSCENESTATE_WAITING,
     /* 2 */ ENSOB1_CUTSCENESTATE_PLAYING
 } EnSob1CutsceneState;
-
-//! @TODO: Add enum for objIndices index based on what the object is for
-
-extern const ActorInit En_Sob1_InitVars;
 
 #endif // Z_EN_SOB1_H

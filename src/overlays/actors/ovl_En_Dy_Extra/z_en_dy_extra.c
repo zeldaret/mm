@@ -11,15 +11,15 @@
 
 #define THIS ((EnDyExtra*)thisx)
 
-void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDyExtra_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDyExtra_Init(Actor* thisx, PlayState* play);
+void EnDyExtra_Destroy(Actor* thisx, PlayState* play);
+void EnDyExtra_Update(Actor* thisx, PlayState* play);
+void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 
-void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx);
-void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx);
+void func_80A61334(EnDyExtra* this, PlayState* play);
+void func_80A613C8(EnDyExtra* this, PlayState* play);
 
-const ActorInit En_Dy_Extra_InitVars = {
+ActorInit En_Dy_Extra_InitVars = {
     ACTOR_EN_DY_EXTRA,
     ACTORCAT_PROP,
     FLAGS,
@@ -31,10 +31,10 @@ const ActorInit En_Dy_Extra_InitVars = {
     (ActorFunc)EnDyExtra_Draw,
 };
 
-void EnDyExtra_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDyExtra_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDyExtra_Init(Actor* thisx, PlayState* play) {
     EnDyExtra* this = THIS;
 
     this->type = this->actor.params;
@@ -48,7 +48,7 @@ void EnDyExtra_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80A61334;
 }
 
-void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
+void func_80A61334(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->actor.world.pos.y < -85.0f) {
@@ -61,11 +61,11 @@ void func_80A61334(EnDyExtra* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
+void func_80A613C8(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if (this->unk14C == 0 || this->unk150 < 0.02f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -76,16 +76,16 @@ void func_80A613C8(EnDyExtra* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnDyExtra_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDyExtra_Update(Actor* thisx, PlayState* play) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
 }
 
-void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
     static Color_RGBA8 D_80A61740[] = {
         { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 },
         { 170, 255, 255, 255 }, { 255, 255, 170, 255 },
@@ -97,7 +97,7 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00 };
     EnDyExtra* this = THIS;
     s32 pad;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     Vtx* vertices = Lib_SegmentedToVirtual(object_dy_obj_Vtx_00DD40);
     s32 i;
     u8 unk[3];
@@ -114,12 +114,12 @@ void EnDyExtra_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames * 2, 0, 0x20, 0x40, 1,
-                                globalCtx->state.frames, globalCtx->state.frames * -8, 0x10, 0x10));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 2, 0, 0x20, 0x40, 1, play->state.frames,
+                                play->state.frames * -8, 0x10, 0x10));
     gDPPipeSync(POLY_XLU_DISP++);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, D_80A61740[this->type].r, D_80A61740[this->type].g,
                     D_80A61740[this->type].b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, D_80A61754[this->type].r, D_80A61754[this->type].g, D_80A61754[this->type].b, 128);

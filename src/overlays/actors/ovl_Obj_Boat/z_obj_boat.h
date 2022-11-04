@@ -18,8 +18,6 @@ typedef struct ObjBoat {
     /* 0x162 */ UNK_TYPE1 pad_162;
     /* 0x163 */ u8 unk_163;
     /* 0x164 */ Vec3s* unk_164;
-} ObjBoat;
-
-extern const ActorInit Obj_Boat_InitVars;
+} ObjBoat; // size = 0x168
 
 #endif // Z_OBJ_BOAT_H

@@ -11,19 +11,19 @@
 
 #define THIS ((BgGoronOyu*)thisx)
 
-void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgGoronOyu_Init(Actor* thisx, PlayState* play);
+void BgGoronOyu_Destroy(Actor* thisx, PlayState* play);
+void BgGoronOyu_Update(Actor* thisx, PlayState* play);
+void BgGoronOyu_Draw(Actor* thisx, PlayState* play);
 
-void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx);
-void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx);
-void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx);
-void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx);
-void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx);
-void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx);
+void func_80B40100(BgGoronOyu* this, PlayState* play);
+void func_80B400C8(BgGoronOyu* this, PlayState* play);
+void func_80B401F8(BgGoronOyu* this, PlayState* play);
+void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, PlayState* play);
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play);
+void func_80B40160(BgGoronOyu* this, PlayState* play);
 
-const ActorInit Bg_Goron_Oyu_InitVars = {
+ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
     ACTORCAT_BG,
     FLAGS,
@@ -47,12 +47,12 @@ void func_80B4009C(BgGoronOyu* this) {
     this->unk_164 = 20.0f;
 }
 
-void func_80B400C8(BgGoronOyu* this, GlobalContext* globalCtx) {
-    BgGoronOyu_UpdateWaterBoxInfo(this, globalCtx);
-    func_80B401F8(this, globalCtx);
+void func_80B400C8(BgGoronOyu* this, PlayState* play) {
+    BgGoronOyu_UpdateWaterBoxInfo(this, play);
+    func_80B401F8(this, play);
 }
 
-void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx) {
+void func_80B40100(BgGoronOyu* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->initialActorCutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->initialActorCutscene, &this->dyna.actor);
         this->actionFunc = func_80B40160;
@@ -61,12 +61,12 @@ void func_80B40100(BgGoronOyu* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
+void func_80B40160(BgGoronOyu* this, PlayState* play) {
     static Vec3f D_80B40780 = { 0, 0, 0 };
 
     Math_StepToF(&this->unk_164, 0.0f, 0.2f);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - this->unk_164;
-    BgGoronOyu_UpdateWaterBoxInfo(this, globalCtx);
+    BgGoronOyu_UpdateWaterBoxInfo(this, play);
 
     if (this->unk_164 <= 0.0f) {
         ActorCutscene_Stop(this->initialActorCutscene);
@@ -77,45 +77,45 @@ void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
     Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
-void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
+void func_80B401F8(BgGoronOyu* this, PlayState* play) {
     Player* player;
     Vec3f dist;
 
-    if (Actor_HasParent(&this->dyna.actor, globalCtx)) {
+    if (Actor_HasParent(&this->dyna.actor, play)) {
         this->dyna.actor.parent = NULL;
         return;
     }
 
-    player = GET_PLAYER(globalCtx);
+    player = GET_PLAYER(play);
     Math_Vec3f_DistXYZAndStoreDiff(&this->waterBoxPos, &player->actor.world.pos, &dist);
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        Actor_PickUp(&this->dyna.actor, globalCtx, GI_MAX, this->dyna.actor.xzDistToPlayer,
+        Actor_PickUp(&this->dyna.actor, play, GI_MAX, this->dyna.actor.xzDistToPlayer,
                      fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 
-void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, GlobalContext* globalCtx) {
+void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, PlayState* play) {
     WaterBox* waterBox;
     f32 ySurface;
 
-    if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                             &ySurface, &waterBox)) {
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z, &ySurface,
+                             &waterBox)) {
         Math_Vec3s_ToVec3f(&this->waterBoxPos, &waterBox->minPos);
         this->waterBoxXLength = waterBox->xLength;
         this->waterBoxZLength = waterBox->zLength;
     }
 }
 
-void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx) {
+void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play) {
     s16 scale;
     Vec3f pos1;
     Vec3f pos2;
     CollisionPoly* poly;
     s32 pad;
 
-    if ((globalCtx->state.frames % 4) == 0) {
+    if ((play->state.frames % 4) == 0) {
         Vec3f vel1;
         Vec3f vel2;
 
@@ -127,9 +127,9 @@ void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx) {
         vel1.z = 0.0f;
         scale = -200 - (s32)(Rand_ZeroOne() * 50.0f);
 
-        if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos1) < this->waterBoxPos.y) {
+        if (BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos1) < this->waterBoxPos.y) {
             pos1.y = this->waterBoxPos.y + 10.0f;
-            EffectSsIceSmoke_Spawn(globalCtx, &pos1, &vel1, &gZeroVec3f, scale);
+            EffectSsIceSmoke_Spawn(play, &pos1, &vel1, &gZeroVec3f, scale);
         }
         pos2.x = (Rand_ZeroOne() * this->waterBoxXLength) + this->waterBoxPos.x;
         pos2.y = this->waterBoxPos.y + 100.0f;
@@ -139,14 +139,14 @@ void BgGoronOyu_SpawnEffects(BgGoronOyu* this, GlobalContext* globalCtx) {
         vel2.z = 0.0f;
         scale = -200 - (s32)(Rand_ZeroOne() * 50.0f);
 
-        if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos2) < this->waterBoxPos.y) {
+        if (BgCheck_EntityRaycastFloor2(play, &play->colCtx, &poly, &pos2) < this->waterBoxPos.y) {
             pos2.y = this->waterBoxPos.y + 10.0f;
-            EffectSsIceSmoke_Spawn(globalCtx, &pos2, &vel2, &gZeroVec3f, scale);
+            EffectSsIceSmoke_Spawn(play, &pos2, &vel2, &gZeroVec3f, scale);
         }
     }
 }
 
-void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgGoronOyu* this = THIS;
     CollisionHeader* colHeader = NULL;
@@ -155,9 +155,9 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 1);
     CollisionHeader_GetVirtual(&object_oyu_Colheader_000988, &colHeader);
 
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
 
-    BgGoronOyu_UpdateWaterBoxInfo(this, globalCtx);
+    BgGoronOyu_UpdateWaterBoxInfo(this, play);
 
     if (thisx->params != 0) {
         thisx->world.pos.y = thisx->home.pos.y;
@@ -168,25 +168,25 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgGoronOyu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgGoronOyu_Destroy(Actor* thisx, PlayState* play) {
     BgGoronOyu* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgGoronOyu_Update(Actor* thisx, PlayState* play) {
     BgGoronOyu* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    BgGoronOyu_SpawnEffects(this, globalCtx);
+    this->actionFunc(this, play);
+    BgGoronOyu_SpawnEffects(this, play);
 }
 
-void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+void BgGoronOyu_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

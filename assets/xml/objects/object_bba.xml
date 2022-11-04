@@ -18,7 +18,7 @@
         <DList Name="gBbaFeetDL" Offset="0x4180" />
 
         <!-- Animations -->
-        <Animation Name="gBbaWalkingAnim" Offset="0x4910" /> <!-- Looks to be unused -->
+        <Animation Name="gBbaSwayAnim" Offset="0x4910" />
         <Animation Name="gBbaKnockedOverAnim" Offset="0x5154" />
         <Animation Name="gBbaLyingDownAnim" Offset="0x58B8" />
         <Animation Name="gBbaIdleHoldingBagAnim" Offset="0x5DC4" />
@@ -41,7 +41,7 @@
         <Limb Name="gBbaRightLowerArmRootLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_LOWER_ARM_ROOT" Offset="0x5E88" />
         <Limb Name="gBbaRightForearmLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_FOREARM" Offset="0x5E94" />
         <Limb Name="gBbaRightHandLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_HAND" Offset="0x5EA0" />
-        <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimbs" Offset="0x5EF0" />
+        <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimb" Offset="0x5EF0" />
 
          <!-- Animations -->
         <Animation Name="gBbaIdleAnim" Offset="0x6550" />

@@ -15,16 +15,16 @@
 
 #define PARAMS ((EffectSsIcePieceInitParams*)initParamsx)
 
-u32 EffectSsIcePiece_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsIcePiece_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsIcePiece_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsIcePiece_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsIcePiece_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Ice_Piece_InitVars = {
     EFFECT_SS_ICE_PIECE,
     EffectSsIcePiece_Init,
 };
 
-u32 EffectSsIcePiece_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsIcePiece_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsIcePieceInitParams* initParams = PARAMS;
 
     this->pos = initParams->pos;
@@ -44,11 +44,11 @@ u32 EffectSsIcePiece_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
     return 1;
 }
 
-void EffectSsIcePiece_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsIcePiece_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
     f32 scale = this->rScale * 0.01f;
-    u32 frames = globalCtx->state.frames;
+    u32 frames = play->state.frames;
     f32 alpha;
 
     OPEN_DISPS(gfxCtx);
@@ -65,18 +65,18 @@ void EffectSsIcePiece_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     Matrix_RotateYS(this->rYaw, MTXMODE_APPLY);
     Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (s32)alpha & 0xFF);
-    func_800BCC68(&this->pos, globalCtx);
-    gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, frames % 256, 0x20, 0x10, 1, 0, (2 * frames) % 256, 0x40,
-                                0x20));
-    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragmentDL);
+    func_8012C2DC(play->state.gfxCtx);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 50, 100, (u8)(s32)alpha);
+    func_800BCC68(&this->pos, play);
+    gSPSegment(
+        POLY_XLU_DISP++, 0x08,
+        Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, frames % 256, 0x20, 0x10, 1, 0, (2 * frames) % 256, 0x40, 0x20));
+    gSPDisplayList(POLY_XLU_DISP++, gEffIceFragment1DL);
 
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsIcePiece_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsIcePiece_Update(PlayState* play, u32 index, EffectSs* this) {
     this->rPitch += this->rRotSpeed;
     this->velocity.x *= 0.85f;
     this->velocity.y *= 0.85f;

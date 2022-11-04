@@ -11,16 +11,16 @@
 
 #define THIS ((DoorAna*)thisx)
 
-void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx);
-void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx);
-void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DoorAna_Init(Actor* thisx, PlayState* play);
+void DoorAna_Destroy(Actor* thisx, PlayState* play);
+void DoorAna_Update(Actor* thisx, PlayState* play);
+void DoorAna_Draw(Actor* thisx, PlayState* play);
 
-void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx);
-void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx);
-void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx);
+void DoorAna_WaitClosed(DoorAna* this, PlayState* play);
+void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
+void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
-const ActorInit Door_Ana_InitVars = {
+ActorInit Door_Ana_InitVars = {
     ACTOR_DOOR_ANA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,16 +52,17 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 10, 0, { 0, 0, 0 } },
 };
 
-static u16 sEntranceIndexes[] = {
-    0x1A00, 0x1400, 0x1410, 0x1420, 0x1430, 0x1440, 0x1450, 0x1460,
-    0x1470, 0x1480, 0x1490, 0x14A0, 0x14B0, 0x14C0, 0x14D0,
+static u16 sEntrances[] = {
+    ENTRANCE(UNSET_0D, 0), ENTRANCE(GROTTOS, 0),  ENTRANCE(GROTTOS, 1),  ENTRANCE(GROTTOS, 2),  ENTRANCE(GROTTOS, 3),
+    ENTRANCE(GROTTOS, 4),  ENTRANCE(GROTTOS, 5),  ENTRANCE(GROTTOS, 6),  ENTRANCE(GROTTOS, 7),  ENTRANCE(GROTTOS, 8),
+    ENTRANCE(GROTTOS, 9),  ENTRANCE(GROTTOS, 10), ENTRANCE(GROTTOS, 11), ENTRANCE(GROTTOS, 12), ENTRANCE(GROTTOS, 13),
 };
 
 void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunction) {
     this->actionFunc = actionFunction;
 }
 
-void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DoorAna_Init(Actor* thisx, PlayState* play) {
     DoorAna* this = THIS;
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
@@ -69,7 +70,7 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (grottoType == DOORANA_TYPE_HIDDEN_STORMS || grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
         if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
-            Collider_InitAndSetCylinder(globalCtx, &this->bombCollider, &this->actor, &sCylinderInit);
+            Collider_InitAndSetCylinder(play, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
             this->actor.flags |= ACTOR_FLAG_10; // always update
         }
@@ -84,22 +85,22 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 0;
 }
 
-void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DoorAna_Destroy(Actor* thisx, PlayState* play) {
     DoorAna* this = THIS;
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
-        Collider_DestroyCylinder(globalCtx, &this->bombCollider);
+        Collider_DestroyCylinder(play, &this->bombCollider);
     }
 }
 
-void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
+void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
     s32 grottoIsOpen = false;
     u32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (grottoType == DOORANA_TYPE_HIDDEN_STORMS) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
-        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && EnvFlags_Get(globalCtx, 5)) {
+        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && EnvFlags_Get(play, 5)) {
             grottoIsOpen = true;
             this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
         }
@@ -107,11 +108,11 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     } else {
         if (this->bombCollider.base.acFlags & AC_HIT) { // bomb collision
             grottoIsOpen = true;
-            Collider_DestroyCylinder(globalCtx, &this->bombCollider);
+            Collider_DestroyCylinder(play, &this->bombCollider);
 
         } else {
             Collider_UpdateCylinder(&this->actor, &this->bombCollider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->bombCollider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->bombCollider.base);
         }
     }
 
@@ -121,25 +122,26 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
         play_sound(NA_SE_SY_CORRECT_CHIME);
     }
 
-    func_800B8C50(&this->actor, globalCtx);
+    func_800B8C50(&this->actor, play);
 }
 
-void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        if (this->actor.targetMode != 0 && globalCtx->sceneLoadFlag == 0 && globalCtx->unk_18B4A == 0 &&
-            (player->stateFlags1 & 0x80000000) && player->unk_AE7 == 0) {
+        if ((this->actor.targetMode != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & PLAYER_STATE1_80000000) &&
+            (player->unk_AE7 == 0)) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
 
-                globalCtx->nextEntranceIndex = globalCtx->setupExitList[exitIndex];
+                play->nextEntrance = play->setupExitList[exitIndex];
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_UNK_3, 0x4FF);
+                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, 0x4FF);
 
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
@@ -151,15 +153,15 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
                     destinationIdx = DOORANA_GET_EX_ENTRANCE(&this->actor);
                 }
 
-                globalCtx->nextEntranceIndex = sEntranceIndexes[destinationIdx];
+                play->nextEntrance = sEntrances[destinationIdx];
             }
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
-        } else if (!Play_InCsMode(globalCtx) && !(player->stateFlags1 & 0x08800000) &&
+        } else if (!Play_InCsMode(play) && !(player->stateFlags1 & (PLAYER_STATE1_8000000 | PLAYER_STATE1_800000)) &&
                    (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
                    (this->actor.playerHeightRel <= 15.0f)) {
-            player->stateFlags1 |= 0x80000000;
+            player->stateFlags1 |= PLAYER_STATE1_80000000;
             this->actor.targetMode = 1;
 
         } else {
@@ -170,7 +172,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, this->actor.scale.x);
 }
 
-void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
+void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
     Player* player;
     s8 pad[2];
 
@@ -183,19 +185,19 @@ void DoorAna_GrabLink(DoorAna* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.playerHeightRel <= 0.0f && this->actor.xzDistToPlayer > 20.0f) {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
         player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 20.0f + this->actor.world.pos.x;
         player->actor.world.pos.z = Math_CosS(this->actor.yawTowardsPlayer) * 20.0f + this->actor.world.pos.z;
     }
 }
 
-void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DoorAna_Update(Actor* thisx, PlayState* play) {
     DoorAna* this = THIS;
 
-    this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
+    this->actionFunc(this, play);
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)));
 }
 
-void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListXlu(globalCtx, gameplay_field_keep_DL_000C40);
+void DoorAna_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListXlu(play, gameplay_field_keep_DL_000C40);
 }

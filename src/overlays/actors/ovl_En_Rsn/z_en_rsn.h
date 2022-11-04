@@ -5,7 +5,7 @@
 
 struct EnRsn;
 
-typedef void (*EnRsnActionFunc)(struct EnRsn*, GlobalContext*);
+typedef void (*EnRsnActionFunc)(struct EnRsn*, PlayState*);
 
 typedef struct EnRsn {
     /* 0x000 */ Actor actor;
@@ -15,7 +15,5 @@ typedef struct EnRsn {
     /* 0x1D8 */ Vec3s unk1D8;
     /* 0x1DE */ Vec3s unk1DE;
 } EnRsn; // size = 0x1E4
-
-extern const ActorInit En_Rsn_InitVars;
 
 #endif // Z_EN_RSN_H

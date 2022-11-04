@@ -5,7 +5,7 @@
 
 struct EnBomjimb;
 
-typedef void (*EnBomjimbActionFunc)(struct EnBomjimb*, GlobalContext*);
+typedef void (*EnBomjimbActionFunc)(struct EnBomjimb*, PlayState*);
 
 #define ENBOMJIMB_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMJIMB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
@@ -60,7 +60,5 @@ typedef struct EnBomjimb {
     /* 0x2E4 */ Actor* unk_2E4;
     /* 0x2E8 */ ColliderCylinder collider;
 } EnBomjimb; // size = 0x334
-
-extern const ActorInit En_Bomjimb_InitVars;
 
 #endif // Z_EN_BOMJIMB_H

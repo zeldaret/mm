@@ -17,7 +17,7 @@ typedef enum {
 
 struct EnSnowman;
 
-typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, GlobalContext*);
+typedef void (*EnSnowmanActionFunc)(struct EnSnowman*, PlayState*);
 
 typedef struct EnSnowman {
     /* 0x000 */ Actor actor;
@@ -53,7 +53,5 @@ typedef struct EnSnowman {
     /* 0x2C0 */ Vec3f bodyPartsPos[9];
     /* 0x32C */ ColliderCylinder collider;
 } EnSnowman; // size = 0x378
-
-extern const ActorInit En_Snowman_InitVars;
 
 #endif // Z_EN_SNOWMAN_H

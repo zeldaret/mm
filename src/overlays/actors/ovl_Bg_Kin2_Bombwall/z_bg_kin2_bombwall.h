@@ -1,13 +1,13 @@
 #ifndef Z_BG_KIN2_BOMBWALL_H
 #define Z_BG_KIN2_BOMBWALL_H
 
-#define BG_KIN2_BOMBWALL_SWITCH_FLAG(thisx) (thisx->dyna.actor.params & 0x7F)
+#define BG_KIN2_BOMBWALL_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 #include "global.h"
 
 struct BgKin2Bombwall;
 
-typedef void (*BgKin2BombwallActionFunc)(struct BgKin2Bombwall*, GlobalContext*);
+typedef void (*BgKin2BombwallActionFunc)(struct BgKin2Bombwall*, PlayState*);
 
 typedef struct BgKin2Bombwall {
     /* 0x000 */ DynaPolyActor dyna;

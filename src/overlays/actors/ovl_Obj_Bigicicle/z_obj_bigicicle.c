@@ -6,24 +6,25 @@
 
 #include "z_obj_bigicicle.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigicicle/object_bigicicle.h"
 
 #define FLAGS 0x00000000
 
 #define THIS ((ObjBigicicle*)thisx)
 
-void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBigicicle_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjBigicicle_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjBigicicle_Init(Actor* thisx, PlayState* play);
+void ObjBigicicle_Destroy(Actor* thisx, PlayState* play);
+void ObjBigicicle_Update(Actor* thisx, PlayState* play);
+void ObjBigicicle_Draw(Actor* thisx, PlayState* play);
 
-void func_80AE8FD4(ObjBigicicle* this, GlobalContext* globalCtx);
-void func_80AE9090(ObjBigicicle* this, GlobalContext* globalCtx);
-void func_80AE9180(ObjBigicicle* this, GlobalContext* globalCtx);
-void func_80AE9258(ObjBigicicle* this, GlobalContext* globalCtx);
-void func_80AE939C(ObjBigicicle* this, GlobalContext* globalCtx);
+void func_80AE8FD4(ObjBigicicle* this, PlayState* play);
+void func_80AE9090(ObjBigicicle* this, PlayState* play);
+void func_80AE9180(ObjBigicicle* this, PlayState* play);
+void func_80AE9258(ObjBigicicle* this, PlayState* play);
+void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-const ActorInit Obj_Bigicicle_InitVars = {
+ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -97,7 +98,7 @@ Gfx* D_80AE98A8[] = {
     object_bigicicle_DL_000F40,
 };
 
-void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     ObjBigicicle* this = THIS;
     f32 sp30;
     s32 sp28;
@@ -114,18 +115,18 @@ void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     sp30 = sp28 * (1.0f / 60.0f);
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
+    Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     this->collider1.dim.radius = this->collider1.dim.radius * sp30;
     this->collider1.dim.height = this->collider1.dim.height * sp30;
     this->collider1.dim.yShift = this->collider1.dim.yShift * sp30;
 
-    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
+    Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
     this->collider2.dim.radius = this->collider2.dim.radius * sp30;
     this->collider2.dim.height = this->collider2.dim.height * sp30;
     this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
-        Actor_MarkForDeath(&this->actor);
+    if (Flags_GetSwitch(play, this->actor.params)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -144,14 +145,14 @@ void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80AE8FD4;
 }
 
-void ObjBigicicle_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBigicicle_Destroy(Actor* thisx, PlayState* play) {
     ObjBigicicle* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider1);
-    Collider_DestroyCylinder(globalCtx, &this->collider2);
+    Collider_DestroyCylinder(play, &this->collider1);
+    Collider_DestroyCylinder(play, &this->collider2);
 }
 
-void func_80AE8DE4(ObjBigicicle* this, GlobalContext* globalCtx) {
+void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
     s32 i;
     Vec3f sp98;
     Vec3f sp8C;
@@ -166,18 +167,18 @@ void func_80AE8DE4(ObjBigicicle* this, GlobalContext* globalCtx) {
         sp8C.y = Rand_ZeroFloat(2.0f);
         sp8C.z = randPlusMinusPoint5Scaled(13.0f);
 
-        EffectSsHahen_Spawn(globalCtx, &sp98, &sp8C, &D_80AE987C, 2, (Rand_ZeroFloat(20.0f) + 30.0f) * temp_f20,
-                            OBJECT_BIGICICLE, 0x28, object_bigicicle_DL_0009B0);
+        EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, HAHEN_XLU, (Rand_ZeroFloat(20.0f) + 30.0f) * temp_f20,
+                            OBJECT_BIGICICLE, 40, object_bigicicle_DL_0009B0);
     }
 
     sp98.x = this->actor.world.pos.x;
     sp98.y = this->actor.world.pos.y - (25.0f * temp_f20);
     sp98.z = this->actor.world.pos.z;
 
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp98, 40, NA_SE_EV_ICE_PIECE);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &sp98, 40, NA_SE_EV_ICE_PIECE);
 }
 
-void func_80AE8FD4(ObjBigicicle* this, GlobalContext* globalCtx) {
+void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
         ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
@@ -186,18 +187,18 @@ void func_80AE8FD4(ObjBigicicle* this, GlobalContext* globalCtx) {
             return;
         }
 
-        func_80AE8DE4(this, globalCtx);
+        func_80AE8DE4(this, play);
         this->unk_149++;
         this->unk_14A = 50;
         this->actionFunc = func_80AE9180;
     }
 }
 
-void func_80AE9090(ObjBigicicle* this, GlobalContext* globalCtx) {
+void func_80AE9090(ObjBigicicle* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->unk_149++;
-        func_80AE8DE4(this, globalCtx);
+        func_80AE8DE4(this, play);
         if (this->unk_149 == 2) {
             f32 temp_f0 = this->actor.scale.y * 2100.0f;
 
@@ -216,7 +217,7 @@ void func_80AE9090(ObjBigicicle* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AE9180(ObjBigicicle* this, GlobalContext* globalCtx) {
+void func_80AE9180(ObjBigicicle* this, PlayState* play) {
     this->unk_14A--;
 
     if (this->unk_14A > 0) {
@@ -231,15 +232,15 @@ void func_80AE9180(ObjBigicicle* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AE9258(ObjBigicicle* this, GlobalContext* globalCtx) {
+void func_80AE9258(ObjBigicicle* this, PlayState* play) {
     Actor* itemAction;
     f32 temp_f0;
     ObjIcePoly* icePoly;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
-    itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
+    itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (itemAction != NULL) {
         if (itemAction->id == ACTOR_OBJ_ICE_POLY) {
@@ -247,7 +248,7 @@ void func_80AE9258(ObjBigicicle* this, GlobalContext* globalCtx) {
             temp_f0 = this->actor.world.pos.y - icePoly->actor.world.pos.y;
             if ((temp_f0 < icePoly->colliders1[0].dim.height) && (temp_f0 > 0.0f) &&
                 (Actor_XZDistanceBetweenActors(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
-                Flags_SetSwitch(globalCtx, this->actor.params);
+                Flags_SetSwitch(play, this->actor.params);
                 this->actionFunc = func_80AE939C;
                 return;
             }
@@ -263,7 +264,7 @@ void func_80AE9258(ObjBigicicle* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AE939C(ObjBigicicle* this, GlobalContext* globalCtx) {
+void func_80AE939C(ObjBigicicle* this, PlayState* play) {
     s32 i;
     Vec3f sp98;
     Vec3f sp8C;
@@ -278,21 +279,21 @@ void func_80AE939C(ObjBigicicle* this, GlobalContext* globalCtx) {
         sp98.y = this->actor.world.pos.y + (sp8C.y * 7.0f * temp_f20);
         sp98.z = this->actor.world.pos.z + (sp8C.z * 5.0f * temp_f20);
 
-        EffectSsHahen_Spawn(globalCtx, &sp98, &sp8C, &D_80AE987C, 2, (Rand_ZeroFloat(30.0f) + 40.0f) * temp_f20,
+        EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, HAHEN_XLU, (Rand_ZeroFloat(30.0f) + 40.0f) * temp_f20,
                             OBJECT_BIGICICLE, 30, object_bigicicle_DL_0009B0);
     }
 
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_GLASSBROKEN_IMPACT);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_GLASSBROKEN_IMPACT);
     ActorCutscene_Stop(this->actor.cutscene);
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
-void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBigicicle_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjBigicicle* this = THIS;
     Vec3f sp44;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (Rand_ZeroOne() < 0.05f) {
         sp44.x = (((215.0f + Rand_ZeroFloat(65.0f)) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1)) * this->actor.scale.x) +
@@ -302,20 +303,20 @@ void ObjBigicicle_Update(Actor* thisx, GlobalContext* globalCtx) {
         sp44.z = (((215.0f + Rand_ZeroFloat(65.0f)) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1)) * this->actor.scale.z) +
                  this->actor.world.pos.z;
 
-        EffectSsKirakira_SpawnDispersed(globalCtx, &sp44, &gZeroVec3f, &gZeroVec3f, &D_80AE9894, &D_80AE9898, 2000, 5);
+        EffectSsKirakira_SpawnDispersed(play, &sp44, &gZeroVec3f, &gZeroVec3f, &D_80AE9894, &D_80AE9898, 2000, 5);
     }
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider2.base);
 }
 
-void ObjBigicicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBigicicle_Draw(Actor* thisx, PlayState* play) {
     ObjBigicicle* this = THIS;
 
-    Gfx_DrawDListXlu(globalCtx, D_80AE989C[this->unk_149]);
-    Gfx_DrawDListXlu(globalCtx, D_80AE98A8[this->unk_149]);
-    AnimatedMat_Draw(globalCtx, D_80AE9878);
-    Gfx_DrawDListXlu(globalCtx, object_bigicicle_DL_0014F0);
+    Gfx_DrawDListXlu(play, D_80AE989C[this->unk_149]);
+    Gfx_DrawDListXlu(play, D_80AE98A8[this->unk_149]);
+    AnimatedMat_Draw(play, D_80AE9878);
+    Gfx_DrawDListXlu(play, object_bigicicle_DL_0014F0);
 }

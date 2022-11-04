@@ -48,6 +48,6 @@
         <Limb Name="object_rb_Standardlimb_001E74" Type="Standard" EnumName="OBJECT_RB_LIMB_0E" Offset="0x1E74" />
         <Limb Name="object_rb_Standardlimb_001E80" Type="Standard" EnumName="OBJECT_RB_LIMB_0F" Offset="0x1E80" />
 
-        <Skeleton Name="gLeeverSkel" Type="Normal" LimbType="Standard" LimbNone="LEEVER_LIMB_NONE" LimbMax="LEEVER_LIMB_MAX" EnumName="LeeverLimbs" Offset="0x1EE8" />
+        <Skeleton Name="gLeeverSkel" Type="Normal" LimbType="Standard" LimbNone="LEEVER_LIMB_NONE" LimbMax="LEEVER_LIMB_MAX" EnumName="LeeverLimb" Offset="0x1EE8" />
     </File>
 </Root>

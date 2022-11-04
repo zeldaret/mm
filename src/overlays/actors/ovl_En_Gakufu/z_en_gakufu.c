@@ -11,21 +11,21 @@
 
 #define THIS ((EnGakufu*)thisx)
 
-void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnGakufu_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnGakufu_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnGakufu_Init(Actor* thisx, PlayState* play);
+void EnGakufu_Destroy(Actor* thisx, PlayState* play);
+void EnGakufu_Update(Actor* thisx, PlayState* play);
+void EnGakufu_Draw(Actor* thisx, PlayState* play);
 
 void EnGakufu_ProcessNotes(EnGakufu* this);
-s32 EnGakufu_IsPlayerInRange(EnGakufu* this, GlobalContext* globalCtx);
-void EnGakufu_DisplayOnTimer(EnGakufu* this, GlobalContext* globalCtx);
-void EnGakufu_WaitForTimer(EnGakufu* this, GlobalContext* globalCtx);
-void EnGakufu_DoNothing(EnGakufu* this, GlobalContext* globalCtx);
-void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx);
-void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx);
-void EnGakufu_WaitForSong(EnGakufu* this, GlobalContext* globalCtx);
+s32 EnGakufu_IsPlayerInRange(EnGakufu* this, PlayState* play);
+void EnGakufu_DisplayOnTimer(EnGakufu* this, PlayState* play);
+void EnGakufu_WaitForTimer(EnGakufu* this, PlayState* play);
+void EnGakufu_DoNothing(EnGakufu* this, PlayState* play);
+void EnGakufu_GiveReward(EnGakufu* this, PlayState* play);
+void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play);
+void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play);
 
-const ActorInit En_Gakufu_InitVars = {
+ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -106,18 +106,21 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
     s32 songIndex;
 
     AudioOcarina_TerminaWallGenerateNotes();
-    AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_DEFAULT);
+    AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
     AudioOcarina_StartDefault((1 << this->songIndex) | 0x80000000);
     playbackStaff = AudioOcarina_GetPlaybackStaff();
     playbackStaff->pos = 0;
     playbackStaff->state = 0xFF;
-    AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+    AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
 
     songIndex = this->songIndex;
     ocarinaSongButtons = &gOcarinaSongButtons[songIndex];
+
+    //! FAKE:
+    if (1) {}
     songNumButtons = gOcarinaSongButtons[this->songIndex].numButtons;
 
-    for (i = 0; i < songNumButtons; i++) {
+    for (i = 0; i < (u8)songNumButtons; i++) {
         this->buttonIndex[i] = ocarinaSongButtons->buttonIndex[i];
     }
 
@@ -126,7 +129,7 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
     }
 }
 
-void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnGakufu_Init(Actor* thisx, PlayState* play) {
     EnGakufu* this = THIS;
 
     this->songIndex = OCARINA_SONG_TERMINA_WALL;
@@ -141,7 +144,7 @@ void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.flags &= ~ACTOR_FLAG_2000000;
 
-    if (EnGakufu_IsPlayerInRange(this, globalCtx)) {
+    if (EnGakufu_IsPlayerInRange(this, play)) {
         gSaveContext.eventInf[3] |= 2;
     } else {
         gSaveContext.eventInf[3] &= (u8)~2;
@@ -151,7 +154,7 @@ void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx) {
     gSaveContext.eventInf[3] &= (u8)~4;
 }
 
-void EnGakufu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnGakufu_Destroy(Actor* thisx, PlayState* play) {
     EnGakufu* this = THIS;
 
     if (GAKUFU_GET_TYPE(&this->actor) != GAKUFU_MILK_BAR) {
@@ -164,7 +167,7 @@ void EnGakufu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  * this->actor.home.rot.x acts as a timer. Draws the notes on the back of the stage
  * until the timer runs out
  */
-void EnGakufu_DisplayOnTimer(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_DisplayOnTimer(EnGakufu* this, PlayState* play) {
     if (this->actor.home.rot.x > 0) {
         this->actor.draw = EnGakufu_Draw;
         this->actor.home.rot.x--;
@@ -180,17 +183,17 @@ void EnGakufu_DisplayOnTimer(EnGakufu* this, GlobalContext* globalCtx) {
  * this->actor.home.rot.x acts as a timer. Waits for this timer to be set,
  * then rerolls the notes and start displaying the notes
  */
-void EnGakufu_WaitForTimer(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_WaitForTimer(EnGakufu* this, PlayState* play) {
     if (this->actor.home.rot.x > 0) {
         EnGakufu_ProcessNotes(this);
         this->actionFunc = EnGakufu_DisplayOnTimer;
     }
 }
 
-void EnGakufu_DoNothing(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_DoNothing(EnGakufu* this, PlayState* play) {
 }
 
-s32 EnGakufu_IsPlayerInRange(EnGakufu* this, GlobalContext* globalCtx) {
+s32 EnGakufu_IsPlayerInRange(EnGakufu* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 600.0f) {
         return true;
     } else {
@@ -201,26 +204,26 @@ s32 EnGakufu_IsPlayerInRange(EnGakufu* this, GlobalContext* globalCtx) {
 /**
  * Reward the player with three item drops depending on the time of day
  */
-void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_GiveReward(EnGakufu* this, PlayState* play) {
     s32 hour;
     s32 i;
 
     play_sound(NA_SE_SY_CORRECT_CHIME);
 
-    hour = gSaveContext.save.time * (24.0f / 0x10000);
+    hour = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
     for (i = 0; i < 3; i++) {
-        Item_DropCollectible(globalCtx, &sRewardDropsSpawnTerminaFieldPos, sRewardDrops[i + sRewardDropsIndex[hour]]);
+        Item_DropCollectible(play, &sRewardDropsSpawnTerminaFieldPos, sRewardDrops[i + sRewardDropsIndex[hour]]);
     }
 
     this->actionFunc = EnGakufu_DoNothing;
 }
 
-void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play) {
     if (this->actor.cutscene == -1) {
-        EnGakufu_GiveReward(this, globalCtx);
+        EnGakufu_GiveReward(this, play);
     } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        EnGakufu_GiveReward(this, globalCtx);
+        EnGakufu_GiveReward(this, play);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -231,45 +234,45 @@ void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx) {
  * (gSaveContext.eventInf[3] & 2) is checking if Player is within range of the wall
  * (gSaveContext.eventInf[3] & 4) is checking if Player has played the notes of the wall
  */
-void EnGakufu_WaitForSong(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play) {
     if (gSaveContext.eventInf[3] & 2) {
         if (gSaveContext.eventInf[3] & 4) {
             gSaveContext.eventInf[3] &= (u8)~2;
             gSaveContext.eventInf[3] &= (u8)~4;
 
             this->actionFunc = EnGakufu_PlayRewardCutscene;
-            EnGakufu_PlayRewardCutscene(this, globalCtx);
+            EnGakufu_PlayRewardCutscene(this, play);
             this->actor.draw = NULL;
-        } else if (!EnGakufu_IsPlayerInRange(this, globalCtx)) {
+        } else if (!EnGakufu_IsPlayerInRange(this, play)) {
             gSaveContext.eventInf[3] &= (u8)~2;
         }
-    } else if (EnGakufu_IsPlayerInRange(this, globalCtx)) {
+    } else if (EnGakufu_IsPlayerInRange(this, play)) {
         gSaveContext.eventInf[3] |= 2;
     }
 }
 
-void EnGakufu_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnGakufu_Update(Actor* thisx, PlayState* play) {
     EnGakufu* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnGakufu_Draw(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad;
     EnGakufu* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
-    gSPSegment(POLY_XLU_DISP++, 0x02, globalCtx->interfaceCtx.parameterSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x02, play->interfaceCtx.parameterSegment);
 
     for (i = 0; (i < ARRAY_COUNT(this->buttonIndex)) && (this->buttonIndex[i] != OCARINA_BTN_INVALID); i++) {
         Matrix_Push();
         Matrix_Translate(30 * i - 105, sOcarinaBtnWallYOffsets[this->buttonIndex[i]] * 7.5f, 1.0f, MTXMODE_APPLY);
         Matrix_Scale(0.6f, 0.6f, 0.6f, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetTextureLUT(POLY_XLU_DISP++, G_TT_NONE);
         gDPLoadTextureBlock(POLY_XLU_DISP++, sOcarinaBtnWallTextures[this->buttonIndex[i]], G_IM_FMT_IA, G_IM_SIZ_8b,
                             16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 4, 4, G_TX_NOLOD,
@@ -286,7 +289,7 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Pop();
     }
 
-    gSPSegment(POLY_XLU_DISP++, 0x02, globalCtx->sceneSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x02, play->sceneSegment);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

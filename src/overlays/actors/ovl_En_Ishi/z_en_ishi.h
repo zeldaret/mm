@@ -5,9 +5,9 @@
 
 struct EnIshi;
 
-typedef void (*EnIshiActionFunc)(struct EnIshi*, GlobalContext*);
-typedef void (*EnIshiUnkFunc)(struct EnIshi*, GlobalContext*);
-typedef void (*EnIshiUnkFunc2)(Actor*, GlobalContext*);
+typedef void (*EnIshiActionFunc)(struct EnIshi*, PlayState*);
+typedef void (*EnIshiUnkFunc)(struct EnIshi*, PlayState*);
+typedef void (*EnIshiUnkFunc2)(Actor*, PlayState*);
 
 #define ENISHI_GET_1(thisx) ((thisx)->params & 1)
 #define ENISHI_GET_2(thisx) (((thisx)->params >> 1) & 1)
@@ -19,15 +19,13 @@ typedef void (*EnIshiUnkFunc2)(Actor*, GlobalContext*);
 #define ENISHI_GET_FE00(thisx) (((thisx)->params >> 9) & 0x7F)
 
 typedef struct EnIshi {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder collider;
-    /* 0x0190 */ EnIshiActionFunc actionFunc;
-    /* 0x0194 */ s8 unk_194;
-    /* 0x0195 */ s8 unk_195;
-    /* 0x0196 */ s8 unk_196;
-    /* 0x0197 */ u8 unk_197;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ EnIshiActionFunc actionFunc;
+    /* 0x194 */ s8 unk_194;
+    /* 0x195 */ s8 unk_195;
+    /* 0x196 */ s8 unk_196;
+    /* 0x197 */ u8 unk_197;
 } EnIshi; // size = 0x198
-
-extern const ActorInit En_Ishi_InitVars;
 
 #endif // Z_EN_ISHI_H

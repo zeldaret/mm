@@ -6,7 +6,7 @@
 
 struct EnScopecrow;
 
-typedef void (*EnScopecrowActionFunc)(struct EnScopecrow*, GlobalContext*);
+typedef void (*EnScopecrowActionFunc)(struct EnScopecrow*, PlayState*);
 
 #define ENSCOPECROW_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENSCOPECROW_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
@@ -26,7 +26,5 @@ typedef struct EnScopecrow {
     /* 0x262 */ s16 unk_262;
     /* 0x264 */ s16 unk_264;
 } EnScopecrow; // size = 0x268
-
-extern const ActorInit En_Scopecrow_InitVars;
 
 #endif // Z_EN_SCOPECROW_H

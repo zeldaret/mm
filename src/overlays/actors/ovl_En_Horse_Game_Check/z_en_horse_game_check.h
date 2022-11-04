@@ -6,7 +6,7 @@
 
 struct EnHorseGameCheck;
 
-typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, GlobalContext*);
+typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, PlayState*);
 
 #define ENHORSEGAMECHECK_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENHORSEGAMECHECK_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
@@ -54,7 +54,5 @@ typedef struct EnHorseGameCheck {
     /* 0x17C */ s32 unk_17C;
     /* 0x180 */ UNK_TYPE1 pad180[0x38];
 } EnHorseGameCheck; // size = 0x1B8
-
-extern const ActorInit En_Horse_Game_Check_InitVars;
 
 #endif // Z_EN_HORSE_GAME_CHECK_H

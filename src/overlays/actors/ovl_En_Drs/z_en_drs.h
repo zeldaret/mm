@@ -7,7 +7,7 @@
 
 struct EnDrs;
 
-typedef void (*EnDrsActionFunc)(struct EnDrs*, GlobalContext*);
+typedef void (*EnDrsActionFunc)(struct EnDrs*, PlayState*);
 
 typedef struct EnDrs {
     /* 0x000 */ Actor actor;
@@ -18,7 +18,5 @@ typedef struct EnDrs {
     /* 0x1F0 */ Vec3s morphTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
     /* 0x208 */ s8 moonMaskObjBankIndex;
 } EnDrs; // size = 0x20C */
-
-extern const ActorInit En_Drs_InitVars;
 
 #endif // Z_EN_DRS_H

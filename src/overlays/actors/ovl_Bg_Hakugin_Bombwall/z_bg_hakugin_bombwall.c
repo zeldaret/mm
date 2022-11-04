@@ -11,22 +11,22 @@
 
 #define THIS ((BgHakuginBombwall*)thisx)
 
-void BgHakuginBombwall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgHakuginBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgHakuginBombwall_Init(Actor* thisx, PlayState* play);
+void BgHakuginBombwall_Destroy(Actor* thisx, PlayState* play);
+void BgHakuginBombwall_Update(Actor* thisx, PlayState* play);
+void BgHakuginBombwall_Draw(Actor* thisx, PlayState* play);
 
-void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx);
-void func_80ABC2E0(BgHakuginBombwall* this, GlobalContext* globalCtx);
-void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx);
-void func_80ABC7FC(BgHakuginBombwall* this, GlobalContext* globalCtx);
-s32 func_80ABCB5C(Actor* thisx, GlobalContext* globalCtx);
-s32 func_80ABCC00(Actor* thisx, GlobalContext* globalCtx);
-void func_80ABCCE4(BgHakuginBombwall* this, GlobalContext* globalCtx);
-void func_80ABCD98(BgHakuginBombwall* this, GlobalContext* globalCtx);
-void func_80ABCE60(BgHakuginBombwall* this, GlobalContext* globalCtx);
+void func_80ABBFC0(BgHakuginBombwall* this, PlayState* play);
+void func_80ABC2E0(BgHakuginBombwall* this, PlayState* play);
+void func_80ABC58C(BgHakuginBombwall* this, PlayState* play);
+void func_80ABC7FC(BgHakuginBombwall* this, PlayState* play);
+s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play);
+s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play);
+void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play);
+void func_80ABCD98(BgHakuginBombwall* this, PlayState* play);
+void func_80ABCE60(BgHakuginBombwall* this, PlayState* play);
 
-const ActorInit Bg_Hakugin_Bombwall_InitVars = {
+ActorInit Bg_Hakugin_Bombwall_InitVars = {
     ACTOR_BG_HAKUGIN_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -121,7 +121,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABBFC0(BgHakuginBombwall* this, PlayState* play) {
     f32 temp;
     Vec3f spF0;
     Vec3f spE4;
@@ -162,20 +162,19 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
             if ((s32)Rand_Next() > 0) {
                 phi_s0 |= 1;
                 phi_s1 = 1;
-                func_800B0E48(globalCtx, &spF0, &gZeroVec3f, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
+                func_800B0E48(play, &spF0, &gZeroVec3f, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
                               (Rand_Next() >> 0x1B) + 70, (Rand_Next() >> 0x1A) + 60);
             } else {
                 phi_s1 = 0;
             }
 
-            EffectSsKakera_Spawn(globalCtx, &spF0, &spE4, &spF0, -550, phi_s0, 30, 0, 0,
-                                 (s32)(Rand_ZeroOne() * 22.0f) + 5, phi_s1, 0, 50, -1, OBJECT_HAKUGIN_OBJ,
-                                 object_hakugin_obj_DL_009830);
+            EffectSsKakera_Spawn(play, &spF0, &spE4, &spF0, -550, phi_s0, 30, 0, 0, (s32)(Rand_ZeroOne() * 22.0f) + 5,
+                                 phi_s1, 0, 50, -1, OBJECT_HAKUGIN_OBJ, object_hakugin_obj_DL_009830);
         }
     }
 }
 
-void func_80ABC2E0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABC2E0(BgHakuginBombwall* this, PlayState* play) {
     s32 pad;
     s32 i;
     s16 phi_s2;
@@ -219,17 +218,17 @@ void func_80ABC2E0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
             phi_t0 = -400;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spC8, &spBC, &spC8, phi_t0, phi_v0, 30, 0, 0, temp_s1, phi_v1, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, phi_t0, phi_v0, 30, 0, 0, temp_s1, phi_v1, 0, 50, -1,
                              OBJECT_HAKUGIN_OBJ, object_hakugin_obj_DL_009830);
 
         if ((i & 1) == 0) {
-            func_800B0E48(globalCtx, &spC8, &D_80ABD034, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0,
-                          (Rand_Next() >> 0x1B) + 60, (Rand_Next() >> 0x1A) + 50);
+            func_800B0E48(play, &spC8, &D_80ABD034, &D_80ABCFB4, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1B) + 60,
+                          (Rand_Next() >> 0x1A) + 50);
         }
     }
 }
 
-void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABC58C(BgHakuginBombwall* this, PlayState* play) {
     s32 pad;
     Vec3f spD8;
     Vec3f spCC;
@@ -269,12 +268,12 @@ void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         spC0.y += this->dyna.actor.world.pos.y;
         spC0.z += this->dyna.actor.world.pos.z;
 
-        func_800B0E48(globalCtx, &spC0, &spCC, &spD8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
+        func_800B0E48(play, &spC0, &spCC, &spD8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
                       (Rand_Next() >> 0x1B) + 60);
     }
 }
 
-void func_80ABC7FC(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABC7FC(BgHakuginBombwall* this, PlayState* play) {
     s32 pad;
     Vec3f spB8;
     Vec3f spAC;
@@ -303,28 +302,28 @@ void func_80ABC7FC(BgHakuginBombwall* this, GlobalContext* globalCtx) {
         spB8.x = spAC.x * -0.095f;
         spB8.z = spAC.z * -0.095f;
 
-        func_800B0E48(globalCtx, &spA0, &spAC, &spB8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
+        func_800B0E48(play, &spA0, &spAC, &spB8, &D_80ABCFAC, &D_80ABCFB0, (Rand_Next() >> 0x1A) + 60,
                       (Rand_Next() >> 0x1B) + 60);
     }
 }
 
-void BgHakuginBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakuginBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgHakuginBombwall* this = THIS;
     BgHakuginBombwallStruct* ptr = &D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)];
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(globalCtx, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+    if (Flags_GetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor))) {
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, ptr->unk_00);
+    DynaPolyActor_LoadMesh(play, &this->dyna, ptr->unk_00);
 
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->collider.dim.radius = ptr->unk_14;
     this->collider.dim.height = ptr->unk_16;
     this->collider.info.bumper.dmgFlags = ptr->unk_18;
@@ -336,22 +335,21 @@ void BgHakuginBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_80ABCCE4;
 }
 
-void BgHakuginBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakuginBombwall_Destroy(Actor* thisx, PlayState* play) {
     BgHakuginBombwall* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-s32 func_80ABCB5C(Actor* thisx, GlobalContext* globalCtx) {
-    BgHakuginBombwall* this = THIS;
-    s32 pad;
+s32 func_80ABCB5C(BgHakuginBombwall* this, PlayState* play) {
+    Actor* thisx = &this->dyna.actor;
 
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.base.ac != NULL) {
-            if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &this->collider.base.ac->world.pos) <
-                D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)].unk_1C) {
-                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
+            if (Math3D_Vec3fDistSq(&thisx->world.pos, &this->collider.base.ac->world.pos) <
+                D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(thisx)].unk_1C) {
+                SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 60, NA_SE_EV_WALL_BROKEN);
                 return true;
             }
         }
@@ -359,78 +357,75 @@ s32 func_80ABCB5C(Actor* thisx, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80ABCC00(Actor* thisx, GlobalContext* globalCtx) {
-    BgHakuginBombwall* this = THIS;
-    s32 pad;
-
+s32 func_80ABCC00(BgHakuginBombwall* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         if (this->collider.info.acHitInfo->toucher.dmgFlags & 8) {
             if (this->collider.base.ac != NULL) {
+                s32 requiredScopeTemp;
+
                 if (Math3D_Vec3fDistSq(&this->dyna.actor.world.pos, &this->collider.base.ac->world.pos) <
                     D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)].unk_1C) {
-                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 50,
-                                                       NA_SE_EV_WALL_BROKEN);
+                    SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
                     return true;
                 }
             }
         } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-        label:;
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 50, NA_SE_EV_WALL_BROKEN);
             return true;
         }
     }
     return false;
 }
 
-void func_80ABCCE4(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABCCE4(BgHakuginBombwall* this, PlayState* play) {
     BgHakuginBombwallStruct* ptr = &D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)];
 
-    if (ptr->unk_20(&this->dyna.actor, globalCtx)) {
+    if (ptr->unk_20(this, play)) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
         this->actionFunc = func_80ABCD98;
     } else {
         this->collider.base.acFlags &= ~AC_HIT;
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void func_80ABCD98(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABCD98(BgHakuginBombwall* this, PlayState* play) {
     s32 pad;
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         BgHakuginBombwallStruct* ptr = &D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)];
 
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        ptr->unk_24(this, globalCtx);
+        ptr->unk_24(this, play);
         this->dyna.actor.draw = NULL;
         this->unk_1AC = 20;
-        Flags_SetSwitch(globalCtx, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor));
-        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        Flags_SetSwitch(play, BGHAKUGIN_BOMBWALL_SWITCHFLAG(&this->dyna.actor));
+        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80ABCE60;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void func_80ABCE60(BgHakuginBombwall* this, GlobalContext* globalCtx) {
+void func_80ABCE60(BgHakuginBombwall* this, PlayState* play) {
     BgHakuginBombwallStruct* ptr = &D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(&this->dyna.actor)];
 
     this->unk_1AC--;
     if (this->unk_1AC <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else if (this->unk_1AC == ptr->unk_2C) {
-        ptr->unk_28(this, globalCtx);
+        ptr->unk_28(this, play);
     }
 }
 
-void BgHakuginBombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgHakuginBombwall_Update(Actor* thisx, PlayState* play) {
     BgHakuginBombwall* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgHakuginBombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(thisx)].unk_04);
+void BgHakuginBombwall_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, D_80ABCFC0[BGHAKUGIN_BOMBWALL_100(thisx)].unk_04);
 }

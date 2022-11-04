@@ -14,16 +14,16 @@
 
 #define PARAMS ((EffectSsIceSmokeInitParams*)initParamsx)
 
-u32 EffectSsIceSmoke_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsIceSmoke_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsIceSmoke_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsIceSmoke_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsIceSmoke_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Ice_Smoke_InitVars = {
     EFFECT_SS_ICE_SMOKE,
     EffectSsIceSmoke_Init,
 };
 
-u32 EffectSsIceSmoke_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsIceSmoke_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsIceSmokeInitParams* initParams = PARAMS;
 
     Math_Vec3f_Copy(&this->pos, &initParams->pos);
@@ -45,32 +45,32 @@ u32 EffectSsIceSmoke_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
     return 1;
 }
 
-void EffectSsIceSmoke_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsIceSmoke_Draw(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
     Mtx* mtx;
     f32 scale;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 235, 235, this->rAlpha);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, this->rScrollX * this->life, this->rScrollY * this->life,
-                                0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->rScrollX * this->life, this->rScrollY * this->life, 0x20,
+                                0x40, 1, 0, 0, 0x20, 0x20));
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
-    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
     scale = this->rScale * 0.0001f;
     Matrix_Scale(scale, scale, 1.0f, MTXMODE_APPLY);
-    mtx = Matrix_NewMtx(globalCtx->state.gfxCtx);
+    mtx = Matrix_NewMtx(play->state.gfxCtx);
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gEffIceSmokeDL);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EffectSsIceSmoke_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsIceSmoke_Update(PlayState* play, u32 index, EffectSs* this) {
     if (this->life < 10) {
         Math_StepToS(&this->rAlpha, 0, 10);
     } else if (this->rAlpha < 100) {

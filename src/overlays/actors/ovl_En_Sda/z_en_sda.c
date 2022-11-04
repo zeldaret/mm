@@ -10,17 +10,17 @@
 
 #define THIS ((EnSda*)thisx)
 
-void EnSda_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSda_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSda_Init(Actor* thisx, PlayState* play);
+void EnSda_Destroy(Actor* thisx, PlayState* play);
+void EnSda_Update(Actor* thisx, PlayState* play);
+void EnSda_Draw(Actor* thisx, PlayState* play);
 
-void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext* globalCtx);
-void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx);
+void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* play);
+void func_80947668(u8* shadowTexture, Player* player, PlayState* play);
 
 Vec3f D_80947EA0[16];
 
-const ActorInit En_Sda_InitVars = {
+ActorInit En_Sda_InitVars = {
     ACTOR_EN_SDA,
     ACTORCAT_BOSS,
     FLAGS,
@@ -72,40 +72,40 @@ static s32 sPad[2] = { 0, 0 };
 
 #include "overlays/ovl_En_Sda/ovl_En_Sda.c"
 
-void EnSda_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Init(Actor* thisx, PlayState* play) {
 }
 
-void EnSda_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnSda_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Update(Actor* thisx, PlayState* play) {
     EnSda* this = THIS;
     Player* player;
 
     if (this->actor.params == ENSDA_1) {
         player = (Player*)this->actor.parent;
     } else {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
     }
     this->actor.world.pos = player->actor.world.pos;
 }
 
-void EnSda_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnSda_Draw(Actor* thisx, PlayState* play) {
     EnSda* this = THIS;
     Player* player;
-    u8* shadowTexture = GRAPH_ALLOC(globalCtx->state.gfxCtx, 64 * 64);
+    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
 
     if (this->actor.params == ENSDA_1) {
         player = (Player*)this->actor.parent;
     } else {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
     }
 
     player->actor.shape.shadowAlpha = 0;
-    func_8094702C(this, shadowTexture, player, globalCtx);
+    func_8094702C(this, shadowTex, player, play);
 
     if (KREG(0) < 5) {
-        func_80947668(shadowTexture, player, globalCtx);
+        func_80947668(shadowTex, player, play);
     }
 }
 
@@ -209,7 +209,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
     }
 }
 
-void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext* globalCtx) {
+void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* play) {
     s16 temp_t0;
     s16 temp_t1;
     s16 temp_v0;
@@ -315,15 +315,15 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
     }
 }
 
-void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void func_80947668(u8* shadowTexture, Player* player, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     f32 tempx;
     f32 tempz;
     s16 i;
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C448(globalCtx->state.gfxCtx);
+    func_8012C448(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 0, 0, 0, (BREG(52) + 50));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
@@ -339,7 +339,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
     Matrix_Translate(tempx, 0.0f, tempz, MTXMODE_APPLY);
     Matrix_Scale(((BREG(56) - 250) / 1000.0f) + 0.6f, 1.0f, ((BREG(59) - 250) / 1000.0f) + 0.6f, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, ovl_En_Sda_DL_1498);
     gDPLoadTextureBlock(POLY_XLU_DISP++, shadowTexture, G_IM_FMT_I, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
@@ -347,7 +347,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
 
     for (i = 0; i < KREG(78); i++) {
         Matrix_Scale((KREG(79) / 100.0f) + 1.0f, 1.0f, (KREG(79) / 100.0f) + 1.0f, MTXMODE_APPLY);
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, ovl_En_Sda_DL_14B8);
     }
 

@@ -10,26 +10,31 @@
         <Texture Name="object_um_Tex_002148" OutName="tex_002148" Format="rgba16" Width="32" Height="32" Offset="0x2148" />
         <Texture Name="object_um_Tex_002948" OutName="tex_002948" Format="rgba16" Width="32" Height="32" Offset="0x2948" />
         <Texture Name="object_um_Tex_003148" OutName="tex_003148" Format="rgba16" Width="32" Height="32" Offset="0x3148" />
-        <DList Name="object_um_DL_003C60" Offset="0x3C60" />
+
+        <!-- The bottles which the bandits try to destroy in the milk-run minigame. Referred as "milk-bottles" by Cremia in-game. -->
+        <DList Name="gUmMinigamePotDL" Offset="0x3C60" />
         <Texture Name="object_um_Tex_003F00" OutName="tex_003F00" Format="rgba16" Width="16" Height="16" Offset="0x3F00" />
         <Texture Name="object_um_Tex_004100" OutName="tex_004100" Format="rgba16" Width="8" Height="8" Offset="0x4100" />
         <DList Name="object_um_DL_0043E0" Offset="0x43E0" />
         <Texture Name="object_um_Tex_004500" OutName="tex_004500" Format="i8" Width="32" Height="32" Offset="0x4500" />
         <DList Name="object_um_DL_004B60" Offset="0x4B60" />
         <Texture Name="object_um_Tex_004C80" OutName="tex_004C80" Format="i8" Width="32" Height="32" Offset="0x4C80" />
-        <DList Name="object_um_DL_0052B0" Offset="0x52B0" />
+        <DList Name="gUmBrokenMinigamePotDL" Offset="0x52B0" />
         <Texture Name="object_um_TLUT_0054D0" OutName="tlut_0054D0" Format="rgba16" Width="16" Height="16" Offset="0x54D0" />
         <Texture Name="object_um_Tex_0056D0" OutName="tex_0056D0" Format="ci8" Width="8" Height="8" Offset="0x56D0" />
         <Texture Name="object_um_Tex_005710" OutName="tex_005710" Format="ci8" Width="32" Height="64" Offset="0x5710" />
         <Texture Name="object_um_Tex_005F10" OutName="tex_005F10" Format="ci8" Width="32" Height="32" Offset="0x5F10" />
-        <DList Name="object_um_DL_0067C0" Offset="0x67C0" />
+        <DList Name="object_um_DL_0067C0" Offset="0x67C0" /> <!-- pre-minigame pot? -->
         <Texture Name="object_um_TLUT_006AD0" OutName="tlut_006AD0" Format="rgba16" Width="16" Height="16" Offset="0x6AD0" />
         <Texture Name="object_um_Tex_006CD0" OutName="tex_006CD0" Format="ci8" Width="8" Height="8" Offset="0x6CD0" />
         <Texture Name="object_um_Tex_006D10" OutName="tex_006D10" Format="ci8" Width="32" Height="64" Offset="0x6D10" />
         <Texture Name="object_um_Tex_007510" OutName="tex_007510" Format="rgba16" Width="32" Height="32" Offset="0x7510" />
+
         <!-- <Blob Name="object_um_Blob_007D10" Size="0x10" Offset="0x7D10" /> -->
+
         <Collision Name="object_um_Colheader_007E20" Offset="0x7E20" />
         <Collision Name="object_um_Colheader_007F50" Offset="0x7F50" />
+
         <DList Name="object_um_DL_00DF20" Offset="0xDF20" />
         <DList Name="object_um_DL_00E2F0" Offset="0xE2F0" />
         <DList Name="object_um_DL_00E6A8" Offset="0xE6A8" />
@@ -49,31 +54,35 @@
         <DList Name="object_um_DL_010BD8" Offset="0x10BD8" />
         <DList Name="object_um_DL_010CC8" Offset="0x10CC8" />
         <DList Name="object_um_DL_0114B8" Offset="0x114B8" />
-        <Limb Name="object_um_Standardlimb_011CA8" Type="Standard" EnumName="OBJECT_UM_LIMB_01" Offset="0x11CA8" />
-        <Limb Name="object_um_Standardlimb_011CB4" Type="Standard" EnumName="OBJECT_UM_LIMB_02" Offset="0x11CB4" />
-        <Limb Name="object_um_Standardlimb_011CC0" Type="Standard" EnumName="OBJECT_UM_LIMB_03" Offset="0x11CC0" />
-        <Limb Name="object_um_Standardlimb_011CCC" Type="Standard" EnumName="OBJECT_UM_LIMB_04" Offset="0x11CCC" />
-        <Limb Name="object_um_Standardlimb_011CD8" Type="Standard" EnumName="OBJECT_UM_LIMB_05" Offset="0x11CD8" />
-        <Limb Name="object_um_Standardlimb_011CE4" Type="Standard" EnumName="OBJECT_UM_LIMB_06" Offset="0x11CE4" />
-        <Limb Name="object_um_Standardlimb_011CF0" Type="Standard" EnumName="OBJECT_UM_LIMB_07" Offset="0x11CF0" />
-        <Limb Name="object_um_Standardlimb_011CFC" Type="Standard" EnumName="OBJECT_UM_LIMB_08" Offset="0x11CFC" />
-        <Limb Name="object_um_Standardlimb_011D08" Type="Standard" EnumName="OBJECT_UM_LIMB_09" Offset="0x11D08" />
-        <Limb Name="object_um_Standardlimb_011D14" Type="Standard" EnumName="OBJECT_UM_LIMB_0A" Offset="0x11D14" />
-        <Limb Name="object_um_Standardlimb_011D20" Type="Standard" EnumName="OBJECT_UM_LIMB_0B" Offset="0x11D20" />
-        <Limb Name="object_um_Standardlimb_011D2C" Type="Standard" EnumName="OBJECT_UM_LIMB_0C" Offset="0x11D2C" />
-        <Limb Name="object_um_Standardlimb_011D38" Type="Standard" EnumName="OBJECT_UM_LIMB_0D" Offset="0x11D38" />
-        <Limb Name="object_um_Standardlimb_011D44" Type="Standard" EnumName="OBJECT_UM_LIMB_0E" Offset="0x11D44" />
-        <Limb Name="object_um_Standardlimb_011D50" Type="Standard" EnumName="OBJECT_UM_LIMB_0F" Offset="0x11D50" />
-        <Limb Name="object_um_Standardlimb_011D5C" Type="Standard" EnumName="OBJECT_UM_LIMB_10" Offset="0x11D5C" />
-        <Limb Name="object_um_Standardlimb_011D68" Type="Standard" EnumName="OBJECT_UM_LIMB_11" Offset="0x11D68" />
-        <Limb Name="object_um_Standardlimb_011D74" Type="Standard" EnumName="OBJECT_UM_LIMB_12" Offset="0x11D74" />
-        <Limb Name="object_um_Standardlimb_011D80" Type="Standard" EnumName="OBJECT_UM_LIMB_13" Offset="0x11D80" />
-        <Limb Name="object_um_Standardlimb_011D8C" Type="Standard" EnumName="OBJECT_UM_LIMB_14" Offset="0x11D8C" />
-        <Limb Name="object_um_Standardlimb_011D98" Type="Standard" EnumName="OBJECT_UM_LIMB_15" Offset="0x11D98" />
-        <Skeleton Name="object_um_Skel_011DF8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_UM_LIMB_NONE" LimbMax="OBJECT_UM_LIMB_MAX" EnumName="object_um_Limbs" Offset="0x11DF8" />
-        <Animation Name="object_um_Anim_01213C" Offset="0x1213C" />
-        <Animation Name="object_um_Anim_0126C4" Offset="0x126C4" />
-        <Animation Name="object_um_Anim_012CC0" Offset="0x12CC0" />
+
+        <Limb Name="gUmWagonSeatAndShaftsLimb" Type="Standard" EnumName="UM_LIMB_SEAT_AND_SHAFTS" Offset="0x11CA8" /> <!-- Chair and donkey attachment -->
+        <Limb Name="gUmWagonRootLimb" Type="Standard" EnumName="UM_LIMB_WAGON_ROOT" Offset="0x11CB4" />
+        <Limb Name="gUmWagonRightWheelLimb" Type="Standard" EnumName="UM_LIMB_WAGON_RIGHT_WHEEL" Offset="0x11CC0" />
+        <Limb Name="gUmWagonLeftWheelLimb" Type="Standard" EnumName="UM_LIMB_WAGON_LEFT_WHEEL" Offset="0x11CCC" />
+        <Limb Name="gUmWagonCartBedLimb" Type="Standard" EnumName="UM_LIMB_WAGON_CART_BED" Offset="0x11CD8" />
+        <Limb Name="gUmWagonHandBrakeLimb" Type="Standard" EnumName="UM_LIMB_WAGON_HAND_BRAKE" Offset="0x11CE4" />
+        <Limb Name="gUmWagonCartCoverLimb" Type="Standard" EnumName="UM_LIMB_WAGON_CART_COVER" Offset="0x11CF0" />
+        <Limb Name="gUmWagonLeftLeafSpringLimb" Type="Standard" EnumName="UM_LIMB_WAGON_LEFT_LEAF_SPRING" Offset="0x11CFC" />
+        <Limb Name="gUmWagonRightLeafSpringLimb" Type="Standard" EnumName="UM_LIMB_WAGON_RIGHT_LEAF_SPRING" Offset="0x11D08" />
+        <Limb Name="gUmWagonSteeringWheelLimb" Type="Standard" EnumName="UM_LIMB_WAGON_STEERING_WHEEL" Offset="0x11D14" />
+        <Limb Name="gUmCremiaRootLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_ROOT" Offset="0x11D20" />
+        <Limb Name="gUmCremiaTorsoLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_TORSO" Offset="0x11D2C" />
+        <Limb Name="gUmCremiaHeadLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_HEAD" Offset="0x11D38" />
+        <Limb Name="gUmCremiaHairEndLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_HAIR_END" Offset="0x11D44" />
+        <Limb Name="gUmCremiaLeftUpperArmLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_LEFT_UPPER_ARM" Offset="0x11D50" />
+        <Limb Name="gUmCremiaLeftForearmLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_LEFT_FOREARM" Offset="0x11D5C" />
+        <Limb Name="gUmCremiaLeftHandLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_LEFT_HAND" Offset="0x11D68" />
+        <Limb Name="gUmCremiaRightUpperArmLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_RIGHT_UPPER_ARM" Offset="0x11D74" />
+        <Limb Name="gUmCremiaRightForearmLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_RIGHT_FOREARM" Offset="0x11D80" />
+        <Limb Name="gUmCremiaRightHandLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_RIGHT_HAND" Offset="0x11D8C" />
+        <Limb Name="gUmCremiaLowerBodyLimb" Type="Standard" EnumName="UM_LIMB_CREMIA_LOWER_BODY" Offset="0x11D98" />
+
+        <Skeleton Name="gUmSkel" Type="Flex" LimbType="Standard" LimbNone="UM_LIMB_NONE" LimbMax="UM_LIMB_MAX" EnumName="ObjectUmLimb" Offset="0x11DF8" />
+
+        <Animation Name="gUmGallopAnim" Offset="0x1213C" />
+        <Animation Name="gUmLookBackAnim" Offset="0x126C4" />
+        <Animation Name="gUmTrotAnim" Offset="0x12CC0" />
+
         <Texture Name="object_um_TLUT_012CD0" OutName="tlut_012CD0" Format="rgba16" Width="16" Height="16" Offset="0x12CD0" />
         <Texture Name="object_um_TLUT_012ED0" OutName="tlut_012ED0" Format="rgba16" Width="16" Height="16" Offset="0x12ED0" />
         <Texture Name="object_um_TLUT_0130D0" OutName="tlut_0130D0" Format="rgba16" Width="16" Height="16" Offset="0x130D0" />
@@ -85,7 +94,19 @@
         <Texture Name="object_um_Tex_014CD0" OutName="tex_014CD0" Format="ci8" Width="32" Height="64" Offset="0x14CD0" />
         <Texture Name="object_um_Tex_0154D0" OutName="tex_0154D0" Format="ci8" Width="32" Height="64" Offset="0x154D0" />
         <Texture Name="object_um_Tex_015CD0" OutName="tex_015CD0" Format="rgba16" Width="32" Height="32" Offset="0x15CD0" />
-        <!-- <Blob Name="object_um_Blob_0164D0" Size="0x2000" Offset="0x164D0" /> -->
+
+        <Texture Name="gUmCremiaEyeOpenTex" OutName="cremia_eye_open" Format="ci8" Width="32" Height="32" Offset="0x164D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmCremiaEyeHalfTex" OutName="cremia_eye_half" Format="ci8" Width="32" Height="32" Offset="0x168D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmCremiaEyeClosedTex" OutName="cremia_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x16CD0" TlutOffset="0x130D0" />
+        <Texture Name="gUmCremiaEyeHappyTex" OutName="cremia_eye_happy" Format="ci8" Width="32" Height="32" Offset="0x170D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmCremiaEyeAngryTex" OutName="cremia_eye_angry" Format="ci8" Width="32" Height="32" Offset="0x174D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmCremiaEyeSadTex" OutName="cremia_eye_sad" Format="ci8" Width="32" Height="32" Offset="0x178D0" TlutOffset="0x130D0" />
+
+        <Texture Name="gUmMouthNormalTex" OutName="mouth_normal" Format="ci8" Width="32" Height="16" Offset="0x17CD0" TlutOffset="0x130D0" />
+        <Texture Name="gUmMouthHappyTex" OutName="mouth_happy" Format="ci8" Width="32" Height="16" Offset="0x17ED0" TlutOffset="0x130D0" />
+        <Texture Name="gUmMouthFrownTex" OutName="mouth_frown" Format="ci8" Width="32" Height="16" Offset="0x180D0" TlutOffset="0x130D0" />
+        <Texture Name="gUmMouthHangingOpenTex" OutName="mouth_hanging_open" Format="ci8" Width="32" Height="16" Offset="0x182D0" TlutOffset="0x130D0" />
+
         <Texture Name="object_um_Tex_0184D0" OutName="tex_0184D0" Format="ci8" Width="8" Height="8" Offset="0x184D0" />
         <Texture Name="object_um_Tex_018510" OutName="tex_018510" Format="ci8" Width="16" Height="16" Offset="0x18510" />
         <Texture Name="object_um_Tex_018610" OutName="tex_018610" Format="ci8" Width="16" Height="16" Offset="0x18610" />
@@ -100,6 +121,6 @@
         <Texture Name="object_um_Tex_019210" OutName="tex_019210" Format="ci8" Width="16" Height="16" Offset="0x19210" />
         <Texture Name="object_um_Tex_019310" OutName="tex_019310" Format="ci8" Width="16" Height="32" Offset="0x19310" />
         <Texture Name="object_um_Tex_019510" OutName="tex_019510" Format="ci8" Width="64" Height="16" Offset="0x19510" />
-        <Animation Name="object_um_Anim_019E10" Offset="0x19E10" />
+        <Animation Name="gUmIdleAnim" Offset="0x19E10" />
     </File>
 </Root>

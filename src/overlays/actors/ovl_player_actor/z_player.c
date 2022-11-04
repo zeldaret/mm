@@ -5,6 +5,9 @@
  */
 
 #include "global.h"
+#include "z64quake.h"
+#include "z64rumble.h"
+#include "z64shrink_window.h"
 
 #define THIS ((Player*)thisx)
 
@@ -12,10 +15,10 @@ extern UNK_TYPE D_06008860;
 extern UNK_TYPE D_0600BDD8;
 extern UNK_TYPE D_060178D0;
 
-void Player_Init(Actor* thisx, GlobalContext* globalCtx);
-void Player_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void Player_Update(Actor* thisx, GlobalContext* globalCtx);
-void Player_Draw(Actor* thisx, GlobalContext* globalCtx);
+void Player_Init(Actor* thisx, PlayState* play);
+void Player_Destroy(Actor* thisx, PlayState* play);
+void Player_Update(Actor* thisx, PlayState* play);
+void Player_Draw(Actor* thisx, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
 

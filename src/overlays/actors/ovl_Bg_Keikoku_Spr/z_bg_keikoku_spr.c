@@ -11,12 +11,12 @@
 
 #define THIS ((BgKeikokuSpr*)thisx)
 
-void BgKeikokuSpr_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSpr_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSpr_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKeikokuSpr_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKeikokuSpr_Init(Actor* thisx, PlayState* play);
+void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play);
+void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
+void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Keikoku_Spr_InitVars = {
+ActorInit Bg_Keikoku_Spr_InitVars = {
     ACTOR_BG_KEIKOKU_SPR,
     ACTORCAT_PROP,
     FLAGS,
@@ -35,28 +35,28 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
 
-void BgKeikokuSpr_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSpr_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(thisx, sInitChain);
 }
 
-void BgKeikokuSpr_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSpr_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void BgKeikokuSpr_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSpr_Update(Actor* thisx, PlayState* play) {
 }
 
-void BgKeikokuSpr_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0001F8));
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000100);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0003F8));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0003F8));
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000300);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0005F8));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_keikoku_obj_Matanimheader_0005F8));
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_000500);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

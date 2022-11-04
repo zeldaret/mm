@@ -5,7 +5,7 @@
 
 struct EnDai;
 
-typedef void (*EnDaiActionFunc)(struct EnDai*, GlobalContext*);
+typedef void (*EnDaiActionFunc)(struct EnDai*, PlayState*);
 
 typedef struct EnDaiEffect {
     /* 0x00 */ u8 isEnabled;
@@ -45,7 +45,5 @@ typedef struct EnDai {
     /* 0xA6C */ s32 unk_A6C;
     /* 0xA70 */ s32 unk_A70;
 } EnDai; // size = 0xA74
-
-extern const ActorInit En_Dai_InitVars;
 
 #endif // Z_EN_DAI_H

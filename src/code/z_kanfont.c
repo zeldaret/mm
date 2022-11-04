@@ -1,11 +1,11 @@
 #include "global.h"
 
 // stubbed in NTSC-U
-void Font_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32 offset) {
+void Font_LoadChar(PlayState* play, u16 codePointIndex, s32 offset) {
 }
 
-void Font_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32 offset) {
-    MessageContext* msgCtx = &globalCtx->msgCtx;
+void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset) {
+    MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font;
 
     DmaMgr_SendRequest0(&font->charBuf[font->unk_11D88][offset],

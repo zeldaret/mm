@@ -12,16 +12,16 @@
 
 #define THIS ((EnDnb*)thisx)
 
-void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDnb_Init(Actor* thisx, PlayState* play);
+void EnDnb_Destroy(Actor* thisx, PlayState* play);
+void EnDnb_Update(Actor* thisx, PlayState* play);
+void EnDnb_Draw(Actor* thisx, PlayState* play);
 
 s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5);
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
-s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx);
+s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-const ActorInit En_Dnb_InitVars = {
+ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
     ACTORCAT_BG,
     FLAGS,
@@ -99,13 +99,13 @@ s32 func_80A500F8(EnDnb* this) {
     return i;
 }
 
-void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnb_Init(Actor* thisx, PlayState* play) {
     EnDnb* this = THIS;
     s32 i;
     s16* alloc;
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
     alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
@@ -115,13 +115,13 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 1.0f);
 }
 
-void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnb_Destroy(Actor* thisx, PlayState* play) {
     EnDnb* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnb_Update(Actor* thisx, PlayState* play) {
     EnDnb* this = THIS;
     s32 i;
 
@@ -150,13 +150,13 @@ void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A5086C(this->unk_0D38);
 }
 
-void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
+void func_80A50510(EnDnb* this, PlayState* play) {
     s32 i;
     Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
         Matrix_Push();
@@ -165,22 +165,22 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
         Matrix_RotateYS(this->effects[i].unk_18.y, MTXMODE_APPLY);
         Matrix_RotateZS(this->effects[i].unk_18.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gfx[i]);
 
         Matrix_Pop();
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
+void func_80A5063C(EnDnb* this, PlayState* play) {
     s32 i;
     Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
         Matrix_Push();
@@ -189,24 +189,24 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
         Matrix_RotateYS(this->effects[i].unk_18.y, MTXMODE_APPLY);
         Matrix_RotateZS(this->effects[i].unk_18.z, MTXMODE_APPLY);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gfx[i]);
 
         Matrix_Pop();
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnb_Draw(Actor* thisx, PlayState* play) {
     EnDnb* this = THIS;
 
-    if (globalCtx->actorCtx.unk4 != 0) {
-        func_80A50510(this, globalCtx);
+    if (play->actorCtx.lensMaskSize != 0) {
+        func_80A50510(this, play);
     } else {
-        func_80A5063C(this, globalCtx);
+        func_80A5063C(this, play);
     }
-    func_80A50950(this->unk_0D38, globalCtx);
+    func_80A50950(this->unk_0D38, play);
 }
 
 s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5) {
@@ -251,19 +251,19 @@ s32 func_80A5086C(EnDnbUnkStruct* arg0) {
     return count;
 }
 
-s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
-    static TexturePtr D_80A50CBC[] = {
-        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
+    static TexturePtr sDustTextures[] = {
+        gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
     };
-    GlobalContext* globalCtx = globalCtx2;
+    PlayState* play = play2;
     s32 isGfxSetup = false;
     s32 sp5C = 0;
     s32 idx;
     s32 i;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < 256; i++, arg0++) {
         if (arg0->isEnabled == 1) {
@@ -282,12 +282,11 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
 
             Matrix_Translate(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
 
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = (arg0->unk_01 / (f32)arg0->unk_02) * 8.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
 
             Matrix_Pop();
@@ -295,7 +294,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
     return sp5C;
 }

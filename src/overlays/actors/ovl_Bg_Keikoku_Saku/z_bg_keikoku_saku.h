@@ -7,7 +7,7 @@
 
 struct BgKeikokuSaku;
 
-typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, GlobalContext*);
+typedef void (*BgKeikokuSakuActionFunc)(struct BgKeikokuSaku*, PlayState*);
 
 typedef struct BgKeikokuSaku {
     /* 0x000 */ DynaPolyActor dyna;
@@ -15,6 +15,5 @@ typedef struct BgKeikokuSaku {
     /* 0x160 */ s16 switchFlag;
     /* 0x162 */ s16 timer;
 } BgKeikokuSaku; // Size = 0x164
-extern const ActorInit Bg_Keikoku_Saku_InitVars;
 
 #endif // Z_BG_KEIKOKU_SAKU_H
