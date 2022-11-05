@@ -1386,19 +1386,19 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animIndex = FSN_ANIM_SLAM_COUNTER_START;
-            if (gSaveContext.save.weekEventReg[18] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_10)) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
             this->animIndex = FSN_ANIM_LEAN_FORWARD_START;
-            if (gSaveContext.save.weekEventReg[18] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_08)) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
             this->animIndex = FSN_ANIM_HAND_ON_FACE_START;
-            if (gSaveContext.save.weekEventReg[18] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_04)) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1417,17 +1417,17 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.save.weekEventReg[55] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_10)) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_ZORA:
-            if (gSaveContext.save.weekEventReg[55] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_08)) {
                 return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
         case PLAYER_FORM_GORON:
-            if (gSaveContext.save.weekEventReg[55] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_04)) {
                 return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
@@ -1438,22 +1438,22 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
 void EnOssan_SetHaveMet(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
-            gSaveContext.save.weekEventReg[18] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_18_10);
             break;
         case 0x06C6:
-            gSaveContext.save.weekEventReg[55] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_10);
             break;
         case 0x06A7:
-            gSaveContext.save.weekEventReg[18] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_18_08);
             break;
         case 0x06C4:
-            gSaveContext.save.weekEventReg[55] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_08);
             break;
         case 0x06A5:
-            gSaveContext.save.weekEventReg[18] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_18_04);
             break;
         case 0x06C2:
-            gSaveContext.save.weekEventReg[55] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_04);
             break;
     }
 }

@@ -58,10 +58,10 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
     this->zubora = EnKgy_FindZubora(play);
     this->iceBlock = EnKgy_FindIceBlock(play);
     Flags_UnsetSwitch(play, ENKGY_GET_FE00(&this->actor) + 1);
-    if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor)) || (gSaveContext.save.weekEventReg[33] & 0x80)) {
+    if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
         Flags_SetSwitch(play, ENKGY_GET_FE00(&this->actor) + 1);
         play->envCtx.lightSettingOverride = 1;
-        gSaveContext.save.weekEventReg[21] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_21_01);
         if (!func_80B40D64(play)) {
             EnKgy_ChangeAnim(this, 4, ANIMMODE_LOOP, 0);
             this->actionFunc = func_80B425A0;
@@ -78,7 +78,7 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
             this->actor.textId = 0xC50;
         }
     } else {
-        if (gSaveContext.save.weekEventReg[20] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_80)) {
             EnKgy_ChangeAnim(this, 4, ANIMMODE_LOOP, 0);
         } else {
             EnKgy_ChangeAnim(this, 0, ANIMMODE_LOOP, 0);
@@ -1054,7 +1054,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
             func_80B40BC0(this, 1);
         } else {
             EnKgy_ChangeAnim(this, 5, ANIMMODE_ONCE, -5.0f);
-            gSaveContext.save.weekEventReg[20] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_80);
         }
         func_80B411DC(this, play, 0);
         func_80B40E18(this, this->actor.textId);
@@ -1062,7 +1062,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
         if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor))) {
             this->actor.textId = 0xC30;
             this->actionFunc = func_80B4296C;
-            gSaveContext.save.weekEventReg[21] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_21_01);
         } else if (this->actor.xzDistToPlayer < 200.0f) {
             if (this->unk_2D2 == 4) {
                 this->actor.textId = 0xC2D;

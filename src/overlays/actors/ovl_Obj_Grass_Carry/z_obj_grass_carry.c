@@ -356,5 +356,5 @@ void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_809ABB7C(Actor* this, PlayState* play) {
-    Gfx_DrawDListOpa(play, gKusaBushType1);
+    Gfx_DrawDListOpa(play, gKusaBushType1DL);
 }

@@ -390,7 +390,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
         } else if (this->stateFlags & TOILET_HAND_STATE_VISIBLE) {
             // Vanish if player goes too far away or heart piece given
             if ((fabsf(this->actor.playerHeightRel) > 70.0f) || (this->actor.xzDistToPlayer > 140.0f) ||
-                (gSaveContext.save.weekEventReg[90] & 0x80)) {
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_90_80)) {
                 SubS_UpdateFlags(&this->stateFlags, 0, 7);
                 this->playedSfx = false;
                 this->stateFlags &= ~TOILET_HAND_STATE_VISIBLE;
@@ -399,7 +399,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
         } else {
             // Appear if player approaches and heart piece not given
             if ((fabsf(this->actor.playerHeightRel) < 20.0f) && (this->actor.xzDistToPlayer < 70.0f) &&
-                !(gSaveContext.save.weekEventReg[90] & 0x80)) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_90_80)) {
                 this->stateFlags |= TOILET_HAND_STATE_APPEARING;
                 this->playedSfx = false;
             }

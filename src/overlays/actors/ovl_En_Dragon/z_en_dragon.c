@@ -684,37 +684,37 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
                                           this->actor.unk20, NULL)) {
-            gSaveContext.save.weekEventReg[13] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_13_01);
             switch (this->pythonIndex) {
                 case 0:
-                    gSaveContext.save.weekEventReg[83] |= 0x10;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_10);
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[83] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_20);
                     break;
 
                 case 2:
-                    gSaveContext.save.weekEventReg[83] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_40);
                     break;
 
                 case 3:
-                    gSaveContext.save.weekEventReg[83] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_80);
                     break;
                 case 4:
-                    gSaveContext.save.weekEventReg[84] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_01);
                     break;
 
                 case 5:
-                    gSaveContext.save.weekEventReg[84] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_02);
                     break;
 
                 case 6:
-                    gSaveContext.save.weekEventReg[84] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_04);
                     break;
 
                 case 7:
-                    gSaveContext.save.weekEventReg[84] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_08);
                     break;
             }
         }

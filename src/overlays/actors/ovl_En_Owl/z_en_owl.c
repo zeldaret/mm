@@ -183,7 +183,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
 
         case ENOWL_GET_TYPE_2:
             this->actionFunc = func_8095BE0C;
-            if (gSaveContext.save.weekEventReg[9] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_20)) {
                 this->actor.textId = 0xBF0;
             } else {
                 this->actor.textId = 0xBEA;
@@ -613,10 +613,10 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                if (gSaveContext.save.weekEventReg[9] & 0x40) {
+                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
                                     func_80151938(play, 0xBF4);
                                 } else {
-                                    gSaveContext.save.weekEventReg[9] |= 0x40;
+                                    SET_WEEKEVENTREG(WEEKEVENTREG_09_40);
                                     func_80151938(play, 0xBED);
                                 }
                                 break;
@@ -649,7 +649,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
-                        gSaveContext.save.weekEventReg[9] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_09_20);
                         func_80151938(play, 0xBEB);
                         break;
 

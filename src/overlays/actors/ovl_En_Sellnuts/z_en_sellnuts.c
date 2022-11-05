@@ -348,21 +348,21 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
         } else {
             switch (this->unk_340) {
                 case 0x60E:
-                    gSaveContext.save.weekEventReg[17] |= 0x20;
-                    gSaveContext.save.weekEventReg[86] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_17_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_86_04);
                     Message_StartTextbox(play, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x628:
-                    gSaveContext.save.weekEventReg[77] |= 0x40;
-                    gSaveContext.save.weekEventReg[86] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_77_40);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_86_04);
                     Message_StartTextbox(play, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x614:
-                    gSaveContext.save.weekEventReg[17] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_17_40);
                     Message_StartTextbox(play, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
@@ -386,20 +386,20 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
-                if (gSaveContext.save.weekEventReg[77] & 0x40) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_40)) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             } else {
                 this->unk_33A = 1;
-                if (gSaveContext.save.weekEventReg[17] & 0x20) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_20)) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             }
-        } else if (gSaveContext.save.weekEventReg[17] & 0x40) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_40)) {
             this->unk_340 = D_80ADD918[this->unk_33A];
         } else {
             this->unk_340 = D_80ADD910[this->unk_33A];
@@ -480,7 +480,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
 void func_80ADBBEC(EnSellnuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[17] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_17_80);
         this->actionFunc = func_80ADBCE4;
     } else {
         Actor_PickUp(&this->actor, play, GI_DEED_LAND, 300.0f, 300.0f);
@@ -836,7 +836,7 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_34C == 17) {
             ActorCutscene_Stop(this->cutscene);
-            gSaveContext.save.weekEventReg[73] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_73_04);
             Actor_Kill(&this->actor);
         }
     }
@@ -872,7 +872,7 @@ void func_80ADCC04(EnSellnuts* this, PlayState* play) {
 
 void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (gSaveContext.save.weekEventReg[73] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_04)) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
@@ -948,7 +948,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad2;
 
-    if ((gSaveContext.save.weekEventReg[17] & 0x80) || (gSaveContext.save.weekEventReg[61] & 0x10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_61_10)) {
         Actor_Kill(&this->actor);
     }
 
@@ -970,7 +970,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     this->unk_36C = 0.01f;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
-    if (gSaveContext.save.weekEventReg[73] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_04)) {
         if (ENSELLNUTS_GET_1(&this->actor)) {
             Actor_Kill(&this->actor);
             return;

@@ -161,13 +161,13 @@ void EnStoneheishi_TrackPlayer(EnStoneheishi* this) {
 
 void func_80BC94B0(EnStoneheishi* this) {
     this->textIdIndex = 0;
-    if (gSaveContext.save.weekEventReg[41] & 0x40) { // After drinking bottle
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) { // After drinking bottle
         EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_CHEER_WITH_SPEAR);
         this->textIdIndex = 8;
         this->actor.flags &= ~ACTOR_FLAG_80;
     } else { // Initial configuration
         EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_WAVE);
-        if (gSaveContext.save.weekEventReg[41] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_80)) {
             this->textIdIndex = 2;
         }
     }
@@ -185,7 +185,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
         return;
     }
 
-    if (!(gSaveContext.save.weekEventReg[41] & 0x40) && (play->actorCtx.lensMaskSize != 100)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) && (play->actorCtx.lensMaskSize != 100)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         return;
     }
@@ -287,7 +287,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
 
                 this->textIdIndex = 3;
                 player->actor.textId = 0;
-                gSaveContext.save.weekEventReg[41] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_41_80);
                 this->action = EN_STONE_ACTION_1;
                 this->actionFunc = func_80BC9680;
             }
@@ -396,7 +396,7 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
         this->actor.parent = NULL;
         this->textIdIndex++;
         this->actor.textId = sEnStoneHeishiTextIds[this->textIdIndex];
-        gSaveContext.save.weekEventReg[41] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_41_40);
         Actor_ProcessTalkRequest(&this->actor, &play->state);
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BC9E50;
@@ -436,7 +436,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (((gSaveContext.save.weekEventReg[41] & 0x40) || (play->actorCtx.lensMaskSize == 100)) &&
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) || (play->actorCtx.lensMaskSize == 100)) &&
         !(player->stateFlags1 & PLAYER_STATE1_800000)) {
         if ((this->animIndex != EN_STONE_HEISHI_ANIM_WAVE) &&
             ((((this->action == EN_STONE_ACTION_0) || (this->action == EN_STONE_ACTION_1)) ||
@@ -448,7 +448,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
             this->targetHeadRot.y = 0;
         }
 
-        if (!(gSaveContext.save.weekEventReg[41] & 0x40)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) {
             Actor_SetFocus(&this->actor, 30.0f);
         } else {
             Actor_SetFocus(&this->actor, 60.0f);
@@ -517,7 +517,7 @@ void EnStoneheishi_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (!(gSaveContext.save.weekEventReg[41] & 0x40)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) {
         func_8012C2DC(play->state.gfxCtx);
 
         POLY_XLU_DISP =

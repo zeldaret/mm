@@ -435,8 +435,7 @@ s32 func_80BE10BC(EnTab* this, PlayState* play) {
             } else {
                 dist = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_1E4->actor.world.pos);
 
-                if ((gSaveContext.save.weekEventReg[75] & 1) || (this->unk_1E4->actor.draw == NULL) ||
-                    !(dist < 160.0f)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01) || (this->unk_1E4->actor.draw == NULL) || !(dist < 160.0f)) {
                     tempActor = &GET_PLAYER(play)->actor;
                     this->actor.child = tempActor;
                 } else {
