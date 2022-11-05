@@ -833,8 +833,8 @@ void func_80AEB584(EnLiftNuts* this) {
 void func_80AEB598(EnLiftNuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) &&
-            (CURRENT_DAY == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) && (CURRENT_DAY == 3) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_14_80);
         }
         func_80AEB684(this);
