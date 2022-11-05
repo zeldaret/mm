@@ -168,12 +168,11 @@ f32 D_801D0470[160] = {
 };
 // clang-format on
 
-
 // rupeesTextLocalization
 char D_801D06F0[4][8] = {
     { "Rupee(s)" }, // EN
     { "Rubin(e)" }, // DE
-    { "Rubis"    }, // FR
+    { "Rubis" },    // FR
     { "Rupia(s)" }, // SPA
 };
 
@@ -181,7 +180,7 @@ char D_801D06F0[4][8] = {
 u8 D_801D0710[4] = {
     sizeof("Rupee(s)") - 1,
     sizeof("Rubin(e)") - 1,
-    sizeof("Rubis"   ) - 1,
+    sizeof("Rubis") - 1,
     sizeof("Rupia(s)") - 1,
 };
 
@@ -203,16 +202,16 @@ char D_801D0714[OWL_WARP_MAX][16] = {
 // sOwlWarpTextLength
 s16 D_801D07C4[OWL_WARP_MAX] = {
     sizeof("Great Bay Coast") - 1,  // OWL_WARP_GREAT_BAY_COAST
-    sizeof("Zora Cape") - 1,         // OWL_WARP_ZORA_CAPE
-    sizeof("Snowhead") - 1,          // OWL_WARP_SNOWHEAD
+    sizeof("Zora Cape") - 1,        // OWL_WARP_ZORA_CAPE
+    sizeof("Snowhead") - 1,         // OWL_WARP_SNOWHEAD
     sizeof("Mountain Village") - 1, // OWL_WARP_MOUNTAIN_VILLAGE
     sizeof("Clock Town") - 1,       // OWL_WARP_CLOCK_TOWN
-    sizeof("Milk Road") - 1,         // OWL_WARP_MILK_ROAD
-    sizeof("Woodfall") - 1,          // OWL_WARP_WOODFALL
+    sizeof("Milk Road") - 1,        // OWL_WARP_MILK_ROAD
+    sizeof("Woodfall") - 1,         // OWL_WARP_WOODFALL
     sizeof("Southern Swamp") - 1,   // OWL_WARP_SOUTHERN_SWAMP
     sizeof("Ikana Canyon") - 1,     // OWL_WARP_IKANA_CANYON
     sizeof("Stone Tower") - 1,      // OWL_WARP_STONE_TOWER
-    sizeof("Entrance") - 1,          // OWL_WARP_ENTRANCE
+    sizeof("Entrance") - 1,         // OWL_WARP_ENTRANCE
 };
 
 void Message_FindMessageNES(PlayState* play, u16 textId) {
@@ -484,141 +483,34 @@ void func_80159438(OSTime time, s16* digits) {
     digits[7] += '0';
 }
 
-
 Vec3s D_801D07DC[] = {
-    {0x00FF, 0x0078,
-    0x0000,},
-    {0x0046,
-    0x00FF, 0x0050},
-
-    {0x0050, 0x006E,
-    0x00FF},
-    {0x00FF,
-    0x00FF, 0x001E},
-
-    {0x005A, 0x00B4,
-    0x00FF },
-    {0x00D2,
-    0x0064, 0x00FF},
-
-    {0x00AA, 0x00AA,
-    0x00AA},
-    {0x00FF,
-    0x0082, 0x001E},
+    { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
+    { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
 Vec3s D_801D080C[] = {
-    {0x00FF,
-    0x003C,
-    0x003C},
-    {0x0046,
-    0x00FF,
-    0x0050},
-    {0x0050,
-    0x005A,
-    0x00FF},
-    {0x00FF,
-    0x00FF,
-    0x0032},
-    {0x0050,
-    0x0096,
-    0x00FF},
-    {0x00FF,
-    0x0096,
-    0x00B4},
-    {0x00AA,
-    0x00AA,
-    0x00AA},
-    {0x00FF,
-    0x0082,
-    0x001E},
+    { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
 Vec3s D_801D083C[] = {
-    {0x00FF,
-    0x003C,
-    0x003C},
-    {0x0046,
-    0x00FF,
-    0x0050},
-    {0x0050,
-    0x005A,
-    0x00FF},
-    {0x00FF,
-    0x00FF,
-    0x0032},
-    {0x0050,
-    0x0096,
-    0x00FF},
-    {0x00FF,
-    0x0096,
-    0x00B4},
-    {0x00B4,
-    0x00B4,
-    0x00C8},
-    {0x00FF,
-    0x0082,
-    0x001E},
+    { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
 };
 
 Vec3s D_801D086C[] = {
-    {0x00C3,
-    0x0000,
-    0x0000},
-    {0x0046,
-    0x00FF,
-    0x0050},
-    {0x0050,
-    0x005A,
-    0x00FF},
-    {0x00FF,
-    0x00FF,
-    0x0032},
-    {0x0050,
-    0x0096,
-    0x00FF},
-    {0x00FF,
-    0x0096,
-    0x00B4},
-
-    {0x00AA, 0x00AA,
-    0x00AA}, {0x00FF,
-    0x0082, 0x001E},
+    { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
 Vec3s D_801D089C[] = {
-    {0x00FF,
-    0x003C,
-    0x003C},
-    {0x006E,
-    0x00AA,
-    0x00FF},
-    {0x0050,
-    0x005A,
-    0x00FF},
-    {0x00FF,
-    0x00FF,
-    0x0032},
-    {0x0050,
-    0x0096,
-    0x00FF},
-    {0x00FF,
-    0x0096,
-    0x00B4},
-    {0x00AA,
-    0x00AA,
-    0x00AA},
-    {0x00FF,
-    0x0082,
-    0x001E},
+    { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
 u8 D_801D08CC[] = {
-    0x02, 0x01, 0x03, 0x06,
-    0x06, 0x06, 0x03, 0x03,
-    0x03, 0x03, 0x01, 0x06,
+    0x02, 0x01, 0x03, 0x06, 0x06, 0x06, 0x03, 0x03, 0x03, 0x03, 0x01, 0x06,
 };
-
 
 #if 0
 void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
@@ -1448,29 +1340,31 @@ block_217:
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DrawTextNES.s")
 #endif
 
-
-
-UNK_TYPE4 D_801D08D8[] = {
-    0x46617374,
-    0x2D2D2D2D,
-    0x536C6F77,
+char D_801D08D8[][4] = {
+    "Fast",
+    "----",
+    "Slow",
 };
 
-UNK_TYPE4 D_801D08E4[] = {
-    0x01030402,
+u8 D_801D08E4[] = {
+    0x01,
+    0x03,
+    0x04,
+    0x02,
 };
 
-UNK_TYPE4 D_801D08E8[] = {
-    0x52454400,
-    0x0000424C,
-    0x55450000,
-    0x59454C4C,
-    0x4F574752,
-    0x45454E00,
+char D_801D08E8[][6] = {
+    "RED",
+    "BLUE",
+    "YELLOW",
+    "GREEN",
 };
 
-UNK_TYPE4 D_801D0900[] = {
-    0x03040605,
+u8 D_801D0900[] = {
+    sizeof("RED") - 1,
+    sizeof("BLUE") - 1,
+    sizeof("YELLOW") - 1,
+    sizeof("GREEN") - 1,
 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DecodeNES.s")

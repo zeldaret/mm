@@ -935,7 +935,6 @@ extern char sOcarinaSongFanfareIoData[];
 // extern UNK_TYPE1 D_801D080C;
 // extern UNK_TYPE1 D_801D083C;
 // extern UNK_TYPE1 D_801D086C;
-// extern UNK_TYPE1 D_801D0890;
 // extern UNK_TYPE1 D_801D089C;
 // extern UNK_TYPE1 D_801D08CC;
 // extern UNK_TYPE1 D_801D08D8;
