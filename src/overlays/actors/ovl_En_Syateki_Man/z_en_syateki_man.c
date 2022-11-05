@@ -222,7 +222,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
 }
 
 /**
@@ -341,8 +341,8 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
             } else {
                 func_8019F208();
                 Rupees_ChangeBy(-20);
-                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
@@ -408,11 +408,11 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 break;
 
             case 0xA32: // You have to try harder!
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_CloseTextbox(play);
                     player->stateFlags1 &= ~PLAYER_STATE1_20;
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
                     gSaveContext.minigameState = 3;
                     this->shootingGameState = SG_GAME_STATE_NONE;
@@ -469,8 +469,8 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                 this->actionFunc = EnSyatekiMan_Swamp_Idle;
                 this->shootingGameState = SG_GAME_STATE_NONE;
             }
@@ -660,8 +660,8 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     this->prevTextId = 0x3FF;
                 }
 
-                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             }
         } else {
             func_8019F230();
@@ -747,8 +747,8 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     player->actor.freezeTimer = 0;
                     this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
                     player->stateFlags1 |= PLAYER_STATE1_20;
-                    SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     this->actionFunc = EnSyatekiMan_Town_MovePlayerAndSayHighScore;
                 }
                 break;
@@ -767,10 +767,10 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 break;
 
             case 0x401: // You got [score]? Oh, that's too bad...
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_CloseTextbox(play);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
@@ -781,10 +781,10 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 break;
 
             case 0x403: // You got [score]? Too bad...
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_CloseTextbox(play);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
@@ -839,8 +839,8 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->actionFunc = EnSyatekiMan_Town_Idle;
                 this->shootingGameState = SG_GAME_STATE_NONE;
@@ -958,8 +958,8 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->score = 0;
             this->shootingGameState = SG_GAME_STATE_NONE;
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             this->actionFunc = EnSyatekiMan_SetupIdle;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -1118,9 +1118,9 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 this->prevTextId = 0xA34;
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             } else if (this->score >= 2000) {
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     gSaveContext.minigameState = 3;
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;

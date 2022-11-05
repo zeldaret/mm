@@ -106,7 +106,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
 void EnMm3_Destroy(Actor* thisx, PlayState* play) {
     EnMm3* this = THIS;
 
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -279,7 +279,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
             case 0x2795:
             case 0x2796:
             case 0x2797:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
                     func_80151BB4(play, 0xB);
@@ -351,8 +351,8 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                     play_sound(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     func_80A6F270(this);
                 }
             }
@@ -374,8 +374,8 @@ void func_80A6FBA0(EnMm3* this) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
     func_801A0238(0, 5);
-    SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+    SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
     this->actionFunc = func_80A6FBFC;
 }
 

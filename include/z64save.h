@@ -1039,8 +1039,18 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_62_20 PACK_WEEKEVENTREG_FLAG(62, 0x20)
 #define WEEKEVENTREG_62_40 PACK_WEEKEVENTREG_FLAG(62, 0x40)
 #define WEEKEVENTREG_62_80 PACK_WEEKEVENTREG_FLAG(62, 0x80)
-#define WEEKEVENTREG_63_01 PACK_WEEKEVENTREG_FLAG(63, 0x01)
-#define WEEKEVENTREG_63_02 PACK_WEEKEVENTREG_FLAG(63, 0x02)
+
+// These two kickout flags work together to delay being
+// kicked out of a scene until an event has occured.
+
+// Set this flag to block and store a kickout event.
+// Must unset this flag to unblock a stored kickout event.
+#define WEEKEVENTREG_KICKOUT_BLOCK PACK_WEEKEVENTREG_FLAG(63, 0x01)
+// This flag is set to indicate that a kickout time has passed,
+// but was blocked and is being stored.
+// Must unset this flag to unblock a stored kickout event.
+#define WEEKEVENTREG_KICKOUT_TIME_PASSED PACK_WEEKEVENTREG_FLAG(63, 0x02)
+
 #define WEEKEVENTREG_63_04 PACK_WEEKEVENTREG_FLAG(63, 0x04)
 #define WEEKEVENTREG_63_08 PACK_WEEKEVENTREG_FLAG(63, 0x08)
 #define WEEKEVENTREG_63_10 PACK_WEEKEVENTREG_FLAG(63, 0x10)

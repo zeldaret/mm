@@ -229,7 +229,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
 void EnFu_Destroy(Actor* thisx, PlayState* play) {
     EnFu* this = THIS;
 
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     Collider_DestroyCylinder(play, &this->collider);
 }
@@ -532,8 +532,8 @@ void func_80962660(EnFu* this, PlayState* play) {
                 break;
 
             case 0x287D:
-                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                 Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
@@ -605,8 +605,8 @@ void func_809628D0(EnFu* this, PlayState* play) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
-                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                         func_809622FC(this);
                         break;
 
