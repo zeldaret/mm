@@ -1387,8 +1387,8 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2 ||
-                GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
+            if ((GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) ||
+                (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3)) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;

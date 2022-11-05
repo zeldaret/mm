@@ -118,7 +118,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
     switch (EN_RZ_GET_TYPE(thisx)) {
         case EN_RZ_TYPE_1:
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -532,7 +532,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             }
 
         } else if (EnRz_CanTalk(this, play)) {
-            if (func_80BFBCEC(this, play) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) && this->sister != NULL) {
+            if (func_80BFBCEC(this, play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
             } else {

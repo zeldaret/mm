@@ -14,41 +14,41 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01): Aliens defeated
+ * - WEEKEVENTREG_22_01: Aliens defeated
  *     If false: The actor doesn't spawn
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)
+ * - WEEKEVENTREG_31_40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)
+ * - WEEKEVENTREG_31_80
  *     If true: Triggers cutscene on Romani's Ranch
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80)
+ * - WEEKEVENTREG_34_80
  *     If true: Doesn't spawn on Romani's Ranch
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)
+ * - WEEKEVENTREG_52_01
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)
+ * - WEEKEVENTREG_52_02
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)
+ * - WEEKEVENTREG_59_02
  *     If true: Doesn't spawn again on Milk Road
  *
  * weekEventReg flags set by this actor:
- * - SET_WEEKEVENTREG(WEEKEVENTREG_31_40): Cremia offered a ride
+ * - WEEKEVENTREG_31_40: Cremia offered a ride
  *     Cremia offered a ride accross the Milk Road to Player
- * - SET_WEEKEVENTREG(WEEKEVENTREG_31_80): Player is in Milk Run
+ * - WEEKEVENTREG_31_80: Player is in Milk Run
  *     Player accepts the ride and is with Cremia during the Milk Run
- * - SET_WEEKEVENTREG(WEEKEVENTREG_34_80): Cremia does Milk Run alone
+ * - WEEKEVENTREG_34_80: Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
- * - SET_WEEKEVENTREG(WEEKEVENTREG_52_01): Won Milk Run minigame
+ * - WEEKEVENTREG_52_01: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
- * - SET_WEEKEVENTREG(WEEKEVENTREG_52_02): Lose Milk Run minigame
+ * - WEEKEVENTREG_52_02: Lose Milk Run minigame
  *     Every pot was broken by bandits. Turns off the "Win Milk Run minigame"
- * - SET_WEEKEVENTREG(WEEKEVENTREG_59_02): ?
+ * - WEEKEVENTREG_59_02: ?
  *     Passed through Milk Road after winning the Milk Run
  *
  * weekEventReg flags unset by this actor:
- * - CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80)
+ * - WEEKEVENTREG_31_80
  *     Turned off when the Milk Run finishes
- * - CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01)
+ * - WEEKEVENTREG_52_01
  *     Turned off if Player lose the Milk Run
- * - CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02)
+ * - WEEKEVENTREG_52_02
  *     Turned off if Player wins the Milk Run
  */
 

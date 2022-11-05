@@ -382,7 +382,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                 if (Flags_GetSwitch(play, 0x40)) {
                     Flags_UnsetSwitch(play, 0x40);
                     Inventory_SaveDekuPlaygroundHighScore(4);
-                    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20)) &&
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) &&
                         CURRENT_DAY == 3) {
                         this->unk_354 = 0;
                         Message_StartTextbox(play, 0x27F4, &this->actor);
@@ -833,12 +833,12 @@ void func_80AEB584(EnLiftNuts* this) {
 void func_80AEB598(EnLiftNuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20)) &&
-            (CURRENT_DAY == 3) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) &&
+            (CURRENT_DAY == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_14_80);
         }
         func_80AEB684(this);
-    } else if ((this->textId == 0x27F4) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80))) {
+    } else if ((this->textId == 0x27F4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_14_80)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -851,7 +851,7 @@ void func_80AEB684(EnLiftNuts* this) {
 
 void func_80AEB698(EnLiftNuts* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10)) && (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20)) && CURRENT_DAY == 3) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) && (CURRENT_DAY == 3)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 13);
             Message_StartTextbox(play, 0x27F5, &this->actor);
             this->textId = 0x27F5;
