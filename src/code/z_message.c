@@ -2392,7 +2392,7 @@ void Message_Decode(PlayState* play) {
                                                             } while (var_s1_13 < 5);
                                                             spEA -= 1;
                                                         } else if (curChar == 0x223) {
-                                                            temp_v0 = gSaveContext.save.timeSpeedOffset;
+                                                            temp_v0 = gSaveContext.save.daySpeed;
                                                             spDA = var_a3;
                                                             var_s1_14 = 0;
                                                             if (temp_v0 == 0x12) {
@@ -5791,12 +5791,12 @@ void Message_Update(PlayState* play) {
                     if (Message_ShouldAdvance(play)) {
                         if (msgCtx->choiceIndex == 0) {
                             func_8019F208();
-                            if (gSaveContext.save.timeSpeedOffset == 0) {
+                            if (gSaveContext.save.daySpeed == 0) {
                                 play->msgCtx.ocarinaMode = OCARINA_MODE_APPLY_INV_SOT_SLOW;
-                                gSaveContext.save.timeSpeedOffset = -2;
+                                gSaveContext.save.daySpeed = -2;
                             } else {
                                 play->msgCtx.ocarinaMode = OCARINA_MODE_APPLY_INV_SOT_FAST;
-                                gSaveContext.save.timeSpeedOffset = 0;
+                                gSaveContext.save.daySpeed = 0;
                             }
                             Message_CloseTextbox(play);
                         } else {
@@ -5981,7 +5981,7 @@ void Message_Update(PlayState* play) {
                     } else if (sLastPlayedSong == OCARINA_SONG_INVERTED_TIME) {
                         if (interfaceCtx->restrictions.unk_314 == 0) {
                             if (gGameInfo->data[0xF] != 0) {
-                                if (gSaveContext.save.timeSpeedOffset == 0) {
+                                if (gSaveContext.save.daySpeed == 0) {
                                     Message_StartTextbox(play, 0x1B8C, NULL);
                                 } else {
                                     Message_StartTextbox(play, 0x1B8D, NULL);
