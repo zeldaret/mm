@@ -54,7 +54,7 @@ typedef enum {
 #define TEXTBOX_ENDTYPE_63    0x63
 #define TEXTBOX_ENDTYPE_64    0x64
 
-typedef enum {
+typedef enum MessageMode {
     /* 0x00 */ MSGMODE_NONE,
     /* 0x01 */ MSGMODE_TEXT_START,
     /* 0x02 */ MSGMODE_TEXT_BOX_GROWING,

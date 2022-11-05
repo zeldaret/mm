@@ -3394,7 +3394,7 @@ void Message_Decode(PlayState* play) {
                 }
             }
         }
-        msgCtx->msgMode = 6;
+        msgCtx->msgMode = MSGMODE_TEXT_DISPLAYING;
         msgCtx->textDrawPos = 1;
         msgCtx->unk11FFA = msgCtx->textboxY + 6;
         msgCtx->unk11F1A[spD2] = 0;
