@@ -37,8 +37,10 @@ ActorInit En_Warp_tag_InitVars = {
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases
-// these unknown values get passed to a unknown z_message function
-u8 D_809C1000[] = { 0x28, 0x29, 0x2A, 0x2B, 0x2D, 0x2C, 0, 0 };
+u8 D_809C1000[] = {
+    OCARINA_ACTION_CHECK_TIME,    OCARINA_ACTION_CHECK_HEALING, OCARINA_ACTION_CHECK_EPONAS,
+    OCARINA_ACTION_CHECK_SOARING, OCARINA_ACTION_CHECK_SUNS,    OCARINA_ACTION_CHECK_STORMS,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
