@@ -733,7 +733,7 @@ void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP) {
         gDPPipeSync(gfx++);
     }
 
-    gDPSetPrimColor(gfx++, 0, 0, msgCtx->unk12018, msgCtx->unk1201A, msgCtx->unk1201C, msgCtx->textColorAlpha);
+    gDPSetPrimColor(gfx++, 0, 0, msgCtx->textColorR, msgCtx->textColorG, msgCtx->textColorB, msgCtx->textColorAlpha);
     gSPTextureRectangle(gfx++, (x) << 2, (y) << 2, ((x + sCharTexSize)) << 2, ((y + sCharTexSize)) << 2,
                         G_TX_RENDERTILE, 0, 0, sCharTexScale, sCharTexScale);
     *gfxP = gfx++;
@@ -994,9 +994,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
     if (play->msgCtx.itemId != 0x270F) {
         Message_DrawItemIcon(play, &gfx);
     }
-    msgCtx->unk12018 = msgCtx->unk120C8;
-    msgCtx->unk1201A = msgCtx->unk120CA;
-    msgCtx->unk1201C = msgCtx->unk120CC;
+    msgCtx->textColorR = msgCtx->unk120C8;
+    msgCtx->textColorG = msgCtx->unk120CA;
+    msgCtx->textColorB = msgCtx->unk120CC;
 
     charTexIndex = 0;
 
@@ -1006,11 +1006,11 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
         switch (character) {
             case 0x2000:
                 if (play->pauseCtx.bombersNotebookOpen || (msgCtx->textBoxType == 0xD)) {
-                    msgCtx->unk12018 = msgCtx->unk1201A = msgCtx->unk1201C = 0;
+                    msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
                 } else if (msgCtx->textBoxType == 5) {
-                    msgCtx->unk12018 = msgCtx->unk1201A = msgCtx->unk1201C = 0;
+                    msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
                 } else {
-                    msgCtx->unk12018 = msgCtx->unk1201A = msgCtx->unk1201C = 0xFF;
+                    msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0xFF;
                 }
                 if ((i + 1) == msgCtx->textDrawPos) {
                     msgCtx->textDrawPos++;
@@ -1041,36 +1041,36 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     }
 
                     if (D_801CFE74[character - 0x2001][0] + msgCtx->unk120D4 < 0) {
-                        msgCtx->unk12018 = 0;
+                        msgCtx->textColorR = 0;
                     } else {
-                        msgCtx->unk12018 = D_801CFE74[character - 0x2001][0] + msgCtx->unk120D4;
+                        msgCtx->textColorR = D_801CFE74[character - 0x2001][0] + msgCtx->unk120D4;
                     }
                     if (D_801CFE74[character - 0x2001][1] + msgCtx->unk120D4 >= 0xFF) {
-                        msgCtx->unk1201A = D_801CFE74[character - 0x2001][1];
+                        msgCtx->textColorG = D_801CFE74[character - 0x2001][1];
                     } else {
-                        msgCtx->unk1201A = D_801CFE74[character - 0x2001][1] + msgCtx->unk120D4;
+                        msgCtx->textColorG = D_801CFE74[character - 0x2001][1] + msgCtx->unk120D4;
                     }
                     if (D_801CFE74[character - 0x2001][2] + msgCtx->unk120D4 < 0) {
-                        msgCtx->unk1201C = 0;
+                        msgCtx->textColorB = 0;
                     } else {
-                        msgCtx->unk1201C = D_801CFE74[character - 0x2001][2] + msgCtx->unk120D4;
+                        msgCtx->textColorB = D_801CFE74[character - 0x2001][2] + msgCtx->unk120D4;
                     }
                 } else if (play->pauseCtx.bombersNotebookOpen) {
-                    msgCtx->unk12018 = D_801CFF34[character - 0x2001][0];
-                    msgCtx->unk1201A = D_801CFF34[character - 0x2001][1];
-                    msgCtx->unk1201C = D_801CFF34[character - 0x2001][2];
+                    msgCtx->textColorR = D_801CFF34[character - 0x2001][0];
+                    msgCtx->textColorG = D_801CFF34[character - 0x2001][1];
+                    msgCtx->textColorB = D_801CFF34[character - 0x2001][2];
                 } else if (msgCtx->textBoxType == 1) {
-                    msgCtx->unk12018 = D_801CFE74[character - 0x2001][0];
-                    msgCtx->unk1201A = D_801CFE74[character - 0x2001][1];
-                    msgCtx->unk1201C = D_801CFE74[character - 0x2001][2];
+                    msgCtx->textColorR = D_801CFE74[character - 0x2001][0];
+                    msgCtx->textColorG = D_801CFE74[character - 0x2001][1];
+                    msgCtx->textColorB = D_801CFE74[character - 0x2001][2];
                 } else if (msgCtx->textBoxType == 0xD) {
-                    msgCtx->unk12018 = D_801CFF04[character - 0x2001][0];
-                    msgCtx->unk1201A = D_801CFF04[character - 0x2001][1];
-                    msgCtx->unk1201C = D_801CFF04[character - 0x2001][2];
+                    msgCtx->textColorR = D_801CFF04[character - 0x2001][0];
+                    msgCtx->textColorG = D_801CFF04[character - 0x2001][1];
+                    msgCtx->textColorB = D_801CFF04[character - 0x2001][2];
                 } else {
-                    msgCtx->unk12018 = D_801CFEA4[character - 0x2001][0];
-                    msgCtx->unk1201A = D_801CFEA4[character - 0x2001][1];
-                    msgCtx->unk1201C = D_801CFEA4[character - 0x2001][2];
+                    msgCtx->textColorR = D_801CFEA4[character - 0x2001][0];
+                    msgCtx->textColorG = D_801CFEA4[character - 0x2001][1];
+                    msgCtx->textColorB = D_801CFEA4[character - 0x2001][2];
                 }
 
                 if ((i + 1) == msgCtx->textDrawPos) {
@@ -1086,13 +1086,13 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0xC:
                 sp130++;
                 msgCtx->textPosX = msgCtx->unk11F1A[sp130] + msgCtx->unk11FF8;
-                if (msgCtx->unk12022 == 1) {
+                if (msgCtx->choiceNum == 1) {
                     if (!play->pauseCtx.bombersNotebookOpen) {
                         msgCtx->textPosX += 32;
                     } else {
                         msgCtx->textPosX += 57;
                     }
-                } else if (msgCtx->unk12022 == 2) {
+                } else if (msgCtx->choiceNum == 2) {
                     if (!play->pauseCtx.bombersNotebookOpen) {
                         msgCtx->textPosX += 22;
                     } else {
@@ -1104,7 +1104,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x9:
             case 0xB:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    if (msgCtx->unk12094 == 0) {
+                    if (!msgCtx->textboxSkipped) {
                         play_sound(0);
                         msgCtx->msgMode = MSGMODE_TEXT_AWAIT_NEXT;
                         Font_LoadMessageBoxEndIcon(font, 0);
@@ -1113,9 +1113,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                         msgCtx->textUnskippable = 0;
                         msgCtx->msgBufPos++;
                     }
-                    msgCtx->unk120CE = msgCtx->unk12018;
-                    msgCtx->unk120D0 = msgCtx->unk1201A;
-                    msgCtx->unk120D2 = msgCtx->unk1201C;
+                    msgCtx->unk120CE = msgCtx->textColorR;
+                    msgCtx->unk120D0 = msgCtx->textColorG;
+                    msgCtx->unk120D2 = msgCtx->textColorB;
                 }
                 *gfxP = gfx;
                 return;
@@ -1207,7 +1207,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x134:
             case 0x135:
             case 0x136:
-                msgCtx->unk12026 = character - 0x130;
+                msgCtx->textDelay = character - 0x130;
                 if ((i + 1) == msgCtx->textDrawPos) {
                     msgCtx->textDrawPos++;
                 }
@@ -1258,7 +1258,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x202:
                 msgCtx->textboxEndType = 0x10;
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    msgCtx->unk11F06 = msgCtx->currentTextId;
+                    msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 2);
                 }
@@ -1267,7 +1267,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x203:
                 msgCtx->textboxEndType = 0x11;
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    msgCtx->unk11F06 = msgCtx->currentTextId;
+                    msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
                     Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 2);
                 }
@@ -1390,16 +1390,16 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                 }
 
                 if ((character >= 0x839F) && (character < 0x83AB)) {
-                    sp12E = msgCtx->unk12018;
-                    sp12C = msgCtx->unk1201A;
-                    sp12A = msgCtx->unk1201C;
-                    msgCtx->unk12018 = D_801CFED4[D_801CFF64[character - 0x839F]][0];
-                    msgCtx->unk1201A = D_801CFED4[D_801CFF64[character - 0x839F]][1];
-                    msgCtx->unk1201C = D_801CFED4[D_801CFF64[character - 0x839F]][2];
+                    sp12E = msgCtx->textColorR;
+                    sp12C = msgCtx->textColorG;
+                    sp12A = msgCtx->textColorB;
+                    msgCtx->textColorR = D_801CFED4[D_801CFF64[character - 0x839F]][0];
+                    msgCtx->textColorG = D_801CFED4[D_801CFF64[character - 0x839F]][1];
+                    msgCtx->textColorB = D_801CFED4[D_801CFF64[character - 0x839F]][2];
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
-                    msgCtx->unk12018 = sp12E;
-                    msgCtx->unk1201A = sp12C;
-                    msgCtx->unk1201C = sp12A;
+                    msgCtx->textColorR = sp12E;
+                    msgCtx->textColorG = sp12C;
+                    msgCtx->textColorB = sp12A;
                 } else {
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                 }
@@ -1512,7 +1512,7 @@ void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
         msgCtx->unk12014 = (msgCtx->unk12014 * 1.4f);
     }
 
-    msgCtx->unk12022 = 1;
+    msgCtx->choiceNum = 1;
 }
 
 void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
@@ -1880,7 +1880,7 @@ void Message_Decode(PlayState* play) {
     void* temp_v1_2;
 
     play->msgCtx.textDelayTimer = 0;
-    play->msgCtx.unk12026 = (u16)play->msgCtx.textDelayTimer;
+    play->msgCtx.textDelay = (u16)play->msgCtx.textDelayTimer;
     play->msgCtx.textFade = 0;
     spC0 = 0.0f;
     play->msgCtx.font.unk_11D88 = (play->msgCtx.font.unk_11D88 ^ 1) & 1;
@@ -1975,11 +1975,11 @@ void Message_Decode(PlayState* play) {
                                                 } else if (curChar == 0x202) {
                                                     spDA = var_a3;
                                                     msgCtx->unk11F18 = 1;
-                                                    msgCtx->unk12022 = 2;
+                                                    msgCtx->choiceNum = 2;
                                                 } else if (curChar == 0x203) {
                                                     spDA = var_a3;
                                                     msgCtx->unk11F18 = 1;
-                                                    msgCtx->unk12022 = 3;
+                                                    msgCtx->choiceNum = 3;
                                                     msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
                                                 } else if (curChar == 0x204) {
                                                     temp_a0 = (&gSaveContext.pictoPhoto[0x39C])[curChar];
@@ -3016,7 +3016,7 @@ void Message_Decode(PlayState* play) {
                                                                                                 .wchar[temp_v0_6] =
                                                                                                 font->msgBuf
                                                                                                     .wchar[temp_s0_12];
-                                                                                            if ((msgCtx->unk12094 !=
+                                                                                            if ((msgCtx->textboxSkipped !=
                                                                                                  0) ||
                                                                                                 (temp_v0_7 =
                                                                                                      msgCtx
@@ -3428,7 +3428,7 @@ void Message_Decode(PlayState* play) {
             msgCtx->msgBufPos = msgCtx->msgBufPos + 2;
         }
         msgCtx->decodedTextLen = (u16)spEA;
-        if ((msgCtx->unk12094 != 0) || (temp_v0_13 = msgCtx->textBoxType, (temp_v0_13 == 1)) || (temp_v0_13 == 3) ||
+        if ((msgCtx->textboxSkipped != 0) || (temp_v0_13 = msgCtx->textBoxType, (temp_v0_13 == 1)) || (temp_v0_13 == 3) ||
             (temp_v0_13 == 6) || (temp_v0_13 == 8) || (temp_v0_13 == 9) || (temp_v0_13 == (u8)0xBU) ||
             (msgCtx->unk11F0C == 3)) {
             msgCtx->textDrawPos = msgCtx->decodedTextLen;
@@ -3539,9 +3539,9 @@ void Message_OpenText(PlayState* play, u16 textId) {
         Interface_SetHudVisibility(HUD_VISIBILITY_A_HEARTS_MAGIC_WITH_OVERWRITE);
     }
 
-    msgCtx->unk12092 = 0;
+    msgCtx->messageHasSetSfx = false;
     D_801C6A70 = 0;
-    msgCtx->unk12094 = 0;
+    msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
     var_fv0 = 1.0f;
 
@@ -3591,7 +3591,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
         DmaMgr_SendRequest0(&font->msgBuf, &_message_data_staticSegmentRomStart[font->messageStart], font->messageEnd);
     }
 
-    msgCtx->unk12022 = 0;
+    msgCtx->choiceNum = 0;
     msgCtx->textUnskippable = 0;
     msgCtx->textboxEndType = 0;
     msgCtx->textDrawPos = 0;
@@ -3647,9 +3647,9 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     if (msgCtx->msgMode == MSGMODE_NONE) {
         gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
     }
-    msgCtx->unk12092 = 0;
+    msgCtx->messageHasSetSfx = false;
     D_801C6A70 = 0;
-    msgCtx->unk12094 = 0;
+    msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
 
     if (gSaveContext.options.language == 0) {
@@ -3683,7 +3683,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
                             font->messageEnd);
     }
-    msgCtx->unk12022 = 0;
+    msgCtx->choiceNum = 0;
     msgCtx->textUnskippable = 0;
     msgCtx->textboxEndType = 0;
     msgCtx->textDrawPos = 0;
@@ -4510,8 +4510,8 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_TEXT_DELAYED_BREAK:
             case MSGMODE_9:
                 if ((gSaveContext.options.language == 0) && !msgCtx->textIsCredits) {
-                    if (msgCtx->unk12026 != 0) {
-                        msgCtx->textDrawPos += msgCtx->unk12026;
+                    if (msgCtx->textDelay != 0) {
+                        msgCtx->textDrawPos += msgCtx->textDelay;
                     }
                     Message_DrawTextNES(play, &gfx, 0);
                     if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -4520,8 +4520,8 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 } else if (msgCtx->textIsCredits) {
                     Message_DrawTextCredits(play, &gfx);
                 } else {
-                    if (msgCtx->unk12026 != 0) {
-                        msgCtx->textDrawPos += msgCtx->unk12026;
+                    if (msgCtx->textDelay != 0) {
+                        msgCtx->textDrawPos += msgCtx->textDelay;
                     }
                     Message_DrawTextNES(play, &gfx, 0);
                     if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -5638,7 +5638,7 @@ void Message_Update(PlayState* play) {
         case MSGMODE_TEXT_DISPLAYING:
             if (msgCtx->textBoxType != TEXTBOX_TYPE_4) {
                 if (CHECK_BTN_ALL(input->press.button, BTN_B) && !msgCtx->textUnskippable) {
-                    msgCtx->unk12094 = 1;
+                    msgCtx->textboxSkipped = true;
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_A) && !msgCtx->textUnskippable) {
 
@@ -6225,12 +6225,12 @@ void Message_Init(PlayState* play) {
     Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;
 
-    msgCtx->textIsCredits = msgCtx->unk12092 = false;
-    msgCtx->unk12094 = 0;
+    msgCtx->textIsCredits = msgCtx->messageHasSetSfx = false;
+    msgCtx->textboxSkipped = false;
     msgCtx->textFade = false;
     msgCtx->ocarinaAvailableSongs = 0;
-    msgCtx->textboxX = 0x34;
-    msgCtx->textboxY = 0x24;
+    msgCtx->textboxX = 52;
+    msgCtx->textboxY = 36;
     msgCtx->ocarinaSongEffectActive = false;
     msgCtx->unk120BE = 0;
     msgCtx->unk120C0 = 0;

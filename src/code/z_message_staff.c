@@ -27,29 +27,29 @@ extern f32 sFontWidths[];
 
 #ifdef NON_MATCHING
 // Message_DrawTextCredits // https://decomp.me/scratch/yc8Or
-void Message_DrawTextCredits(PlayState* play, Gfx** gfxp) {
+void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
     u16 lookAheadCharacter;
-    u16 j;// var_a0;
-    u16 i;// var_t0; // sp126
+    u16 j;
+    u16 i;
     u16 sfxHi;
-    char character; //temp_v0;
-    u16 charTexIndex; //sp120;
-    Font* font = &play->msgCtx.font; // temp_a3 = &play->msgCtx.font; // sp50
-    Gfx* gfx = *gfxp; // sp118;
+    char character;
+    u16 charTexIndex;
+    Font* font = &msgCtx->font;
+    Gfx* gfx = *gfxP;
 
-    play->msgCtx.textPosX = play->msgCtx.unk11FF8;
+    msgCtx->textPosX = msgCtx->unk11FF8;
 
-    if (!play->msgCtx.textIsCredits) {
+    if (!msgCtx->textIsCredits) {
         msgCtx->textPosY = msgCtx->unk11FFA;
     } else {
         msgCtx->textPosY = 48;
     }
 
     if (msgCtx->textBoxType == 5) {
-        msgCtx->unk12018 =msgCtx->unk1201A = msgCtx->unk1201C = 0;
+        msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
     } else {
-        msgCtx->unk12018 =msgCtx->unk1201A = msgCtx->unk1201C = 0xFF;
+        msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 255;
     }
 
     charTexIndex = 0;
@@ -58,450 +58,452 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxp) {
         character = msgCtx->decodedBuffer.schar[i];
 
         switch (character) {
-            case 0x1:
+            case 0x1: // MESSAGE_NEWLINE
                 msgCtx->textPosX = msgCtx->unk11FF8;
-                if ((msgCtx->unk12022 == 1) || (msgCtx->unk12022 == 3)) {
-                    msgCtx->textPosX += 0x20;
+                if ((msgCtx->choiceNum == 1) || (msgCtx->choiceNum == 3)) {
+                    msgCtx->textPosX += 32;
                 }
-                if ((msgCtx->unk12022 == 2) && (msgCtx->textPosY != msgCtx->unk11FFA)) {
-                    msgCtx->textPosX += 0x20;
+                if ((msgCtx->choiceNum == 2) && (msgCtx->textPosY != msgCtx->unk11FFA)) {
+                    msgCtx->textPosX += 32;
                 }
                 msgCtx->textPosY += msgCtx->unk11FFC;
                 break;
 
-            case 0x5:
+            case 0x5: // Remnant of MESSAGE_COLOR
                 break;
 
-            case 0x20:
+            case ' ':
                 msgCtx->textPosX += 6;
                 break;
 
-            case 0x4:
-                if (msgCtx->msgMode == 6) {
-                    if (msgCtx->unk12094 == 0) {
+            case 0x4: // MESSAGE_BOX_BREAK
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    if (!msgCtx->textboxSkipped) {
                         play_sound(0);
-                        msgCtx->msgMode = 0x41;
-                        Font_LoadMessageBoxEndIcon(font, 0U);
+                        msgCtx->msgMode = MSGMODE_TEXT_AWAIT_NEXT;
+                        Font_LoadMessageBoxEndIcon(font, 0);
                     } else {
-                        msgCtx->msgMode = 4;
-                        msgCtx->textUnskippable = 0;
+                        msgCtx->msgMode = MSGMODE_TEXT_NEXT_MSG;
+                        msgCtx->textUnskippable = false;
                         msgCtx->msgBufPos++;
                     }
                 }
-                *gfxp = gfx;
+                *gfxP = gfx;
                 return;
-            case 0x6:
+
+            case 0x6: // MESSAGE_SHIFT
                 msgCtx->textPosX += msgCtx->decodedBuffer.schar[++i];
                 break;
 
-            case 0x7:
-                msgCtx->textboxEndType = 0x20;
-                if (msgCtx->msgMode == 6) {
-                    play_sound(0U);
-                    msgCtx->msgMode = 0x42;
-                    Font_LoadMessageBoxEndIcon(font, 0U);
+            case 0x7: // MESSAGE_TEXTID
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_20;
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    play_sound(0);
+                    msgCtx->msgMode = MSGMODE_TEXT_DONE;
+                    Font_LoadMessageBoxEndIcon(font, 0);
                 }
-                *gfxp = gfx;
+                *gfxP = gfx;
                 return;
-            case 0x8:
-                //if (msgCtx && msgCtx) {}
 
-                if ((i + 1) == msgCtx->textDrawPos) {
-                    if ((msgCtx->msgMode == 6) || ((msgCtx->msgMode >= 0xA) && (msgCtx->msgMode < 0x27))) {
-                        j = i;
-    //loop_32:
-                        while (true) {
-                            lookAheadCharacter = msgCtx->decodedBuffer.schar[j];
-                            if (lookAheadCharacter == 6) {
-                                j += 2;
-                                //goto loop_32;
-                                continue;
-                            }
-                            if ((lookAheadCharacter != 9) && (lookAheadCharacter != 0xA) && (lookAheadCharacter != 0xB) && (lookAheadCharacter != 0xC) && (lookAheadCharacter != 0xD) && (lookAheadCharacter != 4) && (lookAheadCharacter != 2)) {
-                                j++;
-                                //goto loop_32;
-                                continue;
-                            }
-                            break;
+            case 0x8: // MESSAGE_QUICKTEXT_ENABLE
+                if (((i + 1) == msgCtx->textDrawPos) &&
+                    ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) ||
+                     ((msgCtx->msgMode >= MSGMODE_OCARINA_STARTING) && (msgCtx->msgMode <= MSGMODE_26)))) {
+                    j = i;
+                    while (true) {
+                        lookAheadCharacter = msgCtx->decodedBuffer.schar[j];
+                        if (lookAheadCharacter == 6) {
+                            j += 2;
+                            continue;
                         }
-                        i = j - 1;
-                        msgCtx->textDrawPos = i + 1;
+                        if ((lookAheadCharacter != 9) && (lookAheadCharacter != 0xA) && (lookAheadCharacter != 0xB) &&
+                            (lookAheadCharacter != 0xC) && (lookAheadCharacter != 0xD) && (lookAheadCharacter != 4) &&
+                            (lookAheadCharacter != 2)) {
+                            j++;
+                            continue;
+                        }
+                        break;
                     }
+                    i = j - 1;
+                    msgCtx->textDrawPos = i + 1;
                 }
-                /* fallthrough */
-            case 0x9:
+                // fallthrough
+            case 0x9: // MESSAGE_QUICKTEXT_DISABLE
                 break;
-            case 0xD:
+
+            case 0xD: // MESSAGE_AWAIT_BUTTON_PRESS
                 if ((i + 1) == msgCtx->textDrawPos) {
-                    if (msgCtx->msgMode == 6) {
-                        msgCtx->msgMode = 7;
-                        Font_LoadMessageBoxEndIcon(font, 0U);
+                    if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                        msgCtx->msgMode = MSGMODE_TEXT_AWAIT_INPUT;
+                        Font_LoadMessageBoxEndIcon(font, 0);
                     }
-                    *gfxp = gfx;
+                    *gfxP = gfx;
                     return;
                 }
                 break;
-            case 0xC:
-                if (msgCtx->msgMode == 6) {
+
+            case 0xC: // MESSAGE_BOX_BREAK_DELAYED
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i];
-                    msgCtx->msgMode = 8;
+                    msgCtx->msgMode = MSGMODE_TEXT_DELAYED_BREAK;
                 }
-                *gfxp = gfx;
+                *gfxP = gfx;
                 return;
-            case 0x11:
-                if (msgCtx->msgMode == 6) {
-                    msgCtx->msgMode = 0x42;
-                    msgCtx->textboxEndType = 0x50;
+
+            case 0x11: // MESSAGE_FADE2
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    msgCtx->msgMode = MSGMODE_TEXT_DONE;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_50;
                     msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i] << 8;
                     msgCtx->stateTimer |= msgCtx->decodedBuffer.schar[++i];
                 }
-                *gfxp = gfx;
+                *gfxP = gfx;
                 return;
-            case 0x12:
-                if ((msgCtx->msgMode == 6) && (msgCtx->unk12092 == 0)) {
-                    #if 0
-                    temp_t7_2 = msgCtx + i;
-                    msgCtx->unk12092 = 1;
-                    sp48 = i;
-                    play_sound((temp_t7_2->unk_11F26 | (temp_t7_2->unk_11F25 << 8)) & 0xFFFF);
-                    var_a1 = sp48;
-                    #endif
-                    msgCtx->unk12092 = 1;
-                    sfxHi = msgCtx->decodedBuffer.schar[1+i];
-                    sfxHi <<= 8;
-                    play_sound(sfxHi | msgCtx->decodedBuffer.schar[2+i]);
+
+            case 0x12: // MESSAGE_SFX
+                if ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) && !msgCtx->messageHasSetSfx) {
+                    msgCtx->messageHasSetSfx = true;
+                    sfxHi = msgCtx->decodedBuffer.schar[i + 1];
+                    sfxHi = sfxHi << 8;
+                    play_sound(sfxHi | msgCtx->decodedBuffer.schar[i + 2]);
                 }
                 i += 2;
                 break;
-            case 0x13:
+
+            case 0x13: // remnant of MESSAGE_ITEM_ICON
                 break;
-            case 0x15:
-                if (msgCtx->msgMode == 6) {
-                    play_sound(0U);
+
+            case 0x15: // MESSAGE_BACKGROUND
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    play_sound(0);
                 }
-                //temp_t7_3 = gfx;
-                //gfx = temp_t7_3 + 8;
-                //temp_t7_3->words.w1 = 0;
-                //temp_t7_3->words.w0 = 0xE7000000;
+                // temp_t7_3 = gfx;
+                // gfx = temp_t7_3 + 8;
+                // temp_t7_3->words.w1 = 0;
+                // temp_t7_3->words.w0 = 0xE7000000;
                 gDPPipeSync(gfx++);
 
-                //temp_t9 = gfx;
-                //gfx = temp_t9 + 8;
-                //temp_t9->words.w0 = 0xFC119623;
-                //temp_t9->words.w1 = 0xFF2FFFFF;
+                // temp_t9 = gfx;
+                // gfx = temp_t9 + 8;
+                // temp_t9->words.w0 = 0xFC119623;
+                // temp_t9->words.w1 = 0xFF2FFFFF;
                 gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
-                //temp_v0_7 = gfx;
-                //gfx = temp_v0_7 + 8;
-                //temp_v0_7->words.w0 = 0xFA000000;
-                //temp_v0_7->words.w1 = msgCtx->textColorAlpha & 0xFF;
+                // temp_v0_7 = gfx;
+                // gfx = temp_v0_7 + 8;
+                // temp_v0_7->words.w0 = 0xFA000000;
+                // temp_v0_7->words.w1 = msgCtx->textColorAlpha & 0xFF;
                 gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, msgCtx->textColorAlpha);
 
-                //temp_v0_8 = gfx;
-                //temp_t7_4 = temp_v0_8 + 8;
-                //gfx = temp_t7_4;
-                //temp_v0_8->words.w0 = 0xFD900000;
-                //temp_v0_8->words.w1 = (u32)msgCtx->textboxSegment + 0x1000;
-                //gDPSetTextureImage(gfx++, G_IM_FMT_I, G_IM_SIZ_16b, 1, (u32)msgCtx->textboxSegment + 0x1000);
+                // temp_v0_8 = gfx;
+                // temp_t7_4 = temp_v0_8 + 8;
+                // gfx = temp_t7_4;
+                // temp_v0_8->words.w0 = 0xFD900000;
+                // temp_v0_8->words.w1 = (u32)msgCtx->textboxSegment + 0x1000;
+                // gDPSetTextureImage(gfx++, G_IM_FMT_I, G_IM_SIZ_16b, 1, (u32)msgCtx->textboxSegment + 0x1000);
 
-                //gfx = temp_t7_4 + 8;
-                //temp_t7_4->words.w1 = 0x07000000;
-                //temp_t7_4->words.w0 = 0xF5900000;
+                // gfx = temp_t7_4 + 8;
+                // temp_t7_4->words.w1 = 0x07000000;
+                // temp_t7_4->words.w0 = 0xF5900000;
 
-                //temp_t7_5 = gfx;
-                //gfx = temp_t7_5 + 8;
-                //temp_t7_5->words.w1 = 0;
-                //temp_t7_5->words.w0 = 0xE6000000;
-                //temp_t6 = gfx;
-                //gfx = temp_t6 + 8;
-                //temp_t6->words.w0 = 0xF3000000;
-                //temp_t6->words.w1 = 0x0747F156;
-                //temp_t6_2 = gfx;
-                //gfx = temp_t6_2 + 8;
-                //temp_t6_2->words.w1 = 0;
-                //temp_t6_2->words.w0 = 0xE7000000;
-                //temp_t8 = gfx;
-                //gfx = temp_t8 + 8;
-                //temp_t8->words.w1 = 0;
-                //temp_t8->words.w0 = 0xF5800C00;
-                //temp_t7_6 = gfx;
-                //gfx = temp_t7_6 + 8;
-                //temp_t7_6->words.w0 = 0xF2000000;
-                //temp_t7_6->words.w1 = 0x0017C0BC;
-                gDPLoadTextureBlock_4b(gfx++, ((u32) msgCtx->textboxSegment) + 0x1000, G_IM_FMT_I, 96, 48, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                // temp_t7_5 = gfx;
+                // gfx = temp_t7_5 + 8;
+                // temp_t7_5->words.w1 = 0;
+                // temp_t7_5->words.w0 = 0xE6000000;
+                // temp_t6 = gfx;
+                // gfx = temp_t6 + 8;
+                // temp_t6->words.w0 = 0xF3000000;
+                // temp_t6->words.w1 = 0x0747F156;
+                // temp_t6_2 = gfx;
+                // gfx = temp_t6_2 + 8;
+                // temp_t6_2->words.w1 = 0;
+                // temp_t6_2->words.w0 = 0xE7000000;
+                // temp_t8 = gfx;
+                // gfx = temp_t8 + 8;
+                // temp_t8->words.w1 = 0;
+                // temp_t8->words.w0 = 0xF5800C00;
+                // temp_t7_6 = gfx;
+                // gfx = temp_t7_6 + 8;
+                // temp_t7_6->words.w0 = 0xF2000000;
+                // temp_t7_6->words.w1 = 0x0017C0BC;
+                gDPLoadTextureBlock_4b(gfx++, msgCtx->textboxSegment + 0x1000, G_IM_FMT_I, 96, 48, 0,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
 
-                //temp_v0_9 = gfx;
+                // temp_v0_9 = gfx;
                 ////temp_t8_2 = temp_v0_9 + 8;
-                //temp_t8_2 = temp_v0_9 + 1;
-                //gfx = temp_t8_2;
-                //temp_v0_9->words.w0 = ((((msgCtx->textPosX + 0x61) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((msgCtx->unk12012 + 0x31) * 4) & 0xFFF);
-                //temp_v0_9->words.w1 = ((((msgCtx->textPosX + 1) * 4) & 0xFFF) << 0xC) | (((msgCtx->unk12012 + 1) * 4) & 0xFFF);
-                //gfx = temp_t8_2 + 8;
-                //temp_t8_2->words.w0 = 0xE1000000;
-                //temp_t8_2->words.w1 = 0;
-                //temp_t7_7 = gfx;
-                //gfx = temp_t7_7 + 8;
-                //temp_t7_7->words.w0 = 0xF1000000;
-                //temp_t7_7->words.w1 = 0x04000400;
-                gSPTextureRectangle(gfx++, (msgCtx->textPosX + 1) << 2, (msgCtx->unk12012 + 1) << 2, (msgCtx->textPosX + 0x61) << 2, (msgCtx->unk12012 + 0x31) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+                // temp_t8_2 = temp_v0_9 + 1;
+                // gfx = temp_t8_2;
+                // temp_v0_9->words.w0 = ((((msgCtx->textPosX + 0x61) * 4) & 0xFFF) << 0xC) | 0xE4000000 |
+                // (((msgCtx->unk12012 + 0x31) * 4) & 0xFFF); temp_v0_9->words.w1 = ((((msgCtx->textPosX + 1) * 4) &
+                // 0xFFF) << 0xC) | (((msgCtx->unk12012 + 1) * 4) & 0xFFF); gfx = temp_t8_2 + 8; temp_t8_2->words.w0 =
+                // 0xE1000000; temp_t8_2->words.w1 = 0; temp_t7_7 = gfx; gfx = temp_t7_7 + 8; temp_t7_7->words.w0 =
+                // 0xF1000000; temp_t7_7->words.w1 = 0x04000400;
+                gSPTextureRectangle(gfx++, (msgCtx->textPosX + 1) << 2, (msgCtx->unk12012 + 1) << 2,
+                                    (msgCtx->textPosX + 0x61) << 2, (msgCtx->unk12012 + 0x31) << 2, G_TX_RENDERTILE, 0,
+                                    0, 1 << 10, 1 << 10);
 
+                // temp_v0_10 = gfx;
+                // temp_t8_3 = temp_v0_10 + 8;
+                // gfx = temp_t8_3;
+                // temp_v0_10->words.w0 = 0xFD900000;
+                // temp_v0_10->words.w1 = (u32)msgCtx->textboxSegment + 0x1900;
+                // gfx = temp_t8_3 + 8;
+                // temp_t8_3->words.w1 = 0x07000000;
+                // temp_t8_3->words.w0 = 0xF5900000;
+                // temp_t8_4 = gfx;
+                // gfx = temp_t8_4 + 8;
+                // temp_t8_4->words.w1 = 0;
+                // temp_t8_4->words.w0 = 0xE6000000;
+                // temp_t7_8 = gfx;
+                // gfx = temp_t7_8 + 8;
+                // temp_t7_8->words.w0 = 0xF3000000;
+                // temp_t7_8->words.w1 = 0x0747F156;
+                // temp_t7_9 = gfx;
+                // gfx = temp_t7_9 + 8;
+                // temp_t7_9->words.w1 = 0;
+                // temp_t7_9->words.w0 = 0xE7000000;
+                // temp_t9_2 = gfx;
+                // gfx = temp_t9_2 + 8;
+                // temp_t9_2->words.w1 = 0;
+                // temp_t9_2->words.w0 = 0xF5800C00;
+                // temp_t8_5 = gfx;
+                // gfx = temp_t8_5 + 8;
+                // temp_t8_5->words.w0 = 0xF2000000;
+                // temp_t8_5->words.w1 = 0x0017C0BC;
+                gDPLoadTextureBlock_4b(gfx++, msgCtx->textboxSegment + 0x1900, G_IM_FMT_I, 96, 48, 0,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
 
-                //temp_v0_10 = gfx;
-                //temp_t8_3 = temp_v0_10 + 8;
-                //gfx = temp_t8_3;
-                //temp_v0_10->words.w0 = 0xFD900000;
-                //temp_v0_10->words.w1 = (u32)msgCtx->textboxSegment + 0x1900;
-                //gfx = temp_t8_3 + 8;
-                //temp_t8_3->words.w1 = 0x07000000;
-                //temp_t8_3->words.w0 = 0xF5900000;
-                //temp_t8_4 = gfx;
-                //gfx = temp_t8_4 + 8;
-                //temp_t8_4->words.w1 = 0;
-                //temp_t8_4->words.w0 = 0xE6000000;
-                //temp_t7_8 = gfx;
-                //gfx = temp_t7_8 + 8;
-                //temp_t7_8->words.w0 = 0xF3000000;
-                //temp_t7_8->words.w1 = 0x0747F156;
-                //temp_t7_9 = gfx;
-                //gfx = temp_t7_9 + 8;
-                //temp_t7_9->words.w1 = 0;
-                //temp_t7_9->words.w0 = 0xE7000000;
-                //temp_t9_2 = gfx;
-                //gfx = temp_t9_2 + 8;
-                //temp_t9_2->words.w1 = 0;
-                //temp_t9_2->words.w0 = 0xF5800C00;
-                //temp_t8_5 = gfx;
-                //gfx = temp_t8_5 + 8;
-                //temp_t8_5->words.w0 = 0xF2000000;
-                //temp_t8_5->words.w1 = 0x0017C0BC;
-                gDPLoadTextureBlock_4b(gfx++, ((u32) msgCtx->textboxSegment) + 0x1900, G_IM_FMT_I, 96, 48, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                // temp_v0_11 = gfx;
+                // temp_t9_3 = temp_v0_11 + 8;
+                // gfx = temp_t9_3;
+                // temp_v0_11->words.w0 = ((((msgCtx->textPosX + 0xC2) * 4) & 0xFFF) << 0xC) | 0xE4000000 |
+                // (((msgCtx->unk12012 + 0x31) * 4) & 0xFFF); temp_v0_11->words.w1 = ((((msgCtx->textPosX + 0x61) * 4) &
+                // 0xFFF) << 0xC) | (((msgCtx->unk12012 + 1) * 4) & 0xFFF); gfx = temp_t9_3 + 8; temp_t9_3->words.w0 =
+                // 0xE1000000; temp_t9_3->words.w1 = 0; temp_t8_6 = gfx; gfx = temp_t8_6 + 8; temp_t8_6->words.w0 =
+                // 0xF1000000; temp_t8_6->words.w1 = 0x04000400;
+                gSPTextureRectangle(gfx++, (msgCtx->textPosX + 0x61) << 2, (msgCtx->unk12012 + 1) << 2,
+                                    (msgCtx->textPosX + 0xC2) << 2, (msgCtx->unk12012 + 0x31) << 2, 0, 0, 0, 1 << 10,
+                                    1 << 10);
 
-
-                //temp_v0_11 = gfx;
-                //temp_t9_3 = temp_v0_11 + 8;
-                //gfx = temp_t9_3;
-                //temp_v0_11->words.w0 = ((((msgCtx->textPosX + 0xC2) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((msgCtx->unk12012 + 0x31) * 4) & 0xFFF);
-                //temp_v0_11->words.w1 = ((((msgCtx->textPosX + 0x61) * 4) & 0xFFF) << 0xC) | (((msgCtx->unk12012 + 1) * 4) & 0xFFF);
-                //gfx = temp_t9_3 + 8;
-                //temp_t9_3->words.w0 = 0xE1000000;
-                //temp_t9_3->words.w1 = 0;
-                //temp_t8_6 = gfx;
-                //gfx = temp_t8_6 + 8;
-                //temp_t8_6->words.w0 = 0xF1000000;
-                //temp_t8_6->words.w1 = 0x04000400;
-                gSPTextureRectangle(gfx++, (msgCtx->textPosX + 0x61) << 2, (msgCtx->unk12012 + 1) << 2, (msgCtx->textPosX + 0xC2) << 2, (msgCtx->unk12012 + 0x31) << 2, 0, 0, 0, 0x0400, 0x0400);
-
-
-                //temp_t8_7 = gfx;
-                //gfx = temp_t8_7 + 8;
-                //temp_t8_7->words.w1 = 0;
-                //temp_t8_7->words.w0 = 0xE7000000;
-                //temp_v0_12 = gfx;
-                //gfx = temp_v0_12 + 8;
-                //temp_v0_12->words.w0 = 0xFA000000;
-                //temp_v0_12->words.w1 = (msgCtx->textColorAlpha & 0xFF) | 0xFF3C0000;
+                // temp_t8_7 = gfx;
+                // gfx = temp_t8_7 + 8;
+                // temp_t8_7->words.w1 = 0;
+                // temp_t8_7->words.w0 = 0xE7000000;
+                // temp_v0_12 = gfx;
+                // gfx = temp_v0_12 + 8;
+                // temp_v0_12->words.w0 = 0xFA000000;
+                // temp_v0_12->words.w1 = (msgCtx->textColorAlpha & 0xFF) | 0xFF3C0000;
                 gDPPipeSync(gfx++);
                 gDPSetPrimColor(gfx++, 0, 0, 255, 60, 0, msgCtx->textColorAlpha);
 
-                //temp_v0_13 = gfx;
-                //temp_t9_4 = temp_v0_13 + 8;
-                //gfx = temp_t9_4;
-                //temp_v0_13->words.w0 = 0xFD900000;
-                //temp_v0_13->words.w1 = (u32)msgCtx->textboxSegment + 0x1000;
-                //gfx = temp_t9_4 + 8;
-                //temp_t9_4->words.w1 = 0x07000000;
-                //temp_t9_4->words.w0 = 0xF5900000;
-                //temp_t9_5 = gfx;
-                //gfx = temp_t9_5 + 8;
-                //temp_t9_5->words.w1 = 0;
-                //temp_t9_5->words.w0 = 0xE6000000;
-                //temp_t8_8 = gfx;
-                //gfx = temp_t8_8 + 8;
-                //temp_t8_8->words.w0 = 0xF3000000;
-                //temp_t8_8->words.w1 = 0x0747F156;
-                //temp_t8_9 = gfx;
-                //gfx = temp_t8_9 + 8;
-                //temp_t8_9->words.w1 = 0;
-                //temp_t8_9->words.w0 = 0xE7000000;
-                //temp_t6_3 = gfx;
-                //gfx = temp_t6_3 + 8;
-                //temp_t6_3->words.w1 = 0;
-                //temp_t6_3->words.w0 = 0xF5800C00;
-                //temp_t9_6 = gfx;
-                //gfx = temp_t9_6 + 8;
-                //temp_t9_6->words.w0 = 0xF2000000;
-                //temp_t9_6->words.w1 = 0x0017C0BC;
-                gDPLoadTextureBlock_4b(gfx++, ((u32) msgCtx->textboxSegment) + 0x1000, G_IM_FMT_I, 96, 48, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                // temp_v0_13 = gfx;
+                // temp_t9_4 = temp_v0_13 + 8;
+                // gfx = temp_t9_4;
+                // temp_v0_13->words.w0 = 0xFD900000;
+                // temp_v0_13->words.w1 = (u32)msgCtx->textboxSegment + 0x1000;
+                // gfx = temp_t9_4 + 8;
+                // temp_t9_4->words.w1 = 0x07000000;
+                // temp_t9_4->words.w0 = 0xF5900000;
+                // temp_t9_5 = gfx;
+                // gfx = temp_t9_5 + 8;
+                // temp_t9_5->words.w1 = 0;
+                // temp_t9_5->words.w0 = 0xE6000000;
+                // temp_t8_8 = gfx;
+                // gfx = temp_t8_8 + 8;
+                // temp_t8_8->words.w0 = 0xF3000000;
+                // temp_t8_8->words.w1 = 0x0747F156;
+                // temp_t8_9 = gfx;
+                // gfx = temp_t8_9 + 8;
+                // temp_t8_9->words.w1 = 0;
+                // temp_t8_9->words.w0 = 0xE7000000;
+                // temp_t6_3 = gfx;
+                // gfx = temp_t6_3 + 8;
+                // temp_t6_3->words.w1 = 0;
+                // temp_t6_3->words.w0 = 0xF5800C00;
+                // temp_t9_6 = gfx;
+                // gfx = temp_t9_6 + 8;
+                // temp_t9_6->words.w0 = 0xF2000000;
+                // temp_t9_6->words.w1 = 0x0017C0BC;
+                gDPLoadTextureBlock_4b(gfx++, msgCtx->textboxSegment + 0x1000, G_IM_FMT_I, 96, 48, 0,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
 
-                //temp_v0_14 = gfx;
-                //gfx = temp_v0_14 + 8;
-                //temp_v0_14->words.w0 = ((((msgCtx->textPosX + 0x60) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((msgCtx->unk12012 + 0x30) * 4) & 0xFFF);
-                //temp_v0_14->words.w1 = (((msgCtx->textPosX * 4) & 0xFFF) << 0xC) | ((msgCtx->unk12012 * 4) & 0xFFF);
-                //temp_t8_10 = gfx;
-                //gfx = temp_t8_10 + 8;
-                //temp_t8_10->words.w0 = 0xE1000000;
-                //temp_t8_10->words.w1 = 0;
-                //temp_t7_10 = gfx;
-                //gfx = temp_t7_10 + 8;
-                //temp_t7_10->words.w0 = 0xF1000000;
-                //temp_t7_10->words.w1 = 0x04000400;
-                gSPTextureRectangle(gfx++, msgCtx->textPosX << 2, msgCtx->unk12012 << 2, (msgCtx->textPosX + 0x60) << 2, (msgCtx->unk12012 + 0x30) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+                // temp_v0_14 = gfx;
+                // gfx = temp_v0_14 + 8;
+                // temp_v0_14->words.w0 = ((((msgCtx->textPosX + 0x60) * 4) & 0xFFF) << 0xC) | 0xE4000000 |
+                // (((msgCtx->unk12012 + 0x30) * 4) & 0xFFF); temp_v0_14->words.w1 = (((msgCtx->textPosX * 4) & 0xFFF)
+                // << 0xC) | ((msgCtx->unk12012 * 4) & 0xFFF); temp_t8_10 = gfx; gfx = temp_t8_10 + 8;
+                // temp_t8_10->words.w0 = 0xE1000000; temp_t8_10->words.w1 = 0; temp_t7_10 = gfx; gfx = temp_t7_10 + 8;
+                // temp_t7_10->words.w0 = 0xF1000000; temp_t7_10->words.w1 = 0x04000400;
+                gSPTextureRectangle(gfx++, msgCtx->textPosX << 2, msgCtx->unk12012 << 2, (msgCtx->textPosX + 0x60) << 2,
+                                    (msgCtx->unk12012 + 0x30) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
-                //temp_v0_15 = gfx;
-                //temp_t8_11 = temp_v0_15 + 8;
-                //gfx = temp_t8_11;
-                //temp_v0_15->words.w0 = 0xFD900000;
-                //temp_v0_15->words.w1 = (u32)msgCtx->textboxSegment + 0x1900;
-                //gfx = temp_t8_11 + 8;
-                //temp_t8_11->words.w1 = 0x07000000;
-                //temp_t8_11->words.w0 = 0xF5900000;
-                //temp_t8_12 = gfx;
-                //gfx = temp_t8_12 + 8;
-                //temp_t8_12->words.w1 = 0;
-                //temp_t8_12->words.w0 = 0xE6000000;
-                //temp_t7_11 = gfx;
-                //gfx = temp_t7_11 + 8;
-                //temp_t7_11->words.w0 = 0xF3000000;
-                //temp_t7_11->words.w1 = 0x0747F156;
-                //temp_t7_12 = gfx;
-                //gfx = temp_t7_12 + 8;
-                //temp_t7_12->words.w1 = 0;
-                //temp_t7_12->words.w0 = 0xE7000000;
-                //temp_t6_4 = gfx;
-                //gfx = temp_t6_4 + 8;
-                //temp_t6_4->words.w1 = 0;
-                //temp_t6_4->words.w0 = 0xF5800C00;
-                //temp_t8_13 = gfx;
-                //gfx = temp_t8_13 + 8;
-                //temp_t8_13->words.w0 = 0xF2000000;
-                //temp_t8_13->words.w1 = 0x17C0BC;
-                gDPLoadTextureBlock_4b(gfx++, ((u32) msgCtx->textboxSegment) + 0x1900, G_IM_FMT_I, 96, 48, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                // temp_v0_15 = gfx;
+                // temp_t8_11 = temp_v0_15 + 8;
+                // gfx = temp_t8_11;
+                // temp_v0_15->words.w0 = 0xFD900000;
+                // temp_v0_15->words.w1 = (u32)msgCtx->textboxSegment + 0x1900;
+                // gfx = temp_t8_11 + 8;
+                // temp_t8_11->words.w1 = 0x07000000;
+                // temp_t8_11->words.w0 = 0xF5900000;
+                // temp_t8_12 = gfx;
+                // gfx = temp_t8_12 + 8;
+                // temp_t8_12->words.w1 = 0;
+                // temp_t8_12->words.w0 = 0xE6000000;
+                // temp_t7_11 = gfx;
+                // gfx = temp_t7_11 + 8;
+                // temp_t7_11->words.w0 = 0xF3000000;
+                // temp_t7_11->words.w1 = 0x0747F156;
+                // temp_t7_12 = gfx;
+                // gfx = temp_t7_12 + 8;
+                // temp_t7_12->words.w1 = 0;
+                // temp_t7_12->words.w0 = 0xE7000000;
+                // temp_t6_4 = gfx;
+                // gfx = temp_t6_4 + 8;
+                // temp_t6_4->words.w1 = 0;
+                // temp_t6_4->words.w0 = 0xF5800C00;
+                // temp_t8_13 = gfx;
+                // gfx = temp_t8_13 + 8;
+                // temp_t8_13->words.w0 = 0xF2000000;
+                // temp_t8_13->words.w1 = 0x17C0BC;
+                gDPLoadTextureBlock_4b(gfx++, msgCtx->textboxSegment + 0x1900, G_IM_FMT_I, 96, 48, 0,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
 
-                //temp_v0_16 = gfx;
-                //gfx = temp_v0_16 + 8;
-                //temp_v0_16->words.w0 = ((((msgCtx->textPosX + 0xC0) * 4) & 0xFFF) << 0xC) | 0xE4000000 | (((msgCtx->unk12012 + 0x30) * 4) & 0xFFF);
-                //temp_v0_16->words.w1 = ((((msgCtx->textPosX + 0x60) * 4) & 0xFFF) << 0xC) | ((msgCtx->unk12012 * 4) & 0xFFF);
-                //temp_t8_14 = gfx;
-                //gfx = temp_t8_14 + 8;
-                //temp_t8_14->words.w0 = 0xE1000000;
-                //temp_t8_14->words.w1 = 0;
-                //temp_t7_13 = gfx;
-                //gfx = temp_t7_13 + 8;
-                //temp_t7_13->words.w0 = 0xF1000000;
-                //temp_t7_13->words.w1 = 0x04000400;
-                gSPTextureRectangle(gfx++, (msgCtx->textPosX + 0x60) << 2, msgCtx->unk12012 << 2, (msgCtx->textPosX + 0xC0) << 2, (msgCtx->unk12012 + 0x30) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+                // temp_v0_16 = gfx;
+                // gfx = temp_v0_16 + 8;
+                // temp_v0_16->words.w0 = ((((msgCtx->textPosX + 0xC0) * 4) & 0xFFF) << 0xC) | 0xE4000000 |
+                // (((msgCtx->unk12012 + 0x30) * 4) & 0xFFF); temp_v0_16->words.w1 = ((((msgCtx->textPosX + 0x60) * 4) &
+                // 0xFFF) << 0xC) | ((msgCtx->unk12012 * 4) & 0xFFF); temp_t8_14 = gfx; gfx = temp_t8_14 + 8;
+                // temp_t8_14->words.w0 = 0xE1000000;
+                // temp_t8_14->words.w1 = 0;
+                // temp_t7_13 = gfx;
+                // gfx = temp_t7_13 + 8;
+                // temp_t7_13->words.w0 = 0xF1000000;
+                // temp_t7_13->words.w1 = 0x04000400;
+                gSPTextureRectangle(gfx++, (msgCtx->textPosX + 0x60) << 2, msgCtx->unk12012 << 2,
+                                    (msgCtx->textPosX + 0xC0) << 2, (msgCtx->unk12012 + 0x30) << 2, G_TX_RENDERTILE, 0,
+                                    0, 1 << 10, 1 << 10);
 
-
-                //temp_t7_14 = gfx;
-                //gfx = temp_t7_14 + 8;
-                //temp_t7_14->words.w1 = 0;
-                //temp_t7_14->words.w0 = 0xE7000000;
-                //temp_t9_7 = gfx;
-                //gfx = temp_t9_7 + 8;
-                //temp_t9_7->words.w0 = 0xFCFF97FF;
-                //temp_t9_7->words.w1 = 0xFF2DFEFF;
+                // temp_t7_14 = gfx;
+                // gfx = temp_t7_14 + 8;
+                // temp_t7_14->words.w1 = 0;
+                // temp_t7_14->words.w0 = 0xE7000000;
+                // temp_t9_7 = gfx;
+                // gfx = temp_t9_7 + 8;
+                // temp_t9_7->words.w0 = 0xFCFF97FF;
+                // temp_t9_7->words.w1 = 0xFF2DFEFF;
                 gDPPipeSync(gfx++);
-                gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
+                gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
+                                  PRIMITIVE, 0);
                 msgCtx->textPosX += 0x20;
                 break;
 
-            case 0x14:
-                msgCtx->unk12026 = msgCtx->decodedBuffer.schar[++i];
+            case 0x14: // MESSAGE_TEXT_SPEED
+                msgCtx->textDelay = msgCtx->decodedBuffer.schar[++i];
                 break;
-            case 0x1A:
-                msgCtx->textUnskippable = 1;
+
+            case 0x1A: // MESSAGE_UNSKIPPABLE
+                msgCtx->textUnskippable = true;
                 break;
-            case 0x1B:
-                msgCtx->textboxEndType = 0x10;
-                if (msgCtx->msgMode == 6) {
-                    msgCtx->unk11F06 = msgCtx->currentTextId;
+
+            case 0x1B: // MESSAGE_TWO_CHOICE
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_10;
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
                     msgCtx->choiceIndex = 0;
-                    Font_LoadMessageBoxEndIcon(font, 2U);
+                    Font_LoadMessageBoxEndIcon(font, 2);
                 }
                 break;
-            case 0x1C:
-                msgCtx->textboxEndType = 0x11;
-                if (msgCtx->msgMode == 6) {
-                    msgCtx->unk11F06 = msgCtx->currentTextId;
+
+            case 0x1C: // MESSAGE_THREE_CHOICE
+                msgCtx->textboxEndType = TEXTBOX_ENDTYPE_11;
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
                     msgCtx->choiceIndex = 0;
-                    Font_LoadMessageBoxEndIcon(font, 2U);
+                    Font_LoadMessageBoxEndIcon(font, 2);
                 }
                 break;
-            case 0x2:
-                if (msgCtx->msgMode == 6) {
-                    msgCtx->msgMode = 0x42;
-                    if (msgCtx->textboxEndType == 0) {
-                        play_sound(0x482E);
-                        Font_LoadMessageBoxEndIcon(font, 1U);
+
+            case 0x2: // MESSAGE_END
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    msgCtx->msgMode = MSGMODE_TEXT_DONE;
+                    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_00) {
+                        play_sound(NA_SE_SY_MESSAGE_END);
+                        Font_LoadMessageBoxEndIcon(font, 1);
                         if (play->csCtx.state == 0) {
                             func_8011552C(play, 3);
                         }
                     }
                 }
-                *gfxp = gfx;
+                *gfxP = gfx;
                 return;
-            case 0x10:
+
+            case 0x10: // MESSAGE_OCARINA
                 if ((i + 1) == msgCtx->textDrawPos) {
-                    func_8014AAD0(play);
-                    *gfxp = gfx;
+                    Message_HandleOcarina(play);
+                    *gfxP = gfx;
                     return;
                 }
                 break;
-            case 0xE:
-                if (msgCtx->msgMode == 6) {
-                    msgCtx->msgMode = 0x42;
-                    msgCtx->textboxEndType = 0x50;
-                    msgCtx->stateTimer = (u8) msgCtx->decodedBuffer.schar[++i];
-                    Font_LoadMessageBoxEndIcon(font, 1U);
+
+            case 0xE: // MESSAGE_FADE
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    msgCtx->msgMode = MSGMODE_TEXT_DONE;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_50;
+                    msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i];
+                    Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == 0) {
                         func_8011552C(play, 3);
                     }
                 }
-                *gfxp = gfx;
+                *gfxP = gfx;
                 return;
-            case 0xA:
-                if (msgCtx->msgMode == 6) {
-                    play_sound(0U);
-                    msgCtx->msgMode = 0x42;
-                    msgCtx->textboxEndType = 0x30;
-                }
-                *gfxp = gfx;
-                return;
-            case 0xB:
-                if (msgCtx->msgMode == 6) {
-                    msgCtx->msgMode = 0x42;
-                    msgCtx->textboxEndType = 0x40;
-                    Font_LoadMessageBoxEndIcon(font, 0U);
-                    play_sound(0x482E);
-                }
-                *gfxp = gfx;
-                return;
-            default:
 
-                if ((msgCtx->msgMode == 6) && ((i + 1) == msgCtx->textDrawPos) && (msgCtx->textDelayTimer == msgCtx->unk12026)) {
-                    //sp48 = (s32) character;
-                    play_sound(0U);
+            case 0xA: // MESSAGE_PERSISTENT
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    play_sound(0);
+                    msgCtx->msgMode = MSGMODE_TEXT_DONE;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_30;
                 }
-                //sp48 = (s32) character;
-                func_8014995C(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
+                *gfxP = gfx;
+                return;
+
+            case 0xB: // MESSAGE_EVENT
+                if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
+                    msgCtx->msgMode = MSGMODE_TEXT_DONE;
+                    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_40;
+                    Font_LoadMessageBoxEndIcon(font, 0);
+                    play_sound(NA_SE_SY_MESSAGE_END);
+                }
+                *gfxP = gfx;
+                return;
+
+            default:
+                if ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) && ((i + 1) == msgCtx->textDrawPos) &&
+                    (msgCtx->textDelayTimer == msgCtx->textDelay)) {
+                    play_sound(0);
+                }
+                Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                 charTexIndex += 0x80;
-                // msgCtx->textPosX += (s32)(sFontWidths[character - ' '] * msgCtx->textCharScale);
-                msgCtx->textPosX += (s32) (sFontWidths[character - ' '] * msgCtx->textCharScale);
-                //continue;
+
+                msgCtx->textPosX += (s32)(sFontWidths[character - ' '] * msgCtx->textCharScale);
                 break;
         }
     }
 
     if (msgCtx->textDelayTimer == 0) {
         msgCtx->textDrawPos = i + 1;
-        msgCtx->textDelayTimer = msgCtx->unk12026;
+        msgCtx->textDelayTimer = msgCtx->textDelay;
     } else {
         msgCtx->textDelayTimer--;
     }
 
-    *gfxp = gfx;
+    *gfxP = gfx;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DrawTextCredits.s")

@@ -34,6 +34,8 @@ typedef enum {
 #define TEXTBOX_ENDTYPE_11    0x11
 #define TEXTBOX_ENDTYPE_12    0x12
 
+#define TEXTBOX_ENDTYPE_20    0x20
+
 #define TEXTBOX_ENDTYPE_30    0x30
 
 #define TEXTBOX_ENDTYPE_40    0x40
@@ -195,7 +197,7 @@ typedef struct MessageContext {
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
     /* 0x11F00 */ struct OcarinaStaff* ocarinaStaff;
     /* 0x11F04 */ u16 currentTextId;
-    /* 0x11F06 */ u16 unk11F06; // s16 unk11F06;
+    /* 0x11F06 */ u16 choiceTextId; // s16?
     /* 0x11F08 */ u16 unk11F08;
     /* 0x11F0A */ u8 textBoxType;
     /* 0x11F0B */ u8 textBoxPos;
@@ -234,16 +236,16 @@ typedef struct MessageContext {
     /* 0x12012 */ s16 unk12012;
     /* 0x12014 */ s16 unk12014;
     /* 0x12014 */ s16 unk12016;
-    /* 0x12018 */ s16 unk12018; // messageR
-    /* 0x1201A */ s16 unk1201A; // messageG
-    /* 0x1201C */ s16 unk1201C; // messageB
-    /* 0x1201E */ s16 textColorAlpha; // messageA
+    /* 0x12018 */ s16 textColorR;
+    /* 0x1201A */ s16 textColorG;
+    /* 0x1201C */ s16 textColorB;
+    /* 0x1201E */ s16 textColorAlpha;
     /* 0x12020 */ u8 textboxEndType;
     /* 0x12021 */ u8 choiceIndex;
-    /* 0x12022 */ u8 unk12022;
+    /* 0x12022 */ u8 choiceNum;
     /* 0x12023 */ u8 stateTimer;
     /* 0x12024 */ u16 textDelayTimer;
-    /* 0x12026 */ u16 unk12026;
+    /* 0x12026 */ u16 textDelay;
     /* 0x12028 */ u16 songPlayed;
     /* 0x1202A */ u16 ocarinaMode;
     /* 0x1202C */ u16 ocarinaAction;
@@ -276,8 +278,8 @@ typedef struct MessageContext {
     /* 0x12088 */ UNK_TYPE4 unk12088;
     /* 0x1208C */ struct MessageTableEntry* messageTableStaff;
     /* 0x12090 */ s16 textIsCredits;
-    /* 0x12092 */ s16 unk12092;
-    /* 0x12094 */ u8 unk12094;
+    /* 0x12092 */ s16 messageHasSetSfx;
+    /* 0x12094 */ u8 textboxSkipped;
     /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
     /* 0x12098 */ f32 textCharScale;
     /* 0x1209C */ s16 textFade;
