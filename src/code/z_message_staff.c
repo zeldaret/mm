@@ -24,7 +24,7 @@ void Message_FindCreditsMessage(PlayState* play, u16 textId) {
 }
 
 // clang-format off
-f32 sFontWidths[144] = {
+f32 sCreditsFontWidths[144] = {
     8.0f,
     8.0f,
     6.0f,
@@ -638,7 +638,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                 Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                 charTexIndex += 0x80;
 
-                msgCtx->textPosX += (s32)(sFontWidths[character - ' '] * msgCtx->textCharScale);
+                msgCtx->textPosX += (s32)(sCreditsFontWidths[character - ' '] * msgCtx->textCharScale);
                 break;
         }
     }

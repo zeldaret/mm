@@ -2,20 +2,188 @@
 #include "message_data_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-#if 0
+// clang-format off
+// fontWidth
+f32 D_801D0470[160] = {
+    8.0f,
+    8.0f,
+    6.0f,
+    9.0f,
+    9.0f,
+    14.0f,
+    12.0f,
+    3.0f,
+    7.0f,
+    7.0f,
+    7.0f,
+    9.0f,
+    4.0f,
+    6.0f,
+    4.0f,
+    9.0f,
+    10.0f,
+    5.0f,
+    9.0f,
+    9.0f,
+    10.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    6.0f,
+    6.0f,
+    9.0f,
+    11.0f,
+    9.0f,
+    11.0f,
+    13.0f,
+    12.0f,
+    9.0f,
+    11.0f,
+    11.0f,
+    8.0f,
+    8.0f,
+    12.0f,
+    10.0f,
+    4.0f,
+    8.0f,
+    10.0f,
+    8.0f,
+    13.0f,
+    11.0f,
+    13.0f,
+    9.0f,
+    13.0f,
+    10.0f,
+    10.0f,
+    9.0f,
+    10.0f,
+    11.0f,
+    15.0f,
+    11.0f,
+    10.0f,
+    10.0f,
+    7.0f,
+    10.0f,
+    7.0f,
+    10.0f,
+    9.0f,
+    5.0f,
+    8.0f,
+    9.0f,
+    8.0f,
+    9.0f,
+    9.0f,
+    6.0f,
+    9.0f,
+    8.0f,
+    4.0f,
+    6.0f,
+    8.0f,
+    4.0f,
+    12.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    7.0f,
+    8.0f,
+    7.0f,
+    8.0f,
+    9.0f,
+    12.0f,
+    8.0f,
+    9.0f,
+    8.0f,
+    7.0f,
+    5.0f,
+    7.0f,
+    10.0f,
+    6.0f,
+    12.0f,
+    12.0f,
+    12.0f,
+    12.0f,
+    11.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    6.0f,
+    6.0f,
+    6.0f,
+    6.0f,
+    10.0f,
+    13.0f,
+    13.0f,
+    13.0f,
+    13.0f,
+    10.0f,
+    10.0f,
+    10.0f,
+    10.0f,
+    9.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    4.0f,
+    4.0f,
+    4.0f,
+    4.0f,
+    8.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    9.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    8.0f,
+    11.0f,
+    6.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+    14.0f,
+};
+// clang-format on
 
-//fontWidth
-extern f32 D_801D0470[159];
 
-//rupeesTextLocalization
-u8 D_801D06F0[4][8] = { { "rupee(s)" }, //EN
-                        { "rubin(e)" }, //DE
-                        { "rubis"    }, //FR
-                        { "rupia(s)" }  //SPA 
-                        };
+// rupeesTextLocalization
+char D_801D06F0[4][8] = {
+    { "Rupee(s)" }, // EN
+    { "Rubin(e)" }, // DE
+    { "Rubis"    }, // FR
+    { "Rupia(s)" }, // SPA
+};
 
 // rupeesTextLength
-u8 D_801D0710[4] = {8,8,5,8};
+u8 D_801D0710[4] = {
+    sizeof("Rupee(s)") - 1,
+    sizeof("Rubin(e)") - 1,
+    sizeof("Rubis"   ) - 1,
+    sizeof("Rupia(s)") - 1,
+};
 
 // sOwlWarpText
 char D_801D0714[OWL_WARP_MAX][16] = {
@@ -34,26 +202,18 @@ char D_801D0714[OWL_WARP_MAX][16] = {
 
 // sOwlWarpTextLength
 s16 D_801D07C4[OWL_WARP_MAX] = {
-    15, // OWL_WARP_GREAT_BAY_COAST
-    9,  // OWL_WARP_ZORA_CAPE
-    8,  // OWL_WARP_SNOWHEAD
-    16, // OWL_WARP_MOUNTAIN_VILLAGE
-    10, // OWL_WARP_CLOCK_TOWN
-    9,  // OWL_WARP_MILK_ROAD
-    8,  // OWL_WARP_WOODFALL
-    14, // OWL_WARP_SOUTHERN_SWAMP
-    12, // OWL_WARP_IKANA_CANYON
-    11, // OWL_WARP_STONE_TOWER
-    8,  // OWL_WARP_ENTRANCE
+    sizeof("Great Bay Coast") - 1,  // OWL_WARP_GREAT_BAY_COAST
+    sizeof("Zora Cape") - 1,         // OWL_WARP_ZORA_CAPE
+    sizeof("Snowhead") - 1,          // OWL_WARP_SNOWHEAD
+    sizeof("Mountain Village") - 1, // OWL_WARP_MOUNTAIN_VILLAGE
+    sizeof("Clock Town") - 1,       // OWL_WARP_CLOCK_TOWN
+    sizeof("Milk Road") - 1,         // OWL_WARP_MILK_ROAD
+    sizeof("Woodfall") - 1,          // OWL_WARP_WOODFALL
+    sizeof("Southern Swamp") - 1,   // OWL_WARP_SOUTHERN_SWAMP
+    sizeof("Ikana Canyon") - 1,     // OWL_WARP_IKANA_CANYON
+    sizeof("Stone Tower") - 1,      // OWL_WARP_STONE_TOWER
+    sizeof("Entrance") - 1,          // OWL_WARP_ENTRANCE
 };
-
-#endif
-
-extern f32 D_801D0470[159];
-extern u8 D_801D06F0[4][8];
-extern u8 D_801D0710[4];
-extern u8 D_801D0714[OWL_WARP_MAX][16];
-extern s16 D_801D07C4[OWL_WARP_MAX];
 
 void Message_FindMessageNES(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -323,6 +483,118 @@ void func_80159438(OSTime time, s16* digits) {
     digits[6] += '0';
     digits[7] += '0';
 }
+
+
+UNK_TYPE4 D_801D07DC[] = {
+    0x00FF0078,
+    0x00000046,
+    0x00FF0050,
+    0x0050006E,
+    0x00FF00FF,
+    0x00FF001E,
+    0x005A00B4,
+    0x00FF00D2,
+    0x006400FF,
+    0x00AA00AA,
+    0x00AA00FF,
+    0x0082001E,
+};
+
+UNK_TYPE4 D_801D080C[] = {
+    0x00FF003C,
+    0x003C0046,
+    0x00FF0050,
+    0x0050005A,
+    0x00FF00FF,
+    0x00FF0032,
+    0x00500096,
+    0x00FF00FF,
+    0x009600B4,
+    0x00AA00AA,
+    0x00AA00FF,
+    0x0082001E,
+};
+
+UNK_TYPE4 D_801D083C[] = {
+    0x00FF003C,
+    0x003C0046,
+    0x00FF0050,
+    0x0050005A,
+    0x00FF00FF,
+    0x00FF0032,
+    0x00500096,
+    0x00FF00FF,
+    0x009600B4,
+    0x00B400B4,
+    0x00C800FF,
+    0x0082001E,
+};
+
+UNK_TYPE4 D_801D086C[] = {
+    0x00C30000,
+    0x00000046,
+    0x00FF0050,
+    0x0050005A,
+    0x00FF00FF,
+    0x00FF0032,
+    0x00500096,
+    0x00FF00FF,
+    0x009600B4,
+};
+
+UNK_TYPE4 D_801D0890[] = {
+    0x00AA00AA,
+    0x00AA00FF,
+    0x0082001E,
+};
+
+UNK_TYPE4 D_801D089C[] = {
+    0x00FF003C,
+    0x003C006E,
+    0x00AA00FF,
+    0x0050005A,
+    0x00FF00FF,
+    0x00FF0032,
+    0x00500096,
+    0x00FF00FF,
+    0x009600B4,
+    0x00AA00AA,
+    0x00AA00FF,
+    0x0082001E,
+};
+
+UNK_TYPE4 D_801D08CC[] = {
+    0x02010306,
+    0x06060303,
+    0x03030106,
+};
+
+UNK_TYPE4 D_801D08D8[] = {
+    0x46617374,
+    0x2D2D2D2D,
+    0x536C6F77,
+};
+
+UNK_TYPE4 D_801D08E4[] = {
+    0x01030402,
+};
+
+UNK_TYPE4 D_801D08E8[] = {
+    0x52454400,
+    0x0000424C,
+    0x55450000,
+    0x59454C4C,
+    0x4F574752,
+    0x45454E00,
+};
+
+UNK_TYPE4 D_801D0900[] = {
+    0x03040605,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+};
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DrawTextNES.s")
 
