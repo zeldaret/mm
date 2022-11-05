@@ -164,7 +164,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
     this->targetYPos = thisx->world.pos.y;
     this->unk_1F0 = 0.0f;
     if (play->sceneId == SCENE_31MISAKI) {
-        if (gSaveContext.save.weekEventReg[53] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         } else {
@@ -185,7 +185,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
 
     switch (play->sceneId) {
         case SCENE_31MISAKI:
-            if (gSaveContext.save.weekEventReg[53] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
                 thisx->world.pos.x = -6480.0f;
                 this->targetYPos = -120.0f;
                 thisx->world.pos.z = 1750.0f;
@@ -279,14 +279,14 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
     s16 cs = ActorCutscene_GetAdditionalCutscene(
         ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(cs1)));
 
-    if (gSaveContext.save.weekEventReg[93] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_08)) {
         cs1 = cs;
     }
 
     if (ActorCutscene_GetCanPlayNext(cs1)) {
         ActorCutscene_Start(cs1, &this->dyna.actor);
-        gSaveContext.save.weekEventReg[53] |= 0x20;
-        gSaveContext.save.weekEventReg[93] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_53_20);
+        SET_WEEKEVENTREG(WEEKEVENTREG_93_08);
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80AAF884;
     } else {
@@ -329,10 +329,10 @@ void func_80AAFA18(DmChar08* this, PlayState* play) {
     nextCs2 = nextCs1;
     nextCs1 = ActorCutscene_GetAdditionalCutscene(nextCs1);
 
-    nextCs = ((void)0, gSaveContext.save.weekEventReg[53] & 0x40) ? nextCs1 : nextCs2;
+    nextCs = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCs1 : nextCs2;
 
     if (ActorCutscene_GetCanPlayNext(nextCs) != 0) {
-        gSaveContext.save.weekEventReg[53] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_53_40);
         ActorCutscene_Start(nextCs, &this->dyna.actor);
         this->actionFunc = DmChar08_DoNothing;
     } else {
@@ -390,7 +390,7 @@ void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play) {
 void func_80AAFCCC(DmChar08* this, PlayState* play) {
     switch (play->sceneId) {
         case SCENE_31MISAKI:
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                 switch (this->unk_206) {
                     case 0:
                         break;

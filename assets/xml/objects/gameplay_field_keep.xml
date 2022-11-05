@@ -40,8 +40,8 @@
         <DList Name="gameplay_field_keep_DL_006760" Offset="0x6760" />
         <Texture Name="gameplay_field_keep_Tex_006810" OutName="tex_006810" Format="rgba16" Width="32" Height="32" Offset="0x6810" />
         <Texture Name="gameplay_field_keep_Tex_007010" OutName="tex_007010" Format="rgba16" Width="32" Height="32" Offset="0x7010" />
-        <DList Name="gKusaBushType1" Offset="0x78A0" />
-        <DList Name="gKusaBushType2" Offset="0x7938" />
+        <DList Name="gKusaBushType1DL" Offset="0x78A0" />
+        <DList Name="gKusaBushType2DL" Offset="0x7938" />
         <Texture Name="gameplay_field_keep_Tex_0079D0" OutName="tex_0079D0" Format="i8" Width="64" Height="32" Offset="0x79D0" />
         <Texture Name="gameplay_field_keep_Tex_0081D0" OutName="tex_0081D0" Format="ia8" Width="64" Height="32" Offset="0x81D0" />
         <DList Name="gameplay_field_keep_DL_0089D0" Offset="0x89D0" />

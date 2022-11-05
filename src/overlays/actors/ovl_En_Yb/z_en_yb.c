@@ -120,8 +120,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    // check if already healed
-    if (gSaveContext.save.weekEventReg[82] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -292,7 +291,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
             case 0x147D: // I am counting on you
                 Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.save.weekEventReg[82] |= 0x4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {

@@ -118,7 +118,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
     switch (EN_RZ_GET_TYPE(thisx)) {
         case EN_RZ_TYPE_1:
-            if (!(gSaveContext.save.weekEventReg[77] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -129,7 +129,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
         case EN_RZ_TYPE_2:
             this->actor.flags |= ACTOR_FLAG_10;
-            if (gSaveContext.save.weekEventReg[77] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
                 EnRz_ChangeAnim(play, this, EN_RZ_ANIM_LINK_DANCE, ANIMMODE_LOOP, 0.0f);
             } else {
                 EnRz_ChangeAnim(play, this, EN_RZ_ANIM_DANCE, ANIMMODE_LOOP, 0.0f);
@@ -141,7 +141,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
         default: // EN_RZ_TYPE_0
             this->stateFlags |= EN_RZ_STATE_2;
-            if (gSaveContext.save.weekEventReg[77] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -344,7 +344,7 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 }
 
 void func_80BFBDFC(PlayState* play) {
-    if (gSaveContext.save.weekEventReg[75] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
         func_80151BB4(play, 0x27);
     }
     func_80151BB4(play, 0xC);
@@ -424,7 +424,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
             case 0x2927:
             case 0x2928:
                 Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                gSaveContext.save.weekEventReg[77] |= 4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_77_04);
                 break;
 
             default:
@@ -489,12 +489,12 @@ void func_80BFC2F4(EnRz* this, PlayState* play) {
 void func_80BFC36C(EnRz* this, PlayState* play) {
     EnRz_UpdateSkelAnime(this, play);
     if (func_80BFBFAC(this, play)) {
-        gSaveContext.save.weekEventReg[77] |= 4;
-        if (gSaveContext.save.weekEventReg[75] & 0x80) {
+        SET_WEEKEVENTREG(WEEKEVENTREG_77_04);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
             this->actionFunc = func_80BFC214;
         } else {
             this->actionFunc = func_80BFC2F4;
-            gSaveContext.save.weekEventReg[75] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_75_80);
         }
         this->actor.cutscene = this->cutscenes[1];
     }
@@ -519,7 +519,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
                 this->actor.cutscene = this->cutscenes[0];
                 this->actor.flags &= ~ACTOR_FLAG_10000;
             } else if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
-                if (gSaveContext.save.weekEventReg[77] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
                     Message_StartTextbox(play, 0x2925, &this->actor);
                     func_80BFBDFC(play);
                 } else {
@@ -532,7 +532,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             }
 
         } else if (EnRz_CanTalk(this, play)) {
-            if (func_80BFBCEC(this, play) && !(gSaveContext.save.weekEventReg[77] & 4) && this->sister != NULL) {
+            if (func_80BFBCEC(this, play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
             } else {

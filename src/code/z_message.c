@@ -370,12 +370,12 @@ void func_80151BB4(PlayState* play, u8 arg1) {
     u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     } else if (arg1 >= 20) {
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
@@ -391,11 +391,8 @@ u32 func_80151C9C(PlayState* play) {
         }
         msgCtx->unk120B1--;
 
-        if ((gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] &
-             (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
-            gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] =
-                ((void)0, gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8]) |
-                (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
+        if (!CHECK_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]])) {
+            SET_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]);
 
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                 Message_ContinueTextbox(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);

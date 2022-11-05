@@ -7,8 +7,8 @@ import argparse, os, struct, math
 from actor_symbols import resolve_symbol
 
 cmd_info = [
-    ('SCHEDULE_CMD_CHECK_FLAG_S',         0x04, '>BBb',   (2, )),
-    ('SCHEDULE_CMD_CHECK_FLAG_L',         0x05, '>BBh',   (2, )),
+    ('SCHEDULE_CMD_CHECK_FLAG_S',         0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_FLAG_L',         0x05, '>Hh',    (1, )),
     ('SCHEDULE_CMD_CHECK_TIME_RANGE_S',   0x06, '>BBBBb', (4, )),
     ('SCHEDULE_CMD_CHECK_TIME_RANGE_L',   0x07, '>BBBBh', (4, )),
     ('SCHEDULE_CMD_RET_VAL_L',            0x03, '>H',     (   )),
@@ -198,6 +198,8 @@ def disassemble_unk_script(data_file, offset):
                 elif arg_type == "H":
                     if (cmd == 0x0A or cmd == 0x0B) and (arg_value < len(scene_names)):
                         arg_formatted = scene_names[arg_value]
+                    elif cmd == 0x00 or cmd == 0x01:
+                        arg_formatted = f"WEEKEVENTREG_{arg_value>>8:02}_{arg_value&0xFF:02X}"
                     else:
                         arg_formatted = f"{arg_value}"
                 elif arg_type == "B":

@@ -235,19 +235,19 @@ void EnKujiya_FinishGivePrize(EnKujiya* this, PlayState* play) {
 s32 EnKujiya_CheckBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.save.weekEventReg[33] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_10)) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[33] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_20)) {
                 return true;
             }
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[33] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_40)) {
                 return true;
             }
             break;
@@ -258,15 +258,15 @@ s32 EnKujiya_CheckBoughtTicket(void) {
 void EnKujiya_SetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }
@@ -277,15 +277,15 @@ void EnKujiya_SetBoughtTicket(void) {
 void EnKujiya_UnsetBoughtTicket(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x10;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_10);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x20;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_20);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[33] &= (u8)~0x40;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_40);
             break;
     }
 }

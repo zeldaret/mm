@@ -53,8 +53,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
     switch (ENTIMETAG_GET_TYPE(&this->actor)) {
         case TIMETAG_KICKOUT_FINAL_HOURS:
-            if ((gSaveContext.save.weekEventReg[8] & 0x40) || (CURRENT_DAY != 3)) {
-                // Not final hours
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) || (CURRENT_DAY != 3)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -101,7 +100,7 @@ void EnTimeTag_RooftopOath_Cutscene(EnTimeTag* this, PlayState* play) {
 
         if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
             CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-            gSaveContext.save.weekEventReg[25] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_25_02);
         }
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -293,7 +292,7 @@ void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play) {
  * Setup a request to kick out, but wait for an event to complete first
  */
 void EnTimeTag_KickOut_WaitForEvent(EnTimeTag* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[63] & 1) && !(gSaveContext.save.weekEventReg[63] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
         func_800B7298(play, &this->actor, 7);
         Message_StartTextbox(play, 0x1883 + ENTIMETAG_GET_KICKOUT_TEXT_TYPE(&this->actor), NULL);
         this->actionFunc = EnTimeTag_KickOut_Transition;
@@ -312,12 +311,12 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
     hour = TIME_TO_HOURS_F(gSaveContext.save.time);
     minute = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
 
-    if (gSaveContext.save.weekEventReg[63] & 1) {
-        if (gSaveContext.save.weekEventReg[63] & 2) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
             this->actionFunc = EnTimeTag_KickOut_WaitForEvent;
         } else if ((hour == ENTIMETEG_GET_KICKOUT_HOUR(&this->actor)) &&
                    (minute == ENTIMETEG_GET_KICKOUT_MINUTE(&this->actor))) {
-            gSaveContext.save.weekEventReg[63] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_63_02);
         }
     } else if ((hour == ENTIMETEG_GET_KICKOUT_HOUR(&this->actor)) &&
                (minute == ENTIMETEG_GET_KICKOUT_MINUTE(&this->actor)) && !Play_InCsMode(play)) {
