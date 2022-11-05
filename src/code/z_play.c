@@ -405,10 +405,10 @@ void Play_Destroy(GameState* thisx) {
     func_80140EA0(D_801F6D4C);
     D_801F6D4C = NULL;
 
-    if (gSaveContext.save.weekEventReg[92] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_92_80)) {
         Actor_CleanupContext(&this->actorCtx, this);
     }
-    gSaveContext.save.weekEventReg[92] &= (u8)~0x80;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_92_80);
 
     Interface_Destroy(this);
     KaleidoScopeCall_Destroy(this);
@@ -563,13 +563,11 @@ void Play_UpdateTransition(PlayState* this) {
 
                 if ((!(Entrance_GetTransitionFlags(this->nextEntrance + sceneLayer) & 0x8000) ||
                      ((this->nextEntrance == ENTRANCE(PATH_TO_MOUNTAIN_VILLAGE, 1)) &&
-                      !(gSaveContext.save.weekEventReg[33] & 0x80)) ||
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) ||
                      ((this->nextEntrance == ENTRANCE(ROAD_TO_SOUTHERN_SWAMP, 1)) &&
-                      !(gSaveContext.save.weekEventReg[20] & 2)) ||
-                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) &&
-                      !(gSaveContext.save.weekEventReg[55] & 0x80)) ||
-                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) &&
-                      !(gSaveContext.save.weekEventReg[52] & 0x20))) &&
+                      !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) ||
+                     ((this->nextEntrance == ENTRANCE(TERMINA_FIELD, 2)) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) ||
+                     ((this->nextEntrance == ENTRANCE(ROAD_TO_IKANA, 1)) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20))) &&
                     (!func_800FE590(this) || (Entrance_GetSceneId(this->nextEntrance + sceneLayer) < 0) ||
                      (Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS))) {
                     func_801A4058(20);
@@ -2057,8 +2055,8 @@ void Play_Init(GameState* thisx) {
     s32 scene;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
-        if (gSaveContext.eventInf[2] & 0x80) {
-            gSaveContext.eventInf[2] &= (u8)~0x80;
+        if (CHECK_EVENTINF(EVENTINF_27)) {
+            CLEAR_EVENTINF(EVENTINF_27);
             STOP_GAMESTATE(&this->state);
             SET_NEXT_GAMESTATE(&this->state, DayTelop_Init, sizeof(DayTelopState));
             return;
@@ -2083,7 +2081,7 @@ void Play_Init(GameState* thisx) {
         scene = ((void)0, gSaveContext.save.entrance) >> 9;
         spawn = (((void)0, gSaveContext.save.entrance) >> 4) & 0x1F;
 
-        if (gSaveContext.save.weekEventReg[33] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
             if (scene == ENTR_SCENE_MOUNTAIN_VILLAGE_WINTER) {
                 scene = ENTR_SCENE_MOUNTAIN_VILLAGE_SPRING;
             } else if (scene == ENTR_SCENE_GORON_VILLAGE_WINTER) {
@@ -2097,7 +2095,7 @@ void Play_Init(GameState* thisx) {
             }
         }
 
-        if (gSaveContext.save.weekEventReg[20] & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             if (scene == ENTR_SCENE_SOUTHERN_SWAMP_POISONED) {
                 scene = ENTR_SCENE_SOUTHERN_SWAMP_CLEARED;
             } else if (scene == ENTR_SCENE_WOODFALL) {
@@ -2105,11 +2103,11 @@ void Play_Init(GameState* thisx) {
             }
         }
 
-        if ((gSaveContext.save.weekEventReg[52] & 0x20) && (scene == ENTR_SCENE_IKANA_CANYON)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (scene == ENTR_SCENE_IKANA_CANYON)) {
             gSaveContext.nextCutsceneIndex = 0xFFF2;
         }
 
-        if ((gSaveContext.save.weekEventReg[55] & 0x80) &&
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80) &&
             ((scene == ENTR_SCENE_GREAT_BAY_COAST) || (scene == ENTR_SCENE_ZORA_CAPE))) {
             gSaveContext.nextCutsceneIndex = 0xFFF0;
         }
