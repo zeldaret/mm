@@ -2119,6 +2119,7 @@
     0x801D08E4:("D_801D08E4","UNK_TYPE1","",0x1),
     0x801D08E8:("D_801D08E8","UNK_TYPE1","",0x1),
     0x801D0900:("D_801D0900","UNK_TYPE1","",0x1),
+    0x801D0910:("sFontWidths","f32","[]",0x1),
     0x801D0B50:("Player_InitVars","ActorInit","",0x20),
     0x801D0B70:("gKaleidoMgrOverlayTable","KaleidoMgrOverlay","",0x38),
     0x801D0BA8:("sKaleidoAreaPtr","void*","",0x4),
