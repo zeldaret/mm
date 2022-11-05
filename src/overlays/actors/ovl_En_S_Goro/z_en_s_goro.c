@@ -235,16 +235,16 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
     switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_A:
-            if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(gSaveContext.save.weekEventReg[36] & 2)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_02)) {
                         switch (this->textId) {
                             case 0xCFB:
                                 return 0xCFC;
                             case 0xCFC:
                                 return 0xCFD;
                             case 0xCFD:
-                                gSaveContext.save.weekEventReg[36] |= 2;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_36_02);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xCFE;
                             default:
@@ -255,8 +255,8 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xCFE;
                     }
                 } else {
-                    if (!(gSaveContext.save.weekEventReg[36] & 1)) {
-                        gSaveContext.save.weekEventReg[36] |= 1;
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_01)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_36_01);
                         return 0xCF9;
                     }
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
@@ -266,9 +266,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                 // Scene flag - Checks whether the chandelier has been lit
                 if (!Flags_GetSwitch(play, EN_S_GORO_SCENEFLAG_INDEX(&this->actor))) {
                     if (player->transformation == PLAYER_FORM_GORON) {
-                        if (!(gSaveContext.save.weekEventReg[36] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08)) {
                             if (this->textId == 0xD02) {
-                                gSaveContext.save.weekEventReg[36] |= 8;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_36_08);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD03;
                             }
@@ -277,10 +277,10 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD04;
                     }
-                    if (!(gSaveContext.save.weekEventReg[36] & 4)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_04)) {
                         if (this->textId == 0xCFF) {
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                            gSaveContext.save.weekEventReg[36] |= 4;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_36_04);
                             return 0xD00;
                         }
                         return 0xCFF;
@@ -288,9 +288,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD01;
                 }
-                if (!(gSaveContext.save.weekEventReg[36] & 0x10)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_10)) {
                     if (this->textId == 0xD05) {
-                        gSaveContext.save.weekEventReg[36] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_36_10);
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD06;
                     }
@@ -302,14 +302,14 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_B:
-            if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(gSaveContext.save.weekEventReg[36] & 0x40)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_40)) {
                         switch (this->textId) {
                             case 0xD15:
                                 return 0xD16;
                             case 0xD16:
-                                gSaveContext.save.weekEventReg[36] |= 0x40;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_36_40);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD17;
                             default:
@@ -320,20 +320,20 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xD17;
                     }
                 } else {
-                    if (!(gSaveContext.save.weekEventReg[36] & 0x20)) {
-                        gSaveContext.save.weekEventReg[36] |= 0x20;
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_20)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_36_20);
                         return 0xD13;
                     }
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD14;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!(gSaveContext.save.weekEventReg[37] & 1)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_01)) {
                     switch (this->textId) {
                         case 0xD1E:
                             return 0xD1F;
                         case 0xD1F:
-                            gSaveContext.save.weekEventReg[37] |= 1;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_37_01);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD20;
                         default:
@@ -344,7 +344,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD21;
                 }
             } else {
-                if (!(gSaveContext.save.weekEventReg[36] & 0x80)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_80)) {
                     switch (this->textId) {
                         case 0xD18:
                             return 0xD19;
@@ -353,7 +353,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         case 0xD1A:
                             return 0xD1B;
                         case 0xD1B:
-                            gSaveContext.save.weekEventReg[36] |= 0x80;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_36_80);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD1C;
                         default:
@@ -367,16 +367,16 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_C:
-            if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(gSaveContext.save.weekEventReg[37] & 2)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_02)) {
                         switch (this->textId) {
                             case 0xD09:
                                 return 0xD0A;
                             case 0xD0A:
                                 return 0xD0B;
                             case 0xD0B:
-                                gSaveContext.save.weekEventReg[37] |= 2;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_37_02);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD0C;
                             default:
@@ -391,12 +391,12 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD08;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!(gSaveContext.save.weekEventReg[37] & 4)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_04)) {
                     switch (this->textId) {
                         case 0xD0E:
                             return 0xD0F;
                         case 0xD0F:
-                            gSaveContext.save.weekEventReg[37] |= 4;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_37_04);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD10;
                         default:
@@ -414,7 +414,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_A:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDE3) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDE4;
@@ -429,7 +429,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_B:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDE7) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDE8;
@@ -444,7 +444,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_C:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDEB) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDEC;
@@ -459,7 +459,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_D:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDF1) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDF2;
@@ -482,7 +482,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_E:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDF6) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDF7;
@@ -500,7 +500,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_F:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     switch (this->textId) {
                         case 0xDFB:
                             return 0xDFC;
@@ -771,7 +771,7 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE1);
             }
         }
-    } else if (gSaveContext.save.weekEventReg[22] & 4) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_SUPPRESS_SNORE;
     }
 
@@ -842,7 +842,7 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
         return false;
     }
     if ((!(this->actionFlags & EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED)) &&
-        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || (gSaveContext.save.weekEventReg[22] & 4))) {
+        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04))) {
 
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
         this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
@@ -1026,7 +1026,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->loadedObjIndex)) {
         this->actionFlags = 0;
         if (EN_S_GORO_OFTYPE_WSHRINE) {
-            if (gSaveContext.save.weekEventReg[22] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
                 this->animInfoIndex = EN_S_GORO_ANIM_SHIVER_A;

@@ -71,7 +71,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
             this->actionFunc = func_80A42F20;
             sCurrentCs = sCutscenes[this->unk_144];
             this->transitionCsTimer = 0;
-            gSaveContext.eventInf[1] |= 0x80;
+            SET_EVENTINF(EVENTINF_17);
         } else if (this->unk_144 == 0) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
@@ -108,7 +108,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
             this->actionFunc = func_80A42F20;
             sCurrentCs = sCutscenes[this->unk_144];
             this->transitionCsTimer = 0;
-            gSaveContext.eventInf[1] |= 0x80;
+            SET_EVENTINF(EVENTINF_17);
         } else if (this->unk_144 == 0) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
@@ -298,14 +298,14 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     if (temp_v0 >= 0) {
         ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(sCutscenes[0]);
 
-        gSaveContext.eventInf[5] |= 0x4;
+        SET_EVENTINF(EVENTINF_52);
         sCutscenes[1] = temp_v0_2->additionalCutscene;
     } else {
-        gSaveContext.eventInf[5] &= (u8)~0x4;
+        CLEAR_EVENTINF(EVENTINF_52);
         sCutscenes[1] = sCutscenes[0];
     }
 
-    if (sIsLoaded || (gSaveContext.eventInf[2] & 0x80)) {
+    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_27))) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
@@ -391,7 +391,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 if (CURRENT_DAY == 3) {
                     Interface_StartMoonCrash(play);
                     Actor_Kill(&this->actor);
-                    gSaveContext.eventInf[1] |= 0x80;
+                    SET_EVENTINF(EVENTINF_17);
                 } else if (((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) &&
                            (CURRENT_DAY != 3)) {
                     func_80A41FA4(this, play);
@@ -413,7 +413,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
 
                     gSaveContext.respawnFlag = -4;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                     Actor_Kill(&this->actor);
                 }
             }
@@ -508,8 +508,9 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
         if (sCurrentCs >= 0) {
             ActorCutscene_Stop(sCurrentCs);
         }
+
         gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
-        gSaveContext.eventInf[1] &= (u8)~0x80;
+        CLEAR_EVENTINF(EVENTINF_17);
         Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 }

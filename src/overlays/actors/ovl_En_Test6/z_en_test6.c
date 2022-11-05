@@ -125,7 +125,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
     phi_s0 = 0;
     phi_f24 = -900.0f;
 
-    if (gSaveContext.eventInf[7] & 1) {
+    if (CHECK_EVENTINF(EVENTINF_70)) {
         for (i = 0; i < 6; i++) {
             D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 5;
         }
@@ -134,7 +134,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 1;
     }
 
-    if (gSaveContext.eventInf[7] & 0x10) {
+    if (CHECK_EVENTINF(EVENTINF_74)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 1;
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 1;
         if (!(phi_s0 & 1)) {
@@ -144,7 +144,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 0x10;
     }
 
-    if (gSaveContext.eventInf[7] & 2) {
+    if (CHECK_EVENTINF(EVENTINF_71)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 2;
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 2;
         if (!(phi_s0 & 1)) {
@@ -154,7 +154,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 2;
     }
 
-    if (gSaveContext.eventInf[7] & 4) {
+    if (CHECK_EVENTINF(EVENTINF_72)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 3;
         if (!(phi_s0 & (0x10 | 0x2 | 0x1))) {
             D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 3;
@@ -162,7 +162,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 4;
     }
 
-    if (gSaveContext.eventInf[7] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_73)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 4;
         if (!(phi_s0 & (0x10 | 0x2 | 0x1))) {
             D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 4;
@@ -722,7 +722,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
         case 1:
             func_80A90C34();
-            if (gSaveContext.eventInf[5] & 4) {
+            if (CHECK_EVENTINF(EVENTINF_52)) {
                 this->unk_274 = 9;
             }
             break;
@@ -979,7 +979,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 play->transitionType = TRANS_TYPE_02;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                 } else {
                     gSaveContext.respawnFlag = 2;
                 }

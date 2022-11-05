@@ -199,7 +199,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
     this->actor.world.pos.z = this->unk_6F0;
     Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 60.0f, 60.0f, 4);
 
-    if ((KREG(64) != 0) || (gSaveContext.eventInf[6] & 1)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_60)) {
         func_809ECD00(this, play);
         this->actor.world.pos.y = this->actor.floorHeight + 160.0f;
         phi_f24 = this->actor.floorHeight;
@@ -392,7 +392,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 Cutscene_End(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 func_80165690();
-                gSaveContext.eventInf[6] |= 1;
+                SET_EVENTINF(EVENTINF_60);
             }
             break;
     }

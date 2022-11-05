@@ -171,13 +171,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.save.weekEventReg[KEY] = VALUE
-// KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
-    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-    (33 << 8) | 0x01, // Southern Swamp Frog Returned
-    (33 << 8) | 0x02, // Laundry Pool Frog Returned
+    WEEKEVENTREG_32_40,
+    WEEKEVENTREG_32_80,
+    WEEKEVENTREG_33_01,
+    WEEKEVENTREG_33_02,
 };
 
 void EnPametfrog_Init(Actor* thisx, PlayState* play) {
@@ -193,8 +191,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }

@@ -11,7 +11,7 @@
 
 #define THIS ((EnToto*)thisx)
 
-#define ENTOTO_WEEK_EVENT_FLAGS (gSaveContext.save.weekEventReg[50] & 1 || gSaveContext.save.weekEventReg[51] & 0x80)
+#define ENTOTO_WEEK_EVENT_FLAGS (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80))
 
 void EnToto_Init(Actor* thisx, PlayState* play);
 void EnToto_Destroy(Actor* thisx, PlayState* play);
@@ -550,16 +550,16 @@ s32 func_80BA46D8(EnToto* this, PlayState* play) {
 s32 func_80BA4740(EnToto* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 4) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-            gSaveContext.save.weekEventReg[56] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_10);
         }
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-            gSaveContext.save.weekEventReg[56] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_20);
         }
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            gSaveContext.save.weekEventReg[56] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_40);
         }
         if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-            gSaveContext.save.weekEventReg[56] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_80);
         }
         return 1;
     }
@@ -571,16 +571,16 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     s32 i;
 
     this->unk2B3 = 0;
-    if (gSaveContext.save.weekEventReg[56] & 0x10) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_10)) {
         this->unk2B3 += 1;
     }
-    if (gSaveContext.save.weekEventReg[56] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_20)) {
         this->unk2B3 += 2;
     }
-    if (gSaveContext.save.weekEventReg[56] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_40)) {
         this->unk2B3 += 4;
     }
-    if (gSaveContext.save.weekEventReg[56] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_80)) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
@@ -621,9 +621,9 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
             func_800B7298(play, NULL, PLAYER_CSMODE_69);
             if (this->unk2B3 == 0xF) {
                 if (CURRENT_DAY == 1) {
-                    gSaveContext.save.weekEventReg[50] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_50_01);
                 } else {
-                    gSaveContext.save.weekEventReg[51] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_51_80);
                 }
             } else {
                 func_80BA402C(this, play);

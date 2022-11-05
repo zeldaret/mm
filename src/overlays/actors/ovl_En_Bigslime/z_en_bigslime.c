@@ -311,13 +311,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
-    // gSaveContext.save.weekEventReg[KEY] = VALUE
-    // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
-        (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-        (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-        (33 << 8) | 0x01, // Southern Swamp Frog Returned
-        (33 << 8) | 0x02, // Laundry Pool Frog Returned
+        WEEKEVENTREG_32_40,
+        WEEKEVENTREG_32_80,
+        WEEKEVENTREG_33_01,
+        WEEKEVENTREG_33_02,
     };
     PlayState* play = play2;
     EnBigslime* this = THIS;
@@ -342,43 +340,43 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->actor.params);
         }
-    } else {
-        this->cutscene = this->actor.cutscene;
-        this->actor.scale.x = this->actor.scale.z = 0.15f;
-        this->actor.scale.y = 0.075f;
-        this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
-        this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
-        this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
-        this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
-        for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
-            this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play,
-                                                                  ACTOR_EN_MINISLIME, 0.0f, 0.0f, 0.0f, 0, 0, 0, i);
-            if (this->minislime[i] == NULL) {
-                for (i = i - 1; i >= 0; i--) {
-                    Actor_Kill(&this->minislime[i]->actor);
-                }
-
-                Actor_Kill(&this->actor);
-                return;
-            }
-        }
-
-        this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(gMinislimeFrozenTexAnim);
-        this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
-        this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
-        this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actor.shape.shadowAlpha = 255;
-        this->gekkoScale = 0.007f;
-        this->actor.shape.rot.y = 0;
-        this->minislimeToThrow = this->minislime[0];
-        EnBigslime_SetupInitEntrance(this);
+        return;
     }
+
+    this->cutscene = this->actor.cutscene;
+    this->actor.scale.x = this->actor.scale.z = 0.15f;
+    this->actor.scale.y = 0.075f;
+    this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
+    this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
+    this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
+    this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
+    for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
+        this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MINISLIME,
+                                                              0.0f, 0.0f, 0.0f, 0, 0, 0, i);
+        if (this->minislime[i] == NULL) {
+            for (i = i - 1; i >= 0; i--) {
+                Actor_Kill(&this->minislime[i]->actor);
+            }
+
+            Actor_Kill(&this->actor);
+            return;
+        }
+    }
+
+    this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(gMinislimeFrozenTexAnim);
+    this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
+    this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
+    this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.shape.shadowAlpha = 255;
+    this->gekkoScale = 0.007f;
+    this->actor.shape.rot.y = 0;
+    this->minislimeToThrow = this->minislime[0];
+    EnBigslime_SetupInitEntrance(this);
 }
 
 void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
