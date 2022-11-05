@@ -425,7 +425,7 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -508,7 +508,7 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -603,7 +603,7 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -686,7 +686,7 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -776,7 +776,7 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -854,7 +854,7 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
@@ -937,7 +937,7 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
@@ -1015,7 +1015,7 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -1246,7 +1246,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_33C = 0;
                 this->actionFunc = func_80BEEE10;
@@ -1254,7 +1254,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                 this->unk_32C &= ~0x20;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_32C &= ~0x4;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_338 = 8;
                 this->unk_33C = 0;
@@ -1286,7 +1286,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
 
 void func_80BEF18C(EnAkindonuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_33C = 0;
         this->actionFunc = func_80BEEE10;
@@ -1313,7 +1313,7 @@ void func_80BEF20C(EnAkindonuts* this, PlayState* play) {
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->actionFunc = func_80BEF360;
         } else {

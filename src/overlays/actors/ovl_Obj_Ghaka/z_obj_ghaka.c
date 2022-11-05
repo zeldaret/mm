@@ -99,7 +99,7 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             func_80B3C260(this);
         }
@@ -120,7 +120,7 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
 
                 case 2:
                     func_8019F230();
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
                     func_80B3C260(this);
                     break;

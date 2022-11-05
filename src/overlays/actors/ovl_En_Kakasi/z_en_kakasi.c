@@ -560,7 +560,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        Message_DisplayOcarinaStaff(play, 0x35);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_SCARECROW_SPAWN_RECORDING);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -617,7 +617,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
         func_8096FAAC(this, play);
         func_8096FBB8(this, play);
 
-        if (play->msgCtx.ocarinaMode == 4) { // song failed
+        if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) { // song failed
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             ActorCutscene_Stop(this->actorCutscenes[0]);
@@ -631,7 +631,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
-        } else if (play->msgCtx.ocarinaMode == 3) { // song success
+        } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) { // song success
             this->postTeachTimer = 30;
             this->skelanime.playSpeed = 2.0f;
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -654,7 +654,7 @@ void EnKakasi_PostSongLearnTwirl(EnKakasi* this, PlayState* play) {
 
 void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     ActorCutscene_Stop(this->actorCutscenes[0]);
-    play->msgCtx.ocarinaMode = 4;
+    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -1031,9 +1031,9 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
     if ((gSaveContext.save.weekEventReg[79] & 8) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
-        (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
+        (BREG(1) != 0 || play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SCARECROW_SPAWN)) {
         this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
 }

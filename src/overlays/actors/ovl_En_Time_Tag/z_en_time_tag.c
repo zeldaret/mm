@@ -103,13 +103,13 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
 void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
     EnTimeTag* this2 = this;
 
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80AC9FE4;
             ActorCutscene_SetIntentToPlay(this2->actor.cutscene);
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
     }
 }
 
@@ -175,7 +175,7 @@ void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
         play->msgCtx.msgLength = 0;
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
     }
 }
 
@@ -202,13 +202,13 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
                         break;
 
                     case 0x122B:
-                        Message_DisplayOcarinaStaff(play, 0x3F);
+                        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_SECOND_HALF);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 0;
                         break;
 
                     case 0x122E:
-                        Message_DisplayOcarinaStaff(play, 0x40);
+                        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_DEMONSTRATE_EVAN_PART2_SECOND_HALF);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 1;
                         break;

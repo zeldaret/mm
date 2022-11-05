@@ -1140,7 +1140,7 @@ void func_80B98BF4(EnZot* this, PlayState* play) {
 
 void func_80B98CA8(EnZot* this, PlayState* play) {
     if (func_800B8718(&this->actor, &play->state)) {
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= ACTOR_FLAG_10000;

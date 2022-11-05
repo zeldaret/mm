@@ -825,13 +825,14 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             switch (this->ocarinaFlag) {
                 case 0:
-                    if (play->msgCtx.ocarinaMode == 1) {
+                    if (play->msgCtx.ocarinaMode == OCARINA_MODE_ACTIVE) {
                         this->ocarinaFlag = 1;
                     }
                     break;
 
                 case 1:
-                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+                    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_END) &&
+                        (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
                         play_sound(NA_SE_SY_TRE_BOX_APPEAR);

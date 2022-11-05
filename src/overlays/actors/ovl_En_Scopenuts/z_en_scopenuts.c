@@ -318,7 +318,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
@@ -341,7 +341,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                         Message_StartTextbox(play, this->unk_33C, &this->actor);
                     } else {
                         func_8019F208();
-                        play->msgCtx.msgMode = 0x43;
+                        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         Rupees_ChangeBy(-this->unk_358);
                         this->actionFunc = func_80BCB90C;

@@ -216,7 +216,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             this->curTextId = 0x464; // Hey, relax! It doesn't leave any marks
             break;
         case 0x464: // Hey, relax! It doesn't leave any marks
-            play->msgCtx.msgMode = 0x44;
+            play->msgCtx.msgMode = MSGMODE_PAUSED;
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
         case 0x465: // "There! Now I'll know you when I see you!"

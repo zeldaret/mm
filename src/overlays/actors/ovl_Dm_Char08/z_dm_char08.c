@@ -264,7 +264,7 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
     } else {
         sSuccessSoundAlreadyPlayed = false;
     }
-    if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_ZORA) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE)) {
         if ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f)) {
             if ((player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f)) {

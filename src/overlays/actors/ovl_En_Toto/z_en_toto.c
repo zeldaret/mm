@@ -151,7 +151,12 @@ static Vec3s D_80BA510C[] = {
     { 0xFF64, 0x0016, 0xFE7E },
 };
 
-static u16 D_80BA5120[] = { 67, 68, 69, 70 };
+static u16 sOcarinaActionWindFishPrompts[] = {
+    OCARINA_ACTION_PROMPT_WIND_FISH_HUMAN,
+    OCARINA_ACTION_PROMPT_WIND_FISH_GORON,
+    OCARINA_ACTION_PROMPT_WIND_FISH_ZORA,
+    OCARINA_ACTION_PROMPT_WIND_FISH_DEKU,
+};
 
 static u8 D_80BA5128[] = { 8, 4, 2, 1 };
 
@@ -544,12 +549,12 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, 0x44);
-    Message_DisplayOcarinaStaff(play, D_80BA5120[CUR_FORM]);
+    Message_DisplayOcarinaStaff(play, sOcarinaActionWindFishPrompts[CUR_FORM]);
     return 0;
 }
 
 s32 func_80BA4740(EnToto* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             gSaveContext.save.weekEventReg[56] |= 0x10;
         }

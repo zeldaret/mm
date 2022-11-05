@@ -481,7 +481,7 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     EnWeatherTag* this = THIS;
 
     this->actionFunc(this, play);
-    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
+    if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != MSGMODE_NONE) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
         (play->csCtx.state == 0)) {

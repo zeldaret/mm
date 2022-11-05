@@ -346,7 +346,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
@@ -374,7 +374,7 @@ void func_80AD3DA4(EnTrt2* this, PlayState* play) {
 void func_80AD3E34(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (Inventory_HasEmptyBottle()) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
@@ -402,7 +402,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
             }
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_3B2 = 12;
     }
@@ -446,7 +446,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             func_80AD349C(this);
             func_80AD3DA4(this, play);
         } else {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
@@ -528,7 +528,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
     }
 
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
     }
 }

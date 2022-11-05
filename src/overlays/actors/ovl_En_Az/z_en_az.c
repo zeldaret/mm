@@ -690,7 +690,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
             if ((play->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
                 if (SubS_StartActorCutscene(&brother->actor, brother->unk_3D0[0], 0x7C, SUBS_CUTSCENE_NORMAL)) {
                     brother->unk_374 |= 0x8000;
-                    play->msgCtx.msgMode = 0x44;
+                    play->msgCtx.msgMode = MSGMODE_PAUSED;
                     ret = 0;
                 }
             } else if (Message_ShouldAdvance(play)) {
@@ -796,7 +796,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10DB:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             this->unk_2FA = 1;
                             ret = 0;
                         } else {
@@ -893,7 +893,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10EB:
                         if (play->msgCtx.choiceIndex == 0) {
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             func_8019F208();
                             switch (this->unk_2FA) {
                                 case 4:
@@ -1399,7 +1399,7 @@ void func_80A97A28(EnAz* this, PlayState* play) {
 
 void func_80A97A40(EnAz* this, PlayState* play) {
     if (SubS_StartActorCutscene(&this->actor, 0, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
-        play->msgCtx.msgMode = 0;
+        play->msgCtx.msgMode = MSGMODE_NONE;
         play->msgCtx.msgLength = 0;
         func_80A97A9C(this, play);
     }
@@ -1425,7 +1425,7 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
-                            play->msgCtx.msgMode = 0x44;
+                            play->msgCtx.msgMode = MSGMODE_PAUSED;
                             func_800FD750(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);

@@ -3464,7 +3464,7 @@ void func_80B4B024(EnInvadepoh* this) {
 
 void func_80B4B048(EnInvadepoh* this, PlayState* play) {
     if (play->msgCtx.unk120B1 == 0) {
-        if (play->msgCtx.msgMode == 0) {
+        if (play->msgCtx.msgMode == MSGMODE_NONE) {
             D_80B4E998 = 1;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
                    (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {

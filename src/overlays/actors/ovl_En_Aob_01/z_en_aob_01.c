@@ -393,7 +393,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
                 this->unk_2D2 &= ~2;
                 Rupees_ChangeBy(-this->unk_434);
                 func_800B7298(play, NULL, 7);
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_809C1C9C;
                 return;
@@ -454,7 +454,7 @@ void func_809C1D64(EnAob01* this, PlayState* play) {
             }
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_210 = 0;
         this->actionFunc = func_809C2060;
@@ -582,7 +582,7 @@ void func_809C21E0(EnAob01* this, PlayState* play) {
             this->unk_2D2 &= ~0x40;
             if (this->unk_2D2 & 0x10) {
                 this->unk_2D2 &= ~0x10;
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_809C2060;
             } else {
@@ -751,7 +751,7 @@ void func_809C2A64(EnAob01* this, PlayState* play) {
     if (func_809C15BC(this)) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             this->unk_434 = 0;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
         }
 

@@ -120,18 +120,18 @@ void ShotSun_TriggerFairy(ShotSun* this, PlayState* play) {
 void ShotSun_UpdateForOcarina(ShotSun* this, PlayState* play) {
     s32 params = SHOTSUN_GET_FF(&this->actor);
 
-    if (play->msgCtx.ocarinaMode == 3) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
                 if (params == SHOTSUN_FAIRY_SPAWNER_STORMS) {
                     this->actionFunc = ShotSun_TriggerFairy;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
             case OCARINA_SONG_SUNS:
                 if (params == SHOTSUN_FAIRY_SPAWNER_SUNS) {
                     this->actionFunc = ShotSun_TriggerFairy;
-                    play->msgCtx.ocarinaMode = 4;
+                    play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 }
                 break;
         }

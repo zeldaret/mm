@@ -34,7 +34,6 @@ typedef enum {
 #define TEXTBOX_ENDTYPE_11    0x11
 #define TEXTBOX_ENDTYPE_12    0x12
 
-
 #define TEXTBOX_ENDTYPE_30    0x30
 
 #define TEXTBOX_ENDTYPE_40    0x40

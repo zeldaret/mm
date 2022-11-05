@@ -89,7 +89,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
         var_v1 = 0;
     }
     if (func_800B8718(&this->actor, &play->state)) {
-        Message_DisplayOcarinaStaff(play, var_v1 + 0x29);
+        Message_DisplayOcarinaStaff(play, OCARINA_ACTION_CHECK_HEALING + var_v1);
         this->actionFunc = func_8093E68C;
     } else {
         yDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
@@ -111,14 +111,17 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
 }
 
 void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         this->actionFunc = func_8093E518;
     } else {
-        if ((play->msgCtx.ocarinaMode == 3) ||
-            ((this->unk14A == -1) &&
-             ((play->msgCtx.ocarinaMode == 5) || (play->msgCtx.ocarinaMode == 6) || (play->msgCtx.ocarinaMode == 7) ||
-              (play->msgCtx.ocarinaMode == 8) || (play->msgCtx.ocarinaMode == 0xA) || (play->msgCtx.ocarinaMode == 9) ||
-              (play->msgCtx.ocarinaMode == 0xF)))) {
+        if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) ||
+            ((this->unk14A == -1) && ((play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_TIME) ||
+                                      (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_HEALING) ||
+                                      (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_EPONAS) ||
+                                      (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SOARING) ||
+                                      (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_SUNS) ||
+                                      (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) ||
+                                      (play->msgCtx.ocarinaMode == OCARINA_MODE_F)))) {
             if (this->switchFlags >= 0) {
                 switch (this->unk148) {
                     case 0:
@@ -136,7 +139,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                         break;
                 }
             }
-            play->msgCtx.ocarinaMode = 4;
+            play->msgCtx.ocarinaMode = OCARINA_MODE_END;
             play_sound(NA_SE_SY_CORRECT_CHIME);
             this->actionFunc = func_8093E518;
         }

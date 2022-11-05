@@ -411,7 +411,7 @@ void func_80B3EE8C(EnDai* this, PlayState* play) {
 void func_80B3EEDC(EnDai* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         func_80B3E5DC(this, 1);
         this->actionFunc = func_80B3EE8C;

@@ -370,8 +370,8 @@ void func_80B0FE7C(PlayState* play) {
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == OCARINA_SONG_ELEGY) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
-        play->msgCtx.ocarinaMode = 4;
+    if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         gSaveContext.eventInf[4] |= 0x80;
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
@@ -391,7 +391,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
@@ -431,7 +431,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 case 0:
                     func_8019F208();
                     Rupees_ChangeBy(-this->unk_288);
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
                     func_800B7298(play, NULL, 7);
                     this->actionFunc = func_80B11344;
@@ -553,7 +553,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
     if (talkState == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play)) {
             if (this->unk_26C & 2) {
-                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                 play->msgCtx.stateTimer = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
@@ -583,7 +583,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 } else {
                     func_8019F208();
                     Rupees_ChangeBy(-this->unk_288);
-                    play->msgCtx.msgMode = 0x43;
+                    play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                     play->msgCtx.stateTimer = 4;
                     func_800B7298(play, NULL, 7);
                     this->actionFunc = func_80B11344;
@@ -750,7 +750,7 @@ void func_80B10E98(EnGb2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
@@ -793,7 +793,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
 void func_80B110F8(EnGb2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_26C & 2) {
-            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
             play->msgCtx.stateTimer = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;

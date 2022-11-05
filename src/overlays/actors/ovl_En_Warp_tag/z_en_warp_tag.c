@@ -125,13 +125,13 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  * Unused ActionFunc: assigned by EnWarpTag_Unused809C09A0, no known variants use.
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 9) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_PLAYED_STORMS) {
         func_800B7298(play, NULL, 7);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
 
-    } else if (play->msgCtx.ocarinaMode >= 2) {
-        play->msgCtx.ocarinaMode = 4;
+    } else if (play->msgCtx.ocarinaMode >= OCARINA_MODE_WARP) {
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         this->actionFunc = EnWarpTag_Unused809C09A0;
     }
 }

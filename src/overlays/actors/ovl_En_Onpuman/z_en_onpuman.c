@@ -84,14 +84,14 @@ Actor* func_80B11F44(PlayState* play) {
 }
 
 void func_80B11F78(EnOnpuman* this, PlayState* play) {
-    if (play->msgCtx.ocarinaMode == 4) {
+    if (play->msgCtx.ocarinaMode == OCARINA_MODE_END) {
         this->actionFunc = func_80B121D8;
         if (this->actor.cutscene != -1) {
             ActorCutscene_Stop(this->actor.cutscene);
         }
-    } else if (play->msgCtx.ocarinaMode == 3) {
+    } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
         play_sound(NA_SE_SY_CORRECT_CHIME);
-        play->msgCtx.ocarinaMode = 4;
+        play->msgCtx.ocarinaMode = OCARINA_MODE_END;
         if (this->actor.cutscene != -1) {
             ActorCutscene_Stop(this->actor.cutscene);
         }
@@ -118,7 +118,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 
             case 0x8D6:
                 this->actionFunc = func_80B11F78;
-                Message_DisplayOcarinaStaff(play, 0x3A);
+                Message_DisplayOcarinaStaff(play, OCARINA_ACTION_3A);
                 if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0;
                 }

@@ -400,7 +400,7 @@ void func_80C2077C(EnHintSkb* this, PlayState* play) {
             Message_StartTextbox(play, 0x1147, &this->actor);
             this->unk_3E6 = 0x1147;
             if (this->skelAnime.animation == &object_skb_Anim_00697C) {
-                play->msgCtx.msgMode = 0x44;
+                play->msgCtx.msgMode = MSGMODE_PAUSED;
                 this->actor.speedXZ = 2.4f;
                 this->actor.gravity = -1.0f;
                 this->actor.velocity.y = 3.0f;

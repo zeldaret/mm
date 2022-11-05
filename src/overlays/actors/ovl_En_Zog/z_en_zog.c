@@ -627,7 +627,7 @@ void func_80B9451C(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
-    } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
             (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
@@ -716,7 +716,7 @@ void func_80B948A8(EnZog* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
-    } else if ((play->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
             (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);

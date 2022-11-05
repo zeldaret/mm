@@ -154,7 +154,7 @@ extern s16 sIconEnvColors[][3];
 
 // Matching, in-function data
 #ifdef NON_MATCHING
-void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxp, s16 x, s16 y) {
+void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     static s16 sIconPrimR = 0;
     static s16 sIconPrimG = 80;
     static s16 sIconPrimB = 200;
@@ -174,7 +174,7 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxp, s16 x, s16 y) {
     s16 envB;
     u8* iconTexture = msgCtx->font.iconBuf;
 
-    gfx = *gfxp;
+    gfx = *gfxP;
 
     if (!msgCtx->textIsCredits) {
         primR = ABS_ALT(sIconPrimR - sIconPrimColors[sIconFlashColorIndex][0]) / sIconFlashTimer;
@@ -247,17 +247,17 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxp, s16 x, s16 y) {
         }
 
         msgCtx->stateTimer++;
-        *gfxp = gfx;
+        *gfxP = gfx;
     }
 }
 #else
-void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxp, s16 x, s16 y);
+void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_DrawTextboxIcon.s")
 #endif
 
 // Matching, in-function data
 #ifdef NON_MATCHING
-void func_80147F18(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
+void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     static s16 D_801CFD28 = 0;
     static s16 D_801CFD2C = 80;
     static s16 D_801CFD30 = 200;
@@ -275,7 +275,7 @@ void func_80147F18(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
     s16 envG;
     s16 envB;
 
-    gfx = *gfxp;
+    gfx = *gfxP;
 
     if (!msgCtx->textIsCredits) {
         primR = ABS_ALT(D_801CFD28 - D_801CFD10[D_801CFD38][0]) / D_801CFD34;
@@ -343,11 +343,11 @@ void func_80147F18(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
         gDPPipeSync(gfx++);
 
         msgCtx->stateTimer++;
-        *gfxp = gfx++;
+        *gfxP = gfx++;
     }
 }
 #else
-void func_80147F18(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3);
+void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147F18.s")
 #endif
 
@@ -356,7 +356,7 @@ extern s16 D_801CFD54[][3];
 
 // Matching, in-function data
 #ifdef NON_MATCHING
-void func_80148558(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
+void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     static s16 D_801CFD60 = 0;
     static s16 D_801CFD64 = 80;
     static s16 D_801CFD68 = 200;
@@ -374,7 +374,7 @@ void func_80148558(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
     s16 envG;
     s16 envB;
 
-    gfx = *gfxp;
+    gfx = *gfxP;
 
     if (!msgCtx->textIsCredits) {
         primR = ABS_ALT(D_801CFD60 - D_801CFD48[D_801CFD70][0]) / D_801CFD6C;
@@ -442,11 +442,11 @@ void func_80148558(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3) {
         gDPPipeSync(gfx++);
 
         msgCtx->stateTimer++;
-        *gfxp = gfx++;
+        *gfxP = gfx++;
     }
 }
 #else
-void func_80148558(PlayState* play, Gfx** gfxp, s16 arg2, s16 arg3);
+void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 #endif
 
@@ -481,7 +481,7 @@ void Message_HandleChoiceSelection(PlayState* play, u8 numChoices) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_HandleChoiceSelection.s")
 #endif
 
-void func_80148CBC(PlayState* play, Gfx** gfxp, u8 arg2) {
+void func_80148CBC(PlayState* play, Gfx** gfxP, u8 arg2) {
     MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->textPosX = 0x30;
@@ -490,7 +490,7 @@ void func_80148CBC(PlayState* play, Gfx** gfxp, u8 arg2) {
     } else {
         msgCtx->textPosY = msgCtx->unk11FFE[msgCtx->choiceIndex];
     }
-    Message_DrawTextboxIcon(play, gfxp, msgCtx->textPosX, msgCtx->textPosY);
+    Message_DrawTextboxIcon(play, gfxP, msgCtx->textPosX, msgCtx->textPosY);
 }
 
 // Matching, in-function data
@@ -715,16 +715,16 @@ void func_801496C8(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801496C8.s")
 #endif
 
-void Message_DrawTextChar(PlayState* play, TexturePtr arg1, Gfx** gfxp) {
+void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
-    Gfx* gfx = *gfxp;
+    Gfx* gfx = *gfxP;
     s16 x = msgCtx->textPosX;
     s16 y = msgCtx->textPosY;
 
     gDPPipeSync(gfx++);
 
-    gDPLoadTextureBlock_4b(gfx++, arg1, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                           G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gfx++, texture, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     if ((msgCtx->textBoxType != 5) && (msgCtx->textBoxType != 0xD) && !play->pauseCtx.bombersNotebookOpen) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, msgCtx->textColorAlpha);
@@ -736,7 +736,7 @@ void Message_DrawTextChar(PlayState* play, TexturePtr arg1, Gfx** gfxp) {
     gDPSetPrimColor(gfx++, 0, 0, msgCtx->unk12018, msgCtx->unk1201A, msgCtx->unk1201C, msgCtx->textColorAlpha);
     gSPTextureRectangle(gfx++, (x) << 2, (y) << 2, ((x + sCharTexSize)) << 2, ((y + sCharTexSize)) << 2,
                         G_TX_RENDERTILE, 0, 0, sCharTexScale, sCharTexScale);
-    *gfxp = gfx++;
+    *gfxP = gfx++;
 }
 
 // resizes textboxes when opening them
@@ -1429,7 +1429,8 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                         break;
 
                     default:
-                        if ((msgCtx->msgMode >= 0x45) && (msgCtx->msgMode < 0x4A)) {
+                        if ((msgCtx->msgMode >= MSGMODE_SCENE_TITLE_CARD_FADE_IN_BACKGROUND) &&
+                            (msgCtx->msgMode <= MSGMODE_SCENE_TITLE_CARD_FADE_OUT_BACKGROUND)) {
                             msgCtx->textPosX += (s32)((16.0f * msgCtx->textCharScale) - 1.0f);
                         } else {
                             msgCtx->textPosX += (s32)(16.0f * msgCtx->textCharScale);
@@ -4045,9 +4046,9 @@ u8 Message_GetState(MessageContext* msgCtx) {
     return TEXT_STATE_3;
 }
 
-void Message_DrawTextBox(PlayState* play, Gfx** gfxp) {
+void Message_DrawTextBox(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
-    Gfx* gfx = *gfxp;
+    Gfx* gfx = *gfxP;
 
     gDPPipeSync(gfx++);
 
@@ -4101,7 +4102,7 @@ void Message_DrawTextBox(PlayState* play, Gfx** gfxp) {
         gSPTextureRectangle(gfx++, 0x0138, 0x0298, 0x0178, 0x0318, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
     }
 
-    *gfxp = gfx++;
+    *gfxP = gfx++;
 }
 
 void Message_SetView(View* view) {
@@ -4408,11 +4409,11 @@ void Message_DrawText(PlayState* play, Gfx** gfxP) {
     }
 }
 
-void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxp) {
+void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
     Gfx* gfx;
 
-    gfx = *gfxp;
+    gfx = *gfxP;
     func_8012C680(&gfx);
 
     gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
@@ -4434,7 +4435,7 @@ void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxp) {
     }
     msgCtx->unk11FFA = XREG(74);
     Message_DrawTextNES(play, &gfx, 0);
-    *gfxp = gfx++;
+    *gfxP = gfx++;
 }
 
 extern s16 D_801C6A94;
@@ -4935,7 +4936,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 if (msgCtx->stateTimer == 0) {
                     func_80152CAC(play);
                     sOcarinaButtonIndexBufPos = 0;
-                    msgCtx->msgMode = 0x1A;
+                    msgCtx->msgMode = MSGMODE_SONG_DEMONSTRATION;
                 }
                 Message_DrawText(play, &gfx);
                 break;
@@ -6202,45 +6203,45 @@ void Message_SetTables(PlayState* play) {
 
 void Message_Init(PlayState* play) {
     Font* font;
-    MessageContext* messageCtx = &play->msgCtx;
+    MessageContext* msgCtx = &play->msgCtx;
 
     Message_SetTables(play);
 
     play->msgCtx.ocarinaMode = OCARINA_MODE_NONE;
 
-    messageCtx->msgMode = 0;
-    messageCtx->msgLength = 0;
-    messageCtx->currentTextId = 0;
-    messageCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
-    messageCtx->choiceIndex = 0;
-    messageCtx->ocarinaAction = messageCtx->textUnskippable = 0;
-    messageCtx->textColorAlpha = 0xFF;
+    msgCtx->msgMode = MSGMODE_NONE;
+    msgCtx->msgLength = 0;
+    msgCtx->currentTextId = 0;
+    msgCtx->textboxEndType = TEXTBOX_ENDTYPE_00;
+    msgCtx->choiceIndex = 0;
+    msgCtx->ocarinaAction = msgCtx->textUnskippable = 0;
+    msgCtx->textColorAlpha = 0xFF;
 
-    View_Init(&messageCtx->view, play->state.gfxCtx);
+    View_Init(&msgCtx->view, play->state.gfxCtx);
 
-    messageCtx->textboxSegment = THA_AllocEndAlign16(&play->state.heap, 0x13C00);
+    msgCtx->textboxSegment = THA_AllocEndAlign16(&play->state.heap, 0x13C00);
 
     font = &play->msgCtx.font;
     Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;
 
-    messageCtx->textIsCredits = messageCtx->unk12092 = false;
-    messageCtx->unk12094 = 0;
-    messageCtx->textFade = false;
-    messageCtx->ocarinaAvailableSongs = 0;
-    messageCtx->textboxX = 0x34;
-    messageCtx->textboxY = 0x24;
-    messageCtx->ocarinaSongEffectActive = false;
-    messageCtx->unk120BE = 0;
-    messageCtx->unk120C0 = 0;
-    messageCtx->unk120C2 = 0;
-    messageCtx->unk120C4 = 0;
-    messageCtx->unk120C8 = 0;
-    messageCtx->unk120CA = 0;
-    messageCtx->unk120CC = 0;
-    messageCtx->unk120CE = 0;
-    messageCtx->unk120D0 = 0;
-    messageCtx->unk120D2 = 0;
-    messageCtx->unk120D4 = 0;
-    messageCtx->unk120D6 = 0;
+    msgCtx->textIsCredits = msgCtx->unk12092 = false;
+    msgCtx->unk12094 = 0;
+    msgCtx->textFade = false;
+    msgCtx->ocarinaAvailableSongs = 0;
+    msgCtx->textboxX = 0x34;
+    msgCtx->textboxY = 0x24;
+    msgCtx->ocarinaSongEffectActive = false;
+    msgCtx->unk120BE = 0;
+    msgCtx->unk120C0 = 0;
+    msgCtx->unk120C2 = 0;
+    msgCtx->unk120C4 = 0;
+    msgCtx->unk120C8 = 0;
+    msgCtx->unk120CA = 0;
+    msgCtx->unk120CC = 0;
+    msgCtx->unk120CE = 0;
+    msgCtx->unk120D0 = 0;
+    msgCtx->unk120D2 = 0;
+    msgCtx->unk120D4 = 0;
+    msgCtx->unk120D6 = 0;
 }
