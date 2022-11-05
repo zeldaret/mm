@@ -309,7 +309,7 @@ void func_80A52C6C(EnDnq* this, PlayState* play) {
 }
 
 s32* func_80A52CF8(EnDnq* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[23] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         return &D_80A53400[14];
     }
 
@@ -343,11 +343,11 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         this->unk_390 = 70.0f;
         if (Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(play) &&
             (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) && (ActorCutscene_GetCurrentIndex() == -1)) {
-            if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+            if ((DECR(this->unk_384) == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
                 Message_StartTextbox(play, 0x969, NULL);
                 this->unk_384 = 200;
             }
@@ -361,7 +361,7 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
 
         this->picto.actor.xzDistToPlayer = this->unk_394;
 
-        if (gSaveContext.save.weekEventReg[83] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_08)) {
             func_80A52A78(this, play);
         } else if (this->unk_3A4 == 0) {
             Math_ApproachS(&this->picto.actor.shape.rot.y, this->picto.actor.world.rot.y, 3, 0x2AA8);
@@ -430,7 +430,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_UpdateFlags(&this->unk_37C, 3, 7);
-    if (gSaveContext.save.weekEventReg[9] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
         this->unk_3A4 = 1;
     } else {
         this->unk_3A4 = 0;
