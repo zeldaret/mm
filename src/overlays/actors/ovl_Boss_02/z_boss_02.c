@@ -551,7 +551,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad[2];
 
-    if ((gSaveContext.save.weekEventReg[52] & 0x20) && (this->actor.params == TWINMOLD_RED)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (this->actor.params == TWINMOLD_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
                                                    0.0f, 0, 0, 0, 1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
@@ -567,7 +567,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = Boss02_Static_Draw;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_1D70 = 0.00999999977648f;
-        if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x20) || (sBlueWarp != NULL)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
             sMusicStartTimer = KREG(15) + 20;
         } else {
@@ -2051,7 +2051,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 1:
-            if ((gSaveContext.save.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
             Cutscene_Start(play, &play->csCtx);
@@ -2145,7 +2145,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
                 sRedTwinmold->unk_0146[0] = sBlueTwinmold->unk_0146[0] = 60;
-                gSaveContext.eventInf[5] |= 0x20;
+                SET_EVENTINF(EVENTINF_55);
             }
             break;
 

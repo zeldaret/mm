@@ -222,7 +222,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
 }
 
 void EnSyatekiMan_Destroy(Actor* thisx, PlayState* play) {
-    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
 }
 
 /**
@@ -341,8 +341,8 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
             } else {
                 func_8019F208();
                 Rupees_ChangeBy(-20);
-                gSaveContext.save.weekEventReg[63] |= 1;
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
@@ -408,11 +408,11 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
                 break;
 
             case 0xA32: // You have to try harder!
-                if (gSaveContext.save.weekEventReg[63] & 2) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
                     player->stateFlags1 &= ~PLAYER_STATE1_20;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
                     gSaveContext.minigameState = 3;
                     this->shootingGameState = SG_GAME_STATE_NONE;
@@ -469,8 +469,8 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
-                gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 this->actionFunc = EnSyatekiMan_Swamp_Idle;
                 this->shootingGameState = SG_GAME_STATE_NONE;
             }
@@ -660,8 +660,8 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     this->prevTextId = 0x3FF;
                 }
 
-                gSaveContext.save.weekEventReg[63] |= 1;
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
             }
         } else {
             func_8019F230();
@@ -747,8 +747,8 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                     player->actor.freezeTimer = 0;
                     this->shootingGameState = SG_GAME_STATE_MOVING_PLAYER;
                     player->stateFlags1 |= PLAYER_STATE1_20;
-                    gSaveContext.save.weekEventReg[63] |= 1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->actionFunc = EnSyatekiMan_Town_MovePlayerAndSayHighScore;
                 }
                 break;
@@ -767,10 +767,10 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 break;
 
             case 0x401: // You got [score]? Oh, that's too bad...
-                if (gSaveContext.save.weekEventReg[63] & 2) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
@@ -781,10 +781,10 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
                 break;
 
             case 0x403: // You got [score]? Too bad...
-                if (gSaveContext.save.weekEventReg[63] & 2) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                     func_801477B4(play);
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     this->actionFunc = EnSyatekiMan_Town_Idle;
                 } else {
@@ -839,8 +839,8 @@ void EnSyatekiMan_Town_Talk(EnSyatekiMan* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 this->actionFunc = EnSyatekiMan_Town_Idle;
                 this->shootingGameState = SG_GAME_STATE_NONE;
@@ -862,20 +862,20 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[59] & 0x10)) {
-            gSaveContext.save.weekEventReg[59] |= 0x10;
-        } else if (!(gSaveContext.save.weekEventReg[32] & 2) && (this->score >= 2180)) {
-            gSaveContext.save.weekEventReg[32] |= 2;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_59_10);
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02) && (this->score >= 2180)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_32_02);
         }
 
         this->actor.parent = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_GiveReward;
     } else {
-        if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(gSaveContext.save.weekEventReg[59] & 0x10)) {
+        if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10)) {
             Actor_PickUp(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
         } else if (this->score < 2180) {
             Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 500.0f, 100.0f);
-        } else if (!(gSaveContext.save.weekEventReg[32] & 2)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02)) {
             Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -917,14 +917,14 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         if (this->prevTextId == 0x407) {
-            if (!(gSaveContext.save.weekEventReg[59] & 0x20)) {
-                gSaveContext.save.weekEventReg[59] |= 0x20;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_20);
             }
         }
 
         if ((this->prevTextId == 0x405) || (this->prevTextId == 0x406)) {
-            if (!(gSaveContext.save.weekEventReg[32] & 4)) {
-                gSaveContext.save.weekEventReg[32] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_32_04);
             }
         }
 
@@ -932,12 +932,12 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
         this->actionFunc = EnSyatekiMan_Town_GiveReward;
     } else {
         if (this->prevTextId == 0x407) {
-            if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !(gSaveContext.save.weekEventReg[59] & 0x20)) {
+            if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
                 Actor_PickUp(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
             } else {
                 Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
             }
-        } else if (!(gSaveContext.save.weekEventReg[32] & 4)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04)) {
             Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
@@ -958,8 +958,8 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
             player->stateFlags1 &= ~PLAYER_STATE1_20;
             this->score = 0;
             this->shootingGameState = SG_GAME_STATE_NONE;
-            gSaveContext.save.weekEventReg[63] &= (u8)~1;
-            gSaveContext.save.weekEventReg[63] &= (u8)~2;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
             this->actionFunc = EnSyatekiMan_SetupIdle;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -1118,9 +1118,9 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
                 this->prevTextId = 0xA34;
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             } else if (this->score >= 2000) {
-                if (gSaveContext.save.weekEventReg[63] & 2) {
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_63_02);
                     this->shootingGameState = SG_GAME_STATE_NONE;
                     gSaveContext.minigameState = 3;
                     this->actionFunc = EnSyatekiMan_Swamp_Idle;
@@ -1373,7 +1373,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
             this->talkWaitTimer = 15;
             if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
                 if (GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
-                    if (!(gSaveContext.save.weekEventReg[59] & 0x20)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
                         // You got a new record!
                         Message_StartTextbox(play, 0x407, &this->actor);
                         this->prevTextId = 0x407;

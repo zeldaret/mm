@@ -145,20 +145,20 @@ void EnGakufu_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_2000000;
 
     if (EnGakufu_IsPlayerInRange(this, play)) {
-        gSaveContext.eventInf[3] |= 2;
+        SET_EVENTINF(EVENTINF_31);
     } else {
-        gSaveContext.eventInf[3] &= (u8)~2;
+        CLEAR_EVENTINF(EVENTINF_31);
     }
 
     this->actionFunc = EnGakufu_WaitForSong;
-    gSaveContext.eventInf[3] &= (u8)~4;
+    CLEAR_EVENTINF(EVENTINF_32);
 }
 
 void EnGakufu_Destroy(Actor* thisx, PlayState* play) {
     EnGakufu* this = THIS;
 
     if (GAKUFU_GET_TYPE(&this->actor) != GAKUFU_MILK_BAR) {
-        gSaveContext.eventInf[3] &= (u8)~2;
+        CLEAR_EVENTINF(EVENTINF_31);
     }
 }
 
@@ -231,23 +231,23 @@ void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play) {
 
 /**
  * Waits for the notes on the wall to be played and updates the corresponding flags
- * (gSaveContext.eventInf[3] & 2) is checking if Player is within range of the wall
- * (gSaveContext.eventInf[3] & 4) is checking if Player has played the notes of the wall
+ * EVENTINF_31 is used to track if Player is within range of the wall
+ * EVENTINF_32 is used to track if Player has played the notes of the wall
  */
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play) {
-    if (gSaveContext.eventInf[3] & 2) {
-        if (gSaveContext.eventInf[3] & 4) {
-            gSaveContext.eventInf[3] &= (u8)~2;
-            gSaveContext.eventInf[3] &= (u8)~4;
+    if (CHECK_EVENTINF(EVENTINF_31)) {
+        if (CHECK_EVENTINF(EVENTINF_32)) {
+            CLEAR_EVENTINF(EVENTINF_31);
+            CLEAR_EVENTINF(EVENTINF_32);
 
             this->actionFunc = EnGakufu_PlayRewardCutscene;
             EnGakufu_PlayRewardCutscene(this, play);
             this->actor.draw = NULL;
         } else if (!EnGakufu_IsPlayerInRange(this, play)) {
-            gSaveContext.eventInf[3] &= (u8)~2;
+            CLEAR_EVENTINF(EVENTINF_31);
         }
     } else if (EnGakufu_IsPlayerInRange(this, play)) {
-        gSaveContext.eventInf[3] |= 2;
+        SET_EVENTINF(EVENTINF_31);
     }
 }
 

@@ -334,7 +334,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitJntSph(play, &this->collider);
 
-    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (gSaveContext.save.weekEventReg[83] & 2)) {
+    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -534,7 +534,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&
                         OBJCOMB_GET_10(&this->actor)) {
-                        gSaveContext.save.weekEventReg[83] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_83_02);
                     }
 
                     this->unk_1B5 = 2;

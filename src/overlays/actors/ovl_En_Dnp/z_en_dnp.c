@@ -246,7 +246,7 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.save.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, play)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && Actor_HasParent(&this->actor, play)) {
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
@@ -291,10 +291,10 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
     s32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (play->sceneId == SCENE_MITURIN) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) &&
         (play->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
-        gSaveContext.save.weekEventReg[29] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
     }
 
     if (Cutscene_CheckActorAction(play, 101)) {
@@ -385,7 +385,7 @@ void func_80B3D47C(EnDnp* this, PlayState* play) {
 void func_80B3D558(EnDnp* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        gSaveContext.save.weekEventReg[23] |= 0x20;
+        SET_WEEKEVENTREG(WEEKEVENTREG_23_20);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -414,13 +414,13 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
     } else if (((EN_DNP_GET_TYPE(&this->actor) == EN_DNP_TYPE_WOODFALL_TEMPLE) &&
-                !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
+                !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) ||
                ((EN_DNP_GET_TYPE(&this->actor) == EN_DNP_TYPE_DEKU_KINGS_CHAMBER) &&
-                (gSaveContext.save.weekEventReg[23] & 0x20))) {
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((play->sceneId == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+        if ((play->sceneId == SCENE_MITURIN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
             this->unk_322 |= 0x20;
             EnDnp_ChangeAnim(this, EN_DNP_ANIM_HURRY);
         }
@@ -456,7 +456,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
+        if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_AP_NONE, this->unk_322 & 7);
