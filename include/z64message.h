@@ -9,6 +9,133 @@ struct Actor;
 struct MessageTableEntry;
 struct OcarinaStaff;
 
+typedef enum {
+    /* 0x0 */ TEXTBOX_TYPE_0,
+    /* 0x1 */ TEXTBOX_TYPE_1,
+    /* 0x2 */ TEXTBOX_TYPE_2,
+    /* 0x3 */ TEXTBOX_TYPE_3,
+    /* 0x4 */ TEXTBOX_TYPE_4,
+    /* 0x5 */ TEXTBOX_TYPE_5,
+    /* 0x6 */ TEXTBOX_TYPE_6,
+    /* 0x7 */ TEXTBOX_TYPE_7,
+    /* 0x8 */ TEXTBOX_TYPE_8,
+    /* 0x9 */ TEXTBOX_TYPE_9,
+    /* 0xA */ TEXTBOX_TYPE_A,
+    /* 0xB */ TEXTBOX_TYPE_B,
+    /* 0xC */ TEXTBOX_TYPE_C,
+    /* 0xD */ TEXTBOX_TYPE_D,
+    /* 0xE */ TEXTBOX_TYPE_E,
+    /* 0xF */ TEXTBOX_TYPE_F
+} TextBoxType;
+
+#define TEXTBOX_ENDTYPE_00    0x00
+
+#define TEXTBOX_ENDTYPE_10    0x10
+#define TEXTBOX_ENDTYPE_11    0x11
+#define TEXTBOX_ENDTYPE_12    0x12
+
+
+#define TEXTBOX_ENDTYPE_30    0x30
+
+#define TEXTBOX_ENDTYPE_40    0x40
+#define TEXTBOX_ENDTYPE_41    0x41
+#define TEXTBOX_ENDTYPE_42    0x42
+
+#define TEXTBOX_ENDTYPE_50    0x50
+#define TEXTBOX_ENDTYPE_52    0x52
+#define TEXTBOX_ENDTYPE_55    0x55
+#define TEXTBOX_ENDTYPE_56    0x56
+#define TEXTBOX_ENDTYPE_57    0x57
+
+#define TEXTBOX_ENDTYPE_60    0x60
+#define TEXTBOX_ENDTYPE_61    0x61
+#define TEXTBOX_ENDTYPE_62    0x62
+#define TEXTBOX_ENDTYPE_63    0x63
+#define TEXTBOX_ENDTYPE_64    0x64
+
+typedef enum {
+    /* 0x00 */ MSGMODE_NONE,
+    /* 0x01 */ MSGMODE_TEXT_START,
+    /* 0x02 */ MSGMODE_TEXT_BOX_GROWING,
+    /* 0x03 */ MSGMODE_TEXT_STARTING,
+    /* 0x04 */ MSGMODE_TEXT_NEXT_MSG,
+    /* 0x05 */ MSGMODE_TEXT_CONTINUING,
+    /* 0x06 */ MSGMODE_TEXT_DISPLAYING,
+    /* 0x07 */ MSGMODE_TEXT_AWAIT_INPUT,
+    /* 0x08 */ MSGMODE_TEXT_DELAYED_BREAK,
+    /* 0x09 */ MSGMODE_9,
+    /* 0x0A */ MSGMODE_OCARINA_STARTING,
+    /* 0x0B */ MSGMODE_SONG_DEMONSTRATION_STARTING,
+    /* 0x0C */ MSGMODE_SONG_PROMPT_STARTING,
+    /* 0x0D */ MSGMODE_OCARINA_PLAYING,
+    /* 0x0E */ MSGMODE_E,
+    /* 0x0F */ MSGMODE_OCARINA_FAIL,
+    /* 0x10 */ MSGMODE_OCARINA_FAIL_NO_TEXT,
+    /* 0x11 */ MSGMODE_OCARINA_NOTES_DROP,
+    /* 0x12 */ MSGMODE_SONG_PLAYED,
+    /* 0x13 */ MSGMODE_SETUP_DISPLAY_SONG_PLAYED,
+    /* 0x14 */ MSGMODE_DISPLAY_SONG_PLAYED,
+    /* 0x15 */ MSGMODE_DISPLAY_SONG_PLAYED_TEXT_BEGIN,
+    /* 0x16 */ MSGMODE_16,
+    /* 0x17 */ MSGMODE_17,
+    /* 0x18 */ MSGMODE_18,
+    /* 0x19 */ MSGMODE_19,
+    /* 0x1A */ MSGMODE_SONG_DEMONSTRATION,
+    /* 0x1B */ MSGMODE_SONG_DEMONSTRATION_DONE,
+    /* 0x1C */ MSGMODE_SONG_PROMPT,
+    /* 0x1D */ MSGMODE_SONG_PROMPT_SUCCESS,
+    /* 0x1E */ MSGMODE_SONG_PROMPT_FAIL,
+    /* 0x1F */ MSGMODE_SONG_PROMPT_NOTES_DROP,
+    /* 0x20 */ MSGMODE_OCARINA_AWAIT_INPUT,
+    /* 0x21 */ MSGMODE_21,
+    /* 0x22 */ MSGMODE_22,
+    /* 0x23 */ MSGMODE_23,
+    /* 0x24 */ MSGMODE_24,
+    /* 0x25 */ MSGMODE_25,
+    /* 0x26 */ MSGMODE_26,
+    /* 0x27 */ MSGMODE_SCARECROW_LONG_RECORDING_START,
+    /* 0x28 */ MSGMODE_SCARECROW_LONG_RECORDING_ONGOING,
+    /* 0x29 */ MSGMODE_SCARECROW_LONG_DEMONSTRATION,
+    /* 0x2A */ MSGMODE_SCARECROW_SPAWN_RECORDING_START,
+    /* 0x2B */ MSGMODE_SCARECROW_SPAWN_RECORDING_ONGOING,
+    /* 0x2C */ MSGMODE_SCARECROW_SPAWN_RECORDING_FAILED,
+    /* 0x2D */ MSGMODE_SCARECROW_SPAWN_RECORDING_DONE,
+    /* 0x2E */ MSGMODE_SCARECROW_SPAWN_DEMONSTRATION,
+    /* 0x2F */ MSGMODE_2F,
+    /* 0x30 */ MSGMODE_30,
+    /* 0x31 */ MSGMODE_31,
+    /* 0x32 */ MSGMODE_32,
+    /* 0x33 */ MSGMODE_33,
+    /* 0x34 */ MSGMODE_34,
+    /* 0x35 */ MSGMODE_35,
+    /* 0x36 */ MSGMODE_36,
+    /* 0x37 */ MSGMODE_37,
+    /* 0x38 */ MSGMODE_38,
+    /* 0x39 */ MSGMODE_39,
+    /* 0x3A */ MSGMODE_3A,
+    /* 0x3B */ MSGMODE_3B,
+    /* 0x3C */ MSGMODE_3C,
+    /* 0x3D */ MSGMODE_3D,
+    /* 0x3E */ MSGMODE_3E,
+    /* 0x3F */ MSGMODE_3F,
+    /* 0x40 */ MSGMODE_40,
+    /* 0x41 */ MSGMODE_TEXT_AWAIT_NEXT,
+    /* 0x42 */ MSGMODE_TEXT_DONE,
+    /* 0x43 */ MSGMODE_TEXT_CLOSING,
+    /* 0x44 */ MSGMODE_PAUSED, // Causes the message system to do nothing until external code sets a new message mode or calls a public function
+    /* 0x45 */ MSGMODE_SCENE_TITLE_CARD_FADE_IN_BACKGROUND, // Scene Title Card
+    /* 0x46 */ MSGMODE_SCENE_TITLE_CARD_FADE_IN_TEXT,
+    /* 0x47 */ MSGMODE_SCENE_TITLE_CARD_DISPLAYING,
+    /* 0x48 */ MSGMODE_SCENE_TITLE_CARD_FADE_OUT_TEXT,
+    /* 0x49 */ MSGMODE_SCENE_TITLE_CARD_FADE_OUT_BACKGROUND,
+    /* 0x4A */ MSGMODE_NEW_CYCLE_0, // End of cycle?
+    /* 0x4B */ MSGMODE_NEW_CYCLE_1,
+    /* 0x4C */ MSGMODE_NEW_CYCLE_2,
+    /* 0x4D */ MSGMODE_OWL_SAVE_0,
+    /* 0x4E */ MSGMODE_OWL_SAVE_1,
+    /* 0x4F */ MSGMODE_OWL_SAVE_2
+} MessageMode;
+
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
     /*  1 */ TEXT_STATE_1,
@@ -57,27 +184,27 @@ typedef struct {
         u16 wchar[640];   // msgBufWide
         u64 force_structure_alignment_msg;
     } msgBuf;
-    /* 0x11D80 */ u8* messageStart;
-    /* 0x11D84 */ u8* messageEnd;
+    /* 0x11D80 */ u32 messageStart;
+    /* 0x11D84 */ u32 messageEnd;
     /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
 } Font; // size = 0x11D90
 
 typedef struct MessageContext {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
-    /* 0x11EF8 */ UNK_PTR unk11EF8;
+    /* 0x11EF8 */ u8* textboxSegment;
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
-    /* 0x11F00 */ struct OcarinaStaff* unk11F00;
+    /* 0x11F00 */ struct OcarinaStaff* ocarinaStaff;
     /* 0x11F04 */ u16 currentTextId;
-    /* 0x11F06 */ UNK_TYPE1 unk11F06[0x2];
+    /* 0x11F06 */ u16 unk11F06;
     /* 0x11F08 */ u16 unk11F08;
-    /* 0x11F0A */ u8 unk11F0A;
-    /* 0x11F0B */ s8 unk11F0B;
-    /* 0x11F0C */ s8 unk11F0C;
+    /* 0x11F0A */ u8 textBoxType;
+    /* 0x11F0B */ u8 textBoxPos;
+    /* 0x11F0C */ u8 unk11F0C;
     /* 0x11F0B */ UNK_TYPE1 unk11F0D[0x3];
     /* 0x11F10 */ s32 msgLength;
     /* 0x11F14 */ u16 unk11F14;
-    /* 0x11F16 */ u16 unk11F16;
+    /* 0x11F16 */ u16 itemId;
     /* 0x11F18 */ s8 unk11F18;
     /* 0x11F19 */ UNK_TYPE1 unk11F19[0x1];
     /* 0x11F1A */ s16 unk11F1A[3];
@@ -89,17 +216,17 @@ typedef struct MessageContext {
         u16 wchar[100];
     } decodedBuffer;
     /* 0x11FEC */ u16 msgBufPos;
-    /* 0x11FEE */ s16 unk11FEE;
-    /* 0x11FF0 */ s16 unk11FF0;
-    /* 0x11FF2 */ u16 unk11FF2;
-    /* 0x11FF4 */ s16 unk11FF4;
-    /* 0x11FF6 */ s16 unk11FF6;
+    /* 0x11FEE */ u16 textDrawPos;
+    /* 0x11FF0 */ u16 decodedTextLen;
+    /* 0x11FF2 */ u16 textUnskippable;
+    /* 0x11FF4 */ s16 textPosX;
+    /* 0x11FF6 */ s16 textPosY;
     /* 0x11FF8 */ s16 unk11FF8;
     /* 0x11FFA */ s16 unk11FFA;
     /* 0x11FFC */ s16 unk11FFC;
     /* 0x11FFE */ s16 unk11FFE[0x3];
-    /* 0x12004 */ s16 unk12004;
-    /* 0x12006 */ s16 unk12006;
+    /* 0x12004 */ s16 textboxXTarget;
+    /* 0x12006 */ s16 textboxYTarget;
     /* 0x12008 */ s16 unk12008;
     /* 0x1200A */ UNK_TYPE2 unk1200A;
     /* 0x1200C */ s16 unk1200C;
@@ -111,12 +238,12 @@ typedef struct MessageContext {
     /* 0x12018 */ s16 unk12018; // messageR
     /* 0x1201A */ s16 unk1201A; // messageG
     /* 0x1201C */ s16 unk1201C; // messageB
-    /* 0x1201E */ s16 unk1201E; // messageA
-    /* 0x12020 */ u8 unk12020;  // probably textboxEndType
+    /* 0x1201E */ s16 textColorAlpha; // messageA
+    /* 0x12020 */ u8 textboxEndType;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 stateTimer;
-    /* 0x12024 */ s16 unk12024;
+    /* 0x12024 */ u16 textDelayTimer;
     /* 0x12026 */ u16 unk12026;
     /* 0x12028 */ u16 songPlayed;
     /* 0x1202A */ u16 ocarinaMode;
@@ -124,22 +251,22 @@ typedef struct MessageContext {
     /* 0x1202E */ u16 lastPlayedSong;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
-    /* 0x12034 */ s16 unk12034;
-    /* 0x12036 */ s16 unk12036;
-    /* 0x12038 */ s16 unk12038;
-    /* 0x1203A */ s16 unk1203A;
-    /* 0x1203C */ s16 unk1203C;
+    /* 0x12034 */ s16 textboxColorRed;
+    /* 0x12036 */ s16 textboxColorGreen;
+    /* 0x12038 */ s16 textboxColorBlue;
+    /* 0x1203A */ s16 textboxColorAlphaTarget;
+    /* 0x1203C */ s16 textboxColorAlphaCurrent;
     /* 0x1203E */ s16 unk1203E;
-    /* 0x12040 */ struct Actor* unkActor;
+    /* 0x12040 */ struct Actor* talkActor;
     /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ s16 unk12046;
-    /* 0x12048 */ u8 unk12048; // EnKakasi
+    /* 0x12046 */ s16 blockSunsSong;
+    /* 0x12048 */ u8 lastOcarinaButtonIndex;
     /* 0x12049 */ UNK_TYPE1 unk12049[0x1];
-    /* 0x1204A */ s16 unk1204A[0x5];
+    /* 0x1204A */ s16 ocarinaButtonsPosY[0x5];
     /* 0x12054 */ s16 unk12054[6]; // First, second and third digits in lottery code guess
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
-    /* 0x12068 */ s16 unk12068;
-    /* 0x1206A */ s16 unk1206A;
+    /* 0x12068 */ s16 textboxX;
+    /* 0x1206A */ s16 textboxY;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ s32 unk12074;
@@ -149,16 +276,21 @@ typedef struct MessageContext {
     /* 0x12084 */ struct MessageTableEntry* messageEntryTableNes;
     /* 0x12088 */ UNK_TYPE4 unk12088;
     /* 0x1208C */ struct MessageTableEntry* messageTableStaff;
-    /* 0x12090 */ s16 unk12090;
+    /* 0x12090 */ s16 textIsCredits;
     /* 0x12092 */ s16 unk12092;
-    /* 0x12094 */ s8 unk12094;
+    /* 0x12094 */ u8 unk12094;
     /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
-    /* 0x12098 */ f32 unk12098; // Text_Scale?
-    /* 0x1209C */ s16 unk1209C;
+    /* 0x12098 */ f32 textCharScale;
+    /* 0x1209C */ s16 textFade;
     /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
-    /* 0x120A0 */ s32 unk120A0;
-    /* 0x120A4 */ s16 unk120A4[6];
-    /* 0x120B0 */ u8 unk120B0;
+    /* 0x120A0 */ s32 ocarinaAvailableSongs;
+    /* 0x120A4 */ s16 stickAdjX;
+    /* 0x120A6 */ s16 stickAdjY;
+    /* 0x120A8 */ s16 stickXRepeatState;
+    /* 0x120AA */ s16 stickYRepeatState;
+    /* 0x120AC */ s16 stickXRepeatTimer;
+    /* 0x120AE */ s16 stickYRepeatTimer;
+    /* 0x120B0 */ u8 ocarinaSongEffectActive;
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ u8 unk120B2[0xA];
     /* 0x120BC */ u16 unk_120BC;

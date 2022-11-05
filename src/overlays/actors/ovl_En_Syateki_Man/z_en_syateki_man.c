@@ -409,7 +409,7 @@ void EnSyatekiMan_Swamp_HandleNormalMessage(EnSyatekiMan* this, PlayState* play)
 
             case 0xA32: // You have to try harder!
                 if (gSaveContext.save.weekEventReg[63] & 2) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     player->stateFlags1 &= ~PLAYER_STATE1_20;
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -768,7 +768,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
 
             case 0x401: // You got [score]? Oh, that's too bad...
                 if (gSaveContext.save.weekEventReg[63] & 2) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
                     this->shootingGameState = SG_GAME_STATE_NONE;
@@ -782,7 +782,7 @@ void EnSyatekiMan_Town_HandleNormalMessage(EnSyatekiMan* this, PlayState* play) 
 
             case 0x403: // You got [score]? Too bad...
                 if (gSaveContext.save.weekEventReg[63] & 2) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     gSaveContext.save.weekEventReg[63] &= (u8)~1;
                     gSaveContext.save.weekEventReg[63] &= (u8)~2;
                     this->shootingGameState = SG_GAME_STATE_NONE;

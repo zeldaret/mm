@@ -48,12 +48,12 @@ static s16 sCurrentCs;
 
 void func_80A41D70(EnTest4* this, PlayState* play) {
     if (this->unk_144 != 0) {
-        func_80151A68(play, sNightMessages1[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sNightMessages1[CURRENT_DAY - 1]);
     } else if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
             Sram_IncrementDay();
             gSaveContext.save.time = CLOCK_TIME(6, 0);
-            func_80151A68(play, sDayMessages1[CURRENT_DAY - 1]);
+            Message_DisplaySceneTitleCard(play, sDayMessages1[CURRENT_DAY - 1]);
         } else {
             this->unk_144 = 0;
             this->unk_146 = gSaveContext.save.time += CLOCK_TIME_MINUTE;
@@ -91,12 +91,12 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
 
 void func_80A41FA4(EnTest4* this, PlayState* play) {
     if (this->unk_144 != 0) {
-        func_80151A68(play, sNightMessages2[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sNightMessages2[CURRENT_DAY - 1]);
     } else if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         Sram_IncrementDay();
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         func_8010EE74(play, CURRENT_DAY);
-        func_80151A68(play, sDayMessages2[CURRENT_DAY - 1]);
+        Message_DisplaySceneTitleCard(play, sDayMessages2[CURRENT_DAY - 1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);
         func_800FEAF4(&play->envCtx);

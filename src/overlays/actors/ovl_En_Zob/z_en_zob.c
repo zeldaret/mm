@@ -267,7 +267,7 @@ void func_80B9FC70(EnZob* this, s16 arg1) {
 }
 
 void func_80B9FCA0(EnZob* this, PlayState* play) {
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     play->msgCtx.ocarinaMode = 4;
     func_80B9FC0C(this);
     this->unk_2F4 &= ~1;
@@ -331,7 +331,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        func_80152434(play, 0x42);
+        Message_DisplayOcarinaStaff(play, 0x42);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
     }
@@ -343,7 +343,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
         this->actionFunc = func_80B9FF20;
         this->unk_304 = 6;
         func_80B9F7E4(this, 1, ANIMMODE_LOOP);
-        func_80152434(play, 0x3E);
+        Message_DisplayOcarinaStaff(play, 0x3E);
         func_80B9FC70(this, 1);
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
         play->msgCtx.msgLength = 0;
@@ -357,7 +357,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        func_80152434(play, 0x41);
+        Message_DisplayOcarinaStaff(play, 0x41);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
     }
@@ -372,14 +372,14 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 1:
                         func_8019F208();
-                        func_80151938(play, 0x1209);
+                        Message_ContinueTextbox(play, 0x1209);
                         this->unk_304 = 1;
                         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
                         break;
 
                     case 0:
                         func_8019F230();
-                        func_80151938(play, 0x1213);
+                        Message_ContinueTextbox(play, 0x1213);
                         break;
                 }
             }
@@ -391,7 +391,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                     case 0x1208:
                     case 0x120E:
                     case 0x1216:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x120C:
@@ -405,7 +405,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                     case 0x1211:
                     case 0x1213:
                     case 0x1217:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->unk_304 = 3;
                         func_80B9F7E4(this, 4, ANIMMODE_ONCE);
                         break;
@@ -426,7 +426,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x1209:
-                        func_80152434(play, 0x3D);
+                        Message_DisplayOcarinaStaff(play, 0x3D);
                         this->unk_304 = 4;
                         func_80B9F7E4(this, 0, ANIMMODE_LOOP);
                         this->actionFunc = func_80BA005C;
@@ -439,7 +439,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
 }
 
 void func_80BA0318(EnZob* this, PlayState* play) {
-    func_80152434(play, 0x3D);
+    Message_DisplayOcarinaStaff(play, 0x3D);
     this->unk_304 = 4;
     func_80B9F7E4(this, 0, ANIMMODE_LOOP);
     this->actionFunc = func_80BA005C;
@@ -457,13 +457,13 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1207);
+                        Message_ContinueTextbox(play, 0x1207);
                         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
                         break;
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1206);
+                        Message_ContinueTextbox(play, 0x1206);
                         break;
                 }
             }
@@ -474,11 +474,11 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x11F8:
                         gSaveContext.save.weekEventReg[30] |= 2;
-                        func_80151938(play, 0x11F9);
+                        Message_ContinueTextbox(play, 0x11F9);
                         break;
 
                     case 0x11F9:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0728;
                         this->unk_304 = 0;
                         func_80B9F7E4(this, 6, ANIMMODE_ONCE);
@@ -490,19 +490,19 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                     case 0x11FF:
                     case 0x1201:
                     case 0x1203:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x11FD:
                         this->unk_304 = 3;
                         func_80B9F7E4(this, 4, ANIMMODE_ONCE);
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x11FE:
                         this->unk_304 = 1;
                         func_80B9F7E4(this, 3, ANIMMODE_LOOP);
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x11FA:
@@ -513,7 +513,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                     case 0x120F:
                     case 0x1210:
                     case 0x1215:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0728;
                         this->unk_304 = 0;
                         func_80B9F7E4(this, 6, ANIMMODE_ONCE);
@@ -522,7 +522,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x1207:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0318;
                         player->unk_A90 = &this->actor;
                         player->stateFlags3 |= PLAYER_STATE3_20;
@@ -630,7 +630,7 @@ void func_80BA0A04(EnZob* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BA0AD8;
                 this->unk_304 = 0;
                 func_80B9F7E4(this, 6, ANIMMODE_ONCE);

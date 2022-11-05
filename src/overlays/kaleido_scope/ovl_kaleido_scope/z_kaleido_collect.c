@@ -557,7 +557,7 @@ s16 sQuestHpPrimBlue = 0;
 s16 sQuestHpPrimAlpha = 0;
 s16 sQuestHpColorTimer = 20;
 s16 sQuestHpPrimColorTargetIndex = 0;
-TexturePtr sOcarinaButtonTextures[] = {
+static TexturePtr sOcarinaButtonTextures[] = {
     gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
 };
 s16 sQuestSongsPrimRed[] = {

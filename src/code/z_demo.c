@@ -187,7 +187,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             if (isStartFrame) {
                 loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
-                    func_80151A68(play, loadedScene->titleTextId);
+                    Message_DisplaySceneTitleCard(play, loadedScene->titleTextId);
                 }
             }
             break;
@@ -1016,7 +1016,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
     } else if (D_801BB128 != cmd->base) {
         D_801BB160 = CS_TEXTBOX_TYPE_LEARN_SONG;
         D_801BB128 = cmd->base;
-        func_80152434(play, cmd->base);
+        Message_DisplayOcarinaStaff(play, cmd->base);
     } else {
     else_label:
         if (csCtx->frames >= cmd->endFrame) {
@@ -1035,7 +1035,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                         }
 
                         if (cmd->textId1 != 0xFFFF) {
-                            func_80151938(play, cmd->textId1);
+                            Message_ContinueTextbox(play, cmd->textId1);
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId2 != 0xFFFF) {
@@ -1043,7 +1043,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                                 }
                             }
                         } else {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             csCtx->frames++;
                         }
                     } else {
@@ -1052,7 +1052,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                         }
 
                         if (cmd->textId2 != 0xFFFF) {
-                            func_80151938(play, cmd->textId2);
+                            Message_ContinueTextbox(play, cmd->textId2);
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId1 != 0xFFFF) {
@@ -1060,14 +1060,14 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                                 }
                             }
                         } else {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             csCtx->frames++;
                         }
                     }
                 }
 
                 if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                    func_80152434(play, cmd->base);
+                    Message_DisplayOcarinaStaff(play, cmd->base);
                 }
             }
 
@@ -1501,7 +1501,7 @@ void func_800EDBE0(PlayState* play) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
                                              ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(play, sp24->titleTextId);
+                Message_DisplaySceneTitleCard(play, sp24->titleTextId);
             }
         }
 

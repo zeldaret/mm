@@ -135,7 +135,7 @@ void func_80ACA184(EnTimeTag* this, PlayState* play) {
 
 void func_80ACA208(EnTimeTag* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actionFunc = func_80ACA268;
     }
 }
@@ -162,16 +162,16 @@ void func_80ACA348(EnTimeTag* this, PlayState* play) {
     }
 
     if (this->actor.home.rot.z != 0) {
-        func_80151938(play, 0x1230);
+        Message_ContinueTextbox(play, 0x1230);
     } else {
-        func_80151938(play, 0x122D);
+        Message_ContinueTextbox(play, 0x122D);
     }
 
     this->actionFunc = func_80ACA418;
 }
 
 void func_80ACA3C0(EnTimeTag* this, PlayState* play) {
-    if ((play->msgCtx.unk11F00->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
+    if ((play->msgCtx.ocarinaStaff->state == 0) && (play->msgCtx.msgMode == 0x1B)) {
         this->actor.home.rot.x = 5;
         this->actionFunc = func_80ACA348;
         play->msgCtx.msgLength = 0;
@@ -188,13 +188,13 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
                     case 0x101D:
                     case 0x101E:
                     case 0x122D:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x101F:
                     case 0x122A:
                     case 0x1230:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80ACA5F8;
                         if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                             ActorCutscene_Stop(this->actor.cutscene);
@@ -202,13 +202,13 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
                         break;
 
                     case 0x122B:
-                        func_80152434(play, 0x3F);
+                        Message_DisplayOcarinaStaff(play, 0x3F);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 0;
                         break;
 
                     case 0x122E:
-                        func_80152434(play, 0x40);
+                        Message_DisplayOcarinaStaff(play, 0x40);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 1;
                         break;

@@ -17,12 +17,12 @@ void Message_FindCreditsMessage(PlayState* play, u16 textId) {
             nextSegment = msgEntry->segment;
             font->messageStart = foundSegment - segment;
             font->messageEnd = nextSegment - foundSegment;
-            return;
+            break;
         }
         msgEntry++;
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/func_8015E7EC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DrawTextCredits.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/func_8015F8A8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DecodeCredits.s")

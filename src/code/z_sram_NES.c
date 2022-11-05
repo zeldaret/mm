@@ -460,7 +460,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     gSaveContext.save.playerData.rupees = 0;
-    gSaveContext.save.unk_F65 = 0;
+    gSaveContext.save.scarecrowSpawnSongSet = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;
@@ -1007,7 +1007,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
             gSaveContext.cycleSceneFlags[i].collectible = gSaveContext.save.permanentSceneFlags[i].collectible;
         }
 
-        if (gSaveContext.save.unk_F65) {
+        if (gSaveContext.save.scarecrowSpawnSongSet) {
             Lib_MemCpy(gScarecrowSpawnSongPtr, gSaveContext.save.scarecrowSpawnSong,
                        sizeof(gSaveContext.save.scarecrowSpawnSong));
 

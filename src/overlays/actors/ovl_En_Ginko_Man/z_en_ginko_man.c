@@ -199,7 +199,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
         case 0x45C: // given 1000 reward
         case 0x45D: // given 5000 reward
             this->isStampChecked = false;
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             EnGinkoMan_SetupBankAward(this);
             EnGinkoMan_BankAward(this, play);
             break;
@@ -270,7 +270,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x470: // "Is that so?  Come back and deposit some after saving up a bunch!"
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->isStampChecked = false;
                 EnGinkoMan_SetupIdle(this); // change to waiting for approach
             }

@@ -383,14 +383,14 @@ void func_80B97194(EnZot* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x125C:
             case 0x125F:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x125D:
             case 0x125E:
             case 0x1260:
             case 0x1261:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97240;
                 break;
         }
@@ -454,36 +454,36 @@ void func_80B973BC(EnZot* this, PlayState* play) {
             case 0x1270:
             case 0x1273:
             case 0x1274:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1272:
-                func_80151938(play, 0x126F);
+                Message_ContinueTextbox(play, 0x126F);
                 break;
 
             case 0x126F:
                 Rupees_ChangeBy(90);
-                func_80151938(play, 0x1270);
+                Message_ContinueTextbox(play, 0x1270);
                 break;
 
             case 0x1275:
                 if (gSaveContext.save.playerData.rupees < 10) {
-                    func_80151938(play, 0x1277);
+                    Message_ContinueTextbox(play, 0x1277);
                 } else {
-                    func_80151938(play, 0x1278);
+                    Message_ContinueTextbox(play, 0x1278);
                     Rupees_ChangeBy(-10);
                 }
                 break;
 
             case 0x1276:
-                func_80151938(play, 0x1275);
+                Message_ContinueTextbox(play, 0x1275);
                 break;
 
             case 0x1271:
             case 0x1277:
             case 0x1278:
             case 0x1279:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80B965D0(this, play);
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
@@ -530,10 +530,10 @@ void func_80B9765C(EnZot* this, PlayState* play) {
             case 0x1267:
             case 0x126A:
             case 0x126B:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97708;
                 break;
         }
@@ -667,7 +667,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
             case 0x1282:
             case 0x1285:
             case 0x1288:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x127D:
@@ -676,7 +676,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
             case 0x1284:
             case 0x1289:
             case 0x128A:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 if (!(this->unk_2F2 & 2)) {
                     this->unk_2F2 |= 2;
                     this->actionFunc = func_80B979DC;
@@ -687,7 +687,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97B5C;
                 break;
         }
@@ -720,7 +720,7 @@ void func_80B97C40(EnZot* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actionFunc = func_80B97CC8;
     }
 }
@@ -772,17 +772,17 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
             case 0x128C:
                 this->unk_2F2 &= ~4;
                 func_80B96BEC(this, 6, ANIMMODE_ONCE);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x128D:
             case 0x128E:
             case 0x128F:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1290:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97D6C;
                 this->unk_2F2 |= 4;
                 func_80B96BEC(this, 3, ANIMMODE_LOOP);
@@ -790,7 +790,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
                 break;
 
             case 0x128B:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97FD0;
                 break;
         }
@@ -955,7 +955,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
         itemActionParam = func_80123810(play);
         if (itemActionParam > PLAYER_AP_NONE) {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
                 Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
                 if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
@@ -969,7 +969,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
             }
             this->actionFunc = func_80B98728;
         } else if (itemActionParam < PLAYER_AP_NONE) {
-            func_80151938(play, 0x12AB);
+            Message_ContinueTextbox(play, 0x12AB);
             this->actionFunc = func_80B98728;
         }
     }
@@ -984,12 +984,12 @@ void func_80B98728(EnZot* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1294);
+                        Message_ContinueTextbox(play, 0x1294);
                         break;
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1298);
+                        Message_ContinueTextbox(play, 0x1298);
                         break;
                 }
             }
@@ -1014,44 +1014,44 @@ void func_80B98728(EnZot* this, PlayState* play) {
                     case 0x12A7:
                     case 0x12A8:
                     case 0x12AE:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x12A9:
                     case 0x12AA:
-                        func_80151938(play, 0xFF);
+                        Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80B985EC;
                         break;
 
                     case 0x1294:
                         if (CURRENT_DAY == 3) {
-                            func_80151938(play, 0x1296);
+                            Message_ContinueTextbox(play, 0x1296);
                         } else {
-                            func_80151938(play, 0x1295);
+                            Message_ContinueTextbox(play, 0x1295);
                         }
                         break;
 
                     case 0x12AB:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B98998;
                         break;
 
                     case 0x12AC:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->unk_2D4 = 2;
                         this->actionFunc = func_80B9854C;
                         func_80B9854C(this, play);
                         break;
 
                     case 0x12AF:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->unk_2D4 = 4;
                         this->actionFunc = func_80B9854C;
                         func_80B9854C(this, play);
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B98998;
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
@@ -1098,25 +1098,25 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
             case 0x12B4:
             case 0x12B7:
             case 0x12B9:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x12B8:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
                 AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             case 0x12BA:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.save.weekEventReg[41] |= 0x20;
                 AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98CA8;
                 break;
         }
@@ -1222,17 +1222,17 @@ void func_80B98F94(EnZot* this, PlayState* play) {
             case 0x12BC:
             case 0x12C0:
             case 0x12C3:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x12BE:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98F30;
                 func_80B98F30(this, play);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B990A4;
                 break;
         }
@@ -1281,9 +1281,9 @@ void func_80B991E4(EnZot* this, PlayState* play) {
 
         if ((temp == 0x12C6) || (temp == 0x12C7) || (temp == 0x12CA) || (temp == 0x12CB)) {
             temp2 = temp;
-            func_80151938(play, temp2 + 1);
+            Message_ContinueTextbox(play, temp2 + 1);
         } else {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
         }

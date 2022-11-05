@@ -245,7 +245,7 @@ s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = transitionType;
     gSaveContext.nextTransitionType = nextTransitionType;
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     return 1;
 }
 
@@ -431,7 +431,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_02;
             gSaveContext.nextTransitionType = TRANS_TYPE_02;
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             func_800B7298(play, &this->actor, 7);
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
@@ -466,7 +466,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
 
         // Keep racing
         func_8019F208();
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_800B7298(play, &this->actor, 6);
         gSaveContext.eventInf[1] &= (u8)~8;
         this->timer = 100;

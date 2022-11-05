@@ -364,9 +364,9 @@ s32 func_80BA3EE8(EnToto* this, PlayState* play) {
 
 s32 func_80BA3F2C(EnToto* this, PlayState* play) {
     if (this->text->textId != 0) {
-        func_80151938(play, this->text->textId);
+        Message_ContinueTextbox(play, this->text->textId);
     } else {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BA3EE8(this, play);
     }
     if (this->text->unk0 == 4) {
@@ -544,7 +544,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, 0x44);
-    func_80152434(play, D_80BA5120[CUR_FORM]);
+    Message_DisplayOcarinaStaff(play, D_80BA5120[CUR_FORM]);
     return 0;
 }
 

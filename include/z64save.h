@@ -275,7 +275,7 @@ typedef struct Save {
     /* 0x0F5C */ u32 regionsVisited;                    // "area_arrival"
     /* 0x0F60 */ u32 worldMapCloudVisibility;           // "cloud_clear"
     /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
-    /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0x0F65 */ u8 scarecrowSpawnSongSet;                            // "oca_rec_flag8"                  scarecrows song set?
     /* 0x0F66 */ u8 scarecrowSpawnSong[128];
     /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"

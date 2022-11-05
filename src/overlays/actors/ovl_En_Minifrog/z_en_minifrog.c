@@ -268,14 +268,14 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
             case 0xD84: // "That look...It is true! Winter was so long that I began to lose all hope."
             case 0xD86: // "Could it be... You came all this way looking for me?"
             case 0xD87: // "Ah! You need not say a thing. Upon seeing that face, I understand!" ...
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0xD82:                                          // "What has brought you all this way?"
                 if (gSaveContext.save.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
-                    func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
+                    Message_ContinueTextbox(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
-                    func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"
+                    Message_ContinueTextbox(play, 0xD86); // "Could it be... You came all this way looking for me?"
                 }
 
                 gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
@@ -285,7 +285,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
 
             case 0xD85: // "I understand. I shall head for the mountains immediately."
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnMinifrog_SpawnDust(this, play);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
@@ -365,10 +365,11 @@ void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, PlayState* play) {
 void EnMinifrog_CheckChoirSuccess(EnMinifrog* this, PlayState* play) {
     this->actionFunc = EnMinifrog_YellowFrogDialog;
     if (this->frog != NULL) {
-        func_80151938(play, 0xD78); // "Unfortunately, it seems not all of our members have gathered."
+        Message_ContinueTextbox(play, 0xD78); // "Unfortunately, it seems not all of our members have gathered."
     } else {
-        func_80151938(play,
-                      0xD7C); // "The conducting was spectacular. And all of our members rose to the occasion!"
+        Message_ContinueTextbox(
+            play,
+            0xD7C); // "The conducting was spectacular. And all of our members rose to the occasion!"
     }
 
     EnMinifrog_SetJumpState(this);
@@ -507,7 +508,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
                     case 1: // No
                         func_8019F230();
-                        func_80151938(play, 0xD7E); // "Let us do it again sometime."
+                        Message_ContinueTextbox(play, 0xD7E); // "Let us do it again sometime."
                         break;
                 }
             }
@@ -519,7 +520,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xD76: // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it looks like
                                 // you've lost a little weight..."
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         gSaveContext.save.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
                         break;
@@ -528,7 +529,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                                 // has come to the mountains..."
                     case 0xD7A: // "And when the great Don Gero has come for us, too...What a pity."
                     case 0xD7F: // "Well, if it isn't the great Don Gero."
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0xD77: // "Let us begin our chorus"
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;
@@ -536,21 +537,21 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
                         if (gSaveContext.save.weekEventReg[35] & 0x80) { // Obtained Heart Piece
-                            func_80151938(play, 0xD7E);
+                            Message_ContinueTextbox(play, 0xD7E);
                         } else {
-                            func_80151938(play, 0xD7D); // Get Heart Piece
+                            Message_ContinueTextbox(play, 0xD7D); // Get Heart Piece
                             gSaveContext.save.weekEventReg[35] |= 0x80;
                         }
                         break;
                     case 0xD7D: // "This is how deeply we were moved by your spectacular conducting..."
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = EnMinifrog_GetFrogHP;
                         EnMinifrog_GetFrogHP(this, play);
                         break;
                     case 0xD7B: // "Where in the world could the other members be, and what could they be doing?"
                     case 0xD7E: // "Let us do it again sometime."
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;

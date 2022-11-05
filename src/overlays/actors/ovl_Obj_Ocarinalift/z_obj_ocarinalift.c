@@ -203,7 +203,7 @@ void func_80AC9AB8(ObjOcarinalift* this) {
 
 void func_80AC9AE0(ObjOcarinalift* this, PlayState* play) {
     if (func_800B8718(&this->dyna.actor, &play->state)) {
-        func_80152434(play, 1);
+        Message_DisplayOcarinaStaff(play, 1);
         func_80AC9B48(this);
     } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         func_800B8804(&this->dyna.actor, play, 40.0f);

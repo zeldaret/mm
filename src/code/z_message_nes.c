@@ -91,7 +91,7 @@ void Message_LoadCharNES(PlayState* play, u8 codePointIndex, s32* offset, f32* a
     Font_LoadCharNES(play, codePointIndex, temp1);
     msgCtx->decodedBuffer.schar[decodedBufPos] = codePointIndex;
     temp1 += FONT_CHAR_TEX_SIZE;
-    temp2 += (16.0f * msgCtx->unk12098);
+    temp2 += (16.0f * msgCtx->textCharScale);
     *offset = temp1;
     *arg3 = temp2;
 }
@@ -128,7 +128,7 @@ void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offse
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 's';
 
-    f += 16.0f * msgCtx->unk12098 * 6.0f;
+    f += 16.0f * msgCtx->textCharScale * 6.0f;
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -152,7 +152,7 @@ void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* of
     }
 
     p--;
-    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.options.language - 1] + 1);
+    f += 16.0f * msgCtx->textCharScale * (D_801D0710[gSaveContext.options.language - 1] + 1);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -191,9 +191,9 @@ void Message_LoadRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32
         Font_LoadCharNES(play, 's', o);
         o += FONT_CHAR_TEX_SIZE;
         msgCtx->decodedBuffer.schar[p] = 's';
-        f += 16.0f * msgCtx->unk12098 * 6.0f;
+        f += 16.0f * msgCtx->textCharScale * 6.0f;
     } else {
-        f += 16.0f * msgCtx->unk12098 * 5.0f;
+        f += 16.0f * msgCtx->textCharScale * 5.0f;
     }
 
     *decodedBufPos = p;
@@ -250,7 +250,7 @@ void Message_LoadTimeNES(PlayState* play, u8 arg1, s32* offset, f32* arg3, s16* 
         }
     }
 
-    f += 5.0f * (16.0f * msgCtx->unk12098);
+    f += 5.0f * (16.0f * msgCtx->textCharScale);
     *decodedBufPos = p - 1;
     *offset = o;
     *arg3 = f;
@@ -282,11 +282,11 @@ void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* de
         }
         currentChar = msgCtx->decodedBuffer.schar[p];
         p++;
-        f += (D_801D0470[currentChar - ' '] * msgCtx->unk12098);
+        f += (D_801D0470[currentChar - ' '] * msgCtx->textCharScale);
     }
 
     p--;
-    f += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
+    f += (stringLimit - 1) * (16.0f * msgCtx->textCharScale);
     *decodedBufPos = p;
     *offset = o;
     *arg2 = f;
@@ -324,6 +324,6 @@ void func_80159438(OSTime time, s16* digits) {
     digits[7] += '0';
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/func_8015966C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DrawTextNES.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/func_8015B198.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DecodeNES.s")

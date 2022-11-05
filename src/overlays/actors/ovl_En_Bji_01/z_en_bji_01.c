@@ -211,21 +211,21 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         func_809CD634(this, play);
                         break;
                     case 1:
                         func_8019F230();
                         switch (gSaveContext.save.playerForm) {
                             case PLAYER_FORM_DEKU:
-                                func_80151938(play, 0x5F0);
+                                Message_ContinueTextbox(play, 0x5F0);
                                 break;
                             case PLAYER_FORM_HUMAN:
-                                func_80151938(play, 0x5F8);
+                                Message_ContinueTextbox(play, 0x5F8);
                                 break;
                             case PLAYER_FORM_GORON:
                             case PLAYER_FORM_ZORA:
-                                func_80151938(play, 0x5E1);
+                                Message_ContinueTextbox(play, 0x5E1);
                                 break;
                         }
                         break;
@@ -238,16 +238,16 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 3, &this->animIndex);
-                        func_80151938(play, 0x5DF);
+                        Message_ContinueTextbox(play, 0x5DF);
                         break;
                     case 0x5E4:
-                        func_80151938(play, 0x5E7);
+                        Message_ContinueTextbox(play, 0x5E7);
                         break;
                     case 0x5E5:
-                        func_80151938(play, 0x5E0);
+                        Message_ContinueTextbox(play, 0x5E0);
                         break;
                     case 0x5E7:
-                        func_80151938(play, 0x5E5);
+                        Message_ContinueTextbox(play, 0x5E5);
                         break;
                     case 0x5DC:
                     case 0x5DD:
@@ -257,11 +257,11 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5EE:
                     case 0x5F2:
                     case 0x5F5:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x5F0:
                     case 0x5F6:
-                        func_80151938(play, 0x5EF);
+                        Message_ContinueTextbox(play, 0x5EF);
                         break;
                     case 0x5E1:
                     case 0x5E8:
@@ -273,7 +273,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5F4:
                     case 0x5F7:
                     case 0x5F8:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                         func_809CCE98(this, play);

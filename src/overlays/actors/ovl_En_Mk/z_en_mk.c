@@ -170,7 +170,7 @@ void func_809596A0(EnMk* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80959774;
             }
             break;
@@ -279,16 +279,16 @@ void func_80959A24(EnMk* this, PlayState* play) {
                     case 0xFA4:
                     case 0xFAA:
                     case 0xFAE:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0xFA2:
                         if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                            func_801477B4(play);
+                            Message_CloseTextbox(play);
                             this->actionFunc = func_80959E18;
                             break;
                         }
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0xFA5:
@@ -303,53 +303,53 @@ void func_80959A24(EnMk* this, PlayState* play) {
                     case 0xFBD:
                     case 0xFBE:
                     case 0xFBF:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80959E18;
                         break;
 
                     case 0xFA0:
                         gSaveContext.save.weekEventReg[19] |= 4;
-                        func_80151938(play, 0xFA1);
+                        Message_ContinueTextbox(play, 0xFA1);
                         break;
 
                     case 0xFA8:
                         gSaveContext.save.weekEventReg[19] |= 8;
                         if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                            func_80151938(play, 0xFBD);
+                            Message_ContinueTextbox(play, 0xFBD);
                             break;
                         }
-                        func_80151938(play, 0xFA9);
+                        Message_ContinueTextbox(play, 0xFA9);
                         break;
 
                     case 0xFAC:
                         gSaveContext.save.weekEventReg[19] |= 0x10;
                         if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                            func_80151938(play, 0xFBE);
+                            Message_ContinueTextbox(play, 0xFBE);
                             break;
                         }
-                        func_80151938(play, 0xFAD);
+                        Message_ContinueTextbox(play, 0xFAD);
                         break;
 
                     case 0xFB1:
                         gSaveContext.save.weekEventReg[19] |= 0x20;
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80959E18;
                         break;
 
                     case 0xFB3:
                     case 0xFB4:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80959E18;
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
 
                     case 0xFB5:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80959E18;
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80959E18;
                         break;
                 }

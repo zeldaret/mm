@@ -624,7 +624,7 @@ void func_80BB2944(EnGeg* this, PlayState* play) {
             this->actionFunc = func_80BB2520;
         } else {
             this->unk_496 = func_80BB16D0(this);
-            func_80151938(play, this->unk_496);
+            Message_ContinueTextbox(play, this->unk_496);
         }
     }
 }
@@ -663,7 +663,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
             this->unk_230 |= 0x10;
             ActorCutscene_StartAndSetFlag(this->unk_498, &this->actor);
             this->unk_496 = 0xD68;
-            func_80151938(play, this->unk_496);
+            Message_ContinueTextbox(play, this->unk_496);
             this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
             if (this->unk_248 >= 0) {
                 this->unk_4AC = 13;

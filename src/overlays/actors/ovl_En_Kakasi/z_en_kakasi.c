@@ -274,8 +274,9 @@ void func_8096FAAC(EnKakasi* this, PlayState* play) {
  * goes off every frame of song teach, but... doing what?
  */
 void func_8096FBB8(EnKakasi* this, PlayState* play) {
-    if (play->msgCtx.unk12048 == 0 || play->msgCtx.unk12048 == 1 || play->msgCtx.unk12048 == 2 ||
-        play->msgCtx.unk12048 == 3 || play->msgCtx.unk12048 == 4) {
+    if (play->msgCtx.lastOcarinaButtonIndex == 0 || play->msgCtx.lastOcarinaButtonIndex == 1 ||
+        play->msgCtx.lastOcarinaButtonIndex == 2 || play->msgCtx.lastOcarinaButtonIndex == 3 ||
+        play->msgCtx.lastOcarinaButtonIndex == 4) {
         // why not 0 < x < 4? fewer branches
         this->unk190++;
     }
@@ -414,7 +415,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if ((this->talkState == Message_GetState(&play->msgCtx)) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         if (this->talkState == TEXT_STATE_5) {
             // bad song input
             if (this->unkState196 == 2 && this->picto.actor.textId == 0x1647) {
@@ -440,7 +441,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                     this->picto.actor.textId = 0x1645;
                 }
 
-                func_80151938(play, this->picto.actor.textId);
+                Message_ContinueTextbox(play, this->picto.actor.textId);
                 return;
 
             } else if (this->picto.actor.textId == 0x165D || this->picto.actor.textId == 0x165F ||
@@ -538,7 +539,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 }
             }
         }
-        func_80151938(play, this->picto.actor.textId);
+        Message_ContinueTextbox(play, this->picto.actor.textId);
     }
 }
 
@@ -559,7 +560,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_80152434(play, 0x35);
+        Message_DisplayOcarinaStaff(play, 0x35);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -674,7 +675,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&player->actor.shape.rot.y, this->picto.actor.yawTowardsPlayer + 0x8000, 5, 1000, 0);
 
     if (this->unk190 == 0) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_800B7298(play, &this->picto.actor, 0x56);
         this->picto.actor.textId = 0x1648;
         Message_StartTextbox(play, (this->picto.actor.textId), &this->picto.actor);
@@ -735,7 +736,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     if ((this->unkState1A8 != 0) && (Message_GetState(&play->msgCtx) == this->talkState) &&
         Message_ShouldAdvance(play)) {
 
-        func_801477B4(play);
+        Message_CloseTextbox(play);
 
         if (this->talkState == TEXT_STATE_5) {
             this->unk190++;
@@ -778,7 +779,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.textId = 0x1661;
             }
         }
-        func_80151938(play, this->picto.actor.textId);
+        Message_ContinueTextbox(play, this->picto.actor.textId);
     }
 }
 
@@ -1100,7 +1101,7 @@ void EnKakasi_RisenDialogue(EnKakasi* this, PlayState* play) {
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 1000, 0);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         EnKakasi_SetupIdleRisen(this);
     }
 }

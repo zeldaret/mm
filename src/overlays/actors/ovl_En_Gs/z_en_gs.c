@@ -249,7 +249,7 @@ void func_80997E4C(EnGs* this, PlayState* play) {
                                 this->unk_210 = this->unk_195 + 0x20F7;
                                 break;
                         }
-                        func_80151938(play, this->unk_210);
+                        Message_ContinueTextbox(play, this->unk_210);
                         break;
 
                     default:
@@ -268,7 +268,7 @@ void func_80997FF0(EnGs* this, PlayState* play) {
 }
 
 void func_80998040(EnGs* this, PlayState* play) {
-    func_80152434(play, 1);
+    Message_DisplayOcarinaStaff(play, 1);
     this->actionFunc = func_8099807C;
 }
 

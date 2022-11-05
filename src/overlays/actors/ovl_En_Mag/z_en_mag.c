@@ -133,7 +133,7 @@ void EnMag_Init(Actor* thisx, PlayState* play) {
     this->mainTitleAlpha = this->subtitleAlpha = this->unk11F32 = this->copyrightAlpha = 0;
 
     this->unk11F02 = 30;
-    this->unk11F00 = this->state = MAG_STATE_INITIAL;
+    this->ocarinaStaff = this->state = MAG_STATE_INITIAL;
 
     if (gSaveContext.hudVisibilityForceButtonAlphasByStatus) {
         this->mainTitleAlpha = 210;
@@ -242,7 +242,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                 if (!EnvFlags_Get(play, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
-                    this->unk11F00 = 0;
+                    this->ocarinaStaff = 0;
                     this->unk11F02 = 30;
                     sInputDelayTimer = 20;
                     gSaveContext.transFadeDuration = 1;

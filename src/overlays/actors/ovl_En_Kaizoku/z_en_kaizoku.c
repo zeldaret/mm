@@ -522,7 +522,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             }
 
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_11);
                 this->unk_598 = 0;
                 this->unk_59C++;
@@ -571,7 +571,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 4:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->unk_598 = 0;
                 this->unk_59C++;
                 func_801A0238(0x7F, 0);
@@ -721,7 +721,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
 
         case 2:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_800B7298(play, &this->picto.actor, 6);
                 ActorCutscene_Stop(this->unk_2D6);
                 this->subCamId = 0;
@@ -793,7 +793,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             }
 
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_18);
                 func_800B7298(play, &this->picto.actor, 0x85);
                 this->unk_5A0 = 0;

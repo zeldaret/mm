@@ -232,7 +232,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (D_80ABBE38[this->guardTextIndex] != 1) {
                 if (D_80ABBE38[this->guardTextIndex] == 2) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     D_80ABBE20 = 2;
                     gSaveContext.save.weekEventReg[12] |= 0x40;
                     EnGuardNuts_Burrow(this, play);
@@ -247,11 +247,11 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
             } else if (this->guardTextIndex != 3) {
                 this->targetHeadPos.x = 0;
                 this->targetHeadPos.y = this->targetHeadPos.x;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->state = GUARD_NUTS_UNK_STATE;
                 this->actionFunc = EnGuardNuts_Unburrow;
             } else {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnGuardNuts_SetupWait(this);
             }
         }

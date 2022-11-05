@@ -678,7 +678,7 @@ void func_80BD9B4C(EnPamera* this, PlayState* play) {
                 break;
             case 0x158E:
             case 0x15A8:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80BD9C70(this, play);
                 break;
         }

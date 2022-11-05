@@ -81,7 +81,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     var_v1 = this->unk14A;
     if (var_v1 == 6) {
         var_v1 = 0xA;
-        if (gSaveContext.save.unk_F65 == 0) {
+        if (!gSaveContext.save.scarecrowSpawnSongSet) {
             return;
         }
     }
@@ -89,7 +89,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
         var_v1 = 0;
     }
     if (func_800B8718(&this->actor, &play->state)) {
-        func_80152434(play, var_v1 + 0x29);
+        Message_DisplayOcarinaStaff(play, var_v1 + 0x29);
         this->actionFunc = func_8093E68C;
     } else {
         yDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
