@@ -171,7 +171,10 @@ typedef struct AnimationContext {
 
 typedef struct {
     /* 0x0 */ AnimationHeaderCommon common;
-    /* 0x4 */ struct PlayerAnimationFrame* segment;
+    /* 0x4 */ union {
+                void* segmentVoid;
+                struct PlayerAnimationFrame* segment;
+            };
 } LinkAnimationHeader; // size = 0x8
 
 typedef struct SkelAnime {
