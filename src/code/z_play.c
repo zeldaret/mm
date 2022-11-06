@@ -696,7 +696,7 @@ void Play_UpdateTransition(PlayState* this) {
                         if (gSaveContext.minigameState == 1) {
                             gSaveContext.minigameState = 3;
                         }
-                    } else { // 1 and 3
+                    } else { // 2
                         STOP_GAMESTATE(&this->state);
                         SET_NEXT_GAMESTATE(&this->state, FileSelect_Init, sizeof(FileSelectState));
                     }
@@ -887,7 +887,7 @@ void Play_UpdateTransition(PlayState* this) {
 
 #ifdef NON_MATCHING
 // Stack issues
-void Play_UpdateGame(PlayState* this) {
+void Play_UpdateMain(PlayState* this) {
     Input* input = this->state.input;
     u8 freezeFlashTimer;
     s32 sp5C = false;
@@ -1023,7 +1023,7 @@ void Play_UpdateGame(PlayState* this) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_UpdateGame.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_UpdateMain.s")
 #endif
 
 void Play_Update(PlayState* this) {
@@ -1048,7 +1048,7 @@ void Play_Update(PlayState* this) {
         BombersNotebook_Update(this, &sBombersNotebook, this->state.input);
         Message_Update(this);
     } else {
-        Play_UpdateGame(this);
+        Play_UpdateMain(this);
     }
 }
 
@@ -1096,7 +1096,7 @@ void Play_PostWorldDraw(PlayState* this) {
 
 #ifdef NON_MATCHING
 // Stack issues and 1 small issue around Play_PostWorldDraw
-void Play_DrawGame(PlayState* this) {
+void Play_DrawMain(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     Lights* sp268;
     Vec3f sp25C;
@@ -1409,7 +1409,7 @@ void Play_DrawGame(PlayState* this) {
     CLOSE_DISPS(this->state.gfxCtx);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_DrawGame.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_DrawMain.s")
 #endif
 
 void Play_Draw(PlayState* this) {
@@ -1449,7 +1449,7 @@ void Play_Draw(PlayState* this) {
         BombersNotebook_Draw(&sBombersNotebook, gfxCtx);
         Message_Draw(this);
     } else {
-        Play_DrawGame(this);
+        Play_DrawMain(this);
     }
 }
 
@@ -2063,7 +2063,7 @@ void Play_Init(GameState* thisx) {
         }
 
         gSaveContext.unk_3CA7 = 1;
-        if (gSaveContext.respawnFlag == ~0x62) {
+        if (gSaveContext.respawnFlag == -0x63) {
             gSaveContext.respawnFlag = 2;
         }
     } else {

@@ -2506,10 +2506,10 @@ asm/non_matchings/code/z_play/Play_DecompressI5ToI8.s,Play_DecompressI5ToI8,0x80
 asm/non_matchings/code/z_play/Play_GetWaterSurface.s,Play_GetWaterSurface,0x801668B4,0x2D
 asm/non_matchings/code/z_play/Play_UpdateWaterCamera.s,Play_UpdateWaterCamera,0x80166968,0x72
 asm/non_matchings/code/z_play/Play_UpdateTransition.s,Play_UpdateTransition,0x80166B30,0x339
-asm/non_matchings/code/z_play/Play_UpdateGame.s,Play_UpdateGame,0x80167814,0x174
+asm/non_matchings/code/z_play/Play_UpdateMain.s,Play_UpdateMain,0x80167814,0x174
 asm/non_matchings/code/z_play/Play_Update.s,Play_Update,0x80167DE4,0x4A
 asm/non_matchings/code/z_play/Play_PostWorldDraw.s,Play_PostWorldDraw,0x80167F0C,0x61
-asm/non_matchings/code/z_play/Play_DrawGame.s,Play_DrawGame,0x80168090,0x347
+asm/non_matchings/code/z_play/Play_DrawMain.s,Play_DrawMain,0x80168090,0x347
 asm/non_matchings/code/z_play/Play_Draw.s,Play_Draw,0x80168DAC,0x6E
 asm/non_matchings/code/z_play/Play_Main.s,Play_Main,0x80168F64,0x5A
 asm/non_matchings/code/z_play/Play_InCsMode.s,Play_InCsMode,0x801690CC,0xD
