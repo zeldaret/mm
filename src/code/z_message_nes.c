@@ -514,7 +514,7 @@ u8 D_801D08CC[] = {
 };
 
 #ifdef NON_EQUIVALENT
-void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
+void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     MessageContext* msgCtx = &play->msgCtx;
     u16 sp13A;
     Font* font = &play->msgCtx.font;
@@ -524,27 +524,17 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
     s16 sp12C;
     s16 sp12A;
     u8 var_t0; // sp54
-    s32 sp50;
-    s32 temp_a0_2;
-    s16 temp_v1_3;
-    u16 temp_s2;
-    s32 temp_v1_7;
-    s32 var_a1;
     u16 i;
     u16 var_v1;
-    u8 temp_v0_18;
     u8 temp_v0_20;
     u8 temp_v0_21;
-    u8 temp_v1_8;
-
-    temp_s2 = textDrawPos;
 
     gfx = *gfxP;
-    play->msgCtx.textPosX = play->msgCtx.unk11F1A[0] + play->msgCtx.unk11FF8;
-    play->msgCtx.textPosY = play->msgCtx.unk11FFA;
+    msgCtx->textPosX = msgCtx->unk11F1A[0] + msgCtx->unk11FF8;
+    msgCtx->textPosY = msgCtx->unk11FFA;
     sp130 = 0;
 
-    if (play->msgCtx.textIsCredits == 0) {
+    if (msgCtx->textIsCredits == 0) {
         msgCtx->textPosY = msgCtx->unk11FFA;
     } else {
         msgCtx->textPosY = 0x30;
@@ -559,7 +549,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
     msgCtx->textColorB = msgCtx->unk120CC;
     sp13A = 0;
 
-    for (i = temp_s2; i < msgCtx->textDrawPos; i++) {
+    for (i = textDrawPos; i < msgCtx->textDrawPos; i++) {
         var_t0 = (u8)msgCtx->decodedBuffer.schar[i];
         switch (var_t0) { /* switch 1 */
             case 0x0:     /* switch 2 */
@@ -639,18 +629,16 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 msgCtx->textPosY = msgCtx->textPosY + msgCtx->unk11FFC;
                 /* fallthrough */
             case 0x13: /* switch 2 */
-                temp_v1_3 = sp130 + 1;
+                sp130++;
 
-                msgCtx->textPosX = msgCtx->unk11F1A[temp_v1_3] + msgCtx->unk11FF8;
-                temp_v0_18 = msgCtx->choiceNum;
-                sp130 = temp_v1_3;
-                if (temp_v0_18 == 1) {
+                msgCtx->textPosX = msgCtx->unk11F1A[sp130] + msgCtx->unk11FF8;
+                if (msgCtx->choiceNum == 1) {
                     if (play->pauseCtx.bombersNotebookOpen == 0) {
                         msgCtx->textPosX += 0x10;
                     } else {
                         msgCtx->textPosX += 0x32;
                     }
-                } else if (temp_v0_18 == 2) {
+                } else if (msgCtx->choiceNum == 2) {
                     if (msgCtx->unk120D8 != 3) {
                         if (play->pauseCtx.bombersNotebookOpen == 0) {
                             msgCtx->textPosX += 0xA;
@@ -673,7 +661,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                     if (msgCtx->textboxSkipped == 0) {
                         play_sound(0);
                         msgCtx->msgMode = 0x41;
-                        Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 0);
+                        Font_LoadMessageBoxEndIcon(font, 0);
                     } else {
                         msgCtx->msgMode = 4;
                         msgCtx->textUnskippable = 0;
@@ -687,21 +675,22 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 return;
 
             case 0x17: /* switch 2 */
-                if ((msgCtx->textDrawPos == (i + 1)) &&
-                    ((msgCtx->msgMode == 6) || ((msgCtx->msgMode >= 0xA) && (msgCtx->msgMode < 0x27)))) {
+                if (msgCtx->textDrawPos == (i + 1)) {
                     var_v1 = i;
-                    while (true) {
-                        //temp_v0_20 = msgCtx->decodedBuffer.schar[var_v1];
-                        if ((msgCtx->decodedBuffer.schar[var_v1] != 0x18) && (msgCtx->decodedBuffer.schar[var_v1] != 0x1A) && (msgCtx->decodedBuffer.schar[var_v1] != 0x19) &&
-                            (msgCtx->decodedBuffer.schar[var_v1] != 0xE0) && (msgCtx->decodedBuffer.schar[var_v1] != 0x10) && (msgCtx->decodedBuffer.schar[var_v1] != 0x12)) {
-                            var_v1++;
-                            continue;
+                    if ((msgCtx->msgMode == 6) || ((msgCtx->msgMode >= 0xA) && (msgCtx->msgMode < 0x27))) {
+                        while (true) {
+                            //temp_v0_20 = msgCtx->decodedBuffer.schar[var_v1];
+                            if ((msgCtx->decodedBuffer.schar[var_v1] != 0x18) && (msgCtx->decodedBuffer.schar[var_v1] != 0x1A) && (msgCtx->decodedBuffer.schar[var_v1] != 0x19) &&
+                                (msgCtx->decodedBuffer.schar[var_v1] != 0xE0) && (msgCtx->decodedBuffer.schar[var_v1] != 0x10) && (msgCtx->decodedBuffer.schar[var_v1] != 0x12)) {
+                                var_v1++;
+                                continue;
+                            }
+                            break;
                         }
-                        break;
-                    }
 
-                    i = var_v1 - 1;
-                    msgCtx->textDrawPos = i + 1;
+                        i = var_v1 - 1;
+                        msgCtx->textDrawPos = i + 1;
+                    }
                 }
                 continue;
 
@@ -710,8 +699,8 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
 
             case 0x1B: /* switch 2 */
                 if (msgCtx->msgMode == 6) {
-                    msgCtx->stateTimer = ((u8)msgCtx->decodedBuffer.schar[++i] << 8) |
-                                         (u8)msgCtx->decodedBuffer.schar[++i];
+                    msgCtx->stateTimer = (msgCtx->decodedBuffer.schar[++i] << 8) |
+                                         msgCtx->decodedBuffer.schar[++i];
                     msgCtx->msgMode = 8;
                 }
                 *gfxP = gfx;
@@ -727,7 +716,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                     }
                     msgCtx->stateTimer = ((u8)msgCtx->decodedBuffer.schar[++i] << 8) |
                                          (u8)msgCtx->decodedBuffer.schar[++i];
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1U);
+                    Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == 0) {
                         func_8011552C(play, 3);
                     }
@@ -741,7 +730,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                     msgCtx->textboxEndType = 0x52;
                     msgCtx->stateTimer = ((u8)msgCtx->decodedBuffer.schar[++i] << 8) |
                                          (u8)msgCtx->decodedBuffer.schar[++i];
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1);
+                    Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == 0) {
                         func_8011552C(play, 3);
                     }
@@ -750,22 +739,16 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 return;
 
             case 0x1E: /* switch 2 */
-                temp_v1_7 = i + 1;
-                var_a1 = i;
-
-                if (msgCtx->textDrawPos == temp_v1_7) {
+                if ((i + 1) == msgCtx->textDrawPos) {
                     if (msgCtx->msgMode == 6) {
-                        sp50 = i;
                         play_sound(
-                            ((msgCtx->decodedBuffer.schar[i + 1] << 8) | msgCtx->decodedBuffer.schar[i + 2]) &
-                            0xFFFF);
-                        var_a1 = sp50;
+                            (msgCtx->decodedBuffer.schar[i + 1] << 8) | msgCtx->decodedBuffer.schar[i + 2]);
                     }
                 }
-                if (msgCtx->textDrawPos == temp_v1_7) {
+                if ((i + 1) == msgCtx->textDrawPos) {
                     msgCtx->textDrawPos = msgCtx->textDrawPos + 2;
                 }
-                i = (var_a1 + 2);
+                i += 2;
                 continue;
 
             case 0x1F: /* switch 2 */
@@ -844,6 +827,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 // gfx = temp_t8_2 + 8;
                 // temp_t8_2->words.w1 = 0x0017C0BC;
                 // temp_t8_2->words.w0 = 0xF2000000;
+
                 gDPPipeSync(gfx++);
                 gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                 gDPSetPrimColor(gfx++, 0, 0, 0x00, 0x00, 0x00, msgCtx->textColorAlpha);
@@ -1014,6 +998,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                                     (msgCtx->textPosX + 0xC0) << 2, (msgCtx->unk12012 + 0x30) << 2, G_TX_RENDERTILE, 0,
                                     0, 0x0400, 0x0400);
 
+            
                 // temp_t8_6 = gfx;
                 // gfx = temp_t8_6 + 8;
                 // temp_t8_6->words.w1 = 0x00000000;
@@ -1036,7 +1021,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 if (msgCtx->msgMode == 6) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 2U);
+                    Font_LoadMessageBoxEndIcon(font, 2U);
                     if (msgCtx->unk120D8 != 3) {
                         msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 0xE);
                         msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x1A);
@@ -1051,7 +1036,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 if (msgCtx->msgMode == 6) {
                     msgCtx->choiceTextId = msgCtx->currentTextId;
                     msgCtx->stateTimer = 4;
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 2U);
+                    Font_LoadMessageBoxEndIcon(font, 2U);
                     if (msgCtx->unk120D8 != 3) {
                         msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 0xE);
                         msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x1A);
@@ -1063,7 +1048,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 msgCtx->textboxEndType = 0x60;
 
                 if (msgCtx->msgMode == 6) {
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1U);
+                    Font_LoadMessageBoxEndIcon(font, 1U);
                 }
                 continue;
 
@@ -1071,7 +1056,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 msgCtx->textboxEndType = 0x61;
 
                 if (msgCtx->msgMode == 6) {
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1U);
+                    Font_LoadMessageBoxEndIcon(font, 1U);
                 }
                 continue;
 
@@ -1079,7 +1064,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 msgCtx->textboxEndType = 0x62;
 
                 if (msgCtx->msgMode == 6) {
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1U);
+                    Font_LoadMessageBoxEndIcon(font, 1U);
                 }
                 continue;
 
@@ -1088,7 +1073,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 if (msgCtx->msgMode == 6) {
                     msgCtx->msgMode = 0x42;
                     msgCtx->textboxEndType = 0x41;
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 0U);
+                    Font_LoadMessageBoxEndIcon(font, 0U);
                     play_sound(0x482EU);
                 }
                 continue;
@@ -1097,7 +1082,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 msgCtx->textboxEndType = 0x63;
 
                 if (msgCtx->msgMode == 6) {
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1U);
+                    Font_LoadMessageBoxEndIcon(font, 1U);
                 }
                 continue;
 
@@ -1141,7 +1126,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 if (msgCtx->msgMode == 6) {
                     msgCtx->msgMode = 0x42;
                     msgCtx->textboxEndType = 0x40;
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 0U);
+                    Font_LoadMessageBoxEndIcon(font, 0U);
                     play_sound(0x482EU);
                 }
                 *gfxP = gfx;
@@ -1151,7 +1136,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                 if (msgCtx->msgMode == 6) {
                     msgCtx->msgMode = 0x42;
                     msgCtx->textboxEndType = 0x42;
-                    Font_LoadMessageBoxEndIcon(&play->msgCtx.font, 1U);
+                    Font_LoadMessageBoxEndIcon(font, 1U);
                     play_sound(0x482EU);
                 }
                 *gfxP = gfx;
@@ -1216,18 +1201,17 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos) {
                         msgCtx->textPosX += (s32)(15.0f * msgCtx->textCharScale);
                         break;
                     default: /* switch 5 */
-                        temp_v1_8 = msgCtx->textboxEndType;
-                        if (((temp_v1_8 == 0x62) && ((i < msgCtx->unk120C0) == 0) &&
+                        if (((msgCtx->textboxEndType == 0x62) && ((i < msgCtx->unk120C0) == 0) &&
                              ((msgCtx->unk120C0 + 4) >= i)) ||
-                            ((temp_v1_8 == 0x63) && ((i < msgCtx->unk120C0) == 0) &&
+                            ((msgCtx->textboxEndType == 0x63) && ((i < msgCtx->unk120C0) == 0) &&
                              ((msgCtx->unk120C0 + 2) >= i)) ||
-                            ((temp_v1_8 == 0x60) && ((i < msgCtx->unk120C0) == 0) &&
+                            ((msgCtx->textboxEndType == 0x60) && ((i < msgCtx->unk120C0) == 0) &&
                              ((msgCtx->unk120C0 + 2) >= i)) ||
-                            ((temp_v1_8 == 0x61) && ((i < msgCtx->unk120C0) == 0) &&
+                            ((msgCtx->textboxEndType == 0x61) && ((i < msgCtx->unk120C0) == 0) &&
                              ((msgCtx->unk120C0 + 1) >= i))) {
                             msgCtx->textPosX += (s32)(16.0f * msgCtx->textCharScale);
                         } else {
-                            msgCtx->textPosX += (s32)(*(D_801D0470 + (var_t0) - ' ') * msgCtx->textCharScale);
+                            msgCtx->textPosX += (s32)(D_801D0470[var_t0 - ' '] * msgCtx->textCharScale);
                         }
                         break;
                 }

@@ -2213,7 +2213,7 @@ void Message_Draw(PlayState* play);
 void Message_Update(PlayState* play);
 void Message_Init(PlayState* play);
 void Message_FindMessageNES(PlayState* play, u16 textId);
-void Message_DrawTextNES(PlayState* play, Gfx** gfxP, s32 textDrawPos);
+void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos);
 void Message_DecodeNES(PlayState* play);
 void Message_FindCreditsMessage(PlayState* play, u16 textId);
 void Message_DrawTextCredits(PlayState* play, Gfx** gfxP);
