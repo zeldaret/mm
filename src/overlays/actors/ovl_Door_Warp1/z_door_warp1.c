@@ -762,7 +762,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
         }
     } else if (DOORWARP1_GET_FF00_1(&this->dyna.actor) != 0xFF) {
         if (DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_6) {
-            gSaveContext.respawnFlag = ~1;
+            gSaveContext.respawnFlag = -2;
         }
         play->nextEntrance = play->setupExitList[DOORWARP1_GET_FF00_3(&this->dyna.actor)];
         Scene_SetExitFade(play);
