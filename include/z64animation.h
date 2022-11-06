@@ -16,7 +16,9 @@ struct PlayerAnimationFrame;
 #define LIMB_DONE 0xFF
 #define ANIMATION_ENTRY_MAX 50
 
+#define ANIM_FLAG_1         (1 << 0)
 #define ANIM_FLAG_UPDATEY   (1 << 1)
+#define ANIM_FLAG_4         (1 << 2)
 #define ANIM_FLAG_NOMOVE    (1 << 4)
 
 typedef enum AnimationMode {
