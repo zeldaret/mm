@@ -75,7 +75,7 @@ void func_809CCDE0(EnBji01* this, PlayState* play) {
     s32 pad[2];
 
     Math_Vec3f_Copy(&pitchTarget, &player->actor.world.pos);
-    pitchTarget.y = player->bodyPartsPos[7].y + 3.0f;
+    pitchTarget.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     SubS_TrackPointStep(&this->actor.world.pos, &this->actor.focus.pos, this->actor.shape.rot.y,
                         &player->actor.world.pos, &pitchTarget, &this->headZRotStep, &this->headXRotStep,
                         &this->torsoZRotStep, &this->torsoXRotStep, 0x1554, 0x1FFE, 0xE38, 0x1C70);

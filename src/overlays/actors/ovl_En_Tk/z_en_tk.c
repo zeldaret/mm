@@ -657,7 +657,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         }
 
         Math_Vec3f_Copy(&sp44, &player->actor.world.pos);
-        sp44.y = player->bodyPartsPos[7].y + 3.0f;
+        sp44.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         temp_v0 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp44);
         if (ABS(temp_v0) < 0x800) {
             Math_SmoothStepToS(&this->unk_31A, temp_v0, 3, 0x16C, 0);
