@@ -31,7 +31,6 @@ extern s16 sTextboxWidth;
 extern s16 D_801CFF94[];
 
 extern u8 D_801C6A70;
-extern s32 D_801F6B08;
 
 extern s16 D_801CFF70[];
 extern s16 D_801CFF7C[];
@@ -53,27 +52,31 @@ extern s16 D_801CFD3C;
 extern s16 D_801CFD40;
 extern s16 D_801CFD44;
 
-extern s32 sCharTexSize;
-extern s32 sCharTexScale;
-
-extern u16 D_801C6AB8[];
-extern u16 D_801C6B28[];
-extern s16 sOcarinaEffectActorIds[];
-extern s32 sOcarinaEffectActorParams[];
-extern s16 sOcarinaButtonAPrimR;
-extern s16 sOcarinaButtonAPrimB;
-extern s16 sOcarinaButtonAPrimG;
-extern s16 sOcarinaButtonAEnvR;
-extern s16 sOcarinaButtonAEnvB;
-extern s16 sOcarinaButtonAEnvG;
-extern s16 sOcarinaButtonCPrimR;
-extern s16 sOcarinaButtonCPrimB;
-extern s16 sOcarinaButtonCPrimG;
-extern s16 sOcarinaButtonCEnvR;
-extern s16 sOcarinaButtonCEnvB;
-extern s16 sOcarinaButtonCEnvG;
 extern MessageTableEntry D_801C6B98[];
 extern MessageTableEntry D_801CFB08[];
+extern s16 sOcarinaEffectActorIds[];
+extern u16 D_801C6B28[];
+extern u16 D_801C6AB8[];
+extern s32 sOcarinaEffectActorParams[];
+
+// bss
+
+s32 sCharTexSize;
+s32 sCharTexScale;
+s32 D_801F6B08;
+
+s16 sOcarinaButtonAPrimR;
+s16 sOcarinaButtonAPrimB;
+s16 sOcarinaButtonAPrimG;
+s16 sOcarinaButtonAEnvR;
+s16 sOcarinaButtonAEnvB;
+s16 sOcarinaButtonAEnvG;
+s16 sOcarinaButtonCPrimR;
+s16 sOcarinaButtonCPrimB;
+s16 sOcarinaButtonCPrimG;
+s16 sOcarinaButtonCEnvR;
+s16 sOcarinaButtonCEnvB;
+s16 sOcarinaButtonCEnvG;
 
 void Message_ResetOcarinaButtonAlphas(void) {
     sOcarinaButtonIndexBuf[0] = OCARINA_BTN_INVALID;
