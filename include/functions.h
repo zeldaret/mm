@@ -1387,7 +1387,7 @@ void func_800FD928(s32 param_1);
 void func_800FE390(PlayState* play);
 void func_800FE3E0(PlayState* play);
 void func_800FE484(void);
-void func_800FE498(void);
+s32 func_800FE498(void);
 // void func_800FE4A8(void);
 u32 func_800FE4B8(PlayState* play);
 s32 func_800FE590(PlayState* play);

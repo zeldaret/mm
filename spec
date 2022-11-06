@@ -2670,9 +2670,7 @@ beginseg
     name "ovl_En_Test3"
     compress
     include "build/src/overlays/actors/ovl_En_Test3/z_en_test3.o"
-    include "build/data/ovl_En_Test3/ovl_En_Test3.data.o"
-    include "build/data/ovl_En_Test3/ovl_En_Test3.bss.o"
-    include "build/data/ovl_En_Test3/ovl_En_Test3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Test3/ovl_En_Test3_reloc.o"
 endseg
 
 beginseg
@@ -2948,8 +2946,7 @@ beginseg
     name "ovl_En_Egol"
     compress
     include "build/src/overlays/actors/ovl_En_Egol/z_en_egol.o"
-    include "build/data/ovl_En_Egol/ovl_En_Egol.data.o"
-    include "build/data/ovl_En_Egol/ovl_En_Egol.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Egol/ovl_En_Egol_reloc.o"
 endseg
 
 beginseg
@@ -3011,8 +3008,7 @@ beginseg
     name "ovl_En_Estone"
     compress
     include "build/src/overlays/actors/ovl_En_Estone/z_en_estone.o"
-    include "build/data/ovl_En_Estone/ovl_En_Estone.data.o"
-    include "build/data/ovl_En_Estone/ovl_En_Estone.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Estone/ovl_En_Estone_reloc.o"
 endseg
 
 beginseg
@@ -3125,8 +3121,7 @@ beginseg
     name "ovl_En_Egblock"
     compress
     include "build/src/overlays/actors/ovl_En_Egblock/z_en_egblock.o"
-    include "build/data/ovl_En_Egblock/ovl_En_Egblock.data.o"
-    include "build/data/ovl_En_Egblock/ovl_En_Egblock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Egblock/ovl_En_Egblock_reloc.o"
 endseg
 
 beginseg
