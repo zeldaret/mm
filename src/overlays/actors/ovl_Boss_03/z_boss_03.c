@@ -7,10 +7,6 @@
 /**
  * Some notes:
  *
- * Global flags:
- * - gSaveContext.eventInf[5] & 0x40: Enabled when Gyorg's intro cutscene has been watched
- * - gSaveContext.save.weekEventReg[55] & 0x80: Checked to know if Gyorg has been defeated
- *
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
  * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them
@@ -454,7 +450,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Vec3f sp70;
 
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
                            0, ENDOORWARP1_FF_1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
@@ -520,8 +516,8 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
                        GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
-    // gSaveContext.eventInf[5] & 0x40: intro cutscene already watched
-    if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x40)) {
+    // CHECK_EVENTINF(EVENTINF_56): intro cutscene already watched
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
         Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
@@ -1378,7 +1374,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                 func_809E344C(this, play);
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
 
-                gSaveContext.eventInf[5] |= 0x40;
+                SET_EVENTINF(EVENTINF_56);
             }
             break;
     }
