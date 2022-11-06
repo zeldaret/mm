@@ -476,16 +476,17 @@ s32 EnOsn_GetInitialText(EnOsn* this, PlayState* play) {
                 if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
                     (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
+                } else {
+                    return 0x1FCD;
                 }
-                return 0x1FCD;
             }
             this->stateFlags |= OSN_STATE_MET_GORON;
-            if (gSaveContext.save.weekEventReg[76] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_20)) {
                 return 0x1FC8;
+            } else {
+                SET_WEEKEVENTREG(WEEKEVENTREG_76_20);
+                return 0x1FCE;
             }
-
-            gSaveContext.save.weekEventReg[76] |= 0x20;
-            return 0x1FCE;
         }
 
         if (player->transformation == PLAYER_FORM_ZORA) {
@@ -497,11 +498,12 @@ s32 EnOsn_GetInitialText(EnOsn* this, PlayState* play) {
                 }
                 return 0x1FCD;
             }
+
             this->stateFlags |= OSN_STATE_MET_ZORA;
-            if (gSaveContext.save.weekEventReg[76] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_40)) {
                 return 0x1FC8;
             }
-            gSaveContext.save.weekEventReg[76] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_40);
             return 0x1FD0;
         }
 

@@ -7,7 +7,8 @@
         <Texture Name="object_test3_Tex_000800" OutName="tex_000800" Format="ci8" Width="8" Height="8" Offset="0x800" />
         <Texture Name="object_test3_Tex_000840" OutName="tex_000840" Format="ci8" Width="8" Height="16" Offset="0x840" />
         <Texture Name="object_test3_Tex_0008C0" OutName="tex_0008C0" Format="ci8" Width="16" Height="16" Offset="0x8C0" />
-        <!-- <Blob Name="object_test3_Blob_0009C0" Size="0xC00" Offset="0x9C0" /> -->
+        <Texture Name="object_test3_Tex_0009C0" OutName="tex_0009C0" Format="ci8" Width="32" Height="32" Offset="0x9C0" />
+        <Texture Name="object_test3_Tex_000DC0" OutName="tex_000DC0" Format="ci8" Width="64" Height="32" Offset="0xDC0" />
         <Texture Name="object_test3_Tex_0015C0" OutName="tex_0015C0" Format="ci8" Width="8" Height="16" Offset="0x15C0" />
         <Texture Name="object_test3_Tex_001640" OutName="tex_001640" Format="ci8" Width="16" Height="16" Offset="0x1640" />
         <Texture Name="object_test3_Tex_001740" OutName="tex_001740" Format="ci8" Width="32" Height="32" Offset="0x1740" />
@@ -17,7 +18,16 @@
         <Texture Name="object_test3_Tex_002180" OutName="tex_002180" Format="rgba16" Width="32" Height="64" Offset="0x2180" />
         <Texture Name="object_test3_Tex_003180" OutName="tex_003180" Format="ci8" Width="16" Height="64" Offset="0x3180" />
         <Texture Name="object_test3_Tex_003580" OutName="tex_003580" Format="ci8" Width="16" Height="16" Offset="0x3580" />
-        <!-- <Blob Name="object_test3_Blob_003680" Size="0x4400" Offset="0x3680" /> -->
+        <Texture Name="object_test3_Tex_003680" OutName="tex_003680" Format="ci8" Width="64" Height="32" Offset="0x3680" />
+        <Texture Name="object_test3_Tex_003E80" OutName="tex_003E80" Format="ci8" Width="64" Height="32" Offset="0x3E80" />
+        <Texture Name="object_test3_Tex_004680" OutName="tex_004680" Format="ci8" Width="64" Height="32" Offset="0x4680" />
+        <Texture Name="object_test3_Tex_004E80" OutName="tex_004E80" Format="ci8" Width="64" Height="32" Offset="0x4E80" />
+        <Texture Name="object_test3_Tex_005680" OutName="tex_005680" Format="ci8" Width="64" Height="32" Offset="0x5680" />
+        <Texture Name="object_test3_Tex_005E80" OutName="tex_005E80" Format="ci8" Width="64" Height="32" Offset="0x5E80" />
+        <Texture Name="object_test3_Tex_006680" OutName="tex_006680" Format="ci8" Width="64" Height="32" Offset="0x6680" />
+        <Texture Name="object_test3_Tex_006E80" OutName="tex_006E80" Format="ci8" Width="32" Height="32" Offset="0x6E80" />
+        <Texture Name="object_test3_Tex_007280" OutName="tex_007280" Format="ci8" Width="32" Height="32" Offset="0x7280" />
+        <Texture Name="object_test3_Tex_007680" OutName="tex_007680" Format="ci8" Width="32" Height="32" Offset="0x7680" />
         <DList Name="object_test3_DL_00BF10" Offset="0xBF10" />
         <DList Name="object_test3_DL_00C198" Offset="0xC198" />
         <DList Name="object_test3_DL_00C300" Offset="0xC300" />

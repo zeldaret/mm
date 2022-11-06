@@ -103,12 +103,13 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
     thisx->targetMode = 6;
+
     this->eyeIndex = 0;
     this->blinkTimer = 0;
     this->textId = 0;
     this->talkFlags = TALK_FLAG_NONE;
     this->isInCutscene = false;
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
         EnHgo_SetupTalk(this);
     } else {
         thisx->draw = NULL;
@@ -221,7 +222,7 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 break;
 
             case 0x1590:
-                if (gSaveContext.save.weekEventReg[14] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
                     Message_StartTextbox(play, 0x1591, &this->actor);
                     this->textId = 0x1591;
                     break;
@@ -341,7 +342,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         return true;
     }
 
-    if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
+    if ((play->csCtx.state == CS_STATE_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
         (this->actionFunc == EnHgo_DoNothing)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,

@@ -121,34 +121,34 @@ void func_809CD028(EnBji01* this, PlayState* play) {
         case SHIKASHI_TYPE_FINISHED_CONVERSATION:
             switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if (gSaveContext.save.weekEventReg[17] & 0x10) {
-                        if (gSaveContext.save.weekEventReg[74] & 0x80) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_10)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
                             this->textId = 0x5F4;
                         } else {
                             this->textId = 0x5E2;
                         }
                     } else {
                         this->textId = 0x5EC;
-                        gSaveContext.save.weekEventReg[17] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_17_10);
                     }
                     break;
                 case PLAYER_FORM_HUMAN:
                     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
-                    } else if (gSaveContext.save.weekEventReg[74] & 0x10) {
+                    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_10)) {
                         this->textId = 0x5F6;
                     } else {
                         this->textId = 0x5F5;
-                        gSaveContext.save.weekEventReg[74] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_74_10);
                     }
                     break;
                 case PLAYER_FORM_GORON:
                 case PLAYER_FORM_ZORA:
-                    if (gSaveContext.save.weekEventReg[75] & 8) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_08)) {
                         this->textId = 0x5E4;
                     } else {
                         this->textId = 0x5DC;
-                        gSaveContext.save.weekEventReg[75] |= 8;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_75_08);
                     }
                     break;
             }
@@ -156,7 +156,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
         case SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE:
             switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
-                    if (gSaveContext.save.weekEventReg[74] & 0x80) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
                         this->textId = 0x5F2;
                     } else {
                         this->textId = 0x5F1;

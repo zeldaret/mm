@@ -213,7 +213,7 @@ typedef enum {
     /* 13 */ OCARINA_INSTRUMENT_PIANO,
     /* 14 */ OCARINA_INSTRUMENT_BASS_GUITAR,
     /* 15 */ OCARINA_INSTRUMENT_BABY_SINGING,
-    /* 16 */ OCARINA_INSTRUMENT_AMPLIFIED_GUITAR // Related to (gSaveContext.weekEventReg[41] & 0x20)
+    /* 16 */ OCARINA_INSTRUMENT_AMPLIFIED_GUITAR // Related to WEEKEVENTREG_41_20
 } OcarinaInstrumentId;
 
 typedef enum {

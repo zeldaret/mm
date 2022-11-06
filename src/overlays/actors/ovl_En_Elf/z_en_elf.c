@@ -1416,7 +1416,7 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
                                 if (!gSaveContext.save.isNight) {
                                     Message_ContinueTextbox(play, 0x248);
                                 } else if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) &&
-                                           (gSaveContext.save.weekEventReg[74] & 0x20)) {
+                                           CHECK_WEEKEVENTREG(WEEKEVENTREG_74_20)) {
                                     Message_ContinueTextbox(play, 0x225);
                                 } else {
                                     Message_ContinueTextbox(play, 0x249);
