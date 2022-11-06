@@ -1474,7 +1474,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
     }
     if (((this->action == EYEGORE_ACTION_LASER) && (this->laserState >= EYEGORE_LASER_FIRE)) || this->chargingLaser) {
         func_8012C2DC(play->state.gfxCtx);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         if (!this->chargingLaser) {
             s32 i;
             f32 laserLightScaleMod;
@@ -1494,7 +1494,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
                                 laserLightAlpha);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 Matrix_Pop();
                 laserLightScaleMod = 3.0f;
                 laserLightAlpha = 200.0f;
@@ -1509,7 +1509,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
             Matrix_RotateZS(this->chargeLightRot, MTXMODE_APPLY);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
             Matrix_Pop();
         }
     }
