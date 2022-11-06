@@ -1105,7 +1105,7 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             func_8094E054(this, play, 0);
         } else {
             func_8094E054(this, play, 9);
-            this->skelAnime.moveFlags = 0x10;
+            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
@@ -1181,7 +1181,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         } else {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
             func_8094E054(this, play, 9);
-            this->skelAnime.moveFlags = 0x10;
+            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_400 = 0;
         this->unk_3A4 |= 0x100;
