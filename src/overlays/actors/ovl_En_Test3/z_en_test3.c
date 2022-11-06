@@ -455,7 +455,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.unk_A86 = -1;
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
-    this->player.itemActionParam = PLAYER_AP_NONE;
+    this->player.heldItemAction = PLAYER_IA_NONE;
     this->player.heldItemId = ITEM_OCARINA;
 
     Player_SetModelGroup(&this->player, 3);
@@ -1021,7 +1021,7 @@ void func_80A40908(EnTest3* this, PlayState* play) {
         func_80151BB4(play, 0x19);
         func_80151BB4(play, 2);
     } else {
-        func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         this->unk_D78 = &D_80A41854[6];
         this->player.actor.textId = this->unk_D78->textId;
         this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
