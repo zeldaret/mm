@@ -1222,7 +1222,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             CLOSE_DISPS(play->state.gfxCtx);
         }
     } else {
-        func_80128B74(play, &this->player, limbIndex);
+        Player_SetFeetPos(play, &this->player, limbIndex);
     }
 }
 

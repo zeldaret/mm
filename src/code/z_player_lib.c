@@ -2012,11 +2012,11 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
         sPlayerCurBodyPartPos = &player->bodyPartsPos[-1];
 
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
-            if (!(player->skelAnime.moveFlags & 4) || (player->skelAnime.moveFlags & 1)) {
+            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_1)) {
                 pos->x *= player->ageProperties->unk_08;
                 pos->z *= player->ageProperties->unk_08;
             }
-            if (!(player->skelAnime.moveFlags & 4) || (player->skelAnime.moveFlags & 2)) {
+            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATEY)) {
                 pos->y *= player->ageProperties->unk_08;
             }
         }
@@ -2180,11 +2180,11 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             } else if ((sPlayerLeftHandType == PLAYER_MODELTYPE_LH_4) && (player->stateFlags1 & PLAYER_STATE1_2000000)) {
                 var_a0 = &gPlayerLeftHandOpenDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_OPEN;
-            } else if ((player->leftHandType == 0) && (player->actor.speedXZ > 2.0f) &&
+            } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_OPEN) && (player->actor.speedXZ > 2.0f) &&
                        !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
                 var_a0 = &gPlayerLeftHandClosedDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_CLOSED;
-            } else if ((player->leftHandType == 2) && (player->transformation == PLAYER_FORM_HUMAN) &&
+            } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_ONE_HAND_SWORD) && (player->transformation == PLAYER_FORM_HUMAN) &&
                        ((temp_v1 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD), temp_v1 != 0))) {
                 var_a0 = &D_801C018C[2 * ((temp_v1 - 1) ^ 0)];
             } else {
@@ -2232,11 +2232,11 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 
                 if (sPlayerRightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
-                        if (player->currentShield != 0) {
+                        if (player->currentShield != PLAYER_SHIELD_NONE) {
                             var_v1 = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
                         }
                     }
-                } else if ((player->rightHandType == 6) && (player->actor.speedXZ > 2.0f) &&
+                } else if ((player->rightHandType == PLAYER_MODELTYPE_RH_OPEN) && (player->actor.speedXZ > 2.0f) &&
                            (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
                     var_v1 = &gPlayerRightHandClosedDLs[D_801F59E0];
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
@@ -2261,7 +2261,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 s32 temp_a0 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
 
                 if (temp_a0 != 0) {
-                    if ((player->sheathType == 0xE) || (player->sheathType == 0xC)) {
+                    if ((player->sheathType == PLAYER_MODELTYPE_SHEATH_14) || (player->sheathType == PLAYER_MODELTYPE_SHEATH_12)) {
                         var_v1_2 = &gPlayerSheathedSwords[2 * ((temp_a0 - 1) ^ 0)];
                     } else {
                         var_v1_2 = &gPlayerSwordSheaths[2 * ((temp_a0 - 1) ^ 0)];
@@ -2994,69 +2994,6 @@ Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
     { 0.0f, 20.0f, -60.0f },     // PLAYER_FORM_DEKU
     { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_HUMAN
 };
-Vec3f D_801C0D24[PLAYER_FORM_MAX] = {
-    { 200.0f, 300.0f, 0.0f }, // PLAYER_FORM_FIERCE_DEITY
-    { 200.0f, 200.0f, 0.0f }, // PLAYER_FORM_GORON
-    { 200.0f, 300.0f, 0.0f }, // PLAYER_FORM_ZORA
-    { 200.0f, 150.0f, 0.0f }, // PLAYER_FORM_DEKU
-    { 200.0f, 200.0f, 0.0f }, // PLAYER_FORM_HUMAN
-};
-Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
-Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
-
-f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
-    0.0f,    // PLAYER_MELEEWEAPON_NONE              // Player is not holding a melee weapon
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI      // PLAYER_IA_SWORD_KOKIRI
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR       // PLAYER_IA_SWORD_RAZOR
-    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED      // PLAYER_IA_SWORD_GILDED
-    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY // PLAYER_IA_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_MELEEWEAPON_STICK             // PLAYER_IA_STICK
-    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS         // PLAYER_IA_ZORA_FINS
-};
-
-Gfx* D_801C0D94 = object_link_child_DL_017818;
-
-f32 D_801C0D98 = -35.0f;
-f32 D_801C0D9C = -395.0f;
-f32 D_801C0DA0 = 0.0f;
-
-f32 D_801C0DA4 = 0.0f;
-
-Vec3f D_801C0DA8[4] = {
-    { -4500.0f, -3000.0f, -600.0f },
-    { 1500.0f, -3000.0f, -600.0f },
-    { -4500.0f, 3000.0f, -600.0f },
-    { 1500.0f, 3000.0f, -600.0f },
-};
-
-Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
-Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
-Gfx* D_801C0DF0[] = {
-    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
-    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
-};
-
-Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
-    { 140.0f, -130.0f }, { 0.0f, -200.0f }, { -160.0f, 0.0f }, { 220.0f, -200.0f }, { 0.0f, 0.0f },
-};
-
-Gfx* D_801C0E2C[] = {
-    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
-    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
-};
-Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
-    { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
-    { -570.0f, -812.0f, 0.0f }, { -230.0f, -520.0f, 0.0f },
-};
-Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
-
-// unused
-Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
-
-Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
-Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
-Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
-Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
 void Player_DrawBunnyHood(PlayState* play) {
     Mtx* temp_a1 = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Mtx));
@@ -3391,11 +3328,76 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
     return true;
 }
 
-void func_80128B74(PlayState* play, Player* player, s32 limbIndex) {
-    Vec3f* footPos = &D_801C0D24[player->transformation];
+Vec3f sPlayerFootPos[PLAYER_FORM_MAX] = {
+    { 200.0f, 300.0f, 0.0f }, // PLAYER_FORM_FIERCE_DEITY
+    { 200.0f, 200.0f, 0.0f }, // PLAYER_FORM_GORON
+    { 200.0f, 300.0f, 0.0f }, // PLAYER_FORM_ZORA
+    { 200.0f, 150.0f, 0.0f }, // PLAYER_FORM_DEKU
+    { 200.0f, 200.0f, 0.0f }, // PLAYER_FORM_HUMAN
+};
+
+void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex) {
+    Vec3f* footPos = &sPlayerFootPos[player->transformation];
 
     Actor_SetFeetPos(&player->actor, limbIndex, PLAYER_LIMB_LEFT_FOOT, footPos, PLAYER_LIMB_RIGHT_FOOT, footPos);
 }
+
+Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
+Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
+
+f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
+    0.0f,    // PLAYER_MELEEWEAPON_NONE              // Player is not holding a melee weapon
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI      // PLAYER_IA_SWORD_KOKIRI
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR       // PLAYER_IA_SWORD_RAZOR
+    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED      // PLAYER_IA_SWORD_GILDED
+    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY // PLAYER_IA_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_MELEEWEAPON_STICK             // PLAYER_IA_STICK
+    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS         // PLAYER_IA_ZORA_FINS
+};
+
+Gfx* D_801C0D94 = object_link_child_DL_017818;
+
+f32 D_801C0D98 = -35.0f;
+f32 D_801C0D9C = -395.0f;
+f32 D_801C0DA0 = 0.0f;
+
+f32 D_801C0DA4 = 0.0f;
+
+Vec3f D_801C0DA8[4] = {
+    { -4500.0f, -3000.0f, -600.0f },
+    { 1500.0f, -3000.0f, -600.0f },
+    { -4500.0f, 3000.0f, -600.0f },
+    { 1500.0f, 3000.0f, -600.0f },
+};
+
+Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
+Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
+Gfx* D_801C0DF0[] = {
+    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
+    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
+};
+
+Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
+    { 140.0f, -130.0f }, { 0.0f, -200.0f }, { -160.0f, 0.0f }, { 220.0f, -200.0f }, { 0.0f, 0.0f },
+};
+
+Gfx* D_801C0E2C[] = {
+    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
+    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
+};
+Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
+    { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
+    { -570.0f, -812.0f, 0.0f }, { -230.0f, -520.0f, 0.0f },
+};
+Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+
+// unused
+Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+
+Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
+Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
+Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
+Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
 #ifdef NON_EQUIVALENT
 void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
@@ -3732,7 +3734,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             Actor* spA8;
 
             spA8 = NULL;
-            if (player->transformation != 3) {
+            if (player->transformation != PLAYER_FORM_DEKU) {
                 Matrix_MultVec3f(&D_801C0E7C, &player->actor.focus.pos);
             } else {
                 Matrix_MultVec3f(&D_801C0E7C, &player->actor.focus.pos);
@@ -3788,7 +3790,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             }
         }
     } else if (player->actor.scale.y >= 0.0f) {
-        func_80128B74(play, player, limbIndex);
+        Player_SetFeetPos(play, player, limbIndex);
     }
 
     func_8012536C();

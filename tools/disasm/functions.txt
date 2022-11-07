@@ -2272,7 +2272,7 @@
     0x80128388:("func_80128388",),
     0x801284A0:("Player_DrawGreatFairysMask",),
     0x80128640:("func_80128640",),
-    0x80128B74:("func_80128B74",),
+    0x80128B74:("Player_SetFeetPos",),
     0x80128BD0:("func_80128BD0",),
     0x80129EF0:("PreNMI_Stop",),
     0x80129F04:("PreNMI_Update",),
