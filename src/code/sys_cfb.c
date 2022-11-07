@@ -1,29 +1,29 @@
 #include "global.h"
 
-extern OSViMode D_801FBB30;
-extern uintptr_t* gFramebuffers[2];
-extern OSViMode* D_801FBB88;
-extern u16* gZBufferPtr;
-extern void* D_801FBB90;
-extern u64* gGfxSPTaskOutputBufferPtr;
-extern size_t gGfxSPTaskOutputBufferSize;
-extern uintptr_t D_801FBB9C; //UNK_TYPE
-extern uintptr_t D_801FBBA0; //UNK_TYPE
-extern u16 (*gZBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
-extern u16 (*gWorkBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
-extern u64 (*gGfxSPTaskOutputBuffer)[0x3000];
-extern void* gGfxSPTaskOutputBufferEnd;
-extern uintptr_t D_801FBBB4;
-extern s32 D_801FBBB8;
-extern s32 D_801FBBBC; //PAL Z buffer?
-extern s32 D_801FBBC0;
-extern u64 (*gGfxSPTaskOutputBuffer2)[0x3000];
-extern void* gGfxSPTaskOutputBufferEnd2;
-extern s16 D_801FBBCC;
-extern s16 D_801FBBCE;
-extern s16 D_801FBBD0;
-extern s16 D_801FBBD2;
-extern s8 D_801FBBD4;
+ OSViMode D_801FBB30;
+ void* gFramebuffers[2];
+ OSViMode* D_801FBB88;
+ u16* gZBufferPtr;
+ void* D_801FBB90;
+ u64* gGfxSPTaskOutputBufferPtr;
+ size_t gGfxSPTaskOutputBufferSize;
+ void* D_801FBB9C; //UNK_TYPE
+ void* D_801FBBA0; //UNK_TYPE
+ u16 (*gZBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
+ u16 (*gWorkBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
+ u64 (*gGfxSPTaskOutputBuffer)[0x3000];
+ void* gGfxSPTaskOutputBufferEnd;
+ uintptr_t D_801FBBB4;
+ s32 D_801FBBB8;
+ s32 D_801FBBBC; //PAL Z buffer?
+ s32 D_801FBBC0;
+ u64 (*gGfxSPTaskOutputBuffer2)[0x3000];
+ void* gGfxSPTaskOutputBufferEnd2;
+ s16 D_801FBBCC;
+ s16 D_801FBBCE;
+ s16 D_801FBBD0;
+ s16 D_801FBBD2;
+ s8 D_801FBBD4;
 
 void func_80178750(void) {
     gFramebuffers[1] = D_801FBB9C;
