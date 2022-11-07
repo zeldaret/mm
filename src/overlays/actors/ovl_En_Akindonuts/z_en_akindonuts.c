@@ -1040,41 +1040,41 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
     s32 params = ENAKINDONUTS_GET_3(&this->actor);
-    PlayerActionParam itemActionParam = func_80123810(play);
+    PlayerItemAction itemAction = func_80123810(play);
 
-    if (itemActionParam > PLAYER_AP_NONE) {
-        if (itemActionParam == PLAYER_AP_DEED_LAND) {
+    if (itemAction > PLAYER_IA_NONE) {
+        if (itemAction == PLAYER_IA_DEED_LAND) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_AP_DEED_SWAMP) {
+        } else if (itemAction == PLAYER_IA_DEED_SWAMP) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_AP_DEED_MOUNTAIN) {
+        } else if (itemAction == PLAYER_IA_DEED_MOUNTAIN) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
             }
-        } else if (itemActionParam == PLAYER_AP_DEED_OCEAN) {
+        } else if (itemAction == PLAYER_IA_DEED_OCEAN) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
-                player->exchangeItemId = itemActionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1085,7 +1085,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             this->actionFunc = func_80BEF18C;
         }
         func_801477B4(play);
-    } else if (itemActionParam <= PLAYER_AP_MINUS1) {
+    } else if (itemAction <= PLAYER_IA_MINUS1) {
         this->unk_33C = D_80BF04AC[params];
         func_80151938(play, this->unk_33C);
         this->actionFunc = func_80BEF18C;

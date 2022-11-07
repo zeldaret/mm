@@ -293,10 +293,10 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
     if (this->unk_1D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_1D8 &= ~0x180;
-            if (player->exchangeItemId == PLAYER_AP_PICTO_BOX) {
+            if (player->exchangeItemId == PLAYER_IA_PICTO_BOX) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
-            } else if (player->exchangeItemId != PLAYER_AP_NONE) {
+            } else if (player->exchangeItemId != PLAYER_IA_NONE) {
                 this->unk_1D8 |= 0x100;
                 this->unk_2E4 = player->exchangeItemId;
             }
@@ -382,7 +382,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE6130(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
-    func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_AP_NONE, this->unk_1D8 & 7);
+    func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & 7);
 }
 
 s32 EnShn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

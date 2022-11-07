@@ -341,7 +341,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == PLAYER_AP_MOON_TEAR) {
+        if (Player_GetExchangeItemId(play) == PLAYER_IA_MOON_TEAR) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
@@ -382,7 +382,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        func_800B85E0(&this->actor, play, 80.0f, PLAYER_AP_MOON_TEAR);
+        func_800B85E0(&this->actor, play, 80.0f, PLAYER_IA_MOON_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
@@ -417,15 +417,16 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
 void func_80ADB924(EnSellnuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u8 talkState = Message_GetState(&play->msgCtx);
-    PlayerActionParam actionParam;
+    PlayerItemAction itemAction;
 
     if (talkState == TEXT_STATE_16) {
-        actionParam = func_80123810(play);
-        if (actionParam > PLAYER_AP_NONE) {
-            if (actionParam == PLAYER_AP_MOON_TEAR) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
+            if (itemAction == PLAYER_IA_MOON_TEAR) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
-                player->exchangeItemId = actionParam;
+                player->exchangeItemId = itemAction;
                 this->actionFunc = func_80ADBAB8;
             } else {
                 player->actor.textId = D_80ADD920[this->unk_33A];
@@ -433,7 +434,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
                 this->actionFunc = func_80ADB0D8;
             }
             func_801477B4(play);
-        } else if (actionParam <= PLAYER_AP_MINUS1) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             this->unk_340 = D_80ADD920[this->unk_33A];
             func_80151938(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
@@ -491,14 +492,14 @@ void func_80ADBC60(EnSellnuts* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
     }
 }
 
 void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
     }

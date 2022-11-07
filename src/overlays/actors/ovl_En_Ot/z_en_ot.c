@@ -605,7 +605,7 @@ void func_80B5CB0C(EnOt* this, PlayState* play) {
 
 void func_80B5CBA0(EnOt* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10000;
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
+    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     this->actionFunc = func_80B5CBEC;
 }
 
@@ -616,7 +616,7 @@ void func_80B5CBEC(EnOt* this, PlayState* play) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     }
 }
 
@@ -692,7 +692,7 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {

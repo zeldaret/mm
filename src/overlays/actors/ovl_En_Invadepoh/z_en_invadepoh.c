@@ -3454,7 +3454,7 @@ void func_80B4AF94(EnInvadepoh* this, PlayState* play) {
         func_80151BB4(play, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_IA_MINUS1);
     }
 }
 

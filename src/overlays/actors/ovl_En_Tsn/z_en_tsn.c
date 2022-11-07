@@ -311,20 +311,20 @@ void func_80AE04C4(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE04FC(EnTsn* this, PlayState* play) {
-    PlayerActionParam itemActionParam;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
+        itemAction = func_80123810(play);
 
-        if (itemActionParam != PLAYER_AP_NONE) {
+        if (itemAction != PLAYER_IA_NONE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_26_02);
         }
 
-        if (itemActionParam > PLAYER_AP_NONE) {
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
             this->actionFunc = func_80AE0704;
-            if (itemActionParam == PLAYER_AP_PICTO_BOX) {
+            if (itemAction == PLAYER_IA_PICTO_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
@@ -338,13 +338,20 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
                     player->actor.textId = 0x1078;
                     this->unk_220 |= 8;
                 }
-            } else if (itemActionParam == PLAYER_AP_HOOKSHOT) {
-                player->actor.textId = 0x1075;
-            } else {
-                player->actor.textId = 0x1078;
-                this->unk_220 |= 8;
+                return;
             }
-        } else if (itemActionParam <= PLAYER_AP_MINUS1) {
+
+            if (itemAction == PLAYER_IA_HOOKSHOT) {
+                player->actor.textId = 0x1075;
+                return;
+            }
+
+            player->actor.textId = 0x1078;
+            this->unk_220 |= 8;
+            return;
+        }
+
+        if (itemAction <= PLAYER_IA_MINUS1) {
             func_80151938(play, 0x1078);
             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
             this->actionFunc = func_80AE0704;
