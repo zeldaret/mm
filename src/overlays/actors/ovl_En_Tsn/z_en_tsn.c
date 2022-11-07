@@ -328,16 +328,21 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
-                    } else if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
-                        player->actor.textId = 0x10A9;
-                    } else {
-                        player->actor.textId = 0x1078;
-                        this->unk_220 |= 8;
+                        return;
                     }
-                } else {
+
+                    if (Snap_CheckFlag(PICTOGRAPH_PIRATE_TOO_FAR)) {
+                        player->actor.textId = 0x10A9;
+                        return;
+                    }
+
                     player->actor.textId = 0x1078;
                     this->unk_220 |= 8;
+                    return;
                 }
+
+                player->actor.textId = 0x1078;
+                this->unk_220 |= 8;
                 return;
             }
 
