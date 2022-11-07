@@ -2831,7 +2831,7 @@ void Player_DrawCouplesMask(PlayState* play, Player* player) {
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
-void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
+void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
     static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
     static Vec3f bubbleAccel = { 0.0f, 0.0f, 0.0f };
     Gfx* gfx;
@@ -2869,7 +2869,6 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
 
             gfx = &gfx[6];
         } else {
-            Player* player = (Player*)actor;
             f32 speedXZ = sqrtf(SQ(player->actor.velocity.x) + SQ(player->actor.velocity.z));
             s16 phi_s0 = speedXZ * 2000.0f;
             f32 temp_f20;
@@ -3461,7 +3460,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                       ((player->meleeWeaponState != 0) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_RIGHT) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))))) {
-                    if (player->itemAction == 7) {
+                    if (player->itemAction == PLAYER_IA_STICK) {
                         D_801C0994->x = player->unk_B08[1] * 5000.0f;
                     } else {
                         D_801C0994->x = D_801C0D78[Player_GetMeleeWeaponHeld(player)];
@@ -3656,7 +3655,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
 
                 CLOSE_DISPS(play->state.gfxCtx);
             }
-        } else if (player->transformation == 3) {
+        } else if (player->transformation == PLAYER_FORM_DEKU) {
             if (player->skelAnime.animation == &gPlayerAnim_pn_gurd) {
                 OPEN_DISPS(play->state.gfxCtx);
 
@@ -3735,7 +3734,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             }
         }
 
-        if ((player->stateFlags1 & 0x102) && (player->unk_AE8 != 0)) {
+        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->unk_AE8 != 0)) {
             temp_s0_7 = &D_801C0E40[player->transformation];
 
             OPEN_DISPS(play->state.gfxCtx);
