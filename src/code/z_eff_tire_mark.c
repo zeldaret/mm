@@ -1,7 +1,7 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 arg4,
+void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 angle,
                    CollisionPoly* colPoly, s32 bgId) {
     Vec3s spB8;
     Vec3s spB0;
@@ -16,12 +16,12 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
         return;
     }
 
-    spB8.x = (Math_SinS(arg4 - 0x4000) * arg3) + pos->x;
-    spB8.z = (Math_CosS(arg4 - 0x4000) * arg3) + pos->z;
+    spB8.x = (Math_SinS(angle - 0x4000) * arg3) + pos->x;
+    spB8.z = (Math_CosS(angle - 0x4000) * arg3) + pos->z;
     spB8.y = func_800BFD84(colPoly, spB8.x, spB8.z) + 2.0f;
 
-    spB0.x = (Math_SinS(arg4 + 0x4000) * arg3) + pos->x;
-    spB0.z = (Math_CosS(arg4 + 0x4000) * arg3) + pos->z;
+    spB0.x = (Math_SinS(angle + 0x4000) * arg3) + pos->x;
+    spB0.z = (Math_CosS(angle + 0x4000) * arg3) + pos->z;
     spB0.y = func_800BFD84(colPoly, spB0.x, spB0.z) + 2.0f;
 
     spAC = &this->elements[this->numElements - 1];

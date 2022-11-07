@@ -427,7 +427,7 @@ extern Gfx D_801AEFA0[];
 // extern UNK_TYPE1 D_801AEFBC;
 // extern UNK_TYPE1 D_801AEFC0;
 extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX];
-extern s32 gMaxActorId;
+extern ActorId gMaxActorId;
 extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
 // extern UNK_TYPE1 D_801B4708;

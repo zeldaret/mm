@@ -79,7 +79,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
-        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, 0xBFF);
+        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
         if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
@@ -351,7 +351,7 @@ void func_80122F28(Player* player) {
         (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
                                   PLAYER_STATE1_20000000))) &&
         (!(player->stateFlags2 & PLAYER_STATE2_1))) {
-        if (player->doorType < 0) {
+        if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             ActorCutscene_SetIntentToPlay(0x7C);
         } else {
             ActorCutscene_SetIntentToPlay(0x7D);
@@ -480,7 +480,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != 0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csMode != PLAYER_CSMODE_0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -504,7 +504,7 @@ s32 func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->targetedActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -560,7 +560,7 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 0) {
-        s32 item = Inventory_GetBtnBItem(play);
+        ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
             return item;
@@ -1267,7 +1267,7 @@ void func_80123C58(Player* player) {
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
-    if (player->csMode != 0x86) {
+    if (player->csMode != PLAYER_CSMODE_134) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
@@ -1293,7 +1293,7 @@ void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, Pla
 }
 
 void func_80123DA4(Player* player) {
-    player->unk_730 = NULL;
+    player->targetedActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
 
@@ -1318,7 +1318,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
-    player->unk_730 = actor;
+    player->targetedActor = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
@@ -2589,9 +2589,9 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
                 if (player->stateFlags1 & PLAYER_STATE1_400) {
                     refPos.y = player->actor.world.pos.y + 30.0f;
                 } else {
-                    refPos.x = player->bodyPartsPos[PLAYER_BODYPART_L_HAND].x;
-                    refPos.y = player->bodyPartsPos[PLAYER_BODYPART_L_HAND].y - 6.0f;
-                    refPos.z = player->bodyPartsPos[PLAYER_BODYPART_L_HAND].z;
+                    refPos.x = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].x;
+                    refPos.y = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].z;
                 }
             } else {
                 refPos.y = player->actor.world.pos.y + 28.0f;

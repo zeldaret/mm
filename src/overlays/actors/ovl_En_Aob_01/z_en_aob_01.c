@@ -394,7 +394,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             if (this->unk_2D2 & 2) {
                 this->unk_2D2 &= ~2;
                 Rupees_ChangeBy(-this->unk_434);
-                func_800B7298(play, NULL, 7);
+                func_800B7298(play, NULL, PLAYER_CSMODE_7);
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_809C1C9C;

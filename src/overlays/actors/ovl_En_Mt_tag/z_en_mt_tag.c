@@ -255,7 +255,7 @@ s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType
 void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
     gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     Message_StartTextbox(play, 0xE95, NULL); // An entrant made a false start
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     Audio_QueueSeqCmd(0x101400FF);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
@@ -266,7 +266,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
  */
 void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
     Message_StartTextbox(play, 0xE97, NULL); // You can't win now...
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
@@ -432,7 +432,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             play->transitionType = TRANS_TYPE_02;
             gSaveContext.nextTransitionType = TRANS_TYPE_02;
             func_801477B4(play);
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
             CLEAR_EVENTINF(EVENTINF_10);
@@ -467,7 +467,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
         // Keep racing
         func_8019F208();
         func_801477B4(play);
-        func_800B7298(play, &this->actor, 6);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
         CLEAR_EVENTINF(EVENTINF_13);
         this->timer = 100;
         this->actionFunc = EnMttag_Race;

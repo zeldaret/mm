@@ -1481,7 +1481,7 @@ void func_808F6334(EnIn* this, PlayState* play) {
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if ((&this->actor == player->targetActor) &&
+    if ((&this->actor == player->talkActor) &&
         !((play->msgCtx.currentTextId >= 0xFF) && (play->msgCtx.currentTextId <= 0x200)) &&
         (talkState == TEXT_STATE_3) && (this->prevTalkState == TEXT_STATE_3)) {
         if (!(play->state.frames & 1)) {

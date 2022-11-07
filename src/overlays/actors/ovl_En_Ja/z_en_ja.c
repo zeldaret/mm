@@ -220,7 +220,7 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     f32 phi_f0;
 
     if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->targetActor)) {
+        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->talkActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;

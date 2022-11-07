@@ -473,8 +473,7 @@ void func_800AE5A0(PlayState* play);
 void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE8EC(PlayState* play);
-void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 arg4,
-                   CollisionPoly* colPoly, s32 bgId);
+void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 angle, CollisionPoly* colPoly, s32 bgId);
 void func_800AEF44(EffectTireMark* this);
 void EffectTireMark_Init(void* thisx, void* initParamsx);
 void EffectTireMark_Destroy(void* thisx);
@@ -684,7 +683,7 @@ s32 func_800B8614(Actor* actor, PlayState* play, f32 radius);
 s32 func_800B863C(Actor* actor, PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2);
-s32 Player_GetExchangeItemId(PlayState* play);
+PlayerActionParam Player_GetExchangeItemId(PlayState* play);
 s32 func_800B8718(Actor* actor, GameState* gameState);
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange);
 s32 func_800B8804(Actor* actor, PlayState* play, f32 xzRange);

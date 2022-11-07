@@ -134,7 +134,7 @@ typedef enum {
     /* 0xFF */ SLOT_NONE = 0xFF
 } InventorySlot;
 
-typedef enum {
+typedef enum ItemId {
     /* 0x00 */ ITEM_OCARINA,
     /* 0x01 */ ITEM_BOW,
     /* 0x02 */ ITEM_ARROW_FIRE,
@@ -248,7 +248,9 @@ typedef enum {
     /* 0x6E */ ITEM_SKULL_TOKEN,
     /* 0x6F */ ITEM_HEART_CONTAINER,
     /* 0x70 */ ITEM_HEART_PIECE,
-    /* 0x73 */ ITEM_SONG_LULLABY_INTRO = 0x73,
+    /* 0x71 */ ITEM_71,
+    /* 0x72 */ ITEM_72,
+    /* 0x73 */ ITEM_SONG_LULLABY_INTRO,
     /* 0x74 */ ITEM_KEY_BOSS,
     /* 0x75 */ ITEM_COMPASS,
     /* 0x76 */ ITEM_DUNGEON_MAP,
@@ -398,7 +400,7 @@ typedef enum GetItemId {
     /* 0x6D */ GI_6D,
     /* 0x6E */ GI_SEAHORSE,
     /* 0x6F */ GI_CHATEAU_BOTTLE,
-    /* 0x70 */ GI_70,
+    /* 0x70 */ GI_HYLIAN_LOACH,
     /* 0x75 */ GI_75 = 0x75,
     /* 0x76 */ GI_ICE_TRAP,
     /* 0x78 */ GI_MASK_DEKU = 0x78,
@@ -428,7 +430,7 @@ typedef enum GetItemId {
     /* 0x91 */ GI_CHATEAU = 0x91,
     /* 0x92 */ GI_MILK,
     /* 0x93 */ GI_GOLD_DUST_2,
-    /* 0x94 */ GI_HYLIAN_LOACH, // Unused bottled eel
+    /* 0x94 */ GI_HYLIAN_LOACH_2, // Unused bottled eel
     /* 0x95 */ GI_SEAHORSE_CAUGHT,
     /* 0x96 */ GI_MOON_TEAR,
     /* 0x97 */ GI_DEED_LAND,
@@ -461,8 +463,8 @@ typedef enum GetItemId {
     /* 0xBA */ GI_MAX
 } GetItemId;
 
-typedef enum GetItemDrawID {
-    /*  -1 */ GID_NONE = -1,
+typedef enum GetItemDrawId {
+    /*   -1 */ GID_NONE = -1,
     /* 0x00 */ GID_BOTTLE,
     /* 0x01 */ GID_KEY_SMALL,
     /* 0x02 */ GID_MASK_KAMARO,

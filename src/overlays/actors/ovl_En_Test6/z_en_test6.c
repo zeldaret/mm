@@ -395,7 +395,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
-    func_800B7298(play, NULL, 6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_6);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
     Actor_Kill(&this->actor);
@@ -537,22 +537,22 @@ void func_80A91760(EnTest6* this, PlayState* play) {
     }
 
     if (this->unk_286 != 0) {
-        func_800B7298(play, NULL, 7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_7);
     } else {
         if (this->unk_27A == 90) {
-            func_800B7298(play, NULL, 0x42);
+            func_800B7298(play, NULL, PLAYER_CSMODE_66);
         }
 
         if (this->unk_27A == 70) {
-            func_800B7298(play, NULL, 0x52);
+            func_800B7298(play, NULL, PLAYER_CSMODE_82);
         }
 
         if (this->unk_27A == 30) {
-            func_800B7298(play, NULL, 0x51);
+            func_800B7298(play, NULL, PLAYER_CSMODE_81);
         }
 
         if (this->unk_27A == 5) {
-            func_800B7298(play, NULL, 0x4A);
+            func_800B7298(play, NULL, PLAYER_CSMODE_74);
         }
     }
 
@@ -616,7 +616,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
-    func_800B7298(play, NULL, 6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_6);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
     Actor_Kill(&this->actor);
@@ -764,23 +764,23 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             break;
 
         case 98:
-            func_800B7298(play, NULL, 0x40);
+            func_800B7298(play, NULL, PLAYER_CSMODE_64);
             break;
 
         case 68:
-            func_800B7298(play, NULL, 0x41);
+            func_800B7298(play, NULL, PLAYER_CSMODE_65);
             break;
 
         case 52:
-            func_800B7298(play, NULL, 0x58);
+            func_800B7298(play, NULL, PLAYER_CSMODE_88);
             break;
 
         case 43:
-            func_800B7298(play, NULL, 0x72);
+            func_800B7298(play, NULL, PLAYER_CSMODE_114);
             break;
 
         case 38:
-            func_800B7298(play, NULL, 7);
+            func_800B7298(play, NULL, PLAYER_CSMODE_7);
             break;
 
         case 14:
@@ -972,7 +972,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
 
             case 9:
                 Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF), player->unk_3CE,
-                                    0xBFF, &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
@@ -1053,7 +1053,8 @@ void func_80A92950(EnTest6* this, PlayState* play) {
             case 9:
                 if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF),
-                                        player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
+                                        player->unk_3CC);
                     this->unk_276 = 99;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
