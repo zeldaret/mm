@@ -21,7 +21,7 @@ void func_80965DB4(EnMm* this, PlayState* play);
 void func_8096611C(EnMm* this, PlayState* play);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
 
-const ActorInit En_Mm_InitVars = {
+ActorInit En_Mm_InitVars = {
     ACTOR_EN_MM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -74,9 +74,9 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
-    if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
-                                      (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
-        Actor_MarkForDeath(&this->actor);
+    if ((this->actor.params >= 0) && (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_10) ||
+                                      CHECK_WEEKEVENTREG(WEEKEVENTREG_37_08) || (gSaveContext.unk_1014 != 0))) {
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -114,8 +114,8 @@ void func_80965D3C(EnMm* this, PlayState* play) {
 
 void func_80965DB4(EnMm* this, PlayState* play) {
     s16 direction;
-    Vec3f sp50;
-    s16 unused;
+    Vec3f slopeNormal;
+    s16 downwardSlopeYaw;
     f32 temp_f14;
     f32 temp_f12;
     f32 temp_f2;
@@ -143,9 +143,9 @@ void func_80965DB4(EnMm* this, PlayState* play) {
         } else {
             temp_f14 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
             temp_f12 = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-            func_800B75A0(this->actor.floorPoly, &sp50, &unused);
-            temp_f14 += 3.0f * sp50.x;
-            temp_f12 += 3.0f * sp50.z;
+            Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
+            temp_f14 += 3.0f * slopeNormal.x;
+            temp_f12 += 3.0f * slopeNormal.z;
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speedXZ) ||

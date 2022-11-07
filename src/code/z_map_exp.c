@@ -226,8 +226,8 @@ void Map_Update(PlayState* play) {
     s16 floor;
     s32 pad2;
 
-    if ((play->pauseCtx.state < 4) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) && (!Play_InCsMode(play)) &&
-        (!func_80106530(play))) {
+    if ((play->pauseCtx.state <= PAUSE_STATE_OPENING_2) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) &&
+        !Play_InCsMode(play) && !func_80106530(play)) {
         if (!R_MINIMAP_DISABLED) {
             play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
         } else {
@@ -239,20 +239,20 @@ void Map_Update(PlayState* play) {
 
     func_80105B34(play);
 
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {
                 gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].unk_14 |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
-                XREG(94) = FLOOR_INDEX_MAX - floor;
+                R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {
                     sLastRoomNum = interfaceCtx->mapRoomNum;
                 }
             }
         } else if (Map_IsInBossArea(play)) {
             func_80105294();
-            XREG(94) = FLOOR_INDEX_MAX - func_80105318();
+            R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - func_80105318();
         }
     }
 }

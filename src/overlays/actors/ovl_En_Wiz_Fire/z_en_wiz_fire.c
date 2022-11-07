@@ -14,8 +14,8 @@
 
 void EnWizFire_Init(Actor* thisx, PlayState* play);
 void EnWizFire_Destroy(Actor* thisx, PlayState* play);
-void EnWizFire_Update(Actor* thisx, PlayState* play);
-void EnWizFire_Draw(Actor* thisx, PlayState* play);
+void EnWizFire_Update(Actor* thisx, PlayState* play2);
+void EnWizFire_Draw(Actor* thisx, PlayState* play2);
 
 void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play);
 void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play);
@@ -37,7 +37,7 @@ typedef enum {
 
 static s32 sPoolHitByIceArrow = false;
 
-const ActorInit En_Wiz_Fire_InitVars = {
+ActorInit En_Wiz_Fire_InitVars = {
     ACTOR_EN_WIZ_FIRE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -330,7 +330,7 @@ void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
         Math_ApproachF(&this->scale, 2.0f * this->targetScale, 0.2f, 0.002f);
         Math_ApproachZeroF(&this->alpha, 1.0f, 35.0f);
         if ((this->timer == 0) && (this->alpha < 2.0f)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     }
@@ -444,7 +444,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
 
         if ((this->poolScale < 0.001f) && (this->blendScaleFrac < 0.001f)) {
             sPoolHitByIceArrow = false;
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
 
         return;
@@ -463,7 +463,7 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
                 wiz->hasActiveProjectile = false;
             }
 
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -483,7 +483,7 @@ void EnWiz_KillMagicProjectile(EnWizFire* this, PlayState* play) {
                 }
             }
 
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -636,7 +636,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    if ((player->stateFlags2 & 0x4000) && (player->unk_AE8 < 90)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_4000) && (player->unk_AE8 < 90)) {
         player->unk_AE8 = 90;
     }
 

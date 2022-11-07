@@ -44,6 +44,4 @@ typedef struct EnBaguo {
     /* 0x23C */ NejironEffect effects[EN_BAGUO_EFFECT_COUNT];
 } EnBaguo; // size = 0x8CC
 
-extern const ActorInit En_Baguo_InitVars;
-
 #endif // Z_EN_BAGUO_H

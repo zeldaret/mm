@@ -21,6 +21,4 @@ typedef struct EffChange {
     /* 0x1C8 */ EffChangeActionFunc actionFunc;
 } EffChange; // size = 0x1CC
 
-extern const ActorInit Eff_Change_InitVars;
-
 #endif // Z_EFF_CHANGE_H

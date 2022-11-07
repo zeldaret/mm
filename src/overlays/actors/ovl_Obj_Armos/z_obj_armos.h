@@ -38,6 +38,4 @@ typedef struct ObjArmos {
     /* 0x270 */ s16 unk_270;
 } ObjArmos; // size = 0x274
 
-extern const ActorInit Obj_Armos_InitVars;
-
 #endif // Z_OBJ_ARMOS_H

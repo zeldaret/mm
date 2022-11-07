@@ -28,6 +28,4 @@ typedef struct ObjectKankyo {
     /* 0x1150 */ ObjectKankyoActionFunc actionFunc;
 } ObjectKankyo; // size = 0x1154
 
-extern const ActorInit Object_Kankyo_InitVars;
-
 #endif // Z_OBJECT_KANKYO_H

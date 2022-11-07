@@ -22,13 +22,13 @@ void func_80B13170(ObjDhouse* this, PlayState* play, ObjDhouseStruct1* ptr, ObjD
 void func_80B13908(ObjDhouse* this);
 void func_80B1391C(ObjDhouse* this, PlayState* play);
 void func_80B1392C(ObjDhouse* this);
-void func_80B13940(ObjDhouse* this, PlayState* play);
+void func_80B13940(ObjDhouse* this, PlayState* play2);
 void func_80B139D8(ObjDhouse* this);
 void func_80B139F4(ObjDhouse* this, PlayState* play);
 void func_80B13C08(Actor* thisx, PlayState* play);
 void func_80B13E40(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Dhouse_InitVars = {
+ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
     ACTORCAT_BG,
     FLAGS,

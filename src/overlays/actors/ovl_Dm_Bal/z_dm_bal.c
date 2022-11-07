@@ -18,7 +18,7 @@ void DmBal_Draw(Actor* thisx, PlayState* play);
 void func_80C1EAC4(DmBal* this);
 void func_80C1EAD8(DmBal* this, PlayState* play);
 
-const ActorInit Dm_Bal_InitVars = {
+ActorInit Dm_Bal_InitVars = {
     ACTOR_DM_BAL,
     ACTORCAT_NPC,
     FLAGS,
@@ -191,7 +191,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void DmBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-TexturePtr sEyeTextures[] = { object_bal_Tex_006050, object_bal_Tex_0094D0 };
+static TexturePtr sEyeTextures[] = { object_bal_Tex_006050, object_bal_Tex_0094D0 };
 
 void DmBal_Draw(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;

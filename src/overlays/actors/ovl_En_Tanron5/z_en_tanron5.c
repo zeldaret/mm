@@ -15,15 +15,15 @@
 
 void EnTanron5_Init(Actor* thisx, PlayState* play);
 void EnTanron5_Destroy(Actor* thisx, PlayState* play);
-void EnTanron5_Update(Actor* thisx, PlayState* play);
+void EnTanron5_Update(Actor* thisx, PlayState* play2);
 void EnTanron5_Draw(Actor* thisx, PlayState* play);
 
-void func_80BE5818(Actor* thisx, PlayState* play);
+void func_80BE5818(Actor* thisx, PlayState* play2);
 void func_80BE5C10(Actor* thisx, PlayState* play);
 
 s32 D_80BE5D80 = 0;
 
-const ActorInit En_Tanron5_InitVars = {
+ActorInit En_Tanron5_InitVars = {
     ACTOR_EN_TANRON5,
     ACTORCAT_BOSS,
     FLAGS,
@@ -150,7 +150,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
     if (ENTANRON5_GET(&this->actor) >= ENTANRON5_100) {
         D_80BE5D80++;
         if (D_80BE5D80 > 60) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -201,7 +201,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             Collider_InitAndSetCylinder(play, &child->collider, &child->actor, &sCylinderInit);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
         this->actor.world.pos.y = this->actor.floorHeight + -20.0f;
@@ -230,7 +230,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
         this->unk_1A0++;
         Actor_SetScale(&this->actor, 0.0f);
         if (this->unk_1A0 >= 40) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     } else {
@@ -406,13 +406,13 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
         this->unk_1A0++;
         this->actor.world.pos.y -= 2.0f * D_80BE5DD0;
         if (this->unk_1A0 == 40) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     }
 
     if (DECR(this->unk_144) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->actor.speedXZ > 0.02f) {
@@ -435,7 +435,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
                 }
                 this->unk_1A0++;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     } else {
@@ -464,7 +464,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
                     } else {
                         Item_Give(play, ITEM_MAGIC_LARGE);
                     }
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     play_sound(NA_SE_SY_GET_ITEM);
                 } else {
                     this->unk_1A1 = 20;

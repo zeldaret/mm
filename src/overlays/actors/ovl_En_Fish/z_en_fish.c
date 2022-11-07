@@ -12,7 +12,7 @@
 #define THIS ((EnFish*)thisx)
 
 void EnFish_Init(Actor* thisx, PlayState* play);
-void EnFish_Destroy(Actor* thisx, PlayState* play);
+void EnFish_Destroy(Actor* thisx, PlayState* play2);
 void EnFish_Update(Actor* thisx, PlayState* play);
 void EnFish_Draw(Actor* thisx, PlayState* play);
 
@@ -68,7 +68,7 @@ static Color_RGB8 D_8091FA94[] = {
     { 215, 97, 7 },
 };
 
-const ActorInit En_Fish_InitVars = {
+ActorInit En_Fish_InitVars = {
     ACTOR_EN_FISH,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -520,7 +520,7 @@ void func_8091E880(Actor* thisx, PlayState* play) {
         }
     } else if ((this->unk_240 <= 0) && (this->actor.params == ENFISH_0) &&
                (this->actor.floorHeight < BGCHECK_Y_MIN + 10)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -582,8 +582,11 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_240 <= 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_240 <= 60) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_240 <= 60) {
         if (sp40 & 4) {
             this->actor.draw = EnFish_Draw;
         } else {
@@ -655,7 +658,7 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_240 <= 0) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
     }
 }
 
@@ -688,7 +691,7 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     s16 sp2E;
 
     if (sp3C == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -878,10 +881,11 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
             if (this->actor.params == ENFISH_0) {
-                Actor_MarkForDeath(&this->actor);
-            } else {
-                func_8091D904(this);
+                Actor_Kill(&this->actor);
+                return;
             }
+
+            func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
             Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }
@@ -892,7 +896,7 @@ void func_8091F830(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
     if (this->actor.params == ENFISH_1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

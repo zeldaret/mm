@@ -13,7 +13,7 @@
 
 void EnSyatekiWf_Init(Actor* thisx, PlayState* play);
 void EnSyatekiWf_Destroy(Actor* thisx, PlayState* play);
-void EnSyatekiWf_Update(Actor* thisx, PlayState* play);
+void EnSyatekiWf_Update(Actor* thisx, PlayState* play2);
 void EnSyatekiWf_Draw(Actor* thisx, PlayState* play);
 
 void func_80A201CC(EnSyatekiWf* this);
@@ -101,7 +101,7 @@ static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
 
 static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
 
-const ActorInit En_Syateki_Wf_InitVars = {
+ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -156,7 +156,7 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (path == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

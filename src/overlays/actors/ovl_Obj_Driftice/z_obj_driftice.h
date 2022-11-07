@@ -56,6 +56,6 @@ typedef struct ObjDriftice {
     /* 0x24C */ s32 unk_24C;
 } ObjDriftice; // size = 0x250
 
-extern const ActorInit Obj_Driftice_InitVars;
+extern ActorInit Obj_Driftice_InitVars;
 
 #endif // Z_OBJ_DRIFTICE_H

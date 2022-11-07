@@ -25,7 +25,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay);
 void EnEncount2_UpdateEffects(EnEncount2* this, PlayState* play);
 void EnEncount2_DrawEffects(EnEncount2* this, PlayState* play);
 
-const ActorInit En_Encount2_InitVars = {
+ActorInit En_Encount2_InitVars = {
     ACTOR_EN_ENCOUNT2,
     ACTORCAT_PROP,
     FLAGS,
@@ -121,7 +121,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -181,7 +181,7 @@ void EnEncount2_Die(EnEncount2* this, PlayState* play) {
         if (this->switchFlag >= 0) {
             Flags_SetSwitch(play, this->switchFlag);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -208,8 +208,8 @@ void EnEncount2_Update(Actor* thisx, PlayState* play) {
 void EnEncount2_Draw(Actor* thisx, PlayState* play) {
     EnEncount2* this = THIS;
     if (this->isPopped != true) {
-        Gfx_DrawDListOpa(play, object_fusen_DL_000A00);
-        Gfx_DrawDListOpa(play, object_fusen_DL_000D78);
+        Gfx_DrawDListOpa(play, gMajoraBalloonDL);
+        Gfx_DrawDListOpa(play, gMajoraBalloonKnotDL);
     }
     EnEncount2_DrawEffects(this, play);
 }
@@ -223,7 +223,7 @@ void EnEncount2_InitEffects(EnEncount2* this, Vec3f* pos, s16 fadeDelay) {
             sPtr->isEnabled = true;
             sPtr->pos = *pos;
             sPtr->alphaFadeDelay = fadeDelay;
-            sPtr->alpha = 0xFF;
+            sPtr->alpha = 255;
 
             sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
             sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;

@@ -12,8 +12,8 @@
 
 #define THIS ((ObjKibako*)thisx)
 
-void ObjKibako_Init(Actor* thisx, PlayState* play);
-void ObjKibako_Destroy(Actor* thisx, PlayState* play);
+void ObjKibako_Init(Actor* thisx, PlayState* play2);
+void ObjKibako_Destroy(Actor* thisx, PlayState* play2);
 void ObjKibako_Update(Actor* thisx, PlayState* play);
 
 void ObjKibako_Draw(Actor* thisx, PlayState* play);
@@ -36,7 +36,7 @@ static s16 D_80927384 = 0;
 static s16 D_80927388 = 0;
 static s16 D_8092738C = 0;
 
-const ActorInit Obj_Kibako_InitVars = {
+ActorInit Obj_Kibako_InitVars = {
     ACTOR_OBJ_KIBAKO,
     ACTORCAT_PROP,
     FLAGS,
@@ -151,7 +151,7 @@ void ObjKibako_Init(Actor* thisx, PlayState* play2) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->bankIndex = Object_GetIndex(&play->objectCtx, sObjectIdList[whichBankIndex]);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->unk199 = this->actor.room;
@@ -284,12 +284,12 @@ void ObjKibako_Idle(ObjKibako* this, PlayState* play) {
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (this->collider.base.acFlags & AC_HIT) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Actor_MoveWithGravity(&this->actor);
         func_809262BC(this);
@@ -388,14 +388,14 @@ void ObjKibako_Thrown(ObjKibako* this, PlayState* play) {
         ObjKibako_AirBreak(this, play);
         ObjKibako_SpawnCollectible(this, play);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         if (this->actor.bgCheckFlags & 0x40) {
             ObjKibako_WaterBreak(this, play);
             ObjKibako_SpawnCollectible(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_WOODBOX_BREAK);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             if (this->actor.velocity.y < -0.05f) {
                 this->actor.gravity = -2.3f;

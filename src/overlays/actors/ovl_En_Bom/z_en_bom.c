@@ -32,7 +32,7 @@ typedef struct {
 
 static PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-const ActorInit En_Bom_InitVars = {
+ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
     ACTORCAT_EXPLOSIVES,
     FLAGS,
@@ -228,8 +228,8 @@ void func_80871058(EnBom* this, PlayState* play) {
     } else {
         Vec3f* sp58;
         u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        Vec3f sp48;
-        s16 sp46;
+        Vec3f slopeNormal;
+        s16 downwardSlopeYaw;
         f32 sp40;
         f32 sp3C;
         f32 sp38;
@@ -253,10 +253,10 @@ void func_80871058(EnBom* this, PlayState* play) {
 
         sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
         sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-        func_800B75A0(this->actor.floorPoly, &sp48, &sp46);
+        Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
 
-        sp40 += 3.0f * sp48.x;
-        sp3C += 3.0f * sp48.z;
+        sp40 += 3.0f * slopeNormal.x;
+        sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
         if ((sp38 < this->actor.speedXZ) ||
@@ -377,7 +377,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
 
     if (this->timer == 0) {
         func_80123590(play, &this->actor);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if ((this->timer & 1) == 0) {
@@ -433,12 +433,12 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 2) {
+    if (player->stateFlags1 & PLAYER_STATE1_2) {
         return;
     }
 
     if (Player_GetMask(play) == PLAYER_MASK_GIANT) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
@@ -451,7 +451,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
             if (this->isPowderKeg) {
                 gSaveContext.powderKegTimer = 0;
             }
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     } else {
         thisx->gravity = -1.2f;

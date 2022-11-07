@@ -20,7 +20,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play);
 void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play);
 
-const ActorInit En_Attack_Niw_InitVars = {
+ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -282,7 +282,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
 
 void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     if (!EnAttackNiw_IsOnScreen(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -334,7 +334,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
 
 void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play) {
     if (!EnAttackNiw_IsOnScreen(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -376,10 +376,12 @@ void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.floorHeight <= BGCHECK_Y_MIN) { // under the world
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
+        return;
+    }
 
-    } else if ((this->actor.bgCheckFlags & 0x20) && // on or below water
-               (this->actionFunc != EnAttackNiw_FlyAway)) {
+    if ((this->actor.bgCheckFlags & 0x20) && // on or below water
+        (this->actionFunc != EnAttackNiw_FlyAway)) {
         Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
         splashPos.y += this->actor.depthInWater;
         EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, 400);

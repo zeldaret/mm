@@ -22,7 +22,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play);
 void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
-const ActorInit En_Arrow_InitVars = {
+ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -170,7 +170,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             if (this->actor.params == ENARROW_7) {
                 Magic_Reset(play);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -298,7 +298,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
         if ((this->actor.params == ENARROW_4) || (this->actor.params == ENARROW_3)) {
             if ((this->actor.params == ENARROW_4) && (func_8088B6B0 != this->actionFunc)) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BG_ICEFLOE, sp44.x, sp44.y, sp44.z, 0, 0, 0, 300);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -306,7 +306,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
             this->collider.info.toucher.dmgFlags = 0x20;
 
             if (this->actor.child != NULL) {
-                Actor_MarkForDeath(this->actor.child);
+                Actor_Kill(this->actor.child);
                 return;
             }
 
@@ -357,7 +357,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 EffectSs_Spawn(play, EFFECT_SS_SBN, 128, &sp84);
             }
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -382,7 +382,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             }
             EffectSsStone1_Spawn(play, &this->actor.world.pos, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sp82);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             EffectSsHitmark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
 
@@ -516,7 +516,7 @@ void func_8088B630(EnArrow* this, PlayState* play) {
     }
 
     if (DECR(this->unk_260) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -526,7 +526,7 @@ void func_8088B6B0(EnArrow* this, PlayState* play) {
     func_8088AA98(this, play);
 
     if (DECR(this->unk_260) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

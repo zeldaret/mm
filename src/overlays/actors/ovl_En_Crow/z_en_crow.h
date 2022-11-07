@@ -31,6 +31,4 @@ typedef struct EnCrow {
     /* 0x298 */ f32 drawDmgEffScale;
 } EnCrow; // size = 0x29C
 
-extern const ActorInit En_Crow_InitVars;
-
 #endif // Z_EN_CROW_H

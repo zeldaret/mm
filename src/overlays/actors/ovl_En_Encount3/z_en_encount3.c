@@ -20,7 +20,7 @@ void func_809AD194(EnEncount3* this, PlayState* play);
 void func_809AD1EC(EnEncount3* this, PlayState* play);
 
 #if 0
-const ActorInit En_Encount3_InitVars = {
+ActorInit En_Encount3_InitVars = {
     ACTOR_EN_ENCOUNT3,
     ACTORCAT_ENEMY,
     FLAGS,

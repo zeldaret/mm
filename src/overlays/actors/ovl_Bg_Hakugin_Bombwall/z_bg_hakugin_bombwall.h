@@ -19,6 +19,4 @@ typedef struct BgHakuginBombwall {
     /* 0x1AC */ s32 unk_1AC;
 } BgHakuginBombwall; // size = 0x1B0
 
-extern const ActorInit Bg_Hakugin_Bombwall_InitVars;
-
 #endif // Z_BG_HAKUGIN_BOMBWALL_H
