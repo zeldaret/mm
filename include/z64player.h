@@ -929,7 +929,7 @@ typedef struct Player {
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 unk_A86; // actorCutsceneIndex?
-    /* 0xA87 */ s8 exchangeItemId; // PlayerActionParam enum
+    /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
     /* 0xA90 */ Actor* unk_A90;
