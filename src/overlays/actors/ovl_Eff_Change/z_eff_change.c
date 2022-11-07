@@ -18,7 +18,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play);
 void EffChange_SetColors(EffChange* this, s32 arg1);
 void func_80A4C5CC(EffChange* this, PlayState* play);
 
-const ActorInit Eff_Change_InitVars = {
+ActorInit Eff_Change_InitVars = {
     ACTOR_EFF_CHANGE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -130,7 +130,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play) {
     EffChange* this = THIS;
 
     AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_028FEC), this->step);
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);

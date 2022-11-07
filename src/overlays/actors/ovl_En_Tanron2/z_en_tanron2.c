@@ -30,7 +30,7 @@ Boss04* D_80BB8450;
 f32 D_80BB8454;
 EnTanron2* D_80BB8458[82];
 
-const ActorInit En_Tanron2_InitVars = {
+ActorInit En_Tanron2_InitVars = {
     ACTOR_EN_TANRON2,
     ACTORCAT_BOSS,
     FLAGS,
@@ -143,7 +143,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
 
-    if ((KREG(64) != 0) || (gSaveContext.eventInf[6] & 1)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_60)) {
         func_80BB69C0(this);
     } else {
         func_80BB6F64(this);
@@ -428,8 +428,8 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 func_80BB6B80(this);
                 this->unk_158 = 1;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IKURA_DAMAGE);
-                if ((player->unk_730 != 0) && (&this->actor != player->unk_730)) {
-                    player->unk_730 = &this->actor;
+                if ((player->targetedActor != NULL) && (&this->actor != player->targetedActor)) {
+                    player->targetedActor = &this->actor;
                     play->actorCtx.targetContext.arrowPointedActor = &this->actor;
                     play->actorCtx.targetContext.targetedActor = &this->actor;
                 }

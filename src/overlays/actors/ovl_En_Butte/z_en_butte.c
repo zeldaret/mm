@@ -53,7 +53,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-const ActorInit En_Butte_InitVars = {
+ActorInit En_Butte_InitVars = {
     ACTOR_EN_BUTTE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -155,7 +155,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 180, sp48);
     gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 210, 255);
-    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

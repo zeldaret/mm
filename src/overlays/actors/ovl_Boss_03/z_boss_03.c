@@ -7,10 +7,6 @@
 /**
  * Some notes:
  *
- * Global flags:
- * - gSaveContext.eventInf[5] & 0x40: Enabled when Gyorg's intro cutscene has been watched
- * - gSaveContext.save.weekEventReg[55] & 0x80: Checked to know if Gyorg has been defeated
- *
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
  * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them
@@ -278,7 +274,7 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 
 /* Start of Gyorg's Init and actionFuncs section */
 
-const ActorInit Boss_03_InitVars = {
+ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
     ACTORCAT_BOSS,
     FLAGS,
@@ -453,7 +449,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Vec3f sp70;
 
-    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
                            0, ENDOORWARP1_FF_1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
@@ -519,8 +515,8 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
                        GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
-    // gSaveContext.eventInf[5] & 0x40: intro cutscene already watched
-    if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x40)) {
+    // CHECK_EVENTINF(EVENTINF_56): intro cutscene already watched
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_56)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
         Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
@@ -688,7 +684,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = 0;
+            player->csMode = PLAYER_CSMODE_0;
         }
 
         func_809E344C(this, play);
@@ -783,7 +779,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = 0;
+            player->csMode = PLAYER_CSMODE_0;
             func_80165690();
         }
 
@@ -911,7 +907,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = 0;
+            player->csMode = PLAYER_CSMODE_0;
             func_80165690();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
@@ -1149,7 +1145,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 7);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1260,7 +1256,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
             if (this->csTimer == 5) {
                 // Rotates Player towards Gyorg
-                func_800B7298(play, &this->actor, 8);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_8);
             }
 
             this->subCamEye.x = player->actor.world.pos.x + 30.0f;
@@ -1371,13 +1367,13 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
                 func_80169AFC(play, this->subCamId, 0);
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
 
-                gSaveContext.eventInf[5] |= 0x40;
+                SET_EVENTINF(EVENTINF_56);
             }
             break;
     }
@@ -1449,7 +1445,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 1);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1629,7 +1625,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->csState = 3;
                 func_80165690();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
@@ -1663,7 +1659,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 1);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1724,7 +1720,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                         func_80169AFC(play, this->subCamId, 0);
                         this->subCamId = SUB_CAM_ID_DONE;
                         Cutscene_End(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, 6);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
 
                         func_809E344C(this, play);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;
@@ -1754,7 +1750,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     if (&this->actor == player->actor.parent) {
         player->unk_AE8 = 101;
         player->actor.parent = NULL;
-        player->csMode = 0;
+        player->csMode = PLAYER_CSMODE_0;
         func_80165690();
     }
 
@@ -1906,7 +1902,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     if (&this->actor == player->actor.parent) {
                         player->unk_AE8 = 101;
                         player->actor.parent = NULL;
-                        player->csMode = 0;
+                        player->csMode = PLAYER_CSMODE_0;
                         func_80165690();
                     }
 
@@ -2593,7 +2589,7 @@ void Boss03_SeaweedDraw(Actor* thisx, PlayState* play) {
     Boss03* this = THIS;
     s16 i;
     // Why 10 Mtxs? This seems to only use the first 6 elements
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 10);
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 10 * sizeof(Mtx));
 
     OPEN_DISPS(play->state.gfxCtx);
 

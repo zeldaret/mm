@@ -88,6 +88,4 @@ typedef enum {
     /* 2 */ ENSOB1_CUTSCENESTATE_PLAYING
 } EnSob1CutsceneState;
 
-extern const ActorInit En_Sob1_InitVars;
-
 #endif // Z_EN_SOB1_H

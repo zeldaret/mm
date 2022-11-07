@@ -24,7 +24,7 @@ void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
-const ActorInit Bg_Sinkai_Kabe_InitVars = {
+ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -67,7 +67,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     this->pythonIndex = sCurrentPythonIndex;
     sCurrentPythonIndex++;
 
-    if (!(gSaveContext.save.weekEventReg[13] & 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01)) {
         this->deepPython = Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_DRAGON, pos.x, pos.y,
                                               pos.z, 0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
@@ -82,14 +82,14 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         }
     } else {
         shouldSpawnSeahorse = false;
-        if (((this->dyna.actor.params == 0) && (gSaveContext.save.weekEventReg[83] & 0x10)) ||
-            ((this->dyna.actor.params == 1) && (gSaveContext.save.weekEventReg[83] & 0x20)) ||
-            ((this->dyna.actor.params == 2) && (gSaveContext.save.weekEventReg[83] & 0x40)) ||
-            ((this->dyna.actor.params == 3) && (gSaveContext.save.weekEventReg[83] & 0x80)) ||
-            ((this->dyna.actor.params == 4) && (gSaveContext.save.weekEventReg[84] & 1)) ||
-            ((this->dyna.actor.params == 5) && (gSaveContext.save.weekEventReg[84] & 2)) ||
-            ((this->dyna.actor.params == 6) && (gSaveContext.save.weekEventReg[84] & 4)) ||
-            ((this->dyna.actor.params == 7) && (gSaveContext.save.weekEventReg[84] & 8))) {
+        if (((this->dyna.actor.params == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_10)) ||
+            ((this->dyna.actor.params == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_20)) ||
+            ((this->dyna.actor.params == 2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_40)) ||
+            ((this->dyna.actor.params == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_80)) ||
+            ((this->dyna.actor.params == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_01)) ||
+            ((this->dyna.actor.params == 5) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_02)) ||
+            ((this->dyna.actor.params == 6) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_04)) ||
+            ((this->dyna.actor.params == 7) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_08))) {
             shouldSpawnSeahorse = true;
         }
 

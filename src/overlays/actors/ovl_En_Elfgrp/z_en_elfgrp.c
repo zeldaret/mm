@@ -11,6 +11,8 @@
 
 #define THIS ((EnElfgrp*)thisx)
 
+//! TODO: this file require macros for its uses of weekEventReg
+
 void EnElfgrp_Init(Actor* thisx, PlayState* play);
 void EnElfgrp_Destroy(Actor* thisx, PlayState* play);
 void EnElfgrp_Update(Actor* thisx, PlayState* play);
@@ -33,7 +35,7 @@ void func_80A3A77C(EnElfgrp* this, PlayState* play);
 void func_80A3A7FC(EnElfgrp* this, PlayState* play);
 void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 
-const ActorInit En_Elfgrp_InitVars = {
+ActorInit En_Elfgrp_InitVars = {
     ACTOR_EN_ELFGRP,
     ACTORCAT_PROP,
     FLAGS,
@@ -91,7 +93,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
 
                 switch (this->unk_147) {
                     case ENELFGRP_1:
-                        if (gSaveContext.save.weekEventReg[23] & 2) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
                             func_80A396B0(this, 1);
                         } else {
                             this->unk_14A |= 4;
@@ -146,7 +148,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                     this->unk_14A |= 2;
                     func_80A396B0(this, 6);
                 }
-            } else if ((gSaveContext.save.weekEventReg[8] & 0x80)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
                 func_80A39DC8(this, play, 24, 0);
                 this->actionFunc = func_80A3A398;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
@@ -421,7 +423,7 @@ void func_80A3A398(EnElfgrp* this, PlayState* play) {
         }
 
         if ((this->unk_14A & 4) != 0) {
-            gSaveContext.save.weekEventReg[23] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_23_02);
         }
 
         if (this->unk_14A & 0x10) {

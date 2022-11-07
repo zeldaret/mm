@@ -66,7 +66,7 @@ s32 D_80BE1A0C[] = {
     0x0C103012, 0x14FFEC06, 0x00920000, 0x1300920C, 0x10300034, 0x0100050E, 0x2B100C10, 0x0E2B110C, 0x10000000,
 };
 
-const ActorInit En_Tab_InitVars = {
+ActorInit En_Tab_InitVars = {
     ACTOR_EN_TAB,
     ACTORCAT_NPC,
     FLAGS,
@@ -268,7 +268,7 @@ void func_80BE0A98(EnTab* this, PlayState* play) {
 
     Matrix_Translate(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
-    if ((&this->actor == player->targetActor) &&
+    if ((&this->actor == player->talkActor) &&
         ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 2) == 0) {
@@ -435,8 +435,7 @@ s32 func_80BE10BC(EnTab* this, PlayState* play) {
             } else {
                 dist = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_1E4->actor.world.pos);
 
-                if ((gSaveContext.save.weekEventReg[75] & 1) || (this->unk_1E4->actor.draw == NULL) ||
-                    !(dist < 160.0f)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01) || (this->unk_1E4->actor.draw == NULL) || !(dist < 160.0f)) {
                     tempActor = &GET_PLAYER(play)->actor;
                     this->actor.child = tempActor;
                 } else {

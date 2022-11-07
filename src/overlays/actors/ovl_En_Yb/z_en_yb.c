@@ -32,7 +32,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
-const ActorInit En_Yb_InitVars = {
+ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
     ACTORCAT_NPC,
     FLAGS,
@@ -84,7 +84,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @Bug this alignment is because of player animations, but should be using ALIGN16
+    // @bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
                        (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
 
@@ -120,8 +120,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    // check if already healed
-    if (gSaveContext.save.weekEventReg[82] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -292,7 +291,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
             case 0x147D: // I am counting on you
                 func_801477B4(play);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.save.weekEventReg[82] |= 0x4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {

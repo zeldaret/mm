@@ -59,7 +59,7 @@ void func_808D2D30(EnFloormas* this, PlayState* play);
 void func_808D2DC0(EnFloormas* this, PlayState* play);
 void func_808D3754(Actor* thisx, PlayState* play);
 
-const ActorInit En_Floormas_InitVars = {
+ActorInit En_Floormas_InitVars = {
     ACTOR_EN_FLOORMAS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -719,7 +719,7 @@ void func_808D217C(EnFloormas* this, Player* player) {
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
-    ptr = &D_808D3900[(void)0, gSaveContext.save.playerForm];
+    ptr = &D_808D3900[GET_PLAYER_FORM];
     this->actor.home.pos.x = ptr->z * Math_SinS(this->actor.shape.rot.y);
     this->actor.home.pos.y = CLAMP(-this->actor.playerHeightRel, ptr->x, ptr->y);
     this->actor.home.pos.z = ptr->z * Math_CosS(this->actor.shape.rot.y);
@@ -762,7 +762,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
         this->actor.speedXZ = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
-        func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->unk_92);
+        func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->voiceSfxIdOffset);
         play->damagePlayer(play, -4);
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_STICK - SFX_FLAG);

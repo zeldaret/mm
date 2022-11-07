@@ -22,7 +22,7 @@ void func_80BDD634(EnZow* this, PlayState* play);
 void func_80BDD6BC(EnZow* this, PlayState* play);
 void func_80BDD79C(EnZow* this, PlayState* play);
 
-const ActorInit En_Zow_InitVars = {
+ActorInit En_Zow_InitVars = {
     ACTOR_EN_ZOW,
     ACTORCAT_NPC,
     FLAGS,
@@ -357,45 +357,45 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
             if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.save.weekEventReg[78] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
                 } else {
                     phi_a1 = 0x12FA;
-                    gSaveContext.save.weekEventReg[78] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_78_04);
                 }
-            } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_10)) {
                 phi_a1 = 0x1301;
             } else {
-                gSaveContext.save.weekEventReg[78] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
                 phi_a1 = 0x12FF;
             }
         } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            if (gSaveContext.save.weekEventReg[78] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_08)) {
                 phi_a1 = 0x12F8;
             } else {
                 phi_a1 = 0x12F3;
-                gSaveContext.save.weekEventReg[78] |= 8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_78_08);
             }
-        } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_10)) {
             phi_a1 = 0x1301;
         } else {
-            gSaveContext.save.weekEventReg[78] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
             phi_a1 = 0x12FF;
         }
-    } else if (gSaveContext.save.weekEventReg[55] & 0x80) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
     } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[78] & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_02)) {
             phi_a1 = 0x12EB;
         } else {
             phi_a1 = 0x12E8;
-            gSaveContext.save.weekEventReg[78] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_78_02);
         }
     } else {
         phi_a1 = 0x12EF;
@@ -589,11 +589,12 @@ void EnZow_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_80BDDA7C(GraphicsContext* gfxCtx) {
-    Gfx* gfx = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gSPEndDisplayList(gfx);
+    gSPEndDisplayList(gfx++);
 
-    return gfx;
+    return gfxHead;
 }
 
 Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };

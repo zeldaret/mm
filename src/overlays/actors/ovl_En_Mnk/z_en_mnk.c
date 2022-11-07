@@ -16,7 +16,7 @@ void EnMnk_Update(Actor* thisx, PlayState* play);
 void EnMnk_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Mnk_InitVars = {
+ActorInit En_Mnk_InitVars = {
     ACTOR_EN_MNK,
     ACTORCAT_NPC,
     FLAGS,

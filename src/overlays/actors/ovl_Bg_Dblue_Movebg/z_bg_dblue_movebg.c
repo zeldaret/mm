@@ -45,7 +45,7 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
-const ActorInit Bg_Dblue_Movebg_InitVars = {
+ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -812,7 +812,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if ((this->unk_160 == 8) && (this->unk_172 & 0x20)) {
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gGreatBayTempleObjectWaterwheelSplashTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim));
 
         OPEN_DISPS(play->state.gfxCtx);
 

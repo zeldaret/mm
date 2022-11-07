@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Prz_InitVars = {
+ActorInit En_Prz_InitVars = {
     ACTOR_EN_PRZ,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -353,7 +353,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
         this->unk_1C8 = 1;
     }
 
-    this->unk_1D8.y = (player->actor.world.pos.y + D_80A771E0[((void)0, gSaveContext.save.playerForm)]) +
+    this->unk_1D8.y = (player->actor.world.pos.y + D_80A771E0[GET_PLAYER_FORM]) +
                       randPlusMinusPoint5Scaled((2.0f * this->unk_1E6) + 1.0f);
     func_80A76070(this, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_1D8), play);
 }

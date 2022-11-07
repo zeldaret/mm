@@ -28,7 +28,7 @@ void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this);
 void ObjTokeiStep_DoNothingOpen(ObjTokeiStep* this, PlayState* play);
 void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Tokei_Step_InitVars = {
+ActorInit Obj_Tokei_Step_InitVars = {
     ACTOR_OBJ_TOKEI_STEP,
     ACTORCAT_BG,
     FLAGS,

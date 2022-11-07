@@ -51,7 +51,7 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
-const ActorInit En_GirlA_InitVars = {
+ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
     ACTORCAT_PROP,
     FLAGS,
@@ -205,13 +205,13 @@ s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this) {
-    if (!(gSaveContext.save.weekEventReg[53] & 8)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (!(gSaveContext.save.weekEventReg[53] & 0x10)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_10)) {
         return CANBUY_RESULT_SUCCESS_2;
     }
     if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {

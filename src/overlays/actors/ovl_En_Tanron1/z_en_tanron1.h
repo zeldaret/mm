@@ -39,6 +39,4 @@ typedef struct EnTanron1 {
     /* 0x3360 */ Vec3f unk_3360;
 } EnTanron1; // size = 0x336C
 
-extern const ActorInit En_Tanron1_InitVars;
-
 #endif // Z_EN_TANRON1_H

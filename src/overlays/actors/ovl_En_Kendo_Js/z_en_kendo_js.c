@@ -37,7 +37,7 @@ s32 func_80B278C4(PlayState* play, Vec3f arg1);
 void func_80B279F0(EnKendoJs* this, PlayState* play, s32 arg2);
 void func_80B27A90(EnKendoJs* this, PlayState* play);
 
-const ActorInit En_Kendo_Js_InitVars = {
+ActorInit En_Kendo_Js_InitVars = {
     ACTOR_EN_KENDO_JS,
     ACTORCAT_NPC,
     FLAGS,
@@ -148,7 +148,7 @@ void EnKendoJs_Destroy(Actor* thisx, PlayState* play) {
     EnKendoJs* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[82] &= (u8)~8;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
 }
 
 void func_80B26538(EnKendoJs* this) {
@@ -504,7 +504,7 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
 }
 
 void func_80B2714C(EnKendoJs* this) {
-    gSaveContext.save.weekEventReg[82] |= 8;
+    SET_WEEKEVENTREG(WEEKEVENTREG_82_08);
     this->unk_28C = 1;
     this->unk_290 = 0;
     this->unk_284 = 0;
@@ -565,14 +565,14 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
         }
 
         if (this->unk_284 == 7) {
-            gSaveContext.save.weekEventReg[82] &= (u8)~8;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
             func_80B26AE8(this);
         }
     }
 }
 
 void func_80B273D0(EnKendoJs* this) {
-    gSaveContext.save.weekEventReg[82] |= 8;
+    SET_WEEKEVENTREG(WEEKEVENTREG_82_08);
     this->unk_290 = 120;
     this->unk_284 = 0;
     this->unk_286 = 1;
@@ -605,7 +605,7 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
                 this->unk_288 = 0x272E;
             }
             player->stateFlags1 |= PLAYER_STATE1_20;
-            gSaveContext.save.weekEventReg[82] &= (u8)~8;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_08);
             func_80B26AE8(this);
             return;
         }
@@ -648,7 +648,7 @@ void func_80B276D8(EnKendoJs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         func_80B27760(this);
-    } else if (!(gSaveContext.save.weekEventReg[63] & 0x20)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
@@ -663,8 +663,8 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.weekEventReg[63] & 0x20)) {
-            gSaveContext.save.weekEventReg[63] |= 0x20;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_63_20);
             Message_StartTextbox(play, 0x272F, &this->actor);
             this->unk_288 = 0x272F;
         } else {

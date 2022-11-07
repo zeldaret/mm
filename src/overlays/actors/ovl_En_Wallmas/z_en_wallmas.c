@@ -43,7 +43,7 @@ void EnWallmas_WaitForProximity(EnWallmas* this, PlayState* play);
 void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
-const ActorInit En_Wallmas_InitVars = {
+ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -459,14 +459,14 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->yTarget = this->actor.playerHeightRel;
-    func_800B724C(play, &this->actor, 18);
+    func_800B724C(play, &this->actor, PLAYER_CSMODE_18);
 }
 
 void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+        func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_CATCH);
     }
 
@@ -480,9 +480,9 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
             this->actor.world.pos.y += 10.0f;
         }
 
-        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)];
+        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[GET_PLAYER_FORM];
         if (this->timer == -30) {
-            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_TAKEN_AWAY);
+            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_TAKEN_AWAY);
         }
 
         if (this->timer == 0) {
@@ -491,8 +491,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
         this->timer += 2;
     } else {
-        Math_StepToF(&this->actor.world.pos.y,
-                     sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)] + player->actor.world.pos.y, 5.0f);
+        Math_StepToF(&this->actor.world.pos.y, sYOffsetPerForm[GET_PLAYER_FORM] + player->actor.world.pos.y, 5.0f);
     }
 
     Math_StepToF(&this->actor.world.pos.x, player->actor.world.pos.x, 3.0f);

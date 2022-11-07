@@ -118,7 +118,7 @@ s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 
 s32 D_80B2C490[] = { 0x2C27850C, 0x10000000 };
 
-const ActorInit En_Pst_InitVars = {
+ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
     ACTORCAT_PROP,
     FLAGS,
@@ -162,15 +162,15 @@ void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
 s32 EnPst_HandleLetterDay1(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x2;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02);
         case POSTBOX_NORTH_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x4;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04);
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x8;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08);
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x10;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10);
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x20;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20);
         default:
             return false;
     }
@@ -179,15 +179,15 @@ s32 EnPst_HandleLetterDay1(EnPst* this) {
 s32 EnPst_HandleLetterDay2(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x40;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40);
         case POSTBOX_NORTH_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x80;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80);
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[28] & 0x1;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01);
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[28] & 0x2;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02);
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[28] & 0x4;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04);
         default:
             return false;
     }
@@ -358,19 +358,19 @@ void EnPst_Talk(EnPst* this, PlayState* play) {
         if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {
                 case 1:
-                    gSaveContext.save.weekEventReg[91] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_91_04);
                     break;
 
                 case 2:
                     if (EnPst_HandleLetterDay2(this)) {
-                        gSaveContext.save.weekEventReg[91] |= 8;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_91_08);
                     } else {
-                        gSaveContext.save.weekEventReg[91] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_91_04);
                     }
                     break;
 
                 default:
-                    gSaveContext.save.weekEventReg[91] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_91_08);
                     break;
             }
         }

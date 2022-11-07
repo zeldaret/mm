@@ -25,7 +25,7 @@ void EnSsh_Start(EnSsh* this, PlayState* play);
 
 extern AnimationHeader D_06000304;
 
-const ActorInit En_Ssh_InitVars = {
+ActorInit En_Ssh_InitVars = {
     ACTOR_EN_SSH,
     ACTORCAT_NPC,
     FLAGS,
@@ -708,11 +708,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 void func_809756D0(EnSsh* this, PlayState* play) {
     u16 phi_a1;
 
-    if (gSaveContext.save.weekEventReg[34] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        gSaveContext.save.weekEventReg[34] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_08);
     }
     Message_StartTextbox(play, phi_a1, &this->actor);
 }

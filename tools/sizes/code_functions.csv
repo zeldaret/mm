@@ -268,7 +268,7 @@ asm/non_matchings/code/z_actor/Actor_IsFacingPlayer.s,Actor_IsFacingPlayer,0x800
 asm/non_matchings/code/z_actor/Actor_ActorAIsFacingActorB.s,Actor_ActorAIsFacingActorB,0x800B742C,0x18
 asm/non_matchings/code/z_actor/Actor_IsFacingAndNearPlayer.s,Actor_IsFacingAndNearPlayer,0x800B748C,0x20
 asm/non_matchings/code/z_actor/Actor_ActorAIsFacingAndNearActorB.s,Actor_ActorAIsFacingAndNearActorB,0x800B750C,0x25
-asm/non_matchings/code/z_actor/func_800B75A0.s,func_800B75A0,0x800B75A0,0x1F
+asm/non_matchings/code/z_actor/Actor_GetSlopeDirection.s,Actor_GetSlopeDirection,0x800B75A0,0x1F
 asm/non_matchings/code/z_actor/func_800B761C.s,func_800B761C,0x800B761C,0x17
 asm/non_matchings/code/z_actor/func_800B7678.s,func_800B7678,0x800B7678,0x90
 asm/non_matchings/code/z_actor/Actor_UpdateBgCheckInfo.s,Actor_UpdateBgCheckInfo,0x800B78B8,0x153
@@ -1721,7 +1721,7 @@ asm/non_matchings/code/z_player_lib/Player_SetModels.s,Player_SetModels,0x80123A
 asm/non_matchings/code/z_player_lib/Player_SetModelGroup.s,Player_SetModelGroup,0x80123BD4,0x21
 asm/non_matchings/code/z_player_lib/func_80123C58.s,func_80123C58,0x80123C58,0xE
 asm/non_matchings/code/z_player_lib/Player_SetEquipmentData.s,Player_SetEquipmentData,0x80123C90,0x30
-asm/non_matchings/code/z_player_lib/func_80123D50.s,func_80123D50,0x80123D50,0x15
+asm/non_matchings/code/z_player_lib/Player_UpdateBottleHeld.s,Player_UpdateBottleHeld,0x80123D50,0x15
 asm/non_matchings/code/z_player_lib/func_80123DA4.s,func_80123DA4,0x80123DA4,0x7
 asm/non_matchings/code/z_player_lib/func_80123DC0.s,func_80123DC0,0x80123DC0,0x34
 asm/non_matchings/code/z_player_lib/func_80123E90.s,func_80123E90,0x80123E90,0x21
@@ -2294,9 +2294,9 @@ asm/non_matchings/code/code_801420C0/func_801420F4.s,func_801420F4,0x801420F4,0x
 asm/non_matchings/code/code_801420C0/func_80142100.s,func_80142100,0x80142100,0xD0
 asm/non_matchings/code/z_vr_box/func_80142440.s,func_80142440,0x80142440,0x342
 asm/non_matchings/code/z_vr_box/func_80143148.s,func_80143148,0x80143148,0x28
-asm/non_matchings/code/z_vr_box/func_801431E8.s,func_801431E8,0x801431E8,0x4F
+asm/non_matchings/code/z_vr_box/Skybox_Setup.s,Skybox_Setup,0x801431E8,0x4F
 asm/non_matchings/code/z_vr_box/func_80143324.s,func_80143324,0x80143324,0x70
-asm/non_matchings/code/z_vr_box/func_801434E4.s,func_801434E4,0x801434E4,0x2F
+asm/non_matchings/code/z_vr_box/Skybox_Init.s,Skybox_Init,0x801434E4,0x2F
 asm/non_matchings/code/z_vr_box_draw/func_801435A0.s,func_801435A0,0x801435A0,0x21
 asm/non_matchings/code/z_vr_box_draw/func_80143624.s,func_80143624,0x80143624,0x11
 asm/non_matchings/code/z_vr_box_draw/func_80143668.s,func_80143668,0x80143668,0xE7
@@ -2552,7 +2552,7 @@ asm/non_matchings/code/z_play/func_8016A02C.s,func_8016A02C,0x8016A02C,0x20
 asm/non_matchings/code/z_play/Play_IsUnderwater.s,Play_IsUnderwater,0x8016A0AC,0x2F
 asm/non_matchings/code/z_play/Play_IsDebugCamEnabled.s,Play_IsDebugCamEnabled,0x8016A168,0x4
 asm/non_matchings/code/z_play/func_8016A178.s,func_8016A178,0x8016A178,0x3C
-asm/non_matchings/code/z_play/func_8016A268.s,func_8016A268,0x8016A268,0x18
+asm/non_matchings/code/z_play/Play_FillScreen.s,Play_FillScreen,0x8016A268,0x18
 asm/non_matchings/code/z_play/Play_Init.s,Play_Init,0x8016A2C8,0x252
 asm/non_matchings/code/z_play_hireso/func_8016AC10.s,func_8016AC10,0x8016AC10,0x83
 asm/non_matchings/code/z_play_hireso/func_8016AE1C.s,func_8016AE1C,0x8016AE1C,0x117

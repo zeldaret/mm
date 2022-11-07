@@ -15,6 +15,8 @@
 
 #define THIS ((EnRacedog*)thisx)
 
+//! TODO: this file require macros for its uses of weekEventReg
+
 void EnRacedog_Init(Actor* thisx, PlayState* play);
 void EnRacedog_Destroy(Actor* thisx, PlayState* play);
 void EnRacedog_Update(Actor* thisx, PlayState* play);
@@ -69,7 +71,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,

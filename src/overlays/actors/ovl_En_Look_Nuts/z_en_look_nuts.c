@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-const ActorInit En_Look_Nuts_InitVars = {
+ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -300,7 +300,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[17] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_17_04);
     }
 }
 
@@ -359,7 +359,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, 0x1A);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;

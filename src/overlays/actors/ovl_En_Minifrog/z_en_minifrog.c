@@ -26,7 +26,7 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play);
 
-const ActorInit En_Minifrog_InitVars = {
+ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
     ACTORCAT_NPC,
     FLAGS,
@@ -66,14 +66,8 @@ static TexturePtr D_808A4D74[] = {
     object_fr_Tex_005BA0,
 };
 
-// gSaveContext.save.weekEventReg[KEY] = VALUE
-// KEY | VALUE
 static u16 isFrogReturnedFlags[] = {
-    (0 << 8) | 0x00,  // NULL
-    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-    (33 << 8) | 0x01, // Southern Swamp Frog Returned
-    (33 << 8) | 0x02, // Laundry Pool Frog Returned
+    0, WEEKEVENTREG_32_40, WEEKEVENTREG_32_80, WEEKEVENTREG_33_01, WEEKEVENTREG_33_02,
 };
 
 static s32 isInitialized = false;
@@ -94,7 +88,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (!isInitialized) {
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < ARRAY_COUNT(D_808A4D74); i++) {
             D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
         }
         isInitialized = true;
@@ -112,10 +106,9 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     this->timer = 0;
 
     if (1) {}
+
     if (!EN_MINIFROG_IS_RETURNED(&this->actor)) {
-        if ((this->frogIndex == MINIFROG_YELLOW) ||
-            ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
-              (u8)isFrogReturnedFlags[this->frogIndex]))) {
+        if ((this->frogIndex == MINIFROG_YELLOW) || CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -129,8 +122,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actor.textId = 0;
             this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
 
-            // Not spoken to MINIFROG_YELLOW
-            if (!(gSaveContext.save.weekEventReg[34] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
 
@@ -141,8 +133,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
 
             // Frog has been returned
-            if ((gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
-                 (u8)isFrogReturnedFlags[this->frogIndex])) {
+            if (CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
                 this->actionFunc = EnMinifrog_SetupNextFrogInit;
             } else {
                 this->actor.draw = NULL;
@@ -271,16 +262,14 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
-            case 0xD82:                                          // "What has brought you all this way?"
-                if (gSaveContext.save.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
+            case 0xD82: // "What has brought you all this way?"
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                     func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
                     func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"
                 }
 
-                gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] =
-                    ((void)0, gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8]) |
-                    (u8)isFrogReturnedFlags[this->frogIndex];
+                SET_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex]);
                 break;
 
             case 0xD85: // "I understand. I shall head for the mountains immediately."
@@ -521,7 +510,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                                 // you've lost a little weight..."
                         func_80151938(play, play->msgCtx.currentTextId + 1);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
-                        gSaveContext.save.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
+                        SET_WEEKEVENTREG(WEEKEVENTREG_34_01);
                         break;
                     case 0xD78: // "Unfortunately, it seems not all of our members have gathered."
                     case 0xD79: // "Perhaps it is because winter was too long? They must not have realized that spring
@@ -535,11 +524,11 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
                         play->msgCtx.msgLength = 0;
                         break;
                     case 0xD7C: // "The conducting was spectacular. And all of our members rose to the occasion!"
-                        if (gSaveContext.save.weekEventReg[35] & 0x80) { // Obtained Heart Piece
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_80)) { // Obtained Heart Piece
                             func_80151938(play, 0xD7E);
                         } else {
                             func_80151938(play, 0xD7D); // Get Heart Piece
-                            gSaveContext.save.weekEventReg[35] |= 0x80;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_35_80);
                         }
                         break;
                     case 0xD7D: // "This is how deeply we were moved by your spectacular conducting..."
@@ -568,7 +557,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
     EnMinifrog_JumpTimer(this);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
-        if (!(gSaveContext.save.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_01)) {
             Message_StartTextbox(play, 0xD76,
                                  &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
                                                 // but it looks like you've lost a little weight..."

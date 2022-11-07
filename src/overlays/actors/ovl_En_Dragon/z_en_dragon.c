@@ -50,7 +50,7 @@ typedef enum {
 
 static s32 sNumPythonsDead = 0;
 
-const ActorInit En_Dragon_InitVars = {
+ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -535,7 +535,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
     if (this->grabTimer > sMaxGrabTimerPerPython[this->pythonIndex]) {
         if (this->state == DEEP_PYTHON_GRAB_STATE_START) {
-            func_800B7298(play, &this->actor, 6);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
             this->state = DEEP_PYTHON_GRAB_STATE_GRABBED;
         }
 
@@ -572,7 +572,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
         //! player->currentMask, but in this case is garbage in the skelAnime
-        func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+        func_800B8E58((Player*)this, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
         CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
     }
@@ -684,37 +684,37 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
                                           this->actor.unk20, NULL)) {
-            gSaveContext.save.weekEventReg[13] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_13_01);
             switch (this->pythonIndex) {
                 case 0:
-                    gSaveContext.save.weekEventReg[83] |= 0x10;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_10);
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[83] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_20);
                     break;
 
                 case 2:
-                    gSaveContext.save.weekEventReg[83] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_40);
                     break;
 
                 case 3:
-                    gSaveContext.save.weekEventReg[83] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_83_80);
                     break;
                 case 4:
-                    gSaveContext.save.weekEventReg[84] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_01);
                     break;
 
                 case 5:
-                    gSaveContext.save.weekEventReg[84] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_02);
                     break;
 
                 case 6:
-                    gSaveContext.save.weekEventReg[84] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_04);
                     break;
 
                 case 7:
-                    gSaveContext.save.weekEventReg[84] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_84_08);
                     break;
             }
         }

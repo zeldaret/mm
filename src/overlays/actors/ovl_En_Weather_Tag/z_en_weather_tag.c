@@ -35,7 +35,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play);
 void func_809674C8(EnWeatherTag* this, PlayState* play);
 void func_80967608(EnWeatherTag* this, PlayState* play);
 
-const ActorInit En_Weather_Tag_InitVars = {
+ActorInit En_Weather_Tag_InitVars = {
     ACTOR_EN_WEATHER_TAG,
     ACTORCAT_PROP,
     FLAGS,
@@ -77,7 +77,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (gSaveContext.save.weekEventReg[52] & 0x20) { // if cleared STT
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);

@@ -24,7 +24,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play);
 void func_808AEF68(EnBombf* this, PlayState* play);
 void func_808AEFD4(EnBombf* this, PlayState* play);
 
-const ActorInit En_Bombf_InitVars = {
+ActorInit En_Bombf_InitVars = {
     ACTOR_EN_BOMBF,
     ACTORCAT_PROP,
     FLAGS,
@@ -451,15 +451,15 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_808AF86C(GraphicsContext* gfxCtx, PlayState* play) {
-    Gfx* head = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
-    Gfx* gfx = head;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 5 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(gfx++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPEndDisplayList(gfx++);
 
-    return head;
+    return gfxHead;
 }
 
 void EnBombf_Draw(Actor* thisx, PlayState* play) {

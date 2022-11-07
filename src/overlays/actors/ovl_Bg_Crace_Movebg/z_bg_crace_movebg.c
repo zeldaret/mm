@@ -41,7 +41,7 @@ typedef enum {
 
 u8 sIsLoaded[32];
 
-const ActorInit Bg_Crace_Movebg_InitVars = {
+ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -243,9 +243,9 @@ void BgCraceMovebg_ClosingDoor_CheckIfPlayerIsBeyondDoor(BgCraceMovebg* this, Pl
 
     if ((BG_CRACE_MOVEBG_GET_TYPE(&this->dyna.actor) != BG_CRACE_MOVEBG_TYPE_UNUSED_CLOSING) &&
         SubS_LineSegVsPlane(&this->dyna.actor.home.pos, &this->dyna.actor.home.rot, &sUnitVecZ, &this->prevPlayerPos,
-                            &player->bodyPartsPos[0], &intersect)) {
+                            &player->bodyPartsPos[PLAYER_BODYPART_WAIST], &intersect)) {
         Matrix_RotateYS(-this->dyna.actor.home.rot.y, MTXMODE_NEW);
-        Math_Vec3f_Diff(&player->bodyPartsPos[0], &this->dyna.actor.home.pos, &posDiff);
+        Math_Vec3f_Diff(&player->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->dyna.actor.home.pos, &posDiff);
         Matrix_MultVec3f(&posDiff, &this->intersectionOffsetFromHome);
 
         if (fabsf(this->intersectionOffsetFromHome.x) < 100.0f && this->intersectionOffsetFromHome.y >= -10.0f &&

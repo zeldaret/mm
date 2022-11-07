@@ -26,6 +26,4 @@ typedef enum {
     /* 5 */ RUPEE_UNUSED,
 } RupeeType;
 
-extern const ActorInit En_Sc_Ruppe_InitVars;
-
 #endif // Z_EN_SC_RUPPE_H

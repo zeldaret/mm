@@ -16,7 +16,7 @@ void DmTsg_Update(Actor* thisx, PlayState* play);
 void DmTsg_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Dm_Tsg_InitVars = {
+ActorInit Dm_Tsg_InitVars = {
     ACTOR_DM_TSG,
     ACTORCAT_ITEMACTION,
     FLAGS,

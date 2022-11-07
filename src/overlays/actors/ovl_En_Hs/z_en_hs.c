@@ -23,7 +23,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play);
 void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
-const ActorInit En_Hs_InitVars = {
+ActorInit En_Hs_InitVars = {
     ACTOR_EN_HS,
     ACTORCAT_NPC,
     FLAGS,
@@ -218,14 +218,14 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
     if (DECR(this->stateTimer) == 0) {
         play->nextEntrance = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[25] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_25_08);
         this->actionFunc = EnHs_DoNothing;
     }
 }
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
@@ -239,7 +239,7 @@ void func_809533A0(EnHs* this, PlayState* play) {
     } else if (this->stateFlags & 0x10) {
         sp1E = 0x33F9;
         this->stateFlags &= ~0x10;
-    } else if (gSaveContext.save.weekEventReg[25] & 8) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         sp1E = 0x33F4;
     } else {
         sp1E = 0x33F5;

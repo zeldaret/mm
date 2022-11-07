@@ -22,7 +22,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play);
 
 s32 D_80BF5C10;
 
-const ActorInit En_Rg_InitVars = {
+ActorInit En_Rg_InitVars = {
     ACTOR_EN_RG,
     ACTORCAT_NPC,
     FLAGS,
@@ -659,7 +659,7 @@ void func_80BF4EBC(EnRg* this, PlayState* play) {
             this->actor.shape.yOffset = 14.0f;
             this->actionFunc = func_80BF4FC4;
         }
-    } else if (gSaveContext.save.weekEventReg[12] & 2) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
         if (DECR(this->unk_318) == 0) {
             func_80BF409C(this, 1);
             this->unk_310 &= ~8;
@@ -698,7 +698,7 @@ void func_80BF4FC4(EnRg* this, PlayState* play) {
             this->unk_310 &= ~0x800;
         }
 
-        if (gSaveContext.eventInf[1] & 1) {
+        if (CHECK_EVENTINF(EVENTINF_10)) {
             if (DECR(this->unk_318) == 0) {
                 func_80BF47AC(this, play);
 
@@ -751,7 +751,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = -1.0f;
         SubS_UpdateFlags(&this->unk_310, 3, 7);
 
-        if (!(gSaveContext.save.weekEventReg[12] & 2)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
             this->unk_318 = Rand_S16Offset(30, 30);
         }
 

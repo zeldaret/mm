@@ -25,7 +25,7 @@ void func_80C042F8(EnBombers* this);
 void func_80C04354(EnBombers* this, PlayState* play);
 void func_80C043C8(EnBombers* this, PlayState* play);
 
-const ActorInit En_Bombers_InitVars = {
+ActorInit En_Bombers_InitVars = {
     ACTOR_EN_BOMBERS,
     ACTORCAT_NPC,
     FLAGS,
@@ -104,20 +104,20 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
     this->unk_2BE = ENBOMBERS_GET_F(&this->actor);
 
     if (this->unk_2BC == ENBOMBERS_F0_0) {
-        if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
             Actor_Kill(&this->actor);
             return;
         }
 
         this->unk_2BE++;
         func_80C03ACC(this);
-    } else if (((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) &&
-               (((this->unk_2BE == ENBOMBERS_F_0) && (gSaveContext.save.weekEventReg[76] & 1)) ||
-                ((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.save.weekEventReg[76] & 2)) ||
-                ((this->unk_2BE == ENBOMBERS_F_2) && (gSaveContext.save.weekEventReg[76] & 4)) ||
-                ((this->unk_2BE == ENBOMBERS_F_3) && (gSaveContext.save.weekEventReg[76] & 8)) ||
-                ((this->unk_2BE == ENBOMBERS_F_4) && (gSaveContext.save.weekEventReg[76] & 0x10)))) {
-        if (gSaveContext.save.weekEventReg[75] & 0x40) {
+    } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) &&
+               (((this->unk_2BE == ENBOMBERS_F_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_01)) ||
+                ((this->unk_2BE == ENBOMBERS_F_1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_02)) ||
+                ((this->unk_2BE == ENBOMBERS_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_04)) ||
+                ((this->unk_2BE == ENBOMBERS_F_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_08)) ||
+                ((this->unk_2BE == ENBOMBERS_F_4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_76_10)))) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40)) {
             if (this->unk_2BE == ENBOMBERS_F_0) {
                 EnBomBowlMan* bomBowlMan = (EnBomBowlMan*)Actor_Spawn(
                     &play->actorCtx, play, ACTOR_EN_BOM_BOWL_MAN, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -131,11 +131,11 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     while (cs != -1) { bomBowlMan->unk_2CC[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
                     // clang-format on
 
-                    gSaveContext.save.weekEventReg[76] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~2;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~4;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~8;
-                    gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_04);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_08);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_10);
                 }
             }
             Actor_Kill(&this->actor);
@@ -182,7 +182,7 @@ void func_80C039A8(EnBombers* this, PlayState* play) {
     switch (player->transformation) {
         case PLAYER_FORM_HUMAN:
             this->actor.textId = 0x73D;
-            if (gSaveContext.save.weekEventReg[84] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_80)) {
                 this->actor.textId = 0x74B;
             }
             break;
@@ -196,14 +196,14 @@ void func_80C039A8(EnBombers* this, PlayState* play) {
             break;
 
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.save.weekEventReg[73] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_20)) {
                 this->actor.textId = 0x75A;
-            } else if (gSaveContext.save.weekEventReg[73] & 0x40) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_40)) {
                 this->actor.textId = 0x749;
-                if (((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.save.weekEventReg[74] & 1)) ||
-                    ((this->unk_2BE == ENBOMBERS_F_2) && (gSaveContext.save.weekEventReg[74] & 2)) ||
-                    ((this->unk_2BE == ENBOMBERS_F_3) && (gSaveContext.save.weekEventReg[74] & 4)) ||
-                    ((this->unk_2BE == ENBOMBERS_F_4) && (gSaveContext.save.weekEventReg[74] & 8))) {
+                if (((this->unk_2BE == ENBOMBERS_F_1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_01)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_02)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_04)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_74_08))) {
                     this->actor.textId = 0x74A;
                 }
             } else {
@@ -395,22 +395,22 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
         } else if (this->actor.textId == 0x748) {
             switch (this->unk_2BE) {
                 case ENBOMBERS_F_1:
-                    gSaveContext.save.weekEventReg[74] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_74_01);
                     break;
 
                 case ENBOMBERS_F_2:
-                    gSaveContext.save.weekEventReg[74] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_74_02);
                     break;
 
                 case ENBOMBERS_F_3:
-                    gSaveContext.save.weekEventReg[74] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_74_04);
                     break;
 
                 case ENBOMBERS_F_4:
-                    gSaveContext.save.weekEventReg[74] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_74_08);
                     break;
             }
-            gSaveContext.save.weekEventReg[73] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_73_40);
         }
 
         switch (sp2A) {

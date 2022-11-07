@@ -72,7 +72,7 @@ typedef enum {
     /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
 } GiantCsActionIndex;
 
-const ActorInit En_Giant_InitVars = {
+ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
     ACTORCAT_NPC,
     FLAGS,
@@ -183,7 +183,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.save.weekEventReg[25] & 2)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
             Actor_Kill(&this->actor);
             return;
         }

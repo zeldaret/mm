@@ -27,7 +27,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-const ActorInit En_Guruguru_InitVars = {
+ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
     ACTORCAT_NPC,
     FLAGS,
@@ -119,10 +119,10 @@ void func_80BC6E10(EnGuruguru* this) {
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
-        if (gSaveContext.save.weekEventReg[38] & 0x10) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_10)) {
             this->textIdIndex = 1;
         }
-    } else if (gSaveContext.save.weekEventReg[38] & 0x40) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_40)) {
         this->textIdIndex = 2;
     } else {
         this->textIdIndex = 3;
@@ -131,8 +131,8 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.save.weekEventReg[77] & 4)) {
-        if (!(gSaveContext.save.weekEventReg[88] & 4)) {
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04)) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;
@@ -153,7 +153,7 @@ void func_80BC6F14(EnGuruguru* this, PlayState* play) {
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
             this->textIdIndex = 13;
-            if (gSaveContext.save.weekEventReg[79] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_04)) {
                 this->textIdIndex = 14;
             }
         }
@@ -212,16 +212,16 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(play, 0x13);
-            gSaveContext.save.weekEventReg[79] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_79_04);
             func_80BC6E10(this);
             return;
         }
         if (this->actor.params == 0) {
             if (this->actor.textId == 0x295F) {
-                gSaveContext.save.weekEventReg[88] |= 4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_04);
             }
             if (this->actor.textId == 0x292A) {
-                gSaveContext.save.weekEventReg[38] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_38_10);
             }
             func_80151BB4(play, 0x13);
             func_80BC6E10(this);
@@ -232,7 +232,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             return;
         }
         if (this->textIdIndex == 12) {
-            gSaveContext.save.weekEventReg[38] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
             func_801A3B48(0);
             func_80151BB4(play, 0x36);
             func_80151BB4(play, 0x13);
@@ -297,7 +297,7 @@ void func_80BC7440(EnGuruguru* this, PlayState* play) {
         func_801A3B48(1);
         func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
         this->unk268 = 0;
-        gSaveContext.save.weekEventReg[38] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
         this->actionFunc = func_80BC7520;
     } else {
         Actor_PickUp(&this->actor, play, GI_MASK_BREMEN, 300.0f, 300.0f);

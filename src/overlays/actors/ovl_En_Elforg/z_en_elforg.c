@@ -22,7 +22,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play);
 void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play);
 
-const ActorInit En_Elforg_InitVars = {
+ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -80,7 +80,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
 
     switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
-            if (gSaveContext.save.weekEventReg[8] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -293,7 +293,7 @@ void EnElforg_TurnInFairy(EnElforg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset *= 0.9f;
     this->actor.speedXZ = 5.0f;
-    EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[0]);
+    EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 
     xzDistToPlayer = this->actor.xzDistToPlayer;
     if (xzDistToPlayer < 0.0f) {
@@ -393,7 +393,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
 
     this->actor.world.pos.x = (Math_SinS(this->timer << 12) * distanceFromPlayer) + playerActor->world.pos.x;
     this->actor.world.pos.z = (Math_CosS(this->timer << 12) * distanceFromPlayer) + playerActor->world.pos.z;
-    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     EnElforg_SpawnSparkles(this, play, 16);
 }
 
@@ -412,7 +412,7 @@ void EnElforg_SetupFairyCollected(EnElforg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.world.pos.x = playerActor->world.pos.x;
-    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = EnElforg_FairyCollected;
     this->timer = 0;
@@ -430,7 +430,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
         Actor_Kill(&this->actor);
-        gSaveContext.save.weekEventReg[8] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_08_80);
         ActorCutscene_Stop(0x7C);
         return;
     }
@@ -452,7 +452,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Player_GetMask(play) == PLAYER_MASK_GREAT_FAIRY) {
-        pos = player->bodyPartsPos[0];
+        pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
         this->targetSpeedXZ = 5.0f;
         EnElforg_MoveToTarget(this, &pos);
     } else {

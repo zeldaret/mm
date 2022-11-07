@@ -67,7 +67,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play);
 void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
 
-const ActorInit Door_Spiral_InitVars = {
+ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
     FLAGS,
@@ -274,7 +274,7 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
     } else if (DoorSpiral_PlayerShouldClimb(this, play)) {
         player = GET_PLAYER(play);
 
-        player->doorType = 4;
+        player->doorType = PLAYER_DOORTYPE_STAIRCASE;
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = DOORSPIRAL_GET_TRANSITION_ID(&this->actor);

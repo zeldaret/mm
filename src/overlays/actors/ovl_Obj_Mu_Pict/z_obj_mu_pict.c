@@ -25,7 +25,7 @@ void func_80C06D90(ObjMuPict* this, PlayState* play);
 void func_80C06DC8(ObjMuPict* this, PlayState* play);
 void func_80C06E88(ObjMuPict* this, PlayState* play);
 
-const ActorInit Obj_Mu_Pict_InitVars = {
+ActorInit Obj_Mu_Pict_InitVars = {
     ACTOR_OBJ_MU_PICT,
     ACTORCAT_PROP,
     FLAGS,
@@ -40,7 +40,7 @@ const ActorInit Obj_Mu_Pict_InitVars = {
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {
     ObjMuPict* this = THIS;
 
-    if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
         Actor_Kill(&this->actor);
     }
 

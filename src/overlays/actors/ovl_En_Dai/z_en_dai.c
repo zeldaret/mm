@@ -19,7 +19,7 @@ void EnDai_Draw(Actor* thisx, PlayState* play);
 void func_80B3F00C(EnDai* this, PlayState* play);
 void func_80B3EF90(EnDai* this, PlayState* play);
 
-const ActorInit En_Dai_InitVars = {
+ActorInit En_Dai_InitVars = {
     ACTOR_EN_DAI,
     ACTORCAT_NPC,
     FLAGS,
@@ -176,8 +176,8 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_12HAKUGINMAE) && (play->csCtx.currentCsIndex == 0) &&
-        !(gSaveContext.save.weekEventReg[30] & 1)) {
+    if ((play->csCtx.state != CS_STATE_0) && (play->sceneId == SCENE_12HAKUGINMAE) &&
+        (play->csCtx.currentCsIndex == 0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(play, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -192,7 +192,7 @@ s32 func_80B3E69C(EnDai* this, PlayState* play) {
     } else if (this->unk_1CE & 0x10) {
         this->unk_1CE &= ~0x10;
         this->unk_1CE |= 0x200;
-        gSaveContext.save.weekEventReg[30] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_30_01);
         this->actionFunc = func_80B3F00C;
     }
 
@@ -522,7 +522,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (gSaveContext.save.weekEventReg[33] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
         SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
@@ -530,7 +530,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[30] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
         Actor_Kill(&this->actor);
         return;
     }

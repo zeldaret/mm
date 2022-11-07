@@ -49,7 +49,7 @@ void func_809340BC(EnFz* this, Vec3f* a, Vec3f* b, Vec3f* c, f32 arg4, f32 arg5,
 void func_80934178(EnFz* this, PlayState* play);
 void func_80934464(EnFz* this, PlayState* play);
 
-const ActorInit En_Fz_InitVars = {
+ActorInit En_Fz_InitVars = {
     ACTOR_EN_FZ,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -1003,7 +1003,7 @@ void func_80934464(EnFz* this, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
                 flag++;
             }
 
@@ -1017,7 +1017,7 @@ void func_80934464(EnFz* this, PlayState* play) {
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
         }
     }
 

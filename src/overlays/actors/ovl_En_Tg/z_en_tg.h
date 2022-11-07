@@ -31,6 +31,4 @@ typedef struct EnTg {
     /* 0x2F0 */ EnTgHeartEffect effects[10];
 } EnTg; // size = 0x548
 
-extern const ActorInit En_Tg_InitVars;
-
 #endif // Z_EN_TG_H
