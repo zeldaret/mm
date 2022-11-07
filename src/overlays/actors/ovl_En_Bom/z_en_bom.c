@@ -228,8 +228,8 @@ void func_80871058(EnBom* this, PlayState* play) {
     } else {
         Vec3f* sp58;
         u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        Vec3f sp48;
-        s16 sp46;
+        Vec3f slopeNormal;
+        s16 downwardSlopeYaw;
         f32 sp40;
         f32 sp3C;
         f32 sp38;
@@ -253,10 +253,10 @@ void func_80871058(EnBom* this, PlayState* play) {
 
         sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
         sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-        func_800B75A0(this->actor.floorPoly, &sp48, &sp46);
+        Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
 
-        sp40 += 3.0f * sp48.x;
-        sp3C += 3.0f * sp48.z;
+        sp40 += 3.0f * slopeNormal.x;
+        sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
         if ((sp38 < this->actor.speedXZ) ||

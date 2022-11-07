@@ -465,7 +465,7 @@ s32 func_80A869DC(EnTru* this, PlayState* play) {
     Math_ApproachS(&this->unk_368, this->actor.yawTowardsPlayer - this->actor.shape.rot.y, 4, 0x2AA8);
     this->unk_368 = CLAMP(this->unk_368, -0x1FFE, 0x1FFE);
     Math_Vec3f_Copy(&sp38, &player->actor.world.pos);
-    sp38.y = player->bodyPartsPos[7].y + 3.0f;
+    sp38.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     Math_Vec3f_Copy(&sp2C, &this->actor.focus.pos);
     sp2C.y -= 30.0f;
     Math_ApproachS(&this->unk_366, Math_Vec3f_Pitch(&sp2C, &sp38), 4, 0x2AA8);
@@ -900,7 +900,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
             } else if (Animation_OnFrame(&this->skelAnime, 12.0f) && !(this->unk_34E & 0x800)) {
                 this->unk_34E |= 0x400;
                 this->unk_34E |= 0x800;
-                Player_SetModels(player, 3);
+                Player_SetModels(player, PLAYER_MODELGROUP_DEFAULT);
             }
             break;
 
@@ -913,7 +913,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
                        Animation_OnFrame(&this->skelAnime, 52.0f)) {
                 if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
                     this->unk_34E &= ~0x400;
-                    func_80123D50(play, player, 18, 21);
+                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                 }
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {

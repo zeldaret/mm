@@ -77,7 +77,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
-        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, 0xBFF);
+        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
         if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
@@ -148,7 +148,7 @@ void func_801229A0(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+void func_801229EC(Actor* thisx, PlayState* play) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
@@ -185,7 +185,8 @@ void func_801229FC(Player* player) {
                 s32 i;
 
                 for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]),
+                                  &player->bodyPartsPos[PLAYER_BODYPART_HEAD]);
                 }
             }
         }
@@ -328,7 +329,7 @@ void func_80122F28(Player* player) {
         (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
                                   PLAYER_STATE1_20000000))) &&
         (!(player->stateFlags2 & PLAYER_STATE2_1))) {
-        if (player->doorType < 0) {
+        if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             ActorCutscene_SetIntentToPlay(0x7C);
         } else {
             ActorCutscene_SetIntentToPlay(0x7D);
@@ -354,27 +355,27 @@ void func_8012300C(PlayState* play, s32 arg1) {
     player->unk_B2B = arg1;
 }
 
-void func_8012301C(Player* player, PlayState* play2) {
+void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 pad;
+    Player* this = (Player*)thisx;
 
-    player->unk_AE7++;
+    this->unk_AE7++;
 
-    if (player->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[((void)0, gSaveContext.save.playerForm)];
+    if (this->unk_AE7 == 2) {
+        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
-        player->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (player->unk_AE7 >= 3) {
+        func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
+        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
+    } else if (this->unk_AE7 >= 3) {
         s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-            player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
-            player->actor.init = PlayerCall_Init;
-            player->actor.update = PlayerCall_Update;
-            player->actor.draw = PlayerCall_Draw;
+            this->actor.objBankIndex = objBankIndex;
+            this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
+            this->actor.init = PlayerCall_Init;
+            this->actor.update = PlayerCall_Update;
+            this->actor.draw = PlayerCall_Draw;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
         }
     }
@@ -456,7 +457,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != 0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csMode != PLAYER_CSMODE_0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -480,7 +481,7 @@ s32 func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->targetedActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -536,7 +537,7 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 0) {
-        s32 item = Inventory_GetBtnBItem(play);
+        ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
             return item;
@@ -558,20 +559,14 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)         ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)         ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
 
-    return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)          ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-                                                                           : ITEM_NONE;
+    return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
@@ -602,7 +597,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId, i)) <= PLAYER_IA_MINUS1)) {
+            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
                 play_sound(NA_SE_SY_ERROR);
                 return PLAYER_IA_MINUS1;
             } else {
@@ -1249,7 +1244,7 @@ void func_80123C58(Player* player) {
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
-    if (player->csMode != 0x86) {
+    if (player->csMode != PLAYER_CSMODE_134) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
@@ -1263,7 +1258,7 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
@@ -1275,7 +1270,7 @@ void func_80123D50(PlayState* play, Player* player, ItemId itemId, PlayerItemAct
 }
 
 void func_80123DA4(Player* player) {
-    player->unk_730 = NULL;
+    player->targetedActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
 
@@ -1300,7 +1295,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
-    player->unk_730 = actor;
+    player->targetedActor = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
@@ -1333,7 +1328,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
 }
 
 u8 Player_GetStrength(void) {
-    return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
+    return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
 u8 Player_GetMask(PlayState* play) {
@@ -2034,9 +2029,9 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
                 if (player->stateFlags1 & PLAYER_STATE1_400) {
                     refPos.y = player->actor.world.pos.y + 30.0f;
                 } else {
-                    refPos.x = player->bodyPartsPos[0xC].x;
-                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
-                    refPos.z = player->bodyPartsPos[0xC].z;
+                    refPos.x = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].x;
+                    refPos.y = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].z;
                 }
             } else {
                 refPos.y = player->actor.world.pos.y + 28.0f;
@@ -2045,7 +2040,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
             Math_Vec3f_Copy(&refPos, &D_801F59E8);
         }
 
-        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        drawIdPlusOne = ABS_ALT(player->getItemDrawId);
         Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }

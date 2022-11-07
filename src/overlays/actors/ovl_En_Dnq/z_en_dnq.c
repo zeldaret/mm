@@ -259,7 +259,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     u16 temp = play->msgCtx.currentTextId;
 
-    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->targetActor == &this->picto.actor)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
         switch (temp) {
             case 0x89B:
                 func_80A5257C(this, 18);

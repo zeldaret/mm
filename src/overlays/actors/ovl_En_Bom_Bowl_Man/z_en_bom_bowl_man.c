@@ -365,7 +365,7 @@ void func_809C5310(EnBomBowlMan* this, PlayState* play) {
     if (player->actor.world.pos.x < 1510.0f) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             if (this->actor.xzDistToPlayer < this->unk_2C8) {
-                func_800B7298(play, &this->actor, 7);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
                 func_809C53A4(this);
             }
         } else {
@@ -423,7 +423,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
         } else if (this->actor.textId == 0x734) {
             this->actor.textId = 0x715;
         } else if (this->actor.textId == 0x715) {
-            func_800B7298(play, &this->actor, 6);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
             func_809C493C(this, 17, 1.0f);
             func_809C59A4(this, play);
             return;
@@ -435,7 +435,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             func_80151BB4(play, 0x24);
             func_80151BB4(play, 0x25);
             func_80151BB4(play, 0);
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             this->actionFunc = func_809C5738;
             return;
         }

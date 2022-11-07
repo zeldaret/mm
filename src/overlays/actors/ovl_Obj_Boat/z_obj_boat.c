@@ -124,7 +124,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
             sp3C = this->unk_15D * (OBJBOAT_GET_4000(thisx) ? 5.0f : 3.0f);
         }
     }
-    if (player->csMode != 0x1A) {
+    if (player->csMode != PLAYER_CSMODE_26) {
         Math_ScaledStepToS(&this->dyna.actor.shape.rot.y, sp3A, (s16)(s32)(fabsf(this->dyna.actor.speedXZ) * 40.0f));
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
         Math_StepToF(&this->dyna.actor.speedXZ, sp3C, 0.05f);

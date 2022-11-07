@@ -181,7 +181,7 @@ void func_80AE6488(EnShn* this, PlayState* play) {
     this->unk_2D4 += (this->unk_2D0 != 0.0f) ? 40.0f : -40.0f;
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_Translate(this->unk_2D4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if ((&this->actor == player->targetActor) &&
+    if ((&this->actor == player->talkActor) &&
         ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId >= 0x201)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if (play->state.frames % 2 == 0) {
@@ -259,7 +259,7 @@ s32 func_80AE6704(Actor* thisx, PlayState* play) {
 
         case 6:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 6);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;

@@ -850,9 +850,9 @@ void func_80AD5234(EnTrt2* this, PlayState* play) {
     sp40 = player->actor.world.pos;
 
     if (this->unk_3B2 == 8) {
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        sp40.y = player->bodyPartsPos[7].y + 45.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 45.0f;
     }
 
     sp34 = this->actor.world.pos;

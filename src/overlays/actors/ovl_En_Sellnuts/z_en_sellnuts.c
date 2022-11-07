@@ -473,7 +473,7 @@ void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->actionFunc = func_80ADBBEC;
-        func_800B7298(play, NULL, 0x13);
+        func_800B7298(play, NULL, PLAYER_CSMODE_19);
     }
 }
 

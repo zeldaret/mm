@@ -684,7 +684,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = 0;
+            player->csMode = PLAYER_CSMODE_0;
         }
 
         func_809E344C(this, play);
@@ -779,7 +779,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = 0;
+            player->csMode = PLAYER_CSMODE_0;
             func_80165690();
         }
 
@@ -907,7 +907,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = 0;
+            player->csMode = PLAYER_CSMODE_0;
             func_80165690();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
@@ -1145,7 +1145,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 7);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1256,7 +1256,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
             if (this->csTimer == 5) {
                 // Rotates Player towards Gyorg
-                func_800B7298(play, &this->actor, 8);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_8);
             }
 
             this->subCamEye.x = player->actor.world.pos.x + 30.0f;
@@ -1367,7 +1367,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
                 func_80169AFC(play, this->subCamId, 0);
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
@@ -1445,7 +1445,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 1);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1625,7 +1625,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->csState = 3;
                 func_80165690();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
@@ -1659,7 +1659,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 1);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1720,7 +1720,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                         func_80169AFC(play, this->subCamId, 0);
                         this->subCamId = SUB_CAM_ID_DONE;
                         Cutscene_End(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, 6);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
 
                         func_809E344C(this, play);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;
@@ -1750,7 +1750,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     if (&this->actor == player->actor.parent) {
         player->unk_AE8 = 101;
         player->actor.parent = NULL;
-        player->csMode = 0;
+        player->csMode = PLAYER_CSMODE_0;
         func_80165690();
     }
 
@@ -1902,7 +1902,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     if (&this->actor == player->actor.parent) {
                         player->unk_AE8 = 101;
                         player->actor.parent = NULL;
-                        player->csMode = 0;
+                        player->csMode = PLAYER_CSMODE_0;
                         func_80165690();
                     }
 

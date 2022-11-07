@@ -349,7 +349,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
                 this->textId = 0x884;
                 Message_StartTextbox(play, this->textId, &this->actor);
                 SET_WEEKEVENTREG(WEEKEVENTREG_53_08);
-                func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+                Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
@@ -375,7 +375,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
 void EnTrt_PayForMushroom(EnTrt* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
+        Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
         this->actionFunc = EnTrt_SetupItemGiven;
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
@@ -1711,7 +1711,7 @@ void EnTrt_TrackPlayer(EnTrt* this, PlayState* play) {
     this->headYaw = CLAMP(this->headYaw, -0x38E0, 0x38E0);
 
     playerPos = player->actor.world.pos;
-    playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+    playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     pos = this->actor.world.pos;
     Math_SmoothStepToS(&this->headPitch, Math_Vec3f_Pitch(&pos, &playerPos), 4, 0x1C70, 1);
     this->headPitch = CLAMP(this->headPitch, -0x1C70, 0x1C70);
