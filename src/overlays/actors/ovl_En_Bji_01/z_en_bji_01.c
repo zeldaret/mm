@@ -109,7 +109,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
         } else {
             this->moonsTear = (ObjMoonStone*)SubS_FindActor(play, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, play, 60.0f, 10.0f, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE);
     }
 }
 
@@ -162,7 +162,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         this->textId = 0x5F1;
                     }
                     func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                  PLAYER_AP_NONE);
+                                  PLAYER_IA_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;

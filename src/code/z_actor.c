@@ -1849,10 +1849,10 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 // This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerActionParam exchangeItemId) {
+s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1867,12 +1867,12 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerActionParam exchangeItemId) {
+s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
     return func_800B8500(actor, play, radius, radius, exchangeItemId);
 }
 
 s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, PLAYER_AP_NONE);
+    return func_800B85E0(actor, play, radius, PLAYER_IA_NONE);
 }
 
 s32 func_800B863C(Actor* actor, PlayState* play) {
@@ -1909,7 +1909,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-PlayerActionParam Player_GetExchangeItemId(PlayState* play) {
+PlayerItemAction Player_GetExchangeItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->exchangeItemId;

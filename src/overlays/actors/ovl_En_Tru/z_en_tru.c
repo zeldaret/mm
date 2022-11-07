@@ -827,7 +827,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 s32 func_80A8777C(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
     s32 ret = 0;
-    s32 itemActionParam;
+    PlayerItemAction itemAction;
 
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
@@ -837,10 +837,11 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
             }
         // Fallthrough
         case TEXT_STATE_16:
-            itemActionParam = func_80123810(play);
-            if ((itemActionParam == PLAYER_AP_BOTTLE_POTION_RED) || (itemActionParam == PLAYER_AP_BOTTLE_POTION_BLUE)) {
+            itemAction = func_80123810(play);
+
+            if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->unk_34E |= 8;
-                if (itemActionParam == PLAYER_AP_BOTTLE_POTION_RED) {
+                if (itemAction == PLAYER_IA_BOTTLE_POTION_RED) {
                     this->unk_390 = 1;
                 } else {
                     this->unk_390 = 2;
@@ -848,9 +849,9 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 this->unk_378 = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
-            } else if (itemActionParam < PLAYER_AP_NONE) {
+            } else if (itemAction <= PLAYER_IA_MINUS1) {
                 ret = 3;
-            } else if (itemActionParam != PLAYER_AP_NONE) {
+            } else if (itemAction != PLAYER_IA_NONE) {
                 ret = 2;
             }
             break;
@@ -912,7 +913,7 @@ s32 func_80A87880(Actor* thisx, PlayState* play) {
                        Animation_OnFrame(&this->skelAnime, 52.0f)) {
                 if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
                     this->unk_34E &= ~0x400;
-                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                    Player_UpdateBottleHeld(play, player, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                 }
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DRINK);
             } else if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
@@ -1150,7 +1151,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
         EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP);
     } else {
-        this->unk_388 = PLAYER_AP_NONE;
+        this->unk_388 = PLAYER_IA_NONE;
     }
 
     this->actionFunc = func_80A87FD0;
@@ -1176,7 +1177,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
     func_80A86DB8(this);
 
     radius = this->collider.dim.worldSphere.radius + 30;
-    this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_AP_NONE : PLAYER_AP_NONE;
+    this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_IA_NONE : PLAYER_IA_NONE;
 
     func_8013C964(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & 7);
     func_80A8697C(this, play);

@@ -647,7 +647,7 @@ void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
         EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

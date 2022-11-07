@@ -5,10 +5,7 @@ import argparse
 
 # all occurrences of keys will be replaced by associated value
 simpleReplace = {
-    # "Math_Rand_":"Rand_",
-    # "ACTORTYPE":"ACTORCAT",
-    # "DistToLink":"DistToPlayer",
-    # "HitItem":"HitInfo",
+    "PLAYER_AP_": "PLAYER_IA_",
 }
 
 # all occurrences of keys will be replaced by associated value,
@@ -729,6 +726,8 @@ wordReplace = {
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",
+    "player->itemActionParam": "player->heldItemAction",
+    "player->heldItemActionParam": "player->itemAction",
     "player->unk_A9C": "player->secretRumbleCharge",
     "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_B68": "player->fallStartHeight",
@@ -797,21 +796,21 @@ wordReplace = {
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
-    "EXCH_ITEM_MINUS1": "PLAYER_AP_MINUS1",
-    "EXCH_ITEM_NONE": "PLAYER_AP_NONE",
-    "EXCH_ITEM_PICTO_BOX": "PLAYER_AP_PICTO_BOX",
-    "EXCH_ITEM_1E": "PLAYER_AP_BOTTLE_MUSHROOM",
-    "EXCH_ITEM_MOON_TEAR": "PLAYER_AP_MOON_TEAR",
-    "EXCH_ITEM_DEED_LAND": "PLAYER_AP_DEED_LAND",
-    "EXCH_ITEM_ROOM_KEY": "PLAYER_AP_ROOM_KEY",
-    "EXCH_ITEM_LETTER_TO_KAFEI": "PLAYER_AP_LETTER_TO_KAFEI",
-    "EXCH_ITEM_2E": "PLAYER_AP_MAGIC_BEANS",
-    "EXCH_ITEM_DEED_SWAMP": "PLAYER_AP_DEED_SWAMP",
-    "EXCH_ITEM_DEED_MOUNTAIN": "PLAYER_AP_DEED_MOUNTAIN",
-    "EXCH_ITEM_DEED_OCEAN": "PLAYER_AP_DEED_OCEAN",
-    "EXCH_ITEM_LETTER_MAMA": "PLAYER_AP_LETTER_MAMA",
+    "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
+    "EXCH_ITEM_NONE": "PLAYER_IA_NONE",
+    "EXCH_ITEM_PICTO_BOX": "PLAYER_IA_PICTO_BOX",
+    "EXCH_ITEM_1E": "PLAYER_IA_BOTTLE_MUSHROOM",
+    "EXCH_ITEM_MOON_TEAR": "PLAYER_IA_MOON_TEAR",
+    "EXCH_ITEM_DEED_LAND": "PLAYER_IA_DEED_LAND",
+    "EXCH_ITEM_ROOM_KEY": "PLAYER_IA_ROOM_KEY",
+    "EXCH_ITEM_LETTER_TO_KAFEI": "PLAYER_IA_LETTER_TO_KAFEI",
+    "EXCH_ITEM_2E": "PLAYER_IA_MAGIC_BEANS",
+    "EXCH_ITEM_DEED_SWAMP": "PLAYER_IA_DEED_SWAMP",
+    "EXCH_ITEM_DEED_MOUNTAIN": "PLAYER_IA_DEED_MOUNTAIN",
+    "EXCH_ITEM_DEED_OCEAN": "PLAYER_IA_DEED_OCEAN",
+    "EXCH_ITEM_LETTER_MAMA": "PLAYER_IA_LETTER_MAMA",
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
-    "PLAYER_AP_FISHING_POLE": "PLAYER_AP_FISHING_ROD",
+    "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames

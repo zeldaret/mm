@@ -567,7 +567,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 

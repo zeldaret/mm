@@ -258,7 +258,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_NONE);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_800B8614(&this->actor, play, 50.0f);
