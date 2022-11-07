@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -1922,9 +1921,9 @@ void func_801251C4(Player* player, Vec3f* arg1) {
                   &player->bodyPartsPos[PLAYER_BODYPART_WAIST], arg1, &player->unk_B90, &player->unk_B10[0], 0.0f,
                   0x1F40, &player->unk_B92, &player->unk_B10[1], 0);
 
-    sp40.x = (player->bodyPartsPos[PLAYER_BODYPART_L_FOOT].x + player->bodyPartsPos[PLAYER_BODYPART_R_FOOT].x) / 2.0f;
-    sp40.y = (player->bodyPartsPos[PLAYER_BODYPART_L_FOOT].y + player->bodyPartsPos[PLAYER_BODYPART_R_FOOT].y) / 2.0f;
-    sp40.z = (player->bodyPartsPos[PLAYER_BODYPART_L_FOOT].z + player->bodyPartsPos[PLAYER_BODYPART_R_FOOT].z) / 2.0f;
+    sp40.x = (player->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].x + player->bodyPartsPos[PLAYER_BODYPART_RIGHT_FOOT].x) / 2.0f;
+    sp40.y = (player->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].y + player->bodyPartsPos[PLAYER_BODYPART_RIGHT_FOOT].y) / 2.0f;
+    sp40.z = (player->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].z + player->bodyPartsPos[PLAYER_BODYPART_RIGHT_FOOT].z) / 2.0f;
     func_80124FF0(-20.0f, player->unk_B90, arg1, (player->actor.shape.rot.y + player->unk_B92), &sp40, arg1,
                   &player->unk_B94, &player->unk_B10[2], -1.9f, 0x1F40, &player->unk_B96, &player->unk_B10[3], 0);
 }
@@ -2482,8 +2481,8 @@ Gfx* D_801C0B14[] = {
 };
 
 u8 D_801C0B1C[] = {
-    PLAYER_BODYPART_L_HAND,
-    PLAYER_BODYPART_R_HAND,
+    PLAYER_BODYPART_LEFT_HAND,
+    PLAYER_BODYPART_RIGHT_HAND,
 };
 
 Gfx* D_801C0B20[] = {
@@ -3335,7 +3334,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             CLOSE_DISPS(play->state.gfxCtx);
         }
 
-    } else if (player->heldheldItemAction == PLAYER_IA_STICK) {
+    } else if (player->itemAction == PLAYER_IA_STICK) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -3350,7 +3349,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (player->leftHandType == PLAYER_MODELTYPE_LH_BOTTLE) {
-        PlayerBottle bottle = Player_ActionToBottle(player, player->heldheldItemAction);
+        PlayerBottle bottle = Player_ActionToBottle(player, player->itemAction);
         Vec3f* temp_v1_2 = &D_801C0CE8[player->transformation];
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -3542,11 +3541,11 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
                     D_801F59E8.x =
-                        (player->bodyPartsPos[PLAYER_BODYPART_R_HAND].x + player->leftHandWorld.pos.x) * 0.5f;
+                        (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x + player->leftHandWorld.pos.x) * 0.5f;
                     D_801F59E8.y =
-                        (player->bodyPartsPos[PLAYER_BODYPART_R_HAND].y + player->leftHandWorld.pos.y) * 0.5f;
+                        (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y + player->leftHandWorld.pos.y) * 0.5f;
                     D_801F59E8.z =
-                        (player->bodyPartsPos[PLAYER_BODYPART_R_HAND].z + player->leftHandWorld.pos.z) * 0.5f;
+                        (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + player->leftHandWorld.pos.z) * 0.5f;
                 }
 
                 if (player->getItemDrawId == 0) {
