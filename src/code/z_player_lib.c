@@ -2167,29 +2167,28 @@ void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* pos, Vec3s* rot
     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
 }
 
-// Player_OverrideLimbDrawGameplayDefault
-s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
+s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, &player->actor)) {
         if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
-            Gfx** var_a0 = player->leftHandDLists;
-            s32 temp_v1;
+            Gfx** leftHandDLists = player->leftHandDLists;
+            s32 swordEquipValue;
 
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
             } else if ((sPlayerLeftHandType == PLAYER_MODELTYPE_LH_4) &&
                        (player->stateFlags1 & PLAYER_STATE1_2000000)) {
-                var_a0 = &gPlayerLeftHandOpenDLs[D_801F59E0];
+                leftHandDLists = &gPlayerLeftHandOpenDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_OPEN;
             } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_OPEN) && (player->actor.speedXZ > 2.0f) &&
                        !(player->stateFlags1 & PLAYER_STATE1_8000000)) {
-                var_a0 = &gPlayerLeftHandClosedDLs[D_801F59E0];
+                leftHandDLists = &gPlayerLeftHandClosedDLs[D_801F59E0];
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_CLOSED;
             } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_ONE_HAND_SWORD) &&
                        (player->transformation == PLAYER_FORM_HUMAN) &&
-                       ((temp_v1 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD), temp_v1 != 0))) {
-                var_a0 = &D_801C018C[2 * ((temp_v1 - 1) ^ 0)];
+                       ((swordEquipValue = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD), swordEquipValue != EQUIP_VALUE_SWORD_NONE))) {
+                leftHandDLists = &D_801C018C[2 * ((swordEquipValue - 1) ^ 0)];
             } else {
                 s32 phi_v0 = GET_FACE_FROM_JOINTTABLE(player->skelAnime.jointTable) & 0xF000;
 
@@ -2198,11 +2197,11 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                     if (phi_v0 >= 2) {
                         phi_v0 = 0;
                     }
-                    var_a0 = &D_801C095C[phi_v0][D_801F59E0];
+                    leftHandDLists = &D_801C095C[phi_v0][D_801F59E0];
                 }
             }
 
-            *dList = var_a0[D_801F59E4];
+            *dList = leftHandDLists[D_801F59E4];
 
             if (player->transformation == PLAYER_FORM_GORON) {
                 if (player->skelAnime.animation == &gPlayerAnim_pg_punchA) {
@@ -2228,7 +2227,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                  func_801242B4(player))) {
                 *dList = gLinkZoraRightHandOpenDL;
             } else {
-                Gfx** var_v1 = player->rightHandDLists;
+                Gfx** rightHandDLists = player->rightHandDLists;
 
                 if (player->stateFlags3 & PLAYER_STATE3_2000) {
                     rot->z -= player->unk_B8C;
@@ -2237,44 +2236,44 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                 if (sPlayerRightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                     if (player->transformation == PLAYER_FORM_HUMAN) {
                         if (player->currentShield != PLAYER_SHIELD_NONE) {
-                            var_v1 = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
+                            rightHandDLists = &gPlayerHandHoldingShields[2 * ((player->currentShield - 1) ^ 0)];
                         }
                     }
                 } else if ((player->rightHandType == PLAYER_MODELTYPE_RH_OPEN) && (player->actor.speedXZ > 2.0f) &&
                            (!(player->stateFlags1 & PLAYER_STATE1_8000000))) {
-                    var_v1 = &gPlayerRightHandClosedDLs[D_801F59E0];
+                    rightHandDLists = &gPlayerRightHandClosedDLs[D_801F59E0];
                     sPlayerRightHandType = PLAYER_MODELTYPE_RH_CLOSED;
                 } else {
                     s32 temp_v0_8 = GET_FACE_FROM_JOINTTABLE(player->skelAnime.jointTable) & 0xF00;
 
                     if (temp_v0_8 != 0) {
                         temp_v0_8 = (temp_v0_8 >> 8) - 1;
-                        var_v1 = &D_801C0964[temp_v0_8][D_801F59E0];
+                        rightHandDLists = &D_801C0964[temp_v0_8][D_801F59E0];
                     }
                 }
 
-                *dList = var_v1[D_801F59E4];
+                *dList = rightHandDLists[D_801F59E4];
                 if (player->skelAnime.animation == &gPlayerAnim_pg_punchB) {
                     func_80125CE0(player, D_801C0784, pos, rot);
                 }
             }
         } else if (limbIndex == PLAYER_LIMB_SHEATH) {
-            Gfx** var_v1_2 = player->sheathDLists;
+            Gfx** sheathDLists = player->sheathDLists;
 
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                s32 temp_a0 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
+                EquipValueSword swordEquipValue = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
 
-                if (temp_a0 != 0) {
+                if (swordEquipValue != EQUIP_VALUE_SWORD_NONE) {
                     if ((player->sheathType == PLAYER_MODELTYPE_SHEATH_14) ||
                         (player->sheathType == PLAYER_MODELTYPE_SHEATH_12)) {
-                        var_v1_2 = &gPlayerSheathedSwords[2 * ((temp_a0 - 1) ^ 0)];
+                        sheathDLists = &gPlayerSheathedSwords[2 * ((swordEquipValue - 1) ^ 0)];
                     } else {
-                        var_v1_2 = &gPlayerSwordSheaths[2 * ((temp_a0 - 1) ^ 0)];
+                        sheathDLists = &gPlayerSwordSheaths[2 * ((swordEquipValue - 1) ^ 0)];
                     }
                 }
             }
 
-            *dList = var_v1_2[D_801F59E4];
+            *dList = sheathDLists[D_801F59E4];
         } else if (limbIndex == PLAYER_LIMB_WAIST) {
             *dList = player->waistDLists[D_801F59E4];
         } else if (limbIndex == PLAYER_LIMB_HAT) {
@@ -2287,8 +2286,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-// Player_OverrideLimbDrawGameplayFirstPerson
-s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
+s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, actor)) {
@@ -2314,8 +2312,8 @@ s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-// unused
-s32 func_801263FC(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+// Unused remnant of OoT
+s32 Player_OverrideLimbDrawGameplayCrawling(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     Player* player = (Player*)thisx;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, thisx)) {
@@ -2967,27 +2965,27 @@ struct_80128388_arg1 D_801C0C54[] = {
 };
 
 Color_RGB8 D_801C0CA8[PLAYER_BOTTLE_MAX] = {
-    { 255, 255, 255 }, // PLAYER_BOTTLE_EMPTY            // PLAYER_IA_BOTTLE
-    { 80, 80, 255 },   // PLAYER_BOTTLE_FISH             // PLAYER_IA_BOTTLE_FISH
-    { 136, 192, 255 }, // PLAYER_BOTTLE_SPRING_WATER     // PLAYER_IA_BOTTLE_SPRING_WATER
-    { 136, 192, 255 }, // PLAYER_BOTTLE_HOT_SPRING_WATER // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
-    { 184, 232, 232 }, // PLAYER_BOTTLE_ZORA_EGG         // PLAYER_IA_BOTTLE_ZORA_EGG
-    { 248, 200, 0 },   // PLAYER_BOTTLE_DEKU_PRINCESS    // PLAYER_IA_BOTTLE_DEKU_PRINCESS
-    { 255, 180, 0 },   // PLAYER_BOTTLE_GOLD_DUST        // PLAYER_IA_BOTTLE_GOLD_DUST
-    { 0, 128, 0 },     // PLAYER_BOTTLE_1C               // PLAYER_IA_BOTTLE_1C
-    { 252, 238, 0 },   // PLAYER_BOTTLE_SEAHORSE         // PLAYER_IA_BOTTLE_SEAHORSE
-    { 131, 0, 174 },   // PLAYER_BOTTLE_MUSHROOM         // PLAYER_IA_BOTTLE_MUSHROOM
-    { 64, 64, 32 },    // PLAYER_BOTTLE_HYLIAN_LOACH     // PLAYER_IA_BOTTLE_HYLIAN_LOACH
-    { 0, 0, 255 },     // PLAYER_BOTTLE_BUG              // PLAYER_IA_BOTTLE_BUG
-    { 255, 0, 255 },   // PLAYER_BOTTLE_POE              // PLAYER_IA_BOTTLE_POE
-    { 255, 0, 255 },   // PLAYER_BOTTLE_BIG_POE          // PLAYER_IA_BOTTLE_BIG_POE
-    { 255, 0, 0 },     // PLAYER_BOTTLE_POTION_RED       // PLAYER_IA_BOTTLE_POTION_RED
-    { 0, 0, 255 },     // PLAYER_BOTTLE_POTION_BLUE      // PLAYER_IA_BOTTLE_POTION_BLUE
-    { 0, 200, 0 },     // PLAYER_BOTTLE_POTION_GREEN     // PLAYER_IA_BOTTLE_POTION_GREEN
-    { 255, 255, 255 }, // PLAYER_BOTTLE_MILK             // PLAYER_IA_BOTTLE_MILK
-    { 255, 255, 255 }, // PLAYER_BOTTLE_MILK_HALF        // PLAYER_IA_BOTTLE_MILK_HALF
-    { 255, 255, 255 }, // PLAYER_BOTTLE_CHATEAU          // PLAYER_IA_BOTTLE_CHATEAU
-    { 80, 80, 255 },   // PLAYER_BOTTLE_FAIRY            // PLAYER_IA_BOTTLE_FAIRY
+    { 255, 255, 255 }, // PLAYER_BOTTLE_EMPTY
+    { 80, 80, 255 },   // PLAYER_BOTTLE_FISH
+    { 136, 192, 255 }, // PLAYER_BOTTLE_SPRING_WATER
+    { 136, 192, 255 }, // PLAYER_BOTTLE_HOT_SPRING_WATER
+    { 184, 232, 232 }, // PLAYER_BOTTLE_ZORA_EGG
+    { 248, 200, 0 },   // PLAYER_BOTTLE_DEKU_PRINCESS
+    { 255, 180, 0 },   // PLAYER_BOTTLE_GOLD_DUST
+    { 0, 128, 0 },     // PLAYER_BOTTLE_1C
+    { 252, 238, 0 },   // PLAYER_BOTTLE_SEAHORSE
+    { 131, 0, 174 },   // PLAYER_BOTTLE_MUSHROOM
+    { 64, 64, 32 },    // PLAYER_BOTTLE_HYLIAN_LOACH
+    { 0, 0, 255 },     // PLAYER_BOTTLE_BUG
+    { 255, 0, 255 },   // PLAYER_BOTTLE_POE
+    { 255, 0, 255 },   // PLAYER_BOTTLE_BIG_POE
+    { 255, 0, 0 },     // PLAYER_BOTTLE_POTION_RED
+    { 0, 0, 255 },     // PLAYER_BOTTLE_POTION_BLUE
+    { 0, 200, 0 },     // PLAYER_BOTTLE_POTION_GREEN
+    { 255, 255, 255 }, // PLAYER_BOTTLE_MILK
+    { 255, 255, 255 }, // PLAYER_BOTTLE_MILK_HALF
+    { 255, 255, 255 }, // PLAYER_BOTTLE_CHATEAU
+    { 80, 80, 255 },   // PLAYER_BOTTLE_FAIRY
 };
 
 Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
@@ -2999,28 +2997,28 @@ Vec3f D_801C0CE8[PLAYER_FORM_MAX] = {
 };
 
 void Player_DrawBunnyHood(PlayState* play) {
-    Mtx* temp_a1 = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Mtx));
-    Vec3s sp2C;
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Mtx));
+    Vec3s earRot;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0B, temp_a1);
+    gSPSegment(POLY_OPA_DISP++, 0x0B, mtx);
 
     Matrix_Push();
 
-    sp2C.x = sBunnyEarKinematics.rot.y + 0x3E2;
-    sp2C.y = sBunnyEarKinematics.rot.z + 0xDBE;
-    sp2C.z = sBunnyEarKinematics.rot.x - 0x348A;
-    Matrix_SetTranslateRotateYXZ(97.0f, -1203.0f, -240.0f, &sp2C);
+    earRot.x = sBunnyEarKinematics.rot.y + 0x3E2;
+    earRot.y = sBunnyEarKinematics.rot.z + 0xDBE;
+    earRot.z = sBunnyEarKinematics.rot.x - 0x348A;
+    Matrix_SetTranslateRotateYXZ(97.0f, -1203.0f, -240.0f, &earRot);
 
-    Matrix_ToMtx(temp_a1++);
+    Matrix_ToMtx(mtx++);
 
-    sp2C.x = sBunnyEarKinematics.rot.y - 0x3E2;
-    sp2C.y = -sBunnyEarKinematics.rot.z - 0xDBE;
-    sp2C.z = sBunnyEarKinematics.rot.x - 0x348A;
-    Matrix_SetTranslateRotateYXZ(97.0f, -1203.0f, 240.0f, &sp2C);
+    earRot.x = sBunnyEarKinematics.rot.y - 0x3E2;
+    earRot.y = -sBunnyEarKinematics.rot.z - 0xDBE;
+    earRot.z = sBunnyEarKinematics.rot.x - 0x348A;
+    Matrix_SetTranslateRotateYXZ(97.0f, -1203.0f, 240.0f, &earRot);
 
-    Matrix_ToMtx(temp_a1);
+    Matrix_ToMtx(mtx);
 
     Matrix_Pop();
 
@@ -3038,6 +3036,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
     }
 }
 
+// Draws the Great Fairy's Mask particles when a stray fairy is in the room
 void func_80127BE8(PlayState* play, Vec3f* arg1) {
     Vec3f sp2C;
     f32 sp28;

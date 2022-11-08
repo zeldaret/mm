@@ -1762,9 +1762,9 @@ asm/non_matchings/code/z_player_lib/Player_DrawZoraShield.s,Player_DrawZoraShiel
 asm/non_matchings/code/z_player_lib/func_80125500.s,func_80125500,0x80125500,0x20
 asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayCommon.s,Player_OverrideLimbDrawGameplayCommon,0x80125580,0x1D8
 asm/non_matchings/code/z_player_lib/func_80125CE0.s,func_80125CE0,0x80125CE0,0x1B
-asm/non_matchings/code/z_player_lib/func_80125D4C.s,func_80125D4C,0x80125D4C,0x15F
-asm/non_matchings/code/z_player_lib/func_801262C8.s,func_801262C8,0x801262C8,0x4D
-asm/non_matchings/code/z_player_lib/func_801263FC.s,func_801263FC,0x801263FC,0x11
+asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayDefault.s,Player_OverrideLimbDrawGameplayDefault,0x80125D4C,0x15F
+asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayFirstPerson.s,Player_OverrideLimbDrawGameplayFirstPerson,0x801262C8,0x4D
+asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayCrawling.s,Player_OverrideLimbDrawGameplayCrawling,0x801263FC,0x11
 asm/non_matchings/code/z_player_lib/func_80126440.s,func_80126440,0x80126440,0x62
 asm/non_matchings/code/z_player_lib/func_801265C8.s,func_801265C8,0x801265C8,0x35
 asm/non_matchings/code/z_player_lib/func_8012669C.s,func_8012669C,0x8012669C,0x5B
