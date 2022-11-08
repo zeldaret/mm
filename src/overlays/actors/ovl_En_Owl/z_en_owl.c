@@ -411,7 +411,7 @@ void func_8095B0C8(EnOwl* this) {
     Vec3s* points = Lib_SegmentedToVirtual(this->path->points);
 
     points += this->unk_3F8;
-    this->unk_3EC = Math_FAtan2F(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
+    this->unk_3EC = Math_Atan2S_XY(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
     this->unk_3F0 = points->y;
 }
 

@@ -2866,8 +2866,8 @@ asm/non_matchings/code/sys_math3d/func_8017FD44.s,func_8017FD44,0x8017FD44,0x5B
 asm/non_matchings/code/sys_math_atan/Math_GetAtan2Tbl.s,Math_GetAtan2Tbl,0x8017FEB0,0xD
 asm/non_matchings/code/sys_math_atan/Math_Atan2S.s,Math_Atan2S,0x8017FEE4,0x7A
 asm/non_matchings/code/sys_math_atan/Math_Atan2F.s,Math_Atan2F,0x801800CC,0xD
-asm/non_matchings/code/sys_math_atan/Math_FAtan2F.s,Math_FAtan2F,0x80180100,0xB
-asm/non_matchings/code/sys_math_atan/Math_Acot2F.s,Math_Acot2F,0x8018012C,0xD
+asm/non_matchings/code/sys_math_atan/Math_Atan2S_XY.s,Math_Atan2S_XY,0x80180100,0xB
+asm/non_matchings/code/sys_math_atan/Math_Atan2F_XY.s,Math_Atan2F_XY,0x8018012C,0xD
 asm/non_matchings/code/sys_matrix/Matrix_Init.s,Matrix_Init,0x80180160,0xF
 asm/non_matchings/code/sys_matrix/Matrix_Push.s,Matrix_Push,0x8018019C,0xC
 asm/non_matchings/code/sys_matrix/Matrix_Pop.s,Matrix_Pop,0x801801CC,0x7

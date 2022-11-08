@@ -565,17 +565,17 @@ void func_8088D9BC(EnElf* this, PlayState* play) {
 
     switch (this->unk_244) {
         case 0:
-            targetYaw = Math_FAtan2F(-(this->actor.world.pos.z - vec->z), -(this->actor.world.pos.x - vec->x));
+            targetYaw = Math_Atan2S_XY(-(this->actor.world.pos.z - vec->z), -(this->actor.world.pos.x - vec->x));
             break;
 
         case 3:
-            targetYaw = Math_FAtan2F(-(this->actor.world.pos.z - player->actor.world.pos.z),
-                                     -(this->actor.world.pos.x - player->actor.world.pos.x));
+            targetYaw = Math_Atan2S_XY(-(this->actor.world.pos.z - player->actor.world.pos.z),
+                                       -(this->actor.world.pos.x - player->actor.world.pos.x));
             break;
 
         case 2:
-            targetYaw = Math_FAtan2F(this->actor.world.pos.z - player->actor.world.pos.z,
-                                     this->actor.world.pos.x - player->actor.world.pos.x);
+            targetYaw = Math_Atan2S_XY(this->actor.world.pos.z - player->actor.world.pos.z,
+                                       this->actor.world.pos.x - player->actor.world.pos.x);
             break;
 
         default:
@@ -719,7 +719,7 @@ void func_8088E018(EnElf* this, PlayState* play) {
     } else {
         Actor_Kill(&this->actor);
     }
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
 }
 
 void func_8088E0E0(EnElf* this, PlayState* play) {
@@ -766,7 +766,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
         return;
     }
 
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, play, 32);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
@@ -800,7 +800,7 @@ void func_8088E304(EnElf* this, PlayState* play) {
     this->unk_248 += this->unk_24C;
 
     func_8088D7F8(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, play, 0x20);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
@@ -825,7 +825,7 @@ void func_8088E484(EnElf* this, PlayState* play) {
 
     func_8088D7F8(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
     Actor_SetScale(&this->actor, (1.0f - (SQ(this->unk_250) * SQ(1.0f / 9.0f))) * 0.008f);
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, play, 32);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
@@ -872,7 +872,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 
     Lights_PointGlowSetInfo(&this->lightInfoGlow, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 255, 255, 255, glowLightRadius);
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     Actor_SetScale(&this->actor, this->actor.scale.x);
 }
 
