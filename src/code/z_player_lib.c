@@ -2167,7 +2167,8 @@ void func_80125CE0(Player* player, struct_80124618* arg1, Vec3f* pos, Vec3s* rot
     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
 }
 
-s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
+s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                           Actor* actor) {
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, &player->actor)) {
@@ -2187,7 +2188,8 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                 sPlayerLeftHandType = PLAYER_MODELTYPE_LH_CLOSED;
             } else if ((player->leftHandType == PLAYER_MODELTYPE_LH_ONE_HAND_SWORD) &&
                        (player->transformation == PLAYER_FORM_HUMAN) &&
-                       ((swordEquipValue = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD), swordEquipValue != EQUIP_VALUE_SWORD_NONE))) {
+                       ((swordEquipValue = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD),
+                         swordEquipValue != EQUIP_VALUE_SWORD_NONE))) {
                 leftHandDLists = &D_801C018C[2 * ((swordEquipValue - 1) ^ 0)];
             } else {
                 s32 phi_v0 = GET_FACE_FROM_JOINTTABLE(player->skelAnime.jointTable) & 0xF000;
@@ -2286,7 +2288,8 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
     return false;
 }
 
-s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
+s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                               Actor* actor) {
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, actor)) {
@@ -2313,7 +2316,8 @@ s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, G
 }
 
 // Unused remnant of OoT
-s32 Player_OverrideLimbDrawGameplayCrawling(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 Player_OverrideLimbDrawGameplayCrawling(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                            Actor* thisx) {
     Player* player = (Player*)thisx;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, thisx)) {
@@ -2597,7 +2601,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
             Math_Vec3f_Copy(&refPos, &D_801F59E8);
         }
 
-        drawIdPlusOne = ABS_ALT(player->getItemDrawId);
+        drawIdPlusOne = ABS_ALT(player->getItemDrawIdPlusOne);
         Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }
@@ -3529,8 +3533,8 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                        (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT)) {
                 func_80126B8C(play, player);
             }
-            if ((player->getItemDrawId != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
-                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawId != 0) &&
+            if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
+                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
                     (player->exchangeItemId != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
@@ -3542,7 +3546,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                         (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + player->leftHandWorld.pos.z) * 0.5f;
                 }
 
-                if (player->getItemDrawId == 0) {
+                if (player->getItemDrawIdPlusOne == (GID_NONE + 1)) {
                     Math_Vec3f_Copy(&sp224->world.pos, &D_801F59E8);
                 }
             }
