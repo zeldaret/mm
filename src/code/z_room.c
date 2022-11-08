@@ -170,7 +170,6 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             pos.y = roomShapeCullableEntry->boundsSphereCenter.y;
             pos.z = roomShapeCullableEntry->boundsSphereCenter.z;
             SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &pos, &projectedPos);
-            // SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &projectedPos, &projectedW);
 
             projectedPos.z *= var_fa1;
 
@@ -230,7 +229,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
             }
         }
 
-        // if this is real then I might not be
+        //! FAKE: Similar trick used in OoT
         R_ROOM_CULL_NUM_ENTRIES = roomShape->numEntries & 0xFFFF & 0xFFFF & 0xFFFF;
 
         // Draw entries, from nearest to furthest
