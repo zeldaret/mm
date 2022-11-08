@@ -131,16 +131,109 @@ u32 D_801C5FC0[SCENE_MAX][4] = {
     { 0, 0, 1, 0 },                 // SCENE_ALLEY
 };
 
-// Related to weekEventReg
+// TODO: figure out a way to use the WEEKEVENTREG defines here
+// weekEventReg flags which will be not be cleared on a cycle reset
 u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.weekEventReg)] = {
-    0xFFFC, 0xFFFF, 0xFFFF, 0xFFFF, 0,      0,      0,      0xC000, 0xC00,  0,      0xC0,   0,      0x300,
-    0x3000, 0xC000, 0xC00,  0,      0,      0,      0,      0,      0,      0xC00C, 0xC00C, 0xC008, 3,
-    0x3000, 0,      0,      0,      0xFF00, 0xC3F,  0x3F,   0,      0,      0xCFFF, 0,      0,      0xC00,
-    0xC00,  0,      0xC0,   0,      0,      0,      0,      0,      0,      0,      0,      0x3C,   0x20,
-    0,      0x300C, 0x3000, 0,      0xC,    0xC0,   0,      0xFF0,  0x300,  0,      0,      0xC00,  0,
-    0,      0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xC0,   0,      0xC000, 0,      3,
-    0,      0xC000, 0,      0xC0,   0x300,  0,      0,      0,      0xC000, 0xFFF0, 0,      0,      0x300,
-    0,      0xC000, 0xF0,   0,      0,      0,      0,      0,      0,
+    /*  0 */ 0xFFFC,
+    /*  1 */ 0xFFFF,
+    /*  2 */ 0xFFFF,
+    /*  3 */ 0xFFFF,
+    /*  4 */ 0,
+    /*  5 */ 0,
+    /*  6 */ 0,
+    /*  7 */ 0xC000,
+    /*  8 */ 0xC00,
+    /*  9 */ 0,
+    /* 10 */ 0xC0,
+    /* 11 */ 0,
+    /* 12 */ 0x300,
+    /* 13 */ 0x3000,
+    /* 14 */ 0xC000,
+    /* 15 */ 0xC00,
+    /* 16 */ 0,
+    /* 17 */ 0,
+    /* 18 */ 0,
+    /* 19 */ 0,
+    /* 20 */ 0,
+    /* 21 */ 0,
+    /* 22 */ 0xC00C,
+    /* 23 */ 0xC00C,
+    /* 24 */ 0xC008,
+    /* 25 */ 3,
+    /* 26 */ 0x3000,
+    /* 27 */ 0,
+    /* 28 */ 0,
+    /* 29 */ 0,
+    /* 30 */ 0xFF00,
+    /* 31 */ 0xC3F,
+    /* 32 */ 0x3F,
+    /* 33 */ 0,
+    /* 34 */ 0,
+    /* 35 */ 0xCFFF,
+    /* 36 */ 0,
+    /* 37 */ 0,
+    /* 38 */ 0xC00,
+    /* 39 */ 0xC00,
+    /* 40 */ 0,
+    /* 41 */ 0xC0,
+    /* 42 */ 0,
+    /* 43 */ 0,
+    /* 44 */ 0,
+    /* 45 */ 0,
+    /* 46 */ 0,
+    /* 47 */ 0,
+    /* 48 */ 0,
+    /* 49 */ 0,
+    /* 50 */ 0x3C,
+    /* 51 */ 0x20,
+    /* 52 */ 0,
+    /* 53 */ 0x300C,
+    /* 54 */ 0x3000,
+    /* 55 */ 0,
+    /* 56 */ 0xC,
+    /* 57 */ 0xC0,
+    /* 58 */ 0,
+    /* 59 */ 0xFF0,
+    /* 60 */ 0x300,
+    /* 61 */ 0,
+    /* 62 */ 0,
+    /* 63 */ 0xC00,
+    /* 64 */ 0,
+    /* 65 */ 0,
+    /* 66 */ 0xFFFF,
+    /* 67 */ 0xFFFF,
+    /* 68 */ 0xFFFF,
+    /* 69 */ 0xFFFF,
+    /* 70 */ 0xFFFF,
+    /* 71 */ 0xFFFF,
+    /* 72 */ 0xFFFF,
+    /* 73 */ 0xC0,
+    /* 74 */ 0,
+    /* 75 */ 0xC000,
+    /* 76 */ 0,
+    /* 77 */ 3,
+    /* 78 */ 0,
+    /* 79 */ 0xC000,
+    /* 80 */ 0,
+    /* 81 */ 0xC0,
+    /* 82 */ 0x300,
+    /* 83 */ 0,
+    /* 84 */ 0,
+    /* 85 */ 0,
+    /* 86 */ 0xC000,
+    /* 87 */ 0xFFF0,
+    /* 88 */ 0,
+    /* 89 */ 0,
+    /* 90 */ 0x300,
+    /* 91 */ 0,
+    /* 92 */ 0xC000,
+    /* 93 */ 0xF0,
+    /* 94 */ 0,
+    /* 95 */ 0,
+    /* 96 */ 0,
+    /* 97 */ 0,
+    /* 98 */ 0,
+    /* 99 */ 0,
 };
 
 // used in other files
@@ -232,16 +325,11 @@ void Sram_ClearHighscores(void) {
  * Clears specific weekEventReg flags. Used by the "Dawn of the First Day" message
  */
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
-    // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
-    gSaveContext.save.weekEventReg[55] &= (u8)~2;
-    // Unconfirmed: "Postman fleeing town"
-    gSaveContext.save.weekEventReg[90] &= (u8)~1;
-    // Unconfirmed: "Postman is about to flee"
-    gSaveContext.save.weekEventReg[89] &= (u8)~0x40;
-    // Unconfirmed: "Postman has delivered priority mail"
-    gSaveContext.save.weekEventReg[89] &= (u8)~8;
-    // Unconfirmed: "Postman showing priority mail to Madame"
-    gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_55_02);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_89_40);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_89_08);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_80);
 }
 
 /**
@@ -296,7 +384,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.masksGivenOnMoon[i] = 0;
     }
 
-    if (gSaveContext.save.weekEventReg[84] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
         Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
@@ -316,38 +404,38 @@ void Sram_SaveEndOfCycle(PlayState* play) {
         gSaveContext.eventInf[i] = 0;
     }
 
-    gSaveContext.eventInf[7] &= (u8)~1;
-    gSaveContext.eventInf[7] &= (u8)~2;
-    gSaveContext.eventInf[7] &= (u8)~4;
-    gSaveContext.eventInf[7] &= (u8)~8;
-    gSaveContext.eventInf[7] &= (u8)~0x10;
+    CLEAR_EVENTINF(EVENTINF_70);
+    CLEAR_EVENTINF(EVENTINF_71);
+    CLEAR_EVENTINF(EVENTINF_72);
+    CLEAR_EVENTINF(EVENTINF_73);
+    CLEAR_EVENTINF(EVENTINF_74);
 
     if (gSaveContext.save.playerData.rupees != 0) {
-        gSaveContext.eventInf[7] |= 1;
+        SET_EVENTINF(EVENTINF_70);
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
         item = INV_CONTENT(ITEM_BOMB);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 2;
+            SET_EVENTINF(EVENTINF_71);
         }
     }
     if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
         item = INV_CONTENT(ITEM_NUT);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 4;
+            SET_EVENTINF(EVENTINF_72);
         }
     }
     if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
         item = INV_CONTENT(ITEM_STICK);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 8;
+            SET_EVENTINF(EVENTINF_73);
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
         item = INV_CONTENT(ITEM_BOW);
         if (AMMO(item) != 0) {
-            gSaveContext.eventInf[7] |= 0x10;
+            SET_EVENTINF(EVENTINF_74);
         }
     }
 
@@ -482,10 +570,8 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.bombersCaughtOrder[3] = 0;
     gSaveContext.save.bombersCaughtOrder[4] = 0;
 
-    // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
-    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
-    // Unconfirmed: "Bombers Hide & Seek in Progress"
-    gSaveContext.save.weekEventReg[85] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_02);
 }
 
 u16 Sram_CalcChecksum(void* data, size_t count) {
@@ -832,9 +918,9 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.inventory, &sSaveDebugInventory, sizeof(Inventory));
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[((void)0, gSaveContext.save.playerForm)];
-        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[((void)0, gSaveContext.save.playerForm)];
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[GET_PLAYER_FORM];
+        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[GET_PLAYER_FORM];
     }
 
     gSaveContext.save.hasTatl = true;
@@ -848,12 +934,9 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
     gSaveContext.save.isFirstCycle = true;
 
-    //
-    gSaveContext.save.weekEventReg[0x0F] |= 0x20;
-    // Unconfirmed: "Entered South Clock Town"
-    gSaveContext.save.weekEventReg[0x3B] |= 0x04;
-    // Unconfirmed: "Tatl's Second Cycle Text?"
-    gSaveContext.save.weekEventReg[0x1F] |= 0x04;
+    SET_WEEKEVENTREG(WEEKEVENTREG_15_20);
+    SET_WEEKEVENTREG(WEEKEVENTREG_59_04);
+    SET_WEEKEVENTREG(WEEKEVENTREG_31_04);
 
     gSaveContext.cycleSceneFlags[SCENE_INSIDETOWER].switch0 = 1;
     gSaveContext.save.permanentSceneFlags[SCENE_INSIDETOWER].switch0 = 1;
@@ -990,12 +1073,10 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
     } else {
         gSaveContext.save.entrance = D_801C6A58[(void)0, gSaveContext.save.owlSaveLocation];
         if ((gSaveContext.save.entrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
-            (gSaveContext.save.weekEventReg[20] & 2)) {
-            // Unconfirmed weekEventReg: "Woodfall Temple Prison Entrance raised / Water cleansed"
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             gSaveContext.save.entrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((gSaveContext.save.entrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
-            // Unconfirmed weekEventReg: "Mountain Village Unfrozen"
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
             gSaveContext.save.entrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
 
@@ -1561,8 +1642,7 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
 
     day = gSaveContext.save.day;
 
-    // Unconfirmed: "Obtained Fierce Deity Mask?"
-    gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_84_20);
 
     Sram_SaveEndOfCycle(play);
     func_8014546C(&play->sramCtx);

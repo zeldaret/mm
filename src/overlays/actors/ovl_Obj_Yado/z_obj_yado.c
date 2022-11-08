@@ -4,6 +4,7 @@
  * Description: Stockpot Inn - 2nd Floor Window
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_yado.h"
 #include "objects/object_yado_obj/object_yado_obj.h"
 

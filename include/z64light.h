@@ -1,5 +1,5 @@
-#ifndef _Z64LIGHT_H_
-#define _Z64LIGHT_H_
+#ifndef Z64LIGHT_H
+#define Z64LIGHT_H
 
 #include "ultra64.h"
 #include "PR/gbi.h"
@@ -12,8 +12,8 @@ typedef struct {
     /* 0x09 */ s8 diffusePos2[3];
     /* 0x0C */ u8 diffuseColor[3];
     /* 0x0F */ u8 fogColor[3];
-    /* 0x12 */ u16 fogNear;
-    /* 0x14 */ u16 fogFar;
+    /* 0x12 */ s16 fogNear;
+    /* 0x14 */ s16 fogFar;
 } LightSettings; // size = 0x16
 
 typedef struct {

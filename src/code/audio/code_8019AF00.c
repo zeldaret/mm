@@ -4356,7 +4356,8 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
         for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
              channelIndex++) {
             if (&gAudioCtx.sequenceChannelNone != gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
-                // seqScriptIO[5] was originally set to 0x40 in channels 0, 1, and 4 in OoT (BGM no longer in MM)
+                // seqScriptIO[5] was originally set to 0x40 in channels 0, 1, and 4 by OoT's Ganon's Tower BGM,
+                // which was removed in MM
                 if ((u8)gAudioCtx.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->seqScriptIO[5] !=
                     (u8)SEQ_IO_VAL_NONE) {
                     // Higher volume leads to lower reverb

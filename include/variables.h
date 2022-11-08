@@ -427,7 +427,7 @@ extern Gfx D_801AEFA0[];
 // extern UNK_TYPE1 D_801AEFBC;
 // extern UNK_TYPE1 D_801AEFC0;
 extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX];
-extern s32 gMaxActorId;
+extern ActorId gMaxActorId;
 extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
 // extern UNK_TYPE1 D_801B4708;
@@ -808,13 +808,6 @@ extern UNK_PTR D_801C5CB0;
 // extern UNK_TYPE1 D_801C5DE0;
 // extern UNK_TYPE1 D_801C5DF0;
 // extern UNK_TYPE1 D_801C5E00;
-extern s32 D_801C5E30[]; // D_801C5E30
-extern u16 D_801C5E48[]; // D_801C5E48
-extern s32 D_801C5E88[]; // D_801C5E88
-extern s32 D_801C5E9C[]; // D_801C5E9C
-extern s32 D_801C5EB0[]; // D_801C5EB0
-extern s16 D_801C5EC4[]; // D_801C5EC4
-extern struct_801C5F44 D_801C5F44[]; // D_801C5F44
 
 // extern UNK_TYPE1 D_801C6A70;
 // extern UNK_TYPE2 D_801C6A74;
