@@ -222,6 +222,21 @@ s16 sFinalHoursClockFrameEnvBlue = 0;
 s16 sFinalHoursClockColorTimer = 15;
 s16 sFinalHoursClockColorTargetIndex = 0;
 
+/**
+ * Draw a RGBA16 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
                            s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, textureWidth, textureHeight, 0,
@@ -234,6 +249,21 @@ Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 t
     return gfx;
 }
 
+/**
+ * Draw an IA8 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx*  the display list pointer
+ */
 Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
                         s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
@@ -246,6 +276,25 @@ Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 text
     return gfx;
 }
 
+/**
+ * Draw an IA8 texture on a rectangle with a shadow slightly offset to the bottom-right
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r texture red
+ * @param g texture green
+ * @param b texture blue
+ * @param a texture alpha
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexRectIA8_DropShadow(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
                                    s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b,
                                    s16 a) {
@@ -274,6 +323,22 @@ Gfx* Gfx_DrawTexRectIA8_DropShadow(Gfx* gfx, TexturePtr texture, s16 textureWidt
     return gfx;
 }
 
+/**
+ * Draw a colored rectangle with a shadow slightly offset to the bottom-right
+ *
+ * @param gfx the display list pointer
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r // rectangle red
+ * @param g // rectangle green
+ * @param b // rectangle blue
+ * @param a // rectangle alpha
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawRect_DropShadow(Gfx* gfx, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
                              s16 r, s16 g, s16 b, s16 a) {
     s16 dropShadowAlpha = a;
@@ -296,9 +361,30 @@ Gfx* Gfx_DrawRect_DropShadow(Gfx* gfx, s16 rectLeft, s16 rectTop, s16 rectWidth,
     return gfx;
 }
 
+/**
+ * Draw an IA8 texture on a rectangle with a shadow slightly offset to the bottom-right with additional texture offsets
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r // texture red
+ * @param g // texture green
+ * @param b // texture blue
+ * @param a // texture alpha
+ * @param masks specify the mask for the s axis
+ * @param rects the texture coordinate s of upper-left corner of rectangle (s10.5)
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight,
                                          s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
-                                         s16 r, s16 g, s16 b, s16 a, s32 masks, s32 rectS) {
+                                         s16 r, s16 g, s16 b, s16 a, s32 masks, s32 rects) {
     s16 dropShadowAlpha = a;
 
     if (a > 100) {
@@ -312,17 +398,32 @@ Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* gfx, TexturePtr texture, s16 textu
                         G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
-                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
 
     gDPPipeSync(gfx++);
     gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
 
     gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
-                        G_TX_RENDERTILE, rectS, 0, dsdx, dtdy);
+                        G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
 
     return gfx;
 }
 
+/**
+ * Draw an I8 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
                        s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_I, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
@@ -335,17 +436,46 @@ Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textu
     return gfx;
 }
 
+/**
+ * Draw a 4b texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param fmt texture image format
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param cms gives the clamp, wrap, and mirror flag for the s axis
+ * @param masks specify the mask for the s axis
+ * @param rects the texture coordinate s of upper-left corner of rectangle (s10.5)
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexRect4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, s16 rectLeft,
-                       s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 s, u16 dsdx, u16 dtdy) {
+                       s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 rects, u16 dsdx, u16 dtdy) {
     gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, cms, G_TX_NOMIRROR | G_TX_WRAP, masks,
                            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
-                        G_TX_RENDERTILE, s, 0, dsdx, dtdy);
+                        G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
 
     return gfx;
 }
 
+/**
+ * Draw an I8 texture on a Quadrangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param point index of the first point to draw the Quadrangle
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point) {
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -356,6 +486,17 @@ Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 text
     return gfx;
 }
 
+/**
+ * Draw a 4b texture on a Quadrangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param fmt texture image format
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param point index of the first point to draw the Quadrangle
+ * @return Gfx* the display list pointer
+ */
 Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point) {
     gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
