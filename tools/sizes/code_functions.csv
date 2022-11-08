@@ -1751,7 +1751,7 @@ asm/non_matchings/code/z_player_lib/Player_UpdateBunnyEarsKinematics.s,Player_Up
 asm/non_matchings/code/z_player_lib/func_80124618.s,func_80124618,0x80124618,0x37
 asm/non_matchings/code/z_player_lib/Player_DrawImpl.s,Player_DrawImpl,0x801246F4,0x5F
 asm/non_matchings/code/z_player_lib/func_80124870.s,func_80124870,0x80124870,0x115
-asm/non_matchings/code/z_player_lib/func_80124CC4.s,func_80124CC4,0x80124CC4,0x95
+asm/non_matchings/code/z_player_lib/Player_DrawHookshotReticle.s,Player_DrawHookshotReticle,0x80124CC4,0x95
 asm/non_matchings/code/z_player_lib/func_80124F18.s,func_80124F18,0x80124F18,0x36
 asm/non_matchings/code/z_player_lib/func_80124FF0.s,func_80124FF0,0x80124FF0,0x75
 asm/non_matchings/code/z_player_lib/func_801251C4.s,func_801251C4,0x801251C4,0x55
@@ -1787,7 +1787,7 @@ asm/non_matchings/code/z_player_lib/func_80128388.s,func_80128388,0x80128388,0x4
 asm/non_matchings/code/z_player_lib/Player_DrawGreatFairysMask.s,Player_DrawGreatFairysMask,0x801284A0,0x68
 asm/non_matchings/code/z_player_lib/func_80128640.s,func_80128640,0x80128640,0x14D
 asm/non_matchings/code/z_player_lib/Player_SetFeetPos.s,Player_SetFeetPos,0x80128B74,0x17
-asm/non_matchings/code/z_player_lib/func_80128BD0.s,func_80128BD0,0x80128BD0,0x4C8
+asm/non_matchings/code/z_player_lib/Player_PostLimbDrawGameplay.s,Player_PostLimbDrawGameplay,0x80128BD0,0x4C8
 asm/non_matchings/code/z_prenmi/PreNMI_Stop.s,PreNMI_Stop,0x80129EF0,0x5
 asm/non_matchings/code/z_prenmi/PreNMI_Update.s,PreNMI_Update,0x80129F04,0x12
 asm/non_matchings/code/z_prenmi/PreNMI_Draw.s,PreNMI_Draw,0x80129F4C,0x2B

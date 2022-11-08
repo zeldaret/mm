@@ -66,7 +66,7 @@ s32 D_801F59E0;
 
 s32 D_801F59E4;
 
-Vec3f D_801F59E8;
+Vec3f sGetItemRefPos;
 
 PlayerModelType sPlayerLeftHandType;
 PlayerModelType sPlayerRightHandType;
@@ -1810,35 +1810,33 @@ void func_80124870(PlayState* play, Player* player, SkelAnime* skelAnime, Vec3f*
     }
 }
 
-void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
+void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDistance) {
     static Vec3f D_801C094C = { -500.0f, -100.0f, 0.0f };
     CollisionPoly* poly;
     s32 bgId;
     Vec3f sp7C;
     Vec3f sp70;
     Vec3f pos;
-    Vec3f sp58;
-    f32 sp54;
-    f32 scale;
 
     D_801C094C.z = 0.0f;
     Matrix_MultVec3f(&D_801C094C, &sp7C);
-    D_801C094C.z = arg2;
+    D_801C094C.z = hookshotDistance;
     Matrix_MultVec3f(&D_801C094C, &sp70);
 
     if (BgCheck_AnyLineTest3(&play->colCtx, &sp7C, &sp70, &pos, &poly, true, true, true, true, &bgId)) {
         if (!func_800B90AC(play, &player->actor, poly, bgId, &pos) ||
             BgCheck_ProjectileLineTest(&play->colCtx, &sp7C, &sp70, &pos, &poly, true, true, true, true, &bgId)) {
+            Vec3f sp58;
+            f32 sp54;
+            f32 scale;
+
             OPEN_DISPS(play->state.gfxCtx);
 
             OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
 
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &sp58, &sp54);
-            if (sp54 < 200.0f) {
-                scale = 0.08f;
-            } else {
-                scale = (sp54 / 200.0f) * 0.08f;
-            }
+
+            scale = (sp54 < 200.0f) ? 0.08f : (sp54 / 200.0f) * 0.08f;
 
             Matrix_Translate(pos.x, pos.y, pos.z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
@@ -1846,7 +1844,7 @@ void func_80124CC4(PlayState* play, Player* player, f32 arg2) {
             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPSegment(OVERLAY_DISP++, 0x06, play->objectCtx.status[player->actor.objBankIndex].segment);
-            gSPDisplayList(OVERLAY_DISP++, gameplay_keep_DL_04F250);
+            gSPDisplayList(OVERLAY_DISP++, gHookshotReticleDL);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
@@ -2601,7 +2599,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
                 refPos.y = player->actor.world.pos.y + 28.0f;
             }
         } else {
-            Math_Vec3f_Copy(&refPos, &D_801F59E8);
+            Math_Vec3f_Copy(&refPos, &sGetItemRefPos);
         }
 
         drawIdPlusOne = ABS_ALT(player->getItemDrawIdPlusOne);
@@ -3405,7 +3403,7 @@ Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
 Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
 
 #ifdef NON_EQUIVALENT
-void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
+void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
     Player* player = (Player*)actor;
     MtxF sp230;
     s32 sp154;
@@ -3529,7 +3527,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                     sp224->shape.rot = sp224->world.rot;
                     if (func_800B7128(player) != 0) {
                         Matrix_Translate(500.0f, 300.0f, 0.0f, MTXMODE_APPLY);
-                        func_80124CC4(play, player, 77600.0f);
+                        Player_DrawHookshotReticle(play, player, 77600.0f);
                     }
                 }
             } else if ((player->meleeWeaponState != 0) &&
@@ -3539,18 +3537,18 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
                     (player->exchangeItemId != PLAYER_IA_NONE)) {
-                    Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
+                    Math_Vec3f_Copy(&sGetItemRefPos, &player->leftHandWorld.pos);
                 } else {
-                    D_801F59E8.x =
+                    sGetItemRefPos.x =
                         (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x + player->leftHandWorld.pos.x) * 0.5f;
-                    D_801F59E8.y =
+                    sGetItemRefPos.y =
                         (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y + player->leftHandWorld.pos.y) * 0.5f;
-                    D_801F59E8.z =
+                    sGetItemRefPos.z =
                         (player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + player->leftHandWorld.pos.z) * 0.5f;
                 }
 
                 if (player->getItemDrawIdPlusOne == (GID_NONE + 1)) {
-                    Math_Vec3f_Copy(&sp224->world.pos, &D_801F59E8);
+                    Math_Vec3f_Copy(&sp224->world.pos, &sGetItemRefPos);
                 }
             }
         }
@@ -3823,5 +3821,5 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
     func_8012536C();
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80128BD0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_PostLimbDrawGameplay.s")
 #endif

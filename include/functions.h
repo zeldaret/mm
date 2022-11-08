@@ -1848,7 +1848,7 @@ void func_80126B8C(PlayState* play, Player* player);
 s32 func_80127438(PlayState* play, Player* player, s32 currentMask);
 s32 func_80128640(PlayState* play, Player* player, Gfx* dlist);
 void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex);
-void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
+void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor);
 
 Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
