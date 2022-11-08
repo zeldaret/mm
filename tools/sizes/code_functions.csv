@@ -1766,7 +1766,7 @@ asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayDefault.s,Pla
 asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayFirstPerson.s,Player_OverrideLimbDrawGameplayFirstPerson,0x801262C8,0x4D
 asm/non_matchings/code/z_player_lib/Player_OverrideLimbDrawGameplayCrawling.s,Player_OverrideLimbDrawGameplayCrawling,0x801263FC,0x11
 asm/non_matchings/code/z_player_lib/func_80126440.s,func_80126440,0x80126440,0x62
-asm/non_matchings/code/z_player_lib/func_801265C8.s,func_801265C8,0x801265C8,0x35
+asm/non_matchings/code/z_player_lib/Player_UpdateShieldCollider.s,Player_UpdateShieldCollider,0x801265C8,0x35
 asm/non_matchings/code/z_player_lib/func_8012669C.s,func_8012669C,0x8012669C,0x5B
 asm/non_matchings/code/z_player_lib/Player_DrawGetItemImpl.s,Player_DrawGetItemImpl,0x80126808,0x5D
 asm/non_matchings/code/z_player_lib/Player_DrawGetItem.s,Player_DrawGetItem,0x8012697C,0x4E

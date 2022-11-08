@@ -64,7 +64,7 @@ Vec3f* sPlayerCurBodyPartPos;
 
 s32 D_801F59E0;
 
-s32 D_801F59E4;
+s32 sPlayerLod;
 
 Vec3f sGetItemRefPos;
 
@@ -1679,7 +1679,7 @@ void Player_DrawImpl(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dL
     POLY_OPA_DISP = &gfx[2];
 
     D_801F59E0 = playerForm * 2;
-    D_801F59E4 = lod;
+    sPlayerLod = lod;
     SkelAnime_DrawFlexLod(play, skeleton, jointTable, dListCount, overrideLimbDraw, postLimbDraw, actor, lod);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1955,10 +1955,8 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
     Gfx* dList;
-    f32 scale;
+    f32 scale = player->unk_B62 * (10.0f / 51.0f);
     s32 i;
-
-    scale = player->unk_B62 * (10.0f / 51.0f);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -2204,7 +2202,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                 }
             }
 
-            *dList = leftHandDLists[D_801F59E4];
+            *dList = leftHandDLists[sPlayerLod];
 
             if (player->transformation == PLAYER_FORM_GORON) {
                 if (player->skelAnime.animation == &gPlayerAnim_pg_punchA) {
@@ -2255,7 +2253,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                     }
                 }
 
-                *dList = rightHandDLists[D_801F59E4];
+                *dList = rightHandDLists[sPlayerLod];
                 if (player->skelAnime.animation == &gPlayerAnim_pg_punchB) {
                     func_80125CE0(player, D_801C0784, pos, rot);
                 }
@@ -2276,9 +2274,9 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
                 }
             }
 
-            *dList = sheathDLists[D_801F59E4];
+            *dList = sheathDLists[sPlayerLod];
         } else if (limbIndex == PLAYER_LIMB_WAIST) {
-            *dList = player->waistDLists[D_801F59E4];
+            *dList = player->waistDLists[sPlayerLod];
         } else if (limbIndex == PLAYER_LIMB_HAT) {
             if (player->transformation == PLAYER_FORM_ZORA) {
                 Matrix_Scale((player->unk_B10[0] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
@@ -2369,16 +2367,16 @@ u8 sPlayerShieldCollisionTypes[PLAYER_SHIELD_MAX] = {
     COLTYPE_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
 };
 
-void func_801265C8(PlayState* play, Player* player, ColliderQuad* collider, Vec3f arg3[4]) {
+void Player_UpdateShieldCollider(PlayState* play, Player* player, ColliderQuad* collider, Vec3f quadSrc[4]) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
-        Vec3f sp28[4];
+        Vec3f quadDest[4];
 
         player->shieldQuad.base.colType = sPlayerShieldCollisionTypes[player->currentShield];
-        Matrix_MultVec3f(&arg3[0], &sp28[0]);
-        Matrix_MultVec3f(&arg3[1], &sp28[1]);
-        Matrix_MultVec3f(&arg3[2], &sp28[2]);
-        Matrix_MultVec3f(&arg3[3], &sp28[3]);
-        Collider_SetQuadVertices(collider, &sp28[0], &sp28[1], &sp28[2], &sp28[3]);
+        Matrix_MultVec3f(&quadSrc[0], &quadDest[0]);
+        Matrix_MultVec3f(&quadSrc[1], &quadDest[1]);
+        Matrix_MultVec3f(&quadSrc[2], &quadDest[2]);
+        Matrix_MultVec3f(&quadSrc[3], &quadDest[3]);
+        Collider_SetQuadVertices(collider, &quadDest[0], &quadDest[1], &quadDest[2], &quadDest[3]);
         CollisionCheck_SetAC(play, &play->colChkCtx, &collider->base);
         CollisionCheck_SetAT(play, &play->colChkCtx, &collider->base);
     }
@@ -3513,7 +3511,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 Matrix_Get(&player->shieldMf);
             } else if (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                 Matrix_Get(&player->shieldMf);
-                func_801265C8(play, player, &player->shieldQuad, D_801C0DA8);
+                Player_UpdateShieldCollider(play, player, &player->shieldQuad, D_801C0DA8);
             } else if (player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT) {
                 Matrix_MultVec3f(&D_801C0DD8, &player->rightHandWorld.pos);
 

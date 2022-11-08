@@ -4010,7 +4010,7 @@
     0x801F59D0:("sBunnyEarKinematics","struct_801F59D0","",0x0A),
     0x801F59DC:("sPlayerCurBodyPartPos","Vec3f*","",0x4),
     0x801F59E0:("D_801F59E0","s32","",0x4),
-    0x801F59E4:("D_801F59E4","s32","",0x4),
+    0x801F59E4:("sPlayerLod","s32","",0x4),
     0x801F59E8:("sGetItemRefPos","Vec3f","",0xC),
     0x801F59F4:("sPlayerLeftHandType","s32","",0x4),
     0x801F59F8:("sPlayerRightHandType","s32","",0x4),

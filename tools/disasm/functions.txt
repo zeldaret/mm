@@ -2252,7 +2252,7 @@
     0x801262C8:("Player_OverrideLimbDrawGameplayFirstPerson",),
     0x801263FC:("Player_OverrideLimbDrawGameplayCrawling",),
     0x80126440:("func_80126440",),
-    0x801265C8:("func_801265C8",),
+    0x801265C8:("Player_UpdateShieldCollider",),
     0x8012669C:("func_8012669C",),
     0x80126808:("Player_DrawGetItemImpl",),
     0x8012697C:("Player_DrawGetItem",),
