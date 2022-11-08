@@ -3299,7 +3299,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         // Note this does not check for PLAYER_BOTTLE_NONE, which would produce an OoB access on D_801C0CA8.
-        // On normal circunstances it should not be a problem because of the previous
+        // Under normal circunstances it should not be a problem because of the previous
         // `player->leftHandType == PLAYER_MODELTYPE_LH_BOTTLE` check
         if (bottle != PLAYER_BOTTLE_EMPTY) {
             Color_RGB8* bottleColor = &D_801C0CA8[bottle];
