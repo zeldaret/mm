@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_AP_NONE, 0x4000, 0x4000);
+        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -535,9 +535,9 @@ void func_80AED4F8(EnTk* this, PlayState* play) {
 }
 
 void func_80AED544(EnTk* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[31] & 0x10)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_10)) {
         Message_StartTextbox(play, 0x13FE, &this->actor);
-        gSaveContext.save.weekEventReg[31] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_31_10);
     } else if (gSaveContext.save.time < CLOCK_TIME(9, 0)) {
         Message_StartTextbox(play, 0x13FF, &this->actor);
     } else if (gSaveContext.save.time < CLOCK_TIME(12, 0)) {
@@ -564,7 +564,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
                     func_80AED544(this, play);
                 } else if (!Flags_GetSwitch(play, ENTK_GET_7F0(&this->actor))) {
                     Message_StartTextbox(play, 0x1403, &this->actor);
-                } else if (gSaveContext.save.weekEventReg[60] & 2) {
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_02)) {
                     func_80AED544(this, play);
                 } else {
                     Message_StartTextbox(play, 0x1413, &this->actor);
@@ -595,7 +595,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
 
                     case 0x1413:
                         Rupees_ChangeBy(30);
-                        gSaveContext.save.weekEventReg[60] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_60_02);
                         func_80151938(play, 0x13FF);
                         break;
 
@@ -657,7 +657,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         }
 
         Math_Vec3f_Copy(&sp44, &player->actor.world.pos);
-        sp44.y = player->bodyPartsPos[7].y + 3.0f;
+        sp44.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         temp_v0 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp44);
         if (ABS(temp_v0) < 0x800) {
             Math_SmoothStepToS(&this->unk_31A, temp_v0, 3, 0x16C, 0);
@@ -696,10 +696,10 @@ void func_80AED940(EnTk* this, PlayState* play) {
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_AP_NONE, 0x4000, 0x4000);
+            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
         }
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     }
 }
 
@@ -758,7 +758,7 @@ void func_80AEDE10(EnTk* this, PlayState* play) {
             switch (this->unk_310) {
                 case 0:
                     this->unk_2CA &= ~0x1000;
-                    if (!(gSaveContext.save.weekEventReg[52] & 0x80)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_80)) {
                         this->unk_2E6 = 0x1405;
                     } else {
                         this->unk_2E6 = 0x140B;
@@ -863,7 +863,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                         break;
 
                     case 0x140A:
-                        gSaveContext.save.weekEventReg[52] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_52_80);
 
                     case 0x140B:
                         func_80AEE784(this, play);

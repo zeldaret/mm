@@ -82,7 +82,7 @@ void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
 
 void ObjBoyo_UpdatePirateBumpValues(ObjBoyo* src, EnKaizoku* target) {
     target->unk_2F0 = 30.0f;
-    target->unk_2F4 = Actor_YawBetweenActors(&src->actor, &target->actor);
+    target->unk_2F4 = Actor_YawBetweenActors(&src->actor, &target->picto.actor);
 }
 
 void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {

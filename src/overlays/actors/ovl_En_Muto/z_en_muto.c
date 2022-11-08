@@ -70,7 +70,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->shouldSetHeadRotation = true;
         this->textIdIndex = 2;
-        if (gSaveContext.save.weekEventReg[60] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_80)) {
             this->textIdIndex = 3;
         }
 
@@ -82,7 +82,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
 
-        if (gSaveContext.save.weekEventReg[63] & 0x80 || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -136,7 +136,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         player = GET_PLAYER(play);
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (!(gSaveContext.save.weekEventReg[88] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08)) {
                 this->actor.textId = 0x62C;
             } else {
                 this->actor.textId = 0x62B;
@@ -164,7 +164,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     } else {
         this->textIdIndex = 0;
-        if (gSaveContext.save.weekEventReg[60] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
@@ -202,10 +202,10 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
             func_801477B4(play);
 
             if (this->actor.textId == 0x62C) {
-                gSaveContext.save.weekEventReg[88] |= 8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_08);
             }
             if (this->actor.textId == 0x624) {
-                gSaveContext.save.weekEventReg[60] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_60_80);
             }
 
             this->textIdIndex = 3;

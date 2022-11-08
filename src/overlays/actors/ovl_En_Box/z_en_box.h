@@ -5,12 +5,12 @@
 #include "objects/object_box/object_box.h"
 
 struct EnBox;
-struct func_80867BDC_a0;
+struct struct_80867BDC_a0;
 
 typedef void (*EnBoxActionFunc)(struct EnBox*, PlayState*);
-typedef void (*EnBoxUnkFunc)(struct func_80867BDC_a0* arg0, PlayState* play);
+typedef void (*EnBoxUnkFunc)(struct struct_80867BDC_a0* arg0, PlayState* play);
 
-typedef struct func_80867BDC_a0 {
+typedef struct struct_80867BDC_a0 {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ EnBoxUnkFunc unk_0C;
     /* 0x10 */ EnBoxUnkFunc unk_10;
@@ -18,7 +18,7 @@ typedef struct func_80867BDC_a0 {
     /* 0x18 */ s32 unk_18;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 unk_20;
-} func_80867BDC_a0; //size 0x24
+} struct_80867BDC_a0; // size 0x24
 
 typedef enum {
     /*  0 */ ENBOX_TYPE_BIG,                    // big
@@ -59,7 +59,7 @@ typedef struct EnBox {
     /* 0x1F1 */ u8 type;
     /* 0x1F2 */ u8 iceSmokeTimer;
     /* 0x1F3 */ s8 unk_1F3;
-    /* 0x1F4 */ func_80867BDC_a0 unk_1F4;
+    /* 0x1F4 */ struct_80867BDC_a0 unk_1F4;
     /* 0x218 */ s16 cutsceneIdxA;
     /* 0x21A */ s16 cutsceneIdxB;
     /* 0x21C */ s32 getItemId;

@@ -64,7 +64,7 @@ s16 sQuestRemainsEnvBlue[] = {
 
 #ifdef NON_EQUIVALENT
 // TODO: is actually NON_MATCHING, update once `z_kaleido_scope_NES.c` is decompiled
-// A single small regalloc at the first `func_8010DC58` for the heart piece count (see `gItemIcons`)
+// A single small regalloc at the first `Gfx_DrawTexQuadIA8` for the heart piece count (see `gItemIcons`)
 void KaleidoScope_DrawQuestStatus(PlayState* play) {
     static s16 sQuestRemainsColorTimer = 20;
     static s16 sQuestRemainsColorTimerIndex = 0;
@@ -337,7 +337,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-        POLY_OPA_DISP = func_8010DC58(
+        POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
             POLY_OPA_DISP,
             gItemIcons[(0x7A + ((GET_SAVE_INVENTORY_QUEST_ITEMS & 0xF0000000) >> QUEST_HEART_PIECE_COUNT))], 48, 48, 0);
     }
@@ -387,8 +387,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP,
-                                                  sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[i]], 16, 16, 0);
+                    POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
+                        POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[i]], 16, 16, 0);
                 }
             }
         } else if (IS_PAUSE_MAIN_STATE_SAVE_PROMPT || (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) {
@@ -421,7 +421,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                POLY_OPA_DISP = func_8010DC58(
+                POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
                     POLY_OPA_DISP, sOcarinaButtonTextures[gOcarinaSongButtons[sp1C8].buttonIndex[k]], 16, 16, 0);
             }
 
@@ -471,8 +471,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
 
-                    POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP,
-                                                  sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[k]], 16, 16, 0);
+                    POLY_OPA_DISP = Gfx_DrawTexQuadIA8(
+                        POLY_OPA_DISP, sOcarinaButtonTextures[sQuestSongPlayedOcarinaButtons[k]], 16, 16, 0);
                 }
 
                 if (pauseCtx->mainState == PAUSE_MAIN_STATE_SONG_PROMPT_INIT) {

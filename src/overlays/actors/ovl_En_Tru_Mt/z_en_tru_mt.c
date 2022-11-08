@@ -318,7 +318,7 @@ void func_80B7679C(EnTruMt* this, PlayState* play) {
     this->unk_34A = CLAMP(this->unk_34A, -0x38E0, 0x38E0);
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
 
     sp34 = this->actor.world.pos;
     sp34.y += 30.0f;
@@ -344,18 +344,18 @@ void func_80B76980(EnTruMt* this, PlayState* play) {
 
     if (gSaveContext.minigameHiddenScore >= 10) {
         Message_StartTextbox(play, 0x87F, &this->actor);
-        gSaveContext.eventInf[3] |= 0x40;
-        gSaveContext.eventInf[4] |= 1;
+        SET_EVENTINF(EVENTINF_36);
+        SET_EVENTINF(EVENTINF_40);
         player->stateFlags3 &= ~PLAYER_STATE3_400;
         this->actor.speedXZ = 0.0f;
         this->actionFunc = func_80B76BB8;
-    } else if (gSaveContext.eventInf[4] & 1) {
+    } else if (CHECK_EVENTINF(EVENTINF_40)) {
         u32 score = gSaveContext.minigameScore;
 
         if (((gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10) < score) {
             gSaveContext.save.unk_EE8 =
                 ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.unk_EE8 & 0xFFFF);
-            gSaveContext.eventInf[3] |= 0x80;
+            SET_EVENTINF(EVENTINF_37);
         }
     }
 }
@@ -413,7 +413,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTruMt* this = THIS;
 
-    if (!(gSaveContext.eventInf[3] & 0x20)) {
+    if (!CHECK_EVENTINF(EVENTINF_35)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -461,7 +461,7 @@ void EnTruMt_Update(Actor* thisx, PlayState* play) {
     func_80B76110(this);
     Actor_SetFocus(&this->actor, 34.0f);
 
-    if (!(gSaveContext.eventInf[4] & 1)) {
+    if (!CHECK_EVENTINF(EVENTINF_40)) {
         func_80B761FC(this, play);
     }
 

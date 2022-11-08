@@ -25,22 +25,6 @@ enum {
     /* 10 */ ENHORSEGAMECHECK_FF_MAX,
 };
 
-#define RACE_FLAG_END 0
-#define RACE_FLAG_START 1
-#define RACE_FLAG_2 2
-#define RACE_FLAG_3 3
-#define RACE_FLAG_4 4
-#define RACE_FLAGS 7
-
-#define GET_RACE_FLAGS (gSaveContext.save.weekEventReg[92] & RACE_FLAGS)
-
-#define SET_RACE_FLAGS(flag)                                                                                        \
-    {                                                                                                               \
-        gSaveContext.save.weekEventReg[92] &= (u8)~RACE_FLAGS;                                                      \
-        gSaveContext.save.weekEventReg[92] =                                                                        \
-            gSaveContext.save.weekEventReg[92] | (u8)((gSaveContext.save.weekEventReg[92] & ~RACE_FLAGS) | (flag)); \
-    } (void)0
-
 typedef struct EnHorseGameCheck {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ s32 unk_15C;
