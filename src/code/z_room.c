@@ -1,19 +1,12 @@
 #include "global.h"
 
-static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
-
-void (*sRoomDrawHandlers[])(PlayState* play, Room* room, u32 flags) = {
-    Room_DrawNormal,   // ROOM_SHAPE_TYPE_NORMAL
-    Room_DrawImage,    // ROOM_SHAPE_TYPE_IMAGE
-    Room_DrawCullable, // ROOM_SHAPE_TYPE_CULLABLE
-    Room_DrawNone,     // ROOM_SHAPE_TYPE_NONE
-};
-
 void Room_Update(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
 
 void Room_DrawNone(PlayState* play, Room* room, u32 flags) {
 }
+
+static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 void Room_DrawNormal(PlayState* play, Room* room, u32 flags) {
     RoomShapeNormal* roomShape;
@@ -308,6 +301,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 #else
+void Room_DrawCullable(PlayState* play, Room* room, u32 flags);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_DrawCullable.s")
 #endif
 
@@ -500,16 +494,16 @@ void Room_Init(PlayState* play, RoomContext* roomCtx) {
     }
 }
 
-u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
-    u32 maxRoomSize = 0;
-    u32 roomSize;
+size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
+    size_t maxRoomSize = 0;
+    size_t roomSize;
     s32 i;
     s32 j;
     s32 frontRoom;
     s32 backRoom;
-    u32 frontRoomSize;
-    u32 backRoomSize;
-    u32 cumulRoomSize;
+    size_t frontRoomSize;
+    size_t backRoomSize;
+    size_t cumulRoomSize;
     s32 pad[2];
 
     {
@@ -517,9 +511,7 @@ u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
 
         for (i = 0; i < play->numRooms; i++) {
             roomSize = roomList[i].vromEnd - roomList[i].vromStart;
-            if (maxRoomSize < roomSize) {
-                maxRoomSize = roomSize;
-            }
+            maxRoomSize = CLAMP_MIN(maxRoomSize, roomSize);
         }
     }
 
@@ -534,9 +526,7 @@ u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
             backRoomSize = (backRoom < 0) ? 0 : roomList[backRoom].vromEnd - roomList[backRoom].vromStart;
             cumulRoomSize = (frontRoom != backRoom) ? frontRoomSize + backRoomSize : frontRoomSize;
 
-            if (maxRoomSize < cumulRoomSize) {
-                maxRoomSize = cumulRoomSize;
-            }
+            maxRoomSize = CLAMP_MIN(maxRoomSize, cumulRoomSize);
             transitionActor++;
         }
     }
@@ -572,7 +562,7 @@ u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
 
 s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
     if (roomCtx->status == 0) {
-        u32 size;
+        size_t size;
 
         roomCtx->prevRoom = roomCtx->curRoom;
         roomCtx->curRoom.num = index;
@@ -580,10 +570,10 @@ s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index) {
         roomCtx->status = 1;
 
         size = play->roomList[index].vromEnd - play->roomList[index].vromStart;
-        roomCtx->activeRoomVram = (void*)(ALIGN16((u32)roomCtx->roomMemPages[roomCtx->activeMemPage] -
+        roomCtx->activeRoomVram = (void*)(ALIGN16((uintptr_t)roomCtx->roomMemPages[roomCtx->activeMemPage] -
                                                   (size + 8) * roomCtx->activeMemPage - 7));
 
-        osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, 1);
+        osCreateMesgQueue(&roomCtx->loadQueue, roomCtx->loadMsg, ARRAY_COUNT(roomCtx->loadMsg));
         DmaMgr_SendRequestImpl(&roomCtx->dmaRequest, roomCtx->activeRoomVram, play->roomList[index].vromStart, size, 0,
                                &roomCtx->loadQueue, NULL);
         roomCtx->activeMemPage ^= 1;
@@ -620,6 +610,13 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
 
     return 1;
 }
+
+void (*sRoomDrawHandlers[])(PlayState* play, Room* room, u32 flags) = {
+    Room_DrawNormal,   // ROOM_SHAPE_TYPE_NORMAL
+    Room_DrawImage,    // ROOM_SHAPE_TYPE_IMAGE
+    Room_DrawCullable, // ROOM_SHAPE_TYPE_CULLABLE
+    Room_DrawNone,     // ROOM_SHAPE_TYPE_NONE
+};
 
 void Room_Draw(PlayState* play, Room* room, u32 flags) {
     if (room->segment != NULL) {

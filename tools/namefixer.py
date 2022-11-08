@@ -769,6 +769,9 @@ wordReplace = {
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
+    "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
+    "play->roomCtx.curRoom.unk2": "play->roomCtx.curRoom.behaviorType2",
+    "play->roomCtx.unk31": "play->roomCtx.status",
 
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",

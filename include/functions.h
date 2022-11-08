@@ -1930,18 +1930,14 @@ Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s3
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b);
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b);
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
+
 void Room_Update(PlayState* play, Room* room, Input* input, s32 arg3);
-void Room_DrawNone(PlayState* play, Room* room, u32 flags);
-void Room_DrawNormal(PlayState* play, Room* room, u32 flags);
-void Room_DrawCullable(PlayState* play, Room* room, u32 flags);
-void Room_DrawImageSingle(PlayState* play, Room* room, u32 flags);
-void Room_DrawImageMulti(PlayState* play, Room* room, u32 flags);
-void Room_DrawImage(PlayState* play, Room* room, u32 flags);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
-u32 Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
+size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
 s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index);
 s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx);
 void Room_Draw(PlayState* play, Room* room, u32 flags);
+
 void func_8012EBF8(PlayState* play, RoomContext* roomCtx);
 s32 Inventory_GetBtnBItem(PlayState* play);
 void Inventory_ChangeEquipment(s16 value);
