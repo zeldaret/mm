@@ -539,7 +539,7 @@ typedef struct {
     /* 0x2FC */ s16 perfectLettersPrimColor[4];
     /* 0x304 */ s16 perfectLettersCount;
     /* 0x306 */ s16 perfectLettersUnused;
-    /* 0x308 */ s16 perfectLettersColorTargetIndex;
+    /* 0x308 */ s16 perfectLettersColorIndex;
     /* 0x30A */ s16 perfectLettersColorTimer;
     /* 0x30C */ s16 perfectLettersTimer;
     struct {

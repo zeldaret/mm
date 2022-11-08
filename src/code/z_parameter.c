@@ -3148,7 +3148,7 @@ void Interface_SetPerfectLetters(PlayState* play, s16 perfectLettersType) {
     interfaceCtx->perfectLettersPrimColor[3] = 255;
     interfaceCtx->perfectLettersColorTimer = 20;
 
-    interfaceCtx->perfectLettersColorTargetIndex = 0;
+    interfaceCtx->perfectLettersColorIndex = 0;
     interfaceCtx->perfectLettersCount = 1;
     interfaceCtx->perfectLettersTimer = 0;
 
@@ -3166,7 +3166,7 @@ void Interface_SetPerfectLetters(PlayState* play, s16 perfectLettersType) {
     interfaceCtx->perfectLettersState[0] = PERFECT_LETTERS_STATE_INIT;
 }
 
-u16 sPerfectLettersType1AngleOffScreenTargets[PERFECT_LETTERS_NUM_LETTERS] = {
+u16 sPerfectLettersType1OffScreenAngles[PERFECT_LETTERS_NUM_LETTERS] = {
     6 * PERFECT_LETTERS_ANGLE_PER_LETTER, // P
     7 * PERFECT_LETTERS_ANGLE_PER_LETTER, // E
     0 * PERFECT_LETTERS_ANGLE_PER_LETTER, // R
@@ -3194,18 +3194,18 @@ void Interface_UpdatePerfectLettersType1(PlayState* play) {
     for (count = 0, i = 0; i < interfaceCtx->perfectLettersCount; i++, count += 4) {
         if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_INIT) {
             // Initialize letter positions along the elliptical spirals
-            interfaceCtx->perfectLettersAngles[i] = sPerfectLettersType1AngleOffScreenTargets[i] + 0xA000;
+            interfaceCtx->perfectLettersAngles[i] = sPerfectLettersType1OffScreenAngles[i] + 0xA000;
             interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_ENTER;
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_ENTER) {
             // Swirl inwards along elliptical spirals to form the spelt-out word
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
-            if (interfaceCtx->perfectLettersAngles[i] == sPerfectLettersType1AngleOffScreenTargets[i]) {
+            if (interfaceCtx->perfectLettersAngles[i] == sPerfectLettersType1OffScreenAngles[i]) {
                 interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_STATIONARY;
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_SPREAD) {
             // Swirl outwards along elliptical spirals offscreen
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
-            if (interfaceCtx->perfectLettersAngles[i] == (u16)(sPerfectLettersType1AngleOffScreenTargets[i] - 0x8000)) {
+            if (interfaceCtx->perfectLettersAngles[i] == (u16)(sPerfectLettersType1OffScreenAngles[i] - 0x8000)) {
                 interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_OFF;
             }
         }
@@ -3221,7 +3221,7 @@ void Interface_UpdatePerfectLettersType1(PlayState* play) {
         interfaceCtx->perfectLettersSemiAxisX[interfaceCtx->perfectLettersCount] = 140.0f;
         interfaceCtx->perfectLettersSemiAxisY[interfaceCtx->perfectLettersCount] = 100.0f;
         interfaceCtx->perfectLettersAngles[interfaceCtx->perfectLettersCount] =
-            sPerfectLettersType1AngleOffScreenTargets[interfaceCtx->perfectLettersCount] + 0xA000;
+            sPerfectLettersType1OffScreenAngles[interfaceCtx->perfectLettersCount] + 0xA000;
 
         interfaceCtx->perfectLettersCount++;
     }
@@ -3231,31 +3231,31 @@ void Interface_UpdatePerfectLettersType1(PlayState* play) {
         (interfaceCtx->perfectLettersState[PERFECT_LETTERS_NUM_LETTERS - 1] == PERFECT_LETTERS_STATE_STATIONARY)) {
 
         colorStepR = ABS_ALT(interfaceCtx->perfectLettersPrimColor[0] -
-                             sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][0]) /
+                             sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorIndex][0]) /
                      interfaceCtx->perfectLettersColorTimer;
         colorStepG = ABS_ALT(interfaceCtx->perfectLettersPrimColor[1] -
-                             sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][1]) /
+                             sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorIndex][1]) /
                      interfaceCtx->perfectLettersColorTimer;
         colorStepB = ABS_ALT(interfaceCtx->perfectLettersPrimColor[2] -
-                             sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][2]) /
+                             sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorIndex][2]) /
                      interfaceCtx->perfectLettersColorTimer;
 
         if (interfaceCtx->perfectLettersPrimColor[0] >=
-            sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][0]) {
+            sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorIndex][0]) {
             interfaceCtx->perfectLettersPrimColor[0] -= colorStepR;
         } else {
             interfaceCtx->perfectLettersPrimColor[0] += colorStepR;
         }
 
         if (interfaceCtx->perfectLettersPrimColor[1] >=
-            sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][1]) {
+            sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorIndex][1]) {
             interfaceCtx->perfectLettersPrimColor[1] -= colorStepG;
         } else {
             interfaceCtx->perfectLettersPrimColor[1] += colorStepG;
         }
 
         if (interfaceCtx->perfectLettersPrimColor[2] >=
-            sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][2]) {
+            sPerfectLettersType1PrimColorTargets[interfaceCtx->perfectLettersColorIndex][2]) {
             interfaceCtx->perfectLettersPrimColor[2] -= colorStepB;
         } else {
             interfaceCtx->perfectLettersPrimColor[2] += colorStepB;
@@ -3265,7 +3265,7 @@ void Interface_UpdatePerfectLettersType1(PlayState* play) {
 
         if (interfaceCtx->perfectLettersColorTimer == 0) {
             interfaceCtx->perfectLettersColorTimer = 20;
-            interfaceCtx->perfectLettersColorTargetIndex ^= 1;
+            interfaceCtx->perfectLettersColorIndex ^= 1;
             interfaceCtx->perfectLettersTimer++;
 
             if (interfaceCtx->perfectLettersTimer == 6) {
@@ -3288,7 +3288,7 @@ void Interface_UpdatePerfectLettersType1(PlayState* play) {
 }
 
 // Targets to offset each letter to properly spell "PERFECT!"
-s16 sPerfectLettersType2OffsetXSpellingTargets[PERFECT_LETTERS_NUM_LETTERS] = {
+s16 sPerfectLettersType2SpellingOffsetsX[PERFECT_LETTERS_NUM_LETTERS] = {
     78,  // P
     54,  // E
     29,  // R
@@ -3300,7 +3300,7 @@ s16 sPerfectLettersType2OffsetXSpellingTargets[PERFECT_LETTERS_NUM_LETTERS] = {
 };
 
 // Targets to offset each letter to sweep horizontally offscreen
-s16 sPerfectLettersType2OffsetXOffScreenTargets[PERFECT_LETTERS_NUM_LETTERS] = {
+s16 sPerfectLettersType2OffScreenOffsetsX[PERFECT_LETTERS_NUM_LETTERS] = {
     180,  // P (offscreen left)
     180,  // E (offscreen left)
     180,  // R (offscreen left)
@@ -3359,20 +3359,18 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_SPREAD) {
             // Spread out the letters horizontally from the center to the spelt-out word
-            colorStepR =
-                ABS_ALT(interfaceCtx->perfectLettersOffsetX[i] - sPerfectLettersType2OffsetXSpellingTargets[i]) /
-                interfaceCtx->perfectLettersColorTimer;
-            if (interfaceCtx->perfectLettersOffsetX[i] >= sPerfectLettersType2OffsetXSpellingTargets[i]) {
+            colorStepR = ABS_ALT(interfaceCtx->perfectLettersOffsetX[i] - sPerfectLettersType2SpellingOffsetsX[i]) /
+                         interfaceCtx->perfectLettersColorTimer;
+            if (interfaceCtx->perfectLettersOffsetX[i] >= sPerfectLettersType2SpellingOffsetsX[i]) {
                 interfaceCtx->perfectLettersOffsetX[i] -= colorStepR;
             } else {
                 interfaceCtx->perfectLettersOffsetX[i] += colorStepR;
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_EXIT) {
             // Spread out the letters horizontally from the spelt-out world to offscreen
-            colorStepR =
-                ABS_ALT(interfaceCtx->perfectLettersOffsetX[i] - sPerfectLettersType2OffsetXOffScreenTargets[i]) /
-                interfaceCtx->perfectLettersColorTimer;
-            if (interfaceCtx->perfectLettersOffsetX[i] >= sPerfectLettersType2OffsetXOffScreenTargets[i]) {
+            colorStepR = ABS_ALT(interfaceCtx->perfectLettersOffsetX[i] - sPerfectLettersType2OffScreenOffsetsX[i]) /
+                         interfaceCtx->perfectLettersColorTimer;
+            if (interfaceCtx->perfectLettersOffsetX[i] >= sPerfectLettersType2OffScreenOffsetsX[i]) {
                 interfaceCtx->perfectLettersOffsetX[i] -= colorStepR;
             } else {
                 interfaceCtx->perfectLettersOffsetX[i] += colorStepR;
@@ -3415,35 +3413,32 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
     if (interfaceCtx->perfectLettersCount == PERFECT_LETTERS_NUM_LETTERS) {
         if (interfaceCtx->perfectLettersState[PERFECT_LETTERS_NUM_LETTERS - 1] == PERFECT_LETTERS_STATE_DISPLAY) {
 
-            colorStepR =
-                ABS_ALT(interfaceCtx->perfectLettersPrimColor[0] -
-                        sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][0]) /
-                interfaceCtx->perfectLettersColorTimer;
-            colorStepG =
-                ABS_ALT(interfaceCtx->perfectLettersPrimColor[1] -
-                        sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][1]) /
-                interfaceCtx->perfectLettersColorTimer;
-            colorStepB =
-                ABS_ALT(interfaceCtx->perfectLettersPrimColor[2] -
-                        sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][2]) /
-                interfaceCtx->perfectLettersColorTimer;
+            colorStepR = ABS_ALT(interfaceCtx->perfectLettersPrimColor[0] -
+                                 sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorIndex][0]) /
+                         interfaceCtx->perfectLettersColorTimer;
+            colorStepG = ABS_ALT(interfaceCtx->perfectLettersPrimColor[1] -
+                                 sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorIndex][1]) /
+                         interfaceCtx->perfectLettersColorTimer;
+            colorStepB = ABS_ALT(interfaceCtx->perfectLettersPrimColor[2] -
+                                 sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorIndex][2]) /
+                         interfaceCtx->perfectLettersColorTimer;
 
             if (interfaceCtx->perfectLettersPrimColor[0] >=
-                sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][0]) {
+                sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorIndex][0]) {
                 interfaceCtx->perfectLettersPrimColor[0] -= colorStepR;
             } else {
                 interfaceCtx->perfectLettersPrimColor[0] += colorStepR;
             }
 
             if (interfaceCtx->perfectLettersPrimColor[1] >=
-                sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][1]) {
+                sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorIndex][1]) {
                 interfaceCtx->perfectLettersPrimColor[1] -= colorStepG;
             } else {
                 interfaceCtx->perfectLettersPrimColor[1] += colorStepG;
             }
 
             if (interfaceCtx->perfectLettersPrimColor[2] >=
-                sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][2]) {
+                sPerfectLettersType2PrimColorTargets[interfaceCtx->perfectLettersColorIndex][2]) {
                 interfaceCtx->perfectLettersPrimColor[2] -= colorStepB;
             } else {
                 interfaceCtx->perfectLettersPrimColor[2] += colorStepB;
@@ -3452,7 +3447,7 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
             interfaceCtx->perfectLettersColorTimer--;
             if (interfaceCtx->perfectLettersColorTimer == 0) {
                 interfaceCtx->perfectLettersColorTimer = 20;
-                interfaceCtx->perfectLettersColorTargetIndex ^= 1;
+                interfaceCtx->perfectLettersColorIndex ^= 1;
                 interfaceCtx->perfectLettersTimer++;
                 if (interfaceCtx->perfectLettersTimer == 6) {
                     for (i = 0; i < PERFECT_LETTERS_NUM_LETTERS; i++) {
@@ -3466,7 +3461,7 @@ void Interface_UpdatePerfectLettersType2(PlayState* play) {
 }
 
 // Targets to offset each letter to properly spell "PERFECT!"
-s16 sPerfectLettersType3OffsetXSpellingTargets[PERFECT_LETTERS_NUM_LETTERS] = {
+s16 sPerfectLettersType3SpellingOffsetsX[PERFECT_LETTERS_NUM_LETTERS] = {
     78,  // P
     54,  // E
     29,  // R
@@ -3478,7 +3473,7 @@ s16 sPerfectLettersType3OffsetXSpellingTargets[PERFECT_LETTERS_NUM_LETTERS] = {
 };
 
 // Targets to sweep each letter's angle along an elliptical spiral offscreen
-u16 sPerfectLettersType3AngleOffScreenTargets[PERFECT_LETTERS_NUM_LETTERS] = {
+u16 sPerfectLettersType3OffScreenAngles[PERFECT_LETTERS_NUM_LETTERS] = {
     6 * PERFECT_LETTERS_ANGLE_PER_LETTER, // P
     7 * PERFECT_LETTERS_ANGLE_PER_LETTER, // E
     0 * PERFECT_LETTERS_ANGLE_PER_LETTER, // R
@@ -3536,10 +3531,9 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
             }
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_SPREAD) {
             // Spread out the letters horizontally from the center to the spelt-out word
-            colorStepR =
-                ABS_ALT(interfaceCtx->perfectLettersOffsetX[i] - sPerfectLettersType3OffsetXSpellingTargets[i]) /
-                interfaceCtx->perfectLettersColorTimer;
-            if (interfaceCtx->perfectLettersOffsetX[i] >= sPerfectLettersType3OffsetXSpellingTargets[i]) {
+            colorStepR = ABS_ALT(interfaceCtx->perfectLettersOffsetX[i] - sPerfectLettersType3SpellingOffsetsX[i]) /
+                         interfaceCtx->perfectLettersColorTimer;
+            if (interfaceCtx->perfectLettersOffsetX[i] >= sPerfectLettersType3SpellingOffsetsX[i]) {
                 interfaceCtx->perfectLettersOffsetX[i] -= colorStepR;
             } else {
                 interfaceCtx->perfectLettersOffsetX[i] += colorStepR;
@@ -3547,7 +3541,7 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
         } else if (interfaceCtx->perfectLettersState[i] == PERFECT_LETTERS_STATE_EXIT) {
             // Swirl outwards along elliptical spirals offscreen
             interfaceCtx->perfectLettersAngles[i] -= 0x800;
-            if (interfaceCtx->perfectLettersAngles[i] == (u16)(sPerfectLettersType3AngleOffScreenTargets[i] - 0x8000)) {
+            if (interfaceCtx->perfectLettersAngles[i] == (u16)(sPerfectLettersType3OffScreenAngles[i] - 0x8000)) {
                 interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_OFF;
             }
         }
@@ -3575,31 +3569,31 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
         (interfaceCtx->perfectLettersState[PERFECT_LETTERS_NUM_LETTERS - 1] == PERFECT_LETTERS_STATE_DISPLAY)) {
 
         colorStepR = ABS_ALT(interfaceCtx->perfectLettersPrimColor[0] -
-                             sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][0]) /
+                             sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorIndex][0]) /
                      interfaceCtx->perfectLettersColorTimer;
         colorStepG = ABS_ALT(interfaceCtx->perfectLettersPrimColor[1] -
-                             sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][1]) /
+                             sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorIndex][1]) /
                      interfaceCtx->perfectLettersColorTimer;
         colorStepB = ABS_ALT(interfaceCtx->perfectLettersPrimColor[2] -
-                             sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][2]) /
+                             sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorIndex][2]) /
                      interfaceCtx->perfectLettersColorTimer;
 
         if (interfaceCtx->perfectLettersPrimColor[0] >=
-            sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][0]) {
+            sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorIndex][0]) {
             interfaceCtx->perfectLettersPrimColor[0] -= colorStepR;
         } else {
             interfaceCtx->perfectLettersPrimColor[0] += colorStepR;
         }
 
         if (interfaceCtx->perfectLettersPrimColor[1] >=
-            sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][1]) {
+            sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorIndex][1]) {
             interfaceCtx->perfectLettersPrimColor[1] -= colorStepG;
         } else {
             interfaceCtx->perfectLettersPrimColor[1] += colorStepG;
         }
 
         if (interfaceCtx->perfectLettersPrimColor[2] >=
-            sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorTargetIndex][2]) {
+            sPerfectLettersType3PrimColorTargets[interfaceCtx->perfectLettersColorIndex][2]) {
             interfaceCtx->perfectLettersPrimColor[2] -= colorStepB;
         } else {
             interfaceCtx->perfectLettersPrimColor[2] += colorStepB;
@@ -3608,13 +3602,13 @@ void Interface_UpdatePerfectLettersType3(PlayState* play) {
         interfaceCtx->perfectLettersColorTimer--;
         if (interfaceCtx->perfectLettersColorTimer == 0) {
             interfaceCtx->perfectLettersColorTimer = 20;
-            interfaceCtx->perfectLettersColorTargetIndex ^= 1;
+            interfaceCtx->perfectLettersColorIndex ^= 1;
             interfaceCtx->perfectLettersTimer++;
             if (interfaceCtx->perfectLettersTimer == 6) {
                 for (i = 0; i < PERFECT_LETTERS_NUM_LETTERS; i++) {
                     interfaceCtx->perfectLettersSemiAxisX[i] = 140.0f;
                     interfaceCtx->perfectLettersSemiAxisY[i] = 100.0f;
-                    interfaceCtx->perfectLettersAngles[i] = sPerfectLettersType3AngleOffScreenTargets[i];
+                    interfaceCtx->perfectLettersAngles[i] = sPerfectLettersType3OffScreenAngles[i];
                     interfaceCtx->perfectLettersState[i] = PERFECT_LETTERS_STATE_EXIT;
                 }
                 interfaceCtx->perfectLettersColorTimer = 5;
