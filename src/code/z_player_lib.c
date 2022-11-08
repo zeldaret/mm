@@ -1516,7 +1516,8 @@ void Player_UpdateBunnyEarsKinematics(Player* player) {
     angle = player->actor.world.rot.y - player->actor.shape.rot.y;
     force.x =
         (s32)(player->actor.speedXZ * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
-    force.y = (s32)(player->actor.speedXZ * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    force.y =
+        (s32)(player->actor.speedXZ * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
 
     sBunnyEarKinematics.angVel.x += force.x >> 2;
     sBunnyEarKinematics.angVel.y += force.y >> 2;
