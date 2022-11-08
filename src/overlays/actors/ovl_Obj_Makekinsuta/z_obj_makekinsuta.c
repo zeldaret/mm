@@ -87,7 +87,7 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
         Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
         Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
         Matrix_MultVec3f(&D_8099FE3C, &destVec);
-        rotY = Math_FAtan2F(destVec.z, destVec.x);
+        rotY = Math_Atan2S_XY(destVec.z, destVec.x);
     }
     actor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z,
                         0, rotY, 0, (OBJMAKEKINSUTA_GET_1F(thisx) << 2) | 0xFF01);

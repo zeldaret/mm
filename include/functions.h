@@ -2702,11 +2702,10 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z);
 // void func_8017FB1C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
 // void func_8017FD44(void);
 
-u16 Math_GetAtan2Tbl(f32 y, f32 x);
 s16 Math_Atan2S(f32 y, f32 x);
 f32 Math_Atan2F(f32 y, f32 x);
-s16 Math_FAtan2F(f32 adjacent, f32 opposite);
-f32 Math_Acot2F(f32 adjacent, f32 opposite);
+s16 Math_Atan2S_XY(f32 x, f32 y);
+f32 Math_Atan2F_XY(f32 x, f32 y);
 
 u64* SysUcode_GetUCodeBoot(void);
 size_t SysUcode_GetUCodeBootSize(void);

@@ -1725,7 +1725,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     Math_Vec3f_Diff(arg5, arg4, &sp44);
     sp40 = sqrtf(SQXZ(sp44));
 
-    sp3C = (sp40 <= 1.0f) ? arg3 : Math_FAtan2F(sp44.z, sp44.x);
+    sp3C = (sp40 <= 1.0f) ? arg3 : Math_Atan2S_XY(sp44.z, sp44.x);
     sp40 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
 
     if (ABS_ALT(BINANG_SUB(sp3C, arg3)) > 0x4000) {
@@ -1733,7 +1733,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     }
     sp3C -= arg3;
 
-    temp_v0 = Math_FAtan2F(sp44.y, sp40);
+    temp_v0 = Math_Atan2S_XY(sp44.y, sp40);
     temp_v0 = CLAMP(temp_v0, (s16)-arg9, arg9);
     //! FAKE:
     if (sp3C) {}

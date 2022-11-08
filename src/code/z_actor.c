@@ -151,7 +151,7 @@ void ActorShadow_DrawFoot(PlayState* play, Light* light, MtxF* arg2, s32 lightNu
 
     dir0 = light->l.dir[0];
     dir2 = light->l.dir[2];
-    sp58 = Math_FAtan2F(dir2, dir0);
+    sp58 = Math_Atan2S_XY(dir2, dir0);
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
     Matrix_Put(arg2);
@@ -1493,8 +1493,7 @@ void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* 
     slopeNormal->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
     slopeNormal->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
     slopeNormal->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
-
-    *downwardSlopeYaw = Math_FAtan2F(slopeNormal->z, slopeNormal->x);
+    *downwardSlopeYaw = Math_Atan2S_XY(slopeNormal->z, slopeNormal->x);
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
@@ -1591,7 +1590,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
 
-            actor->wallYaw = Math_FAtan2F(sp7C->normal.z, sp7C->normal.x);
+            actor->wallYaw = Math_Atan2S_XY(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
             actor->bgCheckFlags &= ~8;
@@ -4380,8 +4379,8 @@ void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     f32 zDiff = arg1->z - arg0->z;
     f32 yDiff = arg3 ? (arg1->y - arg0->y) : (arg0->y - arg1->y);
 
-    arg2->y = Math_FAtan2F(zDiff, xDiff);
-    arg2->x = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
+    arg2->y = Math_Atan2S_XY(zDiff, xDiff);
+    arg2->x = Math_Atan2S_XY(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {

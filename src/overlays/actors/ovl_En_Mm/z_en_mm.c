@@ -151,7 +151,7 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             if ((temp_f2 < this->actor.speedXZ) ||
                 (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
                 this->actor.speedXZ = CLAMP_MAX(temp_f2, 16.0f);
-                this->actor.world.rot.y = Math_FAtan2F(temp_f12, temp_f14);
+                this->actor.world.rot.y = Math_Atan2S_XY(temp_f12, temp_f14);
             }
 
             if (!Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f)) {

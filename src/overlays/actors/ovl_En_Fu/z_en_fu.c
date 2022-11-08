@@ -119,7 +119,7 @@ void func_809616E0(EnFu* this, PlayState* play) {
     for (i = 0; i < this->unk_520; i++) {
         temp_f20 = this->actor.world.pos.x - this->unk_538[i].x;
         temp_f22 = this->actor.world.pos.z - this->unk_538[i].z;
-        atan = Math_FAtan2F(temp_f22, temp_f20);
+        atan = Math_Atan2S_XY(temp_f22, temp_f20);
 
         if (!spA0 || ((i % 2) != 0)) {
             Actor_Spawn(&play->actorCtx, play, this->unk_544, this->unk_538[i].x, this->unk_538[i].y,
