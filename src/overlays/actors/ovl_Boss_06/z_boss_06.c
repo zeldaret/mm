@@ -135,7 +135,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
     D_809F4970 = (EnKnight*)this->actor.parent;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
-    if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x80)) {
+    if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_57)) {
         this->actionFunc = func_809F2E14;
     } else {
         this->actionFunc = func_809F2B64;
@@ -199,7 +199,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             Cutscene_Start(play, &play->csCtx);
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -239,7 +239,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 this->unk_1D8 = 0.0f;
                 if (this->unk_1CA == 60) {
                     D_809F4970->unk_154++;
-                    func_800B7298(play, &this->actor, 0x84);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_132);
                     player->actor.shape.rot.y = 0;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
                 }
@@ -332,7 +332,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 D_809F4970->unk_151 = 0;
             }
             break;
@@ -641,7 +641,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Translate(this->actor.world.pos.x + this->unk_1B0, this->actor.world.pos.y + 84.0f + this->unk_1B4,
                          (this->actor.world.pos.z - 2.0f) + spE0, MTXMODE_NEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)((140.0f * sp68) + 115.0f), temp_s2);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
 
@@ -649,7 +649,7 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZS(play->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

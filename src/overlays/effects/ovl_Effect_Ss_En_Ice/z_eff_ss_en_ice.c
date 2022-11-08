@@ -71,7 +71,7 @@ u32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->update = EffectSsEnIce_Update;
         this->rLifespan = initParams->life;
         this->rScale = initParams->scale * 100.0f;
-        this->rYaw = Math_FAtan2F(initParams->velocity.z, initParams->velocity.x);
+        this->rYaw = Math_Atan2S_XY(initParams->velocity.z, initParams->velocity.x);
         this->rPitch = 0;
         this->rPrimColorR = initParams->primColor.r;
         this->rPrimColorG = initParams->primColor.g;

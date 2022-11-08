@@ -667,10 +667,10 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && (gSaveContext.save.weekEventReg[20] & 2)) {
+        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((play->nextEntrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   (gSaveContext.save.weekEventReg[33] & 0x80)) {
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
             play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
     }
@@ -957,7 +957,7 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     s32 sp40;
 
     if (this->unk_144 & 1) {
-        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_18CC.unk_18->unk_1));
+        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_18CC.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
             func_8018450C(play, &this->unk_18CC, mtx, func_80AF31D0, NULL, &this->actor);

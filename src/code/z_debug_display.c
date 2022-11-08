@@ -148,9 +148,9 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
     s32 segment; // of path ending at the current point, 1-indexed
 
     if (path != NULL) {
-        // count - 1 segments, 1 gSPVertex and 3 gSP2Triangles for each, plus a gSPEndDisplayList
-        gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(((path->count - 1) * 4 + 1) * sizeof(Gfx)));
-        curVtx = GRAPH_ALLOC(gfxCtx, ALIGN16(path->count * 6 * sizeof(Vtx)));
+        // (count - 1) segments, 1 gSPVertex and 3 gSP2Triangles for each, plus a gSPEndDisplayList
+        gfx = GRAPH_ALLOC(gfxCtx, ((path->count - 1) * 4 + 1) * sizeof(Gfx));
+        curVtx = GRAPH_ALLOC(gfxCtx, path->count * 6 * sizeof(Vtx));
 
         gfxHead = gfx;
         curBaseVtx = curVtx;
@@ -202,7 +202,7 @@ Gfx* DebugDisplay_PathDisplayList(GraphicsContext* gfxCtx, Path* path) {
         gSPEndDisplayList(gfx++);
     } else {
         // No path, trivial displaylist
-        gfxHead = gfx = GRAPH_ALLOC(gfxCtx, ALIGN16(sizeof(Gfx)));
+        gfx = gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
         gSPEndDisplayList(gfx++);
     }
     return gfxHead;
