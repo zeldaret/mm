@@ -3183,21 +3183,17 @@ void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2
     sp58.y = 0.0f;
     sp58.z = 0.0f;
     sp50.x = 0;
-    i = 1;
 
-    if (arg2 >= 2) {
-        do {
-            sp58.x = arg1->unk_00 * 100.0f;
-            sp50.z = arg1->unk_06 + (s16)(phi_s1->unk_1A - arg0->unk_1A);
-            sp50.y = arg1->unk_04 + (s16)(phi_s1->unk_18 - arg0->unk_18);
-            Matrix_TranslateRotateZYX(&sp58, &sp50);
-            Matrix_ToMtx(*arg3);
-            (*arg3)++;
-            arg0++;
-            phi_s1++;
-            arg1++;
-            i++;
-        } while (i < arg2);
+    for (i = 1; i < arg2; i++) {
+        sp58.x = arg1->unk_00 * 100.0f;
+        sp50.z = arg1->unk_06 + (s16)(phi_s1->unk_1A - arg0->unk_1A);
+        sp50.y = arg1->unk_04 + (s16)(phi_s1->unk_18 - arg0->unk_18);
+        Matrix_TranslateRotateZYX(&sp58, &sp50);
+        Matrix_ToMtx(*arg3);
+        (*arg3)++;
+        arg0++;
+        phi_s1++;
+        arg1++;
     }
 }
 

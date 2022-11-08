@@ -90,7 +90,7 @@
         <Limb Name="gLinkGoronShieldingArmsAndLegsLimb" Type="Standard" EnumName="LINK_GORON_SHIELDING_LIMB_ARMS_AND_LEGS" Offset="0x1779C" />
         <Skeleton Name="gLinkGoronShieldingSkel" Type="Flex" LimbType="Standard" LimbNone="LINK_GORON_SHIELDING_LIMB_NONE" LimbMax="LINK_GORON_SHIELDING_LIMB_MAX" EnumName="LinkGoronShieldingLimb" Offset="0x177B8" />
 
-        <Animation Name="object_link_goron_Anim_0178D0" Offset="0x178D0" />
+        <Animation Name="gLinkGoronShieldingAnim" Offset="0x178D0" />
 
         <Limb Name="gLinkGoronRootLimb" Type="LOD" EnumName="LINK_GORON_LIMB_ROOT" Offset="0x178E0" />
         <Limb Name="gLinkGoronWaistLimb" Type="LOD" EnumName="LINK_GORON_LIMB_WAIST" Offset="0x178F0" />
