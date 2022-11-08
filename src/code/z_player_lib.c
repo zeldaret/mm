@@ -915,8 +915,11 @@ Gfx* gPlayerLeftHandOneHandSwordDLs[2 * PLAYER_FORM_MAX] = {
 };
 
 Gfx* D_801C018C[] = {
+    // EQUIP_VALUE_SWORD_KOKIRI
     gLinkHumanLeftHandHoldingKokiriSwordDL, gLinkHumanLeftHandHoldingKokiriSwordDL,
+    // EQUIP_VALUE_SWORD_RAZOR
     gLinkHumanLeftHandHoldingRazorSwordDL,  gLinkHumanLeftHandHoldingRazorSwordDL,
+    // EQUIP_VALUE_SWORD_GILDED
     gLinkHumanLeftHandHoldingGildedSwordDL, gLinkHumanLeftHandHoldingGildedSwordDL,
 };
 
@@ -2174,7 +2177,7 @@ s32 Player_OverrideLimbDrawGameplayDefault(PlayState* play, s32 limbIndex, Gfx**
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, &player->actor)) {
         if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
             Gfx** leftHandDLists = player->leftHandDLists;
-            s32 swordEquipValue;
+            EquipValueSword swordEquipValue;
 
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
@@ -2968,7 +2971,7 @@ struct_80128388_arg1 D_801C0C54[] = {
     { 30.0f, 0x0000, 0x0000, { 0.0f, 0.0f, 0.0f }, 20.0f, 0x1F40, 0x2EE0 },
 };
 
-Color_RGB8 D_801C0CA8[PLAYER_BOTTLE_MAX] = {
+Color_RGB8 sPlayerBottleColors[PLAYER_BOTTLE_MAX] = {
     { 255, 255, 255 }, // PLAYER_BOTTLE_EMPTY
     { 80, 80, 255 },   // PLAYER_BOTTLE_FISH
     { 136, 192, 255 }, // PLAYER_BOTTLE_SPRING_WATER
@@ -3292,11 +3295,11 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Translate(temp_v1_2->x, temp_v1_2->y, temp_v1_2->z, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        // Note this does not check for PLAYER_BOTTLE_NONE, which would produce an OoB access on D_801C0CA8.
+        // Note this does not check for PLAYER_BOTTLE_NONE, which would produce an OoB access on sPlayerBottleColors.
         // Under normal circunstances it should not be a problem because of the previous
         // `player->leftHandType == PLAYER_MODELTYPE_LH_BOTTLE` check
         if (bottle != PLAYER_BOTTLE_EMPTY) {
-            Color_RGB8* bottleColor = &D_801C0CA8[bottle];
+            Color_RGB8* bottleColor = &sPlayerBottleColors[bottle];
 
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);

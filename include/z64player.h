@@ -390,6 +390,7 @@ typedef enum PlayerFacialExpression {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
+// TODO: Contains more than just the face info, should be renamed appropriately
 #define GET_FACE_FROM_JOINTTABLE(jointTable) (((PlayerAnimationFrame*)(jointTable))->faceInfo)
 
 typedef enum PlayerLimb {
