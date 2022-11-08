@@ -1387,11 +1387,11 @@ s32 func_801240DC(Player* player) {
 }
 
 PlayerBButtonSword Player_BButtonSwordFromIA(Player* player, PlayerItemAction itemAction) {
-    PlayerBButtonSword bButtonSword = GET_B_SWORD_FROM_IA(itemAction);
+    PlayerBButtonSword bButtonSword = GET_BSWORD_FROM_IA(itemAction);
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if ((GET_B_SWORD_FROM_IA(itemAction) > PLAYER_BSWORD_NONE) &&
-            (GET_B_SWORD_FROM_IA(itemAction) < PLAYER_BSWORD_MAX)) {
+        if ((GET_BSWORD_FROM_IA(itemAction) > PLAYER_BSWORD_NONE) &&
+            (GET_BSWORD_FROM_IA(itemAction) < PLAYER_BSWORD_MAX)) {
             return bButtonSword;
         }
     }
