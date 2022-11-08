@@ -53,15 +53,12 @@ Vec3f D_801F59B0[2];
 
 s32 D_801F59C8[2];
 
-typedef struct {
-    /* 0x0 */ s16 unk_0;
-    /* 0x2 */ s16 unk_2;
-    /* 0x4 */ s16 unk_4;
-    /* 0x6 */ s16 unk_6;
-    /* 0x8 */ s16 unk_8;
-} struct_801F59D0; // size = 0xA
+typedef struct BunnyEarKinematics {
+    /* 0x0 */ Vec3s rot;
+    /* 0x6 */ Vec3s angVel;
+} BunnyEarKinematics; // size = 0xC
 
-struct_801F59D0 D_801F59D0;
+BunnyEarKinematics sBunnyEarKinematics;
 
 Vec3f* sPlayerCurBodyPartPos;
 
@@ -1389,12 +1386,12 @@ s32 func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
-PlayerBButtonSword Player_BButtonSwordFromAP(Player* player, PlayerItemAction itemAction) {
-    PlayerBButtonSword bButtonSword = GET_B_SWORD_FROM_AP(itemAction);
+PlayerBButtonSword Player_BButtonSwordFromIA(Player* player, PlayerItemAction itemAction) {
+    PlayerBButtonSword bButtonSword = GET_B_SWORD_FROM_IA(itemAction);
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if ((GET_B_SWORD_FROM_AP(itemAction) > PLAYER_BSWORD_NONE) &&
-            (GET_B_SWORD_FROM_AP(itemAction) < PLAYER_BSWORD_MAX)) {
+        if ((GET_B_SWORD_FROM_IA(itemAction) > PLAYER_BSWORD_NONE) &&
+            (GET_B_SWORD_FROM_IA(itemAction) < PLAYER_BSWORD_MAX)) {
             return bButtonSword;
         }
     }
@@ -1403,11 +1400,11 @@ PlayerBButtonSword Player_BButtonSwordFromAP(Player* player, PlayerItemAction it
 }
 
 PlayerBButtonSword Player_GetHeldBButtonSword(Player* player) {
-    return Player_BButtonSwordFromAP(player, player->heldItemAction);
+    return Player_BButtonSwordFromIA(player, player->heldItemAction);
 }
 
-PlayerMeleeWeapon Player_ActionToMeleeWeapon(PlayerItemAction itemAction) {
-    PlayerMeleeWeapon weapon = GET_MELEE_WEAPON_FROM_AP(itemAction);
+PlayerMeleeWeapon Player_MeleeWeaponFromIA(PlayerItemAction itemAction) {
+    PlayerMeleeWeapon weapon = GET_MELEE_WEAPON_FROM_IA(itemAction);
 
     if ((weapon > PLAYER_MELEEWEAPON_NONE) && (weapon < PLAYER_MELEEWEAPON_MAX)) {
         return weapon;
@@ -1417,7 +1414,7 @@ PlayerMeleeWeapon Player_ActionToMeleeWeapon(PlayerItemAction itemAction) {
 }
 
 PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player) {
-    return Player_ActionToMeleeWeapon(player->heldItemAction);
+    return Player_MeleeWeaponFromIA(player->heldItemAction);
 }
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
@@ -1429,8 +1426,8 @@ s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     return false;
 }
 
-PlayerBottle Player_ActionToBottle(Player* player, PlayerItemAction itemAction) {
-    PlayerBottle bottle = GET_BOTTLE_FROM_AP(itemAction);
+PlayerBottle Player_BottleFromIA(Player* player, PlayerItemAction itemAction) {
+    PlayerBottle bottle = GET_BOTTLE_FROM_IA(itemAction);
 
     if ((bottle > PLAYER_BOTTLE_NONE) && (bottle < PLAYER_BOTTLE_MAX)) {
         return bottle;
@@ -1440,11 +1437,11 @@ PlayerBottle Player_ActionToBottle(Player* player, PlayerItemAction itemAction) 
 }
 
 PlayerBottle Player_GetBottleHeld(Player* Player) {
-    return Player_ActionToBottle(Player, Player->heldItemAction);
+    return Player_BottleFromIA(Player, Player->heldItemAction);
 }
 
-PlayerExplosive Player_ActionToExplosive(Player* player, PlayerItemAction itemAction) {
-    PlayerExplosive explosive = GET_EXPLOSIVE_FROM_AP(itemAction);
+PlayerExplosive Player_ExplosiveFromIA(Player* player, PlayerItemAction itemAction) {
+    PlayerExplosive explosive = GET_EXPLOSIVE_FROM_IA(itemAction);
 
     if ((explosive > PLAYER_EXPLOSIVE_NONE) && (explosive < PLAYER_EXPLOSIVE_MAX)) {
         return explosive;
@@ -1454,16 +1451,16 @@ PlayerExplosive Player_ActionToExplosive(Player* player, PlayerItemAction itemAc
 }
 
 PlayerExplosive Player_GetExplosiveHeld(Player* player) {
-    return Player_ActionToExplosive(player, player->heldItemAction);
+    return Player_ExplosiveFromIA(player, player->heldItemAction);
 }
 
 // Note this function maps PLAYER_IA_LAST_USED to PLAYER_SWORD_KOKIRI
-PlayerSword Player_ActionToSword(Player* player, PlayerItemAction itemAction) {
+PlayerSword Player_SwordFromIA(Player* player, PlayerItemAction itemAction) {
     PlayerSword sword = PLAYER_SWORD_KOKIRI;
 
     //! FAKE:
     if ((itemAction == PLAYER_IA_LAST_USED) ||
-        ((sword = GET_SWORD_FROM_AP(itemAction), (sword > PLAYER_SWORD_NONE)) && (sword < PLAYER_SWORD_MAX))) {
+        ((sword = GET_SWORD_FROM_IA(itemAction), (sword > PLAYER_SWORD_NONE)) && (sword < PLAYER_SWORD_MAX))) {
         return sword;
     }
 
@@ -1508,43 +1505,41 @@ s32 Player_GetEnvTimerType(PlayState* play) {
 }
 
 void Player_UpdateBunnyEarsKinematics(Player* player) {
-    s32 pad;
-    s16 sp2C;
-    s16 sp28;
-    s16 sp26;
+    Vec3s force;
+    s16 angle;
 
-    D_801F59D0.unk_6 -= D_801F59D0.unk_6 >> 3;
-    D_801F59D0.unk_8 -= D_801F59D0.unk_8 >> 3;
-    D_801F59D0.unk_6 += -D_801F59D0.unk_0 >> 2;
-    D_801F59D0.unk_8 += -D_801F59D0.unk_2 >> 2;
+    sBunnyEarKinematics.angVel.x -= sBunnyEarKinematics.angVel.x >> 3;
+    sBunnyEarKinematics.angVel.y -= sBunnyEarKinematics.angVel.y >> 3;
+    sBunnyEarKinematics.angVel.x += -sBunnyEarKinematics.rot.x >> 2;
+    sBunnyEarKinematics.angVel.y += -sBunnyEarKinematics.rot.y >> 2;
 
-    sp26 = player->actor.world.rot.y - player->actor.shape.rot.y;
-    sp28 =
-        (s32)(player->actor.speedXZ * -200.0f * Math_CosS(sp26) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
-    sp2C = (s32)(player->actor.speedXZ * 100.0f * Math_SinS(sp26) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    angle = player->actor.world.rot.y - player->actor.shape.rot.y;
+    force.x =
+        (s32)(player->actor.speedXZ * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    force.y = (s32)(player->actor.speedXZ * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
 
-    D_801F59D0.unk_6 += sp28 >> 2;
-    D_801F59D0.unk_8 += sp2C >> 2;
+    sBunnyEarKinematics.angVel.x += force.x >> 2;
+    sBunnyEarKinematics.angVel.y += force.y >> 2;
 
-    if (D_801F59D0.unk_6 > 0x1770) {
-        D_801F59D0.unk_6 = 0x1770;
-    } else if (D_801F59D0.unk_6 < -0x1770) {
-        D_801F59D0.unk_6 = -0x1770;
+    if (sBunnyEarKinematics.angVel.x > 0x1770) {
+        sBunnyEarKinematics.angVel.x = 0x1770;
+    } else if (sBunnyEarKinematics.angVel.x < -0x1770) {
+        sBunnyEarKinematics.angVel.x = -0x1770;
     }
 
-    if (D_801F59D0.unk_8 > 0x1770) {
-        D_801F59D0.unk_8 = 0x1770;
-    } else if (D_801F59D0.unk_8 < -0x1770) {
-        D_801F59D0.unk_8 = -0x1770;
+    if (sBunnyEarKinematics.angVel.y > 0x1770) {
+        sBunnyEarKinematics.angVel.y = 0x1770;
+    } else if (sBunnyEarKinematics.angVel.y < -0x1770) {
+        sBunnyEarKinematics.angVel.y = -0x1770;
     }
 
-    D_801F59D0.unk_0 += D_801F59D0.unk_6;
-    D_801F59D0.unk_2 += D_801F59D0.unk_8;
+    sBunnyEarKinematics.rot.x += sBunnyEarKinematics.angVel.x;
+    sBunnyEarKinematics.rot.y += sBunnyEarKinematics.angVel.y;
 
-    if (D_801F59D0.unk_0 < 0) {
-        D_801F59D0.unk_4 = D_801F59D0.unk_0 >> 1;
+    if (sBunnyEarKinematics.rot.x < 0) {
+        sBunnyEarKinematics.rot.z = sBunnyEarKinematics.rot.x >> 1;
     } else {
-        D_801F59D0.unk_4 = 0;
+        sBunnyEarKinematics.rot.z = 0;
     }
 }
 
@@ -2283,7 +2278,6 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             *dList = player->waistDLists[D_801F59E4];
         } else if (limbIndex == PLAYER_LIMB_HAT) {
             if (player->transformation == PLAYER_FORM_ZORA) {
-                // super important (* 1)
                 Matrix_Scale((player->unk_B10[0] * 1) + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
             }
         }
@@ -2365,7 +2359,7 @@ s32 func_80126440(PlayState* play, ColliderQuad* collider, WeaponInfo* weaponInf
     return true;
 }
 
-u8 D_801C096C[PLAYER_SHIELD_MAX] = {
+u8 sPlayerShieldCollisionTypes[PLAYER_SHIELD_MAX] = {
     COLTYPE_METAL, // PLAYER_SHIELD_NONE
     COLTYPE_METAL, // PLAYER_SHIELD_HEROS_SHIELD
     COLTYPE_METAL, // PLAYER_SHIELD_MIRROR_SHIELD
@@ -2375,7 +2369,7 @@ void func_801265C8(PlayState* play, Player* player, ColliderQuad* collider, Vec3
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         Vec3f sp28[4];
 
-        player->shieldQuad.base.colType = D_801C096C[player->currentShield];
+        player->shieldQuad.base.colType = sPlayerShieldCollisionTypes[player->currentShield];
         Matrix_MultVec3f(&arg3[0], &sp28[0]);
         Matrix_MultVec3f(&arg3[1], &sp28[1]);
         Matrix_MultVec3f(&arg3[2], &sp28[2]);
@@ -3013,16 +3007,16 @@ void Player_DrawBunnyHood(PlayState* play) {
 
     Matrix_Push();
 
-    sp2C.x = D_801F59D0.unk_2 + 0x3E2;
-    sp2C.y = D_801F59D0.unk_4 + 0xDBE;
-    sp2C.z = D_801F59D0.unk_0 - 0x348A;
+    sp2C.x = sBunnyEarKinematics.rot.y + 0x3E2;
+    sp2C.y = sBunnyEarKinematics.rot.z + 0xDBE;
+    sp2C.z = sBunnyEarKinematics.rot.x - 0x348A;
     Matrix_SetTranslateRotateYXZ(97.0f, -1203.0f, -240.0f, &sp2C);
 
     Matrix_ToMtx(temp_a1++);
 
-    sp2C.x = D_801F59D0.unk_2 - 0x3E2;
-    sp2C.y = -D_801F59D0.unk_4 - 0xDBE;
-    sp2C.z = D_801F59D0.unk_0 - 0x348A;
+    sp2C.x = sBunnyEarKinematics.rot.y - 0x3E2;
+    sp2C.y = -sBunnyEarKinematics.rot.z - 0xDBE;
+    sp2C.z = sBunnyEarKinematics.rot.x - 0x348A;
     Matrix_SetTranslateRotateYXZ(97.0f, -1203.0f, 240.0f, &sp2C);
 
     Matrix_ToMtx(temp_a1);
@@ -3088,8 +3082,8 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
 
     Math_Vec3f_Copy(&arg1->unk_00, arg4);
     Math_Vec3f_Diff(arg5, arg4, &spB0);
-    arg1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
-    arg1->unk_1A = Math_FAtan2F(sqrtf(SQ(spB0.x) + SQ(spB0.z)), spB0.y);
+    arg1->unk_18 = Math_Atan2S_XY(spB0.z, spB0.x);
+    arg1->unk_1A = Math_Atan2S_XY(sqrtf(SQ(spB0.x) + SQ(spB0.z)), spB0.y);
     i = 1;
     arg2 += 1;
 
@@ -3118,7 +3112,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
         f20 = sqrtf(SQ(spB0.x) + SQ(spB0.z));
 
         if (f20 > 4.0f) {
-            phi_s1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
+            phi_s1->unk_18 = Math_Atan2S_XY(spB0.z, spB0.x);
             s2 = phi_s1->unk_18 - arg1->unk_18;
 
             if (ABS_ALT(s2) > 0x4000) {
@@ -3127,7 +3121,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
             }
         }
 
-        phi_s1->unk_1A = Math_FAtan2F(f20, spB0.y);
+        phi_s1->unk_1A = Math_Atan2S_XY(f20, spB0.y);
 
         s2 = phi_s1->unk_18 - arg1->unk_18;
         s2 = CLAMP(s2, -arg2->unk_18, arg2->unk_18);
@@ -3289,7 +3283,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (player->leftHandType == PLAYER_MODELTYPE_LH_BOTTLE) {
-        PlayerBottle bottle = Player_ActionToBottle(player, player->itemAction);
+        PlayerBottle bottle = Player_BottleFromIA(player, player->itemAction);
         Vec3f* temp_v1_2 = &D_801C0CE8[player->transformation];
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -3354,13 +3348,13 @@ Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
 f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
-    0.0f,    // PLAYER_MELEEWEAPON_NONE              // Player is not holding a melee weapon
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI      // PLAYER_IA_SWORD_KOKIRI
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR       // PLAYER_IA_SWORD_RAZOR
-    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED      // PLAYER_IA_SWORD_GILDED
-    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY // PLAYER_IA_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_MELEEWEAPON_STICK             // PLAYER_IA_STICK
-    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS         // PLAYER_IA_ZORA_FINS
+    0.0f,    // PLAYER_MELEEWEAPON_NONE
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
+    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
+    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_MELEEWEAPON_STICK
+    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
 };
 
 Gfx* D_801C0D94 = object_link_child_DL_017818;
@@ -3626,7 +3620,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 if (player->currentMask == PLAYER_MASK_COUPLE) {
                     Player_DrawCouplesMask(play, player);
                 } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
-                    Player_DrawCircusLeadersMask(play, &player->actor);
+                    Player_DrawCircusLeadersMask(play, player);
                 } else if (player->currentMask == PLAYER_MASK_BLAST) {
                     Player_DrawBlastMask(play, player);
                 } else if (player->currentMask == PLAYER_MASK_BUNNY) {
