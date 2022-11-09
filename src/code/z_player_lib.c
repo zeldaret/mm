@@ -3350,7 +3350,7 @@ void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex) {
 void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
     static Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
     static Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
-    static f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
+    static f32 sMeleeWeaponLengths[PLAYER_MELEEWEAPON_MAX] = {
         0.0f,    // PLAYER_MELEEWEAPON_NONE
         3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
         3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
@@ -3362,7 +3362,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     static Gfx* D_801C0D94 = object_link_child_DL_017818;
     static Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
     static f32 D_801C0DA4 = 0.0f;
-    static Vec3f D_801C0DA8[4] = {
+    // Coordinates of the shield quad collider vertices, in the right hand limb's own model space.
+    static Vec3f sRightHandLimbModelShieldQuadVertices[4] = {
         { -4500.0f, -3000.0f, -600.0f },
         { 1500.0f, -3000.0f, -600.0f },
         { -4500.0f, 3000.0f, -600.0f },
@@ -3392,13 +3393,13 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
         { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
     };
-    static Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+    static Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
     // unused
     static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
     static Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
     static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
-    static Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
-    static Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
+    static Vec3f sSheathLimbModelShieldOnBackPos = { 630.0f, 100.0f, -30.0f };
+    static Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
 
     Player* player = (Player*)actor;
     MtxF sp230;
@@ -3420,6 +3421,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
     if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
         Math_Vec3f_Copy(&player->leftHandWorld.pos, sPlayerCurBodyPartPos);
+
         if ((*dList1 != NULL) && !func_801271B0(play, player, 0) && !func_80128640(play, player, *dList1) &&
             (player->skelAnime.animation == &gPlayerAnim_pg_punchA)) {
             func_80127488(play, player, D_801C0778[(s32)player->skelAnime.curFrame]);
@@ -3454,7 +3456,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     if (player->itemAction == PLAYER_IA_STICK) {
                         D_801C0994->x = player->unk_B08[1] * 5000.0f;
                     } else {
-                        D_801C0994->x = D_801C0D78[Player_GetMeleeWeaponHeld(player)];
+                        D_801C0994->x = sMeleeWeaponLengths[Player_GetMeleeWeaponHeld(player)];
                     }
                     func_80126B8C(play, player);
                 }
@@ -3505,11 +3507,11 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
 
         if (player->actor.scale.y >= 0.0f) {
-            if (player->rightHandType == 0xFF) {
+            if (player->rightHandType == PLAYER_MODELTYPE_RH_FF) {
                 Matrix_Get(&player->shieldMf);
             } else if (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
                 Matrix_Get(&player->shieldMf);
-                Player_UpdateShieldCollider(play, player, &player->shieldQuad, D_801C0DA8);
+                Player_UpdateShieldCollider(play, player, &player->shieldQuad, sRightHandLimbModelShieldQuadVertices);
             } else if (player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT) {
                 Matrix_MultVec3f(&D_801C0DD8, &player->rightHandWorld.pos);
 
@@ -3751,9 +3753,9 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
             spA8 = NULL;
             if (player->transformation != PLAYER_FORM_DEKU) {
-                Matrix_MultVec3f(&D_801C0E7C, &player->actor.focus.pos);
+                Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
             } else {
-                Matrix_MultVec3f(&D_801C0E7C, &player->actor.focus.pos);
+                Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
                 Matrix_MultVec3f(&D_801C0E94, sPlayerCurBodyPartPos);
                 if ((player->skelAnime.animation == &gPlayerAnim_pn_drinkend) ||
                     (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
@@ -3810,8 +3812,9 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
 
         if (player->actor.scale.y >= 0.0f) {
-            if ((player->rightHandType != PLAYER_MODELTYPE_RH_SHIELD) && (player->rightHandType != 0xFF)) {
-                Matrix_TranslateRotateZYX(&D_801C0EAC, &D_801C0EB8);
+            if ((player->rightHandType != PLAYER_MODELTYPE_RH_SHIELD) &&
+                (player->rightHandType != PLAYER_MODELTYPE_RH_FF)) {
+                Matrix_TranslateRotateZYX(&sSheathLimbModelShieldOnBackPos, &sSheathLimbModelShieldOnBackZyxRot);
                 Matrix_Get(&player->shieldMf);
             }
         }
@@ -3824,7 +3827,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 #else
 Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
 Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
-f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
+f32 sMeleeWeaponLengths[PLAYER_MELEEWEAPON_MAX] = {
     0.0f,    // PLAYER_MELEEWEAPON_NONE
     3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
     3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
@@ -3836,7 +3839,7 @@ f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
 Gfx* D_801C0D94 = object_link_child_DL_017818;
 Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
 f32 D_801C0DA4 = 0.0f;
-Vec3f D_801C0DA8[4] = {
+Vec3f sRightHandLimbModelShieldQuadVertices[4] = {
     { -4500.0f, -3000.0f, -600.0f },
     { 1500.0f, -3000.0f, -600.0f },
     { -4500.0f, 3000.0f, -600.0f },
@@ -3866,13 +3869,13 @@ Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
     { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
     { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
 };
-Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
 // unused
 Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
 Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
 Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
-Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
-Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
+Vec3f sSheathLimbModelShieldOnBackPos = { 630.0f, 100.0f, -30.0f };
+Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_PostLimbDrawGameplay.s")
 #endif
