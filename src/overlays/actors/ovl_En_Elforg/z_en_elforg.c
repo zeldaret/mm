@@ -220,7 +220,7 @@ void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* homePos) {
     EnElforg_ApproachTargetYPosition(this, homePos);
     xDifference = this->actor.world.pos.x - homePos->x;
     zDifference = this->actor.world.pos.z - homePos->z;
-    targetAngle = Math_FAtan2F(-zDifference, -xDifference);
+    targetAngle = Math_Atan2S_XY(-zDifference, -xDifference);
     xzDistance = sqrtf(SQ(xDifference) + SQ(zDifference));
 
     if ((this->targetDistanceFromHome + 10.0f) < xzDistance) {
@@ -247,7 +247,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
 
     this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer << 9);
     EnElforg_ApproachTargetYPosition(this, targetPos);
-    targetAngle = Math_FAtan2F(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
+    targetAngle = Math_Atan2S_XY(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
 
     if (this->targetSpeedXZ > 2.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 0x400, 0x100);
@@ -293,7 +293,7 @@ void EnElforg_TurnInFairy(EnElforg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset *= 0.9f;
     this->actor.speedXZ = 5.0f;
-    EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[0]);
+    EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 
     xzDistToPlayer = this->actor.xzDistToPlayer;
     if (xzDistToPlayer < 0.0f) {
@@ -393,7 +393,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
 
     this->actor.world.pos.x = (Math_SinS(this->timer << 12) * distanceFromPlayer) + playerActor->world.pos.x;
     this->actor.world.pos.z = (Math_CosS(this->timer << 12) * distanceFromPlayer) + playerActor->world.pos.z;
-    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     EnElforg_SpawnSparkles(this, play, 16);
 }
 
@@ -412,7 +412,7 @@ void EnElforg_SetupFairyCollected(EnElforg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.world.pos.x = playerActor->world.pos.x;
-    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = EnElforg_FairyCollected;
     this->timer = 0;
@@ -452,7 +452,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Player_GetMask(play) == PLAYER_MASK_GREAT_FAIRY) {
-        pos = player->bodyPartsPos[0];
+        pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
         this->targetSpeedXZ = 5.0f;
         EnElforg_MoveToTarget(this, &pos);
     } else {

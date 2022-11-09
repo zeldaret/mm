@@ -318,7 +318,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
+                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
             }
         }
     }
@@ -409,7 +409,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if (this->unkState1A8 == 2 && this->unkState196 == 2) {
-        func_800B7298(play, &this->picto.actor, 0x49);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_73);
         this->unkState1A8 = 0;
     }
 
@@ -418,7 +418,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
         if (this->talkState == TEXT_STATE_5) {
             // bad song input
             if (this->unkState196 == 2 && this->picto.actor.textId == 0x1647) {
-                func_800B7298(play, &this->picto.actor, 6);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_6);
             }
 
             // after timeskip
@@ -445,7 +445,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
             } else if (this->picto.actor.textId == 0x165D || this->picto.actor.textId == 0x165F ||
                        this->picto.actor.textId == 0x1660 || this->picto.actor.textId == 0x1652) {
-                func_800B7298(play, &this->picto.actor, 4);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_4);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                     ActorCutscene_Stop(0x7C);
                     ActorCutscene_SetIntentToPlay(this->actorCutscenes[0]);
@@ -675,7 +675,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
     if (this->unk190 == 0) {
         Message_CloseTextbox(play);
-        func_800B7298(play, &this->picto.actor, 0x56);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_86);
         this->picto.actor.textId = 0x1648;
         Message_StartTextbox(play, (this->picto.actor.textId), &this->picto.actor);
         this->unkState1A8 = 0;
@@ -711,7 +711,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         Math_Vec3f_Copy(&this->unk22C, &this->picto.actor.home.pos);
         ActorCutscene_StartAndSetUnkLinkFields(this->actorCutscenes[0], &this->picto.actor);
         this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
-        func_800B7298(play, &this->picto.actor, 0x56);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_86);
         this->unkState1A8 = 1;
     }
 
@@ -744,7 +744,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             }
 
             if (this->picto.actor.textId == 0x1648) {
-                func_800B7298(play, &this->picto.actor, 7);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_7);
                 this->picto.actor.textId = 0x1649;
                 if (this->animIndex != ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) {
                     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
@@ -916,7 +916,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 this->unk190++;
                 this->unk204 = 0xA;
                 if (this->unk190 == 0xE) {
-                    func_800B7298(play, &this->picto.actor, 0x49);
+                    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_73);
                     func_80165690();
                     this->unk204 = 0x14;
                 }
@@ -930,10 +930,12 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 player = GET_PLAYER(play);
 
                 Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                    0xBFF, &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
+                //! FAKE
                 if (0) {}
+
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
@@ -1012,7 +1014,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
     Math_ApproachF(&this->picto.actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->picto.actor.shape.yOffset + 6000.0f) < 10.0f) {
         SET_WEEKEVENTREG(WEEKEVENTREG_79_08);
-        func_800B7298(play, &this->picto.actor, 6);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_6);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
         this->songSummonDist = 80.0f;

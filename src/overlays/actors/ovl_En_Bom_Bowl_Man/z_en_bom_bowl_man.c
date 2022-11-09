@@ -365,7 +365,7 @@ void func_809C5310(EnBomBowlMan* this, PlayState* play) {
     if (player->actor.world.pos.x < 1510.0f) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             if (this->actor.xzDistToPlayer < this->unk_2C8) {
-                func_800B7298(play, &this->actor, 7);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
                 func_809C53A4(this);
             }
         } else {
@@ -423,7 +423,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
         } else if (this->actor.textId == 0x734) {
             this->actor.textId = 0x715;
         } else if (this->actor.textId == 0x715) {
-            func_800B7298(play, &this->actor, 6);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
             func_809C493C(this, 17, 1.0f);
             func_809C59A4(this, play);
             return;
@@ -435,7 +435,7 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
             func_80151BB4(play, 0x24);
             func_80151BB4(play, 0x25);
             func_80151BB4(play, 0);
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             this->actionFunc = func_809C5738;
             return;
         }
@@ -510,7 +510,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         } else {
             this->actor.textId = 0x716;
         }
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
         Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
@@ -525,7 +525,7 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5598;
         }
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

@@ -254,7 +254,7 @@ void func_80BBB2C4(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -266,7 +266,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB2C4;
         SET_WEEKEVENTREG(WEEKEVENTREG_39_20);
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
             getItemId = GI_RUPEE_PURPLE;
@@ -361,17 +361,18 @@ void func_80BBB574(EnZos* this, PlayState* play) {
 }
 
 void func_80BBB718(EnZos* this, PlayState* play) {
-    s32 sp24;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        sp24 = func_80123810(play);
-        if (sp24 > 0) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
 
-            if (sp24 == 25) {
+            if (itemAction == PLAYER_IA_BOTTLE_ZORA_EGG) {
                 player->actor.textId = 0x1232;
                 EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
                 this->unk_2B6 |= 8;
@@ -385,7 +386,7 @@ void func_80BBB718(EnZos* this, PlayState* play) {
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
-        } else if (sp24 < 0) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
                 Message_ContinueTextbox(play, 0x1241);
             } else {
@@ -525,7 +526,7 @@ void func_80BBBCBC(EnZos* this, PlayState* play) {
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -534,7 +535,7 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
     if (!Cutscene_CheckActorAction(play, 0x1F5)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 

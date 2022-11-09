@@ -394,7 +394,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
             if (this->unk_2D2 & 2) {
                 this->unk_2D2 &= ~2;
                 Rupees_ChangeBy(-this->unk_434);
-                func_800B7298(play, NULL, 7);
+                func_800B7298(play, NULL, PLAYER_CSMODE_7);
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->actionFunc = func_809C1C9C;
@@ -476,7 +476,7 @@ void func_809C1EC8(EnAob01* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->torsoRot, &sTrackOptions);

@@ -1337,7 +1337,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
                 } else if (func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         PLAYER_AP_MINUS1)) {
+                                         PLAYER_IA_MINUS1)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {
@@ -1600,8 +1600,8 @@ void func_80A982E0(PlayState* play, ActorPathing* actorPathing) {
     sp28.z = actorPathing->curPoint.z - actorPathing->worldPos->z;
     actorPathing->distSqToCurPointXZ = Math3D_XZLengthSquared(sp28.x, sp28.z);
     actorPathing->distSqToCurPoint = Math3D_LengthSquared(&sp28);
-    actorPathing->rotToCurPoint.y = Math_FAtan2F(sp28.z, sp28.x);
-    actorPathing->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
+    actorPathing->rotToCurPoint.y = Math_Atan2S_XY(sp28.z, sp28.x);
+    actorPathing->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPathing->distSqToCurPointXZ), -sp28.y);
     actorPathing->rotToCurPoint.z = 0;
 }
 

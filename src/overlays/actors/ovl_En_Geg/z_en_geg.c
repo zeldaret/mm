@@ -355,7 +355,7 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
         sp40 = player->actor.world.pos;
     } else {
         sp40 = player->actor.world.pos;
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     }
 
     sp34 = this->actor.world.pos;

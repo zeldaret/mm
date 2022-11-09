@@ -1823,7 +1823,7 @@ s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
 
-            sp30.y = player->bodyPartsPos[7].y + 3.0f;
+            sp30.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
             sp3E = Math_Vec3f_Yaw(&this->dyna.actor.focus.pos, &sp30) - this->dyna.actor.shape.rot.y;
             temp_v0_3 = Math_Atan2S(
                 this->dyna.actor.focus.pos.y - sp30.y,

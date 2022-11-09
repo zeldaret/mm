@@ -311,19 +311,20 @@ void func_80AE04C4(EnTsn* this, PlayState* play) {
 }
 
 void func_80AE04FC(EnTsn* this, PlayState* play) {
-    s32 sp24;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        sp24 = func_80123810(play);
-        if (sp24 != 0) {
+        itemAction = func_80123810(play);
+
+        if (itemAction != PLAYER_IA_NONE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_26_02);
         }
 
-        if (sp24 > 0) {
+        if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80AE0704;
-            if (sp24 == 19) {
+            if (itemAction == PLAYER_IA_PICTO_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTOGRAPH_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;
@@ -345,7 +346,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
                 return;
             }
 
-            if (sp24 == 13) {
+            if (itemAction == PLAYER_IA_HOOKSHOT) {
                 player->actor.textId = 0x1075;
                 return;
             }
@@ -355,7 +356,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
             return;
         }
 
-        if (sp24 < 0) {
+        if (itemAction <= PLAYER_IA_MINUS1) {
             Message_ContinueTextbox(play, 0x1078);
             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
             this->actionFunc = func_80AE0704;

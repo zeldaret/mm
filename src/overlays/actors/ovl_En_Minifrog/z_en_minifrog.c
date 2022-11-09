@@ -466,7 +466,7 @@ void EnMinifrog_EndChoir(EnMinifrog* this, PlayState* play) {
         Message_StartTextbox(play, 0xD7E, &this->actor); // "Let us do it again sometime."
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -477,7 +477,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 10000.0f, 50.0f);
     }

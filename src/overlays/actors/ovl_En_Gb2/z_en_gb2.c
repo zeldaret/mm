@@ -370,7 +370,7 @@ void func_80B0FE7C(PlayState* play) {
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == OCARINA_SONG_ELEGY) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
         play->msgCtx.ocarinaMode = 4;
         SET_EVENTINF(EVENTINF_47);
         this->unk_26E = 0x14D1;
@@ -433,7 +433,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, 7);
+                    func_800B7298(play, NULL, PLAYER_CSMODE_7);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -585,7 +585,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, 7);
+                    func_800B7298(play, NULL, PLAYER_CSMODE_7);
                     this->actionFunc = func_80B11344;
                 }
                 break;

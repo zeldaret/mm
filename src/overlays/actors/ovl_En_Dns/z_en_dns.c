@@ -144,7 +144,7 @@ void func_8092C740(EnDns* this, PlayState* play) {
     this->unk_2CE = CLAMP(this->unk_2CE, -0x3FFC, 0x3FFC);
 
     Math_Vec3f_Copy(&sp28, &player->actor.world.pos);
-    sp28.y = player->bodyPartsPos[7].y + 3.0f;
+    sp28.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
     sp34.y += 10.0f;
     temp = Math_Vec3f_Pitch(&sp34, &sp28);
@@ -550,7 +550,7 @@ void EnDns_Update(Actor* thisx, PlayState* play) {
         func_8092C934(this);
         func_8092C86C(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-        func_8013C964(&this->actor, play, 80.0f, 40.0f, PLAYER_AP_NONE, this->unk_2C6 & 7);
+        func_8013C964(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & 7);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, play);
         func_8092C5C0(this);
