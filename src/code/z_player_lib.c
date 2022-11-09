@@ -916,11 +916,14 @@ Gfx* gPlayerLeftHandOneHandSwordDLs[2 * PLAYER_FORM_MAX] = {
 
 Gfx* D_801C018C[] = {
     // EQUIP_VALUE_SWORD_KOKIRI
-    gLinkHumanLeftHandHoldingKokiriSwordDL, gLinkHumanLeftHandHoldingKokiriSwordDL,
+    gLinkHumanLeftHandHoldingKokiriSwordDL,
+    gLinkHumanLeftHandHoldingKokiriSwordDL,
     // EQUIP_VALUE_SWORD_RAZOR
-    gLinkHumanLeftHandHoldingRazorSwordDL,  gLinkHumanLeftHandHoldingRazorSwordDL,
+    gLinkHumanLeftHandHoldingRazorSwordDL,
+    gLinkHumanLeftHandHoldingRazorSwordDL,
     // EQUIP_VALUE_SWORD_GILDED
-    gLinkHumanLeftHandHoldingGildedSwordDL, gLinkHumanLeftHandHoldingGildedSwordDL,
+    gLinkHumanLeftHandHoldingGildedSwordDL,
+    gLinkHumanLeftHandHoldingGildedSwordDL,
 };
 
 Gfx* gPlayerRightHandOpenDLs[2 * PLAYER_FORM_MAX] = {
