@@ -309,13 +309,13 @@ void func_808CE078(Actor* thisx, PlayState* play2) {
     Matrix_RotateZS(zRot, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash2DL);
 
     Matrix_Pop();
     Matrix_RotateZS(-zRot, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash2DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 

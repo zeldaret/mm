@@ -66,7 +66,7 @@ static u8 sScheduleScript[] = {
     /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
     /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
     /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(0x32, 0x20, 0x57 - 0x4B),
+    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_50_20, 0x57 - 0x4B),
     /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
     /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
@@ -424,7 +424,7 @@ void func_80BC05A8(EnNb* this, PlayState* play) {
     TextState talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((&this->actor == player->targetActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+    if ((&this->actor == player->talkActor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_26C == 120.0f) {

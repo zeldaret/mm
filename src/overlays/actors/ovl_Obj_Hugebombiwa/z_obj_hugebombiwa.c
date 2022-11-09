@@ -412,7 +412,7 @@ void func_80A54CEC(ObjHugebombiwa* this, PlayState* play) {
         Flags_SetSwitch(play, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
             ((play->sceneId == SCENE_17SETUGEN) || (play->sceneId == SCENE_17SETUGEN2))) {
-            gSaveContext.save.weekEventReg[19] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_19_02);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {

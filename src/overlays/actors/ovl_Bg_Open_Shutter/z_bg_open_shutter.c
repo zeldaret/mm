@@ -121,7 +121,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
 
         doorDirection = func_80ACABA8(this, play);
         if (doorDirection > 0) {
-            player->doorType = 2;
+            player->doorType = PLAYER_DOORTYPE_SLIDING;
             player->doorDirection = doorDirection;
             player->doorActor = &this->dyna.actor;
             func_80122F28(player);

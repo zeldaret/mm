@@ -54,14 +54,15 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
     s32 objectIndex;
     s32 pad;
 
-    if (((params < SEKIHI_TYPE_0) || (params >= SEKIHI_TYPE_MAX)) || sOpaDLists[params] == NULL) {
+    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == NULL) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    if ((params == SEKIHI_TYPE_4) && ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30)) {
-        gSaveContext.save.weekEventReg[13] |= 0x20;
+    if ((params == SEKIHI_TYPE_4) && (((gSaveContext.save.skullTokenCount & 0xFFFF)) >= 30)) {
+        SET_WEEKEVENTREG(WEEKEVENTREG_13_20);
     }
+
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
     if (objectIndex >= 0) {
         this->objectIndex = objectIndex;

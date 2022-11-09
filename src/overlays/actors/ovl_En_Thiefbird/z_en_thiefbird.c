@@ -4,6 +4,7 @@
  * Description: Takkuri
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
@@ -130,8 +131,9 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static s16 D_80C13664[] = { ITEM00_ARROWS_10,  ITEM00_BOMBS_B,   ITEM00_RUPEE_GREEN,
-                            ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_RUPEE_PURPLE };
+static s16 D_80C13664[] = {
+    ITEM00_ARROWS_10, ITEM00_BOMBS_B, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_RUPEE_PURPLE,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
@@ -140,8 +142,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-static Vec3f D_80C13920;
-static s32 D_80C1392C;
+Vec3f D_80C13920;
+s32 D_80C1392C;
 
 void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     EnThiefbird* this = THIS;
@@ -209,7 +211,11 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
 }
 
 s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
-    static Gfx* D_80C13680[] = { gTakkuriStolenKokiriSwordDL, gTakkuriStolenRazorSwordDL, gTakkuriStolenGildedSwordDL };
+    static Gfx* D_80C13680[] = {
+        gTakkuriStolenKokiriSwordDL,
+        gTakkuriStolenRazorSwordDL,
+        gTakkuriStolenGildedSwordDL,
+    };
     s32 isItemFound = false;
     s32 phi_a3 = 0;
     s32 slotId = SLOT_BOTTLE_1;

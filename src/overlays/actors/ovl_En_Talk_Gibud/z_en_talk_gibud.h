@@ -19,7 +19,7 @@ typedef struct EnTalkGibud {
     /* 0x1D8 */ Vec3f limbPos[15];
     /* 0x28C */ s32 limbIndex;
     /* 0x290 */ s32 requestedItemIndex;
-    /* 0x294 */ s32 itemActionParam;
+    /* 0x294 */ PlayerItemAction itemAction;
     /* 0x298 */ s32 switchFlag;
     /* 0x29C */ f32 drawDmgEffAlpha;
     /* 0x2A0 */ f32 drawDmgEffScale;

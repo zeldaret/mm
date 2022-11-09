@@ -84,7 +84,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObject)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
         DynaPolyActor_Init(&this->dyna, 0x1);
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCollider);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCol);
         this->dyna.actor.objBankIndex = this->dangeonKeepObject;
         this->dyna.actor.draw = EnWarpTag_Draw;
     }
@@ -94,10 +94,10 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(play, NULL, 0x51);
+            func_800B7298(play, NULL, PLAYER_CSMODE_81);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(play, NULL, 0xF);
+            func_800B7298(play, NULL, PLAYER_CSMODE_15);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -126,7 +126,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 9) {
-        func_800B7298(play, NULL, 7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_7);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
 
@@ -201,9 +201,9 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 newRespawnPos.z = playerActorEntry->pos.z;
 
                 if (WARPTAG_GET_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
-                    playerParams = 0x9FF;
+                    playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_9);
                 } else { // not used by any known variant
-                    playerParams = 0x8FF;
+                    playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_8);
                 }
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?
@@ -263,7 +263,7 @@ void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWarpTagRainbowTexAnim));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpTagRainbowTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_OPA_DISP++, gWarpTagGoronTrialBaseDL);

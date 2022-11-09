@@ -791,10 +791,10 @@ void Distortion_Update(void) {
                     break;
             }
 
-            if (player->unk_B88 < 0) {
-                xyScaleFactor = (player->unk_B88 - (f32)0x4000) / (f32)0xC000;
+            if (player->unk_B86[1] < 0) {
+                xyScaleFactor = (player->unk_B86[1] - (f32)0x4000) / (f32)0xC000;
             } else {
-                xyScaleFactor = (player->unk_B88 + (f32)0x4000) / (f32)0xC000;
+                xyScaleFactor = (player->unk_B86[1] + (f32)0x4000) / (f32)0xC000;
             }
             zScaleFactor = -xyScaleFactor;
             speedScaleFactor = 1.0f;

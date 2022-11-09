@@ -69,40 +69,46 @@ void func_80BCD000(EnScopecrow* this, PlayState* play) {
 s32 func_80BCD09C(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (gSaveContext.save.weekEventReg[53] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[53] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[54] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[54] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 4:
-            if (gSaveContext.save.weekEventReg[54] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 5:
-            if (gSaveContext.save.weekEventReg[54] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
     }
 
     return false;
@@ -111,43 +117,43 @@ s32 func_80BCD09C(s16 arg0) {
 s32 func_80BCD1AC(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (!(gSaveContext.save.weekEventReg[53] & 4)) {
-                gSaveContext.save.weekEventReg[53] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
 
         case 1:
-            if (!(gSaveContext.save.weekEventReg[53] & 0x80)) {
-                gSaveContext.save.weekEventReg[53] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[54] & 1)) {
-                gSaveContext.save.weekEventReg[54] |= 1;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
 
         case 3:
-            if (!(gSaveContext.save.weekEventReg[54] & 2)) {
-                gSaveContext.save.weekEventReg[54] |= 2;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
 
         case 4:
-            if (!(gSaveContext.save.weekEventReg[54] & 4)) {
-                gSaveContext.save.weekEventReg[54] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
 
         case 5:
-            if (!(gSaveContext.save.weekEventReg[54] & 8)) {
-                gSaveContext.save.weekEventReg[54] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }
             break;

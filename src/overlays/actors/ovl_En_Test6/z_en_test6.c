@@ -125,7 +125,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
     phi_s0 = 0;
     phi_f24 = -900.0f;
 
-    if (gSaveContext.eventInf[7] & 1) {
+    if (CHECK_EVENTINF(EVENTINF_70)) {
         for (i = 0; i < 6; i++) {
             D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 5;
         }
@@ -134,7 +134,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 1;
     }
 
-    if (gSaveContext.eventInf[7] & 0x10) {
+    if (CHECK_EVENTINF(EVENTINF_74)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 1;
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 1;
         if (!(phi_s0 & 1)) {
@@ -144,7 +144,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 0x10;
     }
 
-    if (gSaveContext.eventInf[7] & 2) {
+    if (CHECK_EVENTINF(EVENTINF_71)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 2;
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 2;
         if (!(phi_s0 & 1)) {
@@ -154,7 +154,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 2;
     }
 
-    if (gSaveContext.eventInf[7] & 4) {
+    if (CHECK_EVENTINF(EVENTINF_72)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 3;
         if (!(phi_s0 & (0x10 | 0x2 | 0x1))) {
             D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 3;
@@ -162,7 +162,7 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         phi_s0 |= 4;
     }
 
-    if (gSaveContext.eventInf[7] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_73)) {
         D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 4;
         if (!(phi_s0 & (0x10 | 0x2 | 0x1))) {
             D_80A94910[(s32)(Rand_ZeroOne() * ARRAY_COUNT(D_80A94910))].unk_00 = 4;
@@ -240,8 +240,8 @@ void func_80A90D34(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
 void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 2);
-    Gfx* gfx2 = gfx;
+    Gfx* gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
     Hilite* sp70;
     Vec3f sp64;
 
@@ -253,14 +253,14 @@ void func_80A90FC0(EnTest6* this, PlayState* play, EnTest6Struct* ptr) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (gfx != NULL) {
+    if (gfxHead != NULL) {
         func_8012C28C(play->state.gfxCtx);
 
         gDPSetTileSize(gfx++, 1, sp70->h.x1 & 0xFFFF, sp70->h.y1 & 0xFFFF, (sp70->h.x1 + 60) & 0xFFFF,
                        (sp70->h.y1 + 60) & 0xFFFF);
-        gSPEndDisplayList(gfx);
+        gSPEndDisplayList(gfx++);
 
-        gSPSegment(POLY_OPA_DISP++, 0x07, gfx2);
+        gSPSegment(POLY_OPA_DISP++, 0x07, gfxHead);
 
         Matrix_Translate(sp64.x, sp64.y, sp64.z, MTXMODE_NEW);
         Matrix_Scale(ptr->unk_04 * 0.018f, ptr->unk_04 * 0.018f, ptr->unk_04 * 0.018f, MTXMODE_APPLY);
@@ -395,7 +395,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
-    func_800B7298(play, NULL, 6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_6);
     func_80A90C34();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -537,22 +537,22 @@ void func_80A91760(EnTest6* this, PlayState* play) {
     }
 
     if (this->unk_286 != 0) {
-        func_800B7298(play, NULL, 7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_7);
     } else {
         if (this->unk_27A == 90) {
-            func_800B7298(play, NULL, 0x42);
+            func_800B7298(play, NULL, PLAYER_CSMODE_66);
         }
 
         if (this->unk_27A == 70) {
-            func_800B7298(play, NULL, 0x52);
+            func_800B7298(play, NULL, PLAYER_CSMODE_82);
         }
 
         if (this->unk_27A == 30) {
-            func_800B7298(play, NULL, 0x51);
+            func_800B7298(play, NULL, PLAYER_CSMODE_81);
         }
 
         if (this->unk_27A == 5) {
-            func_800B7298(play, NULL, 0x4A);
+            func_800B7298(play, NULL, PLAYER_CSMODE_74);
         }
     }
 
@@ -616,7 +616,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
-    func_800B7298(play, NULL, 6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_6);
     func_80A90C34();
     Distortion_RemoveRequest(DISTORTION_TYPE_SONG_OF_TIME);
     Actor_Kill(&this->actor);
@@ -722,7 +722,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
         case 1:
             func_80A90C34();
-            if (gSaveContext.eventInf[5] & 4) {
+            if (CHECK_EVENTINF(EVENTINF_52)) {
                 this->unk_274 = 9;
             }
             break;
@@ -764,23 +764,23 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             break;
 
         case 98:
-            func_800B7298(play, NULL, 0x40);
+            func_800B7298(play, NULL, PLAYER_CSMODE_64);
             break;
 
         case 68:
-            func_800B7298(play, NULL, 0x41);
+            func_800B7298(play, NULL, PLAYER_CSMODE_65);
             break;
 
         case 52:
-            func_800B7298(play, NULL, 0x58);
+            func_800B7298(play, NULL, PLAYER_CSMODE_88);
             break;
 
         case 43:
-            func_800B7298(play, NULL, 0x72);
+            func_800B7298(play, NULL, PLAYER_CSMODE_114);
             break;
 
         case 38:
-            func_800B7298(play, NULL, 7);
+            func_800B7298(play, NULL, PLAYER_CSMODE_7);
             break;
 
         case 14:
@@ -972,14 +972,14 @@ void func_80A92950(EnTest6* this, PlayState* play) {
 
             case 9:
                 Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF), player->unk_3CE,
-                                    0xBFF, &player->unk_3C0, player->unk_3CC);
+                                    PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
                 play->transitionType = TRANS_TYPE_02;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                 } else {
                     gSaveContext.respawnFlag = 2;
                 }
@@ -1053,7 +1053,8 @@ void func_80A92950(EnTest6* this, PlayState* play) {
             case 9:
                 if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
                     Play_SetRespawnData(&play->state, 1, ((void)0, gSaveContext.save.entrance & 0xFFFF),
-                                        player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        player->unk_3CE, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0,
+                                        player->unk_3CC);
                     this->unk_276 = 99;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
@@ -1272,7 +1273,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
                 }
             }
             Lights_PointSetPosition(&this->lights[0].info, player->actor.world.pos.x, player->actor.world.pos.y - 10.0f,
