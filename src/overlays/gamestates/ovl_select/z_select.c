@@ -994,7 +994,7 @@ void MapSelect_DrawMenu(MapSelectState* this) {
     GfxPrint_Open(printer, POLY_OPA_DISP);
 
     MapSelect_PrintMenu(this, printer);
-    MapSelect_PrintAgeSetting(this, printer, ((void)0, gSaveContext.save.playerForm));
+    MapSelect_PrintAgeSetting(this, printer, GET_PLAYER_FORM);
     MapSelect_PrintCutsceneSetting(this, printer, ((void)0, gSaveContext.save.cutscene));
 
     POLY_OPA_DISP = GfxPrint_Close(printer);

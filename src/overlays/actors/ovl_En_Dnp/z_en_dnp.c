@@ -211,10 +211,12 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 0x1);
     sp30 = player->actor.world.pos;
-    sp30.y = player->bodyPartsPos[7].y + 3.0f;
+    sp30.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     sp3C = this->actor.world.pos;
     sp3C.y += 10.0f;
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
+
+    //! FAKE
     if (1) {};
     Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
@@ -352,7 +354,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         }
     }
 }
@@ -459,7 +461,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_AP_NONE, this->unk_322 & 7);
+        func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & 7);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }

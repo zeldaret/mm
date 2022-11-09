@@ -465,7 +465,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
 }
 
 void func_80866B20(EnDoor* this, PlayState* play) {
-    static s32 D_80867BC0[4];
+    static s32 D_80867BC0;
     Player* player = GET_PLAYER(play);
     Vec3f playerPosRelToDoor;
     s16 temp_a2;
@@ -475,7 +475,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     u8 temp_a1;
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state) && (this->dyna.actor.textId == 0x1821)) {
-        D_80867BC0[0] = 1;
+        D_80867BC0 = true;
     }
     if (this->unk_1A1 != 0) {
         this->actionFunc = func_80867144;
@@ -491,25 +491,25 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
-        if ((D_80867BC0[0] != 0) || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
-                                     (fabsf(playerPosRelToDoor.z) < 50.0f))) {
+        if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
+                           (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             yawDiff = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
             if (playerPosRelToDoor.z > 0.0f) {
                 yawDiff = (0x8000 - yawDiff);
             }
             if (ABS_ALT(yawDiff) < 0x3000) {
-                player->doorType = 1;
+                player->doorType = PLAYER_DOORTYPE_HANDLE;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->dyna.actor;
                 if (this->unk_1A6 != 0) {
                     if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
-                        player->doorType = -1;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
                 } else if (this->unk_1A4 == 4) {
-                    player->doorType = -1;
+                    player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->dyna.actor.textId = 0x1800;
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
                     s32 textIdOffset;
@@ -528,16 +528,18 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         } else if (this->unk_1A4 == 2) {
                             baseTextId = 0x181D;
                         }
-                        player->doorType = -1;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput sp30;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
+                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30)) {
                         this->dyna.actor.textId = sp30.result + 0x1800;
 
-                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? 5 : -1;
+                        player->doorType = ((this->dyna.actor.textId == 0x1821) && D_80867BC0)
+                                               ? PLAYER_DOORTYPE_PROXIMITY
+                                               : PLAYER_DOORTYPE_TALKING;
                     }
                 }
                 func_80122F28(player);

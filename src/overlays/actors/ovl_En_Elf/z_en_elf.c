@@ -565,17 +565,17 @@ void func_8088D9BC(EnElf* this, PlayState* play) {
 
     switch (this->unk_244) {
         case 0:
-            targetYaw = Math_FAtan2F(-(this->actor.world.pos.z - vec->z), -(this->actor.world.pos.x - vec->x));
+            targetYaw = Math_Atan2S_XY(-(this->actor.world.pos.z - vec->z), -(this->actor.world.pos.x - vec->x));
             break;
 
         case 3:
-            targetYaw = Math_FAtan2F(-(this->actor.world.pos.z - player->actor.world.pos.z),
-                                     -(this->actor.world.pos.x - player->actor.world.pos.x));
+            targetYaw = Math_Atan2S_XY(-(this->actor.world.pos.z - player->actor.world.pos.z),
+                                       -(this->actor.world.pos.x - player->actor.world.pos.x));
             break;
 
         case 2:
-            targetYaw = Math_FAtan2F(this->actor.world.pos.z - player->actor.world.pos.z,
-                                     this->actor.world.pos.x - player->actor.world.pos.x);
+            targetYaw = Math_Atan2S_XY(this->actor.world.pos.z - player->actor.world.pos.z,
+                                       this->actor.world.pos.x - player->actor.world.pos.x);
             break;
 
         default:
@@ -719,7 +719,7 @@ void func_8088E018(EnElf* this, PlayState* play) {
     } else {
         Actor_Kill(&this->actor);
     }
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
 }
 
 void func_8088E0E0(EnElf* this, PlayState* play) {
@@ -766,7 +766,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
         return;
     }
 
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, play, 32);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
@@ -799,8 +799,8 @@ void func_8088E304(EnElf* this, PlayState* play) {
     this->unk_224.z = Math_SinS(this->unk_248) * -this->unk_254;
     this->unk_248 += this->unk_24C;
 
-    func_8088D7F8(this, &player->bodyPartsPos[0]);
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    func_8088D7F8(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, play, 0x20);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
@@ -823,9 +823,9 @@ void func_8088E484(EnElf* this, PlayState* play) {
         this->unk_254 = 1.0f;
     }
 
-    func_8088D7F8(this, &player->bodyPartsPos[0]);
+    func_8088D7F8(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
     Actor_SetScale(&this->actor, (1.0f - (SQ(this->unk_250) * SQ(1.0f / 9.0f))) * 0.008f);
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     func_8088F5F4(this, play, 32);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
 }
@@ -872,7 +872,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 
     Lights_PointGlowSetInfo(&this->lightInfoGlow, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 255, 255, 255, glowLightRadius);
-    this->unk_258 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+    this->unk_258 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
     Actor_SetScale(&this->actor, this->actor.scale.x);
 }
 
@@ -915,11 +915,11 @@ void func_8088E850(EnElf* this, PlayState* play) {
         }
     } else {
         this->actor.shape.rot.x = 0;
-        distFromLinksHead = Math_Vec3f_DistXYZ(&player->bodyPartsPos[8], &this->actor.world.pos);
+        distFromLinksHead = Math_Vec3f_DistXYZ(&player->bodyPartsPos[PLAYER_BODYPART_HAT], &this->actor.world.pos);
         switch (this->unk_244) {
             case 5:
-                func_8088D660(this, &player->bodyPartsPos[8], 1.0f - (this->unk_24A * 0.033333335f));
-                xScale = Math_Vec3f_DistXYZ(&player->bodyPartsPos[8], &this->actor.world.pos);
+                func_8088D660(this, &player->bodyPartsPos[PLAYER_BODYPART_HAT], 1.0f - (this->unk_24A * 0.033333335f));
+                xScale = Math_Vec3f_DistXYZ(&player->bodyPartsPos[PLAYER_BODYPART_HAT], &this->actor.world.pos);
 
                 if (distFromLinksHead < 7.0f) {
                     this->unk_25C = 0;
@@ -935,12 +935,12 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 break;
 
             case 6:
-                func_8088D660(this, &player->bodyPartsPos[8], 0.2f);
-                this->actor.world.pos = player->bodyPartsPos[8];
+                func_8088D660(this, &player->bodyPartsPos[PLAYER_BODYPART_HAT], 0.2f);
+                this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_HAT];
                 break;
 
             case 9:
-                nextPos = player->bodyPartsPos[8];
+                nextPos = player->bodyPartsPos[PLAYER_BODYPART_HAT];
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
                 func_8088D7F8(this, &nextPos);
@@ -967,8 +967,8 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
             default:
                 arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
-                if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->targetActor != NULL)) {
-                    Math_Vec3f_Copy(&nextPos, &player->targetActor->focus.pos);
+                if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
+                    Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
                     Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.unk0);
                 }
@@ -1085,10 +1085,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 1) {
-        if ((arrayPointerActor == NULL) || (player->unk_730 == NULL)) {
+        if ((arrayPointerActor == NULL) || (player->targetedActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((arrayPointerActor != NULL) && (player->unk_730 != NULL)) {
+    } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
 
@@ -1230,8 +1230,8 @@ void func_8088F214(EnElf* this, PlayState* play) {
     if (sp34 != this->unk_244) {
         func_8088C51C(this, sp34);
         if (sp34 == 9) {
-            this->unk_254 = Math_Vec3f_DistXZ(&player->bodyPartsPos[8], &this->actor.world.pos);
-            this->unk_248 = Math_Vec3f_Yaw(&this->actor.world.pos, &player->bodyPartsPos[8]);
+            this->unk_254 = Math_Vec3f_DistXZ(&player->bodyPartsPos[PLAYER_BODYPART_HAT], &this->actor.world.pos);
+            this->unk_248 = Math_Vec3f_Yaw(&this->actor.world.pos, &player->bodyPartsPos[PLAYER_BODYPART_HAT]);
         }
     }
 }
@@ -1281,11 +1281,13 @@ void func_8088FA38(EnElf* this, PlayState* play) {
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->unk_730 == NULL) || (&player->actor == player->unk_730) || (&this->actor == player->unk_730) ||
-                (this->unk_264 & 4)) {
-                refPos.x = player->bodyPartsPos[7].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
-                refPos.y = player->bodyPartsPos[7].y + 5.0f;
-                refPos.z = player->bodyPartsPos[7].z + (Math_CosS(player->actor.shape.rot.y) * 20.0f);
+            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) ||
+                (&this->actor == player->targetedActor) || (this->unk_264 & 4)) {
+                refPos.x =
+                    player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
+                refPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 5.0f;
+                refPos.z =
+                    player->bodyPartsPos[PLAYER_BODYPART_HEAD].z + (Math_CosS(player->actor.shape.rot.y) * 20.0f);
                 this->unk_264 &= ~4;
             }
         }
@@ -1456,7 +1458,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         gSaveContext.save.playerData.tatlTimer = 0;
     }
 
-    if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
+    if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
         if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
         }

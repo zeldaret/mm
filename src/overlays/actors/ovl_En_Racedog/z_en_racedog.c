@@ -288,7 +288,7 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     }
 
     *distSQ = SQ(diffX) + SQ(diffZ);
-    return RADF_TO_BINANG(Math_Acot2F(diffZRand, diffXRand));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -299,7 +299,7 @@ void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
         ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
     }
 }
 

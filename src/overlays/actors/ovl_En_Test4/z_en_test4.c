@@ -398,7 +398,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 } else {
                     gSaveContext.screenScale = 0.0f;
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                        0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(&play->state);
                     if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
@@ -442,9 +442,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     u32 entrance = gSaveContext.save.entrance;
 
                     if ((play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-                        playerParams = 0xCFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE);
                     } else {
-                        playerParams = 0xBFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);

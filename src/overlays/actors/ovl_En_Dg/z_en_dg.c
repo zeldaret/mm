@@ -252,8 +252,8 @@ void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
 
         sinf(0.0f);
         cosf(0.0f);
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
-        floorRot->z = Math_Acot2F(1.0f, -nx * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
+        floorRot->z = Math_Atan2F_XY(1.0f, -nx * ny);
     }
 }
 
@@ -310,7 +310,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**

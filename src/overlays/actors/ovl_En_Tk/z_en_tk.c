@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_AP_NONE, 0x4000, 0x4000);
+        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -657,7 +657,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         }
 
         Math_Vec3f_Copy(&sp44, &player->actor.world.pos);
-        sp44.y = player->bodyPartsPos[7].y + 3.0f;
+        sp44.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         temp_v0 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp44);
         if (ABS(temp_v0) < 0x800) {
             Math_SmoothStepToS(&this->unk_31A, temp_v0, 3, 0x16C, 0);
@@ -696,10 +696,10 @@ void func_80AED940(EnTk* this, PlayState* play) {
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_AP_NONE, 0x4000, 0x4000);
+            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
         }
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     }
 }
 

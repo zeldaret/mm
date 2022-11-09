@@ -963,7 +963,7 @@ s32 EnSGoro_UpdateRotationToPlayer(EnSGoro* this, PlayState* play) {
     this->bodyRotY = CLAMP(this->bodyRotY, -0x1C70, 0x1C70);
 
     playerPos = player->actor.world.pos;
-    playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+    playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     thisPos = this->actor.world.pos;
     thisPos.y += 70.0f;
 

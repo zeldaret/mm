@@ -9,9 +9,10 @@
 struct PlayState;
 struct Actor;
 struct SkelAnime;
+struct PlayerAnimationFrame;
 
 #define LINK_ANIMETION_OFFSET(addr, offset) \
-    (SEGMENT_ROM_START(link_animetion) + ((u32)addr & 0xFFFFFF) + ((u32)offset))
+    (SEGMENT_ROM_START(link_animetion) + ((uintptr_t)addr & 0xFFFFFF) + ((u32)offset))
 #define LIMB_DONE 0xFF
 #define ANIMATION_ENTRY_MAX 50
 
@@ -20,14 +21,14 @@ struct SkelAnime;
 #define ANIM_FLAG_4         (1 << 2)
 #define ANIM_FLAG_NOMOVE    (1 << 4)
 
-typedef enum {
+typedef enum AnimationMode {
     /* 0 */ ANIMMODE_LOOP,
     /* 1 */ ANIMMODE_LOOP_INTERP,
     /* 2 */ ANIMMODE_ONCE,
     /* 3 */ ANIMMODE_ONCE_INTERP,
     /* 4 */ ANIMMODE_LOOP_PARTIAL,
     /* 5 */ ANIMMODE_LOOP_PARTIAL_INTERP
-} AnimationModes;
+} AnimationMode;
 
 typedef enum { 
     /* -1 */ ANIMTAPER_DECEL = -1,
@@ -170,7 +171,10 @@ typedef struct AnimationContext {
 
 typedef struct {
     /* 0x0 */ AnimationHeaderCommon common;
-    /* 0x4 */ u32 segment;
+    /* 0x4 */ union {
+                void* segmentVoid;
+                struct PlayerAnimationFrame* segment;
+            };
 } LinkAnimationHeader; // size = 0x8
 
 typedef struct SkelAnime {

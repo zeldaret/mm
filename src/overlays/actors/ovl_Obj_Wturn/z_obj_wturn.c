@@ -72,7 +72,7 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
     Play_EnableMotionBlur(140);
     this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
-    func_800B7298(play, &this->actor, 21);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;
     subCamAt.y = player->actor.focus.pos.y;
@@ -96,7 +96,7 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
 
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
-    func_800B7298(play, &this->actor, 0x54);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
     func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
     Play_DisableMotionBlur();
