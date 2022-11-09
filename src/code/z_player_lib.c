@@ -3402,11 +3402,12 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     static Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
 
     Player* player = (Player*)actor;
-    MtxF sp230;
-    s32 sp154;
     Vec2f* temp_s0_4;
+    MtxF sp230;
     Vec3f* temp_s0_7;
     Vec3f* var_a0;
+    Actor* sp224;
+    s32 sp154;
     Vec3s* temp_s1;
     f32 temp_fv0;
     s32 pad;
@@ -3466,7 +3467,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
-        Actor* sp224 = player->heldActor;
+        sp224 = player->heldActor;
 
         if (*dList1 != NULL) {
             if (player->rightHandType == PLAYER_MODELTYPE_RH_BOW) {
@@ -3606,28 +3607,28 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        if ((*dList1 != NULL) && (player->currentMask != PLAYER_MASK_NONE) &&
+        if ((*dList1 != NULL) && (((void)0, player->currentMask) != PLAYER_MASK_NONE) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
              ((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY) &&
               ((player->transformation + PLAYER_MASK_FIERCE_DEITY) != player->currentMask) &&
               (player->skelAnime.curFrame >= 10.0f)))) {
-            if (func_80127438(play, player, player->currentMask)) {
-                sp154 = player->currentMask - 1;
+            if (func_80127438(play, player, ((void)0, player->currentMask))) {
+                sp154 = ((void)0, player->currentMask) - 1;
 
                 OPEN_DISPS(play->state.gfxCtx);
 
-                if (player->currentMask == PLAYER_MASK_COUPLE) {
+                if (((void)0, player->currentMask) == PLAYER_MASK_COUPLE) {
                     Player_DrawCouplesMask(play, player);
-                } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
+                } else if (((void)0, player->currentMask) == PLAYER_MASK_CIRCUS_LEADER) {
                     Player_DrawCircusLeadersMask(play, player);
-                } else if (player->currentMask == PLAYER_MASK_BLAST) {
+                } else if (((void)0, player->currentMask) == PLAYER_MASK_BLAST) {
                     Player_DrawBlastMask(play, player);
-                } else if (player->currentMask == PLAYER_MASK_BUNNY) {
+                } else if (((void)0, player->currentMask) == PLAYER_MASK_BUNNY) {
                     Player_DrawBunnyHood(play);
-                } else if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
+                } else if (((void)0, player->currentMask) == PLAYER_MASK_GREAT_FAIRY) {
                     Player_DrawGreatFairysMask(play, player);
-                } else if (player->currentMask >= PLAYER_MASK_FIERCE_DEITY) {
+                } else if (((void)0, player->currentMask) >= PLAYER_MASK_FIERCE_DEITY) {
                     temp_s0_4 = &D_801C0E04[player->transformation];
 
                     Matrix_Push();
@@ -3715,6 +3716,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                     for (i = 0; i < 5; i++) {
                         Matrix_Push();
+                        //goto dummy_label_845302; dummy_label_845302: ;
+
                         Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
