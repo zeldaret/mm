@@ -3347,58 +3347,6 @@ void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex) {
 }
 
 void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
-    static Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
-    static Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
-    static f32 sMeleeWeaponLengths[PLAYER_MELEEWEAPON_MAX] = {
-        0.0f,    // PLAYER_MELEEWEAPON_NONE
-        3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
-        3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
-        4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
-        5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
-        -1.0f,   // PLAYER_MELEEWEAPON_STICK
-        2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
-    };
-    static Gfx* D_801C0D94 = object_link_child_DL_017818;
-    static Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
-    static f32 D_801C0DA4 = 0.0f;
-    // Coordinates of the shield quad collider vertices, in the right hand limb's own model space.
-    static Vec3f sRightHandLimbModelShieldQuadVertices[4] = {
-        { -4500.0f, -3000.0f, -600.0f },
-        { 1500.0f, -3000.0f, -600.0f },
-        { -4500.0f, 3000.0f, -600.0f },
-        { 1500.0f, 3000.0f, -600.0f },
-    };
-    static Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
-    static Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
-    static Gfx* D_801C0DF0[] = {
-        object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
-        object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
-    };
-    static Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
-        { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
-        { 0.0f, -200.0f },   // PLAYER_FORM_GORON
-        { -160.0f, 0.0f },   // PLAYER_FORM_ZORA
-        { 220.0f, -200.0f }, // PLAYER_FORM_DEKU
-        { 0.0f, 0.0f },      // PLAYER_FORM_HUMAN
-    };
-    static Gfx* D_801C0E2C[] = {
-        object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
-        object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
-    };
-    static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
-        { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
-        { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
-        { -189.5f, -594.87f, 0.0f }, // PLAYER_FORM_ZORA
-        { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
-        { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
-    };
-    static Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
-    // unused
-    static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
-    static Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
-    static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
-    static Vec3f sSheathLimbModelShieldOnBackPos = { 630.0f, 100.0f, -30.0f };
-    static Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
     Player* player = (Player*)actor;
     Vec3s* temp_s1;
     MtxF sp230;
@@ -3419,6 +3367,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         if (player->actor.scale.y >= 0.0f) {
             if (!Player_IsHoldingHookshot(player) && ((heldActor = player->heldActor) != NULL)) {
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->transformation != PLAYER_FORM_DEKU)) {
+                    static Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
+                    static Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
                     Vec3f* var_a0 = &D_801C0D60;
 
                     if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -3429,13 +3379,23 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     Matrix_RotateZYX(0x69E8, -0x5708, 0x458E, MTXMODE_APPLY);
                     Matrix_Get(&sp230);
                     temp_s1 = &heldActor->world.rot;
-                    Matrix_MtxFToYXZRot(&sp230, temp_s1, 0);
+                    Matrix_MtxFToYXZRot(&sp230, temp_s1, false);
                     heldActor->shape.rot = *temp_s1;
                 } else if (player->stateFlags1 & PLAYER_STATE1_800) {
                     heldActor->world.rot.y = heldActor->shape.rot.y =
                         player->actor.shape.rot.y + player->leftHandWorld.rot.y;
                 }
             } else {
+                static f32 sMeleeWeaponLengths[PLAYER_MELEEWEAPON_MAX] = {
+                    0.0f,    // PLAYER_MELEEWEAPON_NONE
+                    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
+                    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
+                    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
+                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+                    -1.0f,   // PLAYER_MELEEWEAPON_STICK
+                    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
+                };
+
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
                      ((player->itemAction == PLAYER_IA_STICK) ||
@@ -3451,7 +3411,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 }
 
                 Matrix_Get(&player->mf_CC4);
-                Matrix_MtxFToYXZRot(&player->mf_CC4, &player->leftHandWorld.rot, 0);
+                Matrix_MtxFToYXZRot(&player->mf_CC4, &player->leftHandWorld.rot, false);
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
@@ -3460,6 +3420,11 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
         if (*dList1 != NULL) {
             if (player->rightHandType == PLAYER_MODELTYPE_RH_BOW) {
+                static Gfx* D_801C0D94 = object_link_child_DL_017818;
+                static Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
+                // Unused
+                static f32 D_801C0DA4 = 0.0f;
+
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Push();
@@ -3502,18 +3467,29 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             if (player->rightHandType == PLAYER_MODELTYPE_RH_FF) {
                 Matrix_Get(&player->shieldMf);
             } else if (player->rightHandType == PLAYER_MODELTYPE_RH_SHIELD) {
+                // Coordinates of the shield quad collider vertices, in the right hand limb's own model space.
+                static Vec3f sRightHandLimbModelShieldQuadVertices[4] = {
+                    { -4500.0f, -3000.0f, -600.0f },
+                    { 1500.0f, -3000.0f, -600.0f },
+                    { -4500.0f, 3000.0f, -600.0f },
+                    { 1500.0f, 3000.0f, -600.0f },
+                };
+
                 Matrix_Get(&player->shieldMf);
                 Player_UpdateShieldCollider(play, player, &player->shieldQuad, sRightHandLimbModelShieldQuadVertices);
             } else if (player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT) {
+                static Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
+
                 Matrix_MultVec3f(&D_801C0DD8, &player->rightHandWorld.pos);
 
                 if (sp224 != NULL) {
+                    static Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
                     MtxF sp1BC;
 
                     Matrix_MultVec3f(&D_801C0DE4, &sp224->world.pos);
                     Matrix_RotateZYX(0, -0x4000, -0x4000, MTXMODE_APPLY);
                     Matrix_Get(&sp1BC);
-                    Matrix_MtxFToYXZRot(&sp1BC, &sp224->world.rot, 0);
+                    Matrix_MtxFToYXZRot(&sp1BC, &sp224->world.rot, false);
                     sp224->shape.rot = sp224->world.rot;
                     if (func_800B7128(player) != 0) {
                         Matrix_Translate(500.0f, 300.0f, 0.0f, MTXMODE_APPLY);
@@ -3555,16 +3531,19 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             temp_a0 = player->skelAnime.animation == &gPlayerAnim_pg_gakkistart;
             temp_v1_3 = player->skelAnime.animation == &gPlayerAnim_pg_gakkiwait;
             if ((((temp_a0 != 0)) || (temp_v1_3 != 0) || (player->skelAnime.animation == &gPlayerAnim_pg_gakkiplay))) {
-                Vec3f sp178[5];
+                static Gfx* D_801C0DF0[] = {
+                    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
+                    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
+                };
+                Vec3f sp178[ARRAY_COUNT(D_801C0DF0)];
                 s32 i;
-                // f32* var_v0; // sp168
 
                 OPEN_DISPS(play->state.gfxCtx);
 
                 if (temp_v1_3 != 0) {
                     f32* var_v0 = player->unk_B10;
 
-                    for (i = 0; i < 5; i++) {
+                    for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                         func_80124618(D_801C0510, *var_v0, &sp178[i]);
                         var_v0 += 1;
                     }
@@ -3574,7 +3553,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         func_80124618(D_801C0428, player->skelAnime.curFrame, &player->unk_AF0[1]);
                     }
 
-                    for (i = 0; i < 5; i++) {
+                    for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                         Math_Vec3f_Copy(&sp178[i], &player->unk_AF0[1]);
                     }
                 }
@@ -3588,7 +3567,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                 Matrix_Pop();
 
-                for (i = 0; i < 5; i++) {
+                for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                     Matrix_Push();
                     Matrix_Scale(sp178[i].x, sp178[i].y, sp178[i].z, MTXMODE_APPLY);
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
@@ -3602,16 +3581,15 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
+        //! FAKE
         if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
-              ((player->skelAnime.animation != (&gPlayerAnim_cl_setmask)) || (player->skelAnime.curFrame >= 12.0f))) ||
+              ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
              ((((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY)) &&
                ((player->transformation + PLAYER_MASK_FIERCE_DEITY) != player->currentMask)) &&
               (player->skelAnime.curFrame >= 10.0f)))) {
             if (func_80127438(play, player, player->currentMask)) {
-                s32 sp154;
-
-                sp154 = ((void)0, player->currentMask) - 1;
+                s32 sp154 = ((void)0, player->currentMask) - 1;
 
                 OPEN_DISPS(play->state.gfxCtx);
 
@@ -3626,8 +3604,14 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 } else if (((void)0, player->currentMask) == PLAYER_MASK_GREAT_FAIRY) {
                     Player_DrawGreatFairysMask(play, player);
                 } else if (((void)0, player->currentMask) >= PLAYER_MASK_FIERCE_DEITY) {
-                    Vec2f* temp_s0_4;
-                    temp_s0_4 = &D_801C0E04[player->transformation];
+                    static Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
+                        { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
+                        { 0.0f, -200.0f },   // PLAYER_FORM_GORON
+                        { -160.0f, 0.0f },   // PLAYER_FORM_ZORA
+                        { 220.0f, -200.0f }, // PLAYER_FORM_DEKU
+                        { 0.0f, 0.0f },      // PLAYER_FORM_HUMAN
+                    };
+                    Vec2f* temp_s0_4 = &D_801C0E04[player->transformation];
 
                     Matrix_Push();
                     Matrix_Translate(temp_s0_4->x, temp_s0_4->z, 0.0f, MTXMODE_APPLY);
@@ -3665,36 +3649,39 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                 CLOSE_DISPS(play->state.gfxCtx);
             } else {
-                s32 temp_v1_5;
+                s32 temp_v1_5 = player->skelAnime.animation == &gPlayerAnim_pn_gakkistart;
 
-                temp_v1_5 = player->skelAnime.animation == &gPlayerAnim_pn_gakkistart;
-                if ((temp_v1_5 != 0) || (player->skelAnime.animation == &gPlayerAnim_pn_gakkiplay) ||
+                if (temp_v1_5 || (player->skelAnime.animation == &gPlayerAnim_pn_gakkiplay) ||
                     (player->skelAnime.animation == &gPlayerAnim_dl_kokeru)) {
-                    Vec3f spF0[5];
+                    static Gfx* D_801C0E2C[] = {
+                        object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
+                        object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
+                    };
+                    Vec3f spF0[ARRAY_COUNT(D_801C0E2C)];
                     s32 i;
                     f32* temp;
 
                     OPEN_DISPS(play->state.gfxCtx);
 
-                    if (temp_v1_5 != 0) {
+                    if (temp_v1_5) {
                         Vec3f spD4;
 
                         func_80124618(D_801C0340, player->skelAnime.curFrame, &spD4);
                         player->unk_AF0[0].x = spD4.x;
                         func_80124618(D_801C0368, player->skelAnime.curFrame, spF0);
 
-                        for (i = 0; i < 4; i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0) - 1; i++) {
                             Math_Vec3f_Copy(&spF0[i + 1], spF0);
                         }
 
                         temp = &player->unk_AF0[0].y;
-                        for (i = 0; i < 5; i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
                             *temp = spF0[0].x;
                             temp++;
                         }
                     } else {
                         temp = &player->unk_AF0[0].y;
-                        for (i = 0; i < 5; i++) {
+                        for (i = 0; i < ARRAY_COUNT(spF0); i++) {
                             spF0[i].x = *temp;
                             spF0[i].y = *temp;
                             spF0[i].z = *temp;
@@ -3711,9 +3698,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                     Matrix_Pop();
 
-                    for (i = 0; i < 5; i++) {
+                    for (i = 0; i < ARRAY_COUNT(spF0); i++) {
                         Matrix_Push();
-                        // goto dummy_label_845302; dummy_label_845302: ;
 
                         Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
@@ -3736,16 +3722,21 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
 
         if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->unk_AE8 != 0)) {
-            Vec3f* temp_s0_7;
-
-            temp_s0_7 = &D_801C0E40[player->transformation];
+            static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
+                { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
+                { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
+                { -189.5f, -594.87f, 0.0f }, // PLAYER_FORM_ZORA
+                { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
+                { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
+            };
+            Vec3f* temp_s0_7 = &D_801C0E40[player->transformation];
 
             OPEN_DISPS(play->state.gfxCtx);
 
             Matrix_Push();
             AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_054F18));
             Matrix_Translate(temp_s0_7->x, temp_s0_7->y, 0.0f, MTXMODE_APPLY);
-            if (player->transformation == 2) {
+            if (player->transformation == PLAYER_FORM_ZORA) {
                 Matrix_Scale(0.7f, 0.7f, 0.7f, MTXMODE_APPLY);
             }
 
@@ -3758,25 +3749,30 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             CLOSE_DISPS(play->state.gfxCtx);
         }
         if (player->actor.scale.y >= 0.0f) {
-            Actor* spA8;
+            static Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
+            // unused
+            static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+            Actor* spA8 = NULL;
 
-            spA8 = NULL;
             if (player->transformation != PLAYER_FORM_DEKU) {
                 Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
             } else {
+                static Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
+
                 Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
                 Matrix_MultVec3f(&D_801C0E94, sPlayerCurBodyPartPos);
                 if ((player->skelAnime.animation == &gPlayerAnim_pn_drinkend) ||
                     (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((spA8 = player->heldActor) != NULL))) {
                     if (spA8 != NULL) {
+                        static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
                         MtxF sp68;
 
                         Matrix_Push();
                         Matrix_MultVec3f(&D_801C0EA0, &spA8->world.pos);
                         Matrix_RotateZYX(0, 0x4000, 0, MTXMODE_APPLY);
                         Matrix_Get(&sp68);
-                        Matrix_MtxFToYXZRot(&sp68, &spA8->world.rot, 0);
+                        Matrix_MtxFToYXZRot(&sp68, &spA8->world.rot, false);
                         spA8->shape.rot = spA8->world.rot;
                         Matrix_Pop();
                     }
@@ -3823,6 +3819,9 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         if (player->actor.scale.y >= 0.0f) {
             if ((player->rightHandType != PLAYER_MODELTYPE_RH_SHIELD) &&
                 (player->rightHandType != PLAYER_MODELTYPE_RH_FF)) {
+                static Vec3f sSheathLimbModelShieldOnBackPos = { 630.0f, 100.0f, -30.0f };
+                static Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
+
                 Matrix_TranslateRotateZYX(&sSheathLimbModelShieldOnBackPos, &sSheathLimbModelShieldOnBackZyxRot);
                 Matrix_Get(&player->shieldMf);
             }
