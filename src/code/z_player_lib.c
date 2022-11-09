@@ -3346,7 +3346,6 @@ void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex) {
     Actor_SetFeetPos(&player->actor, limbIndex, PLAYER_LIMB_LEFT_FOOT, footPos, PLAYER_LIMB_RIGHT_FOOT, footPos);
 }
 
-#ifdef NON_EQUIVALENT
 void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
     static Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
     static Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
@@ -3400,10 +3399,10 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
     static Vec3f sSheathLimbModelShieldOnBackPos = { 630.0f, 100.0f, -30.0f };
     static Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
-
     Player* player = (Player*)actor;
-    Vec2f* temp_s0_4;
+    Vec3s* temp_s1;
     MtxF sp230;
+    Actor* heldActor;
 
     if (*dList2 != NULL) {
         Matrix_MultZero(sPlayerCurBodyPartPos);
@@ -3418,11 +3417,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
 
         if (player->actor.scale.y >= 0.0f) {
-            Actor* heldActor;
-
             if (!Player_IsHoldingHookshot(player) && ((heldActor = player->heldActor) != NULL)) {
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->transformation != PLAYER_FORM_DEKU)) {
-                    Vec3s* temp_s1;
                     Vec3f* var_a0 = &D_801C0D60;
 
                     if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -3459,9 +3455,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
-        Actor* sp224;
-
-        sp224 = player->heldActor;
+        Actor* sp224 = player->heldActor;
+        s32 pad;
 
         if (*dList1 != NULL) {
             if (player->rightHandType == PLAYER_MODELTYPE_RH_BOW) {
@@ -3472,7 +3467,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->unk_B28 >= 0) && (player->unk_ACC < 0xB)) {
                     Vec3f sp20C;
                     f32 temp_fv0;
-                    s32 pad;
+                    s32 pad2;
 
                     Matrix_MultZero(&sp20C);
                     temp_fv0 = Math_Vec3f_DistXYZ(sPlayerCurBodyPartPos, &sp20C);
@@ -3607,7 +3602,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != ((0, PLAYER_MASK_NONE)))) &&
+        if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != (((void)0, PLAYER_MASK_NONE)))) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
               ((player->skelAnime.animation != (&gPlayerAnim_cl_setmask)) || (player->skelAnime.curFrame >= 12.0f))) ||
              ((((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY)) &&
@@ -3631,6 +3626,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 } else if (((void)0, player->currentMask) == PLAYER_MASK_GREAT_FAIRY) {
                     Player_DrawGreatFairysMask(play, player);
                 } else if (((void)0, player->currentMask) >= PLAYER_MASK_FIERCE_DEITY) {
+                    Vec2f* temp_s0_4;
                     temp_s0_4 = &D_801C0E04[player->transformation];
 
                     Matrix_Push();
@@ -3676,12 +3672,12 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     (player->skelAnime.animation == &gPlayerAnim_dl_kokeru)) {
                     Vec3f spF0[5];
                     s32 i;
+                    f32* temp;
 
                     OPEN_DISPS(play->state.gfxCtx);
 
                     if (temp_v1_5 != 0) {
                         Vec3f spD4;
-                        f32* temp;
 
                         func_80124618(D_801C0340, player->skelAnime.curFrame, &spD4);
                         player->unk_AF0[0].x = spD4.x;
@@ -3697,8 +3693,6 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                             temp++;
                         }
                     } else {
-                        f32* temp;
-
                         temp = &player->unk_AF0[0].y;
                         for (i = 0; i < 5; i++) {
                             spF0[i].x = *temp;
@@ -3821,7 +3815,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
              (player->sheathType == PLAYER_MODELTYPE_SHEATH_15))) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            gSPDisplayList(POLY_XLU_DISP++, gPlayerShields[2 * ((player->currentShield - 1) ^ 0)]);
+            gSPDisplayList(POLY_OPA_DISP++, gPlayerShields[2 * ((player->currentShield - 1) ^ 0)]);
 
             CLOSE_DISPS(play->state.gfxCtx);
         }
@@ -3839,58 +3833,3 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
     func_8012536C();
 }
-#else
-Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
-Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
-f32 sMeleeWeaponLengths[PLAYER_MELEEWEAPON_MAX] = {
-    0.0f,    // PLAYER_MELEEWEAPON_NONE
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
-    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
-    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_MELEEWEAPON_STICK
-    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
-};
-Gfx* D_801C0D94 = object_link_child_DL_017818;
-Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
-f32 D_801C0DA4 = 0.0f;
-Vec3f sRightHandLimbModelShieldQuadVertices[4] = {
-    { -4500.0f, -3000.0f, -600.0f },
-    { 1500.0f, -3000.0f, -600.0f },
-    { -4500.0f, 3000.0f, -600.0f },
-    { 1500.0f, 3000.0f, -600.0f },
-};
-Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
-Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
-Gfx* D_801C0DF0[] = {
-    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
-    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
-};
-Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
-    { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
-    { 0.0f, -200.0f },   // PLAYER_FORM_GORON
-    { -160.0f, 0.0f },   // PLAYER_FORM_ZORA
-    { 220.0f, -200.0f }, // PLAYER_FORM_DEKU
-    { 0.0f, 0.0f },      // PLAYER_FORM_HUMAN
-};
-Gfx* D_801C0E2C[] = {
-    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
-    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
-};
-Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
-    { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
-    { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
-    { -189.5f, -594.87f, 0.0f }, // PLAYER_FORM_ZORA
-    { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
-    { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
-};
-Vec3f sPlayerFocusHeadLimbModelPos = { 1100.0f, -700.0f, 0.0f };
-// unused
-Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
-Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
-Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
-Vec3f sSheathLimbModelShieldOnBackPos = { 630.0f, 100.0f, -30.0f };
-Vec3s sSheathLimbModelShieldOnBackZyxRot = { 0, 0, 0x7FFF };
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_PostLimbDrawGameplay.s")
-#endif
