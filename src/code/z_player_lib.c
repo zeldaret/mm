@@ -3346,65 +3346,60 @@ void Player_SetFeetPos(PlayState* play, Player* player, s32 limbIndex) {
     Actor_SetFeetPos(&player->actor, limbIndex, PLAYER_LIMB_LEFT_FOOT, footPos, PLAYER_LIMB_RIGHT_FOOT, footPos);
 }
 
-Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
-Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
-
-f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
-    0.0f,    // PLAYER_MELEEWEAPON_NONE
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
-    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
-    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
-    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_MELEEWEAPON_STICK
-    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
-};
-
-Gfx* D_801C0D94 = object_link_child_DL_017818;
-
-f32 D_801C0D98 = -35.0f;
-f32 D_801C0D9C = -395.0f;
-f32 D_801C0DA0 = 0.0f;
-
-f32 D_801C0DA4 = 0.0f;
-
-Vec3f D_801C0DA8[4] = {
-    { -4500.0f, -3000.0f, -600.0f },
-    { 1500.0f, -3000.0f, -600.0f },
-    { -4500.0f, 3000.0f, -600.0f },
-    { 1500.0f, 3000.0f, -600.0f },
-};
-
-Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
-Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
-Gfx* D_801C0DF0[] = {
-    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
-    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
-};
-
-Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
-    { 140.0f, -130.0f }, { 0.0f, -200.0f }, { -160.0f, 0.0f }, { 220.0f, -200.0f }, { 0.0f, 0.0f },
-};
-
-Gfx* D_801C0E2C[] = {
-    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
-    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
-};
-Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
-    { 0.0f, 0.0f, 0.0f },       { -578.3f, -1100.9f, 0.0f }, { -189.5f, -594.87f, 0.0f },
-    { -570.0f, -812.0f, 0.0f }, { -230.0f, -520.0f, 0.0f },
-};
-Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
-
-// unused
-Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
-
-Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
-Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
-Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
-Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
-
 #ifdef NON_EQUIVALENT
 void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot, Actor* actor) {
+    static Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
+    static Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
+    static f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
+        0.0f,    // PLAYER_MELEEWEAPON_NONE
+        3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
+        3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
+        4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
+        5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+        -1.0f,   // PLAYER_MELEEWEAPON_STICK
+        2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
+    };
+    static Gfx* D_801C0D94 = object_link_child_DL_017818;
+    static Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
+    static f32 D_801C0DA4 = 0.0f;
+    static Vec3f D_801C0DA8[4] = {
+        { -4500.0f, -3000.0f, -600.0f },
+        { 1500.0f, -3000.0f, -600.0f },
+        { -4500.0f, 3000.0f, -600.0f },
+        { 1500.0f, 3000.0f, -600.0f },
+    };
+    static Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
+    static Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
+    static Gfx* D_801C0DF0[] = {
+        object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
+        object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
+    };
+    static Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
+        { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
+        { 0.0f, -200.0f },   // PLAYER_FORM_GORON
+        { -160.0f, 0.0f },   // PLAYER_FORM_ZORA
+        { 220.0f, -200.0f }, // PLAYER_FORM_DEKU
+        { 0.0f, 0.0f },      // PLAYER_FORM_HUMAN
+    };
+    static Gfx* D_801C0E2C[] = {
+        object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
+        object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
+    };
+    static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
+        { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
+        { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
+        { -189.5f, -594.87f, 0.0f }, // PLAYER_FORM_ZORA
+        { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
+        { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
+    };
+    static Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+    // unused
+    static Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+    static Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
+    static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
+    static Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
+    static Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
+
     Player* player = (Player*)actor;
     MtxF sp230;
     s32 sp154;
@@ -3476,7 +3471,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Push();
-                Matrix_Translate(D_801C0D98, D_801C0D9C, D_801C0DA0, MTXMODE_APPLY);
+                Matrix_Translate(D_801C0D98.x, D_801C0D98.y, D_801C0D98.z, MTXMODE_APPLY);
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->unk_B28 >= 0) && (player->unk_ACC < 0xB)) {
                     Vec3f sp20C;
 
@@ -3531,9 +3526,10 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Player_DrawHookshotReticle(play, player, 77600.0f);
                     }
                 }
-            } else if ((player->meleeWeaponState != 0) &&
-                       (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT)) {
-                func_80126B8C(play, player);
+            } else if (player->meleeWeaponState != 0) {
+                if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT) {
+                    func_80126B8C(play, player);
+                }
             }
             if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
@@ -3787,15 +3783,19 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                                   &player->meleeWeaponInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_SHIN) {
-        if ((player->meleeWeaponState != 0) && ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK) ||
-                                                (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_START) ||
-                                                (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_FINISH))) {
-            func_8012669C(play, player, D_801C0A48, D_801C0A24);
+        if (player->meleeWeaponState != 0) {
+            if ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK) ||
+                (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_START) ||
+                (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_FINISH)) {
+                func_8012669C(play, player, D_801C0A48, D_801C0A24);
+            }
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {
-        if ((player->meleeWeaponState != 0) && (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT)) {
-            Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
-            func_8012669C(play, player, D_801C0A90, D_801C0A6C);
+        if (player->meleeWeaponState != 0) {
+            if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT) {
+                Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
+                func_8012669C(play, player, D_801C0A90, D_801C0A6C);
+            }
         }
     } else if (limbIndex == PLAYER_LIMB_SHEATH) {
         if ((*dList1 != NULL) && (player->transformation == PLAYER_FORM_HUMAN) &&
@@ -3822,5 +3822,57 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     func_8012536C();
 }
 #else
+Vec3f D_801C0D60 = { 398.0f, 1419.0f, 244.0f };
+Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
+f32 D_801C0D78[PLAYER_MELEEWEAPON_MAX] = {
+    0.0f,    // PLAYER_MELEEWEAPON_NONE
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
+    3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
+    4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
+    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_MELEEWEAPON_STICK
+    2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
+};
+Gfx* D_801C0D94 = object_link_child_DL_017818;
+Vec3f D_801C0D98 = { -35.0f, -395.0f, 0.0f };
+f32 D_801C0DA4 = 0.0f;
+Vec3f D_801C0DA8[4] = {
+    { -4500.0f, -3000.0f, -600.0f },
+    { 1500.0f, -3000.0f, -600.0f },
+    { -4500.0f, 3000.0f, -600.0f },
+    { 1500.0f, 3000.0f, -600.0f },
+};
+Vec3f D_801C0DD8 = { 50.0f, 800.0f, 0.0f };
+Vec3f D_801C0DE4 = { 50.0f, 850.0f, 0.0f };
+Gfx* D_801C0DF0[] = {
+    object_link_goron_DL_010590, object_link_goron_DL_010368, object_link_goron_DL_010140,
+    object_link_goron_DL_00FF18, object_link_goron_DL_00FCF0,
+};
+Vec2f D_801C0E04[PLAYER_FORM_MAX] = {
+    { 140.0f, -130.0f }, // PLAYER_FORM_FIERCE_DEITY
+    { 0.0f, -200.0f },   // PLAYER_FORM_GORON
+    { -160.0f, 0.0f },   // PLAYER_FORM_ZORA
+    { 220.0f, -200.0f }, // PLAYER_FORM_DEKU
+    { 0.0f, 0.0f },      // PLAYER_FORM_HUMAN
+};
+Gfx* D_801C0E2C[] = {
+    object_link_nuts_DL_007A28, object_link_nuts_DL_0077D0, object_link_nuts_DL_007548,
+    object_link_nuts_DL_007900, object_link_nuts_DL_0076A0,
+};
+Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
+    { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
+    { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
+    { -189.5f, -594.87f, 0.0f }, // PLAYER_FORM_ZORA
+    { -570.0f, -812.0f, 0.0f },  // PLAYER_FORM_DEKU
+    { -230.0f, -520.0f, 0.0f },  // PLAYER_FORM_HUMAN
+};
+Vec3f D_801C0E7C = { 1100.0f, -700.0f, 0.0f };
+// unused
+Vec3f D_801C0E88 = { 1600.0f, -1700.0f, -70.0f };
+Vec3f D_801C0E94 = { 1800.0f, -300.0f, 0.0f };
+Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
+Vec3f D_801C0EAC = { 630.0f, 100.0f, -30.0f };
+Vec3s D_801C0EB8 = { 0, 0, 0x7FFF };
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_PostLimbDrawGameplay.s")
 #endif
