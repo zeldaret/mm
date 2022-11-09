@@ -1042,7 +1042,10 @@ typedef struct Player {
     /* 0xAE7 */ s8 unk_AE7; // a timer
     /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
     /* 0xAEC */ f32 unk_AEC;
-    /* 0xAF0 */ Vec3f unk_AF0[2];
+    /* 0xAF0 */ union { // TODO: this may be an union of two structs
+                    Vec3f unk_AF0[2];
+                    f32 arr_AF0[6];
+                };
     /* 0xB08 */ f32 unk_B08[2]; // TODO: Investigate if this member actually is an array
     /* 0xB10 */ f32 unk_B10[6];
     /* 0xB28 */ s16 unk_B28; //Burning stick timer?
