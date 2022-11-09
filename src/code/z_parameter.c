@@ -222,27 +222,289 @@ s16 sFinalHoursClockFrameEnvBlue = 0;
 s16 sFinalHoursClockColorTimer = 15;
 s16 sFinalHoursClockColorTargetIndex = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CB80.s")
+/**
+ * Draw a RGBA16 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                           s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CD98.s")
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-Gfx* func_8010CFBC(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CFBC.s")
+    return gfx;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D2D4.s")
+/**
+ * Draw an IA8 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx*  the display list pointer
+ */
+Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                        s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
-Gfx* func_8010D480(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a, s32 argE, s32 argF);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D480.s")
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D7D0.s")
+    return gfx;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D9F4.s")
+/**
+ * Draw an IA8 texture on a rectangle with a shadow slightly offset to the bottom-right
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r texture red
+ * @param g texture green
+ * @param b texture blue
+ * @param a texture alpha
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectIA8_DropShadow(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                                   s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b,
+                                   s16 a) {
+    s16 dropShadowAlpha = a;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DC58.s")
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DE38.s")
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw a colored rectangle with a shadow slightly offset to the bottom-right
+ *
+ * @param gfx the display list pointer
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r // rectangle red
+ * @param g // rectangle green
+ * @param b // rectangle blue
+ * @param a // rectangle alpha
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawRect_DropShadow(Gfx* gfx, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
+                             s16 r, s16 g, s16 b, s16 a) {
+    s16 dropShadowAlpha = a;
+
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw an IA8 texture on a rectangle with a shadow slightly offset to the bottom-right with additional texture offsets
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r // texture red
+ * @param g // texture green
+ * @param b // texture blue
+ * @param a // texture alpha
+ * @param masks specify the mask for the s axis
+ * @param rects the texture coordinate s of upper-left corner of rectangle (s10.5)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight,
+                                         s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
+                                         s16 r, s16 g, s16 b, s16 a, s32 masks, s32 rects) {
+    s16 dropShadowAlpha = a;
+
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw an I8 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                       s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_I, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw a 4b texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param fmt texture image format
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param cms gives the clamp, wrap, and mirror flag for the s axis
+ * @param masks specify the mask for the s axis
+ * @param rects the texture coordinate s of upper-left corner of rectangle (s10.5)
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRect4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                       s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 rects, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, cms, G_TX_NOMIRROR | G_TX_WRAP, masks,
+                           G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw an I8 texture on a Quadrangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param point index of the first point to draw the Quadrangle
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
+
+    return gfx;
+}
+
+/**
+ * Draw a 4b texture on a Quadrangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param fmt texture image format
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param point index of the first point to draw the Quadrangle
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
+
+    return gfx;
+}
 
 s16 D_801BFA04[] = {
     -14, -14, -24, -8, -12, -12, -7, -8, -7, -8, -12, 0,
@@ -2418,17 +2680,17 @@ void Magic_DrawMeter(PlayState* play) {
 
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
-        OVERLAY_DISP = func_8010CFBC(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10,
-                                     sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
-                                     interfaceCtx->magicAlpha);
-        OVERLAY_DISP =
-            func_8010CFBC(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY, ((void)0, gSaveContext.magicCapacity),
-                          16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
-                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
-        OVERLAY_DISP =
-            func_8010D480(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY,
-                          8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
-                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha, 3, 0x100);
+        OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(
+            OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed,
+            sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY,
+                                                     ((void)0, gSaveContext.magicCapacity), 16, 1 << 10, 1 << 10,
+                                                     sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
+                                                     sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadowOffset(
+            OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY, 8, 16,
+            1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
+            interfaceCtx->magicAlpha, 3, 0x100);
 
         gDPPipeSync(OVERLAY_DISP++);
         gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, PRIMITIVE,
@@ -3034,9 +3296,9 @@ void Interface_DrawTimers(PlayState* play) {
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
-            OVERLAY_DISP =
-                func_8010CD98(OVERLAY_DISP, gTimerClockIconTex, 0x10, 0x10, ((void)0, gSaveContext.timerX[sTimerId]),
-                              ((void)0, gSaveContext.timerY[sTimerId]) + 2, 0x10, 0x10, 1 << 10, 1 << 10);
+            OVERLAY_DISP = Gfx_DrawTexRectIA8(
+                OVERLAY_DISP, gTimerClockIconTex, 0x10, 0x10, ((void)0, gSaveContext.timerX[sTimerId]),
+                ((void)0, gSaveContext.timerY[sTimerId]) + 2, 0x10, 0x10, 1 << 10, 1 << 10);
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
                               0, PRIMITIVE, 0);
@@ -3083,7 +3345,7 @@ void Interface_DrawTimers(PlayState* play) {
                     if (sPostmanBunnyHoodState == POSTMAN_MINIGAME_BUNNY_HOOD_ON) {
                         // draw sTimerDigits[3] (10s of seconds) to sTimerDigits[6] (100s of milliseconds)
                         for (j = 0; j < 4; j++) {
-                            OVERLAY_DISP = func_8010D7D0(
+                            OVERLAY_DISP = Gfx_DrawTexRectI8(
                                 OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j + 3])), 8, 0x10,
                                 ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                                 ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -3091,7 +3353,7 @@ void Interface_DrawTimers(PlayState* play) {
                     } else {
                         // draw sTimerDigits[3] (10s of seconds) to sTimerDigits[7] (10s of milliseconds)
                         for (j = 0; j < 5; j++) {
-                            OVERLAY_DISP = func_8010D7D0(
+                            OVERLAY_DISP = Gfx_DrawTexRectI8(
                                 OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j + 3])), 8, 0x10,
                                 ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                                 ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -3100,7 +3362,7 @@ void Interface_DrawTimers(PlayState* play) {
                 } else {
                     // draw sTimerDigits[3] (6s of minutes) to sTimerDigits[7] (10s of milliseconds)
                     for (j = 0; j < 8; j++) {
-                        OVERLAY_DISP = func_8010D7D0(
+                        OVERLAY_DISP = Gfx_DrawTexRectI8(
                             OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j])), 8, 0x10,
                             ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                             ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
