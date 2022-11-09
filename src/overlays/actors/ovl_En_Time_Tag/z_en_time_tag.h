@@ -9,7 +9,7 @@ typedef void (*EnTimeTagActionFunc)(struct EnTimeTag*, PlayState*);
 
 #define TIMETAG_GET_TYPE(thisx) (((thisx)->params & 0xE000) >> 0xD)
 
-#define TIMETAG_KICKOUT_GET_TEXT_TYPE(thisx) (((thisx)->params & 0x1FE0) >> 0x5)
+#define TIMETAG_KICKOUT_GET_TEXT(thisx) (((thisx)->params & 0x1FE0) >> 0x5)
 #define TIMETAG_KICKOUT_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x1F)
 #define TIMETAG_KICKOUT_HOUR(thisx) ((thisx)->home.rot.x)
 #define TIMETAG_KICKOUT_MINUTE(thisx) ((thisx)->home.rot.y)
