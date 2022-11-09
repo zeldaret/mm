@@ -94,10 +94,10 @@ void EnWarpTag_WaitForPlayer(EnWarptag* this, PlayState* play) {
     if (!Player_InCsMode(play) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (WARPTAG_GET_INVISIBLE(&this->dyna.actor)) {
-            func_800B7298(play, NULL, 0x51);
+            func_800B7298(play, NULL, PLAYER_CSMODE_81);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
-            func_800B7298(play, NULL, 0xF);
+            func_800B7298(play, NULL, PLAYER_CSMODE_15);
             this->actionFunc = EnWarpTag_RespawnPlayer;
         }
     }
@@ -126,7 +126,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 9) {
-        func_800B7298(play, NULL, 7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_7);
         this->actionFunc = EnWarpTag_RespawnPlayer;
         ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
 
@@ -201,9 +201,9 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
                 newRespawnPos.z = playerActorEntry->pos.z;
 
                 if (WARPTAG_GET_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
-                    playerParams = 0x9FF;
+                    playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_9);
                 } else { // not used by any known variant
-                    playerParams = 0x8FF;
+                    playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_8);
                 }
 
                 // why are we getting player home rotation from the room data? doesnt player have home.rot.y?

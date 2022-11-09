@@ -104,7 +104,7 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
             this->actor.velocity.y += this->actor.gravity;
             spdXZ = sqrtf((this->actor.velocity.x * this->actor.velocity.x) +
                           (this->actor.velocity.z * this->actor.velocity.z));
-            this->actor.world.rot.x = Math_FAtan2F(spdXZ, this->actor.velocity.y);
+            this->actor.world.rot.x = Math_Atan2S_XY(spdXZ, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) ||

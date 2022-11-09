@@ -53,8 +53,8 @@ void func_80868B74(EnBox* this, PlayState* play);
 void EnBox_WaitOpen(EnBox* this, PlayState* play);
 void EnBox_Open(EnBox* this, PlayState* play);
 
-void func_80867FBC(func_80867BDC_a0* arg0, PlayState* play, s32 arg2);
-void func_80867FE4(func_80867BDC_a0* arg0, PlayState* play);
+void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2);
+void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play);
 
 ActorInit En_Box_InitVars = {
     ACTOR_EN_BOX,
@@ -87,7 +87,7 @@ void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
     this->actionFunc = func;
 }
 
-void func_80867BDC(func_80867BDC_a0* arg0, PlayState* play, Vec3f* pos) {
+void func_80867BDC(struct_80867BDC_a0* arg0, PlayState* play, Vec3f* pos) {
     arg0->pos = *pos;
     arg0->unk_0C = NULL;
     arg0->unk_10 = NULL;
@@ -96,7 +96,7 @@ void func_80867BDC(func_80867BDC_a0* arg0, PlayState* play, Vec3f* pos) {
     arg0->unk_1C = 0;
 }
 
-void func_80867C14(func_80867BDC_a0* arg0, PlayState* play) {
+void func_80867C14(struct_80867BDC_a0* arg0, PlayState* play) {
     arg0->unk_18++;
     if (arg0->unk_18 > 85) {
         arg0->unk_18 = 85;
@@ -115,7 +115,7 @@ void func_80867C14(func_80867BDC_a0* arg0, PlayState* play) {
     arg0->unk_14++;
 }
 
-void func_80867C8C(func_80867BDC_a0* arg0, PlayState* play) {
+void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
     s32 temp_s6 = arg0->unk_18 - arg0->unk_1C;
     s32 i;
     f32 pad;
@@ -154,13 +154,13 @@ void func_80867C8C(func_80867BDC_a0* arg0, PlayState* play) {
     }
 }
 
-void func_80867FBC(func_80867BDC_a0* arg0, PlayState* play, s32 arg2) {
+void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2) {
     arg0->unk_0C = func_80867C14;
     arg0->unk_10 = func_80867C8C;
     arg0->unk_20 = arg2;
 }
 
-void func_80867FE4(func_80867BDC_a0* arg0, PlayState* play) {
+void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play) {
     arg0->unk_0C = NULL;
     arg0->unk_10 = NULL;
     func_80867BDC(arg0, play, &arg0->pos);
@@ -434,9 +434,9 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->unk_1A0++;
         if ((this->cutsceneIdxA != -1) && ActorCutscene_GetCurrentIndex() == this->cutsceneIdxA) {
             if (this->unk_1A0 == 2) {
-                func_800B724C(play, &this->dyna.actor, 4);
+                func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
             } else if (this->unk_1A0 == 22) {
-                func_800B724C(play, &this->dyna.actor, 1);
+                func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_1);
             }
         }
     } else if (this->unk_1A0 < 60) {

@@ -278,7 +278,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
     sp40.x = this->dyna.actor.world.pos.x;
     sp40.y = this->dyna.actor.world.pos.y - 50.0f;
     sp40.z = this->dyna.actor.world.pos.z;
-    sp3A = player->unk_B6A;
+    sp3A = player->fallDistance;
 
     if (Player_IsBurningStickInRange(play, &sp40, 70.0f, 50.0f)) {
         this->dyna.actor.home.pos.x = player->meleeWeaponInfo[0].tip.x;
@@ -330,7 +330,7 @@ void func_809CE4C8(BgSpdweb* this, PlayState* play) {
         if ((this->unk_161 != 0) ||
             ((DynaPolyActor_IsInRidingMovingState(&this->dyna) != 0) && (this->unk_164 > 2.0f))) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
-            player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
+            player->fallStartHeight = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;
             player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
@@ -450,7 +450,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
                 this->dyna.actor.world.pos.z;
         }
         func_809CEE74(this);
-    } else if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+    } else if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);

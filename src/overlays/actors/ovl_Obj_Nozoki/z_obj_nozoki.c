@@ -407,17 +407,17 @@ void func_80BA311C(ObjNozoki* this, PlayState* play) {
 }
 
 void func_80BA3230(ObjNozoki* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[64] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_20)) {
         Actor* npc = play->actorCtx.actorLists[ACTORCAT_NPC].first;
         Actor* test3 = SubS_FindActor(play, npc, ACTORCAT_NPC, ACTOR_EN_TEST3);
 
         if ((test3 != NULL) && (test3->draw != NULL)) {
-            if ((play->curSpawn == 3) && !(gSaveContext.save.weekEventReg[64] & 0x40)) {
+            if ((play->curSpawn == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
                 this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
                 this->dyna.actor.textId = 0x297A;
             } else {
                 this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-                if (gSaveContext.save.weekEventReg[64] & 0x40) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
                     this->dyna.actor.textId = 0;
                 } else {
                     this->dyna.actor.textId = 0x2979;
@@ -434,9 +434,9 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
 }
 
 void func_80BA3344(ObjNozoki* this, PlayState* play) {
-    if ((play->curSpawn == 3) && !(gSaveContext.save.weekEventReg[64] & 0x40)) {
+    if ((play->curSpawn == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, play)) {
-            gSaveContext.save.weekEventReg[64] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_64_40);
             this->dyna.actor.flags &= ~ACTOR_FLAG_10000;
             ObjNozoki_SetupAction(this, func_80BA3230);
         }

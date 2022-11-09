@@ -220,7 +220,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actor.draw = EnFall_Moon_Draw;
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
-                if (!(gSaveContext.save.weekEventReg[25] & 2)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
                     Actor_Kill(&this->actor);
                 }
                 break;
@@ -229,7 +229,7 @@ void EnFall_Setup(EnFall* this, PlayState* play) {
                 this->actionFunc = EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
-                if (gSaveContext.save.weekEventReg[25] & 2) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
                     Actor_Kill(&this->actor);
                 }
                 break;
@@ -326,7 +326,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
             case 2:
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-                    if (gSaveContext.save.weekEventReg[93] & 4) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_04)) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
                             ActorCutscene_Start(0xC, &this->actor);
                             sGiantsCutsceneState++;
@@ -335,7 +335,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                         }
                     } else if (ActorCutscene_GetCanPlayNext(0xB)) {
                         ActorCutscene_Start(0xB, &this->actor);
-                        gSaveContext.save.weekEventReg[93] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_93_04);
                         sGiantsCutsceneState++;
                     } else {
                         ActorCutscene_SetIntentToPlay(0xB);
@@ -518,8 +518,8 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
     if (this->actor.draw != NULL) {
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
-            gSaveContext.save.weekEventReg[74] |= 0x80;
-            gSaveContext.save.weekEventReg[74] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_74_80);
+            SET_WEEKEVENTREG(WEEKEVENTREG_74_20);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
