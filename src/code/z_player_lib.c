@@ -3404,17 +3404,6 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
     Player* player = (Player*)actor;
     Vec2f* temp_s0_4;
     MtxF sp230;
-    Vec3f* temp_s0_7;
-    Vec3f* var_a0;
-    Actor* sp224;
-    s32 sp154;
-    Vec3s* temp_s1;
-    f32 temp_fv0;
-    s32 pad;
-    s32 temp_a0;
-    s32 temp_v1_3;
-    s32 temp_v1_5;
-    Actor* heldActor;
 
     if (*dList2 != NULL) {
         Matrix_MultZero(sPlayerCurBodyPartPos);
@@ -3429,8 +3418,11 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
 
         if (player->actor.scale.y >= 0.0f) {
+            Actor* heldActor;
+
             if (!Player_IsHoldingHookshot(player) && ((heldActor = player->heldActor) != NULL)) {
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->transformation != PLAYER_FORM_DEKU)) {
+                    Vec3s* temp_s1;
                     Vec3f* var_a0 = &D_801C0D60;
 
                     if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -3467,6 +3459,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
+        Actor* sp224;
+
         sp224 = player->heldActor;
 
         if (*dList1 != NULL) {
@@ -3477,6 +3471,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 Matrix_Translate(D_801C0D98.x, D_801C0D98.y, D_801C0D98.z, MTXMODE_APPLY);
                 if ((player->stateFlags3 & PLAYER_STATE3_40) && (player->unk_B28 >= 0) && (player->unk_ACC < 0xB)) {
                     Vec3f sp20C;
+                    f32 temp_fv0;
+                    s32 pad;
 
                     Matrix_MultZero(&sp20C);
                     temp_fv0 = Math_Vec3f_DistXYZ(sPlayerCurBodyPartPos, &sp20C);
@@ -3500,7 +3496,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 Matrix_Pop();
 
                 CLOSE_DISPS(play->state.gfxCtx);
-            } else if (&gPlayerAnim_pg_punchB == player->skelAnime.animation) {
+            } else if (player->skelAnime.animation == &gPlayerAnim_pg_punchB) {
                 func_80127488(play, player, D_801C07AC[(s32)player->skelAnime.curFrame]);
             } else {
                 func_801271B0(play, player, 1);
@@ -3558,6 +3554,9 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         func_80126BD0(play, player, 1);
     } else if (limbIndex == PLAYER_LIMB_TORSO) {
         if (player->transformation == PLAYER_FORM_GORON) {
+            s32 temp_a0;
+            s32 temp_v1_3;
+
             temp_a0 = player->skelAnime.animation == &gPlayerAnim_pg_gakkistart;
             temp_v1_3 = player->skelAnime.animation == &gPlayerAnim_pg_gakkiwait;
             if ((((temp_a0 != 0)) || (temp_v1_3 != 0) || (player->skelAnime.animation == &gPlayerAnim_pg_gakkiplay))) {
@@ -3569,6 +3568,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                 if (temp_v1_3 != 0) {
                     f32* var_v0 = player->unk_B10;
+
                     for (i = 0; i < 5; i++) {
                         func_80124618(D_801C0510, *var_v0, &sp178[i]);
                         var_v0 += 1;
@@ -3607,13 +3607,15 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_HEAD) {
-        if ((*dList1 != NULL) && (((void)0, player->currentMask) != PLAYER_MASK_NONE) &&
+        if (((*dList1 != NULL) && ((((void)0, player->currentMask)) != ((0, PLAYER_MASK_NONE)))) &&
             (((player->transformation == PLAYER_FORM_HUMAN) &&
-              ((player->skelAnime.animation != &gPlayerAnim_cl_setmask) || (player->skelAnime.curFrame >= 12.0f))) ||
-             ((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY) &&
-              ((player->transformation + PLAYER_MASK_FIERCE_DEITY) != player->currentMask) &&
+              ((player->skelAnime.animation != (&gPlayerAnim_cl_setmask)) || (player->skelAnime.curFrame >= 12.0f))) ||
+             ((((player->transformation != PLAYER_FORM_HUMAN) && (player->currentMask >= PLAYER_MASK_FIERCE_DEITY)) &&
+               ((player->transformation + PLAYER_MASK_FIERCE_DEITY) != player->currentMask)) &&
               (player->skelAnime.curFrame >= 10.0f)))) {
-            if (func_80127438(play, player, ((void)0, player->currentMask))) {
+            if (func_80127438(play, player, player->currentMask)) {
+                s32 sp154;
+
                 sp154 = ((void)0, player->currentMask) - 1;
 
                 OPEN_DISPS(play->state.gfxCtx);
@@ -3667,7 +3669,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                 CLOSE_DISPS(play->state.gfxCtx);
             } else {
-            label:
+                s32 temp_v1_5;
+
                 temp_v1_5 = player->skelAnime.animation == &gPlayerAnim_pn_gakkistart;
                 if ((temp_v1_5 != 0) || (player->skelAnime.animation == &gPlayerAnim_pn_gakkiplay) ||
                     (player->skelAnime.animation == &gPlayerAnim_dl_kokeru)) {
@@ -3716,11 +3719,18 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                     for (i = 0; i < 5; i++) {
                         Matrix_Push();
-                        //goto dummy_label_845302; dummy_label_845302: ;
+                        // goto dummy_label_845302; dummy_label_845302: ;
 
                         Matrix_Scale(spF0[i].x, spF0[i].y, spF0[i].z, MTXMODE_APPLY);
                         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        //! FAKE (yes, all of them are required)
+                        if (1) {}
+                        if (1) {}
+                        if (1) {}
+                        if (1) {}
+                        if (1) {}
+                        if (1) {}
                         gSPDisplayList(POLY_OPA_DISP++, D_801C0E2C[i]);
 
                         Matrix_Pop();
@@ -3732,6 +3742,8 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
         }
 
         if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->unk_AE8 != 0)) {
+            Vec3f* temp_s0_7;
+
             temp_s0_7 = &D_801C0E40[player->transformation];
 
             OPEN_DISPS(play->state.gfxCtx);
