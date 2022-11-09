@@ -1987,7 +1987,7 @@ void Scene_HeaderCmdMiniMapCompassInfo(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdAnimatedMaterials(PlayState* play, SceneCmd* cmd);
 void Scene_SetExitFade(PlayState* play);
-s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* header);
+s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* sceneCmd);
 u16 Entrance_Create(s32 scene, s32 spawn, s32 layer);
 u16 Entrance_CreateFromSpawn(s32 spawn);
 void Scene_ExecuteDrawConfig(PlayState* play);
@@ -2381,7 +2381,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
 void func_80169EFC(GameState* thisx);
 void func_80169F78(GameState* thisx);
 void func_80169FDC(GameState* thisx);
-s32 func_80169FFC(GameState* thisx);
+s32 Play_CamIsNotFixed(GameState* thisx);
 s32 FrameAdvance_IsEnabled(GameState* thisx);
 s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw);
 s32 Play_IsUnderwater(PlayState* this, Vec3f* pos);

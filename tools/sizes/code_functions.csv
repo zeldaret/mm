@@ -2546,7 +2546,7 @@ asm/non_matchings/code/z_play/func_80169ECC.s,func_80169ECC,0x80169ECC,0xC
 asm/non_matchings/code/z_play/func_80169EFC.s,func_80169EFC,0x80169EFC,0x1F
 asm/non_matchings/code/z_play/func_80169F78.s,func_80169F78,0x80169F78,0x19
 asm/non_matchings/code/z_play/func_80169FDC.s,func_80169FDC,0x80169FDC,0x8
-asm/non_matchings/code/z_play/func_80169FFC.s,func_80169FFC,0x80169FFC,0x8
+asm/non_matchings/code/z_play/Play_CamIsNotFixed.s,Play_CamIsNotFixed,0x80169FFC,0x8
 asm/non_matchings/code/z_play/FrameAdvance_IsEnabled.s,FrameAdvance_IsEnabled,0x8016A01C,0x4
 asm/non_matchings/code/z_play/func_8016A02C.s,func_8016A02C,0x8016A02C,0x20
 asm/non_matchings/code/z_play/Play_IsUnderwater.s,Play_IsUnderwater,0x8016A0AC,0x2F

@@ -535,57 +535,58 @@ void Scene_SetExitFade(PlayState* play) {
     play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
+static void (*sceneCmdHandlers[])(PlayState*, SceneCmd*) = {
+    Scene_HeaderCmdSpawnList,
+    Scene_HeaderCmdActorList,
+    Scene_HeaderCmdActorCutsceneCamList,
+    Scene_HeaderCmdColHeader,
+    Scene_HeaderCmdRoomList,
+    Scene_HeaderCmdWindSettings,
+    Scene_HeaderCmdEntranceList,
+    Scene_HeaderCmdSpecialFiles,
+    Scene_HeaderCmdRoomBehavior,
+    Scene_HeaderCmd09,
+    Scene_HeaderCmdMesh,
+    Scene_HeaderCmdObjectList,
+    Scene_HeaderCmdLightList,
+    Scene_HeaderCmdPathList,
+    Scene_HeaderCmdTransiActorList,
+    Scene_HeaderCmdEnvLightSettings,
+    Scene_HeaderCmdTimeSettings,
+    Scene_HeaderCmdSkyboxSettings,
+    Scene_HeaderCmdSkyboxDisables,
+    Scene_HeaderCmdExitList,
+    NULL,
+    Scene_HeaderCmdSoundSettings,
+    Scene_HeaderCmdEchoSetting,
+    Scene_HeaderCmdCutsceneList,
+    Scene_HeaderCmdAltHeaderList,
+    Scene_HeaderCmdSetRegionVisitedFlag,
+    Scene_HeaderCmdAnimatedMaterials,
+    Scene_HeaderCmdActorCutsceneList,
+    Scene_HeaderCmdMiniMap,
+    Scene_HeaderCmd1D,
+    Scene_HeaderCmdMiniMapCompassInfo,
+};
+
 /**
  * Executes all of the commands in a scene or room header.
  */
-s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* header) {
-    static void (*sceneCmdHandlers[])(PlayState*, SceneCmd*) = {
-        Scene_HeaderCmdSpawnList,
-        Scene_HeaderCmdActorList,
-        Scene_HeaderCmdActorCutsceneCamList,
-        Scene_HeaderCmdColHeader,
-        Scene_HeaderCmdRoomList,
-        Scene_HeaderCmdWindSettings,
-        Scene_HeaderCmdEntranceList,
-        Scene_HeaderCmdSpecialFiles,
-        Scene_HeaderCmdRoomBehavior,
-        Scene_HeaderCmd09,
-        Scene_HeaderCmdMesh,
-        Scene_HeaderCmdObjectList,
-        Scene_HeaderCmdLightList,
-        Scene_HeaderCmdPathList,
-        Scene_HeaderCmdTransiActorList,
-        Scene_HeaderCmdEnvLightSettings,
-        Scene_HeaderCmdTimeSettings,
-        Scene_HeaderCmdSkyboxSettings,
-        Scene_HeaderCmdSkyboxDisables,
-        Scene_HeaderCmdExitList,
-        NULL,
-        Scene_HeaderCmdSoundSettings,
-        Scene_HeaderCmdEchoSetting,
-        Scene_HeaderCmdCutsceneList,
-        Scene_HeaderCmdAltHeaderList,
-        Scene_HeaderCmdSetRegionVisitedFlag,
-        Scene_HeaderCmdAnimatedMaterials,
-        Scene_HeaderCmdActorCutsceneList,
-        Scene_HeaderCmdMiniMap,
-        Scene_HeaderCmd1D,
-        Scene_HeaderCmdMiniMapCompassInfo,
-    };
+s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* sceneCmd) {
     u32 cmdId;
 
     while (true) {
-        cmdId = header->base.code;
+        cmdId = sceneCmd->base.code;
 
         if (cmdId == SCENE_CMD_ID_END) {
             break;
         }
 
         if (cmdId < SCENE_CMD_MAX) {
-            sceneCmdHandlers[cmdId](play, header);
+            sceneCmdHandlers[cmdId](play, sceneCmd);
         }
 
-        header++;
+        sceneCmd++;
     }
 
     return 0;

@@ -426,11 +426,10 @@ void func_80169FDC(GameState* thisx) {
     func_80169F78(thisx);
 }
 
-// Used by Kankyo to determine how to change the lighting, e.g. for game over.
-s32 func_80169FFC(GameState* thisx) {
+s32 Play_CamIsNotFixed(GameState* thisx) {
     PlayState* this = (PlayState*)thisx;
 
-    return this->roomCtx.curRoom.roomShape->normal.base.type != 1;
+    return this->roomCtx.curRoom.roomShape->base.type != ROOM_SHAPE_TYPE_IMAGE;
 }
 
 s32 FrameAdvance_IsEnabled(GameState* thisx) {

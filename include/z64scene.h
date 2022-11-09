@@ -225,8 +225,8 @@ typedef enum {
 } RoomShapeType;
 
 typedef struct {
-    /* 0x00 */ u8 type;
-} RoomShapeBase; // size = 0x01
+    /* 0x0 */ u8 type;
+} RoomShapeBase; // size = 0x1
 
 typedef struct {
     /* 0x0 */ Gfx* opa;
@@ -246,10 +246,10 @@ typedef enum {
 } RoomShapeImageAmountType;
 
 typedef struct {
-    /* 0x00 */ RoomShapeBase base;
-    /* 0x01 */ u8 amountType; // RoomShapeImageAmountType
-    /* 0x04 */ RoomShapeDListsEntry* entry;
-} RoomShapeImageBase; // size = 0x08
+    /* 0x0 */ RoomShapeBase base;
+    /* 0x1 */ u8 amountType; // RoomShapeImageAmountType
+    /* 0x4 */ RoomShapeDListsEntry* entry;
+} RoomShapeImageBase; // size = 0x8
 
 typedef struct {
     /* 0x00 */ RoomShapeImageBase base;
@@ -367,11 +367,11 @@ typedef struct {
     struct {
         s8 room;    // Room to switch to
         s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
-    } /* 0x0 */ sides[2]; // 0 = front, 1 = back
-    /* 0x4 */ s16   id;
-    /* 0x6 */ Vec3s pos;
-    /* 0xC */ s16   rotY;
-    /* 0xE */ u16   params;
+    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
+    /* 0x04 */ s16   id;
+    /* 0x06 */ Vec3s pos;
+    /* 0x0C */ s16   rotY;
+    /* 0x0E */ u16   params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
@@ -380,10 +380,10 @@ typedef struct {
 } DoorContext; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ s16 id;
-    /* 0x2 */ Vec3s pos;
-    /* 0x8 */ Vec3s rot;
-    /* 0xE */ s16 params;
+    /* 0x00 */ s16 id;
+    /* 0x02 */ Vec3s pos;
+    /* 0x08 */ Vec3s rot;
+    /* 0x0E */ s16 params;
 } ActorEntry; // size = 0x10
 
 typedef struct {

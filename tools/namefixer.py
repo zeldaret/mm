@@ -472,6 +472,7 @@ wordReplace = {
     "func_800DFC90": "Camera_GetCamDir",
     "func_800DFD04": "Camera_AddQuake",
     "func_800DFFAC": "Camera_ChangeDoorCam",
+    "func_80169FFC": "Play_CamIsNotFixed",
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_ChangeCameraStatus",
