@@ -114,7 +114,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnZod_PlayDrumsSequence;
 
     switch (ENZOD_GET_TYPE(thisx)) {
-        case 1:
+        case ENZOD_TYPE_1:
             if (gSaveContext.save.weekEventReg[78] & 1) {
                 this->actionFunc = func_80BAFDB4;
                 EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
@@ -130,7 +130,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case 2:
+        case ENZOD_TYPE_2:
             this->actionFunc = func_80BAFF14;
             this->fogNear = -1;
             this->stateFlags |= TIJO_STATE_2;
@@ -181,8 +181,9 @@ s32 EnZod_PlayerIsFacingTijo(EnZod* this, PlayState* play) {
     if ((this->actor.playerHeightRel < 30.0f) && (this->actor.xzDistToPlayer < 200.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
+    } else {
+        return false;
     }
-    return false;
 }
 
 void EnZod_ChangeAnim(EnZod* this, s16 nextAnimIndex, u8 mode) {
@@ -195,7 +196,7 @@ void EnZod_ChangeAnim(EnZod* this, s16 nextAnimIndex, u8 mode) {
     this->nextAnimIndex = nextAnimIndex;
 }
 
-void EnZod_UpdateAnimations(EnZod* this) {
+void EnZod_UpdateAnimation(EnZod* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->nextAnimIndex == this->curAnimIndex) {
             EnZod_ChangeAnim(this, this->curAnimIndex, ANIMMODE_ONCE);
@@ -220,7 +221,7 @@ void EnZod_UpdateAnimations(EnZod* this) {
     }
 }
 
-void EnZod_UpdateDrumVels(EnZod* this) {
+void EnZod_UpdateInstruments(EnZod* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->cymbalRots); i++) {
@@ -305,7 +306,7 @@ void EnZod_UpdateDrumVels(EnZod* this) {
 }
 
 void func_80BAF7CC(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x121F)) {
@@ -370,7 +371,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     s32 pad;
     Vec3f seqPos;
 
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnZod_HandleRoomConversation(this, play);
@@ -411,7 +412,7 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
 void func_80BAFADC(EnZod* this, PlayState* play) {
     u8 talkState;
 
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     talkState = Message_GetState(&play->msgCtx);
     if (talkState != TEXT_STATE_CLOSING) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -426,7 +427,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFB84(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
@@ -440,7 +441,7 @@ void EnZod_DoNothing(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Rehearse(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
@@ -459,7 +460,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
 }
 
 void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
@@ -473,7 +474,7 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFDB4(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_Start(this->actor.cutscene, &this->actor);
         func_800B7298(play, NULL, 0x44);
@@ -485,7 +486,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFE34(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     if (this->fogNear < 799) {
         this->fogNear += 200;
     } else {
@@ -508,7 +509,7 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFF14(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimations(this);
+    EnZod_UpdateAnimation(this);
     if (Cutscene_CheckActorAction(play, 0x203) &&
         (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 4)) {
         this->actionFunc = func_80BAFE34;
@@ -516,8 +517,8 @@ void func_80BAFF14(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Update(Actor* thisx, PlayState* play) {
-    EnZod* this = THIS;
     s32 pad;
+    EnZod* this = THIS;
     Vec3s torsoRot;
 
     Actor_MoveWithGravity(&this->actor);
@@ -525,7 +526,7 @@ void EnZod_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
     this->actionFunc(this, play);
-    EnZod_UpdateDrumVels(this);
+    EnZod_UpdateInstruments(this);
 
     if (DECR(this->blinkTimer) == 0) {
         this->blinkTimer = Rand_S16Offset(60, 60);

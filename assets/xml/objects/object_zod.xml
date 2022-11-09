@@ -10,10 +10,10 @@
         <!-- Tijo DisplayLists -->
         <DList Name="gTijoLowerBodyChairDL" Offset="0x39A0" />
         <DList Name="gTijoUpperBodyDL" Offset="0x3DA0" />
-        <DList Name="gTijoUpperRightArmDL" Offset="0x4018" />
+        <DList Name="gTijoRightForearmDL" Offset="0x4018" />
         <DList Name="gTijoLowerRightArmDL" Offset="0x4130" />
         <DList Name="gTijoRightHandDL" Offset="0x4258" />
-        <DList Name="gTijoUpperLeftArmDL" Offset="0x43E8" />
+        <DList Name="gTijoLeftForearmDL" Offset="0x43E8" />
         <DList Name="gTijoLowerLeftArmDL" Offset="0x4500" />
         <DList Name="gTijoLeftHandDL" Offset="0x4628" />
         <DList Name="gTijoHeadDL" Offset="0x47B8" />
@@ -30,7 +30,7 @@
         <Texture Name="gTijoMouthClosedTex" OutName="tijo_mouth_closed" Format="rgba16" Width="32" Height="32" Offset="0x7650" />
         <Texture Name="gTijoMouthOpenTex" OutName="tijo_mouth_open" Format="rgba16" Width="32" Height="32" Offset="0x7E50" />
 
-        <!-- <Blob Name="object_zod_Blob_008650" Size="0x2800" Offset="0x8650" /> -->
+        <!-- <Blob Name="object_zod_Blob_008650" Size="0x1E10" Offset="0x8650" /> -->
 
         <!-- Tijo Drums DisplayLists /> -->
         <DList Name="gTijoDrumFrameDL" Offset="0xA460" />
@@ -56,10 +56,10 @@
         <Limb Name="gTijoLowerBodyChairLimb" Type="Standard" EnumName="TIJO_LIMB_BODY_CHAIR" Offset="0xD5C8" />
         <Limb Name="gTijoUpperBodyLimb" Type="Standard" EnumName="TIJO_LIMB_UPPER_BODY" Offset="0xD5D4" />
         <Limb Name="gTijoHeadLimb" Type="Standard" EnumName="TIJO_LIMB_HEAD" Offset="0xD5E0" />
-        <Limb Name="gTijoUpperLeftArmLimb" Type="Standard" EnumName="TIJO_LIMB_UPPER_LEFT_ARM" Offset="0xD5EC" />
+        <Limb Name="gTijoLeftForearmLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_FOREARM" Offset="0xD5EC" />
         <Limb Name="gTijoLowerLeftArmLimb" Type="Standard" EnumName="TIJO_LIMB_LOWER_LEFT_ARM" Offset="0xD5F8" />
         <Limb Name="gTijoLeftHandLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_HAND_LIMB" Offset="0xD604" />
-        <Limb Name="gTijoUpperRightArmLimb" Type="Standard" EnumName="TIJO_LIMB_UPPER_RIGHT_ARM" Offset="0xD610" />
+        <Limb Name="gTijoRightForearmLimb" Type="Standard" EnumName="TIJO_LIMB_RIGHT_FOREARM" Offset="0xD610" />
         <Limb Name="gTijoLowerRightArmLimb" Type="Standard" EnumName="TIJO_LIMB_LOWER_RIGHT_ARM" Offset="0xD61C" />
         <Limb Name="gTijoRightHandLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_RIGHT_LIMB" Offset="0xD628" />
 
