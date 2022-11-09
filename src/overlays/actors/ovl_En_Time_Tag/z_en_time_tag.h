@@ -46,7 +46,7 @@ typedef enum {
     /*  3 */ TIMETAG_KICKOUT_TEXT_HONEY_AND_DARLING, // need some alone time
     /*  4 */ TIMETAG_KICKOUT_TEXT_LOTTERY, // business is finished
     /*  5 */ TIMETAG_KICKOUT_TEXT_BARN_DAY, // the lady needs a break
-    /*  6 */ TIMETAG_KICKOUT_TEXT_DEFAULT, // (Many scenes) place is about to close
+    /*  6 */ TIMETAG_KICKOUT_TEXT_GENERIC, // (Many scenes) place is about to close
     /*  7 */ TIMETAG_KICKOUT_TEXT_BARN_NIGHT, // they came
     /*  8 */ TIMETAG_KICKOUT_TEXT_TRADING_POST, // we have to close shop
     /*  9 */ TIMETAG_KICKOUT_TEXT_MILK_BAR, // I have to get ready for business
