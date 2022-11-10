@@ -33,9 +33,9 @@ typedef struct EnZod {
 } EnZod; // size = 0x2A0
 
 typedef enum {
-    /* 0xF */ ENZOD_TYPE_0xF = 0xF,
     /* 1 */ ENZOD_TYPE_1 = 1,
     /* 2 */ ENZOD_TYPE_2,
+    /* 0xF */ ENZOD_TYPE_0xF = 0xF,
 } EnZodTypes;
 
 #endif // Z_EN_ZOD_H
