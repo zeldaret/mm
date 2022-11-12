@@ -1282,9 +1282,9 @@ asm/non_matchings/code/z_kankyo/func_800FDAF8.s,func_800FDAF8,0x800FDAF8,0x67
 asm/non_matchings/code/z_kankyo/func_800FDC94.s,func_800FDC94,0x800FDC94,0x1BF
 asm/non_matchings/code/z_kankyo/func_800FE390.s,func_800FE390,0x800FE390,0x14
 asm/non_matchings/code/z_kankyo/func_800FE3E0.s,func_800FE3E0,0x800FE3E0,0x29
-asm/non_matchings/code/z_kankyo/func_800FE484.s,func_800FE484,0x800FE484,0x5
-asm/non_matchings/code/z_kankyo/func_800FE498.s,func_800FE498,0x800FE498,0x4
-asm/non_matchings/code/z_kankyo/func_800FE4A8.s,func_800FE4A8,0x800FE4A8,0x4
+asm/non_matchings/code/z_kankyo/Environment_StopTime.s,Environment_StopTime,0x800FE484,0x5
+asm/non_matchings/code/z_kankyo/Environment_StartTime.s,Environment_StartTime,0x800FE498,0x4
+asm/non_matchings/code/z_kankyo/Environment_IsTimeStopped.s,Environment_IsTimeStopped,0x800FE4A8,0x4
 asm/non_matchings/code/z_kankyo/func_800FE4B8.s,func_800FE4B8,0x800FE4B8,0x36
 asm/non_matchings/code/z_kankyo/func_800FE590.s,func_800FE590,0x800FE590,0x10
 asm/non_matchings/code/z_kankyo/func_800FE5D0.s,func_800FE5D0,0x800FE5D0,0x10
@@ -1613,7 +1613,7 @@ asm/non_matchings/code/z_parameter/Interface_StartPostmanTimer.s,Interface_Start
 asm/non_matchings/code/z_parameter/Interface_StartGoronRaceTimer.s,Interface_StartGoronRaceTimer,0x8010EB50,0x14
 asm/non_matchings/code/z_parameter/Interface_StartBottleTimer.s,Interface_StartBottleTimer,0x8010EBA0,0x2D
 asm/non_matchings/code/z_parameter/Interface_GetCompressedTimerDigits.s,Interface_GetCompressedTimerDigits,0x8010EC54,0x88
-asm/non_matchings/code/z_parameter/func_8010EE74.s,func_8010EE74,0x8010EE74,0x3D
+asm/non_matchings/code/z_parameter/Interface_NewDay.s,Interface_NewDay,0x8010EE74,0x3D
 asm/non_matchings/code/z_parameter/Interface_SetHudVisibility.s,Interface_SetHudVisibility,0x8010EF68,0xD
 asm/non_matchings/code/z_parameter/Interface_UpdateButtonAlphasByStatus.s,Interface_UpdateButtonAlphasByStatus,0x8010EF9C,0x4E
 asm/non_matchings/code/z_parameter/Interface_UpdateButtonAlphas.s,Interface_UpdateButtonAlphas,0x8010F0D4,0x35
@@ -1664,7 +1664,7 @@ asm/non_matchings/code/z_parameter/func_80118084.s,func_80118084,0x80118084,0x20
 asm/non_matchings/code/z_parameter/func_80118890.s,func_80118890,0x80118890,0xC5
 asm/non_matchings/code/z_parameter/func_80118BA4.s,func_80118BA4,0x80118BA4,0x123
 asm/non_matchings/code/z_parameter/func_80119030.s,func_80119030,0x80119030,0x178
-asm/non_matchings/code/z_parameter/func_80119610.s,func_80119610,0x80119610,0x7B4
+asm/non_matchings/code/z_parameter/Interface_DrawClock.s,Interface_DrawClock,0x80119610,0x7B4
 asm/non_matchings/code/z_parameter/func_8011B4E0.s,func_8011B4E0,0x8011B4E0,0x38
 asm/non_matchings/code/z_parameter/func_8011B5C0.s,func_8011B5C0,0x8011B5C0,0x108
 asm/non_matchings/code/z_parameter/func_8011B9E0.s,func_8011B9E0,0x8011B9E0,0x164

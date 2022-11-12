@@ -654,7 +654,7 @@ void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
 void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, sSchedule, &scheduleOutput) ||
         ((this->scheduleResult != scheduleOutput.result) &&

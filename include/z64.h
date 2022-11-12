@@ -583,10 +583,8 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ u16 unk_0;
-    /* 0x02 */ u16 timeIncrement;
-    /* 0x04 */ f32 unk_4;
-    /* 0x08 */ f32 unk_8;
-    /* 0x0C */ f32 unk_C;
+    /* 0x02 */ u16 sceneTimeSpeed;
+    /* 0x04 */ Vec3f sunPos;
     /* 0x10 */ u8 unk_10;
     /* 0x11 */ u8 unk_11;
     /* 0x12 */ u8 unk_12;

@@ -239,7 +239,7 @@ typedef struct Save {
     /* 0x000C */ u16 time;                              // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
     /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
-    /* 0x0014 */ s32 daySpeed;                          // "change_zelda_time"
+    /* 0x0014 */ s32 timeSpeedOffset;                   // "change_zelda_time"
     /* 0x0018 */ s32 day;                               // "totalday"
     /* 0x001C */ s32 daysElapsed;                       // "eventday"
     /* 0x0020 */ u8 playerForm;                         // "player_character"

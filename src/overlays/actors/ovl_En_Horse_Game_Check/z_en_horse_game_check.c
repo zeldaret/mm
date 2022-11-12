@@ -140,7 +140,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, PlayState* play2) {
     Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_FREE0);
     Play_SetCameraAtEye(play, CAM_ID_MAIN, &mainCamAt, &mainCamEye);
     Play_SetCameraFov(play, CAM_ID_MAIN, 45.0f);
-    func_800FE484();
+    Environment_StopTime();
     return false;
 }
 

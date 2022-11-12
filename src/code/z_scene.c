@@ -378,30 +378,30 @@ void Scene_HeaderCmdSkyboxDisables(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x10: Time Settings
 void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
-    if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
+    if ((cmd->timeSettings.hour != 0xFF) && (cmd->timeSettings.min != 0xFF)) {
         gSaveContext.skyboxTime = gSaveContext.save.time =
-            (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
+            CLOCK_TIME_ALT2_F(cmd->timeSettings.hour, cmd->timeSettings.min);
     }
 
-    if (cmd->timeSettings.unk6 != 0xFF) {
-        play->envCtx.timeIncrement = cmd->timeSettings.unk6;
+    if (cmd->timeSettings.timeSpeed != 0xFF) {
+        play->envCtx.sceneTimeSpeed = cmd->timeSettings.timeSpeed;
     } else {
-        play->envCtx.timeIncrement = 0;
+        play->envCtx.sceneTimeSpeed = 0;
     }
 
-    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.timeIncrement != 0)) {
-        play->envCtx.timeIncrement = 5;
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
+        play->envCtx.sceneTimeSpeed = 5;
     }
 
     if (gSaveContext.sunsSongState == SUNSSONG_INACTIVE) {
-        REG(15) = play->envCtx.timeIncrement;
+        R_TIME_SPEED = play->envCtx.sceneTimeSpeed;
     }
 
-    play->envCtx.unk_4 = -(Math_SinS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
-    play->envCtx.unk_8 = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 120.0f) * 25.0f;
-    play->envCtx.unk_C = (Math_CosS(((void)0, gSaveContext.save.time) - 0x8000) * 20.0f) * 25.0f;
+    play->envCtx.sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    play->envCtx.sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
-    if ((play->envCtx.timeIncrement == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
+    if ((play->envCtx.sceneTimeSpeed == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
         gSaveContext.skyboxTime = gSaveContext.save.time;
 
         if ((gSaveContext.skyboxTime >= CLOCK_TIME(4, 0)) && (gSaveContext.skyboxTime < CLOCK_TIME(6, 30))) {
