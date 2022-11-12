@@ -553,8 +553,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
         var_t0 = (u8)msgCtx->decodedBuffer.schar[i];
         switch (var_t0) { /* switch 1 */
             case 0x0:     /* switch 2 */
-                if ((play->pauseCtx.bombersNotebookOpen != 0) ||
-                    (msgCtx->textBoxType == 0xD)) {
+                if ((play->pauseCtx.bombersNotebookOpen) || (msgCtx->textBoxType == 0xD)) {
                     msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
                 } else if (msgCtx->textBoxType == 5) {
                     msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
@@ -589,16 +588,16 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         }
                     }
 
-                    msgCtx->textColorR = CLAMP_MIN(D_801D07DC[var_t0 - 1+1].x + msgCtx->unk120D4, 0);
+                    msgCtx->textColorR = CLAMP_MIN(D_801D07DC[var_t0 - 1 + 1].x + msgCtx->unk120D4, 0);
 
-                    if (D_801D07DC[var_t0 - 1+1].y + msgCtx->unk120D4 >= 0xFF) {
-                        msgCtx->textColorG = D_801D07DC[var_t0 - 1+1].y;
+                    if (D_801D07DC[var_t0 - 1 + 1].y + msgCtx->unk120D4 >= 0xFF) {
+                        msgCtx->textColorG = D_801D07DC[var_t0 - 1 + 1].y;
                     } else {
-                        msgCtx->textColorG = D_801D07DC[var_t0 - 1+1].y + msgCtx->unk120D4;
+                        msgCtx->textColorG = D_801D07DC[var_t0 - 1 + 1].y + msgCtx->unk120D4;
                     }
 
-                    msgCtx->textColorB = CLAMP_MIN(D_801D07DC[var_t0 - 1+1].z + msgCtx->unk120D4, 0);
-                } else if (play->pauseCtx.bombersNotebookOpen != 0) {
+                    msgCtx->textColorB = CLAMP_MIN(D_801D07DC[var_t0 - 1 + 1].z + msgCtx->unk120D4, 0);
+                } else if (play->pauseCtx.bombersNotebookOpen) {
                     msgCtx->textColorR = D_801D089C[(s16)(var_t0 - 1)].x;
                     msgCtx->textColorG = D_801D089C[(s16)(var_t0 - 1)].y;
                     msgCtx->textColorB = D_801D089C[(s16)(var_t0 - 1)].z;
@@ -679,9 +678,13 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     var_v1 = i;
                     if ((msgCtx->msgMode == 6) || ((msgCtx->msgMode >= 0xA) && (msgCtx->msgMode < 0x27))) {
                         while (true) {
-                            //temp_v0_20 = msgCtx->decodedBuffer.schar[var_v1];
-                            if ((msgCtx->decodedBuffer.schar[var_v1] != 0x18) && (msgCtx->decodedBuffer.schar[var_v1] != 0x1A) && (msgCtx->decodedBuffer.schar[var_v1] != 0x19) &&
-                                (msgCtx->decodedBuffer.schar[var_v1] != 0xE0) && (msgCtx->decodedBuffer.schar[var_v1] != 0x10) && (msgCtx->decodedBuffer.schar[var_v1] != 0x12)) {
+                            // temp_v0_20 = msgCtx->decodedBuffer.schar[var_v1];
+                            if ((msgCtx->decodedBuffer.schar[var_v1] != 0x18) &&
+                                (msgCtx->decodedBuffer.schar[var_v1] != 0x1A) &&
+                                (msgCtx->decodedBuffer.schar[var_v1] != 0x19) &&
+                                (msgCtx->decodedBuffer.schar[var_v1] != 0xE0) &&
+                                (msgCtx->decodedBuffer.schar[var_v1] != 0x10) &&
+                                (msgCtx->decodedBuffer.schar[var_v1] != 0x12)) {
                                 var_v1++;
                                 continue;
                             }
@@ -699,8 +702,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
             case 0x1B: /* switch 2 */
                 if (msgCtx->msgMode == 6) {
-                    msgCtx->stateTimer = (msgCtx->decodedBuffer.schar[++i] << 8) |
-                                         msgCtx->decodedBuffer.schar[++i];
+                    msgCtx->stateTimer = (msgCtx->decodedBuffer.schar[++i] << 8) | msgCtx->decodedBuffer.schar[++i];
                     msgCtx->msgMode = 8;
                 }
                 *gfxP = gfx;
@@ -714,8 +716,8 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     } else {
                         msgCtx->textboxEndType = 0x50;
                     }
-                    msgCtx->stateTimer = ((u8)msgCtx->decodedBuffer.schar[++i] << 8) |
-                                         (u8)msgCtx->decodedBuffer.schar[++i];
+                    msgCtx->stateTimer =
+                        ((u8)msgCtx->decodedBuffer.schar[++i] << 8) | (u8)msgCtx->decodedBuffer.schar[++i];
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == 0) {
                         func_8011552C(play, 3);
@@ -728,8 +730,8 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 if (msgCtx->msgMode == 6) {
                     msgCtx->msgMode = 0x42;
                     msgCtx->textboxEndType = 0x52;
-                    msgCtx->stateTimer = ((u8)msgCtx->decodedBuffer.schar[++i] << 8) |
-                                         (u8)msgCtx->decodedBuffer.schar[++i];
+                    msgCtx->stateTimer =
+                        ((u8)msgCtx->decodedBuffer.schar[++i] << 8) | (u8)msgCtx->decodedBuffer.schar[++i];
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == 0) {
                         func_8011552C(play, 3);
@@ -741,8 +743,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case 0x1E: /* switch 2 */
                 if ((i + 1) == msgCtx->textDrawPos) {
                     if (msgCtx->msgMode == 6) {
-                        play_sound(
-                            (msgCtx->decodedBuffer.schar[i + 1] << 8) | msgCtx->decodedBuffer.schar[i + 2]);
+                        play_sound((msgCtx->decodedBuffer.schar[i + 1] << 8) | msgCtx->decodedBuffer.schar[i + 2]);
                     }
                 }
                 if ((i + 1) == msgCtx->textDrawPos) {
@@ -758,7 +759,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->textDelayTimer =
                         (msgCtx->decodedBuffer.schar[i + 1] << 8) | msgCtx->decodedBuffer.schar[i + 2];
                 }
-                i +=  2;
+                i += 2;
                 continue;
 
             case 0xA: /* switch 2 */
@@ -998,7 +999,6 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                                     (msgCtx->textPosX + 0xC0) << 2, (msgCtx->unk12012 + 0x30) << 2, G_TX_RENDERTILE, 0,
                                     0, 0x0400, 0x0400);
 
-            
                 // temp_t8_6 = gfx;
                 // gfx = temp_t8_6 + 8;
                 // temp_t8_6->words.w1 = 0x00000000;

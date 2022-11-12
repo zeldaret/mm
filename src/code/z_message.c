@@ -5,59 +5,65 @@
 #include "interface/parameter_static/parameter_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-#if 0
-
-s16 sOcarinaEffectActorIds[15] = {
-    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
-    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
-    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
-    ACTOR_OCEFF_WIPE,  ACTOR_OCEFF_WIPE7, // Song of Time Effect, Song of Healing Effect
-    ACTOR_OCEFF_WIPE2, ACTOR_OCEFF_WIPE6, // Epona's Song Effect, Song of Soaring Effect
-    ACTOR_OCEFF_STORM, ACTOR_OCEFF_SPOT,  // Song of Storms Effect II [?], Sun's Song Effect
-    ACTOR_OCEFF_WIPE, ACTOR_OCEFF_WIPE,   // Song of Time Effect, Song of Time Effect
-    ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
-};
-s32 sOcarinaEffectActorParams[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
-
-#endif
-
-extern s16 sTextboxHeight;
-extern s16 sTextboxTexWidth;
-extern s16 sTextboxTexHeight;
-extern f32 D_801CFDA4[];
-extern f32 D_801CFDC8[];
-extern s16 sTextboxWidth;
-
-extern s16 D_801CFF94[];
-
 extern u8 D_801C6A70;
-
-extern s16 D_801CFF70[];
-extern s16 D_801CFF7C[];
-extern s16 D_801CFF88[];
-
 extern s16 sOcarinaButtonIndexBufPos;
 extern s16 sOcarinaButtonIndexBufLen;
-
-extern s16 D_801CFC78[15];
-
-extern s16 D_801CFD10[][3];
-extern s16 D_801CFD1C[][3];
-extern s16 D_801CFD28;
-extern s16 D_801CFD2C;
-extern s16 D_801CFD30;
-extern s16 D_801CFD34;
-extern s16 D_801CFD38;
-extern s16 D_801CFD3C;
-extern s16 D_801CFD40;
-extern s16 D_801CFD44;
-
+extern s16 sLastPlayedSong;
+extern s16 sOcarinaButtonStepR;
+extern s16 sOcarinaButtonStepG;
+extern s16 sOcarinaButtonStepB;
+extern s16 sOcarinaButtonFlashTimer;
+extern s16 sOcarinaButtonFlashColorIndex;
+extern s16 D_801C6A94;
+extern u8 D_801C6A98[6][5];
+extern u16 D_801C6AB8[];
+extern u16 D_801C6B28[];
 extern MessageTableEntry D_801C6B98[];
 extern MessageTableEntry D_801CFB08[];
-extern s16 sOcarinaEffectActorIds[];
-extern u16 D_801C6B28[];
-extern u16 D_801C6AB8[];
-extern s32 sOcarinaEffectActorParams[];
+extern s16 D_801CFC78[15];
+extern u8 sOcarinaButtonIndexBuf[];
+extern s16 sOcarinaButtonAlphaValues[];
+extern s16 gOcarinaSongItemMap[];
+
+#if 0
+u8 D_801C6A70 = 0;
+s16 sOcarinaButtonIndexBufPos = 0;
+s16 sOcarinaButtonIndexBufLen = 0;
+s16 sLastPlayedSong = 0xFF;
+s16 sOcarinaButtonStepR = 0;
+s16 sOcarinaButtonStepG = 0;
+s16 sOcarinaButtonStepB = 0;
+s16 sOcarinaButtonFlashTimer = 12;
+s16 sOcarinaButtonFlashColorIndex = 1;
+s16 D_801C6A94 = 0;
+
+u8 D_801C6A98[][5] = {
+    { 0, 0, 0xFF, 0, 0 },    { 0, 0, 0xFF, 0, 0 }, { 0, 0xFF, 0xFF, 0, 0 },
+    { 0, 0xFF, 0xFF, 0, 0 }, { 0, 0, 0xFF, 0, 0 }, { 0, 0, 0xFF, 0, 0 },
+};
+
+u16 D_801C6AB8[] = {
+    0x2147, 0x2134, 0x2135, 0x2136, 0x2137, 0x2138, 0x2139, 0x213A, 0x213B, 0x213C, 0x213D, 0x213E, 0x213F, 0x2140,
+    0x2141, 0x2142, 0x2143, 0x2144, 0x2145, 0x2146, 0x2152, 0x2153, 0x2154, 0,      0x2156, 0x2157, 0x2158, 0x2159,
+    0x215A, 0x215B, 0,      0x215D, 0,      0x215F, 0x2160, 0x2161, 0,      0x2163, 0x2164, 0x2165, 0x2166, 0x2167,
+    0x2168, 0x2169, 0x216A, 0x216B, 0x216C, 0x216D, 0x216E, 0x216F, 0x2170, 0x2171, 0x2172, 0x2173, 0x2174, 0,
+};
+u16 D_801C6B28[] = {
+    0x4408, 0x4201, 0x4202, 0x4204, 0x4208, 0x4210, 0x4220, 0x4240, 0x4280, 0x4301, 0x4302, 0x4304, 0x4308, 0x4310,
+    0x4320, 0x4340, 0x4380, 0x4401, 0x4402, 0x4404, 0x4410, 0x4420, 0x4440, 0x4480, 0x4501, 0x4502, 0x4504, 0x4508,
+    0x4510, 0x4520, 0x4540, 0x4580, 0x4601, 0x4602, 0x4604, 0x4608, 0x4610, 0x4620, 0x4640, 0x4680, 0x4701, 0x4702,
+    0x4704, 0x4708, 0x4710, 0x4720, 0x4740, 0x4780, 0x4801, 0x4802, 0x4804, 0x4808, 0x4810, 0x4820, 0x4840, 0,
+};
+
+// TODO: Scripts
+// Include message tables D_801C6B98 and D_801CFB08
+#include "src/code/z_message_tables.inc.c"
+
+s16 D_801CFC78[] = { 0, 1, 3, 2, 14, 14, 0, 14, 0, 0, 0, 14, 14, 4, 14 };
+u8 sOcarinaButtonIndexBuf[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+s16 sOcarinaButtonAlphaValues[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+s16 gOcarinaSongItemMap[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0 };
+#endif
 
 // bss
 
@@ -152,12 +158,17 @@ void Message_CloseTextbox(PlayState* play) {
     }
 }
 
-extern s16 sIconPrimColors[][3];
-extern s16 sIconEnvColors[][3];
-
 // Matching, in-function data
 #ifdef NON_MATCHING
 void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
+    static s16 sIconPrimColors[][3] = {
+        { 0, 80, 200 },
+        { 50, 130, 255 },
+    };
+    static s16 sIconEnvColors[][3] = {
+        { 0, 0, 0 },
+        { 0, 130, 255 },
+    };
     static s16 sIconPrimR = 0;
     static s16 sIconPrimG = 80;
     static s16 sIconPrimB = 200;
@@ -261,6 +272,14 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y);
 // Matching, in-function data
 #ifdef NON_MATCHING
 void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
+    static s16 D_801CFD10[][3] = {
+        { 0, 80, 200 },
+        { 50, 130, 255 },
+    };
+    static s16 D_801CFD1C[][3] = {
+        { 0, 0, 0 },
+        { 0, 130, 255 },
+    };
     static s16 D_801CFD28 = 0;
     static s16 D_801CFD2C = 80;
     static s16 D_801CFD30 = 200;
@@ -354,12 +373,17 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147F18.s")
 #endif
 
-extern s16 D_801CFD48[][3];
-extern s16 D_801CFD54[][3];
-
 // Matching, in-function data
 #ifdef NON_MATCHING
 void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
+    static s16 D_801CFD48[][3] = {
+        { 0, 80, 200 },
+        { 50, 130, 255 },
+    };
+    static s16 D_801CFD54[][3] = {
+        { 0, 0, 0 },
+        { 0, 130, 255 },
+    };
     static s16 D_801CFD60 = 0;
     static s16 D_801CFD64 = 80;
     static s16 D_801CFD68 = 200;
@@ -742,6 +766,23 @@ void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP) {
     *gfxP = gfx++;
 }
 
+extern s16 sTextboxWidth;
+extern s16 sTextboxHeight;
+extern s16 sTextboxTexWidth;
+extern s16 sTextboxTexHeight;
+extern f32 D_801CFDA4[];
+extern f32 D_801CFDC8[];
+
+#if 0
+s16 sTextboxWidth = 0x100;
+s16 sTextboxHeight = 0x40;
+s16 sTextboxTexWidth = 0x400;
+s16 sTextboxTexHeight = 0x400;
+
+f32 D_801CFDA4[] = { 0.6f, 0.75f, 0.9f, 1.0f, 1.05f, 1.1f, 1.05f, 1.0f, 1.0f };
+f32 D_801CFDC8[] = { 0.6f, 0.75f, 0.9f, 1.0f, 1.05f, 1.1f, 1.05f, 1.0f, 1.0f };
+#endif
+
 // resizes textboxes when opening them
 void Message_GrowTextbox(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -815,13 +856,36 @@ extern TexturePtr D_801CFE4C[];
 extern u8 D_801CFE5C[][3];
 extern u8 D_801CFE68[][3];
 
+#if 0
+u8 D_801CFDEC[][3] = {
+    { 0, 255, 0 },   { 0, 0, 255 },     { 255, 255, 255 }, { 255, 0, 0 },
+    { 255, 0, 255 }, { 255, 255, 255 }, { 255, 100, 0 },   { 0, 0, 0 },
+};
+s16 D_801CFE04[] = { 150, 255, 100, 255, 255, 255, 255, 255, 255, 255, 255, 255 };
+s16 D_801CFE1C[] = { 255, 80, 150, 160, 100, 240, 255, 255, 255, 255, 255, 255 };
+s16 D_801CFE34[] = { 100, 40, 255, 0, 255, 100, 255, 255, 255, 255, 255, 255 };
+
+TexturePtr D_801CFE4C[] = { 0x02008998, 0x02009598, 0x0200A198, 0x0200AD98 };
+
+u8 D_801CFE5C[][3] = {
+    { 255, 110, 160 },
+    { 90, 255, 100 },
+    { 120, 255, 255 },
+    { 245, 245, 90 },
+};
+u8 D_801CFE68[][3] = {
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+    { 255, 255, 255 },
+    { 225, 170, 0 },
+};
+#endif
+
 void Message_DrawItemIcon(PlayState* play, Gfx** gfxP) {
-    MessageContext* msgCtx;
-    Gfx* gfx;
+    MessageContext* msgCtx = &play->msgCtx;
+    Gfx* gfx = *gfxP;
     s32 index;
 
-    msgCtx = &play->msgCtx;
-    gfx = *gfxP;
     msgCtx->unk12016 = msgCtx->unk12014;
 
     if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
@@ -972,6 +1036,30 @@ extern s16 D_801CFED4[][3];
 extern s16 D_801CFF04[][3];
 extern s16 D_801CFF34[][3];
 extern u8 D_801CFF64[];
+
+#if 0
+s16 D_801CFE74[][3] = {
+    { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
+    { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
+};
+s16 D_801CFEA4[][3] = {
+    { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
+};
+s16 D_801CFED4[][3] = {
+    { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
+};
+s16 D_801CFF04[][3] = {
+    { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
+};
+s16 D_801CFF34[][3] = {
+    { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
+    { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
+};
+u8 D_801CFF64[] = { 2, 1, 3, 6, 6, 6, 3, 3, 3, 3, 1, 6 };
+#endif
 
 #ifdef NON_EQUIVALENT
 void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
@@ -1460,6 +1548,37 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_DrawTextDefault.s")
 #endif
 
+extern s16 D_801CFF70[];
+extern s16 D_801CFF7C[];
+extern s16 D_801CFF88[];
+extern s16 D_801CFF94[];
+
+#if 0
+s16 D_801CFF70[] = { 4, 0x12, 0x12, 0x12, 0x12, 0 };
+s16 D_801CFF7C[] = { 0, 0xE, 0xE, 0xE, 0xE, 0 };
+s16 D_801CFF88[] = { 0, 0x16, 0x16, 0x16, 0x16, 0 };
+s16 D_801CFF94[] = {
+    0x270F, 0x84,   0x85,   0x86,   0x87,   0x88,   0x89,   0x8A,   0x5A,   0x5B,   0x83,   0x83,   0x70,   0x6F,
+    0x79,   0x7A,   0x83,   0x77,   0x83,   0x83,   6,      6,      6,      6,      6,      8,      7,      0x56,
+    0x57,   0x58,   1,      1,      1,      1,      0x53,   0x54,   0x55,   2,      3,      4,      9,      9,
+    9,      0x270F, 0x270F, 0x270F, 0x270F, 0x9B,   0x270F, 0x270F, 0x51,   0x52,   0xC,    0xA,    0xD,    0x4D,
+    0x4E,   0x4F,   0x50,   0x10,   0x78,   0x74,   0x76,   0x75,   0xC,    0xF,    0xE,    0xD,    0x5C,   0x270F,
+    0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0,      0x270F, 0x270F, 0x270F, 0x6D,   0x270F, 0x6E,   0x270F,
+    0x270F, 0x5D,   0x5E,   0x5F,   0x60,   0x13,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17,   0x18,   0x19,
+    0x1A,   0x1B,   0x1C,   0x1D,   0x1E,   0x1F,   0x20,   0x21,   0x22,   0x23,   0x270F, 0x270F, 0x24,   0x25,
+    0x26,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x32,   0x33,   0x34,   0x35,   0x36,   0x37,
+    0x38,   0x39,   0x3A,   0x3B,   0x3C,   0x3D,   0x3E,   0x3F,   0x40,   0x41,   0x42,   0x43,   0x44,   0x45,
+    0x46,   0x47,   0x48,   0x49,   0x270F, 0x25,   0x18,   0x22,   0x26,   0x24,   0x28,   0x29,   0x2A,   0x2B,
+    0x2C,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x2D,   0x2E,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F,
+    0x270F, 0x270F, 0x2F,   0x30,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x31,   0x31,   0x31,
+    0x31,   0x31,   0x31,   0x31,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F,
+    0x270F, 0x270F, 0x270F, 0x270F, 0x61,   0x61,   0x61,   0x62,   0x63,   0x64,   0x65,   0x66,   0x67,   0x68,
+    0x69,   0x6A,   0x6B,   0x6C,   0x62,   0x61,   0x61,   0x61,   0x62,   0x63,   0xB8,   0xB9,   0xBA,   0xBB,
+    0xBC,   0xBD,   0xBE,   0xBF,   0xC0,   0xC1,   0xC2,   0xC3,   0xC4,   0xC5,   0xC6,   0xC7,   0xC8,   0xC9,
+    0xCA,   0xCB,   0xCC,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F,
+};
+#endif
+
 void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
     MessageContext* msgCtx = &play->msgCtx;
     u16* new_var2 = &itemId;
@@ -1694,6 +1813,27 @@ extern u16 D_801D0188[OWL_WARP_MAX][9];
 // Area Names lengths
 extern s16 D_801D0250[OWL_WARP_MAX];
 
+#if 0
+// JPN Area names
+u16 D_801D0188[OWL_WARP_MAX][9] = {
+    { 0x834F, 0x838C, 0x815B, 0x8367, 0x8378, 0x8343, 0x82CC, 0x8A43, 0x8ADD },
+    { 0x835D, 0x815B, 0x8389, 0x82CC, 0x82DD, 0x82B3, 0x82AB, 0, 0 },
+    { 0x8358, 0x836D, 0x815B, 0x8377, 0x8362, 0x8368, 0, 0, 0 },
+    { 0x8E52, 0x97A2, 0, 0, 0, 0, 0, 0, 0 },
+    { 0x834E, 0x838D, 0x8362, 0x834E, 0x835E, 0x8345, 0x8393, 0, 0 },
+    { 0x837E, 0x838B, 0x834E, 0x838D, 0x815B, 0x8368, 0, 0, 0 },
+    { 0x8345, 0x8362, 0x8368, 0x8374, 0x8348, 0x815B, 0x838B, 0, 0 },
+    { 0x8FC0, 0x926E, 0, 0, 0, 0, 0, 0, 0 },
+    { 0x8343, 0x834A, 0x815B, 0x8369, 0x8C6B, 0x924A, 0, 0, 0 },
+    { 0x838D, 0x8362, 0x834E, 0x8372, 0x838B, 0, 0, 0, 0 },
+    { 0x93FC, 0x82E8, 0x8CFB, 0, 0, 0, 0, 0, 0 },
+};
+
+// Area Names lengths
+s16 D_801D0250[OWL_WARP_MAX] = { 9, 7, 6, 2, 7, 6, 7, 2, 6, 5, 3 };
+
+#endif
+
 void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
     MessageContext* msgCtx = &play->msgCtx;
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -1724,11 +1864,22 @@ void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) 
     *arg2 = sp3C;
 }
 
-void Message_Decode(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Decode.s")
 extern s16 D_801D0268[][3];
 extern s16 D_801D027C[];
 extern s16 D_801D0284[];
+
+#if 0
+s16 D_801D0268[][3] = {
+    { 0x82CD, 0x82E2, 0x82A2 },
+    { 0x82D3, 0x82C2, 0x82A4 },
+    { 0x82A8, 0x82BB, 0x82A2 },
+};
+s16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
+s16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
+#endif
+
+void Message_Decode(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Decode.s")
 
 #if 0
 void Message_Decode(PlayState* play) {
@@ -3452,7 +3603,7 @@ void func_80150A84(PlayState* play) {
     u8 offset = msgCtx->textBoxType;
     u8 t;
 
-    if (D_801CFC78[offset] != 0xE) {
+    if (D_801CFC78[offset] != 14) {
         DmaMgr_SendRequest0(msgCtx->textboxSegment,
                             &((u8*)SEGMENT_ROM_START(message_static))[D_801CFC78[offset] * 0x1000], 0x1000);
 
@@ -3819,10 +3970,16 @@ s32 func_80151C9C(PlayState* play) {
     }
 }
 
-extern s16 sLastPlayedSong;
-extern u16 D_801D023A[];
 extern u16 D_801D028C[];
 extern u16 sOcarinaSongFlagsMap[];
+
+#if 0
+u16 D_801D028C[] = {
+    0x1B5A, 0x1B5B, 0x1B5C, 0x1B5D, 0x1B5E, 0x1B5F, 0x1B60, 0x1B61, 0x1B62, 0x1B63, 0x1B64, 0x1B65, 0x1B66,
+    0x1B67, 0x1B68, 0x1B69, 0x1B6A, 0,      0xDC7,  0xDC9,  0x120A, 0x120B, 0x122C, 0x122F, 0x120A, 0x120B,
+};
+u16 sOcarinaSongFlagsMap[] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800 };
+#endif
 
 void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -4159,6 +4316,23 @@ void func_80152CAC(PlayState* play) {
     AudioOcarina_SetPlaybackSong((msgCtx->ocarinaAction - OCARINA_ACTION_FREE_PLAY), 2);
 }
 
+extern s16 sOcarinaEffectActorIds[];
+extern s32 sOcarinaEffectActorParams[];
+
+#if 0
+s16 sOcarinaEffectActorIds[] = {
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE,  ACTOR_OCEFF_WIPE7, // Song of Time Effect, Song of Healing Effect
+    ACTOR_OCEFF_WIPE2, ACTOR_OCEFF_WIPE6, // Epona's Song Effect, Song of Soaring Effect
+    ACTOR_OCEFF_STORM, ACTOR_OCEFF_SPOT,  // Song of Storms Effect II [?], Sun's Song Effect
+    ACTOR_OCEFF_WIPE,  ACTOR_OCEFF_WIPE,  // Song of Time Effect, Song of Time Effect
+    ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect
+};
+s32 sOcarinaEffectActorParams[] = { 0, 1, 2, 3, 4, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0 };
+#endif
+
 void Message_SpawnSongEffect(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Player* player = GET_PLAYER(play);
@@ -4180,15 +4354,29 @@ void Message_SpawnSongEffect(PlayState* play) {
     }
 }
 
-extern s16 sOcarinaButtonStepR;
-extern s16 sOcarinaButtonStepG;
-extern s16 sOcarinaButtonStepB;
-extern s16 sOcarinaButtonFlashTimer;
-extern s16 sOcarinaButtonFlashColorIndex;
 extern s16 sOcarinaButtonAPrimColors[][3];
 extern s16 sOcarinaButtonAEnvColors[][3];
 extern s16 sOcarinaButtonCPrimColors[][3];
 extern s16 sOcarinaButtonCEnvColors[][3];
+
+#if 0
+s16 sOcarinaButtonAPrimColors[][3] = {
+    { 80, 150, 255 },
+    { 100, 200, 255 },
+};
+s16 sOcarinaButtonAEnvColors[][3] = {
+    { 10, 10, 10 },
+    { 50, 50, 255 },
+};
+s16 sOcarinaButtonCPrimColors[][3] = {
+    { 255, 255, 50 },
+    { 255, 255, 180 },
+};
+s16 sOcarinaButtonCEnvColors[][3] = {
+    { 10, 10, 10 },
+    { 110, 110, 50 },
+};
+#endif
 
 void Message_FlashOcarinaButtons(void) {
     sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonAPrimR - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][0]) /
@@ -4304,13 +4492,15 @@ void Message_FlashOcarinaButtons(void) {
 
 extern TexturePtr sOcarinaButtonTextures[];
 
+#if 0
+TexturePtr sOcarinaButtonTextures[] = { 0x020024A0, 0x020025A0, 0x020026A0, 0x020027A0, 0x020028A0 };
+#endif
+
 void Message_DrawOcarinaButtons(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
-    Gfx* gfx;
+    Gfx* gfx = *gfxP;
     u16 i;
     u16 notePosX;
-
-    gfx = *gfxP;
 
     if ((play->msgCtx.msgMode >= MSGMODE_OCARINA_PLAYING) && (msgCtx->msgMode <= MSGMODE_40)) {
         if ((msgCtx->ocarinaAction != OCARINA_ACTION_FREE_PLAY) &&
@@ -4438,10 +4628,21 @@ void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxP) {
     *gfxP = gfx++;
 }
 
-extern s16 D_801C6A94;
 extern s16 sOcarinaSongFanfares[];
+extern s8 sOcarinaSongFanfareIoData[];
 extern u8 sPlayerFormOcarinaInstruments[];
 extern s16 D_801D03A8[];
+
+#if 0
+s16 sOcarinaSongFanfares[] = {
+    0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x34, 0x48, 0x32, 0x47, 0x35, 0x33, 0x49, 0x4A, 0x61, 0x61, 0x61,
+};
+s8 sOcarinaSongFanfareIoData[] = { 0x35, 0x5C, 0x5D, 0x5E, 0x35 };
+u8 sPlayerFormOcarinaInstruments[] = { 1, 7, 8, 9 };
+s16 D_801D03A8[] = {
+    0x3B, 0x3B, 0x3B, 0x3B, 0x22, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B,
+};
+#endif
 
 void Message_DrawMain(PlayState* play, Gfx** gfxP) {
     s32 pad;
@@ -5413,6 +5614,23 @@ extern s16 sTextboxXPositions[];
 extern s16 sTextboxLowerYPositions[];
 extern s16 sTextboxUpperYPositions[];
 extern s16 sTextboxMidYPositions[];
+extern s16 D_801D0448[];
+
+#if 0
+s16 sTextboxXPositions[] = {
+    0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22,
+};
+s16 sTextboxLowerYPositions[] = {
+    0x8E, 0x8E, 0x8E, 0x8E, 0xAE, 0x8E, 0x8E, 0x8E, 0x8E, 0x82, 0xAE, 0, 0x8E, 0x8E, 0x8E, 0x8E,
+};
+s16 sTextboxUpperYPositions[] = {
+    0x26, 0x26, 0x26, 0x26, 0xAE, 0x26, 0x26, 0x26, 0x26, 0x3C, 0xAE, 0, 0x26, 0x26, 0x26, 0x26,
+};
+s16 sTextboxMidYPositions[] = {
+    0x5A, 0x5A, 0x5A, 0x5A, 0xAE, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0xAE, 0, 0x5A, 0x5A, 0x5A, 0x5A,
+};
+s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 };
+#endif
 
 #ifdef NON_EQUIVALENT
 // Down to a single compiler-managed stack variable
@@ -5420,9 +5638,6 @@ extern s16 sTextboxMidYPositions[];
 // i.e. some may need to break instead of going to default
 // Also contains in-function data
 void Message_Update(PlayState* play) {
-    static s16 D_801D045C[] = { 0x1B91, 0x1B90, 0x1B8F };
-    static s16 D_801D0464[] = { 0x1B92, 0x1B8E };
-    static u8 D_801D0468 = 0;
     MessageContext* msgCtx = &play->msgCtx;
     SramContext* sramCtx = &play->sramCtx; // Optional
     PauseContext* pauseCtx = &play->pauseCtx;
