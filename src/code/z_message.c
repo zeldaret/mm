@@ -3921,6 +3921,9 @@ s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 
 // i.e. some may need to break instead of going to default
 // Also contains in-function data
 void Message_Update(PlayState* play) {
+    static s16 D_801D045C[] = { 0x1B91, 0x1B90, 0x1B8F };
+    static s16 D_801D0464[] = { 0x1B92, 0x1B8E };
+    static u8 D_801D0468 = 0;
     MessageContext* msgCtx = &play->msgCtx;
     SramContext* sramCtx = &play->sramCtx; // Optional
     PauseContext* pauseCtx = &play->pauseCtx;
