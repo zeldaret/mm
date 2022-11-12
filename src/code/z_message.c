@@ -5,27 +5,6 @@
 #include "interface/parameter_static/parameter_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-extern u8 D_801C6A70;
-extern s16 sOcarinaButtonIndexBufPos;
-extern s16 sOcarinaButtonIndexBufLen;
-extern s16 sLastPlayedSong;
-extern s16 sOcarinaButtonStepR;
-extern s16 sOcarinaButtonStepG;
-extern s16 sOcarinaButtonStepB;
-extern s16 sOcarinaButtonFlashTimer;
-extern s16 sOcarinaButtonFlashColorIndex;
-extern s16 D_801C6A94;
-extern u8 D_801C6A98[6][5];
-extern u16 D_801C6AB8[];
-extern u16 D_801C6B28[];
-extern MessageTableEntry D_801C6B98[];
-extern MessageTableEntry D_801CFB08[];
-extern s16 D_801CFC78[15];
-extern u8 sOcarinaButtonIndexBuf[];
-extern s16 sOcarinaButtonAlphaValues[];
-extern s16 gOcarinaSongItemMap[];
-
-#if 0
 u8 D_801C6A70 = 0;
 s16 sOcarinaButtonIndexBufPos = 0;
 s16 sOcarinaButtonIndexBufLen = 0;
@@ -38,8 +17,12 @@ s16 sOcarinaButtonFlashColorIndex = 1;
 s16 D_801C6A94 = 0;
 
 u8 D_801C6A98[][5] = {
-    { 0, 0, 0xFF, 0, 0 },    { 0, 0, 0xFF, 0, 0 }, { 0, 0xFF, 0xFF, 0, 0 },
-    { 0, 0xFF, 0xFF, 0, 0 }, { 0, 0, 0xFF, 0, 0 }, { 0, 0, 0xFF, 0, 0 },
+    { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
+    { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
+    { BTN_ENABLED, BTN_DISABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
+    { BTN_ENABLED, BTN_DISABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
+    { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
+    { BTN_ENABLED, BTN_ENABLED, BTN_DISABLED, BTN_ENABLED, BTN_ENABLED },
 };
 
 u16 D_801C6AB8[] = {
@@ -60,10 +43,15 @@ u16 D_801C6B28[] = {
 #include "src/code/z_message_tables.inc.c"
 
 s16 D_801CFC78[] = { 0, 1, 3, 2, 14, 14, 0, 14, 0, 0, 0, 14, 14, 4, 14 };
-u8 sOcarinaButtonIndexBuf[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-s16 sOcarinaButtonAlphaValues[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-s16 gOcarinaSongItemMap[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0 };
-#endif
+u8 sOcarinaButtonIndexBuf[12] = { 0 };
+s16 sOcarinaButtonAlphaValues[9] = { 0 };
+s16 gOcarinaSongItemMap[] = {
+    OCARINA_SONG_SONATA,        OCARINA_SONG_GORON_LULLABY, OCARINA_SONG_NEW_WAVE,
+    OCARINA_SONG_ELEGY,         OCARINA_SONG_OATH,          OCARINA_SONG_SARIAS,
+    OCARINA_SONG_TIME,          OCARINA_SONG_HEALING,       OCARINA_SONG_EPONAS,
+    OCARINA_SONG_SOARING,       OCARINA_SONG_STORMS,        OCARINA_SONG_SUNS,
+    OCARINA_SONG_INVERTED_TIME, OCARINA_SONG_DOUBLE_TIME,   OCARINA_SONG_GORON_LULLABY_INTRO,
+};
 
 // bss
 
@@ -158,8 +146,6 @@ void Message_CloseTextbox(PlayState* play) {
     }
 }
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     static s16 sIconPrimColors[][3] = {
         { 0, 80, 200 },
@@ -264,13 +250,7 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
         *gfxP = gfx;
     }
 }
-#else
-void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_DrawTextboxIcon.s")
-#endif
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     static s16 D_801CFD10[][3] = {
         { 0, 80, 200 },
@@ -368,13 +348,7 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
         *gfxP = gfx++;
     }
 }
-#else
-void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147F18.s")
-#endif
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     static s16 D_801CFD48[][3] = {
         { 0, 80, 200 },
@@ -472,13 +446,7 @@ void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
         *gfxP = gfx++;
     }
 }
-#else
-void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
-#endif
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void Message_HandleChoiceSelection(PlayState* play, u8 numChoices) {
     static s16 D_801CFD80 = false; // sAnalogStickHeld
     MessageContext* msgCtx = &play->msgCtx;
@@ -504,9 +472,6 @@ void Message_HandleChoiceSelection(PlayState* play, u8 numChoices) {
         D_801CFD80 = false;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_HandleChoiceSelection.s")
-#endif
 
 void func_80148CBC(PlayState* play, Gfx** gfxP, u8 arg2) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -520,8 +485,6 @@ void func_80148CBC(PlayState* play, Gfx** gfxP, u8 arg2) {
     Message_DrawTextboxIcon(play, gfxP, msgCtx->textPosX, msgCtx->textPosY);
 }
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void func_80148D64(PlayState* play) {
     static s16 D_801CFD84 = false; // sAnalogStickHeld
     MessageContext* msgCtx = &play->msgCtx;
@@ -566,10 +529,6 @@ void func_80148D64(PlayState* play) {
     msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] * 10) - ('0' * 10);
     msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2]) - '0';
 }
-#else
-void func_80148D64(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148D64.s")
-#endif
 
 void func_80149048(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -595,8 +554,6 @@ void func_80149048(PlayState* play) {
     msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] * 10) - 0x1E0U;
 }
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void func_801491DC(PlayState* play) {
     static s16 D_801CFD88 = false; // sAnalogStickHeld
     MessageContext* msgCtx = &play->msgCtx;
@@ -639,13 +596,7 @@ void func_801491DC(PlayState* play) {
         D_801CFD88 = false;
     }
 }
-#else
-void func_801491DC(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801491DC.s")
-#endif
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void func_80149454(PlayState* play) {
     static s16 D_801CFD8C = false; // sAnalogStickHeld
     MessageContext* msgCtx = &play->msgCtx;
@@ -688,13 +639,7 @@ void func_80149454(PlayState* play) {
         D_801CFD8C = false;
     }
 }
-#else
-void func_80149454(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149454.s")
-#endif
 
-// Matching, in-function data
-#ifdef NON_MATCHING
 void func_801496C8(PlayState* play) {
     static s16 D_801CFD90 = false; // sAnalogStickHeld
     MessageContext* msgCtx = &play->msgCtx;
@@ -737,10 +682,6 @@ void func_801496C8(PlayState* play) {
         D_801CFD90 = false;
     }
 }
-#else
-void func_801496C8(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801496C8.s")
-#endif
 
 void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -766,14 +707,6 @@ void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP) {
     *gfxP = gfx++;
 }
 
-extern s16 sTextboxWidth;
-extern s16 sTextboxHeight;
-extern s16 sTextboxTexWidth;
-extern s16 sTextboxTexHeight;
-extern f32 D_801CFDA4[];
-extern f32 D_801CFDC8[];
-
-#if 0
 s16 sTextboxWidth = 0x100;
 s16 sTextboxHeight = 0x40;
 s16 sTextboxTexWidth = 0x400;
@@ -781,7 +714,6 @@ s16 sTextboxTexHeight = 0x400;
 
 f32 D_801CFDA4[] = { 0.6f, 0.75f, 0.9f, 1.0f, 1.05f, 1.1f, 1.05f, 1.0f, 1.0f };
 f32 D_801CFDC8[] = { 0.6f, 0.75f, 0.9f, 1.0f, 1.05f, 1.1f, 1.05f, 1.0f, 1.0f };
-#endif
 
 // resizes textboxes when opening them
 void Message_GrowTextbox(PlayState* play) {
@@ -848,15 +780,6 @@ void Message_FindMessage(PlayState* play, u16 textId) {
     font->messageEnd = nextSegment - foundSegment;
 }
 
-extern u8 D_801CFDEC[][3];
-extern s16 D_801CFE04[];
-extern s16 D_801CFE1C[];
-extern s16 D_801CFE34[];
-extern TexturePtr D_801CFE4C[];
-extern u8 D_801CFE5C[][3];
-extern u8 D_801CFE68[][3];
-
-#if 0
 u8 D_801CFDEC[][3] = {
     { 0, 255, 0 },   { 0, 0, 255 },     { 255, 255, 255 }, { 255, 0, 0 },
     { 255, 0, 255 }, { 255, 255, 255 }, { 255, 100, 0 },   { 0, 0, 0 },
@@ -879,7 +802,6 @@ u8 D_801CFE68[][3] = {
     { 255, 255, 255 },
     { 225, 170, 0 },
 };
-#endif
 
 void Message_DrawItemIcon(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -1030,14 +952,6 @@ void Message_HandleOcarina(PlayState* play) {
     }
 }
 
-extern s16 D_801CFE74[][3];
-extern s16 D_801CFEA4[][3];
-extern s16 D_801CFED4[][3];
-extern s16 D_801CFF04[][3];
-extern s16 D_801CFF34[][3];
-extern u8 D_801CFF64[];
-
-#if 0
 s16 D_801CFE74[][3] = {
     { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
     { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
@@ -1059,7 +973,6 @@ s16 D_801CFF34[][3] = {
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 u8 D_801CFF64[] = { 2, 1, 3, 6, 6, 6, 3, 3, 3, 3, 1, 6 };
-#endif
 
 #ifdef NON_EQUIVALENT
 void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
@@ -1548,36 +1461,261 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_DrawTextDefault.s")
 #endif
 
-extern s16 D_801CFF70[];
-extern s16 D_801CFF7C[];
-extern s16 D_801CFF88[];
-extern s16 D_801CFF94[];
-
-#if 0
 s16 D_801CFF70[] = { 4, 0x12, 0x12, 0x12, 0x12, 0 };
 s16 D_801CFF7C[] = { 0, 0xE, 0xE, 0xE, 0xE, 0 };
 s16 D_801CFF88[] = { 0, 0x16, 0x16, 0x16, 0x16, 0 };
 s16 D_801CFF94[] = {
-    0x270F, 0x84,   0x85,   0x86,   0x87,   0x88,   0x89,   0x8A,   0x5A,   0x5B,   0x83,   0x83,   0x70,   0x6F,
-    0x79,   0x7A,   0x83,   0x77,   0x83,   0x83,   6,      6,      6,      6,      6,      8,      7,      0x56,
-    0x57,   0x58,   1,      1,      1,      1,      0x53,   0x54,   0x55,   2,      3,      4,      9,      9,
-    9,      0x270F, 0x270F, 0x270F, 0x270F, 0x9B,   0x270F, 0x270F, 0x51,   0x52,   0xC,    0xA,    0xD,    0x4D,
-    0x4E,   0x4F,   0x50,   0x10,   0x78,   0x74,   0x76,   0x75,   0xC,    0xF,    0xE,    0xD,    0x5C,   0x270F,
-    0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0,      0x270F, 0x270F, 0x270F, 0x6D,   0x270F, 0x6E,   0x270F,
-    0x270F, 0x5D,   0x5E,   0x5F,   0x60,   0x13,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17,   0x18,   0x19,
-    0x1A,   0x1B,   0x1C,   0x1D,   0x1E,   0x1F,   0x20,   0x21,   0x22,   0x23,   0x270F, 0x270F, 0x24,   0x25,
-    0x26,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x32,   0x33,   0x34,   0x35,   0x36,   0x37,
-    0x38,   0x39,   0x3A,   0x3B,   0x3C,   0x3D,   0x3E,   0x3F,   0x40,   0x41,   0x42,   0x43,   0x44,   0x45,
-    0x46,   0x47,   0x48,   0x49,   0x270F, 0x25,   0x18,   0x22,   0x26,   0x24,   0x28,   0x29,   0x2A,   0x2B,
-    0x2C,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x2D,   0x2E,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F,
-    0x270F, 0x270F, 0x2F,   0x30,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x31,   0x31,   0x31,
-    0x31,   0x31,   0x31,   0x31,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F,
-    0x270F, 0x270F, 0x270F, 0x270F, 0x61,   0x61,   0x61,   0x62,   0x63,   0x64,   0x65,   0x66,   0x67,   0x68,
-    0x69,   0x6A,   0x6B,   0x6C,   0x62,   0x61,   0x61,   0x61,   0x62,   0x63,   0xB8,   0xB9,   0xBA,   0xBB,
-    0xBC,   0xBD,   0xBE,   0xBF,   0xC0,   0xC1,   0xC2,   0xC3,   0xC4,   0xC5,   0xC6,   0xC7,   0xC8,   0xC9,
-    0xCA,   0xCB,   0xCC,   0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F, 0x270F,
+    0x270F,
+    ITEM_RUPEE_GREEN,
+    ITEM_RUPEE_BLUE,
+    ITEM_RUPEE_10,
+    ITEM_RUPEE_RED,
+    ITEM_RUPEE_PURPLE,
+    ITEM_RUPEE_SILVER,
+    ITEM_RUPEE_HUGE,
+    ITEM_WALLET_ADULT,
+    ITEM_WALLET_GIANT,
+    ITEM_RECOVERY_HEART,
+    ITEM_RECOVERY_HEART,
+    ITEM_HEART_PIECE,
+    ITEM_HEART_CONTAINER,
+    ITEM_MAGIC_SMALL,
+    ITEM_MAGIC_LARGE,
+    ITEM_RECOVERY_HEART,
+    ITEM_STRAY_FAIRIES,
+    ITEM_RECOVERY_HEART,
+    ITEM_RECOVERY_HEART,
+    ITEM_BOMB,
+    ITEM_BOMB,
+    ITEM_BOMB,
+    ITEM_BOMB,
+    ITEM_BOMB,
+    ITEM_STICK,
+    ITEM_BOMBCHU,
+    ITEM_BOMB_BAG_20,
+    ITEM_BOMB_BAG_30,
+    ITEM_BOMB_BAG_40,
+    ITEM_BOW,
+    ITEM_BOW,
+    ITEM_BOW,
+    ITEM_BOW,
+    ITEM_QUIVER_30,
+    ITEM_QUIVER_40,
+    ITEM_QUIVER_50,
+    ITEM_ARROW_FIRE,
+    ITEM_ARROW_ICE,
+    ITEM_ARROW_LIGHT,
+    ITEM_NUT,
+    ITEM_NUT,
+    ITEM_NUT,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_STICK_UPGRADE_20,
+    0x270F,
+    0x270F,
+    ITEM_SHIELD_HERO,
+    ITEM_SHIELD_MIRROR,
+    ITEM_POWDER_KEG,
+    ITEM_MAGIC_BEANS,
+    ITEM_PICTO_BOX,
+    ITEM_SWORD_KOKIRI,
+    ITEM_SWORD_RAZOR,
+    ITEM_SWORD_GILDED,
+    ITEM_SWORD_DEITY,
+    ITEM_SWORD_GREAT_FAIRY,
+    ITEM_KEY_SMALL,
+    ITEM_KEY_BOSS,
+    ITEM_DUNGEON_MAP,
+    ITEM_COMPASS,
+    ITEM_POWDER_KEG,
+    ITEM_HOOKSHOT,
+    ITEM_LENS,
+    ITEM_PICTO_BOX,
+    ITEM_FISHING_ROD,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_OCARINA,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_BOMBERS_NOTEBOOK,
+    0x270F,
+    ITEM_SKULL_TOKEN,
+    0x270F,
+    0x270F,
+    ITEM_REMAINS_ODOLWA,
+    ITEM_REMAINS_GOHT,
+    ITEM_REMAINS_GYORG,
+    ITEM_REMAINS_TWINMOLD,
+    ITEM_POTION_RED,
+    ITEM_BOTTLE,
+    ITEM_POTION_RED,
+    ITEM_POTION_GREEN,
+    ITEM_POTION_BLUE,
+    ITEM_FAIRY,
+    ITEM_DEKU_PRINCESS,
+    ITEM_MILK_BOTTLE,
+    ITEM_MILK_HALF,
+    ITEM_FISH,
+    ITEM_BUG,
+    ITEM_BLUE_FIRE,
+    ITEM_POE,
+    ITEM_BIG_POE,
+    ITEM_SPRING_WATER,
+    ITEM_HOT_SPRING_WATER,
+    ITEM_ZORA_EGG,
+    ITEM_GOLD_DUST,
+    ITEM_MUSHROOM,
+    0x270F,
+    0x270F,
+    ITEM_SEAHORSE,
+    ITEM_CHATEAU,
+    ITEM_HYLIAN_LOACH,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_MASK_DEKU,
+    ITEM_MASK_GORON,
+    ITEM_MASK_ZORA,
+    ITEM_MASK_FIERCE_DEITY,
+    ITEM_MASK_TRUTH,
+    ITEM_MASK_KAFEIS_MASK,
+    ITEM_MASK_ALL_NIGHT,
+    ITEM_MASK_BUNNY,
+    ITEM_MASK_KEATON,
+    ITEM_MASK_GARO,
+    ITEM_MASK_ROMANI,
+    ITEM_MASK_CIRCUS_LEADER,
+    ITEM_MASK_POSTMAN,
+    ITEM_MASK_COUPLE,
+    ITEM_MASK_GREAT_FAIRY,
+    ITEM_MASK_GIBDO,
+    ITEM_MASK_DON_GERO,
+    ITEM_MASK_KAMARO,
+    ITEM_MASK_CAPTAIN,
+    ITEM_MASK_STONE,
+    ITEM_MASK_BREMEN,
+    ITEM_MASK_BLAST,
+    ITEM_MASK_SCENTS,
+    ITEM_MASK_GIANT,
+    0x270F,
+    ITEM_CHATEAU,
+    ITEM_MILK_BOTTLE,
+    ITEM_GOLD_DUST,
+    ITEM_HYLIAN_LOACH,
+    ITEM_SEAHORSE,
+    ITEM_MOON_TEAR,
+    ITEM_DEED_LAND,
+    ITEM_DEED_SWAMP,
+    ITEM_DEED_MOUNTAIN,
+    ITEM_DEED_OCEAN,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_ROOM_KEY,
+    ITEM_LETTER_MAMA,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_LETTER_TO_KAFEI,
+    ITEM_PENDANT_OF_MEMORIES,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_TINGLE_MAP,
+    ITEM_TINGLE_MAP,
+    ITEM_TINGLE_MAP,
+    ITEM_TINGLE_MAP,
+    ITEM_TINGLE_MAP,
+    ITEM_TINGLE_MAP,
+    ITEM_TINGLE_MAP,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    ITEM_SONG_SONATA,
+    ITEM_SONG_SONATA,
+    ITEM_SONG_SONATA,
+    ITEM_SONG_LULLABY,
+    ITEM_SONG_NOVA,
+    ITEM_SONG_ELEGY,
+    ITEM_SONG_OATH,
+    ITEM_SONG_SARIA,
+    ITEM_SONG_TIME,
+    ITEM_SONG_HEALING,
+    ITEM_SONG_EPONA,
+    ITEM_SONG_SOARING,
+    ITEM_SONG_STORMS,
+    ITEM_SONG_SUN,
+    ITEM_SONG_LULLABY,
+    ITEM_SONG_SONATA,
+    ITEM_SONG_SONATA,
+    ITEM_SONG_SONATA,
+    ITEM_SONG_LULLABY,
+    ITEM_SONG_NOVA,
+    0xB8,
+    0xB9,
+    0xBA,
+    0xBB,
+    0xBC,
+    0xBD,
+    0xBE,
+    0xBF,
+    0xC0,
+    0xC1,
+    0xC2,
+    0xC3,
+    0xC4,
+    0xC5,
+    0xC6,
+    0xC7,
+    0xC8,
+    0xC9,
+    0xCA,
+    0xCB,
+    0xCC,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
+    0x270F,
 };
-#endif
 
 void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -1809,12 +1947,6 @@ void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decod
 }
 
 // JPN Area names
-extern u16 D_801D0188[OWL_WARP_MAX][9];
-// Area Names lengths
-extern s16 D_801D0250[OWL_WARP_MAX];
-
-#if 0
-// JPN Area names
 u16 D_801D0188[OWL_WARP_MAX][9] = {
     { 0x834F, 0x838C, 0x815B, 0x8367, 0x8378, 0x8343, 0x82CC, 0x8A43, 0x8ADD },
     { 0x835D, 0x815B, 0x8389, 0x82CC, 0x82DD, 0x82B3, 0x82AB, 0, 0 },
@@ -1831,8 +1963,6 @@ u16 D_801D0188[OWL_WARP_MAX][9] = {
 
 // Area Names lengths
 s16 D_801D0250[OWL_WARP_MAX] = { 9, 7, 6, 2, 7, 6, 7, 2, 6, 5, 3 };
-
-#endif
 
 void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -1864,11 +1994,6 @@ void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) 
     *arg2 = sp3C;
 }
 
-extern s16 D_801D0268[][3];
-extern s16 D_801D027C[];
-extern s16 D_801D0284[];
-
-#if 0
 s16 D_801D0268[][3] = {
     { 0x82CD, 0x82E2, 0x82A2 },
     { 0x82D3, 0x82C2, 0x82A4 },
@@ -1876,7 +2001,6 @@ s16 D_801D0268[][3] = {
 };
 s16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
 s16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
-#endif
 
 void Message_Decode(PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Decode.s")
@@ -2253,16 +2377,11 @@ s32 func_80151C9C(PlayState* play) {
     }
 }
 
-extern u16 D_801D028C[];
-extern u16 sOcarinaSongFlagsMap[];
-
-#if 0
 u16 D_801D028C[] = {
     0x1B5A, 0x1B5B, 0x1B5C, 0x1B5D, 0x1B5E, 0x1B5F, 0x1B60, 0x1B61, 0x1B62, 0x1B63, 0x1B64, 0x1B65, 0x1B66,
     0x1B67, 0x1B68, 0x1B69, 0x1B6A, 0,      0xDC7,  0xDC9,  0x120A, 0x120B, 0x122C, 0x122F, 0x120A, 0x120B,
 };
 u16 sOcarinaSongFlagsMap[] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800 };
-#endif
 
 void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -2599,10 +2718,6 @@ void func_80152CAC(PlayState* play) {
     AudioOcarina_SetPlaybackSong((msgCtx->ocarinaAction - OCARINA_ACTION_FREE_PLAY), 2);
 }
 
-extern s16 sOcarinaEffectActorIds[];
-extern s32 sOcarinaEffectActorParams[];
-
-#if 0
 s16 sOcarinaEffectActorIds[] = {
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
@@ -2614,7 +2729,6 @@ s16 sOcarinaEffectActorIds[] = {
     ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect
 };
 s32 sOcarinaEffectActorParams[] = { 0, 1, 2, 3, 4, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0 };
-#endif
 
 void Message_SpawnSongEffect(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -2637,12 +2751,6 @@ void Message_SpawnSongEffect(PlayState* play) {
     }
 }
 
-extern s16 sOcarinaButtonAPrimColors[][3];
-extern s16 sOcarinaButtonAEnvColors[][3];
-extern s16 sOcarinaButtonCPrimColors[][3];
-extern s16 sOcarinaButtonCEnvColors[][3];
-
-#if 0
 s16 sOcarinaButtonAPrimColors[][3] = {
     { 80, 150, 255 },
     { 100, 200, 255 },
@@ -2659,7 +2767,6 @@ s16 sOcarinaButtonCEnvColors[][3] = {
     { 10, 10, 10 },
     { 110, 110, 50 },
 };
-#endif
 
 void Message_FlashOcarinaButtons(void) {
     sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonAPrimR - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][0]) /
@@ -2773,11 +2880,9 @@ void Message_FlashOcarinaButtons(void) {
     }
 }
 
-extern TexturePtr sOcarinaButtonTextures[];
-
-#if 0
-TexturePtr sOcarinaButtonTextures[] = { 0x020024A0, 0x020025A0, 0x020026A0, 0x020027A0, 0x020028A0 };
-#endif
+TexturePtr sOcarinaButtonTextures[] = {
+    gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
+};
 
 void Message_DrawOcarinaButtons(PlayState* play, Gfx** gfxP) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -2911,21 +3016,40 @@ void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxP) {
     *gfxP = gfx++;
 }
 
-extern s16 sOcarinaSongFanfares[];
-extern s8 sOcarinaSongFanfareIoData[];
-extern u8 sPlayerFormOcarinaInstruments[];
-extern s16 D_801D03A8[];
-
-#if 0
 s16 sOcarinaSongFanfares[] = {
-    0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 0x34, 0x48, 0x32, 0x47, 0x35, 0x33, 0x49, 0x4A, 0x61, 0x61, 0x61,
+    NA_BGM_OCA_SONATA,
+    NA_BGM_OCA_LULLABY,
+    NA_BGM_OCA_NEW_WAVE,
+    NA_BGM_OCA_ELEGY,
+    NA_BGM_OCA_OATH,
+    NA_BGM_MAJORAS_LAIR,
+    NA_BGM_OCA_TIME,
+    NA_BGM_OCA_HEALING,
+    NA_BGM_OCA_EPONA,
+    NA_BGM_OCA_SOARING,
+    NA_BGM_OCA_STORM,
+    NA_BGM_OCA_SUNS,
+    NA_BGM_INVERTED_SONG_OF_TIME,
+    NA_BGM_SONG_OF_DOUBLE_TIME,
+    NA_BGM_OCA_LULLABY_INTRO,
+    NA_BGM_OCA_LULLABY_INTRO,
+    NA_BGM_OCA_LULLABY_INTRO,
 };
-s8 sOcarinaSongFanfareIoData[] = { 0x35, 0x5C, 0x5D, 0x5E, 0x35 };
-u8 sPlayerFormOcarinaInstruments[] = { 1, 7, 8, 9 };
+
+s8 sOcarinaSongFanfareIoData[] = {
+    0x35, 0x5C, 0x5D, 0x5E, 0x35,
+};
+
+u8 sPlayerFormOcarinaInstruments[] = {
+    OCARINA_INSTRUMENT_DEFAULT,
+    OCARINA_INSTRUMENT_GORON_DRUMS,
+    OCARINA_INSTRUMENT_ZORA_GUITAR,
+    OCARINA_INSTRUMENT_DEKU_PIPES,
+};
+
 s16 D_801D03A8[] = {
     0x3B, 0x3B, 0x3B, 0x3B, 0x22, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B, 0x3B,
 };
-#endif
 
 void Message_DrawMain(PlayState* play, Gfx** gfxP) {
     s32 pad;
@@ -3893,13 +4017,6 @@ void Message_Draw(PlayState* play) {
     CLOSE_DISPS(gfxCtx);
 }
 
-extern s16 sTextboxXPositions[];
-extern s16 sTextboxLowerYPositions[];
-extern s16 sTextboxUpperYPositions[];
-extern s16 sTextboxMidYPositions[];
-extern s16 D_801D0448[];
-
-#if 0
 s16 sTextboxXPositions[] = {
     0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22,
 };
@@ -3913,7 +4030,15 @@ s16 sTextboxMidYPositions[] = {
     0x5A, 0x5A, 0x5A, 0x5A, 0xAE, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0xAE, 0, 0x5A, 0x5A, 0x5A, 0x5A,
 };
 s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 };
-#endif
+s16 D_801D045C[] = {
+    0x1B91,
+    0x1B90,
+    0x1B8F,
+};
+s16 D_801D0464[] = {
+    0x1B92,
+    0x1B8E,
+};
 
 #ifdef NON_EQUIVALENT
 // Down to a single compiler-managed stack variable
@@ -3921,8 +4046,6 @@ s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 
 // i.e. some may need to break instead of going to default
 // Also contains in-function data
 void Message_Update(PlayState* play) {
-    static s16 D_801D045C[] = { 0x1B91, 0x1B90, 0x1B8F };
-    static s16 D_801D0464[] = { 0x1B92, 0x1B8E };
     static u8 D_801D0468 = 0;
     MessageContext* msgCtx = &play->msgCtx;
     SramContext* sramCtx = &play->sramCtx; // Optional
@@ -4694,6 +4817,7 @@ void Message_Update(PlayState* play) {
     }
 }
 #else
+u8 D_801D0468 = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_Update.s")
 #endif
 
