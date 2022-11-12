@@ -222,27 +222,289 @@ s16 sFinalHoursClockFrameEnvBlue = 0;
 s16 sFinalHoursClockColorTimer = 15;
 s16 sFinalHoursClockColorTargetIndex = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CB80.s")
+/**
+ * Draw a RGBA16 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectRGBA16(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                           s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CD98.s")
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-Gfx* func_8010CFBC(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010CFBC.s")
+    return gfx;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D2D4.s")
+/**
+ * Draw an IA8 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx*  the display list pointer
+ */
+Gfx* Gfx_DrawTexRectIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                        s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
-Gfx* func_8010D480(Gfx* displayListHead, void* texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
-                   s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b, s16 a, s32 argE, s32 argF);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D480.s")
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D7D0.s")
+    return gfx;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010D9F4.s")
+/**
+ * Draw an IA8 texture on a rectangle with a shadow slightly offset to the bottom-right
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r texture red
+ * @param g texture green
+ * @param b texture blue
+ * @param a texture alpha
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectIA8_DropShadow(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                                   s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy, s16 r, s16 g, s16 b,
+                                   s16 a) {
+    s16 dropShadowAlpha = a;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DC58.s")
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DE38.s")
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw a colored rectangle with a shadow slightly offset to the bottom-right
+ *
+ * @param gfx the display list pointer
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r // rectangle red
+ * @param g // rectangle green
+ * @param b // rectangle blue
+ * @param a // rectangle alpha
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawRect_DropShadow(Gfx* gfx, s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
+                             s16 r, s16 g, s16 b, s16 a) {
+    s16 dropShadowAlpha = a;
+
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw an IA8 texture on a rectangle with a shadow slightly offset to the bottom-right with additional texture offsets
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @param r // texture red
+ * @param g // texture green
+ * @param b // texture blue
+ * @param a // texture alpha
+ * @param masks specify the mask for the s axis
+ * @param rects the texture coordinate s of upper-left corner of rectangle (s10.5)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectIA8_DropShadowOffset(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight,
+                                         s16 rectLeft, s16 rectTop, s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy,
+                                         s16 r, s16 g, s16 b, s16 a, s32 masks, s32 rects) {
+    s16 dropShadowAlpha = a;
+
+    if (a > 100) {
+        dropShadowAlpha = 100;
+    }
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, dropShadowAlpha);
+
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, (rectLeft + 2) * 4, (rectTop + 2) * 4, (rectLeft + rectWidth + 2) * 4,
+                        (rectTop + rectHeight + 2) * 4, G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
+
+    gDPPipeSync(gfx++);
+    gDPSetPrimColor(gfx++, 0, 0, r, g, b, a);
+
+    gSPTextureRectangle(gfx++, rectLeft * 4, rectTop * 4, (rectLeft + rectWidth) * 4, (rectTop + rectHeight) * 4,
+                        G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw an I8 texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRectI8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, s16 rectLeft, s16 rectTop,
+                       s16 rectWidth, s16 rectHeight, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_I, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, 0, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw a 4b texture on a rectangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param fmt texture image format
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param rectLeft the x-coordinate of upper-left corner of rectangle
+ * @param rectTop the y-coordinate of upper-left corner of rectangle
+ * @param rectWidth rectangle width in texels
+ * @param rectHeight rectangle height in texels
+ * @param cms gives the clamp, wrap, and mirror flag for the s axis
+ * @param masks specify the mask for the s axis
+ * @param rects the texture coordinate s of upper-left corner of rectangle (s10.5)
+ * @param dsdx the change in s for each change in x (s5.10)
+ * @param dtdy the change in t for each change in y (s5.10)
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexRect4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, s16 rectLeft,
+                       s16 rectTop, s16 rectWidth, s16 rectHeight, s32 cms, s32 masks, s32 rects, u16 dsdx, u16 dtdy) {
+    gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, cms, G_TX_NOMIRROR | G_TX_WRAP, masks,
+                           G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSPTextureRectangle(gfx++, rectLeft << 2, rectTop << 2, (rectLeft + rectWidth) << 2, (rectTop + rectHeight) << 2,
+                        G_TX_RENDERTILE, rects, 0, dsdx, dtdy);
+
+    return gfx;
+}
+
+/**
+ * Draw an I8 texture on a Quadrangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param point index of the first point to draw the Quadrangle
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexQuadIA8(Gfx* gfx, TexturePtr texture, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, textureWidth, textureHeight, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
+
+    return gfx;
+}
+
+/**
+ * Draw a 4b texture on a Quadrangle
+ *
+ * @param gfx the display list pointer
+ * @param texture
+ * @param fmt texture image format
+ * @param textureWidth texture image width in texels
+ * @param textureHeight texture image height in texels
+ * @param point index of the first point to draw the Quadrangle
+ * @return Gfx* the display list pointer
+ */
+Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, s16 textureHeight, u16 point) {
+    gDPLoadTextureBlock_4b(gfx++, texture, fmt, textureWidth, textureHeight, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
+
+    return gfx;
+}
 
 s16 D_801BFA04[] = {
     -14, -14, -24, -8, -12, -12, -7, -8, -7, -8, -12, 0,
@@ -322,7 +584,7 @@ void Interface_StartPostmanTimer(s16 seconds, s16 bunnyHoodState) {
 void Interface_StartGoronRaceTimer(s32 arg0) {
     if (gSaveContext.timerStates[TIMER_ID_GORON_RACE_UNUSED] != TIMER_STATE_OFF) {
         // Goron race started
-        if (gSaveContext.eventInf[1] & 1) {
+        if (CHECK_EVENTINF(EVENTINF_10)) {
             gSaveContext.timerCurTimes[TIMER_ID_GORON_RACE_UNUSED] = SECONDS_TO_TIMER_PRECISE(2, 39);
         } else {
             gSaveContext.timerCurTimes[TIMER_ID_GORON_RACE_UNUSED] = SECONDS_TO_TIMER_PRECISE(0, 1);
@@ -1172,7 +1434,9 @@ u8 Item_Give(PlayState* play, u8 item) {
     }
 
     if (item == ITEM_SKULL_TOKEN) {
-        SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_SKULL_TOKEN);
+        //! @bug: Sets QUEST_QUIVER instead of QUEST_SKULL_TOKEN
+        // Setting `QUEST_SKULL_TOKEN` will result in misplaced digits on the pause menu - Quest Status page.
+        SET_QUEST_ITEM(item - ITEM_SKULL_TOKEN + QUEST_QUIVER);
         Inventory_IncrementSkullTokenCount(play->sceneId);
         return ITEM_NONE;
 
@@ -1446,7 +1710,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_REMAINS_ODOLWA) && (item <= ITEM_REMAINS_TWINMOLD)) {
-        SET_QUEST_ITEM(item - ITEM_REMAINS_ODOLWA + QUEST_REMAINS_ODOWLA);
+        SET_QUEST_ITEM(item - ITEM_REMAINS_ODOLWA + QUEST_REMAINS_ODOLWA);
         return ITEM_NONE;
 
     } else if (item == ITEM_RECOVERY_HEART) {
@@ -1455,16 +1719,16 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if (item == ITEM_MAGIC_SMALL) {
         Magic_Add(play, MAGIC_NORMAL_METER / 2);
-        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
-            gSaveContext.save.weekEventReg[12] |= 0x80;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_80)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_80);
             return ITEM_NONE;
         }
         return item;
 
     } else if (item == ITEM_MAGIC_LARGE) {
         Magic_Add(play, MAGIC_NORMAL_METER);
-        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
-            gSaveContext.save.weekEventReg[12] |= 0x80;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_80)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_80);
             return ITEM_NONE;
         }
         return item;
@@ -1674,7 +1938,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
         return ITEM_RECOVERY_HEART;
 
     } else if ((item == ITEM_MAGIC_SMALL) || (item == ITEM_MAGIC_LARGE)) {
-        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_80)) {
             return ITEM_NONE;
         }
         return item;
@@ -2045,7 +2309,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (gSaveContext.save.weekEventReg[14] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                     // Drank Chateau Romani
                     magicToConsume = 0;
                 }
@@ -2065,7 +2329,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (gSaveContext.save.weekEventReg[14] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                     // Drank Chateau Romani
                     magicToConsume = 0;
                 }
@@ -2142,7 +2406,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (gSaveContext.save.weekEventReg[14] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                     // Drank Chateau Romani
                     magicToConsume = 0;
                 }
@@ -2231,7 +2495,7 @@ void Magic_Update(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s16 magicCapacityTarget;
 
-    if (gSaveContext.save.weekEventReg[14] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
         // Drank Chateau Romani
         Magic_FlashMeterBorder();
     }
@@ -2282,7 +2546,7 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME:
             // Consume magic until target is reached or no more magic is available
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 gSaveContext.save.playerData.magic =
                     ((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
                 if (gSaveContext.save.playerData.magic <= 0) {
@@ -2295,7 +2559,7 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_METER_FLASH_1:
         case MAGIC_STATE_METER_FLASH_2:
         case MAGIC_STATE_METER_FLASH_3:
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -2307,7 +2571,7 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_LENS:
             // Slowly consume magic while Lens of Truth is active
-            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
                 (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
                 !Play_InCsMode(play)) {
@@ -2329,19 +2593,19 @@ void Magic_Update(PlayState* play) {
 
                 interfaceCtx->magicConsumptionTimer--;
                 if (interfaceCtx->magicConsumptionTimer == 0) {
-                    if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                         gSaveContext.save.playerData.magic--;
                     }
                     interfaceCtx->magicConsumptionTimer = 80;
                 }
             }
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
 
         case MAGIC_STATE_CONSUME_GORON_ZORA_SETUP:
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 gSaveContext.save.playerData.magic -= 2;
             }
             if (gSaveContext.save.playerData.magic <= 0) {
@@ -2350,13 +2614,13 @@ void Magic_Update(PlayState* play) {
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
             // fallthrough
         case MAGIC_STATE_CONSUME_GORON_ZORA:
-            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == 0) && (msgCtx->msgMode == 0) &&
-                (play->gameOverCtx.state == GAMEOVER_INACTIVE) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
-                (play->transitionMode == TRANS_MODE_OFF)) {
+            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == 0) &&
+                (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
+                (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
-                        if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                             gSaveContext.save.playerData.magic--;
                         }
                         if (gSaveContext.save.playerData.magic <= 0) {
@@ -2366,19 +2630,19 @@ void Magic_Update(PlayState* play) {
                     }
                 }
             }
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
 
         case MAGIC_STATE_CONSUME_GIANTS_MASK:
-            if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+            if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
                 (msgCtx->msgMode == 0) && (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
-                        if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                             gSaveContext.save.playerData.magic--;
                         }
                         if (gSaveContext.save.playerData.magic <= 0) {
@@ -2388,7 +2652,7 @@ void Magic_Update(PlayState* play) {
                     }
                 }
             }
-            if (!(gSaveContext.save.weekEventReg[14] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -2416,17 +2680,17 @@ void Magic_DrawMeter(PlayState* play) {
 
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
-        OVERLAY_DISP = func_8010CFBC(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10,
-                                     sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
-                                     interfaceCtx->magicAlpha);
-        OVERLAY_DISP =
-            func_8010CFBC(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY, ((void)0, gSaveContext.magicCapacity),
-                          16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
-                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
-        OVERLAY_DISP =
-            func_8010D480(OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY,
-                          8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
-                          sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha, 3, 0x100);
+        OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(
+            OVERLAY_DISP, gMagicMeterEndTex, 8, 16, 18, magicBarY, 8, 16, 1 << 10, 1 << 10, sMagicMeterOutlinePrimRed,
+            sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gMagicMeterMidTex, 24, 16, 26, magicBarY,
+                                                     ((void)0, gSaveContext.magicCapacity), 16, 1 << 10, 1 << 10,
+                                                     sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen,
+                                                     sMagicMeterOutlinePrimBlue, interfaceCtx->magicAlpha);
+        OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadowOffset(
+            OVERLAY_DISP, gMagicMeterEndTex, 8, 16, ((void)0, gSaveContext.magicCapacity) + 26, magicBarY, 8, 16,
+            1 << 10, 1 << 10, sMagicMeterOutlinePrimRed, sMagicMeterOutlinePrimGreen, sMagicMeterOutlinePrimBlue,
+            interfaceCtx->magicAlpha, 3, 0x100);
 
         gDPPipeSync(OVERLAY_DISP++);
         gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, 0, 0, 0, PRIMITIVE, PRIMITIVE,
@@ -2444,7 +2708,7 @@ void Magic_DrawMeter(PlayState* play) {
 
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
-            if (gSaveContext.save.weekEventReg[14] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 // Blue magic (drank Chateau Romani)
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
@@ -2458,7 +2722,7 @@ void Magic_DrawMeter(PlayState* play) {
                 (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             // Fill the whole meter with the normal magic color
-            if (gSaveContext.save.weekEventReg[14] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_08)) {
                 // Blue magic (drank Chateau Romani)
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
@@ -2678,7 +2942,7 @@ void Interface_DrawTimers(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     // Not satisfying any of these conditions will pause the timer
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         ((msgCtx->msgMode == 0) ||
          ((msgCtx->msgMode != 0) && (msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&
@@ -2892,7 +3156,7 @@ void Interface_DrawTimers(PlayState* play) {
                             gSaveContext.timerStopTimes[sTimerId] = SECONDS_TO_TIMER(120);
                             gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(120);
                         }
-                    } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES) &&
+                    } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES) &&
                                (gSaveContext.timerStopTimes[sTimerId] >= SECONDS_TO_TIMER(120))) {
                         gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(120);
                     }
@@ -3001,7 +3265,7 @@ void Interface_DrawTimers(PlayState* play) {
                     if (osTime >= SECONDS_TO_TIMER(120)) {
                         osTime = SECONDS_TO_TIMER(120);
                     }
-                } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES) &&
+                } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES) &&
                            (osTime >= SECONDS_TO_TIMER(120))) {
                     osTime = SECONDS_TO_TIMER(120);
                 }
@@ -3018,7 +3282,7 @@ void Interface_DrawTimers(PlayState* play) {
                         play_sound(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
                     }
-                } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES)) {
+                } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                     if ((((void)0, gSaveContext.timerCurTimes[sTimerId]) >
                          (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] - SECONDS_TO_TIMER(9))) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
@@ -3032,9 +3296,9 @@ void Interface_DrawTimers(PlayState* play) {
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(OVERLAY_DISP++, 0, 0, 0, 0);
-            OVERLAY_DISP =
-                func_8010CD98(OVERLAY_DISP, gTimerClockIconTex, 0x10, 0x10, ((void)0, gSaveContext.timerX[sTimerId]),
-                              ((void)0, gSaveContext.timerY[sTimerId]) + 2, 0x10, 0x10, 1 << 10, 1 << 10);
+            OVERLAY_DISP = Gfx_DrawTexRectIA8(
+                OVERLAY_DISP, gTimerClockIconTex, 0x10, 0x10, ((void)0, gSaveContext.timerX[sTimerId]),
+                ((void)0, gSaveContext.timerY[sTimerId]) + 2, 0x10, 0x10, 1 << 10, 1 << 10);
             gDPPipeSync(OVERLAY_DISP++);
             gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
                               0, PRIMITIVE, 0);
@@ -3056,7 +3320,7 @@ void Interface_DrawTimers(PlayState* play) {
                         } else {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, 255);
                         }
-                    } else if ((gSaveContext.eventInf[3] & 0x10) && (play->sceneId == SCENE_DEKUTES)) {
+                    } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                         if (((void)0, gSaveContext.timerCurTimes[sTimerId]) >=
                             gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 50, 0, 255);
@@ -3081,7 +3345,7 @@ void Interface_DrawTimers(PlayState* play) {
                     if (sPostmanBunnyHoodState == POSTMAN_MINIGAME_BUNNY_HOOD_ON) {
                         // draw sTimerDigits[3] (10s of seconds) to sTimerDigits[6] (100s of milliseconds)
                         for (j = 0; j < 4; j++) {
-                            OVERLAY_DISP = func_8010D7D0(
+                            OVERLAY_DISP = Gfx_DrawTexRectI8(
                                 OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j + 3])), 8, 0x10,
                                 ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                                 ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -3089,7 +3353,7 @@ void Interface_DrawTimers(PlayState* play) {
                     } else {
                         // draw sTimerDigits[3] (10s of seconds) to sTimerDigits[7] (10s of milliseconds)
                         for (j = 0; j < 5; j++) {
-                            OVERLAY_DISP = func_8010D7D0(
+                            OVERLAY_DISP = Gfx_DrawTexRectI8(
                                 OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j + 3])), 8, 0x10,
                                 ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                                 ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -3098,7 +3362,7 @@ void Interface_DrawTimers(PlayState* play) {
                 } else {
                     // draw sTimerDigits[3] (6s of minutes) to sTimerDigits[7] (10s of milliseconds)
                     for (j = 0; j < 8; j++) {
-                        OVERLAY_DISP = func_8010D7D0(
+                        OVERLAY_DISP = Gfx_DrawTexRectI8(
                             OVERLAY_DISP, ((u8*)gCounterDigit0Tex + (8 * 16 * sTimerDigits[j])), 8, 0x10,
                             ((void)0, gSaveContext.timerX[sTimerId]) + sTimerDigitsOffsetX[j],
                             ((void)0, gSaveContext.timerY[sTimerId]), sTimerDigitsWidth[j], 0xFA, 0x370, 0x370);
@@ -3123,7 +3387,7 @@ void Interface_UpdateBottleTimers(PlayState* play) {
     s32 pad[2];
 
     // Not satisfying any of these conditions will pause the bottle timer
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE) &&
         ((msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
          ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId <= 0x1BB6))) &&

@@ -4,6 +4,7 @@
  * Description: Stockpot Inn - 2nd Floor Window
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_yado.h"
 #include "objects/object_yado_obj/object_yado_obj.h"
 
@@ -16,7 +17,7 @@ void ObjYado_Destroy(Actor* thisx, PlayState* play);
 void ObjYado_Update(Actor* thisx, PlayState* play);
 void ObjYado_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Yado_InitVars = {
+ActorInit Obj_Yado_InitVars = {
     ACTOR_OBJ_YADO,
     ACTORCAT_BG,
     FLAGS,

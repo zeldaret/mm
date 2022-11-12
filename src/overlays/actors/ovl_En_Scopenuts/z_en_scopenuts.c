@@ -33,7 +33,7 @@ void func_80BCC288(EnScopenuts* this, PlayState* play);
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-const ActorInit En_Scopenuts_InitVars = {
+ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -170,7 +170,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
 s16 func_80BCAF0C(EnScopenuts* this) {
     switch (this->unk_33C) {
         case 0x0:
-            if (gSaveContext.save.weekEventReg[53] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_02)) {
                 this->unk_328 |= 1;
                 return 0x1638;
             }
@@ -239,8 +239,8 @@ void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
     this->unk_350 *= 0.92f;
     Actor_SetScale(&this->actor, this->unk_350);
     if (this->actor.bgCheckFlags & 1) {
-        gSaveContext.save.weekEventReg[52] |= 0x40;
-        Actor_MarkForDeath(&this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_52_40);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -368,7 +368,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
 void func_80BCB90C(EnScopenuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[53] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
         this->actionFunc = func_80BCB6D0;
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -594,7 +594,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         if (sp32 == 3) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_338);
-                gSaveContext.save.weekEventReg[52] &= (u8)~0x40;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_40);
                 this->actionFunc = func_80BCC288;
             } else {
                 this->unk_334++;
@@ -626,7 +626,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCC288(EnScopenuts* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
@@ -684,9 +684,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(gSaveContext.save.weekEventReg[74] & 0x40) &&
-        (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
-        Actor_MarkForDeath(&this->actor);
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) && (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -705,21 +704,21 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     this->actor.speedXZ = 0.0f;
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
-        if (gSaveContext.save.weekEventReg[52] & 0x40) {
-            Actor_MarkForDeath(&this->actor);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
+            Actor_Kill(&this->actor);
         } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
-        if (gSaveContext.save.weekEventReg[52] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->actor.gravity = -1.0f;
                 this->actor.draw = EnScopenuts_Draw;
@@ -732,10 +731,10 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80BCB230;
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

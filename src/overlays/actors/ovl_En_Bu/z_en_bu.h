@@ -14,6 +14,4 @@ typedef struct EnBu {
     /* 0x18C */ Gfx* displayListPtr;
 } EnBu; // size = 0x190
 
-extern const ActorInit En_Bu_InitVars;
-
 #endif // Z_EN_BU_H

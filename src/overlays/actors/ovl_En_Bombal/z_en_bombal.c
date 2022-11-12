@@ -25,7 +25,7 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay);
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play);
 void EnBombal_DrawEffects(EnBombal*, PlayState*);
 
-const ActorInit En_Bombal_InitVars = {
+ActorInit En_Bombal_InitVars = {
     ACTOR_EN_BOMBAL,
     ACTORCAT_PROP,
     FLAGS,
@@ -92,8 +92,8 @@ void func_80C05B3C(EnBombal* this, PlayState* play) {
         if (this->collider.base.acFlags & AC_HIT) {
             player = GET_PLAYER(play);
             this->collider.base.acFlags &= ~AC_HIT;
-            if (!(gSaveContext.save.weekEventReg[75] & 0x40) && !(gSaveContext.save.weekEventReg[73] & 0x10) &&
-                !(gSaveContext.save.weekEventReg[85] & 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
                 player->stateFlags1 |= ACTOR_FLAG_20;
                 this->actor.flags |= ACTOR_FLAG_100000;
             }
@@ -107,8 +107,8 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
     s32 i;
     Vec3f pos;
 
-    if (!(gSaveContext.save.weekEventReg[75] & 0x40) && !(gSaveContext.save.weekEventReg[73] & 0x10) &&
-        !(gSaveContext.save.weekEventReg[85] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
             ActorCutscene_SetIntentToPlay(this->cutscene);
@@ -135,7 +135,7 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
             EnBombal_InitEffects(this, &pos, 10);
         }
 
-        gSaveContext.save.weekEventReg[83] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_83_04);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
         this->timer = 30;
         this->isPopped = true;
@@ -145,12 +145,15 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
 
 void func_80C05DE8(EnBombal* this, PlayState* play) {
     if (this->timer == 0) {
-        if (!(gSaveContext.save.weekEventReg[75] & 0x40) && !(gSaveContext.save.weekEventReg[73] & 0x10) &&
-            !(gSaveContext.save.weekEventReg[85] & 2)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
             ActorCutscene_Stop(this->cutscene);
         }
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->timer < 10) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->timer < 10) {
         this->actor.colChkInfo.health = 0;
     }
 }

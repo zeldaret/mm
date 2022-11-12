@@ -148,8 +148,9 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
 
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
-    if ((play->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0x0CFF)) {
+    if ((PLAYER_GET_INITMODE(play->linkActorEntry) == PLAYER_INITMODE_TELESCOPE) ||
+        ((gSaveContext.respawnFlag == 0x02) &&
+         (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
         // Skull Kid Object
         Object_Spawn(&play->objectCtx, OBJECT_STK);
         return;
@@ -159,7 +160,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     nextObject = play->objectCtx.status[play->objectCtx.num].segment;
     play->objectCtx.num = loadedCount;
     play->objectCtx.spawnedObjectCount = loadedCount;
-    playerObjectId = gPlayerFormObjectIndices[(void)0, gSaveContext.save.playerForm];
+    playerObjectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&play->objectCtx, playerObjectId);
 
@@ -216,7 +217,9 @@ void Scene_HeaderCmdEntranceList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x07: Special Files
 void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
-    static RomFile tatlMessageFiles[2] = {
+    // @note These quest hint files are identical to OoT's.
+    // They are not relevant in this game and the system to process these scripts has been removed.
+    static RomFile naviQuestHintFiles[2] = {
         { SEGMENT_ROM_START(elf_message_field), SEGMENT_ROM_END(elf_message_field) },
         { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
     };
@@ -227,8 +230,8 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
         gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
     }
 
-    if (cmd->specialFiles.cUpElfMsgNum != 0) {
-        play->unk_18868 = Play_LoadScene(play, &tatlMessageFiles[cmd->specialFiles.cUpElfMsgNum - 1]);
+    if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
+        play->naviQuestHints = Play_LoadScene(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -589,7 +592,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
 }
 
 /**
- * Creates an entrance from the scene, spawn, and lyaer.
+ * Creates an entrance from the scene, spawn, and layer.
  */
 u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
     return (scene << 9) | (spawn << 4) | layer;

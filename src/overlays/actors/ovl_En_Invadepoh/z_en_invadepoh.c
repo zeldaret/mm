@@ -178,7 +178,7 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 
 extern s32 D_801BDA9C;
 
-const ActorInit En_Invadepoh_InitVars = {
+ActorInit En_Invadepoh_InitVars = {
     ACTOR_EN_INVADEPOH,
     ACTORCAT_PROP,
     FLAGS,
@@ -830,7 +830,7 @@ s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2) {
 
     sp40 = temp_a3->x - sp48->x;
     sp3C = temp_a3->z - sp48->z;
-    sp1E = Math_FAtan2F(sp3C, sp40);
+    sp1E = Math_Atan2S_XY(sp3C, sp40);
     sp38 = Math_CosS(sp1E);
     sp34 = Math_SinS(sp1E);
     sp30 = this->actor.world.pos.x - sp48->x;
@@ -1160,8 +1160,8 @@ s32 func_80B44C80(EnInvadepoh* this, PlayState* play) {
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y,
-                       Math_FAtan2F(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x), 4,
-                       0xFA0, 0x64);
+                       Math_Atan2S_XY(((sp60.z + temp_f0_2) * 0.9f) + sp6C.z, ((sp60.x + temp_f0_3) * 0.9f) + sp6C.x),
+                       4, 0xFA0, 0x64);
     Actor_MoveWithGravity(&this->actor);
     if (func_80B440B8(this, 50.0f, 15.0f)) {
         phi_v0 = 4;
@@ -1283,7 +1283,7 @@ void func_80B451A0(EnInvadepoh* this, PlayState* play) {
         }
 
         if (D_80B4E940 == 0) {
-            if (gSaveContext.save.weekEventReg[22] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 D_80B4E940 = 3;
             } else {
                 D_80B4E940 = 4;
@@ -1688,7 +1688,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, PlayState* play) {
     }
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_UCH);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1698,7 +1698,7 @@ void EnInvadepoh_InitParentCow(EnInvadepoh* this, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0x30);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1707,7 +1707,7 @@ void EnInvadepoh_InitChildCow(EnInvadepoh* this, PlayState* play) {
     this->actor.update = func_80B481C4;
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1743,27 +1743,28 @@ void EnInvadepoh_InitRomani(EnInvadepoh* this, PlayState* play) {
 
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA1);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
+
     if (temp == 5) {
-        if (gSaveContext.save.weekEventReg[22] & 1) {
-            Actor_MarkForDeath(&this->actor);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (temp == 7) {
         if (gSaveContext.save.time < CLOCK_TIME(6, 0) && gSaveContext.save.time >= CLOCK_TIME(2, 15)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (temp != 8) {
         if (temp == 9) {
             if (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 6)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         } else if (temp == 0xC) {
-            if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-                Actor_MarkForDeath(&this->actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+                Actor_Kill(&this->actor);
             }
             D_80B503F4 = this;
         }
@@ -1784,7 +1785,7 @@ void func_80B468B4(EnInvadepoh* this, PlayState* play) {
         this->actor.world.pos.y += 1500.0f;
         func_80B49628(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1799,7 +1800,7 @@ void EnInvadepoh_InitDog(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 24.0f);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_DOG);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1815,10 +1816,10 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 18.0f);
     this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_MA2);
     if (this->bankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
-    if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->actor);
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+        Actor_Kill(&this->actor);
     }
     D_80B503F8 = this;
 }
@@ -1954,7 +1955,7 @@ void func_80B46FA8(EnInvadepoh* this, PlayState* play) {
     s32 i;
 
     if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) && (gSaveContext.save.time >= CLOCK_TIME(5, 15))) {
-        gSaveContext.save.weekEventReg[22] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_22_01);
         func_80B47064(this);
     } else {
         func_80B457A0(this);
@@ -2039,7 +2040,7 @@ void func_80B47298(EnInvadepoh* this, PlayState* play) {
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_72;
     gSaveContext.nextTransitionType = TRANS_TYPE_72;
-    gSaveContext.save.weekEventReg[89] |= 0x10;
+    SET_WEEKEVENTREG(WEEKEVENTREG_89_10);
     func_80B47304(this);
 }
 
@@ -2297,7 +2298,7 @@ void func_80B47BAC(Actor* thisx, PlayState* play) {
                 func_80B47568(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -2313,7 +2314,7 @@ void func_80B47D30(Actor* thisx, PlayState* play) {
             thisx->gravity = 0.0f;
             func_80B47830(this);
         } else if ((this->actionFunc == func_80B474DC) || (this->actionFunc == func_80B473E4)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
@@ -2376,7 +2377,7 @@ void func_80B48060(Actor* thisx, PlayState* play) {
     MtxF unkMtx;
 
     if (D_80B503F0 == NULL || this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2416,7 +2417,7 @@ void func_80B4827C(Actor* thisx, PlayState* play) {
     EnInvadepoh* this = THIS;
 
     if (D_80B503F0 == NULL || this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -2534,7 +2535,7 @@ void func_80B4873C(Actor* thisx, PlayState* play) {
     AlienBehaviorInfo* substruct = &this->behaviorInfo;
 
     if (this->actor.parent == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);
@@ -2940,7 +2941,7 @@ void func_80B4994C(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -3030,7 +3031,7 @@ void func_80B49C38(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (this->clockTime >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -3059,7 +3060,7 @@ void func_80B49DFC(EnInvadepoh* this, PlayState* play) {
     substruct->unk26.y = CLAMP(temp_v1, -0x1F40, 0x1F40);
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         if (this->actor.textId == 0x332D) {
-            gSaveContext.save.weekEventReg[54] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_54_10);
             this->actor.textId = 0x332E;
         }
         func_80B49BD0(this);
@@ -3084,8 +3085,8 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
         func_80B44C24(this, play);
         func_80B43F0C(this);
         func_80B4516C(this);
-        if (0x20 & gSaveContext.save.weekEventReg[21]) {
-            if (gSaveContext.save.weekEventReg[54] & 0x10) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E;
             } else {
                 this->actor.textId = 0x332D;
@@ -3103,7 +3104,7 @@ void func_80B49F88(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E324;
             func_80B49BD0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -3286,7 +3287,7 @@ void func_80B4A81C(EnInvadepoh* this, PlayState* play) {
 
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         if (this->actor.textId == 0x332D) {
-            gSaveContext.save.weekEventReg[54] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_54_10);
             this->actor.textId = 0x332E;
         }
         if (this->pathIndex == this->endPoint) {
@@ -3325,8 +3326,8 @@ void func_80B4A9C8(Actor* thisx, PlayState* play) {
         func_80B43F0C(this);
         func_800B4AEC(play, &this->actor, 50.0f);
         func_80B4516C(this);
-        if (gSaveContext.save.weekEventReg[21] & 0x20) {
-            if (gSaveContext.save.weekEventReg[54] & 0x10) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E;
             } else {
                 this->actor.textId = 0x332D;
@@ -3374,7 +3375,7 @@ void func_80B4ACDC(EnInvadepoh* this) {
 }
 
 void func_80B4ACF0(EnInvadepoh* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[22] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         this->actor.draw = func_80B4E324;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80B4AD3C(this);
@@ -3402,7 +3403,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 void func_80B4ADCC(EnInvadepoh* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x3331) {
-            if (gSaveContext.save.weekEventReg[22] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
                 EnInvadepoh_SetTextID(this, play, 0x3334);
                 func_80151BB4(play, 0x1D);
                 func_80151BB4(play, 5);
@@ -3434,7 +3435,7 @@ void func_80B4AEDC(EnInvadepoh* this, PlayState* play) {
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[22] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_22_02);
         func_80B4AF80(this);
     } else {
         Actor_PickUp(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
@@ -3453,7 +3454,7 @@ void func_80B4AF94(EnInvadepoh* this, PlayState* play) {
         func_80151BB4(play, 5);
         func_80B4ADB8(this);
     } else {
-        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 2000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -3654,7 +3655,7 @@ void func_80B4B8BC(Actor* thisx, PlayState* play) {
         } else if (D_80B4E940 == 1) {
             this->actor.update = func_80B4BA30;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             if (!this) {}
         }
     }
@@ -3788,7 +3789,7 @@ void func_80B4BC4C(EnInvadepoh* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ROMANI_WALK);
     }
     if (gSaveContext.save.time > CLOCK_TIME(20, 15)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if ((temp_t6 != NULL) && (temp_t6->actionFunc == func_80B4CB0C)) {
         func_80B4C1BC(this);
     }
@@ -3892,7 +3893,7 @@ void func_80B4C3A0(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E7BC;
             func_80B4BBE0(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -4003,7 +4004,7 @@ void func_80B4C730(EnInvadepoh* this, PlayState* play) {
     }
 
     if (this->clockTime >= 0.9999f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -4101,7 +4102,7 @@ void func_80B4CE54(Actor* thisx, PlayState* play) {
             this->actor.draw = func_80B4E324;
             func_80B4C6C8(this);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -4168,7 +4169,7 @@ void func_80B4D290(EnInvadepoh* this, PlayState* play) {
     f32 sp28;
 
     if (D_80B503F0 == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -4190,7 +4191,7 @@ void func_80B4D290(EnInvadepoh* this, PlayState* play) {
     }
 
     if (sp28 < 5.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4257,7 +4258,7 @@ void func_80B4D480(EnInvadepoh* this, PlayState* play) {
     }
 
     if ((this->actionTimer <= 0) || sp2C) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -4525,7 +4526,7 @@ void func_80B4E3F0(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
-    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
     if (func_80B456A8(play, &sp5C)) {
         func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, sp5C, 20.0f, 9.0f, 0, 0);
     }

@@ -48,7 +48,7 @@ typedef enum {
     /* 0x01 */ OWL_OK
 } EnOwlMessageChoice;
 
-const ActorInit En_Owl_InitVars = {
+ActorInit En_Owl_InitVars = {
     ACTOR_EN_OWL,
     ACTORCAT_NPC,
     FLAGS,
@@ -151,21 +151,21 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
     switch (owlType) {
         case ENOWL_GET_TYPE_1:
             if ((switchFlag < 0x7F) && Flags_GetSwitch(play, switchFlag)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_2:
             if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENOWL_GET_TYPE_3:
             if (CHECK_QUEST_ITEM(QUEST_SONG_SOARING)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -183,7 +183,7 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
 
         case ENOWL_GET_TYPE_2:
             this->actionFunc = func_8095BE0C;
-            if (gSaveContext.save.weekEventReg[9] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_20)) {
                 this->actor.textId = 0xBF0;
             } else {
                 this->actor.textId = 0xBEA;
@@ -229,7 +229,7 @@ s32 func_8095A978(EnOwl* this, PlayState* play, u16 textId, f32 targetDist, f32 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, targetDist, arg4, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, targetDist, arg4, PLAYER_IA_NONE);
     }
 
     return false;
@@ -242,7 +242,7 @@ s32 func_8095A9FC(EnOwl* this, PlayState* play, u16 textId) {
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_NONE);
     }
 
     return false;
@@ -411,7 +411,7 @@ void func_8095B0C8(EnOwl* this) {
     Vec3s* points = Lib_SegmentedToVirtual(this->path->points);
 
     points += this->unk_3F8;
-    this->unk_3EC = Math_FAtan2F(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
+    this->unk_3EC = Math_Atan2S_XY(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
     this->unk_3F0 = points->y;
 }
 
@@ -429,7 +429,7 @@ void func_8095B1E4(EnOwl* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer > 6000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -478,7 +478,7 @@ void func_8095B3DC(EnOwl* this, PlayState* play) {
 void func_8095B480(EnOwl* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x10000000) {
+    if (player->stateFlags3 & PLAYER_STATE3_10000000) {
         this->actor.textId = 0xBF1;
         EnOwl_ChangeMode(this, func_8095BF58, func_8095C484, &this->skelAnime2, &object_owl_Anim_00CDB0, 0.0f);
         this->eyeTexIndex = 0;
@@ -505,7 +505,7 @@ void func_8095B574(EnOwl* this, PlayState* play) {
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, 200.0f, 400.0f, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -613,10 +613,10 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         switch (play->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                if (gSaveContext.save.weekEventReg[9] & 0x40) {
+                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_40)) {
                                     func_80151938(play, 0xBF4);
                                 } else {
-                                    gSaveContext.save.weekEventReg[9] |= 0x40;
+                                    SET_WEEKEVENTREG(WEEKEVENTREG_09_40);
                                     func_80151938(play, 0xBED);
                                 }
                                 break;
@@ -649,7 +649,7 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0xBEA:
-                        gSaveContext.save.weekEventReg[9] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_09_20);
                         func_80151938(play, 0xBEB);
                         break;
 
@@ -718,11 +718,11 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
         if (this->actor.isTargeted) {
-            func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_AP_NONE);
+            func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_AP_NONE);
+        func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -740,7 +740,7 @@ void func_8095BF58(EnOwl* this, PlayState* play) {
 void func_8095BF78(EnOwl* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_20;
     if (this->actor.xzDistToPlayer > 6000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_3EC, 2, 0x80, 0x40);
@@ -1066,13 +1066,13 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
     EnOwl* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x10000000) {
-        Actor_MarkForDeath(&this->actor);
+    if (player->stateFlags3 & PLAYER_STATE3_10000000) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (this->actor.world.pos.y < (this->unk_3F0 - 1000.0f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1083,7 +1083,7 @@ void func_8095CCF4(Actor* thisx, PlayState* play) {
         if (this->unk_3DC > 0) {
             this->unk_3DC--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }

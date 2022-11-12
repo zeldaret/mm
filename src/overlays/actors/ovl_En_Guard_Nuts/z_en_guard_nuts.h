@@ -29,6 +29,4 @@ typedef struct EnGuardNuts {
     /* 0x244 */ ColliderCylinder collider;
 } EnGuardNuts; // size = 0x290
 
-extern const ActorInit En_Guard_Nuts_InitVars;
-
 #endif // Z_EN_GUARD_NUTS_H

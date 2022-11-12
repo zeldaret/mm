@@ -16,7 +16,7 @@ void BgOpenSpot_Destroy(Actor* thisx, PlayState* play);
 void BgOpenSpot_Update(Actor* thisx, PlayState* play);
 void BgOpenSpot_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Open_Spot_InitVars = {
+ActorInit Bg_Open_Spot_InitVars = {
     ACTOR_BG_OPEN_SPOT,
     ACTORCAT_PROP,
     FLAGS,

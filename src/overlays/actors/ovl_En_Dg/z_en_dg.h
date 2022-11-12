@@ -65,6 +65,4 @@ typedef struct EnDg {
     /* 0x294 */ Vec3f curRot;
 } EnDg; // size = 0x2A0
 
-extern const ActorInit En_Dg_InitVars;
-
 #endif // Z_EN_DG_H

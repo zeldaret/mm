@@ -52,6 +52,4 @@ typedef struct EnRg {
     /* 0x34C */ EnRgStruct unk_34C[32];
 } EnRg; // size = 0xACC
 
-extern const ActorInit En_Rg_InitVars;
-
 #endif // Z_EN_RG_H

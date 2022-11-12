@@ -22,7 +22,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play);
 void func_808A7C04(ObjWturn* this, PlayState* play);
 void func_808A7C78(ObjWturn* this, PlayState* play);
 
-const ActorInit Obj_Wturn_InitVars = {
+ActorInit Obj_Wturn_InitVars = {
     ACTOR_OBJ_WTURN,       ACTORCAT_ITEMACTION,        FLAGS,
     GAMEPLAY_KEEP,         sizeof(ObjWturn),           (ActorFunc)ObjWturn_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)ObjWturn_Update, (ActorFunc)NULL,
@@ -41,9 +41,12 @@ void func_808A7954(ObjWturn* this) {
 void func_808A7968(ObjWturn* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode >= 28 && play->msgCtx.ocarinaMode < 39) {
         Flags_UnsetSwitch(play, this->actor.params);
-        Actor_MarkForDeath(&this->actor);
-    } else if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
-               (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if ((Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F40)) ||
+        (!Flags_GetSwitch(play, this->actor.params) && (play->sceneId == SCENE_F41))) {
         func_808A7A24(this);
     }
 }
@@ -69,7 +72,7 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
     func_8016566C(140);
     this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
-    func_800B7298(play, &this->actor, 21);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;
     subCamAt.y = player->actor.focus.pos.y;
@@ -93,7 +96,7 @@ void func_808A7C04(ObjWturn* this, PlayState* play) {
 
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
-    func_800B7298(play, &this->actor, 0x54);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_84);
     func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
     func_80165690();

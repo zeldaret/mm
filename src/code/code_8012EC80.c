@@ -661,17 +661,17 @@ void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
             i++;
         }
 
-        if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[0]) {
+        if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
             gSaveContext.save.worldMapCloudVisibility |= 3;
-        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[1]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_WOODFALL]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x1C;
-        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[2]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
             gSaveContext.save.worldMapCloudVisibility |= 0xE0;
-        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[3]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x100;
-        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[4]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x1E00;
-        } else if ((*tingleMapSceneIds) == sSceneIdsPerTingleMap[5]) {
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
             gSaveContext.save.worldMapCloudVisibility |= 0x6000;
         }
     }

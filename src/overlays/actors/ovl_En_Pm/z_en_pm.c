@@ -132,7 +132,7 @@ static u8 D_80AFAD80[] = {
     /* 0x239 */ SCHEDULE_CMD_RET_TIME(10, 21, 10, 35, 44),
     /* 0x23F */ SCHEDULE_CMD_RET_NONE(),
     /* 0x240 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x414 - 0x245),
-    /* 0x245 */ SCHEDULE_CMD_CHECK_FLAG_L(0x1C, 0x08, 0x2EF - 0x24A),
+    /* 0x245 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_28_08, 0x2EF - 0x24A),
     /* 0x24A */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x251),
     /* 0x251 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 13, 1, 0x2E4 - 0x258),
     /* 0x258 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 15, 0, 0x2DC - 0x25E),
@@ -226,8 +226,8 @@ static u8 D_80AFAD80[] = {
     /* 0x40D */ SCHEDULE_CMD_RET_TIME(12, 0, 13, 1, 21),
     /* 0x413 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x414 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x588 - 0x419),
-    /* 0x419 */ SCHEDULE_CMD_CHECK_FLAG_L(0x1C, 0x08, 0x55D - 0x41E),
-    /* 0x41E */ SCHEDULE_CMD_CHECK_FLAG_L(0x1C, 0x10, 0x52F - 0x423),
+    /* 0x419 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_28_08, 0x55D - 0x41E),
+    /* 0x41E */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_28_10, 0x52F - 0x423),
     /* 0x423 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(9, 0, 12, 0, 0x117 - 0x42A),
     /* 0x42A */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(12, 0, 13, 1, 0x527 - 0x431),
     /* 0x431 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(13, 1, 15, 0, 0x446 - 0x437),
@@ -472,7 +472,7 @@ static UNK_TYPE D_80AFB764[] = {
     0x52801210,
 };
 
-const ActorInit En_Pm_InitVars = {
+ActorInit En_Pm_InitVars = {
     ACTOR_EN_PM,
     ACTORCAT_NPC,
     FLAGS,
@@ -544,19 +544,19 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s32 func_80AF7B40(void) {
-    if (gSaveContext.save.weekEventReg[90] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         return 4;
     }
 
-    if (gSaveContext.save.weekEventReg[89] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
         return 3;
     }
 
-    if (gSaveContext.save.weekEventReg[89] & 8) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
         return 2;
     }
 
-    if (gSaveContext.save.weekEventReg[86] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01)) {
         return 1;
     }
 
@@ -566,28 +566,28 @@ s32 func_80AF7B40(void) {
 s32 func_80AF7BAC(EnPm* this) {
     switch (this->unk_38C) {
         case 0:
-            if (gSaveContext.save.weekEventReg[86] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01)) {
                 D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[89] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
                 D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[89] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
                 D_801F4E78 = 0;
                 this->unk_38C++;
             }
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[90] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
                 D_801F4E78 = gSaveContext.save.time;
                 this->unk_38C++;
             }
@@ -842,7 +842,7 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 1:
         case 3:
         case 5:
-            if ((gSaveContext.save.weekEventReg[86] & 8) && (this->unk_378 == 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
@@ -1103,31 +1103,29 @@ void func_80AF8AC8(EnPm* this) {
 
 void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8D4[] = {
-        0x1B02, 0x1B04, 0x1B08, 0x1B10, 0x1B20,
+        WEEKEVENTREG_27_02, WEEKEVENTREG_27_04, WEEKEVENTREG_27_08, WEEKEVENTREG_27_10, WEEKEVENTREG_27_20,
     };
     static u16 D_80AFB8E0[] = {
-        0x1B40, 0x1B80, 0x1C01, 0x1C02, 0x1C04,
+        WEEKEVENTREG_27_40, WEEKEVENTREG_27_80, WEEKEVENTREG_28_01, WEEKEVENTREG_28_02, WEEKEVENTREG_28_04,
     };
 
-    if (!(gSaveContext.save.weekEventReg[88] & 2)) {
-        if (gSaveContext.save.weekEventReg[D_80AFB8D4[arg0] >> 8] &
-            (D_80AFB8D4[arg0] & (1 | 2 | 4 | 0x38 | 0x40 | 0x80))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_02)) {
+        if (CHECK_WEEKEVENTREG(D_80AFB8D4[arg0])) {
             switch (gSaveContext.save.day) {
                 case 2:
-                    gSaveContext.save.weekEventReg[28] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
                     break;
 
                 case 3:
-                    gSaveContext.save.weekEventReg[28] |= 0x10;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_28_10);
                     break;
             }
-            gSaveContext.save.weekEventReg[51] |= 2;
-            gSaveContext.save.weekEventReg[90] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
         }
     }
 
-    gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8] =
-        ((void)0, gSaveContext.save.weekEventReg[D_80AFB8E0[arg0] >> 8]) | (u8)D_80AFB8E0[arg0];
+    SET_WEEKEVENTREG(D_80AFB8E0[arg0]);
 }
 
 void func_80AF8C68(EnPm* this, PlayState* play) {
@@ -1135,7 +1133,7 @@ void func_80AF8C68(EnPm* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
     u16 textId = play->msgCtx.currentTextId;
 
-    if ((player->targetActor == &this->actor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
+    if ((player->talkActor == &this->actor) && ((textId < 0xFF) || (textId > 0x200)) && (talkState == TEXT_STATE_3) &&
         (this->prevTalkState == TEXT_STATE_3)) {
         if ((play->state.frames % 3) == 0) {
             if (this->unk_360 == 120.0f) {
@@ -1170,7 +1168,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     u16 textId = play->msgCtx.currentTextId;
     s32 pad;
 
-    if (player->stateFlags1 & (0x400 | 0x40)) {
+    if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_356 |= 0x400;
         if (this->unk_358 != textId) {
             if ((this->unk_384 == 0) || (this->unk_384 == 1)) {
@@ -1261,7 +1259,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_36C = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_36E = sp56 - scheduleOutput->time0;
             this->actor.flags &= ~ACTOR_FLAG_1;
-            if (gSaveContext.save.weekEventReg[90] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                 this->unk_356 |= 0x800;
             }
             this->unk_356 |= 0x9000;
@@ -1341,7 +1339,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             default:
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 0);
-                if (gSaveContext.save.weekEventReg[90] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                     this->unk_356 |= 0x800;
                 }
                 this->unk_356 |= 0x9000;
@@ -1380,7 +1378,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         if (scheduleOutput->result == 24) {
             Flags_UnsetSwitch(play, 0);
             Flags_UnsetSwitch(play, 1);
-            this->unk_394 = PLAYER_AP_NONE;
+            this->unk_394 = PLAYER_IA_NONE;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
         }
@@ -1457,10 +1455,10 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 break;
 
             case 23:
-                if (gSaveContext.save.weekEventReg[90] & 8) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                     this->unk_356 |= 0x800;
                 }
-                gSaveContext.save.weekEventReg[60] |= 4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_60_04);
 
             default:
                 if (scheduleOutput->result == 29) {
@@ -1481,7 +1479,7 @@ s32 func_80AF98A0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM3, 116.0f, 26.0f, -219.0f, 0, -0x3F46, 0,
                            0) != NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         ret = true;
     }
     return ret;
@@ -1568,7 +1566,7 @@ s32 func_80AF9BF8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_394 = PLAYER_AP_NONE;
+    this->unk_394 = PLAYER_IA_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 
@@ -1780,11 +1778,9 @@ s32 func_80AF9E7C(EnPm* this, PlayState* play) {
     }
 
     if ((this->unk_356 & 0x10) && (this->unk_258 == 90)) {
-        u8 val = gSaveContext.save.weekEventReg[89] | 0x40;
-
-        gSaveContext.save.weekEventReg[89] = val;
-        if (val == 0) {
-            gSaveContext.save.weekEventReg[89] |= 0x40;
+        //! @bug Uses SET_WEEKEVENTREG instead of CHECK_WEEKEVENTREG
+        if (!SET_WEEKEVENTREG(WEEKEVENTREG_89_40)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
         }
     }
 
@@ -1798,7 +1794,7 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
     switch (this->unk_258) {
         case 28:
             if (gSaveContext.save.time >= CLOCK_TIME(1, 39)) {
-                gSaveContext.save.weekEventReg[89] |= 8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
             }
 
         case 16:
@@ -2120,7 +2116,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }
-            if ((this->unk_356 & 0x8000) && !(gSaveContext.save.weekEventReg[90] & 4)) {
+            if ((this->unk_356 & 0x8000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_90_04)) {
                 func_80AF8890(this, gfx, 1);
             }
             break;

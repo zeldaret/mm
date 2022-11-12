@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Prz_InitVars = {
+ActorInit En_Prz_InitVars = {
     ACTOR_EN_PRZ,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -234,7 +234,7 @@ void func_80A763E8(EnPrz* this, PlayState* play) {
         return;
     }
 
-    if ((player->stateFlags1 & 0x8000000) && (this->unk_1F2 == 0)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (this->unk_1F2 == 0)) {
         func_80A76748(this);
         return;
     }
@@ -291,7 +291,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
         if (func_80A762C0(this, play) != 0) {
             this->unk_1E4 += 0x1500;
             this->unk_1E4 += (s16)Rand_ZeroFloat(5000.0f);
-        } else if ((player->stateFlags1 & 0x8000000) && (player->actor.floorHeight < 30.0f)) {
+        } else if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (player->actor.floorHeight < 30.0f)) {
             this->actionFunc = func_80A763E8;
         } else {
             this->unk_1EE = 10;
@@ -325,7 +325,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
     distXZ = sqrtf(SQ(player->actor.world.pos.x - this->actor.parent->home.pos.x) +
                    SQ(player->actor.world.pos.z - this->actor.parent->home.pos.z));
 
-    if (!(player->stateFlags1 & 0x8000000) || (pr->unk_2C8 < distXZ)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_8000000) || (pr->unk_2C8 < distXZ)) {
         this->unk_1F2 = 100;
         this->skelAnime.playSpeed = 1.0f;
         func_80A76388(this);
@@ -353,7 +353,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
         this->unk_1C8 = 1;
     }
 
-    this->unk_1D8.y = (player->actor.world.pos.y + D_80A771E0[((void)0, gSaveContext.save.playerForm)]) +
+    this->unk_1D8.y = (player->actor.world.pos.y + D_80A771E0[GET_PLAYER_FORM]) +
                       randPlusMinusPoint5Scaled((2.0f * this->unk_1E6) + 1.0f);
     func_80A76070(this, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_1D8), play);
 }
@@ -415,7 +415,7 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
 
                 EffectSsBubble_Spawn(play, &sp6C, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

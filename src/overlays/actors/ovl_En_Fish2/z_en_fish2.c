@@ -49,7 +49,7 @@ static s32 D_80B2B2EC = 0;
 static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
-const ActorInit En_Fish2_InitVars = {
+ActorInit En_Fish2_InitVars = {
     ACTOR_EN_FISH2,
     ACTORCAT_PROP,
     FLAGS,
@@ -163,27 +163,27 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
                            this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
-            if (gSaveContext.save.weekEventReg[81] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_10)) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.save.weekEventReg[81] & 0x20) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_20)) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.save.weekEventReg[81] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_40)) {
                 this->unk_2C0 = 3;
             }
         } else {
-            if (gSaveContext.save.weekEventReg[81] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_80)) {
                 this->unk_2C0 = 1;
             }
 
-            if (gSaveContext.save.weekEventReg[82] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_01)) {
                 this->unk_2C0 = 2;
             }
 
-            if (gSaveContext.save.weekEventReg[82] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_02)) {
                 this->unk_2C0 = 3;
             }
         }
@@ -527,7 +527,7 @@ void func_80B2951C(EnFish2* this) {
 
     this->unk_2B4 = 10;
     this->actor.speedXZ = 3.0f;
-    Actor_MarkForDeath(this->unk_350);
+    Actor_Kill(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_M_EAT);
@@ -619,18 +619,18 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
                 this->unk_2C0++;
                 if (this->unk_344 == 0) {
                     if (this->unk_2C0 == 1) {
-                        gSaveContext.save.weekEventReg[81] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_10);
                     } else if (this->unk_2C0 == 2) {
-                        gSaveContext.save.weekEventReg[81] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_20);
                     } else if (this->unk_2C0 == 3) {
-                        gSaveContext.save.weekEventReg[81] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_81_40);
                     }
                 } else if (this->unk_2C0 == 1) {
-                    gSaveContext.save.weekEventReg[81] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_81_80);
                 } else if (this->unk_2C0 == 2) {
-                    gSaveContext.save.weekEventReg[82] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_82_01);
                 } else if (this->unk_2C0 == 3) {
-                    gSaveContext.save.weekEventReg[82] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_82_02);
                 }
 
                 if (this->unk_2B0 != 0) {
@@ -806,7 +806,7 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
     if (D_80B2B2EC != 0) {
         D_80B2B2EC++;
         if (D_80B2B2EC > 200) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             ActorCutscene_Stop(this->unk_2BA[0]);
             return;
         }
@@ -863,7 +863,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;
         D_80B2B2F4 = NULL;
         ActorCutscene_Stop(this->unk_2BA[0]);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -890,12 +890,12 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
             temp_v0->speedXZ = 4.0f;
             temp_v0->velocity.y = 15.0f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x10;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x20;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x40;
-            gSaveContext.save.weekEventReg[81] &= (u8)~0x80;
-            gSaveContext.save.weekEventReg[82] &= (u8)~1;
-            gSaveContext.save.weekEventReg[82] &= (u8)~2;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_10);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_20);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_40);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_81_80);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_82_02);
         }
     }
 

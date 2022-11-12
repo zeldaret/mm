@@ -1,7 +1,22 @@
+//#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+
+#include "z_camera_data.inc.c"
+
+// BSS
+s16 D_801EDBF0;
+f32 D_801EDBF4;
+f32 D_801EDBF8;
+CameraCollision D_801EDC00;
+
+PlayState* sCamPlayState;
+SwingAnimation D_801EDC30[4];
+Vec3f D_801EDDD0;
+Vec3f D_801EDDE0;
+Vec3f D_801EDDF0;
 
 /**
  * Returns the absolute value for floats
@@ -535,6 +550,9 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CC9C0.s")
 
+s32 D_801B9E5C = 0;
+f32 D_801B9E60 = 0.0f;
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CCCEC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CD04C.s")
@@ -577,147 +595,175 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800CED90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeNop.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Noop.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeNORM1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeNORM2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeNORM3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeNORM4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeNORM0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Normal0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModePARA1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Parallel1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModePARA2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Parallel2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModePARA3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Parallel3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModePARA4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Parallel4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModePARA0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Parallel0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeJUMP1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeJUMP2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeJUMP3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeJUMP4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeJUMP0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Jump0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeBATT1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Battle1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeBATT2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Battle2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeBATT3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Battle3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeBATT4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Battle4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeBATT0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Battle0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeKEEP1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeKEEP2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeKEEP3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeKEEP4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeKEEP0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_KeepOn0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeFIXD1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeFIXD2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeFIXD3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeFIXD4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeFIXD0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Fixed0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSUBJ1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Subject1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSUBJ2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Subject2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSUBJ3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Subject3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSUBJ4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Subject4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSUBJ0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Subject0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDATA0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Data0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDATA1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Data1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDATA2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Data2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDATA3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Data3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDATA4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Data4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ5.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique5.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ6.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique6.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ7.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique7.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeUNIQ9.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Unique9.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO2.s")
+// Data for opening chests (default)
+VecSph D_801B9E64[] = {
+    { 50.0f, 0xEE3A, 0xD558 },
+    { 75.0f, 0x0000, 0x8008 },
+    { 80.0f, 0xEE3A, 0x8008 },
+    { 15.0f, 0xEE3A, 0x8008 },
+};
+Vec3f D_801B9E84[] = {
+    { 0.0f, 40.0f, 20.0f },
+    { 0.0f, 40.0f, 0.0f },
+    { 0.0f, 3.0f, -3.0f },
+    { 0.0f, 3.0f, -3.0f },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO3.s")
+// Data for opening chests (goron)
+VecSph D_801B9EB4[] = {
+    { 60.0f, 0xEE3A, 0xD558 },
+    { 95.0f, 0x0000, 0x8008 },
+    { 90.0f, 0xEE3A, 0x8008 },
+    { 20.0f, 0xEE3A, 0x8008 },
+};
+Vec3f D_801B9ED4[] = {
+    { 0.0f, 40.0f, 20.0f },
+    { 0.0f, 40.0f, 0.0f },
+    { 0.0f, 3.0f, -3.0f },
+    { 0.0f, 3.0f, -3.0f },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO5.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO6.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO7.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo5.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo6.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO9.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo7.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeDEMO0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo9.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC1.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Demo0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC2.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC3.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special1.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special2.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC5.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special3.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC6.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC7.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special5.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special6.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_ModeSPEC9.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special7.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special8.s")
+
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Special9.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Alloc.s")
 
@@ -735,6 +781,14 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DE324.s")
 
+s16 sEarthquakeFreq[] = {
+    0xFFC, // 1 Large Earthquake  between CLOCK_TIME(0, 00) to CLOCK_TIME(1, 30)
+    0x7FC, // 2 Large Earthquakes between CLOCK_TIME(1, 30) to CLOCK_TIME(3, 00)
+    0x3FC, // 4 Large Earthquakes between CLOCK_TIME(3, 00) to CLOCK_TIME(4, 30)
+    0x1FC, // 8 Large Earthquakes between CLOCK_TIME(4, 30) to CLOCK_TIME(6, 00)
+};
+s16 sEarthquakeTimer = 0;
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DE62C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DE840.s")
@@ -744,6 +798,8 @@ s32 Camera_GetWaterBoxBgCamSetting(Camera* camera, f32* waterY) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DE954.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/Camera_Update.s")
+
+s32 sModeChangeFlags = 0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_camera/func_800DF498.s")
 

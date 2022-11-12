@@ -25,7 +25,7 @@ void func_808CDDE0(DemoEffect* this, PlayState* play);
 void func_808CDFF8(Actor* thisx, PlayState* play);
 void func_808CE078(Actor* thisx, PlayState* play2);
 
-const ActorInit Demo_Effect_InitVars = {
+ActorInit Demo_Effect_InitVars = {
     ACTOR_DEMO_EFFECT,
     ACTORCAT_BG,
     FLAGS,
@@ -213,7 +213,7 @@ void func_808CDBDC(DemoEffect* this, PlayState* play) {
         func_800B8FE8(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
     } else {
         func_808CDAD0(1.0f);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -232,7 +232,7 @@ void func_808CDD70(DemoEffect* this, PlayState* play) {
 
     this->timer++;
     if (this->actor.scale.x < 0.02f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -309,13 +309,13 @@ void func_808CE078(Actor* thisx, PlayState* play2) {
     Matrix_RotateZS(zRot, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash2DL);
 
     Matrix_Pop();
     Matrix_RotateZS(-zRot, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023288);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash2DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 

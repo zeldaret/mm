@@ -28,6 +28,4 @@ typedef struct BgDblueWaterfall {
     /* 0x1A8 */ f32 unk_1A8;
 } BgDblueWaterfall; // size = 0x1AC
 
-extern const ActorInit Bg_Dblue_Waterfall_InitVars;
-
 #endif // Z_BG_DBLUE_WATERFALL_H
