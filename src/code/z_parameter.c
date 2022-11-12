@@ -7,8 +7,6 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
 
-extern Gfx D_0E0001C8[]; // Display List
-
 typedef struct {
     /* 0x00 */ u8 scene;
     /* 0x01 */ u8 flags1;
@@ -3194,8 +3192,7 @@ void Interface_DrawClock(PlayState* play) {
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
                     gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
 
-                    // Unknown
-                    gSPDisplayList(OVERLAY_DISP++, D_0E0001C8);
+                    gSPDisplayList(OVERLAY_DISP++, D_0E000000.setScissor);
 
                     // Final Hours
                     if ((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
