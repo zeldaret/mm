@@ -200,7 +200,7 @@ wordReplace = {
     "SkelAnime_AnimationType4Loaded": "AnimationContext_CopyFalse",
     "SkelAnime_AnimationType5Loaded": "AnimationContext_MoveActor",
     "func_80135EE8": "AnimationContext_Update",
-    "SkelAnime_InitLinkAnimetion": "SkelAnime_InitLink",
+    "SkelAnime_InitLink": "SkelAnime_InitPlayer",
     "LinkAnimation_SetUpdateFunction": "PlayerAnimation_SetUpdateFunction",
     "LinkAnimation_Update": "PlayerAnimation_Update",
     "SkelAnime_SetTransition": "Animation_SetMorph",

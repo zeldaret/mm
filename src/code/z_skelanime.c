@@ -988,19 +988,19 @@ AnimationEntry* AnimationContext_AddEntry(AnimationContext* animationCtx, Animat
 }
 
 /**
- * Requests loading frame data from the Link animation into frameTable
+ * Requests loading frame data from the Player animation into frameTable
  */
 void AnimationContext_SetLoadFrame(PlayState* play, PlayerAnimationHeader* animation, s32 frame, s32 limbCount,
                                    Vec3s* frameTable) {
     AnimationEntry* entry = AnimationContext_AddEntry(&play->animationCtx, ANIMATION_LINKANIMETION);
 
     if (entry != NULL) {
-        PlayerAnimationHeader* linkAnimHeader = Lib_SegmentedToVirtual(animation);
+        PlayerAnimationHeader* playerAnimHeader = Lib_SegmentedToVirtual(animation);
         uintptr_t ram = frameTable;
 
-        osCreateMesgQueue(&entry->data.load.msgQueue, &entry->data.load.msg, 1);
+        osCreateMesgQueue(&entry->data.load.msgQueue, entry->data.load.msg, ARRAY_COUNT(entry->data.load.msg));
         DmaMgr_SendRequestImpl(&entry->data.load.req, ram,
-                               LINK_ANIMETION_OFFSET(linkAnimHeader->segment, (sizeof(Vec3s) * limbCount + 2) * frame),
+                               LINK_ANIMETION_OFFSET(playerAnimHeader->segment, (sizeof(Vec3s) * limbCount + 2) * frame),
                                sizeof(Vec3s) * limbCount + 2, 0, &entry->data.load.msgQueue, NULL);
     }
 }
@@ -1078,7 +1078,7 @@ void AnimationContext_SetMoveActor(PlayState* play, Actor* actor, SkelAnime* ske
 }
 
 /**
- * Receives the request for Link's animation frame data
+ * Receives the request for Player's animation frame data
  */
 void AnimationContext_LoadFrame(PlayState* play, AnimationEntryData* data) {
     AnimEntryLoadFrame* entry = &data->load;
@@ -1183,10 +1183,10 @@ void AnimationContext_Update(PlayState* play, AnimationContext* animationCtx) {
 }
 
 /**
- * Initializes a skeleton to be used with Link animations to a looping animation, dynamically allocating the frame
+ * Initializes a skeleton to be used with Player animations to a looping animation, dynamically allocating the frame
  * tables if not given.
  */
-void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
+void SkelAnime_InitPlayer(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
                         PlayerAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer,
                         s32 limbBufCount) {
     FlexSkeletonHeader* skeletonHeader;
@@ -1228,23 +1228,23 @@ void SkelAnime_InitLink(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
 }
 
 /**
- * Sets the update function of a SkelAnime that uses Link animations based on its mode
+ * Sets the update function of a SkelAnime that uses Player animations based on its mode
  */
 void PlayerAnimation_SetUpdateFunction(SkelAnime* skelAnime) {
     if (skelAnime->mode <= ANIMMODE_LOOP_INTERP) {
-        skelAnime->update.link = PlayerAnimation_Loop;
+        skelAnime->update.player = PlayerAnimation_Loop;
     } else {
-        skelAnime->update.link = PlayerAnimation_Once;
+        skelAnime->update.player = PlayerAnimation_Once;
     }
     skelAnime->morphWeight = 0.0f;
 }
 
 /**
- * Advances the current Link animation and updates all frame tables. If the animation plays once, returns true when it
+ * Advances the current Player animation and updates all frame tables. If the animation plays once, returns true when it
  * finishes.
  */
 s32 PlayerAnimation_Update(PlayState* play, SkelAnime* skelAnime) {
-    return skelAnime->update.link(play, skelAnime);
+    return skelAnime->update.player(play, skelAnime);
 }
 
 /**
@@ -1266,7 +1266,7 @@ s32 PlayerAnimation_Morph(PlayState* play, SkelAnime* skelAnime) {
 }
 
 /**
- * Requests a load of the next frame of a Link animation, advances the morph, and requests an interpolation between
+ * Requests a load of the next frame of a Player animation, advances the morph, and requests an interpolation between
  * jointTable and morphTable
  */
 void PlayerAnimation_AnimateFrame(PlayState* play, SkelAnime* skelAnime) {
@@ -1285,7 +1285,7 @@ void PlayerAnimation_AnimateFrame(PlayState* play, SkelAnime* skelAnime) {
 }
 
 /**
- * Advances a Link animation that loops over its full length
+ * Advances a Player animation that loops over its full length
  */
 s32 PlayerAnimation_Loop(PlayState* play, SkelAnime* skelAnime) {
     f32 updateRate = (s32)play->state.framerateDivisor * 0.5f;
@@ -1301,7 +1301,7 @@ s32 PlayerAnimation_Loop(PlayState* play, SkelAnime* skelAnime) {
 }
 
 /**
- * Advances a Link animation that stops at endFrame and returns true when it is reached.
+ * Advances a Player animation that stops at endFrame and returns true when it is reached.
  */
 s32 PlayerAnimation_Once(PlayState* play, SkelAnime* skelAnime) {
     f32 updateRate = (s32)play->state.framerateDivisor * 0.5f;
@@ -1335,7 +1335,7 @@ void Animation_SetMorph(PlayState* play, SkelAnime* skelAnime, f32 morphFrames) 
 }
 
 /**
- * General way to set a new Link animation, allowing choice of playback speed, start frame, end frame, play mode, and
+ * General way to set a new Player animation, allowing choice of playback speed, start frame, end frame, play mode, and
  * number of transition frames. Positive morph frames morph from the current pose to the start pose of the new
  * animation, then start the new animation. Negative morph frames start the new animation immediately, modified by the
  * pose immediately before the animation change.
@@ -1349,7 +1349,7 @@ void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimati
             SkelAnime_CopyFrameTable(skelAnime, skelAnime->morphTable, skelAnime->jointTable);
             morphFrames = -morphFrames;
         } else {
-            skelAnime->update.link = PlayerAnimation_Morph;
+            skelAnime->update.player = PlayerAnimation_Morph;
             AnimationContext_SetLoadFrame(play, animation, (s32)startFrame, skelAnime->limbCount,
                                           skelAnime->morphTable);
         }
@@ -1371,7 +1371,7 @@ void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimati
 }
 
 /**
- * Immediately changes to a Link animation that plays once at the default speed.
+ * Immediately changes to a Player animation that plays once at the default speed.
  */
 void PlayerAnimation_PlayOnce(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
     PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
@@ -1379,7 +1379,7 @@ void PlayerAnimation_PlayOnce(PlayState* play, SkelAnime* skelAnime, PlayerAnima
 }
 
 /**
- * Immediately changes to a Link animation that plays once at the specified speed.
+ * Immediately changes to a Player animation that plays once at the specified speed.
  */
 void PlayerAnimation_PlayOnceSetSpeed(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation,
                                     f32 playSpeed) {
@@ -1388,7 +1388,7 @@ void PlayerAnimation_PlayOnceSetSpeed(PlayState* play, SkelAnime* skelAnime, Pla
 }
 
 /**
- * Immediately changes to a Link animation that loops at the default speed.
+ * Immediately changes to a Player animation that loops at the default speed.
  */
 void PlayerAnimation_PlayLoop(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation) {
     PlayerAnimation_Change(play, skelAnime, animation, 1.0f, 0.0f, Animation_GetLastFrame(&animation->common),
@@ -1396,7 +1396,7 @@ void PlayerAnimation_PlayLoop(PlayState* play, SkelAnime* skelAnime, PlayerAnima
 }
 
 /**
- * Immediately changes to a Link animation that loops at the specified speed.
+ * Immediately changes to a Player animation that loops at the specified speed.
  */
 void PlayerAnimation_PlayLoopSetSpeed(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation,
                                     f32 playSpeed) {
@@ -1419,14 +1419,14 @@ void PlayerAnimation_CopyMorphToJoint(PlayState* play, SkelAnime* skelAnime) {
 }
 
 /**
- * Requests loading frame data from the Link animation into morphTable
+ * Requests loading frame data from the Player animation into morphTable
  */
 void PlayerAnimation_LoadToMorph(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 frame) {
     AnimationContext_SetLoadFrame(play, animation, (s32)frame, skelAnime->limbCount, skelAnime->morphTable);
 }
 
 /**
- * Requests loading frame data from the Link animation into jointTable
+ * Requests loading frame data from the Player animation into jointTable
  */
 void PlayerAnimation_LoadToJoint(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 frame) {
     AnimationContext_SetLoadFrame(play, animation, (s32)frame, skelAnime->limbCount, skelAnime->jointTable);
@@ -1440,7 +1440,7 @@ void PlayerAnimation_InterpJointMorph(PlayState* play, SkelAnime* skelAnime, f32
 }
 
 /**
- * Requests loading frame data from the Link animations and blending them, placing the result in jointTable
+ * Requests loading frame data from the Player animations and blending them, placing the result in jointTable
  */
 void PlayerAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation1, f32 frame1,
                                 PlayerAnimationHeader* animation2, f32 frame2, f32 blendWeight, void* blendTableBuffer) {
@@ -1455,7 +1455,7 @@ void PlayerAnimation_BlendToJoint(PlayState* play, SkelAnime* skelAnime, PlayerA
 }
 
 /**
- * Requests loading frame data from the Link animations and blending them, placing the result in morphTable
+ * Requests loading frame data from the Player animations and blending them, placing the result in morphTable
  */
 void PlayerAnimation_BlendToMorph(PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation1, f32 frame1,
                                 PlayerAnimationHeader* animation2, f32 frame2, f32 blendWeight, void* blendTableBuffer) {
@@ -1505,7 +1505,7 @@ s32 Animation_OnFrameImpl(SkelAnime* skelAnime, f32 frame, f32 updateRate) {
 }
 
 /**
- * Checks if the current Link animation has reached the specified frame
+ * Checks if the current Player animation has reached the specified frame
  */
 s32 PlayerAnimation_OnFrame(SkelAnime* skelAnime, f32 frame) {
     f32 updateRate = gFramerateDivisorHalf;

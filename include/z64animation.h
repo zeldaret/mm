@@ -99,18 +99,18 @@ typedef struct {
 } LegacyAnimationHeader; // size = 0xC
 
 typedef enum {
-    ANIMATION_LINKANIMETION,
-    ANIMENTRY_COPYALL,
-    ANIMENTRY_INTERP,
-    ANIMENTRY_COPYTRUE,
-    ANIMENTRY_COPYFALSE,
-    ANIMENTRY_MOVEACTOR
+    /* 0 */ ANIMATION_LINKANIMETION,
+    /* 1 */ ANIMENTRY_COPYALL,
+    /* 2 */ ANIMENTRY_INTERP,
+    /* 3 */ ANIMENTRY_COPYTRUE,
+    /* 4 */ ANIMENTRY_COPYFALSE,
+    /* 5 */ ANIMENTRY_MOVEACTOR
 } AnimationType;
 
 typedef struct {
     /* 0x00 */ DmaRequest req;
     /* 0x20 */ OSMesgQueue msgQueue;
-    /* 0x38 */ OSMesg msg;
+    /* 0x38 */ OSMesg msg[1];
 } AnimEntryLoadFrame; // size = 0x3C
 
 typedef struct {
@@ -195,10 +195,10 @@ typedef struct SkelAnime {
     /* 0x2C */ f32 morphRate;     // Reciprocal of the number of frames in the morph
     /* 0x30 */ union {
                     s32 (*normal)(struct SkelAnime*);// Can be Loop, Partial loop, Play once, Morph, or Tapered morph
-                    s32 (*link)(struct PlayState*, struct SkelAnime*); // Loop, Play once, and Morph
+                    s32 (*player)(struct PlayState*, struct SkelAnime*); // Loop, Play once, and Morph
                 } update;
-    /* 0x34 */ s8 initFlags;      // Flags used when initializing Link's skeleton
-    /* 0x35 */ u8 moveFlags;          // Flags used for animations that move the actor in worldspace.
+    /* 0x34 */ s8 initFlags;      // Flags used when initializing Player's skeleton
+    /* 0x35 */ u8 moveFlags;      // Flags used for animations that move the actor in worldspace.
     /* 0x36 */ s16 prevRot;       // Previous rotation in worldspace.
     /* 0x38 */ Vec3s prevTransl;  // Previous modelspace translation.
     /* 0x3E */ Vec3s baseTransl;  // Base modelspace translation.
@@ -227,8 +227,6 @@ typedef void (*TransformLimbDrawOpa)(struct PlayState* play, s32 limbIndex, stru
 typedef void (*TransformLimbDraw)(struct PlayState* play, s32 limbIndex, struct Actor* thisx, Gfx** gfx);
 
 typedef void (*AnimationEntryCallback)(struct PlayState*, AnimationEntryData*);
-
-extern u32 link_animetion_segment;
 
 typedef struct {
     /* 0x00 */ AnimationHeader* animation;
