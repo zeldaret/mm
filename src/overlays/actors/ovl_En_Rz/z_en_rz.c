@@ -221,11 +221,13 @@ void EnRz_ChangeAnim(PlayState* play, EnRz* this, s16 animIndex, u8 animMode, f3
         if (animIndex >= ARRAY_COUNT(sJudoAnimations)) {
             endFrame = Animation_GetLastFrame(sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)]);
             if (animMode == ANIMMODE_LOOP) {
-                PlayerAnimation_Change(play, &this->skelAnime, sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
+                PlayerAnimation_Change(play, &this->skelAnime,
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
+                                       endFrame, ANIMMODE_LOOP, morphFrames);
             } else {
-                PlayerAnimation_Change(play, &this->skelAnime, sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)],
-                                     2.0f / 3.0f, 0.0f, endFrame, ANIMMODE_LOOP, morphFrames);
+                PlayerAnimation_Change(play, &this->skelAnime,
+                                       sPlayerAnimations[animIndex - ARRAY_COUNT(sJudoAnimations)], 2.0f / 3.0f, 0.0f,
+                                       endFrame, ANIMMODE_LOOP, morphFrames);
             }
         } else {
             Animation_Change(&this->skelAnime, animationPtr[animIndex], 1.0f, 0.0f,
