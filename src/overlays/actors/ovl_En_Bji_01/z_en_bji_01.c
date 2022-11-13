@@ -178,7 +178,6 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                             break;
                         case 3:
                             // Calculates the time left before the moon crashes.
-                            // The day begins at CLOCK_TIME(6, 0) so it must be offset.
                             timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
                             if (timeUntilMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;
