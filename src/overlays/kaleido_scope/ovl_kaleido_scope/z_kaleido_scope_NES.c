@@ -152,13 +152,81 @@ TexturePtr sQuestStatusTextures[] = {
     &D_08091440, // gPauseQuestStatus24Tex
 };
 
-s16 D_8082B7F0[] = {
-    80, 64, 64, 64, 16, 64, 112, 112, 48, 64, 64, 64, 64, 48, 64, 8,  8,  8,
-    8,  8,  8,  8,  8,  8,  8,   8,   24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {
+    80,  // mapPageVtx[60] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
+    64,  // mapPageVtx[64] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
+    64,  // mapPageVtx[68] QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
+    64,  // mapPageVtx[72] QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
+    16,  // mapPageVtx[76] QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
+    64,  // mapPageVtx[80] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
+    112, // mapPageVtx[84] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
+    112, // mapPageVtx[88] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
+    48,  // mapPageVtx[92] QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
+    64,  // mapPageVtx[96] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
+    64,  // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
+    64,  // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
+    64,  // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
+    48,  // mapPageVtx[112] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_1
+    64,  // mapPageVtx[116] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_2
+    8,   // mapPageVtx[120] QUAD_MAP_REGION_GREAT_BAY
+    8,   // mapPageVtx[124] QUAD_MAP_REGION_ZORA_HALL
+    8,   // mapPageVtx[128] QUAD_MAP_REGION_ROMANI_RANCH
+    8,   // mapPageVtx[132] QUAD_MAP_REGION_DEKU_PALACE
+    8,   // mapPageVtx[136] QUAD_MAP_REGION_WOODFALL
+    8,   // mapPageVtx[140] QUAD_MAP_REGION_CLOCK_TOWN
+    8,   // mapPageVtx[144] QUAD_MAP_REGION_SNOWHEAD
+    8,   // mapPageVtx[148] QUAD_MAP_REGION_IKANA_GRAVEYARD
+    8,   // mapPageVtx[152] QUAD_MAP_REGION_IKANA_CANYON
+    8,   // mapPageVtx[156] QUAD_MAP_REGION_GORON_VILLAGE
+    8,   // mapPageVtx[160] QUAD_MAP_REGION_STONE_TOWER
+    24,  // mapPageVtx[164] QUAD_MAP_OWL_WARP_GREAT_BAY_COAST
+    24,  // mapPageVtx[168] QUAD_MAP_OWL_WARP_ZORA_CAPE
+    24,  // mapPageVtx[172] QUAD_MAP_OWL_WARP_SNOWHEAD
+    24,  // mapPageVtx[176] QUAD_MAP_OWL_WARP_MOUNTAIN_VILLAGE
+    24,  // mapPageVtx[180] QUAD_MAP_OWL_WARP_CLOCK_TOWN
+    24,  // mapPageVtx[184] QUAD_MAP_OWL_WARP_MILK_ROAD
+    24,  // mapPageVtx[188] QUAD_MAP_OWL_WARP_WOODFALL
+    24,  // mapPageVtx[192] QUAD_MAP_OWL_WARP_SOUTHERN_SWAMP
+    24,  // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
+    24,  // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
-s16 D_8082B838[] = {
-    40, 31, 53, 53, 53, 52, 35, 35, 32, 64, 64, 64, 64, 82, 61, 8,  8,  8,
-    8,  8,  8,  8,  8,  8,  8,  8,  12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+s16 gVtxPageMapWorldQuadsHeight[VTX_PAGE_MAP_WORLD_QUADS] = {
+    40, // mapPageVtx[60] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
+    31, // mapPageVtx[64] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
+    53, // mapPageVtx[68] QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
+    53, // mapPageVtx[72] QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
+    53, // mapPageVtx[76] QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
+    52, // mapPageVtx[80] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
+    35, // mapPageVtx[84] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
+    35, // mapPageVtx[88] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
+    32, // mapPageVtx[92] QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
+    64, // mapPageVtx[96] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
+    64, // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
+    64, // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
+    64, // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
+    82, // mapPageVtx[112] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_1
+    61, // mapPageVtx[116] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_2
+    8,  // mapPageVtx[120] QUAD_MAP_REGION_GREAT_BAY
+    8,  // mapPageVtx[124] QUAD_MAP_REGION_ZORA_HALL
+    8,  // mapPageVtx[128] QUAD_MAP_REGION_ROMANI_RANCH
+    8,  // mapPageVtx[132] QUAD_MAP_REGION_DEKU_PALACE
+    8,  // mapPageVtx[136] QUAD_MAP_REGION_WOODFALL
+    8,  // mapPageVtx[140] QUAD_MAP_REGION_CLOCK_TOWN
+    8,  // mapPageVtx[144] QUAD_MAP_REGION_SNOWHEAD
+    8,  // mapPageVtx[148] QUAD_MAP_REGION_IKANA_GRAVEYARD
+    8,  // mapPageVtx[152] QUAD_MAP_REGION_IKANA_CANYON
+    8,  // mapPageVtx[156] QUAD_MAP_REGION_GORON_VILLAGE
+    8,  // mapPageVtx[160] QUAD_MAP_REGION_STONE_TOWER
+    12, // mapPageVtx[164] QUAD_MAP_OWL_WARP_GREAT_BAY_COAST
+    12, // mapPageVtx[168] QUAD_MAP_OWL_WARP_ZORA_CAPE
+    12, // mapPageVtx[172] QUAD_MAP_OWL_WARP_SNOWHEAD
+    12, // mapPageVtx[176] QUAD_MAP_OWL_WARP_MOUNTAIN_VILLAGE
+    12, // mapPageVtx[180] QUAD_MAP_OWL_WARP_CLOCK_TOWN
+    12, // mapPageVtx[184] QUAD_MAP_OWL_WARP_MILK_ROAD
+    12, // mapPageVtx[188] QUAD_MAP_OWL_WARP_WOODFALL
+    12, // mapPageVtx[192] QUAD_MAP_OWL_WARP_SOUTHERN_SWAMP
+    12, // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
+    12, // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
 
 s16 sGameOverPrimR = 0;
@@ -372,7 +440,8 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
     }
 }
 
-Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, void** textures) {
+// Draw 15 (PAGE_BG_QUADS) quads with IA8 80x32 textures
+Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, TexturePtr* textures) {
     s32 i;
     s32 j;
 
@@ -897,8 +966,8 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
     if (pauseCtx->cursorSpecialPos != 0) {
         j = (pauseCtx->cursorSpecialPos * 4) - 32;
-        pauseCtx->cursorVtx[0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
-        pauseCtx->cursorVtx[0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
+        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
+        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
     }
 
     y = pauseCtx->infoPanelOffsetY - 80;
@@ -1334,8 +1403,8 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
 
     if (pauseCtx->cursorSpecialPos != 0) {
         j = (pauseCtx->cursorSpecialPos * 4) - 32;
-        pauseCtx->cursorVtx[0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
-        pauseCtx->cursorVtx[0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
+        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
+        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
     }
 
     y = pauseCtx->infoPanelOffsetY - 80;
@@ -1455,91 +1524,235 @@ void KaleidoScope_SetView(PauseContext* pauseCtx, f32 eyeX, f32 eyeY, f32 eyeZ) 
                VIEW_ALL | VIEW_FORCE_VIEWING | VIEW_FORCE_VIEWPORT | VIEW_FORCE_PROJECTION_PERSPECTIVE);
 }
 
-s16 D_8082B9E8[] = { 0, 0 };
-s16 D_8082B9EC[] = { 0, 0 };
-s16 D_8082B9F0[] = { -21, -104, -76, -48, -104, -40 };
-s16 D_8082B9FC[] = { 0, 0 };
-s16 D_8082BA00[] = {
-    -41, 9, 43, -21, -37, 43, -69, -69, -32, -109, -45, -109, -45, 59,  -5, -70, -52, -11,
-    -2,  8, 2,  1,   43,  52, 54,  62,  -80, -64,  -9,  -3,   -7,  -16, -1, 23,  44,  54,
+// CLAMP_MIN(*, 1) because C arrays can't have 0 length
+s16 sVtxPageMaskQuadsX[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
+s16 sVtxPageItemQuadsX[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
+s16 sVtxPageMapDungeonQuadsX[VTX_PAGE_MAP_DUNGEON_QUADS] = {
+    -21,  // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
+    -104, // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
+    -76,  // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
+    -48,  // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    -104, // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
+    -40   // mapPageVtx[80] QUAD_MAP_DUNGEON_5
 };
-s16 D_8082BA48[] = {
-    -76, -58, 10, -58, 10, 0,
+s16 sVtxPageQuestQuadsX[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
+s16 sVtxPageMapWorldQuadsX[VTX_PAGE_MAP_WORLD_QUADS] = {
+    -41,  // mapPageVtx[60] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
+    9,    // mapPageVtx[64] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
+    43,   // mapPageVtx[68] QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
+    -21,  // mapPageVtx[72] QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
+    -37,  // mapPageVtx[76] QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
+    43,   // mapPageVtx[80] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
+    -69,  // mapPageVtx[84] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
+    -69,  // mapPageVtx[88] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
+    -32,  // mapPageVtx[92] QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
+    -109, // mapPageVtx[96] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
+    -45,  // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
+    -109, // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
+    -45,  // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
+    59,   // mapPageVtx[112] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_1
+    -5,   // mapPageVtx[116] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_2
+    -70,  // mapPageVtx[120] QUAD_MAP_REGION_GREAT_BAY
+    -52,  // mapPageVtx[124] QUAD_MAP_REGION_ZORA_HALL
+    -11,  // mapPageVtx[128] QUAD_MAP_REGION_ROMANI_RANCH
+    -2,   // mapPageVtx[132] QUAD_MAP_REGION_DEKU_PALACE
+    8,    // mapPageVtx[136] QUAD_MAP_REGION_WOODFALL
+    2,    // mapPageVtx[140] QUAD_MAP_REGION_CLOCK_TOWN
+    1,    // mapPageVtx[144] QUAD_MAP_REGION_SNOWHEAD
+    43,   // mapPageVtx[148] QUAD_MAP_REGION_IKANA_GRAVEYARD
+    52,   // mapPageVtx[152] QUAD_MAP_REGION_IKANA_CANYON
+    54,   // mapPageVtx[156] QUAD_MAP_REGION_GORON_VILLAGE
+    62,   // mapPageVtx[160] QUAD_MAP_REGION_STONE_TOWER
+    -80,  // mapPageVtx[164] QUAD_MAP_OWL_WARP_GREAT_BAY_COAST
+    -64,  // mapPageVtx[168] QUAD_MAP_OWL_WARP_ZORA_CAPE
+    -9,   // mapPageVtx[172] QUAD_MAP_OWL_WARP_SNOWHEAD
+    -3,   // mapPageVtx[176] QUAD_MAP_OWL_WARP_MOUNTAIN_VILLAGE
+    -7,   // mapPageVtx[180] QUAD_MAP_OWL_WARP_CLOCK_TOWN
+    -16,  // mapPageVtx[184] QUAD_MAP_OWL_WARP_MILK_ROAD
+    -1,   // mapPageVtx[188] QUAD_MAP_OWL_WARP_WOODFALL
+    23,   // mapPageVtx[192] QUAD_MAP_OWL_WARP_SOUTHERN_SWAMP
+    44,   // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
+    54,   // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
-s16 D_8082BA54[] = { 0, 0 };
-s16 D_8082BA58[] = { 0, 0 };
-s16 D_8082BA5C[] = {
-    128, 24, 24, 24, 32, 24,
+s16 sVtxPageSaveQuadsX[VTX_PAGE_SAVE_QUADS] = {
+    -76, // Prompt Message
+    -58, // Prompt Cursor Left
+    10,  // Prompt Cursor Right
+    -58, // Prompt Choice Yes
+    10,  // Prompt Choice No
 };
-s16 D_8082BA68[] = { 0, 0 };
-s16 D_8082BA6C[] = {
-    152, 48, 48, 48, 48, 0,
-};
-s16 D_8082BA78[] = { 0, 0 };
-s16 D_8082BA7C[] = { 0, 0 };
 
-s16 D_8082BA80[] = {
-    54, -42, -42, -42, -24, 50,
+// CLAMP_MIN(*, 1) because C arrays can't have 0 length
+s16 sVtxPageMaskQuadsWidth[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
+s16 sVtxPageItemQuadsWidth[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
+s16 sVtxPageMapDungeonQuadsWidth[VTX_PAGE_MAP_DUNGEON_QUADS] = {
+    128, // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
+    24,  // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
+    24,  // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
+    24,  // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    32,  // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
+    24,  // mapPageVtx[80] QUAD_MAP_DUNGEON_5
 };
-s16 D_8082BA8C[] = { 0, 0 };
-s16 D_8082BA90[] = {
-    11,  22,  -16, -16, -16, 59, 24, 59, -11, -5,  -5, 59, 59, 39, 31,  -10, -36, -19,
-    -53, -27, -2,  41,  11,  -3, 45, 18, -8,  -38, 39, 26, 1,  -7, -28, -27, -1,  24,
-};
-s16 D_8082BAD8[] = {
-    36, 10, 10, -6, -6, 0,
-};
-s16 D_8082BAE4[] = { 0, 0 };
-s16 D_8082BAE8[] = { 0, 0 };
-s16 D_8082BAEC[] = {
-    16, 24, 24, 24, 24, 24,
-};
-s16 D_8082BAF8[] = { 0, 0 };
-s16 D_8082BAFC[] = {
-    16, 48, 48, 16, 16, 0,
-};
-s16* D_8082BB08[] = {
-    D_8082B9E8, D_8082B9EC, D_8082B9F0, D_8082B9FC, D_8082BA00, D_8082BA48,
+s16 sVtxPageQuestQuadsWidth[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
+s16 sVtxPageSaveQuadsWidth[VTX_PAGE_SAVE_QUADS] = {
+    152, // Prompt Message
+    48,  // Prompt Cursor Left
+    48,  // Prompt Cursor Right
+    48,  // Prompt Choice Yes
+    48,  // Prompt Choice No
 };
 
-s16* D_8082BB20[] = {
-    D_8082BA54, D_8082BA58, D_8082BA5C, D_8082BA68, D_8082B7F0, D_8082BA6C,
+// CLAMP_MIN(*, 1) because C arrays can't have 0 length
+s16 sVtxPageMaskQuadsY[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
+s16 sVtxPageItemQuadsY[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
+
+s16 sVtxPageMapDungeonQuadsY[VTX_PAGE_MAP_DUNGEON_QUADS] = {
+    54,  // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
+    -42, // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
+    -42, // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
+    -42, // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    -24, // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
+    50,  // mapPageVtx[80] QUAD_MAP_DUNGEON_5
+};
+s16 sVtxPageQuestQuadsY[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
+s16 sVtxPageMapWorldQuadsY[VTX_PAGE_MAP_WORLD_QUADS] = {
+    11,  // mapPageVtx[60] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
+    22,  // mapPageVtx[64] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
+    -16, // mapPageVtx[68] QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
+    -16, // mapPageVtx[72] QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
+    -16, // mapPageVtx[76] QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
+    59,  // mapPageVtx[80] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
+    24,  // mapPageVtx[84] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
+    59,  // mapPageVtx[88] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
+    -11, // mapPageVtx[92] QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
+    -5,  // mapPageVtx[96] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
+    -5,  // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
+    59,  // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
+    59,  // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
+    39,  // mapPageVtx[112] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_1
+    31,  // mapPageVtx[116] QUAD_MAP_WORLD_CLOUDS_STONE_TOWER_2
+    -10, // mapPageVtx[120] QUAD_MAP_REGION_GREAT_BAY
+    -36, // mapPageVtx[124] QUAD_MAP_REGION_ZORA_HALL
+    -19, // mapPageVtx[128] QUAD_MAP_REGION_ROMANI_RANCH
+    -53, // mapPageVtx[132] QUAD_MAP_REGION_DEKU_PALACE
+    -27, // mapPageVtx[136] QUAD_MAP_REGION_WOODFALL
+    -2,  // mapPageVtx[140] QUAD_MAP_REGION_CLOCK_TOWN
+    41,  // mapPageVtx[144] QUAD_MAP_REGION_SNOWHEAD
+    11,  // mapPageVtx[148] QUAD_MAP_REGION_IKANA_GRAVEYARD
+    -3,  // mapPageVtx[152] QUAD_MAP_REGION_IKANA_CANYON
+    45,  // mapPageVtx[156] QUAD_MAP_REGION_GORON_VILLAGE
+    18,  // mapPageVtx[160] QUAD_MAP_REGION_STONE_TOWER
+    -8,  // mapPageVtx[164] QUAD_MAP_OWL_WARP_GREAT_BAY_COAST
+    -38, // mapPageVtx[168] QUAD_MAP_OWL_WARP_ZORA_CAPE
+    39,  // mapPageVtx[172] QUAD_MAP_OWL_WARP_SNOWHEAD
+    26,  // mapPageVtx[176] QUAD_MAP_OWL_WARP_MOUNTAIN_VILLAGE
+    1,   // mapPageVtx[180] QUAD_MAP_OWL_WARP_CLOCK_TOWN
+    -7,  // mapPageVtx[184] QUAD_MAP_OWL_WARP_MILK_ROAD
+    -28, // mapPageVtx[188] QUAD_MAP_OWL_WARP_WOODFALL
+    -27, // mapPageVtx[192] QUAD_MAP_OWL_WARP_SOUTHERN_SWAMP
+    -1,  // mapPageVtx[196] QUAD_MAP_OWL_WARP_IKANA_CANYON
+    24,  // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
+};
+s16 sVtxPageSaveQuadsY[VTX_PAGE_SAVE_QUADS] = {
+    36, // Prompt Message
+    10, // Prompt Cursor Left
+    10, // Prompt Cursor Right
+    -6, // Prompt Choice Yes
+    -6, // Prompt Choice No
 };
 
-s16* D_8082BB38[] = {
-    D_8082BA78, D_8082BA7C, D_8082BA80, D_8082BA8C, D_8082BA90, D_8082BAD8,
+// CLAMP_MIN(*, 1) because C arrays can't have 0 length
+s16 sVtxPageMaskQuadsHeight[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
+s16 sVtxPageItemQuadsHeight[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
+s16 sVtxPageMapDungeonQuadsHeight[] = {
+    16, // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
+    24, // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
+    24, // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
+    24, // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    24, // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
+    24, // mapPageVtx[80] QUAD_MAP_DUNGEON_5
+};
+s16 sVtxPageQuestQuadsHeight[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
+s16 sVtxPageSaveQuadsHeight[VTX_PAGE_SAVE_QUADS] = {
+    16, // Prompt Message
+    48, // Prompt Cursor Left
+    48, // Prompt Cursor Right
+    16, // Prompt Choice Yes
+    16, // Prompt Choice No
 };
 
-s16* D_8082BB50[] = {
-    D_8082BAE4, D_8082BAE8, D_8082BAEC, D_8082BAF8, D_8082B838, D_8082BAFC,
+s16* sVtxPageQuadsX[VTX_PAGE_MAX] = {
+    sVtxPageMaskQuadsX,       // VTX_PAGE_MASK
+    sVtxPageItemQuadsX,       // VTX_PAGE_ITEM
+    sVtxPageMapDungeonQuadsX, // VTX_PAGE_MAP_DUNGEON
+    sVtxPageQuestQuadsX,      // VTX_PAGE_QUEST
+    sVtxPageMapWorldQuadsX,   // VTX_PAGE_MAP_WORLD
+    sVtxPageSaveQuadsX,       // VTX_PAGE_SAVE
 };
-s16 D_8082BB68[] = {
-    14, -2, -2, -18, -18, 0,
+
+s16* sVtxPageQuadsWidth[VTX_PAGE_MAX] = {
+    sVtxPageMaskQuadsWidth,       // VTX_PAGE_MASK
+    sVtxPageItemQuadsWidth,       // VTX_PAGE_ITEM
+    sVtxPageMapDungeonQuadsWidth, // VTX_PAGE_MAP_DUNGEON
+    sVtxPageQuestQuadsWidth,      // VTX_PAGE_QUEST
+    gVtxPageMapWorldQuadsWidth,   // VTX_PAGE_MAP_WORLD
+    sVtxPageSaveQuadsWidth,       // VTX_PAGE_SAVE
 };
-s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
+
+s16* sVtxPageQuadsY[VTX_PAGE_MAX] = {
+    sVtxPageMaskQuadsY,       // VTX_PAGE_MASK
+    sVtxPageItemQuadsY,       // VTX_PAGE_ITEM
+    sVtxPageMapDungeonQuadsY, // VTX_PAGE_MAP_DUNGEON
+    sVtxPageQuestQuadsY,      // VTX_PAGE_QUEST
+    sVtxPageMapWorldQuadsY,   // VTX_PAGE_MAP_WORLD
+    sVtxPageSaveQuadsY,       // VTX_PAGE_SAVE
+};
+
+s16* sVtxPageQuadsHeight[VTX_PAGE_MAX] = {
+    sVtxPageMaskQuadsHeight,       // VTX_PAGE_MASK
+    sVtxPageItemQuadsHeight,       // VTX_PAGE_ITEM
+    sVtxPageMapDungeonQuadsHeight, // VTX_PAGE_MAP_DUNGEON
+    sVtxPageQuestQuadsHeight,      // VTX_PAGE_QUEST
+    gVtxPageMapWorldQuadsHeight,   // VTX_PAGE_MAP_WORLD
+    sVtxPageSaveQuadsHeight,       // VTX_PAGE_SAVE
+};
+
+s16 sVtxPageGameOverSaveQuadsY[VTX_PAGE_SAVE_QUADS] = {
+    14,  // Prompt Message
+    -2,  // Prompt Cursor Left
+    -2,  // Prompt Cursor Right
+    -18, // Prompt Choice Yes
+    -18, // Prompt Choice No
+};
+
+s16 KaleidoScope_SetPageVertices(PlayState* play, Vtx* vtx, s16 vtxPage, s16 numQuads) {
     PauseContext* pauseCtx = &play->pauseCtx;
     GameOverContext* gameOverCtx = &play->gameOverCtx;
-    s16* ptr1;
-    s16* ptr2;
-    s16* ptr3;
-    s16* ptr4;
-    s16 var_a2;
-    s16 var_t3;
+    s16* quadsX;
+    s16* quadsWidth;
+    s16* quadsY;
+    s16* quadsHeight;
+    s16 pageBgQuadX;
+    s16 pageBgQuadY;
     s16 i;
     s16 j;
     s16 k;
 
-    var_t3 = -200;
+    // Vertices for KaleidoScope_DrawPageSections
 
+    pageBgQuadX = 0 - (PAGE_BG_COLS * PAGE_BG_QUAD_WIDTH) / 2 - PAGE_BG_QUAD_WIDTH;
+
+    // For each column
     for (k = 0, i = 0; i < 3; i++) {
-        var_t3 += 80;
+        pageBgQuadX += PAGE_BG_QUAD_WIDTH;
 
-        for (var_a2 = 80, j = 0; j < 5; j++, k += 4, var_a2 -= 32) {
-            vtx[k + 0].v.ob[0] = vtx[k + 2].v.ob[0] = var_t3;
-            vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + 80;
+        // For each row
+        for (pageBgQuadY = (PAGE_BG_ROWS * PAGE_BG_QUAD_HEIGHT) / 2, j = 0; j < 5; j++, k += 4, pageBgQuadY -= 32) {
+            vtx[k + 0].v.ob[0] = vtx[k + 2].v.ob[0] = pageBgQuadX;
+            vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + PAGE_BG_QUAD_WIDTH;
 
-            vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = var_a2 + pauseCtx->offsetY;
-            vtx[k + 2].v.ob[1] = vtx[k + 3].v.ob[1] = vtx[k + 0].v.ob[1] - 32;
+            vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = pageBgQuadY + pauseCtx->offsetY;
+            vtx[k + 2].v.ob[1] = vtx[k + 3].v.ob[1] = vtx[k + 0].v.ob[1] - PAGE_BG_QUAD_HEIGHT;
 
             vtx[k + 0].v.ob[2] = vtx[k + 1].v.ob[2] = vtx[k + 2].v.ob[2] = vtx[k + 3].v.ob[2] = 0;
 
@@ -1547,8 +1760,8 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
 
             vtx[k + 0].v.tc[0] = vtx[k + 0].v.tc[1] = 0;
             vtx[k + 1].v.tc[1] = vtx[k + 2].v.tc[0] = 0;
-            vtx[k + 1].v.tc[0] = vtx[k + 3].v.tc[0] = 80 * (1 << 5);
-            vtx[k + 2].v.tc[1] = vtx[k + 3].v.tc[1] = 32 * (1 << 5);
+            vtx[k + 1].v.tc[0] = vtx[k + 3].v.tc[0] = PAGE_BG_QUAD_TEX_WIDTH * (1 << 5);
+            vtx[k + 2].v.tc[1] = vtx[k + 3].v.tc[1] = PAGE_BG_QUAD_TEX_HEIGHT * (1 << 5);
 
             vtx[k + 0].v.cn[0] = vtx[k + 2].v.cn[0] = vtx[k + 0].v.cn[1] = vtx[k + 2].v.cn[1] = vtx[k + 0].v.cn[2] =
                 vtx[k + 2].v.cn[2] = 0;
@@ -1560,34 +1773,34 @@ s16 func_80825A50(PlayState* play, Vtx* vtx, s16 arg2, s16 arg3) {
         }
     }
 
-    if (arg3 != 0) {
-        ptr1 = D_8082BB08[arg2];
-        ptr2 = D_8082BB20[arg2];
-        ptr3 = D_8082BB38[arg2];
-        ptr4 = D_8082BB50[arg2];
+    if (numQuads != 0) {
+        quadsX = sVtxPageQuadsX[vtxPage];
+        quadsWidth = sVtxPageQuadsWidth[vtxPage];
+        quadsY = sVtxPageQuadsY[vtxPage];
+        quadsHeight = sVtxPageQuadsHeight[vtxPage];
 
-        for (i = 0; i < arg3; i++, k += 4) {
-            vtx[k + 2].v.ob[0] = vtx[k + 0].v.ob[0] = ptr1[i];
+        for (i = 0; i < numQuads; i++, k += 4) {
+            vtx[k + 2].v.ob[0] = vtx[k + 0].v.ob[0] = quadsX[i];
 
-            vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + ptr2[i];
+            vtx[k + 1].v.ob[0] = vtx[k + 3].v.ob[0] = vtx[k + 0].v.ob[0] + quadsWidth[i];
 
             if (!IS_PAUSE_STATE_GAMEOVER) {
-                vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = ptr3[i] + pauseCtx->offsetY;
+                vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = quadsY[i] + pauseCtx->offsetY;
             } else if (gameOverCtx->state == GAMEOVER_INACTIVE) {
-                vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = ptr3[i] + pauseCtx->offsetY;
+                vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = quadsY[i] + pauseCtx->offsetY;
             } else {
-                vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = D_8082BB68[i] + pauseCtx->offsetY;
+                vtx[k + 0].v.ob[1] = vtx[k + 1].v.ob[1] = sVtxPageGameOverSaveQuadsY[i] + pauseCtx->offsetY;
             }
 
-            vtx[k + 2].v.ob[1] = vtx[k + 3].v.ob[1] = vtx[k + 0].v.ob[1] - ptr4[i];
+            vtx[k + 2].v.ob[1] = vtx[k + 3].v.ob[1] = vtx[k + 0].v.ob[1] - quadsHeight[i];
 
             vtx[k + 0].v.ob[2] = vtx[k + 1].v.ob[2] = vtx[k + 2].v.ob[2] = vtx[k + 3].v.ob[2] = 0;
 
             vtx[k + 0].v.flag = vtx[k + 1].v.flag = vtx[k + 2].v.flag = vtx[k + 3].v.flag = 0;
 
             vtx[k + 0].v.tc[0] = vtx[k + 0].v.tc[1] = vtx[k + 1].v.tc[1] = vtx[k + 2].v.tc[0] = 0;
-            vtx[k + 1].v.tc[0] = vtx[k + 3].v.tc[0] = ptr2[i] << 5;
-            vtx[k + 2].v.tc[1] = vtx[k + 3].v.tc[1] = ptr4[i] << 5;
+            vtx[k + 1].v.tc[0] = vtx[k + 3].v.tc[0] = quadsWidth[i] << 5;
+            vtx[k + 2].v.tc[1] = vtx[k + 3].v.tc[1] = quadsHeight[i] << 5;
 
             vtx[k + 0].v.cn[0] = vtx[k + 2].v.cn[0] = vtx[k + 0].v.cn[1] = vtx[k + 2].v.cn[1] = vtx[k + 0].v.cn[2] =
                 vtx[k + 2].v.cn[2] = 255;
@@ -1769,13 +1982,13 @@ s16 sQuestVtxHeights[] = {
     16, // ocarina input button index 7
 };
 
-void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
+void KaleidoScope_SetVertices(PlayState* play, GraphicsContext* gfxCtx) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 i;
     s16 j;
     s16 k;
-    s16 var_a3;
-    s16 var_t3;
+    s16 vtx_x;
+    s16 vtx_y;
 
     pauseCtx->offsetY = 0;
 
@@ -1787,20 +2000,27 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 
     if (pauseCtx->pageIndex != PAUSE_QUEST) {
-        pauseCtx->itemPageVtx = GRAPH_ALLOC(gfxCtx, 60 * sizeof(Vtx));
-        func_80825A50(play, pauseCtx->itemPageVtx, 1, 0);
+        pauseCtx->itemPageVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_ITEM_QUADS) * 4) * sizeof(Vtx));
+        KaleidoScope_SetPageVertices(play, pauseCtx->itemPageVtx, VTX_PAGE_ITEM, VTX_PAGE_ITEM_QUADS);
 
-        pauseCtx->itemVtx = GRAPH_ALLOC(gfxCtx, 108 * sizeof(Vtx));
+        pauseCtx->itemVtx = GRAPH_ALLOC(gfxCtx, (QUAD_ITEM_MAX * 4) * sizeof(Vtx));
 
-        for (k = 0, i = 0, var_t3 = 58; k < 4; k++, var_t3 -= 32) {
-            for (var_a3 = -96, j = 0; j < 6; j++, i += 4, var_a3 += 32) {
-                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0] = var_a3 + 2;
+        // QUAD_ITEM_GRID_FIRST..QUAD_ITEM_GRID_LAST
+
+        // Loop over grid rows
+        for (k = 0, i = 0, vtx_y = (ITEM_GRID_ROWS * ITEM_GRID_CELL_HEIGHT) / 2 - 6; k < ITEM_GRID_ROWS;
+             k++, vtx_y -= ITEM_GRID_CELL_HEIGHT) {
+            // Loop over grid columns
+            for (vtx_x = 0 - (ITEM_GRID_COLS * ITEM_GRID_CELL_WIDTH) / 2, j = 0; j < ITEM_GRID_COLS;
+                 j++, i += 4, vtx_x += ITEM_GRID_CELL_WIDTH) {
+                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0] = vtx_x + ITEM_GRID_QUAD_MARGIN;
                 pauseCtx->itemVtx[i + 1].v.ob[0] = pauseCtx->itemVtx[i + 3].v.ob[0] =
-                    pauseCtx->itemVtx[i + 0].v.ob[0] + 28;
+                    pauseCtx->itemVtx[i + 0].v.ob[0] + ITEM_GRID_QUAD_WIDTH;
 
-                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] = var_t3 + pauseCtx->offsetY - 2;
+                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] =
+                    vtx_y + pauseCtx->offsetY - ITEM_GRID_QUAD_MARGIN;
                 pauseCtx->itemVtx[i + 2].v.ob[1] = pauseCtx->itemVtx[i + 3].v.ob[1] =
-                    pauseCtx->itemVtx[i + 0].v.ob[1] - 28;
+                    pauseCtx->itemVtx[i + 0].v.ob[1] - ITEM_GRID_QUAD_WIDTH;
 
                 pauseCtx->itemVtx[i + 0].v.ob[2] = pauseCtx->itemVtx[i + 1].v.ob[2] = pauseCtx->itemVtx[i + 2].v.ob[2] =
                     pauseCtx->itemVtx[i + 3].v.ob[2] = 0;
@@ -1812,7 +2032,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                     pauseCtx->itemVtx[i + 2].v.tc[0] = 0;
 
                 pauseCtx->itemVtx[i + 1].v.tc[0] = pauseCtx->itemVtx[i + 2].v.tc[1] = pauseCtx->itemVtx[i + 3].v.tc[0] =
-                    pauseCtx->itemVtx[i + 3].v.tc[1] = 32 * (1 << 5);
+                    pauseCtx->itemVtx[i + 3].v.tc[1] = ITEM_GRID_QUAD_TEX_SIZE * (1 << 5);
 
                 pauseCtx->itemVtx[i + 0].v.cn[0] = pauseCtx->itemVtx[i + 1].v.cn[0] = pauseCtx->itemVtx[i + 2].v.cn[0] =
                     pauseCtx->itemVtx[i + 3].v.cn[0] = pauseCtx->itemVtx[i + 0].v.cn[1] =
@@ -1826,19 +2046,23 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
             }
         }
 
-        for (j = 1; j < 4; j++, i += 4) {
-            if (GET_CUR_FORM_BTN_SLOT(j) != ITEM_NONE) {
-                k = GET_CUR_FORM_BTN_SLOT(j) << 2;
+        // QUAD_ITEM_GRID_SELECTED_C_LEFT, QUAD_ITEM_GRID_SELECTED_C_DOWN, QUAD_ITEM_GRID_SELECTED_C_RIGHT
 
-                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0] = pauseCtx->itemVtx[k].v.ob[0] - 2;
+        for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++, i += 4) {
+            if (GET_CUR_FORM_BTN_SLOT(j) != ITEM_NONE) {
+                k = GET_CUR_FORM_BTN_SLOT(j) * 4;
+
+                pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0] =
+                    pauseCtx->itemVtx[k].v.ob[0] + ITEM_GRID_SELECTED_QUAD_MARGIN;
 
                 pauseCtx->itemVtx[i + 1].v.ob[0] = pauseCtx->itemVtx[i + 3].v.ob[0] =
-                    pauseCtx->itemVtx[i + 0].v.ob[0] + 32;
+                    pauseCtx->itemVtx[i + 0].v.ob[0] + ITEM_GRID_SELECTED_QUAD_WIDTH;
 
-                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] = pauseCtx->itemVtx[k].v.ob[1] + 2;
+                pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] =
+                    pauseCtx->itemVtx[k].v.ob[1] - ITEM_GRID_SELECTED_QUAD_MARGIN;
 
                 pauseCtx->itemVtx[i + 2].v.ob[1] = pauseCtx->itemVtx[i + 3].v.ob[1] =
-                    pauseCtx->itemVtx[i + 0].v.ob[1] - 32;
+                    pauseCtx->itemVtx[i + 0].v.ob[1] - ITEM_GRID_SELECTED_QUAD_WIDTH;
 
                 pauseCtx->itemVtx[i + 0].v.ob[2] = pauseCtx->itemVtx[i + 1].v.ob[2] = pauseCtx->itemVtx[i + 2].v.ob[2] =
                     pauseCtx->itemVtx[i + 3].v.ob[2] = 0;
@@ -1850,7 +2074,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                     pauseCtx->itemVtx[i + 2].v.tc[0] = 0;
 
                 pauseCtx->itemVtx[i + 1].v.tc[0] = pauseCtx->itemVtx[i + 2].v.tc[1] = pauseCtx->itemVtx[i + 3].v.tc[0] =
-                    pauseCtx->itemVtx[i + 3].v.tc[1] = 32 * (1 << 5);
+                    pauseCtx->itemVtx[i + 3].v.tc[1] = ITEM_GRID_SELECTED_QUAD_TEX_SIZE * (1 << 5);
 
                 pauseCtx->itemVtx[i + 0].v.cn[0] = pauseCtx->itemVtx[i + 1].v.cn[0] = pauseCtx->itemVtx[i + 2].v.cn[0] =
                     pauseCtx->itemVtx[i + 3].v.cn[0] = pauseCtx->itemVtx[i + 0].v.cn[1] =
@@ -1862,35 +2086,38 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                 pauseCtx->itemVtx[i + 0].v.cn[3] = pauseCtx->itemVtx[i + 1].v.cn[3] = pauseCtx->itemVtx[i + 2].v.cn[3] =
                     pauseCtx->itemVtx[i + 3].v.cn[3] = pauseCtx->alpha;
             } else {
+                // No item equipped on the C button, put the quad out of view
+
                 pauseCtx->itemVtx[i + 2].v.ob[0] = -300;
                 pauseCtx->itemVtx[i + 0].v.ob[0] = pauseCtx->itemVtx[i + 2].v.ob[0];
 
                 pauseCtx->itemVtx[i + 1].v.ob[0] = pauseCtx->itemVtx[i + 3].v.ob[0] =
-                    pauseCtx->itemVtx[i + 0].v.ob[0] + 32;
+                    pauseCtx->itemVtx[i + 0].v.ob[0] + ITEM_GRID_SELECTED_QUAD_WIDTH;
 
                 pauseCtx->itemVtx[i + 0].v.ob[1] = pauseCtx->itemVtx[i + 1].v.ob[1] = 300;
                 pauseCtx->itemVtx[i + 2].v.ob[1] = pauseCtx->itemVtx[i + 3].v.ob[1] =
-                    pauseCtx->itemVtx[i + 0].v.ob[1] - 32;
+                    pauseCtx->itemVtx[i + 0].v.ob[1] - ITEM_GRID_SELECTED_QUAD_HEIGHT;
             }
         }
     }
 
     if (pauseCtx->pageIndex != PAUSE_MASK) {
         if (!sInDungeonScene) {
-            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 264 * sizeof(Vtx));
-            j = func_80825A50(play, pauseCtx->mapPageVtx, 4, 36);
+            pauseCtx->mapPageVtx = GRAPH_ALLOC(
+                gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_MAP_WORLD_QUADS + WORLD_MAP_IMAGE_FRAG_NUM) * 4) * sizeof(Vtx));
+            j = KaleidoScope_SetPageVertices(play, pauseCtx->mapPageVtx, VTX_PAGE_MAP_WORLD, VTX_PAGE_MAP_WORLD_QUADS);
 
-            for (i = 0, var_t3 = 59; i < 15; i++, j += 4, var_t3 -= 9) {
-                pauseCtx->mapPageVtx[j + 2].v.ob[0] = -109;
+            for (i = 0, vtx_y = 59; i < WORLD_MAP_IMAGE_FRAG_NUM; i++, j += 4, vtx_y -= WORLD_MAP_IMAGE_FRAG_HEIGHT) {
+                pauseCtx->mapPageVtx[j + 2].v.ob[0] = 0 - (WORLD_MAP_IMAGE_WIDTH / 2) - 1;
                 pauseCtx->mapPageVtx[j + 0].v.ob[0] = pauseCtx->mapPageVtx[j + 2].v.ob[0];
 
                 pauseCtx->mapPageVtx[j + 1].v.ob[0] = pauseCtx->mapPageVtx[j + 3].v.ob[0] =
-                    pauseCtx->mapPageVtx[j + 0].v.ob[0] + 216;
+                    pauseCtx->mapPageVtx[j + 0].v.ob[0] + WORLD_MAP_IMAGE_WIDTH;
 
-                pauseCtx->mapPageVtx[j + 0].v.ob[1] = pauseCtx->mapPageVtx[j + 1].v.ob[1] = var_t3 + pauseCtx->offsetY;
+                pauseCtx->mapPageVtx[j + 0].v.ob[1] = pauseCtx->mapPageVtx[j + 1].v.ob[1] = vtx_y + pauseCtx->offsetY;
 
                 pauseCtx->mapPageVtx[j + 2].v.ob[1] = pauseCtx->mapPageVtx[j + 3].v.ob[1] =
-                    pauseCtx->mapPageVtx[j + 0].v.ob[1] - 9;
+                    pauseCtx->mapPageVtx[j + 0].v.ob[1] - WORLD_MAP_IMAGE_FRAG_HEIGHT;
 
                 pauseCtx->mapPageVtx[j + 0].v.ob[2] = pauseCtx->mapPageVtx[j + 1].v.ob[2] =
                     pauseCtx->mapPageVtx[j + 2].v.ob[2] = pauseCtx->mapPageVtx[j + 3].v.ob[2] = 0;
@@ -1901,8 +2128,10 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                 pauseCtx->mapPageVtx[j + 0].v.tc[0] = pauseCtx->mapPageVtx[j + 0].v.tc[1] =
                     pauseCtx->mapPageVtx[j + 1].v.tc[1] = pauseCtx->mapPageVtx[j + 2].v.tc[0] = 0;
 
-                pauseCtx->mapPageVtx[j + 1].v.tc[0] = pauseCtx->mapPageVtx[j + 3].v.tc[0] = 216 * (1 << 5);
-                pauseCtx->mapPageVtx[j + 2].v.tc[1] = pauseCtx->mapPageVtx[j + 3].v.tc[1] = 9 * (1 << 5);
+                pauseCtx->mapPageVtx[j + 1].v.tc[0] = pauseCtx->mapPageVtx[j + 3].v.tc[0] =
+                    WORLD_MAP_IMAGE_WIDTH * (1 << 5);
+                pauseCtx->mapPageVtx[j + 2].v.tc[1] = pauseCtx->mapPageVtx[j + 3].v.tc[1] =
+                    WORLD_MAP_IMAGE_FRAG_HEIGHT * (1 << 5);
 
                 pauseCtx->mapPageVtx[j + 0].v.cn[0] = pauseCtx->mapPageVtx[j + 2].v.cn[0] =
                     pauseCtx->mapPageVtx[j + 0].v.cn[1] = pauseCtx->mapPageVtx[j + 2].v.cn[1] =
@@ -1916,19 +2145,21 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
             }
 
             pauseCtx->mapPageVtx[j - 2].v.ob[1] = pauseCtx->mapPageVtx[j - 1].v.ob[1] =
-                pauseCtx->mapPageVtx[j - 4].v.ob[1] - 2;
+                pauseCtx->mapPageVtx[j - 4].v.ob[1] - (WORLD_MAP_IMAGE_HEIGHT % WORLD_MAP_IMAGE_FRAG_HEIGHT);
 
-            pauseCtx->mapPageVtx[j - 2].v.tc[1] = pauseCtx->mapPageVtx[j - 1].v.tc[1] = 2 * (1 << 5);
+            pauseCtx->mapPageVtx[j - 2].v.tc[1] = pauseCtx->mapPageVtx[j - 1].v.tc[1] =
+                (WORLD_MAP_IMAGE_HEIGHT % WORLD_MAP_IMAGE_FRAG_HEIGHT) * (1 << 5);
 
         } else {
-            pauseCtx->mapPageVtx = GRAPH_ALLOC(gfxCtx, 84 * sizeof(Vtx));
-            func_80825A50(play, pauseCtx->mapPageVtx, 2, 6);
+            pauseCtx->mapPageVtx =
+                GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_MAP_DUNGEON_QUADS) * 4) * sizeof(Vtx));
+            KaleidoScope_SetPageVertices(play, pauseCtx->mapPageVtx, VTX_PAGE_MAP_DUNGEON, VTX_PAGE_MAP_DUNGEON_QUADS);
         }
     }
 
     if (pauseCtx->pageIndex != PAUSE_ITEM) {
-        pauseCtx->questPageVtx = GRAPH_ALLOC(gfxCtx, 60 * sizeof(Vtx));
-        func_80825A50(play, pauseCtx->questPageVtx, 3, 0);
+        pauseCtx->questPageVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_QUEST_QUADS) * 4) * sizeof(Vtx));
+        KaleidoScope_SetPageVertices(play, pauseCtx->questPageVtx, VTX_PAGE_QUEST, VTX_PAGE_QUEST_QUADS);
 
         pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, 156 * sizeof(Vtx));
 
@@ -1982,20 +2213,25 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 
     if (pauseCtx->pageIndex != PAUSE_MAP) {
-        pauseCtx->maskPageVtx = GRAPH_ALLOC(gfxCtx, 60 * sizeof(Vtx));
-        func_80825A50(play, pauseCtx->maskPageVtx, 0, 0);
+        pauseCtx->maskPageVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_MASK_QUADS) * 4) * sizeof(Vtx));
+        KaleidoScope_SetPageVertices(play, pauseCtx->maskPageVtx, VTX_PAGE_MASK, VTX_PAGE_MASK_QUADS);
 
-        pauseCtx->maskVtx = GRAPH_ALLOC(gfxCtx, 108 * sizeof(Vtx));
+        pauseCtx->maskVtx = GRAPH_ALLOC(gfxCtx, (QUAD_MASK_MAX * 4) * sizeof(Vtx));
 
-        for (k = 0, i = 0, var_t3 = 58; k < 4; k++, var_t3 -= 32) {
-            for (var_a3 = -96, j = 0; j < 6; j++, i += 4, var_a3 += 32) {
-                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0] = var_a3 + 2;
+        // Loop over grid rows
+        for (k = 0, i = 0, vtx_y = (MASK_GRID_ROWS * MASK_GRID_CELL_HEIGHT) / 2 - 6; k < MASK_GRID_ROWS;
+             k++, vtx_y -= MASK_GRID_CELL_HEIGHT) {
+            // Loop over grid columns
+            for (vtx_x = 0 - (MASK_GRID_COLS * MASK_GRID_CELL_WIDTH) / 2, j = 0; j < MASK_GRID_COLS;
+                 j++, i += 4, vtx_x += MASK_GRID_CELL_WIDTH) {
+                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0] = vtx_x + MASK_GRID_QUAD_MARGIN;
                 pauseCtx->maskVtx[i + 1].v.ob[0] = pauseCtx->maskVtx[i + 3].v.ob[0] =
-                    pauseCtx->maskVtx[i + 0].v.ob[0] + 28;
+                    pauseCtx->maskVtx[i + 0].v.ob[0] + MASK_GRID_QUAD_WIDTH;
 
-                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] = var_t3 + pauseCtx->offsetY - 2;
+                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] =
+                    vtx_y + pauseCtx->offsetY - MASK_GRID_QUAD_MARGIN;
                 pauseCtx->maskVtx[i + 2].v.ob[1] = pauseCtx->maskVtx[i + 3].v.ob[1] =
-                    pauseCtx->maskVtx[i + 0].v.ob[1] - 28;
+                    pauseCtx->maskVtx[i + 0].v.ob[1] - MASK_GRID_QUAD_HEIGHT;
 
                 pauseCtx->maskVtx[i + 0].v.ob[2] = pauseCtx->maskVtx[i + 1].v.ob[2] = pauseCtx->maskVtx[i + 2].v.ob[2] =
                     pauseCtx->maskVtx[i + 3].v.ob[2] = 0;
@@ -2007,7 +2243,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                     pauseCtx->maskVtx[i + 2].v.tc[0] = 0;
 
                 pauseCtx->maskVtx[i + 1].v.tc[0] = pauseCtx->maskVtx[i + 2].v.tc[1] = pauseCtx->maskVtx[i + 3].v.tc[0] =
-                    pauseCtx->maskVtx[i + 3].v.tc[1] = 32 * (1 << 5);
+                    pauseCtx->maskVtx[i + 3].v.tc[1] = MASK_GRID_QUAD_TEX_SIZE * (1 << 5);
 
                 pauseCtx->maskVtx[i + 0].v.cn[0] = pauseCtx->maskVtx[i + 1].v.cn[0] = pauseCtx->maskVtx[i + 2].v.cn[0] =
                     pauseCtx->maskVtx[i + 3].v.cn[0] = pauseCtx->maskVtx[i + 0].v.cn[1] =
@@ -2021,19 +2257,23 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
             }
         }
 
-        for (j = 1; j < 4; j++, i += 4) {
-            if (GET_CUR_FORM_BTN_SLOT(j) != ITEM_NONE) {
-                k = (GET_CUR_FORM_BTN_SLOT(j) << 2) - 0x60;
+        // QUAD_MASK_GRID_SELECTED_C_LEFT, QUAD_MASK_GRID_SELECTED_C_DOWN, QUAD_MASK_GRID_SELECTED_C_RIGHT
 
-                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0] = pauseCtx->maskVtx[k].v.ob[0] - 2;
+        for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++, i += 4) {
+            if (GET_CUR_FORM_BTN_SLOT(j) != ITEM_NONE) {
+                k = (GET_CUR_FORM_BTN_SLOT(j) - ITEM_NUM_SLOTS) * 4;
+
+                pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0] =
+                    pauseCtx->maskVtx[k].v.ob[0] + MASK_GRID_SELECTED_QUAD_MARGIN;
 
                 pauseCtx->maskVtx[i + 1].v.ob[0] = pauseCtx->maskVtx[i + 3].v.ob[0] =
-                    pauseCtx->maskVtx[i + 0].v.ob[0] + 32;
+                    pauseCtx->maskVtx[i + 0].v.ob[0] + MASK_GRID_SELECTED_QUAD_WIDTH;
 
-                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] = pauseCtx->maskVtx[k].v.ob[1] + 2;
+                pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] =
+                    pauseCtx->maskVtx[k].v.ob[1] - MASK_GRID_SELECTED_QUAD_MARGIN;
 
                 pauseCtx->maskVtx[i + 2].v.ob[1] = pauseCtx->maskVtx[i + 3].v.ob[1] =
-                    pauseCtx->maskVtx[i + 0].v.ob[1] - 32;
+                    pauseCtx->maskVtx[i + 0].v.ob[1] - MASK_GRID_SELECTED_QUAD_HEIGHT;
 
                 pauseCtx->maskVtx[i + 0].v.ob[2] = pauseCtx->maskVtx[i + 1].v.ob[2] = pauseCtx->maskVtx[i + 2].v.ob[2] =
                     pauseCtx->maskVtx[i + 3].v.ob[2] = 0;
@@ -2045,7 +2285,7 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                     pauseCtx->maskVtx[i + 2].v.tc[0] = 0;
 
                 pauseCtx->maskVtx[i + 1].v.tc[0] = pauseCtx->maskVtx[i + 2].v.tc[1] = pauseCtx->maskVtx[i + 3].v.tc[0] =
-                    pauseCtx->maskVtx[i + 3].v.tc[1] = 32 * (1 << 5);
+                    pauseCtx->maskVtx[i + 3].v.tc[1] = MASK_GRID_SELECTED_QUAD_TEX_SIZE * (1 << 5);
 
                 pauseCtx->maskVtx[i + 0].v.cn[0] = pauseCtx->maskVtx[i + 1].v.cn[0] = pauseCtx->maskVtx[i + 2].v.cn[0] =
                     pauseCtx->maskVtx[i + 3].v.cn[0] = pauseCtx->maskVtx[i + 0].v.cn[1] =
@@ -2061,18 +2301,18 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
                 pauseCtx->maskVtx[i + 0].v.ob[0] = pauseCtx->maskVtx[i + 2].v.ob[0];
 
                 pauseCtx->maskVtx[i + 1].v.ob[0] = pauseCtx->maskVtx[i + 3].v.ob[0] =
-                    pauseCtx->maskVtx[i + 0].v.ob[0] + 32;
+                    pauseCtx->maskVtx[i + 0].v.ob[0] + MASK_GRID_SELECTED_QUAD_WIDTH;
 
                 pauseCtx->maskVtx[i + 0].v.ob[1] = pauseCtx->maskVtx[i + 1].v.ob[1] = 300;
                 pauseCtx->maskVtx[i + 2].v.ob[1] = pauseCtx->maskVtx[i + 3].v.ob[1] =
-                    pauseCtx->maskVtx[i + 0].v.ob[1] - 32;
+                    pauseCtx->maskVtx[i + 0].v.ob[1] - MASK_GRID_SELECTED_QUAD_HEIGHT;
             }
         }
     }
 
-    pauseCtx->cursorVtx = GRAPH_ALLOC(play->state.gfxCtx, 20 * sizeof(Vtx));
+    pauseCtx->cursorVtx = GRAPH_ALLOC(play->state.gfxCtx, (PAUSE_QUAD_CURSOR_MAX * 4) * sizeof(Vtx));
 
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < (PAUSE_QUAD_CURSOR_MAX * 4); i++) {
         pauseCtx->cursorVtx[i].v.ob[0] = pauseCtx->cursorVtx[i].v.ob[1] = pauseCtx->cursorVtx[i].v.ob[2] = 0;
 
         pauseCtx->cursorVtx[i].v.flag = 0;
@@ -2083,21 +2323,28 @@ void KaleidoScope_InitVertices(PlayState* play, GraphicsContext* gfxCtx) {
             pauseCtx->cursorVtx[i].v.cn[3] = 255;
     }
 
-    pauseCtx->cursorVtx[1].v.tc[0] = pauseCtx->cursorVtx[2].v.tc[1] = pauseCtx->cursorVtx[3].v.tc[0] =
-        pauseCtx->cursorVtx[3].v.tc[1] = pauseCtx->cursorVtx[5].v.tc[0] = pauseCtx->cursorVtx[6].v.tc[1] =
-            pauseCtx->cursorVtx[7].v.tc[0] = pauseCtx->cursorVtx[7].v.tc[1] = pauseCtx->cursorVtx[9].v.tc[0] =
-                pauseCtx->cursorVtx[10].v.tc[1] = pauseCtx->cursorVtx[11].v.tc[0] = pauseCtx->cursorVtx[11].v.tc[1] =
-                    pauseCtx->cursorVtx[13].v.tc[0] = pauseCtx->cursorVtx[14].v.tc[1] =
-                        pauseCtx->cursorVtx[15].v.tc[0] = pauseCtx->cursorVtx[15].v.tc[1] = 16 * (1 << 5);
+    // PAUSE_QUAD_CURSOR_0
+    pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 1].v.tc[0] = pauseCtx->cursorVtx[2].v.tc[1] =
+        pauseCtx->cursorVtx[3].v.tc[0] = pauseCtx->cursorVtx[3].v.tc[1]
+        // PAUSE_QUAD_CURSOR_1
+        = pauseCtx->cursorVtx[5].v.tc[0] = pauseCtx->cursorVtx[6].v.tc[1] = pauseCtx->cursorVtx[7].v.tc[0] =
+            pauseCtx->cursorVtx[7].v.tc[1]
+        // PAUSE_QUAD_CURSOR_2
+        = pauseCtx->cursorVtx[9].v.tc[0] = pauseCtx->cursorVtx[10].v.tc[1] = pauseCtx->cursorVtx[11].v.tc[0] =
+            pauseCtx->cursorVtx[11].v.tc[1]
+        // PAUSE_QUAD_CURSOR_3
+        = pauseCtx->cursorVtx[13].v.tc[0] = pauseCtx->cursorVtx[14].v.tc[1] = pauseCtx->cursorVtx[15].v.tc[0] =
+            pauseCtx->cursorVtx[15].v.tc[1] = 16 * (1 << 5);
 
+    // PAUSE_QUAD_CURSOR_4
     pauseCtx->cursorVtx[17].v.tc[0] = pauseCtx->cursorVtx[18].v.tc[1] = pauseCtx->cursorVtx[19].v.tc[0] =
         pauseCtx->cursorVtx[19].v.tc[1] = 32 * (1 << 5);
 
     pauseCtx->infoPanelVtx = GRAPH_ALLOC(gfxCtx, 28 * sizeof(Vtx));
 
     if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER) {
-        pauseCtx->saveVtx = GRAPH_ALLOC(gfxCtx, 80 * sizeof(Vtx));
-        func_80825A50(play, pauseCtx->saveVtx, 5, 5);
+        pauseCtx->saveVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_SAVE_QUADS) * 4) * sizeof(Vtx));
+        KaleidoScope_SetPageVertices(play, pauseCtx->saveVtx, VTX_PAGE_SAVE, VTX_PAGE_SAVE_QUADS);
     }
 }
 
@@ -2465,7 +2712,7 @@ void KaleidoScope_Draw(PlayState* play) {
 
         if (!IS_PAUSE_STATE_OWLWARP) {
             // Draw Default or Game Over Menus
-            KaleidoScope_InitVertices(play, play->state.gfxCtx);
+            KaleidoScope_SetVertices(play, play->state.gfxCtx);
             KaleidoScope_DrawPages(play, play->state.gfxCtx);
 
             func_8012C8AC(play->state.gfxCtx);
@@ -2490,7 +2737,7 @@ void KaleidoScope_Draw(PlayState* play) {
             }
         } else {
             // Draw Owl Warp Menu
-            KaleidoScope_InitVertices(play, play->state.gfxCtx);
+            KaleidoScope_SetVertices(play, play->state.gfxCtx);
             KaleidoScope_DrawPages(play, play->state.gfxCtx);
             KaleidoScope_DrawOwlWarpMapPage(play);
 

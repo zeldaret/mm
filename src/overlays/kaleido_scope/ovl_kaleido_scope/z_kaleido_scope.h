@@ -140,11 +140,130 @@ typedef enum {
     /* 2 */ PAUSE_CURSOR_RESULT_SPECIAL_POS
 } PauseMoveCursorResult;
 
-#define NUM_ITEM_SLOTS 24
-#define NUM_MASK_SLOTS 24
+typedef enum {
+    /* 0 */ PAUSE_QUAD_CURSOR_0,
+    /* 1 */ PAUSE_QUAD_CURSOR_1,
+    /* 2 */ PAUSE_QUAD_CURSOR_2,
+    /* 3 */ PAUSE_QUAD_CURSOR_3,
+    /* 4 */ PAUSE_QUAD_CURSOR_4,
+    /* 5 */ PAUSE_QUAD_CURSOR_MAX
+} PauseCursorQuad;
+
+typedef enum {
+    /* 0 */ VTX_PAGE_MASK,
+    /* 1 */ VTX_PAGE_ITEM,
+    /* 2 */ VTX_PAGE_MAP_DUNGEON,
+    /* 3 */ VTX_PAGE_QUEST,
+    /* 4 */ VTX_PAGE_MAP_WORLD,
+    /* 5 */ VTX_PAGE_SAVE,
+    /* 6 */ VTX_PAGE_MAX
+} VtxPage;
+
+#define VTX_PAGE_MASK_QUADS 0        // VTX_PAGE_MASK
+#define VTX_PAGE_ITEM_QUADS 0        // VTX_PAGE_ITEM
+#define VTX_PAGE_MAP_DUNGEON_QUADS 6 // VTX_PAGE_MAP_DUNGEON
+#define VTX_PAGE_QUEST_QUADS 0       // VTX_PAGE_QUEST
+#define VTX_PAGE_MAP_WORLD_QUADS 36  // VTX_PAGE_MAP_WORLD
+#define VTX_PAGE_SAVE_QUADS 5        // VTX_PAGE_SAVE
+
+#define PAGE_BG_COLS 3
+#define PAGE_BG_ROWS 5
+#define PAGE_BG_QUADS (PAGE_BG_COLS * PAGE_BG_ROWS)
+#define PAGE_BG_QUAD_WIDTH 80
+#define PAGE_BG_QUAD_HEIGHT 32
+#define PAGE_BG_QUAD_TEX_WIDTH 80
+#define PAGE_BG_QUAD_TEX_HEIGHT 32
 
 #define PAUSE_PROMPT_YES 0
 #define PAUSE_PROMPT_NO 4
+
+
+
+// === ITEM/MASK === //
+
+#define ITEM_GRID_ROWS 4
+#define ITEM_GRID_COLS 6
+#define ITEM_GRID_CELL_WIDTH 32
+#define ITEM_GRID_CELL_HEIGHT 32
+#define ITEM_GRID_QUAD_MARGIN 2
+#define ITEM_GRID_QUAD_WIDTH (ITEM_GRID_CELL_WIDTH - (2 * ITEM_GRID_QUAD_MARGIN))
+#define ITEM_GRID_QUAD_HEIGHT (ITEM_GRID_CELL_HEIGHT - (2 * ITEM_GRID_QUAD_MARGIN))
+#define ITEM_GRID_QUAD_TEX_SIZE 32 // both width and height
+#define ITEM_GRID_QUAD_ENLARGE_OFFSET 2
+
+#define ITEM_GRID_SELECTED_QUAD_MARGIN (-2)
+#define ITEM_GRID_SELECTED_QUAD_WIDTH (ITEM_GRID_QUAD_WIDTH - (2 * ITEM_GRID_SELECTED_QUAD_MARGIN))
+#define ITEM_GRID_SELECTED_QUAD_HEIGHT (ITEM_GRID_QUAD_HEIGHT - (2 * ITEM_GRID_SELECTED_QUAD_MARGIN))
+#define ITEM_GRID_SELECTED_QUAD_TEX_SIZE 32 // both width and height
+
+#define ITEM_NUM_SLOTS (ITEM_GRID_ROWS * ITEM_GRID_COLS)
+
+#define ITEM_AMMO_DIGIT_QUAD_WIDTH 8
+#define ITEM_AMMO_DIGIT_QUAD_HEIGHT 8
+#define ITEM_AMMO_DIGIT_QUAD_TEX_SIZE 8
+
+// Relative to the corresponding QUAD_ITEM_GRID_ quad
+#define ITEM_AMMO_TENS_QUAD_OFFSET_X 0
+#define ITEM_AMMO_TENS_QUAD_OFFSET_Y 22
+
+// Relative to the ammo tens digit
+#define ITEM_AMMO_UNITS_QUAD_OFFSET_X 6
+#define ITEM_AMMO_UNITS_QUAD_OFFSET_Y 0
+
+typedef enum {
+    // 0..23 are the ITEM_GRID_ROWS*ITEM_GRID_COLS item grid
+    // The values follow the `InventorySlot` enum
+    /*  0 */ QUAD_ITEM_GRID_FIRST,
+    /* 23 */ QUAD_ITEM_GRID_LAST = ITEM_GRID_ROWS * ITEM_GRID_COLS - 1,
+    // Markers indicating the currently equipped items
+    /* 24 */ QUAD_ITEM_GRID_SELECTED_C_LEFT,
+    /* 25 */ QUAD_ITEM_GRID_SELECTED_C_DOWN,
+    /* 26 */ QUAD_ITEM_GRID_SELECTED_C_RIGHT,
+    /* 27 */ QUAD_ITEM_MAX
+} ItemQuad;
+
+// === MASK === //
+#define MASK_NUM_SLOTS 24
+
+#define MASK_GRID_ROWS 4
+#define MASK_GRID_COLS 6
+#define MASK_GRID_CELL_WIDTH 32
+#define MASK_GRID_CELL_HEIGHT 32
+#define MASK_GRID_QUAD_MARGIN 2
+#define MASK_GRID_QUAD_WIDTH (MASK_GRID_CELL_WIDTH - (2 * MASK_GRID_QUAD_MARGIN))
+#define MASK_GRID_QUAD_HEIGHT (MASK_GRID_CELL_HEIGHT - (2 * MASK_GRID_QUAD_MARGIN))
+#define MASK_GRID_QUAD_TEX_SIZE 32 // both width and height
+#define MASK_GRID_QUAD_ENLARGE_OFFSET 2
+
+#define MASK_GRID_SELECTED_QUAD_MARGIN (-2)
+#define MASK_GRID_SELECTED_QUAD_WIDTH (MASK_GRID_QUAD_WIDTH - (2 * MASK_GRID_SELECTED_QUAD_MARGIN))
+#define MASK_GRID_SELECTED_QUAD_HEIGHT (MASK_GRID_QUAD_HEIGHT - (2 * MASK_GRID_SELECTED_QUAD_MARGIN))
+#define MASK_GRID_SELECTED_QUAD_TEX_SIZE 32 // both width and height
+
+typedef enum {
+    // 0..23 are the MASK_GRID_ROWS*MASK_GRID_COLS item grid
+    // The values follow the `InventorySlot` enum offset by ITEM_NUM_SLOTS
+    /*  0 */ QUAD_MASK_GRID_FIRST,
+    /* 23 */ QUAD_MASK_GRID_LAST = MASK_GRID_ROWS * MASK_GRID_COLS - 1,
+    // Markers indicating the currently equipped items
+    /* 24 */ QUAD_MASK_GRID_SELECTED_C_LEFT,
+    /* 25 */ QUAD_MASK_GRID_SELECTED_C_DOWN,
+    /* 26 */ QUAD_MASK_GRID_SELECTED_C_RIGHT,
+    /* 27 */ QUAD_MASK_MAX
+} MaskQuad;
+
+// === QUEST === //
+
+// QuestQuad;
+
+// === WORLD MAP === //
+
+// MapQuad
+
+#define WORLD_MAP_IMAGE_WIDTH 216
+#define WORLD_MAP_IMAGE_HEIGHT 128
+#define WORLD_MAP_IMAGE_FRAG_HEIGHT ((TMEM_SIZE / 2) / (WORLD_MAP_IMAGE_WIDTH * G_IM_SIZ_8b_BYTES))
+#define WORLD_MAP_IMAGE_FRAG_NUM (((WORLD_MAP_IMAGE_HEIGHT - 1) / WORLD_MAP_IMAGE_FRAG_HEIGHT) + 1)
 
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);

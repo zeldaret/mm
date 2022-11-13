@@ -10,13 +10,10 @@
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 
-extern s16 D_8082B7F0[];
-extern s16 D_8082B838[];
+extern s16 gVtxPageMapWorldQuadsWidth[];
+extern s16 gVtxPageMapWorldQuadsHeight[];
 
 extern TexturePtr D_09007500; // gPlayerFaceIcon
-
-#define WORLD_MAP_IMAGE_TEX_WIDTH 216
-#define WORLD_MAP_IMAGE_TEX_HEIGHT 128
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -153,7 +150,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_MAP];
     }
 
-    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60], 16, 0);
+    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60], 4 * 4, 0);
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
@@ -562,12 +559,12 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Process the 128 rows of pixels for gWorldMapImageTex, 8 rows at a time over 16 iterations
         // Loop over yPos (t), textureIndex (j)
         for (t = 62, j = 0; j < 16; j++, t += 8) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_TEX_WIDTH * 8),
-                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_WIDTH * 8), G_IM_FMT_CI,
+                                G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             rectLeft = 51 << 2;
-            rectRight = rectLeft + (WORLD_MAP_IMAGE_TEX_WIDTH << 2);
+            rectRight = rectLeft + (WORLD_MAP_IMAGE_WIDTH << 2);
             gSPTextureRectangle(POLY_OPA_DISP++, rectLeft, t << 2, rectRight, (t << 2) + (8 << 2), G_TX_RENDERTILE, 0,
                                 0, 1 << 10, 1 << 10);
         }
@@ -599,9 +596,10 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Process the first 72 rows of pixels for gWorldMapImageTex, 9 rows at a time over 8 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, k = 0, j = 0; i < 8; i++, k++, j += 4) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
-                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(
+                POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_WIDTH * WORLD_MAP_IMAGE_FRAG_HEIGHT),
+                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, WORLD_MAP_IMAGE_FRAG_HEIGHT, 0,
+                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
@@ -613,17 +611,19 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Process the next 54 rows of pixels for gWorldMapImageTex, 9 rows at a time over 6 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
-                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(
+                POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_WIDTH * WORLD_MAP_IMAGE_FRAG_HEIGHT),
+                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, WORLD_MAP_IMAGE_FRAG_HEIGHT, 0,
+                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
         // Process the last 2 rows of pixels for gWorldMapImageTex
-        gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9), G_IM_FMT_CI,
-                            G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 2, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(
+            POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_WIDTH * WORLD_MAP_IMAGE_FRAG_HEIGHT),
+            G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, WORLD_MAP_IMAGE_HEIGHT % WORLD_MAP_IMAGE_FRAG_HEIGHT, 0,
+            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
     }
@@ -647,7 +647,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60 + n * 4], 4, 0);
 
-            POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sCloudTextures[n], D_8082B7F0[n], D_8082B838[n], 0);
+            POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sCloudTextures[n], gVtxPageMapWorldQuadsWidth[n],
+                                               gVtxPageMapWorldQuadsHeight[n], 0);
         }
     }
 
