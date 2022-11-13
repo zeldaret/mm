@@ -445,7 +445,7 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, TexturePtr* textures
     s32 i;
     s32 j;
 
-    gSPVertex(gfx++, vertices, 32, 0);
+    gSPVertex(gfx++, vertices, 8 * 4, 0);
 
     i = 0;
     j = 0;
@@ -459,7 +459,7 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, TexturePtr* textures
         i++;
     }
 
-    gSPVertex(gfx++, vertices + 32, 28, 0);
+    gSPVertex(gfx++, vertices + (8 * 4), 7 * 4, 0);
 
     j = 0;
     while (j < 28) {
@@ -1528,12 +1528,12 @@ void KaleidoScope_SetView(PauseContext* pauseCtx, f32 eyeX, f32 eyeY, f32 eyeZ) 
 s16 sVtxPageMaskQuadsX[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
 s16 sVtxPageItemQuadsX[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
 s16 sVtxPageMapDungeonQuadsX[VTX_PAGE_MAP_DUNGEON_QUADS] = {
-    -21,  // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
-    -104, // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
-    -76,  // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
-    -48,  // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    -21,  // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE
+    -104, // mapPageVtx[64] QUAD_MAP_DUNGEON_BOSS_KEY
+    -76,  // mapPageVtx[68] QUAD_MAP_DUNGEON_COMPASS
+    -48,  // mapPageVtx[72] QUAD_MAP_DUNGEON_MAP
     -104, // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
-    -40   // mapPageVtx[80] QUAD_MAP_DUNGEON_5
+    -40   // mapPageVtx[80] QUAD_MAP_DUNGEON_UNUSED
 };
 s16 sVtxPageQuestQuadsX[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
 s16 sVtxPageMapWorldQuadsX[VTX_PAGE_MAP_WORLD_QUADS] = {
@@ -1575,31 +1575,31 @@ s16 sVtxPageMapWorldQuadsX[VTX_PAGE_MAP_WORLD_QUADS] = {
     54,   // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
 s16 sVtxPageSaveQuadsX[VTX_PAGE_SAVE_QUADS] = {
-    -76, // Prompt Message
-    -58, // Prompt Cursor Left
-    10,  // Prompt Cursor Right
-    -58, // Prompt Choice Yes
-    10,  // Prompt Choice No
+    -76, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
+    -58, // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
+    10,  // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
+    -58, // promptPageVtx[72] QUAD_PROMPT_CHOICE_YES
+    10,  // promptPageVtx[76] QUAD_PROMPT_CHOICE_NO
 };
 
 // CLAMP_MIN(*, 1) because C arrays can't have 0 length
 s16 sVtxPageMaskQuadsWidth[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
 s16 sVtxPageItemQuadsWidth[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
 s16 sVtxPageMapDungeonQuadsWidth[VTX_PAGE_MAP_DUNGEON_QUADS] = {
-    128, // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
-    24,  // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
-    24,  // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
-    24,  // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    128, // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE
+    24,  // mapPageVtx[64] QUAD_MAP_DUNGEON_BOSS_KEY
+    24,  // mapPageVtx[68] QUAD_MAP_DUNGEON_COMPASS
+    24,  // mapPageVtx[72] QUAD_MAP_DUNGEON_MAP
     32,  // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
-    24,  // mapPageVtx[80] QUAD_MAP_DUNGEON_5
+    24,  // mapPageVtx[80] QUAD_MAP_DUNGEON_UNUSED
 };
 s16 sVtxPageQuestQuadsWidth[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
 s16 sVtxPageSaveQuadsWidth[VTX_PAGE_SAVE_QUADS] = {
-    152, // Prompt Message
-    48,  // Prompt Cursor Left
-    48,  // Prompt Cursor Right
-    48,  // Prompt Choice Yes
-    48,  // Prompt Choice No
+    152, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
+    48,  // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
+    48,  // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
+    48,  // promptPageVtx[72] QUAD_PROMPT_CHOICE_YES
+    48,  // promptPageVtx[76] QUAD_PROMPT_CHOICE_NO
 };
 
 // CLAMP_MIN(*, 1) because C arrays can't have 0 length
@@ -1607,12 +1607,12 @@ s16 sVtxPageMaskQuadsY[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
 s16 sVtxPageItemQuadsY[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
 
 s16 sVtxPageMapDungeonQuadsY[VTX_PAGE_MAP_DUNGEON_QUADS] = {
-    54,  // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
-    -42, // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
-    -42, // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
-    -42, // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    54,  // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE
+    -42, // mapPageVtx[64] QUAD_MAP_DUNGEON_BOSS_KEY
+    -42, // mapPageVtx[68] QUAD_MAP_DUNGEON_COMPASS
+    -42, // mapPageVtx[72] QUAD_MAP_DUNGEON_MAP
     -24, // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
-    50,  // mapPageVtx[80] QUAD_MAP_DUNGEON_5
+    50,  // mapPageVtx[80] QUAD_MAP_DUNGEON_UNUSED
 };
 s16 sVtxPageQuestQuadsY[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
 s16 sVtxPageMapWorldQuadsY[VTX_PAGE_MAP_WORLD_QUADS] = {
@@ -1654,31 +1654,31 @@ s16 sVtxPageMapWorldQuadsY[VTX_PAGE_MAP_WORLD_QUADS] = {
     24,  // mapPageVtx[200] QUAD_MAP_OWL_WARP_STONE_TOWER
 };
 s16 sVtxPageSaveQuadsY[VTX_PAGE_SAVE_QUADS] = {
-    36, // Prompt Message
-    10, // Prompt Cursor Left
-    10, // Prompt Cursor Right
-    -6, // Prompt Choice Yes
-    -6, // Prompt Choice No
+    36, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
+    10, // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
+    10, // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
+    -6, // promptPageVtx[72] QUAD_PROMPT_CHOICE_YES
+    -6, // promptPageVtx[76] QUAD_PROMPT_CHOICE_NO
 };
 
 // CLAMP_MIN(*, 1) because C arrays can't have 0 length
 s16 sVtxPageMaskQuadsHeight[CLAMP_MIN(VTX_PAGE_MASK_QUADS, 1)] = { 0 };
 s16 sVtxPageItemQuadsHeight[CLAMP_MIN(VTX_PAGE_ITEM_QUADS, 1)] = { 0 };
 s16 sVtxPageMapDungeonQuadsHeight[] = {
-    16, // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE_1
-    24, // mapPageVtx[64] QUAD_MAP_DUNGEON_TITLE_2
-    24, // mapPageVtx[68] QUAD_MAP_DUNGEON_TITLE_3
-    24, // mapPageVtx[72] QUAD_MAP_DUNGEON_TITLE_4
+    16, // mapPageVtx[60] QUAD_MAP_DUNGEON_TITLE
+    24, // mapPageVtx[64] QUAD_MAP_DUNGEON_BOSS_KEY
+    24, // mapPageVtx[68] QUAD_MAP_DUNGEON_COMPASS
+    24, // mapPageVtx[72] QUAD_MAP_DUNGEON_MAP
     24, // mapPageVtx[76] QUAD_MAP_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
-    24, // mapPageVtx[80] QUAD_MAP_DUNGEON_5
+    24, // mapPageVtx[80] QUAD_MAP_DUNGEON_UNUSED
 };
 s16 sVtxPageQuestQuadsHeight[CLAMP_MIN(VTX_PAGE_QUEST_QUADS, 1)] = { 0 };
 s16 sVtxPageSaveQuadsHeight[VTX_PAGE_SAVE_QUADS] = {
-    16, // Prompt Message
-    48, // Prompt Cursor Left
-    48, // Prompt Cursor Right
-    16, // Prompt Choice Yes
-    16, // Prompt Choice No
+    16, // promptPageVtx[60] QUAD_PROMPT_MESSAGE
+    48, // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
+    48, // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
+    16, // promptPageVtx[72] QUAD_PROMPT_CHOICE_YES
+    16, // promptPageVtx[76] QUAD_PROMPT_CHOICE_NO
 };
 
 s16* sVtxPageQuadsX[VTX_PAGE_MAX] = {
@@ -1687,7 +1687,7 @@ s16* sVtxPageQuadsX[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsX, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsX,      // VTX_PAGE_QUEST
     sVtxPageMapWorldQuadsX,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsX,       // VTX_PAGE_SAVE
+    sVtxPageSaveQuadsX,       // VTX_PAGE_PROMPT
 };
 
 s16* sVtxPageQuadsWidth[VTX_PAGE_MAX] = {
@@ -1696,7 +1696,7 @@ s16* sVtxPageQuadsWidth[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsWidth, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsWidth,      // VTX_PAGE_QUEST
     gVtxPageMapWorldQuadsWidth,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsWidth,       // VTX_PAGE_SAVE
+    sVtxPageSaveQuadsWidth,       // VTX_PAGE_PROMPT
 };
 
 s16* sVtxPageQuadsY[VTX_PAGE_MAX] = {
@@ -1705,7 +1705,7 @@ s16* sVtxPageQuadsY[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsY, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsY,      // VTX_PAGE_QUEST
     sVtxPageMapWorldQuadsY,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsY,       // VTX_PAGE_SAVE
+    sVtxPageSaveQuadsY,       // VTX_PAGE_PROMPT
 };
 
 s16* sVtxPageQuadsHeight[VTX_PAGE_MAX] = {
@@ -1714,15 +1714,15 @@ s16* sVtxPageQuadsHeight[VTX_PAGE_MAX] = {
     sVtxPageMapDungeonQuadsHeight, // VTX_PAGE_MAP_DUNGEON
     sVtxPageQuestQuadsHeight,      // VTX_PAGE_QUEST
     gVtxPageMapWorldQuadsHeight,   // VTX_PAGE_MAP_WORLD
-    sVtxPageSaveQuadsHeight,       // VTX_PAGE_SAVE
+    sVtxPageSaveQuadsHeight,       // VTX_PAGE_PROMPT
 };
 
 s16 sVtxPageGameOverSaveQuadsY[VTX_PAGE_SAVE_QUADS] = {
-    14,  // Prompt Message
-    -2,  // Prompt Cursor Left
-    -2,  // Prompt Cursor Right
-    -18, // Prompt Choice Yes
-    -18, // Prompt Choice No
+    14,  // promptPageVtx[60] QUAD_PROMPT_MESSAGE
+    -2,  // promptPageVtx[64] QUAD_PROMPT_CURSOR_LEFT
+    -2,  // promptPageVtx[68] QUAD_PROMPT_CURSOR_RIGHT
+    -18, // promptPageVtx[72] QUAD_PROMPT_CHOICE_YES
+    -18, // promptPageVtx[76] QUAD_PROMPT_CHOICE_NO
 };
 
 s16 KaleidoScope_SetPageVertices(PlayState* play, Vtx* vtx, s16 vtxPage, s16 numQuads) {
@@ -2343,8 +2343,8 @@ void KaleidoScope_SetVertices(PlayState* play, GraphicsContext* gfxCtx) {
     pauseCtx->infoPanelVtx = GRAPH_ALLOC(gfxCtx, 28 * sizeof(Vtx));
 
     if ((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) || IS_PAUSE_STATE_GAMEOVER) {
-        pauseCtx->saveVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_SAVE_QUADS) * 4) * sizeof(Vtx));
-        KaleidoScope_SetPageVertices(play, pauseCtx->saveVtx, VTX_PAGE_SAVE, VTX_PAGE_SAVE_QUADS);
+        pauseCtx->promptPageVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_SAVE_QUADS) * 4) * sizeof(Vtx));
+        KaleidoScope_SetPageVertices(play, pauseCtx->promptPageVtx, VTX_PAGE_PROMPT, VTX_PAGE_SAVE_QUADS);
     }
 }
 

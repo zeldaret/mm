@@ -155,7 +155,7 @@ typedef enum {
     /* 2 */ VTX_PAGE_MAP_DUNGEON,
     /* 3 */ VTX_PAGE_QUEST,
     /* 4 */ VTX_PAGE_MAP_WORLD,
-    /* 5 */ VTX_PAGE_SAVE,
+    /* 5 */ VTX_PAGE_PROMPT,
     /* 6 */ VTX_PAGE_MAX
 } VtxPage;
 
@@ -164,7 +164,7 @@ typedef enum {
 #define VTX_PAGE_MAP_DUNGEON_QUADS 6 // VTX_PAGE_MAP_DUNGEON
 #define VTX_PAGE_QUEST_QUADS 0       // VTX_PAGE_QUEST
 #define VTX_PAGE_MAP_WORLD_QUADS 36  // VTX_PAGE_MAP_WORLD
-#define VTX_PAGE_SAVE_QUADS 5        // VTX_PAGE_SAVE
+#define VTX_PAGE_SAVE_QUADS 5        // VTX_PAGE_PROMPT
 
 #define PAGE_BG_COLS 3
 #define PAGE_BG_ROWS 5
@@ -177,6 +177,14 @@ typedef enum {
 #define PAUSE_PROMPT_YES 0
 #define PAUSE_PROMPT_NO 4
 
+typedef enum {
+    /* 0 */ QUAD_PROMPT_MESSAGE,
+    /* 1 */ QUAD_PROMPT_CURSOR_LEFT,
+    /* 2 */ QUAD_PROMPT_CURSOR_RIGHT,
+    /* 3 */ QUAD_PROMPT_CHOICE_YES,
+    /* 4 */ QUAD_PROMPT_CHOICE_NO,
+    /* 5 */ QUAD_PROMPT_MAX
+} PromptQuad;
 
 
 // === ITEM/MASK === //

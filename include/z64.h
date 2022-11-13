@@ -398,7 +398,7 @@ typedef struct {
     /* 0x194 */ Vtx* mapVtx;
     /* 0x198 */ Vtx* questVtx;
     /* 0x19C */ Vtx* maskVtx;
-    /* 0x1A0 */ Vtx* saveVtx;
+    /* 0x1A0 */ Vtx* promptPageVtx;
     /* 0x1A4 */ Vtx* infoPanelVtx;
     /* 0x1A8 */ Vtx* cursorVtx;
     /* 0x1AC */ OcarinaStaff* ocarinaStaff;
