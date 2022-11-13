@@ -62,10 +62,10 @@ ActorInit En_Box_InitVars = {
     FLAGS,
     OBJECT_BOX,
     sizeof(EnBox),
-    (ActorFunc)EnBox_Init,
-    (ActorFunc)EnBox_Destroy,
-    (ActorFunc)EnBox_Update,
-    (ActorFunc)EnBox_Draw,
+    EnBox_Init,
+    EnBox_Destroy,
+    EnBox_Update,
+    EnBox_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

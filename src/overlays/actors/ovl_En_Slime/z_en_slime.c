@@ -39,10 +39,10 @@ ActorInit En_Slime_InitVars = {
     FLAGS,
     OBJECT_SLIME,
     sizeof(EnSlime),
-    (ActorFunc)EnSlime_Init,
-    (ActorFunc)EnSlime_Destroy,
-    (ActorFunc)EnSlime_Update,
-    (ActorFunc)EnSlime_Draw,
+    EnSlime_Init,
+    EnSlime_Destroy,
+    EnSlime_Update,
+    EnSlime_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

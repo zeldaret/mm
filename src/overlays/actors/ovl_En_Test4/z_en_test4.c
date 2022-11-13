@@ -26,10 +26,10 @@ ActorInit En_Test4_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest4),
-    (ActorFunc)EnTest4_Init,
-    (ActorFunc)EnTest4_Destroy,
-    (ActorFunc)EnTest4_Update,
-    (ActorFunc)NULL,
+    EnTest4_Init,
+    EnTest4_Destroy,
+    EnTest4_Update,
+    NULL,
 };
 
 static s32 sIsLoaded = false;

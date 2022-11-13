@@ -41,10 +41,10 @@ ActorInit En_Rat_InitVars = {
     FLAGS,
     OBJECT_RAT,
     sizeof(EnRat),
-    (ActorFunc)EnRat_Init,
-    (ActorFunc)EnRat_Destroy,
-    (ActorFunc)EnRat_Update,
-    (ActorFunc)EnRat_Draw,
+    EnRat_Init,
+    EnRat_Destroy,
+    EnRat_Update,
+    EnRat_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

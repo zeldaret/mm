@@ -43,10 +43,10 @@ ActorInit En_Geg_InitVars = {
     FLAGS,
     OBJECT_OF1D_MAP,
     sizeof(EnGeg),
-    (ActorFunc)EnGeg_Init,
-    (ActorFunc)EnGeg_Destroy,
-    (ActorFunc)EnGeg_Update,
-    (ActorFunc)EnGeg_Draw,
+    EnGeg_Init,
+    EnGeg_Destroy,
+    EnGeg_Update,
+    EnGeg_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

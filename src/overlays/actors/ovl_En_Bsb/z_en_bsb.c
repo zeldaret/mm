@@ -118,10 +118,10 @@ ActorInit En_Bsb_InitVars = {
     FLAGS,
     OBJECT_BSB,
     sizeof(EnBsb),
-    (ActorFunc)EnBsb_Init,
-    (ActorFunc)EnBsb_Destroy,
-    (ActorFunc)EnBsb_Update,
-    (ActorFunc)EnBsb_Draw,
+    EnBsb_Init,
+    EnBsb_Destroy,
+    EnBsb_Update,
+    EnBsb_Draw,
 };
 
 #endif

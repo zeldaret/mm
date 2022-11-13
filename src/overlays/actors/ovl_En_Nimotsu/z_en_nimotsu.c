@@ -24,10 +24,10 @@ ActorInit En_Nimotsu_InitVars = {
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnNimotsu),
-    (ActorFunc)EnNimotsu_Init,
-    (ActorFunc)EnNimotsu_Destroy,
-    (ActorFunc)EnNimotsu_Update,
-    (ActorFunc)EnNimotsu_Draw,
+    EnNimotsu_Init,
+    EnNimotsu_Destroy,
+    EnNimotsu_Update,
+    EnNimotsu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -36,10 +36,10 @@ ActorInit En_Water_Effect_InitVars = {
     FLAGS,
     OBJECT_WATER_EFFECT,
     sizeof(EnWaterEffect),
-    (ActorFunc)EnWaterEffect_Init,
-    (ActorFunc)EnWaterEffect_Destroy,
-    (ActorFunc)EnWaterEffect_Update,
-    (ActorFunc)EnWaterEffect_Draw,
+    EnWaterEffect_Init,
+    EnWaterEffect_Destroy,
+    EnWaterEffect_Update,
+    EnWaterEffect_Draw,
 };
 
 static Vec3f D_80A5AFB0 = { 0.0f, 0.0f, 0.0f };

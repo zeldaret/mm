@@ -33,10 +33,10 @@ ActorInit En_Fu_Mato_InitVars = {
     FLAGS,
     OBJECT_FU_MATO,
     sizeof(EnFuMato),
-    (ActorFunc)EnFuMato_Init,
-    (ActorFunc)EnFuMato_Destroy,
-    (ActorFunc)EnFuMato_Update,
-    (ActorFunc)EnFuMato_Draw,
+    EnFuMato_Init,
+    EnFuMato_Destroy,
+    EnFuMato_Update,
+    EnFuMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

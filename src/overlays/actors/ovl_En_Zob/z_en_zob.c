@@ -43,10 +43,10 @@ ActorInit En_Zob_InitVars = {
     FLAGS,
     OBJECT_ZOB,
     sizeof(EnZob),
-    (ActorFunc)EnZob_Init,
-    (ActorFunc)EnZob_Destroy,
-    (ActorFunc)EnZob_Update,
-    (ActorFunc)EnZob_Draw,
+    EnZob_Init,
+    EnZob_Destroy,
+    EnZob_Update,
+    EnZob_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

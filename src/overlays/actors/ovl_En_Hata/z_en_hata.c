@@ -22,10 +22,10 @@ ActorInit En_Hata_InitVars = {
     FLAGS,
     OBJECT_HATA,
     sizeof(EnHata),
-    (ActorFunc)EnHata_Init,
-    (ActorFunc)EnHata_Destroy,
-    (ActorFunc)EnHata_Update,
-    (ActorFunc)EnHata_Draw,
+    EnHata_Init,
+    EnHata_Destroy,
+    EnHata_Update,
+    EnHata_Draw,
 };
 
 void EnHata_Init(Actor* thisx, PlayState* play) {

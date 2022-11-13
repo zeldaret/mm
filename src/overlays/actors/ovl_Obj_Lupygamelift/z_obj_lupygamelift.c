@@ -27,10 +27,10 @@ ActorInit Obj_Lupygamelift_InitVars = {
     FLAGS,
     OBJECT_RAILLIFT,
     sizeof(ObjLupygamelift),
-    (ActorFunc)ObjLupygamelift_Init,
-    (ActorFunc)ObjLupygamelift_Destroy,
-    (ActorFunc)ObjLupygamelift_Update,
-    (ActorFunc)ObjLupygamelift_Draw,
+    ObjLupygamelift_Init,
+    ObjLupygamelift_Destroy,
+    ObjLupygamelift_Update,
+    ObjLupygamelift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

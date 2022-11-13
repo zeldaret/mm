@@ -25,10 +25,10 @@ ActorInit En_Nutsball_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnNutsball),
-    (ActorFunc)EnNutsball_Init,
-    (ActorFunc)EnNutsball_Destroy,
-    (ActorFunc)EnNutsball_Update,
-    (ActorFunc)EnNutsball_Draw,
+    EnNutsball_Init,
+    EnNutsball_Destroy,
+    EnNutsball_Update,
+    EnNutsball_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

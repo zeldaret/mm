@@ -67,10 +67,10 @@ ActorInit En_Snowman_InitVars = {
     FLAGS,
     OBJECT_SNOWMAN,
     sizeof(EnSnowman),
-    (ActorFunc)EnSnowman_Init,
-    (ActorFunc)EnSnowman_Destroy,
-    (ActorFunc)EnSnowman_Update,
-    (ActorFunc)EnSnowman_Draw,
+    EnSnowman_Init,
+    EnSnowman_Destroy,
+    EnSnowman_Update,
+    EnSnowman_Draw,
 };
 
 static ColliderCylinderInit sEenoCylinderInit = {

@@ -29,10 +29,10 @@ ActorInit Arrow_Ice_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArrowIce),
-    (ActorFunc)ArrowIce_Init,
-    (ActorFunc)ArrowIce_Destroy,
-    (ActorFunc)ArrowIce_Update,
-    (ActorFunc)ArrowIce_Draw,
+    ArrowIce_Init,
+    ArrowIce_Destroy,
+    ArrowIce_Update,
+    ArrowIce_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

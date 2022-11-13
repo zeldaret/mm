@@ -33,10 +33,10 @@ ActorInit Bg_Kin2_Fence_InitVars = {
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Fence),
-    (ActorFunc)BgKin2Fence_Init,
-    (ActorFunc)BgKin2Fence_Destroy,
-    (ActorFunc)BgKin2Fence_Update,
-    (ActorFunc)BgKin2Fence_Draw,
+    BgKin2Fence_Init,
+    BgKin2Fence_Destroy,
+    BgKin2Fence_Update,
+    BgKin2Fence_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {

@@ -26,10 +26,10 @@ ActorInit Arms_Hook_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArmsHook),
-    (ActorFunc)ArmsHook_Init,
-    (ActorFunc)ArmsHook_Destroy,
-    (ActorFunc)ArmsHook_Update,
-    (ActorFunc)ArmsHook_Draw,
+    ArmsHook_Init,
+    ArmsHook_Destroy,
+    ArmsHook_Update,
+    ArmsHook_Draw,
 };
 
 static ColliderQuadInit D_808C1BC0 = {

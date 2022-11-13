@@ -44,10 +44,10 @@ ActorInit En_Death_InitVars = {
     FLAGS,
     OBJECT_DEATH,
     sizeof(EnDeath),
-    (ActorFunc)EnDeath_Init,
-    (ActorFunc)EnDeath_Destroy,
-    (ActorFunc)EnDeath_Update,
-    (ActorFunc)EnDeath_Draw,
+    EnDeath_Init,
+    EnDeath_Destroy,
+    EnDeath_Update,
+    EnDeath_Draw,
 };
 
 // static ColliderSphereInit sSphereInit = {

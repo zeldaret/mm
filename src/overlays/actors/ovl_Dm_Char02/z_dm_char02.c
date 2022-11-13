@@ -24,10 +24,10 @@ ActorInit Dm_Char02_InitVars = {
     FLAGS,
     OBJECT_STK2,
     sizeof(DmChar02),
-    (ActorFunc)DmChar02_Init,
-    (ActorFunc)DmChar02_Destroy,
-    (ActorFunc)DmChar02_Update,
-    (ActorFunc)DmChar02_Draw,
+    DmChar02_Init,
+    DmChar02_Destroy,
+    DmChar02_Update,
+    DmChar02_Draw,
 
 };
 

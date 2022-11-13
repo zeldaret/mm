@@ -32,10 +32,10 @@ ActorInit Obj_Grass_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrass),
-    (ActorFunc)ObjGrass_Init,
-    (ActorFunc)ObjGrass_Destroy,
-    (ActorFunc)ObjGrass_Update,
-    (ActorFunc)ObjGrass_Draw,
+    ObjGrass_Init,
+    ObjGrass_Destroy,
+    ObjGrass_Update,
+    ObjGrass_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -47,10 +47,10 @@ ActorInit En_Baguo_InitVars = {
     FLAGS,
     OBJECT_GMO,
     sizeof(EnBaguo),
-    (ActorFunc)EnBaguo_Init,
-    (ActorFunc)EnBaguo_Destroy,
-    (ActorFunc)EnBaguo_Update,
-    (ActorFunc)NULL,
+    EnBaguo_Init,
+    EnBaguo_Destroy,
+    EnBaguo_Update,
+    NULL,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

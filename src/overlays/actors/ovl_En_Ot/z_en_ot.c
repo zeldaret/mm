@@ -69,10 +69,10 @@ ActorInit En_Ot_InitVars = {
     FLAGS,
     OBJECT_OT,
     sizeof(EnOt),
-    (ActorFunc)EnOt_Init,
-    (ActorFunc)EnOt_Destroy,
-    (ActorFunc)EnOt_Update,
-    (ActorFunc)EnOt_Draw,
+    EnOt_Init,
+    EnOt_Destroy,
+    EnOt_Update,
+    EnOt_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

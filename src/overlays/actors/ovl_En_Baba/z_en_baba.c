@@ -56,10 +56,10 @@ ActorInit En_Baba_InitVars = {
     FLAGS,
     OBJECT_BBA,
     sizeof(EnBaba),
-    (ActorFunc)EnBaba_Init,
-    (ActorFunc)EnBaba_Destroy,
-    (ActorFunc)EnBaba_Update,
-    (ActorFunc)EnBaba_Draw,
+    EnBaba_Init,
+    EnBaba_Destroy,
+    EnBaba_Update,
+    EnBaba_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

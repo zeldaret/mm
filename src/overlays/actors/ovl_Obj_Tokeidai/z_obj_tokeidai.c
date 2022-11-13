@@ -68,10 +68,10 @@ ActorInit Obj_Tokeidai_InitVars = {
     FLAGS,
     OBJECT_OBJ_TOKEIDAI,
     sizeof(ObjTokeidai),
-    (ActorFunc)ObjTokeidai_Init,
-    (ActorFunc)ObjTokeidai_Destroy,
-    (ActorFunc)ObjTokeidai_Update,
-    (ActorFunc)ObjTokeidai_Draw,
+    ObjTokeidai_Init,
+    ObjTokeidai_Destroy,
+    ObjTokeidai_Update,
+    ObjTokeidai_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

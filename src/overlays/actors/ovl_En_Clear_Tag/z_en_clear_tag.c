@@ -37,10 +37,10 @@ ActorInit En_Clear_Tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnClearTag),
-    (ActorFunc)EnClearTag_Init,
-    (ActorFunc)EnClearTag_Destroy,
-    (ActorFunc)EnClearTag_Update,
-    (ActorFunc)EnClearTag_Draw,
+    EnClearTag_Init,
+    EnClearTag_Destroy,
+    EnClearTag_Update,
+    EnClearTag_Draw,
 };
 
 static Vec3f sZeroVector = { 0.0f, 0.0f, 0.0f };

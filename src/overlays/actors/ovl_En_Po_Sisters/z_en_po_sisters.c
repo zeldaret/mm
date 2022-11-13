@@ -67,10 +67,10 @@ ActorInit En_Po_Sisters_InitVars = {
     FLAGS,
     OBJECT_PO_SISTERS,
     sizeof(EnPoSisters),
-    (ActorFunc)EnPoSisters_Init,
-    (ActorFunc)EnPoSisters_Destroy,
-    (ActorFunc)EnPoSisters_Update,
-    (ActorFunc)EnPoSisters_Draw,
+    EnPoSisters_Init,
+    EnPoSisters_Destroy,
+    EnPoSisters_Update,
+    EnPoSisters_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -31,10 +31,10 @@ ActorInit En_Bombers_InitVars = {
     FLAGS,
     OBJECT_CS,
     sizeof(EnBombers),
-    (ActorFunc)EnBombers_Init,
-    (ActorFunc)EnBombers_Destroy,
-    (ActorFunc)EnBombers_Update,
-    (ActorFunc)EnBombers_Draw,
+    EnBombers_Init,
+    EnBombers_Destroy,
+    EnBombers_Update,
+    EnBombers_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

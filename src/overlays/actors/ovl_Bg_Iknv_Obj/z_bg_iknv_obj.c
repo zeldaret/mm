@@ -27,10 +27,10 @@ ActorInit Bg_Iknv_Obj_InitVars = {
     FLAGS,
     OBJECT_IKNV_OBJ,
     sizeof(BgIknvObj),
-    (ActorFunc)BgIknvObj_Init,
-    (ActorFunc)BgIknvObj_Destroy,
-    (ActorFunc)BgIknvObj_Update,
-    (ActorFunc)BgIknvObj_Draw,
+    BgIknvObj_Init,
+    BgIknvObj_Destroy,
+    BgIknvObj_Update,
+    BgIknvObj_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

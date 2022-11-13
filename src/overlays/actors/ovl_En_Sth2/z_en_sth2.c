@@ -24,10 +24,10 @@ ActorInit En_Sth2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSth2),
-    (ActorFunc)EnSth2_Init,
-    (ActorFunc)EnSth2_Destroy,
-    (ActorFunc)EnSth2_Update,
-    (ActorFunc)NULL,
+    EnSth2_Init,
+    EnSth2_Destroy,
+    EnSth2_Update,
+    NULL,
 };
 
 #include "overlays/ovl_En_Sth2/ovl_En_Sth2.c"

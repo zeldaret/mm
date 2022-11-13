@@ -24,10 +24,10 @@ ActorInit Obj_Roomtimer_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjRoomtimer),
-    (ActorFunc)ObjRoomtimer_Init,
-    (ActorFunc)ObjRoomtimer_Destroy,
-    (ActorFunc)ObjRoomtimer_Update,
-    (ActorFunc)NULL,
+    ObjRoomtimer_Init,
+    ObjRoomtimer_Destroy,
+    ObjRoomtimer_Update,
+    NULL,
 };
 
 void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {

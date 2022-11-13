@@ -58,10 +58,10 @@ ActorInit En_Trt2_InitVars = {
     FLAGS,
     OBJECT_TRT,
     sizeof(EnTrt2),
-    (ActorFunc)EnTrt2_Init,
-    (ActorFunc)EnTrt2_Destroy,
-    (ActorFunc)EnTrt2_Update,
-    (ActorFunc)NULL,
+    EnTrt2_Init,
+    EnTrt2_Destroy,
+    EnTrt2_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

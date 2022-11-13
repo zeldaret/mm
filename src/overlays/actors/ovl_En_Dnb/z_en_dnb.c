@@ -27,10 +27,10 @@ ActorInit En_Dnb_InitVars = {
     FLAGS,
     OBJECT_HANAREYAMA_OBJ,
     sizeof(EnDnb),
-    (ActorFunc)EnDnb_Init,
-    (ActorFunc)EnDnb_Destroy,
-    (ActorFunc)EnDnb_Update,
-    (ActorFunc)EnDnb_Draw,
+    EnDnb_Init,
+    EnDnb_Destroy,
+    EnDnb_Update,
+    EnDnb_Draw,
 };
 
 void func_80A4FDD0(EnDnbEffect* effect, EnDnb* this, s16* alloc, s32 idx) {

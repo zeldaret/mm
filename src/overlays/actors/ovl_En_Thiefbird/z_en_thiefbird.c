@@ -39,10 +39,10 @@ ActorInit En_Thiefbird_InitVars = {
     FLAGS,
     OBJECT_THIEFBIRD,
     sizeof(EnThiefbird),
-    (ActorFunc)EnThiefbird_Init,
-    (ActorFunc)EnThiefbird_Destroy,
-    (ActorFunc)EnThiefbird_Update,
-    (ActorFunc)EnThiefbird_Draw,
+    EnThiefbird_Init,
+    EnThiefbird_Destroy,
+    EnThiefbird_Update,
+    EnThiefbird_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {

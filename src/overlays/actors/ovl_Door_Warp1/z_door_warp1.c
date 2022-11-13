@@ -55,10 +55,10 @@ ActorInit Door_Warp1_InitVars = {
     FLAGS,
     OBJECT_WARP1,
     sizeof(DoorWarp1),
-    (ActorFunc)DoorWarp1_Init,
-    (ActorFunc)DoorWarp1_Destroy,
-    (ActorFunc)DoorWarp1_Update,
-    (ActorFunc)DoorWarp1_Draw,
+    DoorWarp1_Init,
+    DoorWarp1_Destroy,
+    DoorWarp1_Update,
+    DoorWarp1_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

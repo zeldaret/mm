@@ -42,10 +42,10 @@ ActorInit En_Neo_Reeba_InitVars = {
     FLAGS,
     OBJECT_RB,
     sizeof(EnNeoReeba),
-    (ActorFunc)EnNeoReeba_Init,
-    (ActorFunc)EnNeoReeba_Destroy,
-    (ActorFunc)EnNeoReeba_Update,
-    (ActorFunc)EnNeoReeba_Draw,
+    EnNeoReeba_Init,
+    EnNeoReeba_Destroy,
+    EnNeoReeba_Update,
+    EnNeoReeba_Draw,
 };
 
 typedef enum {

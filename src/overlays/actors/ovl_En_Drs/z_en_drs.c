@@ -23,10 +23,10 @@ ActorInit En_Drs_InitVars = {
     FLAGS,
     OBJECT_DRS,
     sizeof(EnDrs),
-    (ActorFunc)EnDrs_Init,
-    (ActorFunc)EnDrs_Destroy,
-    (ActorFunc)EnDrs_Update,
-    (ActorFunc)NULL,
+    EnDrs_Init,
+    EnDrs_Destroy,
+    EnDrs_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

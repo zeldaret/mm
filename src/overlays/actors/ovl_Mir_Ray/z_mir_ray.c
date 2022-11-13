@@ -47,10 +47,10 @@ ActorInit Mir_Ray_InitVars = {
     FLAGS,
     OBJECT_MIR_RAY,
     sizeof(MirRay),
-    (ActorFunc)MirRay_Init,
-    (ActorFunc)MirRay_Destroy,
-    (ActorFunc)MirRay_Update,
-    (ActorFunc)MirRay_Draw,
+    MirRay_Init,
+    MirRay_Destroy,
+    MirRay_Update,
+    MirRay_Draw,
 };
 
 u8 D_808E3BF0 = false;

@@ -280,10 +280,10 @@ ActorInit Boss_03_InitVars = {
     FLAGS,
     OBJECT_BOSS03,
     sizeof(Boss03),
-    (ActorFunc)Boss03_Init,
-    (ActorFunc)Boss03_Destroy,
-    (ActorFunc)Boss03_Update,
-    (ActorFunc)Boss03_Draw,
+    Boss03_Init,
+    Boss03_Destroy,
+    Boss03_Update,
+    Boss03_Draw,
 };
 
 // The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw

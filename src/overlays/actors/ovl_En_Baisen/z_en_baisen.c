@@ -29,10 +29,10 @@ ActorInit En_Baisen_InitVars = {
     FLAGS,
     OBJECT_BAI,
     sizeof(EnBaisen),
-    (ActorFunc)EnBaisen_Init,
-    (ActorFunc)EnBaisen_Destroy,
-    (ActorFunc)EnBaisen_Update,
-    (ActorFunc)EnBaisen_Draw,
+    EnBaisen_Init,
+    EnBaisen_Destroy,
+    EnBaisen_Update,
+    EnBaisen_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -29,10 +29,10 @@ ActorInit Obj_Toge_InitVars = {
     FLAGS,
     OBJECT_TRAP,
     sizeof(ObjToge),
-    (ActorFunc)ObjToge_Init,
-    (ActorFunc)ObjToge_Destroy,
-    (ActorFunc)ObjToge_Update,
-    (ActorFunc)ObjToge_Draw,
+    ObjToge_Init,
+    ObjToge_Destroy,
+    ObjToge_Update,
+    ObjToge_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

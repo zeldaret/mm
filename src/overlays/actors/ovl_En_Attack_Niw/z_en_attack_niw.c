@@ -26,10 +26,10 @@ ActorInit En_Attack_Niw_InitVars = {
     FLAGS,
     OBJECT_NIW,
     sizeof(EnAttackNiw),
-    (ActorFunc)EnAttackNiw_Init,
-    (ActorFunc)EnAttackNiw_Destroy,
-    (ActorFunc)EnAttackNiw_Update,
-    (ActorFunc)EnAttackNiw_Draw,
+    EnAttackNiw_Init,
+    EnAttackNiw_Destroy,
+    EnAttackNiw_Update,
+    EnAttackNiw_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

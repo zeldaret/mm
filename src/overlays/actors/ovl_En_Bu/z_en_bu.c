@@ -23,10 +23,10 @@ ActorInit En_Bu_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBu),
-    (ActorFunc)EnBu_Init,
-    (ActorFunc)EnBu_Destroy,
-    (ActorFunc)EnBu_Update,
-    (ActorFunc)EnBu_Draw,
+    EnBu_Init,
+    EnBu_Destroy,
+    EnBu_Update,
+    EnBu_Draw,
 };
 
 void EnBu_Init(Actor* thisx, PlayState* play) {

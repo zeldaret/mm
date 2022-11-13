@@ -48,10 +48,10 @@ ActorInit Bg_Icicle_InitVars = {
     FLAGS,
     OBJECT_ICICLE,
     sizeof(BgIcicle),
-    (ActorFunc)BgIcicle_Init,
-    (ActorFunc)BgIcicle_Destroy,
-    (ActorFunc)BgIcicle_Update,
-    (ActorFunc)BgIcicle_Draw,
+    BgIcicle_Init,
+    BgIcicle_Destroy,
+    BgIcicle_Update,
+    BgIcicle_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

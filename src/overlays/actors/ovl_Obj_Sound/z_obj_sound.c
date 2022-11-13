@@ -21,10 +21,10 @@ ActorInit Obj_Sound_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjSound),
-    (ActorFunc)ObjSound_Init,
-    (ActorFunc)ObjSound_Destroy,
-    (ActorFunc)ObjSound_Update,
-    (ActorFunc)NULL,
+    ObjSound_Init,
+    ObjSound_Destroy,
+    ObjSound_Update,
+    NULL,
 };
 
 #endif

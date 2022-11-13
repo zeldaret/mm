@@ -47,8 +47,8 @@ void BgBreakwall_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL, ACTORCAT_ITEMACTION,           FLAGS,
-    GAMEPLAY_KEEP,      sizeof(BgBreakwall),           (ActorFunc)BgBreakwall_Init,
-    (ActorFunc)NULL,    (ActorFunc)BgBreakwall_Update, (ActorFunc)NULL,
+    GAMEPLAY_KEEP,      sizeof(BgBreakwall),           BgBreakwall_Init,
+    NULL,    BgBreakwall_Update, NULL,
 };
 
 typedef struct {

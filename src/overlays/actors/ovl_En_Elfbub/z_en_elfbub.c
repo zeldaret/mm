@@ -26,10 +26,10 @@ ActorInit En_Elfbub_InitVars = {
     FLAGS,
     OBJECT_BUBBLE,
     sizeof(EnElfbub),
-    (ActorFunc)EnElfbub_Init,
-    (ActorFunc)EnElfbub_Destroy,
-    (ActorFunc)EnElfbub_Update,
-    (ActorFunc)EnElfbub_Draw,
+    EnElfbub_Init,
+    EnElfbub_Destroy,
+    EnElfbub_Update,
+    EnElfbub_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

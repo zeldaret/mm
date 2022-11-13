@@ -23,10 +23,10 @@ ActorInit En_Hs2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHs2),
-    (ActorFunc)EnHs2_Init,
-    (ActorFunc)EnHs2_Destroy,
-    (ActorFunc)EnHs2_Update,
-    (ActorFunc)EnHs2_Draw,
+    EnHs2_Init,
+    EnHs2_Destroy,
+    EnHs2_Update,
+    EnHs2_Draw,
 };
 
 void EnHs2_Init(Actor* thisx, PlayState* play) {

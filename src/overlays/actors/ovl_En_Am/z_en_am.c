@@ -43,10 +43,10 @@ ActorInit En_Am_InitVars = {
     FLAGS,
     OBJECT_AM,
     sizeof(EnAm),
-    (ActorFunc)EnAm_Init,
-    (ActorFunc)EnAm_Destroy,
-    (ActorFunc)EnAm_Update,
-    (ActorFunc)EnAm_Draw,
+    EnAm_Init,
+    EnAm_Destroy,
+    EnAm_Update,
+    EnAm_Draw,
 };
 
 static ColliderCylinderInit sEnemyCylinderInit = {

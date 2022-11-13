@@ -21,10 +21,10 @@ ActorInit En_Fire_Rock_InitVars = {
     FLAGS,
     OBJECT_EFC_STAR_FIELD,
     sizeof(EnFireRock),
-    (ActorFunc)EnFireRock_Init,
-    (ActorFunc)EnFireRock_Destroy,
-    (ActorFunc)EnFireRock_Update,
-    (ActorFunc)EnFireRock_Draw,
+    EnFireRock_Init,
+    EnFireRock_Destroy,
+    EnFireRock_Update,
+    EnFireRock_Draw,
 };
 
 void EnFireRock_Init(Actor* thisx, PlayState* play) {

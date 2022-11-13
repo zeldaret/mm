@@ -27,10 +27,10 @@ ActorInit Arrow_Fire_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArrowFire),
-    (ActorFunc)ArrowFire_Init,
-    (ActorFunc)ArrowFire_Destroy,
-    (ActorFunc)ArrowFire_Update,
-    (ActorFunc)ArrowFire_Draw,
+    ArrowFire_Init,
+    ArrowFire_Destroy,
+    ArrowFire_Update,
+    ArrowFire_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {

@@ -24,10 +24,10 @@ ActorInit En_Cha_InitVars = {
     FLAGS,
     OBJECT_CHA,
     sizeof(EnCha),
-    (ActorFunc)EnCha_Init,
-    (ActorFunc)EnCha_Destroy,
-    (ActorFunc)EnCha_Update,
-    (ActorFunc)EnCha_Draw,
+    EnCha_Init,
+    EnCha_Destroy,
+    EnCha_Update,
+    EnCha_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

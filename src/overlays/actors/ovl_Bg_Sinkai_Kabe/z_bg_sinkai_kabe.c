@@ -30,10 +30,10 @@ ActorInit Bg_Sinkai_Kabe_InitVars = {
     FLAGS,
     OBJECT_SINKAI_KABE,
     sizeof(BgSinkaiKabe),
-    (ActorFunc)BgSinkaiKabe_Init,
-    (ActorFunc)BgSinkaiKabe_Destroy,
-    (ActorFunc)BgSinkaiKabe_Update,
-    (ActorFunc)NULL,
+    BgSinkaiKabe_Init,
+    BgSinkaiKabe_Destroy,
+    BgSinkaiKabe_Update,
+    NULL,
 };
 
 static s32 sCurrentPythonIndex = 0;

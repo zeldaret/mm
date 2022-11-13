@@ -34,10 +34,10 @@ ActorInit Obj_Tokei_Step_InitVars = {
     FLAGS,
     OBJECT_TOKEI_STEP,
     sizeof(ObjTokeiStep),
-    (ActorFunc)ObjTokeiStep_Init,
-    (ActorFunc)ObjTokeiStep_Destroy,
-    (ActorFunc)ObjTokeiStep_Update,
-    (ActorFunc)ObjTokeiStep_Draw,
+    ObjTokeiStep_Init,
+    ObjTokeiStep_Destroy,
+    ObjTokeiStep_Update,
+    ObjTokeiStep_Draw,
 };
 
 static f32 sPanelXOffsets[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };

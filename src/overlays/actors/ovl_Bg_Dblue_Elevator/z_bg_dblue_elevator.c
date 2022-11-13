@@ -22,10 +22,10 @@ ActorInit Bg_Dblue_Elevator_InitVars = {
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueElevator),
-    (ActorFunc)BgDblueElevator_Init,
-    (ActorFunc)BgDblueElevator_Destroy,
-    (ActorFunc)BgDblueElevator_Update,
-    (ActorFunc)BgDblueElevator_Draw,
+    BgDblueElevator_Init,
+    BgDblueElevator_Destroy,
+    BgDblueElevator_Update,
+    BgDblueElevator_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

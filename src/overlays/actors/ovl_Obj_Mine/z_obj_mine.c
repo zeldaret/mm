@@ -22,10 +22,10 @@ ActorInit Obj_Mine_InitVars = {
     FLAGS,
     OBJECT_NY,
     sizeof(ObjMine),
-    (ActorFunc)ObjMine_Init,
-    (ActorFunc)ObjMine_Destroy,
-    (ActorFunc)ObjMine_Update,
-    (ActorFunc)ObjMine_Draw,
+    ObjMine_Init,
+    ObjMine_Destroy,
+    ObjMine_Update,
+    ObjMine_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {

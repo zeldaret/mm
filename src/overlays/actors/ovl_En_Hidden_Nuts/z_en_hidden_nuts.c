@@ -37,10 +37,10 @@ ActorInit En_Hidden_Nuts_InitVars = {
     FLAGS,
     OBJECT_HINTNUTS,
     sizeof(EnHiddenNuts),
-    (ActorFunc)EnHiddenNuts_Init,
-    (ActorFunc)EnHiddenNuts_Destroy,
-    (ActorFunc)EnHiddenNuts_Update,
-    (ActorFunc)EnHiddenNuts_Draw,
+    EnHiddenNuts_Init,
+    EnHiddenNuts_Destroy,
+    EnHiddenNuts_Update,
+    EnHiddenNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -27,10 +27,10 @@ ActorInit Bg_Fire_Wall_InitVars = {
     FLAGS,
     OBJECT_FWALL,
     sizeof(BgFireWall),
-    (ActorFunc)BgFireWall_Init,
-    (ActorFunc)BgFireWall_Destroy,
-    (ActorFunc)BgFireWall_Update,
-    (ActorFunc)NULL,
+    BgFireWall_Init,
+    BgFireWall_Destroy,
+    BgFireWall_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -41,10 +41,10 @@ ActorInit En_Horse_Game_Check_InitVars = {
     FLAGS,
     OBJECT_HORSE_GAME_CHECK,
     sizeof(EnHorseGameCheck),
-    (ActorFunc)EnHorseGameCheck_Init,
-    (ActorFunc)EnHorseGameCheck_Destroy,
-    (ActorFunc)EnHorseGameCheck_Update,
-    (ActorFunc)EnHorseGameCheck_Draw,
+    EnHorseGameCheck_Init,
+    EnHorseGameCheck_Destroy,
+    EnHorseGameCheck_Update,
+    EnHorseGameCheck_Draw,
 };
 
 #include "overlays/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.c"

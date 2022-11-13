@@ -46,10 +46,10 @@ ActorInit Door_Shutter_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DoorShutter),
-    (ActorFunc)DoorShutter_Init,
-    (ActorFunc)DoorShutter_Destroy,
-    (ActorFunc)DoorShutter_Update,
-    (ActorFunc)NULL,
+    DoorShutter_Init,
+    DoorShutter_Destroy,
+    DoorShutter_Update,
+    NULL,
 };
 
 typedef struct {

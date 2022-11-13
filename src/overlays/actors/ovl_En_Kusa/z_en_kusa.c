@@ -63,10 +63,10 @@ ActorInit En_Kusa_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnKusa),
-    (ActorFunc)EnKusa_Init,
-    (ActorFunc)EnKusa_Destroy,
-    (ActorFunc)EnKusa_Update,
-    (ActorFunc)NULL,
+    EnKusa_Init,
+    EnKusa_Destroy,
+    EnKusa_Update,
+    NULL,
 };
 
 static s16 objectIds[] = { GAMEPLAY_FIELD_KEEP, OBJECT_KUSA, OBJECT_KUSA, OBJECT_KUSA };

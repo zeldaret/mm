@@ -107,10 +107,10 @@ ActorInit En_Syateki_Wf_InitVars = {
     FLAGS,
     OBJECT_WF,
     sizeof(EnSyatekiWf),
-    (ActorFunc)EnSyatekiWf_Init,
-    (ActorFunc)EnSyatekiWf_Destroy,
-    (ActorFunc)EnSyatekiWf_Update,
-    (ActorFunc)EnSyatekiWf_Draw,
+    EnSyatekiWf_Init,
+    EnSyatekiWf_Destroy,
+    EnSyatekiWf_Update,
+    EnSyatekiWf_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

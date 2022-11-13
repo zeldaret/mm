@@ -75,10 +75,10 @@ ActorInit En_Fsn_InitVars = {
     FLAGS,
     OBJECT_FSN,
     sizeof(EnFsn),
-    (ActorFunc)EnFsn_Init,
-    (ActorFunc)EnFsn_Destroy,
-    (ActorFunc)EnFsn_Update,
-    (ActorFunc)EnFsn_Draw,
+    EnFsn_Init,
+    EnFsn_Destroy,
+    EnFsn_Update,
+    EnFsn_Draw,
 };
 
 static AnimationInfoS sAnimationInfo[] = {

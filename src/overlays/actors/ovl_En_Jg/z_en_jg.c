@@ -70,10 +70,10 @@ ActorInit En_Jg_InitVars = {
     FLAGS,
     OBJECT_JG,
     sizeof(EnJg),
-    (ActorFunc)EnJg_Init,
-    (ActorFunc)EnJg_Destroy,
-    (ActorFunc)EnJg_Update,
-    (ActorFunc)EnJg_Draw,
+    EnJg_Init,
+    EnJg_Destroy,
+    EnJg_Update,
+    EnJg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

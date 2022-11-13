@@ -75,10 +75,10 @@ ActorInit Boss_06_InitVars = {
     FLAGS,
     OBJECT_KNIGHT,
     sizeof(Boss06),
-    (ActorFunc)Boss06_Init,
-    (ActorFunc)Boss06_Destroy,
-    (ActorFunc)Boss06_Update,
-    (ActorFunc)Boss06_Draw,
+    Boss06_Init,
+    Boss06_Destroy,
+    Boss06_Update,
+    Boss06_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

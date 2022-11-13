@@ -21,10 +21,10 @@ ActorInit Obj_Ending_InitVars = {
     FLAGS,
     OBJECT_ENDING_OBJ,
     sizeof(ObjEnding),
-    (ActorFunc)ObjEnding_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjEnding_Update,
-    (ActorFunc)ObjEnding_Draw,
+    ObjEnding_Init,
+    Actor_Noop,
+    ObjEnding_Update,
+    ObjEnding_Draw,
 };
 
 static ObjEndingModelInfo sModelInfo[] = {

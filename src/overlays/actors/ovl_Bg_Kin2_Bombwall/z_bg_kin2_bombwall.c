@@ -28,10 +28,10 @@ ActorInit Bg_Kin2_Bombwall_InitVars = {
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Bombwall),
-    (ActorFunc)BgKin2Bombwall_Init,
-    (ActorFunc)BgKin2Bombwall_Destroy,
-    (ActorFunc)BgKin2Bombwall_Update,
-    (ActorFunc)BgKin2Bombwall_Draw,
+    BgKin2Bombwall_Init,
+    BgKin2Bombwall_Destroy,
+    BgKin2Bombwall_Update,
+    BgKin2Bombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

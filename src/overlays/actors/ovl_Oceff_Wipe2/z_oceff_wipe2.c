@@ -21,10 +21,10 @@ ActorInit Oceff_Wipe2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(OceffWipe2),
-    (ActorFunc)OceffWipe2_Init,
-    (ActorFunc)OceffWipe2_Destroy,
-    (ActorFunc)OceffWipe2_Update,
-    (ActorFunc)OceffWipe2_Draw,
+    OceffWipe2_Init,
+    OceffWipe2_Destroy,
+    OceffWipe2_Update,
+    OceffWipe2_Draw,
 };
 
 #include "assets/overlays/ovl_Oceff_Wipe2/ovl_Oceff_Wipe2.c"

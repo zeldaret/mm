@@ -57,10 +57,10 @@ ActorInit En_GirlA_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnGirlA),
-    (ActorFunc)EnGirlA_Init,
-    (ActorFunc)EnGirlA_Destroy,
-    (ActorFunc)EnGirlA_Update,
-    (ActorFunc)NULL,
+    EnGirlA_Init,
+    EnGirlA_Destroy,
+    EnGirlA_Update,
+    NULL,
 };
 
 static ShopItemEntry sShopItemEntries[] = {

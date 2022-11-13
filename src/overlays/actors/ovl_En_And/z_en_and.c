@@ -24,10 +24,10 @@ ActorInit En_And_InitVars = {
     FLAGS,
     OBJECT_AND,
     sizeof(EnAnd),
-    (ActorFunc)EnAnd_Init,
-    (ActorFunc)EnAnd_Destroy,
-    (ActorFunc)EnAnd_Update,
-    (ActorFunc)EnAnd_Draw,
+    EnAnd_Init,
+    EnAnd_Destroy,
+    EnAnd_Update,
+    EnAnd_Draw,
 };
 
 #endif

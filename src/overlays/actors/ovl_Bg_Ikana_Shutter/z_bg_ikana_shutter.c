@@ -42,10 +42,10 @@ ActorInit Bg_Ikana_Shutter_InitVars = {
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaShutter),
-    (ActorFunc)BgIkanaShutter_Init,
-    (ActorFunc)BgIkanaShutter_Destroy,
-    (ActorFunc)BgIkanaShutter_Update,
-    (ActorFunc)BgIkanaShutter_Draw,
+    BgIkanaShutter_Init,
+    BgIkanaShutter_Destroy,
+    BgIkanaShutter_Update,
+    BgIkanaShutter_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

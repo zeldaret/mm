@@ -54,10 +54,10 @@ ActorInit En_Niw_InitVars = {
     FLAGS,
     OBJECT_NIW,
     sizeof(EnNiw),
-    (ActorFunc)EnNiw_Init,
-    (ActorFunc)EnNiw_Destroy,
-    (ActorFunc)EnNiw_Update,
-    (ActorFunc)EnNiw_Draw,
+    EnNiw_Init,
+    EnNiw_Destroy,
+    EnNiw_Update,
+    EnNiw_Draw,
 };
 
 static f32 sHeadRotations[] = { 5000.0f, -5000.0f };

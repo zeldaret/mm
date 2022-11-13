@@ -50,10 +50,10 @@ ActorInit Obj_Kendo_Kanban_InitVars = {
     FLAGS,
     OBJECT_DORA,
     sizeof(ObjKendoKanban),
-    (ActorFunc)ObjKendoKanban_Init,
-    (ActorFunc)ObjKendoKanban_Destroy,
-    (ActorFunc)ObjKendoKanban_Update,
-    (ActorFunc)ObjKendoKanban_Draw,
+    ObjKendoKanban_Init,
+    ObjKendoKanban_Destroy,
+    ObjKendoKanban_Update,
+    ObjKendoKanban_Draw,
 };
 
 // Directly applied to the velocity of the actor upon object creation.

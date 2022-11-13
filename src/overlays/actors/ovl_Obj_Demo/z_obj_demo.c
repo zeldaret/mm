@@ -23,10 +23,10 @@ ActorInit Obj_Demo_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjDemo),
-    (ActorFunc)ObjDemo_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjDemo_Update,
-    (ActorFunc)NULL,
+    ObjDemo_Init,
+    Actor_Noop,
+    ObjDemo_Update,
+    NULL,
 };
 
 void ObjDemo_Init(Actor* thisx, PlayState* play) {

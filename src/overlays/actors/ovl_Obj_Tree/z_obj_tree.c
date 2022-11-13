@@ -26,10 +26,10 @@ ActorInit Obj_Tree_InitVars = {
     FLAGS,
     OBJECT_TREE,
     sizeof(ObjTree),
-    (ActorFunc)ObjTree_Init,
-    (ActorFunc)ObjTree_Destroy,
-    (ActorFunc)ObjTree_Update,
-    (ActorFunc)ObjTree_Draw,
+    ObjTree_Init,
+    ObjTree_Destroy,
+    ObjTree_Update,
+    ObjTree_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

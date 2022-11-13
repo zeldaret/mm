@@ -217,10 +217,10 @@ ActorInit En_Bigslime_InitVars = {
     FLAGS,
     OBJECT_BIGSLIME,
     sizeof(EnBigslime),
-    (ActorFunc)EnBigslime_Init,
-    (ActorFunc)EnBigslime_Destroy,
-    (ActorFunc)EnBigslime_UpdateGekko,
-    (ActorFunc)EnBigslime_DrawGekko,
+    EnBigslime_Init,
+    EnBigslime_Destroy,
+    EnBigslime_UpdateGekko,
+    EnBigslime_DrawGekko,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -35,10 +35,10 @@ ActorInit En_M_Thunder_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMThunder),
-    (ActorFunc)EnMThunder_Init,
-    (ActorFunc)EnMThunder_Destroy,
-    (ActorFunc)EnMThunder_Update,
-    (ActorFunc)EnMThunder_Draw,
+    EnMThunder_Init,
+    EnMThunder_Destroy,
+    EnMThunder_Update,
+    EnMThunder_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -52,10 +52,10 @@ ActorInit En_Tite_InitVars = {
     FLAGS,
     OBJECT_TITE,
     sizeof(EnTite),
-    (ActorFunc)EnTite_Init,
-    (ActorFunc)EnTite_Destroy,
-    (ActorFunc)EnTite_Update,
-    (ActorFunc)EnTite_Draw,
+    EnTite_Init,
+    EnTite_Destroy,
+    EnTite_Update,
+    EnTite_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

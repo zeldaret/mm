@@ -25,10 +25,10 @@ ActorInit En_An_InitVars = {
     FLAGS,
     OBJECT_AN1,
     sizeof(EnAn),
-    (ActorFunc)EnAn_Init,
-    (ActorFunc)EnAn_Destroy,
-    (ActorFunc)EnAn_Update,
-    (ActorFunc)NULL,
+    EnAn_Init,
+    EnAn_Destroy,
+    EnAn_Update,
+    NULL,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

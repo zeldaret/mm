@@ -22,10 +22,10 @@ ActorInit Obj_Entotu_InitVars = {
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjEntotu),
-    (ActorFunc)ObjEntotu_Init,
-    (ActorFunc)ObjEntotu_Destroy,
-    (ActorFunc)ObjEntotu_Update,
-    (ActorFunc)ObjEntotu_Draw,
+    ObjEntotu_Init,
+    ObjEntotu_Destroy,
+    ObjEntotu_Update,
+    ObjEntotu_Draw,
 };
 
 #include "overlays/ovl_Obj_Entotu/ovl_Obj_Entotu.c"

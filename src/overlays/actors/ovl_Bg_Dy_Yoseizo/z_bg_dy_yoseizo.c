@@ -32,10 +32,10 @@ ActorInit Bg_Dy_Yoseizo_InitVars = {
     FLAGS,
     OBJECT_DY_OBJ,
     sizeof(BgDyYoseizo),
-    (ActorFunc)BgDyYoseizo_Init,
-    (ActorFunc)BgDyYoseizo_Destroy,
-    (ActorFunc)BgDyYoseizo_Update,
-    (ActorFunc)NULL,
+    BgDyYoseizo_Init,
+    BgDyYoseizo_Destroy,
+    BgDyYoseizo_Update,
+    NULL,
 };
 
 #endif

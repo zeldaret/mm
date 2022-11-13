@@ -34,10 +34,10 @@ ActorInit Obj_Raillift_InitVars = {
     FLAGS,
     OBJECT_RAILLIFT,
     sizeof(ObjRaillift),
-    (ActorFunc)ObjRaillift_Init,
-    (ActorFunc)ObjRaillift_Destroy,
-    (ActorFunc)ObjRaillift_Update,
-    (ActorFunc)ObjRaillift_Draw,
+    ObjRaillift_Init,
+    ObjRaillift_Destroy,
+    ObjRaillift_Update,
+    ObjRaillift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

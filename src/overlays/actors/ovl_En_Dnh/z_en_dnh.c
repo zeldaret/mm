@@ -25,10 +25,10 @@ ActorInit En_Dnh_InitVars = {
     FLAGS,
     OBJECT_TRO,
     sizeof(EnDnh),
-    (ActorFunc)EnDnh_Init,
-    (ActorFunc)EnDnh_Destroy,
-    (ActorFunc)EnDnh_Update,
-    (ActorFunc)EnDnh_Draw,
+    EnDnh_Init,
+    EnDnh_Destroy,
+    EnDnh_Update,
+    EnDnh_Draw,
 };
 
 #endif

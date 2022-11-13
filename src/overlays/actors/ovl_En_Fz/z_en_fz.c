@@ -55,10 +55,10 @@ ActorInit En_Fz_InitVars = {
     FLAGS,
     OBJECT_FZ,
     sizeof(EnFz),
-    (ActorFunc)EnFz_Init,
-    (ActorFunc)EnFz_Destroy,
-    (ActorFunc)EnFz_Update,
-    (ActorFunc)EnFz_Draw,
+    EnFz_Init,
+    EnFz_Destroy,
+    EnFz_Update,
+    EnFz_Draw,
 };
 
 static s16 D_809346F0[] = { 0, 0x2000, 0x4000, 0 };

@@ -32,10 +32,10 @@ ActorInit Obj_Hgdoor_InitVars = {
     FLAGS,
     OBJECT_HGDOOR,
     sizeof(ObjHgdoor),
-    (ActorFunc)ObjHgdoor_Init,
-    (ActorFunc)ObjHgdoor_Destroy,
-    (ActorFunc)ObjHgdoor_Update,
-    (ActorFunc)ObjHgdoor_Draw,
+    ObjHgdoor_Init,
+    ObjHgdoor_Destroy,
+    ObjHgdoor_Update,
+    ObjHgdoor_Draw,
 };
 
 static s16 sOpenFlag = 0;

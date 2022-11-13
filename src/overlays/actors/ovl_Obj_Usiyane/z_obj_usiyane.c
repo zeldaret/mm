@@ -22,10 +22,10 @@ ActorInit Obj_Usiyane_InitVars = {
     FLAGS,
     OBJECT_OBJ_USIYANE,
     sizeof(ObjUsiyane),
-    (ActorFunc)ObjUsiyane_Init,
-    (ActorFunc)ObjUsiyane_Destroy,
-    (ActorFunc)ObjUsiyane_Update,
-    (ActorFunc)ObjUsiyane_Draw,
+    ObjUsiyane_Init,
+    ObjUsiyane_Destroy,
+    ObjUsiyane_Update,
+    ObjUsiyane_Draw,
 };
 
 PosRot D_80C08660[] = {

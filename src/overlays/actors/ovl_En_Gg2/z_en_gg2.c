@@ -33,10 +33,10 @@ ActorInit En_Gg2_InitVars = {
     FLAGS,
     OBJECT_GG,
     sizeof(EnGg2),
-    (ActorFunc)EnGg2_Init,
-    (ActorFunc)EnGg2_Destroy,
-    (ActorFunc)EnGg2_Update,
-    (ActorFunc)EnGg2_Draw,
+    EnGg2_Init,
+    EnGg2_Destroy,
+    EnGg2_Update,
+    EnGg2_Draw,
 };
 
 AnimationInfo D_80B3BF00[] = {

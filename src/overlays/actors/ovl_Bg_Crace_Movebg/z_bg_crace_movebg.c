@@ -47,10 +47,10 @@ ActorInit Bg_Crace_Movebg_InitVars = {
     FLAGS,
     OBJECT_CRACE_OBJECT,
     sizeof(BgCraceMovebg),
-    (ActorFunc)BgCraceMovebg_Init,
-    (ActorFunc)BgCraceMovebg_Destroy,
-    (ActorFunc)BgCraceMovebg_Update,
-    (ActorFunc)BgCraceMovebg_Draw,
+    BgCraceMovebg_Init,
+    BgCraceMovebg_Destroy,
+    BgCraceMovebg_Update,
+    BgCraceMovebg_Draw,
 };
 
 static u8 sHasInitializedIsLoaded = 0;

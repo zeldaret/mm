@@ -156,10 +156,10 @@ ActorInit Dm_Stk_InitVars = {
     FLAGS,
     OBJECT_STK,
     sizeof(DmStk),
-    (ActorFunc)DmStk_Init,
-    (ActorFunc)DmStk_Destroy,
-    (ActorFunc)DmStk_Update,
-    (ActorFunc)DmStk_Draw,
+    DmStk_Init,
+    DmStk_Destroy,
+    DmStk_Update,
+    DmStk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

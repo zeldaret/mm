@@ -22,10 +22,10 @@ ActorInit Demo_Moonend_InitVars = {
     FLAGS,
     OBJECT_MOONEND,
     sizeof(DemoMoonend),
-    (ActorFunc)DemoMoonend_Init,
-    (ActorFunc)DemoMoonend_Destroy,
-    (ActorFunc)DemoMoonend_Update,
-    (ActorFunc)DemoMoonend_Draw,
+    DemoMoonend_Init,
+    DemoMoonend_Destroy,
+    DemoMoonend_Update,
+    DemoMoonend_Draw,
 };
 
 #endif

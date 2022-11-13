@@ -77,10 +77,10 @@ ActorInit En_Jso2_InitVars = {
     FLAGS,
     OBJECT_JSO,
     sizeof(EnJso2),
-    (ActorFunc)EnJso2_Init,
-    (ActorFunc)EnJso2_Destroy,
-    (ActorFunc)EnJso2_Update,
-    (ActorFunc)EnJso2_Draw,
+    EnJso2_Init,
+    EnJso2_Destroy,
+    EnJso2_Update,
+    EnJso2_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

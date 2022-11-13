@@ -39,10 +39,10 @@ ActorInit En_Goroiwa_InitVars = {
     FLAGS,
     OBJECT_GOROIWA,
     sizeof(EnGoroiwa),
-    (ActorFunc)EnGoroiwa_Init,
-    (ActorFunc)EnGoroiwa_Destroy,
-    (ActorFunc)EnGoroiwa_Update,
-    (ActorFunc)EnGoroiwa_Draw,
+    EnGoroiwa_Init,
+    EnGoroiwa_Destroy,
+    EnGoroiwa_Update,
+    EnGoroiwa_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

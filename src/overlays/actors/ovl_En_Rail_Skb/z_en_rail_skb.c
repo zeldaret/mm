@@ -56,10 +56,10 @@ ActorInit En_Rail_Skb_InitVars = {
     FLAGS,
     OBJECT_SKB,
     sizeof(EnRailSkb),
-    (ActorFunc)EnRailSkb_Init,
-    (ActorFunc)EnRailSkb_Destroy,
-    (ActorFunc)EnRailSkb_Update,
-    (ActorFunc)EnRailSkb_Draw,
+    EnRailSkb_Init,
+    EnRailSkb_Destroy,
+    EnRailSkb_Update,
+    EnRailSkb_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

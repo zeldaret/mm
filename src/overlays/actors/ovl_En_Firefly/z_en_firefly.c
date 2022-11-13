@@ -50,10 +50,10 @@ ActorInit En_Firefly_InitVars = {
     FLAGS,
     OBJECT_FIREFLY,
     sizeof(EnFirefly),
-    (ActorFunc)EnFirefly_Init,
-    (ActorFunc)EnFirefly_Destroy,
-    (ActorFunc)EnFirefly_Update,
-    (ActorFunc)EnFirefly_Draw,
+    EnFirefly_Init,
+    EnFirefly_Destroy,
+    EnFirefly_Update,
+    EnFirefly_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

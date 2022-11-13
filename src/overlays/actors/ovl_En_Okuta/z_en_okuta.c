@@ -34,10 +34,10 @@ ActorInit En_Okuta_InitVars = {
     FLAGS,
     OBJECT_OKUTA,
     sizeof(EnOkuta),
-    (ActorFunc)EnOkuta_Init,
-    (ActorFunc)EnOkuta_Destroy,
-    (ActorFunc)EnOkuta_Update,
-    (ActorFunc)EnOkuta_Draw,
+    EnOkuta_Init,
+    EnOkuta_Destroy,
+    EnOkuta_Update,
+    EnOkuta_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

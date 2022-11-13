@@ -38,10 +38,10 @@ ActorInit En_Dekubaba_InitVars = {
     FLAGS,
     OBJECT_DEKUBABA,
     sizeof(EnDekubaba),
-    (ActorFunc)EnDekubaba_Init,
-    (ActorFunc)EnDekubaba_Destroy,
-    (ActorFunc)EnDekubaba_Update,
-    (ActorFunc)EnDekubaba_Draw,
+    EnDekubaba_Init,
+    EnDekubaba_Destroy,
+    EnDekubaba_Update,
+    EnDekubaba_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {

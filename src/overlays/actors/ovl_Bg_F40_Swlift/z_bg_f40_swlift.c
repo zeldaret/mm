@@ -22,10 +22,10 @@ ActorInit Bg_F40_Swlift_InitVars = {
     FLAGS,
     OBJECT_F40_OBJ,
     sizeof(BgF40Swlift),
-    (ActorFunc)BgF40Swlift_Init,
-    (ActorFunc)BgF40Swlift_Destroy,
-    (ActorFunc)BgF40Swlift_Update,
-    (ActorFunc)BgF40Swlift_Draw,
+    BgF40Swlift_Init,
+    BgF40Swlift_Destroy,
+    BgF40Swlift_Update,
+    BgF40Swlift_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

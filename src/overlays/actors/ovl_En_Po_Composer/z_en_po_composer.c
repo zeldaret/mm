@@ -34,10 +34,10 @@ ActorInit En_Po_Composer_InitVars = {
     FLAGS,
     OBJECT_PO_COMPOSER,
     sizeof(EnPoComposer),
-    (ActorFunc)EnPoComposer_Init,
-    (ActorFunc)EnPoComposer_Destroy,
-    (ActorFunc)EnPoComposer_Update,
-    (ActorFunc)EnPoComposer_Draw,
+    EnPoComposer_Init,
+    EnPoComposer_Destroy,
+    EnPoComposer_Update,
+    EnPoComposer_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

@@ -24,10 +24,10 @@ ActorInit Obj_Makekinsuta_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMakekinsuta),
-    (ActorFunc)ObjMakekinsuta_Init,
-    (ActorFunc)ObjMakekinsuta_Destroy,
-    (ActorFunc)ObjMakekinsuta_Update,
-    (ActorFunc)NULL,
+    ObjMakekinsuta_Init,
+    ObjMakekinsuta_Destroy,
+    ObjMakekinsuta_Update,
+    NULL,
 };
 
 static InitChainEntry sInitChain[] = {

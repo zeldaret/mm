@@ -22,10 +22,10 @@ ActorInit Mir_Ray3_InitVars = {
     FLAGS,
     OBJECT_MIR_RAY,
     sizeof(MirRay3),
-    (ActorFunc)MirRay3_Init,
-    (ActorFunc)MirRay3_Destroy,
-    (ActorFunc)MirRay3_Update,
-    (ActorFunc)MirRay3_Draw,
+    MirRay3_Init,
+    MirRay3_Destroy,
+    MirRay3_Update,
+    MirRay3_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {

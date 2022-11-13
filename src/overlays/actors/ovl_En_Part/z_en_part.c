@@ -25,10 +25,10 @@ ActorInit En_Part_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnPart),
-    (ActorFunc)EnPart_Init,
-    (ActorFunc)EnPart_Destroy,
-    (ActorFunc)EnPart_Update,
-    (ActorFunc)EnPart_Draw,
+    EnPart_Init,
+    EnPart_Destroy,
+    EnPart_Update,
+    EnPart_Draw,
 };
 
 void EnPart_Init(Actor* thisx, PlayState* play) {

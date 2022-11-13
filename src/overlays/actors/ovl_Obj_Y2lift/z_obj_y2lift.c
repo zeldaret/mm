@@ -22,10 +22,10 @@ ActorInit Obj_Y2lift_InitVars = {
     FLAGS,
     OBJECT_KAIZOKU_OBJ,
     sizeof(ObjY2lift),
-    (ActorFunc)ObjY2lift_Init,
-    (ActorFunc)ObjY2lift_Destroy,
-    (ActorFunc)ObjY2lift_Update,
-    (ActorFunc)ObjY2lift_Draw,
+    ObjY2lift_Init,
+    ObjY2lift_Destroy,
+    ObjY2lift_Update,
+    ObjY2lift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

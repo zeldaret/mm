@@ -25,10 +25,10 @@ ActorInit Shot_Sun_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ShotSun),
-    (ActorFunc)ShotSun_Init,
-    (ActorFunc)ShotSun_Destroy,
-    (ActorFunc)ShotSun_Update,
-    (ActorFunc)NULL,
+    ShotSun_Init,
+    ShotSun_Destroy,
+    ShotSun_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

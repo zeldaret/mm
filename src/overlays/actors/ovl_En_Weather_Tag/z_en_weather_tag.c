@@ -41,10 +41,10 @@ ActorInit En_Weather_Tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnWeatherTag),
-    (ActorFunc)EnWeatherTag_Init,
-    (ActorFunc)EnWeatherTag_Destroy,
-    (ActorFunc)EnWeatherTag_Update,
-    (ActorFunc)EnWeatherTag_Draw,
+    EnWeatherTag_Init,
+    EnWeatherTag_Destroy,
+    EnWeatherTag_Update,
+    EnWeatherTag_Draw,
 };
 
 extern f32 D_801F4E74;

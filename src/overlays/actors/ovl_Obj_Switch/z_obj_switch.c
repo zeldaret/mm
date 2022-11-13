@@ -77,10 +77,10 @@ ActorInit Obj_Switch_InitVars = {
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(ObjSwitch),
-    (ActorFunc)ObjSwitch_Init,
-    (ActorFunc)ObjSwitch_Destroy,
-    (ActorFunc)ObjSwitch_Update,
-    (ActorFunc)ObjSwitch_Draw,
+    ObjSwitch_Init,
+    ObjSwitch_Destroy,
+    ObjSwitch_Update,
+    ObjSwitch_Draw,
 };
 
 static f32 sHeights[] = { 10.0f, 10.0f, 0.0f, 30.0f, 30.0f, 15.0f };

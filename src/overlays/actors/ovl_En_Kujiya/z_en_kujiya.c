@@ -40,10 +40,10 @@ ActorInit En_Kujiya_InitVars = {
     FLAGS,
     OBJECT_KUJIYA,
     sizeof(EnKujiya),
-    (ActorFunc)EnKujiya_Init,
-    (ActorFunc)EnKujiya_Destroy,
-    (ActorFunc)EnKujiya_Update,
-    (ActorFunc)EnKujiya_Draw,
+    EnKujiya_Init,
+    EnKujiya_Destroy,
+    EnKujiya_Update,
+    EnKujiya_Draw,
 };
 
 #define CHECK_LOTTERY_NUMBERS                                                     \

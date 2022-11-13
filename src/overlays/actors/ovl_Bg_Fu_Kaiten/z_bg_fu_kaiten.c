@@ -22,10 +22,10 @@ ActorInit Bg_Fu_Kaiten_InitVars = {
     FLAGS,
     OBJECT_FU_KAITEN,
     sizeof(BgFuKaiten),
-    (ActorFunc)BgFuKaiten_Init,
-    (ActorFunc)BgFuKaiten_Destroy,
-    (ActorFunc)BgFuKaiten_Update,
-    (ActorFunc)BgFuKaiten_Draw,
+    BgFuKaiten_Init,
+    BgFuKaiten_Destroy,
+    BgFuKaiten_Update,
+    BgFuKaiten_Draw,
 };
 
 void BgFuKaiten_Init(Actor* thisx, PlayState* play) {

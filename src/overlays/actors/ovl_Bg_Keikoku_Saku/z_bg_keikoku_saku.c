@@ -26,10 +26,10 @@ ActorInit Bg_Keikoku_Saku_InitVars = {
     FLAGS,
     OBJECT_KEIKOKU_OBJ,
     sizeof(BgKeikokuSaku),
-    (ActorFunc)BgKeikokuSaku_Init,
-    (ActorFunc)BgKeikokuSaku_Destroy,
-    (ActorFunc)BgKeikokuSaku_Update,
-    (ActorFunc)BgKeikokuSaku_Draw,
+    BgKeikokuSaku_Init,
+    BgKeikokuSaku_Destroy,
+    BgKeikokuSaku_Update,
+    BgKeikokuSaku_Draw,
 };
 
 void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {

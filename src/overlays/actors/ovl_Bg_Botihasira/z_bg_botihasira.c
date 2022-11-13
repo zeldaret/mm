@@ -24,10 +24,10 @@ ActorInit Bg_Botihasira_InitVars = {
     FLAGS,
     OBJECT_BOTIHASIRA,
     sizeof(BgBotihasira),
-    (ActorFunc)BgBotihasira_Init,
-    (ActorFunc)BgBotihasira_Destroy,
-    (ActorFunc)BgBotihasira_Update,
-    (ActorFunc)BgBotihasira_Draw,
+    BgBotihasira_Init,
+    BgBotihasira_Destroy,
+    BgBotihasira_Update,
+    BgBotihasira_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

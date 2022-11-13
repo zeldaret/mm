@@ -118,10 +118,10 @@ ActorInit Boss_02_InitVars = {
     FLAGS,
     OBJECT_BOSS02,
     sizeof(Boss02),
-    (ActorFunc)Boss02_Init,
-    (ActorFunc)Boss02_Destroy,
-    (ActorFunc)Boss02_Twinmold_Update,
-    (ActorFunc)Boss02_Twinmold_Draw,
+    Boss02_Init,
+    Boss02_Destroy,
+    Boss02_Twinmold_Update,
+    Boss02_Twinmold_Draw,
 };
 
 f32 D_809DF5B0 = 1.0f;

@@ -33,10 +33,10 @@ ActorInit Obj_Lightswitch_InitVars = {
     FLAGS,
     OBJECT_LIGHTSWITCH,
     sizeof(ObjLightswitch),
-    (ActorFunc)ObjLightswitch_Init,
-    (ActorFunc)ObjLightswitch_Destroy,
-    (ActorFunc)ObjLightswitch_Update,
-    (ActorFunc)ObjLightswitch_Draw,
+    ObjLightswitch_Init,
+    ObjLightswitch_Destroy,
+    ObjLightswitch_Update,
+    ObjLightswitch_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

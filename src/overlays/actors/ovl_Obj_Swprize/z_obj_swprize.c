@@ -29,10 +29,10 @@ ActorInit Obj_Swprize_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjSwprize),
-    (ActorFunc)ObjSwprize_Init,
-    (ActorFunc)ObjSwprize_Destroy,
-    (ActorFunc)ObjSwprize_Update,
-    (ActorFunc)NULL,
+    ObjSwprize_Init,
+    ObjSwprize_Destroy,
+    ObjSwprize_Update,
+    NULL,
 };
 
 s16 D_80C257F0[] = { 2, 0x14, 1, 8 };

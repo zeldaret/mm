@@ -91,10 +91,10 @@ ActorInit En_Al_InitVars = {
     FLAGS,
     OBJECT_AL,
     sizeof(EnAl),
-    (ActorFunc)EnAl_Init,
-    (ActorFunc)EnAl_Destroy,
-    (ActorFunc)EnAl_Update,
-    (ActorFunc)EnAl_Draw,
+    EnAl_Init,
+    EnAl_Destroy,
+    EnAl_Update,
+    EnAl_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -56,10 +56,10 @@ ActorInit En_Toto_InitVars = {
     FLAGS,
     OBJECT_ZM,
     sizeof(EnToto),
-    (ActorFunc)EnToto_Init,
-    (ActorFunc)EnToto_Destroy,
-    (ActorFunc)EnToto_Update,
-    (ActorFunc)EnToto_Draw,
+    EnToto_Init,
+    EnToto_Destroy,
+    EnToto_Update,
+    EnToto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

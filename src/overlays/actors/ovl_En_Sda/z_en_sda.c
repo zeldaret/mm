@@ -26,10 +26,10 @@ ActorInit En_Sda_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSda),
-    (ActorFunc)EnSda_Init,
-    (ActorFunc)EnSda_Destroy,
-    (ActorFunc)EnSda_Update,
-    (ActorFunc)EnSda_Draw,
+    EnSda_Init,
+    EnSda_Destroy,
+    EnSda_Update,
+    EnSda_Draw,
 };
 
 Vec3f D_80947A60 = { 0.0f, 0.0f, 0.0f };

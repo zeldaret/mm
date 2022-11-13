@@ -32,10 +32,10 @@ ActorInit Bg_Haka_Curtain_InitVars = {
     FLAGS,
     OBJECT_HAKA_OBJ,
     sizeof(BgHakaCurtain),
-    (ActorFunc)BgHakaCurtain_Init,
-    (ActorFunc)BgHakaCurtain_Destroy,
-    (ActorFunc)BgHakaCurtain_Update,
-    (ActorFunc)BgHakaCurtain_Draw,
+    BgHakaCurtain_Init,
+    BgHakaCurtain_Destroy,
+    BgHakaCurtain_Update,
+    BgHakaCurtain_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

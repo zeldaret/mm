@@ -36,10 +36,10 @@ ActorInit En_Bigokuta_InitVars = {
     FLAGS,
     OBJECT_BIGOKUTA,
     sizeof(EnBigokuta),
-    (ActorFunc)EnBigokuta_Init,
-    (ActorFunc)EnBigokuta_Destroy,
-    (ActorFunc)EnBigokuta_Update,
-    (ActorFunc)EnBigokuta_Draw,
+    EnBigokuta_Init,
+    EnBigokuta_Destroy,
+    EnBigokuta_Update,
+    EnBigokuta_Draw,
 };
 
 static ColliderCylinderInit sShellCylinderInit = {

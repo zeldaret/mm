@@ -47,10 +47,10 @@ ActorInit Obj_Purify_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjPurify),
-    (ActorFunc)ObjPurify_Init,
-    (ActorFunc)ObjPurify_Destroy,
-    (ActorFunc)ObjPurify_Update,
-    (ActorFunc)NULL,
+    ObjPurify_Init,
+    ObjPurify_Destroy,
+    ObjPurify_Update,
+    NULL,
 };
 
 ObjPurifyInfo sObjPurifyInfo[] = {

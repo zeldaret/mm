@@ -52,10 +52,10 @@ ActorInit En_Poh_InitVars = {
     FLAGS,
     OBJECT_PO,
     sizeof(EnPoh),
-    (ActorFunc)EnPoh_Init,
-    (ActorFunc)EnPoh_Destroy,
-    (ActorFunc)EnPoh_Update,
-    (ActorFunc)EnPoh_Draw,
+    EnPoh_Init,
+    EnPoh_Destroy,
+    EnPoh_Update,
+    EnPoh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

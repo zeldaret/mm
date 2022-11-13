@@ -43,10 +43,10 @@ ActorInit Obj_Hakaisi_InitVars = {
     FLAGS,
     OBJECT_HAKAISI,
     sizeof(ObjHakaisi),
-    (ActorFunc)ObjHakaisi_Init,
-    (ActorFunc)ObjHakaisi_Destroy,
-    (ActorFunc)ObjHakaisi_Update,
-    (ActorFunc)ObjHakaisi_Draw,
+    ObjHakaisi_Init,
+    ObjHakaisi_Destroy,
+    ObjHakaisi_Update,
+    ObjHakaisi_Draw,
 };
 
 Vec3f D_80B155B0 = { 0.0f, 25.0f, 30.0f };

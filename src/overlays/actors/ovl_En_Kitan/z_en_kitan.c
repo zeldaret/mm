@@ -21,10 +21,10 @@ ActorInit En_Kitan_InitVars = {
     FLAGS,
     OBJECT_KITAN,
     sizeof(EnKitan),
-    (ActorFunc)EnKitan_Init,
-    (ActorFunc)EnKitan_Destroy,
-    (ActorFunc)EnKitan_Update,
-    (ActorFunc)NULL,
+    EnKitan_Init,
+    EnKitan_Destroy,
+    EnKitan_Update,
+    NULL,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

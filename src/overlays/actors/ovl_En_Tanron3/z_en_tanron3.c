@@ -37,10 +37,10 @@ ActorInit En_Tanron3_InitVars = {
     FLAGS,
     OBJECT_BOSS03,
     sizeof(EnTanron3),
-    (ActorFunc)EnTanron3_Init,
-    (ActorFunc)EnTanron3_Destroy,
-    (ActorFunc)EnTanron3_Update,
-    (ActorFunc)EnTanron3_Draw,
+    EnTanron3_Init,
+    EnTanron3_Destroy,
+    EnTanron3_Update,
+    EnTanron3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

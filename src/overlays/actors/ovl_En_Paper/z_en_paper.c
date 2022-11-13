@@ -29,10 +29,10 @@ ActorInit En_Paper_InitVars = {
     FLAGS,
     OBJECT_BAL,
     sizeof(EnPaper),
-    (ActorFunc)EnPaper_Init,
-    (ActorFunc)EnPaper_Destroy,
-    (ActorFunc)EnPaper_Update,
-    (ActorFunc)EnPaper_Draw,
+    EnPaper_Init,
+    EnPaper_Destroy,
+    EnPaper_Update,
+    EnPaper_Draw,
 };
 
 Vec3f D_80C1FC60 = { 0.0f, 0.0f, 1.0f };

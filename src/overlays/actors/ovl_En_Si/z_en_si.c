@@ -25,10 +25,10 @@ ActorInit En_Si_InitVars = {
     FLAGS,
     OBJECT_ST,
     sizeof(EnSi),
-    (ActorFunc)EnSi_Init,
-    (ActorFunc)EnSi_Destroy,
-    (ActorFunc)EnSi_Update,
-    (ActorFunc)EnSi_Draw,
+    EnSi_Init,
+    EnSi_Destroy,
+    EnSi_Update,
+    EnSi_Draw,
 };
 
 // static ColliderSphereInit sSphereInit = {

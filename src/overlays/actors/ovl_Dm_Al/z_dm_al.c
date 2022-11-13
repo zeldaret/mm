@@ -21,10 +21,10 @@ ActorInit Dm_Al_InitVars = {
     FLAGS,
     OBJECT_AL,
     sizeof(DmAl),
-    (ActorFunc)DmAl_Init,
-    (ActorFunc)DmAl_Destroy,
-    (ActorFunc)DmAl_Update,
-    (ActorFunc)DmAl_Draw,
+    DmAl_Init,
+    DmAl_Destroy,
+    DmAl_Update,
+    DmAl_Draw,
 };
 
 typedef enum {

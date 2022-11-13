@@ -26,10 +26,10 @@ ActorInit Obj_Etcetera_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjEtcetera),
-    (ActorFunc)ObjEtcetera_Init,
-    (ActorFunc)ObjEtcetera_Destroy,
-    (ActorFunc)ObjEtcetera_Update,
-    (ActorFunc)NULL,
+    ObjEtcetera_Init,
+    ObjEtcetera_Destroy,
+    ObjEtcetera_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

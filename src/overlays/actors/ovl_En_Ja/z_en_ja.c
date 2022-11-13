@@ -56,10 +56,10 @@ ActorInit En_Ja_InitVars = {
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnJa),
-    (ActorFunc)EnJa_Init,
-    (ActorFunc)EnJa_Destroy,
-    (ActorFunc)EnJa_Update,
-    (ActorFunc)EnJa_Draw,
+    EnJa_Init,
+    EnJa_Destroy,
+    EnJa_Update,
+    EnJa_Draw,
 };
 
 Vec3f D_80BC36AC = { -10.0f, 56.0f, 25.0f };

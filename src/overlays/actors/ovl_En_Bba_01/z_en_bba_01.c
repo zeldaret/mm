@@ -34,10 +34,10 @@ ActorInit En_Bba_01_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBba01),
-    (ActorFunc)EnBba01_Init,
-    (ActorFunc)EnBba01_Destroy,
-    (ActorFunc)EnBba01_Update,
-    (ActorFunc)EnBba01_Draw,
+    EnBba01_Init,
+    EnBba01_Destroy,
+    EnBba01_Update,
+    EnBba01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

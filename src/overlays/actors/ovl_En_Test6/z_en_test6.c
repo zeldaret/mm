@@ -48,10 +48,10 @@ ActorInit En_Test6_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest6),
-    (ActorFunc)EnTest6_Init,
-    (ActorFunc)EnTest6_Destroy,
-    (ActorFunc)EnTest6_Update,
-    (ActorFunc)EnTest6_Draw,
+    EnTest6_Init,
+    EnTest6_Destroy,
+    EnTest6_Update,
+    EnTest6_Draw,
 };
 
 u8 D_80A93E80[] = {

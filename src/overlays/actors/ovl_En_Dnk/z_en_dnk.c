@@ -30,10 +30,10 @@ ActorInit En_Dnk_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnDnk),
-    (ActorFunc)EnDnk_Init,
-    (ActorFunc)EnDnk_Destroy,
-    (ActorFunc)EnDnk_Update,
-    (ActorFunc)NULL,
+    EnDnk_Init,
+    EnDnk_Destroy,
+    EnDnk_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -39,10 +39,10 @@ ActorInit En_Elf_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnElf),
-    (ActorFunc)EnElf_Init,
-    (ActorFunc)EnElf_Destroy,
-    (ActorFunc)EnElf_Update,
-    (ActorFunc)EnElf_Draw,
+    EnElf_Init,
+    EnElf_Destroy,
+    EnElf_Update,
+    EnElf_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

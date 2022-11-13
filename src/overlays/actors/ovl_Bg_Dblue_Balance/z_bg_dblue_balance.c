@@ -36,10 +36,10 @@ ActorInit Bg_Dblue_Balance_InitVars = {
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueBalance),
-    (ActorFunc)BgDblueBalance_Init,
-    (ActorFunc)BgDblueBalance_Destroy,
-    (ActorFunc)BgDblueBalance_Update,
-    (ActorFunc)BgDblueBalance_Draw,
+    BgDblueBalance_Init,
+    BgDblueBalance_Destroy,
+    BgDblueBalance_Update,
+    BgDblueBalance_Draw,
 };
 
 typedef struct {

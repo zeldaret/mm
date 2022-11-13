@@ -124,10 +124,10 @@ ActorInit En_Pst_InitVars = {
     FLAGS,
     OBJECT_PST,
     sizeof(EnPst),
-    (ActorFunc)EnPst_Init,
-    (ActorFunc)EnPst_Destroy,
-    (ActorFunc)EnPst_Update,
-    (ActorFunc)EnPst_Draw,
+    EnPst_Init,
+    EnPst_Destroy,
+    EnPst_Update,
+    EnPst_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

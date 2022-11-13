@@ -29,10 +29,10 @@ ActorInit En_Viewer_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnViewer),
-    (ActorFunc)EnViewer_Init,
-    (ActorFunc)EnViewer_Destroy,
-    (ActorFunc)EnViewer_Update,
-    (ActorFunc)EnViewer_Draw,
+    EnViewer_Init,
+    EnViewer_Destroy,
+    EnViewer_Update,
+    EnViewer_Draw,
 };
 
 u32 D_8089F4D0;

@@ -21,10 +21,10 @@ ActorInit En_Firefly2_InitVars = {
     FLAGS,
     OBJECT_FIREFLY,
     sizeof(EnFirefly2),
-    (ActorFunc)EnFirefly2_Init,
-    (ActorFunc)EnFirefly2_Destroy,
-    (ActorFunc)EnFirefly2_Update,
-    (ActorFunc)EnFirefly2_Draw,
+    EnFirefly2_Init,
+    EnFirefly2_Destroy,
+    EnFirefly2_Update,
+    EnFirefly2_Draw,
 };
 
 void EnFirefly2_Init(Actor* thisx, PlayState* play) {

@@ -22,10 +22,10 @@ ActorInit Eff_Stk_InitVars = {
     FLAGS,
     OBJECT_STK2,
     sizeof(EffStk),
-    (ActorFunc)EffStk_Init,
-    (ActorFunc)EffStk_Destroy,
-    (ActorFunc)EffStk_Update,
-    (ActorFunc)EffStk_Draw,
+    EffStk_Init,
+    EffStk_Destroy,
+    EffStk_Update,
+    EffStk_Draw,
 };
 
 #endif

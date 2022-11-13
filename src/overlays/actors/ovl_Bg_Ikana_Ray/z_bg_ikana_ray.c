@@ -27,10 +27,10 @@ ActorInit Bg_Ikana_Ray_InitVars = {
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaRay),
-    (ActorFunc)BgIkanaRay_Init,
-    (ActorFunc)BgIkanaRay_Destroy,
-    (ActorFunc)BgIkanaRay_Update,
-    (ActorFunc)BgIkanaRay_Draw,
+    BgIkanaRay_Init,
+    BgIkanaRay_Destroy,
+    BgIkanaRay_Update,
+    BgIkanaRay_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

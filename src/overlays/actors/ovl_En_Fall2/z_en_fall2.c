@@ -27,10 +27,10 @@ ActorInit En_Fall2_InitVars = {
     FLAGS,
     OBJECT_FALL2,
     sizeof(EnFall2),
-    (ActorFunc)EnFall2_Init,
-    (ActorFunc)EnFall2_Destroy,
-    (ActorFunc)EnFall2_Update,
-    (ActorFunc)EnFall2_Draw,
+    EnFall2_Init,
+    EnFall2_Destroy,
+    EnFall2_Update,
+    EnFall2_Draw,
 };
 
 void EnFall2_Init(Actor* thisx, PlayState* play) {

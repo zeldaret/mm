@@ -43,10 +43,10 @@ ActorInit En_Wiz_Fire_InitVars = {
     FLAGS,
     OBJECT_WIZ,
     sizeof(EnWizFire),
-    (ActorFunc)EnWizFire_Init,
-    (ActorFunc)EnWizFire_Destroy,
-    (ActorFunc)EnWizFire_Update,
-    (ActorFunc)EnWizFire_Draw,
+    EnWizFire_Init,
+    EnWizFire_Destroy,
+    EnWizFire_Update,
+    EnWizFire_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

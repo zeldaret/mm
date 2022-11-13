@@ -30,10 +30,10 @@ ActorInit Eff_Dust_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EffDust),
-    (ActorFunc)EffDust_Init,
-    (ActorFunc)EffDust_Destroy,
-    (ActorFunc)EffDust_Update,
-    (ActorFunc)EffDust_Draw,
+    EffDust_Init,
+    EffDust_Destroy,
+    EffDust_Update,
+    EffDust_Draw,
 };
 
 void func_80918B40(EffDust* this) {

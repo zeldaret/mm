@@ -88,10 +88,10 @@ ActorInit En_Bigpo_InitVars = {
     FLAGS,
     OBJECT_BIGPO,
     sizeof(EnBigpo),
-    (ActorFunc)EnBigpo_Init,
-    (ActorFunc)EnBigpo_Destroy,
-    (ActorFunc)EnBigpo_Update,
-    (ActorFunc)NULL,
+    EnBigpo_Init,
+    EnBigpo_Destroy,
+    EnBigpo_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

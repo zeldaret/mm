@@ -29,10 +29,10 @@ ActorInit Obj_Spidertent_InitVars = {
     FLAGS,
     OBJECT_SPIDERTENT,
     sizeof(ObjSpidertent),
-    (ActorFunc)ObjSpidertent_Init,
-    (ActorFunc)ObjSpidertent_Destroy,
-    (ActorFunc)ObjSpidertent_Update,
-    (ActorFunc)ObjSpidertent_Draw,
+    ObjSpidertent_Init,
+    ObjSpidertent_Destroy,
+    ObjSpidertent_Update,
+    ObjSpidertent_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit1[] = {

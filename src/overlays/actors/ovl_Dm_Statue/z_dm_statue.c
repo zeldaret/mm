@@ -22,10 +22,10 @@ ActorInit Dm_Statue_InitVars = {
     FLAGS,
     OBJECT_SMTOWER,
     sizeof(DmStatue),
-    (ActorFunc)DmStatue_Init,
-    (ActorFunc)DmStatue_Destroy,
-    (ActorFunc)DmStatue_Update,
-    (ActorFunc)DmStatue_Draw,
+    DmStatue_Init,
+    DmStatue_Destroy,
+    DmStatue_Update,
+    DmStatue_Draw,
 };
 
 void DmStatue_Init(Actor* thisx, PlayState* play) {

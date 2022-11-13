@@ -22,10 +22,10 @@ ActorInit Obj_Kepn_Koya_InitVars = {
     FLAGS,
     OBJECT_KEPN_KOYA,
     sizeof(ObjKepnKoya),
-    (ActorFunc)ObjKepnKoya_Init,
-    (ActorFunc)ObjKepnKoya_Destroy,
-    (ActorFunc)ObjKepnKoya_Update,
-    (ActorFunc)ObjKepnKoya_Draw,
+    ObjKepnKoya_Init,
+    ObjKepnKoya_Destroy,
+    ObjKepnKoya_Update,
+    ObjKepnKoya_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

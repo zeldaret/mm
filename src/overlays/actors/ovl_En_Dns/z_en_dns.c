@@ -45,10 +45,10 @@ ActorInit En_Dns_InitVars = {
     FLAGS,
     OBJECT_DNS,
     sizeof(EnDns),
-    (ActorFunc)EnDns_Init,
-    (ActorFunc)EnDns_Destroy,
-    (ActorFunc)EnDns_Update,
-    (ActorFunc)EnDns_Draw,
+    EnDns_Init,
+    EnDns_Destroy,
+    EnDns_Update,
+    EnDns_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

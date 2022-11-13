@@ -22,10 +22,10 @@ ActorInit En_Wdhand_InitVars = {
     FLAGS,
     OBJECT_WDHAND,
     sizeof(EnWdhand),
-    (ActorFunc)EnWdhand_Init,
-    (ActorFunc)EnWdhand_Destroy,
-    (ActorFunc)EnWdhand_Update,
-    (ActorFunc)EnWdhand_Draw,
+    EnWdhand_Init,
+    EnWdhand_Destroy,
+    EnWdhand_Update,
+    EnWdhand_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {

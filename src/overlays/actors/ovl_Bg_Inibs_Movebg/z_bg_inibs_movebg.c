@@ -21,10 +21,10 @@ ActorInit Bg_Inibs_Movebg_InitVars = {
     FLAGS,
     OBJECT_INIBS_OBJECT,
     sizeof(BgInibsMovebg),
-    (ActorFunc)BgInibsMovebg_Init,
-    (ActorFunc)BgInibsMovebg_Destroy,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)BgInibsMovebg_Draw,
+    BgInibsMovebg_Init,
+    BgInibsMovebg_Destroy,
+    Actor_Noop,
+    BgInibsMovebg_Draw,
 };
 
 Gfx* sOpaDLists[] = { gTwinmoldArenaNormalModeSandDL, gTwinmoldArenaGiantModeSandDL };

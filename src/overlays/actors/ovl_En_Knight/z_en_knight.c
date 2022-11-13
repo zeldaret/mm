@@ -199,10 +199,10 @@ ActorInit En_Knight_InitVars = {
     FLAGS,
     OBJECT_KNIGHT,
     sizeof(EnKnight),
-    (ActorFunc)EnKnight_Init,
-    (ActorFunc)EnKnight_Destroy,
-    (ActorFunc)EnKnight_Update,
-    (ActorFunc)EnKnight_Draw,
+    EnKnight_Init,
+    EnKnight_Destroy,
+    EnKnight_Update,
+    EnKnight_Draw,
 };
 
 #endif

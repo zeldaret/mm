@@ -44,10 +44,10 @@ ActorInit En_Zoraegg_InitVars = {
     FLAGS,
     OBJECT_ZORAEGG,
     sizeof(EnZoraegg),
-    (ActorFunc)EnZoraegg_Init,
-    (ActorFunc)EnZoraegg_Destroy,
-    (ActorFunc)EnZoraegg_Update,
-    (ActorFunc)EnZoraegg_Draw,
+    EnZoraegg_Init,
+    EnZoraegg_Destroy,
+    EnZoraegg_Update,
+    EnZoraegg_Draw,
 };
 
 void func_80B31590(EnZoraegg* this) {

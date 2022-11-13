@@ -53,10 +53,10 @@ ActorInit En_Hg_InitVars = {
     FLAGS,
     OBJECT_HARFGIBUD,
     sizeof(EnHg),
-    (ActorFunc)EnHg_Init,
-    (ActorFunc)EnHg_Destroy,
-    (ActorFunc)EnHg_Update,
-    (ActorFunc)EnHg_Draw,
+    EnHg_Init,
+    EnHg_Destroy,
+    EnHg_Update,
+    EnHg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

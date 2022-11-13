@@ -20,10 +20,10 @@ ActorInit En_Fr_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnFr),
-    (ActorFunc)EnFr_Init,
-    (ActorFunc)EnFr_Destroy,
-    (ActorFunc)EnFr_Update,
-    (ActorFunc)NULL,
+    EnFr_Init,
+    EnFr_Destroy,
+    EnFr_Update,
+    NULL,
 };
 
 void EnFr_Init(Actor* thisx, PlayState* play) {

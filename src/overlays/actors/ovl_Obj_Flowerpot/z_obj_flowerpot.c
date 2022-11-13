@@ -37,10 +37,10 @@ ActorInit Obj_Flowerpot_InitVars = {
     FLAGS,
     OBJECT_FLOWERPOT,
     sizeof(ObjFlowerpot),
-    (ActorFunc)ObjFlowerpot_Init,
-    (ActorFunc)ObjFlowerpot_Destroy,
-    (ActorFunc)ObjFlowerpot_Update,
-    (ActorFunc)ObjFlowerpot_Draw,
+    ObjFlowerpot_Init,
+    ObjFlowerpot_Destroy,
+    ObjFlowerpot_Update,
+    ObjFlowerpot_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

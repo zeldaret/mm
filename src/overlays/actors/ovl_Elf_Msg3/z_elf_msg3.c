@@ -23,10 +23,10 @@ ActorInit Elf_Msg3_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ElfMsg3),
-    (ActorFunc)ElfMsg3_Init,
-    (ActorFunc)ElfMsg3_Destroy,
-    (ActorFunc)ElfMsg3_Update,
-    (ActorFunc)NULL,
+    ElfMsg3_Init,
+    ElfMsg3_Destroy,
+    ElfMsg3_Update,
+    NULL,
 };
 
 static InitChainEntry sInitChain[] = {

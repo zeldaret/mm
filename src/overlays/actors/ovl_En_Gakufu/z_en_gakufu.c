@@ -31,10 +31,10 @@ ActorInit En_Gakufu_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnGakufu),
-    (ActorFunc)EnGakufu_Init,
-    (ActorFunc)EnGakufu_Destroy,
-    (ActorFunc)EnGakufu_Update,
-    (ActorFunc)EnGakufu_Draw,
+    EnGakufu_Init,
+    EnGakufu_Destroy,
+    EnGakufu_Update,
+    EnGakufu_Draw,
 };
 
 Vec3f sRewardDropsSpawnTerminaFieldPos = {

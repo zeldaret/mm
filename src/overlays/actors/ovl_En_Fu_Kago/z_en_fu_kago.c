@@ -34,10 +34,10 @@ ActorInit En_Fu_Kago_InitVars = {
     FLAGS,
     OBJECT_FU_MATO,
     sizeof(EnFuKago),
-    (ActorFunc)EnFuKago_Init,
-    (ActorFunc)EnFuKago_Destroy,
-    (ActorFunc)EnFuKago_Update,
-    (ActorFunc)EnFuKago_Draw,
+    EnFuKago_Init,
+    EnFuKago_Destroy,
+    EnFuKago_Update,
+    EnFuKago_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

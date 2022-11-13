@@ -36,10 +36,10 @@ ActorInit Bg_Numa_Hana_InitVars = {
     FLAGS,
     OBJECT_NUMA_OBJ,
     sizeof(BgNumaHana),
-    (ActorFunc)BgNumaHana_Init,
-    (ActorFunc)BgNumaHana_Destroy,
-    (ActorFunc)BgNumaHana_Update,
-    (ActorFunc)BgNumaHana_Draw,
+    BgNumaHana_Init,
+    BgNumaHana_Destroy,
+    BgNumaHana_Update,
+    BgNumaHana_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -30,10 +30,10 @@ ActorInit Obj_Aqua_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjAqua),
-    (ActorFunc)ObjAqua_Init,
-    (ActorFunc)ObjAqua_Destroy,
-    (ActorFunc)ObjAqua_Update,
-    (ActorFunc)ObjAqua_Draw,
+    ObjAqua_Init,
+    ObjAqua_Destroy,
+    ObjAqua_Update,
+    ObjAqua_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -24,10 +24,10 @@ ActorInit Dm_Tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DmTag),
-    (ActorFunc)DmTag_Init,
-    (ActorFunc)DmTag_Destroy,
-    (ActorFunc)DmTag_Update,
-    (ActorFunc)NULL,
+    DmTag_Init,
+    DmTag_Destroy,
+    DmTag_Update,
+    NULL,
 };
 
 s32 D_80C22BF0[] = {

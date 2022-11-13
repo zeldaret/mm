@@ -24,10 +24,10 @@ ActorInit Dm_Char09_InitVars = {
     FLAGS,
     OBJECT_BEE,
     sizeof(DmChar09),
-    (ActorFunc)DmChar09_Init,
-    (ActorFunc)DmChar09_Destroy,
-    (ActorFunc)DmChar09_Update,
-    (ActorFunc)DmChar09_Draw,
+    DmChar09_Init,
+    DmChar09_Destroy,
+    DmChar09_Update,
+    DmChar09_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

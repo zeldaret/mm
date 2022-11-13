@@ -44,10 +44,10 @@ ActorInit En_Suttari_InitVars = {
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnSuttari),
-    (ActorFunc)EnSuttari_Init,
-    (ActorFunc)EnSuttari_Destroy,
-    (ActorFunc)EnSuttari_Update,
-    (ActorFunc)EnSuttari_Draw,
+    EnSuttari_Init,
+    EnSuttari_Destroy,
+    EnSuttari_Update,
+    EnSuttari_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

@@ -22,10 +22,10 @@ ActorInit Obj_Tokei_Tobira_InitVars = {
     FLAGS,
     OBJECT_TOKEI_TOBIRA,
     sizeof(ObjTokeiTobira),
-    (ActorFunc)ObjTokeiTobira_Init,
-    (ActorFunc)ObjTokeiTobira_Destroy,
-    (ActorFunc)ObjTokeiTobira_Update,
-    (ActorFunc)ObjTokeiTobira_Draw,
+    ObjTokeiTobira_Init,
+    ObjTokeiTobira_Destroy,
+    ObjTokeiTobira_Update,
+    ObjTokeiTobira_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

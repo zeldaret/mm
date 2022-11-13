@@ -41,10 +41,10 @@ ActorInit En_Mkk_InitVars = {
     FLAGS,
     OBJECT_MKK,
     sizeof(EnMkk),
-    (ActorFunc)EnMkk_Init,
-    (ActorFunc)EnMkk_Destroy,
-    (ActorFunc)EnMkk_Update,
-    (ActorFunc)EnMkk_Draw,
+    EnMkk_Init,
+    EnMkk_Destroy,
+    EnMkk_Update,
+    EnMkk_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

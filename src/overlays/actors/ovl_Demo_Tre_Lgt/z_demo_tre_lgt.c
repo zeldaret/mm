@@ -41,10 +41,10 @@ ActorInit Demo_Tre_Lgt_InitVars = {
     FLAGS,
     OBJECT_BOX,
     sizeof(DemoTreLgt),
-    (ActorFunc)DemoTreLgt_Init,
-    (ActorFunc)DemoTreLgt_Destroy,
-    (ActorFunc)DemoTreLgt_Update,
-    (ActorFunc)DemoTreLgt_Draw,
+    DemoTreLgt_Init,
+    DemoTreLgt_Destroy,
+    DemoTreLgt_Update,
+    DemoTreLgt_Draw,
 };
 
 static TransformUpdateIndex* sBoxLightAnimations[] = {

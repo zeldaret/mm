@@ -22,10 +22,10 @@ ActorInit Dm_Tsg_InitVars = {
     FLAGS,
     OBJECT_OPEN_OBJ,
     sizeof(DmTsg),
-    (ActorFunc)DmTsg_Init,
-    (ActorFunc)DmTsg_Destroy,
-    (ActorFunc)DmTsg_Update,
-    (ActorFunc)DmTsg_Draw,
+    DmTsg_Init,
+    DmTsg_Destroy,
+    DmTsg_Update,
+    DmTsg_Draw,
 };
 
 #endif

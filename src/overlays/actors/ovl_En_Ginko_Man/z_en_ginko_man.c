@@ -36,10 +36,10 @@ ActorInit En_Ginko_Man_InitVars = {
     FLAGS,
     OBJECT_BOJ,
     sizeof(EnGinkoMan),
-    (ActorFunc)EnGinkoMan_Init,
-    (ActorFunc)EnGinkoMan_Destroy,
-    (ActorFunc)EnGinkoMan_Update,
-    (ActorFunc)EnGinkoMan_Draw,
+    EnGinkoMan_Init,
+    EnGinkoMan_Destroy,
+    EnGinkoMan_Update,
+    EnGinkoMan_Draw,
 };
 
 typedef enum {

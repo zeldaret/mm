@@ -27,10 +27,10 @@ ActorInit Bg_Ctower_Rot_InitVars = {
     FLAGS,
     OBJECT_CTOWER_ROT,
     sizeof(BgCtowerRot),
-    (ActorFunc)BgCtowerRot_Init,
-    (ActorFunc)BgCtowerRot_Destroy,
-    (ActorFunc)BgCtowerRot_Update,
-    (ActorFunc)BgCtowerRot_Draw,
+    BgCtowerRot_Init,
+    BgCtowerRot_Destroy,
+    BgCtowerRot_Update,
+    BgCtowerRot_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

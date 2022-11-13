@@ -22,10 +22,10 @@ ActorInit Obj_Hana_InitVars = {
     FLAGS,
     OBJECT_HANA,
     sizeof(ObjHana),
-    (ActorFunc)ObjHana_Init,
-    (ActorFunc)ObjHana_Destroy,
-    (ActorFunc)ObjHana_Update,
-    (ActorFunc)ObjHana_Draw,
+    ObjHana_Init,
+    ObjHana_Destroy,
+    ObjHana_Update,
+    ObjHana_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

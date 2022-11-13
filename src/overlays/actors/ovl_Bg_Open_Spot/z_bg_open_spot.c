@@ -22,10 +22,10 @@ ActorInit Bg_Open_Spot_InitVars = {
     FLAGS,
     OBJECT_OPEN_OBJ,
     sizeof(BgOpenSpot),
-    (ActorFunc)BgOpenSpot_Init,
-    (ActorFunc)BgOpenSpot_Destroy,
-    (ActorFunc)BgOpenSpot_Update,
-    (ActorFunc)NULL,
+    BgOpenSpot_Init,
+    BgOpenSpot_Destroy,
+    BgOpenSpot_Update,
+    NULL,
 };
 
 static InitChainEntry sInitChain[] = {

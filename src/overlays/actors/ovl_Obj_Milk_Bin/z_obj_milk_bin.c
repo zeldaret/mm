@@ -22,10 +22,10 @@ ActorInit Obj_Milk_Bin_InitVars = {
     FLAGS,
     OBJECT_OBJ_MILK_BIN,
     sizeof(ObjMilkBin),
-    (ActorFunc)ObjMilkBin_Init,
-    (ActorFunc)ObjMilkBin_Destroy,
-    (ActorFunc)ObjMilkBin_Update,
-    (ActorFunc)ObjMilkBin_Draw,
+    ObjMilkBin_Init,
+    ObjMilkBin_Destroy,
+    ObjMilkBin_Update,
+    ObjMilkBin_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

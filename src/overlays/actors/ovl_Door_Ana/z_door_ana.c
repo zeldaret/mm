@@ -26,10 +26,10 @@ ActorInit Door_Ana_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(DoorAna),
-    (ActorFunc)DoorAna_Init,
-    (ActorFunc)DoorAna_Destroy,
-    (ActorFunc)DoorAna_Update,
-    (ActorFunc)DoorAna_Draw,
+    DoorAna_Init,
+    DoorAna_Destroy,
+    DoorAna_Update,
+    DoorAna_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

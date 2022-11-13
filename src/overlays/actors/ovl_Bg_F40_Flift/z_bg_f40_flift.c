@@ -25,10 +25,10 @@ ActorInit Bg_F40_Flift_InitVars = {
     FLAGS,
     OBJECT_F40_OBJ,
     sizeof(BgF40Flift),
-    (ActorFunc)BgF40Flift_Init,
-    (ActorFunc)BgF40Flift_Destroy,
-    (ActorFunc)BgF40Flift_Update,
-    (ActorFunc)BgF40Flift_Draw,
+    BgF40Flift_Init,
+    BgF40Flift_Destroy,
+    BgF40Flift_Update,
+    BgF40Flift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

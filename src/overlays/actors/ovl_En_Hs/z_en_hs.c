@@ -29,10 +29,10 @@ ActorInit En_Hs_InitVars = {
     FLAGS,
     OBJECT_HS,
     sizeof(EnHs),
-    (ActorFunc)EnHs_Init,
-    (ActorFunc)EnHs_Destroy,
-    (ActorFunc)EnHs_Update,
-    (ActorFunc)EnHs_Draw,
+    EnHs_Init,
+    EnHs_Destroy,
+    EnHs_Update,
+    EnHs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

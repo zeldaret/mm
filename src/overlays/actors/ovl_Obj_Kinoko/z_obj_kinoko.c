@@ -22,10 +22,10 @@ ActorInit Obj_Kinoko_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjKinoko),
-    (ActorFunc)ObjKinoko_Init,
-    (ActorFunc)ObjKinoko_Destroy,
-    (ActorFunc)ObjKinoko_Update,
-    (ActorFunc)ObjKinoko_Draw,
+    ObjKinoko_Init,
+    ObjKinoko_Destroy,
+    ObjKinoko_Update,
+    ObjKinoko_Draw,
 };
 
 void ObjKinoko_Init(Actor* thisx, PlayState* play) {

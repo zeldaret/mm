@@ -19,10 +19,10 @@ ActorInit Obj_Makeoshihiki_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMakeoshihiki),
-    (ActorFunc)ObjMakeoshihiki_Init,
-    (ActorFunc)Actor_Noop,
-    (ActorFunc)ObjMakeoshihiki_Update,
-    (ActorFunc)NULL,
+    ObjMakeoshihiki_Init,
+    Actor_Noop,
+    ObjMakeoshihiki_Update,
+    NULL,
 };
 
 s32 ObjMakeoshihiki_GetChildSpawnPointIndex(ObjMakeoshihiki* this, PlayState* play) {

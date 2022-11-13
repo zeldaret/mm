@@ -54,10 +54,10 @@ ActorInit En_Hgo_InitVars = {
     FLAGS,
     OBJECT_HARFGIBUD,
     sizeof(EnHgo),
-    (ActorFunc)EnHgo_Init,
-    (ActorFunc)EnHgo_Destroy,
-    (ActorFunc)EnHgo_Update,
-    (ActorFunc)EnHgo_Draw,
+    EnHgo_Init,
+    EnHgo_Destroy,
+    EnHgo_Update,
+    EnHgo_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

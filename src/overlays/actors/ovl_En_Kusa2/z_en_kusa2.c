@@ -59,10 +59,10 @@ ActorInit En_Kusa2_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(EnKusa2),
-    (ActorFunc)EnKusa2_Init,
-    (ActorFunc)EnKusa2_Destroy,
-    (ActorFunc)EnKusa2_Update,
-    (ActorFunc)EnKusa2_Draw,
+    EnKusa2_Init,
+    EnKusa2_Destroy,
+    EnKusa2_Update,
+    EnKusa2_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -28,10 +28,10 @@ ActorInit En_Bee_InitVars = {
     FLAGS,
     OBJECT_BEE,
     sizeof(EnBee),
-    (ActorFunc)EnBee_Init,
-    (ActorFunc)EnBee_Destroy,
-    (ActorFunc)EnBee_Update,
-    (ActorFunc)EnBee_Draw,
+    EnBee_Init,
+    EnBee_Destroy,
+    EnBee_Update,
+    EnBee_Draw,
 };
 
 static DamageTable sDamageTable = {

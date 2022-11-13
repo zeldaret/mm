@@ -38,10 +38,10 @@ ActorInit En_Hakurock_InitVars = {
     FLAGS,
     OBJECT_BOSS_HAKUGIN,
     sizeof(EnHakurock),
-    (ActorFunc)EnHakurock_Init,
-    (ActorFunc)EnHakurock_Destroy,
-    (ActorFunc)EnHakurock_Update,
-    (ActorFunc)NULL,
+    EnHakurock_Init,
+    EnHakurock_Destroy,
+    EnHakurock_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -23,10 +23,10 @@ ActorInit Obj_Yado_InitVars = {
     FLAGS,
     OBJECT_YADO_OBJ,
     sizeof(ObjYado),
-    (ActorFunc)ObjYado_Init,
-    (ActorFunc)ObjYado_Destroy,
-    (ActorFunc)ObjYado_Update,
-    (ActorFunc)ObjYado_Draw,
+    ObjYado_Init,
+    ObjYado_Destroy,
+    ObjYado_Update,
+    ObjYado_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

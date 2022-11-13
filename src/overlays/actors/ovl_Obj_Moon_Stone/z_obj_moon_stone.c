@@ -31,10 +31,10 @@ ActorInit Obj_Moon_Stone_InitVars = {
     FLAGS,
     OBJECT_GI_RESERVE00,
     sizeof(ObjMoonStone),
-    (ActorFunc)ObjMoonStone_Init,
-    (ActorFunc)ObjMoonStone_Destroy,
-    (ActorFunc)ObjMoonStone_Update,
-    (ActorFunc)ObjMoonStone_Draw,
+    ObjMoonStone_Init,
+    ObjMoonStone_Destroy,
+    ObjMoonStone_Update,
+    ObjMoonStone_Draw,
 };
 
 void ObjMoonStone_Init(Actor* thisx, PlayState* play) {

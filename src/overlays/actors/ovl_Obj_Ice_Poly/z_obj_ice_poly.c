@@ -28,10 +28,10 @@ ActorInit Obj_Ice_Poly_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjIcePoly),
-    (ActorFunc)ObjIcePoly_Init,
-    (ActorFunc)ObjIcePoly_Destroy,
-    (ActorFunc)ObjIcePoly_Update,
-    (ActorFunc)ObjIcePoly_Draw,
+    ObjIcePoly_Init,
+    ObjIcePoly_Destroy,
+    ObjIcePoly_Update,
+    ObjIcePoly_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

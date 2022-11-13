@@ -26,10 +26,10 @@ ActorInit En_Jc_Mato_InitVars = {
     FLAGS,
     OBJECT_TRU,
     sizeof(EnJcMato),
-    (ActorFunc)EnJcMato_Init,
-    (ActorFunc)EnJcMato_Destroy,
-    (ActorFunc)EnJcMato_Update,
-    (ActorFunc)EnJcMato_Draw,
+    EnJcMato_Init,
+    EnJcMato_Destroy,
+    EnJcMato_Update,
+    EnJcMato_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

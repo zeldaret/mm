@@ -24,10 +24,10 @@ ActorInit En_Light_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnLight),
-    (ActorFunc)EnLight_Init,
-    (ActorFunc)EnLight_Destroy,
-    (ActorFunc)EnLight_Update,
-    (ActorFunc)EnLight_Draw,
+    EnLight_Init,
+    EnLight_Destroy,
+    EnLight_Update,
+    EnLight_Draw,
 };
 
 typedef struct {

@@ -283,10 +283,10 @@ ActorInit En_Door_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnDoor),
-    (ActorFunc)EnDoor_Init,
-    (ActorFunc)EnDoor_Destroy,
-    (ActorFunc)EnDoor_Update,
-    (ActorFunc)EnDoor_Draw,
+    EnDoor_Init,
+    EnDoor_Destroy,
+    EnDoor_Update,
+    EnDoor_Draw,
 };
 
 typedef struct {

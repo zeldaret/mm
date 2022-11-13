@@ -28,10 +28,10 @@ ActorInit Obj_Comb_InitVars = {
     FLAGS,
     OBJECT_COMB,
     sizeof(ObjComb),
-    (ActorFunc)ObjComb_Init,
-    (ActorFunc)ObjComb_Destroy,
-    (ActorFunc)ObjComb_Update,
-    (ActorFunc)ObjComb_Draw,
+    ObjComb_Init,
+    ObjComb_Destroy,
+    ObjComb_Update,
+    ObjComb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

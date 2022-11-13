@@ -84,10 +84,10 @@ ActorInit En_Osn_InitVars = {
     FLAGS,
     OBJECT_OSN,
     sizeof(EnOsn),
-    (ActorFunc)EnOsn_Init,
-    (ActorFunc)EnOsn_Destroy,
-    (ActorFunc)EnOsn_Update,
-    (ActorFunc)EnOsn_Draw,
+    EnOsn_Init,
+    EnOsn_Destroy,
+    EnOsn_Update,
+    EnOsn_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

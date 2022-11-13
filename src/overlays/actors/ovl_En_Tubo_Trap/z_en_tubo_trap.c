@@ -45,10 +45,10 @@ ActorInit En_Tubo_Trap_InitVars = {
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(EnTuboTrap),
-    (ActorFunc)EnTuboTrap_Init,
-    (ActorFunc)EnTuboTrap_Destroy,
-    (ActorFunc)EnTuboTrap_Update,
-    (ActorFunc)EnTuboTrap_Draw,
+    EnTuboTrap_Init,
+    EnTuboTrap_Destroy,
+    EnTuboTrap_Update,
+    EnTuboTrap_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

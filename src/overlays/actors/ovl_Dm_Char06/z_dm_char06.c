@@ -24,10 +24,10 @@ ActorInit Dm_Char06_InitVars = {
     FLAGS,
     OBJECT_YUKIYAMA,
     sizeof(DmChar06),
-    (ActorFunc)DmChar06_Init,
-    (ActorFunc)DmChar06_Destroy,
-    (ActorFunc)DmChar06_Update,
-    (ActorFunc)DmChar06_Draw,
+    DmChar06_Init,
+    DmChar06_Destroy,
+    DmChar06_Update,
+    DmChar06_Draw,
 };
 
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {

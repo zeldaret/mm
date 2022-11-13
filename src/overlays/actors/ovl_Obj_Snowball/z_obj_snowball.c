@@ -39,10 +39,10 @@ ActorInit Obj_Snowball_InitVars = {
     FLAGS,
     OBJECT_GOROIWA,
     sizeof(ObjSnowball),
-    (ActorFunc)ObjSnowball_Init,
-    (ActorFunc)ObjSnowball_Destroy,
-    (ActorFunc)ObjSnowball_Update,
-    (ActorFunc)ObjSnowball_Draw,
+    ObjSnowball_Init,
+    ObjSnowball_Destroy,
+    ObjSnowball_Update,
+    ObjSnowball_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

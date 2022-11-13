@@ -98,10 +98,10 @@ ActorInit En_Ossan_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOssan),
-    (ActorFunc)EnOssan_Init,
-    (ActorFunc)EnOssan_Destroy,
-    (ActorFunc)EnOssan_Update,
-    (ActorFunc)NULL,
+    EnOssan_Init,
+    EnOssan_Destroy,
+    EnOssan_Update,
+    NULL,
 };
 
 static AnimationInfoS sCuriosityShopManAnimationInfo[] = {

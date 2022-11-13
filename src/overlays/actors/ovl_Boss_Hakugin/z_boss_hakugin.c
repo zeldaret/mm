@@ -40,10 +40,10 @@ ActorInit Boss_Hakugin_InitVars = {
     FLAGS,
     OBJECT_BOSS_HAKUGIN,
     sizeof(BossHakugin),
-    (ActorFunc)BossHakugin_Init,
-    (ActorFunc)BossHakugin_Destroy,
-    (ActorFunc)BossHakugin_Update,
-    (ActorFunc)BossHakugin_Draw,
+    BossHakugin_Init,
+    BossHakugin_Destroy,
+    BossHakugin_Update,
+    BossHakugin_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[19] = {

@@ -23,10 +23,10 @@ ActorInit Item_Inbox_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ItemInbox),
-    (ActorFunc)ItemInbox_Init,
-    (ActorFunc)ItemInbox_Destroy,
-    (ActorFunc)ItemInbox_Update,
-    (ActorFunc)ItemInbox_Draw,
+    ItemInbox_Init,
+    ItemInbox_Destroy,
+    ItemInbox_Update,
+    ItemInbox_Draw,
 };
 
 void ItemInbox_Init(Actor* thisx, PlayState* play) {

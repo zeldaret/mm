@@ -70,10 +70,10 @@ ActorInit En_Sob1_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSob1),
-    (ActorFunc)EnSob1_Init,
-    (ActorFunc)EnSob1_Destroy,
-    (ActorFunc)EnSob1_Update,
-    (ActorFunc)NULL,
+    EnSob1_Init,
+    EnSob1_Destroy,
+    EnSob1_Update,
+    NULL,
 };
 
 static s16 sObjectIds[][3] = {

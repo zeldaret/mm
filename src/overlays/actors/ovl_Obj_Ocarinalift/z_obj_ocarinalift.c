@@ -37,10 +37,10 @@ ActorInit Obj_Ocarinalift_InitVars = {
     FLAGS,
     OBJECT_RAILLIFT,
     sizeof(ObjOcarinalift),
-    (ActorFunc)ObjOcarinalift_Init,
-    (ActorFunc)ObjOcarinalift_Destroy,
-    (ActorFunc)ObjOcarinalift_Update,
-    (ActorFunc)ObjOcarinalift_Draw,
+    ObjOcarinalift_Init,
+    ObjOcarinalift_Destroy,
+    ObjOcarinalift_Update,
+    ObjOcarinalift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

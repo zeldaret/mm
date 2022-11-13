@@ -24,10 +24,10 @@ ActorInit Obj_Syokudai_InitVars = {
     FLAGS,
     OBJECT_SYOKUDAI,
     sizeof(ObjSyokudai),
-    (ActorFunc)ObjSyokudai_Init,
-    (ActorFunc)ObjSyokudai_Destroy,
-    (ActorFunc)ObjSyokudai_Update,
-    (ActorFunc)ObjSyokudai_Draw,
+    ObjSyokudai_Init,
+    ObjSyokudai_Destroy,
+    ObjSyokudai_Update,
+    ObjSyokudai_Draw,
 };
 
 static ColliderCylinderInit sStandColliderInit = {

@@ -90,10 +90,10 @@ ActorInit En_Railgibud_InitVars = {
     FLAGS,
     OBJECT_RD,
     sizeof(EnRailgibud),
-    (ActorFunc)EnRailgibud_Init,
-    (ActorFunc)EnRailgibud_Destroy,
-    (ActorFunc)EnRailgibud_Update,
-    (ActorFunc)EnRailgibud_Draw,
+    EnRailgibud_Init,
+    EnRailgibud_Destroy,
+    EnRailgibud_Update,
+    EnRailgibud_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

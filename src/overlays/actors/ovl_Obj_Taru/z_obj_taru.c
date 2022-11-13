@@ -30,10 +30,10 @@ ActorInit Obj_Taru_InitVars = {
     FLAGS,
     OBJECT_TARU,
     sizeof(ObjTaru),
-    (ActorFunc)ObjTaru_Init,
-    (ActorFunc)ObjTaru_Destroy,
-    (ActorFunc)ObjTaru_Update,
-    (ActorFunc)ObjTaru_Draw,
+    ObjTaru_Init,
+    ObjTaru_Destroy,
+    ObjTaru_Update,
+    ObjTaru_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

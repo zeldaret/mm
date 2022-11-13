@@ -49,10 +49,10 @@ ActorInit En_Wallmas_InitVars = {
     FLAGS,
     OBJECT_WALLMASTER,
     sizeof(EnWallmas),
-    (ActorFunc)EnWallmas_Init,
-    (ActorFunc)EnWallmas_Destroy,
-    (ActorFunc)EnWallmas_Update,
-    (ActorFunc)EnWallmas_Draw,
+    EnWallmas_Init,
+    EnWallmas_Destroy,
+    EnWallmas_Update,
+    EnWallmas_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

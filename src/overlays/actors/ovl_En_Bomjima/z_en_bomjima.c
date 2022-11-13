@@ -59,10 +59,10 @@ ActorInit En_Bomjima_InitVars = {
     FLAGS,
     OBJECT_CS,
     sizeof(EnBomjima),
-    (ActorFunc)EnBomjima_Init,
-    (ActorFunc)EnBomjima_Destroy,
-    (ActorFunc)EnBomjima_Update,
-    (ActorFunc)EnBomjima_Draw,
+    EnBomjima_Init,
+    EnBomjima_Destroy,
+    EnBomjima_Update,
+    EnBomjima_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

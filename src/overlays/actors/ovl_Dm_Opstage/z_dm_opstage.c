@@ -24,10 +24,10 @@ ActorInit Dm_Opstage_InitVars = {
     FLAGS,
     OBJECT_KEIKOKU_DEMO,
     sizeof(DmOpstage),
-    (ActorFunc)DmOpstage_Init,
-    (ActorFunc)DmOpstage_Destroy,
-    (ActorFunc)DmOpstage_Update,
-    (ActorFunc)DmOpstage_Draw,
+    DmOpstage_Init,
+    DmOpstage_Destroy,
+    DmOpstage_Update,
+    DmOpstage_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

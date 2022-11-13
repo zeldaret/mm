@@ -31,10 +31,10 @@ ActorInit Bg_Ikana_Bombwall_InitVars = {
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaBombwall),
-    (ActorFunc)BgIkanaBombwall_Init,
-    (ActorFunc)BgIkanaBombwall_Destroy,
-    (ActorFunc)BgIkanaBombwall_Update,
-    (ActorFunc)BgIkanaBombwall_Draw,
+    BgIkanaBombwall_Init,
+    BgIkanaBombwall_Destroy,
+    BgIkanaBombwall_Update,
+    BgIkanaBombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

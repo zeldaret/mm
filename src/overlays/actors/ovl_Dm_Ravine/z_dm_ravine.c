@@ -22,10 +22,10 @@ ActorInit Dm_Ravine_InitVars = {
     FLAGS,
     OBJECT_KEIKOKU_DEMO,
     sizeof(DmRavine),
-    (ActorFunc)DmRavine_Init,
-    (ActorFunc)DmRavine_Destroy,
-    (ActorFunc)DmRavine_Update,
-    (ActorFunc)DmRavine_Draw,
+    DmRavine_Init,
+    DmRavine_Destroy,
+    DmRavine_Update,
+    DmRavine_Draw,
 };
 
 void DmRavine_Init(Actor* thisx, PlayState* play) {

@@ -24,10 +24,10 @@ ActorInit En_Snowwd_InitVars = {
     FLAGS,
     OBJECT_SNOWWD,
     sizeof(EnSnowwd),
-    (ActorFunc)EnSnowwd_Init,
-    (ActorFunc)EnSnowwd_Destroy,
-    (ActorFunc)EnSnowwd_Update,
-    (ActorFunc)EnSnowwd_Draw,
+    EnSnowwd_Init,
+    EnSnowwd_Destroy,
+    EnSnowwd_Update,
+    EnSnowwd_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

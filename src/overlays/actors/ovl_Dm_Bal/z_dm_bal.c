@@ -24,10 +24,10 @@ ActorInit Dm_Bal_InitVars = {
     FLAGS,
     OBJECT_BAL,
     sizeof(DmBal),
-    (ActorFunc)DmBal_Init,
-    (ActorFunc)DmBal_Destroy,
-    (ActorFunc)DmBal_Update,
-    (ActorFunc)DmBal_Draw,
+    DmBal_Init,
+    DmBal_Destroy,
+    DmBal_Update,
+    DmBal_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

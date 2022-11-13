@@ -29,10 +29,10 @@ ActorInit En_Estone_InitVars = {
     FLAGS,
     OBJECT_EG,
     sizeof(EnEstone),
-    (ActorFunc)EnEstone_Init,
-    (ActorFunc)EnEstone_Destroy,
-    (ActorFunc)EnEstone_Update,
-    (ActorFunc)EnEstone_Draw,
+    EnEstone_Init,
+    EnEstone_Destroy,
+    EnEstone_Update,
+    EnEstone_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

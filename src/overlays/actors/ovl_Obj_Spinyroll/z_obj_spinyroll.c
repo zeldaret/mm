@@ -34,10 +34,10 @@ ActorInit Obj_Spinyroll_InitVars = {
     FLAGS,
     OBJECT_SPINYROLL,
     sizeof(ObjSpinyroll),
-    (ActorFunc)ObjSpinyroll_Init,
-    (ActorFunc)ObjSpinyroll_Destroy,
-    (ActorFunc)ObjSpinyroll_Update,
-    (ActorFunc)ObjSpinyroll_Draw,
+    ObjSpinyroll_Init,
+    ObjSpinyroll_Destroy,
+    ObjSpinyroll_Update,
+    ObjSpinyroll_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {

@@ -31,10 +31,10 @@ ActorInit Demo_Effect_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DemoEffect),
-    (ActorFunc)DemoEffect_Init,
-    (ActorFunc)DemoEffect_Destroy,
-    (ActorFunc)DemoEffect_Update,
-    (ActorFunc)NULL,
+    DemoEffect_Init,
+    DemoEffect_Destroy,
+    DemoEffect_Update,
+    NULL,
 };
 
 void DemoEffect_Init(Actor* thisx, PlayState* play) {

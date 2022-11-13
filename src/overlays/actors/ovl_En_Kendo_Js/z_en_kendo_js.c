@@ -43,10 +43,10 @@ ActorInit En_Kendo_Js_InitVars = {
     FLAGS,
     OBJECT_JS,
     sizeof(EnKendoJs),
-    (ActorFunc)EnKendoJs_Init,
-    (ActorFunc)EnKendoJs_Destroy,
-    (ActorFunc)EnKendoJs_Update,
-    (ActorFunc)EnKendoJs_Draw,
+    EnKendoJs_Init,
+    EnKendoJs_Destroy,
+    EnKendoJs_Update,
+    EnKendoJs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

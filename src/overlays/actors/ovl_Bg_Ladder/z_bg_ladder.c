@@ -26,10 +26,10 @@ ActorInit Bg_Ladder_InitVars = {
     FLAGS,
     OBJECT_LADDER,
     sizeof(BgLadder),
-    (ActorFunc)BgLadder_Init,
-    (ActorFunc)BgLadder_Destroy,
-    (ActorFunc)BgLadder_Update,
-    (ActorFunc)BgLadder_Draw,
+    BgLadder_Init,
+    BgLadder_Destroy,
+    BgLadder_Update,
+    BgLadder_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

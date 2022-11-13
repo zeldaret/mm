@@ -33,10 +33,10 @@ ActorInit En_Crow_InitVars = {
     FLAGS,
     OBJECT_CROW,
     sizeof(EnCrow),
-    (ActorFunc)EnCrow_Init,
-    (ActorFunc)EnCrow_Destroy,
-    (ActorFunc)EnCrow_Update,
-    (ActorFunc)EnCrow_Draw,
+    EnCrow_Init,
+    EnCrow_Destroy,
+    EnCrow_Update,
+    EnCrow_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

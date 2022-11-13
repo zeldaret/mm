@@ -26,10 +26,10 @@ ActorInit Item_Etcetera_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ItemEtcetera),
-    (ActorFunc)ItemEtcetera_Init,
-    (ActorFunc)ItemEtcetera_Destroy,
-    (ActorFunc)ItemEtcetera_Update,
-    (ActorFunc)NULL,
+    ItemEtcetera_Init,
+    ItemEtcetera_Destroy,
+    ItemEtcetera_Update,
+    NULL,
 };
 
 static s16 sObjectIds[] = {

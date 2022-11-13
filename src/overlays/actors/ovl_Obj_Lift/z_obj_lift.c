@@ -33,10 +33,10 @@ ActorInit Obj_Lift_InitVars = {
     FLAGS,
     OBJECT_D_LIFT,
     sizeof(ObjLift),
-    (ActorFunc)ObjLift_Init,
-    (ActorFunc)ObjLift_Destroy,
-    (ActorFunc)ObjLift_Update,
-    (ActorFunc)ObjLift_Draw,
+    ObjLift_Init,
+    ObjLift_Destroy,
+    ObjLift_Update,
+    ObjLift_Draw,
 };
 
 static s16 D_8093DD50[] = { 0, 10, 20, 30, 40, 50, 60 };

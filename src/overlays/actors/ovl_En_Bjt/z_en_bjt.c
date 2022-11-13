@@ -52,10 +52,10 @@ ActorInit En_Bjt_InitVars = {
     FLAGS,
     OBJECT_BJT,
     sizeof(EnBjt),
-    (ActorFunc)EnBjt_Init,
-    (ActorFunc)EnBjt_Destroy,
-    (ActorFunc)EnBjt_Update,
-    (ActorFunc)EnBjt_Draw,
+    EnBjt_Init,
+    EnBjt_Destroy,
+    EnBjt_Update,
+    EnBjt_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

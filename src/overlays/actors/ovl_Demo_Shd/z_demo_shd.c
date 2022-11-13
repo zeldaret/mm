@@ -21,10 +21,10 @@ ActorInit Demo_Shd_InitVars = {
     FLAGS,
     OBJECT_FWALL,
     sizeof(DemoShd),
-    (ActorFunc)DemoShd_Init,
-    (ActorFunc)DemoShd_Destroy,
-    (ActorFunc)DemoShd_Update,
-    (ActorFunc)DemoShd_Draw,
+    DemoShd_Init,
+    DemoShd_Destroy,
+    DemoShd_Update,
+    DemoShd_Draw,
 };
 
 void DemoShd_Init(Actor* thisx, PlayState* play) {

@@ -29,10 +29,10 @@ ActorInit Eff_Kamejima_Wave_InitVars = {
     FLAGS,
     OBJECT_KAMEJIMA,
     sizeof(EffKamejimaWave),
-    (ActorFunc)EffKamejimaWave_Init,
-    (ActorFunc)EffKamejimaWave_Destroy,
-    (ActorFunc)EffKamejimaWave_Update,
-    (ActorFunc)NULL,
+    EffKamejimaWave_Init,
+    EffKamejimaWave_Destroy,
+    EffKamejimaWave_Update,
+    NULL,
 };
 
 static Color_RGBA8 sPrimColors[] = {

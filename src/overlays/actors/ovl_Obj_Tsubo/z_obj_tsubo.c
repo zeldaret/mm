@@ -47,10 +47,10 @@ ActorInit Obj_Tsubo_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjTsubo),
-    (ActorFunc)ObjTsubo_Init,
-    (ActorFunc)ObjTsubo_Destroy,
-    (ActorFunc)ObjTsubo_Update,
-    (ActorFunc)NULL,
+    ObjTsubo_Init,
+    ObjTsubo_Destroy,
+    ObjTsubo_Update,
+    NULL,
 };
 
 typedef struct {

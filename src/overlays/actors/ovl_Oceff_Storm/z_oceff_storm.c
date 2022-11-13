@@ -25,10 +25,10 @@ ActorInit Oceff_Storm_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(OceffStorm),
-    (ActorFunc)OceffStorm_Init,
-    (ActorFunc)OceffStorm_Destroy,
-    (ActorFunc)OceffStorm_Update,
-    (ActorFunc)OceffStorm_Draw,
+    OceffStorm_Init,
+    OceffStorm_Destroy,
+    OceffStorm_Update,
+    OceffStorm_Draw,
 };
 
 void OceffStorm_SetupAction(OceffStorm* this, OceffStormActionFunc actionFunc) {

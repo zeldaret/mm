@@ -46,10 +46,10 @@ ActorInit En_Ani_InitVars = {
     FLAGS,
     OBJECT_ANI,
     sizeof(EnAni),
-    (ActorFunc)EnAni_Init,
-    (ActorFunc)EnAni_Destroy,
-    (ActorFunc)EnAni_Update,
-    (ActorFunc)EnAni_Draw,
+    EnAni_Init,
+    EnAni_Destroy,
+    EnAni_Update,
+    EnAni_Draw,
 };
 
 // two different colliders, but only one init for both

@@ -75,10 +75,10 @@ ActorInit En_Ma_Yto_InitVars = {
     FLAGS,
     OBJECT_MA2,
     sizeof(EnMaYto),
-    (ActorFunc)EnMaYto_Init,
-    (ActorFunc)EnMaYto_Destroy,
-    (ActorFunc)EnMaYto_Update,
-    (ActorFunc)EnMaYto_Draw,
+    EnMaYto_Init,
+    EnMaYto_Destroy,
+    EnMaYto_Update,
+    EnMaYto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

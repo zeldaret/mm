@@ -30,10 +30,10 @@ ActorInit En_Fg_InitVars = {
     FLAGS,
     OBJECT_FR,
     sizeof(EnFg),
-    (ActorFunc)EnFg_Init,
-    (ActorFunc)EnFg_Destroy,
-    (ActorFunc)EnFg_Update,
-    (ActorFunc)EnFg_Draw,
+    EnFg_Init,
+    EnFg_Destroy,
+    EnFg_Update,
+    EnFg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

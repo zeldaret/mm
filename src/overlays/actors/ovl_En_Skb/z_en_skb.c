@@ -151,10 +151,10 @@ ActorInit En_Skb_InitVars = {
     FLAGS,
     OBJECT_SKB,
     sizeof(EnSkb),
-    (ActorFunc)EnSkb_Init,
-    (ActorFunc)EnSkb_Destroy,
-    (ActorFunc)EnSkb_Update,
-    (ActorFunc)EnSkb_Draw,
+    EnSkb_Init,
+    EnSkb_Destroy,
+    EnSkb_Update,
+    EnSkb_Draw,
 };
 
 void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {

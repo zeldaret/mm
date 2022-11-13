@@ -23,10 +23,10 @@ ActorInit En_Okarina_Tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOkarinaTag),
-    (ActorFunc)EnOkarinaTag_Init,
-    (ActorFunc)EnOkarinaTag_Destroy,
-    (ActorFunc)EnOkarinaTag_Update,
-    (ActorFunc)NULL,
+    EnOkarinaTag_Init,
+    EnOkarinaTag_Destroy,
+    EnOkarinaTag_Update,
+    NULL,
 };
 
 void EnOkarinaTag_Destroy(Actor* thisx, PlayState* play) {

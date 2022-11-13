@@ -47,10 +47,10 @@ ActorInit En_Minislime_InitVars = {
     FLAGS,
     OBJECT_BIGSLIME,
     sizeof(EnMinislime),
-    (ActorFunc)EnMinislime_Init,
-    (ActorFunc)EnMinislime_Destroy,
-    (ActorFunc)EnMinislime_Update,
-    (ActorFunc)NULL,
+    EnMinislime_Init,
+    EnMinislime_Destroy,
+    EnMinislime_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

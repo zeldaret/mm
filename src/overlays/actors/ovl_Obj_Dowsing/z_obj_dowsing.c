@@ -23,10 +23,10 @@ ActorInit Obj_Dowsing_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjDowsing),
-    (ActorFunc)ObjDowsing_Init,
-    (ActorFunc)ObjDowsing_Destroy,
-    (ActorFunc)ObjDowsing_Update,
-    (ActorFunc)NULL,
+    ObjDowsing_Init,
+    ObjDowsing_Destroy,
+    ObjDowsing_Update,
+    NULL,
 };
 
 s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play) {

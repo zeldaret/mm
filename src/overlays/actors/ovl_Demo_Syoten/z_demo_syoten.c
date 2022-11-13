@@ -31,10 +31,10 @@ ActorInit Demo_Syoten_InitVars = {
     FLAGS,
     OBJECT_SYOTEN,
     sizeof(DemoSyoten),
-    (ActorFunc)DemoSyoten_Init,
-    (ActorFunc)DemoSyoten_Destroy,
-    (ActorFunc)DemoSyoten_Update,
-    (ActorFunc)DemoSyoten_Draw,
+    DemoSyoten_Init,
+    DemoSyoten_Destroy,
+    DemoSyoten_Update,
+    DemoSyoten_Draw,
 };
 
 u8 D_80C177D0[] = {
