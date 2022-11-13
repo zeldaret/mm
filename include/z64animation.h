@@ -175,7 +175,7 @@ typedef struct {
                 void* segmentVoid;
                 struct PlayerAnimationFrame* segment;
             };
-} LinkAnimationHeader; // size = 0x8
+} PlayerAnimationHeader; // size = 0x8
 
 typedef struct SkelAnime {
     /* 0x00 */ u8 limbCount;      // Number of limbs in the skeleton
@@ -183,7 +183,7 @@ typedef struct SkelAnime {
     /* 0x02 */ u8 dListCount;     // Number of display lists in a flexible skeleton
     /* 0x03 */ s8 taper;          // Tapering to use when morphing between animations. Only used by Door_Warp1.
     /* 0x04 */ void** skeleton;   // An array of pointers to limbs. Can be StandardLimb, LodLimb, or SkinLimb.
-    /* 0x08 */ void* animation;   // Can be an AnimationHeader or LinkAnimationHeader.
+    /* 0x08 */ void* animation;   // Can be an AnimationHeader or PlayerAnimationHeader.
     /* 0x0C */ f32 startFrame;    // In mode 4, start of partial loop.
     /* 0x10 */ f32 endFrame;      // In mode 2, Update returns true when curFrame is equal to this. In mode 4, end of partial loop.
     /* 0x14 */ f32 animLength;    // Total number of frames in the current animation's file.
@@ -323,5 +323,9 @@ typedef s32 (*OverrideKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* 
 
 typedef void (*PostKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** dList,
                                        u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
+
+// ZAPD compatibility typedefs
+// TODO: Remove when ZAPD adds support for them
+typedef PlayerAnimationHeader LinkAnimationHeader;
 
 #endif

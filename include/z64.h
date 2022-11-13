@@ -1049,7 +1049,7 @@ struct PlayState {
     /* 0x1878C */ void (*unk_1878C)(struct PlayState* play);
     /* 0x18790 */ void (*unk_18790)(struct PlayState* play, s16 arg1);
     /* 0x18794 */ PlayerItemAction (*unk_18794)(struct PlayState* play, Player* player, ItemId itemId);
-    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
+    /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct PlayState* play, PlayerAnimationHeader* talkAnim, s32 animMode);
     /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
