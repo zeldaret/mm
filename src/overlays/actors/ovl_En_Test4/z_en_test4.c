@@ -1,7 +1,7 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description: Three-Day Clock
+ * Description: Three-Day Events
  */
 
 #include "prevent_bss_reordering.h"
