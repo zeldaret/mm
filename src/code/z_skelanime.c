@@ -1262,7 +1262,7 @@ s32 PlayerAnimation_Morph(PlayState* play, SkelAnime* skelAnime) {
 
     AnimationContext_SetInterp(play, skelAnime->limbCount, skelAnime->jointTable, skelAnime->morphTable,
                                1.0f - (skelAnime->morphWeight / prevMorphWeight));
-    return 0;
+    return false;
 }
 
 /**
@@ -1297,7 +1297,7 @@ s32 PlayerAnimation_Loop(PlayState* play, SkelAnime* skelAnime) {
         skelAnime->curFrame -= skelAnime->animLength;
     }
     PlayerAnimation_AnimateFrame(play, skelAnime);
-    return 0;
+    return false;
 }
 
 /**
@@ -1308,7 +1308,7 @@ s32 PlayerAnimation_Once(PlayState* play, SkelAnime* skelAnime) {
 
     if (skelAnime->curFrame == skelAnime->endFrame) {
         PlayerAnimation_AnimateFrame(play, skelAnime);
-        return 1;
+        return true;
     }
 
     skelAnime->curFrame += skelAnime->playSpeed * updateRate;
@@ -1323,7 +1323,7 @@ s32 PlayerAnimation_Once(PlayState* play, SkelAnime* skelAnime) {
         }
     }
     PlayerAnimation_AnimateFrame(play, skelAnime);
-    return 0;
+    return false;
 }
 
 /**
@@ -1618,7 +1618,7 @@ s32 SkelAnime_Morph(SkelAnime* skelAnime) {
     }
     SkelAnime_InterpFrameTable(skelAnime->limbCount, skelAnime->jointTable, skelAnime->jointTable,
                                skelAnime->morphTable, 1.0f - (skelAnime->morphWeight / prevMorphWeight));
-    return 0;
+    return false;
 }
 
 /**
@@ -1652,7 +1652,7 @@ s32 SkelAnime_MorphTaper(SkelAnime* skelAnime) {
     }
     SkelAnime_InterpFrameTable(skelAnime->limbCount, skelAnime->jointTable, skelAnime->jointTable,
                                skelAnime->morphTable, 1.0f - curWeight);
-    return 0;
+    return false;
 }
 
 /**
@@ -1699,7 +1699,7 @@ s32 SkelAnime_LoopFull(SkelAnime* skelAnime) {
     }
 
     SkelAnime_AnimateFrame(skelAnime);
-    return 0;
+    return false;
 }
 
 /**
@@ -1716,7 +1716,7 @@ s32 SkelAnime_LoopPartial(SkelAnime* skelAnime) {
     }
 
     SkelAnime_AnimateFrame(skelAnime);
-    return 0;
+    return false;
 }
 
 /**
@@ -1728,7 +1728,7 @@ s32 SkelAnime_Once(SkelAnime* skelAnime) {
     if (skelAnime->curFrame == skelAnime->endFrame) {
         SkelAnime_GetFrameData(skelAnime->animation, skelAnime->curFrame, skelAnime->limbCount, skelAnime->jointTable);
         SkelAnime_AnimateFrame(skelAnime);
-        return 1;
+        return true;
     }
 
     skelAnime->curFrame += skelAnime->playSpeed * updateRate;
@@ -1744,7 +1744,7 @@ s32 SkelAnime_Once(SkelAnime* skelAnime) {
         }
     }
     SkelAnime_AnimateFrame(skelAnime);
-    return 0;
+    return false;
 }
 
 /**
