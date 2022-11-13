@@ -42,15 +42,8 @@ typedef struct ObjPurifyInfo {
 } ObjPurifyInfo; // size = 0x28
 
 ActorInit Obj_Purify_InitVars = {
-    ACTOR_OBJ_PURIFY,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjPurify),
-    ObjPurify_Init,
-    ObjPurify_Destroy,
-    ObjPurify_Update,
-    NULL,
+    ACTOR_OBJ_PURIFY,  ACTORCAT_BG,      FLAGS, GAMEPLAY_KEEP, sizeof(ObjPurify), ObjPurify_Init,
+    ObjPurify_Destroy, ObjPurify_Update, NULL,
 };
 
 ObjPurifyInfo sObjPurifyInfo[] = {

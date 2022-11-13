@@ -19,15 +19,7 @@ void func_80C1EAC4(DmBal* this);
 void func_80C1EAD8(DmBal* this, PlayState* play);
 
 ActorInit Dm_Bal_InitVars = {
-    ACTOR_DM_BAL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BAL,
-    sizeof(DmBal),
-    DmBal_Init,
-    DmBal_Destroy,
-    DmBal_Update,
-    DmBal_Draw,
+    ACTOR_DM_BAL, ACTORCAT_NPC, FLAGS, OBJECT_BAL, sizeof(DmBal), DmBal_Init, DmBal_Destroy, DmBal_Update, DmBal_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

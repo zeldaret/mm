@@ -275,15 +275,8 @@ Actor* Boss03_FindActorDblueMovebg(PlayState* play) {
 /* Start of Gyorg's Init and actionFuncs section */
 
 ActorInit Boss_03_InitVars = {
-    ACTOR_BOSS_03,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS03,
-    sizeof(Boss03),
-    Boss03_Init,
-    Boss03_Destroy,
-    Boss03_Update,
-    Boss03_Draw,
+    ACTOR_BOSS_03, ACTORCAT_BOSS,  FLAGS,         OBJECT_BOSS03, sizeof(Boss03),
+    Boss03_Init,   Boss03_Destroy, Boss03_Update, Boss03_Draw,
 };
 
 // The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw

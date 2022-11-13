@@ -25,15 +25,8 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
 ActorInit En_Look_Nuts_InitVars = {
-    ACTOR_EN_LOOK_NUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNK,
-    sizeof(EnLookNuts),
-    EnLookNuts_Init,
-    EnLookNuts_Destroy,
-    EnLookNuts_Update,
-    EnLookNuts_Draw,
+    ACTOR_EN_LOOK_NUTS, ACTORCAT_NPC,      FLAGS,           OBJECT_DNK, sizeof(EnLookNuts), EnLookNuts_Init,
+    EnLookNuts_Destroy, EnLookNuts_Update, EnLookNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

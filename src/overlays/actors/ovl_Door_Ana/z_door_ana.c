@@ -21,15 +21,8 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
 void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
 ActorInit Door_Ana_InitVars = {
-    ACTOR_DOOR_ANA,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(DoorAna),
-    DoorAna_Init,
-    DoorAna_Destroy,
-    DoorAna_Update,
-    DoorAna_Draw,
+    ACTOR_DOOR_ANA, ACTORCAT_ITEMACTION, FLAGS,          GAMEPLAY_FIELD_KEEP, sizeof(DoorAna),
+    DoorAna_Init,   DoorAna_Destroy,     DoorAna_Update, DoorAna_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

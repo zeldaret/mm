@@ -38,15 +38,8 @@ void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
 ActorInit En_Geg_InitVars = {
-    ACTOR_EN_GEG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OF1D_MAP,
-    sizeof(EnGeg),
-    EnGeg_Init,
-    EnGeg_Destroy,
-    EnGeg_Update,
-    EnGeg_Draw,
+    ACTOR_EN_GEG, ACTORCAT_NPC,  FLAGS,        OBJECT_OF1D_MAP, sizeof(EnGeg),
+    EnGeg_Init,   EnGeg_Destroy, EnGeg_Update, EnGeg_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

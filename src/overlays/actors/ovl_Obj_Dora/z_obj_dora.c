@@ -36,15 +36,8 @@ typedef enum {
 } ObjDoraDamageEffect;
 
 ActorInit Obj_Dora_InitVars = {
-    ACTOR_OBJ_DORA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DORA,
-    sizeof(ObjDora),
-    ObjDora_Init,
-    ObjDora_Destroy,
-    ObjDora_Update,
-    ObjDora_Draw,
+    ACTOR_OBJ_DORA, ACTORCAT_NPC,    FLAGS,          OBJECT_DORA,  sizeof(ObjDora),
+    ObjDora_Init,   ObjDora_Destroy, ObjDora_Update, ObjDora_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[6] = {

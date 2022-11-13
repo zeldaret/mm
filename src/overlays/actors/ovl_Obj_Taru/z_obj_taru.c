@@ -25,15 +25,8 @@ void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
 ActorInit Obj_Taru_InitVars = {
-    ACTOR_OBJ_TARU,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_TARU,
-    sizeof(ObjTaru),
-    ObjTaru_Init,
-    ObjTaru_Destroy,
-    ObjTaru_Update,
-    ObjTaru_Draw,
+    ACTOR_OBJ_TARU, ACTORCAT_BG,     FLAGS,          OBJECT_TARU,  sizeof(ObjTaru),
+    ObjTaru_Init,   ObjTaru_Destroy, ObjTaru_Update, ObjTaru_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

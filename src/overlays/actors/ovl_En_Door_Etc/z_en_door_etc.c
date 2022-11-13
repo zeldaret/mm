@@ -21,15 +21,8 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play);
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Door_Etc_InitVars = {
-    ACTOR_EN_DOOR_ETC,
-    ACTORCAT_DOOR,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnDoorEtc),
-    EnDoorEtc_Init,
-    EnDoorEtc_Destroy,
-    EnDoorEtc_Update,
-    NULL,
+    ACTOR_EN_DOOR_ETC, ACTORCAT_DOOR,    FLAGS, GAMEPLAY_KEEP, sizeof(EnDoorEtc), EnDoorEtc_Init,
+    EnDoorEtc_Destroy, EnDoorEtc_Update, NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

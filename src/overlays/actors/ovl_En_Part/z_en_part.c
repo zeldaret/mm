@@ -20,15 +20,8 @@ void func_80865390(EnPart* this, PlayState* play);
 void func_808654C4(EnPart* this, PlayState* play);
 
 ActorInit En_Part_InitVars = {
-    ACTOR_EN_PART,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnPart),
-    EnPart_Init,
-    EnPart_Destroy,
-    EnPart_Update,
-    EnPart_Draw,
+    ACTOR_EN_PART, ACTORCAT_ITEMACTION, FLAGS,         GAMEPLAY_KEEP, sizeof(EnPart),
+    EnPart_Init,   EnPart_Destroy,      EnPart_Update, EnPart_Draw,
 };
 
 void EnPart_Init(Actor* thisx, PlayState* play) {

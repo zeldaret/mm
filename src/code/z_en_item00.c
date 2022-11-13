@@ -24,15 +24,8 @@ void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
 ActorInit En_Item00_InitVars = {
-    ACTOR_EN_ITEM00,
-    ACTORCAT_MISC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnItem00),
-    EnItem00_Init,
-    EnItem00_Destroy,
-    EnItem00_Update,
-    EnItem00_Draw,
+    ACTOR_EN_ITEM00, ACTORCAT_MISC,    FLAGS,           GAMEPLAY_KEEP, sizeof(EnItem00),
+    EnItem00_Init,   EnItem00_Destroy, EnItem00_Update, EnItem00_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

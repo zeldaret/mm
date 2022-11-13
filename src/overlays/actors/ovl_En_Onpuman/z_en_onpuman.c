@@ -17,15 +17,8 @@ void EnOnpuman_Update(Actor* thisx, PlayState* play);
 void func_80B121D8(EnOnpuman* this, PlayState* play);
 
 ActorInit En_Onpuman_InitVars = {
-    ACTOR_EN_ONPUMAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnOnpuman),
-    EnOnpuman_Init,
-    EnOnpuman_Destroy,
-    EnOnpuman_Update,
-    NULL,
+    ACTOR_EN_ONPUMAN,  ACTORCAT_NPC,     FLAGS, GAMEPLAY_KEEP, sizeof(EnOnpuman), EnOnpuman_Init,
+    EnOnpuman_Destroy, EnOnpuman_Update, NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

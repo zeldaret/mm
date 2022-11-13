@@ -24,15 +24,8 @@ static u8 D_8089F3E0 = 0;
 static u8 D_8089F3E4 = 0;
 
 ActorInit En_Viewer_InitVars = {
-    ACTOR_EN_VIEWER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnViewer),
-    EnViewer_Init,
-    EnViewer_Destroy,
-    EnViewer_Update,
-    EnViewer_Draw,
+    ACTOR_EN_VIEWER, ACTORCAT_ITEMACTION, FLAGS,           GAMEPLAY_KEEP, sizeof(EnViewer),
+    EnViewer_Init,   EnViewer_Destroy,    EnViewer_Update, EnViewer_Draw,
 };
 
 u32 D_8089F4D0;

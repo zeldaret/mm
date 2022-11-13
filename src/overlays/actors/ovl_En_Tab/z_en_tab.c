@@ -67,15 +67,7 @@ s32 D_80BE1A0C[] = {
 };
 
 ActorInit En_Tab_InitVars = {
-    ACTOR_EN_TAB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TAB,
-    sizeof(EnTab),
-    EnTab_Init,
-    EnTab_Destroy,
-    EnTab_Update,
-    EnTab_Draw,
+    ACTOR_EN_TAB, ACTORCAT_NPC, FLAGS, OBJECT_TAB, sizeof(EnTab), EnTab_Init, EnTab_Destroy, EnTab_Update, EnTab_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

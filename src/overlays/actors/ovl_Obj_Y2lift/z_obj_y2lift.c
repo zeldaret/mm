@@ -17,15 +17,8 @@ void ObjY2lift_Update(Actor* thisx, PlayState* play);
 void ObjY2lift_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Y2lift_InitVars = {
-    ACTOR_OBJ_Y2LIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAIZOKU_OBJ,
-    sizeof(ObjY2lift),
-    ObjY2lift_Init,
-    ObjY2lift_Destroy,
-    ObjY2lift_Update,
-    ObjY2lift_Draw,
+    ACTOR_OBJ_Y2LIFT,  ACTORCAT_BG,      FLAGS,          OBJECT_KAIZOKU_OBJ, sizeof(ObjY2lift), ObjY2lift_Init,
+    ObjY2lift_Destroy, ObjY2lift_Update, ObjY2lift_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

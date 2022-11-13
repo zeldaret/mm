@@ -21,15 +21,9 @@ void func_80A538E0(BgKeikokuSaku* this, PlayState* play);
 void func_80A53994(BgKeikokuSaku* this, PlayState* play);
 
 ActorInit Bg_Keikoku_Saku_InitVars = {
-    ACTOR_BG_KEIKOKU_SAKU,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_KEIKOKU_OBJ,
-    sizeof(BgKeikokuSaku),
-    BgKeikokuSaku_Init,
-    BgKeikokuSaku_Destroy,
-    BgKeikokuSaku_Update,
-    BgKeikokuSaku_Draw,
+    ACTOR_BG_KEIKOKU_SAKU, ACTORCAT_ITEMACTION,   FLAGS,
+    OBJECT_KEIKOKU_OBJ,    sizeof(BgKeikokuSaku), BgKeikokuSaku_Init,
+    BgKeikokuSaku_Destroy, BgKeikokuSaku_Update,  BgKeikokuSaku_Draw,
 };
 
 void BgKeikokuSaku_Init(Actor* thisx, PlayState* play) {

@@ -21,15 +21,8 @@ void BgLadder_FadeIn(BgLadder* this, PlayState* play);
 void BgLadder_DoNothing(BgLadder* this, PlayState* play);
 
 ActorInit Bg_Ladder_InitVars = {
-    ACTOR_BG_LADDER,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_LADDER,
-    sizeof(BgLadder),
-    BgLadder_Init,
-    BgLadder_Destroy,
-    BgLadder_Update,
-    BgLadder_Draw,
+    ACTOR_BG_LADDER, ACTORCAT_PROP,    FLAGS,           OBJECT_LADDER, sizeof(BgLadder),
+    BgLadder_Init,   BgLadder_Destroy, BgLadder_Update, BgLadder_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

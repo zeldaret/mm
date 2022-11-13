@@ -19,15 +19,8 @@ void DmChar09_DoNothing(DmChar09* this, PlayState* play);
 void func_80AB2268(DmChar09* this, PlayState* play);
 
 ActorInit Dm_Char09_InitVars = {
-    ACTOR_DM_CHAR09,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BEE,
-    sizeof(DmChar09),
-    DmChar09_Init,
-    DmChar09_Destroy,
-    DmChar09_Update,
-    DmChar09_Draw,
+    ACTOR_DM_CHAR09, ACTORCAT_ITEMACTION, FLAGS,           OBJECT_BEE,    sizeof(DmChar09),
+    DmChar09_Init,   DmChar09_Destroy,    DmChar09_Update, DmChar09_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

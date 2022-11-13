@@ -25,15 +25,8 @@ void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
 ActorInit Bg_Sinkai_Kabe_InitVars = {
-    ACTOR_BG_SINKAI_KABE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_SINKAI_KABE,
-    sizeof(BgSinkaiKabe),
-    BgSinkaiKabe_Init,
-    BgSinkaiKabe_Destroy,
-    BgSinkaiKabe_Update,
-    NULL,
+    ACTOR_BG_SINKAI_KABE, ACTORCAT_ITEMACTION, FLAGS, OBJECT_SINKAI_KABE, sizeof(BgSinkaiKabe), BgSinkaiKabe_Init,
+    BgSinkaiKabe_Destroy, BgSinkaiKabe_Update, NULL,
 };
 
 static s32 sCurrentPythonIndex = 0;

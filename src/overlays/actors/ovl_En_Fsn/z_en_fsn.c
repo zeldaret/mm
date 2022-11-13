@@ -70,15 +70,7 @@ typedef enum {
 } FsnAnimation;
 
 ActorInit En_Fsn_InitVars = {
-    ACTOR_EN_FSN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FSN,
-    sizeof(EnFsn),
-    EnFsn_Init,
-    EnFsn_Destroy,
-    EnFsn_Update,
-    EnFsn_Draw,
+    ACTOR_EN_FSN, ACTORCAT_NPC, FLAGS, OBJECT_FSN, sizeof(EnFsn), EnFsn_Init, EnFsn_Destroy, EnFsn_Update, EnFsn_Draw,
 };
 
 static AnimationInfoS sAnimationInfo[] = {

@@ -18,15 +18,8 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play);
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Chikuwa_InitVars = {
-    ACTOR_OBJ_CHIKUWA,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_D_LIFT,
-    sizeof(ObjChikuwa),
-    ObjChikuwa_Init,
-    ObjChikuwa_Destroy,
-    ObjChikuwa_Update,
-    ObjChikuwa_Draw,
+    ACTOR_OBJ_CHIKUWA,  ACTORCAT_BG,       FLAGS,           OBJECT_D_LIFT, sizeof(ObjChikuwa), ObjChikuwa_Init,
+    ObjChikuwa_Destroy, ObjChikuwa_Update, ObjChikuwa_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

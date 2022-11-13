@@ -17,15 +17,8 @@ void ObjUsiyane_Update(Actor* thisx, PlayState* play);
 void ObjUsiyane_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Usiyane_InitVars = {
-    ACTOR_OBJ_USIYANE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_OBJ_USIYANE,
-    sizeof(ObjUsiyane),
-    ObjUsiyane_Init,
-    ObjUsiyane_Destroy,
-    ObjUsiyane_Update,
-    ObjUsiyane_Draw,
+    ACTOR_OBJ_USIYANE,  ACTORCAT_PROP,     FLAGS,           OBJECT_OBJ_USIYANE, sizeof(ObjUsiyane), ObjUsiyane_Init,
+    ObjUsiyane_Destroy, ObjUsiyane_Update, ObjUsiyane_Draw,
 };
 
 PosRot D_80C08660[] = {

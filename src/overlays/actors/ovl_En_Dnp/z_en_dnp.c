@@ -33,15 +33,7 @@ typedef enum {
 } EnDnpEyeIndex;
 
 ActorInit En_Dnp_InitVars = {
-    ACTOR_EN_DNP,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNQ,
-    sizeof(EnDnp),
-    EnDnp_Init,
-    EnDnp_Destroy,
-    EnDnp_Update,
-    EnDnp_Draw,
+    ACTOR_EN_DNP, ACTORCAT_NPC, FLAGS, OBJECT_DNQ, sizeof(EnDnp), EnDnp_Init, EnDnp_Destroy, EnDnp_Update, EnDnp_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

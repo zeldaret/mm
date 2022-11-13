@@ -34,15 +34,8 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
 ActorInit En_Scopenuts_InitVars = {
-    ACTOR_EN_SCOPENUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNT,
-    sizeof(EnScopenuts),
-    EnScopenuts_Init,
-    EnScopenuts_Destroy,
-    EnScopenuts_Update,
-    EnScopenuts_Draw,
+    ACTOR_EN_SCOPENUTS, ACTORCAT_NPC,     FLAGS, OBJECT_DNT, sizeof(EnScopenuts), EnScopenuts_Init, EnScopenuts_Destroy,
+    EnScopenuts_Update, EnScopenuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {

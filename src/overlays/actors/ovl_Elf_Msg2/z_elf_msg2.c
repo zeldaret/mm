@@ -19,15 +19,8 @@ void func_8096EF98(ElfMsg2* this, PlayState* play);
 void func_8096EFD0(ElfMsg2* this, PlayState* play);
 
 ActorInit Elf_Msg2_InitVars = {
-    ACTOR_ELF_MSG2,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ElfMsg2),
-    ElfMsg2_Init,
-    ElfMsg2_Destroy,
-    ElfMsg2_Update,
-    NULL,
+    ACTOR_ELF_MSG2, ACTORCAT_BG,     FLAGS,          GAMEPLAY_KEEP, sizeof(ElfMsg2),
+    ElfMsg2_Init,   ElfMsg2_Destroy, ElfMsg2_Update, NULL,
 };
 
 static InitChainEntry sInitChain[] = {

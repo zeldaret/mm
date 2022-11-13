@@ -44,15 +44,8 @@ void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
 ActorInit En_Wallmas_InitVars = {
-    ACTOR_EN_WALLMAS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_WALLMASTER,
-    sizeof(EnWallmas),
-    EnWallmas_Init,
-    EnWallmas_Destroy,
-    EnWallmas_Update,
-    EnWallmas_Draw,
+    ACTOR_EN_WALLMAS,  ACTORCAT_ENEMY,   FLAGS,          OBJECT_WALLMASTER, sizeof(EnWallmas), EnWallmas_Init,
+    EnWallmas_Destroy, EnWallmas_Update, EnWallmas_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

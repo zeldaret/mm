@@ -23,15 +23,8 @@ static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at on
 static s16 sLostWoodsSkyFishParticleNum = 0;
 
 ActorInit Demo_Kankyo_InitVars = {
-    ACTOR_DEMO_KANKYO,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DemoKankyo),
-    DemoKankyo_Init,
-    DemoKankyo_Destroy,
-    DemoKankyo_Update,
-    DemoKankyo_Draw,
+    ACTOR_DEMO_KANKYO,  ACTORCAT_ITEMACTION, FLAGS,           GAMEPLAY_KEEP, sizeof(DemoKankyo), DemoKankyo_Init,
+    DemoKankyo_Destroy, DemoKankyo_Update,   DemoKankyo_Draw,
 };
 
 static s32 sObjectBubbleIndex = OBJECT_BUBBLE | 0x10000;

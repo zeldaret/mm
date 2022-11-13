@@ -26,15 +26,8 @@ void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play);
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play);
 
 ActorInit En_Gakufu_InitVars = {
-    ACTOR_EN_GAKUFU,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnGakufu),
-    EnGakufu_Init,
-    EnGakufu_Destroy,
-    EnGakufu_Update,
-    EnGakufu_Draw,
+    ACTOR_EN_GAKUFU, ACTORCAT_ITEMACTION, FLAGS,           GAMEPLAY_KEEP, sizeof(EnGakufu),
+    EnGakufu_Init,   EnGakufu_Destroy,    EnGakufu_Update, EnGakufu_Draw,
 };
 
 Vec3f sRewardDropsSpawnTerminaFieldPos = {

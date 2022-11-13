@@ -60,15 +60,9 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define COLUMN_RIGHT 2
 
 ActorInit En_Syateki_Man_InitVars = {
-    ACTOR_EN_SYATEKI_MAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SHN,
-    sizeof(EnSyatekiMan),
-    EnSyatekiMan_Init,
-    EnSyatekiMan_Destroy,
-    EnSyatekiMan_Update,
-    EnSyatekiMan_Draw,
+    ACTOR_EN_SYATEKI_MAN, ACTORCAT_NPC,         FLAGS,
+    OBJECT_SHN,           sizeof(EnSyatekiMan), EnSyatekiMan_Init,
+    EnSyatekiMan_Destroy, EnSyatekiMan_Update,  EnSyatekiMan_Draw,
 };
 
 typedef enum {

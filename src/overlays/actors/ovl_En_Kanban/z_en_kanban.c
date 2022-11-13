@@ -18,15 +18,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play);
 void EnKanban_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Kanban_InitVars = {
-    ACTOR_EN_KANBAN,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_KANBAN,
-    sizeof(EnKanban),
-    EnKanban_Init,
-    EnKanban_Destroy,
-    EnKanban_Update,
-    EnKanban_Draw,
+    ACTOR_EN_KANBAN, ACTORCAT_PROP,    FLAGS,           OBJECT_KANBAN, sizeof(EnKanban),
+    EnKanban_Init,   EnKanban_Destroy, EnKanban_Update, EnKanban_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

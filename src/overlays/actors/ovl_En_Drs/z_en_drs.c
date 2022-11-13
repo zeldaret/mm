@@ -18,15 +18,7 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
 ActorInit En_Drs_InitVars = {
-    ACTOR_EN_DRS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DRS,
-    sizeof(EnDrs),
-    EnDrs_Init,
-    EnDrs_Destroy,
-    EnDrs_Update,
-    NULL,
+    ACTOR_EN_DRS, ACTORCAT_PROP, FLAGS, OBJECT_DRS, sizeof(EnDrs), EnDrs_Init, EnDrs_Destroy, EnDrs_Update, NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

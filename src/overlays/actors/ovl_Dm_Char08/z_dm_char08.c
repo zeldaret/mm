@@ -52,15 +52,8 @@ typedef enum {
 } TurtleAnimation;
 
 ActorInit Dm_Char08_InitVars = {
-    ACTOR_DM_CHAR08,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_KAMEJIMA,
-    sizeof(DmChar08),
-    DmChar08_Init,
-    DmChar08_Destroy,
-    DmChar08_Update,
-    DmChar08_Draw,
+    ACTOR_DM_CHAR08, ACTORCAT_BG,      FLAGS,           OBJECT_KAMEJIMA, sizeof(DmChar08),
+    DmChar08_Init,   DmChar08_Destroy, DmChar08_Update, DmChar08_Draw,
 };
 
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"

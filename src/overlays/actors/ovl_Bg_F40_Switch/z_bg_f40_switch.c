@@ -25,15 +25,9 @@ void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play);
 void BgF40Switch_IdleUnpressed(BgF40Switch* this, PlayState* play);
 
 ActorInit Bg_F40_Switch_InitVars = {
-    ACTOR_BG_F40_SWITCH,
-    ACTORCAT_SWITCH,
-    FLAGS,
-    OBJECT_F40_SWITCH,
-    sizeof(BgF40Switch),
-    BgF40Switch_Init,
-    BgF40Switch_Destroy,
-    BgF40Switch_Update,
-    BgF40Switch_Draw,
+    ACTOR_BG_F40_SWITCH, ACTORCAT_SWITCH,     FLAGS,
+    OBJECT_F40_SWITCH,   sizeof(BgF40Switch), BgF40Switch_Init,
+    BgF40Switch_Destroy, BgF40Switch_Update,  BgF40Switch_Draw,
 };
 
 s32 sBgF40SwitchGlobalsInitialized = false;

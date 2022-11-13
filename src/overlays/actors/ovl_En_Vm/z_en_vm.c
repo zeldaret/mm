@@ -30,15 +30,7 @@ void func_808CCB50(EnVm* this, PlayState* play);
 void func_808CCCF0(EnVm* this, PlayState* play);
 
 ActorInit En_Vm_InitVars = {
-    ACTOR_EN_VM,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_VM,
-    sizeof(EnVm),
-    EnVm_Init,
-    EnVm_Destroy,
-    EnVm_Update,
-    EnVm_Draw,
+    ACTOR_EN_VM, ACTORCAT_ENEMY, FLAGS, OBJECT_VM, sizeof(EnVm), EnVm_Init, EnVm_Destroy, EnVm_Update, EnVm_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {

@@ -29,15 +29,7 @@ void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
 ActorInit En_Sw_InitVars = {
-    ACTOR_EN_SW,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ST,
-    sizeof(EnSw),
-    EnSw_Init,
-    EnSw_Destroy,
-    EnSw_Update,
-    EnSw_Draw,
+    ACTOR_EN_SW, ACTORCAT_NPC, FLAGS, OBJECT_ST, sizeof(EnSw), EnSw_Init, EnSw_Destroy, EnSw_Update, EnSw_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

@@ -34,15 +34,8 @@ void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, PlayState* play);
 
 ActorInit En_Goroiwa_InitVars = {
-    ACTOR_EN_GOROIWA,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_GOROIWA,
-    sizeof(EnGoroiwa),
-    EnGoroiwa_Init,
-    EnGoroiwa_Destroy,
-    EnGoroiwa_Update,
-    EnGoroiwa_Draw,
+    ACTOR_EN_GOROIWA,  ACTORCAT_PROP,    FLAGS,          OBJECT_GOROIWA, sizeof(EnGoroiwa), EnGoroiwa_Init,
+    EnGoroiwa_Destroy, EnGoroiwa_Update, EnGoroiwa_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

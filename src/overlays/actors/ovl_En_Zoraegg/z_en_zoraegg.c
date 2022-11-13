@@ -39,15 +39,8 @@ void func_80B32C34(EnZoraegg* this, PlayState* play);
 void func_80B32D08(EnZoraegg* this, PlayState* play);
 
 ActorInit En_Zoraegg_InitVars = {
-    ACTOR_EN_ZORAEGG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ZORAEGG,
-    sizeof(EnZoraegg),
-    EnZoraegg_Init,
-    EnZoraegg_Destroy,
-    EnZoraegg_Update,
-    EnZoraegg_Draw,
+    ACTOR_EN_ZORAEGG,  ACTORCAT_ITEMACTION, FLAGS,          OBJECT_ZORAEGG, sizeof(EnZoraegg), EnZoraegg_Init,
+    EnZoraegg_Destroy, EnZoraegg_Update,    EnZoraegg_Draw,
 };
 
 void func_80B31590(EnZoraegg* this) {

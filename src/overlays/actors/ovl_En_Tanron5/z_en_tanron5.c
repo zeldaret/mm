@@ -24,15 +24,8 @@ void func_80BE5C10(Actor* thisx, PlayState* play);
 s32 D_80BE5D80 = 0;
 
 ActorInit En_Tanron5_InitVars = {
-    ACTOR_EN_TANRON5,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS02,
-    sizeof(EnTanron5),
-    EnTanron5_Init,
-    EnTanron5_Destroy,
-    EnTanron5_Update,
-    EnTanron5_Draw,
+    ACTOR_EN_TANRON5,  ACTORCAT_BOSS,    FLAGS,          OBJECT_BOSS02, sizeof(EnTanron5), EnTanron5_Init,
+    EnTanron5_Destroy, EnTanron5_Update, EnTanron5_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

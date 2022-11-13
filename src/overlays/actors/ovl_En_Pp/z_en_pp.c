@@ -116,15 +116,7 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Pp_InitVars = {
-    ACTOR_EN_PP,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PP,
-    sizeof(EnPp),
-    EnPp_Init,
-    EnPp_Destroy,
-    EnPp_Update,
-    EnPp_Draw,
+    ACTOR_EN_PP, ACTORCAT_ENEMY, FLAGS, OBJECT_PP, sizeof(EnPp), EnPp_Init, EnPp_Destroy, EnPp_Update, EnPp_Draw,
 };
 
 static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {

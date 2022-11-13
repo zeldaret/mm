@@ -146,15 +146,7 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Skb_InitVars = {
-    ACTOR_EN_SKB,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_SKB,
-    sizeof(EnSkb),
-    EnSkb_Init,
-    EnSkb_Destroy,
-    EnSkb_Update,
-    EnSkb_Draw,
+    ACTOR_EN_SKB, ACTORCAT_ENEMY, FLAGS, OBJECT_SKB, sizeof(EnSkb), EnSkb_Init, EnSkb_Destroy, EnSkb_Update, EnSkb_Draw,
 };
 
 void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {

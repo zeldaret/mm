@@ -19,15 +19,7 @@ void TGSw_Draw(Actor* thisx, PlayState* play);
 void TGSw_ActionExecuteOneShot(struct TGSw* this, PlayState* play);
 
 ActorInit TG_Sw_InitVars = {
-    ACTOR_TG_SW,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(TGSw),
-    TGSw_Init,
-    TGSw_Destroy,
-    TGSw_Update,
-    TGSw_Draw,
+    ACTOR_TG_SW, ACTORCAT_PROP, FLAGS, GAMEPLAY_KEEP, sizeof(TGSw), TGSw_Init, TGSw_Destroy, TGSw_Update, TGSw_Draw,
 };
 
 void TGSw_ActionDecider(TGSw* this, PlayState* play) {

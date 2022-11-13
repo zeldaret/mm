@@ -68,15 +68,8 @@ static ColliderCylinderInit D_80971D80 = {
 };
 
 ActorInit En_Kakasi_InitVars = {
-    ACTOR_EN_KAKASI,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_KA,
-    sizeof(EnKakasi),
-    EnKakasi_Init,
-    EnKakasi_Destroy,
-    EnKakasi_Update,
-    EnKakasi_Draw,
+    ACTOR_EN_KAKASI, ACTORCAT_NPC,     FLAGS,           OBJECT_KA,     sizeof(EnKakasi),
+    EnKakasi_Init,   EnKakasi_Destroy, EnKakasi_Update, EnKakasi_Draw,
 };
 
 Vec3f D_80971DCC[] = {

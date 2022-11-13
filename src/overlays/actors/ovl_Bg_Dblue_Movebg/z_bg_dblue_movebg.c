@@ -46,15 +46,9 @@ u8 D_80A2B870[][2] = {
 };
 
 ActorInit Bg_Dblue_Movebg_InitVars = {
-    ACTOR_BG_DBLUE_MOVEBG,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_DBLUE_OBJECT,
-    sizeof(BgDblueMovebg),
-    BgDblueMovebg_Init,
-    BgDblueMovebg_Destroy,
-    BgDblueMovebg_Update,
-    BgDblueMovebg_Draw,
+    ACTOR_BG_DBLUE_MOVEBG, ACTORCAT_BG,           FLAGS,
+    OBJECT_DBLUE_OBJECT,   sizeof(BgDblueMovebg), BgDblueMovebg_Init,
+    BgDblueMovebg_Destroy, BgDblueMovebg_Update,  BgDblueMovebg_Draw,
 };
 
 static Gfx* sOpaDLists[] = {

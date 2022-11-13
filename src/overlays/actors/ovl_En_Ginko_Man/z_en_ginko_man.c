@@ -31,15 +31,8 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play);
 
 ActorInit En_Ginko_Man_InitVars = {
-    ACTOR_EN_GINKO_MAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BOJ,
-    sizeof(EnGinkoMan),
-    EnGinkoMan_Init,
-    EnGinkoMan_Destroy,
-    EnGinkoMan_Update,
-    EnGinkoMan_Draw,
+    ACTOR_EN_GINKO_MAN, ACTORCAT_NPC,      FLAGS,           OBJECT_BOJ, sizeof(EnGinkoMan), EnGinkoMan_Init,
+    EnGinkoMan_Destroy, EnGinkoMan_Update, EnGinkoMan_Draw,
 };
 
 typedef enum {

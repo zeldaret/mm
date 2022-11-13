@@ -33,15 +33,8 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
 void func_80BE7718(EnDaiku2* this, PlayState* play);
 
 ActorInit En_Daiku2_InitVars = {
-    ACTOR_EN_DAIKU2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DAIKU,
-    sizeof(EnDaiku2),
-    EnDaiku2_Init,
-    EnDaiku2_Destroy,
-    EnDaiku2_Update,
-    EnDaiku2_Draw,
+    ACTOR_EN_DAIKU2, ACTORCAT_NPC,     FLAGS,           OBJECT_DAIKU,  sizeof(EnDaiku2),
+    EnDaiku2_Init,   EnDaiku2_Destroy, EnDaiku2_Update, EnDaiku2_Draw,
 };
 
 static u16 sTextIds[] = {

@@ -473,15 +473,7 @@ static UNK_TYPE D_80AFB764[] = {
 };
 
 ActorInit En_Pm_InitVars = {
-    ACTOR_EN_PM,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_MM,
-    sizeof(EnPm),
-    EnPm_Init,
-    EnPm_Destroy,
-    EnPm_Update,
-    EnPm_Draw,
+    ACTOR_EN_PM, ACTORCAT_NPC, FLAGS, OBJECT_MM, sizeof(EnPm), EnPm_Init, EnPm_Destroy, EnPm_Update, EnPm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

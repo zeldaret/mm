@@ -25,15 +25,8 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play);
 s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Muto_InitVars = {
-    ACTOR_EN_MUTO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TORYO,
-    sizeof(EnMuto),
-    EnMuto_Init,
-    EnMuto_Destroy,
-    EnMuto_Update,
-    EnMuto_Draw,
+    ACTOR_EN_MUTO, ACTORCAT_NPC,   FLAGS,         OBJECT_TORYO, sizeof(EnMuto),
+    EnMuto_Init,   EnMuto_Destroy, EnMuto_Update, EnMuto_Draw,
 };
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x0624, 0x0623, 0x2AC6 };

@@ -30,15 +30,8 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play);
 void func_809ABB7C(Actor* this, PlayState* play);
 
 ActorInit Obj_Grass_Carry_InitVars = {
-    ACTOR_OBJ_GRASS_CARRY,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_FIELD_KEEP,
-    sizeof(ObjGrassCarry),
-    ObjGrassCarry_Init,
-    ObjGrassCarry_Destroy,
-    ObjGrassCarry_Update,
-    NULL,
+    ACTOR_OBJ_GRASS_CARRY, ACTORCAT_PROP,        FLAGS, GAMEPLAY_FIELD_KEEP, sizeof(ObjGrassCarry), ObjGrassCarry_Init,
+    ObjGrassCarry_Destroy, ObjGrassCarry_Update, NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

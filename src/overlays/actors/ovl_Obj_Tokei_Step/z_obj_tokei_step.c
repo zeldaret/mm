@@ -29,15 +29,9 @@ void ObjTokeiStep_DoNothingOpen(ObjTokeiStep* this, PlayState* play);
 void ObjTokeiStep_DrawOpen(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Tokei_Step_InitVars = {
-    ACTOR_OBJ_TOKEI_STEP,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_TOKEI_STEP,
-    sizeof(ObjTokeiStep),
-    ObjTokeiStep_Init,
-    ObjTokeiStep_Destroy,
-    ObjTokeiStep_Update,
-    ObjTokeiStep_Draw,
+    ACTOR_OBJ_TOKEI_STEP, ACTORCAT_BG,          FLAGS,
+    OBJECT_TOKEI_STEP,    sizeof(ObjTokeiStep), ObjTokeiStep_Init,
+    ObjTokeiStep_Destroy, ObjTokeiStep_Update,  ObjTokeiStep_Draw,
 };
 
 static f32 sPanelXOffsets[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };

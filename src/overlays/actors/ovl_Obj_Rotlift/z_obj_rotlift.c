@@ -26,15 +26,8 @@ typedef struct ObjRotliftModelInfo {
 } ObjRotliftModelInfo; // size = 0xC
 
 ActorInit Obj_Rotlift_InitVars = {
-    ACTOR_OBJ_ROTLIFT,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_ROTLIFT,
-    sizeof(ObjRotlift),
-    ObjRotlift_Init,
-    ObjRotlift_Destroy,
-    ObjRotlift_Update,
-    ObjRotlift_Draw,
+    ACTOR_OBJ_ROTLIFT,  ACTORCAT_BG,       FLAGS,           OBJECT_ROTLIFT, sizeof(ObjRotlift), ObjRotlift_Init,
+    ObjRotlift_Destroy, ObjRotlift_Update, ObjRotlift_Draw,
 };
 
 struct ObjRotliftModelInfo sModelInfo[] = {

@@ -17,15 +17,9 @@ void BgKeikokuSpr_Update(Actor* thisx, PlayState* play);
 void BgKeikokuSpr_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Keikoku_Spr_InitVars = {
-    ACTOR_BG_KEIKOKU_SPR,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_KEIKOKU_OBJ,
-    sizeof(BgKeikokuSpr),
-    BgKeikokuSpr_Init,
-    BgKeikokuSpr_Destroy,
-    BgKeikokuSpr_Update,
-    BgKeikokuSpr_Draw,
+    ACTOR_BG_KEIKOKU_SPR, ACTORCAT_PROP,        FLAGS,
+    OBJECT_KEIKOKU_OBJ,   sizeof(BgKeikokuSpr), BgKeikokuSpr_Init,
+    BgKeikokuSpr_Destroy, BgKeikokuSpr_Update,  BgKeikokuSpr_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

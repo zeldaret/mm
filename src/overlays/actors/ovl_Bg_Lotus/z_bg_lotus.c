@@ -21,15 +21,8 @@ void BgLotus_Sink(BgLotus* this, PlayState* play);
 void BgLotus_WaitToAppear(BgLotus* this, PlayState* play);
 
 ActorInit Bg_Lotus_InitVars = {
-    ACTOR_BG_LOTUS,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_LOTUS,
-    sizeof(BgLotus),
-    BgLotus_Init,
-    BgLotus_Destroy,
-    BgLotus_Update,
-    BgLotus_Draw,
+    ACTOR_BG_LOTUS, ACTORCAT_BG,     FLAGS,          OBJECT_LOTUS, sizeof(BgLotus),
+    BgLotus_Init,   BgLotus_Destroy, BgLotus_Update, BgLotus_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

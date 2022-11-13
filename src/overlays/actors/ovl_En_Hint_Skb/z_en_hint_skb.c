@@ -40,15 +40,8 @@ void func_80C21468(EnHintSkb* this, PlayState* play);
 void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2);
 
 ActorInit En_Hint_Skb_InitVars = {
-    ACTOR_EN_HINT_SKB,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_SKB,
-    sizeof(EnHintSkb),
-    EnHintSkb_Init,
-    EnHintSkb_Destroy,
-    EnHintSkb_Update,
-    EnHintSkb_Draw,
+    ACTOR_EN_HINT_SKB, ACTORCAT_NPC,     FLAGS,          OBJECT_SKB, sizeof(EnHintSkb), EnHintSkb_Init,
+    EnHintSkb_Destroy, EnHintSkb_Update, EnHintSkb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

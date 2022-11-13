@@ -36,15 +36,8 @@ void func_80A3A7FC(EnElfgrp* this, PlayState* play);
 void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 
 ActorInit En_Elfgrp_InitVars = {
-    ACTOR_EN_ELFGRP,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnElfgrp),
-    EnElfgrp_Init,
-    EnElfgrp_Destroy,
-    EnElfgrp_Update,
-    NULL,
+    ACTOR_EN_ELFGRP, ACTORCAT_PROP,    FLAGS,           GAMEPLAY_KEEP, sizeof(EnElfgrp),
+    EnElfgrp_Init,   EnElfgrp_Destroy, EnElfgrp_Update, NULL,
 };
 
 void func_80A396B0(EnElfgrp* this, s32 arg1) {

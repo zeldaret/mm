@@ -18,15 +18,8 @@ void func_80AFDB38(ElfMsg5* this, PlayState* play);
 s32 func_80AFD990(ElfMsg5* this, PlayState* play);
 
 ActorInit Elf_Msg5_InitVars = {
-    ACTOR_ELF_MSG5,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ElfMsg5),
-    ElfMsg5_Init,
-    ElfMsg5_Destroy,
-    ElfMsg5_Update,
-    NULL,
+    ACTOR_ELF_MSG5, ACTORCAT_BG,     FLAGS,          GAMEPLAY_KEEP, sizeof(ElfMsg5),
+    ElfMsg5_Init,   ElfMsg5_Destroy, ElfMsg5_Update, NULL,
 };
 
 static InitChainEntry sInitChainsInitChain[] = {

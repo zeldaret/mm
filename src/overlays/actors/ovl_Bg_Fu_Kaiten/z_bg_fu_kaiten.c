@@ -17,15 +17,8 @@ void BgFuKaiten_Update(Actor* thisx, PlayState* play);
 void BgFuKaiten_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Fu_Kaiten_InitVars = {
-    ACTOR_BG_FU_KAITEN,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_KAITEN,
-    sizeof(BgFuKaiten),
-    BgFuKaiten_Init,
-    BgFuKaiten_Destroy,
-    BgFuKaiten_Update,
-    BgFuKaiten_Draw,
+    ACTOR_BG_FU_KAITEN, ACTORCAT_BG,       FLAGS,           OBJECT_FU_KAITEN, sizeof(BgFuKaiten), BgFuKaiten_Init,
+    BgFuKaiten_Destroy, BgFuKaiten_Update, BgFuKaiten_Draw,
 };
 
 void BgFuKaiten_Init(Actor* thisx, PlayState* play) {

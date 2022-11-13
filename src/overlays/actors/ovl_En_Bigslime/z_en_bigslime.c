@@ -212,15 +212,9 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
 };
 
 ActorInit En_Bigslime_InitVars = {
-    ACTOR_EN_BIGSLIME,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGSLIME,
-    sizeof(EnBigslime),
-    EnBigslime_Init,
-    EnBigslime_Destroy,
-    EnBigslime_UpdateGekko,
-    EnBigslime_DrawGekko,
+    ACTOR_EN_BIGSLIME,  ACTORCAT_BOSS,          FLAGS,
+    OBJECT_BIGSLIME,    sizeof(EnBigslime),     EnBigslime_Init,
+    EnBigslime_Destroy, EnBigslime_UpdateGekko, EnBigslime_DrawGekko,
 };
 
 static ColliderCylinderInit sCylinderInit = {
