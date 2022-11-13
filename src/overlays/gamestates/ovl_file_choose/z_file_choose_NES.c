@@ -2257,8 +2257,7 @@ void FileSelect_InitContext(GameState* thisx) {
     gSaveContext.skyboxTime = 0;
     gSaveContext.save.time = 0;
 
-    // Skybox_Init
-    func_801434E4(&this->state, &this->skyboxCtx, 1);
+    Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;
 
     // TODO: copy some variable names from OoT
