@@ -1176,7 +1176,7 @@ void func_80963FF8(EnFu* this, PlayState* play) {
 
     if (player->stateFlags1 & PLAYER_STATE1_100000) {
         play->actorCtx.unk268 = 1;
-        play->actorCtx.unk_26C.press.button = 0x8000;
+        play->actorCtx.unk_26C.press.button = BTN_A;
     } else {
         play->actorCtx.unk268 = 1;
     }

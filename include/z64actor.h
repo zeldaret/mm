@@ -356,6 +356,13 @@ typedef struct {
     /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
+typedef struct ActorContext_unk_1F4 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 timer;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ Vec3f unk_08;
+} ActorContext_unk_1F4; // size = 0x14
+
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 id;
     /* 0x2 */ s8 isDynamicallyInitialised;
@@ -396,11 +403,7 @@ typedef struct ActorContext {
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
-    /* 0x1F4 */ u8 unk1F4;
-    /* 0x1F5 */ u8 unk1F5;
-    /* 0x1F6 */ UNK_TYPE1 pad1F6[0x2];
-    /* 0x1F8 */ f32 unk1F8;
-    /* 0x1FC */ Vec3f unk1FC;
+    /* 0x1F4 */ ActorContext_unk_1F4 unk_1F4;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorContext_unk_20C unk_20C[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];

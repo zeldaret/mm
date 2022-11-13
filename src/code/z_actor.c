@@ -129,9 +129,9 @@ void ActorShadow_DrawSquare(Actor* actor, Lights* lights, PlayState* play) {
 }
 
 void ActorShadow_DrawWhiteCircle(Actor* actor, Lights* lights, PlayState* play) {
-    static Color_RGBA8 color = { 255, 255, 255, 255 };
+    static Color_RGBA8 sColor = { 255, 255, 255, 255 };
 
-    ActorShadow_Draw(actor, lights, play, gCircleShadowDL, &color);
+    ActorShadow_Draw(actor, lights, play, gCircleShadowDL, &sColor);
 }
 
 void ActorShadow_DrawHorse(Actor* actor, Lights* lights, PlayState* play) {
@@ -907,39 +907,41 @@ s32 func_800B6434(PlayState* play, TitleCardContext* titleCtx) {
     return true;
 }
 
+// ActorContext_1F4 Init
 void func_800B6468(PlayState* play) {
-    play->actorCtx.unk1F5 = 0;
+    play->actorCtx.unk_1F4.timer = 0;
 }
 
+// ActorContext_1F4 Update
 void func_800B6474(PlayState* play) {
-    if (play->actorCtx.unk1F5 != 0) {
-        play->actorCtx.unk1F5--;
-    }
+    DECR(play->actorCtx.unk_1F4.timer);
 }
 
-s32 func_800B648C(PlayState* play, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4) {
-    if ((play->actorCtx.unk1F5 != 0) && (arg3 < play->actorCtx.unk1F8)) {
+// ActorContext_1F4 setter something
+s32 func_800B648C(PlayState* play, s32 arg1, s32 timer, f32 arg3, Vec3f* arg4) {
+    if ((play->actorCtx.unk_1F4.timer != 0) && (arg3 < play->actorCtx.unk_1F4.unk_04)) {
         return false;
     }
 
-    play->actorCtx.unk1F4 = arg1;
-    play->actorCtx.unk1F5 = arg2;
-    play->actorCtx.unk1F8 = arg3;
-    Math_Vec3f_Copy(&play->actorCtx.unk1FC, arg4);
+    play->actorCtx.unk_1F4.unk_00 = arg1;
+    play->actorCtx.unk_1F4.timer = timer;
+    play->actorCtx.unk_1F4.unk_04 = arg3;
+    Math_Vec3f_Copy(&play->actorCtx.unk_1F4.unk_08, arg4);
 
     return true;
 }
 
+// ActorContext_1F4 getter something
 f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3) {
     f32 temp_f8;
 
-    if ((play->actorCtx.unk1F5 == 0) || (arg1 == 0.0f)) {
+    if ((play->actorCtx.unk_1F4.timer == 0) || (arg1 == 0.0f)) {
         return -1.0f;
     }
 
-    temp_f8 = Math_Vec3f_DistXYZ(&play->actorCtx.unk1FC, arg2) / arg1;
-    *arg3 = play->actorCtx.unk1F4;
-    return play->actorCtx.unk1F8 - temp_f8;
+    temp_f8 = Math_Vec3f_DistXYZ(&play->actorCtx.unk_1F4.unk_08, arg2) / arg1;
+    *arg3 = play->actorCtx.unk_1F4.unk_00;
+    return play->actorCtx.unk_1F4.unk_04 - temp_f8;
 }
 
 /**

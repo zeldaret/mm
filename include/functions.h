@@ -614,7 +614,7 @@ void Flags_SetCollectible(PlayState* play, s32 flag);
 
 void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, TexturePtr texture, s16 x, s16 y, u8 width, u8 height);
 
-s32 func_800B648C(PlayState* play, s32 arg1, s32 arg2, f32 arg3, Vec3f* arg4);
+s32 func_800B648C(PlayState* play, s32 arg1, s32 timer, f32 arg3, Vec3f* arg4);
 f32 func_800B64FC(PlayState* play, f32 arg1, Vec3f* arg2, u32* arg3);
 void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size);
 void* func_800B6608(PlayState* play, s16 id);
