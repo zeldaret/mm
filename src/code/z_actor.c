@@ -1012,7 +1012,7 @@ void* func_800B6608(PlayState* play, s16 id) {
  * Retrieves the first pointer stored with the id `id`.
  * If there's no pointer stored with that id, NULL is returned.
  *
- * Used only by EnLiftNuts.
+ * Used only by EnGamelupy.
  */
 void* func_800B6680(PlayState* play, s16 id) {
     ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
@@ -1103,17 +1103,17 @@ void Actor_Destroy(Actor* actor, PlayState* play) {
     }
 }
 
-f32 actorMovementScale = 1.0f;
+f32 sActorMovementScale = 1.0f;
 
 void Actor_SetMovementScale(s32 scale) {
-    actorMovementScale = scale * 0.5f;
+    sActorMovementScale = scale * 0.5f;
 }
 
 /**
  * Update actor position using velocity and any push from z_collision_check.
  */
 void Actor_UpdatePos(Actor* actor) {
-    f32 speedRate = actorMovementScale;
+    f32 speedRate = sActorMovementScale;
 
     actor->world.pos.x += (actor->velocity.x * speedRate) + actor->colChkInfo.displacement.x;
     actor->world.pos.y += (actor->velocity.y * speedRate) + actor->colChkInfo.displacement.y;
@@ -1304,12 +1304,16 @@ f32 Player_GetHeight(Player* player) {
         default:
         case PLAYER_FORM_FIERCE_DEITY:
             return extraHeight + 124.0f;
+
         case PLAYER_FORM_GORON:
             return extraHeight + ((player->stateFlags3 & PLAYER_STATE3_1000) ? 34.0f : 80.0f);
+
         case PLAYER_FORM_ZORA:
             return extraHeight + 68.0f;
+
         case PLAYER_FORM_DEKU:
             return extraHeight + 36.0f;
+
         case PLAYER_FORM_HUMAN:
             return extraHeight + 44.0f;
     }

@@ -430,7 +430,7 @@
     0x801AEC78:("sTimer","s32","",0x4),
     0x801AEC80:("D_801AEC80","Color_RGBA8","",0x4),
     0x801AEC84:("sTatlColorList","TatlColor","[13]",0x68),
-    0x801AECEC:("actorMovementScale","f32","",0x4),
+    0x801AECEC:("sActorMovementScale","f32","",0x4),
     0x801AECF0:("gTargetRanges","f32","[]",0x58),
     0x801AED48:("D_801AED48","s16","[8]",0x10),
     0x801AED58:("D_801AED58","UNK_TYPE4","",0x4),
