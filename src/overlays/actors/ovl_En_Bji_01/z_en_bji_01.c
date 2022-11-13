@@ -114,7 +114,7 @@ void func_809CCEE8(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD028(EnBji01* this, PlayState* play) {
-    f32 timeBeforeMoonCrash;
+    f32 timeUntilMoonCrash;
 
     switch (this->actor.params) {
         case SHIKASHI_TYPE_DEFAULT:
@@ -179,9 +179,8 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         case 3:
                             // Calculates the time left before the moon crashes.
                             // The day begins at CLOCK_TIME(6, 0) so it must be offset.
-                            timeBeforeMoonCrash = (4 - CURRENT_DAY) * DAY_LENGTH -
-                                                  (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
-                            if (timeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) {
+                            timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
+                            if (timeUntilMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;

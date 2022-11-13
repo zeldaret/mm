@@ -390,6 +390,9 @@ typedef enum SunsSongState {
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
+#define TIME_UNTIL_MOON_CRASH \
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
+
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 
 #define SLOT(item) gItemSlots[item]

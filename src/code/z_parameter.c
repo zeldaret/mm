@@ -2806,8 +2806,8 @@ s16 D_801BFB24[] = { 0, 255, 100, 0 };   // magicArrowEffectsB
 #ifdef NON_MATCHING
 void Interface_DrawClock(PlayState* play) {
     static s16 sThreeDayClockAlpha = 255;
-    static s16 D_801BFB30 = 0; // clockAlphaTimer1
-    static s16 D_801BFB34 = 0; // clockAlphaTimer2
+    static s16 D_801BFB30 = 0; // sClockAlphaTimer1
+    static s16 D_801BFB34 = 0; // sClockAlphaTimer2
     static u16 sThreeDayClockHours[] = {
         CLOCK_TIME(0, 0),  CLOCK_TIME(1, 0),  CLOCK_TIME(2, 0),  CLOCK_TIME(3, 0),  CLOCK_TIME(4, 0),
         CLOCK_TIME(5, 0),  CLOCK_TIME(6, 0),  CLOCK_TIME(7, 0),  CLOCK_TIME(8, 0),  CLOCK_TIME(9, 0),
@@ -2846,7 +2846,7 @@ void Interface_DrawClock(PlayState* play) {
         gFinalHoursClockDigit4Tex, gFinalHoursClockDigit5Tex, gFinalHoursClockDigit6Tex, gFinalHoursClockDigit7Tex,
         gFinalHoursClockDigit8Tex, gFinalHoursClockDigit9Tex, gFinalHoursClockColonTex,
     };
-    // finalHoursDigitSlotPosXOffset
+    // sFinalHoursDigitSlotPosXOffset
     static s16 D_801BFC40[] = {
         127, 136, 144, 151, 160, 168, 175, 184,
     };
@@ -2854,10 +2854,10 @@ void Interface_DrawClock(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     s16 sp1E6;
     f32 temp_f14;
-    u32 timeBeforeMoonCrash;
+    u32 timeUntilMoonCrash;
     f32 sp1D8;
     f32 timeInMinutes;
-    f32 sp1D0;
+    f32 timeInSeconds;
     f32 sp1CC;
     s32 new_var;
     s16 sp1C6;
@@ -2878,8 +2878,8 @@ void Interface_DrawClock(PlayState* play) {
                 /**
                  * Changes Clock's transparancy depending if Player is moving or not and possibly other things
                  */
-                if (((void)0, gSaveContext.hudVisibility) == HUD_VISIBILITY_ALL) {
-                    if (func_801234D4(play) != 0) {
+                if (gSaveContext.hudVisibility == HUD_VISIBILITY_ALL) {
+                    if (func_801234D4(play)) {
                         sThreeDayClockAlpha = 80;
                         D_801BFB30 = 5;
                         D_801BFB34 = 20;
@@ -3053,8 +3053,8 @@ void Interface_DrawClock(PlayState* play) {
                             D_801BF974 ^= 1;
                         }
 
-                        sp1D0 = gSaveContext.save.time * 1.3183594f;
-                        sp1D0 -= ((s16)(sp1D0 / 3600.0f)) * 3600.0f;
+                        timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
+                        timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
 
                         func_8012C8D4(play->state.gfxCtx);
 
@@ -3072,7 +3072,7 @@ void Interface_DrawClock(PlayState* play) {
 
                         Matrix_Translate(0.0f, -86.0f, 0.0f, MTXMODE_NEW);
                         Matrix_Scale(1.0f, 1.0f, D_801BF980, MTXMODE_APPLY);
-                        Matrix_RotateZF(-(sp1D0 * 0.0175f) / 10.0f, MTXMODE_APPLY);
+                        Matrix_RotateZF(-(timeInSeconds * 0.0175f) / 10.0f, MTXMODE_APPLY);
 
                         gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3273,38 +3273,36 @@ void Interface_DrawClock(PlayState* play) {
 
                         finalHoursClockSlots[0] = 0;
 
-                        timeBeforeMoonCrash = (4 - CURRENT_DAY) * DAY_LENGTH -
-                                              (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0));
+                        timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
 
-                        timeInMinutes = TIME_TO_MINUTES_F(timeBeforeMoonCrash);
+                        timeInMinutes = TIME_TO_MINUTES_F(timeUntilMoonCrash);
 
+                        // digits for hours
                         finalHoursClockSlots[1] = timeInMinutes / 60.0f;
                         finalHoursClockSlots[2] = timeInMinutes / 60.0f;
 
                         temp = (s32)timeInMinutes % 60;
 
-                        // digits for hours
                         while (finalHoursClockSlots[1] >= 10) {
                             finalHoursClockSlots[0]++;
                             finalHoursClockSlots[1] -= 10;
                         }
 
+                        // digits for minutes
                         finalHoursClockSlots[3] = 0;
                         finalHoursClockSlots[4] = temp;
 
-                        // digits for minutes
                         while (finalHoursClockSlots[4] >= 10) {
                             finalHoursClockSlots[3]++;
                             finalHoursClockSlots[4] -= 10;
                         }
 
+                        // digits for seconds
                         finalHoursClockSlots[6] = 0;
                         finalHoursClockSlots[7] =
-                            timeBeforeMoonCrash -
-                            (u32)((finalHoursClockSlots[2] * 2730.6667f) + // 2^13 / 3 (ft1 - e6c4)
-                                  (((void)0, temp) * 45.511112f));         // 2^13 / 3 / 60 (ft0 - e758)
+                            timeUntilMoonCrash - (u32)((finalHoursClockSlots[2] * ((f32)0x10000 / 24)) +
+                                                       (((void)0, temp) * ((f32)0x10000 / (24 * 60))));
 
-                        // digits for seconds
                         while (finalHoursClockSlots[7] >= 10) {
                             finalHoursClockSlots[6]++;
                             finalHoursClockSlots[7] -= 10;
