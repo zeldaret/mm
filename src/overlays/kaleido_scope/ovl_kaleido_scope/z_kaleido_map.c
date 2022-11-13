@@ -738,8 +738,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         j = 0;
         n = 0;
 
-        // Map grottos/shrines to sceneId's to be used in different regions
         sceneId = play->sceneId;
+
+        // Map grottos/shrines to sceneId's to be used in different regions
         if (sceneId == SCENE_KAKUSIANA) {
             if (play->roomCtx.curRoom.num == 5) {
                 sceneId = SCENE_11GORONNOSATO;

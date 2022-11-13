@@ -342,6 +342,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 u8 sPlayerFormItems[] = {
     ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
 };
+
 void KaleidoScope_UpdateItemCursor(PlayState* play) {
     s32 pad1;
     PauseContext* pauseCtx = &play->pauseCtx;
