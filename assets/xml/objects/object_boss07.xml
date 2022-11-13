@@ -110,7 +110,7 @@
         <Texture Name="gBossMaskGyorgToothHornTex" OutName="boss_mask_gyorg_tooth_horn" Format="ci4" Width="16" Height="16" Offset="0xFA50" />
         <Texture Name="gBossMaskGohtEyeTex" OutName="boss_mask_goht_eye" Format="rgba16" Width="32" Height="64" Offset="0xFAD0" />
         <Texture Name="gBossMaskGohtTopPatternTex" OutName="boss_mask_goht_top_pattern" Format="rgba16" Width="32" Height="64" Offset="0x10AD0" />
-        <Texture Name="gBossMaskGohtTwinmoldPatternTex" OutName="boss_mask_goht_twinmold_pattern" Format="rgba16" Width="32" Height="64" Offset="0x11AD0" /> <!-- Used for the lower part of Goht's mask for the mouth of Twinmold's mask -->
+        <Texture Name="gBossMaskGohtTwinmoldPatternTex" OutName="boss_mask_goht_twinmold_pattern" Format="rgba16" Width="32" Height="64" Offset="0x11AD0" /> <!-- Used for the lower part of Goht's mask and for the mouth of Twinmold's mask -->
         <Texture Name="gBossMaskGohtSpikeTwinmoldMandibleTex" OutName="boss_mask_goht_spike_twinmold_mandible" Format="rgba16" Width="32" Height="32" Offset="0x12AD0" />
         <Texture Name="gBossMaskTwinmoldSkinTLUT" OutName="boss_mask_twinmold_skin_tlut" Format="rgba16" Width="4" Height="4" Offset="0x132D0" />
         <Texture Name="gBossMaskTwinmoldSnoutTLUT" OutName="boss_mask_twinmold_snout_tlut" Format="rgba16" Width="4" Height="4" Offset="0x132F0" />
