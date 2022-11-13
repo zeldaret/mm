@@ -151,7 +151,7 @@ void ActorShadow_DrawFoot(PlayState* play, Light* light, MtxF* arg2, s32 lightNu
 
     dir0 = light->l.dir[0];
     dir2 = light->l.dir[2];
-    sp58 = Math_FAtan2F(dir2, dir0);
+    sp58 = Math_Atan2S_XY(dir2, dir0);
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
     Matrix_Put(arg2);
@@ -520,7 +520,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
 
             Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
 
-            if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->unk_730)) {
+            if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
                 OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 0x39);
 
                 for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
@@ -589,7 +589,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     Vec3f projectedPos;
     f32 invW;
 
-    if ((player->unk_730 != 0) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
         func_800BB8EC(gameState, &play->actorCtx, &sp68, &D_801ED920, player);
@@ -1331,7 +1331,7 @@ s32 func_800B7118(Player* player) {
 }
 
 s32 func_800B7128(Player* player) {
-    return func_800B7118(player) && player->unk_ACC;
+    return func_800B7118(player) && (player->unk_ACC != 0);
 }
 
 s32 func_800B715C(PlayState* play) {
@@ -1357,7 +1357,7 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 s32 func_800B7200(Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80)) || (player->csMode != 0);
+    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
 }
 
 void func_800B722C(GameState* gameState, Player* player) {
@@ -1367,7 +1367,7 @@ void func_800B722C(GameState* gameState, Player* player) {
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == 5) || ((csMode == 6) && (player->csMode == 0))) {
+    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_6) && (player->csMode == PLAYER_CSMODE_0))) {
         return false;
     }
 
@@ -1377,7 +1377,7 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     return true;
 }
 
-u32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
+s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
@@ -1492,11 +1492,11 @@ s32 Actor_ActorAIsFacingAndNearActorB(Actor* actorA, Actor* actorB, f32 range, s
 
 /* Start of BgCheck related section */
 
-void func_800B75A0(CollisionPoly* poly, Vec3f* normal, s16* azimuth) {
-    normal->x = COLPOLY_GET_NORMAL(poly->normal.x);
-    normal->y = COLPOLY_GET_NORMAL(poly->normal.y);
-    normal->z = COLPOLY_GET_NORMAL(poly->normal.z);
-    *azimuth = Math_FAtan2F(normal->z, normal->x);
+void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* downwardSlopeYaw) {
+    slopeNormal->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+    slopeNormal->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+    slopeNormal->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+    *downwardSlopeYaw = Math_Atan2S_XY(slopeNormal->z, slopeNormal->x);
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
@@ -1593,7 +1593,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
 
-            actor->wallYaw = Math_FAtan2F(sp7C->normal.z, sp7C->normal.x);
+            actor->wallYaw = Math_Atan2S_XY(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
             actor->bgCheckFlags &= ~8;
@@ -1724,16 +1724,14 @@ void func_800B8050(Actor* actor, PlayState* play, s32 flag) {
     Hilite* hilite = func_800BCBF4(&actor->world.pos, play);
 
     if (flag != 0) {
-        Gfx* displayListHead;
-        Gfx* displayList = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-
-        displayListHead = displayList;
+        Gfx* gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+        Gfx* gfx = gfxHead;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
-        gSPEndDisplayList(displayListHead);
-        gSPSegment(POLY_OPA_DISP++, 0x07, displayList);
+        gDPSetHilite1Tile(gfx++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(gfx++);
+        gSPSegment(POLY_OPA_DISP++, 0x07, gfxHead);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1743,16 +1741,14 @@ void func_800B8118(Actor* actor, PlayState* play, s32 flag) {
     Hilite* hilite = func_800BCC68(&actor->world.pos, play);
 
     if (flag != 0) {
-        Gfx* displayListHead;
-        Gfx* displayList = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-
-        displayListHead = displayList;
+        Gfx* gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+        Gfx* gfx = gfxHead;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
-        gSPEndDisplayList(displayListHead);
-        gSPSegment(POLY_XLU_DISP++, 0x07, displayList);
+        gDPSetHilite1Tile(gfx++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(gfx++);
+        gSPSegment(POLY_XLU_DISP++, 0x07, gfxHead);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1790,7 +1786,7 @@ f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
     s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle);
     s16 yaw = ABS_ALT(temp_v0);
 
-    if (player->unk_730 != NULL) {
+    if (player->targetedActor != NULL) {
         if ((yaw > 0x4000) || ((actor->flags & ACTOR_FLAG_8000000))) {
             return FLT_MAX;
         }
@@ -1828,7 +1824,7 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
         s16 phi_v1 = ABS_ALT(yaw);
         f32 dist;
 
-        if ((player->unk_730 == NULL) && (phi_v1 >= 0x2AAB)) {
+        if ((player->targetedActor == NULL) && (phi_v1 >= 0x2AAB)) {
             dist = FLT_MAX;
         } else {
             dist = actor->xyzDistToPlayerSq;
@@ -1855,30 +1851,30 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 // This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerActionParam exchangeItemId) {
+s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
-         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
+         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
         return false;
     }
 
-    player->targetActor = actor;
-    player->targetActorDistance = actor->xzDistToPlayer;
+    player->talkActor = actor;
+    player->talkActorDistance = actor->xzDistToPlayer;
     player->exchangeItemId = exchangeItemId;
 
     ActorCutscene_SetIntentToPlay(0x7C);
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerActionParam exchangeItemId) {
+s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
     return func_800B8500(actor, play, radius, radius, exchangeItemId);
 }
 
 s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, PLAYER_AP_NONE);
+    return func_800B85E0(actor, play, radius, PLAYER_IA_NONE);
 }
 
 s32 func_800B863C(Actor* actor, PlayState* play) {
@@ -1901,21 +1897,21 @@ s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
  * Fails if Player is not already focussing on an actor or in a talking state
  */
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
-    Actor* targetActor;
+    Actor* talkActor;
     Player* player = GET_PLAYER(play);
 
-    targetActor = player->targetActor;
+    talkActor = player->talkActor;
 
-    if ((player->actor.flags & ACTOR_FLAG_100) && (targetActor != NULL)) {
-        player->targetActor = actor2;
-        player->unk_730 = actor2;
+    if ((player->actor.flags & ACTOR_FLAG_100) && (talkActor != NULL)) {
+        player->talkActor = actor2;
+        player->targetedActor = actor2;
         return true;
     }
 
     return false;
 }
 
-s32 Player_GetExchangeItemId(PlayState* play) {
+PlayerItemAction Player_GetExchangeItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->exchangeItemId;
@@ -1999,7 +1995,7 @@ s32 Actor_HasParent(Actor* actor, PlayState* play) {
  * GI_NONE is usually used as a special case to lift an actor
  * GI_MAX is usually used to catch an actor in a bottle
  */
-s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 yRange) {
+s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
@@ -2009,7 +2005,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
             if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
                  getItemId == GI_DEED_LAND ||
-                 ((player->heldActor != NULL || actor == player->targetActor) &&
+                 ((player->heldActor != NULL || actor == player->talkActor) &&
                   (getItemId > GI_NONE && getItemId < GI_MAX))) ||
                 !(player->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000))) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
@@ -2033,7 +2029,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, s32 getItemId, f32 xzRange, f32 
     return false;
 }
 
-s32 Actor_PickUpNearby(Actor* actor, PlayState* play, s32 getItemId) {
+s32 Actor_PickUpNearby(Actor* actor, PlayState* play, GetItemId getItemId) {
     return Actor_PickUp(actor, play, getItemId, 50.0f, 10.0f);
 }
 
@@ -2041,7 +2037,7 @@ s32 Actor_LiftActor(Actor* actor, PlayState* play) {
     return Actor_PickUpNearby(actor, play, GI_NONE);
 }
 
-s32 Actor_PickUpFar(Actor* actor, PlayState* play, s32 getItemId) {
+s32 Actor_PickUpFar(Actor* actor, PlayState* play, GetItemId getItemId) {
     return Actor_PickUp(actor, play, getItemId, 9999.9f, 9999.9f);
 }
 
@@ -2068,11 +2064,15 @@ void func_800B8C20(Actor* actorA, Actor* actorB, PlayState* play) {
     actorA->parent = NULL;
 }
 
+/**
+ * Sets closest secret distance to the distance to the actor. Calling this function on `actor` is the way to make it a
+ * 'secret' for that update cycle, i.e. something that the controller will rumble for.
+ */
 void func_800B8C50(Actor* actor, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (actor->xyzDistToPlayerSq < player->unk_AA0) {
-        player->unk_AA0 = actor->xyzDistToPlayerSq;
+    if (actor->xyzDistToPlayerSq < player->closestSecretDistSq) {
+        player->closestSecretDistSq = actor->xyzDistToPlayerSq;
     }
 }
 
@@ -2214,7 +2214,7 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, s32 arg4) {
+s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
     if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
@@ -2244,7 +2244,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.save.weekEventReg[92] |= 0x80;
+    SET_WEEKEVENTREG(WEEKEVENTREG_92_80);
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(play->sceneId)];
 
     bzero(actorCtx, sizeof(ActorContext));
@@ -2304,7 +2304,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
             }
 
             if (!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC) &&
-                (!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
+                (!CHECK_EVENTINF(EVENTINF_17) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&play->actorCtx, actorEntry, play);
             }
             actorEntry++;
@@ -2375,13 +2375,13 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
                 actor->flags &= ~ACTOR_FLAG_1000000;
 
                 if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
-                    if (actor == params->player->unk_730) {
+                    if (actor == params->player->targetedActor) {
                         actor->isTargeted = true;
                     } else {
                         actor->isTargeted = false;
                     }
 
-                    if ((actor->targetPriority != 0) && (params->player->unk_730 == 0)) {
+                    if ((actor->targetPriority != 0) && (params->player->targetedActor == NULL)) {
                         actor->targetPriority = 0;
                     }
 
@@ -2468,7 +2468,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     if ((player->stateFlags1 & PLAYER_STATE1_40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
-        params.unk10 = player->targetActor;
+        params.unk10 = player->talkActor;
     } else {
         params.unk10 = NULL;
     }
@@ -2506,7 +2506,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
     }
 
-    actor = player->unk_730;
+    actor = player->targetedActor;
     if ((actor != NULL) && (actor->update == NULL)) {
         actor = NULL;
         func_80123DA4(player);
@@ -3287,9 +3287,9 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     Actor* newHead;
     ActorOverlay* overlayEntry = actor->overlayEntry;
 
-    if ((player != NULL) && (actor == player->unk_730)) {
+    if ((player != NULL) && (actor == player->targetedActor)) {
         func_80123DA4(player);
-        Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), 0);
+        Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
     if (actor == actorCtx->targetContext.arrowPointedActor) {
@@ -3330,7 +3330,7 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
 void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player, s32 actorCategory) {
     PlayState* play = (PlayState*)gameState;
     f32 temp_f0_2;
-    Actor* sp8C;
+    Actor* targetedActor;
     Actor* actor;
     s32 phi_s2;
     CollisionPoly* sp80;
@@ -3339,7 +3339,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
     s32 phi_s2_2;
 
     actor = actorCtx->actorLists[actorCategory].first;
-    sp8C = player->unk_730;
+    targetedActor = player->targetedActor;
     while (actor != NULL) {
         if ((actor->update != NULL) && ((Player*)actor != player)) {
             if (actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1)) {
@@ -3350,7 +3350,7 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
                     }
                 }
 
-                if ((actor != sp8C) || (actor->flags & ACTOR_FLAG_80000)) {
+                if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
                     temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
                     phi_s2_2 = (actor->flags & 1) != 0;
                     if (phi_s2_2) {
@@ -4193,19 +4193,16 @@ Gfx D_801AEFA0[] = {
 };
 
 Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
-    Gfx* displayListHead;
-    Gfx* displayList;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    gDPSetRenderMode(
+        gfx++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A,
+        AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+            GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
+    gSPEndDisplayList(gfx++);
 
-    gDPSetRenderMode(displayListHead++,
-                     AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                         G_RM_FOG_SHADE_A,
-                     AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-    gSPEndDisplayList(displayListHead++);
-
-    return displayList;
+    return gfxHead;
 }
 
 // unused
@@ -4240,7 +4237,7 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     Player* player = GET_PLAYER(play);
     f32 phi_f2;
 
-    if ((play->csCtx.state != 0) || gDbgCamEnabled) {
+    if ((play->csCtx.state != CS_STATE_0) || gDbgCamEnabled) {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &play->view.eye) * 0.25f;
     } else {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);
@@ -4385,8 +4382,8 @@ void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     f32 zDiff = arg1->z - arg0->z;
     f32 yDiff = arg3 ? (arg1->y - arg0->y) : (arg0->y - arg1->y);
 
-    arg2->y = Math_FAtan2F(zDiff, xDiff);
-    arg2->x = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
+    arg2->y = Math_Atan2S_XY(zDiff, xDiff);
+    arg2->x = Math_Atan2S_XY(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
@@ -4548,7 +4545,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
 
                 alpha = effectAlpha * 100.0f;
                 if (alpha > 100.0f) {
@@ -4571,7 +4568,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
                 }
                 break;
 
@@ -4630,7 +4627,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 lightOrbsScale = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
                 alpha = effectAlpha * 255.0f;
                 if (alpha > 255.0f) {
@@ -4661,7 +4658,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
                 break;
 
@@ -4679,7 +4676,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                 gSPSegment(POLY_XLU_DISP++, 0x08,
                            Lib_SegmentedToVirtual(sElectricSparkTextures[play->gameplayFrames % 4]));
 
-                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkDL);
+                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkMaterialDL);
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 255), (u8)(sREG(17) + 255), (u8)(sREG(18) + 150),
                                 (u8)(sREG(19) + 255));
@@ -4701,7 +4698,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
 
                     // second electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
@@ -4713,7 +4710,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
                 }
 
                 break;

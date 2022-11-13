@@ -68,8 +68,7 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[25] & 8) {
-        // if breman mask was already used, replace with adult EnNiw
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
         Actor_Kill(&this->actor);
