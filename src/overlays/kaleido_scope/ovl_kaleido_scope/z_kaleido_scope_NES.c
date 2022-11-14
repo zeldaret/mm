@@ -4,7 +4,6 @@
  * Description: Pause Menu
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "z64view.h"
@@ -153,16 +152,16 @@ TexturePtr sQuestPageBgTextures[] = {
 };
 
 s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {
-    80,  // mapPageVtx[60] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
-    64,  // mapPageVtx[64] QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
-    64,  // mapPageVtx[68] QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
-    64,  // mapPageVtx[72] QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
-    16,  // mapPageVtx[76] QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
-    64,  // mapPageVtx[80] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
-    112, // mapPageVtx[84] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
-    112, // mapPageVtx[88] QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
-    48,  // mapPageVtx[92] QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
-    64,  // mapPageVtx[96] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
+    80,  // mapPageVtx[60]  QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_1
+    64,  // mapPageVtx[64]  QUAD_MAP_WORLD_CLOUDS_CLOCK_TOWN_2
+    64,  // mapPageVtx[68]  QUAD_MAP_WORLD_CLOUDS_WOODFALL_1
+    64,  // mapPageVtx[72]  QUAD_MAP_WORLD_CLOUDS_WOODFALL_2
+    16,  // mapPageVtx[76]  QUAD_MAP_WORLD_CLOUDS_WOODFALL_3
+    64,  // mapPageVtx[80]  QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_1
+    112, // mapPageVtx[84]  QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_2
+    112, // mapPageVtx[88]  QUAD_MAP_WORLD_CLOUDS_SNOWHEAD_3
+    48,  // mapPageVtx[92]  QUAD_MAP_WORLD_CLOUDS_ROMANI_RANCH
+    64,  // mapPageVtx[96]  QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_1
     64,  // mapPageVtx[100] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_2
     64,  // mapPageVtx[104] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_3
     64,  // mapPageVtx[108] QUAD_MAP_WORLD_CLOUDS_GREAT_BAY_4
@@ -456,6 +455,7 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, TexturePtr* textures
 
     i = 0;
     j = 0;
+    // Draw first 8/15 background textures
     while (j < 32) {
         gDPPipeSync(gfx++);
         gDPLoadTextureBlock(gfx++, textures[i], G_IM_FMT_IA, G_IM_SIZ_8b, 80, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -469,6 +469,7 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, TexturePtr* textures
     gSPVertex(gfx++, vertices + (8 * 4), 7 * 4, 0);
 
     j = 0;
+    // Draw last 7/15 background textures
     while (j < 28) {
         gDPPipeSync(gfx++);
         gDPLoadTextureBlock(gfx++, textures[i], G_IM_FMT_IA, G_IM_SIZ_8b, 80, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -1410,8 +1411,8 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
 
     if (pauseCtx->cursorSpecialPos != 0) {
         j = (pauseCtx->cursorSpecialPos * 4) - 32;
-        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
-        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
+        pauseCtx->cursorVtx[0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
+        pauseCtx->cursorVtx[0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
     }
 
     y = pauseCtx->infoPanelOffsetY - 80;
@@ -2331,8 +2332,8 @@ void KaleidoScope_SetVertices(PlayState* play, GraphicsContext* gfxCtx) {
     }
 
     // PAUSE_QUAD_CURSOR_0
-    pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 1].v.tc[0] = pauseCtx->cursorVtx[2].v.tc[1] =
-        pauseCtx->cursorVtx[3].v.tc[0] = pauseCtx->cursorVtx[3].v.tc[1]
+    pauseCtx->cursorVtx[1].v.tc[0] = pauseCtx->cursorVtx[2].v.tc[1] = pauseCtx->cursorVtx[3].v.tc[0] =
+        pauseCtx->cursorVtx[3].v.tc[1]
         // PAUSE_QUAD_CURSOR_1
         = pauseCtx->cursorVtx[5].v.tc[0] = pauseCtx->cursorVtx[6].v.tc[1] = pauseCtx->cursorVtx[7].v.tc[0] =
             pauseCtx->cursorVtx[7].v.tc[1]

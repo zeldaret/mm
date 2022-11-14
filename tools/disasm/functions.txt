@@ -4205,7 +4205,7 @@
     0x80819238:("KaleidoScope_DrawInventoryEditor",),
     0x80819F04:("KaleidoScope_UpdateInventoryEditor",),
     0x8081B240:("KaleidoScope_DrawAmmoCount",),
-    0x8081B6BC:("KaleidoScope_SetCursorVtx",),
+    0x8081B6BC:("KaleidoScope_SetCursorVtxPos",),
     0x8081B6EC:("KaleidoScope_DrawItemSelect",),
     0x8081BCA8:("KaleidoScope_UpdateItemCursor",),
     0x8081C684:("KaleidoScope_UpdateItemEquip",),

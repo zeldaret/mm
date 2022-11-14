@@ -196,7 +196,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MASK] * 4, pauseCtx->maskVtx);
+    KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_MASK] * 4, pauseCtx->maskVtx);
 
     func_8012C8AC(play->state.gfxCtx);
 
@@ -656,7 +656,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
     }
 
     if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
-        //! NOTE: Copied from OoT when `SLOT_BOW` was still valued at 3.
+        //! Note: Copied from OoT when `SLOT_BOW` was still valued at 3.
         // Due to a shift, `SLOT_ARROW_ICE` now occupies slot 3 but this value was not updated
         // Block is never reached as you can not equip magic arrows from the mask page
         bowItemVtx = &pauseCtx->itemVtx[SLOT_ARROW_ICE * 4];

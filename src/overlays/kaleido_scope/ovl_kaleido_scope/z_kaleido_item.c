@@ -236,9 +236,9 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
     CLOSE_DISPS(gfxCtx);
 }
 
-void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
-    pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[0] = vtx[index].v.ob[0];
-    pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[1] = vtx[index].v.ob[1];
+void KaleidoScope_SetCursorVtxPos(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
+    pauseCtx->cursorVtx[0].v.ob[0] = vtx[index].v.ob[0];
+    pauseCtx->cursorVtx[0].v.ob[1] = vtx[index].v.ob[1];
 }
 
 s16 sMagicArrowEffectsR[] = { 255, 100, 255 };

@@ -151,109 +151,7 @@ typedef enum {
 #define PAGE_BG_QUAD_TEX_WIDTH 80
 #define PAGE_BG_QUAD_TEX_HEIGHT 32
 
-// === PROMPT === //
-
-/**
- * promptPageVtx (unused in MM, inferred from OoT)
- * 
- * // PAGE_BG_QUADS
- * promptPageVtx[0] prompt page background texture:  row 0, column 0
- * promptPageVtx[4] prompt page background texture:  row 1, column 0
- * promptPageVtx[8] prompt page background texture:  row 2, column 0
- * promptPageVtx[12] prompt page background texture: row 3, column 0
- * promptPageVtx[16] prompt page background texture: row 4, column 0
- * promptPageVtx[20] prompt page background texture: row 0, column 1
- * promptPageVtx[24] prompt page background texture: row 1, column 1
- * promptPageVtx[28] prompt page background texture: row 2, column 1
- * promptPageVtx[32] prompt page background texture: row 3, column 1
- * promptPageVtx[36] prompt page background texture: row 4, column 1
- * promptPageVtx[40] prompt page background texture: row 0, column 2
- * promptPageVtx[44] prompt page background texture: row 1, column 2
- * promptPageVtx[48] prompt page background texture: row 2, column 2
- * promptPageVtx[52] prompt page background texture: row 3, column 2
- * promptPageVtx[56] prompt page background texture: row 4, column 2
- * 
- * // QUAD_PROMPT_MAX
- * promptPageVtx[60] message
- * promptPageVtx[64] cursor left
- * promptPageVtx[68] cursor right
- * promptPageVtx[72] choice (yes)
- * promptPageVtx[76] choice (no)
- */
-
-#define PAUSE_PROMPT_YES 0
-#define PAUSE_PROMPT_NO 4
-
-typedef enum {
-    /* 0 */ QUAD_PROMPT_MESSAGE,
-    /* 1 */ QUAD_PROMPT_CURSOR_LEFT,
-    /* 2 */ QUAD_PROMPT_CURSOR_RIGHT,
-    /* 3 */ QUAD_PROMPT_CHOICE_YES,
-    /* 4 */ QUAD_PROMPT_CHOICE_NO,
-    /* 5 */ QUAD_PROMPT_MAX
-} PromptQuad;
-
-
 // === ITEM === //
-
-/**
- * itemPageVtx
- * 
- * // PAGE_BG_QUADS
- * itemPageVtx[0] item page background texture:  row 0, column 0
- * itemPageVtx[4] item page background texture:  row 1, column 0
- * itemPageVtx[8] item page background texture:  row 2, column 0
- * itemPageVtx[12] item page background texture: row 3, column 0
- * itemPageVtx[16] item page background texture: row 4, column 0
- * itemPageVtx[20] item page background texture: row 0, column 1
- * itemPageVtx[24] item page background texture: row 1, column 1
- * itemPageVtx[28] item page background texture: row 2, column 1
- * itemPageVtx[32] item page background texture: row 3, column 1
- * itemPageVtx[36] item page background texture: row 4, column 1
- * itemPageVtx[40] item page background texture: row 0, column 2
- * itemPageVtx[44] item page background texture: row 1, column 2
- * itemPageVtx[48] item page background texture: row 2, column 2
- * itemPageVtx[52] item page background texture: row 3, column 2
- * itemPageVtx[56] item page background texture: row 4, column 2
- * 
- * // VTX_PAGE_ITEM_QUADS
- * None
- */
-
-/**
- * itemVtx
- * 
- * // ITEM_NUM_SLOTS
- * itemVtx[0] item icon: SLOT_OCARINA
- * itemVtx[4] item icon: SLOT_BOW
- * itemVtx[8] item icon: SLOT_ARROW_FIRE
- * itemVtx[12] item icon: SLOT_ARROW_ICE
- * itemVtx[16] item icon: SLOT_ARROW_LIGHT
- * itemVtx[20] item icon: SLOT_TRADE_DEED
- * itemVtx[24] item icon: SLOT_BOMB
- * itemVtx[28] item icon: SLOT_BOMBCHU
- * itemVtx[32] item icon: SLOT_STICK
- * itemVtx[36] item icon: SLOT_NUT
- * itemVtx[40] item icon: SLOT_MAGIC_BEANS
- * itemVtx[44] item icon: SLOT_TRADE_KEY_MAMA
- * itemVtx[48] item icon: SLOT_POWDER_KEG
- * itemVtx[52] item icon: SLOT_PICTO_BOX
- * itemVtx[56] item icon: SLOT_LENS
- * itemVtx[60] item icon: SLOT_HOOKSHOT
- * itemVtx[64] item icon: SLOT_SWORD_GREAT_FAIRY
- * itemVtx[68] item icon: SLOT_TRADE_COUPLE
- * itemVtx[72] item icon: SLOT_BOTTLE_1
- * itemVtx[76] item icon: SLOT_BOTTLE_2
- * itemVtx[80] item icon: SLOT_BOTTLE_3
- * itemVtx[84] item icon: SLOT_BOTTLE_4
- * itemVtx[88] item icon: SLOT_BOTTLE_5
- * itemVtx[92] item icon: SLOT_BOTTLE_6
- * 
- * // C Buttons
- * itemVtx[96] equipped item white-box outline: EQUIP_SLOT_C_LEFT
- * itemVtx[100] equipped item white-box outline: EQUIP_SLOT_C_DOWN
- * itemVtx[104] equipped item white-box outline: EQUIP_SLOT_C_RIGHT
- */
 
 #define ITEM_GRID_ROWS 4
 #define ITEM_GRID_COLS 6
@@ -272,24 +170,20 @@ typedef enum {
 
 #define ITEM_NUM_SLOTS (ITEM_GRID_ROWS * ITEM_GRID_COLS)
 
-#define ITEM_AMMO_DIGIT_QUAD_WIDTH 8
-#define ITEM_AMMO_DIGIT_QUAD_HEIGHT 8
-#define ITEM_AMMO_DIGIT_QUAD_TEX_SIZE 8
-
-// Relative to the corresponding QUAD_ITEM_GRID_ quad
-#define ITEM_AMMO_TENS_QUAD_OFFSET_X 0
-#define ITEM_AMMO_TENS_QUAD_OFFSET_Y 22
-
-// Relative to the ammo tens digit
-#define ITEM_AMMO_UNITS_QUAD_OFFSET_X 6
-#define ITEM_AMMO_UNITS_QUAD_OFFSET_Y 0
+typedef enum {
+    // 0..59 are the 15 background textures
+    /*  0 */ QUAD_ITEM_PAGE_BG_FIRST,
+    /* 14 */ QUAD_ITEM_PAGE_BG_LAST = PAGE_BG_QUADS - 1,
+    // VTX_PAGE_ITEM_QUADS is 0
+    /* 15 */ QUAD_ITEM_PAGE_MAX
+} ItemPageQuad;
 
 typedef enum {
     // 0..23 are the ITEM_GRID_ROWS*ITEM_GRID_COLS item grid
     // The values follow the `InventorySlot` enum
     /*  0 */ QUAD_ITEM_GRID_FIRST,
     /* 23 */ QUAD_ITEM_GRID_LAST = ITEM_GRID_ROWS * ITEM_GRID_COLS - 1,
-    // Markers indicating the currently equipped items
+    // White-box Markers indicating the currently equipped items
     /* 24 */ QUAD_ITEM_GRID_SELECTED_C_LEFT,
     /* 25 */ QUAD_ITEM_GRID_SELECTED_C_DOWN,
     /* 26 */ QUAD_ITEM_GRID_SELECTED_C_RIGHT,
@@ -297,62 +191,6 @@ typedef enum {
 } ItemQuad;
 
 // === MASK === //
-
-/**
- * maskPageVtx
- * 
- * // PAGE_BG_QUADS
- * maskPageVtx[0] mask page background texture:  row 0, column 0
- * maskPageVtx[4] mask page background texture:  row 1, column 0
- * maskPageVtx[8] mask page background texture:  row 2, column 0
- * maskPageVtx[12] mask page background texture: row 3, column 0
- * maskPageVtx[16] mask page background texture: row 4, column 0
- * maskPageVtx[20] mask page background texture: row 0, column 1
- * maskPageVtx[24] mask page background texture: row 1, column 1
- * maskPageVtx[28] mask page background texture: row 2, column 1
- * maskPageVtx[32] mask page background texture: row 3, column 1
- * maskPageVtx[36] mask page background texture: row 4, column 1
- * maskPageVtx[40] mask page background texture: row 0, column 2
- * maskPageVtx[44] mask page background texture: row 1, column 2
- * maskPageVtx[48] mask page background texture: row 2, column 2
- * maskPageVtx[52] mask page background texture: row 3, column 2
- * maskPageVtx[56] mask page background texture: row 4, column 2
- * 
- * // VTX_PAGE_MASK_QUADS
- * None
- */
-
-/**
- * maskVtx
- * 
- * maskVtx[0] mask icon: SLOT_MASK_POSTMAN
- * maskVtx[4] mask icon: SLOT_MASK_ALL_NIGHT
- * maskVtx[8] mask icon: SLOT_MASK_BLAST
- * maskVtx[12] mask icon: SLOT_MASK_STONE
- * maskVtx[16] mask icon: SLOT_MASK_GREAT_FAIRY
- * maskVtx[20] mask icon: SLOT_MASK_DEKU
- * maskVtx[24] mask icon: SLOT_MASK_KEATON
- * maskVtx[28] mask icon: SLOT_MASK_BREMEN
- * maskVtx[32] mask icon: SLOT_MASK_BUNNY
- * maskVtx[36] mask icon: SLOT_MASK_DON_GERO
- * maskVtx[40] mask icon: SLOT_MASK_SCENTS
- * maskVtx[44] mask icon: SLOT_MASK_GORON
- * maskVtx[48] mask icon: SLOT_MASK_ROMANI
- * maskVtx[52] mask icon: SLOT_MASK_CIRCUS_LEADER
- * maskVtx[56] mask icon: SLOT_MASK_KAFEIS_MASK
- * maskVtx[60] mask icon: SLOT_MASK_COUPLE
- * maskVtx[64] mask icon: SLOT_MASK_TRUTH
- * maskVtx[68] mask icon: SLOT_MASK_ZORA
- * maskVtx[72] mask icon: SLOT_MASK_KAMARO
- * maskVtx[76] mask icon: SLOT_MASK_GIBDO
- * maskVtx[80] mask icon: SLOT_MASK_GARO
- * maskVtx[84] mask icon: SLOT_MASK_CAPTAIN
- * maskVtx[88] mask icon: SLOT_MASK_GIANT
- * maskVtx[92] mask icon: SLOT_MASK_FIERCE_DEITY
- * maskVtx[96] equipped mask white-box outline: EQUIP_SLOT_C_LEFT
- * maskVtx[100] equipped mask white-box outline: EQUIP_SLOT_C_DOWN
- * maskVtx[104] equipped mask white-box outline: EQUIP_SLOT_C_RIGHT
- */
 
 #define MASK_GRID_ROWS 4
 #define MASK_GRID_COLS 6
@@ -372,6 +210,14 @@ typedef enum {
 #define MASK_NUM_SLOTS (MASK_GRID_ROWS * MASK_GRID_COLS)
 
 typedef enum {
+    // 0..59 are the 15 background textures
+    /*  0 */ QUAD_MASK_PAGE_BG_FIRST,
+    /* 14 */ QUAD_MASK_PAGE_BG_LAST = PAGE_BG_QUADS - 1,
+    // VTX_PAGE_MASK_QUADS is 0
+    /* 15 */ QUAD_MASK_PAGE_MAX
+} MaskPageQuad;
+
+typedef enum {
     // 0..23 are the MASK_GRID_ROWS*MASK_GRID_COLS item grid
     // The values follow the `InventorySlot` enum offset by ITEM_NUM_SLOTS
     /*  0 */ QUAD_MASK_GRID_FIRST,
@@ -385,191 +231,78 @@ typedef enum {
 
 // === QUEST === //
 
-/**
- * questPageVtx
- * 
- * // PAGE_BG_QUADS
- * questPageVtx[0] quest page background texture:  row 0, column 0
- * questPageVtx[4] quest page background texture:  row 1, column 0
- * questPageVtx[8] quest page background texture:  row 2, column 0
- * questPageVtx[12] quest page background texture: row 3, column 0
- * questPageVtx[16] quest page background texture: row 4, column 0
- * questPageVtx[20] quest page background texture: row 0, column 1
- * questPageVtx[24] quest page background texture: row 1, column 1
- * questPageVtx[28] quest page background texture: row 2, column 1
- * questPageVtx[32] quest page background texture: row 3, column 1
- * questPageVtx[36] quest page background texture: row 4, column 1
- * questPageVtx[40] quest page background texture: row 0, column 2
- * questPageVtx[44] quest page background texture: row 1, column 2
- * questPageVtx[48] quest page background texture: row 2, column 2
- * questPageVtx[52] quest page background texture: row 3, column 2
- * questPageVtx[56] quest page background texture: row 4, column 2
- * 
- * // VTX_PAGE_QUEST_QUADS
- * None
- */
+typedef enum {
+    // 0..59 are the 15 background textures
+    /*  0 */ QUAD_QUEST_PAGE_BG_FIRST,
+    /* 14 */ QUAD_QUEST_PAGE_BG_LAST = PAGE_BG_QUADS - 1,
+    // VTX_PAGE_QUEST_QUADS is 0
+    /* 15 */ QUAD_QUEST_PAGE_MAX
+} QuestPageQuad;
 
-/**
- * questVtx
- * 
- * questVtx[0] quest icon: QUEST_REMAINS_ODOLWA
- * questVtx[4] quest icon: QUEST_REMAINS_GOHT
- * questVtx[8] quest icon: QUEST_REMAINS_GYORG
- * questVtx[12] quest icon: QUEST_REMAINS_TWINMOLD
- * questVtx[16] quest icon: QUEST_SHIELD
- * questVtx[20] quest icon: QUEST_SWORD
- * questVtx[24] quest icon: QUEST_SONG_SONATA
- * questVtx[28] quest icon: QUEST_SONG_LULLABY
- * questVtx[32] quest icon: QUEST_SONG_BOSSA_NOVA
- * questVtx[36] quest icon: QUEST_SONG_ELEGY
- * questVtx[40] quest icon: QUEST_SONG_OATH
- * questVtx[44] quest icon: QUEST_SONG_SARIA
- * questVtx[48] quest icon: QUEST_SONG_TIME
- * questVtx[52] quest icon: QUEST_SONG_HEALING
- * questVtx[56] quest icon: QUEST_SONG_EPONA
- * questVtx[60] quest icon: QUEST_SONG_SOARING
- * questVtx[64] quest icon: QUEST_SONG_STORMS
- * questVtx[68] quest icon: QUEST_SONG_SUN
- * questVtx[72] quest icon: QUEST_BOMBERS_NOTEBOOK
- * questVtx[76] quest icon: QUEST_QUIVER
- * questVtx[80] quest icon: QUEST_BOMB_BAG
- * questVtx[84] quest icon: QUEST_SKULL_TOKEN
- * questVtx[88] quest icon: QUEST_HEART_PIECE
- * questVtx[92] ocarina song button index 0
- * questVtx[96] ocarina song button index 1
- * questVtx[100] ocarina song button index 2
- * questVtx[104] ocarina song button index 3
- * questVtx[108] ocarina song button index 4
- * questVtx[112] ocarina song button index 5
- * questVtx[116] ocarina song button index 6
- * questVtx[120] ocarina song button index 7
- * questVtx[124] ocarina input button index 0
- * questVtx[128] ocarina input button index 1
- * questVtx[132] ocarina input button index 2
- * questVtx[140] ocarina input button index 3
- * questVtx[144] ocarina input button index 4
- * questVtx[148] ocarina input button index 5
- * questVtx[152] ocarina input button index 6
- * questVtx[156] ocarina input button index 7
- */
-
-// QuestQuad;
+typedef enum {
+    // 0 to 24 matches the `QuestItem` enum
+    // Notes showing the correct song
+    /* 25 */ QUAD_QUEST_SONG_NOTE_A1 = QUEST_HEART_PIECE + 1,
+    /* 26 */ QUAD_QUEST_SONG_NOTE_A2,
+    /* 27 */ QUAD_QUEST_SONG_NOTE_A3,
+    /* 28 */ QUAD_QUEST_SONG_NOTE_A4,
+    /* 29 */ QUAD_QUEST_SONG_NOTE_A5,
+    /* 30 */ QUAD_QUEST_SONG_NOTE_A6,
+    /* 31 */ QUAD_QUEST_SONG_NOTE_A7,
+    /* 32 */ QUAD_QUEST_SONG_NOTE_A8,
+    // Notes appearing when playing
+    /* 33 */ QUAD_QUEST_SONG_NOTE_B1,
+    /* 34 */ QUAD_QUEST_SONG_NOTE_B2,
+    /* 35 */ QUAD_QUEST_SONG_NOTE_B3,
+    /* 36 */ QUAD_QUEST_SONG_NOTE_B4,
+    /* 37 */ QUAD_QUEST_SONG_NOTE_B5,
+    /* 38 */ QUAD_QUEST_SONG_NOTE_B6,
+    /* 39 */ QUAD_QUEST_SONG_NOTE_B7,
+    /* 40 */ QUAD_QUEST_SONG_NOTE_B8,
+    /* 41 */ QUAD_QUEST_MAX
+} QuestQuad;
 
 // === DUNGEON MAP === //
 
-/**
- * mapPageVtx (Dungeon)
- * 
- * // PAGE_BG_QUADS
- * mapPageVtx[0] map page background texture:  row 0, column 0
- * mapPageVtx[4] map page background texture:  row 1, column 0
- * mapPageVtx[8] map page background texture:  row 2, column 0
- * mapPageVtx[12] map page background texture: row 3, column 0
- * mapPageVtx[16] map page background texture: row 4, column 0
- * mapPageVtx[20] map page background texture: row 0, column 1
- * mapPageVtx[24] map page background texture: row 1, column 1
- * mapPageVtx[28] map page background texture: row 2, column 1
- * mapPageVtx[32] map page background texture: row 3, column 1
- * mapPageVtx[36] map page background texture: row 4, column 1
- * mapPageVtx[40] map page background texture: row 0, column 2
- * mapPageVtx[44] map page background texture: row 1, column 2
- * mapPageVtx[48] map page background texture: row 2, column 2
- * mapPageVtx[52] map page background texture: row 3, column 2
- * mapPageVtx[56] map page background texture: row 4, column 2
- * 
- * // VTX_PAGE_MAP_DUNGEON
- * mapPageVtx[60] dungeon title
- * mapPageVtx[64] dungeon boss key
- * mapPageVtx[68] dungeon compass
- * mapPageVtx[72] dungeon map
- * mapPageVtx[76] dungeon stray fairy glowing circle
- * mapPageVtx[80] dungeon unused
- */
+typedef enum {
+    // 0..59 are the 15 background textures
+    /*  0 */ QUAD_MAP_PAGE_DUNGEON_BG_FIRST,
+    /* 14 */ QUAD_MAP_PAGE_DUNGEON_BG_LAST = PAGE_BG_QUADS - 1,
+    /* 15 */ QUAD_MAP_PAGE_DUNGEON_TITLE,
+    /* 16 */ QUAD_MAP_PAGE_DUNGEON_BOSS_KEY,
+    /* 17 */ QUAD_MAP_PAGE_DUNGEON_COMPASS,
+    /* 18 */ QUAD_MAP_PAGE_DUNGEON_MAP,
+    /* 19 */ QUAD_MAP_PAGE_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE,
+    /* 20 */ QUAD_MAP_PAGE_DUNGEON_UNUSED,
+    /* 21 */ QUAD_MAP_PAGE_DUNGEON_MAX
+} DungeonMapPageQuad;
 
 // === WORLD MAP === //
-
-/**
- * mapPageVtx (World)
- * 
- * // PAGE_BG_QUADS
- * mapPageVtx[0] map page background texture:  row 0, column 0
- * mapPageVtx[4] map page background texture:  row 1, column 0
- * mapPageVtx[8] map page background texture:  row 2, column 0
- * mapPageVtx[12] map page background texture: row 3, column 0
- * mapPageVtx[16] map page background texture: row 4, column 0
- * mapPageVtx[20] map page background texture: row 0, column 1
- * mapPageVtx[24] map page background texture: row 1, column 1
- * mapPageVtx[28] map page background texture: row 2, column 1
- * mapPageVtx[32] map page background texture: row 3, column 1
- * mapPageVtx[36] map page background texture: row 4, column 1
- * mapPageVtx[40] map page background texture: row 0, column 2
- * mapPageVtx[44] map page background texture: row 1, column 2
- * mapPageVtx[48] map page background texture: row 2, column 2
- * mapPageVtx[52] map page background texture: row 3, column 2
- * mapPageVtx[56] map page background texture: row 4, column 2
- * 
- * // VTX_PAGE_MAP_WORLD
- * mapPageVtx[60] world map clouds Clock Town 1
- * mapPageVtx[64] world map clouds Clock Town 2
- * mapPageVtx[68] world map clouds Woodfall 1
- * mapPageVtx[72] world map clouds Woodfall 2
- * mapPageVtx[76] world map clouds Woodfall 3
- * mapPageVtx[80] world map clouds Snowhead 1
- * mapPageVtx[84] world map clouds Snowhead 2
- * mapPageVtx[88] world map clouds Snowhead 3
- * mapPageVtx[92] world map clouds Romani Rance
- * mapPageVtx[96] world map clouds Great Bay 1
- * mapPageVtx[100] world map clouds Great Bay 2
- * mapPageVtx[104] world map clouds Great Bay 3
- * mapPageVtx[108] world map clouds Great Bay 4
- * mapPageVtx[112] world map clouds Stone Tower 1
- * mapPageVtx[116] world map clouds Stone Tower 2
- * mapPageVtx[120] world map region Great Bay
- * mapPageVtx[124] world map region Zora Hall
- * mapPageVtx[128] world map region Romani Ranch
- * mapPageVtx[132] world map region Deku Palace
- * mapPageVtx[136] world map region Woodfall
- * mapPageVtx[140] world map region Clock Town
- * mapPageVtx[144] world map region Snowhead
- * mapPageVtx[148] world map region Ikana Graveyard
- * mapPageVtx[152] world map region Ikana Canyon
- * mapPageVtx[156] world map region Goron Village
- * mapPageVtx[160] world map region Stone Tower
- * mapPageVtx[164] world map owl warp Great Bay Coast
- * mapPageVtx[168] world map owl warp Zora Cape
- * mapPageVtx[172] world map owl warp snowhead
- * mapPageVtx[176] world map owl warp Mountain Village
- * mapPageVtx[180] world map owl warp Clock Town
- * mapPageVtx[184] world map owl warp Milk Road
- * mapPageVtx[188] world map owl warp Woodfall
- * mapPageVtx[192] world map owl warp Southern Swamp
- * mapPageVtx[196] world map owl warp Ikana Canyon
- * mapPageVtx[200] world map owl warp Stone Tower
- * 
- * WORLD_MAP_IMAGE_FRAG_NUM
- * mapPageVtx[204] World Map fragment row 1
- * mapPageVtx[208] World Map fragment row 2
- * mapPageVtx[212] World Map fragment row 3
- * mapPageVtx[216] World Map fragment row 4
- * mapPageVtx[220] World Map fragment row 5
- * mapPageVtx[224] World Map fragment row 6
- * mapPageVtx[228] World Map fragment row 7
- * mapPageVtx[232] World Map fragment row 8
- * mapPageVtx[236] World Map fragment row 9
- * mapPageVtx[240] World Map fragment row 10
- * mapPageVtx[244] World Map fragment row 11
- * mapPageVtx[248] World Map fragment row 12
- * mapPageVtx[252] World Map fragment row 13
- * mapPageVtx[256] World Map fragment row 14
- * mapPageVtx[260] World Map fragment row 15
- */
-
-// MapQuad
 
 #define WORLD_MAP_IMAGE_WIDTH 216
 #define WORLD_MAP_IMAGE_HEIGHT 128
 #define WORLD_MAP_IMAGE_FRAG_HEIGHT ((TMEM_SIZE / 2) / (WORLD_MAP_IMAGE_WIDTH * G_IM_SIZ_8b_BYTES))
 #define WORLD_MAP_IMAGE_FRAG_NUM (((WORLD_MAP_IMAGE_HEIGHT - 1) / WORLD_MAP_IMAGE_FRAG_HEIGHT) + 1)
+#define WORLD_MAP_NUM_CLOUDS 15
+
+typedef enum {
+    // 0..59 are the 15 background textures
+    /*  0 */ QUAD_MAP_PAGE_WORLD_BG_FIRST,
+    /* 14 */ QUAD_MAP_PAGE_WORLD_BG_LAST = PAGE_BG_QUADS - 1,
+    // Clouds covering the world map
+    /* 15 */ QUAD_MAP_PAGE_WORLD_CLOUDS_FIRST,
+    /* 29 */ QUAD_MAP_PAGE_WORLD_CLOUDS_LAST = QUAD_MAP_PAGE_WORLD_CLOUDS_FIRST + WORLD_MAP_NUM_CLOUDS - 1,
+    // Markers for regions
+    /* 30 */ QUAD_MAP_PAGE_WORLD_REGION_FIRST,
+    /* 40 */ QUAD_MAP_PAGE_WORLD_REGION_LAST = QUAD_MAP_PAGE_WORLD_REGION_FIRST + REGION_MAX - 1,
+    // Markers for owl warps
+    /* 41 */ QUAD_MAP_PAGE_WORLD_WARP_FIRST,
+    /* 50 */ QUAD_MAP_PAGE_WORLD_WARP_LAST = QUAD_MAP_PAGE_WORLD_WARP_FIRST + OWL_WARP_ENTRANCE - 1,
+    // Fragments of the world map
+    /* 51 */ QUAD_MAP_PAGE_WORLD_IMAGE_FIRST,
+    /* 65 */ QUAD_MAP_PAGE_WORLD_IMAGE_LAST = QUAD_MAP_PAGE_WORLD_IMAGE_FIRST + WORLD_MAP_IMAGE_FRAG_NUM - 1,
+    /* 66 */ QUAD_MAP_PAGE_WORLD_MAX
+} WorldMapPageQuad;
 
 // === INFO PANEL === //
 
@@ -620,6 +353,48 @@ typedef enum {
     /* 5 */ PAUSE_QUAD_CURSOR_MAX
 } PauseCursorQuad;
 
+// === PROMPT === //
+
+/**
+ * promptPageVtx (unused in MM, inferred from OoT)
+ * 
+ * // PAGE_BG_QUADS
+ * promptPageVtx[0] prompt page background texture:  row 0, column 0
+ * promptPageVtx[4] prompt page background texture:  row 1, column 0
+ * promptPageVtx[8] prompt page background texture:  row 2, column 0
+ * promptPageVtx[12] prompt page background texture: row 3, column 0
+ * promptPageVtx[16] prompt page background texture: row 4, column 0
+ * promptPageVtx[20] prompt page background texture: row 0, column 1
+ * promptPageVtx[24] prompt page background texture: row 1, column 1
+ * promptPageVtx[28] prompt page background texture: row 2, column 1
+ * promptPageVtx[32] prompt page background texture: row 3, column 1
+ * promptPageVtx[36] prompt page background texture: row 4, column 1
+ * promptPageVtx[40] prompt page background texture: row 0, column 2
+ * promptPageVtx[44] prompt page background texture: row 1, column 2
+ * promptPageVtx[48] prompt page background texture: row 2, column 2
+ * promptPageVtx[52] prompt page background texture: row 3, column 2
+ * promptPageVtx[56] prompt page background texture: row 4, column 2
+ * 
+ * // QUAD_PROMPT_MAX
+ * promptPageVtx[60] message
+ * promptPageVtx[64] cursor left
+ * promptPageVtx[68] cursor right
+ * promptPageVtx[72] choice (yes)
+ * promptPageVtx[76] choice (no)
+ */
+
+#define PAUSE_PROMPT_YES 0
+#define PAUSE_PROMPT_NO 4
+
+typedef enum {
+    /* 0 */ QUAD_PROMPT_MESSAGE,
+    /* 1 */ QUAD_PROMPT_CURSOR_LEFT,
+    /* 2 */ QUAD_PROMPT_CURSOR_RIGHT,
+    /* 3 */ QUAD_PROMPT_CHOICE_YES,
+    /* 4 */ QUAD_PROMPT_CHOICE_NO,
+    /* 5 */ QUAD_PROMPT_MAX
+} PromptQuad;
+
 
 // NES
 void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos);
@@ -638,7 +413,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play);
 void KaleidoScope_UpdateQuestCursor(PlayState* play);
 
 // Item
-void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx);
+void KaleidoScope_SetCursorVtxPos(PauseContext* pauseCtx, u16 index, Vtx* vtx);
 void KaleidoScope_DrawItemSelect(PlayState* play);
 void KaleidoScope_UpdateItemCursor(PlayState* play);
 void KaleidoScope_UpdateItemEquip(PlayState* play);

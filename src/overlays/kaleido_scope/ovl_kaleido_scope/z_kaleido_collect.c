@@ -137,7 +137,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
+    KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_QUEST] * 4, pauseCtx->questVtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);

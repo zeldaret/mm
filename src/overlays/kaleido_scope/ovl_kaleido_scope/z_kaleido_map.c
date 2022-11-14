@@ -139,8 +139,8 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    j = 72 + (pauseCtx->cursorSlot[PAUSE_MAP] * 4);
-    KaleidoScope_SetCursorVtx(pauseCtx, j, pauseCtx->mapPageVtx);
+    j = (QUAD_MAP_PAGE_DUNGEON_MAP + pauseCtx->cursorSlot[PAUSE_MAP]) * 4;
+    KaleidoScope_SetCursorVtxPos(pauseCtx, j, pauseCtx->mapPageVtx);
 
     pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
     if (pauseCtx->cursorSpecialPos == 0) {
@@ -150,11 +150,19 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_MAP];
     }
 
-    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60], 4 * 4, 0);
+    // Set vertices for:
+    // QUAD_MAP_PAGE_DUNGEON_TITLE,
+    // QUAD_MAP_PAGE_DUNGEON_BOSS_KEY,
+    // QUAD_MAP_PAGE_DUNGEON_COMPASS,
+    // QUAD_MAP_PAGE_DUNGEON_MAP
+    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[QUAD_MAP_PAGE_DUNGEON_TITLE * 4], 4 * 4, 0);
+
+    // Dungeon Title
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
 
+    // QUAD_MAP_PAGE_DUNGEON_TITLE
     POLY_OPA_DISP =
         Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sDungeonTitleTextures[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
 
@@ -208,6 +216,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
+                    // QUAD_MAP_PAGE_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
                     pauseCtx->mapPageVtx[76].v.ob[0] = pauseCtx->mapPageVtx[78].v.ob[0] = -16;
 
                     pauseCtx->mapPageVtx[77].v.ob[0] = pauseCtx->mapPageVtx[79].v.ob[0] =
@@ -218,7 +227,8 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     pauseCtx->mapPageVtx[78].v.ob[1] = pauseCtx->mapPageVtx[79].v.ob[1] =
                         pauseCtx->mapPageVtx[76].v.ob[1] - 24;
 
-                    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[76], 4, 0);
+                    gSPVertex(POLY_OPA_DISP++,
+                              &pauseCtx->mapPageVtx[QUAD_MAP_PAGE_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE * 4], 4, 0);
 
                     POLY_OPA_DISP =
                         Gfx_DrawTexQuad4b(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
@@ -255,6 +265,9 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
+            // QUAD_MAP_PAGE_DUNGEON_BOSS_KEY
+            // QUAD_MAP_PAGE_DUNGEON_COMPASS
+            // QUAD_MAP_PAGE_DUNGEON_MAP
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
     }
@@ -535,7 +548,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
+    KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
     // Draw the world map image
     if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
@@ -591,7 +604,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         // Set the vertices for the first 8 quads attached to the world map texture.
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 8 * 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[QUAD_MAP_PAGE_WORLD_IMAGE_FIRST * 4], 8 * 4, 0);
 
         // Process the first 72 rows of pixels for gWorldMapImageTex, 9 rows at a time over 8 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
@@ -606,7 +619,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
         // Set the vertices for the last 7 quads attached to the world map texture:
         // 6 quads with a height of 9, 1 quad with a height of 2
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], (6 + 1) * 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_IMAGE_FIRST + 8) * 4], (6 + 1) * 4, 0);
 
         // Process the next 54 rows of pixels for gWorldMapImageTex, 9 rows at a time over 6 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
@@ -642,10 +655,10 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     // Draw clouds over the world map
     // Iterate over cloud bits (n)
-    for (n = 0; n < 15; n++) {
+    for (n = 0; n < WORLD_MAP_NUM_CLOUDS; n++) {
         if (!(((void)0, gSaveContext.save.worldMapCloudVisibility) & gBitFlags[n])) {
 
-            gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60 + n * 4], 4, 0);
+            gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_CLOUDS_FIRST + n) * 4], 4, 0);
 
             POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sCloudTextures[n], gVtxPageMapWorldQuadsWidth[n],
                                                gVtxPageMapWorldQuadsHeight[n], 0);
@@ -678,6 +691,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
             gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
 
+            // QUAD_MAP_PAGE_WORLD_REGION_FIRST
             pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
             pauseCtx->mapPageVtx[121].v.ob[0] = pauseCtx->mapPageVtx[123].v.ob[0] =
@@ -692,7 +706,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Loop over RegionId (i), unused vtxIndex (j), unused (k)
         for (i = 0, j = 0; i < REGION_MAX; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
-                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[120 + i * 4], 4, 0);
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_REGION_FIRST + i) * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
         }
@@ -710,6 +724,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
             gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
 
+            // QUAD_MAP_PAGE_WORLD_WARP_FIRST
             pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
             pauseCtx->mapPageVtx[165].v.ob[0] = pauseCtx->mapPageVtx[167].v.ob[0] =
@@ -724,7 +739,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Loop over OwlWarpId (i), unused vtxIndex (j), unused (k)
         for (i = 0, j = 0; i < OWL_WARP_ENTRANCE; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
-                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_WARP_FIRST + i) * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
         }
