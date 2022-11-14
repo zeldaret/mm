@@ -71,7 +71,7 @@ extern TexturePtr D_08091440;
 // Page Textures (Background of Page):
 // Broken up into multiple textures.
 // Numbered by column/row.
-TexturePtr sSelectMaskTextures[] = {
+TexturePtr sMaskPageBgTextures[] = {
     // Column 0
     &D_08064440, // gPauseMasks00Tex
     &D_0806E440, // gPauseMasks01Tex
@@ -91,7 +91,7 @@ TexturePtr sSelectMaskTextures[] = {
     &D_08082440, // gPauseMasks23Tex
     &D_0808BA40, // gPauseMasks24Tex
 };
-TexturePtr sSelectItemTextures[] = {
+TexturePtr sItemPageBgTextures[] = {
     // Column 0
     gPauseSelectItem00ENGTex,
     &D_08070240, // gPauseSelectItem01Tex
@@ -111,7 +111,7 @@ TexturePtr sSelectItemTextures[] = {
     &D_08084240, // gPauseSelectItem23Tex
     &D_0808D840, // gPauseSelectItem24Tex
 };
-TexturePtr sMapTextures[] = {
+TexturePtr sMapPageBgTextures[] = {
     // Column 0
     &D_08068040, // gPauseMap00Tex
     &D_08072040, // gPauseMap01Tex
@@ -131,7 +131,7 @@ TexturePtr sMapTextures[] = {
     &D_08086040, // gPauseMap23Tex
     &D_0808F640, // gPauseMap24Tex
 };
-TexturePtr sQuestStatusTextures[] = {
+TexturePtr sQuestPageBgTextures[] = {
     // Column 0
     gPauseQuestStatus00ENGTex,
     &D_08073E40, // gPauseQuestStatus01Tex
@@ -339,11 +339,10 @@ void func_80821A04(PlayState* play) {
 
     pauseCtx->cursorShrinkRate = 4.0f;
 
-    // TODO: indexing of D_801C6A98 is likely wrong
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
-    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][1];
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][1];
+    gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][1];
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
 
     gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
@@ -371,7 +370,7 @@ void KaleidoScope_SwitchPage(PauseContext* pauseCtx, u8 direction) {
     pauseCtx->switchPageTimer = 0;
 
     if (direction == SWITCH_PAGE_LEFT) {
-        pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
+        pauseCtx->nextPageMode = (pauseCtx->pageIndex * 2) + 1;
         play_sound(NA_SE_SY_WIN_SCROLL_LEFT);
         pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
     } else { // SWITCH_PAGE_RIGHT
@@ -400,42 +399,50 @@ void KaleidoScope_HandlePageToggles(PlayState* play, Input* input) {
     //! FAKE
     if (1) {}
 
-    if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn) {
-        if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
-            // Switch the page to the right regardless of where the cursor is
-            if (interfaceCtx->unk_212 == 6) {
-                func_8011552C(play, 0x15);
+    if ((pauseCtx->debugEditor != DEBUG_EDITOR_NONE) || pauseCtx->itemDescriptionOn) {
+        return;
+    }
+
+    if (CHECK_BTN_ALL(input->cur.button, BTN_DRIGHT) || CHECK_BTN_ALL(input->press.button, BTN_R)) {
+        // Switch the page to the right regardless of where the cursor is
+        if (interfaceCtx->unk_212 == 6) {
+            func_8011552C(play, 0x15);
+        }
+        KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
+        return;
+    }
+
+    if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT) || CHECK_BTN_ALL(input->press.button, BTN_Z)) {
+        // Switch the page to the left regardless of where the cursor is
+        if (interfaceCtx->unk_212 == 6) {
+            func_8011552C(play, 0x15);
+        }
+        KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
+        return;
+    }
+
+    if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
+        //
+        if (pauseCtx->stickAdjX < -30) {
+            pauseCtx->pageSwitchInputTimer++;
+            // Switch the page to the left after a certain number of frames with held input or after a second press
+            if ((pauseCtx->pageSwitchInputTimer >= 10) || (pauseCtx->pageSwitchInputTimer == 0)) {
+                KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
             }
-            KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
-        } else if (CHECK_BTN_ALL(input->cur.button, BTN_DLEFT) || CHECK_BTN_ALL(input->press.button, BTN_Z)) {
-            // Switch the page to the left regardless of where the cursor is
-            if (interfaceCtx->unk_212 == 6) {
-                func_8011552C(play, 0x15);
+        } else {
+            // stickAdjX is no longer held, so that the next input to the left will immediately switch pages
+            pauseCtx->pageSwitchInputTimer = -1;
+        }
+    } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) {
+        if (pauseCtx->stickAdjX > 30) {
+            pauseCtx->pageSwitchInputTimer++;
+            // Switch the page to the right after a certain number of frames with held input or after a second press
+            if ((pauseCtx->pageSwitchInputTimer >= 10) || (pauseCtx->pageSwitchInputTimer == 0)) {
+                KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
             }
-            KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
-        } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-            //
-            if (pauseCtx->stickAdjX < -30) {
-                pauseCtx->pageSwitchInputTimer++;
-                // Switch the page to the left after a certain number of frames with held input or after a second press
-                if ((pauseCtx->pageSwitchInputTimer >= 10) || (pauseCtx->pageSwitchInputTimer == 0)) {
-                    KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_LEFT);
-                }
-            } else {
-                // stickAdjX is no longer held, so that the next input to the left will immediately switch pages
-                pauseCtx->pageSwitchInputTimer = -1;
-            }
-        } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) {
-            if (pauseCtx->stickAdjX > 30) {
-                pauseCtx->pageSwitchInputTimer++;
-                // Switch the page to the right after a certain number of frames with held input or after a second press
-                if ((pauseCtx->pageSwitchInputTimer >= 10) || (pauseCtx->pageSwitchInputTimer == 0)) {
-                    KaleidoScope_SwitchPage(pauseCtx, SWITCH_PAGE_RIGHT);
-                }
-            } else {
-                // stickAdjY is no longer held, so that the next input to the right will immediately switch pages
-                pauseCtx->pageSwitchInputTimer = -1;
-            }
+        } else {
+            // stickAdjY is no longer held, so that the next input to the right will immediately switch pages
+            pauseCtx->pageSwitchInputTimer = -1;
         }
     }
 }
@@ -578,7 +585,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, sSelectItemTextures);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, sItemPageBgTextures);
 
             KaleidoScope_DrawItemSelect(play);
         }
@@ -598,7 +605,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapTextures);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapPageBgTextures);
 
             if (sInDungeonScene) {
                 KaleidoScope_DrawDungeonMap(play);
@@ -627,7 +634,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, sQuestStatusTextures);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, sQuestPageBgTextures);
 
             KaleidoScope_DrawQuestStatus(play);
         }
@@ -649,7 +656,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, sSelectMaskTextures);
+            POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, sMaskPageBgTextures);
 
             KaleidoScope_DrawMaskSelect(play);
         }
@@ -672,7 +679,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     POLY_OPA_DISP =
-                        KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, sSelectItemTextures);
+                        KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->itemPageVtx, sItemPageBgTextures);
 
                     KaleidoScope_DrawItemSelect(play);
                 }
@@ -693,7 +700,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapTextures);
+                POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapPageBgTextures);
 
                 if (sInDungeonScene) {
                     KaleidoScope_DrawDungeonMap(play);
@@ -744,7 +751,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 POLY_OPA_DISP =
-                    KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, sQuestStatusTextures);
+                    KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->questPageVtx, sQuestPageBgTextures);
 
                 KaleidoScope_DrawQuestStatus(play);
                 break;
@@ -765,7 +772,7 @@ void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                 POLY_OPA_DISP =
-                    KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, sSelectMaskTextures);
+                    KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->maskPageVtx, sMaskPageBgTextures);
 
                 KaleidoScope_DrawMaskSelect(play);
                 break;
@@ -966,8 +973,8 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
     if (pauseCtx->cursorSpecialPos != 0) {
         j = (pauseCtx->cursorSpecialPos * 4) - 32;
-        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
-        pauseCtx->cursorVtx[(PAUSE_QUAD_CURSOR_0 * 4) + 0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
+        pauseCtx->cursorVtx[0].v.ob[0] = pauseCtx->infoPanelVtx[j].v.ob[0];
+        pauseCtx->cursorVtx[0].v.ob[1] = pauseCtx->infoPanelVtx[j].v.ob[1];
     }
 
     y = pauseCtx->infoPanelOffsetY - 80;
@@ -1006,7 +1013,7 @@ void KaleidoScope_DrawInfoPanel(PlayState* play) {
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->infoPanelVtx[16], 4, 0);
 
-            if (pauseCtx->nameColorSet == 1) {
+            if (pauseCtx->nameColorSet == PAUSE_NAME_COLOR_SET_GREY) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 70, 70, 70, 255);
             } else {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -1176,7 +1183,7 @@ void KaleidoScope_UpdateNamePanel(PlayState* play) {
             }
             pauseCtx->nameDisplayTimer = 0;
         }
-    } else if (pauseCtx->nameColorSet == 0) {
+    } else if (pauseCtx->nameColorSet == PAUSE_NAME_COLOR_SET_WHITE) {
         if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
              (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) &&
              (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) ||
@@ -1214,7 +1221,7 @@ void KaleidoScope_DrawOwlWarpMapPage(PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapTextures);
+    POLY_OPA_DISP = KaleidoScope_DrawPageSections(POLY_OPA_DISP, pauseCtx->mapPageVtx, sMapPageBgTextures);
 
     Matrix_RotateYF(R_PAUSE_WORLD_MAP_YAW / 1000.0f, MTXMODE_NEW);
 
@@ -1430,7 +1437,7 @@ void KaleidoScope_DrawOwlWarpInfoPanel(PlayState* play) {
 
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->infoPanelVtx[16], 4, 0);
 
-        if (pauseCtx->nameColorSet == 1) {
+        if (pauseCtx->nameColorSet == PAUSE_NAME_COLOR_SET_GREY) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 70, 70, 70, 255);
         } else {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -1462,7 +1469,7 @@ void KaleidoScope_UpdateOwlWarpNamePanel(PlayState* play) {
             }
             pauseCtx->nameDisplayTimer = 0;
         }
-    } else if (pauseCtx->nameColorSet == 0) {
+    } else if (pauseCtx->nameColorSet == PAUSE_NAME_COLOR_SET_WHITE) {
         if (((pauseCtx->pageIndex == PAUSE_QUEST) && (pauseCtx->cursorSlot[PAUSE_QUEST] >= QUEST_SONG_SONATA) &&
              (pauseCtx->cursorSlot[PAUSE_QUEST] <= QUEST_SONG_SUN) &&
              (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE_CURSOR_ON_SONG)) ||
@@ -2161,7 +2168,7 @@ void KaleidoScope_SetVertices(PlayState* play, GraphicsContext* gfxCtx) {
         pauseCtx->questPageVtx = GRAPH_ALLOC(gfxCtx, ((PAGE_BG_QUADS + VTX_PAGE_QUEST_QUADS) * 4) * sizeof(Vtx));
         KaleidoScope_SetPageVertices(play, pauseCtx->questPageVtx, VTX_PAGE_QUEST, VTX_PAGE_QUEST_QUADS);
 
-        pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, 156 * sizeof(Vtx));
+        pauseCtx->questVtx = GRAPH_ALLOC(gfxCtx, (39 * 4) * sizeof(Vtx));
 
         for (k = 0, j = 0; j < 39; j++, k += 4) {
             if (j <= QUEST_SWORD) {
@@ -2522,13 +2529,16 @@ void KaleidoScope_UpdateCursorSize(PlayState* play) {
                 } else {
                     pauseCtx->cursorX = sDungeonMapCursorsX[pauseCtx->cursorPoint[PAUSE_MAP]];
                     pauseCtx->cursorY = sDungeonMapCursorsY[pauseCtx->cursorPoint[PAUSE_MAP]];
-                    if (pauseCtx->cursorSlot[pauseCtx->pageIndex] >= 4) {
+                    if (pauseCtx->cursorSlot[pauseCtx->pageIndex] >= DUNGEON_FLOOR_INDEX_4) {
+                        // Floors
                         pauseCtx->cursorWidth = 18.0f;
                         pauseCtx->cursorHeight = 12.0f;
-                    } else if (pauseCtx->cursorSlot[pauseCtx->pageIndex] == 3) {
+                    } else if (pauseCtx->cursorSlot[pauseCtx->pageIndex] == DUNGEON_STRAY_FAIRIES) {
+                        // Stray Fairies
                         pauseCtx->cursorHeight = 12.0f;
                         pauseCtx->cursorWidth = 40.0f;
                     } else {
+                        // Map, Compass, Boss Key
                         pauseCtx->cursorHeight = 15.0f;
                         pauseCtx->cursorWidth = 15.0f;
                     }
@@ -2633,7 +2643,7 @@ void KaleidoScope_DrawCursor(PlayState* play) {
             gDPLoadTextureBlock(POLY_OPA_DISP++, &D_08064340, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            gSPVertex(POLY_OPA_DISP++, pauseCtx->cursorVtx, 4, 0);
+            gSPVertex(POLY_OPA_DISP++, &pauseCtx->cursorVtx[0], 4, 0);
             gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             Matrix_Pop();
         }
@@ -2772,6 +2782,7 @@ void KaleidoScope_GrayOutTextureRGBA32(u32* texture, u16 pixelCount) {
     if (texture == NULL) {}
 
     for (i = 0; i < pixelCount; i++) {
+        //! FAKE
         j = i;
         if ((texture[j] & 0xFFFFFF00) != 0) {
             rgb = texture[j] >> 8;
@@ -2800,10 +2811,10 @@ void KaleidoScope_UpdateOpening(PlayState* play) {
         func_80112C0C(play, 1);
 
         if (pauseCtx->cursorSpecialPos == 0) {
-            gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_801C6A98[pauseCtx->pageIndex][0];
-            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = D_801C6A98[pauseCtx->pageIndex][1];
-            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = D_801C6A98[pauseCtx->pageIndex][1];
-            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_801C6A98[pauseCtx->pageIndex][1];
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex][0];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex][1];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex][1];
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = gPageSwitchNextButtonStatus[pauseCtx->pageIndex][1];
             gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
         } else {
             gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -3061,7 +3072,7 @@ void KaleidoScope_Update(PlayState* play) {
 
         case PAUSE_STATE_SAVEPROMPT:
             switch (pauseCtx->savePromptState) {
-                case PAUSE_SAVEPROMPT_STATE_0:
+                case PAUSE_SAVEPROMPT_STATE_APPEARING:
                     pauseCtx->roll -= 78.5f;
                     sPauseCursorLeftX -= (s16)(sPauseCursorLeftMoveOffsetX / 4);
                     sPauseCursorRightX -= (s16)(sPauseCursorRightMoveOffsetX / 4);
@@ -3075,7 +3086,7 @@ void KaleidoScope_Update(PlayState* play) {
                     if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
                         if (pauseCtx->promptChoice != PAUSE_PROMPT_YES) {
                             func_8011552C(play, 0xA);
-                            pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_2;
+                            pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU;
                         } else {
                             play_sound(NA_SE_SY_PIECE_OF_HEART);
                             Play_SaveCycleSceneFlags(&play->state);
@@ -3099,7 +3110,7 @@ void KaleidoScope_Update(PlayState* play) {
                         func_801A3AEC(0);
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                         func_8011552C(play, 0xA);
-                        pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_2;
+                        pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU;
                         D_8082B90C = pauseCtx->roll;
                     }
                     break;
@@ -3145,21 +3156,26 @@ void KaleidoScope_Update(PlayState* play) {
                     }
                     break;
 
-                case PAUSE_SAVEPROMPT_STATE_2:
+                case PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU:
                     pauseCtx->roll += 78.5f;
                     sPauseCursorLeftX += (s16)(sPauseCursorLeftMoveOffsetX / 4);
                     sPauseCursorRightX += (s16)(sPauseCursorRightMoveOffsetX / 4);
+
                     if (pauseCtx->roll >= -314.0f) {
                         pauseCtx->state = PAUSE_STATE_MAIN;
-                        pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_0;
+                        pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_APPEARING;
                         pauseCtx->roll = -314.0f;
                         pauseCtx->itemPageRoll = pauseCtx->mapPageRoll = pauseCtx->questPageRoll =
                             pauseCtx->maskPageRoll = 0.0f;
                         func_8011552C(play, 0x15);
-                        gSaveContext.buttonStatus[EQUIP_SLOT_B] = D_801C6A98[pauseCtx->pageIndex + 1][0];
-                        gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-                        gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = D_801C6A98[pauseCtx->pageIndex + 1][1];
-                        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = D_801C6A98[pauseCtx->pageIndex + 1][1];
+                        gSaveContext.buttonStatus[EQUIP_SLOT_B] =
+                            gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][0];
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] =
+                            gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][1];
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] =
+                            gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][1];
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] =
+                            gPageSwitchNextButtonStatus[pauseCtx->pageIndex + 1][1];
                         if ((pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) ||
                             (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT)) {
                             KaleidoScope_MoveCursorToSpecialPos(play, pauseCtx->cursorSpecialPos);

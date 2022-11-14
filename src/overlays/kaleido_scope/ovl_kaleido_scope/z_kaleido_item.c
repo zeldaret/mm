@@ -737,7 +737,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
     }
 
     if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
-        bowItemVtx = &pauseCtx->itemVtx[4];
+        bowItemVtx = &pauseCtx->itemVtx[SLOT_BOW * 4];
         offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sEquipAnimTimer;
         offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sEquipAnimTimer;
     } else {
@@ -761,13 +761,13 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
         // Update coordinates of item icon while being equipped
         if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
             // target is the bow slot
-            if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[4].v.ob[0] * 10)) {
+            if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[SLOT_BOW * 4].v.ob[0] * 10)) {
                 pauseCtx->equipAnimX -= offsetX;
             } else {
                 pauseCtx->equipAnimX += offsetX;
             }
 
-            if (pauseCtx->equipAnimY >= (pauseCtx->itemVtx[4].v.ob[1] * 10)) {
+            if (pauseCtx->equipAnimY >= (pauseCtx->itemVtx[SLOT_BOW * 4].v.ob[1] * 10)) {
                 pauseCtx->equipAnimY -= offsetY;
             } else {
                 pauseCtx->equipAnimY += offsetY;

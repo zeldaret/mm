@@ -656,7 +656,10 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
     }
 
     if (sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
-        bowItemVtx = &pauseCtx->itemVtx[12];
+        //! NOTE: Copied from OoT when `SLOT_BOW` was still valued at 3.
+        // Due to a shift, `SLOT_ARROW_ICE` now occupies slot 3 but this value was not updated
+        // Block is never reached as you can not equip magic arrows from the mask page
+        bowItemVtx = &pauseCtx->itemVtx[SLOT_ARROW_ICE * 4];
         offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sMaskEquipAnimTimer;
         offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sMaskEquipAnimTimer;
     } else {
