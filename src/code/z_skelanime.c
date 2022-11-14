@@ -13,6 +13,13 @@ void PlayerAnimation_Change(PlayState* play, SkelAnime* skelAnime, PlayerAnimati
                             f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
 void SkelAnime_CopyFrameTable(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 
+void AnimationContext_LoadFrame(struct PlayState* play, AnimationEntryData* data);
+void AnimationContext_CopyAll(struct PlayState* play, AnimationEntryData* data);
+void AnimationContext_Interp(struct PlayState* play, AnimationEntryData* data);
+void AnimationContext_CopyTrue(struct PlayState* play, AnimationEntryData* data);
+void AnimationContext_CopyFalse(struct PlayState* play, AnimationEntryData* data);
+void AnimationContext_MoveActor(struct PlayState* play, AnimationEntryData* data);
+
 static AnimationEntryCallback sAnimationLoadDone[] = {
     AnimationContext_LoadFrame, AnimationContext_CopyAll,   AnimationContext_Interp,
     AnimationContext_CopyTrue,  AnimationContext_CopyFalse, AnimationContext_MoveActor,
