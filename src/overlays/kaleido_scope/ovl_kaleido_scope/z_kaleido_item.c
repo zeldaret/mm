@@ -15,7 +15,7 @@ s16 sEquipMagicArrowSlotHoldTimer = 0;
 // Number of frames to move icon from slot to target position when equipping.
 s16 sEquipAnimTimer = 10;
 
-u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][NUM_ITEM_SLOTS] = {
+u8 gPlayerFormSlotRestrictions[PLAYER_FORM_MAX][ITEM_NUM_SLOTS] = {
     // Fierce Deity
     {
         false, // SLOT_OCARINA
@@ -236,9 +236,9 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
     CLOSE_DISPS(gfxCtx);
 }
 
-void KaleidoScope_SetCursorVtx(PauseContext* pauseCtx, u16 index, Vtx* vtx) {
-    pauseCtx->cursorVtx[0].v.ob[0] = vtx[index].v.ob[0];
-    pauseCtx->cursorVtx[0].v.ob[1] = vtx[index].v.ob[1];
+void KaleidoScope_SetCursorVtxPos(PauseContext* pauseCtx, u16 vtxIndex, Vtx* vtx) {
+    pauseCtx->cursorVtx[0].v.ob[0] = vtx[vtxIndex].v.ob[0];
+    pauseCtx->cursorVtx[0].v.ob[1] = vtx[vtxIndex].v.ob[1];
 }
 
 s16 sMagicArrowEffectsR[] = { 255, 100, 255 };
@@ -258,9 +258,9 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     // Loop over c-buttons (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
-    for (i = 0, j = NUM_ITEM_SLOTS * 4; i < 3; i++, j += 4) {
+    for (i = 0, j = ITEM_NUM_SLOTS * 4; i < 3; i++, j += 4) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
-            if (GET_CUR_FORM_BTN_SLOT(i + 1) < NUM_ITEM_SLOTS) {
+            if (GET_CUR_FORM_BTN_SLOT(i + 1) < ITEM_NUM_SLOTS) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j], 4, 0);
                 POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
             }
@@ -272,7 +272,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
     // Draw the item icons
     // Loop over slots (i) and vtx offset (j)
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    for (j = 0, i = 0; i < NUM_ITEM_SLOTS; i++, j += 4) {
+    for (j = 0, i = 0; i < ITEM_NUM_SLOTS; i++, j += 4) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
@@ -323,7 +323,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
             gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
             // Loop over slots (i) and ammoIndex (j)
-            for (j = 0, i = 0; i < NUM_ITEM_SLOTS; i++) {
+            for (j = 0, i = 0; i < ITEM_NUM_SLOTS; i++) {
                 if (gAmmoItems[i] != ITEM_NONE) {
                     if (((void)0, gSaveContext.save.inventory.items[i]) != ITEM_NONE) {
                         KaleidoScope_DrawAmmoCount(pauseCtx, play->state.gfxCtx,
@@ -398,7 +398,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                             pauseCtx->cursorPoint[PAUSE_ITEM] =
                                 pauseCtx->cursorXIndex[PAUSE_ITEM] + (pauseCtx->cursorYIndex[PAUSE_ITEM] * 6);
 
-                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= NUM_ITEM_SLOTS) {
+                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= ITEM_NUM_SLOTS) {
                                 pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorXIndex[PAUSE_ITEM];
                             }
 
@@ -429,7 +429,7 @@ void KaleidoScope_UpdateItemCursor(PlayState* play) {
                             pauseCtx->cursorPoint[PAUSE_ITEM] =
                                 pauseCtx->cursorXIndex[PAUSE_ITEM] + (pauseCtx->cursorYIndex[PAUSE_ITEM] * 6);
 
-                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= NUM_ITEM_SLOTS) {
+                            if (pauseCtx->cursorPoint[PAUSE_ITEM] >= ITEM_NUM_SLOTS) {
                                 pauseCtx->cursorPoint[PAUSE_ITEM] = pauseCtx->cursorXIndex[PAUSE_ITEM];
                             }
 
@@ -737,7 +737,7 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
     }
 
     if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
-        bowItemVtx = &pauseCtx->itemVtx[4];
+        bowItemVtx = &pauseCtx->itemVtx[SLOT_BOW * 4];
         offsetX = ABS_ALT(pauseCtx->equipAnimX - bowItemVtx->v.ob[0] * 10) / sEquipAnimTimer;
         offsetY = ABS_ALT(pauseCtx->equipAnimY - bowItemVtx->v.ob[1] * 10) / sEquipAnimTimer;
     } else {
@@ -761,13 +761,13 @@ void KaleidoScope_UpdateItemEquip(PlayState* play) {
         // Update coordinates of item icon while being equipped
         if (sEquipState == EQUIP_STATE_MAGIC_ARROW_MOVE_TO_BOW_SLOT) {
             // target is the bow slot
-            if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[4].v.ob[0] * 10)) {
+            if (pauseCtx->equipAnimX >= (pauseCtx->itemVtx[SLOT_BOW * 4].v.ob[0] * 10)) {
                 pauseCtx->equipAnimX -= offsetX;
             } else {
                 pauseCtx->equipAnimX += offsetX;
             }
 
-            if (pauseCtx->equipAnimY >= (pauseCtx->itemVtx[4].v.ob[1] * 10)) {
+            if (pauseCtx->equipAnimY >= (pauseCtx->itemVtx[SLOT_BOW * 4].v.ob[1] * 10)) {
                 pauseCtx->equipAnimY -= offsetY;
             } else {
                 pauseCtx->equipAnimY += offsetY;
