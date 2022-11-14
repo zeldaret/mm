@@ -21,7 +21,7 @@ struct CollisionPoly;
 struct EnBox;
 struct EnTorch2;
 
-typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
+typedef void (*ActorFunc)(struct Actor* this, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -94,17 +94,17 @@ typedef struct {
     /* 0x08 */ s16 objectId;
     /* 0x0C */ u32 instanceSize;
     struct {
-    /* 0x10 */ ActorFunc init;
-    /* 0x14 */ ActorFunc destroy;
-    /* 0x18 */ ActorFunc update;
-    /* 0x1C */ ActorFunc draw;
+        /* 0x10 */ ActorFunc init;
+        /* 0x14 */ ActorFunc destroy;
+        /* 0x18 */ ActorFunc update;
+        /* 0x1C */ ActorFunc draw;
     };
 } ActorInit; // size = 0x20
 
 typedef enum {
-    ALLOCTYPE_NORMAL,
-    ALLOCTYPE_ABSOLUTE,
-    ALLOCTYPE_PERMANENT
+    /* 0 */ ALLOCTYPE_NORMAL,
+    /* 1 */ ALLOCTYPE_ABSOLUTE,
+    /* 2 */ ALLOCTYPE_PERMANENT
 } AllocType;
 
 typedef struct {
@@ -119,7 +119,7 @@ typedef struct {
     /* 0x1E */ s8 numLoaded; // original name: "clients"
 } ActorOverlay; // size = 0x20
 
-typedef void(*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
+typedef void (*ActorShadowFunc)(struct Actor* actor, struct Lights* mapper, struct PlayState* play);
 
 typedef struct {
     /* 0x00 */ Vec3s rot; // Current actor shape rotation
@@ -226,7 +226,6 @@ typedef struct {
     /* 0x15A */ s16 pad15A;
 } DynaPolyActor; // size = 0x15C
 
-
 typedef enum Item00Type {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
@@ -318,7 +317,6 @@ typedef enum {
 #define ACTORCTX_FLAG_5 (1 << 5)
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
-
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -424,7 +422,6 @@ typedef enum {
     /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM,
     /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
 } ActorDrawDamageEffectType;
-
 
 #define DEFINE_ACTOR(_name, enumValue, _allocType, _debugName) enumValue,
 #define DEFINE_ACTOR_INTERNAL(_name, enumValue, _allocType, _debugName) enumValue,
