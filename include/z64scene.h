@@ -247,7 +247,7 @@ typedef enum {
 
 typedef struct {
     /* 0x0 */ RoomShapeBase base;
-    /* 0x1 */ u8 amountType; // RoomShapeImageAmountType
+    /* 0x1 */ u8 amountType; // uses `RoomShapeImageAmountType`
     /* 0x4 */ RoomShapeDListsEntry* entry;
 } RoomShapeImageBase; // size = 0x8
 
@@ -266,7 +266,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 bgCamIndex; // for which bg cam index is this entry for
+    /* 0x02 */ u8 bgCamIndex; // the bg cam index this entry is for
     /* 0x04 */ void* source;
     /* 0x08 */ u32 unk_0C;
     /* 0x0C */ void* tlut;
@@ -279,16 +279,16 @@ typedef struct {
 } RoomShapeImageMultiBgEntry; // size = 0x1C
 
 typedef struct {
-    /* 0x00 */ RoomShapeImageBase base;
-    /* 0x08 */ u8 numBackgrounds;
-    /* 0x0C */ RoomShapeImageMultiBgEntry* backgrounds;
+    /* 0x0 */ RoomShapeImageBase base;
+    /* 0x8 */ u8 numBackgrounds;
+    /* 0xC */ RoomShapeImageMultiBgEntry* backgrounds;
 } RoomShapeImageMulti; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ Vec3s boundsSphereCenter;
-    /* 0x06 */ s16 boundsSphereRadius;
-    /* 0x08 */ Gfx* opa;
-    /* 0x0C */ Gfx* xlu;
+    /* 0x0 */ Vec3s boundsSphereCenter;
+    /* 0x6 */ s16 boundsSphereRadius;
+    /* 0x8 */ Gfx* opa;
+    /* 0xC */ Gfx* xlu;
 } RoomShapeCullableEntry; // size = 0x10
 
 typedef struct {
@@ -367,11 +367,11 @@ typedef struct {
     struct {
         s8 room;    // Room to switch to
         s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
-    } /* 0x00 */ sides[2]; // 0 = front, 1 = back
-    /* 0x04 */ s16   id;
-    /* 0x06 */ Vec3s pos;
-    /* 0x0C */ s16   rotY;
-    /* 0x0E */ u16   params;
+    } /* 0x0 */ sides[2]; // 0 = front, 1 = back
+    /* 0x4 */ s16 id;
+    /* 0x6 */ Vec3s pos;
+    /* 0xC */ s16 rotY;
+    /* 0xE */ u16 params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
@@ -380,10 +380,10 @@ typedef struct {
 } DoorContext; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ s16 id;
-    /* 0x02 */ Vec3s pos;
-    /* 0x08 */ Vec3s rot;
-    /* 0x0E */ s16 params;
+    /* 0x0 */ s16 id;
+    /* 0x2 */ Vec3s pos;
+    /* 0x8 */ Vec3s rot;
+    /* 0xE */ s16 params;
 } ActorEntry; // size = 0x10
 
 typedef struct {
