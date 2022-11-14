@@ -68,8 +68,15 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
 
 ActorInit Door_Spiral_InitVars = {
-    ACTOR_DOOR_SPIRAL,  ACTORCAT_DOOR,     FLAGS,           GAMEPLAY_KEEP, sizeof(DoorSpiral), DoorSpiral_Init,
-    DoorSpiral_Destroy, DoorSpiral_Update, DoorSpiral_Draw,
+    ACTOR_DOOR_SPIRAL,
+    ACTORCAT_DOOR,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(DoorSpiral),
+    DoorSpiral_Init,
+    DoorSpiral_Destroy,
+    DoorSpiral_Update,
+    DoorSpiral_Draw,
 };
 
 // Parameters for each staircase, indexed with SpiralType

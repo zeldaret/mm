@@ -25,8 +25,15 @@ void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
 ActorInit Bg_Spdweb_InitVars = {
-    ACTOR_BG_SPDWEB, ACTORCAT_BG,      FLAGS,           OBJECT_SPDWEB, sizeof(BgSpdweb),
-    BgSpdweb_Init,   BgSpdweb_Destroy, BgSpdweb_Update, BgSpdweb_Draw,
+    ACTOR_BG_SPDWEB,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_SPDWEB,
+    sizeof(BgSpdweb),
+    BgSpdweb_Init,
+    BgSpdweb_Destroy,
+    BgSpdweb_Update,
+    BgSpdweb_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit1[2] = {

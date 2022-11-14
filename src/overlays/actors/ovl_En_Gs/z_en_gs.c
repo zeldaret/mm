@@ -38,7 +38,15 @@ void func_80999A8C(EnGs* this, PlayState* play);
 void func_80999AC0(EnGs* this);
 
 ActorInit En_Gs_InitVars = {
-    ACTOR_EN_GS, ACTORCAT_PROP, FLAGS, OBJECT_GS, sizeof(EnGs), EnGs_Init, EnGs_Destroy, EnGs_Update, EnGs_Draw,
+    ACTOR_EN_GS,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_GS,
+    sizeof(EnGs),
+    EnGs_Init,
+    EnGs_Destroy,
+    EnGs_Update,
+    EnGs_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

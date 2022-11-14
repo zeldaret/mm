@@ -69,7 +69,15 @@ static DamageTable sDamageTable = {
 f32 D_80A338C0[PLAYER_FORM_MAX] = { 30.0f, 30.0f, 30.0f, 15.0f, 15.0f };
 
 ActorInit En_Pr_InitVars = {
-    ACTOR_EN_PR, ACTORCAT_ENEMY, FLAGS, OBJECT_PR, sizeof(EnPr), EnPr_Init, EnPr_Destroy, EnPr_Update, EnPr_Draw,
+    ACTOR_EN_PR,
+    ACTORCAT_ENEMY,
+    FLAGS,
+    OBJECT_PR,
+    sizeof(EnPr),
+    EnPr_Init,
+    EnPr_Destroy,
+    EnPr_Update,
+    EnPr_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

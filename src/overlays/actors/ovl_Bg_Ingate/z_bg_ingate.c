@@ -27,8 +27,15 @@ void func_80954340(BgIngate* this, PlayState* play);
 void func_809543D4(BgIngate* this, PlayState* play);
 
 ActorInit Bg_Ingate_InitVars = {
-    ACTOR_BG_INGATE, ACTORCAT_BG,      FLAGS,           OBJECT_SICHITAI_OBJ, sizeof(BgIngate),
-    BgIngate_Init,   BgIngate_Destroy, BgIngate_Update, BgIngate_Draw,
+    ACTOR_BG_INGATE,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_SICHITAI_OBJ,
+    sizeof(BgIngate),
+    BgIngate_Init,
+    BgIngate_Destroy,
+    BgIngate_Update,
+    BgIngate_Draw,
 };
 
 /**

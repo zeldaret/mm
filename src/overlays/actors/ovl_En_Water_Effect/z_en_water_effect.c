@@ -31,9 +31,15 @@ void func_80A5A534(Actor* thisx, PlayState* play);
 void func_80A5A6B8(Actor* thisx, PlayState* play2);
 
 ActorInit En_Water_Effect_InitVars = {
-    ACTOR_EN_WATER_EFFECT, ACTORCAT_BOSS,         FLAGS,
-    OBJECT_WATER_EFFECT,   sizeof(EnWaterEffect), EnWaterEffect_Init,
-    EnWaterEffect_Destroy, EnWaterEffect_Update,  EnWaterEffect_Draw,
+    ACTOR_EN_WATER_EFFECT,
+    ACTORCAT_BOSS,
+    FLAGS,
+    OBJECT_WATER_EFFECT,
+    sizeof(EnWaterEffect),
+    EnWaterEffect_Init,
+    EnWaterEffect_Destroy,
+    EnWaterEffect_Update,
+    EnWaterEffect_Draw,
 };
 
 static Vec3f D_80A5AFB0 = { 0.0f, 0.0f, 0.0f };

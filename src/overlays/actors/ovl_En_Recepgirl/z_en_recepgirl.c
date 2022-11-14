@@ -22,8 +22,15 @@ void EnRecepgirl_SetupTalk(EnRecepgirl* this);
 void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play);
 
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL, ACTORCAT_NPC,     FLAGS, OBJECT_BG, sizeof(EnRecepgirl), EnRecepgirl_Init, EnRecepgirl_Destroy,
-    EnRecepgirl_Update, EnRecepgirl_Draw,
+    ACTOR_EN_RECEPGIRL,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_BG,
+    sizeof(EnRecepgirl),
+    EnRecepgirl_Init,
+    EnRecepgirl_Destroy,
+    EnRecepgirl_Update,
+    EnRecepgirl_Draw,
 };
 
 static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0,

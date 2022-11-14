@@ -23,9 +23,15 @@ void func_80AF3C18(ObjLightblock* this);
 void func_80AF3C34(ObjLightblock* this, PlayState* play);
 
 ActorInit Obj_Lightblock_InitVars = {
-    ACTOR_OBJ_LIGHTBLOCK,  ACTORCAT_BG,           FLAGS,
-    OBJECT_LIGHTBLOCK,     sizeof(ObjLightblock), ObjLightblock_Init,
-    ObjLightblock_Destroy, ObjLightblock_Update,  ObjLightblock_Draw,
+    ACTOR_OBJ_LIGHTBLOCK,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_LIGHTBLOCK,
+    sizeof(ObjLightblock),
+    ObjLightblock_Init,
+    ObjLightblock_Destroy,
+    ObjLightblock_Update,
+    ObjLightblock_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

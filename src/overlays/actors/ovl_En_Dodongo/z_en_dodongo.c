@@ -36,8 +36,15 @@ void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, PlayState* play);
 
 ActorInit En_Dodongo_InitVars = {
-    ACTOR_EN_DODONGO,  ACTORCAT_ENEMY,   FLAGS,          OBJECT_DODONGO, sizeof(EnDodongo), EnDodongo_Init,
-    EnDodongo_Destroy, EnDodongo_Update, EnDodongo_Draw,
+    ACTOR_EN_DODONGO,
+    ACTORCAT_ENEMY,
+    FLAGS,
+    OBJECT_DODONGO,
+    sizeof(EnDodongo),
+    EnDodongo_Init,
+    EnDodongo_Destroy,
+    EnDodongo_Update,
+    EnDodongo_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[10] = {

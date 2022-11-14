@@ -29,8 +29,15 @@ typedef enum {
 } PlayerCheatStatus;
 
 ActorInit En_Mt_tag_InitVars = {
-    ACTOR_EN_MT_TAG, ACTORCAT_BG,     FLAGS,          GAMEPLAY_KEEP, sizeof(EnMttag),
-    EnMttag_Init,    EnMttag_Destroy, EnMttag_Update, NULL,
+    ACTOR_EN_MT_TAG,
+    ACTORCAT_BG,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnMttag),
+    EnMttag_Init,
+    EnMttag_Destroy,
+    EnMttag_Update,
+    NULL,
 };
 
 static s32 sStartingCheckpointPerSceneExitIndex[] = {

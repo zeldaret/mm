@@ -28,7 +28,15 @@ void func_80B680A8(Actor* thisx, PlayState* play);
 void func_80B6849C(Actor* thisx, PlayState* play);
 
 ActorInit En_Sth_InitVars = {
-    ACTOR_EN_STH, ACTORCAT_NPC, FLAGS, GAMEPLAY_KEEP, sizeof(EnSth), EnSth_Init, EnSth_Destroy, EnSth_Update, NULL,
+    ACTOR_EN_STH,
+    ACTORCAT_NPC,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnSth),
+    EnSth_Init,
+    EnSth_Destroy,
+    EnSth_Update,
+    NULL,
 };
 
 #include "overlays/ovl_En_Sth/ovl_En_Sth.c"

@@ -49,7 +49,15 @@ enum EnNiwState {
 };
 
 ActorInit En_Niw_InitVars = {
-    ACTOR_EN_NIW, ACTORCAT_PROP, FLAGS, OBJECT_NIW, sizeof(EnNiw), EnNiw_Init, EnNiw_Destroy, EnNiw_Update, EnNiw_Draw,
+    ACTOR_EN_NIW,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_NIW,
+    sizeof(EnNiw),
+    EnNiw_Init,
+    EnNiw_Destroy,
+    EnNiw_Update,
+    EnNiw_Draw,
 };
 
 static f32 sHeadRotations[] = { 5000.0f, -5000.0f };

@@ -51,8 +51,15 @@ s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
 
 ActorInit En_Toto_InitVars = {
-    ACTOR_EN_TOTO, ACTORCAT_NPC,   FLAGS,         OBJECT_ZM,   sizeof(EnToto),
-    EnToto_Init,   EnToto_Destroy, EnToto_Update, EnToto_Draw,
+    ACTOR_EN_TOTO,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_ZM,
+    sizeof(EnToto),
+    EnToto_Init,
+    EnToto_Destroy,
+    EnToto_Update,
+    EnToto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

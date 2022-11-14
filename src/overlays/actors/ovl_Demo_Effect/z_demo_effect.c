@@ -26,8 +26,15 @@ void func_808CDFF8(Actor* thisx, PlayState* play);
 void func_808CE078(Actor* thisx, PlayState* play2);
 
 ActorInit Demo_Effect_InitVars = {
-    ACTOR_DEMO_EFFECT,  ACTORCAT_BG,       FLAGS, GAMEPLAY_KEEP, sizeof(DemoEffect), DemoEffect_Init,
-    DemoEffect_Destroy, DemoEffect_Update, NULL,
+    ACTOR_DEMO_EFFECT,
+    ACTORCAT_BG,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(DemoEffect),
+    DemoEffect_Init,
+    DemoEffect_Destroy,
+    DemoEffect_Update,
+    NULL,
 };
 
 void DemoEffect_Init(Actor* thisx, PlayState* play) {

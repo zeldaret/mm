@@ -18,8 +18,15 @@ void ObjYado_Update(Actor* thisx, PlayState* play);
 void ObjYado_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Yado_InitVars = {
-    ACTOR_OBJ_YADO, ACTORCAT_BG,     FLAGS,          OBJECT_YADO_OBJ, sizeof(ObjYado),
-    ObjYado_Init,   ObjYado_Destroy, ObjYado_Update, ObjYado_Draw,
+    ACTOR_OBJ_YADO,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_YADO_OBJ,
+    sizeof(ObjYado),
+    ObjYado_Init,
+    ObjYado_Destroy,
+    ObjYado_Update,
+    ObjYado_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

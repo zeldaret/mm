@@ -50,8 +50,15 @@ static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
 
 ActorInit En_Fish2_InitVars = {
-    ACTOR_EN_FISH2, ACTORCAT_PROP,   FLAGS,          OBJECT_FB,    sizeof(EnFish2),
-    EnFish2_Init,   EnFish2_Destroy, EnFish2_Update, EnFish2_Draw,
+    ACTOR_EN_FISH2,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_FB,
+    sizeof(EnFish2),
+    EnFish2_Init,
+    EnFish2_Destroy,
+    EnFish2_Update,
+    EnFish2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

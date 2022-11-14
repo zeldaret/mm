@@ -91,7 +91,15 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 ActorInit En_Trt_InitVars = {
-    ACTOR_EN_TRT, ACTORCAT_NPC, FLAGS, OBJECT_TRT, sizeof(EnTrt), EnTrt_Init, EnTrt_Destroy, EnTrt_Update, EnTrt_Draw,
+    ACTOR_EN_TRT,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_TRT,
+    sizeof(EnTrt),
+    EnTrt_Init,
+    EnTrt_Destroy,
+    EnTrt_Update,
+    EnTrt_Draw,
 };
 
 static f32 sActorScale = 0.008f;

@@ -24,8 +24,15 @@ void func_80AF6994(EnGamelupy* this);
 void func_80AF6A38(EnGamelupy* this);
 
 ActorInit En_Gamelupy_InitVars = {
-    ACTOR_EN_GAMELUPY,  ACTORCAT_PROP,     FLAGS,           GAMEPLAY_KEEP, sizeof(EnGamelupy), EnGamelupy_Init,
-    EnGamelupy_Destroy, EnGamelupy_Update, EnGamelupy_Draw,
+    ACTOR_EN_GAMELUPY,
+    ACTORCAT_PROP,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnGamelupy),
+    EnGamelupy_Init,
+    EnGamelupy_Destroy,
+    EnGamelupy_Update,
+    EnGamelupy_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

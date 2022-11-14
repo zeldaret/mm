@@ -28,8 +28,15 @@ void EnCrow_TurnAway(EnCrow* this, PlayState* play);
 void EnCrow_Respawn(EnCrow* this, PlayState* play);
 
 ActorInit En_Crow_InitVars = {
-    ACTOR_EN_CROW, ACTORCAT_ENEMY, FLAGS,         OBJECT_CROW, sizeof(EnCrow),
-    EnCrow_Init,   EnCrow_Destroy, EnCrow_Update, EnCrow_Draw,
+    ACTOR_EN_CROW,
+    ACTORCAT_ENEMY,
+    FLAGS,
+    OBJECT_CROW,
+    sizeof(EnCrow),
+    EnCrow_Init,
+    EnCrow_Destroy,
+    EnCrow_Update,
+    EnCrow_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

@@ -17,8 +17,15 @@ void ObjToudai_Update(Actor* thisx, PlayState* play);
 void ObjToudai_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Toudai_InitVars = {
-    ACTOR_OBJ_TOUDAI,  ACTORCAT_PROP,    FLAGS,          OBJECT_F53_OBJ, sizeof(ObjToudai), ObjToudai_Init,
-    ObjToudai_Destroy, ObjToudai_Update, ObjToudai_Draw,
+    ACTOR_OBJ_TOUDAI,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_F53_OBJ,
+    sizeof(ObjToudai),
+    ObjToudai_Init,
+    ObjToudai_Destroy,
+    ObjToudai_Update,
+    ObjToudai_Draw,
 };
 
 #include "assets/overlays/ovl_Obj_Toudai/ovl_Obj_Toudai.c"

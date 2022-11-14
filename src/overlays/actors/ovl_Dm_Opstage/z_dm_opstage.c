@@ -19,8 +19,15 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play);
 void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play);
 
 ActorInit Dm_Opstage_InitVars = {
-    ACTOR_DM_OPSTAGE,  ACTORCAT_ITEMACTION, FLAGS,          OBJECT_KEIKOKU_DEMO, sizeof(DmOpstage), DmOpstage_Init,
-    DmOpstage_Destroy, DmOpstage_Update,    DmOpstage_Draw,
+    ACTOR_DM_OPSTAGE,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    OBJECT_KEIKOKU_DEMO,
+    sizeof(DmOpstage),
+    DmOpstage_Init,
+    DmOpstage_Destroy,
+    DmOpstage_Update,
+    DmOpstage_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

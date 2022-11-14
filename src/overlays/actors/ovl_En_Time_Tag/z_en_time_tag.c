@@ -31,8 +31,15 @@ void func_80ACA7C4(EnTimeTag* this, PlayState* play);
 void func_80ACA840(EnTimeTag* this, PlayState* play);
 
 ActorInit En_Time_Tag_InitVars = {
-    ACTOR_EN_TIME_TAG, ACTORCAT_ITEMACTION, FLAGS, GAMEPLAY_KEEP, sizeof(EnTimeTag), EnTimeTag_Init,
-    EnTimeTag_Destroy, EnTimeTag_Update,    NULL,
+    ACTOR_EN_TIME_TAG,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnTimeTag),
+    EnTimeTag_Init,
+    EnTimeTag_Destroy,
+    EnTimeTag_Update,
+    NULL,
 };
 
 void EnTimeTag_Init(Actor* thisx, PlayState* play) {

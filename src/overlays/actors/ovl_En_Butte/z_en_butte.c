@@ -54,8 +54,15 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 ActorInit En_Butte_InitVars = {
-    ACTOR_EN_BUTTE, ACTORCAT_ITEMACTION, FLAGS,          GAMEPLAY_FIELD_KEEP, sizeof(EnButte),
-    EnButte_Init,   EnButte_Destroy,     EnButte_Update, EnButte_Draw,
+    ACTOR_EN_BUTTE,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    GAMEPLAY_FIELD_KEEP,
+    sizeof(EnButte),
+    EnButte_Init,
+    EnButte_Destroy,
+    EnButte_Update,
+    EnButte_Draw,
 };
 
 typedef struct {

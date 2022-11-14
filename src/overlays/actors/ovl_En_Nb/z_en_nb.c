@@ -111,7 +111,15 @@ u8 D_80BC15C8[] = {
 };
 
 ActorInit En_Nb_InitVars = {
-    ACTOR_EN_NB, ACTORCAT_NPC, FLAGS, OBJECT_NB, sizeof(EnNb), EnNb_Init, EnNb_Destroy, EnNb_Update, EnNb_Draw,
+    ACTOR_EN_NB,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_NB,
+    sizeof(EnNb),
+    EnNb_Init,
+    EnNb_Destroy,
+    EnNb_Update,
+    EnNb_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

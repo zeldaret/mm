@@ -25,8 +25,15 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
 ActorInit En_Warp_tag_InitVars = {
-    ACTOR_EN_WARP_TAG, ACTORCAT_ITEMACTION, FLAGS, GAMEPLAY_KEEP, sizeof(EnWarptag), EnWarptag_Init,
-    EnWarptag_Destroy, EnWarptag_Update,    NULL,
+    ACTOR_EN_WARP_TAG,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnWarptag),
+    EnWarptag_Init,
+    EnWarptag_Destroy,
+    EnWarptag_Update,
+    NULL,
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases

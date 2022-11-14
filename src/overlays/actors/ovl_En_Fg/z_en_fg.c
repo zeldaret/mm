@@ -25,7 +25,15 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect);
 
 ActorInit En_Fg_InitVars = {
-    ACTOR_EN_FG, ACTORCAT_NPC, FLAGS, OBJECT_FR, sizeof(EnFg), EnFg_Init, EnFg_Destroy, EnFg_Update, EnFg_Draw,
+    ACTOR_EN_FG,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_FR,
+    sizeof(EnFg),
+    EnFg_Init,
+    EnFg_Destroy,
+    EnFg_Update,
+    EnFg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

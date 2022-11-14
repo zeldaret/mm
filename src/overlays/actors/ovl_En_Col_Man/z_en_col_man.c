@@ -48,8 +48,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit En_Col_Man_InitVars = {
-    ACTOR_EN_COL_MAN, ACTORCAT_MISC,    FLAGS,           GAMEPLAY_KEEP, sizeof(EnColMan),
-    EnColMan_Init,    EnColMan_Destroy, EnColMan_Update, NULL,
+    ACTOR_EN_COL_MAN,
+    ACTORCAT_MISC,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnColMan),
+    EnColMan_Init,
+    EnColMan_Destroy,
+    EnColMan_Update,
+    NULL,
 };
 
 static Color_RGBA8 primColor = { 60, 50, 20, 255 };

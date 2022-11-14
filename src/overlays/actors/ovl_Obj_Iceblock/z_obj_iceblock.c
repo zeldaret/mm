@@ -46,9 +46,15 @@ void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
 ActorInit Obj_Iceblock_InitVars = {
-    ACTOR_OBJ_ICEBLOCK,  ACTORCAT_BG,         FLAGS,
-    OBJECT_ICE_BLOCK,    sizeof(ObjIceblock), ObjIceblock_Init,
-    ObjIceblock_Destroy, ObjIceblock_Update,  ObjIceblock_Draw,
+    ACTOR_OBJ_ICEBLOCK,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_ICE_BLOCK,
+    sizeof(ObjIceblock),
+    ObjIceblock_Init,
+    ObjIceblock_Destroy,
+    ObjIceblock_Update,
+    ObjIceblock_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -22,7 +22,15 @@ void func_80C1CC80(DmAn* this, PlayState* play);
 void func_80C1D0B0(Actor* thisx, PlayState* play);
 
 ActorInit Dm_An_InitVars = {
-    ACTOR_DM_AN, ACTORCAT_NPC, FLAGS, OBJECT_AN1, sizeof(DmAn), DmAn_Init, DmAn_Destroy, DmAn_Update, NULL,
+    ACTOR_DM_AN,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_AN1,
+    sizeof(DmAn),
+    DmAn_Init,
+    DmAn_Destroy,
+    DmAn_Update,
+    NULL,
 };
 
 static AnimationInfoS sAnimationInfo[] = {

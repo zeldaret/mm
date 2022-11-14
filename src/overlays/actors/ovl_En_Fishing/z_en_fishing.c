@@ -202,8 +202,15 @@ u8 D_80917274;
 Vec3f D_80917278;
 
 ActorInit En_Fishing_InitVars = {
-    ACTOR_EN_FISHING,     ACTORCAT_NPC,       FLAGS, OBJECT_FISH, sizeof(EnFishing), EnFishing_Init, EnFishing_Destroy,
-    EnFishing_UpdateFish, EnFishing_DrawFish,
+    ACTOR_EN_FISHING,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_FISH,
+    sizeof(EnFishing),
+    EnFishing_Init,
+    EnFishing_Destroy,
+    EnFishing_UpdateFish,
+    EnFishing_DrawFish,
 };
 
 f32 D_8090CCD0 = 0.0f;

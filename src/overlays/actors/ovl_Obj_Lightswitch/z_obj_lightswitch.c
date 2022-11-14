@@ -28,9 +28,15 @@ void ObjLightSwitch_Disabled(ObjLightswitch* this, PlayState* play);
 void ObjLightswitch_Idle(ObjLightswitch* this, PlayState* play);
 
 ActorInit Obj_Lightswitch_InitVars = {
-    ACTOR_OBJ_LIGHTSWITCH,  ACTORCAT_SWITCH,        FLAGS,
-    OBJECT_LIGHTSWITCH,     sizeof(ObjLightswitch), ObjLightswitch_Init,
-    ObjLightswitch_Destroy, ObjLightswitch_Update,  ObjLightswitch_Draw,
+    ACTOR_OBJ_LIGHTSWITCH,
+    ACTORCAT_SWITCH,
+    FLAGS,
+    OBJECT_LIGHTSWITCH,
+    sizeof(ObjLightswitch),
+    ObjLightswitch_Init,
+    ObjLightswitch_Destroy,
+    ObjLightswitch_Update,
+    ObjLightswitch_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

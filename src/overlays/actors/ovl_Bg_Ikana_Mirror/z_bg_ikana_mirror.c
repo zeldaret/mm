@@ -27,9 +27,15 @@ void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this);
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play);
 
 ActorInit Bg_Ikana_Mirror_InitVars = {
-    ACTOR_BG_IKANA_MIRROR, ACTORCAT_PROP,         FLAGS,
-    OBJECT_IKANA_OBJ,      sizeof(BgIkanaMirror), BgIkanaMirror_Init,
-    BgIkanaMirror_Destroy, BgIkanaMirror_Update,  BgIkanaMirror_Draw,
+    ACTOR_BG_IKANA_MIRROR,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_IKANA_OBJ,
+    sizeof(BgIkanaMirror),
+    BgIkanaMirror_Init,
+    BgIkanaMirror_Destroy,
+    BgIkanaMirror_Update,
+    BgIkanaMirror_Draw,
 };
 
 static ColliderTrisElementInit sMirrorColliderElementsInit[] = {

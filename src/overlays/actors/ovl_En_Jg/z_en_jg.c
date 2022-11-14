@@ -65,7 +65,15 @@ typedef enum {
 } EnJgAction;
 
 ActorInit En_Jg_InitVars = {
-    ACTOR_EN_JG, ACTORCAT_NPC, FLAGS, OBJECT_JG, sizeof(EnJg), EnJg_Init, EnJg_Destroy, EnJg_Update, EnJg_Draw,
+    ACTOR_EN_JG,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_JG,
+    sizeof(EnJg),
+    EnJg_Init,
+    EnJg_Destroy,
+    EnJg_Update,
+    EnJg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

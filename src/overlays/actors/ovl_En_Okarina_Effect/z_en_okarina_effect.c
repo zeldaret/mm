@@ -20,9 +20,15 @@ void func_8096B174(EnOkarinaEffect* this, PlayState* play);
 void func_8096B1FC(EnOkarinaEffect* this, PlayState* play);
 
 ActorInit En_Okarina_Effect_InitVars = {
-    ACTOR_EN_OKARINA_EFFECT, ACTORCAT_ITEMACTION,     FLAGS,
-    GAMEPLAY_KEEP,           sizeof(EnOkarinaEffect), EnOkarinaEffect_Init,
-    EnOkarinaEffect_Destroy, EnOkarinaEffect_Update,  NULL,
+    ACTOR_EN_OKARINA_EFFECT,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnOkarinaEffect),
+    EnOkarinaEffect_Init,
+    EnOkarinaEffect_Destroy,
+    EnOkarinaEffect_Update,
+    NULL,
 };
 
 void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc actionFunc) {

@@ -26,8 +26,15 @@ void func_809A3E58(Actor* thisx, PlayState* play);
 void func_809A3F0C(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Pzlblock_InitVars = {
-    ACTOR_OBJ_PZLBLOCK,  ACTORCAT_PROP,      FLAGS, GAMEPLAY_KEEP, sizeof(ObjPzlblock), ObjPzlblock_Init,
-    ObjPzlblock_Destroy, ObjPzlblock_Update, NULL,
+    ACTOR_OBJ_PZLBLOCK,
+    ACTORCAT_PROP,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(ObjPzlblock),
+    ObjPzlblock_Init,
+    ObjPzlblock_Destroy,
+    ObjPzlblock_Update,
+    NULL,
 };
 
 s16 D_809A4050[] = { 1, -1, 0, 0 };

@@ -294,8 +294,15 @@ static Color_RGB8 sLightOrbColors[] = {
 };
 
 ActorInit En_Egol_InitVars = {
-    ACTOR_EN_EGOL, ACTORCAT_ENEMY, FLAGS,         OBJECT_EG,   sizeof(EnEgol),
-    EnEgol_Init,   EnEgol_Destroy, EnEgol_Update, EnEgol_Draw,
+    ACTOR_EN_EGOL,
+    ACTORCAT_ENEMY,
+    FLAGS,
+    OBJECT_EG,
+    sizeof(EnEgol),
+    EnEgol_Init,
+    EnEgol_Destroy,
+    EnEgol_Update,
+    EnEgol_Draw,
 };
 
 void EnEgol_ChangeAnim(EnEgol* this, s32 animation) {

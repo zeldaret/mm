@@ -57,7 +57,15 @@ void func_80867FBC(struct_80867BDC_a0* arg0, PlayState* play, s32 arg2);
 void func_80867FE4(struct_80867BDC_a0* arg0, PlayState* play);
 
 ActorInit En_Box_InitVars = {
-    ACTOR_EN_BOX, ACTORCAT_CHEST, FLAGS, OBJECT_BOX, sizeof(EnBox), EnBox_Init, EnBox_Destroy, EnBox_Update, EnBox_Draw,
+    ACTOR_EN_BOX,
+    ACTORCAT_CHEST,
+    FLAGS,
+    OBJECT_BOX,
+    sizeof(EnBox),
+    EnBox_Init,
+    EnBox_Destroy,
+    EnBox_Update,
+    EnBox_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

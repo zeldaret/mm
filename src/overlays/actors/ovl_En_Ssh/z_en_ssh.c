@@ -26,7 +26,15 @@ void EnSsh_Start(EnSsh* this, PlayState* play);
 extern AnimationHeader D_06000304;
 
 ActorInit En_Ssh_InitVars = {
-    ACTOR_EN_SSH, ACTORCAT_NPC, FLAGS, OBJECT_SSH, sizeof(EnSsh), EnSsh_Init, EnSsh_Destroy, EnSsh_Update, EnSsh_Draw,
+    ACTOR_EN_SSH,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_SSH,
+    sizeof(EnSsh),
+    EnSsh_Init,
+    EnSsh_Destroy,
+    EnSsh_Update,
+    EnSsh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

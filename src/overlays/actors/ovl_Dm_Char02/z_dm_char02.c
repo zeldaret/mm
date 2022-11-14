@@ -19,8 +19,15 @@ void DmChar02_Draw(Actor* thisx, PlayState* play);
 void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play);
 
 ActorInit Dm_Char02_InitVars = {
-    ACTOR_DM_CHAR02, ACTORCAT_ITEMACTION, FLAGS,           OBJECT_STK2,   sizeof(DmChar02),
-    DmChar02_Init,   DmChar02_Destroy,    DmChar02_Update, DmChar02_Draw,
+    ACTOR_DM_CHAR02,
+    ACTORCAT_ITEMACTION,
+    FLAGS,
+    OBJECT_STK2,
+    sizeof(DmChar02),
+    DmChar02_Init,
+    DmChar02_Destroy,
+    DmChar02_Update,
+    DmChar02_Draw,
 
 };
 

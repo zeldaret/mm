@@ -30,8 +30,15 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Bji_01_InitVars = {
-    ACTOR_EN_BJI_01, ACTORCAT_NPC,    FLAGS,          OBJECT_BJI,   sizeof(EnBji01),
-    EnBji01_Init,    EnBji01_Destroy, EnBji01_Update, EnBji01_Draw,
+    ACTOR_EN_BJI_01,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_BJI,
+    sizeof(EnBji01),
+    EnBji01_Init,
+    EnBji01_Destroy,
+    EnBji01_Update,
+    EnBji01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

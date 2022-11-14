@@ -28,7 +28,15 @@ s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
 ActorInit En_Gg2_InitVars = {
-    ACTOR_EN_GG2, ACTORCAT_NPC, FLAGS, OBJECT_GG, sizeof(EnGg2), EnGg2_Init, EnGg2_Destroy, EnGg2_Update, EnGg2_Draw,
+    ACTOR_EN_GG2,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_GG,
+    sizeof(EnGg2),
+    EnGg2_Init,
+    EnGg2_Destroy,
+    EnGg2_Update,
+    EnGg2_Draw,
 };
 
 AnimationInfo D_80B3BF00[] = {

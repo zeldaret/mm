@@ -24,7 +24,15 @@ void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
 ActorInit En_Mk_InitVars = {
-    ACTOR_EN_MK, ACTORCAT_NPC, FLAGS, OBJECT_MK, sizeof(EnMk), EnMk_Init, EnMk_Destroy, EnMk_Update, EnMk_Draw,
+    ACTOR_EN_MK,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_MK,
+    sizeof(EnMk),
+    EnMk_Init,
+    EnMk_Destroy,
+    EnMk_Update,
+    EnMk_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

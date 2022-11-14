@@ -29,7 +29,15 @@ void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
 ActorInit En_Rr_InitVars = {
-    ACTOR_EN_RR, ACTORCAT_ENEMY, FLAGS, OBJECT_RR, sizeof(EnRr), EnRr_Init, EnRr_Destroy, EnRr_Update, EnRr_Draw,
+    ACTOR_EN_RR,
+    ACTORCAT_ENEMY,
+    FLAGS,
+    OBJECT_RR,
+    sizeof(EnRr),
+    EnRr_Init,
+    EnRr_Destroy,
+    EnRr_Update,
+    EnRr_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

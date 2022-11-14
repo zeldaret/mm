@@ -31,9 +31,15 @@ typedef enum {
 } EnDemoheishiAnimation;
 
 ActorInit En_Demo_heishi_InitVars = {
-    ACTOR_EN_DEMO_HEISHI, ACTORCAT_NPC,         FLAGS,
-    OBJECT_SDN,           sizeof(EnDemoheishi), EnDemoheishi_Init,
-    EnDemoheishi_Destroy, EnDemoheishi_Update,  EnDemoheishi_Draw,
+    ACTOR_EN_DEMO_HEISHI,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_SDN,
+    sizeof(EnDemoheishi),
+    EnDemoheishi_Init,
+    EnDemoheishi_Destroy,
+    EnDemoheishi_Update,
+    EnDemoheishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

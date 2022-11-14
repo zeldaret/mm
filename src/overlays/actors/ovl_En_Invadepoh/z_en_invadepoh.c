@@ -179,8 +179,15 @@ void func_80B45B1C(EnInvadePohStruct* s, unkstructInvadepoh4** u);
 extern s32 D_801BDA9C;
 
 ActorInit En_Invadepoh_InitVars = {
-    ACTOR_EN_INVADEPOH,  ACTORCAT_PROP,      FLAGS, GAMEPLAY_KEEP, sizeof(EnInvadepoh), EnInvadepoh_Init,
-    EnInvadepoh_Destroy, EnInvadepoh_Update, NULL,
+    ACTOR_EN_INVADEPOH,
+    ACTORCAT_PROP,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnInvadepoh),
+    EnInvadepoh_Init,
+    EnInvadepoh_Destroy,
+    EnInvadepoh_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInitAlien = {
