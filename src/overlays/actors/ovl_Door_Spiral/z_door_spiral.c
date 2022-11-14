@@ -73,10 +73,12 @@ ActorInit Door_Spiral_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DoorSpiral),
-    DoorSpiral_Init,
-    DoorSpiral_Destroy,
-    DoorSpiral_Update,
-    DoorSpiral_Draw,
+    {
+        DoorSpiral_Init,
+        DoorSpiral_Destroy,
+        DoorSpiral_Update,
+        DoorSpiral_Draw,
+    },
 };
 
 // Parameters for each staircase, indexed with SpiralType

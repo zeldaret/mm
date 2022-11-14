@@ -30,10 +30,12 @@ ActorInit Obj_Ghaka_InitVars = {
     FLAGS,
     OBJECT_GHAKA,
     sizeof(ObjGhaka),
-    ObjGhaka_Init,
-    ObjGhaka_Destroy,
-    ObjGhaka_Update,
-    ObjGhaka_Draw,
+    {
+        ObjGhaka_Init,
+        ObjGhaka_Destroy,
+        ObjGhaka_Update,
+        ObjGhaka_Draw,
+    },
 };
 
 static Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };

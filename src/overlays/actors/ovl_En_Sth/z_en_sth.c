@@ -33,10 +33,12 @@ ActorInit En_Sth_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSth),
-    EnSth_Init,
-    EnSth_Destroy,
-    EnSth_Update,
-    NULL,
+    {
+        EnSth_Init,
+        EnSth_Destroy,
+        EnSth_Update,
+        NULL,
+    },
 };
 
 #include "overlays/ovl_En_Sth/ovl_En_Sth.c"

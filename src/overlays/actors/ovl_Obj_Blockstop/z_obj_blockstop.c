@@ -23,10 +23,12 @@ ActorInit Obj_Blockstop_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjBlockstop),
-    ObjBlockstop_Init,
-    Actor_Noop,
-    ObjBlockstop_Update,
-    NULL,
+    {
+        ObjBlockstop_Init,
+        Actor_Noop,
+        ObjBlockstop_Update,
+        NULL,
+    },
 };
 
 void ObjBlockstop_Init(Actor* thisx, PlayState* play) {

@@ -108,10 +108,12 @@ ActorInit En_Talk_Gibud_InitVars = {
     FLAGS,
     OBJECT_RD,
     sizeof(EnTalkGibud),
-    EnTalkGibud_Init,
-    EnTalkGibud_Destroy,
-    EnTalkGibud_Update,
-    EnTalkGibud_Draw,
+    {
+        EnTalkGibud_Init,
+        EnTalkGibud_Destroy,
+        EnTalkGibud_Update,
+        EnTalkGibud_Draw,
+    },
 };
 
 static AnimationInfo sAnimationInfo[] = {

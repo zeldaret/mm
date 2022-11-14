@@ -31,10 +31,12 @@ ActorInit En_Guard_Nuts_InitVars = {
     FLAGS,
     OBJECT_DNK,
     sizeof(EnGuardNuts),
-    EnGuardNuts_Init,
-    EnGuardNuts_Destroy,
-    EnGuardNuts_Update,
-    EnGuardNuts_Draw,
+    {
+        EnGuardNuts_Init,
+        EnGuardNuts_Destroy,
+        EnGuardNuts_Update,
+        EnGuardNuts_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -61,10 +61,12 @@ ActorInit En_Wf_InitVars = {
     FLAGS,
     OBJECT_WF,
     sizeof(EnWf),
-    EnWf_Init,
-    EnWf_Destroy,
-    EnWf_Update,
-    EnWf_Draw,
+    {
+        EnWf_Init,
+        EnWf_Destroy,
+        EnWf_Update,
+        EnWf_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[4] = {

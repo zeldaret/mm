@@ -52,10 +52,12 @@ ActorInit En_Bigpamet_InitVars = {
     FLAGS,
     OBJECT_TL,
     sizeof(EnBigpamet),
-    EnBigpamet_Init,
-    EnBigpamet_Destroy,
-    EnBigpamet_Update,
-    EnBigpamet_Draw,
+    {
+        EnBigpamet_Init,
+        EnBigpamet_Destroy,
+        EnBigpamet_Update,
+        EnBigpamet_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

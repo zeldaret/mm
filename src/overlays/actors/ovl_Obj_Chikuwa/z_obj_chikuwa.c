@@ -23,10 +23,12 @@ ActorInit Obj_Chikuwa_InitVars = {
     FLAGS,
     OBJECT_D_LIFT,
     sizeof(ObjChikuwa),
-    ObjChikuwa_Init,
-    ObjChikuwa_Destroy,
-    ObjChikuwa_Update,
-    ObjChikuwa_Draw,
+    {
+        ObjChikuwa_Init,
+        ObjChikuwa_Destroy,
+        ObjChikuwa_Update,
+        ObjChikuwa_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

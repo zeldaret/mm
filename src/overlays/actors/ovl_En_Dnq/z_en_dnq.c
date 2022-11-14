@@ -31,10 +31,12 @@ ActorInit En_Dnq_InitVars = {
     FLAGS,
     OBJECT_DNO,
     sizeof(EnDnq),
-    EnDnq_Init,
-    EnDnq_Destroy,
-    EnDnq_Update,
-    EnDnq_Draw,
+    {
+        EnDnq_Init,
+        EnDnq_Destroy,
+        EnDnq_Update,
+        EnDnq_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

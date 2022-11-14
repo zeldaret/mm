@@ -21,10 +21,12 @@ ActorInit Obj_Visiblock_InitVars = {
     FLAGS,
     OBJECT_VISIBLOCK,
     sizeof(ObjVisiblock),
-    ObjVisiblock_Init,
-    ObjVisiblock_Destroy,
-    Actor_Noop,
-    ObjVisiblock_Draw,
+    {
+        ObjVisiblock_Init,
+        ObjVisiblock_Destroy,
+        Actor_Noop,
+        ObjVisiblock_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

@@ -24,10 +24,12 @@ ActorInit Bg_Ikninside_InitVars = {
     FLAGS,
     OBJECT_IKNINSIDE_OBJ,
     sizeof(BgIkninside),
-    BgIkninside_Init,
-    BgIkninside_Destroy,
-    BgIkninside_Update,
-    BgIkninside_Draw,
+    {
+        BgIkninside_Init,
+        BgIkninside_Destroy,
+        BgIkninside_Update,
+        BgIkninside_Draw,
+    },
 };
 
 static Gfx* D_80C076A0[] = { object_ikninside_obj_DL_00A748, object_ikninside_obj_DL_00A5A8 };

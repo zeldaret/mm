@@ -22,11 +22,11 @@ ActorInit En_Mnk_InitVars = {
     FLAGS,
     OBJECT_MNK,
     sizeof(EnMnk),
-    EnMnk_Init,
+{EnMnk_Init,
     EnMnk_Destroy,
     EnMnk_Update,
     EnMnk_Draw,
-};
+},};
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80AB9D10 = {

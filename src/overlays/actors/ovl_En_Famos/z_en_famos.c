@@ -57,10 +57,12 @@ ActorInit En_Famos_InitVars = {
     FLAGS,
     OBJECT_FAMOS,
     sizeof(EnFamos),
-    EnFamos_Init,
-    EnFamos_Destroy,
-    EnFamos_Update,
-    EnFamos_Draw,
+    {
+        EnFamos_Init,
+        EnFamos_Destroy,
+        EnFamos_Update,
+        EnFamos_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

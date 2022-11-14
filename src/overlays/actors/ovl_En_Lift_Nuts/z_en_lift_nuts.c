@@ -55,10 +55,12 @@ ActorInit En_Lift_Nuts_InitVars = {
     FLAGS,
     OBJECT_DNT,
     sizeof(EnLiftNuts),
-    EnLiftNuts_Init,
-    EnLiftNuts_Destroy,
-    EnLiftNuts_Update,
-    EnLiftNuts_Draw,
+    {
+        EnLiftNuts_Init,
+        EnLiftNuts_Destroy,
+        EnLiftNuts_Update,
+        EnLiftNuts_Draw,
+    },
 };
 
 static AnimationInfo sAnimations[] = {

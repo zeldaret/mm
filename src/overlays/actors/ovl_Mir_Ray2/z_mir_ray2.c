@@ -21,10 +21,12 @@ ActorInit Mir_Ray2_InitVars = {
     FLAGS,
     OBJECT_MIR_RAY,
     sizeof(MirRay2),
-    MirRay2_Init,
-    MirRay2_Destroy,
-    MirRay2_Update,
-    MirRay2_Draw,
+    {
+        MirRay2_Init,
+        MirRay2_Destroy,
+        MirRay2_Update,
+        MirRay2_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

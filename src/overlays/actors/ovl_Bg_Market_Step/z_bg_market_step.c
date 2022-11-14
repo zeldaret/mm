@@ -15,9 +15,17 @@ void BgMarketStep_Init(Actor* thisx, PlayState* play);
 void BgMarketStep_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Market_Step_InitVars = {
-    ACTOR_BG_MARKET_STEP,  ACTORCAT_BG,           FLAGS,
-    OBJECT_MARKET_OBJ,     sizeof(BgMarketStep),  BgMarketStep_Init,
-    Actor_Noop, Actor_Noop, BgMarketStep_Draw,
+    ACTOR_BG_MARKET_STEP,
+    ACTORCAT_BG,
+    FLAGS,
+    OBJECT_MARKET_OBJ,
+    sizeof(BgMarketStep),
+    {
+        BgMarketStep_Init,
+        Actor_Noop,
+        Actor_Noop,
+        BgMarketStep_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

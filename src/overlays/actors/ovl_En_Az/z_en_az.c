@@ -98,10 +98,12 @@ ActorInit En_Az_InitVars = {
     FLAGS,
     OBJECT_AZ,
     sizeof(EnAz),
-    EnAz_Init,
-    EnAz_Destroy,
-    EnAz_Update,
-    EnAz_Draw,
+    {
+        EnAz_Init,
+        EnAz_Destroy,
+        EnAz_Update,
+        EnAz_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

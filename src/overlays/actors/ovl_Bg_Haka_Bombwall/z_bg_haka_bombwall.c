@@ -30,10 +30,12 @@ ActorInit Bg_Haka_Bombwall_InitVars = {
     FLAGS,
     OBJECT_HAKA_OBJ,
     sizeof(BgHakaBombwall),
-    BgHakaBombwall_Init,
-    BgHakaBombwall_Destroy,
-    BgHakaBombwall_Update,
-    BgHakaBombwall_Draw,
+    {
+        BgHakaBombwall_Init,
+        BgHakaBombwall_Destroy,
+        BgHakaBombwall_Update,
+        BgHakaBombwall_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

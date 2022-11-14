@@ -30,10 +30,12 @@ ActorInit Bg_F40_Switch_InitVars = {
     FLAGS,
     OBJECT_F40_SWITCH,
     sizeof(BgF40Switch),
-    BgF40Switch_Init,
-    BgF40Switch_Destroy,
-    BgF40Switch_Update,
-    BgF40Switch_Draw,
+    {
+        BgF40Switch_Init,
+        BgF40Switch_Destroy,
+        BgF40Switch_Update,
+        BgF40Switch_Draw,
+    },
 };
 
 s32 sBgF40SwitchGlobalsInitialized = false;

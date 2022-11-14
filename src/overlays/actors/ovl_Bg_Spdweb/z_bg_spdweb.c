@@ -30,10 +30,12 @@ ActorInit Bg_Spdweb_InitVars = {
     FLAGS,
     OBJECT_SPDWEB,
     sizeof(BgSpdweb),
-    BgSpdweb_Init,
-    BgSpdweb_Destroy,
-    BgSpdweb_Update,
-    BgSpdweb_Draw,
+    {
+        BgSpdweb_Init,
+        BgSpdweb_Destroy,
+        BgSpdweb_Update,
+        BgSpdweb_Draw,
+    },
 };
 
 static ColliderTrisElementInit sTrisElementsInit1[2] = {

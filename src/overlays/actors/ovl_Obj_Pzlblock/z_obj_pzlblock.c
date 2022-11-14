@@ -31,10 +31,12 @@ ActorInit Obj_Pzlblock_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjPzlblock),
-    ObjPzlblock_Init,
-    ObjPzlblock_Destroy,
-    ObjPzlblock_Update,
-    NULL,
+    {
+        ObjPzlblock_Init,
+        ObjPzlblock_Destroy,
+        ObjPzlblock_Update,
+        NULL,
+    },
 };
 
 s16 D_809A4050[] = { 1, -1, 0, 0 };

@@ -33,10 +33,12 @@ ActorInit Obj_Skateblock_InitVars = {
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(ObjSkateblock),
-    ObjSkateblock_Init,
-    ObjSkateblock_Destroy,
-    ObjSkateblock_Update,
-    ObjSkateblock_Draw,
+    {
+        ObjSkateblock_Init,
+        ObjSkateblock_Destroy,
+        ObjSkateblock_Update,
+        ObjSkateblock_Draw,
+    },
 };
 
 s32 D_80A22A10 = 0;

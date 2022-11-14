@@ -29,10 +29,12 @@ ActorInit Bg_Astr_Bombwall_InitVars = {
     FLAGS,
     OBJECT_ASTR_OBJ,
     sizeof(BgAstrBombwall),
-    BgAstrBombwall_Init,
-    BgAstrBombwall_Destroy,
-    BgAstrBombwall_Update,
-    BgAstrBombwall_Draw,
+    {
+        BgAstrBombwall_Init,
+        BgAstrBombwall_Destroy,
+        BgAstrBombwall_Update,
+        BgAstrBombwall_Draw,
+    },
 };
 
 static ColliderTrisElementInit sTrisElementsInit[2] = {

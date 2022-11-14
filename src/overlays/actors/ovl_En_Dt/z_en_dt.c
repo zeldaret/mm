@@ -22,11 +22,11 @@ ActorInit En_Dt_InitVars = {
     FLAGS,
     OBJECT_DT,
     sizeof(EnDt),
-    EnDt_Init,
+{EnDt_Init,
     EnDt_Destroy,
     EnDt_Update,
     EnDt_Draw,
-};
+},};
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BEB29C = {

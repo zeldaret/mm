@@ -27,11 +27,11 @@ ActorInit Dm_Hina_InitVars = {
     FLAGS,
     OBJECT_BSMASK,
     sizeof(DmHina),
-    DmHina_Init,
+{DmHina_Init,
     DmHina_Destroy,
     DmHina_Update,
     DmHina_Draw,
-};
+},};
 
 #endif
 

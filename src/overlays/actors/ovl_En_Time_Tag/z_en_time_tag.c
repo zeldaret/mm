@@ -36,10 +36,12 @@ ActorInit En_Time_Tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTimeTag),
-    EnTimeTag_Init,
-    EnTimeTag_Destroy,
-    EnTimeTag_Update,
-    NULL,
+    {
+        EnTimeTag_Init,
+        EnTimeTag_Destroy,
+        EnTimeTag_Update,
+        NULL,
+    },
 };
 
 void EnTimeTag_Init(Actor* thisx, PlayState* play) {

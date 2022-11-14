@@ -21,10 +21,12 @@ ActorInit Oceff_Wipe5_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(OceffWipe5),
-    OceffWipe5_Init,
-    OceffWipe5_Destroy,
-    OceffWipe5_Update,
-    OceffWipe5_Draw,
+    {
+        OceffWipe5_Init,
+        OceffWipe5_Destroy,
+        OceffWipe5_Update,
+        OceffWipe5_Draw,
+    },
 };
 
 UNK_TYPE4 D_80BC9260;

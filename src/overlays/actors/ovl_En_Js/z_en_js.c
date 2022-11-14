@@ -33,10 +33,12 @@ ActorInit En_Js_InitVars = {
     FLAGS,
     OBJECT_OB,
     sizeof(EnJs),
-    EnJs_Init,
-    EnJs_Destroy,
-    EnJs_Update,
-    EnJs_Draw,
+    {
+        EnJs_Init,
+        EnJs_Destroy,
+        EnJs_Update,
+        EnJs_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

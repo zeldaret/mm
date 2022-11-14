@@ -34,10 +34,12 @@ ActorInit Obj_Dhouse_InitVars = {
     FLAGS,
     OBJECT_DHOUSE,
     sizeof(ObjDhouse),
-    ObjDhouse_Init,
-    ObjDhouse_Destroy,
-    ObjDhouse_Update,
-    ObjDhouse_Draw,
+    {
+        ObjDhouse_Init,
+        ObjDhouse_Destroy,
+        ObjDhouse_Update,
+        ObjDhouse_Draw,
+    },
 };
 
 ObjDhouseStruct3 D_80B13E90[] = {

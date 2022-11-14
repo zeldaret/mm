@@ -73,10 +73,12 @@ ActorInit En_Pametfrog_InitVars = {
     FLAGS,
     OBJECT_BIGSLIME,
     sizeof(EnPametfrog),
-    EnPametfrog_Init,
-    EnPametfrog_Destroy,
-    EnPametfrog_Update,
-    EnPametfrog_Draw,
+    {
+        EnPametfrog_Init,
+        EnPametfrog_Destroy,
+        EnPametfrog_Update,
+        EnPametfrog_Draw,
+    },
 };
 
 typedef enum {

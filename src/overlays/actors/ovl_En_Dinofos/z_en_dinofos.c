@@ -63,10 +63,12 @@ ActorInit En_Dinofos_InitVars = {
     FLAGS,
     OBJECT_DINOFOS,
     sizeof(EnDinofos),
-    EnDinofos_Init,
-    EnDinofos_Destroy,
-    EnDinofos_Update,
-    EnDinofos_Draw,
+    {
+        EnDinofos_Init,
+        EnDinofos_Destroy,
+        EnDinofos_Update,
+        EnDinofos_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[9] = {

@@ -32,10 +32,12 @@ ActorInit Bg_Ikana_Mirror_InitVars = {
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaMirror),
-    BgIkanaMirror_Init,
-    BgIkanaMirror_Destroy,
-    BgIkanaMirror_Update,
-    BgIkanaMirror_Draw,
+    {
+        BgIkanaMirror_Init,
+        BgIkanaMirror_Destroy,
+        BgIkanaMirror_Update,
+        BgIkanaMirror_Draw,
+    },
 };
 
 static ColliderTrisElementInit sMirrorColliderElementsInit[] = {

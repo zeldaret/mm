@@ -30,10 +30,12 @@ ActorInit Obj_Bombiwa_InitVars = {
     FLAGS,
     OBJECT_BOMBIWA,
     sizeof(ObjBombiwa),
-    ObjBombiwa_Init,
-    ObjBombiwa_Destroy,
-    ObjBombiwa_Update,
-    NULL,
+    {
+        ObjBombiwa_Init,
+        ObjBombiwa_Destroy,
+        ObjBombiwa_Update,
+        NULL,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

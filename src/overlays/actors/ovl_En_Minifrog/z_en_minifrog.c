@@ -32,10 +32,12 @@ ActorInit En_Minifrog_InitVars = {
     FLAGS,
     OBJECT_FR,
     sizeof(EnMinifrog),
-    EnMinifrog_Init,
-    EnMinifrog_Destroy,
-    EnMinifrog_Update,
-    EnMinifrog_Draw,
+    {
+        EnMinifrog_Init,
+        EnMinifrog_Destroy,
+        EnMinifrog_Update,
+        EnMinifrog_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

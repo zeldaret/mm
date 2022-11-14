@@ -33,10 +33,12 @@ ActorInit En_Test2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest2),
-    EnTest2_Init,
-    Actor_Noop,
-    EnTest2_Update,
-    NULL,
+    {
+        EnTest2_Init,
+        Actor_Noop,
+        EnTest2_Update,
+        NULL,
+    },
 };
 
 static EnTest2ModelInfo sModelInfo[] = {

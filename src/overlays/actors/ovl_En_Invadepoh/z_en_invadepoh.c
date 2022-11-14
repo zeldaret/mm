@@ -184,10 +184,12 @@ ActorInit En_Invadepoh_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInvadepoh),
-    EnInvadepoh_Init,
-    EnInvadepoh_Destroy,
-    EnInvadepoh_Update,
-    NULL,
+    {
+        EnInvadepoh_Init,
+        EnInvadepoh_Destroy,
+        EnInvadepoh_Update,
+        NULL,
+    },
 };
 
 static ColliderCylinderInit sCylinderInitAlien = {

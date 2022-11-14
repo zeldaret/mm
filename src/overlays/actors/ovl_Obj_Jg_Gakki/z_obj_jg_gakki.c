@@ -22,10 +22,12 @@ ActorInit Obj_Jg_Gakki_InitVars = {
     FLAGS,
     OBJECT_JG,
     sizeof(ObjJgGakki),
-    ObjJgGakki_Init,
-    ObjJgGakki_Destroy,
-    ObjJgGakki_Update,
-    ObjJgGakki_Draw,
+    {
+        ObjJgGakki_Init,
+        ObjJgGakki_Destroy,
+        ObjJgGakki_Update,
+        ObjJgGakki_Draw,
+    },
 };
 
 void ObjJgGakki_Init(Actor* thisx, PlayState* play2) {

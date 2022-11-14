@@ -30,10 +30,12 @@ ActorInit En_Ending_Hero6_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnEndingHero6),
-    EnEndingHero6_Init,
-    EnEndingHero6_Destroy,
-    EnEndingHero6_Update,
-    EnEndingHero6_Draw,
+    {
+        EnEndingHero6_Init,
+        EnEndingHero6_Destroy,
+        EnEndingHero6_Update,
+        EnEndingHero6_Draw,
+    },
 };
 
 static FlexSkeletonHeader* sSkeletons[] = {

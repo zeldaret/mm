@@ -44,10 +44,12 @@ ActorInit Bg_Hakugin_Switch_InitVars = {
     FLAGS,
     OBJECT_GORONSWITCH,
     sizeof(BgHakuginSwitch),
-    BgHakuginSwitch_Init,
-    BgHakuginSwitch_Destroy,
-    BgHakuginSwitch_Update,
-    BgHakuginSwitch_Draw,
+    {
+        BgHakuginSwitch_Init,
+        BgHakuginSwitch_Destroy,
+        BgHakuginSwitch_Update,
+        BgHakuginSwitch_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

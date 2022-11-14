@@ -33,10 +33,12 @@ ActorInit Object_Kankyo_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjectKankyo),
-    ObjectKankyo_Init,
-    ObjectKankyo_Destroy,
-    ObjectKankyo_Update,
-    ObjectKankyo_Draw,
+    {
+        ObjectKankyo_Init,
+        ObjectKankyo_Destroy,
+        ObjectKankyo_Update,
+        ObjectKankyo_Draw,
+    },
 };
 
 static u16 D_808DE340 = 0;

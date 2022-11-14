@@ -24,10 +24,12 @@ ActorInit En_Rsn_InitVars = {
     FLAGS,
     OBJECT_RS,
     sizeof(EnRsn),
-    EnRsn_Init,
-    EnRsn_Destroy,
-    EnRsn_Update,
-    EnRsn_Draw,
+    {
+        EnRsn_Init,
+        EnRsn_Destroy,
+        EnRsn_Update,
+        EnRsn_Draw,
+    },
 };
 
 static AnimationInfo sAnimationInfo[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };

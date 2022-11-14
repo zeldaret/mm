@@ -27,10 +27,12 @@ ActorInit Arrow_Light_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ArrowLight),
-    ArrowLight_Init,
-    ArrowLight_Destroy,
-    ArrowLight_Update,
-    ArrowLight_Draw,
+    {
+        ArrowLight_Init,
+        ArrowLight_Destroy,
+        ArrowLight_Update,
+        ArrowLight_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

@@ -57,10 +57,12 @@ ActorInit Dm_Char08_InitVars = {
     FLAGS,
     OBJECT_KAMEJIMA,
     sizeof(DmChar08),
-    DmChar08_Init,
-    DmChar08_Destroy,
-    DmChar08_Update,
-    DmChar08_Draw,
+    {
+        DmChar08_Init,
+        DmChar08_Destroy,
+        DmChar08_Update,
+        DmChar08_Draw,
+    },
 };
 
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"

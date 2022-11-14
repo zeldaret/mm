@@ -31,10 +31,12 @@ ActorInit Obj_Driftice_InitVars = {
     FLAGS,
     OBJECT_DRIFTICE,
     sizeof(ObjDriftice),
-    ObjDriftice_Init,
-    ObjDriftice_Destroy,
-    ObjDriftice_Update,
-    ObjDriftice_Draw,
+    {
+        ObjDriftice_Init,
+        ObjDriftice_Destroy,
+        ObjDriftice_Update,
+        ObjDriftice_Draw,
+    },
 };
 
 static f32 D_80A67620[][3] = {

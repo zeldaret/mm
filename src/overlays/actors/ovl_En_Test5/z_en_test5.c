@@ -22,10 +22,12 @@ ActorInit En_Test5_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest5),
-    EnTest5_Init,
-    EnTest5_Destroy,
-    EnTest5_Update,
-    NULL,
+    {
+        EnTest5_Init,
+        EnTest5_Destroy,
+        EnTest5_Update,
+        NULL,
+    },
 };
 
 void EnTest5_SetupAction(EnTest5* this, EnTest5ActionFunc actionFunc) {

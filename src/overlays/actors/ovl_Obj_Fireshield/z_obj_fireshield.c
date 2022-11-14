@@ -28,10 +28,12 @@ ActorInit Obj_Fireshield_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjFireshield),
-    ObjFireshield_Init,
-    ObjFireshield_Destroy,
-    ObjFireshield_Update,
-    ObjFireshield_Draw,
+    {
+        ObjFireshield_Init,
+        ObjFireshield_Destroy,
+        ObjFireshield_Update,
+        ObjFireshield_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

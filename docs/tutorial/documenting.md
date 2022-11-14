@@ -54,10 +54,12 @@ ActorInit En_Recepgirl_InitVars = {
     FLAGS,
     OBJECT_BG,
     sizeof(EnRecepgirl),
-    EnRecepgirl_Init,
-    EnRecepgirl_Destroy,
-    EnRecepgirl_Update,
-    EnRecepgirl_Draw,
+    {
+        EnRecepgirl_Init,
+        EnRecepgirl_Destroy,
+        EnRecepgirl_Update,
+        EnRecepgirl_Draw,
+    },
 };
 
 static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };

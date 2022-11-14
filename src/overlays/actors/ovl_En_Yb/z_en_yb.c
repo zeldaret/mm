@@ -38,10 +38,12 @@ ActorInit En_Yb_InitVars = {
     FLAGS,
     OBJECT_YB,
     sizeof(EnYb),
-    EnYb_Init,
-    EnYb_Destroy,
-    EnYb_Update,
-    EnYb_Draw,
+    {
+        EnYb_Init,
+        EnYb_Destroy,
+        EnYb_Update,
+        EnYb_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

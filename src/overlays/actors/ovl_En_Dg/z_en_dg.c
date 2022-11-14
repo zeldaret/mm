@@ -44,10 +44,12 @@ ActorInit En_Dg_InitVars = {
     FLAGS,
     OBJECT_DOG,
     sizeof(EnDg),
-    EnDg_Init,
-    EnDg_Destroy,
-    EnDg_Update,
-    EnDg_Draw,
+    {
+        EnDg_Init,
+        EnDg_Destroy,
+        EnDg_Update,
+        EnDg_Draw,
+    },
 };
 
 #define DOG_FLAG_NONE 0

@@ -24,10 +24,12 @@ ActorInit Dm_Char04_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DmChar04),
-    DmChar04_Init,
-    DmChar04_Destroy,
-    DmChar04_Update,
-    DmChar04_Draw,
+    {
+        DmChar04_Init,
+        DmChar04_Destroy,
+        DmChar04_Update,
+        DmChar04_Draw,
+    },
 };
 
 void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 animIndex) {

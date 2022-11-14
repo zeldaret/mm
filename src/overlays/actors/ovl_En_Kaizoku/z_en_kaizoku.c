@@ -155,10 +155,12 @@ ActorInit En_Kaizoku_InitVars = {
     FLAGS,
     OBJECT_KZ,
     sizeof(EnKaizoku),
-    EnKaizoku_Init,
-    EnKaizoku_Destroy,
-    EnKaizoku_Update,
-    NULL,
+    {
+        EnKaizoku_Init,
+        EnKaizoku_Destroy,
+        EnKaizoku_Update,
+        NULL,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

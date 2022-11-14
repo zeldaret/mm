@@ -35,10 +35,12 @@ ActorInit En_Egblock_InitVars = {
     FLAGS,
     OBJECT_EG,
     sizeof(EnEgblock),
-    EnEgblock_Init,
-    EnEgblock_Destroy,
-    EnEgblock_Update,
-    EnEgblock_Draw,
+    {
+        EnEgblock_Init,
+        EnEgblock_Destroy,
+        EnEgblock_Update,
+        EnEgblock_Draw,
+    },
 };
 
 void EnEgblock_Init(Actor* thisx, PlayState* play) {

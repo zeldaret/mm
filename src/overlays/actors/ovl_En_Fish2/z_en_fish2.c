@@ -55,10 +55,12 @@ ActorInit En_Fish2_InitVars = {
     FLAGS,
     OBJECT_FB,
     sizeof(EnFish2),
-    EnFish2_Init,
-    EnFish2_Destroy,
-    EnFish2_Update,
-    EnFish2_Draw,
+    {
+        EnFish2_Init,
+        EnFish2_Destroy,
+        EnFish2_Update,
+        EnFish2_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

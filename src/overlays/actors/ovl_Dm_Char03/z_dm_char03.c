@@ -26,10 +26,12 @@ ActorInit Dm_Char03_InitVars = {
     FLAGS,
     OBJECT_OSN,
     sizeof(DmChar03),
-    DmChar03_Init,
-    DmChar03_Destroy,
-    DmChar03_Update,
-    DmChar03_Draw,
+    {
+        DmChar03_Init,
+        DmChar03_Destroy,
+        DmChar03_Update,
+        DmChar03_Draw,
+    },
 };
 
 AnimationInfo sAnimationInfo[] = {

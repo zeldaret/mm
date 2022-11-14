@@ -37,10 +37,12 @@ ActorInit En_Akindonuts_InitVars = {
     FLAGS,
     OBJECT_DNT,
     sizeof(EnAkindonuts),
-    EnAkindonuts_Init,
-    EnAkindonuts_Destroy,
-    EnAkindonuts_Update,
-    EnAkindonuts_Draw,
+    {
+        EnAkindonuts_Init,
+        EnAkindonuts_Destroy,
+        EnAkindonuts_Update,
+        EnAkindonuts_Draw,
+    },
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {

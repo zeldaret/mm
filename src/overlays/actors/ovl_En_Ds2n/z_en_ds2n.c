@@ -26,10 +26,12 @@ ActorInit En_Ds2n_InitVars = {
     FLAGS,
     OBJECT_DS2N,
     sizeof(EnDs2n),
-    EnDs2n_Init,
-    EnDs2n_Destroy,
-    EnDs2n_Update,
-    EnDs2n_Draw,
+    {
+        EnDs2n_Init,
+        EnDs2n_Destroy,
+        EnDs2n_Update,
+        EnDs2n_Draw,
+    },
 };
 
 static AnimationInfo sAnimationInfo[] = {

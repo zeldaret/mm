@@ -29,10 +29,12 @@ ActorInit Bg_Haka_Tomb_InitVars = {
     FLAGS,
     OBJECT_HAKA_OBJ,
     sizeof(BgHakaTomb),
-    BgHakaTomb_Init,
-    BgHakaTomb_Destroy,
-    BgHakaTomb_Update,
-    BgHakaTomb_Draw,
+    {
+        BgHakaTomb_Init,
+        BgHakaTomb_Destroy,
+        BgHakaTomb_Update,
+        BgHakaTomb_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

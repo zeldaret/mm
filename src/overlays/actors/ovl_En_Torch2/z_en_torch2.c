@@ -25,10 +25,12 @@ ActorInit En_Torch2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTorch2),
-    EnTorch2_Init,
-    EnTorch2_Destroy,
-    EnTorch2_Update,
-    EnTorch2_Draw,
+    {
+        EnTorch2_Init,
+        EnTorch2_Destroy,
+        EnTorch2_Update,
+        EnTorch2_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

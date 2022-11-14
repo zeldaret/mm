@@ -24,10 +24,12 @@ ActorInit Elf_Msg2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ElfMsg2),
-    ElfMsg2_Init,
-    ElfMsg2_Destroy,
-    ElfMsg2_Update,
-    NULL,
+    {
+        ElfMsg2_Init,
+        ElfMsg2_Destroy,
+        ElfMsg2_Update,
+        NULL,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

@@ -25,10 +25,12 @@ ActorInit Obj_Kibako2_InitVars = {
     FLAGS,
     OBJECT_KIBAKO2,
     sizeof(ObjKibako2),
-    ObjKibako2_Init,
-    ObjKibako2_Destroy,
-    ObjKibako2_Update,
-    ObjKibako2_Draw,
+    {
+        ObjKibako2_Init,
+        ObjKibako2_Destroy,
+        ObjKibako2_Update,
+        ObjKibako2_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

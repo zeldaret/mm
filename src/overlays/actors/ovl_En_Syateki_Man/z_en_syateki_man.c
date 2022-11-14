@@ -65,10 +65,12 @@ ActorInit En_Syateki_Man_InitVars = {
     FLAGS,
     OBJECT_SHN,
     sizeof(EnSyatekiMan),
-    EnSyatekiMan_Init,
-    EnSyatekiMan_Destroy,
-    EnSyatekiMan_Update,
-    EnSyatekiMan_Draw,
+    {
+        EnSyatekiMan_Init,
+        EnSyatekiMan_Destroy,
+        EnSyatekiMan_Update,
+        EnSyatekiMan_Draw,
+    },
 };
 
 typedef enum {

@@ -93,10 +93,12 @@ typedef struct {
     /* 0x04 */ u32 flags;
     /* 0x08 */ s16 objectId;
     /* 0x0C */ u32 instanceSize;
+    struct {
     /* 0x10 */ ActorFunc init;
     /* 0x14 */ ActorFunc destroy;
     /* 0x18 */ ActorFunc update;
     /* 0x1C */ ActorFunc draw;
+    };
 } ActorInit; // size = 0x20
 
 typedef enum {

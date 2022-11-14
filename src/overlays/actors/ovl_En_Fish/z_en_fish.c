@@ -74,10 +74,12 @@ ActorInit En_Fish_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnFish),
-    EnFish_Init,
-    EnFish_Destroy,
-    EnFish_Update,
-    EnFish_Draw,
+    {
+        EnFish_Init,
+        EnFish_Destroy,
+        EnFish_Update,
+        EnFish_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

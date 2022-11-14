@@ -55,10 +55,12 @@ ActorInit En_Sellnuts_InitVars = {
     FLAGS,
     OBJECT_DNT,
     sizeof(EnSellnuts),
-    EnSellnuts_Init,
-    EnSellnuts_Destroy,
-    EnSellnuts_Update,
-    EnSellnuts_Draw,
+    {
+        EnSellnuts_Init,
+        EnSellnuts_Destroy,
+        EnSellnuts_Update,
+        EnSellnuts_Draw,
+    },
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {

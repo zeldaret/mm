@@ -25,10 +25,12 @@ ActorInit Bg_Ctower_Gear_InitVars = {
     FLAGS,
     OBJECT_CTOWER_ROT,
     sizeof(BgCtowerGear),
-    BgCtowerGear_Init,
-    BgCtowerGear_Destroy,
-    BgCtowerGear_Update,
-    BgCtowerGear_Draw,
+    {
+        BgCtowerGear_Init,
+        BgCtowerGear_Destroy,
+        BgCtowerGear_Update,
+        BgCtowerGear_Draw,
+    },
 };
 
 static Vec3f sExitSplashOffsets[] = {

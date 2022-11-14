@@ -27,10 +27,12 @@ ActorInit Dm_An_InitVars = {
     FLAGS,
     OBJECT_AN1,
     sizeof(DmAn),
-    DmAn_Init,
-    DmAn_Destroy,
-    DmAn_Update,
-    NULL,
+    {
+        DmAn_Init,
+        DmAn_Destroy,
+        DmAn_Update,
+        NULL,
+    },
 };
 
 static AnimationInfoS sAnimationInfo[] = {

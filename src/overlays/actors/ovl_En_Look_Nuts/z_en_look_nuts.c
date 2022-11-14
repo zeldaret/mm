@@ -30,10 +30,12 @@ ActorInit En_Look_Nuts_InitVars = {
     FLAGS,
     OBJECT_DNK,
     sizeof(EnLookNuts),
-    EnLookNuts_Init,
-    EnLookNuts_Destroy,
-    EnLookNuts_Update,
-    EnLookNuts_Draw,
+    {
+        EnLookNuts_Init,
+        EnLookNuts_Destroy,
+        EnLookNuts_Update,
+        EnLookNuts_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

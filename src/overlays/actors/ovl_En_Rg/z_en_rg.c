@@ -28,10 +28,12 @@ ActorInit En_Rg_InitVars = {
     FLAGS,
     OBJECT_OF1D_MAP,
     sizeof(EnRg),
-    EnRg_Init,
-    EnRg_Destroy,
-    EnRg_Update,
-    EnRg_Draw,
+    {
+        EnRg_Init,
+        EnRg_Destroy,
+        EnRg_Update,
+        EnRg_Draw,
+    },
 };
 
 static ColliderSphereInit sSphereInit = {

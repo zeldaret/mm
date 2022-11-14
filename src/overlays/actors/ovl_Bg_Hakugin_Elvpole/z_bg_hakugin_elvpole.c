@@ -24,10 +24,12 @@ ActorInit Bg_Hakugin_Elvpole_InitVars = {
     FLAGS,
     OBJECT_HAKUGIN_OBJ,
     sizeof(BgHakuginElvpole),
-    BgHakuginElvpole_Init,
-    BgHakuginElvpole_Destroy,
-    BgHakuginElvpole_Update,
-    BgHakuginElvpole_Draw,
+    {
+        BgHakuginElvpole_Init,
+        BgHakuginElvpole_Destroy,
+        BgHakuginElvpole_Update,
+        BgHakuginElvpole_Draw,
+    },
 };
 
 void BgHakuginElvpole_Init(Actor* thisx, PlayState* play) {

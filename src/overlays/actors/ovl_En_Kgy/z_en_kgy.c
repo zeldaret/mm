@@ -37,10 +37,12 @@ ActorInit En_Kgy_InitVars = {
     FLAGS,
     OBJECT_KGY,
     sizeof(EnKgy),
-    EnKgy_Init,
-    EnKgy_Destroy,
-    EnKgy_Update,
-    EnKgy_Draw,
+    {
+        EnKgy_Init,
+        EnKgy_Destroy,
+        EnKgy_Update,
+        EnKgy_Draw,
+    },
 };
 
 void EnKgy_Init(Actor* thisx, PlayState* play) {

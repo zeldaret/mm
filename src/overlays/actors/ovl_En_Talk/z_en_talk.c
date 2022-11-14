@@ -22,10 +22,12 @@ ActorInit En_Talk_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTalk),
-    EnTalk_Init,
-    EnTalk_Destroy,
-    EnTalk_Update,
-    NULL,
+    {
+        EnTalk_Init,
+        EnTalk_Destroy,
+        EnTalk_Update,
+        NULL,
+    },
 };
 
 void EnTalk_Init(Actor* thisx, PlayState* play) {

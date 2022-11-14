@@ -24,10 +24,12 @@ ActorInit Item_B_Heart_InitVars = {
     FLAGS,
     OBJECT_GI_HEARTS,
     sizeof(ItemBHeart),
-    ItemBHeart_Init,
-    ItemBHeart_Destroy,
-    ItemBHeart_Update,
-    ItemBHeart_Draw,
+    {
+        ItemBHeart_Init,
+        ItemBHeart_Destroy,
+        ItemBHeart_Update,
+        ItemBHeart_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

@@ -41,10 +41,12 @@ ActorInit En_Elfgrp_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnElfgrp),
-    EnElfgrp_Init,
-    EnElfgrp_Destroy,
-    EnElfgrp_Update,
-    NULL,
+    {
+        EnElfgrp_Init,
+        EnElfgrp_Destroy,
+        EnElfgrp_Update,
+        NULL,
+    },
 };
 
 void func_80A396B0(EnElfgrp* this, s32 arg1) {

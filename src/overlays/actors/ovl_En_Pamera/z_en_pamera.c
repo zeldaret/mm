@@ -75,10 +75,12 @@ ActorInit En_Pamera_InitVars = {
     FLAGS,
     OBJECT_PAMERA,
     sizeof(EnPamera),
-    EnPamera_Init,
-    EnPamera_Destroy,
-    EnPamera_Update,
-    EnPamera_Draw,
+    {
+        EnPamera_Init,
+        EnPamera_Destroy,
+        EnPamera_Update,
+        EnPamera_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -23,10 +23,12 @@ ActorInit En_Ru_InitVars = {
     FLAGS,
     OBJECT_RU2,
     sizeof(EnRu),
-    EnRu_Init,
-    EnRu_Destroy,
-    EnRu_Update,
-    EnRu_Draw,
+    {
+        EnRu_Init,
+        EnRu_Destroy,
+        EnRu_Update,
+        EnRu_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

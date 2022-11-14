@@ -28,10 +28,12 @@ ActorInit En_Osk_InitVars = {
     FLAGS,
     OBJECT_IKN_DEMO,
     sizeof(EnOsk),
-    EnOsk_Init,
-    EnOsk_Destroy,
-    EnOsk_Update,
-    EnOsk_Draw,
+    {
+        EnOsk_Init,
+        EnOsk_Destroy,
+        EnOsk_Update,
+        EnOsk_Draw,
+    },
 };
 
 AnimationHeader* D_80BF6FA0[] = {

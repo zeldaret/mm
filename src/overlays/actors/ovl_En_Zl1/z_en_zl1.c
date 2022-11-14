@@ -21,10 +21,12 @@ ActorInit En_Zl1_InitVars = {
     FLAGS,
     OBJECT_ZL1,
     sizeof(EnZl1),
-    EnZl1_Init,
-    EnZl1_Destroy,
-    EnZl1_Update,
-    EnZl1_Draw,
+    {
+        EnZl1_Init,
+        EnZl1_Destroy,
+        EnZl1_Update,
+        EnZl1_Draw,
+    },
 };
 
 void EnZl1_Init(Actor* thisx, PlayState* play) {

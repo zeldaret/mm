@@ -46,10 +46,12 @@ ActorInit En_Tru_Mt_InitVars = {
     FLAGS,
     OBJECT_TRU,
     sizeof(EnTruMt),
-    EnTruMt_Init,
-    EnTruMt_Destroy,
-    EnTruMt_Update,
-    EnTruMt_Draw,
+    {
+        EnTruMt_Init,
+        EnTruMt_Destroy,
+        EnTruMt_Update,
+        EnTruMt_Draw,
+    },
 };
 
 static ColliderSphereInit sSphereInit = {

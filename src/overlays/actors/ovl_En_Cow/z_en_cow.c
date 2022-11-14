@@ -33,10 +33,12 @@ ActorInit En_Cow_InitVars = {
     FLAGS,
     OBJECT_COW,
     sizeof(EnCow),
-    EnCow_Init,
-    EnCow_Destroy,
-    EnCow_Update,
-    EnCow_Draw,
+    {
+        EnCow_Init,
+        EnCow_Destroy,
+        EnCow_Update,
+        EnCow_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -32,10 +32,12 @@ ActorInit Bg_Ingate_InitVars = {
     FLAGS,
     OBJECT_SICHITAI_OBJ,
     sizeof(BgIngate),
-    BgIngate_Init,
-    BgIngate_Destroy,
-    BgIngate_Update,
-    BgIngate_Draw,
+    {
+        BgIngate_Init,
+        BgIngate_Destroy,
+        BgIngate_Update,
+        BgIngate_Draw,
+    },
 };
 
 /**

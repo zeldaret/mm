@@ -41,10 +41,12 @@ ActorInit En_Bbfall_InitVars = {
     FLAGS,
     OBJECT_BB,
     sizeof(EnBbfall),
-    EnBbfall_Init,
-    EnBbfall_Destroy,
-    EnBbfall_Update,
-    EnBbfall_Draw,
+    {
+        EnBbfall_Init,
+        EnBbfall_Destroy,
+        EnBbfall_Update,
+        EnBbfall_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[3] = {

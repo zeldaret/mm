@@ -37,10 +37,12 @@ ActorInit En_Tanron4_InitVars = {
     FLAGS,
     OBJECT_TANRON4,
     sizeof(EnTanron4),
-    EnTanron4_Init,
-    EnTanron4_Destroy,
-    EnTanron4_Update,
-    EnTanron4_Draw,
+    {
+        EnTanron4_Init,
+        EnTanron4_Destroy,
+        EnTanron4_Update,
+        EnTanron4_Draw,
+    },
 };
 
 void EnTanron4_Init(Actor* thisx, PlayState* play2) {

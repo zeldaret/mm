@@ -40,10 +40,12 @@ ActorInit En_Test7_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest7),
-    EnTest7_Init,
-    EnTest7_Destroy,
-    EnTest7_Update,
-    EnTest7_Draw,
+    {
+        EnTest7_Init,
+        EnTest7_Destroy,
+        EnTest7_Update,
+        EnTest7_Draw,
+    },
 };
 
 void EnTest7_SetupAction(EnTest7* this, EnTest7ActionFunc actionFunc) {

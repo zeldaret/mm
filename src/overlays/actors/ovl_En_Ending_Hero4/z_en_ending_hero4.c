@@ -25,10 +25,12 @@ ActorInit En_Ending_Hero4_InitVars = {
     FLAGS,
     OBJECT_SDN,
     sizeof(EnEndingHero4),
-    EnEndingHero4_Init,
-    EnEndingHero4_Destroy,
-    EnEndingHero4_Update,
-    EnEndingHero4_Draw,
+    {
+        EnEndingHero4_Init,
+        EnEndingHero4_Destroy,
+        EnEndingHero4_Update,
+        EnEndingHero4_Draw,
+    },
 };
 
 void EnEndingHero4_Init(Actor* thisx, PlayState* play) {

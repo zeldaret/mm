@@ -34,10 +34,12 @@ ActorInit En_Bat_InitVars = {
     FLAGS,
     OBJECT_BAT,
     sizeof(EnBat),
-    EnBat_Init,
-    EnBat_Destroy,
-    EnBat_Update,
-    EnBat_Draw,
+    {
+        EnBat_Init,
+        EnBat_Destroy,
+        EnBat_Update,
+        EnBat_Draw,
+    },
 };
 
 static ColliderSphereInit sSphereInit = {

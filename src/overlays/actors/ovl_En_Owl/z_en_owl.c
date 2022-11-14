@@ -54,10 +54,12 @@ ActorInit En_Owl_InitVars = {
     FLAGS,
     OBJECT_OWL,
     sizeof(EnOwl),
-    EnOwl_Init,
-    EnOwl_Destroy,
-    EnOwl_Update,
-    EnOwl_Draw,
+    {
+        EnOwl_Init,
+        EnOwl_Destroy,
+        EnOwl_Update,
+        EnOwl_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

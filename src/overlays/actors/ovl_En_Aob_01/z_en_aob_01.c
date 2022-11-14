@@ -40,10 +40,12 @@ ActorInit En_Aob_01_InitVars = {
     FLAGS,
     OBJECT_AOB,
     sizeof(EnAob01),
-    EnAob01_Init,
-    EnAob01_Destroy,
-    EnAob01_Update,
-    EnAob01_Draw,
+    {
+        EnAob01_Init,
+        EnAob01_Destroy,
+        EnAob01_Update,
+        EnAob01_Draw,
+    },
 };
 
 static AnimationInfo sAnimationInfo[] = {

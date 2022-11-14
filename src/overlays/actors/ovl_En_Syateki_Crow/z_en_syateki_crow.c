@@ -31,10 +31,12 @@ ActorInit En_Syateki_Crow_InitVars = {
     FLAGS,
     OBJECT_CROW,
     sizeof(EnSyatekiCrow),
-    EnSyatekiCrow_Init,
-    EnSyatekiCrow_Destroy,
-    EnSyatekiCrow_Update,
-    EnSyatekiCrow_Draw,
+    {
+        EnSyatekiCrow_Init,
+        EnSyatekiCrow_Destroy,
+        EnSyatekiCrow_Update,
+        EnSyatekiCrow_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

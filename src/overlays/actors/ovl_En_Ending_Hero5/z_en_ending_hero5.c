@@ -25,10 +25,12 @@ ActorInit En_Ending_Hero5_InitVars = {
     FLAGS,
     OBJECT_DAIKU,
     sizeof(EnEndingHero5),
-    EnEndingHero5_Init,
-    EnEndingHero5_Destroy,
-    EnEndingHero5_Update,
-    EnEndingHero5_Draw,
+    {
+        EnEndingHero5_Init,
+        EnEndingHero5_Destroy,
+        EnEndingHero5_Update,
+        EnEndingHero5_Draw,
+    },
 };
 
 void EnEndingHero5_Init(Actor* thisx, PlayState* play) {

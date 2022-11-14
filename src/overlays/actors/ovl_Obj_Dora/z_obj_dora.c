@@ -41,10 +41,12 @@ ActorInit Obj_Dora_InitVars = {
     FLAGS,
     OBJECT_DORA,
     sizeof(ObjDora),
-    ObjDora_Init,
-    ObjDora_Destroy,
-    ObjDora_Update,
-    ObjDora_Draw,
+    {
+        ObjDora_Init,
+        ObjDora_Destroy,
+        ObjDora_Update,
+        ObjDora_Draw,
+    },
 };
 
 static ColliderTrisElementInit sTrisElementsInit[6] = {

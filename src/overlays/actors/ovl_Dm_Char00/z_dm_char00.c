@@ -26,10 +26,12 @@ ActorInit Dm_Char00_InitVars = {
     FLAGS,
     OBJECT_DELF,
     sizeof(DmChar00),
-    DmChar00_Init,
-    DmChar00_Destroy,
-    DmChar00_Update,
-    DmChar00_Draw,
+    {
+        DmChar00_Init,
+        DmChar00_Destroy,
+        DmChar00_Update,
+        DmChar00_Draw,
+    },
 };
 
 static AnimationInfo sAnimationInfo[] = {

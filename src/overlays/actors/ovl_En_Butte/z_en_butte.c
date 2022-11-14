@@ -59,10 +59,12 @@ ActorInit En_Butte_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(EnButte),
-    EnButte_Init,
-    EnButte_Destroy,
-    EnButte_Update,
-    EnButte_Draw,
+    {
+        EnButte_Init,
+        EnButte_Destroy,
+        EnButte_Update,
+        EnButte_Draw,
+    },
 };
 
 typedef struct {

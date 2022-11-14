@@ -88,10 +88,12 @@ ActorInit En_Prz_InitVars = {
     FLAGS,
     OBJECT_PR,
     sizeof(EnPrz),
-    EnPrz_Init,
-    EnPrz_Destroy,
-    EnPrz_Update,
-    EnPrz_Draw,
+    {
+        EnPrz_Init,
+        EnPrz_Destroy,
+        EnPrz_Update,
+        EnPrz_Draw,
+    },
 };
 
 AnimationHeader* D_80A77240[] = { &object_pr_Anim_004340, &object_pr_Anim_004274 };

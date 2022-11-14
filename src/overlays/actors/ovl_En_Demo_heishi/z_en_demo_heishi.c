@@ -36,10 +36,12 @@ ActorInit En_Demo_heishi_InitVars = {
     FLAGS,
     OBJECT_SDN,
     sizeof(EnDemoheishi),
-    EnDemoheishi_Init,
-    EnDemoheishi_Destroy,
-    EnDemoheishi_Update,
-    EnDemoheishi_Draw,
+    {
+        EnDemoheishi_Init,
+        EnDemoheishi_Destroy,
+        EnDemoheishi_Update,
+        EnDemoheishi_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

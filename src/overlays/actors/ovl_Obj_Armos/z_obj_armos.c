@@ -29,10 +29,12 @@ ActorInit Obj_Armos_InitVars = {
     FLAGS,
     OBJECT_AM,
     sizeof(ObjArmos),
-    ObjArmos_Init,
-    ObjArmos_Destroy,
-    ObjArmos_Update,
-    ObjArmos_Draw,
+    {
+        ObjArmos_Init,
+        ObjArmos_Destroy,
+        ObjArmos_Update,
+        ObjArmos_Draw,
+    },
 };
 
 s16 D_809A5BB0[] = { 1, -1, 0, 0 };

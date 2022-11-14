@@ -153,11 +153,11 @@ ActorInit Boss_05_InitVars = {
     FLAGS,
     OBJECT_BOSS05,
     sizeof(Boss05),
-    Boss05_Init,
+{Boss05_Init,
     Boss05_Destroy,
     Boss05_Update,
     Boss05_Draw,
-};
+},};
 
 #endif
 

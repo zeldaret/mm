@@ -22,10 +22,12 @@ ActorInit Bg_Fu_Mizu_InitVars = {
     FLAGS,
     OBJECT_FU_KAITEN,
     sizeof(BgFuMizu),
-    BgFuMizu_Init,
-    BgFuMizu_Destroy,
-    BgFuMizu_Update,
-    BgFuMizu_Draw,
+    {
+        BgFuMizu_Init,
+        BgFuMizu_Destroy,
+        BgFuMizu_Update,
+        BgFuMizu_Draw,
+    },
 };
 
 void BgFuMizu_Init(Actor* thisx, PlayState* play) {

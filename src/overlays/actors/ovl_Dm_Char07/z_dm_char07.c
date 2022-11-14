@@ -24,10 +24,12 @@ ActorInit Dm_Char07_InitVars = {
     FLAGS,
     OBJECT_MILKBAR,
     sizeof(DmChar07),
-    DmChar07_Init,
-    DmChar07_Destroy,
-    DmChar07_Update,
-    DmChar07_Draw,
+    {
+        DmChar07_Init,
+        DmChar07_Destroy,
+        DmChar07_Update,
+        DmChar07_Draw,
+    },
 };
 
 void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {

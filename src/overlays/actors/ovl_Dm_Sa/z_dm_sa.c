@@ -24,10 +24,12 @@ ActorInit Dm_Sa_InitVars = {
     FLAGS,
     OBJECT_STK,
     sizeof(DmSa),
-    DmSa_Init,
-    DmSa_Destroy,
-    DmSa_Update,
-    DmSa_Draw,
+    {
+        DmSa_Init,
+        DmSa_Destroy,
+        DmSa_Update,
+        DmSa_Draw,
+    },
 };
 
 static AnimationInfo sAnimationInfo[] = { { &gSkullKidTPoseAnim, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };

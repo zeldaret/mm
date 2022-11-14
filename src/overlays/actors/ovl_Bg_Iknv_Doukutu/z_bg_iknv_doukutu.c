@@ -33,10 +33,12 @@ ActorInit Bg_Iknv_Doukutu_InitVars = {
     FLAGS,
     OBJECT_IKNV_OBJ,
     sizeof(BgIknvDoukutu),
-    BgIknvDoukutu_Init,
-    BgIknvDoukutu_Destroy,
-    BgIknvDoukutu_Update,
-    BgIknvDoukutu_Draw,
+    {
+        BgIknvDoukutu_Init,
+        BgIknvDoukutu_Destroy,
+        BgIknvDoukutu_Update,
+        BgIknvDoukutu_Draw,
+    },
 };
 
 void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {

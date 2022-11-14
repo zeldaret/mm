@@ -41,10 +41,12 @@ ActorInit Dm_Char01_InitVars = {
     FLAGS,
     OBJECT_MTORIDE,
     sizeof(DmChar01),
-    DmChar01_Init,
-    DmChar01_Destroy,
-    DmChar01_Update,
-    DmChar01_Draw,
+    {
+        DmChar01_Init,
+        DmChar01_Destroy,
+        DmChar01_Update,
+        DmChar01_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

@@ -27,10 +27,12 @@ ActorInit Obj_HsStump_InitVars = {
     FLAGS,
     OBJECT_HSSTUMP,
     sizeof(ObjHsStump),
-    ObjHsStump_Init,
-    ObjHsStump_Destroy,
-    ObjHsStump_Update,
-    ObjHsStump_Draw,
+    {
+        ObjHsStump_Init,
+        ObjHsStump_Destroy,
+        ObjHsStump_Update,
+        ObjHsStump_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

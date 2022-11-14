@@ -77,10 +77,12 @@ ActorInit En_Racedog_InitVars = {
     FLAGS,
     OBJECT_DOG,
     sizeof(EnRacedog),
-    EnRacedog_Init,
-    EnRacedog_Destroy,
-    EnRacedog_Update,
-    EnRacedog_Draw,
+    {
+        EnRacedog_Init,
+        EnRacedog_Destroy,
+        EnRacedog_Update,
+        EnRacedog_Draw,
+    },
 };
 
 static s16 sNumberOfDogsFinished = 0;

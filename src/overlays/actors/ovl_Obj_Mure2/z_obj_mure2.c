@@ -24,11 +24,11 @@ ActorInit Obj_Mure2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMure2),
-    ObjMure2_Init,
+{ObjMure2_Init,
     Actor_Noop,
     ObjMure2_Update,
     NULL,
-};
+},};
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809615F4[] = {

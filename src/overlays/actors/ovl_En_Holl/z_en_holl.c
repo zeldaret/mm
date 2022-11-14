@@ -63,10 +63,12 @@ ActorInit En_Holl_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHoll),
-    EnHoll_Init,
-    EnHoll_Destroy,
-    EnHoll_Update,
-    EnHoll_Draw,
+    {
+        EnHoll_Init,
+        EnHoll_Destroy,
+        EnHoll_Update,
+        EnHoll_Draw,
+    },
 };
 
 #include "overlays/ovl_En_Holl/ovl_En_Holl.c"

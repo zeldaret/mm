@@ -30,10 +30,12 @@ ActorInit Obj_Bigicicle_InitVars = {
     FLAGS,
     OBJECT_BIGICICLE,
     sizeof(ObjBigicicle),
-    ObjBigicicle_Init,
-    ObjBigicicle_Destroy,
-    ObjBigicicle_Update,
-    ObjBigicicle_Draw,
+    {
+        ObjBigicicle_Init,
+        ObjBigicicle_Destroy,
+        ObjBigicicle_Update,
+        ObjBigicicle_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

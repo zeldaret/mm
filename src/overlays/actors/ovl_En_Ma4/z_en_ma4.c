@@ -60,10 +60,12 @@ ActorInit En_Ma4_InitVars = {
     FLAGS,
     OBJECT_MA1,
     sizeof(EnMa4),
-    EnMa4_Init,
-    EnMa4_Destroy,
-    EnMa4_Update,
-    EnMa4_Draw,
+    {
+        EnMa4_Init,
+        EnMa4_Destroy,
+        EnMa4_Update,
+        EnMa4_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -75,10 +75,12 @@ ActorInit En_Tk_InitVars = {
     FLAGS,
     OBJECT_TK,
     sizeof(EnTk),
-    EnTk_Init,
-    EnTk_Destroy,
-    EnTk_Update,
-    EnTk_Draw,
+    {
+        EnTk_Init,
+        EnTk_Destroy,
+        EnTk_Update,
+        EnTk_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

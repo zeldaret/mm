@@ -50,10 +50,12 @@ ActorInit En_Ishi_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnIshi),
-    EnIshi_Init,
-    EnIshi_Destroy,
-    EnIshi_Update,
-    NULL,
+    {
+        EnIshi_Init,
+        EnIshi_Destroy,
+        EnIshi_Update,
+        NULL,
+    },
 };
 
 static f32 D_8095F6B8[] = { 0.1f, 0.4f };

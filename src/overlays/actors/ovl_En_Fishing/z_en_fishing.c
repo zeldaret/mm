@@ -207,10 +207,12 @@ ActorInit En_Fishing_InitVars = {
     FLAGS,
     OBJECT_FISH,
     sizeof(EnFishing),
-    EnFishing_Init,
-    EnFishing_Destroy,
-    EnFishing_UpdateFish,
-    EnFishing_DrawFish,
+    {
+        EnFishing_Init,
+        EnFishing_Destroy,
+        EnFishing_UpdateFish,
+        EnFishing_DrawFish,
+    },
 };
 
 f32 D_8090CCD0 = 0.0f;

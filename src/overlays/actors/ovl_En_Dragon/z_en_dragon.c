@@ -56,10 +56,12 @@ ActorInit En_Dragon_InitVars = {
     FLAGS,
     OBJECT_UTUBO,
     sizeof(EnDragon),
-    EnDragon_Init,
-    EnDragon_Destroy,
-    EnDragon_Update,
-    EnDragon_Draw,
+    {
+        EnDragon_Init,
+        EnDragon_Destroy,
+        EnDragon_Update,
+        EnDragon_Draw,
+    },
 };
 
 typedef enum {

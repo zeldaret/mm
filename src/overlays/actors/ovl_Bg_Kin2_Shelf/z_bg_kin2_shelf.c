@@ -29,10 +29,12 @@ ActorInit Bg_Kin2_Shelf_InitVars = {
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Shelf),
-    BgKin2Shelf_Init,
-    BgKin2Shelf_Destroy,
-    BgKin2Shelf_Update,
-    BgKin2Shelf_Draw,
+    {
+        BgKin2Shelf_Init,
+        BgKin2Shelf_Destroy,
+        BgKin2Shelf_Update,
+        BgKin2Shelf_Draw,
+    },
 };
 
 f32 D_80B70750[] = { 60.0f, 120.0f };

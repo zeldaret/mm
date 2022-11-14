@@ -22,10 +22,12 @@ ActorInit En_Test_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTest),
-    EnTest_Init,
-    EnTest_Destroy,
-    EnTest_Update,
-    EnTest_Draw,
+    {
+        EnTest_Init,
+        EnTest_Destroy,
+        EnTest_Update,
+        EnTest_Draw,
+    },
 };
 
 void func_80862B70(EnTestStruct* arg0) {

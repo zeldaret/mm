@@ -43,10 +43,12 @@ ActorInit En_Bom_Bowl_Man_InitVars = {
     FLAGS,
     OBJECT_CS,
     sizeof(EnBomBowlMan),
-    EnBomBowlMan_Init,
-    EnBomBowlMan_Destroy,
-    EnBomBowlMan_Update,
-    EnBomBowlMan_Draw,
+    {
+        EnBomBowlMan_Init,
+        EnBomBowlMan_Destroy,
+        EnBomBowlMan_Update,
+        EnBomBowlMan_Draw,
+    },
 };
 
 static AnimationHeader* sAnimations[] = {

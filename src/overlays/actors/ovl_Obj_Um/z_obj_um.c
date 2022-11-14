@@ -67,10 +67,12 @@ ActorInit Obj_Um_InitVars = {
     FLAGS,
     OBJECT_UM,
     sizeof(ObjUm),
-    ObjUm_Init,
-    ObjUm_Destroy,
-    ObjUm_Update,
-    ObjUm_Draw,
+    {
+        ObjUm_Init,
+        ObjUm_Destroy,
+        ObjUm_Update,
+        ObjUm_Draw,
+    },
 };
 
 static TexturePtr sEyeTextures[] = {

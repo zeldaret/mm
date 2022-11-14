@@ -78,10 +78,12 @@ ActorInit En_Giant_InitVars = {
     FLAGS,
     OBJECT_GIANT,
     sizeof(EnGiant),
-    EnGiant_Init,
-    EnGiant_Destroy,
-    EnGiant_Update,
-    EnGiant_Draw,
+    {
+        EnGiant_Init,
+        EnGiant_Destroy,
+        EnGiant_Update,
+        EnGiant_Draw,
+    },
 };
 
 static AnimationHeader* sAnimations[] = {

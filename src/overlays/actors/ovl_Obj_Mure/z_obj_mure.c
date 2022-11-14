@@ -26,10 +26,12 @@ ActorInit Obj_Mure_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMure),
-    ObjMure_Init,
-    ObjMure_Destroy,
-    ObjMure_Update,
-    NULL,
+    {
+        ObjMure_Init,
+        ObjMure_Destroy,
+        ObjMure_Update,
+        NULL,
+    },
 };
 
 static f32 sZClip[] = {

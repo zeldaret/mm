@@ -116,10 +116,12 @@ ActorInit En_Nb_InitVars = {
     FLAGS,
     OBJECT_NB,
     sizeof(EnNb),
-    EnNb_Init,
-    EnNb_Destroy,
-    EnNb_Update,
-    EnNb_Draw,
+    {
+        EnNb_Init,
+        EnNb_Destroy,
+        EnNb_Update,
+        EnNb_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -22,11 +22,11 @@ ActorInit En_Ge3_InitVars = {
     FLAGS,
     OBJECT_GELDB,
     sizeof(EnGe3),
-    EnGe3_Init,
+{EnGe3_Init,
     EnGe3_Destroy,
     EnGe3_Update,
     EnGe3_Draw,
-};
+},};
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_809A0DA0 = {

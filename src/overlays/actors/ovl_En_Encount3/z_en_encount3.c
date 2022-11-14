@@ -26,11 +26,11 @@ ActorInit En_Encount3_InitVars = {
     FLAGS,
     OBJECT_BIG_FWALL,
     sizeof(EnEncount3),
-    EnEncount3_Init,
+{EnEncount3_Init,
     EnEncount3_Destroy,
     EnEncount3_Update,
     EnEncount3_Draw,
-};
+},};
 
 #endif
 

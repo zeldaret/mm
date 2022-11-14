@@ -143,10 +143,12 @@ ActorInit En_Grasshopper_InitVars = {
     FLAGS,
     OBJECT_GRASSHOPPER,
     sizeof(EnGrasshopper),
-    EnGrasshopper_Init,
-    EnGrasshopper_Destroy,
-    EnGrasshopper_Update,
-    EnGrasshopper_Draw,
+    {
+        EnGrasshopper_Init,
+        EnGrasshopper_Destroy,
+        EnGrasshopper_Update,
+        EnGrasshopper_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

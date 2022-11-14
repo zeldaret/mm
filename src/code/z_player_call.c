@@ -20,10 +20,12 @@ ActorInit Player_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(Player),
-    PlayerCall_Init,
-    PlayerCall_Destroy,
-    PlayerCall_Update,
-    PlayerCall_Draw,
+    {
+        PlayerCall_Init,
+        PlayerCall_Destroy,
+        PlayerCall_Update,
+        PlayerCall_Draw,
+    },
 };
 
 void Player_Init(Actor* thisx, PlayState* play);

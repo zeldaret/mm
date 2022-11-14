@@ -24,10 +24,12 @@ ActorInit Eff_Zoraband_InitVars = {
     FLAGS,
     OBJECT_ZORABAND,
     sizeof(EffZoraband),
-    EffZoraband_Init,
-    EffZoraband_Destroy,
-    EffZoraband_Update,
-    EffZoraband_Draw,
+    {
+        EffZoraband_Init,
+        EffZoraband_Destroy,
+        EffZoraband_Update,
+        EffZoraband_Draw,
+    },
 };
 
 void EffZoraband_Init(Actor* thisx, PlayState* play) {

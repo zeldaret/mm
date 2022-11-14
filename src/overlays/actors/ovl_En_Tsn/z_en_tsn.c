@@ -35,10 +35,12 @@ ActorInit En_Tsn_InitVars = {
     FLAGS,
     OBJECT_TSN,
     sizeof(EnTsn),
-    EnTsn_Init,
-    EnTsn_Destroy,
-    EnTsn_Update,
-    EnTsn_Draw,
+    {
+        EnTsn_Init,
+        EnTsn_Destroy,
+        EnTsn_Update,
+        EnTsn_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

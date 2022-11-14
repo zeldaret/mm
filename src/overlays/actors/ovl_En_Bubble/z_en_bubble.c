@@ -25,10 +25,12 @@ ActorInit En_Bubble_InitVars = {
     FLAGS,
     OBJECT_BUBBLE,
     sizeof(EnBubble),
-    EnBubble_Init,
-    EnBubble_Destroy,
-    EnBubble_Update,
-    EnBubble_Draw,
+    {
+        EnBubble_Init,
+        EnBubble_Destroy,
+        EnBubble_Update,
+        EnBubble_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

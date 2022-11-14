@@ -31,10 +31,12 @@ ActorInit En_Ssh_InitVars = {
     FLAGS,
     OBJECT_SSH,
     sizeof(EnSsh),
-    EnSsh_Init,
-    EnSsh_Destroy,
-    EnSsh_Update,
-    EnSsh_Draw,
+    {
+        EnSsh_Init,
+        EnSsh_Destroy,
+        EnSsh_Update,
+        EnSsh_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

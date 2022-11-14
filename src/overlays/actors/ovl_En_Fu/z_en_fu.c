@@ -61,10 +61,12 @@ ActorInit En_Fu_InitVars = {
     FLAGS,
     OBJECT_MU,
     sizeof(EnFu),
-    EnFu_Init,
-    EnFu_Destroy,
-    EnFu_Update,
-    EnFu_Draw,
+    {
+        EnFu_Init,
+        EnFu_Destroy,
+        EnFu_Update,
+        EnFu_Draw,
+    },
 };
 
 static s32 D_80964B00[] = { 300, 100, 100 };

@@ -27,10 +27,12 @@ ActorInit Obj_Danpeilift_InitVars = {
     FLAGS,
     OBJECT_OBJ_DANPEILIFT,
     sizeof(ObjDanpeilift),
-    ObjDanpeilift_Init,
-    ObjDanpeilift_Destroy,
-    ObjDanpeilift_Update,
-    ObjDanpeilift_Draw,
+    {
+        ObjDanpeilift_Init,
+        ObjDanpeilift_Destroy,
+        ObjDanpeilift_Update,
+        ObjDanpeilift_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

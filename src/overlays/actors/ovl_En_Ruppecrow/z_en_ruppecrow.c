@@ -46,10 +46,12 @@ ActorInit En_Ruppecrow_InitVars = {
     FLAGS,
     OBJECT_CROW,
     sizeof(EnRuppecrow),
-    EnRuppecrow_Init,
-    EnRuppecrow_Destroy,
-    EnRuppecrow_Update,
-    EnRuppecrow_Draw,
+    {
+        EnRuppecrow_Init,
+        EnRuppecrow_Destroy,
+        EnRuppecrow_Update,
+        EnRuppecrow_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

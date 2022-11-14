@@ -24,11 +24,11 @@ ActorInit En_Zl4_InitVars = {
     FLAGS,
     OBJECT_STK,
     sizeof(EnZl4),
-    EnZl4_Init,
+{EnZl4_Init,
     EnZl4_Destroy,
     EnZl4_Update,
     EnZl4_Draw,
-};
+},};
 
 #endif
 

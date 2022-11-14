@@ -22,10 +22,12 @@ ActorInit Bg_Mbar_Chair_InitVars = {
     FLAGS,
     OBJECT_MBAR_OBJ,
     sizeof(BgMbarChair),
-    BgMbarChair_Init,
-    BgMbarChair_Destroy,
-    BgMbarChair_Update,
-    BgMbarChair_Draw,
+    {
+        BgMbarChair_Init,
+        BgMbarChair_Destroy,
+        BgMbarChair_Update,
+        BgMbarChair_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

@@ -29,10 +29,12 @@ ActorInit Obj_Hsblock_InitVars = {
     FLAGS,
     OBJECT_D_HSBLOCK,
     sizeof(ObjHsblock),
-    ObjHsblock_Init,
-    ObjHsblock_Destroy,
-    ObjHsblock_Update,
-    ObjHsblock_Draw,
+    {
+        ObjHsblock_Init,
+        ObjHsblock_Destroy,
+        ObjHsblock_Update,
+        ObjHsblock_Draw,
+    },
 };
 
 static f32 sFocusHeights[] = { 85.0f, 85.0f, 0.0f };

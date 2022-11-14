@@ -25,10 +25,12 @@ ActorInit En_Dy_Extra_InitVars = {
     FLAGS,
     OBJECT_DY_OBJ,
     sizeof(EnDyExtra),
-    EnDyExtra_Init,
-    EnDyExtra_Destroy,
-    EnDyExtra_Update,
-    EnDyExtra_Draw,
+    {
+        EnDyExtra_Init,
+        EnDyExtra_Destroy,
+        EnDyExtra_Update,
+        EnDyExtra_Draw,
+    },
 };
 
 void EnDyExtra_Destroy(Actor* thisx, PlayState* play) {

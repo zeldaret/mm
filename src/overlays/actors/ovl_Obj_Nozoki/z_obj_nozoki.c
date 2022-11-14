@@ -38,10 +38,12 @@ ActorInit Obj_Nozoki_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjNozoki),
-    ObjNozoki_Init,
-    ObjNozoki_Destroy,
-    ObjNozoki_Update,
-    NULL,
+    {
+        ObjNozoki_Init,
+        ObjNozoki_Destroy,
+        ObjNozoki_Update,
+        NULL,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

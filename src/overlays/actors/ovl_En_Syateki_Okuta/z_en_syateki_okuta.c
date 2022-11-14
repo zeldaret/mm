@@ -34,10 +34,12 @@ ActorInit En_Syateki_Okuta_InitVars = {
     FLAGS,
     OBJECT_OKUTA,
     sizeof(EnSyatekiOkuta),
-    EnSyatekiOkuta_Init,
-    EnSyatekiOkuta_Destroy,
-    EnSyatekiOkuta_Update,
-    EnSyatekiOkuta_Draw,
+    {
+        EnSyatekiOkuta_Init,
+        EnSyatekiOkuta_Destroy,
+        EnSyatekiOkuta_Update,
+        EnSyatekiOkuta_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

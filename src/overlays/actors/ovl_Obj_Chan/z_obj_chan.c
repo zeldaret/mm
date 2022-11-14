@@ -34,10 +34,12 @@ ActorInit Obj_Chan_InitVars = {
     FLAGS,
     OBJECT_OBJ_CHAN,
     sizeof(ObjChan),
-    ObjChan_Init,
-    ObjChan_Destroy,
-    ObjChan_Update,
-    ObjChan_Draw,
+    {
+        ObjChan_Init,
+        ObjChan_Destroy,
+        ObjChan_Update,
+        ObjChan_Draw,
+    },
 };
 
 static ColliderCylinderInit sObjChanCylinderInit = {

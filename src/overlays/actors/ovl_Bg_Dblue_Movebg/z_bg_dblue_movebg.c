@@ -51,10 +51,12 @@ ActorInit Bg_Dblue_Movebg_InitVars = {
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueMovebg),
-    BgDblueMovebg_Init,
-    BgDblueMovebg_Destroy,
-    BgDblueMovebg_Update,
-    BgDblueMovebg_Draw,
+    {
+        BgDblueMovebg_Init,
+        BgDblueMovebg_Destroy,
+        BgDblueMovebg_Update,
+        BgDblueMovebg_Draw,
+    },
 };
 
 static Gfx* sOpaDLists[] = {

@@ -40,10 +40,12 @@ ActorInit Bg_Ikana_Rotaryroom_InitVars = {
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaRotaryroom),
-    BgIkanaRotaryroom_Init,
-    BgIkanaRotaryroom_Destroy,
-    BgIkanaRotaryroom_Update,
-    BgIkanaRotaryroom_Draw,
+    {
+        BgIkanaRotaryroom_Init,
+        BgIkanaRotaryroom_Destroy,
+        BgIkanaRotaryroom_Update,
+        BgIkanaRotaryroom_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[2] = {

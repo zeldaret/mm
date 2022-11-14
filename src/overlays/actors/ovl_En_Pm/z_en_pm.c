@@ -478,10 +478,12 @@ ActorInit En_Pm_InitVars = {
     FLAGS,
     OBJECT_MM,
     sizeof(EnPm),
-    EnPm_Init,
-    EnPm_Destroy,
-    EnPm_Update,
-    EnPm_Draw,
+    {
+        EnPm_Init,
+        EnPm_Destroy,
+        EnPm_Update,
+        EnPm_Draw,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

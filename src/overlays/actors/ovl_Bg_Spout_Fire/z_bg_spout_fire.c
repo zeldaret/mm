@@ -28,10 +28,12 @@ ActorInit Bg_Spout_Fire_InitVars = {
     FLAGS,
     OBJECT_FWALL,
     sizeof(BgSpoutFire),
-    BgSpoutFire_Init,
-    BgSpoutFire_Destroy,
-    BgSpoutFire_Update,
-    NULL,
+    {
+        BgSpoutFire_Init,
+        BgSpoutFire_Destroy,
+        BgSpoutFire_Update,
+        NULL,
+    },
 };
 
 static ColliderCylinderInit sCylinderInit = {

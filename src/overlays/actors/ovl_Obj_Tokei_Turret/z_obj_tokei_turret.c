@@ -22,10 +22,12 @@ ActorInit Obj_Tokei_Turret_InitVars = {
     FLAGS,
     OBJECT_TOKEI_TURRET,
     sizeof(ObjTokeiTurret),
-    ObjTokeiTurret_Init,
-    ObjTokeiTurret_Destroy,
-    ObjTokeiTurret_Update,
-    ObjTokeiTurret_Draw,
+    {
+        ObjTokeiTurret_Init,
+        ObjTokeiTurret_Destroy,
+        ObjTokeiTurret_Update,
+        ObjTokeiTurret_Draw,
+    },
 };
 
 static InitChainEntry sInitChain[] = {

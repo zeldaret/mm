@@ -68,10 +68,12 @@ ActorInit Boss_04_InitVars = {
     FLAGS,
     OBJECT_BOSS04,
     sizeof(Boss04),
-    Boss04_Init,
-    Boss04_Destroy,
-    Boss04_Update,
-    Boss04_Draw,
+    {
+        Boss04_Init,
+        Boss04_Destroy,
+        Boss04_Update,
+        Boss04_Draw,
+    },
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {
