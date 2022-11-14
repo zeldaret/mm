@@ -430,4 +430,7 @@ void KaleidoScope_UpdatePrompt(PlayState* play);
 void KaleidoScope_DrawInventoryEditor(PlayState* play);
 void KaleidoScope_UpdateInventoryEditor(PlayState* play);
 
+extern s16 gVtxPageMapWorldQuadsWidth[];
+extern s16 gVtxPageMapWorldQuadsHeight[];
+
 #endif

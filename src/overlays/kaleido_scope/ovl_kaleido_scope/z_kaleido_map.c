@@ -10,9 +10,6 @@
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 
-extern s16 gVtxPageMapWorldQuadsWidth[];
-extern s16 gVtxPageMapWorldQuadsHeight[];
-
 extern TexturePtr D_09007500; // gPlayerFaceIcon
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
