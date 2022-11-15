@@ -47,6 +47,7 @@
 #include "z64scene.h"
 #include "z64schedule.h"
 #include "z64skin.h"
+#include "z64skybox.h"
 #include "z64subs.h"
 #include "z64transition.h"
 #include "z64view.h"
@@ -642,36 +643,6 @@ typedef struct {
     /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
-
-typedef struct {
-    /* 0x000 */ View view;
-    /* 0x168 */ void* staticSegments[4];
-    /* 0x178 */ void* paletteStaticSegment;
-    /* 0x17C */ Gfx (*dListBuf)[150];
-    /* 0x180 */ Gfx* roomDL;
-    /* 0x184 */ Vtx* roomVtx;
-    /* 0x188 */ DmaRequest unk188;
-    /* 0x1A8 */ DmaRequest unk1A8;
-    /* 0x1C8 */ DmaRequest unk1C8;
-    /* 0x1E8 */ OSMesgQueue loadQueue;
-    /* 0x200 */ OSMesg loadMsg;
-    /* 0x204 */ s16 skyboxShouldDraw;
-    /* 0x208 */ f32 rotX;
-    /* 0x20C */ f32 rotY;
-    /* 0x210 */ f32 rotZ;
-    /* 0x214 */ Vec3f eye;
-    /* 0x220 */ s16 angle;
-    /* 0x222 */ u8 primR;
-    /* 0x223 */ u8 primG;
-    /* 0x224 */ u8 primB;
-    /* 0x225 */ u8 envR;
-    /* 0x226 */ u8 envG;
-    /* 0x227 */ u8 envB;
-} SkyboxContext; // size = 0x228
-
-typedef enum {
-    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
-} SkyboxId;
 
 typedef struct ListAlloc {
     /* 0x0 */ struct ListAlloc* prev;
