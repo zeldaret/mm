@@ -15,6 +15,4 @@ typedef struct ObjMakeoshihiki {
     /* 0x148 */ s32 pathCount;
 } ObjMakeoshihiki; // size = 0x14C
 
-extern const ActorInit Obj_Makeoshihiki_InitVars;
-
 #endif // Z_OBJ_MAKEOSHIHIKI_H

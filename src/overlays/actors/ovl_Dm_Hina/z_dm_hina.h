@@ -26,6 +26,4 @@ typedef struct DmHina {
     /* 0x180 */ u8 isVisible;
 } DmHina; // size = 0x184
 
-extern const ActorInit Dm_Hina_InitVars;
-
 #endif // Z_DM_HINA_H

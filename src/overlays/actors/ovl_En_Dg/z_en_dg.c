@@ -10,6 +10,8 @@
 
 #define THIS ((EnDg*)thisx)
 
+//! TODO: this file require macros for its uses of weekEventReg
+
 void EnDg_Init(Actor* thisx, PlayState* play);
 void EnDg_Destroy(Actor* thisx, PlayState* play);
 void EnDg_Update(Actor* thisx, PlayState* play);
@@ -36,7 +38,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
-const ActorInit En_Dg_InitVars = {
+ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -250,8 +252,8 @@ void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
 
         sinf(0.0f);
         cosf(0.0f);
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
-        floorRot->z = Math_Acot2F(1.0f, -nx * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
+        floorRot->z = Math_Atan2F_XY(1.0f, -nx * ny);
     }
 }
 
@@ -308,7 +310,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -547,7 +549,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
 void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & 0x20000000) { // bremen mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if (sBremenMaskFollowerIndex == ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
             EnDg_FindFollowerForBremenMask(play);
         }
@@ -865,7 +867,7 @@ void EnDg_SitNextToPlayer(EnDg* this, PlayState* play) {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     } else {
-        if (player->stateFlags3 & 0x20000000) { // bremen mask march
+        if (player->stateFlags3 & PLAYER_STATE3_20000000) {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_WALK);
         } else {
             EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_RUN);
@@ -992,7 +994,7 @@ void EnDg_ApproachPlayer(EnDg* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 40.0f) {
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
         this->actionFunc = EnDg_SitNextToPlayer;
-    } else if (player->stateFlags3 & 0x20000000) { // bremen mask march
+    } else if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if ((this->actor.xzDistToPlayer > 40.0f) && (player->linearVelocity == 0.0f)) {
             Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
         } else {
@@ -1340,7 +1342,7 @@ void EnDg_Update(Actor* thisx, PlayState* play) {
     Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedRacetrackDogInfo.index;
-    if (!(player->stateFlags1 & 0x20) || (play->sceneId != SCENE_CLOCKTOWER)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20) || (play->sceneId != SCENE_CLOCKTOWER)) {
         if (EnDg_ShouldReactToNonHumanPlayer(this, play)) {
             EnDg_ChooseActionForForm(this, play);
         } else if (this->behavior != DOG_BEHAVIOR_DEFAULT) {

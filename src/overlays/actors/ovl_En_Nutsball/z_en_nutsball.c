@@ -19,7 +19,7 @@ void EnNutsball_Draw(Actor* thisx, PlayState* play);
 
 void EnNutsball_InitColliderParams(EnNutsball* this);
 
-const ActorInit En_Nutsball_InitVars = {
+ActorInit En_Nutsball_InitVars = {
     ACTOR_EN_NUTSBALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -97,13 +97,14 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
     s32 bgId;
     CollisionPoly* poly;
 
-    if (!(player->stateFlags1 & 0x300000C0)) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         this->timer--;
         if (this->timer < 0) {
             this->actor.velocity.y += this->actor.gravity;
             spdXZ = sqrtf((this->actor.velocity.x * this->actor.velocity.x) +
                           (this->actor.velocity.z * this->actor.velocity.z));
-            this->actor.world.rot.x = Math_FAtan2F(spdXZ, this->actor.velocity.y);
+            this->actor.world.rot.x = Math_Atan2S_XY(spdXZ, this->actor.velocity.y);
         }
         this->actor.home.rot.z += 0x2AA8;
         if ((this->actor.bgCheckFlags & 8) || (this->actor.bgCheckFlags & 1) || (this->actor.bgCheckFlags & 16) ||

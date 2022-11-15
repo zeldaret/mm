@@ -22,7 +22,7 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, PlayState* play);
 static u8 sLostWoodsSparklesMutex = false; // make sure only one can exist at once
 static s16 sLostWoodsSkyFishParticleNum = 0;
 
-const ActorInit Demo_Kankyo_InitVars = {
+ActorInit Demo_Kankyo_InitVars = {
     ACTOR_DEMO_KANKYO,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -639,7 +639,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
                 Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
@@ -651,7 +651,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, PlayState* play2) {
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     gSPDisplayList(POLY_XLU_DISP++, gBubbleDL);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
             }
         }

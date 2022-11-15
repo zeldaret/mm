@@ -19,7 +19,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play);
 void func_80865390(EnPart* this, PlayState* play);
 void func_808654C4(EnPart* this, PlayState* play);
 
-const ActorInit En_Part_InitVars = {
+ActorInit En_Part_InitVars = {
     ACTOR_EN_PART,
     ACTORCAT_ITEMACTION,
     FLAGS,

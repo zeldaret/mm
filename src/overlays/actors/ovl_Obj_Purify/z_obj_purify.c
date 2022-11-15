@@ -41,7 +41,7 @@ typedef struct ObjPurifyInfo {
     /* 0x24 */ s32 isDekuCity;
 } ObjPurifyInfo; // size = 0x28
 
-const ActorInit Obj_Purify_InitVars = {
+ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,
     FLAGS,
@@ -109,14 +109,11 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
     ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
 
     if (!info->isDekuCity) {
-        // woodfall temple wood flower unraveled
-        if (gSaveContext.save.weekEventReg[12] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
             return true;
         }
-    }
-    // woodfall temple purification cutscene watched
-    else {
-        if (gSaveContext.save.weekEventReg[20] & 2) {
+    } else {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
             return true;
         }
     }

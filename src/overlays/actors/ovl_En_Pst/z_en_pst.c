@@ -118,7 +118,7 @@ s32 D_80B2C488[] = { 0x2C27A40C, 0x10000000 };
 
 s32 D_80B2C490[] = { 0x2C27850C, 0x10000000 };
 
-const ActorInit En_Pst_InitVars = {
+ActorInit En_Pst_InitVars = {
     ACTOR_EN_PST,
     ACTORCAT_PROP,
     FLAGS,
@@ -162,15 +162,15 @@ void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
 s32 EnPst_HandleLetterDay1(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x2;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02);
         case POSTBOX_NORTH_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x4;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04);
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x8;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08);
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x10;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10);
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x20;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20);
         default:
             return false;
     }
@@ -179,22 +179,22 @@ s32 EnPst_HandleLetterDay1(EnPst* this) {
 s32 EnPst_HandleLetterDay2(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x40;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40);
         case POSTBOX_NORTH_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[27] & 0x80;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80);
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[28] & 0x1;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01);
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[28] & 0x2;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02);
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-            return gSaveContext.save.weekEventReg[28] & 0x4;
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04);
         default:
             return false;
     }
 }
 
 s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
-    s32 itemActionParam = 0;
+    PlayerItemAction itemAction = PLAYER_IA_NONE;
     s32 scriptBranch = 0;
     EnPst* this = THIS;
 
@@ -205,17 +205,16 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                 case TEXT_STATE_5:
                     if (Message_ShouldAdvance(play)) {
                         case TEXT_STATE_16:
-                            itemActionParam = func_80123810(play);
+                            itemAction = func_80123810(play);
                             scriptBranch = 0;
-                            if ((itemActionParam == PLAYER_AP_LETTER_TO_KAFEI) ||
-                                (itemActionParam == PLAYER_AP_LETTER_MAMA)) {
-                                this->exchangeItemId = itemActionParam;
+                            if ((itemAction == PLAYER_IA_LETTER_TO_KAFEI) || (itemAction == PLAYER_IA_LETTER_MAMA)) {
+                                this->exchangeItemId = itemAction;
                                 this->behaviour++;
                                 scriptBranch = 1;
-                            } else if (itemActionParam < PLAYER_AP_NONE) {
+                            } else if (itemAction <= PLAYER_IA_MINUS1) {
                                 this->behaviour++;
                                 scriptBranch = 3;
-                            } else if (itemActionParam != PLAYER_AP_NONE) {
+                            } else if (itemAction != PLAYER_IA_NONE) {
                                 this->behaviour++;
                                 scriptBranch = 2;
                             }
@@ -224,7 +223,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
             }
             break;
         case POSTBOX_BEHAVIOUR_TAKE_ITEM:
-            if (this->exchangeItemId == PLAYER_AP_LETTER_TO_KAFEI) {
+            if (this->exchangeItemId == PLAYER_IA_LETTER_TO_KAFEI) {
                 scriptBranch = 1;
             }
             break;
@@ -253,7 +252,7 @@ s32* EnPst_GetMsgEventScript(EnPst* this, PlayState* play) {
                 return NULL;
         }
     } else if (this->stateFlags & 0x20) {
-        if (this->exchangeItemId == PLAYER_AP_LETTER_MAMA) {
+        if (this->exchangeItemId == PLAYER_IA_LETTER_MAMA) {
             return D_80B2C488;
         } else {
             return D_80B2C490;
@@ -284,10 +283,10 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     if (this->stateFlags & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->stateFlags &= ~0x30;
-            if (player->exchangeItemId == PLAYER_AP_LETTER_TO_KAFEI) {
+            if (player->exchangeItemId == PLAYER_IA_LETTER_TO_KAFEI) {
                 this->stateFlags |= 0x10;
                 this->exchangeItemId = player->exchangeItemId;
-            } else if (player->exchangeItemId != PLAYER_AP_NONE) {
+            } else if (player->exchangeItemId != PLAYER_IA_NONE) {
                 this->stateFlags |= 0x20;
                 this->exchangeItemId = player->exchangeItemId;
             }
@@ -358,19 +357,19 @@ void EnPst_Talk(EnPst* this, PlayState* play) {
         if (EnPst_HandleLetterDay1(this) != this->isLetterToKafeiDeposited) {
             switch (gSaveContext.save.day) {
                 case 1:
-                    gSaveContext.save.weekEventReg[91] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_91_04);
                     break;
 
                 case 2:
                     if (EnPst_HandleLetterDay2(this)) {
-                        gSaveContext.save.weekEventReg[91] |= 8;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_91_08);
                     } else {
-                        gSaveContext.save.weekEventReg[91] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_91_04);
                     }
                     break;
 
                 default:
-                    gSaveContext.save.weekEventReg[91] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_91_08);
                     break;
             }
         }

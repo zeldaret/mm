@@ -159,7 +159,7 @@ void DmHina_DrawLightOrb(DmHina* this, PlayState* play) {
         func_8012C2DC(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)(this->scale * 100.0f) + 155, this->lightOrbAlpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, (u8)(this->drawOrbEffect * 100.0f) + 50, 0);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         Matrix_Translate(this->actor.world.pos.x,
                          this->actor.world.pos.y + (this->oscilationFactor * this->yDimScaleFactor) +
                              (40.0f * this->yDimScaleFactor),
@@ -168,7 +168,7 @@ void DmHina_DrawLightOrb(DmHina* this, PlayState* play) {
         Matrix_Scale(this->scale * 20.0f, this->scale * 20.0f, this->scale * 20.0f, MTXMODE_APPLY);
         Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
 
         CLOSE_DISPS(gfxCtx);
     }

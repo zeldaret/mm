@@ -21,7 +21,7 @@ void func_8098F5E4(ObjMure3* this, PlayState* play);
 void func_8098F66C(ObjMure3* this);
 void func_8098F680(ObjMure3* this, PlayState* play);
 
-const ActorInit Obj_Mure3_InitVars = {
+ActorInit Obj_Mure3_InitVars = {
     ACTOR_OBJ_MURE3,
     ACTORCAT_BG,
     FLAGS,

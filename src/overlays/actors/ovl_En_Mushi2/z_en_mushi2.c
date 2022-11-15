@@ -32,7 +32,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, PlayState* play);
 
-const ActorInit En_Mushi2_InitVars = {
+ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -658,7 +658,7 @@ void func_80A69D3C(EnMushi2* this) {
         sp38 = Math3D_XZLengthSquared(sp40, sp3C);
 
         if (fabsf(sp38) > 0.010000001f) {
-            s16 temp_v0 = Math_FAtan2F(sp3C, sp40);
+            s16 temp_v0 = Math_Atan2S_XY(sp3C, sp40);
             temp_v0 = CLAMP(temp_v0, -3000, 3000);
             func_80A68F9C(this, temp_v0);
         }

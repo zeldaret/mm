@@ -18,7 +18,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 
 void func_80AABE34(DmChar04* this, PlayState* play);
 
-const ActorInit Dm_Char04_InitVars = {
+ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -129,7 +129,7 @@ s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3
 }
 
 void DmChar04_Draw(Actor* thisx, PlayState* play) {
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
     s32 alpha;
     s32 pad;
     DmChar04* this = THIS;

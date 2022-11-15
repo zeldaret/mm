@@ -28,7 +28,7 @@ void ObjChan_Draw(Actor* thisx, PlayState* play);
 void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
-const ActorInit Obj_Chan_InitVars = {
+ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
     ACTORCAT_BG,
     FLAGS,
@@ -310,8 +310,8 @@ void ObjChan_PotAction(ObjChan* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
         func_80BB9A1C((ObjChan*)this->actor.parent, 40.0f);
         if (this->myPotIndex == 4) {
-            if (!(((void)0, gSaveContext.save.weekEventReg[0x25]) & 0x10)) {
-                gSaveContext.save.weekEventReg[0x25] = ((void)0, gSaveContext.save.weekEventReg[0x25]) | 0x10;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_10)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_37_10);
                 Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x8000,
                                               this->actor.cutscene, this->actor.unk20, NULL);

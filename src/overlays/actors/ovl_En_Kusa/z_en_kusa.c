@@ -57,7 +57,7 @@ s16 D_80936CDC;
 s16 D_80936CDE;
 s16 D_80936CE0;
 
-const ActorInit En_Kusa_InitVars = {
+ActorInit En_Kusa_InitVars = {
     ACTOR_EN_KUSA,
     ACTORCAT_PROP,
     FLAGS,
@@ -699,7 +699,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
             EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
 
-        Gfx_DrawDListOpa(play, gKusaBushType1);
+        Gfx_DrawDListOpa(play, gKusaBushType1DL);
 
     } else if (this->actor.projectedPos.z < 1300.0f) {
         s32 alpha;
@@ -711,7 +711,7 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
-        gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2);
+        gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

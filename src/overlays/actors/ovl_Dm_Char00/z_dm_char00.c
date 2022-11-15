@@ -20,7 +20,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2);
 void func_80AA67F8(DmChar00* this, PlayState* play);
 void func_80AA695C(DmChar00* this, PlayState* play);
 
-const ActorInit Dm_Char00_InitVars = {
+ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -912,7 +912,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     DmChar00* this = THIS;
     s32 phi_a0;
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
     if ((play->csCtx.state == 0) &&
         ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||

@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-const ActorInit Obj_Iceblock_InitVars = {
+ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -849,7 +849,7 @@ void func_80A25404(ObjIceblock* this) {
 void func_80A2541C(ObjIceblock* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags2 &= ~0x10;
+    player->stateFlags2 &= ~PLAYER_STATE2_10;
     this->dyna.pushForce = 0.0f;
 }
 
@@ -921,7 +921,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockDynaColHeader);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockCol);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
@@ -1208,7 +1208,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
         this->unk_1B0 |= 1;
     }
 
@@ -1254,7 +1254,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
 
     if ((this->unk_1B0 & 1) && (isBool || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1B0 &= ~1;
-        func_800B7298(play, &this->dyna.actor, 6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
     }
 
     if (isBool) {
@@ -1453,7 +1453,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
             this->unk_1B0 &= ~1;
-            func_800B7298(play, &this->dyna.actor, 6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
         }
         func_80A266C4(this);
     }

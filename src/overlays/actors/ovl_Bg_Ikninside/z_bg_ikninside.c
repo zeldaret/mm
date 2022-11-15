@@ -18,7 +18,7 @@ void BgIkninside_Draw(Actor* thisx, PlayState* play);
 
 void func_80C072D0(BgIkninside* this, PlayState* play);
 
-const ActorInit Bg_Ikninside_InitVars = {
+ActorInit Bg_Ikninside_InitVars = {
     ACTOR_BG_IKNINSIDE,
     ACTORCAT_BG,
     FLAGS,

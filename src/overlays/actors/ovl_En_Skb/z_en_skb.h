@@ -9,6 +9,10 @@ typedef void (*EnSkbActionFunc)(struct EnSkb*, PlayState*);
 
 #define ENSKB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 
+typedef enum {
+    /* 0 */ ENSKB_PARAMS_0,
+} EnSkbParams;
+
 typedef struct EnSkb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -35,7 +39,5 @@ typedef struct EnSkb {
     /* 0x3E5 */ u8 unk_3E5;
     /* 0x3E6 */ u8 drawDmgEffType;
 } EnSkb; // size = 0x3E8
-
-extern const ActorInit En_Skb_InitVars;
 
 #endif // Z_EN_SKB_H

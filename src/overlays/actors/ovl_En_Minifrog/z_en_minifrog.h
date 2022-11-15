@@ -38,6 +38,4 @@ typedef struct EnMinifrog {
     /* 0x2B8 */ ColliderCylinder collider;
 } EnMinifrog; // size = 0x304
 
-extern const ActorInit En_Minifrog_InitVars;
-
 #endif // Z_EN_MINIFROG_H

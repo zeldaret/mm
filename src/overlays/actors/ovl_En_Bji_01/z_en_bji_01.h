@@ -35,6 +35,4 @@ typedef struct EnBji01 {
     /* 0x2B0 */ ObjMoonStone* moonsTear;
 } EnBji01; // size = 0x2B4
 
-extern const ActorInit En_Bji_01_InitVars;
-
 #endif // Z_EN_BJI_01_H

@@ -26,7 +26,7 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play);
 void func_808DF788(EnHorseLinkChild* this);
 void func_808DF838(EnHorseLinkChild* this, PlayState* play);
 
-const ActorInit En_Horse_Link_Child_InitVars = {
+ActorInit En_Horse_Link_Child_InitVars = {
     ACTOR_EN_HORSE_LINK_CHILD,
     ACTORCAT_BG,
     FLAGS,
@@ -345,7 +345,7 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
     sp4C = SkelAnime_Update(&this->skin.skelAnime);
 
     if ((sp4C != 0) || (this->unk_148 == 1) || (this->unk_148 == 0)) {
-        if ((gSaveContext.save.weekEventReg[1] & 0x20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_01_20)) {
             f32 sp44 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
             s32 pad;
 

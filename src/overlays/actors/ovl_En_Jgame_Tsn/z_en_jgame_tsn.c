@@ -36,7 +36,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play);
 s32 func_80C149B0(PlayState* play, EnJgameTsnStruct* arg1);
 s32 func_80C14BCC(EnJgameTsn* this, PlayState* play);
 
-const ActorInit En_Jgame_Tsn_InitVars = {
+ActorInit En_Jgame_Tsn_InitVars = {
     ACTOR_EN_JGAME_TSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -141,7 +141,7 @@ void EnJgameTsn_Destroy(Actor* thisx, PlayState* play) {
     EnJgameTsn* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
 }
 
 void func_80C13B74(EnJgameTsn* this) {
@@ -189,7 +189,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
         func_800B8614(&this->actor, play, 80.0f);
     }
 
-    if ((player->actor.bgCheckFlags & 1) && !(player->stateFlags1 & 0x2000) && (this->unk_2FE == 0) &&
+    if ((player->actor.bgCheckFlags & 1) && !(player->stateFlags1 & PLAYER_STATE1_2000) && (this->unk_2FE == 0) &&
         (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) && func_80C149B0(play, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
@@ -282,11 +282,11 @@ void func_80C14044(EnJgameTsn* this, PlayState* play) {
 void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     func_801A2BB8(0x25);
     play->interfaceCtx.unk_280 = 1;
     func_80112AFC(play);
-    gSaveContext.save.weekEventReg[90] |= 0x20;
+    SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 120);
     this->actionFunc = func_80C1418C;
 }
@@ -296,7 +296,7 @@ void func_80C1418C(EnJgameTsn* this, PlayState* play) {
 
     if (play->interfaceCtx.unk_280 == 8) {
         func_80C141DC(this);
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
     }
 }
 
@@ -338,7 +338,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         Message_StartTextbox(play, 0x109F, &this->actor);
         this->unk_300 = 0x109F;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
@@ -346,7 +346,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         Message_StartTextbox(play, 0x10A0, &this->actor);
         this->unk_300 = 0x10A0;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
@@ -355,7 +355,7 @@ void func_80C14230(EnJgameTsn* this, PlayState* play) {
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] == SECONDS_TO_TIMER(0)) {
         Message_StartTextbox(play, 0x10A1, &this->actor);
         this->unk_300 = 0x10A1;
-        player->stateFlags1 |= 0x20;
+        player->stateFlags1 |= PLAYER_STATE1_20;
         *this->unk_208[this->unk_218] &= ~OBJLUPYGAMELIFT_IGNITE_FIRE;
         func_801A2C20();
         func_80C14030(this);
@@ -379,11 +379,11 @@ void func_80C14540(EnJgameTsn* this) {
 
 void func_80C14554(EnJgameTsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[82] & 0x10)) {
-            gSaveContext.save.weekEventReg[82] |= 0x10;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_82_10);
         }
         func_80C145FC(this);
-    } else if (gSaveContext.save.weekEventReg[82] & 0x10) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_10)) {
         Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -480,7 +480,7 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 func_801477B4(play);
                 gSaveContext.minigameState = 3;
                 gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
-                gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_20);
                 func_80C144E4(this);
                 break;
 

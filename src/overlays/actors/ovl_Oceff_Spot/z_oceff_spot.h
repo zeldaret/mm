@@ -18,6 +18,4 @@ typedef struct OceffSpot {
     /* 0x174 */ OceffSpotActionFunc actionFunc;
 } OceffSpot; // size = 0x178
 
-extern const ActorInit Oceff_Spot_InitVars;
-
 #endif // Z_OCEFF_SPOT_H

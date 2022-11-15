@@ -2599,11 +2599,11 @@ _DW({									\
         gsSPLoadUcodeEx((uc_start), (uc_dstart), SP_UCODE_DATA_SIZE)
 
 #define	gSPLoadUcodeL(pkt, ucode)					\
-        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&##ucode##TextStart),	\
-		            OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&ucode##TextStart),	\
+		            OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #define	gsSPLoadUcodeL(ucode)						\
-        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&##ucode##TextStart),		\
-		      OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&ucode##TextStart),		\
+		      OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #endif
 
 #ifdef	F3DEX_GBI_2
@@ -4132,7 +4132,7 @@ _DW({									\
 #define	gDPLoadMultiTile(pkt, timg, tmem, rtile, fmt, siz, width, height,\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz, width, timg);			\
 	gDPSetTile(pkt, fmt, siz,					\
 		(((((lrs)-(uls)+1) * siz##_TILE_BYTES)+7)>>3), tmem,	\
@@ -4154,7 +4154,7 @@ _DW({									\
 			(ult)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrs)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrt)<<G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 
 #define	gsDPLoadTextureTile(timg, fmt, siz, width, height,		\

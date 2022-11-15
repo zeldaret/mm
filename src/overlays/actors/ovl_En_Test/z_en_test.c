@@ -16,7 +16,7 @@ void EnTest_Destroy(Actor* thisx, PlayState* play);
 void EnTest_Update(Actor* thisx, PlayState* play);
 void EnTest_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Test_InitVars = {
+ActorInit En_Test_InitVars = {
     ACTOR_EN_TEST,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -250,7 +250,7 @@ s32 EnTest_OverrideKeyframeDraw(PlayState* play, SkeletonInfo* skeletonInfo, s32
 
 void EnTest_Draw(Actor* thisx, PlayState* play) {
     EnTest* this = THIS;
-    Mtx* sp28;
+    Mtx* mtx;
     s32 sp2C = this->unk_208 - 1;
 
     if (sp2C >= 29) {
@@ -263,11 +263,11 @@ void EnTest_Draw(Actor* thisx, PlayState* play) {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);
     }
 
-    sp28 = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
-    if (sp28 != NULL) {
+    if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);
-        func_8018450C(play, &this->skeletonInfo, sp28, EnTest_OverrideKeyframeDraw, NULL, thisx);
+        func_8018450C(play, &this->skeletonInfo, mtx, EnTest_OverrideKeyframeDraw, NULL, thisx);
         func_80863048(play, this->unk_20C);
     }
 }

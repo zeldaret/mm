@@ -37,7 +37,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play);
 void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
-const ActorInit En_Geg_InitVars = {
+ActorInit En_Geg_InitVars = {
     ACTOR_EN_GEG,
     ACTORCAT_NPC,
     FLAGS,
@@ -355,7 +355,7 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
         sp40 = player->actor.world.pos;
     } else {
         sp40 = player->actor.world.pos;
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     }
 
     sp34 = this->actor.world.pos;
@@ -453,7 +453,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
         }
     } else {
         this->unk_230 &= ~4;
-        if (gSaveContext.save.weekEventReg[35] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_40)) {
             if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_230 & 8)) {
                 this->unk_496 = 0xD62;
                 Message_StartTextbox(play, this->unk_496, &this->actor);
@@ -464,7 +464,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
                 this->unk_230 |= 8;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_230 & 8)) {
-            gSaveContext.save.weekEventReg[35] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_35_40);
             this->unk_496 = 0xD5E;
             this->unk_49A = this->unk_49C[0];
             Message_StartTextbox(play, this->unk_496, &this->actor);
@@ -656,7 +656,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[4]) {
         if (ActorCutscene_GetCanPlayNext(this->unk_498)) {
-            gSaveContext.save.weekEventReg[37] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_37_08);
             if (this->actor.child != NULL) {
                 Actor_Kill(this->actor.child);
             }
@@ -798,7 +798,7 @@ void func_80BB31B8(EnGeg* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[61] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_61_01);
         if (getItemId == GI_MASK_DON_GERO) {
             this->unk_230 |= 0x40;
         }
@@ -861,7 +861,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
-    if (gSaveContext.save.weekEventReg[61] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_01)) {
         Actor_Kill(&this->actor);
         return;
     }

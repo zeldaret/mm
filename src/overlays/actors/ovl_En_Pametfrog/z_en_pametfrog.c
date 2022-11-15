@@ -67,7 +67,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play);
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 
-const ActorInit En_Pametfrog_InitVars = {
+ActorInit En_Pametfrog_InitVars = {
     ACTOR_EN_PAMETFROG,
     ACTORCAT_BOSS,
     FLAGS,
@@ -171,13 +171,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.save.weekEventReg[KEY] = VALUE
-// KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
-    (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-    (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-    (33 << 8) | 0x01, // Southern Swamp Frog Returned
-    (33 << 8) | 0x02, // Laundry Pool Frog Returned
+    WEEKEVENTREG_32_40,
+    WEEKEVENTREG_32_80,
+    WEEKEVENTREG_33_01,
+    WEEKEVENTREG_33_02,
 };
 
 void EnPametfrog_Init(Actor* thisx, PlayState* play) {
@@ -193,8 +191,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }
@@ -345,7 +342,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
-        func_800B724C(play, &this->actor, 6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
     }
 }
 
@@ -1008,7 +1005,7 @@ void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
         this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
-        func_800B724C(play, &this->actor, 7);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
         if (this->actor.colChkInfo.health == 0) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
                 EnPametfrog_SetupCallSnapper(this, play);

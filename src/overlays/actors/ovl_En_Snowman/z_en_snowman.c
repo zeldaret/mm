@@ -61,7 +61,7 @@ typedef enum {
     /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE,
 } EnSnowmanCombineState;
 
-const ActorInit En_Snowman_InitVars = {
+ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -395,7 +395,7 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
         EnSnowman_SetupCombine(this, play, &combinePos);
     } else if ((this->work.timer == 0) && (fabsf(this->actor.playerHeightRel) < 60.0f) &&
                (this->actor.xzDistToPlayer < this->attackRange) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-               !(player->stateFlags1 & 0x800000)) {
+               !(player->stateFlags1 & PLAYER_STATE1_800000)) {
         EnSnowman_SetupEmerge(this, play);
     } else if (this->snowPileTargetRotY != this->actor.shape.rot.y) {
         if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->snowPileTargetRotY, 0x100)) {
@@ -439,7 +439,7 @@ void EnSnowman_Emerge(EnSnowman* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
             EnSnowman_SetupSubmerge(this, play);
-        } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
+        } else if (!(player->stateFlags1 & PLAYER_STATE1_800000) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
             this->collider.base.acFlags |= AC_ON;
             this->work.snowballsToThrowBeforeIdling = 3;
             EnSnowman_SetupReadySnowball(this);
@@ -529,7 +529,7 @@ void EnSnowman_ThrowSnowball(EnSnowman* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if (SkelAnime_Update(&this->skelAnime)) {
         if ((this->work.snowballsToThrowBeforeIdling != 0) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-            !(player->stateFlags1 & 0x800000)) {
+            !(player->stateFlags1 & PLAYER_STATE1_800000)) {
             EnSnowman_SetupReadySnowball(this);
         } else {
             this->work.snowballsToThrowBeforeIdling = 0;
@@ -1040,8 +1040,8 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
             if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
-                    this->snowPileTargetRotY = Math_FAtan2F(this->actor.floorPoly->normal.z * SHT_MINV,
-                                                            this->actor.floorPoly->normal.x * SHT_MINV);
+                    this->snowPileTargetRotY = Math_Atan2S_XY(this->actor.floorPoly->normal.z * SHT_MINV,
+                                                              this->actor.floorPoly->normal.x * SHT_MINV);
                     this->turningOnSteepSlope = true;
                 }
             } else {
