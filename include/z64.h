@@ -1041,7 +1041,7 @@ struct PlayState {
     /* 0x18868 */ void* naviQuestHints; // leftover from OoT, system which processes this is removed
     /* 0x1886C */ AnimatedMaterial* sceneMaterialAnims;
     /* 0x18870 */ void* specialEffects;
-    /* 0x18874 */ u8 skyboxId;
+    /* 0x18874 */ u8 skyboxId; // SkyboxId enum
     /* 0x18875 */ s8 transitionTrigger; // "fade_direction"
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;

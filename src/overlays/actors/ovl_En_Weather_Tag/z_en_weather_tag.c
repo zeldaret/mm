@@ -94,7 +94,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             break;
         case WEATHERTAG_TYPE_UNK5:
             func_800BC154(play, &play->actorCtx, &this->actor, 7);
-            play->skyboxId = 3;
+            play->skyboxId = SKYBOX_3;
             play->envCtx.unk_1F = 5;
             play->envCtx.unk_20 = 5;
             D_801F4E74 = 1.0f;
@@ -231,10 +231,10 @@ void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
 // this tag stops spawning after STT cleared?
 void func_80966B08(EnWeatherTag* this, PlayState* play) {
     if (func_80966608(this, play, 0, 0, play->envCtx.unk_1F, 5, 100, 2) || (gWeatherMode == 2)) {
-        play->skyboxId = 3;
+        play->skyboxId = SKYBOX_3;
         EnWeatherTag_SetupAction(this, func_80966D20);
     } else if (D_801F4E74 <= 0.01f) {
-        play->skyboxId = 1;
+        play->skyboxId = SKYBOX_NORMAL_SKY;
     } else {
         Math_SmoothStepToF(&D_801F4E74, 0.0f, 0.2f, 0.02f, 0.001f);
     }

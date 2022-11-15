@@ -9,6 +9,10 @@
 #include "z64view.h"
 
 typedef enum SkyboxId {
+    /* 0x00 */ SKYBOX_NONE,
+    /* 0x01 */ SKYBOX_NORMAL_SKY,
+    /* 0x02 */ SKYBOX_2,
+    /* 0x03 */ SKYBOX_3,
     /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
 } SkyboxId;
 
@@ -23,7 +27,7 @@ typedef struct SkyboxContext {
     /* 0x1A8 */ DmaRequest unk1A8;
     /* 0x1C8 */ DmaRequest unk1C8;
     /* 0x1E8 */ OSMesgQueue loadQueue;
-    /* 0x200 */ OSMesg loadMsg;
+    /* 0x200 */ OSMesg loadMsg[1];
     /* 0x204 */ s16 skyboxShouldDraw;
     /* 0x208 */ f32 rotX;
     /* 0x20C */ f32 rotY;
