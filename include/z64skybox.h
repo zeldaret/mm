@@ -9,11 +9,11 @@
 #include "z64view.h"
 
 typedef enum SkyboxId {
-    /* 0x00 */ SKYBOX_NONE,
-    /* 0x01 */ SKYBOX_NORMAL_SKY,
-    /* 0x02 */ SKYBOX_2,
-    /* 0x03 */ SKYBOX_3,
-    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
+    /* 0 */ SKYBOX_NONE,
+    /* 1 */ SKYBOX_NORMAL_SKY,
+    /* 2 */ SKYBOX_2,
+    /* 3 */ SKYBOX_3,
+    /* 5 */ SKYBOX_CUTSCENE_MAP = 5
 } SkyboxId;
 
 typedef struct SkyboxContext {
