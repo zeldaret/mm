@@ -42,4 +42,12 @@ typedef struct SkyboxContext {
     /* 0x227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
+typedef struct struct_801C5F44 {
+    /* 0x00 */ s32 unk0;
+    /* 0x04 */ s32 unk4;
+    /* 0x08 */ s32 unk8;
+    /* 0x0C */ s32 unkC;
+    /* 0x10 */ s32 unk10;
+} struct_801C5F44; // size = 0x14
+
 #endif
