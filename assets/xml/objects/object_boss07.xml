@@ -149,7 +149,7 @@
         <!-- Majora's Mask Animation -->
         <Animation Name="gMajorasMaskFloatingAnim" Offset="0x19E48" /> <!-- Original name is "last3_stop" -->
 
-        <!-- Majora's Wrath Animations-->
+        <!-- Majora's Wrath Animations. For unused animations, we don't know what the whips are supposed to do, since their physics are controlled by the Boss07 actor.  -->
         <Animation Name="gMajorasWrathFlipLeftAndSpin" Offset="0x1AE1C" /> <!-- Original name is "last_ac01". Unused -->
         <Animation Name="gMajorasWrathDoubleKickAndJumpBackAnim" Offset="0x1C430" /> <!-- Original name is "last_ac02". Unused -->
         <Animation Name="gMajorasWrathBackflipUppercutAttackAnim" Offset="0x1CFF0" /> <!-- Original name is "last_ac03". Unused -->
@@ -197,7 +197,7 @@
         <DList Name="gMajorasWrathDeathLightModelDL" Offset="0x2EFE8" />
 
         <!-- Majora's Wrath Top DisplayList-->
-        <DList Name="gMajorasWrathTopDL" Offset="0x2F640" />
+        <DList Name="gMajorasWrathSpinningTopDL" Offset="0x2F640" />
 
         <!-- Majora Title Cards -->
         <Texture Name="gMajorasMaskTitleCardTex" OutName="majoras_mask_title_card" Format="i8" Width="128" Height="40" Offset="0x2F840" />
