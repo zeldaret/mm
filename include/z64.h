@@ -395,7 +395,7 @@ typedef struct {
     /* 0x188 */ Vtx* questPageVtx;
     /* 0x18C */ Vtx* maskPageVtx;
     /* 0x190 */ Vtx* itemVtx;
-    /* 0x194 */ UNK_TYPE1 unk_194;
+    /* 0x194 */ UNK_TYPE1 unk_194[0x4];
     /* 0x198 */ Vtx* questVtx;
     /* 0x19C */ Vtx* maskVtx;
     /* 0x1A0 */ Vtx* promptPageVtx;

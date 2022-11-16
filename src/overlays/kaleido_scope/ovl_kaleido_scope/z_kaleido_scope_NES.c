@@ -320,13 +320,11 @@ Gfx* KaleidoScope_DrawPageSections(Gfx* gfx, Vtx* vertices, TexturePtr* textures
 }
 
 s16 sCursorPrimColorTarget[][3] = {
-    { 0x00FF, 0x00FF, 0x00FF }, { 0x00FF, 0x00FF, 0x00FF }, { 0x00FF, 0x00FF, 0x0000 },
-    { 0x00FF, 0x00FF, 0x0000 }, { 0x0064, 0x0096, 0x00FF }, { 0x0064, 0x00FF, 0x00FF },
+    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 0 }, { 255, 255, 0 }, { 100, 150, 255 }, { 100, 255, 255 },
 };
 
 s16 sCursorEnvColorTarget[][3] = {
-    { 0x0000, 0x0000, 0x0000 }, { 0x00AA, 0x00AA, 0x00AA }, { 0x0000, 0x0000, 0x0000 },
-    { 0x00FF, 0x00A0, 0x0000 }, { 0x0000, 0x0000, 0x0064 }, { 0x0000, 0x0096, 0x00FF },
+    { 0, 0, 0 }, { 170, 170, 170 }, { 0, 0, 0 }, { 255, 160, 0 }, { 0, 0, 100 }, { 0, 150, 255 },
 };
 
 void KaleidoScope_DrawPages(PlayState* play, GraphicsContext* gfxCtx) {
@@ -696,6 +694,7 @@ s16 D_8082B9D0[][4] = {
     { 180, 210, 255, 220 },
     { 100, 100, 150, 220 },
 };
+
 s16 D_8082B9E0 = 20;
 s16 D_8082B9E4 = 0;
 
