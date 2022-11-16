@@ -58,10 +58,10 @@
         <Limb Name="gTijoHeadLimb" Type="Standard" EnumName="TIJO_LIMB_HEAD" Offset="0xD5E0" />
         <Limb Name="gTijoLeftArmLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_ARM" Offset="0xD5EC" />
         <Limb Name="gTijoLeftForearmLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_FOREARM" Offset="0xD5F8" />
-        <Limb Name="gTijoLeftHandLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_HAND_LIMB" Offset="0xD604" />
+        <Limb Name="gTijoLeftHandLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_HAND" Offset="0xD604" />
         <Limb Name="gTijoRightArmLimb" Type="Standard" EnumName="TIJO_LIMB_RIGHT_ARM" Offset="0xD610" />
         <Limb Name="gTijoRightForearmLimb" Type="Standard" EnumName="TIJO_LIMB_RIGHT_FOREARM" Offset="0xD61C" />
-        <Limb Name="gTijoRightHandLimb" Type="Standard" EnumName="TIJO_LIMB_LEFT_RIGHT_LIMB" Offset="0xD628" />
+        <Limb Name="gTijoRightHandLimb" Type="Standard" EnumName="TIJO_LIMB_RIGHT_HAND" Offset="0xD628" />
 
         <!-- Tijo Skeleton -->
         <Skeleton Name="gTijoSkel" Type="Flex" LimbType="Standard" LimbNone="TIJO_LIMB_NONE" LimbMax="TIJO_LIMB_MAX" EnumName="TijoLimb" Offset="0xD658" />
