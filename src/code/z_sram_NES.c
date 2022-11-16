@@ -1192,6 +1192,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
             phi_s2 = false;
             sp6E = 0;
+            //! @bug iteration 4 will read OOB (8 and 9) 
             if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64])) {
                 sp6E = 1;
                 if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
