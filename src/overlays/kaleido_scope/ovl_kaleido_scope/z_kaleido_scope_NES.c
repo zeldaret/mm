@@ -4,6 +4,7 @@
  * Description: Pause Menu
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "z64view.h"
@@ -14,141 +15,89 @@
 
 // iconItemSegment
 extern TexturePtr D_08064340; // gPauseMenuCursorTex
-extern TexturePtr D_08064440;
-extern TexturePtr D_0806E440;
-extern TexturePtr D_08077A40;
-extern TexturePtr D_08081040;
-extern TexturePtr D_0808A640;
-extern TexturePtr D_0806EE40;
-extern TexturePtr D_08078440;
-extern TexturePtr D_08081A40;
-extern TexturePtr D_0808B040;
-extern TexturePtr D_08065840;
-extern TexturePtr D_0806F840;
-extern TexturePtr D_08078E40;
-extern TexturePtr D_08082440;
-extern TexturePtr D_0808BA40;
-extern TexturePtr D_08070240;
-extern TexturePtr D_08079840;
-extern TexturePtr D_08082E40;
-extern TexturePtr D_0808C440;
-extern TexturePtr D_08070C40;
-extern TexturePtr D_0807A240;
-extern TexturePtr D_08083840;
-extern TexturePtr D_0808CE40;
-extern TexturePtr D_08071640;
-extern TexturePtr D_0807AC40;
-extern TexturePtr D_08084240;
-extern TexturePtr D_0808D840;
-extern TexturePtr D_08068040;
-extern TexturePtr D_08072040;
-extern TexturePtr D_0807B640;
-extern TexturePtr D_08084C40;
-extern TexturePtr D_0808E240;
-extern TexturePtr D_08072A40;
-extern TexturePtr D_0807C040;
-extern TexturePtr D_08085640;
-extern TexturePtr D_0808EC40;
-extern TexturePtr D_08069440;
-extern TexturePtr D_08073440;
-extern TexturePtr D_0807CA40;
-extern TexturePtr D_08086040;
-extern TexturePtr D_0808F640;
-extern TexturePtr D_08073E40;
-extern TexturePtr D_0807D440;
-extern TexturePtr D_08086A40;
-extern TexturePtr D_08090040;
-extern TexturePtr D_08074840;
-extern TexturePtr D_0807DE40;
-extern TexturePtr D_08087440;
-extern TexturePtr D_08090A40;
-extern TexturePtr D_08075240;
-extern TexturePtr D_0807E840;
-extern TexturePtr D_08087E40;
-extern TexturePtr D_08091440;
 
 // Page Textures (Background of Page):
 // Broken up into multiple textures.
 // Numbered by column/row.
 TexturePtr sMaskPageBgTextures[] = {
     // Column 0
-    &D_08064440, // gPauseMasks00Tex
-    &D_0806E440, // gPauseMasks01Tex
-    &D_08077A40, // gPauseMasks02Tex
-    &D_08081040, // gPauseMasks03Tex
-    &D_0808A640, // gPauseMasks04Tex
+    0x08064440, // gPauseMasks00Tex
+    0x0806E440, // gPauseMasks01Tex
+    0x08077A40, // gPauseMasks02Tex
+    0x08081040, // gPauseMasks03Tex
+    0x0808A640, // gPauseMasks04Tex
     // Column 1
     gPauseMasks10ENGTex,
-    &D_0806EE40, // gPauseMasks11Tex
-    &D_08078440, // gPauseMasks12Tex
-    &D_08081A40, // gPauseMasks13Tex
-    &D_0808B040, // gPauseMasks14Tex
+    0x0806EE40, // gPauseMasks11Tex
+    0x08078440, // gPauseMasks12Tex
+    0x08081A40, // gPauseMasks13Tex
+    0x0808B040, // gPauseMasks14Tex
     // Column 2
-    &D_08065840, // gPauseMasks20Tex
-    &D_0806F840, // gPauseMasks21Tex
-    &D_08078E40, // gPauseMasks22Tex
-    &D_08082440, // gPauseMasks23Tex
-    &D_0808BA40, // gPauseMasks24Tex
+    0x08065840, // gPauseMasks20Tex
+    0x0806F840, // gPauseMasks21Tex
+    0x08078E40, // gPauseMasks22Tex
+    0x08082440, // gPauseMasks23Tex
+    0x0808BA40, // gPauseMasks24Tex
 };
 TexturePtr sItemPageBgTextures[] = {
     // Column 0
     gPauseSelectItem00ENGTex,
-    &D_08070240, // gPauseSelectItem01Tex
-    &D_08079840, // gPauseSelectItem02Tex
-    &D_08082E40, // gPauseSelectItem03Tex
-    &D_0808C440, // gPauseSelectItem04Tex
+    0x08070240, // gPauseSelectItem01Tex
+    0x08079840, // gPauseSelectItem02Tex
+    0x08082E40, // gPauseSelectItem03Tex
+    0x0808C440, // gPauseSelectItem04Tex
     // Column 1
     gPauseSelectItem10ENGTex,
-    &D_08070C40, // gPauseSelectItem11Tex
-    &D_0807A240, // gPauseSelectItem12Tex
-    &D_08083840, // gPauseSelectItem13Tex
-    &D_0808CE40, // gPauseSelectItem14Tex
+    0x08070C40, // gPauseSelectItem11Tex
+    0x0807A240, // gPauseSelectItem12Tex
+    0x08083840, // gPauseSelectItem13Tex
+    0x0808CE40, // gPauseSelectItem14Tex
     // Column 2
     gPauseSelectItem20ENGTex,
-    &D_08071640, // gPauseSelectItem21Tex
-    &D_0807AC40, // gPauseSelectItem22Tex
-    &D_08084240, // gPauseSelectItem23Tex
-    &D_0808D840, // gPauseSelectItem24Tex
+    0x08071640, // gPauseSelectItem21Tex
+    0x0807AC40, // gPauseSelectItem22Tex
+    0x08084240, // gPauseSelectItem23Tex
+    0x0808D840, // gPauseSelectItem24Tex
 };
 TexturePtr sMapPageBgTextures[] = {
     // Column 0
-    &D_08068040, // gPauseMap00Tex
-    &D_08072040, // gPauseMap01Tex
-    &D_0807B640, // gPauseMap02Tex
-    &D_08084C40, // gPauseMap03Tex
-    &D_0808E240, // gPauseMap04Tex
+    0x08068040, // gPauseMap00Tex
+    0x08072040, // gPauseMap01Tex
+    0x0807B640, // gPauseMap02Tex
+    0x08084C40, // gPauseMap03Tex
+    0x0808E240, // gPauseMap04Tex
     // Column 1
     gPauseMap10ENGTex,
-    &D_08072A40, // gPauseMap11Tex
-    &D_0807C040, // gPauseMap12Tex
-    &D_08085640, // gPauseMap13Tex
-    &D_0808EC40, // gPauseMap14Tex
+    0x08072A40, // gPauseMap11Tex
+    0x0807C040, // gPauseMap12Tex
+    0x08085640, // gPauseMap13Tex
+    0x0808EC40, // gPauseMap14Tex
     // Column 2
-    &D_08069440, // gPauseMap20Tex
-    &D_08073440, // gPauseMap21Tex
-    &D_0807CA40, // gPauseMap22Tex
-    &D_08086040, // gPauseMap23Tex
-    &D_0808F640, // gPauseMap24Tex
+    0x08069440, // gPauseMap20Tex
+    0x08073440, // gPauseMap21Tex
+    0x0807CA40, // gPauseMap22Tex
+    0x08086040, // gPauseMap23Tex
+    0x0808F640, // gPauseMap24Tex
 };
 TexturePtr sQuestPageBgTextures[] = {
     // Column 0
     gPauseQuestStatus00ENGTex,
-    &D_08073E40, // gPauseQuestStatus01Tex
-    &D_0807D440, // gPauseQuestStatus02Tex
-    &D_08086A40, // gPauseQuestStatus03Tex
-    &D_08090040, // gPauseQuestStatus04Tex
+    0x08073E40, // gPauseQuestStatus01Tex
+    0x0807D440, // gPauseQuestStatus02Tex
+    0x08086A40, // gPauseQuestStatus03Tex
+    0x08090040, // gPauseQuestStatus04Tex
     // Column 1
     gPauseQuestStatus10ENGTex,
-    &D_08074840, // gPauseQuestStatus11Tex
-    &D_0807DE40, // gPauseQuestStatus12Tex
-    &D_08087440, // gPauseQuestStatus13Tex
-    &D_08090A40, // gPauseQuestStatus14Tex
+    0x08074840, // gPauseQuestStatus11Tex
+    0x0807DE40, // gPauseQuestStatus12Tex
+    0x08087440, // gPauseQuestStatus13Tex
+    0x08090A40, // gPauseQuestStatus14Tex
     // Column 2
     gPauseQuestStatus20ENGTex,
-    &D_08075240, // gPauseQuestStatus21Tex
-    &D_0807E840, // gPauseQuestStatus22Tex
-    &D_08087E40, // gPauseQuestStatus23Tex
-    &D_08091440, // gPauseQuestStatus24Tex
+    0x08075240, // gPauseQuestStatus21Tex
+    0x0807E840, // gPauseQuestStatus22Tex
+    0x08087E40, // gPauseQuestStatus23Tex
+    0x08091440, // gPauseQuestStatus24Tex
 };
 
 s16 gVtxPageMapWorldQuadsWidth[VTX_PAGE_MAP_WORLD_QUADS] = {

@@ -61,19 +61,19 @@ void func_800F4A10(PlayState* play) {
         }
     }
 
-    YREG(11) = -200;
-    YREG(12) = -14400;
-    YREG(13) = 10000;
-    YREG(14) = 10000;
-    YREG(15) = 10000;
-    YREG(16) = -190;
-    YREG(17) = -1750;
-    YREG(18) = -2960;
-    YREG(19) = 1760;
+    YREG(11) = -0x00C8;
+    YREG(12) = -0x3840;
+    YREG(13) = 0x2710;
+    YREG(14) = 0x2710;
+    YREG(15) = 0x2710;
+    YREG(16) = -0x00BE;
+    YREG(17) = -0x06D6;
+    YREG(18) = -0x0B90;
+    YREG(19) = 0x06E0;
     YREG(20) = 0;
-    YREG(21) = -1570;
-    YREG(22) = -3140;
-    YREG(23) = 1570;
+    YREG(21) = -0x0622;
+    YREG(22) = -0x0C44;
+    YREG(23) = 0x0622;
     R_PAUSE_WORLD_MAP_YAW = -0x622;
     R_PAUSE_WORLD_MAP_Y_OFFSET = -90;
     R_PAUSE_WORLD_MAP_DEPTH = -14400;
