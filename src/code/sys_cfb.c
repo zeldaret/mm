@@ -65,7 +65,7 @@ void func_80178818(void) {
         l1:
         width = D_801FBBCC - 610;
         height = D_801FBBCE - 470;
-        func_8014026C(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 30, width, 10, height);
+        ViMode_Configure(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 30, width, 10, height);
         D_801FBB88 = &D_801FBB30;
     }
     gSysCfb_HiResEnabled = 1;
