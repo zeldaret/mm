@@ -22,11 +22,11 @@ ActorInit En_Bal_InitVars = {
     FLAGS,
     OBJECT_BAL,
     sizeof(EnBal),
-{EnBal_Init,
+    EnBal_Init,
     EnBal_Destroy,
     EnBal_Update,
     EnBal_Draw,
-},};
+};
 
 // static DamageTable sDamageTable = {
 static DamageTable D_80A63CE0 = {

@@ -38,12 +38,10 @@ ActorInit En_Bom_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBom),
-    {
-        EnBom_Init,
-        EnBom_Destroy,
-        EnBom_Update,
-        EnBom_Draw,
-    },
+    EnBom_Init,
+    EnBom_Destroy,
+    EnBom_Update,
+    EnBom_Draw,
 };
 
 static f32 enBomScales[] = { 0.01f, 0.03f };

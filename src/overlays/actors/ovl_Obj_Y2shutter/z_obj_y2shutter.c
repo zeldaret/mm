@@ -35,12 +35,10 @@ ActorInit Obj_Y2shutter_InitVars = {
     FLAGS,
     OBJECT_KAIZOKU_OBJ,
     sizeof(ObjY2shutter),
-    {
-        ObjY2shutter_Init,
-        ObjY2shutter_Destroy,
-        ObjY2shutter_Update,
-        ObjY2shutter_Draw,
-    },
+    ObjY2shutter_Init,
+    ObjY2shutter_Destroy,
+    ObjY2shutter_Update,
+    ObjY2shutter_Draw,
 };
 
 ShutterInfo sShutterInfo[] = {

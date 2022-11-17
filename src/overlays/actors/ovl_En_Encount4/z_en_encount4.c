@@ -26,12 +26,10 @@ ActorInit En_Encount4_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnEncount4),
-    {
-        EnEncount4_Init,
-        EnEncount4_Destroy,
-        EnEncount4_Update,
-        NULL,
-    },
+    EnEncount4_Init,
+    EnEncount4_Destroy,
+    EnEncount4_Update,
+    NULL,
 };
 
 s16 D_809C46D0[] = {

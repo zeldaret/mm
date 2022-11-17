@@ -46,12 +46,10 @@ ActorInit En_Karebaba_InitVars = {
     FLAGS,
     OBJECT_DEKUBABA,
     sizeof(EnKarebaba),
-    {
-        EnKarebaba_Init,
-        EnKarebaba_Destroy,
-        EnKarebaba_Update,
-        EnKarebaba_Draw,
-    },
+    EnKarebaba_Init,
+    EnKarebaba_Destroy,
+    EnKarebaba_Update,
+    EnKarebaba_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

@@ -27,12 +27,10 @@ ActorInit En_Wiz_Brock_InitVars = {
     FLAGS,
     OBJECT_WIZ,
     sizeof(EnWizBrock),
-    {
-        EnWizBrock_Init,
-        EnWizBrock_Destroy,
-        EnWizBrock_Update,
-        EnWizBrock_Draw,
-    },
+    EnWizBrock_Init,
+    EnWizBrock_Destroy,
+    EnWizBrock_Update,
+    EnWizBrock_Draw,
 };
 
 void EnWizBrock_Init(Actor* thisx, PlayState* play) {

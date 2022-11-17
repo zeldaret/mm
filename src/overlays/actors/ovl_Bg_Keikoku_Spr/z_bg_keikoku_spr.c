@@ -22,12 +22,10 @@ ActorInit Bg_Keikoku_Spr_InitVars = {
     FLAGS,
     OBJECT_KEIKOKU_OBJ,
     sizeof(BgKeikokuSpr),
-    {
-        BgKeikokuSpr_Init,
-        BgKeikokuSpr_Destroy,
-        BgKeikokuSpr_Update,
-        BgKeikokuSpr_Draw,
-    },
+    BgKeikokuSpr_Init,
+    BgKeikokuSpr_Destroy,
+    BgKeikokuSpr_Update,
+    BgKeikokuSpr_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

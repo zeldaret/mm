@@ -31,12 +31,10 @@ ActorInit Obj_Rotlift_InitVars = {
     FLAGS,
     OBJECT_ROTLIFT,
     sizeof(ObjRotlift),
-    {
-        ObjRotlift_Init,
-        ObjRotlift_Destroy,
-        ObjRotlift_Update,
-        ObjRotlift_Draw,
-    },
+    ObjRotlift_Init,
+    ObjRotlift_Destroy,
+    ObjRotlift_Update,
+    ObjRotlift_Draw,
 };
 
 struct ObjRotliftModelInfo sModelInfo[] = {

@@ -21,12 +21,10 @@ ActorInit Dm_Nb_InitVars = {
     FLAGS,
     OBJECT_NB,
     sizeof(DmNb),
-    {
-        DmNb_Init,
-        DmNb_Destroy,
-        DmNb_Update,
-        DmNb_Draw,
-    },
+    DmNb_Init,
+    DmNb_Destroy,
+    DmNb_Update,
+    DmNb_Draw,
 };
 
 static AnimationInfoS sAnimationInfo[] = {

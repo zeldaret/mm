@@ -86,12 +86,10 @@ ActorInit En_Wiz_InitVars = {
     FLAGS,
     OBJECT_WIZ,
     sizeof(EnWiz),
-    {
-        EnWiz_Init,
-        EnWiz_Destroy,
-        EnWiz_Update,
-        EnWiz_Draw,
-    },
+    EnWiz_Init,
+    EnWiz_Destroy,
+    EnWiz_Update,
+    EnWiz_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[10] = {

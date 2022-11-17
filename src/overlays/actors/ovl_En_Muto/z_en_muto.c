@@ -30,12 +30,10 @@ ActorInit En_Muto_InitVars = {
     FLAGS,
     OBJECT_TORYO,
     sizeof(EnMuto),
-    {
-        EnMuto_Init,
-        EnMuto_Destroy,
-        EnMuto_Update,
-        EnMuto_Draw,
-    },
+    EnMuto_Init,
+    EnMuto_Destroy,
+    EnMuto_Update,
+    EnMuto_Draw,
 };
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x0624, 0x0623, 0x2AC6 };

@@ -174,12 +174,10 @@ ActorInit En_Test3_InitVars = {
     FLAGS,
     OBJECT_TEST3,
     sizeof(EnTest3),
-    {
-        EnTest3_Init,
-        EnTest3_Destroy,
-        EnTest3_Update,
-        NULL,
-    },
+    EnTest3_Init,
+    EnTest3_Destroy,
+    EnTest3_Update,
+    NULL,
 };
 
 static struct_80A4168C D_80A4168C[] = {

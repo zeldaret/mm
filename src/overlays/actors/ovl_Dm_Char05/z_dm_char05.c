@@ -41,12 +41,10 @@ ActorInit Dm_Char05_InitVars = {
     FLAGS,
     OBJECT_DMASK,
     sizeof(DmChar05),
-    {
-        DmChar05_Init,
-        DmChar05_Destroy,
-        DmChar05_Update,
-        DmChar05_Draw,
-    },
+    DmChar05_Init,
+    DmChar05_Destroy,
+    DmChar05_Update,
+    DmChar05_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

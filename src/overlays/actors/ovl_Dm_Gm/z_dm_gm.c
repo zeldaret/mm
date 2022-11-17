@@ -27,12 +27,10 @@ ActorInit Dm_Gm_InitVars = {
     FLAGS,
     OBJECT_AN1,
     sizeof(DmGm),
-    {
-        DmGm_Init,
-        DmGm_Destroy,
-        DmGm_Update,
-        NULL,
-    },
+    DmGm_Init,
+    DmGm_Destroy,
+    DmGm_Update,
+    NULL,
 };
 
 static AnimationInfoS sAnimationInfo[] = {

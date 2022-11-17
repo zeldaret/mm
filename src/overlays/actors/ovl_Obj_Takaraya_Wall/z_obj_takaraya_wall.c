@@ -24,11 +24,11 @@ ActorInit Obj_Takaraya_Wall_InitVars = {
     FLAGS,
     OBJECT_TAKARAYA_OBJECTS,
     sizeof(ObjTakarayaWall),
-{ObjTakarayaWall_Init,
+    ObjTakarayaWall_Init,
     ObjTakarayaWall_Destroy,
     ObjTakarayaWall_Update,
     ObjTakarayaWall_Draw,
-},};
+};
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80ADA2A0 = {

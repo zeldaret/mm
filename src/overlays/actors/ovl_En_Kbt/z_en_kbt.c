@@ -28,12 +28,10 @@ ActorInit En_Kbt_InitVars = {
     FLAGS,
     OBJECT_KBT,
     sizeof(EnKbt),
-    {
-        EnKbt_Init,
-        EnKbt_Destroy,
-        EnKbt_Update,
-        EnKbt_Draw,
-    },
+    EnKbt_Init,
+    EnKbt_Destroy,
+    EnKbt_Update,
+    EnKbt_Draw,
 };
 
 void EnKbt_Init(Actor* thisx, PlayState* play) {

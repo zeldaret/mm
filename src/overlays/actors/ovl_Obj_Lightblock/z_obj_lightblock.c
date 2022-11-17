@@ -28,12 +28,10 @@ ActorInit Obj_Lightblock_InitVars = {
     FLAGS,
     OBJECT_LIGHTBLOCK,
     sizeof(ObjLightblock),
-    {
-        ObjLightblock_Init,
-        ObjLightblock_Destroy,
-        ObjLightblock_Update,
-        ObjLightblock_Draw,
-    },
+    ObjLightblock_Init,
+    ObjLightblock_Destroy,
+    ObjLightblock_Update,
+    ObjLightblock_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

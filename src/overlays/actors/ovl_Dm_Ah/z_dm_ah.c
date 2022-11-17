@@ -21,12 +21,10 @@ ActorInit Dm_Ah_InitVars = {
     FLAGS,
     OBJECT_AH,
     sizeof(DmAh),
-    {
-        DmAh_Init,
-        DmAh_Destroy,
-        DmAh_Update,
-        DmAh_Draw,
-    },
+    DmAh_Init,
+    DmAh_Destroy,
+    DmAh_Update,
+    DmAh_Draw,
 };
 
 static AnimationInfoS sAnimations[] = {

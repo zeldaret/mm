@@ -26,12 +26,10 @@ ActorInit Bg_Lotus_InitVars = {
     FLAGS,
     OBJECT_LOTUS,
     sizeof(BgLotus),
-    {
-        BgLotus_Init,
-        BgLotus_Destroy,
-        BgLotus_Update,
-        BgLotus_Draw,
-    },
+    BgLotus_Init,
+    BgLotus_Destroy,
+    BgLotus_Update,
+    BgLotus_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

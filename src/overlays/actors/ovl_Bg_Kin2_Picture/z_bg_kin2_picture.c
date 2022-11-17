@@ -33,12 +33,10 @@ ActorInit Bg_Kin2_Picture_InitVars = {
     FLAGS,
     OBJECT_KIN2_OBJ,
     sizeof(BgKin2Picture),
-    {
-        BgKin2Picture_Init,
-        BgKin2Picture_Destroy,
-        BgKin2Picture_Update,
-        BgKin2Picture_Draw,
-    },
+    BgKin2Picture_Init,
+    BgKin2Picture_Destroy,
+    BgKin2Picture_Update,
+    BgKin2Picture_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {

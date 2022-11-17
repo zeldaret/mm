@@ -25,12 +25,10 @@ ActorInit En_Zo_InitVars = {
     FLAGS,
     OBJECT_ZO,
     sizeof(EnZo),
-    {
-        EnZo_Init,
-        EnZo_Destroy,
-        EnZo_Update,
-        EnZo_Draw,
-    },
+    EnZo_Init,
+    EnZo_Destroy,
+    EnZo_Update,
+    EnZo_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

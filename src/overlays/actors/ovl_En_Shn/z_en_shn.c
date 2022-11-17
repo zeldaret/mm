@@ -57,12 +57,10 @@ ActorInit En_Shn_InitVars = {
     FLAGS,
     OBJECT_SHN,
     sizeof(EnShn),
-    {
-        EnShn_Init,
-        EnShn_Destroy,
-        EnShn_Update,
-        EnShn_Draw,
-    },
+    EnShn_Init,
+    EnShn_Destroy,
+    EnShn_Update,
+    EnShn_Draw,
 };
 
 void func_80AE6130(EnShn* this) {

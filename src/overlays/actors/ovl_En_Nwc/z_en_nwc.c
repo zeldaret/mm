@@ -47,12 +47,10 @@ ActorInit En_Nwc_InitVars = {
     FLAGS,
     OBJECT_NWC,
     sizeof(EnNwc),
-    {
-        EnNwc_Init,
-        EnNwc_Destroy,
-        EnNwc_Update,
-        EnNwc_Draw,
-    },
+    EnNwc_Init,
+    EnNwc_Destroy,
+    EnNwc_Update,
+    EnNwc_Draw,
 };
 
 Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };

@@ -22,12 +22,10 @@ ActorInit Obj_Smork_InitVars = {
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjSmork),
-    {
-        ObjSmork_Init,
-        ObjSmork_Destroy,
-        ObjSmork_Update,
-        ObjSmork_Draw,
-    },
+    ObjSmork_Init,
+    ObjSmork_Destroy,
+    ObjSmork_Update,
+    ObjSmork_Draw,
 };
 
 #include "overlays/ovl_Obj_Smork/ovl_Obj_Smork.c"

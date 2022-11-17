@@ -73,12 +73,10 @@ ActorInit En_Kakasi_InitVars = {
     FLAGS,
     OBJECT_KA,
     sizeof(EnKakasi),
-    {
-        EnKakasi_Init,
-        EnKakasi_Destroy,
-        EnKakasi_Update,
-        EnKakasi_Draw,
-    },
+    EnKakasi_Init,
+    EnKakasi_Destroy,
+    EnKakasi_Update,
+    EnKakasi_Draw,
 };
 
 Vec3f D_80971DCC[] = {

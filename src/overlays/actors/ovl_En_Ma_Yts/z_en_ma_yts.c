@@ -35,12 +35,10 @@ ActorInit En_Ma_Yts_InitVars = {
     FLAGS,
     OBJECT_MA1,
     sizeof(EnMaYts),
-    {
-        EnMaYts_Init,
-        EnMaYts_Destroy,
-        EnMaYts_Update,
-        EnMaYts_Draw,
-    },
+    EnMaYts_Init,
+    EnMaYts_Destroy,
+    EnMaYts_Update,
+    EnMaYts_Draw,
 };
 
 void EnMaYts_UpdateEyes(EnMaYts* this) {

@@ -20,12 +20,10 @@ ActorInit En_River_Sound_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnRiverSound),
-    {
-        EnRiverSound_Init,
-        Actor_Noop,
-        EnRiverSound_Update,
-        EnRiverSound_Draw,
-    },
+    EnRiverSound_Init,
+    Actor_Noop,
+    EnRiverSound_Update,
+    EnRiverSound_Draw,
 };
 
 void EnRiverSound_Init(Actor* thisx, PlayState* play) {

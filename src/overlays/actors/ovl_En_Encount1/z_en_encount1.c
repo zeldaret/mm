@@ -21,12 +21,10 @@ ActorInit En_Encount1_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnEncount1),
-    {
-        EnEncount1_Init,
-        NULL,
-        EnEncount1_Update,
-        NULL,
-    },
+    EnEncount1_Init,
+    NULL,
+    EnEncount1_Update,
+    NULL,
 };
 
 static s16 sActorList[] = {

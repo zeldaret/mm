@@ -21,12 +21,10 @@ ActorInit En_Boj_01_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBoj01),
-    {
-        EnBoj01_Init,
-        EnBoj01_Destroy,
-        EnBoj01_Update,
-        EnBoj01_Draw,
-    },
+    EnBoj01_Init,
+    EnBoj01_Destroy,
+    EnBoj01_Update,
+    EnBoj01_Draw,
 };
 
 void EnBoj01_Init(Actor* thisx, PlayState* play) {

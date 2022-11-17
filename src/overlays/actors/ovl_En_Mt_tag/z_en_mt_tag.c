@@ -34,12 +34,10 @@ ActorInit En_Mt_tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMttag),
-    {
-        EnMttag_Init,
-        EnMttag_Destroy,
-        EnMttag_Update,
-        NULL,
-    },
+    EnMttag_Init,
+    EnMttag_Destroy,
+    EnMttag_Update,
+    NULL,
 };
 
 static s32 sStartingCheckpointPerSceneExitIndex[] = {

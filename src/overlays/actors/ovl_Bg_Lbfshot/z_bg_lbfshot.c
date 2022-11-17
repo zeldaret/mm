@@ -21,12 +21,10 @@ ActorInit Bg_Lbfshot_InitVars = {
     FLAGS,
     OBJECT_LBFSHOT,
     sizeof(BgLbfshot),
-    {
-        BgLbfshot_Init,
-        BgLbfshot_Destroy,
-        Actor_Noop,
-        BgLbfshot_Draw,
-    },
+    BgLbfshot_Init,
+    BgLbfshot_Destroy,
+    Actor_Noop,
+    BgLbfshot_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

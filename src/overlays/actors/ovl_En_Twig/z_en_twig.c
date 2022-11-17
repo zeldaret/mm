@@ -31,12 +31,10 @@ ActorInit En_Twig_InitVars = {
     FLAGS,
     OBJECT_TWIG,
     sizeof(EnTwig),
-    {
-        EnTwig_Init,
-        EnTwig_Destroy,
-        EnTwig_Update,
-        EnTwig_Draw,
-    },
+    EnTwig_Init,
+    EnTwig_Destroy,
+    EnTwig_Update,
+    EnTwig_Draw,
 };
 
 static s32 sCurrentRing;

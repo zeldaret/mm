@@ -35,12 +35,10 @@ ActorInit En_Vm_InitVars = {
     FLAGS,
     OBJECT_VM,
     sizeof(EnVm),
-    {
-        EnVm_Init,
-        EnVm_Destroy,
-        EnVm_Update,
-        EnVm_Draw,
-    },
+    EnVm_Init,
+    EnVm_Destroy,
+    EnVm_Update,
+    EnVm_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {

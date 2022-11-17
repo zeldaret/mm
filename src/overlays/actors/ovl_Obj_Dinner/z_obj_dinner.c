@@ -22,12 +22,10 @@ ActorInit Obj_Dinner_InitVars = {
     FLAGS,
     OBJECT_OBJ_DINNER,
     sizeof(ObjDinner),
-    {
-        ObjDinner_Init,
-        ObjDinner_Destroy,
-        ObjDinner_Update,
-        ObjDinner_Draw,
-    },
+    ObjDinner_Init,
+    ObjDinner_Destroy,
+    ObjDinner_Update,
+    ObjDinner_Draw,
 };
 
 void ObjDinner_Init(Actor* thisx, PlayState* play) {

@@ -27,12 +27,10 @@ ActorInit En_Hanabi_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHanabi),
-    {
-        EnHanabi_Init,
-        EnHanabi_Destroy,
-        EnHanabi_Update,
-        NULL,
-    },
+    EnHanabi_Init,
+    EnHanabi_Destroy,
+    EnHanabi_Update,
+    NULL,
 };
 
 Vec3s D_80B23AA0[] = {

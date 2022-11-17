@@ -87,12 +87,10 @@ ActorInit En_Pr2_InitVars = {
     FLAGS,
     OBJECT_PR,
     sizeof(EnPr2),
-    {
-        EnPr2_Init,
-        EnPr2_Destroy,
-        EnPr2_Update,
-        EnPr2_Draw,
-    },
+    EnPr2_Init,
+    EnPr2_Destroy,
+    EnPr2_Update,
+    EnPr2_Draw,
 };
 
 static AnimationHeader* sAnimations[] = {

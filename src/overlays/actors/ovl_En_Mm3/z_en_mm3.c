@@ -35,12 +35,10 @@ ActorInit En_Mm3_InitVars = {
     FLAGS,
     OBJECT_MM,
     sizeof(EnMm3),
-    {
-        EnMm3_Init,
-        EnMm3_Destroy,
-        EnMm3_Update,
-        EnMm3_Draw,
-    },
+    EnMm3_Init,
+    EnMm3_Destroy,
+    EnMm3_Update,
+    EnMm3_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

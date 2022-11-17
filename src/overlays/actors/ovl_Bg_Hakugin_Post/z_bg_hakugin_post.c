@@ -45,12 +45,10 @@ ActorInit Bg_Hakugin_Post_InitVars = {
     FLAGS,
     OBJECT_HAKUGIN_OBJ,
     sizeof(BgHakuginPost),
-    {
-        BgHakuginPost_Init,
-        BgHakuginPost_Destroy,
-        BgHakuginPost_Update,
-        NULL,
-    },
+    BgHakuginPost_Init,
+    BgHakuginPost_Destroy,
+    BgHakuginPost_Update,
+    NULL,
 };
 
 typedef struct {

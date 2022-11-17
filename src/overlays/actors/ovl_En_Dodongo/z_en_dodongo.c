@@ -41,12 +41,10 @@ ActorInit En_Dodongo_InitVars = {
     FLAGS,
     OBJECT_DODONGO,
     sizeof(EnDodongo),
-    {
-        EnDodongo_Init,
-        EnDodongo_Destroy,
-        EnDodongo_Update,
-        EnDodongo_Draw,
-    },
+    EnDodongo_Init,
+    EnDodongo_Destroy,
+    EnDodongo_Update,
+    EnDodongo_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[10] = {

@@ -42,12 +42,10 @@ ActorInit En_Maruta_InitVars = {
     FLAGS,
     OBJECT_MARUTA,
     sizeof(EnMaruta),
-    {
-        EnMaruta_Init,
-        EnMaruta_Destroy,
-        EnMaruta_Update,
-        EnMaruta_Draw,
-    },
+    EnMaruta_Init,
+    EnMaruta_Destroy,
+    EnMaruta_Update,
+    EnMaruta_Draw,
 };
 
 Gfx* D_80B386A0[] = {

@@ -22,11 +22,11 @@ ActorInit Obj_Mine_InitVars = {
     FLAGS,
     OBJECT_NY,
     sizeof(ObjMine),
-{ObjMine_Init,
+    ObjMine_Init,
     ObjMine_Destroy,
     ObjMine_Update,
     ObjMine_Draw,
-},};
+};
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A84570[1] = {

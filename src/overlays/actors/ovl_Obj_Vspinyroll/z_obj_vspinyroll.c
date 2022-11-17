@@ -33,12 +33,10 @@ ActorInit Obj_Vspinyroll_InitVars = {
     FLAGS,
     OBJECT_SPINYROLL,
     sizeof(ObjVspinyroll),
-    {
-        ObjVspinyroll_Init,
-        ObjVspinyroll_Destroy,
-        ObjVspinyroll_Update,
-        ObjVspinyroll_Draw,
-    },
+    ObjVspinyroll_Init,
+    ObjVspinyroll_Destroy,
+    ObjVspinyroll_Update,
+    ObjVspinyroll_Draw,
 };
 
 f32 D_80A3D450[] = { 1.0f, 2.0f };

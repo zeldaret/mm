@@ -30,12 +30,10 @@ ActorInit Bg_Ikana_Dharma_InitVars = {
     FLAGS,
     OBJECT_IKANA_OBJ,
     sizeof(BgIkanaDharma),
-    {
-        BgIkanaDharma_Init,
-        BgIkanaDharma_Destroy,
-        BgIkanaDharma_Update,
-        BgIkanaDharma_Draw,
-    },
+    BgIkanaDharma_Init,
+    BgIkanaDharma_Destroy,
+    BgIkanaDharma_Update,
+    BgIkanaDharma_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

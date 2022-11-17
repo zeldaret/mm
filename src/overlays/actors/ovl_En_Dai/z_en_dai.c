@@ -25,12 +25,10 @@ ActorInit En_Dai_InitVars = {
     FLAGS,
     OBJECT_DAI,
     sizeof(EnDai),
-    {
-        EnDai_Init,
-        EnDai_Destroy,
-        EnDai_Update,
-        EnDai_Draw,
-    },
+    EnDai_Init,
+    EnDai_Destroy,
+    EnDai_Update,
+    EnDai_Draw,
 };
 
 static Vec3f D_80B3FBF0 = { 1.0f, 1.0f, 1.0f };

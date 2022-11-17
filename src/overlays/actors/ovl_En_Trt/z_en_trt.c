@@ -96,12 +96,10 @@ ActorInit En_Trt_InitVars = {
     FLAGS,
     OBJECT_TRT,
     sizeof(EnTrt),
-    {
-        EnTrt_Init,
-        EnTrt_Destroy,
-        EnTrt_Update,
-        EnTrt_Draw,
-    },
+    EnTrt_Init,
+    EnTrt_Destroy,
+    EnTrt_Update,
+    EnTrt_Draw,
 };
 
 static f32 sActorScale = 0.008f;

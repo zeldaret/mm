@@ -23,12 +23,10 @@ ActorInit En_Kanban_InitVars = {
     FLAGS,
     OBJECT_KANBAN,
     sizeof(EnKanban),
-    {
-        EnKanban_Init,
-        EnKanban_Destroy,
-        EnKanban_Update,
-        EnKanban_Draw,
-    },
+    EnKanban_Init,
+    EnKanban_Destroy,
+    EnKanban_Update,
+    EnKanban_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -25,12 +25,10 @@ ActorInit Obj_Bell_InitVars = {
     FLAGS,
     OBJECT_F52_OBJ,
     sizeof(ObjBell),
-    {
-        ObjBell_Init,
-        ObjBell_Destroy,
-        ObjBell_Update,
-        ObjBell_Draw,
-    },
+    ObjBell_Init,
+    ObjBell_Destroy,
+    ObjBell_Update,
+    ObjBell_Draw,
 };
 
 // Bell Post?

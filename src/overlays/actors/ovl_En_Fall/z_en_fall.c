@@ -68,12 +68,10 @@ ActorInit En_Fall_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnFall),
-    {
-        EnFall_Init,
-        EnFall_Destroy,
-        EnFall_Update,
-        NULL,
-    },
+    EnFall_Init,
+    EnFall_Destroy,
+    EnFall_Update,
+    NULL,
 };
 
 /**

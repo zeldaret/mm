@@ -33,11 +33,11 @@ ActorInit En_Ge2_InitVars = {
     FLAGS,
     OBJECT_GLA,
     sizeof(EnGe2),
-{EnGe2_Init,
+    EnGe2_Init,
     EnGe2_Destroy,
     EnGe2_Update,
     EnGe2_Draw,
-},};
+};
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B8CE40 = {

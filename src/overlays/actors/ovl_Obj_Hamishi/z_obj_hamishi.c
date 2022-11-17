@@ -22,12 +22,10 @@ ActorInit Obj_Hamishi_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjHamishi),
-    {
-        ObjHamishi_Init,
-        ObjHamishi_Destroy,
-        ObjHamishi_Update,
-        ObjHamishi_Draw,
-    },
+    ObjHamishi_Init,
+    ObjHamishi_Destroy,
+    ObjHamishi_Update,
+    ObjHamishi_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

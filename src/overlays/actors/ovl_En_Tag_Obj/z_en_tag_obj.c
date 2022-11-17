@@ -40,12 +40,10 @@ ActorInit En_Tag_Obj_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTagObj),
-    {
-        EnTagObj_Init,
-        EnTagObj_Destroy,
-        EnTagObj_Update,
-        NULL,
-    },
+    EnTagObj_Init,
+    EnTagObj_Destroy,
+    EnTagObj_Update,
+    NULL,
 };
 
 void EnTagObj_Init(Actor* thisx, PlayState* play) {

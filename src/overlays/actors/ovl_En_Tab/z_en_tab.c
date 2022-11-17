@@ -72,12 +72,10 @@ ActorInit En_Tab_InitVars = {
     FLAGS,
     OBJECT_TAB,
     sizeof(EnTab),
-    {
-        EnTab_Init,
-        EnTab_Destroy,
-        EnTab_Update,
-        EnTab_Draw,
-    },
+    EnTab_Init,
+    EnTab_Destroy,
+    EnTab_Update,
+    EnTab_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

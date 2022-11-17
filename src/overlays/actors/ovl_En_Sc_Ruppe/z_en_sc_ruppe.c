@@ -29,12 +29,10 @@ ActorInit En_Sc_Ruppe_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnScRuppe),
-    {
-        EnScRuppe_Init,
-        EnScRuppe_Destroy,
-        EnScRuppe_Update,
-        EnScRuppe_Draw,
-    },
+    EnScRuppe_Init,
+    EnScRuppe_Destroy,
+    EnScRuppe_Update,
+    EnScRuppe_Draw,
 };
 
 RuppeInfo sRupeeInfo[] = {

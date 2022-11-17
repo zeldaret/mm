@@ -31,12 +31,10 @@ ActorInit Obj_Oshihiki_InitVars = {
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(ObjOshihiki),
-    {
-        ObjOshihiki_Init,
-        ObjOshihiki_Destroy,
-        ObjOshihiki_Update,
-        ObjOshihiki_Draw,
-    },
+    ObjOshihiki_Init,
+    ObjOshihiki_Destroy,
+    ObjOshihiki_Update,
+    ObjOshihiki_Draw,
 };
 
 static f32 sScales[] = { 0.1f, 0.2f, 0.4f, 0.1f, 0.2f, 0.4f };

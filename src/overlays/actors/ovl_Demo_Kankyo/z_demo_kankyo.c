@@ -28,12 +28,10 @@ ActorInit Demo_Kankyo_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DemoKankyo),
-    {
-        DemoKankyo_Init,
-        DemoKankyo_Destroy,
-        DemoKankyo_Update,
-        DemoKankyo_Draw,
-    },
+    DemoKankyo_Init,
+    DemoKankyo_Destroy,
+    DemoKankyo_Update,
+    DemoKankyo_Draw,
 };
 
 static s32 sObjectBubbleIndex = OBJECT_BUBBLE | 0x10000;

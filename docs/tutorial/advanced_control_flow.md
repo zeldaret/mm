@@ -32,12 +32,10 @@ ActorInit En_Ms_InitVars = {
     FLAGS,
     OBJECT_MS,
     sizeof(EnMs),
-    {
-        EnMs_Init,
-        EnMs_Destroy,
-        EnMs_Update,
-        EnMs_Draw,
-    },
+    EnMs_Init,
+    EnMs_Destroy,
+    EnMs_Update,
+    EnMs_Draw,
 };
 
 static ColliderCylinderInitType1 D_80952BA0 = {

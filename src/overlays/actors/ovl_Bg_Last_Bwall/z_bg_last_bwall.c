@@ -43,12 +43,10 @@ ActorInit Bg_Last_Bwall_InitVars = {
     FLAGS,
     OBJECT_LAST_OBJ,
     sizeof(BgLastBwall),
-    {
-        BgLastBwall_Init,
-        BgLastBwall_Destroy,
-        BgLastBwall_Update,
-        BgLastBwall_Draw,
-    },
+    BgLastBwall_Init,
+    BgLastBwall_Destroy,
+    BgLastBwall_Update,
+    BgLastBwall_Draw,
 };
 
 static ColliderTrisElementInit sTrisElementsInit[] = {

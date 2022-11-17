@@ -27,12 +27,10 @@ ActorInit Obj_Mure3_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMure3),
-    {
-        ObjMure3_Init,
-        ObjMure3_Destroy,
-        ObjMure3_Update,
-        NULL,
-    },
+    ObjMure3_Init,
+    ObjMure3_Destroy,
+    ObjMure3_Update,
+    NULL,
 };
 
 static s16 sRupeeCounts[] = { 5, 5, 7, 0 };

@@ -24,12 +24,10 @@ ActorInit En_Stream_InitVars = {
     FLAGS,
     OBJECT_STREAM,
     sizeof(EnStream),
-    {
-        EnStream_Init,
-        EnStream_Destroy,
-        EnStream_Update,
-        EnStream_Draw,
-    },
+    EnStream_Init,
+    EnStream_Destroy,
+    EnStream_Update,
+    EnStream_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

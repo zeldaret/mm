@@ -22,12 +22,10 @@ ActorInit En_Scopecoin_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnScopecoin),
-    {
-        EnScopecoin_Init,
-        EnScopecoin_Destroy,
-        EnScopecoin_Update,
-        EnScopecoin_Draw,
-    },
+    EnScopecoin_Init,
+    EnScopecoin_Destroy,
+    EnScopecoin_Update,
+    EnScopecoin_Draw,
 };
 
 void EnScopecoin_Spin(EnScopecoin* this, PlayState* play) {

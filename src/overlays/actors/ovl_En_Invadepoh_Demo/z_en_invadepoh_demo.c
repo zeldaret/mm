@@ -29,11 +29,11 @@ ActorInit En_Invadepoh_Demo_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInvadepohDemo),
-{EnInvadepohDemo_Init,
+    EnInvadepohDemo_Init,
     EnInvadepohDemo_Destroy,
     EnInvadepohDemo_Update,
     EnInvadepohDemo_Draw,
-},};
+};
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C1AA74[] = {

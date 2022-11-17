@@ -28,12 +28,10 @@ ActorInit En_Elforg_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnElforg),
-    {
-        EnElforg_Init,
-        EnElforg_Destroy,
-        EnElforg_Update,
-        EnElforg_Draw,
-    },
+    EnElforg_Init,
+    EnElforg_Destroy,
+    EnElforg_Update,
+    EnElforg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

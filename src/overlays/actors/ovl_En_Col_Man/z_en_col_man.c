@@ -53,12 +53,10 @@ ActorInit En_Col_Man_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnColMan),
-    {
-        EnColMan_Init,
-        EnColMan_Destroy,
-        EnColMan_Update,
-        NULL,
-    },
+    EnColMan_Init,
+    EnColMan_Destroy,
+    EnColMan_Update,
+    NULL,
 };
 
 static Color_RGBA8 primColor = { 60, 50, 20, 255 };

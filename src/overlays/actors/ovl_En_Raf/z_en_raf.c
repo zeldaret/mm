@@ -73,12 +73,10 @@ ActorInit En_Raf_InitVars = {
     FLAGS,
     OBJECT_RAF,
     sizeof(EnRaf),
-    {
-        EnRaf_Init,
-        EnRaf_Destroy,
-        EnRaf_Update,
-        EnRaf_Draw,
-    },
+    EnRaf_Init,
+    EnRaf_Destroy,
+    EnRaf_Update,
+    EnRaf_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

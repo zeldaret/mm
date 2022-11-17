@@ -100,12 +100,10 @@ ActorInit En_S_Goro_InitVars = {
     FLAGS,
     OBJECT_OF1D_MAP,
     sizeof(EnSGoro),
-    {
-        EnSGoro_Init,
-        EnSGoro_Destroy,
-        EnSGoro_Update,
-        EnSGoro_Draw,
-    },
+    EnSGoro_Init,
+    EnSGoro_Destroy,
+    EnSGoro_Update,
+    EnSGoro_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

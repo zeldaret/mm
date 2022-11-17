@@ -25,12 +25,10 @@ ActorInit En_Ending_Hero2_InitVars = {
     FLAGS,
     OBJECT_BAI,
     sizeof(EnEndingHero2),
-    {
-        EnEndingHero2_Init,
-        EnEndingHero2_Destroy,
-        EnEndingHero2_Update,
-        EnEndingHero2_Draw,
-    },
+    EnEndingHero2_Init,
+    EnEndingHero2_Destroy,
+    EnEndingHero2_Update,
+    EnEndingHero2_Draw,
 };
 
 void EnEndingHero2_Init(Actor* thisx, PlayState* play) {

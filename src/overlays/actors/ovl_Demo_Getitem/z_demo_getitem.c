@@ -24,12 +24,10 @@ ActorInit Demo_Getitem_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(DemoGetitem),
-    {
-        DemoGetitem_Init,
-        DemoGetitem_Destroy,
-        DemoGetitem_Update,
-        NULL,
-    },
+    DemoGetitem_Init,
+    DemoGetitem_Destroy,
+    DemoGetitem_Update,
+    NULL,
 };
 
 static s16 sObjectBankIndices[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };

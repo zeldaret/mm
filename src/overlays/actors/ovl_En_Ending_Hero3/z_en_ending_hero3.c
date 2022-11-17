@@ -25,12 +25,10 @@ ActorInit En_Ending_Hero3_InitVars = {
     FLAGS,
     OBJECT_TORYO,
     sizeof(EnEndingHero3),
-    {
-        EnEndingHero3_Init,
-        EnEndingHero3_Destroy,
-        EnEndingHero3_Update,
-        EnEndingHero3_Draw,
-    },
+    EnEndingHero3_Init,
+    EnEndingHero3_Destroy,
+    EnEndingHero3_Update,
+    EnEndingHero3_Draw,
 };
 
 void EnEndingHero3_Init(Actor* thisx, PlayState* play) {

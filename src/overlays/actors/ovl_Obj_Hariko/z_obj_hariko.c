@@ -29,12 +29,10 @@ ActorInit Obj_Hariko_InitVars = {
     FLAGS,
     OBJECT_HARIKO,
     sizeof(ObjHariko),
-    {
-        ObjHariko_Init,
-        ObjHariko_Destroy,
-        ObjHariko_Update,
-        ObjHariko_Draw,
-    },
+    ObjHariko_Init,
+    ObjHariko_Destroy,
+    ObjHariko_Update,
+    ObjHariko_Draw,
 };
 
 void ObjHariko_Init(Actor* thisx, PlayState* play) {

@@ -34,12 +34,10 @@ ActorInit Eff_Lastday_InitVars = {
     FLAGS,
     OBJECT_LASTDAY,
     sizeof(EffLastday),
-    {
-        EffLastday_Init,
-        EffLastday_Destroy,
-        EffLastday_Update,
-        EffLastday_Draw,
-    },
+    EffLastday_Init,
+    EffLastday_Destroy,
+    EffLastday_Update,
+    EffLastday_Draw,
 };
 
 void EffLastday_Init(Actor* thisx, PlayState* play2) {

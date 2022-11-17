@@ -25,12 +25,10 @@ ActorInit En_Okarina_Effect_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOkarinaEffect),
-    {
-        EnOkarinaEffect_Init,
-        EnOkarinaEffect_Destroy,
-        EnOkarinaEffect_Update,
-        NULL,
-    },
+    EnOkarinaEffect_Init,
+    EnOkarinaEffect_Destroy,
+    EnOkarinaEffect_Update,
+    NULL,
 };
 
 void EnOkarinaEffect_SetupAction(EnOkarinaEffect* this, EnOkarinaEffectActionFunc actionFunc) {

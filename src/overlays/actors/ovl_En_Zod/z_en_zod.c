@@ -22,11 +22,11 @@ ActorInit En_Zod_InitVars = {
     FLAGS,
     OBJECT_ZOD,
     sizeof(EnZod),
-{EnZod_Init,
+    EnZod_Init,
     EnZod_Destroy,
     EnZod_Update,
     EnZod_Draw,
-},};
+};
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80BB0540 = {

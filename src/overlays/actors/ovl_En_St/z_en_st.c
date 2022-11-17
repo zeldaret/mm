@@ -29,12 +29,10 @@ ActorInit En_St_InitVars = {
     FLAGS,
     OBJECT_ST,
     sizeof(EnSt),
-    {
-        EnSt_Init,
-        EnSt_Destroy,
-        EnSt_Update,
-        NULL,
-    },
+    EnSt_Init,
+    EnSt_Destroy,
+    EnSt_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

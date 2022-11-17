@@ -44,12 +44,10 @@ ActorInit En_Wood02_InitVars = {
     FLAGS,
     OBJECT_WOOD02,
     sizeof(EnWood02),
-    {
-        EnWood02_Init,
-        EnWood02_Destroy,
-        EnWood02_Update,
-        EnWood02_Draw,
-    },
+    EnWood02_Init,
+    EnWood02_Destroy,
+    EnWood02_Update,
+    EnWood02_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

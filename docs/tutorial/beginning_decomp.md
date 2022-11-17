@@ -33,12 +33,10 @@ ActorInit En_Recepgirl_InitVars = {
     FLAGS,
     OBJECT_BG,
     sizeof(EnRecepgirl),
-    {
-        EnRecepgirl_Init,
-        EnRecepgirl_Destroy,
-        EnRecepgirl_Update,
-        EnRecepgirl_Draw,
-    },
+    EnRecepgirl_Init,
+    EnRecepgirl_Destroy,
+    EnRecepgirl_Update,
+    EnRecepgirl_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {
@@ -343,12 +341,10 @@ ActorInit En_Recepgirl_InitVars = {
     FLAGS,
     OBJECT_BG,
     sizeof(EnRecepgirl),
-    {
-        EnRecepgirl_Init,
-        EnRecepgirl_Destroy,
-        EnRecepgirl_Update,
-        EnRecepgirl_Draw,
-    },
+    EnRecepgirl_Init,
+    EnRecepgirl_Destroy,
+    EnRecepgirl_Update,
+    EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { (void*)0x600F8F0, (void*)0x600FCF0, (void*)0x60100F0, (void*)0x600FCF0 };

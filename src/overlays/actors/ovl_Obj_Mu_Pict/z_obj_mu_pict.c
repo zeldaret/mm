@@ -31,12 +31,10 @@ ActorInit Obj_Mu_Pict_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjMuPict),
-    {
-        ObjMuPict_Init,
-        ObjMuPict_Destroy,
-        ObjMuPict_Update,
-        ObjMuPict_Draw,
-    },
+    ObjMuPict_Init,
+    ObjMuPict_Destroy,
+    ObjMuPict_Update,
+    ObjMuPict_Draw,
 };
 
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {

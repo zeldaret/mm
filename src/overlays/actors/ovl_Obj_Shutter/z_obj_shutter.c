@@ -22,12 +22,10 @@ ActorInit Obj_Shutter_InitVars = {
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjShutter),
-    {
-        ObjShutter_Init,
-        ObjShutter_Destroy,
-        ObjShutter_Update,
-        ObjShutter_Draw,
-    },
+    ObjShutter_Init,
+    ObjShutter_Destroy,
+    ObjShutter_Update,
+    ObjShutter_Draw,
 };
 
 void ObjShutter_Init(Actor* thisx, PlayState* play) {

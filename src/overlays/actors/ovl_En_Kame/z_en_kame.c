@@ -47,12 +47,10 @@ ActorInit En_Kame_InitVars = {
     FLAGS,
     OBJECT_TL,
     sizeof(EnKame),
-    {
-        EnKame_Init,
-        EnKame_Destroy,
-        EnKame_Update,
-        EnKame_Draw,
-    },
+    EnKame_Init,
+    EnKame_Destroy,
+    EnKame_Update,
+    EnKame_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -24,12 +24,10 @@ ActorInit TG_Sw_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(TGSw),
-    {
-        TGSw_Init,
-        TGSw_Destroy,
-        TGSw_Update,
-        TGSw_Draw,
-    },
+    TGSw_Init,
+    TGSw_Destroy,
+    TGSw_Update,
+    TGSw_Draw,
 };
 
 void TGSw_ActionDecider(TGSw* this, PlayState* play) {

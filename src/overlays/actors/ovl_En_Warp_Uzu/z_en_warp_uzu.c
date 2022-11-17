@@ -27,12 +27,10 @@ ActorInit En_Warp_Uzu_InitVars = {
     FLAGS,
     OBJECT_WARP_UZU,
     sizeof(EnWarpUzu),
-    {
-        EnWarpUzu_Init,
-        EnWarpUzu_Destroy,
-        EnWarpUzu_Update,
-        EnWarpUzu_Draw,
-    },
+    EnWarpUzu_Init,
+    EnWarpUzu_Destroy,
+    EnWarpUzu_Update,
+    EnWarpUzu_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

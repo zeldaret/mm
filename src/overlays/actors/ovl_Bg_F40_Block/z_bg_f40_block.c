@@ -32,12 +32,10 @@ ActorInit Bg_F40_Block_InitVars = {
     FLAGS,
     OBJECT_F40_OBJ,
     sizeof(BgF40Block),
-    {
-        BgF40Block_Init,
-        BgF40Block_Destroy,
-        BgF40Block_Update,
-        BgF40Block_Draw,
-    },
+    BgF40Block_Init,
+    BgF40Block_Destroy,
+    BgF40Block_Update,
+    BgF40Block_Draw,
 };
 
 static Vec3f D_80BC4620[] = {

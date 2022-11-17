@@ -26,12 +26,10 @@ ActorInit En_Door_Etc_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnDoorEtc),
-    {
-        EnDoorEtc_Init,
-        EnDoorEtc_Destroy,
-        EnDoorEtc_Update,
-        NULL,
-    },
+    EnDoorEtc_Init,
+    EnDoorEtc_Destroy,
+    EnDoorEtc_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

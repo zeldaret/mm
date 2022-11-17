@@ -31,12 +31,10 @@ ActorInit En_Encount2_InitVars = {
     FLAGS,
     OBJECT_FUSEN,
     sizeof(EnEncount2),
-    {
-        EnEncount2_Init,
-        EnEncount2_Destroy,
-        EnEncount2_Update,
-        EnEncount2_Draw,
-    },
+    EnEncount2_Init,
+    EnEncount2_Destroy,
+    EnEncount2_Update,
+    EnEncount2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

@@ -35,11 +35,11 @@ ActorInit En_Minideath_InitVars = {
     FLAGS,
     OBJECT_DEATH,
     sizeof(EnMinideath),
-{EnMinideath_Init,
+    EnMinideath_Init,
     EnMinideath_Destroy,
     EnMinideath_Update,
     NULL,
-},};
+};
 
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_808CBF50[3] = {

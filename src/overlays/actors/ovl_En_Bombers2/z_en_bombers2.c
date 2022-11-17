@@ -29,12 +29,10 @@ ActorInit En_Bombers2_InitVars = {
     FLAGS,
     OBJECT_CS,
     sizeof(EnBombers2),
-    {
-        EnBombers2_Init,
-        EnBombers2_Destroy,
-        EnBombers2_Update,
-        EnBombers2_Draw,
-    },
+    EnBombers2_Init,
+    EnBombers2_Destroy,
+    EnBombers2_Update,
+    EnBombers2_Draw,
 };
 
 static u16 sTextIds[] = {

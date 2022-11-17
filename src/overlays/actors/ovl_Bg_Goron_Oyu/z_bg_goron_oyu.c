@@ -29,12 +29,10 @@ ActorInit Bg_Goron_Oyu_InitVars = {
     FLAGS,
     OBJECT_OYU,
     sizeof(BgGoronOyu),
-    {
-        BgGoronOyu_Init,
-        BgGoronOyu_Destroy,
-        BgGoronOyu_Update,
-        BgGoronOyu_Draw,
-    },
+    BgGoronOyu_Init,
+    BgGoronOyu_Destroy,
+    BgGoronOyu_Update,
+    BgGoronOyu_Draw,
 };
 
 void func_80B40080(BgGoronOyu* this) {

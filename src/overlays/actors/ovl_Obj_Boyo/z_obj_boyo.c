@@ -24,12 +24,10 @@ ActorInit Obj_Boyo_InitVars = {
     FLAGS,
     OBJECT_BOYO,
     sizeof(ObjBoyo),
-    {
-        ObjBoyo_Init,
-        ObjBoyo_Destroy,
-        ObjBoyo_Update,
-        ObjBoyo_Draw,
-    },
+    ObjBoyo_Init,
+    ObjBoyo_Destroy,
+    ObjBoyo_Update,
+    ObjBoyo_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

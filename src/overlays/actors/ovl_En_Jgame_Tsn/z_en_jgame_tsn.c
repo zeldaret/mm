@@ -42,12 +42,10 @@ ActorInit En_Jgame_Tsn_InitVars = {
     FLAGS,
     OBJECT_TSN,
     sizeof(EnJgameTsn),
-    {
-        EnJgameTsn_Init,
-        EnJgameTsn_Destroy,
-        EnJgameTsn_Update,
-        EnJgameTsn_Draw,
-    },
+    EnJgameTsn_Init,
+    EnJgameTsn_Destroy,
+    EnJgameTsn_Update,
+    EnJgameTsn_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

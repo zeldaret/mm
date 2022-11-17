@@ -22,11 +22,11 @@ ActorInit Obj_Wind_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(ObjWind),
-{ObjWind_Init,
+    ObjWind_Init,
     ObjWind_Destroy,
     ObjWind_Update,
     ObjWind_Draw,
-},};
+};
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B24480[] = {

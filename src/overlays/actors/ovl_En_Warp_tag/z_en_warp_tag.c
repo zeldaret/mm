@@ -30,12 +30,10 @@ ActorInit En_Warp_tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnWarptag),
-    {
-        EnWarptag_Init,
-        EnWarptag_Destroy,
-        EnWarptag_Update,
-        NULL,
-    },
+    EnWarptag_Init,
+    EnWarptag_Destroy,
+    EnWarptag_Update,
+    NULL,
 };
 
 // this appears to be unused, as the code never accesses it in known vanilla cases

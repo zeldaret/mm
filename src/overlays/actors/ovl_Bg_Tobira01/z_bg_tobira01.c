@@ -22,12 +22,10 @@ ActorInit Bg_Tobira01_InitVars = {
     FLAGS,
     OBJECT_SPOT11_OBJ,
     sizeof(BgTobira01),
-    {
-        BgTobira01_Init,
-        BgTobira01_Destroy,
-        BgTobira01_Update,
-        BgTobira01_Draw,
-    },
+    BgTobira01_Init,
+    BgTobira01_Destroy,
+    BgTobira01_Update,
+    BgTobira01_Draw,
 };
 
 void BgTobira01_Open(BgTobira01* this, PlayState* play) {

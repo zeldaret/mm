@@ -23,12 +23,10 @@ ActorInit Dm_Zl_InitVars = {
     FLAGS,
     OBJECT_ZL4,
     sizeof(DmZl),
-    {
-        DmZl_Init,
-        DmZl_Destroy,
-        DmZl_Update,
-        DmZl_Draw,
-    },
+    DmZl_Init,
+    DmZl_Destroy,
+    DmZl_Update,
+    DmZl_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

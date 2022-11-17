@@ -24,12 +24,10 @@ ActorInit En_Invisible_Ruppe_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInvisibleRuppe),
-    {
-        EnInvisibleRuppe_Init,
-        EnInvisibleRuppe_Destroy,
-        EnInvisibleRuppe_Update,
-        NULL,
-    },
+    EnInvisibleRuppe_Init,
+    EnInvisibleRuppe_Destroy,
+    EnInvisibleRuppe_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

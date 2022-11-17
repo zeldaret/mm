@@ -39,12 +39,10 @@ ActorInit En_Scopenuts_InitVars = {
     FLAGS,
     OBJECT_DNT,
     sizeof(EnScopenuts),
-    {
-        EnScopenuts_Init,
-        EnScopenuts_Destroy,
-        EnScopenuts_Update,
-        EnScopenuts_Draw,
-    },
+    EnScopenuts_Init,
+    EnScopenuts_Destroy,
+    EnScopenuts_Update,
+    EnScopenuts_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {

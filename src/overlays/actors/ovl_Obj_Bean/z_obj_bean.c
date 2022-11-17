@@ -66,12 +66,10 @@ ActorInit Obj_Bean_InitVars = {
     FLAGS,
     OBJECT_MAMENOKI,
     sizeof(ObjBean),
-    {
-        ObjBean_Init,
-        ObjBean_Destroy,
-        ObjBean_Update,
-        NULL,
-    },
+    ObjBean_Init,
+    ObjBean_Destroy,
+    ObjBean_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

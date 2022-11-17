@@ -29,12 +29,10 @@ ActorInit Bg_Icefloe_InitVars = {
     FLAGS,
     OBJECT_ICEFLOE,
     sizeof(BgIcefloe),
-    {
-        BgIcefloe_Init,
-        BgIcefloe_Destroy,
-        BgIcefloe_Update,
-        BgIcefloe_Draw,
-    },
+    BgIcefloe_Init,
+    BgIcefloe_Destroy,
+    BgIcefloe_Update,
+    BgIcefloe_Draw,
 };
 static BgIcefloe* sSpawnedInstances[] = { NULL, NULL, NULL };
 

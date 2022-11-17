@@ -20,12 +20,10 @@ ActorInit En_M_Fire1_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMFire1),
-    {
-        EnMFire1_Init,
-        EnMFire1_Destroy,
-        EnMFire1_Update,
-        NULL,
-    },
+    EnMFire1_Init,
+    EnMFire1_Destroy,
+    EnMFire1_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

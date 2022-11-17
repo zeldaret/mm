@@ -22,12 +22,10 @@ ActorInit Obj_Toudai_InitVars = {
     FLAGS,
     OBJECT_F53_OBJ,
     sizeof(ObjToudai),
-    {
-        ObjToudai_Init,
-        ObjToudai_Destroy,
-        ObjToudai_Update,
-        ObjToudai_Draw,
-    },
+    ObjToudai_Init,
+    ObjToudai_Destroy,
+    ObjToudai_Update,
+    ObjToudai_Draw,
 };
 
 #include "assets/overlays/ovl_Obj_Toudai/ovl_Obj_Toudai.c"

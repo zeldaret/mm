@@ -33,12 +33,10 @@ ActorInit Obj_Jgame_Light_InitVars = {
     FLAGS,
     OBJECT_SYOKUDAI,
     sizeof(ObjJgameLight),
-    {
-        ObjJgameLight_Init,
-        ObjJgameLight_Destroy,
-        ObjJgameLight_Update,
-        ObjJgameLight_Draw,
-    },
+    ObjJgameLight_Init,
+    ObjJgameLight_Destroy,
+    ObjJgameLight_Update,
+    ObjJgameLight_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -28,12 +28,10 @@ ActorInit Obj_Warpstone_InitVars = {
     FLAGS,
     OBJECT_SEK,
     sizeof(ObjWarpstone),
-    {
-        ObjWarpstone_Init,
-        ObjWarpstone_Destroy,
-        ObjWarpstone_Update,
-        ObjWarpstone_Draw,
-    },
+    ObjWarpstone_Init,
+    ObjWarpstone_Destroy,
+    ObjWarpstone_Update,
+    ObjWarpstone_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

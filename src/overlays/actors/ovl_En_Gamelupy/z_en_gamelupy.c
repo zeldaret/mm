@@ -29,12 +29,10 @@ ActorInit En_Gamelupy_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnGamelupy),
-    {
-        EnGamelupy_Init,
-        EnGamelupy_Destroy,
-        EnGamelupy_Update,
-        EnGamelupy_Draw,
-    },
+    EnGamelupy_Init,
+    EnGamelupy_Destroy,
+    EnGamelupy_Update,
+    EnGamelupy_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

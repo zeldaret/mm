@@ -32,12 +32,10 @@ ActorInit En_Horse_Link_Child_InitVars = {
     FLAGS,
     OBJECT_HORSE_LINK_CHILD,
     sizeof(EnHorseLinkChild),
-    {
-        EnHorseLinkChild_Init,
-        EnHorseLinkChild_Destroy,
-        EnHorseLinkChild_Update,
-        EnHorseLinkChild_Draw,
-    },
+    EnHorseLinkChild_Init,
+    EnHorseLinkChild_Destroy,
+    EnHorseLinkChild_Update,
+    EnHorseLinkChild_Draw,
 };
 
 AnimationHeader* D_808DFEC0[] = { &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468 };

@@ -23,12 +23,10 @@ ActorInit En_Bh_InitVars = {
     FLAGS,
     OBJECT_BH,
     sizeof(EnBh),
-    {
-        EnBh_Init,
-        EnBh_Destroy,
-        EnBh_Update,
-        EnBh_Draw,
-    },
+    EnBh_Init,
+    EnBh_Destroy,
+    EnBh_Update,
+    EnBh_Draw,
 };
 
 void EnBh_Init(Actor* thisx, PlayState* play) {

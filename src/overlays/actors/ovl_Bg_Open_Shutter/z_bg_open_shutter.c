@@ -33,12 +33,10 @@ ActorInit Bg_Open_Shutter_InitVars = {
     FLAGS,
     OBJECT_OPEN_OBJ,
     sizeof(BgOpenShutter),
-    {
-        BgOpenShutter_Init,
-        BgOpenShutter_Destroy,
-        BgOpenShutter_Update,
-        BgOpenShutter_Draw,
-    },
+    BgOpenShutter_Init,
+    BgOpenShutter_Destroy,
+    BgOpenShutter_Update,
+    BgOpenShutter_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

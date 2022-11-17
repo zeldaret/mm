@@ -31,12 +31,10 @@ ActorInit En_Bom_Chu_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBomChu),
-    {
-        EnBomChu_Init,
-        EnBomChu_Destroy,
-        EnBomChu_Update,
-        EnBomChu_Draw,
-    },
+    EnBomChu_Init,
+    EnBomChu_Destroy,
+    EnBomChu_Update,
+    EnBomChu_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

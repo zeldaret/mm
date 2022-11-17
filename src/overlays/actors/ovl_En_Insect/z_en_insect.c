@@ -38,12 +38,10 @@ ActorInit En_Insect_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnInsect),
-    {
-        EnInsect_Init,
-        EnInsect_Destroy,
-        EnInsect_Update,
-        EnInsect_Draw,
-    },
+    EnInsect_Init,
+    EnInsect_Destroy,
+    EnInsect_Update,
+    EnInsect_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

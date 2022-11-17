@@ -121,12 +121,10 @@ ActorInit En_Pp_InitVars = {
     FLAGS,
     OBJECT_PP,
     sizeof(EnPp),
-    {
-        EnPp_Init,
-        EnPp_Destroy,
-        EnPp_Update,
-        EnPp_Draw,
-    },
+    EnPp_Init,
+    EnPp_Destroy,
+    EnPp_Update,
+    EnPp_Draw,
 };
 
 static ColliderJntSphElementInit sMaskColliderJntSphElementsInit[1] = {

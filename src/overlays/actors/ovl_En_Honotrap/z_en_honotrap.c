@@ -37,11 +37,11 @@ ActorInit En_Honotrap_InitVars = {
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(EnHonotrap),
-{EnHonotrap_Init,
+    EnHonotrap_Init,
     EnHonotrap_Destroy,
     EnHonotrap_Update,
     EnHonotrap_Draw,
-},};
+};
 
 // static ColliderTrisElementInit sTrisElementsInit[2] = {
 static ColliderTrisElementInit D_80930424[2] = {

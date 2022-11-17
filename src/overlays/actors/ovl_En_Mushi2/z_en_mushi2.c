@@ -38,12 +38,10 @@ ActorInit En_Mushi2_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnMushi2),
-    {
-        EnMushi2_Init,
-        EnMushi2_Destroy,
-        EnMushi2_Update,
-        EnMushi2_Draw,
-    },
+    EnMushi2_Init,
+    EnMushi2_Destroy,
+    EnMushi2_Update,
+    EnMushi2_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {

@@ -42,12 +42,10 @@ ActorInit En_Gb2_InitVars = {
     FLAGS,
     OBJECT_PS,
     sizeof(EnGb2),
-    {
-        EnGb2_Init,
-        EnGb2_Destroy,
-        EnGb2_Update,
-        EnGb2_Draw,
-    },
+    EnGb2_Init,
+    EnGb2_Destroy,
+    EnGb2_Update,
+    EnGb2_Draw,
 };
 
 typedef struct {

@@ -27,12 +27,10 @@ ActorInit En_Daiku_InitVars = {
     FLAGS,
     OBJECT_DAIKU,
     sizeof(EnDaiku),
-    {
-        EnDaiku_Init,
-        EnDaiku_Destroy,
-        EnDaiku_Update,
-        EnDaiku_Draw,
-    },
+    EnDaiku_Init,
+    EnDaiku_Destroy,
+    EnDaiku_Update,
+    EnDaiku_Draw,
 };
 
 static u16 sTextIds[] = {

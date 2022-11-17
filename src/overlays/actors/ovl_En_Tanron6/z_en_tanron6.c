@@ -24,12 +24,10 @@ ActorInit En_Tanron6_InitVars = {
     FLAGS,
     OBJECT_TANRON5,
     sizeof(EnTanron6),
-    {
-        EnTanron6_Init,
-        EnTanron6_Destroy,
-        EnTanron6_Update,
-        EnTanron6_Draw,
-    },
+    EnTanron6_Init,
+    EnTanron6_Destroy,
+    EnTanron6_Update,
+    EnTanron6_Draw,
 };
 
 static DamageTable sDamageTable = {

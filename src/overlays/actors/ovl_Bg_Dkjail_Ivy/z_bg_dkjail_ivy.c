@@ -30,12 +30,10 @@ ActorInit Bg_Dkjail_Ivy_InitVars = {
     FLAGS,
     OBJECT_DKJAIL_OBJ,
     sizeof(BgDkjailIvy),
-    {
-        BgDkjailIvy_Init,
-        BgDkjailIvy_Destroy,
-        BgDkjailIvy_Update,
-        BgDkjailIvy_Draw,
-    },
+    BgDkjailIvy_Init,
+    BgDkjailIvy_Destroy,
+    BgDkjailIvy_Update,
+    BgDkjailIvy_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -82,12 +82,10 @@ ActorInit En_Tru_InitVars = {
     FLAGS,
     OBJECT_TRU,
     sizeof(EnTru),
-    {
-        EnTru_Init,
-        EnTru_Destroy,
-        EnTru_Update,
-        EnTru_Draw,
-    },
+    EnTru_Init,
+    EnTru_Destroy,
+    EnTru_Update,
+    EnTru_Draw,
 };
 
 #include "overlays/ovl_En_Tru/ovl_En_Tru.c"

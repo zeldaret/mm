@@ -24,12 +24,10 @@ ActorInit En_Tanron1_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnTanron1),
-    {
-        EnTanron1_Init,
-        EnTanron1_Destroy,
-        EnTanron1_Update,
-        EnTanron1_Draw,
-    },
+    EnTanron1_Init,
+    EnTanron1_Destroy,
+    EnTanron1_Update,
+    EnTanron1_Draw,
 };
 
 static u64 sPad = { 0 };

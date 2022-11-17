@@ -299,12 +299,10 @@ ActorInit En_Egol_InitVars = {
     FLAGS,
     OBJECT_EG,
     sizeof(EnEgol),
-    {
-        EnEgol_Init,
-        EnEgol_Destroy,
-        EnEgol_Update,
-        EnEgol_Draw,
-    },
+    EnEgol_Init,
+    EnEgol_Destroy,
+    EnEgol_Update,
+    EnEgol_Draw,
 };
 
 void EnEgol_ChangeAnim(EnEgol* this, s32 animation) {

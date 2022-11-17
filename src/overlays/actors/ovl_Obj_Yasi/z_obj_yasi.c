@@ -24,12 +24,10 @@ ActorInit Obj_Yasi_InitVars = {
     FLAGS,
     OBJECT_OBJ_YASI,
     sizeof(ObjYasi),
-    {
-        ObjYasi_Init,
-        ObjYasi_Destroy,
-        ObjYasi_Update,
-        ObjYasi_Draw,
-    },
+    ObjYasi_Init,
+    ObjYasi_Destroy,
+    ObjYasi_Update,
+    ObjYasi_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

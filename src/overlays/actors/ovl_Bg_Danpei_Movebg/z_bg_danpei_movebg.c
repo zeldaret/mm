@@ -21,11 +21,11 @@ ActorInit Bg_Danpei_Movebg_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(BgDanpeiMovebg),
-{BgDanpeiMovebg_Init,
+    BgDanpeiMovebg_Init,
     BgDanpeiMovebg_Destroy,
     BgDanpeiMovebg_Update,
     NULL,
-},};
+};
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AF753C[] = {

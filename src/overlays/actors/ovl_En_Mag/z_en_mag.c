@@ -91,12 +91,10 @@ ActorInit En_Mag_InitVars = {
     FLAGS,
     OBJECT_MAG,
     sizeof(EnMag),
-    {
-        EnMag_Init,
-        EnMag_Destroy,
-        EnMag_Update,
-        EnMag_Draw,
-    },
+    EnMag_Init,
+    EnMag_Destroy,
+    EnMag_Update,
+    EnMag_Draw,
 };
 
 void EnMag_Init(Actor* thisx, PlayState* play) {

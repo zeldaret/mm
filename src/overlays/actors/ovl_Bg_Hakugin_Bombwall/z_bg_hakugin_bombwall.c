@@ -32,12 +32,10 @@ ActorInit Bg_Hakugin_Bombwall_InitVars = {
     FLAGS,
     OBJECT_HAKUGIN_OBJ,
     sizeof(BgHakuginBombwall),
-    {
-        BgHakuginBombwall_Init,
-        BgHakuginBombwall_Destroy,
-        BgHakuginBombwall_Update,
-        BgHakuginBombwall_Draw,
-    },
+    BgHakuginBombwall_Init,
+    BgHakuginBombwall_Destroy,
+    BgHakuginBombwall_Update,
+    BgHakuginBombwall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

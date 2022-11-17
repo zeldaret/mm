@@ -28,12 +28,10 @@ ActorInit En_Arrow_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnArrow),
-    {
-        EnArrow_Init,
-        EnArrow_Destroy,
-        EnArrow_Update,
-        EnArrow_Draw,
-    },
+    EnArrow_Init,
+    EnArrow_Destroy,
+    EnArrow_Update,
+    EnArrow_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {

@@ -22,12 +22,10 @@ ActorInit En_Hit_Tag_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHitTag),
-    {
-        EnHitTag_Init,
-        EnHitTag_Destroy,
-        EnHitTag_Update,
-        NULL,
-    },
+    EnHitTag_Init,
+    EnHitTag_Destroy,
+    EnHitTag_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

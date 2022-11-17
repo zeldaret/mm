@@ -22,12 +22,10 @@ ActorInit En_Onpuman_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnOnpuman),
-    {
-        EnOnpuman_Init,
-        EnOnpuman_Destroy,
-        EnOnpuman_Update,
-        NULL,
-    },
+    EnOnpuman_Init,
+    EnOnpuman_Destroy,
+    EnOnpuman_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

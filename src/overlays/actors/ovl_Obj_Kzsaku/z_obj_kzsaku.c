@@ -29,12 +29,10 @@ ActorInit Obj_Kzsaku_InitVars = {
     FLAGS,
     OBJECT_KZSAKU,
     sizeof(ObjKzsaku),
-    {
-        ObjKzsaku_Init,
-        ObjKzsaku_Destroy,
-        ObjKzsaku_Update,
-        ObjKzsaku_Draw,
-    },
+    ObjKzsaku_Init,
+    ObjKzsaku_Destroy,
+    ObjKzsaku_Update,
+    ObjKzsaku_Draw,
 };
 
 void ObjKzsaku_Init(Actor* thisx, PlayState* play) {

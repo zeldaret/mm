@@ -25,12 +25,10 @@ ActorInit En_Boom_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnBoom),
-    {
-        EnBoom_Init,
-        EnBoom_Destroy,
-        EnBoom_Update,
-        EnBoom_Draw,
-    },
+    EnBoom_Init,
+    EnBoom_Destroy,
+    EnBoom_Update,
+    EnBoom_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {

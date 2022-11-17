@@ -30,12 +30,10 @@ ActorInit En_Sekihi_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnSekihi),
-    {
-        EnSekihi_Init,
-        EnSekihi_Destroy,
-        EnSekihi_Update,
-        NULL,
-    },
+    EnSekihi_Init,
+    EnSekihi_Destroy,
+    EnSekihi_Update,
+    NULL,
 };
 
 static s16 sObjectIds[] = { OBJECT_SEKIHIL, OBJECT_SEKIHIG, OBJECT_SEKIHIN, OBJECT_SEKIHIZ, OBJECT_ZOG };

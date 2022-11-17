@@ -31,12 +31,10 @@ ActorInit Bg_Ikana_Block_InitVars = {
     FLAGS,
     GAMEPLAY_DANGEON_KEEP,
     sizeof(BgIkanaBlock),
-    {
-        BgIkanaBlock_Init,
-        BgIkanaBlock_Destroy,
-        BgIkanaBlock_Update,
-        NULL,
-    },
+    BgIkanaBlock_Init,
+    BgIkanaBlock_Destroy,
+    BgIkanaBlock_Update,
+    NULL,
 };
 
 static InitChainEntry sInitChain[] = {

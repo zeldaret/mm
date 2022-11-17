@@ -52,12 +52,10 @@ ActorInit Obj_Hunsui_InitVars = {
     FLAGS,
     OBJECT_HUNSUI,
     sizeof(ObjHunsui),
-    {
-        ObjHunsui_Init,
-        ObjHunsui_Destroy,
-        ObjHunsui_Update,
-        ObjHunsui_Draw,
-    },
+    ObjHunsui_Init,
+    ObjHunsui_Destroy,
+    ObjHunsui_Update,
+    ObjHunsui_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

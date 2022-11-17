@@ -19,11 +19,11 @@ ActorInit Obj_Grass_Unit_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrassUnit),
-{ObjGrassUnit_Init,
+    ObjGrassUnit_Init,
     Actor_Noop,
     Actor_Noop,
     NULL,
-},};
+};
 
 #endif
 

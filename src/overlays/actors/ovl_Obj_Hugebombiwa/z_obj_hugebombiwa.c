@@ -34,12 +34,10 @@ ActorInit Obj_Hugebombiwa_InitVars = {
     FLAGS,
     OBJECT_BOMBIWA,
     sizeof(ObjHugebombiwa),
-    {
-        ObjHugebombiwa_Init,
-        ObjHugebombiwa_Destroy,
-        ObjHugebombiwa_Update,
-        ObjHugebombiwa_Draw,
-    },
+    ObjHugebombiwa_Init,
+    ObjHugebombiwa_Destroy,
+    ObjHugebombiwa_Update,
+    ObjHugebombiwa_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

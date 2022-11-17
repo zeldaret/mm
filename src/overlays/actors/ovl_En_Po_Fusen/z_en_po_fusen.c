@@ -31,12 +31,10 @@ ActorInit En_Po_Fusen_InitVars = {
     FLAGS,
     OBJECT_PO_FUSEN,
     sizeof(EnPoFusen),
-    {
-        EnPoFusen_Init,
-        EnPoFusen_Destroy,
-        EnPoFusen_Update,
-        EnPoFusen_Draw,
-    },
+    EnPoFusen_Init,
+    EnPoFusen_Destroy,
+    EnPoFusen_Update,
+    EnPoFusen_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

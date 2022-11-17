@@ -22,11 +22,11 @@ ActorInit Obj_Tokei_Tobira_InitVars = {
     FLAGS,
     OBJECT_TOKEI_TOBIRA,
     sizeof(ObjTokeiTobira),
-{ObjTokeiTobira_Init,
+    ObjTokeiTobira_Init,
     ObjTokeiTobira_Destroy,
     ObjTokeiTobira_Update,
     ObjTokeiTobira_Draw,
-},};
+};
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ABD750[] = {

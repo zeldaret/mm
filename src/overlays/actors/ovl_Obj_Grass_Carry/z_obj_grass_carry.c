@@ -35,12 +35,10 @@ ActorInit Obj_Grass_Carry_InitVars = {
     FLAGS,
     GAMEPLAY_FIELD_KEEP,
     sizeof(ObjGrassCarry),
-    {
-        ObjGrassCarry_Init,
-        ObjGrassCarry_Destroy,
-        ObjGrassCarry_Update,
-        NULL,
-    },
+    ObjGrassCarry_Init,
+    ObjGrassCarry_Destroy,
+    ObjGrassCarry_Update,
+    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -26,12 +26,10 @@ ActorInit En_Cne_01_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnCne01),
-    {
-        EnCne01_Init,
-        EnCne01_Destroy,
-        EnCne01_Update,
-        EnCne01_Draw,
-    },
+    EnCne01_Init,
+    EnCne01_Destroy,
+    EnCne01_Update,
+    EnCne01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

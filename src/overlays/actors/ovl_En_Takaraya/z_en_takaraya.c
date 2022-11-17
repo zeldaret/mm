@@ -22,11 +22,11 @@ ActorInit En_Takaraya_InitVars = {
     FLAGS,
     OBJECT_BG,
     sizeof(EnTakaraya),
-{EnTakaraya_Init,
+    EnTakaraya_Init,
     EnTakaraya_Destroy,
     EnTakaraya_Update,
     EnTakaraya_Draw,
-},};
+};
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ADFB20[] = {

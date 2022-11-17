@@ -45,12 +45,10 @@ ActorInit En_Hint_Skb_InitVars = {
     FLAGS,
     OBJECT_SKB,
     sizeof(EnHintSkb),
-    {
-        EnHintSkb_Init,
-        EnHintSkb_Destroy,
-        EnHintSkb_Update,
-        EnHintSkb_Draw,
-    },
+    EnHintSkb_Init,
+    EnHintSkb_Destroy,
+    EnHintSkb_Update,
+    EnHintSkb_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

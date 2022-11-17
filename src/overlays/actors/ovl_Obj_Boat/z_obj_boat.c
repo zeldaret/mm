@@ -24,12 +24,10 @@ ActorInit Obj_Boat_InitVars = {
     FLAGS,
     OBJECT_KAIZOKU_OBJ,
     sizeof(ObjBoat),
-    {
-        ObjBoat_Init,
-        ObjBoat_Destroy,
-        ObjBoat_Update,
-        ObjBoat_Draw,
-    },
+    ObjBoat_Init,
+    ObjBoat_Destroy,
+    ObjBoat_Update,
+    ObjBoat_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -34,12 +34,10 @@ ActorInit En_Sw_InitVars = {
     FLAGS,
     OBJECT_ST,
     sizeof(EnSw),
-    {
-        EnSw_Init,
-        EnSw_Destroy,
-        EnSw_Update,
-        EnSw_Draw,
-    },
+    EnSw_Init,
+    EnSw_Destroy,
+    EnSw_Update,
+    EnSw_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

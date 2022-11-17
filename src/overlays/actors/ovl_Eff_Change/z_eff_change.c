@@ -24,12 +24,10 @@ ActorInit Eff_Change_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EffChange),
-    {
-        EffChange_Init,
-        EffChange_Destroy,
-        EffChange_Update,
-        NULL,
-    },
+    EffChange_Init,
+    EffChange_Destroy,
+    EffChange_Update,
+    NULL,
 };
 
 static u8 D_80A4C920[] = {

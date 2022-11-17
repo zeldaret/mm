@@ -51,12 +51,10 @@ ActorInit Obj_Iceblock_InitVars = {
     FLAGS,
     OBJECT_ICE_BLOCK,
     sizeof(ObjIceblock),
-    {
-        ObjIceblock_Init,
-        ObjIceblock_Destroy,
-        ObjIceblock_Update,
-        ObjIceblock_Draw,
-    },
+    ObjIceblock_Init,
+    ObjIceblock_Destroy,
+    ObjIceblock_Update,
+    ObjIceblock_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

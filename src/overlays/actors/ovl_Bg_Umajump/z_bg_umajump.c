@@ -24,12 +24,10 @@ ActorInit Bg_Umajump_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(BgUmajump),
-    {
-        BgUmajump_Init,
-        BgUmajump_Destroy,
-        BgUmajump_Update,
-        NULL,
-    },
+    BgUmajump_Init,
+    BgUmajump_Destroy,
+    BgUmajump_Update,
+    NULL,
 };
 
 static InitChainEntry sInitChain[] = {

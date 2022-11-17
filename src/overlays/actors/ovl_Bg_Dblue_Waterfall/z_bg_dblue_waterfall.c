@@ -31,12 +31,10 @@ ActorInit Bg_Dblue_Waterfall_InitVars = {
     FLAGS,
     OBJECT_DBLUE_OBJECT,
     sizeof(BgDblueWaterfall),
-    {
-        BgDblueWaterfall_Init,
-        BgDblueWaterfall_Destroy,
-        BgDblueWaterfall_Update,
-        BgDblueWaterfall_Draw,
-    },
+    BgDblueWaterfall_Init,
+    BgDblueWaterfall_Destroy,
+    BgDblueWaterfall_Update,
+    BgDblueWaterfall_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

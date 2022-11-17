@@ -35,12 +35,10 @@ ActorInit Bg_Iknin_Susceil_InitVars = {
     FLAGS,
     OBJECT_IKNINSIDE_OBJ,
     sizeof(BgIkninSusceil),
-    {
-        BgIkninSusceil_Init,
-        BgIkninSusceil_Destroy,
-        BgIkninSusceil_Update,
-        BgIkninSusceil_Draw,
-    },
+    BgIkninSusceil_Init,
+    BgIkninSusceil_Destroy,
+    BgIkninSusceil_Update,
+    BgIkninSusceil_Draw,
 };
 
 static s32 unused = 0;

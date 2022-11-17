@@ -55,12 +55,10 @@ ActorInit En_Rz_InitVars = {
     FLAGS,
     OBJECT_RZ,
     sizeof(EnRz),
-    {
-        EnRz_Init,
-        EnRz_Destroy,
-        EnRz_Update,
-        EnRz_Draw,
-    },
+    EnRz_Init,
+    EnRz_Destroy,
+    EnRz_Update,
+    EnRz_Draw,
 };
 
 static TexturePtr sEyeTextures[] = {

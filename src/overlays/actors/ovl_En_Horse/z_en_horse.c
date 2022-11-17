@@ -150,12 +150,10 @@ ActorInit En_Horse_InitVars = {
     FLAGS,
     GAMEPLAY_KEEP,
     sizeof(EnHorse),
-    {
-        EnHorse_Init,
-        EnHorse_Destroy,
-        EnHorse_Update,
-        EnHorse_Draw,
-    },
+    EnHorse_Init,
+    EnHorse_Destroy,
+    EnHorse_Update,
+    EnHorse_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

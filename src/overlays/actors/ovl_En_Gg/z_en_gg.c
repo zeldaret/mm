@@ -32,12 +32,10 @@ ActorInit En_Gg_InitVars = {
     FLAGS,
     OBJECT_GG,
     sizeof(EnGg),
-    {
-        EnGg_Init,
-        EnGg_Destroy,
-        EnGg_Update,
-        EnGg_Draw,
-    },
+    EnGg_Init,
+    EnGg_Destroy,
+    EnGg_Update,
+    EnGg_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

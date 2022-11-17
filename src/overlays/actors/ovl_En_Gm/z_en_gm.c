@@ -161,12 +161,10 @@ ActorInit En_Gm_InitVars = {
     FLAGS,
     OBJECT_IN2,
     sizeof(EnGm),
-    {
-        EnGm_Init,
-        EnGm_Destroy,
-        EnGm_Update,
-        EnGm_Draw,
-    },
+    EnGm_Init,
+    EnGm_Destroy,
+    EnGm_Update,
+    EnGm_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
