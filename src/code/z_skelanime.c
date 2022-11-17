@@ -996,7 +996,7 @@ void AnimationContext_SetLoadFrame(PlayState* play, LinkAnimationHeader* animati
 
     if (entry != NULL) {
         LinkAnimationHeader* linkAnimHeader = Lib_SegmentedToVirtual(animation);
-        uintptr_t ram = frameTable;
+        uintptr_t ram = (uintptr_t)frameTable;
 
         osCreateMesgQueue(&entry->data.load.msgQueue, &entry->data.load.msg, 1);
         DmaMgr_SendRequestImpl(&entry->data.load.req, ram,

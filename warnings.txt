@@ -1,35 +1,7 @@
-src/overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.c: In function 'EffectSsBubble_Init':
-src/overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.c:33:19: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
-   33 |         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
-      |                   ^
 src/overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.c: In function 'EffectSsSibuki_Init':
 src/overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.c:43:19: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
    43 |         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
       |                   ^
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:7: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  573 |     { 0x08053000, 0x08054000, 0x08055000 },
-      |       ^~~~~~~~~~
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:7: note: (near initialization for 'sQuestUpgradeTextures[0][0]')
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:19: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  573 |     { 0x08053000, 0x08054000, 0x08055000 },
-      |                   ^~~~~~~~~~
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:19: note: (near initialization for 'sQuestUpgradeTextures[0][1]')
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:31: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  573 |     { 0x08053000, 0x08054000, 0x08055000 },
-      |                               ^~~~~~~~~~
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:31: note: (near initialization for 'sQuestUpgradeTextures[0][2]')
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:7: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  574 |     { 0x08056000, 0x08057000, 0x08058000 },
-      |       ^~~~~~~~~~
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:7: note: (near initialization for 'sQuestUpgradeTextures[1][0]')
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:19: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  574 |     { 0x08056000, 0x08057000, 0x08058000 },
-      |                   ^~~~~~~~~~
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:19: note: (near initialization for 'sQuestUpgradeTextures[1][1]')
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:31: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  574 |     { 0x08056000, 0x08057000, 0x08058000 },
-      |                               ^~~~~~~~~~
-src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:31: note: (near initialization for 'sQuestUpgradeTextures[1][2]')
 src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:85:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
    85 |     0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
       |     ^~~~~~~~~~
@@ -268,14 +240,14 @@ src/boot_O2/loadfragment.c:173:9: warning: assignment to 'void *' from 'unsigned
       |         ^
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
 cc: Warning: -mips3 should not be used for ucode 32-bit compiles
-src/libultra/io/sprawdma.c: In function '__osSpRawStartDma':
-src/libultra/io/sprawdma.c:8:34: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    8 |     HW_REG(SP_MEM_ADDR_REG, u32) = devAddr;
-      |                                  ^
 src/libultra/io/sptask.c: In function 'osSpTaskLoad':
 src/libultra/io/sptask.c:35:25: warning: assignment to 'u64 *' {aka 'long long unsigned int *'} from 'u32' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
    35 |             tp->t.ucode = HW_REG((uintptr_t)intp->t.yieldDataPtr + OS_YIELD_DATA_SIZE - 4, u32);
       |                         ^
+src/libultra/io/sprawdma.c: In function '__osSpRawStartDma':
+src/libultra/io/sprawdma.c:8:34: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+    8 |     HW_REG(SP_MEM_ADDR_REG, u32) = devAddr;
+      |                                  ^
 src/libultra/os/createthread.c: In function 'osCreateThread':
 src/libultra/os/createthread.c:12:19: warning: assignment to 'u64' {aka 'long long unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
    12 |     t->context.a0 = arg;
@@ -1071,17 +1043,6 @@ include/z64load.h:28:97: note: expected 'uintptr_t' {aka 'unsigned int'} but arg
 src/code/z_effect_soft_sprite.c:191:18: warning: assignment to 'EffectSsInit *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
   191 |         initInfo = (uintptr_t)((entry->initInfo != NULL)
       |                  ^
-src/code/z_fbdemo_dlftbls.c: In function 'Transition_Init':
-src/code/z_fbdemo_dlftbls.c:36:74: warning: passing argument 1 of 'Lib_PhysicalToVirtual' makes pointer from integer without a cast [-Wint-conversion]
-   36 |     relocOffset = (uintptr_t)Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr) - (uintptr_t)overlayEntry->vramStart;
-      |                                                    ~~~~~~~~~~~~~~~~~~~~~~^~~~~
-      |                                                                          |
-      |                                                                          unsigned int:24
-In file included from include/global.h:6,
-                 from src/code/z_fbdemo_dlftbls.c:1:
-include/functions.h:1473:35: note: expected 'void *' but argument is of type 'unsigned int:24'
- 1473 | void* Lib_PhysicalToVirtual(void* ptr);
-      |                             ~~~~~~^~~
 src/code/z_kaleido_manager.c: In function 'KaleidoManager_LoadOvl':
 src/code/z_kaleido_manager.c:43:56: warning: passing argument 3 of 'Load2_LoadOverlay' makes integer from pointer without a cast [-Wint-conversion]
    43 |     Load2_LoadOverlay(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
@@ -1101,31 +1062,21 @@ In file included from src/code/z_kaleido_manager.c:2:
 include/z64load.h:28:97: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 'void *'
    28 | size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd, void* allocatedVRamAddr);
       |                                                                                       ~~~~~~~~~~^~~~~~~
+In file included from include/variables.h:6,
+                 from include/global.h:7,
+                 from src/code/z_lib.c:1:
+src/code/z_lib.c: In function 'Lib_PhysicalToVirtual':
+include/macros.h:21:54: warning: returning 'unsigned int' from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
+   21 | #define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
+      |                                   ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+src/code/z_lib.c:734:16: note: in expansion of macro 'PHYSICAL_TO_VIRTUAL'
+  734 |         return PHYSICAL_TO_VIRTUAL(ptr);
+      |                ^~~~~~~~~~~~~~~~~~~
 src/code/z_overlay.c: In function 'TransitionOverlay_VramToRam':
-src/code/z_overlay.c:19:71: warning: passing argument 1 of 'Lib_PhysicalToVirtual' makes pointer from integer without a cast [-Wint-conversion]
-   19 |     void* loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
-      |                                                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~
-      |                                                                       |
-      |                                                                       unsigned int:24
-In file included from include/global.h:6,
-                 from src/code/z_overlay.c:15:
-include/functions.h:1473:35: note: expected 'void *' but argument is of type 'unsigned int:24'
- 1473 | void* Lib_PhysicalToVirtual(void* ptr);
-      |                             ~~~~~~^~~
 src/code/z_overlay.c:22:80: warning: returning 'unsigned int' from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
    22 |         return ((uintptr_t)loadedRamAddr - (uintptr_t)overlayEntry->vramStart) + (uintptr_t)vramAddr;
       |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
 src/code/z_overlay.c: In function 'TransitionOverlay_Load':
-src/code/z_overlay.c:42:53: warning: passing argument 1 of 'Lib_PhysicalToVirtual' makes pointer from integer without a cast [-Wint-conversion]
-   42 |     if (Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr) == NULL) {
-      |                               ~~~~~~~~~~~~~~~~~~~~~~^~~~~
-      |                                                     |
-      |                                                     unsigned int:24
-In file included from include/global.h:6,
-                 from src/code/z_overlay.c:15:
-include/functions.h:1473:35: note: expected 'void *' but argument is of type 'unsigned int:24'
- 1473 | void* Lib_PhysicalToVirtual(void* ptr);
-      |                             ~~~~~~^~~
 src/code/z_overlay.c:48:87: warning: passing argument 3 of 'Load2_LoadOverlay' makes integer from pointer without a cast [-Wint-conversion]
    48 |         Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
       |                                                                           ~~~~~~~~~~~~^~~~~~~~~~~
@@ -1144,31 +1095,11 @@ In file included from src/code/z_overlay.c:16:
 include/z64load.h:28:97: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 'void *'
    28 | size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd, void* allocatedVRamAddr);
       |                                                                                       ~~~~~~~~~~^~~~~~~
-src/code/z_overlay.c:50:37: warning: assignment to 'unsigned int:24' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-   50 |         overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(loadedRamAddr);
-      |                                     ^
-src/code/z_overlay.c: In function 'TransitionOverlay_Free':
-src/code/z_overlay.c:75:65: warning: passing argument 1 of 'Lib_PhysicalToVirtual' makes pointer from integer without a cast [-Wint-conversion]
-   75 |     loadedRamAddr = Lib_PhysicalToVirtual(overlayEntry->loadInfo.addr);
-      |                                           ~~~~~~~~~~~~~~~~~~~~~~^~~~~
-      |                                                                 |
-      |                                                                 unsigned int:24
-In file included from include/global.h:6,
-                 from src/code/z_overlay.c:15:
-include/functions.h:1473:35: note: expected 'void *' but argument is of type 'unsigned int:24'
- 1473 | void* Lib_PhysicalToVirtual(void* ptr);
-      |                             ~~~~~~^~~
-src/code/z_overlay.c:83:45: warning: assignment to 'unsigned int:24' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-   83 |                 overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(NULL);
-      |                                             ^
 src/code/z_scene.c: In function 'Object_Spawn':
 src/code/z_scene.c:16:55: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
    16 |         objectCtx->status[objectCtx->num + 1].segment = ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
       |                                                       ^
 src/code/z_skelanime.c: In function 'AnimationContext_SetLoadFrame':
-src/code/z_skelanime.c:999:25: warning: initialization of 'uintptr_t' {aka 'unsigned int'} from 'Vec3s *' makes integer from pointer without a cast [-Wint-conversion]
-  999 |         uintptr_t ram = frameTable;
-      |                         ^~~~~~~~~~
 src/code/z_skelanime.c:1002:55: warning: passing argument 2 of 'DmaMgr_SendRequestImpl' makes pointer from integer without a cast [-Wint-conversion]
  1002 |         DmaMgr_SendRequestImpl(&entry->data.load.req, ram,
       |                                                       ^~~
@@ -1179,255 +1110,5 @@ In file included from include/global.h:6,
 include/functions.h:18:55: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
    18 | s32 DmaMgr_SendRequestImpl(DmaRequest* request, void* vramStart, uintptr_t vromStart, size_t size, UNK_TYPE4 unused, OSMesgQueue* queue, void* msg);
       |                                                 ~~~~~~^~~~~~~~~
-src/code/audio/audio_heap.c: In function 'AudioHeap_ApplySampleBankCacheInternal':
-src/code/audio/audio_heap.c:1441:20: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
- 1441 |     change.oldAddr = AudioHeap_SearchCaches(SAMPLE_TABLE, CACHE_EITHER, sampleBankId);
-      |                    ^
-src/code/audio/audio_load.c: In function 'AudioLoad_SyncLoadSeqParts':
-src/code/audio/audio_load.c:416:35: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
-  416 |             osSendMesg(arg3, arg2 << 0x18, OS_MESG_NOBLOCK);
-      |                              ~~~~~^~~~~~~
-      |                                   |
-      |                                   s32 {aka int}
-In file included from include/global.h:6,
-                 from src/code/audio/audio_load.c:13:
-include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 's32' {aka 'int'}
-  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
-      |                                 ~~~~~~~^~~
-src/code/audio/audio_load.c: In function 'AudioLoad_SyncLoadSample':
-src/code/audio/audio_load.c:433:50: warning: passing argument 1 of 'AudioLoad_SyncDmaUnkMedium' makes integer from pointer without a cast [-Wint-conversion]
-  433 |                 AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sampleAddr, sample->size,
-      |                                            ~~~~~~^~~~~~~~~~~~
-      |                                                  |
-      |                                                  u8 * {aka unsigned char *}
-src/code/audio/audio_load.c:41:43: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 'u8 *' {aka 'unsigned char *'}
-   41 | void AudioLoad_SyncDmaUnkMedium(uintptr_t devAddr, u8* addr, size_t size, s32 unkMediumParam);
-      |                                 ~~~~~~~~~~^~~~~~~
-src/code/audio/audio_load.c:436:41: warning: passing argument 1 of 'AudioLoad_SyncDma' makes integer from pointer without a cast [-Wint-conversion]
-  436 |                 AudioLoad_SyncDma(sample->sampleAddr, sampleAddr, sample->size, sample->medium);
-      |                                   ~~~~~~^~~~~~~~~~~~
-      |                                         |
-      |                                         u8 * {aka unsigned char *}
-src/code/audio/audio_load.c:40:34: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 'u8 *' {aka 'unsigned char *'}
-   40 | void AudioLoad_SyncDma(uintptr_t devAddr, u8* ramAddr, size_t size, s32 medium);
-      |                        ~~~~~~~~~~^~~~~~~
-src/code/audio/audio_load.c: In function 'AudioLoad_AsyncLoad':
-src/code/audio/audio_load.c:473:30: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
-  473 |         osSendMesg(retQueue, 0xFFFFFFFF, OS_MESG_NOBLOCK);
-      |                              ^~~~~~~~~~
-      |                              |
-      |                              unsigned int
-In file included from include/global.h:6,
-                 from src/code/audio/audio_load.c:13:
-include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'unsigned int'
-  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
-      |                                 ~~~~~~~^~~
-src/code/audio/audio_load.c: In function 'AudioLoad_TrySyncLoadSampleBank':
-src/code/audio/audio_load.c:653:16: warning: returning 'void *' from a function with return type 'u32' {aka 'unsigned int'} makes integer from pointer without a cast [-Wint-conversion]
-  653 |         return addr;
-      |                ^~~~
-src/code/audio/audio_load.c:666:16: warning: returning 'void *' from a function with return type 'u32' {aka 'unsigned int'} makes integer from pointer without a cast [-Wint-conversion]
-  666 |         return addr;
-      |                ^~~~
-src/code/audio/audio_load.c: In function 'AudioLoad_SyncLoad':
-src/code/audio/audio_load.c:786:19: warning: passing argument 1 of 'bcopy' makes pointer from integer without a cast [-Wint-conversion]
-  786 |             bcopy(romAddr, ramAddr, size);
-      |                   ^~~~~~~
-      |                   |
-      |                   uintptr_t {aka unsigned int}
-In file included from include/global.h:6,
-                 from src/code/audio/audio_load.c:13:
-include/functions.h:350:18: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
-  350 | void bcopy(void* __src, void* __dest, size_t __n);
-      |            ~~~~~~^~~~~
-src/code/audio/audio_load.c: In function 'AudioLoad_RelocateFont':
-src/code/audio/audio_load.c:891:21: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-  891 |         fontData[0] = RELOC_TO_RAM(soundListOffset);
-      |                     ^
-src/code/audio/audio_load.c:896:25: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'Drum *' makes integer from pointer without a cast [-Wint-conversion]
-  896 |             soundOffset = ((Drum**)fontData[0])[i];
-      |                         ^
-src/code/audio/audio_load.c:900:29: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-  900 |                 soundOffset = RELOC_TO_RAM(soundOffset);
-      |                             ^
-src/code/audio/audio_load.c:901:49: warning: assignment to 'Drum *' from 'uintptr_t' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
-  901 |                 ((Drum**)fontData[0])[i] = drum = soundOffset;
-      |                                                 ^
-src/code/audio/audio_load.c:907:33: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'EnvelopePoint *' makes integer from pointer without a cast [-Wint-conversion]
-  907 |                     soundOffset = drum->envelope;
-      |                                 ^
-src/code/audio/audio_load.c:925:21: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-  925 |         fontData[1] = RELOC_TO_RAM(soundListOffset);
-      |                     ^
-src/code/audio/audio_load.c:930:25: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'TunedSample *' makes integer from pointer without a cast [-Wint-conversion]
-  930 |             soundOffset = (TunedSample*)fontData[1] + i;
-      |                         ^
-src/code/audio/audio_load.c:953:25: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-  953 |             fontData[i] = RELOC_TO_RAM(fontData[i]);
-      |                         ^
-src/code/audio/audio_load.c:971:29: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'EnvelopePoint *' makes integer from pointer without a cast [-Wint-conversion]
-  971 |                 soundOffset = inst->envelope;
-      |                             ^
-src/code/audio/audio_load.c: In function 'AudioLoad_AsyncLoadInner':
-src/code/audio/audio_load.c:65:60: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
-   65 |     (((retData) << 24) | ((tableType) << 16) | ((id) << 8) | (loadStatus))
-      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
-      |                                                            |
-      |                                                            int
-src/code/audio/audio_load.c:1095:30: note: in expansion of macro 'MK_ASYNC_MSG'
- 1095 |         osSendMesg(retQueue, MK_ASYNC_MSG(retData, 0, 0, LOAD_STATUS_NOT_LOADED), OS_MESG_NOBLOCK);
-      |                              ^~~~~~~~~~~~
-In file included from include/global.h:6,
-                 from src/code/audio/audio_load.c:13:
-include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
-  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
-      |                                 ~~~~~~~^~~
-src/code/audio/audio_load.c: In function 'AudioLoad_SlowLoadSample':
-src/code/audio/audio_load.c:1373:26: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'u8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
- 1373 |     slowLoad->curDevAddr = sample->sampleAddr;
-      |                          ^
-src/code/audio/audio_load.c: In function 'AudioLoad_ProcessSlowLoads':
-src/code/audio/audio_load.c:1461:86: warning: passing argument 2 of 'AudioLoad_DmaSlowCopyUnkMedium' makes integer from pointer without a cast [-Wint-conversion]
- 1461 |                         AudioLoad_DmaSlowCopyUnkMedium(slowLoad->curDevAddr, slowLoad->curRamAddr, size,
-      |                                                                              ~~~~~~~~^~~~~~~~~~~~
-      |                                                                                      |
-      |                                                                                      u8 * {aka unsigned char *}
-src/code/audio/audio_load.c:48:64: note: expected 'intptr_t' {aka 'int'} but argument is of type 'u8 *' {aka 'unsigned char *'}
-   48 | void AudioLoad_DmaSlowCopyUnkMedium(intptr_t devAddr, intptr_t ramAddr, size_t size, s32 arg3);
-      |                                                       ~~~~~~~~~^~~~~~~
-src/code/audio/audio_load.c:1469:86: warning: passing argument 2 of 'AudioLoad_DmaSlowCopyUnkMedium' makes integer from pointer without a cast [-Wint-conversion]
- 1469 |                         AudioLoad_DmaSlowCopyUnkMedium(slowLoad->curDevAddr, slowLoad->curRamAddr, 0x400,
-      |                                                                              ~~~~~~~~^~~~~~~~~~~~
-      |                                                                                      |
-      |                                                                                      u8 * {aka unsigned char *}
-src/code/audio/audio_load.c:48:64: note: expected 'intptr_t' {aka 'int'} but argument is of type 'u8 *' {aka 'unsigned char *'}
-   48 | void AudioLoad_DmaSlowCopyUnkMedium(intptr_t devAddr, intptr_t ramAddr, size_t size, s32 arg3);
-      |                                                       ~~~~~~~~~^~~~~~~
-src/code/audio/audio_load.c: In function 'AudioLoad_FinishAsyncLoad':
-src/code/audio/audio_load.c:1663:13: warning: assignment to 'OSMesg' {aka 'void *'} from 'u32' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
- 1663 |     doneMsg = asyncLoad->retMsg;
-      |             ^
-src/code/audio/audio_load.c: In function 'AudioLoad_AsyncDmaRamUnloaded':
-src/code/audio/audio_load.c:1735:20: warning: passing argument 1 of 'bcopy' makes pointer from integer without a cast [-Wint-conversion]
- 1735 |     bcopy(asyncLoad->curDevAddr, asyncLoad->curRamAddr, size);
-      |           ~~~~~~~~~^~~~~~~~~~~~
-      |                    |
-      |                    uintptr_t {aka unsigned int}
-In file included from include/global.h:6,
-                 from src/code/audio/audio_load.c:13:
-include/functions.h:350:18: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
-  350 | void bcopy(void* __src, void* __dest, size_t __n);
-      |            ~~~~~~^~~~~
-src/code/audio/audio_synthesis.c: In function 'AudioSynth_SaveResampledReverbSamples':
-src/code/audio/audio_synthesis.c:503:53: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  503 |                                                     &reverb->leftReverbBuf[entry->startPos]);
-      |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                     |
-      |                                                     s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:24:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-   24 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr);
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c:508:63: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  508 |                                                         reverb->leftReverbBuf);
-      |                                                         ~~~~~~^~~~~~~~~~~~~~~
-      |                                                               |
-      |                                                               s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:24:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-   24 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr);
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c:517:53: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  517 |                                                     &reverb->rightReverbBuf[entry->startPos]);
-      |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                     |
-      |                                                     s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:24:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-   24 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr);
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c:522:63: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  522 |                                                         reverb->rightReverbBuf);
-      |                                                         ~~~~~~^~~~~~~~~~~~~~~~
-      |                                                               |
-      |                                                               s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:24:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-   24 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr);
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c: In function 'AudioSynth_SaveReverbSamples':
-src/code/audio/audio_synthesis.c:719:61: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  719 |                                                             &reverb->leftReverbBuf[entry->startPos]);
-      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                             |
-      |                                                             s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:615:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-  615 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr) {
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c:721:61: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  721 |                                                             &reverb->rightReverbBuf[entry->startPos]);
-      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                             |
-      |                                                             s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:615:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-  615 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr) {
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c:726:67: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  726 |                                                             reverb->leftReverbBuf);
-      |                                                             ~~~~~~^~~~~~~~~~~~~~~
-      |                                                                   |
-      |                                                                   s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:615:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-  615 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr) {
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c:728:67: warning: passing argument 4 of 'AudioSynth_SaveResampledReverbSamplesImpl' makes integer from pointer without a cast [-Wint-conversion]
-  728 |                                                             reverb->rightReverbBuf);
-      |                                                             ~~~~~~^~~~~~~~~~~~~~~~
-      |                                                                   |
-      |                                                                   s16 * {aka short int *}
-src/code/audio/audio_synthesis.c:615:90: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 's16 *' {aka 'short int *'}
-  615 | Acmd* AudioSynth_SaveResampledReverbSamplesImpl(Acmd* cmd, u16 dmem, u16 size, uintptr_t startAddr) {
-      |                                                                                ~~~~~~~~~~^~~~~~~~~
-src/code/audio/audio_synthesis.c: In function 'AudioSynth_ProcessSample':
-src/code/audio/audio_synthesis.c:1113:43: warning: assignment to 'void *' from 's32' {aka 'int'} makes pointer from integer without a cast [-Wint-conversion]
- 1113 |                             reverbAddrSrc = gCustomAudioReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
-      |                                           ^
-src/code/audio/audio_synthesis.c:1173:64: warning: passing argument 1 of 'AudioLoad_DmaSampleData' makes integer from pointer without a cast [-Wint-conversion]
- 1173 |                             AudioLoad_DmaSampleData(sampleAddr + (zeroOffset + sampleAddrOffset),
-      |                                                     ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                                |
-      |                                                                u8 * {aka unsigned char *}
-In file included from include/global.h:6,
-                 from src/code/audio/audio_synthesis.c:1:
-include/functions.h:2814:41: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 'u8 *' {aka 'unsigned char *'}
- 2814 | void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
-      |                               ~~~~~~~~~~^~~~~~~
-src/code/audio/code_8019AF00.c: In function 'AudioSfx_Init':
-src/code/audio/code_8019AF00.c:5168:33: warning: passing argument 2 of 'AudioThread_QueueCmdS32' makes integer from pointer without a cast [-Wint-conversion]
- 5168 |                                 &sSfxChannelState[channelIndex]);
-      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                 |
-      |                                 SfxChannelState *
-In file included from include/global.h:6,
-                 from src/code/audio/code_8019AF00.c:1:
-include/functions.h:2850:46: note: expected 's32' {aka 'int'} but argument is of type 'SfxChannelState *'
- 2850 | void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
-      |                                          ~~~~^~~~
-src/code/audio/code_8019AF00.c:5171:41: warning: passing argument 2 of 'AudioThread_QueueCmdS32' makes integer from pointer without a cast [-Wint-conversion]
- 5171 |     AudioThread_QueueCmdS32(0xE4000000, AudioSfx_SetFreqAndStereoBits);
-      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                         |
-      |                                         u32 (*)(u8,  SequenceChannel *) {aka unsigned int (*)(unsigned char,  SequenceChannel *)}
-In file included from include/global.h:6,
-                 from src/code/audio/code_8019AF00.c:1:
-include/functions.h:2850:46: note: expected 's32' {aka 'int'} but argument is of type 'u32 (*)(u8,  SequenceChannel *)' {aka 'unsigned int (*)(unsigned char,  SequenceChannel *)'}
- 2850 | void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
-      |                                          ~~~~^~~~
-src/code/audio/code_8019AF00.c:5172:41: warning: passing argument 2 of 'AudioThread_QueueCmdS32' makes integer from pointer without a cast [-Wint-conversion]
- 5172 |     AudioThread_QueueCmdS32(0xE4000001, Audio_SetAmbienceRandomBend);
-      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                         |
-      |                                         u32 (*)(u8,  SequenceChannel *) {aka unsigned int (*)(unsigned char,  SequenceChannel *)}
-In file included from include/global.h:6,
-                 from src/code/audio/code_8019AF00.c:1:
-include/functions.h:2850:46: note: expected 's32' {aka 'int'} but argument is of type 'u32 (*)(u8,  SequenceChannel *)' {aka 'unsigned int (*)(unsigned char,  SequenceChannel *)'}
- 2850 | void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
-      |                                          ~~~~^~~~
 md5sum: WARNING: 1 computed checksum did NOT match
-make: *** [Makefile:252: uncompressed] Error 1
+make: *** [Makefile:253: uncompressed] Error 1
