@@ -28,7 +28,7 @@ void EnBba01_Walk(EnHy* this, PlayState* play);
 void EnBba01_FaceFoward(EnHy* this, PlayState* play);
 void EnBba01_Talk(EnHy* this, PlayState* play);
 
-const ActorInit En_Bba_01_InitVars = {
+ActorInit En_Bba_01_InitVars = {
     ACTOR_EN_BBA_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -111,7 +111,7 @@ void EnBba01_UpdateModel(EnBba01* this, PlayState* play) {
     EnHy_UpdateSkelAnime(&this->enHy, play);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.trackTarget,
                         &this->enHy.headRot, &this->enHy.torsoRot, &sTrackOptions);
@@ -150,7 +150,7 @@ s32 func_809CC270(EnBba01* this, PlayState* play) {
     Actor_GetScreenPos(play, &this->enHy.actor, &x, &y);
     //! @bug: Both x and y conditionals are always true, || should be an &&
     if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_AP_MAGIC_BEANS);
+        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_IA_MAGIC_BEANS);
     }
     return true;
 }
@@ -220,7 +220,7 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {
-        Actor_MarkForDeath(&this->enHy.actor);
+        Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
     Collider_InitCylinder(play, &this->enHy.collider);
@@ -262,8 +262,8 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         OPEN_DISPS(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
         CLOSE_DISPS(play->state.gfxCtx);
     }
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
@@ -298,7 +298,7 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     if (limbIndex == BBA_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
-        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
         CLOSE_DISPS(play->state.gfxCtx);
     }
 

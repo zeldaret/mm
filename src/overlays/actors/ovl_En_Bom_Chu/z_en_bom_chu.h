@@ -25,6 +25,4 @@ typedef struct EnBomChu {
     /* 0x188 */ ColliderSphere collider;
 } EnBomChu; // size = 0x1E0
 
-extern const ActorInit En_Bom_Chu_InitVars;
-
 #endif // Z_EN_BOM_CHU_H

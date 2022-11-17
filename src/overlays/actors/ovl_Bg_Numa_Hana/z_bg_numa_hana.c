@@ -15,7 +15,7 @@
 void BgNumaHana_Init(Actor* thisx, PlayState* play);
 void BgNumaHana_Destroy(Actor* thisx, PlayState* play);
 void BgNumaHana_Update(Actor* thisx, PlayState* play);
-void BgNumaHana_Draw(Actor* thisx, PlayState* play);
+void BgNumaHana_Draw(Actor* thisx, PlayState* play2);
 
 void BgNumaHana_SetupDoNothing(BgNumaHana* this);
 void BgNumaHana_DoNothing(BgNumaHana* this, PlayState* play);
@@ -30,7 +30,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play);
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
 void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play);
 
-const ActorInit Bg_Numa_Hana_InitVars = {
+ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
     ACTORCAT_BG,
     FLAGS,
@@ -157,11 +157,11 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
         Collider_SetCylinder(play, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
         this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (!BgNumaHana_SpawnOpenFlowerCollisionChild(this, play)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
-        if (gSaveContext.save.weekEventReg[12] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
             func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
 
             this->petalZRotation = 0x2000;
@@ -219,7 +219,7 @@ void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-            gSaveContext.save.weekEventReg[12] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
             Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupUnfoldInnerPetals(this);
         } else {

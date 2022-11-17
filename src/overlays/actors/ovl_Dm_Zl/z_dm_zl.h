@@ -26,6 +26,4 @@ typedef struct DmZl {
     /* 0x2BC */ UNK_TYPE1 pad2BC[0x18]; // unused by DmZl
 } DmZl; // size = 0x2D4
 
-extern const ActorInit Dm_Zl_InitVars;
-
 #endif // Z_DM_ZL_H

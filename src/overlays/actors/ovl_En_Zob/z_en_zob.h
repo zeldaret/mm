@@ -32,6 +32,4 @@ typedef struct EnZob {
     /* 0x314 */ EnZobActionFunc actionFunc;
 } EnZob; // size = 0x318
 
-extern const ActorInit En_Zob_InitVars;
-
 #endif // Z_EN_ZOB_H

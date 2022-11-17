@@ -15,7 +15,7 @@ void DmAl_Destroy(Actor* thisx, PlayState* play);
 void DmAl_Update(Actor* thisx, PlayState* play);
 void DmAl_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Al_InitVars = {
+ActorInit Dm_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
     FLAGS,

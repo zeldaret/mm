@@ -11,6 +11,4 @@ typedef struct BgFuMizu {
     /* 0x160 */ s16 unk_160;
 } BgFuMizu; // size = 0x164
 
-extern const ActorInit Bg_Fu_Mizu_InitVars;
-
 #endif // Z_BG_FU_MIZU_H

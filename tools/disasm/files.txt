@@ -598,6 +598,7 @@
             0x801D9090 : "audio_sound_params",
             0x801DB470 : "code_801A5BD0",
             0x801DB4C0 : "code_801A7B10",
+            0x801DB4E0 : "audio_init_params",
 
             # .rodata section
             0x801DBDF0 : "z_en_item00",

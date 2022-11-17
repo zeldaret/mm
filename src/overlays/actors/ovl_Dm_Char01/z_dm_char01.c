@@ -14,7 +14,7 @@
 
 void DmChar01_Init(Actor* thisx, PlayState* play);
 void DmChar01_Destroy(Actor* thisx, PlayState* play);
-void DmChar01_Update(Actor* thisx, PlayState* play);
+void DmChar01_Update(Actor* thisx, PlayState* play2);
 void DmChar01_Draw(Actor* thisx, PlayState* play);
 
 void func_80AA8698(DmChar01* this, PlayState* play);
@@ -35,7 +35,7 @@ s16 D_80AAAE26;
 
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
-const ActorInit Dm_Char01_InitVars = {
+ActorInit Dm_Char01_InitVars = {
     ACTOR_DM_CHAR01,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -67,13 +67,13 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
 
     switch (DMCHAR01_GET(&this->dyna.actor)) {
         case DMCHAR01_0:
-            if (gSaveContext.save.weekEventReg[20] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                 this->unk_34C = 2;
                 this->actionFunc = func_80AA8F1C;
                 break;
             }
 
-            if (gSaveContext.sceneSetupIndex == 0) {
+            if (gSaveContext.sceneLayer == 0) {
                 play->envCtx.unk_1F = 5;
                 play->envCtx.unk_20 = 5;
             }
@@ -87,7 +87,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodfallSceneryPoisonWaterDamageCol);
 
             this->unk_34D = true;
-            if (gSaveContext.sceneSetupIndex == 1) {
+            if (gSaveContext.sceneLayer == 1) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8C28;
             } else {
@@ -97,7 +97,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case DMCHAR01_1:
-            if ((gSaveContext.save.weekEventReg[20] & 2) || (gSaveContext.sceneSetupIndex == 1)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) || (gSaveContext.sceneLayer == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
             } else {
@@ -107,7 +107,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
 
         case DMCHAR01_2:
             this->unk_34C = 0;
-            if (!(gSaveContext.save.weekEventReg[20] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01)) {
                 this->unk_34C = 1;
                 this->dyna.actor.world.pos.y -= 400.0f;
             }
@@ -123,8 +123,8 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
         case DMCHAR01_3:
             this->dyna.actor.world.rot.y += 0x8000;
             this->dyna.actor.shape.rot.y += 0x8000;
-            if (!(gSaveContext.save.weekEventReg[20] & 1)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01)) {
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
 
@@ -134,7 +134,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodfallSceneryTempleRampAndPlatformCol);
 
             this->unk_34D = true;
-            if (!(gSaveContext.save.weekEventReg[20] & 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                 this->actionFunc = func_80AA9020;
                 this->dyna.actor.world.pos.y -= 120.0f;
             } else {
@@ -160,11 +160,11 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
 
-    if (gSaveContext.save.weekEventReg[20] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_01)) {
         return;
     }
 
-    if ((player->stateFlags2 & 0x8000000) && (player2->actor.world.pos.x > -40.0f) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (player2->actor.world.pos.x > -40.0f) &&
         (player2->actor.world.pos.x < 40.0f) && (player2->actor.world.pos.z > 1000.0f) &&
         (player2->actor.world.pos.z < 1078.0f)) {
         if (!D_80AAAAB4) {
@@ -180,7 +180,7 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&
             (player2->actor.world.pos.z > 1000.0f) && (player2->actor.world.pos.z < 1078.0f)) {
-            gSaveContext.save.weekEventReg[20] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_01);
             this->actionFunc = func_80AA884C;
         }
     }
@@ -348,7 +348,7 @@ void func_80AA9020(DmChar01* this, PlayState* play) {
         CsCmdActorAction* temp_v1 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)];
 
         if ((temp_v1->startFrame == play->csCtx.frames) && (temp_v1->action == 2)) {
-            gSaveContext.save.weekEventReg[20] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_02);
             this->actionFunc = func_80AA90AC;
         }
     }
@@ -406,18 +406,18 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
         case DMCHAR01_0:
             switch (this->unk_34C) {
                 case 0:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPoisonWaterTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPoisonWaterTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryPoisonWaterDL);
                     break;
 
                 case 1:
-                    if (gSaveContext.sceneSetupIndex == 1) {
-                        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWaterTexAnim));
+                    if (gSaveContext.sceneLayer == 1) {
+                        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPurifiedWaterTexAnim));
                         Gfx_DrawDListOpa(play, gWoodfallSceneryFloorDL);
                         Gfx_DrawDListXlu(play, gWoodfallSceneryPurifiedWaterDL);
                         Matrix_Translate(0.0f, 10.0f, 0.0f, MTXMODE_APPLY);
                     }
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryDynamicPoisonWaterTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryDynamicPoisonWaterTexAnim));
 
                     OPEN_DISPS(play->state.gfxCtx);
 
@@ -451,7 +451,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                     break;
 
                 case 2:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWaterTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPurifiedWaterTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryFloorDL);
                     Gfx_DrawDListXlu(play, gWoodfallSceneryPurifiedWaterDL);
                     break;
@@ -461,23 +461,23 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
         case DMCHAR01_1:
             switch (this->unk_34C) {
                 case 0:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPoisonWallsTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPoisonWallsTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryPoisonWallsDL);
                     break;
 
                 case 1:
-                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryPurifiedWallsTexAnim));
+                    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryPurifiedWallsTexAnim));
                     Gfx_DrawDListOpa(play, gWoodfallSceneryPurifiedWallsDL);
                     break;
             }
             break;
 
         case DMCHAR01_2:
-            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryTempleTexAnim));
+            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryTempleTexAnim));
             Gfx_DrawDListOpa(play, gWoodfallSceneryTempleDL);
 
             if ((this->unk_34C != 0) && ((u8)this->unk_348 != 0)) {
-                AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWoodfallSceneryWaterFlowingOverTempleTexAnim));
+                AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWoodfallSceneryWaterFlowingOverTempleTexAnim));
 
                 OPEN_DISPS(play->state.gfxCtx);
 

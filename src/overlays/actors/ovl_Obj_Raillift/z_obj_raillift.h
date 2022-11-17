@@ -38,6 +38,4 @@ typedef struct ObjRaillift {
     /* 0x188 */ s16 cutsceneTimer;
 } ObjRaillift; // size = 0x18C
 
-extern const ActorInit Obj_Raillift_InitVars;
-
 #endif // Z_OBJ_RAILLIFT_H

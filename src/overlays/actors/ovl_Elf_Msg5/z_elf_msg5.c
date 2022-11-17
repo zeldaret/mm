@@ -17,7 +17,7 @@ void ElfMsg5_Update(Actor* thisx, PlayState* play);
 void func_80AFDB38(ElfMsg5* this, PlayState* play);
 s32 func_80AFD990(ElfMsg5* this, PlayState* play);
 
-const ActorInit Elf_Msg5_InitVars = {
+ActorInit Elf_Msg5_InitVars = {
     ACTOR_ELF_MSG5,
     ACTORCAT_BG,
     FLAGS,
@@ -41,7 +41,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
         if (ELFMSG5_GET_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG5_GET_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
@@ -50,7 +50,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
             if (ELFMSG5_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG5_GET_SWITCHFLAG(&this->actor));
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return true;
         }
     }
@@ -59,7 +59,7 @@ s32 func_80AFD990(ElfMsg5* this, PlayState* play) {
     }
     if (Flags_GetSwitch(play, ELFMSG5_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // Collapse together
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;

@@ -18,7 +18,7 @@ void func_80C258A0(EnInvisibleRuppe* this, PlayState* play);
 void func_80C2590C(EnInvisibleRuppe* this, PlayState* play);
 void func_80C259E8(EnInvisibleRuppe* this, PlayState* play);
 
-const ActorInit En_Invisible_Ruppe_InitVars = {
+ActorInit En_Invisible_Ruppe_InitVars = {
     ACTOR_EN_INVISIBLE_RUPPE,
     ACTORCAT_NPC,
     FLAGS,
@@ -86,7 +86,7 @@ void func_80C2590C(EnInvisibleRuppe* this, PlayState* play) {
 }
 
 void func_80C259E8(EnInvisibleRuppe* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
@@ -100,7 +100,7 @@ void EnInvisibleRuppe_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_190 >= 0) && Flags_GetSwitch(play, this->unk_190)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

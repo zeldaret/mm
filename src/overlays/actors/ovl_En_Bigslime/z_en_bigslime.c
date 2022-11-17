@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigslime.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
@@ -14,7 +15,7 @@
 
 #define THIS ((EnBigslime*)thisx)
 
-void EnBigslime_Init(Actor* thisx, PlayState* play);
+void EnBigslime_Init(Actor* thisx, PlayState* play2);
 void EnBigslime_Destroy(Actor* thisx, PlayState* play);
 void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play);
 void EnBigslime_DrawGekko(Actor* thisx, PlayState* play);
@@ -210,7 +211,7 @@ static EnBigslimeTri sBigslimeTri[BIGSLIME_NUM_FACES] = {
     { 142, 126, 127 }, { 130, 111, 145 },
 };
 
-const ActorInit En_Bigslime_InitVars = {
+ActorInit En_Bigslime_InitVars = {
     ACTOR_EN_BIGSLIME,
     ACTORCAT_BOSS,
     FLAGS,
@@ -310,13 +311,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
-    // gSaveContext.save.weekEventReg[KEY] = VALUE
-    // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
-        (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-        (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-        (33 << 8) | 0x01, // Southern Swamp Frog Returned
-        (33 << 8) | 0x02, // Laundry Pool Frog Returned
+        WEEKEVENTREG_32_40,
+        WEEKEVENTREG_32_80,
+        WEEKEVENTREG_33_01,
+        WEEKEVENTREG_33_02,
     };
     PlayState* play = play2;
     EnBigslime* this = THIS;
@@ -339,45 +338,45 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
     this->gekkoCollider.base.ocFlags1 &= ~OC1_NO_PUSH;
     this->actor.params = CLAMP(this->actor.params, 1, 4);
 
-    if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
-        Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+    if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
+        Actor_Kill(&this->actor);
+        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->actor.params);
         }
-    } else {
-        this->cutscene = this->actor.cutscene;
-        this->actor.scale.x = this->actor.scale.z = 0.15f;
-        this->actor.scale.y = 0.075f;
-        this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
-        this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
-        this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
-        this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
-        for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
-            this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play,
-                                                                  ACTOR_EN_MINISLIME, 0.0f, 0.0f, 0.0f, 0, 0, 0, i);
-            if (this->minislime[i] == NULL) {
-                for (i = i - 1; i >= 0; i--) {
-                    Actor_MarkForDeath(&this->minislime[i]->actor);
-                }
-
-                Actor_MarkForDeath(&this->actor);
-                return;
-            }
-        }
-
-        this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(&gMinislimeFrozenTexAnim);
-        this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(&gBigslimeFrozenTexAnim);
-        this->iceShardTexAnim = Lib_SegmentedToVirtual(&gBigslimeIceShardTexAnim);
-        this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actor.shape.shadowAlpha = 255;
-        this->gekkoScale = 0.007f;
-        this->actor.shape.rot.y = 0;
-        this->minislimeToThrow = this->minislime[0];
-        EnBigslime_SetupInitEntrance(this);
+        return;
     }
+
+    this->cutscene = this->actor.cutscene;
+    this->actor.scale.x = this->actor.scale.z = 0.15f;
+    this->actor.scale.y = 0.075f;
+    this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
+    this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
+    this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
+    this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
+    for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
+        this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MINISLIME,
+                                                              0.0f, 0.0f, 0.0f, 0, 0, 0, i);
+        if (this->minislime[i] == NULL) {
+            for (i = i - 1; i >= 0; i--) {
+                Actor_Kill(&this->minislime[i]->actor);
+            }
+
+            Actor_Kill(&this->actor);
+            return;
+        }
+    }
+
+    this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(gMinislimeFrozenTexAnim);
+    this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
+    this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
+    this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.shape.shadowAlpha = 255;
+    this->gekkoScale = 0.007f;
+    this->actor.shape.rot.y = 0;
+    this->minislimeToThrow = this->minislime[0];
+    EnBigslime_SetupInitEntrance(this);
 }
 
 void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
@@ -727,7 +726,7 @@ void EnBigslime_SetMinislimeBreakLocation(EnBigslime* this) {
 void EnBigslime_SetPlayerParams(EnBigslime* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags2 & 0x80) {
+    if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
         func_800B8D98(play, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f);
@@ -743,12 +742,14 @@ void EnBigslime_EndThrowMinislime(EnBigslime* this) {
 
 void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     s32 i;
-    s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-    Quake_SetSpeed(quake, 20000);
-    Quake_SetQuakeValues(quake, 15, 0, 0, 0);
-    Quake_SetCountdown(quake, 15);
+    Quake_SetSpeed(quakeIndex, 20000);
+    Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
+    Quake_SetCountdown(quakeIndex, 15);
+
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.acFlags &= ~(AC_ON | AC_HIT);
 
@@ -848,7 +849,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        func_800B724C(play, &this->actor, 6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
     }
 }
 
@@ -937,7 +938,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, PlayState* play) {
     this->bigslimeCollider[0].base.acFlags &= ~AC_ON;
 
     Math_Vec3f_Copy(&subCam->at, &this->actor.focus.pos);
-    func_800B7298(play, &this->actor, 4);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
 
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 347.0f + this->actor.world.pos.x;
@@ -985,7 +986,7 @@ void EnBigslime_SetupCallMinislime(EnBigslime* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 5.0f);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_GREET);
     this->callTimer = 0;
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     this->actionFunc = EnBigslime_CallMinislime;
 }
 
@@ -1005,11 +1006,11 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
     } else if (this->isAnimUpdate) {
         Animation_PlayLoop(&this->skelAnime, &gGekkoNervousIdleAnim);
         EnBigslime_UpdateCameraIntroCs(this, play, 25);
-        func_801A2E54(0x38);
+        Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnBigslime_InitFallMinislime(this);
         play->envCtx.lightSettingOverride = 0xFF;
         this->callTimer = 35;
-        func_800B7298(play, &this->actor, 4);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
     }
 }
 
@@ -1623,7 +1624,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
             }
 
             play->damagePlayer(play, -4);
-            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
             this->gekkoRot.y += (s16)(Rand_S16Offset(0x4000, 0x4000) * (Rand_ZeroOne() < 0.5f ? -1 : 1));
             this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;
             this->gekkoPosOffset.z = Math_CosS(this->gekkoRot.y) * -50.0f;
@@ -1706,7 +1707,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
 
         scale = 0.5f - cos_rad(-this->windupPunchTimer * (M_PI / 5)) * 0.5f;
         if (this->windupPunchTimer == -5) {
-            if (player->stateFlags2 & 0x80) {
+            if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
                 player->unk_AE8 = 100;
             }
@@ -2497,7 +2498,7 @@ void EnBigslime_Despawn(EnBigslime* this, PlayState* play) {
     }
 
     if (!this->isDespawned) {
-        Flags_SetClearTemp(play, play->roomCtx.currRoom.num);
+        Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
         this->isDespawned = true;
     }
 
@@ -2506,7 +2507,7 @@ void EnBigslime_Despawn(EnBigslime* this, PlayState* play) {
             this->minislime[i]->actor.params = MINISLIME_DESPAWN;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -2542,7 +2543,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
     } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
         if (this->actionFuncStored != EnBigslime_SquishFlat) {
-            func_800B724C(play, &this->actor, 7);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
         }
 
         this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
@@ -2620,7 +2621,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
                 if (Actor_ApplyDamage(&this->actor) == 0) {
                     func_800BE504(&this->actor, &this->gekkoCollider);
-                    func_801A2ED8();
+                    Audio_RestorePrevBgm();
                     Enemy_StartFinishingBlow(play, &this->actor);
                     this->gekkoCollider.base.acFlags &= ~AC_ON;
                     EnBigslime_GekkoThaw(this, play);
@@ -2983,16 +2984,16 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     // Draw Bigslime
     gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeDynamicVtx[this->dynamicVtxState]);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeNormalDL);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
+    gSPDisplayList(POLY_XLU_DISP++, gBigslimeNormalMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, gBigslimeModelDL);
 
     // Draw frozen Bigslime
     if ((this->actionFunc == EnBigslime_Freeze) || (this->actionFunc == EnBigslime_FrozenGround) ||
         (this->actionFunc == EnBigslime_FrozenFall) || (this->actionFunc == EnBigslime_Melt)) {
         AnimatedMat_Draw(play, this->bigslimeFrozenTexAnim);
         gSPSegment(POLY_XLU_DISP++, 0x09, sBigslimeTargetVtx);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeFrozenVtxDL);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gBigslimeFrozenMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, gBigslimeModelDL);
     }
 
     // Draw bubbles inside Bigslime
@@ -3011,7 +3012,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
             billboardMtxF->zw =
                 dynamicVtx->n.ob[2] * this->actor.scale.z * bubblesInfoPtr->scaleVtx + this->actor.world.pos.z;
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &gBigslimeBubbleDL);
+            gSPDisplayList(POLY_XLU_DISP++, gBigslimeBubbleDL);
         }
     }
     CLOSE_DISPS(play->state.gfxCtx);
@@ -3130,12 +3131,12 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
         Matrix_Translate(this->frozenPos.x, this->frozenPos.y, this->frozenPos.z, MTXMODE_NEW);
         Matrix_Scale(this->shockwaveScale, this->shockwaveScale, this->shockwaveScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, &gBigslimeShockwaveDL);
+        gSPDisplayList(POLY_XLU_DISP++, gBigslimeShockwaveDL);
     }
 
     // Draw Ice Shards
     AnimatedMat_Draw(play, this->iceShardTexAnim);
-    gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardDL);
+    gSPDisplayList(POLY_XLU_DISP++, gBigslimeIceShardDL);
 
     for (i = 0; i < BIGSLIME_NUM_ICE_SHARD; i++) {
         iceShardEffect = &this->iceShardEffect[i];
@@ -3144,7 +3145,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
                                          &iceShardEffect->rot);
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, &gBigslimeIceShardVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gBigslimeIceShardVtxDL);
         }
     }
 

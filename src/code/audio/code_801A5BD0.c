@@ -599,7 +599,7 @@ void AudioSfx_PlayActiveSfx(u8 bankId) {
         // If entry is not empty
         if (entryIndex != 0xFF) {
             entry = &gSfxBanks[bankId][entryIndex];
-            channel = gAudioContext.seqPlayers[SEQ_PLAYER_SFX].channels[sCurSfxPlayerChannelIndex];
+            channel = gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].channels[sCurSfxPlayerChannelIndex];
 
             if (entry->state == SFX_STATE_READY) {
                 // Initialize a sfx (new sfx request)
@@ -671,7 +671,7 @@ void AudioSfx_PlayActiveSfx(u8 bankId) {
                     // "one-frame" sfx
                     entry->state = SFX_STATE_PLAYING_ONE_FRAME;
                 }
-            } else if ((u8)channel->soundScriptIO[1] == 0xFF) {
+            } else if ((u8)channel->soundScriptIO[1] == (u8)SEQ_IO_VAL_NONE) {
                 // Signal from seq 0 that the sfx is finished playing. Remove entry
                 AudioSfx_RemoveBankEntry(bankId, entryIndex);
             } else if (entry->state == SFX_STATE_PLAYING_REFRESH) {
@@ -847,7 +847,7 @@ void AudioSfx_StopById(u32 sfxId) {
 }
 
 void AudioSfx_ProcessRequests(void) {
-    if (gAudioContext.seqPlayers[SEQ_PLAYER_SFX].enabled) {
+    if (gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].enabled) {
         while (sSfxRequestWriteIndex != sSfxRequestReadIndex) {
             AudioSfx_ProcessRequest();
             sSfxRequestReadIndex++;
@@ -886,7 +886,7 @@ void AudioSfx_StepBankLerp(u8 bankId) {
 void AudioSfx_ProcessActiveSfx(void) {
     u8 bankId;
 
-    if (gAudioContext.seqPlayers[SEQ_PLAYER_SFX].enabled) {
+    if (gAudioCtx.seqPlayers[SEQ_PLAYER_SFX].enabled) {
         sCurSfxPlayerChannelIndex = 0;
 
         for (bankId = 0; bankId < ARRAY_COUNT(gSfxBanks); bankId++) {

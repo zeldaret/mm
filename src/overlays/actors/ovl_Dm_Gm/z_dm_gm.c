@@ -21,7 +21,7 @@ void func_80C24A00(DmGm* this, PlayState* play);
 void func_80C24BD0(DmGm* this, PlayState* play);
 void func_80C25000(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Gm_InitVars = {
+ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -183,7 +183,7 @@ void func_80C248A8(DmGm* this, PlayState* play) {
         this->unk_2AE |= 1;
         this->actor.draw = func_80C25000;
 
-        if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+        if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C24838(play);
             func_80C24428(this, play, 1);
             this->actionFunc = func_80C24BD0;

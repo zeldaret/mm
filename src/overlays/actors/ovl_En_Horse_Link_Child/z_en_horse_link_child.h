@@ -23,6 +23,4 @@ typedef struct EnHorseLinkChild {
     /* 0x298 */ UNK_TYPE1 unk298[4];
 } EnHorseLinkChild; // size = 0x29C
 
-extern const ActorInit En_Horse_Link_Child_InitVars;
-
 #endif // Z_EN_HORSE_LINK_CHILD_H

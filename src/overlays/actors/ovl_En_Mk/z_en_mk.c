@@ -23,7 +23,7 @@ void func_80959C94(EnMk* this, PlayState* play);
 void func_80959D28(EnMk* this, PlayState* play);
 void func_80959E18(EnMk* this, PlayState* play);
 
-const ActorInit En_Mk_InitVars = {
+ActorInit En_Mk_InitVars = {
     ACTOR_EN_MK,
     ACTORCAT_NPC,
     FLAGS,
@@ -120,7 +120,7 @@ void EnMk_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80959524(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 7;
+    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 7;
 }
 
 void func_8095954C(EnMk* this, PlayState* play) {
@@ -147,7 +147,7 @@ void func_80959624(EnMk* this, PlayState* play) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
-        } else if (gSaveContext.save.weekEventReg[55] & 0x80) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
             textId = 0xFBC;
         } else {
             textId = 0xFBB;
@@ -202,17 +202,17 @@ void func_80959844(EnMk* this, PlayState* play) {
 
     if ((this->unk_27A & 2) && (func_80959524(play) >= 7)) {
         textId = 0xFB3;
-    } else if (gSaveContext.save.weekEventReg[20] & 0x40) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) {
         textId = 0xFB9;
-    } else if (gSaveContext.save.weekEventReg[19] & 0x40) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
         textId = 0xFB5;
     } else if (func_80959524(play) >= 7) {
         textId = 0xFB3;
     } else {
         switch (gSaveContext.save.playerForm) {
             case PLAYER_FORM_DEKU:
-                if (gSaveContext.save.weekEventReg[19] & 0x10) {
-                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_10)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                         textId = 0xFAF;
                     } else {
                         textId = 0xFAE;
@@ -223,8 +223,8 @@ void func_80959844(EnMk* this, PlayState* play) {
                 break;
 
             case PLAYER_FORM_GORON:
-                if (gSaveContext.save.weekEventReg[19] & 8) {
-                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_08)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                         textId = 0xFAB;
                     } else {
                         textId = 0xFAA;
@@ -238,8 +238,8 @@ void func_80959844(EnMk* this, PlayState* play) {
             case PLAYER_FORM_HUMAN:
                 if (func_80959524(play) > 0) {
                     textId = 0xFA7;
-                } else if (gSaveContext.save.weekEventReg[19] & 4) {
-                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_04)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                         textId = 0xFBF;
                     } else {
                         textId = 0xFA6;
@@ -252,7 +252,7 @@ void func_80959844(EnMk* this, PlayState* play) {
             default:
                 if (func_80959524(play) > 0) {
                     textId = 0xFB0;
-                } else if (gSaveContext.save.weekEventReg[19] & 0x20) {
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_20)) {
                     textId = 0xFB2;
                 } else {
                     textId = 0xFB1;
@@ -283,12 +283,12 @@ void func_80959A24(EnMk* this, PlayState* play) {
                         break;
 
                     case 0xFA2:
-                        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                             func_801477B4(play);
                             this->actionFunc = func_80959E18;
-                            break;
+                        } else {
+                            func_80151938(play, play->msgCtx.currentTextId + 1);
                         }
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0xFA5:
@@ -308,30 +308,30 @@ void func_80959A24(EnMk* this, PlayState* play) {
                         break;
 
                     case 0xFA0:
-                        gSaveContext.save.weekEventReg[19] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_19_04);
                         func_80151938(play, 0xFA1);
                         break;
 
                     case 0xFA8:
-                        gSaveContext.save.weekEventReg[19] |= 8;
-                        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_19_08);
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                             func_80151938(play, 0xFBD);
-                            break;
+                        } else {
+                            func_80151938(play, 0xFA9);
                         }
-                        func_80151938(play, 0xFA9);
                         break;
 
                     case 0xFAC:
-                        gSaveContext.save.weekEventReg[19] |= 0x10;
-                        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_19_10);
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                             func_80151938(play, 0xFBE);
-                            break;
+                        } else {
+                            func_80151938(play, 0xFAD);
                         }
-                        func_80151938(play, 0xFAD);
                         break;
 
                     case 0xFB1:
-                        gSaveContext.save.weekEventReg[19] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_19_20);
                         func_801477B4(play);
                         this->actionFunc = func_80959E18;
                         break;
@@ -365,7 +365,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
         Message_StartTextbox(play, 0xFB3, &this->actor);
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -373,7 +373,7 @@ void func_80959D28(EnMk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((play->csCtx.state == 0) && (this->actor.cutscene == -1)) {
-        if (gSaveContext.save.weekEventReg[20] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) {
             this->unk_27A &= ~1;
             this->actionFunc = func_80959774;
             this->actor.home.rot.y += 0x4E20;
@@ -401,7 +401,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (gSaveContext.save.weekEventReg[20] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) {
         this->unk_27A &= ~1;
         this->actionFunc = func_80959774;
         this->actor.home.rot.y += 0x4E20;
@@ -413,7 +413,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
         this->actionFunc = func_80959D28;
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             this->actor.cutscene = this->unk_276[0];
-            gSaveContext.save.weekEventReg[20] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_40);
             Item_Give(play, ITEM_SONG_NOVA);
         } else {
             this->actor.cutscene = this->unk_276[1];
@@ -428,7 +428,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
     } else if ((this->actor.xzDistToPlayer < 120.0f) && (ABS_ALT(sp22) <= 0x4300)) {
         this->unk_27A |= 1;
         func_800B8614(&this->actor, play, 200.0f);
-        if (!(gSaveContext.save.weekEventReg[20] & 0x40) && (gSaveContext.save.weekEventReg[19] & 0x40)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
             func_800B874C(&this->actor, play, 200.0f, 100.0f);
         }
     } else {

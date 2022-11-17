@@ -14,41 +14,41 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - gSaveContext.save.weekEventReg[22] & 1: Aliens defeated
+ * - WEEKEVENTREG_22_01: Aliens defeated
  *     If false: The actor doesn't spawn
- * - gSaveContext.save.weekEventReg[31] & 0x40
+ * - WEEKEVENTREG_31_40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
- * - gSaveContext.save.weekEventReg[31] & 0x80
+ * - WEEKEVENTREG_31_80
  *     If true: Triggers cutscene on Romani's Ranch
- * - gSaveContext.save.weekEventReg[34] & 0x80
+ * - WEEKEVENTREG_34_80
  *     If true: Doesn't spawn on Romani's Ranch
- * - gSaveContext.save.weekEventReg[52] & 1
+ * - WEEKEVENTREG_52_01
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - gSaveContext.save.weekEventReg[52] & 2
+ * - WEEKEVENTREG_52_02
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - gSaveContext.save.weekEventReg[59] & 2
+ * - WEEKEVENTREG_59_02
  *     If true: Doesn't spawn again on Milk Road
  *
  * weekEventReg flags set by this actor:
- * - gSaveContext.save.weekEventReg[31] |= 0x40: Cremia offered a ride
+ * - WEEKEVENTREG_31_40: Cremia offered a ride
  *     Cremia offered a ride accross the Milk Road to Player
- * - gSaveContext.save.weekEventReg[31] |= 0x80: Player is in Milk Run
- *     Player accepts the ride and is with Cremia during the Milk Run.
- * - gSaveContext.save.weekEventReg[34] |= 0x80: Cremia does Milk Run alone
+ * - WEEKEVENTREG_31_80: Player is in Milk Run
+ *     Player accepts the ride and is with Cremia during the Milk Run
+ * - WEEKEVENTREG_34_80: Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
- * - gSaveContext.save.weekEventReg[52] |= 1: Won Milk Run minigame
+ * - WEEKEVENTREG_52_01: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
- * - gSaveContext.save.weekEventReg[52] |= 2: Lose Milk Run minigame
+ * - WEEKEVENTREG_52_02: Lose Milk Run minigame
  *     Every pot was broken by bandits. Turns off the "Win Milk Run minigame"
- * - gSaveContext.save.weekEventReg[59] |= 2: ?
+ * - WEEKEVENTREG_59_02: ?
  *     Passed through Milk Road after winning the Milk Run
  *
  * weekEventReg flags unset by this actor:
- * - gSaveContext.save.weekEventReg[31] &= (u8)~0x80
+ * - WEEKEVENTREG_31_80
  *     Turned off when the Milk Run finishes
- * - gSaveContext.save.weekEventReg[52] &= (u8)~1
+ * - WEEKEVENTREG_52_01
  *     Turned off if Player lose the Milk Run
- * - gSaveContext.save.weekEventReg[52] &= (u8)~2
+ * - WEEKEVENTREG_52_02
  *     Turned off if Player wins the Milk Run
  */
 
@@ -58,10 +58,10 @@ void ObjUm_Update(Actor* thisx, PlayState* play);
 void ObjUm_Draw(Actor* thisx, PlayState* play);
 
 void ObjUm_DefaultAnim(ObjUm* this, PlayState* play);
-void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation index);
+void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex);
 void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc);
 
-const ActorInit Obj_Um_InitVars = {
+ActorInit Obj_Um_InitVars = {
     ACTOR_OBJ_UM,
     ACTORCAT_NPC,
     FLAGS,
@@ -683,8 +683,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->initialPathIndex = OBJ_UM_GET_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
-    if (!(gSaveContext.save.weekEventReg[22] & 1)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -692,7 +692,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
     } else if (this->type == OBJ_UM_TYPE_RANCH) {
         this->pathIndex = this->initialPathIndex;
-        if (gSaveContext.save.weekEventReg[31] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
             // In cutscene
 
             sp54 = false;
@@ -702,10 +702,10 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         } else {
             // Waiting for player
 
-            if ((gSaveContext.save.weekEventReg[34] & 0x80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
-                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (gSaveContext.save.weekEventReg[52] & 1) ||
-                (gSaveContext.save.weekEventReg[52] & 2)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
+                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
 
@@ -714,12 +714,12 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!(gSaveContext.save.weekEventReg[31] & 0x80) || (gSaveContext.save.weekEventReg[52] & 1)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
-        if (!(gSaveContext.save.weekEventReg[52] & 2)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
             this->pathIndex = this->initialPathIndex;
             sp54 = false;
             func_800FE484();
@@ -728,8 +728,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_RotatePlayer(this, play, 0);
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
-        if (!(gSaveContext.save.weekEventReg[31] & 0x80)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -740,8 +740,8 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!(gSaveContext.save.weekEventReg[52] & 1) || (gSaveContext.save.weekEventReg[59] & 2)) {
-            Actor_MarkForDeath(&this->dyna.actor);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
+            Actor_Kill(&this->dyna.actor);
             return;
         }
 
@@ -751,7 +751,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
-        func_801A3098(NA_BGM_CLEAR_EVENT);
+        Audio_PlayFanfare(NA_BGM_CLEAR_EVENT);
     } else {
         this->type = OBJ_UM_TYPE_TERMINA_FIELD;
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
@@ -768,7 +768,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->dyna.bgId == BGCHECK_SCENE) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -780,7 +780,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                               this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAMS(ENHORSE_PARAM_DONKEY, ENHORSE_18));
 
     if (this->donkey == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -802,11 +802,11 @@ void ObjUm_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->banditsCollisions[1]);
 }
 
-// ObjUm_MarkMyDonkeyAndMyselfForDeath, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
+// ObjUm_KillMyDonkeyAndMyself, ObjUm_TerminateMe, ObjUmn't, ObjUm_Asinucide
 void func_80B79524(ObjUm* this) {
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
     if (this->donkey != NULL) {
-        Actor_MarkForDeath(&this->donkey->actor);
+        Actor_Kill(&this->donkey->actor);
     }
 }
 
@@ -828,11 +828,11 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
         case 0x33B4:
         // "Want a ride?"
         case 0x33CF:
-            gSaveContext.save.weekEventReg[31] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_31_40);
             if (play->msgCtx.choiceIndex == 0) {
                 player = GET_PLAYER(play);
                 func_8019F208();
-                gSaveContext.save.weekEventReg[31] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_31_80);
                 play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
                     D_801BDAA0 = 1;
@@ -907,7 +907,7 @@ u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-        if (gSaveContext.save.weekEventReg[31] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;
         } else {
@@ -999,7 +999,7 @@ void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
             func_80B7984C(play, this, 0, &this->unk_2B4);
         }
     } else if (!func_80B79A24(this->unk_2B4) && (gSaveContext.save.time > CLOCK_TIME(19, 0))) {
-        gSaveContext.save.weekEventReg[34] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_80);
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
 
@@ -1138,7 +1138,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            if (gSaveContext.save.weekEventReg[31] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
@@ -1295,25 +1295,25 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
     switch (ObjUm_UpdatePath(this, play)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            gSaveContext.seqIndex = 0xFF;
-            gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80);
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 
-            if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    gSaveContext.save.weekEventReg[52] |= 1;
-                    gSaveContext.save.weekEventReg[52] &= (u8)~2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_52_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02);
                 } else {
                     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    gSaveContext.save.weekEventReg[52] |= 2;
-                    gSaveContext.save.weekEventReg[52] &= (u8)~1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_52_02);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01);
                 }
             }
             break;
@@ -1545,10 +1545,10 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     this->wheelRot += 0x3E8;
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
 
-    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
+    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(false);
-        gSaveContext.save.weekEventReg[59] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_59_02);
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
         play->transitionType = TRANS_TYPE_64;
@@ -1823,7 +1823,7 @@ s32 ObjUm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
 
-            sp30.y = player->bodyPartsPos[7].y + 3.0f;
+            sp30.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
             sp3E = Math_Vec3f_Yaw(&this->dyna.actor.focus.pos, &sp30) - this->dyna.actor.shape.rot.y;
             temp_v0_3 = Math_Atan2S(
                 this->dyna.actor.focus.pos.y - sp30.y,

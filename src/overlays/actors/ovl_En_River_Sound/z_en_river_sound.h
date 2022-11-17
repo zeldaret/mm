@@ -45,6 +45,4 @@ typedef struct EnRiverSound {
     /* 0x148 */ Vec3s* pathPoints;
 } EnRiverSound; // size = 0x14C
 
-extern const ActorInit En_River_Sound_InitVars;
-
 #endif // Z_EN_RIVER_SOUND_H

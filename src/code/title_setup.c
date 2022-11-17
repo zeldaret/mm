@@ -23,13 +23,13 @@ void Setup_SetRegs(void) {
     XREG(77) = 0x3C;
     XREG(78) = 0x2F;
     XREG(79) = 0x62;
-    XREG(87) = 0;
+    R_PAUSE_OWLWARP_ALPHA = 0;
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
-    XREG(91) = 0;
-    XREG(94) = 0;
-    XREG(95) = 0;
+    R_STORY_FILL_SCREEN_ALPHA = 0;
+    R_REVERSE_FLOOR_INDEX = 0;
+    R_MINIMAP_DISABLED = false;
 
     YREG(32) = 0x50;
     YREG(33) = 0x3C;

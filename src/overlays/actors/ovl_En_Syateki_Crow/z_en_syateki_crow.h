@@ -6,8 +6,8 @@
 
 #define EN_SYATEKI_CROW_GET_WAIT_MOD(thisx) ((thisx)->params & 0xF)
 #define EN_SYATEKI_CROW_GET_SPEED_MOD(thisx) (((thisx)->params & 0xF0) >> 4)
-#define EN_SYATEKI_CROW_GET_NUMBER(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_SYATEKI_CROW_PARAMS(number, speedMod, waitMod) (((number << 8) & 0xFF00) | ((speedMod << 4) & 0xF0) | (waitMod & 0xF))
+#define EN_SYATEKI_CROW_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_SYATEKI_CROW_PARAMS(index, speedMod, waitMod) (((index << 8) & 0xFF00) | ((speedMod << 4) & 0xF0) | (waitMod & 0xF))
 
 struct EnSyatekiCrow;
 
@@ -31,7 +31,5 @@ typedef struct EnSyatekiCrow {
     /* 0x23C */ ColliderJntSph collider;
     /* 0x25C */ ColliderJntSphElement colliderElements[1];
 } EnSyatekiCrow; // size = 0x29C
-
-extern const ActorInit En_Syateki_Crow_InitVars;
 
 #endif // Z_EN_SYATEKI_CROW_H

@@ -23,7 +23,7 @@ void func_80AC4D2C(BgIcefloe* this, PlayState* play);
 void func_80AC4C34(BgIcefloe* this, PlayState* play);
 void func_80AC4CF0(BgIcefloe* this);
 
-const ActorInit Bg_Icefloe_InitVars = {
+ActorInit Bg_Icefloe_InitVars = {
     ACTOR_BG_ICEFLOE,
     ACTORCAT_BG,
     FLAGS,
@@ -158,7 +158,7 @@ void func_80AC4D2C(BgIcefloe* this, PlayState* play) {
     }
     this->dyna.actor.scale.y -= 0.0026f;
     if (this->dyna.actor.scale.y <= 0.0f) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

@@ -12,6 +12,4 @@ typedef struct ObjBlockstop {
     /* 0x144 */ ObjBlockstopActionFunc actionFunc;
 } ObjBlockstop; // size = 0x148
 
-extern const ActorInit Obj_Blockstop_InitVars;
-
 #endif // Z_OBJ_BLOCKSTOP_H

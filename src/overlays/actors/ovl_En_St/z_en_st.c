@@ -23,7 +23,7 @@ void func_808A6E24(EnSt* this, PlayState* play);
 void func_808A701C(EnSt* this, PlayState* play);
 void func_808A7478(Actor* thisx, PlayState* play);
 
-const ActorInit En_St_InitVars = {
+ActorInit En_St_InitVars = {
     ACTOR_EN_ST,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -260,8 +260,8 @@ void func_808A54B0(EnSt* this, PlayState* play) {
         }
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u8)(255 * temp_f0));
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
+        gSPDisplayList(POLY_XLU_DISP++, gSpinAttackDiskDL);
+        gSPDisplayList(POLY_XLU_DISP++, gSpinAttackCylinderDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -822,7 +822,7 @@ void func_808A701C(EnSt* this, PlayState* play) {
 
         if (count == ARRAY_COUNT(this->unk_31C)) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (DECR(this->unk_318) == 0) {
         this->unk_18C |= 0x40;
@@ -839,10 +839,11 @@ void EnSt_Init(Actor* thisx, PlayState* play) {
     this->unk_2C0 = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
     if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(play, ENST_GET_3F(&this->actor))) ||
         (this->unk_2C0 < 0)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actionFunc = func_808A6A78;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actionFunc = func_808A6A78;
 }
 
 void EnSt_Destroy(Actor* thisx, PlayState* play) {

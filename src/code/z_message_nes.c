@@ -17,31 +17,43 @@ u8 D_801D06F0[4][8] = { { "rupee(s)" }, //EN
 // rupeesTextLength
 u8 D_801D0710[4] = {8,8,5,8};
 
-//TextArea
-char D_801D0714[11][16] = {
-                                    "Great Bay Coast",
-                                    "Zora Cape",
-                                    "Snowhead",
-                                    "Mountain Village",
-                                    "Clock Town",
-                                    "Milk Road",
-                                    "Woodfall",
-                                    "Southern Swamp",
-                                    "Ikana Canyon",
-                                    "Stone Tower",
-                                    "Entrance"
-                                };
+// sOwlWarpText
+char D_801D0714[OWL_WARP_MAX][16] = {
+    "Great Bay Coast",  // OWL_WARP_GREAT_BAY_COAST
+    "Zora Cape",        // OWL_WARP_ZORA_CAPE
+    "Snowhead",         // OWL_WARP_SNOWHEAD
+    "Mountain Village", // OWL_WARP_MOUNTAIN_VILLAGE
+    "Clock Town",       // OWL_WARP_CLOCK_TOWN
+    "Milk Road",        // OWL_WARP_MILK_ROAD
+    "Woodfall",         // OWL_WARP_WOODFALL
+    "Southern Swamp",   // OWL_WARP_SOUTHERN_SWAMP
+    "Ikana Canyon",     // OWL_WARP_IKANA_CANYON
+    "Stone Tower",      // OWL_WARP_STONE_TOWER
+    "Entrance",         // OWL_WARP_ENTRANCE
+};
 
-//TextAreaLength
-s16 D_801D07C4[11] = {15,9,8,16,10,9,8,14,12,11,8};
+// sOwlWarpTextLength
+s16 D_801D07C4[OWL_WARP_MAX] = {
+    15, // OWL_WARP_GREAT_BAY_COAST
+    9,  // OWL_WARP_ZORA_CAPE
+    8,  // OWL_WARP_SNOWHEAD
+    16, // OWL_WARP_MOUNTAIN_VILLAGE
+    10, // OWL_WARP_CLOCK_TOWN
+    9,  // OWL_WARP_MILK_ROAD
+    8,  // OWL_WARP_WOODFALL
+    14, // OWL_WARP_SOUTHERN_SWAMP
+    12, // OWL_WARP_IKANA_CANYON
+    11, // OWL_WARP_STONE_TOWER
+    8,  // OWL_WARP_ENTRANCE
+};
 
 #endif
 
 extern f32 D_801D0470[159];
 extern u8 D_801D06F0[4][8];
 extern u8 D_801D0710[4];
-extern u8 D_801D0714[11][16];
-extern s16 D_801D07C4[11];
+extern u8 D_801D0714[OWL_WARP_MAX][16];
+extern s16 D_801D07C4[OWL_WARP_MAX];
 
 void Message_FindMessageNES(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -244,28 +256,28 @@ void Message_LoadTimeNES(PlayState* play, u8 arg1, s32* offset, f32* arg3, s16* 
     *arg3 = f;
 }
 
-void Message_LoadAreaTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
+void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
     MessageContext* msgCtx = &play->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg2;
     s16 i;
     u8 currentChar;
-    s16 currentArea;
+    s16 owlWarpId;
     s16 stringLimit;
 
-    if ((func_8010A0A4(play) != 0) || (play->sceneNum == SCENE_SECOM)) {
-        currentArea = 10;
+    if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
+        owlWarpId = OWL_WARP_ENTRANCE;
     } else {
-        currentArea = play->pauseCtx.cursorPoint[PAUSE_WORLD_MAP];
+        owlWarpId = play->pauseCtx.cursorPoint[PAUSE_WORLD_MAP];
     }
-    stringLimit = D_801D07C4[currentArea];
+    stringLimit = D_801D07C4[owlWarpId];
 
     for (i = 0; i < stringLimit; i++) {
-        msgCtx->decodedBuffer.schar[p] = D_801D0714[currentArea][i];
+        msgCtx->decodedBuffer.schar[p] = D_801D0714[owlWarpId][i];
         currentChar = msgCtx->decodedBuffer.schar[p];
         if (currentChar != ' ') {
-            Font_LoadCharNES(play, D_801D0714[currentArea][i], o);
+            Font_LoadCharNES(play, D_801D0714[owlWarpId][i], o);
             o += FONT_CHAR_TEX_SIZE;
         }
         currentChar = msgCtx->decodedBuffer.schar[p];

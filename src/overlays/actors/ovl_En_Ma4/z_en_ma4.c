@@ -54,7 +54,7 @@ typedef enum {
     /* 3 */ MA4_STATE_AFTERDESCRIBETHEMCS,
 } EnMa4State;
 
-const ActorInit En_Ma4_InitVars = {
+ActorInit En_Ma4_InitVars = {
     ACTOR_EN_MA4,
     ACTORCAT_NPC,
     FLAGS,
@@ -200,14 +200,14 @@ void EnMa4_Init(Actor* thisx, PlayState* play) {
 
     if (CURRENT_DAY == 1) {
         this->type = MA4_TYPE_DAY1;
-    } else if (gSaveContext.save.weekEventReg[22] & 1) { // Aliens defeated
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         this->type = MA4_TYPE_ALIENS_DEFEATED;
     } else {
         this->type = MA4_TYPE_ALIENS_WON;
         this->hasBow = false;
     }
 
-    if (Cutscene_GetSceneSetupIndex(play) != 0) { // if (sceneSetupIndex != 0)
+    if (Cutscene_GetSceneLayer(play) != 0) {
         EnMa4_ChangeAnim(this, 0);
         this->state = MA4_STATE_HORSEBACKGAME;
         EnMa4_InitHorsebackGame(this, play);
@@ -238,7 +238,7 @@ void EnMa4_Destroy(Actor* thisx, PlayState* play) {
     EnMa4* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    gSaveContext.save.weekEventReg[8] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
 }
 
 // Running in circles in the ranch
@@ -347,7 +347,7 @@ void EnMa4_Wait(EnMa4* this, PlayState* play) {
         EnMa4_StartDialogue(this, play);
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
-        if (!(player->stateFlags1 & 0x800000)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
             func_800B8614(&this->actor, play, 100.0f);
         }
     }
@@ -372,7 +372,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3341:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    gSaveContext.save.weekEventReg[21] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_20);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
@@ -388,7 +388,7 @@ void EnMa4_HandlePlayerChoice(EnMa4* this, PlayState* play) {
             case 0x3346:
                 if (play->msgCtx.choiceIndex == 0) {
                     func_8019F208();
-                    gSaveContext.save.weekEventReg[21] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_20);
                     Message_StartTextbox(play, 0x3343, &this->actor);
                     this->textId = 0x3343;
                 } else {
@@ -596,14 +596,14 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                     this->textId = 0x334C;
                 } else {
                     func_801477B4(play);
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     EnMa4_SetupBeginEponasSongCs(this);
                     EnMa4_BeginEponasSongCs(this, play);
                 }
                 break;
 
             case 0x3358:
-                if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !(CHECK_QUEST_ITEM(QUEST_SONG_EPONA))) {
+                if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
                     Message_StartTextbox(play, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     func_80151BB4(play, 5);
@@ -674,7 +674,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
         // "You're feeling confident"
         Message_StartTextbox(play, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
-    } else if ((gSaveContext.unk_3DE0[4] < 115 * 100)) { // timer < 115 seconds
+    } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(115)) {
         func_800B8614(&this->actor, play, 100.0f);
     }
 }
@@ -689,10 +689,10 @@ void EnMa4_InitHorsebackGame(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     play->interfaceCtx.unk_280 = 1;
-    func_8010E9F0(4, 0);
-    gSaveContext.save.weekEventReg[8] |= 1;
+    Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
+    SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
     func_80112AFC(play);
-    player->stateFlags1 |= 0x20;
+    player->stateFlags1 |= PLAYER_STATE1_20;
     this->actionFunc = EnMa4_SetupHorsebackGameWait;
 }
 
@@ -701,7 +701,7 @@ void EnMa4_SetupHorsebackGameWait(EnMa4* this, PlayState* play) {
 
     if (play->interfaceCtx.unk_280 == 8) {
         this->actionFunc = EnMa4_HorsebackGameWait;
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
     }
 }
 
@@ -709,7 +709,7 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
     static s16 D_80AC0258 = 0;
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags3 |= 0x400;
+    player->stateFlags3 |= PLAYER_STATE3_400;
     EnMa4_HorsebackGameCheckPlayerInteractions(this, play);
 
     if (this->poppedBalloonCounter != D_80AC0258) {
@@ -717,16 +717,16 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
         play->interfaceCtx.unk_25C = 1;
     }
 
-    if ((gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) // timer >= 2 minutes
-        || (this->poppedBalloonCounter == 10)) {
-        gSaveContext.unk_3DD0[4] = 6;
+    if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) ||
+        (this->poppedBalloonCounter == 10)) {
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
         EnMa4_SetupHorsebackGameEnd(this, play);
         D_80AC0258 = 0;
     }
 }
 
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, PlayState* play) {
-    gSaveContext.save.weekEventReg[8] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_08_01);
     this->actionFunc = EnMa4_HorsebackGameEnd;
     Audio_QueueSeqCmd(NA_BGM_STOP);
     Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
@@ -736,7 +736,7 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
     static s32 sFrameCounter = 0;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 0x100000) {
+    if (player->stateFlags1 & PLAYER_STATE1_100000) {
         play->actorCtx.unk268 = 1;
         play->actorCtx.unk_26C.press.button = BTN_A;
     } else {
@@ -827,8 +827,8 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
     } else {
         Player* player = GET_PLAYER(play);
 
-        player->stateFlags1 |= 0x20;
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
+        player->stateFlags1 |= PLAYER_STATE1_20;
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
         D_80AC0260 = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -844,13 +844,13 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
 
     this->actor.flags |= ACTOR_FLAG_10000;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x334C, &this->actor);
         this->textId = 0x334C;
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -873,7 +873,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
     switch (this->type) {
         case MA4_TYPE_DAY1:
             if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if ((gSaveContext.save.weekEventReg[21] & 0x80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
@@ -881,11 +881,11 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x3335, &this->actor);
                     this->textId = 0x3335;
-                    gSaveContext.save.weekEventReg[21] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_80);
                 }
             } else if (this->state == MA4_STATE_DEFAULT) {
-                if ((gSaveContext.save.weekEventReg[21] & 0x40)) {
-                    if (!(gSaveContext.save.weekEventReg[21] & 0x20)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_40)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
                         Message_StartTextbox(play, 0x3346, &this->actor);
                         this->textId = 0x3346;
                     } else {
@@ -895,16 +895,16 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x3338, &this->actor);
                     this->textId = 0x3338;
-                    gSaveContext.save.weekEventReg[21] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_40);
                 }
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-                if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
                     // "Too bad Grasshopper"
                     EnMa4_SetFaceExpression(this, 0, 0);
                     Message_StartTextbox(play, 0x336D, &this->actor);
                     this->textId = 0x336D;
                 } else {
-                    time = gSaveContext.unk_3DE0[4];
+                    time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
                     if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
                         // [Score] New record!
                         gSaveContext.save.horseBackBalloonHighScore = time;
@@ -929,7 +929,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
 
         case MA4_TYPE_ALIENS_DEFEATED:
             if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if ((gSaveContext.save.weekEventReg[21] & 0x80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
                     this->textId = 0x3337;
@@ -937,18 +937,18 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 } else {
                     Message_StartTextbox(play, 0x3335, &this->actor);
                     this->textId = 0x3335;
-                    gSaveContext.save.weekEventReg[21] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_21_80);
                 }
             } else if (this->state == MA4_STATE_DEFAULT) {
                 Message_StartTextbox(play, 0x3354, &this->actor);
                 this->textId = 0x3354;
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-                if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
                     // "Try again?"
                     Message_StartTextbox(play, 0x3356, &this->actor);
                     this->textId = 0x3356;
                 } else {
-                    time = gSaveContext.unk_3DE0[4];
+                    time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
                     if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
                         gSaveContext.save.horseBackBalloonHighScore = time;
                         EnMa4_SetFaceExpression(this, 0, 3);
@@ -970,12 +970,12 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
                 Message_StartTextbox(play, 0x3358, &this->actor);
                 this->textId = 0x3358;
             } else if (this->state == MA4_STATE_AFTERHORSEBACKGAME) {
-                if (gSaveContext.unk_3DE0[4] >= 2 * 60 * 100) {
+                if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) {
                     // "Try again?"
                     Message_StartTextbox(play, 0x3356, &this->actor);
                     this->textId = 0x3356;
                 } else {
-                    time = gSaveContext.unk_3DE0[4];
+                    time = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
                     if ((s32)time < (s32)gSaveContext.save.horseBackBalloonHighScore) {
                         // New record
                         gSaveContext.save.horseBackBalloonHighScore = time;

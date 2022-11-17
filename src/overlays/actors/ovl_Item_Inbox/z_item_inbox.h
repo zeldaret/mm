@@ -12,6 +12,4 @@ typedef struct ItemInbox {
     /* 0x144 */ ItemInboxActionFunc actionFunc;
 } ItemInbox; // size = 0x148
 
-extern const ActorInit Item_Inbox_InitVars;
-
 #endif // Z_ITEM_INBOX_H

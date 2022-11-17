@@ -32,6 +32,4 @@ typedef struct EnBubble {
     /* 0x254 */ f32 yVelocity;
 } EnBubble; // size = 0x258
 
-extern const ActorInit En_Bubble_InitVars;
-
 #endif // Z_EN_BUBBLE_H

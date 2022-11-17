@@ -47,7 +47,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 11, 1, { 0, 0, 0 } },
 };
 
-const ActorInit En_Col_Man_InitVars = {
+ActorInit En_Col_Man_InitVars = {
     ACTOR_EN_COL_MAN,
     ACTORCAT_MISC,
     FLAGS,
@@ -94,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -123,14 +123,14 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
             this->actor.speedXZ = 0.0f;
         }
     }
-    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!(gSaveContext.save.weekEventReg[56] & 2)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_02)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -139,8 +139,8 @@ void func_80AFDE00(EnColMan* this, PlayState* play) {
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        gSaveContext.save.weekEventReg[56] |= 2;
-        Actor_MarkForDeath(&this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_56_02);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -183,7 +183,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
                           Rand_ZeroFloat(50.0f) + 60.0f, 30, Rand_ZeroFloat(5.0f) + 20.0f);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -211,7 +211,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

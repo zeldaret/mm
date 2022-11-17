@@ -13,6 +13,4 @@ typedef struct EnHonotrap {
     /* 0x148 */ char unk_148[0x17C];
 } EnHonotrap; // size = 0x2C4
 
-extern const ActorInit En_Honotrap_InitVars;
-
 #endif // Z_EN_HONOTRAP_H

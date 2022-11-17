@@ -16,6 +16,4 @@ typedef struct EffZoraband {
     /* 0x148 */ EffZorabandActionFunc actionFunc;
 } EffZoraband; // size = 0x14C
 
-extern const ActorInit Eff_Zoraband_InitVars;
-
 #endif // Z_EFF_ZORABAND_H

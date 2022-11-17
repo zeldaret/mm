@@ -69,7 +69,7 @@ typedef enum {
     /* 13 */ FSN_ANIM_MAX
 } FsnAnimation;
 
-const ActorInit En_Fsn_InitVars = {
+ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -153,7 +153,7 @@ u16 EnFsn_GetWelcome(PlayState* play) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
     switch (this->textId) {
         case 0:
-            if (!(gSaveContext.save.weekEventReg[80] & 0x10)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_10)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -166,7 +166,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                gSaveContext.save.weekEventReg[80] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -186,7 +186,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            gSaveContext.save.weekEventReg[80] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
             this->textId = 0x29F1;
             break;
         case 0x29F1:
@@ -212,7 +212,7 @@ void EnFsn_HandleSetupResumeInteraction(EnFsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play) &&
         this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &play->state);
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
             this->actor.textId = 0;
         }
@@ -301,8 +301,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!(gSaveContext.save.weekEventReg[33] & 4) && CURRENT_DAY == 3) {
-        if (!(gSaveContext.save.weekEventReg[33] & 8) && !(gSaveContext.save.weekEventReg[79] & 0x40)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04) && CURRENT_DAY == 3) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -335,7 +335,7 @@ s32 EnFsn_HasItemsToSell(void) {
     }
 
     if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) ||
-        !(gSaveContext.save.weekEventReg[33] & 4)) {
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
         return true;
     }
 
@@ -393,7 +393,7 @@ void EnFsn_EndInteraction(EnFsn* this, PlayState* play) {
     Actor_ProcessTalkRequest(&this->actor, &play->state);
     play->msgCtx.msgMode = 0x43;
     play->msgCtx.stateTimer = 4;
-    Interface_ChangeAlpha(50);
+    Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
@@ -441,9 +441,9 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
             func_8019F208();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
-            } else if (gSaveContext.save.weekEventReg[33] & 4) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                 this->actor.textId = 0x29FF;
-            } else if (!(gSaveContext.save.weekEventReg[33] & 8) && !(gSaveContext.save.weekEventReg[79] & 0x40)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
@@ -839,7 +839,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -861,10 +861,9 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
                     break;
                 case 0x29D2:
-                    if (gSaveContext.save.weekEventReg[33] & 4) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(gSaveContext.save.weekEventReg[33] & 8) &&
-                               !(gSaveContext.save.weekEventReg[79] & 0x40)) {
+                    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
@@ -916,12 +915,13 @@ void EnFsn_SetupDeterminePrice(EnFsn* this, PlayState* play) {
 
 void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 itemActionParam;
+    PlayerItemAction itemAction;
     u8 buttonItem;
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_AP_NONE) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
             buttonItem = GET_CUR_FORM_BTN_ITEM(player->heldItemButton);
             this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
@@ -934,7 +934,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
             }
             this->actor.textId = player->actor.textId;
             func_801477B4(play);
-        } else if (itemActionParam < PLAYER_AP_NONE) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             if (CURRENT_DAY == 3) {
                 this->actor.textId = 0x29DF;
             } else {
@@ -982,7 +982,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
                 break;
             case 1:
                 func_8019F230();
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }
@@ -997,7 +997,7 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
-            func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+            Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
         }
         this->actionFunc = EnFsn_SetupResumeInteraction;
     } else if (this->isSelling == true) {
@@ -1038,7 +1038,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, PlayState* play) {
             this->actionFunc = EnFsn_ConverseBackroom;
         }
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_AP_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1145,7 +1145,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
     switch (item->canBuyFunc(play, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
-            gSaveContext.save.weekEventReg[33] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_33_04);
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
@@ -1157,7 +1157,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
             Actor_PickUp(&this->actor, play, this->items[this->cursorIndex]->getItemId, 300.0f, 300.0f);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
-            Interface_ChangeAlpha(50);
+            Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             this->drawCursor = 0;
             this->shopItemSelectedTween = 0.0f;
             item = this->items[this->cursorIndex];
@@ -1416,8 +1416,8 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
-        if ((gSaveContext.save.weekEventReg[33] & 8) || (gSaveContext.save.weekEventReg[79] & 0x40)) {
-            Actor_MarkForDeath(&this->actor);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+            Actor_Kill(&this->actor);
             return;
         }
         Collider_InitCylinder(play, &this->collider);

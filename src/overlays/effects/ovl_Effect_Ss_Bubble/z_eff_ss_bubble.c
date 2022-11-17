@@ -14,7 +14,7 @@
 #define PARAMS ((EffectSsBubbleInitParams*)initParamsx)
 
 u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsBubble_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this);
 void EffectSsBubble_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Bubble_InitVars = {
@@ -91,7 +91,7 @@ void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this) {
 
         BgCheck_EntityRaycastFloor2_1(play, &play->colCtx, &colPoly, &this->pos);
         speed = SurfaceType_GetConveyorSpeed(&play->colCtx, colPoly, BGCHECK_SCENE);
-        if ((speed != 0) && !SurfaceType_GetConveyorType(&play->colCtx, colPoly, BGCHECK_SCENE)) {
+        if ((speed != 0) && !SurfaceType_IsFloorConveyor(&play->colCtx, colPoly, BGCHECK_SCENE)) {
             direction = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
             rVecAdjMax = sVecAdjMaximums[speed - 1];
             this->rVecAdjX = Math_SinS(direction) * rVecAdjMax;

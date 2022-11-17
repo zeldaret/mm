@@ -20,6 +20,4 @@ typedef struct DmChar04 {
     /* 0x262 */ u16 timer;
 } DmChar04; // size = 0x264
 
-extern const ActorInit Dm_Char04_InitVars;
-
 #endif // Z_DM_CHAR04_H
