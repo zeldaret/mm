@@ -569,7 +569,9 @@ s16 sQuestSongsPrimGreen[] = {
 s16 sQuestSongsPrimBlue[] = {
     100, 40, 255, 0, 255, 100, 255, 255, 255, 255, 255, 255,
 };
-TexturePtr sQuestUpgradeTextures[][3] = {
+
+// TODO: TexturePtr
+uintptr_t sQuestUpgradeTextures[][3] = {
     { 0x08053000, 0x08054000, 0x08055000 },
     { 0x08056000, 0x08057000, 0x08058000 },
 };

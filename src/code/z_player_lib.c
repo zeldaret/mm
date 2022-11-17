@@ -983,7 +983,7 @@ Gfx* D_801C02BC[PLAYER_FORM_MAX] = {
 Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
     //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
-    0x060038C0,
+    (void*)0x060038C0,
     gLinkZoraRightHandOpenDL,
     gLinkDekuRightHandDL,
     object_link_child_DL_018490,
@@ -992,7 +992,7 @@ Gfx* D_801C02D0[PLAYER_FORM_MAX] = {
 Gfx* D_801C02E4[PLAYER_FORM_MAX] = {
     gLinkFierceDeityRightHandDL,
     //! @bug This is in the middle of a texture in the link_goron object. It has the same offset as a link_nuts dlist
-    0x060038C0,
+    (void*)0x060038C0,
     gLinkZoraRightHandOpenDL,
     gLinkDekuRightHandDL,
     object_link_child_DL_017B40,

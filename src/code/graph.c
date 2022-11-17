@@ -33,7 +33,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     GfxPool* pool = &gGfxPools[gfxCtx->gfxPoolIdx % 2];
 
     gGfxMasterDL = &pool->master;
-    gSegments[0x0E] = gGfxMasterDL;
+    gSegments[0x0E] = (uintptr_t)gGfxMasterDL;
 
     pool->headMagic = GFXPOOL_HEAD_MAGIC;
     pool->tailMagic = GFXPOOL_TAIL_MAGIC;
@@ -51,7 +51,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->debugBuffer = pool->debugBuffer;
 
     gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
-    gSegments[0x0F] = gfxCtx->curFrameBuffer;
+    gSegments[0x0F] = (uintptr_t)gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
 
