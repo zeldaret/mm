@@ -20,15 +20,15 @@ void func_8098CBDC(EnSi* this, PlayState* play);
 
 #if 0
 ActorInit En_Si_InitVars = {
-    ACTOR_EN_SI,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_ST,
-    sizeof(EnSi),
-    EnSi_Init,
-    EnSi_Destroy,
-    EnSi_Update,
-    EnSi_Draw,
+    /**/    ACTOR_EN_SI,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    OBJECT_ST,
+    /**/    sizeof(EnSi),
+    /**/    EnSi_Init,
+    /**/    EnSi_Destroy,
+    /**/    EnSi_Update,
+    /**/    EnSi_Draw,
 };
 
 // static ColliderSphereInit sSphereInit = {

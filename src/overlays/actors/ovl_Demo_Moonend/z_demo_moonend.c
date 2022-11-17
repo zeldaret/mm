@@ -17,15 +17,15 @@ void DemoMoonend_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Demo_Moonend_InitVars = {
-    ACTOR_DEMO_MOONEND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_MOONEND,
-    sizeof(DemoMoonend),
-    DemoMoonend_Init,
-    DemoMoonend_Destroy,
-    DemoMoonend_Update,
-    DemoMoonend_Draw,
+    /**/    ACTOR_DEMO_MOONEND,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    OBJECT_MOONEND,
+    /**/    sizeof(DemoMoonend),
+    /**/    DemoMoonend_Init,
+    /**/    DemoMoonend_Destroy,
+    /**/    DemoMoonend_Update,
+    /**/    DemoMoonend_Draw,
 };
 
 #endif

@@ -24,15 +24,15 @@ void func_80C19F7C(EnInvadepohDemo* this, PlayState* play);
 
 #if 0
 ActorInit En_Invadepoh_Demo_InitVars = {
-    ACTOR_EN_INVADEPOH_DEMO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnInvadepohDemo),
-    EnInvadepohDemo_Init,
-    EnInvadepohDemo_Destroy,
-    EnInvadepohDemo_Update,
-    EnInvadepohDemo_Draw,
+    /**/    ACTOR_EN_INVADEPOH_DEMO,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(EnInvadepohDemo),
+    /**/    EnInvadepohDemo_Init,
+    /**/    EnInvadepohDemo_Destroy,
+    /**/    EnInvadepohDemo_Update,
+    /**/    EnInvadepohDemo_Draw,
 };
 
 // static InitChainEntry sInitChain[] = {

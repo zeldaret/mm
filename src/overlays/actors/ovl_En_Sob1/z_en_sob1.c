@@ -65,15 +65,15 @@ static AnimationInfoS sAnimationInfoBombShopkeeper[] = {
 };
 
 ActorInit En_Sob1_InitVars = {
-    ACTOR_EN_OSSAN,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnSob1),
-    EnSob1_Init,
-    EnSob1_Destroy,
-    EnSob1_Update,
-    NULL,
+    /**/    ACTOR_EN_OSSAN,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(EnSob1),
+    /**/    EnSob1_Init,
+    /**/    EnSob1_Destroy,
+    /**/    EnSob1_Update,
+    /**/    NULL,
 };
 
 static s16 sObjectIds[][3] = {

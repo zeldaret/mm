@@ -19,15 +19,15 @@ void func_80C18C50(EnAnd* this, PlayState* play);
 
 #if 0
 ActorInit En_And_InitVars = {
-    ACTOR_EN_AND,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AND,
-    sizeof(EnAnd),
-    EnAnd_Init,
-    EnAnd_Destroy,
-    EnAnd_Update,
-    EnAnd_Draw,
+    /**/    ACTOR_EN_AND,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_AND,
+    /**/    sizeof(EnAnd),
+    /**/    EnAnd_Init,
+    /**/    EnAnd_Destroy,
+    /**/    EnAnd_Update,
+    /**/    EnAnd_Draw,
 };
 
 #endif

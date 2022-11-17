@@ -17,15 +17,15 @@ void BgFuMizu_Update(Actor* thisx, PlayState* play);
 void BgFuMizu_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Fu_Mizu_InitVars = {
-    ACTOR_BG_FU_MIZU,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_FU_KAITEN,
-    sizeof(BgFuMizu),
-    BgFuMizu_Init,
-    BgFuMizu_Destroy,
-    BgFuMizu_Update,
-    BgFuMizu_Draw,
+    /**/    ACTOR_BG_FU_MIZU,
+    /**/    ACTORCAT_BG,
+    /**/    FLAGS,
+    /**/    OBJECT_FU_KAITEN,
+    /**/    sizeof(BgFuMizu),
+    /**/    BgFuMizu_Init,
+    /**/    BgFuMizu_Destroy,
+    /**/    BgFuMizu_Update,
+    /**/    BgFuMizu_Draw,
 };
 
 void BgFuMizu_Init(Actor* thisx, PlayState* play) {

@@ -54,15 +54,15 @@ static s32 D_80C009F0 = 0;
 static s32 D_80C009F4 = 0;
 
 ActorInit En_Bomjima_InitVars = {
-    ACTOR_EN_BOMJIMA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_CS,
-    sizeof(EnBomjima),
-    EnBomjima_Init,
-    EnBomjima_Destroy,
-    EnBomjima_Update,
-    EnBomjima_Draw,
+    /**/    ACTOR_EN_BOMJIMA,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_CS,
+    /**/    sizeof(EnBomjima),
+    /**/    EnBomjima_Init,
+    /**/    EnBomjima_Destroy,
+    /**/    EnBomjima_Update,
+    /**/    EnBomjima_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

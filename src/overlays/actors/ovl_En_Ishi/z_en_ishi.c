@@ -45,15 +45,15 @@ static s16 D_8095F690 = 0;
 static s16 D_8095F694 = 0;
 
 ActorInit En_Ishi_InitVars = {
-    ACTOR_EN_ISHI,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnIshi),
-    EnIshi_Init,
-    EnIshi_Destroy,
-    EnIshi_Update,
-    NULL,
+    /**/    ACTOR_EN_ISHI,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(EnIshi),
+    /**/    EnIshi_Init,
+    /**/    EnIshi_Destroy,
+    /**/    EnIshi_Update,
+    /**/    NULL,
 };
 
 static f32 D_8095F6B8[] = { 0.1f, 0.4f };

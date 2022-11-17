@@ -19,15 +19,15 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2);
 void DemoGetitem_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Demo_Getitem_InitVars = {
-    ACTOR_DEMO_GETITEM,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DemoGetitem),
-    DemoGetitem_Init,
-    DemoGetitem_Destroy,
-    DemoGetitem_Update,
-    NULL,
+    /**/    ACTOR_DEMO_GETITEM,
+    /**/    ACTORCAT_BG,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(DemoGetitem),
+    /**/    DemoGetitem_Init,
+    /**/    DemoGetitem_Destroy,
+    /**/    DemoGetitem_Update,
+    /**/    NULL,
 };
 
 static s16 sObjectBankIndices[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };

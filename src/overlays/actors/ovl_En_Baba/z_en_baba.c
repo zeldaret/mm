@@ -51,15 +51,15 @@ typedef enum {
 } BombShopLadyScheduleResult;
 
 ActorInit En_Baba_InitVars = {
-    ACTOR_EN_BABA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BBA,
-    sizeof(EnBaba),
-    EnBaba_Init,
-    EnBaba_Destroy,
-    EnBaba_Update,
-    EnBaba_Draw,
+    /**/    ACTOR_EN_BABA,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_BBA,
+    /**/    sizeof(EnBaba),
+    /**/    EnBaba_Init,
+    /**/    EnBaba_Destroy,
+    /**/    EnBaba_Update,
+    /**/    EnBaba_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

@@ -43,15 +43,15 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 ActorInit Bg_Icicle_InitVars = {
-    ACTOR_BG_ICICLE,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_ICICLE,
-    sizeof(BgIcicle),
-    BgIcicle_Init,
-    BgIcicle_Destroy,
-    BgIcicle_Update,
-    BgIcicle_Draw,
+    /**/    ACTOR_BG_ICICLE,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    OBJECT_ICICLE,
+    /**/    sizeof(BgIcicle),
+    /**/    BgIcicle_Init,
+    /**/    BgIcicle_Destroy,
+    /**/    BgIcicle_Update,
+    /**/    BgIcicle_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

@@ -64,15 +64,15 @@ static EnOt* D_80B5E884;
 static EnOt* D_80B5E888;
 
 ActorInit En_Ot_InitVars = {
-    ACTOR_EN_OT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_OT,
-    sizeof(EnOt),
-    EnOt_Init,
-    EnOt_Destroy,
-    EnOt_Update,
-    EnOt_Draw,
+    /**/    ACTOR_EN_OT,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_OT,
+    /**/    sizeof(EnOt),
+    /**/    EnOt_Init,
+    /**/    EnOt_Destroy,
+    /**/    EnOt_Update,
+    /**/    EnOt_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

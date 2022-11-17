@@ -32,15 +32,15 @@ void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
 ActorInit En_Hidden_Nuts_InitVars = {
-    ACTOR_EN_HIDDEN_NUTS,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_HINTNUTS,
-    sizeof(EnHiddenNuts),
-    EnHiddenNuts_Init,
-    EnHiddenNuts_Destroy,
-    EnHiddenNuts_Update,
-    EnHiddenNuts_Draw,
+    /**/    ACTOR_EN_HIDDEN_NUTS,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    OBJECT_HINTNUTS,
+    /**/    sizeof(EnHiddenNuts),
+    /**/    EnHiddenNuts_Init,
+    /**/    EnHiddenNuts_Destroy,
+    /**/    EnHiddenNuts_Update,
+    /**/    EnHiddenNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

@@ -19,15 +19,15 @@ void DmChar04_Draw(Actor* thisx, PlayState* play);
 void func_80AABE34(DmChar04* this, PlayState* play);
 
 ActorInit Dm_Char04_InitVars = {
-    ACTOR_DM_CHAR04,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DmChar04),
-    DmChar04_Init,
-    DmChar04_Destroy,
-    DmChar04_Update,
-    DmChar04_Draw,
+    /**/    ACTOR_DM_CHAR04,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(DmChar04),
+    /**/    DmChar04_Init,
+    /**/    DmChar04_Destroy,
+    /**/    DmChar04_Update,
+    /**/    DmChar04_Draw,
 };
 
 void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 animIndex) {

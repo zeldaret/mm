@@ -63,15 +63,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit Boss_04_InitVars = {
-    ACTOR_BOSS_04,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS04,
-    sizeof(Boss04),
-    Boss04_Init,
-    Boss04_Destroy,
-    Boss04_Update,
-    Boss04_Draw,
+    /**/    ACTOR_BOSS_04,
+    /**/    ACTORCAT_BOSS,
+    /**/    FLAGS,
+    /**/    OBJECT_BOSS04,
+    /**/    sizeof(Boss04),
+    /**/    Boss04_Init,
+    /**/    Boss04_Destroy,
+    /**/    Boss04_Update,
+    /**/    Boss04_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit1[1] = {

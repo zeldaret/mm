@@ -29,15 +29,15 @@ void func_8086F694(EnOkuta* this, PlayState* play);
 
 #if 0
 ActorInit En_Okuta_InitVars = {
-    ACTOR_EN_OKUTA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_OKUTA,
-    sizeof(EnOkuta),
-    EnOkuta_Init,
-    EnOkuta_Destroy,
-    EnOkuta_Update,
-    EnOkuta_Draw,
+    /**/    ACTOR_EN_OKUTA,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_OKUTA,
+    /**/    sizeof(EnOkuta),
+    /**/    EnOkuta_Init,
+    /**/    EnOkuta_Destroy,
+    /**/    EnOkuta_Update,
+    /**/    EnOkuta_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

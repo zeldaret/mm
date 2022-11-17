@@ -73,15 +73,15 @@ typedef enum {
 } GiantCsActionIndex;
 
 ActorInit En_Giant_InitVars = {
-    ACTOR_EN_GIANT,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GIANT,
-    sizeof(EnGiant),
-    EnGiant_Init,
-    EnGiant_Destroy,
-    EnGiant_Update,
-    EnGiant_Draw,
+    /**/    ACTOR_EN_GIANT,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_GIANT,
+    /**/    sizeof(EnGiant),
+    /**/    EnGiant_Init,
+    /**/    EnGiant_Destroy,
+    /**/    EnGiant_Update,
+    /**/    EnGiant_Draw,
 };
 
 static AnimationHeader* sAnimations[] = {

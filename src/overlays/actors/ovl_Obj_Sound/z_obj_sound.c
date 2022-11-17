@@ -16,15 +16,15 @@ void ObjSound_Update(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Obj_Sound_InitVars = {
-    ACTOR_OBJ_SOUND,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjSound),
-    ObjSound_Init,
-    ObjSound_Destroy,
-    ObjSound_Update,
-    NULL,
+    /**/    ACTOR_OBJ_SOUND,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(ObjSound),
+    /**/    ObjSound_Init,
+    /**/    ObjSound_Destroy,
+    /**/    ObjSound_Update,
+    /**/    NULL,
 };
 
 #endif

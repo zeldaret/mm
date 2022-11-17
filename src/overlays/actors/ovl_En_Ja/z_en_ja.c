@@ -51,15 +51,15 @@ s32 D_80BC366C[] = {
 };
 
 ActorInit En_Ja_InitVars = {
-    ACTOR_EN_JA,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BOJ,
-    sizeof(EnJa),
-    EnJa_Init,
-    EnJa_Destroy,
-    EnJa_Update,
-    EnJa_Draw,
+    /**/    ACTOR_EN_JA,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_BOJ,
+    /**/    sizeof(EnJa),
+    /**/    EnJa_Init,
+    /**/    EnJa_Destroy,
+    /**/    EnJa_Update,
+    /**/    EnJa_Draw,
 };
 
 Vec3f D_80BC36AC = { -10.0f, 56.0f, 25.0f };

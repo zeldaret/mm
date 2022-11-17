@@ -20,15 +20,15 @@ void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play);
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Ctower_Gear_InitVars = {
-    ACTOR_BG_CTOWER_GEAR,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_CTOWER_ROT,
-    sizeof(BgCtowerGear),
-    BgCtowerGear_Init,
-    BgCtowerGear_Destroy,
-    BgCtowerGear_Update,
-    BgCtowerGear_Draw,
+    /**/    ACTOR_BG_CTOWER_GEAR,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    OBJECT_CTOWER_ROT,
+    /**/    sizeof(BgCtowerGear),
+    /**/    BgCtowerGear_Init,
+    /**/    BgCtowerGear_Destroy,
+    /**/    BgCtowerGear_Update,
+    /**/    BgCtowerGear_Draw,
 };
 
 static Vec3f sExitSplashOffsets[] = {

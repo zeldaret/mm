@@ -103,15 +103,15 @@ typedef enum {
 } EnTalkGibudGrabState;
 
 ActorInit En_Talk_Gibud_InitVars = {
-    ACTOR_EN_TALK_GIBUD,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_RD,
-    sizeof(EnTalkGibud),
-    EnTalkGibud_Init,
-    EnTalkGibud_Destroy,
-    EnTalkGibud_Update,
-    EnTalkGibud_Draw,
+    /**/    ACTOR_EN_TALK_GIBUD,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_RD,
+    /**/    sizeof(EnTalkGibud),
+    /**/    EnTalkGibud_Init,
+    /**/    EnTalkGibud_Destroy,
+    /**/    EnTalkGibud_Update,
+    /**/    EnTalkGibud_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

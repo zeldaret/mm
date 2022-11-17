@@ -49,15 +49,15 @@ typedef enum {
 } HgoAnimation;
 
 ActorInit En_Hgo_InitVars = {
-    ACTOR_EN_HGO,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_HARFGIBUD,
-    sizeof(EnHgo),
-    EnHgo_Init,
-    EnHgo_Destroy,
-    EnHgo_Update,
-    EnHgo_Draw,
+    /**/    ACTOR_EN_HGO,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_HARFGIBUD,
+    /**/    sizeof(EnHgo),
+    /**/    EnHgo_Init,
+    /**/    EnHgo_Destroy,
+    /**/    EnHgo_Update,
+    /**/    EnHgo_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

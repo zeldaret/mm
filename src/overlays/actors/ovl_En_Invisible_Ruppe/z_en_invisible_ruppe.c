@@ -19,15 +19,15 @@ void func_80C2590C(EnInvisibleRuppe* this, PlayState* play);
 void func_80C259E8(EnInvisibleRuppe* this, PlayState* play);
 
 ActorInit En_Invisible_Ruppe_InitVars = {
-    ACTOR_EN_INVISIBLE_RUPPE,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnInvisibleRuppe),
-    EnInvisibleRuppe_Init,
-    EnInvisibleRuppe_Destroy,
-    EnInvisibleRuppe_Update,
-    NULL,
+    /**/    ACTOR_EN_INVISIBLE_RUPPE,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(EnInvisibleRuppe),
+    /**/    EnInvisibleRuppe_Init,
+    /**/    EnInvisibleRuppe_Destroy,
+    /**/    EnInvisibleRuppe_Update,
+    /**/    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit = {

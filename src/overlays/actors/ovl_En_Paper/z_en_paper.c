@@ -24,15 +24,15 @@ void func_80C1F55C(EnPaper* this, EnPaperStruct* arg1);
 void func_80C1F6E0(EnPaper* this, EnPaperStruct* arg1);
 
 ActorInit En_Paper_InitVars = {
-    ACTOR_EN_PAPER,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_BAL,
-    sizeof(EnPaper),
-    EnPaper_Init,
-    EnPaper_Destroy,
-    EnPaper_Update,
-    EnPaper_Draw,
+    /**/    ACTOR_EN_PAPER,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    OBJECT_BAL,
+    /**/    sizeof(EnPaper),
+    /**/    EnPaper_Init,
+    /**/    EnPaper_Destroy,
+    /**/    EnPaper_Update,
+    /**/    EnPaper_Draw,
 };
 
 Vec3f D_80C1FC60 = { 0.0f, 0.0f, 1.0f };

@@ -31,15 +31,15 @@ void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play);
 
 ActorInit En_Bigokuta_InitVars = {
-    ACTOR_EN_BIGOKUTA,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BIGOKUTA,
-    sizeof(EnBigokuta),
-    EnBigokuta_Init,
-    EnBigokuta_Destroy,
-    EnBigokuta_Update,
-    EnBigokuta_Draw,
+    /**/    ACTOR_EN_BIGOKUTA,
+    /**/    ACTORCAT_BOSS,
+    /**/    FLAGS,
+    /**/    OBJECT_BIGOKUTA,
+    /**/    sizeof(EnBigokuta),
+    /**/    EnBigokuta_Init,
+    /**/    EnBigokuta_Destroy,
+    /**/    EnBigokuta_Update,
+    /**/    EnBigokuta_Draw,
 };
 
 static ColliderCylinderInit sShellCylinderInit = {

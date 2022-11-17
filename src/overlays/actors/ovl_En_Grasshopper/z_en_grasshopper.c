@@ -138,15 +138,15 @@ static DamageTable sDamageTable = {
 };
 
 ActorInit En_Grasshopper_InitVars = {
-    ACTOR_EN_GRASSHOPPER,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_GRASSHOPPER,
-    sizeof(EnGrasshopper),
-    EnGrasshopper_Init,
-    EnGrasshopper_Destroy,
-    EnGrasshopper_Update,
-    EnGrasshopper_Draw,
+    /**/    ACTOR_EN_GRASSHOPPER,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_GRASSHOPPER,
+    /**/    sizeof(EnGrasshopper),
+    /**/    EnGrasshopper_Init,
+    /**/    EnGrasshopper_Destroy,
+    /**/    EnGrasshopper_Update,
+    /**/    EnGrasshopper_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[2] = {

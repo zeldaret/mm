@@ -17,15 +17,15 @@ void EnZod_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Zod_InitVars = {
-    ACTOR_EN_ZOD,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOD,
-    sizeof(EnZod),
-    EnZod_Init,
-    EnZod_Destroy,
-    EnZod_Update,
-    EnZod_Draw,
+    /**/    ACTOR_EN_ZOD,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_ZOD,
+    /**/    sizeof(EnZod),
+    /**/    EnZod_Init,
+    /**/    EnZod_Destroy,
+    /**/    EnZod_Update,
+    /**/    EnZod_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

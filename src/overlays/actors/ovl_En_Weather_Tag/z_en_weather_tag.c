@@ -36,15 +36,15 @@ void func_809674C8(EnWeatherTag* this, PlayState* play);
 void func_80967608(EnWeatherTag* this, PlayState* play);
 
 ActorInit En_Weather_Tag_InitVars = {
-    ACTOR_EN_WEATHER_TAG,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnWeatherTag),
-    EnWeatherTag_Init,
-    EnWeatherTag_Destroy,
-    EnWeatherTag_Update,
-    EnWeatherTag_Draw,
+    /**/    ACTOR_EN_WEATHER_TAG,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(EnWeatherTag),
+    /**/    EnWeatherTag_Init,
+    /**/    EnWeatherTag_Destroy,
+    /**/    EnWeatherTag_Update,
+    /**/    EnWeatherTag_Draw,
 };
 
 extern f32 D_801F4E74;

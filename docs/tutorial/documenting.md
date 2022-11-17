@@ -49,15 +49,15 @@ void func_80C10290(EnRecepgirl* this);
 void func_80C102D4(EnRecepgirl* this, PlayState* play);
 
 ActorInit En_Recepgirl_InitVars = {
-    ACTOR_EN_RECEPGIRL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_BG,
-    sizeof(EnRecepgirl),
-    EnRecepgirl_Init,
-    EnRecepgirl_Destroy,
-    EnRecepgirl_Update,
-    EnRecepgirl_Draw,
+    /**/    ACTOR_EN_RECEPGIRL,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_BG,
+    /**/    sizeof(EnRecepgirl),
+    /**/    EnRecepgirl_Init,
+    /**/    EnRecepgirl_Destroy,
+    /**/    EnRecepgirl_Update,
+    /**/    EnRecepgirl_Draw,
 };
 
 static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };

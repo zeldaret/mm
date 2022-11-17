@@ -61,15 +61,15 @@ void func_80938E00(Actor* thisx, PlayState* play);
 void func_80938F50(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Bean_InitVars = {
-    ACTOR_OBJ_BEAN,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_MAMENOKI,
-    sizeof(ObjBean),
-    ObjBean_Init,
-    ObjBean_Destroy,
-    ObjBean_Update,
-    NULL,
+    /**/    ACTOR_OBJ_BEAN,
+    /**/    ACTORCAT_BG,
+    /**/    FLAGS,
+    /**/    OBJECT_MAMENOKI,
+    /**/    sizeof(ObjBean),
+    /**/    ObjBean_Init,
+    /**/    ObjBean_Destroy,
+    /**/    ObjBean_Update,
+    /**/    NULL,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

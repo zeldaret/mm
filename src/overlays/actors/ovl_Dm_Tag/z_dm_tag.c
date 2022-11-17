@@ -19,15 +19,15 @@ void func_80C229EC(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
 ActorInit Dm_Tag_InitVars = {
-    ACTOR_DM_TAG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(DmTag),
-    DmTag_Init,
-    DmTag_Destroy,
-    DmTag_Update,
-    NULL,
+    /**/    ACTOR_DM_TAG,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(DmTag),
+    /**/    DmTag_Init,
+    /**/    DmTag_Destroy,
+    /**/    DmTag_Update,
+    /**/    NULL,
 };
 
 s32 D_80C22BF0[] = {

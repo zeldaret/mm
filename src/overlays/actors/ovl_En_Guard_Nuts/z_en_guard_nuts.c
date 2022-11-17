@@ -26,15 +26,15 @@ void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
 ActorInit En_Guard_Nuts_InitVars = {
-    ACTOR_EN_GUARD_NUTS,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DNK,
-    sizeof(EnGuardNuts),
-    EnGuardNuts_Init,
-    EnGuardNuts_Destroy,
-    EnGuardNuts_Update,
-    EnGuardNuts_Draw,
+    /**/    ACTOR_EN_GUARD_NUTS,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_DNK,
+    /**/    sizeof(EnGuardNuts),
+    /**/    EnGuardNuts_Init,
+    /**/    EnGuardNuts_Destroy,
+    /**/    EnGuardNuts_Update,
+    /**/    EnGuardNuts_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

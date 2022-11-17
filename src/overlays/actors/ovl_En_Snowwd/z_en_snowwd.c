@@ -19,15 +19,15 @@ void func_80AF76F0(EnSnowwd* this, PlayState* play);
 
 #if 0
 ActorInit En_Snowwd_InitVars = {
-    ACTOR_EN_SNOWWD,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_SNOWWD,
-    sizeof(EnSnowwd),
-    EnSnowwd_Init,
-    EnSnowwd_Destroy,
-    EnSnowwd_Update,
-    EnSnowwd_Draw,
+    /**/    ACTOR_EN_SNOWWD,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    OBJECT_SNOWWD,
+    /**/    sizeof(EnSnowwd),
+    /**/    EnSnowwd_Init,
+    /**/    EnSnowwd_Destroy,
+    /**/    EnSnowwd_Update,
+    /**/    EnSnowwd_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

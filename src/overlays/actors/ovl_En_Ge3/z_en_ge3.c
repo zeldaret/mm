@@ -17,15 +17,15 @@ void EnGe3_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit En_Ge3_InitVars = {
-    ACTOR_EN_GE3,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GELDB,
-    sizeof(EnGe3),
-    EnGe3_Init,
-    EnGe3_Destroy,
-    EnGe3_Update,
-    EnGe3_Draw,
+    /**/    ACTOR_EN_GE3,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_GELDB,
+    /**/    sizeof(EnGe3),
+    /**/    EnGe3_Init,
+    /**/    EnGe3_Destroy,
+    /**/    EnGe3_Update,
+    /**/    EnGe3_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

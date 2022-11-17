@@ -18,15 +18,15 @@ void func_80983704(ObjDemo* this, PlayState* play);
 void func_80983634(PlayState* play);
 
 ActorInit Obj_Demo_InitVars = {
-    ACTOR_OBJ_DEMO,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ObjDemo),
-    ObjDemo_Init,
-    Actor_Noop,
-    ObjDemo_Update,
-    NULL,
+    /**/    ACTOR_OBJ_DEMO,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(ObjDemo),
+    /**/    ObjDemo_Init,
+    /**/    Actor_Noop,
+    /**/    ObjDemo_Update,
+    /**/    NULL,
 };
 
 void ObjDemo_Init(Actor* thisx, PlayState* play) {

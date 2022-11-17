@@ -29,15 +29,15 @@ void func_80BD1F1C(EnZov* this, PlayState* play);
 s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx);
 
 ActorInit En_Zov_InitVars = {
-    ACTOR_EN_ZOV,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_ZOV,
-    sizeof(EnZov),
-    EnZov_Init,
-    EnZov_Destroy,
-    EnZov_Update,
-    EnZov_Draw,
+    /**/    ACTOR_EN_ZOV,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_ZOV,
+    /**/    sizeof(EnZov),
+    /**/    EnZov_Init,
+    /**/    EnZov_Destroy,
+    /**/    EnZov_Update,
+    /**/    EnZov_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

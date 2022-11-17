@@ -33,15 +33,15 @@ void func_808B3EE8(EnDekubaba* this, PlayState* play);
 
 #if 0
 ActorInit En_Dekubaba_InitVars = {
-    ACTOR_EN_DEKUBABA,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_DEKUBABA,
-    sizeof(EnDekubaba),
-    EnDekubaba_Init,
-    EnDekubaba_Destroy,
-    EnDekubaba_Update,
-    EnDekubaba_Draw,
+    /**/    ACTOR_EN_DEKUBABA,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_DEKUBABA,
+    /**/    sizeof(EnDekubaba),
+    /**/    EnDekubaba_Init,
+    /**/    EnDekubaba_Destroy,
+    /**/    EnDekubaba_Update,
+    /**/    EnDekubaba_Draw,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[7] = {

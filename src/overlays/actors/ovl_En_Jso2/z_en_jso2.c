@@ -72,15 +72,15 @@ static DamageTable D_80A7B4F0 = {
 };
 
 ActorInit En_Jso2_InitVars = {
-    ACTOR_EN_JSO2,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_JSO,
-    sizeof(EnJso2),
-    EnJso2_Init,
-    EnJso2_Destroy,
-    EnJso2_Update,
-    EnJso2_Draw,
+    /**/    ACTOR_EN_JSO2,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_JSO,
+    /**/    sizeof(EnJso2),
+    /**/    EnJso2_Init,
+    /**/    EnJso2_Destroy,
+    /**/    EnJso2_Update,
+    /**/    EnJso2_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

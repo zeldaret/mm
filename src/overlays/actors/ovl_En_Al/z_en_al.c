@@ -86,15 +86,15 @@ s32 D_80BDFF24[] = {
 };
 
 ActorInit En_Al_InitVars = {
-    ACTOR_EN_AL,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_AL,
-    sizeof(EnAl),
-    EnAl_Init,
-    EnAl_Destroy,
-    EnAl_Update,
-    EnAl_Draw,
+    /**/    ACTOR_EN_AL,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_AL,
+    /**/    sizeof(EnAl),
+    /**/    EnAl_Init,
+    /**/    EnAl_Destroy,
+    /**/    EnAl_Update,
+    /**/    EnAl_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

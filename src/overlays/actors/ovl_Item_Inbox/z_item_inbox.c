@@ -18,15 +18,15 @@ void ItemInbox_Draw(Actor* thisx, PlayState* play);
 void ItemInbox_Idle(ItemInbox* this, PlayState* play);
 
 ActorInit Item_Inbox_InitVars = {
-    ACTOR_ITEM_INBOX,
-    ACTORCAT_NPC,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ItemInbox),
-    ItemInbox_Init,
-    ItemInbox_Destroy,
-    ItemInbox_Update,
-    ItemInbox_Draw,
+    /**/    ACTOR_ITEM_INBOX,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(ItemInbox),
+    /**/    ItemInbox_Init,
+    /**/    ItemInbox_Destroy,
+    /**/    ItemInbox_Update,
+    /**/    ItemInbox_Draw,
 };
 
 void ItemInbox_Init(Actor* thisx, PlayState* play) {

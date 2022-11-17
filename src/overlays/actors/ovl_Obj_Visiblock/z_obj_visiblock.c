@@ -16,15 +16,15 @@ void ObjVisiblock_Destroy(Actor* thisx, PlayState* play);
 void ObjVisiblock_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Visiblock_InitVars = {
-    ACTOR_OBJ_VISIBLOCK,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_VISIBLOCK,
-    sizeof(ObjVisiblock),
-    ObjVisiblock_Init,
-    ObjVisiblock_Destroy,
-    Actor_Noop,
-    ObjVisiblock_Draw,
+    /**/    ACTOR_OBJ_VISIBLOCK,
+    /**/    ACTORCAT_BG,
+    /**/    FLAGS,
+    /**/    OBJECT_VISIBLOCK,
+    /**/    sizeof(ObjVisiblock),
+    /**/    ObjVisiblock_Init,
+    /**/    ObjVisiblock_Destroy,
+    /**/    Actor_Noop,
+    /**/    ObjVisiblock_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

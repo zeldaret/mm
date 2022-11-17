@@ -51,15 +51,15 @@ typedef enum {
 static s32 sNumPythonsDead = 0;
 
 ActorInit En_Dragon_InitVars = {
-    ACTOR_EN_DRAGON,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_UTUBO,
-    sizeof(EnDragon),
-    EnDragon_Init,
-    EnDragon_Destroy,
-    EnDragon_Update,
-    EnDragon_Draw,
+    /**/    ACTOR_EN_DRAGON,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_UTUBO,
+    /**/    sizeof(EnDragon),
+    /**/    EnDragon_Init,
+    /**/    EnDragon_Destroy,
+    /**/    EnDragon_Update,
+    /**/    EnDragon_Draw,
 };
 
 typedef enum {

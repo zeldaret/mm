@@ -37,15 +37,15 @@ void func_80B11268(EnGb2* this, PlayState* play);
 void func_80B11344(EnGb2* this, PlayState* play);
 
 ActorInit En_Gb2_InitVars = {
-    ACTOR_EN_GB2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_PS,
-    sizeof(EnGb2),
-    EnGb2_Init,
-    EnGb2_Destroy,
-    EnGb2_Update,
-    EnGb2_Draw,
+    /**/    ACTOR_EN_GB2,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_PS,
+    /**/    sizeof(EnGb2),
+    /**/    EnGb2_Init,
+    /**/    EnGb2_Destroy,
+    /**/    EnGb2_Update,
+    /**/    EnGb2_Draw,
 };
 
 typedef struct {

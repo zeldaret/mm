@@ -19,15 +19,15 @@ void func_80AD9B04(ObjTakarayaWall* this, PlayState* play);
 
 #if 0
 ActorInit Obj_Takaraya_Wall_InitVars = {
-    ACTOR_OBJ_TAKARAYA_WALL,
-    ACTORCAT_BG,
-    FLAGS,
-    OBJECT_TAKARAYA_OBJECTS,
-    sizeof(ObjTakarayaWall),
-    ObjTakarayaWall_Init,
-    ObjTakarayaWall_Destroy,
-    ObjTakarayaWall_Update,
-    ObjTakarayaWall_Draw,
+    /**/    ACTOR_OBJ_TAKARAYA_WALL,
+    /**/    ACTORCAT_BG,
+    /**/    FLAGS,
+    /**/    OBJECT_TAKARAYA_OBJECTS,
+    /**/    sizeof(ObjTakarayaWall),
+    /**/    ObjTakarayaWall_Init,
+    /**/    ObjTakarayaWall_Destroy,
+    /**/    ObjTakarayaWall_Update,
+    /**/    ObjTakarayaWall_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

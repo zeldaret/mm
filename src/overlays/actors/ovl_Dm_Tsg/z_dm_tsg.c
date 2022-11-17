@@ -17,15 +17,15 @@ void DmTsg_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 ActorInit Dm_Tsg_InitVars = {
-    ACTOR_DM_TSG,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    OBJECT_OPEN_OBJ,
-    sizeof(DmTsg),
-    DmTsg_Init,
-    DmTsg_Destroy,
-    DmTsg_Update,
-    DmTsg_Draw,
+    /**/    ACTOR_DM_TSG,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    OBJECT_OPEN_OBJ,
+    /**/    sizeof(DmTsg),
+    /**/    DmTsg_Init,
+    /**/    DmTsg_Destroy,
+    /**/    DmTsg_Update,
+    /**/    DmTsg_Draw,
 };
 
 #endif

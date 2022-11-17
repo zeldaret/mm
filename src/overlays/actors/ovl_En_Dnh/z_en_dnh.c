@@ -20,15 +20,15 @@ void func_80A50F9C(EnDnh* this, PlayState* play);
 
 #if 0
 ActorInit En_Dnh_InitVars = {
-    ACTOR_EN_DNH,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_TRO,
-    sizeof(EnDnh),
-    EnDnh_Init,
-    EnDnh_Destroy,
-    EnDnh_Update,
-    EnDnh_Draw,
+    /**/    ACTOR_EN_DNH,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_TRO,
+    /**/    sizeof(EnDnh),
+    /**/    EnDnh_Init,
+    /**/    EnDnh_Destroy,
+    /**/    EnDnh_Update,
+    /**/    EnDnh_Draw,
 };
 
 #endif

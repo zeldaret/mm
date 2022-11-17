@@ -113,15 +113,15 @@ static DamageTable sRedTwinmoldDamageTable = {
 };
 
 ActorInit Boss_02_InitVars = {
-    ACTOR_BOSS_02,
-    ACTORCAT_BOSS,
-    FLAGS,
-    OBJECT_BOSS02,
-    sizeof(Boss02),
-    Boss02_Init,
-    Boss02_Destroy,
-    Boss02_Twinmold_Update,
-    Boss02_Twinmold_Draw,
+    /**/    ACTOR_BOSS_02,
+    /**/    ACTORCAT_BOSS,
+    /**/    FLAGS,
+    /**/    OBJECT_BOSS02,
+    /**/    sizeof(Boss02),
+    /**/    Boss02_Init,
+    /**/    Boss02_Destroy,
+    /**/    Boss02_Twinmold_Update,
+    /**/    Boss02_Twinmold_Draw,
 };
 
 f32 D_809DF5B0 = 1.0f;

@@ -27,15 +27,15 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play);
 
 #if 0
 ActorInit Bg_Dy_Yoseizo_InitVars = {
-    ACTOR_BG_DY_YOSEIZO,
-    ACTORCAT_PROP,
-    FLAGS,
-    OBJECT_DY_OBJ,
-    sizeof(BgDyYoseizo),
-    BgDyYoseizo_Init,
-    BgDyYoseizo_Destroy,
-    BgDyYoseizo_Update,
-    NULL,
+    /**/    ACTOR_BG_DY_YOSEIZO,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    OBJECT_DY_OBJ,
+    /**/    sizeof(BgDyYoseizo),
+    /**/    BgDyYoseizo_Init,
+    /**/    BgDyYoseizo_Destroy,
+    /**/    BgDyYoseizo_Update,
+    /**/    NULL,
 };
 
 #endif

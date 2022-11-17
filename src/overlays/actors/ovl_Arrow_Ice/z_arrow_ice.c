@@ -24,15 +24,15 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 s32 unused; // Needed for bss
 
 ActorInit Arrow_Ice_InitVars = {
-    ACTOR_ARROW_ICE,
-    ACTORCAT_ITEMACTION,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(ArrowIce),
-    ArrowIce_Init,
-    ArrowIce_Destroy,
-    ArrowIce_Update,
-    ArrowIce_Draw,
+    /**/    ACTOR_ARROW_ICE,
+    /**/    ACTORCAT_ITEMACTION,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(ArrowIce),
+    /**/    ArrowIce_Init,
+    /**/    ArrowIce_Destroy,
+    /**/    ArrowIce_Update,
+    /**/    ArrowIce_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

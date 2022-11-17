@@ -16,15 +16,15 @@ void EnEncount1_Update(Actor* thisx, PlayState* play);
 void func_808E0954(EnEncount1* this, PlayState* play);
 
 ActorInit En_Encount1_InitVars = {
-    ACTOR_EN_ENCOUNT1,
-    ACTORCAT_PROP,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnEncount1),
-    EnEncount1_Init,
-    NULL,
-    EnEncount1_Update,
-    NULL,
+    /**/    ACTOR_EN_ENCOUNT1,
+    /**/    ACTORCAT_PROP,
+    /**/    FLAGS,
+    /**/    GAMEPLAY_KEEP,
+    /**/    sizeof(EnEncount1),
+    /**/    EnEncount1_Init,
+    /**/    NULL,
+    /**/    EnEncount1_Update,
+    /**/    NULL,
 };
 
 static s16 sActorList[] = {

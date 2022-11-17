@@ -72,15 +72,15 @@ typedef struct {
 } RaceDogInfo;
 
 ActorInit En_Racedog_InitVars = {
-    ACTOR_EN_RACEDOG,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_DOG,
-    sizeof(EnRacedog),
-    EnRacedog_Init,
-    EnRacedog_Destroy,
-    EnRacedog_Update,
-    EnRacedog_Draw,
+    /**/    ACTOR_EN_RACEDOG,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_DOG,
+    /**/    sizeof(EnRacedog),
+    /**/    EnRacedog_Init,
+    /**/    EnRacedog_Destroy,
+    /**/    EnRacedog_Update,
+    /**/    EnRacedog_Draw,
 };
 
 static s16 sNumberOfDogsFinished = 0;

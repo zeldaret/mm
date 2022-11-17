@@ -29,15 +29,15 @@ void EnBat_Die(EnBat* this, PlayState* play);
 void EnBat_Stunned(EnBat* this, PlayState* play);
 
 ActorInit En_Bat_InitVars = {
-    ACTOR_EN_BAT,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_BAT,
-    sizeof(EnBat),
-    EnBat_Init,
-    EnBat_Destroy,
-    EnBat_Update,
-    EnBat_Draw,
+    /**/    ACTOR_EN_BAT,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_BAT,
+    /**/    sizeof(EnBat),
+    /**/    EnBat_Init,
+    /**/    EnBat_Destroy,
+    /**/    EnBat_Update,
+    /**/    EnBat_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

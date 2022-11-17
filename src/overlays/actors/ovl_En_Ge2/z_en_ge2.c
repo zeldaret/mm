@@ -28,15 +28,15 @@ void func_80B8C9B8(EnGe2* this, PlayState* play);
 
 #if 0
 ActorInit En_Ge2_InitVars = {
-    ACTOR_EN_GE2,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_GLA,
-    sizeof(EnGe2),
-    EnGe2_Init,
-    EnGe2_Destroy,
-    EnGe2_Update,
-    EnGe2_Draw,
+    /**/    ACTOR_EN_GE2,
+    /**/    ACTORCAT_NPC,
+    /**/    FLAGS,
+    /**/    OBJECT_GLA,
+    /**/    sizeof(EnGe2),
+    /**/    EnGe2_Init,
+    /**/    EnGe2_Destroy,
+    /**/    EnGe2_Update,
+    /**/    EnGe2_Draw,
 };
 
 // static ColliderCylinderInit sCylinderInit = {

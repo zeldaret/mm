@@ -16,15 +16,15 @@ void EnFirefly2_Update(Actor* thisx, PlayState* play);
 void EnFirefly2_Draw(Actor* thisx, PlayState* play);
 
 ActorInit En_Firefly2_InitVars = {
-    ACTOR_EN_FIREFLY2,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_FIREFLY,
-    sizeof(EnFirefly2),
-    EnFirefly2_Init,
-    EnFirefly2_Destroy,
-    EnFirefly2_Update,
-    EnFirefly2_Draw,
+    /**/    ACTOR_EN_FIREFLY2,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_FIREFLY,
+    /**/    sizeof(EnFirefly2),
+    /**/    EnFirefly2_Init,
+    /**/    EnFirefly2_Destroy,
+    /**/    EnFirefly2_Update,
+    /**/    EnFirefly2_Draw,
 };
 
 void EnFirefly2_Init(Actor* thisx, PlayState* play) {

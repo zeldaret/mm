@@ -62,15 +62,15 @@ static Color_RGBA8 sPoSisterEnvColors[] = {
 };
 
 ActorInit En_Po_Sisters_InitVars = {
-    ACTOR_EN_PO_SISTERS,
-    ACTORCAT_ENEMY,
-    FLAGS,
-    OBJECT_PO_SISTERS,
-    sizeof(EnPoSisters),
-    EnPoSisters_Init,
-    EnPoSisters_Destroy,
-    EnPoSisters_Update,
-    EnPoSisters_Draw,
+    /**/    ACTOR_EN_PO_SISTERS,
+    /**/    ACTORCAT_ENEMY,
+    /**/    FLAGS,
+    /**/    OBJECT_PO_SISTERS,
+    /**/    sizeof(EnPoSisters),
+    /**/    EnPoSisters_Init,
+    /**/    EnPoSisters_Destroy,
+    /**/    EnPoSisters_Update,
+    /**/    EnPoSisters_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {
