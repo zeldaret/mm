@@ -26,15 +26,15 @@ void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
 ActorInit En_Twig_InitVars = {
-    /**/    ACTOR_EN_TWIG,
-    /**/    ACTORCAT_MISC,
-    /**/    FLAGS,
-    /**/    OBJECT_TWIG,
-    /**/    sizeof(EnTwig),
-    /**/    EnTwig_Init,
-    /**/    EnTwig_Destroy,
-    /**/    EnTwig_Update,
-    /**/    EnTwig_Draw,
+    /**/ ACTOR_EN_TWIG,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ OBJECT_TWIG,
+    /**/ sizeof(EnTwig),
+    /**/ EnTwig_Init,
+    /**/ EnTwig_Destroy,
+    /**/ EnTwig_Update,
+    /**/ EnTwig_Draw,
 };
 
 static s32 sCurrentRing;

@@ -26,15 +26,15 @@ void func_80C04354(EnBombers* this, PlayState* play);
 void func_80C043C8(EnBombers* this, PlayState* play);
 
 ActorInit En_Bombers_InitVars = {
-    /**/    ACTOR_EN_BOMBERS,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_CS,
-    /**/    sizeof(EnBombers),
-    /**/    EnBombers_Init,
-    /**/    EnBombers_Destroy,
-    /**/    EnBombers_Update,
-    /**/    EnBombers_Draw,
+    /**/ ACTOR_EN_BOMBERS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBombers),
+    /**/ EnBombers_Init,
+    /**/ EnBombers_Destroy,
+    /**/ EnBombers_Update,
+    /**/ EnBombers_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

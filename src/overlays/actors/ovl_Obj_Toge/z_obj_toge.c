@@ -24,15 +24,15 @@ void func_809A488C(ObjToge* this);
 void func_809A48AC(ObjToge* this, PlayState* play);
 
 ActorInit Obj_Toge_InitVars = {
-    /**/    ACTOR_OBJ_TOGE,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_TRAP,
-    /**/    sizeof(ObjToge),
-    /**/    ObjToge_Init,
-    /**/    ObjToge_Destroy,
-    /**/    ObjToge_Update,
-    /**/    ObjToge_Draw,
+    /**/ ACTOR_OBJ_TOGE,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_TRAP,
+    /**/ sizeof(ObjToge),
+    /**/ ObjToge_Init,
+    /**/ ObjToge_Destroy,
+    /**/ ObjToge_Update,
+    /**/ ObjToge_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

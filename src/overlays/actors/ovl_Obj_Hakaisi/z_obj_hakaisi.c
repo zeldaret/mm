@@ -38,15 +38,15 @@ void func_80B1544C(Actor* thisx, PlayState* play);
 void func_80B154A0(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Hakaisi_InitVars = {
-    /**/    ACTOR_OBJ_HAKAISI,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_HAKAISI,
-    /**/    sizeof(ObjHakaisi),
-    /**/    ObjHakaisi_Init,
-    /**/    ObjHakaisi_Destroy,
-    /**/    ObjHakaisi_Update,
-    /**/    ObjHakaisi_Draw,
+    /**/ ACTOR_OBJ_HAKAISI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HAKAISI,
+    /**/ sizeof(ObjHakaisi),
+    /**/ ObjHakaisi_Init,
+    /**/ ObjHakaisi_Destroy,
+    /**/ ObjHakaisi_Update,
+    /**/ ObjHakaisi_Draw,
 };
 
 Vec3f D_80B155B0 = { 0.0f, 25.0f, 30.0f };

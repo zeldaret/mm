@@ -24,15 +24,15 @@ void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play);
 void func_80C08CB0(ObjKzsaku* this, PlayState* play);
 
 ActorInit Obj_Kzsaku_InitVars = {
-    /**/    ACTOR_OBJ_KZSAKU,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_KZSAKU,
-    /**/    sizeof(ObjKzsaku),
-    /**/    ObjKzsaku_Init,
-    /**/    ObjKzsaku_Destroy,
-    /**/    ObjKzsaku_Update,
-    /**/    ObjKzsaku_Draw,
+    /**/ ACTOR_OBJ_KZSAKU,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_KZSAKU,
+    /**/ sizeof(ObjKzsaku),
+    /**/ ObjKzsaku_Init,
+    /**/ ObjKzsaku_Destroy,
+    /**/ ObjKzsaku_Update,
+    /**/ ObjKzsaku_Draw,
 };
 
 void ObjKzsaku_Init(Actor* thisx, PlayState* play) {

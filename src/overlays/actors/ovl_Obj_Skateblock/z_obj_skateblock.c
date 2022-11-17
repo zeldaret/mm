@@ -28,15 +28,15 @@ void func_80A227A4(ObjSkateblock* this);
 void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
 ActorInit Obj_Skateblock_InitVars = {
-    /**/    ACTOR_OBJ_SKATEBLOCK,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_DANGEON_KEEP,
-    /**/    sizeof(ObjSkateblock),
-    /**/    ObjSkateblock_Init,
-    /**/    ObjSkateblock_Destroy,
-    /**/    ObjSkateblock_Update,
-    /**/    ObjSkateblock_Draw,
+    /**/ ACTOR_OBJ_SKATEBLOCK,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_DANGEON_KEEP,
+    /**/ sizeof(ObjSkateblock),
+    /**/ ObjSkateblock_Init,
+    /**/ ObjSkateblock_Destroy,
+    /**/ ObjSkateblock_Update,
+    /**/ ObjSkateblock_Draw,
 };
 
 s32 D_80A22A10 = 0;

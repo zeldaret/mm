@@ -27,15 +27,15 @@ void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play);
 s32 ObjHgdoor_Rotate(ObjHgdoor* this, PlayState* play);
 
 ActorInit Obj_Hgdoor_InitVars = {
-    /**/    ACTOR_OBJ_HGDOOR,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_HGDOOR,
-    /**/    sizeof(ObjHgdoor),
-    /**/    ObjHgdoor_Init,
-    /**/    ObjHgdoor_Destroy,
-    /**/    ObjHgdoor_Update,
-    /**/    ObjHgdoor_Draw,
+    /**/ ACTOR_OBJ_HGDOOR,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_HGDOOR,
+    /**/ sizeof(ObjHgdoor),
+    /**/ ObjHgdoor_Init,
+    /**/ ObjHgdoor_Destroy,
+    /**/ ObjHgdoor_Update,
+    /**/ ObjHgdoor_Draw,
 };
 
 static s16 sOpenFlag = 0;

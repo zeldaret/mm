@@ -21,15 +21,15 @@ void EnElfbub_Pop(EnElfbub* this, PlayState* play);
 void EnElfbub_Idle(EnElfbub* this, PlayState* play);
 
 ActorInit En_Elfbub_InitVars = {
-    /**/    ACTOR_EN_ELFBUB,
-    /**/    ACTORCAT_MISC,
-    /**/    FLAGS,
-    /**/    OBJECT_BUBBLE,
-    /**/    sizeof(EnElfbub),
-    /**/    EnElfbub_Init,
-    /**/    EnElfbub_Destroy,
-    /**/    EnElfbub_Update,
-    /**/    EnElfbub_Draw,
+    /**/ ACTOR_EN_ELFBUB,
+    /**/ ACTORCAT_MISC,
+    /**/ FLAGS,
+    /**/ OBJECT_BUBBLE,
+    /**/ sizeof(EnElfbub),
+    /**/ EnElfbub_Init,
+    /**/ EnElfbub_Destroy,
+    /**/ EnElfbub_Update,
+    /**/ EnElfbub_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

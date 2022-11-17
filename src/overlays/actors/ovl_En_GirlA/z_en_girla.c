@@ -52,15 +52,15 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
 ActorInit En_GirlA_InitVars = {
-    /**/    ACTOR_EN_GIRLA,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_KEEP,
-    /**/    sizeof(EnGirlA),
-    /**/    EnGirlA_Init,
-    /**/    EnGirlA_Destroy,
-    /**/    EnGirlA_Update,
-    /**/    NULL,
+    /**/ ACTOR_EN_GIRLA,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnGirlA),
+    /**/ EnGirlA_Init,
+    /**/ EnGirlA_Destroy,
+    /**/ EnGirlA_Update,
+    /**/ NULL,
 };
 
 static ShopItemEntry sShopItemEntries[] = {

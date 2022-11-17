@@ -29,15 +29,15 @@ void func_80A365EC(EnSyatekiOkuta* this, PlayState* play);
 void func_80A36CB0(EnSyatekiOkuta* this);
 
 ActorInit En_Syateki_Okuta_InitVars = {
-    /**/    ACTOR_EN_SYATEKI_OKUTA,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_OKUTA,
-    /**/    sizeof(EnSyatekiOkuta),
-    /**/    EnSyatekiOkuta_Init,
-    /**/    EnSyatekiOkuta_Destroy,
-    /**/    EnSyatekiOkuta_Update,
-    /**/    EnSyatekiOkuta_Draw,
+    /**/ ACTOR_EN_SYATEKI_OKUTA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_OKUTA,
+    /**/ sizeof(EnSyatekiOkuta),
+    /**/ EnSyatekiOkuta_Init,
+    /**/ EnSyatekiOkuta_Destroy,
+    /**/ EnSyatekiOkuta_Update,
+    /**/ EnSyatekiOkuta_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

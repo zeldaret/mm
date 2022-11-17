@@ -52,15 +52,15 @@ static UNK_TYPE D_80AE71C4[] = { 0x00374000, 0x1C2C09DB, 0x0C2F0000, 0x0C0F09DC,
                                  0x0C113740, 0x102C09E0, 0x0C2F0000, 0x0C0F09E1, 0x0C0F09E2, 0x0C100000 };
 
 ActorInit En_Shn_InitVars = {
-    /**/    ACTOR_EN_SHN,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_SHN,
-    /**/    sizeof(EnShn),
-    /**/    EnShn_Init,
-    /**/    EnShn_Destroy,
-    /**/    EnShn_Update,
-    /**/    EnShn_Draw,
+    /**/ ACTOR_EN_SHN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_SHN,
+    /**/ sizeof(EnShn),
+    /**/ EnShn_Init,
+    /**/ EnShn_Destroy,
+    /**/ EnShn_Update,
+    /**/ EnShn_Draw,
 };
 
 void func_80AE6130(EnShn* this) {

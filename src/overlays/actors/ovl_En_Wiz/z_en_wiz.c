@@ -81,15 +81,15 @@ typedef enum {
 } EnWizAnimation;
 
 ActorInit En_Wiz_InitVars = {
-    /**/    ACTOR_EN_WIZ,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_WIZ,
-    /**/    sizeof(EnWiz),
-    /**/    EnWiz_Init,
-    /**/    EnWiz_Destroy,
-    /**/    EnWiz_Update,
-    /**/    EnWiz_Draw,
+    /**/ ACTOR_EN_WIZ,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WIZ,
+    /**/ sizeof(EnWiz),
+    /**/ EnWiz_Init,
+    /**/ EnWiz_Destroy,
+    /**/ EnWiz_Update,
+    /**/ EnWiz_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[10] = {

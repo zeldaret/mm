@@ -70,15 +70,15 @@ void func_80BDA2E0(EnPamera* this, PlayState* play);
 void func_80BDA344(Actor* thisx, PlayState* play);
 
 ActorInit En_Pamera_InitVars = {
-    /**/    ACTOR_EN_PAMERA,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_PAMERA,
-    /**/    sizeof(EnPamera),
-    /**/    EnPamera_Init,
-    /**/    EnPamera_Destroy,
-    /**/    EnPamera_Update,
-    /**/    EnPamera_Draw,
+    /**/ ACTOR_EN_PAMERA,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_PAMERA,
+    /**/ sizeof(EnPamera),
+    /**/ EnPamera_Init,
+    /**/ EnPamera_Destroy,
+    /**/ EnPamera_Update,
+    /**/ EnPamera_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

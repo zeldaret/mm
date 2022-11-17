@@ -25,15 +25,15 @@ void BgDkjailIvy_SetupFadeOut(BgDkjailIvy* this);
 void BgDkjailIvy_FadeOut(BgDkjailIvy* this, PlayState* play);
 
 ActorInit Bg_Dkjail_Ivy_InitVars = {
-    /**/    ACTOR_BG_DKJAIL_IVY,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    OBJECT_DKJAIL_OBJ,
-    /**/    sizeof(BgDkjailIvy),
-    /**/    BgDkjailIvy_Init,
-    /**/    BgDkjailIvy_Destroy,
-    /**/    BgDkjailIvy_Update,
-    /**/    BgDkjailIvy_Draw,
+    /**/ ACTOR_BG_DKJAIL_IVY,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_DKJAIL_OBJ,
+    /**/ sizeof(BgDkjailIvy),
+    /**/ BgDkjailIvy_Init,
+    /**/ BgDkjailIvy_Destroy,
+    /**/ BgDkjailIvy_Update,
+    /**/ BgDkjailIvy_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

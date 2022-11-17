@@ -19,15 +19,15 @@ void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc);
 void func_8092E284(ElfMsg* this, PlayState* play);
 
 ActorInit Elf_Msg_InitVars = {
-    /**/    ACTOR_ELF_MSG,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_KEEP,
-    /**/    sizeof(ElfMsg),
-    /**/    ElfMsg_Init,
-    /**/    ElfMsg_Destroy,
-    /**/    ElfMsg_Update,
-    /**/    NULL,
+    /**/ ACTOR_ELF_MSG,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ElfMsg),
+    /**/ ElfMsg_Init,
+    /**/ ElfMsg_Destroy,
+    /**/ ElfMsg_Update,
+    /**/ NULL,
 };
 
 static InitChainEntry sInitChain[] = {

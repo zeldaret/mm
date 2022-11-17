@@ -50,15 +50,15 @@ void func_80AEB974(EnLiftNuts* this);
 void func_80AEB9E0(EnLiftNuts* this, PlayState* play);
 
 ActorInit En_Lift_Nuts_InitVars = {
-    /**/    ACTOR_EN_LIFT_NUTS,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_DNT,
-    /**/    sizeof(EnLiftNuts),
-    /**/    EnLiftNuts_Init,
-    /**/    EnLiftNuts_Destroy,
-    /**/    EnLiftNuts_Update,
-    /**/    EnLiftNuts_Draw,
+    /**/ ACTOR_EN_LIFT_NUTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNT,
+    /**/ sizeof(EnLiftNuts),
+    /**/ EnLiftNuts_Init,
+    /**/ EnLiftNuts_Destroy,
+    /**/ EnLiftNuts_Update,
+    /**/ EnLiftNuts_Draw,
 };
 
 static AnimationInfo sAnimations[] = {

@@ -28,15 +28,15 @@ void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Lift_InitVars = {
-    /**/    ACTOR_OBJ_LIFT,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    OBJECT_D_LIFT,
-    /**/    sizeof(ObjLift),
-    /**/    ObjLift_Init,
-    /**/    ObjLift_Destroy,
-    /**/    ObjLift_Update,
-    /**/    ObjLift_Draw,
+    /**/ ACTOR_OBJ_LIFT,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_D_LIFT,
+    /**/ sizeof(ObjLift),
+    /**/ ObjLift_Init,
+    /**/ ObjLift_Destroy,
+    /**/ ObjLift_Update,
+    /**/ ObjLift_Draw,
 };
 
 static s16 D_8093DD50[] = { 0, 10, 20, 30, 40, 50, 60 };

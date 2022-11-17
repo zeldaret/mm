@@ -21,15 +21,15 @@ void EnCne01_FaceForward(EnHy* this, PlayState* play);
 void EnCne01_Talk(EnHy* this, PlayState* play);
 
 ActorInit En_Cne_01_InitVars = {
-    /**/    ACTOR_EN_CNE_01,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_KEEP,
-    /**/    sizeof(EnCne01),
-    /**/    EnCne01_Init,
-    /**/    EnCne01_Destroy,
-    /**/    EnCne01_Update,
-    /**/    EnCne01_Draw,
+    /**/ ACTOR_EN_CNE_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(EnCne01),
+    /**/ EnCne01_Init,
+    /**/ EnCne01_Destroy,
+    /**/ EnCne01_Update,
+    /**/ EnCne01_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

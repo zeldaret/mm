@@ -47,15 +47,15 @@ void func_80B2F328(Actor* thisx, PlayState* play);
 void func_80B2F37C(Actor* thisx, PlayState* play);
 
 ActorInit En_Poh_InitVars = {
-    /**/    ACTOR_EN_POH,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_PO,
-    /**/    sizeof(EnPoh),
-    /**/    EnPoh_Init,
-    /**/    EnPoh_Destroy,
-    /**/    EnPoh_Update,
-    /**/    EnPoh_Draw,
+    /**/ ACTOR_EN_POH,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_PO,
+    /**/ sizeof(EnPoh),
+    /**/ EnPoh_Init,
+    /**/ EnPoh_Destroy,
+    /**/ EnPoh_Update,
+    /**/ EnPoh_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

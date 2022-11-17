@@ -26,15 +26,15 @@ void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
 ActorInit En_Sb_InitVars = {
-    /**/    ACTOR_EN_SB,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_SB,
-    /**/    sizeof(EnSb),
-    /**/    EnSb_Init,
-    /**/    EnSb_Destroy,
-    /**/    EnSb_Update,
-    /**/    EnSb_Draw,
+    /**/ ACTOR_EN_SB,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_SB,
+    /**/ sizeof(EnSb),
+    /**/ EnSb_Init,
+    /**/ EnSb_Destroy,
+    /**/ EnSb_Update,
+    /**/ EnSb_Draw,
 };
 
 static ColliderCylinderInitType1 sCylinderInit = {

@@ -30,15 +30,15 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
 ActorInit En_Ma_Yts_InitVars = {
-    /**/    ACTOR_EN_MA_YTS,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_MA1,
-    /**/    sizeof(EnMaYts),
-    /**/    EnMaYts_Init,
-    /**/    EnMaYts_Destroy,
-    /**/    EnMaYts_Update,
-    /**/    EnMaYts_Draw,
+    /**/ ACTOR_EN_MA_YTS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA1,
+    /**/ sizeof(EnMaYts),
+    /**/ EnMaYts_Init,
+    /**/ EnMaYts_Destroy,
+    /**/ EnMaYts_Update,
+    /**/ EnMaYts_Draw,
 };
 
 void EnMaYts_UpdateEyes(EnMaYts* this) {

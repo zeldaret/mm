@@ -22,15 +22,15 @@ void func_80C1B8F0(EnFall2* this);
 void func_80C1B9D4(EnFall2* this, PlayState* play);
 
 ActorInit En_Fall2_InitVars = {
-    /**/    ACTOR_EN_FALL2,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    OBJECT_FALL2,
-    /**/    sizeof(EnFall2),
-    /**/    EnFall2_Init,
-    /**/    EnFall2_Destroy,
-    /**/    EnFall2_Update,
-    /**/    EnFall2_Draw,
+    /**/ ACTOR_EN_FALL2,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ OBJECT_FALL2,
+    /**/ sizeof(EnFall2),
+    /**/ EnFall2_Init,
+    /**/ EnFall2_Destroy,
+    /**/ EnFall2_Update,
+    /**/ EnFall2_Draw,
 };
 
 void EnFall2_Init(Actor* thisx, PlayState* play) {

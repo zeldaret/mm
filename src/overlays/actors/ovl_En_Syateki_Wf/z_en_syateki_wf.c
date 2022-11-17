@@ -102,15 +102,15 @@ static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
 static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
 
 ActorInit En_Syateki_Wf_InitVars = {
-    /**/    ACTOR_EN_SYATEKI_WF,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_WF,
-    /**/    sizeof(EnSyatekiWf),
-    /**/    EnSyatekiWf_Init,
-    /**/    EnSyatekiWf_Destroy,
-    /**/    EnSyatekiWf_Update,
-    /**/    EnSyatekiWf_Draw,
+    /**/ ACTOR_EN_SYATEKI_WF,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_WF,
+    /**/ sizeof(EnSyatekiWf),
+    /**/ EnSyatekiWf_Init,
+    /**/ EnSyatekiWf_Destroy,
+    /**/ EnSyatekiWf_Update,
+    /**/ EnSyatekiWf_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

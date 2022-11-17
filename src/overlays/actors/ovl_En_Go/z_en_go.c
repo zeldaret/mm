@@ -79,15 +79,15 @@ static s32 D_80A163FC[4] = { 0x100060E, 0xE060C12, 0x100E0E07, 0xC121000 };
 static s32 D_80A1640C[2] = { 0xE023A0C, 0x12100000 };
 
 ActorInit En_Go_InitVars = {
-    /**/    ACTOR_EN_GO,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_OF1D_MAP,
-    /**/    sizeof(EnGo),
-    /**/    EnGo_Init,
-    /**/    EnGo_Destroy,
-    /**/    EnGo_Update,
-    /**/    NULL,
+    /**/ ACTOR_EN_GO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnGo),
+    /**/ EnGo_Init,
+    /**/ EnGo_Destroy,
+    /**/ EnGo_Update,
+    /**/ NULL,
 };
 
 static ColliderSphereInit sSphereInit = {

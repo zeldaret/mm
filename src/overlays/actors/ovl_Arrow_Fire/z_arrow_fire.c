@@ -22,15 +22,15 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play);
 #include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
 
 ActorInit Arrow_Fire_InitVars = {
-    /**/    ACTOR_ARROW_FIRE,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_KEEP,
-    /**/    sizeof(ArrowFire),
-    /**/    ArrowFire_Init,
-    /**/    ArrowFire_Destroy,
-    /**/    ArrowFire_Update,
-    /**/    ArrowFire_Draw,
+    /**/ ACTOR_ARROW_FIRE,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ArrowFire),
+    /**/ ArrowFire_Init,
+    /**/ ArrowFire_Destroy,
+    /**/ ArrowFire_Update,
+    /**/ ArrowFire_Draw,
 };
 
 static ColliderQuadInit sQuadInit = {

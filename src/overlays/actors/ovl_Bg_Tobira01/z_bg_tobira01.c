@@ -17,15 +17,15 @@ void BgTobira01_Update(Actor* thisx, PlayState* play);
 void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Bg_Tobira01_InitVars = {
-    /**/    ACTOR_BG_TOBIRA01,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_SPOT11_OBJ,
-    /**/    sizeof(BgTobira01),
-    /**/    BgTobira01_Init,
-    /**/    BgTobira01_Destroy,
-    /**/    BgTobira01_Update,
-    /**/    BgTobira01_Draw,
+    /**/ ACTOR_BG_TOBIRA01,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_SPOT11_OBJ,
+    /**/ sizeof(BgTobira01),
+    /**/ BgTobira01_Init,
+    /**/ BgTobira01_Destroy,
+    /**/ BgTobira01_Update,
+    /**/ BgTobira01_Draw,
 };
 
 void BgTobira01_Open(BgTobira01* this, PlayState* play) {

@@ -68,15 +68,15 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play)
 void EnPametfrog_TransitionGekkoSnapper(EnPametfrog* this, PlayState* play);
 
 ActorInit En_Pametfrog_InitVars = {
-    /**/    ACTOR_EN_PAMETFROG,
-    /**/    ACTORCAT_BOSS,
-    /**/    FLAGS,
-    /**/    OBJECT_BIGSLIME,
-    /**/    sizeof(EnPametfrog),
-    /**/    EnPametfrog_Init,
-    /**/    EnPametfrog_Destroy,
-    /**/    EnPametfrog_Update,
-    /**/    EnPametfrog_Draw,
+    /**/ ACTOR_EN_PAMETFROG,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_BIGSLIME,
+    /**/ sizeof(EnPametfrog),
+    /**/ EnPametfrog_Init,
+    /**/ EnPametfrog_Destroy,
+    /**/ EnPametfrog_Update,
+    /**/ EnPametfrog_Draw,
 };
 
 typedef enum {

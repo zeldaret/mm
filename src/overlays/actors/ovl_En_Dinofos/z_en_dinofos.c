@@ -58,15 +58,15 @@ void func_8089C164(EnDinofos* this);
 void func_8089C244(EnDinofos* this);
 
 ActorInit En_Dinofos_InitVars = {
-    /**/    ACTOR_EN_DINOFOS,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_DINOFOS,
-    /**/    sizeof(EnDinofos),
-    /**/    EnDinofos_Init,
-    /**/    EnDinofos_Destroy,
-    /**/    EnDinofos_Update,
-    /**/    EnDinofos_Draw,
+    /**/ ACTOR_EN_DINOFOS,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DINOFOS,
+    /**/ sizeof(EnDinofos),
+    /**/ EnDinofos_Init,
+    /**/ EnDinofos_Destroy,
+    /**/ EnDinofos_Update,
+    /**/ EnDinofos_Draw,
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[9] = {

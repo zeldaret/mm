@@ -29,15 +29,15 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play);
 void ObjChan_PotAction(ObjChan* this, PlayState* play);
 
 ActorInit Obj_Chan_InitVars = {
-    /**/    ACTOR_OBJ_CHAN,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    OBJECT_OBJ_CHAN,
-    /**/    sizeof(ObjChan),
-    /**/    ObjChan_Init,
-    /**/    ObjChan_Destroy,
-    /**/    ObjChan_Update,
-    /**/    ObjChan_Draw,
+    /**/ ACTOR_OBJ_CHAN,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_CHAN,
+    /**/ sizeof(ObjChan),
+    /**/ ObjChan_Init,
+    /**/ ObjChan_Destroy,
+    /**/ ObjChan_Update,
+    /**/ ObjChan_Draw,
 };
 
 static ColliderCylinderInit sObjChanCylinderInit = {

@@ -38,15 +38,15 @@ s32 D_809C6100 = 0;
 s32 D_809C6104 = 0;
 
 ActorInit En_Bom_Bowl_Man_InitVars = {
-    /**/    ACTOR_EN_BOM_BOWL_MAN,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_CS,
-    /**/    sizeof(EnBomBowlMan),
-    /**/    EnBomBowlMan_Init,
-    /**/    EnBomBowlMan_Destroy,
-    /**/    EnBomBowlMan_Update,
-    /**/    EnBomBowlMan_Draw,
+    /**/ ACTOR_EN_BOM_BOWL_MAN,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_CS,
+    /**/ sizeof(EnBomBowlMan),
+    /**/ EnBomBowlMan_Init,
+    /**/ EnBomBowlMan_Destroy,
+    /**/ EnBomBowlMan_Update,
+    /**/ EnBomBowlMan_Draw,
 };
 
 static AnimationHeader* sAnimations[] = {

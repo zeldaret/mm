@@ -36,15 +36,15 @@ void func_80A4E84C(EnMkk* this);
 void func_80A4EBBC(EnMkk* this, PlayState* play);
 
 ActorInit En_Mkk_InitVars = {
-    /**/    ACTOR_EN_MKK,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_MKK,
-    /**/    sizeof(EnMkk),
-    /**/    EnMkk_Init,
-    /**/    EnMkk_Destroy,
-    /**/    EnMkk_Update,
-    /**/    EnMkk_Draw,
+    /**/ ACTOR_EN_MKK,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_MKK,
+    /**/ sizeof(EnMkk),
+    /**/ EnMkk_Init,
+    /**/ EnMkk_Destroy,
+    /**/ EnMkk_Update,
+    /**/ EnMkk_Draw,
 };
 
 static ColliderSphereInit sSphereInit = {

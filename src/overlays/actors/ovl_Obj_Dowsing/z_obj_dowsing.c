@@ -18,15 +18,15 @@ s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play);
 s32 ObjDowsing_CheckValidSpawn(ObjDowsing* this, PlayState* play);
 
 ActorInit Obj_Dowsing_InitVars = {
-    /**/    ACTOR_OBJ_DOWSING,
-    /**/    ACTORCAT_ITEMACTION,
-    /**/    FLAGS,
-    /**/    GAMEPLAY_KEEP,
-    /**/    sizeof(ObjDowsing),
-    /**/    ObjDowsing_Init,
-    /**/    ObjDowsing_Destroy,
-    /**/    ObjDowsing_Update,
-    /**/    NULL,
+    /**/ ACTOR_OBJ_DOWSING,
+    /**/ ACTORCAT_ITEMACTION,
+    /**/ FLAGS,
+    /**/ GAMEPLAY_KEEP,
+    /**/ sizeof(ObjDowsing),
+    /**/ ObjDowsing_Init,
+    /**/ ObjDowsing_Destroy,
+    /**/ ObjDowsing_Update,
+    /**/ NULL,
 };
 
 s32 ObjDowsing_GetFlag(ObjDowsing* this, PlayState* play) {

@@ -41,15 +41,15 @@ void func_808F241C(EnKarebaba* this, PlayState* play);
 void func_808F254C(EnKarebaba* this, PlayState* play);
 
 ActorInit En_Karebaba_InitVars = {
-    /**/    ACTOR_EN_KAREBABA,
-    /**/    ACTORCAT_ENEMY,
-    /**/    FLAGS,
-    /**/    OBJECT_DEKUBABA,
-    /**/    sizeof(EnKarebaba),
-    /**/    EnKarebaba_Init,
-    /**/    EnKarebaba_Destroy,
-    /**/    EnKarebaba_Update,
-    /**/    EnKarebaba_Draw,
+    /**/ ACTOR_EN_KAREBABA,
+    /**/ ACTORCAT_ENEMY,
+    /**/ FLAGS,
+    /**/ OBJECT_DEKUBABA,
+    /**/ sizeof(EnKarebaba),
+    /**/ EnKarebaba_Init,
+    /**/ EnKarebaba_Destroy,
+    /**/ EnKarebaba_Update,
+    /**/ EnKarebaba_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit1 = {

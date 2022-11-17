@@ -50,15 +50,15 @@ typedef enum {
 } EnRzPathStatus;
 
 ActorInit En_Rz_InitVars = {
-    /**/    ACTOR_EN_RZ,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_RZ,
-    /**/    sizeof(EnRz),
-    /**/    EnRz_Init,
-    /**/    EnRz_Destroy,
-    /**/    EnRz_Update,
-    /**/    EnRz_Draw,
+    /**/ ACTOR_EN_RZ,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_RZ,
+    /**/ sizeof(EnRz),
+    /**/ EnRz_Init,
+    /**/ EnRz_Destroy,
+    /**/ EnRz_Update,
+    /**/ EnRz_Draw,
 };
 
 static TexturePtr sEyeTextures[] = {

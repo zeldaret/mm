@@ -95,15 +95,15 @@ typedef enum EnSGoroAnimation {
 } EnSGoroAnimation;
 
 ActorInit En_S_Goro_InitVars = {
-    /**/    ACTOR_EN_S_GORO,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_OF1D_MAP,
-    /**/    sizeof(EnSGoro),
-    /**/    EnSGoro_Init,
-    /**/    EnSGoro_Destroy,
-    /**/    EnSGoro_Update,
-    /**/    EnSGoro_Draw,
+    /**/ ACTOR_EN_S_GORO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_OF1D_MAP,
+    /**/ sizeof(EnSGoro),
+    /**/ EnSGoro_Init,
+    /**/ EnSGoro_Destroy,
+    /**/ EnSGoro_Update,
+    /**/ EnSGoro_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

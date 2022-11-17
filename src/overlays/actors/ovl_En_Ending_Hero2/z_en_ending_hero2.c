@@ -20,15 +20,15 @@ void func_80C232E8(EnEndingHero2* this);
 void func_80C23304(EnEndingHero2* this, PlayState* play);
 
 ActorInit En_Ending_Hero2_InitVars = {
-    /**/    ACTOR_EN_ENDING_HERO2,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_BAI,
-    /**/    sizeof(EnEndingHero2),
-    /**/    EnEndingHero2_Init,
-    /**/    EnEndingHero2_Destroy,
-    /**/    EnEndingHero2_Update,
-    /**/    EnEndingHero2_Draw,
+    /**/ ACTOR_EN_ENDING_HERO2,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_BAI,
+    /**/ sizeof(EnEndingHero2),
+    /**/ EnEndingHero2_Init,
+    /**/ EnEndingHero2_Destroy,
+    /**/ EnEndingHero2_Update,
+    /**/ EnEndingHero2_Draw,
 };
 
 void EnEndingHero2_Init(Actor* thisx, PlayState* play) {

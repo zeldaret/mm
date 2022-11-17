@@ -35,15 +35,15 @@ void func_809C2D0C(EnAob01* this, PlayState* play);
 s32 func_809C2EC4(EnAob01* this, PlayState* play);
 
 ActorInit En_Aob_01_InitVars = {
-    /**/    ACTOR_EN_AOB_01,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_AOB,
-    /**/    sizeof(EnAob01),
-    /**/    EnAob01_Init,
-    /**/    EnAob01_Destroy,
-    /**/    EnAob01_Update,
-    /**/    EnAob01_Draw,
+    /**/ ACTOR_EN_AOB_01,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_AOB,
+    /**/ sizeof(EnAob01),
+    /**/ EnAob01_Init,
+    /**/ EnAob01_Destroy,
+    /**/ EnAob01_Update,
+    /**/ EnAob01_Draw,
 };
 
 static AnimationInfo sAnimationInfo[] = {

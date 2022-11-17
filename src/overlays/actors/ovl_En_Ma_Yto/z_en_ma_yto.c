@@ -70,15 +70,15 @@ s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
 ActorInit En_Ma_Yto_InitVars = {
-    /**/    ACTOR_EN_MA_YTO,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_MA2,
-    /**/    sizeof(EnMaYto),
-    /**/    EnMaYto_Init,
-    /**/    EnMaYto_Destroy,
-    /**/    EnMaYto_Update,
-    /**/    EnMaYto_Draw,
+    /**/ ACTOR_EN_MA_YTO,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_MA2,
+    /**/ sizeof(EnMaYto),
+    /**/ EnMaYto_Init,
+    /**/ EnMaYto_Destroy,
+    /**/ EnMaYto_Update,
+    /**/ EnMaYto_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

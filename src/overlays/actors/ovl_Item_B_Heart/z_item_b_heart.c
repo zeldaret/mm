@@ -19,15 +19,15 @@ void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 void func_808BCF54(ItemBHeart* this, PlayState* play);
 
 ActorInit Item_B_Heart_InitVars = {
-    /**/    ACTOR_ITEM_B_HEART,
-    /**/    ACTORCAT_BOSS,
-    /**/    FLAGS,
-    /**/    OBJECT_GI_HEARTS,
-    /**/    sizeof(ItemBHeart),
-    /**/    ItemBHeart_Init,
-    /**/    ItemBHeart_Destroy,
-    /**/    ItemBHeart_Update,
-    /**/    ItemBHeart_Draw,
+    /**/ ACTOR_ITEM_B_HEART,
+    /**/ ACTORCAT_BOSS,
+    /**/ FLAGS,
+    /**/ OBJECT_GI_HEARTS,
+    /**/ sizeof(ItemBHeart),
+    /**/ ItemBHeart_Init,
+    /**/ ItemBHeart_Destroy,
+    /**/ ItemBHeart_Update,
+    /**/ ItemBHeart_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

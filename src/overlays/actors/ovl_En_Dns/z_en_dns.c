@@ -40,15 +40,15 @@ static s32 D_8092DCB0[] = {
 };
 
 ActorInit En_Dns_InitVars = {
-    /**/    ACTOR_EN_DNS,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_DNS,
-    /**/    sizeof(EnDns),
-    /**/    EnDns_Init,
-    /**/    EnDns_Destroy,
-    /**/    EnDns_Update,
-    /**/    EnDns_Draw,
+    /**/ ACTOR_EN_DNS,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_DNS,
+    /**/ sizeof(EnDns),
+    /**/ EnDns_Init,
+    /**/ EnDns_Destroy,
+    /**/ EnDns_Update,
+    /**/ EnDns_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

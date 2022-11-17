@@ -32,15 +32,15 @@ void func_80B42714(EnKgy* this, PlayState* play);
 void func_80B42D28(EnKgy* this, PlayState* play);
 
 ActorInit En_Kgy_InitVars = {
-    /**/    ACTOR_EN_KGY,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_KGY,
-    /**/    sizeof(EnKgy),
-    /**/    EnKgy_Init,
-    /**/    EnKgy_Destroy,
-    /**/    EnKgy_Update,
-    /**/    EnKgy_Draw,
+    /**/ ACTOR_EN_KGY,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_KGY,
+    /**/ sizeof(EnKgy),
+    /**/ EnKgy_Init,
+    /**/ EnKgy_Destroy,
+    /**/ EnKgy_Update,
+    /**/ EnKgy_Draw,
 };
 
 void EnKgy_Init(Actor* thisx, PlayState* play) {

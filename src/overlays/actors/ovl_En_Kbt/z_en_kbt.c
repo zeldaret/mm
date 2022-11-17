@@ -23,15 +23,15 @@ void func_80B34314(EnKbt* this, PlayState* play);
 void func_80B34598(EnKbt* this, PlayState* play);
 
 ActorInit En_Kbt_InitVars = {
-    /**/    ACTOR_EN_KBT,
-    /**/    ACTORCAT_NPC,
-    /**/    FLAGS,
-    /**/    OBJECT_KBT,
-    /**/    sizeof(EnKbt),
-    /**/    EnKbt_Init,
-    /**/    EnKbt_Destroy,
-    /**/    EnKbt_Update,
-    /**/    EnKbt_Draw,
+    /**/ ACTOR_EN_KBT,
+    /**/ ACTORCAT_NPC,
+    /**/ FLAGS,
+    /**/ OBJECT_KBT,
+    /**/ sizeof(EnKbt),
+    /**/ EnKbt_Init,
+    /**/ EnKbt_Destroy,
+    /**/ EnKbt_Update,
+    /**/ EnKbt_Draw,
 };
 
 void EnKbt_Init(Actor* thisx, PlayState* play) {

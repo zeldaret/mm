@@ -63,15 +63,15 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Tokeidai_InitVars = {
-    /**/    ACTOR_OBJ_TOKEIDAI,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_OBJ_TOKEIDAI,
-    /**/    sizeof(ObjTokeidai),
-    /**/    ObjTokeidai_Init,
-    /**/    ObjTokeidai_Destroy,
-    /**/    ObjTokeidai_Update,
-    /**/    ObjTokeidai_Draw,
+    /**/ ACTOR_OBJ_TOKEIDAI,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_OBJ_TOKEIDAI,
+    /**/ sizeof(ObjTokeidai),
+    /**/ ObjTokeidai_Init,
+    /**/ ObjTokeidai_Destroy,
+    /**/ ObjTokeidai_Update,
+    /**/ ObjTokeidai_Draw,
 };
 
 static InitChainEntry sInitChain[] = {

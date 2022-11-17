@@ -19,15 +19,15 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
 ActorInit Obj_Boyo_InitVars = {
-    /**/    ACTOR_OBJ_BOYO,
-    /**/    ACTORCAT_PROP,
-    /**/    FLAGS,
-    /**/    OBJECT_BOYO,
-    /**/    sizeof(ObjBoyo),
-    /**/    ObjBoyo_Init,
-    /**/    ObjBoyo_Destroy,
-    /**/    ObjBoyo_Update,
-    /**/    ObjBoyo_Draw,
+    /**/ ACTOR_OBJ_BOYO,
+    /**/ ACTORCAT_PROP,
+    /**/ FLAGS,
+    /**/ OBJECT_BOYO,
+    /**/ sizeof(ObjBoyo),
+    /**/ ObjBoyo_Init,
+    /**/ ObjBoyo_Destroy,
+    /**/ ObjBoyo_Update,
+    /**/ ObjBoyo_Draw,
 };
 
 static ColliderCylinderInit sCylinderInit = {

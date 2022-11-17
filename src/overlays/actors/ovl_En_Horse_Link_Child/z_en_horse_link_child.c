@@ -27,15 +27,15 @@ void func_808DF788(EnHorseLinkChild* this);
 void func_808DF838(EnHorseLinkChild* this, PlayState* play);
 
 ActorInit En_Horse_Link_Child_InitVars = {
-    /**/    ACTOR_EN_HORSE_LINK_CHILD,
-    /**/    ACTORCAT_BG,
-    /**/    FLAGS,
-    /**/    OBJECT_HORSE_LINK_CHILD,
-    /**/    sizeof(EnHorseLinkChild),
-    /**/    EnHorseLinkChild_Init,
-    /**/    EnHorseLinkChild_Destroy,
-    /**/    EnHorseLinkChild_Update,
-    /**/    EnHorseLinkChild_Draw,
+    /**/ ACTOR_EN_HORSE_LINK_CHILD,
+    /**/ ACTORCAT_BG,
+    /**/ FLAGS,
+    /**/ OBJECT_HORSE_LINK_CHILD,
+    /**/ sizeof(EnHorseLinkChild),
+    /**/ EnHorseLinkChild_Init,
+    /**/ EnHorseLinkChild_Destroy,
+    /**/ EnHorseLinkChild_Update,
+    /**/ EnHorseLinkChild_Draw,
 };
 
 AnimationHeader* D_808DFEC0[] = { &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468 };
