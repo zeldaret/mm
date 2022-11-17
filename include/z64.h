@@ -346,7 +346,7 @@ typedef union {
 // End of RDRAM with the Expansion Pak installed
 #define EXPANDED_RDRAM_END 0x80800000
 // Address at the end of normal RDRAM after which is room for a screen buffer
-#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
+#define FAULT_FB_ADDRESS ((void*)(NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH])))
 
 typedef void (*FaultDrawerCallback)(void);
 

@@ -556,7 +556,7 @@ void EnMag_DrawImageRGBA32(Gfx** gfxp, s16 centerX, s16 centerY, TexturePtr sour
 
     func_8012CA0C(&gfx);
 
-    curTexture = source;
+    curTexture = (uintptr_t)source;
     rectLeft = centerX - (width / 2);
     rectTop = centerY - (height / 2);
     textureHeight = TMEM_SIZE / (width << 2);

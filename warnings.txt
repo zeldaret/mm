@@ -1,0 +1,1403 @@
+In file included from include/global.h:4,
+                 from src/boot_O2_g3/fault_drawer.c:1:
+include/z64.h:348:26: warning: initialization of 'u16 *' {aka 'short unsigned int *'} from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+  348 | #define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
+      |                          ^
+src/boot_O2_g3/fault_drawer.c:10:5: note: in expansion of macro 'FAULT_FB_ADDRESS'
+   10 |     FAULT_FB_ADDRESS,                   // fb
+      |     ^~~~~~~~~~~~~~~~
+include/z64.h:348:26: note: (near initialization for 'sFaultDrawerDefault.fb')
+  348 | #define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
+      |                          ^
+src/boot_O2_g3/fault_drawer.c:10:5: note: in expansion of macro 'FAULT_FB_ADDRESS'
+   10 |     FAULT_FB_ADDRESS,                   // fb
+      |     ^~~~~~~~~~~~~~~~
+src/boot_O2_g3/idle.c: In function 'Idle_InitMemory':
+src/boot_O2_g3/idle.c:45:22: warning: passing argument 1 of 'Idle_ClearMemory' makes pointer from integer without a cast [-Wint-conversion]
+   45 |     Idle_ClearMemory(0x80000400, gFramebuffer1);
+      |                      ^~~~~~~~~~
+      |                      |
+      |                      unsigned int
+src/boot_O2_g3/idle.c:19:29: note: expected 'void *' but argument is of type 'unsigned int'
+   19 | void Idle_ClearMemory(void* begin, void* end) {
+      |                       ~~~~~~^~~~~
+src/overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.c: In function 'EffectSsExtra_Init':
+src/overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.c:38:27: warning: initialization of 'void *' from 'u32' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+   38 |         void* segBackup = gSegments[6];
+      |                           ^~~~~~~~~
+src/overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.c:53:22: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   53 |         gSegments[6] = segBackup;
+      |                      ^
+src/overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.c: In function 'EffectSsDtBubble_Init':
+src/overlays/effects/ovl_Effect_Ss_Dt_Bubble/z_eff_ss_dt_bubble.c:53:19: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   53 |         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
+      |                   ^
+src/overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.c: In function 'EffectSsBubble_Init':
+src/overlays/effects/ovl_Effect_Ss_Bubble/z_eff_ss_bubble.c:33:19: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
+      |                   ^
+src/overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.c: In function 'EffectSsSibuki_Init':
+src/overlays/effects/ovl_Effect_Ss_Sibuki/z_eff_ss_sibuki.c:43:19: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+   43 |         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
+      |                   ^
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:7: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  573 |     { 0x08053000, 0x08054000, 0x08055000 },
+      |       ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:7: note: (near initialization for 'sQuestUpgradeTextures[0][0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:19: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  573 |     { 0x08053000, 0x08054000, 0x08055000 },
+      |                   ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:19: note: (near initialization for 'sQuestUpgradeTextures[0][1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:31: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  573 |     { 0x08053000, 0x08054000, 0x08055000 },
+      |                               ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:573:31: note: (near initialization for 'sQuestUpgradeTextures[0][2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:7: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  574 |     { 0x08056000, 0x08057000, 0x08058000 },
+      |       ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:7: note: (near initialization for 'sQuestUpgradeTextures[1][0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:19: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  574 |     { 0x08056000, 0x08057000, 0x08058000 },
+      |                   ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:19: note: (near initialization for 'sQuestUpgradeTextures[1][1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:31: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  574 |     { 0x08056000, 0x08057000, 0x08058000 },
+      |                               ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_collect.c:574:31: note: (near initialization for 'sQuestUpgradeTextures[1][2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:85:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   85 |     0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:85:5: note: (near initialization for 'sDungeonItemTextures[0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:86:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   86 |     0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:86:5: note: (near initialization for 'sDungeonItemTextures[1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:87:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   87 |     0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_map.c:87:5: note: (near initialization for 'sDungeonItemTextures[2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:5: note: (near initialization for 'D_8082B700[0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:17: note: (near initialization for 'D_8082B700[1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:29: note: (near initialization for 'D_8082B700[2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:41: note: (near initialization for 'D_8082B700[3]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:53: note: (near initialization for 'D_8082B700[4]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:65: note: (near initialization for 'D_8082B700[5]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:77: note: (near initialization for 'D_8082B700[6]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:89: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   24 |     0x08064440, 0x0806E440, 0x08077A40, 0x08081040, 0x0808A640, 0x0D003A00, 0x0806EE40, 0x08078440,
+      |                                                                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:24:89: note: (near initialization for 'D_8082B700[7]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:5: note: (near initialization for 'D_8082B700[8]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:17: note: (near initialization for 'D_8082B700[9]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:29: note: (near initialization for 'D_8082B700[10]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:41: note: (near initialization for 'D_8082B700[11]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:53: note: (near initialization for 'D_8082B700[12]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:65: note: (near initialization for 'D_8082B700[13]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     0x08081A40, 0x0808B040, 0x08065840, 0x0806F840, 0x08078E40, 0x08082440, 0x0808BA40,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:25:77: note: (near initialization for 'D_8082B700[14]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:5: note: (near initialization for 'D_8082B73C[0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:17: note: (near initialization for 'D_8082B73C[1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:29: note: (near initialization for 'D_8082B73C[2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:41: note: (near initialization for 'D_8082B73C[3]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:53: note: (near initialization for 'D_8082B73C[4]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:65: note: (near initialization for 'D_8082B73C[5]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:77: note: (near initialization for 'D_8082B73C[6]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:89: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   28 |     0x0D004400, 0x08070240, 0x08079840, 0x08082E40, 0x0808C440, 0x0D004E00, 0x08070C40, 0x0807A240,
+      |                                                                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:28:89: note: (near initialization for 'D_8082B73C[7]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:5: note: (near initialization for 'D_8082B73C[8]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:17: note: (near initialization for 'D_8082B73C[9]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:29: note: (near initialization for 'D_8082B73C[10]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:41: note: (near initialization for 'D_8082B73C[11]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:53: note: (near initialization for 'D_8082B73C[12]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:65: note: (near initialization for 'D_8082B73C[13]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   29 |     0x08083840, 0x0808CE40, 0x0D005800, 0x08071640, 0x0807AC40, 0x08084240, 0x0808D840,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:29:77: note: (near initialization for 'D_8082B73C[14]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:5: note: (near initialization for 'D_8082B778[0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:17: note: (near initialization for 'D_8082B778[1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:29: note: (near initialization for 'D_8082B778[2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:41: note: (near initialization for 'D_8082B778[3]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:53: note: (near initialization for 'D_8082B778[4]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:65: note: (near initialization for 'D_8082B778[5]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:77: note: (near initialization for 'D_8082B778[6]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:89: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   32 |     0x08068040, 0x08072040, 0x0807B640, 0x08084C40, 0x0808E240, 0x0D006200, 0x08072A40, 0x0807C040,
+      |                                                                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:32:89: note: (near initialization for 'D_8082B778[7]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:5: note: (near initialization for 'D_8082B778[8]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:17: note: (near initialization for 'D_8082B778[9]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:29: note: (near initialization for 'D_8082B778[10]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:41: note: (near initialization for 'D_8082B778[11]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:53: note: (near initialization for 'D_8082B778[12]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:65: note: (near initialization for 'D_8082B778[13]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   33 |     0x08085640, 0x0808EC40, 0x08069440, 0x08073440, 0x0807CA40, 0x08086040, 0x0808F640,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:33:77: note: (near initialization for 'D_8082B778[14]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:5: note: (near initialization for 'D_8082B7B4[0]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:17: note: (near initialization for 'D_8082B7B4[1]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:29: note: (near initialization for 'D_8082B7B4[2]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:41: note: (near initialization for 'D_8082B7B4[3]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:53: note: (near initialization for 'D_8082B7B4[4]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:65: note: (near initialization for 'D_8082B7B4[5]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:77: note: (near initialization for 'D_8082B7B4[6]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:89: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   36 |     0x0D006C00, 0x08073E40, 0x0807D440, 0x08086A40, 0x08090040, 0x0D007600, 0x08074840, 0x0807DE40,
+      |                                                                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:36:89: note: (near initialization for 'D_8082B7B4[7]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:5: note: (near initialization for 'D_8082B7B4[8]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:17: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:17: note: (near initialization for 'D_8082B7B4[9]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:29: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:29: note: (near initialization for 'D_8082B7B4[10]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:41: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |                                         ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:41: note: (near initialization for 'D_8082B7B4[11]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:53: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |                                                     ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:53: note: (near initialization for 'D_8082B7B4[12]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:65: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |                                                                 ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:65: note: (near initialization for 'D_8082B7B4[13]')
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:77: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+   37 |     0x08087440, 0x08090A40, 0x0D008000, 0x08075240, 0x0807E840, 0x08087E40, 0x08091440,
+      |                                                                             ^~~~~~~~~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:37:77: note: (near initialization for 'D_8082B7B4[14]')
+In file included from include/variables.h:5,
+                 from include/global.h:7,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c: In function 'func_80821900':
+include/segment_symbols.h:27:37: warning: passing argument 1 of 'func_80178E3C' makes pointer from integer without a cast [-Wint-conversion]
+   27 | #define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
+      |                                    ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                     |
+      |                                     unsigned int
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:464:19: note: in expansion of macro 'SEGMENT_ROM_START'
+  464 |     func_80178E3C(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
+      |                   ^~~~~~~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:2591:20: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'unsigned int'
+ 2591 | void func_80178E3C(u8*, s32, s32, s32);
+      |                    ^~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:464:65: warning: passing argument 3 of 'func_80178E3C' makes integer from pointer without a cast [-Wint-conversion]
+  464 |     func_80178E3C(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
+      |                                                                 ^~~~~~~
+      |                                                                 |
+      |                                                                 void *
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:2591:30: note: expected 's32' {aka 'int'} but argument is of type 'void *'
+ 2591 | void func_80178E3C(u8*, s32, s32, s32);
+      |                              ^~~
+In file included from include/variables.h:5,
+                 from include/global.h:7,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c: In function 'func_8082192C':
+include/segment_symbols.h:27:37: warning: passing argument 1 of 'func_80178E3C' makes pointer from integer without a cast [-Wint-conversion]
+   27 | #define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
+      |                                    ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                     |
+      |                                     unsigned int
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:468:19: note: in expansion of macro 'SEGMENT_ROM_START'
+  468 |     func_80178E3C(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
+      |                   ^~~~~~~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:2591:20: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'unsigned int'
+ 2591 | void func_80178E3C(u8*, s32, s32, s32);
+      |                    ^~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:468:65: warning: passing argument 3 of 'func_80178E3C' makes integer from pointer without a cast [-Wint-conversion]
+  468 |     func_80178E3C(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
+      |                                                                 ^~~~~~~
+      |                                                                 |
+      |                                                                 void *
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:2591:30: note: expected 's32' {aka 'int'} but argument is of type 'void *'
+ 2591 | void func_80178E3C(u8*, s32, s32, s32);
+      |                              ^~~
+In file included from include/variables.h:5,
+                 from include/global.h:7,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c: In function 'func_80821958':
+include/segment_symbols.h:27:37: warning: passing argument 1 of 'func_80178E3C' makes pointer from integer without a cast [-Wint-conversion]
+   27 | #define SEGMENT_ROM_START(segment) ((uintptr_t) _ ## segment ## SegmentRomStart)
+      |                                    ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                     |
+      |                                     unsigned int
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:472:19: note: in expansion of macro 'SEGMENT_ROM_START'
+  472 |     func_80178E3C(SEGMENT_ROM_START(item_name_static), texIndex, segment, 0x400);
+      |                   ^~~~~~~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:2591:20: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'unsigned int'
+ 2591 | void func_80178E3C(u8*, s32, s32, s32);
+      |                    ^~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:472:66: warning: passing argument 3 of 'func_80178E3C' makes integer from pointer without a cast [-Wint-conversion]
+  472 |     func_80178E3C(SEGMENT_ROM_START(item_name_static), texIndex, segment, 0x400);
+      |                                                                  ^~~~~~~
+      |                                                                  |
+      |                                                                  void *
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:2591:30: note: expected 's32' {aka 'int'} but argument is of type 'void *'
+ 2591 | void func_80178E3C(u8*, s32, s32, s32);
+      |                              ^~~
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c: In function 'KaleidoScope_Update':
+src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:641:67: warning: passing argument 2 of 'DmaMgr_SendRequest0' makes integer from pointer without a cast [-Wint-conversion]
+  641 |                 DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, _icon_item_field_staticSegmentRomStart, size);
+      |                                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                                   |
+      |                                                                   u8 * {aka unsigned char *}
+In file included from include/global.h:6,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h:4,
+                 from src/overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope_NES.c:7:
+include/functions.h:19:52: note: expected 'uintptr_t' {aka 'unsigned int'} but argument is of type 'u8 *' {aka 'unsigned char *'}
+   19 | s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size);
+      |                                          ~~~~~~~~~~^~~~~~~~~
+src/overlays/actors/ovl_En_Ja/z_en_ja.c: In function 'func_80BC1AE0':
+src/overlays/actors/ovl_En_Ja/z_en_ja.c:157:23: warning: returning 'struct Actor *' from a function with return type 's32' {aka 'int'} makes integer from pointer without a cast [-Wint-conversion]
+  157 |     return this->actor.child;
+      |            ~~~~~~~~~~~^~~~~~
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c: In function 'BgIkanaBombwall_Init':
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:251:14: warning: assignment to 's32' {aka 'int'} from 'CollisionHeader *' makes integer from pointer without a cast [-Wint-conversion]
+  251 |         sp28 = &object_ikana_obj_Colheader_000488;
+      |              ^
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:252:14: warning: assignment to 's32' {aka 'int'} from 'ColliderCylinderInit *' makes integer from pointer without a cast [-Wint-conversion]
+  252 |         sp24 = &sCylinderInit1;
+      |              ^
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:254:14: warning: assignment to 's32' {aka 'int'} from 'CollisionHeader *' makes integer from pointer without a cast [-Wint-conversion]
+  254 |         sp28 = &object_ikana_obj_Colheader_000128;
+      |              ^
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:255:14: warning: assignment to 's32' {aka 'int'} from 'ColliderCylinderInit *' makes integer from pointer without a cast [-Wint-conversion]
+  255 |         sp24 = &sCylinderInit2;
+      |              ^
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:258:47: warning: passing argument 3 of 'DynaPolyActor_LoadMesh' makes pointer from integer without a cast [-Wint-conversion]
+  258 |     DynaPolyActor_LoadMesh(play, &this->dyna, sp28);
+      |                                               ^~~~
+      |                                               |
+      |                                               s32 {aka int}
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.h:4,
+                 from src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:7:
+include/functions.h:947:89: note: expected 'CollisionHeader *' but argument is of type 's32' {aka 'int'}
+  947 | void DynaPolyActor_LoadMesh(PlayState* play, DynaPolyActor* dynaActor, CollisionHeader* meshHeader);
+      |                                                                        ~~~~~~~~~~~~~~~~~^~~~~~~~~~
+src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:259:68: warning: passing argument 4 of 'Collider_SetCylinder' makes pointer from integer without a cast [-Wint-conversion]
+  259 |     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, sp24);
+      |                                                                    ^~~~
+      |                                                                    |
+      |                                                                    s32 {aka int}
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.h:4,
+                 from src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.c:7:
+include/functions.h:1060:107: note: expected 'ColliderCylinderInit *' but argument is of type 's32' {aka 'int'}
+ 1060 | s32 Collider_SetCylinder(PlayState* play, ColliderCylinder* collider, Actor* actor, ColliderCylinderInit* src);
+      |                                                                                     ~~~~~~~~~~~~~~~~~~~~~~^~~
+src/overlays/actors/ovl_En_Go/z_en_go.c: In function 'func_80A15684':
+src/overlays/actors/ovl_En_Go/z_en_go.c:1820:9: warning: initialization of 'int' from 's32 *' {aka 'int *'} makes integer from pointer without a cast [-Wint-conversion]
+ 1820 |         D_80A16100,
+      |         ^~~~~~~~~~
+src/overlays/actors/ovl_En_Go/z_en_go.c:1820:9: note: (near initialization for 'D_80A16704[0]')
+src/overlays/actors/ovl_En_Go/z_en_go.c:1821:9: warning: initialization of 'int' from 's32 *' {aka 'int *'} makes integer from pointer without a cast [-Wint-conversion]
+ 1821 |         D_80A16164,
+      |         ^~~~~~~~~~
+src/overlays/actors/ovl_En_Go/z_en_go.c:1821:9: note: (near initialization for 'D_80A16704[1]')
+src/overlays/actors/ovl_En_Go/z_en_go.c:1849:30: warning: returning 's32' {aka 'int'} from a function with return type 's32 *' {aka 'int *'} makes pointer from integer without a cast [-Wint-conversion]
+ 1849 |             return D_80A16704[ENGO_GET_70(&this->actor)];
+      |                    ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/overlays/actors/ovl_Dm_Ah/z_dm_ah.c: In function 'func_80C1D6E0':
+src/overlays/actors/ovl_Dm_Ah/z_dm_ah.c:88:29: warning: passing argument 2 of 'func_80C1D4D0' makes integer from pointer without a cast [-Wint-conversion]
+   88 |         func_80C1D4D0(this, play);
+      |                             ^~~~
+      |                             |
+      |                             PlayState *
+src/overlays/actors/ovl_Dm_Ah/z_dm_ah.c:55:35: note: expected 's32' {aka 'int'} but argument is of type 'PlayState *'
+   55 | s32 func_80C1D4D0(DmAh* this, s32 arg1) {
+      |                               ~~~~^~~~
+src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.c: In function 'func_809C5BF4':
+src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.c:577:20: warning: assignment to 's32' {aka 'int'} from 'Camera *' makes integer from pointer without a cast [-Wint-conversion]
+  577 |             subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D2));
+      |                    ^
+src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.c:583:39: warning: passing argument 1 of 'Camera_SetTargetActor' makes pointer from integer without a cast [-Wint-conversion]
+  583 |                 Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
+      |                                       ^~~~~~
+      |                                       |
+      |                                       s32 {aka int}
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.h:4,
+                 from src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.c:7:
+include/functions.h:1004:36: note: expected 'Camera *' but argument is of type 's32' {aka 'int'}
+ 1004 | void Camera_SetTargetActor(Camera* camera, Actor* actor);
+      |                            ~~~~~~~~^~~~~~
+src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.c:598:39: warning: passing argument 1 of 'Camera_SetTargetActor' makes pointer from integer without a cast [-Wint-conversion]
+  598 |                 Camera_SetTargetActor(subCam, &this->unk_2D8[1 + idx]->actor);
+      |                                       ^~~~~~
+      |                                       |
+      |                                       s32 {aka int}
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.h:4,
+                 from src/overlays/actors/ovl_En_Bom_Bowl_Man/z_en_bom_bowl_man.c:7:
+include/functions.h:1004:36: note: expected 'Camera *' but argument is of type 's32' {aka 'int'}
+ 1004 | void Camera_SetTargetActor(Camera* camera, Actor* actor);
+      |                            ~~~~~~~~^~~~~~
+src/overlays/actors/ovl_Obj_Mure3/z_obj_mure3.c: In function 'func_8098F680':
+src/overlays/actors/ovl_Obj_Mure3/z_obj_mure3.c:191:29: warning: passing argument 2 of 'func_8098F364' makes integer from pointer without a cast [-Wint-conversion]
+  191 |         func_8098F364(this, play);
+      |                             ^~~~
+      |                             |
+      |                             PlayState *
+src/overlays/actors/ovl_Obj_Mure3/z_obj_mure3.c:110:40: note: expected 's32' {aka 'int'} but argument is of type 'PlayState *'
+  110 | void func_8098F364(ObjMure3* this, s32 play) {
+      |                                    ~~~~^~~~
+src/overlays/actors/ovl_En_Yb/z_en_yb.c: In function 'EnYb_Init':
+src/overlays/actors/ovl_En_Yb/z_en_yb.c:88:114: warning: passing argument 5 of 'SkelAnime_InitFlex' makes pointer from integer without a cast [-Wint-conversion]
+   88 |     SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
+      |                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+      |                                                                                                                  |
+      |                                                                                                                  unsigned int
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_En_Yb/z_en_yb.h:4,
+                 from src/overlays/actors/ovl_En_Yb/z_en_yb.c:7:
+include/functions.h:2103:138: note: expected 'Vec3s *' but argument is of type 'unsigned int'
+ 2103 | void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
+      |                                                                                                                                   ~~~~~~~^~~~~~~~~~
+src/overlays/actors/ovl_En_Yb/z_en_yb.c:89:52: warning: passing argument 6 of 'SkelAnime_InitFlex' makes pointer from integer without a cast [-Wint-conversion]
+   89 |                        (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+      |                                                    |
+      |                                                    unsigned int
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_En_Yb/z_en_yb.h:4,
+                 from src/overlays/actors/ovl_En_Yb/z_en_yb.c:7:
+include/functions.h:2103:157: note: expected 'Vec3s *' but argument is of type 'unsigned int'
+ 2103 | void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
+      |                                                                                                                                                      ~~~~~~~^~~~~~~~~~
+src/overlays/actors/ovl_En_Mag/z_en_mag.c: In function 'EnMag_DrawImageRGBA32':
+src/overlays/actors/ovl_En_Mag/z_en_mag.c:559:16: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'TexturePtr' {aka 'void *'} makes integer from pointer without a cast [-Wint-conversion]
+  559 |     curTexture = source;
+      |                ^
+src/overlays/actors/ovl_En_Ah/z_en_ah.c: In function 'func_80BD2A30':
+src/overlays/actors/ovl_En_Ah/z_en_ah.c:127:12: warning: returning 'Actor *' from a function with return type 's32' {aka 'int'} makes integer from pointer without a cast [-Wint-conversion]
+  127 |     return foundActor;
+      |            ^~~~~~~~~~
+src/overlays/actors/ovl_En_Ah/z_en_ah.c: In function 'func_80BD3320':
+src/overlays/actors/ovl_En_Ah/z_en_ah.c:370:22: warning: initialization of 'Actor *' from 's32' {aka 'int'} makes pointer from integer without a cast [-Wint-conversion]
+  370 |     Actor* temp_v0 = func_80BD2A30(this, play, actorCat, actorId);
+      |                      ^~~~~~~~~~~~~
+src/overlays/actors/ovl_En_Rz/z_en_rz.c: In function 'EnRz_Init':
+src/overlays/actors/ovl_En_Rz/z_en_rz.c:106:52: warning: passing argument 5 of 'SkelAnime_InitFlex' makes pointer from integer without a cast [-Wint-conversion]
+  106 |                        (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+      |                                                    |
+      |                                                    unsigned int
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_En_Rz/z_en_rz.h:4,
+                 from src/overlays/actors/ovl_En_Rz/z_en_rz.c:7:
+include/functions.h:2103:138: note: expected 'Vec3s *' but argument is of type 'unsigned int'
+ 2103 | void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
+      |                                                                                                                                   ~~~~~~~^~~~~~~~~~
+src/overlays/actors/ovl_En_Rz/z_en_rz.c:106:88: warning: passing argument 6 of 'SkelAnime_InitFlex' makes pointer from integer without a cast [-Wint-conversion]
+  106 |                        (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, OBJECT_RZ_LIMB_MAX);
+      |                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+      |                                                                                        |
+      |                                                                                        unsigned int
+In file included from include/global.h:6,
+                 from src/overlays/actors/ovl_En_Rz/z_en_rz.h:4,
+                 from src/overlays/actors/ovl_En_Rz/z_en_rz.c:7:
+include/functions.h:2103:157: note: expected 'Vec3s *' but argument is of type 'unsigned int'
+ 2103 | void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
+      |                                                                                                                                                      ~~~~~~~^~~~~~~~~~
+src/overlays/actors/ovl_En_Fish2/z_en_fish2.c: In function 'func_80B2ADB0':
+src/overlays/actors/ovl_En_Fish2/z_en_fish2.c:1101:25: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+ 1101 |             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
+      |                         ^
+src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.c: In function 'TransitionWipe5_Draw':
+src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.c:83:16: warning: initialization of 's32' {aka 'int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   83 |     s32 sp50 = D_801FBB90;
+      |                ^~~~~~~~~~
+src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.c:94:41: warning: passing argument 3 of 'func_8014116C' makes pointer from integer without a cast [-Wint-conversion]
+   94 |         func_8014116C(&gfx, D_0F000000, sp50, width, height, 1);
+      |                                         ^~~~
+      |                                         |
+      |                                         s32 {aka int}
+In file included from include/global.h:6,
+                 from src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h:4,
+                 from src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.c:7:
+include/functions.h:2169:48: note: expected 'u16 *' {aka 'short unsigned int *'} but argument is of type 's32' {aka 'int'}
+ 2169 | void func_8014116C(Gfx** gfxP, u16* arg1, u16* arg2, s32 width, s32 height, s32 arg5);
+      |                                           ~~~~~^~~~
+src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.c:110:29: warning: passing argument 2 of 'func_8014116C' makes pointer from integer without a cast [-Wint-conversion]
+  110 |         func_8014116C(&gfx, sp50, D_0F000000, width, height, 0);
+      |                             ^~~~
+      |                             |
+      |                             s32 {aka int}
+In file included from include/global.h:6,
+                 from src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.h:4,
+                 from src/overlays/fbdemos/ovl_fbdemo_wipe5/z_fbdemo_wipe5.c:7:
+include/functions.h:2169:37: note: expected 'u16 *' {aka 'short unsigned int *'} but argument is of type 's32' {aka 'int'}
+ 2169 | void func_8014116C(Gfx** gfxP, u16* arg1, u16* arg2, s32 width, s32 height, s32 arg5);
+      |                                ~~~~~^~~~
+src/boot_O2/boot_800862E0.c: In function 'SystemArena_RunBlockFunc':
+src/boot_O2/boot_800862E0.c:37:21: warning: initialization of 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   37 |     uintptr_t pos = blk;
+      |                     ^~~
+src/boot_O2/boot_800862E0.c:40:19: warning: passing argument 1 of 'blockFunc' makes pointer from integer without a cast [-Wint-conversion]
+   40 |         blockFunc(pos);
+      |                   ^~~
+      |                   |
+      |                   uintptr_t {aka unsigned int}
+src/boot_O2/boot_800862E0.c:40:19: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
+src/boot_O2/boot_800862E0.c: In function 'SystemArena_RunBlockFunc1':
+src/boot_O2/boot_800862E0.c:45:21: warning: initialization of 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   45 |     uintptr_t pos = blk;
+      |                     ^~~
+src/boot_O2/boot_800862E0.c:48:19: warning: passing argument 1 of 'blockFunc' makes pointer from integer without a cast [-Wint-conversion]
+   48 |         blockFunc(pos, 2);
+      |                   ^~~
+      |                   |
+      |                   uintptr_t {aka unsigned int}
+src/boot_O2/boot_800862E0.c:48:19: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
+src/boot_O2/boot_800862E0.c: In function 'SystemArena_RunBlockFunc8':
+src/boot_O2/boot_800862E0.c:58:25: warning: initialization of 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   58 |         uintptr_t pos = blk;
+      |                         ^~~
+src/boot_O2/boot_800862E0.c:61:23: warning: passing argument 1 of 'blockFunc' makes pointer from integer without a cast [-Wint-conversion]
+   61 |             blockFunc(pos, 0, 0, 0, 0, 0, 0, 0, 0);
+      |                       ^~~
+      |                       |
+      |                       uintptr_t {aka unsigned int}
+src/boot_O2/boot_800862E0.c:61:23: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
+src/boot_O2/boot_800862E0.c: In function 'SystemArena_RunBlockFunc1Reverse':
+src/boot_O2/boot_800862E0.c:78:15: warning: assignment to 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   78 |         start = blk;
+      |               ^
+src/boot_O2/boot_800862E0.c:84:23: warning: passing argument 1 of 'blockFunc' makes pointer from integer without a cast [-Wint-conversion]
+   84 |             blockFunc(pos, 2);
+      |                       ^~~
+      |                       |
+      |                       uintptr_t {aka unsigned int}
+src/boot_O2/boot_800862E0.c:84:23: note: expected 'void *' but argument is of type 'uintptr_t' {aka 'unsigned int'}
+src/boot_O2/loadfragment2.c: In function 'Load2_LoadOverlay':
+src/boot_O2/loadfragment2.c:102:9: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+  102 |     end = (uintptr_t)allocatedVRamAddr + size;
+      |         ^
+src/boot_O2/loadfragment.c: In function 'Load_LoadOverlay':
+src/boot_O2/loadfragment.c:107:9: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+  107 |     end = (uintptr_t)allocatedVRamAddr + size;
+      |         ^
+src/boot_O2/loadfragment.c: In function 'Load_AllocateAndLoad':
+src/boot_O2/loadfragment.c:149:9: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+  149 |     end = (uintptr_t)allocatedVRamAddr + size;
+      |         ^
+src/boot_O2/loadfragment.c:173:9: warning: assignment to 'void *' from 'unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+  173 |     end = (uintptr_t)allocatedVRamAddr + size;
+      |         ^
+cc: Warning: -mips3 should not be used for ucode 32-bit compiles
+cc: Warning: -mips3 should not be used for ucode 32-bit compiles
+src/libultra/io/sprawdma.c: In function '__osSpRawStartDma':
+src/libultra/io/sprawdma.c:8:34: warning: assignment to 'u32' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+    8 |     HW_REG(SP_MEM_ADDR_REG, u32) = devAddr;
+      |                                  ^
+src/libultra/io/sptask.c: In function 'osSpTaskLoad':
+src/libultra/io/sptask.c:35:25: warning: assignment to 'u64 *' {aka 'long long unsigned int *'} from 'u32' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+   35 |             tp->t.ucode = HW_REG((uintptr_t)intp->t.yieldDataPtr + OS_YIELD_DATA_SIZE - 4, u32);
+      |                         ^
+src/libultra/os/createthread.c: In function 'osCreateThread':
+src/libultra/os/createthread.c:12:19: warning: assignment to 'u64' {aka 'long long unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   12 |     t->context.a0 = arg;
+      |                   ^
+src/libultra/os/createthread.c:14:19: warning: assignment to 'u64' {aka 'long long unsigned int'} from 'void (*)(void)' makes integer from pointer without a cast [-Wint-conversion]
+   14 |     t->context.ra = __osCleanupThread;
+      |                   ^
+src/libultra/os/initialize.c: In function 'osInitialize':
+src/libultra/os/initialize.c:54:23: warning: passing argument 1 of 'osWritebackDCache' makes pointer from integer without a cast [-Wint-conversion]
+   54 |     osWritebackDCache(0x80000000, 400);
+      |                       ^~~~~~~~~~
+      |                       |
+      |                       unsigned int
+In file included from include/global.h:6,
+                 from src/libultra/os/initialize.c:1:
+include/functions.h:248:30: note: expected 'void *' but argument is of type 'unsigned int'
+  248 | void osWritebackDCache(void* vaddr, s32 nbytes);
+      |                        ~~~~~~^~~~~
+src/libultra/os/initialize.c:55:19: warning: passing argument 1 of 'osInvalICache' makes pointer from integer without a cast [-Wint-conversion]
+   55 |     osInvalICache(0x80000000, 400);
+      |                   ^~~~~~~~~~
+      |                   |
+      |                   unsigned int
+In file included from include/global.h:6,
+                 from src/libultra/os/initialize.c:1:
+include/functions.h:312:26: note: expected 'void *' but argument is of type 'unsigned int'
+  312 | void osInvalICache(void* vaddr, size_t nbytes);
+      |                    ~~~~~~^~~~~
+src/code/code_8012EC80.c:100:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  100 |     0x08000000,        // ITEM_OCARINA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:100:5: note: (near initialization for 'gItemIcons[0]')
+src/code/code_8012EC80.c:101:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  101 |     0x08001000,        // ITEM_BOW
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:101:5: note: (near initialization for 'gItemIcons[1]')
+src/code/code_8012EC80.c:102:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  102 |     0x08002000,        // ITEM_ARROW_FIRE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:102:5: note: (near initialization for 'gItemIcons[2]')
+src/code/code_8012EC80.c:103:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  103 |     0x08003000,        // ITEM_ARROW_ICE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:103:5: note: (near initialization for 'gItemIcons[3]')
+src/code/code_8012EC80.c:104:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  104 |     0x08004000,        // ITEM_ARROW_LIGHT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:104:5: note: (near initialization for 'gItemIcons[4]')
+src/code/code_8012EC80.c:105:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  105 |     0x08005000,        // ITEM_OCARINA_FAIRY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:105:5: note: (near initialization for 'gItemIcons[5]')
+src/code/code_8012EC80.c:106:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  106 |     0x08006000,        // ITEM_BOMB
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:106:5: note: (near initialization for 'gItemIcons[6]')
+src/code/code_8012EC80.c:107:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  107 |     0x08007000,        // ITEM_BOMBCHU
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:107:5: note: (near initialization for 'gItemIcons[7]')
+src/code/code_8012EC80.c:108:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  108 |     0x08008000,        // ITEM_STICK
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:108:5: note: (near initialization for 'gItemIcons[8]')
+src/code/code_8012EC80.c:109:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  109 |     0x08009000,        // ITEM_NUT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:109:5: note: (near initialization for 'gItemIcons[9]')
+src/code/code_8012EC80.c:110:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  110 |     0x0800A000,        // ITEM_MAGIC_BEANS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:110:5: note: (near initialization for 'gItemIcons[10]')
+src/code/code_8012EC80.c:111:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  111 |     0x0800B000,        // ITEM_SLINGSHOT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:111:5: note: (near initialization for 'gItemIcons[11]')
+src/code/code_8012EC80.c:112:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  112 |     0x0800C000,        // ITEM_POWDER_KEG
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:112:5: note: (near initialization for 'gItemIcons[12]')
+src/code/code_8012EC80.c:113:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  113 |     0x0800D000,        // ITEM_PICTO_BOX
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:113:5: note: (near initialization for 'gItemIcons[13]')
+src/code/code_8012EC80.c:114:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  114 |     0x0800E000,        // ITEM_LENS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:114:5: note: (near initialization for 'gItemIcons[14]')
+src/code/code_8012EC80.c:115:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  115 |     0x0800F000,        // ITEM_HOOKSHOT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:115:5: note: (near initialization for 'gItemIcons[15]')
+src/code/code_8012EC80.c:116:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  116 |     0x08010000,        // ITEM_SWORD_GREAT_FAIRY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:116:5: note: (near initialization for 'gItemIcons[16]')
+src/code/code_8012EC80.c:117:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  117 |     0x08011000,        // ITEM_LONGSHOT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:117:5: note: (near initialization for 'gItemIcons[17]')
+src/code/code_8012EC80.c:118:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  118 |     0x08012000,        // ITEM_BOTTLE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:118:5: note: (near initialization for 'gItemIcons[18]')
+src/code/code_8012EC80.c:119:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  119 |     0x08013000,        // ITEM_POTION_RED
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:119:5: note: (near initialization for 'gItemIcons[19]')
+src/code/code_8012EC80.c:120:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  120 |     0x08014000,        // ITEM_POTION_GREEN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:120:5: note: (near initialization for 'gItemIcons[20]')
+src/code/code_8012EC80.c:121:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  121 |     0x08015000,        // ITEM_POTION_BLUE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:121:5: note: (near initialization for 'gItemIcons[21]')
+src/code/code_8012EC80.c:122:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  122 |     0x08016000,        // ITEM_FAIRY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:122:5: note: (near initialization for 'gItemIcons[22]')
+src/code/code_8012EC80.c:123:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  123 |     0x08017000,        // ITEM_DEKU_PRINCESS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:123:5: note: (near initialization for 'gItemIcons[23]')
+src/code/code_8012EC80.c:124:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  124 |     0x08018000,        // ITEM_MILK_BOTTLE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:124:5: note: (near initialization for 'gItemIcons[24]')
+src/code/code_8012EC80.c:125:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  125 |     0x08019000,        // ITEM_MILK_HALF
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:125:5: note: (near initialization for 'gItemIcons[25]')
+src/code/code_8012EC80.c:126:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  126 |     0x0801A000,        // ITEM_FISH
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:126:5: note: (near initialization for 'gItemIcons[26]')
+src/code/code_8012EC80.c:127:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  127 |     0x0801B000,        // ITEM_BUG
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:127:5: note: (near initialization for 'gItemIcons[27]')
+src/code/code_8012EC80.c:128:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  128 |     0x0801C000,        // ITEM_BLUE_FIRE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:128:5: note: (near initialization for 'gItemIcons[28]')
+src/code/code_8012EC80.c:129:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  129 |     0x0801D000,        // ITEM_POE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:129:5: note: (near initialization for 'gItemIcons[29]')
+src/code/code_8012EC80.c:130:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  130 |     0x0801E000,        // ITEM_BIG_POE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:130:5: note: (near initialization for 'gItemIcons[30]')
+src/code/code_8012EC80.c:131:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  131 |     0x0801F000,        // ITEM_SPRING_WATER
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:131:5: note: (near initialization for 'gItemIcons[31]')
+src/code/code_8012EC80.c:132:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  132 |     0x08020000,        // ITEM_HOT_SPRING_WATER
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:132:5: note: (near initialization for 'gItemIcons[32]')
+src/code/code_8012EC80.c:133:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  133 |     0x08021000,        // ITEM_ZORA_EGG
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:133:5: note: (near initialization for 'gItemIcons[33]')
+src/code/code_8012EC80.c:134:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  134 |     0x08022000,        // ITEM_GOLD_DUST
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:134:5: note: (near initialization for 'gItemIcons[34]')
+src/code/code_8012EC80.c:135:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  135 |     0x08023000,        // ITEM_MUSHROOM
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:135:5: note: (near initialization for 'gItemIcons[35]')
+src/code/code_8012EC80.c:136:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  136 |     0x08024000,        // ITEM_SEAHORSE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:136:5: note: (near initialization for 'gItemIcons[36]')
+src/code/code_8012EC80.c:137:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  137 |     0x08025000,        // ITEM_CHATEAU
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:137:5: note: (near initialization for 'gItemIcons[37]')
+src/code/code_8012EC80.c:138:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  138 |     0x08026000,        // ITEM_HYLIAN_LOACH
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:138:5: note: (near initialization for 'gItemIcons[38]')
+src/code/code_8012EC80.c:139:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  139 |     0x08027000,        // ITEM_OBABA_DRINK
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:139:5: note: (near initialization for 'gItemIcons[39]')
+src/code/code_8012EC80.c:140:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  140 |     0x08028000,        // ITEM_MOON_TEAR
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:140:5: note: (near initialization for 'gItemIcons[40]')
+src/code/code_8012EC80.c:141:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  141 |     0x08029000,        // ITEM_DEED_LAND
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:141:5: note: (near initialization for 'gItemIcons[41]')
+src/code/code_8012EC80.c:142:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  142 |     0x0802A000,        // ITEM_DEED_SWAMP
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:142:5: note: (near initialization for 'gItemIcons[42]')
+src/code/code_8012EC80.c:143:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  143 |     0x0802B000,        // ITEM_DEED_MOUNTAIN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:143:5: note: (near initialization for 'gItemIcons[43]')
+src/code/code_8012EC80.c:144:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  144 |     0x0802C000,        // ITEM_DEED_OCEAN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:144:5: note: (near initialization for 'gItemIcons[44]')
+src/code/code_8012EC80.c:145:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  145 |     0x0802D000,        // ITEM_ROOM_KEY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:145:5: note: (near initialization for 'gItemIcons[45]')
+src/code/code_8012EC80.c:146:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  146 |     0x0802E000,        // ITEM_LETTER_MAMA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:146:5: note: (near initialization for 'gItemIcons[46]')
+src/code/code_8012EC80.c:147:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  147 |     0x0802F000,        // ITEM_LETTER_TO_KAFEI
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:147:5: note: (near initialization for 'gItemIcons[47]')
+src/code/code_8012EC80.c:148:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  148 |     0x08030000,        // ITEM_PENDANT_OF_MEMORIES
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:148:5: note: (near initialization for 'gItemIcons[48]')
+src/code/code_8012EC80.c:149:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  149 |     0x08031000,        // ITEM_TINGLE_MAP
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:149:5: note: (near initialization for 'gItemIcons[49]')
+src/code/code_8012EC80.c:150:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  150 |     0x08032000,        // ITEM_MASK_DEKU
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:150:5: note: (near initialization for 'gItemIcons[50]')
+src/code/code_8012EC80.c:151:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  151 |     0x08033000,        // ITEM_MASK_GORON
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:151:5: note: (near initialization for 'gItemIcons[51]')
+src/code/code_8012EC80.c:152:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  152 |     0x08034000,        // ITEM_MASK_ZORA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:152:5: note: (near initialization for 'gItemIcons[52]')
+src/code/code_8012EC80.c:153:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  153 |     0x08035000,        // ITEM_MASK_FIERCE_DEITY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:153:5: note: (near initialization for 'gItemIcons[53]')
+src/code/code_8012EC80.c:154:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  154 |     0x08036000,        // ITEM_MASK_TRUTH
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:154:5: note: (near initialization for 'gItemIcons[54]')
+src/code/code_8012EC80.c:155:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  155 |     0x08037000,        // ITEM_MASK_KAFEIS_MASK
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:155:5: note: (near initialization for 'gItemIcons[55]')
+src/code/code_8012EC80.c:156:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  156 |     0x08038000,        // ITEM_MASK_ALL_NIGHT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:156:5: note: (near initialization for 'gItemIcons[56]')
+src/code/code_8012EC80.c:157:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  157 |     0x08039000,        // ITEM_MASK_BUNNY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:157:5: note: (near initialization for 'gItemIcons[57]')
+src/code/code_8012EC80.c:158:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  158 |     0x0803A000,        // ITEM_MASK_KEATON
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:158:5: note: (near initialization for 'gItemIcons[58]')
+src/code/code_8012EC80.c:159:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  159 |     0x0803B000,        // ITEM_MASK_GARO
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:159:5: note: (near initialization for 'gItemIcons[59]')
+src/code/code_8012EC80.c:160:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  160 |     0x0803C000,        // ITEM_MASK_ROMANI
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:160:5: note: (near initialization for 'gItemIcons[60]')
+src/code/code_8012EC80.c:161:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  161 |     0x0803D000,        // ITEM_MASK_CIRCUS_LEADER
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:161:5: note: (near initialization for 'gItemIcons[61]')
+src/code/code_8012EC80.c:162:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  162 |     0x0803E000,        // ITEM_MASK_POSTMAN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:162:5: note: (near initialization for 'gItemIcons[62]')
+src/code/code_8012EC80.c:163:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  163 |     0x0803F000,        // ITEM_MASK_COUPLE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:163:5: note: (near initialization for 'gItemIcons[63]')
+src/code/code_8012EC80.c:164:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  164 |     0x08040000,        // ITEM_MASK_GREAT_FAIRY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:164:5: note: (near initialization for 'gItemIcons[64]')
+src/code/code_8012EC80.c:165:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  165 |     0x08041000,        // ITEM_MASK_GIBDO
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:165:5: note: (near initialization for 'gItemIcons[65]')
+src/code/code_8012EC80.c:166:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  166 |     0x08042000,        // ITEM_MASK_DON_GERO
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:166:5: note: (near initialization for 'gItemIcons[66]')
+src/code/code_8012EC80.c:167:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  167 |     0x08043000,        // ITEM_MASK_KAMARO
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:167:5: note: (near initialization for 'gItemIcons[67]')
+src/code/code_8012EC80.c:168:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  168 |     0x08044000,        // ITEM_MASK_CAPTAIN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:168:5: note: (near initialization for 'gItemIcons[68]')
+src/code/code_8012EC80.c:169:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  169 |     0x08045000,        // ITEM_MASK_STONE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:169:5: note: (near initialization for 'gItemIcons[69]')
+src/code/code_8012EC80.c:170:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  170 |     0x08046000,        // ITEM_MASK_BREMEN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:170:5: note: (near initialization for 'gItemIcons[70]')
+src/code/code_8012EC80.c:171:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  171 |     0x08047000,        // ITEM_MASK_BLAST
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:171:5: note: (near initialization for 'gItemIcons[71]')
+src/code/code_8012EC80.c:172:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  172 |     0x08048000,        // ITEM_MASK_SCENTS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:172:5: note: (near initialization for 'gItemIcons[72]')
+src/code/code_8012EC80.c:173:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  173 |     0x08049000,        // ITEM_MASK_GIANT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:173:5: note: (near initialization for 'gItemIcons[73]')
+src/code/code_8012EC80.c:174:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  174 |     0x0804A000,        // ITEM_BOW_ARROW_FIRE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:174:5: note: (near initialization for 'gItemIcons[74]')
+src/code/code_8012EC80.c:175:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  175 |     0x0804B000,        // ITEM_BOW_ARROW_ICE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:175:5: note: (near initialization for 'gItemIcons[75]')
+src/code/code_8012EC80.c:176:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  176 |     0x0804C000,        // ITEM_BOW_ARROW_LIGHT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:176:5: note: (near initialization for 'gItemIcons[76]')
+src/code/code_8012EC80.c:177:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  177 |     0x0804D000,        // ITEM_SWORD_KOKIRI
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:177:5: note: (near initialization for 'gItemIcons[77]')
+src/code/code_8012EC80.c:178:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  178 |     0x0804E000,        // ITEM_SWORD_RAZOR
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:178:5: note: (near initialization for 'gItemIcons[78]')
+src/code/code_8012EC80.c:179:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  179 |     0x0804F000,        // ITEM_SWORD_GILDED
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:179:5: note: (near initialization for 'gItemIcons[79]')
+src/code/code_8012EC80.c:180:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  180 |     0x08050000,        // ITEM_SWORD_DEITY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:180:5: note: (near initialization for 'gItemIcons[80]')
+src/code/code_8012EC80.c:181:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  181 |     0x08051000,        // ITEM_SHIELD_HERO
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:181:5: note: (near initialization for 'gItemIcons[81]')
+src/code/code_8012EC80.c:182:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  182 |     0x08052000,        // ITEM_SHIELD_MIRROR
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:182:5: note: (near initialization for 'gItemIcons[82]')
+src/code/code_8012EC80.c:183:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  183 |     0x08053000,        // ITEM_QUIVER_30
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:183:5: note: (near initialization for 'gItemIcons[83]')
+src/code/code_8012EC80.c:184:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  184 |     0x08054000,        // ITEM_QUIVER_40
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:184:5: note: (near initialization for 'gItemIcons[84]')
+src/code/code_8012EC80.c:185:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  185 |     0x08055000,        // ITEM_QUIVER_50
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:185:5: note: (near initialization for 'gItemIcons[85]')
+src/code/code_8012EC80.c:186:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  186 |     0x08056000,        // ITEM_BOMB_BAG_20
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:186:5: note: (near initialization for 'gItemIcons[86]')
+src/code/code_8012EC80.c:187:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  187 |     0x08057000,        // ITEM_BOMB_BAG_30
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:187:5: note: (near initialization for 'gItemIcons[87]')
+src/code/code_8012EC80.c:188:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  188 |     0x08058000,        // ITEM_BOMB_BAG_40
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:188:5: note: (near initialization for 'gItemIcons[88]')
+src/code/code_8012EC80.c:189:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  189 |     0x08059000,        // ITEM_WALLET_DEFAULT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:189:5: note: (near initialization for 'gItemIcons[89]')
+src/code/code_8012EC80.c:190:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  190 |     0x0805A000,        // ITEM_WALLET_ADULT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:190:5: note: (near initialization for 'gItemIcons[90]')
+src/code/code_8012EC80.c:191:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  191 |     0x0805B000,        // ITEM_WALLET_GIANT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:191:5: note: (near initialization for 'gItemIcons[91]')
+src/code/code_8012EC80.c:192:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  192 |     0x0805C000,        // ITEM_FISHING_ROD
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:192:5: note: (near initialization for 'gItemIcons[92]')
+src/code/code_8012EC80.c:193:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  193 |     0x0805D000,        // ITEM_REMAINS_ODOLWA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:193:5: note: (near initialization for 'gItemIcons[93]')
+src/code/code_8012EC80.c:194:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  194 |     0x0805E000,        // ITEM_REMAINS_GOHT
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:194:5: note: (near initialization for 'gItemIcons[94]')
+src/code/code_8012EC80.c:195:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  195 |     0x0805F000,        // ITEM_REMAINS_GYORG
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:195:5: note: (near initialization for 'gItemIcons[95]')
+src/code/code_8012EC80.c:196:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  196 |     0x08060000,        // ITEM_REMAINS_TWINMOLD
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:196:5: note: (near initialization for 'gItemIcons[96]')
+src/code/code_8012EC80.c:197:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  197 |     0x08062000,        // ITEM_SONG_SONATA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:197:5: note: (near initialization for 'gItemIcons[97]')
+src/code/code_8012EC80.c:198:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  198 |     0x08062000,        // ITEM_SONG_LULLABY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:198:5: note: (near initialization for 'gItemIcons[98]')
+src/code/code_8012EC80.c:199:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  199 |     0x08062000,        // ITEM_SONG_NOVA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:199:5: note: (near initialization for 'gItemIcons[99]')
+src/code/code_8012EC80.c:200:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  200 |     0x08062000,        // ITEM_SONG_ELEGY
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:200:5: note: (near initialization for 'gItemIcons[100]')
+src/code/code_8012EC80.c:201:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  201 |     0x08062000,        // ITEM_SONG_OATH
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:201:5: note: (near initialization for 'gItemIcons[101]')
+src/code/code_8012EC80.c:202:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  202 |     0x08062000,        // ITEM_SONG_SARIA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:202:5: note: (near initialization for 'gItemIcons[102]')
+src/code/code_8012EC80.c:203:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  203 |     0x08062000,        // ITEM_SONG_TIME
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:203:5: note: (near initialization for 'gItemIcons[103]')
+src/code/code_8012EC80.c:204:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  204 |     0x08062000,        // ITEM_SONG_HEALING
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:204:5: note: (near initialization for 'gItemIcons[104]')
+src/code/code_8012EC80.c:205:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  205 |     0x08062000,        // ITEM_SONG_EPONA
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:205:5: note: (near initialization for 'gItemIcons[105]')
+src/code/code_8012EC80.c:206:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  206 |     0x08062000,        // ITEM_SONG_SOARING
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:206:5: note: (near initialization for 'gItemIcons[106]')
+src/code/code_8012EC80.c:207:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  207 |     0x08062000,        // ITEM_SONG_STORMS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:207:5: note: (near initialization for 'gItemIcons[107]')
+src/code/code_8012EC80.c:208:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  208 |     0x08062000,        // ITEM_SONG_SUN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:208:5: note: (near initialization for 'gItemIcons[108]')
+src/code/code_8012EC80.c:209:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  209 |     0x08061000,        // ITEM_BOMBERS_NOTEBOOK
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:209:5: note: (near initialization for 'gItemIcons[109]')
+src/code/code_8012EC80.c:210:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  210 |     0x09000000,        // ITEM_SKULL_TOKEN
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:210:5: note: (near initialization for 'gItemIcons[110]')
+src/code/code_8012EC80.c:211:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  211 |     0x09000900,        // ITEM_HEART_CONTAINER
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:211:5: note: (near initialization for 'gItemIcons[111]')
+src/code/code_8012EC80.c:212:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  212 |     0x09001200,        // ITEM_HEART_PIECE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:212:5: note: (near initialization for 'gItemIcons[112]')
+src/code/code_8012EC80.c:213:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  213 |     0x08062000,        //
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:213:5: note: (near initialization for 'gItemIcons[113]')
+src/code/code_8012EC80.c:214:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  214 |     0x08062000,        //
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:214:5: note: (near initialization for 'gItemIcons[114]')
+src/code/code_8012EC80.c:215:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  215 |     0x08062000,        // ITEM_SONG_LULLABY_INTRO
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:215:5: note: (near initialization for 'gItemIcons[115]')
+src/code/code_8012EC80.c:216:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  216 |     0x09003600,        // ITEM_KEY_BOSS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:216:5: note: (near initialization for 'gItemIcons[116]')
+src/code/code_8012EC80.c:217:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  217 |     0x09004800,        // ITEM_COMPASS
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:217:5: note: (near initialization for 'gItemIcons[117]')
+src/code/code_8012EC80.c:218:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  218 |     0x09003F00,        // ITEM_DUNGEON_MAP
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:218:5: note: (near initialization for 'gItemIcons[118]')
+src/code/code_8012EC80.c:219:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  219 |     0x09005100,        // ITEM_STRAY_FAIRIES
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:219:5: note: (near initialization for 'gItemIcons[119]')
+src/code/code_8012EC80.c:220:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  220 |     0x09005A00,        // ITEM_KEY_SMALL
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:220:5: note: (near initialization for 'gItemIcons[120]')
+src/code/code_8012EC80.c:221:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  221 |     0x09006300,        // ITEM_MAGIC_SMALL
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:221:5: note: (near initialization for 'gItemIcons[121]')
+src/code/code_8012EC80.c:222:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  222 |     0x09006C00,        // ITEM_MAGIC_LARGE
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:222:5: note: (near initialization for 'gItemIcons[122]')
+src/code/code_8012EC80.c:223:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  223 |     0x08062180,        // ITEM_HEART_PIECE_2
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:223:5: note: (near initialization for 'gItemIcons[123]')
+src/code/code_8012EC80.c:224:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  224 |     0x08062A80,        // ITEM_INVALID_1
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:224:5: note: (near initialization for 'gItemIcons[124]')
+src/code/code_8012EC80.c:225:5: warning: initialization of 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  225 |     0x08063380,        // ITEM_INVALID_2
+      |     ^~~~~~~~~~
+src/code/code_8012EC80.c:225:5: note: (near initialization for 'gItemIcons[125]')
+src/code/graph.c: In function 'Graph_FaultClient':
+src/code/graph.c:19:20: warning: passing argument 1 of 'osViSwapBuffer' makes pointer from integer without a cast [-Wint-conversion]
+   19 |     osViSwapBuffer(SysCfb_GetFbPtr(0));
+      |                    ^~~~~~~~~~~~~~~~~~
+      |                    |
+      |                    u32 {aka unsigned int}
+In file included from include/global.h:6,
+                 from src/code/graph.c:2:
+include/functions.h:326:27: note: expected 'void *' but argument is of type 'u32' {aka 'unsigned int'}
+  326 | void osViSwapBuffer(void* frameBufPtr);
+      |                     ~~~~~~^~~~~~~~~~~
+src/code/graph.c:23:20: warning: passing argument 1 of 'osViSwapBuffer' makes pointer from integer without a cast [-Wint-conversion]
+   23 |     osViSwapBuffer(SysCfb_GetFbPtr(1));
+      |                    ^~~~~~~~~~~~~~~~~~
+      |                    |
+      |                    u32 {aka unsigned int}
+In file included from include/global.h:6,
+                 from src/code/graph.c:2:
+include/functions.h:326:27: note: expected 'void *' but argument is of type 'u32' {aka 'unsigned int'}
+  326 | void osViSwapBuffer(void* frameBufPtr);
+      |                     ~~~~~~^~~~~~~~~~~
+src/code/graph.c: In function 'Graph_SetNextGfxPool':
+src/code/graph.c:36:21: warning: assignment to 'u32' {aka 'unsigned int'} from 'GfxMasterList *' makes integer from pointer without a cast [-Wint-conversion]
+   36 |     gSegments[0x0E] = gGfxMasterDL;
+      |                     ^
+src/code/graph.c:54:21: warning: assignment to 'u32' {aka 'unsigned int'} from 'u16 *' {aka 'short unsigned int *'} makes integer from pointer without a cast [-Wint-conversion]
+   54 |     gSegments[0x0F] = gfxCtx->curFrameBuffer;
+      |                     ^
+src/code/graph.c:56:21: warning: assignment to 'void *' from 'u32' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+   56 |     gfxCtx->zbuffer = SysCfb_GetZBuffer();
+      |                     ^
+src/code/graph.c: In function 'Graph_FaultAddrConvFunc':
+src/code/graph.c:95:22: warning: initialization of 'uintptr_t' {aka 'unsigned int'} from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+   95 |     uintptr_t addr = address;
+      |                      ^~~~~~~
+src/code/graph.c:109:29: warning: returning 'uintptr_t' {aka 'unsigned int'} from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
+  109 |                 return addr + ramConv;
+      |                        ~~~~~^~~~~~~~~
+src/code/graph.c: In function 'Graph_TaskSet00':
+src/code/graph.c:182:26: warning: assignment to 'u64 *' {aka 'long long unsigned int *'} from 'size_t' {aka 'unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
+  182 |     task->outputBuffSize = gGfxSPTaskOutputBufferSize;
+      |                          ^
+src/code/main.c: In function 'Main':
+src/code/main.c:22:13: warning: assignment to 'intptr_t' {aka 'int'} from 'u8 *' {aka 'unsigned char *'} makes integer from pointer without a cast [-Wint-conversion]
+   22 |     sysHeap = gSystemHeap;
+      |             ^
+src/code/main.c:25:22: warning: passing argument 1 of 'SystemArena_Init' makes pointer from integer without a cast [-Wint-conversion]
+   25 |     SystemArena_Init(sysHeap, startHeapSize);
+      |                      ^~~~~~~
+      |                      |
+      |                      intptr_t {aka int}
+In file included from include/global.h:6,
+                 from src/code/main.c:6:
+include/functions.h:139:29: note: expected 'void *' but argument is of type 'intptr_t' {aka 'int'}
+  139 | void SystemArena_Init(void* start, size_t size);
+      |                       ~~~~~~^~~~~
+src/code/sched.c: In function 'Sched_HandleAudioCancel':
+src/code/sched.c:4:22: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
+    4 | #define RSP_DONE_MSG 667
+      |                      ^~~
+      |                      |
+      |                      int
+src/code/sched.c:93:40: note: in expansion of macro 'RSP_DONE_MSG'
+   93 |         osSendMesg(&sched->interruptQ, RSP_DONE_MSG, OS_MESG_NOBLOCK);
+      |                                        ^~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+      |                                 ~~~~~~~^~~
+src/code/sched.c: In function 'Sched_HandleGfxCancel':
+src/code/sched.c:4:22: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
+    4 | #define RSP_DONE_MSG 667
+      |                      ^~~
+      |                      |
+      |                      int
+src/code/sched.c:155:40: note: in expansion of macro 'RSP_DONE_MSG'
+  155 |         osSendMesg(&sched->interruptQ, RSP_DONE_MSG, OS_MESG_NOBLOCK);
+      |                                        ^~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+      |                                 ~~~~~~~^~~
+src/code/sched.c:5:22: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
+    5 | #define RDP_DONE_MSG 668
+      |                      ^~~
+      |                      |
+      |                      int
+src/code/sched.c:184:44: note: in expansion of macro 'RDP_DONE_MSG'
+  184 |             osSendMesg(&sched->interruptQ, RDP_DONE_MSG, OS_MESG_NOBLOCK);
+      |                                            ^~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+      |                                 ~~~~~~~^~~
+src/code/sched.c: In function 'Sched_SendEntryMsg':
+src/code/sched.c:6:19: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
+    6 | #define ENTRY_MSG 670
+      |                   ^~~
+      |                   |
+      |                   int
+src/code/sched.c:495:36: note: in expansion of macro 'ENTRY_MSG'
+  495 |     osSendMesg(&sched->interruptQ, ENTRY_MSG, OS_MESG_BLOCK);
+      |                                    ^~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+      |                                 ~~~~~~~^~~
+src/code/sched.c: In function 'Sched_SendAudioCancelMsg':
+src/code/sched.c:7:30: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
+    7 | #define RDP_AUDIO_CANCEL_MSG 671
+      |                              ^~~
+      |                              |
+      |                              int
+src/code/sched.c:503:36: note: in expansion of macro 'RDP_AUDIO_CANCEL_MSG'
+  503 |     osSendMesg(&sched->interruptQ, RDP_AUDIO_CANCEL_MSG, OS_MESG_BLOCK);
+      |                                    ^~~~~~~~~~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+      |                                 ~~~~~~~^~~
+src/code/sched.c: In function 'Sched_SendGfxCancelMsg':
+src/code/sched.c:8:28: warning: passing argument 2 of 'osSendMesg' makes pointer from integer without a cast [-Wint-conversion]
+    8 | #define RSP_GFX_CANCEL_MSG 672
+      |                            ^~~
+      |                            |
+      |                            int
+src/code/sched.c:511:36: note: in expansion of macro 'RSP_GFX_CANCEL_MSG'
+  511 |     osSendMesg(&sched->interruptQ, RSP_GFX_CANCEL_MSG, OS_MESG_BLOCK);
+      |                                    ^~~~~~~~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:195:40: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  195 | s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags);
+      |                                 ~~~~~~~^~~
+src/code/sched.c: In function 'Sched_Init':
+src/code/sched.c:4:22: warning: passing argument 3 of 'osSetEventMesg' makes pointer from integer without a cast [-Wint-conversion]
+    4 | #define RSP_DONE_MSG 667
+      |                      ^~~
+      |                      |
+      |                      int
+src/code/sched.c:597:53: note: in expansion of macro 'RSP_DONE_MSG'
+  597 |     osSetEventMesg(OS_EVENT_SP, &sched->interruptQ, RSP_DONE_MSG);
+      |                                                     ^~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:294:56: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  294 | void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m);
+      |                                                 ~~~~~~~^
+src/code/sched.c:5:22: warning: passing argument 3 of 'osSetEventMesg' makes pointer from integer without a cast [-Wint-conversion]
+    5 | #define RDP_DONE_MSG 668
+      |                      ^~~
+      |                      |
+      |                      int
+src/code/sched.c:598:53: note: in expansion of macro 'RDP_DONE_MSG'
+  598 |     osSetEventMesg(OS_EVENT_DP, &sched->interruptQ, RDP_DONE_MSG);
+      |                                                     ^~~~~~~~~~~~
+In file included from include/global.h:6,
+                 from src/code/sched.c:2:
+include/functions.h:294:56: note: expected 'OSMesg' {aka 'void *'} but argument is of type 'int'
+  294 | void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m);
+      |                                                 ~~~~~~~^
+cfe: Error: src/code/sys_initial_check.c, line 73: Unacceptable operand of '-'.
+     DmaMgr_SendRequest0((u8*)(((void*)(0x80400000  - sizeof(u16[240 ][320 ])))  - (((208 * 16 / 2 * 1)) > ( (128 * 37 / 2 * 2)) ? ((208 * 16 / 2 * 1)) : ( (128 * 37 / 2 * 2))) ) , ((uintptr_t) _memerrmsgSegmentRomStart) , ((uintptr_t)(_memerrmsgSegmentEnd)  - (uintptr_t)(_memerrmsgSegmentStart) ) );
+ -------------------------------^
+For the subtraction operator, one of the following shall hold: both operands
+have arithmetic type; operands are pointers to qualified or unqualified
+versions of compatible object types; or the left operand is a pointer
+to an object type and the right operand has integral type.
+cfe: Error: src/code/sys_initial_check.c, line 75: Unacceptable operand of '-'.
+     Check_DrawI4Texture((u16*)((void*)(0x80400000  - sizeof(u16[240 ][320 ]))) , 96, 71, 128 , 37 , (u8*)(((void*)(0x80400000  - sizeof(u16[240 ][320 ])))  - (((208 * 16 / 2 * 1)) > ( (128 * 37 / 2 * 2)) ? ((208 * 16 / 2 * 1)) : ( (128 * 37 / 2 * 2))) ) );
+ -----------------------------------------------------------------------------------------------------------^
+For the subtraction operator, one of the following shall hold: both operands
+have arithmetic type; operands are pointers to qualified or unqualified
+versions of compatible object types; or the left operand is a pointer
+to an object type and the right operand has integral type.
+cfe: Error: src/code/sys_initial_check.c, line 77: Unacceptable operand of '-'.
+                         (u8*)(((void*)(0x80400000  - sizeof(u16[240 ][320 ])))  - (((208 * 16 / 2 * 1)) > ( (128 * 37 / 2 * 2)) ? ((208 * 16 / 2 * 1)) : ( (128 * 37 / 2 * 2))) )  + 128  * 37  / 2);
+ -------------------------------^
+For the subtraction operator, one of the following shall hold: both operands
+have arithmetic type; operands are pointers to qualified or unqualified
+versions of compatible object types; or the left operand is a pointer
+to an object type and the right operand has integral type.
+cfe: Error: src/code/sys_initial_check.c, line 87: Unacceptable operand of '-'.
+     DmaMgr_SendRequest0((u8*)(((void*)(0x80400000  - sizeof(u16[240 ][320 ])))  - (((208 * 16 / 2 * 1)) > ( (128 * 37 / 2 * 2)) ? ((208 * 16 / 2 * 1)) : ( (128 * 37 / 2 * 2))) ) , ((uintptr_t) _locerrmsgSegmentRomStart) , ((uintptr_t)(_locerrmsgSegmentEnd)  - (uintptr_t)(_locerrmsgSegmentStart) ) );
+ -------------------------------^
+For the subtraction operator, one of the following shall hold: both operands
+have arithmetic type; operands are pointers to qualified or unqualified
+versions of compatible object types; or the left operand is a pointer
+to an object type and the right operand has integral type.
+cfe: Error: src/code/sys_initial_check.c, line 90: Unacceptable operand of '-'.
+                         (u8*)(((void*)(0x80400000  - sizeof(u16[240 ][320 ])))  - (((208 * 16 / 2 * 1)) > ( (128 * 37 / 2 * 2)) ? ((208 * 16 / 2 * 1)) : ( (128 * 37 / 2 * 2))) ) );
+ -------------------------------^
+For the subtraction operator, one of the following shall hold: both operands
+have arithmetic type; operands are pointers to qualified or unqualified
+versions of compatible object types; or the left operand is a pointer
+to an object type and the right operand has integral type.
+make: *** [Makefile:365: build/src/code/sys_initial_check.o] Error 55
+make: *** Waiting for unfinished jobs....

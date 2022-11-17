@@ -35,7 +35,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 
     objIndex = Object_GetIndex(&play->objectCtx, OBJECT_YABUSAME_POINT);
     if ((objIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objIndex))) {
-        void* segBackup = gSegments[6];
+        uintptr_t segBackup = gSegments[6];
 
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
 

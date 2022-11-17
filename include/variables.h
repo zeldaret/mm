@@ -2646,7 +2646,7 @@ extern CfbInfo sGraphCfbInfos[3];
 extern OSTime sGraphTaskStartTime;
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
-extern u32 gSegments[NUM_SEGMENTS];
+extern uintptr_t gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
 extern IrqMgrClient irqClient;
 extern OSMesgQueue irqMgrMsgQ;
