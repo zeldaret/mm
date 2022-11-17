@@ -4140,7 +4140,7 @@
     0x801FBBCE:("D_801FBBCE","UNK_TYPE2","",0x2),
     0x801FBBD0:("D_801FBBD0","UNK_TYPE1","",0x1),
     0x801FBBD2:("D_801FBBD2","UNK_TYPE1","",0x1),
-    0x801FBBD4:("D_801FBBD4","UNK_TYPE1","",0x1),
+    0x801FBBD4:("gSysCfb_HiResEnabled","UNK_TYPE1","",0x1),
     0x801FBBE0:("D_801FBBE0","UNK_TYPE1","",0x1),
     0x801FBBF0:("D_801FBBF0","Vec3f","",0xc),
     0x801FBC00:("Math3D_ColSphereTri_line","LineSegment","",0x18),

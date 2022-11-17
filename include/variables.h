@@ -3293,7 +3293,7 @@ extern UNK_TYPE2 D_801FBBCC;
 extern UNK_TYPE2 D_801FBBCE;
 // extern UNK_TYPE1 D_801FBBD0;
 // extern UNK_TYPE1 D_801FBBD2;
-// extern UNK_TYPE1 D_801FBBD4;
+// extern UNK_TYPE1 gSysCfb_HiResEnabled;
 // extern UNK_TYPE1 D_801FBBE0;
 extern Vec3f D_801FBBF0;
 extern LineSegment Math3D_ColSphereTri_line;

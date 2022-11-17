@@ -1,29 +1,29 @@
 #include "global.h"
 
- OSViMode D_801FBB30;
- void* gFramebuffers[2];
- OSViMode* D_801FBB88;
- u16* gZBufferPtr;
- void* D_801FBB90;
- u64* gGfxSPTaskOutputBufferPtr;
- size_t gGfxSPTaskOutputBufferSize;
- void* D_801FBB9C; //UNK_TYPE
- void* D_801FBBA0; //UNK_TYPE
- u16 (*gZBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
- u16 (*gWorkBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
- u64 (*gGfxSPTaskOutputBuffer)[0x3000];
- void* gGfxSPTaskOutputBufferEnd;
- uintptr_t D_801FBBB4;
- s32 D_801FBBB8;
- s32 D_801FBBBC; //PAL Z buffer?
- s32 D_801FBBC0;
- u64 (*gGfxSPTaskOutputBuffer2)[0x3000];
- void* gGfxSPTaskOutputBufferEnd2;
- s16 D_801FBBCC;
- s16 D_801FBBCE;
- s16 D_801FBBD0;
- s16 D_801FBBD2;
- s8 D_801FBBD4;
+OSViMode D_801FBB30;
+void* gFramebuffers[2];
+OSViMode* D_801FBB88;
+u16* gZBufferPtr;
+void* D_801FBB90;
+u64* gGfxSPTaskOutputBufferPtr;
+size_t gGfxSPTaskOutputBufferSize;
+void* D_801FBB9C; //UNK_TYPE
+void* D_801FBBA0; //UNK_TYPE
+u16 (*gZBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
+u16 (*gWorkBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
+u64 (*gGfxSPTaskOutputBuffer)[0x3000];
+void* gGfxSPTaskOutputBufferEnd;
+uintptr_t D_801FBBB4;
+s32 D_801FBBB8;
+s32 D_801FBBBC; //HIRes ZBuffer
+s32 D_801FBBC0;
+u64 (*gGfxSPTaskOutputBuffer2)[0x3000];
+void* gGfxSPTaskOutputBufferEnd2;
+s16 D_801FBBCC; //CfbWidth
+s16 D_801FBBCE; //CfbHeight
+s16 D_801FBBD0;
+s16 D_801FBBD2;
+u8 gSysCfb_HiResEnabled;
 
 void func_80178750(void) {
     gFramebuffers[1] = D_801FBB9C;
@@ -32,11 +32,11 @@ void func_80178750(void) {
     D_801FBB90 = gWorkBuffer;
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBuffer;
     gGfxSPTaskOutputBufferSize = (u32) gGfxSPTaskOutputBufferEnd;
-    D_801FBBCC = 320;
-    D_801FBBCE = 240;
+    D_801FBBCC = SCREEN_WIDTH;
+    D_801FBBCE = SCREEN_HEIGHT;
     D_801FBBD0 = 0;
     D_801FBBD2 = 0;
-    D_801FBBD4 = 0;
+    gSysCfb_HiResEnabled = 0;
     gScreenWidth =  D_801FBBCC;
     gScreenHeight = D_801FBBCE;
     D_801FBB88 = &osViModeNtscLan1;
@@ -53,8 +53,8 @@ void func_80178818(void) {
     gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBuffer2;
     gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferEnd2;
     if(1){}
-    D_801FBBCC = 576; //576P
-    D_801FBBCE = 454;
+    D_801FBBCC = SCREEN_WIDTH_HIGH_RES;
+    D_801FBBCE = SCREEN_HEIGHT_HIGH_RES;
     D_801FBBD0 = 30;
     D_801FBBD2 = 10;
     gScreenWidth = D_801FBBCC;
@@ -65,16 +65,14 @@ void func_80178818(void) {
         l1:
         width = D_801FBBCC - 610;
         height = D_801FBBCE - 470;
-        func_8014026C(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 0x1E, width, 0xA, height);
+        func_8014026C(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 30, width, 10, height);
         D_801FBB88 = &D_801FBB30;
     }
-    D_801FBBD4 = 1;
+    gSysCfb_HiResEnabled = 1;
 }
 
-
-
 //TODO Fake match
-extern u16 gFramebuffer1_[SCREEN_HEIGHT][SCREEN_WIDTH]; 
+extern u16 gFramebuffer1_[SCREEN_WIDTH_HIGH_RES][SCREEN_HEIGHT_HIGH_RES];
 void func_80178978(void) {
     D_801FBB9C = gFramebuffer1;
     D_801FBBA0 = gFramebuffer0;
