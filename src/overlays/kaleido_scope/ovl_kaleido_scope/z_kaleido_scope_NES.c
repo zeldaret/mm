@@ -623,7 +623,8 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
-            CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, size1);
+            CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment,
+                                size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             if (func_8010A0A4(play)) {
