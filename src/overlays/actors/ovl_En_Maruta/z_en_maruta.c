@@ -36,7 +36,7 @@ void func_80B38060(EnMaruta* this, Vec3f* arg1);
 void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
 void func_80B382E4(PlayState* play, Vec3f arg1);
 
-const ActorInit En_Maruta_InitVars = {
+ActorInit En_Maruta_InitVars = {
     ACTOR_EN_MARUTA,
     ACTORCAT_PROP,
     FLAGS,
@@ -317,7 +317,7 @@ void func_80B37428(EnMaruta* this, PlayState* play) {
 
             kendoJs->unk_28C--;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -332,7 +332,7 @@ void func_80B374B8(EnMaruta* this) {
 
 void func_80B374FC(EnMaruta* this, PlayState* play) {
     if (this->unk_21E == 40) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -476,7 +476,7 @@ void func_80B37A8C(EnMaruta* this) {
 void func_80B37AA0(EnMaruta* this, PlayState* play) {
     if (this->actor.scale.y == 0.0f) {
         if (this->actor.scale.x == 0.0f) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         Math_SmoothStepToF(&this->actor.scale.x, 0.0f, 0.2f, 0.01f, 0.001f);

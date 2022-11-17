@@ -51,7 +51,7 @@ void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
 void EnFamos_DrawDebris(EnFamos* this, PlayState* play);
 
-const ActorInit En_Famos_InitVars = {
+ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -154,7 +154,7 @@ static AnimatedMaterial* sEmblemAnimatedMats[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_DEATH_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
@@ -166,7 +166,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (GET_FAMOS_PATH(thisx) != 0xFF) {
+    if (FAMOS_GET_PATH(thisx) != 0xFF) {
         path = &play->setupPathList[this->actor.params];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathNodeCount = path->count;
@@ -193,7 +193,7 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 250;
     this->baseHeight = this->actor.world.pos.y;
     // params: [this->actor.shape.rot.x] is used to set aggro distance
-    this->aggroDistance = (GET_FAMOS_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
+    this->aggroDistance = (FAMOS_GET_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
     this->hasFinishedRotating = true;
@@ -723,7 +723,7 @@ void EnFamos_DeathFade(EnFamos* this, PlayState* play) {
         if (enBom != NULL) {
             enBom->parent = NULL;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

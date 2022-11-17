@@ -103,7 +103,7 @@
         <!-- Skeleton -->
         <!-- @bug: gFsnSkel specifies 18 limbs but only 17 exist, ZAPD breaks if gFsnLimbs is not extracted manually -->
         <LimbTable Name="gFsnLimbs" LimbType="Standard" Count="17" Offset="0x132DC"/>
-        <Skeleton Name="gFsnSkel" Type="Flex" LimbType="Standard" LimbNone="FSN_LIMB_NONE" LimbMax="FSN_LIMB_MAX" EnumName="FsnLimbs" Offset="0x13320" />
+        <Skeleton Name="gFsnSkel" Type="Flex" LimbType="Standard" LimbNone="FSN_LIMB_NONE" LimbMax="FSN_LIMB_MAX" EnumName="FsnLimb" Offset="0x13320" />
 
         <!-- Animations -->
         <Animation Name="gFsnLeanForwardStartAnim" Offset="0x138B0" />

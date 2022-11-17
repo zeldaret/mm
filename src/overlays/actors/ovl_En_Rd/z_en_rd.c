@@ -97,7 +97,7 @@ typedef enum {
     /* 4 */ EN_RD_GRAB_END,
 } EnRdGrabState;
 
-const ActorInit En_Rd_InitVars = {
+ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -223,7 +223,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
                 if (!EnRd_ShouldNotDance(play)) {
                     EnRd_SetupSquattingDance(this);
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                     EnRd_SetupIdle(this);
                 }
                 this->setupDanceFunc = EnRd_SetupSquattingDance;
@@ -233,7 +233,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
                 if (!EnRd_ShouldNotDance(play)) {
                     EnRd_SetupClappingDance(this);
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                     EnRd_SetupIdle(this);
                 }
                 this->setupDanceFunc = EnRd_SetupClappingDance;
@@ -243,7 +243,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
                 if (!EnRd_ShouldNotDance(play)) {
                     EnRd_SetupPirouette(this);
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                     EnRd_SetupIdle(this);
                 }
                 this->setupDanceFunc = EnRd_SetupPirouette;
@@ -251,9 +251,9 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
 
             default:
                 if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-                    this->actor.hintId = 0x2D;
+                    this->actor.hintId = TATL_HINT_ID_GIBDO;
                 } else {
-                    this->actor.hintId = 0x2A;
+                    this->actor.hintId = TATL_HINT_ID_REDEAD;
                 }
                 EnRd_SetupIdle(this);
                 this->setupDanceFunc = EnRd_SetupIdle;
@@ -436,9 +436,9 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
     this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(play) && func_800B715C(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
@@ -446,9 +446,9 @@ void EnRd_SquattingDance(EnRd* this, PlayState* play) {
 
     if (EnRd_ShouldNotDance(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         EnRd_SetupIdle(this);
     }
@@ -480,9 +480,9 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
     this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(play) && func_800B715C(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         Animation_Change(&this->skelAnime, &gGibdoRedeadLookBackAnim, 0.0f, 0.0f, 19.0f, ANIMMODE_ONCE, -10.0f);
         this->actionFunc = EnRd_EndClappingOrSquattingDanceWhenPlayerIsClose;
@@ -490,9 +490,9 @@ void EnRd_ClappingDance(EnRd* this, PlayState* play) {
 
     if (EnRd_ShouldNotDance(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         EnRd_SetupIdle(this);
     }
@@ -541,18 +541,18 @@ void EnRd_Pirouette(EnRd* this, PlayState* play) {
     this->isMourning = false;
     if ((this->actor.xzDistToPlayer <= 150.0f) && EnRd_ShouldNotDance(play) && func_800B715C(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         this->actionFunc = EnRd_EndPirouetteWhenPlayerIsClose;
     }
 
     if (EnRd_ShouldNotDance(play)) {
         if (EN_RD_GET_TYPE(&this->actor) == EN_RD_TYPE_GIBDO) {
-            this->actor.hintId = 0x2D;
+            this->actor.hintId = TATL_HINT_ID_GIBDO;
         } else {
-            this->actor.hintId = 0x2A;
+            this->actor.hintId = TATL_HINT_ID_REDEAD;
         }
         EnRd_SetupIdle(this);
     }
@@ -654,8 +654,9 @@ void EnRd_WalkToPlayer(EnRd* this, PlayState* play) {
     }
 
     if ((ABS_ALT(yaw) < 0x1554) && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 150.0f)) {
-        if (!(player->stateFlags1 & (0x200000 | 0x80000 | 0x40000 | 0x4000 | 0x2000 | 0x80)) &&
-            !(player->stateFlags2 & (0x4000 | 0x80))) {
+        if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_40000 |
+                                     PLAYER_STATE1_80000 | PLAYER_STATE1_200000)) &&
+            !(player->stateFlags2 & (PLAYER_STATE2_80 | PLAYER_STATE2_4000))) {
             if (this->playerStunWaitTimer == 0) {
                 if (!(this->flags & EN_RD_FLAG_CANNOT_FREEZE_PLAYER)) {
                     player->actor.freezeTimer = 40;
@@ -838,9 +839,9 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             Math_SmoothStepToS(&this->upperBodyYRotation, 0, 1, 1500, 0);
 
         case EN_RD_GRAB_ATTACK:
-            if (!(player->stateFlags2 & 0x80) || (player->unk_B62 != 0)) {
-                if ((player->unk_B62 != 0) && (player->stateFlags2 & 0x80)) {
-                    player->stateFlags2 &= ~0x80;
+            if (!(player->stateFlags2 & PLAYER_STATE2_80) || (player->unk_B62 != 0)) {
+                if ((player->unk_B62 != 0) && (player->stateFlags2 & PLAYER_STATE2_80)) {
+                    player->stateFlags2 &= ~PLAYER_STATE2_80;
                     player->unk_AE8 = 100;
                 }
                 Animation_Change(&this->skelAnime, &gGibdoRedeadGrabEndAnim, 0.5f, 0.0f,
@@ -880,7 +881,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
                 play->damagePlayer(play, -8);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 20;
-                func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+                func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
             }
             break;
 
@@ -1068,7 +1069,7 @@ void EnRd_Dead(EnRd* this, PlayState* play) {
                 this->actor.scale.y -= (75.0f / 1000000.0f);
                 this->alpha -= 5;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             this->deathTimer--;

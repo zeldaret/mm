@@ -2,15 +2,14 @@
 #define Z_EN_KAKASI_H
 
 #include "global.h"
+#include "z64snap.h"
 
 struct EnKakasi;
 
 typedef void (*EnKakasiActionFunc)(struct EnKakasi*, PlayState*);
-typedef void (*EnKakasiUnkFunc)(PlayState*, struct EnKakasi*);
 
 typedef struct EnKakasi {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ EnKakasiUnkFunc unkFunc; // used for one z_snap calling function?
+    /* 0x000 */ PictoActor picto;
     /* 0x148 */ EnKakasiActionFunc actionFunc;
     /* 0x14C */ SkelAnime skelanime;
     /* 0x190 */ s16 unk190; // camera index for song teaching angles?
@@ -41,12 +40,10 @@ typedef struct EnKakasi {
     /* 0x254 */ ColliderCylinder collider;
 } EnKakasi; // size = 0x2A0
 
-extern const ActorInit En_Kakasi_InitVars;
-
 #define ENKAKASI_ABOVE_GROUND_TYPE 2
 
-#define GET_KAKASI_SUMMON_DISTANCE(thisx) (((thisx)->params >> 0x8) & 0xFF) 
-#define GET_KAKASI_ABOVE_GROUND(thisx) ((thisx)->params & 0x1) 
-#define GET_KAKASI_TARGETMODE(thisx) ((thisx)->world.rot.x - 1)
+#define KAKASI_GET_SUMMON_DISTANCE(thisx) (((thisx)->params >> 0x8) & 0xFF) 
+#define KAKASI_GET_ABOVE_GROUND(thisx) ((thisx)->params & 0x1) 
+#define KAKASI_GET_TARGETMODE(thisx) ((thisx)->world.rot.x - 1)
 
 #endif // Z_EN_KAKASI_H

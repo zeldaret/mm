@@ -19,13 +19,13 @@ void ObjRotlift_Draw(Actor* thisx, PlayState* play);
 
 void ObjRotlift_MoveDekuFlowers(ObjRotlift* this);
 
-typedef struct ModelInfo {
+typedef struct ObjRotliftModelInfo {
     /* 0x0 */ Gfx* dList;
     /* 0x4 */ AnimatedMaterial* animMat;
     /* 0x8 */ CollisionHeader* colHeader;
-} ModelInfo; // size = 0xC
+} ObjRotliftModelInfo; // size = 0xC
 
-const ActorInit Obj_Rotlift_InitVars = {
+ActorInit Obj_Rotlift_InitVars = {
     ACTOR_OBJ_ROTLIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -37,7 +37,7 @@ const ActorInit Obj_Rotlift_InitVars = {
     (ActorFunc)ObjRotlift_Draw,
 };
 
-struct ModelInfo sModelInfo[] = {
+struct ObjRotliftModelInfo sModelInfo[] = {
     {
         gDekuMoonDungeonRotatingPlatformsDL,
         gDekuMoonDungeonRotatingPlatformsUnusedTexAnim,
@@ -87,7 +87,7 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
     s32 type = OBJROTLIFT_GET_TYPE(&this->dyna.actor);
     s32 dekuFlowerParams;
     s32 i;
-    ModelInfo* modelInfo;
+    ObjRotliftModelInfo* modelInfo;
     ObjEtcetera** dekuFlowers;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -146,7 +146,7 @@ void ObjRotlift_Update(Actor* thisx, PlayState* play) {
 void ObjRotlift_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjRotlift* this = THIS;
-    ModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
+    ObjRotliftModelInfo* modelInfo = &sModelInfo[OBJROTLIFT_GET_TYPE(&this->dyna.actor)];
 
     // Neither of the displaylists reference other segments, so this call is ultimately pointless.
     AnimatedMat_Draw(play, modelInfo->animMat);

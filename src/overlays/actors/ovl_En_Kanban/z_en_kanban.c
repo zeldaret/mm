@@ -17,7 +17,7 @@ void EnKanban_Destroy(Actor* thisx, PlayState* play);
 void EnKanban_Update(Actor* thisx, PlayState* play);
 void EnKanban_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Kanban_InitVars = {
+ActorInit En_Kanban_InitVars = {
     ACTOR_EN_KANBAN,
     ACTORCAT_PROP,
     FLAGS,
@@ -277,7 +277,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
                         piece->partFlags = sCutFlags[this->cutType] & this->partFlags;
                         if (piece->partFlags == 0) {
-                            Actor_MarkForDeath(&piece->actor);
+                            Actor_Kill(&piece->actor);
                             return;
                         }
 
@@ -673,7 +673,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             signpost = (EnKanban*)this->actor.parent;
 
             if (signpost->partFlags == 0xFFFF) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             phi_f0 = 0.0f;
@@ -831,7 +831,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.unk1202E == 7)) {
+                    if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
                         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -852,7 +852,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             signpost->invincibilityTimer = 5;
 
             if (signpost->partFlags == 0xFFFF) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             Matrix_RotateYS(signpost->actor.shape.rot.y, MTXMODE_NEW);
@@ -876,7 +876,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 (this->floorRot.z == 0.0f)) {
                 signpost->partFlags |= this->partFlags;
                 signpost->actor.flags |= ACTOR_FLAG_1;
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -963,7 +963,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->partFlags == 0xFFFF) {
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05AED0);
+            gSPDisplayList(POLY_OPA_DISP++, gSignRectangularDL);
         } else {
             for (i = 0; i < ARRAY_COUNT(sPartFlags); i++) {
                 if (sPartFlags[i] & this->partFlags) {

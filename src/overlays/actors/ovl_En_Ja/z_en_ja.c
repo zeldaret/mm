@@ -50,7 +50,7 @@ s32 D_80BC366C[] = {
     0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-const ActorInit En_Ja_InitVars = {
+ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,
     ACTORCAT_NPC,
     FLAGS,
@@ -89,7 +89,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
     { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
@@ -105,7 +105,7 @@ s32 func_80BC192C(EnJa* this, s32 arg1) {
 
     if (arg1 != this->unk_36C) {
         this->unk_36C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
         this->unk_344 = this->skelAnime.playSpeed;
     }
 
@@ -177,7 +177,7 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
     this->unk_35A = CLAMP(this->unk_35A, -0x1C70, 0x1C70);
 
     if (this->unk_1D8.player->actor.id == ACTOR_PLAYER) {
-        sp40.y = this->unk_1D8.player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = this->unk_1D8.player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.focus.pos);
     }
@@ -220,7 +220,7 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     f32 phi_f0;
 
     if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->targetActor)) {
+        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->talkActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;
@@ -385,7 +385,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
         radius = this->collider.dim.radius + 30;
         height = this->collider.dim.height + 10;
-        func_8013C964(&this->actor, play, radius, height, EXCH_ITEM_NONE, this->unk_340 & 7);
+        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & 7);
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);

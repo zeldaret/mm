@@ -30,7 +30,7 @@ void func_80ACA724(EnTimeTag* this, PlayState* play);
 void func_80ACA7C4(EnTimeTag* this, PlayState* play);
 void func_80ACA840(EnTimeTag* this, PlayState* play);
 
-const ActorInit En_Time_Tag_InitVars = {
+ActorInit En_Time_Tag_InitVars = {
     ACTOR_EN_TIME_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -49,8 +49,8 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
     switch (ENTIMETAG_GET_E000(&this->actor)) {
         case 4:
-            if ((gSaveContext.save.weekEventReg[8] & 0x40) || (CURRENT_DAY != 3)) {
-                Actor_MarkForDeath(&this->actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) || (CURRENT_DAY != 3)) {
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.home.rot.x = 0;
@@ -90,10 +90,10 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->actionFunc = func_80AC9FD4;
-        gSaveContext.unk_3DD0[3] = 0;
-        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
+        gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
+        if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
             CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-            gSaveContext.save.weekEventReg[25] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_25_02);
         }
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
@@ -103,11 +103,11 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
 void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
     EnTimeTag* this2 = this;
 
-    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.unk1202E == 4)) {
+    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
         if (this->actor.cutscene != -1) {
             this->actionFunc = func_80AC9FE4;
             ActorCutscene_SetIntentToPlay(this2->actor.cutscene);
-            gSaveContext.unk_3DD0[3] = 0;
+            gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
         play->msgCtx.ocarinaMode = 4;
     }
@@ -263,7 +263,7 @@ void func_80ACA714(EnTimeTag* this, PlayState* play) {
 
 void func_80ACA724(EnTimeTag* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
-        play->nextEntranceIndex = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
+        play->nextEntrance = play->setupExitList[ENTIMETAG_GET_1F(&this->actor)];
         play->transitionTrigger = TRANS_TRIGGER_START;
         if (!ENTIMETAG_GET_E000(&this->actor)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_DOOR_OPEN);
@@ -273,8 +273,8 @@ void func_80ACA724(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA7C4(EnTimeTag* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[63] & 1) && !(gSaveContext.save.weekEventReg[63] & 2)) {
-        func_800B7298(play, &this->actor, 7);
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
         Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
         this->actionFunc = func_80ACA724;
     }
@@ -284,18 +284,18 @@ void func_80ACA840(EnTimeTag* this, PlayState* play) {
     s16 temp_ft4;
     s16 temp_hi;
 
-    if ((play->sceneNum != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
+    if ((play->sceneId != SCENE_YADOYA) || (INV_CONTENT(ITEM_ROOM_KEY) != ITEM_ROOM_KEY)) {
         temp_ft4 = gSaveContext.save.time * (24.0f / 0x10000); // TIME_TO_HOURS_F
         temp_hi = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
-        if (gSaveContext.save.weekEventReg[63] & 1) {
-            if (gSaveContext.save.weekEventReg[63] & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_02)) {
                 this->actionFunc = func_80ACA7C4;
             } else if ((temp_ft4 == this->actor.home.rot.x) && (temp_hi == this->actor.home.rot.y)) {
-                gSaveContext.save.weekEventReg[63] |= 2;
+                SET_WEEKEVENTREG(WEEKEVENTREG_63_02);
             }
         } else if ((temp_ft4 == this->actor.home.rot.x) && (temp_hi == this->actor.home.rot.y) &&
                    !Play_InCsMode(play)) {
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             Message_StartTextbox(play, ENTIMETAG_GET_1FE0(&this->actor) + 0x1883, NULL);
             this->actionFunc = func_80ACA724;
         }

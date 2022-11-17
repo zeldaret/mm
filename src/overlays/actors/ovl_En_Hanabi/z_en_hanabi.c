@@ -11,8 +11,8 @@
 
 #define THIS ((EnHanabi*)thisx)
 
-void EnHanabi_Init(Actor* thisx, PlayState* play);
-void EnHanabi_Destroy(Actor* thisx, PlayState* play);
+void EnHanabi_Init(Actor* thisx, PlayState* play2);
+void EnHanabi_Destroy(Actor* thisx, PlayState* play2);
 void EnHanabi_Update(Actor* thisx, PlayState* play);
 
 void func_80B23894(EnHanabi* this, PlayState* play);
@@ -21,7 +21,7 @@ void func_80B23910(EnHanabi* this, PlayState* play);
 void func_80B23934(EnHanabi* this, PlayState* play);
 void EnHanabi_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Hanabi_InitVars = {
+ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -146,7 +146,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+    gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
     sp53 = 0xFF;
     if (sp53) {}
@@ -181,7 +181,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
                                 D_80B23C2C[arg0->unk_02 + 2], 255);
             }
 
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
         }
     }
 
@@ -305,7 +305,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
 void func_80B23894(EnHanabi* this, PlayState* play) {
     func_80B236C8(this, play);
     if (func_80B22F34(this->unk_148) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -323,15 +323,15 @@ void func_80B23910(EnHanabi* this, PlayState* play) {
 }
 
 void func_80B23934(EnHanabi* this, PlayState* play) {
-    if ((gSaveContext.save.entranceIndex == 0x5410) && (gSaveContext.sceneSetupIndex == 7)) {
+    if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
         if (play->csCtx.frames > 1650) {
             func_80B236C8(this, play);
             func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 
-    if ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7) &&
-        (play->csCtx.currentCsIndex == 0) && (play->csCtx.frames == 610)) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0) &&
+        (play->csCtx.frames == 610)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_GROAN);
     }
 }

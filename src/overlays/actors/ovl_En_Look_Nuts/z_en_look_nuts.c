@@ -5,6 +5,7 @@
  */
 
 #include "z_en_look_nuts.h"
+#include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
 #define FLAGS (ACTOR_FLAG_80000000)
 
@@ -23,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-const ActorInit En_Look_Nuts_InitVars = {
+ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -119,11 +120,11 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->pathLocation == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -295,11 +296,11 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
-        play->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
+        play->nextEntrance = Entrance_CreateFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[17] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_17_04);
     }
 }
 
@@ -340,24 +341,25 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             Matrix_MultVec3f(&effectVelOffset, &effectVel);
             Matrix_Pop();
             if (!this->isPlayerDetected) {
-                s16 drawFlag = 1;
+                s16 effectFlags = SOLDERSRCHBALL_INVISIBLE;
+
                 if (gSaveContext.save.isNight) {
-                    drawFlag = 0;
+                    effectFlags = 0;
                 }
                 if (Player_GetMask(play) != PLAYER_MASK_STONE) {
                     EffectSsSolderSrchBall_Spawn(play, &effectPos, &effectVel, &gZeroVec3f, 50, &this->isPlayerDetected,
-                                                 drawFlag);
+                                                 effectFlags);
                 }
             }
 
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(play);
 
-                if (!(player->stateFlags3 & 0x100) && !Play_InCsMode(play)) {
+                if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, 0x1A);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;

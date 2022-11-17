@@ -62,7 +62,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_Counterweight_Draw(Actor* thisx, PlayState* play);
 void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Tokeidai_InitVars = {
+ActorInit Obj_Tokeidai_InitVars = {
     ACTOR_OBJ_TOKEIDAI,
     ACTORCAT_PROP,
     FLAGS,
@@ -121,16 +121,14 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, PlayState* play) {
     this->opaDList = gClockTowerExteriorGearDL;
     ObjTokeidai_SetupClockOrExteriorGear(this);
 
-    if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-         (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-         (play->csCtx.currentCsIndex == 0))) {
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) ||
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actionFunc = ObjTokeidai_ExteriorGear_OpenedIdle;
         this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
         this->actor.shape.yOffset = 1500.0f;
-        gSaveContext.save.weekEventReg[8] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
     } else {
         this->actionFunc = ObjTokeidai_ExteriorGear_Idle;
     }
@@ -140,10 +138,8 @@ void ObjTokeidai_TowerClock_Init(ObjTokeidai* this, PlayState* play) {
     this->actor.draw = ObjTokeidai_Clock_Draw;
     ObjTokeidai_Clock_Init(this);
 
-    if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-         (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-         (play->csCtx.currentCsIndex == 0))) {
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) ||
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0))) {
         ObjTokeidai_SetupTowerOpening(this);
     } else if ((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) {
         this->actor.world.pos.y += (this->actor.scale.y * 5191.0f) - 50.0f;
@@ -175,10 +171,8 @@ void ObjTokeidai_Counterweight_Init(ObjTokeidai* this, PlayState* play) {
         this->spotlightIntensity = 0;
     }
 
-    if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-         (play->csCtx.currentCsIndex == 0)) ||
-        ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-         (play->csCtx.currentCsIndex == 0))) {
+    if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) ||
+        ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0))) {
         this->spotlightIntensity = 0;
         ObjTokeidai_SetupTowerOpening(this);
 
@@ -447,19 +441,20 @@ void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, PlayState* play) {
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
     if (Cutscene_CheckActorAction(play, 132) != 0 &&
         play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 5) {
-        gSaveContext.save.weekEventReg[8] |= 0x40;
-        if (((play->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) &&
              (play->csCtx.currentCsIndex == 0)) ||
-            ((play->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
+            ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) &&
              (play->csCtx.currentCsIndex == 0))) {
             Audio_SetCutsceneFlag(false);
             gSaveContext.save.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
             gSaveContext.respawnFlag = 2;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_RETURN].entranceIndex;
+            play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
             play->transitionType = TRANS_TYPE_02;
-            if (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == 0xCFF) {
+            if (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams ==
+                PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)) {
                 gSaveContext.nextTransitionType = TRANS_TYPE_21;
             } else {
                 gSaveContext.nextTransitionType = TRANS_TYPE_02;
@@ -594,7 +589,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, PlayState* play) {
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, PlayState* play) {
     if ((Cutscene_CheckActorAction(play, 132) &&
          play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 132)]->action == 4) ||
-        (gSaveContext.save.weekEventReg[8] & 0x40)) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }
 }
@@ -616,8 +611,8 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, PlayState* play) {
 }
 
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
-    if (((CURRENT_DAY == 3 && gSaveContext.save.time < CLOCK_TIME(6, 0)) || CURRENT_DAY >= 4) ||
-        (gSaveContext.save.weekEventReg[8] & 0x40)) {
+    if ((((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || CURRENT_DAY >= 4) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {
         this->actor.draw = NULL;
@@ -692,7 +687,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
     if (CURRENT_DAY == 3 && this->clockHour < 6 && gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerOpening(this);
-        gSaveContext.save.weekEventReg[8] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
         return;
     }
 
@@ -701,7 +696,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
         this->clockTime += 3;
         this->actor.draw = ObjTokeidai_Clock_Draw;
     } else {
-        if (!(play->actorCtx.unk5 & 2) &&
+        if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
             OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD &&
             ActorCutscene_GetCurrentIndex() == -1) {
             this->actor.draw = NULL;
@@ -734,9 +729,9 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
             this->clockTime += 3;
             this->actor.draw = ObjTokeidai_ExteriorGear_Draw;
         } else {
-            if ((play->actorCtx.unk5 & 2) == 0 &&
-                OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD &&
-                ActorCutscene_GetCurrentIndex() == -1) {
+            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD) &&
+                (ActorCutscene_GetCurrentIndex() == -1)) {
                 this->actor.draw = NULL;
             }
             this->clockTime = gSaveContext.save.time;

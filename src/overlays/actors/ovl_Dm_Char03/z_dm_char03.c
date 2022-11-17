@@ -20,7 +20,7 @@ void func_80AAB644(DmChar03* this, PlayState* play);
 void DmChar03_DoNothing(DmChar03* this, PlayState* play);
 void func_80AABA84(PlayState* play, DmChar03* this);
 
-const ActorInit Dm_Char03_InitVars = {
+ActorInit Dm_Char03_InitVars = {
     ACTOR_DM_CHAR03,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -32,20 +32,22 @@ const ActorInit Dm_Char03_InitVars = {
     (ActorFunc)DmChar03_Draw,
 };
 
-AnimationInfo sAnimations[] = { { &object_osn_Anim_020530, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f } };
+AnimationInfo sAnimationInfo[] = {
+    { &gDekuMaskFallOverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+};
 
-void DmChar03_ChangeAnimation(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 index) {
+void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 frame;
 
-    animInfo += index;
+    animationInfo += animIndex;
 
-    if (animInfo->frameCount < 0.0f) {
-        frame = Animation_GetLastFrame(animInfo->animation);
+    if (animationInfo->frameCount < 0.0f) {
+        frame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frame = animInfo->frameCount;
+        frame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, frame, animInfo->mode,
-                     animInfo->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, frame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmChar03_Init(Actor* thisx, PlayState* play) {
@@ -56,7 +58,7 @@ void DmChar03_Init(Actor* thisx, PlayState* play) {
     this->unk_18E = false;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuMaskSkel, NULL, NULL, NULL, 0);
-    DmChar03_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    DmChar03_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmChar03_DoNothing;
 }
@@ -106,7 +108,7 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
                 case 3:
                     this->unk_18E = false;
                     shouldChangeAnim = false;
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     break;
                 case 4:
                     Item_Give(play, ITEM_MASK_DEKU);
@@ -119,7 +121,7 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
             }
 
             if (shouldChangeAnim) {
-                DmChar03_ChangeAnimation(&this->skelAnime, &sAnimations[this->animIndex], 0);
+                DmChar03_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, index);

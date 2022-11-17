@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return NULL;
@@ -531,24 +531,24 @@ Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s1
     return closestActor;
 }
 
-s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     s32 endFrame;
     s32 startFrame;
 
-    animations += index;
-    endFrame = animations->frameCount;
-    if (animations->frameCount < 0) {
-        endFrame = Animation_GetLastFrame(&animations->animation->common);
+    animationInfo += animIndex;
+    endFrame = animationInfo->frameCount;
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
-    startFrame = animations->startFrame;
+    startFrame = animationInfo->startFrame;
     if (startFrame >= endFrame || startFrame < 0) {
         return false;
     }
-    if (animations->playSpeed < 0.0f) {
+    if (animationInfo->playSpeed < 0.0f) {
         SWAP(s32, endFrame, startFrame);
     }
-    Animation_Change(skelAnime, animations->animation, animations->playSpeed, startFrame, endFrame, animations->mode,
-                     animations->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
     return true;
 }
 
@@ -1072,8 +1072,8 @@ s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trac
     s16 targetX;
     f32 diffZ = target->z - focusPos->z;
 
-    yaw = Math_FAtan2F(diffZ, diffX);
-    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
+    yaw = Math_Atan2S_XY(diffZ, diffX);
+    pitch = Math_Atan2S_XY(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
     Math_SmoothStepToS(&trackTarget->x, pitch, 4, 0x2710, 0);
     Math_SmoothStepToS(&trackTarget->y, yaw, 4, 0x2710, 0);
 
@@ -1306,8 +1306,8 @@ void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
     actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
     actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
-    actorPath->rotToCurPoint.y = Math_FAtan2F(diff.z, diff.x);
-    actorPath->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
+    actorPath->rotToCurPoint.y = Math_Atan2S_XY(diff.z, diff.x);
+    actorPath->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;
 }
 
@@ -1357,21 +1357,21 @@ s32 SubS_ActorPathing_SetNextPoint(PlayState* play, ActorPathing* actorPath) {
     return reupdate;
 }
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
-                                     s32* curIndex) {
-    AnimationSpeedInfo* animation = &animations[nextIndex];
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex,
+                                     s32* curAnimIndex) {
+    AnimationSpeedInfo* animation = &animationInfo[nextAnimIndex];
     f32 startFrame = skelAnime->curFrame;
     f32 endFrame;
     f32 morphFrames;
 
-    if ((*curIndex < 0) || (nextIndex == *curIndex)) {
+    if ((*curAnimIndex < 0) || (nextAnimIndex == *curAnimIndex)) {
         morphFrames = 0.0f;
-        if (*curIndex < 0) {
+        if (*curAnimIndex < 0) {
             startFrame = 0.0f;
         }
     } else {
         morphFrames = animation->morphFrames;
-        if (nextIndex != *curIndex) {
+        if (nextAnimIndex != *curAnimIndex) {
             startFrame = 0.0f;
         }
     }
@@ -1383,7 +1383,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     }
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, startFrame, endFrame, animation->mode,
                      morphFrames);
-    *curIndex = nextIndex;
+    *curAnimIndex = nextAnimIndex;
 }
 
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {

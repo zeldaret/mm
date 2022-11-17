@@ -27,7 +27,7 @@ void func_80A2273C(ObjSkateblock* this, PlayState* play);
 void func_80A227A4(ObjSkateblock* this);
 void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
-const ActorInit Obj_Skateblock_InitVars = {
+ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -369,7 +369,7 @@ void func_80A21C88(ObjSkateblock* this, s32 arg1) {
 void func_80A21CB4(ObjSkateblock* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags2 &= ~0x10;
+    player->stateFlags2 &= ~PLAYER_STATE2_10;
     this->dyna.pushForce = 0.0f;
 }
 
@@ -535,7 +535,7 @@ void func_80A22334(ObjSkateblock* this, PlayState* play) {
         func_80A21C88(this, sp2C);
         func_80A2244C(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
         this->unk_1C1 |= 1;
     }
 
@@ -591,7 +591,7 @@ void func_80A224A4(ObjSkateblock* this, PlayState* play) {
 
     if ((this->unk_1C1 & 1) && (sp24 || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1C1 &= ~1;
-        func_800B7298(play, &this->dyna.actor, 6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
     }
 
     func_80A21F74(this, play);

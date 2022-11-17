@@ -23,6 +23,6 @@
         <Limb Name="gToiletHandOtherFingersLimb" Type="Standard" EnumName="TOILET_HAND_LIMB_OTHER_FINGERS" Offset="0x2354" />
         <Limb Name="gToiletHandThumbLimb" Type="Standard" EnumName="TOILET_HAND_LIMB_THUMB" Offset="0x2360" />
         <Limb Name="gToiletHandIndexFingerLimb" Type="Standard" EnumName="TOILET_HAND_LIMB_INDEX_FINGER" Offset="0x236C" />
-        <Skeleton Name="gToiletHandSkel" Type="Flex" LimbType="Standard" LimbNone="TOILET_HAND_LIMB_NONE" LimbMax="TOILET_HAND_LIMB_MAX" EnumName="ToiletHandLimbs" Offset="0x2390" />
+        <Skeleton Name="gToiletHandSkel" Type="Flex" LimbType="Standard" LimbNone="TOILET_HAND_LIMB_NONE" LimbMax="TOILET_HAND_LIMB_MAX" EnumName="ToiletHandLimb" Offset="0x2390" />
     </File>
 </Root>

@@ -145,15 +145,16 @@ void BgKin2Bombwall_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     bombwallCollider = &this->collider;
     Collider_InitCylinder(play, bombwallCollider);
-    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(this))) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
-        Collider_SetCylinder(play, bombwallCollider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
-        Actor_SetFocus(&this->dyna.actor, 60.0f);
-        BgKin2Bombwall_SetupWait(this);
+    if (Flags_GetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor))) {
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseBombableWallCol);
+    Collider_SetCylinder(play, bombwallCollider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, bombwallCollider);
+    Actor_SetFocus(&this->dyna.actor, 60.0f);
+    BgKin2Bombwall_SetupWait(this);
 }
 
 void BgKin2Bombwall_Destroy(Actor* thisx, PlayState* play) {
@@ -184,7 +185,7 @@ void BgKin2Bombwall_SetupPlayCutscene(BgKin2Bombwall* this) {
 void BgKin2Bombwall_PlayCutscene(BgKin2Bombwall* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(this));
+        Flags_SetSwitch(play, BG_KIN2_BOMBWALL_SWITCH_FLAG(&this->dyna.actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = NULL;
@@ -205,7 +206,7 @@ void BgKin2Bombwall_EndCutscene(BgKin2Bombwall* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

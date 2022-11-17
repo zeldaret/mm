@@ -8,8 +8,8 @@ struct ObjIceblock;
 typedef void (*ObjIceblockActionFunc)(struct ObjIceblock*, PlayState*);
 typedef void (*ObjIceblockExtendedDrawFunc)(struct ObjIceblock*, PlayState*);
 
-#define GET_ICEBLOCK_SNAP_ROT(thisx) (((thisx)->params >> 1) & 1)
-#define GET_ICEBLOCK_ICEBERG(thisx) ((thisx)->params & 1)
+#define ICEBLOCK_GET_SNAP_ROT(thisx) (((thisx)->params >> 1) & 1)
+#define ICEBLOCK_GET_ICEBERG(thisx) ((thisx)->params & 1)
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
@@ -77,7 +77,5 @@ typedef struct ObjIceblock {
     /* 0x2B1 */ s8 spawnCutsceneTimer;
     /* 0x2B4 */ f32 unk_2B4;
 } ObjIceblock; // size = 0x2B8
-
-extern const ActorInit Obj_Iceblock_InitVars;
 
 #endif // Z_OBJ_ICEBLOCK_H

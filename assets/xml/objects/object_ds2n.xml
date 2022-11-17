@@ -86,7 +86,7 @@
         <Limb Name="gDs2nRightForarmLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_FORARM" Offset="0x8104" />
         <Limb Name="gDs2nRightHandLimb" Type="Standard" EnumName="DS2N_LIMB_RIGHT_HAND" Offset="0x8110" />
         <Limb Name="gDs2nHeadLimb" Type="Standard" EnumName="DS2N_LIMB_HEAD" Offset="0x811C" />
-        <Skeleton Name="gDs2nSkeleton" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimbs" Offset="0x8170" />
+        <Skeleton Name="gDs2nSkeleton" Type="Flex" LimbType="Standard" LimbNone="DS2N_LIMB_NONE" LimbMax="DS2N_LIMB_MAX" EnumName="Ds2nLimb" Offset="0x8170" />
 
         <!-- 8 bytes: 0x11 followed by zeros  <Blob Name="gDs2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
     </File>

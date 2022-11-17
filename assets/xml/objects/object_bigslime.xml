@@ -88,7 +88,7 @@
         <Limb Name="gGekkoJawLimb" Type="Standard" EnumName="GEKKO_LIMB_JAW" Offset="0xDF18" />
         <Limb Name="gGekkoLeftEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_LEFT_EYE" Offset="0xDF24" />
         <Limb Name="gGekkoRightEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_EYE" Offset="0xDF30" />
-        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" LimbNone="GEKKO_LIMB_NONE" LimbMax="GEKKO_LIMB_MAX" EnumName="GekkoLimbs" Offset="0xDF98" />
+        <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" LimbNone="GEKKO_LIMB_NONE" LimbMax="GEKKO_LIMB_MAX" EnumName="GekkoLimb" Offset="0xDF98" />
 
         <Animation Name="gGekkoWindupPunchAnim" Offset="0xF048" />
         <Animation Name="gGekkoSwimUpAnim" Offset="0xF3F0" />
@@ -101,12 +101,12 @@
         <Texture Name="gBigslimeShockwave2Tex" OutName="bigslime_shockwave_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
         <Blob Name="object_bigslime_zeroes_Blob_0104A8" Size="0x88" Offset="0x104A8" />
         
-        <DList Name="gBigslimeNormalDL" Offset="0x10530" />
+        <DList Name="gBigslimeNormalMaterialDL" Offset="0x10530" />
 
         <!-- Reads vtx from segment 9 set by sBigslimeDynamicVtx -->
-        <DList Name="gBigslimeVtxDL" Offset="0x105E8" />
+        <DList Name="gBigslimeModelDL" Offset="0x105E8" />
         <!-- Reads vtx from segment 9 set by sBigslimeTargetVtx -->
-        <DList Name="gBigslimeFrozenVtxDL" Offset="0x10B80" />
+        <DList Name="gBigslimeFrozenMaterialDL" Offset="0x10B80" />
 
         <TextureAnimation Name="gBigslimeFrozenTexAnim" Offset="0x10C48" />
         <DList Name="gMinislimeFrozenDL" Offset="0x10DB0" />

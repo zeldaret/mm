@@ -12,7 +12,7 @@
 
 void EnCow_Init(Actor* thisx, PlayState* play);
 void EnCow_Destroy(Actor* thisx, PlayState* play);
-void EnCow_Update(Actor* thisx, PlayState* play);
+void EnCow_Update(Actor* thisx, PlayState* play2);
 void EnCow_Draw(Actor* thisx, PlayState* play);
 
 void EnCow_TalkEnd(EnCow* this, PlayState* play);
@@ -24,10 +24,10 @@ void EnCow_Talk(EnCow* this, PlayState* play);
 void EnCow_Idle(EnCow* this, PlayState* play);
 
 void EnCow_DoTail(EnCow* this, PlayState* play);
-void EnCow_UpdateTail(Actor* this, PlayState* play);
-void EnCow_DrawTail(Actor* this, PlayState* play);
+void EnCow_UpdateTail(Actor* thisx, PlayState* play);
+void EnCow_DrawTail(Actor* thisx, PlayState* play);
 
-const ActorInit En_Cow_InitVars = {
+ActorInit En_Cow_InitVars = {
     ACTOR_EN_COW,
     ACTORCAT_NPC,
     FLAGS,
@@ -116,9 +116,9 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnCow_Idle;
 
-            if (!(gSaveContext.save.weekEventReg[22] & 1) && (CURRENT_DAY != 1) &&
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -153,7 +153,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
 
-    gSaveContext.save.weekEventReg[87] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
 }
 
 void EnCow_Destroy(Actor* thisx, PlayState* play) {
@@ -289,8 +289,8 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
         if (func_801A5100() == 4) {
-            if (!(gSaveContext.save.weekEventReg[87] & 1)) {
-                gSaveContext.save.weekEventReg[87] |= 1;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_87_01);
                 if (Inventory_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
@@ -301,7 +301,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 this->actionFunc = EnCow_Talk;
             }
         } else {
-            gSaveContext.save.weekEventReg[87] &= (u8)~1;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
         }
     }
 

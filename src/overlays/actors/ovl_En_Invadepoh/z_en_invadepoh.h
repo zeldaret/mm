@@ -34,32 +34,32 @@ typedef enum {
 } EnInvadepohDirection;
 
 typedef struct unkStruct80B50350 {
-    /* 0x000 */ s8 unk0;
-    /* 0x001 */ s8 unk1;
-    /* 0x002 */ u8 unk2;
-    /* 0x004 */ Vec3f unk4;
+    /* 0x0 */ s8 unk0;
+    /* 0x1 */ s8 unk1;
+    /* 0x2 */ u8 unk2;
+    /* 0x4 */ Vec3f unk4;
 } unkStruct80B50350; // size = 0x10;
 
 typedef struct {
-    /* 0x00 */ s8* unk00;
-    /* 0x04 */ s8 unk04;
-} unkstructInvadepoh0; // size = 0x08
+    /* 0x0 */ s8* unk00;
+    /* 0x4 */ s8 unk04;
+} unkstructInvadepoh0; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ s8 unk00;
-    /* 0x04 */ f32 unk04;
-} unkstructInvadepoh1; // size = 0x08
+    /* 0x0 */ s8 unk00;
+    /* 0x4 */ f32 unk04;
+} unkstructInvadepoh1; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ s8 unk00;
-    /* 0x04 */ unkstructInvadepoh0* unk04;
-} unkstructInvadepoh2; // size = 0x08
+    /* 0x0 */ s8 unk00;
+    /* 0x4 */ unkstructInvadepoh0* unk04;
+} unkstructInvadepoh2; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ s8 unk0;
-    /* 0x04 */ unkstructInvadepoh0* unk4;
-    /* 0x08 */ s8 unk8;
-    /* 0x0C */ unkstructInvadepoh1* unkC;
+    /* 0x0 */ s8 unk0;
+    /* 0x4 */ unkstructInvadepoh0* unk4;
+    /* 0x8 */ s8 unk8;
+    /* 0xC */ unkstructInvadepoh1* unkC;
 } unkstructInvadepoh3; // size = 0x10
 
 typedef struct {
@@ -72,38 +72,38 @@ typedef struct {
 } unkstructInvadepoh4; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ f32 unk00;
-    /* 0x04 */ s16 unk04;
-    /* 0x06 */ s16 unk06;
-} unkstruct80B4EE0C; // size = 0x08
+    /* 0x0 */ f32 unk00;
+    /* 0x4 */ s16 unk04;
+    /* 0x6 */ s16 unk06;
+} unkstruct80B4EE0C; // size = 0x8
 
 typedef struct EnInvadePohStruct {
-    /* 0x000 */ unkstructInvadepoh4* unk0;
-    /* 0x004 */ s8 unk4;
-    /* 0x008 */ unkstructInvadepoh4* unk8;
-    /* 0x00C */ s16 unkC;
-    /* 0x00E */ s8 unkE;
-    /* 0x00F */ s8 unkF;
+    /* 0x0 */ unkstructInvadepoh4* unk0;
+    /* 0x4 */ s8 unk4;
+    /* 0x8 */ unkstructInvadepoh4* unk8;
+    /* 0xC */ s16 unkC;
+    /* 0xE */ s8 unkE;
+    /* 0xF */ s8 unkF;
 } EnInvadePohStruct; // size = 0x10;
 
 typedef struct AlienBehaviorInfo {
-    /* 0x000 */ EnInvadePohStruct unk0;
-    /* 0x010 */ EnInvadePohStruct unk10;
-    /* 0x020 */ Vec3s unk20;
-    /* 0x026 */ Vec3s unk26;
-    /* 0x02C */ s16 unk2C;
-    /* 0x02E */ u16 unk2E;
-    /* 0x030 */ f32 unk30;
-    /* 0x034 */ f32 unk34;
-    /* 0x038 */ f32 unk38;
-    /* 0x03C */ f32 unk3C;
-    /* 0x040 */ s16 unk40;
-    /* 0x042 */ s16 unk42;
-    /* 0x044 */ f32 unk44;
-    /* 0x048 */ s16 unk48;
-    /* 0x04A */ char unk4A[0x2];
-    /* 0x04C */ s16 unk4C;
-    /* 0x04E */ s16 unk4E;
+    /* 0x00 */ EnInvadePohStruct unk0;
+    /* 0x10 */ EnInvadePohStruct unk10;
+    /* 0x20 */ Vec3s unk20;
+    /* 0x26 */ Vec3s unk26;
+    /* 0x2C */ s16 unk2C;
+    /* 0x2E */ u16 unk2E;
+    /* 0x30 */ f32 unk30;
+    /* 0x34 */ f32 unk34;
+    /* 0x38 */ f32 unk38;
+    /* 0x3C */ f32 unk3C;
+    /* 0x40 */ s16 unk40;
+    /* 0x42 */ s16 unk42;
+    /* 0x44 */ f32 unk44;
+    /* 0x48 */ s16 unk48;
+    /* 0x4A */ UNK_TYPE1 unk4A[0x2];
+    /* 0x4C */ s16 unk4C;
+    /* 0x4E */ s16 unk4E;
 } AlienBehaviorInfo; // size = 0x50
 
 typedef struct EnInvadepoh {
@@ -148,10 +148,8 @@ typedef struct EnInvadepoh {
     /* 0x3A8 */ s16 scaleAdjAngle;
     /* 0x3AA */ s16 unk3AA;
     /* 0x3AC */ s8 unk3AC; // index for D_80B4EDD0
-    /* 0x3AD */ char unk3AD[0xF];
+    /* 0x3AD */ UNK_TYPE1 unk3AD[0xF];
     /* 0x3BC */ s8 unk3BC;
 } EnInvadepoh; // size = 0x3C0
-
-extern const ActorInit En_Invadepoh_InitVars;
 
 #endif // Z_EN_INVADEPOH_H

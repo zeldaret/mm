@@ -41,7 +41,7 @@ typedef enum {
     /* 0x1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
-const ActorInit En_Baguo_InitVars = {
+ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -126,7 +126,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, NEJIRON_LIMB_MAX);
-    this->actor.hintId = 0xB;
+    this->actor.hintId = TATL_HINT_ID_NEJIRON;
     this->maxDistanceFromHome = 240.0f;
     this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
     this->actor.world.rot.z = 0;
@@ -299,7 +299,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
 
 void EnBaguo_PostDetonation(EnBaguo* this, PlayState* play) {
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->timer >= 26) {

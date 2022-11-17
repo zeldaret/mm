@@ -28,7 +28,7 @@ void func_80BC5830(EnPoComposer* this, PlayState* play);
 void func_80BC58E0(EnPoComposer* this, PlayState* play);
 
 #if 0
-const ActorInit En_Po_Composer_InitVars = {
+ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
     ACTORCAT_ITEMACTION,
     FLAGS,

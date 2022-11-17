@@ -21,10 +21,10 @@ void func_80918D64(EffDust* this, PlayState* play);
 void func_80918FE4(EffDust* this, PlayState* play);
 void func_80919230(EffDust* this, PlayState* play);
 
-void func_80919768(Actor* thisx, PlayState* play);
-void func_809199FC(Actor* thisx, PlayState* play);
+void func_80919768(Actor* thisx, PlayState* play2);
+void func_809199FC(Actor* thisx, PlayState* play2);
 
-const ActorInit Eff_Dust_InitVars = {
+ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,
     ACTORCAT_NPC,
     FLAGS,
@@ -71,7 +71,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dz = 0.8f;
             this->scalingFactor = 0.5f;
             break;
-        case EFF_DUST_TYPE_2:
+        case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
         case EFF_DUST_TYPE_3:
             this->actionFunc = func_80919230;
             this->actor.draw = func_809199FC;
@@ -171,11 +171,11 @@ void func_80919230(EffDust* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & 0x1000)) {
+    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
         if (this->life != 0) {
             this->life--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
 
         for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
@@ -203,7 +203,7 @@ void func_80919230(EffDust* this, PlayState* play) {
         if (this->distanceTraveled[i] >= 1.0f) {
             theta = randPlusMinusPoint5Scaled(0x10000);
             switch (this->actor.params) {
-                case EFF_DUST_TYPE_2:
+                case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 4500.0f) + 700.0f;
                     if (this->initialPositions[i].x > 3000.0f) {
                         this->initialPositions[i].y = (3000.0f * Rand_ZeroOne()) * Math_SinS(theta);

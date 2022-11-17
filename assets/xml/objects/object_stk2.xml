@@ -42,7 +42,7 @@
         <Limb Name="gClockTowerOcarinaOfTimeRootLimb" Type="Standard" EnumName="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_ROOT" Offset="0xAD58" />
 
         <!-- Clock Tower Ocarina Skeleton -->
-        <Skeleton Name="gClockTowerOcarinaOfTimeSkel" Type="Flex" LimbType="Standard" LimbNone="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_NONE" LimbMax="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_MAX" EnumName="ClockTowerOcarinaOfTimeLimbs" Offset="0xAD68" />
+        <Skeleton Name="gClockTowerOcarinaOfTimeSkel" Type="Flex" LimbType="Standard" LimbNone="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_NONE" LimbMax="CLOCK_TOWER_OCARINA_OF_TIME_LIMB_MAX" EnumName="ClockTowerOcarinaOfTimeLimb" Offset="0xAD68" />
 
         <!-- Skull Kid Animations -->
         <Animation Name="gSkullKidLaughStartAnim" Offset="0xC270" /> <!-- Original name is "oowarai" ("laughing loudly") -->

@@ -53,10 +53,8 @@ typedef struct EnDns {
     /* 0x2EC */ f32 unk_2EC;
     /* 0x2F0 */ f32 unk_2F0;
     /* 0x2F4 */ EnDnsFunc unk_2F4;
-    /* 0x2F8 */ s32 animationIndex;
+    /* 0x2F8 */ s32 animIndex;
     /* 0x2FC */ s32 unk_2FC;
 } EnDns; // size = 0x300
-
-extern const ActorInit En_Dns_InitVars;
 
 #endif // Z_EN_DNS_H

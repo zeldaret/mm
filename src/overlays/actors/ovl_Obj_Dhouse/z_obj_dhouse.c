@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_dhouse.h"
+#include "z64quake.h"
 #include "objects/object_dhouse/object_dhouse.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
@@ -21,13 +22,13 @@ void func_80B13170(ObjDhouse* this, PlayState* play, ObjDhouseStruct1* ptr, ObjD
 void func_80B13908(ObjDhouse* this);
 void func_80B1391C(ObjDhouse* this, PlayState* play);
 void func_80B1392C(ObjDhouse* this);
-void func_80B13940(ObjDhouse* this, PlayState* play);
+void func_80B13940(ObjDhouse* this, PlayState* play2);
 void func_80B139D8(ObjDhouse* this);
 void func_80B139F4(ObjDhouse* this, PlayState* play);
 void func_80B13C08(Actor* thisx, PlayState* play);
 void func_80B13E40(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Dhouse_InitVars = {
+ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
     ACTORCAT_BG,
     FLAGS,
@@ -454,23 +455,23 @@ void func_80B139D8(ObjDhouse* this) {
 
 void func_80B139F4(ObjDhouse* this, PlayState* play) {
     Camera* camera = GET_ACTIVE_CAM(play);
-    s16 quake;
+    s16 quakeIndex;
 
     if (this->unk_1370 == 117) {
-        quake = Quake_Add(camera, 3);
-        Quake_SetSpeed(quake, 20000);
-        Quake_SetQuakeValues(quake, 8, 0, 0, 0);
-        Quake_SetCountdown(quake, 17);
+        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetQuakeValues(quakeIndex, 8, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 17);
     } else if (this->unk_1370 == 105) {
-        quake = Quake_Add(camera, 3);
-        Quake_SetSpeed(quake, 20000);
-        Quake_SetQuakeValues(quake, 7, 0, 0, 0);
-        Quake_SetCountdown(quake, 20);
+        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 20);
     } else if (this->unk_1370 == 90) {
-        quake = Quake_Add(camera, 3);
-        Quake_SetSpeed(quake, 20000);
-        Quake_SetQuakeValues(quake, 5, 0, 0, 0);
-        Quake_SetCountdown(quake, 62);
+        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, 20000);
+        Quake_SetQuakeValues(quakeIndex, 5, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 62);
     }
 
     this->unk_1370--;

@@ -16,7 +16,7 @@ void EnGuardNuts_Destroy(Actor* thisx, PlayState* play);
 void EnGuardNuts_Update(Actor* thisx, PlayState* play);
 void EnGuardNuts_Draw(Actor* thisx, PlayState* play);
 
-void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 index);
+void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 animIndex);
 void EnGuardNuts_SetupWait(EnGuardNuts* this);
 void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play);
 void func_80ABB540(EnGuardNuts* this);
@@ -25,7 +25,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_SetupUnburrow(EnGuardNuts* this, PlayState* play);
 void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play);
 
-const ActorInit En_Guard_Nuts_InitVars = {
+ActorInit En_Guard_Nuts_InitVars = {
     ACTOR_EN_GUARD_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -72,7 +72,7 @@ static AnimationHeader* sAnimations[] = {
     &gDekuPalaceGuardWalkAnim,
 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 static TexturePtr sEyeTextures[] = {
     gDekuPalaceGuardEyeOpenTex,
@@ -109,7 +109,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     sGuardCount++;
 
     // If you have returned deku princess guards will init burrowed.
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         EnGuardNuts_SetupWait(this);
     } else {
         EnGuardNuts_Burrow(this, play);
@@ -126,13 +126,13 @@ void EnGuardNuts_Destroy(Actor* thisx, PlayState* play) {
  * @brief Changes the animation to the provided index. Updates animIndex and animFrameCount for the animation.
  *
  * @param this
- * @param index the index of sAnimations to change to
+ * @param animIndex the index of sAnimations to change to
  */
-void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 index) {
-    this->animIndex = index;
+void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 animIndex) {
+    this->animIndex = animIndex;
     this->animFrameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animFrameCount,
-                     sAnimModes[this->animIndex], -2.0f);
+                     sAnimationModes[this->animIndex], -2.0f);
 }
 
 void EnGuardNuts_SetupWait(EnGuardNuts* this) {
@@ -158,10 +158,10 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
     if (player->transformation == PLAYER_FORM_DEKU) {
         // this is the palace of...
         this->guardTextIndex = 0;
-        if ((gSaveContext.save.weekEventReg[17] & 4) && (!this->hasCompletedConversation)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_04) && (!this->hasCompletedConversation)) {
             // I told you not to enter!!
             this->guardTextIndex = 7;
-        } else if (gSaveContext.save.weekEventReg[12] & 0x40) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_40)) {
             // come to see the monkey again?
             this->guardTextIndex = 4;
         }
@@ -234,7 +234,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
                 if (D_80ABBE38[this->guardTextIndex] == 2) {
                     func_801477B4(play);
                     D_80ABBE20 = 2;
-                    gSaveContext.save.weekEventReg[12] |= 0x40;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_12_40);
                     EnGuardNuts_Burrow(this, play);
                 } else {
                     this->guardTextIndex++;
@@ -300,7 +300,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
     Vec3f digPos;
 
     // If you have returned Deku Princess, guards will not unburrow
-    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
         yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
         if ((yawDiff < 0x4000) && ((D_80ABBE20 == 0) || (this->actor.xzDistToPlayer > 150.0f))) {
             Math_Vec3f_Copy(&digPos, &this->actor.world.pos);

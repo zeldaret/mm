@@ -27,7 +27,7 @@ void func_80C15474(ObjJgameLight* this, PlayState* play);
 void ObjJgameLight_UpdateCollision(ObjJgameLight* this, PlayState* play);
 void func_80C15718(ObjJgameLight* this, PlayState* play);
 
-const ActorInit Obj_Jgame_Light_InitVars = {
+ActorInit Obj_Jgame_Light_InitVars = {
     ACTOR_OBJ_JGAME_LIGHT,
     ACTORCAT_PROP,
     FLAGS,
@@ -204,7 +204,7 @@ void ObjJgameLight_Draw(Actor* thisx, PlayState* play) {
                         MTXMODE_APPLY);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
     CLOSE_DISPS(play->state.gfxCtx);
 }

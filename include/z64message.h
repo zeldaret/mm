@@ -121,7 +121,7 @@ typedef struct MessageContext {
     /* 0x12028 */ u16 songPlayed;
     /* 0x1202A */ u16 ocarinaMode;
     /* 0x1202C */ u16 ocarinaAction;
-    /* 0x1202E */ u16 unk1202E;
+    /* 0x1202E */ u16 lastPlayedSong;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
     /* 0x12034 */ s16 unk12034;
@@ -160,7 +160,8 @@ typedef struct MessageContext {
     /* 0x120A4 */ s16 unk120A4[6];
     /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xC];
+    /* 0x120B2 */ u8 unk120B2[0xA];
+    /* 0x120BC */ u16 unk_120BC;
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;

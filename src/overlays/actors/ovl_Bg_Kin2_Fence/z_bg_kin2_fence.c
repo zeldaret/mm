@@ -27,7 +27,7 @@ void BgKin2Fence_RaiseFence(BgKin2Fence* this, PlayState* play);
 void BgKin2Fence_SetupDoNothing(BgKin2Fence* this);
 void BgKin2Fence_DoNothing(BgKin2Fence* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Fence_InitVars = {
+ActorInit Bg_Kin2_Fence_InitVars = {
     ACTOR_BG_KIN2_FENCE,
     ACTORCAT_BG,
     FLAGS,
@@ -120,19 +120,12 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
-    ColliderJntSphElement* elements = this->collider.elements;
+    s32 i;
 
-    if (elements[0].info.bumperFlags & BUMP_HIT) {
-        return 0;
-    }
-    if (elements[1].info.bumperFlags & BUMP_HIT) {
-        return 1;
-    }
-    if (elements[2].info.bumperFlags & BUMP_HIT) {
-        return 2;
-    }
-    if (elements[3].info.bumperFlags & BUMP_HIT) {
-        return 3;
+    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+        if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
+            return i;
+        }
     }
     return -1;
 }
@@ -157,7 +150,7 @@ void BgKin2Fence_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_kin2_obj_Colheader_000908);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gOceanSpiderHouseFireplaceGrateCol);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,

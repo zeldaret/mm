@@ -13,6 +13,4 @@ typedef struct ObjMure2 {
     /* 0x148 */ char unk_148[0x38];
 } ObjMure2; // size = 0x180
 
-extern const ActorInit Obj_Mure2_InitVars;
-
 #endif // Z_OBJ_MURE2_H

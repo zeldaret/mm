@@ -25,7 +25,7 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play);
 void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play);
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play);
 
-const ActorInit En_Gakufu_InitVars = {
+ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -106,18 +106,21 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
     s32 songIndex;
 
     AudioOcarina_TerminaWallGenerateNotes();
-    AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_DEFAULT);
+    AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
     AudioOcarina_StartDefault((1 << this->songIndex) | 0x80000000);
     playbackStaff = AudioOcarina_GetPlaybackStaff();
     playbackStaff->pos = 0;
     playbackStaff->state = 0xFF;
-    AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
+    AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
 
     songIndex = this->songIndex;
     ocarinaSongButtons = &gOcarinaSongButtons[songIndex];
+
+    //! FAKE:
+    if (1) {}
     songNumButtons = gOcarinaSongButtons[this->songIndex].numButtons;
 
-    for (i = 0; i < songNumButtons; i++) {
+    for (i = 0; i < (u8)songNumButtons; i++) {
         this->buttonIndex[i] = ocarinaSongButtons->buttonIndex[i];
     }
 
@@ -142,20 +145,20 @@ void EnGakufu_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_2000000;
 
     if (EnGakufu_IsPlayerInRange(this, play)) {
-        gSaveContext.eventInf[3] |= 2;
+        SET_EVENTINF(EVENTINF_31);
     } else {
-        gSaveContext.eventInf[3] &= (u8)~2;
+        CLEAR_EVENTINF(EVENTINF_31);
     }
 
     this->actionFunc = EnGakufu_WaitForSong;
-    gSaveContext.eventInf[3] &= (u8)~4;
+    CLEAR_EVENTINF(EVENTINF_32);
 }
 
 void EnGakufu_Destroy(Actor* thisx, PlayState* play) {
     EnGakufu* this = THIS;
 
     if (GAKUFU_GET_TYPE(&this->actor) != GAKUFU_MILK_BAR) {
-        gSaveContext.eventInf[3] &= (u8)~2;
+        CLEAR_EVENTINF(EVENTINF_31);
     }
 }
 
@@ -228,23 +231,23 @@ void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play) {
 
 /**
  * Waits for the notes on the wall to be played and updates the corresponding flags
- * (gSaveContext.eventInf[3] & 2) is checking if Player is within range of the wall
- * (gSaveContext.eventInf[3] & 4) is checking if Player has played the notes of the wall
+ * EVENTINF_31 is used to track if Player is within range of the wall
+ * EVENTINF_32 is used to track if Player has played the notes of the wall
  */
 void EnGakufu_WaitForSong(EnGakufu* this, PlayState* play) {
-    if (gSaveContext.eventInf[3] & 2) {
-        if (gSaveContext.eventInf[3] & 4) {
-            gSaveContext.eventInf[3] &= (u8)~2;
-            gSaveContext.eventInf[3] &= (u8)~4;
+    if (CHECK_EVENTINF(EVENTINF_31)) {
+        if (CHECK_EVENTINF(EVENTINF_32)) {
+            CLEAR_EVENTINF(EVENTINF_31);
+            CLEAR_EVENTINF(EVENTINF_32);
 
             this->actionFunc = EnGakufu_PlayRewardCutscene;
             EnGakufu_PlayRewardCutscene(this, play);
             this->actor.draw = NULL;
         } else if (!EnGakufu_IsPlayerInRange(this, play)) {
-            gSaveContext.eventInf[3] &= (u8)~2;
+            CLEAR_EVENTINF(EVENTINF_31);
         }
     } else if (EnGakufu_IsPlayerInRange(this, play)) {
-        gSaveContext.eventInf[3] |= 2;
+        SET_EVENTINF(EVENTINF_31);
     }
 }
 
