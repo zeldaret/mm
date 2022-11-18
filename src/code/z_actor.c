@@ -3115,7 +3115,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit = (void*)(
+        actorInit = (void*)(uintptr_t)(
             (overlayEntry->initInfo != NULL)
                 ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                 : NULL);
