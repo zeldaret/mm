@@ -185,12 +185,13 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
                 return;
             }
 
-            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, (uintptr_t)entry->vramStart, (uintptr_t)entry->vramEnd, entry->loadedRamAddr);
+            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, (uintptr_t)entry->vramStart, (uintptr_t)entry->vramEnd,
+                              entry->loadedRamAddr);
         }
 
-        initInfo = (void*)(uintptr_t)((entry->initInfo != NULL)
-                                   ? (void*)((uintptr_t)entry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(entry))
-                                   : NULL);
+        initInfo = (void*)(uintptr_t)(
+            (entry->initInfo != NULL) ? (void*)((uintptr_t)entry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(entry))
+                                      : NULL);
     }
 
     if (initInfo->init != NULL) {

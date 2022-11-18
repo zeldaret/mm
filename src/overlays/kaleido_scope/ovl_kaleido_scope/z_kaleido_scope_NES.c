@@ -617,7 +617,8 @@ void KaleidoScope_Update(PlayState* play) {
 
             for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
-                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual((TexturePtr)gItemIcons[(s32)itemId]), 0x400);
+                    KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual((TexturePtr)gItemIcons[(s32)itemId]),
+                                                      0x400);
                 }
             }
 

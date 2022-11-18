@@ -1,9 +1,0 @@
-cc: Warning: -mips3 should not be used for ucode 32-bit compiles
-cc: Warning: -mips3 should not be used for ucode 32-bit compiles
-src/libultra/os/createthread.c: In function 'osCreateThread':
-src/libultra/os/createthread.c:12:21: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-   12 |     t->context.a0 = (u64)arg;
-      |                     ^
-src/libultra/os/createthread.c:14:21: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-   14 |     t->context.ra = (u64)__osCleanupThread;
-      |                     ^

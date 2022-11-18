@@ -258,8 +258,9 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j + 0], 4, 0);
                 KaleidoScope_DrawTexQuadRGBA32(
-                    play->state.gfxCtx, (TexturePtr)gItemIcons[((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS])],
-                    32, 32, 0);
+                    play->state.gfxCtx,
+                    (TexturePtr)gItemIcons[((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS])], 32, 32,
+                    0);
             }
         }
     }

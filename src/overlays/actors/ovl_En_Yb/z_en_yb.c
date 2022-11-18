@@ -84,9 +84,10 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @bug this alignment is because of player animations, but should be using ALIGN16
-    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (void*) ((uintptr_t)this->jointTable & ~0xF),
-                       (void*) ((uintptr_t)this->morphTable & ~0xF), YB_LIMB_MAX);
+    //! @bug this alignment is because of player animations, but should be using ALIGN16
+    SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
+                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF),
+                       YB_LIMB_MAX);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 

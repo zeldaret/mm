@@ -21,10 +21,10 @@ void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
             (overlayEntry->unk_14 != NULL)
                 ? (void*)((uintptr_t)overlayEntry->unk_14 - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
                 : NULL);
-        overlayEntry->init =
-            (void*)(uintptr_t)((overlayEntry->init != NULL)
-                            ? (void*)((uintptr_t)overlayEntry->init - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
-                            : NULL);
+        overlayEntry->init = (void*)(uintptr_t)(
+            (overlayEntry->init != NULL)
+                ? (void*)((uintptr_t)overlayEntry->init - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                : NULL);
         overlayEntry->destroy = (void*)(uintptr_t)(
             (overlayEntry->destroy != NULL)
                 ? (void*)((uintptr_t)overlayEntry->destroy - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))

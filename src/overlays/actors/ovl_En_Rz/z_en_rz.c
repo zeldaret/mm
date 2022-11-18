@@ -103,7 +103,8 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
 
     //! @bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(play, &this->skelAnime, &object_rz_Skel_00D8D8, &gRosaSistersStandingAnim,
-                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF), OBJECT_RZ_LIMB_MAX);
+                       (void*)((uintptr_t)this->jointTable & ~0xF), (void*)((uintptr_t)this->morphTable & ~0xF),
+                       OBJECT_RZ_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gRosaSistersStandingAnim);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
