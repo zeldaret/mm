@@ -115,7 +115,8 @@ void Play_DisableMotionBlur(void) {
 #define PLAY_INTENSITY_GREEN 4
 #define PLAY_INTENSITY_BLUE 1
 #define PLAY_INTENSITY_NORM (0x1F * PLAY_INTENSITY_RED + 0x1F * PLAY_INTENSITY_GREEN + 0x1F * PLAY_INTENSITY_BLUE)
-#define PLAY_INTENSITY_MIX(r, g, b, m) ((((r) * PLAY_INTENSITY_RED + (g) * PLAY_INTENSITY_GREEN + (b) * PLAY_INTENSITY_BLUE) * (m)) / PLAY_INTENSITY_NORM)
+#define PLAY_INTENSITY_MIX(r, g, b, m) \
+    ((((r)*PLAY_INTENSITY_RED + (g)*PLAY_INTENSITY_GREEN + (b)*PLAY_INTENSITY_BLUE) * (m)) / PLAY_INTENSITY_NORM)
 
 /**
  * Converts an RGBA16 buffer to an Intensity Image
