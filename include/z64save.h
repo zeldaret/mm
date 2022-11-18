@@ -100,12 +100,12 @@ typedef enum {
     /* 16 */ TIMER_STATE_POSTMAN_END
 } TimerState;
 
-typedef enum {
+typedef enum BottleTimerState {
     /* 0 */ BOTTLE_TIMER_STATE_OFF,
     /* 1 */ BOTTLE_TIMER_STATE_COUNTING
 } BottleTimerState;
 
-typedef enum {
+typedef enum HudVisibility {
     /*  0 */ HUD_VISIBILITY_IDLE,
     /*  1 */ HUD_VISIBILITY_NONE,
     /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE

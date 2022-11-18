@@ -294,7 +294,7 @@ typedef struct MessageContext {
     /* 0x120B0 */ u8 ocarinaSongEffectActive;
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ u8 unk120B2[0xA];
-    /* 0x120BC */ u16 unk_120BC;
+    /* 0x120BC */ u16 unk_120BC; // HudVisibility enum
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;

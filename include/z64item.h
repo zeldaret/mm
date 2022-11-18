@@ -297,6 +297,8 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEAHORSE_CAUGHT,
+    /* 0xB8 */ ITEM_B8 = 0xB8,
+    /* 0xCC */ ITEM_CC = 0xCC,
     /* 0xF0 */ ITEM_F0 = 0xF0,
     /* 0xF1 */ ITEM_F1,
     /* 0xF2 */ ITEM_F2,
