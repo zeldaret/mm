@@ -141,7 +141,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->unk_33C = ENOT_GET_C000(&this->actor);
     if (this->unk_33C == 0) {
         D_80B5E880 = this;
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
@@ -265,7 +265,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
         case 3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
-                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
@@ -412,9 +412,9 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
         this->unk_360->unk_32C |= 0x100;
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIndex);
         SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIndex);
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-        this->unk_360->actor.flags |= ACTOR_FLAG_8000000;
+        this->unk_360->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->unk_360->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80B5C9A8(this->unk_360, play);
         func_80B5C3B8(this, play);
@@ -887,7 +887,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));
     this->actionFunc = func_80B5D750;
@@ -915,7 +915,7 @@ void func_80B5D750(EnOt* this, PlayState* play) {
     }
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
-        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         if (D_80B5E884 != 0) {
             func_80B5C9A8(this, play);

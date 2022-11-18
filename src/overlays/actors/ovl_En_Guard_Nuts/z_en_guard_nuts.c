@@ -276,7 +276,7 @@ void EnGuardNuts_Burrow(EnGuardNuts* this, PlayState* play) {
     digPos.y = this->actor.floorHeight;
     EffectSsHahen_SpawnBurst(play, &digPos, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
     this->targetHeadPos.y = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->targetHeadPos.x = this->targetHeadPos.y;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
@@ -311,7 +311,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, PlayState* play) {
             if (this->guardTextIndex == 9) {
                 this->hasCompletedConversation = true;
             }
-            this->actor.flags &= ~ACTOR_FLAG_8000000;
+            this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
             EnGuardNuts_SetupWait(this);
         }
     }

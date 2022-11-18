@@ -463,8 +463,8 @@ typedef enum {
 #define ACTOR_FLAG_40            (1 << 6)
 // Invisible
 #define ACTOR_FLAG_80            (1 << 7)
-// Related to talk
-#define ACTOR_FLAG_100           (1 << 8)
+// Player has requested to talk to the actor; Player uses this flag differently than every other actor
+#define ACTOR_FLAG_TALK_REQUESTED (1 << 8)
 // 
 #define ACTOR_FLAG_200           (1 << 9)
 // 
@@ -501,8 +501,8 @@ typedef enum {
 #define ACTOR_FLAG_2000000       (1 << 25)
 // 
 #define ACTOR_FLAG_4000000       (1 << 26)
-// 
-#define ACTOR_FLAG_8000000       (1 << 27)
+// Prevents locking on with Z targeting an actor even if Tatl is floating over it
+#define ACTOR_FLAG_CANT_LOCK_ON  (1 << 27)
 // 
 #define ACTOR_FLAG_10000000      (1 << 28)
 // 

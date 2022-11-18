@@ -284,7 +284,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     blureInit.calcMode = 2;
     Effect_Add(play, &this->blureIndex, EFFECT_BLURE1, 0, 0, &blureInit);
     Actor_SetScale(&this->picto.actor, 0.0125f);
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     if (this->switchFlag == 127) {
         this->switchFlag = -1;
@@ -612,7 +612,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 this->unk_59C = 0;
                 this->subCamId = 0;
                 this->picto.actor.flags &= ~ACTOR_FLAG_100000;
-                this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
+                this->picto.actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
                 this->picto.actor.flags |= ACTOR_FLAG_1;
                 func_80B872A4(this);
             }
@@ -1679,7 +1679,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     func_800B7298(play, &this->picto.actor, 0x7B);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-    this->picto.actor.flags |= ACTOR_FLAG_8000000;
+    this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     this->picto.actor.flags &= ~ACTOR_FLAG_400;
     this->unk_598 = 0;
