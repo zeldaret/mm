@@ -133,6 +133,16 @@ typedef enum HudVisibility {
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
 
+// Based on D_801D06F0
+typedef enum Language {
+    /* 0 */ LANGUAGE_JAP,
+    /* 1 */ LANGUAGE_ENG,
+    /* 2 */ LANGUAGE_GER,
+    /* 3 */ LANGUAGE_FRE,
+    /* 4 */ LANGUAGE_SPA,
+    /* 5 */ LANGUAGE_MAX
+} Language;
+
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
     /* 0x04 */ u8 *saveBuf;

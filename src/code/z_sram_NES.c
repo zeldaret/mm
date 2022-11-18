@@ -1394,7 +1394,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
             } else {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
-                    gSaveContext.options.language = 1;
+                    gSaveContext.options.language = LANGUAGE_ENG;
                     gSaveContext.options.audioSetting = 0;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
@@ -1402,7 +1402,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                     Lib_MemCpy(&gSaveContext.options, sramCtx->saveBuf, sizeof(SaveOptions));
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
-                        gSaveContext.options.language = 1;
+                        gSaveContext.options.language = LANGUAGE_ENG;
                         gSaveContext.options.audioSetting = 0;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
@@ -1416,7 +1416,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
         gSaveContext.unk_3F3F = D_801F6AF2;
     }
 
-    gSaveContext.options.language = 1;
+    gSaveContext.options.language = LANGUAGE_ENG;
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
@@ -1591,8 +1591,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
 void func_80146DF8(SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
-        // TODO: macros for languages
-        gSaveContext.options.language = 1;
+        gSaveContext.options.language = LANGUAGE_ENG;
         Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
 }

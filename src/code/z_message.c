@@ -1461,9 +1461,28 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_DrawTextDefault.s")
 #endif
 
-s16 D_801CFF70[] = { 4, 0x12, 0x12, 0x12, 0x12, 0 };
-s16 D_801CFF7C[] = { 0, 0xE, 0xE, 0xE, 0xE, 0 };
-s16 D_801CFF88[] = { 0, 0x16, 0x16, 0x16, 0x16, 0 };
+s16 D_801CFF70[LANGUAGE_MAX] = {
+    4,    // LANGUAGE_JAP
+    0x12, // LANGUAGE_ENG
+    0x12, // LANGUAGE_GER
+    0x12, // LANGUAGE_FRE
+    0x12, // LANGUAGE_SPA
+};
+s16 D_801CFF7C[LANGUAGE_MAX] = {
+    0,   // LANGUAGE_JAP
+    0xE, // LANGUAGE_ENG
+    0xE, // LANGUAGE_GER
+    0xE, // LANGUAGE_FRE
+    0xE, // LANGUAGE_SPA
+};
+s16 D_801CFF88[LANGUAGE_MAX] = {
+    0,    // LANGUAGE_JAP
+    0x16, // LANGUAGE_ENG
+    0x16, // LANGUAGE_GER
+    0x16, // LANGUAGE_FRE
+    0x16, // LANGUAGE_SPA
+};
+
 s16 D_801CFF94[] = {
     0x270F,
     ITEM_RUPEE_GREEN,
@@ -1737,34 +1756,37 @@ void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), 0x61, msgCtx->textboxSegment + 0x1000, 0x180);
+        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
+                      0x180);
     } else if (itemId == ITEM_BOMBERS_NOTEBOOK) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), 0x61, msgCtx->textboxSegment + 0x1000, 0x1000);
+        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
+                      0x1000);
     } else if (itemId <= ITEM_REMAINS_TWINMOLD) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
         func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), itemId, msgCtx->textboxSegment + 0x1000, 0x1000);
-    } else if (itemId == 0xCC) {
+    } else if (itemId == ITEM_CC) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), 0x15, msgCtx->textboxSegment + 0x1000, 0x400);
-    } else if (itemId >= 0xB8) {
+        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), ITEM_POTION_BLUE, msgCtx->textboxSegment + 0x1000,
+                      0x400);
+    } else if (itemId >= ITEM_B8) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), (itemId - 0xB8), msgCtx->textboxSegment + 0x1000,
+        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), (itemId - ITEM_B8), msgCtx->textboxSegment + 0x1000,
                       0x800);
-    } else if (itemId >= 0x6E) {
+    } else if (itemId >= ITEM_SKULL_TOKEN) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x18;
-        func_80178E3C(SEGMENT_ROM_START(icon_item_24_static_test), (itemId - 0x6E), msgCtx->textboxSegment + 0x1000,
-                      0x900);
+        func_80178E3C(SEGMENT_ROM_START(icon_item_24_static_test), (itemId - ITEM_SKULL_TOKEN),
+                      msgCtx->textboxSegment + 0x1000, 0x900);
     }
 
     if (play->pauseCtx.bombersNotebookOpen) {
@@ -2087,8 +2109,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
         textId = 0xCD;
     }
 
-    if ((textId == 0xC) &&
-        (GET_QUEST_HEART_PIECE_COUNT != 0)) {
+    if ((textId == 0xC) && (GET_QUEST_HEART_PIECE_COUNT != 0)) {
         textId = GET_QUEST_HEART_PIECE_COUNT;
         textId += 0xC4;
     }
@@ -2107,7 +2128,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     var_fv0 = 1.0f;
 
     if (play->pauseCtx.bombersNotebookOpen) {
-        if (gSaveContext.options.language == 0) {
+        if (gSaveContext.options.language == LANGUAGE_JAP) {
             msgCtx->textCharScale = 1.4f;
             msgCtx->unk11FFC = 0x1E;
             msgCtx->unk11FF8 = 0x32;
@@ -2123,7 +2144,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
         msgCtx->textCharScale = 0.85f;
         msgCtx->unk11FFC = 6;
         msgCtx->unk11FF8 = 0x14;
-    } else if (gSaveContext.options.language == 0) {
+    } else if (gSaveContext.options.language == LANGUAGE_JAP) {
         msgCtx->textCharScale = 0.88f;
         msgCtx->unk11FFC = 0x12;
         msgCtx->unk11FF8 = 0x32;
@@ -2142,7 +2163,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
         msgCtx->msgLength = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &_staff_message_data_staticSegmentRomStart[font->messageStart],
                             font->messageEnd);
-    } else if (gSaveContext.options.language == 0) {
+    } else if (gSaveContext.options.language == LANGUAGE_JAP) {
         Message_FindMessage(play, textId);
         msgCtx->msgLength = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &_message_data_staticSegmentRomStart[font->messageStart], font->messageEnd);
@@ -2213,7 +2234,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     msgCtx->textboxSkipped = false;
     msgCtx->textIsCredits = false;
 
-    if (gSaveContext.options.language == 0) {
+    if (gSaveContext.options.language == LANGUAGE_JAP) {
         msgCtx->textCharScale = 0.88f;
         msgCtx->unk11FFC = 0x12;
         msgCtx->unk11FF8 = 0x32;
@@ -2233,7 +2254,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
 
     msgCtx->currentTextId = arg1;
 
-    if (gSaveContext.options.language == 0) {
+    if (gSaveContext.options.language == LANGUAGE_JAP) {
         Message_FindMessage(play, arg1);
         msgCtx->msgLength = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
@@ -2978,7 +2999,7 @@ void Message_DrawOcarinaButtons(PlayState* play, Gfx** gfxP) {
 }
 
 void Message_DrawText(PlayState* play, Gfx** gfxP) {
-    if ((gSaveContext.options.language == 0) && !play->msgCtx.textIsCredits) {
+    if ((gSaveContext.options.language == LANGUAGE_JAP) && !play->msgCtx.textIsCredits) {
         Message_DrawTextDefault(play, gfxP);
     } else if (play->msgCtx.textIsCredits) {
         Message_DrawTextCredits(play, gfxP);
@@ -3117,7 +3138,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_TEXT_DISPLAYING:
             case MSGMODE_TEXT_DELAYED_BREAK:
             case MSGMODE_9:
-                if ((gSaveContext.options.language == 0) && !msgCtx->textIsCredits) {
+                if ((gSaveContext.options.language == LANGUAGE_JAP) && !msgCtx->textIsCredits) {
                     if (msgCtx->textDelay != 0) {
                         msgCtx->textDrawPos += msgCtx->textDelay;
                     }
@@ -3742,7 +3763,8 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     gSaveContext.save.scarecrowSpawnSongSet = true;
                     msgCtx->msgMode = MSGMODE_SCARECROW_SPAWN_RECORDING_DONE;
                     play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-                    Lib_MemCpy(gSaveContext.save.scarecrowSpawnSong, gScarecrowSpawnSongPtr, sizeof(gSaveContext.save.scarecrowSpawnSong));
+                    Lib_MemCpy(gSaveContext.save.scarecrowSpawnSong, gScarecrowSpawnSongPtr,
+                               sizeof(gSaveContext.save.scarecrowSpawnSong));
                     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.scarecrowSpawnSong); i++) {
                         // osSyncPrintf("%d, ", gSaveContext.scarecrowSpawnSong[i]);
                     }
@@ -4194,7 +4216,7 @@ void Message_Update(PlayState* play) {
 
                 msgCtx->textboxXTarget = sTextboxXPositions[var_v1];
 
-                if ((gSaveContext.options.language == 0) && !msgCtx->textIsCredits) {
+                if ((gSaveContext.options.language == LANGUAGE_JAP) && !msgCtx->textIsCredits) {
                     msgCtx->unk11FFE[0] = (s16)(msgCtx->textboxYTarget + 7);
                     msgCtx->unk11FFE[1] = (s16)(msgCtx->textboxYTarget + 0x19);
                     msgCtx->unk11FFE[2] = (s16)(msgCtx->textboxYTarget + 0x2B);
@@ -4556,7 +4578,8 @@ void Message_Update(PlayState* play) {
             if ((play->csCtx.state == 0) && (gSaveContext.save.cutscene < 0xFFF0) &&
                 ((play->activeCamId == 0) || ((play->transitionTrigger == 0) && (play->transitionMode == 0))) &&
                 (play->msgCtx.ocarinaMode == OCARINA_MODE_END)) {
-                if ((gSaveContext.prevHudVisibility == HUD_VISIBILITY_IDLE) || (gSaveContext.prevHudVisibility == HUD_VISIBILITY_NONE) ||
+                if ((gSaveContext.prevHudVisibility == HUD_VISIBILITY_IDLE) ||
+                    (gSaveContext.prevHudVisibility == HUD_VISIBILITY_NONE) ||
                     (gSaveContext.prevHudVisibility == HUD_VISIBILITY_NONE_ALT)) {
                     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
                 }

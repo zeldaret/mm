@@ -18,7 +18,7 @@ void SaveContext_Init(void) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
 
-    gSaveContext.options.language = 1;
+    gSaveContext.options.language = LANGUAGE_ENG;
     gSaveContext.options.audioSetting = 0;
     gSaveContext.options.zTargetSetting = 0;
 }

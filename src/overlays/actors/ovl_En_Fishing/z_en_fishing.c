@@ -5566,7 +5566,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
     Audio_PlaySfxAtPos(&sStreamSoundProjectedPos, NA_SE_EV_WATER_WALL - SFX_FLAG);
 
-    if (gSaveContext.options.language == 0) { // Added in MM
+    if (gSaveContext.options.language == LANGUAGE_JAP) { // Added in MM
         gSaveContext.minigameScore = D_8090CCF8;
     } else {
         gSaveContext.minigameScore = (SQ((f32)D_8090CCF8) * 0.0036f) + 0.5f;

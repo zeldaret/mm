@@ -169,7 +169,7 @@ f32 D_801D0470[160] = {
 // clang-format on
 
 // rupeesTextLocalization
-char D_801D06F0[4][8] = {
+char D_801D06F0[LANGUAGE_MAX - 1][8] = {
     { "Rupee(s)" }, // EN
     { "Rubin(e)" }, // DE
     { "Rubis" },    // FR
@@ -177,7 +177,7 @@ char D_801D06F0[4][8] = {
 };
 
 // rupeesTextLength
-u8 D_801D0710[4] = {
+u8 D_801D0710[LANGUAGE_MAX - 1] = {
     sizeof("Rupee(s)") - 1,
     sizeof("Rubin(e)") - 1,
     sizeof("Rubis") - 1,
