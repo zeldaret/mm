@@ -471,8 +471,8 @@ typedef enum {
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
-// 
-#define ACTOR_FLAG_1000          (1 << 12)
+// Actor will not shake when a quake occurs
+#define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
 // 

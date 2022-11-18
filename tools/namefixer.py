@@ -811,6 +811,8 @@ wordReplace = {
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
+    "ACTOR_FLAG_1000": "ACTOR_FLAG_IGNORE_QUAKE",
+
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
     "EXCH_ITEM_NONE": "PLAYER_IA_NONE",
     "EXCH_ITEM_PICTO_BOX": "PLAYER_IA_PICTO_BOX",

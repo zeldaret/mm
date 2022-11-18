@@ -2546,7 +2546,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
                    (actor->flags & (ACTOR_FLAG_10000000 | ACTOR_FLAG_400000)) ? NULL : &actor->world.pos, play);
     Lights_Draw(light, play->state.gfxCtx);
 
-    if (actor->flags & ACTOR_FLAG_1000) {
+    if (actor->flags & ACTOR_FLAG_IGNORE_QUAKE) {
         Matrix_SetTranslateRotateYXZ(actor->world.pos.x + play->mainCamera.quakeOffset.x,
                                      actor->world.pos.y +
                                          ((actor->shape.yOffset * actor->scale.y) + play->mainCamera.quakeOffset.y),
