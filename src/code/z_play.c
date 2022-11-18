@@ -108,6 +108,15 @@ void Play_DisableMotionBlur(void) {
     R_MOTION_BLUR_ENABLED = false;
 }
 
+// How much each color component contributes to the intensity image.
+// These coefficients are close to what the YUV color space defines Y (luminance) as:
+// https://en.wikipedia.org/wiki/YUV#Conversion_to/from_RGB
+#define PLAY_INTENSITY_RED 2
+#define PLAY_INTENSITY_GREEN 4
+#define PLAY_INTENSITY_BLUE 1
+#define PLAY_INTENSITY_NORM (0x1F * PLAY_INTENSITY_RED + 0x1F * PLAY_INTENSITY_GREEN + 0x1F * PLAY_INTENSITY_BLUE)
+#define PLAY_INTENSITY_MIX(r, g, b, m) ((((r) * PLAY_INTENSITY_RED + (g) * PLAY_INTENSITY_GREEN + (b) * PLAY_INTENSITY_BLUE) * (m)) / PLAY_INTENSITY_NORM)
+
 /**
  * Converts an RGBA16 buffer to an Intensity Image
  *
@@ -141,13 +150,13 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
                     r = RGBA16_GET_R(pixel);
                     g = RGBA16_GET_G(pixel);
                     b = RGBA16_GET_B(pixel);
-                    upper = ((r * 2 + g * 4 + b) * 0xF) / 217;
+                    upper = PLAY_INTENSITY_MIX(r, g, b, 15);
 
                     pixel = srcRgba16[i * rgba16Width + j + 1];
                     r = RGBA16_GET_R(pixel);
                     g = RGBA16_GET_G(pixel);
                     b = RGBA16_GET_B(pixel);
-                    lower = ((r * 2 + g * 4 + b) * 0xF) / 217;
+                    lower = PLAY_INTENSITY_MIX(r, g, b, 15);
 
                     *(destI4++) = (upper << 4) | lower;
                 }
@@ -167,7 +176,7 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
 
                     pixel = 0;
 
-                    *(destI5++) = (((r * 2 + g * 4 + b) * 0xFF) / 217) & 0xF8;
+                    *(destI5++) = PLAY_INTENSITY_MIX(r, g, b, 255) & 0xF8;
                 }
             }
             break;
@@ -184,7 +193,7 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
                     g = RGBA16_GET_G(pixel);
                     b = RGBA16_GET_B(pixel);
 
-                    *(destI8++) = ((r * 2 + g * 4 + b) * 0xFF) / 217;
+                    *(destI8++) = PLAY_INTENSITY_MIX(r, g, b, 255);
                 }
             }
             break;
