@@ -310,7 +310,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j + 0], 4, 0);
             KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx,
-                                           gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
+                                           (TexturePtr)gItemIcons[((void)0, gSaveContext.save.inventory.items[i])], 32, 32, 0);
         }
     }
 

@@ -2570,7 +2570,7 @@ s32 func_80178A94(s32 param_1, s32 param_2);
 // void func_80178C80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80178D7C(void);
 // void func_80178DAC(void);
-void func_80178E3C(uintptr_t, s32, s32, s32);
+void func_80178E3C(uintptr_t, s32, void*, s32);
 void func_80178E7C(uintptr_t arg0, void* arg1, size_t size);
 // void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value);
 // void Check_WriteI4Pixel(u16* buffer, u32 x, u32 y, u32 value);
