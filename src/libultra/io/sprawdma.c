@@ -5,7 +5,7 @@ s32 __osSpRawStartDma(s32 direction, void* devAddr, void* dramAddr, size_t size)
         return -1;
     }
 
-    HW_REG(SP_MEM_ADDR_REG, u32) = devAddr;
+    HW_REG(SP_MEM_ADDR_REG, u32) = (u32)devAddr;
     HW_REG(SP_DRAM_ADDR_REG, u32) = osVirtualToPhysical(dramAddr);
 
     if (direction == OS_READ) {

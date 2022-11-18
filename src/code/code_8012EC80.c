@@ -95,8 +95,9 @@ u32 gGsFlagsShift[] = {
     24,
 };
 
+// TODO: TexturePtr
 // TODO: use symbols for these icon textures once textures are properly in C
-TexturePtr gItemIcons[] = {
+uintptr_t gItemIcons[] = {
     0x08000000,        // ITEM_OCARINA
     0x08001000,        // ITEM_BOW
     0x08002000,        // ITEM_ARROW_FIRE
@@ -223,11 +224,11 @@ TexturePtr gItemIcons[] = {
     0x08062180,        // ITEM_HEART_PIECE_2
     0x08062A80,        // ITEM_INVALID_1
     0x08063380,        // ITEM_INVALID_2
-    gOcarinaCUpTex,    // ITEM_INVALID_3
-    gOcarinaCDownTex,  // ITEM_INVALID_4
-    gOcarinaCLeftTex,  // ITEM_INVALID_5
-    gOcarinaCRightTex, // ITEM_INVALID_6
-    gOcarinaATex,      // ITEM_INVALID_7
+    (uintptr_t)gOcarinaCUpTex,    // ITEM_INVALID_3
+    (uintptr_t)gOcarinaCDownTex,  // ITEM_INVALID_4
+    (uintptr_t)gOcarinaCLeftTex,  // ITEM_INVALID_5
+    (uintptr_t)gOcarinaCRightTex, // ITEM_INVALID_6
+    (uintptr_t)gOcarinaATex,      // ITEM_INVALID_7
 };
 
 // Used to map item IDs to inventory slots

@@ -1,11 +1,11 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 
-#define RSP_DONE_MSG 667
-#define RDP_DONE_MSG 668
-#define ENTRY_MSG 670
-#define RDP_AUDIO_CANCEL_MSG 671
-#define RSP_GFX_CANCEL_MSG 672
+#define RSP_DONE_MSG (OSMesg)667
+#define RDP_DONE_MSG (OSMesg)668
+#define ENTRY_MSG (OSMesg)670
+#define RDP_AUDIO_CANCEL_MSG (OSMesg)671
+#define RSP_GFX_CANCEL_MSG (OSMesg)672
 
 FaultClient sSchedFaultClient;
 
@@ -551,22 +551,27 @@ void Sched_ThreadEntry(void* arg) {
 
         // Check if it's a message from another thread or the OS
         switch ((s32)msg) {
-            case RDP_AUDIO_CANCEL_MSG:
+            case (s32)RDP_AUDIO_CANCEL_MSG:
                 Sched_HandleAudioCancel(sched);
                 continue;
-            case RSP_GFX_CANCEL_MSG:
+
+            case (s32)RSP_GFX_CANCEL_MSG:
                 Sched_HandleGfxCancel(sched);
                 continue;
-            case ENTRY_MSG:
+
+            case (s32)ENTRY_MSG:
                 Sched_HandleEntry(sched);
                 continue;
-            case RSP_DONE_MSG:
+
+            case (s32)RSP_DONE_MSG:
                 Sched_HandleRSPDone(sched);
                 continue;
-            case RDP_DONE_MSG:
+
+            case (s32)RDP_DONE_MSG:
                 Sched_HandleRDPDone(sched);
                 continue;
         }
+
         // Check if it's a message from the IrqMgr
         switch (((OSScMsg*)msg)->type) {
             case OS_SC_RETRACE_MSG:
