@@ -92,7 +92,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 }
 
 void* Graph_FaultAddrConvFunc(void* address, void* param) {
-    uintptr_t addr = address;
+    uintptr_t addr = (uintptr_t)address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
     uintptr_t ramConv;
     void* ramStart;
@@ -106,7 +106,7 @@ void* Graph_FaultAddrConvFunc(void* address, void* param) {
 
         if (ramStart != NULL) {
             if (addr >= (uintptr_t)ramStart && addr < (uintptr_t)ramStart + diff) {
-                return addr + ramConv;
+                return (void*)(addr + ramConv);
             }
         }
     }
@@ -179,7 +179,7 @@ retry:
     task->dramStack = (u64*)gGfxSPTaskStack;
     task->dramStackSize = sizeof(gGfxSPTaskStack);
     task->outputBuff = gGfxSPTaskOutputBufferPtr;
-    task->outputBuffSize = gGfxSPTaskOutputBufferSize;
+    task->outputBuffSize = (void*)gGfxSPTaskOutputBufferSize;
     task->dataPtr = (u64*)gGfxMasterDL;
     task->dataSize = 0;
     task->yieldDataPtr = (u64*)gGfxSPTaskYieldBuffer;

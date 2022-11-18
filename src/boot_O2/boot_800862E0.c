@@ -75,7 +75,7 @@ void SystemArena_RunBlockFunc1Reverse(void* blk, size_t nBlk, size_t blkSize, Bl
     }
 
     if (blockFunc != NULL) {
-        start = blk;
+        start = (uintptr_t)blk;
         maskedBlkSize = (blkSize & ~0);
         pos = (uintptr_t)start + (nBlk * blkSize);
 

@@ -2561,8 +2561,8 @@ void func_8017842C(MtxF* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32 arg5,
 // void func_80178818(void);
 void func_80178978(void);
 // void func_801789D4(void);
-u32 SysCfb_GetFbPtr(s32 index);
-u32 SysCfb_GetZBuffer(void);
+void* SysCfb_GetFbPtr(s32 index);
+void* SysCfb_GetZBuffer(void);
 // UNK_TYPE4 func_80178A24(void);
 // void func_80178A34(void);
 s32 func_80178A94(s32 param_1, s32 param_2);

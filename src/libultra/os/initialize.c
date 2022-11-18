@@ -51,8 +51,8 @@ void osInitialize(void) {
     *(struct_exceptionPreamble*)0x80000100 = *((struct_exceptionPreamble*)__osExceptionPreamble);
     *(struct_exceptionPreamble*)0x80000180 = *((struct_exceptionPreamble*)__osExceptionPreamble);
 
-    osWritebackDCache(0x80000000, 400);
-    osInvalICache(0x80000000, 400);
+    osWritebackDCache((void*)0x80000000, 400);
+    osInvalICache((void*)0x80000000, 400);
     __createSpeedParam();
     osUnmapTLBAll();
     osMapTLBRdb();

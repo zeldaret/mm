@@ -1090,15 +1090,15 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            TexturePtr phi_v0;
+            TexturePtr texture;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = gEffBubble2Tex;
+                texture = gEffBubble2Tex;
             } else {
-                phi_v0 = gEffBubble1Tex;
+                texture = gEffBubble1Tex;
             }
 
-            ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
+            ptr->unk_20 = (void*)VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(texture));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
             ptr->unk_04.x += randPlusMinusPoint5Scaled(ptr->unk_00 + (this->unk_330 * 4000.0f));

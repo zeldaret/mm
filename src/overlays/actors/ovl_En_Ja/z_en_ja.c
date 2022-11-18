@@ -141,7 +141,7 @@ void func_80BC1A68(EnJa* this) {
     }
 }
 
-s32 func_80BC1AE0(EnJa* this, PlayState* play) {
+Actor* func_80BC1AE0(EnJa* this, PlayState* play) {
     Actor* ja = SubS_FindNearestActor(&this->actor, play, ACTORCAT_NPC, ACTOR_EN_JA);
     Vec3f sp30;
     Vec3f sp24;
@@ -242,7 +242,7 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
 s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80BC1AE0(this, play)) {
+    if (func_80BC1AE0(this, play) != NULL) {
         SubS_UpdateFlags(&this->unk_340, 3, 7);
         this->unk_340 |= 0x10;
         func_80BC192C(this, 5);
@@ -255,7 +255,7 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    if (func_80BC1AE0(this, play)) {
+    if (func_80BC1AE0(this, play) != NULL) {
         if (ENJA_GET_3(&this->actor) == 0) {
             func_80BC192C(this, 1);
         } else {

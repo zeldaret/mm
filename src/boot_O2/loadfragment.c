@@ -97,7 +97,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, void* allocatedVRamAddr,
                         size_t allocatedBytes) {
     size_t size = vRomEnd - vRomStart;
-    void* end;
+    uintptr_t end;
     s32 pad;
     OverlayRelocationSection* ovl;
 
@@ -107,7 +107,7 @@ size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamSt
     end = (uintptr_t)allocatedVRamAddr + size;
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovl = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
     if (gLoadLogSeverity >= 3) {}
 
@@ -124,7 +124,7 @@ size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamSt
 
     if (ovl->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
-        bzero(end, ovl->bssSize);
+        bzero((void*)end, ovl->bssSize);
     }
 
     osWritebackDCache(allocatedVRamAddr, allocatedBytes);
@@ -137,7 +137,7 @@ size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamSt
 
 void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart) {
     size_t size = vRomEnd - vRomStart;
-    void* end;
+    uintptr_t end;
     void* allocatedVRamAddr;
     uintptr_t ovlOffset;
     OverlayRelocationSection* ovl;
@@ -154,8 +154,8 @@ void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRa
 
     if (gLoadLogSeverity >= 3) {}
 
-    ovlOffset = (uintptr_t)end - 4;
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovlOffset = end - sizeof(s32);
+    ovl = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
     if (1) {}
 
@@ -171,7 +171,7 @@ void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRa
     }
 
     end = (uintptr_t)allocatedVRamAddr + size;
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - *(uintptr_t*)ovlOffset);
+    ovl = (OverlayRelocationSection*)(end - *(uintptr_t*)ovlOffset);
 
     if (gLoadLogSeverity >= 3) {}
 
@@ -179,7 +179,7 @@ void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRa
 
     if (ovl->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
-        bzero(end, ovl->bssSize);
+        bzero((void*)end, ovl->bssSize);
     }
 
     osInvalICache(allocatedVRamAddr, allocatedBytes);
