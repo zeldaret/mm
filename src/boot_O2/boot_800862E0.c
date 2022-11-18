@@ -1,9 +1,9 @@
 #include "global.h"
 #include "system_malloc.h"
 
-typedef void (*BlockFunc)(void*);
-typedef void (*BlockFunc1)(void*, u32);
-typedef void (*BlockFunc8)(void*, u32, u32, u32, u32, u32, u32, u32, u32);
+typedef void (*BlockFunc)(uintptr_t);
+typedef void (*BlockFunc1)(uintptr_t, u32);
+typedef void (*BlockFunc8)(uintptr_t, u32, u32, u32, u32, u32, u32, u32, u32);
 
 typedef struct InitFunc {
     uintptr_t nextOffset;
@@ -34,7 +34,7 @@ void SystemArena_FreeNullCheck(void* ptr) {
 }
 
 void SystemArena_RunBlockFunc(void* blk, size_t nBlk, size_t blkSize, BlockFunc blockFunc) {
-    uintptr_t pos = blk;
+    uintptr_t pos = (uintptr_t)blk;
 
     for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
         blockFunc(pos);
@@ -42,7 +42,7 @@ void SystemArena_RunBlockFunc(void* blk, size_t nBlk, size_t blkSize, BlockFunc 
 }
 
 void SystemArena_RunBlockFunc1(void* blk, size_t nBlk, size_t blkSize, BlockFunc1 blockFunc) {
-    uintptr_t pos = blk;
+    uintptr_t pos = (uintptr_t)blk;
 
     for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
         blockFunc(pos, 2);
@@ -54,8 +54,8 @@ void* SystemArena_RunBlockFunc8(void* blk, size_t nBlk, size_t blkSize, BlockFun
         blk = SystemArena_MallocMin1(nBlk * blkSize);
     }
 
-    if (blk != NULL && blockFunc != NULL) {
-        uintptr_t pos = blk;
+    if ((blk != NULL) && (blockFunc != NULL)) {
+        uintptr_t pos = (uintptr_t)blk;
 
         for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
             blockFunc(pos, 0, 0, 0, 0, 0, 0, 0, 0);

@@ -93,7 +93,7 @@ size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamS
                          void* allocatedVRamAddr) {
     s32 pad[2];
     s32 size = vRomEnd - vRomStart;
-    void* end;
+    uintptr_t end;
     OverlayRelocationSection* ovl;
 
     if (gLoad2LogSeverity >= 3) {}
@@ -102,7 +102,7 @@ size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamS
     end = (uintptr_t)allocatedVRamAddr + size;
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovl = (OverlayRelocationSection*)(end - ((s32*)end)[-1]);
 
     if (gLoad2LogSeverity >= 3) {}
     if (gLoad2LogSeverity >= 3) {}
@@ -111,7 +111,7 @@ size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamS
 
     if (ovl->bssSize != 0) {
         if (gLoad2LogSeverity >= 3) {}
-        bzero(end, ovl->bssSize);
+        bzero((void*)end, ovl->bssSize);
     }
 
     size = vRamEnd - vRamStart;

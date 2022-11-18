@@ -994,7 +994,7 @@ extern u32 retryCount;
 extern u32 cfbIdx[3];
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
-extern u32 startHeapSize;
+extern uintptr_t startHeapSize;
 extern PadMgr* padmgrContext;
 // extern UNK_TYPE4 controllerInputsCaptured;
 // extern UNK_TYPE4 D_801D1538;

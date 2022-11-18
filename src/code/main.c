@@ -19,10 +19,10 @@ void Main(void* arg) {
     Check_RegionIsSupported();
     Check_ExpansionPak();
 
-    sysHeap = gSystemHeap;
+    sysHeap = (intptr_t)gSystemHeap;
     fb = 0x80780000;
     startHeapSize = fb - sysHeap;
-    SystemArena_Init(sysHeap, startHeapSize);
+    SystemArena_Init((void*)sysHeap, startHeapSize);
 
     GameInfo_Init();
 

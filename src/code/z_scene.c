@@ -13,7 +13,7 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     }
 
     if (objectCtx->num < OBJECT_EXCHANGE_BANK_MAX - 1) {
-        objectCtx->status[objectCtx->num + 1].segment = ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
+        objectCtx->status[objectCtx->num + 1].segment = (void*)ALIGN16((uintptr_t)objectCtx->status[objectCtx->num].segment + size);
     }
 
     objectCtx->num++;

@@ -731,6 +731,6 @@ void* Lib_PhysicalToVirtual(uintptr_t ptr) {
     if (ptr == 0) {
         return NULL;
     } else {
-        return PHYSICAL_TO_VIRTUAL(ptr);
+        return (void*)PHYSICAL_TO_VIRTUAL(ptr);
     }
 }
