@@ -1,6 +1,6 @@
 #include "global.h"
-#include "z64rumble.h"
 #include "z64quake.h"
+#include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
@@ -113,7 +113,7 @@ void Play_DisableMotionBlur(void) {
  *
  * @param[out] destI destination buffer
  * @param[in] srcRgba16 source buffer
- * @param[in] rgba16Width width of a full row fo the RGBA16
+ * @param[in] rgba16Width width of a full row for the RGBA16
  * @param[in] pixelLeft X coordinate of the top-left RGBA16 pixel to start with
  * @param[in] pixelTop Y coordinate of the top-left RGBA16 pixel to start with
  * @param[in] pixelRight X coordinate of the bottom-right RGBA16 pixel to end with
@@ -327,14 +327,6 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
         Transition_Init(transitionCtx);
     }
 }
-
-const char D_801DFA18[] = "来た!!!!!!!!!!!!!!!!!!!!!";
-const char D_801DFA34[][4] = {
-    "all", "a",  "a",  "b",  "b",  "c",  "c",  "d",   "d",   "e",  "e",  "f",  "fa", "fa", "fb", "fb",
-    "fc",  "fc", "fd", "fd", "fe", "fe", "fg", "fg",  "fh",  "fh", "fi", "fi", "fj", "fj", "fk", "fk",
-    "f",   "g",  "g",  "h",  "h",  "i",  "i",  "all", "all", "a",  "b",  "c",  "d",  "e",  "f",  "g",
-    "h",   "i",  "f",  "fa", "fb", "fc", "fd", "fe",  "ff",  "fg", "fh", "fi", "fj", "fk",
-};
 
 void Play_ClearTransition(PlayState* this) {
     if (this->transitionCtx.fbdemoType != -1) {
@@ -841,6 +833,10 @@ void Play_UpdateTransition(PlayState* this) {
                 this->envCtx.sandstormState = 4;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
+
+                // "It's here!!!!!!!!!"
+                (void)"来た!!!!!!!!!!!!!!!!!!!!!";
+
                 this->transitionMode = TRANS_MODE_SANDSTORM_END;
             } else {
                 this->transitionMode = TRANS_MODE_SANDSTORM_INIT;
@@ -884,6 +880,13 @@ void Play_UpdateTransition(PlayState* this) {
             break;
     }
 }
+
+const char D_801DFA34[][4] = {
+    "all", "a",  "a",  "b",  "b",  "c",  "c",  "d",   "d",   "e",  "e",  "f",  "fa", "fa", "fb", "fb",
+    "fc",  "fc", "fd", "fd", "fe", "fe", "fg", "fg",  "fh",  "fh", "fi", "fi", "fj", "fj", "fk", "fk",
+    "f",   "g",  "g",  "h",  "h",  "i",  "i",  "all", "all", "a",  "b",  "c",  "d",  "e",  "f",  "g",
+    "h",   "i",  "f",  "fa", "fb", "fc", "fd", "fe",  "ff",  "fg", "fh", "fi", "fj", "fk",
+};
 
 #ifdef NON_MATCHING
 // Stack issues
