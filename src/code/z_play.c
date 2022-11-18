@@ -336,7 +336,7 @@ void Play_ClearTransition(PlayState* this) {
 }
 
 Gfx* Play_SetFog(PlayState* this, Gfx* gfx) {
-    s32 fogFar = this->lightCtx.fogFar * (5.0f / 64.0f);
+    s32 fogFar = this->lightCtx.zFar * (5.0f / 64.0f);
 
     return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor.r, this->lightCtx.fogColor.g, this->lightCtx.fogColor.b, 0,
                               this->lightCtx.fogNear, ((fogFar <= 1000) ? 1000 : fogFar));
@@ -1140,15 +1140,15 @@ void Play_DrawMain(PlayState* this) {
     gSPSegment(OVERLAY_DISP++, 0x02, this->sceneSegment);
 
     if (1) {
-        f32 var_fv0; // fogFar
+        f32 var_fv0; // zFar
 
         ShrinkWindow_Draw(gfxCtx);
 
         POLY_OPA_DISP = Play_SetFog(this, POLY_OPA_DISP);
         POLY_XLU_DISP = Play_SetFog(this, POLY_XLU_DISP);
 
-        // fogFar
-        var_fv0 = this->lightCtx.fogFar;
+        // zFar
+        var_fv0 = this->lightCtx.zFar;
         if (var_fv0 > 12800.0f) {
             var_fv0 = 12800.0f;
         }

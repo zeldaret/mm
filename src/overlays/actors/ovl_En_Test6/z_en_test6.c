@@ -338,7 +338,7 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     play->envCtx.lightSettings.fogColor[1] = 0;
     play->envCtx.lightSettings.fogColor[2] = 0;
     play->envCtx.lightSettings.fogNear = 0;
-    play->envCtx.lightSettings.fogFar = 0;
+    play->envCtx.lightSettings.zFar = 0;
     play->envCtx.fillScreen = false;
 
     for (i = 0; i < ARRAY_COUNT(this->lights); i++) {

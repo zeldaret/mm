@@ -266,7 +266,7 @@ void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16
     lightCtx->fogColor.g = g;
     lightCtx->fogColor.b = b;
     lightCtx->fogNear = near;
-    lightCtx->fogFar = far;
+    lightCtx->zFar = far;
 }
 
 /**

@@ -161,8 +161,8 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             }
             break;
         case 0x3:
-            if (play->envCtx.lightSettings.fogFar < 12800) {
-                play->envCtx.lightSettings.fogFar += 35;
+            if (play->envCtx.lightSettings.zFar < 12800) {
+                play->envCtx.lightSettings.zFar += 35;
             }
             break;
         case 0x4:

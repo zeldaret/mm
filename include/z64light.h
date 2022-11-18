@@ -13,7 +13,7 @@ typedef struct {
     /* 0x0C */ u8 diffuseColor[3];
     /* 0x0F */ u8 fogColor[3];
     /* 0x12 */ s16 fogNear;
-    /* 0x14 */ s16 fogFar;
+    /* 0x14 */ s16 zFar;
 } LightSettings; // size = 0x16
 
 typedef struct {
@@ -22,7 +22,7 @@ typedef struct {
     /* 0x0C */ s16 diffuseColor2[3];
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
-    /* 0x1A */ s16 fogFar;
+    /* 0x1A */ s16 zFar;
 } EnvLightSettings; // size = 0x1C
 
 typedef struct {
@@ -75,8 +75,8 @@ typedef struct LightContext {
     /* 0x0 */ LightNode* listHead;
     /* 0x4 */ Color_RGB8 ambient;
     /* 0x7 */ Color_RGB8 fogColor;
-    /* 0xA */ s16 fogNear;
-    /* 0xC */ s16 fogFar;
+    /* 0xA */ s16 fogNear; // how close until fog starts taking effect. range 0 - 996
+    /* 0xC */ s16 zFar; // draw distance. range 0 - 12800
 } LightContext; // size = 0x10
 
 typedef enum LightType {
