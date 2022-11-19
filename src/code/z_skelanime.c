@@ -881,7 +881,7 @@ Gfx* SkelAnime_DrawFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32
 s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Vec3s* frameTable) {
     LegacyAnimationHeader* animHeader = Lib_SegmentedToVirtual(animation);
     s16 limbCount = animHeader->limbCount;
-    JointKey* key = Lib_SegmentedToVirtual(animHeader->jointKey);
+    LegacyJointKey* key = Lib_SegmentedToVirtual(animHeader->jointKey);
     s16* frameData = Lib_SegmentedToVirtual(animHeader->frameData);
     s16* staticData = &frameData[0];
     s16* dynamicData = &frameData[frame];
@@ -906,7 +906,7 @@ s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Ve
 /**
  * Used by legacy animation format
  */
-s16 Animation_GetLimbCount2(LegacyAnimationHeader* animation) {
+s16 Animation_GetLimbCountLegacy(LegacyAnimationHeader* animation) {
     LegacyAnimationHeader* animHeader = Lib_SegmentedToVirtual(animation);
 
     return animHeader->limbCount;
@@ -915,7 +915,7 @@ s16 Animation_GetLimbCount2(LegacyAnimationHeader* animation) {
 /**
  * Used by legacy animation format
  */
-s16 Animation_GetLength2(LegacyAnimationHeader* animation) {
+s16 Animation_GetLengthLegacy(LegacyAnimationHeader* animation) {
     LegacyAnimationHeader* animHeader = Lib_SegmentedToVirtual(animation);
 
     return animHeader->frameCount;
@@ -924,7 +924,7 @@ s16 Animation_GetLength2(LegacyAnimationHeader* animation) {
 /**
  * Used by legacy animation format
  */
-s16 Animation_GetLastFrame2(LegacyAnimationHeader* animation) {
+s16 Animation_GetLastFrameLegacy(LegacyAnimationHeader* animation) {
     AnimationHeaderCommon* animHeader = Lib_SegmentedToVirtual(animation);
 
     return animHeader->frameCount - 1;
@@ -984,7 +984,7 @@ AnimationEntry* AnimationContext_AddEntry(AnimationContext* animationCtx, Animat
     AnimationEntry* entry;
     s16 index = animationCtx->animationCount;
 
-    if (index >= ANIMATION_ENTRY_MAX) {
+    if (index >= ARRAY_COUNT(animationCtx->entries)) {
         return NULL;
     }
 
@@ -993,6 +993,9 @@ AnimationEntry* AnimationContext_AddEntry(AnimationContext* animationCtx, Animat
     entry->type = type;
     return entry;
 }
+
+#define LINK_ANIMETION_OFFSET(addr, offset) \
+    (SEGMENT_ROM_START(link_animetion) + ((uintptr_t)addr & 0xFFFFFF) + ((u32)offset))
 
 /**
  * Requests loading frame data from the Player animation into frameTable
@@ -1003,13 +1006,13 @@ void AnimationContext_SetLoadFrame(PlayState* play, PlayerAnimationHeader* anima
 
     if (entry != NULL) {
         PlayerAnimationHeader* playerAnimHeader = Lib_SegmentedToVirtual(animation);
-        uintptr_t ram = frameTable;
+        void* ram = (void*)frameTable;
 
         osCreateMesgQueue(&entry->data.load.msgQueue, entry->data.load.msg, ARRAY_COUNT(entry->data.load.msg));
         DmaMgr_SendRequestImpl(
             &entry->data.load.req, ram,
-            LINK_ANIMETION_OFFSET(playerAnimHeader->segment, (sizeof(Vec3s) * limbCount + 2) * frame),
-            sizeof(Vec3s) * limbCount + 2, 0, &entry->data.load.msgQueue, NULL);
+            LINK_ANIMETION_OFFSET(playerAnimHeader->segment, (sizeof(Vec3s) * limbCount + sizeof(s16)) * frame),
+            sizeof(Vec3s) * limbCount + sizeof(s16), 0, &entry->data.load.msgQueue, NULL);
     }
 }
 

@@ -11,10 +11,7 @@ struct Actor;
 struct SkelAnime;
 struct PlayerAnimationFrame;
 
-#define LINK_ANIMETION_OFFSET(addr, offset) \
-    (SEGMENT_ROM_START(link_animetion) + ((uintptr_t)addr & 0xFFFFFF) + ((u32)offset))
 #define LIMB_DONE 0xFF
-#define ANIMATION_ENTRY_MAX 50
 
 #define ANIM_FLAG_1         (1 << 0)
 #define ANIM_FLAG_UPDATEY   (1 << 1)
@@ -81,22 +78,6 @@ typedef struct {
     /* 0x8 */ JointIndex* jointIndices; // referenced as ref_tbl
     /* 0xC */ u16 staticIndexMax;
 } AnimationHeader; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ s16 xMax;
-    /* 0x02 */ s16 x;
-    /* 0x04 */ s16 yMax;
-    /* 0x06 */ s16 y;
-    /* 0x08 */ s16 zMax;
-    /* 0x10 */ s16 z;
-} JointKey; // size = 0x12
-
-typedef struct {
-    /* 0x0 */ s16 frameCount;
-    /* 0x2 */ s16 limbCount;
-    /* 0x4 */ s16* frameData;
-    /* 0x8 */ JointKey* jointKey;
-} LegacyAnimationHeader; // size = 0xC
 
 typedef enum {
     /* 0 */ ANIMATION_LINKANIMETION,
@@ -166,7 +147,7 @@ typedef struct {
 
 typedef struct AnimationContext {
     /* 0x000 */ s16 animationCount;
-    /* 0x004 */ AnimationEntry entries[ANIMATION_ENTRY_MAX];
+    /* 0x004 */ AnimationEntry entries[50];
 } AnimationContext; // size = 0xC84
 
 typedef struct {
@@ -330,11 +311,6 @@ void SkelAnime_DrawTransformFlexOpa(struct PlayState* play, void** skeleton, Vec
 s16 Animation_GetLastFrame(void* animation);
 Gfx* SkelAnime_Draw(struct PlayState* play, void** skeleton, Vec3s* jointTable, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, struct Actor* actor, Gfx* gfx);
 Gfx* SkelAnime_DrawFlex(struct PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, struct Actor* actor, Gfx* gfx);
-
-s16 SkelAnime_GetFrameDataLegacy(LegacyAnimationHeader* animation, s32 frame, Vec3s* frameTable);
-s16 Animation_GetLimbCount2(LegacyAnimationHeader* animation);
-s16 Animation_GetLength2(LegacyAnimationHeader* animation);
-s16 Animation_GetLastFrame2(LegacyAnimationHeader* animation);
 
 void AnimationContext_Reset(AnimationContext* animationCtx);
 void AnimationContext_SetNextQueue(struct PlayState* play);
