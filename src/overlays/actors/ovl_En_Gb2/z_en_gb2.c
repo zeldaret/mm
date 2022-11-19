@@ -832,7 +832,7 @@ void func_80B111AC(EnGb2* this, PlayState* play) {
     this->actor.world.pos.x = D_80B11A00[index][0];
     this->actor.world.pos.y = D_80B11A00[index][1];
     this->actor.world.pos.z = D_80B11A00[index][2];
-    this->actor.world.rot.y = D_80B11A00[index][3] * 182.04445f;
+    this->actor.world.rot.y = D_80B11A00[index][3] * (0x10000 / 360.0f);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc = func_80B11268;
 }

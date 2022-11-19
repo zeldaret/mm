@@ -121,10 +121,10 @@ void func_80B02DB0(ObjSnowball* this, PlayState* play) {
     s32 pad;
     ObjSnowballStruct2* ptr = &D_80B04F84[this->actor.home.rot.y];
 
-    Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
-                                  this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02,
-                                  ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.halfDaysBits, NULL);
+    Actor_SpawnAsChildAndCutscene(
+        &play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+        this->actor.home.rot.x, 0, this->actor.home.rot.z, this->actor.params | ptr->unk_02,
+        ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02E54(ObjSnowball* this, PlayState* play) {

@@ -99,9 +99,10 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
 
     if (this->unk_194[0] == NULL) {
         ptr = this->unk_194;
-        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(
-            &play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x, this->actor.world.pos.y,
-            this->actor.world.pos.z, 0, Rand_Next() >> 0x10, 0, 1, this->actor.cutscene, this->actor.halfDaysBits, NULL);
+        actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KUSA2, this->actor.world.pos.x,
+                                                        this->actor.world.pos.y, this->actor.world.pos.z, 0,
+                                                        Rand_Next() >> 0x10, 0, 1, this->actor.cutscene,
+                                                        this->actor.halfDaysBits, NULL);
         *ptr = actor;
 
         if (*ptr != NULL) {
@@ -158,7 +159,8 @@ void func_80A5B3BC(EnKusa2* this) {
 void func_80A5B490(EnKusa2* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_KITAN, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.halfDaysBits, NULL);
+                                  ENKUSA2_GET_7F00(&this->actor) << 9, this->actor.cutscene, this->actor.halfDaysBits,
+                                  NULL);
 }
 
 void func_80A5B508(void) {

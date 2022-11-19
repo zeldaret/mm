@@ -151,7 +151,8 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
     f32 playerDistFromCentralPlane;
 
     if (this->type == EN_HOLL_TYPE_DEFAULT) {
-        u32 halfDaysBit = ((play->actorCtx.halfDaysBit & HALFDAYBIT_DAYS) >> 1) | (play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS);
+        u32 halfDaysBit =
+            ((play->actorCtx.halfDaysBit & HALFDAYBIT_DAYS) >> 1) | (play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS);
         u32 zActorBitmask = D_801AED48[EN_HOLL_GET_Z_ACTOR_BITMASK_INDEX(&this->actor)];
 
         if (!(halfDaysBit & zActorBitmask)) {
