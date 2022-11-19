@@ -1886,9 +1886,8 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
     Player* player = GET_PLAYER(this);
 
     if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&this->state, respawnMode, ((void)0, gSaveContext.save.entrance),
-                            this->roomCtx.curRoom.num, playerParams, &player->actor.world.pos,
-                            player->actor.shape.rot.y);
+        Play_SetRespawnData(&this->state, respawnMode, ((void)0, gSaveContext.save.entrance), this->roomCtx.curRoom.num,
+                            playerParams, &player->actor.world.pos, player->actor.shape.rot.y);
     }
 }
 
