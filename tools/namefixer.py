@@ -505,6 +505,8 @@ wordReplace = {
     "func_80165690": "Play_DisableMotionBlur",
     "func_801660B8": "Play_SetFog",
 
+    "func_8011B4E0": "Interface_SetPerfectLetters",
+    "func_80112AFC": "Interface_InitMinigame",
     "func_8010E9F0": "Interface_StartTimer",
     "func_8010EA9C": "Interface_StartPostmanTimer",
     "func_80121F94": "Interface_Destroy",
@@ -522,7 +524,7 @@ wordReplace = {
     "func_80115130": "Inventory_ConsumeFairy",
     "func_801152B8": "Inventory_UpdateItem",
     "func_80115908": "Health_ChangeBy",
-    "func_801159c0": "Health_GiveHearts",
+    "func_801159C0": "Health_GiveHearts",
     "func_801159EC": "Rupees_ChangeBy",
     "func_80115A14": "Inventory_ChangeAmmo",
     "Parameter_AddMagic": "Magic_Add",
@@ -722,6 +724,8 @@ wordReplace = {
     "gSaveContext.sceneSetupIndex": "gSaveContext.sceneLayer",
     "gSaveContext.seqIndex": "gSaveContext.seqId",
     "gSaveContext.nightSeqIndex": "gSaveContext.ambienceId",
+    "gSaveContext.minigameState": "gSaveContext.minigameStatus",
+    "gSaveContext.unk_3F3C": "gSaveContext.minigameHiddenScore",
 
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
@@ -762,6 +766,11 @@ wordReplace = {
     "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
     "play->interfaceCtx.unk_31A": "play->interfaceCtx.storyState",
     "play->interfaceCtx.unk_31B": "play->interfaceCtx.storyType",
+    "play->interfaceCtx.unk_25C": "play->interfaceCtx.minigamePoints",
+    "play->interfaceCtx.unk_25E": "play->interfaceCtx.minigameHiddenPoints",
+    "play->interfaceCtx.unk_280": "play->interfaceCtx.minigameState",
+    "play->interfaceCtx.unk_286": "play->interfaceCtx.perfectLettersOn",
+    "play->interfaceCtx.hbaAmmo": "play->interfaceCtx.minigameAmmo",
 
     # "play->actorCtx.flags": "play->actorCtx.sceneFlags",
     # "play->actorCtx.unk5": "play->actorCtx.flags",

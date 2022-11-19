@@ -342,7 +342,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
             if (play->curSpawn == 6) {
                 func_80953F14(this, play);
                 if (CHECK_EVENTINF(EVENTINF_35)) {
-                    func_80112AFC(play);
+                    Interface_InitMinigame(play);
                 } else {
                     SET_EVENTINF(EVENTINF_41);
                 }

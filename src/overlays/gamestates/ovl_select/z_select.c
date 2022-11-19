@@ -517,7 +517,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                 gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
                 gSaveContext.timerPausedOsTimes[i] = 0;
             }
-            gSaveContext.minigameState = 0;
+            gSaveContext.minigameStatus = MINIGAME_STATUS_INACTIVE;
 
             if (this->scenes[this->currentScene].loadFunc != NULL) {
                 this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance, this->opt);
