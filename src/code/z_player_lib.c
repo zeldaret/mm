@@ -2052,7 +2052,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             Matrix_Translate(pos->x + sp54.x, pos->y + sp54.y, pos->z + sp54.z, MTXMODE_APPLY);
             Matrix_RotateXS(player->unk_B94, MTXMODE_APPLY);
             Matrix_RotateZS(player->unk_B8E, MTXMODE_APPLY);
-            player->unk_AB2.x = player->unk_B90 - player->unk_B94;
+            player->upperLimbRot.x = player->unk_B90 - player->unk_B94;
             Matrix_RotateZYX(rot->x, rot->y, rot->z, MTXMODE_APPLY);
             func_80125318(pos, rot);
         } else if (player->unk_AAA != 0) {
@@ -2067,9 +2067,9 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
         }
 
         if (limbIndex == PLAYER_LIMB_HEAD) {
-            rot->x += player->unk_AAC.z;
-            rot->y -= player->unk_AAC.y;
-            rot->z += player->unk_AAC.x;
+            rot->x += player->headLimbRot.z;
+            rot->y -= player->headLimbRot.y;
+            rot->z += player->headLimbRot.x;
 
             if (player->transformation == PLAYER_FORM_DEKU) {
                 EnArrow* bubble = NULL;
@@ -2139,11 +2139,11 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 Matrix_RotateYS(player->unk_AA8, MTXMODE_APPLY);
             }
 
-            if (player->unk_AB2.y != 0) {
-                Matrix_RotateYS(player->unk_AB2.y, MTXMODE_APPLY);
+            if (player->upperLimbRot.y != 0) {
+                Matrix_RotateYS(player->upperLimbRot.y, MTXMODE_APPLY);
             }
 
-            xRot = player->unk_AB2.x;
+            xRot = player->upperLimbRot.x;
             if ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags3 & PLAYER_STATE3_40)) {
                 if (player->heldActor != NULL) {
                     xRot += (s16)(((EnArrow*)(player->heldActor))->bubble.unk_144 * -470.0f);
@@ -2151,8 +2151,8 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
             }
 
             Matrix_RotateXS(xRot, MTXMODE_APPLY);
-            if (player->unk_AB2.z != 0) {
-                Matrix_RotateZS(player->unk_AB2.z, MTXMODE_APPLY);
+            if (player->upperLimbRot.z != 0) {
+                Matrix_RotateZS(player->upperLimbRot.z, MTXMODE_APPLY);
             }
         } else {
             func_80125500(play, player, limbIndex, pos, rot);
@@ -3310,8 +3310,8 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (dlist == object_link_zora_DL_00E2A0) { // zora guitar
-        s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->unk_AB2.x) * ((f32)(IREG(52) + 20)) / 100.0f);
-        s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->unk_AB2.y) * ((f32)(IREG(53) + 15)) / 100.0f);
+        s16 sp26 = Math_SinS(player->unk_B86[0]) * (ABS_ALT(player->upperLimbRot.x) * ((f32)(IREG(52) + 20)) / 100.0f);
+        s16 sp24 = Math_SinS(player->unk_B86[1]) * (ABS_ALT(player->upperLimbRot.y) * ((f32)(IREG(53) + 15)) / 100.0f);
 
         OPEN_DISPS(play->state.gfxCtx);
 

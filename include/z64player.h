@@ -1018,8 +1018,8 @@ typedef struct Player {
     /* 0xAA6 */ u16 unk_AA6; // flags of some kind
     /* 0xAA8 */ s16 unk_AA8;
     /* 0xAAA */ s16 unk_AAA;
-    /* 0xAAC */ Vec3s unk_AAC;
-    /* 0xAB2 */ Vec3s unk_AB2;
+    /* 0xAAC */ Vec3s headLimbRot;
+    /* 0xAB2 */ Vec3s upperLimbRot;
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
