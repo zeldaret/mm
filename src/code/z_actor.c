@@ -2241,7 +2241,7 @@ void Actor_DeactivateLens(PlayState* play) {
     }
 }
 
-void func_800B9120(ActorContext* actorCtx) {
+void Actor_InitHalfDaysBit(ActorContext* actorCtx) {
     s32 halfDayCount = CURRENT_DAY * 2;
 
     if (gSaveContext.save.time < CLOCK_TIME(6, 0) || gSaveContext.save.time > CLOCK_TIME(18, 0)) {
@@ -2287,7 +2287,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
 
     Actor_SpawnEntry(actorCtx, actorEntry, play);
     Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
-    func_800B9120(actorCtx);
+    Actor_InitHalfDaysBit(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
     func_800B722C(&play->state, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
 }
@@ -2304,7 +2304,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
         s32 actorEntryHalfDayBit;
         s32 i;
 
-        func_800B9120(actorCtx);
+        Actor_InitHalfDaysBit(actorCtx);
         func_800BA8B8(play, &play->actorCtx);
 
         // Shift to previous halfDay bit, but ignoring DAY0_NIGHT.
@@ -2961,6 +2961,9 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
     play->msgCtx.unk_12030 = 0;
 }
 
+/**
+ * Kill every actor which does not have the current halfDayBit enabled
+ */
 void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
     s32 i;
 
@@ -2970,6 +2973,7 @@ void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
         while (actor != NULL) {
             if (!(actor->halfDaysBits & actorCtx->halfDaysBit)) {
                 func_80123590(play, actor);
+
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
                 } else {

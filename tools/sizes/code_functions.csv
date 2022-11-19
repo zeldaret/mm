@@ -326,7 +326,7 @@ asm/non_matchings/code/z_actor/func_800B9084.s,func_800B9084,0x800B9084,0x5
 asm/non_matchings/code/z_actor/func_800B9098.s,func_800B9098,0x800B9098,0x5
 asm/non_matchings/code/z_actor/func_800B90AC.s,func_800B90AC,0x800B90AC,0x12
 asm/non_matchings/code/z_actor/Actor_DeactivateLens.s,Actor_DeactivateLens,0x800B90F4,0xB
-asm/non_matchings/code/z_actor/func_800B9120.s,func_800B9120,0x800B9120,0x14
+asm/non_matchings/code/z_actor/Actor_InitHalfDaysBit.s,Actor_InitHalfDaysBit,0x800B9120,0x14
 asm/non_matchings/code/z_actor/Actor_InitContext.s,Actor_InitContext,0x800B9170,0x71
 asm/non_matchings/code/z_actor/Actor_SpawnSetupActors.s,Actor_SpawnSetupActors,0x800B9334,0x56
 asm/non_matchings/code/z_actor/Actor_UpdateActor.s,Actor_UpdateActor,0x800B948C,0xBD

@@ -718,7 +718,7 @@ void func_800B9084(Actor* actor);
 void func_800B9098(Actor* actor);
 s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4);
 void Actor_DeactivateLens(PlayState* play);
-void func_800B9120(ActorContext* actorCtx);
+void Actor_InitHalfDaysBit(ActorContext* actorCtx);
 void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* actorEntry);
 void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx);
 s32 Actor_RecordUndrawnActor(PlayState* play, Actor* actor);

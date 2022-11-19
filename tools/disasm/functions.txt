@@ -812,7 +812,7 @@
     0x800B9098:("func_800B9098",),
     0x800B90AC:("func_800B90AC",),
     0x800B90F4:("Actor_DeactivateLens",),
-    0x800B9120:("func_800B9120",),
+    0x800B9120:("Actor_InitHalfDaysBit",),
     0x800B9170:("Actor_InitContext",),
     0x800B9334:("Actor_SpawnSetupActors",),
     0x800B948C:("Actor_UpdateActor",),
