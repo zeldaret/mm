@@ -727,7 +727,7 @@ void func_800BA6FC(PlayState* play, ActorContext* actorCtx);
 void func_800BA798(PlayState* play, ActorContext* actorCtx);
 void Actor_CleanupContext(ActorContext* actorCtx, PlayState* play);
 Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
-Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent);
+Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, u32 halfDaysBits, Actor* parent);
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx);
 void Enemy_StartFinishingBlow(PlayState* play, Actor* actor);

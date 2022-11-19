@@ -176,7 +176,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.parent = Actor_SpawnAsChildAndCutscene(
         &play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x, this->actor.world.pos.y,
-        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.unk20, NULL);
+        this->actor.world.pos.z, 0, 0, 0, params + 0x10, -1, this->actor.halfDaysBits, NULL);
     if (this->actor.parent == NULL) {
         Actor_Kill(&this->actor);
         return;
@@ -184,7 +184,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.child = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_FLOORMAS, this->actor.world.pos.x,
                                                       this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
-                                                      params + 0x10, -1, this->actor.unk20, NULL);
+                                                      params + 0x10, -1, this->actor.halfDaysBits, NULL);
     if (this->actor.child == NULL) {
         Actor_Kill(this->actor.parent);
         Actor_Kill(&this->actor);

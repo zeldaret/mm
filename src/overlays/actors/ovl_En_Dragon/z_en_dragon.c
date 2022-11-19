@@ -683,7 +683,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
-                                          this->actor.unk20, NULL)) {
+                                          this->actor.halfDaysBits, NULL)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_13_01);
             switch (this->pythonIndex) {
                 case 0:

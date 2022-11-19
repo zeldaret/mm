@@ -116,7 +116,7 @@ void BgIkanaDharma_Init(Actor* thisx, PlayState* play2) {
                                           segmentY, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                                           this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
                                           BGIKANADHARMA_PARAMS(0, true, 0), this->dyna.actor.cutscene,
-                                          this->dyna.actor.unk20, NULL);
+                                          this->dyna.actor.halfDaysBits, NULL);
         }
 
         this->dyna.actor.bgCheckFlags |= 1;

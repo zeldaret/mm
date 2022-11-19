@@ -992,7 +992,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
             func_80B5B2E0(play, &this->actor.world.pos, ENOT_GET_7F(&this->actor), &sp50, &this->unk_340);
             if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, sp50.x, sp50.y, sp50.z, 0,
                                               this->actor.shape.rot.y, 1, ENOT_GET_3FFF(&this->actor) | 0x8000,
-                                              this->actor.cutscene, this->actor.unk20, NULL) != NULL) {
+                                              this->actor.cutscene, this->actor.halfDaysBits, NULL) != NULL) {
                 this->unk_32C |= 8;
             }
         } else if (D_80B5E888 != NULL) {

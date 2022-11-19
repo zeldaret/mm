@@ -106,7 +106,7 @@ void func_80B02CD0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  ptr->unk_02, -1, this->actor.unk20, NULL);
+                                  ptr->unk_02, -1, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02D58(ObjSnowball* this, PlayState* play) {
@@ -124,7 +124,7 @@ void func_80B02DB0(ObjSnowball* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
                                   this->actor.params | ptr->unk_02,
-                                  ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.unk20, NULL);
+                                  ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02E54(ObjSnowball* this, PlayState* play) {
@@ -132,7 +132,7 @@ void func_80B02E54(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02, -1, this->actor.unk20, NULL);
+                                  this->actor.params | ptr->unk_02, -1, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02EE4(ObjSnowball* this, PlayState* play) {

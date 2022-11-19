@@ -179,7 +179,7 @@ void func_80B80440(BgIkanaRotaryroom* this, PlayState* play) {
     this->unk_204.unk_00 = Actor_SpawnAsChildAndCutscene(
         &play->actorCtx, play, ACTOR_BG_IKANA_BLOCK, sp50.x, sp50.y, sp50.z, this->dyna.actor.shape.rot.x,
         this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, -1,
-        ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene), this->dyna.actor.unk20, NULL);
+        ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene), this->dyna.actor.halfDaysBits, NULL);
     Matrix_Pop();
 }
 

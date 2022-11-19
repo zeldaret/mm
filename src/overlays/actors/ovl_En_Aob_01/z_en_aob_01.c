@@ -130,7 +130,7 @@ void func_809C11EC(EnAob01* this, PlayState* play) {
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,
-            0, D_809C384C[i].unk_04 * 182.04445f, 0, enDgParams, 0xFFFF, this->actor.unk20, NULL);
+            0, D_809C384C[i].unk_04 * 182.04445f, 0, enDgParams, 0xFFFF, this->actor.halfDaysBits, NULL);
     }
 }
 
@@ -140,7 +140,7 @@ void func_809C1304(EnAob01* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++) {
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_RACEDOG, (i * 15.0f) + -3897.0f, 130.0f, 1290.0f - (i * 10.0f), 0, 0x1555,
-            0, (i << 5) | ENAOB01_GET_7E00_1(&this->actor), 0xFFFF, this->actor.unk20, NULL);
+            0, (i << 5) | ENAOB01_GET_7E00_1(&this->actor), 0xFFFF, this->actor.halfDaysBits, NULL);
     }
 }
 

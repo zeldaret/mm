@@ -2966,7 +2966,7 @@ void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
         Actor* actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
-            if (!(actor->unk20 & actorCtx->halfDaysBit)) {
+            if (!(actor->halfDaysBits & actorCtx->halfDaysBit)) {
                 func_80123590(play, actor);
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
@@ -3140,7 +3140,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
 }
 
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX,
-                                     s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent) {
+                                     s16 rotY, s16 rotZ, s32 params, u32 cutscene, u32 halfDaysBits, Actor* parent) {
     s32 pad;
     Actor* actor;
     ActorInit* actorInit;
@@ -3212,10 +3212,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
         actor->cutscene = -1;
     }
 
-    if (arg11 != 0) {
-        actor->unk20 = arg11;
+    if (halfDaysBits != 0) {
+        actor->halfDaysBits = halfDaysBits;
     } else {
-        actor->unk20 = 0x3FF;
+        actor->halfDaysBits = HALFDAYBIT_ALL;
     }
 
     Actor_AddToCategory(actorCtx, actor, actorInit->type);
@@ -3233,7 +3233,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play, s16 actorId, f32 posX, f32 posY,
                           f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params) {
     return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1,
-                                         parent->unk20, parent);
+                                         parent->halfDaysBits, parent);
 }
 
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
