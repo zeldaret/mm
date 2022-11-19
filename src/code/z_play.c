@@ -140,7 +140,7 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
 
     switch (bitDepth) {
         case 4: {
-            u8* destI4 = (u8*)destI;
+            u8* destI4 = destI;
             u32 upper;
             u32 lower;
 
@@ -165,7 +165,7 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
         }
 
         case 5: {
-            u8* destI5 = (u8*)destI;
+            u8* destI5 = destI;
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
@@ -183,7 +183,7 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
         }
 
         case 8: {
-            u8* destI8 = (u8*)destI;
+            u8* destI8 = destI;
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
@@ -200,7 +200,7 @@ void Play_ConvertRgba16ToIntensityImage(void* destI, u16* srcRgba16, s32 rgba16W
         }
 
         case 16: {
-            u16* destI16 = (u16*)destI;
+            u16* destI16 = destI;
 
             for (i = pixelTop; i <= pixelBottom; i++) {
                 for (j = pixelLeft; j <= pixelRight; j++) {
@@ -695,8 +695,8 @@ void Play_UpdateTransition(PlayState* this) {
                         SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
                         gSaveContext.save.entrance = this->nextEntrance;
 
-                        if (gSaveContext.minigameStatus == 1) {
-                            gSaveContext.minigameStatus = 3;
+                        if (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) {
+                            gSaveContext.minigameStatus = MINIGAME_STATUS_END;
                         }
                     } else { // 2
                         STOP_GAMESTATE(&this->state);
@@ -1886,7 +1886,7 @@ void Play_SetupRespawnPoint(GameState* thisx, s32 respawnMode, s32 playerParams)
     Player* player = GET_PLAYER(this);
 
     if (this->sceneId != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&this->state, respawnMode, (u16)((void)0, gSaveContext.save.entrance),
+        Play_SetRespawnData(&this->state, respawnMode, ((void)0, gSaveContext.save.entrance),
                             this->roomCtx.curRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
     }
