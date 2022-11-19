@@ -11,19 +11,18 @@
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
 
-// bss
-s16 sTransitionFillTimer;         // 0x801F6C10
-Input D_801F6C18;                 // 0x801F6C18
-FbDemoStruct sTrnsnUnk;           // 0x801F6C30
-u16* D_801F6D0C;                  // 0x801F6D0C
-s32 gTrnsnUnkState;               // 0x801F6D10
-VisMono sVisMono;                 // 0x801F6D18
-Color_RGBA8_u32 gVisMonoColor;    // 0x801F6D30
-Struct_80140E80 D_801F6D38;       // 0x801F6D38
-Struct_80140E80* D_801F6D4C;      // 0x801F6D4C
-BombersNotebook sBombersNotebook; // 0x801F6D50
-u8 sBombersNotebookOpen;          // 0x801F6DFC
-u8 sMotionBlurStatus;             // 0x801F6DFD
+s16 sTransitionFillTimer;
+Input D_801F6C18;
+FbDemoStruct sTrnsnUnk;
+u16* D_801F6D0C;
+s32 gTrnsnUnkState;
+VisMono sVisMono;
+Color_RGBA8_u32 gVisMonoColor;
+Struct_80140E80 D_801F6D38;
+Struct_80140E80* D_801F6D4C;
+BombersNotebook sBombersNotebook;
+u8 sBombersNotebookOpen;
+u8 sMotionBlurStatus;
 
 typedef enum {
     /* 0 */ MOTION_BLUR_OFF,
