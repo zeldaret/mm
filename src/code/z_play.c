@@ -417,61 +417,62 @@ void Play_Destroy(GameState* thisx) {
     ZeldaArena_Cleanup();
 }
 
-// TODO: More Docs
+#define PLAY_COMPRESS_BITS 5
+#define PLAY_DECOMPRESS_BITS 8
+
 void Play_CompressI8ToI5(void* srcI8, void* destI5, size_t size) {
     u32 i;
     u8* src = srcI8;
     s8* dest = destI5;
-    s32 var_a3 = 8;
+    s32 bitsLeft = PLAY_DECOMPRESS_BITS; // Bits from the current src pixel left to compress
     u32 destPixel = 0;
-    s32 var_a1;
+    s32 shift;
     u32 srcPixel;
 
     for (i = 0; i < size; i++) {
         srcPixel = *src++;
         srcPixel = (srcPixel * 0x1F + 0x80) / 0xFF;
-        var_a1 = var_a3 - 5;
-        if (var_a1 > 0) {
-            destPixel |= srcPixel << (var_a1);
-
+        shift = bitsLeft - PLAY_COMPRESS_BITS;
+        if (shift > 0) {
+            destPixel |= srcPixel << shift;
         } else {
-            destPixel |= srcPixel >> -(var_a1);
+            destPixel |= srcPixel >> -shift;
             *dest++ = destPixel;
-            var_a1 += 8;
-            destPixel = srcPixel << (var_a1);
+            shift += PLAY_DECOMPRESS_BITS;
+            destPixel = srcPixel << shift;
         }
-        var_a3 = var_a1;
+        bitsLeft = shift;
     }
-    if (var_a3 < 8) {
+
+    if (bitsLeft < PLAY_DECOMPRESS_BITS) {
         *dest = destPixel;
     }
 }
 
-// TODO: More Docs
 void Play_DecompressI5ToI8(void* srcI5, void* destI8, size_t size) {
     u32 i;
     u8* src = srcI5;
     s8* dest = destI8;
-    s32 var_a3 = 8;
+    s32 bitsLeft = PLAY_DECOMPRESS_BITS; // Bits from the current dest pixel left to decompress into
     u32 destPixel;
-    s32 var_a1;
+    s32 shift;
     u32 srcPixel = *src++;
 
     for (i = 0; i < size; i++) {
-        var_a1 = var_a3 - 5;
-        if (var_a1 > 0) {
+        shift = bitsLeft - PLAY_COMPRESS_BITS;
+        if (shift > 0) {
             destPixel = 0;
-            destPixel |= srcPixel >> (var_a1);
+            destPixel |= srcPixel >> shift;
         } else {
             destPixel = 0;
-            destPixel |= srcPixel << -(var_a1);
+            destPixel |= srcPixel << -shift;
             srcPixel = *src++;
-            var_a1 += 8;
-            destPixel |= srcPixel >> var_a1;
+            shift += PLAY_DECOMPRESS_BITS;
+            destPixel |= srcPixel >> shift;
         }
         destPixel = (destPixel & 0x1F) * 0xFF / 0x1F;
         *dest++ = destPixel;
-        var_a3 = var_a1;
+        bitsLeft = shift;
     }
 }
 
@@ -694,8 +695,8 @@ void Play_UpdateTransition(PlayState* this) {
                         SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
                         gSaveContext.save.entrance = this->nextEntrance;
 
-                        if (gSaveContext.minigameState == 1) {
-                            gSaveContext.minigameState = 3;
+                        if (gSaveContext.minigameStatus == 1) {
+                            gSaveContext.minigameStatus = 3;
                         }
                     } else { // 2
                         STOP_GAMESTATE(&this->state);
@@ -2210,7 +2211,7 @@ void Play_Init(GameState* thisx) {
         this, Entrance_GetSceneIdAbsolute(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)),
         Entrance_GetSpawnNum(((void)0, gSaveContext.save.entrance) + ((void)0, gSaveContext.sceneLayer)));
     KaleidoScopeCall_Init(this);
-    func_80121FC4(this);
+    Interface_Init(this);
 
     if (gSaveContext.nextDayTime != 0xFFFF) {
         if (gSaveContext.nextDayTime == 0x8000) {
