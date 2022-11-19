@@ -36,7 +36,7 @@ beginseg
     include "build/data/boot/gfxprint.data.o"
     include "build/src/boot_O2/mtxuty-cvt.o"
     include "build/src/boot_O2/assert.o"
-    include "build/src/boot_O2/boot_800862E0.o"
+    include "build/src/boot_O2/system_heap.o"
     include "build/src/boot_O2/padsetup.o"
     include "build/src/boot_O2/boot_80086760.o"
     include "build/asm/boot/fp.text.o"

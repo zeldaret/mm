@@ -22,7 +22,7 @@ void Main(void* arg) {
     sysHeap = gSystemHeap;
     fb = 0x80780000;
     startHeapSize = fb - sysHeap;
-    SystemArena_Init(sysHeap, startHeapSize);
+    SystemHeap_Init(sysHeap, startHeapSize);
 
     GameInfo_Init();
 
