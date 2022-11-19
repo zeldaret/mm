@@ -2,7 +2,7 @@
  * @file system_heap.c
  *
  * @note:
- *  Only SystemHeap_Init() is used, and is esentailly just a wrapper for SystemArena_Init().
+ *  Only SystemHeap_Init() is used, and is essentially just a wrapper for SystemArena_Init().
  *
  */
 #include "global.h"
