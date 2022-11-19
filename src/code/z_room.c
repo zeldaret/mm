@@ -139,7 +139,7 @@ void Room_Draw(PlayState* play, Room* room, u32 flags) {
 void func_8012EBF8(PlayState* play, RoomContext* roomCtx) {
     roomCtx->prevRoom.num = -1;
     roomCtx->prevRoom.segment = NULL;
-    func_800BA798(play, &play->actorCtx);
+    Actor_KillAllFromUnloadedRooms(play, &play->actorCtx);
     Actor_SpawnTransitionActors(play, &play->actorCtx);
     if (roomCtx->curRoom.num > -1) {
         Map_InitRoomData(play, roomCtx->curRoom.num);

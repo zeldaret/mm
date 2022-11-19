@@ -32,7 +32,7 @@ extern Mtx D_801ED8E0;                // 1 func
 extern Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
 
 // Internal forward declarations
-void func_800BA8B8(PlayState* play, ActorContext* actorCtx);
+void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
 void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
@@ -2305,7 +2305,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
         s32 i;
 
         Actor_InitHalfDaysBit(actorCtx);
-        func_800BA8B8(play, &play->actorCtx);
+        Actor_KillAllOnHalfDayChange(play, &play->actorCtx);
 
         // Shift to previous halfDay bit, but ignoring DAY0_NIGHT.
         // In other words, if the current halfDay is DAY1_DAY then this logic is ignored and this variable is zero
@@ -2911,7 +2911,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
 /**
  * Kills every actor which its object is not loaded
  */
-void func_800BA6FC(PlayState* play, ActorContext* actorCtx) {
+void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
 
@@ -2931,7 +2931,7 @@ void func_800BA6FC(PlayState* play, ActorContext* actorCtx) {
 /**
  * Kill actors on room change and update flags accordingly
  */
-void func_800BA798(PlayState* play, ActorContext* actorCtx) {
+void Actor_KillAllFromUnloadedRooms(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
 
@@ -2964,7 +2964,7 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
 /**
  * Kill every actor which does not have the current halfDayBit enabled
  */
-void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
+void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(actorCtx->actorLists); i++) {
@@ -3101,7 +3101,7 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX,
                    s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, 0x3FF,
+    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, HALFDAYBIT_ALL,
                                          NULL);
 }
 
@@ -3261,7 +3261,7 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                                                   transitionActorList->pos.x, transitionActorList->pos.y,
                                                   transitionActorList->pos.z, 0, rotY, 0,
                                                   (i << 0xA) + (transitionActorList->params & 0x3FF),
-                                                  transitionActorList->rotY & 0x7F, 0x3FF, 0) != NULL) {
+                                                  transitionActorList->rotY & 0x7F, HALFDAYBIT_ALL, 0) != NULL) {
                     transitionActorList->id = -transitionActorList->id;
                 }
                 numTransitionActors = play->doorCtx.numTransitionActors;

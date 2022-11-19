@@ -277,7 +277,7 @@ void Scene_HeaderCmdObjectList(PlayState* play, SceneCmd* cmd) {
             }
 
             play->objectCtx.num = i;
-            func_800BA6FC(play, &play->actorCtx);
+            Actor_KillAllWithMissingObject(play, &play->actorCtx);
 
             continue;
         }

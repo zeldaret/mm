@@ -141,7 +141,7 @@ typedef struct Actor {
     /* 0x01C */ s16 params; // Configurable variable set by the actor's spawn data; original name: "args_data"
     /* 0x01E */ s8 objBankIndex; // Object bank index of the actor's object dependency; original name: "bank"
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
-    /* 0x020 */ s16 halfDaysBits;
+    /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
@@ -410,7 +410,7 @@ typedef struct ActorContext {
     /* 0x005 */ u8 flags;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
     /* 0x00B */ s8 lensActorsDrawn;
-    /* 0x00C */ s16 halfDaysBit;
+    /* 0x00C */ s16 halfDaysBit; // A single bit indicating the current half-day. It is one of HALFDAYBIT_DAYX_ macro values
     /* 0x00E */ u8 totalLoadedActors;
     /* 0x00F */ u8 undrawnActorCount;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
