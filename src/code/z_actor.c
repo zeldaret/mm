@@ -1840,7 +1840,14 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
 }
 
 s16 D_801AED48[] = {
-    0x101, 0x141, 0x111, 0x151, 0x105, 0x145, 0x115, 0x155,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY1_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY2_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY1_NIGHT | HALFDAYBIT_DAY2_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY3_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY1_NIGHT | HALFDAYBIT_DAY3_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY2_NIGHT | HALFDAYBIT_DAY3_NIGHT | HALFDAYBIT_DAY4_NIGHT,
+    HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY1_NIGHT | HALFDAYBIT_DAY2_NIGHT | HALFDAYBIT_DAY3_NIGHT | HALFDAYBIT_DAY4_NIGHT,
 };
 
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
@@ -2239,8 +2246,7 @@ void func_800B9120(ActorContext* actorCtx) {
         halfDayCount++;
     }
 
-    // 5 is the max number of days
-    actorCtx->halfDaysBit = (1 << (5 * 2 - 1)) >> halfDayCount;
+    actorCtx->halfDaysBit = 0x200 >> halfDayCount;
 }
 
 void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* actorEntry) {
@@ -2291,24 +2297,26 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
 void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
     if (play->numSetupActors > 0) {
         ActorEntry* actorEntry = play->setupActorList;
-        s32 halfDaysBit = actorCtx->halfDaysBit;
+        s32 prevHalfDaysBitValue = actorCtx->halfDaysBit;
         s32 temp_s1;
-        s32 phi_v0;
+        s32 actorEntryHalfDayBit;
         s32 i;
 
         func_800B9120(actorCtx);
         func_800BA8B8(play, &play->actorCtx);
 
+        // Shift to previous halfDay bit, but ignoring DAY0_NIGHT.
+        // In other words, if the current halfDay is DAY1_DAY then this logic is ignored and this variable is zero
         temp_s1 = (actorCtx->halfDaysBit << 1) & 0x2FF;
 
         for (i = 0; i < play->numSetupActors; i++) {
-            phi_v0 = ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F);
-            if (phi_v0 == 0) {
-                phi_v0 = 0x3FF;
+            actorEntryHalfDayBit = ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F);
+            if (actorEntryHalfDayBit == 0) {
+                actorEntryHalfDayBit = HALFDAYBIT_ALL;
             }
 
-            if (!(phi_v0 & halfDaysBit) && (phi_v0 & actorCtx->halfDaysBit) &&
-                (!CHECK_EVENTINF(EVENTINF_17) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
+            if (!(actorEntryHalfDayBit & prevHalfDaysBitValue) && (actorEntryHalfDayBit & actorCtx->halfDaysBit) &&
+                (!CHECK_EVENTINF(EVENTINF_17) || !(actorEntryHalfDayBit & temp_s1) || !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&play->actorCtx, actorEntry, play);
             }
             actorEntry++;
