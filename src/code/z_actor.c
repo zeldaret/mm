@@ -2233,13 +2233,14 @@ void Actor_DeactivateLens(PlayState* play) {
 }
 
 void func_800B9120(ActorContext* actorCtx) {
-    s32 phi_v0 = CURRENT_DAY * 2;
+    s32 halfDayCount = CURRENT_DAY * 2;
 
     if (gSaveContext.save.time < CLOCK_TIME(6, 0) || gSaveContext.save.time > CLOCK_TIME(18, 0)) {
-        phi_v0++;
+        halfDayCount++;
     }
 
-    actorCtx->unkC = 0x200 >> phi_v0;
+    // 5 is the max number of days
+    actorCtx->halfDaysBit = (1 << (5 * 2 - 1)) >> halfDayCount;
 }
 
 void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* actorEntry) {
@@ -2290,7 +2291,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
 void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
     if (play->numSetupActors > 0) {
         ActorEntry* actorEntry = play->setupActorList;
-        s32 temp_fp = actorCtx->unkC;
+        s32 halfDaysBit = actorCtx->halfDaysBit;
         s32 temp_s1;
         s32 phi_v0;
         s32 i;
@@ -2298,7 +2299,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
         func_800B9120(actorCtx);
         func_800BA8B8(play, &play->actorCtx);
 
-        temp_s1 = (actorCtx->unkC * 2) & 0x2FF;
+        temp_s1 = (actorCtx->halfDaysBit << 1) & 0x2FF;
 
         for (i = 0; i < play->numSetupActors; i++) {
             phi_v0 = ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F);
@@ -2306,7 +2307,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
                 phi_v0 = 0x3FF;
             }
 
-            if (!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC) &&
+            if (!(phi_v0 & halfDaysBit) && (phi_v0 & actorCtx->halfDaysBit) &&
                 (!CHECK_EVENTINF(EVENTINF_17) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&play->actorCtx, actorEntry, play);
             }
@@ -2957,7 +2958,7 @@ void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
         Actor* actor = actorCtx->actorLists[i].first;
 
         while (actor != NULL) {
-            if (!(actor->unk20 & actorCtx->unkC)) {
+            if (!(actor->unk20 & actorCtx->halfDaysBit)) {
                 func_80123590(play, actor);
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);

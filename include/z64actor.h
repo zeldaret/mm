@@ -395,7 +395,7 @@ typedef struct ActorContext {
     /* 0x005 */ u8 flags;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
     /* 0x00B */ s8 lensActorsDrawn;
-    /* 0x00C */ s16 unkC;
+    /* 0x00C */ s16 halfDaysBit;
     /* 0x00E */ u8 totalLoadedActors;
     /* 0x00F */ u8 undrawnActorCount;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];

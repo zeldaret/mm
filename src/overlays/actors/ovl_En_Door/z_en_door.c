@@ -514,9 +514,9 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
                     s32 textIdOffset;
 
-                    temp_t0 = (play->actorCtx.unkC & 0x2AA) >> 1;
+                    temp_t0 = (play->actorCtx.halfDaysBit & 0x2AA) >> 1;
                     temp_a2 = D_801AED48[this->switchFlag & 7];
-                    temp_a1_2 = play->actorCtx.unkC & 0x155;
+                    temp_a1_2 = play->actorCtx.halfDaysBit & 0x155;
                     textIdOffset = (this->switchFlag >> 3) & 0xF;
                     if (((this->unk_1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
                         ((this->unk_1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
