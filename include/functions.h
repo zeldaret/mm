@@ -134,7 +134,7 @@ void MtxConv_L2F(MtxF* mtx, Mtx* mf);
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemHeap_Malloc(u32 size);
-void SystemArena_Free(void* ptr);
+void SystemHeap_Free(void* ptr);
 void SystemHeap_RunInits(void);
 void SystemHeap_Init(void* start, size_t size);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
