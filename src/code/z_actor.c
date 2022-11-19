@@ -3513,16 +3513,16 @@ s16 func_800BBC20(s16 arg0[2], s16 arg1, s16 arg2, s16 arg3) {
     return arg0[0];
 }
 
-void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 arg2, Gfx** dList) {
-    EnPart* part;
-    Actor* spawnedPart;
-    MtxF* currentMatrix;
-
+void Actor_SpawnBodyParts(Actor* actor, PlayState* play, s32 partParams, Gfx** dList) {
     if (*dList != NULL) {
-        currentMatrix = Matrix_GetCurrent();
+        EnPart* part;
+        Actor* spawnedPart;
+        MtxF* currentMatrix = Matrix_GetCurrent();
+
         spawnedPart =
             Actor_SpawnAsChild(&play->actorCtx, actor, play, ACTOR_EN_PART, currentMatrix->mf[3][0],
-                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, arg2);
+                               currentMatrix->mf[3][1], currentMatrix->mf[3][2], 0, 0, actor->objBankIndex, partParams);
+
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;
 

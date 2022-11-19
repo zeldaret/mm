@@ -1149,11 +1149,6 @@ typedef struct DebugDispObject {
 } DebugDispObject; // size = 0x30
 
 typedef struct {
-    /* 0x0 */ f32 rangeSq;
-    /* 0x4 */ f32 leashScale;
-} TargetRangeParams; // size = 0x8
-
-typedef struct {
     /* 0x0 */ u8* value;
     /* 0x4 */ const char* name;
 } FlagSetEntry; // size = 0x8

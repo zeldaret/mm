@@ -642,4 +642,14 @@ typedef enum {
     /* 0xFF */ TATL_HINT_ID_NONE = 0xFF
 } TatlHintId;
 
+typedef struct {
+    /* 0x0 */ f32 rangeSq;
+    /* 0x4 */ f32 leashScale;
+} TargetRangeParams; // size = 0x8
+
+extern TargetRangeParams gTargetRanges[];
+extern s16 D_801AED48[8];
+extern Gfx D_801AEF88[];
+extern Gfx D_801AEFA0[];
+
 #endif
