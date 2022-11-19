@@ -99,13 +99,13 @@ typedef struct {
     /* 0x1C */ ActorFunc draw;
 } ActorInit; // size = 0x20
 
-typedef enum {
-    ALLOCTYPE_NORMAL,
-    ALLOCTYPE_ABSOLUTE,
-    ALLOCTYPE_PERMANENT
+typedef enum AllocType {
+    /* 0 */ ALLOCTYPE_NORMAL,
+    /* 1 */ ALLOCTYPE_ABSOLUTE,
+    /* 2 */ ALLOCTYPE_PERMANENT
 } AllocType;
 
-typedef struct {
+typedef struct ActorOverlay {
     /* 0x00 */ uintptr_t vromStart;
     /* 0x04 */ uintptr_t vromEnd;
     /* 0x08 */ void* vramStart;
@@ -386,20 +386,20 @@ typedef struct ActorListEntry {
 // Target size when activated
 #define LENS_MASK_ACTIVE_SIZE 100
 
-#define HALFDAYBIT_DAY0_DAY   (1 << 9)
+#define HALFDAYBIT_DAY0_DAWN   (1 << 9)
 #define HALFDAYBIT_DAY0_NIGHT (1 << 8)
-#define HALFDAYBIT_DAY1_DAY   (1 << 7)
+#define HALFDAYBIT_DAY1_DAWN   (1 << 7)
 #define HALFDAYBIT_DAY1_NIGHT (1 << 6)
-#define HALFDAYBIT_DAY2_DAY   (1 << 5)
+#define HALFDAYBIT_DAY2_DAWN   (1 << 5)
 #define HALFDAYBIT_DAY2_NIGHT (1 << 4)
-#define HALFDAYBIT_DAY3_DAY   (1 << 3)
+#define HALFDAYBIT_DAY3_DAWN   (1 << 3)
 #define HALFDAYBIT_DAY3_NIGHT (1 << 2)
-#define HALFDAYBIT_DAY4_DAY   (1 << 1)
+#define HALFDAYBIT_DAY4_DAWN   (1 << 1)
 #define HALFDAYBIT_DAY4_NIGHT (1 << 0)
 
-#define HALFDAYBIT_DAYS       (HALFDAYBIT_DAY0_DAY | HALFDAYBIT_DAY1_DAY | HALFDAYBIT_DAY2_DAY | HALFDAYBIT_DAY3_DAY | HALFDAYBIT_DAY4_DAY)
+#define HALFDAYBIT_DAWNS       (HALFDAYBIT_DAY0_DAWN | HALFDAYBIT_DAY1_DAWN | HALFDAYBIT_DAY2_DAWN | HALFDAYBIT_DAY3_DAWN | HALFDAYBIT_DAY4_DAWN)
 #define HALFDAYBIT_NIGHTS     (HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY1_NIGHT | HALFDAYBIT_DAY2_NIGHT | HALFDAYBIT_DAY3_NIGHT | HALFDAYBIT_DAY4_NIGHT)
-#define HALFDAYBIT_ALL        (HALFDAYBIT_DAYS | HALFDAYBIT_NIGHTS)
+#define HALFDAYBIT_ALL        (HALFDAYBIT_DAWNS | HALFDAYBIT_NIGHTS)
 
 typedef struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;

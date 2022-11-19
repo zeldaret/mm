@@ -509,7 +509,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                     player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->dyna.actor.textId = 0x1800;
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
-                    s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAYS) >> 1;
+                    s32 halfDaysDayBit = (play->actorCtx.halfDaysBit & HALFDAYBIT_DAWNS) >> 1;
                     s32 halfDaysNightBit = play->actorCtx.halfDaysBit & HALFDAYBIT_NIGHTS;
                     s16 temp_a2 = D_801AED48[this->switchFlag & 7];
                     s32 textIdOffset = (this->switchFlag >> 3) & 0xF;
