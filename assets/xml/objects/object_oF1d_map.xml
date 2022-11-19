@@ -48,7 +48,7 @@
         <Texture Name="gGoronDonGeroMaskEyeTex" OutName="goron_don_gero_mask_eye" Format="rgba16" Width="16" Height="16" Offset="0x6C40" />
 
         <!-- Scared -->
-        <!-- Leftover from OoT, used when locked in prison cells -->
+        <!-- Unused leftover from OoT -->
         <DList Name="gGoronEmptyDL" Offset="0x7A60" />
         <DList Name="gGoronScaredDL" Offset="0x7A68" />
         <Texture Name="gGoronScaredTLUT" OutName="goron_scared_tlut" Format="rgba16" Width="16" Height="16" Offset="0x7EF0" />
