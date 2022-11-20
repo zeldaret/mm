@@ -2572,7 +2572,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
             Math_Vec3f_Copy(&refPos, &D_801F59E8);
         }
 
-        drawIdPlusOne = ABS_ALT(player->getItemDrawId);
+        drawIdPlusOne = ABS_ALT(player->getItemDrawIdPlusOne);
         Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }
@@ -3477,8 +3477,8 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             } else if ((player->meleeWeaponState != 0) && (player->meleeWeaponAnimation == 0x19)) {
                 func_80126B8C(play, player);
             }
-            if ((player->getItemDrawId != GID_BOTTLE) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
-                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawId != GID_BOTTLE) &&
+            if ((player->getItemDrawIdPlusOne != GID_NONE + 1) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
+                if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != GID_NONE + 1) &&
                     (player->exchangeItemId != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
@@ -3487,7 +3487,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                     D_801F59E8.z = (player->bodyPartsPos[0xF].z + player->leftHandWorld.pos.z) * 0.5f;
                 }
 
-                if (player->getItemDrawId == GID_BOTTLE) {
+                if (player->getItemDrawIdPlusOne == GID_NONE + 1) {
                     Math_Vec3f_Copy(&sp224->world.pos, &D_801F59E8);
                 }
             }

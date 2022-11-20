@@ -1010,7 +1010,7 @@ typedef struct Player {
     /* 0xB08 */ f32 unk_B08[2]; // TODO: Investigate if this member actually is an array
     /* 0xB10 */ f32 unk_B10[6];
     /* 0xB28 */ s16 unk_B28; //Burning stick timer?
-    /* 0xB2A */ s8 getItemDrawId;
+    /* 0xB2A */ s8 getItemDrawIdPlusOne;
     /* 0xB2B */ s8 unk_B2B;
     /* 0xB2C */ f32 windSpeed;
     /* 0xB30 */ s16 windAngleX;

@@ -1214,7 +1214,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
     } else if (limbIndex == OBJECT_TEST3_LIMB_15) {
         if (D_80A41D60 || CHECK_WEEKEVENTREG(WEEKEVENTREG_50_80) ||
             (INV_CONTENT(ITEM_PENDANT_OF_MEMORIES) == ITEM_PENDANT_OF_MEMORIES) ||
-            (this->player.getItemDrawId - 1 == GID_PENDANT_OF_MEMORIES)) {
+            (this->player.getItemDrawIdPlusOne - 1 == GID_PENDANT_OF_MEMORIES)) {
             D_80A41D60 = true;
         } else {
             OPEN_DISPS(play->state.gfxCtx);
@@ -1295,7 +1295,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
     if (this->player.invincibilityTimer > 0) {
         POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
     }
-    if ((this->player.getItemDrawId - 1) != GID_NONE) {
+    if ((this->player.getItemDrawIdPlusOne - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);
     }
     CLOSE_DISPS(play->state.gfxCtx);
