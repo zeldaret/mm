@@ -2418,7 +2418,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     return nextActor;
 }
 
-u32 sFreezeCategoryPlayerFlags1Masks[ACTORCAT_MAX] = {
+u32 sCategoryFreezeMasks[ACTORCAT_MAX] = {
     /* ACTORCAT_SWITCH */
     PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_BG */
@@ -2453,7 +2453,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     s32 i;
     Actor* actor;
     Player* player = GET_PLAYER(play);
-    u32* freezeCategoryPlayerFlags1;
+    u32* categoryFreezeMaskP;
     s32 cat;
     Actor* next;
     ActorListEntry* entry;
@@ -2474,7 +2474,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         actorCtx->unk2--;
     }
 
-    freezeCategoryPlayerFlags1 = sFreezeCategoryPlayerFlags1Masks;
+    categoryFreezeMaskP = sCategoryFreezeMasks;
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         params.requiredActorFlag = ACTOR_FLAG_2000000;
@@ -2489,8 +2489,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists);
-         entry++, freezeCategoryPlayerFlags1++, i++) {
-        params.canFreezeCategory = *freezeCategoryPlayerFlags1 & player->stateFlags1;
+         entry++, categoryFreezeMaskP++, i++) {
+        params.canFreezeCategory = *categoryFreezeMaskP & player->stateFlags1;
         params.actor = entry->first;
 
         while (params.actor != NULL) {
