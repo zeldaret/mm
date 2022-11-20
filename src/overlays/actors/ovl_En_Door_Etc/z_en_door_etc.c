@@ -106,7 +106,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     }
     objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
-        Actor_Kill(&this->actor);
+        Actor_Kill(&this->door.dyna.actor);
     } else {
         this->door.requiredObjBankIndex = objectIndex;
         this->door.dlIndex = objectInfo->dListIndex;

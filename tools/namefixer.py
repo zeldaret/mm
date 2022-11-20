@@ -18,7 +18,7 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    "Math_FAtan2F(": "Math_Atan2S_XY(",
+    "Math_FAtan2F": "Math_Atan2S_XY",
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",

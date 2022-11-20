@@ -47,14 +47,14 @@ s32 Player_InflictDamage(PlayState* play, s32 damage);
 void Player_TalkWithPlayer(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
-PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemId itemId);
+PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId);
 s32 func_8085B930(PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode);
 
 void Player_UpdateCommon(Player* this, PlayState* play, Input* input);
 s32 Player_StartFishing(PlayState* play);
 void func_8085B170(PlayState* play, Player* this);
 s32 func_8083A658(PlayState* play, Player* this);
-void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam);
+void func_8082F8BC(PlayState* play, Player* this, PlayerItemAction actionParam);
 
 void func_80831990(PlayState* play, Player* this, ItemId item);
 
@@ -614,7 +614,7 @@ void func_8082DCA0(PlayState* play, Player* this) {
     }
 
     if (Player_GetExplosiveHeld(this) >= 0) {
-        func_8082F8BC(play, this, PLAYER_AP_NONE);
+        func_8082F8BC(play, this, PLAYER_IA_NONE);
         this->heldItemId = ITEM_FE;
     }
 }
@@ -647,7 +647,7 @@ void func_8082DD2C(PlayState* play, Player* this) {
 }
 
 s32 func_8082DE14(PlayState* play, Player* this) {
-    if (this->itemActionParam > PLAYER_AP_LAST_USED) {
+    if (this->heldItemAction > PLAYER_IA_LAST_USED) {
         func_80831990(play, this, ITEM_NONE);
         return true;
     } else {
@@ -817,9 +817,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // u16 voiceSfxOffset;
+        // u16 voiceSfxIdOffset;
         SFX_VOICE_BANK_SIZE * 0,
-        // u16 surfaceSfxOffset;
+        // u16 surfaceSfxIdOffset;
         0x80,
         // f32 unk_98;
         33.0f,
@@ -913,9 +913,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // u16 voiceSfxOffset;
+        // u16 voiceSfxIdOffset;
         SFX_VOICE_BANK_SIZE * 6,
-        // u16 surfaceSfxOffset;
+        // u16 surfaceSfxIdOffset;
         0x150,
         // f32 unk_98;
         -25.0f,
@@ -1009,9 +1009,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // u16 voiceSfxOffset;
+        // u16 voiceSfxIdOffset;
         SFX_VOICE_BANK_SIZE * 5,
-        // u16 surfaceSfxOffset;
+        // u16 surfaceSfxIdOffset;
         0x120,
         // f32 unk_98;
         22.0f,
@@ -1105,9 +1105,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // u16 voiceSfxOffset;
+        // u16 voiceSfxIdOffset;
         SFX_VOICE_BANK_SIZE * 4,
-        // u16 surfaceSfxOffset;
+        // u16 surfaceSfxIdOffset;
         0xF0,
         // f32 unk_98;
         -21.0f,
@@ -1201,9 +1201,9 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // u16 voiceSfxOffset;
+        // u16 voiceSfxIdOffset;
         SFX_VOICE_BANK_SIZE * 1,
-        // u16 surfaceSfxOffset;
+        // u16 surfaceSfxIdOffset;
         0,
         // f32 unk_98;
         22.0f,
@@ -1778,7 +1778,7 @@ void Player_AnimSfx_PlayVoice(Player* this, u16 sfxId) {
         if (this->currentMask == PLAYER_MASK_SCENTS) {
             sfxOffset = SFX_VOICE_BANK_SIZE * 7;
         } else {
-            sfxOffset = this->ageProperties->voiceSfxOffset;
+            sfxOffset = this->ageProperties->voiceSfxIdOffset;
         }
 
         func_800B8E58(this, sfxOffset + sfxId);
@@ -1797,7 +1797,7 @@ void func_8082E00C(Player* this) {
     u16* sfxIdPtr = D_8085C3EC;
 
     for (i = 0; i < ARRAY_COUNT(D_8085C3EC); i++) {
-        AudioSfx_StopById((u16)(*sfxIdPtr + this->ageProperties->voiceSfxOffset));
+        AudioSfx_StopById((u16)(*sfxIdPtr + this->ageProperties->voiceSfxIdOffset));
         sfxIdPtr++;
     }
 }
@@ -1812,7 +1812,7 @@ void Player_AnimSfx_PlayFloor(Player* this, u16 sfxId) {
 }
 
 u16 Player_GetFloorSfxByAge(Player* this, u16 sfxId) {
-    return sfxId + this->floorSfxOffset + this->ageProperties->surfaceSfxOffset;
+    return sfxId + this->floorSfxOffset + this->ageProperties->surfaceSfxIdOffset;
 }
 
 // ANIMSFX_TYPE_FLOOR_BY_AGE
@@ -1875,10 +1875,10 @@ void Player_PlayAnimSfx(Player* this, AnimSfxEntry* entry) {
                 Player_AnimSfx_PlayFloorWalk(this, 0.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_9)) {
                 // Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume
-                func_8019F638(&this->actor.projectedPos, this->ageProperties->surfaceSfxOffset + NA_SE_PL_WALK_LADDER,
+                func_8019F638(&this->actor.projectedPos, this->ageProperties->surfaceSfxIdOffset + NA_SE_PL_WALK_LADDER,
                               0.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_SURFACE)) {
-                func_800B8E58(this, entry->sfxId + this->ageProperties->surfaceSfxOffset);
+                func_800B8E58(this, entry->sfxId + this->ageProperties->surfaceSfxIdOffset);
             }
         }
 
@@ -2828,7 +2828,7 @@ void func_8082F43C(PlayState* play, Player* this, PlayerFuncAC4 arg2) {
 
 #define GET_PLAYER_ANIM(group, type) ((LinkAnimationHeader**)D_8085BE84)[group * PLAYER_ANIMTYPE_MAX + type]
 
-void func_8082F470(PlayState* play, Player* this, PlayerActionParam actionParam) {
+void func_8082F470(PlayState* play, Player* this, PlayerItemAction actionParam) {
     LinkAnimationHeader* current = this->skelAnime.animation;
     LinkAnimationHeader*(*iter)[PLAYER_ANIMTYPE_MAX] = (void*)&D_8085BE84[0][this->modelAnimType];
     s32 i;
@@ -2850,98 +2850,98 @@ void func_8082F470(PlayState* play, Player* this, PlayerActionParam actionParam)
 }
 
 s8 sItemActionParams[] = {
-    PLAYER_AP_OCARINA,                 // ITEM_OCARINA,
-    PLAYER_AP_BOW,                     // ITEM_BOW,
-    PLAYER_AP_BOW_FIRE,                // ITEM_ARROW_FIRE,
-    PLAYER_AP_BOW_ICE,                 // ITEM_ARROW_ICE,
-    PLAYER_AP_BOW_LIGHT,               // ITEM_ARROW_LIGHT,
-    PLAYER_AP_PICTO_BOX,               // ITEM_OCARINA_FAIRY,
-    PLAYER_AP_BOMB,                    // ITEM_BOMB,
-    PLAYER_AP_BOMBCHU,                 // ITEM_BOMBCHU,
-    PLAYER_AP_STICK,                   // ITEM_STICK,
-    PLAYER_AP_NUT,                     // ITEM_NUT,
-    PLAYER_AP_MAGIC_BEANS,             // ITEM_MAGIC_BEANS,
-    PLAYER_AP_PICTO_BOX,               // ITEM_SLINGSHOT,
-    PLAYER_AP_POWDER_KEG,              // ITEM_POWDER_KEG,
-    PLAYER_AP_PICTO_BOX,               // ITEM_PICTO_BOX,
-    PLAYER_AP_LENS,                    // ITEM_LENS,
-    PLAYER_AP_HOOKSHOT,                // ITEM_HOOKSHOT,
-    PLAYER_AP_SWORD_GREAT_FAIRY,       // ITEM_SWORD_GREAT_FAIRY,
-    PLAYER_AP_PICTO_BOX,               // ITEM_LONGSHOT, // OoT Leftover
-    PLAYER_AP_BOTTLE,                  // ITEM_BOTTLE,
-    PLAYER_AP_BOTTLE_POTION_RED,       // ITEM_POTION_RED,
-    PLAYER_AP_BOTTLE_POTION_GREEN,     // ITEM_POTION_GREEN,
-    PLAYER_AP_BOTTLE_POTION_BLUE,      // ITEM_POTION_BLUE,
-    PLAYER_AP_BOTTLE_FAIRY,            // ITEM_FAIRY,
-    PLAYER_AP_BOTTLE_DEKU_PRINCESS,    // ITEM_DEKU_PRINCESS,
-    PLAYER_AP_BOTTLE_MILK,             // ITEM_MILK_BOTTLE,
-    PLAYER_AP_BOTTLE_MILK_HALF,        // ITEM_MILK_HALF,
-    PLAYER_AP_BOTTLE_FISH,             // ITEM_FISH,
-    PLAYER_AP_BOTTLE_BUG,              // ITEM_BUG,
-    PLAYER_AP_BOTTLE_BUG,              // ITEM_BLUE_FIRE, // !
-    PLAYER_AP_BOTTLE_POE,              // ITEM_POE,
-    PLAYER_AP_BOTTLE_BIG_POE,          // ITEM_BIG_POE,
-    PLAYER_AP_BOTTLE_SPRING_WATER,     // ITEM_SPRING_WATER,
-    PLAYER_AP_BOTTLE_HOT_SPRING_WATER, // ITEM_HOT_SPRING_WATER,
-    PLAYER_AP_BOTTLE_ZORA_EGG,         // ITEM_ZORA_EGG,
-    PLAYER_AP_BOTTLE_GOLD_DUST,        // ITEM_GOLD_DUST,
-    PLAYER_AP_BOTTLE_MUSHROOM,         // ITEM_MUSHROOM,
-    PLAYER_AP_BOTTLE_SEAHORSE,         // ITEM_SEA_HORSE,
-    PLAYER_AP_BOTTLE_CHATEAU,          // ITEM_CHATEAU,
-    PLAYER_AP_BOTTLE_HYLIAN_LOACH,     // ITEM_HYLIAN_LOACH,
-    PLAYER_AP_BOTTLE_POE,              // ITEM_OBABA_DRINK, // !
-    PLAYER_AP_MOON_TEAR,               // ITEM_MOON_TEAR,
-    PLAYER_AP_DEED_LAND,               // ITEM_DEED_LAND,
-    PLAYER_AP_DEED_SWAMP,              // ITEM_DEED_SWAMP,
-    PLAYER_AP_DEED_MOUNTAIN,           // ITEM_DEED_MOUNTAIN,
-    PLAYER_AP_DEED_OCEAN,              // ITEM_DEED_OCEAN,
-    PLAYER_AP_ROOM_KEY,                // ITEM_ROOM_KEY,
-    PLAYER_AP_LETTER_MAMA,             // ITEM_LETTER_MAMA,
-    PLAYER_AP_LETTER_TO_KAFEI,         // ITEM_LETTER_TO_KAFEI,
-    PLAYER_AP_PENDANT_OF_MEMORIES,     // ITEM_PENDANT_MEMORIES,
-    PLAYER_AP_38,                      // ITEM_TINGLE_MAP, // !
-    PLAYER_AP_MASK_DEKU,               // ITEM_MASK_DEKU,
-    PLAYER_AP_MASK_GORON,              // ITEM_MASK_GORON,
-    PLAYER_AP_MASK_ZORA,               // ITEM_MASK_ZORA,
-    PLAYER_AP_MASK_FIERCE_DEITY,       // ITEM_MASK_FIERCE_DEITY,
-    PLAYER_AP_MASK_TRUTH,              // ITEM_MASK_TRUTH,
-    PLAYER_AP_MASK_KAFEIS_MASK,        // ITEM_MASK_KAFEIS_MASK,
-    PLAYER_AP_MASK_ALL_NIGHT,          // ITEM_MASK_ALL_NIGHT,
-    PLAYER_AP_MASK_BUNNY,              // ITEM_MASK_BUNNY,
-    PLAYER_AP_MASK_KEATON,             // ITEM_MASK_KEATON,
-    PLAYER_AP_MASK_GARO,               // ITEM_MASK_GARO,
-    PLAYER_AP_MASK_ROMANI,             // ITEM_MASK_ROMANI,
-    PLAYER_AP_MASK_CIRCUS_LEADER,      // ITEM_MASK_CIRCUS_LEADER,
-    PLAYER_AP_MASK_POSTMAN,            // ITEM_MASK_POSTMAN,
-    PLAYER_AP_MASK_COUPLE,             // ITEM_MASK_COUPLE,
-    PLAYER_AP_MASK_GREAT_FAIRY,        // ITEM_MASK_GREAT_FAIRY,
-    PLAYER_AP_MASK_GIBDO,              // ITEM_MASK_GIBDO,
-    PLAYER_AP_MASK_DON_GERO,           // ITEM_MASK_DON_GERO,
-    PLAYER_AP_MASK_KAMARO,             // ITEM_MASK_KAMARO,
-    PLAYER_AP_MASK_CAPTAIN,            // ITEM_MASK_CAPTAIN,
-    PLAYER_AP_MASK_STONE,              // ITEM_MASK_STONE,
-    PLAYER_AP_MASK_BREMEN,             // ITEM_MASK_BREMEN,
-    PLAYER_AP_MASK_BLAST,              // ITEM_MASK_BLAST,
-    PLAYER_AP_MASK_SCENTS,             // ITEM_MASK_SCENTS,
-    PLAYER_AP_MASK_GIANT,              // ITEM_MASK_GIANT,
-    PLAYER_AP_BOW_FIRE,                // ITEM_BOW_ARROW_FIRE,
-    PLAYER_AP_BOW_ICE,                 // ITEM_BOW_ARROW_ICE,
-    PLAYER_AP_BOW_LIGHT,               // ITEM_BOW_ARROW_LIGHT,
-    PLAYER_AP_SWORD_KOKIRI,            // ITEM_SWORD_KOKIRI,
-    PLAYER_AP_SWORD_RAZOR,             // ITEM_SWORD_RAZOR,
-    PLAYER_AP_SWORD_GILDED,            // ITEM_SWORD_GILDED,
-    PLAYER_AP_SWORD_GREAT_FAIRY,       // ITEM_SWORD_DEITY,
+    PLAYER_IA_OCARINA,                 // ITEM_OCARINA,
+    PLAYER_IA_BOW,                     // ITEM_BOW,
+    PLAYER_IA_BOW_FIRE,                // ITEM_ARROW_FIRE,
+    PLAYER_IA_BOW_ICE,                 // ITEM_ARROW_ICE,
+    PLAYER_IA_BOW_LIGHT,               // ITEM_ARROW_LIGHT,
+    PLAYER_IA_PICTO_BOX,               // ITEM_OCARINA_FAIRY,
+    PLAYER_IA_BOMB,                    // ITEM_BOMB,
+    PLAYER_IA_BOMBCHU,                 // ITEM_BOMBCHU,
+    PLAYER_IA_STICK,                   // ITEM_STICK,
+    PLAYER_IA_NUT,                     // ITEM_NUT,
+    PLAYER_IA_MAGIC_BEANS,             // ITEM_MAGIC_BEANS,
+    PLAYER_IA_PICTO_BOX,               // ITEM_SLINGSHOT,
+    PLAYER_IA_POWDER_KEG,              // ITEM_POWDER_KEG,
+    PLAYER_IA_PICTO_BOX,               // ITEM_PICTO_BOX,
+    PLAYER_IA_LENS,                    // ITEM_LENS,
+    PLAYER_IA_HOOKSHOT,                // ITEM_HOOKSHOT,
+    PLAYER_IA_SWORD_GREAT_FAIRY,       // ITEM_SWORD_GREAT_FAIRY,
+    PLAYER_IA_PICTO_BOX,               // ITEM_LONGSHOT, // OoT Leftover
+    PLAYER_IA_BOTTLE,                  // ITEM_BOTTLE,
+    PLAYER_IA_BOTTLE_POTION_RED,       // ITEM_POTION_RED,
+    PLAYER_IA_BOTTLE_POTION_GREEN,     // ITEM_POTION_GREEN,
+    PLAYER_IA_BOTTLE_POTION_BLUE,      // ITEM_POTION_BLUE,
+    PLAYER_IA_BOTTLE_FAIRY,            // ITEM_FAIRY,
+    PLAYER_IA_BOTTLE_DEKU_PRINCESS,    // ITEM_DEKU_PRINCESS,
+    PLAYER_IA_BOTTLE_MILK,             // ITEM_MILK_BOTTLE,
+    PLAYER_IA_BOTTLE_MILK_HALF,        // ITEM_MILK_HALF,
+    PLAYER_IA_BOTTLE_FISH,             // ITEM_FISH,
+    PLAYER_IA_BOTTLE_BUG,              // ITEM_BUG,
+    PLAYER_IA_BOTTLE_BUG,              // ITEM_BLUE_FIRE, // !
+    PLAYER_IA_BOTTLE_POE,              // ITEM_POE,
+    PLAYER_IA_BOTTLE_BIG_POE,          // ITEM_BIG_POE,
+    PLAYER_IA_BOTTLE_SPRING_WATER,     // ITEM_SPRING_WATER,
+    PLAYER_IA_BOTTLE_HOT_SPRING_WATER, // ITEM_HOT_SPRING_WATER,
+    PLAYER_IA_BOTTLE_ZORA_EGG,         // ITEM_ZORA_EGG,
+    PLAYER_IA_BOTTLE_GOLD_DUST,        // ITEM_GOLD_DUST,
+    PLAYER_IA_BOTTLE_MUSHROOM,         // ITEM_MUSHROOM,
+    PLAYER_IA_BOTTLE_SEAHORSE,         // ITEM_SEA_HORSE,
+    PLAYER_IA_BOTTLE_CHATEAU,          // ITEM_CHATEAU,
+    PLAYER_IA_BOTTLE_HYLIAN_LOACH,     // ITEM_HYLIAN_LOACH,
+    PLAYER_IA_BOTTLE_POE,              // ITEM_OBABA_DRINK, // !
+    PLAYER_IA_MOON_TEAR,               // ITEM_MOON_TEAR,
+    PLAYER_IA_DEED_LAND,               // ITEM_DEED_LAND,
+    PLAYER_IA_DEED_SWAMP,              // ITEM_DEED_SWAMP,
+    PLAYER_IA_DEED_MOUNTAIN,           // ITEM_DEED_MOUNTAIN,
+    PLAYER_IA_DEED_OCEAN,              // ITEM_DEED_OCEAN,
+    PLAYER_IA_ROOM_KEY,                // ITEM_ROOM_KEY,
+    PLAYER_IA_LETTER_MAMA,             // ITEM_LETTER_MAMA,
+    PLAYER_IA_LETTER_TO_KAFEI,         // ITEM_LETTER_TO_KAFEI,
+    PLAYER_IA_PENDANT_OF_MEMORIES,     // ITEM_PENDANT_MEMORIES,
+    PLAYER_IA_38,                      // ITEM_TINGLE_MAP, // !
+    PLAYER_IA_MASK_DEKU,               // ITEM_MASK_DEKU,
+    PLAYER_IA_MASK_GORON,              // ITEM_MASK_GORON,
+    PLAYER_IA_MASK_ZORA,               // ITEM_MASK_ZORA,
+    PLAYER_IA_MASK_FIERCE_DEITY,       // ITEM_MASK_FIERCE_DEITY,
+    PLAYER_IA_MASK_TRUTH,              // ITEM_MASK_TRUTH,
+    PLAYER_IA_MASK_KAFEIS_MASK,        // ITEM_MASK_KAFEIS_MASK,
+    PLAYER_IA_MASK_ALL_NIGHT,          // ITEM_MASK_ALL_NIGHT,
+    PLAYER_IA_MASK_BUNNY,              // ITEM_MASK_BUNNY,
+    PLAYER_IA_MASK_KEATON,             // ITEM_MASK_KEATON,
+    PLAYER_IA_MASK_GARO,               // ITEM_MASK_GARO,
+    PLAYER_IA_MASK_ROMANI,             // ITEM_MASK_ROMANI,
+    PLAYER_IA_MASK_CIRCUS_LEADER,      // ITEM_MASK_CIRCUS_LEADER,
+    PLAYER_IA_MASK_POSTMAN,            // ITEM_MASK_POSTMAN,
+    PLAYER_IA_MASK_COUPLE,             // ITEM_MASK_COUPLE,
+    PLAYER_IA_MASK_GREAT_FAIRY,        // ITEM_MASK_GREAT_FAIRY,
+    PLAYER_IA_MASK_GIBDO,              // ITEM_MASK_GIBDO,
+    PLAYER_IA_MASK_DON_GERO,           // ITEM_MASK_DON_GERO,
+    PLAYER_IA_MASK_KAMARO,             // ITEM_MASK_KAMARO,
+    PLAYER_IA_MASK_CAPTAIN,            // ITEM_MASK_CAPTAIN,
+    PLAYER_IA_MASK_STONE,              // ITEM_MASK_STONE,
+    PLAYER_IA_MASK_BREMEN,             // ITEM_MASK_BREMEN,
+    PLAYER_IA_MASK_BLAST,              // ITEM_MASK_BLAST,
+    PLAYER_IA_MASK_SCENTS,             // ITEM_MASK_SCENTS,
+    PLAYER_IA_MASK_GIANT,              // ITEM_MASK_GIANT,
+    PLAYER_IA_BOW_FIRE,                // ITEM_BOW_ARROW_FIRE,
+    PLAYER_IA_BOW_ICE,                 // ITEM_BOW_ARROW_ICE,
+    PLAYER_IA_BOW_LIGHT,               // ITEM_BOW_ARROW_LIGHT,
+    PLAYER_IA_SWORD_KOKIRI,            // ITEM_SWORD_KOKIRI,
+    PLAYER_IA_SWORD_RAZOR,             // ITEM_SWORD_RAZOR,
+    PLAYER_IA_SWORD_GILDED,            // ITEM_SWORD_GILDED,
+    PLAYER_IA_SWORD_GREAT_FAIRY,       // ITEM_SWORD_DEITY,
 };
 
-PlayerActionParam Player_ItemToActionParam(Player* this, ItemId item) {
+PlayerItemAction Player_ItemToActionParam(Player* this, ItemId item) {
     if (item >= ITEM_FD) {
-        return PLAYER_AP_NONE;
+        return PLAYER_IA_NONE;
     } else if (item == ITEM_FC) {
-        return PLAYER_AP_LAST_USED;
+        return PLAYER_IA_LAST_USED;
     } else if (item == ITEM_FISHING_ROD) {
-        return PLAYER_AP_FISHING_ROD;
+        return PLAYER_IA_FISHING_ROD;
     } else if ((item == ITEM_SWORD_KOKIRI) && (this->transformation == PLAYER_FORM_ZORA)) {
-        return PLAYER_AP_ZORA_FINS;
+        return PLAYER_IA_ZORA_FINS;
     } else {
         return sItemActionParams[item];
     }
@@ -2958,7 +2958,7 @@ void func_8082F5A4(PlayState* play, Player* this) {
 void func_8082F5C0(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_8;
 
-    if (this->itemActionParam == PLAYER_AP_NUT) {
+    if (this->heldItemAction == PLAYER_IA_NUT) {
         this->unk_B28 = -2;
     } else {
         this->unk_B28 = -1;
@@ -2966,177 +2966,177 @@ void func_8082F5C0(PlayState* play, Player* this) {
     this->unk_ACC = 0;
 }
 
-PlayerFuncAC4 D_8085C9F0[PLAYER_AP_MAX] = {
-    func_80848780, // PLAYER_AP_NONE
-    func_80848780, // PLAYER_AP_LAST_USED
-    func_80848780, // PLAYER_AP_FISHING_ROD
-    func_808487B8, // PLAYER_AP_SWORD_KOKIRI
-    func_808487B8, // PLAYER_AP_SWORD_RAZOR
-    func_808487B8, // PLAYER_AP_SWORD_GILDED
-    func_808487B8, // PLAYER_AP_SWORD_GREAT_FAIRY
-    func_80848780, // PLAYER_AP_STICK
-    func_80848780, // PLAYER_AP_ZORA_FINS
-    func_80848B6C, // PLAYER_AP_BOW
-    func_80848B6C, // PLAYER_AP_BOW_FIRE
-    func_80848B6C, // PLAYER_AP_BOW_ICE
-    func_80848B6C, // PLAYER_AP_BOW_LIGHT
-    func_80848B6C, // PLAYER_AP_HOOKSHOT
-    func_808490B4, // PLAYER_AP_BOMB
-    func_808490B4, // PLAYER_AP_POWDER_KEG
-    func_808490B4, // PLAYER_AP_BOMBCHU
-    func_808491B4, // PLAYER_AP_11
-    func_80848B6C, // PLAYER_AP_NUT
-    func_80848780, // PLAYER_AP_PICTO_BOX
-    func_80848780, // PLAYER_AP_OCARINA
-    func_80848780, // PLAYER_AP_BOTTLE
-    func_80848780, // PLAYER_AP_BOTTLE_FISH
-    func_80848780, // PLAYER_AP_BOTTLE_SPRING_WATER
-    func_80848780, // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    func_80848780, // PLAYER_AP_BOTTLE_ZORA_EGG
-    func_80848780, // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    func_80848780, // PLAYER_AP_BOTTLE_GOLD_DUST
-    func_80848780, // PLAYER_AP_BOTTLE_1C
-    func_80848780, // PLAYER_AP_BOTTLE_SEA_HORSE
-    func_80848780, // PLAYER_AP_BOTTLE_MUSHROOM
-    func_80848780, // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    func_80848780, // PLAYER_AP_BOTTLE_BUG
-    func_80848780, // PLAYER_AP_BOTTLE_POE
-    func_80848780, // PLAYER_AP_BOTTLE_BIG_POE
-    func_80848780, // PLAYER_AP_BOTTLE_POTION_RED
-    func_80848780, // PLAYER_AP_BOTTLE_POTION_BLUE
-    func_80848780, // PLAYER_AP_BOTTLE_POTION_GREEN
-    func_80848780, // PLAYER_AP_BOTTLE_MILK
-    func_80848780, // PLAYER_AP_BOTTLE_MILK_HALF
-    func_80848780, // PLAYER_AP_BOTTLE_CHATEAU
-    func_80848780, // PLAYER_AP_BOTTLE_FAIRY
-    func_80848780, // PLAYER_AP_MOON_TEAR
-    func_80848780, // PLAYER_AP_DEED_LAND
-    func_80848780, // PLAYER_AP_ROOM_KEY
-    func_80848780, // PLAYER_AP_LETTER_TO_KAFEI
-    func_80848780, // PLAYER_AP_MAGIC_BEANS
-    func_80848780, // PLAYER_AP_DEED_SWAMP
-    func_80848780, // PLAYER_AP_DEED_MOUNTAIN
-    func_80848780, // PLAYER_AP_DEED_OCEAN
-    func_80848780, // PLAYER_AP_32
-    func_80848780, // PLAYER_AP_LETTER_MAMA
-    func_80848780, // PLAYER_AP_34
-    func_80848780, // PLAYER_AP_35
-    func_80848780, // PLAYER_AP_PENDANT_MEMORIES
-    func_80848780, // PLAYER_AP_37
-    func_80848780, // PLAYER_AP_38
-    func_80848780, // PLAYER_AP_39
-    func_80848780, // PLAYER_AP_MASK_TRUTH
-    func_80848780, // PLAYER_AP_MASK_KAFEIS_MASK
-    func_80848780, // PLAYER_AP_MASK_ALL_NIGHT
-    func_80848780, // PLAYER_AP_MASK_BUNNY
-    func_80848780, // PLAYER_AP_MASK_KEATON
-    func_80848780, // PLAYER_AP_MASK_GARO
-    func_80848780, // PLAYER_AP_MASK_ROMANI
-    func_80848780, // PLAYER_AP_MASK_CIRCUS_LEADER
-    func_80848780, // PLAYER_AP_MASK_POSTMAN
-    func_80848780, // PLAYER_AP_MASK_COUPLE
-    func_80848780, // PLAYER_AP_MASK_GREAT_FAIRY
-    func_80848780, // PLAYER_AP_MASK_GIBDO
-    func_80848780, // PLAYER_AP_MASK_DON_GERO
-    func_80848780, // PLAYER_AP_MASK_KAMARO
-    func_80848780, // PLAYER_AP_MASK_CAPTAIN
-    func_80848780, // PLAYER_AP_MASK_STONE
-    func_80848780, // PLAYER_AP_MASK_BREMEN
-    func_80848780, // PLAYER_AP_MASK_BLAST
-    func_80848780, // PLAYER_AP_MASK_SCENTS
-    func_80848780, // PLAYER_AP_MASK_GIANT
-    func_80848780, // PLAYER_AP_MASK_FIERCE_DEITY
-    func_80848780, // PLAYER_AP_MASK_GORON
-    func_80848780, // PLAYER_AP_MASK_ZORA
-    func_80848780, // PLAYER_AP_MASK_DEKU
-    func_80848780, // PLAYER_AP_LENS
+PlayerFuncAC4 D_8085C9F0[PLAYER_IA_MAX] = {
+    func_80848780, // PLAYER_IA_NONE
+    func_80848780, // PLAYER_IA_LAST_USED
+    func_80848780, // PLAYER_IA_FISHING_ROD
+    func_808487B8, // PLAYER_IA_SWORD_KOKIRI
+    func_808487B8, // PLAYER_IA_SWORD_RAZOR
+    func_808487B8, // PLAYER_IA_SWORD_GILDED
+    func_808487B8, // PLAYER_IA_SWORD_GREAT_FAIRY
+    func_80848780, // PLAYER_IA_STICK
+    func_80848780, // PLAYER_IA_ZORA_FINS
+    func_80848B6C, // PLAYER_IA_BOW
+    func_80848B6C, // PLAYER_IA_BOW_FIRE
+    func_80848B6C, // PLAYER_IA_BOW_ICE
+    func_80848B6C, // PLAYER_IA_BOW_LIGHT
+    func_80848B6C, // PLAYER_IA_HOOKSHOT
+    func_808490B4, // PLAYER_IA_BOMB
+    func_808490B4, // PLAYER_IA_POWDER_KEG
+    func_808490B4, // PLAYER_IA_BOMBCHU
+    func_808491B4, // PLAYER_IA_11
+    func_80848B6C, // PLAYER_IA_NUT
+    func_80848780, // PLAYER_IA_PICTO_BOX
+    func_80848780, // PLAYER_IA_OCARINA
+    func_80848780, // PLAYER_IA_BOTTLE
+    func_80848780, // PLAYER_IA_BOTTLE_FISH
+    func_80848780, // PLAYER_IA_BOTTLE_SPRING_WATER
+    func_80848780, // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    func_80848780, // PLAYER_IA_BOTTLE_ZORA_EGG
+    func_80848780, // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    func_80848780, // PLAYER_IA_BOTTLE_GOLD_DUST
+    func_80848780, // PLAYER_IA_BOTTLE_1C
+    func_80848780, // PLAYER_IA_BOTTLE_SEA_HORSE
+    func_80848780, // PLAYER_IA_BOTTLE_MUSHROOM
+    func_80848780, // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    func_80848780, // PLAYER_IA_BOTTLE_BUG
+    func_80848780, // PLAYER_IA_BOTTLE_POE
+    func_80848780, // PLAYER_IA_BOTTLE_BIG_POE
+    func_80848780, // PLAYER_IA_BOTTLE_POTION_RED
+    func_80848780, // PLAYER_IA_BOTTLE_POTION_BLUE
+    func_80848780, // PLAYER_IA_BOTTLE_POTION_GREEN
+    func_80848780, // PLAYER_IA_BOTTLE_MILK
+    func_80848780, // PLAYER_IA_BOTTLE_MILK_HALF
+    func_80848780, // PLAYER_IA_BOTTLE_CHATEAU
+    func_80848780, // PLAYER_IA_BOTTLE_FAIRY
+    func_80848780, // PLAYER_IA_MOON_TEAR
+    func_80848780, // PLAYER_IA_DEED_LAND
+    func_80848780, // PLAYER_IA_ROOM_KEY
+    func_80848780, // PLAYER_IA_LETTER_TO_KAFEI
+    func_80848780, // PLAYER_IA_MAGIC_BEANS
+    func_80848780, // PLAYER_IA_DEED_SWAMP
+    func_80848780, // PLAYER_IA_DEED_MOUNTAIN
+    func_80848780, // PLAYER_IA_DEED_OCEAN
+    func_80848780, // PLAYER_IA_32
+    func_80848780, // PLAYER_IA_LETTER_MAMA
+    func_80848780, // PLAYER_IA_34
+    func_80848780, // PLAYER_IA_35
+    func_80848780, // PLAYER_IA_PENDANT_MEMORIES
+    func_80848780, // PLAYER_IA_37
+    func_80848780, // PLAYER_IA_38
+    func_80848780, // PLAYER_IA_39
+    func_80848780, // PLAYER_IA_MASK_TRUTH
+    func_80848780, // PLAYER_IA_MASK_KAFEIS_MASK
+    func_80848780, // PLAYER_IA_MASK_ALL_NIGHT
+    func_80848780, // PLAYER_IA_MASK_BUNNY
+    func_80848780, // PLAYER_IA_MASK_KEATON
+    func_80848780, // PLAYER_IA_MASK_GARO
+    func_80848780, // PLAYER_IA_MASK_ROMANI
+    func_80848780, // PLAYER_IA_MASK_CIRCUS_LEADER
+    func_80848780, // PLAYER_IA_MASK_POSTMAN
+    func_80848780, // PLAYER_IA_MASK_COUPLE
+    func_80848780, // PLAYER_IA_MASK_GREAT_FAIRY
+    func_80848780, // PLAYER_IA_MASK_GIBDO
+    func_80848780, // PLAYER_IA_MASK_DON_GERO
+    func_80848780, // PLAYER_IA_MASK_KAMARO
+    func_80848780, // PLAYER_IA_MASK_CAPTAIN
+    func_80848780, // PLAYER_IA_MASK_STONE
+    func_80848780, // PLAYER_IA_MASK_BREMEN
+    func_80848780, // PLAYER_IA_MASK_BLAST
+    func_80848780, // PLAYER_IA_MASK_SCENTS
+    func_80848780, // PLAYER_IA_MASK_GIANT
+    func_80848780, // PLAYER_IA_MASK_FIERCE_DEITY
+    func_80848780, // PLAYER_IA_MASK_GORON
+    func_80848780, // PLAYER_IA_MASK_ZORA
+    func_80848780, // PLAYER_IA_MASK_DEKU
+    func_80848780, // PLAYER_IA_LENS
 };
 
-// sPlayerActionParamInits?
-void (*D_8085CB3C[PLAYER_AP_MAX])(PlayState*, Player*) = {
-    func_8082F594,         // PLAYER_AP_NONE
-    func_8082F594,         // PLAYER_AP_LAST_USED
-    func_8082F594,         // PLAYER_AP_FISHING_ROD
-    func_8082F594,         // PLAYER_AP_SWORD_KOKIRI
-    func_8082F594,         // PLAYER_AP_SWORD_RAZOR
-    func_8082F594,         // PLAYER_AP_SWORD_GILDED
-    func_8082F594,         // PLAYER_AP_SWORD_GREAT_FAIRY
-    func_8082F5A4,         // PLAYER_AP_STICK
-    func_8082F8A0,         // PLAYER_AP_ZORA_FINS
-    func_8082F5C0,         // PLAYER_AP_BOW
-    func_8082F5C0,         // PLAYER_AP_BOW_FIRE
-    func_8082F5C0,         // PLAYER_AP_BOW_ICE
-    func_8082F5C0,         // PLAYER_AP_BOW_LIGHT
-    func_8082F7F4,         // PLAYER_AP_HOOKSHOT
-    Player_SpawnExplosive, // PLAYER_AP_BOMB
-    Player_SpawnExplosive, // PLAYER_AP_POWDER_KEG
-    Player_SpawnExplosive, // PLAYER_AP_BOMBCHU
-    func_8082F8A0,         // PLAYER_AP_11
-    func_8082F5C0,         // PLAYER_AP_NUT
-    func_8082F594,         // PLAYER_AP_PICTO_BOX
-    func_8082F594,         // PLAYER_AP_OCARINA
-    func_8082F594,         // PLAYER_AP_BOTTLE
-    func_8082F594,         // PLAYER_AP_BOTTLE_FISH
-    func_8082F594,         // PLAYER_AP_BOTTLE_SPRING_WATER
-    func_8082F594,         // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    func_8082F594,         // PLAYER_AP_BOTTLE_ZORA_EGG
-    func_8082F594,         // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    func_8082F594,         // PLAYER_AP_BOTTLE_GOLD_DUST
-    func_8082F594,         // PLAYER_AP_BOTTLE_1C
-    func_8082F594,         // PLAYER_AP_BOTTLE_SEA_HORSE
-    func_8082F594,         // PLAYER_AP_BOTTLE_MUSHROOM
-    func_8082F594,         // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    func_8082F594,         // PLAYER_AP_BOTTLE_BUG
-    func_8082F594,         // PLAYER_AP_BOTTLE_POE
-    func_8082F594,         // PLAYER_AP_BOTTLE_BIG_POE
-    func_8082F594,         // PLAYER_AP_BOTTLE_POTION_RED
-    func_8082F594,         // PLAYER_AP_BOTTLE_POTION_BLUE
-    func_8082F594,         // PLAYER_AP_BOTTLE_POTION_GREEN
-    func_8082F594,         // PLAYER_AP_BOTTLE_MILK
-    func_8082F594,         // PLAYER_AP_BOTTLE_MILK_HALF
-    func_8082F594,         // PLAYER_AP_BOTTLE_CHATEAU
-    func_8082F594,         // PLAYER_AP_BOTTLE_FAIRY
-    func_8082F594,         // PLAYER_AP_MOON_TEAR
-    func_8082F594,         // PLAYER_AP_DEED_LAND
-    func_8082F594,         // PLAYER_AP_ROOM_KEY
-    func_8082F594,         // PLAYER_AP_LETTER_TO_KAFEI
-    func_8082F594,         // PLAYER_AP_MAGIC_BEANS
-    func_8082F594,         // PLAYER_AP_DEED_SWAMP
-    func_8082F594,         // PLAYER_AP_DEED_MOUNTAIN
-    func_8082F594,         // PLAYER_AP_DEED_OCEAN
-    func_8082F594,         // PLAYER_AP_32
-    func_8082F594,         // PLAYER_AP_LETTER_MAMA
-    func_8082F594,         // PLAYER_AP_34
-    func_8082F594,         // PLAYER_AP_35
-    func_8082F594,         // PLAYER_AP_PENDANT_MEMORIES
-    func_8082F594,         // PLAYER_AP_37
-    func_8082F594,         // PLAYER_AP_38
-    func_8082F594,         // PLAYER_AP_39
-    func_8082F594,         // PLAYER_AP_MASK_TRUTH
-    func_8082F594,         // PLAYER_AP_MASK_KAFEIS_MASK
-    func_8082F594,         // PLAYER_AP_MASK_ALL_NIGHT
-    func_8082F594,         // PLAYER_AP_MASK_BUNNY
-    func_8082F594,         // PLAYER_AP_MASK_KEATON
-    func_8082F594,         // PLAYER_AP_MASK_GARO
-    func_8082F594,         // PLAYER_AP_MASK_ROMANI
-    func_8082F594,         // PLAYER_AP_MASK_CIRCUS_LEADER
-    func_8082F594,         // PLAYER_AP_MASK_POSTMAN
-    func_8082F594,         // PLAYER_AP_MASK_COUPLE
-    func_8082F594,         // PLAYER_AP_MASK_GREAT_FAIRY
-    func_8082F594,         // PLAYER_AP_MASK_GIBDO
-    func_8082F594,         // PLAYER_AP_MASK_DON_GERO
-    func_8082F594,         // PLAYER_AP_MASK_KAMARO
-    func_8082F594,         // PLAYER_AP_MASK_CAPTAIN
-    func_8082F594,         // PLAYER_AP_MASK_STONE
-    func_8082F594,         // PLAYER_AP_MASK_BREMEN
-    func_8082F594,         // PLAYER_AP_MASK_BLAST
-    func_8082F594,         // PLAYER_AP_MASK_SCENTS
-    func_8082F594,         // PLAYER_AP_MASK_GIANT
-    func_8082F594,         // PLAYER_AP_MASK_FIERCE_DEITY
-    func_8082F594,         // PLAYER_AP_MASK_GORON
-    func_8082F594,         // PLAYER_AP_MASK_ZORA
-    func_8082F594,         // PLAYER_AP_MASK_DEKU
-    func_8082F594,         // PLAYER_AP_LENS
+// sPlayerItemActionInits?
+void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
+    func_8082F594,         // PLAYER_IA_NONE
+    func_8082F594,         // PLAYER_IA_LAST_USED
+    func_8082F594,         // PLAYER_IA_FISHING_ROD
+    func_8082F594,         // PLAYER_IA_SWORD_KOKIRI
+    func_8082F594,         // PLAYER_IA_SWORD_RAZOR
+    func_8082F594,         // PLAYER_IA_SWORD_GILDED
+    func_8082F594,         // PLAYER_IA_SWORD_GREAT_FAIRY
+    func_8082F5A4,         // PLAYER_IA_STICK
+    func_8082F8A0,         // PLAYER_IA_ZORA_FINS
+    func_8082F5C0,         // PLAYER_IA_BOW
+    func_8082F5C0,         // PLAYER_IA_BOW_FIRE
+    func_8082F5C0,         // PLAYER_IA_BOW_ICE
+    func_8082F5C0,         // PLAYER_IA_BOW_LIGHT
+    func_8082F7F4,         // PLAYER_IA_HOOKSHOT
+    Player_SpawnExplosive, // PLAYER_IA_BOMB
+    Player_SpawnExplosive, // PLAYER_IA_POWDER_KEG
+    Player_SpawnExplosive, // PLAYER_IA_BOMBCHU
+    func_8082F8A0,         // PLAYER_IA_11
+    func_8082F5C0,         // PLAYER_IA_NUT
+    func_8082F594,         // PLAYER_IA_PICTO_BOX
+    func_8082F594,         // PLAYER_IA_OCARINA
+    func_8082F594,         // PLAYER_IA_BOTTLE
+    func_8082F594,         // PLAYER_IA_BOTTLE_FISH
+    func_8082F594,         // PLAYER_IA_BOTTLE_SPRING_WATER
+    func_8082F594,         // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    func_8082F594,         // PLAYER_IA_BOTTLE_ZORA_EGG
+    func_8082F594,         // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    func_8082F594,         // PLAYER_IA_BOTTLE_GOLD_DUST
+    func_8082F594,         // PLAYER_IA_BOTTLE_1C
+    func_8082F594,         // PLAYER_IA_BOTTLE_SEA_HORSE
+    func_8082F594,         // PLAYER_IA_BOTTLE_MUSHROOM
+    func_8082F594,         // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    func_8082F594,         // PLAYER_IA_BOTTLE_BUG
+    func_8082F594,         // PLAYER_IA_BOTTLE_POE
+    func_8082F594,         // PLAYER_IA_BOTTLE_BIG_POE
+    func_8082F594,         // PLAYER_IA_BOTTLE_POTION_RED
+    func_8082F594,         // PLAYER_IA_BOTTLE_POTION_BLUE
+    func_8082F594,         // PLAYER_IA_BOTTLE_POTION_GREEN
+    func_8082F594,         // PLAYER_IA_BOTTLE_MILK
+    func_8082F594,         // PLAYER_IA_BOTTLE_MILK_HALF
+    func_8082F594,         // PLAYER_IA_BOTTLE_CHATEAU
+    func_8082F594,         // PLAYER_IA_BOTTLE_FAIRY
+    func_8082F594,         // PLAYER_IA_MOON_TEAR
+    func_8082F594,         // PLAYER_IA_DEED_LAND
+    func_8082F594,         // PLAYER_IA_ROOM_KEY
+    func_8082F594,         // PLAYER_IA_LETTER_TO_KAFEI
+    func_8082F594,         // PLAYER_IA_MAGIC_BEANS
+    func_8082F594,         // PLAYER_IA_DEED_SWAMP
+    func_8082F594,         // PLAYER_IA_DEED_MOUNTAIN
+    func_8082F594,         // PLAYER_IA_DEED_OCEAN
+    func_8082F594,         // PLAYER_IA_32
+    func_8082F594,         // PLAYER_IA_LETTER_MAMA
+    func_8082F594,         // PLAYER_IA_34
+    func_8082F594,         // PLAYER_IA_35
+    func_8082F594,         // PLAYER_IA_PENDANT_MEMORIES
+    func_8082F594,         // PLAYER_IA_37
+    func_8082F594,         // PLAYER_IA_38
+    func_8082F594,         // PLAYER_IA_39
+    func_8082F594,         // PLAYER_IA_MASK_TRUTH
+    func_8082F594,         // PLAYER_IA_MASK_KAFEIS_MASK
+    func_8082F594,         // PLAYER_IA_MASK_ALL_NIGHT
+    func_8082F594,         // PLAYER_IA_MASK_BUNNY
+    func_8082F594,         // PLAYER_IA_MASK_KEATON
+    func_8082F594,         // PLAYER_IA_MASK_GARO
+    func_8082F594,         // PLAYER_IA_MASK_ROMANI
+    func_8082F594,         // PLAYER_IA_MASK_CIRCUS_LEADER
+    func_8082F594,         // PLAYER_IA_MASK_POSTMAN
+    func_8082F594,         // PLAYER_IA_MASK_COUPLE
+    func_8082F594,         // PLAYER_IA_MASK_GREAT_FAIRY
+    func_8082F594,         // PLAYER_IA_MASK_GIBDO
+    func_8082F594,         // PLAYER_IA_MASK_DON_GERO
+    func_8082F594,         // PLAYER_IA_MASK_KAMARO
+    func_8082F594,         // PLAYER_IA_MASK_CAPTAIN
+    func_8082F594,         // PLAYER_IA_MASK_STONE
+    func_8082F594,         // PLAYER_IA_MASK_BREMEN
+    func_8082F594,         // PLAYER_IA_MASK_BLAST
+    func_8082F594,         // PLAYER_IA_MASK_SCENTS
+    func_8082F594,         // PLAYER_IA_MASK_GIANT
+    func_8082F594,         // PLAYER_IA_MASK_FIERCE_DEITY
+    func_8082F594,         // PLAYER_IA_MASK_GORON
+    func_8082F594,         // PLAYER_IA_MASK_ZORA
+    func_8082F594,         // PLAYER_IA_MASK_DEKU
+    func_8082F594,         // PLAYER_IA_LENS
 };
 
 void func_8082F5FC(Player* this, Actor* actor) {
@@ -3171,9 +3171,9 @@ s8 D_8085CD00[PLAYER_ANIMTYPE_MAX][PLAYER_ANIMTYPE_MAX] = {
 };
 
 ExplosiveInfo sPlayerExplosiveInfo[] = {
-    { ITEM_BOMB, ACTOR_EN_BOM },        // PLAYER_AP_BOMB
-    { ITEM_POWDER_KEG, ACTOR_EN_BOM },  // PLAYER_AP_POWDER_KEG
-    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_AP_BOMBCHU
+    { ITEM_BOMB, ACTOR_EN_BOM },        // PLAYER_IA_BOMB
+    { ITEM_POWDER_KEG, ACTOR_EN_BOM },  // PLAYER_IA_POWDER_KEG
+    { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_IA_BOMBCHU
 };
 
 void Player_SpawnExplosive(PlayState* play, Player* this) {
@@ -3240,8 +3240,8 @@ void func_8082F8A0(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_1000000;
 }
 
-void func_8082F8BC(PlayState* play, Player* this, PlayerActionParam actionParam) {
-    this->heldItemActionParam = this->itemActionParam = actionParam;
+void func_8082F8BC(PlayState* play, Player* this, PlayerItemAction actionParam) {
+    this->itemAction = this->heldItemAction = actionParam;
     this->modelGroup = this->nextModelGroup;
 
     this->stateFlags1 &= ~(PLAYER_STATE1_1000000 | PLAYER_STATE1_8);
@@ -3434,7 +3434,7 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
                 if (this->unk_ADD >= 3) {
                     voiceSfx = NA_SE_VO_LI_SWORD_L;
                 } else {
-                    itemSfx = (this->itemActionParam == PLAYER_AP_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING
+                    itemSfx = (this->heldItemAction == PLAYER_IA_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING
                                                                                      : NA_SE_IT_SWORD_SWING;
                 }
             }
@@ -3485,14 +3485,14 @@ void func_8082FC60(Player* this) {
 }
 
 s32 func_8082FC78(Player* this, ItemId item) {
-    if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == this->heldItemActionParam)) {
+    if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == this->itemAction)) {
         return true;
     } else {
         return false;
     }
 }
 
-s32 func_8082FCC4(Player* this, ItemId item, PlayerActionParam actionParam) {
+s32 func_8082FCC4(Player* this, ItemId item, PlayerItemAction actionParam) {
     if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == actionParam)) {
         return true;
     } else {
@@ -3500,7 +3500,7 @@ s32 func_8082FCC4(Player* this, ItemId item, PlayerActionParam actionParam) {
     }
 }
 
-s32 func_8082FD0C(Player* this, PlayerActionParam actionParam) {
+s32 func_8082FD0C(Player* this, PlayerItemAction actionParam) {
     s32 btn;
 
     for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
@@ -3547,14 +3547,14 @@ void func_8082FE0C(Player* this, PlayState* play) {
 
     if (this->transformation == PLAYER_FORM_HUMAN) {
         if (this->currentMask != PLAYER_MASK_NONE) {
-            PlayerActionParam maskActionParam = this->currentMask + PLAYER_AP_MASK_TRUTH - 1;
+            PlayerItemAction maskActionParam = this->currentMask + PLAYER_IA_MASK_TRUTH - 1;
             s32 btn;
 
             btn = func_8082FD0C(this, maskActionParam);
 
             if (btn < 0) {
                 s32 maskIdMinusOne =
-                    Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154)) - PLAYER_AP_39 - 1;
+                    Player_ItemToActionParam(this, GET_CUR_FORM_BTN_ITEM(this->unk_154)) - PLAYER_IA_39 - 1;
 
                 if ((maskIdMinusOne < PLAYER_MASK_TRUTH - 1) || (maskIdMinusOne >= PLAYER_MASK_MAX - 1)) {
                     maskIdMinusOne = this->currentMask - 1;
@@ -3571,7 +3571,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
         }
     }
 
-    if (((this->actor.id == ACTOR_PLAYER) && (this->heldItemActionParam >= PLAYER_AP_FISHING_ROD)) &&
+    if (((this->actor.id == ACTOR_PLAYER) && (this->itemAction >= PLAYER_IA_FISHING_ROD)) &&
         !(((func_80124148(this) == 0) || (gSaveContext.jinxTimer == 0)) &&
           (func_8082FC78(this, (IREG(1) != 0) ? ITEM_FISHING_ROD : Inventory_GetBtnBItem(play)) ||
            func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_LEFT)) || func_8082FC78(this, C_BTN_ITEM(EQUIP_SLOT_C_DOWN)) ||
@@ -3583,7 +3583,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
         s32 i = func_8082FDC4();
 
         i = ((i >= 4) && (this->transformation == PLAYER_FORM_FIERCE_DEITY) &&
-             (this->itemActionParam != PLAYER_AP_SWORD_GREAT_FAIRY))
+             (this->heldItemAction != PLAYER_IA_SWORD_GREAT_FAIRY))
                 ? 0
                 : i;
 
@@ -3596,7 +3596,7 @@ void func_8082FE0C(Player* this, PlayState* play) {
             }
 
             item = func_8012364C(play, this, i);
-            if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == this->itemActionParam)) {
+            if ((item < ITEM_FD) && (Player_ItemToActionParam(this, item) == this->heldItemAction)) {
                 D_80862B4C = 1;
             }
         } else if (item == ITEM_F0) {
@@ -3642,12 +3642,12 @@ void func_808302CC(Player* this, PlayState* play) {
     nextModelAnimType = gPlayerModelTypes[this->nextModelGroup].modelAnimType;
     var_v1 = D_8085CD00[gPlayerModelTypes[this->modelGroup].modelAnimType][nextModelAnimType];
 
-    if ((actionParam == PLAYER_AP_ZORA_FINS) || (this->itemActionParam == PLAYER_AP_ZORA_FINS)) {
-        var_v1 = (actionParam == PLAYER_AP_NONE) ? -14 : 14;
-    } else if ((actionParam == PLAYER_AP_BOTTLE) || (actionParam == PLAYER_AP_11) ||
-               ((actionParam == PLAYER_AP_NONE) &&
-                ((this->itemActionParam == PLAYER_AP_BOTTLE) || (this->itemActionParam == PLAYER_AP_11)))) {
-        var_v1 = (actionParam == PLAYER_AP_NONE) ? -13 : 13;
+    if ((actionParam == PLAYER_IA_ZORA_FINS) || (this->heldItemAction == PLAYER_IA_ZORA_FINS)) {
+        var_v1 = (actionParam == PLAYER_IA_NONE) ? -14 : 14;
+    } else if ((actionParam == PLAYER_IA_BOTTLE) || (actionParam == PLAYER_IA_11) ||
+               ((actionParam == PLAYER_IA_NONE) &&
+                ((this->heldItemAction == PLAYER_IA_BOTTLE) || (this->heldItemAction == PLAYER_IA_11)))) {
+        var_v1 = (actionParam == PLAYER_IA_NONE) ? -13 : 13;
     }
 
     this->unk_14E = ABS_ALT(var_v1);
@@ -3667,7 +3667,7 @@ void func_808302CC(Player* this, PlayState* play) {
         endFrame = 0.0f;
     }
 
-    if (actionParam != PLAYER_AP_NONE) {
+    if (actionParam != PLAYER_IA_NONE) {
         frameSpeed *= 2.0f;
     }
 
@@ -3677,7 +3677,7 @@ void func_808302CC(Player* this, PlayState* play) {
 
 void func_808304BC(Player* this, PlayState* play) {
     if ((this->actor.id == ACTOR_PLAYER) && !(this->stateFlags3 & PLAYER_STATE3_40000000)) {
-        if ((this->itemActionParam == this->heldItemActionParam) || (this->stateFlags1 & PLAYER_STATE1_400000)) {
+        if ((this->heldItemAction == this->itemAction) || (this->stateFlags1 & PLAYER_STATE1_400000)) {
             if ((gSaveContext.save.playerData.health != 0) && (play->csCtx.state == CS_STATE_0)) {
                 if ((this->csMode == PLAYER_CSMODE_0) && (play->unk_1887C == 0) && (play->activeCamId == 0)) {
                     if (!func_8082DA90(play) && (gSaveContext.timerStates[4] != 5)) {
@@ -3695,13 +3695,13 @@ void func_808304BC(Player* this, PlayState* play) {
 
 // EN_ARROW ammo related?
 s32 func_808305BC(PlayState* play, Player* this, ItemId* item, s32* typeParam) {
-    if (this->itemActionParam == PLAYER_AP_NUT) {
+    if (this->heldItemAction == PLAYER_IA_NUT) {
         *item = ITEM_NUT;
         *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? 7 : 6;
     } else {
         *item = ITEM_BOW;
         *typeParam =
-            (this->stateFlags1 & PLAYER_STATE1_800000) ? ENARROW_1 : this->itemActionParam - PLAYER_AP_BOW + ENARROW_2;
+            (this->stateFlags1 & PLAYER_STATE1_800000) ? ENARROW_1 : this->heldItemAction - PLAYER_IA_BOW + ENARROW_2;
     }
 
     if (this->transformation == PLAYER_FORM_DEKU) {
@@ -3713,8 +3713,8 @@ s32 func_808305BC(PlayState* play, Player* this, ItemId* item, s32* typeParam) {
     if (this->stateFlags3 & PLAYER_STATE3_400) {
         return 1;
     }
-    if (gSaveContext.minigameState == 1) {
-        return play->interfaceCtx.hbaAmmo;
+    if (gSaveContext.minigameStatus == 1) {
+        return play->interfaceCtx.minigameAmmo;
     }
     if (play->unk_1887C != 0) {
         return play->unk_1887C;
@@ -3738,7 +3738,7 @@ u8 sMagicArrowCosts[] = {
 
 // Draw bow or hookshot / first person items?
 s32 func_808306F8(Player* this, PlayState* play) {
-    if ((this->itemActionParam >= PLAYER_AP_BOW_FIRE) && (this->itemActionParam <= PLAYER_AP_BOW_LIGHT) &&
+    if ((this->heldItemAction >= PLAYER_IA_BOW_FIRE) && (this->heldItemAction <= PLAYER_IA_BOW_LIGHT) &&
         (gSaveContext.magicState != 0)) {
         play_sound(NA_SE_SY_ERROR);
     } else {
@@ -3795,8 +3795,8 @@ s32 func_808306F8(Player* this, PlayState* play) {
 void func_808308DC(PlayState* play, Player* this) {
     s32 isGoronOrDeku = (this->transformation == PLAYER_FORM_GORON) || (this->transformation == PLAYER_FORM_DEKU);
 
-    if ((this->itemActionParam != PLAYER_AP_NONE) && !isGoronOrDeku) {
-        if (Player_ActionToSword(&this->actor, this->itemActionParam) >= 0) {
+    if ((this->heldItemAction != PLAYER_IA_NONE) && !isGoronOrDeku) {
+        if (Player_ActionToSword(&this->actor, this->heldItemAction) >= 0) {
             func_8082E1F0(this, NA_SE_IT_SWORD_PUTAWAY);
         } else {
             func_8082E1F0(this, NA_SE_PL_CHANGE_ARMS);
@@ -3806,9 +3806,9 @@ void func_808308DC(PlayState* play, Player* this) {
     func_80831990(play, this, this->heldItemId);
 
     if (!isGoronOrDeku) {
-        if (Player_ActionToSword(&this->actor, this->itemActionParam) >= 0) {
+        if (Player_ActionToSword(&this->actor, this->heldItemAction) >= 0) {
             func_8082E1F0(this, NA_SE_IT_SWORD_PICKOUT);
-        } else if (this->itemActionParam != PLAYER_AP_NONE) {
+        } else if (this->heldItemAction != PLAYER_IA_NONE) {
             func_8082E1F0(this, NA_SE_PL_CHANGE_ARMS);
         }
     }
@@ -3819,7 +3819,7 @@ void func_808309CC(PlayState* play, Player* this) {
         func_808308DC(play, this);
     }
 
-    func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
+    func_8082F43C(play, this, D_8085C9F0[this->heldItemAction]);
     this->unk_ACC = 0;
     this->unk_AA4 = 0;
     func_8082DCA0(play, this);
@@ -3901,7 +3901,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
         if (!(this->stateFlags1 & (PLAYER_STATE1_400000 | PLAYER_STATE1_800000 | PLAYER_STATE1_20000000))) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000) ||
                 ((this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (this->actor.bgCheckFlags & 1))) {
-                if ((play->unk_1887C == 0) && (this->itemActionParam == this->heldItemActionParam)) {
+                if ((play->unk_1887C == 0) && (this->heldItemAction == this->itemAction)) {
                     if ((this->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                         (!Player_IsGoronOrDeku(this) &&
                          ((((this->transformation == PLAYER_FORM_ZORA)) &&
@@ -3929,7 +3929,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
 void func_80830CE8(PlayState* play, Player* this) {
     func_8082F43C(play, this, func_80848AB0);
 
-    if (this->heldItemActionParam < 0) {
+    if (this->itemAction < 0) {
         func_80123C58(this);
     }
 
@@ -3961,7 +3961,7 @@ s32 func_80830DF0(Player* this, PlayState* play) {
 }
 
 s32 func_80830E30(Player* this, PlayState* play) {
-    if ((this->itemActionParam == PLAYER_AP_11) || (this->transformation == PLAYER_FORM_ZORA)) {
+    if ((this->heldItemAction == PLAYER_IA_11) || (this->transformation == PLAYER_FORM_ZORA)) {
         func_8082F43C(play, this, func_8084923C);
 
         LinkAnimation_PlayOnce(play, &this->unk_284,
@@ -4044,10 +4044,10 @@ s32 func_80831194(PlayState* play, Player* this) {
 
             func_808305BC(play, this, &item, &sp30);
             if ((this->transformation != PLAYER_FORM_DEKU) && !(this->stateFlags3 & PLAYER_STATE3_400)) {
-                if (gSaveContext.minigameState == 1) {
+                if (gSaveContext.minigameStatus == 1) {
                     if ((play->sceneId != SCENE_SYATEKI_MIZU) && (play->sceneId != SCENE_F01) &&
                         (play->sceneId != SCENE_SYATEKI_MORI)) {
-                        play->interfaceCtx.hbaAmmo -= 1;
+                        play->interfaceCtx.minigameAmmo -= 1;
                     }
                 } else if (play->unk_1887C != 0) {
                     play->unk_1887C--;
@@ -4146,7 +4146,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     func_800AEF44(Effect_GetByIndex(this->meleeWeaponEffectIndex[2]));
     this->actionFunc = actionFunc;
 
-    if ((this->heldItemActionParam != this->itemActionParam) &&
+    if ((this->itemAction != this->heldItemAction) &&
         (!(arg3 & 1) || !(this->stateFlags1 & PLAYER_STATE1_400000))) {
         func_80123C58(this);
     }
@@ -4204,21 +4204,21 @@ void func_8083172C(PlayState* play, Player* this, PlayerActionFunc actionFunc, s
 }
 
 void func_80831760(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3) {
-    if (this->heldItemActionParam >= 0) {
-        s32 heldItemActionParam = this->heldItemActionParam;
+    if (this->itemAction >= 0) {
+        s32 heldItemActionParam = this->itemAction;
 
-        this->heldItemActionParam = this->itemActionParam;
+        this->itemAction = this->heldItemAction;
         Player_SetAction(play, this, actionFunc, arg3);
-        this->heldItemActionParam = heldItemActionParam;
+        this->itemAction = heldItemActionParam;
 
-        Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
+        Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
     }
 }
 
 void func_808317C4(Player* this) {
     if (Player_IsHoldingHookshot(this)) {
         if (this->heldActor != NULL) {
-            Actor_MarkForDeath(this->heldActor);
+            Actor_Kill(this->heldActor);
             this->actor.child = NULL;
             this->heldActor = NULL;
         }
@@ -4262,34 +4262,34 @@ void func_80831944(PlayState* play, Player* this) {
 
 // Proposed name: Player_UseItem
 void func_80831990(PlayState* play, Player* this, ItemId item) {
-    PlayerActionParam actionParam = Player_ItemToActionParam(this, item);
+    PlayerItemAction actionParam = Player_ItemToActionParam(this, item);
 
-    if ((((this->itemActionParam == this->heldItemActionParam) &&
+    if ((((this->heldItemAction == this->itemAction) &&
           (!(this->stateFlags1 & PLAYER_STATE1_400000) || (Player_ActionToMeleeWeapon(actionParam) != 0) ||
-           (actionParam == PLAYER_AP_NONE))) ||
-         ((this->heldItemActionParam < PLAYER_AP_NONE) &&
-          ((Player_ActionToMeleeWeapon(actionParam) != 0) || (actionParam == PLAYER_AP_NONE)))) &&
-        ((actionParam == PLAYER_AP_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
-         (actionParam == PLAYER_AP_MASK_ZORA) ||
+           (actionParam == PLAYER_IA_NONE))) ||
+         ((this->itemAction < PLAYER_IA_NONE) &&
+          ((Player_ActionToMeleeWeapon(actionParam) != 0) || (actionParam == PLAYER_IA_NONE)))) &&
+        ((actionParam == PLAYER_IA_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
+         (actionParam == PLAYER_IA_MASK_ZORA) ||
          ((this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) && (this->actor.bgCheckFlags & 1)))) {
-        s32 var_v1 = ((actionParam >= PLAYER_AP_MASK_TRUTH) && (actionParam <= PLAYER_AP_MASK_DEKU) &&
-                      ((this->transformation != PLAYER_FORM_HUMAN) || (actionParam >= PLAYER_AP_MASK_GIANT)));
+        s32 var_v1 = ((actionParam >= PLAYER_IA_MASK_TRUTH) && (actionParam <= PLAYER_IA_MASK_DEKU) &&
+                      ((this->transformation != PLAYER_FORM_HUMAN) || (actionParam >= PLAYER_IA_MASK_GIANT)));
         CollisionPoly* sp5C;
         s32 sp58;
         f32 sp54;
         s32 explAction;
 
-        if (var_v1 || (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_100) && (actionParam != PLAYER_AP_NONE)) ||
-            (actionParam == PLAYER_AP_OCARINA) ||
-            ((actionParam > PLAYER_AP_BOTTLE) && actionParam < PLAYER_AP_MASK_TRUTH) ||
-            ((actionParam == PLAYER_AP_PICTO_BOX) && (this->talkActor != NULL) &&
-             (this->exchangeItemId > PLAYER_AP_NONE))) {
+        if (var_v1 || (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_100) && (actionParam != PLAYER_IA_NONE)) ||
+            (actionParam == PLAYER_IA_OCARINA) ||
+            ((actionParam > PLAYER_IA_BOTTLE) && actionParam < PLAYER_IA_MASK_TRUTH) ||
+            ((actionParam == PLAYER_IA_PICTO_BOX) && (this->talkActor != NULL) &&
+             (this->exchangeItemId > PLAYER_IA_NONE))) {
             if (var_v1) {
-                PlayerTransformation playerForm = (actionParam < PLAYER_AP_MASK_FIERCE_DEITY)
+                PlayerTransformation playerForm = (actionParam < PLAYER_IA_MASK_FIERCE_DEITY)
                                                       ? PLAYER_FORM_HUMAN
-                                                      : actionParam - PLAYER_AP_MASK_FIERCE_DEITY;
+                                                      : actionParam - PLAYER_IA_MASK_FIERCE_DEITY;
 
-                if (((this->currentMask != PLAYER_MASK_GIANT) && (actionParam == PLAYER_AP_MASK_GIANT) &&
+                if (((this->currentMask != PLAYER_MASK_GIANT) && (actionParam == PLAYER_IA_MASK_GIANT) &&
                      ((gSaveContext.magicState != 0) || (gSaveContext.save.playerData.magic == 0))) ||
                     (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                      BgCheck_EntityCheckCeiling(&play->colCtx, &sp54, &this->actor.world.pos,
@@ -4298,13 +4298,13 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                     return;
                 }
             }
-            if ((actionParam == PLAYER_AP_MAGIC_BEANS) && (AMMO(ITEM_MAGIC_BEANS) == 0)) {
+            if ((actionParam == PLAYER_IA_MAGIC_BEANS) && (AMMO(ITEM_MAGIC_BEANS) == 0)) {
                 play_sound(NA_SE_SY_ERROR);
             } else {
-                this->heldItemActionParam = actionParam;
+                this->itemAction = actionParam;
                 this->unk_AA5 = PLAYER_UNKAA5_5;
             }
-        } else if (((actionParam == PLAYER_AP_STICK) && (AMMO(ITEM_STICK) == 0)) ||
+        } else if (((actionParam == PLAYER_IA_STICK) && (AMMO(ITEM_STICK) == 0)) ||
                    (((play->unk_1887D != 0) || (play->unk_1887E != 0)) &&
                     (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 5)) ||
                    ((play->unk_1887D == 0) && (play->unk_1887E == 0) &&
@@ -4312,22 +4312,22 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                     ((AMMO(sPlayerExplosiveInfo[explAction].itemId) == 0) ||
                      (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 3)))) {
             play_sound(NA_SE_SY_ERROR);
-        } else if (actionParam == PLAYER_AP_LENS) {
+        } else if (actionParam == PLAYER_IA_LENS) {
             func_808318C0(play);
-        } else if (actionParam == PLAYER_AP_PICTO_BOX) {
+        } else if (actionParam == PLAYER_IA_PICTO_BOX) {
             if (!func_80831814(this, play, PLAYER_UNKAA5_2)) {
                 play_sound(NA_SE_SY_ERROR);
             }
-        } else if ((actionParam == PLAYER_AP_NUT) &&
+        } else if ((actionParam == PLAYER_IA_NUT) &&
                    ((this->transformation != PLAYER_FORM_DEKU) || (this->heldItemButton != 0))) {
             if (AMMO(ITEM_NUT) != 0) {
                 func_8083A658(play, this);
             } else {
                 play_sound(NA_SE_SY_ERROR);
             }
-        } else if ((this->transformation == PLAYER_FORM_HUMAN) && (actionParam >= PLAYER_AP_MASK_TRUTH) &&
-                   (actionParam < PLAYER_AP_MASK_GIANT)) {
-            s32 maskId = actionParam - PLAYER_AP_39;
+        } else if ((this->transformation == PLAYER_FORM_HUMAN) && (actionParam >= PLAYER_IA_MASK_TRUTH) &&
+                   (actionParam < PLAYER_IA_MASK_GIANT)) {
+            s32 maskId = actionParam - PLAYER_IA_39;
 
             this->prevMask = this->currentMask;
             if (maskId == this->currentMask) {
@@ -4338,15 +4338,15 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                 func_8082E1F0(this, NA_SE_PL_CHANGE_ARMS);
             }
             gSaveContext.save.equippedMask = this->currentMask;
-        } else if ((actionParam != this->itemActionParam) ||
+        } else if ((actionParam != this->heldItemAction) ||
                    ((this->heldActor == NULL) && (Player_ActionToExplosive(this, actionParam) >= 0))) {
             u8 nextAnimType;
 
             this->nextModelGroup = Player_ActionToModelGroup(this, actionParam);
             nextAnimType = gPlayerModelTypes[this->nextModelGroup].modelAnimType;
-            var_v1 = ((this->transformation != PLAYER_FORM_GORON) || (actionParam == PLAYER_AP_POWDER_KEG));
+            var_v1 = ((this->transformation != PLAYER_FORM_GORON) || (actionParam == PLAYER_IA_POWDER_KEG));
 
-            if (var_v1 && (this->itemActionParam >= 0) && (item != this->heldItemId) &&
+            if (var_v1 && (this->heldItemAction >= 0) && (item != this->heldItemId) &&
                 (D_8085CD00[gPlayerModelTypes[this->modelGroup].modelAnimType][nextAnimType] != 0)) {
                 this->heldItemId = item;
                 this->stateFlags3 |= PLAYER_STATE3_40000000;
@@ -4409,7 +4409,7 @@ s32 func_80832090(Player* this) {
             (((this->stateFlags3 & PLAYER_STATE3_40000000)) &&
              ((this->heldItemId == ITEM_FC) || (this->heldItemId == ITEM_NONE)))) &&
            (!(func_80848808 == this->unk_AC4) ||
-            Player_ItemToActionParam(this, this->heldItemId) == this->itemActionParam);
+            Player_ItemToActionParam(this, this->heldItemId) == this->heldItemAction);
 }
 
 // Whether action is Bremen marching or Kamaro dancing
@@ -4609,7 +4609,7 @@ void func_80832888(Player* this, PlayState* play) {
     if (temp_v0_3 || (this->unk_738 != 0) || (this->stateFlags1 & (PLAYER_STATE1_1000 | PLAYER_STATE1_2000000))) {
         if (!temp_v0_3) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
-                ((this->itemActionParam != PLAYER_AP_FISHING_ROD) || (this->unk_B28 == 0)) &&
+                ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
                 var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.targetContext.arrowPointedActor
                                                       : &GET_PLAYER(play)->actor;
@@ -4842,7 +4842,7 @@ void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 isSwordBeam
 
         thunder = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_M_THUNDER, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
                               this->bodyPartsPos[PLAYER_BODYPART_WAIST].y, this->bodyPartsPos[PLAYER_BODYPART_WAIST].z,
-                              pitch, 0, 0, (this->itemActionParam - PLAYER_AP_SWORD_KOKIRI) | magicCost);
+                              pitch, 0, 0, (this->heldItemAction - PLAYER_IA_SWORD_KOKIRI) | magicCost);
 
         if ((thunder != NULL) && isSwordBeam) {
             Magic_Consume(play, 1, MAGIC_CONSUME_DEITY_BEAM);
@@ -4860,7 +4860,7 @@ s32 func_808333CC(Player* this) {
     s8 temp2;
     s32 i;
 
-    if (this->itemActionParam == PLAYER_AP_STICK) {
+    if (this->heldItemAction == PLAYER_IA_STICK) {
         return false;
     }
 
@@ -4955,7 +4955,7 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
                 }
             }
 
-            if (this->itemActionParam == PLAYER_AP_STICK) {
+            if (this->heldItemAction == PLAYER_IA_STICK) {
                 meleeWeaponAnimation = PLAYER_MWA_FORWARD_SLASH_1H;
             }
         }
@@ -4980,12 +4980,12 @@ void func_80833728(Player* this, s32 index, u32 dmgFlags, s32 damage) {
 
 MeleeWeaponDamageInfo D_8085D09C[] = {
     /* Goron, non-sword AP         */ { DMG_GORON_PUNCH, 2, 2, 0, 0 },
-    /* PLAYER_AP_SWORD_KOKIRI      */ { DMG_SWORD, 4, 8, 1, 2 },
-    /* PLAYER_AP_SWORD_RAZOR       */ { DMG_SWORD, 4, 8, 2, 4 },
-    /* PLAYER_AP_SWORD_GILDED      */ { DMG_SWORD, 4, 8, 3, 6 },
-    /* PLAYER_AP_SWORD_GREAT_FAIRY */ { DMG_SWORD, 4, 8, 4, 8 },
-    /* PLAYER_AP_STICK             */ { DMG_DEKU_STICK, 0, 0, 2, 4 },
-    /* PLAYER_AP_ZORA_FINS         */ { DMG_ZORA_PUNCH, 1, 2, 0, 0 },
+    /* PLAYER_IA_SWORD_KOKIRI      */ { DMG_SWORD, 4, 8, 1, 2 },
+    /* PLAYER_IA_SWORD_RAZOR       */ { DMG_SWORD, 4, 8, 2, 4 },
+    /* PLAYER_IA_SWORD_GILDED      */ { DMG_SWORD, 4, 8, 3, 6 },
+    /* PLAYER_IA_SWORD_GREAT_FAIRY */ { DMG_SWORD, 4, 8, 4, 8 },
+    /* PLAYER_IA_STICK             */ { DMG_DEKU_STICK, 0, 0, 2, 4 },
+    /* PLAYER_IA_ZORA_FINS         */ { DMG_ZORA_PUNCH, 1, 2, 0, 0 },
 };
 
 // New function in NE0: split out of func_80833864 to be able to call it to patch Power Crouch Stab.
@@ -5971,7 +5971,7 @@ void Player_Door_Staircase(PlayState* play, Player* this, Actor* door) {
 
     Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), 0x50);
     this->doorBgCamIndex =
-        play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamDataId;
+        play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorStaircase->actor)].sides[0].bgCamIndex;
     Actor_DeactivateLens(play);
     this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
 }
@@ -6019,7 +6019,7 @@ void Player_Door_Sliding(PlayState* play, Player* this, Actor* door) {
     if (doorSliding->dyna.actor.category == ACTORCAT_DOOR) {
         this->doorBgCamIndex = play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorSliding->dyna.actor)]
                                    .sides[this->doorDirection > 0 ? 0 : 1]
-                                   .bgCamDataId;
+                                   .bgCamIndex;
         Actor_DeactivateLens(play);
     }
 }
@@ -6117,7 +6117,7 @@ void Player_Door_Default(PlayState* play, Player* this, Actor* door) {
                 Camera_ChangeDoorCam(cam, &doorHandle->dyna.actor,
                                      play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorHandle->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
-                                         .bgCamDataId,
+                                         .bgCamIndex,
                                      0.0f, this->unk_AE7, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
             }
         }
@@ -6128,7 +6128,7 @@ void Player_Door_Default(PlayState* play, Player* this, Actor* door) {
 s32 func_808365DC(Player* this, PlayState* play) {
     if ((gSaveContext.save.playerData.health != 0) && (this->doorType != PLAYER_DOORTYPE_NONE)) {
         if ((this->actor.category != ACTORCAT_PLAYER) ||
-            ((((this->doorType <= PLAYER_DOORTYPE_TALK) && ActorCutscene_GetCanPlayNext(0x7C)) ||
+            ((((this->doorType <= PLAYER_DOORTYPE_TALKING) && ActorCutscene_GetCanPlayNext(0x7C)) ||
               ((this->doorType >= PLAYER_DOORTYPE_HANDLE) && ActorCutscene_GetCanPlayNext(0x7D))) &&
              (!(this->stateFlags1 & PLAYER_STATE1_800) &&
               (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) || (func_8085437C == this->actionFunc) ||
@@ -6136,7 +6136,7 @@ s32 func_808365DC(Player* this, PlayState* play) {
             Actor* doorActor = this->doorActor;
             Actor* var_v0_3;
 
-            if (this->doorType <= PLAYER_DOORTYPE_TALK) {
+            if (this->doorType <= PLAYER_DOORTYPE_TALKING) {
                 Player_TalkWithPlayer(play, doorActor);
                 if (doorActor->textId == 0x1821) {
                     doorActor->flags |= ACTOR_FLAG_100;
@@ -6414,8 +6414,8 @@ void func_80837134(PlayState* play, Player* this) {
 
         if ((this->skelAnime.animation == &gPlayerAnim_pn_rakkafinish) ||
             (this->skelAnime.animation == &gPlayerAnim_pn_kakkufinish)) {
-            func_80836C70(play, this, PLAYER_BODYPART_L_HAND);
-            func_80836C70(play, this, PLAYER_BODYPART_R_HAND);
+            func_80836C70(play, this, PLAYER_BODYPART_LEFT_HAND);
+            func_80836C70(play, this, PLAYER_BODYPART_RIGHT_HAND);
             var_v1 = true;
         }
 
@@ -6551,7 +6551,7 @@ s32 func_80837730(PlayState* play, Player* this, f32 arg2, s32 scale) {
         Math_Vec3f_Copy(&pos, &this->bodyPartsPos[PLAYER_BODYPART_WAIST]);
         pos.y += 20.0f;
         if (WaterBox_GetSurface1(play, &play->colCtx, pos.x, pos.z, &pos.y, &waterBox)) {
-            sp34 = pos.y - this->bodyPartsPos[PLAYER_BODYPART_L_FOOT].y;
+            sp34 = pos.y - this->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].y;
             if ((sp34 > -2.0f) && (sp34 < 100.0f)) {
                 EffectSsGSplash_Spawn(play, &pos, NULL, NULL,
                                       (sp3C <= 10.0f) ? EFFSSGSPLASH_TYPE_0 : EFFSSGSPLASH_TYPE_1, scale);
@@ -6629,7 +6629,7 @@ void func_808379C0(PlayState* play, Player* this) {
 void func_80837B60(PlayState* play, Player* this) {
     func_8083172C(play, this, func_8084E980, 0);
 
-    this->exchangeItemId = PLAYER_AP_NONE;
+    this->exchangeItemId = PLAYER_IA_NONE;
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     if (this->actor.textId != 0) {
         Message_StartTextbox(play, this->actor.textId, this->talkActor);
@@ -6679,7 +6679,7 @@ void func_80837CEC(PlayState* play, Player* this, CollisionPoly* arg2, f32 arg3,
 
     this->actor.world.pos.x -= (arg3 + 1.0f) * nx;
     this->actor.world.pos.z -= (arg3 + 1.0f) * nz;
-    this->actor.shape.rot.y = Math_FAtan2F(nz, nx);
+    this->actor.shape.rot.y = Math_Atan2S_XY(nz, nx);
     this->currentYaw = this->actor.shape.rot.y;
 
     func_8082DAD4(this);
@@ -6908,7 +6908,7 @@ s32 func_8083868C(PlayState* play, Player* this) {
     }
 
     camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
-                                              : Play_GetCamera(play, ((EnTest3*)this)->unk_D8E);
+                                              : Play_GetCamera(play, ((EnTest3*)this)->subCamId);
 
     return Camera_ChangeMode(camera, camMode);
 }
@@ -7003,90 +7003,90 @@ LinkAnimationHeader* D_8085D190[PLAYER_FORM_MAX] = {
     &gPlayerAnim_link_normal_okarina_swing,
 };
 
-u8 D_8085D1A4[PLAYER_AP_MAX] = {
-    GI_NONE,                // PLAYER_AP_NONE
-    GI_NONE,                // PLAYER_AP_LAST_USED
-    GI_NONE,                // PLAYER_AP_FISHING_ROD
-    GI_SWORD_KOKIRI,        // PLAYER_AP_SWORD_KOKIRI
-    GI_SWORD_RAZOR,         // PLAYER_AP_SWORD_RAZOR
-    GI_SWORD_GILDED,        // PLAYER_AP_SWORD_GILDED
-    GI_SWORD_GREAT_FAIRY,   // PLAYER_AP_SWORD_GREAT_FAIRY
-    GI_STICKS_1,            // PLAYER_AP_STICK
-    GI_SWORD_KOKIRI,        // PLAYER_AP_ZORA_FINS
-    GI_QUIVER_30,           // PLAYER_AP_BOW
-    GI_ARROW_FIRE,          // PLAYER_AP_BOW_FIRE
-    GI_ARROW_ICE,           // PLAYER_AP_BOW_ICE
-    GI_ARROW_LIGHT,         // PLAYER_AP_BOW_LIGHT
-    GI_HOOKSHOT,            // PLAYER_AP_HOOKSHOT
-    GI_BOMBS_1,             // PLAYER_AP_BOMB
-    GI_POWDER_KEG,          // PLAYER_AP_POWDER_KEG
-    GI_BOMBCHUS_10,         // PLAYER_AP_BOMBCHU
-    GI_40,                  // PLAYER_AP_11
-    GI_NUTS_1,              // PLAYER_AP_NUT
-    GI_PICTO_BOX,           // PLAYER_AP_PICTO_BOX
-    GI_OCARINA,             // PLAYER_AP_OCARINA
-    GI_BOTTLE,              // PLAYER_AP_BOTTLE
-    GI_FISH,                // PLAYER_AP_BOTTLE_FISH
-    GI_75,                  // PLAYER_AP_BOTTLE_SPRING_WATER
-    GI_ICE_TRAP,            // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    GI_ZORA_EGG,            // PLAYER_AP_BOTTLE_ZORA_EGG
-    GI_GOLD_DUST,           // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    GI_6C,                  // PLAYER_AP_BOTTLE_GOLD_DUST
-    GI_SEAHORSE,            // PLAYER_AP_BOTTLE_1C
-    GI_MUSHROOM,            // PLAYER_AP_BOTTLE_SEAHORSE
-    GI_70,                  // PLAYER_AP_BOTTLE_MUSHROOM
-    GI_DEKU_PRINCESS,       // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    GI_BUG,                 // PLAYER_AP_BOTTLE_BUG
-    GI_POE,                 // PLAYER_AP_BOTTLE_POE
-    GI_BIG_POE,             // PLAYER_AP_BOTTLE_BIG_POE
-    GI_POTION_RED,          // PLAYER_AP_BOTTLE_POTION_RED
-    GI_POTION_BLUE,         // PLAYER_AP_BOTTLE_POTION_BLUE
-    GI_POTION_GREEN,        // PLAYER_AP_BOTTLE_POTION_GREEN
-    GI_MILK_HALF,           // PLAYER_AP_BOTTLE_MILK
-    GI_MILK_HALF,           // PLAYER_AP_BOTTLE_MILK_HALF
-    GI_CHATEAU,             // PLAYER_AP_BOTTLE_CHATEAU
-    GI_FAIRY,               // PLAYER_AP_BOTTLE_FAIRY
-    GI_MOON_TEAR,           // PLAYER_AP_MOON_TEAR
-    GI_DEED_LAND,           // PLAYER_AP_DEED_LAND
-    GI_ROOM_KEY,            // PLAYER_AP_ROOM_KEY
-    GI_LETTER_TO_KAFEI,     // PLAYER_AP_LETTER_TO_KAFEI
-    GI_MAGIC_BEANS,         // PLAYER_AP_MAGIC_BEANS
-    GI_DEED_SWAMP,          // PLAYER_AP_DEED_SWAMP
-    GI_DEED_MOUNTAIN,       // PLAYER_AP_DEED_MOUNTAIN
-    GI_DEED_OCEAN,          // PLAYER_AP_DEED_OCEAN
-    GI_MOON_TEAR,           // PLAYER_AP_32
-    GI_LETTER_TO_MAMA,      // PLAYER_AP_LETTER_MAMA
-    GI_A7,                  // PLAYER_AP_34
-    GI_A8,                  // PLAYER_AP_35
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_PENDANT_OF_MEMORIES
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_37
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_38
-    GI_PENDANT_OF_MEMORIES, // PLAYER_AP_39
-    GI_MASK_TRUTH,          // PLAYER_AP_MASK_TRUTH
-    GI_MASK_KAFEIS_MASK,    // PLAYER_AP_MASK_KAFEIS_MASK
-    GI_MASK_ALL_NIGHT,      // PLAYER_AP_MASK_ALL_NIGHT
-    GI_MASK_BUNNY,          // PLAYER_AP_MASK_BUNNY
-    GI_MASK_KEATON,         // PLAYER_AP_MASK_KEATON
-    GI_MASK_GARO,           // PLAYER_AP_MASK_GARO
-    GI_MASK_ROMANI,         // PLAYER_AP_MASK_ROMANI
-    GI_MASK_CIRCUS_LEADER,  // PLAYER_AP_MASK_CIRCUS_LEADER
-    GI_MASK_POSTMAN,        // PLAYER_AP_MASK_POSTMAN
-    GI_MASK_COUPLE,         // PLAYER_AP_MASK_COUPLE
-    GI_MASK_GREAT_FAIRY,    // PLAYER_AP_MASK_GREAT_FAIRY
-    GI_MASK_GIBDO,          // PLAYER_AP_MASK_GIBDO
-    GI_MASK_DON_GERO,       // PLAYER_AP_MASK_DON_GERO
-    GI_MASK_KAMARO,         // PLAYER_AP_MASK_KAMARO
-    GI_MASK_CAPTAIN,        // PLAYER_AP_MASK_CAPTAIN
-    GI_MASK_STONE,          // PLAYER_AP_MASK_STONE
-    GI_MASK_BREMEN,         // PLAYER_AP_MASK_BREMEN
-    GI_MASK_BLAST,          // PLAYER_AP_MASK_BLAST
-    GI_MASK_SCENTS,         // PLAYER_AP_MASK_SCENTS
-    GI_MASK_GIANT,          // PLAYER_AP_MASK_GIANT
-    GI_MASK_FIERCE_DEITY,   // PLAYER_AP_MASK_FIERCE_DEITY
-    GI_MASK_GORON,          // PLAYER_AP_MASK_GORON
-    GI_MASK_ZORA,           // PLAYER_AP_MASK_ZORA
-    GI_MASK_DEKU,           // PLAYER_AP_MASK_DEKU
-    GI_LENS,                // PLAYER_AP_LENS
+u8 D_8085D1A4[PLAYER_IA_MAX] = {
+    GI_NONE,                // PLAYER_IA_NONE
+    GI_NONE,                // PLAYER_IA_LAST_USED
+    GI_NONE,                // PLAYER_IA_FISHING_ROD
+    GI_SWORD_KOKIRI,        // PLAYER_IA_SWORD_KOKIRI
+    GI_SWORD_RAZOR,         // PLAYER_IA_SWORD_RAZOR
+    GI_SWORD_GILDED,        // PLAYER_IA_SWORD_GILDED
+    GI_SWORD_GREAT_FAIRY,   // PLAYER_IA_SWORD_GREAT_FAIRY
+    GI_STICKS_1,            // PLAYER_IA_STICK
+    GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_FINS
+    GI_QUIVER_30,           // PLAYER_IA_BOW
+    GI_ARROW_FIRE,          // PLAYER_IA_BOW_FIRE
+    GI_ARROW_ICE,           // PLAYER_IA_BOW_ICE
+    GI_ARROW_LIGHT,         // PLAYER_IA_BOW_LIGHT
+    GI_HOOKSHOT,            // PLAYER_IA_HOOKSHOT
+    GI_BOMBS_1,             // PLAYER_IA_BOMB
+    GI_POWDER_KEG,          // PLAYER_IA_POWDER_KEG
+    GI_BOMBCHUS_10,         // PLAYER_IA_BOMBCHU
+    GI_40,                  // PLAYER_IA_11
+    GI_NUTS_1,              // PLAYER_IA_NUT
+    GI_PICTO_BOX,           // PLAYER_IA_PICTO_BOX
+    GI_OCARINA,             // PLAYER_IA_OCARINA
+    GI_BOTTLE,              // PLAYER_IA_BOTTLE
+    GI_FISH,                // PLAYER_IA_BOTTLE_FISH
+    GI_75,                  // PLAYER_IA_BOTTLE_SPRING_WATER
+    GI_ICE_TRAP,            // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    GI_ZORA_EGG,            // PLAYER_IA_BOTTLE_ZORA_EGG
+    GI_GOLD_DUST,           // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    GI_6C,                  // PLAYER_IA_BOTTLE_GOLD_DUST
+    GI_SEAHORSE,            // PLAYER_IA_BOTTLE_1C
+    GI_MUSHROOM,            // PLAYER_IA_BOTTLE_SEAHORSE
+    GI_HYLIAN_LOACH,        // PLAYER_IA_BOTTLE_MUSHROOM
+    GI_DEKU_PRINCESS,       // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    GI_BUG,                 // PLAYER_IA_BOTTLE_BUG
+    GI_POE,                 // PLAYER_IA_BOTTLE_POE
+    GI_BIG_POE,             // PLAYER_IA_BOTTLE_BIG_POE
+    GI_POTION_RED,          // PLAYER_IA_BOTTLE_POTION_RED
+    GI_POTION_BLUE,         // PLAYER_IA_BOTTLE_POTION_BLUE
+    GI_POTION_GREEN,        // PLAYER_IA_BOTTLE_POTION_GREEN
+    GI_MILK_HALF,           // PLAYER_IA_BOTTLE_MILK
+    GI_MILK_HALF,           // PLAYER_IA_BOTTLE_MILK_HALF
+    GI_CHATEAU,             // PLAYER_IA_BOTTLE_CHATEAU
+    GI_FAIRY,               // PLAYER_IA_BOTTLE_FAIRY
+    GI_MOON_TEAR,           // PLAYER_IA_MOON_TEAR
+    GI_DEED_LAND,           // PLAYER_IA_DEED_LAND
+    GI_ROOM_KEY,            // PLAYER_IA_ROOM_KEY
+    GI_LETTER_TO_KAFEI,     // PLAYER_IA_LETTER_TO_KAFEI
+    GI_MAGIC_BEANS,         // PLAYER_IA_MAGIC_BEANS
+    GI_DEED_SWAMP,          // PLAYER_IA_DEED_SWAMP
+    GI_DEED_MOUNTAIN,       // PLAYER_IA_DEED_MOUNTAIN
+    GI_DEED_OCEAN,          // PLAYER_IA_DEED_OCEAN
+    GI_MOON_TEAR,           // PLAYER_IA_32
+    GI_LETTER_TO_MAMA,      // PLAYER_IA_LETTER_MAMA
+    GI_A7,                  // PLAYER_IA_34
+    GI_A8,                  // PLAYER_IA_35
+    GI_PENDANT_OF_MEMORIES, // PLAYER_IA_PENDANT_OF_MEMORIES
+    GI_PENDANT_OF_MEMORIES, // PLAYER_IA_37
+    GI_PENDANT_OF_MEMORIES, // PLAYER_IA_38
+    GI_PENDANT_OF_MEMORIES, // PLAYER_IA_39
+    GI_MASK_TRUTH,          // PLAYER_IA_MASK_TRUTH
+    GI_MASK_KAFEIS_MASK,    // PLAYER_IA_MASK_KAFEIS_MASK
+    GI_MASK_ALL_NIGHT,      // PLAYER_IA_MASK_ALL_NIGHT
+    GI_MASK_BUNNY,          // PLAYER_IA_MASK_BUNNY
+    GI_MASK_KEATON,         // PLAYER_IA_MASK_KEATON
+    GI_MASK_GARO,           // PLAYER_IA_MASK_GARO
+    GI_MASK_ROMANI,         // PLAYER_IA_MASK_ROMANI
+    GI_MASK_CIRCUS_LEADER,  // PLAYER_IA_MASK_CIRCUS_LEADER
+    GI_MASK_POSTMAN,        // PLAYER_IA_MASK_POSTMAN
+    GI_MASK_COUPLE,         // PLAYER_IA_MASK_COUPLE
+    GI_MASK_GREAT_FAIRY,    // PLAYER_IA_MASK_GREAT_FAIRY
+    GI_MASK_GIBDO,          // PLAYER_IA_MASK_GIBDO
+    GI_MASK_DON_GERO,       // PLAYER_IA_MASK_DON_GERO
+    GI_MASK_KAMARO,         // PLAYER_IA_MASK_KAMARO
+    GI_MASK_CAPTAIN,        // PLAYER_IA_MASK_CAPTAIN
+    GI_MASK_STONE,          // PLAYER_IA_MASK_STONE
+    GI_MASK_BREMEN,         // PLAYER_IA_MASK_BREMEN
+    GI_MASK_BLAST,          // PLAYER_IA_MASK_BLAST
+    GI_MASK_SCENTS,         // PLAYER_IA_MASK_SCENTS
+    GI_MASK_GIANT,          // PLAYER_IA_MASK_GIANT
+    GI_MASK_FIERCE_DEITY,   // PLAYER_IA_MASK_FIERCE_DEITY
+    GI_MASK_GORON,          // PLAYER_IA_MASK_GORON
+    GI_MASK_ZORA,           // PLAYER_IA_MASK_ZORA
+    GI_MASK_DEKU,           // PLAYER_IA_MASK_DEKU
+    GI_LENS,                // PLAYER_IA_LENS
 };
 
 LinkAnimationHeader* D_8085D1F8[] = {
@@ -7095,7 +7095,7 @@ LinkAnimationHeader* D_8085D1F8[] = {
 };
 
 // TODO: standarize
-#define BOTTLE_ACTION(item) ((item)-PLAYER_AP_BOTTLE)
+#define BOTTLE_ACTION(item) ((item)-PLAYER_IA_BOTTLE)
 
 s32 func_80838A90(Player* this, PlayState* play) {
     s32 bottleAction;
@@ -7110,12 +7110,12 @@ s32 func_80838A90(Player* this, PlayState* play) {
         }
         if (!func_808387A0(play, this)) {
             if (this->unk_AA5 == PLAYER_UNKAA5_5) {
-                if ((this->heldItemActionParam > PLAYER_AP_39) && (this->heldItemActionParam <= PLAYER_AP_MASK_DEKU)) {
-                    s32 maskId = this->heldItemActionParam - PLAYER_AP_39;
+                if ((this->itemAction > PLAYER_IA_39) && (this->itemAction <= PLAYER_IA_MASK_DEKU)) {
+                    s32 maskId = this->itemAction - PLAYER_IA_39;
 
                     this->prevMask = this->currentMask;
-                    if ((!!(maskId == this->currentMask) != 0) || (this->heldItemActionParam < PLAYER_AP_MASK_GIANT) ||
-                        ((this->heldItemActionParam == PLAYER_AP_MASK_GIANT) &&
+                    if ((!!(maskId == this->currentMask) != 0) || (this->itemAction < PLAYER_IA_MASK_GIANT) ||
+                        ((this->itemAction == PLAYER_IA_MASK_GIANT) &&
                          (this->transformation != PLAYER_FORM_HUMAN))) {
                         if (maskId == this->currentMask) {
                             this->currentMask = PLAYER_MASK_NONE;
@@ -7133,37 +7133,37 @@ s32 func_80838A90(Player* this, PlayState* play) {
                             func_808389BC(play, this);
                             return true;
                         }
-                        func_808388B8(play, this, this->heldItemActionParam - PLAYER_AP_MASK_FIERCE_DEITY);
+                        func_808388B8(play, this, this->itemAction - PLAYER_IA_MASK_FIERCE_DEITY);
                     }
                     gSaveContext.save.equippedMask = this->currentMask;
                 } else if (((this->actor.flags & ACTOR_FLAG_100) == ACTOR_FLAG_100) ||
-                           (this->heldItemActionParam == PLAYER_AP_PICTO_BOX) ||
-                           ((this->heldItemActionParam != this->unk_B2B) &&
-                            ((this->heldItemActionParam == PLAYER_AP_BOTTLE_BIG_POE) ||
-                             ((this->heldItemActionParam >= PLAYER_AP_BOTTLE_ZORA_EGG) &&
-                              (this->heldItemActionParam <= PLAYER_AP_BOTTLE_HYLIAN_LOACH)) ||
-                             (this->heldItemActionParam > PLAYER_AP_BOTTLE_FAIRY) ||
+                           (this->itemAction == PLAYER_IA_PICTO_BOX) ||
+                           ((this->itemAction != this->unk_B2B) &&
+                            ((this->itemAction == PLAYER_IA_BOTTLE_BIG_POE) ||
+                             ((this->itemAction >= PLAYER_IA_BOTTLE_ZORA_EGG) &&
+                              (this->itemAction <= PLAYER_IA_BOTTLE_HYLIAN_LOACH)) ||
+                             (this->itemAction > PLAYER_IA_BOTTLE_FAIRY) ||
                              ((this->talkActor != NULL) && (this->exchangeItemId > 0) &&
-                              (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
-                                (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
-                               ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) &&
-                                (Player_ActionToBottle(this, this->heldItemActionParam) > -1))))))) {
+                              (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
+                                (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
+                               ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
+                                (Player_ActionToBottle(this, this->itemAction) > -1))))))) {
                     Actor* talkActor;
-                    s32 heldItemTemp = this->heldItemActionParam;
+                    s32 heldItemTemp = this->itemAction;
 
                     func_80838760(this);
-                    this->heldItemActionParam = PLAYER_AP_NONE;
+                    this->itemAction = PLAYER_IA_NONE;
                     func_80831760(play, this, func_80853A5C, 0);
                     talkActor = this->talkActor;
-                    this->heldItemActionParam = heldItemTemp;
+                    this->itemAction = heldItemTemp;
                     this->unk_A86 = -1;
 
-                    if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) &&
-                                                 (this->heldItemActionParam == PLAYER_AP_MAGIC_BEANS)) ||
-                                                ((this->exchangeItemId != PLAYER_AP_MAGIC_BEANS) &&
-                                                 (this->exchangeItemId > PLAYER_AP_NONE)))) {
+                    if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
+                                                 (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
+                                                ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
+                                                 (this->exchangeItemId > PLAYER_IA_NONE)))) {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_40);
-                        if (this->exchangeItemId == PLAYER_AP_MAGIC_BEANS) {
+                        if (this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
                             func_80831760(play, this, func_8084B4A8, 0);
                             this->currentYaw = talkActor->yawTowardsPlayer + 0x8000;
@@ -7192,22 +7192,22 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->actor.textId = 0xFE;
                     }
                     this->actor.flags |= ACTOR_FLAG_100;
-                    this->exchangeItemId = this->heldItemActionParam;
+                    this->exchangeItemId = this->itemAction;
                     if (this->unk_AE7 >= 0) {
                         Player_AnimationPlayOnce(play, this, D_8085D1F8[this->unk_AE7]);
                     }
                     func_8082DAD4(this);
                     return true;
                 } else {
-                    bottleAction = Player_ActionToBottle(this, this->heldItemActionParam);
+                    bottleAction = Player_ActionToBottle(this, this->itemAction);
 
                     if (bottleAction > -1) {
                         func_80838760(this);
-                        if (bottleAction >= BOTTLE_ACTION(PLAYER_AP_BOTTLE_FAIRY)) {
+                        if (bottleAction >= BOTTLE_ACTION(PLAYER_IA_BOTTLE_FAIRY)) {
                             func_80831760(play, this, func_80853754, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_bug_out);
-                        } else if ((bottleAction > BOTTLE_ACTION(PLAYER_AP_BOTTLE)) &&
-                                   (bottleAction < BOTTLE_ACTION(PLAYER_AP_BOTTLE_POE))) {
+                        } else if ((bottleAction > BOTTLE_ACTION(PLAYER_IA_BOTTLE)) &&
+                                   (bottleAction < BOTTLE_ACTION(PLAYER_IA_BOTTLE_POE))) {
                             func_80831760(play, this, func_80853850, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_fish_out);
                             this->unk_A86 = play->playerActorCsIds[2];
@@ -7454,7 +7454,7 @@ void func_80839860(Player* this, PlayState* play, s32 arg2) {
 
 void func_80839978(PlayState* play, Player* this) {
     if (this->actor.bgCheckFlags & 1) {
-        this->heldItemActionParam = PLAYER_AP_OCARINA;
+        this->itemAction = PLAYER_IA_OCARINA;
         func_80831760(play, this, func_8084AC84, 0);
         func_8082DB60(play, this, &gPlayerAnim_clink_normal_okarina_walk);
         func_8082E920(play, this, (4 | 0x200));
@@ -7466,7 +7466,7 @@ void func_80839978(PlayState* play, Player* this) {
 
 void func_80839A10(PlayState* play, Player* this) {
     if (this->actor.bgCheckFlags & 1) {
-        this->heldItemActionParam = PLAYER_AP_NONE;
+        this->itemAction = PLAYER_IA_NONE;
         func_80831760(play, this, func_8084AEEC, 0);
         func_8082DB60(play, this, &gPlayerAnim_alink_dance_loop);
         this->stateFlags2 |= PLAYER_STATE3_2000000;
@@ -7628,7 +7628,7 @@ s32 func_8083A114(Player* this, PlayState* play) {
                 return true;
             }
 
-            if ((this->putAwayCountdown == 0) && (this->itemActionParam >= PLAYER_AP_SWORD_KOKIRI) &&
+            if ((this->putAwayCountdown == 0) && (this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) &&
                 (this->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 func_80831990(play, this, ITEM_NONE);
             } else {
@@ -7714,7 +7714,7 @@ s32 func_8083A580(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_B)) {
         if (!(this->stateFlags1 & PLAYER_STATE1_400000) && (Player_GetMeleeWeaponHeld(this) != 0)) {
             if ((this->unk_ADC > 0) && (((this->transformation == PLAYER_FORM_ZORA)) ||
-                                        ((this->unk_ADC == 1) && (this->itemActionParam != PLAYER_AP_STICK)))) {
+                                        ((this->unk_ADC == 1) && (this->heldItemAction != PLAYER_IA_STICK)))) {
                 if (this->transformation == PLAYER_FORM_ZORA) {
                     func_80830E30(this, play);
                 } else {
@@ -8442,7 +8442,7 @@ void func_8083C6E8(Player* this, PlayState* play) {
 
         yIntersect = func_80835D2C(play, this, &D_8085D218, &pos);
         if (yIntersect > BGCHECK_Y_MIN) {
-            temp_v0 = Math_FAtan2F(40.0f, this->actor.world.pos.y - yIntersect);
+            temp_v0 = Math_Atan2S_XY(40.0f, this->actor.world.pos.y - yIntersect);
             sp46 = CLAMP(temp_v0, -4000, 4000);
         }
         this->actor.focus.rot.y = this->actor.shape.rot.y;
@@ -8623,7 +8623,7 @@ LinkAnimationHeader* D_8085D264[] = {
 s32 func_8083CF68(PlayState* play, Player* this) {
     if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & 2)) {
         if ((func_80853D68 != this->actionFunc) && (func_80857BE8 != this->actionFunc) && (D_80862B40 == 1)) {
-            s16 playerVelYaw = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+            s16 playerVelYaw = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
             Vec3f slopeNormal;
             s16 downwardSlopeYaw;
             s16 velYawToDownwardSlope;
@@ -8972,7 +8972,7 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
         wallPolyNormalX = COLPOLY_GET_NORMAL(wallPoly->normal.x);
         wallPolyNormalZ = COLPOLY_GET_NORMAL(wallPoly->normal.z);
 
-        Math_ScaledStepToS(&this->actor.shape.rot.y, Math_FAtan2F(-wallPolyNormalZ, -wallPolyNormalX), 0x320);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, Math_Atan2S_XY(-wallPolyNormalZ, -wallPolyNormalX), 0x320);
 
         this->currentYaw = this->actor.shape.rot.y;
         this->actor.world.pos.x = sp5C.x - (Math_SinS(this->actor.shape.rot.y) * arg3);
@@ -9624,9 +9624,9 @@ void func_8083FEF4(PlayState* play, Player* this) {
 }
 
 s32 func_8083FF30(PlayState* play, Player* this) {
-    if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B08[1] > 0.5f)) {
+    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B08[1] > 0.5f)) {
         if (AMMO(ITEM_STICK) != 0) {
-            EffectSsStick_Spawn(play, &this->bodyPartsPos[PLAYER_BODYPART_R_HAND],
+            EffectSsStick_Spawn(play, &this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND],
                                 BINANG_ADD(this->actor.shape.rot.y, 0x8000));
             this->unk_B08[1] = 0.5f;
             func_8083FEF4(play, this);
@@ -9640,7 +9640,7 @@ s32 func_8083FF30(PlayState* play, Player* this) {
 
 // handles razor sword health and breaking
 s32 func_8083FFEC(PlayState* play, Player* this) {
-    if (this->itemActionParam == PLAYER_AP_SWORD_RAZOR) {
+    if (this->heldItemAction == PLAYER_IA_SWORD_RAZOR) {
         if (gSaveContext.save.playerData.swordHealth > 0) {
             gSaveContext.save.playerData.swordHealth--;
             if (gSaveContext.save.playerData.swordHealth <= 0) {
@@ -10010,7 +10010,7 @@ s32 func_80840F90(PlayState* play, Player* this, CsCmdActorAction* playerAction,
         f32 scaledCurDist = sqrtf(SQ(curDiffX) + SQ(curDiffZ)) / halfUpdateRate;
         s32 framesLeft = (playerAction->endFrame - play->csCtx.frames) + 1;
 
-        arg4 = Math_FAtan2F(curDiffZ, curDiffX);
+        arg4 = Math_Atan2S_XY(curDiffZ, curDiffX);
 
         if (arg5 == 1) {
             f32 distX = playerAction->endPos.x - playerAction->startPos.x;
@@ -10080,7 +10080,7 @@ u8 D_8085D2B0[] = {
 // OoT leftover?
 void func_80841358(PlayState* play, Player* this, s32 arg2) {
     ItemId item;
-    PlayerActionParam actionParam;
+    PlayerItemAction actionParam;
 
     //! @bug OoB read if player is goron, deku or human
     item = D_8085D2B0[this->transformation];
@@ -10156,8 +10156,8 @@ void func_80841744(PlayState* play, Player* this) {
     Player_SetAction(play, this, func_80855C28, 0);
     if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
         Player_AnimationPlayOnceReverse(play, this, D_8085D17C[this->transformation]);
-        this->heldItemActionParam = PLAYER_AP_OCARINA;
-        Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
+        this->itemAction = PLAYER_IA_OCARINA;
+        Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
     } else {
         func_8082DB60(play, this, D_8085BE84[PLAYER_ANIMGROUP_43][this->modelAnimType]);
     }
@@ -10190,8 +10190,8 @@ void Player_InitCommon(Player* this, PlayState* play, FlexSkeletonHeader* skelHe
         this->unk_284.baseTransl = D_8085D2C4;
 
         if (this->transformation == PLAYER_FORM_GORON) {
-            SkelAnime_InitFlex(play, &this->unk_2C8, &object_link_goron_Skel_0177B8, &object_link_goron_Anim_0178D0,
-                               this->jointTable, this->morphTable, OBJECT_LINK_GORON_1_LIMB_MAX);
+            SkelAnime_InitFlex(play, &this->unk_2C8, &gLinkGoronShieldingSkel, &object_link_goron_Anim_0178D0,
+                               this->jointTable, this->morphTable, LINK_GORON_SHIELDING_LIMB_MAX);
         }
 
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawFeet, this->ageProperties->shadowScale);
@@ -10286,7 +10286,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
         objBankIndex = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
         this->actor.objBankIndex = objBankIndex;
         if (objBankIndex < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -10339,8 +10339,8 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
     this->ageProperties = &sPlayerAgeProperties[this->transformation];
 
-    this->heldItemActionParam = PLAYER_AP_NONE;
-    this->itemActionParam = PLAYER_AP_NONE;
+    this->itemAction = PLAYER_IA_NONE;
+    this->heldItemAction = PLAYER_IA_NONE;
     this->heldItemId = ITEM_NONE;
 
     func_80831990(play, this, ITEM_NONE);
@@ -10484,9 +10484,9 @@ void Player_Init(Actor* thisx, PlayState* play) {
         }
 
         if (gSaveContext.powderKegTimer != 0) {
-            this->nextModelGroup = Player_ActionToModelGroup(this, PLAYER_AP_POWDER_KEG);
+            this->nextModelGroup = Player_ActionToModelGroup(this, PLAYER_IA_POWDER_KEG);
             this->heldItemId = ITEM_POWDER_KEG;
-            func_8082F8BC(play, this, PLAYER_AP_POWDER_KEG);
+            func_8082F8BC(play, this, PLAYER_IA_POWDER_KEG);
             func_808313F0(this, play);
         } else if (gSaveContext.unk_1014 != 0) {
             func_8082F5FC(this, Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MM,
@@ -10620,7 +10620,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
             doActionA = DO_ACTION_NONE;
         } else if (this->stateFlags1 & PLAYER_STATE1_100000) {
             doActionA = DO_ACTION_RETURN;
-        } else if ((this->itemActionParam == PLAYER_AP_FISHING_ROD) && (this->unk_B28 != 0)) {
+        } else if ((this->heldItemAction == PLAYER_IA_FISHING_ROD) && (this->unk_B28 != 0)) {
             doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE;
             doActionA = (this->unk_B28 == 2) ? DO_ACTION_REEL : DO_ACTION_NONE; // required to match, maybe FAKE?
         } else if (this->stateFlags3 & PLAYER_STATE3_2000) {
@@ -10718,7 +10718,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                     doActionA = DO_ACTION_ATTACK;
                 } else if (((this->transformation == PLAYER_FORM_HUMAN) ||
                             (this->transformation == PLAYER_FORM_ZORA)) &&
-                           ((this->itemActionParam >= PLAYER_AP_SWORD_KOKIRI) ||
+                           ((this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) ||
                             ((this->stateFlags2 & PLAYER_STATE2_100000) &&
                              (play->actorCtx.targetContext.arrowPointedActor == NULL)))) {
                     doActionA = DO_ACTION_PUT_AWAY;
@@ -10875,7 +10875,7 @@ void func_80843178(PlayState* play, Player* this) {
             if (spA8 != this->actor.wallPoly) {
                 this->actor.wallPoly = spA8;
                 this->actor.wallBgId = spA4;
-                this->actor.wallYaw = Math_FAtan2F(spA8->normal.z, spA8->normal.x);
+                this->actor.wallYaw = Math_Atan2S_XY(spA8->normal.z, spA8->normal.x);
             }
         }
 
@@ -10935,7 +10935,7 @@ void func_80843178(PlayState* play, Player* this) {
                     D_8085D358.y = (temp_fv0_5 + 5.0f) - this->actor.world.pos.y;
 
                     if ((func_80835D58(play, this, &D_8085D358, &sp80, &sp7C, &D_80862B30)) &&
-                        (temp_v1_6 = this->actor.wallYaw - Math_FAtan2F(sp80->normal.z, sp80->normal.x),
+                        (temp_v1_6 = this->actor.wallYaw - Math_Atan2S_XY(sp80->normal.z, sp80->normal.x),
                          ABS_ALT(temp_v1_6) < 0x4000) &&
                         !(SurfaceType_CheckWallFlag1(&play->colCtx, sp80, sp7C))) {
                         this->wallHeight = 399.96002f;
@@ -11003,13 +11003,13 @@ void func_80843178(PlayState* play, Player* this) {
             sp54 = Math_SinS(this->currentYaw);
             sp4C = Math_CosS(this->currentYaw);
             this->unk_B6C =
-                Math_FAtan2F(1.0f, (-(floorPolyNormalX * sp54) - (floorPolyNormalZ * sp4C)) * floorPolyNormalY);
+                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sp54) - (floorPolyNormalZ * sp4C)) * floorPolyNormalY);
             this->unk_B6E =
-                Math_FAtan2F(1.0f, (-(floorPolyNormalX * sp4C) - (floorPolyNormalZ * sp54)) * floorPolyNormalY);
+                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sp4C) - (floorPolyNormalZ * sp54)) * floorPolyNormalY);
             sp54 = Math_SinS(this->actor.shape.rot.y);
             sp4C = Math_CosS(this->actor.shape.rot.y);
             D_80862B28 =
-                Math_FAtan2F(1.0f, (-(floorPolyNormalX * sp54) - (floorPolyNormalZ * sp4C)) * floorPolyNormalY);
+                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sp54) - (floorPolyNormalZ * sp4C)) * floorPolyNormalY);
             func_8083CF68(play, this);
         }
     } else {
@@ -11062,7 +11062,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
             Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_NORMAL);
         } else {
             camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
-                                                      : Play_GetCamera(play, ((EnTest3*)this)->unk_D8E);
+                                                      : Play_GetCamera(play, ((EnTest3*)this)->subCamId);
             if ((this->actor.parent != NULL) && (this->stateFlags3 & PLAYER_STATE3_80)) {
                 camMode = CAM_MODE_HOOKSHOT;
                 Camera_SetViewParam(camera, CAM_VIEW_TARGET, this->actor.parent);
@@ -11557,9 +11557,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->lightInfo.params.point.radius = -1;
     }
 
-    if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
+    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
         func_808442D8(play, this);
-    } else if (this->itemActionParam == PLAYER_AP_FISHING_ROD) {
+    } else if (this->heldItemAction == PLAYER_IA_FISHING_ROD) {
         if (this->unk_B28 < 0) {
             this->unk_B28++;
         }
@@ -11791,7 +11791,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             this->talkActorDistance = 0.0f;
         } else {
             this->talkActor = NULL;
-            this->exchangeItemId = PLAYER_AP_NONE;
+            this->exchangeItemId = PLAYER_IA_NONE;
             this->talkActorDistance = FLT_MAX;
         }
         if (!(this->actor.flags & ACTOR_FLAG_20000000) && (this->unk_AA5 != PLAYER_UNKAA5_5)) {
@@ -11822,7 +11822,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         temp_fv0 = this->actor.world.pos.y - this->actor.prevPos.y;
         var_fv1_2 =
             temp_fv0 +
-            ((this->bodyPartsPos[PLAYER_BODYPART_L_FOOT].y + this->bodyPartsPos[PLAYER_BODYPART_R_FOOT].y) * 0.5f);
+            ((this->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].y + this->bodyPartsPos[PLAYER_BODYPART_RIGHT_FOOT].y) * 0.5f);
         temp_fv0 += this->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 10.0f;
 
         if (this->cylinder.info.toucher.dmgFlags == 0x80000) {
@@ -12474,7 +12474,7 @@ s32 func_80847880(PlayState* play, Player* this) {
 s32 func_80847994(PlayState* play, Player* this) {
     if (this->stateFlags3 & PLAYER_STATE3_20) {
         this->stateFlags3 &= ~PLAYER_STATE3_20;
-        this->heldItemActionParam = PLAYER_AP_OCARINA;
+        this->itemAction = PLAYER_IA_OCARINA;
         this->unk_AA5 = PLAYER_UNKAA5_5;
         func_80838A90(this, play);
         return true;
@@ -12494,7 +12494,7 @@ void func_808479F4(PlayState* play, Player* this, f32 arg2) {
 
 void func_80847A50(Player* this) {
     func_800B8E58(this, ((this->unk_AE7 != 0) ? NA_SE_PL_WALK_METAL1 : NA_SE_PL_WALK_LADDER) +
-                            this->ageProperties->surfaceSfxOffset);
+                            this->ageProperties->surfaceSfxIdOffset);
 }
 
 Vec3f D_8085D588[] = {
@@ -12803,7 +12803,7 @@ void func_80848640(PlayState* play, Player* this) {
     EnTorch2* torch2;
     Actor* effChange;
 
-    torch2 = (EnTorch2*)play->actorCtx.unk_254[this->transformation];
+    torch2 = play->actorCtx.elegyShells[this->transformation];
     if (torch2 != NULL) {
         Math_Vec3f_Copy(&torch2->actor.home.pos, &this->actor.world.pos);
         torch2->actor.home.rot.y = this->actor.shape.rot.y;
@@ -12816,7 +12816,7 @@ void func_80848640(PlayState* play, Player* this) {
     }
 
     if (torch2 != NULL) {
-        play->actorCtx.unk_254[this->transformation] = (Actor*)torch2;
+        play->actorCtx.elegyShells[this->transformation] = torch2;
         Play_SetupRespawnPoint(&play->state, this->transformation + 3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
     }
 
@@ -12846,10 +12846,10 @@ s32 func_808487B8(Player* this, PlayState* play) {
 
 s32 func_80848808(Player* this, PlayState* play) {
     if (LinkAnimation_Update(play, &this->unk_284) ||
-        ((Player_ItemToActionParam(this, this->heldItemId) == this->itemActionParam) &&
+        ((Player_ItemToActionParam(this, this->heldItemId) == this->heldItemAction) &&
          (D_80862B48 = D_80862B48 || ((this->modelAnimType != PLAYER_ANIMTYPE_3) &&
-                                      (this->itemActionParam != PLAYER_AP_STICK) && (play->unk_1887C == 0))))) {
-        func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
+                                      (this->heldItemAction != PLAYER_IA_STICK) && (play->unk_1887C == 0))))) {
+        func_8082F43C(play, this, D_8085C9F0[this->heldItemAction]);
         this->unk_ACC = 0;
         this->unk_AA4 = 0;
         D_80862B4C = D_80862B48;
@@ -12899,7 +12899,7 @@ s32 func_80848AB0(Player* this, PlayState* play) {
     // possibly a case of if ((D_80862B48 = D_80862B4C) || LinkAnimation_Update(play, &this->unk_284))
     D_80862B48 = D_80862B4C;
     if ((D_80862B48 != 0) || LinkAnimation_Update(play, &this->unk_284)) {
-        func_8082F43C(play, this, D_8085C9F0[this->itemActionParam]);
+        func_8082F43C(play, this, D_8085C9F0[this->heldItemAction]);
         LinkAnimation_PlayLoop(play, &this->unk_284, D_8085BE84[PLAYER_ANIMGROUP_0][this->modelAnimType]);
         this->unk_AA4 = 0;
         this->unk_AC4(this, play);
@@ -13116,7 +13116,7 @@ s32 func_8084933C(Player* this, PlayState* play) {
         Vec3f pos;
         s16 untargetedRotY;
 
-        func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_L_HAND], this->actor.shape.rot.y, 0.0f, &pos);
+        func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND], this->actor.shape.rot.y, 0.0f, &pos);
         pos.y = this->actor.world.pos.y + 50.0f;
 
         untargetedRotY = this->actor.shape.rot.y - 0x190;
@@ -13134,7 +13134,7 @@ s32 func_8084933C(Player* this, PlayState* play) {
             }
             leftBoomerang->unk_1CC = leftBoomerang->unk_1CF + 0x24;
 
-            func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_R_HAND], this->actor.shape.rot.y, 0.0f, &pos);
+            func_80835BF8(&this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND], this->actor.shape.rot.y, 0.0f, &pos);
 
             untargetedRotY = (this->actor.shape.rot.y + 0x190);
             rightBoomerang =
@@ -13899,7 +13899,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
             if (!func_8083A274(this, play)) {
                 this->stateFlags1 &= ~PLAYER_STATE1_400000;
 
-                if (this->heldItemActionParam < PLAYER_AP_NONE) {
+                if (this->itemAction < PLAYER_IA_NONE) {
                     func_80123C58(this);
                 }
 
@@ -13975,7 +13975,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
                     LinkAnimation_Change(play, &this->skelAnime, this->skelAnime.animation, 1.0f,
                                          Animation_GetLastFrame(this->skelAnime.animation), 0.0f, 2, 0.0f);
                 } else {
-                    if (this->heldItemActionParam < PLAYER_AP_NONE) {
+                    if (this->itemAction < PLAYER_IA_NONE) {
                         func_80123C58(this);
                     }
 
@@ -14371,7 +14371,7 @@ void func_8084CA24(Player* this, PlayState* play) {
             }
         } else {
             this->actor.gravity = -1.0f;
-            this->unk_AAA = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);
+            this->unk_AAA = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
             func_8082F164(this, BTN_R);
         }
     }
@@ -15007,7 +15007,7 @@ void func_8084E724(Player* this, PlayState* play) {
               (this->targetedActor != NULL)) ||
              (func_8083868C(play, this) == 0)) ||
             ((this->unk_AA5 == PLAYER_UNKAA5_3) &&
-             (((((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) != this->itemActionParam) &&
+             (((((Player_ItemToActionParam(this, Inventory_GetBtnBItem(play)) != this->heldItemAction) &&
                  CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_B)) ||
                 CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_R | BTN_A)) ||
                (func_80123434(this) != 0)) ||
@@ -15071,7 +15071,7 @@ void func_8084E980(Player* this, PlayState* play) {
     } else if (!func_80123420(this) && LinkAnimation_Update(play, &this->skelAnime)) {
         if (this->skelAnime.moveFlags != 0) {
             func_8082E794(this);
-            if ((this->talkActor->category == ACTORCAT_NPC) && (this->itemActionParam != PLAYER_AP_FISHING_ROD)) {
+            if ((this->talkActor->category == ACTORCAT_NPC) && (this->heldItemAction != PLAYER_IA_FISHING_ROD)) {
                 func_8082DB90(play, this, &gPlayerAnim_link_normal_talk_free);
             } else {
                 Player_AnimationPlayLoop(play, this, func_8082ED20(this));
@@ -16481,8 +16481,8 @@ void func_80852B28(Player* this, PlayState* play) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         func_80836A98(this, &gPlayerAnim_link_normal_light_bom_end, play);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 3.0f)) {
-        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_R_HAND].x,
-                        this->bodyPartsPos[PLAYER_BODYPART_R_HAND].y, this->bodyPartsPos[PLAYER_BODYPART_R_HAND].z,
+        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x,
+                        this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y, this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z,
                         0xFA0, this->actor.shape.rot.y, 0, 8) != NULL) {
             Inventory_ChangeAmmo(ITEM_NUT, -1);
             this->unk_D57 = 4;
@@ -16516,7 +16516,7 @@ void func_80852C04(Player* this, PlayState* play) {
             }
 
             if (func_808482E0(play, this) && (this->unk_AE8 == 1)) {
-                Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
+                Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
 
                 if ((this->getItemDrawId == GID_POWDER_KEG) || (this->getItemDrawId == GID_REMAINS_GYORG) ||
                     (this->getItemDrawId == GID_REMAINS_TWINMOLD) || (this->getItemDrawId == GID_SWORD_RAZOR)) {
@@ -16525,14 +16525,14 @@ void func_80852C04(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, PLAYER_CSMODE_93);
                 } else {
-                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) ||
+                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId < PLAYER_IA_NONE)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
                         func_80838760(this);
                         if (var_a2) {
                             func_80848250(play, this);
-                            this->exchangeItemId = PLAYER_AP_NONE;
+                            this->exchangeItemId = PLAYER_IA_NONE;
                             if (!func_80847994(play, this)) {
                                 Player_TalkWithPlayer(play, this->talkActor);
                             }
@@ -16637,12 +16637,12 @@ void func_808530E0(PlayState* play, Player* this) {
 }
 
 u8 D_8085D790[] = {
-    1,     // PLAYER_AP_BOTTLE_POTION_RED
-    1 | 2, // PLAYER_AP_BOTTLE_POTION_BLUE
-    2,     // PLAYER_AP_BOTTLE_POTION_GREEN
-    4,     // PLAYER_AP_BOTTLE_MILK
-    4,     // PLAYER_AP_BOTTLE_MILK_HALF
-    1 | 2, // PLAYER_AP_BOTTLE_CHATEAU
+    1,     // PLAYER_IA_BOTTLE_POTION_RED
+    1 | 2, // PLAYER_IA_BOTTLE_POTION_BLUE
+    2,     // PLAYER_IA_BOTTLE_POTION_GREEN
+    4,     // PLAYER_IA_BOTTLE_MILK
+    4,     // PLAYER_IA_BOTTLE_MILK_HALF
+    1 | 2, // PLAYER_IA_BOTTLE_CHATEAU
 };
 
 void func_80853194(Player* this, PlayState* play) {
@@ -16650,7 +16650,7 @@ void func_80853194(Player* this, PlayState* play) {
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         if (this->unk_AE8 == 0) {
-            if (this->heldItemActionParam == PLAYER_AP_BOTTLE_POE) {
+            if (this->itemAction == PLAYER_IA_BOTTLE_POE) {
                 s32 health = Rand_S16Offset(-1, 3);
 
                 if (health == 0) {
@@ -16666,7 +16666,7 @@ void func_80853194(Player* this, PlayState* play) {
                     gSaveContext.healthAccumulator = health * 0x10;
                 }
             } else {
-                s32 temp_v1 = D_8085D790[this->heldItemActionParam - PLAYER_AP_BOTTLE_POTION_RED];
+                s32 temp_v1 = D_8085D790[this->itemAction - PLAYER_IA_BOTTLE_POTION_RED];
 
                 if (temp_v1 & 1) {
                     gSaveContext.healthAccumulator = 0x140;
@@ -16678,7 +16678,7 @@ void func_80853194(Player* this, PlayState* play) {
                     gSaveContext.healthAccumulator = 0x50;
                 }
 
-                if (this->heldItemActionParam == PLAYER_AP_BOTTLE_CHATEAU) {
+                if (this->itemAction == PLAYER_IA_BOTTLE_CHATEAU) {
                     gSaveContext.save.weekEventReg[0xE] |= 8;
                 }
 
@@ -16716,8 +16716,8 @@ void func_80853194(Player* this, PlayState* play) {
             }
 
             Player_UpdateBottleHeld(play, this,
-                                    (this->heldItemActionParam == PLAYER_AP_BOTTLE_MILK) ? ITEM_MILK_HALF : ITEM_BOTTLE,
-                                    PLAYER_AP_BOTTLE);
+                                    (this->itemAction == PLAYER_IA_BOTTLE_MILK) ? ITEM_MILK_HALF : ITEM_BOTTLE,
+                                    PLAYER_IA_BOTTLE);
         }
 
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DRINK - SFX_FLAG);
@@ -16727,20 +16727,20 @@ void func_80853194(Player* this, PlayState* play) {
 }
 
 struct_8085D798 D_8085D798[] = {
-    { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
-    { ACTOR_EN_FISH, -1, ITEM_FISH, PLAYER_AP_BOTTLE_FISH, 0x62 },
-    { ACTOR_EN_INSECT, -1, ITEM_BUG, PLAYER_AP_BOTTLE_BUG, 0x63 },
-    { ACTOR_EN_MUSHI2, -1, ITEM_BUG, PLAYER_AP_BOTTLE_BUG, 0x63 },
-    { ACTOR_EN_TEST5, 0, ITEM_SPRING_WATER, PLAYER_AP_BOTTLE_SPRING_WATER, 0x67 },
-    { ACTOR_EN_TEST5, 1, ITEM_HOT_SPRING_WATER, PLAYER_AP_BOTTLE_HOT_SPRING_WATER, 0x68 },
-    { ACTOR_BG_GORON_OYU, -1, ITEM_HOT_SPRING_WATER, PLAYER_AP_BOTTLE_HOT_SPRING_WATER, 0x68 },
-    { ACTOR_EN_ZORAEGG, -1, ITEM_ZORA_EGG, PLAYER_AP_BOTTLE_ZORA_EGG, 0x69 },
-    { ACTOR_EN_DNP, -1, ITEM_DEKU_PRINCESS, PLAYER_AP_BOTTLE_DEKU_PRINCESS, 0x5F },
-    { ACTOR_EN_OT, -1, ITEM_SEAHORSE, PLAYER_AP_BOTTLE_SEAHORSE, 0x6E },
-    { ACTOR_OBJ_KINOKO, -1, ITEM_MUSHROOM, PLAYER_AP_BOTTLE_SEAHORSE, 0x6B },
-    { ACTOR_EN_POH, -1, ITEM_POE, PLAYER_AP_BOTTLE_POE, 0x65 },
-    { ACTOR_EN_BIGPO, -1, ITEM_BIG_POE, PLAYER_AP_BOTTLE_BIG_POE, 0x66 },
-    { ACTOR_EN_ELF, 6, ITEM_FAIRY, PLAYER_AP_BOTTLE_FAIRY, 0x5E },
+    { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_IA_BOTTLE_FAIRY, 0x5E },
+    { ACTOR_EN_FISH, -1, ITEM_FISH, PLAYER_IA_BOTTLE_FISH, 0x62 },
+    { ACTOR_EN_INSECT, -1, ITEM_BUG, PLAYER_IA_BOTTLE_BUG, 0x63 },
+    { ACTOR_EN_MUSHI2, -1, ITEM_BUG, PLAYER_IA_BOTTLE_BUG, 0x63 },
+    { ACTOR_EN_TEST5, 0, ITEM_SPRING_WATER, PLAYER_IA_BOTTLE_SPRING_WATER, 0x67 },
+    { ACTOR_EN_TEST5, 1, ITEM_HOT_SPRING_WATER, PLAYER_IA_BOTTLE_HOT_SPRING_WATER, 0x68 },
+    { ACTOR_BG_GORON_OYU, -1, ITEM_HOT_SPRING_WATER, PLAYER_IA_BOTTLE_HOT_SPRING_WATER, 0x68 },
+    { ACTOR_EN_ZORAEGG, -1, ITEM_ZORA_EGG, PLAYER_IA_BOTTLE_ZORA_EGG, 0x69 },
+    { ACTOR_EN_DNP, -1, ITEM_DEKU_PRINCESS, PLAYER_IA_BOTTLE_DEKU_PRINCESS, 0x5F },
+    { ACTOR_EN_OT, -1, ITEM_SEAHORSE, PLAYER_IA_BOTTLE_SEAHORSE, 0x6E },
+    { ACTOR_OBJ_KINOKO, -1, ITEM_MUSHROOM, PLAYER_IA_BOTTLE_SEAHORSE, 0x6B },
+    { ACTOR_EN_POH, -1, ITEM_POE, PLAYER_IA_BOTTLE_POE, 0x65 },
+    { ACTOR_EN_BIGPO, -1, ITEM_BIG_POE, PLAYER_IA_BOTTLE_BIG_POE, 0x66 },
+    { ACTOR_EN_ELF, 6, ITEM_FAIRY, PLAYER_IA_BOTTLE_FAIRY, 0x5E },
 };
 
 void func_808534C0(Player* this, PlayState* play) {
@@ -16765,7 +16765,7 @@ void func_808534C0(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
-                if ((talkActor != NULL) && (this->exchangeItemId < PLAYER_AP_NONE)) {
+                if ((talkActor != NULL) && (this->exchangeItemId < PLAYER_IA_NONE)) {
                     Player_TalkWithPlayer(play, talkActor);
                 }
             }
@@ -16828,8 +16828,8 @@ void func_80853754(Player* this, PlayState* play) {
 
         func_800B8E58(this, NA_SE_EV_BOTTLE_CAP_OPEN);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_AUTO_JUMP);
-        if (this->heldItemActionParam == PLAYER_AP_BOTTLE_FAIRY) {
-            Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+        if (this->itemAction == PLAYER_IA_BOTTLE_FAIRY) {
+            Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
             func_800B8E58(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
             sp2C = 1;
         }
@@ -16842,17 +16842,17 @@ void func_80853850(Player* this, PlayState* play) {
     static Vec3f D_8085D7F8 = { 10.0f, 26.800001f, 30.0f };
     static s8 D_8085D804[PLAYER_FORM_MAX] = { 0x2D, 0x4B, 0x37, 0x23, 0x28 };
     static struct_8085D80C D_8085D80C[] = {
-        { ACTOR_EN_FISH, 0 },       // PLAYER_AP_BOTTLE_FISH
-        { ACTOR_OBJ_AQUA, 0 },      // PLAYER_AP_BOTTLE_SPRING_WATER
-        { ACTOR_OBJ_AQUA, 1 },      // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-        { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_AP_BOTTLE_ZORA_EGG
-        { ACTOR_EN_DNP, 1 },        // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_AP_BOTTLE_GOLD_DUST
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_AP_BOTTLE_1C
-        { ACTOR_EN_OT, 0x8000 },    // PLAYER_AP_BOTTLE_SEAHORSE
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_AP_BOTTLE_MUSHROOM
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_AP_BOTTLE_BUG
+        { ACTOR_EN_FISH, 0 },       // PLAYER_IA_BOTTLE_FISH
+        { ACTOR_OBJ_AQUA, 0 },      // PLAYER_IA_BOTTLE_SPRING_WATER
+        { ACTOR_OBJ_AQUA, 1 },      // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+        { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_IA_BOTTLE_ZORA_EGG
+        { ACTOR_EN_DNP, 1 },        // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_GOLD_DUST
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_1C
+        { ACTOR_EN_OT, 0x8000 },    // PLAYER_IA_BOTTLE_SEAHORSE
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_MUSHROOM
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_IA_BOTTLE_BUG
     };
     static AnimSfxEntry D_8085D838[] = {
         ANIMSFX(ANIMSFX_TYPE_VOICE, 38, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
@@ -16890,13 +16890,13 @@ void func_80853850(Player* this, PlayState* play) {
             func_80839E74(this, play);
         }
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 76.0f)) {
-        sp4C = &D_8085D80C[this->heldItemActionParam - PLAYER_AP_BOTTLE - 1];
+        sp4C = &D_8085D80C[this->itemAction - PLAYER_IA_BOTTLE - 1];
 
         Actor_Spawn(&play->actorCtx, play, sp4C->actorId,
                     (Math_SinS(this->actor.shape.rot.y) * 5.0f) + this->leftHandWorld.pos.x, this->leftHandWorld.pos.y,
                     (Math_CosS(this->actor.shape.rot.y) * 5.0f) + this->leftHandWorld.pos.z, 0x4000,
                     this->actor.shape.rot.y, 0, sp4C->params);
-        Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+        Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE);
     } else {
         Player_PlayAnimSfx(this, D_8085D838);
     }
@@ -16913,7 +16913,7 @@ void func_80853A5C(Player* this, PlayState* play) {
     func_8083249C(this);
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
-        if (this->exchangeItemId == PLAYER_AP_NONE) {
+        if (this->exchangeItemId == PLAYER_IA_NONE) {
             Actor* talkActor = this->talkActor;
 
             func_80838760(this);
@@ -16926,7 +16926,7 @@ void func_80853A5C(Player* this, PlayState* play) {
         } else {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
 
-            if (Player_ActionToBottle(this, this->heldItemActionParam) < 0) {
+            if (Player_ActionToBottle(this, this->itemAction) < 0) {
                 this->getItemDrawId = ABS_ALT(giEntry->gid);
             }
 
@@ -16945,11 +16945,11 @@ void func_80853A5C(Player* this, PlayState* play) {
             }
         }
     } else if (this->unk_AE8 >= 0) {
-        if ((Player_ActionToBottle(this, this->heldItemActionParam) >= 0) &&
+        if ((Player_ActionToBottle(this, this->itemAction) >= 0) &&
             LinkAnimation_OnFrame(&this->skelAnime, 36.0f)) {
             Player_SetModels(this, PLAYER_MODELGROUP_BOTTLE);
         } else if (LinkAnimation_OnFrame(&this->skelAnime, 2.0f)) {
-            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->heldItemActionParam] - 1];
+            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->itemAction] - 1];
 
             func_80838830(this, giEntry->objectId);
         }
@@ -17232,7 +17232,7 @@ void func_80854800(Player* this, PlayState* play) {
     }
 
     this->shockTimer = 40;
-    func_800B8F98(&this->actor, this->ageProperties->voiceSfxOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
+    func_800B8F98(&this->actor, this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }
 
 void func_808548B8(Player* this, PlayState* play) {
@@ -18061,7 +18061,7 @@ void func_80856918(Player* this, PlayState* play) {
 
         this->linearVelocity = sqrtf(SQXZ(this->actor.velocity));
         if (this->linearVelocity != 0.0f) {
-            var_a1 = Math_FAtan2F(this->actor.velocity.z, this->actor.velocity.x);
+            var_a1 = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
 
             temp_a0 = this->actor.shape.rot.y - var_a1;
             if (ABS_ALT(temp_a0) > 0x4000) {
@@ -18092,13 +18092,13 @@ void func_80856918(Player* this, PlayState* play) {
                 s32 i;
 
                 Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D960,
-                                           &this->bodyPartsPos[PLAYER_BODYPART_L_HAND]);
+                                           &this->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND]);
                 Player_TranslateAndRotateY(this, &this->actor.world.pos, &D_8085D96C,
-                                           &this->bodyPartsPos[PLAYER_BODYPART_R_HAND]);
+                                           &this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND]);
 
                 for (i = 0; i < 13; i++) {
-                    func_808566C0(play, this, PLAYER_BODYPART_L_HAND, 0.6f, 1.0f, 0.8f, 17);
-                    func_808566C0(play, this, PLAYER_BODYPART_R_HAND, 0.6f, 1.0f, 0.8f, 17);
+                    func_808566C0(play, this, PLAYER_BODYPART_LEFT_HAND, 0.6f, 1.0f, 0.8f, 17);
+                    func_808566C0(play, this, PLAYER_BODYPART_RIGHT_HAND, 0.6f, 1.0f, 0.8f, 17);
                 }
             }
         } else if ((this->unk_AE8 == 0) || (temp_fv1 < 0.0f)) {
@@ -18124,8 +18124,8 @@ void func_80856918(Player* this, PlayState* play) {
 
         if (this->unk_B66 > 200) {
             this->unk_B66 -= 200;
-            func_808566C0(play, this, PLAYER_BODYPART_L_HAND, 0.0f, 1.0f, 0.0f, 32);
-            func_808566C0(play, this, PLAYER_BODYPART_R_HAND, 0.0f, 1.0f, 0.0f, 32);
+            func_808566C0(play, this, PLAYER_BODYPART_LEFT_HAND, 0.0f, 1.0f, 0.0f, 32);
+            func_808566C0(play, this, PLAYER_BODYPART_RIGHT_HAND, 0.0f, 1.0f, 0.0f, 32);
         }
 
         func_8019FCB8(&this->actor.projectedPos, 0x1851, 2.0f * (this->unk_B86[1] * (1.0f / 6000.0f)));
@@ -18555,7 +18555,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                         var_fa1 = 0.0f;
                     }
 
-                    var_a3 = Math_FAtan2F(60.0f, var_fa1);
+                    var_a3 = Math_Atan2S_XY(60.0f, var_fa1);
                     if (ABS_ALT(var_a3) > 0x2AAA) {
                         var_a3 = 0;
                     }
@@ -18602,7 +18602,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                     spA0 *= spB8;
 
                     if (sp54 != 0.0f) {
-                        this->unk_B28 = Math_FAtan2F(spA0, spA4);
+                        this->unk_B28 = Math_Atan2S_XY(spA0, spA4);
                     }
 
                     if (this->unk_AE8 == 0) {
@@ -18627,7 +18627,7 @@ void func_80857BE8(Player* this, PlayState* play) {
                 this->unk_B08[0] = sqrtf(SQ(spB4) + SQ(spB0));
                 this->unk_B08[0] = CLAMP_MAX(this->unk_B08[0], 18.0f);
 
-                this->currentYaw = Math_FAtan2F(spB0, spB4);
+                this->currentYaw = Math_Atan2S_XY(spB0, spB4);
             }
 
             func_808576BC(play, this);
@@ -19166,8 +19166,8 @@ void func_80859B28(PlayState* play, Player* this, UNK_PTR arg2) {
 
 void func_80859B54(PlayState* play, Player* this, UNK_TYPE arg2) {
     func_80858CC8(play, this, &gPlayerAnim_link_normal_okarina_start);
-    this->heldItemActionParam = PLAYER_AP_OCARINA;
-    Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
+    this->itemAction = PLAYER_IA_OCARINA;
+    Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
 }
 
 void Player_Cutscene_Translate(PlayState* play, Player* this, CsCmdActorAction* playerAction) {
@@ -19547,7 +19547,7 @@ void func_80859F4C(PlayState* play, Player* this, UNK_TYPE arg2) {
     if (LinkAnimation_Update(play, &this->skelAnime)) {
         func_8083FCF0(play, this, 0.0f, 99.0f, this->skelAnime.endFrame - 8.0f);
     }
-    if (this->itemActionParam != PLAYER_AP_SWORD_GILDED) {
+    if (this->heldItemAction != PLAYER_IA_SWORD_GILDED) {
         func_80841358(play, this, true);
     }
 }
@@ -19616,8 +19616,8 @@ void func_8085A1D4(PlayState* play, Player* this, UNK_TYPE arg2) {
 
 void func_8085A24C(PlayState* play, Player* this, UNK_TYPE arg2) {
     func_8082DB90(play, this, D_8085D17C[this->transformation]);
-    this->heldItemActionParam = PLAYER_AP_OCARINA;
-    Player_SetModels(this, Player_ActionToModelGroup(this, this->heldItemActionParam));
+    this->itemAction = PLAYER_IA_OCARINA;
+    Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
 }
 
 void func_8085A2AC(PlayState* play, Player* this, UNK_TYPE arg2) {
@@ -20031,7 +20031,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     }
 
     player->talkActor = actor;
-    player->exchangeItemId = PLAYER_AP_NONE;
+    player->exchangeItemId = PLAYER_IA_NONE;
     player->targetedActor = actor;
 
     if (actor->textId == 0xFFFF) {
@@ -20056,7 +20056,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
             if (func_801242B4(player)) {
                 func_80832558(play, player, func_80837B60);
                 func_8082E634(play, player, &gPlayerAnim_link_swimer_swim_wait);
-            } else if ((actor->category != ACTORCAT_NPC) || (player->itemActionParam == PLAYER_AP_FISHING_ROD)) {
+            } else if ((actor->category != ACTORCAT_NPC) || (player->heldItemAction == PLAYER_IA_FISHING_ROD)) {
                 func_80837B60(play, player);
 
                 if (!func_80123420(player)) {
@@ -20118,23 +20118,23 @@ void func_8085B820(PlayState* play, s16 arg1) {
     func_80836D8C(player);
 }
 
-PlayerActionParam func_8085B854(PlayState* play, Player* player, ItemId itemId) {
-    PlayerActionParam actionParam = Player_ItemToActionParam(player, itemId);
+PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
+    PlayerItemAction actionParam = Player_ItemToActionParam(player, itemId);
 
-    if ((actionParam >= PLAYER_AP_MASK_TRUTH) && (actionParam <= PLAYER_AP_MASK_DEKU) &&
-        (actionParam == (player->currentMask + PLAYER_AP_MASK_TRUTH - 1))) {
-        actionParam = PLAYER_AP_NONE;
+    if ((actionParam >= PLAYER_IA_MASK_TRUTH) && (actionParam <= PLAYER_IA_MASK_DEKU) &&
+        (actionParam == (player->currentMask + PLAYER_IA_MASK_TRUTH - 1))) {
+        actionParam = PLAYER_IA_NONE;
     }
 
-    if ((actionParam <= PLAYER_AP_NONE) || (actionParam >= PLAYER_AP_MAX)) {
+    if ((actionParam <= PLAYER_IA_NONE) || (actionParam >= PLAYER_IA_MAX)) {
         return -1;
     }
 
-    player->heldItemActionParam = PLAYER_AP_NONE;
+    player->itemAction = PLAYER_IA_NONE;
     player->actionFunc = NULL;
     func_80831760(play, player, func_80853A5C, 0);
     player->unk_A86 = 0x7C;
-    player->heldItemActionParam = actionParam;
+    player->itemAction = actionParam;
     Player_AnimationPlayOnce(play, player, &gPlayerAnim_link_normal_give_other);
     player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     player->getItemDrawId = GID_BOTTLE;

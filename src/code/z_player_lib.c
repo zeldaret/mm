@@ -1948,9 +1948,9 @@ void Player_DrawZoraShield(PlayState* play, Player* player) {
 }
 
 void func_80125500(PlayState* play, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot) {
-    if (limbIndex == PLAYER_LIMB_L_THIGH) {
+    if (limbIndex == PLAYER_LIMB_LEFT_THIGH) {
         func_80124870(play, player, &player->skelAnime, pos, rot, 7, 8, 9);
-    } else if (limbIndex == PLAYER_LIMB_R_THIGH) {
+    } else if (limbIndex == PLAYER_LIMB_RIGHT_THIGH) {
         func_80124870(play, player, &player->skelAnime, pos, rot, 4, 5, 6);
     }
 }
@@ -2144,7 +2144,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     s32 phi_v0;
 
     if (!func_80125580(play, limbIndex, dList, pos, rot, player)) {
-        if (limbIndex == PLAYER_LIMB_L_HAND) {
+        if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
             phi_a0 = player->leftHandDLists;
             if (player->stateFlags3 & PLAYER_STATE3_2000) {
                 rot->z -= player->unk_B8C;
@@ -2193,7 +2193,7 @@ s32 func_80125D4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
                     }
                 }
             }
-        } else if (limbIndex == PLAYER_LIMB_R_HAND) {
+        } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
             if ((player->transformation == PLAYER_FORM_ZORA) &&
                 (((player->stateFlags1 & PLAYER_STATE1_2)) || (player->stateFlags1 & PLAYER_STATE1_400) ||
                  func_801242B4(player))) {
@@ -2267,13 +2267,13 @@ s32 func_801262C8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     if (func_80125580(play, limbIndex, dList, pos, rot, actor) == 0) {
         if (player->unk_AA5 != PLAYER_UNKAA5_3) {
             *dList = NULL;
-        } else if (limbIndex == PLAYER_LIMB_L_FOREARM) {
+        } else if (limbIndex == PLAYER_LIMB_LEFT_FOREARM) {
             *dList = D_801C0294[player->transformation];
-        } else if (limbIndex == PLAYER_LIMB_L_HAND) {
+        } else if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
             *dList = D_801C02A8[player->transformation];
-        } else if (limbIndex == PLAYER_LIMB_R_SHOULDER) {
+        } else if (limbIndex == PLAYER_LIMB_RIGHT_SHOULDER) {
             *dList = D_801C02BC[player->transformation];
-        } else if (limbIndex == PLAYER_LIMB_R_HAND) {
+        } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
             if (Player_IsHoldingHookshot(player)) {
                 *dList = D_801C02E4[player->transformation];
             } else {
@@ -2639,7 +2639,7 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
                     func_80124618(D_801C0820, player->skelAnime.curFrame, player->unk_AF0);
                 } else if (player->skelAnime.animation == &gPlayerAnim_pz_jumpATend) {
                     func_80124618(D_801C0838, player->skelAnime.curFrame, player->unk_AF0);
-                } else if (player->itemActionParam == 8) {
+                } else if (player->heldItemAction == 8) {
                     player->unk_AF0[0].x = 1.0f;
                     player->unk_AF0[0].y = 1.0f;
                     player->unk_AF0[0].z = 1.0f;
@@ -2838,8 +2838,8 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
             s16 phi_s0 = temp_f0 * 2000.0f;
             f32 temp_f20;
 
-            D_801C0BA8.y = temp_f0 * 0.4f;
-            D_801C0BB4.y = -0.3f;
+            bubbleVelocity.y = temp_f0 * 0.4f;
+            bubbleAccel.y = -0.3f;
 
             if (phi_s0 > 0x3E80) {
                 phi_s0 = 0x3E80;
@@ -2852,10 +2852,10 @@ void Player_DrawCircusLeadersMask(PlayState* play, Actor* actor) {
                 temp_f20 = 4.0f;
             }
 
-            D_801C0BA8.x = -Math_SinS(phi_s0) * temp_f20;
-            D_801C0BA8.z = -Math_CosS(phi_s0) * temp_f20;
+            bubbleVelocity.x = -Math_SinS(phi_s0) * temp_f20;
+            bubbleVelocity.z = -Math_CosS(phi_s0) * temp_f20;
 
-            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &D_801C0BA8, &D_801C0BB4, 0x14, 0x14, 3, 0);
+            EffectSsDtBubble_SpawnColorProfile(play, &D_801F59B0[i], &bubbleVelocity, &bubbleAccel, 0x14, 0x14, 3, 0);
             D_801F59C8[i] -= 0x190;
         }
     }
@@ -2959,12 +2959,12 @@ Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
 f32 D_801C0D78[] = {
     0.0f,    // Player is not holding a melee weapon
-    3000.0f, // PLAYER_AP_SWORD_KOKIRI
-    3000.0f, // PLAYER_AP_SWORD_RAZOR
-    4000.0f, // PLAYER_AP_SWORD_GILDED
-    5500.0f, // PLAYER_AP_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_AP_STICK
-    2500.0f, // PLAYER_AP_ZORA_FINS
+    3000.0f, // PLAYER_IA_SWORD_KOKIRI
+    3000.0f, // PLAYER_IA_SWORD_RAZOR
+    4000.0f, // PLAYER_IA_SWORD_GILDED
+    5500.0f, // PLAYER_IA_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_IA_STICK
+    2500.0f, // PLAYER_IA_ZORA_FINS
 };
 
 Gfx* D_801C0D94 = object_link_child_DL_017818;
@@ -3097,8 +3097,8 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
 
     Math_Vec3f_Copy(&arg1->unk_00, arg4);
     Math_Vec3f_Diff(arg5, arg4, &spB0);
-    arg1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
-    arg1->unk_1A = Math_FAtan2F(sqrtf(SQ(spB0.x) + SQ(spB0.z)), spB0.y);
+    arg1->unk_18 = Math_Atan2S_XY(spB0.z, spB0.x);
+    arg1->unk_1A = Math_Atan2S_XY(sqrtf(SQ(spB0.x) + SQ(spB0.z)), spB0.y);
     i = 1;
     arg2 += 1;
 
@@ -3127,7 +3127,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
         f20 = sqrtf(SQ(spB0.x) + SQ(spB0.z));
 
         if (f20 > 4.0f) {
-            phi_s1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
+            phi_s1->unk_18 = Math_Atan2S_XY(spB0.z, spB0.x);
             s2 = phi_s1->unk_18 - arg1->unk_18;
 
             if (ABS_ALT(s2) > 0x4000) {
@@ -3136,7 +3136,7 @@ void func_80127DA4(PlayState* play, struct_801F58B0 arg1[], struct_80128388_arg1
             }
         }
 
-        phi_s1->unk_1A = Math_FAtan2F(f20, spB0.y);
+        phi_s1->unk_1A = Math_Atan2S_XY(f20, spB0.y);
 
         s2 = phi_s1->unk_18 - arg1->unk_18;
         s2 = CLAMP(s2, -arg2->unk_18, arg2->unk_18);
@@ -3281,7 +3281,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             CLOSE_DISPS(play->state.gfxCtx);
         }
 
-    } else if (player->heldItemActionParam == 7) {
+    } else if (player->itemAction == 7) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -3296,7 +3296,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else if (player->leftHandType == 5) {
-        s32 sp48 = Player_ActionToBottle(player, player->heldItemActionParam);
+        s32 sp48 = Player_ActionToBottle(player, player->itemAction);
         Vec3f* temp_v1_2 = &D_801C0CE8[player->transformation];
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -3370,7 +3370,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
         Matrix_MultZero(D_801F59DC);
     }
 
-    if (limbIndex == PLAYER_LIMB_L_HAND) {
+    if (limbIndex == PLAYER_LIMB_LEFT_HAND) {
         Math_Vec3f_Copy(&player->leftHandWorld.pos, D_801F59DC);
         if ((*dList1 != 0) && !func_801271B0(play, player, 0) && !func_80128640(play, player, *dList1) &&
             (&gPlayerAnim_pg_punchA == player->skelAnime.animation)) {
@@ -3401,10 +3401,10 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             } else {
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
-                     ((player->heldItemActionParam == 7) ||
+                     ((player->itemAction == 7) ||
                       ((player->meleeWeaponState != 0) && ((player->meleeWeaponAnimation != 0x19)) &&
                        (player->meleeWeaponAnimation != 0x1A))))) {
-                    if (player->heldItemActionParam == 7) {
+                    if (player->itemAction == 7) {
                         D_801C0994->x = player->unk_B08[1] * 5000.0f;
                     } else {
                         D_801C0994->x = D_801C0D78[Player_GetMeleeWeaponHeld(player)];
@@ -3415,7 +3415,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 Matrix_MtxFToYXZRot(&player->leftHandMf, &player->leftHandWorld.rot, 0);
             }
         }
-    } else if (limbIndex == PLAYER_LIMB_R_HAND) {
+    } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
         sp224 = player->heldActor;
 
         if (*dList1 != 0) {
@@ -3479,7 +3479,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             }
             if ((player->getItemDrawId != GID_BOTTLE) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawId != GID_BOTTLE) &&
-                    (player->exchangeItemId != PLAYER_AP_NONE)) {
+                    (player->exchangeItemId != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&D_801F59E8, &player->leftHandWorld.pos);
                 } else {
                     D_801F59E8.x = (player->bodyPartsPos[0xF].x + player->leftHandWorld.pos.x) * 0.5f;
@@ -3492,9 +3492,9 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
                 }
             }
         }
-    } else if (limbIndex == PLAYER_LIMB_L_FOREARM) {
+    } else if (limbIndex == PLAYER_LIMB_LEFT_FOREARM) {
         func_80126BD0(play, player, 0);
-    } else if (limbIndex == PLAYER_LIMB_R_FOREARM) {
+    } else if (limbIndex == PLAYER_LIMB_RIGHT_FOREARM) {
         func_80126BD0(play, player, 1);
     } else if (limbIndex == PLAYER_LIMB_TORSO) {
         if (player->transformation == PLAYER_FORM_GORON) {
@@ -3715,7 +3715,7 @@ void func_80128BD0(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dList2, V
             EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
                                   &player->meleeWeaponInfo[0].base);
         }
-    } else if (limbIndex == PLAYER_LIMB_R_SHIN) {
+    } else if (limbIndex == PLAYER_LIMB_RIGHT_SHIN) {
         if ((player->meleeWeaponState != 0) &&
             (((player->meleeWeaponAnimation == 0x1D)) || (player->meleeWeaponAnimation == 0x12) ||
              (player->meleeWeaponAnimation == 0x15))) {

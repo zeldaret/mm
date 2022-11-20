@@ -1935,8 +1935,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             pos.z = this->bodyCollider.info.bumper.hitPos.z;
 
             if (player->transformation != PLAYER_FORM_HUMAN) {
-                player->unk_B84 = this->picto.actor.yawTowardsPlayer;
-                player->unk_B80 = 15.0f;
+                player->pushedYaw = this->picto.actor.yawTowardsPlayer;
+                player->pushedSpeed = 15.0f;
             }
 
             this->bodyCollider.base.acFlags &= ~AC_HIT;

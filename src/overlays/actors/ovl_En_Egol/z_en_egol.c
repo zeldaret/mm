@@ -340,7 +340,7 @@ void EnEgol_FootstepEffects(EnEgol* this, PlayState* play, f32 leftFootFrame, f3
         }
 
         if (player->stateFlags3 != PLAYER_STATE3_1000000) {
-            func_800BC848(&this->actor, play, quakeSize, 2);
+            Actor_RequestRumble(&this->actor, play, quakeSize, 2);
         }
         if (Animation_OnFrame(&this->skelAnime, leftFootFrame)) {
             Math_Vec3f_Copy(&spawnPos, &this->leftFootPos);
@@ -780,7 +780,7 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
                     quakeSize = 1;
                 }
                 if (player->stateFlags3 != PLAYER_STATE3_1000000) {
-                    func_800BC848(&this->actor, play, quakeSize, 2);
+                    Actor_RequestRumble(&this->actor, play, quakeSize, 2);
                 }
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_EXPLOSION);
                 func_800B31BC(play, &hitPos, 40, -2, 255, 20);
@@ -889,7 +889,7 @@ void EnEgol_Slam(EnEgol* this, PlayState* play) {
         } else if (quakeSize < 1) {
             quakeSize = 1;
         }
-        func_800BC848(&this->actor, play, quakeSize, 2);
+        Actor_RequestRumble(&this->actor, play, quakeSize, 2);
         if (this->actor.floorBgId == BGCHECK_SCENE) {
             Math_Vec3f_Copy(&spawnPos, &this->actor.world.pos);
             spawnPos.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
@@ -1080,7 +1080,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
     } else {
         if (Animation_OnFrame(&this->skelAnime, 46.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_EXPLOSION);
-            func_800BC848(&this->actor, play, 10, 5);
+            Actor_RequestRumble(&this->actor, play, 10, 5);
         }
         if ((curFrame >= this->animEndFrame) && (this->action != EYEGORE_ACTION_DEAD)) {
             s32 i;

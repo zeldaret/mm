@@ -480,7 +480,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     }
     if (this->door.playOpenAnim) {
         this->actionFunc = func_80867144;
-        Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->animIndex],
+        Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->door.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
             gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
