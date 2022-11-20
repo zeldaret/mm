@@ -697,7 +697,7 @@ s32 Actor_OfferLift(Actor* actor, PlayState* play);
 s32 Actor_OfferGetItemFar(Actor* actor, PlayState* play, GetItemId getItemId);
 s32 Actor_HasNoParent(Actor* actor, PlayState* play);
 void func_800B8C20(Actor* actorA, Actor* actorB, PlayState* play);
-void func_800B8C50(Actor* actor, PlayState* play);
+void Actor_SetClosestSecretDistance(Actor* actor, PlayState* play);
 s32 Actor_HasRider(PlayState* play, Actor* horse);
 s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide);
 s32 Actor_HasNoRider(PlayState* play, Actor* horse);

@@ -2080,7 +2080,7 @@ void func_800B8C20(Actor* actorA, Actor* actorB, PlayState* play) {
  * Sets closest secret distance to the distance to the actor. Calling this function on `actor` is the way to make it a
  * 'secret' for that update cycle, i.e. something that the controller will rumble for.
  */
-void func_800B8C50(Actor* actor, PlayState* play) {
+void Actor_SetClosestSecretDistance(Actor* actor, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (actor->xyzDistToPlayerSq < player->closestSecretDistSq) {

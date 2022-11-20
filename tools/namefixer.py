@@ -279,6 +279,7 @@ wordReplace = {
     "Actor_PickUpFar": "Actor_OfferGetItemFar",
     "func_801A5CFC": "AudioSfx_PlaySfx",
     "Audio_PlaySfxGeneral": "AudioSfx_PlaySfx",
+    "func_800B8C50": "Actor_SetClosestSecretDistance",
     "func_800BBDAC": "Actor_SpawnFloorDustRing",
     "func_800B8708": "Player_GetExchangeItemId",
     "func_801233E4": "Player_InCsMode",

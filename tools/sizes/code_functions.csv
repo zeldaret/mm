@@ -305,7 +305,7 @@ asm/non_matchings/code/z_actor/Actor_OfferLift.s,Actor_OfferLift,0x800B8BB0,0x8
 asm/non_matchings/code/z_actor/Actor_OfferGetItemFar.s,Actor_OfferGetItemFar,0x800B8BD0,0xB
 asm/non_matchings/code/z_actor/Actor_HasNoParent.s,Actor_HasNoParent,0x800B8BFC,0x9
 asm/non_matchings/code/z_actor/func_800B8C20.s,func_800B8C20,0x800B8C20,0xC
-asm/non_matchings/code/z_actor/func_800B8C50.s,func_800B8C50,0x800B8C50,0xA
+asm/non_matchings/code/z_actor/Actor_SetClosestSecretDistance.s,Actor_SetClosestSecretDistance,0x800B8C50,0xA
 asm/non_matchings/code/z_actor/Actor_HasRider.s,Actor_HasRider,0x800B8C78,0x9
 asm/non_matchings/code/z_actor/Actor_SetRideActor.s,Actor_SetRideActor,0x800B8C9C,0x14
 asm/non_matchings/code/z_actor/Actor_HasNoRider.s,Actor_HasNoRider,0x800B8CEC,0x9

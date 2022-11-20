@@ -374,7 +374,7 @@ void EnBox_Fall(EnBox* this, PlayState* play) {
 }
 
 void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
-    func_800B8C50(&this->dyna.actor, play);
+    Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (this->unk_1A0 >= 0) {
         EnBox_SetupAction(this, EnBox_Fall);
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -386,7 +386,7 @@ void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
 }
 
 void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
-    func_800B8C50(&this->dyna.actor, play);
+    Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (Flags_GetSwitch(play, this->switchFlag)) {
         if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);
@@ -399,7 +399,7 @@ void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
 }
 
 void EnBox_AppearOnRoomClear(EnBox* this, PlayState* play) {
-    func_800B8C50(&this->dyna.actor, play);
+    Actor_SetClosestSecretDistance(&this->dyna.actor, play);
     if (Flags_GetClearTemp(play, this->dyna.actor.room)) {
         if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);

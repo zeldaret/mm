@@ -791,7 +791,7 @@
     0x800B8BD0:("Actor_OfferGetItemFar",),
     0x800B8BFC:("Actor_HasNoParent",),
     0x800B8C20:("func_800B8C20",),
-    0x800B8C50:("func_800B8C50",),
+    0x800B8C50:("Actor_SetClosestSecretDistance",),
     0x800B8C78:("Actor_HasRider",),
     0x800B8C9C:("Actor_SetRideActor",),
     0x800B8CEC:("Actor_HasNoRider",),
