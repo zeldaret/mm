@@ -40,7 +40,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow*, PlayState*);
 void EnRuppecrow_UpdateSpeed(EnRuppecrow*, PlayState*);
 void EnRuppecrow_FlyToDespawn(EnRuppecrow*, PlayState*);
 
-const ActorInit En_Ruppecrow_InitVars = {
+ActorInit En_Ruppecrow_InitVars = {
     ACTOR_EN_RUPPECROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -257,7 +257,7 @@ void EnRuppecrow_UpdateRupees(EnRuppecrow* this) {
     for (rupeeIndex = 0; rupeeIndex < ENRUPPECROW_RUPEE_COUNT; rupeeIndex++) {
         rupee = this->rupees[rupeeIndex];
         if (rupee != NULL && rupee->unk152 == 0) {
-            Actor_MarkForDeath(&rupee->actor);
+            Actor_Kill(&rupee->actor);
         }
     }
 }
@@ -577,7 +577,7 @@ void EnRuppecrow_FlyToDespawn(EnRuppecrow* this, PlayState* play) {
     Math_ApproachF(&this->actor.velocity.y, 3.0f, 0.2f, 0.5f);
 
     if (this->actor.world.pos.y > 1000.0f || this->actor.xzDistToPlayer > 2000.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->yOffset += 0x800;
         this->actor.shape.yOffset = Math_SinS(this->yOffset) * 500.0f;
@@ -614,7 +614,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
                           0x0);
 
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 0xB, NA_SE_EN_EXTINCT);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -643,7 +643,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     if (this->path != NULL) {
         this->actionFunc = EnRuppecrow_HandleSong;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

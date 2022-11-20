@@ -22,7 +22,7 @@ void EnBee_Attack(EnBee* this, PlayState* play);
 
 s32 sNumLoadedBees = 0;
 
-const ActorInit En_Bee_InitVars = {
+ActorInit En_Bee_InitVars = {
     ACTOR_EN_BEE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -243,7 +243,7 @@ void EnBee_UpdateDamage(EnBee* this, PlayState* play) {
         this->actor.colChkInfo.health = 0;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_EXTINCT);
         func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

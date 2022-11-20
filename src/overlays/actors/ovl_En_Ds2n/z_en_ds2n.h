@@ -22,6 +22,4 @@ typedef struct EnDs2n {
 
 } EnDs2n; // size = 0x234
 
-extern const ActorInit En_Ds2n_InitVars;
-
 #endif // Z_EN_DS2N_H

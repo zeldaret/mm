@@ -151,7 +151,7 @@ void ActorShadow_DrawFoot(PlayState* play, Light* light, MtxF* arg2, s32 lightNu
 
     dir0 = light->l.dir[0];
     dir2 = light->l.dir[2];
-    sp58 = Math_FAtan2F(dir2, dir0);
+    sp58 = Math_Atan2S_XY(dir2, dir0);
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
     Matrix_Put(arg2);
@@ -1027,7 +1027,7 @@ void* func_800B6680(PlayState* play, s16 id) {
     return NULL;
 }
 
-void Actor_MarkForDeath(Actor* actor) {
+void Actor_Kill(Actor* actor) {
     actor->draw = NULL;
     actor->update = NULL;
     actor->flags &= ~ACTOR_FLAG_1;
@@ -1328,7 +1328,7 @@ s32 func_800B7118(Player* player) {
 }
 
 s32 func_800B7128(Player* player) {
-    return func_800B7118(player) && player->unk_ACC;
+    return func_800B7118(player) && (player->unk_ACC != 0);
 }
 
 s32 func_800B715C(PlayState* play) {
@@ -1354,7 +1354,7 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 s32 func_800B7200(Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80)) || (player->csMode != PLAYER_CSMODE_0);
+    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
 }
 
 void func_800B722C(GameState* gameState, Player* player) {
@@ -1493,8 +1493,7 @@ void Actor_GetSlopeDirection(CollisionPoly* floorPoly, Vec3f* slopeNormal, s16* 
     slopeNormal->x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
     slopeNormal->y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
     slopeNormal->z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
-
-    *downwardSlopeYaw = Math_FAtan2F(slopeNormal->z, slopeNormal->x);
+    *downwardSlopeYaw = Math_Atan2S_XY(slopeNormal->z, slopeNormal->x);
 }
 
 s32 func_800B761C(Actor* actor, f32 arg1, s32 arg2) {
@@ -1591,7 +1590,7 @@ void Actor_UpdateBgCheckInfo(PlayState* play, Actor* actor, f32 wallCheckHeight,
                 Math_Vec3f_Copy(&actor->world.pos, &pos);
             }
 
-            actor->wallYaw = Math_FAtan2F(sp7C->normal.z, sp7C->normal.x);
+            actor->wallYaw = Math_Atan2S_XY(sp7C->normal.z, sp7C->normal.x);
             actor->wallBgId = bgId;
         } else {
             actor->bgCheckFlags &= ~8;
@@ -1722,16 +1721,14 @@ void func_800B8050(Actor* actor, PlayState* play, s32 flag) {
     Hilite* hilite = func_800BCBF4(&actor->world.pos, play);
 
     if (flag != 0) {
-        Gfx* displayListHead;
-        Gfx* displayList = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-
-        displayListHead = displayList;
+        Gfx* gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+        Gfx* gfx = gfxHead;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
-        gSPEndDisplayList(displayListHead);
-        gSPSegment(POLY_OPA_DISP++, 0x07, displayList);
+        gDPSetHilite1Tile(gfx++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(gfx++);
+        gSPSegment(POLY_OPA_DISP++, 0x07, gfxHead);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1741,16 +1738,14 @@ void func_800B8118(Actor* actor, PlayState* play, s32 flag) {
     Hilite* hilite = func_800BCC68(&actor->world.pos, play);
 
     if (flag != 0) {
-        Gfx* displayListHead;
-        Gfx* displayList = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
-
-        displayListHead = displayList;
+        Gfx* gfxHead = GRAPH_ALLOC(play->state.gfxCtx, 2 * sizeof(Gfx));
+        Gfx* gfx = gfxHead;
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        gDPSetHilite1Tile(displayListHead++, 1, hilite, 0x10, 0x10);
-        gSPEndDisplayList(displayListHead);
-        gSPSegment(POLY_XLU_DISP++, 0x07, displayList);
+        gDPSetHilite1Tile(gfx++, 1, hilite, 0x10, 0x10);
+        gSPEndDisplayList(gfx++);
+        gSPSegment(POLY_XLU_DISP++, 0x07, gfxHead);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -1853,12 +1848,12 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 // Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
 // This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerActionParam exchangeItemId) {
+s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_AP_NONE) && Player_InCsMode(play)) ||
+    if ((player->actor.flags & ACTOR_FLAG_100) || ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
-         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->talkActorDistance)) ||
+         ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
         return false;
     }
@@ -1871,12 +1866,12 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerActionParam exchangeItemId) {
+s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
     return func_800B8500(actor, play, radius, radius, exchangeItemId);
 }
 
 s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, PLAYER_AP_NONE);
+    return func_800B85E0(actor, play, radius, PLAYER_IA_NONE);
 }
 
 s32 func_800B863C(Actor* actor, PlayState* play) {
@@ -1899,12 +1894,12 @@ s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
  * Fails if Player is not already focussing on an actor or in a talking state
  */
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
-    Actor* targetActor;
+    Actor* talkActor;
     Player* player = GET_PLAYER(play);
 
-    targetActor = player->talkActor;
+    talkActor = player->talkActor;
 
-    if ((player->actor.flags & ACTOR_FLAG_100) && (targetActor != NULL)) {
+    if ((player->actor.flags & ACTOR_FLAG_100) && (talkActor != NULL)) {
         player->talkActor = actor2;
         player->targetedActor = actor2;
         return true;
@@ -1913,7 +1908,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-s32 Player_GetExchangeItemId(PlayState* play) {
+PlayerItemAction Player_GetExchangeItemId(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->exchangeItemId;
@@ -2247,7 +2242,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.save.weekEventReg[92] |= 0x80;
+    SET_WEEKEVENTREG(WEEKEVENTREG_92_80);
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneId(play->sceneId)];
 
     bzero(actorCtx, sizeof(ActorContext));
@@ -2307,7 +2302,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
             }
 
             if (!(phi_v0 & temp_fp) && (phi_v0 & actorCtx->unkC) &&
-                (!(gSaveContext.eventInf[1] & 0x80) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
+                (!CHECK_EVENTINF(EVENTINF_17) || !(phi_v0 & temp_s1) || !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&play->actorCtx, actorEntry, play);
             }
             actorEntry++;
@@ -2357,7 +2352,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         }
     } else {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
-            Actor_MarkForDeath(actor);
+            Actor_Kill(actor);
         } else {
             s32 tmp = (params->unk_08 == 0);
 
@@ -2651,200 +2646,128 @@ void Actor_DrawLensOverlay(Gfx** gfxP, s32 lensMaskSize) {
                                        ((LENS_MASK_ACTIVE_SIZE - lensMaskSize) * 0.003f) + 1.0f);
 }
 
-#ifdef NON_EQUIVALENT
-void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors) {
+void Actor_DrawLensActors(PlayState* play, s32 numInvisibleActors, Actor** invisibleActors) {
+    s32 dbgVar1;
+    s32 dbgVar2;
     s32 spB4;
+    Actor** invisibleActor;
     Gfx* spAC;
-    void* spA8; // pad
-    s32 spA4;
-    // void* sp34;
-    // Gfx* temp_s1_11;
-    // Gfx** temp_a0_2;
-    // Gfx** temp_a1;
-    // GraphicsContext* temp_s2;
-    // void* temp_s1_10;
-    // void* temp_s1_7;
-    // void* temp_s1_8;
-    // void* temp_s1_9;
-    // Gfx* phi_s1;
-    Gfx* phi_s1_2;
-    // void* phi_s1_4;
+    void* spA8;
+    void* spA4;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    Gfx* tmp;
+    s32 pad[2];
 
-    OPEN_DISPS(play->state.gfxCtx);
-    // temp_s2 = play->state.gfxCtx;
+    dbgVar1 = true;
+    dbgVar2 = true;
 
-    if (numActors > 0) {
-        spAC = POLY_XLU_DISP;
-        // sp34 = play + 0x18000;
+    if (dbgVar1) {
+        dbgVar1 = numInvisibleActors > 0;
+    }
+
+    OPEN_DISPS(gfxCtx);
+
+    if (dbgVar1) {
+        tmp = POLY_XLU_DISP;
+        spA8 = gfxCtx->zbuffer;
         spA4 = play->unk_18E68;
 
-        PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, __gfxCtx->curFrameBuffer,
-                            __gfxCtx->zbuffer);
+        if (dbgVar2) {
+            PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, spA8);
 
-        func_80170200(&play->pauseBgPreRender, &spAC, __gfxCtx->zbuffer, (void*)spA4);
+            spAC = tmp;
+            func_80170200(&play->pauseBgPreRender, &spAC, spA8, spA4);
+            tmp = spAC;
+        }
 
-        // spAC->words.w0 = 0xE7000000;
-        // spAC->words.w1 = 0;
-        // temp_s1_2 = spAC + 8;
-        gDPPipeSync(spAC++);
+        gDPPipeSync(tmp++);
+        gDPSetPrimDepth(tmp++, 0, 0);
 
-        // temp_s1_2->words.w0 = 0xEE000000;
-        // temp_s1_2->words.w1 = 0;
-        // temp_s1_3 = temp_s1_2 + 8;
-        gDPSetPrimDepth(spAC++, 0, 0);
-
-        // temp_s1_3->words.w0 = 0xEF002C30;
-        // temp_s1_3->words.w1 = 0xAF504365;
-        // temp_s1_4 = temp_s1_3 + 8;
-        gDPSetOtherMode(spAC++,
+        gDPSetOtherMode(tmp++,
                         G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
                             G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                         G_AC_THRESHOLD | G_ZS_PRIM | Z_UPD | IM_RD | CVG_DST_SAVE | ZMODE_OPA | FORCE_BL |
                             GBL_c1(G_BL_CLR_BL, G_BL_0, G_BL_CLR_MEM, G_BL_1MA) |
                             GBL_c2(G_BL_CLR_BL, G_BL_0, G_BL_CLR_MEM, G_BL_1MA));
 
-        // temp_s1_4->words.w1 = 0xFF;
-        // temp_s1_4->words.w0 = 0xFA000000;
-        // temp_s1_5 = temp_s1_4 + 8;
-        gDPSetPrimColor(spAC++, 0, 0, 0, 0, 0, 255);
-        // temp_s1_5 = spAC;
+        gDPSetPrimColor(tmp++, 0, 0, 0, 0, 0, 255);
 
         if (play->roomCtx.curRoom.unk5 == 0) {
-            // temp_s1_5->words.w0 = 0xFC61E6C3;
-            // temp_s1_5->words.w1 = 0x11CF9FCF;
-            // phi_s1 = temp_s1_5 + 8;
-            gDPSetCombineLERP(spAC++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
+            gDPSetCombineLERP(tmp++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
                               TEXEL0, PRIMITIVE, 0);
         } else {
-            // temp_s1_5->words.w0 = 0xFC119623;
-            // temp_s1_5->words.w1 = 0xFF2FFFFF;
-            // phi_s1 = temp_s1_5 + 8;
-            gDPSetCombineMode(spAC++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPSetCombineMode(tmp++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         }
 
-        // spAC = phi_s1;
+        spAC = tmp;
         Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
-        phi_s1_2 = func_801660B8(play, spAC);
+        tmp = func_801660B8(play, spAC);
 
-        for (spB4 = 0; spB4 < numActors; spB4++, actors++) {
-            Actor_Draw(play, *actors);
+        for (spB4 = 0, invisibleActor = invisibleActors; spB4 < numInvisibleActors; spB4++, invisibleActor++) {
+            POLY_XLU_DISP = tmp;
+            Actor_Draw(play, *invisibleActor);
+            tmp = POLY_XLU_DISP;
         }
 
-        // temp_s0_2 = &play->pauseBgPreRender;
+        if (dbgVar2) {
+            gDPPipeSync(tmp++);
 
-        // phi_s1_2->words.w0 = 0xE7000000;
-        // phi_s1_2->words.w1 = 0;
-        // temp_s1_7 = phi_s1_2 + 8;
-        gDPPipeSync(phi_s1_2++);
+            gDPSetOtherMode(tmp++,
+                            G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                                G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                            G_AC_THRESHOLD | G_ZS_PRIM | AA_EN | IM_RD | CVG_DST_WRAP | ZMODE_OPA | CVG_X_ALPHA |
+                                ALPHA_CVG_SEL | FORCE_BL | GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1) |
+                                GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1));
 
-        // temp_s1_7->unk_0 = 0xEF002CF0;
-        // temp_s1_7->unk_4 = 0xF5A714D;
-        // temp_s1_8 = temp_s1_7 + 8;
-        gDPSetOtherMode(phi_s1_2++,
-                        G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                            G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
-                        G_AC_THRESHOLD | G_ZS_PRIM | AA_EN | IM_RD | CVG_DST_WRAP | ZMODE_OPA | CVG_X_ALPHA |
-                            ALPHA_CVG_SEL | FORCE_BL | GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1) |
-                            GBL_c2(G_BL_CLR_IN, G_BL_0, G_BL_CLR_MEM, G_BL_1));
+            gDPSetBlendColor(tmp++, 255, 255, 255, 0);
+            gDPSetPrimColor(tmp++, 0, 0xFF, 0, 0, 0, 32);
 
-        // temp_s1_8->unk_4 = -0x100;
-        // temp_s1_8->unk_0 = 0xF9000000;
-        // temp_s1_9 = temp_s1_8 + 8;
-        gDPSetBlendColor(phi_s1_2++, 255, 255, 255, 0);
+            if (play->roomCtx.curRoom.unk5 == 0) {
+                gDPSetCombineMode(tmp++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            } else {
+                gDPSetCombineLERP(tmp++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
+                                  TEXEL0, PRIMITIVE, 0);
+            }
 
-        // temp_s1_9->unk_4 = 0x20;
-        // temp_s1_9->unk_0 = 0xFA0000FF;
-        // temp_s1_10 = temp_s1_9 + 8;
-        gDPSetPrimColor(phi_s1_2++, 0, 0xFF, 0, 0, 0, 32);
+            gDPSetColorImage(tmp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, play->pauseBgPreRender.width, spA4);
 
-        // temp_a0_2 = &spAC;
-        // if (sp34->unk_6E5 == 0) {
-        if (play->roomCtx.curRoom.unk5 == 0) {
-            //    temp_s1_10->unk_0 = 0xFC119623;
-            //    temp_s1_10->unk_4 = 0xFF2FFFFF;
-            //    phi_s1_4 = temp_s1_10 + 8;
-            gDPSetCombineMode(phi_s1_2++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-            //} else {
-        } else {
-            //    temp_s1_10->unk_4 = 0x11CF9FCF;
-            //    temp_s1_10->unk_0 = 0xFC61E6C3;
-            //    phi_s1_4 = temp_s1_10 + 8;
-            gDPSetCombineLERP(phi_s1_2++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1,
-                              TEXEL0, PRIMITIVE, 0);
+            spAC = tmp;
+            Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
+            tmp = spAC;
 
-            //}
+            gDPPipeSync(tmp++);
+            gDPSetBlendColor(tmp++, 255, 255, 255, 8);
+
+            gDPSetColorImage(tmp++, G_IM_FMT_RGBA, G_IM_SIZ_16b, play->pauseBgPreRender.width,
+                             play->pauseBgPreRender.fbuf);
+
+            spAC = tmp;
+            func_8016FDB8(&play->pauseBgPreRender, &spAC, (void*)spA4, spA8, 1);
+            tmp = spAC;
         }
-        // phi_s1_4->unk_0 = (s32) (((sp34->unk_B4C - 1) & 0xFFF) | 0xFF100000);
-        // temp_s1_11 = phi_s1_4 + 8;
-        // phi_s1_4->unk_4 = spA4;
-        gDPSetColorImage(phi_s1_2++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((play->pauseBgPreRender.width - 1) & 0xFFF), spA4);
-        // temp_s1_11 = phi_s1_2;
 
-        spAC = phi_s1_2;
-
-        // spAC = temp_s1_11;
-        Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskSize);
-        // temp_s1_11->words.w0 = 0xE7000000;
-        // temp_s1_11->words.w1 = 0;
-        // temp_s1_12 = temp_s1_11 + 8;
-        gDPPipeSync(spAC++);
-
-        // temp_s1_12->words.w1 = -0xF8;
-        // temp_s1_12->words.w0 = 0xF9000000;
-        // temp_s1_13 = temp_s1_12 + 8;
-        gDPSetBlendColor(spAC++, 255, 255, 255, 8);
-
-        // temp_s1_14 = temp_s1_13 + 8;
-        // temp_s1_13->words.w0 = ((sp34->unk_B4C - 1) & 0xFFF) | 0xFF100000;
-        // temp_s1_13->words.w1 = sp34->unk_B5C;
-        gDPSetColorImage(spAC++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((play->pauseBgPreRender.width - 1) & 0xFFF),
-                         play->pauseBgPreRender.fbuf);
-
-        // temp_a1 = &spAC;
-        // spAC = temp_s1_14;
-        // func_8016FDB8(&play->pauseBgPreRender, temp_a1, (void* ) spA4, spA8, 1U);
-        func_8016FDB8(&play->pauseBgPreRender, &spAC, (void*)spA4, __gfxCtx->zbuffer, 1U);
-        //
-        // POLY_OPA_DISP = temp_s1_14;
-        POLY_OPA_DISP = spAC;
+        POLY_XLU_DISP = tmp;
     }
 
-    // temp_s1_15 = OVERLAY_DISP;
-    // temp_s1_15->words.w0 = 0xE7000000;
-    // temp_s1_15->words.w1 = 0;
-    // temp_s1_16 = temp_s1_15 + 8;
-    spAC = OVERLAY_DISP;
-    gDPPipeSync(spAC++);
+    tmp = OVERLAY_DISP;
 
-    // temp_s1_16->words.w0 = 0xEF002C30;
-    // temp_s1_16->words.w1 = 0x00504345;
-    // temp_s1_17 = temp_s1_16 + 8;
-    gDPSetOtherMode(spAC++,
+    gDPPipeSync(tmp++);
+
+    gDPSetOtherMode(tmp++,
                     G_AD_DISABLE | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
                         G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
                     G_AC_THRESHOLD | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
 
-    // temp_s1_17->words.w0 = 0xFC61E6C3;
-    // temp_s1_17->words.w1 = 0x11CF9FCF;
-    // temp_s1_18 = temp_s1_17 + 8;
-    gDPSetCombineLERP(spAC++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0,
+    gDPSetCombineLERP(tmp++, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0, PRIMITIVE, 0, 1, TEXEL0,
                       PRIMITIVE, 0);
+    gDPSetPrimColor(tmp++, 0, 0, 74, 0, 0, 74);
 
-    // temp_s1_18->words.w0 = 0xFA000000;
-    // temp_s1_18->words.w1 = 0x4A00004A;
-    // spAC = temp_s1_18 + 8;
-    gDPSetPrimColor(spAC++, 0, 0, 74, 0, 0, 74);
-
-    Actor_DrawLensOverlay(&spAC, (s32)play->actorCtx.lensMaskSize);
-
+    spAC = tmp;
+    Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
     OVERLAY_DISP = spAC;
 
-    CLOSE_DISPS(play->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
-#else
-void Actor_DrawLensActors(PlayState* play, s32 numActors, Actor** actors);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_actor/Actor_DrawLensActors.s")
-#endif
 
 s32 func_800BA2D8(PlayState* play, Actor* actor) {
     return func_800BA2FC(play, actor, &actor->projectedPos, actor->projectedW);
@@ -2981,7 +2904,7 @@ void func_800BA6FC(PlayState* play, ActorContext* actorCtx) {
 
         while (actor != NULL) {
             if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
-                Actor_MarkForDeath(actor);
+                Actor_Kill(actor);
             }
 
             actor = actor->next;
@@ -3005,7 +2928,7 @@ void func_800BA798(PlayState* play, ActorContext* actorCtx) {
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
                 } else {
-                    Actor_MarkForDeath(actor);
+                    Actor_Kill(actor);
                     Actor_Destroy(actor, play);
                     actor = actor->next;
                 }
@@ -3034,7 +2957,7 @@ void func_800BA8B8(PlayState* play, ActorContext* actorCtx) {
                 if (!actor->isDrawn) {
                     actor = Actor_Delete(actorCtx, actor, play);
                 } else {
-                    Actor_MarkForDeath(actor);
+                    Actor_Kill(actor);
                     Actor_Destroy(actor, play);
                     actor = actor->next;
                 }
@@ -4268,19 +4191,16 @@ Gfx D_801AEFA0[] = {
 };
 
 Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
-    Gfx* displayListHead;
-    Gfx* displayList;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    gDPSetRenderMode(
+        gfx++, AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL | G_RM_FOG_SHADE_A,
+        AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
+            GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
+    gSPEndDisplayList(gfx++);
 
-    gDPSetRenderMode(displayListHead++,
-                     AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                         G_RM_FOG_SHADE_A,
-                     AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                         GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA));
-    gSPEndDisplayList(displayListHead++);
-
-    return displayList;
+    return gfxHead;
 }
 
 // unused
@@ -4315,7 +4235,7 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     Player* player = GET_PLAYER(play);
     f32 phi_f2;
 
-    if ((play->csCtx.state != 0) || gDbgCamEnabled) {
+    if ((play->csCtx.state != CS_STATE_0) || gDbgCamEnabled) {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &play->view.eye) * 0.25f;
     } else {
         phi_f2 = Math_Vec3f_DistXYZ(&actor->world.pos, &player->actor.world.pos);
@@ -4460,8 +4380,8 @@ void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
     f32 zDiff = arg1->z - arg0->z;
     f32 yDiff = arg3 ? (arg1->y - arg0->y) : (arg0->y - arg1->y);
 
-    arg2->y = Math_FAtan2F(zDiff, xDiff);
-    arg2->x = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
+    arg2->y = Math_Atan2S_XY(zDiff, xDiff);
+    arg2->x = Math_Atan2S_XY(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
@@ -4623,7 +4543,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
-                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
 
                 alpha = effectAlpha * 100.0f;
                 if (alpha > 100.0f) {
@@ -4646,7 +4566,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
                 }
                 break;
 
@@ -4705,7 +4625,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 lightOrbsScale = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
 
                 alpha = effectAlpha * 255.0f;
                 if (alpha > 255.0f) {
@@ -4736,7 +4656,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
                 }
                 break;
 
@@ -4754,7 +4674,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                 gSPSegment(POLY_XLU_DISP++, 0x08,
                            Lib_SegmentedToVirtual(sElectricSparkTextures[play->gameplayFrames % 4]));
 
-                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkDL);
+                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkMaterialDL);
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 255), (u8)(sREG(17) + 255), (u8)(sREG(18) + 150),
                                 (u8)(sREG(19) + 255));
@@ -4776,7 +4696,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
 
                     // second electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
@@ -4788,7 +4708,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkModelDL);
                 }
 
                 break;

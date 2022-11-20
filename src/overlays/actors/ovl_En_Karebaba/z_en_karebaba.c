@@ -40,7 +40,7 @@ void func_808F238C(EnKarebaba* this);
 void func_808F241C(EnKarebaba* this, PlayState* play);
 void func_808F254C(EnKarebaba* this, PlayState* play);
 
-const ActorInit En_Karebaba_InitVars = {
+ActorInit En_Karebaba_InitVars = {
     ACTOR_EN_KAREBABA,
     ACTORCAT_ENEMY,
     FLAGS,

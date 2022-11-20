@@ -80,7 +80,7 @@ static u8 D_80951820[] = {
     /* 0x134 */ SCHEDULE_CMD_RET_TIME(12, 55, 13, 0, 20),
     /* 0x13A */ SCHEDULE_CMD_RET_NONE(),
     /* 0x13B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(2, 0x1EB - 0x140),
-    /* 0x140 */ SCHEDULE_CMD_CHECK_FLAG_L(0x32, 0x01, 0x1CD - 0x145),
+    /* 0x140 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_50_01, 0x1CD - 0x145),
     /* 0x145 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_YADOYA, 0x17A - 0x149),
     /* 0x149 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(6, 0, 18, 0, 0x174 - 0x14F),
     /* 0x14F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(18, 0, 21, 0, 0x16E - 0x155),
@@ -155,7 +155,7 @@ static s32 D_80951C2C[] = { 0x0E295A2D, 0x000A0C10 };
 
 static s32 D_80951C34[] = { 0x0E29622D, 0x000A0C10 };
 
-const ActorInit En_Gm_InitVars = {
+ActorInit En_Gm_InitVars = {
     ACTOR_EN_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -463,7 +463,7 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
             }
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[86] & 0x40) && (this->unk_3E0 == 2)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_40) && (this->unk_3E0 == 2)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
@@ -632,8 +632,8 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
 
     switch (this->unk_3E0) {
         case 0:
-            if ((gSaveContext.save.weekEventReg[50] & 1) || (gSaveContext.save.weekEventReg[51] & 0x80) ||
-                (gSaveContext.save.weekEventReg[75] & 2)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 ret = true;
                 break;
             }
@@ -739,14 +739,14 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
             this->actor.child = this->unk_268;
             this->unk_264 = func_8094EDBC(this, play);
 
-            if ((this->unk_258 == 5) && !(gSaveContext.save.weekEventReg[50] & 1) &&
-                !(gSaveContext.save.weekEventReg[51] & 0x80) && !(gSaveContext.save.weekEventReg[75] & 2)) {
+            if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 this->unk_3A4 |= 0x20;
             } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
                 this->unk_3A4 |= 0x20;
             }
 
-            if ((this->unk_258 == 3) && (gSaveContext.save.weekEventReg[75] & 1)) {
+            if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
                 this->unk_3A4 &= ~0x20;
             }
 
@@ -1105,7 +1105,7 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             func_8094E054(this, play, 0);
         } else {
             func_8094E054(this, play, 9);
-            this->skelAnime.moveFlags = 0x10;
+            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
@@ -1137,7 +1137,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         func_8094E054(this, play, 11);
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_268 = al;
-        if (!(gSaveContext.save.weekEventReg[86] & 0x20)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
             this->unk_3C8 = 2;
             this->unk_3CA = 2;
             this->unk_3CC = 8;
@@ -1181,7 +1181,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         } else {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
             func_8094E054(this, play, 9);
-            this->skelAnime.moveFlags = 0x10;
+            this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_400 = 0;
         this->unk_3A4 |= 0x100;
@@ -1352,7 +1352,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
     };
     s32 pad;
 
-    if ((gSaveContext.save.weekEventReg[50] & 1) || (gSaveContext.save.weekEventReg[51] & 0x80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80)) {
         if (this->unk_400 == 0) {
             this->unk_3C8 = 1;
             this->unk_3CA = 1;
@@ -1665,7 +1665,7 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
     EnGm* this = THIS;
 
     if (func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_GM)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1711,7 +1711,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
             func_8094DFF8(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_AP_NONE, this->unk_3A4 & 7);
+            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);

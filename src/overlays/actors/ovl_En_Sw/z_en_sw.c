@@ -28,7 +28,7 @@ void func_808DB100(EnSw* this, PlayState* play);
 void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
-const ActorInit En_Sw_InitVars = {
+ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,
     FLAGS,
@@ -761,7 +761,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
-        temp_v0 = Math_FAtan2F(sp38.z, sp38.x);
+        temp_v0 = Math_Atan2S_XY(sp38.z, sp38.x);
         if (ABS_ALT(temp_v0) < temp_s1) {
             this->skelAnime.curFrame = 0.0f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -794,7 +794,7 @@ void func_808DA578(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp30, &this->unk_374);
             func_808D9894(this, &sp30);
-            temp2 = Math_FAtan2F(sp30.z, sp30.x);
+            temp2 = Math_Atan2S_XY(sp30.z, sp30.x);
             func_808D94D0(this, play, 0, 0, temp2);
         }
     } else if (this->unk_410 & 0x20) {
@@ -825,7 +825,7 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            temp2 = Math_FAtan2F(sp38.z, sp38.x);
+            temp2 = Math_Atan2S_XY(sp38.z, sp38.x);
             func_808D94D0(this, play, 0, 0, temp2);
         }
     } else {
@@ -916,7 +916,7 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             if (this->unk_45E == 0) {
                 Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
                 func_808D9894(this, &sp34);
-                temp_v0 = Math_FAtan2F(sp34.z, sp34.x);
+                temp_v0 = Math_Atan2S_XY(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -967,7 +967,7 @@ void func_808DACF4(EnSw* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            temp_f6 = Math_FAtan2F(sp38.z, sp38.x);
+            temp_f6 = Math_Atan2S_XY(sp38.z, sp38.x);
             func_808D94D0(this, play, 0, 0, temp_f6);
         }
     } else {
@@ -1023,7 +1023,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
             }
 
             if (count == ARRAY_COUNT(this->unk_464)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             Math_ApproachF(&this->actor.scale.x, 0.0f, 0.08f, 1.0f);
@@ -1038,7 +1038,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
                                        0, this->actor.params) != NULL) {
                     play_sound(NA_SE_SY_KINSTA_MARK_APPEAR);
                 }
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             func_808D94D0(this, play, 0, 0, 0x1554);
         }
@@ -1210,7 +1210,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 break;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

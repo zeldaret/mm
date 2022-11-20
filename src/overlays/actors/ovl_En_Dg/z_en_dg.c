@@ -10,6 +10,8 @@
 
 #define THIS ((EnDg*)thisx)
 
+//! TODO: this file require macros for its uses of weekEventReg
+
 void EnDg_Init(Actor* thisx, PlayState* play);
 void EnDg_Destroy(Actor* thisx, PlayState* play);
 void EnDg_Update(Actor* thisx, PlayState* play);
@@ -36,7 +38,7 @@ void EnDg_Thrown(EnDg* this, PlayState* play);
 void EnDg_SetupTalk(EnDg* this, PlayState* play);
 void EnDg_Talk(EnDg* this, PlayState* play);
 
-const ActorInit En_Dg_InitVars = {
+ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -250,8 +252,8 @@ void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
 
         sinf(0.0f);
         cosf(0.0f);
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
-        floorRot->z = Math_Acot2F(1.0f, -nx * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
+        floorRot->z = Math_Atan2F_XY(1.0f, -nx * ny);
     }
 }
 
@@ -308,7 +310,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -347,7 +349,7 @@ void EnDg_MoveAlongPath(EnDg* this, PlayState* play) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -430,7 +432,7 @@ void EnDg_UpdateTextId(EnDg* this) {
                 0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3538 to 0x3546.
@@ -547,7 +549,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
 void EnDg_CheckForBremenMaskMarch(EnDg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags3 & PLAYER_STATE3_20000000) { // bremen mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         if (sBremenMaskFollowerIndex == ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER) {
             EnDg_FindFollowerForBremenMask(play);
         }

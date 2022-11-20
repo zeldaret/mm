@@ -37,7 +37,7 @@ s32 D_809C6100 = 0;
 
 s32 D_809C6104 = 0;
 
-const ActorInit En_Bom_Bowl_Man_InitVars = {
+ActorInit En_Bom_Bowl_Man_InitVars = {
     ACTOR_EN_BOM_BOWL_MAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -97,15 +97,15 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
-    if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
+    if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         func_809C52B4(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -158,7 +158,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 void func_809C4B6C(EnBomBowlMan* this) {
     if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -202,8 +202,8 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     func_809C493C(this, 3, 1.0f);
     this->unk_2D4 = this->actor.yawTowardsPlayer;
     this->unk_290 = this->actor.yawTowardsPlayer;
-    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
-    gSaveContext.save.weekEventReg[85] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_02);
     this->unk_29C = 0;
     this->actionFunc = func_809C4DA4;
 }
@@ -337,13 +337,13 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
-        gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_75_40);
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            gSaveContext.save.weekEventReg[84] |= 0x80;
-            gSaveContext.save.weekEventReg[77] &= (u8)~2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_77_02);
         } else {
-            gSaveContext.save.weekEventReg[73] |= 0x20;
-            gSaveContext.save.weekEventReg[85] &= (u8)~1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_73_20);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_01);
         }
     }
 }
@@ -369,7 +369,7 @@ void func_809C5310(EnBomBowlMan* this, PlayState* play) {
                 func_809C53A4(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -401,7 +401,7 @@ void func_809C5408(EnBomBowlMan* this, PlayState* play) {
 
 void func_809C5524(EnBomBowlMan* this, PlayState* play) {
     this->actor.textId = 0x730;
-    if (!(gSaveContext.save.weekEventReg[85] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);
@@ -483,13 +483,14 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             (this->path != NULL)) {
             this->unk_298++;
             if (this->unk_298 >= this->path->count) {
-                gSaveContext.save.weekEventReg[84] |= 0x80;
-                gSaveContext.save.weekEventReg[83] &= (u8)~4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
                 ActorCutscene_Stop(this->unk_2D6);
-                Actor_MarkForDeath(&this->actor);
-            } else {
-                func_809C4B6C(this);
+                Actor_Kill(&this->actor);
+                return;
             }
+
+            func_809C4B6C(this);
         }
     }
 }
@@ -509,7 +510,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         } else {
             this->actor.textId = 0x716;
         }
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
         Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
@@ -524,7 +525,7 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5598;
         }
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

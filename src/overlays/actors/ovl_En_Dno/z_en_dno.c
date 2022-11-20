@@ -89,7 +89,7 @@ static AnimationSpeedInfo sAnimations[] = {
     { &gDekuButlerGrieveAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-const ActorInit En_Dno_InitVars = {
+ActorInit En_Dno_InitVars = {
     ACTOR_EN_DNO,
     ACTORCAT_NPC,
     FLAGS,
@@ -222,7 +222,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
         actor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_DNO);
         if (actor != NULL) {
             if (actor != thisx) {
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 break;
             }
             actor = actor->next;
@@ -249,8 +249,8 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             switch (EN_DNO_GET_C000(thisx)) {
                 case EN_DNO_GET_C000_0:
                     func_80A71788(this, play);
-                    if (!(gSaveContext.save.weekEventReg[23] & 0x20) || (gSaveContext.save.weekEventReg[93] & 2)) {
-                        Actor_MarkForDeath(thisx);
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_93_02)) {
+                        Actor_Kill(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE_WITH_CANDLE,
                                                         &this->animIndex);
@@ -264,14 +264,14 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case EN_DNO_GET_C000_1:
-                    if (gSaveContext.save.weekEventReg[23] & 0x20) {
-                        Actor_MarkForDeath(thisx);
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
+                        Actor_Kill(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
                                                         &this->animIndex);
                         this->unk_460 = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
                         if (this->unk_460 == NULL) {
-                            Actor_MarkForDeath(thisx);
+                            Actor_Kill(thisx);
                         } else {
                             this->actionFunc = func_80A71B68;
                         }
@@ -307,7 +307,7 @@ void func_80A71B68(EnDno* this, PlayState* play) {
     this->unk_452 = 0;
     this->actor.textId = 0;
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
-        if (gSaveContext.save.weekEventReg[27] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
             if (!(this->unk_3B0 & 0x20)) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_LOOP,
                                                 &this->animIndex);
@@ -374,17 +374,17 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
 
 void func_80A71E54(EnDno* this, PlayState* play) {
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
-        if (gSaveContext.save.weekEventReg[27] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
             this->textId = 0x811;
         } else {
             this->textId = 0x80F;
-            gSaveContext.save.weekEventReg[27] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_27_01);
         }
-    } else if (gSaveContext.save.weekEventReg[26] & 0x80) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_80)) {
         this->textId = 0x80B;
     } else {
         this->textId = 0x80C;
-        gSaveContext.save.weekEventReg[26] |= 0x80;
+        SET_WEEKEVENTREG(WEEKEVENTREG_26_80);
     }
 
     if (this->textId != 0x811) {
@@ -573,7 +573,7 @@ void func_80A724B8(EnDno* this, PlayState* play) {
 }
 
 void func_80A7256C(EnDno* this, PlayState* play) {
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_AP_MINUS1);
+    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_MINUS1);
 }
 
 void func_80A72598(EnDno* this, PlayState* play) {
@@ -617,7 +617,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
 
                 case 2:
                     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
-                        gSaveContext.save.weekEventReg[93] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_93_02);
                         Message_StartTextbox(play, 0x802, &this->actor);
                     }
                     break;

@@ -132,7 +132,7 @@ static SkeletonHeader* sSkeletonHeaders[] = {
     NULL, NULL, &object_horse_link_child_Skel_00A480, NULL, NULL,
 };
 
-const ActorInit En_Horse_InitVars = {
+ActorInit En_Horse_InitVars = {
     ACTOR_EN_HORSE,
     ACTORCAT_BG,
     FLAGS,
@@ -709,7 +709,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->unk_528 = 80.0f;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_1EC |= 1;
@@ -731,7 +731,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->type = HORSE_TYPE_BANDIT;
         this->boostSpeed = 12;
         if ((this->bankIndex = Object_GetIndex(&play->objectCtx, OBJECT_HA)) < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->unk_1EC |= 1;
@@ -739,7 +739,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
     } else {
         this->type = HORSE_TYPE_EPONA;
         this->boostSpeed = 15;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.params &= ~(ENHORSE_PARAM_DONKEY | ENHORSE_PARAM_4000 | ENHORSE_PARAM_BANDIT);
@@ -780,8 +780,8 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         this->stateFlags = 0;
     }
 
-    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_RACE_FLAGS == 1)) ||
-        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && Cutscene_GetSceneLayer(play))) {
+    if (((play->sceneId == SCENE_KOEPONARACE) && (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_START)) ||
+        ((gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) && (Cutscene_GetSceneLayer(play) != 0))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -863,11 +863,11 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         EnHorse_InitCutscene(this, play);
     } else if (thisx->params == ENHORSE_10) {
         EnHorse_InitHorsebackArchery(this);
-        func_80112AFC(play);
+        Interface_InitMinigame(play);
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
         if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (thisx->params == ENHORSE_16) {
         func_8087C9F8(this);
@@ -1558,7 +1558,7 @@ void EnHorse_Stopping(EnHorse* this, PlayState* play) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || !Cutscene_GetSceneLayer(play))) {
+            ((gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0)) || (Cutscene_GetSceneLayer(play) == 0))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_TYPE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -2460,7 +2460,7 @@ void func_808819D8(EnHorse* this, PlayState* play) {
         func_8088168C(this);
     }
 
-    if (GET_RACE_FLAGS == 3) {
+    if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
         this->rider->unk488 = 7;
     } else {
         EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
@@ -2905,22 +2905,23 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
         EnHorse_PlayWalkingSound(this);
     }
 
-    if (play->interfaceCtx.hbaAmmo == 0) {
+    if (play->interfaceCtx.minigameAmmo == 0) {
         this->hbaTimer++;
     }
 
     sp28 = Audio_IsSequencePlaying(NA_BGM_HORSE_GOAL);
     EnHorse_UpdateHbaRaceInfo(this, play, &sHbaInfo);
 
-    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) && (gSaveContext.minigameState != 3)) {
+    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) &&
+        (gSaveContext.minigameStatus != MINIGAME_STATUS_END)) {
         gSaveContext.save.cutscene = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_64;
     }
 
-    if (play->interfaceCtx.hbaAmmo) {}
+    if (play->interfaceCtx.minigameAmmo) {}
 
-    if (((play->interfaceCtx.hbaAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
+    if (((play->interfaceCtx.minigameAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
         this->hbaFlags &= ~4;
         Audio_QueueSeqCmd(0x8041);
     }
@@ -3260,7 +3261,7 @@ void func_80884604(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
 }
 
 void func_808846B4(EnHorse* this, PlayState* play, CsCmdActorAction* action) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808846DC(EnHorse* this, PlayState* play, CsCmdActorAction* action) {

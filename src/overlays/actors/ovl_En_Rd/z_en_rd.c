@@ -97,7 +97,7 @@ typedef enum {
     /* 4 */ EN_RD_GRAB_END,
 } EnRdGrabState;
 
-const ActorInit En_Rd_InitVars = {
+ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -881,7 +881,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
                 play->damagePlayer(play, -8);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 20;
-                func_800B8E58(player, player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_DAMAGE_S);
+                func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
             }
             break;
 
@@ -1069,7 +1069,7 @@ void EnRd_Dead(EnRd* this, PlayState* play) {
                 this->actor.scale.y -= (75.0f / 1000000.0f);
                 this->alpha -= 5;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             this->deathTimer--;

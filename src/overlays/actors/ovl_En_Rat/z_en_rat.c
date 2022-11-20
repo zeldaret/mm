@@ -35,7 +35,7 @@ typedef enum {
     /* -1 */ EN_RAT_HOOKED,
 } EnRatHookedState;
 
-const ActorInit En_Rat_InitVars = {
+ActorInit En_Rat_InitVars = {
     ACTOR_EN_RAT,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -763,7 +763,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play) {
     if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_OVERWORLD) {
         EnRat_SetupRevive(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

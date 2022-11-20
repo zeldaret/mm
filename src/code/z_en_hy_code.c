@@ -140,7 +140,7 @@ void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4
     EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
-    enHy->skelAnime.moveFlags |= 3;
+    enHy->skelAnime.moveFlags |= (ANIM_FLAG_UPDATEY | ANIM_FLAG_1);
     AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->door.playOpenAnim = true;
     door->door.animIndex = animIndex;

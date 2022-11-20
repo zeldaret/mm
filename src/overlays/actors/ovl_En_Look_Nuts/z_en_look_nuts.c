@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-const ActorInit En_Look_Nuts_InitVars = {
+ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -120,11 +120,11 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->pathLocation == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -300,7 +300,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[17] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_17_04);
     }
 }
 

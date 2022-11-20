@@ -40,7 +40,7 @@ void func_80C02DAC(EnBomjimb* this, PlayState* play);
 
 static Actor* D_80C03170 = NULL;
 
-const ActorInit En_Bomjimb_InitVars = {
+ActorInit En_Bomjimb_InitVars = {
     ACTOR_EN_BOMJIMB,
     ACTORCAT_NPC,
     FLAGS,
@@ -115,48 +115,48 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
         this->unk_2C6 = ENBOMJIMB_F0_0;
     }
 
-    if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
-                if (gSaveContext.save.weekEventReg[11] & 1) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_01)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_1:
-                if (gSaveContext.save.weekEventReg[11] & 2) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_02)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_2:
-                if (gSaveContext.save.weekEventReg[11] & 4) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_04)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_3:
-                if (gSaveContext.save.weekEventReg[11] & 8) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_08)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_4:
-                if (gSaveContext.save.weekEventReg[11] & 0x10) {
-                    Actor_MarkForDeath(&this->actor);
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_11_10)) {
+                    Actor_Kill(&this->actor);
                     return;
                 }
                 break;
         }
     }
 
-    if ((!(gSaveContext.save.weekEventReg[73] & 0x10) && !(gSaveContext.save.weekEventReg[85] & 2)) ||
-        (gSaveContext.save.weekEventReg[75] & 0x40)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -674,8 +674,8 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[73] & 0x10)) ||
-        ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.save.weekEventReg[85] & 2))) {
+    if (((player->transformation == PLAYER_FORM_DEKU) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) ||
+        ((player->transformation == PLAYER_FORM_HUMAN) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
         func_80C0113C(this, 17, 1.0f);
         Message_StartTextbox(play, 0x72E, &this->actor);
         player->stateFlags1 |= PLAYER_STATE1_10000000;
@@ -698,28 +698,28 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
 
     switch (this->unk_2C8) {
         case ENBOMJIMB_F_0:
-            gSaveContext.save.weekEventReg[76] |= 1;
-            gSaveContext.save.weekEventReg[11] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_01);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_01);
             break;
 
         case ENBOMJIMB_F_1:
-            gSaveContext.save.weekEventReg[76] |= 2;
-            gSaveContext.save.weekEventReg[11] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_02);
             break;
 
         case ENBOMJIMB_F_2:
-            gSaveContext.save.weekEventReg[76] |= 4;
-            gSaveContext.save.weekEventReg[11] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_04);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_04);
             break;
 
         case ENBOMJIMB_F_3:
-            gSaveContext.save.weekEventReg[76] |= 8;
-            gSaveContext.save.weekEventReg[11] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_08);
             break;
 
         case ENBOMJIMB_F_4:
-            gSaveContext.save.weekEventReg[76] |= 0x10;
-            gSaveContext.save.weekEventReg[11] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_11_10);
             break;
     }
 
@@ -801,8 +801,8 @@ void func_80C02CA4(EnBomjimb* this, PlayState* play) {
         play->transitionType = TRANS_TYPE_86;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
     }
-    gSaveContext.save.weekEventReg[75] |= 0x40;
-    gSaveContext.save.weekEventReg[83] |= 4;
+    SET_WEEKEVENTREG(WEEKEVENTREG_75_40);
+    SET_WEEKEVENTREG(WEEKEVENTREG_83_04);
     this->actionFunc = func_80C02DAC;
 }
 

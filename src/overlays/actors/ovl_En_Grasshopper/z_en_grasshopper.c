@@ -137,7 +137,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, EN_GRASSHOPPER_DMGEFF_HOOK),
 };
 
-const ActorInit En_Grasshopper_InitVars = {
+ActorInit En_Grasshopper_InitVars = {
     ACTOR_EN_GRASSHOPPER,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -390,7 +390,7 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
         }
     }
 
-    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(gSaveContext.eventInf[4] & 2) && !this->shouldTurn &&
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !CHECK_EVENTINF(EVENTINF_41) && !this->shouldTurn &&
         (this->actor.xzDistToPlayer < 200.0f)) {
         EnGrasshopper_SetupApproachPlayer(this, play);
     } else {
@@ -782,8 +782,8 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
     s32 isUnderWater = false;
 
     this->actor.shape.rot.y += 0x1388;
-    if ((this->actor.floorHeight <= -32000.0f) || (this->actor.floorHeight >= 32000.0f)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((this->actor.floorHeight <= BGCHECK_Y_MIN) || (this->actor.floorHeight >= BGCHECK_Y_MAX)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -840,7 +840,7 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
         SoundSource_PlaySfxEachFrameAtFixedWorldPos(play, &this->actor.world.pos, 10,
                                                     NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x60);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

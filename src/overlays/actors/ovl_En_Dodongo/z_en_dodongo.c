@@ -35,7 +35,7 @@ void func_808786C8(EnDodongo* this, PlayState* play);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, PlayState* play);
 
-const ActorInit En_Dodongo_InitVars = {
+ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -729,7 +729,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_EAT);
         if (this->actor.child != NULL) {
-            Actor_MarkForDeath(this->actor.child);
+            Actor_Kill(this->actor.child);
             this->actor.child = NULL;
         }
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -931,7 +931,7 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
             } else {
                 Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RUPEE_PURPLE);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

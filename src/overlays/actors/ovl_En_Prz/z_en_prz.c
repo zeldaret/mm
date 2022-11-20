@@ -82,7 +82,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Prz_InitVars = {
+ActorInit En_Prz_InitVars = {
     ACTOR_EN_PRZ,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -415,7 +415,7 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
 
                 EffectSsBubble_Spawn(play, &sp6C, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

@@ -46,7 +46,7 @@ void func_80A28A28(EnBigpamet* this);
 void func_80A28D80(EnBigpamet* this);
 void func_80A28ED4(EnBigpamet* this);
 
-const ActorInit En_Bigpamet_InitVars = {
+ActorInit En_Bigpamet_InitVars = {
     ACTOR_EN_BIGPAMET,
     ACTORCAT_BOSS,
     FLAGS,
@@ -710,7 +710,7 @@ void func_80A28EE8(EnBigpamet* this, PlayState* play) {
 
         func_800B0DE0(play, &pos, &gZeroVec3f, &gZeroVec3f, &D_80A29788, &D_80A2978C, 800, 50);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EN_NPC_FADEAWAY);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.scale.y = this->actor.scale.x;

@@ -26,6 +26,4 @@ typedef enum EffLastDayParams {
     /* 0x3 */ EFFLASTDAY_PARAMS_3
 } EffLastDayParams;
 
-extern const ActorInit Eff_Lastday_InitVars;
-
 #endif // Z_EFF_LASTDAY_H

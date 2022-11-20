@@ -21,7 +21,7 @@ void func_80C1B9D4(EnFall2* this, PlayState* play);
 void func_80C1B8F0(EnFall2* this);
 void func_80C1B9D4(EnFall2* this, PlayState* play);
 
-const ActorInit En_Fall2_InitVars = {
+ActorInit En_Fall2_InitVars = {
     ACTOR_EN_FALL2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -158,7 +158,7 @@ void EnFall2_Draw(Actor* thisx, PlayState* play) {
         func_8012C2DC(play->state.gfxCtx);
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_fall2_Matanimheader_008840));
 
-        mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+        mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
             func_8012C2DC(play->state.gfxCtx);

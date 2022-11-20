@@ -20,7 +20,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play);
 void ArmsHook_Wait(ArmsHook* this, PlayState* play);
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play);
 
-const ActorInit Arms_Hook_InitVars = {
+ActorInit Arms_Hook_InitVars = {
     ACTOR_ARMS_HOOK,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -109,7 +109,7 @@ s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
 
     if (Player_IsHoldingHookshot(player)) {
-        if ((player->heldItemActionParam != player->itemActionParam) || (player->actor.flags & ACTOR_FLAG_100) ||
+        if ((player->itemAction != player->heldItemAction) || (player->actor.flags & ACTOR_FLAG_100) ||
             (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_4000000))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
@@ -131,7 +131,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
 
     if ((this->actor.parent == NULL) || (!Player_IsHoldingHookshot(player))) {
         ArmsHook_DetachHookFromActor(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -217,7 +217,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             }
         } else {
             Math_Vec3f_Diff(&bodyDistDiffVec, &newPos, &player->actor.velocity);
-            player->actor.world.rot.x = Math_FAtan2F(sqrtf(SQXZ(bodyDistDiffVec)), -bodyDistDiffVec.y);
+            player->actor.world.rot.x = Math_Atan2S_XY(sqrtf(SQXZ(bodyDistDiffVec)), -bodyDistDiffVec.y);
         }
         if (phi_f16 < 50.0f) {
             ArmsHook_DetachHookFromActor(this);
@@ -239,7 +239,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &prevFrameDiff);
         Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
-        this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);
+        this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
         sp60.x = this->unk1EC.x - (this->unk1E0.x - this->unk1EC.x);
         sp60.y = this->unk1EC.y - (this->unk1E0.y - this->unk1EC.y);
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
@@ -258,7 +258,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             if (SurfaceType_IsHookshotSurface(&play->colCtx, poly, bgId)) {
                 DynaPolyActor* dynaPolyActor;
 
-                if (bgId != BGCHECK_SCENE && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
+                if ((bgId != BGCHECK_SCENE) && (dynaPolyActor = DynaPoly_GetActor(&play->colCtx, bgId)) != NULL) {
                     ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                 }
                 func_808C1154(this);
@@ -295,7 +295,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
     f32 f0;
     Player* player = GET_PLAYER(play);
 
-    if (player->actor.draw != NULL && player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT) {
+    if ((player->actor.draw != NULL) && (player->rightHandType == PLAYER_MODELTYPE_RH_HOOKSHOT)) {
         Vec3f sp68;
         Vec3f sp5C;
         Vec3f sp50;

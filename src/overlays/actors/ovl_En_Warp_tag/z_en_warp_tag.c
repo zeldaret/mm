@@ -24,7 +24,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play);
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play);
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play);
 
-const ActorInit En_Warp_tag_InitVars = {
+ActorInit En_Warp_tag_InitVars = {
     ACTOR_EN_WARP_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -59,7 +59,7 @@ void EnWarptag_Init(Actor* thisx, PlayState* play) {
 
         } else {
             if ((this->dangeonKeepObject = Object_GetIndex(&play->objectCtx, GAMEPLAY_DANGEON_KEEP)) < 0) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
 
             this->actionFunc = EnWarpTag_CheckDungeonKeepObject;
@@ -84,7 +84,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->dangeonKeepObject)) {
         this->actionFunc = EnWarpTag_WaitForPlayer;
         DynaPolyActor_Init(&this->dyna, 0x1);
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCollider);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpTagGoronTrialBaseCol);
         this->dyna.actor.objBankIndex = this->dangeonKeepObject;
         this->dyna.actor.draw = EnWarpTag_Draw;
     }
@@ -264,7 +264,7 @@ void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gWarpTagRainbowTexAnim));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpTagRainbowTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gSPDisplayList(POLY_OPA_DISP++, gWarpTagGoronTrialBaseDL);

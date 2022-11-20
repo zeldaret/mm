@@ -21,7 +21,7 @@ void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, PlayState* play);
 void BgIkanaRay_SetActivated(BgIkanaRay* this);
 void BgIkanaRay_UpdateActivated(BgIkanaRay* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Ray_InitVars = {
+ActorInit Bg_Ikana_Ray_InitVars = {
     ACTOR_BG_IKANA_RAY,
     ACTORCAT_PROP,
     FLAGS,

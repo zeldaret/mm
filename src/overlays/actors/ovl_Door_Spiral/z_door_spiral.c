@@ -67,7 +67,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play);
 void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
 
-const ActorInit Door_Spiral_InitVars = {
+ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
     FLAGS,
@@ -179,7 +179,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     s8 objBankId;
 
     if (this->actor.room != play->doorCtx.transitionActorList[transition].sides[0].room) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -191,7 +191,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     this->bankIndex = objBankId;
 
     if (objBankId < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

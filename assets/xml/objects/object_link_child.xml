@@ -45,7 +45,7 @@
         <DList Name="gLinkHumanHeadDL" Offset="0xC3E8" />
         <DList Name="gLinkHumanHatDL" Offset="0xCAA8" />
         <!-- Unused sword in scabbard -->
-        <DList Name="object_link_child_DL_00CBC8" Offset="0xCBC8" />
+        <DList Name="gLinkHumanSwordScabbardDL" Offset="0xCBC8" />
         <DList Name="gLinkHumanRightShoulderDL" Offset="0xCCE0" />
         <DList Name="gLinkHumanRightForearmDL" Offset="0xCF08" />
         <DList Name="gLinkHumanRightHandOpenDL" Offset="0xD058" />
@@ -148,9 +148,9 @@
         <Mtx Name="gLinkHumanMirrorShieldMtx" Offset="0x1DBD8" />
         <DList Name="gLinkHumanMirrorShieldWithMtxDL" Offset="0x1DC18" />
 
-        <DList Name="object_link_child_DL_01DC28" Offset="0x1DC28" />
+        <DList Name="gLinkHumanRightHandHoldingHylianShieldDL" Offset="0x1DC28" />
         <DList Name="object_link_child_DL_01DC38" Offset="0x1DC38" />
-        <DList Name="object_link_child_DL_01DC48" Offset="0x1DC48" />
+        <DList Name="gLinkHumanRightHandHoldingMirrorShieldDL" Offset="0x1DC48" />
         <DList Name="object_link_child_DL_01DC58" Offset="0x1DC58" />
         <DList Name="gLinkHumanLeftHandHoldingKokiriSwordDL" Offset="0x1DC68" />
         <DList Name="object_link_child_DL_01DC78" Offset="0x1DC78" />
@@ -170,22 +170,22 @@
         <Limb Name="gLinkHumanRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_ROOT" Offset="0x1E0A0" />
         <Limb Name="gLinkHumanWaistLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_WAIST" Offset="0x1E0B0" />
         <Limb Name="gLinkHumanLowerRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LOWER_ROOT" Offset="0x1E0C0" />
-        <Limb Name="gLinkHumanRightThighLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_THIGH" Offset="0x1E0D0" />
-        <Limb Name="gLinkHumanRightShinLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_SHIN" Offset="0x1E0E0" />
-        <Limb Name="gLinkHumanRightFootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_FOOT" Offset="0x1E0F0" />
-        <Limb Name="gLinkHumanLeftThighLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_THIGH" Offset="0x1E100" />
-        <Limb Name="gLinkHumanLeftShinLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_SHIN" Offset="0x1E110" />
-        <Limb Name="gLinkHumanLeftFootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_FOOT" Offset="0x1E120" />
+        <Limb Name="gLinkHumanRightThighLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_RIGHT_THIGH" Offset="0x1E0D0" />
+        <Limb Name="gLinkHumanRightShinLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_RIGHT_SHIN" Offset="0x1E0E0" />
+        <Limb Name="gLinkHumanRightFootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_RIGHT_FOOT" Offset="0x1E0F0" />
+        <Limb Name="gLinkHumanLeftThighLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LEFT_THIGH" Offset="0x1E100" />
+        <Limb Name="gLinkHumanLeftShinLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LEFT_SHIN" Offset="0x1E110" />
+        <Limb Name="gLinkHumanLeftFootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LEFT_FOOT" Offset="0x1E120" />
         <Limb Name="gLinkHumanUpperRootLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_UPPER_ROOT" Offset="0x1E130" />
         <Limb Name="gLinkHumanHeadLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_HEAD" Offset="0x1E140" />
         <Limb Name="gLinkHumanHatLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_HAT" Offset="0x1E150" />
         <Limb Name="gLinkHumanCollarLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_COLLAR" Offset="0x1E160" />
-        <Limb Name="gLinkHumanLeftShoulderLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_SHOULDER" Offset="0x1E170" />
-        <Limb Name="gLinkHumanLeftForearmLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_FOREARM" Offset="0x1E180" />
-        <Limb Name="gLinkHumanLeftHandLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_L_HAND" Offset="0x1E190" />
-        <Limb Name="gLinkHumanRightShoulderLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_SHOULDER" Offset="0x1E1A0" />
-        <Limb Name="gLinkHumanRightForearmLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_FOREARM" Offset="0x1E1B0" />
-        <Limb Name="gLinkHumanRightHandLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_R_HAND" Offset="0x1E1C0" />
+        <Limb Name="gLinkHumanLeftShoulderLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LEFT_SHOULDER" Offset="0x1E170" />
+        <Limb Name="gLinkHumanLeftForearmLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LEFT_FOREARM" Offset="0x1E180" />
+        <Limb Name="gLinkHumanLeftHandLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_LEFT_HAND" Offset="0x1E190" />
+        <Limb Name="gLinkHumanRightShoulderLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_RIGHT_SHOULDER" Offset="0x1E1A0" />
+        <Limb Name="gLinkHumanRightForearmLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_RIGHT_FOREARM" Offset="0x1E1B0" />
+        <Limb Name="gLinkHumanRightHandLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_RIGHT_HAND" Offset="0x1E1C0" />
         <Limb Name="gLinkHumanSheathLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_SHEATH" Offset="0x1E1D0" />
         <Limb Name="gLinkHumanTorsoLimb" Type="LOD" EnumName="LINK_HUMAN_LIMB_TORSO" Offset="0x1E1E0" />
         <Skeleton Name="gLinkHumanSkel" Type="Flex" LimbType="LOD" LimbNone="LINK_HUMAN_LIMB_NONE" LimbMax="LINK_HUMAN_LIMB_MAX" EnumName="LinkHumanLimb" Offset="0x1E244" />

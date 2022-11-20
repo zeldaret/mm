@@ -28,7 +28,7 @@ void func_808FB710(EnRr* this, PlayState* play);
 void func_808FAD1C(EnRr* this, PlayState* play);
 void func_808FB398(EnRr* this, PlayState* play);
 
-const ActorInit En_Rr_InitVars = {
+ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -715,8 +715,11 @@ void func_808FB42C(EnRr* this, PlayState* play) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_SHIELD_HERO);
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_1E4 == 88) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_1E4 == 88) {
         Vec3f sp74;
 
         sp74.x = this->actor.world.pos.x;
@@ -871,20 +874,18 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 void EnRr_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnRr* this = THIS;
-    Mtx* matrix;
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
     Vec3f* vecPtr;
     s32 i;
     EnRrStruct* ptr;
     Vec3f spA4;
     f32 temp_f20;
 
-    matrix = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 4);
-
     OPEN_DISPS(play->state.gfxCtx);
 
     func_8012C28C(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x0C, matrix);
+    gSPSegment(POLY_OPA_DISP++, 0x0C, mtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, (this->unk_1E8 * 0) & 0x7F, (this->unk_1E8 * 0) & 0x3F, 0x20,
                                 0x10, 1, (this->unk_1E8 * 0) & 0x3F, (this->unk_1E8 * -6) & 0x7F, 0x20, 0x10));
@@ -911,7 +912,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZYX(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
         Matrix_Push();
         Matrix_Scale(temp_f20, 1.0f, temp_f20, MTXMODE_APPLY);
-        Matrix_ToMtx(matrix);
+        Matrix_ToMtx(mtx);
 
         if ((i & 1) != 0) {
             Matrix_RotateYS(0x2000, MTXMODE_APPLY);
@@ -922,7 +923,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
         Matrix_MultVecX(1842.1053f, vecPtr++);
         Matrix_MultVecX(-1842.1053f, vecPtr++);
         Matrix_Pop();
-        matrix++;
+        mtx++;
         if (i == 3) {
             Matrix_MultZero(&spA4);
         }

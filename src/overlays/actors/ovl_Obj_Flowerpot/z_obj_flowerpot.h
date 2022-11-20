@@ -21,6 +21,4 @@ typedef struct ObjFlowerpot {
     /* 0x1EC */ s8 unk_1EC;
 } ObjFlowerpot; // size = 0x1F0
 
-extern const ActorInit Obj_Flowerpot_InitVars;
-
 #endif // Z_OBJ_FLOWERPOT_H

@@ -19,7 +19,7 @@ void func_8098CB70(EnSi* this, PlayState* play);
 void func_8098CBDC(EnSi* this, PlayState* play);
 
 #if 0
-const ActorInit En_Si_InitVars = {
+ActorInit En_Si_InitVars = {
     ACTOR_EN_SI,
     ACTORCAT_ITEMACTION,
     FLAGS,

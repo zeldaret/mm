@@ -20,7 +20,7 @@ void func_80AC21A0(EnDoorEtc* this, PlayState* play);
 void func_80AC2354(EnDoorEtc* this, PlayState* play);
 void EnDoorEtc_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Door_Etc_InitVars = {
+ActorInit En_Door_Etc_InitVars = {
     ACTOR_EN_DOOR_ETC,
     ACTORCAT_DOOR,
     FLAGS,
@@ -106,7 +106,7 @@ void EnDoorEtc_Init(Actor* thisx, PlayState* play2) {
     }
     objectIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->door.dyna.actor);
+        Actor_Kill(&this->actor);
     } else {
         this->door.requiredObjBankIndex = objectIndex;
         this->door.dlIndex = objectInfo->dListIndex;
@@ -215,7 +215,7 @@ void func_80AC2354(EnDoorEtc* this, PlayState* play) {
             this->door.dyna.actor.world.pos.z = door->world.pos.z;
             this->door.dyna.actor.shape.rot.y = door->shape.rot.y;
             this->door.dyna.actor.world.rot.y = door->world.rot.y;
-            Actor_MarkForDeath(door);
+            Actor_Kill(door);
             this->actionFunc = func_80AC21A0;
             this->door.dyna.actor.textId = 0x239B;
             Actor_SetFocus(&this->door.dyna.actor, 70.0f);

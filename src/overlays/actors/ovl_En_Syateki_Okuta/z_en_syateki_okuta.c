@@ -28,7 +28,7 @@ void func_80A36504(EnSyatekiOkuta* this, PlayState* play);
 void func_80A365EC(EnSyatekiOkuta* this, PlayState* play);
 void func_80A36CB0(EnSyatekiOkuta* this);
 
-const ActorInit En_Syateki_Okuta_InitVars = {
+ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -105,7 +105,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
                                  &waterbox)) ||
         (ySurface <= this->actor.floorHeight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.world.pos.y = this->actor.home.pos.y = ySurface;
     }
@@ -370,7 +370,7 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
         if (this->unk_2A6 == 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            play->interfaceCtx.unk_25C++;
+            play->interfaceCtx.minigamePoints++;
             syatekiMan->score++;
             syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_RED;
         } else {

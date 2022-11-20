@@ -31,7 +31,7 @@ void EnClearTag_Draw(Actor* thisx, PlayState* play);
 void EnClearTag_UpdateEffects(EnClearTag* this, PlayState* play);
 void EnClearTag_DrawEffects(Actor* thisx, PlayState* play);
 
-const ActorInit En_Clear_Tag_InitVars = {
+ActorInit En_Clear_Tag_InitVars = {
     ACTOR_EN_CLEAR_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -284,8 +284,8 @@ void EnClearTag_CreateLightRayEffect(EnClearTag* this, Vec3f* pos, Vec3f* veloci
 
             effect->actionTimer = Rand_ZeroFloat(10.0f);
 
-            effect->rotationY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
-            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->rotationY = Math_Atan2F_XY(effect->velocity.z, effect->velocity.x);
+            effect->rotationX = -Math_Atan2F_XY(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
 
             effect->envColor.r = 255.0f;
             effect->envColor.g = 255.0f;
@@ -326,8 +326,8 @@ void EnClearTag_CreateIsolatedLightRayEffect(EnClearTag* this, Vec3f* pos, Vec3f
 
             effect->actionTimer = Rand_ZeroFloat(10.0f);
 
-            effect->rotationY = Math_Acot2F(effect->velocity.z, effect->velocity.x);
-            effect->rotationX = -Math_Acot2F(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
+            effect->rotationY = Math_Atan2F_XY(effect->velocity.z, effect->velocity.x);
+            effect->rotationX = -Math_Atan2F_XY(sqrtf(SQXZ(effect->velocity)), effect->velocity.y);
 
             effect->envColor.r = sLightRayEnvColor[colorIndex].x;
             effect->envColor.g = sLightRayEnvColor[colorIndex].y;
@@ -615,7 +615,7 @@ void EnClearTag_Update(Actor* thisx, PlayState* play) {
     } else if (this->activeTimer != 0) {
         EnClearTag_UpdateEffects(this, play);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

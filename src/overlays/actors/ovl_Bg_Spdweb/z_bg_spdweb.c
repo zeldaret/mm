@@ -24,7 +24,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
 void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-const ActorInit Bg_Spdweb_InitVars = {
+ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,
     ACTORCAT_BG,
     FLAGS,
@@ -170,7 +170,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     this->unk_162 = 0;
 
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -230,7 +230,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
 
     if (this->unk_162 == 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -373,7 +373,7 @@ void func_809CE830(BgSpdweb* this, PlayState* play) {
         if (ActorCutscene_GetLength(this->dyna.actor.cutscene) == -1) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -450,7 +450,7 @@ void func_809CEBC0(BgSpdweb* this, PlayState* play) {
                 this->dyna.actor.world.pos.z;
         }
         func_809CEE74(this);
-    } else if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+    } else if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);

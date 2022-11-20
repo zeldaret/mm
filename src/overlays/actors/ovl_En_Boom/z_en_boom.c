@@ -19,7 +19,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play);
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
-const ActorInit En_Boom_InitVars = {
+ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -268,7 +268,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                     targetActor->flags &= ~ACTOR_FLAG_2000;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 

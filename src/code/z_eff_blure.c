@@ -396,7 +396,7 @@ void EffectBlure_DrawElemNoInterpolation(EffectBlure* this, EffectBlureElement* 
 
     Math_Vec3s_ToVec3f(&sp6C, &this->elements[0].p2);
 
-    vtx = GRAPH_ALLOC(gfxCtx, sizeof(Vtx[4]));
+    vtx = GRAPH_ALLOC(gfxCtx, 4 * sizeof(Vtx));
     if (vtx == NULL) {
     } else {
         vtx[0].v = baseVtx;
@@ -547,7 +547,7 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
     Math_Vec3f_Scale(&sp174, 0.5f);
     Math_Vec3f_Scale(&sp168, 0.5f);
 
-    vtx = GRAPH_ALLOC(gfxCtx, sizeof(Vtx[16]));
+    vtx = GRAPH_ALLOC(gfxCtx, 16 * sizeof(Vtx));
     if (vtx == NULL) {
     } else {
         Math_Vec3f_Diff(&sp1CC, &sp138, &sp158);
@@ -837,7 +837,7 @@ void EffectBlure_DrawSimple(EffectBlure* this2, GraphicsContext* gfxCtx) {
     if (this->numElements >= 2) {
         vtxCount = this->numElements * 4;
 
-        vtx = GRAPH_ALLOC(gfxCtx, ALIGN16(vtxCount * sizeof(Vtx)));
+        vtx = GRAPH_ALLOC(gfxCtx, vtxCount * sizeof(Vtx));
         if (vtx == NULL) {
             return;
         }
@@ -929,7 +929,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
             func_8012C560(gfxCtx);
             gDPPipeSync(POLY_XLU_DISP++);
 
-            vtx = GRAPH_ALLOC(gfxCtx, sizeof(Vtx[32]));
+            vtx = GRAPH_ALLOC(gfxCtx, 32 * sizeof(Vtx));
             if (vtx == NULL) {
             } else {
                 j = 0;

@@ -12,7 +12,7 @@ void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
     static s32 sOpeningEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };
     static s32 sOpeningCutscenes[] = { 0xFFFA, 0xFFFA };
 
-    gSaveContext.eventInf[1] &= (u8)~0x80;
+    CLEAR_EVENTINF(EVENTINF_17);
     gSaveContext.gameMode = 1;
 
     Sram_InitNewSave();

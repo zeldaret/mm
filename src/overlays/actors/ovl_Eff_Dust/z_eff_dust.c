@@ -24,7 +24,7 @@ void func_80919230(EffDust* this, PlayState* play);
 void func_80919768(Actor* thisx, PlayState* play2);
 void func_809199FC(Actor* thisx, PlayState* play2);
 
-const ActorInit Eff_Dust_InitVars = {
+ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,
     ACTORCAT_NPC,
     FLAGS,
@@ -175,7 +175,7 @@ void func_80919230(EffDust* this, PlayState* play) {
         if (this->life != 0) {
             this->life--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
 
         for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {

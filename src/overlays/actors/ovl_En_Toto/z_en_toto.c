@@ -11,7 +11,7 @@
 
 #define THIS ((EnToto*)thisx)
 
-#define ENTOTO_WEEK_EVENT_FLAGS (gSaveContext.save.weekEventReg[50] & 1 || gSaveContext.save.weekEventReg[51] & 0x80)
+#define ENTOTO_WEEK_EVENT_FLAGS (CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80))
 
 void EnToto_Init(Actor* thisx, PlayState* play);
 void EnToto_Destroy(Actor* thisx, PlayState* play);
@@ -50,7 +50,7 @@ s32 func_80BA4B24(EnToto* this, PlayState* play);
 s32 func_80BA4C0C(EnToto* this, PlayState* play);
 s32 func_80BA4C44(EnToto* this, PlayState* play);
 
-const ActorInit En_Toto_InitVars = {
+ActorInit En_Toto_InitVars = {
     ACTOR_EN_TOTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -186,7 +186,7 @@ void EnToto_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
         (gSaveContext.save.time < CLOCK_TIME(21, 30))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
@@ -258,7 +258,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_NONE);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_800B8614(&this->actor, play, 50.0f);
@@ -510,7 +510,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
     func_80BA3C88(this);
     if (player->actor.world.pos.z > -270.0f) {
         if (this->spotlights != NULL) {
-            Actor_MarkForDeath(this->spotlights);
+            Actor_Kill(this->spotlights);
         }
         this->unk2B6 = 1;
         return this->text->unk1;
@@ -550,16 +550,16 @@ s32 func_80BA46D8(EnToto* this, PlayState* play) {
 s32 func_80BA4740(EnToto* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 4) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-            gSaveContext.save.weekEventReg[56] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_10);
         }
         if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
-            gSaveContext.save.weekEventReg[56] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_20);
         }
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            gSaveContext.save.weekEventReg[56] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_40);
         }
         if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
-            gSaveContext.save.weekEventReg[56] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_56_80);
         }
         return 1;
     }
@@ -571,16 +571,16 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
     s32 i;
 
     this->unk2B3 = 0;
-    if (gSaveContext.save.weekEventReg[56] & 0x10) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_10)) {
         this->unk2B3 += 1;
     }
-    if (gSaveContext.save.weekEventReg[56] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_20)) {
         this->unk2B3 += 2;
     }
-    if (gSaveContext.save.weekEventReg[56] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_40)) {
         this->unk2B3 += 4;
     }
-    if (gSaveContext.save.weekEventReg[56] & 0x80) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_56_80)) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
@@ -613,18 +613,18 @@ s32 func_80BA4A00(EnToto* this, PlayState* play) {
             actor = &GET_PLAYER(play)->actor;
             actor = actor->next;
             while (actor != NULL) {
-                Actor_MarkForDeath(actor);
+                Actor_Kill(actor);
                 actor = actor->next;
             }
             if (this->spotlights != NULL) {
-                Actor_MarkForDeath(this->spotlights);
+                Actor_Kill(this->spotlights);
             }
             func_800B7298(play, NULL, PLAYER_CSMODE_69);
             if (this->unk2B3 == 0xF) {
                 if (CURRENT_DAY == 1) {
-                    gSaveContext.save.weekEventReg[50] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_50_01);
                 } else {
-                    gSaveContext.save.weekEventReg[51] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_51_80);
                 }
             } else {
                 func_80BA402C(this, play);

@@ -85,7 +85,7 @@ s32 D_80BDFF24[] = {
     0x11390411, 0x390819FF, 0xB10E2B3C, 0x2D00080C, 0x19FFA700,
 };
 
-const ActorInit En_Al_InitVars = {
+ActorInit En_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
     FLAGS,
@@ -200,7 +200,7 @@ Actor* func_80BDE384(EnAl* this, PlayState* play) {
 
     switch (this->unk_35C) {
         case 2:
-            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                 actor = func_80BDE1A0(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
             } else {
                 actor = &GET_PLAYER(play)->actor;
@@ -410,7 +410,7 @@ s32 func_80BDEA14(EnAl* this, PlayState* play) {
     switch (this->unk_4E6) {
         case 0:
         case 1:
-            if ((gSaveContext.save.weekEventReg[75] & 2)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
                 sp18 = true;
             } else if (func_80BDE4E0(this, &this->unk_4E6, 0)) {
                 sp18 = true;
@@ -451,7 +451,7 @@ s32* func_80BDEABC(EnAl* this, PlayState* play) {
             return D_80BDFE84;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                 this->unk_4EC = func_80BDE7FC;
                 return D_80BDFCBC;
             }
@@ -659,7 +659,7 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             break;
 
         case 2:
-            this->unk_4F0 = PLAYER_AP_NONE;
+            this->unk_4F0 = PLAYER_IA_NONE;
             this->unk_4EA = 0;
             func_80BDE27C(this, 2);
             break;
@@ -672,7 +672,7 @@ s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_4F0 = PLAYER_AP_NONE;
+    this->unk_4F0 = PLAYER_IA_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;
 
@@ -699,15 +699,15 @@ void func_80BDF414(EnAl* this, PlayState* play) {
     switch (this->unk_4EA) {
         case 0:
         case 1:
-            if (!(gSaveContext.save.weekEventReg[89] & 8)) {
-                if (gSaveContext.save.weekEventReg[85] & 0x80) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80)) {
                     func_80BDE4E0(this, &this->unk_4EA, 0);
                 }
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[89] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08)) {
                 this->unk_4EA++;
             }
             break;

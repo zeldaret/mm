@@ -25,7 +25,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play);
 void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
-const ActorInit Obj_Moon_Stone_InitVars = {
+ActorInit Obj_Moon_Stone_InitVars = {
     ACTOR_OBJ_MOON_STONE,
     ACTORCAT_PROP,
     FLAGS,
@@ -49,15 +49,15 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 0;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80C0662C(this);
-    } else if (!(gSaveContext.save.weekEventReg[74] & 0x40)) {
-        if ((gSaveContext.save.weekEventReg[74] & 0x80)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, -1);
         }
         this->actor.flags &= ~ACTOR_FLAG_1;
         func_80C0673C(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -97,14 +97,14 @@ void func_80C0670C(ObjMoonStone* this, PlayState* play) {
 }
 
 void func_80C0673C(ObjMoonStone* this) {
-    if (!(gSaveContext.save.weekEventReg[74] & 0x80)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
         this->actor.draw = NULL;
     }
     this->actionFunc = func_80C06768;
 }
 
 void func_80C06768(ObjMoonStone* this, PlayState* play) {
-    if ((gSaveContext.save.weekEventReg[74] & 0x80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
         if (this->actor.draw == NULL) {
             this->actor.draw = ObjMoonStone_Draw;
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -128,8 +128,8 @@ void func_80C0685C(ObjMoonStone* this) {
 
 void func_80C06870(ObjMoonStone* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        gSaveContext.save.weekEventReg[74] |= 0x40;
-        Actor_MarkForDeath(&this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_74_40);
+        Actor_Kill(&this->actor);
     }
 }
 

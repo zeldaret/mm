@@ -11,6 +11,4 @@ typedef struct BgMarketStep {
     /* 0x000 */ Actor actor;
 } BgMarketStep; // size = 0x144
 
-extern const ActorInit Bg_Market_Step_InitVars;
-
 #endif // Z_BG_MARKET_STEP_H

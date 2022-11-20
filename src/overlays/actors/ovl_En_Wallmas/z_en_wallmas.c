@@ -43,7 +43,7 @@ void EnWallmas_WaitForProximity(EnWallmas* this, PlayState* play);
 void EnWallmas_WaitForSwitchFlag(EnWallmas* this, PlayState* play);
 void EnWallmas_Stun(EnWallmas* this, PlayState* play);
 
-const ActorInit En_Wallmas_InitVars = {
+ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -171,7 +171,7 @@ void EnWallmas_Init(Actor* thisx, PlayState* play) {
 
     if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_FLAG) {
         if (Flags_GetSwitch(play, this->switchFlag)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -377,7 +377,7 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, PlayState* play) {
 
     if (this->actor.playerHeightRel < -900.0f) {
         if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_FLAG) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -445,7 +445,7 @@ void EnWallmas_Die(EnWallmas* this, PlayState* play) {
     if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0015f)) {
         Actor_SetScale(&this->actor, 0.01f);
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.scale.z = this->actor.scale.x;
@@ -466,7 +466,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-        func_800B8E58(player, player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_DAMAGE_S);
+        func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_CATCH);
     }
 
@@ -482,7 +482,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 
         player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[GET_PLAYER_FORM];
         if (this->timer == -30) {
-            func_800B8E58(player, player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_TAKEN_AWAY);
+            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_TAKEN_AWAY);
         }
 
         if (this->timer == 0) {

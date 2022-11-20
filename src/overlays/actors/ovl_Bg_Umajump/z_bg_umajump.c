@@ -18,7 +18,7 @@ void BgUmajump_Draw(Actor* thisx, PlayState* play);
 
 void func_8091A5A0(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Umajump_InitVars = {
+ActorInit Bg_Umajump_InitVars = {
     ACTOR_BG_UMAJUMP,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,7 +61,7 @@ void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
 void BgUmajump_PlayCutscene(BgUmajump* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        gSaveContext.save.weekEventReg[89] |= 0x20;
+        SET_WEEKEVENTREG(WEEKEVENTREG_89_20);
         this->actionFunc = BgUmajump_StopCutscene;
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -93,7 +93,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     thisx->params = BG_UMAJUMP_GET_FF(thisx);
 
     if ((thisx->params == BG_UMAJUMP_TYPE_2)) {
-        if ((((play->sceneId == SCENE_F01) && !(gSaveContext.save.weekEventReg[89] & 0x20)) &&
+        if ((((play->sceneId == SCENE_F01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_89_20)) &&
              !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) &&
             (thisx->cutscene != -1)) {
             this->actionFunc = BgUmajump_CheckDistance;
@@ -107,13 +107,13 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
         this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UMAJUMP);
 
         if (this->objectIndex < 0) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
 
         if ((thisx->params == BG_UMAJUMP_TYPE_3) && CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, thisx->world.pos.x, thisx->world.pos.y,
                         thisx->world.pos.z, thisx->shape.rot.x, thisx->shape.rot.y, thisx->shape.rot.z, 0x3E);
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     }
 }
@@ -134,11 +134,11 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
         Actor_SetObjectDependency(play, &this->dyna.actor);
 
         if (this->dyna.actor.params == BG_UMAJUMP_TYPE_5) {
-            if (gSaveContext.save.weekEventReg[22] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
             }
         } else if (this->dyna.actor.params == BG_UMAJUMP_TYPE_6) {
-            if (!(gSaveContext.save.weekEventReg[22] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
             }
         } else if ((this->dyna.actor.params == BG_UMAJUMP_TYPE_4) || (this->dyna.actor.params == BG_UMAJUMP_TYPE_3)) {
@@ -155,11 +155,11 @@ void BgUmajump_Update(Actor* thisx, PlayState* play) {
             this->dyna.actor.update = func_8091A5A0;
         } else if ((this->dyna.actor.params == BG_UMAJUMP_TYPE_5) || (this->dyna.actor.params == BG_UMAJUMP_TYPE_6)) {
             if (this->dyna.actor.params == BG_UMAJUMP_TYPE_5) {
-                if ((this->dyna.bgId == BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1)) {
+                if ((this->dyna.bgId == BGACTOR_NEG_ONE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                     DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
                 }
             } else if ((this->dyna.actor.params == BG_UMAJUMP_TYPE_6) && (this->dyna.bgId == BGACTOR_NEG_ONE) &&
-                       (!(gSaveContext.save.weekEventReg[22] & 1) ||
+                       (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) ||
                         ((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == true) &&
                          ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) &&
                           (gSaveContext.save.time <= CLOCK_TIME(6, 0)))))) {
@@ -187,22 +187,22 @@ void func_8091A5A0(Actor* thisx, PlayState* play) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                     this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
                     this->dyna.actor.shape.rot.z, 0x3E);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     if (this->dyna.actor.params == BG_UMAJUMP_TYPE_5) {
-        if ((this->dyna.bgId == BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1)) {
+        if ((this->dyna.bgId == BGACTOR_NEG_ONE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
-        } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && !(gSaveContext.save.weekEventReg[22] & 1)) {
+        } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
             DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     } else if (this->dyna.actor.params == BG_UMAJUMP_TYPE_6) {
         if ((this->dyna.bgId == BGACTOR_NEG_ONE) &&
-            (!(gSaveContext.save.weekEventReg[22] & 1) ||
+            (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) ||
              ((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == true) &&
               (gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0))))) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_umajump_Colheader_001558);
-        } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && (gSaveContext.save.weekEventReg[22] & 1) &&
+        } else if ((this->dyna.bgId != BGACTOR_NEG_ONE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) &&
                    ((gSaveContext.save.day != 2) || (gSaveContext.save.isNight != true) ||
                     (gSaveContext.save.time < CLOCK_TIME(5, 30)) || (gSaveContext.save.time > CLOCK_TIME(6, 0)))) {
             DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);

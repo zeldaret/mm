@@ -33,7 +33,7 @@ void func_80941FA4(EnGoroiwa* this, PlayState* play);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, PlayState* play);
 
-const ActorInit En_Goroiwa_InitVars = {
+ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -965,12 +965,12 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     func_8093E9B0(this, play);
 
     if (sp28 == 0x7F8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (sp2C->count < 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1418,7 +1418,7 @@ void func_80942604(EnGoroiwa* this, PlayState* play) {
     if (this->unk_1C8 > 0) {
         this->unk_1C8--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

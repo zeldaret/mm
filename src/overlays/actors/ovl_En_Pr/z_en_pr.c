@@ -68,7 +68,7 @@ static DamageTable sDamageTable = {
 
 f32 D_80A338C0[PLAYER_FORM_MAX] = { 30.0f, 30.0f, 30.0f, 15.0f, 15.0f };
 
-const ActorInit En_Pr_InitVars = {
+ActorInit En_Pr_InitVars = {
     ACTOR_EN_PR,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -445,7 +445,7 @@ void func_80A32F48(EnPr* this, PlayState* play) {
     if (this->unk_2D2 != 0) {
         Math_SmoothStepToS(&this->unk_2D0, 0, 1, 15, 50);
         if (this->unk_2D0 < 2) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }

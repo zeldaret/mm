@@ -84,7 +84,7 @@ typedef enum {
     /* 2 */ EN_RAILGIBUD_GRAB_RELEASE,
 } EnRailgibudGrabState;
 
-const ActorInit En_Railgibud_InitVars = {
+ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -272,8 +272,8 @@ void EnRailgibud_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    if (gSaveContext.save.weekEventReg[14] & 4) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
+        Actor_Kill(&this->actor);
     }
 
     EnRailgibud_SetupWalkInCircles(this);
@@ -450,7 +450,7 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
             if (this->grabDamageTimer == 20) {
                 s16 requiredScopeTemp;
 
-                damageSfxId = player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_DAMAGE_S;
+                damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
                 play->damagePlayer(play, -8);
                 func_800B8E58(player, damageSfxId);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
@@ -630,7 +630,7 @@ void EnRailgibud_Dead(EnRailgibud* this, PlayState* play) {
     if (this->deathTimer > 300) {
         if (this->actor.shape.shadowAlpha == 0) {
             if (this->actor.parent != NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 // Don't delete the "main" Gibdo, since that will break the surviving
                 // Gibdos' ability to start and stop walking forward. Instead, just
@@ -1116,7 +1116,7 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (gSaveContext.save.entrance != ENTRANCE(IKANA_CANYON, 9)) { // NOT Cutscene: Music Box House Opens
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     EnRailgibud_SetupDoNothing(this);
@@ -1167,7 +1167,7 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, PlayState* play) {
     if (this->sinkTimer != 0) {
         this->sinkTimer--;
     } else if (Math_SmoothStepToF(&this->actor.shape.yOffset, -9500.0f, 0.5f, 200.0f, 10.0f) < 10.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         EnRailgibud_SpawnEffectsForSinkingIntoTheGround(this, play, 0);
     }

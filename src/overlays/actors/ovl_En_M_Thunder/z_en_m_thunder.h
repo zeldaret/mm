@@ -37,6 +37,4 @@ typedef struct EnMThunder {
     /* 0x1C2 */ u8 isCharging;
 } EnMThunder; // size = 0x1C4
 
-extern const ActorInit En_M_Thunder_InitVars;
-
 #endif // Z_EN_M_THUNDER_H

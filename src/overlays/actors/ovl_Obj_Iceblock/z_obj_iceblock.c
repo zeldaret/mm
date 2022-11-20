@@ -45,7 +45,7 @@ void func_80A26B64(ObjIceblock* this, PlayState* play);
 void func_80A26B74(ObjIceblock* this, PlayState* play);
 void func_80A26BF8(ObjIceblock* this, PlayState* play);
 
-const ActorInit Obj_Iceblock_InitVars = {
+ActorInit Obj_Iceblock_InitVars = {
     ACTOR_OBJ_ICEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -922,7 +922,7 @@ void ObjIceblock_Init(Actor* thisx, PlayState* play) {
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockDynaColHeader);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gIceBlockCol);
     func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
@@ -1411,7 +1411,7 @@ void func_80A266E0(ObjIceblock* this, PlayState* play) {
     func_80A2508C(this, play);
 
     if (sp20) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 

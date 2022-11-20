@@ -72,6 +72,11 @@
 
 #define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
 
+#define ALIGN8(val) (((val) + 7) & ~7)
+#define ALIGN16(val) (((val) + 0xF) & ~0xF)
+#define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
+#define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
+
 extern GraphicsContext* __gfxCtx;
 
 #define WORK_DISP __gfxCtx->work.p
@@ -109,7 +114,7 @@ extern GraphicsContext* __gfxCtx;
 #define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
-#define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
+#define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - ALIGN16(size))))
 
 // Custom gbi macro
 #define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \

@@ -67,7 +67,7 @@ static ColliderCylinderInit D_80971D80 = {
     { 20, 70, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Kakasi_InitVars = {
+ActorInit En_Kakasi_InitVars = {
     ACTOR_EN_KAKASI,
     ACTORCAT_NPC,
     FLAGS,
@@ -177,14 +177,14 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->aboveGroundStatus != 0) {
-        if (gSaveContext.save.weekEventReg[79] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08)) {
             this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
             this->songSummonDist = 80.0f;
             EnKakasi_SetupIdleUnderground(this);
         } else {
             Actor_SetFocus(&this->picto.actor, 60.0f);
             this->picto.validationFunc = EnKakasi_ValidatePictograph;
-            if (gSaveContext.save.weekEventReg[83] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_01)) {
                 EnKakasi_InitTimeSkipDialogue(this);
             } else {
                 EnKakasi_SetupIdleStanding(this);
@@ -301,12 +301,12 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
 
     if (gSaveContext.respawnFlag != -4 && gSaveContext.respawnFlag != -8) {
         if (gSaveContext.save.time != CLOCK_TIME(6, 0) && gSaveContext.save.time != CLOCK_TIME(18, 0) &&
-            !(gSaveContext.eventInf[1] & 0x80)) {
+            !CHECK_EVENTINF(EVENTINF_17)) {
 
             if (this->picto.actor.textId == 0) {
                 // dialogue after skipped time 'did you feel that? went by in an instant'
                 this->picto.actor.textId = 0x1653;
-                gSaveContext.save.weekEventReg[83] &= (u8)~1;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->talkState = TEXT_STATE_5;
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->picto.actor.flags |= ACTOR_FLAG_10000;
@@ -318,7 +318,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
+                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
             }
         }
     }
@@ -933,16 +933,18 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                                     PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                 func_80169EFC(&play->state);
 
+                //! FAKE
                 if (0) {}
+
                 if (gSaveContext.save.time > CLOCK_TIME(18, 0) || gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                 } else {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;
                 }
-                gSaveContext.save.weekEventReg[83] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_83_01);
                 this->unk190 = 0;
                 this->actionFunc = EnKakasi_DoNothing;
             }
@@ -1011,7 +1013,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
 
     Math_ApproachF(&this->picto.actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->picto.actor.shape.yOffset + 6000.0f) < 10.0f) {
-        gSaveContext.save.weekEventReg[79] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_79_08);
         func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_6);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
@@ -1029,7 +1031,7 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 }
 
 void EnKakasi_IdleUnderground(EnKakasi* this, PlayState* play) {
-    if ((gSaveContext.save.weekEventReg[79] & 8) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_08) && this->picto.actor.xzDistToPlayer < this->songSummonDist &&
         (BREG(1) != 0 || play->msgCtx.ocarinaMode == 0xD)) {
         this->picto.actor.flags &= ~ACTOR_FLAG_8000000;
         play->msgCtx.ocarinaMode = 4;

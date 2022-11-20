@@ -25,7 +25,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play);
 void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
-const ActorInit En_Sb_InitVars = {
+ActorInit En_Sb_InitVars = {
     ACTOR_EN_SB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -368,22 +368,23 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
             this->actor.params = 1;
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x80);
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        Actor_SetFocus(&this->actor, 20.0f);
-        Actor_MoveWithGravity(&this->actor);
-        this->actionFunc(this, play);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, 5);
-        EnSb_UpdateDamage(this, play);
-        if (player->stateFlags1 & PLAYER_STATE1_8000000) {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            if (this->vulnerableTimer == 0) {
-                CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-            }
-            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        }
-        SkelAnime_Update(&this->skelAnime);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    Actor_SetFocus(&this->actor, 20.0f);
+    Actor_MoveWithGravity(&this->actor);
+    this->actionFunc(this, play);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, 5);
+    EnSb_UpdateDamage(this, play);
+    if (player->stateFlags1 & PLAYER_STATE1_8000000) {
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        if (this->vulnerableTimer == 0) {
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        }
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    }
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {

@@ -40,6 +40,4 @@ typedef struct EnJg {
     /* 0x3D0 */ u8 focusedShrineGoronParam;
 } EnJg; // size = 0x3D4
 
-extern const ActorInit En_Jg_InitVars;
-
 #endif // Z_EN_JG_H

@@ -51,7 +51,7 @@ void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
 void EnFamos_DrawDebris(EnFamos* this, PlayState* play);
 
-const ActorInit En_Famos_InitVars = {
+ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -723,7 +723,7 @@ void EnFamos_DeathFade(EnFamos* this, PlayState* play) {
         if (enBom != NULL) {
             enBom->parent = NULL;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

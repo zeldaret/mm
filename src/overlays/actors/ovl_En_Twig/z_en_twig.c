@@ -25,7 +25,7 @@ void func_80AC0AC8(EnTwig* this, PlayState* play);
 void func_80AC0CC4(EnTwig* this, PlayState* play);
 void func_80AC0D2C(EnTwig* this, PlayState* play);
 
-const ActorInit En_Twig_InitVars = {
+ActorInit En_Twig_InitVars = {
     ACTOR_EN_TWIG,
     ACTORCAT_MISC,
     FLAGS,
@@ -70,23 +70,23 @@ void EnTwig_Init(Actor* thisx, PlayState* play2) {
     this->dyna.actor.bgCheckFlags |= 0x400;
     switch (this->unk_160) {
         case 0:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             break;
         case 1:
             if (!sRingsHaveSpawned) {
-                sRingCount = (gSaveContext.save.weekEventReg[24] & 4) ? 25 : 20;
+                sRingCount = CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04) ? 25 : 20;
                 for (i = 0; i < sRingCount; i++) {
                     sRingNotCollected[i] = false;
                 }
                 sRingsHaveSpawned = true;
             }
             if (RACERING_GET_PARAM_1F0(&this->dyna.actor) != 0) {
-                if (!(gSaveContext.save.weekEventReg[24] & 4)) {
-                    Actor_MarkForDeath(&this->dyna.actor);
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
+                    Actor_Kill(&this->dyna.actor);
                     return;
                 }
-            } else if (gSaveContext.save.weekEventReg[24] & 4) {
-                Actor_MarkForDeath(&this->dyna.actor);
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
             Actor_SetScale(&this->dyna.actor, 4.2f);
@@ -198,7 +198,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
         play_sound(NA_SE_SY_GET_ITEM);
-        play->interfaceCtx.unk_25C--;
+        play->interfaceCtx.minigamePoints--;
         sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
         if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {
             s32 i;
@@ -213,7 +213,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
                 sCurrentRing = -1;
             }
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
     this->unk_170 += 180.0f / 0x10000;

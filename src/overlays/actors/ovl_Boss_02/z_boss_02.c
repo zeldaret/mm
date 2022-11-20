@@ -113,7 +113,7 @@ static DamageTable sRedTwinmoldDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit Boss_02_InitVars = {
+ActorInit Boss_02_InitVars = {
     ACTOR_BOSS_02,
     ACTORCAT_BOSS,
     FLAGS,
@@ -463,20 +463,20 @@ Vec3f D_809DFA2C[] = {
     { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f },
 };
 
-void func_809DA1D0(PlayState* play, u8 arg1, u8 arg2, u8 arg3, u8 arg4) {
-    MREG(64) = 1;
-    MREG(65) = arg1;
-    MREG(66) = arg2;
-    MREG(67) = arg3;
-    MREG(68) = arg4;
+void func_809DA1D0(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ON = true;
+    R_PLAY_FILL_SCREEN_R = red;
+    R_PLAY_FILL_SCREEN_G = green;
+    R_PLAY_FILL_SCREEN_B = blue;
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
-void func_809DA22C(PlayState* play, u8 arg1) {
-    MREG(68) = arg1;
+void func_809DA22C(PlayState* play, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
 void func_809DA24C(PlayState* play) {
-    MREG(64) = 0;
+    R_PLAY_FILL_SCREEN_ON = false;
 }
 
 void Boss02_SpawnEffectSand(TwinmoldEffect* effects, Vec3f* pos, f32 scale) {
@@ -551,7 +551,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad[2];
 
-    if ((gSaveContext.save.weekEventReg[52] & 0x20) && (this->actor.params == TWINMOLD_RED)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (this->actor.params == TWINMOLD_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
                                                    0.0f, 0, 0, 0, 1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
@@ -567,7 +567,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = Boss02_Static_Draw;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_1D70 = 0.00999999977648f;
-        if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x20) || (sBlueWarp != NULL)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
             sMusicStartTimer = KREG(15) + 20;
         } else {
@@ -1098,7 +1098,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                     } while (0);
 
                     if ((s8)this->actor.colChkInfo.health <= 0) {
-                        Actor_MarkForDeath(this->actor.child);
+                        Actor_Kill(this->actor.child);
                         this->actor.child = NULL;
                         Enemy_StartFinishingBlow(play, &this->actor);
                         this->skelAnime.playSpeed = 2.0f;
@@ -1337,8 +1337,8 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     Boss02* this = THIS;
     s32 i;
     s32 idx;
-    Mtx* mtx;
-    Mtx* mtxIter;
+    Mtx* mtxHead = GRAPH_ALLOC(play->state.gfxCtx, 23 * sizeof(Mtx));
+    Mtx* mtx = mtxHead;
     s32 phi_v0;
     f32 phi_f12;
     f32 spAC;
@@ -1347,8 +1347,6 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
     f32 spA0;
     f32 sp9C;
     f32 sp98;
-
-    mtxIter = mtx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Mtx) * 23);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1360,7 +1358,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldBlueSkinTex));
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtxHead);
 
     if (!sIsInGiantMode) {
         sp98 = -500.0f;
@@ -1397,7 +1395,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
 
     spA4 = 0.0f;
     spA0 = 0.0f;
-    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtxIter++) {
+    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtx++) {
         if (this->unk_0195 != 0) {
             phi_v0 = (D_809DF5E4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         } else {
@@ -1416,9 +1414,9 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateXFApply(-(M_PI / 2));
-        Matrix_ToMtx(mtxIter);
+        Matrix_ToMtx(mtx);
 
-        gSPMatrix(POLY_OPA_DISP++, mtxIter, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((this->unk_0156 & 1) && (i >= this->unk_0158) && (this->unk_015A >= i)) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 0x384, 0x44B);
@@ -1579,7 +1577,7 @@ void Boss02_DrawEffects(PlayState* play) {
     for (i = 0, flag = false; i < ARRAY_COUNT(sEffects); i++, effect++) {
         if (effect->type == TWINMOLD_EFFECT_FLASH) {
             if (!flag) { //! @bug - dev forgot to set flag to 1, should only apply to first entry?
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
             }
 
@@ -1590,7 +1588,7 @@ void Boss02_DrawEffects(PlayState* play) {
             Matrix_Scale(effect->scale * D_809DF5B0, effect->scale * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbModelDL);
         }
     }
 
@@ -1627,7 +1625,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
     Vec3f sp58;
     u8 sp57 = 0;
     f32 phi_f0_2;
-    s16 phi_v1;
+    s16 alpha;
 
     this->unk_1D14++;
 
@@ -1925,7 +1923,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         temp_a0_5 = play->actorCtx.actorLists[ACTORCAT_BG].first;
         while (temp_a0_5 != NULL) {
             if (temp_a0_5->id == ACTOR_BG_INIBS_MOVEBG) {
-                Actor_MarkForDeath(temp_a0_5);
+                Actor_Kill(temp_a0_5);
                 break;
             }
             temp_a0_5 = temp_a0_5->next;
@@ -1996,11 +1994,9 @@ void func_809DD934(Boss02* this, PlayState* play) {
             if (this->unk_1D7A >= 400) {
                 this->unk_1D78 = 3;
             }
-            phi_v1 = this->unk_1D7A;
-            if (phi_v1 > 255) {
-                phi_v1 = 255;
-            }
-            func_809DA22C(play, phi_v1);
+            alpha = this->unk_1D7A;
+            alpha = CLAMP_MAX(alpha, 255);
+            func_809DA22C(play, alpha);
             break;
 
         case 3:
@@ -2010,11 +2006,9 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 this->unk_1D78 = 0;
                 func_809DA24C(play);
             } else {
-                phi_v1 = this->unk_1D7A;
-                if (phi_v1 > 255) {
-                    phi_v1 = 255;
-                }
-                func_809DA22C(play, phi_v1);
+                alpha = this->unk_1D7A;
+                alpha = CLAMP_MAX(alpha, 255);
+                func_809DA22C(play, alpha);
             }
             break;
     }
@@ -2057,7 +2051,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 1:
-            if ((gSaveContext.save.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
             Cutscene_Start(play, &play->csCtx);
@@ -2151,7 +2145,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
                 sRedTwinmold->unk_0146[0] = sBlueTwinmold->unk_0146[0] = 60;
-                gSaveContext.eventInf[5] |= 0x20;
+                SET_EVENTINF(EVENTINF_55);
             }
             break;
 

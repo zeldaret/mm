@@ -16,7 +16,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play);
 void ObjWind_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Obj_Wind_InitVars = {
+ActorInit Obj_Wind_InitVars = {
     ACTOR_OBJ_WIND,
     ACTORCAT_ITEMACTION,
     FLAGS,

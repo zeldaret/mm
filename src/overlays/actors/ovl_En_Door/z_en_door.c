@@ -56,7 +56,7 @@ u8 D_808675E4[] = {
     /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
     /* 0x1D */ SCHEDULE_CMD_RET_VAL_S(8),
     /* 0x1F */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x3C - 0x23),
-    /* 0x23 */ SCHEDULE_CMD_CHECK_FLAG_S(0x1C, 0x08, 0x2E - 0x27),
+    /* 0x23 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_28_08, 0x2E - 0x27),
     /* 0x27 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(13, 0, 0x2D - 0x2B),
     /* 0x2B */ SCHEDULE_CMD_RET_VAL_S(9),
     /* 0x2D */ SCHEDULE_CMD_RET_NONE(),
@@ -92,14 +92,14 @@ u8 D_8086764C[] = {
 
 u8 D_80867658[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x13 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x1C, 0x08, 0x0A - 0x08),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_28_08, 0x0A - 0x08),
     /* 0x08 */ SCHEDULE_CMD_RET_VAL_S(12),
     /* 0x0A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 10, 22, 0, 0x12 - 0x10),
     /* 0x10 */ SCHEDULE_CMD_RET_VAL_S(12),
     /* 0x12 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x13 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x28 - 0x17),
     /* 0x17 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(13, 0, 0x28 - 0x1B),
-    /* 0x1B */ SCHEDULE_CMD_CHECK_FLAG_S(0x33, 0x08, 0x21 - 0x1F),
+    /* 0x1B */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_51_08, 0x21 - 0x1F),
     /* 0x1F */ SCHEDULE_CMD_RET_VAL_S(12),
     /* 0x21 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(22, 0, 0x27 - 0x25),
     /* 0x25 */ SCHEDULE_CMD_RET_VAL_S(12),
@@ -230,7 +230,7 @@ u8 D_8086773C[] = {
 
 u8 D_80867744[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x08 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x63, 0x80, 0x0E - 0x08),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_99_80, 0x0E - 0x08),
     /* 0x08 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(20, 0, 0x14 - 0x0C),
     /* 0x0C */ SCHEDULE_CMD_RET_VAL_S(27),
     /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(18, 0, 0x14 - 0x12),
@@ -239,12 +239,12 @@ u8 D_80867744[] = {
 };
 
 u8 D_8086775C[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_FLAG_S(0x34, 0x20, 0x1B - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x4B, 0x20, 0x1B - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_FLAG_S(0x0E, 0x04, 0x0E - 0x0C),
+    /* 0x00 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_52_20, 0x1B - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_20, 0x1B - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_14_04, 0x0E - 0x0C),
     /* 0x0C */ SCHEDULE_CMD_RET_VAL_S(29),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_FLAG_S(0x3B, 0x01, 0x1A - 0x12),
-    /* 0x12 */ SCHEDULE_CMD_CHECK_FLAG_S(0x3D, 0x02, 0x18 - 0x16),
+    /* 0x0E */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_59_01, 0x1A - 0x12),
+    /* 0x12 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_61_02, 0x18 - 0x16),
     /* 0x16 */ SCHEDULE_CMD_RET_VAL_S(30),
     /* 0x18 */ SCHEDULE_CMD_RET_VAL_S(31),
     /* 0x1A */ SCHEDULE_CMD_RET_NONE(),
@@ -276,7 +276,7 @@ u8* D_8086778C[] = {
     D_80867734, D_8086773C, D_80867744, D_8086775C, D_80867778, D_8086777C, D_80867780, D_80867784,
 };
 
-const ActorInit En_Door_InitVars = {
+ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
     ACTORCAT_DOOR,
     FLAGS,
@@ -420,7 +420,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
         objectInfo = &sObjInfo[15];
         objectBankIndex = Object_GetIndex(&play->objectCtx, objectInfo->objectId);
         if (objectBankIndex != 0) {
-            Actor_MarkForDeath(&this->door.dyna.actor);
+            Actor_Kill(&this->door.dyna.actor);
             return;
         }
     }
@@ -480,7 +480,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     }
     if (this->door.playOpenAnim) {
         this->actionFunc = func_80867144;
-        Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->door.animIndex],
+        Animation_PlayOnceSetSpeed(&this->door.skelAnime, sAnimations[this->animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
             gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
@@ -504,13 +504,13 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 player->doorActor = &this->door.dyna.actor;
                 if (this->unk_1A6 != 0) {
                     if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
-                        player->doorType = PLAYER_DOORTYPE_TALK;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->door.dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
                 } else if (this->doorType == ENDOOR_TYPE_4) {
-                    player->doorType = PLAYER_DOORTYPE_TALK;
+                    player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->door.dyna.actor.textId = 0x1800;
                 } else if ((this->doorType == ENDOOR_TYPE_0) || (this->doorType == ENDOOR_TYPE_2) ||
                            (this->doorType == ENDOOR_TYPE_3)) {
@@ -530,18 +530,18 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         } else if (this->doorType == ENDOOR_TYPE_2) {
                             baseTextId = 0x181D;
                         }
-                        player->doorType = PLAYER_DOORTYPE_TALK;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->door.dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->doorType == ENDOOR_TYPE_5) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput sp30;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
+                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30)) {
                         this->door.dyna.actor.textId = sp30.result + 0x1800;
 
                         player->doorType = ((this->door.dyna.actor.textId == 0x1821) && D_80867BC0)
                                                ? PLAYER_DOORTYPE_PROXIMITY
-                                               : PLAYER_DOORTYPE_TALK;
+                                               : PLAYER_DOORTYPE_TALKING;
                     }
                 }
                 func_80122F28(player);

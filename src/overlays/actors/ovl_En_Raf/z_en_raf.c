@@ -67,7 +67,7 @@ typedef enum {
     /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } EnRafPetalScaleType;
 
-const ActorInit En_Raf_InitVars = {
+ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
     ACTORCAT_PROP,
     FLAGS,
@@ -235,8 +235,8 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
-         (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(play, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
+         CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) &&
+        (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
@@ -343,7 +343,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             zDiff = explosive->world.pos.z - this->dyna.actor.world.pos.z;
             if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
                 (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
-                Actor_MarkForDeath(explosive);
+                Actor_Kill(explosive);
                 this->grabTarget = EN_RAF_GRAB_TARGET_EXPLOSIVE;
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;
@@ -430,7 +430,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
         switch (this->grabTarget) {
             case EN_RAF_GRAB_TARGET_PLAYER:
                 play->damagePlayer(play, -2);
-                func_800B8E58((Player*)this, player->ageProperties->voiceSfxOffset + NA_SE_VO_LI_DAMAGE_S);
+                func_800B8E58((Player*)this, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
                 if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->actor.freezeTimer = 10;
@@ -700,7 +700,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     DECR(this->timer);
     this->actionFunc(this, play);
 
-    if ((this->action == EN_RAF_ACTION_IDLE) && (gSaveContext.save.weekEventReg[12] & 1)) {
+    if ((this->action == EN_RAF_ACTION_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
         this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
         EnRaf_SetupConvulse(this);
         return;

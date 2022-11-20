@@ -5,10 +5,7 @@ import argparse
 
 # all occurrences of keys will be replaced by associated value
 simpleReplace = {
-    # "Math_Rand_":"Rand_",
-    # "ACTORTYPE":"ACTORCAT",
-    # "DistToLink":"DistToPlayer",
-    # "HitItem":"HitInfo",
+    "PLAYER_AP_": "PLAYER_IA_",
 }
 
 # all occurrences of keys will be replaced by associated value,
@@ -21,7 +18,9 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    "atan_flip": "Math_Acot2F",
+    "Math_FAtan2F(": "Math_Atan2S_XY(",
+    "Math_Acot2F": "Math_Atan2F_XY",
+    "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",
 
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
@@ -115,6 +114,7 @@ wordReplace = {
     "Actor_IsActorFacingActorAndWithinRange": "Actor_ActorAIsFacingAndNearActorB",
     "Actor_IsActorFacingActor": "Actor_ActorAIsFacingActorB",
     "Actor_IsActorFacedByActor": "Actor_ActorBIsFacingActorA",
+    "Actor_MarkForDeath": "Actor_Kill",
     "func_800B84D0": "Actor_ProcessTalkRequest",
     "func_8017D668": "Math3D_PointDistToLine2D",
     "func_800BDFC0": "Gfx_DrawDListOpa",
@@ -300,6 +300,7 @@ wordReplace = {
     "func_800DF840": "Camera_ChangeMode",
     "func_800B90F4": "Actor_DeactivateLens",
     "func_800BC770": "Actor_AddQuake",
+    "func_800DF840": "Camera_ChangeMode",
     "zelda_malloc": "ZeldaArena_Malloc",
     "zelda_mallocR": "ZeldaArena_MallocR",
     "zelda_realloc": "ZeldaArena_Realloc",
@@ -500,6 +501,8 @@ wordReplace = {
     "func_80169E6C": "Play_SetupRespawnPoint",
     "func_8016A0AC": "Play_IsUnderwater",
     "func_801690CC": "Play_InCsMode",
+    "func_8011B4E0": "Interface_SetPerfectLetters",
+    "func_80112AFC": "Interface_InitMinigame",
     "func_8010E9F0": "Interface_StartTimer",
     "func_8010EA9C": "Interface_StartPostmanTimer",
     "func_80121F94": "Interface_Destroy",
@@ -715,6 +718,8 @@ wordReplace = {
     "gSaveContext.sceneSetupIndex": "gSaveContext.sceneLayer",
     "gSaveContext.seqIndex": "gSaveContext.seqId",
     "gSaveContext.nightSeqIndex": "gSaveContext.ambienceId",
+    "gSaveContext.minigameState": "gSaveContext.minigameStatus",
+    "gSaveContext.unk_3F3C": "gSaveContext.minigameHiddenScore",
 
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
@@ -729,6 +734,10 @@ wordReplace = {
     "player->swordAnimation": "player->meleeWeaponAnimation",
     "player->swordState": "player->meleeWeaponState",
     "player->swordInfo": "player->meleeWeaponInfo",
+    "player->itemActionParam": "player->heldItemAction",
+    "player->heldItemActionParam": "player->itemAction",
+    "player->unk_A9C": "player->secretRumbleCharge",
+    "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_B68": "player->fallStartHeight",
     "player->unk_B6A": "player->fallDistance",
     "player->unk_B80": "player->pushedSpeed",
@@ -736,6 +745,8 @@ wordReplace = {
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
     "player->unk_730": "player->targetedActor",
+    "player->ageProperties->unk_92": "player->ageProperties->voiceSfxIdOffset",
+    "player->ageProperties->unk_94": "player->ageProperties->surfaceSfxIdOffset",
 
     "csCtx.npcActions": "csCtx.actorActions",
     "csCtx->npcActions": "csCtx->actorActions",
@@ -749,6 +760,13 @@ wordReplace = {
     "globalCtx->envCtx.unk_C3": "play->envCtx.lightSettingOverride",
     "globalCtx->envCtx.unk_DC": "play->envCtx.lightBlend",
     "globalCtx->interfaceCtx.unk_21E": "play->interfaceCtx.bButtonDoAction",
+    "play->interfaceCtx.unk_31A": "play->interfaceCtx.storyState",
+    "play->interfaceCtx.unk_31B": "play->interfaceCtx.storyType",
+    "play->interfaceCtx.unk_25C": "play->interfaceCtx.minigamePoints",
+    "play->interfaceCtx.unk_25E": "play->interfaceCtx.minigameHiddenPoints",
+    "play->interfaceCtx.unk_280": "play->interfaceCtx.minigameState",
+    "play->interfaceCtx.unk_286": "play->interfaceCtx.perfectLettersOn",
+    "play->interfaceCtx.hbaAmmo": "play->interfaceCtx.minigameAmmo",
 
     # "play->actorCtx.flags": "play->actorCtx.sceneFlags",
     # "play->actorCtx.unk5": "play->actorCtx.flags",
@@ -763,6 +781,7 @@ wordReplace = {
     "play->actorCtx.unk4": "play->actorCtx.lensMaskSize",
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
+    "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
 
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",
@@ -793,21 +812,21 @@ wordReplace = {
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 
-    "EXCH_ITEM_MINUS1": "PLAYER_AP_MINUS1",
-    "EXCH_ITEM_NONE": "PLAYER_AP_NONE",
-    "EXCH_ITEM_PICTO_BOX": "PLAYER_AP_PICTO_BOX",
-    "EXCH_ITEM_1E": "PLAYER_AP_BOTTLE_MUSHROOM",
-    "EXCH_ITEM_MOON_TEAR": "PLAYER_AP_MOON_TEAR",
-    "EXCH_ITEM_DEED_LAND": "PLAYER_AP_DEED_LAND",
-    "EXCH_ITEM_ROOM_KEY": "PLAYER_AP_ROOM_KEY",
-    "EXCH_ITEM_LETTER_TO_KAFEI": "PLAYER_AP_LETTER_TO_KAFEI",
-    "EXCH_ITEM_2E": "PLAYER_AP_MAGIC_BEANS",
-    "EXCH_ITEM_DEED_SWAMP": "PLAYER_AP_DEED_SWAMP",
-    "EXCH_ITEM_DEED_MOUNTAIN": "PLAYER_AP_DEED_MOUNTAIN",
-    "EXCH_ITEM_DEED_OCEAN": "PLAYER_AP_DEED_OCEAN",
-    "EXCH_ITEM_LETTER_MAMA": "PLAYER_AP_LETTER_MAMA",
+    "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
+    "EXCH_ITEM_NONE": "PLAYER_IA_NONE",
+    "EXCH_ITEM_PICTO_BOX": "PLAYER_IA_PICTO_BOX",
+    "EXCH_ITEM_1E": "PLAYER_IA_BOTTLE_MUSHROOM",
+    "EXCH_ITEM_MOON_TEAR": "PLAYER_IA_MOON_TEAR",
+    "EXCH_ITEM_DEED_LAND": "PLAYER_IA_DEED_LAND",
+    "EXCH_ITEM_ROOM_KEY": "PLAYER_IA_ROOM_KEY",
+    "EXCH_ITEM_LETTER_TO_KAFEI": "PLAYER_IA_LETTER_TO_KAFEI",
+    "EXCH_ITEM_2E": "PLAYER_IA_MAGIC_BEANS",
+    "EXCH_ITEM_DEED_SWAMP": "PLAYER_IA_DEED_SWAMP",
+    "EXCH_ITEM_DEED_MOUNTAIN": "PLAYER_IA_DEED_MOUNTAIN",
+    "EXCH_ITEM_DEED_OCEAN": "PLAYER_IA_DEED_OCEAN",
+    "EXCH_ITEM_LETTER_MAMA": "PLAYER_IA_LETTER_MAMA",
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
-    "PLAYER_AP_FISHING_POLE": "PLAYER_AP_FISHING_ROD",
+    "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
 
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames

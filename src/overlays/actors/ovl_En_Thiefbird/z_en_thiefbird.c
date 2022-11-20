@@ -4,6 +4,7 @@
  * Description: Takkuri
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000)
@@ -32,7 +33,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play);
 void func_80C12744(EnThiefbird* this);
 void func_80C127F4(EnThiefbird* this, PlayState* play);
 
-const ActorInit En_Thiefbird_InitVars = {
+ActorInit En_Thiefbird_InitVars = {
     ACTOR_EN_THIEFBIRD,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -130,8 +131,9 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static s16 D_80C13664[] = { ITEM00_ARROWS_10,  ITEM00_BOMBS_B,   ITEM00_RUPEE_GREEN,
-                            ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_RUPEE_PURPLE };
+static s16 D_80C13664[] = {
+    ITEM00_ARROWS_10, ITEM00_BOMBS_B, ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE, ITEM00_RUPEE_RED, ITEM00_RUPEE_PURPLE,
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
@@ -140,8 +142,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-static Vec3f D_80C13920;
-static s32 D_80C1392C;
+Vec3f D_80C13920;
+s32 D_80C1392C;
 
 void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     EnThiefbird* this = THIS;
@@ -166,12 +168,16 @@ void EnThiefbird_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 1) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
-        Actor_MarkForDeath(&this->actor);
-    } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        func_80C11538(this);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    func_80C11538(this);
 }
 
 void EnThiefbird_Destroy(Actor* thisx, PlayState* play) {
@@ -205,7 +211,11 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
 }
 
 s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
-    static Gfx* D_80C13680[] = { gTakkuriStolenKokiriSwordDL, gTakkuriStolenRazorSwordDL, gTakkuriStolenGildedSwordDL };
+    static Gfx* D_80C13680[] = {
+        gTakkuriStolenKokiriSwordDL,
+        gTakkuriStolenRazorSwordDL,
+        gTakkuriStolenGildedSwordDL,
+    };
     s32 isItemFound = false;
     s32 phi_a3 = 0;
     s32 slotId = SLOT_BOTTLE_1;
@@ -658,7 +668,7 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
             }
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -831,7 +841,7 @@ void func_80C126D8(EnThiefbird* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->actor.shape.rot.x, 0x3000, 6, 0x1000);
     if (this->actor.playerHeightRel > 100.0f) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -44,7 +44,7 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
-const ActorInit Bg_Dblue_Movebg_InitVars = {
+ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -166,7 +166,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
         if (D_80A2BBF4.unk_00 != 0) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
         this->unk_170 = this->dyna.actor.room;
@@ -177,7 +177,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.z = 0;
     } else if (this->unk_160 == 6) {
         if (D_80A2BBF4.unk_01 != 0) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             return;
         }
         this->unk_171 = this->dyna.actor.world.rot.z;
@@ -237,7 +237,7 @@ void BgDblueMovebg_Init(Actor* thisx, PlayState* play) {
             this->dyna.actor.world.rot.z = 0;
             this->dyna.actor.shape.rot.z = 0;
             if (Flags_GetSwitch(play, this->unk_1C0)) {
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 break;
             }
             this->unk_18C = 0;
@@ -349,7 +349,7 @@ void func_80A2A1E0(BgDblueMovebg* this, PlayState* play) {
         if (play->roomCtx.curRoom.num != this->unk_171) {
             if ((play->roomCtx.prevRoom.num != this->unk_170) && (play->roomCtx.prevRoom.num != this->unk_171)) {
                 D_80A2BBF4.unk_01 = 0;
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
             }
         }
     }
@@ -451,7 +451,7 @@ void func_80A2A688(BgDblueMovebg* this, PlayState* play) {
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y - 60.0f, 2.0f) &&
         (this->unk_180 <= 0)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -631,7 +631,7 @@ void func_80A2AED0(BgDblueMovebg* this, PlayState* play) {
         if (play->roomCtx.curRoom.num != this->unk_171) {
             if ((play->roomCtx.prevRoom.num != this->unk_170) && (play->roomCtx.prevRoom.num != this->unk_171)) {
                 D_80A2BBF4.unk_00 = 0;
-                Actor_MarkForDeath(&this->dyna.actor);
+                Actor_Kill(&this->dyna.actor);
                 return;
             }
         }
@@ -732,7 +732,7 @@ void func_80A2B274(Actor* thisx, PlayState* play) {
     s16 temp_v1;
 
     if (this != D_80A2BBF0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -811,7 +811,7 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if ((this->unk_160 == 8) && (this->unk_172 & 0x20)) {
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(&gGreatBayTempleObjectWaterwheelSplashTexAnim));
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterwheelSplashTexAnim));
 
         OPEN_DISPS(play->state.gfxCtx);
 

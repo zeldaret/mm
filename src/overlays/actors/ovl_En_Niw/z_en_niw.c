@@ -48,7 +48,7 @@ enum EnNiwState {
     /* 8 */ NIW_STATE_HOPPING,
 };
 
-const ActorInit En_Niw_InitVars = {
+ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,
     ACTORCAT_PROP,
     FLAGS,

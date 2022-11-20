@@ -80,93 +80,93 @@ typedef enum {
     /* 4 */ PLAYER_ENV_TIMER_UNDERWATER_FREE
 } PlayerEnvTimerType;
 
-typedef enum PlayerActionParam {
-    /*   -1 */ PLAYER_AP_MINUS1 = -1,
-    /* 0x00 */ PLAYER_AP_NONE,
-    /* 0x01 */ PLAYER_AP_LAST_USED,
-    /* 0x02 */ PLAYER_AP_FISHING_ROD,
-    /* 0x03 */ PLAYER_AP_SWORD_KOKIRI,
-    /* 0x04 */ PLAYER_AP_SWORD_RAZOR,
-    /* 0x05 */ PLAYER_AP_SWORD_GILDED,
-    /* 0x06 */ PLAYER_AP_SWORD_GREAT_FAIRY,
-    /* 0x07 */ PLAYER_AP_STICK,
-    /* 0x08 */ PLAYER_AP_ZORA_FINS,
-    /* 0x09 */ PLAYER_AP_BOW,
-    /* 0x0A */ PLAYER_AP_BOW_FIRE,
-    /* 0x0B */ PLAYER_AP_BOW_ICE,
-    /* 0x0C */ PLAYER_AP_BOW_LIGHT,
-    /* 0x0D */ PLAYER_AP_HOOKSHOT,
-    /* 0x0E */ PLAYER_AP_BOMB,
-    /* 0x0F */ PLAYER_AP_POWDER_KEG,
-    /* 0x10 */ PLAYER_AP_BOMBCHU,
-    /* 0x11 */ PLAYER_AP_11,
-    /* 0x12 */ PLAYER_AP_NUT,
-    /* 0x13 */ PLAYER_AP_PICTO_BOX,
-    /* 0x14 */ PLAYER_AP_OCARINA,
-    /* 0x15 */ PLAYER_AP_BOTTLE,
-    /* 0x16 */ PLAYER_AP_BOTTLE_FISH,
-    /* 0x17 */ PLAYER_AP_BOTTLE_SPRING_WATER,
-    /* 0x18 */ PLAYER_AP_BOTTLE_HOT_SPRING_WATER,
-    /* 0x19 */ PLAYER_AP_BOTTLE_ZORA_EGG,
-    /* 0x1A */ PLAYER_AP_BOTTLE_DEKU_PRINCESS,
-    /* 0x1B */ PLAYER_AP_BOTTLE_GOLD_DUST,
-    /* 0x1C */ PLAYER_AP_BOTTLE_1C,
-    /* 0x1D */ PLAYER_AP_BOTTLE_SEAHORSE,
-    /* 0x1E */ PLAYER_AP_BOTTLE_MUSHROOM,
-    /* 0x1F */ PLAYER_AP_BOTTLE_HYLIAN_LOACH,
-    /* 0x20 */ PLAYER_AP_BOTTLE_BUG,
-    /* 0x21 */ PLAYER_AP_BOTTLE_POE,
-    /* 0x22 */ PLAYER_AP_BOTTLE_BIG_POE,
-    /* 0x23 */ PLAYER_AP_BOTTLE_POTION_RED,
-    /* 0x24 */ PLAYER_AP_BOTTLE_POTION_BLUE,
-    /* 0x25 */ PLAYER_AP_BOTTLE_POTION_GREEN,
-    /* 0x26 */ PLAYER_AP_BOTTLE_MILK,
-    /* 0x27 */ PLAYER_AP_BOTTLE_MILK_HALF,
-    /* 0x28 */ PLAYER_AP_BOTTLE_CHATEAU,
-    /* 0x29 */ PLAYER_AP_BOTTLE_FAIRY,
-    /* 0x2A */ PLAYER_AP_MOON_TEAR,
-    /* 0x2B */ PLAYER_AP_DEED_LAND,
-    /* 0x2C */ PLAYER_AP_ROOM_KEY,
-    /* 0x2D */ PLAYER_AP_LETTER_TO_KAFEI,
-    /* 0x2E */ PLAYER_AP_MAGIC_BEANS,
-    /* 0x2F */ PLAYER_AP_DEED_SWAMP,
-    /* 0x30 */ PLAYER_AP_DEED_MOUNTAIN,
-    /* 0x31 */ PLAYER_AP_DEED_OCEAN,
-    /* 0x32 */ PLAYER_AP_32,
-    /* 0x33 */ PLAYER_AP_LETTER_MAMA,
-    /* 0x34 */ PLAYER_AP_34,
-    /* 0x35 */ PLAYER_AP_35,
-    /* 0x36 */ PLAYER_AP_PENDANT_OF_MEMORIES,
-    /* 0x37 */ PLAYER_AP_37,
-    /* 0x38 */ PLAYER_AP_38,
-    /* 0x39 */ PLAYER_AP_39,
-    /* 0x3A */ PLAYER_AP_MASK_TRUTH,
-    /* 0x3B */ PLAYER_AP_MASK_KAFEIS_MASK,
-    /* 0x3C */ PLAYER_AP_MASK_ALL_NIGHT,
-    /* 0x3D */ PLAYER_AP_MASK_BUNNY,
-    /* 0x3E */ PLAYER_AP_MASK_KEATON,
-    /* 0x3F */ PLAYER_AP_MASK_GARO,
-    /* 0x40 */ PLAYER_AP_MASK_ROMANI,
-    /* 0x41 */ PLAYER_AP_MASK_CIRCUS_LEADER,
-    /* 0x42 */ PLAYER_AP_MASK_POSTMAN,
-    /* 0x43 */ PLAYER_AP_MASK_COUPLE,
-    /* 0x44 */ PLAYER_AP_MASK_GREAT_FAIRY,
-    /* 0x45 */ PLAYER_AP_MASK_GIBDO,
-    /* 0x46 */ PLAYER_AP_MASK_DON_GERO,
-    /* 0x47 */ PLAYER_AP_MASK_KAMARO,
-    /* 0x48 */ PLAYER_AP_MASK_CAPTAIN,
-    /* 0x49 */ PLAYER_AP_MASK_STONE,
-    /* 0x4A */ PLAYER_AP_MASK_BREMEN,
-    /* 0x4B */ PLAYER_AP_MASK_BLAST,
-    /* 0x4C */ PLAYER_AP_MASK_SCENTS,
-    /* 0x4D */ PLAYER_AP_MASK_GIANT,
-    /* 0x4E */ PLAYER_AP_MASK_FIERCE_DEITY,
-    /* 0x4F */ PLAYER_AP_MASK_GORON,
-    /* 0x50 */ PLAYER_AP_MASK_ZORA,
-    /* 0x51 */ PLAYER_AP_MASK_DEKU,
-    /* 0x52 */ PLAYER_AP_LENS,
-    /* 0x53 */ PLAYER_AP_MAX
-} PlayerActionParam;
+typedef enum PlayerItemAction {
+    /*   -1 */ PLAYER_IA_MINUS1 = -1,
+    /* 0x00 */ PLAYER_IA_NONE,
+    /* 0x01 */ PLAYER_IA_LAST_USED,
+    /* 0x02 */ PLAYER_IA_FISHING_ROD,
+    /* 0x03 */ PLAYER_IA_SWORD_KOKIRI,
+    /* 0x04 */ PLAYER_IA_SWORD_RAZOR,
+    /* 0x05 */ PLAYER_IA_SWORD_GILDED,
+    /* 0x06 */ PLAYER_IA_SWORD_GREAT_FAIRY,
+    /* 0x07 */ PLAYER_IA_STICK,
+    /* 0x08 */ PLAYER_IA_ZORA_FINS,
+    /* 0x09 */ PLAYER_IA_BOW,
+    /* 0x0A */ PLAYER_IA_BOW_FIRE,
+    /* 0x0B */ PLAYER_IA_BOW_ICE,
+    /* 0x0C */ PLAYER_IA_BOW_LIGHT,
+    /* 0x0D */ PLAYER_IA_HOOKSHOT,
+    /* 0x0E */ PLAYER_IA_BOMB,
+    /* 0x0F */ PLAYER_IA_POWDER_KEG,
+    /* 0x10 */ PLAYER_IA_BOMBCHU,
+    /* 0x11 */ PLAYER_IA_11,
+    /* 0x12 */ PLAYER_IA_NUT,
+    /* 0x13 */ PLAYER_IA_PICTO_BOX,
+    /* 0x14 */ PLAYER_IA_OCARINA,
+    /* 0x15 */ PLAYER_IA_BOTTLE,
+    /* 0x16 */ PLAYER_IA_BOTTLE_FISH,
+    /* 0x17 */ PLAYER_IA_BOTTLE_SPRING_WATER,
+    /* 0x18 */ PLAYER_IA_BOTTLE_HOT_SPRING_WATER,
+    /* 0x19 */ PLAYER_IA_BOTTLE_ZORA_EGG,
+    /* 0x1A */ PLAYER_IA_BOTTLE_DEKU_PRINCESS,
+    /* 0x1B */ PLAYER_IA_BOTTLE_GOLD_DUST,
+    /* 0x1C */ PLAYER_IA_BOTTLE_1C,
+    /* 0x1D */ PLAYER_IA_BOTTLE_SEAHORSE,
+    /* 0x1E */ PLAYER_IA_BOTTLE_MUSHROOM,
+    /* 0x1F */ PLAYER_IA_BOTTLE_HYLIAN_LOACH,
+    /* 0x20 */ PLAYER_IA_BOTTLE_BUG,
+    /* 0x21 */ PLAYER_IA_BOTTLE_POE,
+    /* 0x22 */ PLAYER_IA_BOTTLE_BIG_POE,
+    /* 0x23 */ PLAYER_IA_BOTTLE_POTION_RED,
+    /* 0x24 */ PLAYER_IA_BOTTLE_POTION_BLUE,
+    /* 0x25 */ PLAYER_IA_BOTTLE_POTION_GREEN,
+    /* 0x26 */ PLAYER_IA_BOTTLE_MILK,
+    /* 0x27 */ PLAYER_IA_BOTTLE_MILK_HALF,
+    /* 0x28 */ PLAYER_IA_BOTTLE_CHATEAU,
+    /* 0x29 */ PLAYER_IA_BOTTLE_FAIRY,
+    /* 0x2A */ PLAYER_IA_MOON_TEAR,
+    /* 0x2B */ PLAYER_IA_DEED_LAND,
+    /* 0x2C */ PLAYER_IA_ROOM_KEY,
+    /* 0x2D */ PLAYER_IA_LETTER_TO_KAFEI,
+    /* 0x2E */ PLAYER_IA_MAGIC_BEANS,
+    /* 0x2F */ PLAYER_IA_DEED_SWAMP,
+    /* 0x30 */ PLAYER_IA_DEED_MOUNTAIN,
+    /* 0x31 */ PLAYER_IA_DEED_OCEAN,
+    /* 0x32 */ PLAYER_IA_32,
+    /* 0x33 */ PLAYER_IA_LETTER_MAMA,
+    /* 0x34 */ PLAYER_IA_34,
+    /* 0x35 */ PLAYER_IA_35,
+    /* 0x36 */ PLAYER_IA_PENDANT_OF_MEMORIES,
+    /* 0x37 */ PLAYER_IA_37,
+    /* 0x38 */ PLAYER_IA_38,
+    /* 0x39 */ PLAYER_IA_39,
+    /* 0x3A */ PLAYER_IA_MASK_TRUTH,
+    /* 0x3B */ PLAYER_IA_MASK_KAFEIS_MASK,
+    /* 0x3C */ PLAYER_IA_MASK_ALL_NIGHT,
+    /* 0x3D */ PLAYER_IA_MASK_BUNNY,
+    /* 0x3E */ PLAYER_IA_MASK_KEATON,
+    /* 0x3F */ PLAYER_IA_MASK_GARO,
+    /* 0x40 */ PLAYER_IA_MASK_ROMANI,
+    /* 0x41 */ PLAYER_IA_MASK_CIRCUS_LEADER,
+    /* 0x42 */ PLAYER_IA_MASK_POSTMAN,
+    /* 0x43 */ PLAYER_IA_MASK_COUPLE,
+    /* 0x44 */ PLAYER_IA_MASK_GREAT_FAIRY,
+    /* 0x45 */ PLAYER_IA_MASK_GIBDO,
+    /* 0x46 */ PLAYER_IA_MASK_DON_GERO,
+    /* 0x47 */ PLAYER_IA_MASK_KAMARO,
+    /* 0x48 */ PLAYER_IA_MASK_CAPTAIN,
+    /* 0x49 */ PLAYER_IA_MASK_STONE,
+    /* 0x4A */ PLAYER_IA_MASK_BREMEN,
+    /* 0x4B */ PLAYER_IA_MASK_BLAST,
+    /* 0x4C */ PLAYER_IA_MASK_SCENTS,
+    /* 0x4D */ PLAYER_IA_MASK_GIANT,
+    /* 0x4E */ PLAYER_IA_MASK_FIERCE_DEITY,
+    /* 0x4F */ PLAYER_IA_MASK_GORON,
+    /* 0x50 */ PLAYER_IA_MASK_ZORA,
+    /* 0x51 */ PLAYER_IA_MASK_DEKU,
+    /* 0x52 */ PLAYER_IA_LENS,
+    /* 0x53 */ PLAYER_IA_MAX
+} PlayerItemAction;
 
 typedef enum PlayerMeleeWeaponAnimation {
     /*  0 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
@@ -209,7 +209,7 @@ typedef enum PlayerMeleeWeaponAnimation {
 } PlayerMeleeWeaponAnimation;
 
 typedef enum PlayerDoorType {
-    /* -1 */ PLAYER_DOORTYPE_TALK = -1, // Prevents opening the door normally
+    /* -1 */ PLAYER_DOORTYPE_TALKING = -1, // Displays a message instead of opening
     /*  0 */ PLAYER_DOORTYPE_NONE,
     /*  1 */ PLAYER_DOORTYPE_HANDLE,
     /*  2 */ PLAYER_DOORTYPE_SLIDING,
@@ -329,7 +329,7 @@ typedef enum PlayerModelGroup {
     /* 15 */ PLAYER_MODELGROUP_MAX
 } PlayerModelGroup;
 
-typedef enum {
+typedef enum PlayerEyeIndex {
     /* 0 */ PLAYER_EYES_OPEN,
     /* 1 */ PLAYER_EYES_HALF,
     /* 2 */ PLAYER_EYES_CLOSED,
@@ -341,7 +341,7 @@ typedef enum {
     /* 8 */ PLAYER_EYES_MAX
 } PlayerEyeIndex;
 
-typedef enum {
+typedef enum PlayerMouthIndex {
     /* 0 */ PLAYER_MOUTH_CLOSED,
     /* 1 */ PLAYER_MOUTH_TEETH,
     /* 2 */ PLAYER_MOUTH_ANGRY,
@@ -349,7 +349,7 @@ typedef enum {
     /* 4 */ PLAYER_MOUTH_MAX
 } PlayerMouthIndex;
 
-typedef enum {
+typedef enum PlayerFacialExpression {
     /*  0 */ PLAYER_FACE_0,
     /*  1 */ PLAYER_FACE_1,
     /*  2 */ PLAYER_FACE_2,
@@ -368,53 +368,51 @@ typedef enum {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
-typedef enum {
+typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,
     /* 0x02 */ PLAYER_LIMB_WAIST,
     /* 0x03 */ PLAYER_LIMB_LOWER_ROOT,
-    /* 0x04 */ PLAYER_LIMB_R_THIGH,
-    /* 0x05 */ PLAYER_LIMB_R_SHIN,
-    /* 0x06 */ PLAYER_LIMB_R_FOOT,
-    /* 0x07 */ PLAYER_LIMB_L_THIGH,
-    /* 0x08 */ PLAYER_LIMB_L_SHIN,
-    /* 0x09 */ PLAYER_LIMB_L_FOOT,
+    /* 0x04 */ PLAYER_LIMB_RIGHT_THIGH,
+    /* 0x05 */ PLAYER_LIMB_RIGHT_SHIN,
+    /* 0x06 */ PLAYER_LIMB_RIGHT_FOOT,
+    /* 0x07 */ PLAYER_LIMB_LEFT_THIGH,
+    /* 0x08 */ PLAYER_LIMB_LEFT_SHIN,
+    /* 0x09 */ PLAYER_LIMB_LEFT_FOOT,
     /* 0x0A */ PLAYER_LIMB_UPPER_ROOT,
     /* 0x0B */ PLAYER_LIMB_HEAD,
     /* 0x0C */ PLAYER_LIMB_HAT,
     /* 0x0D */ PLAYER_LIMB_COLLAR,
-    /* 0x0E */ PLAYER_LIMB_L_SHOULDER,
-    /* 0x0F */ PLAYER_LIMB_L_FOREARM,
-    /* 0x10 */ PLAYER_LIMB_L_HAND,
-    /* 0x11 */ PLAYER_LIMB_R_SHOULDER,
-    /* 0x12 */ PLAYER_LIMB_R_FOREARM,
-    /* 0x13 */ PLAYER_LIMB_R_HAND,
+    /* 0x0E */ PLAYER_LIMB_LEFT_SHOULDER,
+    /* 0x0F */ PLAYER_LIMB_LEFT_FOREARM,
+    /* 0x10 */ PLAYER_LIMB_LEFT_HAND,
+    /* 0x11 */ PLAYER_LIMB_RIGHT_SHOULDER,
+    /* 0x12 */ PLAYER_LIMB_RIGHT_FOREARM,
+    /* 0x13 */ PLAYER_LIMB_RIGHT_HAND,
     /* 0x14 */ PLAYER_LIMB_SHEATH,
     /* 0x15 */ PLAYER_LIMB_TORSO,
     /* 0x16 */ PLAYER_LIMB_MAX
 } PlayerLimb;
 
-// Taken from OoT
-// TODO: check if those values are the same.
 typedef enum PlayerBodyPart {
-    /* 0x00 */ PLAYER_BODYPART_WAIST,      // PLAYER_LIMB_WAIST
-    /* 0x01 */ PLAYER_BODYPART_R_THIGH,    // PLAYER_LIMB_R_THIGH
-    /* 0x02 */ PLAYER_BODYPART_R_SHIN,     // PLAYER_LIMB_R_SHIN
-    /* 0x03 */ PLAYER_BODYPART_R_FOOT,     // PLAYER_LIMB_R_FOOT
-    /* 0x04 */ PLAYER_BODYPART_L_THIGH,    // PLAYER_LIMB_L_THIGH
-    /* 0x05 */ PLAYER_BODYPART_L_SHIN,     // PLAYER_LIMB_L_SHIN
-    /* 0x06 */ PLAYER_BODYPART_L_FOOT,     // PLAYER_LIMB_L_FOOT
-    /* 0x07 */ PLAYER_BODYPART_HEAD,       // PLAYER_LIMB_HEAD
-    /* 0x08 */ PLAYER_BODYPART_HAT,        // PLAYER_LIMB_HAT
-    /* 0x09 */ PLAYER_BODYPART_COLLAR,     // PLAYER_LIMB_COLLAR
-    /* 0x0A */ PLAYER_BODYPART_L_SHOULDER, // PLAYER_LIMB_L_SHOULDER
-    /* 0x0B */ PLAYER_BODYPART_L_FOREARM,  // PLAYER_LIMB_L_FOREARM
-    /* 0x0C */ PLAYER_BODYPART_L_HAND,     // PLAYER_LIMB_L_HAND
-    /* 0x0D */ PLAYER_BODYPART_R_SHOULDER, // PLAYER_LIMB_R_SHOULDER
-    /* 0x0E */ PLAYER_BODYPART_R_FOREARM,  // PLAYER_LIMB_R_FOREARM
-    /* 0x0F */ PLAYER_BODYPART_R_HAND,     // PLAYER_LIMB_R_HAND
-    /* 0x10 */ PLAYER_BODYPART_SHEATH,     // PLAYER_LIMB_SHEATH
-    /* 0x11 */ PLAYER_BODYPART_TORSO,      // PLAYER_LIMB_TORSO
+    /* 0x00 */ PLAYER_BODYPART_WAIST,          // PLAYER_LIMB_WAIST
+    /* 0x01 */ PLAYER_BODYPART_RIGHT_THIGH,    // PLAYER_LIMB_RIGHT_THIGH
+    /* 0x02 */ PLAYER_BODYPART_RIGHT_SHIN,     // PLAYER_LIMB_RIGHT_SHIN
+    /* 0x03 */ PLAYER_BODYPART_RIGHT_FOOT,     // PLAYER_LIMB_RIGHT_FOOT
+    /* 0x04 */ PLAYER_BODYPART_LEFT_THIGH,     // PLAYER_LIMB_LEFT_THIGH
+    /* 0x05 */ PLAYER_BODYPART_LEFT_SHIN,      // PLAYER_LIMB_LEFT_SHIN
+    /* 0x06 */ PLAYER_BODYPART_LEFT_FOOT,      // PLAYER_LIMB_LEFT_FOOT
+    /* 0x07 */ PLAYER_BODYPART_HEAD,           // PLAYER_LIMB_HEAD
+    /* 0x08 */ PLAYER_BODYPART_HAT,            // PLAYER_LIMB_HAT
+    /* 0x09 */ PLAYER_BODYPART_COLLAR,         // PLAYER_LIMB_COLLAR
+    /* 0x0A */ PLAYER_BODYPART_LEFT_SHOULDER,  // PLAYER_LIMB_LEFT_SHOULDER
+    /* 0x0B */ PLAYER_BODYPART_LEFT_FOREARM,   // PLAYER_LIMB_LEFT_FOREARM
+    /* 0x0C */ PLAYER_BODYPART_LEFT_HAND,      // PLAYER_LIMB_LEFT_HAND
+    /* 0x0D */ PLAYER_BODYPART_RIGHT_SHOULDER, // PLAYER_LIMB_R_SHOULDER
+    /* 0x0E */ PLAYER_BODYPART_RIGHT_FOREARM,  // PLAYER_LIMB_R_FOREARM
+    /* 0x0F */ PLAYER_BODYPART_RIGHT_HAND,     // PLAYER_LIMB_R_HAND
+    /* 0x10 */ PLAYER_BODYPART_SHEATH,         // PLAYER_LIMB_SHEATH
+    /* 0x11 */ PLAYER_BODYPART_TORSO,          // PLAYER_LIMB_TORSO
     /* 0x12 */ PLAYER_BODYPART_MAX
 } PlayerBodyPart;
 
@@ -447,8 +445,8 @@ typedef struct PlayerAgeProperties {
     /* 0x4A */ Vec3s unk_4A[4];
     /* 0x62 */ Vec3s unk_62[4];
     /* 0x7A */ Vec3s unk_7A[4];
-    /* 0x92 */ u16 voiceSfxOffset;
-    /* 0x94 */ u16 surfaceSfxOffset;
+    /* 0x92 */ u16 voiceSfxIdOffset;
+    /* 0x94 */ u16 surfaceSfxIdOffset;
     /* 0x98 */ f32 unk_98;
     /* 0x9C */ f32 unk_9C;
     /* 0xA0 */ LinkAnimationHeader* openChestAnim;
@@ -759,7 +757,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE2_8000000    (1 << 27)
 // 
 #define PLAYER_STATE2_10000000   (1 << 28)
-// Disable drawing player?
+// Disable drawing player
 #define PLAYER_STATE2_20000000   (1 << 29)
 // Lunge: small forward boost at the end of certain attack animations
 #define PLAYER_STATE2_40000000   (1 << 30)
@@ -854,7 +852,7 @@ typedef enum PlayerInitMode {
     /* 0xF */ PLAYER_INITMODE_F
 } PlayerInitMode;
 
-#define PLAYER_PARAMS(startBgCamId, initMode) ((startBgCamId & 0xFF) | ((initMode & 0xF) << 8))
+#define PLAYER_PARAMS(startBgCamIndex, initMode) ((startBgCamIndex & 0xFF) | ((initMode & 0xF) << 8))
 
 typedef enum PlayerUnkAA5 {
     /* 0 */ PLAYER_UNKAA5_0,
@@ -875,10 +873,10 @@ typedef struct Player {
     /* 0x144 */ s8 currentShield;
     /* 0x145 */ s8 currentBoots;
     /* 0x146 */ s8 heldItemButton;
-    /* 0x147 */ s8 itemActionParam; // PlayerActionParam enum
+    /* 0x147 */ s8 heldItemAction; // PlayerItemAction enum
     /* 0x148 */ u8 heldItemId; // ItemId enum
     /* 0x149 */ s8 prevBoots;
-    /* 0x14A */ s8 heldItemActionParam; // PlayerActionParam enum
+    /* 0x14A */ s8 itemAction; // PlayerItemAction enum
     /* 0x14B */ u8 transformation; // PlayerTransformation enum
     /* 0x14C */ u8 modelGroup; // PlayerModelGroup enum
     /* 0x14D */ u8 nextModelGroup;
@@ -952,7 +950,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* targetedActor; // Z-Targeted actor
+    /* 0x730 */ Actor* targetedActor; // Z/L-Targeted actor
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
@@ -971,7 +969,7 @@ typedef struct Player {
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 unk_A86; // actorCutsceneIndex?
-    /* 0xA87 */ s8 exchangeItemId;
+    /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
     /* 0xA90 */ Actor* unk_A90;
@@ -1064,7 +1062,7 @@ typedef struct Player {
     /* 0xCC4 */ MtxF leftHandMf;
     /* 0xD04 */ MtxF shieldMf;
     /* 0xD44 */ u8 isBurning;
-    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX]; // one flame per body part
+    /* 0xD45 */ u8 flameTimers[PLAYER_BODYPART_MAX];
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ PlayerFuncD58 unk_D58;
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)

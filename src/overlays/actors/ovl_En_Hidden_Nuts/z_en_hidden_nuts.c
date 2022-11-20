@@ -31,7 +31,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play);
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
-const ActorInit En_Hidden_Nuts_InitVars = {
+ActorInit En_Hidden_Nuts_InitVars = {
     ACTOR_EN_HIDDEN_NUTS,
     ACTORCAT_PROP,
     FLAGS,
@@ -95,12 +95,12 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (this->unk_21E == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -313,7 +313,7 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
     this->unk_208 = 1;
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.speedXZ = 2.0f;
@@ -377,7 +377,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
             if (this->unk_208 >= this->path->count) {
                 func_80BDBE70(this, play);
             } else if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     }
@@ -402,7 +402,7 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
         EffectSsHahen_SpawnBurst(play, &sp38, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

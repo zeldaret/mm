@@ -31,6 +31,4 @@ typedef struct ObjKendoKanban {
     /* 0x30C */ u8 boardFragments;
 } ObjKendoKanban; // size = 0x310
 
-extern const ActorInit Obj_Kendo_Kanban_InitVars;
-
 #endif // Z_OBJ_KENDO_KANBAN_H

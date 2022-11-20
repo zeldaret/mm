@@ -42,6 +42,4 @@ typedef struct EnToto {
     /* 0x2C8 */ s32 pad2C8;
 } EnToto; // size = 0x2CC
 
-extern const ActorInit En_Toto_InitVars;
-
 #endif // Z_EN_TOTO_H

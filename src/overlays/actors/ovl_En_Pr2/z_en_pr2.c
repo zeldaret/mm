@@ -81,7 +81,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 17, 32, -10, { 0, 0, 0 } },
 };
 
-const ActorInit En_Pr2_InitVars = {
+ActorInit En_Pr2_InitVars = {
     ACTOR_EN_PR2,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -160,7 +160,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 }
                 func_80A745C4(this);
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         } else {
@@ -174,7 +174,7 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f, 0x1D);
 
     if (!(this->actor.bgCheckFlags & 0x60)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -277,7 +277,7 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
     }
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_1D0, &this->unk_21C)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_ApproachF(&this->actor.world.pos.y, this->unk_21C.y, 0.3f, 5.0f);
@@ -337,7 +337,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         Math_SmoothStepToS(&this->unk_1F4, 0, 1, 30, 100);
         if (this->unk_1F4 < 2) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         switch (this->unk_1E0) {
@@ -455,7 +455,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
         Math_SmoothStepToS(&this->unk_1F4, 0, 1, 30, 100);
         if (this->unk_1F4 < 2) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         SkelAnime_Update(&this->skelAnime);
@@ -558,7 +558,7 @@ void func_80A75310(EnPr2* this, PlayState* play) {
                             this->actor.world.rot.z, i + 10);
             }
 
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else {
@@ -601,7 +601,7 @@ void func_80A75310(EnPr2* this, PlayState* play) {
                     EffectSsBubble_Spawn(play, &sp64, 0.0f, 5.0f, 5.0f, frame);
                 }
 
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     }

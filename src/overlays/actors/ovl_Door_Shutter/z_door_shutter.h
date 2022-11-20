@@ -24,6 +24,4 @@ typedef struct DoorShutter {
     /* 0x16C */ DoorShutterActionFunc actionFunc;
 } DoorShutter; // size = 0x170
 
-extern const ActorInit Door_Shutter_InitVars;
-
 #endif // Z_DOOR_SHUTTER_H
