@@ -4403,13 +4403,13 @@ void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere) {
     }
 }
 
-void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
+void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* dst, s32 arg3) {
     f32 xDiff = arg1->x - arg0->x;
     f32 zDiff = arg1->z - arg0->z;
     f32 yDiff = arg3 ? (arg1->y - arg0->y) : (arg0->y - arg1->y);
 
-    arg2->y = Math_Atan2S_XY(zDiff, xDiff);
-    arg2->x = Math_Atan2S_XY(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
+    dst->y = Math_Atan2S_XY(zDiff, xDiff);
+    dst->x = Math_Atan2S_XY(sqrtf(SQ(xDiff) + SQ(zDiff)), yDiff);
 }
 
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {

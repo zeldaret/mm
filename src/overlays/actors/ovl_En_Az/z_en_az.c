@@ -641,7 +641,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
 }
 
 void func_80A95F94(EnAz* this, PlayState* play) {
-    func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
+    func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
     this->unk_39E = 0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actionFunc = func_80A95FE8;
@@ -656,7 +656,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
     }
     if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
-        func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, 0);
+        func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0xE38, 0x38E);
         this->actor.shape.rot.z = 0;

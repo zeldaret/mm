@@ -327,7 +327,7 @@ void func_80B5BE88(EnOt* this, PlayState* play) {
 }
 
 void func_80B5BED4(EnOt* this, PlayState* play) {
-    func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, 0);
+    func_800BE33C(&this->actor.world.pos, &this->unk_360->actor.world.pos, &this->actor.world.rot, false);
     Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_360->actor), 3, 0xE38,
                        0x38E);
     this->actor.speedXZ = 3.5f;
