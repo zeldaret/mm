@@ -242,7 +242,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
             break;
 
         case AUDIOCMD_OP_GLOBAL_UNMUTE:
-            if (cmd->asInt == 1) {
+            if (cmd->asInt == true) {
                 for (i = 0; i < gAudioCtx.numNotes; i++) {
                     Note* note = &gAudioCtx.notes[i];
                     NoteSampleState* noteSampleState = &note->sampleState;

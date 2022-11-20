@@ -72,6 +72,8 @@ typedef enum {
 #define AUDIO_MK_CMD(b0,b1,b2,b3) (_SHIFTL(b0, 24, 8) | _SHIFTL(b1, 16, 8) | _SHIFTL(b2, 8, 8) | _SHIFTL(b3, 0, 8))
 
 #define AUDIOCMD_ALL_SEQPLAYERS 0xFF
+// Pass to a AUDIOCMD_CHANNEL_ command in place of a channelIndex to try and apply to all channels.
+// Then uses `threadCmdChannelMask` to determine which channels to apply the command to.
 #define AUDIOCMD_ALL_CHANNELS 0xFF
 
 // ==== Audio Thread Channel Commands ====
@@ -147,7 +149,8 @@ typedef enum {
  *
  * @param seqPlayerIndex the index of the seqPlayer to modify
  * @param channelIndex the index of the channel to modify
- * @param panChannelWeight (s8) proportion of pan that comes from the channel
+ * @param panChannelWeight (s8) proportion of pan that comes from the channel. 
+ *                         Set to 0 for layer-only, and 128 for channel-only.
  */
 #define AUDIOCMD_CHANNEL_SET_PAN_WEIGHT(seqPlayerIndex, channelIndex, panChannelWeight)                       \
     AudioThread_QueueCmdS8(AUDIO_MK_CMD(AUDIOCMD_OP_CHANNEL_SET_PAN_WEIGHT, seqPlayerIndex, channelIndex, 0), \
@@ -168,7 +171,7 @@ typedef enum {
  *
  * @param seqPlayerIndex the index of the seqPlayer to modify
  * @param channelIndex the index of the channel to modify
- * @param muteFlags (s8) Affected how a muted channel behaves. See `MUTE_BEHAVIOUR_` macros
+ * @param muteFlags (s8) Affected how a muted channel behaves. See `MUTE_BEHAVIOR_` macros
  */
 #define AUDIOCMD_CHANNEL_SET_MUTE_FLAGS(seqPlayerIndex, channelIndex, muteFlags) \
     AudioThread_QueueCmdS8(AUDIO_MK_CMD(AUDIOCMD_OP_CHANNEL_SET_MUTE_FLAGS, seqPlayerIndex, channelIndex, 0), muteFlags)
@@ -353,7 +356,7 @@ typedef enum {
     AudioThread_QueueCmdS32(AUDIO_MK_CMD(AUDIOCMD_OP_SEQPLAYER_CHANGE_TEMPO_TICKS, seqPlayerIndex, 0, 0), tempoChange)
 
 /**
- * Fade the volume to the requested volume set directly
+ * Fade the volume to the target volume requested in the command
  *
  * @param seqPlayerIndex the index of the seqPlayer to modify
  * @param fadeVolume target volume to fade to

@@ -4305,15 +4305,16 @@ f32 sBigBellsVolume[8] = {
  */
 void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
     u8 channelIndex;
-    s8 pan = 0;
+    s8 panChannelWeight = 0;
 
     // Ganondorfs's Lair
     if (ganonsTowerLevel == 0) {
-        pan = 0x7F;
+        // Pan comes entirely from the SequenceChannel
+        panChannelWeight = 0x7F;
     }
 
     for (channelIndex = 0; channelIndex < SEQ_NUM_CHANNELS; channelIndex++) {
-        AUDIOCMD_CHANNEL_SET_PAN_WEIGHT(SEQ_PLAYER_BGM_MAIN, channelIndex, pan);
+        AUDIOCMD_CHANNEL_SET_PAN_WEIGHT(SEQ_PLAYER_BGM_MAIN, channelIndex, panChannelWeight);
     }
 
     // Lowest room in Ganon's Tower (Entrance Room)
