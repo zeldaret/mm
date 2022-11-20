@@ -533,7 +533,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 }
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0, 0,
                             this->isPowderKeg);
-                func_800BC848(thisx, play, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
+                Actor_RequestRumble(thisx, play, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =

@@ -3591,21 +3591,29 @@ void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 act
 }
 
 // Damage flags for EnArrow
-s32 D_801AEDB0[] = {
-    0x800, 0x20, 0x20, 0x800, 0x1000, 0x2000, 0x1, 0x10000, 0x1,
+u32 sArrowDmgFlags[] = {
+    DMG_FIRE_ARROW, // ENARROW_0
+    DMG_NORMAL_ARROW, // ENARROW_1
+    DMG_NORMAL_ARROW, // ENARROW_2
+    DMG_FIRE_ARROW, // ENARROW_3
+    DMG_ICE_ARROW, // ENARROW_4
+    DMG_LIGHT_ARROW, // ENARROW_5
+    DMG_DEKU_NUT, // ENARROW_6
+    DMG_DEKU_BUBBLE, // ENARROW_7
+    DMG_DEKU_NUT, // ENARROW_8
 };
 
-s32 func_800BC188(s32 index) {
-    if ((index < 0) || (index >= ARRAY_COUNT(D_801AEDB0))) {
+u32 Actor_GetArrowDmgFlags(s32 params) {
+    if ((params < 0) || (params >= ARRAY_COUNT(sArrowDmgFlags))) {
         return 0;
     }
 
-    return D_801AEDB0[index];
+    return sArrowDmgFlags[params];
 }
 
-s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
-    if ((arg3 > 0.0f) && (Actor_DistanceBetweenActors(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
-        s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
+s32 func_800BC1B4(Actor* actor, Actor* projectile, f32 distance, f32 speedXZ) {
+    if ((speedXZ > 0.0f) && (Actor_DistanceBetweenActors(projectile, actor) < ((speedXZ * 2.5f) + distance))) {
+        s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(projectile, actor), projectile->world.rot.y);
 
         if (ABS_ALT(temp_v1) < 0x1400) {
             return true;
@@ -3615,13 +3623,13 @@ s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
     return false;
 }
 
-Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
+Actor* func_800BC270(PlayState* play, Actor* actor, f32 distance, u32 dmgFlags) {
     Actor* itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
     while (itemAction != NULL) {
-        if (((itemAction->id == ACTOR_ARMS_HOOK) && (arg3 & 0x80)) ||
-            ((itemAction->id == ACTOR_EN_BOOM) && (arg3 & 0x10)) ||
-            ((itemAction->id == ACTOR_EN_ARROW) && (func_800BC188(itemAction->params) & arg3))) {
+        if (((itemAction->id == ACTOR_ARMS_HOOK) && (dmgFlags & DMG_HOOKSHOT)) ||
+            ((itemAction->id == ACTOR_EN_BOOM) && (dmgFlags & DMG_ZORA_BOOMERANG)) ||
+            ((itemAction->id == ACTOR_EN_ARROW) && (Actor_GetArrowDmgFlags(itemAction->params) & dmgFlags))) {
             f32 speedXZ;
 
             if ((itemAction->speedXZ <= 0.0f) && (GET_PLAYER(play)->unk_D57 != 0)) {
@@ -3630,11 +3638,11 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
                 } else if (itemAction->id == ACTOR_EN_BOOM) {
                     speedXZ = 12.0f;
                 } else {
-                    s32 temp_v0_3 = func_800BC188(itemAction->params);
+                    u32 arrowDmgFlags = Actor_GetArrowDmgFlags(itemAction->params);
 
-                    if (temp_v0_3 == 1) {
+                    if (arrowDmgFlags == DMG_DEKU_NUT) {
                         speedXZ = 80.0f;
-                    } else if (temp_v0_3 == 0x10000) {
+                    } else if (arrowDmgFlags == DMG_DEKU_BUBBLE) {
                         speedXZ = 60.0f;
                     } else {
                         speedXZ = 150.0f;
@@ -3644,7 +3652,7 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
                 speedXZ = itemAction->speedXZ;
             }
 
-            if (func_800BC1B4(actor, itemAction, arg2, speedXZ)) {
+            if (func_800BC1B4(actor, itemAction, distance, speedXZ)) {
                 break;
             }
         }
@@ -3655,13 +3663,13 @@ Actor* func_800BC270(PlayState* play, Actor* actor, f32 arg2, s32 arg3) {
     return itemAction;
 }
 
-Actor* func_800BC444(PlayState* play, Actor* actor, f32 arg2) {
+Actor* func_800BC444(PlayState* play, Actor* actor, f32 distance) {
     Actor* explosive = play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         if (((explosive->id == ACTOR_EN_BOM) || (explosive->id == ACTOR_EN_BOM_CHU) ||
              (explosive->id == ACTOR_EN_BOMBF))) {
-            if (func_800BC1B4(actor, explosive, arg2, explosive->speedXZ)) {
+            if (func_800BC1B4(actor, explosive, distance, explosive->speedXZ)) {
                 break;
             }
         }
@@ -3777,7 +3785,7 @@ void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s1
 }
 
 // Actor_RequestRumble?
-void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
+void Actor_RequestRumble(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     if (y >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {

@@ -8,16 +8,15 @@ struct EnArrow;
 typedef void (*EnArrowActionFunc)(struct EnArrow*, PlayState*);
 
 enum {
-    /* -8  */ ENARROW_MINUS8 = -8,
-    /*  0  */ ENARROW_0 = 0,
-    /*  1  */ ENARROW_1,
-    /*  2  */ ENARROW_2,
-    /*  3  */ ENARROW_3,
-    /*  4  */ ENARROW_4,
-    /*  5  */ ENARROW_5,
-    /*  6  */ ENARROW_6,
-    /*  7  */ ENARROW_7,
-    /*  8  */ ENARROW_8,
+    /* 0 */ ENARROW_0, // Lit arrow
+    /* 1 */ ENARROW_1, // Horse arrow
+    /* 2 */ ENARROW_2, // Normal arrow
+    /* 3 */ ENARROW_3, // Fire arrow
+    /* 4 */ ENARROW_4, // Ice arrow
+    /* 5 */ ENARROW_5, // Light arrow
+    /* 6 */ ENARROW_6, // ?
+    /* 7 */ ENARROW_7, // Deku bubble
+    /* 8 */ ENARROW_8, // Deku Nut
 };
 
 typedef struct {

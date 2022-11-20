@@ -78,9 +78,9 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     EnArrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (this->actor.params == ENARROW_MINUS8) {
+    if (this->actor.params == -ENARROW_8) {
         this->unk_263 = 1;
-        this->actor.params = 8;
+        this->actor.params = ENARROW_8;
     }
 
     if (this->actor.params < ENARROW_6) {
@@ -113,7 +113,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params < ENARROW_0) {
         this->collider.base.atFlags = (AT_TYPE_ENEMY | AT_ON);
     } else {
-        this->collider.info.toucher.dmgFlags = func_800BC188(this->actor.params);
+        this->collider.info.toucher.dmgFlags = Actor_GetArrowDmgFlags(this->actor.params);
         if (this->actor.params == ENARROW_8) {
             this->collider.info.toucher.damage = 1;
         }

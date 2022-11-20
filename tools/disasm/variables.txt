@@ -438,7 +438,7 @@
     0x801AED8C:("D_801AED8C","UNK_TYPE1","",0x1),
     0x801AED98:("D_801AED98","Vec3f","",0xC),
     0x801AEDA4:("D_801AEDA4","UNK_TYPE4","",0x4),
-    0x801AEDB0:("D_801AEDB0","UNK_TYPE1","",0x1),
+    0x801AEDB0:("sArrowDmgFlags","UNK_TYPE1","",0x1),
     0x801AEDD4:("sDoorLocksInfo","UNK_TYPE4","",0x4),
     0x801AEE28:("D_801AEE28","UNK_TYPE4","",0x4),
     0x801AEE30:("D_801AEE30","UNK_TYPE4","",0x4),
