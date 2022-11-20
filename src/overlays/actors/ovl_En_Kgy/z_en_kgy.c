@@ -597,7 +597,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
     }
     func_80B40EE8(this, play);
 }
@@ -798,7 +798,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             func_801477B4(play);
                             this->actionFunc = func_80B41D64;
                             func_80B413C8(this);
-                            Actor_PickUp(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+                            Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
                             break;
 
                         case 0xC51:

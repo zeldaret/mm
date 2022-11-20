@@ -828,7 +828,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
         case 1:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
+            ret = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
             break;
 
         case 2:

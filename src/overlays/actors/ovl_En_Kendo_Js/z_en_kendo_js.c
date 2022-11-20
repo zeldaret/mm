@@ -649,9 +649,9 @@ void func_80B276D8(EnKendoJs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80B27760(this);
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_20)) {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 800.0f, 100.0f);
     }
 }
 

@@ -1860,7 +1860,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Actor_PickUpExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_PickUp
+// Actor_OfferGetItemExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_OfferGetItem
 // This function is also used to toggle the "Speak" action on the A button
 s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
@@ -2007,7 +2007,7 @@ s32 Actor_HasParent(Actor* actor, PlayState* play) {
  * GI_NONE is usually used as a special case to lift an actor
  * GI_MAX is usually used to catch an actor in a bottle
  */
-s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange, f32 yRange) {
+s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 &
@@ -2041,16 +2041,16 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange
     return false;
 }
 
-s32 Actor_PickUpNearby(Actor* actor, PlayState* play, GetItemId getItemId) {
-    return Actor_PickUp(actor, play, getItemId, 50.0f, 10.0f);
+s32 Actor_OfferGetItemNearby(Actor* actor, PlayState* play, GetItemId getItemId) {
+    return Actor_OfferGetItem(actor, play, getItemId, 50.0f, 10.0f);
 }
 
-s32 Actor_LiftActor(Actor* actor, PlayState* play) {
-    return Actor_PickUpNearby(actor, play, GI_NONE);
+s32 Actor_OfferLift(Actor* actor, PlayState* play) {
+    return Actor_OfferGetItemNearby(actor, play, GI_NONE);
 }
 
-s32 Actor_PickUpFar(Actor* actor, PlayState* play, GetItemId getItemId) {
-    return Actor_PickUp(actor, play, getItemId, 9999.9f, 9999.9f);
+s32 Actor_OfferGetItemFar(Actor* actor, PlayState* play, GetItemId getItemId) {
+    return Actor_OfferGetItem(actor, play, getItemId, 9999.9f, 9999.9f);
 }
 
 s32 Actor_HasNoParent(Actor* actor, PlayState* play) {

@@ -632,7 +632,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_PickUp(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
     }
 }
 

@@ -663,7 +663,7 @@ void func_80B2E230(EnPoh* this, PlayState* play) {
         return;
     }
 
-    Actor_PickUp(&this->actor, play, GI_MAX, 35.0f, 60.0f);
+    Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
     this->actor.world.pos.y = (Math_SinS(this->unk_18D * 0x800) * 5.0f) + this->actor.home.pos.y;
     if (this->unk_18D) {
         this->unk_18D--;

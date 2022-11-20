@@ -770,9 +770,9 @@ void func_809C2A64(EnAob01* this, PlayState* play) {
                 this->actionFunc = func_809C2BE4;
             }
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_20)) {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 300.0f, 300.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
         }
     }
 }

@@ -513,9 +513,9 @@ void func_8095E660(EnIshi* this, PlayState* play) {
 
         if ((this->actor.xzDistToPlayer < 90.0f) && (sp30 == 0)) {
             if (sp38 == 1) {
-                Actor_PickUp(&this->actor, play, GI_NONE, 80.0f, 20.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_NONE, 80.0f, 20.0f);
             } else {
-                Actor_PickUp(&this->actor, play, GI_NONE, 50.0f, 10.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 10.0f);
             }
         }
     }

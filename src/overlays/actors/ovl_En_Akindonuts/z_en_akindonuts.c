@@ -1330,13 +1330,13 @@ void func_80BEF360(EnAkindonuts* this, PlayState* play) {
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {
-            Actor_PickUp(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, func_80BED034(this), 300.0f, 300.0f);
         }
     } else if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BEF450;
     } else {
-        Actor_PickUp(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, func_80BECFBC(this), 300.0f, 300.0f);
     }
 }
 

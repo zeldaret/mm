@@ -293,7 +293,7 @@ void func_80B67458(EnSth* this, PlayState* play) {
             func_80B670A4(this, 3);
         }
     } else {
-        Actor_PickUp(&this->actor, play, this->actor.home.rot.z, 10000.0f, 500.0f);
+        Actor_OfferGetItem(&this->actor, play, this->actor.home.rot.z, 10000.0f, 500.0f);
     }
 }
 
@@ -485,7 +485,7 @@ void func_80B67B50(EnSth* this, PlayState* play) {
     } else {
         this->unk_29C &= ~1;
         SET_WEEKEVENTREG(WEEKEVENTREG_34_08);
-        Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
 

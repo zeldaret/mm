@@ -121,7 +121,7 @@ void func_80926318(ObjKibako* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 100.0f) {
         angle = this->actor.yawTowardsPlayer - GET_PLAYER(play)->actor.world.rot.y;
         if (ABS_ALT(angle) > 0x5555) {
-            Actor_PickUp(&this->actor, play, GI_NONE, 36.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_NONE, 36.0f, 30.0f);
         }
     }
 }

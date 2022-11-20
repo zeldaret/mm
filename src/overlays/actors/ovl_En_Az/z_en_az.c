@@ -1309,7 +1309,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                     this->unk_378 = 0;
                 }
             } else {
-                Actor_PickUp(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
                              this->actor.playerHeightRel);
             }
         }

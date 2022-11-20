@@ -371,7 +371,7 @@ void func_80BCB90C(EnScopenuts* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
         this->actionFunc = func_80BCB6D0;
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
     }
 }
 

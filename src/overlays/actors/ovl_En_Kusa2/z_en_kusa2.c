@@ -991,7 +991,7 @@ void func_80A5D7C4(EnKusa2* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 400.0f) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
-                    Actor_LiftActor(&this->actor, play);
+                    Actor_OfferLift(&this->actor, play);
                 }
             }
         }

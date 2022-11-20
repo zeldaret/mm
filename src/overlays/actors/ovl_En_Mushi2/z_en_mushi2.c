@@ -1225,7 +1225,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->unk_30C & 1) && func_80A68DD4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 60.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 60.0f, 30.0f);
         }
     }
 }

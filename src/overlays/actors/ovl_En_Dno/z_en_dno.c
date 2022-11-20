@@ -675,7 +675,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         } else {
                             this->getItemId = GI_MASK_SCENTS;
                         }
-                        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+                        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
                         func_801477B4(play);
                         func_80A72B84(this, play);
                     }
@@ -741,7 +741,7 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80A72598;
     } else {
-        Actor_PickUp(&this->actor, play, this->getItemId, 60.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 60.0f, 60.0f);
     }
 }
 

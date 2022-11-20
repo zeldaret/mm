@@ -827,7 +827,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_LAUGH);
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAX, 35.0f, 60.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
         this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }

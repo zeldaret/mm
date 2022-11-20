@@ -376,7 +376,7 @@ void EnNiw_Idle(EnNiw* this, PlayState* play) {
             this->actionFunc = EnNiw_Held;
             return;
         } else {
-            Actor_LiftActor(&this->actor, play);
+            Actor_OfferLift(&this->actor, play);
         }
     } else { // NIW_TYPE_UNK1 || NIW_TYPE_HELD
         this->unkIdleTimer2 = 10;
@@ -529,7 +529,7 @@ void EnNiw_Thrown(EnNiw* this, PlayState* play) {
         this->actor.speedXZ = 0.0f;
     } else {
         if (this->hoppingTimer > 5) {
-            Actor_LiftActor(&this->actor, play);
+            Actor_OfferLift(&this->actor, play);
         }
         EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }

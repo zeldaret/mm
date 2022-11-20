@@ -299,7 +299,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((getItemId != GI_NONE) && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -456,7 +456,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
 
     if (this->getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, this->getItemId, 50.0f, 80.0f);
+            Actor_OfferGetItem(&this->actor, play, this->getItemId, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->getItemId = GI_NONE;
@@ -646,7 +646,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+            Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
         }
     }
 

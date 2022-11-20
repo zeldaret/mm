@@ -804,7 +804,7 @@ void func_80BB31B8(EnGeg* this, PlayState* play) {
         }
         this->actionFunc = func_80BB32AC;
     } else {
-        Actor_PickUp(&this->actor, play, getItemId, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 

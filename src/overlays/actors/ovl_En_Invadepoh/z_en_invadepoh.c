@@ -3438,7 +3438,7 @@ void func_80B4AEDC(EnInvadepoh* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_22_02);
         func_80B4AF80(this);
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK_BOTTLE, 2000.0f, 2000.0f);
     }
 }
 

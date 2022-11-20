@@ -107,7 +107,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 func_801477B4(play);
-                Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+                Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
                              this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
@@ -126,7 +126,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
                             func_80151938(play, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
-                            Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
+                            Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
                             Rupees_ChangeBy(-10);
                             this->actionFunc = EnMs_Sell;
                         }
@@ -152,7 +152,7 @@ void EnMs_Sell(EnMs* this, PlayState* play) {
         func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 

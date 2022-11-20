@@ -495,7 +495,7 @@ void func_808F21A4(EnKarebaba* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play) || (this->unk_1EE == 0)) {
         func_808F238C(this);
     } else {
-        Actor_PickUpNearby(&this->actor, play, GI_STICKS_1);
+        Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
     }
 }
 

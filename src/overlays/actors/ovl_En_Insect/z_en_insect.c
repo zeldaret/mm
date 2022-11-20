@@ -494,7 +494,7 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
             }
 
             if (!(this->unk_30C & 8) && (D_8091BD60 < 4) && EnInsect_InBottleRange(this, play) &&
-                Actor_PickUp(&this->actor, play, GI_MAX, 60.0f, 30.0f)) {
+                Actor_OfferGetItem(&this->actor, play, GI_MAX, 60.0f, 30.0f)) {
                 D_8091BD60++;
             }
         }
