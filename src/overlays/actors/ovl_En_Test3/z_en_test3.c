@@ -1124,9 +1124,9 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
             *dList = NULL;
         }
         if (limbIndex == OBJECT_TEST3_LIMB_0B) {
-            rot->x += this->player.unk_AAC.z;
-            rot->y -= this->player.unk_AAC.y;
-            rot->z += this->player.unk_AAC.x;
+            rot->x += this->player.headLimbRot.z;
+            rot->y -= this->player.headLimbRot.y;
+            rot->z += this->player.headLimbRot.x;
         } else if (limbIndex == OBJECT_TEST3_LIMB_0A) {
             s32 requiredScopeTemp;
 
@@ -1134,12 +1134,12 @@ s32 EnTest3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                 Matrix_RotateZS(0x44C, MTXMODE_APPLY);
                 Matrix_RotateYS(this->player.unk_AA8, MTXMODE_APPLY);
             }
-            if (this->player.unk_AB2.y != 0) {
-                Matrix_RotateYS(this->player.unk_AB2.y, MTXMODE_APPLY);
+            if (this->player.upperLimbRot.y != 0) {
+                Matrix_RotateYS(this->player.upperLimbRot.y, MTXMODE_APPLY);
             }
-            Matrix_RotateXS(this->player.unk_AB2.x, MTXMODE_APPLY);
-            if (this->player.unk_AB2.z != 0) {
-                Matrix_RotateZS(this->player.unk_AB2.z, MTXMODE_APPLY);
+            Matrix_RotateXS(this->player.upperLimbRot.x, MTXMODE_APPLY);
+            if (this->player.upperLimbRot.z != 0) {
+                Matrix_RotateZS(this->player.upperLimbRot.z, MTXMODE_APPLY);
             }
         } else {
             func_80125500(play, &this->player, limbIndex, pos, rot);
