@@ -3435,7 +3435,7 @@ void func_8082FA5C(PlayState* play, Player* this, s32 meleeWeaponState) {
                     voiceSfx = NA_SE_VO_LI_SWORD_L;
                 } else {
                     itemSfx = (this->heldItemAction == PLAYER_IA_SWORD_GREAT_FAIRY) ? NA_SE_IT_HAMMER_SWING
-                                                                                     : NA_SE_IT_SWORD_SWING;
+                                                                                    : NA_SE_IT_SWORD_SWING;
                 }
             }
         }
@@ -4146,8 +4146,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     func_800AEF44(Effect_GetByIndex(this->meleeWeaponEffectIndex[2]));
     this->actionFunc = actionFunc;
 
-    if ((this->itemAction != this->heldItemAction) &&
-        (!(arg3 & 1) || !(this->stateFlags1 & PLAYER_STATE1_400000))) {
+    if ((this->itemAction != this->heldItemAction) && (!(arg3 & 1) || !(this->stateFlags1 & PLAYER_STATE1_400000))) {
         func_80123C58(this);
     }
 
@@ -7115,8 +7114,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
 
                     this->prevMask = this->currentMask;
                     if ((!!(maskId == this->currentMask) != 0) || (this->itemAction < PLAYER_IA_MASK_GIANT) ||
-                        ((this->itemAction == PLAYER_IA_MASK_GIANT) &&
-                         (this->transformation != PLAYER_FORM_HUMAN))) {
+                        ((this->itemAction == PLAYER_IA_MASK_GIANT) && (this->transformation != PLAYER_FORM_HUMAN))) {
                         if (maskId == this->currentMask) {
                             this->currentMask = PLAYER_MASK_NONE;
                         } else {
@@ -11822,7 +11820,8 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         temp_fv0 = this->actor.world.pos.y - this->actor.prevPos.y;
         var_fv1_2 =
             temp_fv0 +
-            ((this->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].y + this->bodyPartsPos[PLAYER_BODYPART_RIGHT_FOOT].y) * 0.5f);
+            ((this->bodyPartsPos[PLAYER_BODYPART_LEFT_FOOT].y + this->bodyPartsPos[PLAYER_BODYPART_RIGHT_FOOT].y) *
+             0.5f);
         temp_fv0 += this->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 10.0f;
 
         if (this->cylinder.info.toucher.dmgFlags == 0x80000) {
@@ -16482,8 +16481,9 @@ void func_80852B28(Player* this, PlayState* play) {
         func_80836A98(this, &gPlayerAnim_link_normal_light_bom_end, play);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 3.0f)) {
         if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x,
-                        this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y, this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z,
-                        0xFA0, this->actor.shape.rot.y, 0, 8) != NULL) {
+                        this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y,
+                        this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z, 0xFA0, this->actor.shape.rot.y, 0,
+                        8) != NULL) {
             Inventory_ChangeAmmo(ITEM_NUT, -1);
             this->unk_D57 = 4;
         }
@@ -16945,8 +16945,7 @@ void func_80853A5C(Player* this, PlayState* play) {
             }
         }
     } else if (this->unk_AE8 >= 0) {
-        if ((Player_ActionToBottle(this, this->itemAction) >= 0) &&
-            LinkAnimation_OnFrame(&this->skelAnime, 36.0f)) {
+        if ((Player_ActionToBottle(this, this->itemAction) >= 0) && LinkAnimation_OnFrame(&this->skelAnime, 36.0f)) {
             Player_SetModels(this, PLAYER_MODELGROUP_BOTTLE);
         } else if (LinkAnimation_OnFrame(&this->skelAnime, 2.0f)) {
             GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->itemAction] - 1];
@@ -20119,14 +20118,14 @@ void func_8085B820(PlayState* play, s16 arg1) {
 }
 
 PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
-    PlayerItemAction actionParam = Player_ItemToActionParam(player, itemId);
+    PlayerItemAction itemAction = Player_ItemToActionParam(player, itemId);
 
-    if ((actionParam >= PLAYER_IA_MASK_TRUTH) && (actionParam <= PLAYER_IA_MASK_DEKU) &&
-        (actionParam == (player->currentMask + PLAYER_IA_MASK_TRUTH - 1))) {
-        actionParam = PLAYER_IA_NONE;
+    if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_DEKU) &&
+        (itemAction == (player->currentMask + PLAYER_IA_MASK_TRUTH - 1))) {
+        itemAction = PLAYER_IA_NONE;
     }
 
-    if ((actionParam <= PLAYER_IA_NONE) || (actionParam >= PLAYER_IA_MAX)) {
+    if ((itemAction <= PLAYER_IA_NONE) || (itemAction >= PLAYER_IA_MAX)) {
         return -1;
     }
 
@@ -20134,13 +20133,13 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     player->actionFunc = NULL;
     func_80831760(play, player, func_80853A5C, 0);
     player->unk_A86 = 0x7C;
-    player->itemAction = actionParam;
+    player->itemAction = itemAction;
     Player_AnimationPlayOnce(play, player, &gPlayerAnim_link_normal_give_other);
     player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     player->getItemDrawId = GID_BOTTLE;
-    player->exchangeItemId = actionParam;
+    player->exchangeItemId = itemAction;
 
-    return actionParam;
+    return itemAction;
 }
 
 s32 func_8085B930(PlayState* play, LinkAnimationHeader* talkAnim, s32 animMode) {
