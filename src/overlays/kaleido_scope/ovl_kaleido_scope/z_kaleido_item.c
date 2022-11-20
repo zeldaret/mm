@@ -223,13 +223,15 @@ void KaleidoScope_DrawAmmoCount(PauseContext* pauseCtx, GraphicsContext* gfxCtx,
 
     // Draw upper digit
     if (ammoUpperDigit != 0) {
-        POLY_OPA_DISP = func_8010CD98(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammoUpperDigit)), 8, 8,
-                                      sAmmoRectLeft[ammoIndex], sAmmoRectHeight[ammoIndex], 8, 8, 1 << 10, 1 << 10);
+        POLY_OPA_DISP =
+            Gfx_DrawTexRectIA8(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammoUpperDigit)), 8, 8,
+                               sAmmoRectLeft[ammoIndex], sAmmoRectHeight[ammoIndex], 8, 8, 1 << 10, 1 << 10);
     }
 
     // Draw lower digit
-    POLY_OPA_DISP = func_8010CD98(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammo)), 8, 8,
-                                  sAmmoRectLeft[ammoIndex] + 6, sAmmoRectHeight[ammoIndex], 8, 8, 1 << 10, 1 << 10);
+    POLY_OPA_DISP =
+        Gfx_DrawTexRectIA8(POLY_OPA_DISP, ((u8*)gAmmoDigit0Tex + (8 * 8 * ammo)), 8, 8, sAmmoRectLeft[ammoIndex] + 6,
+                           sAmmoRectHeight[ammoIndex], 8, 8, 1 << 10, 1 << 10);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -260,7 +262,7 @@ void KaleidoScope_DrawItemSelect(PlayState* play) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
             if (GET_CUR_FORM_BTN_SLOT(i + 1) < NUM_ITEM_SLOTS) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->itemVtx[j], 4, 0);
-                POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
+                POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
             }
         }
     }
