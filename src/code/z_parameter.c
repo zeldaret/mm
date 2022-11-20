@@ -932,7 +932,28 @@ u32 Interface_GetCompressedTimerDigits(s16 timerId) {
            (timerArr[4] << 4) | timerArr[5];
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010EE74.s")
+void Interface_NewDay(PlayState* play, s32 day) {
+    s32 pad;
+    s16 i = day - 1;
+
+    // i is used to store dayMinusOne
+    if ((i < 0) || (i >= 3)) {
+        i = 0;
+    }
+
+    // Loads day number from week_static for the three-day clock
+    DmaMgr_SendRequest0((u32)play->interfaceCtx.doActionSegment + 0x780,
+                        (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
+
+    // i is used to store sceneId
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.permanentSceneFlags); i++) {
+        gSaveContext.save.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
+        gSaveContext.save.permanentSceneFlags[i].switch0 = gSaveContext.cycleSceneFlags[i].switch0;
+        gSaveContext.save.permanentSceneFlags[i].switch1 = gSaveContext.cycleSceneFlags[i].switch1;
+        gSaveContext.save.permanentSceneFlags[i].clearedRoom = gSaveContext.cycleSceneFlags[i].clearedRoom;
+        gSaveContext.save.permanentSceneFlags[i].collectible = gSaveContext.cycleSceneFlags[i].collectible;
+    }
+}
 
 void Interface_SetHudVisibility(u16 hudVisibility) {
     if (gSaveContext.hudVisibility != hudVisibility) {
@@ -3088,17 +3109,550 @@ s16 D_801BFB24[] = { 0, 255, 100, 0 };   // magicArrowEffectsB
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80119030.s")
 
-s16 D_801BFB2C = 255;
+/**
+ * Draws either the analog three-day clock or the digital final-hours clock
+ */
+#ifdef NON_MATCHING
+void Interface_DrawClock(PlayState* play) {
+    static s16 sThreeDayClockAlpha = 255;
+    static s16 D_801BFB30 = 0; // sClockAlphaTimer1
+    static s16 D_801BFB34 = 0; // sClockAlphaTimer2
+    static u16 sThreeDayClockHours[] = {
+        CLOCK_TIME(0, 0),  CLOCK_TIME(1, 0),  CLOCK_TIME(2, 0),  CLOCK_TIME(3, 0),  CLOCK_TIME(4, 0),
+        CLOCK_TIME(5, 0),  CLOCK_TIME(6, 0),  CLOCK_TIME(7, 0),  CLOCK_TIME(8, 0),  CLOCK_TIME(9, 0),
+        CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
+        CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
+        CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
+    };
+    static TexturePtr sThreeDayClockHourTextures[] = {
+        gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
+        gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
+        gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
+        gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
+        gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
+        gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
+    };
+    static s16 D_801BFBCC = 0;              // sClockInvDiamondPrimRed
+    static s16 D_801BFBD0 = 0;              // sClockInvDiamondPrimGreen
+    static s16 D_801BFBD4 = 255;            // sClockInvDiamondPrimBlue
+    static s16 D_801BFBD8 = 0;              // sClockInvDiamondEnvRed
+    static s16 D_801BFBDC = 0;              // sClockInvDiamondEnvGreen
+    static s16 D_801BFBE0 = 0;              // sClockInvDiamondEnvBlue
+    static s16 D_801BFBE4 = 15;             // sClockInvDiamondTimer
+    static s16 D_801BFBE8 = 0;              // sClockInvDiamondTargetIndex
+    static s16 D_801BFBEC[] = { 100, 0 };   // sClockInvDiamondPrimRedTargets
+    static s16 D_801BFBF0[] = { 205, 155 }; // sClockInvDiamondPrimGreenTargets
+    static s16 D_801BFBF4[] = { 255, 255 }; // sClockInvDiamondPrimBlueTargets
+    static s16 D_801BFBF8[] = { 30, 0 };    // sClockInvDiamondEnvRedTargets
+    static s16 D_801BFBFC[] = { 30, 0 };    // sClockInvDiamondEnvGreenTargets
+    static s16 D_801BFC00[] = { 100, 0 };   // sClockInvDiamondEnvBlueTargets
+    static s16 D_801BFC04[] = { 255, 0 };   // sFinalHoursClockDigitsRed
+    static s16 D_801BFC08[] = { 100, 0 };   // sFinalHoursClockFrameEnvRedTargets
+    static s16 D_801BFC0C[] = { 30, 0 };    // sFinalHoursClockFrameEnvGreenTargets
+    static s16 D_801BFC10[] = { 100, 0 };   // sFinalHoursClockFrameEnvBlueTargets
+    static TexturePtr sFinalHoursDigitTextures[] = {
+        gFinalHoursClockDigit0Tex, gFinalHoursClockDigit1Tex, gFinalHoursClockDigit2Tex, gFinalHoursClockDigit3Tex,
+        gFinalHoursClockDigit4Tex, gFinalHoursClockDigit5Tex, gFinalHoursClockDigit6Tex, gFinalHoursClockDigit7Tex,
+        gFinalHoursClockDigit8Tex, gFinalHoursClockDigit9Tex, gFinalHoursClockColonTex,
+    };
+    // sFinalHoursDigitSlotPosXOffset
+    static s16 D_801BFC40[] = {
+        127, 136, 144, 151, 160, 168, 175, 184,
+    };
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+    MessageContext* msgCtx = &play->msgCtx;
+    s16 sp1E6;
+    f32 temp_f14;
+    u32 timeUntilMoonCrash;
+    f32 sp1D8;
+    f32 timeInMinutes;
+    f32 timeInSeconds;
+    f32 sp1CC;
+    s32 new_var;
+    s16 sp1C6;
+    s16 currentHour;
+    u16 time;
+    s16 temp;
+    s16 colorStep;
+    s16 finalHoursClockSlots[8]; // sp1AC
+    s16 index;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    if (R_TIME_SPEED != 0) {
+        if ((msgCtx->msgMode == 0) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
+            (msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+            (gSaveContext.gameMode == 3)) {
+            if (!FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day < 4)) {
+                /**
+                 * Changes Clock's transparancy depending if Player is moving or not and possibly other things
+                 */
+                if (gSaveContext.hudVisibility == HUD_VISIBILITY_ALL) {
+                    if (func_801234D4(play)) {
+                        sThreeDayClockAlpha = 80;
+                        D_801BFB30 = 5;
+                        D_801BFB34 = 20;
+                    } else if (D_801BFB34 != 0) {
+                        D_801BFB34--;
+                    } else if (D_801BFB30 != 0) {
+                        colorStep = ABS_ALT(sThreeDayClockAlpha - 255) / D_801BFB30;
+                        sThreeDayClockAlpha += colorStep;
+
+                        if (sThreeDayClockAlpha >= 255) {
+                            sThreeDayClockAlpha = 255;
+                            D_801BFB30 = 0;
+                        }
+                    } else {
+                        if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                            sThreeDayClockAlpha = 255;
+                        } else {
+                            sThreeDayClockAlpha = interfaceCtx->bAlpha;
+                        }
+                        D_801BFB34 = 0;
+                        D_801BFB30 = 0;
+                    }
+                } else {
+                    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                        sThreeDayClockAlpha = 255;
+                    } else {
+                        sThreeDayClockAlpha = interfaceCtx->bAlpha;
+                    }
+                    D_801BFB34 = 0;
+                    D_801BFB30 = 0;
+                }
+
+                if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+
+                    func_8012C654(play->state.gfxCtx);
+
+                    /**
+                     * Draw Clock's Hour Lines
+                     */
+                    gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+                    gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 130, 130, 130, sThreeDayClockAlpha);
+                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
+                                      TEXEL0, 0, PRIMITIVE, 0);
+
+                    OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockHourLinesTex, 4, 64, 35, 96, 180, 128,
+                                                     35, 1, 6, 0, 1 << 10, 1 << 10);
+
+                    /**
+                     * Draw Clock's Border
+                     */
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, sThreeDayClockAlpha);
+                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
+                                      TEXEL0, 0, PRIMITIVE, 0);
+
+                    //! @bug A texture height of 50 is given below. The texture is only 48 units height
+                    //!      resulting in this reading into the next texture. This results in a white
+                    //!      dot in the bottom center of the clock. For the three-day clock, this is
+                    //!      covered by the diamond. However, it can be seen by the final-hours clock.
+                    OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockBorderTex, 4, 64, 50, 96, 168, 128, 50,
+                                                     1, 6, 0, 1 << 10, 1 << 10);
+
+                    if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
+                                                (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
+                        func_8012C8D4(play->state.gfxCtx);
+                        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    } else {
+                        /**
+                         * Draw Three-Day Clock's Diamond
+                         */
+                        gDPPipeSync(OVERLAY_DISP++);
+
+                        // Time is slowed down to half speed with inverted song of time
+                        if (gSaveContext.save.timeSpeedOffset == -2) {
+                            // Clock diamond is blue and flashes white
+                            colorStep = ABS_ALT(D_801BFBCC - D_801BFBEC[D_801BFBE8]) / D_801BFBE4;
+                            if (D_801BFBCC >= D_801BFBEC[D_801BFBE8]) {
+                                D_801BFBCC -= colorStep;
+                            } else {
+                                D_801BFBCC += colorStep;
+                            }
+
+                            colorStep = ABS_ALT(D_801BFBD0 - D_801BFBF0[D_801BFBE8]) / D_801BFBE4;
+                            if (D_801BFBD0 >= D_801BFBF0[D_801BFBE8]) {
+                                D_801BFBD0 -= colorStep;
+                            } else {
+                                D_801BFBD0 += colorStep;
+                            }
+
+                            colorStep = ABS_ALT(D_801BFBD4 - D_801BFBF4[D_801BFBE8]) / D_801BFBE4;
+                            if (D_801BFBD4 >= D_801BFBF4[D_801BFBE8]) {
+                                D_801BFBD4 -= colorStep;
+                            } else {
+                                D_801BFBD4 += colorStep;
+                            }
+
+                            colorStep = ABS_ALT(D_801BFBD8 - D_801BFBF8[D_801BFBE8]) / D_801BFBE4;
+                            if (D_801BFBD8 >= D_801BFBF8[D_801BFBE8]) {
+                                D_801BFBD8 -= colorStep;
+                            } else {
+                                D_801BFBD8 += colorStep;
+                            }
+
+                            colorStep = ABS_ALT(D_801BFBDC - D_801BFBFC[D_801BFBE8]) / D_801BFBE4;
+                            if (D_801BFBDC >= D_801BFBFC[D_801BFBE8]) {
+                                D_801BFBDC -= colorStep;
+                            } else {
+                                D_801BFBDC += colorStep;
+                            }
+
+                            colorStep = ABS_ALT(D_801BFBE0 - D_801BFC00[D_801BFBE8]) / D_801BFBE4;
+                            if (D_801BFBE0 >= D_801BFC00[D_801BFBE8]) {
+                                D_801BFBE0 -= colorStep;
+                            } else {
+                                D_801BFBE0 += colorStep;
+                            }
+
+                            D_801BFBE4--;
+
+                            if (D_801BFBE4 == 0) {
+                                D_801BFBCC = D_801BFBEC[D_801BFBE8];
+                                D_801BFBD0 = D_801BFBF0[D_801BFBE8];
+                                D_801BFBD4 = D_801BFBF4[D_801BFBE8];
+                                D_801BFBD8 = D_801BFBF8[D_801BFBE8];
+                                D_801BFBDC = D_801BFBFC[D_801BFBE8];
+                                D_801BFBE0 = D_801BFC00[D_801BFBE8];
+                                D_801BFBE4 = 15;
+                                D_801BFBE8 ^= 1;
+                            }
+
+                            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
+                                              PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
+                                              PRIMITIVE, 0);
+                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BFBCC, D_801BFBD0, 255, sThreeDayClockAlpha);
+                            gDPSetEnvColor(OVERLAY_DISP++, D_801BFBD8, D_801BFBDC, D_801BFBE0, 0);
+                        } else {
+                            // Clock diamond is green for regular timeSpeedOffset
+                            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 170, 100, sThreeDayClockAlpha);
+                        }
+
+                        OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, gThreeDayClockDiamondTex, 40, 32, 140, 190, 40,
+                                                          32, 1 << 10, 1 << 10);
+
+                        /**
+                         * Draw Three-Day Clock's Day-Number over Diamond
+                         */
+                        gDPPipeSync(OVERLAY_DISP++);
+                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
+
+                        OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, interfaceCtx->doActionSegment + 0x780, 48, 27,
+                                                          137, 192, 48, 27, 1 << 10, 1 << 10);
+
+                        /**
+                         * Draw Three-Day Clock's Star (for the Minute Tracker)
+                         */
+                        gDPPipeSync(OVERLAY_DISP++);
+
+                        if (D_801BF974 != 0) {
+                            D_801BF980 += 0.02f;
+                            D_801BF97C += 11;
+                        } else {
+                            D_801BF980 -= 0.02f;
+                            D_801BF97C -= 11;
+                        }
+
+                        D_801BF978--;
+                        if (D_801BF978 == 0) {
+                            D_801BF978 = 10;
+                            D_801BF974 ^= 1;
+                        }
+
+                        timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
+                        timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
+
+                        func_8012C8D4(play->state.gfxCtx);
+
+                        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                        if (sThreeDayClockAlpha != 255) {
+                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 110, sThreeDayClockAlpha);
+                        } else {
+                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 110, D_801BF97C);
+                        }
+
+                        gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                        gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+                        gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+
+                        Matrix_Translate(0.0f, -86.0f, 0.0f, MTXMODE_NEW);
+                        Matrix_Scale(1.0f, 1.0f, D_801BF980, MTXMODE_APPLY);
+                        Matrix_RotateZF(-(timeInSeconds * 0.0175f) / 10.0f, MTXMODE_APPLY);
+
+                        gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[12], 4, 0);
+                        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gThreeDayClockStarMinuteTex, G_IM_FMT_I, 16, 16, 0,
+                                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
+                                               G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                        gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
+                    }
+
+                    /**
+                     * Cuts off Three-Day Clock's Sun and Moon when they dip below the clock
+                     */
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
+                                      R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF * 4.0f);
+
+                    // determines the current hour
+                    for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
+                        if (((void)0, gSaveContext.save.time) < sThreeDayClockHours[sp1C6 + 1]) {
+                            break;
+                        }
+                    }
+
+                    /**
+                     * Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+                     */
+                    time = gSaveContext.save.time;
+                    sp1D8 = Math_SinS(time) * -40.0f;
+                    temp_f14 = Math_CosS(time) * -34.0f;
+
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 100, 110, sThreeDayClockAlpha);
+
+                    Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
+                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+
+                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[16], 4, 0);
+
+                    OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockSunHourTex, 24, 24, 0);
+
+                    /**
+                     * Draw Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+                     */
+                    sp1D8 = Math_SinS(time) * 40.0f;
+                    temp_f14 = Math_CosS(time) * 34.0f;
+
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 55, sThreeDayClockAlpha);
+
+                    Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
+                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[20], 4, 0);
+
+                    OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockMoonHourTex, 24, 24, 0);
+
+                    /**
+                     * Cuts off Three-Day Clock's Hour Digits when they dip below the clock
+                     */
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
+                                      R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF * 4.0f);
+
+                    /**
+                     * Draws Three-Day Clock's Hour Digit Above the Sun
+                     */
+                    sp1CC = gSaveContext.save.time * 0.000096131f;
+
+                    // Rotates Three-Day Clock's Hour Digit To Above the Sun
+                    Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
+                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                    Matrix_RotateZF(-(sp1CC - 3.15f), MTXMODE_APPLY);
+                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                    // Draws Three-Day Clock's Hour Digit Above the Sun
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
+                                      TEXEL0, 0, PRIMITIVE, 0);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
+                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[24], 8, 0);
+
+                    OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], 4, 16, 11, 0);
+
+                    // Colours the Three-Day Clocks's Hour Digit Above the Sun
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
+                    gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
+
+                    /**
+                     * Draws Three-Day Clock's Hour Digit Above the Moon
+                     */
+                    // Rotates Three-Day Clock's Hour Digit To Above the Moon
+                    Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
+                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                    Matrix_RotateZF(-sp1CC, MTXMODE_APPLY);
+                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                    // Draws Three-Day Clock's Hour Digit Above the Moon
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
+                                      TEXEL0, 0, PRIMITIVE, 0);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
+                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[32], 8, 0);
+
+                    OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], 4, 16, 11, 0);
+
+                    // Colours the Three-Day Clocks's Hour Digit Above the Moon
+                    gDPPipeSync(OVERLAY_DISP++);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
+                    gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
+
+                    gSPDisplayList(OVERLAY_DISP++, D_0E000000.setScissor);
+
+                    // Final Hours
+                    if ((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
+                                               (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
+                        if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0)) {
+                            // The Final Hours clock will flash red
+
+                            colorStep =
+                                ABS_ALT(sFinalHoursClockDigitsRed - D_801BFC04[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                            if (sFinalHoursClockDigitsRed >= D_801BFC04[sFinalHoursClockColorTargetIndex]) {
+                                sFinalHoursClockDigitsRed -= colorStep;
+                            } else {
+                                sFinalHoursClockDigitsRed += colorStep;
+                            }
+
+                            colorStep =
+                                ABS_ALT(sFinalHoursClockFrameEnvRed - D_801BFC08[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                            if (sFinalHoursClockFrameEnvRed >= D_801BFC08[sFinalHoursClockColorTargetIndex]) {
+                                sFinalHoursClockFrameEnvRed -= colorStep;
+                            } else {
+                                sFinalHoursClockFrameEnvRed += colorStep;
+                            }
+
+                            colorStep =
+                                ABS_ALT(sFinalHoursClockFrameEnvGreen - D_801BFC0C[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                            if (sFinalHoursClockFrameEnvGreen >= D_801BFC0C[sFinalHoursClockColorTargetIndex]) {
+                                sFinalHoursClockFrameEnvGreen -= colorStep;
+                            } else {
+                                sFinalHoursClockFrameEnvGreen += colorStep;
+                            }
+
+                            colorStep =
+                                ABS_ALT(sFinalHoursClockFrameEnvBlue - D_801BFC10[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                            if (sFinalHoursClockFrameEnvBlue >= D_801BFC10[sFinalHoursClockColorTargetIndex]) {
+                                sFinalHoursClockFrameEnvBlue -= colorStep;
+                            } else {
+                                sFinalHoursClockFrameEnvBlue += colorStep;
+                            }
+
+                            sFinalHoursClockColorTimer--;
+
+                            if (sFinalHoursClockColorTimer == 0) {
+                                sFinalHoursClockDigitsRed = D_801BFC04[sFinalHoursClockColorTargetIndex];
+                                sFinalHoursClockFrameEnvRed = D_801BFC08[sFinalHoursClockColorTargetIndex];
+                                sFinalHoursClockFrameEnvGreen = D_801BFC0C[sFinalHoursClockColorTargetIndex];
+                                sFinalHoursClockFrameEnvBlue = D_801BFC10[sFinalHoursClockColorTargetIndex];
+                                sFinalHoursClockColorTimer = 6;
+                                sFinalHoursClockColorTargetIndex ^= 1;
+                            }
+                        }
+
+                        sp1E6 = sThreeDayClockAlpha;
+                        if (sp1E6 != 0) {
+                            sp1E6 = 255;
+                        }
+
+                        func_8012C654(play->state.gfxCtx);
+
+                        /**
+                         * Draws Final-Hours Clock's Frame
+                         */
+                        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                        gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+                        gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+                        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
+                                          PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
+                                          PRIMITIVE, 0);
+                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 195, sp1E6);
+                        gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockFrameEnvRed, sFinalHoursClockFrameEnvGreen,
+                                       sFinalHoursClockFrameEnvBlue, 0);
+
+                        OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gFinalHoursClockFrameTex, 3, 80, 13, 119, 202,
+                                                         80, 13, 0, 0, 0, 1 << 10, 1 << 10);
+
+                        finalHoursClockSlots[0] = 0;
+
+                        timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
+
+                        timeInMinutes = TIME_TO_MINUTES_F(timeUntilMoonCrash);
+
+                        // digits for hours
+                        finalHoursClockSlots[1] = timeInMinutes / 60.0f;
+                        finalHoursClockSlots[2] = timeInMinutes / 60.0f;
+
+                        temp = (s32)timeInMinutes % 60;
+
+                        while (finalHoursClockSlots[1] >= 10) {
+                            finalHoursClockSlots[0]++;
+                            finalHoursClockSlots[1] -= 10;
+                        }
+
+                        // digits for minutes
+                        finalHoursClockSlots[3] = 0;
+                        finalHoursClockSlots[4] = temp;
+
+                        while (finalHoursClockSlots[4] >= 10) {
+                            finalHoursClockSlots[3]++;
+                            finalHoursClockSlots[4] -= 10;
+                        }
+
+                        // digits for seconds
+                        finalHoursClockSlots[6] = 0;
+                        finalHoursClockSlots[7] =
+                            timeUntilMoonCrash - (u32)((finalHoursClockSlots[2] * ((f32)0x10000 / 24)) +
+                                                       (((void)0, temp) * ((f32)0x10000 / (24 * 60))));
+
+                        while (finalHoursClockSlots[7] >= 10) {
+                            finalHoursClockSlots[6]++;
+                            finalHoursClockSlots[7] -= 10;
+                        }
+
+                        // Colon separating hours from minutes and minutes from seconds
+                        finalHoursClockSlots[2] = finalHoursClockSlots[5] = 10;
+
+                        /**
+                         * Draws Final-Hours Clock's Digits
+                         */
+                        gDPPipeSync(OVERLAY_DISP++);
+                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sFinalHoursClockDigitsRed, 0, 0, sp1E6);
+                        gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockDigitsRed, 0, 0, 0);
+
+                        for (sp1C6 = 0; sp1C6 < 8; sp1C6++) {
+                            index = D_801BFC40[sp1C6];
+
+                            OVERLAY_DISP =
+                                Gfx_DrawTexRectI8(OVERLAY_DISP, sFinalHoursDigitTextures[finalHoursClockSlots[sp1C6]],
+                                                  8, 8, index, 205, 8, 8, 1 << 10, 1 << 10);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+#else
+s16 sThreeDayClockAlpha = 255;
 s16 D_801BFB30 = 0;
 s16 D_801BFB34 = 0;
-u16 D_801BFB38[] = {
+u16 sThreeDayClockHours[] = {
     CLOCK_TIME(0, 0),  CLOCK_TIME(1, 0),  CLOCK_TIME(2, 0),  CLOCK_TIME(3, 0),  CLOCK_TIME(4, 0),
     CLOCK_TIME(5, 0),  CLOCK_TIME(6, 0),  CLOCK_TIME(7, 0),  CLOCK_TIME(8, 0),  CLOCK_TIME(9, 0),
     CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
     CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
     CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
 };
-TexturePtr D_801BFB6C[] = {
+TexturePtr sThreeDayClockHourTextures[] = {
     gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
     gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
     gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
@@ -3124,7 +3678,7 @@ s16 D_801BFC04[] = { 255, 0 };
 s16 D_801BFC08[] = { 100, 0 };
 s16 D_801BFC0C[] = { 30, 0 };
 s16 D_801BFC10[] = { 100, 0 };
-TexturePtr D_801BFC14[] = {
+TexturePtr sFinalHoursDigitTextures[] = {
     gFinalHoursClockDigit0Tex, gFinalHoursClockDigit1Tex, gFinalHoursClockDigit2Tex, gFinalHoursClockDigit3Tex,
     gFinalHoursClockDigit4Tex, gFinalHoursClockDigit5Tex, gFinalHoursClockDigit6Tex, gFinalHoursClockDigit7Tex,
     gFinalHoursClockDigit8Tex, gFinalHoursClockDigit9Tex, gFinalHoursClockColonTex,
@@ -3132,8 +3686,9 @@ TexturePtr D_801BFC14[] = {
 s16 D_801BFC40[] = {
     127, 136, 144, 151, 160, 168, 175, 184,
 };
-
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80119610.s")
+void Interface_DrawClock(PlayState* play);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_DrawClock.s")
+#endif
 
 void Interface_SetPerfectLetters(PlayState* play, s16 perfectLettersType) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
