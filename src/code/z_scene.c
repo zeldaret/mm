@@ -389,6 +389,7 @@ void Scene_HeaderCmdTimeSettings(PlayState* play, SceneCmd* cmd) {
         play->envCtx.sceneTimeSpeed = 0;
     }
 
+    // Increase time speed during first cycle
     if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (play->envCtx.sceneTimeSpeed != 0)) {
         play->envCtx.sceneTimeSpeed = 5;
     }

@@ -177,7 +177,6 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                             this->textId = 0x5EA;
                             break;
                         case 3:
-                            // Calculates the time left before the moon crashes.
                             timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
                             if (timeUntilMoonCrash < CLOCK_TIME_F(1, 0)) {
                                 this->textId = 0x5E8;

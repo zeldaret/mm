@@ -946,7 +946,7 @@ void Interface_NewDay(PlayState* play, s32 day) {
                         (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
 
     // i is used to store sceneId
-    for (i = 0; i < 120; i++) {
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.permanentSceneFlags); i++) {
         gSaveContext.save.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
         gSaveContext.save.permanentSceneFlags[i].switch0 = gSaveContext.cycleSceneFlags[i].switch0;
         gSaveContext.save.permanentSceneFlags[i].switch1 = gSaveContext.cycleSceneFlags[i].switch1;

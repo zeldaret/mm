@@ -212,10 +212,8 @@ void Message_LoadTimeNES(PlayState* play, u8 arg1, s32* offset, f32* arg3, s16* 
     s16 i;
 
     if (arg1 == 0xCF) {
-        // Calculates the time left before the moon crashes.
         timeLeft = TIME_UNTIL_MOON_CRASH;
     } else {
-        // Calculates the time left before a new day.
         timeLeft = TIME_UNTIL_NEW_DAY;
     }
 
