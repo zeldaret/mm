@@ -1226,8 +1226,8 @@ TexturePtr D_80B533E4[] = {
 void EnGk_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnGk* this = THIS;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1242,12 +1242,12 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
         func_8012C2DC(play->state.gfxCtx);
 
-        sp5C = this->actor.world.pos;
-        sp50.x = 0.2f;
-        sp50.y = 0.2f;
-        sp50.z = 0.2f;
+        pos = this->actor.world.pos;
+        scale.x = 0.2f;
+        scale.y = 0.2f;
+        scale.z = 0.2f;
 
-        func_800BC620(&sp5C, &sp50, 255, play);
+        func_800BC620(&pos, &scale, 255, play);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B533E4[this->unk_2E0]));
 
@@ -1259,20 +1259,21 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
             func_8012C2DC(play->state.gfxCtx);
             if ((this->unk_2E4 == 0) || (this->unk_2E4 == 1) || (this->unk_2E4 == 2) || (this->unk_2E4 == 3) ||
                 (this->unk_2E4 == 4)) {
-                sp5C.x = this->actor.world.pos.x - 15.0f;
-                sp5C.y = this->actor.world.pos.y;
-                sp5C.z = this->actor.world.pos.z;
+                pos.x = this->actor.world.pos.x - 15.0f;
+                pos.y = this->actor.world.pos.y;
+                pos.z = this->actor.world.pos.z;
 
-                sp50.x = 0.2f;
-                sp50.y = 0.2f;
-                sp50.z = 0.2f;
+                scale.x = 0.2f;
+                scale.y = 0.2f;
+                scale.z = 0.2f;
             } else {
-                sp5C = this->actor.world.pos;
-                sp50.x = 0.2f;
-                sp50.y = 0.2f;
-                sp50.z = 0.2f;
+                pos = this->actor.world.pos;
+                scale.x = 0.2f;
+                scale.y = 0.2f;
+                scale.z = 0.2f;
             }
-            func_800BC620(&sp5C, &sp50, 255, play);
+
+            func_800BC620(&pos, &scale, 255, play);
         }
     }
 

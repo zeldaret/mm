@@ -1064,7 +1064,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
 }
 
 void EnIk_Draw(Actor* thisx, PlayState* play) {
-    static Vec3f D_8092C200 = { 0.53f, 0.53f, 0.53f };
+    static Vec3f sScale = { 0.53f, 0.53f, 0.53f };
     EnIk* this = THIS;
     Gfx* gfx;
     Gfx** gfxArmorType;
@@ -1091,7 +1091,7 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(play);
     }
-    func_800BC620(&this->actor.focus.pos, &D_8092C200, 255, play);
+    func_800BC620(&this->actor.focus.pos, &sScale, 255, play);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 

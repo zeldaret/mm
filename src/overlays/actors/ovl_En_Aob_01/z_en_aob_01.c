@@ -1034,8 +1034,8 @@ void EnAob01_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnAob01_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnAob01* this = THIS;
-    Vec3f sp5C;
-    Vec3f sp50;
+    Vec3f pos;
+    Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1051,11 +1051,11 @@ void EnAob01_Draw(Actor* thisx, PlayState* play) {
 
     if (this->actor.draw != NULL) {
         func_8012C2DC(play->state.gfxCtx);
-        sp5C = this->actor.world.pos;
-        sp50.x = 0.5f;
-        sp50.y = 0.5f;
-        sp50.z = 0.5f;
-        func_800BC620(&sp5C, &sp50, 0xFF, play);
+        pos = this->actor.world.pos;
+        scale.x = 0.5f;
+        scale.y = 0.5f;
+        scale.z = 0.5f;
+        func_800BC620(&pos, &scale, 255, play);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

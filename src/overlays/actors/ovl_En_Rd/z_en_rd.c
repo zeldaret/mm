@@ -1325,10 +1325,10 @@ void EnRd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 }
 
 void EnRd_Draw(Actor* thisx, PlayState* play) {
-    static Vec3f D_808D7138 = { 0.25f, 0.25f, 0.25f };
+    static Vec3f sScale = { 0.25f, 0.25f, 0.25f };
     s32 pad;
     EnRd* this = THIS;
-    Vec3f sp54 = this->actor.world.pos;
+    Vec3f pos = this->actor.world.pos;
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1344,7 +1344,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnRd_OverrideLimbDraw, EnRd_PostLimbDraw, &this->actor, POLY_OPA_DISP);
 
-        func_800BC620(&sp54, &D_808D7138, 255, play);
+        func_800BC620(&pos, &sScale, 255, play);
     } else {
         func_8012C2DC(play->state.gfxCtx);
 
@@ -1354,7 +1354,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnRd_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
-        func_800BC620(&sp54, &D_808D7138, this->alpha, play);
+        func_800BC620(&pos, &sScale, this->alpha, play);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
