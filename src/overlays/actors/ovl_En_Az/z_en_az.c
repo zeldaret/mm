@@ -1370,7 +1370,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 } else {
                     Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
                     if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
-                        func_800B8500(&this->actor, play, 120.0f, 120.0f, 0)) {
+                        func_800B8500(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                             this->actor.textId = 0;

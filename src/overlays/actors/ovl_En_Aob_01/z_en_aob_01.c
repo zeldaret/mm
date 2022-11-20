@@ -790,7 +790,7 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
         }
 
         this->unk_210 = 0;
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         gSaveContext.eventInf[0] &= (u8)~7;
         this->actionFunc = func_809C2C9C;
     }
@@ -802,7 +802,7 @@ void func_809C2C9C(EnAob01* this, PlayState* play) {
         func_80151938(play, this->unk_210);
         this->actionFunc = func_809C1D64;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
