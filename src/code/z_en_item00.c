@@ -1128,16 +1128,17 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
         if (fromActor != NULL) {
             dropFlag = fromActor->dropFlag;
-            if (dropFlag != 0) {
-                if (fromActor->dropFlag & 1) {
+
+            if (dropFlag != DROPFLAG_NONE) {
+                if (fromActor->dropFlag & DROPFLAG_1) {
                     params = 0x10;
                     dropId = ITEM00_ARROWS_30;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 2) {
+                } else if (fromActor->dropFlag & DROPFLAG_2) {
                     params = 0x10;
                     dropId = ITEM00_RECOVERY_HEART;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 0x20) {
+                } else if (fromActor->dropFlag & DROPFLAG_20) {
                     dropId = ITEM00_RUPEE_PURPLE;
                     dropQuantity = 1;
                 }

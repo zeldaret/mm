@@ -527,6 +527,11 @@ typedef enum {
 // 
 #define ACTOR_FLAG_80000000      (1 << 31)
 
+#define DROPFLAG_NONE   (0)
+#define DROPFLAG_1      (1 << 0)
+#define DROPFLAG_2      (1 << 1)
+#define DROPFLAG_20     (1 << 5)
+
 typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
     /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
@@ -648,7 +653,7 @@ typedef struct {
 } TargetRangeParams; // size = 0x8
 
 // From OoT's struct_80034A14_arg1
-typedef struct {
+typedef struct struct_800BD888_arg1 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;

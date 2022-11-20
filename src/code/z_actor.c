@@ -4075,37 +4075,37 @@ typedef struct {
 } struct_801AEE38; // size = 0x18
 
 struct_801AEE38 D_801AEE38[] = {
-    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0x0E38, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x31C4, 0xE390, 0x0E38, 0x0E38, 0xF1C8, 0x071C, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x1554, 0xF1C8, 0x0000, 0x071C, 0xF8E4, 0x0000, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xF8E4, 0x071C, 0x0E38, 0xD558, 0x2AA8, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x0000, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0x0E38, 0x0001 }, 170.0f, 0x3FFC },
-    { { 0x2AA8, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2AA8, 0xF1C8, 0x0000, 0x0E38, 0x0000, 0x1C70, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2AA8, 0xF1C8, 0xF1C8, 0x0000, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x071C, 0xF1C8, 0x0E38, 0x1C70, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x0E38, 0xF1C8, 0x0000, 0x1C70, 0x0000, 0x0E38, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2AA8, 0xE390, 0x1C70, 0x0E38, 0xF1C8, 0x0E38, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x18E2, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, 0x0001 }, 0.0f, 0x0000 },
-    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, 0x0000 }, 170.0f, 0x3FFC },
+    { { 0x1C20, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, false }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xEAAC, 0x1554, 0x1554, 0xF8E4, 0x0E38, true }, 170.0f, 0x3FFC },
+    { { 0x31C4, 0xE390, 0x0E38, 0x0E38, 0xF1C8, 0x071C, true }, 170.0f, 0x3FFC },
+    { { 0x1554, 0xF1C8, 0x0000, 0x071C, 0xF8E4, 0x0000, true }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF8E4, 0x071C, 0x0E38, 0xD558, 0x2AA8, true }, 170.0f, 0x3FFC },
+    { { 0x0000, 0xE390, 0x2AA8, 0x3FFC, 0xF1C8, 0x0E38, true }, 170.0f, 0x3FFC },
+    { { 0x2AA8, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xF1C8, 0x0000, 0x0E38, 0x0000, 0x1C70, true }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xF1C8, 0xF1C8, 0x0000, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x071C, 0xF1C8, 0x0E38, 0x1C70, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x0E38, 0xF1C8, 0x0000, 0x1C70, 0x0000, 0x0E38, true }, 0.0f, 0x0000 },
+    { { 0x2AA8, 0xE390, 0x1C70, 0x0E38, 0xF1C8, 0x0E38, true }, 0.0f, 0x0000 },
+    { { 0x18E2, 0xF1C8, 0x0E38, 0x0E38, 0x0000, 0x0000, true }, 0.0f, 0x0000 },
+    { { 0x2A6C, 0xE390, 0x1C70, 0x1554, 0x0000, 0x0000, false }, 170.0f, 0x3FFC },
 };
 
 void func_800BD384(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
                    u8 arg8) {
-    s16 sp46;
+    s16 pitch;
     s16 sp44;
     s16 temp2;
     s16 sp40;
     s16 temp1;
-    Vec3f sp30;
+    Vec3f pos;
 
-    sp30.x = actor->world.pos.x;
-    sp30.y = actor->world.pos.y + arg1->unk_14;
-    sp30.z = actor->world.pos.z;
+    pos.x = actor->world.pos.x;
+    pos.y = actor->world.pos.y + arg1->unk_14;
+    pos.z = actor->world.pos.z;
 
-    sp46 = Math_Vec3f_Pitch(&sp30, &arg1->unk_18);
-    sp44 = Math_Vec3f_Yaw(&sp30, &arg1->unk_18);
+    pitch = Math_Vec3f_Pitch(&pos, &arg1->unk_18);
+    sp44 = Math_Vec3f_Yaw(&pos, &arg1->unk_18);
     sp40 = Math_Vec3f_Yaw(&actor->world.pos, &arg1->unk_18) - actor->shape.rot.y;
 
     temp1 = CLAMP(sp40, -arg2, arg2);
@@ -4126,10 +4126,10 @@ void func_800BD384(Actor* actor, struct_800BD888_arg1* arg1, s16 arg2, s16 arg3,
         Math_SmoothStepToS(&actor->shape.rot.y, sp44, 6, 2000, 1);
     }
 
-    temp1 = CLAMP(sp46, arg4, (s16)(u16)arg3);
+    temp1 = CLAMP(pitch, arg4, (s16)(u16)arg3);
     Math_SmoothStepToS(&arg1->unk_08.x, temp1, 6, 2000, 1);
 
-    temp2 = sp46 - arg1->unk_08.x;
+    temp2 = pitch - arg1->unk_08.x;
 
     temp1 = CLAMP(temp2, arg7, arg6);
     Math_SmoothStepToS(&arg1->unk_0E.x, temp1, 6, 2000, 1);
@@ -4361,15 +4361,15 @@ void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo) {
     ColliderInfo* acHitInfo = colInfo->acHitInfo;
 
     if (acHitInfo == NULL) {
-        actor->dropFlag = 0;
+        actor->dropFlag = DROPFLAG_NONE;
     } else if (acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW) {
-        actor->dropFlag = 1;
+        actor->dropFlag = DROPFLAG_1;
     } else if (acHitInfo->toucher.dmgFlags & DMG_ICE_ARROW) {
-        actor->dropFlag = 2;
+        actor->dropFlag = DROPFLAG_2;
     } else if (acHitInfo->toucher.dmgFlags & DMG_LIGHT_ARROW) {
-        actor->dropFlag = 0x20;
+        actor->dropFlag = DROPFLAG_20;
     } else {
-        actor->dropFlag = 0;
+        actor->dropFlag = DROPFLAG_NONE;
     }
 }
 
@@ -4379,23 +4379,23 @@ void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere) {
     ColliderInfo* acHitInfo;
     s32 flag;
 
-    actor->dropFlag = 0;
+    actor->dropFlag = DROPFLAG_NONE;
 
     for (i = jntSphere->count - 1; i >= 0; i--) {
         jntElement = &jntSphere->elements[i];
         acHitInfo = jntElement->info.acHitInfo;
 
         if (acHitInfo == NULL) {
-            flag = 0;
+            flag = DROPFLAG_NONE;
         } else {
             s32 dmgFlags = acHitInfo->toucher.dmgFlags;
 
-            if (dmgFlags & 0x800) {
-                flag = 1;
-            } else if (dmgFlags & 0x1000) {
-                flag = 2;
+            if (dmgFlags & DMG_FIRE_ARROW) {
+                flag = DROPFLAG_1;
+            } else if (dmgFlags & DMG_ICE_ARROW) {
+                flag = DROPFLAG_2;
             } else {
-                flag = (dmgFlags & 0x2000) ? 0x20 : 0;
+                flag = (dmgFlags & DMG_LIGHT_ARROW) ? DROPFLAG_20 : DROPFLAG_NONE;
             }
         }
 

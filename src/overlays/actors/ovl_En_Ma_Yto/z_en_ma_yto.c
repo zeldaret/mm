@@ -1286,7 +1286,7 @@ void func_80B90C78(EnMaYto* this, PlayState* play) {
             this->unk_1D8.unk_08.y = 0;
             this->unk_1D8.unk_08.x = 0;
         } else {
-            func_800BD888(&this->actor, &this->unk_1D8, 0xD, flag);
+            func_800BD888(&this->actor, &this->unk_1D8, 13, flag);
         }
     } else {
         Math_SmoothStepToS(&this->unk_1D8.unk_08.y, 0, 3, 0x71C, 0xB6);
