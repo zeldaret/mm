@@ -464,7 +464,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
         this->unk_2C8 = 5.0f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x0, 0x28);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speedXZ = 0.0f;
     }

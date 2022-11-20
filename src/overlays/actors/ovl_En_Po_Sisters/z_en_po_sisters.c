@@ -519,7 +519,7 @@ void EnPoSisters_SetupDamageFlinch(EnPoSisters* this) {
 
     this->poSisterFlags &=
         ~(POSISTERS_FLAG_MATCH_PLAYER_HEIGHT | POSISTERS_FLAG_UPDATE_SHAPE_ROT | POSISTERS_FLAG_CHECK_AC);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 16);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 16);
     this->actionFunc = EnPoSisters_DamageFlinch;
 }
 

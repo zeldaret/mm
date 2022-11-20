@@ -470,7 +470,7 @@ void func_80A33098(EnPr* this, PlayState* play) {
 
             if ((this->unk_206 != 6) && (this->unk_206 != 7)) {
                 Actor_ApplyDamage(&this->actor);
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEWALK_DAMAGE);
                 func_80A32E60(this);
             }

@@ -712,7 +712,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
     this->action = EN_GRASSHOPPER_ACTION_DAMAGED;
     this->actionFunc = EnGrasshopper_Damaged;
 }
@@ -737,7 +737,7 @@ void EnGrasshopper_SetupDead(EnGrasshopper* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 25);
     Enemy_StartFinishingBlow(play, &this->actor);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BATTA_DEAD);
     this->action = EN_GRASSHOPPER_ACTION_DEAD;
@@ -874,7 +874,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
                     return;
                 }
             } else if (this->actor.colChkInfo.damageEffect == EN_GRASSHOPPER_DMGEFF_LIGHT_ORB) {
-                Actor_SetColorFilter(&this->actor, 0x8000, 255, 0, 25);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RGB, 255, COLORFILTER_XLUFLAG_OPA, 25);
                 this->drawDmgEffTimer = 20;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,

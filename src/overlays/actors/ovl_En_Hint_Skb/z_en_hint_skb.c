@@ -347,7 +347,7 @@ void func_80C20590(EnHintSkb* this, PlayState* play) {
         this->drawDmgEffScale = 0.0f;
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_3E8 |= 1;
@@ -374,7 +374,7 @@ void func_80C2069C(EnHintSkb* this, PlayState* play) {
         this->drawDmgEffScale = 0.0f;
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_3E8 |= 1;
@@ -661,12 +661,12 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffTimer = 40;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;
-                Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 120, COLORFILTER_XLUFLAG_OPA, 40);
                 func_80C2011C(this);
                 break;
 
             case 1:
-                Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 120, COLORFILTER_XLUFLAG_OPA, 40);
                 func_80C2011C(this);
                 break;
 
@@ -675,7 +675,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 this->unk_3E8 |= 1;
                 func_80C20274(this);
@@ -690,7 +690,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.5f;
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 func_80C20540(this);
                 break;
             case 4:
@@ -698,7 +698,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.5f;
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_80C2066C(this);
@@ -717,7 +717,7 @@ void func_80C20E90(EnHintSkb* this, PlayState* play) {
                 }
 
             case 13:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_80C20274(this);

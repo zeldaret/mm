@@ -342,9 +342,9 @@ void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10;
 
     if (this->isInvisible) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0x2000, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_XLU, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 40);
     }
 
     if (this->actor.colChkInfo.damageEffect == KEESE_DMGEFF_ICE) {
@@ -540,9 +540,9 @@ void EnFirefly_FlyAway(EnFirefly* this, PlayState* play) {
 
 void EnFirefly_SetupStunned(EnFirefly* this) {
     if (this->isInvisible) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0x2000, this->timer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 255, COLORFILTER_XLUFLAG_XLU, this->timer);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, this->timer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 255, COLORFILTER_XLUFLAG_OPA, this->timer);
     }
 
     if (this->actionFunc != EnFirefly_Stunned) {

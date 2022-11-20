@@ -791,7 +791,7 @@ void EnRat_Update(Actor* thisx, PlayState* play) {
             this->damageReaction.hookedState = EN_RAT_HOOK_STARTED;
         } else if (this->actor.colChkInfo.damageEffect == EN_RAT_DMGEFF_STUN) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 120, COLORFILTER_XLUFLAG_OPA, 40);
             if (this->actionFunc == EnRat_Bounced) {
                 this->actor.speedXZ = 0.0f;
                 if (this->actor.velocity.y > 0.0f) {

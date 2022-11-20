@@ -439,7 +439,7 @@ s32 func_80BF45B4(EnRg* this) {
                 this->actor.world.rot.y += 0x2000;
             }
         }
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 40);
         this->unk_322 = 0xA;
     }
 

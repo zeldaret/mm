@@ -367,7 +367,7 @@ void func_809907D4(EnWf* this) {
     this->collider3.base.colType = COLTYPE_HIT3;
     this->unk_2A0 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_OPA, 80);
 }
 
 void func_80990854(EnWf* this, PlayState* play) {
@@ -1422,12 +1422,12 @@ void func_8099386C(EnWf* this, PlayState* play) {
 
             if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2A0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0x78, COLORFILTER_XLUFLAG_OPA, 40);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0xFF, COLORFILTER_XLUFLAG_OPA, 40);
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffScale = 0.75f;
                 this->drawDmgEffAlpha = 2.0f;
@@ -1454,7 +1454,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                                 CLEAR_TAG_LARGE_LIGHT_RAYS);
                 }
 
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     func_80992D6C(this);
                 } else {

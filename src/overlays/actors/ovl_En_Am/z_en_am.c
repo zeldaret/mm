@@ -383,7 +383,7 @@ void EnAm_TakeDamage(EnAm* this, PlayState* play) {
                      Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speedXZ = 6.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
     this->enemyCollider.base.acFlags &= ~AC_ON;
     this->textureBlend = 255;
@@ -440,7 +440,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     } else if (!(this->explodeTimer & 3)) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 4);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
         this->actor.world.rot.z += 0x320;

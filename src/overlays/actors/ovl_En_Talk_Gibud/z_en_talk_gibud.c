@@ -524,9 +524,9 @@ void EnTalkGibud_SetupStunned(EnTalkGibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->drawDmgEffTimer != 0) {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0xC8, COLORFILTER_XLUFLAG_OPA, 0x28);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0xC8, COLORFILTER_XLUFLAG_OPA, 0x28);
     }
 
     this->actionFunc = EnTalkGibud_Stunned;
@@ -1017,7 +1017,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
 
         switch (this->actor.colChkInfo.damageEffect) {
             case EN_TALK_GIBUD_DMGEFF_DAMAGE:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 if (player->unk_ADC != 0) {
                     this->unk_3F7 = player->unk_ADD;
                 }
@@ -1038,7 +1038,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_FIRE_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnTalkGibud_SetupDead(this);
                 } else {
@@ -1050,7 +1050,7 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_LIGHT_ARROW:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
                 if (this->actor.colChkInfo.health == 0) {
                     EnTalkGibud_SetupDead(this);
                 } else {

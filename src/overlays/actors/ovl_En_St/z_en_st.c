@@ -589,21 +589,21 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                 case 1:
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_312 = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA, this->unk_312);
                     break;
 
                 case 5:
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->unk_312 = 40;
                     func_808A576C(this);
-                    Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA, this->unk_312);
                     break;
 
                 default:
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
                     this->unk_314 = 20;
                     this->unk_312 = 0;
-                    Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 200, COLORFILTER_XLUFLAG_OPA, this->unk_314);
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                     this->unk_18C |= 8;
                     this->actionFunc = func_808A6D84;
@@ -652,7 +652,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             }
             this->unk_314 = 20;
             this->unk_312 = 0;
-            Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 200, COLORFILTER_XLUFLAG_OPA, this->unk_314);
             ret = true;
         }
         this->unk_310 = 0;

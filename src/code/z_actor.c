@@ -2574,31 +2574,31 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[actor->objBankIndex].segment);
 
     if (actor->colorFilterTimer != 0) {
-        s32 temp_v0_2 = actor->colorFilterParams & 0xC000;
+        s32 colorFlag = COLORFILTER_GET_COLORFLAG(actor->colorFilterParams);
         Color_RGBA8 actorDefaultHitColor = { 0, 0, 0, 255 };
 
-        if (temp_v0_2 == 0x8000) {
+        if (colorFlag == COLORFILTER_COLORFLAG_RGB) {
             actorDefaultHitColor.r = actorDefaultHitColor.g = actorDefaultHitColor.b =
-                ((actor->colorFilterParams & 0x1F00) >> 5) | 7;
-        } else if (temp_v0_2 == 0x4000) {
-            actorDefaultHitColor.r = ((actor->colorFilterParams & 0x1F00) >> 5) | 7;
-        } else if (temp_v0_2 == 0xC000) {
+                COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
+        } else if (colorFlag == COLORFILTER_COLORFLAG_R) {
+            actorDefaultHitColor.r = COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
+        } else if (colorFlag == COLORFILTER_COLORFLAG_NONE) {
             actorDefaultHitColor.b = actorDefaultHitColor.g = actorDefaultHitColor.r = 0;
         } else {
-            actorDefaultHitColor.b = ((actor->colorFilterParams & 0x1F00) >> 5) | 7;
+            actorDefaultHitColor.b = COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
         }
 
-        if (actor->colorFilterParams & 0x2000) {
-            func_800AE778(play, &actorDefaultHitColor, actor->colorFilterTimer, actor->colorFilterParams & 0xFF);
+        if (COLORFILTER_GET_XLUFLAG(actor->colorFilterParams)) {
+            func_800AE778(play, &actorDefaultHitColor, actor->colorFilterTimer, COLORFILTER_GET_DURATION(actor->colorFilterParams));
         } else {
-            func_800AE434(play, &actorDefaultHitColor, actor->colorFilterTimer, actor->colorFilterParams & 0xFF);
+            func_800AE434(play, &actorDefaultHitColor, actor->colorFilterTimer, COLORFILTER_GET_DURATION(actor->colorFilterParams));
         }
     }
 
     actor->draw(actor, play);
 
     if (actor->colorFilterTimer != 0) {
-        if (actor->colorFilterParams & 0x2000) {
+        if (COLORFILTER_GET_XLUFLAG(actor->colorFilterParams)) {
             func_800AE8EC(play);
         } else {
             func_800AE5A0(play);
@@ -3866,7 +3866,7 @@ void Actor_SpawnShieldParticlesMetal(PlayState* play, Vec3f* pos) {
 }
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
-    if ((colorFlag == 0x8000) && !(colorIntensityMax & 0x8000)) {
+    if ((colorFlag == COLORFILTER_COLORFLAG_RGB) && !(colorIntensityMax & 0x8000)) {
         Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 

@@ -420,7 +420,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
-                    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 8);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_XLU, 8);
                     if (this->actor.colChkInfo.health != 0) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FREEZAD_DAMAGE);
                         sp3C.x = this->actor.world.pos.x;

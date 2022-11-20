@@ -735,7 +735,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
             (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
             (this->collider.elements[7].info.bumperFlags & BUMP_HIT)) {
             Actor_ApplyDamage(&this->actor);
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 25);
             if (this->actor.colChkInfo.health > 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
                 this->action = DEEP_PYTHON_ACTION_DAMAGE;

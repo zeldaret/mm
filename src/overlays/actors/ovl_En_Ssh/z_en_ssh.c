@@ -282,7 +282,7 @@ void EnSsh_SetColliderScale(EnSsh* this, f32 arg1, f32 arg2) {
 
 s32 EnSsh_Damaged(EnSsh* this) {
     if ((this->stunTimer == 120) && (this->stateFlags & SSH_STATE_STUNNED)) {
-        Actor_SetColorFilter(&this->actor, 0, 200, 0, this->stunTimer);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA, this->stunTimer);
     }
 
     if (DECR(this->stunTimer) != 0) {

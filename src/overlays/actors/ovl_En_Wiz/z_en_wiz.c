@@ -1055,7 +1055,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
 
 void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
     EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DAMAGE, false);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
     this->timer = 20;
 
     if ((this->fightState != EN_WIZ_FIGHT_STATE_FIRST_PHASE) && (this->actor.colChkInfo.health <= 0)) {
