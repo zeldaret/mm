@@ -767,7 +767,7 @@ s32 func_800BE184(PlayState* play, Actor* actor, f32 xzDist, s16 arg3, s16 arg4,
 u8 Actor_ApplyDamage(Actor* actor);
 void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo);
 void Actor_SetDropFlagJntSph(Actor* actor, ColliderJntSph* jntSphere);
-void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3);
+void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* dst, s32 arg3);
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2);
 void func_800BE504(Actor* actor, ColliderCylinder* collider);
 void func_800BE568(Actor* actor, ColliderSphere* collider);

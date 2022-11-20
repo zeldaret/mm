@@ -92,7 +92,7 @@ void func_80B401F8(BgGoronOyu* this, PlayState* play) {
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
         Actor_OfferGetItem(&this->dyna.actor, play, GI_MAX, this->dyna.actor.xzDistToPlayer,
-                     fabsf(this->dyna.actor.playerHeightRel));
+                           fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 

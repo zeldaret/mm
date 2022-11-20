@@ -479,7 +479,8 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actionFunc = func_808BE358;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CUTBODY);
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, Animation_GetLastFrame(&gDekuScrubDamageAnim));
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA,
+                         Animation_GetLastFrame(&gDekuScrubDamageAnim));
 }
 
 void func_808BE358(EnDekunuts* this, PlayState* play) {

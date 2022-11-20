@@ -1860,7 +1860,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Actor_OfferGetItemExchange? Seems to be called with exchangeItemId -1 if the same actor used Actor_OfferGetItem
+// Actor_OfferTalk / Actor_OfferGetItemExchange? Seems to be called with PLAYER_IA_MINUS1 if the same actor used
+// Actor_OfferGetItem.
 // This function is also used to toggle the "Speak" action on the A button
 s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
@@ -2487,7 +2488,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         params.talkActor = NULL;
     }
 
-    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, freezeCategoryPlayerFlags1++, i++) {
+    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists);
+         entry++, freezeCategoryPlayerFlags1++, i++) {
         params.canFreezeCategory = *freezeCategoryPlayerFlags1 & player->stateFlags1;
         params.actor = entry->first;
 
@@ -2589,9 +2591,11 @@ void Actor_Draw(PlayState* play, Actor* actor) {
         }
 
         if (COLORFILTER_GET_XLUFLAG(actor->colorFilterParams)) {
-            func_800AE778(play, &actorDefaultHitColor, actor->colorFilterTimer, COLORFILTER_GET_DURATION(actor->colorFilterParams));
+            func_800AE778(play, &actorDefaultHitColor, actor->colorFilterTimer,
+                          COLORFILTER_GET_DURATION(actor->colorFilterParams));
         } else {
-            func_800AE434(play, &actorDefaultHitColor, actor->colorFilterTimer, COLORFILTER_GET_DURATION(actor->colorFilterParams));
+            func_800AE434(play, &actorDefaultHitColor, actor->colorFilterTimer,
+                          COLORFILTER_GET_DURATION(actor->colorFilterParams));
         }
     }
 

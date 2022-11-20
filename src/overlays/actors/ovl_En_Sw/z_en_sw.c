@@ -723,7 +723,8 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             if (this->unk_45A == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA, this->unk_45A);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA,
+                                     this->unk_45A);
             }
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);

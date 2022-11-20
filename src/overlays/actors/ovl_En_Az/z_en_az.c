@@ -1310,7 +1310,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 }
             } else {
                 Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
-                             this->actor.playerHeightRel);
+                                   this->actor.playerHeightRel);
             }
         }
         if (this->unk_378 == 9) {

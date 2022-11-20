@@ -392,7 +392,8 @@ void func_80B5C1CC(EnOt* this, PlayState* play) {
         func_80B5C244(this, play);
         func_80B5C244(this->unk_360, play);
     } else {
-        Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                           this->actor.playerHeightRel);
     }
 }
 

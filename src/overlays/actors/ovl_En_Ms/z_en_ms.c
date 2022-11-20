@@ -108,7 +108,7 @@ void EnMs_Talk(EnMs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 Actor_OfferGetItem(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
-                             this->actor.playerHeightRel);
+                                   this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
             break;
