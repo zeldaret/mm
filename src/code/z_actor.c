@@ -3101,8 +3101,8 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX,
                    s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, HALFDAYBIT_ALL,
-                                         NULL);
+    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1,
+                                         HALFDAYBIT_ALL, NULL);
 }
 
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
@@ -3592,15 +3592,15 @@ void func_800BC154(PlayState* play, ActorContext* actorCtx, Actor* actor, u8 act
 
 // Damage flags for EnArrow
 u32 sArrowDmgFlags[] = {
-    DMG_FIRE_ARROW, // ENARROW_0
+    DMG_FIRE_ARROW,   // ENARROW_0
     DMG_NORMAL_ARROW, // ENARROW_1
     DMG_NORMAL_ARROW, // ENARROW_2
-    DMG_FIRE_ARROW, // ENARROW_3
-    DMG_ICE_ARROW, // ENARROW_4
-    DMG_LIGHT_ARROW, // ENARROW_5
-    DMG_DEKU_NUT, // ENARROW_6
-    DMG_DEKU_BUBBLE, // ENARROW_7
-    DMG_DEKU_NUT, // ENARROW_8
+    DMG_FIRE_ARROW,   // ENARROW_3
+    DMG_ICE_ARROW,    // ENARROW_4
+    DMG_LIGHT_ARROW,  // ENARROW_5
+    DMG_DEKU_NUT,     // ENARROW_6
+    DMG_DEKU_BUBBLE,  // ENARROW_7
+    DMG_DEKU_NUT,     // ENARROW_8
 };
 
 u32 Actor_GetArrowDmgFlags(s32 params) {
@@ -4362,11 +4362,11 @@ void Actor_SetDropFlag(Actor* actor, ColliderInfo* colInfo) {
 
     if (acHitInfo == NULL) {
         actor->dropFlag = 0;
-    } else if (acHitInfo->toucher.dmgFlags & 0x800) { // DMG_FIRE_ARROW
+    } else if (acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW) {
         actor->dropFlag = 1;
-    } else if (acHitInfo->toucher.dmgFlags & 0x1000) { // DMG_ICE_ARROW
+    } else if (acHitInfo->toucher.dmgFlags & DMG_ICE_ARROW) {
         actor->dropFlag = 2;
-    } else if (acHitInfo->toucher.dmgFlags & 0x2000) { // DMG_LIGHT_ARROW
+    } else if (acHitInfo->toucher.dmgFlags & DMG_LIGHT_ARROW) {
         actor->dropFlag = 0x20;
     } else {
         actor->dropFlag = 0;
@@ -4413,9 +4413,9 @@ void func_800BE33C(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, s32 arg3) {
 }
 
 void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
-    f32 sp44;
-    f32 sp40;
-    f32 sp3C;
+    f32 floorPolyNormalX;
+    f32 floorPolyNormalY;
+    f32 floorPolyNormalZ;
     f32 sp38;
     f32 sp34;
     f32 sp30;
@@ -4425,17 +4425,17 @@ void func_800BE3D0(Actor* actor, s16 angle, Vec3s* arg2) {
     if (actor->floorPoly != NULL) {
         CollisionPoly* floorPoly = actor->floorPoly;
 
-        sp44 = COLPOLY_GET_NORMAL(floorPoly->normal.x);
-        sp40 = COLPOLY_GET_NORMAL(floorPoly->normal.y);
-        sp3C = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+        floorPolyNormalX = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        floorPolyNormalY = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        floorPolyNormalZ = COLPOLY_GET_NORMAL(floorPoly->normal.z);
 
         sp38 = Math_SinS(angle);
         sp34 = Math_CosS(angle);
-        arg2->x = (s16)-Math_Atan2S((-(sp44 * sp38) - (sp3C * sp34)) * sp40, 1.0f);
+        arg2->x = (s16)-Math_Atan2S((-(floorPolyNormalX * sp38) - (floorPolyNormalZ * sp34)) * floorPolyNormalY, 1.0f);
 
         sp2C = Math_SinS(angle - 0x3FF7);
         sp30 = Math_CosS(angle - 0x3FF7);
-        arg2->z = (s16)-Math_Atan2S((-(sp44 * sp2C) - (sp3C * sp30)) * sp40, 1.0f);
+        arg2->z = (s16)-Math_Atan2S((-(floorPolyNormalX * sp2C) - (floorPolyNormalZ * sp30)) * floorPolyNormalY, 1.0f);
     }
 }
 
