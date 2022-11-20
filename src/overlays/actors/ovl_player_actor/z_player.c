@@ -16525,7 +16525,7 @@ void func_80852C04(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, PLAYER_CSMODE_93);
                 } else {
-                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId < PLAYER_IA_NONE)) ||
+                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
@@ -16765,7 +16765,7 @@ void func_808534C0(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
-                if ((talkActor != NULL) && (this->exchangeItemId < PLAYER_IA_NONE)) {
+                if ((talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) {
                     Player_TalkWithPlayer(play, talkActor);
                 }
             }
