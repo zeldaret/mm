@@ -69,7 +69,7 @@ typedef enum {
     /* 0xFE */ AUDIOCMD_OP_GLOBAL_DISABLE_ALL_SEQPLAYERS
 } AudioThreadCmdOp;
 
-#define AUDIO_MK_CMD(b0,b1,b2,b3) (_SHIFTL(b0, 24, 8) | _SHIFTL(b1, 16, 8) | _SHIFTL(b2, 8, 8) | _SHIFTL(b3, 0, 8))
+#define AUDIO_MK_CMD(b0, b1, b2, b3) (_SHIFTL(b0, 24, 8) | _SHIFTL(b1, 16, 8) | _SHIFTL(b2, 8, 8) | _SHIFTL(b3, 0, 8))
 
 #define AUDIOCMD_ALL_SEQPLAYERS 0xFF
 // Pass to a AUDIOCMD_CHANNEL_ command in place of a channelIndex to try and apply to all channels.
