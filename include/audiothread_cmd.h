@@ -140,16 +140,15 @@ typedef enum {
  * @param ioPort the index of the array to store the input-output value
  * @param ioData (s8) the value that's written to the input-output array
  */
-#define AUDIOCMD_CHANNEL_SET_IO(seqPlayerIndex, channelIndex, ioPort, ioData)                                    \
-    AudioThread_QueueCmdS8(AUDIO_MK_CMD(AUDIOCMD_OP_CHANNEL_SET_IO, (seqPlayerIndex), (channelIndex), (ioPort)), \
-                           (ioData))
+#define AUDIOCMD_CHANNEL_SET_IO(seqPlayerIndex, channelIndex, ioPort, ioData) \
+    AudioThread_QueueCmdS8(AUDIO_MK_CMD(AUDIOCMD_OP_CHANNEL_SET_IO, seqPlayerIndex, channelIndex, ioPort), ioData)
 
 /**
  * Set the proportion of pan that comes from the channel
  *
  * @param seqPlayerIndex the index of the seqPlayer to modify
  * @param channelIndex the index of the channel to modify
- * @param panChannelWeight (s8) proportion of pan that comes from the channel. 
+ * @param panChannelWeight (u8) proportion of pan that comes from the channel.
  *                         Set to 0 for layer-only, and 128 for channel-only.
  */
 #define AUDIOCMD_CHANNEL_SET_PAN_WEIGHT(seqPlayerIndex, channelIndex, panChannelWeight)                       \
