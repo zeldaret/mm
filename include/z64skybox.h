@@ -8,6 +8,9 @@
 #include "z64math.h"
 #include "z64view.h"
 
+struct GameState;
+struct PlayState;
+
 typedef enum SkyboxId {
     /* 0 */ SKYBOX_NONE,
     /* 1 */ SKYBOX_NORMAL_SKY,
@@ -49,5 +52,15 @@ typedef struct struct_801C5F44 {
     /* 0x0C */ s32 unkC;
     /* 0x10 */ s32 unk10;
 } struct_801C5F44; // size = 0x14
+
+s32 func_80142440(SkyboxContext* skyboxCtx, Vtx* roomVtx, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+void func_80143148(SkyboxContext* skyboxCtx, s32 arg1);
+void Skybox_Setup(struct GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId);
+void func_80143324(struct PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId);
+void Skybox_Init(struct GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId);
+Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z);
+void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB);
+void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z);
+void SkyboxDraw_Noop(SkyboxContext* skyboxCtx);
 
 #endif
