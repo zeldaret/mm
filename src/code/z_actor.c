@@ -2332,9 +2332,9 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
 typedef struct {
     /* 0x00 */ PlayState* play;
     /* 0x04 */ Actor* actor;
-    /* 0x08 */ u32 unk_08;
-    /* 0x0C */ u32 unkC;
-    /* 0x10 */ Actor* unk10;
+    /* 0x08 */ u32 requiredActorFlag;
+    /* 0x0C */ u32 canFreezeCategory;
+    /* 0x10 */ Actor* talkActor;
     /* 0x14 */ Player* player;
     /* 0x18 */ u32 unk_18; // Bitmask of actor flags. The actor will only have main called if it has at least 1
                            // flag set that matches this bitmask
@@ -2370,13 +2370,13 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
             Actor_Kill(actor);
         } else {
-            s32 tmp = (params->unk_08 == 0);
+            s32 tmp = (params->requiredActorFlag == 0);
 
-            if (((params->unk_08) && !(actor->flags & params->unk_08)) ||
-                ((tmp = (params->unk_08 == 0)) &&
+            if (((params->requiredActorFlag) && !(actor->flags & params->requiredActorFlag)) ||
+                ((tmp = (params->requiredActorFlag == 0)) &&
                  (!(actor->flags & ACTOR_FLAG_100000) ||
                   ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
-                 (params->unkC != 0) && (actor != params->unk10) && ((actor != params->player->heldActor)) &&
+                 params->canFreezeCategory && (actor != params->talkActor) && ((actor != params->player->heldActor)) &&
                  (actor->parent != &params->player->actor))) {
                 CollisionCheck_ResetDamage(&actor->colChkInfo);
             } else {
@@ -2417,7 +2417,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     return nextActor;
 }
 
-u32 D_801AED58[ACTORCAT_MAX] = {
+u32 sFreezeCategoryPlayerFlags1Masks[ACTORCAT_MAX] = {
     /* ACTORCAT_SWITCH */
     PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000,
     /* ACTORCAT_BG */
@@ -2452,7 +2452,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     s32 i;
     Actor* actor;
     Player* player = GET_PLAYER(play);
-    u32* tmp;
+    u32* freezeCategoryPlayerFlags1;
     s32 cat;
     Actor* next;
     ActorListEntry* entry;
@@ -2473,22 +2473,22 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         actorCtx->unk2--;
     }
 
-    tmp = D_801AED58;
+    freezeCategoryPlayerFlags1 = sFreezeCategoryPlayerFlags1Masks;
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
-        params.unk_08 = ACTOR_FLAG_2000000;
+        params.requiredActorFlag = ACTOR_FLAG_2000000;
     } else {
-        params.unk_08 = 0;
+        params.requiredActorFlag = 0;
     }
 
     if ((player->stateFlags1 & PLAYER_STATE1_40) && ((player->actor.textId & 0xFF00) != 0x1900)) {
-        params.unk10 = player->talkActor;
+        params.talkActor = player->talkActor;
     } else {
-        params.unk10 = NULL;
+        params.talkActor = NULL;
     }
 
-    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, tmp++, i++) {
-        params.unkC = *tmp & player->stateFlags1;
+    for (i = 0, entry = actorCtx->actorLists; i < ARRAY_COUNT(actorCtx->actorLists); entry++, freezeCategoryPlayerFlags1++, i++) {
+        params.canFreezeCategory = *freezeCategoryPlayerFlags1 & player->stateFlags1;
         params.actor = entry->first;
 
         while (params.actor != NULL) {
