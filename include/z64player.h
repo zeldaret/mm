@@ -968,7 +968,7 @@ typedef struct Player {
     /* 0xA7C */ Actor* boomerangActor;
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
-    /* 0xA86 */ s8 unk_A86; // actorCutsceneIndex?
+    /* 0xA86 */ s8 currentActorCsIndex;
     /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
@@ -1009,7 +1009,7 @@ typedef struct Player {
     /* 0xAF0 */ Vec3f unk_AF0[2];
     /* 0xB08 */ f32 unk_B08[2]; // TODO: Investigate if this member actually is an array
     /* 0xB10 */ f32 unk_B10[6];
-    /* 0xB28 */ s16 unk_B28; //Burning stick timer?
+    /* 0xB28 */ s16 unk_B28; // Burning stick timer?
     /* 0xB2A */ s8 getItemDrawIdPlusOne;
     /* 0xB2B */ s8 unk_B2B;
     /* 0xB2C */ f32 windSpeed;

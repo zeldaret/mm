@@ -369,8 +369,8 @@ void func_80B32228(EnZoraegg* this, PlayState* play) {
         if (this->unk_1E8 > 0) {
             this->unk_1E8--;
         } else if (this->unk_1E8 == 0) {
-            ActorCutscene_Stop(player->unk_A86);
-            player->unk_A86 = -1;
+            ActorCutscene_Stop(player->currentActorCsIndex);
+            player->currentActorCsIndex = -1;
             this->unk_1E8 = -1;
         }
 

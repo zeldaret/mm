@@ -575,7 +575,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
-            player->unk_A86 = -1;
+            player->currentActorCsIndex = -1;
             func_800B7298(play, NULL, PLAYER_CSMODE_115);
         }
     }

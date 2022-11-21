@@ -452,7 +452,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     D_80A41D24 = true;
 
     this->player.actor.room = -1;
-    this->player.unk_A86 = -1;
+    this->player.currentActorCsIndex = -1;
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
@@ -596,7 +596,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
         this->player.doorType = 1;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
         this->player.doorActor = &door->door.dyna.actor;
-        this->player.unk_A86 = -1;
+        this->player.currentActorCsIndex = -1;
         return true;
     }
     return false;

@@ -4382,7 +4382,7 @@ void func_80831F34(PlayState* play, Player* this, LinkAnimationHeader* anim) {
     Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DOWN);
 
     if (this == GET_PLAYER(play)) {
-        this->unk_A86 = play->playerActorCsIds[6];
+        this->currentActorCsIndex = play->playerActorCsIds[6];
         func_801A0184();
         gSaveContext.powderKegTimer = 0;
         gSaveContext.unk_1014 = 0;
@@ -4471,33 +4471,33 @@ s32 func_808323C0(Player* this, s16 csIndex) {
         }
         ActorCutscene_Start(csIndex, &this->actor);
     }
-    this->unk_A86 = csIndex;
+    this->currentActorCsIndex = csIndex;
 
     return true;
 }
 
 s32 func_80832444(Player* this) {
-    if (this->unk_A86 >= 0) {
-        if (!ActorCutscene_GetCanPlayNext(this->unk_A86)) {
-            ActorCutscene_SetIntentToPlay(this->unk_A86);
+    if (this->currentActorCsIndex >= 0) {
+        if (!ActorCutscene_GetCanPlayNext(this->currentActorCsIndex)) {
+            ActorCutscene_SetIntentToPlay(this->currentActorCsIndex);
             return false;
         }
 
-        ActorCutscene_Start(this->unk_A86, &this->actor);
+        ActorCutscene_Start(this->currentActorCsIndex, &this->actor);
     }
     return true;
 }
 
 s32 func_8083249C(Player* this) {
-    if ((this->unk_A86 >= 0) && (ActorCutscene_GetCurrentIndex() != this->unk_A86)) {
+    if ((this->currentActorCsIndex >= 0) && (ActorCutscene_GetCurrentIndex() != this->currentActorCsIndex)) {
         return func_80832444(this);
     }
     return true;
 }
 
-s32 func_808324EC(PlayState* play, Player* this, PlayerFuncD58 arg2, s32 arg3) {
+s32 func_808324EC(PlayState* play, Player* this, PlayerFuncD58 arg2, s32 actorCsIndex) {
     this->unk_D58 = arg2;
-    this->unk_A86 = arg3;
+    this->currentActorCsIndex = actorCsIndex;
     Player_SetAction(play, this, func_8084D770, 0);
     func_8083249C(this);
     this->stateFlags2 |= PLAYER_STATE2_40;
@@ -5664,7 +5664,7 @@ void func_80835324(PlayState* play, Player* this, f32 arg2, s16 arg3) {
     Player_SetAction(play, this, func_8084D820, 0);
     func_8082DD2C(play, this);
 
-    this->unk_A86 = -1;
+    this->currentActorCsIndex = -1;
     this->unk_AE7 = 1;
     this->unk_AE8 = 1;
 
@@ -6154,8 +6154,8 @@ s32 func_808365DC(Player* this, PlayState* play) {
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
-                this->unk_A86 = 0x7D;
-                ActorCutscene_Start(this->unk_A86, &this->actor);
+                this->currentActorCsIndex = 0x7D;
+                ActorCutscene_Start(this->currentActorCsIndex, &this->actor);
             }
 
             if (this->actor.category == ACTORCAT_PLAYER) {
@@ -6912,16 +6912,16 @@ s32 func_8083868C(PlayState* play, Player* this) {
     return Camera_ChangeMode(camera, camMode);
 }
 
-void func_80838760(Player* this) {
-    if (this->unk_A86 >= 0) {
-        ActorCutscene_Stop(this->unk_A86);
-        this->unk_A86 = -1;
+void Player_StopCurrentActorCutscene(Player* this) {
+    if (this->currentActorCsIndex >= 0) {
+        ActorCutscene_Stop(this->currentActorCsIndex);
+        this->currentActorCsIndex = -1;
     }
 }
 
 s32 func_808387A0(PlayState* play, Player* this) {
     if (this->unk_AA5 == PLAYER_UNKAA5_4) {
-        func_80838760(this);
+        Player_StopCurrentActorCutscene(this);
         this->actor.flags &= ~ACTOR_FLAG_100;
         Player_SetAction(play, this, func_8085B08C, 0);
         if (this->doorBgCamIndex != 0) {
@@ -7103,7 +7103,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
         if (!(this->actor.bgCheckFlags & 3) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
             !(this->stateFlags1 & PLAYER_STATE1_800000) && !(this->stateFlags3 & PLAYER_STATE3_8) &&
             !(this->skelAnime.moveFlags & 8)) {
-            func_80838760(this);
+            Player_StopCurrentActorCutscene(this);
             func_80833AA0(this, play);
             return true;
         }
@@ -7149,12 +7149,12 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     Actor* talkActor;
                     s32 heldItemTemp = this->itemAction;
 
-                    func_80838760(this);
+                    Player_StopCurrentActorCutscene(this);
                     this->itemAction = PLAYER_IA_NONE;
                     func_80831760(play, this, func_80853A5C, 0);
                     talkActor = this->talkActor;
                     this->itemAction = heldItemTemp;
-                    this->unk_A86 = -1;
+                    this->currentActorCsIndex = -1;
 
                     if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
                                                  (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
@@ -7177,7 +7177,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                             this->unk_AE7 = -1;
                             this->targetedActor = this->talkActor;
                         } else {
-                            this->unk_A86 = 0x7C;
+                            this->currentActorCsIndex = 0x7C;
                         }
 
                         talkActor->flags |= ACTOR_FLAG_100;
@@ -7185,7 +7185,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->targetedActor = this->talkActor;
                     } else {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_40);
-                        this->unk_A86 = play->playerActorCsIds[3];
+                        this->currentActorCsIndex = play->playerActorCsIds[3];
                         this->unk_AE7 = 1;
                         this->actor.textId = 0xFE;
                     }
@@ -7200,7 +7200,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     bottleAction = Player_ActionToBottle(this, this->itemAction);
 
                     if (bottleAction > -1) {
-                        func_80838760(this);
+                        Player_StopCurrentActorCutscene(this);
                         if (bottleAction >= BOTTLE_ACTION(PLAYER_IA_BOTTLE_FAIRY)) {
                             func_80831760(play, this, func_80853754, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_bug_out);
@@ -7208,7 +7208,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                                    (bottleAction < BOTTLE_ACTION(PLAYER_IA_BOTTLE_POE))) {
                             func_80831760(play, this, func_80853850, 0);
                             func_8082DB90(play, this, &gPlayerAnim_link_bottle_fish_out);
-                            this->unk_A86 = play->playerActorCsIds[2];
+                            this->currentActorCsIndex = play->playerActorCsIds[2];
                         } else {
                             func_80831760(play, this, func_80853194, 0);
                             func_8082E4A4(play, this,
@@ -7225,7 +7225,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                                 return false;
                             }
                         } else {
-                            this->unk_A86 = -1;
+                            this->currentActorCsIndex = -1;
                         }
                         func_80831760(play, this, func_8085269C, 0);
                         if ((this->skelAnime.playSpeed < 0.0f) ||
@@ -7246,7 +7246,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                 }
             } else {
                 if (func_8083868C(play, this) != CAM_MODE_NORMAL) {
-                    func_80838760(this);
+                    Player_StopCurrentActorCutscene(this);
                     if (!(this->stateFlags1 & PLAYER_STATE1_800000)) {
                         Player_SetAction(play, this, func_8084E724, 1);
                         this->unk_AE8 = 13;
@@ -8696,7 +8696,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
 
                         if (!(this->stateFlags2 & PLAYER_STATE2_400) ||
                             (this->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER)) {
-                            func_80838760(this);
+                            Player_StopCurrentActorCutscene(this);
                             func_808324EC(play, this, func_80837C78, play->playerActorCsIds[1]);
                             func_8082DB90(play, this,
                                           (this->transformation == PLAYER_FORM_DEKU)
@@ -8746,7 +8746,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                             func_8082DAD4(this);
                             if ((giEntry->itemId != ITEM_NONE) && (giEntry->gid >= 0) &&
                                 (Item_CheckObtainability(giEntry->itemId) == ITEM_NONE)) {
-                                this->unk_A86 = chest->cutsceneIdxB;
+                                this->currentActorCsIndex = chest->cutsceneIdxB;
                                 func_8082DB90(play, this, this->ageProperties->openChestAnim);
                                 func_8082E920(play, this, 1 | ANIM_FLAG_UPDATE_Y | 4 | 8 | ANIM_FLAG_NOMOVE | 0x80);
                                 this->actor.bgCheckFlags &= ~0x20;
@@ -9842,7 +9842,7 @@ void func_80840770(PlayState* play, Player* this) {
                 this->unk_AE8 = -1;
             }
         } else if (gSaveContext.healthAccumulator == 0) {
-            func_80838760(this);
+            Player_StopCurrentActorCutscene(this);
 
             this->stateFlags1 &= ~PLAYER_STATE1_80;
             if (this->stateFlags1 & PLAYER_STATE1_8000000) {
@@ -9856,8 +9856,8 @@ void func_80840770(PlayState* play, Player* this) {
             func_801A01C4();
         }
     } else if (this->unk_AE7 != 0) {
-        func_80838760(this);
-        this->unk_A86 = play->playerActorCsIds[7];
+        Player_StopCurrentActorCutscene(this);
+        this->currentActorCsIndex = play->playerActorCsIds[7];
         this->unk_AE8 = 60;
         Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D2A4, 5);
         func_800B8E58(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
@@ -10276,7 +10276,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     gActorOverlayTable->initInfo->objectId = 1;
 
     this->actor.room = -1;
-    this->unk_A86 = -1;
+    this->currentActorCsIndex = -1;
 
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
@@ -13203,7 +13203,7 @@ void func_808496AC(Player* this, PlayState* play) {
 
     if (DECR(this->unk_AE8) == 0) {
         if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
-            func_80838760(this);
+            Player_StopCurrentActorCutscene(this);
             Player_SetAction(play, this, func_80849FE0, 0);
             this->stateFlags1 &= ~PLAYER_STATE1_20000000;
         }
@@ -14795,7 +14795,7 @@ void func_8084D820(Player* this, PlayState* play) {
 
                 MREG(64) = 0;
                 func_800E0238(Play_GetCamera(play, 0));
-                func_80838760(this);
+                Player_StopCurrentActorCutscene(this);
                 if (!(this->stateFlags3 & PLAYER_STATE3_20000)) {
                     func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
                 }
@@ -14843,7 +14843,7 @@ void func_8084E034(Player* this, PlayState* play) {
                 this->skelAnime.endFrame = this->skelAnime.animLength - 1.0f;
             }
         } else {
-            func_80838760(this);
+            Player_StopCurrentActorCutscene(this);
             func_80839E74(this, play);
 
             if ((this->actor.category == ACTORCAT_PLAYER) && !sp38) {
@@ -14856,7 +14856,7 @@ void func_8084E034(Player* this, PlayState* play) {
             }
         }
     } else if (!(this->stateFlags1 & PLAYER_STATE1_20000000) && LinkAnimation_OnFrame(&this->skelAnime, 15.0f)) {
-        func_80838760(this);
+        Player_StopCurrentActorCutscene(this);
         play->func_18780(this, play);
     } else if (sp38 && LinkAnimation_OnFrame(&this->skelAnime, 15.0f)) {
         s16 doorRot =
@@ -16520,7 +16520,7 @@ void func_80852C04(Player* this, PlayState* play) {
 
                 if ((this->getItemDrawIdPlusOne == GID_REMAINS_ODOLWA+1) || (this->getItemDrawIdPlusOne == GID_REMAINS_GOHT+1) ||
                     (this->getItemDrawIdPlusOne == GID_REMAINS_GYORG+1) || (this->getItemDrawIdPlusOne == GID_REMAINS_TWINMOLD+1)) {
-                    func_80838760(this);
+                    Player_StopCurrentActorCutscene(this);
                     func_80848250(play, this);
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, PLAYER_CSMODE_93);
@@ -16529,7 +16529,7 @@ void func_80852C04(Player* this, PlayState* play) {
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
-                        func_80838760(this);
+                        Player_StopCurrentActorCutscene(this);
                         if (var_a2) {
                             func_80848250(play, this);
                             this->exchangeItemId = PLAYER_IA_NONE;
@@ -16547,7 +16547,7 @@ void func_80852C04(Player* this, PlayState* play) {
 
             if ((this->getItemId == GI_STRAY_FAIRY) || (this->getItemId == GI_SKULL_TOKEN) ||
                 (this->getItemId == GI_ICE_TRAP)) {
-                func_80838760(this);
+                Player_StopCurrentActorCutscene(this);
                 this->stateFlags1 &= ~(PLAYER_STATE1_400 | PLAYER_STATE1_800);
                 if (this->getItemId == GI_STRAY_FAIRY) {
                     func_80839E74(this, play);
@@ -16567,8 +16567,8 @@ void func_80852C04(Player* this, PlayState* play) {
                 }
 
                 func_8082E920(play, this, (1 | ANIM_FLAG_UPDATE_Y | 4 | 8 | ANIM_FLAG_NOMOVE | 0x80));
-                func_80838760(this);
-                this->unk_A86 = play->playerActorCsIds[1];
+                Player_StopCurrentActorCutscene(this);
+                this->currentActorCsIndex = play->playerActorCsIds[1];
                 this->unk_AE8 = 2;
             }
         }
@@ -16701,7 +16701,7 @@ void func_80853194(Player* this, PlayState* play) {
                 func_808530E0(play, this);
             }
         } else {
-            func_80838760(this);
+            Player_StopCurrentActorCutscene(this);
             func_80839E74(this, play);
         }
     } else if (this->unk_AE8 == 1) {
@@ -16761,7 +16761,7 @@ void func_808534C0(Player* this, PlayState* play) {
                 Actor* talkActor;
 
                 this->unk_AE7 = 0;
-                func_80838760(this);
+                Player_StopCurrentActorCutscene(this);
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
@@ -16821,7 +16821,7 @@ void func_80853754(Player* this, PlayState* play) {
     func_808323C0(this, play->playerActorCsIds[2]);
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
-        func_80838760(this);
+        Player_StopCurrentActorCutscene(this);
         func_80839E74(this, play);
     } else if (LinkAnimation_OnFrame(&this->skelAnime, 37.0f)) {
         s32 sp2C = 8;
@@ -16885,7 +16885,7 @@ void func_80853850(Player* this, PlayState* play) {
     func_8083249C(this);
 
     if (LinkAnimation_Update(play, &this->skelAnime)) {
-        func_80838760(this);
+        Player_StopCurrentActorCutscene(this);
         if (!func_80838A90(this, play)) {
             func_80839E74(this, play);
         }
@@ -16916,7 +16916,7 @@ void func_80853A5C(Player* this, PlayState* play) {
         if (this->exchangeItemId == PLAYER_IA_NONE) {
             Actor* talkActor = this->talkActor;
 
-            func_80838760(this);
+            Player_StopCurrentActorCutscene(this);
             this->getItemDrawIdPlusOne = GID_NONE + 1;
 
             if ((talkActor->textId != 0) && (talkActor->textId != 0xFFFF)) {
@@ -16937,7 +16937,7 @@ void func_80853A5C(Player* this, PlayState* play) {
 
                 this->unk_AE8 = 1;
             } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
-                func_80838760(this);
+                Player_StopCurrentActorCutscene(this);
                 this->getItemDrawIdPlusOne = GID_NONE+1;
                 this->actor.flags &= ~ACTOR_FLAG_100;
                 func_80839E74(this, play);
@@ -17565,8 +17565,8 @@ void func_808553F4(Player* this, PlayState* play) {
         MREG(68) = 0;
 
         if (sp48) {
-            if (ActorCutscene_GetCurrentIndex() == this->unk_A86) {
-                func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_A86)));
+            if (ActorCutscene_GetCurrentIndex() == this->currentActorCsIndex) {
+                func_800E0348(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->currentActorCsIndex)));
             }
 
             if (this->transformation == PLAYER_FORM_HUMAN) {
@@ -17633,8 +17633,8 @@ void func_80855818(Player* this, PlayState* play) {
             if (MREG(64) == 0) {
                 this->stateFlags1 &= ~PLAYER_STATE1_2;
                 this->prevMask = this->currentMask;
-                this->unk_A86 = play->playerActorCsIds[5];
-                func_80838760(this);
+                this->currentActorCsIndex = play->playerActorCsIds[5];
+                Player_StopCurrentActorCutscene(this);
                 play->envCtx.lightSettings = D_80862B50;
                 func_8085B384(this, play);
                 return;
@@ -17716,7 +17716,7 @@ void func_80855C28(Player* this, PlayState* play) {
         if ((var_a0 != 0) && (sp3E < 0)) {
             if (BINANG_SUB(this->actor.shape.rot.y, this->actor.world.rot.y) >= 0) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                func_80838760(this);
+                Player_StopCurrentActorCutscene(this);
                 if (PLAYER_GET_INITMODE(&this->actor) == PLAYER_INITMODE_8) {
                     sp34 = D_8085D17C[this->transformation];
                     func_80836A5C(this, play);
@@ -20132,7 +20132,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
     player->itemAction = PLAYER_IA_NONE;
     player->actionFunc = NULL;
     func_80831760(play, player, func_80853A5C, 0);
-    player->unk_A86 = 0x7C;
+    player->currentActorCsIndex = 0x7C;
     player->itemAction = itemAction;
     Player_AnimationPlayOnce(play, player, &gPlayerAnim_link_normal_give_other);
     player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);

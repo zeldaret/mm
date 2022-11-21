@@ -740,6 +740,7 @@ wordReplace = {
     "player->swordInfo": "player->meleeWeaponInfo",
     "player->itemActionParam": "player->heldItemAction",
     "player->heldItemActionParam": "player->itemAction",
+    "player->unk_A86": "player->currentActorCsIndex",
     "player->unk_A9C": "player->secretRumbleCharge",
     "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_B68": "player->fallStartHeight",
