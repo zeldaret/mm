@@ -1036,6 +1036,7 @@ void Play_UpdateMain(PlayState* this) {
     }
 }
 #else
+void Play_UpdateMain(PlayState* this);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_UpdateMain.s")
 #endif
 
@@ -1319,9 +1320,9 @@ void Play_DrawMain(PlayState* this) {
 
             if (1) {
                 if (!this->envCtx.sunMoonDisabled) {
-                    sp25C.x = this->view.eye.x + this->envCtx.unk_4;
-                    sp25C.y = this->view.eye.y + this->envCtx.unk_8;
-                    sp25C.z = this->view.eye.z + this->envCtx.unk_C;
+                    sp25C.x = this->view.eye.x + this->envCtx.sunPos.x;
+                    sp25C.y = this->view.eye.y + this->envCtx.sunPos.y;
+                    sp25C.z = this->view.eye.z + this->envCtx.sunPos.z;
                     Environment_DrawSunLensFlare(this, &this->envCtx, &this->view, gfxCtx, sp25C);
                 }
 
@@ -1422,6 +1423,7 @@ void Play_DrawMain(PlayState* this) {
     CLOSE_DISPS(this->state.gfxCtx);
 }
 #else
+void Play_DrawMain(PlayState* this);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_DrawMain.s")
 #endif
 

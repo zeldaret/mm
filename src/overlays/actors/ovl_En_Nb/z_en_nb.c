@@ -638,7 +638,7 @@ void EnNb_HandleSchedule(EnNb* this, PlayState* play) {
 void EnNb_FollowSchedule(EnNb* this, PlayState* play) {
     ScheduleOutput scheduleOutput;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (CHECK_EVENTINF(EVENTINF_43)) {
         scheduleOutput.result = EN_NB_SCH_1;
