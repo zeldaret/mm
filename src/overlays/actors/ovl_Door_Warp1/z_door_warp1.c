@@ -163,7 +163,7 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
 
     if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
         (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
-        func_800FE484();
+        Environment_StopTime();
         play->interfaceCtx.restrictions.unk_312 = 1;
         play->interfaceCtx.restrictions.songOfSoaring = 1;
     }
