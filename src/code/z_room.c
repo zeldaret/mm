@@ -610,7 +610,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
     return 1;
 }
 
-void (*sRoomDrawHandlers[])(PlayState* play, Room* room, u32 flags) = {
+RoomDrawHandler sRoomDrawHandlers[] = {
     Room_DrawNormal,   // ROOM_SHAPE_TYPE_NORMAL
     Room_DrawImage,    // ROOM_SHAPE_TYPE_IMAGE
     Room_DrawCullable, // ROOM_SHAPE_TYPE_CULLABLE

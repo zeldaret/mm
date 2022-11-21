@@ -1,7 +1,7 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description: Three-Day Timer
+ * Description: Three-Day Events
  */
 
 #include "prevent_bss_reordering.h"
@@ -59,7 +59,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
             this->unk_146 = gSaveContext.save.time += CLOCK_TIME_MINUTE;
         }
 
-        func_8010EE74(play, CURRENT_DAY);
+        Interface_NewDay(play, CURRENT_DAY);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);
         func_800FEAF4(&play->envCtx);
@@ -95,7 +95,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
     } else if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         Sram_IncrementDay();
         gSaveContext.save.time = CLOCK_TIME(6, 0);
-        func_8010EE74(play, CURRENT_DAY);
+        Interface_NewDay(play, CURRENT_DAY);
         func_80151A68(play, sDayMessages2[CURRENT_DAY - 1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);

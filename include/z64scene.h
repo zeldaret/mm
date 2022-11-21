@@ -122,7 +122,7 @@ typedef struct {
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  hour;
     /* 0x5 */ u8  min;
-    /* 0x6 */ u8  unk6;
+    /* 0x6 */ u8  timeSpeed;
 } SCmdTimeSettings; // size = 0x7
 
 typedef struct {
@@ -362,6 +362,8 @@ typedef struct {
     /* 0x79 */ s8 unk79;
     /* 0x7A */ UNK_TYPE2 unk7A[3];
 } RoomContext; // size = 0x80
+
+typedef void(*RoomDrawHandler)(struct PlayState* play, Room* room, u32 flags);
 
 typedef struct {
     struct {
