@@ -4,6 +4,7 @@
  * separate files since most of it is at addresses ending in 8.
  */
 #include "global.h"
+#include "system_heap.h"
 
 void Main(void* arg) {
     intptr_t fb;

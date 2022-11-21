@@ -13,9 +13,9 @@ typedef void (*BlockFunc1)(void*, u32);
 typedef void (*BlockFunc8)(void*, u32, u32, u32, u32, u32, u32, u32, u32);
 
 typedef struct InitFunc {
-    uintptr_t nextOffset;
-    void (*func)(void);
-} InitFunc;
+    /* 0x0 */ uintptr_t nextOffset;
+    /* 0x4 */ void (*func)(void);
+} InitFunc; // size = 0x8
 
 void* sInitFuncs = NULL;
 
