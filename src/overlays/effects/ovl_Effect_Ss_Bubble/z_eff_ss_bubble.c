@@ -90,17 +90,17 @@ void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this) {
     if (((play->gameplayFrames + index) % 8) == 0) {
         CollisionPoly* colPoly;
         BgConveyorSpeed conveyorSpeed;
-        s16 direction;
+        s16 conveyorDir;
         f32 rVecAdjMax;
 
         BgCheck_EntityRaycastFloor2_1(play, &play->colCtx, &colPoly, &this->pos);
         conveyorSpeed = SurfaceType_GetConveyorSpeed(&play->colCtx, colPoly, BGCHECK_SCENE);
         if ((conveyorSpeed != BG_CONVEYOR_SPEED_DISABLED) &&
             !SurfaceType_IsFloorConveyor(&play->colCtx, colPoly, BGCHECK_SCENE)) {
-            direction = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
+            conveyorDir = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 10;
             rVecAdjMax = sVecAdjMaximums[conveyorSpeed - 1];
-            this->rVecAdjX = Math_SinS(direction) * rVecAdjMax;
-            this->rVecAdjZ = Math_CosS(direction) * rVecAdjMax;
+            this->rVecAdjX = Math_SinS(conveyorDir) * rVecAdjMax;
+            this->rVecAdjZ = Math_CosS(conveyorDir) * rVecAdjMax;
         }
     }
     this->vec.x += this->rVecAdjX / 100.0f;

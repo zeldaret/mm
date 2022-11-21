@@ -581,7 +581,7 @@ asm/non_matchings/code/z_bgcheck/SurfaceType_GetFloorProperty.s,SurfaceType_GetF
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsSoft.s,SurfaceType_IsSoft,0x800C9B68,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_IsHorseBlocked.s,SurfaceType_IsHorseBlocked,0x800C9B90,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetSfxType.s,SurfaceType_GetSfxType,0x800C9BB8,0x9
-asm/non_matchings/code/z_bgcheck/SurfaceType_GetSfxIdOffset.s,SurfaceType_GetSfxIdOffset,0x800C9BDC,0x12
+asm/non_matchings/code/z_bgcheck/SurfaceType_GetSfxId.s,SurfaceType_GetSfxId,0x800C9BDC,0x12
 asm/non_matchings/code/z_bgcheck/func_800C9C24.s,func_800C9C24,0x800C9C24,0x14
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetSlope.s,SurfaceType_GetSlope,0x800C9C74,0xA
 asm/non_matchings/code/z_bgcheck/SurfaceType_GetLightSettingIndex.s,SurfaceType_GetLightSettingIndex,0x800C9C9C,0xA

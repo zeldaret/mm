@@ -2156,7 +2156,7 @@ void func_800B8EF4(PlayState* play, Actor* actor) {
             sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
         }
     } else {
-        sfxId = SurfaceType_GetSfxIdOffset(&play->colCtx, actor->floorPoly, actor->floorBgId);
+        sfxId = SurfaceType_GetSfxId(&play->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
     Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);

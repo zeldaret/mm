@@ -1067,7 +1067,7 @@
     0x800C9B68:("SurfaceType_IsSoft",),
     0x800C9B90:("SurfaceType_IsHorseBlocked",),
     0x800C9BB8:("SurfaceType_GetSfxType",),
-    0x800C9BDC:("SurfaceType_GetSfxIdOffset",),
+    0x800C9BDC:("SurfaceType_GetSfxId",),
     0x800C9C24:("func_800C9C24",),
     0x800C9C74:("SurfaceType_GetSlope",),
     0x800C9C9C:("SurfaceType_GetLightSettingIndex",),
