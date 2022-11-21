@@ -523,10 +523,10 @@ void func_80AD7FF8(EnKame* this, PlayState* play) {
 }
 
 void func_80AD8060(EnKame* this) {
-    s16 sp36 = Animation_GetLastFrame(&object_tl_Anim_0008B4);
+    s16 lastFrame = Animation_GetLastFrame(&object_tl_Anim_0008B4);
 
-    Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, sp36, ANIMMODE_ONCE, -3.0f);
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, sp36);
+    Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, lastFrame, ANIMMODE_ONCE, -3.0f);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, lastFrame);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_DAMAGE);
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80AD810C;

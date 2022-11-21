@@ -420,7 +420,7 @@ void func_80876CAC(EnDodongo* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_80876D28(EnDodongo* this, PlayState* play) {
@@ -757,7 +757,7 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
             } else {
                 this->actor.colChkInfo.health -= 4;
             }
-            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0x78, COLORFILTER_BUFFLAG_OPA, 8);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 8);
         }
     } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
         this->timer--;
@@ -874,7 +874,7 @@ void func_8087864C(EnDodongo* this) {
     this->timer = 0;
     this->unk_304 = 0;
     this->actor.speedXZ = 0.0f;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->actionFunc = func_808786C8;
 }
 
@@ -895,7 +895,7 @@ void func_80878724(EnDodongo* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DEAD);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 8);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
     this->actionFunc = func_808787B0;
 }
 
@@ -907,7 +907,7 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
             func_80876DC4(this, play);
         }
     } else if (this->actor.colorFilterTimer == 0) {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0x78, COLORFILTER_BUFFLAG_OPA, 4);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 120, COLORFILTER_BUFFLAG_OPA, 4);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -993,12 +993,12 @@ void EnDodongo_UpdateDamage(EnDodongo* this, PlayState* play) {
                     }
                 } else if (this->actor.colChkInfo.damageEffect == 1) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xFF, COLORFILTER_BUFFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80878594(this);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xFF, COLORFILTER_BUFFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->drawDmgEffScale = 0.75f;

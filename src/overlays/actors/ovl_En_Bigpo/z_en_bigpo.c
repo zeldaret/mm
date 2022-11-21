@@ -645,7 +645,7 @@ void EnBigpo_SpinningDown(EnBigpo* this, PlayState* play) {
  */
 void EnBigpo_HitStun(EnBigpo* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gBigpoShockAnim, -6.0f);
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 0x10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 16);
     this->collider.base.acFlags &= ~AC_ON;
     func_800BE504(&this->actor, &this->collider);
     this->actionFunc = EnBigpo_CheckHealth;

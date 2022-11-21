@@ -596,9 +596,9 @@ void EnRailgibud_SetupStunned(EnRailgibud* this) {
     this->stunTimer = 10;
 
     if (this->drawDmgEffTimer != 0) {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xC8, COLORFILTER_BUFFLAG_OPA, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xC8, COLORFILTER_BUFFLAG_OPA, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     }
 
     this->actionFunc = EnRailgibud_Stunned;

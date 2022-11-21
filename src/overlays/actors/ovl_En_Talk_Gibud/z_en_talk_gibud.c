@@ -524,9 +524,9 @@ void EnTalkGibud_SetupStunned(EnTalkGibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if (this->drawDmgEffTimer != 0) {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xC8, COLORFILTER_BUFFLAG_OPA, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 0x28);
     } else {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xC8, COLORFILTER_BUFFLAG_OPA, 0x28);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 0x28);
     }
 
     this->actionFunc = EnTalkGibud_Stunned;

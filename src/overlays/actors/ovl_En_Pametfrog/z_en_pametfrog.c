@@ -1285,7 +1285,7 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                 } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
                     EnPametfrog_Freeze(this);
                     this->freezeTimer = 80;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 0x50);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
                     EnPametfrog_SetupStun(this);
                 } else {
                     EnPametfrog_Thaw(this, play);
