@@ -1064,7 +1064,7 @@
     0x800C9AE4:("SurfaceType_CheckWallFlag2",),
     0x800C9B18:("SurfaceType_GetFloorProperty2",),
     0x800C9B40:("SurfaceType_GetFloorProperty",),
-    0x800C9B68:("func_800C9B68",),
+    0x800C9B68:("SurfaceType_IsSoft",),
     0x800C9B90:("SurfaceType_IsHorseBlocked",),
     0x800C9BB8:("SurfaceType_GetSfxType",),
     0x800C9BDC:("SurfaceType_GetSfxIdOffset",),
