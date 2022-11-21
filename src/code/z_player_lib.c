@@ -404,7 +404,7 @@ FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX] = {
     &gLinkFierceDeitySkel, &gLinkGoronSkel, &gLinkZoraSkel, &gLinkDekuSkel, &gLinkHumanSkel,
 };
 
-s16 D_801BFE14[][18] = {
+s16 D_801BFE14[PLAYER_BOOTS_MAX][18] = {
     { 200, 666, 200, 700, 366, 200, 600, 175, 60, 800, 1000, -100, 600, 590, 800, 125, 300, 65 },
     { 200, 1000, 300, 800, 500, 400, 800, 400, 120, 800, 550, -100, 600, 540, 750, 125, 400, 200 },
     { 100, 1000, 300, 800, 250, 200, 800, 200, 90, 800, 350, -80, 600, 540, 750, 60, 200, 200 },
@@ -418,7 +418,7 @@ s16 D_801BFE14[][18] = {
 // OoT's Player_SetBootData
 void func_80123140(PlayState* play, Player* player) {
     s16* bootRegs;
-    s32 currentBoots;
+    PlayerBoots currentBoots;
     f32 scale;
 
     if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
@@ -2769,7 +2769,7 @@ s32 func_801271B0(PlayState* play, Player* player, s32 arg2) {
             Matrix_Push();
             Matrix_Translate(0.0f, 150.0f, 0.0f, MTXMODE_APPLY);
             func_80124618(sp3C[0], player->skelAnime.curFrame, &player->unk_AF0[1]);
-            Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, 1);
+            Matrix_Scale(player->unk_AF0[1].x, player->unk_AF0[1].y, player->unk_AF0[1].z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

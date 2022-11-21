@@ -22,7 +22,8 @@ typedef enum PlayerBoots {
     /* 4 */ PLAYER_BOOTS_ZORA_LAND,
     /* 5 */ PLAYER_BOOTS_ZORA_UNDERWATER,
     /* 6 */ PLAYER_BOOTS_GORON,
-    /* 7 */ PLAYER_BOOTS_MAX
+    /* 7 */ PLAYER_BOOTS_7,
+    /* 8 */ PLAYER_BOOTS_MAX
 } PlayerBoots;
 
 typedef enum PlayerStrength {
