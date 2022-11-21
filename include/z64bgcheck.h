@@ -48,11 +48,6 @@ struct DynaPolyActor;
 #define COLPOLY_IGNORE_ENTITY (1 << 1)
 #define COLPOLY_IGNORE_PROJECTILES (1 << 2)
 
-// Surface Types
-#define COLPOLY_SURFACE_GROUND 0
-#define COLPOLY_SURFACE_SAND 1
-#define COLPOLY_SURFACE_SNOW 14
-
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
 
@@ -110,6 +105,92 @@ typedef struct {
     // 0x0000_1F00 = lighting setting index
     // 0x0000_00FF = bgCam index
 } WaterBox; // size = 0x10
+
+typedef enum BgFloorType {
+    /*  0 */ BG_FLOOR_TYPE_0,
+    /*  1 */ BG_FLOOR_TYPE_1,
+    /*  2 */ BG_FLOOR_TYPE_2,
+    /*  3 */ BG_FLOOR_TYPE_3,
+    /*  4 */ BG_FLOOR_TYPE_4,
+    /*  5 */ BG_FLOOR_TYPE_5,
+    /*  6 */ BG_FLOOR_TYPE_6,
+    /*  7 */ BG_FLOOR_TYPE_7,
+    /*  8 */ BG_FLOOR_TYPE_8,
+    /*  9 */ BG_FLOOR_TYPE_9,
+    /* 10 */ BG_FLOOR_TYPE_10,
+    /* 11 */ BG_FLOOR_TYPE_11,
+    /* 12 */ BG_FLOOR_TYPE_12,
+    /* 13 */ BG_FLOOR_TYPE_13,
+    /* 14 */ BG_FLOOR_TYPE_14,
+    /* 15 */ BG_FLOOR_TYPE_15
+} BgFloorType;
+
+typedef enum BgWallType {
+    /*  0 */ BG_WALL_TYPE_0,
+    /*  1 */ BG_WALL_TYPE_1,
+    /*  2 */ BG_WALL_TYPE_2,
+    /*  3 */ BG_WALL_TYPE_3,
+    /*  4 */ BG_WALL_TYPE_4,
+    /*  5 */ BG_WALL_TYPE_5,
+    /*  6 */ BG_WALL_TYPE_6,
+    /*  7 */ BG_WALL_TYPE_7,
+    /*  8 */ BG_WALL_TYPE_8,
+    /*  9 */ BG_WALL_TYPE_9,
+    /* 10 */ BG_WALL_TYPE_10,
+    /* 11 */ BG_WALL_TYPE_11,
+    /* 12 */ BG_WALL_TYPE_12,
+    /* 32 */ BG_WALL_TYPE_MAX = 32
+} BgWallType;
+
+#define WALL_FLAG_0 (1 << 0)
+#define WALL_FLAG_1 (1 << 1)
+#define WALL_FLAG_2 (1 << 2)
+#define WALL_FLAG_3 (1 << 3)
+#define WALL_FLAG_4 (1 << 4)
+#define WALL_FLAG_5 (1 << 5)
+#define WALL_FLAG_6 (1 << 6)
+
+typedef enum BgFloorProperty{
+    /*  0 */ BG_FLOOR_PROPERTY_0,
+    /*  1 */ BG_FLOOR_PROPERTY_1,
+    /*  2 */ BG_FLOOR_PROPERTY_2,
+    /*  5 */ BG_FLOOR_PROPERTY_5 = 5,
+    /*  6 */ BG_FLOOR_PROPERTY_6,
+    /*  7 */ BG_FLOOR_PROPERTY_7,
+    /*  8 */ BG_FLOOR_PROPERTY_8,
+    /*  9 */ BG_FLOOR_PROPERTY_9,
+    /* 11 */ BG_FLOOR_PROPERTY_11 = 11,
+    /* 12 */ BG_FLOOR_PROPERTY_12,
+    /* 13 */ BG_FLOOR_PROPERTY_13
+} BgFloorProperty;
+
+// TODO: name after the elements from sSurfaceTypeSfx
+typedef enum BgSurfaceSfxType {
+    /*  0 */ BG_SURFACE_SFX_TYPE_0,
+    /*  1 */ BG_SURFACE_SFX_TYPE_1,
+    /*  2 */ BG_SURFACE_SFX_TYPE_2,
+    /*  3 */ BG_SURFACE_SFX_TYPE_3,
+    /*  4 */ BG_SURFACE_SFX_TYPE_4,
+    /*  5 */ BG_SURFACE_SFX_TYPE_5,
+    /*  6 */ BG_SURFACE_SFX_TYPE_6,
+    /*  7 */ BG_SURFACE_SFX_TYPE_7,
+    /*  8 */ BG_SURFACE_SFX_TYPE_8,
+    /*  9 */ BG_SURFACE_SFX_TYPE_9,
+    /* 10 */ BG_SURFACE_SFX_TYPE_10,
+    /* 11 */ BG_SURFACE_SFX_TYPE_11,
+    /* 12 */ BG_SURFACE_SFX_TYPE_12,
+    /* 13 */ BG_SURFACE_SFX_TYPE_13,
+    /* 14 */ BG_SURFACE_SFX_TYPE_14,
+    /* 15 */ BG_SURFACE_SFX_TYPE_MAX
+} BgSurfaceSfxType;
+
+typedef enum BgConveyorSpeed {
+    /* 0 */ BG_CONVEYOR_SPEED_DISABLED,
+    /* 1 */ BG_CONVEYOR_SPEED_SLOW,
+    /* 2 */ BG_CONVEYOR_SPEED_MEDIUM,
+    /* 3 */ BG_CONVEYOR_SPEED_FAST,
+    /* 4 */ BG_CONVEYOR_SPEED_MAX
+} BgConveyorSpeed;
 
 typedef struct {
     /* 0x0 */ u32 data[2];
@@ -216,14 +297,14 @@ typedef struct {
 } DynaCollisionContext; // size = 0x1418
 
 typedef struct {
-    /* 0x00 */ CollisionHeader* colHeader; // scene's static collision
-    /* 0x04 */ Vec3f minBounds;            // minimum coordinates of collision bounding box
-    /* 0x10 */ Vec3f maxBounds;            // maximum coordinates of collision bounding box
-    /* 0x1C */ Vec3i subdivAmount;         // x, y, z subdivisions of the scene's static collision
-    /* 0x28 */ Vec3f subdivLength;         // x, y, z subdivision worldspace lengths
-    /* 0x34 */ Vec3f subdivLengthInv;      // inverse of subdivision length
-    /* 0x40 */ StaticLookup* lookupTbl;    // 3d array of length subdivAmount
-    /* 0x44 */ SSNodeList polyNodes;
+    /* 0x0000 */ CollisionHeader* colHeader; // scene's static collision
+    /* 0x0004 */ Vec3f minBounds;            // minimum coordinates of collision bounding box
+    /* 0x0010 */ Vec3f maxBounds;            // maximum coordinates of collision bounding box
+    /* 0x001C */ Vec3i subdivAmount;         // x, y, z subdivisions of the scene's static collision
+    /* 0x0028 */ Vec3f subdivLength;         // x, y, z subdivision worldspace lengths
+    /* 0x0034 */ Vec3f subdivLengthInv;      // inverse of subdivision length
+    /* 0x0040 */ StaticLookup* lookupTbl;    // 3d array of length subdivAmount
+    /* 0x0044 */ SSNodeList polyNodes;
     /* 0x0050 */ DynaCollisionContext dyna;
     /* 0x1468 */ u32 memSize; // Size of all allocated memory plus CollisionContext
     /* 0x146C */ u32 flags;   // bit 0 reverses conveyor direction (i.e. water flow in Great Bay Temple)
