@@ -319,7 +319,7 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
     s16 minute;
 
     if ((play->sceneId == SCENE_YADOYA) && (INV_CONTENT(ITEM_ROOM_KEY) == ITEM_ROOM_KEY)) {
-        // Having the room key allows you to stay in stock-pot inn
+        // Having the room key allows you to stay in Stock Pot Inn
         return;
     }
 
