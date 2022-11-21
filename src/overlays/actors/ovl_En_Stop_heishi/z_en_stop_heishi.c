@@ -16,11 +16,23 @@ void EnStopheishi_Destroy(Actor* thisx, PlayState* play);
 void EnStopheishi_Update(Actor* thisx, PlayState* play);
 void EnStopheishi_Draw(Actor* thisx, PlayState* play);
 
-void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx);
-void func_80AE85C4(EnStopheishi* this, GlobalContext* globalCtx);
+void func_80AE7F34(EnStopheishi* this, PlayState* play);
+void func_80AE85C4(EnStopheishi* this, PlayState* play);
 void func_80AE7E9C(EnStopheishi* this);
-void func_80AE854C(EnStopheishi* this, GlobalContext* globalCtx);
-void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx);
+void func_80AE854C(EnStopheishi* this, PlayState* play);
+void func_80AE795C(EnStopheishi* this, PlayState* play);
+
+typedef enum {
+    /* 0 */ SOLDIER_ANIM_LOOK_DOWN,
+    /* 1 */ SOLDIER_ANIM_COME_UP_HERE,
+    /* 2 */ SOLDIER_ANIM_STAND_HAND_ON_HIP,
+    /* 3 */ SOLDIER_ANIM_STAND_LOOK_DOWN,
+    /* 4 */ SOLDIER_ANIM_4,
+    /* 5 */ SOLDIER_ANIM_5,
+    /* 6 */ SOLDIER_ANIM_6,
+    /* 7 */ SOLDIER_ANIM_STAND_HAND_ON_CHEST,
+    /* 8 */ SOLDIER_ANIM_MAX,
+} SoldierAnimations;
 
 const ActorInit En_Stop_heishi_InitVars = {
     ACTOR_EN_STOP_HEISHI,
@@ -54,7 +66,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 260, 0, { 0, 0, 0 } },
 };
 
-u16 D_80AE88DC[] = {
+static u16 sLeaveMessages[] = {
     0x0516, 0x0517, 0x051A, 0x0000, 0x051C, 0x0000, 0x051E, 0x0000, 0x0520, 0x0521, 0x0524, 0x0000, 0x0526, 0x0000,
     0x0528, 0x0000, 0x052A, 0x052B, 0x052E, 0x0000, 0x0530, 0x0000, 0x0532, 0x0000, 0x0534, 0x0535, 0x0538, 0x0000,
     0x053A, 0x0000, 0x053C, 0x0000, 0x0518, 0x0519, 0x051B, 0x0000, 0x051D, 0x0000, 0x051F, 0x0000, 0x0522, 0x0523,
@@ -63,7 +75,7 @@ u16 D_80AE88DC[] = {
     0x0564, 0x0000, 0x0515, 0x0000, 0x0561, 0x0000, 0x0563, 0x0000, 0x0565, 0x0000,
 };
 
-u16 D_80AE897C[] = {
+static u16 sThirdDayLeaveMessages[] = {
     0x0540, 0x0541, 0x0542, 0x0000, 0x0543, 0x0000, 0x0543, 0x0000, 0x0547, 0x0548, 0x0549, 0x0000, 0x054A, 0x0000,
     0x054B, 0x0000, 0x054F, 0x0550, 0x0551, 0x0000, 0x0552, 0x0000, 0x0553, 0x0000, 0x0557, 0x0558, 0x0559, 0x0000,
     0x055A, 0x0000, 0x055A, 0x0000, 0x0544, 0x0545, 0x0546, 0x0000, 0x0546, 0x0000, 0x0546, 0x0000, 0x054C, 0x054D,
@@ -72,125 +84,126 @@ u16 D_80AE897C[] = {
     0x053E, 0x0000, 0x053F, 0x0000, 0x053F, 0x0000, 0x053F, 0x0000, 0x053F, 0x0000,
 };
 
-static AnimationHeader* sAnimations[] = {
+static AnimationHeader* sAnimations[SOLDIER_ANIM_MAX] = {
     &gSoldierLookDown,       &gSoldierComeUpHere,     &gSoldierStandHandOnHip, &gSoldierStandAndLookDown,
     &object_sdn_Anim_0057BC, &object_sdn_Anim_005D28, &object_sdn_Anim_0064C0, &gSoldierStandWithHandOnChest,
 
 };
 
-void EnStopheishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnStopheishi_Init(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierStandHandOnHip, this->limbDrawTable,
-                       this->transitionDrawTable, 17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gSoldierSkel, &gSoldierStandHandOnHip, this->limbDrawTable,
+                       this->transitionDrawTable, SOLDIER_LIMB_MAX);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_276 = ((this->actor.params >> 0xC) & 0xF);
-    this->switchFlag = (this->actor.params & 0x3F);
+    this->unk_276 = ENSTOPHEISHI_GET_C(this);
+    this->switchFlag = ENSTOPHEISHI_GET_SWITCH_FLAG(this);
     this->unk_288 = (this->actor.world.rot.z * 40.0f) + 50.0f;
     this->actor.world.rot.z = 0;
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag) != 0)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag) != 0)) {
+        Actor_Kill(&this->actor);
         return;
     }
     this->actor.targetMode = 0;
     this->actor.gravity = -3.0f;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->unk_280 = this->actor.world.rot.y;
-    this->unk_284 = 6;
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    this->yRotTarget = this->actor.world.rot.y;
+    this->headTurnTimer2 = 6;
     func_80AE7E9C(this);
 }
 
-void EnStopheishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnStopheishi_Destroy(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnStopHeishi_ChangeAnim(EnStopheishi* this, s32 animIndex) {
     s32 mode;
     f32 morphFrames;
 
-    this->unk_268 = animIndex;
+    this->currentAnim = animIndex;
     this->currentAnimFrameCount = Animation_GetLastFrame(sAnimations[animIndex]);
-    mode = 2;
+    mode = ANIMMODE_ONCE;
     morphFrames = -10.0f;
-    if ((animIndex >= 2) && (animIndex != 4)) {
-        mode = 0;
+    if ((animIndex >= SOLDIER_ANIM_STAND_HAND_ON_HIP) && (animIndex != SOLDIER_ANIM_4)) {
+        mode = ANIMMODE_LOOP;
     }
-    if (animIndex == 5) {
+    if (animIndex == SOLDIER_ANIM_5) {
         morphFrames = 0.0f;
     }
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->currentAnimFrameCount, mode, morphFrames);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->currentAnimFrameCount, mode,
+                     morphFrames);
 }
 
-void func_80AE75C8(EnStopheishi* this, GlobalContext* globalCtx) {
+void EnStopheishi_UpdateHeadNormal(EnStopheishi* this, PlayState* play) {
     s32 yawDiff;
     Player* player;
     Vec3f playerPos;
 
     yawDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));
 
-    this->unk_260 = 0;
+    this->headXRotTarget = 0;
 
     if (this->actor.xzDistToPlayer < 200.0f) {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
         if (yawDiff < 0x4E20) {
-            this->unk_260 = (this->actor.yawTowardsPlayer - this->actor.world.rot.y);
-            if (this->unk_260 >= 0x2711) {
-                this->unk_260 = 0x2710;
-            } else if (this->unk_260 < -0x2710) {
-                this->unk_260 = -0x2710;
+            this->headXRotTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+            if (this->headXRotTarget >= 0x2711) {
+                this->headXRotTarget = 0x2710;
+            } else if (this->headXRotTarget < -0x2710) {
+                this->headXRotTarget = -0x2710;
             }
         }
 
         Math_Vec3f_Copy(&playerPos, &player->actor.world.pos);
 
         if ((player->transformation == PLAYER_FORM_DEKU) || (player->transformation == PLAYER_FORM_HUMAN)) {
-            playerPos.y += (57.0f + BREG(34));
+            playerPos.y += 57.0f + BREG(34);
         } else {
-            playerPos.y += (70.0f + BREG(35));
+            playerPos.y += 70.0f + BREG(35);
         }
         this->pitchToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &playerPos);
     }
 }
 
-void func_80AE7718(EnStopheishi* this) {
-    if (this->unk_272 != 0) {
-        this->unk_272--;
+void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
+    if (this->headTurnTimer1 != 0) {
+        this->headTurnTimer1--;
     }
     this->pitchToPlayer = -0xBB8;
-    this->unk_260 = 0;
-    if (this->unk_284 < 6) {
-        this->unk_260 = 0x1770;
-        if (!(this->unk_284 & 7)) {
-            this->unk_260 = -0x1770;
+    this->headXRotTarget = 0;
+    if (this->headTurnTimer2 < 6) {
+        this->headXRotTarget = 0x1770;
+        if (!(this->headTurnTimer2 & 7)) {
+            this->headXRotTarget = -0x1770;
         }
-        if (this->unk_272 == 0) {
-            this->unk_284++;
-            this->unk_272 = 10;
-            if (this->unk_284 >= 6) {
-                this->unk_272 = 50;
+        if (this->headTurnTimer1 == 0) {
+            this->headTurnTimer2++;
+            this->headTurnTimer1 = 10;
+            if (this->headTurnTimer2 >= 6) {
+                this->headTurnTimer1 = 50;
             }
         }
-    } else if ((this->unk_272 == 0) && (Quake_NumActiveQuakes() != 0) && (this->unk_284 >= 6)) {
-        this->unk_284 = 0;
+    } else if ((this->headTurnTimer1 == 0) && (Quake_NumActiveQuakes() != 0) && (this->headTurnTimer2 >= 6)) {
+        this->headTurnTimer2 = 0;
     }
 }
 
 void func_80AE77D4(EnStopheishi* this) {
     this->unk_274 = 0;
-    this->unk_28C = 0.0f;
-    this->unk_280 = this->actor.home.rot.y;
-    if (this->unk_270 == 1) {
+    this->maxMoveStep = 0.0f;
+    this->yRotTarget = this->actor.home.rot.y;
+    if (this->timer == 1) {
         this->pitchToPlayer = 0;
-        EnStopHeishi_ChangeAnim(this, 5);
+        EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_5);
     }
-    if ((this->unk_270 == 0) && (this->unk_264 == 0)) {
+    if ((this->timer == 0) && (this->unk_264 == 0)) {
         if ((fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 3.0f) ||
             (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 3.0f)) {
             this->skelAnime.playSpeed = 3.0f;
@@ -200,20 +213,21 @@ void func_80AE77D4(EnStopheishi* this) {
             this->unk_264 = 1;
         }
     }
-    if ((this->unk_268 != 2) && (this->unk_268 != 3) && (this->unk_268 != 7) && (this->unk_264 != 0)) {
+    if ((this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP) && (this->currentAnim != SOLDIER_ANIM_STAND_LOOK_DOWN) &&
+        (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_CHEST) && (this->unk_264 != 0)) {
         this->skelAnime.playSpeed = 1.0f;
-        EnStopHeishi_ChangeAnim(this, 2);
+        EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
         if ((gSaveContext.save.day != 3) && (gSaveContext.save.isNight != 0)) {
-            EnStopHeishi_ChangeAnim(this, 3);
+            EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_LOOK_DOWN);
         }
         if (gSaveContext.save.day == 3) {
-            EnStopHeishi_ChangeAnim(this, 7);
+            EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_CHEST);
         }
     }
 }
 
-void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80AE795C(EnStopheishi* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
     Vec3f newPos;
     f32 xDiff;
@@ -222,9 +236,8 @@ void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
     s16 yaw;
     s16 rotY;
 
-    
     if (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.home.rot.y)) < 0x2000) {
-        this->unk_280 = this->actor.yawTowardsPlayer;
+        this->yRotTarget = this->actor.yawTowardsPlayer;
     }
     playSpeed =
         fabsf((f32)this->actor.yawTowardsPlayer - Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos)) *
@@ -266,27 +279,27 @@ void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
     }
     newPos.x += xDiff;
     newPos.z += zDiff;
-    Math_ApproachF(&this->actor.world.pos.x, newPos.x, 0.5f, this->unk_28C);
-    Math_ApproachF(&this->actor.world.pos.z, newPos.z, 0.5f, this->unk_28C);
-    Math_ApproachF(&this->unk_28C, 50.0f, 0.3f, 1.0f);
+    Math_ApproachF(&this->actor.world.pos.x, newPos.x, 0.5f, this->maxMoveStep);
+    Math_ApproachF(&this->actor.world.pos.z, newPos.z, 0.5f, this->maxMoveStep);
+    Math_ApproachF(&this->maxMoveStep, 50.0f, 0.3f, 1.0f);
 
     switch (this->unk_274) {
         case 0:
             if (gSaveContext.save.day != 3) {
-                EnStopHeishi_ChangeAnim(this, 4);
+                EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_4);
                 this->unk_274 = 2;
             } else {
-                EnStopHeishi_ChangeAnim(this, 2);
+                EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
                 this->unk_274 = 1;
             }
             break;
         case 1:
-            EnStopHeishi_ChangeAnim(this, 4);
+            EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_4);
             this->unk_274 = 2;
             break;
         case 2:
             if (this->currentAnimFrameCount <= curFrame) {
-                EnStopHeishi_ChangeAnim(this, 5);
+                EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_5);
                 this->unk_274 = 3;
             }
             break;
@@ -294,24 +307,24 @@ void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
             if ((fabsf(this->actor.world.pos.x - newPos.x) < 2.0f) &&
                 (fabsf(this->actor.world.pos.z - newPos.z) < 2.0f)) {
                 this->skelAnime.playSpeed = 1.0f;
-                EnStopHeishi_ChangeAnim(this, 6);
+                EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_6);
                 this->unk_274 = 4;
             }
             break;
         case 4:
             if ((fabsf(this->actor.world.pos.x - newPos.x) > 4.0f) ||
                 (fabsf(this->actor.world.pos.z - newPos.z) > 4.0f)) {
-                EnStopHeishi_ChangeAnim(this, 5);
+                EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_5);
                 this->unk_274 = 3;
             }
             break;
     }
     this->unk_264 = 0;
-    this->unk_270 = 0x14;
+    this->timer = 20;
     this->pitchToPlayer = 0;
     if (this->unk_276 == 3) {
         Math_Vec3f_Copy(&newPos, &player->actor.world.pos);
-        if ((player->transformation == 3) || (player->transformation == 4)) {
+        if ((player->transformation == PLAYER_FORM_DEKU) || (player->transformation == PLAYER_FORM_HUMAN)) {
             newPos.y += 77.0f + BREG(37);
             this->pitchToPlayer = Math_Vec3f_Pitch(&this->actor.focus.pos, &newPos);
         }
@@ -319,21 +332,21 @@ void func_80AE795C(EnStopheishi* this, GlobalContext* globalCtx) {
 }
 
 void func_80AE7E9C(EnStopheishi* this) {
-    EnStopHeishi_ChangeAnim(this, 2);
+    EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     if ((gSaveContext.save.day != 3) && (gSaveContext.save.isNight != 0)) {
-        EnStopHeishi_ChangeAnim(this, 3);
+        EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_LOOK_DOWN);
     }
     if (gSaveContext.save.day == 3) {
-        EnStopHeishi_ChangeAnim(this, 7);
+        EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_CHEST);
     }
     this->unk_274 = 0;
-    this->unk_278 = 0;
+    this->disableCollider = false;
     this->actionFunc = func_80AE7F34;
     this->actor.speedXZ = 0.0f;
 }
 
-void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80AE7F34(EnStopheishi* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 sp32;
     s16 phi_a2;
     s32 yawDiffAbs;
@@ -342,15 +355,15 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
     f32 zDiff;
 
     SkelAnime_Update(&this->skelAnime);
-    if ((this->unk_268 == 5) && (((s16)this->skelAnime.curFrame & 1) != 0)) {
-        Actor_PlaySfxAtPos(&this->actor, 0x2931U);
+    if ((this->currentAnim == SOLDIER_ANIM_5) && (((s16)this->skelAnime.curFrame & 1) != 0)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SOLDIER_WALK);
     }
     if (gSaveContext.save.day != 3) {
-        func_80AE75C8(this, globalCtx);
+        EnStopheishi_UpdateHeadNormal(this, play);
     } else {
-        func_80AE7718(this);
+        EnStopHeishi_UpdateHeadThirdDay(this);
     }
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_280, 1, 0x1388, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->yRotTarget, 1, 0x1388, 0);
 
     sp32 = 0;
     if (gSaveContext.save.isNight != 0) {
@@ -383,13 +396,14 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
     }
 
     if (((phi_a2 == 1) || (phi_a2 == 2) || (phi_a2 == 3)) &&
-        (((this->unk_268 == 4)) || (this->unk_268 == 5) || (this->unk_268 == 6))) {
-        EnStopHeishi_ChangeAnim(this, 2);
+        (((this->currentAnim == SOLDIER_ANIM_4)) || (this->currentAnim == SOLDIER_ANIM_5) ||
+         (this->currentAnim == SOLDIER_ANIM_6))) {
+        EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
         if ((gSaveContext.save.day != 3) && (gSaveContext.save.isNight != 0)) {
-            EnStopHeishi_ChangeAnim(this, 3);
+            EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_LOOK_DOWN);
         }
         if (gSaveContext.save.day == 3) {
-            EnStopHeishi_ChangeAnim(this, 7);
+            EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_CHEST);
         }
     }
 
@@ -399,7 +413,7 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
         this->collider.dim.radius = 0x32;
         this->collider.dim.height = 0x104;
         if (sqrtf(SQ(xDiff) + SQ(zDiff)) < 240.0f) {
-            func_80AE795C(this, globalCtx);
+            func_80AE795C(this, play);
         } else {
             func_80AE77D4(this);
         }
@@ -408,22 +422,22 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
         this->collider.dim.height = 0x3C;
     }
     if (phi_a2 != 4) {
-        this->unk_27C = this->unk_276 * 8;
-        this->unk_27C += sp32;
-        this->unk_27C += phi_a2 * 2;
+        this->messageIndex = this->unk_276 * 8;
+        this->messageIndex += sp32;
+        this->messageIndex += phi_a2 * 2;
     } else {
-        this->unk_27C = 0x40;
+        this->messageIndex = 0x40;
         if (sp32 != 0) {
-            this->unk_27C = 0x48;
+            this->messageIndex = 0x48;
         }
-        this->unk_27C += this->unk_276 * 2;
+        this->messageIndex += this->unk_276 * 2;
     }
     if (gSaveContext.save.day != 3) {
-        this->actor.textId = D_80AE88DC[this->unk_27C];
-        this->unk_27E = D_80AE88DC[this->unk_27C + 1];
+        this->actor.textId = sLeaveMessages[this->messageIndex];
+        this->unk_27E = sLeaveMessages[this->messageIndex + 1];
     } else {
-        this->actor.textId = D_80AE897C[this->unk_27C];
-        this->unk_27E = D_80AE897C[this->unk_27C + 1];
+        this->actor.textId = sThirdDayLeaveMessages[this->messageIndex];
+        this->unk_27E = sThirdDayLeaveMessages[this->messageIndex + 1];
     }
     if (this->unk_27E != 0) {
         if ((STOLEN_ITEM_1 == ITEM_SWORD_GREAT_FAIRY) || (STOLEN_ITEM_1 == ITEM_SWORD_KOKIRI) ||
@@ -447,7 +461,7 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
             } else if (this->actor.textId == 0x536) {
                 this->actor.textId = 0x573;
             }
-        } else if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == 0) {
+        } else if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
             if (this->actor.textId == 0x516) {
                 this->actor.textId = 0x55E;
             } else if (this->actor.textId == 0x520) {
@@ -473,87 +487,87 @@ void func_80AE7F34(EnStopheishi* this, GlobalContext* globalCtx) {
     } else {
         yawDiffAbs = yawDiff;
     }
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         this->skelAnime.playSpeed = 1.0f;
-        func_80AE854C(this, globalCtx);
+        func_80AE854C(this, play);
     } else if (yawDiffAbs < 0x4BB9) {
-        func_800B8614(&this->actor, globalCtx, 70.0f);
+        func_800B8614(&this->actor, play, 70.0f);
     }
 }
 
-void func_80AE854C(EnStopheishi* this, GlobalContext* globalCtx) {
-    if (((this->unk_265 != 0) || (gSaveContext.save.weekEventReg[0xC] & 0x20)) && (this->unk_268 != 2)) {
-        EnStopHeishi_ChangeAnim(this, 2);
+void func_80AE854C(EnStopheishi* this, PlayState* play) {
+    if (((this->unk_265 != 0) || (gSaveContext.save.weekEventReg[0xC] & 0x20)) && (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
+        EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     }
     this->pitchToPlayer = 0;
     this->unk_274 = 0;
-    this->unk_278 = 1;
+    this->disableCollider = true;
     this->actionFunc = func_80AE85C4;
 }
 
-void func_80AE85C4(EnStopheishi* this, GlobalContext* globalCtx) {
+void func_80AE85C4(EnStopheishi* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    func_80AE75C8(this, globalCtx);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
+    EnStopheishi_UpdateHeadNormal(this, play);
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_27E != 0) {
             this->actor.textId = this->unk_27E;
-            func_80151938(globalCtx, this->actor.textId);
-            EnStopHeishi_ChangeAnim(this, 2);
+            func_80151938(play, this->actor.textId);
+            EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
             gSaveContext.save.weekEventReg[0xC] |= 0x20;
             this->unk_265 = 1;
             this->unk_27E = 0;
-            return;
+        } else {
+            func_801477B4(play);
+            func_80AE7E9C(this);
         }
-        func_801477B4(globalCtx);
-        func_80AE7E9C(this);
     }
 }
 
-void EnStopheishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnStopheishi_Update(Actor* thisx, PlayState* play) {
     EnStopheishi* this = (EnStopheishi*)thisx;
     s32 pad;
 
-    if (this->unk_270 != 0) {
-        this->unk_270 = this->unk_270 - 1;
+    if (this->timer != 0) {
+        this->timer = this->timer - 1;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_SmoothStepToS(&this->unk_25A, this->unk_260, 1, 0x7D0, 0);
-    Math_SmoothStepToS(&this->unk_258, this->pitchToPlayer, 1, 0x7D0, 0);
-    this->actionFunc(this, globalCtx);
+    Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 0x7D0, 0);
+    Math_SmoothStepToS(&this->headZRot, this->pitchToPlayer, 1, 0x7D0, 0);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.uncullZoneForward = 500.0f;
-    Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk_290);
+    Math_Vec3f_Copy(&this->actor.focus.pos, &this->headWorldPos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-    if (this->unk_278 == 0) {
+    if (!this->disableCollider) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-s32 func_80AE87A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnStopheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnStopheishi* this = THIS;
 
-    if (limbIndex == OBJECT_SDN_LIMB_10) {
-        rot->x += this->unk_25A;
-        rot->z += this->unk_258;
+    if (limbIndex == SOLDIER_LIMB_HEAD) {
+        rot->x += this->headXRot;
+        rot->z += this->headZRot;
     }
     return 0;
 }
 
-void func_80AE87EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnStopheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnStopheishi* this = THIS;
 
-    if (limbIndex == OBJECT_SDN_LIMB_10) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_290);
+    if (limbIndex == SOLDIER_LIMB_HEAD) {
+        Matrix_MultVec3f(&gZeroVec3f, &this->headWorldPos);
     }
 }
 
-void EnStopheishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnStopheishi_Draw(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                          (s32)this->skelAnime.dListCount, func_80AE87A4, func_80AE87EC, &this->actor);
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
+                          EnStopheishi_OverrideLimbDraw, EnStopheishi_PostLimbDraw, &this->actor);
 }
