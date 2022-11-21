@@ -3870,7 +3870,7 @@ void Actor_SpawnShieldParticlesMetal(PlayState* play, Vec3f* pos) {
 }
 
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 bufFlag, u16 duration) {
-    if ((colorFlag == COLORFILTER_COLORFLAG_GRAY) && !(colorIntensityMax & 0x8000)) {
+    if ((colorFlag == COLORFILTER_COLORFLAG_GRAY) && !(colorIntensityMax & COLORFILTER_INTENSITY_FLAG)) {
         Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
