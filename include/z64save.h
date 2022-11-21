@@ -1522,10 +1522,8 @@ void func_80147198(SramContext* sramCtx);
 extern s32 D_801C6798[];
 extern u8 gAmmoItems[];
 extern s32 D_801C67C8[];
-extern s32 D_801C67E8[];
 extern s32 D_801C67F0[];
 extern s32 D_801C6818[];
-extern s32 D_801C6838[];
 extern s32 D_801C6840[];
 extern s32 D_801C6850[];
 
