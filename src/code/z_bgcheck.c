@@ -4301,7 +4301,7 @@ u16 SurfaceType_GetSfxIdOffset(CollisionContext* colCtx, CollisionPoly* poly, s3
 s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3) {
     BgSurfaceSfxType sfxType = SurfaceType_GetSfxType(colCtx, poly, bgId);
 
-    if (sfxType < 0 || sfxType >= ARRAY_COUNT(D_801B46C0)) {
+    if ((sfxType < 0) || (sfxType >= ARRAY_COUNT(D_801B46C0))) {
         return 0;
     }
 
