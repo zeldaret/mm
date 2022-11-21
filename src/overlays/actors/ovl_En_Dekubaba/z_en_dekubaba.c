@@ -921,7 +921,7 @@ void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x30);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->actor.scale.y = this->actor.scale.z = this->actor.scale.x;
@@ -1054,7 +1054,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
     }
 
     if (Actor_HasParent(&this->actor, play) || (this->timer == 0)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
