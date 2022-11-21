@@ -2391,7 +2391,7 @@
     0x8012CF0C:("func_8012CF0C",),
     0x8012D374:("func_8012D374",),
     0x8012D40C:("func_8012D40C",),
-    0x8012D510:("Room_Update",),
+    0x8012D510:("Room_Noop",),
     0x8012D528:("Room_DrawNone",),
     0x8012D53C:("Room_DrawNormal",),
     0x8012D750:("Room_DrawCullable",),

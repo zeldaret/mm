@@ -1905,7 +1905,7 @@ asm/non_matchings/code/z_rcp/Gfx_PrimColor.s,Gfx_PrimColor,0x8012CEA8,0x19
 asm/non_matchings/code/z_rcp/func_8012CF0C.s,func_8012CF0C,0x8012CF0C,0x11A
 asm/non_matchings/code/z_rcp/func_8012D374.s,func_8012D374,0x8012D374,0x26
 asm/non_matchings/code/z_rcp/func_8012D40C.s,func_8012D40C,0x8012D40C,0x3D
-asm/non_matchings/code/z_room/Room_Update.s,Room_Update,0x8012D510,0x6
+asm/non_matchings/code/z_room/Room_Noop.s,Room_Noop,0x8012D510,0x6
 asm/non_matchings/code/z_room/Room_DrawNone.s,Room_DrawNone,0x8012D528,0x5
 asm/non_matchings/code/z_room/Room_DrawNormal.s,Room_DrawNormal,0x8012D53C,0x85
 asm/non_matchings/code/z_room/Room_DrawCullable.s,Room_DrawCullable,0x8012D750,0x1E6

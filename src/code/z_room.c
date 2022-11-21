@@ -1,6 +1,6 @@
 #include "global.h"
 
-void Room_Update(PlayState* play, Room* room, Input* input, s32 arg3) {
+void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3) {
 }
 
 void Room_DrawNone(PlayState* play, Room* room, u32 flags) {

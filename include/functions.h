@@ -1911,7 +1911,7 @@ void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g
 void func_8012D374(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b);
 void func_8012D40C(f32* param_1, f32* param_2, s16* param_3);
 
-void Room_Update(PlayState* play, Room* room, Input* input, s32 arg3);
+void Room_Noop(PlayState* play, Room* room, Input* input, s32 arg3);
 void Room_Init(PlayState* play, RoomContext* roomCtx);
 size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx);
 s32 Room_StartRoomTransition(PlayState* play, RoomContext* roomCtx, s32 index);
