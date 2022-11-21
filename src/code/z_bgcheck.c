@@ -3213,7 +3213,8 @@ f32 BgCheck_RaycastFloorDynaList(DynaRaycast* dynaRaycast, u32 listType) {
             (COLPOLY_VIA_FLAG_TEST(polyList[id].flags_vIB, 4) &&
              (((dynaRaycast->actor != NULL) && (dynaRaycast->actor->category != ACTORCAT_PLAYER)) ||
               ((dynaRaycast->actor == NULL) && (dynaRaycast->xpFlags != COLPOLY_IGNORE_CAMERA)))) ||
-            ((dynaRaycast->unk_24 & 0x20) && SurfaceType_IsSoft(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
+            ((dynaRaycast->unk_24 & 0x20) &&
+             SurfaceType_IsSoft(dynaRaycast->colCtx, &polyList[id], dynaRaycast->unk1C))) {
             if (curNode->next == SS_NULL) {
                 break;
             } else {

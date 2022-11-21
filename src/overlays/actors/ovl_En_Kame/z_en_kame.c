@@ -289,7 +289,8 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
 
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
-            BgSurfaceSfxType surfaceSfxType = SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+            BgSurfaceSfxType surfaceSfxType =
+                SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
             if ((surfaceSfxType == BG_SURFACE_SFX_TYPE_0) || (surfaceSfxType == BG_SURFACE_SFX_TYPE_1)) {
                 func_800B1210(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, 550, 100);

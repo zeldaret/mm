@@ -239,7 +239,8 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 j;
 
     if (this->actor.bgCheckFlags & 2) {
-        BgSurfaceSfxType surfaceSfxType = SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        BgSurfaceSfxType surfaceSfxType =
+            SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
         if ((surfaceSfxType == BG_SURFACE_SFX_TYPE_0) || (surfaceSfxType == BG_SURFACE_SFX_TYPE_1)) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {

@@ -3620,7 +3620,8 @@ void EnHorse_CheckFloors(EnHorse* this, PlayState* play) {
 
         if ((ny < 0.81915206f) ||
             SurfaceType_IsHorseBlocked(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ||
-            (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == BG_FLOOR_TYPE_7)) {
+            (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ==
+             BG_FLOOR_TYPE_7)) {
             if (this->actor.speedXZ >= 0.0f) {
                 EnHorse_ObstructMovement(this, play, 4, galloping);
             } else {
@@ -4119,7 +4120,8 @@ s32 EnHorse_UpdateConveyors(EnHorse* this, PlayState* play) {
     s16 conveyorDir;
 
     if ((this->actor.floorPoly == NULL) || (&this->actor != player->rideActor) ||
-        (SurfaceType_GetConveyorSpeed(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == BG_CONVEYOR_SPEED_DISABLED)) {
+        (SurfaceType_GetConveyorSpeed(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ==
+         BG_CONVEYOR_SPEED_DISABLED)) {
         return false;
     }
 

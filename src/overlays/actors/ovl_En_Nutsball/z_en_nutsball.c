@@ -139,7 +139,8 @@ void EnNutsball_Update(Actor* thisx, PlayState* play2) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 5.0f, 10.0f, 0x7);
 
         if (this->actor.bgCheckFlags & 8) {
-            if (SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) & (WALL_FLAG_4 | WALL_FLAG_5)) {
+            if (SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId) &
+                (WALL_FLAG_4 | WALL_FLAG_5)) {
                 this->actor.bgCheckFlags &= ~8;
                 if (BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &worldPos, &this->actor.world.pos,
                                             &poly, true, false, false, true, &bgId)) {
