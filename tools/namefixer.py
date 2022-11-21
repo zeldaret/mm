@@ -837,6 +837,10 @@ wordReplace = {
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
 
+    "COLPOLY_SURFACE_GROUND": "BG_SURFACE_SFX_TYPE_0",
+    "COLPOLY_SURFACE_SAND": "BG_SURFACE_SFX_TYPE_1",
+    "COLPOLY_SURFACE_SNOW": "BG_SURFACE_SFX_TYPE_14",
+
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
 }

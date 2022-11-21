@@ -1041,7 +1041,7 @@ s32 func_80AEE86C(EnTk* this, PlayState* play) {
 
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80AEFA78, &sp28);
     if ((BgCheck_EntityRaycastFloor3(&play->colCtx, &sp38, &sp34, &sp28) != BGCHECK_Y_MIN) &&
-        (SurfaceType_GetSfxType(&play->colCtx, sp38, sp34) == 1) && (this->unk_2D0 == (u32)1) &&
+        (SurfaceType_GetSfxType(&play->colCtx, sp38, sp34) == BG_SURFACE_SFX_TYPE_1) && (this->unk_2D0 == 1) &&
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&

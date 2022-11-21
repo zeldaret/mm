@@ -903,18 +903,18 @@ Vec3s* BgCheck_GetBgCamFuncDataImpl(CollisionContext* colCtx, s32 bgCamIndex, s3
 Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u32 SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+BgFloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_GetWallType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_GetWallFlags(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_CheckWallFlag0(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_CheckWallFlag1(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_CheckWallFlag2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u32 SurfaceType_GetFloorProperty2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u32 SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+BgFloorProperty SurfaceType_GetFloorProperty2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+BgFloorProperty SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 func_800C9B68(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_IsHorseBlocked(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u32 SurfaceType_GetSfxType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+BgSurfaceSfxType SurfaceType_GetSfxType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u16 SurfaceType_GetSfxIdOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3);
 u32 SurfaceType_GetSlope(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
@@ -925,7 +925,7 @@ s32 SurfaceType_IsIgnoredByEntities(CollisionContext* colCtx, CollisionPoly* pol
 s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 SurfaceType_IsFloorConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u32 SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+BgConveyorSpeed SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_GetConveyorDirection(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_IsWallDamage(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 s32 WaterBox_GetSurfaceImpl(PlayState* play, CollisionContext* colCtx, f32 x, f32 z, f32* ySurface, WaterBox** outWaterBox, s32* bgId);
