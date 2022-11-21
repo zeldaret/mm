@@ -1582,7 +1582,7 @@ void func_80950C24(EnGm* this, PlayState* play) {
 void func_80950CDC(EnGm* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80951820, &sp20) ||
         ((this->unk_258 != sp20.result) && !func_80950280(this, play, &sp20))) {

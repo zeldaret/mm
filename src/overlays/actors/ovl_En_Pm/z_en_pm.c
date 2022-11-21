@@ -1987,7 +1987,7 @@ void func_80AFA4D0(EnPm* this, PlayState* play) {
     u16 sp3C = 0;
     ScheduleOutput sp2C;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (this->unk_38C != 0) {
         time = gSaveContext.save.time - D_801F4E78;
         sp3C = gSaveContext.save.time;
