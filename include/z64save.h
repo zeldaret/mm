@@ -106,6 +106,12 @@ typedef enum {
 } BottleTimerState;
 
 typedef enum {
+    /* 0 */ MINIGAME_STATUS_INACTIVE,
+    /* 1 */ MINIGAME_STATUS_ACTIVE,
+    /* 3 */ MINIGAME_STATUS_END = 3
+} MinigameStatus;
+
+typedef enum {
     /*  0 */ HUD_VISIBILITY_IDLE,
     /*  1 */ HUD_VISIBILITY_NONE,
     /*  2 */ HUD_VISIBILITY_NONE_ALT, // Identical to HUD_VISIBILITY_NONE
@@ -239,7 +245,7 @@ typedef struct Save {
     /* 0x000C */ u16 time;                              // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
     /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
-    /* 0x0014 */ s32 daySpeed;                          // "change_zelda_time"
+    /* 0x0014 */ s32 timeSpeedOffset;                   // "change_zelda_time"
     /* 0x0018 */ s32 day;                               // "totalday"
     /* 0x001C */ s32 daysElapsed;                       // "eventday"
     /* 0x0020 */ u8 playerForm;                         // "player_character"
@@ -343,9 +349,9 @@ typedef struct SaveContext {
     /* 0x3F32 */ s16 magicToConsume; // accumulated magic that is requested to be consumed "magic_used"
     /* 0x3F34 */ s16 magicToAdd; // accumulated magic that is requested to be added "magic_recovery"
     /* 0x3F36 */ u16 mapIndex;                          // "scene_ID"
-    /* 0x3F38 */ u16 minigameState;                     // "yabusame_mode"
+    /* 0x3F38 */ u16 minigameStatus;                    // "yabusame_mode"
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
-    /* 0x3F3C */ u16 unk_3F3C;                          // "yabusame_out_ct"
+    /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
     /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
     /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
@@ -389,6 +395,11 @@ typedef enum SunsSongState {
 #define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
+
+// The day begins at CLOCK_TIME(6, 0) so it must be offset.
+#define TIME_UNTIL_MOON_CRASH \
+    ((4 - CURRENT_DAY) * DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
+#define TIME_UNTIL_NEW_DAY (DAY_LENGTH - (u16)(((void)0, gSaveContext.save.time) - CLOCK_TIME(6, 0)));
 
 #define GET_PLAYER_FORM ((void)0, gSaveContext.save.playerForm)
 

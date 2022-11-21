@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_al" Segment="6">
-        <Animation Name="object_al_Anim_000C54" Offset="0xC54" />
+        <Animation Name="object_al_Anim_000C54" Offset="0xC54" /> <!-- Original name is "al_suwaruA" ("suwaru" = "to sit") -->
         <DList Name="gMadameAromaRightFootDL" Offset="0x45F0" />
         <DList Name="gMadameAromaLeftFootDL" Offset="0x4738" />
         <DList Name="gMadameAromaLegsDL" Offset="0x4880" />
@@ -66,10 +66,10 @@
         <Limb Name="gMadameAromaLeftFootLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_LEFT_FOOT" Offset="0xA058" />
         <Limb Name="gMadameAromaRightFootLimb" Type="Standard" EnumName="MADAME_AROMA_LIMB_RIGHT_FOOT" Offset="0xA064" />
         <Skeleton Name="gMadameAromaSkel" Type="Flex" LimbType="Standard" LimbNone="MADAME_AROMA_LIMB_NONE" LimbMax="MADAME_AROMA_LIMB_MAX" EnumName="MadameAromaLimb" Offset="0xA0D8" />
-        <Animation Name="object_al_Anim_00A764" Offset="0xA764" />
-        <Animation Name="object_al_Anim_00ACA0" Offset="0xACA0" />
-        <Animation Name="object_al_Anim_00BCA4" Offset="0xBCA4" />
-        <Animation Name="object_al_Anim_00CA28" Offset="0xCA28" />
-        <Animation Name="object_al_Anim_00DBE0" Offset="0xDBE0" />
+        <Animation Name="object_al_Anim_00A764" Offset="0xA764" /> <!-- Original name is "al_suwaruAtalk" -->
+        <Animation Name="object_al_Anim_00ACA0" Offset="0xACA0" /> <!-- Original name is "al_suwaruB2talk" -->
+        <Animation Name="object_al_Anim_00BCA4" Offset="0xBCA4" /> <!-- Original name is "al_suwaruBarayada" ("arayada" = "Oh no; Oh dear​") -->
+        <Animation Name="object_al_Anim_00CA28" Offset="0xCA28" /> <!-- Original name is "al_suwaruBtalk" -->
+        <Animation Name="object_al_Anim_00DBE0" Offset="0xDBE0" /> <!-- Original name is "al_suwaruBwait" -->
     </File>
 </Root>
