@@ -496,7 +496,8 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
 }
 
 void func_80AE854C(EnStopheishi* this, PlayState* play) {
-    if (((this->unk_265 != 0) || (gSaveContext.save.weekEventReg[0xC] & 0x20)) && (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
+    if (((this->unk_265 != 0) || (gSaveContext.save.weekEventReg[0xC] & 0x20)) &&
+        (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
         EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     }
     this->pitchToPlayer = 0;
