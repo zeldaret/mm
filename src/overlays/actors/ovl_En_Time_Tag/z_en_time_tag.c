@@ -1,11 +1,11 @@
 /*
  * File: z_en_time_tag.c
  * Overlay: ovl_En_Time_Tag
- * Description: Various text-based and event-based actors. There are 4 variations of this actor.
- *              1) Song of Soaring engraving
- *              2) Clocktown Rooftop Oath to Order event
- *              3) Mikau's and Lulu's diary
- *              4) Kick out of scene event
+ * Description: Various text-, time- and event-based triggers. There are 4 variations of this actor.
+ *  - Song of Soaring engraving
+ *  - Clocktown Rooftop Oath to Order event
+ *  - Mikau's and Lulu's diary
+ *  - Kick out of scene event after a certain time
  */
 
 #include "z_en_time_tag.h"
@@ -34,7 +34,7 @@ void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play);
 
 void EnTimeTag_KickOut_DoNothing(EnTimeTag* this, PlayState* play);
 void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play);
-void EnTimeTag_KickOut_WaitForEvent(EnTimeTag* this, PlayState* play);
+void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play);
 void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play);
 
 ActorInit En_Time_Tag_InitVars = {
@@ -146,7 +146,7 @@ void EnTimeTag_SoaringEngraving_StartCutscene(EnTimeTag* this, PlayState* play) 
     }
 }
 
-void EnTimeTag_SoaringEngraving_RepeatedInteraction(EnTimeTag* this, PlayState* play) {
+void EnTimeTag_SoaringEngraving_SubsequentInteraction(EnTimeTag* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         this->actionFunc = EnTimeTag_SoaringEngraving_Wait;
@@ -158,7 +158,7 @@ void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
         if (this->actor.textId == 0) {
             this->actionFunc = EnTimeTag_SoaringEngraving_StartCutscene;
         } else {
-            this->actionFunc = EnTimeTag_SoaringEngraving_RepeatedInteraction;
+            this->actionFunc = EnTimeTag_SoaringEngraving_SubsequentInteraction;
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                (Flags_GetSwitch(play, TIMETAG_SOARING_GET_SWITCHFLAG(&this->actor)) ||
@@ -217,14 +217,12 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
                         break;
 
                     case 0x122B: // Mikau diary part 1
-                        // Display ocarina Staff
                         func_80152434(play, 0x3F);
                         this->actionFunc = EnTimeTag_Diary_TeachEvanSongSnippets;
                         TIMETAG_DIARY_SONG(&this->actor) = TIMETAG_DIARY_SONG_EVAN_PART1;
                         break;
 
                     case 0x122E: // Mikau diary part 3
-                        // Display ocarina Staff
                         func_80152434(play, 0x40);
                         this->actionFunc = EnTimeTag_Diary_TeachEvanSongSnippets;
                         TIMETAG_DIARY_SONG(&this->actor) = TIMETAG_DIARY_SONG_EVAN_PART2;
@@ -298,16 +296,24 @@ void EnTimeTag_KickOut_Transition(EnTimeTag* this, PlayState* play) {
 }
 
 /**
- * Setup a request to kick out, but wait for an event to complete first
+ * Setup a request to kickout, but wait for an external system to unset
+ * both `WEEKEVENTREG_KICKOUT_WAIT` and `WEEKEVENTREG_KICKOUT_TIME_PASSED`
  */
-void EnTimeTag_KickOut_WaitForEvent(EnTimeTag* this, PlayState* play) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
+void EnTimeTag_KickOut_WaitForTrigger(EnTimeTag* this, PlayState* play) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
         func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
         Message_StartTextbox(play, 0x1883 + TIMETAG_KICKOUT_GET_TEXT(&this->actor), NULL);
         this->actionFunc = EnTimeTag_KickOut_Transition;
     }
 }
 
+/**
+ * Wait for a certain time to pass, then trigger the kickout event.
+ * If an external system sets `WEEKEVENTREG_KICKOUT_WAIT`, then instead of triggering the kickout event now,
+ * store the kickout by going to `EnTimeTag_KickOut_WaitForTrigger`.
+ * If the time has passed but the kickout is being stored, then `WEEKEVENTREG_KICKOUT_TIME_PASSED` is set here
+ * to indicate to external systems that the time has passed and is waiting for a trigger.
+ */
 void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
     s16 hour;
     s16 minute;
@@ -320,9 +326,9 @@ void EnTimeTag_KickOut_WaitForTime(EnTimeTag* this, PlayState* play) {
     hour = TIME_TO_HOURS_F(gSaveContext.save.time);
     minute = (s32)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
-            this->actionFunc = EnTimeTag_KickOut_WaitForEvent;
+            this->actionFunc = EnTimeTag_KickOut_WaitForTrigger;
         } else if ((hour == TIMETAG_KICKOUT_HOUR(&this->actor)) && (minute == TIMETAG_KICKOUT_MINUTE(&this->actor))) {
             SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         }

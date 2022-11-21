@@ -42,7 +42,7 @@ typedef enum {
 typedef enum {
     /*  0 */ TIMETAG_KICKOUT_TEXT_0, // I am closing the shop
     /*  1 */ TIMETAG_KICKOUT_TEXT_SWAMP_SHOOTING_GALLERY, // time to close shop
-    /*  2 */ TIMETAG_KICKOUT_TEXT_STOCK_POT_INN, // stock pot in locking the door
+    /*  2 */ TIMETAG_KICKOUT_TEXT_STOCK_POT_INN, // stock pot inn locking the door
     /*  3 */ TIMETAG_KICKOUT_TEXT_HONEY_AND_DARLING, // need some alone time
     /*  4 */ TIMETAG_KICKOUT_TEXT_LOTTERY, // business is finished
     /*  5 */ TIMETAG_KICKOUT_TEXT_BARN_DAY, // the lady needs a break

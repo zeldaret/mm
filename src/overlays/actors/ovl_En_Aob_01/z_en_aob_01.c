@@ -414,7 +414,7 @@ void func_809C16DC(EnAob01* this, PlayState* play) {
 
 void func_809C1C9C(EnAob01* this, PlayState* play) {
     if (gSaveContext.rupeeAccumulator == 0) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+        SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
@@ -785,8 +785,8 @@ void func_809C2BE4(EnAob01* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
         }
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK)) {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
         }
 
         this->unk_210 = 0;
@@ -839,8 +839,8 @@ void func_809C2D0C(EnAob01* this, PlayState* play) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             }
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK)) {
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
             }
 
             this->unk_210 = 0x354C;
@@ -969,7 +969,7 @@ void EnAob01_Destroy(Actor* thisx, PlayState* play) {
     EnAob01* this = THIS;
 
     if (!(this->unk_2D2 & 0x20)) {
-        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_BLOCK);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     }
     Collider_DestroyCylinder(play, &this->collider);
 }
