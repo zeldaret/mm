@@ -4288,7 +4288,7 @@ BgSurfaceSfxType SurfaceType_GetSfxType(CollisionContext* colCtx, CollisionPoly*
 u16 SurfaceType_GetSfxIdOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     BgSurfaceSfxType sfxType = SurfaceType_GetSfxType(colCtx, poly, bgId);
 
-    if (sfxType < 0 || sfxType >= ARRAY_COUNT(sSurfaceTypeSfx)) {
+    if ((sfxType < 0) || (sfxType >= ARRAY_COUNT(sSurfaceTypeSfx))) {
         return NA_SE_PL_WALK_GROUND - SFX_FLAG;
     }
 
