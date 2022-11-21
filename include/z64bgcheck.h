@@ -184,6 +184,13 @@ typedef enum BgSurfaceSfxType {
     /* 15 */ BG_SURFACE_SFX_TYPE_MAX
 } BgSurfaceSfxType;
 
+typedef enum BgFloorEffect {
+    /* 0 */ FLOOR_EFFECT_0,
+    /* 1 */ FLOOR_EFFECT_1,
+    /* 2 */ FLOOR_EFFECT_2,
+    /* 3 */ FLOOR_EFFECT_3
+} BgFloorEffect;
+
 typedef enum BgConveyorSpeed {
     /* 0 */ BG_CONVEYOR_SPEED_DISABLED,
     /* 1 */ BG_CONVEYOR_SPEED_SLOW,

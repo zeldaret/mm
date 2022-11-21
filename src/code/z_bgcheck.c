@@ -4275,7 +4275,7 @@ s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 a
     return D_801B46C0[sfxType] & arg3;
 }
 
-u32 SurfaceType_GetSlope(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+BgFloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 4 & 3;
 }
 

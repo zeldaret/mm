@@ -260,7 +260,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
         if ((sp38 < this->actor.speedXZ) ||
-            (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+            (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_EFFECT_1)) {
             if (sp38 > 16.0f) {
                 this->actor.speedXZ = 16.0f;
             } else {

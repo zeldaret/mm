@@ -1069,7 +1069,7 @@
     0x800C9BB8:("SurfaceType_GetSfxType",),
     0x800C9BDC:("SurfaceType_GetSfxId",),
     0x800C9C24:("func_800C9C24",),
-    0x800C9C74:("SurfaceType_GetSlope",),
+    0x800C9C74:("SurfaceType_GetFloorEffect",),
     0x800C9C9C:("SurfaceType_GetLightSettingIndex",),
     0x800C9CC4:("SurfaceType_GetEcho",),
     0x800C9CEC:("SurfaceType_IsHookshotSurface",),

@@ -431,7 +431,7 @@ wordReplace = {
     "func_800C9B90": "SurfaceType_IsHorseBlocked",
     "func_800C9BDC": "SurfaceType_GetSfxId",
     "SurfaceType_GetSfx": "SurfaceType_GetSfxId",
-    "func_800C9C74": "SurfaceType_GetSlope",
+    "func_800C9C74": "SurfaceType_GetFloorEffect",
     "func_800C9C9C": "SurfaceType_GetLightSettingIndex",
     "func_800C9CC4": "SurfaceType_GetEcho",
     "func_800C9CEC": "SurfaceType_IsHookshotSurface",
