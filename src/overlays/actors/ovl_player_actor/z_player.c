@@ -3929,7 +3929,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
 void func_80830CE8(PlayState* play, Player* this) {
     func_8082F43C(play, this, func_80848AB0);
 
-    if (this->itemAction < 0) {
+    if (this->itemAction <= PLAYER_IA_MINUS1) {
         func_80123C58(this);
     }
 
@@ -4266,7 +4266,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
     if ((((this->heldItemAction == this->itemAction) &&
           (!(this->stateFlags1 & PLAYER_STATE1_400000) || (Player_ActionToMeleeWeapon(actionParam) != 0) ||
            (actionParam == PLAYER_IA_NONE))) ||
-         ((this->itemAction < PLAYER_IA_NONE) &&
+         ((this->itemAction <= PLAYER_IA_MINUS1) &&
           ((Player_ActionToMeleeWeapon(actionParam) != 0) || (actionParam == PLAYER_IA_NONE)))) &&
         ((actionParam == PLAYER_IA_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
          (actionParam == PLAYER_IA_MASK_ZORA) ||
@@ -11978,8 +11978,8 @@ void Player_Update(Actor* thisx, PlayState* play) {
     } else {
         input = play->state.input[0];
         if (this->unk_B5E != 0) {
-            input.cur.button &= ~0xC008;
-            input.press.button &= ~0xC008;
+            input.cur.button &= ~(BTN_CUP | BTN_B | BTN_A);
+            input.press.button &= ~(BTN_CUP | BTN_B | BTN_A);
         }
     }
 
@@ -13898,7 +13898,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
             if (!func_8083A274(this, play)) {
                 this->stateFlags1 &= ~PLAYER_STATE1_400000;
 
-                if (this->itemAction < PLAYER_IA_NONE) {
+                if (this->itemAction <= PLAYER_IA_MINUS1) {
                     func_80123C58(this);
                 }
 
@@ -13974,7 +13974,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
                     LinkAnimation_Change(play, &this->skelAnime, this->skelAnime.animation, 1.0f,
                                          Animation_GetLastFrame(this->skelAnime.animation), 0.0f, 2, 0.0f);
                 } else {
-                    if (this->itemAction < PLAYER_IA_NONE) {
+                    if (this->itemAction <= PLAYER_IA_MINUS1) {
                         func_80123C58(this);
                     }
 
