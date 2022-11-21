@@ -1383,9 +1383,9 @@ void func_800FD928(s32 param_1);
 // void func_800FDC94(void);
 // void func_800FE390(void);
 // void func_800FE3E0(void);
-void func_800FE484(void);
-s32 func_800FE498(void);
-// void func_800FE4A8(void);
+void Environment_StopTime(void);
+void Environment_StartTime(void);
+u8 Environment_IsTimeStopped(void);
 u32 func_800FE4B8(PlayState* play);
 // void func_800FE590(void);
 // void func_800FE5D0(void);
@@ -1707,7 +1707,7 @@ Gfx* Gfx_DrawTexQuad4b(Gfx* gfx, TexturePtr texture, s32 fmt, s16 textureWidth, 
 
 void Interface_StartTimer(s16 timerId, s16 seconds);
 void Interface_StartPostmanTimer(s16 seconds, s16 bunnyHoodState);
-void func_8010EE74(PlayState* play, s32 day);
+void Interface_NewDay(PlayState* play, s32 day);
 void Interface_SetHudVisibility(u16 hudVisibility);
 void func_80110038(PlayState* play);
 // void func_80111CB4(void);

@@ -698,7 +698,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             sp54 = false;
             this->flags |= OBJ_UM_FLAG_0100;
             ObjUm_SetupAction(this, func_80B7A144);
-            func_800FE484();
+            Environment_StopTime();
         } else {
             // Waiting for player
 
@@ -722,7 +722,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
             this->pathIndex = this->initialPathIndex;
             sp54 = false;
-            func_800FE484();
+            Environment_StopTime();
             ObjUm_SetupAction(this, ObjUm_PreMilkRunStartCs);
             this->unk_354 = 0;
             ObjUm_RotatePlayer(this, play, 0);
@@ -735,7 +735,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
         this->pathIndex = this->initialPathIndex;
         sp54 = false;
-        func_800FE484();
+        Environment_StopTime();
         ObjUm_SetupAction(this, ObjUm_StartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
@@ -747,7 +747,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
         this->pathIndex = this->initialPathIndex;
         sp54 = false;
-        func_800FE484();
+        Environment_StopTime();
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
