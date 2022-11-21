@@ -1145,7 +1145,8 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[3], &this->laserBase);
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[0], &this->laserBase);
                         Math_Vec3f_Copy(&this->laserCollider.dim.quad[2], &this->laserBase);
-                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         EnEgol_SetupStunned(this);
                     }

@@ -1088,7 +1088,8 @@ void EnRd_SetupStunned(EnRd* this) {
         this->stunnedBySunsSong = true;
         this->sunsSongStunTimer = 600;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200, COLORFILTER_BUFFLAG_OPA, 255);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200,
+                             COLORFILTER_BUFFLAG_OPA, 255);
     } else if (this->damageEffect == EN_RD_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
     } else if (this->damageEffect == EN_RD_DMGEFF_ZORA_MAGIC) {
@@ -1106,7 +1107,8 @@ void EnRd_Stunned(EnRd* this, PlayState* play) {
         if (this->sunsSongStunTimer != 0) {
             this->sunsSongStunTimer--;
             if (this->sunsSongStunTimer >= 255) {
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200, COLORFILTER_BUFFLAG_OPA, 255);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, COLORFILTER_INTENSITY_FLAG | 200,
+                                     COLORFILTER_BUFFLAG_OPA, 255);
             }
 
             if (this->sunsSongStunTimer == 0) {

@@ -1044,12 +1044,14 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 1) {
                         this->unk_18E = 40;
-                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         func_808D2D6C(this);
                     } else if (this->actor.colChkInfo.damageEffect == 5) {
                         this->unk_18E = 40;
-                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         this->drawDmgEffScale = 0.55f;
                         this->drawDmgEffAlpha = 2.0f;

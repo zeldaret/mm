@@ -1277,7 +1277,8 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                         this->drawDmgEffTimer = 40;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         EnPp_SetupStunnedOrFrozen(this);
                     }
                     return;
@@ -1286,7 +1287,8 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                          (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                         (this->drawDmgEffTimer == 0)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA,
+                                             40);
                         this->secondaryTimer = 40;
                         EnPp_SetupStunnedOrFrozen(this);
                     }
@@ -1323,7 +1325,8 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
                                     CLEAR_TAG_LARGE_LIGHT_RAYS);
-                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA, 25);
+                        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA,
+                                             25);
                         this->drawDmgEffTimer = 20;
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     }

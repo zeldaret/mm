@@ -1834,7 +1834,8 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->unk_2B8 == 0) {
-                    Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA,
+                                         40);
                     this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
                     this->bodyCollider.base.colType = COLTYPE_HIT3;
                     this->swordCollider.info.elemType = ELEMTYPE_UNK2;
