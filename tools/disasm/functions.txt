@@ -787,7 +787,7 @@
     0x800B89F8:("Actor_HasParent",),
     0x800B8A1C:("Actor_OfferGetItem",),
     0x800B8B84:("Actor_OfferGetItemNearby",),
-    0x800B8BB0:("Actor_OfferLift",),
+    0x800B8BB0:("Actor_OfferCarry",),
     0x800B8BD0:("Actor_OfferGetItemFar",),
     0x800B8BFC:("Actor_HasNoParent",),
     0x800B8C20:("func_800B8C20",),

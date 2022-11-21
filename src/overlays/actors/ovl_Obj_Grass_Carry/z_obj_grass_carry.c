@@ -231,7 +231,7 @@ void func_809AB4A8(ObjGrassCarry* this, PlayState* play) {
         this->actor.playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
         this->actor.xyzDistToPlayerSq = SQ(this->actor.xzDistToPlayer) + SQ(this->actor.playerHeightRel);
         this->actor.yawTowardsPlayer = Actor_YawBetweenActors(&this->actor, &player->actor);
-        Actor_OfferLift(&this->actor, play);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 

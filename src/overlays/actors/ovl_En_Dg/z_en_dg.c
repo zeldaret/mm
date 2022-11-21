@@ -501,7 +501,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
             this->actionFunc = EnDg_Held;
         }
     } else {
-        Actor_OfferLift(&this->actor, play);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 

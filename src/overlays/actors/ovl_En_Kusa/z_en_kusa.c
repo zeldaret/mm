@@ -489,7 +489,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
-                        Actor_OfferLift(&this->actor, play);
+                        Actor_OfferCarry(&this->actor, play);
                     }
                 }
             }

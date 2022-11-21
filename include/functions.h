@@ -693,7 +693,7 @@ s32 Actor_OnScreen(PlayState* play, Actor* actor);
 s32 Actor_HasParent(Actor* actor, PlayState* play);
 s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange, f32 yRange);
 s32 Actor_OfferGetItemNearby(Actor* actor, PlayState* play, GetItemId getItemId);
-s32 Actor_OfferLift(Actor* actor, PlayState* play);
+s32 Actor_OfferCarry(Actor* actor, PlayState* play);
 s32 Actor_OfferGetItemFar(Actor* actor, PlayState* play, GetItemId getItemId);
 s32 Actor_HasNoParent(Actor* actor, PlayState* play);
 void func_800B8C20(Actor* actorA, Actor* actorB, PlayState* play);

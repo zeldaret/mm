@@ -2046,7 +2046,7 @@ s32 Actor_OfferGetItemNearby(Actor* actor, PlayState* play, GetItemId getItemId)
     return Actor_OfferGetItem(actor, play, getItemId, 50.0f, 10.0f);
 }
 
-s32 Actor_OfferLift(Actor* actor, PlayState* play) {
+s32 Actor_OfferCarry(Actor* actor, PlayState* play) {
     return Actor_OfferGetItemNearby(actor, play, GI_NONE);
 }
 
