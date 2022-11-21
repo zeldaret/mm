@@ -211,9 +211,9 @@ void EnBbfall_Thaw(EnBbfall* this, PlayState* play) {
  */
 s32 EnBbfall_IsTouchingLava(EnBbfall* this, PlayState* play) {
     if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
-        u32 floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        BgFloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((floorType == 2) || (floorType == 3) || (floorType == 9)) {
+        if ((floorType == BG_FLOOR_TYPE_2) || (floorType == BG_FLOOR_TYPE_3) || (floorType == BG_FLOOR_TYPE_9)) {
             return true;
         }
     }

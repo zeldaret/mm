@@ -471,14 +471,15 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
     Vec3f sp88;
-    u32 temp_v0;
+    BgFloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
 
     if (this->actor.floorPoly != NULL) {
-        temp_v0 = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        if (temp_v0 != 5) {
-            if ((temp_v0 == 15) || (temp_v0 == 14)) {
+        floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+        if (floorType != BG_FLOOR_TYPE_5) {
+            if ((floorType == BG_FLOOR_TYPE_15) || (floorType == BG_FLOOR_TYPE_14)) {
                 phi_s1 = &D_809942EC;
                 phi_s6 = Rand_ZeroFloat(150.0f) + 350.0f;
                 arg2 += 2;

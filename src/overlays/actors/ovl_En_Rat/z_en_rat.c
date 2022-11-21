@@ -355,7 +355,7 @@ s32 EnRat_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* po
     }
 
     if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, 1, 1, 1, 1, bgId)) {
-        if (!(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & 0x30) &&
+        if (!(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & (WALL_FLAG_4 | WALL_FLAG_5)) &&
             (!isOnWater || (waterSurface <= posResult->y))) {
             return true;
         }

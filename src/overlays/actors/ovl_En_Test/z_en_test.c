@@ -168,7 +168,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
 
     if (thisx->params > 0) {
         Actor_SetScale(thisx, thisx->params / 100000.0f);
-        this->unk_20A = 0;
+        this->surfaceSfxType = BG_SURFACE_SFX_TYPE_0;
     } else {
         thisx->floorPoly = NULL;
         thisx->world.pos.y += 10.0f;
@@ -183,7 +183,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
         Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
-        this->unk_20A = SurfaceType_GetSfxType(&play->colCtx, thisx->floorPoly, sp34);
+        this->surfaceSfxType = SurfaceType_GetSfxType(&play->colCtx, thisx->floorPoly, sp34);
     }
 
     func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_06EB70, &gameplay_keep_Blob_06BB0C, this->unk_178,
@@ -257,7 +257,7 @@ void EnTest_Draw(Actor* thisx, PlayState* play) {
         sp2C = 29;
     }
 
-    if ((this->unk_20A == 15) || (this->unk_20A == 14)) {
+    if ((this->surfaceSfxType == BG_SURFACE_SFX_TYPE_MAX) || (this->surfaceSfxType == BG_SURFACE_SFX_TYPE_14)) {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
     } else {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);
