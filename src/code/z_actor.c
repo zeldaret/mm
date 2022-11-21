@@ -2579,10 +2579,10 @@ void Actor_Draw(PlayState* play, Actor* actor) {
         s32 colorFlag = COLORFILTER_GET_COLORFLAG(actor->colorFilterParams);
         Color_RGBA8 actorDefaultHitColor = { 0, 0, 0, 255 };
 
-        if (colorFlag == COLORFILTER_COLORFLAG_RGB) {
+        if (colorFlag == COLORFILTER_COLORFLAG_GRAY) {
             actorDefaultHitColor.r = actorDefaultHitColor.g = actorDefaultHitColor.b =
                 COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
-        } else if (colorFlag == COLORFILTER_COLORFLAG_R) {
+        } else if (colorFlag == COLORFILTER_COLORFLAG_RED) {
             actorDefaultHitColor.r = COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
         } else if (colorFlag == COLORFILTER_COLORFLAG_NONE) {
             actorDefaultHitColor.b = actorDefaultHitColor.g = actorDefaultHitColor.r = 0;
@@ -2590,7 +2590,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
             actorDefaultHitColor.b = COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
         }
 
-        if (COLORFILTER_GET_XLUFLAG(actor->colorFilterParams)) {
+        if (COLORFILTER_GET_BUFFLAG(actor->colorFilterParams)) {
             func_800AE778(play, &actorDefaultHitColor, actor->colorFilterTimer,
                           COLORFILTER_GET_DURATION(actor->colorFilterParams));
         } else {
@@ -2602,7 +2602,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     actor->draw(actor, play);
 
     if (actor->colorFilterTimer != 0) {
-        if (COLORFILTER_GET_XLUFLAG(actor->colorFilterParams)) {
+        if (COLORFILTER_GET_BUFFLAG(actor->colorFilterParams)) {
             func_800AE8EC(play);
         } else {
             func_800AE5A0(play);
@@ -2913,7 +2913,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
 }
 
 /**
- * Kills every actor which its object is not loaded
+ * Kill every actor which depends on an object that is not loaded.
  */
 void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
@@ -3869,12 +3869,12 @@ void Actor_SpawnShieldParticlesMetal(PlayState* play, Vec3f* pos) {
     CollisionCheck_SpawnShieldParticlesMetal(play, pos);
 }
 
-void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration) {
-    if ((colorFlag == COLORFILTER_COLORFLAG_RGB) && !(colorIntensityMax & 0x8000)) {
+void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 bufFlag, u16 duration) {
+    if ((colorFlag == COLORFILTER_COLORFLAG_GRAY) && !(colorIntensityMax & 0x8000)) {
         Actor_PlaySfxAtPos(actor, NA_SE_EN_LIGHT_ARROW_HIT);
     }
 
-    actor->colorFilterParams = colorFlag | xluFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
+    actor->colorFilterParams = colorFlag | bufFlag | ((colorIntensityMax & 0xF8) << 5) | duration;
     actor->colorFilterTimer = duration;
 }
 

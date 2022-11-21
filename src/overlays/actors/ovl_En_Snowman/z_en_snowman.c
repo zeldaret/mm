@@ -598,7 +598,7 @@ void EnSnowman_Submerge(EnSnowman* this, PlayState* play) {
 }
 
 void EnSnowman_SetupMelt(EnSnowman* this) {
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 50);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 50);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -667,7 +667,7 @@ void EnSnowman_Stun(EnSnowman* this, PlayState* play) {
 
 void EnSnowman_SetupDamaged(EnSnowman* this) {
     Animation_PlayLoop(&this->skelAnime, &gEenoDamageAnim);
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 20;
     this->actor.draw = EnSnowman_Draw;
@@ -976,11 +976,11 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                 if ((this->actionFunc == EnSnowman_MoveSnowPile) || (this->actionFunc == EnSnowman_Combine)) {
                     EnSnowman_SetupEmerge(this, play);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_STUN) {
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 255, COLORFILTER_XLUFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnSnowman_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == EN_SNOWMAN_DMGEFF_ELECTRIC_STUN) {
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 255, COLORFILTER_XLUFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;

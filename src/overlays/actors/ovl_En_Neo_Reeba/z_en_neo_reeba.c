@@ -407,7 +407,7 @@ void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) {
     this->velToTarget.x = Math_SinS(this->actor.yawTowardsPlayer) * -12.0f;
     this->velToTarget.z = Math_CosS(this->actor.yawTowardsPlayer) * -12.0f;
     this->rotationSpeed = 4551.0f;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 25);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_DAMAGE);
     this->actionFunc = EnNeoReeba_DamageAnim;
 }
@@ -444,7 +444,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
     this->velToTarget.z = Math_CosS(this->actor.yawTowardsPlayer) * -12.0f;
 
     this->rotationSpeed = 3640.0f;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_OPA, 25);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 25);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
@@ -562,12 +562,12 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, PlayState* play) {
                 this->stunTimer = 40;
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 2.0f;
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0x78, COLORFILTER_XLUFLAG_OPA, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0x78, COLORFILTER_BUFFLAG_OPA, 40);
                 EnNeoReeba_SetupStun(this);
                 break;
 
             case EN_NEO_REEBA_DMGEFF_STUN:
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0x78, COLORFILTER_XLUFLAG_OPA, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0x78, COLORFILTER_BUFFLAG_OPA, 40);
                 EnNeoReeba_SetupStun(this);
                 break;
         }

@@ -652,7 +652,7 @@ void EnFamos_SetupDeathSlam(EnFamos* this) {
     this->emblemCollider.base.acFlags &= ~AC_ON;
     this->stateTimer = 20;
     this->actor.speedXZ = 0.0f;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->flippedTimer = -1;
     this->actor.world.pos.y = this->actor.floorHeight - 60.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEAD);
@@ -673,7 +673,7 @@ void EnFamos_DeathSlam(EnFamos* this, PlayState* play) {
 
 void EnFamos_SetupDeathExplosion(EnFamos* this) {
     this->actor.world.rot.x = 0x4000;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, false, 4);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, false, 4);
     this->stateTimer = 25;
     Math_Vec3f_Copy(&this->targetDest, &this->actor.world.pos);
     this->actor.flags |= ACTOR_FLAG_10;
@@ -683,7 +683,7 @@ void EnFamos_SetupDeathExplosion(EnFamos* this) {
 void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.3f);
     if (this->actor.colorFilterTimer == 0) {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, false, 4);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, false, 4);
     }
 
     this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;

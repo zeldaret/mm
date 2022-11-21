@@ -589,7 +589,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                 case 1:
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->unk_312 = 40;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA,
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
                                          this->unk_312);
                     break;
 
@@ -597,7 +597,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->unk_312 = 40;
                     func_808A576C(this);
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA,
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
                                          this->unk_312);
                     break;
 
@@ -605,7 +605,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
                     this->unk_314 = 20;
                     this->unk_312 = 0;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 200, COLORFILTER_XLUFLAG_OPA,
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA,
                                          this->unk_314);
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                     this->unk_18C |= 8;
@@ -655,7 +655,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             }
             this->unk_314 = 20;
             this->unk_312 = 0;
-            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 200, COLORFILTER_XLUFLAG_OPA, this->unk_314);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_314);
             ret = true;
         }
         this->unk_310 = 0;

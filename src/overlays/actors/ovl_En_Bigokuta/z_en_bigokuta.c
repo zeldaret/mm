@@ -506,7 +506,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
         }
 
         this->bodyCollider.base.acFlags &= ~AC_HIT;
-        Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA,
+        Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
                              Animation_GetLastFrame(&gBigOctoDeathAnim));
         EnBigokuta_ShootPlayer(this, play);
         EnBigokuta_SetupDeathCutscene(this);

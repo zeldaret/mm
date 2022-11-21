@@ -376,7 +376,7 @@ void func_80A76A1C(EnPrz* this) {
     this->actor.speedXZ = Rand_ZeroFloat(0.5f);
     this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
 
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 30);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 30);
     this->unk_1EE = 50;
     func_80A75F18(this, 0);
     this->unk_1EA = 7;

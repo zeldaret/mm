@@ -535,12 +535,12 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_OPA, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 40);
             }
         } else {
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_OPA, 40);
+                Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 40);
             }
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }

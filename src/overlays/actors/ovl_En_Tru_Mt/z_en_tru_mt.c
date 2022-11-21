@@ -186,7 +186,7 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
             play->interfaceCtx.minigameHiddenPoints = 1;
-            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 25);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
             return true;
         }
     }

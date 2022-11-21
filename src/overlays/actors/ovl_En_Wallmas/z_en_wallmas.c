@@ -205,7 +205,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     this->collider.base.colType = 3;
     this->timer = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
@@ -397,7 +397,7 @@ void EnWallmas_SetupDamage(EnWallmas* this, s32 arg1) {
         func_800BE504(&this->actor, &this->collider);
     }
 
-    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 20);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->actor.speedXZ = 5.0f;
     this->actor.velocity.y = 10.0f;
     this->actionFunc = EnWallmas_Damage;
@@ -583,12 +583,12 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_STUN) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 255, COLORFILTER_XLUFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     EnWallmas_SetupStun(this);
                 } else if (this->actor.colChkInfo.damageEffect == WALLMASTER_DMGEFF_ZORA_MAGIC) {
                     this->timer = 40;
-                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 255, COLORFILTER_XLUFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;

@@ -717,20 +717,20 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             }
             this->unk_458 = 20;
             this->unk_45A = 0;
-            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 200, COLORFILTER_XLUFLAG_OPA, this->unk_458);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_458);
             ret = true;
         } else if (this->actor.colChkInfo.damageEffect == 1) {
             if (this->unk_45A == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->unk_45A = 40;
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 200, COLORFILTER_XLUFLAG_OPA,
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA,
                                      this->unk_45A);
             }
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTU_DAMAGE);
             this->unk_458 = 20;
             this->unk_45A = 0;
-            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 200, COLORFILTER_XLUFLAG_OPA, this->unk_458);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 200, COLORFILTER_BUFFLAG_OPA, this->unk_458);
         }
     }
     return ret;

@@ -748,7 +748,7 @@ void Actor_AddQuake(PlayState* play, s16 verticalMag, s16 countdown);
 void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s16 speed);
 void Actor_RequestRumble(Actor* actor, PlayState* play, s16 y, s16 countdown);
 void Actor_DrawDoorLock(PlayState* play, s32 frame, s32 type);
-void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration);
+void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 bufFlag, u16 duration);
 Hilite* func_800BCBF4(Vec3f* arg0, PlayState* play);
 Hilite* func_800BCC68(Vec3f* arg0, PlayState* play);
 void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop);

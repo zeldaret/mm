@@ -1834,7 +1834,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_SFX) &&
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     this->unk_2B8 == 0) {
-                    Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_B, 120, COLORFILTER_XLUFLAG_OPA, 40);
+                    Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                     this->bodyCollider.info.elemType = ELEMTYPE_UNK1;
                     this->bodyCollider.base.colType = COLTYPE_HIT3;
                     this->swordCollider.info.elemType = ELEMTYPE_UNK2;
@@ -1906,7 +1906,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
         }
 
         if (sp64) {
-            Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
+            Actor_SetColorFilter(&this->picto.actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
             Actor_ApplyDamage(&this->picto.actor);
             if (this->picto.actor.colChkInfo.health <= 0) {
                 func_80B8960C(this, play);

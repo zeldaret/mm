@@ -1088,11 +1088,11 @@ void EnRd_SetupStunned(EnRd* this) {
         this->stunnedBySunsSong = true;
         this->sunsSongStunTimer = 600;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RGB, 0x80C8, COLORFILTER_XLUFLAG_OPA, 255);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 0x80C8, COLORFILTER_BUFFLAG_OPA, 255);
     } else if (this->damageEffect == EN_RD_DMGEFF_STUN) {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0xC8, COLORFILTER_XLUFLAG_OPA, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xC8, COLORFILTER_BUFFLAG_OPA, 40);
     } else if (this->damageEffect == EN_RD_DMGEFF_ZORA_MAGIC) {
-        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_B, 0xC8, COLORFILTER_XLUFLAG_OPA, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 0xC8, COLORFILTER_BUFFLAG_OPA, 40);
     }
     this->actionFunc = EnRd_Stunned;
 }
@@ -1106,7 +1106,7 @@ void EnRd_Stunned(EnRd* this, PlayState* play) {
         if (this->sunsSongStunTimer != 0) {
             this->sunsSongStunTimer--;
             if (this->sunsSongStunTimer >= 255) {
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RGB, 0x80C8, COLORFILTER_XLUFLAG_OPA, 255);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 0x80C8, COLORFILTER_BUFFLAG_OPA, 255);
             }
 
             if (this->sunsSongStunTimer == 0) {
@@ -1186,7 +1186,7 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
                 return;
 
             case EN_RD_DMGEFF_FIRE_ARROW:
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 this->drawDmgEffTimer = 180;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->stunnedBySunsSong = false;
@@ -1195,7 +1195,7 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
                 break;
 
             case EN_RD_DMGEFF_LIGHT_ARROW:
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
                 this->drawDmgEffTimer = 60;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->stunnedBySunsSong = false;
@@ -1204,13 +1204,13 @@ void EnRd_UpdateDamage(EnRd* this, PlayState* play) {
                 break;
 
             case EN_RD_DMGEFF_DAMAGE:
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->stunnedBySunsSong = false;
                 this->sunsSongStunTimer = 0;
                 break;
 
             case EN_RD_DMGEFF_LIGHT_RAY:
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 255, COLORFILTER_XLUFLAG_OPA, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->stunnedBySunsSong = false;
                 this->sunsSongStunTimer = 0;
                 this->actor.colChkInfo.health = 0;

@@ -328,7 +328,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
         if ((this->collider.base.acFlags & AC_HIT || i)) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (i || this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL) {
-                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_R, 0xFF, COLORFILTER_XLUFLAG_OPA, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 0xFF, COLORFILTER_BUFFLAG_OPA, 8);
                 this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speedXZ = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
