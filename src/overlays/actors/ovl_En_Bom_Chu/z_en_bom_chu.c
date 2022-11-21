@@ -193,7 +193,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
 s32 EnBomChu_IsOnCollisionPoly(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
                                s32* bgId) {
     if ((BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId)) &&
-        (!(func_800C9A4C(&play->colCtx, *poly, *bgId) & 0x30))) {
+        (!(SurfaceType_GetWallFlags(&play->colCtx, *poly, *bgId) & 0x30))) {
         return true;
     }
 

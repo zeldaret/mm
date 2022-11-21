@@ -2156,7 +2156,7 @@ void func_800B8EF4(PlayState* play, Actor* actor) {
             sfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
         }
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, actor->floorPoly, actor->floorBgId);
+        sfxId = SurfaceType_GetSfxIdOffset(&play->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
     Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
@@ -2212,7 +2212,7 @@ void func_800B9098(Actor* actor) {
 }
 
 s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
-    if (func_800C99D4(&play->colCtx, polygon, bgId) == 8) {
+    if (SurfaceType_GetFloorType(&play->colCtx, polygon, bgId) == 8) {
         return true;
     }
 

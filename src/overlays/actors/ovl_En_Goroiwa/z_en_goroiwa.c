@@ -1453,7 +1453,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 tmp = this->actor.floorPoly;
                 if (tmp != NULL) {
-                    temp_v0_2 = func_800C99D4(&play->colCtx, tmp, this->actor.floorBgId);
+                    temp_v0_2 = SurfaceType_GetFloorType(&play->colCtx, tmp, this->actor.floorBgId);
 
                     if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
                         if (!(this->unk_1E5 & 0x40)) {

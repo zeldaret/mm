@@ -183,7 +183,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
         Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
-        this->unk_20A = func_800C9BB8(&play->colCtx, thisx->floorPoly, sp34);
+        this->unk_20A = SurfaceType_GetSfxType(&play->colCtx, thisx->floorPoly, sp34);
     }
 
     func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_06EB70, &gameplay_keep_Blob_06BB0C, this->unk_178,

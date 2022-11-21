@@ -196,7 +196,7 @@ void func_80893A18(EnTite* this) {
 
 s32 func_80893A34(EnTite* this, PlayState* play) {
     if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & 1) &&
-        (func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 5)) {
+        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 5)) {
         return true;
     }
     return false;
@@ -239,7 +239,7 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 j;
 
     if (this->actor.bgCheckFlags & 2) {
-        u32 surface = func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        u32 surface = SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
         if ((surface == COLPOLY_SURFACE_GROUND) || (surface == COLPOLY_SURFACE_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {

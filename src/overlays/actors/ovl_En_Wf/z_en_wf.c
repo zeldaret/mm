@@ -476,7 +476,7 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     s16 phi_s6;
 
     if (this->actor.floorPoly != NULL) {
-        temp_v0 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        temp_v0 = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         if (temp_v0 != 5) {
             if ((temp_v0 == 15) || (temp_v0 == 14)) {
                 phi_s1 = &D_809942EC;

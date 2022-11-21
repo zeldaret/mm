@@ -227,7 +227,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
-        u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        u32 sp54 = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         Vec3f slopeNormal;
         s16 downwardSlopeYaw;
         f32 sp40;
@@ -390,7 +390,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
             if (BgCheck_EntityRaycastFloor3(&play->colCtx, &spB0, &spAC, &spB4) != BGCHECK_Y_MIN) {
-                temp_s0 = func_800C99D4(&play->colCtx, spB0, spAC);
+                temp_s0 = SurfaceType_GetFloorType(&play->colCtx, spB0, spAC);
                 temp_f20 = BgCheck_EntityRaycastFloor1(&play->colCtx, &spB0, &spB4);
 
                 if ((temp_s0 == 4) || (temp_s0 == 15) || (temp_s0 == 14)) {

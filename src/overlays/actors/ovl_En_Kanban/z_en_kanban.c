@@ -516,7 +516,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             }
 
             if (onGround) {
-                temp_v0_18 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+                temp_v0_18 = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
                 if ((temp_v0_18 == 15) || (temp_v0_18 == 14)) {
                     this->unk_197 = 1;

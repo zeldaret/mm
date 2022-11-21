@@ -352,7 +352,7 @@ s32 func_808D9440(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, C
     s32 ret = false;
 
     if (BgCheck_EntityLineTest1(&play->colCtx, posA, posB, posResult, outPoly, true, true, true, true, bgId) &&
-        !(func_800C9A4C(&play->colCtx, *outPoly, *bgId) & 0x30)) {
+        !(SurfaceType_GetWallFlags(&play->colCtx, *outPoly, *bgId) & 0x30)) {
         ret = true;
     }
     return ret;
