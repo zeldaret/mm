@@ -764,7 +764,7 @@ extern Gfx sSetupDL[438];
 extern Gfx sFillSetupDL[12];
 extern Gfx gEmptyDL[1];
 extern Vec3f D_801C1D10;
-extern RoomDrawFunc roomDrawFuncs[4];
+extern room_draw_func roomDrawFuncs[4];
 extern u32 gBitFlags[32];
 extern u16 gEquipMasks[];
 extern u16 gEquipNegMasks[];
