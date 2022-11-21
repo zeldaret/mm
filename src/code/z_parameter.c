@@ -942,8 +942,8 @@ void Interface_NewDay(PlayState* play, s32 day) {
     }
 
     // Loads day number from week_static for the three-day clock
-    DmaMgr_SendRequest0((u32)play->interfaceCtx.doActionSegment + 0x780,
-                        (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
+    DmaMgr_SendRequest0((void*)(play->interfaceCtx.doActionSegment + 0x780),
+                        SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
 
     // i is used to store sceneId
     for (i = 0; i < ARRAY_COUNT(gSaveContext.save.permanentSceneFlags); i++) {

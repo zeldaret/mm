@@ -611,7 +611,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItemSegment = (void*)ALIGN16((uintptr_t)play->objectCtx.spaceStart);
             size0 = SEGMENT_ROM_SIZE(icon_item_static_old);
-            func_80178E7C((uintptr_t)SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, size0);
+            func_80178E7C(SEGMENT_ROM_START(icon_item_static_test), pauseCtx->iconItemSegment, size0);
 
             gSegments[0x08] = PHYSICAL_TO_VIRTUAL(pauseCtx->iconItemSegment);
 
@@ -624,7 +624,7 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->iconItem24Segment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemSegment + size0);
             size1 = SEGMENT_ROM_SIZE(icon_item_24_static_old);
-            func_80178E7C((uintptr_t)SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, size1);
+            func_80178E7C(SEGMENT_ROM_START(icon_item_24_static_test), pauseCtx->iconItem24Segment, size1);
 
             pauseCtx->iconItemAltSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItem24Segment + size1);
             if (func_8010A0A4(play)) {
