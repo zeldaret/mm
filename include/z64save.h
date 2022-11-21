@@ -1057,9 +1057,9 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_62_40 PACK_WEEKEVENTREG_FLAG(62, 0x40)
 #define WEEKEVENTREG_62_80 PACK_WEEKEVENTREG_FLAG(62, 0x80)
 
-// See `EnTimeTag_KickOut_WaitForTime`
+// See `EnTimeTag_KickOut_WaitForTime` and `EnTimeTag_KickOut_WaitForTrigger`
 #define WEEKEVENTREG_KICKOUT_WAIT PACK_WEEKEVENTREG_FLAG(63, 0x01)
-// See `EnTimeTag_KickOut_WaitForTime`
+// See `EnTimeTag_KickOut_WaitForTime` and `EnTimeTag_KickOut_WaitForTrigger`
 #define WEEKEVENTREG_KICKOUT_TIME_PASSED PACK_WEEKEVENTREG_FLAG(63, 0x02)
 
 #define WEEKEVENTREG_63_04 PACK_WEEKEVENTREG_FLAG(63, 0x04)
