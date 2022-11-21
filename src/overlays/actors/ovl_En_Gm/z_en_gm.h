@@ -76,6 +76,4 @@ typedef struct EnGm {
     /* 0x400 */ s32 unk_400;
 } EnGm; // size = 0x404
 
-extern const ActorInit En_Gm_InitVars;
-
 #endif // Z_EN_GM_H

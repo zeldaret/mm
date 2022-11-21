@@ -16,7 +16,7 @@ void BgDblueElevator_Update(Actor* thisx, PlayState* play);
 void BgDblueElevator_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit Bg_Dblue_Elevator_InitVars = {
+ActorInit Bg_Dblue_Elevator_InitVars = {
     ACTOR_BG_DBLUE_ELEVATOR,
     ACTORCAT_BG,
     FLAGS,

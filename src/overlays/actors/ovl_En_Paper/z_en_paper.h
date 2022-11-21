@@ -24,6 +24,4 @@ typedef struct EnPaper {
     /* 0xD84 */ s16 timer;
 } EnPaper; // size = 0xD88
 
-extern const ActorInit En_Paper_InitVars;
-
 #endif // Z_EN_PAPER_H

@@ -46,7 +46,7 @@ void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, PlayState* play);
 void func_80895E28(EnTite* this, PlayState* play);
 
-const ActorInit En_Tite_InitVars = {
+ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -668,12 +668,13 @@ void func_808951B8(EnTite* this, PlayState* play) {
             func_800B3030(play, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->limbPos[i], 11, NA_SE_EN_EXTINCT);
         }
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
-            Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
-            this->unk_33C[i].y += this->actor.gravity;
-        }
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
+        Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
+        this->unk_33C[i].y += this->actor.gravity;
     }
 }
 

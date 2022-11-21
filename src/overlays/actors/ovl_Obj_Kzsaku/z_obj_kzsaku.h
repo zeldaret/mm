@@ -17,6 +17,4 @@ typedef struct ObjKzsaku {
     /* 0x168 */ s16 timer;
 } ObjKzsaku; // size = 0x16C
 
-extern const ActorInit Obj_Kzsaku_InitVars;
-
 #endif // Z_OBJ_KZSAKU_H

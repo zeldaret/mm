@@ -47,6 +47,4 @@ typedef struct EnScopenuts {
     /* 0x372 */ s16 unk_372;
 } EnScopenuts; // size = 0x374
 
-extern const ActorInit En_Scopenuts_InitVars;
-
 #endif // Z_EN_SCOPENUTS_H

@@ -33,6 +33,4 @@ typedef struct EnHiddenNuts {
     /* 0x234 */ ColliderCylinder collider;
 } EnHiddenNuts; // size = 0x280
 
-extern const ActorInit En_Hidden_Nuts_InitVars;
-
 #endif // Z_EN_HIDDEN_NUTS_H

@@ -15,6 +15,8 @@
 
 #define THIS ((EnRacedog*)thisx)
 
+//! TODO: this file require macros for its uses of weekEventReg
+
 void EnRacedog_Init(Actor* thisx, PlayState* play);
 void EnRacedog_Destroy(Actor* thisx, PlayState* play);
 void EnRacedog_Update(Actor* thisx, PlayState* play);
@@ -69,7 +71,7 @@ typedef struct {
     s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
-const ActorInit En_Racedog_InitVars = {
+ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
     FLAGS,
@@ -286,7 +288,7 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     }
 
     *distSQ = SQ(diffX) + SQ(diffZ);
-    return RADF_TO_BINANG(Math_Acot2F(diffZRand, diffXRand));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -297,7 +299,7 @@ void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
         ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
     }
 }
 
@@ -318,7 +320,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->selectionArrowGreenPrimColor = 255;

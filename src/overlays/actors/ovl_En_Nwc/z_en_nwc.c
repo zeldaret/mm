@@ -41,7 +41,7 @@ enum EnNiwState {
     /*  4 */ NWC_STATE_RUNNING,          // running from the player after failed breman march
 };
 
-const ActorInit En_Nwc_InitVars = {
+ActorInit En_Nwc_InitVars = {
     ACTOR_EN_NWC,
     ACTORCAT_PROP,
     FLAGS,
@@ -64,15 +64,14 @@ void EnNwc_Init(Actor* thisx, PlayState* play) {
     niwObjectIndex = Object_GetIndex(&play->objectCtx, OBJECT_NIW);
     if (niwObjectIndex < 0) {
         // niw object does not exist, we need it for tranformation, despawn
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[25] & 8) {
-        // if breman mask was already used, replace with adult EnNiw
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -147,7 +146,7 @@ s32 EnNwc_PlayerReleasedBremanMarch(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags3 & 0x20000000) { // breman mask march
+    if (player->stateFlags3 & PLAYER_STATE3_20000000) {
         return false;
     }
 
@@ -165,8 +164,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if (player->stateFlags3 & 0x20000000 && // breman mask march
-        this->actor.xzDistToPlayer < 100.0f) {
+    if ((player->stateFlags3 & PLAYER_STATE3_20000000) && this->actor.xzDistToPlayer < 100.0f) {
         return true;
     }
 

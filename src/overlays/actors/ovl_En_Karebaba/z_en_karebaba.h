@@ -31,6 +31,4 @@ typedef struct EnKarebaba {
     /* 0x27C */ ColliderCylinder hurtCollider;
 } EnKarebaba; // size = 0x2C8
 
-extern const ActorInit En_Karebaba_InitVars;
-
 #endif // Z_EN_KAREBABA_H

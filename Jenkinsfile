@@ -99,7 +99,7 @@ pipeline {
                 branch 'master'
             }
             agent{
-                label 'master'
+                label 'zeldaret_website'
             }
             steps {
                 unstash 'reports'

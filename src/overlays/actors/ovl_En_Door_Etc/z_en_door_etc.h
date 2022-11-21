@@ -22,6 +22,4 @@ typedef struct EnDoorEtc {
     /* 0x1F8 */ EnDoorEtcActionFunc actionFunc;
 } EnDoorEtc; // size = 0x1FC
 
-extern const ActorInit En_Door_Etc_InitVars;
-
 #endif // Z_EN_DOOR_ETC_H

@@ -64,7 +64,7 @@ typedef enum {
     /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
 } EnJgAction;
 
-const ActorInit En_Jg_InitVars = {
+ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
     ACTORCAT_NPC,
     FLAGS,
@@ -214,7 +214,7 @@ s16 EnJg_GetWalkingYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ
 
     *distSQ = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
@@ -493,14 +493,14 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
 
         temp = this->textId;
         if ((temp == 0xDBB) || (temp == 0xDBC)) {
-            if (!(gSaveContext.save.weekEventReg[24] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_24_80)) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
-            } else if (((gSaveContext.save.weekEventReg[24] & 0x40)) ||
+            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_24_40)) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
                 // The player already has the Lullaby or Lullaby Intro, so say "I'm counting on you"
                 this->textId = EnJg_GetNextTextId(this);
@@ -632,7 +632,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
                 case 1:
                     this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
-                        Actor_MarkForDeath(this->drum);
+                        Actor_Kill(this->drum);
                         this->drum = NULL;
                     }
                     break;
@@ -700,7 +700,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
     } else {
         this->csAction = 99;
         this->freezeTimer = 1000;
-        gSaveContext.save.weekEventReg[24] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_24_40);
         this->actionFunc = EnJg_Idle;
     }
 }
@@ -830,7 +830,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return 0xDDC; // Everyone would accept you
 
         case 0xDDC: // Everyone would accept you
-            gSaveContext.save.weekEventReg[77] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_77_80);
             return 0xDDD; // Think it over slowly
 
         default:
@@ -848,7 +848,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, PlayState* play) {
 
     if (!EN_JG_IS_IN_GORON_SHRINE(&this->actor)) {
         if (player->transformation == PLAYER_FORM_GORON) {
-            if ((gSaveContext.save.weekEventReg[24] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                 // The player has already talked as a Goron at least once.
                 return 0xDBC; // Following me won't do you any good
@@ -858,7 +858,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, PlayState* play) {
             return 0xDB6; // "Hunh???"
         }
 
-        if (gSaveContext.save.weekEventReg[24] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_20)) {
             // The player has already talked as a non-Goron at least once.
             return 0xDB5; // This is our problem (repeat)
         }
@@ -868,7 +868,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, PlayState* play) {
     }
 
     if (player->transformation == PLAYER_FORM_GORON) {
-        if (gSaveContext.save.weekEventReg[77] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
             // The player has heard the Goron Shrine cheer as a Goron at least once.
             return 0xDDE; // Come back after entering the race
         }
@@ -908,9 +908,9 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         if (this->textId == 0xDAC) {
             this->action = EN_JG_ACTION_FIRST_THAW;
         } else if (this->textId == 0xDAE) {
-            gSaveContext.save.weekEventReg[24] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_24_20);
         } else if (this->textId == 0xDB6) {
-            gSaveContext.save.weekEventReg[24] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_24_10);
         }
 
         Message_StartTextbox(play, this->textId, &this->actor);

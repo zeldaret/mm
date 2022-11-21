@@ -28,6 +28,4 @@ typedef struct ObjFireshield {
     /* 0x1A8 */ s8 unk_1A8;
 } ObjFireshield; // size = 0x1AC
 
-extern const ActorInit Obj_Fireshield_InitVars;
-
 #endif // Z_OBJ_FIRESHIELD_H

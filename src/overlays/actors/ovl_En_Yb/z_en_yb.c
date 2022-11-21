@@ -32,7 +32,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play);
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames);
 s32 EnYb_CanTalk(EnYb* this, PlayState* play);
 
-const ActorInit En_Yb_InitVars = {
+ActorInit En_Yb_InitVars = {
     ACTOR_EN_YB,
     ACTORCAT_NPC,
     FLAGS,
@@ -84,7 +84,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // @Bug this alignment is because of player animations, but should be using ALIGN16
+    // @bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(play, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200, (uintptr_t)this->jointTable & ~0xF,
                        (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
 
@@ -120,9 +120,8 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    // check if already healed
-    if (gSaveContext.save.weekEventReg[82] & 4) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -250,7 +249,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
     if (this->alpha > 10) {
         this->alpha -= 10;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -263,7 +262,7 @@ void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147D, &this->actor);
         func_80BFA2FC(play);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -275,7 +274,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
@@ -292,7 +291,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
             case 0x147D: // I am counting on you
                 func_801477B4(play);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.save.weekEventReg[82] |= 0x4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
@@ -326,7 +325,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -341,7 +340,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play) {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -372,10 +371,10 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     }
 
     if (this->playerOcarinaOut & 1) {
-        if (!(player->stateFlags2 & 0x8000000)) {
+        if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & 0x8000000) && this->actor.xzDistToPlayer < 180.0f &&
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && this->actor.xzDistToPlayer < 180.0f &&
                fabsf(this->actor.playerHeightRel) < 50.0f) {
         this->playerOcarinaOut |= 1;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);

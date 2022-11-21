@@ -1,27 +1,27 @@
 ﻿<Root>
     <File Name="object_bsb" Segment="6">
-        <Animation Name="object_bsb_Anim_000400" Offset="0x400" />
-        <Animation Name="object_bsb_Anim_000C50" Offset="0xC50" />
-        <Animation Name="object_bsb_Anim_000FF0" Offset="0xFF0" />
-        <Animation Name="object_bsb_Anim_001390" Offset="0x1390" />
-        <Animation Name="object_bsb_Anim_001CD8" Offset="0x1CD8" />
-        <Animation Name="object_bsb_Anim_001F90" Offset="0x1F90" />
-        <Animation Name="object_bsb_Anim_002590" Offset="0x2590" />
-        <Animation Name="object_bsb_Anim_002AF4" Offset="0x2AF4" />
-        <Animation Name="object_bsb_Anim_003238" Offset="0x3238" />
-        <Animation Name="object_bsb_Anim_003E1C" Offset="0x3E1C" />
-        <Animation Name="object_bsb_Anim_004208" Offset="0x4208" />
-        <Animation Name="object_bsb_Anim_0043A4" Offset="0x43A4" />
-        <Animation Name="object_bsb_Anim_004510" Offset="0x4510" />
-        <Animation Name="object_bsb_Anim_004894" Offset="0x4894" />
-        <Animation Name="object_bsb_Anim_004E2C" Offset="0x4E2C" />
-        <Animation Name="object_bsb_Anim_005440" Offset="0x5440" />
-        <Animation Name="object_bsb_Anim_00606C" Offset="0x606C" />
-        <Animation Name="object_bsb_Anim_0065D8" Offset="0x65D8" />
-        <Animation Name="object_bsb_Anim_006C48" Offset="0x6C48" />
-        <Animation Name="object_bsb_Anim_007120" Offset="0x7120" />
-        <Animation Name="object_bsb_Anim_007B18" Offset="0x7B18" />
-        <Animation Name="object_bsb_Anim_0086BC" Offset="0x86BC" />
+        <Animation Name="object_bsb_Anim_000400" Offset="0x400" /> <!-- Original name is "bsb_aita" ("Ouch!") -->
+        <Animation Name="object_bsb_Anim_000C50" Offset="0xC50" /> <!-- Original name is "bsb_atack" -->
+        <Animation Name="object_bsb_Anim_000FF0" Offset="0xFF0" /> <!-- Original name is "bsb_battlewalk" -->
+        <Animation Name="object_bsb_Anim_001390" Offset="0x1390" /> <!-- Original name is "bsb_damage" -->
+        <Animation Name="object_bsb_Anim_001CD8" Offset="0x1CD8" /> <!-- Original name is "bsb_demo_wait" -->
+        <Animation Name="object_bsb_Anim_001F90" Offset="0x1F90" /> <!-- Original name is "bsb_don" (onomatopoeic for "bang; bam; boom; thud") -->
+        <Animation Name="object_bsb_Anim_002590" Offset="0x2590" /> <!-- Original name is "bsb_dosuni" -->
+        <Animation Name="object_bsb_Anim_002AF4" Offset="0x2AF4" /> <!-- Original name is "bsb_down" -->
+        <Animation Name="object_bsb_Anim_003238" Offset="0x3238" /> <!-- Original name is "bsb_furi_wait" -->
+        <Animation Name="object_bsb_Anim_003E1C" Offset="0x3E1C" /> <!-- Original name is "bsb_furimuki" ("to turn around") -->
+        <Animation Name="object_bsb_Anim_004208" Offset="0x4208" /> <!-- Original name is "bsb_jidanda" ("to stamp one's feet (in frustration, impatience, etc.)") -->
+        <Animation Name="object_bsb_Anim_0043A4" Offset="0x43A4" /> <!-- Original name is "bsb_jump" -->
+        <Animation Name="object_bsb_Anim_004510" Offset="0x4510" /> <!-- Original name is "bsb_jumpTOdon" -->
+        <Animation Name="object_bsb_Anim_004894" Offset="0x4894" /> <!-- Original name is "bsb_kei_wait" -->
+        <Animation Name="object_bsb_Anim_004E2C" Offset="0x4E2C" /> <!-- Original name is "bsb_keirei" ("salute") -->
+        <Animation Name="object_bsb_Anim_005440" Offset="0x5440" /> <!-- Original name is "bsb_kiwo_wait" -->
+        <Animation Name="object_bsb_Anim_00606C" Offset="0x606C" /> <!-- Original name is "bsb_kiwotuke" ("standing at attention​") -->
+        <Animation Name="object_bsb_Anim_0065D8" Offset="0x65D8" /> <!-- Original name is "bsb_kyorokyoro" (onomatopoeic for "looking around restlessly") -->
+        <Animation Name="object_bsb_Anim_006C48" Offset="0x6C48" /> <!-- Original name is "bsb_laugh" -->
+        <Animation Name="object_bsb_Anim_007120" Offset="0x7120" /> <!-- Original name is "bsb_matarei" -->
+        <Animation Name="object_bsb_Anim_007B18" Offset="0x7B18" /> <!-- Original name is "bsb_rajio" -->
+        <Animation Name="object_bsb_Anim_0086BC" Offset="0x86BC" /> <!-- Original name is "bsb_start" -->
         <DList Name="object_bsb_DL_00A010" Offset="0xA010" />
         <DList Name="object_bsb_DL_00A0D8" Offset="0xA0D8" />
         <DList Name="object_bsb_DL_00A188" Offset="0xA188" />
@@ -73,8 +73,8 @@
         <Limb Name="object_bsb_Standardlimb_00C378" Type="Standard" EnumName="OBJECT_BSB_LIMB_13" Offset="0xC378" />
         <Limb Name="object_bsb_Standardlimb_00C384" Type="Standard" EnumName="OBJECT_BSB_LIMB_14" Offset="0xC384" />
         <Skeleton Name="object_bsb_Skel_00C3E0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BSB_LIMB_NONE" LimbMax="OBJECT_BSB_LIMB_MAX" EnumName="ObjectBsbLimb" Offset="0xC3E0" />
-        <Animation Name="object_bsb_Anim_00C790" Offset="0xC790" />
-        <Animation Name="object_bsb_Anim_00CD88" Offset="0xCD88" />
-        <Animation Name="object_bsb_Anim_00D3CC" Offset="0xD3CC" />
+        <Animation Name="object_bsb_Anim_00C790" Offset="0xC790" /> <!-- Original name is "bsb_tatsu" ("to stand; to rise; to stand up​") -->
+        <Animation Name="object_bsb_Anim_00CD88" Offset="0xCD88" /> <!-- Original name is "bsb_walk" -->
+        <Animation Name="object_bsb_Anim_00D3CC" Offset="0xD3CC" /> <!-- Original name is "bsb_yareyare" ("oh!; ah!; oh dear!; good grief!; dear me!") -->
     </File>
 </Root>
