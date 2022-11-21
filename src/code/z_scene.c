@@ -536,7 +536,7 @@ void Scene_SetExitFade(PlayState* play) {
     play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
-static void (*sSceneCmdHandlers[])(PlayState*, SceneCmd*) = {
+void (*sSceneCmdHandlers[])(PlayState*, SceneCmd*) = {
     Scene_CommandSpawnList,
     Scene_CommandActorList,
     Scene_CommandActorCutsceneCamList,

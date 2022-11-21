@@ -112,8 +112,8 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
     }
 
     if ((room->enablePosLights != 0) || (MREG(93) != 0)) {
-        gSPSetGeometryMode(POLY_OPA_DISP++, 0x00400000);
-        gSPSetGeometryMode(POLY_XLU_DISP++, 0x00400000);
+        gSPSetGeometryMode(POLY_OPA_DISP++, G_LIGHTING_POSITIONAL);
+        gSPSetGeometryMode(POLY_XLU_DISP++, G_LIGHTING_POSITIONAL);
     }
 
     roomShape = &room->roomShape->cullable;
@@ -510,11 +510,11 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
 
         for (i = 0; i < play->numRooms; i++) {
             roomSize = roomList[i].vromEnd - roomList[i].vromStart;
-            maxRoomSize = CLAMP_MIN(maxRoomSize, roomSize);
+            maxRoomSize = MAX(roomSize, maxRoomSize);
         }
     }
 
-    if (play->doorCtx.numTransitionActors) {
+    if ((u32)play->doorCtx.numTransitionActors != 0) {
         RomFile* roomList = play->roomList;
         TransitionActorEntry* transitionActor = &play->doorCtx.transitionActorList[0];
 
@@ -525,7 +525,7 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
             backRoomSize = (backRoom < 0) ? 0 : roomList[backRoom].vromEnd - roomList[backRoom].vromStart;
             cumulRoomSize = (frontRoom != backRoom) ? frontRoomSize + backRoomSize : frontRoomSize;
 
-            maxRoomSize = CLAMP_MIN(maxRoomSize, cumulRoomSize);
+            maxRoomSize = MAX(cumulRoomSize, maxRoomSize);
             transitionActor++;
         }
     }
@@ -534,7 +534,7 @@ size_t Room_AllocateAndLoad(PlayState* play, RoomContext* roomCtx) {
     if (roomCtx->roomMemPages[0] == NULL) {
         __assert("../z_room.c", 1078);
     }
-    roomCtx->roomMemPages[1] = (void*)((s32)roomCtx->roomMemPages[0] + maxRoomSize);
+    roomCtx->roomMemPages[1] = (void*)((uintptr_t)roomCtx->roomMemPages[0] + maxRoomSize);
     roomCtx->activeMemPage = 0;
     roomCtx->status = 0;
 
