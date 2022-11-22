@@ -759,7 +759,7 @@ void FileSelect_UpdateOptionsMenu(GameState* thisx) {
         if (!gSaveContext.unk_3F3F) {
             this->configMode = CM_OPTIONS_TO_MAIN;
         } else {
-            func_80147008(sramCtx, D_801C67E8[0], D_801C6838[0]);
+            func_80147008(sramCtx, D_801C67C8[8], D_801C6818[8]);
             func_80147020(sramCtx);
             this->configMode = CM_UNK_28;
         }

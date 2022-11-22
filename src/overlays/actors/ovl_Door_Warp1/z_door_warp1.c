@@ -4,6 +4,7 @@
  * Description: Blue warp portal and crystal, and the Majora's Mask-shaped boss warp platform
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_door_warp1.h"
 #include "objects/object_warp1/object_warp1.h"
 
@@ -46,8 +47,8 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play);
 void func_808BABF4(DoorWarp1* this, PlayState* play);
 void func_808BB8D4(DoorWarp1* this, PlayState* play, s32 arg2);
 
-static s16 D_808BC000;
-static f32 D_808BC004;
+s16 D_808BC000;
+f32 D_808BC004;
 
 ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
@@ -163,7 +164,7 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
 
     if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
         (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
-        func_800FE484();
+        Environment_StopTime();
         play->interfaceCtx.restrictions.unk_312 = 1;
         play->interfaceCtx.restrictions.songOfSoaring = 1;
     }
