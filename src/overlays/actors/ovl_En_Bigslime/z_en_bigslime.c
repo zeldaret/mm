@@ -311,13 +311,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
-    // gSaveContext.save.weekEventReg[KEY] = VALUE
-    // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
-        (32 << 8) | 0x40, // Woodfall Temple Frog Returned
-        (32 << 8) | 0x80, // Great Bay Temple Frog Returned
-        (33 << 8) | 0x01, // Southern Swamp Frog Returned
-        (33 << 8) | 0x02, // Laundry Pool Frog Returned
+        WEEKEVENTREG_32_40,
+        WEEKEVENTREG_32_80,
+        WEEKEVENTREG_33_01,
+        WEEKEVENTREG_33_02,
     };
     PlayState* play = play2;
     EnBigslime* this = THIS;
@@ -342,43 +340,43 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
-              (u8)isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->actor.params);
         }
-    } else {
-        this->cutscene = this->actor.cutscene;
-        this->actor.scale.x = this->actor.scale.z = 0.15f;
-        this->actor.scale.y = 0.075f;
-        this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
-        this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
-        this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
-        this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
-        for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
-            this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play,
-                                                                  ACTOR_EN_MINISLIME, 0.0f, 0.0f, 0.0f, 0, 0, 0, i);
-            if (this->minislime[i] == NULL) {
-                for (i = i - 1; i >= 0; i--) {
-                    Actor_Kill(&this->minislime[i]->actor);
-                }
-
-                Actor_Kill(&this->actor);
-                return;
-            }
-        }
-
-        this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(gMinislimeFrozenTexAnim);
-        this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
-        this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
-        this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actor.shape.shadowAlpha = 255;
-        this->gekkoScale = 0.007f;
-        this->actor.shape.rot.y = 0;
-        this->minislimeToThrow = this->minislime[0];
-        EnBigslime_SetupInitEntrance(this);
+        return;
     }
+
+    this->cutscene = this->actor.cutscene;
+    this->actor.scale.x = this->actor.scale.z = 0.15f;
+    this->actor.scale.y = 0.075f;
+    this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
+    this->actor.home.pos.x = GBT_ROOM_5_CENTER_X;
+    this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
+    this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
+    for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
+        this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_MINISLIME,
+                                                              0.0f, 0.0f, 0.0f, 0, 0, 0, i);
+        if (this->minislime[i] == NULL) {
+            for (i = i - 1; i >= 0; i--) {
+                Actor_Kill(&this->minislime[i]->actor);
+            }
+
+            Actor_Kill(&this->actor);
+            return;
+        }
+    }
+
+    this->minislimeFrozenTexAnim = Lib_SegmentedToVirtual(gMinislimeFrozenTexAnim);
+    this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(gBigslimeFrozenTexAnim);
+    this->iceShardTexAnim = Lib_SegmentedToVirtual(gBigslimeIceShardTexAnim);
+    this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.shape.shadowAlpha = 255;
+    this->gekkoScale = 0.007f;
+    this->actor.shape.rot.y = 0;
+    this->minislimeToThrow = this->minislime[0];
+    EnBigslime_SetupInitEntrance(this);
 }
 
 void EnBigslime_Destroy(Actor* thisx, PlayState* play) {
@@ -851,7 +849,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        func_800B724C(play, &this->actor, 6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
     }
 }
 
@@ -940,7 +938,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, PlayState* play) {
     this->bigslimeCollider[0].base.acFlags &= ~AC_ON;
 
     Math_Vec3f_Copy(&subCam->at, &this->actor.focus.pos);
-    func_800B7298(play, &this->actor, 4);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
 
     player->actor.shape.rot.y = this->actor.yawTowardsPlayer + 0x8000;
     player->actor.world.pos.x = Math_SinS(this->actor.yawTowardsPlayer) * 347.0f + this->actor.world.pos.x;
@@ -988,7 +986,7 @@ void EnBigslime_SetupCallMinislime(EnBigslime* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 5.0f);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_GREET);
     this->callTimer = 0;
-    func_800B7298(play, &this->actor, 7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
     this->actionFunc = EnBigslime_CallMinislime;
 }
 
@@ -1012,7 +1010,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         EnBigslime_InitFallMinislime(this);
         play->envCtx.lightSettingOverride = 0xFF;
         this->callTimer = 35;
-        func_800B7298(play, &this->actor, 4);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
     }
 }
 
@@ -1626,7 +1624,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
             }
 
             play->damagePlayer(play, -4);
-            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+            func_800B8E58(player, player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
             this->gekkoRot.y += (s16)(Rand_S16Offset(0x4000, 0x4000) * (Rand_ZeroOne() < 0.5f ? -1 : 1));
             this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;
             this->gekkoPosOffset.z = Math_CosS(this->gekkoRot.y) * -50.0f;
@@ -2545,7 +2543,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
     } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
         if (this->actionFuncStored != EnBigslime_SquishFlat) {
-            func_800B724C(play, &this->actor, 7);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
         }
 
         this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);

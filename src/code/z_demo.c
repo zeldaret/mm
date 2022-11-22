@@ -252,9 +252,9 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             break;
         case 0x12:
             if (!gSaveContext.save.isNight) {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)REG(15);
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)R_TIME_SPEED;
             } else {
-                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * REG(15));
+                gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * R_TIME_SPEED);
             }
             break;
         case 0x13:
@@ -326,10 +326,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             if (csCtx->frames != D_801BB15C) {
                 D_801BB15C = csCtx->frames;
 
-                if (REG(15) != 0) {
-                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
+                if (R_TIME_SPEED != 0) {
+                    gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
                     gSaveContext.save.time =
-                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
+                        ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                 }
             }
             break;
@@ -598,7 +598,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 
             switch (D_801F4DE2) {
                 case 0x1F:
-                    if (gSaveContext.save.weekEventReg[20] & 2) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -611,7 +611,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x44:
-                    if (gSaveContext.save.weekEventReg[33] & 0x80) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
                         play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -624,7 +624,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x5F:
-                    gSaveContext.save.weekEventReg[55] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_55_80);
                     play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -632,7 +632,7 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
                     break;
 
                 case 0x36:
-                    gSaveContext.save.weekEventReg[52] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_52_20);
                     play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1482,6 +1482,7 @@ void func_800EDBE0(PlayState* play) {
                     } else if (!(((void)0,
                                   gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
                                  (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8)))) {
+                        // TODO: macros for this kind of weekEventReg access
                         gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)] =
                             ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
                             (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8));

@@ -1,7 +1,7 @@
 /*
  * File: z_en_test4.c
  * Overlay: ovl_En_Test4
- * Description: Three-Day Timer
+ * Description: Three-Day Events
  */
 
 #include "prevent_bss_reordering.h"
@@ -59,7 +59,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
             this->unk_146 = gSaveContext.save.time += CLOCK_TIME_MINUTE;
         }
 
-        func_8010EE74(play, CURRENT_DAY);
+        Interface_NewDay(play, CURRENT_DAY);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);
         func_800FEAF4(&play->envCtx);
@@ -71,7 +71,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
             this->actionFunc = func_80A42F20;
             sCurrentCs = sCutscenes[this->unk_144];
             this->transitionCsTimer = 0;
-            gSaveContext.eventInf[1] |= 0x80;
+            SET_EVENTINF(EVENTINF_17);
         } else if (this->unk_144 == 0) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
@@ -95,7 +95,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
     } else if ((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         Sram_IncrementDay();
         gSaveContext.save.time = CLOCK_TIME(6, 0);
-        func_8010EE74(play, CURRENT_DAY);
+        Interface_NewDay(play, CURRENT_DAY);
         func_80151A68(play, sDayMessages2[CURRENT_DAY - 1]);
         D_801BDBC8 = 0xFE;
         func_800FB758(play);
@@ -108,7 +108,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
             this->actionFunc = func_80A42F20;
             sCurrentCs = sCutscenes[this->unk_144];
             this->transitionCsTimer = 0;
-            gSaveContext.eventInf[1] |= 0x80;
+            SET_EVENTINF(EVENTINF_17);
         } else if (this->unk_144 == 0) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
         } else {
@@ -298,14 +298,14 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
     if (temp_v0 >= 0) {
         ActorCutscene* temp_v0_2 = ActorCutscene_GetCutscene(sCutscenes[0]);
 
-        gSaveContext.eventInf[5] |= 0x4;
+        SET_EVENTINF(EVENTINF_52);
         sCutscenes[1] = temp_v0_2->additionalCutscene;
     } else {
-        gSaveContext.eventInf[5] &= (u8)~0x4;
+        CLEAR_EVENTINF(EVENTINF_52);
         sCutscenes[1] = sCutscenes[0];
     }
 
-    if (sIsLoaded || (gSaveContext.eventInf[2] & 0x80)) {
+    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_27))) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
@@ -391,14 +391,14 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 if (CURRENT_DAY == 3) {
                     Interface_StartMoonCrash(play);
                     Actor_Kill(&this->actor);
-                    gSaveContext.eventInf[1] |= 0x80;
+                    SET_EVENTINF(EVENTINF_17);
                 } else if (((sCutscenes[this->unk_144] < 0) || (play->actorCtx.flags & ACTORCTX_FLAG_1)) &&
                            (CURRENT_DAY != 3)) {
                     func_80A41FA4(this, play);
                 } else {
                     gSaveContext.screenScale = 0.0f;
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_DOWN, Entrance_CreateFromSpawn(0), player->unk_3CE,
-                                        0xBFF, &player->unk_3C0, player->unk_3CC);
+                                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(&play->state);
                     if (player->stateFlags1 & PLAYER_STATE1_800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
@@ -413,7 +413,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
 
                     gSaveContext.respawnFlag = -4;
-                    gSaveContext.eventInf[2] |= 0x80;
+                    SET_EVENTINF(EVENTINF_27);
                     Actor_Kill(&this->actor);
                 }
             }
@@ -442,9 +442,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     u32 entrance = gSaveContext.save.entrance;
 
                     if ((play->actorCtx.flags & ACTORCTX_FLAG_1)) {
-                        playerParams = 0xCFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE);
                     } else {
-                        playerParams = 0xBFF;
+                        playerParams = PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B);
                     }
                     Play_SetRespawnData(&play->state, RESPAWN_MODE_RETURN, entrance, player->unk_3CE, playerParams,
                                         &player->unk_3C0, player->unk_3CC);
@@ -508,8 +508,9 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
         if (sCurrentCs >= 0) {
             ActorCutscene_Stop(sCurrentCs);
         }
+
         gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
-        gSaveContext.eventInf[1] &= (u8)~0x80;
+        CLEAR_EVENTINF(EVENTINF_17);
         Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 }
