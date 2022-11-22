@@ -390,7 +390,7 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
         }
     }
 
-    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !(gSaveContext.eventInf[4] & 2) && !this->shouldTurn &&
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) && !CHECK_EVENTINF(EVENTINF_41) && !this->shouldTurn &&
         (this->actor.xzDistToPlayer < 200.0f)) {
         EnGrasshopper_SetupApproachPlayer(this, play);
     } else {

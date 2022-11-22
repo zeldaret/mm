@@ -550,7 +550,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad[2];
 
-    if ((gSaveContext.save.weekEventReg[52] & 0x20) && (this->actor.params == TWINMOLD_RED)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (this->actor.params == TWINMOLD_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
                                                    0.0f, 0, 0, 0, 1);
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
@@ -566,7 +566,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = Boss02_Static_Draw;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_1D70 = 0.00999999977648f;
-        if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x20) || (sBlueWarp != NULL)) {
+        if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
             sMusicStartTimer = KREG(15) + 20;
         } else {
@@ -1786,7 +1786,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             player->actor.world.pos.x *= 10.0f;
             player->actor.world.pos.y -= 3150.0f;
             player->actor.world.pos.y *= 10.0f;
-            player->unk_B68 = player->actor.world.pos.y;
+            player->fallStartHeight = player->actor.world.pos.y;
             player->actor.world.pos.z *= 10.0f;
 
             if ((sBlueWarp != NULL) && ((SQ(player->actor.world.pos.z) + SQ(player->actor.world.pos.x)) < SQ(60.0f))) {
@@ -1858,7 +1858,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             player->actor.world.pos.x *= 0.1f;
             player->actor.world.pos.y *= 0.1f;
             player->actor.world.pos.y += 3150.0f;
-            player->unk_B68 = player->actor.world.pos.y;
+            player->fallStartHeight = player->actor.world.pos.y;
             player->actor.world.pos.z *= 0.1f;
 
             sRedTwinmold->actor.world.pos.x *= 0.1f;
@@ -2050,7 +2050,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 1:
-            if ((gSaveContext.save.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
             Cutscene_Start(play, &play->csCtx);
@@ -2086,7 +2086,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 45) {
-                func_800B7298(play, &this->actor, 21);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
                 sMusicStartTimer = KREG(91) + 43;
             }
 
@@ -2100,7 +2100,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             }
 
             if (this->unk_1D1C == 100) {
-                func_800B7298(play, &this->actor, 0x73);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_115);
             }
 
             if (this->unk_1D1C == 112) {
@@ -2139,12 +2139,12 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
                 sRedTwinmold->unk_0146[0] = sBlueTwinmold->unk_0146[0] = 60;
-                gSaveContext.eventInf[5] |= 0x20;
+                SET_EVENTINF(EVENTINF_55);
             }
             break;
 
@@ -2200,7 +2200,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_1;
                 sp68->unk_0144 = 10;

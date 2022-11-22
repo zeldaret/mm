@@ -35,8 +35,8 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
-        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]), 8,
-                                      16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
+        POLY_OPA_DISP = Gfx_DrawTexRectI8(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]),
+                                          8, 16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -50,7 +50,7 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
     POLY_OPA_DISP =
-        func_8010D7D0(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 16, 107, 146, 8, 16, 1 << 10, 1 << 10);
+        Gfx_DrawTexRectI8(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 16, 107, 146, 8, 16, 1 << 10, 1 << 10);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -68,8 +68,8 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
-        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]), 8,
-                                      16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
+        POLY_OPA_DISP = Gfx_DrawTexRectI8(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]),
+                                          8, 16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -159,7 +159,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
 
     POLY_OPA_DISP =
-        func_8010DC58(POLY_OPA_DISP, sDungeonTitleTextures[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
+        Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sDungeonTitleTextures[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -224,7 +224,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[76], 4, 0);
 
                     POLY_OPA_DISP =
-                        func_8010DE38(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
+                        Gfx_DrawTexQuad4b(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
                     KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
                     func_8012C628(play->state.gfxCtx);
 
@@ -275,13 +275,14 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
             // Draw Player's face next to the dungeon floor icon currently in.
-            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
-                                          sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP =
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
+                                      sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
-                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
-                                              sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - func_80105318()], 16, 16,
-                                              1 << 10, 1 << 10);
+                POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
+                                                      sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - func_80105318()], 16,
+                                                      16, 1 << 10, 1 << 10);
             }
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -645,7 +646,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60 + n * 4], 4, 0);
 
-            POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, sCloudTextures[n], D_8082B7F0[n], D_8082B838[n], 0);
+            POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sCloudTextures[n], D_8082B7F0[n], D_8082B838[n], 0);
         }
     }
 
@@ -798,8 +799,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
-                                          sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
+                                                  sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
 

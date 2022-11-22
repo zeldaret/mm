@@ -1,13 +1,12 @@
 ﻿<Root>
+    <!-- ??? (Hand in Toilet) assets -->
     <File Name="object_bjt" Segment="6">
-        <!-- ??? (Hand in Toilet) assets -->
-
         <!-- ??? animations -->
-        <Animation Name="gToiletHandWaggingFingerAnim" Offset="0xFC" /><!-- Original name: bjt_chigau ("different/wrong") -->
-        <Animation Name="gToiletHandFistAnim" Offset="0x218" /><!-- Original name: bjt_guu ("fist") -->
-        <Animation Name="gToiletHandThumbsUpAnim" Offset="0x3A8" /><!-- Original name: bjt_ok (thumbs up, correct) -->
-        <Animation Name="gToiletHandOpenHandAnim" Offset="0x564" /><!-- Original name: bjt_par ("paper"? Open hand, palm up) -->
-        <Animation Name="gToiletHandWaitingAnim" Offset="0x7B8" /><!-- Original name: bjt_wait (flopping around grasping at air) -->
+        <Animation Name="gToiletHandWaggingFingerAnim" Offset="0xFC" /><!-- Original name is "bjt_chigau" ("different/wrong") -->
+        <Animation Name="gToiletHandFistAnim" Offset="0x218" /><!-- Original name is "bjt_guu" ("fist") -->
+        <Animation Name="gToiletHandThumbsUpAnim" Offset="0x3A8" /><!-- Original name is "bjt_ok" (thumbs up, correct) -->
+        <Animation Name="gToiletHandOpenHandAnim" Offset="0x564" /><!-- Original name is "bjt_par" ("paper"? Open hand, palm up) -->
+        <Animation Name="gToiletHandWaitingAnim" Offset="0x7B8" /><!-- Original name is "bjt_wait" (flopping around grasping at air) -->
 
         <!-- ??? model -->
         <DList Name="gToiletHandIndexFingerDL" Offset="0x1570" />
