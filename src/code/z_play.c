@@ -233,8 +233,7 @@ void Play_TriggerPictoPhoto(void) {
 void Play_TakePictoPhoto(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
     Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, SCREEN_WIDTH, PICTO_PHOTO_TOPLEFT_X,
-                                       PICTO_PHOTO_TOPLEFT_Y,
-                                       (PICTO_PHOTO_TOPLEFT_X + PICTO_PHOTO_WIDTH) - 1,
+                                       PICTO_PHOTO_TOPLEFT_Y, (PICTO_PHOTO_TOPLEFT_X + PICTO_PHOTO_WIDTH) - 1,
                                        (PICTO_PHOTO_TOPLEFT_Y + PICTO_PHOTO_HEIGHT) - 1, 8);
 }
 

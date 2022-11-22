@@ -2494,7 +2494,7 @@ asm/non_matchings/code/z_play/Play_ConvertRgba16ToIntensityImage.s,Play_ConvertR
 asm/non_matchings/code/z_play/Play_SetMotionBlurPriorityAlpha.s,Play_SetMotionBlurPriorityAlpha,0x80165DB8,0x5
 asm/non_matchings/code/z_play/Play_EnableMotionBlurPriority.s,Play_EnableMotionBlurPriority,0x80165DCC,0x9
 asm/non_matchings/code/z_play/Play_DisableMotionBlurPriority.s,Play_DisableMotionBlurPriority,0x80165DF0,0x5
-asm/non_matchings/code/z_play/Play_StartPictographPhoto.s,Play_StartPictographPhoto,0x80165E04,0x6
+asm/non_matchings/code/z_play/Play_TriggerPictoPhoto.s,Play_TriggerPictoPhoto,0x80165E04,0x6
 asm/non_matchings/code/z_play/Play_TakePictoPhoto.s,Play_TakePictoPhoto,0x80165E1C,0x18
 asm/non_matchings/code/z_play/Play_ChooseDynamicTransition.s,Play_ChooseDynamicTransition,0x80165E7C,0x11
 asm/non_matchings/code/z_play/Play_SetupTransition.s,Play_SetupTransition,0x80165EC0,0x68
