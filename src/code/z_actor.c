@@ -2301,7 +2301,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
     if (play->numSetupActors > 0) {
         ActorEntry* actorEntry = play->setupActorList;
         s32 prevHalfDaysBitValue = actorCtx->halfDaysBit;
-        s32 temp_s1;
+        s32 shiftedHalfDaysBit;
         s32 actorEntryHalfDayBit;
         s32 i;
 
@@ -2310,7 +2310,7 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
 
         // Shift to previous halfDay bit, but ignoring DAY0_NIGHT.
         // In other words, if the current halfDay is DAY1_DAY then this logic is ignored and this variable is zero
-        temp_s1 = (actorCtx->halfDaysBit << 1) & 0x2FF;
+        shiftedHalfDaysBit = (actorCtx->halfDaysBit << 1) & (HALFDAYBIT_ALL & ~HALFDAYBIT_DAY0_NIGHT);
 
         for (i = 0; i < play->numSetupActors; i++) {
             actorEntryHalfDayBit = ((actorEntry->rot.x & 7) << 7) | (actorEntry->rot.z & 0x7F);
@@ -2319,7 +2319,8 @@ void Actor_SpawnSetupActors(PlayState* play, ActorContext* actorCtx) {
             }
 
             if (!(actorEntryHalfDayBit & prevHalfDaysBitValue) && (actorEntryHalfDayBit & actorCtx->halfDaysBit) &&
-                (!CHECK_EVENTINF(EVENTINF_17) || !(actorEntryHalfDayBit & temp_s1) || !(actorEntry->id & 0x800))) {
+                (!CHECK_EVENTINF(EVENTINF_17) || !(actorEntryHalfDayBit & shiftedHalfDaysBit) ||
+                 !(actorEntry->id & 0x800))) {
                 Actor_SpawnEntry(&play->actorCtx, actorEntry, play);
             }
             actorEntry++;
