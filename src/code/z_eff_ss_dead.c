@@ -81,14 +81,14 @@ void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 duration) {
+void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3) {
     f32 cos;
     Gfx* displayListHead;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     displayListHead = POLY_XLU_DISP;
-    cos = Math_CosS((0x4000 / duration) * arg2);
+    cos = Math_CosS((0x4000 / arg3) * arg2);
 
     gDPPipeSync(displayListHead++);
     gDPSetFogColor(displayListHead++, color->r, color->g, color->b, color->a);

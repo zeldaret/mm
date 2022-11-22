@@ -563,7 +563,7 @@ s32 func_80998BBC(EnGs* this, PlayState* play) {
         this->unk_197 &= 0xF;
         this->unk_19D = 1;
     } else if (this->unk_19D == 1) {
-        this->unk_19E[0].z = (this->unk_1D4 % 8) * 0.125f * 360.0f * (0x10000 / 360.0f);
+        this->unk_19E[0].z = DEG_TO_BINANG((this->unk_1D4 % 8) * 0.125f * 360.0f);
         this->unk_19E[1].z = -this->unk_19E[0].z;
         if (func_80998334(this, play, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.005f, 0.001f, 7, 0) ==
             0.0f) {

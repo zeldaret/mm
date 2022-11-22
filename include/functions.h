@@ -471,7 +471,7 @@ void func_800AE2A0(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE434(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE5A0(PlayState* play);
 void func_800AE5E4(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
-void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 duration);
+void func_800AE778(PlayState* play, Color_RGBA8* color, s16 arg2, s16 arg3);
 void func_800AE8EC(PlayState* play);
 void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 angle, CollisionPoly* colPoly, s32 bgId);
 void func_800AEF44(EffectTireMark* this);

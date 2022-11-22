@@ -3259,7 +3259,7 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
                 (transitionActorList->sides[1].room >= 0 &&
                  (play->roomCtx.curRoom.num == transitionActorList->sides[1].room ||
                   play->roomCtx.prevRoom.num == transitionActorList->sides[1].room))) {
-                s16 rotY = ((transitionActorList->rotY >> 7) & 0x1FF) * (0x10000 / 360.0f);
+                s16 rotY = DEG_TO_BINANG((transitionActorList->rotY >> 7) & 0x1FF);
 
                 if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,
                                                   transitionActorList->pos.x, transitionActorList->pos.y,
@@ -3280,19 +3280,19 @@ Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayStat
     s16 rotZ = (actorEntry->rot.z >> 7) & 0x1FF;
 
     if (!(actorEntry->id & 0x8000)) {
-        rotY *= 0x10000 / 360.0f;
+        rotY = DEG_TO_BINANG(rotY);
     } else if (rotY > 180) {
         rotY -= 360;
     }
 
     if (!(actorEntry->id & 0x4000)) {
-        rotX *= 0x10000 / 360.0f;
+        rotX = DEG_TO_BINANG(rotX);
     } else if (rotX > 180) {
         rotX -= 360;
     }
 
     if (!(actorEntry->id & 0x2000)) {
-        rotZ *= 0x10000 / 360.0f;
+        rotZ = DEG_TO_BINANG(rotZ);
     } else if (rotZ > 180) {
         rotZ -= 360;
     }

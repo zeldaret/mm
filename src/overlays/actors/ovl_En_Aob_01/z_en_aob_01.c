@@ -130,7 +130,7 @@ void func_809C11EC(EnAob01* this, PlayState* play) {
 
         this->unk_3F8[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, D_809C384C[i].unk_00.x, D_809C384C[i].unk_00.y, D_809C384C[i].unk_00.z,
-            0, D_809C384C[i].unk_04 * (0x10000 / 360.0f), 0, enDgParams, 0xFFFF, this->actor.halfDaysBits, NULL);
+            0, DEG_TO_BINANG(D_809C384C[i].unk_04), 0, enDgParams, 0xFFFF, this->actor.halfDaysBits, NULL);
     }
 }
 
