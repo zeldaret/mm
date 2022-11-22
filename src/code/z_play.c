@@ -226,15 +226,16 @@ void Play_DisableMotionBlurPriority(void) {
 }
 
 // Will take the photograph, but doesn't compress and save it
-void Play_TriggerPictographPhoto(void) {
-    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_SETUP;
+void Play_TriggerPictoPhoto(void) {
+    R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_SETUP;
 }
 
-void Play_TakePictographPhoto(PreRender* prerender) {
+void Play_TakePictoPhoto(PreRender* prerender) {
     PreRender_ApplyFilters(prerender);
-    Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, SCREEN_WIDTH, PICTO_TOPLEFT_X,
-                                       PICTO_TOPLEFT_Y, (PICTO_TOPLEFT_X + PICTO_RESOLUTION_WIDTH) - 1,
-                                       (PICTO_TOPLEFT_Y + PICTO_RESOLUTION_HEIGHT) - 1, 8);
+    Play_ConvertRgba16ToIntensityImage(gPictoPhotoI8, prerender->fbufSave, SCREEN_WIDTH, PICTO_PHOTO_TOPLEFT_X,
+                                       PICTO_PHOTO_TOPLEFT_Y,
+                                       (PICTO_PHOTO_TOPLEFT_X + PICTO_PHOTO_WIDTH) - 1,
+                                       (PICTO_PHOTO_TOPLEFT_Y + PICTO_PHOTO_HEIGHT) - 1, 8);
 }
 
 s32 Play_ChooseDynamicTransition(PlayState* this, s32 transitionType) {
@@ -378,7 +379,7 @@ void Play_Destroy(GameState* thisx) {
         R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
     }
 
-    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_OFF;
+    R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
     PreRender_Destroy(&this->pauseBgPreRender);
     this->unk_18E58 = NULL;
     this->pictoPhotoI8 = NULL;
@@ -909,11 +910,11 @@ void Play_UpdateMain(PlayState* this) {
     gSegments[5] = VIRTUAL_TO_PHYSICAL(this->objectCtx.status[this->objectCtx.subKeepIndex].segment);
     gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
 
-    if (R_PICTOGRAPH_PHOTO_STATE == PICTOGRAPH_PHOTO_STATE_PROCESS) {
-        R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_DONE;
+    if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
+        R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_DONE;
         MsgEvent_SendNullTask();
-        Play_TakePictographPhoto(&this->pauseBgPreRender);
-        R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_OFF;
+        Play_TakePictoPhoto(&this->pauseBgPreRender);
+        R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
     }
     Actor_SetMovementScale(this->state.framerateDivisor);
 
@@ -1363,7 +1364,7 @@ void Play_DrawMain(PlayState* this) {
             Play_DrawMotionBlur(this);
 
             if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) || (gTrnsnUnkState == 1)) ||
-                (R_PICTOGRAPH_PHOTO_STATE == 1)) {
+                (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
 
@@ -1373,15 +1374,15 @@ void Play_DrawMain(PlayState* this) {
 
                 if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) {
                     R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_PROCESS;
-                    this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                    this->pauseBgPreRender.fbufSave = gfxCtx->zbuffer;
                     this->pauseBgPreRender.cvgSave = this->unk_18E58;
-                } else if (R_PICTOGRAPH_PHOTO_STATE == PICTOGRAPH_PHOTO_STATE_SETUP) {
-                    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_PROCESS;
-                    this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                } else if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP) {
+                    R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_PROCESS;
+                    this->pauseBgPreRender.fbufSave = gfxCtx->zbuffer;
                     this->pauseBgPreRender.cvgSave = this->unk_18E58;
                 } else {
                     gTrnsnUnkState = 2;
-                    this->pauseBgPreRender.fbufSave = (u16*)gfxCtx->zbuffer;
+                    this->pauseBgPreRender.fbufSave = gfxCtx->zbuffer;
                     this->pauseBgPreRender.cvgSave = NULL;
                 }
 
@@ -2228,7 +2229,7 @@ void Play_Init(GameState* thisx) {
     Play_InitMotionBlur();
 
     R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_OFF;
-    R_PICTOGRAPH_PHOTO_STATE = PICTOGRAPH_PHOTO_STATE_OFF;
+    R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
 
     PreRender_Init(&this->pauseBgPreRender);
     PreRender_SetValuesSave(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL, NULL);

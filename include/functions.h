@@ -2322,7 +2322,7 @@ void Play_DisableMotionBlur(void);
 void Play_SetMotionBlurPriorityAlpha(u32 alpha);
 void Play_EnableMotionBlurPriority(u32 alpha);
 void Play_DisableMotionBlurPriority(void);
-void Play_TriggerPictographPhoto(void);
+void Play_TriggerPictoPhoto(void);
 Gfx* Play_SetFog(PlayState* this, Gfx* gfx);
 void Play_Destroy(GameState* thisx);
 void Play_CompressI8ToI5(void* srcI8, void* destI5, size_t size);

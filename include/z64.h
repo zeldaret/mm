@@ -955,11 +955,11 @@ typedef struct {
 } BombersNotebook; // size = 0xAC
 
 typedef enum {
-    /* 0 */ PICTOGRAPH_PHOTO_STATE_OFF,
-    /* 1 */ PICTOGRAPH_PHOTO_STATE_SETUP,
-    /* 2 */ PICTOGRAPH_PHOTO_STATE_PROCESS,
-    /* 3 */ PICTOGRAPH_PHOTO_STATE_DONE
-} PictographPhotoState;
+    /* 0 */ PICTO_PHOTO_STATE_OFF,
+    /* 1 */ PICTO_PHOTO_STATE_SETUP,
+    /* 2 */ PICTO_PHOTO_STATE_PROCESS,
+    /* 3 */ PICTO_PHOTO_STATE_DONE
+} PictoPhotoState;
 
 // OoT's TransitionUnk
 typedef struct {

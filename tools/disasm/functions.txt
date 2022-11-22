@@ -2981,7 +2981,7 @@
     0x80165DCC:("Play_EnableMotionBlurPriority",),
     0x80165DF0:("Play_DisableMotionBlurPriority",),
     0x80165E04:("Play_StartPictographPhoto",),
-    0x80165E1C:("Play_TakePictographPhoto",),
+    0x80165E1C:("Play_TakePictoPhoto",),
     0x80165E7C:("Play_ChooseDynamicTransition",),
     0x80165EC0:("Play_SetupTransition",),
     0x80166060:("Play_ClearTransition",),

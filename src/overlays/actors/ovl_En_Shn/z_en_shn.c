@@ -227,8 +227,8 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
 
 s32 func_80AE6704(Actor* thisx, PlayState* play) {
     static s32 sPictographFlags[] = {
-        PICTOGRAPH_0,      PICTOGRAPH_MONKEY,    PICTOGRAPH_BIG_OCTO,
-        PICTOGRAPH_TINGLE, PICTOGRAPH_DEKU_KING, PICTOGRAPH_IN_SWAMP,
+        PICTO_VALID_0,      PICTO_VALID_MONKEY,    PICTO_VALID_BIG_OCTO,
+        PICTO_VALID_TINGLE, PICTO_VALID_DEKU_KING, PICTO_VALID_IN_SWAMP,
     };
     EnShn* this = THIS;
     s32 ret = 0;

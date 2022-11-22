@@ -139,14 +139,14 @@ typedef enum {
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
 
-#define PICTO_RESOLUTION_WIDTH 160
-#define PICTO_RESOLUTION_HEIGHT 112
+#define PICTO_PHOTO_WIDTH 160
+#define PICTO_PHOTO_HEIGHT 112
 
-#define PICTO_TOPLEFT_X ((SCREEN_WIDTH - PICTO_RESOLUTION_WIDTH) / 2)
-#define PICTO_TOPLEFT_Y ((SCREEN_HEIGHT - PICTO_RESOLUTION_HEIGHT) / 2)
+#define PICTO_PHOTO_TOPLEFT_X ((SCREEN_WIDTH - PICTO_PHOTO_WIDTH) / 2)
+#define PICTO_PHOTO_TOPLEFT_Y ((SCREEN_HEIGHT - PICTO_PHOTO_HEIGHT) / 2)
 
-#define PICTO_SIZE (PICTO_RESOLUTION_WIDTH * PICTO_RESOLUTION_HEIGHT)
-#define PICTO_COMPRESSED_SIZE (PICTO_SIZE * 5 / 8)
+#define PICTO_PHOTO_SIZE (PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT)
+#define PICTO_PHOTO_COMPRESSED_SIZE (PICTO_PHOTO_SIZE * 5 / 8)
 
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
@@ -313,7 +313,7 @@ typedef struct SaveContext {
     /* 0x1050 */ u64 bottleTimerTimeLimits[BOTTLE_MAX]; // The original total time given before the timer expires, in centiseconds (1/100th sec). "bottle_sub"
     /* 0x1080 */ u64 bottleTimerCurTimes[BOTTLE_MAX]; // The remaining time left before the timer expires, in centiseconds (1/100th sec). "bottle_time"
     /* 0x10B0 */ OSTime bottleTimerPausedOsTimes[BOTTLE_MAX]; // The cumulative osTime spent with the timer paused. "bottle_stop_time"
-    /* 0x10E0 */ u8 pictoPhotoI5[PICTO_COMPRESSED_SIZE]; // buffer containing the pictograph photo, compressed to I5 from I8
+    /* 0x10E0 */ u8 pictoPhotoI5[PICTO_PHOTO_COMPRESSED_SIZE]; // buffer containing the pictograph photo, compressed to I5 from I8
     /* 0x3CA0 */ s32 fileNum;                           // "file_no"
     /* 0x3CA4 */ s16 powderKegTimer;                    // "big_bom_timer"
     /* 0x3CA6 */ u8 unk_3CA6;
