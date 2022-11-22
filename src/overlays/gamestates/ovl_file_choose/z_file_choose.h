@@ -16,6 +16,15 @@
      (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 3) == 'D') && \
      (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 5) == '3'))
 
+// Init mode: Initial setup as the file select is starting up, fades and slides in various menu elements
+// Config mode: Handles the bulk of the file select, various configuration tasks like picking a file, copy/erase, and the options menu
+// Select mode: Displays the selected file with various details about it, and allows the player to confirm and open it
+typedef enum {
+    /* 0 */ FS_MENU_MODE_INIT,
+    /* 1 */ FS_MENU_MODE_CONFIG,
+    /* 2 */ FS_MENU_MODE_SELECT
+} MenuMode;
+
 typedef enum {
     /* 00 */ CM_FADE_IN_START,
     /* 01 */ CM_FADE_IN_END,

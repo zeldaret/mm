@@ -813,6 +813,8 @@ typedef enum {
 */
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
 
+#define ENTR_LOAD_OPENING -1
+
 // SceneTableEntry draw configs
 typedef enum {
     /* 0 */ SCENE_DRAW_CFG_DEFAULT,

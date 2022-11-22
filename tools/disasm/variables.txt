@@ -4638,7 +4638,7 @@
     0x80814758:("sFileButtonTextures","UNK_TYPE4","",0x4),
     0x80814764:("sActionButtonTextures","UNK_TYPE4","",0x4),
     0x80814774:("sFileYOffsets","UNK_TYPE1","",0x1),
-    0x8081477C:("gSelectModeUpdateFuncs","UNK_TYPE","[8]",0x20),
+    0x8081477C:("sSelectModeUpdateFuncs","UNK_TYPE","[8]",0x20),
     0x8081479C:("gFileSelectDrawFuncs","UNK_TYPE","[3]",0xc),
     0x808147A8:("gFileSelectUpdateFuncs","UNK_TYPE","[3]",0xc),
     0x808147B4:("D_808147B4","UNK_TYPE4","",0x4),
