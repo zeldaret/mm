@@ -1939,7 +1939,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id);
 void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd);
 void Scene_CommandActorList(PlayState* play, SceneCmd* cmd);
 void Scene_CommandActorCutsceneCamList(PlayState* play, SceneCmd* cmd);
-void Scene_CommandColHeader(PlayState* play, SceneCmd* cmd);
+void Scene_CommandCollisionHeader(PlayState* play, SceneCmd* cmd);
 void Scene_CommandRoomList(PlayState* play, SceneCmd* cmd);
 void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd);
 void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd);

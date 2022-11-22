@@ -2425,7 +2425,7 @@
     0x8012F79C:("Scene_CommandSpawnList",),
     0x8012F90C:("Scene_CommandActorList",),
     0x8012F954:("Scene_CommandActorCutsceneCamList",),
-    0x8012F984:("Scene_CommandColHeader",),
+    0x8012F984:("Scene_CommandCollisionHeader",),
     0x8012FA24:("Scene_CommandRoomList",),
     0x8012FA68:("Scene_CommandEntranceList",),
     0x8012FA98:("Scene_CommandSpecialFiles",),

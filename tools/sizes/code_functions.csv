@@ -1939,7 +1939,7 @@ asm/non_matchings/code/z_scene/func_8012F73C.s,func_8012F73C,0x8012F73C,0x18
 asm/non_matchings/code/z_scene/Scene_CommandSpawnList.s,Scene_CommandSpawnList,0x8012F79C,0x5C
 asm/non_matchings/code/z_scene/Scene_CommandActorList.s,Scene_CommandActorList,0x8012F90C,0x12
 asm/non_matchings/code/z_scene/Scene_CommandActorCutsceneCamList.s,Scene_CommandActorCutsceneCamList,0x8012F954,0xC
-asm/non_matchings/code/z_scene/Scene_CommandColHeader.s,Scene_CommandColHeader,0x8012F984,0x28
+asm/non_matchings/code/z_scene/Scene_CommandCollisionHeader.s,Scene_CommandCollisionHeader,0x8012F984,0x28
 asm/non_matchings/code/z_scene/Scene_CommandRoomList.s,Scene_CommandRoomList,0x8012FA24,0x11
 asm/non_matchings/code/z_scene/Scene_CommandEntranceList.s,Scene_CommandEntranceList,0x8012FA68,0xC
 asm/non_matchings/code/z_scene/Scene_CommandSpecialFiles.s,Scene_CommandSpecialFiles,0x8012FA98,0x32

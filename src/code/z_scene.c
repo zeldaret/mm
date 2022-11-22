@@ -180,7 +180,7 @@ void Scene_CommandActorCutsceneCamList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
-void Scene_CommandColHeader(PlayState* play, SceneCmd* cmd) {
+void Scene_CommandCollisionHeader(PlayState* play, SceneCmd* cmd) {
     CollisionHeader* colHeaderTemp;
     CollisionHeader* colHeader;
 
@@ -540,7 +540,7 @@ void (*sSceneCmdHandlers[])(PlayState*, SceneCmd*) = {
     Scene_CommandSpawnList,
     Scene_CommandActorList,
     Scene_CommandActorCutsceneCamList,
-    Scene_CommandColHeader,
+    Scene_CommandCollisionHeader,
     Scene_CommandRoomList,
     Scene_CommandWindSettings,
     Scene_CommandEntranceList,
