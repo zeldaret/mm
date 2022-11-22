@@ -489,7 +489,7 @@ typedef struct {
     /* 0x10 */ u8 unk_10;
     /* 0x11 */ u8 unk_11;
     /* 0x12 */ u8 unk_12;
-    /* 0x13 */ u8 unk_13;
+    /* 0x13 */ u8 skyboxBlend;
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 skyboxDisabled;
     /* 0x16 */ u8 sunMoonDisabled;
@@ -568,8 +568,12 @@ typedef struct {
     /* 0x227 */ u8 envB;
 } SkyboxContext; // size = 0x228
 
-typedef enum {
-    /* 0x05 */ SKYBOX_CUTSCENE_MAP = 5
+typedef enum SkyboxId {
+    /* 0 */ SKYBOX_NONE,
+    /* 1 */ SKYBOX_NORMAL_SKY,
+    /* 2 */ SKYBOX_2,
+    /* 3 */ SKYBOX_3,
+    /* 5 */ SKYBOX_CUTSCENE_MAP = 5
 } SkyboxId;
 
 typedef struct ListAlloc {

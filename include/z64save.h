@@ -148,7 +148,7 @@ typedef enum {
 
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
-    /* 0x04 */ u8 *saveBuf;
+    /* 0x04 */ u8* saveBuf;
     /* 0x08 */ char unk_08[4];
     /* 0x0C */ s16 status;
     /* 0x10 */ u32 curPage;
@@ -223,7 +223,7 @@ typedef struct SaveOptions {
 
 typedef struct SavePlayerData {
     /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x06 */ u16 deaths;                            // "savect"
+    /* 0x06 */ u16 sotCount;                          // "savect"
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"
@@ -323,7 +323,7 @@ typedef struct SaveContext {
     /* 0x3DB4 */ f32 entranceSpeed;                     // "player_wipe_speedF"
     /* 0x3DB8 */ u16 entranceSound;                     // "player_wipe_door_SE"
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
-    /* 0x3DBB */ u8 retainWeatherMode;                           // "next_walk"
+    /* 0x3DBB */ u8 retainWeatherMode;                  // "next_walk"
     /* 0x3DBC */ s16 dogParams;                         // "dog_flag"
     /* 0x3DBE */ u8 textTriggerFlags;                   // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
@@ -360,9 +360,9 @@ typedef struct SaveContext {
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
     /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
     /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
-    /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
+    /* 0x3F3F */ u8 flashSaveAvailable;                           // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
-    /* 0x3F46 */ u16 forcedSeqId;                          // "NottoriBgm"
+    /* 0x3F46 */ u16 forcedSeqId;                       // "NottoriBgm"
     /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
     /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
@@ -1514,24 +1514,24 @@ void func_801457CC(struct GameState* gameState, SramContext* sramCtx);
 void func_80146580(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
 void func_80146628(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
-void func_80146DF8(SramContext* sramCtx);
+void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
-void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
-void func_80147020(SramContext* sramCtx);
-void func_80147068(SramContext* sramCtx);
-void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages);
-void func_80147150(SramContext* sramCtx);
-void func_80147198(SramContext* sramCtx);
+void Sram_SetFlashPagesDefault(SramContext* sramCtx, u32 curPage, u32 numPages);
+void Sram_StartWriteToFlashDefault(SramContext* sramCtx);
+void Sram_UpdateWriteToFlashDefault(SramContext* sramCtx);
+void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages);
+void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx);
+void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx);
 
 extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
-extern s32 D_801C67C8[];
-extern s32 D_801C67F0[];
-extern s32 D_801C6818[];
-extern s32 D_801C6840[];
-extern s32 D_801C6850[];
+extern s32 gFlashSaveStartPages[];
+extern s32 gFlashSaveNumPages[];
+extern s32 gFlashSpecialSaveNumPages[];
+extern s32 gFlashOwlSaveStartPages[];
+extern s32 gFlashOwlSaveNumPages[];
 
 #endif

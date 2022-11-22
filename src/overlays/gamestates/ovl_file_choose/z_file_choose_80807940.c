@@ -211,7 +211,7 @@ void FileSelect_SetNameEntryVtx(GameState* thisx) {
 
     for (var_s0 = 0, var_t1 = 0; var_t1 < 44; var_t1 += 4, var_s0++) {
         if ((var_s0 > 0) && (var_s0 < 9)) {
-            temp = this->playerName[this->buttonIndex][var_s0 - 1];
+            temp = this->fileNames[this->buttonIndex][var_s0 - 1];
 
             this->nameEntryVtx[var_t1 + 0].v.ob[0] = this->nameEntryVtx[var_t1 + 2].v.ob[0] =
                 D_80814434[var_s0] + this->nameEntryBoxPosX + D_80814280[temp];
@@ -276,9 +276,8 @@ void FileSelect_SetNameEntryVtx(GameState* thisx) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->nameEntryBoxAlpha);
 
     for (sp108 = 0, var_s0 = 0; var_s0 < 0x20; var_s0 += 4, sp108++) {
-        FileSelect_DrawTexQuadI4(this->state.gfxCtx,
-                                 font->fontBuf + this->playerName[this->buttonIndex][sp108] * FONT_CHAR_TEX_SIZE,
-                                 var_s0);
+        FileSelect_DrawTexQuadI4(
+            this->state.gfxCtx, font->fontBuf + this->fileNames[this->buttonIndex][sp108] * FONT_CHAR_TEX_SIZE, var_s0);
     }
 
     this->nameEntryVtx[37].v.tc[0] = this->nameEntryVtx[38].v.tc[1] = this->nameEntryVtx[39].v.tc[0] =
@@ -411,13 +410,13 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
             this->kbdY = 5;
             this->kbdX = 4;
         } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
-            if ((this->newFileNameCharCount == 7) && (this->playerName[this->buttonIndex][7] != 0x3E)) {
+            if ((this->newFileNameCharCount == 7) && (this->fileNames[this->buttonIndex][7] != 0x3E)) {
 
                 for (i = this->newFileNameCharCount; i < 7; i++) {
-                    this->playerName[this->buttonIndex][i] = this->playerName[this->buttonIndex][i + 1];
+                    this->fileNames[this->buttonIndex][i] = this->fileNames[this->buttonIndex][i + 1];
                 }
 
-                this->playerName[this->buttonIndex][i] = 0x3E;
+                this->fileNames[this->buttonIndex][i] = 0x3E;
                 play_sound(NA_SE_SY_FSEL_CLOSE);
             } else {
                 this->newFileNameCharCount--;
@@ -428,10 +427,10 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                     play_sound(NA_SE_SY_FSEL_CLOSE);
                 } else {
                     for (i = this->newFileNameCharCount; i < 7; i++) {
-                        this->playerName[this->buttonIndex][i] = this->playerName[this->buttonIndex][i + 1];
+                        this->fileNames[this->buttonIndex][i] = this->fileNames[this->buttonIndex][i + 1];
                     }
 
-                    this->playerName[this->buttonIndex][i] = 0x3E;
+                    this->fileNames[this->buttonIndex][i] = 0x3E;
                     play_sound(NA_SE_SY_FSEL_CLOSE);
                 }
             }
@@ -464,7 +463,7 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
 
                     if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                         play_sound(NA_SE_SY_FSEL_DECIDE_S);
-                        this->playerName[this->buttonIndex][this->newFileNameCharCount] = D_808141F0[this->charIndex];
+                        this->fileNames[this->buttonIndex][this->newFileNameCharCount] = D_808141F0[this->charIndex];
 
                         this->newFileNameCharCount++;
 
@@ -475,13 +474,13 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                     if (this->charPage != this->kbdButton) {
                         if (this->kbdButton == FS_KBD_BTN_BACKSPACE) {
-                            if ((this->newFileNameCharCount == 7) && (this->playerName[this->buttonIndex][7] != 0x3E)) {
+                            if ((this->newFileNameCharCount == 7) && (this->fileNames[this->buttonIndex][7] != 0x3E)) {
 
                                 for (i = this->newFileNameCharCount; i < 7; i++) {
-                                    this->playerName[this->buttonIndex][i] = this->playerName[this->buttonIndex][i + 1];
+                                    this->fileNames[this->buttonIndex][i] = this->fileNames[this->buttonIndex][i + 1];
                                 }
 
-                                this->playerName[this->buttonIndex][i] = 0x3E;
+                                this->fileNames[this->buttonIndex][i] = 0x3E;
                                 play_sound(NA_SE_SY_FSEL_CLOSE);
                             } else {
                                 this->newFileNameCharCount--;
@@ -491,17 +490,17 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                                 }
 
                                 for (i = this->newFileNameCharCount; i < 7; i++) {
-                                    this->playerName[this->buttonIndex][i] = this->playerName[this->buttonIndex][i + 1];
+                                    this->fileNames[this->buttonIndex][i] = this->fileNames[this->buttonIndex][i + 1];
                                 }
 
-                                this->playerName[this->buttonIndex][i] = 0x3E;
+                                this->fileNames[this->buttonIndex][i] = 0x3E;
                                 play_sound(NA_SE_SY_FSEL_CLOSE);
                             }
                         } else if (this->kbdButton == FS_KBD_BTN_END) {
                             validName = false;
 
                             for (i = 0; i < 8; i++) {
-                                if (this->playerName[this->buttonIndex][i] != 0x3E) {
+                                if (this->fileNames[this->buttonIndex][i] != 0x3E) {
                                     validName = true;
                                     break;
                                 }
@@ -514,13 +513,13 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                                 Sram_InitSave(this, sramCtx);
                                 gSaveContext.save.time = time;
 
-                                if (!gSaveContext.unk_3F3F) {
+                                if (!gSaveContext.flashSaveAvailable) {
                                     this->configMode = CM_NAME_ENTRY_TO_MAIN;
                                 } else {
-                                    func_80147008(sramCtx, D_801C67C8[this->buttonIndex * 2],
-                                                  D_801C6818[this->buttonIndex * 2]);
-                                    func_80147020(sramCtx);
-                                    this->configMode = CM_UNK_23;
+                                    Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->buttonIndex * 2],
+                                                              gFlashSpecialSaveNumPages[this->buttonIndex * 2]);
+                                    Sram_StartWriteToFlashDefault(sramCtx);
+                                    this->configMode = CM_NAME_ENTRY_WAIT_FOR_FLASH_SAVE;
                                 }
 
                                 this->nameBoxAlpha[this->buttonIndex] = this->nameAlpha[this->buttonIndex] = 200;
@@ -700,11 +699,11 @@ void FileSelect_UpdateKeyboardCursor(GameState* thisx) {
     }
 }
 
-void func_8080A3CC(GameState* thisx) {
+void FileSelect_NameEntryWaitForFlashSave(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
 
-    func_80147068(sramCtx);
+    Sram_UpdateWriteToFlashDefault(sramCtx);
 
     if (sramCtx->status == 0) {
         this->configMode = CM_NAME_ENTRY_TO_MAIN;
@@ -755,13 +754,14 @@ void FileSelect_UpdateOptionsMenu(GameState* thisx) {
 
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         play_sound(NA_SE_SY_FSEL_DECIDE_L);
-        func_80146DF8(sramCtx);
-        if (!gSaveContext.unk_3F3F) {
+        Sram_WriteSaveOptionsToBuffer(sramCtx);
+
+        if (!gSaveContext.flashSaveAvailable) {
             this->configMode = CM_OPTIONS_TO_MAIN;
         } else {
-            func_80147008(sramCtx, D_801C67C8[8], D_801C6818[8]);
-            func_80147020(sramCtx);
-            this->configMode = CM_UNK_28;
+            Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[8], gFlashSpecialSaveNumPages[8]);
+            Sram_StartWriteToFlashDefault(sramCtx);
+            this->configMode = CM_OPTIONS_WAIT_FOR_FLASH_SAVE;
         }
         func_801A3D98(gSaveContext.options.audioSetting);
         return;
@@ -804,11 +804,15 @@ void FileSelect_UpdateOptionsMenu(GameState* thisx) {
     }
 }
 
-void func_8080A6BC(GameState* thisx) {
+/**
+ * Update and wait for the save to flash to complete.
+ * Update function for `CM_OPTIONS_WAIT_FOR_FLASH_SAVE`
+ */
+void FileSelect_OptionsWaitForFlashSave(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     SramContext* sramCtx = &this->sramCtx;
 
-    func_80147068(sramCtx);
+    Sram_UpdateWriteToFlashDefault(sramCtx);
 
     if (sramCtx->status == 0) {
         this->configMode = CM_OPTIONS_TO_MAIN;

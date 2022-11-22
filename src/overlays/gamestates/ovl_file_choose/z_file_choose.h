@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+// `sramCtx->readBuff` is never allocated space, so should never use
 #define GET_NEWF(sramCtx, slotNum, index) \
     (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
 #define SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
@@ -10,11 +11,11 @@
      (GET_NEWF(sramCtx, slotNum, 2) == 'L') || (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
      (GET_NEWF(sramCtx, slotNum, 4) == 'A') || (GET_NEWF(sramCtx, slotNum, 5) == '3'))
 
-#define GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
-#define FILE_CHOOSE_SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
-    ((GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 1) == 'E') && \
-     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 3) == 'D') && \
-     (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_CHOOSE_NEWF(fileSelect, slotNum, 5) == '3'))
+#define GET_FILE_SELECT_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
+#define FILE_SELECT_SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
+    ((GET_FILE_SELECT_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 1) == 'E') && \
+     (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 3) == 'D') && \
+     (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 5) == '3'))
 
 // Init mode: Initial setup as the file select is starting up, fades and slides in various menu elements
 // Config mode: Handles the bulk of the file select, various configuration tasks like picking a file, copy/erase, and the options menu
@@ -39,7 +40,7 @@ typedef enum {
     /* 10 */ CM_SETUP_COPY_CONFIRM_1,
     /* 11 */ CM_SETUP_COPY_CONFIRM_2,
     /* 12 */ CM_COPY_CONFIRM,
-    /* 13 */ CM_UNK_D,
+    /* 13 */ CM_COPY_WAIT_FOR_FLASH_SAVE,
     /* 14 */ CM_RETURN_TO_COPY_DEST,
     /* 15 */ CM_COPY_ANIM_1,
     /* 16 */ CM_COPY_ANIM_2,
@@ -55,7 +56,7 @@ typedef enum {
     /* 26 */ CM_EXIT_TO_ERASE_SELECT_1,
     /* 27 */ CM_EXIT_TO_ERASE_SELECT_2,
     /* 28 */ CM_ERASE_ANIM_1,
-    /* 29 */ CM_UNK_1D,
+    /* 29 */ CM_ERASE_WAIT_FOR_FLASH_SAVE,
     /* 30 */ CM_ERASE_ANIM_2,
     /* 31 */ CM_ERASE_ANIM_3,
     /* 32 */ CM_EXIT_ERASE_TO_MAIN,
@@ -63,12 +64,12 @@ typedef enum {
     /* 34 */ CM_ROTATE_TO_NAME_ENTRY,
     /* 35 */ CM_START_NAME_ENTRY,
     /* 36 */ CM_NAME_ENTRY,
-    /* 37 */ CM_UNK_23,
+    /* 37 */ CM_NAME_ENTRY_WAIT_FOR_FLASH_SAVE,
     /* 38 */ CM_NAME_ENTRY_TO_MAIN,
     /* 39 */ CM_MAIN_TO_OPTIONS,
     /* 40 */ CM_START_OPTIONS,
     /* 41 */ CM_OPTIONS_MENU,
-    /* 42 */ CM_UNK_28,
+    /* 42 */ CM_OPTIONS_WAIT_FOR_FLASH_SAVE,
     /* 43 */ CM_OPTIONS_TO_MAIN,
     /* 44 */ CM_UNUSED_DELAY
 } ConfigMode;
@@ -184,10 +185,10 @@ typedef struct FileSelectState {
     /* 0x243EC */ Vtx* nameEntryVtx;
     /* 0x243F0 */ Vtx* keyboard2Vtx;
     /* 0x243F4 */ u8 newf[4][6];
-    /* 0x2440C */ u16 deaths[2]; // sotCount?
-    /* 0x24410 */ u16 deaths2[2]; // sotCount?
-    /* 0x24414 */ char playerName[2][8];
-    /* 0x24424 */ char playerName2[2][8];
+    /* 0x2440C */ u16 sotCount[2]; // sotCount?
+    /* 0x24410 */ u16 sotCount2[2]; // sotCount?
+    /* 0x24414 */ char fileNames[2][8];
+    /* 0x24424 */ char fileNames2[2][8];
     /* 0x24434 */ s16 healthCapacity[2];
     /* 0x24438 */ u16 healthCapacity2[2];
     /* 0x2443C */ s16 health[2];
