@@ -323,8 +323,8 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
         return;
     }
 
-    if (REG(15) != 0.0f) {
-        this->skelAnime.playSpeed = (f32)func_800FE620(play) / REG(15);
+    if (R_TIME_SPEED != 0.0f) {
+        this->skelAnime.playSpeed = (f32)func_800FE620(play) / R_TIME_SPEED;
     } else {
         this->skelAnime.playSpeed = 0.0f;
     }
@@ -337,14 +337,14 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
         func_80AEC658(&this->skelAnime, this->unk_320, 1.0f, &sp48, &sp44);
     }
 
-    temp2 = REG(15) * sp44;
+    temp2 = R_TIME_SPEED * sp44;
     temp_f0 = temp2;
 
-    this->unk_2DC += (REG(15) * sp44) - temp2;
+    this->unk_2DC += (R_TIME_SPEED * sp44) - temp2;
     temp3 = this->unk_2DC;
     this->timePathTimeSpeed = temp2 + temp3;
     this->unk_2DC -= temp3;
-    this->unk_2E0 += REG(15);
+    this->unk_2E0 += R_TIME_SPEED;
 
     if (Schedule_RunScript(play, D_80AEF800, &sp34)) {
         if ((this->unk_3CC != sp34.result) && !func_80AED354(this, play, &sp34)) {

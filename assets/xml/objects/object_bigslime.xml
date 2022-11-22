@@ -1,30 +1,30 @@
 ﻿<Root>
     <!-- Assets for the Gekko, Minislime, and Bigslime -->
     <File Name="object_bigslime" Segment="6">
-        <Animation Name="gGekkoFullFistPumpAnim" Offset="0x994" />
-        <Animation Name="gGekkoSurpriseJumpAnim" Offset="0x10F4" />
-        <Animation Name="gGekkoCallAnim" Offset="0x1B08" />
-        <Animation Name="gGekkoCrawlAnim" Offset="0x1E14" />
-        <Animation Name="gGekkoFallInAirAnim" Offset="0x1F20" />
-        <Animation Name="gGekkoFloorIdleAnim" Offset="0x225C" />
-        <Animation Name="gGekkoDamagedAnim" Offset="0x276C" />
-        <Animation Name="gGekkoJumpUpAnim" Offset="0x2E0C" />
-        <Animation Name="gGekkoRecoverAnim" Offset="0x30E4" />
-        <Animation Name="gGekkoJabPunchAnim" Offset="0x347C" />
-        <Animation Name="gGekkoJumpForwardAnim" Offset="0x39C4" />
-        <Animation Name="gGekkoKickAnim" Offset="0x3F28" />
-        <Animation Name="gGekkoFallOnGroundAnim" Offset="0x4298" />
-        <Animation Name="gGekkoStandingIdleAnim" Offset="0x4680" />
-        <Animation Name="gGekkoJumpOnSnapperAnim" Offset="0x4894" />
-        <Animation Name="gGekkoQuickFistPumpAnim" Offset="0x4D50" />
-        <Animation Name="gGekkoSqueezeAnim" Offset="0x50B8" />
-        <Animation Name="gGekkoLandOnSnapperAnim" Offset="0x52EC" />
-        <Animation Name="gGekkoWiggleAnim" Offset="0x5694" />
-        <Animation Name="gGekkoKnockbackAnim" Offset="0x5D54" />
-        <Animation Name="gGekkoLookAroundAnim" Offset="0x66B4" />
-        <Animation Name="gGekkoNervousIdleAnim" Offset="0x69FC" />
-        <Animation Name="gGekkoHookPunchAnim" Offset="0x70C4" />
-        <Animation Name="gGekkoSwimForwardAnim" Offset="0x7790" />
+        <Animation Name="gGekkoFullFistPumpAnim" Offset="0x994" /> <!-- Original name is "bsl_aisatsuDEMO" ("greeting") -->
+        <Animation Name="gGekkoSurpriseJumpAnim" Offset="0x10F4" /> <!-- Original name is "bsl_bikkuri" ("to be surprised; to be frightened") -->
+        <Animation Name="gGekkoCallAnim" Offset="0x1B08" /> <!-- Original name is "bsl_callDEMO" -->
+        <Animation Name="gGekkoCrawlAnim" Offset="0x1E14" /> <!-- Original name is "bsl_clim" -->
+        <Animation Name="gGekkoFallInAirAnim" Offset="0x1F20" /> <!-- Original name is "bsl_climdamage" -->
+        <Animation Name="gGekkoFloorIdleAnim" Offset="0x225C" /> <!-- Original name is "bsl_climwait" -->
+        <Animation Name="gGekkoDamagedAnim" Offset="0x276C" /> <!-- Original name is "bsl_damage" -->
+        <Animation Name="gGekkoJumpUpAnim" Offset="0x2E0C" /> <!-- Original name is "bsl_flyjump" -->
+        <Animation Name="gGekkoRecoverAnim" Offset="0x30E4" /> <!-- Original name is "bsl_hukki" ("return; comeback") -->
+        <Animation Name="gGekkoJabPunchAnim" Offset="0x347C" /> <!-- Original name is "bsl_jabA" -->
+        <Animation Name="gGekkoJumpForwardAnim" Offset="0x39C4" /> <!-- Original name is "bsl_jump" -->
+        <Animation Name="gGekkoKickAnim" Offset="0x3F28" /> <!-- Original name is "bsl_kickA" -->
+        <Animation Name="gGekkoFallOnGroundAnim" Offset="0x4298" /> <!-- Original name is "bsl_rakka" ("fall; drop; descent") -->
+        <Animation Name="gGekkoStandingIdleAnim" Offset="0x4680" /> <!-- Original name is "bsl_ride" -->
+        <Animation Name="gGekkoJumpOnSnapperAnim" Offset="0x4894" /> <!-- Orignal name is "bsl_ridefuse" -->
+        <Animation Name="gGekkoQuickFistPumpAnim" Offset="0x4D50" /> <!-- Original name is "bsl_ridegogo" -->
+        <Animation Name="gGekkoSqueezeAnim" Offset="0x50B8" /> <!-- Original name is "bsl_ridejump" -->
+        <Animation Name="gGekkoLandOnSnapperAnim" Offset="0x52EC" /> <!-- Original name is "bsl_rideokiru" ("okiru" = "to get up; to rise") -->
+        <Animation Name="gGekkoWiggleAnim" Offset="0x5694" /> <!-- Original name is "bsl_riderakka" -->
+        <Animation Name="gGekkoKnockbackAnim" Offset="0x5D54" /> <!-- Original name is "bsl_standdamage" -->
+        <Animation Name="gGekkoLookAroundAnim" Offset="0x66B4" /> <!-- Original name is "bsl_standview" -->
+        <Animation Name="gGekkoNervousIdleAnim" Offset="0x69FC" /> <!-- Original name is "bsl_standwalk" -->
+        <Animation Name="gGekkoHookPunchAnim" Offset="0x70C4" /> <!-- Original name is "bsl_strertA" (maybe a severe mispelling of "straight", as in "straight punch"?) -->
+        <Animation Name="gGekkoSwimForwardAnim" Offset="0x7790" /> <!-- Original name is "bsl_swim" -->
 
         <DList Name="gGekkoRightEyeDL" Offset="0x9D90" />
         <DList Name="gGekkoLeftEyeDL" Offset="0x9FF0" />
@@ -90,12 +90,12 @@
         <Limb Name="gGekkoRightEyeLimb" Type="Standard" EnumName="GEKKO_LIMB_RIGHT_EYE" Offset="0xDF30" />
         <Skeleton Name="gGekkoSkel" Type="Flex" LimbType="Standard" LimbNone="GEKKO_LIMB_NONE" LimbMax="GEKKO_LIMB_MAX" EnumName="GekkoLimb" Offset="0xDF98" />
 
-        <Animation Name="gGekkoWindupPunchAnim" Offset="0xF048" />
-        <Animation Name="gGekkoSwimUpAnim" Offset="0xF3F0" />
-        <Animation Name="gGekkoBoxingStanceAnim" Offset="0xF990" />
+        <Animation Name="gGekkoWindupPunchAnim" Offset="0xF048" /> <!-- Original name is "bsl_upperA" -->
+        <Animation Name="gGekkoSwimUpAnim" Offset="0xF3F0" /> <!-- Original name is "bsl_upswim" -->
+        <Animation Name="gGekkoBoxingStanceAnim" Offset="0xF990" /> <!-- Original name is "bsl_waitA" -->
         
-        <DList Name="gBigslimeBubbleDL" Offset="0xF9D0" />
-        <DList Name="gBigslimeShockwaveDL" Offset="0xFB40" />
+        <DList Name="gBigslimeBubbleDL" Offset="0xF9D0" /> <!-- Original name is "bsl_bable_model" -->
+        <DList Name="gBigslimeShockwaveDL" Offset="0xFB40" /> <!-- Original name is "bsl_coolwave_modelT" -->
         <Texture Name="gBigslimeShockwave1Tex" OutName="bigslime_shockwave_1" Format="i4" Width="32" Height="64" Offset="0xFC28" />
         <Blob Name="object_bigslime_zeroes_Blob_010028" Size="0x400" Offset="0x10028" />
         <Texture Name="gBigslimeShockwave2Tex" OutName="bigslime_shockwave_2" Format="i4" Width="16" Height="16" Offset="0x10428" />
@@ -109,15 +109,15 @@
         <DList Name="gBigslimeFrozenMaterialDL" Offset="0x10B80" />
 
         <TextureAnimation Name="gBigslimeFrozenTexAnim" Offset="0x10C48" />
-        <DList Name="gMinislimeFrozenDL" Offset="0x10DB0" />
+        <DList Name="gMinislimeFrozenDL" Offset="0x10DB0" /> <!-- Original name is "bsl_icepart_model" (the original asset exists in MM3D, along with an updated asset named "muddjelly_icepart") -->
         <TextureAnimation Name="gMinislimeFrozenTexAnim" Offset="0x10EC8" />
 
         <DList Name="gBigslimeIceShardDL" Offset="0x10F20" />
-        <DList Name="gBigslimeIceShardVtxDL" Offset="0x10FE0" />
+        <DList Name="gBigslimeIceShardVtxDL" Offset="0x10FE0" /> <!-- Original name is probably "bsl_icepeace_model" (called "muddjelly_icepeace" in MM3D) -->
         <TextureAnimation Name="gBigslimeIceShardTexAnim" Offset="0x11008" />
         
-        <DList Name="gBigslimeShadowDL" Offset="0x11050" />
-        <DList Name="gMinislimeNormalDL" Offset="0x113B0" />
+        <DList Name="gBigslimeShadowDL" Offset="0x11050" /> <!-- Original name is "bsl_kage_model" ("shadow; silhouette") -->
+        <DList Name="gMinislimeNormalDL" Offset="0x113B0" /> <!-- Original name is probably "bsl_smallgel_model" (called "muddjelly_smallgel" in MM3D) -->
 
         <Texture Name="gBigslimeBubbleTex" OutName="bigslime_bubble" Format="i4" Width="16" Height="16" Offset="0x11580" />
         <Texture Name="gBigslimeShadowTex" OutName="bigslime_shadow" Format="i8" Width="32" Height="32" Offset="0x11600" />
