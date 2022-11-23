@@ -360,7 +360,7 @@ typedef struct SaveContext {
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
     /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
     /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
-    /* 0x3F3F */ u8 flashSaveAvailable;                           // "flash_flag"
+    /* 0x3F3F */ u8 flashSaveAvailable;                 // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
     /* 0x3F46 */ u16 forcedSeqId;                       // "NottoriBgm"
     /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
