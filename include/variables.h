@@ -631,7 +631,6 @@ extern UNK_PTR D_801BEC14;
 // extern UNK_TYPE2 D_801BF5B0;
 extern UNK_PTR D_801BF5C0;
 // extern UNK_TYPE1 D_801BF68C;
-// extern UNK_TYPE2 sPrevTimeSpeed;
 
 extern FlexSkeletonHeader* gPlayerSkeletons[PLAYER_FORM_MAX];
 extern PlayerModelIndices gPlayerModelTypes[];

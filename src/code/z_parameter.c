@@ -4400,9 +4400,9 @@ void Interface_DrawTimers(PlayState* play) {
 
                     case TIMER_STATE_POSTMAN_STOP:
                         postmanTimerStopOsTime = gSaveContext.postmanTimerStopOsTime;
-                        gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] =
-                            OSTIME_TO_TIMER(postmanTimerStopOsTime - ((void)0, gSaveContext.timerStartOsTimes[TIMER_ID_POSTMAN]) -
-                                            ((void)0, gSaveContext.timerPausedOsTimes[TIMER_ID_POSTMAN]));
+                        gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = OSTIME_TO_TIMER(
+                            postmanTimerStopOsTime - ((void)0, gSaveContext.timerStartOsTimes[TIMER_ID_POSTMAN]) -
+                            ((void)0, gSaveContext.timerPausedOsTimes[TIMER_ID_POSTMAN]));
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_END;
                         func_80174F9C(Interface_PostmanTimerCallback, NULL);
                         break;

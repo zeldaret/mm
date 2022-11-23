@@ -77,7 +77,7 @@ typedef enum {
     /*  2 */ TIMER_ID_2,
     /*  3 */ TIMER_ID_MOON_CRASH, // timer used for mooncrash on the clocktower roof
     /*  4 */ TIMER_ID_MINIGAME_2, // minigame timer
-    /*  5 */ TIMER_ID_ENV_HAZARD, // environmental timer (underwater or hot room)
+    /*  5 */ TIMER_ID_ENV_HAZARD, // environmental hazard timer (underwater or hot room)
     /*  6 */ TIMER_ID_GORON_RACE_UNUSED,
     /*  7 */ TIMER_ID_MAX,
     /* 99 */ TIMER_ID_NONE = 99,
@@ -335,7 +335,7 @@ typedef struct SaveContext {
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
     /* 0x3DBB */ u8 unk_3DBB;                           // "next_walk"
     /* 0x3DBC */ s16 dogParams;                         // "dog_flag"
-    /* 0x3DBE */ u8 envHazardTextTriggerFlags;                   // "guide_status"
+    /* 0x3DBE */ u8 envHazardTextTriggerFlags;          // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
     /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
