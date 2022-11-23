@@ -424,7 +424,7 @@ void Play_CompressI8ToI5(void* srcI8, void* destI5, size_t size) {
     u32 i;
     u8* src = srcI8;
     s8* dest = destI5;
-    s32 bitsLeft = PLAY_DECOMPRESS_BITS; // Bits from the current src pixel left to compress
+    s32 bitsLeft = PLAY_DECOMPRESS_BITS; // Bits left in the current dest pixel left to compress into
     u32 destPixel = 0;
     s32 shift;
     u32 srcPixel;
@@ -453,7 +453,7 @@ void Play_DecompressI5ToI8(void* srcI5, void* destI8, size_t size) {
     u32 i;
     u8* src = srcI5;
     s8* dest = destI8;
-    s32 bitsLeft = PLAY_DECOMPRESS_BITS; // Bits from the current dest pixel left to decompress into
+    s32 bitsLeft = PLAY_DECOMPRESS_BITS; // Bits left in the current src pixel left to decompress
     u32 destPixel;
     s32 shift;
     u32 srcPixel = *src++;
