@@ -3790,7 +3790,8 @@ void Actor_AddQuakeWithSpeed(PlayState* play, s16 verticalMag, s16 countdown, s1
     Quake_SetCountdown(quakeIndex, countdown);
 }
 
-void Actor_RequestRumble(Actor* actor, PlayState* play, s16 y, s16 countdown) {
+// Actor_RequestRumble?
+void func_800BC848(Actor* actor, PlayState* play, s16 y, s16 countdown) {
     if (y >= 5) {
         Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
