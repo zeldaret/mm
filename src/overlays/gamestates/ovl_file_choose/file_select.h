@@ -3,19 +3,20 @@
 
 #include "global.h"
 
-// `sramCtx->readBuff` is never allocated space, so should never use
-#define GET_NEWF(sramCtx, slotNum, index) \
-    (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
-#define SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
-    ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
-     (GET_NEWF(sramCtx, slotNum, 2) == 'L') || (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
-     (GET_NEWF(sramCtx, slotNum, 4) == 'A') || (GET_NEWF(sramCtx, slotNum, 5) == '3'))
+// `sramCtx->noFlashReadBuf` is never allocated space, so should never use
+// Slot offsets are also based on OoT SaveContext sizes
+#define OOT_GET_NEWF(sramCtx, slotNum, index) \
+    (sramCtx->noFlashReadBuf[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
+#define OOT_SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
+    ((OOT_GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (OOT_GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
+     (OOT_GET_NEWF(sramCtx, slotNum, 2) == 'L') || (OOT_GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
+     (OOT_GET_NEWF(sramCtx, slotNum, 4) == 'A') || (OOT_GET_NEWF(sramCtx, slotNum, 5) == '3'))
 
-#define GET_FILE_SELECT_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
-#define FILE_SELECT_SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
-    ((GET_FILE_SELECT_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 1) == 'E') && \
-     (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 3) == 'D') && \
-     (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_FILE_SELECT_NEWF(fileSelect, slotNum, 5) == '3'))
+#define GET_NEWF(fileSelect, slotNum, index) (fileSelect->newf[slotNum][index])
+#define SLOT_OCCUPIED(fileSelect, slotNum)                                                                 \
+    ((GET_NEWF(fileSelect, slotNum, 0) == 'Z') && (GET_NEWF(fileSelect, slotNum, 1) == 'E') && \
+     (GET_NEWF(fileSelect, slotNum, 2) == 'L') && (GET_NEWF(fileSelect, slotNum, 3) == 'D') && \
+     (GET_NEWF(fileSelect, slotNum, 4) == 'A') && (GET_NEWF(fileSelect, slotNum, 5) == '3'))
 
 // Init mode: Initial setup as the file select is starting up, fades and slides in various menu elements
 // Config mode: Handles the bulk of the file select, various configuration tasks like picking a file, copy/erase, and the options menu

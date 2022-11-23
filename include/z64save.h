@@ -147,7 +147,7 @@ typedef enum {
 } HudVisibility;
 
 typedef struct SramContext {
-    /* 0x00 */ u8* readBuff;
+    /* 0x00 */ u8* noFlashReadBuf;
     /* 0x04 */ u8* saveBuf;
     /* 0x08 */ char unk_08[4];
     /* 0x0C */ s16 status;
