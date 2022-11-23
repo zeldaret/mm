@@ -195,7 +195,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
     if (distToFloor < 200.0f) {
         MtxF sp13C;
         MtxF spFC;
-        CollisionPoly* spF8;
+        CollisionPoly* poly;
         s32 bgId;
         f32 floorHeight[2];
         Light* firstLight = &mapper->l.l[0];
@@ -224,7 +224,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(floorHeight); i++, spB8 >>= 1) {
             feetPosPtr->y += 50.0f;
-            *floorHeightPtr = func_80169100(play, &sp13C, &spF8, &bgId, feetPosPtr);
+            *floorHeightPtr = func_80169100(play, &sp13C, &poly, &bgId, feetPosPtr);
             feetPosPtr->y -= 50.0f;
 
             distToFloor = feetPosPtr->y - *floorHeightPtr;
@@ -235,7 +235,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
                     actor->shape.feetFloorFlags |= spB8;
 
                     if ((actor->depthInWater < 0.0f) && (bgId == 0x32) && ((actor->shape.unk_17 & spB8) != 0)) {
-                        if (func_800C9C24(&play->colCtx, spF8, bgId, 1) != 0) {
+                        if (func_800C9C24(&play->colCtx, poly, bgId, 1)) {
                             SkinMatrix_MtxFCopy(&sp13C, &spFC);
                             SkinMatrix_MulYRotation(&spFC, actor->shape.rot.y);
                             EffFootmark_Add(play, &spFC, actor, i, feetPosPtr, (actor->shape.shadowScale * 0.3f),
