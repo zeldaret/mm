@@ -285,7 +285,7 @@ void KaleidoScope_DrawInventoryEditorText(Gfx** gfxp) {
     GfxPrint_SetPos(&printer, 23, 22);
     GfxPrint_Printf(&printer, "%s", "ｾｲ");
 
-    // Life (double defence)
+    // Life (double defense)
     GfxPrint_SetPos(&printer, 4, 25);
     GfxPrint_Printf(&printer, "%s", "ｲ");
     GfxPrint_SetPos(&printer, 4, 26);
@@ -601,7 +601,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         counterDigits[1] += 21;
     }
 
-    // Double Defence
+    // Double Defense
     KaleidoScope_DrawDigit(play, gSaveContext.save.playerData.doubleDefense, 44, 202);
 
     // Magic
@@ -1070,7 +1070,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 }
 
             } else {
-                // Double Defence
+                // Double Defense
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
                     CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                     gSaveContext.save.playerData.doubleDefense ^= 1;
