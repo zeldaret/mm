@@ -1,5 +1,5 @@
-#ifndef SYSTEM_HEAP
-#define SYSTEM_HEAP
+#ifndef SYSTEM_HEAP_H
+#define SYSTEM_HEAP_H
 
 #include "libc/stddef.h"
 #include "PR/ultratypes.h"

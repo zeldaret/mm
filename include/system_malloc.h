@@ -1,5 +1,5 @@
-#ifndef SYSTEM_MALLOC
-#define SYSTEM_MALLOC
+#ifndef SYSTEM_MALLOC_H
+#define SYSTEM_MALLOC_H
 
 #include "PR/ultratypes.h"
 #include "os_malloc.h"
