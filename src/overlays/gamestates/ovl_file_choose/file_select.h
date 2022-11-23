@@ -1,5 +1,5 @@
-#ifndef Z64_FILE_CHOOSE_H
-#define Z64_FILE_CHOOSE_H
+#ifndef FILE_SELECT_H
+#define FILE_SELECT_H
 
 #include "global.h"
 
@@ -185,8 +185,8 @@ typedef struct FileSelectState {
     /* 0x243EC */ Vtx* nameEntryVtx;
     /* 0x243F0 */ Vtx* keyboard2Vtx;
     /* 0x243F4 */ u8 newf[4][6];
-    /* 0x2440C */ u16 sotCount[2]; // sotCount?
-    /* 0x24410 */ u16 sotCount2[2]; // sotCount?
+    /* 0x2440C */ u16 sotCount[2];
+    /* 0x24410 */ u16 sotCount2[2];
     /* 0x24414 */ char fileNames[2][8];
     /* 0x24424 */ char fileNames2[2][8];
     /* 0x24434 */ s16 healthCapacity[2];
@@ -205,8 +205,8 @@ typedef struct FileSelectState {
     /* 0x2446A */ u8 isOwlSave2[2];
     /* 0x2446C */ s16 rupees[2];
     /* 0x24470 */ s16 rupees2[2];
-    /* 0x24474 */ u8 upgrades[2];
-    /* 0x24476 */ s8 upgrades2[2];
+    /* 0x24474 */ u8 walletUpgrades[2];
+    /* 0x24476 */ s8 walletUpgrades2[2];
     /* 0x24478 */ u8 maskCount[2];
     /* 0x2447A */ s8 maskCount2[2];
     /* 0x2447C */ u8 heartPieceCount[2];
@@ -223,7 +223,7 @@ typedef struct FileSelectState {
     /* 0x24492 */ s16 fileNamesY[3];
     /* 0x24498 */ s16 actionTimer;
     /* 0x2449A */ s16 buttonYOffsets[6];
-    /* 0x244A6 */ s16 fileNum;
+    /* 0x244A6 */ s16 copyDestFileIndex;
     /* 0x244A8 */ s16 warningLabel;
     /* 0x244AA */ s16 warningButtonIndex;
     /* 0x244AC */ s16 titleLabel;
@@ -258,7 +258,7 @@ typedef struct FileSelectState {
     /* 0x2450C */ f32 windowRot;
     /* 0x24510 */ s16 kbdButton;
     /* 0x24512 */ s16 charPage;
-    /* 0x24514 */ s16 unk_24514;
+    /* 0x24514 */ s16 charBgAlpha;
     /* 0x24516 */ s16 charIndex;
     /* 0x24518 */ s16 kbdX;
     /* 0x2451A */ s16 kbdY;
@@ -279,6 +279,55 @@ void FileSelect_Init(GameState* thisx);
 void FileSelect_Destroy(GameState* thisx);
 
 void FileSelect_PulsateCursor(GameState* thisx);
+void FileSelect_DrawNameEntry(GameState* thisx);
+void FileSelect_DrawOptions(GameState* thisx);
 void FileSelect_DrawTexQuadI4(GraphicsContext* gfxCtx, TexturePtr texture, s16 point);
+
+// Copying Files
+void FileSelect_SetupCopySource(GameState* thisx);
+void FileSelect_SelectCopySource(GameState* thisx);
+void FileSelect_SetupCopyDest1(GameState* thisx);
+void FileSelect_SetupCopyDest2(GameState* thisx);
+void FileSelect_SelectCopyDest(GameState* thisx);
+void FileSelect_ExitToCopySource1(GameState* thisx);
+void FileSelect_ExitToCopySource2(GameState* thisx);
+void FileSelect_SetupCopyConfirm1(GameState* thisx);
+void FileSelect_SetupCopyConfirm2(GameState* thisx);
+void FileSelect_CopyConfirm(GameState* thisx);
+void FileSelect_CopyWaitForFlashSave(GameState* thisx);
+void FileSelect_ReturnToCopyDest(GameState* thisx);
+void FileSelect_CopyAnim1(GameState* thisx);
+void FileSelect_CopyAnim2(GameState* thisx);
+void FileSelect_CopyAnim3(GameState* thisx);
+void FileSelect_CopyAnim4(GameState* thisx);
+void FileSelect_CopyAnim5(GameState* thisx);
+void FileSelect_ExitCopyToMain(GameState* thisx);
+
+// Erasing Files
+void FileSelect_SetupEraseSelect(GameState* thisx);
+void FileSelect_EraseSelect(GameState* thisx);
+void FileSelect_SetupEraseConfirm1(GameState* thisx);
+void FileSelect_SetupEraseConfirm2(GameState* thisx);
+void FileSelect_EraseConfirm(GameState* thisx);
+void FileSelect_ExitToEraseSelect1(GameState* thisx);
+void FileSelect_ExitToEraseSelect2(GameState* thisx);
+void FileSelect_EraseAnim1(GameState* thisx);
+void FileSelect_EraseWaitForFlashSave(GameState* thisx);
+void FileSelect_EraseAnim2(GameState* thisx);
+void FileSelect_EraseAnim3(GameState* thisx);
+void FileSelect_ExitEraseToMain(GameState* thisx);
+
+// Entering Name
+void FileSelect_StartNameEntry(GameState* thisx);
+void FileSelect_UpdateKeyboardCursor(GameState* thisx);
+void FileSelect_NameEntryWaitForFlashSave(GameState* thisx);
+
+// Selecting Options
+void FileSelect_StartOptions(GameState* thisx);
+void FileSelect_UpdateOptionsMenu(GameState* thisx);
+void FileSelect_OptionsWaitForFlashSave(GameState* thisx);
+
+extern u8 D_808141F0[];
+extern s16 D_80814280[];
 
 #endif

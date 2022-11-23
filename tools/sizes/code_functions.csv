@@ -2316,8 +2316,8 @@ asm/non_matchings/code/z_sram_NES/Sram_OpenSave.s,Sram_OpenSave,0x80144E78,0x17D
 asm/non_matchings/code/z_sram_NES/func_8014546C.s,func_8014546C,0x8014546C,0x8B
 asm/non_matchings/code/z_sram_NES/func_80145698.s,func_80145698,0x80145698,0x4D
 asm/non_matchings/code/z_sram_NES/func_801457CC.s,func_801457CC,0x801457CC,0x36D
-asm/non_matchings/code/z_sram_NES/func_80146580.s,func_80146580,0x80146580,0x2A
-asm/non_matchings/code/z_sram_NES/func_80146628.s,func_80146628,0x80146628,0x11E
+asm/non_matchings/code/z_sram_NES/Sram_EraseSave.s,Sram_EraseSave,0x80146580,0x2A
+asm/non_matchings/code/z_sram_NES/Sram_CopySave.s,Sram_CopySave,0x80146628,0x11E
 asm/non_matchings/code/z_sram_NES/Sram_InitSave.s,Sram_InitSave,0x80146AA0,0xD6
 asm/non_matchings/code/z_sram_NES/Sram_WriteSaveOptionsToBuffer.s,Sram_WriteSaveOptionsToBuffer,0x80146DF8,0x12
 asm/non_matchings/code/z_sram_NES/Sram_InitSram.s,Sram_InitSram,0x80146E40,0xC

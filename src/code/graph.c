@@ -2,7 +2,7 @@
 #include "global.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/gamestates/ovl_file_choose/file_select.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_select/z_select.h"
 #include "overlays/gamestates/ovl_title/z_title.h"

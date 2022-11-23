@@ -167,15 +167,15 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             break;
         case 0x4:
             if (isStartFrame) {
-                play->envCtx.unk_19 = 1;
-                play->envCtx.unk_17 = 1;
-                play->envCtx.unk_18 = 0;
-                play->envCtx.unk_1A = 0x3C;
-                play->envCtx.unk_21 = 1;
-                play->envCtx.unk_1F = 0;
-                play->envCtx.unk_20 = 1;
-                play->envCtx.unk_24 = 0x3C;
-                play->envCtx.unk_22 = play->envCtx.unk_24;
+                play->envCtx.changeSkyboxState = 1;
+                play->envCtx.skyboxConfig = 1;
+                play->envCtx.changeSkyboxNextConfig = 0;
+                play->envCtx.changeSkyboxTimer = 60;
+                play->envCtx.changeLightEnabled = true;
+                play->envCtx.lightConfig = 0;
+                play->envCtx.changeLightNextConfig = 1;
+                play->envCtx.changeDuration = 60;
+                play->envCtx.changeLightTimer = play->envCtx.changeDuration;
             }
             break;
         case 0x5:
@@ -300,7 +300,7 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             break;
         case 0x1C:
             if (isStartFrame) {
-                play->envCtx.unk_17 = 0xD;
+                play->envCtx.skyboxConfig = 0xD;
             }
             break;
         case 0x1D:

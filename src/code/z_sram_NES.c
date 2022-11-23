@@ -1,5 +1,5 @@
 #include "global.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/gamestates/ovl_file_choose/file_select.h"
 
 void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
@@ -1079,7 +1079,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
 
         if (gSaveContext.fileNum == 0xFF) {
             func_80185968(sramCtx->saveBuf, gFlashSaveStartPages[0], gFlashSaveNumPages[0]);
-        } else if (fileSelect->isOwlSave2[gSaveContext.fileNum] != 0) {
+        } else if (fileSelect->isOwlSave2[gSaveContext.fileNum]) {
             phi_t1 = gSaveContext.fileNum + 2;
             phi_t1 *= 2;
 
@@ -1338,7 +1338,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                     fileSelect->day[sp76] = gSaveContext.save.day;
                     fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                    fileSelect->upgrades[sp76] = CUR_UPG_VALUE(4);
+                    fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(4);
 
                     for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
                         if (gSaveContext.save.inventory.items[sp7A + 24] != 0xFF) {
@@ -1452,7 +1452,7 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
                         fileSelect->day[sp76] = gSaveContext.save.day;
                         fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                        fileSelect->upgrades[sp76] = CUR_UPG_VALUE(4);
+                        fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(4);
 
                         for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
                             if (gSaveContext.save.inventory.items[sp7A + 24] != 0xFF) {
@@ -1527,14 +1527,14 @@ void func_801457CC(GameState* gameState, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 #endif
 
-void func_80146580(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum) {
+void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum) {
     FileSelectState* fileSelect = fileSelect2;
     s32 pad;
 
     if (gSaveContext.flashSaveAvailable) {
         if (fileSelect->isOwlSave2[fileNum]) {
             func_80147314(sramCtx, fileNum);
-            fileSelect->isOwlSave2[fileNum] = 0;
+            fileSelect->isOwlSave2[fileNum] = false;
         }
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
@@ -1544,34 +1544,31 @@ void func_80146580(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileN
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 
-// Sram_CopySave
 #ifdef NON_MATCHING
 // v0/v1
-void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
+void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     FileSelectState* fileSelect = fileSelect2;
     u16 i;
     s16 maskCount;
 
     if (gSaveContext.flashSaveAvailable) {
         if (fileSelect->isOwlSave2[fileSelect->selectedFileIndex]) {
-            func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->fileNum);
-            fileSelect->sotCount2[fileSelect->fileNum] = gSaveContext.save.playerData.sotCount;
+            func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->copyDestFileIndex);
+            fileSelect->sotCount2[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.sotCount;
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-                fileSelect->fileNames2[fileSelect->fileNum][i] = gSaveContext.save.playerData.playerName[i];
+                fileSelect->fileNames2[fileSelect->copyDestFileIndex][i] = gSaveContext.save.playerData.playerName[i];
             }
 
-            fileSelect->healthCapacity2[fileSelect->fileNum] = gSaveContext.save.playerData.healthCapacity;
-            fileSelect->health2[fileSelect->fileNum] = gSaveContext.save.playerData.health;
-            fileSelect->defenseHearts2[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
-            fileSelect->questItems2[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
-            fileSelect->time2[fileSelect->fileNum] = gSaveContext.save.time;
-            fileSelect->day2[fileSelect->fileNum] = gSaveContext.save.day;
-            fileSelect->isOwlSave2[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
-            fileSelect->rupees2[fileSelect->fileNum] = gSaveContext.save.playerData.rupees;
-            // = CUR_UPG_VALUE(UPG_WALLET);
-            fileSelect->upgrades2[fileSelect->fileNum] =
-                (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
+            fileSelect->healthCapacity2[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.healthCapacity;
+            fileSelect->health2[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.health;
+            fileSelect->defenseHearts2[fileSelect->copyDestFileIndex] = gSaveContext.save.inventory.defenseHearts;
+            fileSelect->questItems2[fileSelect->copyDestFileIndex] = gSaveContext.save.inventory.questItems;
+            fileSelect->time2[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
+            fileSelect->day2[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
+            fileSelect->isOwlSave2[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
+            fileSelect->rupees2[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.rupees;
+            fileSelect->walletUpgrades2[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
             for (i = 0, maskCount = 0; i < 24; i++) {
                 if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
@@ -1579,8 +1576,8 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
                 }
             }
 
-            fileSelect->maskCount2[fileSelect->fileNum] = maskCount;
-            fileSelect->heartPieceCount2[fileSelect->fileNum] =
+            fileSelect->maskCount2[fileSelect->copyDestFileIndex] = maskCount;
+            fileSelect->heartPieceCount2[fileSelect->copyDestFileIndex] =
                 (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
         }
 
@@ -1598,23 +1595,21 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
 
-        fileSelect->sotCount[fileSelect->fileNum] = gSaveContext.save.playerData.sotCount;
+        fileSelect->sotCount[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.sotCount;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.playerName); i++) {
-            fileSelect->fileNames[fileSelect->fileNum][i] = gSaveContext.save.playerData.playerName[i];
+            fileSelect->fileNames[fileSelect->copyDestFileIndex][i] = gSaveContext.save.playerData.playerName[i];
         }
 
-        fileSelect->healthCapacity[fileSelect->fileNum] = gSaveContext.save.playerData.healthCapacity;
-        fileSelect->health[fileSelect->fileNum] = gSaveContext.save.playerData.health;
-        fileSelect->defenseHearts[fileSelect->fileNum] = gSaveContext.save.inventory.defenseHearts;
-        fileSelect->questItems[fileSelect->fileNum] = gSaveContext.save.inventory.questItems;
-        fileSelect->time[fileSelect->fileNum] = gSaveContext.save.time;
-        fileSelect->day[fileSelect->fileNum] = gSaveContext.save.day;
-        fileSelect->isOwlSave[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
-        fileSelect->rupees[fileSelect->fileNum] = gSaveContext.save.playerData.rupees;
-        // = CUR_UPG_VALUE(UPG_WALLET);
-        fileSelect->upgrades[fileSelect->fileNum] =
-            (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
+        fileSelect->healthCapacity[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.healthCapacity;
+        fileSelect->health[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.health;
+        fileSelect->defenseHearts[fileSelect->copyDestFileIndex] = gSaveContext.save.inventory.defenseHearts;
+        fileSelect->questItems[fileSelect->copyDestFileIndex] = gSaveContext.save.inventory.questItems;
+        fileSelect->time[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
+        fileSelect->day[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
+        fileSelect->isOwlSave[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
+        fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.playerData.rupees;
+        fileSelect->walletUpgrades[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, maskCount = 0; i < 24; i++) {
             if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
@@ -1622,8 +1617,8 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
             }
         }
 
-        fileSelect->maskCount[fileSelect->fileNum] = maskCount;
-        fileSelect->heartPieceCount[fileSelect->fileNum] =
+        fileSelect->maskCount[fileSelect->copyDestFileIndex] = maskCount;
+        fileSelect->heartPieceCount[fileSelect->copyDestFileIndex] =
             (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
     }
 
@@ -1631,7 +1626,7 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
     gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CopySave.s")
 #endif
 
 void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
@@ -1680,7 +1675,7 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         fileSelect->day[fileSelect->buttonIndex] = gSaveContext.save.day;
         fileSelect->isOwlSave[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
         fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.playerData.rupees;
-        fileSelect->upgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
+        fileSelect->walletUpgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, maskCount = 0; i < 24; i++) {
             if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
@@ -1792,6 +1787,7 @@ void Sram_UpdateWriteToFlashDefault(SramContext* sramCtx) {
             }
         }
     } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->unk_18) >= SECONDS_TO_TIMER(2)) {
+        // Finished status is hardcoded to 2 seconds instead of when the task finishes
         sramCtx->status = 0;
     }
 }
@@ -1829,6 +1825,7 @@ void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx) {
             }
         }
     } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->unk_18) >= SECONDS_TO_TIMER(2)) {
+        // Finished status is hardcoded to 2 seconds instead of when the task finishes
         sramCtx->status = 0;
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         gSaveContext.save.isOwlSave = false;
@@ -1869,7 +1866,7 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.playerData.newf[5] = '3';
 }
 
-// Used for copying files with owl warp save
+// Used for copying files with `isOwlSave2` set
 void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     s32 pad;
 
