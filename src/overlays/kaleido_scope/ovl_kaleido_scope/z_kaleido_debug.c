@@ -1044,16 +1044,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 // Dungeon Items
                 slot = sCurSection - INV_EDITOR_SECTION_DUNGEON_ITEMS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    // Map
-                    gSaveContext.save.inventory.dungeonItems[slot] ^= 4;
+                    gSaveContext.save.inventory.dungeonItems[slot] ^= (1 << DUNGEON_MAP);
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
-                    // Compass
-                    gSaveContext.save.inventory.dungeonItems[slot] ^= 2;
+                    gSaveContext.save.inventory.dungeonItems[slot] ^= (1 << DUNGEON_COMPASS);
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    // Boss Key
-                    gSaveContext.save.inventory.dungeonItems[slot] ^= 1;
+                    gSaveContext.save.inventory.dungeonItems[slot] ^= (1 << DUNGEON_BOSS_KEY);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DOUBLE_DEFENSE) {

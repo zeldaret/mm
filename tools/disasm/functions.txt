@@ -2808,7 +2808,7 @@
     0x80146DF8:("Sram_WriteSaveOptionsToBuffer",),
     0x80146E40:("Sram_InitSram",),
     0x80146E70:("Sram_Alloc",),
-    0x80146EBC:("func_80146EBC",),
+    0x80146EBC:("Sram_SyncWriteToFlash",),
     0x80146EE8:("Sram_SaveSpecialEnterClockTown",),
     0x80146F5C:("Sram_SaveSpecialNewDay",),
     0x80147008:("Sram_SetFlashPagesDefault",),

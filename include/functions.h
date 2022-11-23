@@ -2740,11 +2740,11 @@ void Slowly_Start(SlowlyTask* slowly, void* stack, void (*callback)(), void* cal
 void Slowly_Stop(SlowlyTask* slowly);
 
 s32 func_80185908(void);
-s32 func_80185968(void* dst, u32 pageNum, s32 nPages);
-void func_80185DDC(void* dram, s32 pageNum, s32 nPages);
+s32 func_80185968(void* dst, u32 curPage, s32 numPages);
+void func_80185DDC(void* dram, s32 curPage, s32 numPages);
 s32 func_80185EC4(void);
 s32 func_80185F04(void);
-s32 func_80185F64(void* dram, s32 pageNum, s32 nPages);
+s32 func_80185F64(void* dram, s32 curPage, s32 numPages);
 
 s32 func_80185F90(u32 param_1);
 u32 osFlashGetAddr(u32 pageNum);

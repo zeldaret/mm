@@ -2322,7 +2322,7 @@ asm/non_matchings/code/z_sram_NES/Sram_InitSave.s,Sram_InitSave,0x80146AA0,0xD6
 asm/non_matchings/code/z_sram_NES/Sram_WriteSaveOptionsToBuffer.s,Sram_WriteSaveOptionsToBuffer,0x80146DF8,0x12
 asm/non_matchings/code/z_sram_NES/Sram_InitSram.s,Sram_InitSram,0x80146E40,0xC
 asm/non_matchings/code/z_sram_NES/Sram_Alloc.s,Sram_Alloc,0x80146E70,0x13
-asm/non_matchings/code/z_sram_NES/func_80146EBC.s,func_80146EBC,0x80146EBC,0xB
+asm/non_matchings/code/z_sram_NES/Sram_SyncWriteToFlash.s,Sram_SyncWriteToFlash,0x80146EBC,0xB
 asm/non_matchings/code/z_sram_NES/Sram_SaveSpecialEnterClockTown.s,Sram_SaveSpecialEnterClockTown,0x80146EE8,0x1D
 asm/non_matchings/code/z_sram_NES/Sram_SaveSpecialNewDay.s,Sram_SaveSpecialNewDay,0x80146F5C,0x2B
 asm/non_matchings/code/z_sram_NES/Sram_SetFlashPagesDefault.s,Sram_SetFlashPagesDefault,0x80147008,0x6
