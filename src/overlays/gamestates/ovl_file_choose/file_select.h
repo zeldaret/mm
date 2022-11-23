@@ -3,10 +3,10 @@
 
 #include "global.h"
 
-// `sramCtx->noFlashReadBuf` is never allocated space, so should never use
+// `sramCtx->noFlashSaveBuf` is never allocated space, so should never use
 // Slot offsets are also based on OoT SaveContext sizes
 #define OOT_GET_NEWF(sramCtx, slotNum, index) \
-    (sramCtx->noFlashReadBuf[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
+    (sramCtx->noFlashSaveBuf[gSramSlotOffsets[slotNum] + offsetof(SaveContext, save.playerData.newf[index])])
 #define OOT_SLOT_OCCUPIED(sramCtx, slotNum)                                                  \
     ((OOT_GET_NEWF(sramCtx, slotNum, 0) == 'Z') || (OOT_GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
      (OOT_GET_NEWF(sramCtx, slotNum, 2) == 'L') || (OOT_GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
