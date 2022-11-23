@@ -37,21 +37,21 @@ u16 sSurfaceTypeSfx[BG_SURFACE_SFX_TYPE_MAX] = {
 };
 
 u8 D_801B46C0[BG_SURFACE_SFX_TYPE_MAX] = {
-    1, // BG_SURFACE_SFX_TYPE_0
-    1, // BG_SURFACE_SFX_TYPE_1
-    0, // BG_SURFACE_SFX_TYPE_2
-    1, // BG_SURFACE_SFX_TYPE_3
-    0, // BG_SURFACE_SFX_TYPE_4
-    0, // BG_SURFACE_SFX_TYPE_5
-    0, // BG_SURFACE_SFX_TYPE_6
-    0, // BG_SURFACE_SFX_TYPE_7
-    0, // BG_SURFACE_SFX_TYPE_8
-    0, // BG_SURFACE_SFX_TYPE_9
-    0, // BG_SURFACE_SFX_TYPE_10
-    0, // BG_SURFACE_SFX_TYPE_11
-    0, // BG_SURFACE_SFX_TYPE_12
-    0, // BG_SURFACE_SFX_TYPE_13
-    1, // BG_SURFACE_SFX_TYPE_14
+    true,  // BG_SURFACE_SFX_TYPE_0
+    true,  // BG_SURFACE_SFX_TYPE_1
+    false, // BG_SURFACE_SFX_TYPE_2
+    true,  // BG_SURFACE_SFX_TYPE_3
+    false, // BG_SURFACE_SFX_TYPE_4
+    false, // BG_SURFACE_SFX_TYPE_5
+    false, // BG_SURFACE_SFX_TYPE_6
+    false, // BG_SURFACE_SFX_TYPE_7
+    false, // BG_SURFACE_SFX_TYPE_8
+    false, // BG_SURFACE_SFX_TYPE_9
+    false, // BG_SURFACE_SFX_TYPE_10
+    false, // BG_SURFACE_SFX_TYPE_11
+    false, // BG_SURFACE_SFX_TYPE_12
+    false, // BG_SURFACE_SFX_TYPE_13
+    true,  // BG_SURFACE_SFX_TYPE_14
 };
 
 s16 sSmallMemSceneIds[] = {
