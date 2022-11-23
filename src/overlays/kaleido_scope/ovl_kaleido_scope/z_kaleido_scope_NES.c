@@ -812,7 +812,7 @@ void KaleidoScope_Update(PlayState* play) {
                             Play_SaveCycleSceneFlags(&play->state);
                             gSaveContext.save.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
-                            if (gSaveContext.flashSaveAvailable == 0) {
+                            if (!gSaveContext.flashSaveAvailable) {
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_5;
                             } else {
                                 Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[gSaveContext.fileNum],
@@ -1074,7 +1074,7 @@ void KaleidoScope_Update(PlayState* play) {
                     gSaveContext.save.playerData.savedSceneId = play->sceneId;
                     gSaveContext.save.playerData.health = 0x30;
                     func_8014546C(sramCtx);
-                    if (gSaveContext.flashSaveAvailable == 0) {
+                    if (!gSaveContext.flashSaveAvailable) {
                         pauseCtx->state = PAUSE_STATE_GAMEOVER_8;
                     } else {
                         Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[gSaveContext.fileNum],
