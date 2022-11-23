@@ -1677,7 +1677,7 @@ void EnInvadepoh_InitAlien(EnInvadepoh* this, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
-    this->actor.flags = (ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000);
+    this->actor.flags = (ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000);
     if (INVADEPOH_TYPE(&this->actor) == TYPE_ALIEN_CARRYING_COW) {
         this->actor.update = func_80B4D670;
         this->actor.world.pos.y = this->actor.home.pos.y + 150.0f;

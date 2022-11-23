@@ -7,7 +7,7 @@
 #include "z_en_poh.h"
 #include "objects/object_po/object_po.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
 
 #define THIS ((EnPoh*)thisx)
 

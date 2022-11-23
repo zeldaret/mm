@@ -8,7 +8,7 @@
 #include "objects/object_bigpo/object_bigpo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
 
 #define THIS ((EnBigpo*)thisx)
 
