@@ -72,11 +72,11 @@ typedef enum PlayerMask {
 } PlayerMask;
 
 typedef enum {
-    /* 0 */ PLAYER_ENV_TIMER_NONE,
-    /* 1 */ PLAYER_ENV_TIMER_HOTROOM,
-    /* 2 */ PLAYER_ENV_TIMER_UNDERWATER_FLOOR,
-    /* 3 */ PLAYER_ENV_TIMER_SWIMMING,
-    /* 4 */ PLAYER_ENV_TIMER_UNDERWATER_FREE
+    /* 0 */ PLAYER_ENV_HAZARD_NONE,
+    /* 1 */ PLAYER_ENV_HAZARD_HOTROOM,
+    /* 2 */ PLAYER_ENV_HAZARD_UNDERWATER_FLOOR,
+    /* 3 */ PLAYER_ENV_HAZARD_SWIMMING,
+    /* 4 */ PLAYER_ENV_HAZARD_UNDERWATER_FREE
 } PlayerEnvTimerType;
 
 typedef enum PlayerItemAction {

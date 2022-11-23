@@ -310,7 +310,7 @@ typedef enum {
 
 #define ACTORCTX_FLAG_0 (1 << 0)
 #define ACTORCTX_FLAG_1 (1 << 1)
-#define ACTORCTX_FLAG_2 (1 << 2)
+#define ACTORCTX_FLAG_PICTOGRAPH_ON (1 << 2)
 #define ACTORCTX_FLAG_3 (1 << 3)
 #define ACTORCTX_FLAG_4 (1 << 4)
 #define ACTORCTX_FLAG_5 (1 << 5)

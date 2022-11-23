@@ -381,8 +381,8 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
         if ((temp_a3 * temp_a2) <= 0) {
             gSaveContext.unk_3CA7 = 1;
-            if (play->actorCtx.flags & ACTORCTX_FLAG_2) {
-                play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
+            if (play->actorCtx.flags & ACTORCTX_FLAG_PICTOGRAPH_ON) {
+                play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTOGRAPH_ON;
             }
 
             if (temp_a0 != CLOCK_TIME(6, 0)) {

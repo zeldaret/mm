@@ -215,7 +215,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
             Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
             player->stateFlags1 |= PLAYER_STATE1_20;
-            play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
+            play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTOGRAPH_ON;
         } else {
             Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
             player->stateFlags1 &= ~PLAYER_STATE1_20;
