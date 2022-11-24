@@ -239,14 +239,14 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 j;
 
     if (this->actor.bgCheckFlags & 2) {
-        BgSurfaceSfxType surfaceSfxType =
-            SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        SurfaceMaterial surfaceMaterial =
+            SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((surfaceSfxType == BG_SURFACE_SFX_TYPE_0) || (surfaceSfxType == BG_SURFACE_SFX_TYPE_1)) {
+        if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 func_800BBFB0(play, &this->limbPos[i], 1.0f, 2, 80, 15, 1);
             }
-        } else if (surfaceSfxType == BG_SURFACE_SFX_TYPE_14) {
+        } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
             Vec3f* ptr;
 
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {

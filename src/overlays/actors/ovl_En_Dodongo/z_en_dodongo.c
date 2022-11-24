@@ -358,7 +358,7 @@ void func_80876930(EnDodongo* this, PlayState* play, Vec3f* arg2) {
     s16 temp2;
     f32 temp3;
 
-    if (SurfaceType_GetSfxType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == BG_SURFACE_SFX_TYPE_14) {
+    if (SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == SURFACE_MATERIAL_SNOW) {
         sp80 = &D_8087932C;
         sp7C = &D_80879330;
     } else {

@@ -161,18 +161,18 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnTest* this = THIS;
     MtxF sp38;
-    s32 sp34;
+    s32 bgId;
 
     this->unk_209 = 0;
     this->unk_174 = 0;
 
     if (thisx->params > 0) {
         Actor_SetScale(thisx, thisx->params / 100000.0f);
-        this->surfaceSfxType = BG_SURFACE_SFX_TYPE_0;
+        this->surfaceMaterial = SURFACE_MATERIAL_DIRT;
     } else {
         thisx->floorPoly = NULL;
         thisx->world.pos.y += 10.0f;
-        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
+        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &bgId, &thisx->world.pos);
 
         if ((thisx->floorPoly == NULL) || (thisx->floorHeight == BGCHECK_Y_MIN)) {
             Actor_Kill(thisx);
@@ -183,7 +183,7 @@ void EnTest_Init(Actor* thisx, PlayState* play2) {
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
         Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
-        this->surfaceSfxType = SurfaceType_GetSfxType(&play->colCtx, thisx->floorPoly, sp34);
+        this->surfaceMaterial = SurfaceType_GetMaterial(&play->colCtx, thisx->floorPoly, bgId);
     }
 
     func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_06EB70, &gameplay_keep_Blob_06BB0C, this->unk_178,
@@ -257,7 +257,7 @@ void EnTest_Draw(Actor* thisx, PlayState* play) {
         sp2C = 29;
     }
 
-    if ((this->surfaceSfxType == BG_SURFACE_SFX_TYPE_MAX) || (this->surfaceSfxType == BG_SURFACE_SFX_TYPE_14)) {
+    if ((this->surfaceMaterial == SURFACE_MATERIAL_MAX) || (this->surfaceMaterial == SURFACE_MATERIAL_SNOW)) {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
     } else {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);

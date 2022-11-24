@@ -622,7 +622,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
             if (bounced) {
                 if (this->unk_197 > 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_SNOW);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SNOW);
                 } else {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
                 }
