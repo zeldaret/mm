@@ -4256,7 +4256,7 @@ u16 SurfaceType_GetSfxOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 
     SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
     if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialToSfxOffset))) {
-        return NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        return SURFACE_SFX_OFFSET_DIRT;
     }
 
     return sSurfaceMaterialToSfxOffset[surfaceMaterial];
@@ -4269,7 +4269,7 @@ s32 SurfaceType_IsSoftMaterial(CollisionContext* colCtx, CollisionPoly* poly, s3
     SurfaceMaterial surfaceMaterial = SurfaceType_GetMaterial(colCtx, poly, bgId);
 
     if ((surfaceMaterial < 0) || (surfaceMaterial >= ARRAY_COUNT(sSurfaceMaterialIsSoft))) {
-        return 0;
+        return false;
     }
 
     return sSurfaceMaterialIsSoft[surfaceMaterial] & mask;
