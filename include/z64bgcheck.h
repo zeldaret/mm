@@ -202,26 +202,6 @@ typedef enum {
     /* 15 */ SURFACE_MATERIAL_MAX
 } SurfaceMaterial;
 
-// TODO: name after the elements from sSurfaceMaterialToSfxOffset
-typedef enum BgSurfaceSfxType {
-    /*  0 */ BG_SURFACE_SFX_TYPE_0,
-    /*  1 */ BG_SURFACE_SFX_TYPE_1,
-    /*  2 */ BG_SURFACE_SFX_TYPE_2,
-    /*  3 */ BG_SURFACE_SFX_TYPE_3,
-    /*  4 */ BG_SURFACE_SFX_TYPE_4,
-    /*  5 */ BG_SURFACE_SFX_TYPE_5,
-    /*  6 */ BG_SURFACE_SFX_TYPE_6,
-    /*  7 */ BG_SURFACE_SFX_TYPE_7,
-    /*  8 */ BG_SURFACE_SFX_TYPE_8,
-    /*  9 */ BG_SURFACE_SFX_TYPE_9,
-    /* 10 */ BG_SURFACE_SFX_TYPE_10,
-    /* 11 */ BG_SURFACE_SFX_TYPE_11,
-    /* 12 */ BG_SURFACE_SFX_TYPE_12,
-    /* 13 */ BG_SURFACE_SFX_TYPE_13,
-    /* 14 */ BG_SURFACE_SFX_TYPE_14,
-    /* 15 */ BG_SURFACE_SFX_TYPE_MAX
-} BgSurfaceSfxType;
-
 typedef enum BgFloorEffect {
     /* 0 */ FLOOR_EFFECT_0,
     /* 1 */ FLOOR_EFFECT_1,
