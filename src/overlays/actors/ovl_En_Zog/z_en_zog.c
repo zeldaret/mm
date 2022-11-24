@@ -781,15 +781,15 @@ void func_80B94A00(EnZog* this, PlayState* play) {
 
     if ((this->unk_304 == 4) &&
         (Animation_OnFrame(&this->skelAnime, 136.0f) || Animation_OnFrame(&this->skelAnime, 155.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER0);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
     }
 
     if ((this->unk_304 == 5) &&
         (Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 37.0f))) {
         if (this->actor.depthInWater > 0.0f) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_WATER0);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_WATER_SHALLOW);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_SAND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
         }
     }
 }

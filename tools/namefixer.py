@@ -427,10 +427,10 @@ wordReplace = {
     "func_800C9AE4": "SurfaceType_CheckWallFlag2",
     "func_800C9B18": "SurfaceType_GetFloorProperty2",
     "func_800C9B40": "SurfaceType_GetFloorProperty",
-    "func_800C9BB8": "SurfaceType_GetSfxType",
+    "func_800C9BB8": "SurfaceType_GetMaterial",
     "func_800C9B90": "SurfaceType_IsHorseBlocked",
-    "func_800C9BDC": "SurfaceType_GetSfxId",
-    "SurfaceType_GetSfx": "SurfaceType_GetSfxId",
+    "func_800C9BDC": "SurfaceType_GetSfxOffset",
+    "SurfaceType_GetSfx": "SurfaceType_GetSfxOffset",
     "func_800C9C74": "SurfaceType_GetFloorEffect",
     "func_800C9C9C": "SurfaceType_GetLightSettingIndex",
     "func_800C9CC4": "SurfaceType_GetEcho",
@@ -837,8 +837,8 @@ wordReplace = {
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
 
-    "COLPOLY_SURFACE_GROUND": "BG_SURFACE_SFX_TYPE_0",
-    "COLPOLY_SURFACE_SAND": "BG_SURFACE_SFX_TYPE_1",
+    "COLPOLY_SURFACE_GROUND": "SURFACE_SFX_OFFSET_DIRT",
+    "COLPOLY_SURFACE_SAND": "SURFACE_SFX_OFFSET_SAND",
     "COLPOLY_SURFACE_SNOW": "BG_SURFACE_SFX_TYPE_14",
 
     # Example of custom behaviour:

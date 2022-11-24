@@ -1035,13 +1035,13 @@ s32 func_80AEE86C(EnTk* this, PlayState* play) {
     s32 pad;
     s32 ret = false;
     s32 pad2;
-    CollisionPoly* poly;
+    CollisionPoly* groundPoly;
     s32 bgId;
     Vec3f sp28;
 
     Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80AEFA78, &sp28);
-    if ((BgCheck_EntityRaycastFloor3(&play->colCtx, &poly, &bgId, &sp28) != BGCHECK_Y_MIN) &&
-        (SurfaceType_GetSfxType(&play->colCtx, poly, bgId) == BG_SURFACE_SFX_TYPE_1) && (this->unk_2D0 == 1) &&
+    if ((BgCheck_EntityRaycastFloor3(&play->colCtx, &groundPoly, &bgId, &sp28) != BGCHECK_Y_MIN) &&
+        (SurfaceType_GetMaterial(&play->colCtx, groundPoly, bgId) == SURFACE_MATERIAL_SAND) && (this->unk_2D0 == 1) &&
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&

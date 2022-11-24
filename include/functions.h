@@ -913,9 +913,9 @@ BgFloorProperty SurfaceType_GetFloorProperty2(CollisionContext* colCtx, Collisio
 BgFloorProperty SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_IsSoft(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_IsHorseBlocked(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-BgSurfaceSfxType SurfaceType_GetSfxType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-u16 SurfaceType_GetSfxId(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
-s32 func_800C9C24(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 arg3);
+SurfaceMaterial SurfaceType_GetMaterial(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+u16 SurfaceType_GetSfxOffset(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
+s32 SurfaceType_IsSoftMaterial(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId, s32 mask);
 BgFloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_GetLightSettingIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);
 u32 SurfaceType_GetEcho(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId);

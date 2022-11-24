@@ -122,7 +122,7 @@ s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    s32 waterSfxId;
+    s32 surfaceSfxOffset;
     u16 sfxId;
     u8 isFootGrounded;
 
@@ -131,13 +131,14 @@ s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & 0x20) {
         if (this->actor.depthInWater < 20.0f) {
-            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
-        sfxId = waterSfxId + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND + surfaceSfxOffset;
     } else {
-        sfxId = SurfaceType_GetSfxId(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND +
+                SurfaceType_GetSfxOffset(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     }
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);

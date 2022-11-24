@@ -164,7 +164,45 @@ typedef enum BgFloorProperty{
     /* 13 */ BG_FLOOR_PROPERTY_13
 } BgFloorProperty;
 
-// TODO: name after the elements from sSurfaceTypeSfx
+typedef enum {
+    /*  0 */ SURFACE_SFX_OFFSET_DIRT,
+    /*  1 */ SURFACE_SFX_OFFSET_SAND,
+    /*  2 */ SURFACE_SFX_OFFSET_STONE,
+    /*  3 */ SURFACE_SFX_OFFSET_DIRT_SHALLOW,
+    /*  4 */ SURFACE_SFX_OFFSET_WATER_SHALLOW,
+    /*  5 */ SURFACE_SFX_OFFSET_WATER_DEEP,
+    /*  6 */ SURFACE_SFX_OFFSET_TALL_GRASS,
+    /*  7 */ SURFACE_SFX_OFFSET_LAVA, // MAGMA?
+    /*  8 */ SURFACE_SFX_OFFSET_GRASS,
+    /*  9 */ SURFACE_SFX_OFFSET_CARPET,
+    /* 10 */ SURFACE_SFX_OFFSET_WOOD,
+    /* 11 */ SURFACE_SFX_OFFSET_BRIDGE, // WOOD_PLANK?
+    /* 12 */ SURFACE_SFX_OFFSET_VINE, // METAL?
+    /* 13 */ SURFACE_SFX_OFFSET_DIRT_DEEP,
+    /* 14 */ SURFACE_SFX_OFFSET_SNOW,
+    /* 15 */ SURFACE_SFX_OFFSET_ICE
+} SurfaceSfxOffset;
+
+typedef enum {
+    /*  0 */ SURFACE_MATERIAL_DIRT,
+    /*  1 */ SURFACE_MATERIAL_SAND,
+    /*  2 */ SURFACE_MATERIAL_STONE,
+    /*  3 */ SURFACE_MATERIAL_JABU,
+    /*  4 */ SURFACE_MATERIAL_WATER_SHALLOW,
+    /*  5 */ SURFACE_MATERIAL_WATER_DEEP,
+    /*  6 */ SURFACE_MATERIAL_TALL_GRASS,
+    /*  7 */ SURFACE_MATERIAL_LAVA, // MAGMA?
+    /*  8 */ SURFACE_MATERIAL_GRASS,
+    /*  9 */ SURFACE_MATERIAL_BRIDGE, // WOOD_PLANK?
+    /* 10 */ SURFACE_MATERIAL_WOOD,
+    /* 11 */ SURFACE_MATERIAL_DIRT_SOFT,
+    /* 12 */ SURFACE_MATERIAL_ICE,
+    /* 13 */ SURFACE_MATERIAL_CARPET,
+    /* 14 */ SURFACE_MATERIAL_SNOW,
+    /* 15 */ SURFACE_MATERIAL_MAX
+} SurfaceMaterial;
+
+// TODO: name after the elements from sSurfaceMaterialToSfxOffset
 typedef enum BgSurfaceSfxType {
     /*  0 */ BG_SURFACE_SFX_TYPE_0,
     /*  1 */ BG_SURFACE_SFX_TYPE_1,
