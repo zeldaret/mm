@@ -1431,7 +1431,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     Vec3f sp50;
     f32 sp4C;
     s32 sp48 = true;
-    BgFloorType floorType;
+    FloorType floorType;
     CollisionPoly* tmp;
 
     if (!(player->stateFlags1 &

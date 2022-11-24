@@ -209,7 +209,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
     Vec3f offset;
     EnKanban* piece;
     EnKanban* signpost;
-    BgFloorType floorType;
+    FloorType floorType;
     f32 phi_f0;
     s32 pad2;
 

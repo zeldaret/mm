@@ -122,7 +122,7 @@ s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    s32 surfaceSfxOffset;
+    SurfaceSfxOffset surfaceSfxOffset;
     u16 sfxId;
     u8 isFootGrounded;
 

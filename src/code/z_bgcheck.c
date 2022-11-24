@@ -4201,7 +4201,7 @@ u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly,
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 8 & 0x1F;
 }
 
-BgFloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorType SurfaceType_GetFloorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 13 & 0x1F;
 }
 
@@ -4212,7 +4212,7 @@ u32 func_800C99FC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 18 & 7;
 }
 
-BgWallType SurfaceType_GetWallType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+WallType SurfaceType_GetWallType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 21 & 0x1F;
 }
 
@@ -4232,11 +4232,11 @@ s32 SurfaceType_CheckWallFlag2(CollisionContext* colCtx, CollisionPoly* poly, s3
     return (SurfaceType_GetWallFlags(colCtx, poly, bgId) & WALL_FLAG_2) ? true : false;
 }
 
-BgFloorProperty SurfaceType_GetFloorProperty2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorProperty SurfaceType_GetFloorProperty2(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
 
-BgFloorProperty SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorProperty SurfaceType_GetFloorProperty(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 26 & 0xF;
 }
 
@@ -4275,7 +4275,7 @@ s32 SurfaceType_IsSoftMaterial(CollisionContext* colCtx, CollisionPoly* poly, s3
     return sSurfaceMaterialIsSoft[surfaceMaterial] & mask;
 }
 
-BgFloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+FloorEffect SurfaceType_GetFloorEffect(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 4 & 3;
 }
 
@@ -4343,7 +4343,7 @@ s32 func_800C9DDC(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return !!flags;
 }
 
-BgConveyorSpeed SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+ConveyorSpeed SurfaceType_GetConveyorSpeed(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 1) >> 18 & 7;
 }
 

@@ -227,7 +227,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
-        BgFloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         Vec3f slopeNormal;
         s16 downwardSlopeYaw;
         f32 sp40;
@@ -324,7 +324,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
     static Color_RGBA8 D_80872E90 = { 185, 140, 70, 255 };
     static Color_RGBA8 D_80872E94 = { 255, 255, 255, 255 };
     s32 i;
-    BgFloorType floorType;
+    FloorType floorType;
     f32 temp_f20;
     s32 pad;
     f32 spCC;

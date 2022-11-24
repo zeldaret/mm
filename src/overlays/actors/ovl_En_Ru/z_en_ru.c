@@ -138,7 +138,7 @@ s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    s32 surfaceSfxOffset;
+    SurfaceSfxOffset surfaceSfxOffset;
     s16 sfxId;
     u8 isFootGrounded;
 

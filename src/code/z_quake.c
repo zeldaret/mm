@@ -477,7 +477,7 @@ void Distortion_ClearType(s32 type) {
 /**
  * Checks that the bg surface is an underwater conveyor type and if so, returns the conveyor speed
  */
-BgConveyorSpeed Distortion_GetUnderwaterCurrentSpeed(Player* player) {
+ConveyorSpeed Distortion_GetUnderwaterCurrentSpeed(Player* player) {
     if (!SurfaceType_IsFloorConveyor(&sDistortionRequest.play->colCtx, player->actor.floorPoly,
                                      player->actor.floorBgId)) {
         return SurfaceType_GetConveyorSpeed(&sDistortionRequest.play->colCtx, player->actor.floorPoly,

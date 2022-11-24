@@ -2148,7 +2148,7 @@ void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
 }
 
 void func_800B8EF4(PlayState* play, Actor* actor) {
-    u32 surfaceSfxOffset;
+    SurfaceSfxOffset surfaceSfxOffset;
 
     if (actor->bgCheckFlags & 0x20) {
         if (actor->depthInWater < 20.0f) {

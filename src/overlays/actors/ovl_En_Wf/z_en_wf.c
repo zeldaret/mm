@@ -471,7 +471,7 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
     Vec3f sp88;
-    BgFloorType floorType;
+    FloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
 

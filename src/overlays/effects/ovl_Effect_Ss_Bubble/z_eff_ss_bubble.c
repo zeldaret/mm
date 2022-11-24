@@ -89,7 +89,7 @@ void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this) {
     }
     if (((play->gameplayFrames + index) % 8) == 0) {
         CollisionPoly* colPoly;
-        BgConveyorSpeed conveyorSpeed;
+        ConveyorSpeed conveyorSpeed;
         s16 conveyorDir;
         f32 rVecAdjMax;
 

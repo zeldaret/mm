@@ -106,7 +106,7 @@ typedef struct {
     // 0x0000_00FF = bgCam index
 } WaterBox; // size = 0x10
 
-typedef enum BgFloorType {
+typedef enum FloorType {
     /*  0 */ BG_FLOOR_TYPE_0,
     /*  1 */ BG_FLOOR_TYPE_1,
     /*  2 */ BG_FLOOR_TYPE_2,
@@ -123,9 +123,9 @@ typedef enum BgFloorType {
     /* 13 */ BG_FLOOR_TYPE_13,
     /* 14 */ BG_FLOOR_TYPE_14,
     /* 15 */ BG_FLOOR_TYPE_15
-} BgFloorType;
+} FloorType;
 
-typedef enum BgWallType {
+typedef enum WallType {
     /*  0 */ BG_WALL_TYPE_0,
     /*  1 */ BG_WALL_TYPE_1,
     /*  2 */ BG_WALL_TYPE_2,
@@ -140,7 +140,7 @@ typedef enum BgWallType {
     /* 11 */ BG_WALL_TYPE_11,
     /* 12 */ BG_WALL_TYPE_12,
     /* 32 */ BG_WALL_TYPE_MAX = 32
-} BgWallType;
+} WallType;
 
 #define WALL_FLAG_0 (1 << 0)
 #define WALL_FLAG_1 (1 << 1)
@@ -150,7 +150,7 @@ typedef enum BgWallType {
 #define WALL_FLAG_5 (1 << 5)
 #define WALL_FLAG_6 (1 << 6)
 
-typedef enum BgFloorProperty{
+typedef enum FloorProperty {
     /*  0 */ BG_FLOOR_PROPERTY_0,
     /*  1 */ BG_FLOOR_PROPERTY_1,
     /*  2 */ BG_FLOOR_PROPERTY_2,
@@ -162,9 +162,9 @@ typedef enum BgFloorProperty{
     /* 11 */ BG_FLOOR_PROPERTY_11 = 11,
     /* 12 */ BG_FLOOR_PROPERTY_12,
     /* 13 */ BG_FLOOR_PROPERTY_13
-} BgFloorProperty;
+} FloorProperty;
 
-typedef enum {
+typedef enum SurfaceSfxOffset {
     /*  0 */ SURFACE_SFX_OFFSET_DIRT,
     /*  1 */ SURFACE_SFX_OFFSET_SAND,
     /*  2 */ SURFACE_SFX_OFFSET_STONE,
@@ -183,7 +183,7 @@ typedef enum {
     /* 15 */ SURFACE_SFX_OFFSET_ICE
 } SurfaceSfxOffset;
 
-typedef enum {
+typedef enum SurfaceMaterial {
     /*  0 */ SURFACE_MATERIAL_DIRT,
     /*  1 */ SURFACE_MATERIAL_SAND,
     /*  2 */ SURFACE_MATERIAL_STONE,
@@ -202,20 +202,20 @@ typedef enum {
     /* 15 */ SURFACE_MATERIAL_MAX
 } SurfaceMaterial;
 
-typedef enum BgFloorEffect {
+typedef enum FloorEffect {
     /* 0 */ FLOOR_EFFECT_0,
     /* 1 */ FLOOR_EFFECT_1,
     /* 2 */ FLOOR_EFFECT_2,
     /* 3 */ FLOOR_EFFECT_3
-} BgFloorEffect;
+} FloorEffect;
 
-typedef enum BgConveyorSpeed {
+typedef enum ConveyorSpeed {
     /* 0 */ BG_CONVEYOR_SPEED_DISABLED,
     /* 1 */ BG_CONVEYOR_SPEED_SLOW,
     /* 2 */ BG_CONVEYOR_SPEED_MEDIUM,
     /* 3 */ BG_CONVEYOR_SPEED_FAST,
     /* 4 */ BG_CONVEYOR_SPEED_MAX
-} BgConveyorSpeed;
+} ConveyorSpeed;
 
 typedef struct {
     /* 0x0 */ u32 data[2];

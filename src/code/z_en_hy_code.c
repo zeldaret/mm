@@ -250,7 +250,7 @@ void EnHy_UpdateCollider(EnHy* enHy, PlayState* play) {
 s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
     u8 wasLeftFootOnGround = enHy->isLeftFootOnGround;
     u8 wasRightFootOnGround = enHy->isRightFootOnGround;
-    s32 surfaceSfxOffset;
+    SurfaceSfxOffset surfaceSfxOffset;
     u16 sfxId;
     u8 isFootOnGround;
 
