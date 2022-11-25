@@ -478,8 +478,8 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     if (this->actor.floorPoly != NULL) {
         floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if (floorType != BG_FLOOR_TYPE_5) {
-            if ((floorType == BG_FLOOR_TYPE_15) || (floorType == BG_FLOOR_TYPE_14)) {
+        if (floorType != FLOOR_TYPE_5) {
+            if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                 phi_s1 = &D_809942EC;
                 phi_s6 = Rand_ZeroFloat(150.0f) + 350.0f;
                 arg2 += 2;

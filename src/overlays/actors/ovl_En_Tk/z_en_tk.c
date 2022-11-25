@@ -1313,7 +1313,7 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 0.0f, 5);
 
     if ((this->unk_2B0 == 0) && (SurfaceType_GetFloorProperty(&play->colCtx, this->actor.floorPoly,
-                                                              this->actor.floorBgId) == BG_FLOOR_PROPERTY_12)) {
+                                                              this->actor.floorBgId) == FLOOR_PROPERTY_12)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
         this->unk_2CA |= 0x200;
         this->actor.velocity.y = 0.0f;

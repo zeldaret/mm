@@ -518,9 +518,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
             if (onGround) {
                 floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-                if ((floorType == BG_FLOOR_TYPE_15) || (floorType == BG_FLOOR_TYPE_14)) {
+                if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                     this->unk_197 = 1;
-                } else if (floorType == BG_FLOOR_TYPE_5) {
+                } else if (floorType == FLOOR_TYPE_5) {
                     this->unk_197 = -1;
                 }
 

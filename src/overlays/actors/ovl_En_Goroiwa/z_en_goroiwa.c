@@ -1455,7 +1455,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                 if (tmp != NULL) {
                     floorType = SurfaceType_GetFloorType(&play->colCtx, tmp, this->actor.floorBgId);
 
-                    if ((floorType == BG_FLOOR_TYPE_14) || (floorType == BG_FLOOR_TYPE_15)) {
+                    if ((floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                         if (!(this->unk_1E5 & 0x40)) {
                             sp50.x = this->actor.world.pos.x;
                             sp50.y = this->actor.floorHeight;

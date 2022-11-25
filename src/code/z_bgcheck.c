@@ -7,15 +7,15 @@
 #define DYNA_RAYCAST_WALLS 2
 #define DYNA_RAYCAST_CEILINGS 4
 
-u32 sWallFlags[BG_WALL_TYPE_MAX] = {
-    0,                         // BG_WALL_TYPE_0
-    WALL_FLAG_0,               // BG_WALL_TYPE_1
-    WALL_FLAG_0 | WALL_FLAG_1, // BG_WALL_TYPE_2
-    WALL_FLAG_0 | WALL_FLAG_2, // BG_WALL_TYPE_3
-    WALL_FLAG_3,               // BG_WALL_TYPE_4
-    WALL_FLAG_4,               // BG_WALL_TYPE_5
-    WALL_FLAG_5,               // BG_WALL_TYPE_6
-    WALL_FLAG_6,               // BG_WALL_TYPE_7
+u32 sWallFlags[WALL_TYPE_MAX] = {
+    0,                         // WALL_TYPE_0
+    WALL_FLAG_0,               // WALL_TYPE_1
+    WALL_FLAG_0 | WALL_FLAG_1, // WALL_TYPE_2
+    WALL_FLAG_0 | WALL_FLAG_2, // WALL_TYPE_3
+    WALL_FLAG_3,               // WALL_TYPE_4
+    WALL_FLAG_4,               // WALL_TYPE_5
+    WALL_FLAG_5,               // WALL_TYPE_6
+    WALL_FLAG_6,               // WALL_TYPE_7
 };
 
 u16 sSurfaceMaterialToSfxOffset[SURFACE_MATERIAL_MAX] = {

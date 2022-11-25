@@ -630,7 +630,7 @@ s32 func_80A24954(ObjIceblock* this, PlayState* play) {
         this->unk_2B0 = 3;
     } else if (this->unk_1B0 & 4) {
         if (SurfaceType_GetFloorType(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) ==
-            BG_FLOOR_TYPE_5) {
+            FLOOR_TYPE_5) {
             func_80A25FA0(this);
             this->unk_2B0 = 2;
         } else {

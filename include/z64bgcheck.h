@@ -107,39 +107,39 @@ typedef struct {
 } WaterBox; // size = 0x10
 
 typedef enum FloorType {
-    /*  0 */ BG_FLOOR_TYPE_0,
-    /*  1 */ BG_FLOOR_TYPE_1,
-    /*  2 */ BG_FLOOR_TYPE_2,
-    /*  3 */ BG_FLOOR_TYPE_3,
-    /*  4 */ BG_FLOOR_TYPE_4,
-    /*  5 */ BG_FLOOR_TYPE_5,
-    /*  6 */ BG_FLOOR_TYPE_6,
-    /*  7 */ BG_FLOOR_TYPE_7,
-    /*  8 */ BG_FLOOR_TYPE_8,
-    /*  9 */ BG_FLOOR_TYPE_9,
-    /* 10 */ BG_FLOOR_TYPE_10,
-    /* 11 */ BG_FLOOR_TYPE_11,
-    /* 12 */ BG_FLOOR_TYPE_12,
-    /* 13 */ BG_FLOOR_TYPE_13,
-    /* 14 */ BG_FLOOR_TYPE_14,
-    /* 15 */ BG_FLOOR_TYPE_15
+    /*  0 */ FLOOR_TYPE_0,
+    /*  1 */ FLOOR_TYPE_1,
+    /*  2 */ FLOOR_TYPE_2,
+    /*  3 */ FLOOR_TYPE_3,
+    /*  4 */ FLOOR_TYPE_4,
+    /*  5 */ FLOOR_TYPE_5,
+    /*  6 */ FLOOR_TYPE_6,
+    /*  7 */ FLOOR_TYPE_7,
+    /*  8 */ FLOOR_TYPE_8,
+    /*  9 */ FLOOR_TYPE_9,
+    /* 10 */ FLOOR_TYPE_10,
+    /* 11 */ FLOOR_TYPE_11,
+    /* 12 */ FLOOR_TYPE_12,
+    /* 13 */ FLOOR_TYPE_13,
+    /* 14 */ FLOOR_TYPE_14,
+    /* 15 */ FLOOR_TYPE_15
 } FloorType;
 
 typedef enum WallType {
-    /*  0 */ BG_WALL_TYPE_0,
-    /*  1 */ BG_WALL_TYPE_1,
-    /*  2 */ BG_WALL_TYPE_2,
-    /*  3 */ BG_WALL_TYPE_3,
-    /*  4 */ BG_WALL_TYPE_4,
-    /*  5 */ BG_WALL_TYPE_5,
-    /*  6 */ BG_WALL_TYPE_6,
-    /*  7 */ BG_WALL_TYPE_7,
-    /*  8 */ BG_WALL_TYPE_8,
-    /*  9 */ BG_WALL_TYPE_9,
-    /* 10 */ BG_WALL_TYPE_10,
-    /* 11 */ BG_WALL_TYPE_11,
-    /* 12 */ BG_WALL_TYPE_12,
-    /* 32 */ BG_WALL_TYPE_MAX = 32
+    /*  0 */ WALL_TYPE_0,
+    /*  1 */ WALL_TYPE_1,
+    /*  2 */ WALL_TYPE_2,
+    /*  3 */ WALL_TYPE_3,
+    /*  4 */ WALL_TYPE_4,
+    /*  5 */ WALL_TYPE_5,
+    /*  6 */ WALL_TYPE_6,
+    /*  7 */ WALL_TYPE_7,
+    /*  8 */ WALL_TYPE_8,
+    /*  9 */ WALL_TYPE_9,
+    /* 10 */ WALL_TYPE_10,
+    /* 11 */ WALL_TYPE_11,
+    /* 12 */ WALL_TYPE_12,
+    /* 32 */ WALL_TYPE_MAX = 32
 } WallType;
 
 #define WALL_FLAG_0 (1 << 0)
@@ -151,17 +151,17 @@ typedef enum WallType {
 #define WALL_FLAG_6 (1 << 6)
 
 typedef enum FloorProperty {
-    /*  0 */ BG_FLOOR_PROPERTY_0,
-    /*  1 */ BG_FLOOR_PROPERTY_1,
-    /*  2 */ BG_FLOOR_PROPERTY_2,
-    /*  5 */ BG_FLOOR_PROPERTY_5 = 5,
-    /*  6 */ BG_FLOOR_PROPERTY_6,
-    /*  7 */ BG_FLOOR_PROPERTY_7,
-    /*  8 */ BG_FLOOR_PROPERTY_8,
-    /*  9 */ BG_FLOOR_PROPERTY_9,
-    /* 11 */ BG_FLOOR_PROPERTY_11 = 11,
-    /* 12 */ BG_FLOOR_PROPERTY_12,
-    /* 13 */ BG_FLOOR_PROPERTY_13
+    /*  0 */ FLOOR_PROPERTY_0,
+    /*  1 */ FLOOR_PROPERTY_1,
+    /*  2 */ FLOOR_PROPERTY_2,
+    /*  5 */ FLOOR_PROPERTY_5 = 5,
+    /*  6 */ FLOOR_PROPERTY_6,
+    /*  7 */ FLOOR_PROPERTY_7,
+    /*  8 */ FLOOR_PROPERTY_8,
+    /*  9 */ FLOOR_PROPERTY_9,
+    /* 11 */ FLOOR_PROPERTY_11 = 11,
+    /* 12 */ FLOOR_PROPERTY_12,
+    /* 13 */ FLOOR_PROPERTY_13
 } FloorProperty;
 
 typedef enum SurfaceSfxOffset {
@@ -210,11 +210,11 @@ typedef enum FloorEffect {
 } FloorEffect;
 
 typedef enum ConveyorSpeed {
-    /* 0 */ BG_CONVEYOR_SPEED_DISABLED,
-    /* 1 */ BG_CONVEYOR_SPEED_SLOW,
-    /* 2 */ BG_CONVEYOR_SPEED_MEDIUM,
-    /* 3 */ BG_CONVEYOR_SPEED_FAST,
-    /* 4 */ BG_CONVEYOR_SPEED_MAX
+    /* 0 */ CONVEYOR_SPEED_DISABLED,
+    /* 1 */ CONVEYOR_SPEED_SLOW,
+    /* 2 */ CONVEYOR_SPEED_MEDIUM,
+    /* 3 */ CONVEYOR_SPEED_FAST,
+    /* 4 */ CONVEYOR_SPEED_MAX
 } ConveyorSpeed;
 
 typedef struct {

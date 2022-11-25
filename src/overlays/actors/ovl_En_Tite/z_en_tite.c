@@ -196,7 +196,7 @@ void func_80893A18(EnTite* this) {
 
 s32 func_80893A34(EnTite* this, PlayState* play) {
     if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & 1) &&
-        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == BG_FLOOR_TYPE_5)) {
+        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_TYPE_5)) {
         return true;
     }
     return false;

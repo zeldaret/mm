@@ -1090,7 +1090,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
         if (this->poly != NULL) {
             FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->poly, this->polyBgId);
 
-            if ((floorType == BG_FLOOR_TYPE_5) || (floorType == BG_FLOOR_TYPE_14) || (floorType == BG_FLOOR_TYPE_15)) {
+            if ((floorType == FLOOR_TYPE_5) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                 sp44 = 1;
             }
         }

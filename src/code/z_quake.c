@@ -483,7 +483,7 @@ ConveyorSpeed Distortion_GetUnderwaterCurrentSpeed(Player* player) {
         return SurfaceType_GetConveyorSpeed(&sDistortionRequest.play->colCtx, player->actor.floorPoly,
                                             player->actor.floorBgId);
     }
-    return BG_CONVEYOR_SPEED_DISABLED;
+    return CONVEYOR_SPEED_DISABLED;
 }
 
 void Distortion_Update(void) {
@@ -709,21 +709,21 @@ void Distortion_Update(void) {
             rotZ = 0.3f;
 
             switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
-                case BG_CONVEYOR_SPEED_FAST:
+                case CONVEYOR_SPEED_FAST:
                     xScale = -0.06f;
                     yScale = 0.1f;
                     zScale = 0.03f;
                     speed = 0.33f;
                     break;
 
-                case BG_CONVEYOR_SPEED_MEDIUM:
+                case CONVEYOR_SPEED_MEDIUM:
                     xScale = -0.06f;
                     yScale = 0.1f;
                     zScale = 0.03f;
                     speed = 0.33f;
                     break;
 
-                case BG_CONVEYOR_SPEED_SLOW:
+                case CONVEYOR_SPEED_SLOW:
                     xScale = -0.06f;
                     yScale = 0.1f;
                     zScale = 0.03f;
@@ -759,21 +759,21 @@ void Distortion_Update(void) {
             rotY = 0.0f;
             rotZ = 0.0f;
             switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
-                case BG_CONVEYOR_SPEED_FAST:
+                case CONVEYOR_SPEED_FAST:
                     xScale = 0.12f;
                     yScale = 0.12f;
                     zScale = 0.08f;
                     speed = 0.18f;
                     break;
 
-                case BG_CONVEYOR_SPEED_MEDIUM:
+                case CONVEYOR_SPEED_MEDIUM:
                     xScale = 0.12f;
                     yScale = 0.12f;
                     zScale = 0.08f;
                     speed = 0.12f;
                     break;
 
-                case BG_CONVEYOR_SPEED_SLOW:
+                case CONVEYOR_SPEED_SLOW:
                     xScale = 0.12f;
                     yScale = 0.12f;
                     zScale = 0.08f;

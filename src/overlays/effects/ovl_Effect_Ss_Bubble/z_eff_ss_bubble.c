@@ -23,9 +23,9 @@ const EffectSsInit Effect_Ss_Bubble_InitVars = {
 };
 
 static f32 sVecAdjMaximums[] = {
-    291.0f,  // BG_CONVEYOR_SPEED_SLOW
-    582.0f,  // BG_CONVEYOR_SPEED_MEDIUM
-    1600.0f, // BG_CONVEYOR_SPEED_FAST
+    291.0f,  // CONVEYOR_SPEED_SLOW
+    582.0f,  // CONVEYOR_SPEED_MEDIUM
+    1600.0f, // CONVEYOR_SPEED_FAST
 };
 
 u32 EffectSsBubble_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
@@ -95,7 +95,7 @@ void EffectSsBubble_Update(PlayState* play2, u32 index, EffectSs* this) {
 
         BgCheck_EntityRaycastFloor2_1(play, &play->colCtx, &colPoly, &this->pos);
         conveyorSpeed = SurfaceType_GetConveyorSpeed(&play->colCtx, colPoly, BGCHECK_SCENE);
-        if ((conveyorSpeed != BG_CONVEYOR_SPEED_DISABLED) &&
+        if ((conveyorSpeed != CONVEYOR_SPEED_DISABLED) &&
             !SurfaceType_IsFloorConveyor(&play->colCtx, colPoly, BGCHECK_SCENE)) {
             conveyorDir = SurfaceType_GetConveyorDirection(&play->colCtx, colPoly, BGCHECK_SCENE) << 10;
             rVecAdjMax = sVecAdjMaximums[conveyorSpeed - 1];
