@@ -98,7 +98,7 @@ void KaleidoSetup_Update(PlayState* play) {
                         (gSaveContext.magicState != MAGIC_STATE_FILL)) {
                         if (!CHECK_EVENTINF(EVENTINF_17) && !(player->stateFlags1 & PLAYER_STATE1_20)) {
                             if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
-                                !(play->actorCtx.flags & ACTORCTX_FLAG_PICTOGRAPH_ON)) {
+                                !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
                                     gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
                                     pauseCtx->itemDescriptionOn = false;

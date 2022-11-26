@@ -8,11 +8,11 @@
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
 
 typedef enum {
-    /* 0 */ PICTO_STATE_OFF,         // Not using the pictograph
-    /* 1 */ PICTO_STATE_LENS,        // Looking through the lens of the pictograph
-    /* 2 */ PICTO_STATE_SETUP_PHOTO, // Looking at the photo currently taken
-    /* 3 */ PICTO_STATE_PHOTO
-} PictoState;
+    /* 0 */ PICTO_BOX_STATE_OFF,         // Not using the pictograph
+    /* 1 */ PICTO_BOX_STATE_LENS,        // Looking through the lens of the pictograph
+    /* 2 */ PICTO_BOX_STATE_SETUP_PHOTO, // Looking at the photo currently taken
+    /* 3 */ PICTO_BOX_STATE_PHOTO
+} PictoBoxState;
 
 typedef struct {
     /* 0x00 */ u8 scene;
@@ -146,7 +146,7 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_ALLEY, SET_RESTRICTIONS(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) },
 };
 
-s16 sPictoState = PICTO_STATE_OFF;
+s16 sPictoState = PICTO_BOX_STATE_OFF;
 s16 sPictoPhotoBeingTaken = false;
 
 s16 sHBAScoreTier = 0; // Remnant of OoT, non-functional
@@ -2680,7 +2680,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                     magicToConsume = 0;
                 }
                 gSaveContext.magicToConsume = magicToConsume;
@@ -2699,7 +2699,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                     magicToConsume = 0;
                 }
                 gSaveContext.magicToConsume = magicToConsume;
@@ -2775,7 +2775,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (gSaveContext.magicState == MAGIC_STATE_CONSUME_LENS) {
                     play->actorCtx.lensActive = false;
                 }
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                     magicToConsume = 0;
                 }
                 gSaveContext.save.playerData.magic -= magicToConsume;
@@ -2863,7 +2863,7 @@ void Magic_Update(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s16 magicCapacityTarget;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
         Magic_FlashMeterBorder();
     }
 
@@ -2913,7 +2913,7 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME:
             // Consume magic until target is reached or no more magic is available
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 gSaveContext.save.playerData.magic =
                     ((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
                 if (gSaveContext.save.playerData.magic <= 0) {
@@ -2926,7 +2926,7 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_METER_FLASH_1:
         case MAGIC_STATE_METER_FLASH_2:
         case MAGIC_STATE_METER_FLASH_3:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -2960,19 +2960,19 @@ void Magic_Update(PlayState* play) {
 
                 interfaceCtx->magicConsumptionTimer--;
                 if (interfaceCtx->magicConsumptionTimer == 0) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                         gSaveContext.save.playerData.magic--;
                     }
                     interfaceCtx->magicConsumptionTimer = 80;
                 }
             }
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 Magic_FlashMeterBorder();
             }
             break;
 
         case MAGIC_STATE_CONSUME_GORON_ZORA_SETUP:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 gSaveContext.save.playerData.magic -= 2;
             }
             if (gSaveContext.save.playerData.magic <= 0) {
@@ -2987,7 +2987,7 @@ void Magic_Update(PlayState* play) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
-                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                             gSaveContext.save.playerData.magic--;
                         }
                         if (gSaveContext.save.playerData.magic <= 0) {
@@ -2997,7 +2997,7 @@ void Magic_Update(PlayState* play) {
                     }
                 }
             }
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -3009,7 +3009,7 @@ void Magic_Update(PlayState* play) {
                 if (!Play_InCsMode(play)) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
-                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                             gSaveContext.save.playerData.magic--;
                         }
                         if (gSaveContext.save.playerData.magic <= 0) {
@@ -3019,7 +3019,7 @@ void Magic_Update(PlayState* play) {
                     }
                 }
             }
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 Magic_FlashMeterBorder();
             }
             break;
@@ -3075,7 +3075,7 @@ void Magic_DrawMeter(PlayState* play) {
 
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 // Blue magic
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
@@ -3089,7 +3089,7 @@ void Magic_DrawMeter(PlayState* play) {
                 (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             // Fill the whole meter with the normal magic color
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEUR_ROMANI)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                 // Blue magic
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 200, interfaceCtx->magicAlpha);
             } else {
@@ -5324,7 +5324,7 @@ void Interface_Draw(PlayState* play) {
     }
 
     // Draw pictograph focus icons
-    if (sPictoState == PICTO_STATE_LENS) {
+    if (sPictoState == PICTO_BOX_STATE_LENS) {
 
         func_8012C654(play->state.gfxCtx);
 
@@ -5367,22 +5367,22 @@ void Interface_Draw(PlayState* play) {
     }
 
     // Draw pictograph photo
-    if (sPictoState >= PICTO_STATE_SETUP_PHOTO) {
-        if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTOGRAPH_ON)) {
+    if (sPictoState >= PICTO_BOX_STATE_SETUP_PHOTO) {
+        if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
             Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
                                 (u8*)gSaveContext.pictoPhotoI5, PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
 
             interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
 
-            sPictoState = PICTO_STATE_OFF;
+            sPictoState = PICTO_BOX_STATE_OFF;
             gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
             Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
         } else {
             s16 pictoRectTop;
             s16 pictoRectLeft;
 
-            if (sPictoState == PICTO_STATE_SETUP_PHOTO) {
-                sPictoState = PICTO_STATE_PHOTO;
+            if (sPictoState == PICTO_BOX_STATE_SETUP_PHOTO) {
+                sPictoState = PICTO_BOX_STATE_PHOTO;
                 Message_StartTextbox(play, 0xF8, NULL);
                 Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 player->stateFlags1 |= PLAYER_STATE1_200;
@@ -5667,12 +5667,12 @@ void Interface_Update(PlayState* play) {
 
     // Update minigame State
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
-        if (interfaceCtx->minigameState) { // != MINIGAME_STATE_NONE
+        if ((u32)interfaceCtx->minigameState != MINIGAME_STATE_NONE) {
             switch (interfaceCtx->minigameState) {
-                case MINIGAME_STATE_COUNTDOWN_SETUP_3:  // minigame countdown 3
-                case MINIGAME_STATE_COUNTDOWN_SETUP_2:  // minigame countdown 2
-                case MINIGAME_STATE_COUNTDOWN_SETUP_1:  // minigame countdown 1
-                case MINIGAME_STATE_COUNTDOWN_SETUP_GO: // minigame countdown Go!
+                case MINIGAME_STATE_COUNTDOWN_SETUP_3:
+                case MINIGAME_STATE_COUNTDOWN_SETUP_2:
+                case MINIGAME_STATE_COUNTDOWN_SETUP_1:
+                case MINIGAME_STATE_COUNTDOWN_SETUP_GO:
                     interfaceCtx->minigameCountdownAlpha = 255;
                     interfaceCtx->minigameCountdownScale = 100;
                     interfaceCtx->minigameState++;
@@ -6032,7 +6032,7 @@ void Interface_Init(PlayState* play) {
         }
     }
 
-    sPictoState = PICTO_STATE_OFF;
+    sPictoState = PICTO_BOX_STATE_OFF;
     sPictoPhotoBeingTaken = false;
 
     if ((play->sceneId != SCENE_MITURIN_BS) && (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_SEA_BS) &&
