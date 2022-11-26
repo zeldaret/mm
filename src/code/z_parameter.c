@@ -5077,12 +5077,12 @@ void Interface_Draw(PlayState* play) {
         func_8012C654(play->state.gfxCtx);
 
         // Draw Rupee Icon
-        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sRupeeCounterIconPrimColors[CUR_UPG_VALUE(4)].r,
-                        sRupeeCounterIconPrimColors[CUR_UPG_VALUE(4)].g,
-                        sRupeeCounterIconPrimColors[CUR_UPG_VALUE(4)].b, interfaceCtx->magicAlpha);
-        gDPSetEnvColor(OVERLAY_DISP++, sRupeeCounterIconEnvColors[CUR_UPG_VALUE(4)].r,
-                       sRupeeCounterIconEnvColors[CUR_UPG_VALUE(4)].g, sRupeeCounterIconEnvColors[CUR_UPG_VALUE(4)].b,
-                       255);
+        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sRupeeCounterIconPrimColors[CUR_UPG_VALUE(UPG_WALLET)].r,
+                        sRupeeCounterIconPrimColors[CUR_UPG_VALUE(UPG_WALLET)].g,
+                        sRupeeCounterIconPrimColors[CUR_UPG_VALUE(UPG_WALLET)].b, interfaceCtx->magicAlpha);
+        gDPSetEnvColor(OVERLAY_DISP++, sRupeeCounterIconEnvColors[CUR_UPG_VALUE(UPG_WALLET)].r,
+                       sRupeeCounterIconEnvColors[CUR_UPG_VALUE(UPG_WALLET)].g,
+                       sRupeeCounterIconEnvColors[CUR_UPG_VALUE(UPG_WALLET)].b, 255);
         OVERLAY_DISP =
             Gfx_DrawTexRectIA8(OVERLAY_DISP, gRupeeCounterIconTex, 16, 16, 26, 206, 16, 16, 1 << 10, 1 << 10);
 
