@@ -23,7 +23,6 @@ typedef struct {
 
 Input sPostmanTimerInput[4];
 
-// TODO: Not finalized way to handle these restrictions via macros
 #define RESTRICTIONS_TABLE_END 0xFF
 
 #define RESTRICTIONS_GET_BITS(flags, s) (((flags) & (3 << (s))) >> (s))
