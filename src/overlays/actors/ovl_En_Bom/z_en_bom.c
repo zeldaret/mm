@@ -283,8 +283,7 @@ void func_80871058(EnBom* this, PlayState* play) {
         if (this->actor.bgCheckFlags & 2) {
             Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
-                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) ||
-                    (floorType == FLOOR_TYPE_15)) {
+                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
                     this->actor.velocity.y = this->actor.velocity.y * sp58->z;
@@ -394,8 +393,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
                 floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, spAC);
                 temp_f20 = BgCheck_EntityRaycastFloor1(&play->colCtx, &spB0, &spB4);
 
-                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_15) ||
-                    (floorType == FLOOR_TYPE_14)) {
+                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                     if (floorType == FLOOR_TYPE_4) {
                         sp84 = D_80872E90;
                         sp80 = D_80872E90;
