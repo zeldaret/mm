@@ -1837,7 +1837,7 @@ u8 Item_Give(PlayState* play, u8 item) {
 
     } else if ((item >= ITEM_SWORD_KOKIRI) && (item <= ITEM_SWORD_GILDED)) {
         SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, item - ITEM_SWORD_KOKIRI + EQUIP_VALUE_SWORD_KOKIRI);
-        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = item;
+        CUR_FORM_EQUIP(EQUIP_SLOT_B) = item;
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
         if (item == ITEM_SWORD_RAZOR) {
             gSaveContext.save.playerData.swordHealth = 100;
@@ -2431,12 +2431,12 @@ void Inventory_UpdateDeitySwordEquip(PlayState* play) {
         if ((((gSaveContext.save.playerForm > 0) && (gSaveContext.save.playerForm < 4))
                  ? 1
                  : gSaveContext.save.playerForm >> 1) == 0) {
-            BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_DEITY;
-        } else if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
+            CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_DEITY;
+        } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
             if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
-                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
+                CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
             } else {
-                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) =
+                CUR_FORM_EQUIP(EQUIP_SLOT_B) =
                     GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) - EQUIP_VALUE_SWORD_KOKIRI + ITEM_SWORD_KOKIRI;
             }
         }
@@ -5978,22 +5978,21 @@ void Interface_Init(PlayState* play) {
 
     interfaceCtx->iconItemSegment = THA_AllocEndAlign16(&play->state.heap, 0x4000);
 
-    if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) < 0xF0) {
+    if (CUR_FORM_EQUIP(EQUIP_SLOT_B) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-    } else if ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) &&
-               (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_FD)) {
+    } else if ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_NONE) && (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_FD)) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
     }
 
-    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) < 0xF0) {
+    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_LEFT);
     }
 
-    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) < 0xF0) {
+    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_DOWN);
     }
 
-    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) < 0xF0) {
+    if (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) < ITEM_F0) {
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_C_RIGHT);
     }
 
