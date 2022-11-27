@@ -194,12 +194,12 @@ typedef struct {
         /* 0x30F */ u8 bButton;
         /* 0x310 */ u8 aButton;
         /* 0x311 */ u8 tradeItems;
-        /* 0x312 */ u8 unk_312;
-        /* 0x313 */ u8 unk_313;
-        /* 0x314 */ u8 unk_314;
+        /* 0x312 */ u8 songOfTime;
+        /* 0x313 */ u8 SongOfDoubleTime;
+        /* 0x314 */ u8 invSongOfTime;
         /* 0x315 */ u8 songOfSoaring;
         /* 0x316 */ u8 songOfStorms;
-        /* 0x317 */ u8 unk_317;
+        /* 0x317 */ u8 masks;
         /* 0x318 */ u8 pictographBox;
         /* 0x319 */ u8 all;     // "another"; enables all item restrictions
     } restrictions; // size = 0xC
