@@ -195,7 +195,7 @@ typedef struct {
         /* 0x310 */ u8 aButton;
         /* 0x311 */ u8 tradeItems;
         /* 0x312 */ u8 songOfTime;
-        /* 0x313 */ u8 SongOfDoubleTime;
+        /* 0x313 */ u8 songOfDoubleTime;
         /* 0x314 */ u8 invSongOfTime;
         /* 0x315 */ u8 songOfSoaring;
         /* 0x316 */ u8 songOfStorms;

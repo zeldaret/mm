@@ -24,15 +24,18 @@ typedef struct {
 Input sPostmanTimerInput[4];
 
 // TODO: Not finalized way to handle these restrictions via macros
-#define RESTRICTIONS_SET(hGauge, bButton, aButton, tradeItems, songOfTime, SongOfDoubleTime, invSongOfTime, \
+#define RESTRICTIONS_SET(hGauge, bButton, aButton, tradeItems, songOfTime, songOfDoubleTime, invSongOfTime, \
                          songOfSoaring, songOfStorms, masks, pictoBox, all)                                 \
     ((((hGauge)&3) << 6) | (((bButton)&3) << 4) | (((aButton)&3) << 2) | (((tradeItems)&3) << 0)),          \
-        ((((songOfTime)&3) << 6) | (((SongOfDoubleTime)&3) << 4) | (((invSongOfTime)&3) << 2) |             \
+        ((((songOfTime)&3) << 6) | (((songOfDoubleTime)&3) << 4) | (((invSongOfTime)&3) << 2) |             \
          (((songOfSoaring)&3) << 0)),                                                                       \
         ((((songOfStorms)&3) << 6) | (((masks)&3) << 4) | (((pictoBox)&3) << 2) | (((all)&3) << 0))
 
+// Common patterns
 #define RESTRICTIONS_NONE RESTRICTIONS_SET(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+#define RESTRICTIONS_INDOORS RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1)
 #define RESTRICTIONS_MOON RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0)
+#define RESTRICTIONS_NO_DOUBLE_TIME RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0)
 
 RestrictionFlags sRestrictionFlags[] = {
     { SCENE_20SICHITAI2, RESTRICTIONS_NONE },
@@ -45,20 +48,20 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_KAKUSIANA, RESTRICTIONS_NONE },
     { SCENE_SPOT00, RESTRICTIONS_NONE },
     { SCENE_UNSET_9, RESTRICTIONS_NONE },
-    { SCENE_WITCH_SHOP, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_WITCH_SHOP, RESTRICTIONS_INDOORS },
     { SCENE_LAST_BS, RESTRICTIONS_MOON },
     { SCENE_HAKASHITA, RESTRICTIONS_NONE },
-    { SCENE_AYASHIISHOP, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_AYASHIISHOP, RESTRICTIONS_INDOORS },
     { SCENE_UNSET_E, RESTRICTIONS_NONE },
     { SCENE_UNSET_F, RESTRICTIONS_NONE },
     { SCENE_OMOYA, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0) },
-    { SCENE_BOWLING, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_SONCHONOIE, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_BOWLING, RESTRICTIONS_INDOORS },
+    { SCENE_SONCHONOIE, RESTRICTIONS_INDOORS },
     { SCENE_IKANA, RESTRICTIONS_NONE },
     { SCENE_KAIZOKU, RESTRICTIONS_NONE },
-    { SCENE_MILK_BAR, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_MILK_BAR, RESTRICTIONS_INDOORS },
     { SCENE_INISIE_N, RESTRICTIONS_NONE },
-    { SCENE_TAKARAYA, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_TAKARAYA, RESTRICTIONS_INDOORS },
     { SCENE_INISIE_R, RESTRICTIONS_NONE },
     { SCENE_OKUJOU, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0) },
     { SCENE_OPENINGDAN, RESTRICTIONS_NONE },
@@ -67,15 +70,15 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_CASTLE, RESTRICTIONS_NONE },
     { SCENE_DEKUTES, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1) },
     { SCENE_MITURIN_BS, RESTRICTIONS_NONE },
-    { SCENE_SYATEKI_MIZU, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_SYATEKI_MIZU, RESTRICTIONS_INDOORS },
     { SCENE_HAKUGIN, RESTRICTIONS_NONE },
     { SCENE_ROMANYMAE, RESTRICTIONS_NONE },
     { SCENE_PIRATE, RESTRICTIONS_NONE },
-    { SCENE_SYATEKI_MORI, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_SYATEKI_MORI, RESTRICTIONS_INDOORS },
     { SCENE_SINKAI, RESTRICTIONS_NONE },
     { SCENE_YOUSEI_IZUMI, RESTRICTIONS_NONE },
-    { SCENE_KINSTA1, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
-    { SCENE_KINDAN2, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
+    { SCENE_KINSTA1, RESTRICTIONS_NO_DOUBLE_TIME },
+    { SCENE_KINDAN2, RESTRICTIONS_NO_DOUBLE_TIME },
     { SCENE_TENMON_DAI, RESTRICTIONS_SET(0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0) },
     { SCENE_LAST_DEKU, RESTRICTIONS_MOON },
     { SCENE_22DEKUCITY, RESTRICTIONS_NONE },
@@ -83,7 +86,7 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_00KEIKOKU, RESTRICTIONS_NONE },
     { SCENE_POSTHOUSE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
     { SCENE_LABO, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_DANPEI2TEST, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
+    { SCENE_DANPEI2TEST, RESTRICTIONS_NO_DOUBLE_TIME },
     { SCENE_UNSET_31, RESTRICTIONS_NONE },
     { SCENE_16GORON_HOUSE, RESTRICTIONS_NONE },
     { SCENE_33ZORACITY, RESTRICTIONS_SET(0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0) },
@@ -96,12 +99,12 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_UNSET_3A, RESTRICTIONS_NONE },
     { SCENE_TORIDE, RESTRICTIONS_NONE },
     { SCENE_FISHERMAN, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_GORONSHOP, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_GORONSHOP, RESTRICTIONS_INDOORS },
     { SCENE_DEKU_KING, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0) },
     { SCENE_LAST_GORON, RESTRICTIONS_MOON },
     { SCENE_24KEMONOMITI, RESTRICTIONS_NONE },
-    { SCENE_F01_B, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
-    { SCENE_F01C, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
+    { SCENE_F01_B, RESTRICTIONS_NO_DOUBLE_TIME },
+    { SCENE_F01C, RESTRICTIONS_NO_DOUBLE_TIME },
     { SCENE_BOTI, RESTRICTIONS_NONE },
     { SCENE_HAKUGIN_BS, RESTRICTIONS_NONE },
     { SCENE_20SICHITAI, RESTRICTIONS_NONE },
@@ -117,12 +120,12 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_SECOM, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 0, 3, 0, 0, 0) },
     { SCENE_10YUKIYAMANOMURA, RESTRICTIONS_NONE },
     { SCENE_TOUGITES, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0) },
-    { SCENE_DANPEI, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
+    { SCENE_DANPEI, RESTRICTIONS_NO_DOUBLE_TIME },
     { SCENE_IKANAMAE, RESTRICTIONS_NONE },
     { SCENE_DOUJOU, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
     { SCENE_MUSICHOUSE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0) },
     { SCENE_IKNINSIDE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 3, 0, 0, 0) },
-    { SCENE_MAP_SHOP, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_MAP_SHOP, RESTRICTIONS_INDOORS },
     { SCENE_F40, RESTRICTIONS_NONE },
     { SCENE_F41, RESTRICTIONS_NONE },
     { SCENE_10YUKIYAMANOMURA2, RESTRICTIONS_NONE },
@@ -132,16 +135,16 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_17SETUGEN2, RESTRICTIONS_NONE },
     { SCENE_SEA_BS, RESTRICTIONS_NONE },
     { SCENE_RANDOM, RESTRICTIONS_NONE },
-    { SCENE_YADOYA, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_YADOYA, RESTRICTIONS_INDOORS },
     { SCENE_KONPEKI_ENT, RESTRICTIONS_NONE },
     { SCENE_INSIDETOWER, RESTRICTIONS_SET(0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0) },
-    { SCENE_26SARUNOMORI, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
+    { SCENE_26SARUNOMORI, RESTRICTIONS_NO_DOUBLE_TIME },
     { SCENE_LOST_WOODS, RESTRICTIONS_NONE },
     { SCENE_LAST_LINK, RESTRICTIONS_MOON },
     { SCENE_SOUGEN, RESTRICTIONS_MOON },
-    { SCENE_BOMYA, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
+    { SCENE_BOMYA, RESTRICTIONS_INDOORS },
     { SCENE_KYOJINNOMA, RESTRICTIONS_NONE },
-    { SCENE_KOEPONARACE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0) },
+    { SCENE_KOEPONARACE, RESTRICTIONS_NO_DOUBLE_TIME },
     { SCENE_GORONRACE, RESTRICTIONS_NONE },
     { SCENE_TOWN, RESTRICTIONS_NONE },
     { SCENE_ICHIBA, RESTRICTIONS_NONE },
@@ -1756,7 +1759,7 @@ void Interface_SetSceneRestrictions(PlayState* play) {
             interfaceCtx->restrictions.aButton = (sRestrictionFlags[i].flags1 & 0x0C) >> 2;
             interfaceCtx->restrictions.tradeItems = (sRestrictionFlags[i].flags1 & 0x03) >> 0;
             interfaceCtx->restrictions.songOfTime = (sRestrictionFlags[i].flags2 & 0xC0) >> 6;
-            interfaceCtx->restrictions.SongOfDoubleTime = (sRestrictionFlags[i].flags2 & 0x30) >> 4;
+            interfaceCtx->restrictions.songOfDoubleTime = (sRestrictionFlags[i].flags2 & 0x30) >> 4;
             interfaceCtx->restrictions.invSongOfTime = (sRestrictionFlags[i].flags2 & 0x0C) >> 2;
             interfaceCtx->restrictions.songOfSoaring = (sRestrictionFlags[i].flags2 & 0x03) >> 0;
             interfaceCtx->restrictions.songOfStorms = (sRestrictionFlags[i].flags3 & 0xC0) >> 6;
