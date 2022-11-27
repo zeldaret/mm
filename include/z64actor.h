@@ -533,7 +533,6 @@ typedef enum {
 #define DROPFLAG_20     (1 << 5)
 
 #define COLORFILTER_GET_COLORFLAG(colorFilterParams) ((colorFilterParams) & 0xC000)
-#define COLORFILTER_GET_BUFFLAG(colorFilterParams) ((colorFilterParams) & 0x2000)
 #define COLORFILTER_GET_COLORINTENSITY(colorFilterParams) (((colorFilterParams) & 0x1F00) >> 5)
 #define COLORFILTER_GET_DURATION(colorFilterParams) ((colorFilterParams) & 0xFF)
 

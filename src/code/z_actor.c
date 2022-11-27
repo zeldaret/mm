@@ -2591,7 +2591,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
             actorDefaultHitColor.b = COLORFILTER_GET_COLORINTENSITY(actor->colorFilterParams) | 7;
         }
 
-        if (COLORFILTER_GET_BUFFLAG(actor->colorFilterParams)) {
+        if (actor->colorFilterParams & COLORFILTER_BUFFLAG_XLU) {
             func_800AE778(play, &actorDefaultHitColor, actor->colorFilterTimer,
                           COLORFILTER_GET_DURATION(actor->colorFilterParams));
         } else {
@@ -2603,7 +2603,7 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     actor->draw(actor, play);
 
     if (actor->colorFilterTimer != 0) {
-        if (COLORFILTER_GET_BUFFLAG(actor->colorFilterParams)) {
+        if (actor->colorFilterParams & COLORFILTER_BUFFLAG_XLU) {
             func_800AE8EC(play);
         } else {
             func_800AE5A0(play);
