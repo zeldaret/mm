@@ -196,7 +196,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
-            } else if (player->itemActionParam == PLAYER_AP_STICK) {
+            } else if (player->heldItemAction == PLAYER_IA_STICK) {
                 Vec3f stickTipSeparationVec;
 
                 Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);

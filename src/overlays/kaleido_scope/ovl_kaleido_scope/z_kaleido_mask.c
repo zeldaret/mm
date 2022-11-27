@@ -208,7 +208,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
             if (GET_CUR_FORM_BTN_SLOT(i + 1) >= NUM_ITEM_SLOTS) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j], 4, 0);
-                POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
+                POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
             }
         }
     }

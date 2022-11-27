@@ -1,4 +1,3 @@
-#include "ultra64.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
@@ -7368,9 +7367,9 @@ s32 Camera_UpdateWater(Camera* camera) {
 
 void Camera_EarthquakeDay3(Camera* camera) {
     static s16 sEarthquakeTimer = 0;
-    u16 dayTime;
+    u16 time;
     s16 quake;
-    s32 daySpeed;
+    s32 timeSpeedOffset;
     s16 sEarthquakeFreq[] = {
         0xFFC, // 1 Large Earthquake  between CLOCK_TIME(0, 00) to CLOCK_TIME(1, 30)
         0x7FC, // 2 Large Earthquakes between CLOCK_TIME(1, 30) to CLOCK_TIME(3, 00)
@@ -7379,31 +7378,31 @@ void Camera_EarthquakeDay3(Camera* camera) {
     };
 
     if ((CURRENT_DAY == 3) && (ActorCutscene_GetCurrentIndex() == -1)) {
-        dayTime = gSaveContext.save.time;
-        daySpeed = gSaveContext.save.daySpeed;
+        time = gSaveContext.save.time;
+        timeSpeedOffset = gSaveContext.save.timeSpeedOffset;
 
         // Large earthquake created
         // Times based on sEarthquakeFreq
-        if ((dayTime > CLOCK_TIME(0, 0)) && (dayTime < CLOCK_TIME(6, 0)) &&
-            ((sEarthquakeFreq[dayTime >> 12] & dayTime) == 0) && (Quake_NumActiveQuakes() < 2)) {
+        if ((time > CLOCK_TIME(0, 0)) && (time < CLOCK_TIME(6, 0)) && ((sEarthquakeFreq[time >> 12] & time) == 0) &&
+            (Quake_NumActiveQuakes() < 2)) {
             quake = Quake_Add(camera, 4);
             if (quake != 0) {
                 Quake_SetSpeed(quake, 30000);
-                Quake_SetQuakeValues(quake, (dayTime >> 12) + 2, 1, 5, 60);
-                sEarthquakeTimer = ((dayTime >> 10) - daySpeed) + 80;
+                Quake_SetQuakeValues(quake, (time >> 12) + 2, 1, 5, 60);
+                sEarthquakeTimer = ((time >> 10) - timeSpeedOffset) + 80;
                 Quake_SetCountdown(quake, sEarthquakeTimer);
             }
         }
 
         // Small earthquake created
         // Around CLOCK_TIME(17, 33) || Around CLOCK_TIME(20, 33) || Every 1024 frames (around every 51s)
-        if (((((dayTime + 0x4D2) & 0xDFFC) == 0xC000) || ((camera->play->state.frames % 1024) == 0)) &&
+        if (((((time + 0x4D2) & 0xDFFC) == 0xC000) || ((camera->play->state.frames % 1024) == 0)) &&
             (Quake_NumActiveQuakes() < 2)) {
             quake = Quake_Add(camera, 3);
             if (quake != 0) {
                 Quake_SetSpeed(quake, 16000);
-                Quake_SetQuakeValues(quake, 1, 0, 0, dayTime & 0x3F); // %64
-                sEarthquakeTimer = 120 - daySpeed;
+                Quake_SetQuakeValues(quake, 1, 0, 0, time & 0x3F); // %64
+                sEarthquakeTimer = 120 - timeSpeedOffset;
                 Quake_SetCountdown(quake, sEarthquakeTimer);
             }
         }

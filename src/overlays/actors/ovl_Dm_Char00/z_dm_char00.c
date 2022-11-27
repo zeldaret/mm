@@ -912,7 +912,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
     DmChar00* this = THIS;
     s32 phi_a0;
     s32 pad;
-    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, sizeof(Gfx) * 4);
+    Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
 
     if ((play->csCtx.state == 0) &&
         ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||
