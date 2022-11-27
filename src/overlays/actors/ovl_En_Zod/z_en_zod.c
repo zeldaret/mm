@@ -244,6 +244,9 @@ void EnZod_UpdateInstruments(EnZod* this) {
                     this->cymbalRotVels[i] = -1000;
                 }
                 break;
+
+            default:
+                break;
         }
     }
 
