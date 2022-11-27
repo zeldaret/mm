@@ -24,6 +24,35 @@ typedef struct {
 Input sPostmanTimerInput[4];
 
 // TODO: Not finalized way to handle these restrictions via macros
+#define RESTRICTIONS_TABLE_END 0xFF
+
+#define RESTRICTIONS_GET_BITS(flags, s) (((flags) & (3 << (s))) >> (s))
+
+// does nothing
+#define RESTRICTIONS_GET_HGAUGE(flags) RESTRICTIONS_GET_BITS((flags)->flags1, 6)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_B_BUTTON(flags) RESTRICTIONS_GET_BITS((flags)->flags1, 4)
+// does nothing
+#define RESTRICTIONS_GET_A_BUTTON(flags) RESTRICTIONS_GET_BITS((flags)->flags1, 2)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_TRADE_ITEMS(flags) RESTRICTIONS_GET_BITS((flags)->flags1, 0)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_SONG_OF_TIME(flags) RESTRICTIONS_GET_BITS((flags)->flags2, 6)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_SONG_OF_DOUBLE_TIME(flags) RESTRICTIONS_GET_BITS((flags)->flags2, 4)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_INV_SONG_OF_TIME(flags) RESTRICTIONS_GET_BITS((flags)->flags2, 2)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_SONG_OF_SOARING(flags) RESTRICTIONS_GET_BITS((flags)->flags2, 0)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_SONG_OF_STORMS(flags) RESTRICTIONS_GET_BITS((flags)->flags3, 6)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_MASKS(flags) RESTRICTIONS_GET_BITS((flags)->flags3, 4)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_PICTO_BOX(flags) RESTRICTIONS_GET_BITS((flags)->flags3, 2)
+// 0 = usable, !0 = unusable
+#define RESTRICTIONS_GET_ALL(flags) RESTRICTIONS_GET_BITS((flags)->flags3, 0)
+
 #define RESTRICTIONS_SET(hGauge, bButton, aButton, tradeItems, songOfTime, songOfDoubleTime, invSongOfTime, \
                          songOfSoaring, songOfStorms, masks, pictoBox, all)                                 \
     ((((hGauge)&3) << 6) | (((bButton)&3) << 4) | (((aButton)&3) << 2) | (((tradeItems)&3) << 0)),          \
@@ -151,7 +180,10 @@ RestrictionFlags sRestrictionFlags[] = {
     { SCENE_BACKTOWN, RESTRICTIONS_NONE },
     { SCENE_CLOCKTOWER, RESTRICTIONS_NONE },
     { SCENE_ALLEY, RESTRICTIONS_NONE },
+    // { RESTRICTIONS_TABLE_END, RESTRICTIONS_NONE }, // See note below
 };
+//! @note: in `Interface_SetSceneRestrictions`, `RESTRICTIONS_TABLE_END` act as a terminating value to
+// stop looping through the array. If a scene is missing, then this will cause issues.
 
 s16 sPictoState = PICTO_BOX_STATE_OFF;
 s16 sPictoPhotoBeingTaken = false;
@@ -1754,22 +1786,22 @@ void Interface_SetSceneRestrictions(PlayState* play) {
     do {
         currentScene = (u8)play->sceneId;
         if (currentScene == sRestrictionFlags[i].scene) {
-            interfaceCtx->restrictions.hGauge = (sRestrictionFlags[i].flags1 & 0xC0) >> 6;
-            interfaceCtx->restrictions.bButton = (sRestrictionFlags[i].flags1 & 0x30) >> 4;
-            interfaceCtx->restrictions.aButton = (sRestrictionFlags[i].flags1 & 0x0C) >> 2;
-            interfaceCtx->restrictions.tradeItems = (sRestrictionFlags[i].flags1 & 0x03) >> 0;
-            interfaceCtx->restrictions.songOfTime = (sRestrictionFlags[i].flags2 & 0xC0) >> 6;
-            interfaceCtx->restrictions.songOfDoubleTime = (sRestrictionFlags[i].flags2 & 0x30) >> 4;
-            interfaceCtx->restrictions.invSongOfTime = (sRestrictionFlags[i].flags2 & 0x0C) >> 2;
-            interfaceCtx->restrictions.songOfSoaring = (sRestrictionFlags[i].flags2 & 0x03) >> 0;
-            interfaceCtx->restrictions.songOfStorms = (sRestrictionFlags[i].flags3 & 0xC0) >> 6;
-            interfaceCtx->restrictions.masks = (sRestrictionFlags[i].flags3 & 0x30) >> 4;
-            interfaceCtx->restrictions.pictographBox = (sRestrictionFlags[i].flags3 & 0x0C) >> 2;
-            interfaceCtx->restrictions.all = (sRestrictionFlags[i].flags3 & 0x03) >> 0;
+            interfaceCtx->restrictions.hGauge = RESTRICTIONS_GET_HGAUGE(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.bButton = RESTRICTIONS_GET_B_BUTTON(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.aButton = RESTRICTIONS_GET_A_BUTTON(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.tradeItems = RESTRICTIONS_GET_TRADE_ITEMS(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.songOfTime = RESTRICTIONS_GET_SONG_OF_TIME(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.songOfDoubleTime = RESTRICTIONS_GET_SONG_OF_DOUBLE_TIME(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.invSongOfTime = RESTRICTIONS_GET_INV_SONG_OF_TIME(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.songOfSoaring = RESTRICTIONS_GET_SONG_OF_SOARING(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.songOfStorms = RESTRICTIONS_GET_SONG_OF_STORMS(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.masks = RESTRICTIONS_GET_MASKS(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.pictoBox = RESTRICTIONS_GET_PICTO_BOX(&sRestrictionFlags[i]);
+            interfaceCtx->restrictions.all = RESTRICTIONS_GET_ALL(&sRestrictionFlags[i]);
             break;
         }
         i++;
-    } while (sRestrictionFlags[i].scene != 0xFF);
+    } while (sRestrictionFlags[i].scene != RESTRICTIONS_TABLE_END);
 }
 
 void Interface_Noop(void) {
