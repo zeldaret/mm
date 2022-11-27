@@ -501,7 +501,7 @@ typedef union {
     /* Command: N/A  */ SCmdBase              base;
     /* Command: 0x00 */ SCmdSpawnList         spawnList;
     /* Command: 0x01 */ SCmdActorList         actorList;
-    /* Command: 0x02 */ SCmdCsCameraList      actorCsCamList; // TODO: rename SCmdCsCameraList
+    /* Command: 0x02 */ SCmdCsCameraList      actorCsCamList;
     /* Command: 0x03 */ SCmdColHeader         colHeader;
     /* Command: 0x04 */ SCmdRoomList          roomList;
     /* Command: 0x05 */ SCmdWindSettings      windSettings;

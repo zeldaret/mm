@@ -299,6 +299,7 @@ wordReplace = {
     "func_800B90F4": "Actor_DeactivateLens",
     "func_800BC770": "Actor_AddQuake",
     "func_800DF840": "Camera_ChangeMode",
+    "Camera_SetToTrackActor": "Camera_SetFocalActor",
     "zelda_malloc": "ZeldaArena_Malloc",
     "zelda_mallocR": "ZeldaArena_MallocR",
     "zelda_realloc": "ZeldaArena_Realloc",

@@ -64,7 +64,7 @@ Vec3f D_801EDDF0;
 
 // Camera will reload its paramData. Usually that means setting the read-only data from what is stored in
 // CameraModeValue arrays. Although sometimes some read-write data is reset as well
-#define RELOAD_PARAMS(camera) (camera->animState == 0 || camera->animState == 10 || camera->animState == 20)
+#define RELOAD_PARAMS(camera) ((camera->animState == 0) || (camera->animState == 10) || (camera->animState == 20))
 
 /**
  * Camera data is stored in both read-only data and OREG as s16, and then converted to the appropriate type during
@@ -541,7 +541,6 @@ s32 func_800CBC30(Camera* camera, f32 waterYMax, f32 waterYMin) {
     }
 }
 
-// OoT func_80043F94
 s32 func_800CBC84(Camera* camera, Vec3f* from, CameraCollision* to, s32 arg3) {
     CollisionContext* colCtx = &camera->play->colCtx;
     Vec3f toNewPos;
@@ -603,7 +602,6 @@ s32 func_800CBC84(Camera* camera, Vec3f* from, CameraCollision* to, s32 arg3) {
     return floorBgId + 1;
 }
 
-// OoT func_80044340
 void func_800CBFA4(Camera* camera, Vec3f* arg1, Vec3f* arg2, s32 arg3) {
     CameraCollision sp20;
     s32 pad;
@@ -878,7 +876,6 @@ void func_800CC938(Camera* camera) {
  * Calculates the angle between points `from` and `to`
  */
 s16 Camera_CalcXZAngle(Vec3f* to, Vec3f* from) {
-    // Math_FAtan2F in OoT
     return CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(from->x - to->x, from->z - to->z)));
 }
 
@@ -1202,7 +1199,7 @@ Vec3f* Camera_BgCheckCorner(Vec3f* dst, Vec3f* linePointA, Vec3f* linePointB, Ca
  * eyeNext->at, then eye->at is also checked.
  * Returns:
  * 0 if no collsion is found between at->eyeNext
- * 2 if the angle between the polys is between 60 degrees and 120 degrees
+ * 1 if the angle between the polys is between 60 degrees and 120 degrees
  * 3 ?
  * 6 if the angle between the polys is greater than 120 degrees
  */
@@ -1238,6 +1235,7 @@ s32 func_800CD44C(Camera* camera, VecSph* diffSph, CameraCollision* camEyeCollis
         eyeAtBgId = Camera_BgCheckInfo(camera, &camera->eye, camAtCollision);
 
         if (eyeAtBgId == 0) {
+            // no collision from eyeNext->at
             if (checkEye & 1) {
                 memcpy(camAtCollision, &camCollision, sizeof(CameraCollision));
             } else {
@@ -1246,6 +1244,7 @@ s32 func_800CD44C(Camera* camera, VecSph* diffSph, CameraCollision* camEyeCollis
         }
 
         if (camEyeCollision->poly == camAtCollision->poly) {
+            // at->eyeNext and eyeNext->at is the same poly
             return 3;
         }
 
@@ -1256,6 +1255,7 @@ s32 func_800CD44C(Camera* camera, VecSph* diffSph, CameraCollision* camEyeCollis
         }
 
         if (atEyeBgId != eyeAtBgId) {
+            // different bgIds for at->eye[Next] and eye[Next]->at
             ret = 3;
         } else {
             cosEyeAt = Math3D_Parallel(&camEyeCollision->norm, &camAtCollision->norm);
@@ -1421,7 +1421,6 @@ s32 Camera_CalcLookAtForParallel(Camera* camera, VecSph* arg1, f32 yOffset, f32 
     VecSph focalActorAtOffsetTargetSph;
 
     // Calculate the `focalActorAtOffsetTarget`
-    // More involved in calculating `posOffsetTarget` compared to OoT
     if (flags & 0x40) {
         focalActorAtOffsetTargetSph.r = func_800CCCEC(camera, flags & 0x10);
         focalActorAtOffsetTargetSph.yaw = focalActorPosRot->rot.y + 0x4000;
@@ -1779,7 +1778,7 @@ s16 Camera_CalcDefaultPitch(Camera* camera, s16 pitch, s16 flatSurfacePitchTarge
     s16 pitchTarget;
 
     // if slopePitchAdj is positive, then it is attenuated by a factor of Math_CosS(slopePitchAdj)
-    slopePitchAdjAttenuated = slopePitchAdj > 0 ? (s16)(Math_CosS(slopePitchAdj) * slopePitchAdj) : slopePitchAdj;
+    slopePitchAdjAttenuated = (slopePitchAdj > 0) ? (s16)(Math_CosS(slopePitchAdj) * slopePitchAdj) : slopePitchAdj;
     pitchTarget = flatSurfacePitchTarget - slopePitchAdjAttenuated;
 
     if (ABS(pitchTarget) < pitchMag) {
@@ -2481,7 +2480,7 @@ s32 Camera_Normal3(Camera* camera) {
     }
 
     sp90 = ((camera->speedRatio * 3.0f) + 1.0f) * 0.25f * 0.5f;
-    sp8C = (temp_f2 = camera->speedRatio * 0.2f);
+    sp8C = temp_f2 = camera->speedRatio * 0.2f;
 
     if (D_801EDC30[camera->camId].timer != 0) {
         camera->yawUpdateRateInv = Camera_ScaledStepToCeilF(
@@ -2514,7 +2513,7 @@ s32 Camera_Normal3(Camera* camera) {
     OLib_Vec3fDiffToVecSphGeo(&sp80, at, eyeNext);
     temp_f2 = Camera_ClampDist1(camera, sp80.r, roData->distMin, roData->distMax, rwData->distTimer);
 
-    phi_f2 = ((sp88 - temp_f2));
+    phi_f2 = sp88 - temp_f2;
     phi_f2 *= 0.002f;
     camera->dist = sp80.r = temp_f2 + phi_f2;
 
@@ -2703,7 +2702,6 @@ s32 Camera_Normal0(Camera* camera) {
     camera->pitchUpdateRateInv = Camera_ScaledStepToCeilF(16.0f, camera->pitchUpdateRateInv, spA0, 0.1f);
     camera->yOffsetUpdateRate = Camera_ScaledStepToCeilF(0.05f, camera->yOffsetUpdateRate, spA4, 0.0001f);
     camera->xzOffsetUpdateRate = Camera_ScaledStepToCeilF(0.05f, camera->xzOffsetUpdateRate, spA0, 0.0001f);
-    // TODO: 0.05 instead of 0.05f?
     camera->fovUpdateRate = Camera_ScaledStepToCeilF(0.05, camera->fovUpdateRate, camera->speedRatio * 0.05f, 0.0001f);
 
     if (!(roData->interfaceFlags & NORMAL0_FLAG_7)) {
@@ -7160,9 +7158,6 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, PlayState
     sCameraInitSceneTimer = 3;
 }
 
-/**
- * OoT: func_80057FC4
- */
 void func_800DDFE0(Camera* camera) {
     if (camera != &camera->play->mainCamera) {
         camera->prevSetting = camera->setting = CAM_SET_FREE0;
@@ -7485,6 +7480,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
     Actor* focalActor = camera->focalActor;
     VecSph sp3C;
     s16 bgCamIndex;
+    s16 numQuakesApplied;
     f32 focalActorFloorHeight;
 
     // Camera of status CUT only updates to this point
@@ -7673,10 +7669,11 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
      * This section is about updating view structs from the active camera,
      * which view uses to calculate the viewing/projection matrices
      */
+    numQuakesApplied = Quake_Calc(camera, &quake);
 
-    // Set view at, eye, fov
-    bgId = Quake_Calc(camera, &quake);
-    if (bgId != 0) {
+    bgId = numQuakesApplied; // required to match
+
+    if (numQuakesApplied != 0) {
         viewAt.x = camera->at.x + quake.atOffset.x;
         viewAt.y = camera->at.y + quake.atOffset.y;
         viewAt.z = camera->at.z + quake.atOffset.z;
@@ -7687,7 +7684,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         Camera_CalcUpVec(&viewUp, sp3C.pitch, sp3C.yaw, camera->roll + quake.rollOffset);
         viewFov = camera->fov + CAM_BINANG_TO_DEG(quake.zoom);
     } else if (sIsFalse) {
-        //! @bug: Condition is impossible to achieve
+        //! condition is impossible to achieve
         viewAt = camera->at;
         viewEye = camera->eye;
         OLib_Vec3fDiffToVecSphGeo(&sp3C, &viewEye, &viewAt);
