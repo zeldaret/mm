@@ -341,7 +341,7 @@ asm/non_matchings/code/z_actor/func_800BA2D8.s,func_800BA2D8,0x800BA2D8,0x9
 asm/non_matchings/code/z_actor/func_800BA2FC.s,func_800BA2FC,0x800BA2FC,0x4C
 asm/non_matchings/code/z_actor/Actor_DrawAll.s,Actor_DrawAll,0x800BA42C,0xB4
 asm/non_matchings/code/z_actor/Actor_KillAllWithMissingObject.s,Actor_KillAllWithMissingObject,0x800BA6FC,0x27
-asm/non_matchings/code/z_actor/Actor_KillAllFromUnloadedRooms.s,Actor_KillAllFromUnloadedRooms,0x800BA798,0x48
+asm/non_matchings/code/z_actor/func_800BA798.s,func_800BA798,0x800BA798,0x48
 asm/non_matchings/code/z_actor/Actor_KillAllOnHalfDayChange.s,Actor_KillAllOnHalfDayChange,0x800BA8B8,0x3F
 asm/non_matchings/code/z_actor/Actor_CleanupContext.s,Actor_CleanupContext,0x800BA9B4,0x40
 asm/non_matchings/code/z_actor/Actor_AddToCategory.s,Actor_AddToCategory,0x800BAAB4,0x1C

@@ -827,7 +827,7 @@
     0x800BA2FC:("func_800BA2FC",),
     0x800BA42C:("Actor_DrawAll",),
     0x800BA6FC:("Actor_KillAllWithMissingObject",),
-    0x800BA798:("Actor_KillAllFromUnloadedRooms",),
+    0x800BA798:("func_800BA798",),
     0x800BA8B8:("Actor_KillAllOnHalfDayChange",),
     0x800BA9B4:("Actor_CleanupContext",),
     0x800BAAB4:("Actor_AddToCategory",),

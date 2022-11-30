@@ -2936,7 +2936,7 @@ void Actor_KillAllWithMissingObject(PlayState* play, ActorContext* actorCtx) {
 /**
  * Kill actors on room change and update flags accordingly
  */
-void Actor_KillAllFromUnloadedRooms(PlayState* play, ActorContext* actorCtx) {
+void func_800BA798(PlayState* play, ActorContext* actorCtx) {
     Actor* actor;
     s32 i;
 
