@@ -1,9 +1,9 @@
 ﻿<Root>
     <File Name="object_ah" Segment="6">
-        <Animation Name="object_ah_Anim_000968" Offset="0x968" />
-        <Animation Name="object_ah_Anim_000DDC" Offset="0xDDC" />
-        <Animation Name="object_ah_Anim_001860" Offset="0x1860" />
-        <Animation Name="object_ah_Anim_002280" Offset="0x2280" />
+        <Animation Name="object_ah_Anim_000968" Offset="0x968" /> <!-- Original name is "ah_deteike" (probably based on her Japanese dialogue, where she tells Kafei to "get out") -->
+        <Animation Name="object_ah_Anim_000DDC" Offset="0xDDC" /> <!-- Original name is "ah_suwari" ("sitting") -->
+        <Animation Name="object_ah_Anim_001860" Offset="0x1860" /> <!-- Original name is "ah_wait" -->
+        <Animation Name="object_ah_Anim_002280" Offset="0x2280" /> <!-- Original name is "ah_wait2deteike" -->
         <DList Name="object_ah_DL_004A60" Offset="0x4A60" />
         <DList Name="object_ah_DL_004B70" Offset="0x4B70" />
         <DList Name="object_ah_DL_004C80" Offset="0x4C80" />
@@ -53,6 +53,6 @@
         <Limb Name="object_ah_Standardlimb_009E0C" Type="Standard" EnumName="OBJECT_AH_LIMB_0E" Offset="0x9E0C" />
         <Limb Name="object_ah_Standardlimb_009E18" Type="Standard" EnumName="OBJECT_AH_LIMB_0F" Offset="0x9E18" />
         <Limb Name="object_ah_Standardlimb_009E24" Type="Standard" EnumName="OBJECT_AH_LIMB_10" Offset="0x9E24" />
-        <Skeleton Name="object_ah_Skel_009E70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AH_LIMB_NONE" LimbMax="OBJECT_AH_LIMB_MAX" EnumName="object_ah_Limbs" Offset="0x9E70" />
+        <Skeleton Name="object_ah_Skel_009E70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AH_LIMB_NONE" LimbMax="OBJECT_AH_LIMB_MAX" EnumName="ObjectAhLimb" Offset="0x9E70" />
     </File>
 </Root>

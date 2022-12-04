@@ -17,7 +17,7 @@ void EnDrs_Draw(Actor* thisx, PlayState* play);
 
 void EnDrs_Idle(EnDrs* this, PlayState* play);
 
-const ActorInit En_Drs_InitVars = {
+ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
     ACTORCAT_PROP,
     FLAGS,
@@ -51,7 +51,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
+static AnimationInfoS sAnimationInfo = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
 void EnDrs_CollisionUpdate(EnDrs* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -65,7 +65,7 @@ void EnDrs_Setup(EnDrs* this, PlayState* play) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
                            this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimationInfo, 0);
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
         Actor_SetScale(&this->actor, 0.01f);
@@ -108,7 +108,7 @@ void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
-    if (!(gSaveContext.save.weekEventReg[87] & 2) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_02) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
         OPEN_DISPS(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);

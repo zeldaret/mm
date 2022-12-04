@@ -69,7 +69,7 @@ static u8 D_80AEF800[] = {
     /* 0xE */ SCHEDULE_CMD_RET_NONE(),
 };
 
-const ActorInit En_Tk_InitVars = {
+ActorInit En_Tk_InitVars = {
     ACTOR_EN_TK,
     ACTORCAT_NPC,
     FLAGS,
@@ -209,11 +209,11 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
 
     if (Flags_GetSwitch(play, this->unk_2B1)) {
         if (this->unk_2B0 == 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->unk_2B0 == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -252,7 +252,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     switch (this->unk_2B0) {
         case 4:
             if (D_80AF0050 != 0) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             D_80AF0050 = 1;
@@ -271,7 +271,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
     }
 }
@@ -323,8 +323,8 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
         return;
     }
 
-    if (REG(15) != 0.0f) {
-        this->skelAnime.playSpeed = (f32)func_800FE620(play) / REG(15);
+    if (R_TIME_SPEED != 0.0f) {
+        this->skelAnime.playSpeed = (f32)func_800FE620(play) / R_TIME_SPEED;
     } else {
         this->skelAnime.playSpeed = 0.0f;
     }
@@ -337,14 +337,14 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
         func_80AEC658(&this->skelAnime, this->unk_320, 1.0f, &sp48, &sp44);
     }
 
-    temp2 = REG(15) * sp44;
+    temp2 = R_TIME_SPEED * sp44;
     temp_f0 = temp2;
 
-    this->unk_2DC += (REG(15) * sp44) - temp2;
+    this->unk_2DC += (R_TIME_SPEED * sp44) - temp2;
     temp3 = this->unk_2DC;
     this->timePathTimeSpeed = temp2 + temp3;
     this->unk_2DC -= temp3;
-    this->unk_2E0 += REG(15);
+    this->unk_2E0 += R_TIME_SPEED;
 
     if (Schedule_RunScript(play, D_80AEF800, &sp34)) {
         if ((this->unk_3CC != sp34.result) && !func_80AED354(this, play, &sp34)) {
@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, EXCH_ITEM_NONE, 0x4000, 0x4000);
+        func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -535,9 +535,9 @@ void func_80AED4F8(EnTk* this, PlayState* play) {
 }
 
 void func_80AED544(EnTk* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[31] & 0x10)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_10)) {
         Message_StartTextbox(play, 0x13FE, &this->actor);
-        gSaveContext.save.weekEventReg[31] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_31_10);
     } else if (gSaveContext.save.time < CLOCK_TIME(9, 0)) {
         Message_StartTextbox(play, 0x13FF, &this->actor);
     } else if (gSaveContext.save.time < CLOCK_TIME(12, 0)) {
@@ -564,7 +564,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
                     func_80AED544(this, play);
                 } else if (!Flags_GetSwitch(play, ENTK_GET_7F0(&this->actor))) {
                     Message_StartTextbox(play, 0x1403, &this->actor);
-                } else if (gSaveContext.save.weekEventReg[60] & 2) {
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_02)) {
                     func_80AED544(this, play);
                 } else {
                     Message_StartTextbox(play, 0x1413, &this->actor);
@@ -595,7 +595,7 @@ void func_80AED610(EnTk* this, PlayState* play) {
 
                     case 0x1413:
                         Rupees_ChangeBy(30);
-                        gSaveContext.save.weekEventReg[60] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_60_02);
                         func_80151938(play, 0x13FF);
                         break;
 
@@ -657,7 +657,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
         }
 
         Math_Vec3f_Copy(&sp44, &player->actor.world.pos);
-        sp44.y = player->bodyPartsPos[7].y + 3.0f;
+        sp44.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         temp_v0 = Math_Vec3f_Pitch(&this->actor.focus.pos, &sp44);
         if (ABS(temp_v0) < 0x800) {
             Math_SmoothStepToS(&this->unk_31A, temp_v0, 3, 0x16C, 0);
@@ -679,7 +679,7 @@ void func_80AED940(EnTk* this, PlayState* play) {
                 if (ENTK_GET_F(actor) == 1) {
                     Math_Vec3f_Copy(&this->unk_2EC, &actor->world.pos);
                     Math_Vec3s_Copy(&this->unk_2F8, &actor->world.rot);
-                    Actor_MarkForDeath(actor);
+                    Actor_Kill(actor);
                     this->unk_2CA |= 0x40;
                     break;
                 }
@@ -696,10 +696,10 @@ void func_80AED940(EnTk* this, PlayState* play) {
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, EXCH_ITEM_NONE, 0x4000, 0x4000);
+            func_8013E8F8(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
         }
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
     }
 }
 
@@ -735,7 +735,7 @@ void func_80AEDD4C(EnTk* this, PlayState* play) {
     if (this->unk_2E8 <= 0) {
         ActorCutscene_Stop(this->cutscenes[1]);
         func_801477B4(play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -758,7 +758,7 @@ void func_80AEDE10(EnTk* this, PlayState* play) {
             switch (this->unk_310) {
                 case 0:
                     this->unk_2CA &= ~0x1000;
-                    if (!(gSaveContext.save.weekEventReg[52] & 0x80)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_80)) {
                         this->unk_2E6 = 0x1405;
                     } else {
                         this->unk_2E6 = 0x140B;
@@ -863,7 +863,7 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                         break;
 
                     case 0x140A:
-                        gSaveContext.save.weekEventReg[52] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_52_80);
 
                     case 0x140B:
                         func_80AEE784(this, play);
@@ -928,11 +928,12 @@ void func_80AEE374(EnTk* this, PlayState* play) {
 
     SubS_FindActorCustom(play, &this->actor, NULL, ACTORCAT_NPC, ACTOR_EN_TK, &sp30, func_80AEE300);
     if (sp30.unk_00 == 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
-        this->actionFunc = func_80AEE414;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->unk_2CC = Actor_YawToPoint(&this->actor, &sp30.unk_00->world.pos);
+    this->actionFunc = func_80AEE414;
 }
 
 void func_80AEE414(EnTk* this, PlayState* play) {

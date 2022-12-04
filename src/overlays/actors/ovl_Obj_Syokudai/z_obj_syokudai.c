@@ -15,10 +15,10 @@
 
 void ObjSyokudai_Init(Actor* thisx, PlayState* play);
 void ObjSyokudai_Destroy(Actor* thisx, PlayState* play);
-void ObjSyokudai_Update(Actor* thisx, PlayState* play);
+void ObjSyokudai_Update(Actor* thisx, PlayState* play2);
 void ObjSyokudai_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Syokudai_InitVars = {
+ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
     ACTORCAT_PROP,
     FLAGS,
@@ -196,7 +196,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
-            } else if (player->itemActionParam == PLAYER_AP_STICK) {
+            } else if (player->heldItemAction == PLAYER_IA_STICK) {
                 Vec3f stickTipSeparationVec;
 
                 Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
@@ -254,8 +254,8 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                                 OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) + OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS;
                         }
                     }
-                    Audio_PlaySfxGeneral(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                         &gSfxDefaultReverb);
+                    AudioSfx_PlaySfx(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &gSfxDefaultFreqAndVolScale,
+                                     &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
                 }
             }
         }
@@ -315,8 +315,9 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
         Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - thisx->shape.rot.y), MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
+
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -23,7 +23,7 @@ void func_80AF6944(EnGamelupy* this);
 void func_80AF6994(EnGamelupy* this);
 void func_80AF6A38(EnGamelupy* this);
 
-const ActorInit En_Gamelupy_InitVars = {
+ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
     ACTORCAT_PROP,
     FLAGS,
@@ -55,9 +55,8 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-static TexturePtr sRupeeTex[] = {
-    gameplay_keep_Tex_061FC0, gameplay_keep_Tex_061FE0, gameplay_keep_Tex_062000,
-    gameplay_keep_Tex_062040, gameplay_keep_Tex_062020,
+static TexturePtr sRupeeTextures[] = {
+    gRupeeGreenTex, gRupeeBlueTex, gRupeeRedTex, gRupeeOrangeTex, gRupeePurpleTex,
 };
 
 static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
@@ -150,7 +149,7 @@ void func_80AF6A78(EnGamelupy* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->unk_19C > 30) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->unk_19C++;
         this->actor.world.pos = player->actor.world.pos;
@@ -185,8 +184,8 @@ void EnGamelupy_Draw(Actor* thisx, PlayState* play) {
     func_8012C28C(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTex[this->rupeeIndex]));
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTextures[this->rupeeIndex]));
+    gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

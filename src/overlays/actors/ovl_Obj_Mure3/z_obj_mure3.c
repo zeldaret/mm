@@ -14,12 +14,14 @@ void ObjMure3_Init(Actor* thisx, PlayState* play);
 void ObjMure3_Destroy(Actor* thisx, PlayState* play);
 void ObjMure3_Update(Actor* thisx, PlayState* play);
 
+void func_8098F598(ObjMure3* this);
 void func_8098F5AC(ObjMure3* this, PlayState* play);
+void func_8098F5D0(ObjMure3* this);
 void func_8098F5E4(ObjMure3* this, PlayState* play);
+void func_8098F66C(ObjMure3* this);
 void func_8098F680(ObjMure3* this, PlayState* play);
 
-#if 0
-const ActorInit Obj_Mure3_InitVars = {
+ActorInit Obj_Mure3_InitVars = {
     ACTOR_OBJ_MURE3,
     ACTORCAT_BG,
     FLAGS,
@@ -31,41 +33,168 @@ const ActorInit Obj_Mure3_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_8098F748[] = {
+static s16 sRupeeCounts[] = { 5, 5, 7, 0 };
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 1800, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-#endif
+void func_8098F040(ObjMure3* this, PlayState* play) {
+    s32 i;
+    Vec3f spawnPos;
 
-extern InitChainEntry D_8098F748[];
+    Math_Vec3f_Copy(&spawnPos, &this->actor.world.pos);
+    for (i = 0; i < 5; i++, spawnPos.y += 20.0f) {
+        if (!((this->unk164 >> i) & 1)) {
+            this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x10001);
+            if (this->unk148[i] != NULL) {
+                this->unk148[i]->actor.room = this->actor.room;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F040.s")
+void func_8098F110(ObjMure3* this, PlayState* play) {
+    s32 i;
+    Vec3f spawnPos;
+    f32 sin = Math_SinS(this->actor.world.rot.y);
+    f32 cos = Math_CosS(this->actor.world.rot.y);
+    f32 dist;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F110.s")
+    spawnPos.y = this->actor.world.pos.y;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F220.s")
+    for (i = 0, dist = -40.0f; i < 5; i++, dist += 20.0f) {
+        if (!((this->unk164 >> i) & 1)) {
+            spawnPos.x = this->actor.world.pos.x + (sin * dist);
+            spawnPos.z = this->actor.world.pos.z + (cos * dist);
+            this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x4000);
+            if (this->unk148[i] != NULL) {
+                this->unk148[i]->actor.room = this->actor.room;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F364.s")
+void func_8098F220(ObjMure3* this, PlayState* play) {
+    s16 yRot;
+    Vec3f spawnPos;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F438.s")
+    spawnPos.y = this->actor.world.pos.y;
+    yRot = this->actor.world.rot.y;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/ObjMure3_Init.s")
+    for (i = 0; i < 6; i++) {
+        if (!((this->unk164 >> i) & 1)) {
+            spawnPos.x = (Math_SinS(yRot) * 40.0f) + this->actor.world.pos.x;
+            spawnPos.z = (Math_CosS(yRot) * 40.0f) + this->actor.world.pos.z;
+            this->unk148[i] = (EnItem00*)Item_DropCollectible2(play, &spawnPos, 0x4000);
+            if (this->unk148[i] != NULL) {
+                this->unk148[i]->actor.room = this->actor.room;
+            }
+        }
+        yRot += 0x2AAA;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/ObjMure3_Destroy.s")
+    if (!((this->unk164 >> 6) & 1)) {
+        spawnPos.x = this->actor.world.pos.x;
+        spawnPos.z = this->actor.world.pos.z;
+        this->unk160 = Item_DropCollectible2(play, &spawnPos, 0x4002);
+        if (this->unk160 != NULL) {
+            this->unk160->room = this->actor.room;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F598.s")
+void func_8098F364(ObjMure3* this, PlayState* play) {
+    s16 count = sRupeeCounts[OBJMURE3_PARAMS_RUPEEINDEX(&this->actor)];
+    s32 i;
+    EnItem00** collectible;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F5AC.s")
+    for (i = 0; i < count; i++) {
+        collectible = &this->unk148[i];
+        if ((!((this->unk164 >> i) & 1)) && (*collectible != NULL)) {
+            if (((*collectible)->unk1A4 != 0) || ((*collectible)->actor.update == NULL)) {
+                this->unk164 |= (1 << i);
+            } else {
+                Actor_Kill(&(*collectible)->actor);
+            }
+        }
+        *collectible = NULL;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F5D0.s")
+void func_8098F438(ObjMure3* this, PlayState* play) {
+    s16 count = sRupeeCounts[OBJMURE3_PARAMS_RUPEEINDEX(&this->actor)];
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F5E4.s")
+    for (i = 0; i < count; i++) {
+        EnItem00** collectible = &this->unk148[i];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F66C.s")
+        if ((*collectible != NULL) && !((this->unk164 >> i) & 1)) {
+            if ((*collectible)->unk1A4 != 0) {
+                Flags_SetSwitch(play, OBJMURE3_PARAMS_7F(&this->actor));
+            }
+            if ((*collectible)->actor.update == NULL) {
+                this->unk164 |= (1 << i);
+                this->unk148[i] = NULL;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/func_8098F680.s")
+void ObjMure3_Init(Actor* thisx, PlayState* play) {
+    ObjMure3* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Mure3/ObjMure3_Update.s")
+    if (Flags_GetSwitch(play, OBJMURE3_PARAMS_7F(&this->actor))) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    func_8098F598(this);
+}
+
+void ObjMure3_Destroy(Actor* thisx, PlayState* play) {
+}
+
+void func_8098F598(ObjMure3* this) {
+    this->actionFunc = func_8098F5AC;
+}
+
+void func_8098F5AC(ObjMure3* this, PlayState* play) {
+    func_8098F5D0(this);
+}
+
+void func_8098F5D0(ObjMure3* this) {
+    this->actionFunc = func_8098F5E4;
+}
+
+void func_8098F5E4(ObjMure3* this, PlayState* play) {
+    static ObjMure3SpawnFunc sSpawnFuncs[] = { func_8098F040, func_8098F110, func_8098F220 };
+
+    if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) < SQ(1150.0f)) {
+        this->actor.flags |= ACTOR_FLAG_10;
+        sSpawnFuncs[OBJMURE3_PARAMS_RUPEEINDEX(&this->actor)](this, play);
+        func_8098F66C(this);
+    }
+}
+
+void func_8098F66C(ObjMure3* this) {
+    this->actionFunc = func_8098F680;
+}
+
+void func_8098F680(ObjMure3* this, PlayState* play) {
+    func_8098F438(this, play);
+    if (Math3D_XZLengthSquared(this->actor.projectedPos.x, this->actor.projectedPos.z) >= SQ(1450.0f)) {
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        func_8098F364(this, play);
+        func_8098F5D0(this);
+    }
+}
+
+void ObjMure3_Update(Actor* thisx, PlayState* play) {
+    ObjMure3* this = THIS;
+
+    this->actionFunc(this, play);
+}

@@ -1,15 +1,15 @@
 ﻿<Root>
     <File Name="object_an4" Segment="6">
-        <Animation Name="object_an4_Anim_00041C" Offset="0x41C" />
-        <Animation Name="object_an4_Anim_0013C8" Offset="0x13C8" />
-        <Animation Name="object_an4_Anim_002550" Offset="0x2550" />
-        <Animation Name="object_an4_Anim_00353C" Offset="0x353C" />
-        <Animation Name="object_an4_Anim_004498" Offset="0x4498" />
-        <Animation Name="object_an4_Anim_004A78" Offset="0x4A78" />
-        <Animation Name="object_an4_Anim_00506C" Offset="0x506C" />
-        <Animation Name="object_an4_Anim_0060B4" Offset="0x60B4" />
-        <Animation Name="object_an4_Anim_006CC0" Offset="0x6CC0" />
-        <Animation Name="object_an4_Anim_007E3C" Offset="0x7E3C" />
-        <Animation Name="object_an4_Anim_0088C0" Offset="0x88C0" />
+        <Animation Name="object_an4_Anim_00041C" Offset="0x41C" /> <!-- Original name is "anj_awase" ("to face; to be opposite (someone)") -->
+        <Animation Name="object_an4_Anim_0013C8" Offset="0x13C8" /> <!-- Original name is "anj_dakiau" ("to embrace each other​") -->
+        <Animation Name="object_an4_Anim_002550" Offset="0x2550" /> <!-- Original name is "anj_dakiau_loop" -->
+        <Animation Name="object_an4_Anim_00353C" Offset="0x353C" /> <!-- Original name is "anj_hanare" ("to be separated; to be apart") -->
+        <Animation Name="object_an4_Anim_004498" Offset="0x4498" /> <!-- Original name is "anj_hanare_loop" -->
+        <Animation Name="object_an4_Anim_004A78" Offset="0x4A78" /> <!-- Original name is "anj_kaoage" ("raising face") -->
+        <Animation Name="object_an4_Anim_00506C" Offset="0x506C" /> <!-- Original name is "anj_kaoage_loop" -->
+        <Animation Name="object_an4_Anim_0060B4" Offset="0x60B4" /> <!-- Original name is "anj_miseau" ("to show each other​") -->
+        <Animation Name="object_an4_Anim_006CC0" Offset="0x6CC0" /> <!-- Original name is "anj_mitume_loop" ("to stare (at); to gaze (at)") -->
+        <Animation Name="object_an4_Anim_007E3C" Offset="0x7E3C" /> <!-- Original name is "anj_omen" ("mask") -->
+        <Animation Name="object_an4_Anim_0088C0" Offset="0x88C0" /> <!-- Original name is "anj_omen_loop" -->
     </File>
 </Root>

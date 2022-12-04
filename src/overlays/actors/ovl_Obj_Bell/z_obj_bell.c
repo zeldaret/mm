@@ -19,7 +19,7 @@ void ObjBell_Draw(Actor* thisx, PlayState* play);
 s32 func_80A356D8(ObjBell* this);
 s32 func_80A357A8(ObjBell* this, PlayState* play);
 
-const ActorInit Obj_Bell_InitVars = {
+ActorInit Obj_Bell_InitVars = {
     ACTOR_OBJ_BELL,
     ACTORCAT_PROP,
     FLAGS,

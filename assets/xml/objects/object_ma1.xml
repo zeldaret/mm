@@ -103,7 +103,7 @@
         <Limb Name="gRomaniRightHandLimb" Type="Standard" EnumName="ROMANI_LIMB_RIGHT_HAND" Offset="0x138C4" />
 
         <!-- Romani Skeleton -->
-        <Skeleton Name="gRomaniSkel" Type="Flex" LimbType="Standard" LimbNone="ROMANI_LIMB_NONE" LimbMax="ROMANI_LIMB_MAX" EnumName="RomaniLimbs" Offset="0x13928" />
+        <Skeleton Name="gRomaniSkel" Type="Flex" LimbType="Standard" LimbNone="ROMANI_LIMB_NONE" LimbMax="ROMANI_LIMB_MAX" EnumName="RomaniLimb" Offset="0x13928" />
 
         <!-- Romani Animations -->
         <Animation Name="gRomaniWalkAnim" Offset="0x14088" /> <!-- Original name is "rm_walk" -->

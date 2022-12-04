@@ -118,7 +118,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
         (waterY - fire->position.y > 6500.0f * fire->yScale)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
-    if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
+    if ((fire->flags & 2) && (player->heldItemAction == PLAYER_IA_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < 400.0f) {
             sp40 = true;
@@ -162,7 +162,8 @@ void FireObj_Draw(PlayState* play, FireObj* fire) {
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

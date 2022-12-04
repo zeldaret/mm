@@ -53,8 +53,8 @@ void func_80140CE0(struct_801F8010* arg0) {
 void func_80140D04(struct_801F8010* arg0) {
 }
 
-void func_80140D10(struct_801F8010* arg0, Gfx** _gfx) {
-    Gfx* gfx = *_gfx;
+void func_80140D10(struct_801F8010* arg0, Gfx** gfxp) {
+    Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
     gDPSetPrimDepth(gfx++, -1, -1);
@@ -82,5 +82,5 @@ void func_80140D10(struct_801F8010* arg0, Gfx** _gfx) {
     }
 
     gDPPipeSync(gfx++);
-    *_gfx = gfx;
+    *gfxp = gfx;
 }

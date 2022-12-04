@@ -1,6 +1,7 @@
 #include "global.h"
 #include "system_malloc.h"
 #include "z64rumble.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -136,7 +137,7 @@ void Game_Update(GameState* gameState) {
 
     gameState->main(gameState);
 
-    if (R_PAUSE_MENU_MODE != 2) {
+    if (R_PAUSE_BG_PRERENDER_STATE != PAUSE_BG_PRERENDER_PROCESS) {
         GameState_Draw(gameState, gfxCtx);
         func_801736DC(gfxCtx);
     }
@@ -196,8 +197,8 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
-    gameState->nextGameStateInit = NULL;
-    gameState->nextGameStateSize = 0;
+    gameState->init = NULL;
+    gameState->size = 0;
 
     {
         s32 requiredScopeTemp;
@@ -221,7 +222,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
 void GameState_Destroy(GameState* gameState) {
     AudioMgr_StopAllSfxExceptSystem();
-    func_8019E014();
+    Audio_Update();
     osRecvMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 
     if (gameState->destroy != NULL) {
@@ -238,12 +239,12 @@ void GameState_Destroy(GameState* gameState) {
     GameAlloc_Cleanup(&gameState->alloc);
 }
 
-GameStateFunc GameState_GetNextStateInit(GameState* gameState) {
-    return gameState->nextGameStateInit;
+GameStateFunc GameState_GetInit(GameState* gameState) {
+    return gameState->init;
 }
 
-size_t GameState_GetNextStateSize(GameState* gameState) {
-    return gameState->nextGameStateSize;
+size_t GameState_GetSize(GameState* gameState) {
+    return gameState->size;
 }
 
 u32 GameState_IsRunning(GameState* gameState) {

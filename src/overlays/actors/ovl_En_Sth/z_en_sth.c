@@ -27,7 +27,7 @@ void func_80B67DA0(EnSth* this, PlayState* play);
 void func_80B680A8(Actor* thisx, PlayState* play);
 void func_80B6849C(Actor* thisx, PlayState* play);
 
-const ActorInit En_Sth_InitVars = {
+ActorInit En_Sth_InitVars = {
     ACTOR_EN_STH,
     ACTORCAT_NPC,
     FLAGS,
@@ -103,30 +103,30 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
     switch (ENSTH_GET_F(&this->actor)) {
         case ENSTH_F_1:
-            if (play->actorCtx.unk5 & 2) {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
                 this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
                 this->actionFunc = func_80B67958;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
 
         case ENSTH_F_2:
-            if (Inventory_GetSkullTokenCount(play->sceneNum) >= 30) {
+            if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
                 this->actionFunc = func_80B67DA0;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             this->actor.textId = 0;
-            if (!(gSaveContext.save.weekEventReg[34] & 0x40) || !(gSaveContext.save.weekEventReg[34] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
                 this->unk_29C |= 1;
             }
             break;
 
         case ENSTH_F_3:
             if ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actionFunc = func_80B678A8;
@@ -136,20 +136,20 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENSTH_F_4:
-            if (gSaveContext.save.weekEventReg[13] & 0x20) {
-                Actor_MarkForDeath(&this->actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20)) {
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actor.textId = 0;
             this->actionFunc = func_80B677BC;
-            if (gSaveContext.save.weekEventReg[13] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
                 this->unk_29C |= 2;
             }
             break;
 
         case ENSTH_F_5:
-            if (!(gSaveContext.save.weekEventReg[13] & 0x20) || (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
-                Actor_MarkForDeath(&this->actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_20) || (Inventory_GetSkullTokenCount(play->sceneId) < 30)) {
+                Actor_Kill(&this->actor);
                 return;
             }
             this->actionFunc = func_80B67208;
@@ -258,7 +258,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
                 break;
 
             case 5:
-                if (gSaveContext.save.weekEventReg[13] & 0x40) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
                     phi_a1 = 0x113D;
                 } else {
                     phi_a1 = 0x113C;
@@ -266,7 +266,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
                 break;
 
             default:
-                if (gSaveContext.save.weekEventReg[13] & 0x40) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
                     phi_a1 = 0x1142;
                 } else {
                     phi_a1 = 0x1141;
@@ -275,7 +275,7 @@ void func_80B67348(EnSth* this, PlayState* play) {
         }
         Message_StartTextbox(play, phi_a1, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -286,7 +286,7 @@ void func_80B67458(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B67348;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
         if (CURRENT_DAY == 3) {
             func_80B670A4(this, 6);
         } else {
@@ -331,14 +331,14 @@ void func_80B67540(EnSth* this, PlayState* play) {
                         break;
 
                     case 0x1136:
-                        gSaveContext.save.weekEventReg[13] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_13_80);
 
                         switch (sp2C) {
                             case 0:
-                                if (gSaveContext.save.weekEventReg[13] & 0x40) {
+                                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_40)) {
                                     this->actor.home.rot.z = 6;
                                 } else {
-                                    gSaveContext.save.weekEventReg[13] |= 0x40;
+                                    SET_WEEKEVENTREG(WEEKEVENTREG_13_40);
                                     switch (CUR_UPG_VALUE(UPG_WALLET)) {
                                         case 0:
                                             this->actor.home.rot.z = 8;
@@ -433,31 +433,31 @@ void func_80B67958(EnSth* this, PlayState* play) {
 void func_80B67984(EnSth* this, PlayState* play) {
     u16 sp1E;
 
-    if (gSaveContext.save.weekEventReg[34] & 0x10) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10)) {
         sp1E = 0x903;
         func_80B670A4(this, 2);
-    } else if (gSaveContext.save.weekEventReg[34] & 0x20) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20)) {
         sp1E = 0x90F;
         func_80B670A4(this, 2);
-    } else if (gSaveContext.save.weekEventReg[34] & 0x40) {
-        if (!(gSaveContext.save.weekEventReg[34] & 8)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
             sp1E = 0x91B;
         } else {
             sp1E = 0x918;
         }
         func_80B670A4(this, 2);
-    } else if (Inventory_GetSkullTokenCount(play->sceneNum) >= 30) {
+    } else if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
         if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
             this->unk_29C |= 4;
             sp1E = 0x919;
         } else {
             sp1E = 0x916;
         }
-    } else if (gSaveContext.save.weekEventReg[34] & 2) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_02)) {
         sp1E = 0x8FF;
     } else {
         sp1E = 0x8FC;
-        gSaveContext.save.weekEventReg[34] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_02);
     }
     Message_StartTextbox(play, sp1E, &this->actor);
 }
@@ -467,10 +467,10 @@ void func_80B67AB4(EnSth* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B67C1C;
-        gSaveContext.save.weekEventReg[34] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_40);
         Message_StartTextbox(play, 0x918, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -481,10 +481,10 @@ void func_80B67B50(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B67AB4;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->unk_29C &= ~1;
-        gSaveContext.save.weekEventReg[34] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_34_08);
         Actor_PickUp(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
@@ -524,8 +524,8 @@ void func_80B67C1C(EnSth* this, PlayState* play) {
                 break;
 
             case 0x91A:
-                gSaveContext.save.weekEventReg[34] |= 0x40;
-                gSaveContext.save.weekEventReg[34] &= (u8)~8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_34_40);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_34_08);
 
             case 0x902:
             case 0x903:
@@ -559,7 +559,7 @@ void func_80B67DA0(EnSth* this, PlayState* play) {
 void func_80B67E20(Actor* thisx, PlayState* play) {
     EnSth* this = THIS;
 
-    if (Inventory_GetSkullTokenCount(play->sceneNum) >= 30) {
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
         this->actor.update = func_80B680A8;
         this->actor.draw = func_80B6849C;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -579,8 +579,8 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
                                this->jointTable, this->morphTable, 16);
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
-            if ((gSaveContext.save.weekEventReg[34] & 0x10) || (gSaveContext.save.weekEventReg[34] & 0x20) ||
-                (gSaveContext.save.weekEventReg[34] & 0x40) || (Inventory_GetSkullTokenCount(play->sceneNum) >= 30)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_10) || CHECK_WEEKEVENTREG(WEEKEVENTREG_34_20) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_34_40) || (Inventory_GetSkullTokenCount(play->sceneId) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {
@@ -598,7 +598,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
                 break;
 
             case ENSTH_F_4:
-                if (gSaveContext.save.weekEventReg[13] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_80)) {
                     func_80B670A4(this, 5);
                 } else {
                     func_80B670A4(this, 5);
@@ -610,7 +610,7 @@ void EnSth_Update(Actor* thisx, PlayState* play) {
                 break;
         }
 
-        if ((ENSTH_GET_F(&this->actor) == ENSTH_F_4) && (Inventory_GetSkullTokenCount(play->sceneNum) < 30)) {
+        if ((ENSTH_GET_F(&this->actor) == ENSTH_F_4) && (Inventory_GetSkullTokenCount(play->sceneId) < 30)) {
             this->actor.update = func_80B67E20;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_1;

@@ -35,7 +35,7 @@ typedef enum {
     /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
 } EnBbBodyPartDrawStatus;
 
-const ActorInit En_Bb_InitVars = {
+ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -114,7 +114,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 28, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BLUE_BUBBLE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
@@ -699,7 +699,7 @@ void EnBb_Draw(Actor* thisx, PlayState* play) {
             Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (play->gameplayFrames * -20) & 0x1FF, 32, 128));
         currentMatrixState->mf[3][1] -= 47.0f * this->flameScaleY;
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),

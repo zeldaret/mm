@@ -21,7 +21,7 @@ void func_809AC638(BgFireWall* this, PlayState* play);
 void func_809AC68C(BgFireWall* this, PlayState* play);
 void func_809AC6C0(BgFireWall* this, PlayState* play);
 
-const ActorInit Bg_Fire_Wall_InitVars = {
+ActorInit Bg_Fire_Wall_InitVars = {
     ACTOR_BG_FIRE_WALL,
     ACTORCAT_BG,
     FLAGS,
@@ -166,7 +166,7 @@ void func_809AC7F8(BgFireWall* this, PlayState* play) {
 
 void func_809AC970(BgFireWall* this, PlayState* play) {
     if (Math_StepToF(&this->actor.scale.y, 0.005f, this->unk_158)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -193,7 +193,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
     if (this->actionFunc != func_809AC970) {
         if (this->actor.parent != NULL) {
             EnEncount4* parent = (EnEncount4*)this->actor.parent;
-            if ((parent->actor.update != NULL) && (parent->unk_150 != 0)) {
+            if ((parent->actor.update != NULL) && (parent->timer != 0)) {
                 this->actionFunc = func_809AC970;
             }
         }

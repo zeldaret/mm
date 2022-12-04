@@ -23,7 +23,7 @@ void func_808A6E24(EnSt* this, PlayState* play);
 void func_808A701C(EnSt* this, PlayState* play);
 void func_808A7478(Actor* thisx, PlayState* play);
 
-const ActorInit En_St_InitVars = {
+ActorInit En_St_InitVars = {
     ACTOR_EN_ST,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -152,7 +152,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &object_st_Anim_000304, 4.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -260,8 +260,8 @@ void func_808A54B0(EnSt* this, PlayState* play) {
         }
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, (u8)(255 * temp_f0));
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025850);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_025970);
+        gSPDisplayList(POLY_XLU_DISP++, gSpinAttackDiskDL);
+        gSPDisplayList(POLY_XLU_DISP++, gSpinAttackCylinderDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -447,7 +447,7 @@ s32 func_808A6064(EnSt* this) {
 }
 
 void func_808A60E0(EnSt* this) {
-    s32 idx = (this->unk_2C8 > 0.0f) ? 2 : 6;
+    s32 animIndex = (this->unk_2C8 > 0.0f) ? 2 : 6;
     f32 sp20 = (this->unk_2C8 > 0.0f) ? 4.0f : 9.0f;
     f32 sp1C;
     u16 sfxId = (this->unk_2C8 < 0.0f) ? NA_SE_EN_STALTU_DOWN : NA_SE_EN_STALTU_UP;
@@ -455,7 +455,7 @@ void func_808A60E0(EnSt* this) {
     sp1C = this->skelAnime.curFrame / (this->skelAnime.animLength - 1.0f);
 
     if (sp1C == 1.0f) {
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, idx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
@@ -507,7 +507,7 @@ void func_808A6220(EnSt* this, PlayState* play) {
 }
 
 void func_808A63E8(EnSt* this) {
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
     this->unk_2C8 = 1.0f;
     func_808A5D7C(this);
     this->unk_30C = 0;
@@ -520,7 +520,7 @@ void func_808A63E8(EnSt* this) {
 
 void func_808A6468(EnSt* this, PlayState* play) {
     func_808A5050(this, play);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 4);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
     this->unk_18C |= (0x8 | 0x4);
     this->unk_18C &= ~(0x10 | 0x2);
     this->unk_2C8 = -1.0f;
@@ -535,9 +535,9 @@ void func_808A6468(EnSt* this, PlayState* play) {
 }
 
 void func_808A650C(EnSt* this) {
-    s32 idx = (this->unk_2C8 > 0.0f) ? 2 : 6;
+    s32 animIndex = (this->unk_2C8 > 0.0f) ? 2 : 6;
 
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, idx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     this->unk_2CC = 0.0f;
     this->unk_2D4 = 0.0f;
     this->unk_2D8 = 0.0f;
@@ -604,7 +604,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
                     this->unk_314 = 20;
                     this->unk_312 = 0;
                     Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 1);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                     this->unk_18C |= 8;
                     this->actionFunc = func_808A6D84;
                     this->unk_2C8 = -1.0f;
@@ -645,7 +645,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             }
 
             if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 7);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 7);
                 this->unk_2CC = 0.0f;
                 this->unk_2D4 = 0.0f;
                 this->actor.gravity = -1.0f;
@@ -690,7 +690,7 @@ void func_808A6A78(EnSt* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->unk_2C0)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
 
         Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
         Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
@@ -704,7 +704,7 @@ void func_808A6A78(EnSt* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, 0.04f);
         this->actor.draw = func_808A7478;
-        this->actor.hintId = 4;
+        this->actor.hintId = TATL_HINT_ID_SKULLTULA;
         this->actor.gravity = 0.0f;
         func_808A63E8(this);
         this->unk_18C = 0;
@@ -721,7 +721,7 @@ void func_808A6C04(EnSt* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if ((this->unk_18C & 8) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
         this->unk_18C &= ~8;
     } else if ((this->unk_310 == 0) && func_808A5F28(this, play) && !func_808A6064(this)) {
         func_808A650C(this);
@@ -763,7 +763,7 @@ void func_808A6E24(EnSt* this, PlayState* play) {
         }
 
         if (count == ARRAY_COUNT(this->unk_31C)) {
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 7);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 7);
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
             this->unk_2CC = 0.0f;
             this->unk_2D4 = 0.0f;
@@ -822,7 +822,7 @@ void func_808A701C(EnSt* this, PlayState* play) {
 
         if (count == ARRAY_COUNT(this->unk_31C)) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (DECR(this->unk_318) == 0) {
         this->unk_18C |= 0x40;
@@ -839,10 +839,11 @@ void EnSt_Init(Actor* thisx, PlayState* play) {
     this->unk_2C0 = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
     if (((ENST_GET_3F(&this->actor) != ENST_3F_63) && Flags_GetSwitch(play, ENST_GET_3F(&this->actor))) ||
         (this->unk_2C0 < 0)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actionFunc = func_808A6A78;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actionFunc = func_808A6A78;
 }
 
 void EnSt_Destroy(Actor* thisx, PlayState* play) {

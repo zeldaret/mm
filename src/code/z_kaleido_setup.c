@@ -1,10 +1,27 @@
 #include "global.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-s16 D_801BDB00[] = { PAUSE_MAP, PAUSE_QUEST, PAUSE_MASK, PAUSE_ITEM };
-f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
-f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
+s16 sKaleidoSetupRightPageIndex[] = {
+    PAUSE_MAP,   // PAUSE_ITEM
+    PAUSE_QUEST, // PAUSE_MAP
+    PAUSE_MASK,  // PAUSE_QUEST
+    PAUSE_ITEM,  // PAUSE_MASK
+};
+f32 sKaleidoSetupRightPageEyeX[] = {
+    PAUSE_EYE_DIST * -PAUSE_MAP_X,   // PAUSE_ITEM
+    PAUSE_EYE_DIST * -PAUSE_QUEST_X, // PAUSE_MAP
+    PAUSE_EYE_DIST * -PAUSE_MASK_X,  // PAUSE_QUEST
+    PAUSE_EYE_DIST * -PAUSE_ITEM_X,  // PAUSE_MASK
+};
+f32 sKaleidoSetupRightPageEyeZ[] = {
+    PAUSE_EYE_DIST * -PAUSE_MAP_Z,   // PAUSE_ITEM
+    PAUSE_EYE_DIST * -PAUSE_QUEST_Z, // PAUSE_MAP
+    PAUSE_EYE_DIST * -PAUSE_MASK_Z,  // PAUSE_QUEST
+    PAUSE_EYE_DIST * -PAUSE_ITEM_Z,  // PAUSE_MASK
+};
 
 void func_800F4A10(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -12,33 +29,35 @@ void func_800F4A10(PlayState* play) {
 
     Rumble_StateReset();
 
-    pauseCtx->unk_206 = 0;
-    pauseCtx->unk_200 = 1;
-    pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
-    pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
-    pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
-    pauseCtx->unk_27E = -40;
+    pauseCtx->switchPageTimer = 0;
+    pauseCtx->mainState = PAUSE_MAIN_STATE_SWITCHING_PAGE;
+
+    // Set eye position and pageIndex such that scrolling left brings to the desired page
+    pauseCtx->eye.x = sKaleidoSetupRightPageEyeX[pauseCtx->pageIndex];
+    pauseCtx->eye.z = sKaleidoSetupRightPageEyeZ[pauseCtx->pageIndex];
+    pauseCtx->pageIndex = sKaleidoSetupRightPageIndex[pauseCtx->pageIndex];
+    pauseCtx->infoPanelOffsetY = -40;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
-        pauseCtx->worldMapPoints[i] = 0;
+        pauseCtx->worldMapPoints[i] = false;
     }
 
-    if (pauseCtx->state == 1) {
-        for (i = 0; i < 11; i++) {
-            if ((gSaveContext.save.mapsVisited >> i) & 1) {
-                pauseCtx->worldMapPoints[i] = 1;
+    if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
+        for (i = 0; i < REGION_MAX; i++) {
+            if ((gSaveContext.save.regionsVisited >> i) & 1) {
+                pauseCtx->worldMapPoints[i] = true;
             }
         }
     } else {
-        for (i = 9; i >= 0; i--) {
+        for (i = OWL_WARP_STONE_TOWER; i >= OWL_WARP_GREAT_BAY_COAST; i--) {
             if ((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) {
-                pauseCtx->worldMapPoints[i] = 1;
-                pauseCtx->unk_238[4] = i;
+                pauseCtx->worldMapPoints[i] = true;
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = i;
             }
         }
 
         if ((gSaveContext.save.playerData.owlActivationFlags >> 4) & 1) {
-            pauseCtx->unk_238[4] = 4;
+            pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 4;
         }
     }
 
@@ -55,9 +74,9 @@ void func_800F4A10(PlayState* play) {
     YREG(21) = -0x0622;
     YREG(22) = -0x0C44;
     YREG(23) = 0x0622;
-    YREG(24) = -0x0622;
-    YREG(25) = -0x005A;
-    YREG(26) = -0x3840;
+    R_PAUSE_WORLD_MAP_YAW = -0x622;
+    R_PAUSE_WORLD_MAP_Y_OFFSET = -90;
+    R_PAUSE_WORLD_MAP_DEPTH = -14400;
 }
 
 void KaleidoSetup_Update(PlayState* play) {
@@ -70,27 +89,30 @@ void KaleidoSetup_Update(PlayState* play) {
         if (msgCtx && msgCtx) {}
     }
 
-    if ((pauseCtx->state == 0) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((pauseCtx->state == PAUSE_STATE_OFF) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
         (play->gameOverCtx.state == GAMEOVER_INACTIVE)) {
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
             if ((gSaveContext.save.cutscene < 0xFFF0) && (gSaveContext.nextCutsceneIndex < 0xFFF0)) {
                 if (!Play_InCsMode(play) || ((msgCtx->msgMode != 0) && (msgCtx->currentTextId == 0xFF))) {
-                    if ((play->unk_1887C < 2) && (gSaveContext.unk_3F28 != 8) && (gSaveContext.unk_3F28 != 9)) {
-                        if (!(gSaveContext.eventInf[1] & 0x80) && !(player->stateFlags1 & 0x20)) {
-                            if (!(play->actorCtx.unk5 & 2) && !(play->actorCtx.unk5 & 4)) {
+                    if ((play->unk_1887C < 2) && (gSaveContext.magicState != MAGIC_STATE_STEP_CAPACITY) &&
+                        (gSaveContext.magicState != MAGIC_STATE_FILL)) {
+                        if (!CHECK_EVENTINF(EVENTINF_17) && !(player->stateFlags1 & PLAYER_STATE1_20)) {
+                            if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
+                                !(play->actorCtx.flags & ACTORCTX_FLAG_2)) {
                                 if ((play->actorCtx.unk268 == 0) && CHECK_BTN_ALL(input->press.button, BTN_START)) {
-                                    gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
-                                    pauseCtx->unk_2B9 = 0;
-                                    pauseCtx->state = 1;
+                                    gSaveContext.prevHudVisibility = gSaveContext.hudVisibility;
+                                    pauseCtx->itemDescriptionOn = false;
+                                    pauseCtx->state = PAUSE_STATE_OPENING_0;
                                     func_800F4A10(play);
-                                    pauseCtx->mode = pauseCtx->pageIndex * 2 + 1;
+                                    // Set next page mode to scroll left
+                                    pauseCtx->nextPageMode = pauseCtx->pageIndex * 2 + 1;
                                     func_801A3A7C(1);
                                 }
 
-                                if (pauseCtx->state == 1) {
+                                if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
                                     Game_SetFramerateDivisor(&play->state, 2);
-                                    if (ShrinkWindow_GetLetterboxTarget() != 0) {
-                                        ShrinkWindow_SetLetterboxTarget(0);
+                                    if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
+                                        ShrinkWindow_Letterbox_SetSizeTarget(0);
                                     }
                                     func_801A3AEC(1);
                                 }
@@ -111,33 +133,33 @@ void KaleidoSetup_Init(PlayState* play) {
 
     pauseCtx->pageIndex = PAUSE_ITEM;
 
-    pauseCtx->unk_21C = 160.0f;
-    pauseCtx->unk_218 = 160.0f;
-    pauseCtx->unk_214 = 160.0f;
-    pauseCtx->unk_210 = 160.0f;
+    pauseCtx->maskPageRoll = 160.0f;
+    pauseCtx->questPageRoll = 160.0f;
+    pauseCtx->mapPageRoll = 160.0f;
+    pauseCtx->itemPageRoll = 160.0f;
 
     pauseCtx->eye.x = -64.0f;
     pauseCtx->unk_20C = 936.0f;
-    pauseCtx->unk_220 = -314.0f;
+    pauseCtx->roll = -314.0f;
 
-    pauseCtx->unk_238[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
-    pauseCtx->unk_258 = 11;
-    pauseCtx->unk_25A = 0;
+    pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
+    pauseCtx->pageSwitchTimer = 0;
 
-    pauseCtx->cursorItem[PAUSE_ITEM] = 999;
-    pauseCtx->cursorItem[PAUSE_MAP] = XREG(94) + 3;
-    pauseCtx->cursorItem[PAUSE_QUEST] = 999;
-    pauseCtx->cursorItem[PAUSE_MASK] = 999;
+    pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
+    pauseCtx->cursorItem[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
+    pauseCtx->cursorItem[PAUSE_QUEST] = PAUSE_ITEM_NONE;
+    pauseCtx->cursorItem[PAUSE_MASK] = PAUSE_ITEM_NONE;
 
-    pauseCtx->unk_268[PAUSE_ITEM] = 0;
-    pauseCtx->unk_268[PAUSE_MAP] = XREG(94) + 3;
+    pauseCtx->cursorSlot[PAUSE_ITEM] = 0;
+    pauseCtx->cursorSlot[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
-    pauseCtx->unk_284 = 2;
-    pauseCtx->unk_2A0 = -1;
-    pauseCtx->unk_2BA = 320;
-    pauseCtx->unk_2BC = 40;
-    pauseCtx->unk_29E = 100;
+    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
+    pauseCtx->ocarinaSongIndex = -1;
+    pauseCtx->equipAnimScale = 320;
+    pauseCtx->equipAnimShrinkRate = 40;
+    pauseCtx->promptAlpha = 100;
 
     View_Init(&pauseCtx->view, play->state.gfxCtx);
 }

@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_crow" Segment="6">
-        <Animation Name="gGuayFlyAnim" Offset="0xF0" />
+        <Animation Name="gGuayFlyAnim" Offset="0xF0" /> <!-- Original name is "df_flygue" -->
         <DList Name="gGuayBodyDL" Offset="0x490" />
         <DList Name="gGuayRightWingTipDL" Offset="0x5E0" />
         <DList Name="gGuayRightWingBodyDL" Offset="0x6B0" />
@@ -19,6 +19,6 @@
         <Limb Name="gGuayLeftWingTipLimb" Type="Standard" EnumName="OBJECT_CROW_LIMB_LEFT_WING_TIP" Offset="0x107C" />
         <Limb Name="gGuayUpperTailLimb" Type="Standard" EnumName="OBJECT_CROW_LIMB_UPPER_TAIL" Offset="0x1088" />
         <Limb Name="gGuayTailLimb" Type="Standard" EnumName="OBJECT_CROW_LIMB_TAIL" Offset="0x1094" />
-        <Skeleton Name="gGuaySkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_CROW_LIMB_NONE" LimbMax="OBJECT_CROW_LIMB_MAX" EnumName="objectCrowLimbs" Offset="0x10C0" />
+        <Skeleton Name="gGuaySkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_CROW_LIMB_NONE" LimbMax="OBJECT_CROW_LIMB_MAX" EnumName="ObjectCrowLimb" Offset="0x10C0" />
     </File>
 </Root>

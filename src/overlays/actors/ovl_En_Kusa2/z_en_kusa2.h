@@ -9,8 +9,8 @@ struct EnKusa2UnkBssSubStruct;
 typedef void (*EnKusa2ActionFunc)(struct EnKusa2*, PlayState*);
 typedef void (*EnKusa2BssFunc)(struct EnKusa2UnkBssSubStruct*);
 
-#define ENKUSA2_GET_1(thisx) (((thisx)->params) & 1)
-#define ENKUSA2_GET_7F00(thisx) (u8)((((thisx)->params) >> 8) & 0x7F)
+#define ENKUSA2_GET_1(thisx) ((thisx)->params & 1)
+#define ENKUSA2_GET_7F00(thisx) (u8)(((thisx)->params >> 8) & 0x7F)
 
 typedef struct EnKusa2UnkBssSubStruct {
     /* 0x00 */ Vec3f unk_00;
@@ -80,7 +80,5 @@ typedef struct EnKusa2 {
     /* 0x1D0 */ s8 unk_1D0;
     /* 0x1D1 */ s8 unk_1D1;
 } EnKusa2; // size = 0x1D4
-
-extern const ActorInit En_Kusa2_InitVars;
 
 #endif // Z_EN_KUSA2_H

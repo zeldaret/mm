@@ -33,7 +33,7 @@ void func_80BCC288(EnScopenuts* this, PlayState* play);
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-const ActorInit En_Scopenuts_InitVars = {
+ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -64,7 +64,7 @@ static ColliderCylinderInitType1 sCylinderInit = {
     { 27, 32, 0, { 0, 0, 0 } },
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_dnt_Anim_005488, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_dnt_Anim_004AA0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -170,7 +170,7 @@ void func_80BCAE78(EnScopenuts* this, PlayState* play) {
 s16 func_80BCAF0C(EnScopenuts* this) {
     switch (this->unk_33C) {
         case 0x0:
-            if (gSaveContext.save.weekEventReg[53] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_02)) {
                 this->unk_328 |= 1;
                 return 0x1638;
             }
@@ -190,14 +190,14 @@ s16 func_80BCAF0C(EnScopenuts* this) {
 }
 
 void func_80BCAFA8(EnScopenuts* this, PlayState* play) {
-    Vec3f sp1C;
+    Vec3f screenPos;
 
-    func_80169474(play, &this->actor.world.pos, &sp1C);
-    if ((sp1C.x >= 130.0f) && (sp1C.x < 190.0f) && (sp1C.y >= 90.0f)) {
-        if (sp1C.y < 150.0f) {
+    Play_GetScreenPos(play, &this->actor.world.pos, &screenPos);
+    if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f)) {
+        if (screenPos.y < (SCREEN_HEIGHT - 90.0f)) {
             this->actor.draw = EnScopenuts_Draw;
             this->unk_348 = 10;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 10);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
             this->actionFunc = func_80BCB078;
         }
     }
@@ -239,14 +239,14 @@ void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
     this->unk_350 *= 0.92f;
     Actor_SetScale(&this->actor, this->unk_350);
     if (this->actor.bgCheckFlags & 1) {
-        gSaveContext.save.weekEventReg[52] |= 0x40;
-        Actor_MarkForDeath(&this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_52_40);
+        Actor_Kill(&this->actor);
     }
 }
 
 void func_80BCB230(EnScopenuts* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(sAnimations[this->unk_348].animation);
+    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
 
@@ -257,30 +257,30 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
         this->unk_348 = 3;
         this->collider.dim.height = 64;
         func_80BCAC40(this, play);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
     } else if (sp26 == sp24) {
         if ((this->unk_348 == 4) || (this->unk_348 == 18)) {
             this->unk_348 = 17;
             this->collider.dim.height = 0;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 17);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_348 == 2) {
             this->unk_348 = 16;
             this->collider.dim.height = 32;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 16);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
         } else if (this->unk_348 == 17) {
             if (DECR(this->unk_34E) == 0) {
                 this->unk_34E = Rand_ZeroOne() * 10.0f;
                 this->unk_348 = 2;
                 this->collider.dim.height = 32;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 2);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 2);
             }
         } else if ((this->unk_348 == 16) && (DECR(this->unk_34E) == 0)) {
             this->unk_34E = Rand_S16Offset(40, 40);
             this->unk_348 = 18;
             this->collider.dim.height = 32;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 18);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 18);
         }
     }
 }
@@ -288,7 +288,7 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
 void func_80BCB4DC(EnScopenuts* this, PlayState* play) {
     if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
         this->actionFunc = func_80BCB52C;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     }
 }
 
@@ -306,7 +306,7 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_348 = 4;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 4);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
         this->actionFunc = func_80BCB230;
     }
 }
@@ -323,7 +323,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
                 this->unk_348 = 8;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 8);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
                 this->actionFunc = func_80BCBA00;
             } else {
                 this->unk_33C = func_80BCAF0C(this);
@@ -368,7 +368,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
 void func_80BCB90C(EnScopenuts* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[53] |= 2;
+        SET_WEEKEVENTREG(WEEKEVENTREG_53_02);
         this->actionFunc = func_80BCB6D0;
     } else {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -388,7 +388,7 @@ void func_80BCB980(EnScopenuts* this, PlayState* play) {
 
 void func_80BCBA00(EnScopenuts* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(sAnimations[this->unk_348].animation);
+    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
 
     switch (sp26) {
         case 10:
@@ -463,7 +463,7 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
     if (sp26 == sp24) {
         this->unk_35A = 3;
         this->unk_348 = 19;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 19);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 19);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_328 &= ~2;
         this->unk_34E = 50;
@@ -498,7 +498,7 @@ void func_80BCBC60(EnScopenuts* this, PlayState* play) {
 void func_80BCBD28(EnScopenuts* this, PlayState* play) {
     Vec3f sp44;
     s16 sp42 = this->skelAnime.curFrame;
-    s16 sp40 = Animation_GetLastFrame(sAnimations[this->unk_348].animation);
+    s16 sp40 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
     Vec3s sp38;
 
     func_80BCC448(this->path, this->unk_334, &this->actor.world.pos, &sp38);
@@ -527,7 +527,7 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play) {
     if ((this->actor.home.pos.y + 22.5f) < this->actor.world.pos.y) {
         this->unk_368 = 0.3f;
         this->unk_348 = 9;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 9);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 9);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         func_80BCAC40(this, play);
         this->actionFunc = func_80BCBF0C;
@@ -547,7 +547,7 @@ void func_80BCBF0C(EnScopenuts* this, PlayState* play) {
     if ((this->actor.home.pos.y + 50.0f) < this->actor.world.pos.y) {
         Math_ApproachF(&this->actor.velocity.y, 0.0f, 0.2f, 1.0f);
         this->unk_348 = 10;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 10);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
         this->unk_328 |= 2;
         this->unk_36E = 0;
         this->actionFunc = func_80BCBFFC;
@@ -594,7 +594,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
         if (sp32 == 3) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_338);
-                gSaveContext.save.weekEventReg[52] &= (u8)~0x40;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_40);
                 this->actionFunc = func_80BCC288;
             } else {
                 this->unk_334++;
@@ -626,7 +626,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
 }
 
 void func_80BCC288(EnScopenuts* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
@@ -684,9 +684,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(gSaveContext.save.weekEventReg[74] & 0x40) &&
-        (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
-        Actor_MarkForDeath(&this->actor);
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) && (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -705,21 +704,21 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     this->actor.speedXZ = 0.0f;
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
-        if (gSaveContext.save.weekEventReg[52] & 0x40) {
-            Actor_MarkForDeath(&this->actor);
-        } else if (play->actorCtx.unk5 & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
+            Actor_Kill(&this->actor);
+        } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
-        if (gSaveContext.save.weekEventReg[52] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->actor.gravity = -1.0f;
                 this->actor.draw = EnScopenuts_Draw;
@@ -728,14 +727,14 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
                 this->unk_358 = 150;
                 this->unk_348 = 4;
                 this->unk_35A = 0;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 4);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
                 this->actionFunc = func_80BCB230;
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -11,7 +11,7 @@
 
 #define THIS ((EnGg2*)thisx)
 
-void EnGg2_Init(Actor* thisx, PlayState* play);
+void EnGg2_Init(Actor* thisx, PlayState* play2);
 void EnGg2_Destroy(Actor* thisx, PlayState* play);
 void EnGg2_Update(Actor* thisx, PlayState* play);
 void EnGg2_Draw(Actor* thisx, PlayState* play);
@@ -27,7 +27,7 @@ void func_80B3B5D4(EnGg2* this, PlayState* play);
 s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
-const ActorInit En_Gg2_InitVars = {
+ActorInit En_Gg2_InitVars = {
     ACTOR_EN_GG2,
     ACTORCAT_NPC,
     FLAGS,
@@ -81,7 +81,7 @@ s32 func_80B3AC94(EnGg2* this, PlayState* play) {
     s16 pitch;
 
     sp40 = player->actor.world.pos;
-    sp40.y = player->bodyPartsPos[7].y + 3.0f;
+    sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
 
     sp34 = this->actor.world.pos;
     sp34.y += 70.0f;
@@ -213,18 +213,18 @@ void func_80B3B294(EnGg2* this, PlayState* play) {
     Vec3s sp30;
 
     if (this->unk_2F1 == 0) {
-        if (play->sceneNum == SCENE_11GORONNOSATO) {
-            gSaveContext.save.weekEventReg[20] |= 4;
-            gSaveContext.save.weekEventReg[20] &= (u8)~8;
-            gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-        } else if (play->sceneNum == SCENE_17SETUGEN) {
-            gSaveContext.save.weekEventReg[20] &= (u8)~4;
-            gSaveContext.save.weekEventReg[20] |= 8;
-            gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-        } else if (play->sceneNum == SCENE_10YUKIYAMANOMURA) {
-            gSaveContext.save.weekEventReg[20] &= (u8)~4;
-            gSaveContext.save.weekEventReg[20] &= (u8)~8;
-            gSaveContext.save.weekEventReg[20] |= 0x10;
+        if (play->sceneId == SCENE_11GORONNOSATO) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_04);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
+        } else if (play->sceneId == SCENE_17SETUGEN) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_08);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
+        } else if (play->sceneId == SCENE_10YUKIYAMANOMURA) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_20_10);
         }
 
         if (this->unk_1D8 != NULL) {
@@ -239,18 +239,18 @@ void func_80B3B294(EnGg2* this, PlayState* play) {
                     this->unk_1DC++;
                 } else {
                     this->unk_2F1 = 1;
-                    if (play->sceneNum == SCENE_11GORONNOSATO) {
-                        gSaveContext.save.weekEventReg[20] |= 4;
-                        gSaveContext.save.weekEventReg[20] &= (u8)~8;
-                        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-                    } else if (play->sceneNum == SCENE_17SETUGEN) {
-                        gSaveContext.save.weekEventReg[20] &= (u8)~4;
-                        gSaveContext.save.weekEventReg[20] |= 8;
-                        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-                    } else if (play->sceneNum == SCENE_10YUKIYAMANOMURA) {
-                        gSaveContext.save.weekEventReg[20] &= (u8)~4;
-                        gSaveContext.save.weekEventReg[20] &= (u8)~8;
-                        gSaveContext.save.weekEventReg[20] |= 0x10;
+                    if (play->sceneId == SCENE_11GORONNOSATO) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_20_04);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
+                    } else if (play->sceneId == SCENE_17SETUGEN) {
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_20_08);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
+                    } else if (play->sceneId == SCENE_10YUKIYAMANOMURA) {
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_20_10);
                     }
                 }
             }
@@ -356,12 +356,12 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     EnGg2* this = THIS;
 
     if (INV_CONTENT(ITEM_MASK_GORON) == ITEM_MASK_GORON) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[91] & 0x10) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_10)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -380,38 +380,38 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
     this->unk_2EC = 20;
     this->unk_2EA = 0;
 
-    if (play->sceneNum == SCENE_11GORONNOSATO) {
-        gSaveContext.save.weekEventReg[20] &= (u8)~4;
-        gSaveContext.save.weekEventReg[20] &= (u8)~8;
-        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
+    if (play->sceneId == SCENE_11GORONNOSATO) {
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
         this->unk_2EE = 0;
         Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
         this->actionFunc = func_80B3AFB0;
-    } else if (play->sceneNum == SCENE_17SETUGEN) {
-        if ((gSaveContext.save.weekEventReg[20] & 4) && !(gSaveContext.save.weekEventReg[20] & 8) &&
-            !(gSaveContext.save.weekEventReg[20] & 0x10)) {
-            gSaveContext.save.weekEventReg[20] &= (u8)~4;
+    } else if (play->sceneId == SCENE_17SETUGEN) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
             this->unk_2EE = 8;
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
-    } else if (play->sceneNum == SCENE_10YUKIYAMANOMURA) {
-        if (!(gSaveContext.save.weekEventReg[20] & 4) && (gSaveContext.save.weekEventReg[20] & 8) &&
-            !(gSaveContext.save.weekEventReg[20] & 0x10)) {
-            gSaveContext.save.weekEventReg[20] &= (u8)~8;
+    } else if (play->sceneId == SCENE_10YUKIYAMANOMURA) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10)) {
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
             this->unk_2EE = 8;
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
-        gSaveContext.save.weekEventReg[20] &= (u8)~4;
-        gSaveContext.save.weekEventReg[20] &= (u8)~8;
-        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
-        Actor_MarkForDeath(&this->actor);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -421,7 +421,7 @@ void EnGg2_Destroy(Actor* thisx, PlayState* play) {
 void EnGg2_Update(Actor* thisx, PlayState* play) {
     EnGg2* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         this->actor.flags |= ACTOR_FLAG_80;
         this->actor.flags |= ACTOR_FLAG_1;
         if ((this->unk_2EE == 5) && (this->unk_2EE == 7)) {
@@ -443,7 +443,7 @@ void EnGg2_Update(Actor* thisx, PlayState* play) {
 
     if ((this->unk_2EE == 5) || (this->unk_2EE == 7)) {
         func_800B9010(&this->actor, NA_SE_EN_SHARP_FLOAT - SFX_FLAG);
-        if ((play->actorCtx.unk4 == 100) && ((play->state.frames % 4) == 0)) {
+        if ((play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) && ((play->state.frames % 4) == 0)) {
             func_80B3B4B0(this, play);
         }
     }

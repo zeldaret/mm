@@ -1,5 +1,5 @@
-#ifndef _Z64ITEM_H_
-#define _Z64ITEM_H_
+#ifndef Z64ITEM_H
+#define Z64ITEM_H
 
 #define DROP_TABLE_SIZE 16
 #define DROP_TABLE_NUMBER 17
@@ -7,9 +7,9 @@
 // TODO fill out these enums
 
 typedef enum {
-    /* 0x0 */ EQUIP_TYPE_SWORD,
-    /* 0x1 */ EQUIP_TYPE_SHIELD,
-    /* 0x2 */ EQUIP_TYPE_MAX
+    /* 0 */ EQUIP_TYPE_SWORD,
+    /* 1 */ EQUIP_TYPE_SHIELD,
+    /* 2 */ EQUIP_TYPE_MAX
 } EquipmentType;
 
 typedef enum {
@@ -29,18 +29,18 @@ typedef enum {
 } EquipValueShield;
 
 typedef enum {
-    /* 0x00 */ UPG_QUIVER,
-    /* 0x01 */ UPG_BOMB_BAG,
-    /* 0x02 */ UPG_STRENGTH,
-    /* 0x03 */ UPG_SCALE,
-    /* 0x04 */ UPG_WALLET,
-    /* 0x05 */ UPG_BULLET_BAG,
-    /* 0x06 */ UPG_STICKS,
-    /* 0x07 */ UPG_NUTS
+    /* 0 */ UPG_QUIVER,
+    /* 1 */ UPG_BOMB_BAG,
+    /* 2 */ UPG_STRENGTH,
+    /* 3 */ UPG_SCALE,
+    /* 4 */ UPG_WALLET,
+    /* 5 */ UPG_BULLET_BAG,
+    /* 6 */ UPG_STICKS,
+    /* 7 */ UPG_NUTS
 } UpgradeType;
 
 typedef enum {
-    /* 0x00 */ QUEST_REMAINS_ODOWLA,
+    /* 0x00 */ QUEST_REMAINS_ODOLWA,
     /* 0x01 */ QUEST_REMAINS_GOHT,
     /* 0x02 */ QUEST_REMAINS_GYORG,
     /* 0x03 */ QUEST_REMAINS_TWINMOLD,
@@ -59,11 +59,28 @@ typedef enum {
     /* 0x10 */ QUEST_SONG_STORMS,
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK, // Obtained Bombers Notebook
-    /* 0x13 */ QUEST_SKULL_TOKEN,
-    /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
+    /* 0x13 */ QUEST_QUIVER,
+    /* 0x14 */ QUEST_BOMB_BAG,
+    /* 0x15 */ QUEST_SKULL_TOKEN,
+    /* 0x16 */ QUEST_HEART_PIECE,  // for `pauseCtx->cursorPoint[PAUSE_QUEST]`
+    /* 0x17 */ QUEST_17, // Used in a conditional for quest cursors
+    /* 0x18 */ QUEST_SONG_LULLABY_INTRO,
     /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
     /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C
 } QuestItem;
+
+typedef enum {
+    /* -1 */ DUNGEON_NONE = -1,
+    /*  0 */ DUNGEON_BOSS_KEY,
+    /*  1 */ DUNGEON_COMPASS,
+    /*  2 */ DUNGEON_MAP,
+    /*  3 */ DUNGEON_STRAY_FAIRIES,
+    /*  4 */ DUNGEON_FLOOR_INDEX_4, // Top Floor
+    /*  5 */ DUNGEON_FLOOR_INDEX_3,
+    /*  6 */ DUNGEON_FLOOR_INDEX_2,
+    /*  7 */ DUNGEON_FLOOR_INDEX_1,
+    /*  8 */ DUNGEON_FLOOR_INDEX_0 // Bottom Floor
+} DungeonItem;
 
 typedef enum {
     /* 0x00 */ SLOT_OCARINA,
@@ -117,7 +134,7 @@ typedef enum {
     /* 0xFF */ SLOT_NONE = 0xFF
 } InventorySlot;
 
-typedef enum {
+typedef enum ItemId {
     /* 0x00 */ ITEM_OCARINA,
     /* 0x01 */ ITEM_BOW,
     /* 0x02 */ ITEM_ARROW_FIRE,
@@ -210,7 +227,7 @@ typedef enum {
     /* 0x59 */ ITEM_WALLET_DEFAULT,
     /* 0x5A */ ITEM_WALLET_ADULT,
     /* 0x5B */ ITEM_WALLET_GIANT,
-    /* 0x5C */ ITEM_FISHING_POLE,
+    /* 0x5C */ ITEM_FISHING_ROD,
     /* 0x5D */ ITEM_REMAINS_ODOLWA,
     /* 0x5E */ ITEM_REMAINS_GOHT,
     /* 0x5F */ ITEM_REMAINS_GYORG,
@@ -231,7 +248,9 @@ typedef enum {
     /* 0x6E */ ITEM_SKULL_TOKEN,
     /* 0x6F */ ITEM_HEART_CONTAINER,
     /* 0x70 */ ITEM_HEART_PIECE,
-    /* 0x73 */ ITEM_SONG_LULLABY_INTRO = 0x73,
+    /* 0x71 */ ITEM_71,
+    /* 0x72 */ ITEM_72,
+    /* 0x73 */ ITEM_SONG_LULLABY_INTRO,
     /* 0x74 */ ITEM_KEY_BOSS,
     /* 0x75 */ ITEM_COMPASS,
     /* 0x76 */ ITEM_DUNGEON_MAP,
@@ -280,17 +299,19 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEAHORSE_CAUGHT,
-    /* 0xF0 */ ITEM_F0 = 0xF0,
-    /* 0xF1 */ ITEM_F1,
-    /* 0xF2 */ ITEM_F2,
-    /* 0xFD */ ITEM_FD = 0xFD,
+    /* 0xF0 */ ITEM_F0 = 0xF0, // PLAYER_MASK_BLAST
+    /* 0xF1 */ ITEM_F1, // PLAYER_MASK_BREMEN
+    /* 0xF2 */ ITEM_F2, // PLAYER_MASK_KAMARO
+    /* 0xFC */ ITEM_FC = 0xFC,
+    /* 0xFD */ ITEM_FD,
+    /* 0xFE */ ITEM_FE,
     /* 0xFF */ ITEM_NONE = 0xFF
-} ItemID;
+} ItemId;
 
 #define BOTTLE_FIRST 0
 #define BOTTLE_MAX 6
 
-typedef enum {
+typedef enum GetItemId {
     /* 0x00 */ GI_NONE,
     /* 0x01 */ GI_RUPEE_GREEN,
     /* 0x02 */ GI_RUPEE_BLUE,
@@ -345,7 +366,8 @@ typedef enum {
     /* 0x3D */ GI_KEY_BOSS,
     /* 0x3E */ GI_MAP,
     /* 0x3F */ GI_COMPASS,
-    /* 0x41 */ GI_HOOKSHOT = 0x41,
+    /* 0x40 */ GI_40,
+    /* 0x41 */ GI_HOOKSHOT,
     /* 0x42 */ GI_LENS,
     /* 0x43 */ GI_PICTO_BOX,
     /* 0x4C */ GI_OCARINA = 0x4C,
@@ -374,9 +396,13 @@ typedef enum {
     /* 0x69 */ GI_ZORA_EGG,
     /* 0x6A */ GI_GOLD_DUST,
     /* 0x6B */ GI_MUSHROOM,
-    /* 0x6E */ GI_SEAHORSE = 0x6E,
+    /* 0x6C */ GI_6C,
+    /* 0x6D */ GI_6D,
+    /* 0x6E */ GI_SEAHORSE,
     /* 0x6F */ GI_CHATEAU_BOTTLE,
-    /* 0x76 */ GI_ICE_TRAP = 0x76,
+    /* 0x70 */ GI_HYLIAN_LOACH,
+    /* 0x75 */ GI_75 = 0x75,
+    /* 0x76 */ GI_ICE_TRAP,
     /* 0x78 */ GI_MASK_DEKU = 0x78,
     /* 0x79 */ GI_MASK_GORON,
     /* 0x7A */ GI_MASK_ZORA,
@@ -404,7 +430,7 @@ typedef enum {
     /* 0x91 */ GI_CHATEAU = 0x91,
     /* 0x92 */ GI_MILK,
     /* 0x93 */ GI_GOLD_DUST_2,
-    /* 0x94 */ GI_HYLIAN_LOACH, // Unused bottled eel
+    /* 0x94 */ GI_HYLIAN_LOACH_2, // Unused bottled eel
     /* 0x95 */ GI_SEAHORSE_CAUGHT,
     /* 0x96 */ GI_MOON_TEAR,
     /* 0x97 */ GI_DEED_LAND,
@@ -418,7 +444,14 @@ typedef enum {
     /* 0x9F */ GI_SHIELD_HERO_STOLEN, // Code that treats this as hero's shield is unused, implied as intended to be stolen
     /* 0xA0 */ GI_ROOM_KEY,
     /* 0xA1 */ GI_LETTER_TO_MAMA,
-    /* 0xA9 */ GI_BOTTLE_STOLEN = 0xA9, // buy back stolen bottle
+    /* 0xA2 */ GI_A2,
+    /* 0xA3 */ GI_A3,
+    /* 0xA4 */ GI_A4,
+    /* 0xA5 */ GI_A5,
+    /* 0xA6 */ GI_A6,
+    /* 0xA7 */ GI_A7,
+    /* 0xA8 */ GI_A8,
+    /* 0xA9 */ GI_BOTTLE_STOLEN, // buy back stolen bottle
     /* 0xAA */ GI_LETTER_TO_KAFEI,
     /* 0xAB */ GI_PENDANT_OF_MEMORIES,
     /* 0xB4 */ GI_TINGLE_MAP_CLOCK_TOWN = 0xB4,
@@ -428,9 +461,10 @@ typedef enum {
     /* 0xB8 */ GI_TINGLE_MAP_GREAT_BAY,
     /* 0xB9 */ GI_TINGLE_MAP_STONE_TOWER,
     /* 0xBA */ GI_MAX
-} GetItemID;
+} GetItemId;
 
-typedef enum {
+typedef enum GetItemDrawId {
+    /*   -1 */ GID_NONE = -1,
     /* 0x00 */ GID_BOTTLE,
     /* 0x01 */ GID_KEY_SMALL,
     /* 0x02 */ GID_MASK_KAMARO,
@@ -550,26 +584,6 @@ typedef enum {
     /* 0x74 */ GID_PICTO_BOX,
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
     /* 0x76 */ GID_MAX
-} GetItemDrawID;
-
-// This enum may not be real, and actionparam is just used directly.
-// Keep using it for now.
-// TODO: fill
-typedef enum {
-    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
-    /* 0x00 */ EXCH_ITEM_NONE,
-    /* 0x13 */ EXCH_ITEM_PICTO_BOX = 0x13,
-    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
-    /* 0x2A */ EXCH_ITEM_MOON_TEAR = 0x2A,
-    /* 0x2B */ EXCH_ITEM_DEED_LAND,
-    /* 0x2C */ EXCH_ITEM_ROOM_KEY,
-    /* 0x2D */ EXCH_ITEM_LETTER_TO_KAFEI,
-    /* 0x2E */ EXCH_ITEM_2E,
-    /* 0x2F */ EXCH_ITEM_DEED_SWAMP,
-    /* 0x30 */ EXCH_ITEM_DEED_MOUNTAIN,
-    /* 0x31 */ EXCH_ITEM_DEED_OCEAN,
-    /* 0x32 */ EXCH_ITEM_32,
-    /* 0x33 */ EXCH_ITEM_LETTER_MAMA
-} ExchangeItemID;
+} GetItemDrawId;
 
 #endif

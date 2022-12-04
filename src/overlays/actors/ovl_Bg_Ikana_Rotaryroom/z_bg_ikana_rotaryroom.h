@@ -49,6 +49,4 @@ typedef struct BgIkanaRotaryroom {
     /* 0x584 */ s16 unk_584;
 } BgIkanaRotaryroom; // size = 0x588
 
-extern const ActorInit Bg_Ikana_Rotaryroom_InitVars;
-
 #endif // Z_BG_IKANA_ROTARYROOM_H

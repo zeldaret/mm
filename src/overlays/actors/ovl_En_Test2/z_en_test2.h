@@ -7,9 +7,12 @@ struct EnTest2;
 
 typedef struct EnTest2 {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x4];
+    /* 0x144 */ AnimatedMaterial* animMat;
 } EnTest2; // size = 0x148
 
-extern const ActorInit En_Test2_InitVars;
+typedef enum {
+    /* 0xB */ EN_TEST2_PARAMS_B = 0xB,
+    /* 0xC */ EN_TEST2_PARAMS_C
+} EnTest2_Params;
 
 #endif // Z_EN_TEST2_H

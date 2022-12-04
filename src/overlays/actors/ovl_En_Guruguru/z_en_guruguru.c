@@ -27,7 +27,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play);
 
 extern ColliderCylinderInit D_80BC79A0;
 
-const ActorInit En_Guruguru_InitVars = {
+ActorInit En_Guruguru_InitVars = {
     ACTOR_EN_GURUGURU,
     ACTORCAT_NPC,
     FLAGS,
@@ -62,9 +62,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BC79CC[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
-static u8 D_80BC79D4[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
-static f32 D_80BC79D8[] = { 1.0f, 1.0f };
+static AnimationHeader* sAnimations[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static f32 sPlaySpeeds[] = { 1.0f, 1.0f };
 static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
 static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
 
@@ -88,12 +88,12 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->actor.params == 1) {
         func_80BC6E10(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -105,24 +105,24 @@ void EnGuruguru_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void EnGuruguru_ChangeAnimation(EnGuruguru* this, s32 arg1) {
-    this->frameCount = Animation_GetLastFrame(D_80BC79CC[arg1]);
-    Animation_Change(&this->skelAnime, D_80BC79CC[arg1], D_80BC79D8[arg1], 0.0f, this->frameCount, D_80BC79D4[arg1],
-                     -4.0f);
+void EnGuruguru_ChangeAnim(EnGuruguru* this, s32 animIndex) {
+    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], sPlaySpeeds[animIndex], 0.0f, this->frameCount,
+                     sAnimationModes[animIndex], -4.0f);
 }
 
 void EnGuruguru_DoNothing(EnGuruguru* this, PlayState* play) {
 }
 
 void func_80BC6E10(EnGuruguru* this) {
-    EnGuruguru_ChangeAnimation(this, 0);
+    EnGuruguru_ChangeAnim(this, 0);
     this->textIdIndex = 0;
     this->unk270 = 0;
     if (this->actor.params == 0) {
-        if (gSaveContext.save.weekEventReg[38] & 0x10) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_10)) {
             this->textIdIndex = 1;
         }
-    } else if (gSaveContext.save.weekEventReg[38] & 0x40) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_40)) {
         this->textIdIndex = 2;
     } else {
         this->textIdIndex = 3;
@@ -131,8 +131,8 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && (gSaveContext.save.weekEventReg[77] & 4)) {
-        if (!(gSaveContext.save.weekEventReg[88] & 4)) {
+    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04)) {
             this->actor.textId = 0x295F;
         } else {
             this->actor.textId = 0x2960;
@@ -153,7 +153,7 @@ void func_80BC6F14(EnGuruguru* this, PlayState* play) {
         this->textIdIndex = 3;
         if (player->transformation == PLAYER_FORM_DEKU) {
             this->textIdIndex = 13;
-            if (gSaveContext.save.weekEventReg[79] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_04)) {
                 this->textIdIndex = 14;
             }
         }
@@ -212,16 +212,16 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
             func_80151BB4(play, 0x13);
-            gSaveContext.save.weekEventReg[79] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_79_04);
             func_80BC6E10(this);
             return;
         }
         if (this->actor.params == 0) {
             if (this->actor.textId == 0x295F) {
-                gSaveContext.save.weekEventReg[88] |= 4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_04);
             }
             if (this->actor.textId == 0x292A) {
-                gSaveContext.save.weekEventReg[38] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_38_10);
             }
             func_80151BB4(play, 0x13);
             func_80BC6E10(this);
@@ -232,7 +232,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             return;
         }
         if (this->textIdIndex == 12) {
-            gSaveContext.save.weekEventReg[38] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
             func_801A3B48(0);
             func_80151BB4(play, 0x36);
             func_80151BB4(play, 0x13);
@@ -295,9 +295,9 @@ void func_80BC7440(EnGuruguru* this, PlayState* play) {
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->unk268 = 0;
-        gSaveContext.save.weekEventReg[38] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
         this->actionFunc = func_80BC7520;
     } else {
         Actor_PickUp(&this->actor, play, GI_MASK_BREMEN, 300.0f, 300.0f);
@@ -309,7 +309,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, EXCH_ITEM_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -321,11 +321,11 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
 
     if (!gSaveContext.save.isNight) {
         if (this->actor.params == 1) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (this->actor.params == 0 || this->actor.params == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 

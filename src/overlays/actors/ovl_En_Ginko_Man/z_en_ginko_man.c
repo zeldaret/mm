@@ -30,7 +30,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_Dialogue(EnGinkoMan* this, PlayState* play);
 void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play);
 
-const ActorInit En_Ginko_Man_InitVars = {
+ActorInit En_Ginko_Man_InitVars = {
     ACTOR_EN_GINKO_MAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -42,7 +42,15 @@ const ActorInit En_Ginko_Man_InitVars = {
     (ActorFunc)EnGinkoMan_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+typedef enum {
+    /* 0 */ GINKO_ANIM_LEGSMACKING,
+    /* 1 */ GINKO_ANIM_SITTING,
+    /* 2 */ GINKO_ANIM_REACHING,
+    /* 3 */ GINKO_ANIM_AMAZED,
+    /* 4 */ GINKO_ANIM_ADVERTISING,
+} GinkoAnimation;
+
+static AnimationInfo sAnimationInfo[] = {
     { &object_boj_Anim_0008C0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_boj_Anim_0043F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_boj_Anim_004F40, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
@@ -72,7 +80,7 @@ void EnGinkoMan_Destroy(Actor* thisx, PlayState* play) {
 
 void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
     this->actor.flags |= ACTOR_FLAG_1; // targetable
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
     this->actionFunc = EnGinkoMan_Idle;
 }
 
@@ -82,11 +90,11 @@ void EnGinkoMan_Idle(EnGinkoMan* this, PlayState* play) {
     EnGinkoMan_SwitchAnimation(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if ((gSaveContext.save.bankRupees & 0xFFFF) == 0) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
             Message_StartTextbox(play, 0x44C, &this->actor);
             this->curTextId = 0x44C; // would you like to make an account
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
             if ((CURRENT_DAY == 3) && (gSaveContext.save.isNight == true)) {
                 Message_StartTextbox(play, 0x467, &this->actor);
                 this->curTextId = 0x467; // "What's this? You need somethin' on a day like this?
@@ -109,8 +117,8 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
 
     switch (this->curTextId) {
         case 0x44C: // "Hey there, little guy!  Won't you deposit some Rupees? (first dialogue)
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-            if (gSaveContext.save.weekEventReg[10] & 8) {
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
                 Message_StartTextbox(play, 0x44E, &this->actor);
                 this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
             } else {
@@ -124,7 +132,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             this->curTextId = 0x44E; //" ...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
             break;
         case 0x44F: // "...So, what'll it be?  Deposit Rupees Don't deposit Rupees"
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
             Message_StartTextbox(play, 0x450, &this->actor);
             this->curTextId = 0x450; // "How much? How much?  [rupee prompt]
             break;
@@ -135,14 +143,14 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             if (this->isNewAccount == true) {
                 this->isNewAccount = false;
                 if (this->curTextId != 0x453) { // "That's it? That ain't nothing at all, big spender!
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                 }
 
                 Message_StartTextbox(play, 0x461, &this->actor);
                 this->curTextId = 0x461; // So, little guy, what's your name?
             } else {
                 if (this->curTextId == 0x453) { // "That's it? That ain't nothing at all, big spender!
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                 }
 
                 play->msgCtx.bankRupees = gSaveContext.save.bankRupees & 0xFFFF;
@@ -157,32 +165,32 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x45A: // "All right, little guy, now I've got a total of [rupees] from you!"
             if (((gSaveContext.save.bankRupees & 0xFFFF) >= 200) && (this->previousBankValue < 200) &&
-                !(gSaveContext.save.weekEventReg[59] & 0x40)) {
-                gSaveContext.save.weekEventReg[59] |= 0x40;
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_40)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_40);
                 Message_StartTextbox(play, 0x45B, &this->actor);
                 this->curTextId = 0x45B; // "What's this? You've already saved up 200 Rupees!?!
             } else if (((gSaveContext.save.bankRupees & 0xFFFF) >= 1000) && ((this->previousBankValue) < 1000) &&
-                       !(gSaveContext.save.weekEventReg[59] & 0x80)) {
-                gSaveContext.save.weekEventReg[59] |= 0x80;
+                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_80);
                 Message_StartTextbox(play, 0x45C, &this->actor);
                 this->curTextId = 0x45C; // "What's this? You've already saved up 1000 Rupees!?!
             } else if ((gSaveContext.save.bankRupees & 0xFFFF) >= 5000) {
-                if ((this->previousBankValue < 5000) && !(gSaveContext.save.weekEventReg[60] & 1)) {
-                    gSaveContext.save.weekEventReg[60] |= 1;
+                if ((this->previousBankValue < 5000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_60_01)) {
+                    SET_WEEKEVENTREG(WEEKEVENTREG_60_01);
                     Message_StartTextbox(play, 0x45D, &this->actor);
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
                 } else if (this->previousBankValue < (s16)(gSaveContext.save.bankRupees & 0xFFFF)) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x45E, &this->actor);
                     this->curTextId =
                         0x45E; // "...Hang on there, little guy.  I can't take any more deposits.  Sorry..."
                 } else {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                     Message_StartTextbox(play, 0x460, &this->actor);
                     this->curTextId = 0x460; // "Come back and deposit some after you save up a bunch!"
                 }
             } else {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                 Message_StartTextbox(play, 0x460, &this->actor);
                 this->curTextId = 0x460; // "Come back and deposit some after you save up a bunch!"
             }
@@ -212,7 +220,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             EnGinkoMan_SetupStamp(this); // stamp player
             break;
         case 0x465: // "There! Now I'll know you when I see you!"
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
             play->msgCtx.bankRupees = gSaveContext.save.bankRupees & 0xFFFF;
             Message_StartTextbox(play, 0x45A, &this->actor);
             this->curTextId = 0x45A; // "All right, little guy, now I've got a total of [rupees] from you!"
@@ -269,7 +277,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x476: // "...You haven't deposited that many Rupees, so that much isn't available for withdrawal. Do the
                     // math!
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
         case 0x475: // "What's this?  Look, little guy, you can't hold this many rupees! You got that?"
         case 0x47C: // "Is that so?  Think it over, little guy!  So what are you gonna do?"
         case 0x47D: // duplicate of 48
@@ -336,7 +344,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if (gSaveContext.save.playerData.rupees < play->msgCtx.bankRupeesSelected) {
                     play_sound(NA_SE_SY_ERROR);
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x459, &this->actor);
                     this->curTextId = 0x459; // HEY you dont have that much
                 } else {
@@ -348,7 +356,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         Message_StartTextbox(play, 0x454, &this->actor);
                         this->curTextId = 0x454; // Seriously? that's a lot. A lot!
                     } else {
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                         Message_StartTextbox(play, 0x453, &this->actor);
                         this->curTextId = 0x453; // That's it? That aint nothing at all
                     }
@@ -365,7 +373,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                 }
             } else { // GINKOMAN_CHOICE_NO
                 func_8019F230();
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                 if ((gSaveContext.save.bankRupees & 0xFFFF) == 0) {
                     Message_StartTextbox(play, 0x456, &this->actor);
                     this->curTextId = 0x456; // Is that so? think about it
@@ -398,7 +406,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                 if ((s32)((gSaveContext.save.bankRupees & 0xFFFF)) <
                     ((s32)(play->msgCtx.bankRupeesSelected + this->serviceFee))) {
                     play_sound(NA_SE_SY_ERROR);
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                     Message_StartTextbox(play, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
                 } else if (CUR_CAPACITY(UPG_WALLET) <
@@ -441,7 +449,7 @@ void EnGinkoMan_WaitForRupeeCount(EnGinkoMan* this, PlayState* play) {
         switch (this->curTextId) {
             case 0x450: // "How much? How much?" [rupee prompt] Set the amount with [Control Stick] and
                 if (play->msgCtx.bankRupeesSelected == 0) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x457, &this->actor);
                     this->curTextId = 0x457; // Zero Rupees? Cruel joke!
                 } else {
@@ -516,14 +524,14 @@ void EnGinkoMan_BankAward(EnGinkoMan* this, PlayState* play) {
         this->actor.parent = NULL;
         EnGinkoMan_SetupBankAward2(this);
     } else if (this->curTextId == 0x45B) { // "Whats this, you already saved up 200?"
-        if (!(gSaveContext.save.weekEventReg[10] & 8)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08)) {
             Actor_PickUp(&this->actor, play, GI_WALLET_ADULT + CUR_UPG_VALUE(UPG_WALLET), 500.0f, 100.0f);
         } else {
             Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
         }
     } else if (this->curTextId == 0x45C) { // "Whats this, you already saved up 5000?"
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
-    } else if (!(gSaveContext.save.weekEventReg[59] & 8)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
         Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 500.0f, 100.0f);
@@ -538,14 +546,14 @@ void EnGinkoMan_SetupBankAward2(EnGinkoMan* this) {
 // separate function to handle bank rewards... called while the player is receiving the award
 void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.weekEventReg[10] & 8) && (this->curTextId == 0x45B)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_10_08) && (this->curTextId == 0x45B)) {
             // "What's this? You've already saved up 200 Rupees!?!  Well, little guy, here's your special gift. Take
             // it!"
-            gSaveContext.save.weekEventReg[10] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_10_08);
             Message_StartTextbox(play, 0x47A, &this->actor);
             this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
             Message_StartTextbox(play, 0x47B, &this->actor);
             this->curTextId = 0x47B; // Message after receiving reward for depositing 1000 rupees.
         }
@@ -553,18 +561,18 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-            if (!(gSaveContext.save.weekEventReg[59] & 8)) {
-                gSaveContext.save.weekEventReg[59] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_59_08);
             }
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
 void EnGinkoMan_SetupStamp(EnGinkoMan* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_REACHING);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_REACHING);
     this->actionFunc = EnGinkoMan_Stamp;
 }
 
@@ -577,12 +585,12 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->curTextId) {
             case 0x464: // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                 Message_StartTextbox(play, 0x465, &this->actor);
                 this->curTextId = 0x465; // "There! Now I'll know you when I see you!"
                 break;
             case 0x469: // "Excuse me, but let me take a look at you..."
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                 play->msgCtx.bankRupees = (gSaveContext.save.bankRupees & 0xFFFF);
                 if ((CURRENT_DAY == 3) && (gSaveContext.save.isNight == true)) {
                     Message_StartTextbox(play, 0x46C, &this->actor);
@@ -603,12 +611,12 @@ void EnGinkoMan_SwitchAnimation(EnGinkoMan* this, PlayState* play) {
         if (this->animTimer == 0) {
             if (this->skelAnime.animation != &object_boj_Anim_004A7C) {
                 this->animTimer = 40;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_ADVERTISING);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_ADVERTISING);
             }
         }
     } else if ((this->animTimer == 0) && (this->skelAnime.animation != &object_boj_Anim_000AC4)) {
         this->animTimer = 40;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_AMAZED);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_AMAZED);
     }
 
     DECR(this->animTimer);

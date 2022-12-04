@@ -20,6 +20,4 @@ typedef struct EnFall2 {
     /* 0x2E8 */ EnFall2ActionFunc actionFunc;
 } EnFall2; // size = 0x2EC
 
-extern const ActorInit En_Fall2_InitVars;
-
 #endif // Z_EN_FALL2_H

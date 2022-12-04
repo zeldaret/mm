@@ -37,7 +37,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play);
 void func_80BB3318(EnGeg* this, PlayState* play);
 void func_80BB347C(EnGeg* this, PlayState* play);
 
-const ActorInit En_Geg_InitVars = {
+ActorInit En_Geg_InitVars = {
     ACTOR_EN_GEG,
     ACTORCAT_NPC,
     FLAGS,
@@ -126,7 +126,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gGoronLyingDownIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -355,7 +355,7 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
         sp40 = player->actor.world.pos;
     } else {
         sp40 = player->actor.world.pos;
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     }
 
     sp34 = this->actor.world.pos;
@@ -379,7 +379,7 @@ void func_80BB1FCC(EnGeg* this, PlayState* play) {
 
 void func_80BB2020(EnGeg* this, PlayState* play) {
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_4AC);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_4AC);
 }
 
 s32 func_80BB2088(EnGeg* this, PlayState* play) {
@@ -453,7 +453,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
         }
     } else {
         this->unk_230 &= ~4;
-        if (gSaveContext.save.weekEventReg[35] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_35_40)) {
             if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_230 & 8)) {
                 this->unk_496 = 0xD62;
                 Message_StartTextbox(play, this->unk_496, &this->actor);
@@ -464,7 +464,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
                 this->unk_230 |= 8;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_230 & 8)) {
-            gSaveContext.save.weekEventReg[35] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_35_40);
             this->unk_496 = 0xD5E;
             this->unk_49A = this->unk_49C[0];
             Message_StartTextbox(play, this->unk_496, &this->actor);
@@ -609,7 +609,7 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
 void func_80BB2944(EnGeg* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_4AC].animation);
 
     if (this->unk_4AC == 19) {
         if (curFrame == lastFrame) {
@@ -656,9 +656,9 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[4]) {
         if (ActorCutscene_GetCanPlayNext(this->unk_498)) {
-            gSaveContext.save.weekEventReg[37] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_37_08);
             if (this->actor.child != NULL) {
-                Actor_MarkForDeath(this->actor.child);
+                Actor_Kill(this->actor.child);
             }
             this->unk_230 |= 0x10;
             ActorCutscene_StartAndSetFlag(this->unk_498, &this->actor);
@@ -699,13 +699,13 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
         }
         this->unk_4E0--;
     }
-    func_8019F570(&this->actor.projectedPos, 1);
+    AudioSfx_LowerSfxSettingsReverb(&this->actor.projectedPos, true);
     func_8019F4AC(&this->actor.projectedPos, NA_SE_EN_GOLON_SIRLOIN_EAT - SFX_FLAG);
 }
 
 void func_80BB2E00(EnGeg* this, PlayState* play) {
     s16 sp2E = this->skelAnime.curFrame;
-    s16 sp2C = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
+    s16 sp2C = Animation_GetLastFrame(sAnimationInfo[this->unk_4AC].animation);
 
     if (this->unk_4AC == 2) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
@@ -798,7 +798,7 @@ void func_80BB31B8(EnGeg* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        gSaveContext.save.weekEventReg[61] |= 1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_61_01);
         if (getItemId == GI_MASK_DON_GERO) {
             this->unk_230 |= 0x40;
         }
@@ -839,7 +839,7 @@ void func_80BB3318(EnGeg* this, PlayState* play) {
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[7]) {
         func_800AEF44(Effect_GetByIndex(this->unk_4DC));
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.2f, 1.0f);
         Actor_MoveWithGravity(&this->actor);
@@ -861,8 +861,8 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
-    if (gSaveContext.save.weekEventReg[61] & 1) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_61_01)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -879,7 +879,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
     if (this->actor.update != NULL) {
         this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->unk_248 < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 

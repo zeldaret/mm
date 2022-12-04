@@ -1,16 +1,16 @@
 ﻿<Root>
     <File Name="object_an1" Segment="6">
-        <Animation Name="object_an1_Anim_001090" Offset="0x1090" />
-        <Animation Name="object_an1_Anim_00144C" Offset="0x144C" />
-        <Animation Name="object_an1_Anim_001E74" Offset="0x1E74" />
-        <Animation Name="object_an1_Anim_0026B4" Offset="0x26B4" />
-        <Animation Name="object_an1_Anim_00341C" Offset="0x341C" />
-        <Animation Name="object_an1_Anim_003EA8" Offset="0x3EA8" />
-        <Animation Name="object_an1_Anim_00544C" Offset="0x544C" />
-        <Animation Name="object_an1_Anim_0065C8" Offset="0x65C8" />
-        <Animation Name="object_an1_Anim_0071E8" Offset="0x71E8" />
-        <Animation Name="object_an1_Anim_007E08" Offset="0x7E08" />
-        <Animation Name="object_an1_Anim_008B6C" Offset="0x8B6C" />
+        <Animation Name="object_an1_Anim_001090" Offset="0x1090" /> <!-- Original name is "an_ajimi" ("tasting; sampling​") -->
+        <Animation Name="object_an1_Anim_00144C" Offset="0x144C" /> <!-- Original name is "an_ajimiend" -->
+        <Animation Name="object_an1_Anim_001E74" Offset="0x1E74" /> <!-- Original name is "an_aogu" ("to look up") -->
+        <Animation Name="object_an1_Anim_0026B4" Offset="0x26B4" /> <!-- Original name is "an_bikkuri" ("to be surprised") -->
+        <Animation Name="object_an1_Anim_00341C" Offset="0x341C" /> <!-- Original name is "an_obonwait" ("obon" = "tray") -->
+        <Animation Name="object_an1_Anim_003EA8" Offset="0x3EA8" /> <!-- Original name is "an_obonwalk" -->
+        <Animation Name="object_an1_Anim_00544C" Offset="0x544C" /> <!-- Original name is "an_ojigit" ("bow; bowing") -->
+        <Animation Name="object_an1_Anim_0065C8" Offset="0x65C8" /> <!-- Original name is "an_ryouri" ("cooking") -->
+        <Animation Name="object_an1_Anim_0071E8" Offset="0x71E8" /> <!-- Original name is "an_suwaru" ("to sit") -->
+        <Animation Name="object_an1_Anim_007E08" Offset="0x7E08" /> <!-- Original name is "an_suzetsubou" ("su" = short for "suwaru", "zetsubou" = "despair; hopelessness​") -->
+        <Animation Name="object_an1_Anim_008B6C" Offset="0x8B6C" /> <!-- Original name is "an_wait" -->
         <DList Name="object_an1_DL_00BC20" Offset="0xBC20" />
         <DList Name="object_an1_DL_00BD20" Offset="0xBD20" />
         <DList Name="object_an1_DL_00BE60" Offset="0xBE60" />
@@ -52,7 +52,7 @@
         <Texture Name="object_an1_Tex_0103A0" OutName="tex_0103A0" Format="ci8" Width="32" Height="32" Offset="0x103A0" />
         <!-- <Blob Name="object_an1_Blob_0107A0" Size="0xA40" Offset="0x107A0" /> -->
         <DList Name="object_an1_DL_0111E0" Offset="0x111E0" />
-        <DList Name="object_an1_DL_0111E8" Offset="0x111E8" />
+        <DList Name="object_an1_DL_0111E8" Offset="0x111E8" /> <!-- Original name is "an_obon_model" -->
         <Texture Name="object_an1_Tex_011928" OutName="tex_011928" Format="i8" Width="32" Height="32" Offset="0x11928" />
         <Texture Name="object_an1_Tex_011D28" OutName="tex_011D28" Format="rgba16" Width="16" Height="16" Offset="0x11D28" />
         <Texture Name="object_an1_Tex_011F28" OutName="tex_011F28" Format="rgba16" Width="16" Height="16" Offset="0x11F28" />
@@ -60,7 +60,7 @@
         <Texture Name="object_an1_Tex_012228" OutName="tex_012228" Format="i4" Width="16" Height="16" Offset="0x12228" />
         <Texture Name="object_an1_Tex_0122A8" OutName="tex_0122A8" Format="i8" Width="16" Height="16" Offset="0x122A8" />
         <!-- <Blob Name="object_an1_Blob_0123A8" Size="0x10" Offset="0x123A8" /> -->
-        <DList Name="object_an1_DL_012478" Offset="0x12478" />
+        <DList Name="object_an1_DL_012478" Offset="0x12478" /> <!-- Original name is "an_hashi_model" ("chopsticks​") -->
         <Limb Name="object_an1_Standardlimb_0124D8" Type="Standard" EnumName="OBJECT_AN1_LIMB_01" Offset="0x124D8" />
         <Limb Name="object_an1_Standardlimb_0124E4" Type="Standard" EnumName="OBJECT_AN1_LIMB_02" Offset="0x124E4" />
         <Limb Name="object_an1_Standardlimb_0124F0" Type="Standard" EnumName="OBJECT_AN1_LIMB_03" Offset="0x124F0" />
@@ -81,8 +81,8 @@
         <Limb Name="object_an1_Standardlimb_0125A4" Type="Standard" EnumName="OBJECT_AN1_LIMB_12" Offset="0x125A4" />
         <Limb Name="object_an1_Standardlimb_0125B0" Type="Standard" EnumName="OBJECT_AN1_LIMB_13" Offset="0x125B0" />
         <Limb Name="object_an1_Standardlimb_0125BC" Type="Standard" EnumName="OBJECT_AN1_LIMB_14" Offset="0x125BC" />
-        <Skeleton Name="object_an1_Skel_012618" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AN1_LIMB_NONE" LimbMax="OBJECT_AN1_LIMB_MAX" EnumName="object_an1_Limbs" Offset="0x12618" />
-        <Animation Name="object_an1_Anim_013048" Offset="0x13048" />
-        <Animation Name="object_an1_Anim_013E1C" Offset="0x13E1C" />
+        <Skeleton Name="object_an1_Skel_012618" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AN1_LIMB_NONE" LimbMax="OBJECT_AN1_LIMB_MAX" EnumName="ObjectAn1Limb" Offset="0x12618" />
+        <Animation Name="object_an1_Anim_013048" Offset="0x13048" /> <!-- Original name is "an_walk" -->
+        <Animation Name="object_an1_Anim_013E1C" Offset="0x13E1C" /> <!-- Original name is "anj_tetunagu_loop" ("joined hands") -->
     </File>
 </Root>

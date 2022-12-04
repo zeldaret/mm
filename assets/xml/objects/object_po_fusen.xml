@@ -27,6 +27,6 @@
         <Limb Name="object_po_fusen_Standardlimb_0024A8" Type="Standard" EnumName="OBJECT_PO_FUSEN_LIMB_07" Offset="0x24A8" />
         <Limb Name="object_po_fusen_Standardlimb_0024B4" Type="Standard" EnumName="OBJECT_PO_FUSEN_LIMB_08" Offset="0x24B4" />
         <Limb Name="object_po_fusen_Standardlimb_0024C0" Type="Standard" EnumName="OBJECT_PO_FUSEN_LIMB_09" Offset="0x24C0" />
-        <Skeleton Name="object_po_fusen_Skel_0024F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PO_FUSEN_LIMB_NONE" LimbMax="OBJECT_PO_FUSEN_LIMB_MAX" EnumName="object_po_fusen_Limbs" Offset="0x24F0" />
+        <Skeleton Name="object_po_fusen_Skel_0024F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PO_FUSEN_LIMB_NONE" LimbMax="OBJECT_PO_FUSEN_LIMB_MAX" EnumName="ObjectPoFusenLimb" Offset="0x24F0" />
     </File>
 </Root>

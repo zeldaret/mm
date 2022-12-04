@@ -23,7 +23,7 @@ typedef struct {
     /* 0x4 */ s16 amount;
 } RuppeInfo;
 
-const ActorInit En_Sc_Ruppe_InitVars = {
+ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
     ACTORCAT_NPC,
     FLAGS,
@@ -36,12 +36,12 @@ const ActorInit En_Sc_Ruppe_InitVars = {
 };
 
 RuppeInfo sRupeeInfo[] = {
-    { gameplay_keep_Tex_061FC0, 1 },   // Green rupee
-    { gameplay_keep_Tex_061FE0, 5 },   // Blue rupee
-    { gameplay_keep_Tex_062000, 20 },  // Red rupee
-    { gameplay_keep_Tex_062040, 200 }, // Orange rupee
-    { gameplay_keep_Tex_062020, 50 },  // Purple rupee
-    { gameplay_keep_Tex_062060, 10 },  // (unused)
+    { gRupeeGreenTex, 1 },    // Green rupee
+    { gRupeeBlueTex, 5 },     // Blue rupee
+    { gRupeeRedTex, 20 },     // Red rupee
+    { gRupeeOrangeTex, 200 }, // Orange rupee
+    { gRupeePurpleTex, 50 },  // Purple rupee
+    { gRupeeSilverTex, 10 },  // (unused)
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -73,38 +73,38 @@ void EnScRuppe_UpdateCollision(EnScRuppe* this, PlayState* play) {
 s32 func_80BD697C(s16 ruppeIndex) {
     switch (ruppeIndex) {
         case RUPEE_GREEN:
-            if (gSaveContext.save.weekEventReg[53] & 4) {
-                gSaveContext.save.weekEventReg[53] &= (u8)~4;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
         case RUPEE_BLUE:
-            if (gSaveContext.save.weekEventReg[53] & 0x80) {
-                gSaveContext.save.weekEventReg[53] &= (u8)~0x80;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
         case RUPEE_RED:
-            if (gSaveContext.save.weekEventReg[54] & 1) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~1;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
         case RUPEE_ORANGE:
-            if (gSaveContext.save.weekEventReg[54] & 2) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~2;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
         case RUPEE_PURPLE:
-            if (gSaveContext.save.weekEventReg[54] & 4) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~4;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
         case RUPEE_UNUSED:
-            if ((gSaveContext.save.weekEventReg[54] & 8)) {
-                gSaveContext.save.weekEventReg[54] &= (u8)~8;
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }
             break;
@@ -129,7 +129,7 @@ void func_80BD6B18(EnScRuppe* this, PlayState* play) {
 
     if (this->ruppeDisplayTime > 30) {
         if (func_80BD697C(this->ruppeIndex)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         f32 scale;
@@ -185,7 +185,7 @@ void EnScRuppe_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeInfo[this->ruppeIndex].tex));
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
+    gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

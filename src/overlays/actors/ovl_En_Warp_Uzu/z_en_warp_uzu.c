@@ -21,7 +21,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play);
 void func_80A66384(EnWarpUzu* this, PlayState* play);
 void EnWarpUzu_DoNothing(EnWarpUzu* this, PlayState* play);
 
-const ActorInit En_Warp_Uzu_InitVars = {
+ActorInit En_Warp_Uzu_InitVars = {
     ACTOR_EN_WARP_UZU,
     ACTORCAT_PROP,
     FLAGS,
@@ -111,8 +111,8 @@ void func_80A66278(EnWarpUzu* this, PlayState* play) {
 }
 
 void func_80A66384(EnWarpUzu* this, PlayState* play) {
-    play->nextEntranceIndex = 0x22A0;
-    gSaveContext.respawn[RESPAWN_MODE_DOWN].entranceIndex = play->nextEntranceIndex;
+    play->nextEntrance = ENTRANCE(PIRATES_FORTRESS, 10);
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = play->nextEntrance;
     func_80169EFC(&play->state);
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;

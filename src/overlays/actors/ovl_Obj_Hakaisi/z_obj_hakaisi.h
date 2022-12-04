@@ -24,6 +24,4 @@ typedef struct ObjHakaisi {
     /* 0x19E */ u8 unk_19E;
 } ObjHakaisi; // size = 0x1A0
 
-extern const ActorInit Obj_Hakaisi_InitVars;
-
 #endif // Z_OBJ_HAKAISI_H

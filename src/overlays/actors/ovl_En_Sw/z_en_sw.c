@@ -28,7 +28,7 @@ void func_808DB100(EnSw* this, PlayState* play);
 void func_808DB25C(EnSw* this, PlayState* play);
 void func_808DB2E0(EnSw* this, PlayState* play);
 
-const ActorInit En_Sw_InitVars = {
+ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
     ACTORCAT_NPC,
     FLAGS,
@@ -134,7 +134,7 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
     { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
     { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
@@ -678,7 +678,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             this->actor.flags &= ~ACTOR_FLAG_1;
             if (!ENSW_GET_3(&this->actor)) {
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -738,7 +738,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
 void func_808DA350(EnSw* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 0x200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_200000) && (this->actor.xyzDistToPlayerSq < 8000.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_LAUGH);
         Math_Vec3f_Copy(&this->unk_374, &player->actor.world.pos);
         this->unk_410 &= ~0x20;
@@ -761,7 +761,7 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
         Math_Vec3f_Copy(&sp38, &this->unk_374);
         func_808D9894(this, &sp38);
 
-        temp_v0 = Math_FAtan2F(sp38.z, sp38.x);
+        temp_v0 = Math_Atan2S_XY(sp38.z, sp38.x);
         if (ABS_ALT(temp_v0) < temp_s1) {
             this->skelAnime.curFrame = 0.0f;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -781,11 +781,10 @@ void func_808DA3F4(EnSw* this, PlayState* play) {
     func_808D94D0(this, play, 0, 0, temp_s1);
 }
 
-#ifdef NON_MATCHING
 void func_808DA578(EnSw* this, PlayState* play) {
     f32 temp_f0;
-    s32 test;
-    s32 test2;
+    f32 temp;
+    s16 temp2;
     Vec3f sp30;
 
     if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -795,7 +794,8 @@ void func_808DA578(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp30, &this->unk_374);
             func_808D9894(this, &sp30);
-            func_808D94D0(this, play, 0, 0, Math_FAtan2F(sp30.z, sp30.x));
+            temp2 = Math_Atan2S_XY(sp30.z, sp30.x);
+            func_808D94D0(this, play, 0, 0, temp2);
         }
     } else if (this->unk_410 & 0x20) {
         Math_Vec3f_Copy(&this->unk_374, &this->actor.home.pos);
@@ -805,28 +805,18 @@ void func_808DA578(EnSw* this, PlayState* play) {
         this->skelAnime.curFrame = 0.0f;
     }
 
-    temp_f0 = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
-    if (!(this->unk_410 & 0x20)) {
-        test = this->unk_414;
-        test2 = temp_f0;
-        if ((test != 0) && (test < test2)) {
-            this->unk_410 |= 0x20;
-        }
+    temp = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
+    if (!(this->unk_410 & 0x20) && ((s32)this->unk_414 != 0) && ((s32)this->unk_414 < (s32)temp)) {
+        this->unk_410 |= 0x20;
     }
-    this->unk_414 = temp_f0;
+    this->unk_414 = temp;
 }
-#else
-void func_808DA578(EnSw* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA578.s")
-#endif
 
-#ifdef NON_MATCHING
 void func_808DA6FC(EnSw* this, PlayState* play) {
     f32 sp4C;
-    s32 temp;
-    s32 temp2;
-    Vec3f sp38;
     f32 temp_f0;
+    s16 temp2;
+    Vec3f sp38;
 
     if (!Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         temp_f0 = this->skelAnime.endFrame - this->skelAnime.curFrame;
@@ -835,7 +825,8 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
         if ((this->actor.speedXZ == 0.0f) && (this->unk_44C != 0.0f)) {
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            func_808D94D0(this, play, 0, 0, Math_FAtan2F(sp38.z, sp38.x));
+            temp2 = Math_Atan2S_XY(sp38.z, sp38.x);
+            func_808D94D0(this, play, 0, 0, temp2);
         }
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -843,9 +834,8 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
     }
 
     sp4C = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
-    temp = this->unk_414;
-    temp2 = sp4C;
-    if ((temp != 0) && (temp < temp2)) {
+
+    if (((s32)this->unk_414 != 0) && ((s32)this->unk_414 < (s32)sp4C)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_374);
         this->unk_454 = Rand_S16Offset(20, 20);
         this->unk_456 = (Rand_ZeroOne() * 10.0f) + 3.0f;
@@ -854,10 +844,6 @@ void func_808DA6FC(EnSw* this, PlayState* play) {
     }
     this->unk_414 = sp4C;
 }
-#else
-void func_808DA6FC(EnSw* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DA6FC.s")
-#endif
 
 void func_808DA89C(EnSw* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -930,7 +916,7 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             if (this->unk_45E == 0) {
                 Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
                 func_808D9894(this, &sp34);
-                temp_v0 = Math_FAtan2F(sp34.z, sp34.x);
+                temp_v0 = Math_Atan2S_XY(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -966,15 +952,13 @@ void func_808DAA60(EnSw* this, PlayState* play) {
     func_808D94D0(this, play, 0, 0, sp40);
 }
 
-#ifdef NON_MATCHING
 void func_808DACF4(EnSw* this, PlayState* play) {
     f32 sp4C;
-    f32 temp_f0;
-    s32 temp_f6;
+    f32 temp;
+    s16 temp_f6;
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) == 0) {
         Vec3f sp38;
-        f32 temp;
 
         temp = this->skelAnime.endFrame - this->skelAnime.curFrame;
         this->unk_44C = 0.1f * temp;
@@ -983,7 +967,8 @@ void func_808DACF4(EnSw* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp38, &this->unk_374);
             func_808D9894(this, &sp38);
-            func_808D94D0(this, play, 0, 0, Math_FAtan2F(sp38.z, sp38.x));
+            temp_f6 = Math_Atan2S_XY(sp38.z, sp38.x);
+            func_808D94D0(this, play, 0, 0, temp_f6);
         }
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALWALL_DASH);
@@ -991,8 +976,8 @@ void func_808DACF4(EnSw* this, PlayState* play) {
     }
 
     sp4C = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_374);
-    temp_f6 = this->unk_414;
-    if ((temp_f6 != 0) && (temp_f6 < (s32)sp4C)) {
+
+    if (((s32)this->unk_414 != 0) && ((s32)this->unk_414 < (s32)sp4C)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_374);
         this->unk_4A0 += this->unk_49C;
         if ((this->unk_4A0 >= this->unk_1E4->count) || (this->unk_4A0 < 0)) {
@@ -1009,10 +994,6 @@ void func_808DACF4(EnSw* this, PlayState* play) {
     }
     this->unk_414 = sp4C;
 }
-#else
-void func_808DACF4(EnSw* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808DACF4.s")
-#endif
 
 void func_808DAEB4(EnSw* this, PlayState* play) {
     Vec3f sp5C;
@@ -1042,7 +1023,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
             }
 
             if (count == ARRAY_COUNT(this->unk_464)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         } else {
             Math_ApproachF(&this->actor.scale.x, 0.0f, 0.08f, 1.0f);
@@ -1057,7 +1038,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
                                        0, this->actor.params) != NULL) {
                     play_sound(NA_SE_SY_KINSTA_MARK_APPEAR);
                 }
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             func_808D94D0(this, play, 0, 0, 0x1554);
         }
@@ -1158,16 +1139,16 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
     if (!func_808D9968(this, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_Init(play, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable, 30);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
         if (!ENSW_GET_3(&this->actor)) {
-            this->actor.hintId = 0x1F;
+            this->actor.hintId = TATL_HINT_ID_SKULLWALLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
             this->collider.info.toucher.damage = 8;
         } else {
-            this->actor.hintId = 0x20;
+            this->actor.hintId = TATL_HINT_ID_GOLD_SKULLTULA;
             CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable2, &sColChkInfoInit2);
             this->collider.info.toucher.damage = 16;
         }
@@ -1229,7 +1210,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 break;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

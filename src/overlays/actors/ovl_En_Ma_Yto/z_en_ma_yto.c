@@ -59,7 +59,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play);
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play);
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play);
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex);
 void EnMaYto_UpdateEyes(EnMaYto* this);
 void func_80B90E50(EnMaYto* this, s16);
 void EnMaYto_SetRomaniFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouthTexIndex);
@@ -69,7 +69,7 @@ s32 EnMaYto_HasSpokenToPlayerToday(void);
 s32 EnMaYto_HasSpokenToPlayer(void);
 void EnMaYto_SetTalkedFlag(void);
 
-const ActorInit En_Ma_Yto_InitVars = {
+ActorInit En_Ma_Yto_InitVars = {
     ACTOR_EN_MA_YTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -153,7 +153,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     this->unk320 = 0;
     this->eyeTexIndex = 0;
 
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
     } else {
         EnMaYto_SetFaceExpression(this, 5, 2);
@@ -161,9 +161,9 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 
     this->unk31E = 0;
     this->blinkTimer = 100;
-    this->type = EN_MA_YTO_PARSE_TYPE(this->actor.params);
+    this->type = EN_MA_YTO_GET_TYPE(&this->actor);
     if (!EnMaYto_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -186,19 +186,19 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
 s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
     switch (this->type) {
         case MA_YTO_TYPE_DEFAULT:
-            if (CURRENT_DAY == 3 && !(gSaveContext.save.weekEventReg[22] & 1)) {
+            if (CURRENT_DAY == 3 && !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 return false;
             }
             break;
 
         case MA_YTO_TYPE_DINNER:
-            if (CURRENT_DAY != 1 && (gSaveContext.save.weekEventReg[22] & 1)) {
+            if (CURRENT_DAY != 1 && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 return false;
             }
             break;
 
         case MA_YTO_TYPE_BARN:
-            if (gSaveContext.save.weekEventReg[22] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 if (((this->actor.params & 0x0F00) >> 8) != 0) {
                     return false;
                 }
@@ -211,9 +211,8 @@ s32 EnMaYto_CheckValidSpawn(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_AFTERMILKRUN:
-            // if (!(ProtectedCremia) && !(gSaveContext.save.weekEventReg[52] & 2)) || (PlayedMilkMinigame))
-            if ((!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) ||
-                (gSaveContext.save.weekEventReg[14] & 1)) {
+            if ((!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_14_01)) {
                 return false;
             }
             break;
@@ -240,8 +239,7 @@ void EnMaYto_InitAnimation(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_BARN:
-            // if (AliensDefeated)
-            if (gSaveContext.save.weekEventReg[22] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 EnMaYto_ChangeAnim(this, 12);
             } else {
                 EnMaYto_ChangeAnim(this, 8);
@@ -279,7 +277,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, PlayState* play) {
 
         case MA_YTO_TYPE_AFTERMILKRUN:
             this->unk310 = 0;
-            if (INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI && (gSaveContext.save.weekEventReg[52] & 1) &&
+            if ((INV_CONTENT(ITEM_MASK_ROMANI) == ITEM_MASK_ROMANI) && CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) &&
                 (Rand_Next() & 0x80)) {
                 EnMaYto_SetupBeginWarmFuzzyFeelingCs(this);
             } else {
@@ -304,7 +302,7 @@ s32 EnMaYto_SearchRomani(EnMaYto* this, PlayState* play) {
     while (npcActor != NULL) {
         if (npcActor->id == ACTOR_EN_MA_YTS) {
             EnMaYts* romani = (EnMaYts*)npcActor;
-            s16 romaniType = EN_MA_YTS_PARSE_TYPE(&romani->actor);
+            s16 romaniType = EN_MA_YTS_GET_TYPE(&romani->actor);
 
             if ((this->type == MA_YTO_TYPE_DINNER && romaniType == MA_YTS_TYPE_SITTING) ||
                 (this->type == MA_YTO_TYPE_BARN && romaniType == MA_YTS_TYPE_BARN)) {
@@ -334,7 +332,7 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
             return 0;
 
         case MA_YTO_TYPE_DINNER:
-            if (!(gSaveContext.save.weekEventReg[22] & 1) && CURRENT_DAY == 2) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) && (CURRENT_DAY == 2)) {
                 return 0;
             }
             if (EnMaYto_SearchRomani(this, play)) {
@@ -343,8 +341,7 @@ s32 EnMaYto_TryFindRomani(EnMaYto* this, PlayState* play) {
             return 1;
 
         case MA_YTO_TYPE_BARN:
-            // if (AliensDefeated)
-            if (gSaveContext.save.weekEventReg[22] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 if (EnMaYto_SearchRomani(this, play)) {
                     return 2;
                 }
@@ -380,10 +377,10 @@ void EnMaYto_KeepLookingForRomani(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_SetupDefaultWait(EnMaYto* this) {
     if (this->actor.shape.rot.y == this->actor.home.rot.y) {
-        this->currentAnim = 11;
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     } else {
-        this->currentAnim = 1;
+        this->animIndex = 1;
         EnMaYto_ChangeAnim(this, 1);
     }
 
@@ -398,8 +395,8 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
 
     direction = rotY - this->actor.yawTowardsPlayer;
     if (Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x3000, 0x100) == 0 &&
-        this->currentAnim == 1) {
-        this->currentAnim = 11;
+        this->animIndex == 1) {
+        this->animIndex = 11;
         EnMaYto_ChangeAnim(this, 11);
     }
 
@@ -498,7 +495,7 @@ void EnMaYto_DefaultChooseNextDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupDinnerWait(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         func_80B90E50(this, 0);
         this->unk31E = 0;
     } else {
@@ -539,7 +536,7 @@ void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupDinnerDialogueHandler(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -690,7 +687,7 @@ void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupBarnWait(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         EnMaYto_ChangeAnim(this, 13);
         func_80B90E50(this, 0);
         this->unk31E = 0;
@@ -718,7 +715,7 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
             Actor_ChangeFocus(&this->actor, play, &this->actor);
             EnMaYto_BarnStartDialogue(this, play);
             EnMaYto_SetupBarnDialogueHandler(this);
-        } else if (!(gSaveContext.save.weekEventReg[22] & 1) || ABS_ALT(direction) < 0x2000) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) || ABS_ALT(direction) < 0x2000) {
             func_800B8614(&this->actor, play, 100.0f);
 
             child = this->actor.child;
@@ -730,7 +727,7 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupBarnDialogueHandler(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         func_80B90E50(this, 1);
     } else {
         func_80B90E50(this, 2);
@@ -878,10 +875,10 @@ void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
-    if (gSaveContext.save.weekEventReg[52] & 1) { // if (ProtectedCremia)
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
         EnMaYto_SetFaceExpression(this, 3, 1);
     } else {
-        func_801A3098(NA_BGM_FAILURE_1);
+        Audio_PlayFanfare(NA_BGM_FAILURE_1);
         EnMaYto_SetFaceExpression(this, 5, 2);
     }
     this->actionFunc = EnMaYto_AfterMilkRunInit;
@@ -893,16 +890,15 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
 
-        if (gSaveContext.save.weekEventReg[52] & 1) { // if (ProtectedCremia)
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
             Message_StartTextbox(play, 0x33C1, &this->actor);
             this->textId = 0x33C1;
         } else {
-            // Fails milk minigame
+            // Failed milk minigame
             EnMaYto_SetFaceExpression(this, 5, 2);
             Message_StartTextbox(play, 0x33C0, &this->actor);
             this->textId = 0x33C0;
-            // Attempted Cremia Cart Ride
-            gSaveContext.save.weekEventReg[14] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 4;
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
             func_80151BB4(play, 6);
@@ -983,8 +979,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 0, 1);
             Message_StartTextbox(play, 0x33C3, &this->actor);
             this->textId = 0x33C3;
-            // Attempted Cremia Cart Ride
-            gSaveContext.save.weekEventReg[14] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 3;
             func_80151BB4(play, 0x20);
             func_80151BB4(play, 0x1F);
@@ -995,14 +990,13 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetFaceExpression(this, 0, 1);
             Message_StartTextbox(play, 0x33D0, &this->actor);
             this->textId = 0x33D0;
-            // Attempted Cremia Cart Ride
-            gSaveContext.save.weekEventReg[14] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
             this->unk310 = 3;
             func_80151BB4(play, 6);
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, EXCH_ITEM_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1046,8 +1040,7 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
                         break;
 
                     case 2:
-                        // Attempted Cremia Cart Ride
-                        gSaveContext.save.weekEventReg[14] |= 1;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_14_01);
                         EnMaYto_ChangeAnim(this, 18);
                         break;
 
@@ -1075,7 +1068,7 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE || Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
         if (Message_ShouldAdvance(play) && Message_GetState(&play->msgCtx) == TEXT_STATE_5) {
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             func_801477B4(play);
         }
     }
@@ -1091,11 +1084,9 @@ void EnMaYto_SetupPostMilkRunEnd(EnMaYto* this) {
 
 void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
     if (this->unk310 == 3) {
-        // Termina Field
-        play->nextEntranceIndex = 0x54D0;
+        play->nextEntrance = ENTRANCE(TERMINA_FIELD, 13);
     } else {
-        // Romani Ranch
-        play->nextEntranceIndex = 0x6480;
+        play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
     }
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -1230,8 +1221,7 @@ void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
-    // if (AliensDefeated)
-    if (gSaveContext.save.weekEventReg[22] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         if (CURRENT_DAY == 2) {
             if (this->unk310 == 1) {
                 Message_StartTextbox(play, 0x33AE, &this->actor);
@@ -1270,10 +1260,10 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
     }
 }
 
-void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {
@@ -1354,7 +1344,7 @@ void EnMaYto_SetFaceExpression(EnMaYto* this, s16 overrideEyeTexIndex, s16 mouth
 }
 
 void EnMaYto_InitFaceExpression(EnMaYto* this) {
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         EnMaYto_SetFaceExpression(this, 0, 1);
         EnMaYto_SetRomaniFaceExpression(this, 0, 0);
     } else {
@@ -1366,19 +1356,19 @@ void EnMaYto_InitFaceExpression(EnMaYto* this) {
 s32 EnMaYto_HasSpokenToPlayerToday(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.save.weekEventReg[13] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[13] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
             break;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[13] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
             break;
@@ -1387,20 +1377,20 @@ s32 EnMaYto_HasSpokenToPlayerToday(void) {
 }
 
 s32 EnMaYto_HasSpokenToPlayer(void) {
-    // Please note each case doesn't have their respective `break`s.
+    // Please note no case here has a `break`.
     switch (CURRENT_DAY) {
         case 3:
-            if (gSaveContext.save.weekEventReg[13] & 0x10) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_10)) {
                 return true;
             }
 
         case 2:
-            if (gSaveContext.save.weekEventReg[13] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_08)) {
                 return true;
             }
 
         case 1:
-            if (gSaveContext.save.weekEventReg[13] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_13_04)) {
                 return true;
             }
     }
@@ -1410,15 +1400,15 @@ s32 EnMaYto_HasSpokenToPlayer(void) {
 void EnMaYto_SetTalkedFlag(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.save.weekEventReg[13] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_13_04);
             break;
 
         case 2:
-            gSaveContext.save.weekEventReg[13] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_13_08);
             break;
 
         case 3:
-            gSaveContext.save.weekEventReg[13] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_13_10);
             break;
     }
 }
@@ -1468,7 +1458,7 @@ void EnMaYto_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.save.weekEventReg[22] & 1)) { // Aliens defeated
+    if (this->type == MA_YTO_TYPE_BARN && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBoxDL);
     }

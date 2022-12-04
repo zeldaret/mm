@@ -34,6 +34,4 @@ typedef struct ObjChikuwa {
     /* 0x9A6 */ u8 unk_9A6;
 } ObjChikuwa; // size = 0x9A8
 
-extern const ActorInit Obj_Chikuwa_InitVars;
-
 #endif // Z_OBJ_CHIKUWA_H

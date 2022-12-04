@@ -34,8 +34,8 @@ void EnSnowman_SetupDead(EnSnowman* this);
 void EnSnowman_Dead(EnSnowman* this, PlayState* play);
 void EnSnowman_SetupSplitDoNothing(EnSnowman* this);
 void EnSnowman_SplitDoNothing(EnSnowman* this, PlayState* play);
-void EnSnowman_SetupMarkForDeath(EnSnowman* this);
-void EnSnowman_MarkForDeath(EnSnowman* this, PlayState* play);
+void EnSnowman_SetupKill(EnSnowman* this);
+void EnSnowman_Kill(EnSnowman* this, PlayState* play);
 void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot);
 void EnSnowman_SetupCombine(EnSnowman* this, PlayState* play, Vec3f* combinePos);
 void EnSnowman_Combine(EnSnowman* this, PlayState* play);
@@ -61,7 +61,7 @@ typedef enum {
     /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE,
 } EnSnowmanCombineState;
 
-const ActorInit En_Snowman_InitVars = {
+ActorInit En_Snowman_InitVars = {
     ACTOR_EN_SNOWMAN,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -178,7 +178,7 @@ static Gfx* sSnowballFragmentDLs[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 20, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_EENO, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
@@ -211,14 +211,14 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
                                                           EN_SNOWMAN_TYPE_SPLIT, -1, thisx->unk20, NULL);
             if ((thisx->child == NULL) || (thisx->parent == NULL)) {
                 if (thisx->child != NULL) {
-                    Actor_MarkForDeath(thisx->child);
+                    Actor_Kill(thisx->child);
                 }
 
                 if (thisx->parent != NULL) {
-                    Actor_MarkForDeath(thisx->parent);
+                    Actor_Kill(thisx->parent);
                 }
 
-                Actor_MarkForDeath(thisx);
+                Actor_Kill(thisx);
                 return;
             }
 
@@ -395,7 +395,7 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
         EnSnowman_SetupCombine(this, play, &combinePos);
     } else if ((this->work.timer == 0) && (fabsf(this->actor.playerHeightRel) < 60.0f) &&
                (this->actor.xzDistToPlayer < this->attackRange) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-               !(player->stateFlags1 & 0x800000)) {
+               !(player->stateFlags1 & PLAYER_STATE1_800000)) {
         EnSnowman_SetupEmerge(this, play);
     } else if (this->snowPileTargetRotY != this->actor.shape.rot.y) {
         if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->snowPileTargetRotY, 0x100)) {
@@ -439,7 +439,7 @@ void EnSnowman_Emerge(EnSnowman* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->combineState == EN_SNOWMAN_COMBINE_STATE_ACTIVE) {
             EnSnowman_SetupSubmerge(this, play);
-        } else if (!(player->stateFlags1 & 0x800000) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
+        } else if (!(player->stateFlags1 & PLAYER_STATE1_800000) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
             this->collider.base.acFlags |= AC_ON;
             this->work.snowballsToThrowBeforeIdling = 3;
             EnSnowman_SetupReadySnowball(this);
@@ -529,7 +529,7 @@ void EnSnowman_ThrowSnowball(EnSnowman* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if (SkelAnime_Update(&this->skelAnime)) {
         if ((this->work.snowballsToThrowBeforeIdling != 0) && (Player_GetMask(play) != PLAYER_MASK_STONE) &&
-            !(player->stateFlags1 & 0x800000)) {
+            !(player->stateFlags1 & PLAYER_STATE1_800000)) {
             EnSnowman_SetupReadySnowball(this);
         } else {
             this->work.snowballsToThrowBeforeIdling = 0;
@@ -634,11 +634,11 @@ void EnSnowman_Melt(EnSnowman* this, PlayState* play) {
         if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
             EnSnowman_SetupSplitDoNothing(this);
         } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-            Actor_MarkForDeath(this->actor.parent);
-            Actor_MarkForDeath(this->actor.child);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(this->actor.parent);
+            Actor_Kill(this->actor.child);
+            Actor_Kill(&this->actor);
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -765,7 +765,7 @@ void EnSnowman_Dead(EnSnowman* this, PlayState* play) {
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_SPLIT) {
         EnSnowman_SetupSplitDoNothing(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -788,9 +788,9 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
     if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
         if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
-            EnSnowman_SetupMarkForDeath((EnSnowman*)this->actor.parent);
-            EnSnowman_SetupMarkForDeath((EnSnowman*)this->actor.child);
-            Actor_MarkForDeath(&this->actor);
+            EnSnowman_SetupKill((EnSnowman*)this->actor.parent);
+            EnSnowman_SetupKill((EnSnowman*)this->actor.child);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -801,19 +801,19 @@ void EnSnowman_SplitDoNothing(EnSnowman* this, PlayState* play) {
 }
 
 /**
- * Turns off collision on the Eeno before calling Actor_MarkForDeath on it.
+ * Turns off collision on the Eeno before calling Actor_Kill on it.
  */
-void EnSnowman_SetupMarkForDeath(EnSnowman* this) {
+void EnSnowman_SetupKill(EnSnowman* this) {
     this->collider.base.acFlags &= ~(AC_ON | AC_HIT);
     this->collider.base.ocFlags1 &= ~(OC1_ON | OC1_HIT);
-    this->actionFunc = EnSnowman_MarkForDeath;
+    this->actionFunc = EnSnowman_Kill;
 }
 
 /**
- * Simply calls Actor_MarkForDeath on the Eeno.
+ * Simply calls Actor_Kill on the Eeno.
  */
-void EnSnowman_MarkForDeath(EnSnowman* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+void EnSnowman_Kill(EnSnowman* this, PlayState* play) {
+    Actor_Kill(&this->actor);
 }
 
 /**
@@ -1025,7 +1025,7 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
         EnSnowman_UpdateDamage(this, play);
         this->actionFunc(this, play);
 
-        if (this->actionFunc != EnSnowman_MarkForDeath) {
+        if (this->actionFunc != EnSnowman_Kill) {
             Actor_MoveWithGravity(&this->actor);
             if ((EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) &&
                 (this->actionFunc == EnSnowman_ReadySnowball)) {
@@ -1040,8 +1040,8 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
             if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
-                    this->snowPileTargetRotY = Math_FAtan2F(this->actor.floorPoly->normal.z * SHT_MINV,
-                                                            this->actor.floorPoly->normal.x * SHT_MINV);
+                    this->snowPileTargetRotY = Math_Atan2S_XY(this->actor.floorPoly->normal.z * SHT_MINV,
+                                                              this->actor.floorPoly->normal.x * SHT_MINV);
                     this->turningOnSteepSlope = true;
                 }
             } else {
@@ -1095,25 +1095,26 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
                           30);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
         } else {
-            // EnSnowman_SpawnBigSnowballFragmentEffects only fworks with snowballPos, so we need
-            // to copy the snowball actor's current position into snowballPos to make this fwork.
+            // EnSnowman_SpawnBigSnowballFragmentEffects only works with snowballPos, so we need
+            // to copy the snowball actor's current position into snowballPos to make this work.
             Math_Vec3f_Copy(&this->snowballPos, &this->actor.world.pos);
             EnSnowman_SpawnBigSnowballFragmentEffects(this, play);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_IT_REFLECTION_WOOD);
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.shape.rot.x += 0xF00;
-        Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
-                                this->collider.dim.height - this->collider.dim.yShift, 0x1F);
-        Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actor.shape.rot.x += 0xF00;
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
+                            this->collider.dim.height - this->collider.dim.yShift, 0x1F);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 /**

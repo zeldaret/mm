@@ -29,7 +29,7 @@ void EnMaYts_SetFaceExpression(EnMaYts* this, s16 overrideEyeTexIndex, s16 mouth
 
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play);
 
-const ActorInit En_Ma_Yts_InitVars = {
+ActorInit En_Ma_Yts_InitVars = {
     ACTOR_EN_MA_YTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -113,10 +113,10 @@ static TexturePtr sEyeTextures[] = {
     gRomaniEyeOpenTex, gRomaniEyeHalfTex, gRomaniEyeClosedTex, gRomaniEyeHappyTex, gRomaniEyeSadTex,
 };
 
-void EnMaYts_ChangeAnim(EnMaYts* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].morphFrames);
+void EnMaYts_ChangeAnim(EnMaYts* this, s32 animIndex) {
+    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
+                     sAnimationInfo[animIndex].morphFrames);
 }
 
 void func_80B8D12C(EnMaYts* this, PlayState* play) {
@@ -144,7 +144,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
         case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = 6;
             // Day 1 or "Winning" the alien invasion
-            if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+            if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 EnMaYts_ChangeAnim(this, 14);
             } else {
                 EnMaYts_ChangeAnim(this, 18);
@@ -177,14 +177,14 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
                 case 2:
                     // Failing the alien invasion
-                    if (!(gSaveContext.save.weekEventReg[22] & 1)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                         return false;
                     }
                     break;
 
                 case 3:
                     // "Winning" the alien invasion
-                    if (gSaveContext.save.weekEventReg[22] & 1) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                         return false;
                     }
                     break;
@@ -193,7 +193,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
-            if (!(gSaveContext.save.weekEventReg[22] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 return false;
             } else if (gSaveContext.save.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
                 return false;
@@ -202,7 +202,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
         case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
-            if (gSaveContext.save.weekEventReg[22] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 return false;
             }
             break;
@@ -218,9 +218,9 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
     s32 pad;
 
-    this->type = EN_MA_YTS_PARSE_TYPE(thisx);
+    this->type = EN_MA_YTS_GET_TYPE(thisx);
     if (!EnMaYts_CheckValidSpawn(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
@@ -248,7 +248,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->hasBow = false;
     }
 
-    if (CURRENT_DAY == 1 || (gSaveContext.save.weekEventReg[22] & 1)) {
+    if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -266,7 +266,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 && (gSaveContext.save.weekEventReg[22] & 1)) {
+    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -296,9 +296,9 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
-            if (!(gSaveContext.save.weekEventReg[65] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_80)) {
                 // Saying to non-human Link: "Cremia went to town."
-                gSaveContext.save.weekEventReg[65] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_65_80);
                 EnMaYts_SetFaceExpression(this, 0, 0);
                 Message_StartTextbox(play, 0x335F, &this->actor);
                 this->textId = 0x335F;
@@ -310,8 +310,8 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 func_80151BB4(play, 5);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_NONE) {
-            if (!(gSaveContext.save.weekEventReg[65] & 0x40)) {
-                gSaveContext.save.weekEventReg[65] |= 0x40;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_40)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_65_40);
                 EnMaYts_SetFaceExpression(this, 0, 0);
                 Message_StartTextbox(play, 0x3363, &this->actor);
                 this->textId = 0x3363;
@@ -321,14 +321,14 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 this->textId = 0x3366;
                 func_80151BB4(play, 5);
             }
-        } else if (!(gSaveContext.save.weekEventReg[21] & 0x20)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
             Message_StartTextbox(play, 0x3367, &this->actor);
             this->textId = 0x3367;
         } else {
-            if (!(gSaveContext.save.weekEventReg[65] & 0x20)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_20)) {
                 // Saying to Grasshopper: "Cremia went to town."
-                gSaveContext.save.weekEventReg[65] |= 0x20;
+                SET_WEEKEVENTREG(WEEKEVENTREG_65_20);
                 EnMaYts_SetFaceExpression(this, 4, 2);
                 Message_StartTextbox(play, 0x3369, &this->actor);
                 this->textId = 0x3369;

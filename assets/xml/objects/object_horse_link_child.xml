@@ -76,7 +76,7 @@
         <Limb Name="object_horse_link_child_Skinlimb_00A398" Type="Skin" EnumName="OBJECT_HORSE_LINK_CHILD_LIMB_2C" Offset="0xA398" />
         <Limb Name="object_horse_link_child_Skinlimb_00A3A8" Type="Skin" EnumName="OBJECT_HORSE_LINK_CHILD_LIMB_2D" Offset="0xA3A8" />
         <Limb Name="object_horse_link_child_Skinlimb_00A3B8" Type="Skin" EnumName="OBJECT_HORSE_LINK_CHILD_LIMB_2E" Offset="0xA3B8" />
-        <Skeleton Name="object_horse_link_child_Skel_00A480" Type="Normal" LimbType="Standard" LimbNone="OBJECT_HORSE_LINK_CHILD_LIMB_NONE" LimbMax="OBJECT_HORSE_LINK_CHILD_LIMB_MAX" EnumName="object_horse_link_child_Limbs" Offset="0xA480" />
+        <Skeleton Name="object_horse_link_child_Skel_00A480" Type="Normal" LimbType="Standard" LimbNone="OBJECT_HORSE_LINK_CHILD_LIMB_NONE" LimbMax="OBJECT_HORSE_LINK_CHILD_LIMB_MAX" EnumName="ObjectHorseLinkChildLimb" Offset="0xA480" />
         <Animation Name="object_horse_link_child_Anim_00A8DC" Offset="0xA8DC" />
         <Animation Name="object_horse_link_child_Anim_00AD08" Offset="0xAD08" />
         <Animation Name="object_horse_link_child_Anim_00B3E0" Offset="0xB3E0" />

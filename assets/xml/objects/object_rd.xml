@@ -45,7 +45,7 @@
         <Limb Name="gGibdoHeadRootLimb" Type="Standard" EnumName="GIBDO_LIMB_HEAD_ROOT" Offset="0x5360" />
         <Limb Name="gGibdoHeadLimb" Type="Standard" EnumName="GIBDO_LIMB_HEAD" Offset="0x536C" />
         <Limb Name="gGibdoPelvisLimb" Type="Standard" EnumName="GIBDO_LIMB_PELVIS" Offset="0x5378" />
-        <Skeleton Name="gGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="GIBDO_LIMB_NONE" LimbMax="GIBDO_LIMB_MAX" EnumName="GibdoLimbs" Offset="0x53E8" />
+        <Skeleton Name="gGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="GIBDO_LIMB_NONE" LimbMax="GIBDO_LIMB_MAX" EnumName="GibdoLimb" Offset="0x53E8" />
         <Animation Name="gGibdoRedeadSlumpStartAnim" Offset="0x5DF4" /> <!-- Original name is "gibud_stop" -->
         <Animation Name="gGibdoRedeadSlumpLoopAnim" Offset="0x61E4" /> <!-- Original name is "gibud_stop_loop" -->
         <Animation Name="gGibdoRedeadGrabAttackAnim" Offset="0x6678" /> <!-- Original name is "re_dead_attack" -->
@@ -105,7 +105,7 @@
         <Limb Name="gRedeadHeadRootLimb" Type="Standard" EnumName="REDEAD_LIMB_HEAD_ROOT" Offset="0x10B00" />
         <Limb Name="gRedeadHeadLimb" Type="Standard" EnumName="REDEAD_LIMB_HEAD" Offset="0x10B0C" />
         <Limb Name="gRedeadPelvisLimb" Type="Standard" EnumName="REDEAD_LIMB_PELVIS" Offset="0x10B18" />
-        <Skeleton Name="gRedeadSkel" Type="Flex" LimbType="Standard" LimbNone="REDEAD_LIMB_NONE" LimbMax="REDEAD_LIMB_MAX" EnumName="RedeadLimbs" Offset="0x10B88" />
+        <Skeleton Name="gRedeadSkel" Type="Flex" LimbType="Standard" LimbNone="REDEAD_LIMB_NONE" LimbMax="REDEAD_LIMB_MAX" EnumName="RedeadLimb" Offset="0x10B88" />
         <Animation Name="gGibdoRedeadWalkAnim" Offset="0x113EC" /> <!-- Original name is "re_dead_walk" -->
         <Animation Name="gGibdoRedeadPirouetteAnim" Offset="0x118D8" /> <!-- Original name is "wait_baree" ("ballet") -->
         <Animation Name="gGibdoRedeadClappingDanceAnim" Offset="0x11DB8" /> <!-- Original name is "wait_dance_b" -->
