@@ -1,8 +1,0 @@
-<Root>
-    <File Name="code" BaseAddress="0x800A5AC0" RangeStart="0x120310" RangeEnd="0x120368" OutName="z_vimode">
-        <DList Name="sz_vimode_1DL" Offset="0x120310"/>
-        <DList Name="sz_vimode_2DL" Offset="0x120320"/>
-        <DList Name="sz_vimode_3DL" Offset="0x120330"/>
-        <DList Name="sz_vimode_4DL" Offset="0x120340"/>
-    </File>
-</Root>

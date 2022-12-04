@@ -20,7 +20,7 @@ void* sCfbHiRes0;
 u16 (*gZBufferHiRes)[SCREEN_WIDTH_NOTEBOOK * SCREEN_HEIGHT_NOTEBOOK];
 u16 (*gWorkBufferHiRes)[SCREEN_WIDTH_NOTEBOOK * SCREEN_HEIGHT_NOTEBOOK];
 u64 (*gGfxSPTaskOutputBufferHiRes)[0x3000];
-void* gGfxSPTaskOutputBufferSizeHiRes;  // Actually points to the end of the task buffer
+void* gGfxSPTaskOutputBufferSizeHiRes; // Actually points to the end of the task buffer
 
 s16 gCfbWidth;
 s16 gCfbHeight;
