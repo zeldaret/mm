@@ -528,6 +528,7 @@ beginseg
     include "build/src/code/z_rumble.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
+    include "build/src/code/code_80140CE0.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/code_801420C0.o"

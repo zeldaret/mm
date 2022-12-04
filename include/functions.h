@@ -2375,8 +2375,8 @@ s32 func_8013FD74(View* view);
 s32 func_80140024(View* view);
 s32 func_801400CC(View* view, Gfx** gfxp);
 void ViMode_LogPrint(OSViMode* vimode);
-void ViMode_Configure(ViMode* viMode, s32 mode, s32 type, s32 unk_70, s32 unk_74, s32 unk_78, s32 unk_7C, s32 width,
-                   s32 height, s32 unk_left, s32 unk_right, s32 unk_top, s32 unk_bottom);
+void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 antialiasOff, s32 modeN, s32 fb16Bit,
+                      s32 width, s32 height, s32 leftAdjust, s32 rightAdjust, s32 upperAdjust, s32 lowerAdjust);
 void ViMode_Save(ViMode* viMode);
 void ViMode_Load(ViMode* viMode);
 void ViMode_Init(ViMode* viMode);
@@ -2810,18 +2810,14 @@ void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, Gam
 void func_801780F0(Mtx* param_1, f32 param_2, f32 param_3, f32 param_4, f32 param_5, f32 param_6, f32 param_7);
 // void func_801781EC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017842C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10, UNK_TYPE4 param_11);
-
-
-//SYSCFB start. TODO header
-void func_80178750(void);
-// void func_80178818(void);
-void func_80178978(void);
+void SysCfb_SetLoResMode(void);
+void SysCfb_SetHiResMode(void);
+void SysCfb_Init(void);
 uintptr_t SysCfb_GetFbPtr(s32 index);
 u16* SysCfb_GetZBuffer(void);
-// UNK_TYPE4 func_80178A24(void);
-u16 func_80178A34(s32 arg0, s32 arg1);
-s32 func_80178A94(s32 param_1, s32 param_2);
-
+void* SysCfb_GetWorkBuffer(void);
+u16 func_80178A34(s32 x, s32 y);
+s32 func_80178A94(s32 x, s32 y);
 // void func_80178AC0(void);
 // void func_80178C80(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80178D7C(void);

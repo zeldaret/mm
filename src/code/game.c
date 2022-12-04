@@ -30,32 +30,28 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
         D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
         D_801F8010.color.a = R_FB_FILTER_A;
         func_80140D10(&D_801F8010, &dlist);
-    } else {
-        if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
-            D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
-            D_801F8020.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-            D_801F8020.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-            D_801F8020.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-            D_801F8020.primColor.a = R_FB_FILTER_A;
-            D_801F8020.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-            D_801F8020.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-            D_801F8020.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-            D_801F8020.envColor.a = R_FB_FILTER_A;
-            func_80142100(&D_801F8020, &dlist, arg1);
-        } else {
-            if (R_FB_FILTER_TYPE == 7) {
-                sMonoColors.unk_00 = 0;
-                sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-                sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-                sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-                sMonoColors.primColor.a = R_FB_FILTER_A;
-                sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-                sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-                sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-                sMonoColors.envColor.a = R_FB_FILTER_A;
-                VisMono_Draw(&sMonoColors, &dlist);
-            }
-        }
+    } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
+        D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
+        D_801F8020.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        D_801F8020.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        D_801F8020.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        D_801F8020.primColor.a = R_FB_FILTER_A;
+        D_801F8020.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        D_801F8020.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        D_801F8020.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        D_801F8020.envColor.a = R_FB_FILTER_A;
+        func_80142100(&D_801F8020, &dlist, arg1);
+    } else if (R_FB_FILTER_TYPE == 7) {
+        sMonoColors.unk_00 = 0;
+        sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sMonoColors.primColor.a = R_FB_FILTER_A;
+        sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sMonoColors.envColor.a = R_FB_FILTER_A;
+        VisMono_Draw(&sMonoColors, &dlist);
     }
 
     *gfx = dlist;
@@ -196,7 +192,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gameState->main = NULL;
     gameState->destroy = NULL;
     gameState->running = 1;
-    gfxCtx->viMode = D_801FBB88;
+    gfxCtx->viMode = gActiveViMode;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;

@@ -2639,7 +2639,7 @@ void func_800B9EF4(PlayState* play, s32 numActors, Actor** actors) {
         // sp34 = play + 0x18000;
         spA4 = play->unk_18E68;
 
-        PreRender_SetValues(&play->pauseBgPreRender, D_801FBBCC, D_801FBBCE, __gfxCtx->curFrameBuffer,
+        PreRender_SetValues(&play->pauseBgPreRender, gCfbWidth, gCfbHeight, __gfxCtx->curFrameBuffer,
                             __gfxCtx->zbuffer);
 
         func_80170200(&play->pauseBgPreRender, &spAC, __gfxCtx->zbuffer, (void*)spA4);

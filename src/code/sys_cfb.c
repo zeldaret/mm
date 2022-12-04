@@ -1,88 +1,93 @@
 #include "global.h"
 
-OSViMode D_801FBB30;
+OSViMode sNotebookViMode;
 void* gFramebuffers[2];
-OSViMode* D_801FBB88;
+OSViMode* gActiveViMode;
 u16* gZBufferPtr;
-void* D_801FBB90;
+void* gWorkBuffer;
 u64* gGfxSPTaskOutputBufferPtr;
-size_t gGfxSPTaskOutputBufferSize;
-void* D_801FBB9C; //UNK_TYPE
-void* D_801FBBA0; //UNK_TYPE
-u16 (*gZBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
-u16 (*gWorkBuffer)[SCREEN_WIDTH * SCREEN_HEIGHT];
-u64 (*gGfxSPTaskOutputBuffer)[0x3000];
-void* gGfxSPTaskOutputBufferEnd;
-uintptr_t D_801FBBB4;
-s32 D_801FBBB8;
-s32 D_801FBBBC; //HIRes ZBuffer
-s32 D_801FBBC0;
-u64 (*gGfxSPTaskOutputBuffer2)[0x3000];
-void* gGfxSPTaskOutputBufferEnd2;
-s16 D_801FBBCC; //CfbWidth
-s16 D_801FBBCE; //CfbHeight
-s16 D_801FBBD0;
-s16 D_801FBBD2;
-u8 gSysCfb_HiResEnabled;
+void* gGfxSPTaskOutputBufferSize; // Actually points to the end of the task buffer
 
-void func_80178750(void) {
-    gFramebuffers[1] = D_801FBB9C;
-    gFramebuffers[0] = D_801FBBA0;
-    gZBufferPtr = *gZBuffer;
-    D_801FBB90 = gWorkBuffer;
-    gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBuffer;
-    gGfxSPTaskOutputBufferSize = (u32) gGfxSPTaskOutputBufferEnd;
-    D_801FBBCC = SCREEN_WIDTH;
-    D_801FBBCE = SCREEN_HEIGHT;
-    D_801FBBD0 = 0;
-    D_801FBBD2 = 0;
-    gSysCfb_HiResEnabled = 0;
-    gScreenWidth =  D_801FBBCC;
-    gScreenHeight = D_801FBBCE;
-    D_801FBB88 = &osViModeNtscLan1;
+void* sCfbLoRes1;
+void* sCfbLoRes0;
+u16 (*gZBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
+u16 (*gWorkBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
+u64 (*gGfxSPTaskOutputBufferLoRes)[0x3000];
+void* gGfxSPTaskOutputBufferSizeLoRes; // Actually points to the end of the task buffer
+
+void* sCfbHiRes1;
+void* sCfbHiRes0;
+u16 (*gZBufferHiRes)[SCREEN_WIDTH_NOTEBOOK * SCREEN_HEIGHT_NOTEBOOK];
+u16 (*gWorkBufferHiRes)[SCREEN_WIDTH_NOTEBOOK * SCREEN_HEIGHT_NOTEBOOK];
+u64 (*gGfxSPTaskOutputBufferHiRes)[0x3000];
+void* gGfxSPTaskOutputBufferSizeHiRes;  // Actually points to the end of the task buffer
+
+s16 gCfbWidth;
+s16 gCfbHeight;
+s16 gCfbLeftAdjust;
+s16 gCfbUpperAdjust;
+
+u8 gSysCfbHiResEnabled;
+
+void SysCfb_SetLoResMode(void) {
+    gFramebuffers[1] = sCfbLoRes1;
+    gFramebuffers[0] = sCfbLoRes0;
+    gZBufferPtr = *gZBufferLoRes;
+    gWorkBuffer = gWorkBufferLoRes;
+    gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBufferLoRes;
+    gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferSizeLoRes;
+    gCfbWidth = SCREEN_WIDTH;
+    gCfbHeight = SCREEN_HEIGHT;
+    gCfbLeftAdjust = 0;
+    gCfbUpperAdjust = 0;
+    gSysCfbHiResEnabled = false;
+    gScreenWidth = gCfbWidth;
+    gScreenHeight = gCfbHeight;
+    gActiveViMode = &osViModeNtscLan1;
 }
 
-
-void func_80178818(void) {
-    s32 width;
-    s32 height;
-    gFramebuffers[1] = D_801FBBB4;
-    gFramebuffers[0] = D_801FBBB8;
-    gZBufferPtr = D_801FBBBC;
-    D_801FBB90 = D_801FBBC0;
-    gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBuffer2;
-    gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferEnd2;
-    if(1){}
-    D_801FBBCC = SCREEN_WIDTH_HIGH_RES;
-    D_801FBBCE = SCREEN_HEIGHT_HIGH_RES;
-    D_801FBBD0 = 30;
-    D_801FBBD2 = 10;
-    gScreenWidth = D_801FBBCC;
-    gScreenHeight = D_801FBBCE;
-    if ((D_801FBBCC == 640) && (D_801FBBCE == 480)) {
-        D_801FBB88 = &osViModeNtscHpf1;
+void SysCfb_SetHiResMode(void) {
+    gFramebuffers[1] = sCfbHiRes1;
+    gFramebuffers[0] = sCfbHiRes0;
+    gZBufferPtr = *gZBufferHiRes;
+    gWorkBuffer = gWorkBufferHiRes;
+    gGfxSPTaskOutputBufferPtr = *gGfxSPTaskOutputBufferHiRes;
+    gGfxSPTaskOutputBufferSize = gGfxSPTaskOutputBufferSizeHiRes;
+    if (1) {}
+    gCfbWidth = SCREEN_WIDTH_NOTEBOOK;
+    gCfbHeight = SCREEN_HEIGHT_NOTEBOOK;
+    gCfbLeftAdjust = 30;
+    gCfbUpperAdjust = 10;
+    gScreenWidth = gCfbWidth;
+    gScreenHeight = gCfbHeight;
+    if ((gCfbWidth == SCREEN_WIDTH_HIRES) && (gCfbHeight == SCREEN_HEIGHT_HIRES)) {
+        gActiveViMode = &osViModeNtscHpf1;
     } else {
-        l1:
-        width = D_801FBBCC - 610;
-        height = D_801FBBCE - 470;
-        ViMode_Configure(&D_801FBB30, -1, osTvType, 0, 1, 0, 1,  D_801FBBCC,  D_801FBBCE, 30, width, 10, height);
-        D_801FBB88 = &D_801FBB30;
+        s32 rightAdjust;
+        s32 lowerAdjust;
+
+    l1:
+        rightAdjust = gCfbWidth - 610;
+        lowerAdjust = gCfbHeight - 470;
+        ViMode_Configure(&sNotebookViMode, -1, osTvType, 0, 1, 0, 1, gCfbWidth, gCfbHeight, 30, rightAdjust, 10,
+                         lowerAdjust);
+        gActiveViMode = &sNotebookViMode;
     }
-    gSysCfb_HiResEnabled = 1;
+    gSysCfbHiResEnabled = true;
 }
 
-//TODO Fake match
-extern u16 gFramebuffer1_[SCREEN_WIDTH_HIGH_RES][SCREEN_HEIGHT_HIGH_RES];
-void func_80178978(void) {
-    D_801FBB9C = gFramebuffer1;
-    D_801FBBA0 = gFramebuffer0;
-    D_801FBBB4 = gFramebuffer1_;
-    D_801FBBB8 = D_80780000;
-    func_80178750();
+// TODO Fake match
+extern u16 gFramebuffer1_[SCREEN_WIDTH_NOTEBOOK][SCREEN_HEIGHT_NOTEBOOK];
+void SysCfb_Init(void) {
+    sCfbLoRes1 = gFramebuffer1;
+    sCfbLoRes0 = gFramebuffer0;
+    sCfbHiRes1 = gFramebuffer1_;
+    sCfbHiRes0 = D_80780000;
+    SysCfb_SetLoResMode();
 }
 
-//Unused
-void func_801789D4(void) {
+// Unused
+void SysCfb_Reset(void) {
     gFramebuffers[0] = 0;
     gFramebuffers[1] = 0;
 }
@@ -98,23 +103,23 @@ u16* SysCfb_GetZBuffer(void) {
     return gZBufferPtr;
 }
 
-void* func_80178A24(void) {
-    return D_801FBB90;
+void* SysCfb_GetWorkBuffer(void) {
+    return gWorkBuffer;
 }
 
-u16 func_80178A34(s32 arg0, s32 arg1) { //Get ZBuffer pixel?
-    u16 *zBuff;
-    u16 var_v1;
+u16 func_80178A34(s32 x, s32 y) { // Get ZBuffer pixel
+    u16* zBuff;
+    u16 val;
 
     zBuff = SysCfb_GetZBuffer();
     if (zBuff != NULL) {
-        var_v1 = (&zBuff[arg0])[arg1 * D_801FBBCC];
+        val = (&zBuff[x])[y * gCfbWidth];
     } else {
-        var_v1 = 0;
+        val = 0;
     }
-    return var_v1;
+    return val;
 }
 
-s32 func_80178A94(s32 param_1, s32 param_2) {
-    return func_800F50D4(func_80178A34(param_1, param_2) * 4) >> 3;
+s32 func_80178A94(s32 x, s32 y) {
+    return func_800F50D4(func_80178A34(x, y) * 4) >> 3;
 }
