@@ -17,11 +17,11 @@ typedef struct EnStopheishi {
     /* 0x188 */ Vec3s jointTable[SOLDIER_LIMB_MAX];
     /* 0x1EE */ Vec3s morphTable[SOLDIER_LIMB_MAX];
     /* 0x254 */ EnStopheishiActionFunc actionFunc;
-    /* 0x258 */ s16 headZRot;
-    /* 0x25A */ s16 headXRot;
+    /* 0x258 */ s16 headRotZ;
+    /* 0x25A */ s16 headRotX;
     /* ox25C */ UNK_TYPE1 unk_25C[2];
     /* 0x25E */ s16 pitchToPlayer;
-    /* 0x260 */ s16 headXRotTarget;
+    /* 0x260 */ s16 headRotXTarget;
     /* 0x262 */ s16 unk_262; // Unused
     /* 0x264 */ u8 unk_264; // Locking value at `0` prevents leaving the guard pose, however locking to 1 doesn't prevent guarding.
     /* 0x265 */ u8 unk_265;
@@ -36,7 +36,7 @@ typedef struct EnStopheishi {
     /* 0x27A */ s16 switchFlag;
     /* 0x27C */ s16 messageIndex;
     /* 0x27E */ s16 unk_27E;
-    /* 0x280 */ s16 yRotTarget;
+    /* 0x280 */ s16 rotYTarget;
     /* 0x284 */ s32 headTurnTimer2;
     /* 0x288 */ f32 unk_288;
     /* 0x28C */ f32 maxMoveStep;

@@ -85,9 +85,14 @@ static u16 sThirdDayLeaveMessages[] = {
 };
 
 static AnimationHeader* sAnimations[SOLDIER_ANIM_MAX] = {
-    &gSoldierLookDown,       &gSoldierComeUpHere,     &gSoldierStandHandOnHip, &gSoldierStandAndLookDown,
-    &object_sdn_Anim_0057BC, &object_sdn_Anim_005D28, &object_sdn_Anim_0064C0, &gSoldierStandWithHandOnChest,
-
+    &gSoldierLookDown,             // SOLDIER_ANIM_LOOK_DOWN
+    &gSoldierComeUpHere,           // SOLDIER_ANIM_COME_UP_HERE
+    &gSoldierStandHandOnHip,       // SOLDIER_ANIM_STAND_HAND_ON_HIP
+    &gSoldierStandAndLookDown,     // SOLDIER_ANIM_STAND_LOOK_DOWN
+    &object_sdn_Anim_0057BC,       // SOLDIER_ANIM_4
+    &object_sdn_Anim_005D28,       // SOLDIER_ANIM_5
+    &object_sdn_Anim_0064C0,       // SOLDIER_ANIM_6
+    &gSoldierStandWithHandOnChest, // SOLDIER_ANIM_STAND_HAND_ON_CHEST
 };
 
 void EnStopheishi_Init(Actor* thisx, PlayState* play) {
@@ -112,7 +117,7 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->yRotTarget = this->actor.world.rot.y;
+    this->rotYTarget = this->actor.world.rot.y;
     this->headTurnTimer2 = 6;
     func_80AE7E9C(this);
 }
@@ -148,16 +153,16 @@ void EnStopheishi_UpdateHeadNormal(EnStopheishi* this, PlayState* play) {
 
     yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
 
-    this->headXRotTarget = 0;
+    this->headRotXTarget = 0;
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         player = GET_PLAYER(play);
         if (yawDiff < 0x4E20) {
-            this->headXRotTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-            if (this->headXRotTarget > 0x2710) {
-                this->headXRotTarget = 0x2710;
-            } else if (this->headXRotTarget < -0x2710) {
-                this->headXRotTarget = -0x2710;
+            this->headRotXTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
+            if (this->headRotXTarget > 0x2710) {
+                this->headRotXTarget = 0x2710;
+            } else if (this->headRotXTarget < -0x2710) {
+                this->headRotXTarget = -0x2710;
             }
         }
 
@@ -177,11 +182,11 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
         this->headTurnTimer1--;
     }
     this->pitchToPlayer = -0xBB8;
-    this->headXRotTarget = 0;
+    this->headRotXTarget = 0;
     if (this->headTurnTimer2 < 6) {
-        this->headXRotTarget = 0x1770;
+        this->headRotXTarget = 0x1770;
         if (!(this->headTurnTimer2 & 7)) {
-            this->headXRotTarget = -0x1770;
+            this->headRotXTarget = -0x1770;
         }
         if (this->headTurnTimer1 == 0) {
             this->headTurnTimer2++;
@@ -198,7 +203,7 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
 void func_80AE77D4(EnStopheishi* this) {
     this->unk_274 = 0;
     this->maxMoveStep = 0.0f;
-    this->yRotTarget = this->actor.home.rot.y;
+    this->rotYTarget = this->actor.home.rot.y;
     if (this->timer == 1) {
         this->pitchToPlayer = 0;
         EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_5);
@@ -237,7 +242,7 @@ void func_80AE795C(EnStopheishi* this, PlayState* play) {
     s16 rotY;
 
     if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y)) < 0x2000) {
-        this->yRotTarget = this->actor.yawTowardsPlayer;
+        this->rotYTarget = this->actor.yawTowardsPlayer;
     }
     playSpeed =
         fabsf((f32)this->actor.yawTowardsPlayer - Math_Vec3f_Yaw(&this->actor.home.pos, &player->actor.world.pos)) *
@@ -298,14 +303,14 @@ void func_80AE795C(EnStopheishi* this, PlayState* play) {
             EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_4);
             this->unk_274 = 2;
             break;
-        
+
         case 2:
             if (this->currentAnimFrameCount <= curFrame) {
                 EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_5);
                 this->unk_274 = 3;
             }
             break;
-        
+
         case 3:
             if ((fabsf(this->actor.world.pos.x - newPos.x) < 2.0f) &&
                 (fabsf(this->actor.world.pos.z - newPos.z) < 2.0f)) {
@@ -314,7 +319,7 @@ void func_80AE795C(EnStopheishi* this, PlayState* play) {
                 this->unk_274 = 4;
             }
             break;
-        
+
         case 4:
             if ((fabsf(this->actor.world.pos.x - newPos.x) > 4.0f) ||
                 (fabsf(this->actor.world.pos.z - newPos.z) > 4.0f)) {
@@ -367,7 +372,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
     } else {
         EnStopHeishi_UpdateHeadThirdDay(this);
     }
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->yRotTarget, 1, 0x1388, 0);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->rotYTarget, 1, 0x1388, 0);
 
     sp32 = 0;
     if (gSaveContext.save.isNight) {
@@ -384,11 +389,11 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
                 if (this->unk_265 != 0) {
                     phi_a2 = 1;
                 }
-            } else if ((gSaveContext.save.weekEventReg[0xC] & 0x20) != 0) {
+            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20)) != 0) {
                 phi_a2 = 1;
             }
             break;
-        
+
         case PLAYER_FORM_DEKU:
             phi_a2 = 4;
             break;
@@ -396,7 +401,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
         case PLAYER_FORM_ZORA:
             phi_a2 = 3;
             break;
-        
+
         case PLAYER_FORM_GORON:
             phi_a2 = 2;
             break;
@@ -500,7 +505,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
 }
 
 void func_80AE854C(EnStopheishi* this, PlayState* play) {
-    if (((this->unk_265 != 0) || (gSaveContext.save.weekEventReg[0xC] & 0x20)) &&
+    if (((this->unk_265 != 0) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20))) &&
         (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
         EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     }
@@ -518,7 +523,7 @@ void func_80AE85C4(EnStopheishi* this, PlayState* play) {
             this->actor.textId = this->unk_27E;
             func_80151938(play, this->actor.textId);
             EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
-            gSaveContext.save.weekEventReg[0xC] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_20);
             this->unk_265 = 1;
             this->unk_27E = 0;
         } else {
@@ -536,8 +541,8 @@ void EnStopheishi_Update(Actor* thisx, PlayState* play) {
         this->timer--;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_SmoothStepToS(&this->headXRot, this->headXRotTarget, 1, 0x7D0, 0);
-    Math_SmoothStepToS(&this->headZRot, this->pitchToPlayer, 1, 0x7D0, 0);
+    Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0x7D0, 0);
+    Math_SmoothStepToS(&this->headRotZ, this->pitchToPlayer, 1, 0x7D0, 0);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
@@ -555,8 +560,8 @@ s32 EnStopheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     EnStopheishi* this = THIS;
 
     if (limbIndex == SOLDIER_LIMB_HEAD) {
-        rot->x += this->headXRot;
-        rot->z += this->headZRot;
+        rot->x += this->headRotX;
+        rot->z += this->headRotZ;
     }
     return false;
 }
