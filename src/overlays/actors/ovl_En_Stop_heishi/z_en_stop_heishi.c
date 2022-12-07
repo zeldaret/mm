@@ -185,7 +185,7 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
     this->headRotXTarget = 0;
     if (this->headTurnTimer2 < 6) {
         this->headRotXTarget = 0x1770;
-        if (!(this->headTurnTimer2 & 7)) {
+        if (!((u32)this->headTurnTimer2 % 8)) {
             this->headRotXTarget = -0x1770;
         }
         if (this->headTurnTimer1 == 0) {
@@ -389,7 +389,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
                 if (this->unk_265 != 0) {
                     phi_a2 = 1;
                 }
-            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20)) != 0) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20)) {
                 phi_a2 = 1;
             }
             break;
