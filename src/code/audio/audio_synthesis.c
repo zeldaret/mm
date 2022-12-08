@@ -866,8 +866,8 @@ Acmd* AudioSynth_ProcessSamples(s16* aiBuf, s32 numSamplesPerUpdate, Acmd* cmd, 
     size = numSamplesPerUpdate * SAMPLE_SIZE;
     aInterleave(cmd++, DMEM_TEMP, DMEM_LEFT_CH, DMEM_RIGHT_CH, size);
 
-    if (gCustomAudioSynthFunction != NULL) {
-        cmd = gCustomAudioSynthFunction(cmd, 2 * size, updateIndex);
+    if (gAudioCustomSynthFunction != NULL) {
+        cmd = gAudioCustomSynthFunction(cmd, 2 * size, updateIndex);
     }
     aSaveBuffer(cmd++, DMEM_TEMP, aiBuf, 2 * size);
 
@@ -1109,8 +1109,8 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
 
                     case CODEC_REVERB:
                         reverbAddrSrc = (void*)0xFFFFFFFF;
-                        if (gCustomAudioReverbFunction != NULL) {
-                            reverbAddrSrc = gCustomAudioReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
+                        if (gAudioCustomReverbFunction != NULL) {
+                            reverbAddrSrc = gAudioCustomReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
                         }
 
                         if (reverbAddrSrc == (void*)0xFFFFFFFF) {
