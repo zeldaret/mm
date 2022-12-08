@@ -235,6 +235,7 @@ void LifeMeter_Draw(PlayState* play) {
     if ((gSaveContext.save.playerData.health % 0x10) == 0) {
         fullHeartCount--;
     }
+
     offsetY = 0.0f;
     offsetX = 0.0f;
     curColorSet = -1;
@@ -381,12 +382,13 @@ void LifeMeter_Draw(PlayState* play) {
                 }
             }
             mtx = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
-            func_801780F0(mtx, 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize),
-                          -130.0f + offsetX, 94.5f - offsetY, 0.0f);
+            Mtx_SetTranslateScaleMtx(mtx, 1.0f - (0.32f * lifesize), 1.0f - (0.32f * lifesize),
+                                     1.0f - (0.32f * lifesize), -130.0f + offsetX, 94.5f - offsetY, 0.0f);
             gSPMatrix(OVERLAY_DISP++, mtx, G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPVertex(OVERLAY_DISP++, beatingHeartVtx, 4, 0);
             gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
         }
+
         offsetX += 10.0f;
         if (i == 9) {
             offsetY += 10.0f;
@@ -423,10 +425,8 @@ u32 LifeMeter_IsCritical(void) {
 
     if (gSaveContext.save.playerData.healthCapacity <= 0x50) {
         criticalThreshold = 0x10;
-
     } else if (gSaveContext.save.playerData.healthCapacity <= 0xA0) {
         criticalThreshold = 0x18;
-
     } else if (gSaveContext.save.playerData.healthCapacity <= 0xF0) {
         criticalThreshold = 0x20;
     } else {
