@@ -66,6 +66,7 @@ void SysCfb_SetHiResMode(void) {
         s32 rightAdjust;
         s32 lowerAdjust;
 
+    //! FAKE:
     l1:
         rightAdjust = gCfbWidth - 610;
         lowerAdjust = gCfbHeight - 470;
@@ -76,7 +77,7 @@ void SysCfb_SetHiResMode(void) {
     gSysCfbHiResEnabled = true;
 }
 
-// TODO Fake match
+//! FAKE:
 extern u16 gFramebuffer1_[SCREEN_WIDTH_NOTEBOOK][SCREEN_HEIGHT_NOTEBOOK];
 void SysCfb_Init(void) {
     sCfbLoRes1 = gFramebuffer1;
@@ -88,15 +89,15 @@ void SysCfb_Init(void) {
 
 // Unused
 void SysCfb_Reset(void) {
-    gFramebuffers[0] = 0;
-    gFramebuffers[1] = 0;
+    gFramebuffers[0] = NULL;
+    gFramebuffers[1] = NULL;
 }
 
-uintptr_t SysCfb_GetFbPtr(s32 index) {
+uintptr_t SysCfb_GetFramebuffer(s32 index) {
     if (index < 2) {
         return gFramebuffers[index];
     }
-    return 0;
+    return (uintptr_t)NULL;
 }
 
 u16* SysCfb_GetZBuffer(void) {
@@ -107,7 +108,7 @@ void* SysCfb_GetWorkBuffer(void) {
     return gWorkBuffer;
 }
 
-u16 func_80178A34(s32 x, s32 y) { // Get ZBuffer pixel
+u16 SysCfb_GetZBufferPixel(s32 x, s32 y) {
     u16* zBuff;
     u16 val;
 
@@ -120,6 +121,6 @@ u16 func_80178A34(s32 x, s32 y) { // Get ZBuffer pixel
     return val;
 }
 
-s32 func_80178A94(s32 x, s32 y) {
-    return func_800F50D4(func_80178A34(x, y) * 4) >> 3;
+s32 SysCfb_GetZBufferInt(s32 x, s32 y) {
+    return Environment_ZBufValToFixedPoint(SysCfb_GetZBufferPixel(x, y) << 2) >> 3;
 }

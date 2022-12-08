@@ -16,11 +16,11 @@ OSTime sGraphTaskStartTime;
 
 void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
-    osViSwapBuffer(SysCfb_GetFbPtr(0));
+    osViSwapBuffer(SysCfb_GetFramebuffer(0));
     osViSetMode(gActiveViMode);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF);
     Fault_WaitForInput();
-    osViSwapBuffer(SysCfb_GetFbPtr(1));
+    osViSwapBuffer(SysCfb_GetFramebuffer(1));
     osViSetMode(gActiveViMode);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF);
 }
@@ -50,7 +50,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFbPtr(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFramebuffer(gfxCtx->framebufferIdx % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();

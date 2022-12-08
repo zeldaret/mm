@@ -1372,7 +1372,7 @@ s32 func_80B456A8(PlayState* play, Vec3f* worldPos) {
         s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
         s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
         s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
-        s32 zBuf = func_80178A94(screenPosX, screenPosY);
+        s32 zBuf = SysCfb_GetZBufferInt(screenPosX, screenPosY);
         if (wZ < zBuf) {
             return true;
         }

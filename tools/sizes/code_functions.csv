@@ -1221,7 +1221,7 @@ asm/non_matchings/code/z_kanfont/Font_LoadCharNES.s,Font_LoadCharNES,0x800F4F54,
 asm/non_matchings/code/z_kanfont/Font_LoadMessageBoxEndIcon.s,Font_LoadMessageBoxEndIcon,0x800F4FC0,0x11
 asm/non_matchings/code/z_kanfont/Font_LoadOrderedFont.s,Font_LoadOrderedFont,0x800F5004,0x23
 asm/non_matchings/code/z_kankyo/func_800F5090.s,func_800F5090,0x800F5090,0x11
-asm/non_matchings/code/z_kankyo/func_800F50D4.s,func_800F50D4,0x800F50D4,0xE
+asm/non_matchings/code/z_kankyo/Environment_ZBufValToFixedPoint.s,Environment_ZBufValToFixedPoint,0x800F50D4,0xE
 asm/non_matchings/code/z_kankyo/Kankyo_Init.s,Kankyo_Init,0x800F510C,0x212
 asm/non_matchings/code/z_kankyo/func_800F5954.s,func_800F5954,0x800F5954,0x4E
 asm/non_matchings/code/z_kankyo/Environment_LerpWeight.s,Environment_LerpWeight,0x800F5A8C,0x21
@@ -2743,11 +2743,11 @@ asm/non_matchings/code/sys_cmpdma/SysCfb_SetLoResMode.s,SysCfb_SetLoResMode,0x80
 asm/non_matchings/code/sys_cmpdma/SysCfb_SetHiResMode.s,SysCfb_SetHiResMode,0x80178818,0x58
 asm/non_matchings/code/sys_cmpdma/SysCfb_Init.s,SysCfb_Init,0x80178978,0x17
 asm/non_matchings/code/sys_cmpdma/SysCfb_Reset.s,SysCfb_Reset,0x801789D4,0x6
-asm/non_matchings/code/sys_cmpdma/SysCfb_GetFbPtr.s,SysCfb_GetFbPtr,0x801789EC,0xA
+asm/non_matchings/code/sys_cmpdma/SysCfb_GetFramebuffer.s,SysCfb_GetFramebuffer,0x801789EC,0xA
 asm/non_matchings/code/sys_cmpdma/SysCfb_GetZBuffer.s,SysCfb_GetZBuffer,0x80178A14,0x4
 asm/non_matchings/code/sys_cmpdma/SysCfb_GetWorkBuffer.s,SysCfb_GetWorkBuffer,0x80178A24,0x4
-asm/non_matchings/code/sys_cmpdma/func_80178A34.s,func_80178A34,0x80178A34,0x18
-asm/non_matchings/code/sys_cmpdma/func_80178A94.s,func_80178A94,0x80178A94,0xB
+asm/non_matchings/code/sys_cmpdma/SysCfb_GetZBufferPixel.s,SysCfb_GetZBufferPixel,0x80178A34,0x18
+asm/non_matchings/code/sys_cmpdma/SysCfb_GetZBufferInt.s,SysCfb_GetZBufferInt,0x80178A94,0xB
 asm/non_matchings/code/sys_cmpdma/func_80178AC0.s,func_80178AC0,0x80178AC0,0x70
 asm/non_matchings/code/sys_cmpdma/func_80178C80.s,func_80178C80,0x80178C80,0x3F
 asm/non_matchings/code/sys_cmpdma/func_80178D7C.s,func_80178D7C,0x80178D7C,0xC
