@@ -2371,46 +2371,44 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     } else {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
             Actor_Kill(actor);
+        } else if (((params->requiredActorFlag) && !(actor->flags & params->requiredActorFlag)) ||
+                   ((((!params->requiredActorFlag) != 0)) &&
+                    (!(actor->flags & ACTOR_FLAG_100000) ||
+                     ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
+                    params->canFreezeCategory && (actor != params->talkActor) &&
+                    ((actor != params->player->heldActor)) && (actor->parent != &params->player->actor))) {
+            CollisionCheck_ResetDamage(&actor->colChkInfo);
         } else {
-            if (((params->requiredActorFlag) && !(actor->flags & params->requiredActorFlag)) ||
-                ((((!params->requiredActorFlag) != 0)) &&
-                 (!(actor->flags & ACTOR_FLAG_100000) ||
-                  ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
-                 params->canFreezeCategory && (actor != params->talkActor) && ((actor != params->player->heldActor)) &&
-                 (actor->parent != &params->player->actor))) {
-                CollisionCheck_ResetDamage(&actor->colChkInfo);
-            } else {
-                Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
-                actor->xzDistToPlayer = Actor_XZDistanceBetweenActors(actor, &params->player->actor);
-                actor->playerHeightRel = Actor_HeightDiff(actor, &params->player->actor);
-                actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
+            Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
+            actor->xzDistToPlayer = Actor_XZDistanceBetweenActors(actor, &params->player->actor);
+            actor->playerHeightRel = Actor_HeightDiff(actor, &params->player->actor);
+            actor->xyzDistToPlayerSq = SQ(actor->xzDistToPlayer) + SQ(actor->playerHeightRel);
 
-                actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
-                actor->flags &= ~ACTOR_FLAG_1000000;
+            actor->yawTowardsPlayer = Actor_YawBetweenActors(actor, &params->player->actor);
+            actor->flags &= ~ACTOR_FLAG_1000000;
 
-                if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
-                    if (actor == params->player->targetedActor) {
-                        actor->isTargeted = true;
-                    } else {
-                        actor->isTargeted = false;
-                    }
-
-                    if ((actor->targetPriority != 0) && (params->player->targetedActor == NULL)) {
-                        actor->targetPriority = 0;
-                    }
-
-                    Actor_SetObjectDependency(play, actor);
-
-                    if (actor->colorFilterTimer != 0) {
-                        actor->colorFilterTimer--;
-                    }
-
-                    actor->update(actor, play);
-                    BgCheck_ResetFlagsIfLoadedActor(play, &play->colCtx.dyna, actor);
+            if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
+                if (actor == params->player->targetedActor) {
+                    actor->isTargeted = true;
+                } else {
+                    actor->isTargeted = false;
                 }
 
-                CollisionCheck_ResetDamage(&actor->colChkInfo);
+                if ((actor->targetPriority != 0) && (params->player->targetedActor == NULL)) {
+                    actor->targetPriority = 0;
+                }
+
+                Actor_SetObjectDependency(play, actor);
+
+                if (actor->colorFilterTimer != 0) {
+                    actor->colorFilterTimer--;
+                }
+
+                actor->update(actor, play);
+                BgCheck_ResetFlagsIfLoadedActor(play, &play->colCtx.dyna, actor);
             }
+
+            CollisionCheck_ResetDamage(&actor->colChkInfo);
         }
         nextActor = actor->next;
     }
