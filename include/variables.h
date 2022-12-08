@@ -358,9 +358,7 @@ extern u16 viRetrace;
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;
 extern u64 aspMainTextStart[];
-extern ColliderCylinderInit enAObjCylinderInit;
-extern InitChainEntry enAObjInitVar;
-extern Gfx* enAObjDisplayLists[2];
+
 extern u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER];
 extern s32 D_801AE194[32];

@@ -2372,10 +2372,8 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
             Actor_Kill(actor);
         } else {
-            s32 tmp = (params->requiredActorFlag == 0);
-
             if (((params->requiredActorFlag) && !(actor->flags & params->requiredActorFlag)) ||
-                ((tmp = (params->requiredActorFlag == 0)) &&
+                ((((!params->requiredActorFlag) != 0)) &&
                  (!(actor->flags & ACTOR_FLAG_100000) ||
                   ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
                  params->canFreezeCategory && (actor != params->talkActor) && ((actor != params->player->heldActor)) &&
