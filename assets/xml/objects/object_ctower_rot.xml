@@ -67,34 +67,34 @@
         <!-- DLists and Collision -->
 
         <!-- CeilingCog -->
-        <DList Name="gClockTowerEmpty1DL" Offset="0x10820" />
-        <DList Name="gClockTowerCeilingCogDL" Offset="0x10828" />
+        <DList Name="gClockTowerEmpty1DL" Offset="0x10820" /> <!-- Original name is "w2_gia_modelT" (probably a mispelling of "gear") -->
+        <DList Name="gClockTowerCeilingCogDL" Offset="0x10828" /> <!-- Original name is "w2_gia_model" -->
         
         <!-- Corridor -->
         <DList Name="gClockTowerCorridorFoliageDL" Offset="0x129D0" />
-        <DList Name="gClockTowerCorridorDL" Offset="0x12DA0" />
+        <DList Name="gClockTowerCorridorDL" Offset="0x12DA0" /> <!-- Original name is "w2_hineri_model" ("twist; spin") -->
         <Collision Name="gClockTowerCorridorCol" Offset="0x142E8" />
         
         <!-- Organ -->
-        <DList Name="gClockTowerOrganPipesDL" Offset="0x15F30" />
-        <DList Name="gClockTowerOrganDL" Offset="0x160A0" />
+        <DList Name="gClockTowerOrganPipesDL" Offset="0x15F30" /> <!-- Original name is "w2_piano_modelT" -->
+        <DList Name="gClockTowerOrganDL" Offset="0x160A0" /> <!-- Original name is "w2_piano_model" -->
         <Collision Name="gClockTowerOrganCol" Offset="0x16E70" />
         
         <!-- CenterCog -->
-        <DList Name="gClockTowerEmpty2DL" Offset="0x17010" />
-        <DList Name="gClockTowerCenterCogDL" Offset="0x17018" />
+        <DList Name="gClockTowerEmpty2DL" Offset="0x17010" /> <!-- Original name is "w2_shaft_modelT" -->
+        <DList Name="gClockTowerCenterCogDL" Offset="0x17018" /> <!-- Original name is "w2_shaft_model" -->
         
         <!-- StoneDoorMain -->
-        <DList Name="gClockTowerStoneDoorMainDL" Offset="0x17220" />
+        <DList Name="gClockTowerStoneDoorMainDL" Offset="0x17220" /> <!-- Original name is "w2_shatter_higashi_model" ("higashi" = "east") -->
         <Collision Name="gClockTowerStoneDoorMainCol" Offset="0x17410" />
         
         <!-- StoneDoor -->
-        <DList Name="gClockTowerStoneDoorDL" Offset="0x174E0" />
+        <DList Name="gClockTowerStoneDoorDL" Offset="0x174E0" /> <!-- Original name is "w2_shatter_nishi_model" ("nishi" = "west") -->
         <Collision Name="gClockTowerStoneDoorCol" Offset="0x17650" />
         
         <!-- WaterWheel -->
-        <DList Name="gClockTowerEmpty3DL" Offset="0x18110" />
-        <DList Name="gClockTowerWaterWheelDL" Offset="0x18118" />
+        <DList Name="gClockTowerEmpty3DL" Offset="0x18110" /> <!-- Original name is "w2_suisha_modelT" ("water wheel") -->
+        <DList Name="gClockTowerWaterWheelDL" Offset="0x18118" /> <!-- Original name is "w2_suisha_model" -->
         <Collision Name="gClockTowerWaterWheelCol" Offset="0x18588" />
     </File>
 </Root>
