@@ -4,6 +4,7 @@
  * Description: Kafei
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
@@ -507,7 +508,7 @@ void EnTest3_Destroy(Actor* thisx, PlayState* play2) {
     Collider_DestroyQuad(play, &this->player.meleeWeaponQuads[1]);
     Collider_DestroyQuad(play, &this->player.shieldQuad);
     ZeldaArena_Free(this->player.maskObjectSegment);
-    func_800FE498();
+    Environment_StartTime();
 }
 
 s32 func_80A3F080(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
@@ -764,7 +765,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         if (this->unk_D8D >= 0) {
             if (func_80A3E9DC(this, play)) {
                 this->unk_D8D = -1;
-                func_800FE484();
+                Environment_StopTime();
             }
         } else if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
             this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->player.actor.cutscene);
@@ -779,9 +780,9 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         }
     } else if ((D_80A41D20 == 2) && func_80A3E9DC(this, play)) {
         ActorCutscene_SetReturnCamera(CAM_ID_MAIN);
-        func_800FE498();
-        if (gSaveContext.save.time > CLOCK_TIME(6, 0)) {
-            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16)-gSaveContext.save.time)));
+        Environment_StartTime();
+        if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
+            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             SET_WEEKEVENTREG(WEEKEVENTREG_51_20);
@@ -967,7 +968,7 @@ void func_80A40678(EnTest3* this, PlayState* play) {
 
     this->unk_D80 = ((this->unk_D88 == 20) || (this->unk_D88 == 10) || (this->unk_D88 == 9)) ? 3
                     : Play_InCsMode(play)                                                    ? 0
-                                          : REG(15) + ((void)0, gSaveContext.save.daySpeed);
+                                          : R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (Schedule_RunScript(play, sScheduleScript, &scheduleOutput)) {
         if (this->unk_D88 != scheduleOutput.result) {

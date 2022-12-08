@@ -215,7 +215,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
             Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
             player->stateFlags1 |= PLAYER_STATE1_20;
-            play->actorCtx.flags &= ~ACTORCTX_FLAG_2;
+            play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
         } else {
             Camera_ChangeSetting(mainCam, CAM_SET_BOAT_CRUISE);
             player->stateFlags1 &= ~PLAYER_STATE1_20;
@@ -255,7 +255,7 @@ void func_809542A0(BgIngate* this, PlayState* play) {
     gSaveContext.nextTransitionType = TRANS_TYPE_03;
     this->actionFunc = func_80953F8C;
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
-    func_800FE498();
+    Environment_StartTime();
 }
 
 void func_80954340(BgIngate* this, PlayState* play) {
@@ -264,7 +264,7 @@ void func_80954340(BgIngate* this, PlayState* play) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
             this->timePath = &play->setupPathList[this->timePath->unk1];
             func_80953F14(this, play);
-            func_800FE484();
+            Environment_StopTime();
         }
     }
 }
@@ -283,7 +283,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
-                    func_800FE498();
+                    Environment_StartTime();
                     func_8019F208();
                 } else {
                     if (this->timePath != NULL) {
@@ -304,7 +304,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
                     this->unk160 &= ~0x4;
                     this->actionFunc = func_809541B8;
-                    func_800FE498();
+                    Environment_StartTime();
                     func_8019F230();
                 }
                 func_801477B4(play);

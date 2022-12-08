@@ -894,10 +894,10 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                     SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, value);
 
                     if (value != 0) {
-                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
                         gSaveContext.save.playerData.swordHealth = 100;
                     } else {
-                        BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
 
                 } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN) ||
@@ -909,7 +909,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
 
                     SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, value);
 
-                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
+                    CUR_FORM_EQUIP(EQUIP_SLOT_B) = value + (ITEM_SWORD_KOKIRI - 1);
                     gSaveContext.save.playerData.swordHealth = 100;
                 }
 
