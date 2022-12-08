@@ -508,7 +508,7 @@
             0x801AAAB0 : "aspMain",
             0x801ABAB0 : "gspS2DEX2.fifo",
             0x801AD370 : "njpgdspMain",
-            0x801ADE60 : "",
+            0x801ADE60 : "z_en_a_keep",
             0x801ADEC0 : "z_en_item00",
             0x801AE240 : "z_eff_blure",
             0x801AE2F0 : "z_eff_shield_particle",
