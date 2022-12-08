@@ -909,14 +909,9 @@ extern UNK_PTR D_801D5FE0;
 // extern UNK_TYPE1 D_801D5FE4;
 extern s32 gAudioCtxInitalized;
 // extern UNK_TYPE4 D_801D5FEC;
-// extern UNK_TYPE4 D_801D5FF0;
-// extern UNK_TYPE4 D_801D5FF4;
-// extern UNK_TYPE1 D_801D5FF8;
-// extern UNK_TYPE4 D_801D5FFC;
-extern UNK_PTR D_801D6000;
 // extern UNK_TYPE4 D_801D6190;
 // extern UNK_TYPE4 D_801D6194;
-// extern UNK_TYPE1 D_801D6200;
+extern u8 D_801D6200[0x400];
 extern u8 gIsLargeSfxBank[7];
 extern u8 D_801D6608[7];
 extern u8 gChannelsPerBank[4][7];
@@ -2293,7 +2288,6 @@ extern u8 gSoundFontTable[];
 extern u8 gSequenceFontTable[];
 extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
-extern u64 aspMainDataStart[];
 
 // bss
 // extern UNK_TYPE1 D_801ED890;
@@ -2791,10 +2785,10 @@ extern ActiveSequence gActiveSeqs[];
 // extern UNK_TYPE1 D_80200BCE;
 // extern UNK_TYPE1 D_80200BD0;
 extern AudioContext gAudioCtx; // at 0x80200C70
-extern void (*gCustomAudioUpdateFunction)(void);
-extern u32 (*gCustomAudioSeqFunction)(s8 value, SequenceChannel* channel);
-extern s32 (*gCustomAudioReverbFunction)(Sample*, s32, s8, s32);
-extern Acmd* (*gCustomAudioSynthFunction)(Acmd*, s32, s32);
+extern AudioCustomUpdateFunction gAudioCustomUpdateFunction;
+extern AudioCustomSeqFunction gAudioCustomSeqFunction;
+extern AudioCustomReverbFunction gAudioCustomReverbFunction;
+extern AudioCustomSynthFunction gAudioCustomSynthFunction;
 
 // post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
