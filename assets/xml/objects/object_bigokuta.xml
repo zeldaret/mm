@@ -1,10 +1,10 @@
 ﻿<Root>
     <File Name="object_bigokuta" Segment="6">
-        <Animation Name="gBigOctoRiseOutOfWaterAnim" Offset="0x444" />
-        <Animation Name="gBigOctoDeathAnim" Offset="0xA74" />
-        <Animation Name="gBigOctoHitAnim" Offset="0xD1C" />
-        <Animation Name="gBigOctoIdleAnim" Offset="0x14B8" />
-        <Animation Name="gBigOctoWalkAnim" Offset="0x1CA4" />
+        <Animation Name="gBigOctoRiseOutOfWaterAnim" Offset="0x444" /> <!-- Original name is "ocd_damagejump" -->
+        <Animation Name="gBigOctoDeathAnim" Offset="0xA74" /> <!-- Original name is "ocd_dead" -->
+        <Animation Name="gBigOctoHitAnim" Offset="0xD1C" /> <!-- Original name is "ocd_stop" -->
+        <Animation Name="gBigOctoIdleAnim" Offset="0x14B8" /> <!-- Original name is "ocd_wait" -->
+        <Animation Name="gBigOctoWalkAnim" Offset="0x1CA4" /> <!-- Original name is "ocd_walk" -->
         <DList Name="gBigOctoBodyDL" Offset="0x4090" />
         <DList Name="gBigOctoCenterSnoutDL" Offset="0x4158" />
         <DList Name="gBigOctoLeftSnoutDL" Offset="0x42A8" />

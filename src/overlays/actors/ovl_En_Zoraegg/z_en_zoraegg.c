@@ -118,7 +118,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_07:
         case ENZORAEGG_1F_08:
         case ENZORAEGG_1F_09:
-            if (gSaveContext.save.weekEventReg[19] & 0x40) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -131,7 +131,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
         case ENZORAEGG_1F_0E:
         case ENZORAEGG_1F_0F:
         case ENZORAEGG_1F_10:
-            if (!(gSaveContext.save.weekEventReg[19] & 0x40)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -405,7 +405,7 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
 
         if (temp_v0 != NULL) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, temp_v0);
-            gSaveContext.eventInf[3] |= 8;
+            SET_EVENTINF(EVENTINF_33);
             Actor_Kill(&this->actor);
         }
     } else if ((func_80B319A8(play) >= 7) &&
@@ -475,7 +475,7 @@ void func_80B326F4(EnZoraegg* this, PlayState* play) {
                          Animation_GetLastFrame(&object_zoraegg_Anim_004D20), ANIMMODE_ONCE, 5.0f);
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32644;
-        gSaveContext.save.weekEventReg[19] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_19_40);
         this->unk_1EC = 2;
         this->unk_1EE = 100;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
@@ -556,13 +556,13 @@ void func_80B32A88(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B32B10(EnZoraegg* this, PlayState* play) {
-    if (gSaveContext.eventInf[3] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_33)) {
         this->actionFunc = func_80B32A88;
     }
 }
 
 void func_80B32B3C(EnZoraegg* this, PlayState* play) {
-    if (gSaveContext.eventInf[3] & 8) {
+    if (CHECK_EVENTINF(EVENTINF_33)) {
         this->actionFunc = func_80B32A88;
         this->actor.draw = EnZoraegg_Draw;
     }

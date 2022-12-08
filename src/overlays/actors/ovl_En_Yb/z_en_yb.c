@@ -120,8 +120,7 @@ void EnYb_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    // check if already healed
-    if (gSaveContext.save.weekEventReg[82] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_82_04)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -263,7 +262,7 @@ void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147D, &this->actor);
         func_80BFA2FC(play);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -275,7 +274,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_PickUp(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
@@ -292,7 +291,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
             case 0x147D: // I am counting on you
                 func_801477B4(play);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.save.weekEventReg[82] |= 0x4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
@@ -326,7 +325,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -341,7 +340,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play) {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
     EnYb_EnableProximityMusic(this);
 }

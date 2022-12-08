@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_crow" Segment="6">
-        <Animation Name="gGuayFlyAnim" Offset="0xF0" />
+        <Animation Name="gGuayFlyAnim" Offset="0xF0" /> <!-- Original name is "df_flygue" -->
         <DList Name="gGuayBodyDL" Offset="0x490" />
         <DList Name="gGuayRightWingTipDL" Offset="0x5E0" />
         <DList Name="gGuayRightWingBodyDL" Offset="0x6B0" />

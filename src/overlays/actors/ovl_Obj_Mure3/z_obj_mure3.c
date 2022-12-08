@@ -107,7 +107,7 @@ void func_8098F220(ObjMure3* this, PlayState* play) {
     }
 }
 
-void func_8098F364(ObjMure3* this, s32 play) {
+void func_8098F364(ObjMure3* this, PlayState* play) {
     s16 count = sRupeeCounts[OBJMURE3_PARAMS_RUPEEINDEX(&this->actor)];
     s32 i;
     EnItem00** collectible;

@@ -120,8 +120,8 @@ s32 func_80B0F660(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0F6DC(EnGb2* this) {
-    if (!(gSaveContext.save.weekEventReg[54] & 0x20)) {
-        gSaveContext.save.weekEventReg[54] |= 0x20;
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_20)) {
+        SET_WEEKEVENTREG(WEEKEVENTREG_54_20);
         this->unk_26E = 0x14D0;
     } else {
         this->unk_26E = 0x14D1;
@@ -131,15 +131,15 @@ void func_80B0F6DC(EnGb2* this) {
 }
 
 void func_80B0F728(EnGb2* this, PlayState* play) {
-    if (gSaveContext.eventInf[4] & 0x10) {
+    if (CHECK_EVENTINF(EVENTINF_44)) {
         func_80B0FBF0(this, play);
         this->unk_26E = 0x14E1;
-        if (gSaveContext.eventInf[4] & 0x80) {
+        if (CHECK_EVENTINF(EVENTINF_47)) {
             this->unk_288 = 10;
         } else {
             this->unk_288 = 30;
         }
-    } else if (gSaveContext.eventInf[4] & 0x20) {
+    } else if (CHECK_EVENTINF(EVENTINF_45)) {
         func_80B0FBF0(this, play);
         this->unk_26E = 0x14E0;
         this->unk_26C |= 2;
@@ -147,9 +147,9 @@ void func_80B0F728(EnGb2* this, PlayState* play) {
         this->unk_26E = 0x14DC;
     }
 
-    gSaveContext.eventInf[4] &= (u8)~0x10;
-    gSaveContext.eventInf[4] &= (u8)~0x20;
-    gSaveContext.eventInf[4] &= (u8)~0x40;
+    CLEAR_EVENTINF(EVENTINF_44);
+    CLEAR_EVENTINF(EVENTINF_45);
+    CLEAR_EVENTINF(EVENTINF_46);
     this->actionFunc = func_80B10584;
 }
 
@@ -159,7 +159,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D1;
 
         case 0x14D1:
-            if (gSaveContext.eventInf[4] & 0x80) {
+            if (CHECK_EVENTINF(EVENTINF_47)) {
                 return 0x14E4;
             }
 
@@ -179,7 +179,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D3;
 
         case 0x14D2:
-            if (gSaveContext.eventInf[4] & 0x80) {
+            if (CHECK_EVENTINF(EVENTINF_47)) {
                 return 0x14E5;
             }
             return 0x14D4;
@@ -208,7 +208,7 @@ u16 func_80B0F8F8(EnGb2* this) {
 
         case 0x14DE:
             this->unk_26C |= 2;
-            gSaveContext.save.weekEventReg[54] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_54_80);
             return 0x14DF;
 
         case 0x14E1:
@@ -226,7 +226,7 @@ u16 func_80B0F97C(EnGb2* this) {
             return 0x14F7;
 
         case 0x14F7:
-            gSaveContext.save.weekEventReg[76] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_76_80);
             this->unk_26C |= 2;
             return 0x14F8;
 
@@ -259,7 +259,7 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             return false;
 
         case PLAYER_MASK_CAPTAIN:
-            if (!(gSaveContext.save.weekEventReg[80] & 0x40)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_40)) {
                 this->unk_26E = 0x14EB;
                 return false;
             }
@@ -267,7 +267,7 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             return true;
     }
 
-    if (!(gSaveContext.save.weekEventReg[80] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20)) {
         this->unk_26E = 0x14EF;
         return false;
     } else {
@@ -370,9 +370,9 @@ void func_80B0FE7C(PlayState* play) {
 }
 
 void func_80B0FEBC(EnGb2* this, PlayState* play) {
-    if ((play->msgCtx.ocarinaMode == OCARINA_SONG_ELEGY) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
+    if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
         play->msgCtx.ocarinaMode = 4;
-        gSaveContext.eventInf[4] |= 0x80;
+        SET_EVENTINF(EVENTINF_47);
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
     }
@@ -395,7 +395,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
-                gSaveContext.eventInf[4] &= (u8)~0x80;
+                CLEAR_EVENTINF(EVENTINF_47);
                 this->unk_26C &= ~2;
                 this->actionFunc = func_80B0FEBC;
             } else {
@@ -433,7 +433,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, 7);
+                    func_800B7298(play, NULL, PLAYER_CSMODE_7);
                     this->actionFunc = func_80B11344;
                     break;
 
@@ -488,8 +488,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         if (this->unk_280 == 3) {
             this->unk_26C &= ~0x200;
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
-            func_800FE498();
-            gSaveContext.eventInf[4] |= 0x40;
+            Environment_StartTime();
+            SET_EVENTINF(EVENTINF_46);
             func_80B0FE7C(play);
         } else if (this->unk_280 == 2) {
             if (this->unk_26C & 0x400) {
@@ -507,8 +507,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
 
     if (gSaveContext.save.playerData.health < 49) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
-        gSaveContext.eventInf[4] |= 0x40;
-        gSaveContext.eventInf[4] |= 0x20;
+        SET_EVENTINF(EVENTINF_46);
+        SET_EVENTINF(EVENTINF_45);
 
         if ((this->unk_268 != NULL) && (this->unk_268->update == NULL)) {
             this->unk_268 = NULL;
@@ -521,8 +521,8 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         func_80B0FE7C(play);
     } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
-        gSaveContext.eventInf[4] |= 0x40;
-        gSaveContext.eventInf[4] |= 0x10;
+        SET_EVENTINF(EVENTINF_46);
+        SET_EVENTINF(EVENTINF_44);
 
         if ((this->unk_268 != NULL) && (this->unk_268->update == NULL)) {
             this->unk_268 = NULL;
@@ -564,7 +564,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 } else {
                     this->unk_26E = 0x14D1;
                     this->unk_288 = 30;
-                    gSaveContext.eventInf[4] &= (u8)~0x80;
+                    CLEAR_EVENTINF(EVENTINF_47);
                     this->actionFunc = func_80B0FEBC;
                 }
             } else {
@@ -585,7 +585,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
-                    func_800B7298(play, NULL, 7);
+                    func_800B7298(play, NULL, PLAYER_CSMODE_7);
                     this->actionFunc = func_80B11344;
                 }
                 break;
@@ -617,7 +617,7 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 void func_80B10924(EnGb2* this, PlayState* play) {
     s32 sp24;
 
-    if (gSaveContext.save.weekEventReg[54] & 0x40) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
         sp24 = 5;
     } else {
         sp24 = 12;
@@ -626,7 +626,7 @@ void func_80B10924(EnGb2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (sp24 == 12) {
-            gSaveContext.save.weekEventReg[54] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
         } else {
             Rupees_ChangeBy(50);
         }
@@ -707,9 +707,9 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             Message_StartTextbox(play, this->unk_26E, &this->actor);
             if (this->unk_26E == 0x14EB) {
-                gSaveContext.save.weekEventReg[80] |= 0x40;
+                SET_WEEKEVENTREG(WEEKEVENTREG_80_40);
             } else if (this->unk_26E == 0x14EF) {
-                gSaveContext.save.weekEventReg[80] |= 0x20;
+                SET_WEEKEVENTREG(WEEKEVENTREG_80_20);
             }
             this->unk_26C &= ~0x20;
             this->unk_290 = 0;
@@ -885,14 +885,14 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
 
     switch (ENGB2_GET_7(&this->actor)) {
         case ENGB2_7_0:
-            if (gSaveContext.save.weekEventReg[54] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_80)) {
                 Actor_Kill(&this->actor);
-            } else if (gSaveContext.save.weekEventReg[52] & 0x20) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
                 Actor_Kill(&this->actor);
             }
 
             if (gSaveContext.save.entrance == ENTRANCE(GHOST_HUT, 1)) {
-                func_800FE484();
+                Environment_StopTime();
                 this->actionFunc = func_80B10240;
                 break;
             }
@@ -901,7 +901,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->actor.flags |= ACTOR_FLAG_2000000;
 
-            if (gSaveContext.eventInf[4] & 0x40) {
+            if (CHECK_EVENTINF(EVENTINF_46)) {
                 func_80B0F728(this, play);
             } else {
                 func_80B0FBF0(this, play);
@@ -910,7 +910,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ENGB2_7_1:
-            if ((play->curSpawn == 1) || (gSaveContext.save.weekEventReg[80] & 0x80)) {
+            if ((play->curSpawn == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_80_80)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -940,7 +940,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (gSaveContext.save.weekEventReg[76] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_80)) {
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
                 this->actor.flags &= ~ACTOR_FLAG_1;

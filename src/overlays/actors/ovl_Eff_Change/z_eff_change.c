@@ -130,7 +130,7 @@ void EffChange_Draw(Actor* thisx, PlayState* play) {
     EffChange* this = THIS;
 
     AnimatedMat_DrawStepXlu(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_028FEC), this->step);
-    mtx = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);

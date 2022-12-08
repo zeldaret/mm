@@ -529,7 +529,7 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
     Vec3f sp58;
     f32 sp54;
 
-    if (player->itemActionParam == 7) {
+    if (player->heldItemAction == PLAYER_IA_STICK) {
         if (player->unk_B28 > 0) {
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
                 triNorm = &this->collider.elements[i].dim;
@@ -679,7 +679,7 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, 1);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
         func_80B30AD4(this);
