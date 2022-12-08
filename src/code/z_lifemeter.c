@@ -36,7 +36,7 @@ TexturePtr HeartDDTextures[] = {
 void LifeMeter_Init(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    interfaceCtx->unkTimer = 320;
+    interfaceCtx->healthTimer = 320;
 
     interfaceCtx->health = gSaveContext.save.playerData.health;
 
@@ -167,39 +167,44 @@ void LifeMeter_UpdateColors(PlayState* play) {
     sBeatingHeartsDDEnv[2] = (u8)(bFactor + 0) & 0xFF;
 }
 
+// Unused
 s32 LifeMeter_SaveInterfaceHealth(PlayState* play) {
-    gSaveContext.save.playerData.health = play->interfaceCtx.health;
+    InterfaceContext* interfaceCtx = &play->interfaceCtx;
+
+    gSaveContext.save.playerData.health = interfaceCtx->health;
 
     return 1;
 }
 
+// Unused
 s32 LifeMeter_IncreaseInterfaceHealth(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    interfaceCtx->unkTimer = 320;
+    interfaceCtx->healthTimer = 320;
     interfaceCtx->health += 0x10;
     if (play->interfaceCtx.health >= gSaveContext.save.playerData.health) {
         play->interfaceCtx.health = gSaveContext.save.playerData.health;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
+// Unused
 s32 LifeMeter_DecreaseInterfaceHealth(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
-    if (interfaceCtx->unkTimer != 0) {
-        interfaceCtx->unkTimer--;
+    if (interfaceCtx->healthTimer != 0) {
+        interfaceCtx->healthTimer--;
     } else {
-        interfaceCtx->unkTimer = 320;
+        interfaceCtx->healthTimer = 320;
         interfaceCtx->health -= 0x10;
         if (interfaceCtx->health <= 0) {
             interfaceCtx->health = 0;
             play->damagePlayer(play, -(((void)0, gSaveContext.save.playerData.health) + 1));
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 void LifeMeter_Draw(PlayState* play) {
@@ -401,7 +406,7 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (!Player_InCsMode(play) && (play->pauseCtx.state == 0) &&
+            if (!Player_InCsMode(play) && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
                 (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && LifeMeter_IsCritical() && !Play_InCsMode(play)) {
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }

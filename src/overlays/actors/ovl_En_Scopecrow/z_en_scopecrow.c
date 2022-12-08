@@ -18,7 +18,7 @@ void EnScopecrow_Draw(Actor* thisx, PlayState* play);
 void func_80BCD590(EnScopecrow* this, PlayState* play);
 void func_80BCD640(EnScopecrow* this, PlayState* play);
 
-const ActorInit En_Scopecrow_InitVars = {
+ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
     ACTORCAT_NPC,
     FLAGS,
@@ -69,40 +69,46 @@ void func_80BCD000(EnScopecrow* this, PlayState* play) {
 s32 func_80BCD09C(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (gSaveContext.save.weekEventReg[53] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[53] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[54] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[54] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 4:
-            if (gSaveContext.save.weekEventReg[54] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 5:
-            if (gSaveContext.save.weekEventReg[54] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
     }
 
     return false;
@@ -111,43 +117,43 @@ s32 func_80BCD09C(s16 arg0) {
 s32 func_80BCD1AC(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (!(gSaveContext.save.weekEventReg[53] & 4)) {
-                gSaveContext.save.weekEventReg[53] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
 
         case 1:
-            if (!(gSaveContext.save.weekEventReg[53] & 0x80)) {
-                gSaveContext.save.weekEventReg[53] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[54] & 1)) {
-                gSaveContext.save.weekEventReg[54] |= 1;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
 
         case 3:
-            if (!(gSaveContext.save.weekEventReg[54] & 2)) {
-                gSaveContext.save.weekEventReg[54] |= 2;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
 
         case 4:
-            if (!(gSaveContext.save.weekEventReg[54] & 4)) {
-                gSaveContext.save.weekEventReg[54] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
 
         case 5:
-            if (!(gSaveContext.save.weekEventReg[54] & 8)) {
-                gSaveContext.save.weekEventReg[54] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }
             break;
@@ -244,7 +250,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
             }
 
             if (this->unk_1FC >= (this->path->count - 1)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_1FC++;
             }
@@ -288,19 +294,19 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
             this->actor.world.pos = sp3C;
             this->actor.world.pos.y = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp4C, &sp3C);
             if (this->actor.world.pos.y == BGCHECK_Y_MIN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             func_80BCD2BC(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                            OBJECT_CROW_LIMB_MAX);
         ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
@@ -323,11 +329,11 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnScopecrow_Destroy(Actor* thisx, PlayState* play) {

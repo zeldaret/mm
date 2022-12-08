@@ -59,6 +59,4 @@ typedef struct ObjBean {
     /* 0x200 */ u8 unk_200;
 } ObjBean; // size = 0x204
 
-extern const ActorInit Obj_Bean_InitVars;
-
 #endif // Z_OBJ_BEAN_H

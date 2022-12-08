@@ -31,6 +31,4 @@ typedef struct EnNeoReeba {
     /* 0x310 */ u8 drawEffectType;
 } EnNeoReeba; // size = 0x314
 
-extern const ActorInit En_Neo_Reeba_InitVars;
-
 #endif // Z_EN_NEO_REEBA_H

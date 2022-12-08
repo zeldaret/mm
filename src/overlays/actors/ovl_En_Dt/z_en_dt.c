@@ -16,7 +16,7 @@ void EnDt_Update(Actor* thisx, PlayState* play);
 void EnDt_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Dt_InitVars = {
+ActorInit En_Dt_InitVars = {
     ACTOR_EN_DT,
     ACTORCAT_NPC,
     FLAGS,

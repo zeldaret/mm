@@ -61,7 +61,7 @@ static Color_RGBA8 sPoSisterEnvColors[] = {
     { 0, 150, 0, 255 },   // Amy
 };
 
-const ActorInit En_Po_Sisters_InitVars = {
+ActorInit En_Po_Sisters_InitVars = {
     ACTOR_EN_PO_SISTERS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -177,7 +177,7 @@ void EnPoSisters_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->type = ENPOSISTERS_GET_TYPE(thisx);
-    this->actor.hintId = this->type + 80;
+    this->actor.hintId = this->type + TATL_HINT_ID_POE_SISTER_MEG;
     this->megCloneId = ENPOSISTERS_GET_MEG_CLONE_ID(thisx);
     this->floatingBobbingTimer = 32;
     this->zTargetTimer = 20;
@@ -714,10 +714,11 @@ void EnPoSisters_DeathStage2(EnPoSisters* this, PlayState* play) {
     this->deathTimer++;
 
     if (this->deathTimer == 32) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        EnPoSisters_UpdateDeathFlameSwirl(this, this->deathTimer, &this->actor.world.pos);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    EnPoSisters_UpdateDeathFlameSwirl(this, this->deathTimer, &this->actor.world.pos);
 }
 
 void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {
@@ -734,15 +735,15 @@ void EnPoSisters_SpawnMegClones(EnPoSisters* this, PlayState* play) {
     // if we cannot spawn all clones: abort
     if ((clone1 == NULL) || (clone2 == NULL) || (clone3 == NULL)) {
         if (clone1 != NULL) {
-            Actor_MarkForDeath(clone1);
+            Actor_Kill(clone1);
         }
         if (clone2 != NULL) {
-            Actor_MarkForDeath(clone2);
+            Actor_Kill(clone2);
         }
         if (clone3 != NULL) {
-            Actor_MarkForDeath(clone3);
+            Actor_Kill(clone3);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -793,7 +794,7 @@ void EnPoSisters_MegCloneWaitForSpinBack(EnPoSisters* this, PlayState* play) {
         EnPoSisters_SetupSpinBackToVisible(this, play);
 
     } else if (parent->actionFunc == EnPoSisters_DeathStage1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -101,6 +101,9 @@ typedef struct {
 #define BINANG_LERPIMP(v0, v1, t) ((v0) + (s16)(BINANG_SUB((v1), (v0)) * (t)))
 #define BINANG_LERPIMPINV(v0, v1, t) ((v0) + BINANG_SUB((v1), (v0)) / (t))
 
+#define LERPWEIGHT(val, prev, next) (((val) - (prev)) / ((next) - (prev)))
+#define F32_LERPWEIGHT(val, prev, next) (((f32)(val) - (f32)(prev)) / ((f32)(next) - (f32)(prev)))
+
 #define VEC3F_LERPIMPDST(dst, v0, v1, t){ \
     (dst)->x = (v0)->x + (((v1)->x - (v0)->x) * t); \
     (dst)->y = (v0)->y + (((v1)->y - (v0)->y) * t); \

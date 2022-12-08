@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ishi.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -15,7 +16,7 @@
 #define THIS ((EnIshi*)thisx)
 
 void EnIshi_Init(Actor* thisx, PlayState* play);
-void EnIshi_Destroy(Actor* thisx, PlayState* play);
+void EnIshi_Destroy(Actor* thisx, PlayState* play2);
 void EnIshi_Update(Actor* thisx, PlayState* play);
 
 void func_8095D804(Actor* thisx, PlayState* play);
@@ -43,7 +44,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-const ActorInit En_Ishi_InitVars = {
+ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
     ACTORCAT_PROP,
     FLAGS,
@@ -317,7 +318,7 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
             Matrix_MultVecY(1.0f, &sp30);
             sp2C = Math3D_Parallel(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
-                temp_v1_2 = Math_FAtan2F(sp30.z, sp30.x) - sp3C->world.rot.y;
+                temp_v1_2 = Math_Atan2S_XY(sp30.z, sp30.x) - sp3C->world.rot.y;
                 if (ABS_ALT(temp_v1_2) > 0x4000) {
                     sp3C->world.rot.y = BINANG_ROT180(sp3C->world.rot.y);
                 }
@@ -397,7 +398,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     func_8095D6E0(&this->actor, play);
 
     if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FE00(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -414,7 +415,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = D_8095F6C0[sp34];
 
     if ((sp30 == 0) && !func_8095D758(this, play, 0)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -424,7 +425,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     this->unk_196 = Object_GetIndex(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
     if (this->unk_196 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -489,7 +490,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp38], D_8095F6D0[sp38]);
         D_8095F6D8[sp38](&this->actor, play);
         D_8095F6E0[sp38](this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -532,7 +533,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
     s32 sp2C;
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
             Flags_SetSwitch(play, ENISHI_GET_FE00(&this->actor));
         }
@@ -594,15 +595,16 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         }
 
         if (sp70 == 1) {
-            s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+            s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-            Quake_SetSpeed(quake, 0x4350);
-            Quake_SetQuakeValues(quake, 3, 0, 0, 0);
-            Quake_SetCountdown(quake, 7);
+            Quake_SetSpeed(quakeIndex, 17232);
+            Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
+            Quake_SetCountdown(quakeIndex, 7);
+
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -680,9 +682,9 @@ void func_8095F180(EnIshi* this) {
 
 void func_8095F194(EnIshi* this, PlayState* play) {
     if (this->actor.cutscene < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

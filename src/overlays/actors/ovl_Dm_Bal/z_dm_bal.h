@@ -23,6 +23,4 @@ typedef struct DmBal {
     /* 0x33A */ s16 unk_33A;
 } DmBal; /* size = 0x33C */
 
-extern const ActorInit Dm_Bal_InitVars;
-
 #endif // Z_DM_BAL_H

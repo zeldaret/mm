@@ -1,7 +1,7 @@
 /*
  * File: z_door_warp1.c
  * Overlay: ovl_Door_Warp1
- * Description: Blue Warp
+ * Description: Blue warp portal and crystal, and the Majora's Mask-shaped boss warp platform
  */
 
 #include "z_door_warp1.h"
@@ -49,7 +49,7 @@ void func_808BB8D4(DoorWarp1* this, PlayState* play, s32 arg2);
 static s16 D_808BC000;
 static f32 D_808BC004;
 
-const ActorInit Door_Warp1_InitVars = {
+ActorInit Door_Warp1_InitVars = {
     ACTOR_DOOR_WARP1,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -75,13 +75,13 @@ void DoorWarp1_SetupAction(DoorWarp1* this, DoorWarp1ActionFunc actionFunc) {
 s32 func_808B849C(DoorWarp1* this, PlayState* play) {
     s32 ret = 0;
 
-    if ((play->sceneNum == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+    if ((play->sceneId == SCENE_MITURIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
         ret = 1;
-    } else if ((play->sceneNum == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
+    } else if ((play->sceneId == SCENE_HAKUGIN_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
         ret = 2;
-    } else if ((play->sceneNum == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
+    } else if ((play->sceneId == SCENE_SEA_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
         ret = 3;
-    } else if ((play->sceneNum == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
+    } else if ((play->sceneId == SCENE_INISIE_BS) && !CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
         ret = 4;
     }
     return ret;
@@ -152,7 +152,7 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
         case ENDOORWARP1_FF_5:
             this->unk_1D3 = 1;
             DynaPolyActor_Init(&this->dyna, 0);
-            DynaPolyActor_LoadMesh(play, &this->dyna, &object_warp1_Colheader_008BD4);
+            DynaPolyActor_LoadMesh(play, &this->dyna, &gWarpBossWarpPlatformCol);
             func_808B8C48(this, play);
             break;
 
@@ -161,10 +161,10 @@ void DoorWarp1_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((play->sceneNum == SCENE_MITURIN_BS) || (play->sceneNum == SCENE_HAKUGIN_BS) ||
-        (play->sceneNum == SCENE_INISIE_BS) || (play->sceneNum == SCENE_SEA_BS)) {
-        func_800FE484();
-        play->interfaceCtx.restrictions.unk_312 = 1;
+    if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
+        (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
+        Environment_StopTime();
+        play->interfaceCtx.restrictions.songOfTime = 1;
         play->interfaceCtx.restrictions.songOfSoaring = 1;
     }
 }
@@ -210,8 +210,8 @@ void func_808B8924(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B8A7C(DoorWarp1* this, PlayState* play) {
-    SkelAnime_Init(play, &this->skelAnime, &object_warp1_Skel_002CA8, &object_warp1_Anim_001374, NULL, NULL, 0);
-    Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
+    SkelAnime_Init(play, &this->skelAnime, &gWarpCrystalSkel, &gWarpCrystalAnim, NULL, NULL, 0);
+    Animation_ChangeImpl(&this->skelAnime, &gWarpCrystalAnim, 1.0f, 1.0f, 1.0f, 2, 40.0f, 1);
     this->unk_1C4 = 0;
     this->unk_1C6 = -140;
     this->unk_1C8 = -80;
@@ -239,7 +239,7 @@ void func_808B8C48(DoorWarp1* this, PlayState* play) {
                               this->dyna.actor.world.pos.z, 200, 255, 255, 255);
     Lights_PointNoGlowSetInfo(&this->unk_1F4, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                               this->dyna.actor.world.pos.z, 200, 255, 255, 255);
-    if (((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_2) && CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) ||
+    if (((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_2) && CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) ||
         ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_3) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) ||
         ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_4) && CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) ||
         ((DOORWARP1_GET_FF(&this->dyna.actor) == ENDOORWARP1_FF_5) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD))) {
@@ -268,9 +268,9 @@ void func_808B8E78(DoorWarp1* this, PlayState* play) {
     this->unk_1A8 = 0.0f;
     this->unk_1AC = 0.0f;
     this->unk_1A4 = 700.0f;
-    if (play->sceneNum == SCENE_INISIE_N) {
+    if (play->sceneId == SCENE_INISIE_N) {
         DoorWarp1_SetupAction(this, func_808B96A0);
-    } else if (gSaveContext.save.weekEventReg[86] & 0x80) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80)) {
         this->unk_1D4 = 0;
         DoorWarp1_SetupAction(this, func_808B921C);
     } else {
@@ -307,12 +307,12 @@ void func_808B90CC(DoorWarp1* this, PlayState* play) {
     s16 sp2E = 0;
     f32 phi_f0 = 0.0f;
 
-    if (play->sceneNum == SCENE_MITURIN) {
+    if (play->sceneId == SCENE_MITURIN) {
         sp2E = -10;
         phi_f0 = -5.0f;
-    } else if (play->sceneNum == SCENE_HAKUGIN) {
+    } else if (play->sceneId == SCENE_HAKUGIN) {
         sp2E = -20;
-    } else if (play->sceneNum == SCENE_SEA) {
+    } else if (play->sceneId == SCENE_SEA) {
         sp2E = -20;
     }
 
@@ -344,7 +344,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
     }
 
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
-        func_800B7298(play, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
         Message_StartTextbox(play, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
@@ -360,14 +360,14 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
         func_801477B4(play);
         if (play->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_800B7298(play, &this->dyna.actor, 9);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
             player->unk_3A0.x = this->dyna.actor.world.pos.x;
             player->unk_3A0.z = this->dyna.actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
             func_8019F230();
-            func_800B7298(play, &this->dyna.actor, 6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
     }
@@ -448,7 +448,7 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
 
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-        func_800B7298(play, &this->dyna.actor, 9);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 1;
@@ -551,7 +551,7 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
         return;
     }
 
-    switch (play->sceneNum) {
+    switch (play->sceneId) {
         case SCENE_MITURIN_BS:
             gSaveContext.save.unk_ECC[0] =
                 (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFFFFFF00) | (((u8)gSaveContext.save.unk_ECC[1]) & 0xFF);
@@ -598,8 +598,8 @@ void func_808B9F10(DoorWarp1* this, PlayState* play) {
     if ((this->unk_203 == 0) && func_808B866C(this, play) && !Play_InCsMode(play) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(play);
 
-        Interface_ChangeAlpha(1);
-        func_800B7298(play, &this->dyna.actor, 9);
+        Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
         player->unk_3A0.x = this->dyna.actor.world.pos.x;
         player->unk_3A0.z = this->dyna.actor.world.pos.z;
         this->unk_1CA = 20;
@@ -622,9 +622,8 @@ void func_808B9FD0(DoorWarp1* this, PlayState* play) {
         ActorCutscene_Start(play->playerActorCsIds[9], NULL);
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
-        Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
-                             Animation_GetLastFrame(&object_warp1_Anim_001374.common),
-                             Animation_GetLastFrame(&object_warp1_Anim_001374.common), 2, 40.0f, 1);
+        Animation_ChangeImpl(&this->skelAnime, &gWarpCrystalAnim, 1.0f, Animation_GetLastFrame(&gWarpCrystalAnim),
+                             Animation_GetLastFrame(&gWarpCrystalAnim), 2, 40.0f, 1);
         this->unk_1CA = 50;
         D_808BC004 = player2->actor.world.pos.y;
         DoorWarp1_SetupAction(this, func_808BA550);
@@ -636,16 +635,16 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
     u8 phi_a0;
     s32 phi_v0_3;
 
-    if ((play->sceneNum == SCENE_MITURIN_BS) || (play->sceneNum == SCENE_HAKUGIN_BS) ||
-        (play->sceneNum == SCENE_INISIE_BS) || (play->sceneNum == SCENE_SEA_BS)) {
-        D_801F4DE2 = play->sceneNum;
-        if (play->sceneNum == SCENE_MITURIN_BS) {
+    if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
+        (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
+        D_801F4DE2 = play->sceneId;
+        if (play->sceneId == SCENE_MITURIN_BS) {
             phi_v0_2 = 0;
-        } else if (play->sceneNum == SCENE_HAKUGIN_BS) {
+        } else if (play->sceneId == SCENE_HAKUGIN_BS) {
             phi_v0_2 = 1;
-        } else if (play->sceneNum == SCENE_INISIE_BS) {
+        } else if (play->sceneId == SCENE_INISIE_BS) {
             phi_v0_2 = 2;
-        } else if (play->sceneNum == SCENE_SEA_BS) {
+        } else if (play->sceneId == SCENE_SEA_BS) {
             phi_v0_2 = 3;
         } else {
             phi_v0_2 = 0;
@@ -653,7 +652,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
         if (this->unk_202 != 0) {
             if (phi_v0_2 > 0) {
-                gSaveContext.save.weekEventReg[7] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
             }
 
             switch (phi_v0_2) {
@@ -711,8 +710,8 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
         } else {
             switch (phi_v0_2) {
                 case 0:
-                    if (gSaveContext.save.weekEventReg[20] & 2) {
-                        gSaveContext.save.weekEventReg[7] |= 0x80;
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
@@ -727,7 +726,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[33] |= 0x80;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_33_80);
                     play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
@@ -735,14 +734,14 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 3:
-                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
                         play->nextEntrance = ENTRANCE(ZORA_CAPE, 9);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
                         gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     } else {
-                        gSaveContext.save.weekEventReg[55] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_55_80);
                         play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -752,7 +751,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 2:
-                    gSaveContext.save.weekEventReg[52] |= 0x20;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_52_20);
                     play->nextEntrance = ENTRANCE(IKANA_CANYON, 15);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -872,7 +871,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
 
         play->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
         if (play->envCtx.lightSettings.fogNear < -300) {
-            play->roomCtx.currRoom.segment = NULL;
+            play->roomCtx.curRoom.segment = NULL;
         }
     }
 }
@@ -883,18 +882,18 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play) {
     f32 phi_f2;
 
     phi_f2 = 200.0f;
-    if (play->sceneNum == SCENE_SEA) {
+    if (play->sceneId == SCENE_SEA) {
         phi_f2 = 85.0f;
     }
 
-    if (!(gSaveContext.save.weekEventReg[86] & 0x80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
         ((player->actor.world.pos.y - 20.0f) < this->dyna.actor.world.pos.y) &&
         (this->dyna.actor.world.pos.y < (player->actor.world.pos.y + 20.0f))) {
         cutscene = this->dyna.actor.cutscene;
 
         if (ActorCutscene_GetCanPlayNext(cutscene)) {
             ActorCutscene_Start(cutscene, &this->dyna.actor);
-            gSaveContext.save.weekEventReg[86] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_86_80);
             DoorWarp1_SetupAction(this, func_808BABF4);
         } else {
             ActorCutscene_SetIntentToPlay(cutscene);
@@ -992,7 +991,7 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(play->state.gfxCtx));
-    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
+    gSPDisplayList(POLY_XLU_DISP++, gWarpPortalDL);
 
     Matrix_Pop();
 
@@ -1010,14 +1009,14 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
                      MTXMODE_APPLY);
 
         gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(play->state.gfxCtx));
-        gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
+        gSPDisplayList(POLY_XLU_DISP++, gWarpPortalDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void func_808BB4C4(DoorWarp1* this, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_warp1_DL_0076C0);
+    Gfx_DrawDListOpa(play, gWarpBossWarpPlatformDL);
 }
 
 void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
@@ -1035,17 +1034,17 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
                          this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
-        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
-        Gfx_DrawDListXlu(play, object_warp1_DL_003230);
+        AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpBossWarpActivationBeamTexAnim));
+        Gfx_DrawDListXlu(play, gWarpBossWarpActivationBeamDL);
         return;
     }
 
-    if (play->sceneNum != SCENE_MITURIN) {
-        if (play->sceneNum == SCENE_HAKUGIN) {
+    if (play->sceneId != SCENE_MITURIN) {
+        if (play->sceneId == SCENE_HAKUGIN) {
             sp60 = 1;
-        } else if (play->sceneNum == SCENE_SEA) {
+        } else if (play->sceneId == SCENE_SEA) {
             sp60 = 2;
-        } else if (play->sceneNum == SCENE_INISIE_R) {
+        } else if (play->sceneId == SCENE_INISIE_R) {
             sp60 = 3;
         }
     }
@@ -1054,7 +1053,7 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
                      MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpBossWarpLightShaftsTexAnim));
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1063,13 +1062,13 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_004690);
+    gSPDisplayList(POLY_XLU_DISP++, gWarpBossWarpLightShaftsDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpBossWarpGlowTexAnim));
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                      MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
@@ -1080,7 +1079,7 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk_203);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0058C8);
+    gSPDisplayList(POLY_XLU_DISP++, gWarpBossWarpGlowDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

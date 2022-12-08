@@ -14,6 +14,4 @@ typedef struct EnBba01 {
     /* 0x3EC */ UNK_TYPE1 unk_3EC[0x230];
 } EnBba01; // size = 0x61C
 
-extern const ActorInit En_Bba_01_InitVars;
-
 #endif // Z_EN_BBA_01_H

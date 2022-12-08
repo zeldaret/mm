@@ -29,7 +29,7 @@ void func_809AB6FC(ObjGrassCarry* this);
 void func_809AB77C(ObjGrassCarry* this, PlayState* play);
 void func_809ABB7C(Actor* this, PlayState* play);
 
-const ActorInit Obj_Grass_Carry_InitVars = {
+ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,
     ACTORCAT_PROP,
     FLAGS,
@@ -347,7 +347,7 @@ void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_190 == NULL) {
         if ((this->actionFunc != func_809AB610) && (this->actionFunc != func_809AB77C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -356,5 +356,5 @@ void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_809ABB7C(Actor* this, PlayState* play) {
-    Gfx_DrawDListOpa(play, gKusaBushType1);
+    Gfx_DrawDListOpa(play, gKusaBushType1DL);
 }

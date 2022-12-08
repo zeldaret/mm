@@ -54,7 +54,7 @@ typedef struct {
 
 // Maps scenes to SpiralObjectType
 typedef struct {
-    /* 0x00 */ s16 sceneNum;
+    /* 0x00 */ s16 sceneId;
     /* 0x02 */ u8 objectType;
 } SpiralSceneInfo;
 
@@ -67,7 +67,7 @@ void DoorSpiral_WaitForObject(DoorSpiral* this, PlayState* play);
 void DoorSpiral_Wait(DoorSpiral* this, PlayState* play);
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play);
 
-const ActorInit Door_Spiral_InitVars = {
+ActorInit Door_Spiral_InitVars = {
     ACTOR_DOOR_SPIRAL,
     ACTORCAT_DOOR,
     FLAGS,
@@ -116,7 +116,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, PlayState* play) {
     this->spiralType = doorObjectInfo->spiralType;
 
     if ((this->spiralType == SPIRAL_DAMPES_HOUSE) ||
-        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.currRoom.enablePosLights)) {
+        ((this->spiralType == SPIRAL_WOODFALL_TEMPLE) && play->roomCtx.curRoom.enablePosLights)) {
         if (this->spiralType == SPIRAL_WOODFALL_TEMPLE) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
@@ -147,7 +147,7 @@ s32 DoorSpiral_GetObjectType(PlayState* play) {
     s32 type;
 
     for (i = 0; i < ARRAY_COUNT(spiralSceneInfo); sceneInfo++, i++) {
-        if (play->sceneNum == sceneInfo->sceneNum) {
+        if (play->sceneId == sceneInfo->sceneId) {
             break;
         }
     }
@@ -179,7 +179,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     s8 objBankId;
 
     if (this->actor.room != play->doorCtx.transitionActorList[transition].sides[0].room) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -191,7 +191,7 @@ void DoorSpiral_Init(Actor* thisx, PlayState* play) {
     this->bankIndex = objBankId;
 
     if (objBankId < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -274,7 +274,7 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
     } else if (DoorSpiral_PlayerShouldClimb(this, play)) {
         player = GET_PLAYER(play);
 
-        player->doorType = 4;
+        player->doorType = PLAYER_DOORTYPE_STAIRCASE;
         player->doorDirection = this->orientation;
         player->doorActor = &this->actor;
         transition = DOORSPIRAL_GET_TRANSITION_ID(&this->actor);
@@ -290,7 +290,7 @@ void DoorSpiral_Wait(DoorSpiral* this, PlayState* play) {
 void DoorSpiral_PlayerClimb(DoorSpiral* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x20000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         DoorSpiral_SetupAction(this, DoorSpiral_WaitForObject);
         this->shouldClimb = 0;
     }
@@ -301,7 +301,8 @@ void DoorSpiral_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if ((!(player->stateFlags1 & 0x100004C0)) || (this->actionFunc == DoorSpiral_WaitForObject)) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_400 | PLAYER_STATE1_10000000)) ||
+        (this->actionFunc == DoorSpiral_WaitForObject)) {
         this->actionFunc(this, play);
     }
 }

@@ -5,7 +5,6 @@
  */
 
 #include "z_en_zos.h"
-#include "objects/object_zos/object_zos.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_2000000)
 
@@ -16,7 +15,7 @@ void EnZos_Destroy(Actor* thisx, PlayState* play);
 void EnZos_Update(Actor* thisx, PlayState* play);
 void EnZos_Draw(Actor* thisx, PlayState* play);
 
-void func_80BBAE84(EnZos* this, s16 arg1, u8 arg2);
+void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode);
 void func_80BBB2C4(EnZos* this, PlayState* play);
 void func_80BBB354(EnZos* this, PlayState* play);
 void func_80BBB4CC(EnZos* this, PlayState* play);
@@ -34,7 +33,24 @@ void func_80BBC24C(EnZos* this, PlayState* play);
 void func_80BBC298(EnZos* this, PlayState* play);
 void func_80BBC37C(EnZos* this, PlayState* play);
 
-const ActorInit En_Zos_InitVars = {
+typedef enum {
+    /*  0 */ EN_ZOS_ANIM_LEAN_ON_KEYBOARD,
+    /*  1 */ EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH,
+    /*  2 */ EN_ZOS_ANIM_HANDS_ON_HIPS,
+    /*  3 */ EN_ZOS_ANIM_TALK_FOOT_TAP,
+    /*  4 */ EN_ZOS_ANIM_TALK_LOOK_DOWN,
+    /*  5 */ EN_ZOS_ANIM_TALK_ARMS_OUT,
+    /*  6 */ EN_ZOS_ANIM_TALK_HANDS_ON_HIPS,
+    /*  7 */ EN_ZOS_ANIM_PLAY_RIGHT,
+    /*  8 */ EN_ZOS_ANIM_PLAY_LEFT,
+    /*  9 */ EN_ZOS_ANIM_INSPIRED,
+    /* 10 */ EN_ZOS_ANIM_SLOW_PLAY,
+    /* 11 */ EN_ZOS_ANIM_PLAY_RIGHT_SHORTENED,
+    /* 12 */ EN_ZOS_ANIM_PLAY_LEFT_SHORTENED,
+    /* 13 */ EN_ZOS_ANIM_MAX
+} EnZosAnimation;
+
+ActorInit En_Zos_InitVars = {
     ACTOR_EN_ZOS,
     ACTORCAT_NPC,
     FLAGS,
@@ -73,39 +89,39 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BBBDE0;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zos_Skel_015238, &object_zos_Anim_00A164, this->jointTable,
-                       this->morphTable, 18);
-    Animation_PlayLoop(&this->skelAnime, &object_zos_Anim_00A164);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gEvanSkel, &gEvanLeanOnKeyboardAnim, this->jointTable, this->morphTable,
+                       EVAN_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gEvanLeanOnKeyboardAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_2B6 = 0;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
-    func_80BBAE84(this, 0, ANIMMODE_ONCE);
+    EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD, ANIMMODE_ONCE);
 
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                Actor_Kill(&this->actor);
             }
 
-            if (gSaveContext.save.weekEventReg[78] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
                 this->actionFunc = func_80BBC24C;
             } else {
                 this->actionFunc = func_80BBC14C;
             }
-            func_80BBAE84(this, 0, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD, ANIMMODE_ONCE);
             break;
 
         case ENZOS_F_2:
             this->actionFunc = func_80BBC37C;
-            func_80BBAE84(this, 7, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
             this->unk_2BC = -1;
             this->unk_2B6 |= 0x40;
             break;
 
         default:
-            if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
             break;
@@ -115,26 +131,37 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 void EnZos_Destroy(Actor* thisx, PlayState* play) {
     EnZos* this = THIS;
 
-    gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
 }
 
-void func_80BBAE84(EnZos* this, s16 arg1, u8 arg2) {
-    static AnimationHeader* sAnimations[] = {
-        &object_zos_Anim_00A164, &object_zos_Anim_01621C, &object_zos_Anim_016980, &object_zos_Anim_007C40,
-        &object_zos_Anim_008630, &object_zos_Anim_0090CC, &object_zos_Anim_009830, &object_zos_Anim_005E04,
-        &object_zos_Anim_007334, &object_zos_Anim_0048D4, &object_zos_Anim_001CFC, &object_zos_Anim_005E04,
-        &object_zos_Anim_007334,
-    };
-    f32 phi_f0;
+static AnimationHeader* sAnimations[] = {
+    &gEvanLeanOnKeyboardAnim,        // EN_ZOS_ANIM_LEAN_ON_KEYBOARD
+    &gEvanLeanOnKeyboardAndSighAnim, // EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH
+    &gEvanHandsOnHipsAnim,           // EN_ZOS_ANIM_HANDS_ON_HIPS
+    &gEeanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
+    &gEvanTalkLookDownAnim,          // EN_ZOS_ANIM_TALK_LOOK_DOWN
+    &gEvanTalkArmsOutAnim,           // EN_ZOS_ANIM_TALK_ARMS_OUT
+    &gEvanTalkHandsOnHipsAnim,       // EN_ZOS_ANIM_TALK_HANDS_ON_HIPS
+    &gEvanPlayRightAnim,             // EN_ZOS_ANIM_PLAY_RIGHT
+    &gEvanPlayLeftAnim,              // EN_ZOS_ANIM_PLAY_LEFT
+    &gEvanInspiredAnim,              // EN_ZOS_ANIM_INSPIRED
+    &gEvanSlowPlayAnim,              // EN_ZOS_ANIM_SLOW_PLAY
+    &gEvanPlayRightAnim,             // EN_ZOS_ANIM_PLAY_RIGHT_SHORTENED
+    &gEvanPlayLeftAnim,              // EN_ZOS_ANIM_PLAY_LEFT_SHORTENED
+};
 
-    if ((arg1 != this->unk_2B8) && (arg1 >= 0) && (arg1 < 13)) {
-        if (arg1 > 10) {
-            phi_f0 = 29.0f;
+void EnZos_ChangeAnim(EnZos* this, s16 animIndex, u8 animMode) {
+    f32 endFrame;
+
+    if ((animIndex != this->animIndex) && (animIndex >= EN_ZOS_ANIM_LEAN_ON_KEYBOARD) &&
+        (animIndex < EN_ZOS_ANIM_MAX)) {
+        if (animIndex > EN_ZOS_ANIM_SLOW_PLAY) {
+            endFrame = 29.0f;
         } else {
-            phi_f0 = Animation_GetLastFrame(sAnimations[arg1]);
+            endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
         }
-        Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, phi_f0, arg2, -5.0f);
-        this->unk_2B8 = arg1;
+        Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, endFrame, animMode, -5.0f);
+        this->animIndex = animIndex;
         this->unk_2B6 &= ~0x80;
     }
 }
@@ -153,19 +180,19 @@ s32 func_80BBAFFC(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         switch ((s16)Rand_ZeroFloat(4.0f)) {
             case 0:
-                func_80BBAE84(this, 7, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
                 break;
 
             case 1:
-                func_80BBAE84(this, 8, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_LEFT, ANIMMODE_ONCE);
                 break;
 
             case 2:
-                func_80BBAE84(this, 11, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT_SHORTENED, ANIMMODE_ONCE);
                 break;
 
             default:
-                func_80BBAE84(this, 12, ANIMMODE_ONCE);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_LEFT_SHORTENED, ANIMMODE_ONCE);
                 break;
         }
         return true;
@@ -176,9 +203,9 @@ s32 func_80BBAFFC(EnZos* this, PlayState* play) {
 void func_80BBB0D4(EnZos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (Rand_ZeroFloat(1.0f) < 0.9f) {
-            func_80BBAE84(this, 0, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD, ANIMMODE_ONCE);
         } else {
-            func_80BBAE84(this, 1, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH, ANIMMODE_ONCE);
         }
         SkelAnime_Update(&this->skelAnime);
     }
@@ -190,31 +217,31 @@ void func_80BBB15C(EnZos* this, PlayState* play) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_2B6 & 8) {
             textId = 0x1235;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
         } else if (this->unk_2B6 & 4) {
             textId = 0x123E;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
-        } else if (gSaveContext.save.weekEventReg[40] & 0x20) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_20)) {
             textId = 0x1236;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
         } else {
             textId = 0x1231;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
         }
     } else {
         this->unk_2B6 &= ~2;
-        if (gSaveContext.save.weekEventReg[39] & 0x10) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_10)) {
             textId = 0x1243;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x80;
         } else {
             textId = 0x1244;
-            gSaveContext.save.weekEventReg[39] |= 0x10;
-            func_80BBAE84(this, 4, ANIMMODE_LOOP);
+            SET_WEEKEVENTREG(WEEKEVENTREG_39_10);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_LOOK_DOWN, ANIMMODE_LOOP);
             this->unk_2B6 |= 0x10;
         }
     }
@@ -227,7 +254,7 @@ void func_80BBB2C4(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -237,11 +264,11 @@ void func_80BBB354(EnZos* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BBB2C4;
-        gSaveContext.save.weekEventReg[39] |= 0x20;
+        SET_WEEKEVENTREG(WEEKEVENTREG_39_20);
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        if (gSaveContext.save.weekEventReg[39] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
             getItemId = GI_RUPEE_PURPLE;
         } else {
             getItemId = GI_HEART_PIECE;
@@ -261,11 +288,11 @@ void func_80BBB414(EnZos* this, PlayState* play) {
 
             switch (action) {
                 case 1:
-                    func_80BBAE84(this, 1, ANIMMODE_LOOP);
+                    EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH, ANIMMODE_LOOP);
                     break;
 
                 case 2:
-                    func_80BBAE84(this, 10, ANIMMODE_LOOP);
+                    EnZos_ChangeAnim(this, EN_ZOS_ANIM_SLOW_PLAY, ANIMMODE_LOOP);
                     break;
             }
         }
@@ -304,7 +331,7 @@ void func_80BBB574(EnZos* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x124B:
-                if (this->unk_2B8 == 9) {
+                if (this->animIndex == EN_ZOS_ANIM_INSPIRED) {
                     play->msgCtx.msgLength = 0;
                     this->unk_2B6 |= 0x20;
                 } else {
@@ -315,12 +342,12 @@ void func_80BBB574(EnZos* this, PlayState* play) {
             case 0x124C:
                 play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80BBB4CC;
-                func_80BBAE84(this, 10, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_SLOW_PLAY, ANIMMODE_LOOP);
                 break;
 
             case 0x124D:
                 this->unk_2B6 &= ~0x10;
-                func_80BBAE84(this, 6, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 func_80151938(play, 0x124E);
                 break;
 
@@ -334,37 +361,38 @@ void func_80BBB574(EnZos* this, PlayState* play) {
 }
 
 void func_80BBB718(EnZos* this, PlayState* play) {
-    s32 sp24;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        sp24 = func_80123810(play);
-        if (sp24 > 0) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
             func_801477B4(play);
 
-            if (sp24 == 25) {
+            if (itemAction == PLAYER_IA_BOTTLE_ZORA_EGG) {
                 player->actor.textId = 0x1232;
-                func_80BBAE84(this, 5, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
                 this->unk_2B6 |= 8;
-                gSaveContext.save.weekEventReg[40] |= 0x20;
-            } else if (gSaveContext.save.weekEventReg[39] & 8) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_40_20);
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
                 player->actor.textId = 0x1241;
             } else {
                 player->actor.textId = 0x1237;
-                gSaveContext.save.weekEventReg[39] |= 8;
-                func_80BBAE84(this, 4, ANIMMODE_LOOP);
+                SET_WEEKEVENTREG(WEEKEVENTREG_39_08);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_LOOK_DOWN, ANIMMODE_LOOP);
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
-        } else if (sp24 < 0) {
-            if (gSaveContext.save.weekEventReg[39] & 8) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_08)) {
                 func_80151938(play, 0x1241);
             } else {
                 func_80151938(play, 0x1237);
-                gSaveContext.save.weekEventReg[39] |= 8;
-                func_80BBAE84(this, 4, ANIMMODE_LOOP);
+                SET_WEEKEVENTREG(WEEKEVENTREG_39_08);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_LOOK_DOWN, ANIMMODE_LOOP);
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
@@ -382,7 +410,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_2B6 & 0x80) && (this->actor.yawTowardsPlayer == this->actor.shape.rot.y)) {
-            func_80BBAE84(this, 3, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_FOOT_TAP, ANIMMODE_LOOP);
         }
     }
 
@@ -402,7 +430,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1244:
                 this->unk_2B6 &= ~0x10;
-                func_80BBAE84(this, 6, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
@@ -412,18 +440,18 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1239:
             case 0x1246:
-                func_80BBAE84(this, 6, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1233:
-                func_80BBAE84(this, 5, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1245:
             case 0x1248:
-                func_80BBAE84(this, 3, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_FOOT_TAP, ANIMMODE_LOOP);
                 func_80151938(play, play->msgCtx.currentTextId + 1);
                 break;
 
@@ -434,7 +462,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1243:
             case 0x1249:
-                func_80BBAE84(this, 2, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
@@ -443,7 +471,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
             case 0x1234:
             case 0x123D:
             case 0x1242:
-                func_80BBAE84(this, 2, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 Actor_ProcessTalkRequest(&this->actor, &play->state);
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
@@ -451,7 +479,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
                 break;
 
             case 0x1236:
-                func_80BBAE84(this, 2, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 func_801477B4(play);
                 this->actionFunc = func_80BBBDE0;
                 this->unk_2B6 |= 1;
@@ -473,17 +501,17 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->unk_2B6 |= 2;
-        } else if (gSaveContext.save.weekEventReg[41] & 0x10) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_10)) {
             Message_StartTextbox(play, 0x124A, &this->actor);
             this->actionFunc = func_80BBB8AC;
-            func_80BBAE84(this, 6, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
         } else {
-            gSaveContext.save.weekEventReg[41] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_41_10);
             Message_StartTextbox(play, 0x124B, &this->actor);
             this->actionFunc = func_80BBB574;
-            func_80BBAE84(this, 9, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_INSPIRED, ANIMMODE_ONCE);
             this->unk_2B6 |= 0x10;
         }
     } else {
@@ -494,11 +522,11 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
 void func_80BBBCBC(EnZos* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_80BBAE84(this, 5, ANIMMODE_LOOP);
+        EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -507,7 +535,7 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
     if (!Cutscene_CheckActorAction(play, 0x1F5)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -519,7 +547,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x1000, 0x200);
         this->actor.world.rot.y = thisx->shape.rot.y;
         if (this->actor.home.rot.y == thisx->shape.rot.y) {
-            func_80BBAE84(this, 0, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD, ANIMMODE_ONCE);
             this->unk_2B6 &= ~1;
         }
     }
@@ -544,9 +572,9 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     }
 
     if (!Actor_IsFacingPlayer(&this->actor, 0x4000) && (this->actor.xzDistToPlayer < 100.0f)) {
-        gSaveContext.save.weekEventReg[52] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_52_10);
     } else {
-        gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_10);
     }
 
     sp28.x = this->actor.projectedPos.x;
@@ -559,18 +587,18 @@ void func_80BBBFBC(EnZos* this, PlayState* play) {
     u16 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[79] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x125B;
-        } else if (gSaveContext.save.weekEventReg[78] & 0x80) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_80)) {
             textId = 0x125A;
         } else {
             textId = 0x1259;
-            gSaveContext.save.weekEventReg[78] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_78_80);
         }
-        func_80BBAE84(this, 5, ANIMMODE_LOOP);
+        EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_ARMS_OUT, ANIMMODE_LOOP);
     } else {
         textId = 0x1258;
-        func_80BBAE84(this, 6, ANIMMODE_LOOP);
+        EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
     }
     Message_StartTextbox(play, textId, &this->actor);
 }
@@ -583,7 +611,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_80BBAE84(this, 2, ANIMMODE_LOOP);
+                EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
                 func_801477B4(play);
                 this->actionFunc = func_80BBC14C;
                 this->unk_2B6 |= 1;
@@ -591,7 +619,7 @@ void func_80BBC070(EnZos* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CLOSING:
-            func_80BBAE84(this, 2, ANIMMODE_LOOP);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_HANDS_ON_HIPS, ANIMMODE_LOOP);
             this->actionFunc = func_80BBC14C;
             this->unk_2B6 |= 1;
             break;
@@ -605,7 +633,7 @@ void func_80BBC14C(EnZos* this, PlayState* play) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 2, 0x1000, 0x200);
         this->actor.world.rot.y = thisx->shape.rot.y;
         if (this->actor.home.rot.y == this->actor.shape.rot.y) {
-            func_80BBAE84(this, 0, ANIMMODE_ONCE);
+            EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD, ANIMMODE_ONCE);
             this->unk_2B6 &= ~1;
         }
     }
@@ -626,9 +654,9 @@ void func_80BBC22C(EnZos* this, PlayState* play) {
 
 void func_80BBC24C(EnZos* this, PlayState* play) {
     func_80BBB0D4(this, play);
-    if (gSaveContext.save.weekEventReg[79] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
         this->actionFunc = func_80BBC22C;
-        func_80BBAE84(this, 7, ANIMMODE_ONCE);
+        EnZos_ChangeAnim(this, EN_ZOS_ANIM_PLAY_RIGHT, ANIMMODE_ONCE);
     }
 }
 
@@ -675,13 +703,13 @@ void EnZos_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (DECR(this->unk_2AE) == 0) {
-        this->unk_2AE = Rand_S16Offset(60, 60);
+    if (DECR(this->blinkTimer) == 0) {
+        this->blinkTimer = Rand_S16Offset(60, 60);
     }
 
-    this->unk_2AC = this->unk_2AE;
-    if (this->unk_2AC >= 3) {
-        this->unk_2AC = 0;
+    this->eyeIndex = this->blinkTimer;
+    if (this->eyeIndex >= 3) {
+        this->eyeIndex = 0;
     }
 }
 
@@ -692,16 +720,16 @@ s32 func_80BBC4E4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 void func_80BBC500(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80BBC750 = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 9) {
+    if (limbIndex == EVAN_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BBC750, &thisx->focus.pos);
     }
 }
 
 void EnZos_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80BBC75C[] = {
-        object_zos_Tex_010918,
-        object_zos_Tex_011118,
-        object_zos_Tex_011918,
+    static TexturePtr sEyeTextures[] = {
+        gEvanEyeOpenTex,
+        gEvanEyeHalfTex,
+        gEvanEyeClosedTex,
     };
     EnZos* this = THIS;
     Gfx* gfx;
@@ -716,15 +744,15 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(D_80BBC75C[this->unk_2AC]));
+    gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 
     Matrix_Push();
     Matrix_RotateYS(this->actor.home.rot.y - this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -974.4f, MTXMODE_APPLY);
 
     gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[2], object_zos_DL_0136E0);
-    gSPDisplayList(&gfx[3], object_zos_DL_013088);
+    gSPDisplayList(&gfx[2], gEvanUnknownWhiteTriangleDL);
+    gSPDisplayList(&gfx[3], gEvanKeyboardDL);
 
     POLY_OPA_DISP = &gfx[4];
 

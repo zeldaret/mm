@@ -34,6 +34,4 @@ typedef struct ObjComb {
     /* 0x1B8 */ s8 unk_1B8;
 } ObjComb; // size = 0x1BC
 
-extern const ActorInit Obj_Comb_InitVars;
-
 #endif // Z_OBJ_COMB_H

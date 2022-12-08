@@ -21,7 +21,7 @@ void ObjDanpeilift_Move(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Teleport(ObjDanpeilift* this, PlayState* play);
 void ObjDanpeilift_Wait(ObjDanpeilift* this, PlayState* play);
 
-const ActorInit Obj_Danpeilift_InitVars = {
+ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -57,23 +57,24 @@ void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_obj_danpeilift_Colheader_000BA0);
     if (this->dyna.bgId == BG_ACTOR_MAX) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
+        return;
+    }
+
+    this->speed = OBJDANPEILIFT_GET_SPEED(thisx);
+    if (this->speed < 0.0f) {
+        this->speed = -this->speed;
+    }
+    if (this->speed < 0.01f) {
+        this->actionFunc = ObjDanpeilift_DoNothing;
     } else {
-        this->speed = OBJDANPEILIFT_GET_SPEED(thisx);
-        if (this->speed < 0.0f) {
-            this->speed = -this->speed;
-        }
-        if (this->speed < 0.01f) {
-            this->actionFunc = ObjDanpeilift_DoNothing;
-        } else {
-            path = &play->setupPathList[OBJDANPEILIFT_GET_PATH(thisx)];
-            this->curPoint = OBJDANPEILIFT_GET_STARTING_POINT(thisx);
-            this->endPoint = path->count - 1;
-            this->direction = 1;
-            this->points = Lib_SegmentedToVirtual(path->points);
-            ObjDanpeilift_UpdatePosition(this, this->curPoint);
-            this->actionFunc = ObjDanpeilift_Move;
-        }
+        path = &play->setupPathList[OBJDANPEILIFT_GET_PATH(thisx)];
+        this->curPoint = OBJDANPEILIFT_GET_STARTING_POINT(thisx);
+        this->endPoint = path->count - 1;
+        this->direction = 1;
+        this->points = Lib_SegmentedToVirtual(path->points);
+        ObjDanpeilift_UpdatePosition(this, this->curPoint);
+        this->actionFunc = ObjDanpeilift_Move;
     }
 }
 

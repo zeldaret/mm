@@ -15,7 +15,7 @@ void OceffWipe7_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe7_Update(Actor* thisx, PlayState* play);
 void OceffWipe7_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Oceff_Wipe7_InitVars = {
+ActorInit Oceff_Wipe7_InitVars = {
     ACTOR_OCEFF_WIPE7,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -42,7 +42,7 @@ void OceffWipe7_Init(Actor* thisx, PlayState* play) {
 void OceffWipe7_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe7* this = THIS;
 
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     play->msgCtx.unk120B0 = 0;
 }
 
@@ -53,7 +53,7 @@ void OceffWipe7_Update(Actor* thisx, PlayState* play) {
     if (this->counter < 100) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

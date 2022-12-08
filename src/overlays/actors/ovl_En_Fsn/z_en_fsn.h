@@ -30,7 +30,7 @@ typedef struct EnFsn {
     /* 0x27A */ Vec3s unk27A; // Set but never used
     /* 0x280 */ Vec3s jointTable[FSN_LIMB_MAX + 1]; // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
     /* 0x2F2 */ Vec3s morphTable[FSN_LIMB_MAX + 1];
-    /* 0x364 */ s16 eyeTextureIdx;
+    /* 0x364 */ s16 eyeTexIndex;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;
     /* 0x36A */ s16 cutscene;
@@ -41,7 +41,7 @@ typedef struct EnFsn {
     /* 0x374 */ s16 price;
     /* 0x376 */ u16 textId;
     /* 0x378 */ u8 isSelling;
-    /* 0x379 */ u8 cursorIdx;
+    /* 0x379 */ u8 cursorIndex;
     /* 0x37C */ s32 getItemId;
     /* 0x380 */ s16 stolenItem1;
     /* 0x382 */ s16 stolenItem2;
@@ -67,7 +67,5 @@ typedef struct EnFsn {
     /* 0x44C */ s16 animIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
-
-extern const ActorInit En_Fsn_InitVars;
 
 #endif // Z_EN_FSN_H

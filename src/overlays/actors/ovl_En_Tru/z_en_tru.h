@@ -2,6 +2,7 @@
 #define Z_EN_TRU_H
 
 #include "global.h"
+#include "objects/object_tru/object_tru.h"
 
 struct EnTru;
 
@@ -31,12 +32,12 @@ typedef struct EnTru {
     /* 0x1EC */ Vec3f unk_1EC;
     /* 0x1F8 */ Vec3f unk_1F8;
     /* 0x204 */ Vec3s unk_204;
-    /* 0x20A */ Vec3s jointTable[27];
-    /* 0x2AC */ Vec3s morphTable[27];
+    /* 0x20A */ Vec3s jointTable[KOUME_LIMB_MAX];
+    /* 0x2AC */ Vec3s morphTable[KOUME_LIMB_MAX];
     /* 0x34E */ u16 unk_34E;
     /* 0x350 */ UNK_TYPE1 unk350[0x4];
     /* 0x354 */ s32* unk_354;
-    /* 0x358 */ f32 unk_358;
+    /* 0x358 */ f32 playSpeed;
     /* 0x35C */ f32 unk_35C;
     /* 0x360 */ s16 unk_360;
     /* 0x362 */ s16 unk_362;
@@ -44,13 +45,13 @@ typedef struct EnTru {
     /* 0x366 */ s16 unk_366;
     /* 0x368 */ s16 unk_368;
     /* 0x36A */ s16 unk_36A;
-    /* 0x36C */ s16 unk_36C;
-    /* 0x36E */ s16 unk_36E;
+    /* 0x36C */ s16 blinkTimer;
+    /* 0x36E */ s16 eyeTexIndex;
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;
     /* 0x374 */ s16 unk_374;
     /* 0x378 */ EnTruUnkFunc unk_378;
-    /* 0x37C */ s32 unk_37C;
+    /* 0x37C */ s32 animIndex;
     /* 0x380 */ UNK_TYPE1 unk380[0x4];
     /* 0x384 */ s32 unk_384;
     /* 0x388 */ s32 unk_388;
@@ -58,7 +59,5 @@ typedef struct EnTru {
     /* 0x390 */ s32 unk_390;
     /* 0x394 */ EnTruUnkStruct unk_394[30];
 } EnTru; // size = 0x934
-
-extern const ActorInit En_Tru_InitVars;
 
 #endif // Z_EN_TRU_H

@@ -20,7 +20,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play);
 void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play);
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Etcetera_InitVars = {
+ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
     ACTORCAT_BG,
     FLAGS,
@@ -135,7 +135,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
     s16 minOscillationTimer;
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
+    if ((player->stateFlags3 & PLAYER_STATE3_200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
         Animation_Change(&this->skelAnime, &gDekuFlowerBounceAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gDekuFlowerBounceAnim), ANIMMODE_ONCE, 0.0f);
@@ -146,7 +146,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
         this->bounceOscillationScale = 0.003f;
         this->oscillationTimer = 30;
         this->burrowFlag &= ~1;
-    } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
+    } else if ((player->stateFlags3 & PLAYER_STATE3_2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.playerHeightRel > 0.0f)) {
         // Player is hovering above the Deku Flower
         minOscillationTimer = 10 - (s32)(this->dyna.actor.playerHeightRel * 0.05f);
@@ -159,7 +159,8 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
                 ObjEtcetera_StartRustleAnimation(this);
-            } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
+            } else if ((player->actor.speedXZ > 0.1f) ||
+                       ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & PLAYER_STATE3_100))) {
                 // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very
                 // start of launching
                 this->oscillationTimer = 10;

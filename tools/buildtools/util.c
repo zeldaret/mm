@@ -8,8 +8,7 @@
 #include "util.h"
 
 // displays an error message and exits
-void util_fatal_error(const char *msgfmt, ...)
-{
+void util_fatal_error(const char* msgfmt, ...) {
     va_list args;
 
     fputs(ERRMSG_START, stderr);
@@ -24,10 +23,9 @@ void util_fatal_error(const char *msgfmt, ...)
 }
 
 // reads a whole file into memory, and returns a malloc'd pointer to the data.
-void *util_read_whole_file(const char *filename, size_t *pSize)
-{
-    FILE *file = fopen(filename, "rb");
-    uint8_t *buffer;
+void* util_read_whole_file(const char* filename, size_t* pSize) {
+    FILE* file = fopen(filename, "rb");
+    uint8_t* buffer;
     size_t size;
 
     if (file == NULL)
@@ -56,9 +54,8 @@ void *util_read_whole_file(const char *filename, size_t *pSize)
 }
 
 // writes data to file
-void util_write_whole_file(const char *filename, const void *data, size_t size)
-{
-    FILE *file = fopen(filename, "wb");
+void util_write_whole_file(const char* filename, const void* data, size_t size) {
+    FILE* file = fopen(filename, "wb");
 
     if (file == NULL)
         util_fatal_error("failed to open file '%s' for writing: %s", filename, strerror(errno));
@@ -69,17 +66,12 @@ void util_write_whole_file(const char *filename, const void *data, size_t size)
     fclose(file);
 }
 
-uint32_t util_read_uint32_be(const uint8_t *data)
-{
-    return data[0] << 24
-         | data[1] << 16
-         | data[2] << 8
-         | data[3] << 0;
+uint32_t util_read_uint32_be(const uint8_t* data) {
+    return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3] << 0;
 }
 
 // writes a big-endian 32-bit integer
-void util_write_uint32_be(uint8_t *data, uint32_t val)
-{
+void util_write_uint32_be(uint8_t* data, uint32_t val) {
     data[0] = val >> 24;
     data[1] = val >> 16;
     data[2] = val >> 8;

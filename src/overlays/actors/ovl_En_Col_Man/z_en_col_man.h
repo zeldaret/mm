@@ -24,6 +24,4 @@ typedef enum {
     /* 4 */ EN_COL_MAN_GAMEPLAY_BOMB,
 } EnColManType;
 
-extern const ActorInit En_Col_Man_InitVars;
-
 #endif // Z_EN_COL_MAN_H

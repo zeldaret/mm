@@ -13,6 +13,4 @@ typedef struct BgBotihasira {
     /* 0x160 */ ColliderCylinder collider;
 } BgBotihasira; // size = 0x1AC
 
-extern const ActorInit Bg_Botihasira_InitVars;
-
 #endif // Z_BG_BOTIHASIRA_H

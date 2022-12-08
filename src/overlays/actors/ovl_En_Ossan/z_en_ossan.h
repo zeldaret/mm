@@ -35,7 +35,7 @@ typedef struct EnOssan {
     /* 0x230 */ f32 cursorAnimTween;
     /* 0x234 */ u8 cursorAnimState;
     /* 0x235 */ u8 drawCursor;
-    /* 0x236 */ u8 cursorIdx;
+    /* 0x236 */ u8 cursorIndex;
     /* 0x238 */ StickDirectionPrompt stickLeftPrompt;
     /* 0x270 */ StickDirectionPrompt stickRightPrompt;
     /* 0x2A8 */ f32 arrowAnimTween;
@@ -71,7 +71,5 @@ typedef enum {
     /* 0 */ ENOSSAN_CURIOSITY_SHOP_MAN,
     /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
-
-extern const ActorInit En_Ossan_InitVars;
 
 #endif // Z_EN_OSSAN_H

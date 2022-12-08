@@ -6,6 +6,7 @@
 
 #include "z_bg_open_shutter.h"
 #include "objects/object_open_obj/object_open_obj.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -14,7 +15,7 @@
 
 void BgOpenShutter_Init(Actor* thisx, PlayState* play);
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
-void BgOpenShutter_Update(Actor* thisx, PlayState* play);
+void BgOpenShutter_Update(Actor* thisx, PlayState* play2);
 void BgOpenShutter_Draw(Actor* thisx, PlayState* play);
 
 void func_80ACAD88(BgOpenShutter* this, PlayState* play);
@@ -26,7 +27,7 @@ typedef enum {
     /* 0x2 */ BGOPENSHUTTER_DOOR_CLOSED,
 } BGOpenShutterDoorState;
 
-const ActorInit Bg_Open_Shutter_InitVars = {
+ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,
     ACTORCAT_DOOR,
     FLAGS,
@@ -105,7 +106,7 @@ void BgOpenShutter_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
-    s32 quake;
+    s32 doorDirection;
 
     if (this->unk_15C != 0) {
         Player* player = GET_PLAYER(play);
@@ -118,10 +119,10 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
     } else {
         Player* player = GET_PLAYER(play);
 
-        quake = func_80ACABA8(this, play);
-        if (quake > 0) {
-            player->doorType = 2;
-            player->doorDirection = quake;
+        doorDirection = func_80ACABA8(this, play);
+        if (doorDirection > 0) {
+            player->doorType = PLAYER_DOORTYPE_SLIDING;
+            player->doorDirection = doorDirection;
             player->doorActor = &this->dyna.actor;
             func_80122F28(player);
         }
@@ -142,18 +143,21 @@ void func_80ACAE5C(BgOpenShutter* this, PlayState* play) {
 
 void func_80ACAEF0(BgOpenShutter* this, PlayState* play) {
     s32 pad;
-    s16 quake;
+    s16 quakeIndex;
 
     Math_StepToF(&this->dyna.actor.velocity.y, 20.0f, 8.0f);
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, this->dyna.actor.velocity.y)) {
         this->dyna.actor.floorHeight = this->dyna.actor.home.pos.y;
         Actor_SpawnFloorDustRing(play, &this->dyna.actor, &this->dyna.actor.world.pos, 60.0f, 10, 8.0f, 500, 10, true);
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
-        quake = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), 3);
-        Quake_SetSpeed(quake, -0x7F18);
-        Quake_SetQuakeValues(quake, 2, 0, 0, 0);
-        Quake_SetCountdown(quake, 10);
+
+        quakeIndex = Quake_Add(Play_GetCamera(play, CAM_ID_MAIN), QUAKE_TYPE_3);
+        Quake_SetSpeed(quakeIndex, -32536);
+        Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
+        Quake_SetCountdown(quakeIndex, 10);
+
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 180, 20, 100);
+
         this->unk_15C = 0;
         this->actionFunc = func_80ACAD88;
     }

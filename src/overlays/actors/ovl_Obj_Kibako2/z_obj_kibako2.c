@@ -19,7 +19,7 @@ void ObjKibako2_Draw(Actor* thisx, PlayState* play);
 void ObjKibako2_Idle(ObjKibako2* this, PlayState* play);
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play);
 
-const ActorInit Obj_Kibako2_InitVars = {
+ActorInit Obj_Kibako2_InitVars = {
     ACTOR_OBJ_KIBAKO2,
     ACTORCAT_BG,
     FLAGS,
@@ -221,14 +221,14 @@ void ObjKibako2_Idle(ObjKibako2* this, PlayState* play) {
 
 void ObjKibako2_Kill(ObjKibako2* this, PlayState* play) {
     ObjKibako2_SpawnContents(this, play);
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
 }
 
 void ObjKibako2_Update(Actor* thisx, PlayState* play) {
     ObjKibako2* this = THIS;
 
     if (this->unk_1AC != 0) {
-        play->actorCtx.unk5 |= 8;
+        play->actorCtx.flags |= ACTORCTX_FLAG_3;
     }
 
     if (this->skulltulaNoiseTimer >= 0) {

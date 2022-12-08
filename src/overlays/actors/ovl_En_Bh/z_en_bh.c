@@ -17,7 +17,7 @@ void EnBh_Draw(Actor* thisx, PlayState* play);
 
 void func_80C22DEC(EnBh* this, PlayState* play);
 
-const ActorInit En_Bh_InitVars = {
+ActorInit En_Bh_InitVars = {
     ACTOR_EN_BH,
     ACTORCAT_ITEMACTION,
     FLAGS,

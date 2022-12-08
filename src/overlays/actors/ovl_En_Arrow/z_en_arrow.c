@@ -22,7 +22,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play);
 void func_8088B630(EnArrow* this, PlayState* play);
 void func_8088B6B0(EnArrow* this, PlayState* play);
 
-const ActorInit En_Arrow_InitVars = {
+ActorInit En_Arrow_InitVars = {
     ACTOR_EN_ARROW,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -139,7 +139,7 @@ void EnArrow_Destroy(Actor* thisx, PlayState* play) {
     }
 
     if ((this->actor.params >= ENARROW_3) && (this->actor.params < ENARROW_6) && (this->actor.child == NULL)) {
-        func_80115D5C(&play->state);
+        Magic_Reset(play);
     }
 }
 
@@ -162,15 +162,15 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             this->bubble.unk_148++;
             if (this->bubble.unk_148 > 20) {
                 this->actionFunc = func_8088ACE0;
-                func_80115D5C(&play->state);
+                Magic_Reset(play);
             }
         }
     } else {
         if ((this->actor.params != ENARROW_8) && (player->unk_D57 == 0)) {
             if (this->actor.params == ENARROW_7) {
-                func_80115D5C(&play->state);
+                Magic_Reset(play);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
@@ -202,7 +202,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             this->bubble.unk_144 = CLAMP_MIN(this->bubble.unk_144, 3.5f);
             func_8088A514(this);
             this->unk_260 = 99;
-            func_80115D5C(&play->state);
+            Magic_Reset(play);
         } else if (this->actor.params >= ENARROW_6) {
             if ((this->actor.params == ENARROW_8) && (this->actor.world.rot.x < 0)) {
                 Actor_SetScale(&this->actor, 0.009f);
@@ -298,7 +298,7 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
         if ((this->actor.params == ENARROW_4) || (this->actor.params == ENARROW_3)) {
             if ((this->actor.params == ENARROW_4) && (func_8088B6B0 != this->actionFunc)) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_BG_ICEFLOE, sp44.x, sp44.y, sp44.z, 0, 0, 0, 300);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
 
@@ -306,11 +306,11 @@ void func_8088AA98(EnArrow* this, PlayState* play) {
             this->collider.info.toucher.dmgFlags = 0x20;
 
             if (this->actor.child != NULL) {
-                Actor_MarkForDeath(this->actor.child);
+                Actor_Kill(this->actor.child);
                 return;
             }
 
-            func_80115D5C(&play->state);
+            Magic_Reset(play);
         }
     }
 }
@@ -357,7 +357,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 EffectSs_Spawn(play, EFFECT_SS_SBN, 128, &sp84);
             }
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -382,18 +382,19 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
             }
             EffectSsStone1_Spawn(play, &this->actor.world.pos, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, sp82);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             EffectSsHitmark_SpawnCustomScale(play, 0, 150, &this->actor.world.pos);
 
             if (sp50 && (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
                 sp7C = this->collider.base.at;
 
-                if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) && (sp7C->flags & 0x4000)) {
+                if ((sp7C->update != NULL) && !(this->collider.base.atFlags & AT_BOUNCED) &&
+                    (sp7C->flags & ACTOR_FLAG_4000)) {
                     this->unk_264 = sp7C;
                     func_8088A894(this, play);
                     Math_Vec3f_Diff(&sp7C->world.pos, &this->actor.world.pos, &this->unk_268);
-                    sp7C->flags |= 0x8000;
+                    sp7C->flags |= ACTOR_FLAG_8000;
                     this->collider.base.atFlags &= ~AT_HIT;
                     this->actor.speedXZ *= 0.5f;
                     this->actor.velocity.y *= 0.5f;
@@ -473,7 +474,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
         }
 
         if (this->actor.params < ENARROW_6) {
-            this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);
+            this->actor.shape.rot.x = Math_Atan2S_XY(this->actor.speedXZ, -this->actor.velocity.y);
         }
     }
 
@@ -515,7 +516,7 @@ void func_8088B630(EnArrow* this, PlayState* play) {
     }
 
     if (DECR(this->unk_260) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -525,7 +526,7 @@ void func_8088B6B0(EnArrow* this, PlayState* play) {
     func_8088AA98(this, play);
 
     if (DECR(this->unk_260) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

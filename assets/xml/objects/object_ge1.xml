@@ -38,7 +38,7 @@
         <Texture Name="gGerudoWhiteSkinGradientTex" OutName="gerudo_white_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x2EB8" TlutOffset="0x2CB8" />
         <Texture Name="gGerudoWhiteWhiteFabricLipsTex" OutName="gerudo_white_white_fabric_lips" Format="ci8" Width="16" Height="16" Offset="0x2EF8" TlutOffset="0x2CB8" />
         <Texture Name="gGerudoWhiteEarTex" OutName="gerudo_white_ear" Format="ci8" Width="8" Height="16" Offset="0x2FF8" TlutOffset="0x2CB8" />
-        
+
         <!-- White-clothed Gerudo Eye Textures -->
         <Texture Name="gGerudoWhiteEyeOpenTex" OutName="gerudo_white_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x3078"/>
         <Texture Name="gGerudoWhiteEyeHalfTex" OutName="gerudo_white_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x3878"/>

@@ -27,7 +27,7 @@ void EnPaper_FlyConfettiGroup(EnPaper* this, PlayState* play);
 void EnPaper_InitConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 void EnPaper_FlyConfettiPiece(EnPaper* this, EnPaperConfetto* piece);
 
-const ActorInit En_Paper_InitVars = {
+ActorInit En_Paper_InitVars = {
     ACTOR_EN_PAPER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -199,9 +199,10 @@ void EnPaper_Update(Actor* thisx, PlayState* play) {
     EnPaper_UpdateWind(this);
 
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
+
     this->timer--;
 }
 

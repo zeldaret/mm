@@ -15,9 +15,9 @@
 #define THIS ((ObjTsubo*)thisx)
 
 void ObjTsubo_Init(Actor* thisx, PlayState* play);
-void ObjTsubo_Destroy(Actor* thisx, PlayState* play);
+void ObjTsubo_Destroy(Actor* thisx, PlayState* play2);
 void ObjTsubo_Update(Actor* thisx, PlayState* play);
-void ObjTsubo_Draw(Actor* thisx, PlayState* play);
+void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
 void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
@@ -41,7 +41,7 @@ s16 D_80929504 = 0;
 s16 D_80929508 = 0;
 s16 D_8092950C = 0;
 
-const ActorInit Obj_Tsubo_InitVars = {
+ActorInit Obj_Tsubo_InitVars = {
     ACTOR_OBJ_TSUBO,
     ACTORCAT_PROP,
     FLAGS,
@@ -162,11 +162,11 @@ void func_80927818(ObjTsubo* this, PlayState* play, s32 arg2) {
 }
 
 s32 ObjTsubo_IsSceneNotGohtOrTwinmold(ObjTsubo* this, PlayState* play) {
-    return (play->sceneNum != SCENE_HAKUGIN_BS) && (play->sceneNum != SCENE_INISIE_BS);
+    return (play->sceneId != SCENE_HAKUGIN_BS) && (play->sceneId != SCENE_INISIE_BS);
 }
 
 void func_8092788C(ObjTsubo* this, PlayState* play) {
-    if (!this->unk_197 && (play->roomCtx.currRoom.num != this->homeRoom)) {
+    if (!this->unk_197 && (play->roomCtx.curRoom.num != this->homeRoom)) {
         this->unk_197 = true;
     }
 }
@@ -190,20 +190,21 @@ void ObjTsubo_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->objBankIndex = Object_GetIndex(&play->objectCtx, sPotTypeData[type].objId);
     if (this->objBankIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->actor.shape.shadowScale = 1.8f;
-        this->homeRoom = this->actor.room;
-        if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
-            if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
-                this->unk_198 = true;
-            }
-        }
-        if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
-            this->unk_19A = -1;
-        }
-        func_80928914(this);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->actor.shape.shadowScale = 1.8f;
+    this->homeRoom = this->actor.room;
+    if ((type != OBJ_TSUBO_TYPE_3) && (sp2C != 2)) {
+        if (Item_CanDropBigFairy(play, OBJ_TSUBO_P003F(&this->actor), OBJ_TSUBO_PFE00(&this->actor))) {
+            this->unk_198 = true;
+        }
+    }
+    if ((type == OBJ_TSUBO_TYPE_3) || (sp2C != 2) || !func_809275C0(this, play)) {
+        this->unk_19A = -1;
+    }
+    func_80928914(this);
 }
 
 void ObjTsubo_Destroy(Actor* thisx, PlayState* play2) {
@@ -485,7 +486,7 @@ void func_809289E4(ObjTsubo* this, PlayState* play) {
         func_80927818(this, play, 1);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_809291DC(this);
         }
@@ -527,7 +528,7 @@ void func_80928D80(ObjTsubo* this, PlayState* play) {
 
     func_8092788C(this, play);
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         Actor_MoveWithGravity(&this->actor);
         this->actor.flags &= ~ACTOR_FLAG_4000000;
         Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 15.0f, 0.0f, 0xC5);
@@ -576,10 +577,11 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         }
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            func_809291DC(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        func_809291DC(this);
     } else if (this->actor.bgCheckFlags & 0x40) {
         typeData->breakPot2(this, play);
         if (type == OBJ_TSUBO_TYPE_3) {
@@ -590,10 +592,11 @@ void func_80928F18(ObjTsubo* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_POT_BROKEN);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         if (ObjTsubo_IsSceneNotGohtOrTwinmold(this, play)) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            func_809291DC(this);
+            Actor_Kill(&this->actor);
+            return;
         }
+
+        func_809291DC(this);
     } else {
         Actor_MoveWithGravity(&this->actor);
         Math_StepToS(&D_80929504, D_80929500, 150);
@@ -665,7 +668,7 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play) {
     }
     if (!this->unk_197) {
         if (this->unk_198) {
-            play->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
         if (this->unk_19A >= 0) {

@@ -20,6 +20,4 @@ typedef struct BgF40Switch {
     /* 0x164 */ BgF40SwitchActionFunc actionFunc;
 } BgF40Switch; // size = 0x168
 
-extern const ActorInit Bg_F40_Switch_InitVars;
-
 #endif // Z_BG_F40_SWITCH_H

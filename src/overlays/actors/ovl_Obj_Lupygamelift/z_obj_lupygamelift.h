@@ -21,6 +21,4 @@ typedef struct ObjLupygamelift {
     /* 0x170 */ s16 timer;
 } ObjLupygamelift; /* size = 0x174 */
 
-extern const ActorInit Obj_Lupygamelift_InitVars;
-
 #endif // Z_OBJ_LUPYGAMELIFT_H

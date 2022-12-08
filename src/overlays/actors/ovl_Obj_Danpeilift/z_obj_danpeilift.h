@@ -32,6 +32,4 @@ typedef struct ObjDanpeilift {
     /* 0x188 */ s16 cutsceneTimer;
 } ObjDanpeilift; // size = 0x18C
 
-extern const ActorInit Obj_Danpeilift_InitVars;
-
 #endif // Z_OBJ_DANPEILIFT_H

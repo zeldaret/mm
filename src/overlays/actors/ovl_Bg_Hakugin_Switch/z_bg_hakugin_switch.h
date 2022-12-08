@@ -32,6 +32,4 @@ typedef struct BgHakuginSwitch {
     /* 0x1C8 */ f32 unk_1C8;
 } BgHakuginSwitch; // size = 0x1CC
 
-extern const ActorInit Bg_Hakugin_Switch_InitVars;
-
 #endif // Z_BG_HAKUGIN_SWITCH_H

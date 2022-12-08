@@ -32,7 +32,7 @@ typedef struct {
 
 static PowderKegFuseSegment sPowderKegFuseSegments[16];
 
-const ActorInit En_Bom_InitVars = {
+ActorInit En_Bom_InitVars = {
     ACTOR_EN_BOM,
     ACTORCAT_EXPLOSIVES,
     FLAGS,
@@ -139,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->flashSpeedScale = 7;
     this->isPowderKeg = ENBOM_GETX_1(&this->actor);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 |= 1;
+        play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
     } else {
         this->timer = 70;
@@ -188,7 +188,7 @@ void EnBom_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider2);
     Collider_DestroyCylinder(play, &this->collider1);
     if (this->isPowderKeg) {
-        play->actorCtx.unk5 &= ~1;
+        play->actorCtx.flags &= ~ACTORCTX_FLAG_0;
     }
 }
 
@@ -228,8 +228,8 @@ void func_80871058(EnBom* this, PlayState* play) {
     } else {
         Vec3f* sp58;
         u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        Vec3f sp48;
-        s16 sp46;
+        Vec3f slopeNormal;
+        s16 downwardSlopeYaw;
         f32 sp40;
         f32 sp3C;
         f32 sp38;
@@ -253,10 +253,10 @@ void func_80871058(EnBom* this, PlayState* play) {
 
         sp40 = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
         sp3C = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
-        func_800B75A0(this->actor.floorPoly, &sp48, &sp46);
+        Actor_GetSlopeDirection(this->actor.floorPoly, &slopeNormal, &downwardSlopeYaw);
 
-        sp40 += 3.0f * sp48.x;
-        sp3C += 3.0f * sp48.z;
+        sp40 += 3.0f * slopeNormal.x;
+        sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
         if ((sp38 < this->actor.speedXZ) ||
@@ -266,7 +266,7 @@ void func_80871058(EnBom* this, PlayState* play) {
             } else {
                 this->actor.speedXZ = sp38;
             }
-            this->actor.world.rot.y = Math_FAtan2F(sp3C, sp40);
+            this->actor.world.rot.y = Math_Atan2S_XY(sp3C, sp40);
         }
 
         if (!Math_StepToF(&this->actor.speedXZ, 0.0f, sp58->x)) {
@@ -301,7 +301,7 @@ void func_80871058(EnBom* this, PlayState* play) {
 void func_808714D4(EnBom* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actionFunc = func_80871058;
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
@@ -377,7 +377,7 @@ void func_808715B8(EnBom* this, PlayState* play) {
 
     if (this->timer == 0) {
         func_80123590(play, &this->actor);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if ((this->timer & 1) == 0) {
@@ -433,12 +433,12 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (player->stateFlags1 & 2) {
+    if (player->stateFlags1 & PLAYER_STATE1_2) {
         return;
     }
 
     if (Player_GetMask(play) == PLAYER_MASK_GIANT) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
         return;
     }
 
@@ -451,7 +451,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
             if (this->isPowderKeg) {
                 gSaveContext.powderKegTimer = 0;
             }
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
         }
     } else {
         thisx->gravity = -1.2f;
@@ -541,7 +541,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 Camera_AddQuake(&play->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;
-                thisx->flags |= (0x100000 | 0x20);
+                thisx->flags |= (ACTOR_FLAG_20 | ACTOR_FLAG_100000);
                 this->actionFunc = func_808715B8;
                 if (this->isPowderKeg) {
                     gSaveContext.powderKegTimer = 0;
@@ -678,9 +678,9 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
     Math_Vec3f_Copy(&fuseSegmentPtr->pos, arg1);
     Math_Vec3f_Diff(arg2, arg1, &spCC);
 
-    fuseSegmentPtr->rotY = Math_FAtan2F(spCC.z, spCC.x);
+    fuseSegmentPtr->rotY = Math_Atan2S_XY(spCC.z, spCC.x);
     distXZ = sqrtf(SQXZ(spCC));
-    fuseSegmentPtr->rotX = Math_FAtan2F(distXZ, spCC.y);
+    fuseSegmentPtr->rotX = Math_Atan2S_XY(distXZ, spCC.y);
 
     spB0 = (arg4 / 240) + 1;
 
@@ -718,9 +718,9 @@ void func_808726DC(PlayState* play, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, s32 a
             spCC.z = 0.0f;
         }
 
-        fuseSegmentPtr2->rotY = Math_FAtan2F(spCC.z, spCC.x);
+        fuseSegmentPtr2->rotY = Math_Atan2S_XY(spCC.z, spCC.x);
         distXZ = sqrtf(SQXZ(spCC));
-        fuseSegmentPtr2->rotX = Math_FAtan2F(distXZ, spCC.y);
+        fuseSegmentPtr2->rotX = Math_Atan2S_XY(distXZ, spCC.y);
 
         fuseSegmentPtr2->rotY =
             (s16)CLAMP(BINANG_SUB(fuseSegmentPtr2->rotY, fuseSegmentPtr->rotY), -8000, 8000) + fuseSegmentPtr->rotY;
