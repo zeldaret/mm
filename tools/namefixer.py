@@ -505,6 +505,7 @@ wordReplace = {
     "func_80165690": "Play_DisableMotionBlur",
     "func_801660B8": "Play_SetFog",
 
+    "func_801129E4": "Interface_SetSceneRestrictions",
     "func_8011B4E0": "Interface_SetPerfectLetters",
     "func_80112AFC": "Interface_InitMinigame",
     "func_8010E9F0": "Interface_StartTimer",
@@ -818,6 +819,8 @@ wordReplace = {
     "CUR_UPG_VALUE_VOID": "GET_CUR_UPG_VALUE",
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
+
+    "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
     "EXCH_ITEM_NONE": "PLAYER_IA_NONE",

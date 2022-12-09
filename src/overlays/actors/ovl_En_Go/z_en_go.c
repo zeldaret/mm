@@ -1816,7 +1816,7 @@ void func_80A153FC(EnGo* this, PlayState* play) {
 }
 
 s32* func_80A15684(EnGo* this, PlayState* play) {
-    static s32 D_80A16704[] = {
+    static s32* D_80A16704[] = {
         D_80A16100,
         D_80A16164,
     };

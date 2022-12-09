@@ -2310,7 +2310,7 @@ void Play_Init(GameState* thisx) {
     }
 
     func_800F15D8(&this->mainCamera);
-    func_801129E4(this);
+    Interface_SetSceneRestrictions(this);
     func_800FB758(this);
     gSaveContext.seqId = this->sequenceCtx.seqId;
     gSaveContext.ambienceId = this->sequenceCtx.ambienceId;
