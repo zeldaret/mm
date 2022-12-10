@@ -119,7 +119,7 @@ weekEventReg = {
     (14 << 8) | 0x01: "WEEKEVENTREG_14_01",
     (14 << 8) | 0x02: "WEEKEVENTREG_14_02",
     (14 << 8) | 0x04: "WEEKEVENTREG_14_04",
-    (14 << 8) | 0x08: "WEEKEVENTREG_14_08",
+    (14 << 8) | 0x08: "WEEKEVENTREG_DRANK_CHATEAU_ROMANI",
     (14 << 8) | 0x10: "WEEKEVENTREG_14_10",
     (14 << 8) | 0x20: "WEEKEVENTREG_14_20",
     (14 << 8) | 0x40: "WEEKEVENTREG_14_40",

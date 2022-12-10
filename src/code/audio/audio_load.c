@@ -1212,12 +1212,12 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     s32 i;
     s32 j;
 
-    gCustomAudioUpdateFunction = NULL;
-    gCustomAudioReverbFunction = NULL;
-    gCustomAudioSynthFunction = NULL;
+    gAudioCustomUpdateFunction = NULL;
+    gAudioCustomReverbFunction = NULL;
+    gAudioCustomSynthFunction = NULL;
 
-    for (i = 0; i < ARRAY_COUNT(gAudioCtx.unk_29A8); i++) {
-        gAudioCtx.unk_29A8[i] = NULL;
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.customSeqFunctions); i++) {
+        gAudioCtx.customSeqFunctions[i] = NULL;
     }
 
     gAudioCtx.resetTimer = 0;
@@ -1248,8 +1248,8 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
 
     AudioThread_InitMesgQueues();
 
-    for (i = 0; i < ARRAY_COUNT(gAudioCtx.aiBufNumSamples); i++) {
-        gAudioCtx.aiBufNumSamples[i] = 0xA0;
+    for (i = 0; i < ARRAY_COUNT(gAudioCtx.numSamplesPerFrame); i++) {
+        gAudioCtx.numSamplesPerFrame[i] = 0xA0;
     }
 
     gAudioCtx.totalTaskCount = 0;
@@ -1301,7 +1301,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
 
     gAudioCtx.numSequences = gAudioCtx.sequenceTable->numEntries;
 
-    gAudioCtx.audioResetSpecIdToLoad = 0;
+    gAudioCtx.specId = 0;
     gAudioCtx.resetStatus = 1; // Set reset to immediately initialize the audio heap
     AudioHeap_ResetStep();
 

@@ -322,9 +322,9 @@ void Message_ContinueTextbox(PlayState* play, u16 textId) {
 
     if (interfaceCtx->unk_222 == 0) {
         if (textId != 0x1B93) {
-            func_8011552C(play, 0x10);
+            func_8011552C(play, DO_ACTION_NEXT);
         } else if (textId != 0xF8) {
-            func_8011552C(play, 6);
+            func_8011552C(play, DO_ACTION_DECIDE);
         }
     }
     msgCtx->unk1203C = msgCtx->unk1203A;

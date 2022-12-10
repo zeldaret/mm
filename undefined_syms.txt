@@ -131,6 +131,8 @@ D_80025D00 = 0x80025D00;
 
 rspbootTextSize = 0x160;
 rspbootTextEnd = rspbootTextStart + rspbootTextSize;
+aspMainTextEnd = aspMainTextStart + 0x1000;
+aspMainDataEnd = aspMainDataStart + 0x2E0;
 
 // Segmented Addresses
 
