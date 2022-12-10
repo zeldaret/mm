@@ -9,7 +9,8 @@
 typedef enum {
     /* 0 */ EQUIP_TYPE_SWORD,
     /* 1 */ EQUIP_TYPE_SHIELD,
-    /* 2 */ EQUIP_TYPE_MAX
+    /* 2 */ EQUIP_TYPE_TUNIC, // Remnant of OoT
+    /* 3 */ EQUIP_TYPE_MAX
 } EquipmentType;
 
 typedef enum {
@@ -27,6 +28,14 @@ typedef enum {
     /* 2 */ EQUIP_VALUE_SHIELD_MIRROR,
     /* 3 */ EQUIP_VALUE_SHIELD_MAX
 } EquipValueShield;
+
+typedef enum {
+    /* 0 */ EQUIP_VALUE_TUNIC_NONE,
+    /* 1 */ EQUIP_VALUE_TUNIC_KOKIRI,
+    /* 2 */ EQUIP_VALUE_TUNIC_GORON,
+    /* 3 */ EQUIP_VALUE_TUNIC_ZORA,
+    /* 4 */ EQUIP_VALUE_TUNIC_MAX
+} EquipValueTunic; // Remnant of OoT
 
 typedef enum {
     /* 0 */ UPG_QUIVER,

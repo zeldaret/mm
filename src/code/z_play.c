@@ -39,9 +39,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CompressI8ToI5.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166644.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_DecompressI5ToI8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801668B4.s")
 

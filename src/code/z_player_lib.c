@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -543,15 +542,15 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == 0x18)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_EXPLODE)) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == 0x1A)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_MARCH)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == 0x19)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_DANCE)) {
             return ITEM_F2;
         }
 
@@ -725,17 +724,17 @@ u8 sPlayerStrengths[PLAYER_FORM_MAX] = {
 };
 
 typedef struct {
-    /* 0x00 */ u8 flag;
-    /* 0x02 */ u16 textId;
-} TextTriggerEntry; // size = 0x04
+    /* 0x0 */ u8 flag;
+    /* 0x2 */ u16 textId;
+} EnvHazardTextTriggerEntry; // size = 0x4
 
 // These textIds are OoT remnants. The corresponding text entries are not present in this game, and so these don't point
 // to anything relevant.
-TextTriggerEntry sEnvironmentTextTriggers[] = {
-    { 1, 0x26FC },
-    { 2, 0x26FD },
-    { 0, 0 },
-    { 2, 0x26FD },
+EnvHazardTextTriggerEntry sEnvHazardTextTriggers[] = {
+    { ENV_HAZARD_TEXT_TRIGGER_HOTROOM, 0x26FC },    // PLAYER_ENV_HAZARD_HOTROOM - 1
+    { ENV_HAZARD_TEXT_TRIGGER_UNDERWATER, 0x26FD }, // PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1
+    { 0, 0 },                                       // PLAYER_ENV_HAZARD_SWIMMING - 1
+    { ENV_HAZARD_TEXT_TRIGGER_UNDERWATER, 0x26FD }, // PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1
 };
 
 PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
@@ -1451,37 +1450,36 @@ s32 func_801242B4(Player* player) {
     return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
-s32 Player_GetEnvTimerType(PlayState* play) {
+s32 Player_GetEnvironmentalHazard(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    TextTriggerEntry* triggerEntry;
-    s32 envTimerType;
+    EnvHazardTextTriggerEntry* triggerEntry;
+    s32 envHazard;
 
     if (play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) {
-        envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
+        envHazard = PLAYER_ENV_HAZARD_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
-        envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
+        envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FLOOR - 1;
+            envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1;
         } else {
-            envTimerType = PLAYER_ENV_TIMER_SWIMMING - 1;
+            envHazard = PLAYER_ENV_HAZARD_SWIMMING - 1;
         }
     } else {
-        return PLAYER_ENV_TIMER_NONE;
+        return PLAYER_ENV_HAZARD_NONE;
     }
 
-    // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[envTimerType];
+    triggerEntry = &sEnvHazardTextTriggers[envHazard];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) &&
-            (envTimerType == (PLAYER_ENV_TIMER_HOTROOM - 1))) {
+        if ((triggerEntry->flag) && !(gSaveContext.envHazardTextTriggerFlags & triggerEntry->flag) &&
+            (envHazard == (PLAYER_ENV_HAZARD_HOTROOM - 1))) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
-            gSaveContext.textTriggerFlags |= triggerEntry->flag;
+            gSaveContext.envHazardTextTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return envTimerType + 1;
+    return envHazard + 1;
 }
 
 void func_80124420(Player* player);
