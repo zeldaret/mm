@@ -76,6 +76,6 @@
         <Animation Name="object_bal_Anim_00C8D8" Offset="0xC8D8" /> <!-- Original name is "bal_talk4" -->
         <Animation Name="object_bal_Anim_00CB78" Offset="0xCB78" /> <!-- Original name is "bal_tereru" ("to be shy; to be bashful") -->
         <Animation Name="object_bal_Anim_00D530" Offset="0xD530" /> <!-- Original name is "bal_wait" -->
-        <DList Name="object_bal_DL_00D5A0" Offset="0xD5A0" /> <!-- Original name is "bal_cube32_model" -->
+        <DList Name="gTingleConfettiDL" Offset="0xD5A0" /> <!-- Original name is "bal_cube32_model" -->
     </File>
 </Root>
