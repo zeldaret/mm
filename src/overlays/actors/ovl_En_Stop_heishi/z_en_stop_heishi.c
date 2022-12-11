@@ -103,8 +103,8 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, SOLDIER_LIMB_MAX);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_276 = ENSTOPHEISHI_GET_C(this);
-    this->switchFlag = ENSTOPHEISHI_GET_SWITCH_FLAG(this);
+    this->unk_276 = ENSTOPHEISHI_GET_F000(&this->actor);
+    this->switchFlag = ENSTOPHEISHI_GET_SWITCH_FLAG(&this->actor);
     this->unk_288 = (this->actor.world.rot.z * 40.0f) + 50.0f;
     this->actor.world.rot.z = 0;
     if (this->switchFlag == 0x7F) {
@@ -185,7 +185,7 @@ void EnStopHeishi_UpdateHeadThirdDay(EnStopheishi* this) {
     this->headRotXTarget = 0;
     if (this->headTurnTimer2 < 6) {
         this->headRotXTarget = 0x1770;
-        if (!((u32)this->headTurnTimer2 % 8)) {
+        if (((u32)this->headTurnTimer2 % 8) == 0) {
             this->headRotXTarget = -0x1770;
         }
         if (this->headTurnTimer1 == 0) {

@@ -8,8 +8,8 @@ struct EnStopheishi;
 
 typedef void (*EnStopheishiActionFunc)(struct EnStopheishi*, PlayState*);
 
-#define ENSTOPHEISHI_GET_SWITCH_FLAG(this) (((this)->actor.params) & 0x3F)
-#define ENSTOPHEISHI_GET_C(this) ((((this)->actor.params) >> 0xC) & 0xF)
+#define ENSTOPHEISHI_GET_SWITCH_FLAG(thisx) (((thisx)->params) & 0x3F)
+#define ENSTOPHEISHI_GET_F000(thisx) ((((thisx)->params) >> 0xC) & 0xF)
 
 typedef struct EnStopheishi {
     /* 0x000 */ Actor actor;
