@@ -161,13 +161,13 @@ void EnStoneheishi_TrackPlayer(EnStoneheishi* this) {
 
 void func_80BC94B0(EnStoneheishi* this) {
     this->textIdIndex = 0;
-    if (gSaveContext.save.weekEventReg[41] & 0x40) { // After drinking bottle
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) { // After drinking bottle
         EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_CHEER_WITH_SPEAR);
         this->textIdIndex = 8;
         this->actor.flags &= ~ACTOR_FLAG_REACT_TO_LENS;
     } else { // Initial configuration
         EnStoneheishi_ChangeAnim(this, EN_STONE_HEISHI_ANIM_WAVE);
-        if (gSaveContext.save.weekEventReg[41] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_80)) {
             this->textIdIndex = 2;
         }
     }
@@ -185,7 +185,7 @@ void func_80BC9560(EnStoneheishi* this, PlayState* play) {
         return;
     }
 
-    if (!(gSaveContext.save.weekEventReg[41] & 0x40) && (play->actorCtx.lensMaskSize != 100)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) && (play->actorCtx.lensMaskSize != 100)) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         return;
     }
@@ -265,19 +265,20 @@ void EnStoneheishi_SetupCheckGivenItem(EnStoneheishi* this) {
 }
 
 void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
-    s32 itemActionParam;
+    PlayerItemAction itemAction;
 
     SkelAnime_Update(&this->skelAnime);
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_AP_NONE) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
             this->timer = 40;
             func_801477B4(play);
 
-            if ((itemActionParam == PLAYER_AP_BOTTLE_POTION_RED) || (itemActionParam == PLAYER_AP_BOTTLE_POTION_BLUE)) {
+            if ((itemAction == PLAYER_IA_BOTTLE_POTION_RED) || (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->playerGivesBluePotion = false;
-                if (itemActionParam == PLAYER_AP_BOTTLE_POTION_BLUE) {
+                if (itemAction == PLAYER_IA_BOTTLE_POTION_BLUE) {
                     this->playerGivesBluePotion = true;
                 }
                 EnStoneheishi_SetupDrinkBottleProcess(this);
@@ -286,11 +287,11 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
 
                 this->textIdIndex = 3;
                 player->actor.textId = 0;
-                gSaveContext.save.weekEventReg[41] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_41_80);
                 this->action = EN_STONE_ACTION_1;
                 this->actionFunc = func_80BC9680;
             }
-        } else if (itemActionParam < PLAYER_AP_NONE) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             func_801477B4(play);
             func_80151BB4(play, 0x12);
             func_80BC94B0(this);
@@ -327,7 +328,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
 
                 play->msgCtx.msgLength = 0;
                 player->actor.textId = 0;
-                player->exchangeItemId = PLAYER_AP_NONE;
+                player->exchangeItemId = PLAYER_IA_NONE;
                 this->bottleDisplay = EN_STONE_BOTTLE_RED_POTION;
 
                 if (this->playerGivesBluePotion) {
@@ -346,7 +347,7 @@ void EnStoneheishi_DrinkBottleProcess(EnStoneheishi* this, PlayState* play) {
                 if ((this->timer < 10) && (this->bottleDisplay != EN_STONE_BOTTLE_EMPTY)) {
                     this->bottleDisplay = EN_STONE_BOTTLE_EMPTY;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_NP_DRINK);
-                    func_80123D50(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                    Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE);
                 }
             } else {
                 this->drinkBottleState++;
@@ -395,9 +396,9 @@ void func_80BC9D28(EnStoneheishi* this, PlayState* play) {
         this->actor.parent = NULL;
         this->textIdIndex++;
         this->actor.textId = sEnStoneHeishiTextIds[this->textIdIndex];
-        gSaveContext.save.weekEventReg[41] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_41_40);
         Actor_ProcessTalkRequest(&this->actor, &play->state);
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_80BC9E50;
     } else if (INV_CONTENT(ITEM_MASK_STONE) == ITEM_MASK_STONE) {
         Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 300.0f, 300.0f);
@@ -415,7 +416,7 @@ void func_80BC9E50(EnStoneheishi* this, PlayState* play) {
         this->action = EN_STONE_ACTION_1;
         this->actionFunc = func_80BC9680;
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_AP_MINUS1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -435,7 +436,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
 
-    if (((gSaveContext.save.weekEventReg[41] & 0x40) || (play->actorCtx.lensMaskSize == 100)) &&
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40) || (play->actorCtx.lensMaskSize == 100)) &&
         !(player->stateFlags1 & PLAYER_STATE1_800000)) {
         if ((this->animIndex != EN_STONE_HEISHI_ANIM_WAVE) &&
             ((((this->action == EN_STONE_ACTION_0) || (this->action == EN_STONE_ACTION_1)) ||
@@ -447,7 +448,7 @@ void EnStoneheishi_Update(Actor* thisx, PlayState* play) {
             this->targetHeadRot.y = 0;
         }
 
-        if (!(gSaveContext.save.weekEventReg[41] & 0x40)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) {
             Actor_SetFocus(&this->actor, 30.0f);
         } else {
             Actor_SetFocus(&this->actor, 60.0f);
@@ -516,7 +517,7 @@ void EnStoneheishi_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (!(gSaveContext.save.weekEventReg[41] & 0x40)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_41_40)) {
         func_8012C2DC(play->state.gfxCtx);
 
         POLY_XLU_DISP =

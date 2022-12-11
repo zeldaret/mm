@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -77,7 +76,7 @@ void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2);
 
 s32 func_801226E0(PlayState* play, s32 arg1) {
     if (arg1 == 0) {
-        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, 0xBFF);
+        Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_DOWN, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B));
         if (play->sceneId == SCENE_KAKUSIANA) {
             return 1;
         }
@@ -148,7 +147,7 @@ void func_801229A0(PlayState* play, Player* player) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+void func_801229EC(Actor* thisx, PlayState* play) {
 }
 
 s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
@@ -185,7 +184,8 @@ void func_801229FC(Player* player) {
                 s32 i;
 
                 for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
-                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]),
+                                  &player->bodyPartsPos[PLAYER_BODYPART_HEAD]);
                 }
             }
         }
@@ -328,7 +328,7 @@ void func_80122F28(Player* player) {
         (!(player->stateFlags1 & (PLAYER_STATE1_400 | PLAYER_STATE1_800 | PLAYER_STATE1_200000 | PLAYER_STATE1_800000 |
                                   PLAYER_STATE1_20000000))) &&
         (!(player->stateFlags2 & PLAYER_STATE2_1))) {
-        if (player->doorType < 0) {
+        if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
             ActorCutscene_SetIntentToPlay(0x7C);
         } else {
             ActorCutscene_SetIntentToPlay(0x7D);
@@ -354,27 +354,27 @@ void func_8012300C(PlayState* play, s32 arg1) {
     player->unk_B2B = arg1;
 }
 
-void func_8012301C(Player* player, PlayState* play2) {
+void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
-    s32 pad;
+    Player* this = (Player*)thisx;
 
-    player->unk_AE7++;
+    this->unk_AE7++;
 
-    if (player->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndices[((void)0, gSaveContext.save.playerForm)];
+    if (this->unk_AE7 == 2) {
+        s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
-        func_8012F73C(&play->objectCtx, player->actor.objBankIndex, objectId);
-        player->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (player->unk_AE7 >= 3) {
+        func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
+        this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
+    } else if (this->unk_AE7 >= 3) {
         s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
-            player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
-            player->actor.init = PlayerCall_Init;
-            player->actor.update = PlayerCall_Update;
-            player->actor.draw = PlayerCall_Draw;
+            this->actor.objBankIndex = objBankIndex;
+            this->actor.shape.rot.z = GET_PLAYER_FORM + 1;
+            this->actor.init = PlayerCall_Init;
+            this->actor.update = PlayerCall_Update;
+            this->actor.draw = PlayerCall_Draw;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
         }
     }
@@ -456,7 +456,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != 0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csMode != PLAYER_CSMODE_0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -480,7 +480,7 @@ s32 func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->targetedActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -536,21 +536,21 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 0) {
-        s32 item = Inventory_GetBtnBItem(play);
+        ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == 0x18)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_EXPLODE)) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == 0x1A)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_MARCH)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == 0x19)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (play->interfaceCtx.bButtonDoAction == DO_ACTION_DANCE)) {
             return ITEM_F2;
         }
 
@@ -558,27 +558,21 @@ ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)         ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-               : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)         ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)
-                                                                              : ITEM_NONE;
+        return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
 
-    return (gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] != BTN_DISABLED) ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-           : (gSaveContext.hudVisibility == HUD_VISIBILITY_A_B_C)          ? BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)
-                                                                           : ITEM_NONE;
+    return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
 u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
 
-s32 func_80123810(PlayState* play) {
+PlayerItemAction func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 temp_v0;
+    PlayerItemAction itemAction;
     ItemId itemId;
     s32 i;
 
@@ -587,7 +581,7 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
-            return -1;
+            return PLAYER_IA_MINUS1;
         }
     } else {
         gSaveContext.save.unk_06--;
@@ -602,110 +596,110 @@ s32 func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || (temp_v0 = play->unk_18794(play, player, itemId, i), (temp_v0 < 0))) {
+            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
                 play_sound(NA_SE_SY_ERROR);
-                return -1;
+                return PLAYER_IA_MINUS1;
             } else {
                 s32 pad;
 
                 player->heldItemButton = i;
-                return temp_v0;
+                return itemAction;
             }
         }
     }
 
-    return 0;
+    return PLAYER_IA_NONE;
 }
 
-// Used to map action params to model groups
-u8 sActionModelGroups[PLAYER_AP_MAX] = {
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_NONE
-    PLAYER_MODELGROUP_13,             // PLAYER_AP_LAST_USED
-    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_FISHING_ROD
-    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_KOKIRI
-    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_RAZOR
-    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_AP_SWORD_GILDED
-    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_AP_SWORD_GREAT_FAIRY
-    PLAYER_MODELGROUP_STICK,          // PLAYER_AP_STICK
-    PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_AP_ZORA_FINS
-    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW
-    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW_FIRE
-    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW_ICE
-    PLAYER_MODELGROUP_BOW,            // PLAYER_AP_BOW_LIGHT
-    PLAYER_MODELGROUP_HOOKSHOT,       // PLAYER_AP_HOOKSHOT
-    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_AP_BOMB
-    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_AP_POWDER_KEG
-    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_AP_BOMBCHU
-    PLAYER_MODELGROUP_8,              // PLAYER_AP_11
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_NUT
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_PICTO_BOX
-    PLAYER_MODELGROUP_INSTRUMENT,     // PLAYER_AP_OCARINA
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_FISH
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_SPRING_WATER
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_HOT_SPRING_WATER
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_ZORA_EGG
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_DEKU_PRINCESS
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_GOLD_DUST
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_1C
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_SEAHORSE
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MUSHROOM
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_HYLIAN_LOACH
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_BUG
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POE
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_BIG_POE
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POTION_RED
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POTION_BLUE
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_POTION_GREEN
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MILK
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_MILK_HALF
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_CHATEAU
-    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_AP_BOTTLE_FAIRY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MOON_TEAR
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_LAND
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_ROOM_KEY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LETTER_TO_KAFEI
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MAGIC_BEANS
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_SWAMP
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_MOUNTAIN
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_DEED_OCEAN
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_32
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LETTER_MAMA
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_34
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_35
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_PENDANT_OF_MEMORIES
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_37
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_38
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_39
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_TRUTH
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_KAFEIS_MASK
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_ALL_NIGHT
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_BUNNY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_KEATON
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GARO
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_ROMANI
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_CIRCUS_LEADER
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_POSTMAN
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_COUPLE
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GREAT_FAIRY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GIBDO
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_DON_GERO
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_KAMARO
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_CAPTAIN
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_STONE
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_BREMEN
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_BLAST
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_SCENTS
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GIANT
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_FIERCE_DEITY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_GORON
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_ZORA
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_MASK_DEKU
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_AP_LENS
+// Used to map item actions to model groups
+u8 sActionModelGroups[PLAYER_IA_MAX] = {
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NONE
+    PLAYER_MODELGROUP_13,             // PLAYER_IA_LAST_USED
+    PLAYER_MODELGROUP_STICK,          // PLAYER_IA_FISHING_ROD
+    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_KOKIRI
+    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_RAZOR
+    PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_GILDED
+    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_GREAT_FAIRY
+    PLAYER_MODELGROUP_STICK,          // PLAYER_IA_STICK
+    PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_IA_ZORA_FINS
+    PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW
+    PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_FIRE
+    PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_ICE
+    PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_LIGHT
+    PLAYER_MODELGROUP_HOOKSHOT,       // PLAYER_IA_HOOKSHOT
+    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_BOMB
+    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_POWDER_KEG
+    PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_BOMBCHU
+    PLAYER_MODELGROUP_8,              // PLAYER_IA_11
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NUT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PICTO_BOX
+    PLAYER_MODELGROUP_INSTRUMENT,     // PLAYER_IA_OCARINA
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FISH
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_SPRING_WATER
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_ZORA_EGG
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_GOLD_DUST
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_1C
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_SEAHORSE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MUSHROOM
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_BUG
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_POE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_BIG_POE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_POTION_RED
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_POTION_BLUE
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_POTION_GREEN
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MILK
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MILK_HALF
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_CHATEAU
+    PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FAIRY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOON_TEAR
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_LAND
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_ROOM_KEY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LETTER_TO_KAFEI
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MAGIC_BEANS
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_SWAMP
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_MOUNTAIN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_OCEAN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_32
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LETTER_MAMA
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_34
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_35
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PENDANT_OF_MEMORIES
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_37
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_38
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_39
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_TRUTH
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_KAFEIS_MASK
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_ALL_NIGHT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_BUNNY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_KEATON
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GARO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_ROMANI
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_CIRCUS_LEADER
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_POSTMAN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_COUPLE
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GREAT_FAIRY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GIBDO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_DON_GERO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_KAMARO
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_CAPTAIN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_STONE
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_BREMEN
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_BLAST
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_SCENTS
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GIANT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_FIERCE_DEITY
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GORON
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_ZORA
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_DEKU
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LENS
 };
 
-PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerActionParam actionParam) {
-    PlayerModelGroup modelGroup = sActionModelGroups[actionParam];
+PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerItemAction itemAction) {
+    PlayerModelGroup modelGroup = sActionModelGroups[itemAction];
 
     if ((modelGroup == PLAYER_MODELGROUP_ONE_HAND_SWORD) && Player_IsGoronOrDeku(player)) {
         return PLAYER_MODELGROUP_1;
@@ -730,17 +724,17 @@ u8 sPlayerStrengths[PLAYER_FORM_MAX] = {
 };
 
 typedef struct {
-    /* 0x00 */ u8 flag;
-    /* 0x02 */ u16 textId;
-} TextTriggerEntry; // size = 0x04
+    /* 0x0 */ u8 flag;
+    /* 0x2 */ u16 textId;
+} EnvHazardTextTriggerEntry; // size = 0x4
 
 // These textIds are OoT remnants. The corresponding text entries are not present in this game, and so these don't point
 // to anything relevant.
-TextTriggerEntry sEnvironmentTextTriggers[] = {
-    { 1, 0x26FC },
-    { 2, 0x26FD },
-    { 0, 0 },
-    { 2, 0x26FD },
+EnvHazardTextTriggerEntry sEnvHazardTextTriggers[] = {
+    { ENV_HAZARD_TEXT_TRIGGER_HOTROOM, 0x26FC },    // PLAYER_ENV_HAZARD_HOTROOM - 1
+    { ENV_HAZARD_TEXT_TRIGGER_UNDERWATER, 0x26FD }, // PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1
+    { 0, 0 },                                       // PLAYER_ENV_HAZARD_SWIMMING - 1
+    { ENV_HAZARD_TEXT_TRIGGER_UNDERWATER, 0x26FD }, // PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1
 };
 
 PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
@@ -1177,7 +1171,7 @@ u8 D_801C07AC[] = {
 
 void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
-        if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
+        if ((player->itemAction <= PLAYER_IA_MINUS1) || (player->itemAction == player->heldItemAction)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
@@ -1192,7 +1186,7 @@ void Player_SetModelsForHoldingShield(Player* player) {
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
                     player->modelAnimType = PLAYER_ANIMTYPE_2;
-                    player->heldItemActionParam = -1;
+                    player->itemAction = PLAYER_IA_MINUS1;
                 }
             }
         }
@@ -1243,19 +1237,19 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
 }
 
 void func_80123C58(Player* player) {
-    player->heldItemActionParam = player->itemActionParam;
-    Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemActionParam));
+    player->itemAction = player->heldItemAction;
+    Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
     player->unk_AA5 = 0;
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
-    if (player->csMode != 0x86) {
+    if (player->csMode != PLAYER_CSMODE_134) {
         player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
         }
-        Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->itemActionParam));
+        Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
         func_80123140(play, player);
         if (player->unk_B62 != 0) {
             player->unk_B62 = 1;
@@ -1263,19 +1257,19 @@ void Player_SetEquipmentData(PlayState* play, Player* player) {
     }
 }
 
-void func_80123D50(PlayState* play, Player* player, ItemId itemId, PlayerActionParam actionParam) {
+void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction) {
     Inventory_UpdateBottleItem(play, itemId, player->heldItemButton);
 
     if (itemId != ITEM_BOTTLE) {
         player->heldItemId = itemId;
-        player->itemActionParam = actionParam;
+        player->heldItemAction = itemAction;
     }
 
-    player->heldItemActionParam = actionParam;
+    player->itemAction = itemAction;
 }
 
 void func_80123DA4(Player* player) {
-    player->unk_730 = NULL;
+    player->targetedActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
 
@@ -1300,7 +1294,7 @@ void func_80123E90(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
-    player->unk_730 = actor;
+    player->targetedActor = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);
@@ -1324,7 +1318,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
     Vec3f diff;
     s32 pad;
 
-    if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
+    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
         Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
@@ -1333,7 +1327,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
 }
 
 u8 Player_GetStrength(void) {
-    return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
+    return sPlayerStrengths[GET_PLAYER_FORM];
 }
 
 u8 Player_GetMask(PlayState* play) {
@@ -1363,19 +1357,19 @@ s32 Player_IsHoldingMirrorShield(PlayState* play) {
 }
 
 s32 Player_IsHoldingHookshot(Player* player) {
-    return player->itemActionParam == PLAYER_AP_HOOKSHOT;
+    return player->heldItemAction == PLAYER_IA_HOOKSHOT;
 }
 
 s32 func_801240DC(Player* player) {
     return Player_IsHoldingHookshot(player) && (player->heldActor == NULL);
 }
 
-s32 func_80124110(Player* player, PlayerActionParam actionParam) {
-    s32 temp_v0 = actionParam - PLAYER_AP_FISHING_ROD;
+s32 func_80124110(Player* player, PlayerItemAction itemAction) {
+    s32 temp_v0 = itemAction - PLAYER_IA_FISHING_ROD;
 
     if (player->transformation != PLAYER_FORM_GORON) {
-        if (((actionParam - PLAYER_AP_FISHING_ROD) > (PLAYER_AP_FISHING_ROD - PLAYER_AP_FISHING_ROD)) &&
-            ((actionParam - PLAYER_AP_FISHING_ROD) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_FISHING_ROD))) {
+        if (((itemAction - PLAYER_IA_FISHING_ROD) > (PLAYER_IA_FISHING_ROD - PLAYER_IA_FISHING_ROD)) &&
+            ((itemAction - PLAYER_IA_FISHING_ROD) < (PLAYER_IA_SWORD_GREAT_FAIRY - PLAYER_IA_FISHING_ROD))) {
             return temp_v0;
         }
     }
@@ -1384,36 +1378,36 @@ s32 func_80124110(Player* player, PlayerActionParam actionParam) {
 }
 
 s32 func_80124148(Player* player) {
-    return func_80124110(player, player->itemActionParam);
+    return func_80124110(player, player->heldItemAction);
 }
 
-s32 Player_ActionToMeleeWeapon(PlayerActionParam actionParam) {
-    s32 weapon = actionParam - (PLAYER_AP_SWORD_KOKIRI - 1);
+s32 Player_ActionToMeleeWeapon(PlayerItemAction itemAction) {
+    s32 weapon = itemAction - (PLAYER_IA_SWORD_KOKIRI - 1);
 
-    if ((weapon > 0) && (weapon <= (PLAYER_AP_ZORA_FINS - (PLAYER_AP_SWORD_KOKIRI - 1)))) {
+    if ((weapon > 0) && (weapon <= (PLAYER_IA_ZORA_FINS - (PLAYER_IA_SWORD_KOKIRI - 1)))) {
         return weapon;
     }
     return 0;
 }
 
 s32 Player_GetMeleeWeaponHeld(Player* player) {
-    return Player_ActionToMeleeWeapon(player->itemActionParam);
+    return Player_ActionToMeleeWeapon(player->heldItemAction);
 }
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
-    // Relies on the actionParams for two-handed weapons being contiguous.
-    if ((player->itemActionParam >= PLAYER_AP_SWORD_GREAT_FAIRY) && (player->itemActionParam <= PLAYER_AP_STICK)) {
+    // Relies on the itemActions for two-handed weapons being contiguous.
+    if ((player->heldItemAction >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->heldItemAction <= PLAYER_IA_STICK)) {
         return true;
     }
 
     return false;
 }
 
-s32 Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
-    s32 bottle = actionParam - PLAYER_AP_BOTTLE;
+s32 Player_ActionToBottle(Player* player, PlayerItemAction itemAction) {
+    s32 bottle = itemAction - PLAYER_IA_BOTTLE;
 
-    // Relies on bottle-related action params to be contiguous
-    if ((bottle >= (PLAYER_AP_BOTTLE - PLAYER_AP_BOTTLE)) && (bottle <= (PLAYER_AP_BOTTLE_FAIRY - PLAYER_AP_BOTTLE))) {
+    // Relies on bottle-related item actions to be contiguous
+    if ((bottle >= (PLAYER_IA_BOTTLE - PLAYER_IA_BOTTLE)) && (bottle <= (PLAYER_IA_BOTTLE_FAIRY - PLAYER_IA_BOTTLE))) {
         return bottle;
     }
 
@@ -1421,14 +1415,14 @@ s32 Player_ActionToBottle(Player* player, PlayerActionParam actionParam) {
 }
 
 s32 Player_GetBottleHeld(Player* Player) {
-    return Player_ActionToBottle(Player, Player->itemActionParam);
+    return Player_ActionToBottle(Player, Player->heldItemAction);
 }
 
-s32 Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
-    s32 explosive = actionParam - PLAYER_AP_BOMB;
+s32 Player_ActionToExplosive(Player* player, PlayerItemAction itemAction) {
+    s32 explosive = itemAction - PLAYER_IA_BOMB;
 
-    // Relies on explosive-related action params to be contiguous
-    if ((explosive >= (PLAYER_AP_BOMB - PLAYER_AP_BOMB)) && (explosive <= (PLAYER_AP_BOMBCHU - PLAYER_AP_BOMB))) {
+    // Relies on explosive-related item actions to be contiguous
+    if ((explosive >= (PLAYER_IA_BOMB - PLAYER_IA_BOMB)) && (explosive <= (PLAYER_IA_BOMBCHU - PLAYER_IA_BOMB))) {
         return explosive;
     }
 
@@ -1436,16 +1430,16 @@ s32 Player_ActionToExplosive(Player* player, PlayerActionParam actionParam) {
 }
 
 s32 Player_GetExplosiveHeld(Player* player) {
-    return Player_ActionToExplosive(player, player->itemActionParam);
+    return Player_ActionToExplosive(player, player->heldItemAction);
 }
 
-s32 Player_ActionToSword(Actor* actor, PlayerActionParam actionParam) {
+s32 Player_ActionToSword(Actor* actor, PlayerItemAction itemAction) {
     s32 sword = 0;
 
     //! FAKE:
-    if ((actionParam == PLAYER_AP_LAST_USED) ||
-        ((sword = actionParam - PLAYER_AP_SWORD_KOKIRI, (sword >= PLAYER_AP_SWORD_KOKIRI - PLAYER_AP_SWORD_KOKIRI)) &&
-         (sword <= PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_SWORD_KOKIRI))) {
+    if ((itemAction == PLAYER_IA_LAST_USED) ||
+        ((sword = itemAction - PLAYER_IA_SWORD_KOKIRI, (sword >= PLAYER_IA_SWORD_KOKIRI - PLAYER_IA_SWORD_KOKIRI)) &&
+         (sword <= PLAYER_IA_SWORD_GREAT_FAIRY - PLAYER_IA_SWORD_KOKIRI))) {
         return sword;
     }
 
@@ -1456,37 +1450,36 @@ s32 func_801242B4(Player* player) {
     return (player->stateFlags1 & PLAYER_STATE1_8000000) && (player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER);
 }
 
-s32 Player_GetEnvTimerType(PlayState* play) {
+s32 Player_GetEnvironmentalHazard(PlayState* play) {
     Player* player = GET_PLAYER(play);
-    TextTriggerEntry* triggerEntry;
-    s32 envTimerType;
+    EnvHazardTextTriggerEntry* triggerEntry;
+    s32 envHazard;
 
     if (play->roomCtx.curRoom.unk2 == 3) { // Room is hot
-        envTimerType = PLAYER_ENV_TIMER_HOTROOM - 1;
+        envHazard = PLAYER_ENV_HAZARD_HOTROOM - 1;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->underwaterTimer > 80)) {
-        envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FREE - 1;
+        envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FREE - 1;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            envTimerType = PLAYER_ENV_TIMER_UNDERWATER_FLOOR - 1;
+            envHazard = PLAYER_ENV_HAZARD_UNDERWATER_FLOOR - 1;
         } else {
-            envTimerType = PLAYER_ENV_TIMER_SWIMMING - 1;
+            envHazard = PLAYER_ENV_HAZARD_SWIMMING - 1;
         }
     } else {
-        return PLAYER_ENV_TIMER_NONE;
+        return PLAYER_ENV_HAZARD_NONE;
     }
 
-    // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused in MM
-    triggerEntry = &sEnvironmentTextTriggers[envTimerType];
+    triggerEntry = &sEnvHazardTextTriggers[envHazard];
     if (!Player_InCsMode(play)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) &&
-            (envTimerType == (PLAYER_ENV_TIMER_HOTROOM - 1))) {
+        if ((triggerEntry->flag) && !(gSaveContext.envHazardTextTriggerFlags & triggerEntry->flag) &&
+            (envHazard == (PLAYER_ENV_HAZARD_HOTROOM - 1))) {
             Message_StartTextbox(play, triggerEntry->textId, NULL);
-            gSaveContext.textTriggerFlags |= triggerEntry->flag;
+            gSaveContext.envHazardTextTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return envTimerType + 1;
+    return envHazard + 1;
 }
 
 void func_80124420(Player* player);
@@ -1730,7 +1723,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     Math_Vec3f_Diff(arg5, arg4, &sp44);
     sp40 = sqrtf(SQXZ(sp44));
 
-    sp3C = (sp40 <= 1.0f) ? arg3 : Math_FAtan2F(sp44.z, sp44.x);
+    sp3C = (sp40 <= 1.0f) ? arg3 : Math_Atan2S_XY(sp44.z, sp44.x);
     sp40 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
 
     if (ABS_ALT(BINANG_SUB(sp3C, arg3)) > 0x4000) {
@@ -1738,7 +1731,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     }
     sp3C -= arg3;
 
-    temp_v0 = Math_FAtan2F(sp44.y, sp40);
+    temp_v0 = Math_Atan2S_XY(sp44.y, sp40);
     temp_v0 = CLAMP(temp_v0, (s16)-arg9, arg9);
     //! FAKE:
     if (sp3C) {}
@@ -2034,9 +2027,9 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
                 if (player->stateFlags1 & PLAYER_STATE1_400) {
                     refPos.y = player->actor.world.pos.y + 30.0f;
                 } else {
-                    refPos.x = player->bodyPartsPos[0xC].x;
-                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
-                    refPos.z = player->bodyPartsPos[0xC].z;
+                    refPos.x = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].x;
+                    refPos.y = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[PLAYER_BODYPART_LEFT_HAND].z;
                 }
             } else {
                 refPos.y = player->actor.world.pos.y + 28.0f;
@@ -2045,7 +2038,7 @@ void Player_DrawGetItem(PlayState* play, Player* player) {
             Math_Vec3f_Copy(&refPos, &D_801F59E8);
         }
 
-        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        drawIdPlusOne = ABS_ALT(player->getItemDrawId);
         Player_DrawGetItemImpl(play, player, &refPos, drawIdPlusOne);
     }
 }
@@ -2254,12 +2247,12 @@ Vec3f D_801C0D6C = { 420.0f, 1210.0f, 380.0f };
 
 f32 D_801C0D78[] = {
     0.0f,    // Player is not holding a melee weapon
-    3000.0f, // PLAYER_AP_SWORD_KOKIRI
-    3000.0f, // PLAYER_AP_SWORD_RAZOR
-    4000.0f, // PLAYER_AP_SWORD_GILDED
-    5500.0f, // PLAYER_AP_SWORD_GREAT_FAIRY
-    -1.0f,   // PLAYER_AP_STICK
-    2500.0f, // PLAYER_AP_ZORA_FINS
+    3000.0f, // PLAYER_IA_SWORD_KOKIRI
+    3000.0f, // PLAYER_IA_SWORD_RAZOR
+    4000.0f, // PLAYER_IA_SWORD_GILDED
+    5500.0f, // PLAYER_IA_SWORD_GREAT_FAIRY
+    -1.0f,   // PLAYER_IA_STICK
+    2500.0f, // PLAYER_IA_ZORA_FINS
 };
 
 Gfx* D_801C0D94 = object_link_child_DL_017818;

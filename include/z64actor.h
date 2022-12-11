@@ -19,6 +19,7 @@ struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
+struct EnTorch2;
 
 typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
 
@@ -208,7 +209,7 @@ typedef enum {
  * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
  * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
  * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
- * 0x200 : Unknown (only set/used by player so far)
+ * 0x200 : Only set/used by player, related to interacting with walls
  */
 
 typedef struct {
@@ -224,7 +225,7 @@ typedef struct {
 } DynaPolyActor; // size = 0x15C
 
 
-typedef enum {
+typedef enum Item00Type {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
     /* 0x02 */ ITEM00_RUPEE_RED,
@@ -288,8 +289,17 @@ typedef struct EnAObj {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
-    /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} EnAObj; // size = 0x1A8
+} EnAObj; // size = 0x194
+
+typedef enum {
+    /* 0 */ AOBJ_SIGNPOST_OBLONG,
+    /* 1 */ AOBJ_SIGNPOST_ARROW,
+} AObjType;
+
+#define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
+#define AOBJ_GET_TYPE(thisx) (((thisx)->params & 0xFF) - 9)
+
+#define AOBJ_PARAMS(textId, type) ((((textId - 0x300) & 0xFF) << 8) | (type + 9))
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
@@ -309,7 +319,7 @@ typedef enum {
 
 #define ACTORCTX_FLAG_0 (1 << 0)
 #define ACTORCTX_FLAG_1 (1 << 1)
-#define ACTORCTX_FLAG_2 (1 << 2)
+#define ACTORCTX_FLAG_PICTO_BOX_ON (1 << 2)
 #define ACTORCTX_FLAG_3 (1 << 3)
 #define ACTORCTX_FLAG_4 (1 << 4)
 #define ACTORCTX_FLAG_5 (1 << 5)
@@ -411,7 +421,7 @@ typedef struct ActorContext {
     /* 0x20C */ ActorContext_unk_20C unk_20C[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
-    /* 0x254 */ u32 unk254[5];
+    /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
     /* 0x26C */ Input unk_26C;

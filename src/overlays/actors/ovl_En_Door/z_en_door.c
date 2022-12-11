@@ -57,7 +57,7 @@ u8 D_808675E4[] = {
     /* 0x1C */ SCHEDULE_CMD_RET_NONE(),
     /* 0x1D */ SCHEDULE_CMD_RET_VAL_S(8),
     /* 0x1F */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x3C - 0x23),
-    /* 0x23 */ SCHEDULE_CMD_CHECK_FLAG_S(0x1C, 0x08, 0x2E - 0x27),
+    /* 0x23 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_28_08, 0x2E - 0x27),
     /* 0x27 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(13, 0, 0x2D - 0x2B),
     /* 0x2B */ SCHEDULE_CMD_RET_VAL_S(9),
     /* 0x2D */ SCHEDULE_CMD_RET_NONE(),
@@ -93,14 +93,14 @@ u8 D_8086764C[] = {
 
 u8 D_80867658[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x13 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x1C, 0x08, 0x0A - 0x08),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_28_08, 0x0A - 0x08),
     /* 0x08 */ SCHEDULE_CMD_RET_VAL_S(12),
     /* 0x0A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 10, 22, 0, 0x12 - 0x10),
     /* 0x10 */ SCHEDULE_CMD_RET_VAL_S(12),
     /* 0x12 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x13 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(3, 0x28 - 0x17),
     /* 0x17 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(13, 0, 0x28 - 0x1B),
-    /* 0x1B */ SCHEDULE_CMD_CHECK_FLAG_S(0x33, 0x08, 0x21 - 0x1F),
+    /* 0x1B */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_51_08, 0x21 - 0x1F),
     /* 0x1F */ SCHEDULE_CMD_RET_VAL_S(12),
     /* 0x21 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(22, 0, 0x27 - 0x25),
     /* 0x25 */ SCHEDULE_CMD_RET_VAL_S(12),
@@ -231,7 +231,7 @@ u8 D_8086773C[] = {
 
 u8 D_80867744[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x08 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x63, 0x80, 0x0E - 0x08),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_99_80, 0x0E - 0x08),
     /* 0x08 */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(20, 0, 0x14 - 0x0C),
     /* 0x0C */ SCHEDULE_CMD_RET_VAL_S(27),
     /* 0x0E */ SCHEDULE_CMD_CHECK_BEFORE_TIME_S(18, 0, 0x14 - 0x12),
@@ -240,12 +240,12 @@ u8 D_80867744[] = {
 };
 
 u8 D_8086775C[] = {
-    /* 0x00 */ SCHEDULE_CMD_CHECK_FLAG_S(0x34, 0x20, 0x1B - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(0x4B, 0x20, 0x1B - 0x08),
-    /* 0x08 */ SCHEDULE_CMD_CHECK_FLAG_S(0x0E, 0x04, 0x0E - 0x0C),
+    /* 0x00 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_52_20, 0x1B - 0x04),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_20, 0x1B - 0x08),
+    /* 0x08 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_14_04, 0x0E - 0x0C),
     /* 0x0C */ SCHEDULE_CMD_RET_VAL_S(29),
-    /* 0x0E */ SCHEDULE_CMD_CHECK_FLAG_S(0x3B, 0x01, 0x1A - 0x12),
-    /* 0x12 */ SCHEDULE_CMD_CHECK_FLAG_S(0x3D, 0x02, 0x18 - 0x16),
+    /* 0x0E */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_59_01, 0x1A - 0x12),
+    /* 0x12 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_61_02, 0x18 - 0x16),
     /* 0x16 */ SCHEDULE_CMD_RET_VAL_S(30),
     /* 0x18 */ SCHEDULE_CMD_RET_VAL_S(31),
     /* 0x1A */ SCHEDULE_CMD_RET_NONE(),
@@ -465,7 +465,7 @@ void func_80866A5C(EnDoor* this, PlayState* play) {
 }
 
 void func_80866B20(EnDoor* this, PlayState* play) {
-    static s32 D_80867BC0[4];
+    static s32 D_80867BC0;
     Player* player = GET_PLAYER(play);
     Vec3f playerPosRelToDoor;
     s16 temp_a2;
@@ -475,7 +475,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
     u8 temp_a1;
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state) && (this->dyna.actor.textId == 0x1821)) {
-        D_80867BC0[0] = 1;
+        D_80867BC0 = true;
     }
     if (this->unk_1A1 != 0) {
         this->actionFunc = func_80867144;
@@ -491,25 +491,25 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
     } else if (!Player_InCsMode(play)) {
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
-        if ((D_80867BC0[0] != 0) || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
-                                     (fabsf(playerPosRelToDoor.z) < 50.0f))) {
+        if (D_80867BC0 || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
+                           (fabsf(playerPosRelToDoor.z) < 50.0f))) {
             yawDiff = player->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
             if (playerPosRelToDoor.z > 0.0f) {
                 yawDiff = (0x8000 - yawDiff);
             }
             if (ABS_ALT(yawDiff) < 0x3000) {
-                player->doorType = 1;
+                player->doorType = PLAYER_DOORTYPE_HANDLE;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->dyna.actor;
                 if (this->unk_1A6 != 0) {
                     if (gSaveContext.save.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
-                        player->doorType = -1;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
                 } else if (this->unk_1A4 == 4) {
-                    player->doorType = -1;
+                    player->doorType = PLAYER_DOORTYPE_TALKING;
                     this->dyna.actor.textId = 0x1800;
                 } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
                     s32 textIdOffset;
@@ -528,16 +528,18 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                         } else if (this->unk_1A4 == 2) {
                             baseTextId = 0x181D;
                         }
-                        player->doorType = -1;
+                        player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->dyna.actor.textId = baseTextId + textIdOffset;
                     }
                 } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
                     ScheduleOutput sp30;
 
-                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30) != 0) {
+                    if (Schedule_RunScript(play, D_8086778C[this->switchFlag], &sp30)) {
                         this->dyna.actor.textId = sp30.result + 0x1800;
 
-                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? 5 : -1;
+                        player->doorType = ((this->dyna.actor.textId == 0x1821) && D_80867BC0)
+                                               ? PLAYER_DOORTYPE_PROXIMITY
+                                               : PLAYER_DOORTYPE_TALKING;
                     }
                 }
                 func_80122F28(player);

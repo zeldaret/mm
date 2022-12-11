@@ -25,7 +25,7 @@ static u8 D_80BF3260[] = {
     /* 0x05 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_TOWN, 0x57 - 0x09),
     /* 0x09 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 25, 15, 45, 0x51 - 0x0F),
     /* 0x0F */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 45, 15, 50, 0x4B - 0x15),
-    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(0x4B, 0x10, 0x1A - 0x19),
+    /* 0x15 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_10, 0x1A - 0x19),
     /* 0x19 */ SCHEDULE_CMD_RET_NONE(),
     /* 0x1A */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x45 - 0x20),
     /* 0x20 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 55, 17, 15, 0x3F - 0x26),
@@ -42,7 +42,7 @@ static u8 D_80BF3260[] = {
     /* 0x5B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 45, 15, 50, 0xAF - 0x61),
     /* 0x61 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(15, 50, 16, 10, 0xA9 - 0x67),
     /* 0x67 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 10, 16, 30, 0xA3 - 0x6D),
-    /* 0x6D */ SCHEDULE_CMD_CHECK_FLAG_S(0x4B, 0x10, 0x8A - 0x71),
+    /* 0x6D */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_75_10, 0x8A - 0x71),
     /* 0x71 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 30, 16, 50, 0x84 - 0x77),
     /* 0x77 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(16, 50, 16, 55, 0x7E - 0x7D),
     /* 0x7D */ SCHEDULE_CMD_RET_NONE(),
@@ -372,7 +372,7 @@ s32 func_80BF17BC(EnIg* this, PlayState* play) {
 
         case 1:
         case 3:
-            if (!(gSaveContext.save.weekEventReg[75] & 0x10) && (this->unk_3F6 == 3)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_10) && (this->unk_3F6 == 3)) {
                 ActorCutscene_Stop(sp2A);
                 this->unk_3F6 = 5;
             } else {
@@ -876,7 +876,7 @@ void func_80BF2A50(EnIg* this, PlayState* play) {
 void func_80BF2AF8(EnIg* this, PlayState* play) {
     ScheduleOutput sp20;
 
-    this->timePathTimeSpeed = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->timePathTimeSpeed = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80BF3260, &sp20) ||
         ((this->scheduleResult != sp20.result) && !func_80BF2368(this, play, &sp20))) {
@@ -950,7 +950,7 @@ void EnIg_Update(Actor* thisx, PlayState* play) {
         func_80BF1258(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
-        func_8013C964(&this->actor, play, 60.0f, 30.0f, PLAYER_AP_NONE, this->unk_3D0 & 7);
+        func_8013C964(&this->actor, play, 60.0f, 30.0f, PLAYER_IA_NONE, this->unk_3D0 & 7);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BF1354(this, play);
