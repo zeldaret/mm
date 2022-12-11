@@ -43,7 +43,7 @@ void* TransitionTriforce_Init(void* thisx) {
     this->transPos = 1.0f;
     this->state = STATE_SPIRAL_IN_FAST;
     this->step = 0.015f;
-    this->fadeType = TYPE_TRANSPARENT_TRIFORCE;
+    this->fadeType = 1;
     return this;
 }
 
@@ -108,12 +108,12 @@ void TransitionTriforce_Draw(void* thisx, Gfx** gfxP) {
     gSPVertex(gfx++, &sTriforceWipeVtx, ARRAY_COUNT(sTriforceWipeVtx), 0);
     if (!TransitionTriforce_IsDone(this)) {
         switch (this->fadeType) {
-            case TYPE_TRANSPARENT_TRIFORCE:
+            case TRANS_FADE_TYPE_IN:
                 gSP2Triangles(gfx++, 0, 4, 5, 0, 4, 1, 3, 0);
                 gSP1Triangle(gfx++, 5, 3, 2, 0);
                 break;
 
-            case TYPE_FILLED_TRIFORCE:
+            case TRANS_FADE_TYPE_OUT:
                 gSP2Triangles(gfx++, 3, 4, 5, 0, 0, 2, 6, 0);
                 gSP2Triangles(gfx++, 0, 6, 7, 0, 1, 0, 7, 0);
                 gSP2Triangles(gfx++, 1, 7, 8, 0, 1, 8, 9, 0);
@@ -123,10 +123,10 @@ void TransitionTriforce_Draw(void* thisx, Gfx** gfxP) {
 
     } else {
         switch (this->fadeType) {
-            case TYPE_TRANSPARENT_TRIFORCE:
+            case TRANS_FADE_TYPE_IN:
                 break;
 
-            case TYPE_FILLED_TRIFORCE:
+            case TRANS_FADE_TYPE_OUT:
                 gSP1Quadrangle(gfx++, 6, 7, 8, 9, 0);
                 break;
         }

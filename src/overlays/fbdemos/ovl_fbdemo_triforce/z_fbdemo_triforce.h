@@ -11,12 +11,6 @@ typedef enum {
     /* 4 */ STATE_SPIRAL_OUT_FAST
 } FbTriforceState;
 
-typedef enum {
-    /* 0 */ TYPE_NONE,
-    /* 1 */ TYPE_TRANSPARENT_TRIFORCE,
-    /* 2 */ TYPE_FILLED_TRIFORCE
-} TriforceFadeType;
-
 typedef struct {
     /* 0x000 */ Color_RGBA8_u32 color;
     /* 0x004 */ f32 transPos;
