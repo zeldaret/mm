@@ -124,11 +124,11 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE3E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE484.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StopTime.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE498.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StartTime.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE4A8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_IsTimeStopped.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE4B8.s")
 

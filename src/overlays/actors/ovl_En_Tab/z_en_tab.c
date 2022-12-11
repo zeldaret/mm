@@ -473,7 +473,7 @@ void func_80BE1224(EnTab* this, PlayState* play) {
 void func_80BE127C(EnTab* this, PlayState* play) {
     ScheduleOutput sp18;
 
-    this->unk_31A = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_31A = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
     if (!Schedule_RunScript(play, D_80BE18D0, &sp18) ||
         ((this->unk_1D8 != sp18.result) && !func_80BE1060(this, play, &sp18))) {

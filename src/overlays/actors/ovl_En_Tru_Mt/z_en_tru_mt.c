@@ -185,7 +185,7 @@ s32 func_80B761FC(EnTruMt* this, PlayState* play) {
                 this->unk_3A4 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOUME_DAMAGE2);
             }
-            play->interfaceCtx.unk_25E = 1;
+            play->interfaceCtx.minigameHiddenPoints = 1;
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
             return true;
         }
@@ -342,7 +342,7 @@ void func_80B76924(EnTruMt* this) {
 void func_80B76980(EnTruMt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.unk_3F3C >= 10) {
+    if (gSaveContext.minigameHiddenScore >= 10) {
         Message_StartTextbox(play, 0x87F, &this->actor);
         SET_EVENTINF(EVENTINF_36);
         SET_EVENTINF(EVENTINF_40);
