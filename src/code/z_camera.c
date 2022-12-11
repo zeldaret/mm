@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
@@ -69,15 +70,15 @@ Vec3f D_801EDDF0;
 /**
  * Camera data is stored in both read-only data and OREG as s16, and then converted to the appropriate type during
  * runtime. If a small f32 is being stored as an s16, it is common to store that value 100 times larger than the
- * original value. This is then scaled back down during runtime with the CAM_DATA_UNSCALE macro.
+ * original value. This is then scaled back down during runtime with the CAM_RODATA_UNSCALE macro.
  */
-#define CAM_DATA_SCALE(x) ((x)*100.0f)
-#define CAM_DATA_UNSCALE(x) ((x)*0.01f)
+#define CAM_RODATA_SCALE(x) ((x)*100.0f)
+#define CAM_RODATA_UNSCALE(x) ((x)*0.01f)
 
 // Load the next value from camera read-only data stored in CameraModeValue
 #define GET_NEXT_RO_DATA(values) ((values++)->val)
 // Load the next value and scale down from camera read-only data stored in CameraModeValue
-#define GET_NEXT_SCALED_RO_DATA(values) CAM_DATA_UNSCALE(GET_NEXT_RO_DATA(values))
+#define GET_NEXT_SCALED_RO_DATA(values) CAM_RODATA_UNSCALE(GET_NEXT_RO_DATA(values))
 
 // Camera bg surface flags
 #define FLG_ADJSLOPE (1 << 0)
@@ -675,7 +676,6 @@ s32 Camera_CheckOOB(Camera* camera, Vec3f* from, Vec3f* to) {
 }
 
 s16 func_800CC260(Camera* camera, Vec3f* arg1, Vec3f* arg2, VecSph* arg3, Actor** exclusions, s16 numExclusions) {
-    // sp 70-98 Could be one struct
     VecSph sp90;
     s32 ret;
     s32 angleCount;
@@ -888,11 +888,11 @@ s16 D_801EDBF0;
  *
  * @param camera
  * @param viewYaw The yaw the camera is facing, gives a direction to sample a position
- * @param initAndReturnZero
+ * @param shouldInit
  *
  * @return pitchOffset resulting pitch adjustment
  */
-s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 initAndReturnZero) {
+s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shouldInit) {
     static f32 sFloorYNear;
     static f32 sFloorYFar;
     static CameraCollision sFarColChk;
@@ -928,14 +928,14 @@ s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 init
     nearPos.y = focalActorPos.y;
     nearPos.z = focalActorPos.z + (nearDist * viewForwardsUnitZ);
 
-    if (initAndReturnZero || ((camera->play->state.frames % 2) == 0)) {
+    if (shouldInit || ((camera->play->state.frames % 2) == 0)) {
         sFarColChk.pos.x = focalActorPos.x + (farDist * viewForwardsUnitX);
         sFarColChk.pos.y = focalActorPos.y;
         sFarColChk.pos.z = focalActorPos.z + (farDist * viewForwardsUnitZ);
 
         Camera_BgCheckInfo(camera, &focalActorPos, &sFarColChk);
 
-        if (initAndReturnZero) {
+        if (shouldInit) {
             sFloorYNear = sFloorYFar = camera->focalActorFloorHeight;
         }
     } else {
@@ -1019,7 +1019,7 @@ f32 func_800CCCEC(Camera* camera, s16 reset) {
             distResult = OLib_Vec3fDistXZ(&offsetForwards, &camCollision.pos);
 
             // (-D_801B9E60 < (50.0f - distResult))
-            if ((D_801B9E5C != 2) || !(-D_801B9E60 >= (50.0f - distResult))) {
+            if (!((D_801B9E5C == 2) && (-D_801B9E60 >= (50.0f - distResult)))) {
                 D_801B9E5C = 1;
                 distResult = 50.0f - distResult; // 22.0f
                 D_801B9E60 = distResult;
@@ -2431,7 +2431,7 @@ s32 Camera_Normal3(Camera* camera) {
     if (RELOAD_PARAMS(camera)) {
         CameraModeValue* values = sCameraSettings[camera->setting].cameraModes[camera->mode].values;
 
-        temp_f2 = CAM_DATA_UNSCALE(temp_f2);
+        temp_f2 = CAM_RODATA_UNSCALE(temp_f2);
 
         roData->yOffset = GET_NEXT_RO_DATA(values) * temp_f2;
         roData->distMin = GET_NEXT_RO_DATA(values) * temp_f2;
@@ -2658,7 +2658,7 @@ s32 Camera_Normal0(Camera* camera) {
             rwData->unk_1C = roData->unk_14;
         } else {
             if (bgCamFuncData->fov > 360) {
-                phi_f0 = CAM_DATA_UNSCALE(bgCamFuncData->fov);
+                phi_f0 = CAM_RODATA_UNSCALE(bgCamFuncData->fov);
             } else {
                 phi_f0 = bgCamFuncData->fov;
             }
@@ -2900,11 +2900,11 @@ s32 Camera_Parallel1(Camera* camera) {
                 rwData->unk_20 = bgCamFuncData->rot.x;
                 rwData->unk_1E = bgCamFuncData->rot.y;
                 rwData->unk_08 = (bgCamFuncData->fov == -1)   ? roData->unk_14
-                                 : (bgCamFuncData->fov > 360) ? CAM_DATA_UNSCALE(bgCamFuncData->fov)
+                                 : (bgCamFuncData->fov > 360) ? CAM_RODATA_UNSCALE(bgCamFuncData->fov)
                                                               : bgCamFuncData->fov;
                 rwData->unk_00 = (bgCamFuncData->unk_0E == -1)
                                      ? roData->unk_04
-                                     : CAM_DATA_UNSCALE(bgCamFuncData->unk_0E) * focalActorHeight * yNormal;
+                                     : CAM_RODATA_UNSCALE(bgCamFuncData->unk_0E) * focalActorHeight * yNormal;
             //! FAKE
             dummy:;
             } else {
@@ -3196,7 +3196,7 @@ s32 Camera_Jump2(Camera* camera) {
             phi_f2 = 10.0f;
         }
 
-        roData->unk_00 = CAM_DATA_UNSCALE(phi_f2 + GET_NEXT_RO_DATA(values)) * focalActorHeight * yNormal;
+        roData->unk_00 = CAM_RODATA_UNSCALE(phi_f2 + GET_NEXT_RO_DATA(values)) * focalActorHeight * yNormal;
         roData->unk_04 = GET_NEXT_SCALED_RO_DATA(values) * focalActorHeight * yNormal;
         roData->unk_08 = GET_NEXT_SCALED_RO_DATA(values) * focalActorHeight * yNormal;
         roData->unk_0C = GET_NEXT_SCALED_RO_DATA(values);
@@ -4932,11 +4932,11 @@ s32 Camera_Fixed1(Camera* camera) {
         camera->animState++;
         Camera_SetUpdateRatesSlow(camera);
         if (rwData->fov != (s32)negOne) {
-            roData->fov = CAM_DATA_UNSCALE(rwData->fov);
+            roData->fov = CAM_RODATA_UNSCALE(rwData->fov);
         }
 
         if (bgCamFuncData->unk_0E != (s32)negOne) {
-            roData->unk_04 = CAM_DATA_UNSCALE(bgCamFuncData->unk_0E);
+            roData->unk_04 = CAM_RODATA_UNSCALE(bgCamFuncData->unk_0E);
         }
     }
 
@@ -6872,7 +6872,7 @@ s32 Camera_Special8(Camera* camera) {
         camera->dist = OLib_Vec3fDist(at, &camera->eye);
         camera->roll = 0;
         camera->xzSpeed = 0.0f;
-        camera->fov = CAM_DATA_UNSCALE(rwData->fov);
+        camera->fov = CAM_RODATA_UNSCALE(rwData->fov);
         camera->atLerpStepScale = Camera_ClampLerpScale(camera, 1.0f);
         Camera_SetFocalActorAtOffset(camera, &focalActorPosRot->pos);
     } else {

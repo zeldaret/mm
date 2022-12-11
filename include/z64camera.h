@@ -343,10 +343,10 @@ typedef enum {
     /* 0x00 */ CAM_DATA_Y_OFFSET,
     /* 0x01 */ CAM_DATA_01,
     /* 0x02 */ CAM_DATA_02,
-    /* 0x03 */ CAM_DATA_PITCHTARGET,
+    /* 0x03 */ CAM_DATA_PITCH_TARGET,
     /* 0x04 */ CAM_DATA_04,
     /* 0x05 */ CAM_DATA_05,
-    /* 0x06 */ CAM_DATA_YAWDIFFRANGE,
+    /* 0x06 */ CAM_DATA_YAW_DIFF_RANGE,
     /* 0x07 */ CAM_DATA_FOV,
     /* 0x08 */ CAM_DATA_08,
     /* 0x09 */ CAM_DATA_INTERFACE_FLAGS,
@@ -408,10 +408,10 @@ typedef struct {
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_PITCHTARGET }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { eyeStepScale, CAM_DATA_04 }, \
     { posStepScale, CAM_DATA_05 }, \
-    { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
+    { yawDiffRange, CAM_DATA_YAW_DIFF_RANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -465,7 +465,7 @@ typedef struct {
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
     { data02,      CAM_DATA_02 }, \
-    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { pitchTarget, CAM_DATA_PITCH_TARGET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
@@ -483,7 +483,7 @@ typedef struct {
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_PITCHTARGET }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { eyeStepScale, CAM_DATA_04 }, \
     { posStepScale, CAM_DATA_05 }, \
     { fov,          CAM_DATA_FOV }, \
@@ -535,7 +535,7 @@ typedef struct {
     { data02,       CAM_DATA_02 }, \
     { data21,       CAM_DATA_21 }, \
     { data04,       CAM_DATA_04 }, \
-    { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
+    { yawDiffRange, CAM_DATA_YAW_DIFF_RANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -584,7 +584,7 @@ typedef struct {
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_PITCHTARGET }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { data10,       CAM_DATA_10 }, \
     { data04,       CAM_DATA_04 }, \
     { data05,       CAM_DATA_05 }, \
@@ -599,7 +599,7 @@ typedef struct {
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_PITCHTARGET }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { data10,       CAM_DATA_10 }, \
     { data04,       CAM_DATA_04 }, \
     { data05,       CAM_DATA_05 }, \
@@ -665,7 +665,7 @@ typedef struct {
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data02,      CAM_DATA_02 }, \
     { data01,      CAM_DATA_01 }, \
-    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { pitchTarget, CAM_DATA_PITCH_TARGET }, \
     { data04,      CAM_DATA_04 }, \
     { fov,         CAM_DATA_FOV }, \
     { data08,      CAM_DATA_08 }, \
@@ -732,10 +732,10 @@ typedef struct {
     { yOffset,      CAM_DATA_Y_OFFSET }, \
     { data01,       CAM_DATA_01 }, \
     { data02,       CAM_DATA_02 }, \
-    { pitchTarget,  CAM_DATA_PITCHTARGET }, \
+    { pitchTarget,  CAM_DATA_PITCH_TARGET }, \
     { data04,       CAM_DATA_04 }, \
     { data05,       CAM_DATA_05 }, \
-    { yawDiffRange, CAM_DATA_YAWDIFFRANGE }, \
+    { yawDiffRange, CAM_DATA_YAW_DIFF_RANGE }, \
     { fov,          CAM_DATA_FOV }, \
     { data08,       CAM_DATA_08 }, \
     { interfaceFlags, CAM_DATA_INTERFACE_FLAGS }
@@ -959,7 +959,7 @@ typedef struct {
 #define CAM_FUNCDATA_KEEP4(yOffset, data01, pitchTarget, data10, data18, fov, interfaceFlags, data04, timer) \
     { yOffset,     CAM_DATA_Y_OFFSET }, \
     { data01,      CAM_DATA_01 }, \
-    { pitchTarget, CAM_DATA_PITCHTARGET }, \
+    { pitchTarget, CAM_DATA_PITCH_TARGET }, \
     { data10,      CAM_DATA_10 }, \
     { data18,      CAM_DATA_18 }, \
     { fov,         CAM_DATA_FOV }, \
@@ -1390,7 +1390,7 @@ typedef struct {
     { yOffset,        CAM_DATA_Y_OFFSET }, \
     { eyeDist,        CAM_DATA_01 }, \
     { minDistForRot,  CAM_DATA_02 }, \
-    { fov,            CAM_DATA_PITCHTARGET }, \
+    { fov,            CAM_DATA_PITCH_TARGET }, \
     { atMaxLERPScale, CAM_DATA_FOV }, \
     { timerInit,      CAM_DATA_08 }, \
     { pitch,          CAM_DATA_12 }, \
