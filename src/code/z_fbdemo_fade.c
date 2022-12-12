@@ -72,15 +72,15 @@ void TransitionFade_Update(void* thisx, s32 updateRate) {
 
         case 2:
             newAlpha = this->color.a;
-            if (iREG(50) != 0) {
-                if (iREG(50) < 0) {
+            if (R_TRANS_FADE_FLASH_ALPHA_STEP != 0) {
+                if (R_TRANS_FADE_FLASH_ALPHA_STEP < 0) {
                     if (Math_StepToS(&newAlpha, 255, 255)) {
-                        iREG(50) = 150;
+                        R_TRANS_FADE_FLASH_ALPHA_STEP = 150;
                     }
                 } else {
-                    Math_StepToS(&iREG(50), 20, 60);
-                    if (Math_StepToS(&newAlpha, 0, iREG(50))) {
-                        iREG(50) = 0;
+                    Math_StepToS(&R_TRANS_FADE_FLASH_ALPHA_STEP, 20, 60);
+                    if (Math_StepToS(&newAlpha, 0, R_TRANS_FADE_FLASH_ALPHA_STEP)) {
+                        R_TRANS_FADE_FLASH_ALPHA_STEP = 0;
                         this->isDone = true;
                     }
                 }
