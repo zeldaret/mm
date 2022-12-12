@@ -125,7 +125,7 @@ void TransitionFade_SetType(void* thisx, s32 type) {
     } else if (type == TRANS_INSTANCE_TYPE_START) {
         this->type = 1;
         this->direction = 0;
-    } else if (type == TRANS_TYPE_FADE_FLASH) {
+    } else if (type == TRANS_INSTANCE_TYPE_FADE_FLASH) {
         this->type = 2;
     } else {
         this->type = 0;

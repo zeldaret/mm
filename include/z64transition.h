@@ -54,7 +54,7 @@ typedef enum {
     /* 2 */ TRANS_INSTANCE_TYPE_START,
 } TransitionInstanceType;
 
-#define TRANS_TYPE_FADE_FLASH 3
+#define TRANS_INSTANCE_TYPE_FADE_FLASH 3
 
 typedef struct {
     /* 0x0 */ u8 type;
