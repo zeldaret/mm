@@ -50,9 +50,9 @@ typedef struct {
 } TransitionContext; // size = 0x258
 
 typedef enum {
-    /* 1 */ TRANS_FADE_TYPE_IN = 1,
-    /* 2 */ TRANS_FADE_TYPE_OUT,
-} TransitionTypeFade;
+    /* 1 */ TRANS_INSTANCE_TYPE_END = 1,
+    /* 2 */ TRANS_INSTANCE_TYPE_START,
+} TransitionInstanceType;
 
 #define TRANS_TYPE_FADE_FLASH 3
 
@@ -65,8 +65,8 @@ typedef struct {
 } TransitionFade; // size = 0xC
 
 typedef enum {
- /* 0 */ TRANSITION_CIRCLE_FADE_OUT,
- /* 1 */ TRANSITION_CIRCLE_FADE_IN,
+ /* 0 */ TRANSITION_CIRCLE_IN,
+ /* 1 */ TRANSITION_CIRCLE_OUT,
 } TransitionCircleDirection;
 
 #define FBDEMO_CIRCLE_GET_MASK_TYPE(type) (type & 1)
