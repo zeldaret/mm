@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_dekubaba" Segment="6">
-        <Animation Name="object_dekubaba_Anim_000208" Offset="0x208" />
-        <Animation Name="object_dekubaba_Anim_0002B8" Offset="0x2B8" />
+        <Animation Name="object_dekubaba_Anim_000208" Offset="0x208" /> <!-- Original name is "db_P_kougeki" ("attack; assault") -->
+        <Animation Name="object_dekubaba_Anim_0002B8" Offset="0x2B8" /> <!-- Original name is "db_P_tobidasu" ("to appear (suddenly)​") -->
         <DList Name="object_dekubaba_DL_000580" Offset="0x580" />
         <DList Name="object_dekubaba_DL_000B68" Offset="0xB68" />
-        <DList Name="object_dekubaba_DL_0010F0" Offset="0x10F0" />
-        <DList Name="object_dekubaba_DL_001330" Offset="0x1330" />
-        <DList Name="object_dekubaba_DL_001628" Offset="0x1628" />
-        <DList Name="object_dekubaba_DL_001828" Offset="0x1828" />
+        <DList Name="object_dekubaba_DL_0010F0" Offset="0x10F0" /> <!-- Original name is "db_ha_model" ("leaf; blade of grass") -->
+        <DList Name="object_dekubaba_DL_001330" Offset="0x1330" /> <!-- Original name is "db_miki1_model" ("miki" = "trunk") -->
+        <DList Name="object_dekubaba_DL_001628" Offset="0x1628" /> <!-- Original name is "db_miki2_model" -->
+        <DList Name="object_dekubaba_DL_001828" Offset="0x1828" /> <!-- Original name is "db_miki3_model" -->
         <Texture Name="object_dekubaba_Tex_0018D0" OutName="tex_0018D0" Format="rgba16" Width="16" Height="32" Offset="0x18D0" />
         <Texture Name="object_dekubaba_Tex_001CD0" OutName="tex_001CD0" Format="rgba16" Width="32" Height="32" Offset="0x1CD0" />
         <Texture Name="object_dekubaba_Tex_0024D0" OutName="tex_0024D0" Format="rgba16" Width="16" Height="32" Offset="0x24D0" />

@@ -6,6 +6,6 @@
         <Texture Name="object_botihasira_Tex_000648" OutName="tex_000648" Format="rgba16" Width="32" Height="64" Offset="0x648" />
         <Texture Name="object_botihasira_Tex_001648" OutName="tex_001648" Format="rgba16" Width="32" Height="16" Offset="0x1648" />
         <!-- <Blob Name="object_botihasira_Blob_001A48" Size="0x18" Offset="0x1A48" /> -->
-        <Collision Name="object_botihasira_Colheader_001BD8" Offset="0x1BD8" />
+        <Collision Name="object_botihasira_Colheader_001BD8" Offset="0x1BD8" /> <!-- Original name is "z2_botihasira_bgdatainfo" -->
     </File>
 </Root>
