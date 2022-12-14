@@ -93,11 +93,11 @@ void SysCfb_Reset(void) {
     gFramebuffers[1] = NULL;
 }
 
-uintptr_t SysCfb_GetFramebuffer(s32 index) {
+void* SysCfb_GetFramebuffer(s32 index) {
     if (index < 2) {
         return gFramebuffers[index];
     }
-    return (uintptr_t)NULL;
+    return NULL;
 }
 
 u16* SysCfb_GetZBuffer(void) {
@@ -109,10 +109,9 @@ void* SysCfb_GetWorkBuffer(void) {
 }
 
 u16 SysCfb_GetZBufferPixel(s32 x, s32 y) {
-    u16* zBuff;
+    u16* zBuff = SysCfb_GetZBuffer();
     u16 val;
 
-    zBuff = SysCfb_GetZBuffer();
     if (zBuff != NULL) {
         val = (&zBuff[x])[y * gCfbWidth];
     } else {

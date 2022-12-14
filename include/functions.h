@@ -1322,7 +1322,7 @@ void Font_LoadCharNES(PlayState* play, u8 codePointIndex, s32 offset);
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
 void Font_LoadOrderedFont(Font* font);
 // void func_800F5090(void);
-s32 Environment_ZBufValToFixedPoint(s32);
+s32 Environment_ZBufValToFixedPoint(s32 zBufferVal);
 void Kankyo_Init(PlayState* play, EnvironmentContext* envCtx);
 u32 func_800F5954(u8* param_1, u32 param_2, u32 param_3, u8 param_4, u8 param_5);
 f32 Environment_LerpWeight(u16 max, u16 min, u16 val);
@@ -2561,7 +2561,7 @@ void func_8017842C(MtxF* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32 arg5,
 void SysCfb_SetLoResMode(void);
 void SysCfb_SetHiResMode(void);
 void SysCfb_Init(void);
-uintptr_t SysCfb_GetFramebuffer(s32 index);
+void* SysCfb_GetFramebuffer(s32 index);
 u16* SysCfb_GetZBuffer(void);
 void* SysCfb_GetWorkBuffer(void);
 u16 SysCfb_GetZBufferPixel(s32 x, s32 y);

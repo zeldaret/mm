@@ -1014,10 +1014,10 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x00 */ u32 type;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8_u32 color;
-    /* 0x0C */ Color_RGBA8 envColor;
+    /* 0x0 */ u32 type;
+    /* 0x4 */ u32 setScissor;
+    /* 0x8 */ Color_RGBA8_u32 color;
+    /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
 typedef struct {
@@ -1134,21 +1134,21 @@ typedef enum {
 } ViModeEditState;
 
 typedef struct {
-    /* 0x0000 */ OSViMode customViMode;
-    /* 0x0050 */ s32 viHeight;
-    /* 0x0054 */ s32 viWidth;
-    /* 0x0058 */ s32 rightAdjust;
-    /* 0x005c */ s32 leftAdjust;
-    /* 0x0060 */ s32 lowerAdjust;
-    /* 0x0064 */ s32 upperAdjust;
-    /* 0x0068 */ s32 editState;
-    /* 0x006C */ s32 tvType;
-    /* 0x0070 */ u32 loRes;
-    /* 0x0074 */ u32 antialiasOff;
-    /* 0x0078 */ u32 modeN;
-    /* 0x007c */ u32 fb16Bit;
-    /* 0x0080 */ u32 viFeatures;
-    /* 0x0084 */ u32 unk_84;
+    /* 0x00 */ OSViMode customViMode;
+    /* 0x50 */ s32 viHeight;
+    /* 0x54 */ s32 viWidth;
+    /* 0x58 */ s32 rightAdjust;
+    /* 0x5C */ s32 leftAdjust;
+    /* 0x60 */ s32 lowerAdjust;
+    /* 0x64 */ s32 upperAdjust;
+    /* 0x68 */ s32 editState;
+    /* 0x6C */ s32 tvType;
+    /* 0x70 */ u32 loRes;
+    /* 0x74 */ u32 antialiasOff;
+    /* 0x78 */ u32 modeN;
+    /* 0x7C */ u32 fb16Bit;
+    /* 0x80 */ u32 viFeatures;
+    /* 0x84 */ u32 unk_84;
 } ViMode; // size = 0x88
 
 #endif
