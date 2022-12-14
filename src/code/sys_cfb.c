@@ -1,5 +1,7 @@
 #include "global.h"
 
+#define D_80780000 gPictoPhotoI8
+
 OSViMode sNotebookViMode;
 void* gFramebuffers[2];
 OSViMode* gActiveViMode;
