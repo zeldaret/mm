@@ -11,22 +11,24 @@
 typedef enum {
     /* 0 */ EN_RAF_TYPE_NORMAL,
     /* 1 */ EN_RAF_TYPE_DORMANT,              // Spawns without trap, so it can't eat bombs/player
-    /* 2 */ EN_RAF_TYPE_NO_WATER_INTERACTIONS // Won't produce ripples, and particles won't produce splashes
+    /* 2 */ EN_RAF_TYPE_NO_WATER_INTERACTIONS // Won't produce ripples, and effects won't produce splashes
 } EnRafType;
 
 struct EnRaf;
 
-typedef void (*EnRafActionFunc)(struct EnRaf*, GlobalContext*);
+typedef void (*EnRafActionFunc)(struct EnRaf*, PlayState*);
 
 typedef struct {
-    /* 0x00 */ u8 isVisible;
-    /* 0x04 */ Vec3f position;
+    /* 0x00 */ u8 isEnabled;
+    /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f velocity;
-    /* 0x1C */ Vec3f acceleration;
+    /* 0x1C */ Vec3f accel;
     /* 0x28 */ Vec3s rotation;
     /* 0x30 */ f32 scale;
     /* 0x34 */ s16 timer;
-} EnRafParticle; // size = 0x38
+} EnRafEffect; // size = 0x38
+
+#define EN_RAF_EFFECT_COUNT 31
 
 typedef struct EnRaf {
     /* 0x000 */ DynaPolyActor dyna;
@@ -59,9 +61,7 @@ typedef struct EnRaf {
     /* 0x3CC */ s16 petalClearPixelSecondPassIndex;
     /* 0x3CE */ s16 teethClearPixelSecondPassIndex;
     /* 0x3D0 */ ColliderCylinder collider;
-    /* 0x41C */ EnRafParticle particles[31];
+    /* 0x41C */ EnRafEffect effects[EN_RAF_EFFECT_COUNT];
 } EnRaf; // size = 0xAE4
-
-extern const ActorInit En_Raf_InitVars;
 
 #endif // Z_EN_RAF_H

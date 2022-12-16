@@ -11,12 +11,12 @@
 
 #define THIS ((BgOpenSpot*)thisx)
 
-void BgOpenSpot_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenSpot_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenSpot_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgOpenSpot_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgOpenSpot_Init(Actor* thisx, PlayState* play);
+void BgOpenSpot_Destroy(Actor* thisx, PlayState* play);
+void BgOpenSpot_Update(Actor* thisx, PlayState* play);
+void BgOpenSpot_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Open_Spot_InitVars = {
+ActorInit Bg_Open_Spot_InitVars = {
     ACTOR_BG_OPEN_SPOT,
     ACTORCAT_PROP,
     FLAGS,
@@ -35,22 +35,22 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgOpenSpot_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgOpenSpot_Init(Actor* thisx, PlayState* play) {
     BgOpenSpot* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->texScrolls = Lib_SegmentedToVirtual(gSpotlightTexAnim);
 }
 
-void BgOpenSpot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgOpenSpot_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void BgOpenSpot_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgOpenSpot_Update(Actor* thisx, PlayState* play) {
     BgOpenSpot* this = THIS;
     u32 action;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x7D)) {
-        action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x7D)]->action;
+    if (Cutscene_CheckActorAction(play, 0x7D)) {
+        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7D)]->action;
         if (action == 1) {
             this->actor.draw = NULL;
         } else if (action == 2) {
@@ -59,18 +59,18 @@ void BgOpenSpot_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgOpenSpot_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgOpenSpot_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BgOpenSpot* this = (BgOpenSpot*)thisx;
 
-    AnimatedMat_Draw(globalCtx, this->texScrolls);
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    AnimatedMat_Draw(play, this->texScrolls);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+    func_8012C2DC(play->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
     gSPDisplayList(POLY_XLU_DISP++, gSpotlightLeftDL);
     gSPDisplayList(POLY_XLU_DISP++, gSpotlightRightDL);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

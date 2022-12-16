@@ -9,7 +9,7 @@
 
 struct EnTalkGibud;
 
-typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, GlobalContext*);
+typedef void (*EnTalkGibudActionFunc)(struct EnTalkGibud*, PlayState*);
 
 typedef struct EnTalkGibud {
     /* 0x000 */ Actor actor;
@@ -44,7 +44,5 @@ typedef struct EnTalkGibud {
     /* 0x3F6 */ u8 drawDmgEffType;
     /* 0x3F7 */ s8 unk_3F7; // related to player->unk_ADD
 } EnTalkGibud; // size = 0x3F8
-
-extern const ActorInit En_Talk_Gibud_InitVars;
 
 #endif // Z_EN_TALK_GIBUD_H

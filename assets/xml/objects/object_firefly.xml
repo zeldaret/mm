@@ -49,6 +49,6 @@
         <Limb Name="object_firefly_Standardlimb_001828" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_19" Offset="0x1828" />
         <Limb Name="object_firefly_Standardlimb_001834" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_1A" Offset="0x1834" />
         <Limb Name="object_firefly_Standardlimb_001840" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_1B" Offset="0x1840" />
-        <Skeleton Name="object_firefly_Skel_0018B8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_FIREFLY_LIMB_NONE" LimbMax="OBJECT_FIREFLY_LIMB_MAX" EnumName="object_firefly_Limbs" Offset="0x18B8" />
+        <Skeleton Name="object_firefly_Skel_0018B8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_FIREFLY_LIMB_NONE" LimbMax="OBJECT_FIREFLY_LIMB_MAX" EnumName="ObjectFireflyLimb" Offset="0x18B8" />
     </File>
 </Root>

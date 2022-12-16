@@ -11,21 +11,21 @@
 
 #define THIS ((BgIkanaBombwall*)thisx)
 
-void BgIkanaBombwall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaBombwall_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgIkanaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgIkanaBombwall_Init(Actor* thisx, PlayState* play);
+void BgIkanaBombwall_Destroy(Actor* thisx, PlayState* play);
+void BgIkanaBombwall_Update(Actor* thisx, PlayState* play);
+void BgIkanaBombwall_Draw(Actor* thisx, PlayState* play);
 
 void func_80BD4F18(BgIkanaBombwall* this);
-void func_80BD4F2C(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD4F2C(BgIkanaBombwall* this, PlayState* play);
 void func_80BD4F88(BgIkanaBombwall* this);
-void func_80BD4F9C(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD4F9C(BgIkanaBombwall* this, PlayState* play);
 void func_80BD4FF8(BgIkanaBombwall* this);
-void func_80BD503C(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD503C(BgIkanaBombwall* this, PlayState* play);
 void func_80BD5118(BgIkanaBombwall* this);
-void func_80BD5134(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD5134(BgIkanaBombwall* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Bombwall_InitVars = {
+ActorInit Bg_Ikana_Bombwall_InitVars = {
     ACTOR_BG_IKANA_BOMBWALL,
     ACTORCAT_BG,
     FLAGS,
@@ -97,7 +97,7 @@ Gfx* D_80BD52E0[] = {
 };
 
 #ifdef NON_MATCHING
-void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
+void func_80BD4720(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f spE0;
     Vec3f spD4;
@@ -139,7 +139,7 @@ void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
 
         if ((i & 3) == 0) {
             phi_s0 = 32;
-            func_800BBFB0(globalCtx, &spE0, 50.0f, 2, 100, 120, 1);
+            func_800BBFB0(play, &spE0, 50.0f, 2, 100, 120, 1);
         } else {
             phi_s0 = 64;
         }
@@ -157,18 +157,18 @@ void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx) {
             temp = -450;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spE0, &spD4, &spE0, temp, phi_s0, 30, 0, 0, D_80BD52C8[i & 3], phi_t0, 0, 50,
-                             -1, OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
+        EffectSsKakera_Spawn(play, &spE0, &spD4, &spE0, temp, phi_s0, 30, 0, 0, D_80BD52C8[i & 3], phi_t0, 0, 50, -1,
+                             OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
     }
 
     Matrix_Pop();
 }
 #else
-void func_80BD4720(BgIkanaBombwall* this, GlobalContext* globalCtx);
+void func_80BD4720(BgIkanaBombwall* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ikana_Bombwall/func_80BD4720.s")
 #endif
 
-void func_80BD4A14(BgIkanaBombwall* this, GlobalContext* globalCtx) {
+void func_80BD4A14(BgIkanaBombwall* this, PlayState* play) {
     s32 i;
     Vec3f spD8;
     Vec3f spCC;
@@ -217,17 +217,17 @@ void func_80BD4A14(BgIkanaBombwall* this, GlobalContext* globalCtx) {
             phi_t0 = -400;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spD8, &spCC, &spD8, phi_t0, phi_v0, 30, 0, 0, temp_v1, phi_v1, 0, 50, -1,
+        EffectSsKakera_Spawn(play, &spD8, &spCC, &spD8, phi_t0, phi_v0, 30, 0, 0, temp_v1, phi_v1, 0, 50, -1,
                              OBJECT_IKANA_OBJ, object_ikana_obj_DL_000288);
 
         if ((i & 3) == 0) {
             spD8.y += 30.0f;
-            func_800BBFB0(globalCtx, &spD8, 50.0f, 2, 70, 110, 1);
+            func_800BBFB0(play, &spD8, 50.0f, 2, 70, 110, 1);
         }
     }
 }
 
-void BgIkanaBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIkanaBombwall* this = THIS;
     s32 sp2C = BGIKANABOMBWALL_GET_100(&this->dyna.actor);
@@ -236,10 +236,10 @@ void BgIkanaBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_InitCylinder(play, &this->collider);
 
-    if (Flags_GetSwitch(globalCtx, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+    if (Flags_GetSwitch(play, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor))) {
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -251,8 +251,8 @@ void BgIkanaBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
         sp24 = &sCylinderInit2;
     }
 
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, sp28);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, sp24);
+    DynaPolyActor_LoadMesh(play, &this->dyna, sp28);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, sp24);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     if (sp2C == 0) {
@@ -262,11 +262,11 @@ void BgIkanaBombwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void BgIkanaBombwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaBombwall_Destroy(Actor* thisx, PlayState* play) {
     BgIkanaBombwall* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 s32 func_80BD4E44(BgIkanaBombwall* this) {
@@ -293,11 +293,11 @@ void func_80BD4F18(BgIkanaBombwall* this) {
     this->actionFunc = func_80BD4F2C;
 }
 
-void func_80BD4F2C(BgIkanaBombwall* this, GlobalContext* globalCtx) {
+void func_80BD4F2C(BgIkanaBombwall* this, PlayState* play) {
     if (func_80BD4E44(this)) {
         func_80BD4FF8(this);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -305,11 +305,11 @@ void func_80BD4F88(BgIkanaBombwall* this) {
     this->actionFunc = func_80BD4F9C;
 }
 
-void func_80BD4F9C(BgIkanaBombwall* this, GlobalContext* globalCtx) {
+void func_80BD4F9C(BgIkanaBombwall* this, PlayState* play) {
     if (func_80BD4EAC(this)) {
         func_80BD4FF8(this);
     } else {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -319,19 +319,19 @@ void func_80BD4FF8(BgIkanaBombwall* this) {
     this->actionFunc = func_80BD503C;
 }
 
-void func_80BD503C(BgIkanaBombwall* this, GlobalContext* globalCtx) {
+void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
-            func_80BD4720(this, globalCtx);
+            func_80BD4720(this, play);
         } else {
-            func_80BD4A14(this, globalCtx);
+            func_80BD4A14(this, play);
         }
         this->dyna.actor.draw = NULL;
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
-        Flags_SetSwitch(globalCtx, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 60, NA_SE_EV_WALL_BROKEN);
+        Flags_SetSwitch(play, BGIKANABOMBWALL_GET_SWITCHFLAG(&this->dyna.actor));
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
-            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         }
         func_80BD5118(this);
     } else {
@@ -344,28 +344,28 @@ void func_80BD5118(BgIkanaBombwall* this) {
     this->actionFunc = func_80BD5134;
 }
 
-void func_80BD5134(BgIkanaBombwall* this, GlobalContext* globalCtx) {
+void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
     if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
         this->unk_1AC--;
         if (this->unk_1AC <= 0) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     } else if (this->dyna.actor.cutscene >= 0) {
         if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     } else {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgIkanaBombwall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgIkanaBombwall_Update(Actor* thisx, PlayState* play) {
     BgIkanaBombwall* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgIkanaBombwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_80BD52E0[BGIKANABOMBWALL_GET_100(thisx)]);
+void BgIkanaBombwall_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, D_80BD52E0[BGIKANABOMBWALL_GET_100(thisx)]);
 }

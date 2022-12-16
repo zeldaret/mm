@@ -38,7 +38,7 @@
         <Limb Name="gDekuScrubRightFootLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_RIGHT_FOOT" Offset="0x2438" />
 
         <!-- Deku Scrub Skeleton -->
-        <Skeleton Name="gDekuScrubSkel" Type="Normal" LimbType="Standard" LimbNone="DEKU_SCRUB_LIMB_NONE" LimbMax="DEKU_SCRUB_LIMB_MAX" EnumName="DekuScrubLimbs" Offset="0x2468" />
+        <Skeleton Name="gDekuScrubSkel" Type="Normal" LimbType="Standard" LimbNone="DEKU_SCRUB_LIMB_NONE" LimbMax="DEKU_SCRUB_LIMB_MAX" EnumName="DekuScrubLimb" Offset="0x2468" />
 
         <!-- Deku Scrub Animations -->
         <Animation Name="gDekuScrubDamageAnim" Offset="0x259C" /> <!-- Original name is "dn_damage" -->

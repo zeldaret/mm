@@ -5,7 +5,7 @@
 
 struct EnHanabi;
 
-typedef void (*EnHanabiActionFunc)(struct EnHanabi*, GlobalContext*);
+typedef void (*EnHanabiActionFunc)(struct EnHanabi*, PlayState*);
 
 #define ENHANABI_GET_1F(thisx) ((thisx)->params & 0x1F)
 
@@ -31,7 +31,5 @@ typedef struct EnHanabi {
     /* 0x4648 */ s32 unk_4648[3];
     /* 0x4654 */ EnHanabiActionFunc actionFunc;
 } EnHanabi; // size = 0x4658
-
-extern const ActorInit En_Hanabi_InitVars;
 
 #endif // Z_EN_HANABI_H

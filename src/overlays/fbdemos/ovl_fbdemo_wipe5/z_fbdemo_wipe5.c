@@ -6,6 +6,8 @@
 
 #include "z_fbdemo_wipe5.h"
 
+#define THIS ((TransitionWipe5*)thisx)
+
 void* TransitionWipe5_Init(void* thisx);
 void TransitionWipe5_Destroy(void* thisx);
 void TransitionWipe5_Update(void* thisx, s32 updateRate);
@@ -16,37 +18,129 @@ void TransitionWipe5_SetColor(void* thisx, u32 color);
 void TransitionWipe5_SetEnvColor(void* thisx, u32 color);
 s32 TransitionWipe5_IsDone(void* thisx);
 
-#if 0
-const TransitionInit TransitionWipe5_InitVars = {
-    TransitionWipe5_Init,
-    TransitionWipe5_Destroy,
-    TransitionWipe5_Update,
-    TransitionWipe5_Draw,
-    TransitionWipe5_Start,
-    TransitionWipe5_SetType,
-    TransitionWipe5_SetColor,
-    TransitionWipe5_SetEnvColor,
-    TransitionWipe5_IsDone,
+TransitionInit TransitionWipe5_InitVars = {
+    TransitionWipe5_Init,     TransitionWipe5_Destroy,     TransitionWipe5_Update,
+    TransitionWipe5_Draw,     TransitionWipe5_Start,       TransitionWipe5_SetType,
+    TransitionWipe5_SetColor, TransitionWipe5_SetEnvColor, TransitionWipe5_IsDone,
 };
 
-#endif
+void TransitionWipe5_Start(void* thisx) {
+    TransitionWipe5* this = THIS;
 
-extern UNK_TYPE D_0F000000;
+    this->isDone = false;
+    switch (this->unk_12) {
+        case 0:
+            this->unk_08 = 0.02f;
+            break;
+        case 1:
+            this->unk_08 = 0.05f;
+            break;
+        default:
+            this->unk_08 = 0.2f;
+            break;
+    }
+    switch (this->unk_11) {
+        case 0:
+            this->primColor.rgba = RGBA8(0, 0, 0, 255);
+            break;
+        case 1:
+            this->primColor.rgba = RGBA8(160, 160, 160, 255);
+            break;
+        default:
+            this->primColor.rgba = RGBA8(160, 160, 160, 255);
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Start.s")
+void* TransitionWipe5_Init(void* thisx) {
+    TransitionWipe5* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Init.s")
+    bzero(this, sizeof(TransitionWipe5));
+    return this;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Destroy.s")
+void TransitionWipe5_Destroy(void* thisx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Update.s")
+void TransitionWipe5_Update(void* thisx, s32 updateRate) {
+    TransitionWipe5* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_Draw.s")
+    if (this->unk_10 == 0) {
+        this->isDone = true;
+    } else {
+        this->unk_0C += (this->unk_08 * 3.0f) / updateRate;
+        if (this->unk_0C >= 1.0f) {
+            this->unk_0C = 1.0f;
+            this->isDone = true;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_IsDone.s")
+void TransitionWipe5_Draw(void* thisx, Gfx** gfxP) {
+    Gfx* gfx = *gfxP;
+    s32 width = gScreenWidth;
+    s32 height = gScreenHeight;
+    s32 sp50 = D_801FBB90;
+    TransitionWipe5* this = THIS;
+    s32 alpha = (1.0f - this->unk_0C) * 255.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_SetType.s")
+    gDPPipeSync(gfx++);
+    gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
+    if (this->unk_10 == 0) {
+        gDPSetOtherMode(gfx++,
+                        G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                            G_TD_CLAMP | G_TP_NONE | G_CYC_COPY | G_PM_NPRIMITIVE,
+                        G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
+        func_8014116C(&gfx, D_0F000000, sp50, width, height, 1);
+    } else {
+        if (alpha == 255) {
+            gDPSetOtherMode(gfx++,
+                            G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                                G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                            G_AC_NONE | G_ZS_PRIM | G_RM_OPA_SURF | G_RM_OPA_SURF2);
+        } else {
+            gDPSetOtherMode(gfx++,
+                            G_AD_NOISE | G_CD_NOISE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                                G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                            G_AC_NONE | G_ZS_PRIM | G_RM_CLD_SURF | G_RM_CLD_SURF2);
+        }
+        gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
+        gDPSetCombineLERP(gfx++, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, ENVIRONMENT, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0,
+                          ENVIRONMENT);
+        func_8014116C(&gfx, sp50, D_0F000000, width, height, 0);
+    }
+    gDPPipeSync(gfx++);
+    gSPLoadUcode(gfx++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
+    *gfxP = gfx;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_SetColor.s")
+s32 TransitionWipe5_IsDone(void* thisx) {
+    TransitionWipe5* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_fbdemo_wipe5/TransitionWipe5_SetEnvColor.s")
+    return this->isDone;
+}
+
+void TransitionWipe5_SetType(void* thisx, s32 type) {
+    TransitionWipe5* this = THIS;
+
+    if (type & 0x80) {
+        this->unk_11 = 0;
+        this->unk_12 = type & 1;
+    } else if (type == 1) {
+        this->unk_10 = 1;
+    } else {
+        this->unk_10 = 0;
+    }
+}
+
+void TransitionWipe5_SetColor(void* thisx, u32 color) {
+    TransitionWipe5* this = THIS;
+
+    this->primColor.rgba = color;
+}
+
+void TransitionWipe5_SetEnvColor(void* thisx, u32 color) {
+    TransitionWipe5* this = THIS;
+
+    this->envColor.rgba = color;
+}

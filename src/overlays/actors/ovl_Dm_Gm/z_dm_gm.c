@@ -1,7 +1,7 @@
 /*
  * File: z_dm_gm.c
  * Overlay: ovl_Dm_Gm
- * Description: Anju (cutscene) (duplicate of Dm_An?)
+ * Description: Complete duplicate of Dm_An
  */
 
 #include "z_dm_gm.h"
@@ -12,16 +12,16 @@
 
 #define THIS ((DmGm*)thisx)
 
-void DmGm_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmGm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmGm_Update(Actor* thisx, GlobalContext* globalCtx);
+void DmGm_Init(Actor* thisx, PlayState* play);
+void DmGm_Destroy(Actor* thisx, PlayState* play);
+void DmGm_Update(Actor* thisx, PlayState* play);
 
-void func_80C248A8(DmGm* this, GlobalContext* globalCtx);
-void func_80C24A00(DmGm* this, GlobalContext* globalCtx);
-void func_80C24BD0(DmGm* this, GlobalContext* globalCtx);
-void func_80C25000(Actor* thisx, GlobalContext* globalCtx);
+void func_80C248A8(DmGm* this, PlayState* play);
+void func_80C24A00(DmGm* this, PlayState* play);
+void func_80C24BD0(DmGm* this, PlayState* play);
+void func_80C25000(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Gm_InitVars = {
+ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -33,7 +33,7 @@ const ActorInit Dm_Gm_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -50,7 +50,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 func_80C24360(DmGm* this, GlobalContext* globalCtx) {
+s32 func_80C24360(DmGm* this, PlayState* play) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
     s32 ret = false;
@@ -62,14 +62,14 @@ s32 func_80C24360(DmGm* this, GlobalContext* globalCtx) {
     }
 
     if (objectIndex2 >= 0) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objectIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
     return ret;
 }
 
-s32 func_80C24428(DmGm* this, GlobalContext* globalCtx, s32 arg2) {
+s32 func_80C24428(DmGm* this, PlayState* play, s32 arg2) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
     s32 ret = false;
@@ -81,10 +81,10 @@ s32 func_80C24428(DmGm* this, GlobalContext* globalCtx, s32 arg2) {
     }
 
     if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         this->unk_2C8 = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objectIndex].segment);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
     return ret;
 }
@@ -99,7 +99,7 @@ void func_80C24504(DmGm* this) {
     }
 }
 
-s32 func_80C2457C(DmGm* this, GlobalContext* globalCtx) {
+s32 func_80C2457C(DmGm* this, PlayState* play) {
     s32 pad;
     Vec3f sp40;
     Vec3f sp34;
@@ -130,9 +130,9 @@ s32 func_80C2457C(DmGm* this, GlobalContext* globalCtx) {
     return true;
 }
 
-s32 func_80C2478C(DmGm* this, GlobalContext* globalCtx) {
+s32 func_80C2478C(DmGm* this, PlayState* play) {
     if (this->unk_2B4 != NULL) {
-        func_80C2457C(this, globalCtx);
+        func_80C2457C(this, play);
         this->unk_2AE &= ~1;
         this->unk_2AE |= 2;
     } else if (this->unk_2AE & 2) {
@@ -148,12 +148,12 @@ s32 func_80C2478C(DmGm* this, GlobalContext* globalCtx) {
     return true;
 }
 
-Actor* func_80C24838(GlobalContext* globalCtx) {
+Actor* func_80C24838(PlayState* play) {
     Actor* tempActor;
     Actor* foundActor = NULL;
 
     while (true) {
-        foundActor = SubS_FindActor(globalCtx, foundActor, ACTORCAT_NPC, ACTOR_DM_AH);
+        foundActor = SubS_FindActor(play, foundActor, ACTORCAT_NPC, ACTOR_DM_AH);
 
         if ((foundActor == NULL) || (foundActor->update != NULL)) {
             break;
@@ -169,23 +169,23 @@ Actor* func_80C24838(GlobalContext* globalCtx) {
     return foundActor;
 }
 
-void func_80C248A8(DmGm* this, GlobalContext* globalCtx) {
-    if ((this->unk_2AC >= 0) && SubS_IsObjectLoaded(this->unk_2AC, globalCtx) && (this->unk_2AD >= 0) &&
-        SubS_IsObjectLoaded(this->unk_2AD, globalCtx)) {
+void func_80C248A8(DmGm* this, PlayState* play) {
+    if ((this->unk_2AC >= 0) && SubS_IsObjectLoaded(this->unk_2AC, play) && (this->unk_2AD >= 0) &&
+        SubS_IsObjectLoaded(this->unk_2AD, play)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable,
-                           this->morphTable, OBJECT_AN1_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
+                           OBJECT_AN1_LIMB_MAX);
 
         this->unk_2C8 = -1;
-        func_80C24428(this, globalCtx, 0);
+        func_80C24428(this, play, 0);
         this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
         this->actor.draw = func_80C25000;
 
-        if ((globalCtx->sceneNum == SCENE_YADOYA) && (globalCtx->curSpawn == 4)) {
-            this->unk_2B4 = func_80C24838(globalCtx);
-            func_80C24428(this, globalCtx, 1);
+        if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
+            this->unk_2B4 = func_80C24838(play);
+            func_80C24428(this, play, 1);
             this->actionFunc = func_80C24BD0;
         } else {
             this->actionFunc = func_80C24A00;
@@ -193,12 +193,12 @@ void func_80C248A8(DmGm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80C24A00(DmGm* this, GlobalContext* globalCtx) {
+void func_80C24A00(DmGm* this, PlayState* play) {
     s32 sp28[] = { 0, 0, 12, 2, 4, 6, 8, 10, 11, 3 };
     u16 action;
     s32 sp20;
 
-    if (globalCtx->csCtx.state != 0) {
+    if (play->csCtx.state != 0) {
         if (this->unk_2D0 == 0) {
             this->unk_2B0 = 255;
             this->unk_2D0 = 1;
@@ -206,14 +206,14 @@ void func_80C24A00(DmGm* this, GlobalContext* globalCtx) {
             this->unk_2CC = this->unk_2C8;
         }
 
-        if (Cutscene_CheckActorAction(globalCtx, 0x22D)) {
-            sp20 = Cutscene_GetActorActionIndex(globalCtx, 0x22D);
-            action = globalCtx->csCtx.actorActions[sp20]->action;
+        if (Cutscene_CheckActorAction(play, 0x22D)) {
+            sp20 = Cutscene_GetActorActionIndex(play, 0x22D);
+            action = play->csCtx.actorActions[sp20]->action;
 
             if (this->unk_2B0 != (action & 0xFF)) {
                 this->unk_2B0 = action;
                 this->unk_2D4 = 1;
-                func_80C24428(this, globalCtx, sp28[action]);
+                func_80C24428(this, play, sp28[action]);
             }
 
             switch (this->unk_2B0) {
@@ -225,72 +225,72 @@ void func_80C24A00(DmGm* this, GlobalContext* globalCtx) {
                 case 8:
                     if ((this->unk_2C8 == 12) || (this->unk_2C8 == 4) || (this->unk_2C8 == 6) || (this->unk_2C8 == 8)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                            func_80C24428(this, globalCtx, this->unk_2C8 + 1);
+                            func_80C24428(this, play, this->unk_2C8 + 1);
                         }
                     }
                     break;
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, sp20);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, sp20);
         }
     } else if (this->unk_2D0 != 0) {
         this->unk_2D0 = 0;
         this->unk_2D4 = 0;
-        func_80C24428(this, globalCtx, this->unk_2CC);
+        func_80C24428(this, play, this->unk_2CC);
     }
 }
 
-void func_80C24BD0(DmGm* this, GlobalContext* globalCtx) {
+void func_80C24BD0(DmGm* this, PlayState* play) {
 }
 
-void DmGm_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmGm_Init(Actor* thisx, PlayState* play) {
     DmGm* this = THIS;
 
-    this->unk_2AC = SubS_GetObjectIndex(OBJECT_AN4, globalCtx);
-    this->unk_2AD = SubS_GetObjectIndex(OBJECT_MSMO, globalCtx);
+    this->unk_2AC = SubS_GetObjectIndex(OBJECT_AN4, play);
+    this->unk_2AD = SubS_GetObjectIndex(OBJECT_MSMO, play);
     this->actionFunc = func_80C248A8;
 }
 
-void DmGm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmGm_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmGm_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmGm_Update(Actor* thisx, PlayState* play) {
     DmGm* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
-    func_80C2478C(this, globalCtx);
+    func_80C2478C(this, play);
 
     if (this->actor.draw != NULL) {
-        func_80C24360(this, globalCtx);
+        func_80C24360(this, play);
         func_80C24504(this);
     }
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
 }
 
 Vec3f D_80C25218 = { 450.0f, 700.0f, -760.0f };
 Vec3s D_80C25224 = { 0x238C, 0, -0x3FFC };
 Vec3f D_80C2522C = { 1000.0f, 0.0f, 0.0f };
 
-void DmGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
     DmGm* this = THIS;
     s8 sp2B = this->actor.objBankIndex;
     s8 sp2A = this->unk_2AD;
 
     if ((limbIndex == OBJECT_AN1_LIMB_05) && (this->unk_2D4 != 0)) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
         Matrix_TranslateRotateZYX(&D_80C25218, &D_80C25224);
 
-        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[sp2A].segment);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2A].segment);
         gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[sp2B].segment);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp2B].segment);
 
         Matrix_Pop();
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 
     if (limbIndex == OBJECT_AN1_LIMB_09) {
@@ -299,7 +299,7 @@ void DmGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void DmGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void DmGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     DmGm* this = THIS;
     s16 stepRot;
     s16 overrideRot;
@@ -351,19 +351,19 @@ TexturePtr D_80C25244[] = {
     object_an1_Tex_00FDA0, object_an1_Tex_00F9A0, object_an1_Tex_0103A0,
 };
 
-void func_80C25000(Actor* thisx, GlobalContext* globalCtx) {
+void func_80C25000(Actor* thisx, PlayState* play) {
     DmGm* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C25244[this->unk_2B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C25238[0]));
 
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+    SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, DmGm_PostLimbDraw, DmGm_TransformLimbDraw,
                                    &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -5,9 +5,9 @@
 
 struct EnTrt2;
 
-typedef void (*EnTrt2ActionFunc)(struct EnTrt2*, GlobalContext*);
+typedef void (*EnTrt2ActionFunc)(struct EnTrt2*, PlayState*);
 typedef void (*EnTrt2UnkFunc)(struct EnTrt2*);
-typedef void (*EnTrt2UnkFunc2)(struct EnTrt2*, GlobalContext*);
+typedef void (*EnTrt2UnkFunc2)(struct EnTrt2*, PlayState*);
 
 #define ENTRT2_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
@@ -40,7 +40,5 @@ typedef struct EnTrt2 {
     /* 0x3D9 */ u8 unk_3D9;
     /* 0x3DA */ s16 unk_3DA;
 } EnTrt2; // size = 0x3DC
-
-extern const ActorInit En_Trt2_InitVars;
 
 #endif // Z_EN_TRT2_H

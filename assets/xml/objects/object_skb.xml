@@ -55,7 +55,7 @@
         <Limb Name="object_skb_Standardlimb_005E88" Type="Standard" EnumName="OBJECT_SKB_LIMB_11" Offset="0x5E88" />
         <Limb Name="object_skb_Standardlimb_005E94" Type="Standard" EnumName="OBJECT_SKB_LIMB_12" Offset="0x5E94" />
         <Limb Name="object_skb_Standardlimb_005EA0" Type="Standard" EnumName="OBJECT_SKB_LIMB_13" Offset="0x5EA0" />
-        <Skeleton Name="object_skb_Skel_005EF8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_SKB_LIMB_NONE" LimbMax="OBJECT_SKB_LIMB_MAX" EnumName="object_skb_Limbs" Offset="0x5EF8" />
+        <Skeleton Name="object_skb_Skel_005EF8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_SKB_LIMB_NONE" LimbMax="OBJECT_SKB_LIMB_MAX" EnumName="ObjectSkbLimb" Offset="0x5EF8" />
         <Animation Name="object_skb_Anim_0064E0" Offset="0x64E0" />
         <!-- <Blob Name="object_skb_zeroes_unk_000064F0" Size="0x20" Offset="0x64F0" /> -->
         <Animation Name="object_skb_Anim_00697C" Offset="0x697C" />

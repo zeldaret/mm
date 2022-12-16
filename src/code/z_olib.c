@@ -123,14 +123,14 @@ VecSph* OLib_Vec3fToVecSph(VecSph* dest, Vec3f* vec) {
     if ((dist == 0.0f) && (vec->y == 0.0f)) {
         sph.pitch = 0;
     } else {
-        sph.pitch = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(dist, vec->y)));
+        sph.pitch = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(dist, vec->y)));
     }
 
     sph.r = sqrtf(SQ(vec->y) + distSquared);
     if ((vec->x == 0.0f) && (vec->z == 0.0f)) {
         sph.yaw = 0;
     } else {
-        sph.yaw = DEGF_TO_BINANG(RADF_TO_DEGF(func_80086B30(vec->x, vec->z)));
+        sph.yaw = CAM_DEG_TO_BINANG(RADF_TO_DEGF(func_80086B30(vec->x, vec->z)));
     }
 
     *dest = sph;
@@ -238,8 +238,8 @@ Vec3s* OLib_Vec3fDiffBinAng(Vec3s* dest, Vec3f* a, Vec3f* b) {
 
     OLib_Vec3fDiffRad(&anglesRad, a, b);
 
-    anglesBinAng.x = DEGF_TO_BINANG(RADF_TO_DEGF(anglesRad.x));
-    anglesBinAng.y = DEGF_TO_BINANG(RADF_TO_DEGF(anglesRad.y));
+    anglesBinAng.x = CAM_DEG_TO_BINANG(RADF_TO_DEGF(anglesRad.x));
+    anglesBinAng.y = CAM_DEG_TO_BINANG(RADF_TO_DEGF(anglesRad.y));
     anglesBinAng.z = 0.0f;
 
     *dest = anglesBinAng;

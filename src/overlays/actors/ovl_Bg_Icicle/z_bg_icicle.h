@@ -5,7 +5,7 @@
 
 struct BgIcicle;
 
-typedef void (*BgIcicleActionFunc)(struct BgIcicle*, GlobalContext*);
+typedef void (*BgIcicleActionFunc)(struct BgIcicle*, PlayState*);
 
 typedef enum {
     /* 0 */ ICICLE_STALAGMITE_RANDOM_DROP,
@@ -22,7 +22,5 @@ typedef struct BgIcicle {
     /* 0x162 */ s16 shiverTimer;
     /* 0x164 */ ColliderCylinder collider;
 } BgIcicle; // size = 0x1B0
-
-extern const ActorInit Bg_Icicle_InitVars;
 
 #endif // Z_BG_ICICLE_H

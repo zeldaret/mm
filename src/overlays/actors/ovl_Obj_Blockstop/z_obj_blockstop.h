@@ -5,13 +5,11 @@
 
 struct ObjBlockstop;
 
-typedef void (*ObjBlockstopActionFunc)(struct ObjBlockstop*, GlobalContext*);
+typedef void (*ObjBlockstopActionFunc)(struct ObjBlockstop*, PlayState*);
 
 typedef struct ObjBlockstop {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ObjBlockstopActionFunc actionFunc;
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ ObjBlockstopActionFunc actionFunc;
 } ObjBlockstop; // size = 0x148
-
-extern const ActorInit Obj_Blockstop_InitVars;
 
 #endif // Z_OBJ_BLOCKSTOP_H

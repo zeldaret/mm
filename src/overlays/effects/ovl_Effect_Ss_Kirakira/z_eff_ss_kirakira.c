@@ -23,18 +23,18 @@
 
 #define PARAMS ((EffectSsKirakiraInitParams*)initParamsx)
 
-u32 EffectSsKirakira_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void func_80977DB4(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_80977E6C(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void func_80977F28(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsKirakira_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsKirakira_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void func_80977DB4(PlayState* play, u32 index, EffectSs* this);
+void func_80977E6C(PlayState* play, u32 index, EffectSs* this);
+void func_80977F28(PlayState* play, u32 index, EffectSs* this);
+void EffectSsKirakira_Draw(PlayState* play, u32 index, EffectSs* this);
 
 const EffectSsInit Effect_Ss_Kirakira_InitVars = {
     EFFECT_SS_KIRAKIRA,
     EffectSsKirakira_Init,
 };
 
-u32 EffectSsKirakira_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsKirakira_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsKirakiraInitParams* initParams = PARAMS;
 
     this->pos = initParams->pos;
@@ -80,7 +80,7 @@ u32 EffectSsKirakira_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
     return 1;
 }
 
-void EffectSsKirakira_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsKirakira_Draw(PlayState* play, u32 index, EffectSs* this) {
     GraphicsContext* gfxCtx;
     f32 scale = this->rScale / 10000.0f;
     s32 pad;
@@ -92,14 +92,14 @@ void EffectSsKirakira_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     MtxF mfResult;
     Mtx* mtx;
 
-    gfxCtx = globalCtx->state.gfxCtx;
+    gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     SkinMatrix_SetRotateRPY(&mfRot, 0, 0, this->rYaw);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTransBillboard);
     SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfRot, &mfTransBillboardRot);
     SkinMatrix_MtxFMtxFMult(&mfTransBillboardRot, &mfScale, &mfResult);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -120,7 +120,7 @@ void EffectSsKirakira_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_80977DB4(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void func_80977DB4(PlayState* play, u32 index, EffectSs* this) {
     this->accel.x = (Rand_ZeroOne() * 0.4f) - 0.2f;
     this->accel.z = (Rand_ZeroOne() * 0.4f) - 0.2f;
     this->rEnvColorA += this->rAlphaStep;
@@ -136,7 +136,7 @@ void func_80977DB4(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     this->rYaw += this->rRotSpeed;
 }
 
-void func_80977E6C(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void func_80977E6C(PlayState* play, u32 index, EffectSs* this) {
     this->velocity.x *= 0.95f;
     this->velocity.z *= 0.95f;
     this->accel.x = randPlusMinusPoint5Scaled(0.2f);
@@ -154,6 +154,6 @@ void func_80977E6C(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     this->rYaw += this->rRotSpeed;
 }
 
-void func_80977F28(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void func_80977F28(PlayState* play, u32 index, EffectSs* this) {
     this->rScale = this->rEnvColorA * Math_SinS((32768.0f / this->rLifespan) * this->life);
 }

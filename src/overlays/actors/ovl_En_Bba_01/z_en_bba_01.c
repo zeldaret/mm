@@ -19,16 +19,16 @@
 
 #define THIS ((EnBba01*)thisx)
 
-void EnBba01_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBba01_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBba01_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBba01_Init(Actor* thisx, PlayState* play);
+void EnBba01_Destroy(Actor* thisx, PlayState* play);
+void EnBba01_Update(Actor* thisx, PlayState* play);
+void EnBba01_Draw(Actor* thisx, PlayState* play);
 
-void EnBba01_Walk(EnHy* this, GlobalContext* globalCtx);
-void EnBba01_FaceFoward(EnHy* this, GlobalContext* globalCtx);
-void EnBba01_Talk(EnHy* this, GlobalContext* globalCtx);
+void EnBba01_Walk(EnHy* this, PlayState* play);
+void EnBba01_FaceFoward(EnHy* this, PlayState* play);
+void EnBba01_Talk(EnHy* this, PlayState* play);
 
-const ActorInit En_Bba_01_InitVars = {
+ActorInit En_Bba_01_InitVars = {
     ACTOR_EN_BBA_01,
     ACTORCAT_NPC,
     FLAGS,
@@ -97,72 +97,72 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static TurnOptionsSet sTurnOptions = {
+static TrackOptionsSet sTrackOptions = {
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
     { 0xFA0, 4, 1, 3 },
     { 0x1770, 4, 1, 6 },
 };
 
-void EnBba01_UpdateModel(EnBba01* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnBba01_UpdateModel(EnBba01* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f point;
 
-    EnHy_UpdateSkelAnime(&this->enHy, globalCtx);
+    EnHy_UpdateSkelAnime(&this->enHy, play);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
         point.y = player->bodyPartsPos[7].y + 3.0f;
         point.z = player->actor.world.pos.z;
-        SubS_TurnToPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.turnTarget,
-                         &this->enHy.headRot, &this->enHy.torsoRot, &sTurnOptions);
+        SubS_TrackPoint(&point, &this->enHy.actor.focus.pos, &this->enHy.actor.shape.rot, &this->enHy.trackTarget,
+                        &this->enHy.headRot, &this->enHy.torsoRot, &sTrackOptions);
     } else {
-        Math_SmoothStepToS(&this->enHy.turnTarget.x, 0, 4, 0x3E8, 1);
-        Math_SmoothStepToS(&this->enHy.turnTarget.y, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.trackTarget.x, 0, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->enHy.trackTarget.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.headRot.y, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.y, 0, 4, 0x3E8, 1);
     }
-    SubS_FillLimbRotTables(globalCtx, this->enHy.limbRotTableY, this->enHy.limbRotTableZ,
+    SubS_FillLimbRotTables(play, this->enHy.limbRotTableY, this->enHy.limbRotTableZ,
                            ARRAY_COUNT(this->enHy.limbRotTableY));
-    EnHy_UpdateCollider(&this->enHy, globalCtx);
+    EnHy_UpdateCollider(&this->enHy, play);
 }
 
-s32 EnBba01_TestIsTalking(EnBba01* this, GlobalContext* globalCtx) {
+s32 EnBba01_TestIsTalking(EnBba01* this, PlayState* play) {
     s32 isTalking = false;
 
-    if (Actor_ProcessTalkRequest(&this->enHy.actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->enHy.actor, &play->state)) {
         isTalking = true;
         this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
-        this->enHy.tmpTurnTarget = this->enHy.turnTarget;
-        this->enHy.tmpHeadRot = this->enHy.headRot;
-        this->enHy.tmpTorsoRot = this->enHy.torsoRot;
-        this->enHy.tmpActionFunc = this->enHy.actionFunc;
+        this->enHy.prevTrackTarget = this->enHy.trackTarget;
+        this->enHy.prevHeadRot = this->enHy.headRot;
+        this->enHy.prevTorsoRot = this->enHy.torsoRot;
+        this->enHy.prevActionFunc = this->enHy.actionFunc;
         this->enHy.actionFunc = EnBba01_Talk;
     }
     return isTalking;
 }
 
-s32 func_809CC270(EnBba01* this, GlobalContext* globalCtx) {
+s32 func_809CC270(EnBba01* this, PlayState* play) {
     s16 x;
     s16 y;
 
-    Actor_GetScreenPos(globalCtx, &this->enHy.actor, &x, &y);
+    Actor_GetScreenPos(play, &this->enHy.actor, &x, &y);
     //! @bug: Both x and y conditionals are always true, || should be an &&
     if (!this->enHy.waitingOnInit && ((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-        func_800B85E0(&this->enHy.actor, globalCtx, 30.0f, EXCH_ITEM_2E);
+        func_800B85E0(&this->enHy.actor, play, 30.0f, PLAYER_AP_MAGIC_BEANS);
     }
     return true;
 }
 
-void EnBba01_FinishInit(EnHy* this, GlobalContext* globalCtx) {
+void EnBba01_FinishInit(EnHy* this, PlayState* play) {
     //! @bug: gBbaSkel does not match EnHy's skeleton assumptions.
     //! Since gBbaSkel has more limbs than expected, joint and morph tables will overflow
-    if (EnHy_Init(this, globalCtx, &gBbaSkel, ENHY_ANIMATION_BBA_6)) {
+    if (EnHy_Init(this, play, &gBbaSkel, ENHY_ANIM_BBA_6)) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
-        if (ENBBA01_GET_PATH(&this->actor) == ENBBA01_NO_PATH) {
+        if (ENBBA01_GET_PATH(&this->actor) == 0x3F) {
             this->actionFunc = EnBba01_FaceFoward;
         } else {
             this->actionFunc = EnBba01_Walk;
@@ -170,85 +170,86 @@ void EnBba01_FinishInit(EnHy* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBba01_Walk(EnHy* this, GlobalContext* globalCtx) {
+void EnBba01_Walk(EnHy* this, PlayState* play) {
     if (EnHy_MoveForwards(this, 1.0f)) {
         this->curPoint = 0;
     }
 }
 
-void EnBba01_FaceFoward(EnHy* this, GlobalContext* globalCtx) {
+void EnBba01_FaceFoward(EnHy* this, PlayState* play) {
     this->actor.shape.rot = this->actor.world.rot;
 }
 
-void EnBba01_Talk(EnHy* this, GlobalContext* globalCtx) {
+void EnBba01_Talk(EnHy* this, PlayState* play) {
     s16 yaw;
     u8 talkState;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
-    talkState = Message_GetState(&globalCtx->msgCtx);
-    this->inMsgState3 = (talkState == 3) ? true : false;
+
+    talkState = Message_GetState(&play->msgCtx);
+    this->inMsgState3 = (talkState == TEXT_STATE_3) ? true : false;
 
     switch (talkState) {
-        case 0:
+        case TEXT_STATE_NONE:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {
-                Message_StartTextbox(globalCtx, this->textId, NULL);
+                Message_StartTextbox(play, this->textId, NULL);
             }
             break;
-        case 2:
+
+        case TEXT_STATE_CLOSING:
             this->actor.textId = 0;
-            this->turnTarget = this->tmpTurnTarget;
-            this->headRot = this->tmpHeadRot;
-            this->torsoRot = this->tmpTorsoRot;
+            this->trackTarget = this->prevTrackTarget;
+            this->headRot = this->prevHeadRot;
+            this->torsoRot = this->prevTorsoRot;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            this->actionFunc = this->tmpActionFunc;
-            this->tmpActionFunc = NULL;
+            this->actionFunc = this->prevActionFunc;
+            this->prevActionFunc = NULL;
             break;
     }
 }
 
-void EnBba01_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBba01_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBba01* this = THIS;
 
-    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
-    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
-    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
-    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
+    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
+    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
+    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
+    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_BBA, play);
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {
-        Actor_MarkForDeath(&this->enHy.actor);
+        Actor_Kill(&this->enHy.actor);
     }
     this->enHy.actor.draw = NULL;
-    Collider_InitCylinder(globalCtx, &this->enHy.collider);
-    Collider_SetCylinder(globalCtx, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->enHy.collider);
+    Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = SubS_GetPathByIndex(globalCtx, ENBBA01_GET_PATH(&this->enHy.actor), ENBBA01_NO_PATH);
+    this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH(&this->enHy.actor), 0x3F);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnBba01_FinishInit;
 }
 
-void EnBba01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBba01_Destroy(Actor* thisx, PlayState* play) {
     EnBba01* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->enHy.collider);
+    Collider_DestroyCylinder(play, &this->enHy.collider);
 }
 
-void EnBba01_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBba01_Update(Actor* thisx, PlayState* play) {
     EnBba01* this = THIS;
 
-    EnBba01_TestIsTalking(this, globalCtx);
-    this->enHy.actionFunc(&this->enHy, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->enHy.actor, 0.0f, 0.0f, 0.0f, 4);
-    EnBba01_UpdateModel(this, globalCtx);
-    func_809CC270(this, globalCtx);
+    EnBba01_TestIsTalking(this, play);
+    this->enHy.actionFunc(&this->enHy, play);
+    Actor_UpdateBgCheckInfo(play, &this->enHy.actor, 0.0f, 0.0f, 0.0f, 4);
+    EnBba01_UpdateModel(this, play);
+    func_809CC270(this, play);
 }
 
-s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBba01* this = THIS;
     s8 bodyPart;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
@@ -259,11 +260,11 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -277,8 +278,7 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 &&
-        ((globalCtx->state.frames % 2) == 0)) {
+    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 && ((play->state.frames % 2) == 0)) {
         Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
@@ -290,16 +290,16 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnBba01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnBba01* this = THIS;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == BBA_LIMB_HEAD) {
-        OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
-        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
+        gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
@@ -307,22 +307,22 @@ void EnBba01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 }
 
-void EnBba01_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnBba01_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
-void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBba01_Draw(Actor* thisx, PlayState* play) {
     EnBba01* this = THIS;
     s32 i;
-    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
+    u8* shadowTex = GRAPH_ALLOC(play->state.gfxCtx, SUBS_SHADOW_TEX_SIZE);
     u8* shadowTexIter;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(globalCtx->state.gfxCtx, 255, 255, 255, 0));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 55, 55, 255, 0));
+    func_8012C28C(play->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 255, 255, 255, 0));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 55, 55, 255, 0));
     gDPPipeSync(POLY_OPA_DISP++);
-    SkelAnime_DrawTransformFlexOpa(globalCtx, this->enHy.skelAnime.skeleton, this->enHy.skelAnime.jointTable,
+    SkelAnime_DrawTransformFlexOpa(play, this->enHy.skelAnime.skeleton, this->enHy.skelAnime.jointTable,
                                    this->enHy.skelAnime.dListCount, EnBba01_OverrideLimbDraw, EnBba01_PostLimbDraw,
                                    EnBba01_TransformLimbDraw, &this->enHy.actor);
     Matrix_RotateXS(0, MTXMODE_NEW);
@@ -334,7 +334,7 @@ void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx) {
         SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
                           ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
     }
-    SubS_DrawShadowTex(&this->enHy.actor, &globalCtx->state, shadowTex);
+    SubS_DrawShadowTex(&this->enHy.actor, &play->state, shadowTex);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

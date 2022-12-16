@@ -10,18 +10,18 @@
 
 #define THIS ((DmHina*)thisx)
 
-void DmHina_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmHina_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmHina_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmHina_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmHina_Init(Actor* thisx, PlayState* play);
+void DmHina_Destroy(Actor* thisx, PlayState* play);
+void DmHina_Update(Actor* thisx, PlayState* play);
+void DmHina_Draw(Actor* thisx, PlayState* play);
 
-void func_80A1F470(DmHina* this, GlobalContext* globalCtx);
-void func_80A1F56C(DmHina* this, GlobalContext* globalCtx);
-void func_80A1F5AC(DmHina* this, GlobalContext* globalCtx);
-void func_80A1F63C(DmHina* this, GlobalContext* globalCtx);
+void func_80A1F470(DmHina* this, PlayState* play);
+void func_80A1F56C(DmHina* this, PlayState* play);
+void func_80A1F5AC(DmHina* this, PlayState* play);
+void func_80A1F63C(DmHina* this, PlayState* play);
 
 #if 0
-const ActorInit Dm_Hina_InitVars = {
+ActorInit Dm_Hina_InitVars = {
     ACTOR_DM_HINA,
     ACTORCAT_ITEMACTION,
     FLAGS,

@@ -24,7 +24,7 @@
         <Limb Name="object_sb_Standardlimb_002BAC" Type="Standard" EnumName="OBJECT_SB_LIMB_06" Offset="0x2BAC" />
         <Limb Name="object_sb_Standardlimb_002BB8" Type="Standard" EnumName="OBJECT_SB_LIMB_07" Offset="0x2BB8" />
         <Limb Name="object_sb_Standardlimb_002BC4" Type="Standard" EnumName="OBJECT_SB_LIMB_08" Offset="0x2BC4" />
-        <Skeleton Name="object_sb_Skel_002BF0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SB_LIMB_NONE" LimbMax="OBJECT_SB_LIMB_MAX" EnumName="object_sb_Limbs" Offset="0x2BF0" />
+        <Skeleton Name="object_sb_Skel_002BF0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SB_LIMB_NONE" LimbMax="OBJECT_SB_LIMB_MAX" EnumName="ObjectSbLimb" Offset="0x2BF0" />
         <Animation Name="object_sb_Anim_002C8C" Offset="0x2C8C" />
     </File>
 </Root>

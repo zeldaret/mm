@@ -42,7 +42,7 @@
         <Limb Name="object_gk_Standardlimb_007950" Type="Standard" EnumName="OBJECT_GK_LIMB_11" Offset="0x7950" />
         <Limb Name="object_gk_Standardlimb_00795C" Type="Standard" EnumName="OBJECT_GK_LIMB_12" Offset="0x795C" />
         <Limb Name="object_gk_Standardlimb_007968" Type="Standard" EnumName="OBJECT_GK_LIMB_13" Offset="0x7968" />
-        <Skeleton Name="object_gk_Skel_0079C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GK_LIMB_NONE" LimbMax="OBJECT_GK_LIMB_MAX" EnumName="object_gk_Limbs" Offset="0x79C0" />
+        <Skeleton Name="object_gk_Skel_0079C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GK_LIMB_NONE" LimbMax="OBJECT_GK_LIMB_MAX" EnumName="ObjectGkLimb" Offset="0x79C0" />
         <Animation Name="object_gk_Anim_007DC4" Offset="0x7DC4" />
         <Animation Name="object_gk_Anim_008774" Offset="0x8774" />
         <Animation Name="object_gk_Anim_0092C0" Offset="0x92C0" />

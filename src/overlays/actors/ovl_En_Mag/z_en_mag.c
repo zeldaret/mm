@@ -11,10 +11,10 @@
 
 #define THIS ((EnMag*)thisx)
 
-void EnMag_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMag_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMag_Init(Actor* thisx, PlayState* play);
+void EnMag_Destroy(Actor* thisx, PlayState* play);
+void EnMag_Update(Actor* thisx, PlayState* play);
+void EnMag_Draw(Actor* thisx, PlayState* play);
 
 /**
  * Steps `var` towards `target` linearly, so that it will arrive in `timeRemaining` seconds. Can be used from either
@@ -85,7 +85,7 @@ static s16 sZeldaEffectColorTargetIndex = 0;
 static s16 sTextAlphaTargetIndex = 0;
 static s16 sTextAlphaTimer = 20;
 
-const ActorInit En_Mag_InitVars = {
+ActorInit En_Mag_InitVars = {
     ACTOR_EN_MAG,
     ACTORCAT_PROP,
     FLAGS,
@@ -97,7 +97,7 @@ const ActorInit En_Mag_InitVars = {
     (ActorFunc)EnMag_Draw,
 };
 
-void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMag_Init(Actor* thisx, PlayState* play) {
     EnMag* this = THIS;
     u16 i;
 
@@ -135,7 +135,7 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk11F02 = 30;
     this->unk11F00 = this->state = MAG_STATE_INITIAL;
 
-    if (gSaveContext.unk_3F1E != 0) {
+    if (gSaveContext.hudVisibilityForceButtonAlphasByStatus) {
         this->mainTitleAlpha = 210;
         this->unk11F32 = 255;
         this->copyrightAlpha = 255;
@@ -158,11 +158,11 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->displayEffectEnvColor[1] = 255;
         this->displayEffectEnvColor[2] = 155;
 
-        gSaveContext.unk_3F1E = 0;
+        gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         this->state = MAG_STATE_FADE_IN_MASK;
         sInputDelayTimer = 20;
-        gSaveContext.fadeDuration = 1;
-        gSaveContext.fadeSpeed = 255;
+        gSaveContext.transFadeDuration = 1;
+        gSaveContext.transWipeSpeed = 255;
     }
 
     Font_LoadOrderedFont(&this->font);
@@ -184,7 +184,7 @@ void EnMag_Init(Actor* thisx, GlobalContext* globalCtx) {
     sZeldaEffectColorTargetIndex = 0;
 }
 
-void EnMag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMag_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnMag_UpdateDisplayEffectColors(Actor* thisx) {
@@ -225,7 +225,7 @@ void EnMag_UpdateDisplayEffectColors(Actor* thisx) {
  * Controls the actions performed using a switch and the `state` struct variable rather than action functions. Most of
  * these are to do with fading various parts in and out.
  */
-void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnMag_Update(Actor* thisx, PlayState* play) {
     static s16 sAppearEffectPrimGreenTargets[] = { 255, 155 };
     static s16 sAppearEffectEnvRedTargets[] = { 255, 0 };
     static s16 sAppearEffectEnvBlueTargets[] = { 0, 155 };
@@ -235,18 +235,18 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (gSaveContext.fileNum != 0xFEDC) {
         if (this->state == MAG_STATE_INITIAL) {
-            if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
-                CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-                CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
+            if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
+                CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
-                if (!EnvFlags_Get(globalCtx, 4)) {
+                if (!EnvFlags_Get(play, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                     this->unk11F00 = 0;
                     this->unk11F02 = 30;
                     sInputDelayTimer = 20;
-                    gSaveContext.fadeDuration = 1;
-                    gSaveContext.fadeSpeed = 255;
+                    gSaveContext.transFadeDuration = 1;
+                    gSaveContext.transWipeSpeed = 255;
                 }
             }
         } else {
@@ -378,10 +378,10 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                     EnMag_UpdateDisplayEffectColors(&this->actor);
 
                     if (sInputDelayTimer == 0) {
-                        if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
-                            CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-                            CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
-                            if (globalCtx->sceneLoadFlag != 0x14) {
+                        if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                            CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
+                            if (play->transitionTrigger != TRANS_TRIGGER_START) {
                                 Audio_SetCutsceneFlag(false);
                                 D_801BB12C++;
                                 if (D_801BB12C >= 2) {
@@ -389,11 +389,11 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = 2; // Go to FileChoose
-                                globalCtx->sceneLoadFlag = 0x14;
-                                globalCtx->unk_1887F = 2;
-                                globalCtx->nextEntranceIndex = 0x1C00;
+                                play->transitionTrigger = TRANS_TRIGGER_START;
+                                play->transitionType = TRANS_TYPE_02;
+                                play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                                 gSaveContext.save.cutscene = 0;
-                                gSaveContext.sceneSetupIndex = 0;
+                                gSaveContext.sceneLayer = 0;
                             }
                             this->unk11F54 = 15;
                             this->unk11F56 = 25;
@@ -427,9 +427,9 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             // Appear fully immediately if called during fade-in states.
             if ((this->state > MAG_STATE_INITIAL) && (this->state < MAG_STATE_CALLED)) {
-                if (CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_START) ||
-                    CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_A) ||
-                    CHECK_BTN_ALL(CONTROLLER1(globalCtx)->press.button, BTN_B)) {
+                if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_START) ||
+                    CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
+                    CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                 }
@@ -438,12 +438,12 @@ void EnMag_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->state == MAG_STATE_INITIAL) {
-        if (EnvFlags_Get(globalCtx, 3)) {
+        if (EnvFlags_Get(play, 3)) {
             this->unk11F02 = 40;
             this->state = MAG_STATE_FADE_IN_MASK_EFFECTS;
         }
     } else if (this->state < MAG_STATE_FADE_OUT) {
-        if (EnvFlags_Get(globalCtx, 4)) {
+        if (EnvFlags_Get(play, 4)) {
             this->state = MAG_STATE_FADE_OUT;
         }
     }
@@ -675,7 +675,7 @@ void EnMag_DrawCharTexture(Gfx** gfxp, TexturePtr texture, s32 rectLeft, s32 rec
  * Loads title, PRESS START text, etc. graphics to gfxp, which is made to live on
  * POLY_OPA_DISP, but is used by OVERLAY_DISP.
  */
-void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
+void EnMag_DrawInner(Actor* thisx, PlayState* play, Gfx** gfxp) {
     static u8 pressStartFontIndices[] = {
         0x19, 0x1B, 0x0E, 0x1C, 0x1C, 0x1C, 0x1D, 0x0A, 0x1B, 0x1D,
     }; // Indices into this->font.fontBuf
@@ -707,7 +707,7 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
     s16 step;
 
     // Set segment 6 to the object, since this will be read by OVERLAY_DISP where it is not set by default.
-    gSPSegment(gfx++, 0x06, globalCtx->objectCtx.status[this->actor.objBankIndex].segment);
+    gSPSegment(gfx++, 0x06, play->objectCtx.status[this->actor.objBankIndex].segment);
 
     func_8012C680(&gfx);
 
@@ -953,22 +953,22 @@ void EnMag_DrawInner(Actor* thisx, GlobalContext* globalCtx, Gfx** gfxp) {
  * Jumps drawing to POLY_OPA_DISP to take advantage of the extra space available, but jmups back and actually draws
  * using OVERLAY_DISP.
  */
-void EnMag_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnMag_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     Gfx* gfx;
     Gfx* gfxRef;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gfxRef = POLY_OPA_DISP;
     gfx = Graph_GfxPlusOne(gfxRef);
     gSPDisplayList(OVERLAY_DISP++, gfx);
 
-    EnMag_DrawInner(thisx, globalCtx, &gfx);
+    EnMag_DrawInner(thisx, play, &gfx);
 
     gSPEndDisplayList(gfx++);
     Graph_BranchDlist(gfxRef, gfx);
     POLY_OPA_DISP = gfx;
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

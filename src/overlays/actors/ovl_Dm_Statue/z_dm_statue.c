@@ -11,12 +11,12 @@
 
 #define THIS ((DmStatue*)thisx)
 
-void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmStatue_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmStatue_Init(Actor* thisx, PlayState* play);
+void DmStatue_Destroy(Actor* thisx, PlayState* play);
+void DmStatue_Update(Actor* thisx, PlayState* play);
+void DmStatue_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Statue_InitVars = {
+ActorInit Dm_Statue_InitVars = {
     ACTOR_DM_STATUE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -28,19 +28,19 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Draw,
 };
 
-void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmStatue_Init(Actor* thisx, PlayState* play) {
     DmStatue* this = THIS;
 
     Actor_SetScale(&this->actor, 10.0f);
 }
 
-void DmStatue_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmStatue_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmStatue_Update(Actor* thisx, PlayState* play) {
 }
 
-void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_smtower_Matanimheader_001788));
-    Gfx_DrawDListXlu(globalCtx, object_smtower_DL_000520);
+void DmStatue_Draw(Actor* thisx, PlayState* play) {
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_smtower_Matanimheader_001788));
+    Gfx_DrawDListXlu(play, object_smtower_DL_000520);
 }

@@ -11,10 +11,10 @@
 
 #define THIS ((ObjFireshield*)thisx)
 
-void ObjFireshield_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjFireshield_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjFireshield_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjFireshield_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjFireshield_Init(Actor* thisx, PlayState* play);
+void ObjFireshield_Destroy(Actor* thisx, PlayState* play);
+void ObjFireshield_Update(Actor* thisx, PlayState* play);
+void ObjFireshield_Draw(Actor* thisx, PlayState* play);
 
 void func_80A4CABC(ObjFireshield* this);
 void func_80A4CB7C(ObjFireshield* this);
@@ -22,7 +22,7 @@ void func_80A4CC54(ObjFireshield* this);
 void func_80A4CCBC(ObjFireshield* this);
 void func_80A4CD28(ObjFireshield* this);
 
-const ActorInit Obj_Fireshield_InitVars = {
+ActorInit Obj_Fireshield_InitVars = {
     ACTOR_OBJ_FIRESHIELD,
     ACTORCAT_PROP,
     FLAGS,
@@ -138,10 +138,10 @@ void func_80A4CCBC(ObjFireshield* this) {
 void func_80A4CD28(ObjFireshield* this) {
 }
 
-void func_80A4CD34(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A4CD34(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjFireshield* this = THIS;
-    s32 sp24 = Flags_GetSwitch(globalCtx, OBJFIRESHIELD_GET_7F(&this->actor));
+    s32 sp24 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_7F(&this->actor));
     s32 phi_v1;
     s32 phi_a0;
 
@@ -150,11 +150,11 @@ void func_80A4CD34(Actor* thisx, GlobalContext* globalCtx) {
             phi_v1 = false;
             phi_a0 = false;
         } else {
-            phi_v1 = Flags_GetTreasure(globalCtx, OBJFIRESHIELD_GET_1F00(&this->actor));
+            phi_v1 = Flags_GetTreasure(play, OBJFIRESHIELD_GET_1F00(&this->actor));
             phi_a0 = false;
         }
     } else {
-        phi_a0 = Flags_GetSwitch(globalCtx, OBJFIRESHIELD_GET_3F80(&this->actor));
+        phi_a0 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_3F80(&this->actor));
         phi_v1 = false;
     }
 
@@ -173,7 +173,7 @@ void func_80A4CD34(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A4CE28(ObjFireshield* this, GlobalContext* globalCtx) {
+void func_80A4CE28(ObjFireshield* this, PlayState* play) {
     s32 pad;
     s32 sp30 = OBJFIRESHIELD_GET_7F(&this->actor);
     s32 pad2[2];
@@ -185,23 +185,23 @@ void func_80A4CE28(ObjFireshield* this, GlobalContext* globalCtx) {
             sp24 = false;
             sp20 = false;
         } else {
-            sp24 = Flags_GetTreasure(globalCtx, OBJFIRESHIELD_GET_1F00(&this->actor));
+            sp24 = Flags_GetTreasure(play, OBJFIRESHIELD_GET_1F00(&this->actor));
             sp20 = false;
         }
     } else {
-        sp20 = Flags_GetSwitch(globalCtx, OBJFIRESHIELD_GET_3F80(&this->actor));
+        sp20 = Flags_GetSwitch(play, OBJFIRESHIELD_GET_3F80(&this->actor));
         sp24 = false;
     }
 
     if (!sp24 || !sp20 || (this->unk_19C != 0)) {
-        s32 sp1C = Flags_GetSwitch(globalCtx, sp30);
+        s32 sp1C = Flags_GetSwitch(play, sp30);
         s32 temp_v0 = (sp30 & ~0x1F) >> 5;
 
         if (this->unk_19C == 2) {
             if (Math_StepToF(&this->unk_198, 1.0f, 0.03f)) {
                 this->unk_19C = 1;
                 if (((this->actor.home.rot.z * 10) > 0) && (this->unk_1A7 != 0)) {
-                    Flags_UnsetSwitch(globalCtx, sp30);
+                    Flags_UnsetSwitch(play, sp30);
                     sp1C = false;
                 }
             }
@@ -267,7 +267,7 @@ void func_80A4D1CC(void) {
     D_80A4D864[3] = 0;
 }
 
-void ObjFireshield_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjFireshield_Init(Actor* thisx, PlayState* play) {
     ObjFireshield* this = THIS;
     s32 temp = 0x8000;
     ObjFireshieldStruct* sp2C = &D_80A4D84C[OBJFIRESHIELD_GET_C000(&this->actor)];
@@ -297,24 +297,24 @@ void ObjFireshield_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.home.rot.z = -thisx->home.rot.z;
     }
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
     this->collider.dim.radius *= sp2C->unk_00;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     func_80A4D174(this);
-    func_80A4CD34(&this->actor, globalCtx);
+    func_80A4CD34(&this->actor, play);
     this->actionFunc = func_80A4CD28;
 }
 
-void ObjFireshield_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjFireshield_Destroy(Actor* thisx, PlayState* play) {
     ObjFireshield* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void ObjFireshield_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjFireshield_Update(Actor* thisx, PlayState* play) {
     ObjFireshield* this = THIS;
     ObjFireshield* this2 = THIS;
     s32 sp44 = OBJFIRESHIELD_GET_ROTX(&this->actor);
@@ -342,17 +342,17 @@ void ObjFireshield_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~AT_HIT;
     } else if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
-        func_800B8D98(globalCtx, &this->actor, 5.0f, this->actor.yawTowardsPlayer, 1.0f);
+        func_800B8D98(play, &this->actor, 5.0f, this->actor.yawTowardsPlayer, 1.0f);
     }
 
-    func_80A4CE28(this, globalCtx);
+    func_80A4CE28(this, play);
 
     this->actor.world.pos.y = ((sp44 ? 144.0f : -144.0f) * (1.0f - this2->unk_198)) + this->actor.home.pos.y;
 
     this->unk_1A6 = this->unk_198 * 255.0f;
 
     if (this->unk_198 >= 0.7f) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         this->collider.dim.height = this->unk_198 * 80.0f;
 
@@ -374,25 +374,25 @@ void ObjFireshield_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjFireshield_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjFireshield_Draw(Actor* thisx, PlayState* play) {
     ObjFireshield* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 220, 0, this->unk_1A6);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, this->unk_1A4 & 0x7F, 0, 0x20, 0x40, 1, 0,
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_1A4 & 0x7F, 0, 0x20, 0x40, 1, 0,
                                 (this->unk_1A4 * -15) & 0xFF, 0x20, 0x40));
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_02E510);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

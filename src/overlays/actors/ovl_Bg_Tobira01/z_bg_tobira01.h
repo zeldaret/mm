@@ -5,7 +5,7 @@
 
 struct BgTobira01;
 
-typedef void (*BgTobira01ActionFunc)(struct BgTobira01*, struct GlobalContext*);
+typedef void (*BgTobira01ActionFunc)(struct BgTobira01*, struct PlayState*);
 
 typedef struct BgTobira01 {
     /* 0x000 */ DynaPolyActor dyna;
@@ -16,7 +16,5 @@ typedef struct BgTobira01 {
     /* 0x168 */ s32 playCutscene;
     /* 0x16C */ s32 unk_16C; // unused besides being set to 0
 } BgTobira01; // size = 0x170
-
-extern const ActorInit Bg_Tobira01_InitVars;
 
 #endif // Z_BG_TOBIRA01_H

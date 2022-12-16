@@ -38,7 +38,7 @@
  * Throughout this file, `mode` indicates whether to multiply the matrix on top of the stack by the new construction
  * (APPLY), or to just overwrite it (NEW).
  */
-
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 /* data */

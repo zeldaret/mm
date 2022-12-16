@@ -11,12 +11,12 @@
 
 #define THIS ((EnTest*)thisx)
 
-void EnTest_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTest_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTest_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTest_Init(Actor* thisx, PlayState* play2);
+void EnTest_Destroy(Actor* thisx, PlayState* play);
+void EnTest_Update(Actor* thisx, PlayState* play);
+void EnTest_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Test_InitVars = {
+ActorInit En_Test_InitVars = {
     ACTOR_EN_TEST,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -126,14 +126,14 @@ void func_80862EDC(EnTestStruct* arg0) {
     }
 }
 
-void func_80863048(GlobalContext* globalCtx, EnTestStruct* arg1) {
+void func_80863048(PlayState* play, EnTestStruct* arg1) {
     EnTestStruct* ptr;
     s32 i;
     Mtx* mtx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
@@ -149,16 +149,16 @@ void func_80863048(GlobalContext* globalCtx, EnTestStruct* arg1) {
         Matrix_RotateZYX(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
         Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
 
-        mtx = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        mtx = Matrix_NewMtx(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnTest_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnTest_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnTest* this = THIS;
     MtxF sp38;
     s32 sp34;
@@ -172,11 +172,10 @@ void EnTest_Init(Actor* thisx, GlobalContext* globalCtx2) {
     } else {
         thisx->floorPoly = NULL;
         thisx->world.pos.y += 10.0f;
-        thisx->floorHeight =
-            BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
+        thisx->floorHeight = BgCheck_EntityRaycastFloor3(&play->colCtx, &thisx->floorPoly, &sp34, &thisx->world.pos);
 
         if ((thisx->floorPoly == NULL) || (thisx->floorHeight == BGCHECK_Y_MIN)) {
-            Actor_MarkForDeath(thisx);
+            Actor_Kill(thisx);
             return;
         }
 
@@ -184,7 +183,7 @@ void EnTest_Init(Actor* thisx, GlobalContext* globalCtx2) {
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
         Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, true);
         thisx->world.rot = thisx->shape.rot;
-        this->unk_20A = func_800C9BB8(&globalCtx->colCtx, thisx->floorPoly, sp34);
+        this->unk_20A = func_800C9BB8(&play->colCtx, thisx->floorPoly, sp34);
     }
 
     func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_06EB70, &gameplay_keep_Blob_06BB0C, this->unk_178,
@@ -194,13 +193,13 @@ void EnTest_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_80862B70(this->unk_20C);
 }
 
-void EnTest_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTest_Destroy(Actor* thisx, PlayState* play) {
     EnTest* this = THIS;
 
     func_8018349C(&this->skeletonInfo);
 }
 
-void EnTest_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTest_Update(Actor* thisx, PlayState* play) {
     EnTest* this = THIS;
     s32 i;
 
@@ -209,7 +208,7 @@ void EnTest_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (func_80183DE0(&this->skeletonInfo) && (this->actor.parent == NULL) && (this->actor.params != -1)) {
         this->unk_209++;
         if (this->unk_209 > 20) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -225,11 +224,11 @@ void EnTest_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80862EDC(this->unk_20C);
 }
 
-s32 EnTest_OverrideKeyframeDraw(GlobalContext* globalCtx, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
-                                u8* flags, Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
+s32 EnTest_OverrideKeyframeDraw(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags,
+                                Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
     EnTest* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if ((this->actor.params == -1) && ((limbIndex == 1) || (limbIndex == 2))) {
         *dList = NULL;
@@ -244,12 +243,12 @@ s32 EnTest_OverrideKeyframeDraw(GlobalContext* globalCtx, SkeletonInfo* skeleton
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, ((20 - this->unk_209) * 255.0f) / 20.0f);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 
     return true;
 }
 
-void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTest_Draw(Actor* thisx, PlayState* play) {
     EnTest* this = THIS;
     Mtx* sp28;
     s32 sp2C = this->unk_208 - 1;
@@ -259,16 +258,16 @@ void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_20A == 15) || (this->unk_20A == 14)) {
-        AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
+        AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B730), sp2C);
     } else {
-        AnimatedMat_DrawStep(globalCtx, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);
+        AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(gameplay_keep_Matanimheader_06B6A0), sp2C);
     }
 
-    sp28 = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
+    sp28 = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx)));
 
     if (sp28 != NULL) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        func_8018450C(globalCtx, &this->skeletonInfo, sp28, EnTest_OverrideKeyframeDraw, NULL, thisx);
-        func_80863048(globalCtx, this->unk_20C);
+        func_8012C2DC(play->state.gfxCtx);
+        func_8018450C(play, &this->skeletonInfo, sp28, EnTest_OverrideKeyframeDraw, NULL, thisx);
+        func_80863048(play, this->unk_20C);
     }
 }

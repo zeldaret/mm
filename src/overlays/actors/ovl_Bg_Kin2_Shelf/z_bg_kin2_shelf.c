@@ -11,19 +11,19 @@
 
 #define THIS ((BgKin2Shelf*)thisx)
 
-void BgKin2Shelf_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Shelf_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Shelf_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgKin2Shelf_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgKin2Shelf_Init(Actor* thisx, PlayState* play);
+void BgKin2Shelf_Destroy(Actor* thisx, PlayState* play);
+void BgKin2Shelf_Update(Actor* thisx, PlayState* play);
+void BgKin2Shelf_Draw(Actor* thisx, PlayState* play);
 
 void func_80B700A8(BgKin2Shelf* this);
-void func_80B700C0(BgKin2Shelf* this, GlobalContext* globalCtx);
+void func_80B700C0(BgKin2Shelf* this, PlayState* play);
 void func_80B70214(BgKin2Shelf* this);
-void func_80B70230(BgKin2Shelf* this, GlobalContext* globalCtx);
+void func_80B70230(BgKin2Shelf* this, PlayState* play);
 void func_80B70498(BgKin2Shelf* this);
-void func_80B704B4(BgKin2Shelf* this, GlobalContext* globalCtx);
+void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Shelf_InitVars = {
+ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
     ACTORCAT_BG,
     FLAGS,
@@ -51,11 +51,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
-CollisionHeader* D_80B70780[] = { &object_kin2_obj_Colheader_001328, &object_kin2_obj_Colheader_000F80 };
+CollisionHeader* D_80B70780[] = { &gOceanSpiderHouseChestOfDrawersCol, &gOceanSpiderHouseBookshelfCol };
 
-Gfx* D_80B70788[] = { object_kin2_obj_DL_0010F8, object_kin2_obj_DL_000CA8 };
+Gfx* D_80B70788[] = { gOceanSpiderHouseChestOfDrawersDL, gOceanSpiderHouseBookshelfDL };
 
-s32 func_80B6FB30(BgKin2Shelf* this, GlobalContext* globalCtx) {
+s32 func_80B6FB30(BgKin2Shelf* this, PlayState* play) {
     s32 temp_v1 = BGKIN2SHELF_GET_1(&this->dyna.actor);
     f32 phi_f0;
     f32 spA4;
@@ -94,11 +94,11 @@ s32 func_80B6FB30(BgKin2Shelf* this, GlobalContext* globalCtx) {
     Matrix_MultVec3f(&sp94, &sp7C);
     Matrix_MultVec3f(&sp88, &sp70);
 
-    return BgCheck_EntityLineTest3(&globalCtx->colCtx, &sp7C, &sp70, &sp64, &sp54, true, false, false, true, &sp50,
+    return BgCheck_EntityLineTest3(&play->colCtx, &sp7C, &sp70, &sp64, &sp54, true, false, false, true, &sp50,
                                    &this->dyna.actor, 0.0f);
 }
 
-s32 func_80B6FCA4(BgKin2Shelf* this, GlobalContext* globalCtx) {
+s32 func_80B6FCA4(BgKin2Shelf* this, PlayState* play) {
     s32 pad;
     f32 spA0;
     s16 sp9E;
@@ -136,18 +136,18 @@ s32 func_80B6FCA4(BgKin2Shelf* this, GlobalContext* globalCtx) {
     Matrix_MultVec3f(&sp90, &sp78);
     Matrix_MultVec3f(&sp84, &sp6C);
 
-    return BgCheck_EntityLineTest3(&globalCtx->colCtx, &sp78, &sp6C, &sp60, &sp50, true, false, false, true, &sp4C,
+    return BgCheck_EntityLineTest3(&play->colCtx, &sp78, &sp6C, &sp60, &sp50, true, false, false, true, &sp4C,
                                    &this->dyna.actor, 0.0f);
 }
 
-s32 func_80B6FE08(BgKin2Shelf* this, GlobalContext* globalCtx) {
+s32 func_80B6FE08(BgKin2Shelf* this, PlayState* play) {
     if (this->unk_164 & (0x8 | 0x2)) {
-        return func_80B6FB30(this, globalCtx);
+        return func_80B6FB30(this, play);
     }
-    return func_80B6FCA4(this, globalCtx);
+    return func_80B6FCA4(this, play);
 }
 
-s32 func_80B6FE48(BgKin2Shelf* this, GlobalContext* globalCtx) {
+s32 func_80B6FE48(BgKin2Shelf* this, PlayState* play) {
     s32 params = BGKIN2SHELF_GET_1(&this->dyna.actor);
     u8 temp_v1 = D_80B70778[params] & this->unk_164;
 
@@ -166,7 +166,7 @@ s32 func_80B6FE48(BgKin2Shelf* this, GlobalContext* globalCtx) {
     return temp_v1 & 5;
 }
 
-s32 func_80B6FEBC(BgKin2Shelf* this, GlobalContext* globalCtx) {
+s32 func_80B6FEBC(BgKin2Shelf* this, PlayState* play) {
     if (this->unk_164 & 1) {
         return this->unk_167 < 1;
     }
@@ -185,12 +185,11 @@ s32 func_80B6FEBC(BgKin2Shelf* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80B6FF28(BgKin2Shelf* this, GlobalContext* globalCtx) {
-    return (this->unk_165 > 8) && func_80B6FE48(this, globalCtx) && func_80B6FEBC(this, globalCtx) &&
-           !func_80B6FE08(this, globalCtx);
+s32 func_80B6FF28(BgKin2Shelf* this, PlayState* play) {
+    return (this->unk_165 > 8) && func_80B6FE48(this, play) && func_80B6FEBC(this, play) && !func_80B6FE08(this, play);
 }
 
-void BgKin2Shelf_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgKin2Shelf* this = THIS;
     s32 sp24 = BGKIN2SHELF_GET_1(&this->dyna.actor);
@@ -209,14 +208,14 @@ void BgKin2Shelf_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, D_80B70780[sp24]);
+    DynaPolyActor_LoadMesh(play, &this->dyna, D_80B70780[sp24]);
     func_80B700A8(this);
 }
 
-void BgKin2Shelf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Shelf_Destroy(Actor* thisx, PlayState* play) {
     BgKin2Shelf* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80B700A8(BgKin2Shelf* this) {
@@ -224,7 +223,7 @@ void func_80B700A8(BgKin2Shelf* this) {
     this->actionFunc = func_80B700C0;
 }
 
-void func_80B700C0(BgKin2Shelf* this, GlobalContext* globalCtx) {
+void func_80B700C0(BgKin2Shelf* this, PlayState* play) {
     s16 temp_v0;
     u8 phi_v0_2;
 
@@ -252,16 +251,16 @@ void func_80B700C0(BgKin2Shelf* this, GlobalContext* globalCtx) {
             this->unk_164 = 0;
         }
 
-        if (func_80B6FF28(this, globalCtx)) {
+        if (func_80B6FF28(this, play)) {
             if (this->unk_164 & (0x8 | 0x2)) {
                 func_80B70214(this);
             } else {
                 func_80B70498(this);
             }
         } else {
-            Player* player = GET_PLAYER(globalCtx);
+            Player* player = GET_PLAYER(play);
 
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     } else {
@@ -275,7 +274,7 @@ void func_80B70214(BgKin2Shelf* this) {
     this->actionFunc = func_80B70230;
 }
 
-void func_80B70230(BgKin2Shelf* this, GlobalContext* globalCtx) {
+void func_80B70230(BgKin2Shelf* this, PlayState* play) {
     f32 phi_f20;
     s32 sp40 = BGKIN2SHELF_GET_1(&this->dyna.actor);
     f32 phi_f2;
@@ -290,10 +289,10 @@ void func_80B70230(BgKin2Shelf* this, GlobalContext* globalCtx) {
     this->unk_160 += phi_f2;
 
     if (this->unk_160 >= 1.0f) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         this->unk_160 = 1.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (this->unk_164 & 8) {
@@ -327,7 +326,7 @@ void func_80B70498(BgKin2Shelf* this) {
     this->actionFunc = func_80B704B4;
 }
 
-void func_80B704B4(BgKin2Shelf* this, GlobalContext* globalCtx) {
+void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
     f32 temp_f20;
     s32 sp40 = BGKIN2SHELF_GET_1(&this->dyna.actor);
     f32 phi_f20;
@@ -337,10 +336,10 @@ void func_80B704B4(BgKin2Shelf* this, GlobalContext* globalCtx) {
     this->unk_160 += (Math_SinS(this->unk_160 * 0x8000) * 0.022f) + 0.022f;
 
     if (this->unk_160 >= 1.0f) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         this->unk_160 = 1.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (this->unk_164 & 4) {
@@ -368,12 +367,12 @@ void func_80B704B4(BgKin2Shelf* this, GlobalContext* globalCtx) {
     }
 }
 
-void BgKin2Shelf_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgKin2Shelf_Update(Actor* thisx, PlayState* play) {
     BgKin2Shelf* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgKin2Shelf_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_80B70788[BGKIN2SHELF_GET_1(thisx)]);
+void BgKin2Shelf_Draw(Actor* thisx, PlayState* play) {
+    Gfx_DrawDListOpa(play, D_80B70788[BGKIN2SHELF_GET_1(thisx)]);
 }

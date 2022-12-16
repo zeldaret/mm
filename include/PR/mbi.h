@@ -87,7 +87,7 @@
  **************************************************************************/
 
 #define	NUM_SEGMENTS		(16)
-#define	SEGMENT_OFFSET(a)	((unsigned int)(a) & 0x00ffffff)
+#define	SEGMENT_OFFSET(a)	((unsigned int)(a) & 0x00FFFFFF)
 #define	SEGMENT_NUMBER(a)	(((unsigned int)(a) << 4) >> 28)
 #define	SEGMENT_ADDR(num, off)	(((num) << 24) + (off))
 

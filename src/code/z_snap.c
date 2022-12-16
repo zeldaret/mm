@@ -1,80 +1,96 @@
 #include "global.h"
+#include "z64snap.h"
+#include "overlays/actors/ovl_En_Kakasi/z_en_kakasi.h"
 
-typedef struct {
-    Actor actor;
-    s32 (*pictoFunc)(GlobalContext* globalCtx, Actor* actor);
-} PictoActor;
+#define PICTO_SEEN_IN_SCENE 1
+#define PICTO_SEEN_ANYWHERE 2
 
-s32 func_8013A240(GlobalContext* globalCtx) {
+/**
+ * Test every loaded actor to see if it is a pictographable `PictoActor`, and if so, run its `validationFunc` to set
+ * appropriate flags.
+ *
+ * @return s32 Number of pictograph actors validly captured.
+ */
+s32 Snap_RecordPictographedActors(PlayState* play) {
     PictoActor* pictoActor;
     Actor* actor;
-    s32 type = 0;
+    s32 category = 0;
     s32 seen;
-    s32 count = 0;
+    s32 validCount = 0;
 
     gSaveContext.save.pictoFlags0 = 0;
     gSaveContext.save.pictoFlags1 = 0;
 
-    if (globalCtx->sceneNum == SCENE_20SICHITAI) {
-        func_8013A41C(1);
+    if (play->sceneId == SCENE_20SICHITAI) {
+        Snap_SetFlag(PICTOGRAPH_IN_SWAMP);
     }
 
-    for (; type < 12; type++) {
-        for (actor = globalCtx->actorCtx.actorLists[type].first; actor != NULL; actor = actor->next) {
+    for (; category < ACTORCAT_MAX; category++) {
+        for (actor = play->actorCtx.actorLists[category].first; actor != NULL; actor = actor->next) {
             seen = 0;
 
-            switch (globalCtx->sceneNum) {
+            // Actors which must be pictographed in a specific scene
+            switch (play->sceneId) {
                 case SCENE_20SICHITAI:
                     if ((actor->id == ACTOR_EN_MNK) || (actor->id == ACTOR_EN_BIGOKUTA)) {
-                        seen = 1;
+                        seen = PICTO_SEEN_IN_SCENE;
                     }
                     break;
+
                 default:
                     seen = 0;
+                    break;
             }
 
             if (actor->id) {
                 ; // Needed to match
             }
 
+            // Actors which may be pictographed anywhere
             switch (actor->id) {
                 case ACTOR_EN_KAKASI:
-                    if ((actor->params & 1) == 1) {
-                        seen |= 2;
+                    if (KAKASI_GET_ABOVE_GROUND(actor) == 1) {
+                        seen |= PICTO_SEEN_ANYWHERE;
                         break; //! @bug break is inside conditional, meaning it falls through if it is false
                     }
+                    // FALLTHROUGH
                 case ACTOR_EN_ZOV:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
+
                 case ACTOR_EN_BAL:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
+
                 case ACTOR_EN_DNQ:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
+
                 case ACTOR_EN_GE1:
                 case ACTOR_EN_GE3:
                 case ACTOR_EN_KAIZOKU:
                 case ACTOR_EN_GE2:
-                    seen |= 2;
+                    seen |= PICTO_SEEN_ANYWHERE;
                     break;
             }
 
-            if (seen != 0) {
+            // If actor is recordable, run its validity function and record if valid
+            if (seen) {
                 pictoActor = (PictoActor*)actor;
-                if (pictoActor->pictoFunc != NULL) {
-                    if ((pictoActor->pictoFunc)(globalCtx, actor) == 0) {
-                        count++;
+                if (pictoActor->validationFunc != NULL) {
+                    if ((pictoActor->validationFunc)(play, actor) == 0) {
+                        validCount++;
                     }
                 }
             }
         }
     }
 
-    return count;
+    return validCount;
 }
 
-void func_8013A41C(s32 flag) {
+// Only used in this file
+void Snap_SetFlag(s32 flag) {
     if (flag < 0x20) {
         gSaveContext.save.pictoFlags0 |= (1 << flag);
     } else {
@@ -83,7 +99,8 @@ void func_8013A41C(s32 flag) {
     }
 }
 
-void func_8013A46C(s32 flag) {
+// Unused
+void Snap_UnsetFlag(s32 flag) {
     if (flag < 0x20) {
         gSaveContext.save.pictoFlags0 &= ~(1 << flag);
     } else {
@@ -92,7 +109,7 @@ void func_8013A46C(s32 flag) {
     }
 }
 
-u32 func_8013A4C4(s32 flag) {
+u32 Snap_CheckFlag(s32 flag) {
     SaveContext* saveCtx = &gSaveContext;
 
     if (flag < 0x20) {
@@ -103,58 +120,83 @@ u32 func_8013A4C4(s32 flag) {
     }
 }
 
-s16 func_8013A504(s16 val) {
-    return (val >= 0) ? val : -val;
+s16 Snap_AbsS(s16 val) {
+    return ABS(val);
 }
 
-s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
-                  f32 distanceMax, s16 angleError) {
-    Vec3f screenSpace;
+/**
+ * Test if a pictograph is a valid pictograph of an actor
+ *
+ * @param play
+ * @param actor Actor to test
+ * @param flag Flag to set if checks successful
+ * @param pos position of point to test (generally a particular point in the actor's model)
+ * @param rot rotation of point to test (for facing camera)
+ * @param distanceMin closest point may be
+ * @param distanceMax farthest away point may be
+ * @param angleRange Size of range that counts as facing the camera (-1 is used for any allowed)
+ * @return s32 0 on success, `or`ed combination of the validity flag indices if not
+ *
+ * @note It is generally not possible to recover the actual failure mode(s) from the return value: oring `ret` with the
+ * actual flag rather than its index would rectify this.
+ */
+s32 Snap_ValidatePictograph(PlayState* play, Actor* actor, s32 flag, Vec3f* pos, Vec3s* rot, f32 distanceMin,
+                            f32 distanceMax, s16 angleRange) {
+    Vec3f projectedPos;
     s16 x;
     s16 y;
     f32 distance;
     CollisionPoly* poly;
-    Camera* camera = GET_ACTIVE_CAM(globalCtx);
+    Camera* camera = GET_ACTIVE_CAM(play);
     Actor* actors[2];
     s32 ret = 0;
     s32 bgId;
 
+    // Check distance
     distance = OLib_Vec3fDist(pos, &camera->eye);
     if ((distance < distanceMin) || (distanceMax < distance)) {
-        func_8013A41C(0x3F);
-        ret = 0x3F;
+        Snap_SetFlag(PICTOGRAPH_BAD_DISTANCE);
+        ret = PICTOGRAPH_BAD_DISTANCE;
     }
 
-    x = func_8013A504(Camera_GetCamDirPitch(camera) + rot->x);
-    y = func_8013A504(Camera_GetCamDirYaw(camera) - BINANG_SUB(rot->y, 0x7FFF));
-    if ((0 < angleError) && ((angleError < x) || (angleError < y))) {
-        func_8013A41C(0x3E);
-        ret |= 0x3E;
+    // Check rot is facing camera?
+    x = Snap_AbsS(Camera_GetCamDirPitch(camera) + rot->x);
+    y = Snap_AbsS(Camera_GetCamDirYaw(camera) - BINANG_SUB(rot->y, 0x7FFF));
+    if ((0 < angleRange) && ((angleRange < x) || (angleRange < y))) {
+        Snap_SetFlag(PICTOGRAPH_BAD_ANGLE);
+        ret |= PICTOGRAPH_BAD_ANGLE;
     }
 
-    Actor_GetProjectedPos(globalCtx, pos, &screenSpace, &distance);
-    x = (s16)(screenSpace.x * distance * 160.0f + 160.0f) - 85;
-    y = (s16)(screenSpace.y * distance * -120.0f + 120.0f) - 67;
-    if ((x < 0) || (150 < x) || (y < 0) || (105 < y)) {
-        func_8013A41C(0x3D);
-        ret |= 0x3D;
+    // Check in capture region
+    Actor_GetProjectedPos(play, pos, &projectedPos, &distance);
+    // Convert to projected position to device coordinates, shift to be relative to the capture region's top-left corner
+    x = (s16)PROJECTED_TO_SCREEN_X(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_X;
+    y = (s16)PROJECTED_TO_SCREEN_Y(projectedPos, distance) - PICTO_CAPTURE_REGION_TOPLEFT_Y;
+
+    // checks if the coordinates are within the capture region
+    if ((x < 0) || (x > PICTO_RESOLUTION_HORIZONTAL) || (y < 0) || (y > PICTO_RESOLUTION_VERTICAL)) {
+        Snap_SetFlag(PICTOGRAPH_NOT_IN_VIEW);
+        ret |= PICTOGRAPH_NOT_IN_VIEW;
     }
 
-    if (BgCheck_ProjectileLineTest(&globalCtx->colCtx, pos, &camera->eye, &screenSpace, &poly, true, true, true, true,
+    // Check not obscured by bg collision
+    if (BgCheck_ProjectileLineTest(&play->colCtx, pos, &camera->eye, &projectedPos, &poly, true, true, true, true,
                                    &bgId)) {
-        func_8013A41C(0x3C);
-        ret |= 0x3C;
+        Snap_SetFlag(PICTOGRAPH_BEHIND_BG);
+        ret |= PICTOGRAPH_BEHIND_BG;
     }
 
+    // Check not obscured by actor collision
     actors[0] = actor;
-    actors[1] = &GET_PLAYER(globalCtx)->actor;
-    if (CollisionCheck_LineOCCheck(globalCtx, &globalCtx->colChkCtx, pos, &camera->eye, actors, 2)) {
-        func_8013A41C(0x3B);
-        ret |= 0x3B;
+    actors[1] = &GET_PLAYER(play)->actor;
+    if (CollisionCheck_LineOCCheck(play, &play->colChkCtx, pos, &camera->eye, actors, 2)) {
+        Snap_SetFlag(PICTOGRAPH_BEHIND_COLLISION);
+        ret |= PICTOGRAPH_BEHIND_COLLISION;
     }
 
+    // If all of the above checks pass, set the flag
     if (ret == 0) {
-        func_8013A41C(flag);
+        Snap_SetFlag(flag);
     }
 
     return ret;

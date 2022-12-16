@@ -6,7 +6,7 @@
 
 struct EnYb;
 
-typedef void (*EnYbActionFunc)(struct EnYb*, GlobalContext*);
+typedef void (*EnYbActionFunc)(struct EnYb*, PlayState*);
 
 typedef struct EnYb {
     /* 0x000 */ Actor actor;
@@ -18,7 +18,7 @@ typedef struct EnYb {
     /* 0x3B8 */ ColliderCylinder collider;
     /* 0x404 */ Vec3f shadowPos;
     /* 0x410 */ u16 playerOcarinaOut;
-    /* 0x412 */ s16 currentAnimIndex;
+    /* 0x412 */ s16 animIndex;
     /* 0x414 */ s16 alpha;
     /* 0x416 */ s16 cutscenes[2];
     /* 0x41A */ s16 cutsceneIndex;

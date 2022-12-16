@@ -5,7 +5,7 @@
 
 struct BgGoronOyu;
 
-typedef void (*BgGoronOyuActionFunc)(struct BgGoronOyu*, GlobalContext*);
+typedef void (*BgGoronOyuActionFunc)(struct BgGoronOyu*, PlayState*);
 
 typedef struct BgGoronOyu {
     /* 0x000 */ DynaPolyActor dyna;

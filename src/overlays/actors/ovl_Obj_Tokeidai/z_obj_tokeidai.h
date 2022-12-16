@@ -21,7 +21,7 @@ typedef enum {
 
 struct ObjTokeidai;
 
-typedef void (*ObjTokeidaiActionFunc)(struct ObjTokeidai*, GlobalContext*);
+typedef void (*ObjTokeidaiActionFunc)(struct ObjTokeidai*, PlayState*);
 
 typedef struct ObjTokeidai {
     /* 0x000 */ Actor actor;
@@ -61,7 +61,5 @@ typedef struct ObjTokeidai {
     /* 0x170 */ u16 clockTime; // can differ from the actual time, e.g., in cutscenes
     /* 0x174 */ ObjTokeidaiActionFunc actionFunc;
 } ObjTokeidai; // size = 0x178
-
-extern const ActorInit Obj_Tokeidai_InitVars;
 
 #endif // Z_OBJ_TOKEIDAI_H

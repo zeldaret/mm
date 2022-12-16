@@ -11,15 +11,15 @@
 
 #define THIS ((EnBoom*)thisx)
 
-void EnBoom_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBoom_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBoom_Init(Actor* thisx, PlayState* play);
+void EnBoom_Destroy(Actor* thisx, PlayState* play);
+void EnBoom_Update(Actor* thisx, PlayState* play);
+void EnBoom_Draw(Actor* thisx, PlayState* play);
 
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
-void func_808A2918(EnBoom* this, GlobalContext* globalCtx);
+void func_808A2918(EnBoom* this, PlayState* play);
 
-const ActorInit En_Boom_InitVars = {
+ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -60,13 +60,12 @@ void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void func_808A24DC(EnBoom* this, GlobalContext* globalCtx) {
+void func_808A24DC(EnBoom* this, PlayState* play) {
     WaterBox* sp54;
     f32 sp50 = this->actor.world.pos.y;
     u16 sp4E = this->actor.bgCheckFlags & 0x20;
 
-    if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50,
-                             &sp54) &&
+    if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
         (this->actor.world.pos.y < sp50)) {
         Vec3f sp40;
 
@@ -74,7 +73,7 @@ void func_808A24DC(EnBoom* this, GlobalContext* globalCtx) {
         sp40.x = this->actor.world.pos.x;
         sp40.y = this->actor.world.pos.y - 20.0f;
         sp40.z = this->actor.world.pos.z;
-        EffectSsBubble_Spawn(globalCtx, &sp40, 20.0f, 10.0f, 20.0f, 0.13f);
+        EffectSsBubble_Spawn(play, &sp40, 20.0f, 10.0f, 20.0f, 0.13f);
     } else {
         this->actor.bgCheckFlags &= ~0x20;
     }
@@ -93,20 +92,20 @@ void func_808A24DC(EnBoom* this, GlobalContext* globalCtx) {
             sp34.x = this->actor.prevPos.x + (sp34.x * temp_fv0);
             sp34.y = sp50;
             sp34.z = this->actor.prevPos.z + (sp34.z * temp_fv0);
-            EffectSsGSplash_Spawn(globalCtx, &sp34, NULL, NULL, 0, 300);
+            EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 300);
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
-        EffectSsGRipple_Spawn(globalCtx, &sp34, 100, 500, 0);
-        EffectSsGRipple_Spawn(globalCtx, &sp34, 100, 500, 4);
-        EffectSsGRipple_Spawn(globalCtx, &sp34, 100, 500, 8);
+        EffectSsGRipple_Spawn(play, &sp34, 100, 500, 0);
+        EffectSsGRipple_Spawn(play, &sp34, 100, 500, 4);
+        EffectSsGRipple_Spawn(play, &sp34, 100, 500, 8);
     }
 
     this->actor.bgCheckFlags |= 0x40;
 }
 
-void EnBoom_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoom_Init(Actor* thisx, PlayState* play) {
     static u8 D_808A3068[4] = { 255, 255, 100, 255 };
     static u8 D_808A306C[4] = { 255, 255, 100, 64 };
     static u8 D_808A3070[4] = { 255, 255, 100, 0 };
@@ -130,21 +129,21 @@ void EnBoom_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp30.unkFlag = 0;
     sp30.calcMode = 0;
 
-    Effect_Add(globalCtx, &this->effectIndex, 1, 0, 0, &sp30);
+    Effect_Add(play, &this->effectIndex, 1, 0, 0, &sp30);
 
-    Collider_InitQuad(globalCtx, &this->collider);
-    Collider_SetQuad(globalCtx, &this->collider, &this->actor, &sQuadInit);
+    Collider_InitQuad(play, &this->collider);
+    Collider_SetQuad(play, &this->collider, &this->actor, &sQuadInit);
     EnBoom_SetupAction(this, func_808A2918);
 }
 
-void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoom_Destroy(Actor* thisx, PlayState* play) {
     EnBoom* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Actor* temp;
 
     if (player != NULL) {
-        Effect_Destroy(globalCtx, this->effectIndex);
-        Collider_DestroyQuad(globalCtx, &this->collider);
+        Effect_Destroy(play, this->effectIndex);
+        Collider_DestroyQuad(play, &this->collider);
 
         temp = this->actor.child;
         if (temp != NULL) {
@@ -156,16 +155,16 @@ void EnBoom_Destroy(Actor* thisx, GlobalContext* globalCtx) {
                 temp->child = NULL;
             } else {
                 player->boomerangActor = NULL;
-                player->stateFlags1 &= ~0x2000000;
+                player->stateFlags1 &= ~PLAYER_STATE1_2000000;
             }
         }
-        player->stateFlags3 |= 0x800000;
+        player->stateFlags3 |= PLAYER_STATE3_800000;
     }
 }
 
-void func_808A2918(EnBoom* this, GlobalContext* globalCtx) {
+void func_808A2918(EnBoom* this, PlayState* play) {
     Actor* sp7C;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 sp74;
     s16 sp72;
     s16 sp70;
@@ -211,7 +210,7 @@ void func_808A2918(EnBoom* this, GlobalContext* globalCtx) {
 
     Actor_SetSpeeds(&this->actor, 12.0f);
     Actor_MoveWithGravity(&this->actor);
-    func_808A24DC(this, globalCtx);
+    func_808A24DC(this, play);
     func_800B9010(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
 
     if ((this->collider.base.atFlags & AT_HIT) && (((this->collider.base.at->id == ACTOR_EN_ITEM00) &&
@@ -220,7 +219,7 @@ void func_808A2918(EnBoom* this, GlobalContext* globalCtx) {
                                                    (this->collider.base.at->id == ACTOR_EN_SI))) {
         this->unk_1C8 = this->collider.base.at;
         if (this->collider.base.at->id == ACTOR_EN_SI) {
-            this->collider.base.at->flags |= 0x2000;
+            this->collider.base.at->flags |= ACTOR_FLAG_2000;
         }
     }
 
@@ -229,13 +228,13 @@ void func_808A2918(EnBoom* this, GlobalContext* globalCtx) {
         Vec3f sp50;
         s32 pad;
 
-        sp74 = BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp50,
+        sp74 = BgCheck_EntityLineTest1(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos, &sp50,
                                        &this->actor.wallPoly, true, true, true, true, &sp5C);
         if (sp74 != 0) {
-            if (func_800B90AC(globalCtx, &this->actor, this->actor.wallPoly, sp5C, &sp50)) {
+            if (func_800B90AC(play, &this->actor, this->actor.wallPoly, sp5C, &sp50)) {
                 sp74 = 0;
             } else {
-                CollisionCheck_SpawnShieldParticlesMetal(globalCtx, &sp50);
+                CollisionCheck_SpawnShieldParticlesMetal(play, &sp50);
             }
         }
 
@@ -265,10 +264,10 @@ void func_808A2918(EnBoom* this, GlobalContext* globalCtx) {
                     sp7C->gravity = -0.9f;
                     sp7C->bgCheckFlags &= ~3;
                 } else {
-                    sp7C->flags &= -0x2001;
+                    sp7C->flags &= ~ACTOR_FLAG_2000;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -282,13 +281,13 @@ void func_808A2918(EnBoom* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBoom_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoom_Update(Actor* thisx, PlayState* play) {
     EnBoom* this = THIS;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Actor* actor;
 
-    if (!(player->stateFlags1 & 0x20000000)) {
-        this->actionFunc(this, globalCtx);
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
+        this->actionFunc(this, play);
 
         if (((actor = this->actor.child) != NULL) || ((actor = this->actor.parent) != NULL)) {
             this->actor.focus.pos.x = (this->actor.world.pos.x + actor->world.pos.x) * 0.5f;
@@ -317,13 +316,13 @@ EnBoomStruct D_808A3078[] = {
     { gameplay_keep_DL_06FF68, { -960.0f, 0.0f, 0.0f }, { 960.0f, 0.0f, 0.0f } },
 };
 
-void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoom_Draw(Actor* thisx, PlayState* play) {
     EnBoom* this = THIS;
     EnBoomStruct* sp58 = &D_808A3078[this->actor.params];
     Vec3f sp4C;
     Vec3f sp40;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
     Matrix_RotateZS((this->actor.params != 0) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
@@ -331,15 +330,15 @@ void EnBoom_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_MultVec3f(&sp58->unk_04, &sp4C);
     Matrix_MultVec3f(&sp58->unk_10, &sp40);
 
-    if (func_80126440(globalCtx, &this->collider, &this->weaponInfo, &sp4C, &sp40)) {
+    if (func_80126440(play, &this->collider, &this->weaponInfo, &sp4C, &sp40)) {
         EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &sp4C, &sp40);
     }
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     Matrix_RotateYS(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sp58->unk_00);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

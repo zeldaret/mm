@@ -61,7 +61,7 @@
         <Limb Name="object_dinofos_Standardlimb_0094FC" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_12" Offset="0x94FC" />
         <Limb Name="object_dinofos_Standardlimb_009508" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_13" Offset="0x9508" />
         <Limb Name="object_dinofos_Standardlimb_009514" Type="Standard" EnumName="OBJECT_DINOFOS_LIMB_14" Offset="0x9514" />
-        <Skeleton Name="object_dinofos_Skel_009570" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DINOFOS_LIMB_NONE" LimbMax="OBJECT_DINOFOS_LIMB_MAX" EnumName="object_dinofos_Limbs" Offset="0x9570" />
+        <Skeleton Name="object_dinofos_Skel_009570" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DINOFOS_LIMB_NONE" LimbMax="OBJECT_DINOFOS_LIMB_MAX" EnumName="ObjectDinofosLimb" Offset="0x9570" />
         <Animation Name="object_dinofos_Anim_009B70" Offset="0x9B70" />
         <Animation Name="object_dinofos_Anim_00ABD0" Offset="0xABD0" />
         <Animation Name="object_dinofos_Anim_00C974" Offset="0xC974" />

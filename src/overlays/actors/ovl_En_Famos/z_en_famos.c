@@ -5,6 +5,7 @@
  */
 
 #include "z_en_famos.h"
+#include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -12,45 +13,45 @@
 
 #define THIS ((EnFamos*)thisx)
 
-void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFamos_Init(Actor* thisx, PlayState* play);
+void EnFamos_Destroy(Actor* thisx, PlayState* play);
+void EnFamos_Update(Actor* thisx, PlayState* play);
+void EnFamos_Draw(Actor* thisx, PlayState* play);
 
 void EnFamos_SetupAttackDebris(EnFamos* this);
 void EnFamos_SetupDeathDebris(EnFamos* this);
-s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx);
+s32 EnFamos_IsPlayerSeen(EnFamos* this, PlayState* play);
 void EnFamos_SetupStillIdle(EnFamos* this);
-void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_StillIdle(EnFamos* this, PlayState* play);
 void EnFamos_SetupPathingIdle(EnFamos* this);
-void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_PathingIdle(EnFamos* this, PlayState* play);
 void EnFamos_SetupTurnHome(EnFamos* this);
-void EnFamos_TurnHome(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_TurnHome(EnFamos* this, PlayState* play);
 void EnFamos_SetupReturnHome(EnFamos* this);
-void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_ReturnHome(EnFamos* this, PlayState* play);
 void EnFamos_SetupAlert(EnFamos* this);
-void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_Alert(EnFamos* this, PlayState* play);
 void EnFamos_SetupChase(EnFamos* this);
-void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_Chase(EnFamos* this, PlayState* play);
 void EnFamos_SetupAttackAim(EnFamos* this);
-void EnFamos_AttackAim(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_AttackAim(EnFamos* this, PlayState* play);
 void EnFamos_SetupAttack(EnFamos* this);
-void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_Attack(EnFamos* this, PlayState* play);
 void EnFamos_SetupFinishAttack(EnFamos* this);
-void EnFamos_FinishAttack(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_FinishAttack(EnFamos* this, PlayState* play);
 void EnFamos_SetupAttackRebound(EnFamos* this);
-void EnFamos_AttackRebound(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_AttackRebound(EnFamos* this, PlayState* play);
 void EnFamos_SetupScanForPlayer(EnFamos* this);
-void EnFamos_ScanForPlayer(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_ScanForPlayer(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathSlam(EnFamos* this);
-void EnFamos_DeathSlam(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_DeathSlam(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathExplosion(EnFamos* this);
-void EnFamos_DeathExplosion(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_DeathExplosion(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathFade(EnFamos* this);
-void EnFamos_DeathFade(EnFamos* this, GlobalContext* globalCtx);
-void EnFamos_DrawDebris(EnFamos* this, GlobalContext* globalCtx);
+void EnFamos_DeathFade(EnFamos* this, PlayState* play);
+void EnFamos_DrawDebris(EnFamos* this, PlayState* play);
 
-const ActorInit En_Famos_InitVars = {
+ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -138,7 +139,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -153,20 +154,20 @@ static AnimatedMaterial* sEmblemAnimatedMats[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_DEATH_ARMOS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 3500, ICHAIN_STOP),
 };
 
 static s32 sAnimatedMaterialsDesgmented = false;
 
-void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnFamos_Init(Actor* thisx, PlayState* play) {
     EnFamos* this = THIS;
     Path* path;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (GET_FAMOS_PATH(thisx) != 0xFF) {
-        path = &globalCtx->setupPathList[this->actor.params];
+    if (FAMOS_GET_PATH(thisx) != 0xFF) {
+        path = &play->setupPathList[this->actor.params];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
         this->pathNodeCount = path->count;
         if (this->pathNodeCount == 1) {
@@ -176,12 +177,11 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawSquare, 30.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gFamosSkeleton, &gFamosIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFamosSkeleton, &gFamosIdleAnim, this->jointTable, this->morphTable,
                    FAMOS_LIMB_MAX);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
-    Collider_InitAndSetJntSph(globalCtx, &this->emblemCollider, &this->actor, &sJntSphInit,
-                              this->emblemColliderElements);
+    Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
+    Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
+    Collider_InitAndSetJntSph(play, &this->emblemCollider, &this->actor, &sJntSphInit, this->emblemColliderElements);
 
     if (!sAnimatedMaterialsDesgmented) { // init animated materials
         for (i = 0; i < ARRAY_COUNT(sEmblemAnimatedMats); i++) {
@@ -193,7 +193,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = 250;
     this->baseHeight = this->actor.world.pos.y;
     // params: [this->actor.shape.rot.x] is used to set aggro distance
-    this->aggroDistance = (GET_FAMOS_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
+    this->aggroDistance = (FAMOS_GET_AGGRO_DISTANCE(thisx) <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
     this->hasFinishedRotating = true;
@@ -205,12 +205,12 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnFamos_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnFamos_Destroy(Actor* thisx, PlayState* play) {
     EnFamos* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider1);
-    Collider_DestroyCylinder(globalCtx, &this->collider2);
-    Collider_DestroyJntSph(globalCtx, &this->emblemCollider);
+    Collider_DestroyCylinder(play, &this->collider1);
+    Collider_DestroyCylinder(play, &this->collider2);
+    Collider_DestroyJntSph(play, &this->emblemCollider);
 }
 
 /**
@@ -226,15 +226,15 @@ void EnFamos_SetupAttackDebris(EnFamos* this) {
     this->debrisTimer = 40;
     rock = &this->rocks[0];
     for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
-        randVelDirection = Rand_Next() >> 0x10;
+        randVelDirection = (s32)Rand_Next() >> 0x10;
         randOffset = Rand_S16Offset(0x1800, 0x2800);
         randFloat = Rand_ZeroFloat(5.0f) + 5.0f;
         rock->velocity.x = randFloat * Math_CosS(randOffset) * Math_SinS(randVelDirection);
         rock->velocity.y = Math_SinS(randOffset) * randFloat + 3.0f;
         rock->velocity.z = randFloat * Math_CosS(randOffset) * Math_CosS(randVelDirection);
-        rock->rotation.x = Rand_Next() >> 0x10;
-        rock->rotation.y = Rand_Next() >> 0x10;
-        rock->rotation.z = Rand_Next() >> 0x10;
+        rock->rotation.x = (s32)Rand_Next() >> 0x10;
+        rock->rotation.y = (s32)Rand_Next() >> 0x10;
+        rock->rotation.z = (s32)Rand_Next() >> 0x10;
         rock->pos.x = (Math_SinS(randVelDirection) * 20.0f) + this->actor.world.pos.x;
         rock->pos.y = this->actor.floorHeight;
         rock->pos.z = (Math_CosS(randVelDirection) * 20.0f) + this->actor.world.pos.z;
@@ -255,15 +255,15 @@ void EnFamos_SetupDeathDebris(EnFamos* this) {
     this->debrisTimer = 40;
     rock = &this->rocks[0];
     for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
-        randVelDirection = Rand_Next() >> 0x10;
-        randSmaller = (u32)Rand_Next() >> 0x12;
+        randVelDirection = (s32)Rand_Next() >> 0x10;
+        randSmaller = Rand_Next() >> 0x12;
         randFloat = Rand_ZeroFloat(6.0f) + 7.0f;
         rock->velocity.x = randFloat * Math_CosS(randSmaller) * Math_SinS(randVelDirection);
         rock->velocity.y = Math_SinS(randSmaller) * randFloat + 4.5f;
         rock->velocity.z = randFloat * Math_CosS(randSmaller) * Math_CosS(randVelDirection);
-        rock->rotation.x = Rand_Next() >> 0x10;
-        rock->rotation.y = Rand_Next() >> 0x10;
-        rock->rotation.z = Rand_Next() >> 0x10;
+        rock->rotation.x = (s32)Rand_Next() >> 0x10;
+        rock->rotation.y = (s32)Rand_Next() >> 0x10;
+        rock->rotation.z = (s32)Rand_Next() >> 0x10;
         rock->pos.x = Math_SinS(randVelDirection) * 20.0f + this->actor.world.pos.x;
         rock->pos.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
         rock->pos.z = Math_CosS(randVelDirection) * 20.0f + this->actor.world.pos.z;
@@ -271,9 +271,9 @@ void EnFamos_SetupDeathDebris(EnFamos* this) {
     }
 }
 
-s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx) {
-    if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE) &&
-        (Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->calmPos) < this->aggroDistance) &&
+s32 EnFamos_IsPlayerSeen(EnFamos* this, PlayState* play) {
+    if ((Player_GetMask(play) != PLAYER_MASK_STONE) &&
+        (Actor_XZDistanceToPoint(&GET_PLAYER(play)->actor, &this->calmPos) < this->aggroDistance) &&
         Actor_IsFacingPlayer(&this->actor, 0x5000)) {
         return true;
     } else {
@@ -350,12 +350,12 @@ void EnFamos_SetupStillIdle(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-void EnFamos_StillIdle(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_StillIdle(EnFamos* this, PlayState* play) {
     EnFamos_UpdateBobbingHeight(this);
     if (this->isCalm) {
         Math_Vec3f_Copy(&this->calmPos, &this->actor.world.pos);
     }
-    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, play)) {
         EnFamos_SetupAlert(this);
     }
 }
@@ -379,13 +379,13 @@ void EnFamos_SetupPathingIdle(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-void EnFamos_PathingIdle(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_PathingIdle(EnFamos* this, PlayState* play) {
     EnFamos_UpdateBobbingHeight(this);
     if (this->isCalm) {
         Math_Vec3f_Copy(&this->calmPos, &this->actor.world.pos);
     }
 
-    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, play)) {
         EnFamos_SetupAlert(this);
     } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetYaw, 0x200)) {
         EnFamos_SetupReturnHome(this);
@@ -402,9 +402,9 @@ void EnFamos_SetupTurnHome(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-void EnFamos_TurnHome(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_TurnHome(EnFamos* this, PlayState* play) {
     EnFamos_UpdateBobbingHeight(this);
-    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, play)) {
         EnFamos_SetupAlert(this);
     } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->targetYaw, 0x200)) {
         EnFamos_SetupReturnHome(this);
@@ -420,7 +420,7 @@ void EnFamos_SetupReturnHome(EnFamos* this) {
     this->actionFunc = EnFamos_ReturnHome;
 }
 
-void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_ReturnHome(EnFamos* this, PlayState* play) {
     f32 distanceToHome = Actor_XZDistanceToPoint(&this->actor, &this->targetDest);
 
     this->actor.shape.rot.y = Actor_YawToPoint(&this->actor, &this->targetDest);
@@ -430,7 +430,7 @@ void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->calmPos, &this->actor.world.pos);
     }
 
-    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, play)) {
         EnFamos_SetupAlert(this);
     } else if (distanceToHome < 20.0f) {
         if (this->pathPoints != NULL) {
@@ -461,7 +461,7 @@ void EnFamos_SetupAlert(EnFamos* this) {
     this->actionFunc = EnFamos_Alert;
 }
 
-void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_Alert(EnFamos* this, PlayState* play) {
     if (ABS_ALT(this->flipRot) > 0x4000) {
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
@@ -486,8 +486,8 @@ void EnFamos_SetupChase(EnFamos* this) {
     this->actionFunc = EnFamos_Chase;
 }
 
-void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnFamos_Chase(EnFamos* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f abovePlayerPos;
     u32 surfaceType;
 
@@ -500,13 +500,13 @@ void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
     this->actor.world.rot.x = -Actor_PitchToPoint(&this->actor, &abovePlayerPos);
     Math_StepToF(&this->actor.speedXZ, 6.0f, 0.5f);
 
-    surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
         (surfaceType != 0xC && surfaceType != 0xD)) {
         EnFamos_SetupAttackAim(this);
 
-    } else if ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
-               (this->aggroDistance < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->calmPos)) ||
+    } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
+               (this->aggroDistance < Actor_XZDistanceToPoint(&GET_PLAYER(play)->actor, &this->calmPos)) ||
                !Actor_IsFacingPlayer(&this->actor, 0x6000)) {
         EnFamos_SetupScanForPlayer(this);
     }
@@ -519,7 +519,7 @@ void EnFamos_SetupAttackAim(EnFamos* this) {
     this->actionFunc = EnFamos_AttackAim;
 }
 
-void EnFamos_AttackAim(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_AttackAim(EnFamos* this, PlayState* play) {
     func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     if (SkelAnime_Update(&this->skelAnime)) {
         EnFamos_SetupAttack(this);
@@ -533,7 +533,7 @@ void EnFamos_SetupAttack(EnFamos* this) {
     this->actionFunc = EnFamos_Attack;
 }
 
-void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_Attack(EnFamos* this, PlayState* play) {
     s32 hitFloor;
     u32 surfaceType;
 
@@ -543,18 +543,18 @@ void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
         this->emblemCollider.base.acFlags &= ~AC_ON;
     }
 
-    surfaceType = func_800C9B18(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+    surfaceType = func_800C9B18(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & 1;
     if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
-            func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10); // camera shake?
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+            Camera_AddQuake(GET_ACTIVE_CAM(play), 2, 15, 10);
+            Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             EnFamos_SetupAttackDebris(this);
 
             // spawn crator on floor
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
+            Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x0);
 
             if (this->actor.child != NULL) {
@@ -590,7 +590,7 @@ void EnFamos_SetupFinishAttack(EnFamos* this) {
     this->actionFunc = EnFamos_FinishAttack;
 }
 
-void EnFamos_FinishAttack(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_FinishAttack(EnFamos* this, PlayState* play) {
     if (this->stateTimer == 0) {
         this->collider2.base.atFlags &= ~AT_ON;
     }
@@ -607,7 +607,7 @@ void EnFamos_SetupAttackRebound(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-void EnFamos_AttackRebound(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_AttackRebound(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 5.0f, 0.3f);
     if (this->actor.speedXZ > 1.0f) {
         if (ABS_ALT(this->flipRot) > 0x4000) {
@@ -632,11 +632,11 @@ void EnFamos_SetupScanForPlayer(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-void EnFamos_ScanForPlayer(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_ScanForPlayer(EnFamos* this, PlayState* play) {
     EnFamos_UpdateBobbingHeight(this);
     this->stateTimer--;
 
-    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
+    if (EnFamos_IsPlayerSeen(this, play)) {
         EnFamos_SetupAlert(this);
     } else if (this->stateTimer == 0) {
         EnFamos_SetupTurnHome(this);
@@ -659,7 +659,7 @@ void EnFamos_SetupDeathSlam(EnFamos* this) {
     this->actionFunc = EnFamos_DeathSlam;
 }
 
-void EnFamos_DeathSlam(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_DeathSlam(EnFamos* this, PlayState* play) {
     if (this->stateTimer == 17) {
         this->collider2.base.atFlags &= ~AT_ON;
     }
@@ -680,7 +680,7 @@ void EnFamos_SetupDeathExplosion(EnFamos* this) {
     this->actionFunc = EnFamos_DeathExplosion;
 }
 
-void EnFamos_DeathExplosion(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speedXZ, 3.0f, 0.3f);
     if (this->actor.colorFilterTimer == 0) {
         Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, false, 4);
@@ -690,7 +690,7 @@ void EnFamos_DeathExplosion(EnFamos* this, GlobalContext* globalCtx) {
     this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
     if (this->stateTimer == 1) {
         EnBom* explosion =
-            (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
                                 this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, ENBOM_0);
         if (explosion != NULL) {
             explosion->timer = 0; // instant explosion
@@ -698,7 +698,7 @@ void EnFamos_DeathExplosion(EnFamos* this, GlobalContext* globalCtx) {
         this->stateTimer--;
 
     } else if (this->stateTimer == 0) {
-        Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos,
+        Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos,
                                    (0xD << 4)); // random item from droptable 0xD
         EnFamos_SetupDeathFade(this);
 
@@ -715,7 +715,7 @@ void EnFamos_SetupDeathFade(EnFamos* this) {
     this->actor.speedXZ = 0.0f;
 }
 
-void EnFamos_DeathFade(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_DeathFade(EnFamos* this, PlayState* play) {
     Actor* enBom;
 
     if (this->debrisTimer == 0) {
@@ -723,7 +723,7 @@ void EnFamos_DeathFade(EnFamos* this, GlobalContext* globalCtx) {
         if (enBom != NULL) {
             enBom->parent = NULL;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -735,14 +735,13 @@ void EnFamos_UpdateDebrisPosRot(EnFamos* this) {
     for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
         rock->velocity.y -= 1.0f;
         Math_Vec3f_Sum(&rock->pos, &rock->velocity, &rock->pos);
-        // all casts seem required
-        rock->rotation.x += (s16)(((u32)Rand_Next() >> 0x17) + 0x700);
-        rock->rotation.y += (s16)(((u32)Rand_Next() >> 0x17) + 0x900);
-        rock->rotation.z += (s16)(((u32)Rand_Next() >> 0x17) + 0xB00);
+        rock->rotation.x += (s16)((Rand_Next() >> 0x17) + 0x700);
+        rock->rotation.y += (s16)((Rand_Next() >> 0x17) + 0x900);
+        rock->rotation.z += (s16)((Rand_Next() >> 0x17) + 0xB00);
     }
 }
 
-void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnFamos_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnFamos* this = THIS;
     f32 oldHeight;
@@ -759,7 +758,7 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
 
-        this->actionFunc(this, globalCtx);
+        this->actionFunc(this, play);
         oldHeight = this->actor.world.pos.y;
         Actor_MoveWithoutGravity(&this->actor);
         if (oldHoverTimer != this->hoverTimer) { // test if updated in actionFunc
@@ -767,7 +766,7 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->flippedTimer >= 0) {
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 30.0f, 80.0f, 0x1F);
             if ((this->actionFunc == EnFamos_Attack) && (this->animatedMaterialIndex != FAMOS_ANIMATED_MAT_NORMAL) &&
                 (this->actor.bgCheckFlags & 1)) { // touch floor
                 this->actor.world.pos.y -= 60.0f;
@@ -777,25 +776,24 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.focus.rot.y = this->actor.shape.rot.y;
         Collider_UpdateCylinder(&this->actor, &this->collider1);
         if (this->collider1.base.atFlags & AT_ON) {
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider1.base);
         }
 
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);
         if (this->emblemCollider.base.acFlags & AC_ON) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->emblemCollider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->emblemCollider.base);
         }
 
         if (this->collider2.base.atFlags & AC_ON) {
             Collider_UpdateCylinder(&this->actor, &this->collider2);
             this->collider2.dim.pos.y = this->actor.floorHeight;
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
         }
     }
 }
 
-s32 EnFamos_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnFamos_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFamos* this = THIS;
 
     if (limbIndex == FAMOS_LIMB_BODY) {
@@ -812,7 +810,7 @@ s32 EnFamos_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnFamos_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnFamos_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFamos* this = THIS;
 
     if (limbIndex == FAMOS_LIMB_EMBLEM) {
@@ -821,14 +819,14 @@ void EnFamos_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 }
 
-void EnFamos_DrawDebris(EnFamos* this, GlobalContext* globalCtx) {
+void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
     s32 i;
 
     if (this->debrisTimer > 0) {
         Gfx* dispOpa;
         EnFamosRock* rock;
 
-        OPEN_DISPS(globalCtx->state.gfxCtx);
+        OPEN_DISPS(play->state.gfxCtx);
         dispOpa = POLY_OPA_DISP;
 
         gSPDisplayList(&dispOpa[0], &sSetupDL[6 * 0x19]);
@@ -843,7 +841,7 @@ void EnFamos_DrawDebris(EnFamos* this, GlobalContext* globalCtx) {
             Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rotation);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
-            gSPMatrix(&dispOpa[3 + i * 2], Matrix_NewMtx(globalCtx->state.gfxCtx),
+            gSPMatrix(&dispOpa[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
             gSPDisplayList(&dispOpa[4 + i * 2], &gameplay_keep_DL_06AB30); // greenish brown rock DL
@@ -851,21 +849,21 @@ void EnFamos_DrawDebris(EnFamos* this, GlobalContext* globalCtx) {
 
         POLY_OPA_DISP = &dispOpa[3 + (ARRAY_COUNT(this->rocks) * 2)];
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(play->state.gfxCtx);
     }
 }
 
-void EnFamos_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnFamos_Draw(Actor* thisx, PlayState* play) {
     EnFamos* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     if (this->actionFunc != EnFamos_DeathFade) {
-        AnimatedMat_Draw(globalCtx, sEmblemAnimatedMats[this->animatedMaterialIndex]);
-        SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnFamos_OverrideLimbDraw,
+        AnimatedMat_Draw(play, sEmblemAnimatedMats[this->animatedMaterialIndex]);
+        SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnFamos_OverrideLimbDraw,
                           EnFamos_PostLimbDraw, &this->actor);
         if (this->actor.colorFilterTimer != 0) {
-            func_800AE5A0(globalCtx);
+            func_800AE5A0(play);
         }
     }
-    EnFamos_DrawDebris(this, globalCtx);
+    EnFamos_DrawDebris(this, play);
 }

@@ -5,37 +5,39 @@
  */
 
 #include "z_boss_01.h"
+#include "z64rumble.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss01*)thisx)
 
-void Boss01_Init(Actor* thisx, GlobalContext* globalCtx);
-void Boss01_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void Boss01_Update(Actor* thisx, GlobalContext* globalCtx);
-void Boss01_Draw(Actor* thisx, GlobalContext* globalCtx);
+void Boss01_Init(Actor* thisx, PlayState* play);
+void Boss01_Destroy(Actor* thisx, PlayState* play);
+void Boss01_Update(Actor* thisx, PlayState* play);
+void Boss01_Draw(Actor* thisx, PlayState* play);
 
-void func_809D12B4(Boss01* this, GlobalContext* globalCtx);
-void func_809D1B2C(Boss01* this, GlobalContext* globalCtx);
-void func_809D1E74(Boss01* this, GlobalContext* globalCtx);
-void func_809D20D0(Boss01* this, GlobalContext* globalCtx);
-void func_809D25E8(Boss01* this, GlobalContext* globalCtx);
-void func_809D26B8(Boss01* this, GlobalContext* globalCtx);
-void func_809D27D4(Boss01* this, GlobalContext* globalCtx);
-void func_809D2AA0(Boss01* this, GlobalContext* globalCtx);
-void func_809D2BCC(Boss01* this, GlobalContext* globalCtx);
-void func_809D2CDC(Boss01* this, GlobalContext* globalCtx);
-void func_809D2E4C(Boss01* this, GlobalContext* globalCtx);
-void func_809D30D0(Boss01* this, GlobalContext* globalCtx);
-void func_809D345C(Boss01* this, GlobalContext* globalCtx);
-void func_809D3530(Boss01* this, GlobalContext* globalCtx);
-void func_809D3ADC(Boss01* this, GlobalContext* globalCtx);
-void func_809D3CD0(Boss01* this, GlobalContext* globalCtx);
-void func_809D4464(Boss01* this, GlobalContext* globalCtx);
-void func_809D6314(Boss01* this, GlobalContext* globalCtx);
-void func_809D6488(Boss01* this, GlobalContext* globalCtx);
-void func_809D6588(Boss01* this, GlobalContext* globalCtx);
-void func_809D65E0(Boss01* this, GlobalContext* globalCtx);
+void func_809D12B4(Boss01* this, PlayState* play);
+void func_809D1B2C(Boss01* this, PlayState* play);
+void func_809D1E74(Boss01* this, PlayState* play);
+void func_809D20D0(Boss01* this, PlayState* play);
+void func_809D25E8(Boss01* this, PlayState* play);
+void func_809D26B8(Boss01* this, PlayState* play);
+void func_809D27D4(Boss01* this, PlayState* play);
+void func_809D2AA0(Boss01* this, PlayState* play);
+void func_809D2BCC(Boss01* this, PlayState* play);
+void func_809D2CDC(Boss01* this, PlayState* play);
+void func_809D2E4C(Boss01* this, PlayState* play);
+void func_809D30D0(Boss01* this, PlayState* play);
+void func_809D345C(Boss01* this, PlayState* play);
+void func_809D3530(Boss01* this, PlayState* play);
+void func_809D3ADC(Boss01* this, PlayState* play);
+void func_809D3CD0(Boss01* this, PlayState* play);
+void func_809D4464(Boss01* this, PlayState* play);
+void func_809D6314(Boss01* this, PlayState* play);
+void func_809D6488(Boss01* this, PlayState* play);
+void func_809D6588(Boss01* this, PlayState* play);
+void func_809D65E0(Boss01* this, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
@@ -129,7 +131,7 @@ static ColliderJntSphElementInit D_809D79D0[3] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7A3C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    3, D_809D79D0, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D79D0, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -143,7 +145,7 @@ static ColliderJntSphElementInit D_809D7A4C[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7A70 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809D7A4C, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D7A4C, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[11] = {
@@ -197,7 +199,7 @@ static ColliderJntSphElementInit D_809D7A80[11] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7C0C = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    11, D_809D7A80, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D7A80, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[2] = {
@@ -215,7 +217,7 @@ static ColliderJntSphElementInit D_809D7C1C[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809D7C64 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_809D7C1C, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_809D7C1C, // sJntSphElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
@@ -232,7 +234,7 @@ static ColliderCylinderInit D_809D7CA0 = {
     { 8, 15, 10, { 0, 0, 0 } },
 };
 
-const ActorInit Boss_01_InitVars = {
+ActorInit Boss_01_InitVars = {
     ACTOR_BOSS_01,
     ACTORCAT_BOSS,
     FLAGS,

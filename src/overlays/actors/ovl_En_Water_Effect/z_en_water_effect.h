@@ -18,13 +18,14 @@ typedef struct {
     /* 0x3C */ s16 unk_3C;
 } EnWaterEffectStruct; // size = 0x40
 
-enum {
-    /* 0x  1 */ ENWATEREFFECT_1 = 1,
-    /* 0x309 */ ENWATEREFFECT_777 = 777,
-    /* 0x30A */ ENWATEREFFECT_778,
-    /* 0x30B */ ENWATEREFFECT_779,
-    /* 0x30C */ ENWATEREFFECT_780,
-};
+typedef enum {
+    /* 0x001 */ ENWATEREFFECT_TYPE_FALLING_ROCK_SPAWNER = 1, // Spawner for falling flaming rocks,
+    /* 0x0FF */ ENWATEREFFECT_TYPE_FALLING_WATER_SPAWNER = 0xFF, // Spawner for water dripping from the ceiling
+    /* 0x309 */ ENWATEREFFECT_TYPE_GYORG_RIPPLES = 0x309, // Ripples on the surface when Gyrog enters/leaves the water
+    /* 0x30A */ ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY, // Large "funnel" of water that forms when Gyorg enters/leaves the water
+    /* 0x30B */ ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY, // Secondary "funnel" in the middle of the larger "funnel"
+    /* 0x30C */ ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE, // Shockwave on the surface when Gyorg rams into the central platform
+} EnWaterEffectType;
 
 typedef struct EnWaterEffect {
     /* 0x000 */ Actor actor;
@@ -41,7 +42,5 @@ typedef struct EnWaterEffect {
     /* 0xE34 */ f32 unk_E34;
     /* 0xE38 */ f32 unk_E38;
 } EnWaterEffect; // size = 0xE3C
-
-extern const ActorInit En_Water_Effect_InitVars;
 
 #endif // Z_EN_WATER_EFFECT_H

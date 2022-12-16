@@ -1,7 +1,7 @@
 /*
  * File: z_bg_dblue_waterfall.c
  * Overlay: ovl_Bg_Dblue_Waterfall
- * Description: Great Bay Temple - Freezable Geyser
+ * Description: Great Bay Temple - Freezable Waterfall
  */
 
 #include "z_bg_dblue_waterfall.h"
@@ -11,21 +11,21 @@
 
 #define THIS ((BgDblueWaterfall*)thisx)
 
-void BgDblueWaterfall_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueWaterfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueWaterfall_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgDblueWaterfall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgDblueWaterfall_Init(Actor* thisx, PlayState* play);
+void BgDblueWaterfall_Destroy(Actor* thisx, PlayState* play);
+void BgDblueWaterfall_Update(Actor* thisx, PlayState* play);
+void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play);
 
-void func_80B8484C(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84928(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84AD4(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84AEC(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84B9C(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84BCC(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84EF0(BgDblueWaterfall* this, GlobalContext* globalCtx);
-void func_80B84F20(BgDblueWaterfall* this, GlobalContext* globalCtx);
+void func_80B8484C(BgDblueWaterfall* this, PlayState* play);
+void func_80B84928(BgDblueWaterfall* this, PlayState* play);
+void func_80B84AD4(BgDblueWaterfall* this, PlayState* play);
+void func_80B84AEC(BgDblueWaterfall* this, PlayState* play);
+void func_80B84B9C(BgDblueWaterfall* this, PlayState* play);
+void func_80B84BCC(BgDblueWaterfall* this, PlayState* play);
+void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
+void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
-const ActorInit Bg_Dblue_Waterfall_InitVars = {
+ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -76,11 +76,11 @@ s32 func_80B83C80(Vec3f* arg0, Vec3f* arg1) {
     return true;
 }
 
-s32 func_80B83D04(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+s32 func_80B83D04(BgDblueWaterfall* this, PlayState* play) {
     s32 phi_v1;
     s32 sp18 = BGDBLUEWATERFALL_GET_100(&this->actor);
 
-    if (Flags_GetSwitch(globalCtx, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
         phi_v1 = true;
     } else {
         phi_v1 = false;
@@ -88,22 +88,22 @@ s32 func_80B83D04(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     return phi_v1 ^ sp18;
 }
 
-s32 func_80B83D58(Actor* thisx, GlobalContext* globalCtx) {
+s32 func_80B83D58(Actor* thisx, PlayState* play) {
     BgDblueWaterfall* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEWATERFALL_GET_7F(&this->actor))) {
         return false;
     }
     return true;
 }
 
-void func_80B83D94(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B83D94(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     s32 sp20 = BGDBLUEWATERFALL_GET_7F(&this->actor);
     s32 sp1C = BGDBLUEWATERFALL_GET_100(&this->actor);
     s32 phi_v0;
 
-    if (Flags_GetSwitch(globalCtx, sp20)) {
+    if (Flags_GetSwitch(play, sp20)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -111,20 +111,20 @@ void func_80B83D94(BgDblueWaterfall* this, GlobalContext* globalCtx) {
 
     if (phi_v0 != sp1C) {
         if (phi_v0) {
-            Flags_UnsetSwitch(globalCtx, sp20);
+            Flags_UnsetSwitch(play, sp20);
         } else {
-            Flags_SetSwitch(globalCtx, sp20);
+            Flags_SetSwitch(play, sp20);
         }
     }
 }
 
-void func_80B83E1C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B83E1C(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     s32 sp20 = BGDBLUEWATERFALL_GET_7F(&this->actor);
     s32 sp1C = BGDBLUEWATERFALL_GET_100(&this->actor);
     s32 phi_v0;
 
-    if (Flags_GetSwitch(globalCtx, sp20)) {
+    if (Flags_GetSwitch(play, sp20)) {
         phi_v0 = true;
     } else {
         phi_v0 = false;
@@ -132,14 +132,14 @@ void func_80B83E1C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
 
     if (phi_v0 == sp1C) {
         if (phi_v0) {
-            Flags_UnsetSwitch(globalCtx, sp20);
+            Flags_UnsetSwitch(play, sp20);
         } else {
-            Flags_SetSwitch(globalCtx, sp20);
+            Flags_SetSwitch(play, sp20);
         }
     }
 }
 
-void func_80B83EA4(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B83EA4(BgDblueWaterfall* this, PlayState* play) {
     s32 i;
     s32 temp_s1;
     Vec3f spD4;
@@ -189,13 +189,13 @@ void func_80B83EA4(BgDblueWaterfall* this, GlobalContext* globalCtx) {
             spBC.x = spC8.x * -0.02f;
             spBC.z = spC8.z * -0.02f;
 
-            EffectSsEnIce_Spawn(globalCtx, &spD4, (Rand_ZeroOne() * 0.3f) + 0.1f, &spC8, &spBC, &D_80B8539C,
-                                &D_80B853A0, 30);
+            EffectSsEnIce_Spawn(play, &spD4, (Rand_ZeroOne() * 0.3f) + 0.1f, &spC8, &spBC, &D_80B8539C, &D_80B853A0,
+                                30);
         }
     }
 }
 
-void func_80B841A0(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
     Vec3f sp94;
     s32 i;
     f32 temp_f0;
@@ -220,15 +220,15 @@ void func_80B841A0(BgDblueWaterfall* this, GlobalContext* globalCtx) {
             sp94.y = ((Rand_ZeroOne() * 20.0f) - 10.0f) + temp_f24;
             sp94.z = (Math_CosS(temp_s3) * temp_f20) + temp_f26;
 
-            EffectSsGSplash_Spawn(globalCtx, &sp94, NULL, NULL, 0, 250);
+            EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 0, 250);
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_WATER);
     }
 }
 
-void func_80B84348(BgDblueWaterfall* this, GlobalContext* globalCtx, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6,
-                   f32 arg7, s32 arg8) {
+void func_80B84348(BgDblueWaterfall* this, PlayState* play, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
+                   s32 arg8) {
     static s16 D_80B853A4 = 0;
     s32 pad;
     f32 spB8 = 1.0f / arg8;
@@ -263,20 +263,19 @@ void func_80B84348(BgDblueWaterfall* this, GlobalContext* globalCtx, f32 arg2, f
         sp98.y = temp_f24 + spB0;
         sp98.z = (temp_f22 * 50.0f) + this->actor.world.pos.z;
 
-        EffectSsIceSmoke_Spawn(globalCtx, &sp98, &sp8C, &sp80, (Rand_ZeroOne() * arg7) + arg6);
+        EffectSsIceSmoke_Spawn(play, &sp98, &sp8C, &sp80, (Rand_ZeroOne() * arg7) + arg6);
     }
 }
 
-void func_80B84568(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84568(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     CollisionPoly* sp40;
     WaterBox* sp3C;
     s32 sp38;
-    f32 sp34 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp40, &sp38, &this->actor, &this->actor.world.pos);
+    f32 sp34 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp40, &sp38, &this->actor, &this->actor.world.pos);
     f32 sp30;
 
-    if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30,
-                               &sp3C)) {
+    if (WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp3C)) {
         if (sp30 < sp34) {
             this->unk_198 = sp34;
         } else {
@@ -287,15 +286,15 @@ void func_80B84568(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B84610(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
     s32 pad[2];
     Vec3f sp34;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
     if (this->unk_1A7 <= 0) {
         this->unk_1A7 = 16;
     } else {
-        this->unk_1A7 -= (s8)((u32)Rand_Next() >> 0x1F);
+        this->unk_1A7 -= (s8)(Rand_Next() >> 0x1F);
     }
 
     if (this->unk_1A7 >= 6) {
@@ -333,7 +332,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgDblueWaterfall_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueWaterfall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueWaterfall* this = THIS;
 
@@ -341,26 +340,26 @@ void BgDblueWaterfall_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.z = 0;
     this->actor.world.rot.z = 0;
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
-    this->unk_190 = Lib_SegmentedToVirtual(object_dblue_object_Matanimheader_00B448);
+    this->unk_190 = Lib_SegmentedToVirtual(gGreatBayTempleObjectWaterfallTexAnim);
 
     Actor_SetFocus(&this->actor, -100.0f);
-    func_80B84568(this, globalCtx);
-    func_80B8484C(this, globalCtx);
+    func_80B84568(this, play);
+    func_80B8484C(this, play);
 }
 
-void BgDblueWaterfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueWaterfall_Destroy(Actor* thisx, PlayState* play) {
     BgDblueWaterfall* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80B8484C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B8484C(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
-    s32 temp = func_80B83D04(this, globalCtx);
+    s32 temp = func_80B83D04(this, play);
     s32 sp1C = this->actor.home.rot.z * 10;
 
     if (temp) {
@@ -381,7 +380,7 @@ void func_80B8484C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     }
 
-    if ((sp1C != 0) && !func_80B83D58(&this->actor, globalCtx)) {
+    if ((sp1C != 0) && !func_80B83D58(&this->actor, play)) {
         this->unk_19C = sp1C;
     } else {
         this->unk_19C = 0;
@@ -391,9 +390,9 @@ void func_80B8484C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B84928;
 }
 
-void func_80B84928(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
-    s32 sp30 = func_80B83D04(this, globalCtx);
+    s32 sp30 = func_80B83D04(this, play);
     s32 sp2C = (this->collider.base.acFlags & AC_HIT) != 0;
     s32 sp28 = false;
 
@@ -402,18 +401,18 @@ void func_80B84928(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     }
 
     if ((sp30 == 0) && (this->collider.base.ocFlags2 & OC2_HIT_PLAYER)) {
-        func_80B84610(this, globalCtx);
+        func_80B84610(this, play);
     }
 
     if (this->unk_19C > 0) {
         this->unk_19C--;
         if (this->unk_19C == 0) {
             if (sp30 != 0) {
-                func_80B83D94(this, globalCtx);
-                func_80B84EF0(this, globalCtx);
+                func_80B83D94(this, play);
+                func_80B84EF0(this, play);
             } else {
-                func_80B83E1C(this, globalCtx);
-                func_80B84B9C(this, globalCtx);
+                func_80B83E1C(this, play);
+                func_80B84B9C(this, play);
             }
             sp28 = true;
         }
@@ -422,50 +421,50 @@ void func_80B84928(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     if (!sp28) {
         if (sp2C) {
             if (sp30 != 0) {
-                func_80B83EA4(this, globalCtx);
+                func_80B83EA4(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800) {
                     this->unk_1A4 = this->actor.cutscene;
-                    func_80B84AD4(this, globalCtx);
+                    func_80B84AD4(this, play);
                 }
             } else {
-                func_80B841A0(this, globalCtx);
+                func_80B841A0(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
                     this->unk_1A4 = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-                    func_80B84AD4(this, globalCtx);
+                    func_80B84AD4(this, play);
                 }
             }
         } else {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 }
 
-void func_80B84AD4(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84AD4(BgDblueWaterfall* this, PlayState* play) {
     this->actionFunc = func_80B84AEC;
 }
 
-void func_80B84AEC(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     s32 sp20;
 
     if (ActorCutscene_GetCanPlayNext(this->unk_1A4)) {
-        sp20 = func_80B83D04(this, globalCtx);
+        sp20 = func_80B83D04(this, play);
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_1A4, &this->actor);
         this->unk_1A3 = true;
         if (sp20) {
-            func_80B83D94(this, globalCtx);
-            func_80B84EF0(this, globalCtx);
+            func_80B83D94(this, play);
+            func_80B84EF0(this, play);
         } else {
-            func_80B83E1C(this, globalCtx);
-            func_80B84B9C(this, globalCtx);
+            func_80B83E1C(this, play);
+            func_80B84B9C(this, play);
         }
     } else {
         ActorCutscene_SetIntentToPlay(this->unk_1A4);
     }
 }
 
-void func_80B84B9C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84B9C(BgDblueWaterfall* this, PlayState* play) {
     this->unk_19C = 60;
     this->unk_19E = 255;
     this->unk_19F = 0;
@@ -473,7 +472,7 @@ void func_80B84B9C(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B84BCC;
 }
 
-void func_80B84BCC(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84BCC(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
 
     this->unk_19C--;
@@ -481,23 +480,23 @@ void func_80B84BCC(BgDblueWaterfall* this, GlobalContext* globalCtx) {
         s32 sp38 = this->unk_19C & 1;
 
         if (this->unk_19C > 56) {
-            func_80B84348(this, globalCtx, 0.0f, -5500.0f, 0.4f, -15.0f, 370.0f, 100.0f, 6);
+            func_80B84348(this, play, 0.0f, -5500.0f, 0.4f, -15.0f, 370.0f, 100.0f, 6);
         }
 
         if (!sp38) {
             if ((this->unk_19C < 24) && (this->unk_19C > 10)) {
                 if (this->unk_198 > -32000.0f) {
-                    func_80B84348(this, globalCtx, (this->unk_198 - this->actor.world.pos.y) + 50.0f,
+                    func_80B84348(this, play, (this->unk_198 - this->actor.world.pos.y) + 50.0f,
                                   (this->unk_198 - this->actor.world.pos.y), 7.0f, -1.0f, 280.0f, 100.0f, 3);
                 }
             }
 
             if (this->unk_19C > 50) {
-                func_80B84348(this, globalCtx, 0.0f, -400.0f, 0.6f, -12.0f, 370.0f, 100.0f, 2);
+                func_80B84348(this, play, 0.0f, -400.0f, 0.6f, -12.0f, 370.0f, 100.0f, 2);
             } else if (this->unk_19C > 40) {
-                func_80B84348(this, globalCtx, 0.0f, -400.0f, 1.0f, -12.0f, 370.0f, 100.0f, 2);
+                func_80B84348(this, play, 0.0f, -400.0f, 1.0f, -12.0f, 370.0f, 100.0f, 2);
             } else if (this->unk_19C > 20) {
-                func_80B84348(this, globalCtx, 0.0f, -400.0f, 1.8f, -12.0f, 370.0f, 100.0f, 2);
+                func_80B84348(this, play, 0.0f, -400.0f, 1.8f, -12.0f, 370.0f, 100.0f, 2);
             }
         }
 
@@ -536,11 +535,11 @@ void func_80B84BCC(BgDblueWaterfall* this, GlobalContext* globalCtx) {
         if (this->unk_1A3) {
             ActorCutscene_Stop(this->unk_1A4);
         }
-        func_80B8484C(this, globalCtx);
+        func_80B8484C(this, play);
     }
 }
 
-void func_80B84EF0(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84EF0(BgDblueWaterfall* this, PlayState* play) {
     this->unk_19C = 60;
     this->unk_19E = 0;
     this->unk_19F = 255;
@@ -548,12 +547,12 @@ void func_80B84EF0(BgDblueWaterfall* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80B84F20;
 }
 
-void func_80B84F20(BgDblueWaterfall* this, GlobalContext* globalCtx) {
+void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
     this->unk_19C--;
 
     if (this->unk_19C > 0) {
         if (this->unk_19C >= 58) {
-            func_80B84348(this, globalCtx, 100.0f, -100.0f, 4.0f, -6.0f, 370.0f, 100.0f, 0xC);
+            func_80B84348(this, play, 100.0f, -100.0f, 4.0f, -6.0f, 370.0f, 100.0f, 0xC);
         }
 
         if (this->unk_19C < 50) {
@@ -575,58 +574,57 @@ void func_80B84F20(BgDblueWaterfall* this, GlobalContext* globalCtx) {
         if (this->unk_1A3) {
             ActorCutscene_Stop(this->unk_1A4);
         }
-        func_80B8484C(this, globalCtx);
+        func_80B8484C(this, play);
     }
 }
 
-void BgDblueWaterfall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueWaterfall_Update(Actor* thisx, PlayState* play) {
     BgDblueWaterfall* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgDblueWaterfall_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BgDblueWaterfall* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     if (this->unk_19E > 0) {
         s32 sp38 = this->unk_19E * 0.49803922f;
 
-        AnimatedMat_Draw(globalCtx, this->unk_190);
+        AnimatedMat_Draw(play, this->unk_190);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x8A, 255, 255, 255, sp38);
-        gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_00B280);
+        gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectWaterfallDL);
     }
 
     if (this->unk_19F > 0) {
         if (this->unk_19F < 255) {
             gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, 255, this->unk_19F);
-            gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_003358);
+            gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         } else {
-            func_8012C28C(globalCtx->state.gfxCtx);
+            func_8012C28C(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_dblue_object_DL_003358);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         }
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, this->unk_19F);
-        gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_003250);
+        gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteRimDL);
     }
 
     if (this->unk_1A0 > 0) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, this->unk_1A0);
-        gSPDisplayList(POLY_XLU_DISP++, object_dblue_object_DL_003770);
+        gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectFrozenWaterfallDL);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

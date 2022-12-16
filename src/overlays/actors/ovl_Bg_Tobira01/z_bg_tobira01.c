@@ -11,12 +11,12 @@
 
 #define THIS ((BgTobira01*)thisx)
 
-void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgTobira01_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgTobira01_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgTobira01_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgTobira01_Init(Actor* thisx, PlayState* play);
+void BgTobira01_Destroy(Actor* thisx, PlayState* play);
+void BgTobira01_Update(Actor* thisx, PlayState* play);
+void BgTobira01_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Bg_Tobira01_InitVars = {
+ActorInit Bg_Tobira01_InitVars = {
     ACTOR_BG_TOBIRA01,
     ACTORCAT_PROP,
     FLAGS,
@@ -28,8 +28,8 @@ const ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Draw,
 };
 
-void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void BgTobira01_Open(BgTobira01* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     s16 cutsceneId = this->dyna.actor.cutscene;
     s16 prevTimer;
 
@@ -43,10 +43,9 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
         } else {
             ActorCutscene_SetIntentToPlay(cutsceneId);
         }
-    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->timer == 0) &&
-               (globalCtx->actorCtx.unk1F5 != 0) && (globalCtx->actorCtx.unk1F4 == 0) &&
-               (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId) ==
-                6)) {
+    } else if (!(gSaveContext.save.weekEventReg[88] & 0x40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
+               (play->actorCtx.unk1F4 == 0) &&
+               (SurfaceType_GetSceneExitIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId) == 6)) {
         this->playCutscene = true;
         this->unk_16C = 0; // this variable is not used anywhere else
     }
@@ -68,17 +67,18 @@ void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
         this->timer2 = 180;
     }
 
-    if (!(player->stateFlags1 & 0x40) && (gSaveContext.save.weekEventReg[88] & 0x40) && (DECR(this->timer2) == 0)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_40) && (gSaveContext.save.weekEventReg[88] & 0x40) &&
+        (DECR(this->timer2) == 0)) {
         gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     }
 }
 
-void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgTobira01_Init(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
     s32 pad;
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spot11_obj_Colheader_0011C0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_spot11_obj_Colheader_0011C0);
     gSaveContext.save.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.save.isNight;
@@ -86,26 +86,26 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = BgTobira01_Open;
 }
 
-void BgTobira01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgTobira01_Destroy(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
     s32 pad;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void BgTobira01_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgTobira01_Update(Actor* thisx, PlayState* play) {
     BgTobira01* this = THIS;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgTobira01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+void BgTobira01_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_spot11_obj_DL_000088);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

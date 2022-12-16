@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
@@ -59,7 +60,7 @@ s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction) {
     return osEPiStartDma(pihandle, mb, direction);
 }
 
-DmaEntry* DmaMgr_FindDmaEntry(u32 vrom) {
+DmaEntry* DmaMgr_FindDmaEntry(uintptr_t vrom) {
     DmaEntry* curr;
 
     for (curr = dmadata; curr->vromEnd != 0; curr++) {
@@ -76,7 +77,7 @@ DmaEntry* DmaMgr_FindDmaEntry(u32 vrom) {
     return NULL;
 }
 
-u32 DmaMgr_TranslateVromToRom(u32 vrom) {
+u32 DmaMgr_TranslateVromToRom(uintptr_t vrom) {
     DmaEntry* entry = DmaMgr_FindDmaEntry(vrom);
 
     if (entry != NULL) {
@@ -94,7 +95,7 @@ u32 DmaMgr_TranslateVromToRom(u32 vrom) {
     return -1;
 }
 
-s32 DmaMgr_FindDmaIndex(u32 vrom) {
+s32 DmaMgr_FindDmaIndex(uintptr_t vrom) {
     DmaEntry* entry = DmaMgr_FindDmaEntry(vrom);
 
     if (entry != NULL) {

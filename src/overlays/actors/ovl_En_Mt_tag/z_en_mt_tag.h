@@ -6,7 +6,7 @@
 
 struct EnMttag;
 
-typedef void (*EnMttagActionFunc)(struct EnMttag*, GlobalContext*);
+typedef void (*EnMttagActionFunc)(struct EnMttag*, PlayState*);
 
 typedef struct EnMttag {
     /* 0x000 */ Actor actor;
@@ -17,7 +17,5 @@ typedef struct EnMttag {
     /* 0x15C */ UNK_TYPE1 unk_15C[0x8];
     /* 0x164 */ s32 shouldRestartRace;
 } EnMttag; // size = 0x168
-
-extern const ActorInit En_Mt_tag_InitVars;
 
 #endif // Z_EN_MT_TAG_H

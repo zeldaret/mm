@@ -6,7 +6,7 @@
 
 struct BgSinkaiKabe;
 
-typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, GlobalContext*);
+typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, PlayState*);
 
 typedef struct BgSinkaiKabe {
     /* 0x000 */ DynaPolyActor dyna;
@@ -16,7 +16,5 @@ typedef struct BgSinkaiKabe {
     /* 0x168 */ UNK_TYPE1 unk_168[0x4];
     /* 0x16C */ s32 pythonIndex;
 } BgSinkaiKabe; // size = 0x170
-
-extern const ActorInit Bg_Sinkai_Kabe_InitVars;
 
 #endif // Z_BG_SINKAI_KABE_H

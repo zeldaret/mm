@@ -11,14 +11,14 @@
 
 #define THIS ((DmChar07*)thisx)
 
-void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx);
-void DmChar07_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DmChar07_Update(Actor* thisx, GlobalContext* globalCtx);
-void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DmChar07_Init(Actor* thisx, PlayState* play);
+void DmChar07_Destroy(Actor* thisx, PlayState* play);
+void DmChar07_Update(Actor* thisx, PlayState* play);
+void DmChar07_Draw(Actor* thisx, PlayState* play);
 
-void DmChar07_DoNothing(DmChar07* this, GlobalContext* globalCtx);
+void DmChar07_DoNothing(DmChar07* this, PlayState* play);
 
-const ActorInit Dm_Char07_InitVars = {
+ActorInit Dm_Char07_InitVars = {
     ACTOR_DM_CHAR07,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -34,7 +34,7 @@ void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar07_Init(Actor* thisx, PlayState* play) {
     DmChar07* this = THIS;
 
     this->isStage = 0;
@@ -45,44 +45,44 @@ void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->isStage = 1;
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_milkbar_Colheader_006688);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_milkbar_Colheader_006688);
     } else {
         Actor_SetScale(&this->dyna.actor, 1.0f);
     }
     DmChar07_SetupAction(this, DmChar07_DoNothing);
 }
 
-void DmChar07_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar07_Destroy(Actor* thisx, PlayState* play) {
     DmChar07* this = THIS;
 
     if (this->isStage) {
-        DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
-void DmChar07_DoNothing(DmChar07* this, GlobalContext* globalCtx) {
+void DmChar07_DoNothing(DmChar07* this, PlayState* play) {
 }
 
-void DmChar07_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar07_Update(Actor* thisx, PlayState* play) {
     DmChar07* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DmChar07_Draw(Actor* thisx, PlayState* play) {
     DmChar07* this = THIS;
     s32 pad;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C28C(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_002CD0);
             break;
         case DMCHAR07_CREDITS_STAGE:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_milkbar_Matanimheader_0105F8));
+            AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_milkbar_Matanimheader_0105F8));
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_007918);
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000240);
             gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000790);
@@ -112,8 +112,8 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    func_8012C2DC(play->state.gfxCtx);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:
             gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_002BA0);
@@ -147,5 +147,5 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -5,7 +5,7 @@
 
 struct ArrowFire;
 
-typedef void (*ArrowFireActionFunc)(struct ArrowFire*, GlobalContext*);
+typedef void (*ArrowFireActionFunc)(struct ArrowFire*, PlayState*);
 
 typedef struct ArrowFire {
     /* 0x000 */ Actor actor;
@@ -20,7 +20,5 @@ typedef struct ArrowFire {
     /* 0x260 */ u8 alpha;
 } ArrowFire; // size = 0x264
 
-
-extern const ActorInit Arrow_Fire_InitVars;
 
 #endif // Z_ARROW_FIRE_H

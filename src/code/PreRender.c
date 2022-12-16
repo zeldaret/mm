@@ -191,8 +191,6 @@ void func_80170774(PreRender* this, Gfx** gfxp) {
     func_8016FF70(this, gfxp, this->zbufSave, this->zbuf);
 }
 
-#ifdef NON_MATCHING
-// just regalloc
 void func_80170798(PreRender* this, Gfx** gfxp) {
     Gfx* gfx;
     s32 y;
@@ -235,6 +233,10 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
                              uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                              G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            //! FAKE
+            if (1) {}
+            // The two if (1) {}'s above can be removed with do {} while(0) around macros
+            if (1) {}
             if (1) {}
             gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
                                 ult << 5, 1 << 10, 1 << 10);
@@ -247,9 +249,6 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
         *gfxp = gfx;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_80170798.s")
-#endif
 
 void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
     func_8016FF90(this, gfxp, this->fbufSave, this->fbuf, 255, 255, 255, alpha);

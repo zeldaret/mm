@@ -5,7 +5,7 @@
 
 struct EnEgol;
 
-typedef void (*EnEgolActionFunc)(struct EnEgol*, GlobalContext*);
+typedef void (*EnEgolActionFunc)(struct EnEgol*, PlayState*);
 
 typedef struct EnEgol {
     /* 0x0000 */ Actor actor;
@@ -13,7 +13,5 @@ typedef struct EnEgol {
     /* 0x02A8 */ EnEgolActionFunc actionFunc;
     /* 0x02AC */ char unk_2AC[0x1BC4];
 } EnEgol; // size = 0x1E70
-
-extern const ActorInit En_Egol_InitVars;
 
 #endif // Z_EN_EGOL_H

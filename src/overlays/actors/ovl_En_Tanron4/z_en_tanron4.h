@@ -6,7 +6,7 @@
 
 struct EnTanron4;
 
-typedef void (*EnTanron4ActionFunc)(struct EnTanron4*, GlobalContext*);
+typedef void (*EnTanron4ActionFunc)(struct EnTanron4*, PlayState*);
 
 typedef struct EnTanron4 {
     /* 0x000 */ Actor actor;
@@ -27,7 +27,5 @@ typedef struct EnTanron4 {
 // other than these magic values, params is the number of desired seagulls in the flock
 #define SEAGULL_CLONE -1
 #define SEAGULL_FOLLOW_ACTOR 100
-
-extern const ActorInit En_Tanron4_InitVars;
 
 #endif // Z_EN_TANRON4_H

@@ -5,39 +5,40 @@
  */
 
 #include "z_en_death.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000)
 
 #define THIS ((EnDeath*)thisx)
 
-void EnDeath_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDeath_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDeath_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDeath_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDeath_Init(Actor* thisx, PlayState* play);
+void EnDeath_Destroy(Actor* thisx, PlayState* play);
+void EnDeath_Update(Actor* thisx, PlayState* play);
+void EnDeath_Draw(Actor* thisx, PlayState* play);
 
-void func_808C589C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C5AB8(EnDeath* this, GlobalContext* globalCtx);
-void func_808C5CB4(EnDeath* this, GlobalContext* globalCtx);
-void func_808C5E90(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6070(EnDeath* this, GlobalContext* globalCtx);
-void func_808C64DC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C66A8(EnDeath* this, GlobalContext* globalCtx);
-void func_808C682C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C692C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6AB0(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6CDC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C6F6C(EnDeath* this, GlobalContext* globalCtx);
-void func_808C72AC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C74F8(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7888(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7AAC(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7B88(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7C88(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7D34(EnDeath* this, GlobalContext* globalCtx);
-void func_808C7DCC(EnDeath* this, GlobalContext* globalCtx);
+void func_808C589C(EnDeath* this, PlayState* play);
+void func_808C5AB8(EnDeath* this, PlayState* play);
+void func_808C5CB4(EnDeath* this, PlayState* play);
+void func_808C5E90(EnDeath* this, PlayState* play);
+void func_808C6070(EnDeath* this, PlayState* play);
+void func_808C64DC(EnDeath* this, PlayState* play);
+void func_808C66A8(EnDeath* this, PlayState* play);
+void func_808C682C(EnDeath* this, PlayState* play);
+void func_808C692C(EnDeath* this, PlayState* play);
+void func_808C6AB0(EnDeath* this, PlayState* play);
+void func_808C6CDC(EnDeath* this, PlayState* play);
+void func_808C6F6C(EnDeath* this, PlayState* play);
+void func_808C72AC(EnDeath* this, PlayState* play);
+void func_808C74F8(EnDeath* this, PlayState* play);
+void func_808C7888(EnDeath* this, PlayState* play);
+void func_808C7AAC(EnDeath* this, PlayState* play);
+void func_808C7B88(EnDeath* this, PlayState* play);
+void func_808C7C88(EnDeath* this, PlayState* play);
+void func_808C7D34(EnDeath* this, PlayState* play);
+void func_808C7DCC(EnDeath* this, PlayState* play);
 
 #if 0
-const ActorInit En_Death_InitVars = {
+ActorInit En_Death_InitVars = {
     ACTOR_EN_DEATH,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -78,7 +79,7 @@ static ColliderTrisElementInit D_808C9938[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_808C99B0 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_TRIS, },
-    2, D_808C9938, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_808C9938, // sTrisElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {
@@ -130,7 +131,7 @@ static CollisionCheckInfoInit2 D_808C9A30 = { 20, 28, 90, 20, 100 };
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_808C9A60[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 26, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GOMESS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };

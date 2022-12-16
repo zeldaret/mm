@@ -5,7 +5,7 @@
 
 struct EnBaisen;
 
-typedef void (*EnBaisenActionFunc)(struct EnBaisen*, GlobalContext*);
+typedef void (*EnBaisenActionFunc)(struct EnBaisen*, PlayState*);
 
 typedef struct EnBaisen {
     /* 0x000 */ Actor actor;
@@ -31,7 +31,5 @@ typedef struct EnBaisen {
     /* 0x2AC */ s32 unk2AC;
     /* 0x2B0 */ ColliderCylinder collider;
 } EnBaisen; // size = 0x2FC
-
-extern const ActorInit En_Baisen_InitVars;
 
 #endif // Z_EN_BAISEN_H

@@ -11,17 +11,17 @@
 
 #define THIS ((EnDaiku*)thisx)
 
-void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDaiku_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnDaiku_Init(Actor* thisx, PlayState* play);
+void EnDaiku_Destroy(Actor* thisx, PlayState* play);
+void EnDaiku_Update(Actor* thisx, PlayState* play);
+void EnDaiku_Draw(Actor* thisx, PlayState* play);
 
 void func_80943820(EnDaiku* this);
 void func_80943BC0(EnDaiku* this);
-void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx);
-void func_809438F8(EnDaiku* this, GlobalContext* globalCtx);
+void func_80943BDC(EnDaiku* this, PlayState* play);
+void func_809438F8(EnDaiku* this, PlayState* play);
 
-const ActorInit En_Daiku_InitVars = {
+ActorInit En_Daiku_InitVars = {
     ACTOR_EN_DAIKU,
     ACTORCAT_NPC,
     FLAGS,
@@ -57,17 +57,28 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
+static AnimationHeader* sAnimations[] = {
+    &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
+    &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
+    &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
+};
+
+static u8 sAnimationModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+};
+
+void EnDaiku_Init(Actor* thisx, PlayState* play) {
     EnDaiku* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
     this->actor.targetMode = 0;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
         this->unk_288 = ENDAIKU_GET_FF00(&this->actor);
-        this->unk_258 = SubS_GetPathByIndex(globalCtx, this->unk_288, 0x3F);
+        this->unk_258 = SubS_GetPathByIndex(play, this->unk_288, 0x3F);
     } else if (this->unk_278 == ENDAIKU_PARAMS_FF_2) {
         this->unk_264 = -2000;
     }
@@ -79,10 +90,10 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= ACTOR_FLAG_8000000;
         if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
             ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Math_Vec3f_Copy(&this->unk_26C, &this->actor.world.pos);
@@ -94,17 +105,17 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_27E = this->unk_278 * 4 + 4;
 
         case ENDAIKU_PARAMS_FF_1:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0,
+            SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0,
                                this->jointTable, this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_2:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_00B690,
+            SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_00B690,
                                this->jointTable, this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_3:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_001114,
+            SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_001114,
                                this->jointTable, this->morphTable, 17);
             break;
     }
@@ -112,30 +123,21 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80943820(this);
 }
 
-void EnDaiku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
     EnDaiku* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void func_8094373C(EnDaiku* this, s32 arg1) {
-    static AnimationHeader* D_809440A4[] = {
-        &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
-        &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
-        &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
-    };
-    static u8 D_809440C8[] = {
-        0, 0, 0, 0, 2, 0, 0, 2, 2,
-    };
-
-    this->unk_284 = Animation_GetLastFrame(D_809440A4[arg1]);
-    Animation_Change(&this->skelAnime, D_809440A4[arg1], 1.0f, 0.0f, this->unk_284, D_809440C8[arg1], -4.0f);
+    this->unk_284 = Animation_GetLastFrame(sAnimations[arg1]);
+    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimationModes[arg1], -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
     if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
         if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -165,13 +167,13 @@ void func_80943820(EnDaiku* this) {
     this->actionFunc = func_809438F8;
 }
 
-void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
+void func_809438F8(EnDaiku* this, PlayState* play) {
     f32 currentFrame = this->skelAnime.curFrame;
     s32 pad;
     s32 day = gSaveContext.save.day - 1;
     s32 pad2;
 
-    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+    if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         if (this->unk_278 == ENDAIKU_PARAMS_FF_1) {
             this->actor.textId = 0x2365;
         } else {
@@ -182,7 +184,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         this->actor.textId = sTextIds[this->unk_28C];
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80943BC0(this);
         return;
     }
@@ -221,7 +223,7 @@ void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
         s16 angle = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
         this->unk_280 = this->actor.yawTowardsPlayer;
         if ((this->unk_278 == ENDAIKU_PARAMS_FF_1) || (this->unk_278 == ENDAIKU_PARAMS_FF_2) || (angle <= 0x2890)) {
-            func_800B8614(&this->actor, globalCtx, 100.0f);
+            func_800B8614(&this->actor, play, 100.0f);
         }
     }
 }
@@ -231,7 +233,7 @@ void func_80943BC0(EnDaiku* this) {
     this->actionFunc = func_80943BDC;
 }
 
-void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
+void func_80943BDC(EnDaiku* this, PlayState* play) {
     f32 currentFrame = this->skelAnime.curFrame;
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_2) && (this->unk_284 <= currentFrame)) {
@@ -242,13 +244,13 @@ void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        func_801477B4(globalCtx);
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        func_801477B4(play);
         func_80943820(this);
     }
 }
 
-void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDaiku_Update(Actor* thisx, PlayState* play) {
     EnDaiku* this = THIS;
     s32 pad;
 
@@ -257,11 +259,11 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->unk_27C != 0) {
         this->unk_27C--;
@@ -277,14 +279,13 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->unk_260, this->unk_266, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->unk_25E, this->unk_264, 1, 0xBB8, 0);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     this->actor.uncullZoneForward = 650.0f;
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 EnDaiku_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                             Actor* thisx) {
+s32 EnDaiku_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDaiku* this = THIS;
 
     if (limbIndex == 15) {
@@ -295,7 +296,7 @@ s32 EnDaiku_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     return false;
 }
 
-void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDaiku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Gfx* D_809440D4[] = {
         object_daiku_DL_0070C0,
         object_daiku_DL_006FB0,
@@ -304,7 +305,7 @@ void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     };
     EnDaiku* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 15) {
         gSPDisplayList(POLY_OPA_DISP++, D_809440D4[this->unk_278]);
@@ -314,15 +315,15 @@ void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         gSPDisplayList(POLY_OPA_DISP++, object_daiku_DL_008EC8);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnDaiku_Draw(Actor* thisx, PlayState* play) {
     EnDaiku* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     switch (this->unk_278) {
         case 0:
@@ -346,8 +347,8 @@ void EnDaiku_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDaiku_OverrideLimbDraw, EnDaiku_PostLimbDraw, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

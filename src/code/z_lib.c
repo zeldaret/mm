@@ -651,15 +651,15 @@ void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId) {
     Audio_PlaySfxAtPos(pos, sfxId);
 }
 
-void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst) {
-    f32 sp1C;
-    f32 f0;
+void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 rotAngle, Vec3f* src, Vec3f* dst) {
+    f32 cos;
+    f32 sin;
 
-    sp1C = Math_CosS(a);
-    f0 = Math_SinS(a);
-    dst->x = translation->x + (src->x * sp1C + src->z * f0);
+    cos = Math_CosS(rotAngle);
+    sin = Math_SinS(rotAngle);
+    dst->x = translation->x + (src->x * cos + src->z * sin);
     dst->y = translation->y + src->y;
-    dst->z = translation->z + (src->z * sp1C - src->x * f0);
+    dst->z = translation->z + (src->z * cos - src->x * sin);
 }
 
 void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst) {
@@ -688,7 +688,7 @@ f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {
         start->z = start->z + f2 * diff.z;
     } else {
         Math_Vec3f_Copy(start, target);
-        f0 = 0;
+        f0 = 0.0f;
     }
 
     return f0;
@@ -704,20 +704,30 @@ void* Lib_SegmentedToVirtual(void* ptr) {
 void* Lib_SegmentedToVirtualNull(void* ptr) {
     if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
+    } else {
+        return SEGMENTED_TO_VIRTUAL(ptr);
     }
-
-    return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
-void* Lib_PhysicalToVirtual(void* ptr) {
+/*
+ * Converts a 32-bit virtual address (0x80XXXXXX) to a 24-bit physical address (0xXXXXXX). The NULL case accounts for
+ * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
+ * addresses in 24-bit fields.
+ */
+void* Lib_VirtualToPhysical(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
-        return (void*)PHYSICAL_TO_VIRTUAL(ptr);
+        return (void*)VIRTUAL_TO_PHYSICAL(ptr);
     }
 }
 
-void* Lib_PhysicalToVirtualNull(void* ptr) {
+/*
+ * Converts a 24-bit physical address (0xXXXXXX) to a 32-bit virtual address (0x80XXXXXX). The NULL case accounts for
+ * the NULL virtual address being 0x00000000 and not 0x80000000. Used by transition overlays, which store their
+ * addresses in 24-bit fields.
+ */
+void* Lib_PhysicalToVirtual(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {

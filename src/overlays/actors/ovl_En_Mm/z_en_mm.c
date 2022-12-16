@@ -11,17 +11,17 @@
 
 #define THIS ((EnMm*)thisx)
 
-void EnMm_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMm_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMm_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMm_Init(Actor* thisx, PlayState* play);
+void EnMm_Destroy(Actor* thisx, PlayState* play);
+void EnMm_Update(Actor* thisx, PlayState* play);
+void EnMm_Draw(Actor* thisx, PlayState* play);
 
-void func_80965D3C(EnMm* this, GlobalContext* globalCtx);
-void func_80965DB4(EnMm* this, GlobalContext* globalCtx);
-void func_8096611C(EnMm* this, GlobalContext* globalCtx);
+void func_80965D3C(EnMm* this, PlayState* play);
+void func_80965DB4(EnMm* this, PlayState* play);
+void func_8096611C(EnMm* this, PlayState* play);
 void EnMm_SetupAction(EnMm* this, EnMmActionFunc actionFunc);
 
-const ActorInit En_Mm_InitVars = {
+ActorInit En_Mm_InitVars = {
     ACTOR_EN_MM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -70,19 +70,19 @@ void func_80965BBC(EnMm* this) {
     }
 }
 
-void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMm_Init(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
     if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
                                       (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 50.0f, ActorShadow_DrawCircle, 1.2f);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->actor.parent != NULL) {
         func_80965BBC(this);
         return;
@@ -95,13 +95,13 @@ void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm_SetupAction(this, action);
 }
 
-void EnMm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMm_Destroy(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80965D3C(EnMm* this, GlobalContext* globalCtx) {
+void func_80965D3C(EnMm* this, PlayState* play) {
     s16 cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
 
     if (ActorCutscene_GetCanPlayNext(cutscene)) {
@@ -112,7 +112,7 @@ void func_80965D3C(EnMm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
+void func_80965DB4(EnMm* this, PlayState* play) {
     s16 direction;
     Vec3f sp50;
     s16 unused;
@@ -122,7 +122,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
     s32 angle;
     s32 pad;
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    if (Actor_HasParent(&this->actor, play)) {
         func_80965BBC(this);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
     } else {
@@ -134,7 +134,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
             angle = BINANG_SUB(this->actor.world.rot.y, BINANG_ROT180(this->actor.wallYaw));
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
             this->actor.speedXZ *= 0.5f;
-            CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.world.pos);
+            CollisionCheck_SpawnShieldParticles(play, &this->actor.world.pos);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
@@ -149,7 +149,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speedXZ) ||
-                (SurfaceType_GetSlope(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+                (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
                 this->actor.speedXZ = CLAMP_MAX(temp_f2, 16.0f);
                 this->actor.world.rot.y = Math_FAtan2F(temp_f12, temp_f14);
             }
@@ -171,7 +171,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
 
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
-                Actor_PickUp(&this->actor, globalCtx, GI_NONE, 50.0f, 30.0f);
+                Actor_PickUp(&this->actor, play, GI_NONE, 50.0f, 30.0f);
             }
         }
 
@@ -179,13 +179,13 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void func_8096611C(EnMm* this, GlobalContext* globalCtx) {
-    if (Actor_HasNoParent(&this->actor, globalCtx)) {
+void func_8096611C(EnMm* this, PlayState* play) {
+    if (Actor_HasNoParent(&this->actor, play)) {
         EnMm_SetupAction(this, func_80965DB4);
-        this->actor.room = globalCtx->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         gSaveContext.unk_1014 = 0;
@@ -195,20 +195,20 @@ void func_8096611C(EnMm* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->unk_190, 0, 2000);
 }
 
-void EnMm_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnMm_Update(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
-    Collider_ResetCylinderAC(globalCtx, &this->collider.base);
-    this->actionFunc(this, globalCtx);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 10.0f, 20.0f, 31);
+    Collider_ResetCylinderAC(play, &this->collider.base);
+    this->actionFunc(this, play);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f, 31);
     Actor_SetFocus(&this->actor, 20.0f);
 }
 
-void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnMm_Draw(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C28C(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 
@@ -216,7 +216,7 @@ void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateXS(this->unk_190, MTXMODE_APPLY);
         Matrix_RotateYS(-rotY, MTXMODE_APPLY);
     }
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

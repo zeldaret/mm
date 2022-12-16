@@ -11,23 +11,23 @@
 
 #define THIS ((ObjSkateblock*)thisx)
 
-void ObjSkateblock_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjSkateblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjSkateblock_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjSkateblock_Init(Actor* thisx, PlayState* play);
+void ObjSkateblock_Destroy(Actor* thisx, PlayState* play);
+void ObjSkateblock_Update(Actor* thisx, PlayState* play);
+void ObjSkateblock_Draw(Actor* thisx, PlayState* play);
 
 void func_80A22308(ObjSkateblock* this);
-void func_80A22334(ObjSkateblock* this, GlobalContext* globalCtx);
+void func_80A22334(ObjSkateblock* this, PlayState* play);
 void func_80A2244C(ObjSkateblock* this);
-void func_80A224A4(ObjSkateblock* this, GlobalContext* globalCtx);
+void func_80A224A4(ObjSkateblock* this, PlayState* play);
 void func_80A22628(ObjSkateblock* this);
-void func_80A2264C(ObjSkateblock* this, GlobalContext* globalCtx);
+void func_80A2264C(ObjSkateblock* this, PlayState* play);
 void func_80A22728(ObjSkateblock* this);
-void func_80A2273C(ObjSkateblock* this, GlobalContext* globalCtx);
+void func_80A2273C(ObjSkateblock* this, PlayState* play);
 void func_80A227A4(ObjSkateblock* this);
-void func_80A227C0(ObjSkateblock* this, GlobalContext* globalCtx);
+void func_80A227C0(ObjSkateblock* this, PlayState* play);
 
-const ActorInit Obj_Skateblock_InitVars = {
+ActorInit Obj_Skateblock_InitVars = {
     ACTOR_OBJ_SKATEBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -138,7 +138,7 @@ void func_80A212F0(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
     arg0->z = (arg1->z * temp_f0) - (arg1->x * sp1C);
 }
 
-s32 func_80A21370(ObjSkateblock* this, GlobalContext* globalCtx) {
+s32 func_80A21370(ObjSkateblock* this, PlayState* play) {
     ObjSkateblockFloor* floor;
     s32 i;
     s32 pad;
@@ -162,7 +162,7 @@ s32 func_80A21370(ObjSkateblock* this, GlobalContext* globalCtx) {
         sp8C.z = this->dyna.actor.world.pos.z + ((D_80A22A1C[i].z * this->dyna.actor.scale.z) + D_80A22A44[i].z);
 
         floor->height =
-            BgCheck_EntityRaycastFloor6(&globalCtx->colCtx, &floor->poly, &floor->bgId, &this->dyna.actor, &sp8C, 0.0f);
+            BgCheck_EntityRaycastFloor6(&play->colCtx, &floor->poly, &floor->bgId, &this->dyna.actor, &sp8C, 0.0f);
 
         if (floor->height > BGCHECK_Y_MIN + 1.0f) {
             sp88 = true;
@@ -181,13 +181,13 @@ s32 func_80A21370(ObjSkateblock* this, GlobalContext* globalCtx) {
     return sp88;
 }
 
-s32 func_80A21548(ObjSkateblock* this, GlobalContext* globalCtx) {
+s32 func_80A21548(ObjSkateblock* this, PlayState* play) {
     s32 i;
     ObjSkateblockFloor* floor;
 
     this->unk_1C1 &= ~4;
 
-    if (func_80A21370(this, globalCtx)) {
+    if (func_80A21370(this, play)) {
         f32 maxHeight = BGCHECK_Y_MIN;
         s32 phi_v1 = false;
         f32 temp_f12 = this->dyna.actor.world.pos.y - 10.0f;
@@ -210,7 +210,7 @@ s32 func_80A21548(ObjSkateblock* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80A216D4(ObjSkateblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f* arg3) {
+s32 func_80A216D4(ObjSkateblock* this, PlayState* play, f32 arg2, Vec3f* arg3) {
     s32 pad;
     f32 spE8;
     f32 spE4;
@@ -257,7 +257,7 @@ s32 func_80A216D4(ObjSkateblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f
         spC8.y = spD4.y;
         spC8.z = temp_f26 + spD4.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spD4, &spC8, &spB0, &spA0, true, false, false, true, &spA4,
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spD4, &spC8, &spB0, &spA0, true, false, false, true, &spA4,
                                     &this->dyna.actor, 0.0f)) {
             temp_f2 = Math3D_Vec3fDistSq(&spD4, &spB0);
             if (temp_f2 < temp_f20) {
@@ -270,10 +270,10 @@ s32 func_80A216D4(ObjSkateblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f
     return ret;
 }
 
-s32 func_80A21934(ObjSkateblock* this, GlobalContext* globalCtx) {
+s32 func_80A21934(ObjSkateblock* this, PlayState* play) {
     Vec3f sp1C;
 
-    if (func_80A216D4(this, globalCtx, 0.0f, &sp1C)) {
+    if (func_80A216D4(this, play, 0.0f, &sp1C)) {
         this->dyna.actor.world.pos.x += sp1C.x;
         this->dyna.actor.world.pos.z += sp1C.z;
         return true;
@@ -281,7 +281,7 @@ s32 func_80A21934(ObjSkateblock* this, GlobalContext* globalCtx) {
     return false;
 }
 
-s32 func_80A21990(ObjSkateblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
+s32 func_80A21990(ObjSkateblock* this, PlayState* play, Vec3f* arg2) {
     s32 i;
     f32 sp100;
     s16 phi_s6 = this->dyna.yRotation;
@@ -330,7 +330,7 @@ s32 func_80A21990(ObjSkateblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
+        if (BgCheck_EntityLineTest3(&play->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
                                     &this->dyna.actor, 0.0f)) {
             temp_f0 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f0 < phi_f22) {
@@ -345,10 +345,10 @@ s32 func_80A21990(ObjSkateblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
     return ret;
 }
 
-s32 func_80A21C30(ObjSkateblock* this, GlobalContext* globalCtx) {
+s32 func_80A21C30(ObjSkateblock* this, PlayState* play) {
     Vec3f sp1C;
 
-    if (func_80A21990(this, globalCtx, &sp1C)) {
+    if (func_80A21990(this, play, &sp1C)) {
         this->dyna.actor.world.pos.x += sp1C.x;
         this->dyna.actor.world.pos.z += sp1C.z;
         return true;
@@ -366,10 +366,10 @@ void func_80A21C88(ObjSkateblock* this, s32 arg1) {
     this->unk_170 = arg1;
 }
 
-void func_80A21CB4(ObjSkateblock* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_80A21CB4(ObjSkateblock* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    player->stateFlags2 &= ~0x10;
+    player->stateFlags2 &= ~PLAYER_STATE2_10;
     this->dyna.pushForce = 0.0f;
 }
 
@@ -407,7 +407,7 @@ void func_80A21D1C(ObjSkateblock* this) {
     }
 }
 
-void func_80A21E9C(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A21E9C(ObjSkateblock* this, PlayState* play) {
     DynaPolyActor* temp_v0;
     s32 i;
     ObjSkateblockFloor* ptr;
@@ -419,7 +419,7 @@ void func_80A21E9C(ObjSkateblock* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->unk_184); i++) {
         ptr = &this->unk_184[i];
 
-        temp_v0 = DynaPoly_GetActor(&globalCtx->colCtx, ptr->bgId);
+        temp_v0 = DynaPoly_GetActor(&play->colCtx, ptr->bgId);
         if ((temp_v0 != NULL) && (temp_v0->actor.id == ACTOR_OBJ_SKATEBLOCK)) {
             ObjSkateblock* skateBlock = (ObjSkateblock*)temp_v0;
             f32 height = this->dyna.actor.world.pos.y - ptr->height;
@@ -435,7 +435,7 @@ void func_80A21F68(ObjSkateblock* this) {
     this->unk_17C = 0;
 }
 
-void func_80A21F74(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A21F74(ObjSkateblock* this, PlayState* play) {
     s32 pad;
     Vec3f spA8;
     Vec3f sp9C;
@@ -479,18 +479,18 @@ void func_80A21F74(ObjSkateblock* this, GlobalContext* globalCtx) {
             spA8.z += this->dyna.actor.world.pos.z;
 
             temp = ((Rand_ZeroOne() * 800.0f) + (1600.0f * this->dyna.actor.scale.x)) * phi_f22;
-            func_800B0E48(globalCtx, &spA8, &gZeroVec3f, &D_80A22ACC, &D_80A22AD8, &D_80A22ADC, temp,
+            func_800B0E48(play, &spA8, &gZeroVec3f, &D_80A22ACC, &D_80A22AD8, &D_80A22ADC, temp,
                           (Rand_ZeroOne() * 20.0f) + 30.0f);
         }
     }
 }
 
-void ObjSkateblock_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSkateblock_Init(Actor* thisx, PlayState* play) {
     ObjSkateblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
     if (D_80A22A18 == NULL) {
         D_80A22A18 = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
     }
@@ -500,10 +500,10 @@ void ObjSkateblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     D_80A22A14 &= 0x1F;
 }
 
-void ObjSkateblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSkateblock_Destroy(Actor* thisx, PlayState* play) {
     ObjSkateblock* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80A22308(ObjSkateblock* this) {
@@ -515,14 +515,14 @@ void func_80A22308(ObjSkateblock* this) {
     this->dyna.actor.velocity.y = 0.0f;
 }
 
-void func_80A22334(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A22334(ObjSkateblock* this, PlayState* play) {
     s32 pad;
     s32 sp30;
     s32 sp2C;
     Vec3f sp20;
 
     func_80A21CD8(this);
-    func_80A21548(this, globalCtx);
+    func_80A21548(this, play);
     sp2C = func_80A21150(this);
     func_80A211F4(this, sp2C);
 
@@ -531,16 +531,16 @@ void func_80A22334(ObjSkateblock* this, GlobalContext* globalCtx) {
     if (sp2C == -1) {
         sp30 = false;
     } else if (!(this->unk_1C1 & 2) && (this->unk_172[sp2C] > 10) && (D_80A22A10 == 0) &&
-               !func_80A216D4(this, globalCtx, 2.0f, &sp20) && !Player_InCsMode(&globalCtx->state)) {
+               !func_80A216D4(this, play, 2.0f, &sp20) && !Player_InCsMode(play)) {
         func_80A21C88(this, sp2C);
         func_80A2244C(this);
         sp30 = false;
-        func_800B7298(globalCtx, &this->dyna.actor, 7);
+        func_800B7298(play, &this->dyna.actor, 7);
         this->unk_1C1 |= 1;
     }
 
     if (sp30) {
-        func_80A21CB4(this, globalCtx);
+        func_80A21CB4(this, play);
     }
 }
 
@@ -553,7 +553,7 @@ void func_80A2244C(ObjSkateblock* this) {
     func_80A21F68(this);
 }
 
-void func_80A224A4(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A224A4(ObjSkateblock* this, PlayState* play) {
     s32 pad;
     s32 sp28 = false;
     s32 sp24 = false;
@@ -562,7 +562,7 @@ void func_80A224A4(ObjSkateblock* this, GlobalContext* globalCtx) {
 
     *this->unk_16C += this->unk_164;
 
-    if (func_80A21934(this, globalCtx)) {
+    if (func_80A21934(this, play)) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A21D1C(this);
         sp28 = true;
@@ -572,8 +572,8 @@ void func_80A224A4(ObjSkateblock* this, GlobalContext* globalCtx) {
 
     func_80A21CD8(this);
 
-    if (!func_80A21548(this, globalCtx)) {
-        func_80A21C30(this, globalCtx);
+    if (!func_80A21548(this, play)) {
+        func_80A21C30(this, play);
         func_80A21D1C(this);
         func_80A22628(this);
         sp24 = true;
@@ -586,15 +586,15 @@ void func_80A224A4(ObjSkateblock* this, GlobalContext* globalCtx) {
     }
 
     if (sp24 || sp28 || (this->unk_17A == 1)) {
-        func_80A21CB4(this, globalCtx);
+        func_80A21CB4(this, play);
     }
 
     if ((this->unk_1C1 & 1) && (sp24 || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1C1 &= ~1;
-        func_800B7298(globalCtx, &this->dyna.actor, 6);
+        func_800B7298(play, &this->dyna.actor, 6);
     }
 
-    func_80A21F74(this, globalCtx);
+    func_80A21F74(this, play);
 }
 
 void func_80A22628(ObjSkateblock* this) {
@@ -603,19 +603,19 @@ void func_80A22628(ObjSkateblock* this) {
     this->dyna.actor.velocity.y = this->dyna.actor.gravity;
 }
 
-void func_80A2264C(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A2264C(ObjSkateblock* this, PlayState* play) {
     s32 pad;
     s32 sp20;
 
     if (func_80A21150(this) != -1) {
-        func_80A21CB4(this, globalCtx);
+        func_80A21CB4(this, play);
     }
     func_80A21CD8(this);
 
-    sp20 = func_80A21548(this, globalCtx);
+    sp20 = func_80A21548(this, play);
     if (sp20 || ((this->unk_160 - this->dyna.actor.world.pos.y) > 300.0f)) {
-        if (func_800C9B40(&globalCtx->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) == 12) {
-            func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        if (func_800C9B40(&play->colCtx, this->dyna.actor.floorPoly, this->dyna.actor.floorBgId) == 12) {
+            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             func_80A22728(this);
             return;
@@ -631,7 +631,7 @@ void func_80A22728(ObjSkateblock* this) {
     this->actionFunc = func_80A2273C;
 }
 
-void func_80A2273C(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A2273C(ObjSkateblock* this, PlayState* play) {
     if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.y = (this->dyna.actor.home.pos.y - (600.0f * this->dyna.actor.scale.y)) - 10.0f;
@@ -646,9 +646,9 @@ void func_80A227A4(ObjSkateblock* this) {
     this->unk_17A = 40;
 }
 
-void func_80A227C0(ObjSkateblock* this, GlobalContext* globalCtx) {
+void func_80A227C0(ObjSkateblock* this, PlayState* play) {
     if (func_80A21150(this) != -1) {
-        func_80A21CB4(this, globalCtx);
+        func_80A21CB4(this, play);
     }
 
     if (this->unk_17A > 0) {
@@ -656,7 +656,7 @@ void func_80A227C0(ObjSkateblock* this, GlobalContext* globalCtx) {
         return;
     }
 
-    func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
     this->dyna.actor.draw = ObjSkateblock_Draw;
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f)) {
@@ -668,29 +668,29 @@ void func_80A227C0(ObjSkateblock* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjSkateblock_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSkateblock_Update(Actor* thisx, PlayState* play) {
     ObjSkateblock* this = THIS;
 
     D_80A22A10 &= ~(1 << this->unk_1C0);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     this->unk_1C1 &= ~2;
 }
 
-void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjSkateblock_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjSkateblock* this = THIS;
     Color_RGB8* sp2C = &D_80A22B08[OBJSKAEBLOCK_GET_F(&this->dyna.actor)];
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    AnimatedMat_DrawStep(globalCtx, D_80A22A18, 0);
+    func_8012C28C(play->state.gfxCtx);
+    AnimatedMat_DrawStep(play, D_80A22A18, 0);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0xFF, 0xFF, sp2C->r, sp2C->g, sp2C->b, 255);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_dangeon_keep_DL_0182A8);
 
-    func_80A21E9C(this, globalCtx);
+    func_80A21E9C(this, play);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

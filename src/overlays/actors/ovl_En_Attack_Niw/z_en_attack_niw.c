@@ -11,16 +11,16 @@
 
 #define THIS ((EnAttackNiw*)thisx)
 
-void EnAttackNiw_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnAttackNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnAttackNiw_Init(Actor* thisx, PlayState* play);
+void EnAttackNiw_Destroy(Actor* thisx, PlayState* play);
+void EnAttackNiw_Update(Actor* thisx, PlayState* play);
+void EnAttackNiw_Draw(Actor* thisx, PlayState* play);
 
-void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* globalCtx);
-void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, GlobalContext* globalCtx);
-void EnAttackNiw_FlyAway(EnAttackNiw* this, GlobalContext* globalCtx);
+void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play);
+void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play);
+void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play);
 
-const ActorInit En_Attack_Niw_InitVars = {
+ActorInit En_Attack_Niw_InitVars = {
     ACTOR_EN_ATTACK_NIW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -38,12 +38,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
-void EnAttackNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnAttackNiw_Init(Actor* thisx, PlayState* play) {
     EnAttackNiw* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
                        NIW_LIMB_MAX);
 
     // probably copy pasted from EnNiw, which has this same code, but AttackNiw has no params
@@ -64,7 +64,7 @@ void EnAttackNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = EnAttackNiw_EnterViewFromOffscreen;
 }
 
-void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnAttackNiw_Destroy(Actor* thisx, PlayState* play) {
     EnAttackNiw* this = THIS;
     EnNiw* parent = (EnNiw*)this->actor.parent;
 
@@ -80,7 +80,7 @@ void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  *
  * EnNiw has its own version of this function, probably copy paste since AttackNiw only uses two animationState (2/5)
  */
-void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s16 animationState) {
+void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animationState) {
     if (this->unkTimer24C == 0) {
         if (animationState == 0) {
             this->targetBodyRotY = 0.0f;
@@ -103,12 +103,12 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s1
         this->unkToggle28A &= 1;
 
         switch (animationState) { // only case 2 and 5 are ever called in AttackNiw
-            case NIW_ANIMATION_STILL:
+            case NIW_ANIM_STILL:
                 this->targetLeftWingRotZ = 0.0f;
                 this->targetRightWingRotZ = 0.0f;
                 break;
 
-            case NIW_ANIMATION_HEAD_PECKING:
+            case NIW_ANIM_HEAD_PECKING:
                 this->unkTimer250 = 3;
                 this->targetLeftWingRotZ = 7000.0f;
                 this->targetRightWingRotZ = 7000.0f;
@@ -118,7 +118,7 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s1
                 }
                 break;
 
-            case NIW_ANIMATION_PECKING_AND_WAVING:
+            case NIW_ANIM_PECKING_AND_WAVING:
                 this->unkTimer250 = 2;
                 this->targetLeftWingRotZ = -10000.0f;
                 this->targetRightWingRotZ = -10000.0f;
@@ -132,7 +132,7 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s1
                 }
                 break;
 
-            case NIW_ANIMATION_PECKING_AND_FORFLAPPING:
+            case NIW_ANIM_PECKING_AND_FORFLAPPING:
                 this->unkTimer250 = 2;
                 this->targetRightWingRotY = 10000.0f;
                 this->targetLeftWingRotY = 10000.0f;
@@ -142,12 +142,12 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s1
                 }
                 break;
 
-            case NIW_ANIMATION_FREEZE:
+            case NIW_ANIM_FREEZE:
                 this->unusedTimer24E = 5;
                 this->unkTimer24C = this->unusedTimer24E;
                 break;
 
-            case NIW_ANIMATION_PECKING_SLOW_FORFLAPPING:
+            case NIW_ANIM_PECKING_SLOW_FORFLAPPING:
                 this->unkTimer250 = 5;
                 this->targetRightWingRotY = 14000.0f;
                 this->targetLeftWingRotY = 14000.0f;
@@ -192,12 +192,12 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s1
     }
 }
 
-s32 EnAttackNiw_IsOnScreen(EnAttackNiw* this, GlobalContext* globalCtx) {
+s32 EnAttackNiw_IsOnScreen(EnAttackNiw* this, PlayState* play) {
     s16 posX;
     s16 posY;
 
     Actor_SetFocus(&this->actor, this->targetHeight);
-    Actor_GetScreenPos(globalCtx, &this->actor, &posX, &posY);
+    Actor_GetScreenPos(play, &this->actor, &posX, &posY);
 
     if ((this->actor.projectedPos.z < -20.0f) || (posX < 0) || (posX > SCREEN_WIDTH) || (posY < 0) ||
         (posY > SCREEN_HEIGHT)) {
@@ -206,7 +206,7 @@ s32 EnAttackNiw_IsOnScreen(EnAttackNiw* this, GlobalContext* globalCtx) {
     return true;
 }
 
-void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* globalCtx) {
+void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, PlayState* play) {
     s16 posX;
     s16 posY;
     Vec3f viewOffset;
@@ -217,14 +217,14 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* global
 
     // randomTargetCenterOffset is set in _Init, only needs to be set once
     // but the view is moving, so now we need to re-calculate the spot in space
-    viewOffset.x = this->randomTargetCenterOffset.x + globalCtx->view.at.x - globalCtx->view.eye.x;
-    viewOffset.y = this->randomTargetCenterOffset.y + globalCtx->view.at.y - globalCtx->view.eye.y;
-    viewOffset.z = this->randomTargetCenterOffset.z + globalCtx->view.at.z - globalCtx->view.eye.z;
+    viewOffset.x = this->randomTargetCenterOffset.x + play->view.at.x - play->view.eye.x;
+    viewOffset.y = this->randomTargetCenterOffset.y + play->view.at.y - play->view.eye.y;
+    viewOffset.z = this->randomTargetCenterOffset.z + play->view.at.z - play->view.eye.z;
 
     // this is the 3D spot in space where the cucco is trying to fly into (until it lands or gets close)
-    flightTarget.x = globalCtx->view.at.x + viewOffset.x;
-    flightTarget.y = globalCtx->view.at.y + viewOffset.y;
-    flightTarget.z = globalCtx->view.at.z + viewOffset.z;
+    flightTarget.x = play->view.at.x + viewOffset.x;
+    flightTarget.y = play->view.at.y + viewOffset.y;
+    flightTarget.z = play->view.at.z + viewOffset.z;
 
     this->targetRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &flightTarget);
     this->targetRotX = Math_Vec3f_Pitch(&this->actor.world.pos, &flightTarget) * -1.0f;
@@ -234,7 +234,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* global
     Math_ApproachF(&this->rotStep, 5000.0f, 1.0f, 100.0f);
 
     Actor_SetFocus(&this->actor, this->targetHeight);
-    Actor_GetScreenPos(globalCtx, &this->actor, &posX, &posY);
+    Actor_GetScreenPos(play, &this->actor, &posX, &posY);
 
     if (this->actor.bgCheckFlags & 8) { // touching a wall
         this->targetRotY = this->actor.yawTowardsPlayer;
@@ -276,13 +276,13 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* global
         this->unkTimer24C = 10;
         this->targetBodyRotY = -10000.0f;
         this->targetHeadRotZ = -3000.0f;
-        EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
 }
 
-void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, GlobalContext* globalCtx) {
-    if (!EnAttackNiw_IsOnScreen(this, globalCtx)) {
-        Actor_MarkForDeath(&this->actor);
+void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
+    if (!EnAttackNiw_IsOnScreen(this, play)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -325,30 +325,30 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, GlobalContext* globalCtx) {
         this->actionFunc = EnAttackNiw_FlyAway;
 
     } else if (this->actor.bgCheckFlags & 1) { // touching floor
-        EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_SLOW_FORFLAPPING);
+        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_SLOW_FORFLAPPING);
 
     } else {
-        EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+        EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
 }
 
-void EnAttackNiw_FlyAway(EnAttackNiw* this, GlobalContext* globalCtx) {
-    if (!EnAttackNiw_IsOnScreen(this, globalCtx)) {
-        Actor_MarkForDeath(&this->actor);
+void EnAttackNiw_FlyAway(EnAttackNiw* this, PlayState* play) {
+    if (!EnAttackNiw_IsOnScreen(this, play)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.x, this->targetRotX, 5, this->rotStep, 0);
     Math_ApproachF(&this->rotStep, 5000.0f, 1.0f, 100.0f);
     Math_ApproachF(&this->actor.velocity.y, 5.0f, 0.3f, 1.0f);
-    EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+    EnAttackNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
 }
 
-void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnAttackNiw_Update(Actor* thisx, PlayState* play) {
     EnAttackNiw* this = THIS;
     s32 pad;
     EnNiw* parent;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s32 pad2;
     Vec3f splashPos;
 
@@ -365,9 +365,9 @@ void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
 
     if (this->actionFunc == EnAttackNiw_EnterViewFromOffscreen) {
         Actor_MoveWithoutGravity(&this->actor);
@@ -376,13 +376,15 @@ void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.floorHeight <= BGCHECK_Y_MIN) { // under the world
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
+        return;
+    }
 
-    } else if ((this->actor.bgCheckFlags & 0x20) && // on or below water
-               (this->actionFunc != EnAttackNiw_FlyAway)) {
+    if ((this->actor.bgCheckFlags & 0x20) && // on or below water
+        (this->actionFunc != EnAttackNiw_FlyAway)) {
         Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
         splashPos.y += this->actor.depthInWater;
-        EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 0, 400);
+        EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, 400);
         this->rotStep = 0.0f;
         this->actor.gravity = 0.0f;
         this->targetXZSpeed = 0.0f;
@@ -399,7 +401,7 @@ void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
             if ((this->actor.parent->update != NULL) && (this->actor.parent != NULL) && (parent != NULL) &&
                 (parent->unkAttackNiwTimer == 0) && (player->invincibilityTimer == 0)) {
                 // this updates some player values based on what we pass, need player decomp to know what this is doing
-                func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
+                func_800B8D50(play, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
                 parent->unkAttackNiwTimer = 70;
             }
         }
@@ -416,8 +418,7 @@ void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnAttackNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                 Actor* thisx) {
+s32 EnAttackNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnAttackNiw* this = THIS;
 
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
@@ -442,10 +443,10 @@ s32 EnAttackNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnAttackNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnAttackNiw_Draw(Actor* thisx, PlayState* play) {
     EnAttackNiw* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnAttackNiw_OverrideLimbDraw, NULL, &this->actor);
 }

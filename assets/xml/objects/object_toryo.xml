@@ -48,6 +48,6 @@
         <Limb Name="object_toryo_Standardlimb_0070EC" Type="Standard" EnumName="OBJECT_TORYO_LIMB_0E" Offset="0x70EC" />
         <Limb Name="object_toryo_Standardlimb_0070F8" Type="Standard" EnumName="OBJECT_TORYO_LIMB_0F" Offset="0x70F8" />
         <Limb Name="object_toryo_Standardlimb_007104" Type="Standard" EnumName="OBJECT_TORYO_LIMB_10" Offset="0x7104" />
-        <Skeleton Name="object_toryo_Skel_007150" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TORYO_LIMB_NONE" LimbMax="OBJECT_TORYO_LIMB_MAX" EnumName="object_toryo_Limbs" Offset="0x7150" />
+        <Skeleton Name="object_toryo_Skel_007150" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TORYO_LIMB_NONE" LimbMax="OBJECT_TORYO_LIMB_MAX" EnumName="ObjectToryoLimb" Offset="0x7150" />
     </File>
 </Root>

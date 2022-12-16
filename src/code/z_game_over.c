@@ -1,30 +1,32 @@
 #include "global.h"
+#include "z64rumble.h"
+#include "z64shrink_window.h"
 
-void GameOver_Init(GlobalContext* globalCtx) {
-    globalCtx->gameOverCtx.state = GAMEOVER_INACTIVE;
+void GameOver_Init(PlayState* play) {
+    play->gameOverCtx.state = GAMEOVER_INACTIVE;
 }
 
-void GameOver_FadeLights(GlobalContext* globalCtx) {
-    GameOverContext* gameOverCtx = &globalCtx->gameOverCtx;
+void GameOver_FadeLights(PlayState* play) {
+    GameOverContext* gameOverCtx = &play->gameOverCtx;
 
     if ((gameOverCtx->state >= GAMEOVER_DEATH_WAIT_GROUND && gameOverCtx->state < GAMEOVER_REVIVE_START) ||
         (gameOverCtx->state >= GAMEOVER_REVIVE_RUMBLE && gameOverCtx->state < GAMEOVER_REVIVE_FADE_OUT)) {
-        Kankyo_FadeInGameOverLights(globalCtx);
+        Kankyo_FadeInGameOverLights(play);
     }
 }
 
 static s16 sGameOverTimer = 0;
 
-void GameOver_Update(GlobalContext* globalCtx) {
-    GameOverContext* gameOverCtx = &globalCtx->gameOverCtx;
-    s16 i;
+void GameOver_Update(PlayState* play) {
+    GameOverContext* gameOverCtx = &play->gameOverCtx;
+    s16 timerId;
 
     switch (gameOverCtx->state) {
         case GAMEOVER_DEATH_START:
-            func_801477B4(globalCtx);
+            func_801477B4(play);
 
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3DD0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
+            for (timerId = 0; timerId < TIMER_ID_MAX; timerId++) {
+                gSaveContext.timerStates[timerId] = TIMER_STATE_OFF;
             }
 
             gSaveContext.eventInf[1] &= ~1;
@@ -35,8 +37,8 @@ void GameOver_Update(GlobalContext* globalCtx) {
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED &&
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_DEITY) {
 
-                    if (gSaveContext.buttonStatus[0] != BTN_ENABLED) {
-                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[0];
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_ENABLED) {
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
                     } else {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
@@ -45,52 +47,52 @@ void GameOver_Update(GlobalContext* globalCtx) {
 
             gSaveContext.unk_3DC0 = 2000;
             gSaveContext.save.playerData.tatlTimer = 0;
-            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-            gSaveContext.nightSeqIndex = 0xFF;
+            gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+            gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
             gSaveContext.eventInf[0] = 0;
             gSaveContext.eventInf[1] = 0;
             gSaveContext.eventInf[2] = 0;
             gSaveContext.eventInf[3] = 0;
-            gSaveContext.buttonStatus[0] = BTN_ENABLED;
-            gSaveContext.buttonStatus[1] = BTN_ENABLED;
-            gSaveContext.buttonStatus[2] = BTN_ENABLED;
-            gSaveContext.buttonStatus[3] = BTN_ENABLED;
-            gSaveContext.buttonStatus[4] = BTN_ENABLED;
-            gSaveContext.unk_3F1E = 0;
-            gSaveContext.unk_3F20 = 0;
-            gSaveContext.unk_3F22 = 0;
-            gSaveContext.unk_3F24 = 0;
-            Kankyo_InitGameOverLights(globalCtx);
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
+            gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+            gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
+            gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+            gSaveContext.hudVisibilityTimer = 0;
+            Kankyo_InitGameOverLights(play);
             sGameOverTimer = 20;
-            func_8013ECE0(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
-            if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
-                func_80169F78(&globalCtx->state);
+            if (Audio_GetActiveSequence(SEQ_PLAYER_FANFARE) != NA_BGM_GAME_OVER) {
+                func_80169F78(&play->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
-                gSaveContext.nextTransition = 2;
-                gSaveContext.save.playerData.health = 48;
+                gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                gSaveContext.save.playerData.health = 0x30;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
                     gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
                 }
-                func_8013EE24();
+                Rumble_StateReset();
             }
             break;
         case GAMEOVER_REVIVE_START:
             gameOverCtx->state++;
             sGameOverTimer = 0;
-            Kankyo_InitGameOverLights(globalCtx);
-            ShrinkWindow_SetLetterboxTarget(32);
+            Kankyo_InitGameOverLights(play);
+            ShrinkWindow_Letterbox_SetSizeTarget(32);
             break;
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;
             gameOverCtx->state++;
-            func_8013ECE0(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             break;
         case GAMEOVER_REVIVE_WAIT_GROUND:
             sGameOverTimer--;
@@ -107,7 +109,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             }
             break;
         case GAMEOVER_REVIVE_FADE_OUT:
-            Kankyo_FadeOutGameOverLights(globalCtx);
+            Kankyo_FadeOutGameOverLights(play);
             sGameOverTimer--;
             if (sGameOverTimer == 0) {
                 gameOverCtx->state = GAMEOVER_INACTIVE;

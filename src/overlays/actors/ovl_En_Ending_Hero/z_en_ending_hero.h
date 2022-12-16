@@ -5,7 +5,7 @@
 
 struct EnEndingHero;
 
-typedef void (*EnEndingHeroActionFunc)(struct EnEndingHero*, GlobalContext*);
+typedef void (*EnEndingHeroActionFunc)(struct EnEndingHero*, PlayState*);
 
 typedef struct EnEndingHero {
     /* 0x000 */ Actor actor;
@@ -17,7 +17,5 @@ typedef struct EnEndingHero {
     /* 0x242 */ s16 unk242;
     /* 0x244 */ u16 unk244;
 } EnEndingHero; // size = 0x248
-
-extern const ActorInit En_Ending_Hero_InitVars;
 
 #endif // Z_EN_ENDING_HERO_H

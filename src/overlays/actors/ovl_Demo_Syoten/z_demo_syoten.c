@@ -11,21 +11,21 @@
 
 #define THIS ((DemoSyoten*)thisx)
 
-void DemoSyoten_Init(Actor* thisx, GlobalContext* globalCtx);
-void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx);
-void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx);
+void DemoSyoten_Init(Actor* thisx, PlayState* play);
+void DemoSyoten_Destroy(Actor* thisx, PlayState* play);
+void DemoSyoten_Update(Actor* thisx, PlayState* play);
+void DemoSyoten_Draw(Actor* thisx, PlayState* play);
 
-void func_80C16A64(DemoSyoten* this, GlobalContext* globalCtx);
-void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx);
-void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx);
-void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx);
-void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx);
-void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx);
-void func_80C173B4(Actor* thisx, GlobalContext* globalCtx);
-void func_80C17690(Actor* thisx, GlobalContext* globalCtx);
+void func_80C16A64(DemoSyoten* this, PlayState* play);
+void func_80C16A74(DemoSyoten* this, PlayState* play);
+void func_80C16BD4(DemoSyoten* this, PlayState* play);
+void func_80C16DD4(DemoSyoten* this, PlayState* play);
+void func_80C16EAC(DemoSyoten* this, PlayState* play);
+void func_80C17008(DemoSyoten* this, PlayState* play);
+void func_80C173B4(Actor* thisx, PlayState* play);
+void func_80C17690(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Syoten_InitVars = {
+ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -57,7 +57,7 @@ Color_RGBA8 D_80C17834[] = {
     { 60, 50, 100, 255 },
 };
 
-void DemoSyoten_Init(Actor* thisx, GlobalContext* globalCtx) {
+void DemoSyoten_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     DemoSyoten* this = THIS;
 
@@ -74,13 +74,13 @@ void DemoSyoten_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (DEMOSYOTEN_GET_F(&this->actor)) {
         case DEMOSYOTEN_F_0:
             func_80183430(&this->unk_144, &object_syoten_Blob_001328, &object_syoten_Blob_00023C, this->unk_174,
-                          this->unk_2A6, 0);
+                          this->unk_2A6, NULL);
             func_801835EC(&this->unk_144, &object_syoten_Blob_00023C);
             this->actor.draw = NULL;
             this->actionFunc = func_80C16A74;
-            this->actor.child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EFF_DUST,
-                                                   this->actor.world.pos.x, this->actor.world.pos.y,
-                                                   this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
+            this->actor.child =
+                Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
+                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
             this->unk_3F0 = 0x215;
             Actor_SetScale(&this->actor, 0.05f);
             break;
@@ -127,7 +127,7 @@ void DemoSyoten_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void DemoSyoten_Destroy(Actor* thisx, PlayState* play) {
     DemoSyoten* this = THIS;
 
     if (DEMOSYOTEN_GET_F(&this->actor) == DEMOSYOTEN_F_0) {
@@ -135,14 +135,14 @@ void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80C16760(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C16760(DemoSyoten* this, PlayState* play) {
     s32 pad;
     Vec3s* points;
     Vec3f sp2C;
 
     this->unk_3EC = 0;
     if (DEMOSYOTEN_GET_7E00(&this->actor) != DEMOSYOTEN_7E00_3F) {
-        this->unk_3E8 = &globalCtx->setupPathList[DEMOSYOTEN_GET_7E00(&this->actor)];
+        this->unk_3E8 = &play->setupPathList[DEMOSYOTEN_GET_7E00(&this->actor)];
         if (this->unk_3E8 != NULL) {
             points = Lib_SegmentedToVirtual(this->unk_3E8->points);
             Math_Vec3s_ToVec3f(&this->actor.world.pos, &points[0]);
@@ -179,23 +179,23 @@ s32 func_80C16818(DemoSyoten* this) {
     return false;
 }
 
-void func_80C168D0(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C168D0(DemoSyoten* this, PlayState* play) {
     s32 pad;
     Path* path = this->unk_3E8;
     Vec3s* points;
-    Vec3f sp30;
-    Vec3f sp24;
-    f32 sp20;
+    Vec3f worldPos;
+    Vec3f projectedPos;
+    f32 invW;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(this->unk_3E8->points);
         points += this->unk_3EC;
-        Math_Vec3s_ToVec3f(&sp30, points);
-        Actor_GetProjectedPos(globalCtx, &sp30, &sp24, &sp20);
-        Math_Vec3f_Copy(&sp30, &this->actor.projectedPos);
-        sp30.z = sp30.y;
-        sp24.z = sp24.y;
-        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&sp24, &sp30);
+        Math_Vec3s_ToVec3f(&worldPos, points);
+        Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
+        Math_Vec3f_Copy(&worldPos, &this->actor.projectedPos);
+        worldPos.z = worldPos.y;
+        projectedPos.z = projectedPos.y;
+        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&projectedPos, &worldPos);
     }
 }
 
@@ -215,21 +215,21 @@ void func_80C16974(f32 arg0) {
     }
 }
 
-void func_80C16A64(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C16A64(DemoSyoten* this, PlayState* play) {
 }
 
-void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C16A74(DemoSyoten* this, PlayState* play) {
     u16 temp_a0;
 
     func_80183DE0(&this->unk_144);
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
-        if ((globalCtx->csCtx.frames >= 160) && (globalCtx->csCtx.frames < 322)) {
+    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
+        if ((play->csCtx.frames >= 160) && (play->csCtx.frames < 322)) {
             func_800B9010(&this->actor, NA_SE_EV_IKANA_SOUL_LV - SFX_FLAG);
-        } else if (globalCtx->csCtx.frames == 322) {
+        } else if (play->csCtx.frames == 322) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_IKANA_SOUL_TRANSFORM);
         }
 
-        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -269,12 +269,12 @@ void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C16BD4(DemoSyoten* this, PlayState* play) {
     s32 pad;
     u16 temp_a0;
 
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
+        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -297,7 +297,7 @@ void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
 
                 case 4:
                     this->actor.draw = DemoSyoten_Draw;
-                    func_80C16760(this, globalCtx);
+                    func_80C16760(this, play);
                     this->unk_3E4 |= 4;
                     this->unk_3E4 &= ~1;
                     break;
@@ -314,13 +314,12 @@ void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
 
             case 4:
                 this->actor.speedXZ =
-                    globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->urot.z *
-                    0.005493164f;
+                    play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->urot.z * 0.005493164f;
                 if (this->unk_3EC < this->unk_3E8->count) {
                     if (func_80C16818(this)) {
                         this->unk_3EC++;
                     }
-                    func_80C168D0(this, globalCtx);
+                    func_80C168D0(this, play);
                 }
                 break;
         }
@@ -329,12 +328,12 @@ void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C16DD4(DemoSyoten* this, PlayState* play) {
     s32 pad;
     u16 temp_a0;
 
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
+        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -358,12 +357,12 @@ void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C16EAC(DemoSyoten* this, PlayState* play) {
     s32 pad;
     u16 temp_a0;
 
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
+        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -401,11 +400,11 @@ void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx) {
     func_80C16974(this->unk_3D8);
 }
 
-void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx) {
+void func_80C17008(DemoSyoten* this, PlayState* play) {
     u16 temp_a0;
 
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
+        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -428,14 +427,14 @@ void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx) {
     }
 }
 
-void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx) {
+void DemoSyoten_Update(Actor* thisx, PlayState* play) {
     DemoSyoten* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-s32 func_80C170F8(GlobalContext* globalCtx, UNK_TYPE arg1, s32 arg2, UNK_TYPE arg3, UNK_TYPE arg4, Actor* thisx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+s32 func_80C170F8(PlayState* play, UNK_TYPE arg1, s32 arg2, UNK_TYPE arg3, UNK_TYPE arg4, Actor* thisx) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     DemoSyoten* this = THIS;
 
     OPEN_DISPS(gfxCtx);
@@ -478,27 +477,27 @@ s32 func_80C170F8(GlobalContext* globalCtx, UNK_TYPE arg1, s32 arg2, UNK_TYPE ar
     return true;
 }
 
-void func_80C173B4(Actor* thisx, GlobalContext* globalCtx) {
+void func_80C173B4(Actor* thisx, PlayState* play) {
     s32 pad;
     DemoSyoten* this = THIS;
     Mtx* matrix;
 
-    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
+    AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
 
-    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_144.unk_18->unk_1));
+    matrix = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_144.unk_18->unk_1));
 
     if (matrix != NULL) {
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-        func_8018450C(globalCtx, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
+        func_8012C2DC(play->state.gfxCtx);
+        Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
+        func_8018450C(play, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
     }
 }
 
-void func_80C17468(GlobalContext* globalCtx) {
+void func_80C17468(PlayState* play) {
     Color_RGBA8 sp2C;
     Color_RGBA8 sp28;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     func_800FE7A8(D_80C17824, &sp2C);
     func_800FE7A8(D_80C17834, &sp28);
@@ -506,70 +505,70 @@ void func_80C17468(GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp2C.r, sp2C.g, sp2C.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp28.r, sp28.g, sp28.b, 255);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void DemoSyoten_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     DemoSyoten* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     if (this->unk_3E4 & 4) {
         Matrix_RotateZS(-this->actor.shape.rot.z, MTXMODE_APPLY);
-        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 5.0f, 1.0f, MTXMODE_APPLY);
     }
 
     if (this->unk_3E4 & 1) {
-        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
     }
 
     if (this->unk_3E4 & 8) {
-        func_80C17468(globalCtx);
+        func_80C17468(play);
     }
 
     if (this->unk_3E0 != NULL) {
         if (this->unk_3E4 & 2) {
-            AnimatedMat_DrawStepXlu(globalCtx, this->unk_3E0, this->unk_3E6);
+            AnimatedMat_DrawStepXlu(play, this->unk_3E0, this->unk_3E6);
         } else {
-            AnimatedMat_DrawXlu(globalCtx, this->unk_3E0);
+            AnimatedMat_DrawXlu(play, this->unk_3E0);
         }
     }
 
     if (this->unk_3DC != NULL) {
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, this->unk_3DC);
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80C17690(Actor* thisx, GlobalContext* globalCtx) {
+void func_80C17690(Actor* thisx, PlayState* play) {
     s32 pad;
     DemoSyoten* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+    func_8012C2DC(play->state.gfxCtx);
+    Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
 
     if (this->unk_3E4 & 8) {
-        func_80C17468(globalCtx);
+        func_80C17468(play);
     }
 
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    AnimatedMat_DrawStepXlu(globalCtx, this->unk_3E0, this->unk_3E6);
+    AnimatedMat_DrawStepXlu(play, this->unk_3E0, this->unk_3E6);
 
     gSPDisplayList(POLY_XLU_DISP++, object_syoten_DL_002880);
 
-    AnimatedMat_DrawStepXlu(globalCtx, this->unk_3E0, this->unk_3E6 + 5);
+    AnimatedMat_DrawStepXlu(play, this->unk_3E0, this->unk_3E6 + 5);
 
     gSPDisplayList(POLY_XLU_DISP++, object_syoten_DL_002A20);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

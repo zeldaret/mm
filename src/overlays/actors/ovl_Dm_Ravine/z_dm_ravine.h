@@ -5,7 +5,7 @@
 
 struct DmRavine;
 
-typedef void (*DmRavineActionFunc)(struct DmRavine*, GlobalContext*);
+typedef void (*DmRavineActionFunc)(struct DmRavine*, PlayState*);
 
 typedef enum {
     /* 0 */ DM_RAVINE_STATE_INITIALIZED,
@@ -19,7 +19,5 @@ typedef struct DmRavine {
     /* 0x148 */ u8 state;
     /* 0x149 */ u8 isActive;
 } DmRavine; // size = 0x14C
-
-extern const ActorInit Dm_Ravine_InitVars;
 
 #endif // Z_DM_RAVINE_H

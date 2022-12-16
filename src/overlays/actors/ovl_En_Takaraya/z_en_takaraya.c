@@ -10,13 +10,13 @@
 
 #define THIS ((EnTakaraya*)thisx)
 
-void EnTakaraya_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTakaraya_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTakaraya_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTakaraya_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTakaraya_Init(Actor* thisx, PlayState* play);
+void EnTakaraya_Destroy(Actor* thisx, PlayState* play);
+void EnTakaraya_Update(Actor* thisx, PlayState* play);
+void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Takaraya_InitVars = {
+ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,
     ACTORCAT_NPC,
     FLAGS,

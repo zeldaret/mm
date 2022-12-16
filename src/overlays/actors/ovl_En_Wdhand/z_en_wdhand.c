@@ -10,13 +10,13 @@
 
 #define THIS ((EnWdhand*)thisx)
 
-void EnWdhand_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnWdhand_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnWdhand_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnWdhand_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnWdhand_Init(Actor* thisx, PlayState* play);
+void EnWdhand_Destroy(Actor* thisx, PlayState* play);
+void EnWdhand_Update(Actor* thisx, PlayState* play);
+void EnWdhand_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Wdhand_InitVars = {
+ActorInit En_Wdhand_InitVars = {
     ACTOR_EN_WDHAND,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -63,7 +63,7 @@ static ColliderJntSphElementInit D_80AF63E0[7] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80AF64DC = {
     { COLTYPE_HIT0, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    7, D_80AF63E0, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80AF63E0, // sJntSphElementsInit,
 };
 
 // sColChkInfoInit

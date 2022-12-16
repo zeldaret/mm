@@ -1,11 +1,18 @@
 ﻿<Root>
+    <!-- Get Item Draw: Kafei's Mask -->
     <File Name="object_gi_mask05" Segment="6">
-        <DList Name="object_gi_mask05_DL_001040" Offset="0x1040" />
-        <DList Name="object_gi_mask05_DL_001048" Offset="0x1048" />
-        <Texture Name="object_gi_mask05_TLUT_001638" OutName="tlut_001638" Format="rgba16" Width="16" Height="16" Offset="0x1638" />
-        <Texture Name="object_gi_mask05_Tex_001838" OutName="tex_001838" Format="ci8" Width="8" Height="16" Offset="0x1838" />
-        <Texture Name="object_gi_mask05_Tex_0018B8" OutName="tex_0018B8" Format="ci8" Width="8" Height="16" Offset="0x18B8" />
-        <Texture Name="object_gi_mask05_Tex_001938" OutName="tex_001938" Format="ci8" Width="16" Height="16" Offset="0x1938" />
-        <Texture Name="object_gi_mask05_Tex_001A38" OutName="tex_001A38" Format="ci8" Width="16" Height="8" Offset="0x1A38" />
+
+        <!-- Kafei's Mask Display Lists -->
+        <DList Name="gGiKafeiMaskEmptyDL" Offset="0x1040" />
+        <DList Name="gGiKafeiMaskDL" Offset="0x1048" />
+
+        <!-- Kafei's Mask TLUTs -->
+        <Texture Name="gGiKafeiMaskTLUT" OutName="gi_kafei_mask_tlut" Format="rgba16" Width="16" Height="16" Offset="0x1638" />
+
+        <!-- Kafei's Mask Textures -->
+        <Texture Name="gGiKafeiMaskLowerHairTex" OutName="gi_kafei_mask_lower_hair" Format="ci8" Width="8" Height="16" Offset="0x1838" />
+        <Texture Name="gGiKafeiMaskUpperHairTex" OutName="gi_kafei_mask_upper_hair" Format="ci8" Width="8" Height="16" Offset="0x18B8" />
+        <Texture Name="gGiKafeiMaskEyeMouthTex" OutName="gi_kafei_mask_eye_mouth" Format="ci8" Width="16" Height="16" Offset="0x1938" />
+        <Texture Name="gGiKafeiMaskEyebrowTex" OutName="gi_kafei_mask_eyebrow" Format="ci8" Width="16" Height="8" Offset="0x1A38" />
     </File>
 </Root>

@@ -10,13 +10,13 @@
 
 #define THIS ((EnEgblock*)thisx)
 
-void EnEgblock_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEgblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEgblock_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEgblock_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEgblock_Init(Actor* thisx, PlayState* play);
+void EnEgblock_Destroy(Actor* thisx, PlayState* play);
+void EnEgblock_Update(Actor* thisx, PlayState* play);
+void EnEgblock_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Egblock_InitVars = {
+ActorInit En_Egblock_InitVars = {
     ACTOR_EN_EGBLOCK,
     ACTORCAT_PROP,
     FLAGS,

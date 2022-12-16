@@ -56,6 +56,6 @@
         <Limb Name="gYbRightHandLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_HAND" Offset="0x5ED0" />
         <Limb Name="gYbEmpty5EDCLimb" Type="Standard" EnumName="YB_LIMB_EMPTY_5EDC" Offset="0x5EDC" />
         <Limb Name="gYbUpperTorsoLimb" Type="Standard" EnumName="YB_LIMB_TORSO" Offset="0x5EE8" />
-        <Skeleton Name="gYbSkeleton" Type="Flex" LimbType="Standard" LimbNone="YB_LIMB_NONE" LimbMax="YB_LIMB_MAX" EnumName="ObjectYBLimbs" Offset="0x5F48" />
+        <Skeleton Name="gYbSkeleton" Type="Flex" LimbType="Standard" LimbNone="YB_LIMB_NONE" LimbMax="YB_LIMB_MAX" EnumName="ObjectYbLimb" Offset="0x5F48" />
     </File>
 </Root>

@@ -10,26 +10,26 @@
 
 #define THIS ((EnMinideath*)thisx)
 
-void EnMinideath_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMinideath_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMinideath_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnMinideath_Init(Actor* thisx, PlayState* play);
+void EnMinideath_Destroy(Actor* thisx, PlayState* play);
+void EnMinideath_Update(Actor* thisx, PlayState* play);
 
-void func_808CA860(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CA8F4(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CAAEC(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CABB0(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CACD8(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CAE18(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CAF68(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB094(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB22C(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB454(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB59C(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB6D4(EnMinideath* this, GlobalContext* globalCtx);
-void func_808CB7CC(EnMinideath* this, GlobalContext* globalCtx);
+void func_808CA860(EnMinideath* this, PlayState* play);
+void func_808CA8F4(EnMinideath* this, PlayState* play);
+void func_808CAAEC(EnMinideath* this, PlayState* play);
+void func_808CABB0(EnMinideath* this, PlayState* play);
+void func_808CACD8(EnMinideath* this, PlayState* play);
+void func_808CAE18(EnMinideath* this, PlayState* play);
+void func_808CAF68(EnMinideath* this, PlayState* play);
+void func_808CB094(EnMinideath* this, PlayState* play);
+void func_808CB22C(EnMinideath* this, PlayState* play);
+void func_808CB454(EnMinideath* this, PlayState* play);
+void func_808CB59C(EnMinideath* this, PlayState* play);
+void func_808CB6D4(EnMinideath* this, PlayState* play);
+void func_808CB7CC(EnMinideath* this, PlayState* play);
 
 #if 0
-const ActorInit En_Minideath_InitVars = {
+ActorInit En_Minideath_InitVars = {
     ACTOR_EN_MINIDEATH,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -60,7 +60,7 @@ static ColliderJntSphElementInit D_808CBF50[3] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_808CBFBC = {
     { COLTYPE_NONE, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_NONE | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    3, D_808CBF50, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_808CBF50, // sJntSphElementsInit,
 };
 
 // static DamageTable sDamageTable = {

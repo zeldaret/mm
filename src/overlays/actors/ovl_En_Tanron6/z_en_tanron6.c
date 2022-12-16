@@ -1,7 +1,7 @@
 /*
  * File: z_en_tanron6.c
  * Overlay: ovl_En_Tanron6
- * Description: Swarm of Giant Bees
+ * Description: Unused invisible enemy. Only draws a circle shadow.
  */
 
 #include "z_en_tanron6.h"
@@ -10,15 +10,15 @@
 
 #define THIS ((EnTanron6*)thisx)
 
-void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron6_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron6_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron6_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTanron6_Init(Actor* thisx, PlayState* play);
+void EnTanron6_Destroy(Actor* thisx, PlayState* play);
+void EnTanron6_Update(Actor* thisx, PlayState* play);
+void EnTanron6_Draw(Actor* thisx, PlayState* play);
 
 void EnTanron6_DoNothing(EnTanron6* this);
-void func_80BE60D0(EnTanron6* this, GlobalContext* globalCtx);
+void func_80BE60D0(EnTanron6* this, PlayState* play);
 
-const ActorInit En_Tanron6_InitVars = {
+ActorInit En_Tanron6_InitVars = {
     ACTOR_EN_TANRON6,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -65,7 +65,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron6_Init(Actor* thisx, PlayState* play) {
     EnTanron6* this = THIS;
 
     this->actor.colChkInfo.mass = 10;
@@ -76,23 +76,23 @@ void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron6_DoNothing(this);
 }
 
-void EnTanron6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron6_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnTanron6_DoNothing(EnTanron6* this) {
     this->actionFunc = func_80BE60D0;
 }
 
-void func_80BE60D0(EnTanron6* this, GlobalContext* globalCtx) {
+void func_80BE60D0(EnTanron6* this, PlayState* play) {
 }
 
-void EnTanron6_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron6_Update(Actor* thisx, PlayState* play) {
     EnTanron6* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
 }
 
-void EnTanron6_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron6_Draw(Actor* thisx, PlayState* play) {
 }

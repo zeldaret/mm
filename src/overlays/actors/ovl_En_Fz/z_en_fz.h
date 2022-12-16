@@ -5,7 +5,7 @@
 
 struct EnFz;
 
-typedef void (*EnFzActionFunc)(struct EnFz*, GlobalContext*);
+typedef void (*EnFzActionFunc)(struct EnFz*, PlayState*);
 typedef void (*EnFzUnkFunc)(struct EnFz*);
 
 #define ENFZ_GET_F(thisx) ((thisx)->params & 0xF)
@@ -69,7 +69,5 @@ typedef struct EnFz {
     /* 0xBD8 */ u8 unk_BD8;
     /* 0xBD9 */ u8 unk_BD9;
 } EnFz; /* size = 0xBDC */
-
-extern const ActorInit En_Fz_InitVars;
 
 #endif // Z_EN_FZ_H

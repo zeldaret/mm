@@ -10,10 +10,10 @@
 
 #define THIS ((EnEgol*)thisx)
 
-void EnEgol_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnEgol_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnEgol_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnEgol_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnEgol_Init(Actor* thisx, PlayState* play);
+void EnEgol_Destroy(Actor* thisx, PlayState* play);
+void EnEgol_Update(Actor* thisx, PlayState* play);
+void EnEgol_Draw(Actor* thisx, PlayState* play);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[6] = {
@@ -47,7 +47,7 @@ static ColliderJntSphElementInit D_80A80C64[6] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A80D3C = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    6, D_80A80C64, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A80C64, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -61,7 +61,7 @@ static ColliderJntSphElementInit D_80A80C40[1] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A80D4C = {
     { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A80C40, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit), D_80A80C40, // sJntSphElementsInit,
 };
 
 // static ColliderQuadInit sQuadInit = {
@@ -107,7 +107,7 @@ static DamageTable D_80A80DAC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Egol_InitVars = {
+ActorInit En_Egol_InitVars = {
     ACTOR_EN_EGOL,
     ACTORCAT_ENEMY,
     FLAGS,

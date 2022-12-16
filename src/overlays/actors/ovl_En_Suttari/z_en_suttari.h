@@ -6,7 +6,7 @@
 
 struct EnSuttari;
 
-typedef void (*EnSuttariActionFunc)(struct EnSuttari*, GlobalContext*);
+typedef void (*EnSuttariActionFunc)(struct EnSuttari*, PlayState*);
 
 #define ENSUTTARI_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
 
@@ -27,40 +27,37 @@ typedef struct EnSuttari {
     /* 0x1FC */ UNK_TYPE1 unk_1FC[0x1A];
     /* 0x216 */ Vec3s jointTable[16];
     /* 0x276 */ Vec3s morphTable[16];
-    /* 0x2D6 */ Vec3s turnTarget;
+    /* 0x2D6 */ Vec3s trackTarget;
     /* 0x2DC */ Vec3s headRot;
     /* 0x2E2 */ Vec3s torsoRot;
     /* 0x2E8 */ UNK_TYPE1 unk_2E8[0x12];
     /* 0x2FA */ s16 unk2FA[16];
     /* 0x31A */ s16 unk31A[16];
     /* 0x33A */ UNK_TYPE1 unk_33A[0xB6];
-    /* 0x3F0 */ s16 unk3F0;
+    /* 0x3F0 */ s16 playerDetected;
     /* 0x3F2 */ s16 unk3F2;
     /* 0x3F4 */ s16 unk3F4;
     /* 0x3F6 */ s16 unk3F6;
     /* 0x3F8 */ Vec3f unk3F8;
-    /* 0x404 */ Path* unk404;
-    /* 0x408 */ Vec3f unk408;
-    /* 0x414 */ f32 unk414;
-    /* 0x418 */ s32 unk418;
-    /* 0x41C */ s32 unk41C;
-    /* 0x420 */ s32 unk420;
-    /* 0x424 */ s32 unk424;
+    /* 0x404 */ Path* timePath;
+    /* 0x408 */ Vec3f timePathTargetPos;
+    /* 0x414 */ f32 timePathProgress;
+    /* 0x418 */ s32 timePathTotalTime;
+    /* 0x41C */ s32 timePathWaypointTime;
+    /* 0x420 */ s32 timePathWaypoint;
+    /* 0x424 */ s32 timePathElapsedTime;
     /* 0x428 */ u8 unk428;
-    /* 0x429 */ UNK_TYPE1 unk_429[0x1];
-    /* 0x42A */ s16 unk42A;
+    /* 0x42A */ s16 timePathTimeSpeed;
     /* 0x42C */ s32 unk42C;
     /* 0x430 */ s32 unk430;
     /* 0x434 */ s16 unk434;
     /* 0x436 */ s16 unk436;
     /* 0x438 */ Vec3f unk438;
     /* 0x444 */ Vec3f unk444;
-    /* 0x450 */ s32 animationIndex;
+    /* 0x450 */ s32 animIndex;
     /* 0x454 */ UNK_TYPE1 unk_454[0x2];
     /* 0x456 */ s16 cutscenes[2];
     /* 0x45A */ s16 cutsceneIdx;
 } EnSuttari; // size = 0x45C
-
-extern const ActorInit En_Suttari_InitVars;
 
 #endif // Z_EN_SUTTARI_H

@@ -12,19 +12,19 @@
 
 #define THIS ((EffDust*)thisx)
 
-void EffDust_Init(Actor* thisx, GlobalContext* globalCtx);
-void EffDust_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EffDust_Update(Actor* thisx, GlobalContext* globalCtx);
-void EffDust_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EffDust_Init(Actor* thisx, PlayState* play);
+void EffDust_Destroy(Actor* thisx, PlayState* play);
+void EffDust_Update(Actor* thisx, PlayState* play);
+void EffDust_Draw(Actor* thisx, PlayState* play);
 
-void func_80918D64(EffDust* this, GlobalContext* globalCtx);
-void func_80918FE4(EffDust* this, GlobalContext* globalCtx);
-void func_80919230(EffDust* this, GlobalContext* globalCtx);
+void func_80918D64(EffDust* this, PlayState* play);
+void func_80918FE4(EffDust* this, PlayState* play);
+void func_80919230(EffDust* this, PlayState* play);
 
-void func_80919768(Actor* thisx, GlobalContext* globalCtx);
-void func_809199FC(Actor* thisx, GlobalContext* globalCtx);
+void func_80919768(Actor* thisx, PlayState* play2);
+void func_809199FC(Actor* thisx, PlayState* play2);
 
-const ActorInit Eff_Dust_InitVars = {
+ActorInit Eff_Dust_InitVars = {
     ACTOR_EFF_DUST,
     ACTORCAT_NPC,
     FLAGS,
@@ -49,7 +49,7 @@ void func_80918B40(EffDust* this) {
     this->index = 0;
 }
 
-void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EffDust_Init(Actor* thisx, PlayState* play) {
     EffDust* this = THIS;
     u32 type = this->actor.params;
 
@@ -71,7 +71,7 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dz = 0.8f;
             this->scalingFactor = 0.5f;
             break;
-        case EFF_DUST_TYPE_2:
+        case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
         case EFF_DUST_TYPE_3:
             this->actionFunc = func_80919230;
             this->actor.draw = func_809199FC;
@@ -100,10 +100,10 @@ void EffDust_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->life = 10;
 }
 
-void EffDust_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EffDust_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80918D64(EffDust* this, GlobalContext* globalCtx) {
+void func_80918D64(EffDust* this, PlayState* play) {
     s16 theta;
     s16 fi;
     s32 i;
@@ -134,7 +134,7 @@ void func_80918D64(EffDust* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80918FE4(EffDust* this, GlobalContext* globalCtx) {
+void func_80918FE4(EffDust* this, PlayState* play) {
     s16 theta;
     s16 fi;
     f32* distanceTraveled = this->distanceTraveled;
@@ -163,19 +163,19 @@ void func_80918FE4(EffDust* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80919230(EffDust* this, GlobalContext* globalCtx) {
+void func_80919230(EffDust* this, PlayState* play) {
     s16 theta;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     Actor* parent = this->actor.parent;
     f32* distanceTraveled = this->distanceTraveled;
     s32 i;
     s32 j;
 
-    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & 0x1000)) {
+    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
         if (this->life != 0) {
             this->life--;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
 
         for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
@@ -203,7 +203,7 @@ void func_80919230(EffDust* this, GlobalContext* globalCtx) {
         if (this->distanceTraveled[i] >= 1.0f) {
             theta = randPlusMinusPoint5Scaled(0x10000);
             switch (this->actor.params) {
-                case EFF_DUST_TYPE_2:
+                case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 4500.0f) + 700.0f;
                     if (this->initialPositions[i].x > 3000.0f) {
                         this->initialPositions[i].y = (3000.0f * Rand_ZeroOne()) * Math_SinS(theta);
@@ -243,20 +243,20 @@ void func_80919230(EffDust* this, GlobalContext* globalCtx) {
     }
 }
 
-void EffDust_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EffDust_Update(Actor* thisx, PlayState* play) {
     EffDust* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
 Gfx D_80919DB0[] = {
     gsSPEndDisplayList(),
 };
 
-void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
+void func_80919768(Actor* thisx, PlayState* play2) {
     EffDust* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext* gfxCtx = globalCtx2->state.gfxCtx;
+    PlayState* play = play2;
+    GraphicsContext* gfxCtx = play2->state.gfxCtx;
     f32* distanceTraveled;
     Vec3f* initialPositions;
     s32 i;
@@ -264,7 +264,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     s16 sp92;
     Vec3f activeCamEye;
 
-    activeCamEye = GET_ACTIVE_CAM(globalCtx)->eye;
+    activeCamEye = GET_ACTIVE_CAM(play)->eye;
     sp92 = Math_Vec3f_Yaw(&activeCamEye, &thisx->world.pos);
 
     OPEN_DISPS(gfxCtx);
@@ -290,7 +290,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
                              initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
             Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, MTXMODE_APPLY);
 
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -307,15 +307,15 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
+void func_809199FC(Actor* thisx, PlayState* play2) {
     EffDust* this = THIS;
-    GlobalContext* globalCtx = globalCtx2;
-    GraphicsContext* gfxCtx = globalCtx2->state.gfxCtx;
+    PlayState* play = play2;
+    GraphicsContext* gfxCtx = play2->state.gfxCtx;
     f32* distanceTraveled;
     Vec3f* initialPositions;
     s32 i;
     f32 aux;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
     OPEN_DISPS(gfxCtx);
     func_8012C28C(gfxCtx);
@@ -347,7 +347,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_Scale(*distanceTraveled * this->scalingFactor, *distanceTraveled * this->scalingFactor,
                          *distanceTraveled * this->scalingFactor, MTXMODE_APPLY);
 
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_FOG | G_LIGHTING);
@@ -363,8 +363,8 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffDust_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EffDust_Draw(Actor* thisx, PlayState* play) {
     EffDust* this = THIS;
 
-    this->drawFunc(thisx, globalCtx);
+    this->drawFunc(thisx, play);
 }

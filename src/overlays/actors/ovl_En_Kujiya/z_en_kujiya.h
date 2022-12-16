@@ -5,7 +5,7 @@
 
 struct EnKujiya;
 
-typedef void (*EnKujiyaActionFunc)(struct EnKujiya*, GlobalContext*);
+typedef void (*EnKujiyaActionFunc)(struct EnKujiya*, PlayState*);
 
 typedef struct EnKujiya {
     /* 0x000 */ Actor actor;
@@ -13,7 +13,5 @@ typedef struct EnKujiya {
     /* 0x148 */ s16 timer;
     /* 0x14A */ s16 textId;
 } EnKujiya; // size = 0x14C
-
-extern const ActorInit En_Kujiya_InitVars;
 
 #endif // Z_EN_KUJIYA_H

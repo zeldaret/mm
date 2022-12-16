@@ -5,7 +5,7 @@
 
 struct EnGb2;
 
-typedef void (*EnGb2ActionFunc)(struct EnGb2*, GlobalContext*);
+typedef void (*EnGb2ActionFunc)(struct EnGb2*, PlayState*);
 
 #define ENGB2_GET_7(thisx) ((thisx)->params & 7)
 #define ENGB2_GET_7F8(thisx) (((thisx)->params & 0x7F8) >> 3)
@@ -37,7 +37,5 @@ typedef struct EnGb2 {
     /* 0x28C */ s32 unk_28C;
     /* 0x290 */ s16 unk_290;
 } EnGb2; // size = 0x294
-
-extern const ActorInit En_Gb2_InitVars;
 
 #endif // Z_EN_GB2_H

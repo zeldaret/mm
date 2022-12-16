@@ -11,7 +11,7 @@
 #include "objects/object_boj/object_boj.h"
 #include "objects/object_os_anime/object_os_anime.h"
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
@@ -45,20 +45,20 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 isChanged = false;
 
-    if (animIndex >= ENHY_ANIMATION_AOB_0 && animIndex < ENHY_ANIMATION_MAX) {
+    if (animIndex >= ENHY_ANIM_AOB_0 && animIndex < ENHY_ANIM_MAX) {
         isChanged = true;
-        frameCount = sAnimations[animIndex].frameCount;
+        frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animation->common);
+            frameCount = Animation_GetLastFrame(&sAnimationInfo[animIndex].animation->common);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
     return isChanged;
 }
 
-EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
+EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {
     EnDoor* nearestDoor = NULL;
     Actor* doorIter = NULL;
     f32 dist;
@@ -67,7 +67,7 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     f32 minDist = 0.0f;
 
     do {
-        doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        doorIter = SubS_FindActor(play, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
         dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
@@ -83,16 +83,16 @@ EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     return nearestDoor;
 }
 
-void EnHy_ChangeObjectAndAnim(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex) {
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->animObjIndex].segment);
+void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->animObjIndex].segment);
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
-s32 EnHy_UpdateSkelAnime(EnHy* enHy, GlobalContext* globalCtx) {
+s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->animObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->animObjIndex].segment);
         SkelAnime_Update(&enHy->skelAnime);
         isUpdated = true;
     }
@@ -109,26 +109,26 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
     }
 }
 
-s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
+s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((SubS_IsObjectLoaded(enHy->animObjIndex, globalCtx) == true) &&
-        (SubS_IsObjectLoaded(enHy->headObjIndex, globalCtx) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, globalCtx) == true) &&
-        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, globalCtx) == true)) {
+    if ((SubS_IsObjectLoaded(enHy->animObjIndex, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->headObjIndex, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, play) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, play) == true)) {
         enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->actor.objBankIndex].segment);
-        SkelAnime_InitFlex(globalCtx, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[enHy->actor.objBankIndex].segment);
+        SkelAnime_InitFlex(play, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
                            ENHY_LIMB_MAX);
-        EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
+        EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     }
 
     return isInitialized;
 }
 
-void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3, s16 arg4) {
+void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4) {
     s32 pad;
     s8 animIndex;
     Vec3f offset;
@@ -137,26 +137,26 @@ void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3,
     Actor_OffsetOfPointInActorCoords(&door->dyna.actor, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     animIndex = ((s8)phi_f0 < 0) ? 0 : 2;
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, (animIndex == 0) ? arg3 : arg4);
+    EnHy_ChangeObjectAndAnim(enHy, play, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.moveFlags |= 3;
-    AnimationContext_SetMoveActor(globalCtx, &enHy->actor, &enHy->skelAnime, 1.0f);
+    AnimationContext_SetMoveActor(play, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->unk_1A1 = 1;
     door->animIndex = animIndex;
 }
 
-s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
+s32 func_800F0CE4(EnHy* enHy, PlayState* play, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
     s32 ret = false;
     s16 yaw;
     EnDoor* door;
     s32 pad;
 
     if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
-        door = EnHy_FindNearestDoor(&enHy->actor, globalCtx);
+        door = EnHy_FindNearestDoor(&enHy->actor, play);
         if (door != NULL) {
             ret = true;
-            func_800F0BB4(enHy, globalCtx, door, arg3, arg4);
+            func_800F0BB4(enHy, play, door, arg3, arg4);
             yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
             enHy->actor.world.pos.x += arg5 * Math_SinS(yaw);
             enHy->actor.world.pos.z += arg5 * Math_CosS(yaw);
@@ -168,17 +168,17 @@ s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3
     return ret;
 }
 
-s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
+s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
     s32 ret = false;
     s32 pad;
     EnDoor* door;
 
     enHy->curPoint = 0;
     if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
-        door = EnHy_FindNearestDoor(&enHy->actor, globalCtx);
+        door = EnHy_FindNearestDoor(&enHy->actor, play);
         if (door != NULL) {
             ret = true;
-            func_800F0BB4(enHy, globalCtx, door, arg2, arg3);
+            func_800F0BB4(enHy, play, door, arg2, arg3);
             enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
@@ -188,16 +188,16 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     return ret;
 }
 
-s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
+s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex) {
     enHy->actor.gravity = gravity;
     enHy->actor.flags |= ACTOR_FLAG_1;
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
+    EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     enHy->curPoint++;
     return false;
 }
 
-s32 EnHy_SetPointBackwards(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex) {
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
+s32 EnHy_SetPointBackwards(EnHy* enHy, PlayState* play, s16 animIndex) {
+    EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     enHy->curPoint--;
     return false;
 }
@@ -238,16 +238,16 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
     return reachedEnd;
 }
 
-void EnHy_UpdateCollider(EnHy* enHy, GlobalContext* globalCtx) {
+void EnHy_UpdateCollider(EnHy* enHy, PlayState* play) {
     enHy->collider.dim.pos.x = enHy->actor.world.pos.x;
     enHy->collider.dim.pos.y = enHy->actor.world.pos.y;
     enHy->collider.dim.pos.z = enHy->actor.world.pos.z;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &enHy->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &enHy->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &enHy->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &enHy->collider.base);
 }
 
-s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThreshold) {
+s32 EnHy_PlayWalkingSound(EnHy* enHy, PlayState* play, f32 distAboveThreshold) {
     u8 wasLeftFootOnGround = enHy->isLeftFootOnGround;
     u8 wasRightFootOnGround = enHy->isRightFootOnGround;
     s32 waterSfxId;
@@ -262,15 +262,15 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
         }
         sfxId = waterSfxId + SFX_FLAG;
     } else {
-        sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
+        sfxId = SurfaceType_GetSfx(&play->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
 
-    enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(globalCtx, &enHy->leftFootPos, distAboveThreshold);
+    enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }
 
-    enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(globalCtx, &enHy->rightFootPos, distAboveThreshold);
+    enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(play, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }

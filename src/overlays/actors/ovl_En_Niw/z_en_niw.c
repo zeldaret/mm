@@ -11,26 +11,26 @@
 
 #define THIS ((EnNiw*)thisx)
 
-void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnNiw_Init(Actor* thisx, PlayState* play);
+void EnNiw_Destroy(Actor* thisx, PlayState* play);
+void EnNiw_Update(Actor* thisx, PlayState* play);
+void EnNiw_Draw(Actor* thisx, PlayState* play);
 void EnNiw_SetupIdle(EnNiw* this);
-void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx);
+void EnNiw_Idle(EnNiw* this, PlayState* play);
+void EnNiw_Thrown(EnNiw* this, PlayState* play);
 void EnNiw_SetupRunAway(EnNiw* this);
-void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_Upset(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
-void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationState);
+void EnNiw_RunAway(EnNiw* this, PlayState* play);
+void EnNiw_Swimming(EnNiw* this, PlayState* play);
+void EnNiw_Trigger(EnNiw* this, PlayState* play);
+void EnNiw_Upset(EnNiw* this, PlayState* play);
+void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play);
+void EnNiw_CuccoStorm(EnNiw* this, PlayState* play);
+void EnNiw_SpawnAttackNiw(EnNiw* this, PlayState* play);
+void EnNiw_Held(EnNiw* this, PlayState* play);
+void EnNiw_UpdateFeather(EnNiw* this, PlayState* play);
+void EnNiw_DrawFeathers(EnNiw* this, PlayState* play);
+void EnNiw_CheckRage(EnNiw* this, PlayState* play);
+void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 s16 sCuccoStormActive = false;
@@ -48,7 +48,7 @@ enum EnNiwState {
     /* 8 */ NIW_STATE_HOPPING,
 };
 
-const ActorInit En_Niw_InitVars = {
+ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,
     ACTORCAT_PROP,
     FLAGS,
@@ -112,7 +112,7 @@ static Vec3f D_808934E8 = {
 
 static s32 pad = 0;
 
-void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnNiw_Init(Actor* thisx, PlayState* play) {
     EnNiw* this = THIS;
     Vec3f dTemp = D_808934C4;
 
@@ -129,7 +129,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
-    SkelAnime_InitFlex(globalCtx, &this->skelanime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelanime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
                        NIW_LIMB_MAX);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
@@ -150,7 +150,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     }
 
     if (this->niwType == NIW_TYPE_HELD) {
@@ -169,11 +169,11 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnNiw_Destroy(Actor* thisx, PlayState* play) {
     EnNiw* this = THIS;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+        Collider_DestroyCylinder(play, &this->collider);
     }
 }
 
@@ -182,12 +182,12 @@ void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  *
  * AttackNiw has a copy of this function that it barely uses
  */
-void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationState) {
+void EnNiw_AnimateWingHead(EnNiw* this, PlayState* play, s16 animationState) {
     f32 tempOne = 1.0f; // hopefully fake match, but no luck
 
     if (this->unkTimer24C == 0) {
         // targetLimbRots[0] is bodyRotY
-        if (animationState == NIW_ANIMATION_STILL) {
+        if (animationState == NIW_ANIM_STILL) {
             this->targetLimbRots[0] = 0.0f;
         } else {
             this->targetLimbRots[0] = -10000.0f * tempOne;
@@ -197,7 +197,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
         this->unkTimer24C = 3;
         if ((this->unk292 % 2) == 0) {
             this->targetLimbRots[0] = 0.0f;
-            if (animationState == NIW_ANIMATION_STILL) {
+            if (animationState == NIW_ANIM_STILL) {
                 this->unkTimer24C = Rand_ZeroFloat(30.0f);
             }
         }
@@ -208,11 +208,11 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
         this->unkToggle296 &= 1;
 
         switch (animationState) {
-            case NIW_ANIMATION_STILL:
+            case NIW_ANIM_STILL:
                 this->targetLimbRots[2] = 0.0f; // both wingRotZ
                 this->targetLimbRots[1] = 0.0f;
                 break;
-            case NIW_ANIMATION_HEAD_PECKING:
+            case NIW_ANIM_HEAD_PECKING:
                 this->unkTimer24E = 3;
                 this->targetLimbRots[2] = 7000.0f * tempOne; // both wingRotZ
                 this->targetLimbRots[1] = 7000.0f * tempOne;
@@ -222,7 +222,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
                 }
                 break;
 
-            case NIW_ANIMATION_PECKING_AND_WAVING:
+            case NIW_ANIM_PECKING_AND_WAVING:
                 this->unkTimer24E = 2;
                 this->targetLimbRots[2] = -10000.0f; // both wingRotZ
                 this->targetLimbRots[1] = -10000.0f;
@@ -236,7 +236,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
                 }
                 break;
 
-            case NIW_ANIMATION_PECKING_AND_FORFLAPPING:
+            case NIW_ANIM_PECKING_AND_FORFLAPPING:
                 this->unkTimer24E = 2;
                 this->targetLimbRots[5] = 10000.0f; // both wingRotY
                 this->targetLimbRots[7] = 10000.0f;
@@ -246,11 +246,11 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
                 }
                 break;
 
-            case NIW_ANIMATION_FREEZE:
+            case NIW_ANIM_FREEZE:
                 this->unkTimer24C = 5;
                 break;
 
-            case NIW_ANIMATION_PECKING_SLOW_FORFLAPPING:
+            case NIW_ANIM_PECKING_SLOW_FORFLAPPING:
                 this->unkTimer24E = 5;
                 this->targetLimbRots[5] = 14000.0f; // both wingRotY
                 this->targetLimbRots[7] = 14000.0f;
@@ -288,7 +288,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
     }
 }
 
-void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_SpawnAttackNiw(EnNiw* this, PlayState* play) {
     f32 xView;
     f32 yView;
     f32 zView;
@@ -296,13 +296,13 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     Actor* attackNiw;
 
     if (this->attackNiwSpawnTimer == 0 && this->attackNiwCount < 7) {
-        xView = globalCtx->view.at.x - globalCtx->view.eye.x;
-        yView = globalCtx->view.at.y - globalCtx->view.eye.y;
-        zView = globalCtx->view.at.z - globalCtx->view.eye.z;
-        newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + globalCtx->view.eye.x;
-        newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (globalCtx->view.eye.y + 50.0f + (yView * 0.5f));
-        newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + globalCtx->view.eye.z;
-        attackNiw = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ATTACK_NIW, newNiwPos.x,
+        xView = play->view.at.x - play->view.eye.x;
+        yView = play->view.at.y - play->view.eye.y;
+        zView = play->view.at.z - play->view.eye.z;
+        newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + play->view.eye.x;
+        newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (play->view.eye.y + 50.0f + (yView * 0.5f));
+        newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + play->view.eye.z;
+        attackNiw = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ATTACK_NIW, newNiwPos.x,
                                        newNiwPos.y, newNiwPos.z, 0, 0, 0, ATTACK_NIW_REGULAR);
 
         if (attackNiw != NULL) {
@@ -312,7 +312,7 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnNiw_UpdateRunning(EnNiw* this, GlobalContext* globalCtx, s32 isStormCucco) {
+void EnNiw_UpdateRunning(EnNiw* this, PlayState* play, s32 isStormCucco) {
     f32 runningDirection;
     f32 targetRotY;
     f32* runningAngles = sRunningAngles;
@@ -348,24 +348,25 @@ void EnNiw_UpdateRunning(EnNiw* this, GlobalContext* globalCtx, s32 isStormCucco
     targetRotY = this->yawTowardsPlayer + runningDirection;
     Math_SmoothStepToS(&this->actor.world.rot.y, targetRotY, 3, this->unk300, 0);
     Math_ApproachF(&this->unk300, 3000.0f, 1.0f, 500.0f);
-    EnNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_SLOW_FORFLAPPING);
+    EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_SLOW_FORFLAPPING);
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
+                     -10.0f);
     this->niwState = NIW_STATE_IDLE;
     this->actionFunc = EnNiw_Idle;
 }
 
-void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Idle(EnNiw* this, PlayState* play) {
     f32 posX2;
     f32 posZ2;
     f32 posX1 = randPlusMinusPoint5Scaled(100.0f);
     f32 posZ1 = randPlusMinusPoint5Scaled(100.0f);
-    s16 nextAnimation;
+    s16 nextAnimIndex;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
-        if (Actor_HasParent(&this->actor, globalCtx)) {               // picked up
+        if (Actor_HasParent(&this->actor, play)) {                    // picked up
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->heldTimer = 30;
@@ -375,13 +376,13 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
             this->actionFunc = EnNiw_Held;
             return;
         } else {
-            Actor_LiftActor(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, play);
         }
     } else { // NIW_TYPE_UNK1 || NIW_TYPE_HELD
         this->unkIdleTimer2 = 10;
     }
 
-    nextAnimation = NIW_ANIMATION_STILL; // probably a scoped variable here, where their scope was different
+    nextAnimIndex = NIW_ANIM_STILL; // probably a scoped variable here, where their scope was different
     if (this->unkIdleTimer2 != 0) {
         if (Rand_ZeroFloat(3.99f) < 1.0f) {
             this->headRotationToggle++;
@@ -422,7 +423,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
 
     if (this->unkIdleTimer != 0) {
         Math_ApproachZeroF(&this->targetLimbRots[9], 0.5f, 4000.0f); // head rot
-        nextAnimation = NIW_ANIMATION_HEAD_PECKING;
+        nextAnimIndex = NIW_ANIM_HEAD_PECKING;
         Math_ApproachF(&this->actor.world.pos.x, this->unk2B0.x, 1.0f, this->unk300);
         Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
         Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
@@ -446,10 +447,10 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
 
-    EnNiw_AnimateWingHead(this, globalCtx, nextAnimation);
+    EnNiw_AnimateWingHead(this, play, nextAnimIndex);
 }
 
-void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Held(EnNiw* this, PlayState* play) {
     Vec3f vec3fcopy = D_808934DC;
     s16 rotZ;
 
@@ -462,7 +463,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.y;
     this->actor.shape.rot.z = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.z;
     if (this->niwType == NIW_TYPE_REGULAR) {
-        if (Actor_HasNoParent(&this->actor, globalCtx)) {
+        if (Actor_HasNoParent(&this->actor, play)) {
             this->actor.shape.rot.z = 0;
             rotZ = this->actor.shape.rot.z;
             this->niwState = NIW_STATE_FALLING;
@@ -482,16 +483,16 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->niwType = NIW_TYPE_REGULAR;
         this->actor.shape.rot.y = rotZ;
         this->actor.shape.rot.x = rotZ;
-        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
         this->actor.flags |= ACTOR_FLAG_1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
     }
 
-    EnNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+    EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
 }
 
-void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Thrown(EnNiw* this, PlayState* play) {
     if (this->unk2EC == 0) {
         if (this->actor.bgCheckFlags & 1) { // hit floor
             this->unk2EC = 1;
@@ -516,7 +517,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+    if (Actor_HasParent(&this->actor, play)) {
         // picked up again before could run off
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
@@ -528,19 +529,19 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
     } else {
         if (this->hoppingTimer > 5) {
-            Actor_LiftActor(&this->actor, globalCtx);
+            Actor_LiftActor(&this->actor, play);
         }
-        EnNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+        EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
 }
 
-void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Swimming(EnNiw* this, PlayState* play) {
     Vec3f ripplePos;
 
     // even if hitting water, keep calling for reinforcements
     // this should just be in update
     if (this->isStormActive) {
-        EnNiw_SpawnAttackNiw(this, globalCtx); // spawn attack niw
+        EnNiw_SpawnAttackNiw(this, play); // spawn attack niw
     }
 
     this->actor.speedXZ = 2.0f;
@@ -554,7 +555,7 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&ripplePos, &this->actor.world.pos);
             ripplePos.y += this->actor.depthInWater;
 
-            EffectSsGRipple_Spawn(globalCtx, &ripplePos, 100, 500, 30);
+            EffectSsGRipple_Spawn(play, &ripplePos, 100, 500, 30);
         }
         if (this->actor.bgCheckFlags & 8) { // hit a wall
             this->actor.velocity.y = 10.0f; // fly up in straight line
@@ -584,10 +585,10 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
         }
     }
 
-    EnNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+    EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
 }
 
-void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Trigger(EnNiw* this, PlayState* play) {
     s32 state;
 
     // Possible Fake Match: the weird way this state is set
@@ -596,26 +597,26 @@ void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx) {
     }
 
     this->cuccoStormTimer = 10;
-    this->niwState = this->nextAnimation = state; // NIW_ANIMATION_HEAD_PECKING
+    this->niwState = this->nextAnimIndex = state; // NIW_ANIM_HEAD_PECKING
     this->actionFunc = EnNiw_Upset;
 }
 
-void EnNiw_Upset(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_Upset(EnNiw* this, PlayState* play) {
     // assumption: CuccoStorm is split into smaller parts because it used to be a cutscene in OOT
     this->sfxTimer1 = 100;
     if (this->cuccoStormTimer == 0) {
         this->cuccoStormTimer = 60;
         this->unkTimer24C = 10;
-        this->nextAnimation = NIW_ANIMATION_FREEZE;
+        this->nextAnimIndex = NIW_ANIM_FREEZE;
         this->niwState = NIW_STATE_ANGRY2;
         this->actionFunc = EnNiw_SetupCuccoStorm;
     }
 
-    EnNiw_AnimateWingHead(this, globalCtx, this->nextAnimation);
+    EnNiw_AnimateWingHead(this, play, this->nextAnimIndex);
 }
 
 // the long crow with head back before they descend
-void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_SetupCuccoStorm(EnNiw* this, PlayState* play) {
     f32 viewY;
 
     this->sfxTimer1 = 100;
@@ -639,11 +640,11 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_CuccoStorm;
     }
 
-    EnNiw_AnimateWingHead(this, globalCtx, this->nextAnimation);
+    EnNiw_AnimateWingHead(this, play, this->nextAnimIndex);
 }
 
-void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
-    EnNiw_SpawnAttackNiw(this, globalCtx);
+void EnNiw_CuccoStorm(EnNiw* this, PlayState* play) {
+    EnNiw_SpawnAttackNiw(this, play);
     if (this->cuccoStormTimer == 1) { // not countdown to 0? mistype?
         this->actor.speedXZ = 3.0f;
         this->isRunningRight = Rand_ZeroFloat(1.99f);
@@ -651,20 +652,21 @@ void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
         this->unkTimer24E = this->generalTimer1;
         this->unkTimer24C = this->generalTimer1;
     } else {
-        EnNiw_UpdateRunning(this, globalCtx, true);
+        EnNiw_UpdateRunning(this, play, true);
     }
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), 0, -10.0f);
+    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
+                     -10.0f);
     this->isRunningRight = Rand_ZeroFloat(1.99f);
     this->niwState = NIW_STATE_RUNNING;
     this->actionFunc = EnNiw_RunAway;
     this->actor.speedXZ = 4.0f;
 }
 
-void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnNiw_RunAway(EnNiw* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f tempVec3f = D_808934E8;
     s16 temp298;
     f32 dX;
@@ -694,18 +696,18 @@ void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx) {
             dZ = this->actor.world.pos.z - player->actor.world.pos.z;
         }
         this->yawTowardsPlayer = Math_Atan2S(dX, dZ);
-        EnNiw_UpdateRunning(this, globalCtx, false);
-        EnNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
+        EnNiw_UpdateRunning(this, play, false);
+        EnNiw_AnimateWingHead(this, play, NIW_ANIM_PECKING_AND_WAVING);
     }
 }
 
-void EnNiw_LandBeforeIdle(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_LandBeforeIdle(EnNiw* this, PlayState* play) {
     if (this->actor.bgCheckFlags & 1) { // hit floor
         EnNiw_SetupIdle(this);
     }
 }
 
-void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_CheckRage(EnNiw* this, PlayState* play) {
     if (!this->isStormActive && this->iframeTimer == 0 && this->niwType == NIW_TYPE_REGULAR) {
 
         // is this used? this is before we even know if we've been hit
@@ -759,11 +761,11 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnNiw_Update(Actor* thisx, PlayState* play) {
     EnNiw* this = THIS;
     s8 pad0;
     s16 i;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
     s16 pad1;
     s16 featherCount;
     Vec3f pos;
@@ -815,7 +817,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk29E = 0;
     }
 
-    EnNiw_UpdateFeather(this, globalCtx);
+    EnNiw_UpdateFeather(this, play);
 
     DECR(this->unkTimer24C);
     DECR(this->unkTimer24E);
@@ -831,25 +833,25 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.shape.rot = this->actor.world.rot;
     this->actor.shape.shadowScale = 15.0f;
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Actor_SetFocus(&this->actor, this->unk308);
     Actor_MoveWithGravity(&this->actor);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
     // if cucco is off the map
     if (this->actor.floorHeight <= BGCHECK_Y_MIN || this->actor.floorHeight >= BGCHECK_Y_MAX) {
         Vec3f viewAtToEye;
 
         // Direction vector for the direction the camera is facing
-        viewAtToEye.x = globalCtx->view.at.x - globalCtx->view.eye.x;
-        viewAtToEye.y = globalCtx->view.at.y - globalCtx->view.eye.y;
-        viewAtToEye.z = globalCtx->view.at.z - globalCtx->view.eye.z;
+        viewAtToEye.x = play->view.at.x - play->view.eye.x;
+        viewAtToEye.y = play->view.at.y - play->view.eye.y;
+        viewAtToEye.z = play->view.at.z - play->view.eye.z;
         viewAtToEyeNormY = viewAtToEye.y / sqrtf(SQXYZ(viewAtToEye));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
         this->actor.world.pos.z = this->actor.home.pos.z;
-        this->actor.world.pos.y = this->actor.home.pos.y + globalCtx->view.eye.y + (viewAtToEyeNormY * 160.0f);
+        this->actor.world.pos.y = this->actor.home.pos.y + play->view.eye.y + (viewAtToEyeNormY * 160.0f);
 
         if (this->actor.world.pos.y < this->actor.home.pos.y) {
             this->actor.world.pos.y = this->actor.home.pos.y + 300.0f;
@@ -875,7 +877,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->headRotY = 0.0f;
 
         // clang-format off
-        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->nextAnimation = 0;
+        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->nextAnimIndex = 0;
         // clang-format on
 
         for (i = 0; i < 10; i++) {
@@ -895,7 +897,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         pos.y += this->actor.depthInWater;
         this->swimRippleTimer = 30;
-        EffectSsGSplash_Spawn(globalCtx, &pos, 0, 0, 0, 400);
+        EffectSsGSplash_Spawn(play, &pos, 0, 0, 0, 400);
         this->generalTimer2 = 0;
         this->niwState = NIW_STATE_SWIMMING;
         this->actionFunc = EnNiw_Swimming;
@@ -903,10 +905,10 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->isStormActive && (this->actor.xyzDistToPlayerSq < SQ(dist)) && player->invincibilityTimer == 0) {
-        func_800B8D50(globalCtx, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
+        func_800B8D50(play, &this->actor, 2.0f, this->actor.world.rot.y, 0.0f, 0x10);
     }
 
-    EnNiw_CheckRage(this, globalCtx);
+    EnNiw_CheckRage(this, play);
     if (this->flutterSfxTimer == 0 && this->niwState == NIW_STATE_HELD) {
         this->flutterSfxTimer = 7;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CHICKEN_FLUTTER);
@@ -924,17 +926,17 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!this->isStormActive && this->niwType == NIW_TYPE_REGULAR) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 
-        if (globalCtx) {}
+        if (play) {}
 
         if (this->niwState != NIW_STATE_HELD && this->niwState != NIW_STATE_FALLING) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
     }
 }
 
-s32 EnNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnNiw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNiw* this = THIS;
 
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
@@ -956,13 +958,13 @@ s32 EnNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnNiw_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnNiw_Draw(Actor* thisx, PlayState* play) {
     EnNiw* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
                           EnNiw_OverrideLimbDraw, NULL, &this->actor);
-    EnNiw_DrawFeathers(this, globalCtx);
+    EnNiw_DrawFeathers(this, play);
 }
 
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale) {
@@ -984,7 +986,7 @@ void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 s
     }
 }
 
-void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
+void EnNiw_UpdateFeather(EnNiw* this, PlayState* play) {
     EnNiwFeather* feather = &this->feathers[0];
     f32 featherVelocityGoal = 0.05f;
     s16 i;
@@ -1016,14 +1018,14 @@ void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EnNiw_DrawFeathers(EnNiw* this, PlayState* play) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     u8 isMaterialApplied = false;
     EnNiwFeather* feather = &this->feathers[0];
     s16 i;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->feathers); i++, feather++) {
         if (feather->isEnabled == true) {
@@ -1034,7 +1036,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
             }
 
             Matrix_Translate(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(feather->zRot, MTXMODE_APPLY);
             Matrix_Translate(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);

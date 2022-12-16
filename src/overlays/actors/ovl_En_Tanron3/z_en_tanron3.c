@@ -18,20 +18,20 @@
 #define WORK_TIMER_ATTACK 2
 #define WORK_TIMER_WAIT 2
 
-void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnTanron3_Init(Actor* thisx, PlayState* play);
+void EnTanron3_Destroy(Actor* thisx, PlayState* play);
+void EnTanron3_Update(Actor* thisx, PlayState* play);
+void EnTanron3_Draw(Actor* thisx, PlayState* play);
 
-void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx);
-void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx);
-void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx);
+void EnTanron3_SetupLive(EnTanron3* this, PlayState* play);
+void EnTanron3_Live(EnTanron3* this, PlayState* play);
+void EnTanron3_Die(EnTanron3* this, PlayState* play);
 
 static Vec3f sZeroVec[] = { 0.0f, 0.0f, 0.0f };
 
 static Boss03* sGyorg = NULL;
 
-const ActorInit En_Tanron3_InitVars = {
+ActorInit En_Tanron3_InitVars = {
     ACTOR_EN_TANRON3,
     ACTORCAT_BOSS,
     FLAGS,
@@ -85,8 +85,8 @@ static ColliderCylinderInit sUnusedCylinderInit = {
     { 20, 20, -10, { 0, 0, 0 } },
 };
 
-void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
-    GyorgEffect* effectPtr = globalCtx->specialEffects;
+void EnTanron3_CreateEffect(PlayState* play, Vec3f* effectPos) {
+    GyorgEffect* effectPtr = play->specialEffects;
     s16 i;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, effectPtr++) {
@@ -107,27 +107,27 @@ void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     }
 }
 
-void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron3_Init(Actor* thisx, PlayState* play) {
     EnTanron3* this = THIS;
 
     this->actor.gravity = -1.0f;
-    Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
-    Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSmallFishSkel, &gGyorgSmallFishSwimAnim, this->jointTable,
+    Collider_InitAndSetCylinder(play, &this->atCollider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->acCollider, &this->actor, &sCylinderInit);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGyorgSmallFishSkel, &gGyorgSmallFishSwimAnim, this->jointTable,
                        this->morphTable, GYORG_SMALL_FISH_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
-    EnTanron3_SetupLive(this, globalCtx);
+    EnTanron3_SetupLive(this, play);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     sGyorg = (Boss03*)this->actor.parent;
 }
 
-void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron3_Destroy(Actor* thisx, PlayState* play) {
     sGyorg->numSpawnedSmallFish--;
 }
 
-void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_SpawnBubbles(EnTanron3* this, PlayState* play) {
     static Color_RGBA8 sPrimColor = { 100, 55, 55, 255 };
     static Color_RGBA8 sEnvColor = { 50, 10, 10, 255 };
     s32 i;
@@ -141,12 +141,13 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
         acceleration.x = velocity.x * -0.05f;
         acceleration.y = velocity.y * -0.05f;
         acceleration.z = velocity.z * -0.05f;
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->actor.world.pos, &velocity, &acceleration, &sPrimColor,
-                                          &sEnvColor, Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f, 0);
+        EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &velocity, &acceleration, &sPrimColor,
+                                          &sEnvColor, Rand_ZeroFloat(30.0f) + 70.0f, Rand_ZeroFloat(5.0f) + 15.0f,
+                                          false);
     }
 }
 
-void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_SetupLive(EnTanron3* this, PlayState* play) {
     this->actionFunc = EnTanron3_Live;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgSmallFishSwimAnim, -10.0f);
     this->rotationStep = 0;
@@ -169,14 +170,14 @@ void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
  * - swimming around idly if the player is out of range
  * - flopping around on land if it beaches itself
  */
-void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_Live(EnTanron3* this, PlayState* play) {
     s32 atanTemp;
     f32 xDistance;
     f32 yDistance;
     f32 zDistance;
     f32 xzDistance;
     f32 extraScaleY = 0.0f;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
     this->skelAnime.curFrame = 4.0f;
     if ((player->actor.bgCheckFlags & 1) && player->actor.shape.feetPos[0].y >= 438.0f) {
@@ -210,7 +211,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
 
                 // If the player gets eaten by Gyorg, or if the attack timer ran out,
                 // stop chasing the player for a little bit.
-                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & 0x80)) {
+                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & PLAYER_STATE2_80)) {
                     this->workTimer[WORK_TIMER_WAIT] = 150;
                     this->isNonHostile = true;
                 }
@@ -316,7 +317,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                     effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
                     effectPos.y = this->actor.world.pos.y;
                     effectPos.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
-                    EnTanron3_CreateEffect(globalCtx, &effectPos);
+                    EnTanron3_CreateEffect(play, &effectPos);
                 }
                 break;
         }
@@ -332,11 +333,11 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnTanron3_SetupDie(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_SetupDie(EnTanron3* this, PlayState* play) {
     f32 xDistance;
     f32 yDistance;
     f32 zDistance;
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
     this->actionFunc = EnTanron3_Die;
     xDistance = this->actor.world.pos.x - player->actor.world.pos.x;
@@ -349,25 +350,25 @@ void EnTanron3_SetupDie(EnTanron3* this, GlobalContext* globalCtx) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
-void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx) {
+void EnTanron3_Die(EnTanron3* this, PlayState* play) {
     Actor_MoveWithoutGravityReverse(&this->actor);
     if (this->workTimer[WORK_TIMER_DIE] == 0) {
-        EnTanron3_SpawnBubbles(this, globalCtx);
-        Actor_MarkForDeath(&this->actor);
+        EnTanron3_SpawnBubbles(this, play);
+        Actor_Kill(&this->actor);
         if (Rand_ZeroOne() < 0.3f) {
-            Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos, 0x60);
+            Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0x60);
         }
     }
 }
 
-void EnTanron3_CheckCollisions(EnTanron3* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void EnTanron3_CheckCollisions(EnTanron3* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (player->actor.world.pos.y > 350.0f) {
         if (this->atCollider.base.atFlags & AT_HIT) {
             this->atCollider.base.atFlags &= ~AT_HIT;
-            func_800B8D50(globalCtx, NULL, 3.0f, Math_FAtan2F(-player->actor.world.pos.z, -player->actor.world.pos.x),
-                          5.0f, 0);
+            func_800B8D50(play, NULL, 3.0f, Math_FAtan2F(-player->actor.world.pos.z, -player->actor.world.pos.x), 5.0f,
+                          0);
         }
     }
     if (this->acCollider.base.acFlags & AC_HIT) {
@@ -375,13 +376,13 @@ void EnTanron3_CheckCollisions(EnTanron3* this, GlobalContext* globalCtx) {
         if (this->deathTimer == 0) {
             this->deathTimer = 15;
             this->fogTimer = 15;
-            EnTanron3_SetupDie(this, globalCtx);
+            EnTanron3_SetupDie(this, play);
             sGyorg->unk_324 = 20;
         }
     }
 }
 
-void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron3_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnTanron3* this = THIS;
     s16 i;
@@ -402,8 +403,8 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->fogTimer--;
         }
 
-        this->actionFunc(this, globalCtx);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 20.0f, 5);
+        this->actionFunc(this, play);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 20.0f, 5);
 
         // The fish has either just entered or just exited the water, so create a splash effect
         if (((this->actor.prevPos.y < this->waterSurfaceYPos) && (this->waterSurfaceYPos <= this->actor.world.pos.y)) ||
@@ -411,25 +412,24 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
             splashPos.x = this->actor.world.pos.x;
             splashPos.y = this->waterSurfaceYPos + 10.0f;
             splashPos.z = this->actor.world.pos.z;
-            EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 1, 500);
+            EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 1, 500);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OUT_OF_WATER);
         }
     }
 
-    EnTanron3_CheckCollisions(this, globalCtx);
+    EnTanron3_CheckCollisions(this, play);
     Collider_UpdateCylinder(&this->actor, &this->atCollider);
     Collider_UpdateCylinder(&this->actor, &this->acCollider);
-    CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->atCollider.base);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->acCollider.base);
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->atCollider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->acCollider.base);
 
     if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Die) {
-        EnTanron3_SetupDie(this, globalCtx);
+        EnTanron3_SetupDie(this, play);
         this->workTimer[WORK_TIMER_DIE] = 0;
     }
 }
 
-s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* thisx) {
+s32 EnTanron3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTanron3* this = THIS;
 
     if (limbIndex == GYORG_SMALL_FISH_LIMB_ROOT) {
@@ -447,18 +447,18 @@ s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     return false;
 }
 
-void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTanron3_Draw(Actor* thisx, PlayState* play) {
     EnTanron3* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     if ((this->fogTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnTanron3_OverrideLimbDraw, NULL, &this->actor);
-    POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -11,23 +11,23 @@
 
 #define THIS ((EnBb*)thisx)
 
-void EnBb_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBb_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBb_Init(Actor* thisx, PlayState* play);
+void EnBb_Destroy(Actor* thisx, PlayState* play);
+void EnBb_Update(Actor* thisx, PlayState* play);
+void EnBb_Draw(Actor* thisx, PlayState* play);
 
 void EnBb_SetupFlyIdle(EnBb* this);
-void EnBb_FlyIdle(EnBb* this, GlobalContext* globalCtx);
+void EnBb_FlyIdle(EnBb* this, PlayState* play);
 void EnBb_SetupAttack(EnBb* this);
-void EnBb_Attack(EnBb* this, GlobalContext* globalCtx);
-void EnBb_Down(EnBb* this, GlobalContext* globalCtx);
-void EnBb_Dead(EnBb* this, GlobalContext* globalCtx);
-void EnBb_Damage(EnBb* this, GlobalContext* globalCtx);
-void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx);
+void EnBb_Attack(EnBb* this, PlayState* play);
+void EnBb_Down(EnBb* this, PlayState* play);
+void EnBb_Dead(EnBb* this, PlayState* play);
+void EnBb_Damage(EnBb* this, PlayState* play);
+void EnBb_Frozen(EnBb* this, PlayState* play);
 void EnBb_SetupWaitForRevive(EnBb* this);
-void EnBb_WaitForRevive(EnBb* this, GlobalContext* globalCtx);
+void EnBb_WaitForRevive(EnBb* this, PlayState* play);
 void EnBb_SetupRevive(EnBb* this);
-void EnBb_Revive(EnBb* this, GlobalContext* globalCtx);
+void EnBb_Revive(EnBb* this, PlayState* play);
 
 typedef enum {
     /* -1 */ BB_BODY_PART_DRAW_STATUS_BROKEN = -1,
@@ -35,7 +35,7 @@ typedef enum {
     /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
 } EnBbBodyPartDrawStatus;
 
-const ActorInit En_Bb_InitVars = {
+ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -114,7 +114,7 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 28, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_BLUE_BUBBLE, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
@@ -134,13 +134,13 @@ static s8 sLimbIndexToBodyPartsIndex[] = {
  */
 static Vec3f sDuplicateCraniumBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
-void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBb_Init(Actor* thisx, PlayState* play) {
     EnBb* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable, this->morphTable,
                    BUBBLE_LIMB_MAX);
-    Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
+    Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -157,10 +157,10 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb_SetupFlyIdle(this);
 }
 
-void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBb_Destroy(Actor* thisx, PlayState* play) {
     EnBb* this = THIS;
 
-    Collider_DestroySphere(globalCtx, &this->collider);
+    Collider_DestroySphere(play, &this->collider);
 }
 
 /**
@@ -192,12 +192,11 @@ void EnBb_Freeze(EnBb* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
-void EnBb_Thaw(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Thaw(EnBb* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f,
-                              0.15f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f, 0.15f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -241,7 +240,7 @@ void EnBb_SetupFlyIdle(EnBb* this) {
 
     if ((this->actor.xzDistToPlayer < (this->attackRange + 120.0f)) ||
         (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
-        this->targetYRotation += (s16)(Rand_Next() >> 0x11);
+        this->targetYRotation += (s16)((s32)Rand_Next() >> 0x11);
     }
 
     this->collider.base.atFlags |= AT_ON;
@@ -252,7 +251,7 @@ void EnBb_SetupFlyIdle(EnBb* this) {
 /**
  * Makes the Bubble fly in circles around its home.
  */
-void EnBb_FlyIdle(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_FlyIdle(EnBb* this, PlayState* play) {
     EnBb_UpdateStateForFlying(this);
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
@@ -265,7 +264,7 @@ void EnBb_FlyIdle(EnBb* this, GlobalContext* globalCtx) {
     this->timer--;
 
     if ((this->attackWaitTimer == 0) && (this->actor.xzDistToPlayer < this->attackRange) &&
-        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
+        (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         EnBb_SetupAttack(this);
     } else if (this->timer == 0) {
         EnBb_SetupFlyIdle(this);
@@ -284,7 +283,7 @@ void EnBb_SetupAttack(EnBb* this) {
 /**
  * Makes the Bubble actively move towards the player.
  */
-void EnBb_Attack(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Attack(EnBb* this, PlayState* play) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
     EnBb_UpdateStateForFlying(this);
 
@@ -299,7 +298,7 @@ void EnBb_Attack(EnBb* this, GlobalContext* globalCtx) {
     this->timer--;
 
     if (((this->attackRange + 120.0f) < this->actor.xzDistToPlayer) || (this->timer == 0) ||
-        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
+        (Player_GetMask(play) == PLAYER_MASK_STONE) ||
         (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
         EnBb_SetupFlyIdle(this);
     }
@@ -322,7 +321,7 @@ void EnBb_SetupDown(EnBb* this) {
 /**
  * Makes the Bubble hop along the ground.
  */
-void EnBb_Down(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Down(EnBb* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnBb_CheckForWall(this);
 
@@ -341,7 +340,7 @@ void EnBb_Down(EnBb* this, GlobalContext* globalCtx) {
         }
 
         this->actor.bgCheckFlags &= ~1;
-        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
+        Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
         Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
     }
 
@@ -355,7 +354,7 @@ void EnBb_Down(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_SetupDead(EnBb* this, PlayState* play) {
     Vec3f* bodyPartVelocity;
     Vec3f posDiff;
     f32 magnitude;
@@ -365,8 +364,8 @@ void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
     this->timer = 15;
     this->actor.shape.rot.x += 0x4E20;
     this->actor.speedXZ = 0.0f;
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
-    Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
+    SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
+    Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
     this->actor.speedXZ = 0.0f;
     this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_DEAD;
@@ -390,7 +389,7 @@ void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
     this->actionFunc = EnBb_Dead;
 }
 
-void EnBb_Dead(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Dead(EnBb* this, PlayState* play) {
     s32 i;
 
     this->timer--;
@@ -398,8 +397,8 @@ void EnBb_Dead(EnBb* this, GlobalContext* globalCtx) {
 
     if (this->timer == 0) {
         for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
-            func_800B3030(globalCtx, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
+            func_800B3030(play, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
         }
 
         EnBb_SetupWaitForRevive(this);
@@ -435,7 +434,7 @@ void EnBb_SetupDamage(EnBb* this) {
     this->actionFunc = EnBb_Damage;
 }
 
-void EnBb_Damage(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Damage(EnBb* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
         EnBb_SetupDown(this);
@@ -452,13 +451,13 @@ void EnBb_SetupFrozen(EnBb* this) {
     this->actionFunc = EnBb_Frozen;
 }
 
-void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Frozen(EnBb* this, PlayState* play) {
     DECR(this->timer);
 
     if (this->timer == 0) {
-        EnBb_Thaw(this, globalCtx);
+        EnBb_Thaw(this, play);
         if (this->actor.colChkInfo.health == 0) {
-            EnBb_SetupDead(this, globalCtx);
+            EnBb_SetupDead(this, play);
         } else {
             EnBb_SetupDown(this);
         }
@@ -479,7 +478,7 @@ void EnBb_SetupWaitForRevive(EnBb* this) {
     this->actionFunc = EnBb_WaitForRevive;
 }
 
-void EnBb_WaitForRevive(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_WaitForRevive(EnBb* this, PlayState* play) {
     this->timer--;
     if (this->timer == 0) {
         EnBb_SetupRevive(this);
@@ -498,7 +497,7 @@ void EnBb_SetupRevive(EnBb* this) {
     this->actionFunc = EnBb_Revive;
 }
 
-void EnBb_Revive(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Revive(EnBb* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y += 0x1F00;
 
@@ -515,7 +514,7 @@ void EnBb_Revive(EnBb* this, GlobalContext* globalCtx) {
     this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
 }
 
-void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
@@ -525,10 +524,10 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;
-            EnBb_Thaw(this, globalCtx);
+            EnBb_Thaw(this, play);
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
-                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                Enemy_StartFinishingBlow(play, &this->actor);
             }
 
             if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ICE_ARROW) {
@@ -540,7 +539,7 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
 
                 EnBb_SetupFrozen(this);
             } else if (this->actor.colChkInfo.health == 0) {
-                EnBb_SetupDead(this, globalCtx);
+                EnBb_SetupDead(this, play);
             } else {
                 EnBb_SetupDamage(this);
             }
@@ -549,7 +548,7 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffScale = 0.4f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                             this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_LIGHT_RAYS);
             }
@@ -579,14 +578,14 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBb_Update(Actor* thisx, PlayState* play) {
     EnBb* this = THIS;
 
-    EnBb_UpdateDamage(this, globalCtx);
-    this->actionFunc(this, globalCtx);
+    EnBb_UpdateDamage(this, play);
+    this->actionFunc(this, play);
     if ((this->actionFunc != EnBb_Dead) && (this->actionFunc != EnBb_WaitForRevive)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 40.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 40.0f, 7);
 
         this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
         this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 15.0f;
@@ -598,15 +597,15 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->collider.base.atFlags & AT_ON) {
             this->actor.flags |= ACTOR_FLAG_1000000;
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->collider.base.acFlags & AC_ON) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->collider.base.ocFlags1 & OC1_ON) {
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
         }
 
         if (this->drawDmgEffAlpha > 0.0f) {
@@ -621,7 +620,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnBb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBb* this = THIS;
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_BROKEN) {
@@ -632,7 +631,7 @@ s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnBb* this = THIS;
     MtxF* currentMatrixState;
@@ -658,56 +657,54 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         }
     } else {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
-            OPEN_DISPS(globalCtx->state.gfxCtx);
+            OPEN_DISPS(play->state.gfxCtx);
 
             currentMatrixState = Matrix_GetCurrent();
             currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
             currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
             currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
             Matrix_RotateZS(thisx->world.rot.z, MTXMODE_APPLY);
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
 
-            CLOSE_DISPS(globalCtx->state.gfxCtx);
+            CLOSE_DISPS(play->state.gfxCtx);
         }
     }
 }
 
-void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBb_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBb* this = THIS;
     MtxF* currentMatrixState;
     Gfx* gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
     POLY_OPA_DISP = &gfx[1];
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBb_OverrideLimbDraw,
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBb_OverrideLimbDraw,
                       EnBb_PostLimbDraw, &this->actor);
 
     if (this->flameScaleX > 0.0f) {
         currentMatrixState = Matrix_GetCurrent();
-        func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_RotateYS(
-            ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
-            MTXMODE_APPLY);
+        func_8012C2DC(play->state.gfxCtx);
+        Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
+                        MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);
-        gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
-                                    (globalCtx->gameplayFrames * -20) & 0x1FF, 32, 128));
+        gSPSegment(
+            POLY_XLU_DISP++, 0x08,
+            Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (play->gameplayFrames * -20) & 0x1FF, 32, 128));
         currentMatrixState->mf[3][1] -= 47.0f * this->flameScaleY;
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
-    Actor_DrawDamageEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                             this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                             this->drawDmgEffType);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
