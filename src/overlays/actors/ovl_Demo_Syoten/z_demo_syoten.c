@@ -480,16 +480,16 @@ s32 func_80C170F8(PlayState* play, UNK_TYPE arg1, s32 arg2, UNK_TYPE arg3, UNK_T
 void func_80C173B4(Actor* thisx, PlayState* play) {
     s32 pad;
     DemoSyoten* this = THIS;
-    Mtx* matrix;
+    Mtx* mtx;
 
     AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
 
-    matrix = GRAPH_ALLOC(play->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_144.unk_18->unk_1));
+    mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_144.unk_18->unk_1 * sizeof(Mtx));
 
-    if (matrix != NULL) {
+    if (mtx != NULL) {
         func_8012C2DC(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
-        func_8018450C(play, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
+        func_8018450C(play, &this->unk_144, mtx, (void*)func_80C170F8, 0, &this->actor);
     }
 }
 

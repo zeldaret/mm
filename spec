@@ -424,11 +424,10 @@ beginseg
     name "code"
     compress
     after "dmadata"
-    include "build/src/code/z_en_a_keep.o"
     include "build/data/code/aspMain.data.o"
     include "build/data/code/gspS2DEX2.fifo.data.o"
     include "build/data/code/njpgdspMain.data.o"
-    include "build/data/code/code_801ADE60.data.o"
+    include "build/src/code/z_en_a_keep.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
     include "build/src/code/z_eff_blure.o"
@@ -528,7 +527,8 @@ beginseg
     include "build/src/code/z_rumble.o"
     include "build/src/code/z_view.o"
     include "build/src/code/z_vimode.o"
-    include "build/data/code/z_vimode.data.o"
+    include "build/src/code/code_80140CE0.o"
+    include "build/data/code/code_80140CE0.data.o"
     include "build/src/code/code_80140E80.o"
     include "build/src/code/z_vismono.o"
     include "build/src/code/code_801420C0.o"
@@ -580,6 +580,7 @@ beginseg
     include "build/src/code/speed_meter.o"
     include "build/data/code/speed_meter.data.o"
     include "build/data/code/speed_meter.bss.o"
+    include "build/src/code/su_mtx.o"
     include "build/data/code/sys_cfb.bss.o"
     include "build/src/code/sys_cmpdma.o"
     include "build/data/code/sys_cmpdma.bss.o"
@@ -608,8 +609,7 @@ beginseg
     include "build/src/code/audio/audio_heap.o"
     include "build/data/code/audio_heap.bss.o"
     include "build/src/code/audio/audio_load.o"
-    include "build/src/code/audio/code_80192BE0.o"
-    include "build/data/code/code_80192BE0.data.o"
+    include "build/src/code/audio/audio_thread.o"
     include "build/src/code/audio/audio_dcache.o"
     include "build/src/code/audio/aisetnextbuf.o"
     include "build/src/code/audio/audio_playback.o"
@@ -2672,9 +2672,7 @@ beginseg
     name "ovl_En_Test3"
     compress
     include "build/src/overlays/actors/ovl_En_Test3/z_en_test3.o"
-    include "build/data/ovl_En_Test3/ovl_En_Test3.data.o"
-    include "build/data/ovl_En_Test3/ovl_En_Test3.bss.o"
-    include "build/data/ovl_En_Test3/ovl_En_Test3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Test3/ovl_En_Test3_reloc.o"
 endseg
 
 beginseg
@@ -2950,8 +2948,7 @@ beginseg
     name "ovl_En_Egol"
     compress
     include "build/src/overlays/actors/ovl_En_Egol/z_en_egol.o"
-    include "build/data/ovl_En_Egol/ovl_En_Egol.data.o"
-    include "build/data/ovl_En_Egol/ovl_En_Egol.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Egol/ovl_En_Egol_reloc.o"
 endseg
 
 beginseg
@@ -3013,8 +3010,7 @@ beginseg
     name "ovl_En_Estone"
     compress
     include "build/src/overlays/actors/ovl_En_Estone/z_en_estone.o"
-    include "build/data/ovl_En_Estone/ovl_En_Estone.data.o"
-    include "build/data/ovl_En_Estone/ovl_En_Estone.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Estone/ovl_En_Estone_reloc.o"
 endseg
 
 beginseg
@@ -3127,8 +3123,7 @@ beginseg
     name "ovl_En_Egblock"
     compress
     include "build/src/overlays/actors/ovl_En_Egblock/z_en_egblock.o"
-    include "build/data/ovl_En_Egblock/ovl_En_Egblock.data.o"
-    include "build/data/ovl_En_Egblock/ovl_En_Egblock.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Egblock/ovl_En_Egblock_reloc.o"
 endseg
 
 beginseg
@@ -4024,8 +4019,7 @@ beginseg
     name "ovl_En_Kaizoku"
     compress
     include "build/src/overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.o"
-    include "build/data/ovl_En_Kaizoku/ovl_En_Kaizoku.data.o"
-    include "build/data/ovl_En_Kaizoku/ovl_En_Kaizoku.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kaizoku/ovl_En_Kaizoku_reloc.o"
 endseg
 
 beginseg
@@ -4421,11 +4415,7 @@ beginseg
     name "ovl_Bg_Ikana_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikana_Bombwall/z_bg_ikana_bombwall.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Bg_Ikana_Bombwall/ovl_Bg_Ikana_Bombwall_reloc.o"
-#else
-    include "build/data/ovl_Bg_Ikana_Bombwall/ovl_Bg_Ikana_Bombwall.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -4446,11 +4436,7 @@ beginseg
     name "ovl_Bg_Haka_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Haka_Bombwall/z_bg_haka_bombwall.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_Bg_Haka_Bombwall/ovl_Bg_Haka_Bombwall_reloc.o"
-    #else
-        include "build/data/ovl_Bg_Haka_Bombwall/ovl_Bg_Haka_Bombwall.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_Bg_Haka_Bombwall/ovl_Bg_Haka_Bombwall_reloc.o"
 endseg
 
 beginseg

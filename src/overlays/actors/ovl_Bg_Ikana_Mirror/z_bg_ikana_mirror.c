@@ -257,8 +257,8 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     }
 
     BgIkanaMirror_SetQuadVertices(this);
-    this->lightAbsorptionTexScroll = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightAbsorptionTexAnim);
-    this->lightEmissionTexScroll = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightEmissionTexAnim);
+    this->lightAbsorptionTexScroll = Lib_SegmentedToVirtual(gStoneTowerTempleMirrorLightAbsorptionTexAnim);
+    this->lightEmissionTexScroll = Lib_SegmentedToVirtual(gStoneTowerTempleMirrorLightEmissionTexAnim);
     BgIkanaMirror_SetupWait(this);
 }
 
