@@ -67,7 +67,7 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
 
     if (type & TC_SET_PARAMS) {
         this->maskType = FBDEMO_CIRCLE_GET_MASK_TYPE(type);
-    } else if (type == TRANS_INSTANCE_TYPE_END) {
+    } else if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
         this->direction = TRANSITION_CIRCLE_OUT;
     } else {
         this->direction = TRANSITION_CIRCLE_IN;

@@ -119,10 +119,10 @@ void TransitionFade_SetColor(void* thisx, u32 color) {
 void TransitionFade_SetType(void* thisx, s32 type) {
     TransitionFade* this = THIS;
 
-    if (type == TRANS_INSTANCE_TYPE_END) {
+    if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
         this->type = 1;
         this->direction = 1;
-    } else if (type == TRANS_INSTANCE_TYPE_START) {
+    } else if (type == TRANS_INSTANCE_TYPE_FILL_IN) {
         this->type = 1;
         this->direction = 0;
     } else if (type == TRANS_INSTANCE_TYPE_FADE_FLASH) {

@@ -50,8 +50,8 @@ typedef struct {
 } TransitionContext; // size = 0x258
 
 typedef enum {
-    /* 1 */ TRANS_INSTANCE_TYPE_END = 1,
-    /* 2 */ TRANS_INSTANCE_TYPE_START,
+    /* 1 */ TRANS_INSTANCE_TYPE_FILL_OUT = 1,
+    /* 2 */ TRANS_INSTANCE_TYPE_FILL_IN,
 } TransitionInstanceType;
 
 #define TRANS_INSTANCE_TYPE_FADE_FLASH 3
