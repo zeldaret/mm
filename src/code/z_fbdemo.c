@@ -1,7 +1,16 @@
+/**
+ * @file z_fbdemo.c
+ *
+ * This file implements an unused transition system that takes the current screen, partitions it into large tiles, and can apply an effect to them.
+ *
+ * The screen is divided into 7 rows and 10 columns of tiles. (`gScreenWidth`/ 10 = `gScreenHeight` / 7 = 0x20)
+ *
+ * @note The only coded effect has a visual effect to blend the tiles to a single point, which looks like the screen gets sucked into.
+ */
 #include "global.h"
 #include "system_malloc.h"
 
-Gfx sTransitionUnkSetupDL[] = {
+Gfx sTransTileSetupDL[] = {
     gsDPPipeSync(),
     gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
     gsSPLoadGeometryMode(G_TEXTURE_ENABLE),
@@ -12,17 +21,15 @@ Gfx sTransitionUnkSetupDL[] = {
     gsSPEndDisplayList(),
 };
 
-void TransitionUnk_InitGraphics(TransitionUnk* this) {
-    s32 row2;
-    s32 pad2;
-    s32 pad3;
+void TransitionTile_InitGraphics(TransitionTile* this) {
     s32 frame;
-    s32 rowTex;
-    s32 row;
-    Gfx* gfx;
-    Vtx* vtx;
     s32 col;
+    s32 col2;
     s32 colTex;
+    Vtx* vtx;
+    s32 row;
+    s32 rowTex;
+    Gfx* gfx;
 
     guMtxIdent(&this->modelView);
     guMtxIdent(&this->unk_98);
@@ -31,44 +38,46 @@ void TransitionUnk_InitGraphics(TransitionUnk* this) {
     for (frame = 0; frame < 2; frame++) {
         this->frame = frame;
         vtx = (this->frame == 0) ? this->vtxFrame1 : this->vtxFrame2;
-        for (colTex = 0, col = 0; col < (this->col + 1); col++, colTex += 0x20) {
-            for (rowTex = 0, row = 0; row < (this->row + 1); row++, rowTex += 0x20) {
-                Vtx_t* vtx2 = &vtx->v;
+        for (rowTex = 0, row = 0; row < (this->rows + 1); row++, rowTex += 0x20) {
+            for (colTex = 0, col = 0; col < (this->cols + 1); col++, colTex += 0x20) {
+                Vtx_tn* vtxn = &vtx->n;
 
                 // clang-format on
                 vtx++;   \
-                vtx2->tc[0] = rowTex << 6; \
-                vtx2->ob[0] = row * 0x20; \
-                vtx2->ob[1] = col * 0x20; \
-                vtx2->ob[2] = -5; \
-                vtx2->flag = 0; \
-                vtx2->tc[1] = colTex << 6; \
-                vtx2->cn[0] = 0; \
-                vtx2->cn[1] = 0; \
-                vtx2->cn[2] = 120; \
-                vtx2->cn[3] = 255;
+                vtxn->tc[0] = colTex << 6; \
+                vtxn->ob[0] = col * 0x20; \
+                vtxn->ob[1] = row * 0x20; \
+                vtxn->ob[2] = -5; \
+                vtxn->flag = 0; \
+                vtxn->tc[1] = rowTex << 6; \
+                vtxn->n[0] = 0; \
+                vtxn->n[1] = 0; \
+                vtxn->n[2] = 120; \
+                vtxn->a = 255;
                 // clang-format on
             }
         }
     }
 
     gfx = this->gfx;
-    for (colTex = 0, col = 0; col < this->col; col++, colTex += 0x20) {
+    for (rowTex = 0, row = 0; row < this->rows; row++, rowTex += 0x20) {
+        gSPVertex(gfx++, SEGMENT_ADDR(0xA, (u32)row * (this->cols + 1) * sizeof(Vtx)), 2 * (this->cols + 1), 0);
 
-        gSPVertex(gfx++, SEGMENT_ADDR(0xA, (u32)col * (this->row + 1) * sizeof(Vtx)), 2 * (this->row + 1), 0);
-
-        for (rowTex = 0, row = 0, row2 = 0; row < this->row;) {
+        colTex = 0;
+        col2 = 0;
+        col = 0;
+        while (col < this->cols) {
             gDPPipeSync(gfx++);
 
             gDPLoadTextureTile(gfx++, SEGMENT_ADDR(0xB, 0), G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, SCREEN_HEIGHT,
-                               rowTex, colTex, rowTex + 0x20, colTex + 0x20, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                               colTex, rowTex, colTex + 0x20, rowTex + 0x20, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-            gSP1Quadrangle(gfx++, row, row + 1, row2 + this->row + 2, this->row + row2 + 1, 0);
+            gSP1Quadrangle(gfx++, col, col + 1, col2 + this->cols + 2, this->cols + col2 + 1, 0);
 
-            rowTex += 0x20;
-            row2++;
-            row++;
+            colTex += 0x20;
+            col2++;
+            col++;
         }
     }
 
@@ -76,24 +85,24 @@ void TransitionUnk_InitGraphics(TransitionUnk* this) {
     gSPEndDisplayList(gfx++);
 }
 
-void TransitionUnk_InitData(TransitionUnk* this) {
-    s32 col;
+void TransitionTile_InitVtxData(TransitionTile* this) {
     s32 row;
+    s32 col;
 
-    for (col = 0; col < this->col + 1; col++) {
-        for (row = 0; row < this->row + 1; row++) {
-            (this->unk_0C + row + col * (this->row + 1))->unk_0 = row * 32;
-            (this->unk_0C + row + col * (this->row + 1))->unk_4 = col * 32;
+    for (row = 0; row < this->rows + 1; row++) {
+        for (col = 0; col < this->cols + 1; col++) {
+            (this->vtxData + col + row * (this->cols + 1))->x = col * 0x20;
+            (this->vtxData + col + row * (this->cols + 1))->y = row * 0x20;
         }
     }
 }
 
-void TransitionUnk_Destroy(TransitionUnk* this) {
+void TransitionTile_Destroy(TransitionTile* this) {
     Sleep_Msec(100);
 
-    if (this->unk_0C != NULL) {
-        SystemArena_Free(this->unk_0C);
-        this->unk_0C = NULL;
+    if (this->vtxData != NULL) {
+        SystemArena_Free(this->vtxData);
+        this->vtxData = NULL;
     }
     if (this->vtxFrame1 != NULL) {
         SystemArena_Free(this->vtxFrame1);
@@ -109,23 +118,23 @@ void TransitionUnk_Destroy(TransitionUnk* this) {
     }
 }
 
-TransitionUnk* TransitionUnk_Init(TransitionUnk* this, s32 row, s32 col) {
-    s32 tmp;
+TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows) {
+    s32 gridSize;
 
-    bzero(this, sizeof(TransitionUnk));
+    bzero(this, sizeof(TransitionTile));
     this->frame = 0;
-    this->row = row;
-    this->col = col;
-    tmp = (row + 1) * (col + 1);
-    this->unk_0C = SystemArena_Malloc(tmp * sizeof(TransitionUnkData));
-    this->vtxFrame1 = SystemArena_Malloc(tmp * sizeof(Vtx));
-    this->vtxFrame2 = SystemArena_Malloc(tmp * sizeof(Vtx));
-    this->gfx = SystemArena_Malloc(((row * 9 + 1) * col + 2) * sizeof(Gfx));
+    this->cols = cols;
+    this->rows = rows;
+    gridSize = (cols + 1) * (rows + 1);
+    this->vtxData = SystemArena_Malloc(gridSize * sizeof(TransitionTileVtxData));
+    this->vtxFrame1 = SystemArena_Malloc(gridSize * sizeof(Vtx));
+    this->vtxFrame2 = SystemArena_Malloc(gridSize * sizeof(Vtx));
+    this->gfx = SystemArena_Malloc(((cols * 9 + 1) * rows + 2) * sizeof(Gfx));
 
-    if (this->unk_0C == NULL || this->vtxFrame1 == NULL || this->vtxFrame2 == NULL || this->gfx == NULL) {
-        if (this->unk_0C != NULL) {
-            SystemArena_Free(this->unk_0C);
-            this->unk_0C = NULL;
+    if ((this->vtxData == NULL) || (this->vtxFrame1 == NULL) || (this->vtxFrame2 == NULL) || (this->gfx == NULL)) {
+        if (this->vtxData != NULL) {
+            SystemArena_Free(this->vtxData);
+            this->vtxData = NULL;
         }
         if (this->vtxFrame1 != NULL) {
             SystemArena_Free(this->vtxFrame1);
@@ -141,72 +150,72 @@ TransitionUnk* TransitionUnk_Init(TransitionUnk* this, s32 row, s32 col) {
         }
         return NULL;
     }
-    TransitionUnk_InitGraphics(this);
-    TransitionUnk_InitData(this);
+
+    TransitionTile_InitGraphics(this);
+    TransitionTile_InitVtxData(this);
     this->frame = 0;
 
     return this;
 }
 
-void TransitionUnk_SetData(TransitionUnk* this) {
+void TransitionTile_SetVtx(TransitionTile* this) {
+    s32 row;
     s32 col;
     Vtx* vtx;
-    s32 row;
 
-    for (col = 0; col < this->col + 1; col++) {
-        for (row = 0; row < this->row + 1; row++) {
+    for (row = 0; row < this->rows + 1; row++) {
+        for (col = 0; col < this->cols + 1; col++) {
             vtx = (this->frame == 0) ? this->vtxFrame1 : this->vtxFrame2;
-            (vtx + row + col * (this->row + 1))->v.ob[0] = (this->unk_0C + row + col * (this->row + 1))->unk_0;
+            (vtx + col + row * (this->cols + 1))->n.ob[0] = (this->vtxData + col + row * (this->cols + 1))->x;
+
             vtx = (this->frame == 0) ? this->vtxFrame1 : this->vtxFrame2;
-            (vtx + row + col * (this->row + 1))->v.ob[1] = (this->unk_0C + row + col * (this->row + 1))->unk_4;
+            (vtx + col + row * (this->cols + 1))->n.ob[1] = (this->vtxData + col + row * (this->cols + 1))->y;
         }
     }
 }
 
-void TransitionUnk_Draw(TransitionUnk* this, Gfx** gfxP) {
+void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP) {
     Gfx* gfx = *gfxP;
 
-    gSPDisplayList(gfx++, sTransitionUnkSetupDL);
-    TransitionUnk_SetData(this);
+    gSPDisplayList(gfx++, sTransTileSetupDL);
+    TransitionTile_SetVtx(this);
     gSPMatrix(gfx++, &this->projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gfx++, &this->modelView, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(gfx++, 0xA, this->frame == 0 ? this->vtxFrame1 : this->vtxFrame2);
     gSPSegment(gfx++, 0xB, this->zBuffer);
-    gSPDisplayList(gfx++, sTransitionUnkSetupDL);
+    gSPDisplayList(gfx++, sTransTileSetupDL);
     gSPDisplayList(gfx++, this->gfx);
     gDPPipeSync(gfx++);
     this->frame ^= 1;
     *gfxP = gfx;
 }
 
-void TransitionUnk_Update(TransitionUnk* this) {
-    f32 temp_f00;
-    f32 temp_f12;
-    s32 col;
-    f32 phi_f14;
+void TransitionTile_Suck(TransitionTile* this) {
     s32 row;
+    s32 col;
+    f32 diffX;
+    f32 diffY;
+    f32 scale;
 
-    for (col = 0; col < this->col + 1; col++) {
-        for (row = 0; row < this->row + 1; row++) {
-            temp_f00 =
-                (this->unk_0C + row + col * (this->row + 1))->unk_0 - (this->unk_0C + 5 + 4 * (this->row + 1))->unk_0;
-            temp_f12 =
-                (this->unk_0C + row + col * (this->row + 1))->unk_4 - (this->unk_0C + 5 + 4 * (this->row + 1))->unk_4;
-            phi_f14 = (SQ(temp_f00) + SQ(temp_f12)) / 100.0f;
-            if (phi_f14 != 0.0f) {
-                if (phi_f14 < 1.0f) {
-                    phi_f14 = 1.0f;
+    for (row = 0; row < this->rows + 1; row++) {
+        for (col = 0; col < this->cols + 1; col++) {
+            diffX = (this->vtxData + col + row * (this->cols + 1))->x - (this->vtxData + 5 + 4 * (this->cols + 1))->x;
+            diffY = (this->vtxData + col + row * (this->cols + 1))->y - (this->vtxData + 5 + 4 * (this->cols + 1))->y;
+            scale = (SQ(diffX) + SQ(diffY)) / 100.0f;
+            if (scale != 0.0f) {
+                if (scale < 1.0f) {
+                    scale = 1.0f;
                 }
-                (this->unk_0C + row + col * (this->row + 1))->unk_0 -= temp_f00 / phi_f14;
-                (this->unk_0C + row + col * (this->row + 1))->unk_4 -= temp_f12 / phi_f14;
+                (this->vtxData + col + row * (this->cols + 1))->x -= diffX / scale;
+                (this->vtxData + col + row * (this->cols + 1))->y -= diffY / scale;
             }
         }
     }
 }
 
-void func_801647AC(TransitionUnk* this) {
+void TransitionTile_Update(TransitionTile* this) {
 }
 
-s32 func_801647B8(TransitionUnk* this) {
+s32 func_801647B8(TransitionTile* this) {
     return 0;
 }

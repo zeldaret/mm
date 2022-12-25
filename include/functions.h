@@ -2274,15 +2274,12 @@ void KaleidoScopeCall_Update(PlayState* play);
 void KaleidoScopeCall_Draw(PlayState* play);
 void Transition_Init(TransitionContext* transitionCtx);
 void Transition_Destroy(TransitionContext* transitionCtx);
-// void TransitionUnk_InitGraphics(void);
-// void TransitionUnk_InitData(void);
-// void TransitionUnk_Destroy(void);
-// void TransitionUnk_Init(void);
-// void TransitionUnk_SetData(void);
-// void TransitionUnk_Draw(void);
-// void TransitionUnk_Update(void);
-// void func_801647AC(void);
-// UNK_TYPE4 func_801647B8(void);
+
+void TransitionTile_Destroy(TransitionTile* this);
+void TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows);
+void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP);
+void TransitionTile_Update(TransitionTile* this);
+
 // void TransitionFade_Start(void);
 void* TransitionFade_Init(void* param_1);
 // void TransitionFade_Destroy(void);

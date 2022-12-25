@@ -1,18 +1,25 @@
-#ifndef _Z64_TRANSITION_H_
-#define _Z64_TRANSITION_H_
+#ifndef Z64TRANSITION_H
+#define Z64TRANSITION_H
 
 #include "ultra64.h"
 
-typedef struct {
-    /* 0x0 */ f32 unk_0;
-    /* 0x4 */ f32 unk_4;
-} TransitionUnkData; // size = 0x8
+typedef enum {
+    /* 0 */ TRANS_TILE_OFF, // Inactive, do nothing
+    /* 1 */ TRANS_TILE_SETUP, // Save the necessary buffers
+    /* 2 */ TRANS_TILE_PROCESS, // Initalize the transition using the saved buffers
+    /* 3 */ TRANS_TILE_DONE // The transition is ready, so will update and draw each frame
+} TransitionTileStatus;
 
 typedef struct {
-    /* 0x00 */ s32 row;
-    /* 0x04 */ s32 col;
+    /* 0x0 */ f32 x;
+    /* 0x4 */ f32 y;
+} TransitionTileVtxData; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ s32 cols;
+    /* 0x04 */ s32 rows;
     /* 0x08 */ s32 frame;
-    /* 0x0C */ TransitionUnkData* unk_0C;
+    /* 0x0C */ TransitionTileVtxData* vtxData;
     /* 0x10 */ Vtx* vtxFrame1;
     /* 0x14 */ Vtx* vtxFrame2;
     /* 0x18 */ Mtx projection;
@@ -20,7 +27,7 @@ typedef struct {
     /* 0x98 */ Mtx unk_98;
     /* 0xD8 */ Gfx* gfx; // "gfxtbl"
     /* 0xDC */ u16* zBuffer;
-} TransitionUnk; // size = 0xE0
+} TransitionTile; // size = 0xE0
 
 #define TC_SET_PARAMS (1 << 7)
 
