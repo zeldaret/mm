@@ -357,6 +357,71 @@ typedef enum {
     /* 0x257 */ CS_CMD_ACTOR_CUE_599
 } CutsceneCmd;
 
+typedef enum {
+    /* 0x00 */ CS_MISC_UNIMPLEMENTED_0,
+    /* 0x01 */ CS_MISC_RAIN,
+    /* 0x02 */ CS_MISC_LIGHTNING,
+    /* 0x03 */ CS_MISC_LIFT_FOG,
+    /* 0x04 */ CS_MISC_CLOUDY_SKY,
+    /* 0x05 */ CS_MISC_STOP_CUTSCENE,
+    /* 0x06 */ CS_MISC_UNIMPLEMENTED_6,
+    /* 0x07 */ CS_MISC_SHOW_TITLE_CARD,
+    /* 0x08 */ CS_MISC_MEDIUM_QUAKE_START,
+    /* 0x09 */ CS_MISC_QUAKE_STOP,
+    /* 0x0A */ CS_MISC_VISMONO_BLACK_AND_WHITE,
+    /* 0x0B */ CS_MISC_VISMONO_SEPIA,
+    /* 0x0C */ CS_MISC_HIDE_ROOM,
+    /* 0x0D */ CS_MISC_RED_PULSATING_LIGHTS,
+    /* 0x0E */ CS_MISC_HALT_ALL_ACTORS,
+    /* 0x0F */ CS_MISC_RESUME_ALL_ACTORS,
+    /* 0x10 */ CS_MISC_SANDSTORM_FILL,
+    /* 0x11 */ CS_MISC_SUNSSONG_START,
+    /* 0x12 */ CS_MISC_FREEZE_TIME,
+    /* 0x13 */ CS_MISC_LONG_SCARECROW_SONG,
+    /* 0x14 */ CS_MISC_SET_CSFLAG_3,
+    /* 0x15 */ CS_MISC_SET_CSFLAG_4,
+    /* 0x16 */ CS_MISC_PLAYER_FORM_DEKU,
+    /* 0x17 */ CS_MISC_ENABLE_PLAYER_REFLECTION,
+    /* 0x18 */ CS_MISC_DISABLE_PLAYER_REFLECTION,
+    /* 0x19 */ CS_MISC_PLAYER_FORM_HUMAN,
+    /* 0x1A */ CS_MISC_STRONG_QUAKE_START,
+    /* 0x1B */ CS_MISC_1B,
+    /* 0x1C */ CS_MISC_1C,
+    /* 0x1D */ CS_MISC_PLAYER_FORM_RESTORED,
+    /* 0x1E */ CS_MISC_1E,
+    /* 0x1F */ CS_MISC_1F,
+    /* 0x20 */ CS_MISC_UNIMPLEMENTED_20,
+    /* 0x21 */ CS_MISC_SPECIAL_SAVE,
+    /* 0x22 */ CS_MISC_SAVE,
+    /* 0x23 */ CS_MISC_TIME_ADVANCE,
+    /* 0x24 */ CS_MISC_WEAK_QUAKE_START,
+    /* 0x25 */ CS_MISC_UNIMPLEMENTED_25,
+    /* 0x26 */ CS_MISC_DAWN_OF_A_NEW_DAY,
+    /* 0x27 */ CS_MISC_PLAYER_FORM_ZORA,
+    /* 0x28 */ CS_MISC_FOREVER
+} CutsceneMiscType;
+
+typedef enum {
+    /* 0x03 */ CS_FADE_OUT_FANFARE = 3, 
+    /* 0x04 */ CS_FADE_OUT_BGM_MAIN
+} CutsceneFadeOutSeqPlayer;
+
+typedef enum {
+    /* 0x01 */ CS_TRANS_GRAY_FILL_IN = 1, // has hardcoded sounds for some scenes
+    /* 0x02 */ CS_TRANS_BLUE_FILL_IN,
+    /* 0x03 */ CS_TRANS_RED_FILL_OUT,
+    /* 0x04 */ CS_TRANS_GREEN_FILL_OUT,
+    /* 0x05 */ CS_TRANS_GRAY_FILL_OUT,
+    /* 0x06 */ CS_TRANS_BLUE_FILL_OUT,
+    /* 0x07 */ CS_TRANS_RED_FILL_IN,
+    /* 0x08 */ CS_TRANS_GREEN_FILL_IN,
+    /* 0x09 */ CS_TRANS_TRIGGER_INSTANCE, // used with `TRANS_MODE_INSTANCE_WAIT`
+    /* 0x0A */ CS_TRANS_BLACK_FILL_OUT,
+    /* 0x0B */ CS_TRANS_BLACK_FILL_IN,
+    /* 0x0C */ CS_TRANS_BLACK_C,
+    /* 0x0D */ CS_TRANS_BLACK_D
+} CutsceneTransitionType;
+
 typedef union CutsceneData {
     s32 i;
     f32 f;

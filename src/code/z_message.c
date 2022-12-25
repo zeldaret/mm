@@ -405,7 +405,7 @@ u32 func_80151C9C(PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
-void Message_StartOcarina(PlayState* play, u16 arg2) {
+void func_80152434(PlayState* play, u16 arg2) {
     play->msgCtx.unk12046 = 0;
     func_80151DA4(play, arg2);
 }

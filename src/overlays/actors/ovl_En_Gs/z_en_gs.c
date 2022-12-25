@@ -268,7 +268,7 @@ void func_80997FF0(EnGs* this, PlayState* play) {
 }
 
 void func_80998040(EnGs* this, PlayState* play) {
-    Message_StartOcarina(play, 1);
+    func_80152434(play, 1);
     this->actionFunc = func_8099807C;
 }
 

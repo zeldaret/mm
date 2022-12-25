@@ -118,7 +118,7 @@ void func_80B1202C(EnOnpuman* this, PlayState* play2) {
 
             case 0x8D6:
                 this->actionFunc = func_80B11F78;
-                Message_StartOcarina(play, 0x3A);
+                func_80152434(play, 0x3A);
                 if (this->unk_2A0 != NULL) {
                     this->unk_2A0->home.rot.x = 0;
                 }

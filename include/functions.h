@@ -2209,7 +2209,7 @@ void func_80151A68(PlayState* play, u16 textId);
 void func_80151BB4(PlayState* play, u8 arg1);
 // void func_80151C9C(void);
 void func_80151DA4(PlayState* play, u16 arg2);
-void Message_StartOcarina(PlayState* play, u16 arg2);
+void func_80152434(PlayState* play, u16 arg2);
 // void func_80152464(void);
 u8 Message_GetState(MessageContext* msgCtx);
 // void func_8015268C(void);

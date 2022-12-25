@@ -1067,15 +1067,15 @@ asm/non_matchings/code/z_demo/func_800EAD7C.s,func_800EAD7C,0x800EAD7C,0xD
 asm/non_matchings/code/z_demo/func_800EADB0.s,func_800EADB0,0x800EADB0,0x47
 asm/non_matchings/code/z_demo/CutsceneCmd_FadeOutAmbience.s,CutsceneCmd_FadeOutAmbience,0x800EAECC,0x15
 asm/non_matchings/code/z_demo/CutsceneCmd_RumbleController.s,CutsceneCmd_RumbleController,0x800EAF20,0x30
-asm/non_matchings/code/z_demo/Cutscene_Command_FadeColorScreen.s,Cutscene_Command_FadeColorScreen,0x800EAFE0,0x7F
+asm/non_matchings/code/z_demo/CutsceneCmd_FadeColorScreen.s,CutsceneCmd_FadeColorScreen,0x800EAFE0,0x7F
 asm/non_matchings/code/z_demo/CutsceneCmd_SetTime.s,CutsceneCmd_SetTime,0x800EB1DC,0x62
 asm/non_matchings/code/z_demo/CutsceneCmd_DestinationImpl.s,CutsceneCmd_DestinationImpl,0x800EB364,0x54
 asm/non_matchings/code/z_demo/CutsceneCmd_Destination.s,CutsceneCmd_Destination,0x800EB4B4,0x91
-asm/non_matchings/code/z_demo/Cutscene_Command_ChooseCreditsScenes.s,Cutscene_Command_ChooseCreditsScenes,0x800EB6F8,0x11C
+asm/non_matchings/code/z_demo/CutsceneCmd_ChooseCreditsScenes.s,CutsceneCmd_ChooseCreditsScenes,0x800EB6F8,0x11C
 asm/non_matchings/code/z_demo/CutsceneCmd_MotionBlur.s,CutsceneCmd_MotionBlur,0x800EBB68,0x5A
 asm/non_matchings/code/z_demo/CutsceneCmd_GiveTatlToPlayer.s,CutsceneCmd_GiveTatlToPlayer,0x800EBCD0,0x24
 asm/non_matchings/code/z_demo/CutsceneCmd_Transition.s,CutsceneCmd_Transition,0x800EBD60,0x246
-asm/non_matchings/code/z_demo/Cutscene_Command_Camera.s,Cutscene_Command_Camera,0x800EC678,0x17
+asm/non_matchings/code/z_demo/CutsceneCmd_UpdateCamSpline.s,CutsceneCmd_UpdateCamSpline,0x800EC678,0x17
 asm/non_matchings/code/z_demo/Cutscene_CountNormalMasks.s,Cutscene_CountNormalMasks,0x800EC6D4,0x94
 asm/non_matchings/code/z_demo/CutsceneCmd_Text.s,CutsceneCmd_Text,0x800EC924,0x116
 asm/non_matchings/code/z_demo/func_800ECD7C.s,func_800ECD7C,0x800ECD7C,0x31
@@ -2372,7 +2372,7 @@ asm/non_matchings/code/z_message/func_80151A68.s,func_80151A68,0x80151A68,0x53
 asm/non_matchings/code/z_message/func_80151BB4.s,func_80151BB4,0x80151BB4,0x3A
 asm/non_matchings/code/z_message/func_80151C9C.s,func_80151C9C,0x80151C9C,0x42
 asm/non_matchings/code/z_message/func_80151DA4.s,func_80151DA4,0x80151DA4,0x1A4
-asm/non_matchings/code/z_message/Message_StartOcarina.s,Message_StartOcarina,0x80152434,0xC
+asm/non_matchings/code/z_message/func_80152434.s,func_80152434,0x80152434,0xC
 asm/non_matchings/code/z_message/func_80152464.s,func_80152464,0x80152464,0xD
 asm/non_matchings/code/z_message/Message_GetState.s,Message_GetState,0x80152498,0x7D
 asm/non_matchings/code/z_message/func_8015268C.s,func_8015268C,0x8015268C,0x176

@@ -559,7 +559,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, PlayState* play) {
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        Message_StartOcarina(play, 0x35);
+        func_80152434(play, 0x35);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);

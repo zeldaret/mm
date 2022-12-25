@@ -637,7 +637,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
     if ((play->sceneId == SCENE_MITURIN_BS) || (play->sceneId == SCENE_HAKUGIN_BS) ||
         (play->sceneId == SCENE_INISIE_BS) || (play->sceneId == SCENE_SEA_BS)) {
-        D_801F4DE2 = play->sceneId;
+        gDungeonBossWarpSceneId = play->sceneId;
         if (play->sceneId == SCENE_MITURIN_BS) {
             phi_v0_2 = 0;
         } else if (play->sceneId == SCENE_HAKUGIN_BS) {

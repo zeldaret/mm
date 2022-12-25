@@ -2399,7 +2399,7 @@ extern GameInfo* gGameInfo;
 
 extern UNK_TYPE D_801F4DDC;
 extern u8 D_801F4DE0;
-extern s16 D_801F4DE2;
+extern s16 gDungeonBossWarpSceneId;
 
 extern ActorCutscene* actorCutscenes;
 extern s16 actorCutsceneCount;
@@ -2494,7 +2494,7 @@ extern Input D_801F6C18;
 // extern UNK_TYPE1 D_801F6D0C;
 extern UNK_TYPE4 D_801F6D10;
 // extern UNK_TYPE1 D_801F6D18;
-extern Color_RGBA8 D_801F6D30;
+extern Color_RGBA8 gVisMonoColor;
 // extern UNK_TYPE1 D_801F6D38;
 // extern UNK_TYPE4 D_801F6D4C;
 // extern UNK_TYPE1 D_801F6D50;

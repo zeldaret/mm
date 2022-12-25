@@ -89,7 +89,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
         var_v1 = 0;
     }
     if (func_800B8718(&this->actor, &play->state)) {
-        Message_StartOcarina(play, var_v1 + 0x29);
+        func_80152434(play, var_v1 + 0x29);
         this->actionFunc = func_8093E68C;
     } else {
         yDiff = ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.world.rot.y));

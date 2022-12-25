@@ -331,7 +331,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        Message_StartOcarina(play, 0x42);
+        func_80152434(play, 0x42);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
     }
@@ -343,7 +343,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
         this->actionFunc = func_80B9FF20;
         this->unk_304 = 6;
         func_80B9F7E4(this, 1, ANIMMODE_LOOP);
-        Message_StartOcarina(play, 0x3E);
+        func_80152434(play, 0x3E);
         func_80B9FC70(this, 1);
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
         play->msgCtx.msgLength = 0;
@@ -357,7 +357,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        Message_StartOcarina(play, 0x41);
+        func_80152434(play, 0x41);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
     }
@@ -426,7 +426,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x1209:
-                        Message_StartOcarina(play, 0x3D);
+                        func_80152434(play, 0x3D);
                         this->unk_304 = 4;
                         func_80B9F7E4(this, 0, ANIMMODE_LOOP);
                         this->actionFunc = func_80BA005C;
@@ -439,7 +439,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
 }
 
 void func_80BA0318(EnZob* this, PlayState* play) {
-    Message_StartOcarina(play, 0x3D);
+    func_80152434(play, 0x3D);
     this->unk_304 = 4;
     func_80B9F7E4(this, 0, ANIMMODE_LOOP);
     this->actionFunc = func_80BA005C;

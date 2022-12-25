@@ -543,7 +543,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, PLAYER_CSMODE_68);
-    Message_StartOcarina(play, D_80BA5120[CUR_FORM]);
+    func_80152434(play, D_80BA5120[CUR_FORM]);
     return 0;
 }
 

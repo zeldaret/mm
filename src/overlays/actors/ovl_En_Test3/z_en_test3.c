@@ -527,8 +527,8 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
-    if (this->player.csMode != 0) {
-        play->startPlayerCutscene(play, &this->player, 6);
+    if (this->player.csMode != PLAYER_CSMODE_0) {
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_6);
     }
 }
 
@@ -668,7 +668,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
             func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
             ActorCutscene_SetReturnCamera(this->subCamId);
-            play->startPlayerCutscene(play, &this->player, 7);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_7);
         }
         func_800B863C(&this->player.actor, play);
         if (this->unk_D88 == 3) {
@@ -690,7 +690,7 @@ s32 func_80A3F8D4(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         ((postActor = func_80A3F2BC(play, this, ACTOR_EN_PM, ACTORCAT_NPC, 100.0f, 20.0f)) != NULL)) {
         this->player.actor.home.rot.y = Actor_YawBetweenActors(&this->player.actor, postActor);
     }
-    play->startPlayerCutscene(play, &this->player, 0x61);
+    play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_97);
     return true;
 }
 
@@ -737,7 +737,7 @@ s32 func_80A3FA58(EnTest3* this, PlayState* play) {
             return false;
         }
         if (this->unk_D8A == 90) {
-            play->startPlayerCutscene(play, &this->player, 0x15);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_21);
         }
     } else {
         this->unk_D8A++;
@@ -857,7 +857,7 @@ s32 func_80A3FFD0(EnTest3* this, PlayState* play2) {
         }
     } else {
         SET_WEEKEVENTREG(WEEKEVENTREG_51_40);
-        play->startPlayerCutscene(play, &this->player, 0x6E);
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_110);
     }
     return false;
 }
@@ -1059,13 +1059,13 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
-        if (this->player.csMode != 5) {
-            play->startPlayerCutscene(play, &this->player, 5);
+        if (this->player.csMode != PLAYER_CSMODE_5) {
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_5);
         }
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, 0)) {
+    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_0)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 
