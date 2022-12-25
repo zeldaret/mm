@@ -64,11 +64,6 @@ typedef struct {
     /* 0x8 */ u16 timer;
 } TransitionFade; // size = 0xC
 
-typedef enum {
- /* 0 */ TRANSITION_CIRCLE_IN,
- /* 1 */ TRANSITION_CIRCLE_OUT,
-} TransitionCircleDirection;
-
 #define FBDEMO_CIRCLE_GET_MASK_TYPE(type) (type & 1)
 
 typedef struct {

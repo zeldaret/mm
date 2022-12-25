@@ -2,7 +2,18 @@
 
 #define THIS ((TransitionFade*)thisx)
 
-static Gfx sFadeSetupDL[] = {
+typedef enum {
+    /* 0 */ TRANS_FADE_DIR_IN,
+    /* 1 */ TRANS_FADE_DIR_OUT
+} TransitionFadeDirection;
+
+typedef enum {
+    /* 0 */ TRANS_FADE_TYPE_NONE,
+    /* 1 */ TRANS_FADE_TYPE_ONE_WAY,
+    /* 2 */ TRANS_FADE_TYPE_FLASH
+} TransitionFadeType;
+
+static Gfx sTransFadeSetupDL[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
                           G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
@@ -23,15 +34,15 @@ void TransitionFade_Start(void* thisx) {
     TransitionFade* this = THIS;
 
     switch (this->type) {
-        case 0:
+        case TRANS_FADE_TYPE_NONE:
             break;
 
-        case 1:
+        case TRANS_FADE_TYPE_ONE_WAY:
             this->timer = 0;
-            this->color.a = (this->direction != 0) ? 255 : 0;
+            this->color.a = (this->direction != TRANS_FADE_DIR_IN) ? 255 : 0;
             break;
 
-        case 2:
+        case TRANS_FADE_TYPE_FLASH:
             this->color.a = 0;
             break;
     }
@@ -54,10 +65,10 @@ void TransitionFade_Update(void* thisx, s32 updateRate) {
     TransitionFade* this = THIS;
 
     switch (this->type) {
-        case 0:
+        case TRANS_FADE_TYPE_NONE:
             break;
 
-        case 1:
+        case TRANS_FADE_TYPE_ONE_WAY:
             //! FAKE:
             THIS->timer += updateRate;
 
@@ -67,10 +78,10 @@ void TransitionFade_Update(void* thisx, s32 updateRate) {
             }
 
             alpha = (255.0f * this->timer) / ((void)0, gSaveContext.transFadeDuration);
-            this->color.a = (this->direction != 0) ? 255 - alpha : alpha;
+            this->color.a = (this->direction != TRANS_FADE_DIR_IN) ? 255 - alpha : alpha;
             break;
 
-        case 2:
+        case TRANS_FADE_TYPE_FLASH:
             newAlpha = this->color.a;
             if (R_TRANS_FADE_FLASH_ALPHA_STEP != 0) {
                 if (R_TRANS_FADE_FLASH_ALPHA_STEP < 0) {
@@ -97,7 +108,7 @@ void TransitionFade_Draw(void* thisx, Gfx** gfxP) {
 
     if (color->a != 0) {
         gfx = *gfxP;
-        gSPDisplayList(gfx++, sFadeSetupDL);
+        gSPDisplayList(gfx++, sTransFadeSetupDL);
         gDPSetPrimColor(gfx++, 0, 0, color->r, color->g, color->b, color->a);
         gSPDisplayList(gfx++, D_0E000000.fillRect);
         *gfxP = gfx;
@@ -120,14 +131,14 @@ void TransitionFade_SetType(void* thisx, s32 type) {
     TransitionFade* this = THIS;
 
     if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
-        this->type = 1;
-        this->direction = 1;
+        this->type = TRANS_FADE_TYPE_ONE_WAY;
+        this->direction = TRANS_FADE_DIR_OUT;
     } else if (type == TRANS_INSTANCE_TYPE_FILL_IN) {
-        this->type = 1;
-        this->direction = 0;
+        this->type = TRANS_FADE_TYPE_ONE_WAY;
+        this->direction = TRANS_FADE_DIR_IN;
     } else if (type == TRANS_INSTANCE_TYPE_FADE_FLASH) {
-        this->type = 2;
+        this->type = TRANS_FADE_TYPE_FLASH;
     } else {
-        this->type = 0;
+        this->type = TRANS_FADE_TYPE_NONE;
     }
 }

@@ -1,6 +1,11 @@
 #include "global.h"
 
-Gfx D_801D0D00[] = {
+typedef enum {
+    /* 0 */ TRANS_CIRCLE_DIR_IN,
+    /* 1 */ TRANS_CIRCLE_DIR_OUT,
+} TransitionCircleDirection;
+
+Gfx sTransCircleSetupDL[] = {
     gsDPPipeSync(),
     gsDPSetOtherMode(G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
                          G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
@@ -23,7 +28,7 @@ void TransitionCircle_Start(void* thisx) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     this->stepValue = 0.1f;
-    if (this->direction == TRANSITION_CIRCLE_IN) {
+    if (this->direction == TRANS_CIRCLE_DIR_IN) {
         this->targetRadius = 0.0f;
         this->startingRadius = 1.0f;
     } else {
@@ -68,9 +73,9 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
     if (type & TC_SET_PARAMS) {
         this->maskType = FBDEMO_CIRCLE_GET_MASK_TYPE(type);
     } else if (type == TRANS_INSTANCE_TYPE_FILL_OUT) {
-        this->direction = TRANSITION_CIRCLE_OUT;
+        this->direction = TRANS_CIRCLE_DIR_OUT;
     } else {
-        this->direction = TRANSITION_CIRCLE_IN;
+        this->direction = TRANS_CIRCLE_DIR_IN;
     }
 }
 
@@ -121,7 +126,7 @@ void TransitionCircle_Draw(void* thisx, Gfx** gfxp) {
     TransitionCircle* this = (TransitionCircle*)thisx;
 
     gDPPipeSync(gfx++);
-    gSPDisplayList(gfx++, &D_801D0D00);
+    gSPDisplayList(gfx++, &sTransCircleSetupDL);
     gDPSetPrimColor(gfx++, 0, this->color.a, this->color.r, this->color.g, this->color.b, 1);
     if (this->maskType == 0) {
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIM_LOD_FRAC, PRIMITIVE, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
