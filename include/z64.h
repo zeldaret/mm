@@ -980,7 +980,7 @@ struct PlayState {
     /* 0x1887F */ u8 transitionType; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
-    /* 0x18B20 */ u16 envFlags[20];
+    /* 0x18B20 */ u16 cutsceneFlags[20];
     /* 0x18B48 */ u8 curSpawn;
     /* 0x18B49 */ u8 unk_18B49;
     /* 0x18B4A */ u8 transitionMode;

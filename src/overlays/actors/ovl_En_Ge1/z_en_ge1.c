@@ -88,7 +88,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->picto.actor.targetMode = 6;
     Actor_SetScale(&this->picto.actor, 0.01f);
-    this->animIndex = this->csAction = -1; // GERUDO_WHITE_ANIM_NONE
+    this->animIndex = this->cueId = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
     EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
     this->actionFunc = EnGe1_Wait;
@@ -254,16 +254,16 @@ void EnGe1_Wait(EnGe1* this, PlayState* play) {
 }
 
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
-    s16 csAction;
+    s16 cueId;
 
-    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == 3)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->cueId == 3)) {
         EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_STIFF_SHIVERING, ANIMMODE_LOOP, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 0x79)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_121)) {
         this->picto.actor.draw = EnGe1_Draw;
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x79)]->action;
-        switch (csAction) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_121)]->id;
+        switch (cueId) {
             case 8:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
                 break;
@@ -274,14 +274,15 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
 
             default:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
-                Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 0x79));
+                Cutscene_ActorTranslateAndYaw(&this->picto.actor, play,
+                                              Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_121));
                 break;
         }
 
-        if (this->csAction != csAction) {
-            this->csAction = csAction;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
 
-            switch (this->csAction) {
+            switch (this->cueId) {
                 // Aveil cutscene
                 case 1:
                     EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
@@ -339,7 +340,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
         this->picto.actor.draw = NULL;
     }
 
-    if (this->csAction == 9) {
+    if (this->cueId == 9) {
         if ((this->curPoint < this->path->count) && EnGe1_FollowPath(this)) {
             this->curPoint++;
         }

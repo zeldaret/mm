@@ -295,7 +295,7 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAF884(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == CS_STATE_0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         DynaPolyActor_Init(&this->dyna, 3);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         this->dyna.actor.flags |= ACTOR_FLAG_1;
@@ -455,15 +455,15 @@ void DmChar08_DoNothing(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFE88(DmChar08* this, PlayState* play) {
-    s32 actorActionIndex;
-    CsCmdActorAction* csAction;
+    s32 cueChannel;
+    s32 pad;
     f32 phi_f12;
 
-    if (Cutscene_CheckActorAction(play, 474)) {
-        actorActionIndex = Cutscene_GetActorActionIndex(play, 474);
-        if (this->unk_1F6 != play->csCtx.actorActions[actorActionIndex]->action) {
-            this->unk_1F6 = play->csCtx.actorActions[actorActionIndex]->action;
-            switch (play->csCtx.actorActions[actorActionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_474)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_474);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = TURTLE_ANIM_IDLE;
                     break;
@@ -514,12 +514,12 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     break;
             }
         }
-        switch (play->csCtx.actorActions[actorActionIndex]->action) {
+        switch (play->csCtx.actorCues[cueChannel]->id) {
             case 2:
                 this->unk_1FF = 1;
-                phi_f12 = 2.0f * Environment_LerpWeight(play->csCtx.actorActions[actorActionIndex]->endFrame,
-                                                        play->csCtx.actorActions[actorActionIndex]->startFrame,
-                                                        play->csCtx.frames);
+                phi_f12 =
+                    2.0f * Environment_LerpWeight(play->csCtx.actorCues[cueChannel]->endFrame,
+                                                  play->csCtx.actorCues[cueChannel]->startFrame, play->csCtx.curFrame);
                 if (phi_f12 > 1.0f) {
                     phi_f12 = 1.0f;
                 }
@@ -529,30 +529,30 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     this->unk_1FF = 2;
                 }
 
-                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, actorActionIndex);
+                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, cueChannel);
                 break;
 
             case 5:
-                Cutscene_ActorTranslateAndYawSmooth(&this->dyna.actor, play, actorActionIndex);
+                Cutscene_ActorTranslateAndYawSmooth(&this->dyna.actor, play, cueChannel);
                 break;
 
             case 14:
-                Cutscene_ActorTranslate(&this->dyna.actor, play, actorActionIndex);
-                Math_SmoothStepToS(&this->dyna.actor.world.rot.y, play->csCtx.actorActions[actorActionIndex]->rot.y,
-                                   0xA, 0xDC, 1);
+                Cutscene_ActorTranslate(&this->dyna.actor, play, cueChannel);
+                Math_SmoothStepToS(&this->dyna.actor.world.rot.y, play->csCtx.actorCues[cueChannel]->rot.y, 0xA, 0xDC,
+                                   1);
                 this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
                 break;
 
             default:
-                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, actorActionIndex);
+                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, cueChannel);
                 break;
         }
         this->targetYPos = this->dyna.actor.world.pos.y;
-        if ((this->unk_1FF >= 2) || (play->csCtx.actorActions[actorActionIndex]->action == 2)) {
+        if ((this->unk_1FF >= 2) || (play->csCtx.actorCues[cueChannel]->id == 2)) {
             Math_SmoothStepToF(&this->unk_1F0, 1.0f, 0.02f, 0.1f, 0.00001f);
         }
     } else {
-        this->unk_1F6 = 99;
+        this->cueId = 99;
     }
 }
 
@@ -895,7 +895,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
 void func_80AB096C(DmChar08* this, PlayState* play) {
     if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
         (play->csCtx.currentCsIndex == 0)) {
-        if ((play->csCtx.frames >= 890) && (play->csCtx.frames < 922)) {
+        if ((play->csCtx.curFrame >= 890) && (play->csCtx.curFrame < 922)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     }
@@ -1097,7 +1097,7 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
-    if ((this->unk_1FF > 0) || (play->csCtx.state != CS_STATE_0)) {
+    if ((this->unk_1FF > 0) || (play->csCtx.state != CS_STATE_IDLE)) {
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar08_OverrideLimbDraw, DmChar08_PostLimbDraw,
                                        DmChar08_TransformLimbDraw, &this->dyna.actor);

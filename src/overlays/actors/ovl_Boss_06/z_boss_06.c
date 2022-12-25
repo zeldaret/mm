@@ -198,7 +198,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 break;
             }
 
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
@@ -331,7 +331,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
                 func_809F2ED0(this, play);
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
+                Cutscene_StopManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 D_809F4970->unk_151 = 0;
             }

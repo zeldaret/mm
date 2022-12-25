@@ -622,13 +622,13 @@ void EnJg_TeachLullabyIntro(EnJg* this, PlayState* play) {
 void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
     s32 pad;
 
-    if (Cutscene_CheckActorAction(play, 470)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 470);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_470)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_470);
 
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
@@ -698,7 +698,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
             }
         }
     } else {
-        this->csAction = 99;
+        this->cueId = 99;
         this->freezeTimer = 1000;
         SET_WEEKEVENTREG(WEEKEVENTREG_24_40);
         this->actionFunc = EnJg_Idle;

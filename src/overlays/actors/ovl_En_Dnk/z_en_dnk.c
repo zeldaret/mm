@@ -213,8 +213,8 @@ void func_80A51648(EnDnk* this, PlayState* play) {
 }
 
 void func_80A51890(EnDnk* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 126)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 126));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_126));
     }
 }
 
@@ -423,7 +423,7 @@ void func_80A52018(Actor* thisx, PlayState* play) {
 }
 
 void func_80A52074(EnDnk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 80:
             func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
             break;
@@ -441,7 +441,7 @@ void func_80A52074(EnDnk* this, PlayState* play) {
             break;
     }
 
-    if ((play->csCtx.frames >= 198) && (play->csCtx.frames < 438)) {
+    if ((play->csCtx.curFrame >= 198) && (play->csCtx.curFrame < 438)) {
         func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }

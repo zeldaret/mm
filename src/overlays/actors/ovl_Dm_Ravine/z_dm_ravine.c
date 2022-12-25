@@ -63,7 +63,7 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
             play->roomCtx.unk7A[1]++;
             if (play->roomCtx.unk7A[1] > 254) {
                 play->roomCtx.unk7A[1] = 254;
-                if (play->csCtx.frames > 700) {
+                if (play->csCtx.curFrame > 700) {
                     play->roomCtx.unk7A[1] = 255;
                     play->roomCtx.unk7A[0] = 0;
                     this->state++; // -> DM_RAVINE_STATE_PENDING_DEATH

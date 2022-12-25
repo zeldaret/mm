@@ -124,7 +124,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
     if (play->csCtx.state != 0) {
         if (!(this->unk_37C & 0x20)) {
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_1DC = 0xFF;
+            this->cueId = 255;
             this->unk_37C |= 0x20;
         }
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
@@ -132,7 +132,7 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
     } else {
         if (this->unk_37C & 0x20) {
             this->picto.actor.flags |= ACTOR_FLAG_1;
-            this->unk_1DC = 0xFF;
+            this->cueId = 255;
             this->unk_37C &= ~0x20;
             SubS_UpdateFlags(&this->unk_37C, 3, 7);
         }
@@ -391,15 +391,15 @@ void func_80A53038(EnDnq* this, PlayState* play) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-    s32 temp_v0;
-    u32 temp_v1;
+    s32 cueChannel;
+    u32 cueId;
 
-    if (Cutscene_CheckActorAction(play, 105)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 105);
-        temp_v1 = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_1DC != (u8)temp_v1) {
-            func_80A5257C(this, D_80A535FC[temp_v1]);
-            this->unk_1DC = temp_v1;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_105)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_105);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            func_80A5257C(this, D_80A535FC[cueId]);
+            this->cueId = cueId;
         }
 
         if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
@@ -411,7 +411,7 @@ void func_80A53038(EnDnq* this, PlayState* play) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, cueChannel);
     }
 }
 

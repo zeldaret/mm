@@ -88,7 +88,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, PlayState* play) {
     Camera_ChangeSetting(play->cameraPtrs[CAM_ID_MAIN], CAM_SET_DUNGEON0);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
 
-    if (play->csCtx.frames == 132) {
+    if (play->csCtx.curFrame == 132) {
         play_sound(NA_SE_SY_SPIRAL_DASH);
     }
 }

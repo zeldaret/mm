@@ -41,7 +41,7 @@ typedef struct EnGk {
     /* 0x30C */ Vec3f unk_30C;
     /* 0x318 */ s16 unk_318;
     /* 0x31A */ u8 unk_31A;
-    /* 0x31B */ u8 unk_31B;
+    /* 0x31B */ u8 cueId;
     /* 0x31C */ u16 unk_31C;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ s16 unk_320;

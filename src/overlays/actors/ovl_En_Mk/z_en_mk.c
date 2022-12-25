@@ -124,16 +124,16 @@ s32 func_80959524(PlayState* play) {
 }
 
 void func_8095954C(EnMk* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x7F)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 0x7F));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127));
 
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7F)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id) {
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
-                func_809592E0(this, play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x7F)]->action - 1);
+                func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
         }
     } else {
@@ -449,7 +449,7 @@ void EnMk_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->unk_27A & 1) && !Cutscene_CheckActorAction(play, 0x7F)) {
+    if ((this->unk_27A & 1) && !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_127)) {
         Actor_TrackPlayer(play, &this->actor, &this->unk_270, &sp38, this->actor.focus.pos);
     } else {
         Math_SmoothStepToS(&this->unk_270.x, 0, 6, 0x1838, 0x64);

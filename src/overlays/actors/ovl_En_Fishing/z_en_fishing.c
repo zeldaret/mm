@@ -3775,7 +3775,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 player->unk_B28 = 3;
                 Rumble_Override(0.0f, 1, 3, 1);
                 D_809171D8++;
-                Cutscene_Start(play, &play->csCtx);
+                Cutscene_StartManual(play, &play->csCtx);
                 D_8090CD4C = 100;
                 D_80911F48 = 45.0f;
                 D_8090CD14 = 5;
@@ -5276,7 +5276,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             mainCam->at = sSubCamAt;
         }
             func_80169AFC(play, sSubCamId, 0);
-            Cutscene_End(play, &play->csCtx);
+            Cutscene_StopManual(play, &play->csCtx);
             D_8090CD4C = 0;
             sSubCamId = SUB_CAM_ID_DONE;
             func_800F6834(play, 0);
@@ -5286,7 +5286,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             break;
 
         case 10:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             sSubCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
@@ -5316,7 +5316,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                 mainCam->at = sSubCamAt;
 
                 func_80169AFC(play, sSubCamId, 0);
-                Cutscene_End(play, &play->csCtx);
+                Cutscene_StopManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 D_8090CD4C = 0;
                 sSubCamId = SUB_CAM_ID_DONE;
@@ -5327,7 +5327,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             break;
 
         case 20:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             sSubCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
@@ -5417,7 +5417,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                         mainCam->eyeNext = sSubCamEye;
                         mainCam->at = sSubCamAt;
                         func_80169AFC(play, sSubCamId, 0);
-                        Cutscene_End(play, &play->csCtx);
+                        Cutscene_StopManual(play, &play->csCtx);
                         func_800B7298(play, &this->actor,
                                       PLAYER_CSMODE_6); // arg2 changed from PLAYER_CSMODE_7 to PLAYER_CSMODE_6 in MM
                         D_8090CD4C = 0;

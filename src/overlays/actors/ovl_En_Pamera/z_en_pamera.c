@@ -695,14 +695,14 @@ void func_80BD9C70(EnPamera* this, PlayState* play) {
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x1E5)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x1E5);
-        if (this->unk_326 != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_326 = play->csCtx.actorActions[actionIndex]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_485)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_485);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     func_80BD9E88(this);
                     break;
@@ -727,7 +727,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                     break;
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->setupFunc(this, play);
         return 1;
     }
@@ -738,7 +738,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
             func_80BD9E60(this);
         }
     }
-    this->unk_326 = 0x63;
+    this->cueId = 99;
     return 0;
 }
 

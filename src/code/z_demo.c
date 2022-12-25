@@ -5,18 +5,18 @@
 #include "z64shrink_window.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
-void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx);
-void func_800EA258(PlayState* play, CutsceneContext* csCtx);
-void func_800ED9C4(PlayState* play, CutsceneContext* csCtx);
-void func_800EA2B8(PlayState* play, CutsceneContext* csCtx);
-void func_800ED980(PlayState* play, CutsceneContext* csCtx);
-void func_800EDA04(PlayState* play, CutsceneContext* csCtx);
-void func_800EDA84(PlayState* play, CutsceneContext* csCtx);
+void CutsceneHandler_DoNothing(PlayState* play, CutsceneContext* csCtx);
+void CutsceneHandler_StartManual(PlayState* play, CutsceneContext* csCtx);
+void CutsceneHandler_StopManual(PlayState* play, CutsceneContext* csCtx);
+void CutsceneHandler_StartScript(PlayState* play, CutsceneContext* csCtx);
+void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx);
+void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx);
+void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx);
 
 // Unused
 UNK_TYPE4 D_801BB120 = 0;
-u16 D_801BB124 = 0;
-u16 D_801BB128 = 0;
+u16 sCurTextId = 0;
+u16 sCurOcarinaAction = 0;
 u8 D_801BB12C = 0;
 u8 sCutsceneStoredPlayerForm = 0;
 
@@ -26,22 +26,22 @@ static u16 seqId;
 #endif
 s16 sCutsceneQuakeIndex;
 DbCameraUnkStruct sCutsceneCameraInfo;
-u16 D_801F4DC8[10];
+u16 sCueTypeList[10];
 UNK_TYPE D_801F4DDC;
 u8 D_801F4DE0;
 s16 D_801F4DE2;
 
-void Cutscene_Init(PlayState* play, CutsceneContext* csCtx) {
+void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
 
-    csCtx->state = CS_STATE_0;
-    csCtx->frames = 0;
-    csCtx->unk_0C = 0.0f;
+    csCtx->state = CS_STATE_IDLE;
+    csCtx->curFrame = 0;
+    csCtx->timer = 0.0f;
     play->csCtx.sceneCsCount = 0;
     play->csCtx.currentCsIndex = 0;
 
-    for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
-        D_801F4DC8[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(sCueTypeList); i++) {
+        sCueTypeList[i] = 0;
     }
 
     D_801F4DE0 = 0;
@@ -49,124 +49,130 @@ void Cutscene_Init(PlayState* play, CutsceneContext* csCtx) {
     Audio_SetCutsceneFlag(false);
 }
 
-void Cutscene_Start(PlayState* play, CutsceneContext* csCtx) {
-    csCtx->state = CS_STATE_1;
-    csCtx->playerAction = NULL;
+void Cutscene_StartManual(PlayState* play, CutsceneContext* csCtx) {
+    csCtx->state = CS_STATE_START;
+    csCtx->playerCue = NULL;
 }
 
-void Cutscene_End(PlayState* play, CutsceneContext* csCtx) {
-    if (csCtx->state != CS_STATE_4) {
-        csCtx->state = CS_STATE_3;
+void Cutscene_StopManual(PlayState* play, CutsceneContext* csCtx) {
+    if (csCtx->state != CS_STATE_RUN_UNSTOPPABLE) {
+        csCtx->state = CS_STATE_STOP;
     }
 }
 
-typedef void (*CutsceneStateHandler)(PlayState* play, CutsceneContext* csCtx);
+typedef void (*CutsceneHandler)(PlayState* play, CutsceneContext* csCtx);
 
-CutsceneStateHandler sCsStateHandlers1[] = {
-    Cutscene_DoNothing, // CS_STATE_0
-    func_800EA258,      // CS_STATE_1
-    Cutscene_DoNothing, // CS_STATE_2
-    func_800ED9C4,      // CS_STATE_3
-    Cutscene_DoNothing, // CS_STATE_4
+CutsceneHandler sManualCutsceneHandlers[] = {
+    CutsceneHandler_DoNothing,   // CS_STATE_IDLE
+    CutsceneHandler_StartManual, // CS_STATE_START
+    CutsceneHandler_DoNothing,   // CS_STATE_RUN
+    CutsceneHandler_StopManual,  // CS_STATE_STOP
+    CutsceneHandler_DoNothing,   // CS_STATE_RUN_UNSTOPPABLE
 };
 
-void Cutscene_Update1(PlayState* play, CutsceneContext* csCtx) {
+void Cutscene_UpdateManual(PlayState* play, CutsceneContext* csCtx) {
     if (gSaveContext.save.cutscene < 0xFFF0) {
-        sCsStateHandlers1[csCtx->state](play, csCtx);
+        sManualCutsceneHandlers[csCtx->state](play, csCtx);
     }
 }
 
-CutsceneStateHandler sCsStateHandlers2[] = {
-    Cutscene_DoNothing, // CS_STATE_0
-    func_800EA2B8,      // CS_STATE_1
-    func_800ED980,      // CS_STATE_2
-    func_800EDA04,      // CS_STATE_3
-    func_800ED980,      // CS_STATE_4
+CutsceneHandler sScriptedCutsceneHandlers[] = {
+    CutsceneHandler_DoNothing,   // CS_STATE_IDLE
+    CutsceneHandler_StartScript, // CS_STATE_START
+    CutsceneHandler_RunScript,   // CS_STATE_RUN
+    CutsceneHandler_StopScript,  // CS_STATE_STOP
+    CutsceneHandler_RunScript,   // CS_STATE_RUN_UNSTOPPABLE
 };
 
-void Cutscene_Update2(PlayState* play, CutsceneContext* csCtx) {
+void Cutscene_UpdateScripted(PlayState* play, CutsceneContext* csCtx) {
     if ((gSaveContext.cutsceneTrigger != 0) && (play->transitionTrigger == TRANS_TRIGGER_START)) {
         gSaveContext.cutsceneTrigger = 0;
     }
 
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE)) {
         gSaveContext.save.cutscene = 0xFFFD;
         gSaveContext.cutsceneTrigger = 1;
     }
 
     if (gSaveContext.save.cutscene >= 0xFFF0) {
-        func_800EDA84(play, csCtx);
-        sCsStateHandlers2[csCtx->state](play, csCtx);
+        Cutscene_SetupScripted(play, csCtx);
+        sScriptedCutsceneHandlers[csCtx->state](play, csCtx);
     }
 }
 
-void Cutscene_DoNothing(PlayState* play, CutsceneContext* csCtx) {
+void CutsceneHandler_DoNothing(PlayState* play, CutsceneContext* csCtx) {
 }
 
-s32 func_800EA220(PlayState* play, CutsceneContext* csCtx, f32 target) {
-    return Math_StepToF(&csCtx->unk_0C, target, 0.1f);
+s32 Cutscene_StepTimer(PlayState* play, CutsceneContext* csCtx, f32 target) {
+    return Math_StepToF(&csCtx->timer, target, 0.1f);
 }
 
-void func_800EA258(PlayState* play, CutsceneContext* csCtx) {
+void CutsceneHandler_StartManual(PlayState* play, CutsceneContext* csCtx) {
     Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     ShrinkWindow_Letterbox_SetSizeTarget(32);
-    if (func_800EA220(play, csCtx, 1.0f)) {
+
+    if (Cutscene_StepTimer(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
-        csCtx->state++;
+        csCtx->state++; // CS_STATE_RUN
     }
 }
 
-void func_800EA2B8(PlayState* play, CutsceneContext* csCtx) {
-    func_800ED980(play, csCtx);
+void CutsceneHandler_StartScript(PlayState* play, CutsceneContext* csCtx) {
+    CutsceneHandler_RunScript(play, csCtx);
     Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
     ShrinkWindow_Letterbox_SetSizeTarget(32);
-    if (func_800EA220(play, csCtx, 1.0f)) {
+
+    if (Cutscene_StepTimer(play, csCtx, 1.0f)) {
         Audio_SetCutsceneFlag(true);
-        csCtx->state++;
+        csCtx->state++; // CS_STATE_RUN
     }
 }
 
 /* Start of command handling section */
 
 // Command 0x96: Miscellaneous commands.
-void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
     Player* player = GET_PLAYER(play);
-    f32 progress;
-    u8 isStartFrame = false;
+    f32 lerp;
+    u8 isFirstFrame = false;
     SceneTableEntry* loadedScene;
 
-    if ((csCtx->frames < cmd->startFrame) || ((csCtx->frames >= cmd->endFrame) && (cmd->endFrame != cmd->startFrame))) {
+    if (!((csCtx->curFrame >= cmd->startFrame) &&
+          ((csCtx->curFrame < cmd->endFrame) || (cmd->endFrame == cmd->startFrame)))) {
         return;
     }
 
-    progress = Environment_LerpWeight(cmd->endFrame - 1, cmd->startFrame, csCtx->frames);
-    if (csCtx->frames == cmd->startFrame) {
-        isStartFrame = true;
+    lerp = Environment_LerpWeight(cmd->endFrame - 1, cmd->startFrame, csCtx->curFrame);
+
+    if (csCtx->curFrame == cmd->startFrame) {
+        isFirstFrame = true;
     }
 
-    // TODO: consider creating an enum for this when we understand what each value does
     switch (cmd->base) {
         case 0x1:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 func_800FD78C(play);
                 play->envCtx.unk_F2[0] = 0x3C;
             }
             break;
+
         case 0x2:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
                 D_801F4E68 = 1;
             }
             break;
+
         case 0x3:
             if (play->envCtx.lightSettings.fogFar < 12800) {
                 play->envCtx.lightSettings.fogFar += 35;
             }
             break;
+
         case 0x4:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 play->envCtx.unk_19 = 1;
                 play->envCtx.unk_17 = 1;
                 play->envCtx.unk_18 = 0;
@@ -178,48 +184,56 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
                 play->envCtx.unk_22 = play->envCtx.unk_24;
             }
             break;
+
         case 0x5:
-            if (isStartFrame && (csCtx->state != CS_STATE_4)) {
-                csCtx->state = CS_STATE_3;
+            if (isFirstFrame && (csCtx->state != CS_STATE_RUN_UNSTOPPABLE)) {
+                csCtx->state = CS_STATE_STOP;
             }
             break;
+
         case 0x7:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 loadedScene = play->loadedScene;
                 if (loadedScene->titleTextId != 0) {
                     func_80151A68(play, loadedScene->titleTextId);
                 }
             }
             break;
+
         case 0x8:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 6, 4, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
             }
             break;
+
         case 0x9:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 Quake_Init();
             }
             break;
+
         case 0xA:
             D_801F6D30.r = 255;
             D_801F6D30.g = 255;
             D_801F6D30.b = 255;
-            D_801F6D30.a = 255 * progress;
+            D_801F6D30.a = 255 * lerp;
             break;
+
         case 0xB:
             D_801F6D30.r = 255;
             D_801F6D30.g = 180;
             D_801F6D30.b = 100;
-            D_801F6D30.a = 255 * progress;
+            D_801F6D30.a = 255 * lerp;
             break;
+
         case 0xC:
             play->roomCtx.curRoom.segment = NULL;
             break;
+
         case 0xD:
             if (play->state.frames & 8) {
                 if (play->envCtx.lightSettings.ambientColor[0] < 40) {
@@ -235,21 +249,26 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
                 }
             }
             break;
+
         case 0xE:
             play->unk_18845 = 1;
             break;
+
         case 0xF:
             play->unk_18845 = 0;
             break;
+
         case 0x10:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 play->envCtx.sandstormState = 1;
             }
             func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
+
         case 0x11:
             gSaveContext.sunsSongState = SUNSSONG_START;
             break;
+
         case 0x12:
             if (!gSaveContext.save.isNight) {
                 gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)R_TIME_SPEED;
@@ -257,74 +276,90 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
                 gSaveContext.save.time = ((void)0, gSaveContext.save.time) - (u16)(2 * R_TIME_SPEED);
             }
             break;
+
         case 0x13:
             AudioOcarina_PlayLongScarecrowAfterCredits();
-            csCtx->frames = cmd->startFrame - 1;
+            csCtx->curFrame = cmd->startFrame - 1;
             break;
+
         case 0x14:
-            EnvFlags_Set(play, 3);
+            CutsceneFlags_Set(play, 3);
             break;
+
         case 0x15:
-            EnvFlags_Set(play, 4);
+            CutsceneFlags_Set(play, 4);
             break;
+
         case 0x16:
             gSaveContext.save.playerForm = PLAYER_FORM_DEKU;
             break;
+
         case 0x17:
             player->stateFlags2 |= PLAYER_STATE2_4000000;
             break;
+
         case 0x18:
             player->stateFlags2 &= ~PLAYER_STATE2_4000000;
             break;
+
         case 0x19:
             sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
             break;
+
         case 0x1A:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 20, 10, 0, 0);
                 Quake_SetCountdown(sCutsceneQuakeIndex, 800);
             }
             break;
+
         case 0x1B:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->transitionType = TRANS_TYPE_03;
             }
             break;
+
         case 0x1C:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 play->envCtx.unk_17 = 0xD;
             }
             break;
+
         case 0x1D:
             gSaveContext.save.playerForm = sCutsceneStoredPlayerForm;
             break;
+
         case 0x1E:
             D_801F4DE0 = true;
             break;
+
         case 0x1F:
             D_801F4DE0 = false;
             break;
+
         case 0x21:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 Sram_SaveSpecialEnterClockTown(play);
             }
             break;
+
         case 0x22:
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 func_80144A94(&play->sramCtx);
             }
             break;
+
         case 0x23:
-            if (csCtx->frames != D_801BB15C) {
-                D_801BB15C = csCtx->frames;
+            if (csCtx->curFrame != D_801BB15C) {
+                D_801BB15C = csCtx->curFrame;
 
                 if (R_TIME_SPEED != 0) {
                     gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
@@ -333,9 +368,10 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
                 }
             }
             break;
+
         case 0x24:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
-            if (isStartFrame) {
+            if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
                 Quake_SetQuakeValues(sCutsceneQuakeIndex, 2, 1, 0, 0);
@@ -359,14 +395,16 @@ void Cutscene_Command_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* c
             break;
 
         case 0x28:
-            csCtx->frames = cmd->startFrame - 1;
+            csCtx->curFrame = cmd->startFrame - 1;
+            break;
+
+        default:
             break;
     }
 }
 
-// Command 0x97: Set Environment Lighting
-void Cutscene_Command_SetLighting(PlayState* play, CutsceneContext* csCtx, CsCmdEnvLighting* cmd) {
-    if (csCtx->frames == cmd->startFrame) {
+void CutsceneCmd_SetLightSetting(PlayState* play, CutsceneContext* csCtx, CsCmdLightSetting* cmd) {
+    if (csCtx->curFrame == cmd->startFrame) {
         if (cmd->setting != 0x20) {
             play->envCtx.lightSettingOverride = cmd->setting - 1;
             play->envCtx.lightBlend = 1.0f;
@@ -376,43 +414,42 @@ void Cutscene_Command_SetLighting(PlayState* play, CutsceneContext* csCtx, CsCmd
     }
 }
 
-// Command 0x12C: Plays a sequence (Background music or Fanfare)
-void Cutscene_Command_PlaySequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
-    if (csCtx->frames == cmd->startFrame) {
+void CutsceneCmd_StartSequence(PlayState* play, CutsceneContext* csCtx, CsCmdStartSeq* cmd) {
+    if (csCtx->curFrame == cmd->startFrame) {
         Audio_PlaySequenceInCutscene(cmd->sequence - 1);
     }
 }
 
-// Command 0x12D: Stops a sequence (Background music or Fanfare)
-void Cutscene_Command_StopSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+// CsCmdStopSeq
+void CutsceneCmd_StopSequence(PlayState* play, CutsceneContext* csCtx, CsCmdStartSeq* cmd) {
+    if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
         Audio_StopSequenceInCutscene(cmd->sequence - 1);
     }
 }
 
 // Command 0x9C: Fade a sequence (Background music or Fanfare) over duration
-void Cutscene_Command_FadeSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceFade* cmd) {
-    if ((csCtx->frames == cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
-        u8 fadeTimer = cmd->endFrame - cmd->startFrame;
+void CutsceneCmd_FadeOutSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSequenceFade* cmd) {
+    if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {
+        u8 fadeOutDuration = cmd->endFrame - cmd->startFrame;
 
         if (cmd->type == 2) {
-            Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x110000FF);
+            Audio_QueueSeqCmd((fadeOutDuration << 0x10) | 0x110000FF);
         } else {
-            Audio_QueueSeqCmd((fadeTimer << 0x10) | NA_BGM_STOP);
+            Audio_QueueSeqCmd((fadeOutDuration << 0x10) | NA_BGM_STOP);
         }
     }
 }
 
 // Command 0x12E: Play Ambience sequence
-void Cutscene_Command_PlayAmbienceSequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if (csCtx->frames == cmd->startFrame) {
+void CutsceneCmd_StartAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if (csCtx->curFrame == cmd->startFrame) {
         Audio_PlayAmbience(play->sequenceCtx.ambienceId);
     }
 }
 
 // Command 0x130:
 void func_800EAD48(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if (csCtx->frames == cmd->startFrame) {
+    if (csCtx->curFrame == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(2);
     }
@@ -420,7 +457,7 @@ void func_800EAD48(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
 
 // Command 0x131:
 void func_800EAD7C(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if (csCtx->frames == cmd->startFrame) {
+    if (csCtx->curFrame == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(1);
     }
@@ -433,7 +470,7 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 seqId;
     u8 dayMinusOne;
 
-    if (csCtx->frames == cmd->startFrame) {
+    if (csCtx->curFrame == cmd->startFrame) {
         dayMinusOne = (gSaveContext.save.day - 1);
         if (dayMinusOne >= 3) {
             dayMinusOne = 0;
@@ -487,27 +524,25 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
 #endif
 
-// Command 0x12F: Fade Ambience sequence
-void Cutscene_Command_FadeAmbienceSequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
-        u8 fadeTimer = cmd->endFrame - cmd->startFrame;
+void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {
+        u8 fadeOutDuration = cmd->endFrame - cmd->startFrame;
 
-        Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x140000FF);
+        Audio_QueueSeqCmd((fadeOutDuration << 0x10) | 0x140000FF);
     }
 }
 
-// Command 0x190: Rumble
-void Cutscene_Command_Rumble(PlayState* play, CutsceneContext* csCtx, CsCmdRumble* cmd) {
+void CutsceneCmd_RumbleController(PlayState* play, CutsceneContext* csCtx, CsCmdRumble* cmd) {
     switch (cmd->type) {
         case 1:
-            if (csCtx->frames == cmd->startFrame) {
+            if (csCtx->curFrame == cmd->startFrame) {
                 Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
             }
             break;
 
         case 2:
-            if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-                if ((csCtx->frames == cmd->startFrame) || (play->state.frames % 64 == 0)) {
+            if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
+                if ((csCtx->curFrame == cmd->startFrame) || (play->state.frames % 64 == 0)) {
                     Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
                 }
             }
@@ -517,11 +552,11 @@ void Cutscene_Command_Rumble(PlayState* play, CutsceneContext* csCtx, CsCmdRumbl
 
 // Command 0x9B:
 void Cutscene_Command_FadeColorScreen(PlayState* play, CutsceneContext* csCtx, CsCmdFadeScreen* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+    if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
         f32 alpha;
 
         play->envCtx.fillScreen = true;
-        alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
+        alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
         if (((cmd->unk0 == 1)) || (cmd->unk0 == 2)) {
             play->envCtx.screenFillColor[0] = cmd->color.r;
@@ -538,12 +573,12 @@ void Cutscene_Command_FadeColorScreen(PlayState* play, CutsceneContext* csCtx, C
 }
 
 // Command 0x9D: Set Time of Day & Environment Time
-void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayTime* cmd) {
+void CutsceneCmd_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayTime* cmd) {
     u16 nextTime;
     u16 hourAsMinutes;
     u16 minutes;
 
-    if (csCtx->frames == cmd->startFrame) {
+    if (csCtx->curFrame == cmd->startFrame) {
         hourAsMinutes = CLOCK_TIME_ALT_F(cmd->hour, 0);
         minutes = CLOCK_TIME_ALT_F(0, cmd->minute + 1);
 
@@ -553,13 +588,13 @@ void Cutscene_Command_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdDayT
     }
 }
 
-void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    csCtx->state = CS_STATE_4;
+void CutsceneCmd_DestinationImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    csCtx->state = CS_STATE_RUN_UNSTOPPABLE;
     func_80165690();
     Audio_SetCutsceneFlag(false);
     gSaveContext.cutsceneTransitionControl = 1;
 
-    if ((gSaveContext.gameMode != 0) && (csCtx->frames != cmd->startFrame)) {
+    if ((gSaveContext.gameMode != 0) && (csCtx->curFrame != cmd->startFrame)) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
@@ -586,14 +621,13 @@ void Cutscene_TerminatorImpl(PlayState* play, CutsceneContext* csCtx, CsCmdBase*
     }
 }
 
-// Command 0x15E
-void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void CutsceneCmd_Destination(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
-        if (csCtx->frames == cmd->startFrame) {
-            Cutscene_TerminatorImpl(play, csCtx, cmd);
+        if (csCtx->curFrame == cmd->startFrame) {
+            CutsceneCmd_DestinationImpl(play, csCtx, cmd);
         }
     } else if (cmd->base == 2) {
-        if (csCtx->frames == cmd->startFrame) {
+        if (csCtx->curFrame == cmd->startFrame) {
             func_80165690();
 
             switch (D_801F4DE2) {
@@ -646,10 +680,10 @@ void Cutscene_Command_Terminator(PlayState* play, CutsceneContext* csCtx, CsCmdB
 // Command 0x15F: Chooses between a cutscene or a rotating mask depending on whether the player has the corresponding
 // mask
 void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(SEQ_PLAYER_BGM_MAIN, true) != 0xFF)) {
+    if ((csCtx->curFrame >= cmd->startFrame) && (func_801A3950(SEQ_PLAYER_BGM_MAIN, true) != 0xFF)) {
         switch (cmd->base) {
             case 1:
-                Cutscene_TerminatorImpl(play, csCtx, cmd);
+                CutsceneCmd_DestinationImpl(play, csCtx, cmd);
                 break;
 
             case 2:
@@ -760,30 +794,28 @@ void Cutscene_Command_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCt
     }
 }
 
-// Command 0x99: Motion blur
-void Cutscene_Command_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-        if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
+void CutsceneCmd_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
+        if ((csCtx->curFrame == cmd->startFrame) && (cmd->base == 1)) {
             func_8016566C(180);
         }
 
         if (cmd->base == 2) {
-            f32 progress = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
+            f32 lerp = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
-            if (progress >= 0.9f) {
+            if (lerp >= 0.9f) {
                 func_80165690();
             } else {
-                func_80165658((1.0f - progress) * 180.0f);
+                func_80165658((1.0f - lerp) * 180.0f);
             }
         }
     }
 }
 
-// Command 0x9A: Gives Tatl to the player
-void Cutscene_Command_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void CutsceneCmd_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     Player* player = GET_PLAYER(play);
 
-    if (csCtx->frames == cmd->startFrame) {
+    if (csCtx->curFrame == cmd->startFrame) {
         if (cmd->base == 1) {
             gSaveContext.save.hasTatl = true;
             if (player->tatlActor != NULL) {
@@ -796,12 +828,12 @@ void Cutscene_Command_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, 
 }
 
 // Command 0x98
-void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
-        f32 temp_f0;
+void CutsceneCmd_Transition(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
+        f32 lerp;
 
         play->envCtx.fillScreen = true;
-        temp_f0 = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->frames);
+        lerp = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
         switch (cmd->base) {
             case 1:
@@ -809,13 +841,14 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 play->envCtx.screenFillColor[0] = 160;
                 play->envCtx.screenFillColor[1] = 160;
                 play->envCtx.screenFillColor[2] = 160;
+
                 if (cmd->base == 1) {
-                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
-                    if (temp_f0 == 0.0f) {
+                    play->envCtx.screenFillColor[3] = 255.0f * lerp;
+                    if (lerp == 0.0f) {
                         func_8019F128(NA_SE_EV_S_STONE_FLASH);
                     }
                 } else {
-                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - lerp) * 255.0f;
                 }
                 break;
 
@@ -825,9 +858,9 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 play->envCtx.screenFillColor[1] = 0;
                 play->envCtx.screenFillColor[2] = 255;
                 if (cmd->base == 2) {
-                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * lerp;
                 } else {
-                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - lerp) * 255.0f;
                 }
                 break;
 
@@ -837,9 +870,9 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 play->envCtx.screenFillColor[1] = 0;
                 play->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 3) {
-                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - lerp) * 255.0f;
                 } else {
-                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * lerp;
                 }
                 break;
 
@@ -849,9 +882,9 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 play->envCtx.screenFillColor[1] = 255;
                 play->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 4) {
-                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - lerp) * 255.0f;
                 } else {
-                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * lerp;
                 }
                 break;
 
@@ -865,21 +898,21 @@ void Cutscene_Command_TransitionFX(PlayState* play, CutsceneContext* csCtx, CsCm
                 play->envCtx.screenFillColor[1] = 0;
                 play->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 10) {
-                    play->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
+                    play->envCtx.screenFillColor[3] = (1.0f - lerp) * 255.0f;
                 } else {
-                    play->envCtx.screenFillColor[3] = 255.0f * temp_f0;
+                    play->envCtx.screenFillColor[3] = 255.0f * lerp;
                 }
                 break;
 
             case 12:
-                play->envCtx.screenFillColor[0] = (160.0f * (1.0f - temp_f0));
+                play->envCtx.screenFillColor[0] = 160.0f * (1.0f - lerp);
                 play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[2] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[3] = 255;
                 break;
 
             case 13:
-                play->envCtx.screenFillColor[0] = (160.0f * temp_f0);
+                play->envCtx.screenFillColor[0] = 160.0f * lerp;
                 play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[2] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[3] = 255;
@@ -971,25 +1004,24 @@ s32 Cutscene_CountNormalMasks(void) {
     return count;
 }
 
-// Command 0xA: Textbox
-void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
+void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
     u8 talkState;
     s32 pad;
     u16 originalCsFrames;
     s32 pad2;
 
-    if ((cmd->startFrame >= csCtx->frames) || ((cmd->endFrame < csCtx->frames))) {
+    if ((cmd->startFrame >= csCtx->curFrame) || ((cmd->endFrame < csCtx->curFrame))) {
         return;
     }
 
-    if (cmd->type != CS_TEXTBOX_TYPE_LEARN_SONG) {
-        if (D_801BB124 != cmd->base) {
+    if (cmd->type != CS_TEXT_OCARINA_ACTION) {
+        if (sCurTextId != cmd->base) {
             if (D_801BB160 == CS_TEXTBOX_TYPE_3) {
-                csCtx->frames--;
+                csCtx->curFrame--;
             }
             D_801BB160 = CS_TEXTBOX_TYPE_1;
-            D_801BB124 = cmd->base;
+            sCurTextId = cmd->base;
             if (cmd->type == CS_TEXTBOX_TYPE_BOSSES_REMAINS) {
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
@@ -1013,21 +1045,21 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
         } else {
             goto else_label;
         }
-    } else if (D_801BB128 != cmd->base) {
-        D_801BB160 = CS_TEXTBOX_TYPE_LEARN_SONG;
-        D_801BB128 = cmd->base;
-        func_80152434(play, cmd->base);
+    } else if (sCurOcarinaAction != cmd->base) {
+        D_801BB160 = CS_TEXT_OCARINA_ACTION;
+        sCurOcarinaAction = cmd->base;
+        Message_StartOcarina(play, cmd->base);
     } else {
     else_label:
-        if (csCtx->frames >= cmd->endFrame) {
+        if (csCtx->curFrame >= cmd->endFrame) {
             // The Textbox command can change the current cutscene frame, mainly to prevent advancing the cutscene when
             // a textbox that is expected to be closed by the user is still open.
 
-            originalCsFrames = csCtx->frames;
+            originalCsFrames = csCtx->curFrame;
             talkState = Message_GetState(&play->msgCtx);
             if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
                 (talkState != TEXT_STATE_8)) {
-                csCtx->frames--;
+                csCtx->curFrame--;
                 if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     if (play->msgCtx.choiceIndex == 0) {
                         if (cmd->base == 0x33BD) {
@@ -1039,12 +1071,12 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId2 != 0xFFFF) {
-                                    csCtx->frames++;
+                                    csCtx->curFrame++;
                                 }
                             }
                         } else {
                             func_801477B4(play);
-                            csCtx->frames++;
+                            csCtx->curFrame++;
                         }
                     } else {
                         if (cmd->base == 0x33BD) {
@@ -1056,30 +1088,30 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
                             if (cmd->type == CS_TEXTBOX_TYPE_3) {
                                 D_801BB160 = CS_TEXTBOX_TYPE_3;
                                 if (cmd->textId1 != 0xFFFF) {
-                                    csCtx->frames++;
+                                    csCtx->curFrame++;
                                 }
                             }
                         } else {
                             func_801477B4(play);
-                            csCtx->frames++;
+                            csCtx->curFrame++;
                         }
                     }
                 }
 
                 if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                    func_80152434(play, cmd->base);
+                    Message_StartOcarina(play, cmd->base);
                 }
             }
 
             if ((talkState == TEXT_STATE_CLOSING) && (D_801BB160 == CS_TEXTBOX_TYPE_3)) {
-                csCtx->frames--;
-                D_801BB124++;
+                csCtx->curFrame--;
+                sCurTextId++;
             }
 
-            if (originalCsFrames == csCtx->frames) {
+            if (originalCsFrames == csCtx->curFrame) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-                D_801BB124 = 0;
-                D_801BB128 = 0;
+                sCurTextId = 0;
+                sCurOcarinaAction = 0;
                 func_80161C0C();
             } else {
                 func_80161BE0(1);
@@ -1088,7 +1120,7 @@ void Cutscene_Command_Textbox(PlayState* play, CutsceneContext* csCtx, CsCmdText
     }
 }
 
-// Related to actorActions. Maybe a generic actorAction setter?
+// Related to actorCues. Maybe a generic actorAction setter?
 void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     s32 i;
     s32 count;
@@ -1097,13 +1129,13 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     *cutscenePtr += sizeof(s32);
 
     for (i = 0; i < count; i++) {
-        CsCmdActorAction* actorAction = *(CsCmdActorAction**)cutscenePtr;
+        CsCmdActorCue* actorAction = *(CsCmdActorCue**)cutscenePtr;
 
-        if ((csCtx->frames >= actorAction->startFrame) && (csCtx->frames < actorAction->endFrame)) {
-            csCtx->actorActions[index] = actorAction;
+        if ((csCtx->curFrame >= actorAction->startFrame) && (csCtx->curFrame < actorAction->endFrame)) {
+            csCtx->actorCues[index] = actorAction;
         }
 
-        *cutscenePtr += sizeof(CsCmdActorAction);
+        *cutscenePtr += sizeof(CsCmdActorCue);
     }
 }
 
@@ -1125,7 +1157,7 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  * has (N). This is followed by N commands of the said category. (The exception is Camera, which has the length of the
  * list in bytes instead of the number of commands).
  *
- * For most command lists categories (all but the actorActions and Camera commands):
+ * For most command lists categories (all but the actorCues and Camera commands):
  * - For each command list found, read the number of commands and loop over them, passing each one to the corresponding
  * function which handles the command, applying its effects and checking the frame range stored in the command.
  *
@@ -1133,7 +1165,7 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  *
  * TODO: consider changing the type of `cutscenePtr` to `uintptr_t` when this function matches.
  */
-void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr) {
+void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
     s32 j;
     s32 pad;
@@ -1141,25 +1173,26 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
     u32 cmdType;
     s32 cmdEntries;
     s32 pad2;
-    s32 cutsceneEndFrame;
+    s32 csFrameCount;
     CsCmdBase* cmd;
 
     // Read the command list count and the ending frame for this cutscene
     bcopy(cutscenePtr, &totalEntries, sizeof(s32));
-    cutscenePtr += sizeof(s32);
-    bcopy(cutscenePtr, &cutsceneEndFrame, sizeof(s32));
-    cutscenePtr += sizeof(s32);
+    cutscenePtr += sizeof(totalEntries);
 
-    if (((u16)cutsceneEndFrame < csCtx->frames) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
-        (csCtx->state != CS_STATE_4)) {
-        csCtx->state = CS_STATE_3;
+    bcopy(cutscenePtr, &csFrameCount, sizeof(s32));
+    cutscenePtr += sizeof(csFrameCount);
+
+    if ((csCtx->curFrame > (u16)csFrameCount) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
+        (csCtx->state != CS_STATE_RUN_UNSTOPPABLE)) {
+        csCtx->state = CS_STATE_STOP;
         return;
     }
 
     // Loop over every command list
     for (i = 0; i < totalEntries; i++) {
         // Read the command type of the current command list.
-        bcopy(cutscenePtr, &cmdType, sizeof(u32));
+        bcopy(cutscenePtr, &cmdType, sizeof(cmdType));
         cutscenePtr += sizeof(u32);
 
         // TODO: This should probably be added to the CutsceneCmd enum. Consider doing it when this function matches.
@@ -1169,14 +1202,16 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
 
         // Check special cases of command types. This are generic ActorActions
         // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
-        if (((cmdType >= 100) && (cmdType < 150)) || (cmdType == 201) || ((cmdType >= 450) && (cmdType < 600))) {
-            for (j = 0; j < ARRAY_COUNT(D_801F4DC8); j = (s16)(j + 1)) {
-                if (D_801F4DC8[j] == (u16)cmdType) {
+        if (((cmdType >= CS_CMD_ACTOR_CUE_100) && (cmdType <= CS_CMD_ACTOR_CUE_149)) ||
+            (cmdType == CS_CMD_ACTOR_CUE_201) ||
+            ((cmdType >= CS_CMD_ACTOR_CUE_450) && (cmdType <= CS_CMD_ACTOR_CUE_599))) {
+            for (j = 0; j < ARRAY_COUNT(sCueTypeList); j = (s16)(j + 1)) {
+                if (sCueTypeList[j] == (u16)cmdType) {
                     func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
-                } else if (D_801F4DC8[j] == 0) {
-                    D_801F4DC8[j] = cmdType;
+                } else if (sCueTypeList[j] == 0) {
+                    sCueTypeList[j] = cmdType;
                     func_800ECD7C(csCtx, &cutscenePtr, j);
                     cmdType = -2;
                     break;
@@ -1189,7 +1224,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Misc(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_Misc(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1198,8 +1233,8 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_SetLighting(play, csCtx, (CsCmdEnvLighting*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdEnvLighting);
+                    CutsceneCmd_SetLightSetting(play, csCtx, (CsCmdLightSetting*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdLightSetting);
                 }
                 break;
 
@@ -1207,8 +1242,8 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_PlaySequence(play, csCtx, (CsCmdSequenceChange*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdSequenceChange);
+                    CutsceneCmd_StartSequence(play, csCtx, (CsCmdStartSeq*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdStartSeq);
                 }
                 break;
 
@@ -1216,8 +1251,8 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_StopSequence(play, csCtx, (CsCmdSequenceChange*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdSequenceChange);
+                    CutsceneCmd_StopSequence(play, csCtx, (CsCmdStartSeq*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdStartSeq);
                 }
                 break;
 
@@ -1225,7 +1260,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeSequence(play, csCtx, (CsCmdSequenceFade*)cutscenePtr);
+                    CutsceneCmd_FadeOutSequence(play, csCtx, (CsCmdSequenceFade*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceFade);
                 }
                 break;
@@ -1234,7 +1269,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_PlayAmbienceSequence(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_StartAmbience(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1243,7 +1278,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeAmbienceSequence(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_FadeOutAmbience(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1279,7 +1314,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Rumble(play, csCtx, (CsCmdRumble*)cutscenePtr);
+                    CutsceneCmd_RumbleController(play, csCtx, (CsCmdRumble*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdRumble);
                 }
                 break;
@@ -1297,7 +1332,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_SetTime(play, csCtx, (CsCmdDayTime*)cutscenePtr);
+                    CutsceneCmd_SetTime(play, csCtx, (CsCmdDayTime*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdDayTime);
                 }
                 break;
@@ -1307,10 +1342,10 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
-                    if ((cmd->startFrame <= csCtx->frames) && (csCtx->frames < cmd->endFrame)) {
-                        csCtx->playerAction = (CsCmdActorAction*)cmd;
+                    if ((cmd->startFrame <= csCtx->curFrame) && (csCtx->curFrame < cmd->endFrame)) {
+                        csCtx->playerCue = (CsCmdActorCue*)cmd;
                     }
-                    cutscenePtr += sizeof(CsCmdActorAction);
+                    cutscenePtr += sizeof(CsCmdActorCue);
                 }
                 break;
 
@@ -1322,7 +1357,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Terminator(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_Destination(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1342,9 +1377,9 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if (cmd->base != 0xFFFF) {
-                        Cutscene_Command_Textbox(play, csCtx, (CsCmdTextbox*)cmd);
+                        CutsceneCmd_Text(play, csCtx, (CsCmdText*)cmd);
                     }
-                    cutscenePtr += sizeof(CsCmdTextbox);
+                    cutscenePtr += sizeof(CsCmdText);
                 }
                 break;
 
@@ -1352,7 +1387,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_TransitionFX(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_Transition(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1361,7 +1396,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_MotionBlur(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_MotionBlur(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1370,7 +1405,7 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
                 bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
                 cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_GiveTatlToPlayer(play, csCtx, (CsCmdBase*)cutscenePtr);
+                    CutsceneCmd_GiveTatlToPlayer(play, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;
@@ -1391,60 +1426,62 @@ void Cutscene_ProcessCommands(PlayState* play, CutsceneContext* csCtx, u8* cutsc
 
 /* End of command handling section */
 
-void func_800ED980(PlayState* play, CutsceneContext* csCtx) {
+void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx) {
     if (gSaveContext.save.cutscene >= 0xFFF0) {
-        csCtx->frames++;
-        Cutscene_ProcessCommands(play, csCtx, (u8*)play->csCtx.csData);
+        csCtx->curFrame++;
+        Cutscene_ProcessScript(play, csCtx, (u8*)play->csCtx.script);
     }
 }
 
-void func_800ED9C4(PlayState* play, CutsceneContext* csCtx) {
-    if (func_800EA220(play, csCtx, 0.0f)) {
+void CutsceneHandler_StopManual(PlayState* play, CutsceneContext* csCtx) {
+    if (Cutscene_StepTimer(play, csCtx, 0.0f)) {
         Audio_SetCutsceneFlag(false);
-        csCtx->state = CS_STATE_0;
+        csCtx->state = CS_STATE_IDLE;
     }
 }
 
-// unused
-void func_800EDA04(PlayState* play, CutsceneContext* csCtx) {
-    if (func_800EA220(play, csCtx, 0.0f)) {
+void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx) {
+    if (Cutscene_StepTimer(play, csCtx, 0.0f)) {
         s16 i;
 
-        csCtx->playerAction = NULL;
+        csCtx->playerCue = NULL;
 
-        for (i = 0; i < ARRAY_COUNT(csCtx->actorActions); i++) {
-            csCtx->actorActions[i] = NULL;
+        for (i = 0; i < ARRAY_COUNT(csCtx->actorCues); i++) {
+            csCtx->actorCues[i] = NULL;
         }
 
         gSaveContext.save.cutscene = 0;
         gSaveContext.gameMode = 0;
+
         ActorCutscene_Stop(0x7F);
         Audio_SetCutsceneFlag(false);
-        csCtx->state = CS_STATE_0;
+        csCtx->state = CS_STATE_IDLE;
     }
 }
 
-void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(play)) {
+void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE) && !Player_InCsMode(play)) {
         gSaveContext.save.cutscene = 0xFFFD;
     }
 
-    if ((gSaveContext.save.cutscene >= 0xFFF0) && (csCtx->state == CS_STATE_0)) {
+    if ((gSaveContext.save.cutscene >= 0xFFF0) && (csCtx->state == CS_STATE_IDLE)) {
         s16 i;
 
-        D_801BB124 = 0;
-        D_801BB128 = 0;
-        csCtx->playerAction = NULL;
+        sCurTextId = 0;
+        sCurOcarinaAction = 0;
+        csCtx->playerCue = NULL;
 
-        for (i = 0; i < ARRAY_COUNT(csCtx->actorActions); i++) {
-            csCtx->actorActions[i] = NULL;
+        for (i = 0; i < ARRAY_COUNT(csCtx->actorCues); i++) {
+            csCtx->actorCues[i] = NULL;
         }
 
-        csCtx->state++;
-        if (csCtx->state == CS_STATE_1) {
+        csCtx->state++; // CS_STATE_START
+
+        if (csCtx->state == CS_STATE_START) {
             Audio_SetCutsceneFlag(true);
 
-            csCtx->frames = 0xFFFF;
+            csCtx->curFrame = 0xFFFF;
+
             csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
             func_8016119C(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
@@ -1453,10 +1490,10 @@ void func_800EDA84(PlayState* play, CutsceneContext* csCtx) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
                 ShrinkWindow_Letterbox_SetSizeTarget(32);
                 ShrinkWindow_Letterbox_SetSize(32);
-                csCtx->state++;
+                csCtx->state++; // CS_STATE_RUN
             }
 
-            func_800ED980(play, csCtx);
+            CutsceneHandler_RunScript(play, csCtx);
         }
 
         gSaveContext.cutsceneTrigger = 0;
@@ -1516,10 +1553,10 @@ void func_800EDDB0(PlayState* play) {
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-void Cutscene_LoadCutsceneData(PlayState* play, u8 csIndex) {
+void Cutscene_LoadScript(PlayState* play, u8 csIndex) {
     if (dREG(95) == 0) {
         play->csCtx.currentCsIndex = csIndex;
-        play->csCtx.csData = Lib_SegmentedToVirtual(play->csCtx.sceneCsList[csIndex].segmentedData);
+        play->csCtx.script = Lib_SegmentedToVirtual(play->csCtx.sceneCsList[csIndex].script);
     }
 
     gSaveContext.cutsceneTrigger = 1;
@@ -1531,11 +1568,11 @@ void Cutscene_LoadCutsceneData(PlayState* play, u8 csIndex) {
  * Interpolates the actor's position based on the corresponding actor action's position
  * and the current cutscene frame
  */
-void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 actorActionIndex) {
+void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 cueChannel) {
     Vec3f start;
     Vec3f end;
-    CsCmdActorAction* entry = play->csCtx.actorActions[actorActionIndex];
-    f32 progress;
+    CsCmdActorCue* entry = play->csCtx.actorCues[cueChannel];
+    f32 lerp;
 
     start.x = entry->startPos.x;
     start.y = entry->startPos.y;
@@ -1544,19 +1581,19 @@ void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 actorActionIndex
     end.y = entry->endPos.y;
     end.z = entry->endPos.z;
 
-    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.frames);
+    lerp = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.curFrame);
 
-    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, progress);
+    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, lerp);
 }
 
 /**
  * Interpolates the actor's position based on the corresponding actor action's position
  * and the current cutscene frame, and sets the actor's yaw using the actor action yaw
  */
-void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 actorActionIndex) {
-    Cutscene_ActorTranslate(actor, play, actorActionIndex);
+void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 cueChannel) {
+    Cutscene_ActorTranslate(actor, play, cueChannel);
 
-    actor->world.rot.y = play->csCtx.actorActions[actorActionIndex]->urot.y;
+    actor->world.rot.y = play->csCtx.actorCues[cueChannel]->urot.y;
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1564,23 +1601,23 @@ void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 actorActio
  * Interpolates the actor's position and yaw based on the corresponding actor action's
  * position and the current cutscene frame
  */
-void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex) {
+void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel) {
     Vec3f start;
     Vec3f end;
-    CsCmdActorAction* entry;
-    f32 progress;
+    CsCmdActorCue* entry;
+    f32 lerp;
 
-    start.x = play->csCtx.actorActions[actorActionIndex]->startPos.x;
-    start.y = play->csCtx.actorActions[actorActionIndex]->startPos.y;
-    start.z = play->csCtx.actorActions[actorActionIndex]->startPos.z;
-    end.x = play->csCtx.actorActions[actorActionIndex]->endPos.x;
-    end.y = play->csCtx.actorActions[actorActionIndex]->endPos.y;
-    end.z = play->csCtx.actorActions[actorActionIndex]->endPos.z;
+    start.x = play->csCtx.actorCues[cueChannel]->startPos.x;
+    start.y = play->csCtx.actorCues[cueChannel]->startPos.y;
+    start.z = play->csCtx.actorCues[cueChannel]->startPos.z;
+    end.x = play->csCtx.actorCues[cueChannel]->endPos.x;
+    end.y = play->csCtx.actorCues[cueChannel]->endPos.y;
+    end.z = play->csCtx.actorCues[cueChannel]->endPos.z;
 
-    entry = play->csCtx.actorActions[actorActionIndex];
-    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.frames);
+    entry = play->csCtx.actorCues[cueChannel];
+    lerp = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.curFrame);
 
-    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, progress);
+    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, lerp);
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
@@ -1590,22 +1627,22 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 acto
  * Interpolates the actor's XZ position and yaw based on the corresponding actor action's
  * position and the current cutscene frame
  */
-void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex) {
+void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel) {
     Vec3f start;
     Vec3f end;
-    CsCmdActorAction* entry;
-    f32 progress;
+    CsCmdActorCue* entry;
+    f32 lerp;
 
-    start.x = play->csCtx.actorActions[actorActionIndex]->startPos.x;
-    start.z = play->csCtx.actorActions[actorActionIndex]->startPos.z;
-    end.x = play->csCtx.actorActions[actorActionIndex]->endPos.x;
-    end.z = play->csCtx.actorActions[actorActionIndex]->endPos.z;
+    start.x = play->csCtx.actorCues[cueChannel]->startPos.x;
+    start.z = play->csCtx.actorCues[cueChannel]->startPos.z;
+    end.x = play->csCtx.actorCues[cueChannel]->endPos.x;
+    end.z = play->csCtx.actorCues[cueChannel]->endPos.z;
 
-    entry = play->csCtx.actorActions[actorActionIndex];
-    progress = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.frames);
+    entry = play->csCtx.actorCues[cueChannel];
+    lerp = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.curFrame);
 
-    actor->world.pos.x = start.x + (end.x - start.x) * progress;
-    actor->world.pos.z = start.z + (end.z - start.z) * progress;
+    actor->world.pos.x = start.x + (end.x - start.x) * lerp;
+    actor->world.pos.z = start.z + (end.z - start.z) * lerp;
 
     Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
@@ -1620,25 +1657,35 @@ s32 Cutscene_GetSceneLayer(PlayState* play) {
     return sceneLayer;
 }
 
-s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd) {
+/**
+ * @param play See `PlayState`
+ * @param cueType See `cmdType`
+ * @return cue channel
+ */
+s32 Cutscene_GetCueChannel(PlayState* play, u16 cueType) {
     s32 i;
-    s32 index = -1;
+    s32 cueChannel = -1;
 
-    for (i = 0; i < ARRAY_COUNT(D_801F4DC8); i++) {
-        if (actorActionCmd == D_801F4DC8[i]) {
-            index = i;
+    for (i = 0; i < ARRAY_COUNT(sCueTypeList); i++) {
+        if (cueType == sCueTypeList[i]) {
+            cueChannel = i;
         }
     }
 
-    return index;
+    return cueChannel;
 }
 
-s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd) {
-    if (play->csCtx.state != CS_STATE_0) {
-        s32 index = Cutscene_GetActorActionIndex(play, actorActionCmd);
+/**
+ * @param play See `PlayState`
+ * @param cueType See `cmdType`
+ * @return is cuetype in a channel
+ */
+s32 Cutscene_IsCueInChannel(PlayState* play, u16 cueType) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, cueType);
 
-        if (index != -1) {
-            return play->csCtx.actorActions[index] != NULL;
+        if (cueChannel != -1) {
+            return play->csCtx.actorCues[cueChannel] != NULL;
         }
     }
 
@@ -1646,7 +1693,7 @@ s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd) {
 }
 
 u8 Cutscene_IsPlaying(PlayState* play) {
-    return (gSaveContext.cutsceneTrigger != 0) || (play->csCtx.state != CS_STATE_0);
+    return (gSaveContext.cutsceneTrigger != 0) || (play->csCtx.state != CS_STATE_IDLE);
 }
 
 /* End of actor utilities section */

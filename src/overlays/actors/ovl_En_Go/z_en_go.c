@@ -715,7 +715,7 @@ s32 func_80A12954(EnGo* this, PlayState* play) {
         (play->csCtx.currentCsIndex == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_394 = 255;
+            this->cueId = 255;
             this->unk_3F0 = 1;
             this->unk_18C = this->actionFunc;
         }
@@ -723,7 +723,7 @@ s32 func_80A12954(EnGo* this, PlayState* play) {
         this->actionFunc = func_80A14FC8;
     } else if (this->unk_3F0 != 0) {
         this->actor.flags |= ACTOR_FLAG_1;
-        this->unk_394 = 255;
+        this->cueId = 255;
         this->unk_3F0 = 0;
         SubS_UpdateFlags(&this->unk_390, 3, 7);
         this->actionFunc = this->unk_18C;
@@ -1640,35 +1640,35 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
     s32 sp38[] = {
         0, 2, 6, 20, 18, 5, 5, 15,
     };
-    u16 actorActionCmd = 0;
-    s32 sp30;
-    s32 actionIndex;
+    u16 cueType = 0;
+    s32 cueId;
+    s32 cueChannel;
 
     switch (ENGO_GET_70(&this->actor)) {
         case ENGO_70_0:
-            actorActionCmd = 128;
+            cueType = CS_CMD_ACTOR_CUE_128;
             break;
 
         case ENGO_70_1:
-            actorActionCmd = 129;
+            cueType = CS_CMD_ACTOR_CUE_129;
             break;
     }
 
-    if ((actorActionCmd == 128) || (actorActionCmd == 129)) {
-        if (Cutscene_CheckActorAction(play, actorActionCmd)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, actorActionCmd);
-            sp30 = play->csCtx.actorActions[actionIndex]->action;
+    if ((cueType == CS_CMD_ACTOR_CUE_128) || (cueType == CS_CMD_ACTOR_CUE_129)) {
+        if (Cutscene_IsCueInChannel(play, cueType)) {
+            cueChannel = Cutscene_GetCueChannel(play, cueType);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            if (this->unk_394 != (u8)sp30) {
-                this->unk_394 = sp30;
-                func_80A12C48(this, play, sp38[sp30]);
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                func_80A12C48(this, play, sp38[cueId]);
                 this->unk_390 = 0;
                 this->unk_390 |= 0x20;
                 this->unk_3BE = 0;
                 this->unk_39C = 0.0f;
                 this->unk_3A0 = 0.0f;
 
-                switch (sp30) {
+                switch (cueId) {
                     case 1:
                         this->unk_390 |= 0x80;
                         this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -1681,7 +1681,7 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
                 }
             }
 
-            switch (this->unk_394) {
+            switch (this->cueId) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->unk_3DC == 20)) {
                         func_80A12C48(this, play, 21);
@@ -1706,8 +1706,8 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
                     break;
             }
 
-            if (actorActionCmd == 128) {
-                switch (play->csCtx.frames) {
+            if (cueType == 128) {
+                switch (play->csCtx.curFrame) {
                     case 55:
                     case 100:
                     case 130:
@@ -1730,8 +1730,8 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
                         break;
                 }
-            } else if (actorActionCmd == 129) {
-                switch (play->csCtx.frames) {
+            } else if (cueType == 129) {
+                switch (play->csCtx.curFrame) {
                     case 360:
                     case 390:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_COLD);
@@ -1752,7 +1752,7 @@ void func_80A14FC8(EnGo* this, PlayState* play) {
             }
 
             SubS_FillLimbRotTables(play, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     }
 }

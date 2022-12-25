@@ -76,14 +76,14 @@ void func_80AAB5F8(DmChar03* this, PlayState* play) {
 }
 
 void func_80AAB644(DmChar03* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x88)) {
-        s32 index = Cutscene_GetActorActionIndex(play, 0x88);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136);
 
-        if (play->csCtx.actorActions[index]->action == 4) {
+        if (play->csCtx.actorCues[cueChannel]->id == 4) {
             this->unk_18E = true;
-            this->offset.x = play->csCtx.actorActions[index]->startPos.x;
-            this->offset.y = play->csCtx.actorActions[index]->startPos.y;
-            this->offset.z = play->csCtx.actorActions[index]->startPos.z;
+            this->offset.x = play->csCtx.actorCues[cueChannel]->startPos.x;
+            this->offset.y = play->csCtx.actorCues[cueChannel]->startPos.y;
+            this->offset.z = play->csCtx.actorCues[cueChannel]->startPos.z;
         }
     }
 }
@@ -94,11 +94,11 @@ void DmChar03_DoNothing(DmChar03* this, PlayState* play) {
 void func_80AAB710(DmChar03* this, PlayState* play) {
     u8 shouldChangeAnim = true;
 
-    if (Cutscene_CheckActorAction(play, 0x88)) {
-        s32 index = Cutscene_GetActorActionIndex(play, 0x88);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[index]->startFrame) {
-            switch (play->csCtx.actorActions[index]->action) {
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     shouldChangeAnim = false;
                     break;
@@ -124,7 +124,7 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
                 DmChar03_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, index);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
 
@@ -140,8 +140,8 @@ void func_80AAB838(DmChar03* this, PlayState* play) {
 void DmChar03_Update(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 0x88) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x88)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136)]->id == 2)) {
         SkelAnime_Update(&this->skelAnime);
     }
     this->actionFunc(this, play);
@@ -163,8 +163,8 @@ void DmChar03_Draw(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
     if (!this->unk_18E) {
-        if ((Cutscene_CheckActorAction(play, 0x88)) &&
-            (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x88)]->action != 1)) {
+        if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) &&
+            (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136)]->id != 1)) {
             func_8012C28C(play->state.gfxCtx);
             SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            this->skelAnime.dListCount, DmChar03_OverrideLimbDraw, DmChar03_PostLimbDraw,

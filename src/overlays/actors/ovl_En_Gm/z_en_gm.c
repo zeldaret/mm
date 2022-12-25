@@ -766,7 +766,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
                 func_8094E054(this, play, 0);
                 this->unk_258 = 255;
             }
-            this->unk_259 = 255;
+            this->cueId = 255;
             this->unk_3F8 = 1;
         }
         ret = true;
@@ -1634,20 +1634,20 @@ void func_80950F2C(EnGm* this, PlayState* play) {
     s32 pad;
     Vec3f sp3C;
     Vec3f sp30;
-    s32 sp2C;
+    s32 cueId;
     s16 yaw;
 
-    if (Cutscene_CheckActorAction(play, 526)) {
-        sp2C = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 526)]->action;
-        if (this->unk_259 != (sp2C & 0xFF)) {
-            if (sp2C == 3) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_526)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_526)]->id;
+        if (this->cueId != (u8)cueId) {
+            if (cueId == 3) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
             }
-            this->unk_259 = sp2C;
-            func_8094E054(this, play, sp50[sp2C]);
+            this->cueId = cueId;
+            func_8094E054(this, play, sp50[cueId]);
         }
 
-        if ((this->unk_259 == 3) && (this->unk_268 != NULL) && (this->unk_268->update != NULL)) {
+        if ((this->cueId == 3) && (this->unk_268 != NULL) && (this->unk_268->update != NULL)) {
             Math_Vec3f_Copy(&sp3C, &player->actor.world.pos);
             Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
             yaw = Math_Vec3f_Yaw(&sp30, &sp3C);

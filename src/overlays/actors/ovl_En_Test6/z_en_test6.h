@@ -37,7 +37,7 @@ typedef struct EnTest6 {
     /* 0x258 */ Vec3f subCamAt;
     /* 0x264 */ Vec3f subCamEye;
     /* 0x270 */ f32 subCamFov;
-    /* 0x274 */ s16 unk_274;
+    /* 0x274 */ s16 cueId;
     /* 0x276 */ s16 unk_276;
     /* 0x278 */ s16 unk_278;
     /* 0x27A */ s16 unk_27A;

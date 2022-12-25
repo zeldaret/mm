@@ -198,8 +198,9 @@ void func_80AA884C(DmChar01* this, PlayState* play) {
 }
 
 void func_80AA88A8(DmChar01* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 135)) {
-        if (play->csCtx.frames == play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)]->startFrame) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_135)) {
+        if (play->csCtx.curFrame ==
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_135)]->startFrame) {
             D_80AAAE24 = 1;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }
@@ -344,10 +345,10 @@ void func_80AA8F2C(DmChar01* this, PlayState* play) {
 }
 
 void func_80AA9020(DmChar01* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 135)) {
-        CsCmdActorAction* temp_v1 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 135)];
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_135)) {
+        CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_135)];
 
-        if ((temp_v1->startFrame == play->csCtx.frames) && (temp_v1->action == 2)) {
+        if ((cue->startFrame == play->csCtx.curFrame) && (cue->id == 2)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_20_02);
             this->actionFunc = func_80AA90AC;
         }

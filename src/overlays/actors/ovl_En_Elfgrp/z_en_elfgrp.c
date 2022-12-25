@@ -345,7 +345,7 @@ void func_80A3A044(PlayState* play) {
 }
 
 void func_80A3A0AC(EnElfgrp* this, PlayState* play) {
-    if (!Cutscene_CheckActorAction(play, 0x64)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
         this->actionFunc = func_80A3A600;
         ActorCutscene_Stop(this->actor.cutscene);
     }
@@ -386,12 +386,12 @@ void func_80A3A210(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A274(EnElfgrp* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x64)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
         if (this->unk_14A & 1) {
             func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
         }
 
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x64)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_100)]->id) {
             case 2:
                 if (!(this->unk_14A & 1)) {
                     if (this->unk_147 == ENELFGRP_0) {
@@ -443,9 +443,10 @@ void func_80A3A484(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A4AC(EnElfgrp* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x64)) {
-        s32 temp = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x64)]->action;
-        if (temp == 3) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
+        s32 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_100)]->id;
+
+        if (cueId == 3) {
             this->actionFunc = func_80A3A484;
             this->unk_144 = 90;
         }
@@ -453,7 +454,7 @@ void func_80A3A4AC(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A520(EnElfgrp* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x67)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103)) {
         this->actionFunc = func_80A3A600;
     } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);

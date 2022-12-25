@@ -531,16 +531,16 @@ void func_80B51410(EnGk* this, PlayState* play) {
 
 void func_80B51510(EnGk* this, PlayState* play) {
     s32 pad;
-    s32 actionIndex;
+    s32 cueChannel;
 
     if (this) {}
 
-    if (Cutscene_CheckActorAction(play, 479)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 479);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_479)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_479);
 
-        if (play->csCtx.actorActions[actionIndex]->action != this->unk_31B) {
-            this->unk_31B = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->unk_31A = 0;
                     this->unk_2E4 = 0;
@@ -584,10 +584,10 @@ void func_80B51510(EnGk* this, PlayState* play) {
             func_80B51308(this, play);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->actor.shape.yOffset = 0.0f;
     } else {
-        this->unk_31B = 0x63;
+        this->cueId = 99;
     }
 }
 
@@ -984,7 +984,7 @@ void func_80B525E0(EnGk* this, PlayState* play) {
 
 void func_80B52654(EnGk* this, PlayState* play) {
     this->unk_350 += 0x400;
-    if ((this->unk_1E4 & 0x80) && (play->csCtx.frames == 250)) {
+    if ((this->unk_1E4 & 0x80) && (play->csCtx.curFrame == 250)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_22_04);
     }
 

@@ -264,15 +264,15 @@ void func_80B3556C(EnGg* this, PlayState* play) {
 
 void func_80B35634(EnGg* this, PlayState* play) {
     s32 pad;
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 119)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 119);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_119)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_119);
 
-        if (this->unk_2DB != play->csCtx.actorActions[actionIndex]->action) {
-            this->unk_2DB = play->csCtx.actorActions[actionIndex]->action;
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->unk_2DA = 0;
                     this->unk_2E6 = 0;
@@ -333,10 +333,10 @@ void func_80B35634(EnGg* this, PlayState* play) {
             func_80B358D8(this, play);
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->actor.shape.yOffset = 0.0f;
     } else {
-        this->unk_2DB = 99;
+        this->cueId = 99;
     }
 }
 

@@ -92,7 +92,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
 
     this->unk_320 = 0;
     this->unk_32C = -1;
-    this->unk_326 = -1;
+    this->cueId = -1;
     this->unk_328[0] = this->picto.actor.cutscene;
     this->unk_328[1] = 0x7C;
     this->unk_322 = 0;
@@ -328,12 +328,12 @@ void func_80BD19FC(EnZov* this, PlayState* play) {
 s32 func_80BD1AE0(EnZov* this, PlayState* play) {
     func_80BD1764(this);
 
-    if (Cutscene_CheckActorAction(play, 504)) {
-        s16 action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 504)]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_504)]->id;
 
-        if (action != this->unk_326) {
-            this->unk_326 = action;
-            switch (this->unk_326) {
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     func_80BD1570(this, 0, ANIMMODE_LOOP);
                     break;
@@ -367,7 +367,7 @@ void func_80BD1BF0(EnZov* this, PlayState* play) {
 
 void func_80BD1C38(EnZov* this, PlayState* play) {
     if (func_80BD1AE0(this, play)) {
-        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 504));
+        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_504));
     }
 }
 
@@ -381,7 +381,7 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
         func_800B8614(&this->picto.actor, play, 120.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F8)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
         this->actionFunc = func_80BD1BF0;
         func_80BD1BF0(this, play);
     }
@@ -480,7 +480,7 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (!Cutscene_CheckActorAction(play, 0x1F8)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
         this->unk_320 &= ~0x10;
     }
 

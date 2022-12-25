@@ -313,7 +313,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->unk_286 = 0;
-    this->unk_274 = 0;
+    this->cueId = 0;
     this->unk_278 = 0;
     this->unk_276 = 99;
     func_80A90730(this, play);
@@ -379,7 +379,7 @@ void func_80A9156C(EnTest6* this, PlayState* play) {
 }
 
 void func_80A91690(EnTest6* this, PlayState* play) {
-    this->unk_274 = 90;
+    this->cueId = 90;
     this->unk_27A = 100;
     this->unk_286 = 0;
     if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
@@ -415,14 +415,14 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
     mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-    switch (this->unk_274) {
+    switch (this->cueId) {
         case 90:
             this->unk_276 = 2;
             this->unk_15C = 0.0f;
             this->unk_14C = 0.1f;
             this->unk_282 = 0;
             this->unk_278 = 0;
-            this->unk_274 = 91;
+            this->cueId = 91;
             break;
 
         case 91:
@@ -466,7 +466,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                 Distortion_SetType(DISTORTION_TYPE_5);
                 Distortion_SetCountdown(80);
                 play->unk_18844 = 1;
-                this->unk_274 = 95;
+                this->cueId = 95;
             }
             break;
 
@@ -523,7 +523,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
                 }
-                this->unk_274 = 99;
+                this->cueId = 99;
             }
             break;
 
@@ -687,7 +687,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             func_80A90C08(0x14);
             Distortion_SetType(DISTORTION_TYPE_5);
             Distortion_SetCountdown(90);
-            this->unk_274 = 2;
+            this->cueId = 2;
             break;
 
         case 110:
@@ -696,34 +696,34 @@ void func_80A92188(EnTest6* this, PlayState* play) {
 
         case 38:
         case 114:
-            this->unk_274 = 1;
+            this->cueId = 1;
             break;
 
         case 76:
-            this->unk_274 = 3;
+            this->cueId = 3;
             break;
 
         case 61:
             func_80A90C08(0x96);
-            this->unk_274 = 4;
+            this->cueId = 4;
             break;
 
         case 51:
             func_80A90C08(0xB4);
-            this->unk_274 = 5;
+            this->cueId = 5;
             break;
 
         case 14:
         case 15:
             func_80A90C08(0x32);
             Distortion_ClearType(DISTORTION_TYPE_5);
-            this->unk_274 = 0;
+            this->cueId = 0;
             break;
 
         case 1:
             func_80A90C34();
             if (CHECK_EVENTINF(EVENTINF_52)) {
-                this->unk_274 = 9;
+                this->cueId = 9;
             }
             break;
     }
@@ -825,13 +825,13 @@ void func_80A92950(EnTest6* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 temp_f0;
     s32 i;
-    s32 temp_v0;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x1F9)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 0x1F9);
-        this->unk_274 = play->csCtx.actorActions[temp_v0]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_505)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_505);
+        this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-        switch (this->unk_274) {
+        switch (this->cueId) {
             case 1:
                 break;
 
@@ -841,39 +841,39 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_27C = 0;
                 player->actor.shape.shadowDraw = NULL;
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_154 = (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_154 = (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 } else {
                     this->unk_154 = 150.0f;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.y != 0) {
-                    this->unk_280 = play->csCtx.actorActions[temp_v0]->startPos.y;
+                if (play->csCtx.actorCues[cueChannel]->startPos.y != 0) {
+                    this->unk_280 = play->csCtx.actorCues[cueChannel]->startPos.y;
                 } else {
                     this->unk_280 = 38;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.z != 0) {
-                    this->unk_150 = (u32)play->csCtx.actorActions[temp_v0]->startPos.z;
+                if (play->csCtx.actorCues[cueChannel]->startPos.z != 0) {
+                    this->unk_150 = (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
                 } else {
                     this->unk_150 = 480.0f;
                 }
                 break;
 
             case 3:
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_154 += (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_154 += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.y != 0) {
-                    this->unk_280 += (s16)play->csCtx.actorActions[temp_v0]->startPos.y;
+                if (play->csCtx.actorCues[cueChannel]->startPos.y != 0) {
+                    this->unk_280 += (s16)play->csCtx.actorCues[cueChannel]->startPos.y;
 
                 } else {
                     this->unk_280 += 6;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.z != 0) {
-                    this->unk_158 = (u32)play->csCtx.actorActions[temp_v0]->startPos.z;
+                if (play->csCtx.actorCues[cueChannel]->startPos.z != 0) {
+                    this->unk_158 = (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
                 } else {
                     this->unk_158 = -32.0f;
                 }
@@ -881,30 +881,30 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 break;
 
             case 4:
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_154 += (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_154 += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.y != 0) {
-                    this->unk_280 += (s16)play->csCtx.actorActions[temp_v0]->startPos.y;
+                if (play->csCtx.actorCues[cueChannel]->startPos.y != 0) {
+                    this->unk_280 += (s16)play->csCtx.actorCues[cueChannel]->startPos.y;
                 } else {
                     this->unk_280 -= 4;
                 }
                 break;
 
             case 5:
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_154 += (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_154 += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.y != 0) {
-                    this->unk_280 += (s16)play->csCtx.actorActions[temp_v0]->startPos.y;
+                if (play->csCtx.actorCues[cueChannel]->startPos.y != 0) {
+                    this->unk_280 += (s16)play->csCtx.actorCues[cueChannel]->startPos.y;
                 } else {
                     this->unk_280 -= 8;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.z != 0) {
-                    this->unk_158 += (u32)play->csCtx.actorActions[temp_v0]->startPos.z;
+                if (play->csCtx.actorCues[cueChannel]->startPos.z != 0) {
+                    this->unk_158 += (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
                 } else {
                     this->unk_158 += 20.0f;
                 }
@@ -912,7 +912,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_150 += this->unk_158;
                 if (this->unk_150 > 3500.0f) {
                     this->unk_150 = 3500.0f;
-                    this->unk_274 = 0;
+                    this->cueId = 0;
                 }
                 break;
 
@@ -922,20 +922,20 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_27C = 0;
                 player->actor.shape.shadowDraw = NULL;
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_154 = (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_154 = (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 } else {
                     this->unk_154 = 100.0f;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.y != 0) {
-                    this->unk_14C = (u32)play->csCtx.actorActions[temp_v0]->startPos.y;
+                if (play->csCtx.actorCues[cueChannel]->startPos.y != 0) {
+                    this->unk_14C = (u32)play->csCtx.actorCues[cueChannel]->startPos.y;
                 } else {
                     this->unk_14C = 20.0f;
                 }
 
-                if (play->csCtx.actorActions[temp_v0]->startPos.z != 0) {
-                    this->unk_150 = (u32)play->csCtx.actorActions[temp_v0]->startPos.z;
+                if (play->csCtx.actorCues[cueChannel]->startPos.z != 0) {
+                    this->unk_150 = (u32)play->csCtx.actorCues[cueChannel]->startPos.z;
                 } else {
                     this->unk_150 = 300.0f;
                 }
@@ -943,8 +943,8 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 break;
 
             case 7:
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_158 = (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_158 = (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 } else {
                     this->unk_158 = -5.0f;
                 }
@@ -952,8 +952,8 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 break;
 
             case 8:
-                if (play->csCtx.actorActions[temp_v0]->startPos.x != 0) {
-                    this->unk_158 += (u32)play->csCtx.actorActions[temp_v0]->startPos.x;
+                if (play->csCtx.actorCues[cueChannel]->startPos.x != 0) {
+                    this->unk_158 += (u32)play->csCtx.actorCues[cueChannel]->startPos.x;
                 } else {
                     this->unk_158 += 2.0f;
                 }
@@ -961,7 +961,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_154 += this->unk_158;
                 if (this->unk_154 > 10000.0f) {
                     this->unk_154 = 10000.0f;
-                    this->unk_274 = 0;
+                    this->cueId = 0;
                 }
                 break;
 
@@ -987,7 +987,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 return;
         }
     } else {
-        switch (this->unk_274) {
+        switch (this->cueId) {
             case 2:
                 this->unk_276 = 0;
                 this->unk_278 = 0;
@@ -1016,7 +1016,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_150 += this->unk_158;
                 if (this->unk_150 > 3500.0f) {
                     this->unk_150 = 3500.0f;
-                    this->unk_274 = 0;
+                    this->cueId = 0;
                 }
                 break;
 
@@ -1041,7 +1041,7 @@ void func_80A92950(EnTest6* this, PlayState* play) {
                 this->unk_154 += this->unk_158;
                 if (this->unk_154 > 10000.0f) {
                     this->unk_154 = 10000.0f;
-                    this->unk_274 = 0;
+                    this->cueId = 0;
                 }
                 break;
 
@@ -1231,7 +1231,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    switch (this->unk_274) {
+    switch (this->cueId) {
         case 91:
         case 93:
             Lights_PointSetPosition(&this->lights[0].info, player->actor.world.pos.x, player->actor.world.pos.y - 10.0f,
@@ -1297,7 +1297,7 @@ void func_80A939E8(EnTest6* this, PlayState* play2) {
 void EnTest6_Draw(Actor* thisx, PlayState* play) {
     EnTest6* this = THIS;
 
-    if (this->unk_274 != 0) {
+    if (this->cueId != 0) {
         switch (this->unk_276) {
             case 1:
                 func_80A93298(this, play);

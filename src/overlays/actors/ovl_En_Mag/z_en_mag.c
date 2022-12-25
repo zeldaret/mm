@@ -239,7 +239,7 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) ||
                 CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
 
-                if (!EnvFlags_Get(play, 4)) {
+                if (!CutsceneFlags_Get(play, 4)) {
                     play_sound(NA_SE_SY_PIECE_OF_HEART);
                     this->state = MAG_STATE_CALLED;
                     this->unk11F00 = 0;
@@ -438,12 +438,12 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->state == MAG_STATE_INITIAL) {
-        if (EnvFlags_Get(play, 3)) {
+        if (CutsceneFlags_Get(play, 3)) {
             this->unk11F02 = 40;
             this->state = MAG_STATE_FADE_IN_MASK_EFFECTS;
         }
     } else if (this->state < MAG_STATE_FADE_OUT) {
-        if (EnvFlags_Get(play, 4)) {
+        if (CutsceneFlags_Get(play, 4)) {
             this->state = MAG_STATE_FADE_OUT;
         }
     }

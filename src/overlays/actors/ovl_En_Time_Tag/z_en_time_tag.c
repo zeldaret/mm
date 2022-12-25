@@ -202,13 +202,13 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
                         break;
 
                     case 0x122B:
-                        func_80152434(play, 0x3F);
+                        Message_StartOcarina(play, 0x3F);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 0;
                         break;
 
                     case 0x122E:
-                        func_80152434(play, 0x40);
+                        Message_StartOcarina(play, 0x40);
                         this->actionFunc = func_80ACA3C0;
                         this->actor.home.rot.z = 1;
                         break;

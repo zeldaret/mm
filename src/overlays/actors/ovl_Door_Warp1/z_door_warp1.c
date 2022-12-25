@@ -279,15 +279,15 @@ void func_808B8E78(DoorWarp1* this, PlayState* play) {
 }
 
 s32 func_808B900C(DoorWarp1* this, PlayState* play) {
-    s32 index;
+    s32 cueChannel;
     u8 ret = false;
 
-    if (Cutscene_CheckActorAction(play, 569)) {
-        index = Cutscene_GetActorActionIndex(play, 569);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_569)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_569);
 
-        if (this->unk_208 != play->csCtx.actorActions[index]->action) {
-            this->unk_208 = play->csCtx.actorActions[index]->action;
-            if (play->csCtx.actorActions[index]->action == 2) {
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (play->csCtx.actorCues[cueChannel]->id == 2) {
                 ret = true;
             }
         }

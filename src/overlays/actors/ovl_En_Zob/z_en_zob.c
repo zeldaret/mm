@@ -91,7 +91,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_2F4 = 0;
     this->unk_30E = -1;
-    this->unk_310 = 0;
+    this->cueId = 0;
     this->unk_302 = 9;
     this->unk_304 = 0;
     this->actor.terminalVelocity = -4.0f;
@@ -278,19 +278,19 @@ void func_80B9FCA0(EnZob* this, PlayState* play) {
 }
 
 void func_80B9FD24(EnZob* this, PlayState* play) {
-    s32 actionIndex;
-    s16 action;
+    s32 cueChannel;
+    s16 cueId;
 
     func_80B9F86C(this);
 
-    if (Cutscene_CheckActorAction(play, 500)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
         this->unk_30E = -1;
-        actionIndex = Cutscene_GetActorActionIndex(play, 500);
-        action = play->csCtx.actorActions[actionIndex]->action;
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_500);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
 
-        if (action != this->unk_310) {
-            this->unk_310 = action;
-            switch (action) {
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 case 1:
                     func_80B9F7E4(this, 8, ANIMMODE_LOOP);
                     break;
@@ -331,7 +331,7 @@ void func_80B9FE5C(EnZob* this, PlayState* play) {
 void func_80B9FF20(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        func_80152434(play, 0x42);
+        Message_StartOcarina(play, 0x42);
         this->actionFunc = func_80B9FE5C;
         func_80B9FC70(this, 2);
     }
@@ -343,7 +343,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
         this->actionFunc = func_80B9FF20;
         this->unk_304 = 6;
         func_80B9F7E4(this, 1, ANIMMODE_LOOP);
-        func_80152434(play, 0x3E);
+        Message_StartOcarina(play, 0x3E);
         func_80B9FC70(this, 1);
     } else if (Message_GetState(&play->msgCtx) == TEXT_STATE_11) {
         play->msgCtx.msgLength = 0;
@@ -357,7 +357,7 @@ void func_80B9FF80(EnZob* this, PlayState* play) {
 void func_80BA005C(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_7) {
-        func_80152434(play, 0x41);
+        Message_StartOcarina(play, 0x41);
         this->actionFunc = func_80B9FF80;
         func_80B9FC70(this, 2);
     }
@@ -426,7 +426,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x1209:
-                        func_80152434(play, 0x3D);
+                        Message_StartOcarina(play, 0x3D);
                         this->unk_304 = 4;
                         func_80B9F7E4(this, 0, ANIMMODE_LOOP);
                         this->actionFunc = func_80BA005C;
@@ -439,7 +439,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
 }
 
 void func_80BA0318(EnZob* this, PlayState* play) {
-    func_80152434(play, 0x3D);
+    Message_StartOcarina(play, 0x3D);
     this->unk_304 = 4;
     func_80B9F7E4(this, 0, ANIMMODE_LOOP);
     this->actionFunc = func_80BA005C;
@@ -549,7 +549,7 @@ void func_80BA0610(EnZob* this, PlayState* play) {
 
 void func_80BA06BC(EnZob* this, PlayState* play) {
     func_80B9FD24(this, play);
-    if (!Cutscene_CheckActorAction(play, 500)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
         this->actionFunc = func_80BA0610;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_80BA0610(this, play);
@@ -577,7 +577,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, play);
-    } else if (Cutscene_CheckActorAction(play, 500)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
@@ -684,8 +684,8 @@ void func_80BA0C14(EnZob* this, PlayState* play) {
         this->unk_312 = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 515)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 1) {
             this->actionFunc = func_80BA0CF4;
             this->unk_312 = -1;
         }
@@ -697,8 +697,8 @@ void func_80BA0C14(EnZob* this, PlayState* play) {
 
 void func_80BA0CF4(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Cutscene_CheckActorAction(play, 515) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 2)) {
         this->actionFunc = func_80BA0C14;
     }
 }

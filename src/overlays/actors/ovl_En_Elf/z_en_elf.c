@@ -854,8 +854,8 @@ void func_8088E60C(EnElf* this, PlayState* play) {
         glowLightRadius = 0;
     }
 
-    if (Cutscene_CheckActorAction(play, 201)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action == 6) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id == 6) {
             glowLightRadius = 0;
         }
     }
@@ -882,18 +882,18 @@ void func_8088E850(EnElf* this, PlayState* play) {
     Actor* arrowPointedActor;
     f32 xScale;
     f32 distFromLinksHead;
-    u32 sp38;
+    u32 cueChannel;
 
     func_8088F214(this, play);
     func_8088E5A8(this, play);
     xScale = 0.0f;
 
-    if (Cutscene_CheckActorAction(play, 201)) {
-        sp38 = Cutscene_GetActorActionIndex(play, 201);
-        func_808908D0(&nextPos, play, sp38);
-        this->actor.shape.rot.y = play->csCtx.actorActions[sp38]->urot.y;
-        this->actor.shape.rot.x = play->csCtx.actorActions[sp38]->urot.x;
-        if (play->csCtx.actorActions[sp38]->action == 5) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201);
+        func_808908D0(&nextPos, play, cueChannel);
+        this->actor.shape.rot.y = play->csCtx.actorCues[cueChannel]->urot.y;
+        this->actor.shape.rot.x = play->csCtx.actorCues[cueChannel]->urot.x;
+        if (play->csCtx.actorCues[cueChannel]->id == 5) {
             func_8088F5F4(this, play, 16);
         }
 
@@ -905,12 +905,12 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
         if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) &&
             (play->csCtx.currentCsIndex == 0) &&
-            ((play->csCtx.frames == 149) || (play->csCtx.frames == 381) || (play->csCtx.frames == 591))) {
+            ((play->csCtx.curFrame == 149) || (play->csCtx.curFrame == 381) || (play->csCtx.curFrame == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
         if ((play->sceneId == SCENE_SECOM) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 4) &&
-            (play->csCtx.frames == 95)) {
+            (play->csCtx.curFrame == 95)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {
@@ -1015,7 +1015,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
     func_8088E60C(this, play);
 
-    if (!Cutscene_CheckActorAction(play, 0xC9)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
         this->actor.shape.rot.y = this->unk_258;
     }
 }
@@ -1106,8 +1106,8 @@ void func_8088F214(EnElf* this, PlayState* play) {
     s32 pad;
 
     if (play->csCtx.state != 0) {
-        if (Cutscene_CheckActorAction(play, 201)) {
-            switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action) {
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
+            switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id) {
                 case 4:
                     sp34 = 7;
                     break;
@@ -1578,8 +1578,8 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 
     if (player->currentMask != PLAYER_MASK_GIANT) {
         if (!(this->fairyFlags & 8) &&
-            (!Cutscene_CheckActorAction(play, 201) ||
-             (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action != 6)) &&
+            (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201) ||
+             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id != 6)) &&
             (!(player->stateFlags1 & PLAYER_STATE1_100000) || (kREG(90) < this->actor.projectedPos.z))) {
             Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
             f32 alphaScale;
@@ -1622,17 +1622,17 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 void func_808908D0(Vec3f* vec, PlayState* play, u32 action) {
     Vec3f startPos;
     Vec3f endPos;
-    CsCmdActorAction* npcAction = play->csCtx.actorActions[action];
+    CsCmdActorCue* cue = play->csCtx.actorCues[action];
     f32 lerp;
 
-    startPos.x = npcAction->startPos.x;
-    startPos.y = npcAction->startPos.y;
-    startPos.z = npcAction->startPos.z;
+    startPos.x = cue->startPos.x;
+    startPos.y = cue->startPos.y;
+    startPos.z = cue->startPos.z;
 
-    endPos.x = npcAction->endPos.x;
-    endPos.y = npcAction->endPos.y;
-    endPos.z = npcAction->endPos.z;
+    endPos.x = cue->endPos.x;
+    endPos.y = cue->endPos.y;
+    endPos.z = cue->endPos.z;
 
-    lerp = Environment_LerpWeight(npcAction->endFrame, npcAction->startFrame, play->csCtx.frames);
+    lerp = Environment_LerpWeight(cue->endFrame, cue->startFrame, play->csCtx.curFrame);
     VEC3F_LERPIMPDST(vec, &startPos, &endPos, lerp);
 }

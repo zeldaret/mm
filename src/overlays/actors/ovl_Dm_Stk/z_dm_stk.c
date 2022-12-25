@@ -336,7 +336,7 @@ void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, Animat
  * after Skull Kid steals Epona.
  */
 void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames + 20) {
+    switch (play->csCtx.curFrame + 20) {
         case 1195:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
@@ -427,7 +427,7 @@ void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
  * any sound in-game, since all sound effects are muted when it plays.
  */
 void DmStk_PlaySfxForTitleCutscene(DmStk* this, PlayState* play) {
-    if (play->csCtx.frames == 535) {
+    if (play->csCtx.curFrame == 535) {
         func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
     }
 }
@@ -437,7 +437,7 @@ void DmStk_PlaySfxForTitleCutscene(DmStk* this, PlayState* play) {
  * that starts after the fade-to-white and ends when the player gains control.
  */
 void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 78:
         case 89:
         case 100:
@@ -469,7 +469,7 @@ void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, PlayState* play) {
  * the Happy Mask Salesman.
  */
 void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 18:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_GASAGOSO);
             break;
@@ -490,7 +490,7 @@ void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, PlayState* play) 
  * the hallucinatory Deku Scrubs scene.
  */
 void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 415:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
             break;
@@ -518,7 +518,7 @@ void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 10:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 50);
             break;
@@ -558,7 +558,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
 
     if (player) {}
 
-    if ((play->csCtx.frames >= 263) && (play->csCtx.frames < 698)) {
+    if ((play->csCtx.curFrame >= 263) && (play->csCtx.curFrame < 698)) {
         Actor_PlaySfxAtPos(&player->actor, NA_SE_EN_STALKIDS_BODY_LEV - SFX_FLAG);
     }
 }
@@ -571,7 +571,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* play) {
     static s32 sMoonCallTimer = 0;
 
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 140:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
             break;
@@ -594,7 +594,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
             break;
     }
 
-    if ((this->animIndex == SK_ANIM_OCARINA_JUGGLE) && (play->csCtx.frames < 700)) {
+    if ((this->animIndex == SK_ANIM_OCARINA_JUGGLE) && (play->csCtx.curFrame < 700)) {
         if (Animation_OnFrame(&this->skelAnime, 5.0f) || Animation_OnFrame(&this->skelAnime, 25.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_OTEDAMA1);
         } else if (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
@@ -602,7 +602,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
         }
     }
 
-    if (play->csCtx.frames >= 700) {
+    if (play->csCtx.curFrame >= 700) {
         if (sMoonCallTimer < 128) {
             if ((sMoonCallTimer & 0x1F) == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
@@ -621,7 +621,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
  * Handles sound effects for the cutscene where Skull Kid drops the Ocarina of Time.
  */
 void DmStk_PlaySfxForDroppingOcarinaCutscene(DmStk* this, PlayState* play) {
-    if (play->csCtx.frames == 3) {
+    if (play->csCtx.curFrame == 3) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL06_SURPRISED);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DOWN_K);
     }
@@ -631,7 +631,7 @@ void DmStk_PlaySfxForDroppingOcarinaCutscene(DmStk* this, PlayState* play) {
  * Handles sound effects for the cutscene where Skull Kid is shivering in the rain.
  */
 void DmStk_PlaySfxForShiveringInRainCutscene(DmStk* this, PlayState* play) {
-    if ((play->csCtx.frames >= 642) && (play->csCtx.frames < 845)) {
+    if ((play->csCtx.curFrame >= 642) && (play->csCtx.curFrame < 845)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_NE_STAL23_COLD - SFX_FLAG);
     }
 }
@@ -641,7 +641,7 @@ void DmStk_PlaySfxForShiveringInRainCutscene(DmStk* this, PlayState* play) {
  * in Termina Field.
  */
 void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 58:
         case 61:
         case 68:
@@ -668,7 +668,7 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
  * the Giants are walking away.
  */
 void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 5:
             Audio_PlayAmbience(AMBIENCE_ID_0C);
             break;
@@ -686,7 +686,7 @@ void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 5:
             Audio_PlayAmbience(AMBIENCE_ID_0C);
             break;
@@ -760,7 +760,7 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
 void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, PlayState* play) {
     static s32 sMoonCallTimer = 0;
 
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 40:
             func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
             break;
@@ -779,7 +779,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, PlayState* pla
             break;
     }
 
-    if (play->csCtx.frames >= 408) {
+    if (play->csCtx.curFrame >= 408) {
         if (sMoonCallTimer < 128) {
             if ((sMoonCallTimer & 0x1F) == 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STAL20_CALL_MOON);
@@ -803,7 +803,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
     this->oathToOrderCutsceneVoicePos.y = this->actor.projectedPos.y;
     this->oathToOrderCutsceneVoicePos.z = this->actor.projectedPos.z;
 
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 64:
             Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
             break;
@@ -847,13 +847,13 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 
     if (1) {}
 
-    if ((play->csCtx.frames >= 62) && (play->csCtx.frames < 273)) {
+    if ((play->csCtx.curFrame >= 62) && (play->csCtx.curFrame < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_EARTHQUAKE);
         }
     }
 
-    if ((play->csCtx.frames >= 498) && (play->csCtx.frames < 577)) {
+    if ((play->csCtx.curFrame >= 498) && (play->csCtx.curFrame < 577)) {
         if ((play->state.frames % 4) == 0) {
             if ((play->state.frames & 4) != 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_BODY_LEV);
@@ -863,7 +863,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         }
     }
 
-    if (play->csCtx.frames >= 290) {
+    if (play->csCtx.curFrame >= 290) {
         func_8019F128(NA_SE_EV_KYOJIN_VOICE_SUCCESS - SFX_FLAG);
     }
 }
@@ -874,7 +874,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
  * moon, which is slightly longer.
  */
 void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 551:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
             break;
@@ -896,7 +896,7 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, PlayState* play) {
  * warps to the moon, which is slightly shorter.
  */
 void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 311:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_PULLED);
             break;
@@ -1119,7 +1119,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->fadeOutTimer = 0;
         this->alpha = this->alpha;
         this->actor.targetArrowOffset = 1100.0f;
-        this->csAction = 99;
+        this->cueId = 99;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
         DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
@@ -1238,7 +1238,7 @@ void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->csCtx.frames > 20)) {
+    if ((play->csCtx.state != 0) && (play->csCtx.curFrame > 20)) {
         this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
@@ -1307,21 +1307,21 @@ void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, PlayState* play) {
  */
 void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
     s32 pad;
-    s32 actorActionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 107)) {
-        actorActionIndex = Cutscene_GetActorActionIndex(play, 107);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_107)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_107);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[actorActionIndex]->startFrame) {
-            if (this->csAction != play->csCtx.actorActions[actorActionIndex]->action) {
-                this->csAction = play->csCtx.actorActions[actorActionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+                this->cueId = play->csCtx.actorCues[cueChannel]->id;
                 if (play->sceneId == SCENE_CLOCKTOWER) {
                     this->handType = SK_HAND_TYPE_HOLDING_FLUTE;
                 } else {
                     this->handType = SK_HAND_TYPE_DEFAULT;
                 }
 
-                switch (play->csCtx.actorActions[actorActionIndex]->action) {
+                switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 0:
                     case 1:
                         this->animIndex = SK_ANIM_IDLE;
@@ -1581,9 +1581,9 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actorActionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     } else {
-        this->csAction = 99;
+        this->cueId = 99;
     }
 
     if (this->fadeInState == SK_FADE_IN_STATE_START) {
@@ -1888,7 +1888,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
             case SK_MASK_TYPE_NORMAL:
                 if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1) &&
-                    (play->csCtx.frames < 1400)) {
+                    (play->csCtx.curFrame < 1400)) {
                     if (this->fogN == this->fogF) {
                         this->fogF = this->fogN;
                     }
@@ -1905,8 +1905,8 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMaskEyesDL);
 
-                if (Cutscene_CheckActorAction(play, 513) &&
-                    (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 513)]->action == 2) &&
+                if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_513) &&
+                    (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_513)]->id == 2) &&
                     (this->objectStk2ObjectIndex >= 0)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);

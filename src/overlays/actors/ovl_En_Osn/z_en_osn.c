@@ -750,14 +750,14 @@ void EnOsn_StartCutscene(EnOsn* this, PlayState* play) {
 
 void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
     u8 pad;
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 130)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 130);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_130)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_130);
         this->shouldRotateHead = false;
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = OSN_ANIM_BOWING;
                     break;
@@ -850,7 +850,7 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
         }
 
         if ((this->animIndex == OSN_ANIM_BELIEVE) && (play->sceneId == SCENE_SPOT00) &&
-            (gSaveContext.sceneLayer == 0xB) && (play->csCtx.frames == 400)) {
+            (gSaveContext.sceneLayer == 0xB) && (play->csCtx.curFrame == 400)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_OMVO00);
         }
 
@@ -872,10 +872,10 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     } else {
         this->shouldRotateHead = true;
-        this->csAction = 0x63;
+        this->cueId = 99;
         EnOsn_ChooseAction(this, play);
     }
 }

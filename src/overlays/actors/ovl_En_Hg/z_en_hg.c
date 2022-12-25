@@ -171,12 +171,12 @@ void EnHg_SetupWait(EnHg* this) {
 
 void EnHg_Wait(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
-        if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
-            !Cutscene_CheckActorAction(play, 0x1E3)) {
+        if (((this->actor.xzDistToPlayer < 200.0f) && (this->actor.playerHeightRel < 40.0f)) &&
+            !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_483)) {
             EnHg_SetupChasePlayer(this);
         }
         if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
-            ((play->csCtx.frames == 20) || (play->csCtx.frames == 60))) {
+            ((play->csCtx.curFrame == 20) || (play->csCtx.curFrame == 60))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
@@ -282,18 +282,18 @@ void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
 }
 
 void EnHg_SetupCsAction(EnHg* this) {
-    this->cutscenes[3] = 0x63;
+    this->cutscenes[3] = 99;
     this->cutscenes[2] = 0;
     this->actionFunc = EnHg_HandleCsAction;
 }
 
 void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 484)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 484);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_484)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_484);
 
-        if (this->cutscenes[3] != play->csCtx.actorActions[actionIndex]->action) {
-            this->cutscenes[3] = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (this->cutscenes[3] != play->csCtx.actorCues[cueChannel]->id) {
+            this->cutscenes[3] = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = 0;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
@@ -363,14 +363,14 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                 break;
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         return;
 
     } else if (play->csCtx.state == 0) {
         EnHg_SetupWait(this);
     }
 
-    this->cutscenes[3] = 0x63;
+    this->cutscenes[3] = 99;
 }
 
 void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {

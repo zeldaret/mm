@@ -267,7 +267,7 @@ s32 func_80B3D044(EnDnp* this, PlayState* play) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_324 = 0xFF;
+            this->cueId = 0xFF;
         }
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;
@@ -290,8 +290,8 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
         EN_DNP_ANIM_ANGRY_START, EN_DNP_ANIM_JUMP,          EN_DNP_ANIM_BOUNCE_START,
         EN_DNP_ANIM_GLARE_START, EN_DNP_ANIM_BOW,
     };
-    s32 temp_v0;
-    s32 val;
+    s32 cueChannel;
+    s32 cueId;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) &&
         (play->csCtx.currentCsIndex == 0)) {
@@ -299,11 +299,11 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
     }
 
-    if (Cutscene_CheckActorAction(play, 101)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 101);
-        val = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_324 != (u8)val) {
-            EnDnp_ChangeAnim(this, sCsAnimations[val]);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_101)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_101);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            EnDnp_ChangeAnim(this, sCsAnimations[cueId]);
             if (this->animIndex == EN_DNP_ANIM_CUTSCENE_IDLE) {
                 this->unk_322 |= 8;
             } else {
@@ -321,14 +321,14 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
             }
         }
 
-        this->unk_324 = val;
+        this->cueId = cueId;
         if (((this->animIndex == EN_DNP_ANIM_THINK_START) || (this->animIndex == EN_DNP_ANIM_ARMS_TOGETHER_START) ||
              (this->animIndex == EN_DNP_ANIM_LAUGH_START) || (this->animIndex == EN_DNP_ANIM_ANGRY_START) ||
              (this->animIndex == EN_DNP_ANIM_BOUNCE_START) || (this->animIndex == EN_DNP_ANIM_GLARE_START)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnDnp_ChangeAnim(this, this->animIndex + 1);
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
 

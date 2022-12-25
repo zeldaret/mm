@@ -796,17 +796,17 @@ void EnMa4_SetupEponasSongCs(EnMa4* this) {
     this->actionFunc = EnMa4_EponasSongCs;
 }
 
-static u16 D_80AC0260 = 99;
+static u16 sCueId = 99;
 void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 120)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 120);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_120)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_120);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            if (play->csCtx.actorActions[actionIndex]->action != D_80AC0260) {
-                D_80AC0260 = play->csCtx.actorActions[actionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            if (sCueId != play->csCtx.actorCues[cueChannel]->id) {
+                sCueId = play->csCtx.actorCues[cueChannel]->id;
                 this->animTimer = 0;
 
-                switch (play->csCtx.actorActions[actionIndex]->action) {
+                switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 1:
                         this->hasBow = true;
                         EnMa4_ChangeAnim(this, 1);
@@ -820,8 +820,8 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
-        if (D_80AC0260 == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+        if (sCueId == 2 && this->animTimer == 0 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMa4_ChangeAnim(this, 7);
         }
     } else {
@@ -829,7 +829,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
 
         player->stateFlags1 |= PLAYER_STATE1_20;
         func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
-        D_80AC0260 = 99;
+        sCueId = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
     }

@@ -556,7 +556,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
             }
             break;
         case 1:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -585,7 +585,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, PlayState* play) {
                 mainCam->eyeNext = this->subCamEye;
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
-                Cutscene_End(play, &play->csCtx);
+                Cutscene_StopManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 this->cameraState = 0;
                 this->subCamId = SUB_CAM_ID_DONE;

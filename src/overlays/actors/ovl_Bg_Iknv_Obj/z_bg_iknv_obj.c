@@ -132,7 +132,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play) {
     }
 
     if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 4) &&
-        (play->csCtx.frames == 1495)) {
+        (play->csCtx.curFrame == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
 }

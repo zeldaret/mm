@@ -916,12 +916,12 @@ void func_80A732C8(EnDno* this, PlayState* play) {
 void func_80A73408(EnDno* this, PlayState* play) {
     s32 phi_a2;
     u8 sp33 = true;
-    s32 temp_v0;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 475)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 475);
-        if (this->unk_468 != play->csCtx.actorActions[temp_v0]->action) {
-            switch (play->csCtx.actorActions[temp_v0]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_475)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_475);
+        if (this->unk_468 != play->csCtx.actorCues[cueChannel]->id) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     phi_a2 = 13;
                     break;
@@ -940,7 +940,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, phi_a2, &this->animIndex);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&

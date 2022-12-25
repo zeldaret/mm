@@ -1236,21 +1236,21 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
 // void func_800E9E94(void);
 void func_800E9F78(GraphicsContext* gfxCtx);
 
-void Cutscene_Init(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_Start(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_End(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_Update1(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_Update2(PlayState* play, CutsceneContext* csCtx);
+void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx);
+void Cutscene_StartManual(PlayState* play, CutsceneContext* csCtx);
+void Cutscene_StopManual(PlayState* play, CutsceneContext* csCtx);
+void Cutscene_UpdateManual(PlayState* play, CutsceneContext* csCtx);
+void Cutscene_UpdateScripted(PlayState* play, CutsceneContext* csCtx);
 void func_800EDBE0(PlayState* play);
 void func_800EDDB0(PlayState* play);
-void Cutscene_LoadCutsceneData(PlayState* play, u8 csIndex);
-void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 actorActionIndex);
-void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 actorActionIndex);
-void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex);
-void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 actorActionIndex);
+void Cutscene_LoadScript(PlayState* play, u8 csIndex);
+void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel);
 s32 Cutscene_GetSceneLayer(PlayState* play);
-s32 Cutscene_GetActorActionIndex(PlayState* play, u16 actorActionCmd);
-s32 Cutscene_CheckActorAction(PlayState* play, u16 actorActionCmd);
+s32 Cutscene_GetCueChannel(PlayState* play, u16 cueType);
+s32 Cutscene_IsCueInChannel(PlayState* play, u16 cueType);
 u8 Cutscene_IsPlaying(PlayState* play);
 
 void GetItem_Draw(PlayState* play, s16 drawId);
@@ -1266,10 +1266,10 @@ void SoundSource_PlaySfxEachFrameAtFixedWorldPos(PlayState* play, Vec3f* worldPo
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
 u16 Text_GetFaceReaction(PlayState* play, u32 reactionSet);
-void EnvFlags_UnsetAll(PlayState* play);
-void EnvFlags_Set(PlayState* play, s16 flag);
-void EnvFlags_Unset(PlayState* play, s16 flag);
-s32 EnvFlags_Get(PlayState* play, s16 flag);
+void CutsceneFlags_UnsetAll(PlayState* play);
+void CutsceneFlags_Set(PlayState* play, s16 flag);
+void CutsceneFlags_Unset(PlayState* play, s16 flag);
+s32 CutsceneFlags_Get(PlayState* play, s16 flag);
 s16 func_800F1460(s16 param_1);
 ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 index);
 void ActorCutscene_Init(PlayState* play, ActorCutscene* cutscenes, s32 num);
@@ -2209,7 +2209,7 @@ void func_80151A68(PlayState* play, u16 textId);
 void func_80151BB4(PlayState* play, u8 arg1);
 // void func_80151C9C(void);
 void func_80151DA4(PlayState* play, u16 arg2);
-void func_80152434(PlayState* play, u16 arg2);
+void Message_StartOcarina(PlayState* play, u16 arg2);
 // void func_80152464(void);
 u8 Message_GetState(MessageContext* msgCtx);
 // void func_8015268C(void);

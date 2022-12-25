@@ -259,7 +259,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    Cutscene_Start(play, &play->csCtx);
+                    Cutscene_StartManual(play, &play->csCtx);
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -389,7 +389,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
+                Cutscene_StopManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
                 func_80165690();
                 SET_EVENTINF(EVENTINF_60);

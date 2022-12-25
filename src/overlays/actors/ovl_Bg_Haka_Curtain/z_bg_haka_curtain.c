@@ -123,11 +123,11 @@ void func_80B6DEA8(BgHakaCurtain* this, PlayState* play) {
 
 void BgHakaCurtain_Update(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
-    CsCmdActorAction* actorAction;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 469)) {
-        actorAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 469)];
-        if (actorAction->startFrame == play->csCtx.frames && actorAction->action == 2) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_469)) {
+        cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_469)];
+        if ((cue->startFrame == play->csCtx.curFrame) && (cue->id == 2)) {
             func_80B6DD80(this);
         }
     }

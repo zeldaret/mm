@@ -280,13 +280,13 @@ void func_80BBB354(EnZos* this, PlayState* play) {
 void func_80BBB414(EnZos* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 501)) {
-        s16 action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 501)]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_501)]->id;
 
-        if (action != this->unk_2BA) {
-            this->unk_2BA = action;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
 
-            switch (action) {
+            switch (cueId) {
                 case 1:
                     EnZos_ChangeAnim(this, EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH, ANIMMODE_LOOP);
                     break;
@@ -532,7 +532,7 @@ void func_80BBBCBC(EnZos* this, PlayState* play) {
 
 void func_80BBBD5C(EnZos* this, PlayState* play) {
     func_80BBB414(this, play);
-    if (!Cutscene_CheckActorAction(play, 0x1F5)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
@@ -565,7 +565,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BBB8AC;
         func_80BBB15C(this, play);
-    } else if (Cutscene_CheckActorAction(play, 0x1F5)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBD5C;
     } else if (func_80BBAF5C(this, play)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -673,8 +673,8 @@ void func_80BBC298(EnZos* this, PlayState* play) {
         this->unk_2BC = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 515)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 1) {
             this->actionFunc = func_80BBC37C;
             this->unk_2BC = -1;
         }
@@ -686,8 +686,8 @@ void func_80BBC298(EnZos* this, PlayState* play) {
 
 void func_80BBC37C(EnZos* this, PlayState* play) {
     func_80BBAFFC(this, play);
-    if (Cutscene_CheckActorAction(play, 515) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 3)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 3)) {
         this->actionFunc = func_80BBC298;
     }
 }

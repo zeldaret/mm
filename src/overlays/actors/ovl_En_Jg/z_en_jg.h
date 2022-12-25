@@ -34,7 +34,7 @@ typedef struct EnJg {
     /* 0x3BC */ Vec3f breathAccel;
     /* 0x3C8 */ s16 cutscene;
     /* 0x3CA */ u8 cutsceneAnimIndex;
-    /* 0x3CB */ u8 csAction;
+    /* 0x3CB */ u8 cueId;
     /* 0x3CC */ u16 flags;
     /* 0x3CE */ u16 textId;
     /* 0x3D0 */ u8 focusedShrineGoronParam;

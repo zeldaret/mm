@@ -1396,9 +1396,9 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    if (play->csCtx.frames == 449) {
+    if (play->csCtx.curFrame == 449) {
         ObjUm_InitBandits(this, play);
-    } else if (play->csCtx.frames >= 450) {
+    } else if (play->csCtx.curFrame >= 450) {
         func_80B78DF0(this, play);
     }
 

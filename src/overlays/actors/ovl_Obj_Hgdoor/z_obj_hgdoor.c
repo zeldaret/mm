@@ -121,18 +121,18 @@ void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
 }
 
 void ObjHgdoor_SetupCsAction(ObjHgdoor* this) {
-    this->csAction = 0x63;
+    this->cueId = 99;
     this->actionFunc = ObjHgdoor_HandleCsAction;
 }
 
 void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 483)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 483);
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_483)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_483);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WOOD_DOOR_OPEN_SPEEDY);
                     if ((this->dyna.actor.parent != NULL) && (this->dyna.actor.parent->id == ACTOR_EN_HG)) {
@@ -149,7 +149,7 @@ void ObjHgdoor_HandleCsAction(ObjHgdoor* this, PlayState* play) {
             ObjHgdoor_SetupStopCs(this);
         }
     } else {
-        this->csAction = 0x63;
+        this->cueId = 99;
     }
 }
 

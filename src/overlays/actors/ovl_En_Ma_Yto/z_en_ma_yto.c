@@ -1021,20 +1021,20 @@ void EnMaYto_SetupWarmFuzzyFeelingCs(EnMaYto* this) {
     this->actionFunc = EnMaYto_WarmFuzzyFeelingCs;
 }
 
-static u16 D_80B915F0 = 99;
+static u16 sCueId = 99;
 
 void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 556)) {
-        s32 csActionIndex = Cutscene_GetActorActionIndex(play, 556);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_556)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_556);
 
-        if (play->csCtx.frames == play->csCtx.actorActions[csActionIndex]->startFrame) {
-            u16 action = play->csCtx.actorActions[csActionIndex]->action;
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            u16 cueId = play->csCtx.actorCues[cueChannel]->id;
 
             if (1) {}
 
-            if (action != D_80B915F0) {
-                D_80B915F0 = action;
-                switch (action) {
+            if (cueId != sCueId) {
+                sCueId = cueId;
+                switch (cueId) {
                     case 1:
                         EnMaYto_ChangeAnim(this, 0);
                         break;
@@ -1051,13 +1051,13 @@ void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, csActionIndex);
-        if (D_80B915F0 == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
+        if (sCueId == 2 && this->skelAnime.animation == &gCremiaHugStartAnim &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnMaYto_ChangeAnim(this, 20);
         }
     } else {
-        D_80B915F0 = 99;
+        sCueId = 99;
     }
 }
 

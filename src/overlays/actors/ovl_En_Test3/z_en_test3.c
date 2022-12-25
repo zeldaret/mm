@@ -1056,7 +1056,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     this->player.actor.draw = EnTest3_Draw;
     D_80A41D48 = false;
     this->player.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    if (Cutscene_CheckActorAction(play, 0x1FA) &&
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {
         if (this->player.csMode != 5) {

@@ -34,7 +34,7 @@ typedef struct EnPamera {
     /* 0x320 */ UNK_TYPE1 unk_320[0x2];
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ u16 unk_324;
-    /* 0x326 */ u16 unk_326;
+    /* 0x326 */ u16 cueId;
 } EnPamera; // size = 0x328
 
 #endif // Z_EN_PAMERA_H

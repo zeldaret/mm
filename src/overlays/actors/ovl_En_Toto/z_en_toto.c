@@ -543,7 +543,7 @@ s32 func_80BA4530(EnToto* this, PlayState* play) {
 
 s32 func_80BA46D8(EnToto* this, PlayState* play) {
     func_800B7298(play, NULL, PLAYER_CSMODE_68);
-    func_80152434(play, D_80BA5120[CUR_FORM]);
+    Message_StartOcarina(play, D_80BA5120[CUR_FORM]);
     return 0;
 }
 
@@ -675,17 +675,17 @@ s32 func_80BA4C44(EnToto* this, PlayState* play) {
 }
 
 void func_80BA4CB4(EnToto* this, PlayState* play) {
-    CsCmdActorAction* action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 525)];
+    CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_525)];
 
-    if (this->unk2B5 != action->action) {
-        this->unk2B5 = action->action;
-        if (this->unk2B5 != 4) {
-            if (this->unk2B5 == 3) {
+    if (this->cueId != cue->id) {
+        this->cueId = cue->id;
+        if (this->cueId != 4) {
+            if (this->cueId == 3) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_001DF0, -4.0f);
             } else {
                 Animation_PlayOnce(&this->skelAnime,
-                                   this->unk2B5 == 1 ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
-                if (this->unk2B5 == 2 && this->unk2B3 != 0xF) {
+                                   (this->cueId == 1) ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
+                if ((this->cueId == 2) && (this->unk2B3 != 0xF)) {
                     func_80151BB4(play, 9);
                     func_80151BB4(play, 10);
                 }
@@ -694,11 +694,11 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
     }
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x320);
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk2B5 != 3) {
-            Animation_PlayLoop(&this->skelAnime, this->unk2B5 == 1 ? &object_zm_Anim_00C880 : &object_zm_Anim_001324);
+        if (this->cueId != 3) {
+            Animation_PlayLoop(&this->skelAnime, (this->cueId == 1) ? &object_zm_Anim_00C880 : &object_zm_Anim_001324);
         }
     }
-    if (this->unk2B5 == 4 && !Actor_HasParent(&this->actor, play)) {
+    if (this->cueId == 4 && !Actor_HasParent(&this->actor, play)) {
         Actor_PickUp(&this->actor, play, GI_MASK_CIRCUS_LEADER, 9999.9f, 9999.9f);
     }
 }
@@ -707,7 +707,7 @@ void EnToto_Update(Actor* thisx, PlayState* play) {
     EnToto* this = THIS;
     s32 pad;
 
-    if (Cutscene_CheckActorAction(play, 0x20D)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_525)) {
         func_80BA4CB4(this, play);
     } else {
         D_80BA51B8[this->actionFuncIndex](this, play);

@@ -163,8 +163,8 @@ void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
 void BgCtowerGear_UpdateOrgan(Actor* thisx, PlayState* play) {
     BgCtowerGear* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 104)) {
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 104)]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_104)) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_104)]->id) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);

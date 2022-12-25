@@ -221,12 +221,12 @@ void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {
 }
 
 void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, PlayState* play) {
-    CsCmdActorAction* action;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 134)) {
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 134)];
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_134)) {
+        cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_134)];
 
-        if ((action->startFrame == play->csCtx.frames) && (action->action != 0)) {
+        if ((cue->startFrame == play->csCtx.curFrame) && (cue->id != 0)) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
             ObjTokeiStep_SetupOpen(this);
         }

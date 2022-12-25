@@ -244,11 +244,11 @@ void func_80966B08(EnWeatherTag* this, PlayState* play) {
 // because it uses cutsecnes.. is this the clear ikana cutcsene?
 void func_80966BF4(EnWeatherTag* this, PlayState* play) {
     u8 newUnk20;
-    CsCmdActorAction* tmpAction;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 567)) {
-        tmpAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 567)];
-        if ((play->csCtx.frames >= tmpAction->startFrame) && (tmpAction->action >= 2)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_567)) {
+        cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_567)];
+        if ((play->csCtx.curFrame >= cue->startFrame) && (cue->id >= 2)) {
             switch (gSaveContext.save.day) {
                 case 0:
                 case 1:

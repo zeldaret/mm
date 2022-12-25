@@ -113,7 +113,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
         // also WARPTAG_GET_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]); // unk message function
+        Message_StartOcarina(play, D_809C1000[WARPTAG_GET_3C0(&this->dyna.actor)]); // unk message function
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {

@@ -156,12 +156,12 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     }
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-        this->csAction = 0x226;
+        this->cueType = CS_CMD_ACTOR_CUE_550;
     } else { // EN_RZ_MARILLA
-        this->csAction = 0x227;
+        this->cueType = CS_CMD_ACTOR_CUE_551;
     }
 
-    this->actionIndex = 0;
+    this->cueId = 0;
 }
 
 /**
@@ -357,18 +357,18 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
-    u16 action;
+    u16 cueId;
 
     if ((EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) && (this->animIndex == EN_RZ_ANIM_APPLAUDING)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
 
-    if (Cutscene_CheckActorAction(play, this->csAction)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;
-        if (this->actionIndex != action) {
-            this->actionIndex = action;
-            switch (this->actionIndex) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     func_80BFBA1C(play, this, EN_RZ_ANIM_STANDING);
                     break;

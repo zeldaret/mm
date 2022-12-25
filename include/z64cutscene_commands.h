@@ -64,7 +64,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_LEARN_SONG(ocarinaSongAction, startFrame, endFrame, messageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(ocarinaSongAction, startFrame, endFrame, CS_TEXTBOX_TYPE_LEARN_SONG, messageId, 0xFFFF)
+    CS_TEXT_DISPLAY_TEXTBOX(ocarinaSongAction, startFrame, endFrame, CS_TEXT_OCARINA_ACTION, messageId, 0xFFFF)
 
 /**
  * ARGS
@@ -329,7 +329,7 @@
 
 /**
  * ARGS
- *   s16 playerAction (a), s16 startFrame (s), s16 endFrame (e),
+ *   s16 playerCue (a), s16 startFrame (s), s16 endFrame (e),
  *   s16 rotX (u),       s16 rotY (v),       s16 rotZ (w),
  *   s32 startX (i),     s32 startY (j),     s32 startZ (k),
  *   s32 endX (l),       s32 endY (m),       s32 endZ (n),
@@ -338,8 +338,8 @@
  *   aaaassss eeeeuuuu vvvvwwww iiiiiiii jjjjjjjj kkkkkkkk llllllll mmmmmmmm nnnnnnnn xxxxxxxx yyyyyyyy zzzzzzzz
  *   size = 0x30
  */
-#define CS_PLAYER_ACTION(playerAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
-    CS_ACTOR_ACTION(playerAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ)
+#define CS_PLAYER_ACTION(playerCue, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
+    CS_ACTOR_ACTION(playerCue, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ)
 
 
 /**

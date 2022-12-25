@@ -340,7 +340,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                     } else {
                         ActorCutscene_SetIntentToPlay(0xB);
                     }
-                } else if (play->csCtx.frames > 1600) {
+                } else if (play->csCtx.curFrame > 1600) {
                     play->nextEntrance = ENTRANCE(CLOCK_TOWER_ROOFTOP, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;
@@ -351,7 +351,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                 break;
 
             case 9:
-                play->csCtx.frames--;
+                play->csCtx.curFrame--;
                 break;
         }
     }
@@ -359,15 +359,15 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
 
 void EnFall_CrashingMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
     EnFall_CrashingMoon_HandleGiantsCutscene(this, play);
-    if (Cutscene_CheckActorAction(play, 0x85)) {
-        if (Cutscene_CheckActorAction(play, 133) &&
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133)) {
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133) &&
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133)]->id == 1) {
             this->actor.draw = NULL;
         } else {
             this->actor.draw = EnFall_Moon_Draw;
-            if (Cutscene_CheckActorAction(play, 133) &&
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action == 2) {
-                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 133));
+            if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133) &&
+                play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133)]->id == 2) {
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133));
             }
         }
     } else {
@@ -376,8 +376,8 @@ void EnFall_CrashingMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
 }
 
 void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 133)) {
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133)) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133)]->id) {
             case 3:
                 if (this->eyeGlowIntensity == 0.0f) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
@@ -396,10 +396,10 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, PlayState*
 }
 
 void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 133)) {
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133)) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133)]->id) {
             case 2:
-                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 133));
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133));
                 break;
 
             case 4:
@@ -411,7 +411,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
     if ((play->sceneId == SCENE_OKUJOU) && (gSaveContext.sceneLayer == 2)) {
         switch (play->csCtx.currentCsIndex) {
             case 0:
-                switch (play->csCtx.frames) {
+                switch (play->csCtx.curFrame) {
                     case 1060:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
@@ -424,13 +424,13 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
                 }
-                if (play->csCtx.frames >= 1145) {
+                if (play->csCtx.curFrame >= 1145) {
                     func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
 
             case 1:
-                switch (play->csCtx.frames) {
+                switch (play->csCtx.curFrame) {
                     case 561:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
@@ -443,7 +443,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
                 }
-                if (play->csCtx.frames >= 650) {
+                if (play->csCtx.curFrame >= 650) {
                     func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
@@ -463,16 +463,16 @@ void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, Pla
 void EnFall_Moon_PerformDefaultActions(EnFall* this, PlayState* play) {
     u16 currentDay;
 
-    if (Cutscene_CheckActorAction(play, 133)) {
-        if (Cutscene_CheckActorAction(play, 133) &&
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133)) {
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133) &&
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133)]->id == 1) {
             this->actor.draw = NULL;
         } else {
             Actor_SetScale(&this->actor, this->scale * 3.6f);
             this->actor.draw = EnFall_Moon_Draw;
-            if (Cutscene_CheckActorAction(play, 133) &&
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 133)]->action == 2) {
-                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 133));
+            if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_133) &&
+                play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133)]->id == 2) {
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_133));
             }
         }
     } else {
@@ -510,8 +510,9 @@ void EnFall_MoonsTear_DoNothing(EnFall* this, PlayState* play) {
 void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
     s32 pad;
 
-    if (Cutscene_CheckActorAction(play, 517) &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 517)]->action == 2 && this->actor.draw == NULL) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_517) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_517)]->id == 2) &&
+        (this->actor.draw == NULL)) {
         EnFall_MoonsTear_Initialize(this);
     }
 
@@ -578,7 +579,7 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
         play->skyboxCtx.rotY -= 0.05f;
     }
 
-    if (Cutscene_CheckActorAction(play, 450)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450)) {
         this->actor.draw = EnFall_Fireball_Draw;
         if (this->flags & FLAG_FIRE_BALL_INTENSIFIES) {
             this->fireballIntensity += 0.01f;
@@ -586,9 +587,9 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
                 this->fireballIntensity = 1.0f;
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 450));
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, 450));
 
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 450)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, 450)]->id) {
             default:
                 this->actor.draw = NULL;
                 this->fireballAlpha = 0;
@@ -625,7 +626,7 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1C2) && this->fireballAlpha > 0) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450) && this->fireballAlpha > 0) {
         func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);
@@ -682,9 +683,9 @@ s32 EnFall_RisingDebris_InitializeEffect(EnFall* this) {
 void EnFall_RisingDebris_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 451)) {
-        if (Cutscene_CheckActorAction(play, 451) &&
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 451)]->action == 2) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_451)) {
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_451) &&
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_451)]->id == 2) {
             EnFall_RisingDebris_UpdateEffects(this);
             EnFall_RisingDebris_InitializeEffect(this);
         } else if (this->activeDebrisEffectCount != 0) {
@@ -699,8 +700,8 @@ void EnFall_RisingDebris_Update(Actor* thisx, PlayState* play) {
 void EnFall_FireRing_Update(Actor* thisx, PlayState* play) {
     EnFall* this = THIS;
 
-    if (Cutscene_CheckActorAction(play, 450) &&
-        play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 450)]->action == 5) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450) &&
+        play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_450)]->id == 5) {
         if (!(this->flags & FLAG_FIRE_RING_APPEARS)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
