@@ -75,7 +75,7 @@ void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play)
 }
 
 void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.scriptIndex == 1)) {
         DmChar02_PlaySfxForDroppingOcarinaCutscene(this, play);
     }
 }

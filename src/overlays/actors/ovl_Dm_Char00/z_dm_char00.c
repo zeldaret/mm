@@ -458,11 +458,11 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneLayer == 0) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA5720(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA575C(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         func_80AA5890(this, play);
                     }
                 }
@@ -470,17 +470,17 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneLayer == 0) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA58CC(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA5950(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         func_80AA5960(this, play);
                     }
                 } else if (gSaveContext.sceneLayer == 2) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA59E4(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA5A6C(this, play);
                     }
                 }
@@ -488,34 +488,34 @@ void func_80AA5EBC(DmChar00* this, PlayState* play) {
 
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneLayer == 3) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA5AF4(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         func_80AA5E2C(this, play);
                     }
                 } else if (gSaveContext.sceneLayer == 7) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         func_80AA5BF8(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         func_80AA5CD4(this, play);
                     }
                 }
                 break;
 
             case SCENE_MITURIN:
-                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
                     func_80AA5DC8(this, play);
                 }
                 break;
 
             case SCENE_INSIDETOWER:
-                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0)) {
                     func_80AA5D10(this, play);
                 }
                 break;
 
             case SCENE_PIRATE:
-                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0)) {
+                if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0)) {
                     func_80AA5D6C(this, play);
                 }
                 break;
@@ -853,7 +853,7 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->csCtx.state == 0) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state == 0) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
@@ -916,7 +916,7 @@ void DmChar00_Draw(Actor* thisx, PlayState* play2) {
 
     if ((play->csCtx.state == 0) &&
         ((play->sceneId != SCENE_OPENINGDAN) || (gSaveContext.sceneLayer != 0) || (play->roomCtx.curRoom.num != 0) ||
-         (play->csCtx.currentCsIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
+         (play->csCtx.scriptIndex != 1) || (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }
 

@@ -131,7 +131,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 4) &&
+    if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 4) &&
         (play->csCtx.curFrame == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }

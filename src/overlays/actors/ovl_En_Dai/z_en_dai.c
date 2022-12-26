@@ -177,7 +177,7 @@ s32 func_80B3E69C(EnDai* this, PlayState* play) {
     s32 ret = false;
 
     if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_12HAKUGINMAE) &&
-        (play->csCtx.currentCsIndex == 0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
+        (play->csCtx.scriptIndex == 0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_30_01)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(play, 20);
             this->unk_1CE |= (0x80 | 0x10);

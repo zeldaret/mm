@@ -751,7 +751,7 @@ wordReplace = {
 
     "csCtx.npcActions": "csCtx.actorCues",
     "csCtx->npcActions": "csCtx->actorCues",
-    "csCtx.unk_12": "csCtx.currentCsIndex",
+    "csCtx.unk_12": "csCtx.scriptIndex",
     "globalCtx->mf_187FC": "play->billboardMtxF",
     "globalCtx->projectionMatrix": "play->viewProjectionMtxF",
     "globalCtx->actorCtx.actorList[": "play->actorCtx.actorLists[",

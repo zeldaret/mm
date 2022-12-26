@@ -37,8 +37,8 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     csCtx->state = CS_STATE_IDLE;
     csCtx->curFrame = 0;
     csCtx->timer = 0.0f;
-    play->csCtx.sceneCsCount = 0;
-    play->csCtx.currentCsIndex = 0;
+    play->csCtx.scriptListCount = 0;
+    play->csCtx.scriptIndex = 0;
 
     for (i = 0; i < ARRAY_COUNT(sCueTypeList); i++) {
         sCueTypeList[i] = 0;
@@ -278,7 +278,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
             break;
 
         case CS_MISC_LONG_SCARECROW_SONG:
-            AudioOcarina_PlayLongScarecrowAfterCredits();
+            AudioOcarina_PlayLongScarecrowSong();
             csCtx->curFrame = cmd->startFrame - 1;
             break;
 
@@ -606,7 +606,7 @@ void CutsceneCmd_DestinationImpl(PlayState* play, CutsceneContext* csCtx, CsCmdB
     gSaveContext.save.cutscene = 0;
 
     if (cmd->base == 1) {
-        play->nextEntrance = play->csCtx.sceneCsList[play->csCtx.currentCsIndex].nextEntrance;
+        play->nextEntrance = play->csCtx.scriptList[play->csCtx.scriptIndex].nextEntrance;
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         if (gSaveContext.gameMode != 1) {
@@ -1510,46 +1510,48 @@ void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
     }
 }
 
-// HandleFlags?
-void func_800EDBE0(PlayState* play) {
+void Cutscene_HandleEntranceTriggers(PlayState* play) {
     s32 pad;
-    s16 sp2A;
-    SceneTableEntry* sp24;
-    s32 temp_v0_3;
+    s16 actorCsId;
+    SceneTableEntry* scene;
+    s32 scriptIndex;
 
     if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
-        sp2A = func_800F21CC();
-        if (sp2A != -1) {
-            temp_v0_3 = func_800F2138(sp2A);
-            if (temp_v0_3 != -1) {
-                if ((play->csCtx.sceneCsList[temp_v0_3].unk7 != 0xFF) && (gSaveContext.respawnFlag == 0)) {
-                    if (play->csCtx.sceneCsList[temp_v0_3].unk7 == 0xFE) {
-                        ActorCutscene_Start(sp2A, NULL);
+        actorCsId = func_800F21CC();
+        if (actorCsId != -1) {
+            scriptIndex = func_800F2138(actorCsId);
+            if (scriptIndex != -1) {
+                if ((play->csCtx.scriptList[scriptIndex].flags != 0xFF) && (gSaveContext.respawnFlag == 0)) {
+                    if (play->csCtx.scriptList[scriptIndex].flags == 0xFE) {
+                        // Entrance cutscenes that always run
+                        ActorCutscene_Start(actorCsId, NULL);
                         gSaveContext.showTitleCard = false;
                     } else if (!(((void)0,
-                                  gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) &
-                                 (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8)))) {
+                                  gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)]) &
+                                 (1 << (play->csCtx.scriptList[scriptIndex].flags % 8)))) {
+                        // Entrance cutscenes that only run once
                         // TODO: macros for this kind of weekEventReg access
-                        gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)] =
-                            ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.sceneCsList[temp_v0_3].unk7 / 8)]) |
-                            (1 << (play->csCtx.sceneCsList[temp_v0_3].unk7 % 8));
-                        ActorCutscene_Start(sp2A, NULL);
+                        gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)] =
+                            ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)]) |
+                            (1 << (play->csCtx.scriptList[scriptIndex].flags % 8));
+                        ActorCutscene_Start(actorCsId, NULL);
+
                         gSaveContext.showTitleCard = false;
                     }
                 }
             } else {
-                ActorCutscene_StartAndSetUnkLinkFields(sp2A, NULL);
+                ActorCutscene_StartAndSetUnkLinkFields(actorCsId, NULL);
             }
         }
     }
 
     if ((gSaveContext.respawnFlag == 0) || (gSaveContext.respawnFlag == -2)) {
-        sp24 = play->loadedScene;
-        if ((sp24->titleTextId != 0) && gSaveContext.showTitleCard) {
+        scene = play->loadedScene;
+        if ((scene->titleTextId != 0) && gSaveContext.showTitleCard) {
             if ((Entrance_GetTransitionFlags(((void)0, gSaveContext.save.entrance) +
                                              ((void)0, gSaveContext.sceneLayer)) &
                  0x4000) != 0) {
-                func_80151A68(play, sp24->titleTextId);
+                func_80151A68(play, scene->titleTextId);
             }
         }
 
@@ -1563,10 +1565,10 @@ void func_800EDDB0(PlayState* play) {
 void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-void Cutscene_LoadScript(PlayState* play, u8 csIndex) {
-    if (dREG(95) == 0) {
-        play->csCtx.currentCsIndex = csIndex;
-        play->csCtx.script = Lib_SegmentedToVirtual(play->csCtx.sceneCsList[csIndex].script);
+void Cutscene_LoadScript(PlayState* play, u8 scriptIndex) {
+    if (!dREG(95)) {
+        play->csCtx.scriptIndex = scriptIndex;
+        play->csCtx.script = Lib_SegmentedToVirtual(play->csCtx.scriptList[scriptIndex].script);
     }
 
     gSaveContext.cutsceneTrigger = 1;

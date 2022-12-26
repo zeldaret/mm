@@ -175,7 +175,7 @@ void EnHg_Wait(EnHg* this, PlayState* play) {
             !Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_483)) {
             EnHg_SetupChasePlayer(this);
         }
-        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 0) &&
+        if ((gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0) &&
             ((play->csCtx.curFrame == 20) || (play->csCtx.curFrame == 60))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }

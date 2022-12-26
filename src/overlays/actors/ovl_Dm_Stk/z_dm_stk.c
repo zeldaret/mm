@@ -923,7 +923,7 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
                     DmStk_PlaySfxForIntroCutsceneFirstPart(this, play);
                 } else if (gSaveContext.sceneLayer == 0) {
                     DmStk_PlaySfxForIntroCutsceneSecondPart(this, play);
-                } else if ((gSaveContext.sceneLayer == 2) && (play->csCtx.currentCsIndex == 0)) {
+                } else if ((gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) {
                     DmStk_PlaySfxForObtainingMajorasMaskCutscene(this, play);
                 }
                 break;
@@ -936,9 +936,9 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneLayer == 0) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         DmStk_PlaySfxForCurseCutsceneFirstPart(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         DmStk_PlaySfxForCurseCutsceneSecondPart(this, play);
                     }
                 }
@@ -946,19 +946,19 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
 
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneLayer == 0) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         DmStk_PlaySfxForDroppingOcarinaCutscene(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(this, play);
-                    } else if (play->csCtx.currentCsIndex == 3) {
+                    } else if (play->csCtx.scriptIndex == 3) {
                         DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(this, play);
                     }
                 } else if (gSaveContext.sceneLayer == 2) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         DmStk_PlaySfxForMoonWarpCutsceneVersion1(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         DmStk_PlaySfxForMoonWarpCutsceneVersion2(this, play);
                     }
                 }
@@ -966,15 +966,15 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
 
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneLayer == 3) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         DmStk_PlaySfxForShiveringInRainCutscene(this, play);
-                    } else if (play->csCtx.currentCsIndex == 2) {
+                    } else if (play->csCtx.scriptIndex == 2) {
                         DmStk_PlaySfxForPlayingWithFairiesCutscene(this, play);
                     }
                 } else if (gSaveContext.sceneLayer == 7) {
-                    if (play->csCtx.currentCsIndex == 0) {
+                    if (play->csCtx.scriptIndex == 0) {
                         DmStk_PlaySfxForEndingCutsceneFirstPart(this, play);
-                    } else if (play->csCtx.currentCsIndex == 1) {
+                    } else if (play->csCtx.scriptIndex == 1) {
                         DmStk_PlaySfxForEndingCutsceneSecondPart(this, play);
                     }
                 }
@@ -1127,7 +1127,7 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.currentCsIndex > 0)) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
         play->envCtx.unk_17 = 15;
         play->envCtx.unk_18 = 15;
     }
@@ -1824,7 +1824,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.currentCsIndex > 0)) {
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
         play->envCtx.unk_17 = 15;
         play->envCtx.unk_18 = 15;
     }

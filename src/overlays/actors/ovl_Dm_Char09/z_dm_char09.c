@@ -133,10 +133,10 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
-        if (play->csCtx.currentCsIndex == 1) {
+        if (play->csCtx.scriptIndex == 1) {
             temp = true;
         }
-    } else if (play->csCtx.currentCsIndex == 0) {
+    } else if (play->csCtx.scriptIndex == 0) {
         temp = true;
     }
 

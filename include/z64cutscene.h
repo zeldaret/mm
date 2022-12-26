@@ -432,17 +432,17 @@ typedef union CutsceneData {
 typedef struct {
     /* 0x0 */ CutsceneData* script;
     /* 0x4 */ s16 nextEntrance;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7; // a weekEventReg bitpack?
+    /* 0x6 */ u8 spawn;
+    /* 0x7 */ u8 flags; // a weekEventReg bitpack?
 } CutsceneEntry; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8 sceneCsCount;
+    /* 0x00 */ u8 scriptListCount;
     /* 0x04 */ CutsceneData* script;
     /* 0x08 */ u8 state;
     /* 0x0C */ f32 timer;
     /* 0x10 */ u16 curFrame;
-    /* 0x12 */ u16 currentCsIndex;
+    /* 0x12 */ u16 scriptIndex;
     /* 0x14 */ s32 subCamId;
     /* 0x18 */ u16 unk_18;
     /* 0x1A */ u8 unk_1A;
@@ -451,7 +451,7 @@ typedef struct {
     /* 0x20 */ CutsceneCameraPoint* camEyePoints;
     /* 0x24 */ CsCmdActorCue* playerCue;
     /* 0x28 */ CsCmdActorCue* actorCues[10]; // "npcdemopnt"
-    /* 0x50 */ CutsceneEntry* sceneCsList;
+    /* 0x50 */ CutsceneEntry* scriptList;
 } CutsceneContext; // size = 0x54
 
 #endif

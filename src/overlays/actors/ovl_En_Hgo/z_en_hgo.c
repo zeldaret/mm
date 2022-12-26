@@ -321,7 +321,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
                         (this->isInCutscene == false)) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
-                            ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
+                            ((play->csCtx.scriptIndex == 2) || (play->csCtx.scriptIndex == 4))) {
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }

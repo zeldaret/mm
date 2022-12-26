@@ -539,7 +539,7 @@ s32 func_80A1222C(EnGo* this, PlayState* play) {
          (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) && (this->unk_3EC == 0) &&
          (this->actor.xzDistToPlayer < 400.0f)) ||
         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04) && (play->sceneId == SCENE_16GORON_HOUSE) &&
-         (gSaveContext.sceneLayer == 0) && (this->unk_3EC == 0) && (play->csCtx.currentCsIndex == 1))) {
+         (gSaveContext.sceneLayer == 0) && (this->unk_3EC == 0) && (play->csCtx.scriptIndex == 1))) {
         ret = true;
     }
     return ret;
@@ -712,7 +712,7 @@ s32 func_80A12868(EnGo* this, PlayState* play) {
 s32 func_80A12954(EnGo* this, PlayState* play) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (play->csCtx.state != 0) && (this->actor.draw != NULL) &&
         (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
-        (play->csCtx.currentCsIndex == 0)) {
+        (play->csCtx.scriptIndex == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->cueId = 255;
@@ -1413,7 +1413,7 @@ void func_80A144F4(EnGo* this, PlayState* play) {
 void func_80A145AC(EnGo* this, PlayState* play) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
         (((play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
-          (play->csCtx.currentCsIndex == 0)) ||
+          (play->csCtx.scriptIndex == 0)) ||
          !CHECK_WEEKEVENTREG(WEEKEVENTREG_21_08))) {
         this->actor.child = func_80A13400(this, play);
         this->actor.child->child = &this->actor;

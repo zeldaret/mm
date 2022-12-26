@@ -174,7 +174,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  sceneCsCount;
+    /* 0x1 */ u8  scriptListCount;
     /* 0x4 */ void* segment;
 } SCmdCutsceneList; // size = 0x8
 
@@ -522,7 +522,7 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCutsceneList      cutsceneList;
+    /* Command: 0x17 */ SCmdCutsceneList      scriptList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
@@ -943,8 +943,8 @@ typedef enum {
 #define SCENE_CMD_ECHO_SETTINGS(echo) \
     { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
 
-#define SCENE_CMD_CUTSCENE_LIST(numCutscene, cutsceneList) \
-    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(cutsceneList) }
+#define SCENE_CMD_CUTSCENE_LIST(numCutscene, scriptList) \
+    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(scriptList) }
 
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }

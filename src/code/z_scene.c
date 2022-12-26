@@ -472,8 +472,8 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
-    play->csCtx.sceneCsCount = cmd->cutsceneList.sceneCsCount;
-    play->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->cutsceneList.segment);
+    play->csCtx.scriptListCount = cmd->scriptList.scriptListCount;
+    play->csCtx.scriptList = Lib_SegmentedToVirtual(cmd->scriptList.segment);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List

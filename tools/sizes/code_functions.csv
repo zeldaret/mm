@@ -1084,7 +1084,7 @@ asm/non_matchings/code/z_demo/CutsceneHandler_RunScript.s,CutsceneHandler_RunScr
 asm/non_matchings/code/z_demo/CutsceneHandler_StopManual.s,CutsceneHandler_StopManual,0x800ED9C4,0x10
 asm/non_matchings/code/z_demo/CutsceneHandler_StopScript.s,CutsceneHandler_StopScript,0x800EDA04,0x20
 asm/non_matchings/code/z_demo/Cutscene_SetupScripted.s,Cutscene_SetupScripted,0x800EDA84,0x57
-asm/non_matchings/code/z_demo/func_800EDBE0.s,func_800EDBE0,0x800EDBE0,0x74
+asm/non_matchings/code/z_demo/Cutscene_HandleEntranceTriggers.s,Cutscene_HandleEntranceTriggers,0x800EDBE0,0x74
 asm/non_matchings/code/z_demo/func_800EDDB0.s,func_800EDDB0,0x800EDDB0,0x3
 asm/non_matchings/code/z_demo/func_800EDDBC.s,func_800EDDBC,0x800EDDBC,0x4
 asm/non_matchings/code/z_demo/Cutscene_LoadScript.s,Cutscene_LoadScript,0x800EDDCC,0x1A
@@ -3361,7 +3361,7 @@ asm/non_matchings/code/code_8019AF00/AudioOcarina_TerminaWallGenerateNotes.s,Aud
 asm/non_matchings/code/code_8019AF00/AudioOcarina_MemoryGameInit.s,AudioOcarina_MemoryGameInit,0x8019D488,0x1C
 asm/non_matchings/code/code_8019AF00/AudioOcarina_MemoryGameNextNote.s,AudioOcarina_MemoryGameNextNote,0x8019D4F8,0x42
 asm/non_matchings/code/code_8019AF00/AudioOcarina_Update.s,AudioOcarina_Update,0x8019D600,0x56
-asm/non_matchings/code/code_8019AF00/AudioOcarina_PlayLongScarecrowAfterCredits.s,AudioOcarina_PlayLongScarecrowAfterCredits,0x8019D758,0x43
+asm/non_matchings/code/code_8019AF00/AudioOcarina_PlayLongScarecrowSong.s,AudioOcarina_PlayLongScarecrowSong,0x8019D758,0x43
 asm/non_matchings/code/code_8019AF00/AudioOcarina_SetCustomSequence.s,AudioOcarina_SetCustomSequence,0x8019D864,0x14
 asm/non_matchings/code/code_8019AF00/AudioOcarina_PlayCustomSequence.s,AudioOcarina_PlayCustomSequence,0x8019D8B4,0xC
 asm/non_matchings/code/code_8019AF00/AudioOcarina_CreateCustomSequence.s,AudioOcarina_CreateCustomSequence,0x8019D8E4,0x191
