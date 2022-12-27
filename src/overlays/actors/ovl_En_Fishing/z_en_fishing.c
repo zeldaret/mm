@@ -5317,7 +5317,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
                 func_80169AFC(play, sSubCamId, 0);
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 D_8090CD4C = 0;
                 sSubCamId = SUB_CAM_ID_DONE;
                 D_8090CD50 = 30;
@@ -5418,8 +5418,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                         mainCam->at = sSubCamAt;
                         func_80169AFC(play, sSubCamId, 0);
                         Cutscene_StopManual(play, &play->csCtx);
-                        func_800B7298(play, &this->actor,
-                                      PLAYER_CSMODE_6); // arg2 changed from PLAYER_CSMODE_7 to PLAYER_CSMODE_6 in MM
+                        func_800B7298(
+                            play, &this->actor,
+                            PLAYER_CSMODE_END); // arg2 changed from PLAYER_CSMODE_WAIT to PLAYER_CSMODE_END in MM
                         D_8090CD4C = 0;
                         sSubCamId = SUB_CAM_ID_DONE;
                         player->unk_B28 = -5;

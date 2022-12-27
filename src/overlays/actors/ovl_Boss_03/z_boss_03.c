@@ -1145,7 +1145,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         case 0:
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_StartManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1367,7 +1367,7 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
 
                 func_80169AFC(play, this->subCamId, 0);
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->subCamId = SUB_CAM_ID_DONE;
 
                 func_809E344C(this, play);
@@ -1625,7 +1625,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->csState = 3;
                 func_80165690();
                 Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
@@ -1720,7 +1720,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
                         func_80169AFC(play, this->subCamId, 0);
                         this->subCamId = SUB_CAM_ID_DONE;
                         Cutscene_StopManual(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
 
                         func_809E344C(this, play);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;

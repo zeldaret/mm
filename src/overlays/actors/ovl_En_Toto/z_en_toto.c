@@ -357,7 +357,7 @@ s32 func_80BA3ED4(EnToto* this, PlayState* play) {
 
 s32 func_80BA3EE8(EnToto* this, PlayState* play) {
     if (this->text->unk1 == 2) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
     }
     return 0;
 }
@@ -452,7 +452,7 @@ s32 func_80BA42BC(EnToto* this, PlayState* play) {
     Vec3s* end = &D_80BA510C[3];
 
     func_80BA3FB0(this, play);
-    func_800B7298(play, NULL, PLAYER_CSMODE_6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_END);
     if (player->actor.world.pos.z > -310.0f) {
         if ((player->actor.world.pos.x > -150.0f) || (player->actor.world.pos.z > -172.0f)) {
             phi_s0 = 3;
@@ -480,7 +480,7 @@ s32 func_80BA43F4(EnToto* this, PlayState* play) {
 
 s32 func_80BA445C(EnToto* this, PlayState* play) {
     if (func_80BA4128(this, play)) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_6);
+        func_800B7298(play, NULL, PLAYER_CSMODE_END);
         return 1;
     }
     return 0;

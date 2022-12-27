@@ -903,8 +903,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
             func_8088D660(this, &nextPos, 0.2f);
         }
 
-        if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) &&
-            (play->csCtx.scriptIndex == 0) &&
+        if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0) &&
             ((play->csCtx.curFrame == 149) || (play->csCtx.curFrame == 381) || (play->csCtx.curFrame == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }

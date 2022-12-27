@@ -293,8 +293,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
     s32 cueChannel;
     s32 cueId;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) &&
-        (play->csCtx.scriptIndex == 0)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) && (play->csCtx.scriptIndex == 0)) {
         this->unk_322 |= 0x20;
         SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
     }

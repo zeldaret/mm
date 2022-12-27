@@ -418,7 +418,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
         if (this->talkState == TEXT_STATE_5) {
             // bad song input
             if (this->unkState196 == 2 && this->picto.actor.textId == 0x1647) {
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_6);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
             }
 
             // after timeskip
@@ -744,7 +744,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             }
 
             if (this->picto.actor.textId == 0x1648) {
-                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_7);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_WAIT);
                 this->picto.actor.textId = 0x1649;
                 if (this->animIndex != ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) {
                     EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
@@ -1014,7 +1014,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
     Math_ApproachF(&this->picto.actor.shape.yOffset, -6000.0f, 0.5f, 200.0f);
     if (fabsf(this->picto.actor.shape.yOffset + 6000.0f) < 10.0f) {
         SET_WEEKEVENTREG(WEEKEVENTREG_79_08);
-        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_6);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
         ActorCutscene_Stop(this->actorCutscenes[0]);
         this->aboveGroundStatus = ENKAKASI_ABOVE_GROUND_TYPE;
         this->songSummonDist = 80.0f;

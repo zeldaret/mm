@@ -624,7 +624,7 @@ void func_808A1B48(DoorShutter* this, PlayState* play) {
 void func_808A1C50(DoorShutter* this, PlayState* play) {
     if (this->unk_167++ > 30) {
         if (GET_PLAYER(play)->csMode == PLAYER_CSMODE_115) {
-            func_800B7298(play, NULL, PLAYER_CSMODE_6);
+            func_800B7298(play, NULL, PLAYER_CSMODE_END);
         }
         DoorShutter_SetupDoor(this, play);
     }

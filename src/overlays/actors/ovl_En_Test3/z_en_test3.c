@@ -528,7 +528,7 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
     if (this->player.csMode != PLAYER_CSMODE_0) {
-        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_6);
+        play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_END);
     }
 }
 
@@ -668,7 +668,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
             func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
             ActorCutscene_SetReturnCamera(this->subCamId);
-            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_7);
+            play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
         }
         func_800B863C(&this->player.actor, play);
         if (this->unk_D88 == 3) {

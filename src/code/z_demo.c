@@ -1517,10 +1517,12 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
     s32 scriptIndex;
 
     if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
-        actorCsId = func_800F21CC();
+        // Try to find an actor cutscene that's triggered by the current spawn
+        actorCsId = ActorCutscene_FindEntranceCutscene();
         if (actorCsId != -1) {
-            scriptIndex = func_800F2138(actorCsId);
+            scriptIndex = ActorCutscene_GetCutsceneScriptIndex(actorCsId);
             if (scriptIndex != -1) {
+                // A scripted cutscene is triggered by a spawn
                 if ((play->csCtx.scriptList[scriptIndex].flags != 0xFF) && (gSaveContext.respawnFlag == 0)) {
                     if (play->csCtx.scriptList[scriptIndex].flags == 0xFE) {
                         // Entrance cutscenes that always run
@@ -1535,11 +1537,12 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
                             ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)]) |
                             (1 << (play->csCtx.scriptList[scriptIndex].flags % 8));
                         ActorCutscene_Start(actorCsId, NULL);
-
+                        // The title card will be used by the cs misc command if necessary.
                         gSaveContext.showTitleCard = false;
                     }
                 }
             } else {
+                // A non-scripted cutscene is triggered by a spawn
                 ActorCutscene_StartAndSetUnkLinkFields(actorCsId, NULL);
             }
         }

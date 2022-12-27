@@ -344,7 +344,7 @@ void func_808B921C(DoorWarp1* this, PlayState* play) {
     }
 
     if (func_808B866C(this, play) && !Play_InCsMode(play)) {
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         Message_StartTextbox(play, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
@@ -367,7 +367,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
             func_8019F230();
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
     }

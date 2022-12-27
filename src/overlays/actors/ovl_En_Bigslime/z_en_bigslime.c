@@ -849,7 +849,7 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
     }
 }
 
@@ -986,7 +986,7 @@ void EnBigslime_SetupCallMinislime(EnBigslime* this, PlayState* play) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gGekkoCallAnim, 5.0f);
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_GREET);
     this->callTimer = 0;
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
     this->actionFunc = EnBigslime_CallMinislime;
 }
 
@@ -2543,7 +2543,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
     } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
         if (this->actionFuncStored != EnBigslime_SquishFlat) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         }
 
         this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);

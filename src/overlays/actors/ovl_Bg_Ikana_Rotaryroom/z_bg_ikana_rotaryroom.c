@@ -794,7 +794,7 @@ void func_80B819F0(Actor* thisx, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
         if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         }
         func_80B81A64(this);
     } else {

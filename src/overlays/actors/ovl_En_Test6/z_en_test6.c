@@ -395,7 +395,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
-    func_800B7298(play, NULL, PLAYER_CSMODE_6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_END);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
     Actor_Kill(&this->actor);
@@ -537,7 +537,7 @@ void func_80A91760(EnTest6* this, PlayState* play) {
     }
 
     if (this->unk_286 != 0) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
     } else {
         if (this->unk_27A == 90) {
             func_800B7298(play, NULL, PLAYER_CSMODE_66);
@@ -616,7 +616,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
     ActorCutscene_Stop(play->playerActorCsIds[8]);
-    func_800B7298(play, NULL, PLAYER_CSMODE_6);
+    func_800B7298(play, NULL, PLAYER_CSMODE_END);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
     Actor_Kill(&this->actor);
@@ -780,7 +780,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
             break;
 
         case 38:
-            func_800B7298(play, NULL, PLAYER_CSMODE_7);
+            func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
             break;
 
         case 14:

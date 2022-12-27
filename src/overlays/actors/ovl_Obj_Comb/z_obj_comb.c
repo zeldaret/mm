@@ -518,7 +518,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.update == NULL) {
-        if ((this->unk_1B5 == 2) && (func_800F2138(this->actor.cutscene) == -1)) {
+        if ((this->unk_1B5 == 2) && (ActorCutscene_GetCutsceneScriptIndex(this->actor.cutscene) == -1)) {
             ActorCutscene_Stop(this->actor.cutscene);
             this->unk_1B5 = 0;
         }

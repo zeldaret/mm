@@ -369,7 +369,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
         this->subCamId = SUB_CAM_ID_DONE;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         }
     }
 }
@@ -1206,7 +1206,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         if (this->actor.colChkInfo.health == 0) {
             ActorCutscene_Start(this->actor.cutscene, &this->actor);
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }

@@ -2140,7 +2140,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
@@ -2201,7 +2201,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
                 Cutscene_StopManual(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_1;
                 sp68->unk_0144 = 10;

@@ -454,4 +454,40 @@ typedef struct {
     /* 0x50 */ CutsceneEntry* scriptList;
 } CutsceneContext; // size = 0x54
 
+typedef struct {
+    /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
+    /* 0x2 */ s16 length;
+    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
+    /* 0x6 */ s16 scriptIndex;
+    /* 0x8 */ s16 additionalCutscene;
+    /* 0xA */ u8 endSfx;
+    /* 0xB */ u8 unkB; // 0 - 99: actor-specific custom value. 100+: spawn. 255: none
+    /* 0xC */ s16 hudVisibility; 
+    /* 0xE */ u8 endCam;
+    /* 0xF */ u8 letterboxSize;
+} ActorCutscene; // size = 0x10
+
+typedef enum {
+    /* 0 */ CS_HUD_VISIBILITY_NONE,
+    /* 1 */ CS_HUD_VISIBILITY_ALL,
+    /* 2 */ CS_HUD_VISIBILITY_A_HEARTS_MAGIC,
+    /* 3 */ CS_HUD_VISIBILITY_C_HEARTS_MAGIC,
+    /* 4 */ CS_HUD_VISIBILITY_ALL_NO_MINIMAP,
+    /* 5 */ CS_HUD_VISIBILITY_A_B_C,
+    /* 6 */ CS_HUD_VISIBILITY_B_MINIMAP,
+    /* 7 */ CS_HUD_VISIBILITY_A
+} CutsceneHudVisibility;
+
+typedef enum {
+    /* 0 */ CS_END_SFX_NONE,
+    /* 1 */ CS_END_SFX_TRE_BOX_APPEAR,
+    /* 2 */ CS_END_SFX_CORRECT_CHIME
+} CutsceneEndSfx;
+
+typedef enum {
+    /* 0 */ CS_END_CAM_0,
+    /* 1 */ CS_END_CAM_1,
+    /* 2 */ CS_END_CAM_SMOOTH
+} CutsceneEndCam;
+
 #endif

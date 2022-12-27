@@ -1150,7 +1150,7 @@ asm/non_matchings/code/code_800F12D0/func_800F12D0.s,func_800F12D0,0x800F12D0,0x
 asm/non_matchings/code/code_800F12D0/func_800F1304.s,func_800F1304,0x800F1304,0x1C
 asm/non_matchings/code/code_800F12D0/func_800F1374.s,func_800F1374,0x800F1374,0x1D
 asm/non_matchings/code/code_800F12D0/func_800F13E8.s,func_800F13E8,0x800F13E8,0x1E
-asm/non_matchings/code/z_eventmgr/func_800F1460.s,func_800F1460,0x800F1460,0x26
+asm/non_matchings/code/z_eventmgr/ActorCutscene_SetHudVisibility.s,ActorCutscene_SetHudVisibility,0x800F1460,0x26
 asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCutsceneImpl.s,ActorCutscene_GetCutsceneImpl,0x800F14F8,0x13
 asm/non_matchings/code/z_eventmgr/ActorCutscene_Init.s,ActorCutscene_Init,0x800F1544,0x25
 asm/non_matchings/code/z_eventmgr/func_800F15D8.s,func_800F15D8,0x800F15D8,0x1C
@@ -1169,10 +1169,10 @@ asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCurrentIndex.s,ActorCutscene_
 asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCutscene.s,ActorCutscene_GetCutscene,0x800F208C,0xB
 asm/non_matchings/code/z_eventmgr/ActorCutscene_GetAdditionalCutscene.s,ActorCutscene_GetAdditionalCutscene,0x800F20B8,0x10
 asm/non_matchings/code/z_eventmgr/ActorCutscene_GetLength.s,ActorCutscene_GetLength,0x800F20F8,0x10
-asm/non_matchings/code/z_eventmgr/func_800F2138.s,func_800F2138,0x800F2138,0x10
+asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCutsceneScriptIndex.s,ActorCutscene_GetCutsceneScriptIndex,0x800F2138,0x10
 asm/non_matchings/code/z_eventmgr/func_800F2178.s,func_800F2178,0x800F2178,0x10
 asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCurrentSubCamId.s,ActorCutscene_GetCurrentSubCamId,0x800F21B8,0x5
-asm/non_matchings/code/z_eventmgr/func_800F21CC.s,func_800F21CC,0x800F21CC,0x3E
+asm/non_matchings/code/z_eventmgr/ActorCutscene_FindEntranceCutscene.s,ActorCutscene_FindEntranceCutscene,0x800F21CC,0x3E
 asm/non_matchings/code/z_eventmgr/func_800F22C4.s,func_800F22C4,0x800F22C4,0x40
 asm/non_matchings/code/z_eventmgr/ActorCutscene_SetReturnCamera.s,ActorCutscene_SetReturnCamera,0x800F23C4,0x7
 asm/non_matchings/code/z_fcurve_data/func_800F23E0.s,func_800F23E0,0x800F23E0,0x26
