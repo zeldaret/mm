@@ -25,7 +25,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 static u16 seqId;
 #endif
 s16 sCutsceneQuakeIndex;
-DbCameraUnkStruct sCutsceneCameraInfo;
+CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 UNK_TYPE D_801F4DDC;
 u8 D_801F4DE0;
@@ -938,7 +938,7 @@ s32 CutsceneCmd_UpdateCamSpline(PlayState* play, u8* cmd) {
     bcopy(cmd, &sp1C, sizeof(s32));
     cmd += sizeof(s32);
     if (!Play_IsDebugCamEnabled()) {
-        func_80161998(cmd, &sCutsceneCameraInfo);
+        CutsceneCamera_ProcessCommands(cmd, &sCutsceneCameraInfo);
     }
     return sp1C + sizeof(s32);
 }
@@ -1493,7 +1493,7 @@ void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
             csCtx->curFrame = 0xFFFF;
 
             csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
-            func_8016119C(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
+            CutsceneCamera_Init(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
             csCtx->unk_18 = 0xFFFF;
 
             if (gSaveContext.cutsceneTrigger == 0) {

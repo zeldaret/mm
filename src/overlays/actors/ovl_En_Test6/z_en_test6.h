@@ -31,7 +31,7 @@ typedef struct EnTest6 {
     /* 0x15C */ f32 unk_15C;
     /* 0x160 */ f32 unk_160;
     /* 0x164 */ EnTest6Light lights[2];
-    /* 0x18C */ DbCameraUnkStruct unk_18C;
+    /* 0x18C */ CutsceneCamera unk_18C;
     /* 0x20C */ Vec3f unk_20C[6];
     /* 0x254 */ Vec3f (*unk_254)[64];
     /* 0x258 */ Vec3f subCamAt;

@@ -490,4 +490,80 @@ typedef enum {
     /* 2 */ CS_END_CAM_SMOOTH
 } CutsceneEndCam;
 
+
+#define CS_CAM_POINTS_LIST(numEntries, unused0, unused1, unk_06) \
+    { CMD_HH(numEntries, unused0) }, { CMD_HH(unused1, unk_06) }
+
+#define CS_CAM_POINT(interp, unk_01, unk_02, posX, posY, posZ, unk_0A) \
+    { CMD_BBH(interp, unk_01, unk_02) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, unk_0A) }
+
+#define CS_CAM_MISC(unused0, roll, fov, unused1) \
+    { CMD_HH(unused0, roll) }, { CMD_HH(fov, unused1) }
+
+#define CS_CAM_END() { CMD_W(0xFFFF0004) }
+// #define CS_CAM_END() { CMD_HH(0xFFFF, unused) }
+
+typedef struct {
+    /* 0x0 */ s16 numEntries;
+    /* 0x2 */ s16 unk_02; // unused
+    /* 0x4 */ s16 unk_04; // unused
+    /* 0x6 */ s16 unk_06;
+} CutsceneCameraCmdHeader; // size = 0x8
+
+// Both camAt and camEye
+typedef struct {
+    /* 0x0 */ u8 interpType;
+    /* 0x1 */ u8 unk_01;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ Vec3s pos;
+    /* 0xA */ s16 unk_0A;
+} CutsceneCameraSubCmd1Cmd2; // size = 0xC
+
+typedef struct {
+    /* 0x0 */ CutsceneCameraSubCmd1Cmd2 subCmd1Cmd2[1]; // variable size
+} CutsceneCameraCmd1Cmd2; // size = 0xC * numEntries
+
+// Roll and Fov Data
+typedef struct {
+    /* 0x0 */ s16 unk_00; // unused
+    /* 0x2 */ s16 unk_02; // roll data
+    /* 0x4 */ s16 unk_04; // fov data
+    /* 0x6 */ s16 unk_06; // unused
+} CutsceneCameraSubCmd3; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ CutsceneCameraSubCmd3 subCmd3[1]; // variable size
+} CutsceneCameraCmd3; // size = 0x8 * numEntries
+
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x2A */ f32 unk_20;
+    /* 0x24 */ s16 unk_24;
+    /* 0x26 */ s16 unk_26;
+    /* 0x28 */ s16 unk_28;
+    /* 0x2A */ s16 numEntries;
+    /* 0x1E */ u8 unk_2C;
+    /* 0x2D */ u8 unk_2D;
+    /* 0x2E */ UNK_TYPE1 unk_2E[2];
+} SubCutsceneCamera; // size = 0x30
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 cmdIndex;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x10 */ SubCutsceneCamera eyeInterp;
+    /* 0x40 */ SubCutsceneCamera atInterp;
+    /* 0x70 */ CutsceneCameraCmd1Cmd2* atCmd;
+    /* 0x74 */ CutsceneCameraCmd1Cmd2* eyeCmd;
+    /* 0x78 */ CutsceneCameraCmd3* cmd3;
+    /* 0x7C */ Camera* camera;
+} CutsceneCamera; // size = 0x80
+
 #endif

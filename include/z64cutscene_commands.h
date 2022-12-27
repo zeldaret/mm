@@ -119,7 +119,7 @@
  */
 #define CS_CAMERA_LIST(entries) { CS_CMD_CAMERA }, { CMD_W(entries) }
 
-// TODO: Camera command macros. Requieres func_80161998 being decomped
+// TODO: Camera command macros. Requieres CutsceneCamera_ProcessCommands being decomped
 
 
 /**
