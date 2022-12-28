@@ -208,7 +208,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
                                thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
             thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
                                                           thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0,
-                                                          EN_SNOWMAN_TYPE_SPLIT, -1, thisx->unk20, NULL);
+                                                          EN_SNOWMAN_TYPE_SPLIT, CS_ID_NONE, thisx->unk20, NULL);
             if ((thisx->child == NULL) || (thisx->parent == NULL)) {
                 if (thisx->child != NULL) {
                     Actor_Kill(thisx->child);

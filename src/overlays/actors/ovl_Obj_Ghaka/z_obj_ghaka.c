@@ -63,8 +63,8 @@ void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
                                       this->dyna.actor.csId, this->dyna.actor.unk20, 0);
     } else {
-        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1, -1,
-                                      this->dyna.actor.unk20, 0);
+        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1,
+                                      CS_ID_NONE, this->dyna.actor.unk20, 0);
     }
 }
 
