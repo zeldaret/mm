@@ -503,34 +503,44 @@ s32 Play_IsDebugCamEnabled(void) {
 }
 
 // A mapping from playerCsIds to sGlobalCamDataSettings indices.
-extern s16 D_801D0D64[];
-// s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
+extern s16 sPlayerCsIdToCsCamId[];
+// s16 sPlayerCsIdToCsCamId[] = {
+//     CS_CAM_ID_GLOBAL_ITEM_OCARINA,
+//     CS_CAM_ID_GLOBAL_ITEM_GET,
+//     CS_CAM_ID_GLOBAL_ITEM_BOTTLE,
+//     CS_CAM_ID_GLOBAL_ITEM_SHOW,
+//     CS_CAM_ID_GLOBAL_WARP_PAD_MOON,
+//     CS_CAM_ID_GLOBAL_MASK_TRANSFORMATION,
+//     CS_CAM_ID_GLOBAL_DEATH,
+//     CS_CAM_ID_GLOBAL_REVIVE,
+//     CS_CAM_ID_GLOBAL_SONG_WARP,
+//     CS_CAM_ID_GLOBAL_WARP_PAD_ENTRANCE,
+// };
 
 // Used by Player
 /**
  * Extract the common actor cutscene ids used by Player from the scene and set the actor cutscene ids in
  * this->playerCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
- * to -1. Otherwise, if there is an ActorCutscene where csCamSceneDataId matches the appropriate element of D_801D0D64,
+ * to -1. Otherwise, if there is an ActorCutscene where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
  * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
  */
-void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 startActorCsId) {
+void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
     PlayState* this = (PlayState*)thisx;
     s32 i;
     s16* curPlayerCsId = this->playerCsIds;
-    s16* phi_s1 = D_801D0D64;
+    s16* csCamId = sPlayerCsIdToCsCamId;
 
-    for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, phi_s1++) {
+    for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, csCamId++) {
         ActorCutscene* actorCutscene;
         s32 curCsId;
 
         *curPlayerCsId = CS_ID_NONE;
 
-        for (curCsId = startActorCsId; curCsId != CS_ID_NONE; curCsId = actorCutscene->additionalCsId) {
+        for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = actorCutscene->additionalCsId) {
             actorCutscene = ActorCutscene_GetCutscene(curCsId);
 
-            if (actorCutscene->csCamSceneDataId == *phi_s1) {
-                if ((actorCutscene->csCamSceneDataId == -3) &&
-                    (actorCutscene->priority == 700)) { // override ocarina cs priority
+            if (actorCutscene->csCamId == *csCamId) {
+                if ((actorCutscene->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (actorCutscene->priority == 700)) {
                     actorCutscene->priority = 550;
                 }
                 *curPlayerCsId = curCsId;

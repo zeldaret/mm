@@ -1294,8 +1294,8 @@ s16 ActorCutscene_GetCutsceneCustomValue(s16 csId);
 s16 ActorCutscene_GetCurrentSubCamId(s16 csId);
 s16 ActorCutscene_FindEntranceCsId(void);
 s32 func_800F22C4(s16 csId, Actor* actor);
-
 void ActorCutscene_SetReturnCamera(s16 camId);
+
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
 void FireObj_Draw(PlayState* play, FireObj* fire);
 void FireObj_Init(PlayState* play, FireObj* fire, FireObjInitParams* init, Actor* actor);
@@ -2371,7 +2371,7 @@ s32 FrameAdvance_IsEnabled(GameState* thisx);
 s32 func_8016A02C(GameState* thisx, Actor* actor, s16* yaw);
 s32 Play_IsUnderwater(PlayState* this, Vec3f* pos);
 s32 Play_IsDebugCamEnabled(void);
-void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 startActorCsId);
+void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId);
 void Play_FillScreen(GameState* gameState, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha);
 void Play_Init(GameState* gameState);
 // void func_8016AC10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);

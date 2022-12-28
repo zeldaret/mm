@@ -2,14 +2,26 @@
 #include "z64shrink_window.h"
 
 ActorCutscene sGlobalActorCutscenes[8] = {
-    /* 0x78 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 }, // CS_ID_GLOBAL_78
-    /* 0x79 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 }, // CS_ID_GLOBAL_79
-    /* 0x7A */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 }, // CS_ID_GLOBAL_7A
-    /* 0x7B */ { 0x0002, -1, -25, -1, CS_ID_NONE, 255, 255, 0, 0, 32 },    // CS_ID_GLOBAL_ELEGY
-    /* 0x7C */ { 0x7FFD, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },   // CS_ID_GLOBAL_TALK
-    /* 0x7D */ { 0x7FFC, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },   // CS_ID_GLOBAL_DOOR
-    /* 0x7E */ { 0x7FFE, -2, -14, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },     // CS_ID_GLOBAL_RETURN_TO_CAM
-    /* 0x7F */ { 0x0000, -1, -1, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },      // CS_ID_GLOBAL_END
+    { -100, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
+      255 }, // CS_ID_GLOBAL_78
+    { -100, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
+      255 }, // CS_ID_GLOBAL_79
+    { -100, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
+      255 }, // CS_ID_GLOBAL_7A
+    // CS_ID_GLOBAL_ELEGY
+    { 2, -1, CS_CAM_ID_GLOBAL_ELEGY, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_NONE, CS_END_CAM_0,
+      32 },
+    // CS_ID_GLOBAL_TALK
+    { 32765, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0,
+      255 },
+    // CS_ID_GLOBAL_DOOR
+    { 32764, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0,
+      255 },
+    // CS_ID_GLOBAL_RETURN_TO_CAM
+    { 32766, -2, CS_CAM_ID_GLOBAL_CONNECT, -1, CS_ID_NONE, CS_END_SFX_NONE, 255, CS_HUD_VISIBILITY_ALL_ALT,
+      CS_END_CAM_0, 32 },
+    // CS_ID_GLOBAL_END
+    { 0, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE, 255, CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0, 32 },
 };
 
 typedef struct {
@@ -89,9 +101,9 @@ void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 n
     sActorCutsceneList = actorCutsceneList;
     sActorCutsceneCount = num;
 
-    for (i = 0; i < ARRAY_COUNT(sActorCutsceneWaiting); i++) {
-        sActorCutsceneWaiting[i] = 0;
-        actorCutsceneNextCutscenes[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(sWaitingActorCutsceneList); i++) {
+        sWaitingActorCutsceneList[i] = 0;
+        sNextActorCutsceneList[i] = 0;
     }
 
     sActorCsMgr.endCsId = CS_ID_NONE;
@@ -115,16 +127,16 @@ void func_800F15D8(Camera* camera) {
 void ActorCutscene_ClearWaiting(void) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sActorCutsceneWaiting); i++) {
-        sActorCutsceneWaiting[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(sWaitingActorCutsceneList); i++) {
+        sWaitingActorCutsceneList[i] = 0;
     }
 }
 
 void ActorCutscene_ClearNextCutscenes(void) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(actorCutsceneNextCutscenes); i++) {
-        actorCutsceneNextCutscenes[i] = 0;
+    for (i = 0; i < ARRAY_COUNT(sNextActorCutsceneList); i++) {
+        sNextActorCutsceneList[i] = 0;
     }
 }
 
@@ -143,12 +155,12 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     priorityMax = SHT_MAX;
     for (i = 0; i < 16; i++) {
         for (bit = 1, j = 0; j < 8; j++) {
-            if (sActorCutsceneWaiting[i] & bit) {
+            if (sWaitingActorCutsceneList[i] & bit) {
                 csId = (i << 3) | j;
                 priority = ActorCutscene_GetCutsceneImpl(csId)->priority;
 
                 if ((priority ^ 0) == -1) {
-                    actorCutsceneNextCutscenes[i] |= bit;
+                    sNextActorCutsceneList[i] |= bit;
                 } else if ((priority < priorityMax) && (priority > 0)) {
                     actorCsIdMax = csId;
                     priorityMax = priority;
@@ -159,7 +171,7 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
         }
     }
     if (actorCsIdMax != CS_ID_NONE) {
-        actorCutsceneNextCutscenes[actorCsIdMax >> 3] |= 1 << (actorCsIdMax & 7);
+        sNextActorCutsceneList[actorCsIdMax >> 3] |= 1 << (actorCsIdMax & 7);
     }
     return count;
 }
@@ -280,7 +292,7 @@ s16 ActorCutscene_Update(void) {
 
 void ActorCutscene_SetIntentToPlay(s16 csId) {
     if (csId >= 0) {
-        sActorCutsceneWaiting[csId >> 3] |= 1 << (csId & 7);
+        sWaitingActorCutsceneList[csId >> 3] |= 1 << (csId & 7);
     }
 }
 
@@ -295,7 +307,7 @@ s16 ActorCutscene_GetCanPlayNext(s16 csId) {
     if (csId <= CS_ID_NONE) {
         return -1;
     }
-    return (actorCutsceneNextCutscenes[csId >> 3] & (1 << (csId & 7))) ? true : false;
+    return (sNextActorCutsceneList[csId >> 3] & (1 << (csId & 7))) ? true : false;
 }
 
 /**
@@ -389,8 +401,8 @@ s16 ActorCutscene_Start(s16 csId, Actor* actor) {
             Cutscene_SetScript(sActorCsMgr.play, actorCs->scriptIndex);
             sActorCsMgr.length = actorCs->length;
         } else {
-            if (actorCs->csCamSceneDataId != -1) {
-                Camera_ChangeDataIdx(subCam, actorCs->csCamSceneDataId);
+            if (actorCs->csCamId != CS_CAM_ID_NONE) {
+                Camera_ChangeDataIdx(subCam, actorCs->csCamId);
             } else {
                 Camera_ChangeSetting(subCam, CAM_SET_FREE0);
             }

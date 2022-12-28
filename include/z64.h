@@ -79,7 +79,6 @@ typedef enum {
     /* 4 */ EQUIP_SLOT_A
 } EquipSlot;
 
-
 typedef struct {
     /* 0x0 */ s8 segment;
     /* 0x2 */ s16 type;

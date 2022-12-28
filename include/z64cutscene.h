@@ -611,10 +611,12 @@ typedef struct {
     /* 0x50 */ CutsceneEntry* scriptList;
 } CutsceneContext; // size = 0x54
 
+/* Actor Cutscenes, which encompasses all cutscenes */
+
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
-    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
+    /* 0x4 */ s16 csCamId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
     /* 0x6 */ s16 scriptIndex;
     /* 0x8 */ s16 additionalCsId;
     /* 0xA */ u8 endSfx;
@@ -625,20 +627,65 @@ typedef struct {
 } ActorCutscene; // size = 0x10
 
 typedef enum {
-    /* 0 */ CS_HUD_VISIBILITY_NONE,
-    /* 1 */ CS_HUD_VISIBILITY_ALL,
-    /* 2 */ CS_HUD_VISIBILITY_A_HEARTS_MAGIC,
-    /* 3 */ CS_HUD_VISIBILITY_C_HEARTS_MAGIC,
-    /* 4 */ CS_HUD_VISIBILITY_ALL_NO_MINIMAP,
-    /* 5 */ CS_HUD_VISIBILITY_A_B_C,
-    /* 6 */ CS_HUD_VISIBILITY_B_MINIMAP,
-    /* 7 */ CS_HUD_VISIBILITY_A
+    /*   -1 */ CS_ID_NONE = -1,
+    // CsId's 0 - 119 are scene-specific and index `ActorCutscene`
+    /* 0x78 */ CS_ID_GLOBAL_78 = 120,
+    /* 0x79 */ CS_ID_GLOBAL_79,
+    /* 0x7A */ CS_ID_GLOBAL_7A,
+    /* 0x7B */ CS_ID_GLOBAL_ELEGY,
+    /* 0x7C */ CS_ID_GLOBAL_TALK,
+    /* 0x7D */ CS_ID_GLOBAL_DOOR,
+    /* 0x7E */ CS_ID_GLOBAL_RETURN_TO_CAM, // smoothly return to the previous camera
+    /* 0x7F */ CS_ID_GLOBAL_END,
+} GlobalCutsceneId;
+
+typedef enum {
+    // global (see sGlobalCamDataSettings)
+    /* -25 */ CS_CAM_ID_GLOBAL_ELEGY = -25,         // CAM_SET_ELEGY_SHELL
+    /* -24 */ CS_CAM_ID_GLOBAL_SIDED,               // CAM_SET_SIDED
+    /* -23 */ CS_CAM_ID_GLOBAL_BOAT_CRUISE,         // CAM_SET_BOAT_CRUISE
+    /* -22 */ CS_CAM_ID_GLOBAL_N16,                 // CAM_SET_NONE
+    /* -21 */ CS_CAM_ID_GLOBAL_SUBJECTD,            // CAM_SET_SUBJECTD
+    /* -20 */ CS_CAM_ID_GLOBAL_NORMALD,             // CAM_SET_NORMALD
+    /* -19 */ CS_CAM_ID_GLOBAL_N13,                 // CAM_SET_NONE
+    /* -18 */ CS_CAM_ID_GLOBAL_N12,                 // CAM_SET_NONE
+    /* -17 */ CS_CAM_ID_GLOBAL_N11,                 // CAM_SET_NONE
+    /* -16 */ CS_CAM_ID_GLOBAL_WARP_PAD_ENTRANCE,   // CAM_SET_WARP_PAD_ENTRANCE
+    /* -15 */ CS_CAM_ID_GLOBAL_ATTENTION,           // CAM_SET_ATTENTION
+    /* -14 */ CS_CAM_ID_GLOBAL_CONNECT,             // CAM_SET_CONNECT0
+    /* -13 */ CS_CAM_ID_GLOBAL_REMOTE_BOMB,         // CAM_SET_REMOTEBOMB
+    /* -12 */ CS_CAM_ID_GLOBAL_N0C,                 // CAM_SET_NONE
+    /* -11 */ CS_CAM_ID_GLOBAL_MASK_TRANSFORMATION, // CAM_SET_MASK_TRANSFORMATION
+    /* -10 */ CS_CAM_ID_GLOBAL_LONG_CHEST_OPENING,  // CAM_SET_LONG_CHEST_OPENING
+    /*  -9 */ CS_CAM_ID_GLOBAL_REVIVE,              // CAM_SET_REBIRTH
+    /*  -8 */ CS_CAM_ID_GLOBAL_DEATH,               // CAM_SET_DEATH
+    /*  -7 */ CS_CAM_ID_GLOBAL_WARP_PAD_MOON,       // CAM_SET_WARP_PAD_MOON
+    /*  -6 */ CS_CAM_ID_GLOBAL_SONG_WARP,           // CAM_SET_NAVI
+    /*  -5 */ CS_CAM_ID_GLOBAL_ITEM_SHOW,           // CAM_SET_ITEM3
+    /*  -4 */ CS_CAM_ID_GLOBAL_ITEM_BOTTLE,         // CAM_SET_ITEM2
+    /*  -3 */ CS_CAM_ID_GLOBAL_ITEM_OCARINA,        // CAM_SET_ITEM1
+    /*  -2 */ CS_CAM_ID_GLOBAL_ITEM_GET,            // CAM_SET_ITEM0
+    /*  -1 */ CS_CAM_ID_NONE,
+    // CamCsId's 0+ are scene-specific and index `ActorCsCamInfo`
+} CamCutsceneId;
+
+typedef enum {
+    /* -1 */ CS_HUD_VISIBILITY_ALL_ALT = -1,
+    /*  0 */ CS_HUD_VISIBILITY_NONE,
+    /*  1 */ CS_HUD_VISIBILITY_ALL,
+    /*  2 */ CS_HUD_VISIBILITY_A_HEARTS_MAGIC,
+    /*  3 */ CS_HUD_VISIBILITY_C_HEARTS_MAGIC,
+    /*  4 */ CS_HUD_VISIBILITY_ALL_NO_MINIMAP,
+    /*  5 */ CS_HUD_VISIBILITY_A_B_C,
+    /*  6 */ CS_HUD_VISIBILITY_B_MINIMAP,
+    /*  7 */ CS_HUD_VISIBILITY_A
 } CutsceneHudVisibility;
 
 typedef enum {
-    /* 0 */ CS_END_SFX_NONE,
-    /* 1 */ CS_END_SFX_TRE_BOX_APPEAR,
-    /* 2 */ CS_END_SFX_CORRECT_CHIME
+    /*   0 */ CS_END_SFX_NONE,
+    /*   1 */ CS_END_SFX_TRE_BOX_APPEAR,
+    /*   2 */ CS_END_SFX_CORRECT_CHIME,
+    /* 255 */ CS_END_SFX_NONE_ALT = 0xFF
 } CutsceneEndSfx;
 
 typedef enum {
@@ -647,7 +694,7 @@ typedef enum {
     /* 2 */ CS_END_CAM_SMOOTH
 } CutsceneEndCam;
 
-
+/* Cutscene Camera Spline Scripts */
 
 typedef struct {
     /* 0x0 */ s16 numEntries;
@@ -711,18 +758,5 @@ typedef struct {
     /* 0x78 */ CutsceneCameraCmd3* cmd3;
     /* 0x7C */ Camera* camera;
 } CutsceneCamera; // size = 0x80
-
-typedef enum {
-    /*   -1 */ CS_ID_NONE = -1,
-    // CsId's 0 - 119 are scene-specific
-    /* 0x78 */ CS_ID_GLOBAL_78 = 120,
-    /* 0x79 */ CS_ID_GLOBAL_79,
-    /* 0x7A */ CS_ID_GLOBAL_7A,
-    /* 0x7B */ CS_ID_GLOBAL_ELEGY,
-    /* 0x7C */ CS_ID_GLOBAL_TALK,
-    /* 0x7D */ CS_ID_GLOBAL_DOOR,
-    /* 0x7E */ CS_ID_GLOBAL_RETURN_TO_CAM, // smoothly return to the previous camera
-    /* 0x7F */ CS_ID_GLOBAL_END,
-} GlobalCutsceneId;
 
 #endif

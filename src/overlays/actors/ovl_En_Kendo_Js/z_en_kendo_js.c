@@ -680,8 +680,7 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
 
 void func_80B2783C(EnKendoJs* this, PlayState* play) {
     if (this->actor.csId != CS_ID_NONE) {
-        Camera_ChangeDataIdx(play->cameraPtrs[CAM_ID_MAIN],
-                             ActorCutscene_GetCutscene(this->actor.csId)->csCamSceneDataId);
+        Camera_ChangeDataIdx(play->cameraPtrs[CAM_ID_MAIN], ActorCutscene_GetCutscene(this->actor.csId)->csCamId);
     }
 }
 
