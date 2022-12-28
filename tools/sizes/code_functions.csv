@@ -1087,7 +1087,7 @@ asm/non_matchings/code/z_demo/Cutscene_SetupScripted.s,Cutscene_SetupScripted,0x
 asm/non_matchings/code/z_demo/Cutscene_HandleEntranceTriggers.s,Cutscene_HandleEntranceTriggers,0x800EDBE0,0x74
 asm/non_matchings/code/z_demo/func_800EDDB0.s,func_800EDDB0,0x800EDDB0,0x3
 asm/non_matchings/code/z_demo/func_800EDDBC.s,func_800EDDBC,0x800EDDBC,0x4
-asm/non_matchings/code/z_demo/Cutscene_LoadScript.s,Cutscene_LoadScript,0x800EDDCC,0x1A
+asm/non_matchings/code/z_demo/Cutscene_SetScript.s,Cutscene_SetScript,0x800EDDCC,0x1A
 asm/non_matchings/code/z_demo/Cutscene_ActorTranslate.s,Cutscene_ActorTranslate,0x800EDE34,0x3C
 asm/non_matchings/code/z_demo/Cutscene_ActorTranslateAndYaw.s,Cutscene_ActorTranslateAndYaw,0x800EDF24,0x15
 asm/non_matchings/code/z_demo/Cutscene_ActorTranslateAndYawSmooth.s,Cutscene_ActorTranslateAndYawSmooth,0x800EDF78,0x55
@@ -2421,11 +2421,11 @@ asm/non_matchings/code/z_shrink_window/ShrinkWindow_Draw.s,ShrinkWindow_Draw,0x8
 asm/non_matchings/code/cutscene_camera/func_80161180.s,func_80161180,0x80161180,0x7
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Init.s,CutsceneCamera_Init,0x8016119C,0x24
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interpolate.s,CutsceneCamera_Interpolate,0x8016122C,0x23
-asm/non_matchings/code/cutscene_camera/CutsceneCamera_ProcessSubCommands.s,CutsceneCamera_ProcessSubCommands,0x801612B8,0x1B8
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_UpdateSpline.s,CutsceneCamera_UpdateSpline,0x801612B8,0x1B8
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_ProcessCommands.s,CutsceneCamera_ProcessCommands,0x80161998,0x85
 asm/non_matchings/code/cutscene_camera/func_80161BAC.s,func_80161BAC,0x80161BAC,0xD
-asm/non_matchings/code/cutscene_camera/func_80161BE0.s,func_80161BE0,0x80161BE0,0xB
-asm/non_matchings/code/cutscene_camera/func_80161C0C.s,func_80161C0C,0x80161C0C,0x5
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_SetState.s,CutsceneCamera_SetState,0x80161BE0,0xB
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_Reset.s,CutsceneCamera_Reset,0x80161C0C,0x5
 asm/non_matchings/code/cutscene_camera/func_80161C20.s,func_80161C20,0x80161C20,0x8B
 asm/non_matchings/code/cutscene_camera/func_80161E4C.s,func_80161E4C,0x80161E4C,0xA0
 asm/non_matchings/code/cutscene_camera/func_801620CC.s,func_801620CC,0x801620CC,0xAC

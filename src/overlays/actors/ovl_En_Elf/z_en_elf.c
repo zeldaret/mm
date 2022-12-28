@@ -891,8 +891,8 @@ void func_8088E850(EnElf* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201);
         func_808908D0(&nextPos, play, cueChannel);
-        this->actor.shape.rot.y = play->csCtx.actorCues[cueChannel]->urot.y;
-        this->actor.shape.rot.x = play->csCtx.actorCues[cueChannel]->urot.x;
+        this->actor.shape.rot.y = play->csCtx.actorCues[cueChannel]->rot.y;
+        this->actor.shape.rot.x = play->csCtx.actorCues[cueChannel]->rot.x;
         if (play->csCtx.actorCues[cueChannel]->id == 5) {
             func_8088F5F4(this, play, 16);
         }

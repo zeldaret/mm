@@ -144,7 +144,7 @@ void func_80B9B428(Actor* thisx, PlayState* play2) {
         CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_511)];
 
         if (this->unk_15F != cue->id) {
-            this->dyna.actor.shape.rot.x = cue->urot.x;
+            this->dyna.actor.shape.rot.x = cue->rot.x;
             if (cue->id != 1) {
                 Path* path = &play->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
 
@@ -154,7 +154,7 @@ void func_80B9B428(Actor* thisx, PlayState* play2) {
                 this->unk_163 = path->count;
                 this->unk_164 = Lib_SegmentedToVirtual(path->points);
                 Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, this->unk_164);
-                this->dyna.actor.speedXZ = cue->urot.z * (45.0f / 0x2000);
+                this->dyna.actor.speedXZ = cue->rot.z * (45.0f / 0x2000);
                 this->unk_164++;
                 this->unk_15C = 1;
             }

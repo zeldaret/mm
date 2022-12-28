@@ -314,7 +314,7 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
 
             case 4:
                 this->actor.speedXZ =
-                    play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->urot.z * 0.005493164f;
+                    play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->rot.z * 0.005493164f;
                 if (this->unk_3EC < this->unk_3E8->count) {
                     if (func_80C16818(this)) {
                         this->unk_3EC++;

@@ -383,7 +383,7 @@ s16 ActorCutscene_Start(s16 index, Actor* actor) {
 
         if (sp20 == 1) {
             Camera_ChangeSetting(subCam, CAM_SET_FREE0);
-            Cutscene_LoadScript(sActorCsMgr.play, actorCs->scriptIndex);
+            Cutscene_SetScript(sActorCsMgr.play, actorCs->scriptIndex);
             sActorCsMgr.length = actorCs->length;
         } else {
             if (actorCs->csCamSceneDataId != -1) {

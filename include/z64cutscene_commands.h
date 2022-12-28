@@ -49,7 +49,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_DEFAULT(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
-    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_DEFAULT, topOptionBranch, bottomOptionBranch)
+    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXT_TYPE_DEFAULT, topOptionBranch, bottomOptionBranch)
 
 /**
  * ARGS
@@ -60,7 +60,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_TYPE_1(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
-    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_1, topOptionBranch, bottomOptionBranch)
+    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXT_TYPE_1, topOptionBranch, bottomOptionBranch)
 
 /**
  * ARGS
@@ -81,7 +81,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_TYPE_3(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
-    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_3, topOptionBranch, bottomOptionBranch)
+    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXT_TYPE_3, topOptionBranch, bottomOptionBranch)
 
 /**
  * If Player has all 4 bosses' remains then alternativeMessageId is used, otherwise defaultMessageId is used
@@ -92,7 +92,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_BOSSES_REMAINS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXTBOX_TYPE_BOSSES_REMAINS, alternativeMessageId, 0xFFFF)
+    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXT_TYPE_BOSSES_REMAINS, alternativeMessageId, 0xFFFF)
 
 /**
  * If Player has every non-transformation mask then alternativeMessageId is used, otherwise defaultMessageId is used
@@ -103,7 +103,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_ALL_NORMAL_MASKS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS, alternativeMessageId, 0xFFFF)
+    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXT_TYPE_ALL_NORMAL_MASKS, alternativeMessageId, 0xFFFF)
 
 /**
  * ARGS
@@ -113,7 +113,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_NONE(startFrame, endFrame) \
-    CS_TEXT_DISPLAY_TEXTBOX(0xFFFF, startFrame, endFrame, CS_TEXTBOX_TYPE_NONE, 0xFFFF, 0xFFFF)
+    CS_TEXT_DISPLAY_TEXTBOX(0xFFFF, startFrame, endFrame, CS_TEXT_TYPE_NONE, 0xFFFF, 0xFFFF)
 
 
 /**
@@ -187,8 +187,8 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_LIGHTING(lightSetting, startFrame, endFrame) \
-    { CMD_HH(lightSetting, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_LIGHT_SETTING(lightSetting, startFrame, endFrame) \
+    { CMD_BBH(0, (lightSetting + 1), startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -240,7 +240,7 @@
  *   0000009A eeeeeeee
  *   size = 0x8
  */
-#define CS_GIVETATL_LIST(entries) { CS_CMD_GIVE_TATL }, { CMD_W(entries) }
+#define CS_GIVE_TATL_LIST(entries) { CS_CMD_GIVE_TATL }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -250,7 +250,7 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_GIVETATL(base, startFrame, endFrame) \
+#define CS_GIVE_TATL(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
@@ -261,7 +261,7 @@
  *   0000009B eeeeeeee
  *   size = 0x8
  */
-#define CS_FADESCREEN_LIST(entries) { CS_CMD_FADE_SCREEN }, { CMD_W(entries) }
+#define CS_FADE_SCREEN_LIST(entries) { CS_CMD_FADE_SCREEN }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -272,20 +272,26 @@
  *   mmmmssss eeeerrgg bbUUUUUU
  *   size = 0x0C
  */
-#define CS_FADESCREEN(base, startFrame, endFrame, red, green, blue) \
+#define CS_FADE_SCREEN(base, startFrame, endFrame, red, green, blue) \
     { CMD_HH(base, startFrame) }, { CMD_HBB(endFrame, red, green) }, { CMD_BBBB(blue, 0, 0, 0) }
 
 
 /**
+ *  Stops a sequence at the specified time.
+ * @note `endFrame` is not used in the implementation of the command, so its value does not matter
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
  *   0000009C eeeeeeee
  *   size = 0x8
  */
-#define CS_FADESEQ_LIST(entries) { CS_CMD_FADE_OUT_SEQ }, { CMD_W(entries) }
+#define CS_FADE_OUT_SEQ_LIST(entries) { CS_CMD_FADE_OUT_SEQ }, { CMD_W(entries) }
 
 /**
+ *  Fade out the sequence that is playing on the specified sequence player, over the specified frame range.
+ * @see `CutsceneFadeOutSeqPlayer`
+ * 
  * ARGS
  *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
@@ -293,11 +299,13 @@
  *   mmmmssss eeeeUUUU UUUUUUUU
  *   size = 0x0C
  */
-#define CS_FADESEQ(base, startFrame, endFrame) \
+#define CS_FADE_OUT_SEQ(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, 0) }, { CMD_W(0) }
 
 
 /**
+ * Declares a list of `CS_TIME` entries.
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
@@ -307,6 +315,10 @@
 #define CS_TIME_LIST(entries) { CS_CMD_TIME }, { CMD_W(entries) }
 
 /**
+ * Sets the time of day.
+ * Both the day time and skybox time are set by this command.
+ * @note `endFrame` is not used in the implementation of the command, so its value does not matter
+ * 
  * ARGS
  *   s16 unk (u), s16 startFrame (s), s16 endFrame (e), s8 hour (h), s8 min (m)
  * FORMAT
@@ -319,17 +331,23 @@
 
 
 /**
+ * Declares a list of `CS_ACTOR_CUE` entries.
+ * 
  * ARGS
  *   s32 cmdType (c), s32 entries (e)
  * FORMAT
  *   cccccccc eeeeeeee
  *   size = 0x8
  */
-#define CS_ACTOR_ACTION_LIST(cmdType, entries) { CMD_W(cmdType) }, { CMD_W(entries) }
+#define CS_ACTOR_CUE_LIST(cmdType, entries) { CMD_W(cmdType) }, { CMD_W(entries) }
 
 /**
+ * Defines a cue that an actor can listen for. 
+ * The actor can choose whether or not to use the position and rotation data supplied to it.
+ * The cue `id` is a number that has an actor-specific meaning.
+ * 
  * ARGS
- *   s16 npcAction (a), s16 startFrame (s), s16 endFrame (e),
+ *   s16 id (a),        s16 startFrame (s), s16 endFrame (e),
  *   s16 rotX (u),      s16 rotY (v),       s16 rotZ (w),
  *   s32 startX (i),    s32 startY (j),     s32 startZ (k),
  *   s32 endX (l),      s32 endY (m),       s32 endZ (n),
@@ -338,25 +356,29 @@
  *   aaaassss eeeeuuuu vvvvwwww iiiiiiii jjjjjjjj kkkkkkkk llllllll mmmmmmmm nnnnnnnn xxxxxxxx yyyyyyyy zzzzzzzz
  *   size = 0x30
  */
-#define CS_ACTOR_ACTION(npcAction, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
-    { CMD_HH(npcAction, startFrame) }, { CMD_HH(endFrame, rotX) }, { CMD_HH(rotY, rotZ) }, \
+#define CS_ACTOR_CUE(id, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
+    { CMD_HH(id, startFrame) }, { CMD_HH(endFrame, rotX) }, { CMD_HH(rotY, rotZ) }, \
     { CMD_W(startX) }, { CMD_W(startY) }, { CMD_W(startZ) }, \
     { CMD_W(endX) }, { CMD_W(endY) }, { CMD_W(endZ) }, \
     { CMD_F(normX) }, { CMD_F(normY) }, { CMD_F(normZ) }
 
 
 /**
+ * Declares a list of `CS_PLAYER_CUE` entries.
+ * 
  * ARGS
  *   s32 cmdType (c), s32 entries (e)
  * FORMAT
  *   000000C8 eeeeeeee
  *   size = 0x8
  */
-#define CS_PLAYER_ACTION_LIST(entries) { CS_CMD_PLAYER_CUE }, { CMD_W(entries) }
+#define CS_PLAYER_CUE_LIST(entries) { CS_CMD_PLAYER_CUE }, { CMD_W(entries) }
 
 /**
+ * A player cue is the same as `CS_ACTOR_CUE` but is specifically for player. 
+ * 
  * ARGS
- *   s16 playerCue (a), s16 startFrame (s), s16 endFrame (e),
+ *   s16 id (a),         s16 startFrame (s), s16 endFrame (e),
  *   s16 rotX (u),       s16 rotY (v),       s16 rotZ (w),
  *   s32 startX (i),     s32 startY (j),     s32 startZ (k),
  *   s32 endX (l),       s32 endY (m),       s32 endZ (n),
@@ -365,8 +387,8 @@
  *   aaaassss eeeeuuuu vvvvwwww iiiiiiii jjjjjjjj kkkkkkkk llllllll mmmmmmmm nnnnnnnn xxxxxxxx yyyyyyyy zzzzzzzz
  *   size = 0x30
  */
-#define CS_PLAYER_ACTION(playerCue, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
-    CS_ACTOR_ACTION(playerCue, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ)
+#define CS_PLAYER_CUE(id, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ) \
+    CS_ACTOR_CUE(id, startFrame, endFrame, rotX, rotY, rotZ, startX, startY, startZ, endX, endY, endZ, normX, normY, normZ)
 
 
 /**
@@ -491,7 +513,7 @@
  *   00000134 eeeeeeee
  *   size = 0x8
  */
-#define CS_PLAYAMBIENCE_LIST(entries) { CS_CMD_START_AMBIENCE }, { CMD_W(entries) }
+#define CS_START_AMBIENCE_LIST(entries) { CS_CMD_START_AMBIENCE }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -501,7 +523,7 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_PLAYAMBIENCE(base, startFrame, endFrame, unk_06) \
+#define CS_START_AMBIENCE(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
@@ -512,7 +534,7 @@
  *   00000135 eeeeeeee
  *   size = 0x8
  */
-#define CS_FADEAMBIENCE_LIST(entries) { CS_CMD_FADE_OUT_AMBIENCE }, { CMD_W(entries) }
+#define CS_FADE_OUT_AMBIENCE_LIST(entries) { CS_CMD_FADE_OUT_AMBIENCE }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -522,20 +544,24 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_FADEAMBIENCE(base, startFrame, endFrame, unk_06) \
+#define CS_FADE_OUT_AMBIENCE(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
 /**
+ * Declares a list of `CS_DESTINATION` entries.
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
  *   0000015E eeeeeeee
  *   size = 0x8
  */
-#define CS_TERMINATOR_LIST(entries) { CS_CMD_DESTINATION }, { CMD_W(entries) }
+#define CS_DESTINATION_LIST(entries) { CS_CMD_DESTINATION }, { CMD_W(entries) }
 
 /**
+ *  Sends the player to a new destination using the entry defined in `CutsceneEntry`.
+ * 
  * ARGS
  *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
@@ -543,7 +569,7 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_TERMINATOR(base, startFrame, endFrame) \
+#define CS_DESTINATION(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
@@ -616,15 +642,25 @@
 #define CS_END() { CMD_W(0xFFFFFFFF) }
 
 // TODO: Fix ZAPD and delete these
+#define CS_ACTOR_ACTION_LIST           CS_ACTOR_CUE_LIST
+#define CS_ACTOR_ACTION                CS_ACTOR_CUE
+#define CS_PLAYER_ACTION_LIST          CS_PLAYER_CUE_LIST
+#define CS_PLAYER_ACTION               CS_PLAYER_CUE
 #define CS_LIGHTING_LIST               CS_LIGHT_SETTING_LIST
 #define CS_CAMERA_LIST                 CS_CAM_SPLINE_LIST
 #define CS_TEXT_LEARN_SONG             CS_TEXT_OCARINA_ACTION
 #define CS_SCENE_TRANS_FX_LIST         CS_TRANSITION_LIST
 #define CS_SCENE_TRANS_FX              CS_TRANSITION
+#define CS_GIVETATL_LIST               CS_GIVE_TATL_LIST
+#define CS_GIVETATL                    CS_GIVE_TATL
 #define CS_PLAYSEQ_LIST                CS_START_SEQ_LIST
 #define CS_STOPSEQ_LIST                CS_STOP_SEQ_LIST
-#define CS_FADE_BGM_LIST               CS_FADE_OUT_SEQ_LIST
-#define CS_FADE_BGM                    CS_FADE_OUT_SEQ
+#define CS_FADESEQ_LIST                CS_FADE_OUT_SEQ_LIST
+#define CS_FADESEQ                     CS_FADE_OUT_SEQ
+#define CS_PLAYAMBIENCE_LIST           CS_START_AMBIENCE_LIST
+#define CS_PLAYAMBIENCE                CS_START_AMBIENCE
+#define CS_FADEAMBIENCE_LIST           CS_FADE_OUT_AMBIENCE_LIST
+#define CS_FADEAMBIENCE                CS_FADE_OUT_AMBIENCE
 #define CS_SCENE_UNK_130_LIST          CS_SFX_REVERB_INDEX_2_LIST
 #define CS_SCENE_UNK_130               CS_SFX_REVERB_INDEX_2
 #define CS_SCENE_UNK_131_LIST          CS_SFX_REVERB_INDEX_1_LIST
@@ -633,7 +669,10 @@
 #define CS_SCENE_UNK_132               CS_MODIFY_SEQ
 #define CS_MOTIONBLUR_LIST             CS_MOTION_BLUR_LIST
 #define CS_MOTIONBLUR                  CS_MOTION_BLUR
-// #define CS_TERMINATOR                  CS_DESTINATION
+#define CS_FADESCREEN_LIST             CS_FADE_SCREEN_LIST
+#define CS_FADESCREEN                  CS_FADE_SCREEN
+#define CS_TERMINATOR_LIST             CS_DESTINATION_LIST
+#define CS_TERMINATOR                  CS_DESTINATION
 
 #define CS_PLAYSEQ(seqId, startFrame, endFrame) \
 CS_START_SEQ((seqId)-1, startFrame, endFrame)
@@ -641,5 +680,7 @@ CS_START_SEQ((seqId)-1, startFrame, endFrame)
 #define CS_STOPSEQ(seqId, startFrame, endFrame, unk_06) \
 CS_STOP_SEQ((seqId)-1, startFrame, endFrame, unk_06)
 
+#define CS_LIGHTING(lightSetting, startFrame, endFrame) \
+CS_LIGHT_SETTING((lightSetting)-1, startFrame, endFrame)
 
 #endif

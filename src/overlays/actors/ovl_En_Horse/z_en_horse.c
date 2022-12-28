@@ -2659,7 +2659,7 @@ void EnHorse_WarpMoveInit(EnHorse* this, PlayState* play, CsCmdActorCue* cue) {
     this->actor.world.pos.z = cue->startPos.z;
     this->actor.prevPos = this->actor.world.pos;
 
-    this->actor.world.rot.y = cue->urot.y;
+    this->actor.world.rot.y = cue->rot.y;
     this->actor.shape.rot = this->actor.world.rot;
 
     this->animIndex = ENHORSE_ANIM_GALLOP;
@@ -2699,7 +2699,7 @@ void EnHorse_CsWarpRearingInit(EnHorse* this, PlayState* play, CsCmdActorCue* cu
     this->actor.world.pos.z = cue->startPos.z;
     this->actor.prevPos = this->actor.world.pos;
 
-    this->actor.world.rot.y = cue->urot.y;
+    this->actor.world.rot.y = cue->rot.y;
     this->actor.shape.rot = this->actor.world.rot;
 
     this->animIndex = ENHORSE_ANIM_REARING;
@@ -2790,7 +2790,7 @@ void EnHorse_CutsceneUpdate(EnHorse* this, PlayState* play) {
                     this->actor.world.pos.y = playerCue->startPos.y;
                     this->actor.world.pos.z = playerCue->startPos.z;
 
-                    this->actor.world.rot.y = playerCue->urot.y;
+                    this->actor.world.rot.y = playerCue->rot.y;
                     this->actor.shape.rot = this->actor.world.rot;
                     this->actor.prevPos = this->actor.world.pos;
                 }
@@ -3114,7 +3114,7 @@ void func_80883B70(EnHorse* this, CsCmdActorCue* cue) {
     this->actor.world.pos.y = cue->startPos.y;
     this->actor.world.pos.z = cue->startPos.z;
 
-    this->actor.world.rot.y = cue->urot.y;
+    this->actor.world.rot.y = cue->rot.y;
     this->actor.shape.rot = this->actor.world.rot;
 
     this->actor.prevPos = this->actor.world.pos;
@@ -3300,7 +3300,7 @@ void func_80884718(EnHorse* this, PlayState* play) {
                 this->actor.world.pos.y = cue->startPos.y;
                 this->actor.world.pos.z = cue->startPos.z;
 
-                this->actor.world.rot.y = cue->urot.y;
+                this->actor.world.rot.y = cue->rot.y;
                 this->actor.shape.rot = this->actor.world.rot;
 
                 this->actor.prevPos = this->actor.world.pos;

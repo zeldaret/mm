@@ -77,7 +77,7 @@ s16 (*CutsceneCamera_Interpolate(u8 interpType))(Vec3f*, f32*, s16*, CutsceneCam
     }
 }
 
-u8 CutsceneCamera_ProcessSubCommands(CutsceneCamera* csCamera) {
+u8 CutsceneCamera_UpdateSpline(CutsceneCamera* csCamera) {
     s32 sp5C;
     f32* fov;
     s16* roll;
@@ -267,8 +267,8 @@ s32 CutsceneCamera_ProcessCommands(u8* cmd, CutsceneCamera* csCamera) {
             if (csCamera->unk_0C >= csCamera->unk_0A) {
                 csCamera->unk_0A++;
                 if (csCamera->unk_0C >= csCamera->unk_0A) {
-                    // Process SubCommands
-                    if (!CutsceneCamera_ProcessSubCommands(csCamera)) {
+                    // Process Spline
+                    if (!CutsceneCamera_UpdateSpline(csCamera)) {
                         csCamera->unk_06 = 3;
                     }
                 }
@@ -315,7 +315,7 @@ s32 CutsceneCamera_ProcessCommands(u8* cmd, CutsceneCamera* csCamera) {
                 csCamera->unk_0A++;
                 if (csCamera->unk_0C >= csCamera->unk_0A) {
                     // Process SubCommands
-                    if (!CutsceneCamera_ProcessSubCommands(csCamera)) {
+                    if (!CutsceneCamera_UpdateSpline(csCamera)) {
                         csCamera->unk_06 = 3;
                     }
                 }
@@ -337,9 +337,15 @@ s32 CutsceneCamera_ProcessCommands(u8* cmd, CutsceneCamera* csCamera) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161BAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161BE0.s")
+void CutsceneCamera_SetState(s16 state) {
+    if (sCurCsCamera->unk_06 == 0) {
+        sCurCsCamera->unk_06 = state;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161C0C.s")
+void CutsceneCamera_Reset(void) {
+    sCurCsCamera->unk_06 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161C20.s")
 

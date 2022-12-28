@@ -5,102 +5,276 @@
 #include "unk.h"
 
 
-typedef struct {
-    /* 0x00 */ u16 id; // "dousa"
-    /* 0x02 */ u16 startFrame;
-    /* 0x04 */ u16 endFrame;
-    union {
-        /* 0x06 */ Vec3s rot;
-        /* 0x06 */ Vec3us urot;
+typedef union {
+    struct {
+        /* 0x00 */ u16 id; // "dousa"
+        /* 0x02 */ u16 startFrame;
+        /* 0x04 */ u16 endFrame;
+        /* 0x06 */ Vec3us rot;
+        /* 0x0C */ Vec3i startPos;
+        /* 0x18 */ Vec3i endPos;
+        /* 0x24 */ Vec3f normal;
     };
-    /* 0x0C */ Vec3i startPos;
-    /* 0x18 */ Vec3i endPos;
-    /* 0x24 */ Vec3f normal;
+    s32 _words[12];
 } CsCmdActorCue; // size = 0x30
-
-typedef struct {
-    /* 0x0 */ u16 base;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u16 unk_06;
-} CsCmdBase; // size = 0x8
 
 typedef union {
     struct {
-        /* 0x00 */ u16 type;
-        /* 0x02 */ u16 startFrame;
-        /* 0x04 */ u16 endFrame;
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
     };
     s32 _words[2];
 } CsCmdMisc; // size = 0x30
 
-typedef struct {
-    /* 0x0 */ u16 unk0;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u8 hour;
-    /* 0x7 */ u8 minute;
-    /* 0x8 */ UNK_TYPE1 unk_08[0x04];
-} CsCmdDayTime; // size = 0xC
+typedef union {
+    struct {
+        /* 0x0 */ u16 unused0;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+        /* 0x6 */ u8  hour;
+        /* 0x7 */ u8  minute;
+    };
+    s32 _words[3];
+} CsCmdTime; // size = 0xC
 
-typedef struct {
-    /* 0x0 */ u16 setting;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u16 unk_06;
+typedef union {
+    struct {
+        /* 0x0 */ u16 settingPlusOne;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
 } CsCmdLightSetting; // size = 0x8
 
-typedef struct {
-    /* 0x0 */ u16 sequence;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u16 unk_06;
+typedef union {
+    struct {
+        /* 0x0 */ u16 seqIdPlusOne;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+    };
+    s32 _words[2];
 } CsCmdStartSeq; // size = 0x8
 
-typedef struct {
-    /* 0x0 */ u16 type;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u16 unk_06;
-    /* 0x8 */ u32 unk_08;
-} CsCmdSequenceFade; // size = 0xC
+typedef union {
+    struct {
+        /* 0x0 */ u16 seqIdPlusOne;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+    };
+    s32 _words[2];
+} CsCmdStopSeq; // size = 0x8
 
-typedef struct {
-    /* 0x0 */ u16 base;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u16 type;
-    /* 0x8 */ u16 textId1;
-    /* 0xA */ u16 textId2;
+typedef union {
+    struct {
+        /* 0x0 */ u16 seqPlayer;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+    };
+    s32 _words[3];
+} CsCmdFadeOutSeq; // size = 0xC
+
+typedef enum {
+    /* 1 */ CS_FADE_OUT_BGM_MAIN = 1,
+    /* 2 */ CS_FADE_OUT_FANFARE
+} CutsceneFadeOutSeqPlayer;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 unused0;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdStartAmbience; // size = 0x8
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 unused0;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+    };
+    s32 _words[2];
+} CsCmdFadeOutAmbience; // size = 0x8
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdModifySeq; // size = 0x8
+
+typedef enum {
+    /* 1 */ CS_MOD_SEQ_0 = 1,
+    /* 2 */ CS_MOD_SEQ_1,
+    /* 3 */ CS_MOD_SEQ_2,
+    /* 4 */ CS_MOD_AMBIENCE_0,
+    /* 5 */ CS_MOD_AMBIENCE_1,
+    /* 6 */ CS_MOD_AMBIENCE_2,
+    /* 7 */ CS_MOD_SEQ_STORE,
+    /* 8 */ CS_MOD_SEQ_RESTORE
+} CsModifySeq;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdDestination; // size = 0x8
+
+typedef enum {
+    /* 1 */ CS_DESTINATION_DEFAULT = 1,
+    /* 2 */ CS_DESTINATION_BOSS_WARP
+} CsDestination;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdChooseCreditsScene; // size = 0x8
+
+typedef enum {
+    /*  1 */ CS_CREDITS_DESTINATION = CS_DESTINATION_DEFAULT,
+    /*  2 */ CS_CREDITS_MASK_KAMARO,
+    /*  3 */ CS_CREDITS_MASK_GREAT_FAIRY,
+    /*  4 */ CS_CREDITS_MASK_ROMANI,
+    /*  5 */ CS_CREDITS_MASK_BLAST,
+    /*  6 */ CS_CREDITS_MASK_CIRCUS_LEADER,
+    /*  7 */ CS_CREDITS_MASK_BREMEN,
+    /*  8 */ CS_CREDITS_IKANA,
+    /*  9 */ CS_CREDITS_MASK_COUPLE,
+    /* 10 */ CS_CREDITS_MASK_BUNNY,
+    /* 11 */ CS_CREDITS_MASK_POSTMAN
+} CsChooseCreditsScene;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+    };
+    s32 _words[2];
+} CsCmdMotionBlur; // size = 0x8
+
+typedef enum {
+    /* 1 */ CS_MOTION_BLUR_INSTANT = 1,
+    /* 2 */ CS_MOTION_BLUR_GRADUAL
+} CsMotionBlur;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 unused0;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdSfxReverbIndexTo2; // size = 0x8
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 unused0;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdSfxReverbIndexTo1; // size = 0x8
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+    };
+    s32 _words[2];
+} CsCmdTransition; // size = 0x8
+
+typedef enum {
+    /*  1 */ CS_TRANS_GRAY_FILL_IN = 1, // has hardcoded sounds for some scenes
+    /*  2 */ CS_TRANS_BLUE_FILL_IN,
+    /*  3 */ CS_TRANS_RED_FILL_OUT,
+    /*  4 */ CS_TRANS_GREEN_FILL_OUT,
+    /*  5 */ CS_TRANS_GRAY_FILL_OUT,
+    /*  6 */ CS_TRANS_BLUE_FILL_OUT,
+    /*  7 */ CS_TRANS_RED_FILL_IN,
+    /*  8 */ CS_TRANS_GREEN_FILL_IN,
+    /*  9 */ CS_TRANS_TRIGGER_INSTANCE, // used with `TRANS_MODE_INSTANCE_WAIT`
+    /* 10 */ CS_TRANS_BLACK_FILL_OUT,
+    /* 11 */ CS_TRANS_BLACK_FILL_IN,
+    /* 12 */ CS_TRANS_BLACK_C,
+    /* 13 */ CS_TRANS_BLACK_D
+} CutsceneTransitionType;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 textId; // can also be an ocarina action for `CS_TEXT_OCARINA_ACTION`
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+        /* 0x6 */ u16 type;
+        /* 0x8 */ u16 altTextId1;
+        /* 0xA */ u16 altTextId2;
+    };
+    s32 _words[3];
 } CsCmdText; // size = 0xC
 
 typedef enum {
-    /* -1 */ CS_TEXTBOX_TYPE_NONE = -1,
-    /*  0 */ CS_TEXTBOX_TYPE_DEFAULT,
-    /*  1 */ CS_TEXTBOX_TYPE_1,
+    /* -1 */ CS_TEXT_TYPE_NONE = -1,
+    /*  0 */ CS_TEXT_TYPE_DEFAULT,
+    /*  1 */ CS_TEXT_TYPE_1,
     /*  2 */ CS_TEXT_OCARINA_ACTION,
-    /*  3 */ CS_TEXTBOX_TYPE_3,
-    /*  4 */ CS_TEXTBOX_TYPE_BOSSES_REMAINS,
-    /*  5 */ CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS
+    /*  3 */ CS_TEXT_TYPE_3,
+    /*  4 */ CS_TEXT_TYPE_BOSSES_REMAINS,
+    /*  5 */ CS_TEXT_TYPE_ALL_NORMAL_MASKS
 } CutsceneTextboxType;
 
-typedef struct {
-    /* 0x0 */ u16 type;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ u8 intensity;
-    /* 0x7 */ u8 decayTimer;
-    /* 0x8 */ u8 decayStep;
-    /* 0x9 */ UNK_TYPE1 pad9[0x3];
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+        /* 0x6 */ u8 intensity;
+        /* 0x7 */ u8 decayTimer;
+        /* 0x8 */ u8 decayStep;
+    };
+    s32 _words[3];
 } CsCmdRumble; // size = 0xC
 
-typedef struct {
-    /* 0x0 */ u16 unk0;
-    /* 0x2 */ u16 startFrame;
-    /* 0x4 */ u16 endFrame;
-    /* 0x6 */ Color_RGB8 color;
-    /* 0x9 */ UNK_TYPE1 pad9[0x3];
+typedef enum {
+    /* 1 */ CS_RUMBLE_ONCE = 1, // rumble once when startFrame is reached
+    /* 2 */ CS_RUMBLE_REPEATED // rumble every 64 frames between startFrame and endFrame
+} CutsceneRumbleType;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame;
+        /* 0x6 */ Color_RGB8 color;
+    };
+    s32 _words[3];
 } CsCmdFadeScreen; // size = 0xC
+
+typedef enum {
+    /* 1 */ CS_FADE_IN_SCREEN = 1,
+    /* 2 */ CS_FADE_OUT_SCREEN,
+} CsFadeScreen;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 type;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdGiveTatl; // size = 0x8
+
+#define CS_GIVE_TATL 1
 
 typedef enum {
     /* 0 */ CS_STATE_IDLE,
@@ -109,6 +283,15 @@ typedef enum {
     /* 3 */ CS_STATE_STOP,
     /* 4 */ CS_STATE_RUN_UNSTOPPABLE
 } CutsceneState;
+
+typedef union {
+    struct {
+        /* 0x0 */ u16 unused0;
+        /* 0x2 */ u16 startFrame;
+        /* 0x4 */ u16 endFrame; // unused
+    };
+    s32 _words[2];
+} CsCmdUnimplemented; // size = 0x8
 
 typedef enum {
     /* 0x00A */ CS_CMD_TEXT = 10,
@@ -173,6 +356,17 @@ typedef enum {
     /* 0x09D */ CS_CMD_TIME,
     /* 0x0C8 */ CS_CMD_PLAYER_CUE = 200,
     /* 0x0C9 */ CS_CMD_ACTOR_CUE_201,
+    /* 0x0FA */ CS_CMD_UNK_DATA_FA = 0xFA,
+    /* 0x0FE */ CS_CMD_UNK_DATA_FE = 0xFE,
+    /* 0x0FF */ CS_CMD_UNK_DATA_FF,
+    /* 0x100 */ CS_CMD_UNK_DATA_100,
+    /* 0x101 */ CS_CMD_UNK_DATA_101,
+    /* 0x102 */ CS_CMD_UNK_DATA_102,
+    /* 0x103 */ CS_CMD_UNK_DATA_103,
+    /* 0x104 */ CS_CMD_UNK_DATA_104,
+    /* 0x105 */ CS_CMD_UNK_DATA_105,
+    /* 0x108 */ CS_CMD_UNK_DATA_108 = 0x108,
+    /* 0x109 */ CS_CMD_UNK_DATA_109,
     /* 0x12C */ CS_CMD_START_SEQ = 300,
     /* 0x12D */ CS_CMD_STOP_SEQ,
     /* 0x12E */ CS_CMD_START_AMBIENCE,
@@ -379,27 +573,6 @@ typedef enum {
     /* 0x28 */ CS_MISC_FOREVER
 } CutsceneMiscType;
 
-typedef enum {
-    /* 0x2 */ CS_FADE_OUT_FANFARE = 2, 
-    /* 0x3 */ CS_FADE_OUT_BGM_MAIN
-} CutsceneFadeOutSeqPlayer;
-
-typedef enum {
-    /* 0x01 */ CS_TRANS_GRAY_FILL_IN = 1, // has hardcoded sounds for some scenes
-    /* 0x02 */ CS_TRANS_BLUE_FILL_IN,
-    /* 0x03 */ CS_TRANS_RED_FILL_OUT,
-    /* 0x04 */ CS_TRANS_GREEN_FILL_OUT,
-    /* 0x05 */ CS_TRANS_GRAY_FILL_OUT,
-    /* 0x06 */ CS_TRANS_BLUE_FILL_OUT,
-    /* 0x07 */ CS_TRANS_RED_FILL_IN,
-    /* 0x08 */ CS_TRANS_GREEN_FILL_IN,
-    /* 0x09 */ CS_TRANS_TRIGGER_INSTANCE, // used with `TRANS_MODE_INSTANCE_WAIT`
-    /* 0x0A */ CS_TRANS_BLACK_FILL_OUT,
-    /* 0x0B */ CS_TRANS_BLACK_FILL_IN,
-    /* 0x0C */ CS_TRANS_BLACK_C,
-    /* 0x0D */ CS_TRANS_BLACK_D
-} CutsceneTransitionType;
-
 typedef union CutsceneData {
     s32 i;
     f32 f;
@@ -411,7 +584,10 @@ typedef union CutsceneData {
 #define CS_SPAWN_FLAG_ALWAYS 0xFE
 // Despite there being more than `0x1F` indices for weekEventFlags,
 // this u8 flag entry can only check weekEventFlags with indices [0x0 - 0x1F]
-#define CS_SPAWN_FLAG_WEEKEVENT(flag) ((((flag) & 0x1F00) >> 5) | ((bit) & 0x7F))
+#define CS_SPAWN_FLAG_WEEKEVENTREG(flag) ((((flag) & 0x1F00) >> 5) | ((bit) & 0x7F))
+#define CHECK_CS_SPAWN_FLAG_WEEKEVENTREG(spawnFlags) (GET_WEEKEVENTREG((spawnFlags) / 8) & (1 << ((spawnFlags) % 8)))
+#define SET_CS_SPAWN_FLAG_WEEKEVENTREG(spawnFlags) (WEEKEVENTREG((spawnFlags) / 8) = GET_WEEKEVENTREG((spawnFlags) / 8) | (1 << ((spawnFlags) % 8)))
+
 
 typedef struct {
     /* 0x0 */ CutsceneData* script;
