@@ -177,6 +177,9 @@ void ActorCutscene_End(void) {
             func_800B7298(sActorCsMgr.play, 0, PLAYER_CSMODE_END);
             sActorCsMgr.startMethod = 0;
             break;
+
+        default:
+            break;
     }
 
     actorCs = ActorCutscene_GetCutsceneImpl(sActorCsMgr.actorCsId);
@@ -262,7 +265,9 @@ s16 ActorCutscene_Update(void) {
         ActorCutscene_End();
         sp1E = 2;
     }
+
     ActorCutscene_ClearNextCutscenes();
+
     if (sActorCsMgr.actorCsId == -1) {
         if ((ActorCutscene_MarkNextCutscenes() == 0) && (sp1E != 0)) {
             ShrinkWindow_Letterbox_SetSizeTarget(0);

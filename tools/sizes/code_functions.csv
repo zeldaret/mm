@@ -1062,9 +1062,9 @@ asm/non_matchings/code/z_demo/CutsceneCmd_StartSequence.s,CutsceneCmd_StartSeque
 asm/non_matchings/code/z_demo/CutsceneCmd_StopSequence.s,CutsceneCmd_StopSequence,0x800EAC44,0x14
 asm/non_matchings/code/z_demo/CutsceneCmd_FadeOutSequence.s,CutsceneCmd_FadeOutSequence,0x800EAC94,0x20
 asm/non_matchings/code/z_demo/CutsceneCmd_StartAmbience.s,CutsceneCmd_StartAmbience,0x800EAD14,0xD
-asm/non_matchings/code/z_demo/func_800EAD48.s,func_800EAD48,0x800EAD48,0xD
-asm/non_matchings/code/z_demo/func_800EAD7C.s,func_800EAD7C,0x800EAD7C,0xD
-asm/non_matchings/code/z_demo/func_800EADB0.s,func_800EADB0,0x800EADB0,0x47
+asm/non_matchings/code/z_demo/Cutscene_SetSfxReverbIndexTo2.s,Cutscene_SetSfxReverbIndexTo2,0x800EAD48,0xD
+asm/non_matchings/code/z_demo/Cutscene_SetSfxReverbIndexTo1.s,Cutscene_SetSfxReverbIndexTo1,0x800EAD7C,0xD
+asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s,CutsceneCmd_ModifySequence,0x800EADB0,0x47
 asm/non_matchings/code/z_demo/CutsceneCmd_FadeOutAmbience.s,CutsceneCmd_FadeOutAmbience,0x800EAECC,0x15
 asm/non_matchings/code/z_demo/CutsceneCmd_RumbleController.s,CutsceneCmd_RumbleController,0x800EAF20,0x30
 asm/non_matchings/code/z_demo/CutsceneCmd_FadeColorScreen.s,CutsceneCmd_FadeColorScreen,0x800EAFE0,0x7F
@@ -1078,7 +1078,7 @@ asm/non_matchings/code/z_demo/CutsceneCmd_Transition.s,CutsceneCmd_Transition,0x
 asm/non_matchings/code/z_demo/CutsceneCmd_UpdateCamSpline.s,CutsceneCmd_UpdateCamSpline,0x800EC678,0x17
 asm/non_matchings/code/z_demo/Cutscene_CountNormalMasks.s,Cutscene_CountNormalMasks,0x800EC6D4,0x94
 asm/non_matchings/code/z_demo/CutsceneCmd_Text.s,CutsceneCmd_Text,0x800EC924,0x116
-asm/non_matchings/code/z_demo/func_800ECD7C.s,func_800ECD7C,0x800ECD7C,0x31
+asm/non_matchings/code/z_demo/Cutscene_SetActorCue.s,Cutscene_SetActorCue,0x800ECD7C,0x31
 asm/non_matchings/code/z_demo/Cutscene_ProcessScript.s,Cutscene_ProcessScript,0x800ECE40,0x2D0
 asm/non_matchings/code/z_demo/CutsceneHandler_RunScript.s,CutsceneHandler_RunScript,0x800ED980,0x11
 asm/non_matchings/code/z_demo/CutsceneHandler_StopManual.s,CutsceneHandler_StopManual,0x800ED9C4,0x10

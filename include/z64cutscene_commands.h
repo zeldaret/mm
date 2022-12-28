@@ -5,13 +5,19 @@
 #include "z64cutscene.h"
 
 /**
+ * Cutscene scripts are arrays of `CutsceneData` words, including bit-packed integers and floats.
+ */
+
+/**
+ * Marks the beginning of a cutscene script.
+ * 
  * ARGS
- *   s32 totalEntries (e), s32 endFrame (n)
+ *   s32 totalEntries (e), s32 frameCount (n)
  * FORMAT
  *   eeeeeeee nnnnnnnn
  *   size = 0x8
  */
-#define CS_BEGIN_CUTSCENE(totalEntries, endFrame) { CMD_W(totalEntries) }, { CMD_W(endFrame) }
+#define CS_BEGIN_CUTSCENE(totalEntries, frameCount) { CMD_W(totalEntries) }, { CMD_W(frameCount) }
 
 
 /**
@@ -21,7 +27,7 @@
  *   0000000A eeeeeeee
  *   size = 0x8
  */
-#define CS_TEXT_LIST(entries) { CS_CMD_TEXTBOX }, { CMD_W(entries) }
+#define CS_TEXT_LIST(entries) { CS_CMD_TEXT }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -63,7 +69,7 @@
  *   oooossss eeee0002 iiiiFFFF
  *   size = 0xC
  */
-#define CS_TEXT_LEARN_SONG(ocarinaSongAction, startFrame, endFrame, messageId) \
+#define CS_TEXT_OCARINA_ACTION(ocarinaSongAction, startFrame, endFrame, messageId) \
     CS_TEXT_DISPLAY_TEXTBOX(ocarinaSongAction, startFrame, endFrame, CS_TEXT_OCARINA_ACTION, messageId, 0xFFFF)
 
 /**
@@ -117,12 +123,23 @@
  *   0000005A eeeeeeee
  *   size = 0x8
  */
-#define CS_CAMERA_LIST(entries) { CS_CMD_CAMERA }, { CMD_W(entries) }
+#define CS_CAM_SPLINE_LIST(entries) { CS_CMD_CAMERA_SPLINE }, { CMD_W(entries) }
 
-// TODO: Camera command macros. Requieres CutsceneCamera_ProcessCommands being decomped
+#define CS_CAM_SPLINE(numEntries, unused0, unused1, unk_06) \
+    { CMD_HH(numEntries, unused0) }, { CMD_HH(unused1, unk_06) }
+
+#define CS_CAM_POINT(interp, unk_01, unk_02, posX, posY, posZ, unk_0A) \
+    { CMD_BBH(interp, unk_01, unk_02) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, unk_0A) }
+
+#define CS_CAM_MISC(unused0, roll, fov, unused1) \
+    { CMD_HH(unused0, roll) }, { CMD_HH(fov, unused1) }
+
+#define CS_CAM_END() { CMD_HH(0xFFFF, 4) }
 
 
 /**
+ * Declares a list of `CS_MISC` entries.
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
@@ -132,36 +149,46 @@
 #define CS_MISC_LIST(entries) { CS_CMD_MISC }, { CMD_W(entries) }
 
 /**
+ * Various miscellaneous commands.
+ * @see `CutsceneMiscType` enum for the different types of commands.
+ * @note setting `endFrame` to same value as `startFrame` will not behave as expected.
+ * For commands that only need to last one frame, set `endFrame` to `startFrame + 1`.
+ * 
  * ARGS
  *   s16 unk (u), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   uuuussss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_MISC(unk, startFrame, endFrame, unk_06) \
     { CMD_HH(unk, startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
 /**
+ * Declares a list of `CS_LIGHT_SETTING` entries.
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
  *   00000097 eeeeeeee
  *   size = 0x8
  */
-#define CS_LIGHTING_LIST(entries) { CS_CMD_SET_LIGHTING }, { CMD_W(entries) }
+#define CS_LIGHT_SETTING_LIST(entries) { CS_CMD_LIGHT_SETTING }, { CMD_W(entries) }
 
 /**
+ * Changes the environment lights to the specified setting.
+ * The lighting change will take place immediately with no blending.
+ * 
  * ARGS
  *   s16 setting (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_LIGHTING(setting, startFrame, endFrame) \
-    { CMD_HH(setting, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_LIGHTING(lightSetting, startFrame, endFrame) \
+    { CMD_HH(lightSetting, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -171,7 +198,7 @@
  *   00000098 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_TRANS_FX_LIST(entries) { CS_CMD_SCENE_TRANS_FX }, { CMD_W(entries) }
+#define CS_TRANSITION_LIST(entries) { CS_CMD_TRANSITION }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -179,9 +206,9 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_SCENE_TRANS_FX(transitionType, startFrame, endFrame) \
+#define CS_TRANSITION(transitionType, startFrame, endFrame) \
     { CMD_HH(transitionType, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
@@ -190,9 +217,9 @@
  *   s32 entries (e)
  * FORMAT
  *   00000099 eeeeeeee
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_MOTIONBLUR_LIST(entries) { CS_CMD_MOTIONBLUR }, { CMD_W(entries) }
+#define CS_MOTION_BLUR_LIST(entries) { CS_CMD_MOTION_BLUR }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -200,9 +227,9 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_MOTIONBLUR(base, startFrame, endFrame) \
+#define CS_MOTION_BLUR(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
@@ -213,7 +240,7 @@
  *   0000009A eeeeeeee
  *   size = 0x8
  */
-#define CS_GIVETATL_LIST(entries) { CS_CMD_GIVETATL }, { CMD_W(entries) }
+#define CS_GIVETATL_LIST(entries) { CS_CMD_GIVE_TATL }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -221,7 +248,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_GIVETATL(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
@@ -234,7 +261,7 @@
  *   0000009B eeeeeeee
  *   size = 0x8
  */
-#define CS_FADESCREEN_LIST(entries) { CS_CMD_FADESCREEN }, { CMD_W(entries) }
+#define CS_FADESCREEN_LIST(entries) { CS_CMD_FADE_SCREEN }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -256,7 +283,7 @@
  *   0000009C eeeeeeee
  *   size = 0x8
  */
-#define CS_FADESEQ_LIST(entries) { CS_CMD_FADESEQ }, { CMD_W(entries) }
+#define CS_FADESEQ_LIST(entries) { CS_CMD_FADE_OUT_SEQ }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -277,7 +304,7 @@
  *   0000009D eeeeeeee
  *   size = 0x8
  */
-#define CS_TIME_LIST(entries) { CS_CMD_SETTIME }, { CMD_W(entries) }
+#define CS_TIME_LIST(entries) { CS_CMD_TIME }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -325,7 +352,7 @@
  *   000000C8 eeeeeeee
  *   size = 0x8
  */
-#define CS_PLAYER_ACTION_LIST(entries) { CS_CMD_SET_PLAYER_ACTION }, { CMD_W(entries) }
+#define CS_PLAYER_ACTION_LIST(entries) { CS_CMD_PLAYER_CUE }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -343,24 +370,30 @@
 
 
 /**
+ * Declares a list of `CS_START_SEQ` entries.
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
  *   0000012C eeeeeeee
  *   size = 0x8
  */
-#define CS_PLAYSEQ_LIST(entries) { CS_CMD_PLAYSEQ }, { CMD_W(entries) }
+#define CS_START_SEQ_LIST(entries) \
+    { CS_CMD_START_SEQ }, { CMD_W(entries) }
 
 /**
+ * Starts a sequence at the specified time.
+ * @note `endFrame` is not used in the implementation of the command, so its value does not matter
+ * 
  * ARGS
  *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_PLAYSEQ(sequence, startFrame, endFrame) \
-    { CMD_HH(sequence, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_START_SEQ(sequence, startFrame, endFrame) \
+    { CMD_HH((sequence + 1), startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -370,7 +403,7 @@
  *   00000130 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_130_LIST(entries) { CS_CMD_130 }, { CMD_W(entries) }
+#define CS_SFX_REVERB_INDEX_2_LIST(entries) { CS_CMD_SFX_REVERB_INDEX_2 }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -380,7 +413,7 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x30
  */
-#define CS_SCENE_UNK_130(base, startFrame, endFrame, unk_06) \
+#define CS_SFX_REVERB_INDEX_2(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
@@ -391,7 +424,7 @@
  *   00000131 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_131_LIST(entries) { CS_CMD_131 }, { CMD_W(entries) }
+#define CS_SFX_REVERB_INDEX_1_LIST(entries) { CS_CMD_SFX_REVERB_INDEX_1 }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -399,9 +432,9 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_SCENE_UNK_131(base, startFrame, endFrame, unk_06) \
+#define CS_SFX_REVERB_INDEX_1(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
@@ -412,7 +445,7 @@
  *   00000132 eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_132_LIST(entries) { CS_CMD_132 }, { CMD_W(entries) }
+#define CS_MODIFY_SEQ_LIST(entries) { CS_CMD_MODIFY_SEQ }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -420,31 +453,35 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_SCENE_UNK_132(base, startFrame, endFrame) \
+#define CS_MODIFY_SEQ(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
+ * Declares a list of `CS_STOP_SEQ` entries.
+ * 
  * ARGS
  *   s32 entries (e)
  * FORMAT
  *   00000133 eeeeeeee
  *   size = 0x8
  */
-#define CS_STOPSEQ_LIST(entries) { CS_CMD_STOPSEQ }, { CMD_W(entries) }
+#define CS_STOP_SEQ_LIST(entries) { CS_CMD_STOP_SEQ }, { CMD_W(entries) }
 
 /**
+ * Stops a sequence at the specified time.
+ * 
  * ARGS
  *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
-#define CS_STOPSEQ(base, startFrame, endFrame, unk_06) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
+#define CS_STOP_SEQ(seqId, startFrame, endFrame, unk_06) \
+    { CMD_HH((seqId + 1), startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
 /**
@@ -454,7 +491,7 @@
  *   00000134 eeeeeeee
  *   size = 0x8
  */
-#define CS_PLAYAMBIENCE_LIST(entries) { CS_CMD_PLAYAMBIENCE }, { CMD_W(entries) }
+#define CS_PLAYAMBIENCE_LIST(entries) { CS_CMD_START_AMBIENCE }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -462,7 +499,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_PLAYAMBIENCE(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
@@ -475,7 +512,7 @@
  *   00000135 eeeeeeee
  *   size = 0x8
  */
-#define CS_FADEAMBIENCE_LIST(entries) { CS_CMD_FADEAMBIENCE }, { CMD_W(entries) }
+#define CS_FADEAMBIENCE_LIST(entries) { CS_CMD_FADE_OUT_AMBIENCE }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -483,7 +520,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_FADEAMBIENCE(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
@@ -496,7 +533,7 @@
  *   0000015E eeeeeeee
  *   size = 0x8
  */
-#define CS_TERMINATOR_LIST(entries) { CS_CMD_TERMINATOR }, { CMD_W(entries) }
+#define CS_TERMINATOR_LIST(entries) { CS_CMD_DESTINATION }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -504,7 +541,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_TERMINATOR(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
@@ -525,7 +562,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_CHOOSE_CREDITS_SCENES(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
@@ -546,7 +583,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_RUMBLE(base, startFrame, endFrame, intensity, decayTimer, decayStep) \
     { CMD_HH(base, startFrame) }, { CMD_HBB(endFrame, intensity, decayTimer) }, { CMD_BBBB(decayStep, 0, 0, 0) }
@@ -567,7 +604,7 @@
  * FORMAT
  *   Capital U is Unused
  *   mmmmssss eeeeUUUU
- *   size = 0x08
+ *   size = 0x8
  */
 #define CS_UNK_DATA(base, startFrame, endFrame, unk_06) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
@@ -577,5 +614,32 @@
  * Marks the end of a cutscene
  */
 #define CS_END() { CMD_W(0xFFFFFFFF) }
+
+// TODO: Fix ZAPD and delete these
+#define CS_LIGHTING_LIST               CS_LIGHT_SETTING_LIST
+#define CS_CAMERA_LIST                 CS_CAM_SPLINE_LIST
+#define CS_TEXT_LEARN_SONG             CS_TEXT_OCARINA_ACTION
+#define CS_SCENE_TRANS_FX_LIST         CS_TRANSITION_LIST
+#define CS_SCENE_TRANS_FX              CS_TRANSITION
+#define CS_PLAYSEQ_LIST                CS_START_SEQ_LIST
+#define CS_STOPSEQ_LIST                CS_STOP_SEQ_LIST
+#define CS_FADE_BGM_LIST               CS_FADE_OUT_SEQ_LIST
+#define CS_FADE_BGM                    CS_FADE_OUT_SEQ
+#define CS_SCENE_UNK_130_LIST          CS_SFX_REVERB_INDEX_2_LIST
+#define CS_SCENE_UNK_130               CS_SFX_REVERB_INDEX_2
+#define CS_SCENE_UNK_131_LIST          CS_SFX_REVERB_INDEX_1_LIST
+#define CS_SCENE_UNK_131               CS_SFX_REVERB_INDEX_1
+#define CS_SCENE_UNK_132_LIST          CS_MODIFY_SEQ_LIST
+#define CS_SCENE_UNK_132               CS_MODIFY_SEQ
+#define CS_MOTIONBLUR_LIST             CS_MOTION_BLUR_LIST
+#define CS_MOTIONBLUR                  CS_MOTION_BLUR
+// #define CS_TERMINATOR                  CS_DESTINATION
+
+#define CS_PLAYSEQ(seqId, startFrame, endFrame) \
+CS_START_SEQ((seqId)-1, startFrame, endFrame)
+
+#define CS_STOPSEQ(seqId, startFrame, endFrame, unk_06) \
+CS_STOP_SEQ((seqId)-1, startFrame, endFrame, unk_06)
+
 
 #endif

@@ -3920,7 +3920,7 @@
     0x801F3F80:("D_801F3F80","UNK_TYPE1","",0x1),
     0x801F3F83:("D_801F3F83","UNK_TYPE1","",0x1),
     0x801F48C8:("D_801F48C8","UNK_TYPE1","",0x1),
-    0x801F4D40:("seqId","u16","",0x2),
+    0x801F4D40:("sSeqId","u16","",0x2),
     0x801F4D42:("sCutsceneQuakeIndex","UNK_TYPE2","",0x2),
     0x801F4D48:("sCutsceneCameraInfo","UNK_TYPE","",0x80),
     0x801F4DC8:("sCueTypeList","u16","[10]",0x14),

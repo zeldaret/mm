@@ -4,26 +4,6 @@
 #include "ultra64.h"
 #include "unk.h"
 
-typedef struct {
-    /* 0x0 */ s8    continueFlag;
-    /* 0x1 */ s8    cameraRoll;
-    /* 0x2 */ u16   nextPointFrame;
-    /* 0x4 */ f32   viewAngle; // in degrees
-    /* 0x8 */ Vec3s pos;
-} CutsceneCameraPoint; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ Vec3f at;
-    /* 0x0C */ Vec3f eye;
-    /* 0x18 */ s16 roll;
-    /* 0x1A */ s16 fov;
-} CutsceneCameraAngle; // size = 0x1C
-
-typedef struct {
-    /* 0x0 */ CutsceneCameraPoint* atPoints;
-    /* 0x4 */ CutsceneCameraPoint* eyePoints;
-    /* 0x8 */ s16 relativeToPlayer;
-} CutsceneCameraMove; // size = 0xC
 
 typedef struct {
     /* 0x00 */ u16 id; // "dousa"
@@ -44,6 +24,15 @@ typedef struct {
     /* 0x4 */ u16 endFrame;
     /* 0x6 */ u16 unk_06;
 } CsCmdBase; // size = 0x8
+
+typedef union {
+    struct {
+        /* 0x00 */ u16 type;
+        /* 0x02 */ u16 startFrame;
+        /* 0x04 */ u16 endFrame;
+    };
+    s32 _words[2];
+} CsCmdMisc; // size = 0x30
 
 typedef struct {
     /* 0x0 */ u16 unk0;
@@ -122,9 +111,9 @@ typedef enum {
 } CutsceneState;
 
 typedef enum {
-    /* 0x00A */ CS_CMD_TEXTBOX = 0xA,
-    /* 0x05A */ CS_CMD_CAMERA = 0x5A,
-    /* 0x064 */ CS_CMD_ACTOR_CUE_100 = 0x64,
+    /* 0x00A */ CS_CMD_TEXT = 10,
+    /* 0x05A */ CS_CMD_CAMERA_SPLINE = 90,
+    /* 0x064 */ CS_CMD_ACTOR_CUE_100 = 100,
     /* 0x065 */ CS_CMD_ACTOR_CUE_101,
     /* 0x066 */ CS_CMD_ACTOR_CUE_102,
     /* 0x067 */ CS_CMD_ACTOR_CUE_103,
@@ -175,37 +164,26 @@ typedef enum {
     /* 0x094 */ CS_CMD_ACTOR_CUE_148,
     /* 0x095 */ CS_CMD_ACTOR_CUE_149,
     /* 0x096 */ CS_CMD_MISC,
-    /* 0x097 */ CS_CMD_SET_LIGHTING,
-    /* 0x098 */ CS_CMD_SCENE_TRANS_FX,
-    /* 0x099 */ CS_CMD_MOTIONBLUR,
-    /* 0x09A */ CS_CMD_GIVETATL,
-    /* 0x09B */ CS_CMD_FADESCREEN,
-    /* 0x09C */ CS_CMD_FADESEQ,
-    /* 0x09D */ CS_CMD_SETTIME,
-    /* 0x0C8 */ CS_CMD_SET_PLAYER_ACTION = 0xC8,
+    /* 0x097 */ CS_CMD_LIGHT_SETTING,
+    /* 0x098 */ CS_CMD_TRANSITION,
+    /* 0x099 */ CS_CMD_MOTION_BLUR,
+    /* 0x09A */ CS_CMD_GIVE_TATL,
+    /* 0x09B */ CS_CMD_FADE_SCREEN,
+    /* 0x09C */ CS_CMD_FADE_OUT_SEQ,
+    /* 0x09D */ CS_CMD_TIME,
+    /* 0x0C8 */ CS_CMD_PLAYER_CUE = 200,
     /* 0x0C9 */ CS_CMD_ACTOR_CUE_201,
-    /* 0x0FA */ CS_CMD_UNK_FA = 0xFA,
-    /* 0x0FE */ CS_CMD_UNK_FE = 0xFE,
-    /* 0x0FF */ CS_CMD_UNK_FF,
-    /* 0x100 */ CS_CMD_UNK_100,
-    /* 0x101 */ CS_CMD_UNK_101,
-    /* 0x102 */ CS_CMD_UNK_102,
-    /* 0x103 */ CS_CMD_UNK_103,
-    /* 0x104 */ CS_CMD_UNK_104,
-    /* 0x105 */ CS_CMD_UNK_105,
-    /* 0x108 */ CS_CMD_UNK_108 = 0x108,
-    /* 0x109 */ CS_CMD_UNK_109,
-    /* 0x12C */ CS_CMD_PLAYSEQ = 0x12C,
-    /* 0x12D */ CS_CMD_STOPSEQ,
-    /* 0x12E */ CS_CMD_PLAYAMBIENCE,
-    /* 0x12F */ CS_CMD_FADEAMBIENCE,
-    /* 0x130 */ CS_CMD_130,
-    /* 0x131 */ CS_CMD_131,
-    /* 0x132 */ CS_CMD_132,
-    /* 0x15E */ CS_CMD_TERMINATOR = 0x15E,
+    /* 0x12C */ CS_CMD_START_SEQ = 300,
+    /* 0x12D */ CS_CMD_STOP_SEQ,
+    /* 0x12E */ CS_CMD_START_AMBIENCE,
+    /* 0x12F */ CS_CMD_FADE_OUT_AMBIENCE,
+    /* 0x130 */ CS_CMD_SFX_REVERB_INDEX_2,
+    /* 0x131 */ CS_CMD_SFX_REVERB_INDEX_1,
+    /* 0x132 */ CS_CMD_MODIFY_SEQ,
+    /* 0x15E */ CS_CMD_DESTINATION = 350,
     /* 0x15F */ CS_CMD_CHOOSE_CREDITS_SCENES,
-    /* 0x190 */ CS_CMD_RUMBLE = 0x190,
-    /* 0x1C2 */ CS_CMD_ACTOR_CUE_450 = 0x1C2,
+    /* 0x190 */ CS_CMD_RUMBLE = 400,
+    /* 0x1C2 */ CS_CMD_ACTOR_CUE_450 = 450,
     /* 0x1C3 */ CS_CMD_ACTOR_CUE_451,
     /* 0x1C4 */ CS_CMD_ACTOR_CUE_452,
     /* 0x1C5 */ CS_CMD_ACTOR_CUE_453,
@@ -359,7 +337,7 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ CS_MISC_UNIMPLEMENTED_0,
-    /* 0x01 */ CS_MISC_RAIN,
+    /* 0x01 */ CS_MISC_STORM,
     /* 0x02 */ CS_MISC_LIGHTNING,
     /* 0x03 */ CS_MISC_LIFT_FOG,
     /* 0x04 */ CS_MISC_CLOUDY_SKY,
@@ -402,8 +380,8 @@ typedef enum {
 } CutsceneMiscType;
 
 typedef enum {
-    /* 0x03 */ CS_FADE_OUT_FANFARE = 3, 
-    /* 0x04 */ CS_FADE_OUT_BGM_MAIN
+    /* 0x2 */ CS_FADE_OUT_FANFARE = 2, 
+    /* 0x3 */ CS_FADE_OUT_BGM_MAIN
 } CutsceneFadeOutSeqPlayer;
 
 typedef enum {
@@ -429,11 +407,17 @@ typedef union CutsceneData {
     s8  b[4];
 } CutsceneData;
 
+#define CS_SPAWN_FLAG_NONE 0xFF
+#define CS_SPAWN_FLAG_ALWAYS 0xFE
+// Despite there being more than `0x1F` indices for weekEventFlags,
+// this u8 flag entry can only check weekEventFlags with indices [0x0 - 0x1F]
+#define CS_SPAWN_FLAG_WEEKEVENT(flag) ((((flag) & 0x1F00) >> 5) | ((bit) & 0x7F))
+
 typedef struct {
     /* 0x0 */ CutsceneData* script;
     /* 0x4 */ s16 nextEntrance;
     /* 0x6 */ u8 spawn;
-    /* 0x7 */ u8 flags; // a weekEventReg bitpack?
+    /* 0x7 */ u8 spawnFlags; // See `CS_SPAWN_FLAG_`
 } CutsceneEntry; // size = 0x8
 
 typedef struct {
@@ -447,8 +431,7 @@ typedef struct {
     /* 0x18 */ u16 unk_18;
     /* 0x1A */ u8 unk_1A;
     /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ CutsceneCameraPoint* camAtPoints;
-    /* 0x20 */ CutsceneCameraPoint* camEyePoints;
+    /* 0x1C */ UNK_TYPE1 unk_1C[0x8];
     /* 0x24 */ CsCmdActorCue* playerCue;
     /* 0x28 */ CsCmdActorCue* actorCues[10]; // "npcdemopnt"
     /* 0x50 */ CutsceneEntry* scriptList;
@@ -491,17 +474,6 @@ typedef enum {
 } CutsceneEndCam;
 
 
-#define CS_CAM_POINTS_LIST(numEntries, unused0, unused1, unk_06) \
-    { CMD_HH(numEntries, unused0) }, { CMD_HH(unused1, unk_06) }
-
-#define CS_CAM_POINT(interp, unk_01, unk_02, posX, posY, posZ, unk_0A) \
-    { CMD_BBH(interp, unk_01, unk_02) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, unk_0A) }
-
-#define CS_CAM_MISC(unused0, roll, fov, unused1) \
-    { CMD_HH(unused0, roll) }, { CMD_HH(fov, unused1) }
-
-#define CS_CAM_END() { CMD_W(0xFFFF0004) }
-// #define CS_CAM_END() { CMD_HH(0xFFFF, unused) }
 
 typedef struct {
     /* 0x0 */ s16 numEntries;

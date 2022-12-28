@@ -7,7 +7,7 @@
 #include "z_en_test6.h"
 #include "z64quake.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "command_macros_base.h"
+#include "z64cutscene_commands.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 
@@ -57,7 +57,7 @@ ActorInit En_Test6_InitVars = {
 
 CutsceneData D_80A93E80[] = {
     // Header
-    CS_CAM_POINTS_LIST(13, 424, 0, 100),
+    CS_CAM_SPLINE(13, 424, 0, 100),
 
     // Camera At Data
     /* 0x0 */ CS_CAM_POINT(4, 100, 13, 0, 21, -19, 0),

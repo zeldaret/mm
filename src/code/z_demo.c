@@ -22,7 +22,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 
 // bss
 #ifndef NON_MATCHING
-static u16 seqId;
+static u16 sSeqId;
 #endif
 s16 sCutsceneQuakeIndex;
 CutsceneCamera sCutsceneCameraInfo;
@@ -131,7 +131,7 @@ void CutsceneHandler_StartScript(PlayState* play, CutsceneContext* csCtx) {
 /* Start of command handling section */
 
 // Command 0x96: Miscellaneous commands.
-void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
     static u16 D_801BB15C = 0xFFFF;
     Player* player = GET_PLAYER(play);
     f32 lerp;
@@ -149,8 +149,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
         isFirstFrame = true;
     }
 
-    switch (cmd->base) {
-        case 0x1: // CS_MISC_STORM
+    switch (cmd->type) {
+        case CS_MISC_STORM:
             if (isFirstFrame) {
                 func_800FD78C(play);
                 play->envCtx.unk_F2[0] = 60;
@@ -419,7 +419,6 @@ void CutsceneCmd_StartSequence(PlayState* play, CutsceneContext* csCtx, CsCmdSta
     }
 }
 
-// CsCmdStopSeq
 void CutsceneCmd_StopSequence(PlayState* play, CutsceneContext* csCtx, CsCmdStartSeq* cmd) {
     if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
         Audio_StopSequenceInCutscene(cmd->sequence - 1);
@@ -431,9 +430,9 @@ void CutsceneCmd_FadeOutSequence(PlayState* play, CutsceneContext* csCtx, CsCmdS
     if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {
         u8 fadeOutDuration = cmd->endFrame - cmd->startFrame;
 
-        if (cmd->type == 2) {
+        if (cmd->type == CS_FADE_OUT_FANFARE) {
             Audio_QueueSeqCmd((fadeOutDuration << 0x10) | 0x110000FF);
-        } else {
+        } else { // CS_FADE_OUT_BGM_MAIN
             Audio_QueueSeqCmd((fadeOutDuration << 0x10) | NA_BGM_STOP);
         }
     }
@@ -447,7 +446,7 @@ void CutsceneCmd_StartAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdBas
 }
 
 // Command 0x130:
-void func_800EAD48(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_SetSfxReverbIndexTo2(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->curFrame == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(2);
@@ -455,7 +454,7 @@ void func_800EAD48(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
 }
 
 // Command 0x131:
-void func_800EAD7C(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->curFrame == cmd->startFrame) {
         // Audio_SetSfxReverbIndexExceptOcarinaBank
         func_801A4428(1);
@@ -465,8 +464,8 @@ void func_800EAD7C(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
 #ifdef NON_MATCHING
 // needs in-function static bss
 // audio related
-void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    static u16 seqId;
+void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
+    static u16 sSeqId;
     u8 dayMinusOne;
 
     if (csCtx->curFrame == cmd->startFrame) {
@@ -507,20 +506,20 @@ void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
                 break;
 
             case 7:
-                seqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
+                sSeqId = Audio_GetActiveSequence(SEQ_PLAYER_BGM_MAIN);
                 break;
 
             case 8:
-                if (seqId != NA_BGM_DISABLED) {
-                    Audio_PlaySceneSequence(seqId, dayMinusOne);
+                if (sSeqId != NA_BGM_DISABLED) {
+                    Audio_PlaySceneSequence(sSeqId, dayMinusOne);
                 }
                 break;
         }
     }
 }
 #else
-void func_800EADB0(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
+void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s")
 #endif
 
 void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdBase* cmd) {
@@ -1130,27 +1129,26 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
     }
 }
 
-// Related to actorCues. Maybe a generic actorAction setter?
-void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
+void Cutscene_SetActorCue(CutsceneContext* csCtx, u8** script, s16 cueChannel) {
     s32 i;
-    s32 count;
+    s32 numCues;
 
-    bcopy(*cutscenePtr, &count, sizeof(s32));
-    *cutscenePtr += sizeof(s32);
+    bcopy(*script, &numCues, sizeof(numCues));
+    *script += sizeof(numCues);
 
-    for (i = 0; i < count; i++) {
-        CsCmdActorCue* actorAction = *(CsCmdActorCue**)cutscenePtr;
+    for (i = 0; i < numCues; i++) {
+        CsCmdActorCue* cue = *(CsCmdActorCue**)script;
 
-        if ((csCtx->curFrame >= actorAction->startFrame) && (csCtx->curFrame < actorAction->endFrame)) {
-            csCtx->actorCues[index] = actorAction;
+        if ((csCtx->curFrame >= cue->startFrame) && (csCtx->curFrame < cue->endFrame)) {
+            csCtx->actorCues[cueChannel] = cue;
         }
 
-        *cutscenePtr += sizeof(CsCmdActorCue);
+        *script += sizeof(CsCmdActorCue);
     }
 }
 
 /**
- * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneously (for most
+ * Loops over the cutscene data itself (`script`), applying the effects of each command instantaneously (for most
  * commands).
  *
  * The cutscene data is an irregularly-structured array of words, which is made up of
@@ -1173,9 +1171,9 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  *
  * This function is invoked once per frame that a cutscene is active.
  *
- * TODO: consider changing the type of `cutscenePtr` to `uintptr_t` when this function matches.
+ * TODO: consider changing the type of `script` to `uintptr_t` when this function matches.
  */
-void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* cutscenePtr) {
+void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script) {
     s32 i;
     s32 j;
     s32 pad;
@@ -1187,11 +1185,11 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* cutscen
     CsCmdBase* cmd;
 
     // Read the command list count and the ending frame for this cutscene
-    bcopy(cutscenePtr, &totalEntries, sizeof(s32));
-    cutscenePtr += sizeof(totalEntries);
+    bcopy(script, &totalEntries, sizeof(s32));
+    script += sizeof(totalEntries);
 
-    bcopy(cutscenePtr, &csFrameCount, sizeof(s32));
-    cutscenePtr += sizeof(csFrameCount);
+    bcopy(script, &csFrameCount, sizeof(s32));
+    script += sizeof(csFrameCount);
 
     if ((csCtx->curFrame > (u16)csFrameCount) && (play->transitionTrigger != TRANS_TRIGGER_START) &&
         (csCtx->state != CS_STATE_RUN_UNSTOPPABLE)) {
@@ -1202,27 +1200,29 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* cutscen
     // Loop over every command list
     for (i = 0; i < totalEntries; i++) {
         // Read the command type of the current command list.
-        bcopy(cutscenePtr, &cmdType, sizeof(cmdType));
-        cutscenePtr += sizeof(u32);
+        bcopy(script, &cmdType, sizeof(cmdType));
+        script += sizeof(u32);
 
         // TODO: This should probably be added to the CutsceneCmd enum. Consider doing it when this function matches.
         if (cmdType == 0xFFFFFFFF) {
             break;
         }
 
-        // Check special cases of command types. This are generic ActorActions
+        // Check special cases of command types. This are generic ActorCues
         // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
         if (((cmdType >= CS_CMD_ACTOR_CUE_100) && (cmdType <= CS_CMD_ACTOR_CUE_149)) ||
             (cmdType == CS_CMD_ACTOR_CUE_201) ||
             ((cmdType >= CS_CMD_ACTOR_CUE_450) && (cmdType <= CS_CMD_ACTOR_CUE_599))) {
             for (j = 0; j < ARRAY_COUNT(sCueTypeList); j = (s16)(j + 1)) {
                 if (sCueTypeList[j] == (u16)cmdType) {
-                    func_800ECD7C(csCtx, &cutscenePtr, j);
+                    Cutscene_SetActorCue(csCtx, &script, j);
                     cmdType = -2;
                     break;
-                } else if (sCueTypeList[j] == 0) {
+                }
+
+                if (sCueTypeList[j] == 0) {
                     sCueTypeList[j] = cmdType;
-                    func_800ECD7C(csCtx, &cutscenePtr, j);
+                    Cutscene_SetActorCue(csCtx, &script, j);
                     cmdType = -2;
                     break;
                 }
@@ -1231,192 +1231,212 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* cutscen
 
         switch (cmdType) {
             case CS_CMD_MISC:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_Misc(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_Misc(play, csCtx, (void*)script);
+                    script += sizeof(CsCmdMisc);
                 }
                 break;
 
-            case CS_CMD_SET_LIGHTING:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_LIGHT_SETTING:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_SetLightSetting(play, csCtx, (CsCmdLightSetting*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdLightSetting);
+                    CutsceneCmd_SetLightSetting(play, csCtx, (CsCmdLightSetting*)script);
+                    script += sizeof(CsCmdLightSetting);
                 }
                 break;
 
-            case CS_CMD_PLAYSEQ:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_START_SEQ:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_StartSequence(play, csCtx, (CsCmdStartSeq*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdStartSeq);
+                    CutsceneCmd_StartSequence(play, csCtx, (CsCmdStartSeq*)script);
+                    script += sizeof(CsCmdStartSeq);
                 }
                 break;
 
-            case CS_CMD_STOPSEQ:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_STOP_SEQ:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_StopSequence(play, csCtx, (CsCmdStartSeq*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdStartSeq);
+                    CutsceneCmd_StopSequence(play, csCtx, (CsCmdStartSeq*)script);
+                    script += sizeof(CsCmdStartSeq);
                 }
                 break;
 
-            case CS_CMD_FADESEQ:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_FADE_OUT_SEQ:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_FadeOutSequence(play, csCtx, (CsCmdSequenceFade*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdSequenceFade);
+                    CutsceneCmd_FadeOutSequence(play, csCtx, (CsCmdSequenceFade*)script);
+                    script += sizeof(CsCmdSequenceFade);
                 }
                 break;
 
-            case CS_CMD_PLAYAMBIENCE:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_START_AMBIENCE:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_StartAmbience(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_StartAmbience(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_FADEAMBIENCE:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_FADE_OUT_AMBIENCE:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_FadeOutAmbience(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_FadeOutAmbience(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_130:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_SFX_REVERB_INDEX_2:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAD48(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    Cutscene_SetSfxReverbIndexTo2(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_131:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_SFX_REVERB_INDEX_1:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EAD7C(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    Cutscene_SetSfxReverbIndexTo1(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_132:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_MODIFY_SEQ:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EADB0(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_ModifySequence(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
             case CS_CMD_RUMBLE:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_RumbleController(play, csCtx, (CsCmdRumble*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdRumble);
+                    CutsceneCmd_RumbleController(play, csCtx, (CsCmdRumble*)script);
+                    script += sizeof(CsCmdRumble);
                 }
                 break;
 
-            case CS_CMD_FADESCREEN:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_FADE_SCREEN:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_FadeColorScreen(play, csCtx, (CsCmdFadeScreen*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdFadeScreen);
+                    CutsceneCmd_FadeColorScreen(play, csCtx, (CsCmdFadeScreen*)script);
+                    script += sizeof(CsCmdFadeScreen);
                 }
                 break;
 
-            case CS_CMD_SETTIME:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_TIME:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_SetTime(play, csCtx, (CsCmdDayTime*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdDayTime);
+                    CutsceneCmd_SetTime(play, csCtx, (CsCmdDayTime*)script);
+                    script += sizeof(CsCmdDayTime);
                 }
                 break;
 
-            case CS_CMD_SET_PLAYER_ACTION:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_PLAYER_CUE:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    cmd = (CsCmdBase*)cutscenePtr;
+                    cmd = (CsCmdBase*)script;
                     if ((cmd->startFrame <= csCtx->curFrame) && (csCtx->curFrame < cmd->endFrame)) {
                         csCtx->playerCue = (CsCmdActorCue*)cmd;
                     }
-                    cutscenePtr += sizeof(CsCmdActorCue);
+                    script += sizeof(CsCmdActorCue);
                 }
                 break;
 
-            case CS_CMD_CAMERA:
-                cutscenePtr += CutsceneCmd_UpdateCamSpline(play, cutscenePtr);
+            case CS_CMD_CAMERA_SPLINE:
+                script += CutsceneCmd_UpdateCamSpline(play, script);
                 break;
 
-            case CS_CMD_TERMINATOR:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_DESTINATION:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_Destination(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_Destination(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
             case CS_CMD_CHOOSE_CREDITS_SCENES:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_ChooseCreditsScenes(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_ChooseCreditsScenes(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_TEXTBOX:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_TEXT:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    cmd = (CsCmdBase*)cutscenePtr;
+                    cmd = (CsCmdBase*)script;
                     if (cmd->base != 0xFFFF) {
                         CutsceneCmd_Text(play, csCtx, (CsCmdText*)cmd);
                     }
-                    cutscenePtr += sizeof(CsCmdText);
+                    script += sizeof(CsCmdText);
                 }
                 break;
 
-            case CS_CMD_SCENE_TRANS_FX:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_TRANSITION:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_Transition(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_Transition(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_MOTIONBLUR:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_MOTION_BLUR:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_MotionBlur(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_MotionBlur(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
-            case CS_CMD_GIVETATL:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+            case CS_CMD_GIVE_TATL:
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_GiveTatlToPlayer(play, csCtx, (CsCmdBase*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdBase);
+                    CutsceneCmd_GiveTatlToPlayer(play, csCtx, (CsCmdBase*)script);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
 
@@ -1424,10 +1444,11 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* cutscen
                 break;
 
             default:
-                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
-                cutscenePtr += sizeof(s32);
+                bcopy(script, &cmdEntries, sizeof(cmdEntries));
+                script += sizeof(cmdEntries);
+
                 for (j = 0; j < cmdEntries; j++) {
-                    cutscenePtr += sizeof(CsCmdBase);
+                    script += sizeof(CsCmdBase);
                 }
                 break;
         }
@@ -1523,19 +1544,21 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
             scriptIndex = ActorCutscene_GetCutsceneScriptIndex(actorCsId);
             if (scriptIndex != -1) {
                 // A scripted cutscene is triggered by a spawn
-                if ((play->csCtx.scriptList[scriptIndex].flags != 0xFF) && (gSaveContext.respawnFlag == 0)) {
-                    if (play->csCtx.scriptList[scriptIndex].flags == 0xFE) {
+                if ((play->csCtx.scriptList[scriptIndex].spawnFlags != CS_SPAWN_FLAG_NONE) &&
+                    (gSaveContext.respawnFlag == 0)) {
+                    if (play->csCtx.scriptList[scriptIndex].spawnFlags == CS_SPAWN_FLAG_ALWAYS) {
                         // Entrance cutscenes that always run
                         ActorCutscene_Start(actorCsId, NULL);
                         gSaveContext.showTitleCard = false;
-                    } else if (!(((void)0,
-                                  gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)]) &
-                                 (1 << (play->csCtx.scriptList[scriptIndex].flags % 8)))) {
+                    } else if (!(((void)0, gSaveContext.save
+                                               .weekEventReg[(play->csCtx.scriptList[scriptIndex].spawnFlags / 8)]) &
+                                 (1 << (play->csCtx.scriptList[scriptIndex].spawnFlags % 8)))) {
                         // Entrance cutscenes that only run once
                         // TODO: macros for this kind of weekEventReg access
-                        gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)] =
-                            ((void)0, gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].flags / 8)]) |
-                            (1 << (play->csCtx.scriptList[scriptIndex].flags % 8));
+                        gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].spawnFlags / 8)] =
+                            ((void)0,
+                             gSaveContext.save.weekEventReg[(play->csCtx.scriptList[scriptIndex].spawnFlags / 8)]) |
+                            (1 << (play->csCtx.scriptList[scriptIndex].spawnFlags % 8));
                         ActorCutscene_Start(actorCsId, NULL);
                         // The title card will be used by the cs misc command if necessary.
                         gSaveContext.showTitleCard = false;
