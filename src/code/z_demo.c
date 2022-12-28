@@ -817,7 +817,7 @@ void CutsceneCmd_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmd
     Player* player = GET_PLAYER(play);
 
     if (csCtx->curFrame == cmd->startFrame) {
-        if (cmd->type == CS_GIVE_TATL) {
+        if (cmd->giveTatl == true) {
             gSaveContext.save.hasTatl = true;
             if (player->tatlActor != NULL) {
                 return;

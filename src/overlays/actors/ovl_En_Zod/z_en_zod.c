@@ -500,8 +500,8 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
         this->fogNear = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x203)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 1) {
             this->actionFunc = func_80BAFF14;
             this->fogNear = -1;
         }
@@ -513,8 +513,8 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
 
 void func_80BAFF14(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if (Cutscene_CheckActorAction(play, 0x203) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 4)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 4)) {
         this->actionFunc = func_80BAFE34;
     }
 }

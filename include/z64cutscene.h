@@ -267,14 +267,12 @@ typedef enum {
 
 typedef union {
     struct {
-        /* 0x0 */ u16 type;
+        /* 0x0 */ u16 giveTatl;
         /* 0x2 */ u16 startFrame;
         /* 0x4 */ u16 endFrame; // unused
     };
     s32 _words[2];
 } CsCmdGiveTatl; // size = 0x8
-
-#define CS_GIVE_TATL 1
 
 typedef enum {
     /* 0 */ CS_STATE_IDLE,
