@@ -175,7 +175,7 @@ void func_80C0A400(BgAstrBombwall* this, PlayState* play) {
 }
 
 void func_80C0A418(BgAstrBombwall* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_PLAYER_CS)) {
         func_80C0A458(this, play);
     }
 }

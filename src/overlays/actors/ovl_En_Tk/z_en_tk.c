@@ -712,8 +712,8 @@ void func_80AEDBEC(EnTk* this, PlayState* play) {
 }
 
 void func_80AEDC4C(EnTk* this, PlayState* play) {
-    if ((this->actor.params >= 0) && SubS_StartActorCutscene(&this->actor, this->csIdList[1], this->actor.params,
-                                                             SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if ((this->actor.params >= 0) &&
+        SubS_StartActorCutscene(&this->actor, this->csIdList[1], this->actor.params, SUBS_CUTSCENE_PLAYER_CS)) {
         this->csLength = ActorCutscene_GetLength(this->csIdList[1]);
         func_80151938(play, 0x1411);
         func_80AEDCBC(this, play);
@@ -901,8 +901,7 @@ void func_80AEE2A8(EnTk* this, PlayState* play) {
 }
 
 void func_80AEE2C0(EnTk* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK,
-                                SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_PLAYER_CS)) {
         func_80AEE374(this, play);
     }
 }
@@ -1000,13 +999,12 @@ void func_80AEE6B8(EnTk* this, PlayState* play) {
             func_801477B4(play);
             func_80AEDBEC(this, play);
         } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0],
-                                           SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+                                           SUBS_CUTSCENE_PLAYER_CS)) {
             this->unk_310 = 3;
             func_80AEDE10(this, play);
             this->unk_2CA &= ~0x20;
         }
-    } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0],
-                                       SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_PLAYER_CS)) {
         this->unk_310 = 4;
         func_80AEDE10(this, play);
     }
