@@ -312,7 +312,7 @@ void func_80BA3CC4(EnToto* this, PlayState* play) {
 }
 
 void func_80BA3D38(EnToto* this, PlayState* play) {
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, play);
     play->actorCtx.flags |= ACTORCTX_FLAG_5;
@@ -343,7 +343,7 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
     }
 
     func_80BA36C0(this, play, 0);
-    ActorCutscene_Stop(this->cutscene);
+    ActorCutscene_Stop(this->csId);
     play->actorCtx.flags &= ~ACTORCTX_FLAG_5;
 }
 
@@ -389,21 +389,21 @@ s32 func_80BA3FCC(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA402C(EnToto* this, PlayState* play) {
-    s16 prevCutscene = this->cutscene;
+    s16 prevCsId = this->csId;
 
-    this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
-    ActorCutscene_SetIntentToPlay(this->cutscene);
-    ActorCutscene_Stop(prevCutscene);
+    this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+    ActorCutscene_SetIntentToPlay(this->csId);
+    ActorCutscene_Stop(prevCsId);
     return 0;
 }
 
 s32 func_80BA407C(EnToto* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &GET_PLAYER(play)->actor);
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_StartWithPlayerCs(this->csId, &GET_PLAYER(play)->actor);
         return 1;
     }
 
-    ActorCutscene_SetIntentToPlay(this->cutscene);
+    ActorCutscene_SetIntentToPlay(this->csId);
     return 0;
 }
 
@@ -487,7 +487,7 @@ s32 func_80BA445C(EnToto* this, PlayState* play) {
 }
 
 s32 func_80BA44A0(EnToto* this, PlayState* play) {
-    ActorCutscene_Stop(this->cutscene);
+    ActorCutscene_Stop(this->csId);
     this->unk2B1 = 0;
     return 0;
 }

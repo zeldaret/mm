@@ -187,7 +187,7 @@ void EnBox_ClipToGround(EnBox* this, PlayState* play) {
 void EnBox_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnBox* this = THIS;
-    s16 cutsceneIdx;
+    s16 csId;
     CollisionHeader* colHeader;
     f32 animFrame;
     f32 animFrameEnd;
@@ -290,17 +290,17 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         Actor_SetFocus(&this->dyna.actor, 40.0f);
     }
 
-    this->cutsceneIdxA = -1;
-    this->cutsceneIdxB = -1;
-    cutsceneIdx = this->dyna.actor.cutscene;
+    this->csId1 = CS_ID_NONE;
+    this->csId2 = CS_ID_NONE;
+    csId = this->dyna.actor.csId;
 
-    while (cutsceneIdx != -1) {
-        if (func_800F2178(cutsceneIdx) == 1) {
-            this->cutsceneIdxB = cutsceneIdx;
+    while (csId != CS_ID_NONE) {
+        if (ActorCutscene_GetCutsceneCustomValue(csId) == 1) {
+            this->csId2 = csId;
         } else {
-            this->cutsceneIdxA = cutsceneIdx;
+            this->csId1 = csId;
         }
-        cutsceneIdx = ActorCutscene_GetAdditionalCutscene(cutsceneIdx);
+        csId = ActorCutscene_GetAdditionalCsId(csId);
     }
     func_80867BDC(&this->unk_1F4, play, &this->dyna.actor.home.pos);
 }
@@ -388,12 +388,12 @@ void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
 void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
     func_800B8C50(&this->dyna.actor, play);
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);
+        if (ActorCutscene_GetCanPlayNext(this->csId1)) {
+            ActorCutscene_StartWithPlayerCs(this->csId1, &this->dyna.actor);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutsceneIdxA);
+            ActorCutscene_SetIntentToPlay(this->csId1);
         }
     }
 }
@@ -401,19 +401,19 @@ void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
 void EnBox_AppearOnRoomClear(EnBox* this, PlayState* play) {
     func_800B8C50(&this->dyna.actor, play);
     if (Flags_GetClearTemp(play, this->dyna.actor.room)) {
-        if (ActorCutscene_GetCanPlayNext(this->cutsceneIdxA)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutsceneIdxA, &this->dyna.actor);
+        if (ActorCutscene_GetCanPlayNext(this->csId1)) {
+            ActorCutscene_StartWithPlayerCs(this->csId1, &this->dyna.actor);
             Flags_SetClear(play, this->dyna.actor.room);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutsceneIdxA);
+            ActorCutscene_SetIntentToPlay(this->csId1);
         }
     }
 }
 
 void func_80868AFC(EnBox* this, PlayState* play) {
-    if ((func_800F22C4(this->cutsceneIdxA, &this->dyna.actor) != 0) || (this->unk_1A0 != 0)) {
+    if ((func_800F22C4(this->csId1, &this->dyna.actor) != 0) || (this->unk_1A0 != 0)) {
         EnBox_SetupAction(this, func_80868B74);
         this->unk_1A0 = 0;
         func_80867FBC(&this->unk_1F4, play, (this->movementFlags & ENBOX_MOVE_0x80) != 0);
@@ -432,7 +432,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y += 1.25f;
         }
         this->unk_1A0++;
-        if ((this->cutsceneIdxA != -1) && ActorCutscene_GetCurrentIndex() == this->cutsceneIdxA) {
+        if ((this->csId1 != -1) && ActorCutscene_GetCurrentCsId() == this->csId1) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
             } else if (this->unk_1A0 == 22) {
@@ -445,7 +445,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
     } else {
         EnBox_SetupAction(this, EnBox_WaitOpen);
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
     }
 }
 
@@ -460,8 +460,8 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
-    if ((this->unk_1EC != 0) && ((this->cutsceneIdxB < 0) || (ActorCutscene_GetCurrentIndex() == this->cutsceneIdxB) ||
-                                 (ActorCutscene_GetCurrentIndex() == -1))) {
+    if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (ActorCutscene_GetCurrentCsId() == this->csId2) ||
+                                 (ActorCutscene_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
             animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;

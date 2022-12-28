@@ -341,7 +341,7 @@ void EnPametfrog_StopCutscene(EnPametfrog* this, PlayState* play) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->cutscene);
+        ActorCutscene_Stop(this->csId);
         func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
     }
 }
@@ -990,21 +990,21 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
 
 void EnPametfrog_SetupCutscene(EnPametfrog* this) {
     if (this->actor.colChkInfo.health == 0) {
-        this->cutscene = this->actor.cutscene;
+        this->csId = this->actor.csId;
     } else {
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+        this->csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
     }
 
-    ActorCutscene_SetIntentToPlay(this->cutscene);
+    ActorCutscene_SetIntentToPlay(this->csId);
     this->actionFunc = EnPametfrog_PlayCutscene;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
 }
 
 void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_Start(this->csId, &this->actor);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->csId);
         func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         if (this->actor.colChkInfo.health == 0) {
             if (this->actor.params == GEKKO_PRE_SNAPPER) {
@@ -1016,7 +1016,7 @@ void EnPametfrog_PlayCutscene(EnPametfrog* this, PlayState* play) {
             EnPametfrog_SetupFallOffSnapper(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        ActorCutscene_SetIntentToPlay(this->csId);
     }
 }
 

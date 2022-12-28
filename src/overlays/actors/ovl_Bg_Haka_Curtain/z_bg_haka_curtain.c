@@ -79,12 +79,12 @@ void func_80B6DCEC(BgHakaCurtain* this) {
 }
 
 void func_80B6DD00(BgHakaCurtain* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80B6DD5C(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
 }
 
 void func_80B6DD5C(BgHakaCurtain* this) {

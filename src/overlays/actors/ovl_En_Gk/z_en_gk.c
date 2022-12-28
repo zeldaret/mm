@@ -510,19 +510,19 @@ void func_80B51410(EnGk* this, PlayState* play) {
             this->unk_1E4 |= 0x20;
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->unk_318)) {
+        if (ActorCutscene_GetCanPlayNext(this->csId)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLONKID_SOB_TALK);
-            ActorCutscene_Start(this->unk_318, &this->actor);
+            ActorCutscene_Start(this->csId, &this->actor);
             this->unk_1E4 &= ~0x20;
             return;
         }
 
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
 
         if (this->unk_1E4 & 0x20) {
-            ActorCutscene_SetIntentToPlay(this->unk_318);
+            ActorCutscene_SetIntentToPlay(this->csId);
         }
     } else {
         this->unk_1E4 &= ~0x20;
@@ -661,9 +661,9 @@ void func_80B51970(EnGk* this, PlayState* play) {
 
     if (((talkState == TEXT_STATE_DONE) || (talkState == TEXT_STATE_5)) && Message_ShouldAdvance(play)) {
         if ((this->unk_31C == 0xE84) || (this->unk_31C == 0xE99)) {
-            ActorCutscene_Stop(this->unk_318);
-            this->unk_318 = ActorCutscene_GetAdditionalCutscene(this->unk_318);
-            ActorCutscene_SetIntentToPlay(this->unk_318);
+            ActorCutscene_Stop(this->csId);
+            this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+            ActorCutscene_SetIntentToPlay(this->csId);
             this->actionFunc = func_80B51D9C;
             return;
         }
@@ -772,8 +772,8 @@ void func_80B51B40(EnGk* this, PlayState* play) {
 void func_80B51D9C(EnGk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_318)) {
-        ActorCutscene_StartAndSetFlag(this->unk_318, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
         if (this->unk_1E4 & 4) {
             this->unk_1E4 &= ~4;
             this->unk_2E4 = 6;
@@ -790,10 +790,10 @@ void func_80B51D9C(EnGk* this, PlayState* play) {
             this->actionFunc = func_80B51970;
         }
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
-        ActorCutscene_SetIntentToPlay(this->unk_318);
+        ActorCutscene_SetIntentToPlay(this->csId);
     }
     func_80B50954(this);
 }
@@ -809,7 +809,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
         sp36 = this->actor.shape.rot.y - sp38.y;
         if (func_80B50C78(this, this->path, this->unk_1EC)) {
             if (this->unk_1EC >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_318);
+                ActorCutscene_Stop(this->csId);
                 Actor_Kill(&this->actor);
             } else {
                 this->unk_1EC++;
@@ -1022,7 +1022,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
                 Actor_Kill(&this->actor);
             } else {
-                this->unk_318 = this->actor.cutscene;
+                this->csId = this->actor.csId;
                 this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
                 this->actionFunc = func_80B51760;
             }
@@ -1052,7 +1052,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         }
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_04)) {
         this->unk_2E4 = 0;
-        this->unk_318 = this->actor.cutscene;
+        this->csId = this->actor.csId;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);

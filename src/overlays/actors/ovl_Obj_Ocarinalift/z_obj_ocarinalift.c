@@ -221,7 +221,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
                 if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) {
                     Flags_SetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor));
                 }
-                ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+                ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
                 func_80AC9C20(this);
             }
         } else {
@@ -239,12 +239,12 @@ void func_80AC9C20(ObjOcarinalift* this) {
 }
 
 void func_80AC9C48(ObjOcarinalift* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->cutsceneTimer = 50;
         func_80AC96B4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -256,7 +256,7 @@ void ObjOcarinalift_Update(Actor* thisx, PlayState* play) {
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
         }
     }
 }

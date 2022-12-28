@@ -970,13 +970,13 @@ void ObjIceBlock_SetupAttemptSpawnCutscene(ObjIceblock* this) {
 }
 
 void ObjIceBlock_AttemptSpawnCutscene(ObjIceblock* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->extendedDrawFunc = func_80A26BF8;
         this->spawnCutsceneTimer = 80;
         func_80A25824(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -1462,7 +1462,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
     if (this->spawnCutsceneTimer > 0) {
         this->spawnCutsceneTimer--;
         if (this->spawnCutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
         }
     }
 

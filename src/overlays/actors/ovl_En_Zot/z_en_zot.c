@@ -488,8 +488,8 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
-                if ((this->actor.cutscene != -1) && !(this->unk_2F2 & 1)) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if ((this->actor.csId != CS_ID_NONE) && !(this->unk_2F2 & 1)) {
+                    ActorCutscene_Stop(this->actor.csId);
                 }
                 this->unk_2F2 &= ~1;
                 break;
@@ -497,16 +497,16 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     }
 
     if (this->unk_2F2 & 1) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->unk_2F2 &= ~1;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
+        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->unk_2F2 &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     }
 }

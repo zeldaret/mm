@@ -198,18 +198,18 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
     if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speedXZ = 0.0f;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;
     }
 }
 
 void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->cutsceneTimer = 50;
         this->actionFunc = ObjRaillift_Move;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -223,7 +223,7 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
         }
     }
     if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {

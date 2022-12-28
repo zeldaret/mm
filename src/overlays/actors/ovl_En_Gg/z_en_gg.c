@@ -406,16 +406,16 @@ void func_80B359DC(EnGg* this, PlayState* play) {
             this->unk_307 = true;
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->unk_2DC)) {
-            ActorCutscene_Start(this->unk_2DC, &this->actor);
+        if (ActorCutscene_GetCanPlayNext(this->csId)) {
+            ActorCutscene_Start(this->csId, &this->actor);
             this->unk_307 = false;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
             }
 
             if (this->unk_307) {
-                ActorCutscene_SetIntentToPlay(this->unk_2DC);
+                ActorCutscene_SetIntentToPlay(this->csId);
             }
         }
     } else {
@@ -665,7 +665,7 @@ void EnGg_Init(Actor* thisx, PlayState* play) {
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
     this->actor.flags &= ~ACTOR_FLAG_80;
     this->unk_310 = this->actor.home.pos.y;
-    this->unk_2DC = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->unk_308 = 0;
     this->unk_309 = 0;

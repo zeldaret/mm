@@ -618,7 +618,7 @@ EnInvadepoh* D_80B503F4;
 EnInvadepoh* D_80B503F8;
 AnimatedMaterial* sAlienEyeBeamTexAnim;
 AnimatedMaterial* sAlienEmptyTexAnim;
-s16 D_80B50404[3];
+static s16 sCsIdList[3];
 EnInvadepoh* D_80B5040C;
 
 void func_80B439B0(s32 arg0, s32 arg1) {
@@ -1355,11 +1355,11 @@ void EnInvadepoh_SetTextID(EnInvadepoh* this, PlayState* play, u16 arg2) {
 
 void func_80B45648(EnInvadepoh* this) {
     s32 i;
-    s16 cs = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
     for (i = 0; i < 3; i++) {
-        D_80B50404[i] = cs;
-        cs = ActorCutscene_GetAdditionalCutscene(cs);
+        sCsIdList[i] = csId;
+        csId = ActorCutscene_GetAdditionalCsId(csId);
     }
 }
 
@@ -1915,11 +1915,11 @@ void func_80B46E20(EnInvadepoh* this) {
 void func_80B46E44(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
-    } else if (ActorCutscene_GetCanPlayNext(D_80B50404[0])) {
-        ActorCutscene_StartAndSetUnkLinkFields(D_80B50404[0], &this->actor);
+    } else if (ActorCutscene_GetCanPlayNext(sCsIdList[0])) {
+        ActorCutscene_StartWithPlayerCs(sCsIdList[0], &this->actor);
         func_80B46EC0(this);
     } else {
-        ActorCutscene_SetIntentToPlay(D_80B50404[0]);
+        ActorCutscene_SetIntentToPlay(sCsIdList[0]);
     }
 }
 
@@ -1940,7 +1940,7 @@ void func_80B46EE8(EnInvadepoh* this, PlayState* play) {
 
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        ActorCutscene_Stop(D_80B50404[0]);
+        ActorCutscene_Stop(sCsIdList[0]);
         Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
         func_80B46F88(this);
     }
@@ -1974,11 +1974,11 @@ void func_80B47064(EnInvadepoh* this) {
 }
 
 void func_80B47084(EnInvadepoh* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(D_80B50404[1])) {
-        ActorCutscene_StartAndSetUnkLinkFields(D_80B50404[1], &this->actor);
+    if (ActorCutscene_GetCanPlayNext(sCsIdList[1])) {
+        ActorCutscene_StartWithPlayerCs(sCsIdList[1], &this->actor);
         func_80B470E0(this);
     } else {
-        ActorCutscene_SetIntentToPlay(D_80B50404[1]);
+        ActorCutscene_SetIntentToPlay(sCsIdList[1]);
     }
 }
 

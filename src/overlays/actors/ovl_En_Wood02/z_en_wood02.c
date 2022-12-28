@@ -201,7 +201,7 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ANI, this->actor.world.pos.x,
                                this->actor.world.pos.y + 120.0f, this->actor.world.pos.z - 15.0f, 0, 0, 0, 1);
         if (this->actor.child != NULL) {
-            this->actor.child->cutscene = this->actor.cutscene;
+            this->actor.child->csId = this->actor.csId;
         }
         this->unk_151 = 1;
     } else {

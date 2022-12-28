@@ -1165,26 +1165,26 @@ void DmStk_WaitForTelescope(DmStk* this, PlayState* play) {
  * Plays the cutscene in the telescope where the Moon's Tear falls.
  */
 void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
-    s16 dayOneAndTwoCutscene = this->actor.cutscene;
-    s16 dayThreeCutscene = ActorCutscene_GetAdditionalCutscene(dayOneAndTwoCutscene);
-    s16 finalHoursCutscene = ActorCutscene_GetAdditionalCutscene(dayThreeCutscene);
-    s16 cutscene;
+    s16 dayOneAndTwoCsId = this->actor.csId;
+    s16 dayThreeCsId = ActorCutscene_GetAdditionalCsId(dayOneAndTwoCsId);
+    s16 finalHoursCsId = ActorCutscene_GetAdditionalCsId(dayThreeCsId);
+    s16 csId;
 
     if (gSaveContext.save.day < 3) {
-        cutscene = dayOneAndTwoCutscene;
+        csId = dayOneAndTwoCsId;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) ||
                ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
-        cutscene = finalHoursCutscene;
+        csId = finalHoursCsId;
     } else {
-        cutscene = dayThreeCutscene;
+        csId = dayThreeCsId;
     }
 
-    if (ActorCutscene_GetCanPlayNext(cutscene)) {
-        ActorCutscene_Start(cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_Start(csId, &this->actor);
         Environment_StartTime();
         this->actionFunc = DmStk_DoNothing;
     } else {
-        ActorCutscene_SetIntentToPlay(cutscene);
+        ActorCutscene_SetIntentToPlay(csId);
     }
 }
 
@@ -1814,7 +1814,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
         if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
-            (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
+            (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == 0)) {
             gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
             if (R_TIME_SPEED != 0) {

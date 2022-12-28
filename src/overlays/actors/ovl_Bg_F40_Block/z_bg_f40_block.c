@@ -157,16 +157,16 @@ s32 func_80BC3B00(BgF40Block* this) {
 }
 
 s32 func_80BC3CA4(BgF40Block* this) {
-    if (this->dyna.actor.cutscene == -1) {
+    if (this->dyna.actor.csId == CS_ID_NONE) {
         return true;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         return true;
     }
 
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     return false;
 }
 
@@ -277,13 +277,13 @@ void func_80BC4228(BgF40Block* this, PlayState* play) {
             this->unk_164 = this->unk_160 + 1;
         } else {
             this->actionFunc = func_80BC4530;
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC41AC;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
         return;
@@ -337,13 +337,13 @@ void func_80BC4448(BgF40Block* this, PlayState* play) {
             this->unk_164 = this->unk_160 - 1;
         } else {
             this->actionFunc = func_80BC4380;
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC43CC;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
     }

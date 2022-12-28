@@ -100,9 +100,9 @@ s32 func_8096EE50(ElfMsg2* this) {
 
 void func_8096EE64(ElfMsg2* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        if (this->actor.cutscene != -1) {
-            if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                ActorCutscene_Stop(this->actor.cutscene);
+        if (this->actor.csId != CS_ID_NONE) {
+            if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
+                ActorCutscene_Stop(this->actor.csId);
             }
         }
 
@@ -115,14 +115,14 @@ void func_8096EE64(ElfMsg2* this, PlayState* play) {
         }
 
         ElfMsg2_SetupAction(this, func_8096EF98);
-    } else if ((this->actor.cutscene != -1) && (ActorCutscene_GetCurrentIndex() != this->actor.cutscene)) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    } else if ((this->actor.csId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() != this->actor.csId)) {
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
+        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            ActorCutscene_Start(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     }
 }

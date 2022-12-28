@@ -275,22 +275,22 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
 }
 
 void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
-    s16 cs1 = this->dyna.actor.cutscene;
-    s16 cs = ActorCutscene_GetAdditionalCutscene(
-        ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(cs1)));
+    s16 csId = this->dyna.actor.csId;
+    s16 additionalCsId =
+        ActorCutscene_GetAdditionalCsId(ActorCutscene_GetAdditionalCsId(ActorCutscene_GetAdditionalCsId(csId)));
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_08)) {
-        cs1 = cs;
+        csId = additionalCsId;
     }
 
-    if (ActorCutscene_GetCanPlayNext(cs1)) {
-        ActorCutscene_Start(cs1, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_Start(csId, &this->dyna.actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_53_20);
         SET_WEEKEVENTREG(WEEKEVENTREG_93_08);
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80AAF884;
     } else {
-        ActorCutscene_SetIntentToPlay(cs1);
+        ActorCutscene_SetIntentToPlay(csId);
     }
 }
 
@@ -321,22 +321,22 @@ void func_80AAF8F4(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFA18(DmChar08* this, PlayState* play) {
-    s16 nextCs;
-    s16 nextCs2;
-    s16 nextCs1;
+    s16 nextCsId;
+    s16 nextCsId2;
+    s16 nextCsId1;
 
-    nextCs1 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
-    nextCs2 = nextCs1;
-    nextCs1 = ActorCutscene_GetAdditionalCutscene(nextCs1);
+    nextCsId1 = ActorCutscene_GetAdditionalCsId(this->dyna.actor.csId);
+    nextCsId2 = nextCsId1;
+    nextCsId1 = ActorCutscene_GetAdditionalCsId(nextCsId1);
 
-    nextCs = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCs1 : nextCs2;
+    nextCsId = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCsId1 : nextCsId2;
 
-    if (ActorCutscene_GetCanPlayNext(nextCs) != 0) {
+    if (ActorCutscene_GetCanPlayNext(nextCsId) != 0) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_40);
-        ActorCutscene_Start(nextCs, &this->dyna.actor);
+        ActorCutscene_Start(nextCsId, &this->dyna.actor);
         this->actionFunc = DmChar08_DoNothing;
     } else {
-        ActorCutscene_SetIntentToPlay(nextCs);
+        ActorCutscene_SetIntentToPlay(nextCsId);
     }
 }
 

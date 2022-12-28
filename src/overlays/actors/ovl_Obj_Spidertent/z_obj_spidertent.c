@@ -676,15 +676,15 @@ void func_80B30A2C(ObjSpidertent* this) {
 }
 
 void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -791,7 +791,7 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
             }
         }
     } else if (this->unk_3C1 <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         Actor_Kill(&this->dyna.actor);
     }
 }

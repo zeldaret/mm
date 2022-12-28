@@ -216,14 +216,14 @@ void func_80BD8588(EnPamera* this, PlayState* play) {
 
 void func_80BD8658(EnPamera* this) {
     s32 i;
-    s16 nextCutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        if (nextCutscene == -1) {
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        if (csId == CS_ID_NONE) {
             break;
         }
-        this->cutscenes[i] = nextCutscene;
-        nextCutscene = ActorCutscene_GetAdditionalCutscene(nextCutscene);
+        this->csIdList[i] = csId;
+        csId = ActorCutscene_GetAdditionalCsId(csId);
     }
 }
 
@@ -242,9 +242,9 @@ void func_80BD8700(EnPamera* this) {
 
 void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[0])),
+        if (ActorCutscene_GetCanPlayNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
+            ActorCutscene_StartWithPlayerCs(this->csIdList[0], &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csIdList[0])),
                                    &this->actor);
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -252,8 +252,8 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
             this->actor.world.rot.y = this->actor.home.rot.y;
             func_80BD9338(this, play);
             func_80BD8908(this);
-        } else if ((this->cutscenes[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[0]);
+        } else if ((this->csIdList[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
+            ActorCutscene_SetIntentToPlay(this->csIdList[0]);
         } else {
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -429,13 +429,13 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
-        if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->cutscenes[1])),
+        if ((ActorCutscene_GetCanPlayNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
+            ActorCutscene_StartWithPlayerCs(this->csIdList[1], &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csIdList[1])),
                                    &this->actor);
             EnPamera_LookDownWell(this);
-        } else if (this->cutscenes[1] != -1) {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
+        } else if (this->csIdList[1] != -1) {
+            ActorCutscene_SetIntentToPlay(this->csIdList[1]);
         } else {
             EnPamera_LookDownWell(this);
         }

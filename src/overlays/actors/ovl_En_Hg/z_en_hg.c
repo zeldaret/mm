@@ -133,7 +133,7 @@ static u32 sHasSoundPlayed = false;
 
 void EnHg_Init(Actor* thisx, PlayState* play) {
     EnHg* this = THIS;
-    s16 currentCutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
@@ -148,12 +148,12 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 1;
     this->actor.colChkInfo.health = 0;
     this->actor.gravity = -1.0f;
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        if (currentCutscene == -1) {
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        if (csId == CS_ID_NONE) {
             break;
         }
-        this->cutscenes[i] = currentCutscene;
-        currentCutscene = ActorCutscene_GetAdditionalCutscene(currentCutscene);
+        this->csIdList[i] = csId;
+        csId = ActorCutscene_GetAdditionalCsId(csId);
     }
     EnHg_SetupWait(this);
 }
@@ -270,20 +270,20 @@ void EnHg_SetupCutscene(EnHg* this) {
 }
 
 void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
-        ActorCutscene_Start(this->cutscenes[this->cutsceneIndex], &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
+        ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->actor);
         EnHg_SetupCsAction(this);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+        ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
     }
 }
 
 void EnHg_SetupCsAction(EnHg* this) {
-    this->cutscenes[3] = 99;
-    this->cutscenes[2] = 0;
+    this->csIdList[3] = 99;
+    this->csIdList[2] = 0;
     this->actionFunc = EnHg_HandleCsAction;
 }
 
@@ -291,8 +291,8 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_484)) {
         s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_484);
 
-        if (this->cutscenes[3] != play->csCtx.actorCues[cueChannel]->id) {
-            this->cutscenes[3] = play->csCtx.actorCues[cueChannel]->id;
+        if (this->csIdList[3] != play->csCtx.actorCues[cueChannel]->id) {
+            this->csIdList[3] = play->csCtx.actorCues[cueChannel]->id;
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = 0;
@@ -300,21 +300,21 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     break;
 
                 case 2:
-                    this->cutscenes[2] = 0;
+                    this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_LEAN_FORWARD;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LEAN_FORWARD);
                     break;
 
                 case 3:
-                    this->cutscenes[2] = 0;
+                    this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_CURL_UP;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CURL_UP);
                     break;
 
                 case 4:
-                    this->cutscenes[2] = 0;
+                    this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_PANIC;
-                    if ((this->cutsceneIndex == HG_CS_GET_MASK) || (this->cutsceneIndex == HG_CS_SONG_OF_HEALING)) {
+                    if ((this->csIdIndex == HG_CS_GET_MASK) || (this->csIdIndex == HG_CS_SONG_OF_HEALING)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
@@ -356,8 +356,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                 break;
 
             case HG_ANIM_PANIC:
-                if ((this->cutsceneIndex == HG_CS_FIRST_ENCOUNTER) ||
-                    (this->cutsceneIndex == HG_CS_SUBSEQUENT_ENCOUNTER)) {
+                if ((this->csIdIndex == HG_CS_FIRST_ENCOUNTER) || (this->csIdIndex == HG_CS_SUBSEQUENT_ENCOUNTER)) {
                     func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
                 break;
@@ -370,7 +369,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
         EnHg_SetupWait(this);
     }
 
-    this->cutscenes[3] = 99;
+    this->csIdList[3] = 99;
 }
 
 void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
@@ -394,9 +393,9 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
         if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
             (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
-                this->cutsceneIndex = HG_CS_SONG_OF_HEALING;
+                this->csIdIndex = HG_CS_SONG_OF_HEALING;
             } else {
-                this->cutsceneIndex = HG_CS_GET_MASK;
+                this->csIdIndex = HG_CS_GET_MASK;
             }
 
             EnHg_SetupCutscene(this);
@@ -407,9 +406,9 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
             if ((this->actionFunc != EnHg_PlayCutscene) && (this->actionFunc != EnHg_HandleCsAction)) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_61_02)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_61_02);
-                    this->cutsceneIndex = HG_CS_FIRST_ENCOUNTER;
+                    this->csIdIndex = HG_CS_FIRST_ENCOUNTER;
                 } else {
-                    this->cutsceneIndex = HG_CS_SUBSEQUENT_ENCOUNTER;
+                    this->csIdIndex = HG_CS_SUBSEQUENT_ENCOUNTER;
                 }
 
                 EnHg_SetupCutscene(this);

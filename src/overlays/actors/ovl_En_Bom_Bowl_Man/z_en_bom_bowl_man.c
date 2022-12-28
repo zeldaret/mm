@@ -99,8 +99,8 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
 
     if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
         !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        this->unk_2D6 = this->actor.cutscene;
-        if (this->unk_2D6 == 0) {
+        this->csId3 = this->actor.csId;
+        if (this->csId3 == 0) {
             Actor_Kill(&this->actor);
         }
         func_809C52B4(this);
@@ -192,11 +192,11 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
         }
     }
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_2D0);
-    } else if (!ActorCutscene_GetCanPlayNext(this->unk_2D0)) {
-        ActorCutscene_SetIntentToPlay(this->unk_2D0);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(this->csId1);
+    } else if (!ActorCutscene_GetCanPlayNext(this->csId1)) {
+        ActorCutscene_SetIntentToPlay(this->csId1);
     }
 
     func_809C493C(this, 3, 1.0f);
@@ -214,18 +214,18 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
     if (this->unk_2B8 == 0) {
         Player* player = GET_PLAYER(play);
 
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_2D0);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->csId1);
             return;
         }
 
-        if (!ActorCutscene_GetCanPlayNext(this->unk_2D0)) {
-            ActorCutscene_SetIntentToPlay(this->unk_2D0);
+        if (!ActorCutscene_GetCanPlayNext(this->csId1)) {
+            ActorCutscene_SetIntentToPlay(this->csId1);
             return;
         }
 
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D0, &this->actor);
+        ActorCutscene_StartWithPlayerCs(this->csId1, &this->actor);
         this->unk_2B8 = 1;
         this->unk_2C0 = 0;
         this->unk_2D4 = this->actor.yawTowardsPlayer;
@@ -248,7 +248,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
             case 0:
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D0)),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csId1)),
                                       &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
@@ -268,7 +268,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
             case 2:
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2B8 = 2;
-                    ActorCutscene_Stop(this->unk_2D0);
+                    ActorCutscene_Stop(this->csId1);
                     func_809C59A4(this, play);
                     sp28 = true;
                 } else {
@@ -276,13 +276,13 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                     play->msgCtx.msgLength = 0;
                     func_809C493C(this, 1, 1.0f);
                     D_809C6100 = 1;
-                    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                        ActorCutscene_Stop(0x7C);
-                        ActorCutscene_SetIntentToPlay(this->unk_2D2);
-                    } else if (!ActorCutscene_GetCanPlayNext(this->unk_2D2)) {
-                        ActorCutscene_SetIntentToPlay(this->unk_2D2);
+                    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+                        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                        ActorCutscene_SetIntentToPlay(this->csId2);
+                    } else if (!ActorCutscene_GetCanPlayNext(this->csId2)) {
+                        ActorCutscene_SetIntentToPlay(this->csId2);
                     }
-                    ActorCutscene_Stop(this->unk_2D0);
+                    ActorCutscene_Stop(this->csId1);
                     this->actionFunc = func_809C5B1C;
                     sp28 = true;
                 }
@@ -299,7 +299,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 
             case 4:
                 if (this->unk_2B8 != 2) {
-                    ActorCutscene_Stop(this->unk_2D0);
+                    ActorCutscene_Stop(this->csId1);
                 }
                 play->msgCtx.msgLength = 0;
                 func_809C493C(this, 1, 1.0f);
@@ -452,25 +452,25 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
-                ActorCutscene_SetIntentToPlay(this->unk_2D6);
-            } else if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-                ActorCutscene_SetIntentToPlay(this->unk_2D6);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                ActorCutscene_SetIntentToPlay(this->csId3);
+            } else if (!ActorCutscene_GetCanPlayNext(this->csId3)) {
+                ActorCutscene_SetIntentToPlay(this->csId3);
             } else {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
+                ActorCutscene_StartWithPlayerCs(this->csId3, &this->actor);
                 this->unk_2C2 = 2;
                 func_809C493C(this, 18, 1.0f);
             }
         }
     } else if (this->unk_2C2 == 1) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_2D6);
-        } else if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-            ActorCutscene_SetIntentToPlay(this->unk_2D6);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->csId3);
+        } else if (!ActorCutscene_GetCanPlayNext(this->csId3)) {
+            ActorCutscene_SetIntentToPlay(this->csId3);
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->actor);
+            ActorCutscene_StartWithPlayerCs(this->csId3, &this->actor);
             this->unk_2C2 = 2;
             func_809C493C(this, 18, 1.0f);
         }
@@ -485,7 +485,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             if (this->unk_298 >= this->path->count) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
-                ActorCutscene_Stop(this->unk_2D6);
+                ActorCutscene_Stop(this->csId3);
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -530,13 +530,13 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5B1C(EnBomBowlMan* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_2D2);
-    } else if (!ActorCutscene_GetCanPlayNext(this->unk_2D2)) {
-        ActorCutscene_SetIntentToPlay(this->unk_2D2);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(this->csId2);
+    } else if (!ActorCutscene_GetCanPlayNext(this->csId2)) {
+        ActorCutscene_SetIntentToPlay(this->csId2);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D2, &this->actor);
+        ActorCutscene_StartWithPlayerCs(this->csId2, &this->actor);
         func_809C5BA0(this);
     }
 }
@@ -574,7 +574,7 @@ void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
         }
 
         if (this->unk_2F4 == 0) {
-            subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D2));
+            subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csId2));
 
             if (D_809C6100 > 5) {
                 Player* player = GET_PLAYER(play);

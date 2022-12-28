@@ -30,18 +30,18 @@ ActorInit Bg_Tobira01_InitVars = {
 
 void BgTobira01_Open(BgTobira01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 cutsceneId = this->dyna.actor.cutscene;
+    s16 csId = this->dyna.actor.csId;
     s16 prevTimer;
 
     if (this->playCutscene) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-        } else if (ActorCutscene_GetCanPlayNext(cutsceneId)) {
-            ActorCutscene_StartAndSetUnkLinkFields(cutsceneId, &this->dyna.actor);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        } else if (ActorCutscene_GetCanPlayNext(csId)) {
+            ActorCutscene_StartWithPlayerCs(csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             this->playCutscene = false;
         } else {
-            ActorCutscene_SetIntentToPlay(cutsceneId);
+            ActorCutscene_SetIntentToPlay(csId);
         }
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
                (play->actorCtx.unk1F4 == 0) &&

@@ -87,8 +87,8 @@ void func_80AC9FD4(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80AC9FD4;
         gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
@@ -96,7 +96,7 @@ void func_80AC9FE4(EnTimeTag* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_25_02);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
@@ -104,9 +104,9 @@ void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
     EnTimeTag* this2 = this;
 
     if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
-        if (this->actor.cutscene != -1) {
+        if (this->actor.csId != CS_ID_NONE) {
             this->actionFunc = func_80AC9FE4;
-            ActorCutscene_SetIntentToPlay(this2->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this2->actor.csId);
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
         play->msgCtx.ocarinaMode = 4;
@@ -114,7 +114,7 @@ void func_80ACA0A8(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA12C(EnTimeTag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    if (ActorCutscene_GetCurrentCsId() != this->actor.csId) {
         this->actionFunc = func_80ACA268;
         this->actor.textId = 0xC02;
         Item_Give(play, ITEM_SONG_SOARING);
@@ -122,14 +122,14 @@ void func_80ACA12C(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA184(EnTimeTag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
+    } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_Start(this->actor.csId, &this->actor);
         this->actionFunc = func_80ACA12C;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
@@ -196,8 +196,8 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
                     case 0x1230:
                         func_801477B4(play);
                         this->actionFunc = func_80ACA5F8;
-                        if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                            ActorCutscene_Stop(this->actor.cutscene);
+                        if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
+                            ActorCutscene_Stop(this->actor.csId);
                         }
                         break;
 
@@ -222,16 +222,16 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
     }
 
     if (this->actor.home.rot.x != 0) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->actor.home.rot.x = 0;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
+        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            ActorCutscene_Start(this->actor.csId, &this->actor);
             this->actor.home.rot.x = 0;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     }
 }

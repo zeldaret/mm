@@ -328,7 +328,7 @@ void ObjHunsui_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_172 & 0x40) &&
-        SubS_StartActorCutscene(&this->dyna.actor, this->unk_17C, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        SubS_StartActorCutscene(&this->dyna.actor, this->unk_17C, CS_ID_NONE, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->unk_172 &= ~0x40;
     }
 
@@ -570,7 +570,7 @@ void func_80B9D508(ObjHunsui* this, PlayState* play) {
 void func_80B9D714(ObjHunsui* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s16 cs;
+    s16 csId;
     f32 sp28;
 
     if ((this->unk_16C != play->roomCtx.curRoom.num) && (this->unk_16C != play->roomCtx.prevRoom.num) &&
@@ -580,19 +580,19 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
         if (Flags_GetSwitch(play, this->unk_168)) {
             this->unk_172 &= ~2;
             this->unk_172 |= 0x10;
-            cs = this->dyna.actor.cutscene;
+            csId = this->dyna.actor.csId;
 
             if (this->unk_16E == 0) {
-                if ((cs >= 0) && !ActorCutscene_GetCanPlayNext(cs)) {
-                    ActorCutscene_SetIntentToPlay(cs);
-                } else if (cs >= 0) {
-                    ActorCutscene_StartAndSetUnkLinkFields(cs, &this->dyna.actor);
+                if ((csId >= 0) && !ActorCutscene_GetCanPlayNext(csId)) {
+                    ActorCutscene_SetIntentToPlay(csId);
+                } else if (csId >= 0) {
+                    ActorCutscene_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->unk_16E = -1;
                 } else {
                     this->unk_16E = 40;
                 }
             } else if (this->unk_16E < 0) {
-                if (func_800F22C4(cs, &this->dyna.actor)) {
+                if (func_800F22C4(csId, &this->dyna.actor) != 0) {
                     this->unk_16E = 40;
                 }
             } else {

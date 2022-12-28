@@ -128,7 +128,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 9) {
         func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
         this->actionFunc = EnWarpTag_RespawnPlayer;
-        ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
+        ActorCutscene_Stop(ActorCutscene_GetCurrentCsId());
 
     } else if (play->msgCtx.ocarinaMode >= 2) {
         play->msgCtx.ocarinaMode = 4;
@@ -150,12 +150,12 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     s16 playerParams;
 
     player = GET_PLAYER(play);
-    if (play->playerActorCsIds[4] >= 0 && ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[4]) {
-        if (ActorCutscene_GetCanPlayNext(play->playerActorCsIds[4]) == 0) {
-            ActorCutscene_SetIntentToPlay(play->playerActorCsIds[4]);
+    if (play->playerCsIds[4] >= 0 && ActorCutscene_GetCurrentCsId() != play->playerCsIds[4]) {
+        if (ActorCutscene_GetCanPlayNext(play->playerCsIds[4]) == 0) {
+            ActorCutscene_SetIntentToPlay(play->playerCsIds[4]);
 
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
+            ActorCutscene_StartWithPlayerCs(play->playerCsIds[4], &this->dyna.actor);
             func_800B8E58(player, NA_SE_PL_WARP_PLATE);
             func_8016566C(0);
         }
@@ -232,11 +232,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
  * ActionFunc: Deku Playground, return to North Clock Town.
  */
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCurrentCsId() != this->dyna.actor.csId) {
+        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+            ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
         }
     }
 

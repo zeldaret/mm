@@ -1862,7 +1862,7 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
     player->talkActorDistance = actor->xzDistToPlayer;
     player->exchangeItemId = exchangeItemId;
 
-    ActorCutscene_SetIntentToPlay(0x7C);
+    ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
     return true;
 }
 
@@ -2014,7 +2014,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange
                     player->getItemDirection = absYawDiff;
 
                     if ((getItemId > GI_NONE) && (getItemId < GI_MAX)) {
-                        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[1]);
+                        ActorCutscene_SetIntentToPlay(play->playerCsIds[1]);
                     }
 
                     return true;
@@ -2089,7 +2089,7 @@ s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
            PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
         player->rideActor = horse;
         player->mountSide = mountSide;
-        ActorCutscene_SetIntentToPlay(0x7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
         return true;
     }
 
@@ -3078,8 +3078,8 @@ void Actor_FreeOverlay(ActorOverlay* entry) {
 
 Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX,
                    s16 rotY, s16 rotZ, s32 params) {
-    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params, -1, 0x3FF,
-                                         NULL);
+    return Actor_SpawnAsChildAndCutscene(actorCtx, play, actorId, posX, posY, posZ, rotX, rotY, rotZ, params,
+                                         CS_ID_NONE, 0x3FF, NULL);
 }
 
 ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
@@ -3123,7 +3123,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
 }
 
 Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX,
-                                     s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent) {
+                                     s16 rotY, s16 rotZ, s32 params, u32 csId, s32 arg11, Actor* parent) {
     s32 pad;
     Actor* actor;
     ActorInit* actorInit;
@@ -3189,10 +3189,10 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     actor->home.rot.y = rotY;
     actor->home.rot.z = rotZ;
     actor->params = params & 0xFFFF;
-    actor->cutscene = (cutscene & 0x7F);
+    actor->csId = csId & 0x7F;
 
-    if (actor->cutscene == 0x7F) {
-        actor->cutscene = -1;
+    if (actor->csId == CS_ID_GLOBAL_7F) {
+        actor->csId = CS_ID_NONE;
     }
 
     if (arg11 != 0) {

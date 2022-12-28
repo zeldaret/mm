@@ -169,7 +169,7 @@ void func_80953F14(BgIngate* this, PlayState* play) {
     if (this->timePath != NULL) {
         func_80953B40(this);
     }
-    this->unk16E = -1;
+    this->csId = CS_ID_NONE;
     this->actionFunc = func_80953F9C;
 }
 
@@ -206,13 +206,13 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
                 }
                 this->actionFunc = func_809542A0;
             }
-        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->timePath != NULL)) {
+        } else if ((ActorCutscene_GetCurrentCsId() == CS_ID_NONE) && (this->timePath != NULL)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
     }
-    if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
-        if (ActorCutscene_GetCurrentIndex() != -1) {
+    if (ActorCutscene_GetCurrentCsId() != this->csId) {
+        if (ActorCutscene_GetCurrentCsId() != CS_ID_NONE) {
             Camera_ChangeSetting(mainCam, CAM_SET_NORMAL0);
             player->stateFlags1 |= PLAYER_STATE1_20;
             play->actorCtx.flags &= ~ACTORCTX_FLAG_PICTO_BOX_ON;
@@ -221,7 +221,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
             player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     }
-    this->unk16E = ActorCutscene_GetCurrentIndex();
+    this->csId = ActorCutscene_GetCurrentCsId();
 }
 
 void func_809541B8(BgIngate* this, PlayState* play) {

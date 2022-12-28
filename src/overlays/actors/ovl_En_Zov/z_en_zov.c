@@ -91,10 +91,10 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     Animation_PlayLoop(&this->skelAnime, &object_zov_Anim_00D3EC);
 
     this->unk_320 = 0;
-    this->unk_32C = -1;
+    this->csIdIndex = -1;
     this->cueId = -1;
-    this->unk_328[0] = this->picto.actor.cutscene;
-    this->unk_328[1] = 0x7C;
+    this->csIdList[0] = this->picto.actor.csId;
+    this->csIdList[1] = CS_ID_GLOBAL_7C;
     this->unk_322 = 0;
     this->actionFunc = func_80BD1C84;
     this->picto.validationFunc = EnZov_ValidatePictograph;
@@ -134,17 +134,17 @@ void EnZov_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BD13DC(EnZov* this) {
-    if (this->unk_32C != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->unk_328[this->unk_32C]) {
-            ActorCutscene_Stop(this->unk_328[this->unk_32C]);
+    if (this->csIdIndex != -1) {
+        if (ActorCutscene_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->unk_32C = -1;
+        this->csIdIndex = -1;
     }
 }
 
 void func_80BD1440(EnZov* this, s16 arg1) {
     func_80BD13DC(this);
-    this->unk_32C = arg1;
+    this->csIdIndex = arg1;
 }
 
 void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
@@ -506,14 +506,14 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
         this->unk_2EC = 0;
     }
 
-    if ((this->unk_32C != -1) && (ActorCutscene_GetCurrentIndex() != this->unk_328[this->unk_32C])) {
-        if ((this->unk_32C == 0) && (ActorCutscene_GetCurrentIndex() == 0x7C)) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_328[this->unk_32C]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_328[this->unk_32C])) {
-            ActorCutscene_Start(this->unk_328[this->unk_32C], &this->picto.actor);
+    if ((this->csIdIndex != -1) && (ActorCutscene_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if ((this->csIdIndex == 0) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C)) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+        } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
+            ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->picto.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_328[this->unk_32C]);
+            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         }
     }
 }

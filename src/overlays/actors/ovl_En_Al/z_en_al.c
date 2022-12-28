@@ -219,30 +219,30 @@ Actor* func_80BDE384(EnAl* this, PlayState* play) {
     return actor;
 }
 
-s32 func_80BDE408(EnAl* this, s16 arg1) {
+s32 func_80BDE408(EnAl* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg1);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(csId);
+    } else if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(arg1);
+        ActorCutscene_SetIntentToPlay(csId);
     }
     return ret;
 }
 
 s16 func_80BDE484(EnAl* this, s32 arg1) {
-    s16 cs = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 i;
 
     for (i = 0; i < arg1; i++) {
-        cs = ActorCutscene_GetAdditionalCutscene(cs);
+        csId = ActorCutscene_GetAdditionalCsId(csId);
     }
 
-    return cs;
+    return csId;
 }
 
 s32 func_80BDE4E0(EnAl* this, s16* arg1, s16 arg2) {
@@ -317,13 +317,13 @@ s32 func_80BDE678(EnAl* this, s16* arg1, s16 arg2) {
 
 s32 func_80BDE7FC(EnAl* this, PlayState* play) {
     s32 pad;
-    s16 sp2A = func_80BDE484(this, 0);
+    s16 csId = func_80BDE484(this, 0);
     s32 pad2;
     s32 sp20 = false;
 
     switch (this->unk_4E6) {
         case 0:
-            if (!func_80BDE408(this, sp2A)) {
+            if (!func_80BDE408(this, csId)) {
                 break;
             }
 
@@ -332,7 +332,7 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 6:
         case 8:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), this->actor.child);
             }
             this->unk_4E6++;
             sp20 = true;
@@ -342,13 +342,13 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 3:
         case 5:
         case 7:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
             this->unk_4E6++;
             sp20 = true;
             break;
 
         case 9:
-            ActorCutscene_Stop(sp2A);
+            ActorCutscene_Stop(csId);
             this->unk_4E6++;
             sp20 = true;
             break;

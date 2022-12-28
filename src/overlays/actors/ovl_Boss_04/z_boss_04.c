@@ -254,7 +254,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
             this->unk_2D0 = 2000.0f;
             if ((player->stateFlags1 & PLAYER_STATE1_100000) && (this->actor.projectedPos.z > 0.0f) &&
                 (fabsf(this->actor.projectedPos.x) < 300.0f) && (fabsf(this->actor.projectedPos.y) < 300.0f)) {
-                if ((this->unk_704 >= 15) && (ActorCutscene_GetCurrentIndex() == -1)) {
+                if ((this->unk_704 >= 15) && (ActorCutscene_GetCurrentCsId() == CS_ID_NONE)) {
                     Actor* boss;
 
                     this->unk_708 = 10;

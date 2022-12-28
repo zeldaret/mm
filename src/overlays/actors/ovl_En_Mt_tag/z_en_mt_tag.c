@@ -274,11 +274,11 @@ void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
  * Shows the cutscene that pans over the race track and shows all five race entrants.
  */
 void EnMttag_ShowIntroCutscene(EnMttag* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = EnMttag_WaitForIntroCutsceneToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
@@ -287,7 +287,7 @@ void EnMttag_ShowIntroCutscene(EnMttag* this, PlayState* play) {
  * from showing again and starts the race.
  */
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    if (ActorCutscene_GetCurrentCsId() != this->actor.csId) {
         SET_WEEKEVENTREG(WEEKEVENTREG_12_02);
         this->actionFunc = EnMttag_RaceStart;
     }

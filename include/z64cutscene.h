@@ -616,9 +616,9 @@ typedef struct {
     /* 0x2 */ s16 length;
     /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
     /* 0x6 */ s16 scriptIndex;
-    /* 0x8 */ s16 additionalCutscene;
+    /* 0x8 */ s16 additionalCsId;
     /* 0xA */ u8 endSfx;
-    /* 0xB */ u8 unkB; // 0 - 99: actor-specific custom value. 100+: spawn. 255: none
+    /* 0xB */ u8 customValue; // 0 - 99: actor-specific custom value. 100+: spawn. 255: none
     /* 0xC */ s16 hudVisibility; 
     /* 0xE */ u8 endCam;
     /* 0xF */ u8 letterboxSize;
@@ -711,5 +711,18 @@ typedef struct {
     /* 0x78 */ CutsceneCameraCmd3* cmd3;
     /* 0x7C */ Camera* camera;
 } CutsceneCamera; // size = 0x80
+
+typedef enum {
+    /*   -1 */ CS_ID_NONE = -1,
+    // CsId's 0 - 119 are scene-specific
+    /* 0x78 */ CS_ID_GLOBAL_78 = 120,
+    /* 0x79 */ CS_ID_GLOBAL_79,
+    /* 0x7A */ CS_ID_GLOBAL_7A,
+    /* 0x7B */ CS_ID_GLOBAL_7B,
+    /* 0x7C */ CS_ID_GLOBAL_7C,
+    /* 0x7D */ CS_ID_GLOBAL_7D,
+    /* 0x7E */ CS_ID_GLOBAL_7E,
+    /* 0x7F */ CS_ID_GLOBAL_7F,
+} GlobalCutsceneId;
 
 #endif

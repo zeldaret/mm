@@ -673,7 +673,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
         (player->stateFlags1 & PLAYER_STATE1_100000) ||
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
         (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_100) ||
-        (play->csCtx.state != CS_STATE_IDLE) || (ActorCutscene_GetCurrentIndex() != -1) ||
+        (play->csCtx.state != CS_STATE_IDLE) || (ActorCutscene_GetCurrentCsId() != CS_ID_NONE) ||
         (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_0)) {
         return false;
     }
@@ -1644,7 +1644,7 @@ void EnHorse_Reverse(EnHorse* this, PlayState* play) {
             stickAngle = -0x7FFF;
         }
     } else if ((player->actor.flags & ACTOR_FLAG_100) || (play->csCtx.state != CS_STATE_IDLE) ||
-               (ActorCutscene_GetCurrentIndex() != -1) || (player->stateFlags1 & PLAYER_STATE1_20)) {
+               (ActorCutscene_GetCurrentCsId() != CS_ID_NONE) || (player->stateFlags1 & PLAYER_STATE1_20)) {
         EnHorse_StartMountedIdleResetAnim(this);
         this->actor.speedXZ = 0.0f;
         return;
@@ -4223,7 +4223,7 @@ void EnHorse_Update(Actor* thisx, PlayState* play2) {
             EnHorse_RegenBoost(this, play);
         }
 
-        if (ActorCutscene_GetCurrentIndex() != -1) {
+        if (ActorCutscene_GetCurrentCsId() != CS_ID_NONE) {
             thisx->speedXZ = 0.0f;
         }
 

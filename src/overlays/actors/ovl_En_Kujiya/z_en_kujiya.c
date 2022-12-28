@@ -296,18 +296,18 @@ void EnKujiya_SetupTurnToOpen(EnKujiya* this) {
 }
 
 void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (this->actor.csId != CS_ID_NONE) {
+        if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, 0x7555, 0xA, 0x16C, 0x16C)) {
         if (this->timer > 20) {
-            if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                ActorCutscene_Stop(this->actor.cutscene);
+            if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
+                ActorCutscene_Stop(this->actor.csId);
             }
             EnKujiya_SetupWait(this);
         } else {
@@ -324,18 +324,18 @@ void EnKujiya_SetupTurnToClosed(EnKujiya* this) {
 }
 
 void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (this->actor.csId != CS_ID_NONE) {
+        if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     }
 
     if (!Math_SmoothStepToS(&this->actor.shape.rot.y, 0, 0xA, 0x16C, 0x16C)) {
         if (this->timer > 20) {
-            if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                ActorCutscene_Stop(this->actor.cutscene);
+            if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
+                ActorCutscene_Stop(this->actor.csId);
             }
             EnKujiya_SetupWait(this);
         } else {

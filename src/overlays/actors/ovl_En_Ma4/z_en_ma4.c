@@ -778,16 +778,16 @@ void EnMa4_SetupBeginEponasSongCs(EnMa4* this) {
 
 // Epona's Song cutscene is an ActorCutscene
 void EnMa4_BeginEponasSongCs(EnMa4* this, PlayState* play) {
-    s16 cutsceneIndex = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(cutsceneIndex) != 0) {
-        ActorCutscene_Start(cutsceneIndex, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(csId) != 0) {
+        ActorCutscene_Start(csId, &this->actor);
         EnMa4_SetupEponasSongCs(this);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
-        ActorCutscene_SetIntentToPlay(cutsceneIndex);
+        ActorCutscene_SetIntentToPlay(csId);
     }
 }
 

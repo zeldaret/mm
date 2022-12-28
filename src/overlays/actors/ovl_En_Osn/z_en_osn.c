@@ -691,14 +691,14 @@ void EnOsn_HandleConversation(EnOsn* this, PlayState* play) {
 }
 
 void EnOsn_InitCutscene(EnOsn* this) {
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
     if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
 
         if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
             (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-            this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
+            this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
         }
     }
 }
@@ -706,7 +706,7 @@ void EnOsn_InitCutscene(EnOsn* this) {
 void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
     u32 isFlagSet = Flags_GetSwitch(play, 0);
 
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
 
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
     if (!isFlagSet) {
@@ -737,14 +737,14 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
 }
 
 void EnOsn_StartCutscene(EnOsn* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_Start(this->csId, &this->actor);
         this->actionFunc = EnOsn_HandleCsAction;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        ActorCutscene_SetIntentToPlay(this->csId);
     }
 }
 

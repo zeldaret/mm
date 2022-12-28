@@ -187,13 +187,13 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
 }
 
 void func_80AA884C(DmChar01* this, PlayState* play) {
-    s16 sp1E = this->dyna.actor.cutscene;
+    s16 csId = this->dyna.actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(sp1E)) {
-        ActorCutscene_Start(sp1E, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_Start(csId, &this->dyna.actor);
         this->actionFunc = func_80AA88A8;
     } else {
-        ActorCutscene_SetIntentToPlay(sp1E);
+        ActorCutscene_SetIntentToPlay(csId);
     }
 }
 

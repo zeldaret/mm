@@ -164,7 +164,7 @@ void BgLastBwall_Init(Actor* thisx, PlayState* play) {
 
     BgLastBwall_InitCollider(&sTrisInit, &this->dyna.actor.world.pos, &this->dyna.actor.shape.rot, &this->colliderTris,
                              D_80C18AC0[this->type]);
-    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->dyna.actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     func_80C187E4(this);
 }
 
@@ -239,7 +239,7 @@ void func_80C1886C(BgLastBwall* this, PlayState* play) {
 }
 
 void func_80C18884(BgLastBwall* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         func_80C188C4(this, play);
     }
 }

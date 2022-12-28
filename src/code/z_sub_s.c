@@ -1386,48 +1386,53 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     *curAnimIndex = nextAnimIndex;
 }
 
-s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
+s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
     s32 isStarted = false;
 
-    if ((curCutscene != -1) && (ActorCutscene_GetCurrentIndex() == curCutscene)) {
-        ActorCutscene_Stop(curCutscene);
-        ActorCutscene_SetIntentToPlay(nextCutscene);
-    } else if (ActorCutscene_GetCanPlayNext(nextCutscene)) {
+    if ((curCsId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() == curCsId)) {
+        ActorCutscene_Stop(curCsId);
+        ActorCutscene_SetIntentToPlay(nextCsId);
+    } else if (ActorCutscene_GetCanPlayNext(nextCsId)) {
         switch (type) {
             case SUBS_CUTSCENE_SET_UNK_LINK_FIELDS:
-                ActorCutscene_StartAndSetUnkLinkFields(nextCutscene, actor);
+                ActorCutscene_StartWithPlayerCs(nextCsId, actor);
                 break;
+
             case SUBS_CUTSCENE_NORMAL:
-                ActorCutscene_Start(nextCutscene, actor);
+                ActorCutscene_Start(nextCsId, actor);
                 break;
+
             case SUBS_CUTSCENE_SET_FLAG:
-                ActorCutscene_StartAndSetFlag(nextCutscene, actor);
+                ActorCutscene_StartWithPlayerCsAndSetFlag(nextCsId, actor);
+                break;
+
+            default:
                 break;
         }
         isStarted = true;
     } else {
-        ActorCutscene_SetIntentToPlay(nextCutscene);
+        ActorCutscene_SetIntentToPlay(nextCsId);
     }
 
     return isStarted;
 }
 
-s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
-    s16 cs;
+s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes) {
+    s16 csId;
     s32 i;
 
     for (i = 0; i < numCutscenes; i++) {
-        cutscenes[i] = -1;
+        csIdList[i] = -1;
     }
 
-    cs = actor->cutscene;
+    csId = actor->csId;
     i = 0;
 
-    while (cs != -1) {
-        // Note: Infinite loop if numCutscenes is less than possible additional cutscenes
+    while (csId != CS_ID_NONE) {
+        // Note: Infinite loop if numCutscenes is less than possible additional csIdList
         if (i < numCutscenes) {
-            cutscenes[i] = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(cs);
+            csIdList[i] = csId;
+            csId = ActorCutscene_GetAdditionalCsId(csId);
             i++;
         }
     }

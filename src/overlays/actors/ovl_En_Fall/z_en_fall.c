@@ -327,18 +327,18 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_04)) {
-                        if (ActorCutscene_GetCanPlayNext(0xC)) {
-                            ActorCutscene_Start(0xC, &this->actor);
+                        if (ActorCutscene_GetCanPlayNext(12)) {
+                            ActorCutscene_Start(12, &this->actor);
                             sGiantsCutsceneState++;
                         } else {
-                            ActorCutscene_SetIntentToPlay(0xC);
+                            ActorCutscene_SetIntentToPlay(12);
                         }
-                    } else if (ActorCutscene_GetCanPlayNext(0xB)) {
-                        ActorCutscene_Start(0xB, &this->actor);
+                    } else if (ActorCutscene_GetCanPlayNext(11)) {
+                        ActorCutscene_Start(11, &this->actor);
                         SET_WEEKEVENTREG(WEEKEVENTREG_93_04);
                         sGiantsCutsceneState++;
                     } else {
-                        ActorCutscene_SetIntentToPlay(0xB);
+                        ActorCutscene_SetIntentToPlay(11);
                     }
                 } else if (play->csCtx.curFrame > 1600) {
                     play->nextEntrance = ENTRANCE(CLOCK_TOWER_ROOFTOP, 0);

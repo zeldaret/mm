@@ -181,7 +181,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnZog* this = THIS;
     s32 i;
-    s16 cs;
+    s16 csId;
 
     if (!D_80B95E10) {
         for (i = 0; i < ARRAY_COUNT(D_80B958AC); i++) {
@@ -219,7 +219,7 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     this->unk_30A = 0;
     this->unk_31C = 2;
     this->unk_31E = 0;
-    this->unk_31A = -1;
+    this->csIdIndex = -1;
     this->unk_322 = 100;
 
     Math_Vec3f_Copy(&this->unk_2F0, &this->actor.world.pos);
@@ -245,13 +245,13 @@ void EnZog_Init(Actor* thisx, PlayState* play) {
     this->unk_304 = 0;
     this->unk_2FE = this->unk_2FC;
     this->unk_300 = this->unk_302;
-    cs = this->actor.cutscene;
+    csId = this->actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_30C); i++) {
-        this->unk_30C[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -331,17 +331,17 @@ void func_80B93A48(EnZog* this, PlayState* play) {
 
 void func_80B93B44(EnZog* this) {
     if (!(this->unk_30A & 4)) {
-        if (this->unk_31A != -1) {
-            ActorCutscene_Stop(this->unk_30C[this->unk_31A]);
+        if (this->csIdIndex != -1) {
+            ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
         }
     }
-    this->unk_31A = -1;
+    this->csIdIndex = -1;
     this->unk_30A &= ~4;
 }
 
-void func_80B93BA8(EnZog* this, s16 arg1) {
+void func_80B93BA8(EnZog* this, s16 csIdIndex) {
     func_80B93B44(this);
-    this->unk_31A = arg1;
+    this->csIdIndex = csIdIndex;
     this->unk_30A |= 4;
 }
 
@@ -982,18 +982,18 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
     this->actor.focus.pos.y += 30.0f;
 
     if (this->unk_30A & 4) {
-        if (this->unk_31A == -1) {
+        if (this->csIdIndex == -1) {
             this->unk_30A &= ~4;
-        } else if (this->unk_30C[this->unk_31A] == -1) {
+        } else if (this->csIdList[this->csIdIndex] == CS_ID_NONE) {
             this->unk_30A &= ~4;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_30C[this->unk_31A]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_30C[this->unk_31A])) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_30C[this->unk_31A], &this->actor);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+        } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
+            ActorCutscene_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
             this->unk_30A &= ~4;
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_30C[this->unk_31A]);
+            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         }
     }
 }

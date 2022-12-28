@@ -79,7 +79,7 @@ void ObjHgdoor_Init(Actor* thisx, PlayState* play) {
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, header);
     this->rotation = 0;
     this->timer = 0;
-    this->cutscene = this->dyna.actor.cutscene;
+    this->csId = this->dyna.actor.csId;
     ObjHgdoor_SetupIdle(this);
 }
 
@@ -108,15 +108,15 @@ void ObjHgdoor_SetupCutscene(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_Start(this->csId, &this->dyna.actor);
         ObjHgdoor_SetupCsAction(this);
         ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        ActorCutscene_SetIntentToPlay(this->csId);
     }
 }
 
@@ -160,8 +160,8 @@ void ObjHgdoor_SetupStopCs(ObjHgdoor* this) {
 
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
     if (this->timer++ > 80) {
-        if (!ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_Stop(this->cutscene);
+        if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+            ActorCutscene_Stop(this->csId);
         }
     }
 }

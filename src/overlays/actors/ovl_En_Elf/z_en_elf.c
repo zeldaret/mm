@@ -1323,19 +1323,19 @@ void func_8088FC34(EnElf* this, PlayState* play) {
 }
 
 void func_8088FD04(EnElf* this) {
-    if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
+    if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
         this->unk_264 &= ~1;
         this->unk_264 |= 2;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
         this->unk_264 |= 1;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_Start(this->actor.csId, &this->actor);
         this->unk_264 &= ~1;
         this->unk_264 |= 2;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
         this->unk_264 |= 1;
     }
 }
@@ -1346,8 +1346,8 @@ void func_8088FDCC(EnElf* this) {
     this->fairyFlags &= ~0x20;
     this->actor.focus.pos = this->actor.world.pos;
     this->unk_234 = NULL;
-    if ((this->unk_264 & 2) && (this->actor.cutscene != 0x7C)) {
-        ActorCutscene_Stop(this->actor.cutscene);
+    if ((this->unk_264 & 2) && (this->actor.csId != 0x7C)) {
+        ActorCutscene_Stop(this->actor.csId);
     }
     this->unk_264 &= ~0x20;
 }
@@ -1482,8 +1482,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
             this->elfMsg->flags |= ACTOR_FLAG_100;
-            thisx->cutscene = this->elfMsg->cutscene;
-            if (thisx->cutscene != -1) {
+            thisx->csId = this->elfMsg->csId;
+            if (thisx->csId != CS_ID_NONE) {
                 func_8088FD04(this);
             }
             if (this->elfMsg->home.rot.x == -0x961) {
@@ -1491,7 +1491,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
                 Actor_ChangeFocus(thisx, play, this->elfMsg);
             }
         } else {
-            thisx->cutscene = -1;
+            thisx->csId = CS_ID_NONE;
         }
         thisx->flags &= ~ACTOR_FLAG_10000;
     } else if (this->unk_264 & 4) {

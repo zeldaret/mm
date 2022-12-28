@@ -31,11 +31,11 @@ typedef struct EnGb2 {
     /* 0x27C */ s16 unk_27C;
     /* 0x27E */ s16 unk_27E;
     /* 0x280 */ s16 unk_280;
-    /* 0x282 */ s16 unk_282[3];
+    /* 0x282 */ s16 csIdList[3];
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ u8 unk_28A;
     /* 0x28C */ s32 unk_28C;
-    /* 0x290 */ s16 unk_290;
+    /* 0x290 */ s16 csIdIndex;
 } EnGb2; // size = 0x294
 
 #endif // Z_EN_GB2_H

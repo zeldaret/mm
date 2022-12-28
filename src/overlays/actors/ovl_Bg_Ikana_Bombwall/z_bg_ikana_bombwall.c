@@ -319,13 +319,13 @@ void func_80BD4F9C(BgIkanaBombwall* this, PlayState* play) {
 
 void func_80BD4FF8(BgIkanaBombwall* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     this->actionFunc = func_80BD503C;
 }
 
 void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
             func_80BD4720(this, play);
         } else {
@@ -339,7 +339,7 @@ void func_80BD503C(BgIkanaBombwall* this, PlayState* play) {
         }
         func_80BD5118(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -352,11 +352,11 @@ void func_80BD5134(BgIkanaBombwall* this, PlayState* play) {
     if (!BGIKANABOMBWALL_GET_100(&this->dyna.actor)) {
         this->unk_1AC--;
         if (this->unk_1AC <= 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
             Actor_Kill(&this->dyna.actor);
         }
-    } else if (this->dyna.actor.cutscene >= 0) {
-        if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
+    } else if (this->dyna.actor.csId >= 0) {
+        if (ActorCutscene_GetCurrentCsId() != this->dyna.actor.csId) {
             Actor_Kill(&this->dyna.actor);
         }
     } else {

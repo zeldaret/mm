@@ -298,7 +298,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     this->bodyCollider.dim.radius = 20;
     this->bodyCollider.dim.height = 65;
     this->bodyCollider.dim.yShift = 0;
-    this->unk_2D6 = this->picto.actor.cutscene;
+    this->csId = this->picto.actor.csId;
     this->picto.actor.world.pos.y = player->actor.world.pos.y + 160.0f;
     this->picto.validationFunc = EnKaizoku_ValidatePictograph;
     this->picto.actor.flags |= ACTOR_FLAG_400;
@@ -473,14 +473,14 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                 break;
             }
 
-            if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-                ActorCutscene_SetIntentToPlay(this->unk_2D6);
+            if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+                ActorCutscene_SetIntentToPlay(this->csId);
                 return;
             }
 
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->picto.actor);
+            ActorCutscene_StartWithPlayerCs(this->csId, &this->picto.actor);
             func_800B7298(play, &this->picto.actor, 0x15);
-            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.csId);
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
             sp54 = (this->unk_2CA * 4) + this->unk_2C8;
@@ -608,7 +608,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
         case 7:
             if (this->unk_598 == 0) {
                 func_800B7298(play, &this->picto.actor, 6);
-                ActorCutscene_Stop(this->unk_2D6);
+                ActorCutscene_Stop(this->csId);
                 this->unk_59C = 0;
                 this->subCamId = 0;
                 this->picto.actor.flags &= ~ACTOR_FLAG_100000;
@@ -665,15 +665,15 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
 void func_80B86804(EnKaizoku* this, PlayState* play) {
     if (this->subCamId == 0) {
-        if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-            ActorCutscene_SetIntentToPlay(this->unk_2D6);
+        if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+            ActorCutscene_SetIntentToPlay(this->csId);
             return;
         }
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->picto.actor);
+        ActorCutscene_StartWithPlayerCs(this->csId, &this->picto.actor);
     }
 
     func_800B7298(play, &this->picto.actor, 0x60);
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.csId);
     this->unk_2B2 = 30;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
     this->unk_598 = 0;
@@ -723,7 +723,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 func_801477B4(play);
                 func_800B7298(play, &this->picto.actor, 6);
-                ActorCutscene_Stop(this->unk_2D6);
+                ActorCutscene_Stop(this->csId);
                 this->subCamId = 0;
                 play->nextEntrance = play->setupExitList[this->exitIndex];
                 gSaveContext.nextCutsceneIndex = 0;
@@ -862,7 +862,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     this->unk_59C = 0;
                     this->subCamId = 0;
                     func_800B7298(play, &this->picto.actor, 6);
-                    ActorCutscene_Stop(this->unk_2D6);
+                    ActorCutscene_Stop(this->csId);
                     if (this->switchFlag >= 0) {
                         Flags_SetSwitch(play, this->switchFlag);
                     }
@@ -1714,12 +1714,12 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
     if (curFrame >= 25.0f) {
         player = GET_PLAYER(play);
         if (this->subCamId == 0) {
-            if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-                ActorCutscene_SetIntentToPlay(this->unk_2D6);
+            if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+                ActorCutscene_SetIntentToPlay(this->csId);
                 return;
             }
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->picto.actor);
-            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+            ActorCutscene_StartWithPlayerCs(this->csId, &this->picto.actor);
+            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.csId);
         }
 
         Math_Vec3f_Copy(&this->unk_3C4, &gZeroVec3f);
@@ -1774,12 +1774,12 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
             this->subCamId = 0;
             this->picto.actor.flags |= ACTOR_FLAG_100000;
 
-            if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-                ActorCutscene_SetIntentToPlay(this->unk_2D6);
+            if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+                ActorCutscene_SetIntentToPlay(this->csId);
                 this->actionFunc = func_80B86804;
             } else {
-                ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->picto.actor);
-                this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+                ActorCutscene_StartWithPlayerCs(this->csId, &this->picto.actor);
+                this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.csId);
                 this->actionFunc = func_80B86804;
             }
             return;
@@ -1792,12 +1792,12 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                 this->subCamId = 0;
                 this->picto.actor.flags |= ACTOR_FLAG_100000;
 
-                if (!ActorCutscene_GetCanPlayNext(this->unk_2D6)) {
-                    ActorCutscene_SetIntentToPlay(this->unk_2D6);
+                if (!ActorCutscene_GetCanPlayNext(this->csId)) {
+                    ActorCutscene_SetIntentToPlay(this->csId);
                     this->actionFunc = func_80B86804;
                 } else {
-                    ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D6, &this->picto.actor);
-                    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+                    ActorCutscene_StartWithPlayerCs(this->csId, &this->picto.actor);
+                    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.csId);
                     this->actionFunc = func_80B86804;
                 }
                 return;

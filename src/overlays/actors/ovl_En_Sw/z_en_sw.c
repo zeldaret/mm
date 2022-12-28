@@ -1089,14 +1089,14 @@ void func_808DB100(EnSw* this, PlayState* play) {
 }
 
 void func_808DB25C(EnSw* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_808D9C18(this);
         this->actionFunc = func_808DB2E0;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 

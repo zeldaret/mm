@@ -64,7 +64,7 @@ void func_80973D3C(ObjRoomtimer* this, PlayState* play) {
         if (this->actor.params != 0x1FF) {
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
         this->actionFunc = func_80973DE0;
     } else if ((this->actor.params != 0x1FF) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] == TIMER_STATE_OFF)) {
         play_sound(NA_SE_OC_ABYSS);
@@ -74,17 +74,17 @@ void func_80973D3C(ObjRoomtimer* this, PlayState* play) {
 }
 
 void func_80973DE0(ObjRoomtimer* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
         Flags_SetClear(play, this->actor.room);
         Flags_SetSwitch(play, this->switchFlag);
-        if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        if (ActorCutscene_GetLength(this->actor.csId) != -1) {
+            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
         Actor_Kill(&this->actor);
         return;
     }
 
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    ActorCutscene_SetIntentToPlay(this->actor.csId);
 }
 
 void ObjRoomtimer_Update(Actor* thisx, PlayState* play) {

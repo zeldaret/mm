@@ -1005,14 +1005,14 @@ void EnMaYto_SetupBeginWarmFuzzyFeelingCs(EnMaYto* this) {
 }
 
 void EnMaYto_BeginWarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_Start(this->actor.csId, &this->actor);
         EnMaYto_SetupWarmFuzzyFeelingCs(this);
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 

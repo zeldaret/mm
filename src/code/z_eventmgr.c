@@ -2,20 +2,20 @@
 #include "z64shrink_window.h"
 
 ActorCutscene sGlobalActorCutscenes[8] = {
-    /* 0x78 */ { 0xFF9C, -1, -1, -1, -1, 255, 255, -1, 255, 255 },
-    /* 0x79 */ { 0xFF9C, -1, -1, -1, -1, 255, 255, -1, 255, 255 },
-    /* 0x7A */ { 0xFF9C, -1, -1, -1, -1, 255, 255, -1, 255, 255 },
-    /* 0x7B */ { 0x0002, -1, -25, -1, -1, 255, 255, 0, 0, 32 },
-    /* 0x7C */ { 0x7FFD, -1, -1, -1, -1, 255, 255, -1, 0, 255 },
-    /* 0x7D */ { 0x7FFC, -1, -1, -1, -1, 255, 255, -1, 0, 255 },
-    /* 0x7E */ { 0x7FFE, -2, -14, -1, -1, 0, 255, -1, 0, 32 },
-    /* 0x7F */ { 0x0000, -1, -1, -1, -1, 0, 255, -1, 0, 32 },
+    /* 0x78 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 },
+    /* 0x79 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 },
+    /* 0x7A */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 },
+    /* 0x7B */ { 0x0002, -1, -25, -1, CS_ID_NONE, 255, 255, 0, 0, 32 },
+    /* 0x7C */ { 0x7FFD, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },
+    /* 0x7D */ { 0x7FFC, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },
+    /* 0x7E */ { 0x7FFE, -2, -14, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },
+    /* 0x7F */ { 0x0000, -1, -1, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },
 };
 
 typedef struct {
-    /* 0x00 */ s16 actorCsId;
+    /* 0x00 */ s16 csId;
     /* 0x02 */ s16 length;
-    /* 0x04 */ s16 endActorCsId;
+    /* 0x04 */ s16 endCsId;
     /* 0x06 */ s16 subCamId;
     /* 0x08 */ Actor* targetActor;
     /* 0x0C */ s32 startMethod;
@@ -74,12 +74,12 @@ s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility) {
     return hudVisibility;
 }
 
-ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 actorCsId) {
-    if (actorCsId < 0x78) {
-        return &sActorCutsceneList[actorCsId];
+ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 csId) {
+    if (csId < 0x78) {
+        return &sActorCutsceneList[csId];
     } else {
-        actorCsId -= 0x78;
-        return &sGlobalActorCutscenes[actorCsId];
+        csId -= 0x78;
+        return &sGlobalActorCutscenes[csId];
     }
 }
 
@@ -94,13 +94,13 @@ void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 n
         actorCutsceneNextCutscenes[i] = 0;
     }
 
-    sActorCsMgr.endActorCsId = -1;
+    sActorCsMgr.endCsId = -1;
     sActorCsMgr.play = play;
     sActorCsMgr.length = -1;
     sActorCsMgr.targetActor = NULL;
     sActorCsMgr.subCamId = SUB_CAM_ID_DONE;
     sActorCsMgr.unk16 = 0;
-    sActorCsMgr.actorCsId = sActorCsMgr.endActorCsId;
+    sActorCsMgr.csId = sActorCsMgr.endCsId;
 }
 
 void func_800F15D8(Camera* camera) {
@@ -135,7 +135,7 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     s16 priorityMax;
     s16 actorCsIdMax;
     s32 count;
-    s16 actorCsId;
+    s16 csId;
     s16 priority;
 
     count = 0;
@@ -144,13 +144,13 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     for (i = 0; i < 16; i++) {
         for (bit = 1, j = 0; j < 8; j++) {
             if (sActorCutsceneWaiting[i] & bit) {
-                actorCsId = (i << 3) | j;
-                priority = ActorCutscene_GetCutsceneImpl(actorCsId)->priority;
+                csId = (i << 3) | j;
+                priority = ActorCutscene_GetCutsceneImpl(csId)->priority;
 
                 if ((priority ^ 0) == -1) {
                     actorCutsceneNextCutscenes[i] |= bit;
                 } else if ((priority < priorityMax) && (priority > 0)) {
-                    actorCsIdMax = actorCsId;
+                    actorCsIdMax = csId;
                     priorityMax = priority;
                 }
                 count++;
@@ -182,7 +182,7 @@ void ActorCutscene_End(void) {
             break;
     }
 
-    actorCs = ActorCutscene_GetCutsceneImpl(sActorCsMgr.actorCsId);
+    actorCs = ActorCutscene_GetCutsceneImpl(sActorCsMgr.csId);
 
     switch (actorCs->endSfx) {
         case CS_END_SFX_TRE_BOX_APPEAR:
@@ -205,7 +205,7 @@ void ActorCutscene_End(void) {
             Play_CopyCamera(sActorCsMgr.play, sActorCsMgr.retCamId, sActorCsMgr.subCamId);
             RET_CAM->stateFlags =
                 (RET_CAM->stateFlags & ~CAM_STATE_UNDERWATER) | (CUR_CAM->stateFlags & CAM_STATE_UNDERWATER);
-            ActorCutscene_SetIntentToPlay(0x7E);
+            ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7E);
             break;
 
         case CS_END_CAM_0:
@@ -237,8 +237,8 @@ void ActorCutscene_End(void) {
         Play_ChangeCameraStatus(sActorCsMgr.play, sActorCsMgr.retCamId, CAM_STATUS_ACTIVE);
     }
 
-    sActorCsMgr.actorCsId = -1;
-    sActorCsMgr.endActorCsId = -1;
+    sActorCsMgr.csId = CS_ID_NONE;
+    sActorCsMgr.endCsId = CS_ID_NONE;
     sActorCsMgr.length = -1;
     sActorCsMgr.targetActor = NULL;
     sActorCsMgr.subCamId = SUB_CAM_ID_DONE;
@@ -247,28 +247,28 @@ void ActorCutscene_End(void) {
 s16 ActorCutscene_Update(void) {
     s16 sp1E = 0;
 
-    if (ActorCutscene_GetCanPlayNext(0x7E) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields(0x7E, &GET_PLAYER(sActorCsMgr.play)->actor);
+    if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_7E) != 0) {
+        ActorCutscene_StartWithPlayerCs(CS_ID_GLOBAL_7E, &GET_PLAYER(sActorCsMgr.play)->actor);
     }
-    if (sActorCsMgr.endActorCsId == -1) {
-        if (sActorCsMgr.actorCsId != -1) {
+    if (sActorCsMgr.endCsId == CS_ID_NONE) {
+        if (sActorCsMgr.csId != CS_ID_NONE) {
             if (sActorCsMgr.length > 0) {
                 sActorCsMgr.length--;
             }
             sp1E = 1;
             if (sActorCsMgr.length == 0) {
-                ActorCutscene_Stop(sActorCsMgr.actorCsId);
+                ActorCutscene_Stop(sActorCsMgr.csId);
             }
         }
     }
-    if (sActorCsMgr.endActorCsId != -1) {
+    if (sActorCsMgr.endCsId != -1) {
         ActorCutscene_End();
         sp1E = 2;
     }
 
     ActorCutscene_ClearNextCutscenes();
 
-    if (sActorCsMgr.actorCsId == -1) {
+    if (sActorCsMgr.csId == CS_ID_NONE) {
         if ((ActorCutscene_MarkNextCutscenes() == 0) && (sp1E != 0)) {
             ShrinkWindow_Letterbox_SetSizeTarget(0);
         } else if (sp1E == 0) {
@@ -278,36 +278,36 @@ s16 ActorCutscene_Update(void) {
     return sp1E;
 }
 
-void ActorCutscene_SetIntentToPlay(s16 index) {
-    if (index >= 0) {
-        sActorCutsceneWaiting[index >> 3] |= 1 << (index & 7);
+void ActorCutscene_SetIntentToPlay(s16 csId) {
+    if (csId >= 0) {
+        sActorCutsceneWaiting[csId >> 3] |= 1 << (csId & 7);
     }
 }
 
-s16 ActorCutscene_GetCanPlayNext(s16 index) {
-    if (index == 0x7F) {
-        if (sActorCsMgr.actorCsId == -1) {
-            return 0x7F;
+s16 ActorCutscene_GetCanPlayNext(s16 csId) {
+    if (csId == CS_ID_GLOBAL_7F) {
+        if (sActorCsMgr.csId == CS_ID_NONE) {
+            return CS_ID_GLOBAL_7F;
         } else {
             return 0;
         }
     }
-    if (index < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
-    return (actorCutsceneNextCutscenes[index >> 3] & (1 << (index & 7))) ? true : false;
+    return (actorCutsceneNextCutscenes[csId >> 3] & (1 << (csId & 7))) ? true : false;
 }
 
 /**
  * Start an actor cutscene, activate Player Cutscene Mode "Wait"
  */
-s16 ActorCutscene_StartAndSetUnkLinkFields(s16 index, Actor* actor) {
-    s16 sp1E = ActorCutscene_Start(index, actor);
+s16 ActorCutscene_StartWithPlayerCs(s16 csId, Actor* actor) {
+    s16 sp1E = ActorCutscene_Start(csId, actor);
 
     if (sp1E >= 0) {
         func_800B7298(sActorCsMgr.play, 0, PLAYER_CSMODE_WAIT);
         if (sActorCsMgr.length == 0) {
-            ActorCutscene_Stop(sActorCsMgr.actorCsId);
+            ActorCutscene_Stop(sActorCsMgr.csId);
         }
         sActorCsMgr.startMethod = 1;
     }
@@ -317,13 +317,13 @@ s16 ActorCutscene_StartAndSetUnkLinkFields(s16 index, Actor* actor) {
 /**
  * Start an actor cutscene, activate Player Cutscene Mode "Wait", turn on ACTOR_FLAG_100000
  */
-s16 ActorCutscene_StartAndSetFlag(s16 index, Actor* actor) {
-    s16 sp1E = ActorCutscene_Start(index, actor);
+s16 ActorCutscene_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
+    s16 sp1E = ActorCutscene_Start(csId, actor);
 
     if (sp1E >= 0) {
         func_800B7298(sActorCsMgr.play, 0, PLAYER_CSMODE_WAIT);
         if (sActorCsMgr.length == 0) {
-            ActorCutscene_Stop(sActorCsMgr.actorCsId);
+            ActorCutscene_Stop(sActorCsMgr.csId);
         }
         if (actor != NULL) {
             actor->flags |= ACTOR_FLAG_100000;
@@ -335,27 +335,27 @@ s16 ActorCutscene_StartAndSetFlag(s16 index, Actor* actor) {
     return sp1E;
 }
 
-s16 ActorCutscene_Start(s16 index, Actor* actor) {
+s16 ActorCutscene_Start(s16 csId, Actor* actor) {
     ActorCutscene* actorCs;
     Camera* subCam;
     Camera* retCam;
     s32 sp20 = 0;
 
-    if ((index < 0) || (sActorCsMgr.actorCsId != -1)) {
-        return index;
+    if ((csId < 0) || (sActorCsMgr.csId != CS_ID_NONE)) {
+        return csId;
     }
 
     sActorCsMgr.startMethod = 0;
-    actorCs = ActorCutscene_GetCutsceneImpl(index);
+    actorCs = ActorCutscene_GetCutsceneImpl(csId);
 
     ShrinkWindow_Letterbox_SetSizeTarget(actorCs->letterboxSize);
     ActorCutscene_SetHudVisibility(actorCs->hudVisibility);
 
-    if (index == 0x7F) {
+    if (csId == CS_ID_GLOBAL_7F) {
         sp20 = 1;
     } else if (actorCs->scriptIndex != -1) {
         sp20 = 1;
-    } else if ((index != 0x7D) && (index != 0x7C)) {
+    } else if ((csId != CS_ID_GLOBAL_7D) && (csId != CS_ID_GLOBAL_7C)) {
         sp20 = 2;
     }
 
@@ -366,7 +366,7 @@ s16 ActorCutscene_Start(s16 index, Actor* actor) {
         retCam = Play_GetCamera(sActorCsMgr.play, sActorCsMgr.retCamId);
         if ((retCam->setting == CAM_SET_START0) || (retCam->setting == CAM_SET_START2) ||
             (retCam->setting == CAM_SET_START1)) {
-            if (ActorCutscene_FindEntranceCutscene() != index) {
+            if (ActorCutscene_FindEntranceCsId() != csId) {
                 func_800E0348(retCam);
             } else {
                 Camera_ClearFlags(retCam, CAM_STATE_2);
@@ -394,106 +394,106 @@ s16 ActorCutscene_Start(s16 index, Actor* actor) {
             sActorCsMgr.length = actorCs->length;
         }
     }
-    sActorCsMgr.actorCsId = index;
+    sActorCsMgr.csId = csId;
 
-    return index;
+    return csId;
 }
 
-s16 ActorCutscene_Stop(s16 index) {
+s16 ActorCutscene_Stop(s16 csId) {
     ActorCutscene* actorCs;
 
-    if (index < 0) {
-        return index;
+    if (csId < 0) {
+        return csId;
     }
 
-    actorCs = ActorCutscene_GetCutsceneImpl(sActorCsMgr.actorCsId);
+    actorCs = ActorCutscene_GetCutsceneImpl(sActorCsMgr.csId);
     if ((sActorCsMgr.length > 0) && (actorCs->scriptIndex == -1)) {
         return -2;
     }
-    if ((index != 0x7F) && (actorCs->scriptIndex != -1)) {
+    if ((csId != CS_ID_GLOBAL_7F) && (actorCs->scriptIndex != -1)) {
         return -3;
     }
 
-    if (index == 0x7F) {
-        index = sActorCsMgr.actorCsId;
+    if (csId == CS_ID_GLOBAL_7F) {
+        csId = sActorCsMgr.csId;
     }
-    if (index == sActorCsMgr.actorCsId) {
-        sActorCsMgr.endActorCsId = sActorCsMgr.actorCsId;
-        return sActorCsMgr.endActorCsId;
+    if (csId == sActorCsMgr.csId) {
+        sActorCsMgr.endCsId = sActorCsMgr.csId;
+        return sActorCsMgr.endCsId;
     }
     return -1;
 }
 
-s16 ActorCutscene_GetCurrentIndex(void) {
-    return sActorCsMgr.actorCsId;
+s16 ActorCutscene_GetCurrentCsId(void) {
+    return sActorCsMgr.csId;
 }
 
-ActorCutscene* ActorCutscene_GetCutscene(s16 index) {
-    return ActorCutscene_GetCutsceneImpl(index);
+ActorCutscene* ActorCutscene_GetCutscene(s16 csId) {
+    return ActorCutscene_GetCutsceneImpl(csId);
 }
 
-s16 ActorCutscene_GetAdditionalCutscene(s16 index) {
-    if (index < 0) {
+s16 ActorCutscene_GetAdditionalCsId(s16 csId) {
+    if (csId < 0) {
+        return CS_ID_NONE;
+    }
+    return ActorCutscene_GetCutsceneImpl(csId)->additionalCsId;
+}
+
+s16 ActorCutscene_GetLength(s16 csId) {
+    if (csId < 0) {
         return -1;
     }
-    return ActorCutscene_GetCutsceneImpl(index)->additionalCutscene;
+    return ActorCutscene_GetCutsceneImpl(csId)->length;
 }
 
-s16 ActorCutscene_GetLength(s16 index) {
-    if (index < 0) {
+s16 ActorCutscene_GetCutsceneScriptIndex(s16 csId) {
+    if (csId < 0) {
         return -1;
     }
-    return ActorCutscene_GetCutsceneImpl(index)->length;
+    return ActorCutscene_GetCutsceneImpl(csId)->scriptIndex;
 }
 
-s16 ActorCutscene_GetCutsceneScriptIndex(s16 index) {
-    if (index < 0) {
+s16 ActorCutscene_GetCutsceneCustomValue(s16 csId) {
+    if (csId < 0) {
         return -1;
     }
-    return ActorCutscene_GetCutsceneImpl(index)->scriptIndex;
+    return ActorCutscene_GetCutsceneImpl(csId)->customValue;
 }
 
-s16 func_800F2178(s16 index) {
-    if (index < 0) {
-        return -1;
-    }
-    return ActorCutscene_GetCutsceneImpl(index)->unkB;
-}
-
-s16 ActorCutscene_GetCurrentSubCamId(s16 index) {
+s16 ActorCutscene_GetCurrentSubCamId(s16 csId) {
     return sActorCsMgr.subCamId;
 }
 
-s16 ActorCutscene_FindEntranceCutscene(void) {
+s16 ActorCutscene_FindEntranceCsId(void) {
     PlayState* play;
-    s32 actorCsId;
+    s32 csId;
 
-    for (actorCsId = 0; actorCsId < sActorCutsceneCount; actorCsId++) {
+    for (csId = 0; csId < sActorCutsceneCount; csId++) {
         //! FAKE:
-        if ((sActorCutsceneList[actorCsId].scriptIndex != -1) &&
-            (sActorCutsceneList[actorCsId].scriptIndex < (play = sActorCsMgr.play)->csCtx.scriptListCount) &&
+        if ((sActorCutsceneList[csId].scriptIndex != -1) &&
+            (sActorCutsceneList[csId].scriptIndex < (play = sActorCsMgr.play)->csCtx.scriptListCount) &&
             (sActorCsMgr.play->curSpawn ==
-             sActorCsMgr.play->csCtx.scriptList[sActorCutsceneList[actorCsId].scriptIndex].spawn)) {
-            return actorCsId;
+             sActorCsMgr.play->csCtx.scriptList[sActorCutsceneList[csId].scriptIndex].spawn)) {
+            return csId;
         }
     }
 
-    for (actorCsId = 0; actorCsId < sActorCutsceneCount; actorCsId++) {
-        if ((sActorCutsceneList[actorCsId].unkB >= 100) &&
-            (sActorCutsceneList[actorCsId].unkB == (sActorCsMgr.play->curSpawn + 100))) {
-            return actorCsId;
+    for (csId = 0; csId < sActorCutsceneCount; csId++) {
+        if ((sActorCutsceneList[csId].customValue >= 100) &&
+            (sActorCutsceneList[csId].customValue == (sActorCsMgr.play->curSpawn + 100))) {
+            return csId;
         }
     }
 
     return -1;
 }
 
-s32 func_800F22C4(s16 actorCsId, Actor* actor) {
+s32 func_800F22C4(s16 csId, Actor* actor) {
     f32 dist;
     s16 screenPosX;
     s16 screenPosY;
 
-    if ((sActorCsMgr.actorCsId == -1) || (actorCsId == -1)) {
+    if ((sActorCsMgr.csId == CS_ID_NONE) || (csId == CS_ID_NONE)) {
         return 4;
     }
 
@@ -508,7 +508,7 @@ s32 func_800F22C4(s16 actorCsId, Actor* actor) {
     if (sActorCsMgr.length < 6) {
         return 2;
     }
-    if (actorCsId == sActorCsMgr.actorCsId) {
+    if (csId == sActorCsMgr.csId) {
         return 0;
     }
     return 3;

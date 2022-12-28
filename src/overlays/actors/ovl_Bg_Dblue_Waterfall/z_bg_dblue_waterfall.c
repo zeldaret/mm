@@ -423,13 +423,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800) {
-                    this->unk_1A4 = this->actor.cutscene;
+                    this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
-                    this->unk_1A4 = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+                    this->csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }
             }
@@ -448,9 +448,9 @@ void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     s32 sp20;
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_1A4)) {
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
         sp20 = func_80B83D04(this, play);
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_1A4, &this->actor);
+        ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
         this->unk_1A3 = true;
         if (sp20) {
             func_80B83D94(this, play);
@@ -460,7 +460,7 @@ void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
             func_80B84B9C(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_1A4);
+        ActorCutscene_SetIntentToPlay(this->csId);
     }
 }
 
@@ -533,7 +533,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play) {
         func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
-            ActorCutscene_Stop(this->unk_1A4);
+            ActorCutscene_Stop(this->csId);
         }
         func_80B8484C(this, play);
     }
@@ -572,7 +572,7 @@ void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
         func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
-            ActorCutscene_Stop(this->unk_1A4);
+            ActorCutscene_Stop(this->csId);
         }
         func_80B8484C(this, play);
     }

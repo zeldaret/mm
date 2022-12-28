@@ -217,13 +217,13 @@ void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
 void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
     if (this->fire.state != 3) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+            ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
             Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupUnfoldInnerPetals(this);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
         }
     }
 }
@@ -327,7 +327,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
         this->flowerRotationalVelocity = 0x147;
         this->settleScale = 0.0f;
 
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         BgNumaHana_SetupOpenedIdle(this);
     }
 

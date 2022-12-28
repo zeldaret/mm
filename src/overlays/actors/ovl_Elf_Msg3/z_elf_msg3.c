@@ -110,20 +110,20 @@ void func_80A2CF7C(ElfMsg3* this, PlayState* play) {
          ((player->actor.world.pos.y - this->actor.world.pos.y) < (100.0f * this->actor.scale.y))) &&
         (fabsf(player->actor.world.pos.z - this->actor.world.pos.z) < (100.0f * this->actor.scale.z))) {
         player->tatlTextId = func_80A2CF50(this);
-        ActorCutscene_SetIntentToPlay(0x7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
         tatl->elfMsg = &this->actor;
-        if (this->actor.cutscene == -1) {
-            this->actor.cutscene = 0x7C;
+        if (this->actor.csId == CS_ID_NONE) {
+            this->actor.csId = CS_ID_GLOBAL_7C;
         }
         if ((player->tatlTextId < 0) && (this->actor.home.rot.x < 0)) {
-            if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-                ActorCutscene_Stop(0x7D);
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-            } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                ActorCutscene_Start(this->actor.cutscene, &this->actor);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+                ActorCutscene_SetIntentToPlay(this->actor.csId);
+            } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+                ActorCutscene_Start(this->actor.csId, &this->actor);
                 func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                ActorCutscene_SetIntentToPlay(this->actor.csId);
             }
         }
     }

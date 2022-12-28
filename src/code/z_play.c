@@ -502,38 +502,38 @@ s32 Play_IsDebugCamEnabled(void) {
     return gDbgCamEnabled;
 }
 
-// A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
+// A mapping from playerCsIds to sGlobalCamDataSettings indices.
 extern s16 D_801D0D64[];
 // s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
 
 // Used by Player
 /**
  * Extract the common actor cutscene ids used by Player from the scene and set the actor cutscene ids in
- * this->playerActorCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
+ * this->playerCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
  * to -1. Otherwise, if there is an ActorCutscene where csCamSceneDataId matches the appropriate element of D_801D0D64,
  * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
  */
-void Play_AssignPlayerActorCsIdsFromScene(GameState* thisx, s32 startActorCsId) {
+void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 startActorCsId) {
     PlayState* this = (PlayState*)thisx;
     s32 i;
-    s16* curPlayerActorCsId = this->playerActorCsIds;
+    s16* curPlayerCsId = this->playerCsIds;
     s16* phi_s1 = D_801D0D64;
 
-    for (i = 0; i < ARRAY_COUNT(this->playerActorCsIds); i++, curPlayerActorCsId++, phi_s1++) {
+    for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, phi_s1++) {
         ActorCutscene* actorCutscene;
-        s32 curActorCsId;
+        s32 curCsId;
 
-        *curPlayerActorCsId = -1;
+        *curPlayerCsId = -1;
 
-        for (curActorCsId = startActorCsId; curActorCsId != -1; curActorCsId = actorCutscene->additionalCutscene) {
-            actorCutscene = ActorCutscene_GetCutscene(curActorCsId);
+        for (curCsId = startActorCsId; curCsId != -1; curCsId = actorCutscene->additionalCsId) {
+            actorCutscene = ActorCutscene_GetCutscene(curCsId);
 
             if (actorCutscene->csCamSceneDataId == *phi_s1) {
                 if ((actorCutscene->csCamSceneDataId == -3) &&
                     (actorCutscene->priority == 700)) { // override ocarina cs priority
                     actorCutscene->priority = 550;
                 }
-                *curPlayerActorCsId = curActorCsId;
+                *curPlayerCsId = curCsId;
                 break;
             }
         }

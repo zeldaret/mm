@@ -42,7 +42,7 @@ typedef struct EnRz {
     /* 0x424 */ s16 timer;
     /* 0x426 */ u16 cueType;
     /* 0x428 */ u16 cueId;
-    /* 0x42A */ s16 cutscenes[2];
+    /* 0x42A */ s16 csIdList[2];
     /* 0x430 */ EnRzActionFunc actionFunc;
 } EnRz; // size = 0x434
 

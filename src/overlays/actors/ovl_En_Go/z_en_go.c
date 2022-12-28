@@ -995,14 +995,14 @@ void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
     }
 }
 
-s32 func_80A134F4(EnGo* this, s16 arg1) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+s32 func_80A134F4(EnGo* this, s16 csId) {
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    } else if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
         return true;
     }
-    ActorCutscene_SetIntentToPlay(arg1);
+    ActorCutscene_SetIntentToPlay(csId);
     return false;
 }
 
@@ -1112,8 +1112,8 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
 
     switch (this->unk_3C0) {
         case 0:
-            this->unk_3B8 = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            if (func_80A134F4(this, this->unk_3B8)) {
+            this->csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+            if (func_80A134F4(this, this->csId)) {
                 this->unk_3C4 = 1;
                 this->unk_3C0 = 1;
             } else {
@@ -1121,26 +1121,26 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             }
 
         case 1:
-            if (ActorCutscene_GetCurrentIndex() != this->unk_3B8) {
-                this->unk_3B8 = ActorCutscene_GetAdditionalCutscene(this->unk_3B8);
+            if (ActorCutscene_GetCurrentCsId() != this->csId) {
+                this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
                 this->unk_3C0 = 2;
             } else {
                 break;
             }
 
         case 2:
-            if (func_80A134F4(this, this->unk_3B8)) {
+            if (func_80A134F4(this, this->csId)) {
                 this->unk_3C0 = 3;
             } else {
                 break;
             }
 
         case 3:
-            if (ActorCutscene_GetCanPlayNext(0x7C)) {
-                ActorCutscene_StartAndSetUnkLinkFields(0x7C, NULL);
+            if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_7C)) {
+                ActorCutscene_StartWithPlayerCs(CS_ID_GLOBAL_7C, NULL);
                 this->unk_3C0 = 4;
-            } else if (ActorCutscene_GetCurrentIndex() == this->unk_3B8) {
-                ActorCutscene_SetIntentToPlay(0x7C);
+            } else if (ActorCutscene_GetCurrentCsId() == this->csId) {
+                ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
             }
     }
 
@@ -1230,8 +1230,8 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
 
     switch (this->unk_3C0) {
         case 0:
-            this->unk_3B8 = this->actor.cutscene;
-            if (func_80A134F4(this, this->unk_3B8)) {
+            this->csId = this->actor.csId;
+            if (func_80A134F4(this, this->csId)) {
                 this->unk_3C0++;
             }
             break;
@@ -1258,7 +1258,7 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
 
         case 3:
             if (this->unk_3C2 >= 60) {
-                ActorCutscene_Stop(this->unk_3B8);
+                ActorCutscene_Stop(this->csId);
                 this->unk_3C2 = 0;
                 this->unk_3C0 = 0;
                 ret = true;
@@ -1611,7 +1611,7 @@ void func_80A14E14(EnGo* this, PlayState* play) {
 }
 
 void func_80A14E74(EnGo* this, PlayState* play) {
-    if (func_80A134F4(this, this->actor.cutscene)) {
+    if (func_80A134F4(this, this->actor.csId)) {
         this->actionFunc = func_80A14EB0;
     }
 }
@@ -1625,7 +1625,7 @@ void func_80A14EB0(EnGo* this, PlayState* play) {
         this->unk_3A0 = (this->unk_39C / 0.9f) * 100.0f;
         func_80A139E4(this);
     } else {
-        ActorCutscene_Stop(this->actor.cutscene);
+        ActorCutscene_Stop(this->actor.csId);
         func_80A143A8(this, play);
         if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
             SubS_UpdateFlags(&this->unk_390, 4, 7);

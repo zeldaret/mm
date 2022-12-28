@@ -79,7 +79,7 @@ typedef struct EnGo {
     /* 0x3B2 */ s16 unk_3B2;
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ s16 unk_3B6;
-    /* 0x3B8 */ s16 unk_3B8;
+    /* 0x3B8 */ s16 csId;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
     /* 0x3BE */ s16 unk_3BE;

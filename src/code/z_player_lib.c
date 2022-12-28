@@ -329,9 +329,9 @@ void func_80122F28(Player* player) {
                                   PLAYER_STATE1_20000000))) &&
         (!(player->stateFlags2 & PLAYER_STATE2_1))) {
         if (player->doorType <= PLAYER_DOORTYPE_TALKING) {
-            ActorCutscene_SetIntentToPlay(0x7C);
+            ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
         } else {
-            ActorCutscene_SetIntentToPlay(0x7D);
+            ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7D);
         }
     }
 }

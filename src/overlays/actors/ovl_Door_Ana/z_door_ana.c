@@ -176,11 +176,11 @@ void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
     Player* player;
     s8 pad[2];
 
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCurrentCsId() != this->actor.csId) {
+        if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     }
 

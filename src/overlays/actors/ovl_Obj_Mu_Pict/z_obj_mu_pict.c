@@ -64,14 +64,14 @@ void func_80C06B70(ObjMuPict* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (this->actor.cutscene < 0) {
+        if (this->actor.csId < 0) {
             func_80C06DC8(this, play);
             func_80C06CC4(this);
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
             }
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
             func_80C06DC8(this, play);
             func_80C06C54(this);
         }
@@ -85,11 +85,11 @@ void func_80C06C54(ObjMuPict* this) {
 }
 
 void func_80C06C68(ObjMuPict* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_Start(this->actor.csId, &this->actor);
         func_80C06CC4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
@@ -113,8 +113,8 @@ void func_80C06CD8(ObjMuPict* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 func_80C06B5C(this);
-                if (this->actor.cutscene >= 0) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if (this->actor.csId >= 0) {
+                    ActorCutscene_Stop(this->actor.csId);
                 }
             }
             break;

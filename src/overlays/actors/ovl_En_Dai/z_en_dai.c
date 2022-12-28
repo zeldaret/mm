@@ -399,12 +399,12 @@ s32 func_80B3ED88(EnDai* this) {
 }
 
 void func_80B3EE8C(EnDai* this, PlayState* play) {
-    s16 cutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
     } else {
-        ActorCutscene_SetIntentToPlay(cutscene);
+        ActorCutscene_SetIntentToPlay(csId);
     }
 }
 

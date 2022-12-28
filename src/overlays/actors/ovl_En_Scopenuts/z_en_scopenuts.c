@@ -448,14 +448,14 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
     }
 
     if (this->unk_36C == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_338)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_338, &this->actor);
+        if (ActorCutscene_GetCanPlayNext(this->csId)) {
+            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_36C = 1;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
             }
-            ActorCutscene_SetIntentToPlay(this->unk_338);
+            ActorCutscene_SetIntentToPlay(this->csId);
             return;
         }
     }
@@ -593,7 +593,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
 
         if (sp32 == 3) {
             if (this->unk_334 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_338);
+                ActorCutscene_Stop(this->csId);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_40);
                 this->actionFunc = func_80BCC288;
             } else {
@@ -601,7 +601,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
             }
         }
     } else if (this->actor.playerHeightRel > 500.0f) {
-        ActorCutscene_Stop(this->unk_338);
+        ActorCutscene_Stop(this->csId);
         this->actionFunc = func_80BCC288;
     }
 
@@ -609,17 +609,17 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
     func_80BCAD64(this, sp32);
 
     if (this->unk_36C == 2) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_338)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_338, &this->actor);
+        if (ActorCutscene_GetCanPlayNext(this->csId)) {
+            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_36C = 3;
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_338);
+            ActorCutscene_SetIntentToPlay(this->csId);
             return;
         }
     } else if ((this->unk_36C == 1) && (this->unk_36E == 20)) {
-        ActorCutscene_Stop(this->unk_338);
-        this->unk_338 = ActorCutscene_GetAdditionalCutscene(this->unk_338);
-        ActorCutscene_SetIntentToPlay(this->unk_338);
+        ActorCutscene_Stop(this->csId);
+        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+        ActorCutscene_SetIntentToPlay(this->csId);
         this->unk_36C = 2;
     }
     this->unk_36E++;
@@ -722,7 +722,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
             } else {
                 this->actor.gravity = -1.0f;
                 this->actor.draw = EnScopenuts_Draw;
-                this->unk_338 = this->actor.cutscene;
+                this->csId = this->actor.csId;
                 this->unk_33C = 0;
                 this->unk_358 = 150;
                 this->unk_348 = 4;

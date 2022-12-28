@@ -53,18 +53,18 @@ void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
     }
 
     if (play->csCtx.state == CS_STATE_IDLE) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         this->dyna.actor.update = Actor_Noop;
     }
 }
 
 void BgUmajump_PlayCutscene(BgUmajump* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_89_20);
         this->actionFunc = BgUmajump_StopCutscene;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -95,7 +95,7 @@ void BgUmajump_Init(Actor* thisx, PlayState* play) {
     if ((thisx->params == BG_UMAJUMP_TYPE_2)) {
         if ((((play->sceneId == SCENE_F01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_89_20)) &&
              !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) &&
-            (thisx->cutscene != -1)) {
+            (thisx->csId != CS_ID_NONE)) {
             this->actionFunc = BgUmajump_CheckDistance;
             thisx->update = func_8091A5A0;
             thisx->flags |= ACTOR_FLAG_10;

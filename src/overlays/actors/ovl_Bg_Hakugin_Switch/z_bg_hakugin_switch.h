@@ -22,9 +22,9 @@ typedef struct BgHakuginSwitch {
     /* 0x1B0 */ s16 unk_1B0;
     /* 0x1B2 */ s8 unk_1B2;
     /* 0x1B4 */ BgHakuginSwitchUnkFunc unk_1B4;
-    /* 0x1B8 */ s16 unk_1B8;
-    /* 0x1BA */ s16 unk_1BA;
-    /* 0x1BC */ s16 unk_1BC;
+    /* 0x1B8 */ s16 csId;
+    /* 0x1BA */ s16 additionalCutsceneId;
+    /* 0x1BC */ s16 curCsId;
     /* 0x1BE */ s8 unk_1BE;
     /* 0x1BF */ s8 unk_1BF;
     /* 0x1C0 */ s8 unk_1C0;

@@ -45,7 +45,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     Vec3f pos;
     s32 pad2;
     s32 shouldSpawnSeahorse;
-    s32 cs;
+    s32 csId;
     s32 i;
 
     DynaPolyActor_Init(&this->dyna, 0);
@@ -54,11 +54,11 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&pos, &this->dyna.actor.world.pos);
     pos.x += Math_SinS(this->dyna.actor.world.rot.y + 0x8000) * 3000.0f;
     pos.z += Math_CosS(this->dyna.actor.world.rot.y + 0x8000) * 3000.0f;
-    cs = this->dyna.actor.cutscene;
+    csId = this->dyna.actor.csId;
     i = 0;
 
     // clang-format off
-    while (cs != -1) { this->cutscenes[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
+    while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = ActorCutscene_GetAdditionalCsId(csId); i++; }
     // clang-format on
 
     this->dyna.actor.scale.x = 0.1f;
@@ -74,9 +74,9 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         if (this->deepPython != NULL) {
             EnDragon* dragon = (EnDragon*)this->deepPython;
 
-            dragon->grabCutsceneIndex = this->cutscenes[0];
-            dragon->deathCutsceneIndex = this->cutscenes[1];
-            dragon->actor.cutscene = this->dyna.actor.cutscene;
+            dragon->grabCsId = this->csIdList[0];
+            dragon->deathCsId = this->csIdList[1];
+            dragon->actor.csId = this->dyna.actor.csId;
             Math_Vec3f_Copy(&dragon->burrowEntrancePos, &this->dyna.actor.world.pos);
             dragon->pythonIndex = this->pythonIndex;
         }
@@ -99,7 +99,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
         pos.z += (Math_CosS(this->dyna.actor.world.rot.y + 0x8000) * 500.0f);
         if (shouldSpawnSeahorse) {
             Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, pos.x, pos.y, pos.z, 0,
-                                          this->dyna.actor.shape.rot.y, 0, 0x4000, this->dyna.actor.cutscene,
+                                          this->dyna.actor.shape.rot.y, 0, 0x4000, this->dyna.actor.csId,
                                           this->dyna.actor.unk20, NULL);
         }
 

@@ -376,7 +376,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B94A4(DoorWarp1* this, PlayState* play) {
-    if (!func_808B866C(this, play) && (ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[8])) {
+    if (!func_808B866C(this, play) && (ActorCutscene_GetCurrentCsId() != play->playerCsIds[8])) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, play, 1);
@@ -384,10 +384,10 @@ void func_808B94A4(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9524(DoorWarp1* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(play->playerActorCsIds[9])) {
-        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[9]);
+    if (!ActorCutscene_GetCanPlayNext(play->playerCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(play->playerCsIds[9]);
     } else {
-        ActorCutscene_Start(play->playerActorCsIds[9], NULL);
+        ActorCutscene_Start(play->playerCsIds[9], NULL);
         DoorWarp1_SetupAction(this, func_808B958C);
     }
 }
@@ -457,10 +457,10 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9840(DoorWarp1* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(play->playerActorCsIds[9])) {
-        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[9]);
+    if (!ActorCutscene_GetCanPlayNext(play->playerCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(play->playerCsIds[9]);
     } else {
-        ActorCutscene_Start(play->playerActorCsIds[9], NULL);
+        ActorCutscene_Start(play->playerCsIds[9], NULL);
         DoorWarp1_SetupAction(this, func_808B98A8);
     }
 }
@@ -616,10 +616,10 @@ void func_808B9FD0(DoorWarp1* this, PlayState* play) {
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(play->playerActorCsIds[9])) {
-        ActorCutscene_SetIntentToPlay(play->playerActorCsIds[9]);
+    if (!ActorCutscene_GetCanPlayNext(play->playerCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(play->playerCsIds[9]);
     } else {
-        ActorCutscene_Start(play->playerActorCsIds[9], NULL);
+        ActorCutscene_Start(play->playerCsIds[9], NULL);
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
         Animation_ChangeImpl(&this->skelAnime, &gWarpCrystalAnim, 1.0f, Animation_GetLastFrame(&gWarpCrystalAnim),
@@ -878,7 +878,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
 
 void func_808BAAF4(DoorWarp1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 cutscene;
+    s16 csId;
     f32 phi_f2;
 
     phi_f2 = 200.0f;
@@ -889,14 +889,14 @@ void func_808BAAF4(DoorWarp1* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
         ((player->actor.world.pos.y - 20.0f) < this->dyna.actor.world.pos.y) &&
         (this->dyna.actor.world.pos.y < (player->actor.world.pos.y + 20.0f))) {
-        cutscene = this->dyna.actor.cutscene;
+        csId = this->dyna.actor.csId;
 
-        if (ActorCutscene_GetCanPlayNext(cutscene)) {
-            ActorCutscene_Start(cutscene, &this->dyna.actor);
+        if (ActorCutscene_GetCanPlayNext(csId)) {
+            ActorCutscene_Start(csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_86_80);
             DoorWarp1_SetupAction(this, func_808BABF4);
         } else {
-            ActorCutscene_SetIntentToPlay(cutscene);
+            ActorCutscene_SetIntentToPlay(csId);
         }
     }
 }

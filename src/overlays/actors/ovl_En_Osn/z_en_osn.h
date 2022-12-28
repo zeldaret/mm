@@ -27,7 +27,7 @@ typedef struct EnOsn {
     /* 0x1EA */ u16 stateFlags;
     /* 0x1EC */ u8 animIndex;
     /* 0x1ED */ u8 cueId;
-    /* 0x1EE */ s16 cutscene;
+    /* 0x1EE */ s16 csId;
     /* 0x1F0 */ u8 shouldRotateHead;
     /* 0x1F1 */ UNK_TYPE1 unk_1F1[0x3];
     /* 0x1F4 */ u16 textId;

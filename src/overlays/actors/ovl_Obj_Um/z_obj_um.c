@@ -1139,7 +1139,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80)) {
-                ActorCutscene_Stop(this->dyna.actor.cutscene);
+                ActorCutscene_Stop(this->dyna.actor.csId);
                 play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_03;
@@ -1158,12 +1158,12 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
 void ObjUm_RanchStartCs(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -1276,12 +1276,12 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, PlayState* play) {
     ObjUm_SetPlayerPosition(this, play);
     this->flags |= OBJ_UM_FLAG_0004;
     player->stateFlags1 |= PLAYER_STATE1_20;
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -1357,17 +1357,17 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     }
 
     if (this->flags & OBJ_UM_FLAG_MINIGAME_FINISHED) {
-        s32 sp20 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
+        s32 csId = ActorCutscene_GetAdditionalCsId(this->dyna.actor.csId);
 
         if (this->areAllPotsBroken) {
-            sp20 = ActorCutscene_GetAdditionalCutscene(sp20);
+            csId = ActorCutscene_GetAdditionalCsId(csId);
         }
-        if (ActorCutscene_GetCanPlayNext(sp20)) {
-            ActorCutscene_StartAndSetUnkLinkFields(sp20, &this->dyna.actor);
+        if (ActorCutscene_GetCanPlayNext(csId)) {
+            ActorCutscene_StartWithPlayerCs(csId, &this->dyna.actor);
             ObjUm_SetupAction(this, ObjUm_RunMinigame);
             this->flags &= ~OBJ_UM_FLAG_PLAYING_MINIGAME;
         } else {
-            ActorCutscene_SetIntentToPlay(sp20);
+            ActorCutscene_SetIntentToPlay(csId);
         }
     }
 
@@ -1403,7 +1403,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
     }
 
     if (play->csCtx.state == 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         ObjUm_SetupAction(this, func_80B7A7AC);
     }
 
@@ -1526,12 +1526,12 @@ void ObjUm_StartCs(ObjUm* this, PlayState* play) {
     ObjUm_RotatePlayer(this, play, 0);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -1546,7 +1546,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_TROT);
 
     if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_4) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         Audio_SetCutsceneFlag(false);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_02);
         gSaveContext.nextCutsceneIndex = 0xFFF3;
@@ -1568,11 +1568,11 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_0004;
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         ObjUm_SetupAction(this, ObjUm_PostMilkRunWaitPathFinished);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 

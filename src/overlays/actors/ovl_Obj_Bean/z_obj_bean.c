@@ -588,20 +588,20 @@ void func_809381B0(ObjBean* this) {
 void func_809381C4(ObjBean* this, PlayState* play) {
     this->unk_1E8(this);
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         this->unk_1E4 = 2;
         func_80938284(this);
     } else if (this->unk_1E4 == 4) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         play_sound(NA_SE_SY_ERROR);
         this->unk_1E4 = 0;
         func_80937FB0(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -618,7 +618,7 @@ void func_80938298(ObjBean* this, PlayState* play) {
         this->unk_1E4 = 5;
         func_8093833C(this);
     } else if (this->unk_1E4 == 4) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         play_sound(NA_SE_SY_ERROR);
         this->unk_1E4 = 0;
         func_80937FB0(this);
@@ -634,7 +634,7 @@ void func_80938358(ObjBean* this, PlayState* play) {
     this->unk_1E8(this);
 
     if (this->unk_1B2 <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        ActorCutscene_Stop(this->dyna.actor.csId);
         func_80937FB0(this);
     }
 }
@@ -735,7 +735,7 @@ void func_80938704(ObjBean* this) {
 
 void func_80938728(ObjBean* this, PlayState* play) {
     if (this->unk_200 != 0) {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
         func_8093876C(this);
     }
 }
@@ -745,16 +745,16 @@ void func_8093876C(ObjBean* this) {
 }
 
 void func_80938780(ObjBean* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         this->unk_1B4 = 36;
         func_80937130(this);
         func_80938AA4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 
@@ -909,7 +909,7 @@ void ObjBean_Update(Actor* thisx, PlayState* play) {
     if (this->unk_1B4 > 0) {
         this->unk_1B4--;
         if (this->unk_1B4 == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
         }
     }
 

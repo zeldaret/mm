@@ -147,7 +147,7 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         Rumble_Request(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         if (this->isInitiator) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            ActorCutscene_Stop(this->dyna.actor.csId);
             this->isInitiator = false;
         }
         this->actionFunc = BgF40Switch_IdlePressed;
@@ -157,19 +157,19 @@ void BgF40Switch_Press(BgF40Switch* this, PlayState* play) {
 }
 
 void BgF40Switch_WaitToPress(BgF40Switch* this, PlayState* play) {
-    if (!this->isInitiator || this->dyna.actor.cutscene == -1) {
+    if (!this->isInitiator || (this->dyna.actor.csId == CS_ID_NONE)) {
         this->actionFunc = BgF40Switch_Press;
         if (this->isInitiator) {
             Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCHFLAG(&this->dyna.actor));
         }
-    } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->actionFunc = BgF40Switch_Press;
         if (this->isInitiator) {
             Flags_SetSwitch(play, BGF40SWITCH_GET_SWITCHFLAG(&this->dyna.actor));
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     }
 }
 

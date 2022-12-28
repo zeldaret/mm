@@ -447,7 +447,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetSubCamEyeAt(EnDragon* this, PlayState* play, Vec3f subCamEye, Vec3f subCamAt) {
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
     Math_Vec3f_Copy(&this->subCamEye, &subCamEye);
     Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
@@ -458,10 +458,10 @@ void EnDragon_SetupGrab(EnDragon* this, PlayState* play) {
     Vec3f extendedPos;
     s16 yaw;
 
-    if (!ActorCutscene_GetCanPlayNext(this->grabCutsceneIndex)) {
-        ActorCutscene_SetIntentToPlay(this->grabCutsceneIndex);
+    if (!ActorCutscene_GetCanPlayNext(this->grabCsId)) {
+        ActorCutscene_SetIntentToPlay(this->grabCsId);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->grabCutsceneIndex, &this->actor);
+        ActorCutscene_StartWithPlayerCs(this->grabCsId, &this->actor);
         Math_Vec3f_Copy(&extendedPos, &this->burrowEntrancePos);
         extendedPos.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         extendedPos.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
@@ -496,7 +496,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
     Vec3f pos; // used as both the extended position and the camera eye
     Vec3f subCamAt;
 
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->grabTimer == 0) {
@@ -617,7 +617,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
-        ActorCutscene_Stop(this->grabCutsceneIndex);
+        ActorCutscene_Stop(this->grabCsId);
         if (player->stateFlags2 & PLAYER_STATE2_80) {
             player->unk_AE8 = 100;
         }
@@ -634,10 +634,10 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetupDead(EnDragon* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(this->deathCutsceneIndex)) {
-        ActorCutscene_SetIntentToPlay(this->deathCutsceneIndex);
+    if (!ActorCutscene_GetCanPlayNext(this->deathCsId)) {
+        ActorCutscene_SetIntentToPlay(this->deathCsId);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->deathCutsceneIndex, &this->actor);
+        ActorCutscene_StartWithPlayerCs(this->deathCsId, &this->actor);
         this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->timer = 20;
@@ -682,7 +682,7 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         seahorsePos.y += -100.0f + BREG(33);
         seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
-                                          seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
+                                          seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.csId,
                                           this->actor.unk20, NULL)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_13_01);
             switch (this->pythonIndex) {

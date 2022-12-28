@@ -347,7 +347,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->actor.scale.x = this->actor.scale.z = 0.15f;
     this->actor.scale.y = 0.075f;
     this->vtxScaleX = this->vtxScaleZ = 0.015000001f;
@@ -847,8 +847,8 @@ void EnBigslime_EndCutscene(EnBigslime* this, PlayState* play) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->cutscene);
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+        ActorCutscene_Stop(this->csId);
+        this->csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
         func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
     }
 }
@@ -2522,31 +2522,31 @@ void EnBigslime_InitEntrance(EnBigslime* this, PlayState* play) {
 }
 
 void EnBigslime_SetupCutscene(EnBigslime* this) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-        ActorCutscene_Stop(0x7D);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7D);
     }
 
     if (this->actor.colChkInfo.health == 0) {
-        this->cutscene = this->actor.cutscene;
+        this->csId = this->actor.csId;
     }
 
-    ActorCutscene_SetIntentToPlay(this->cutscene);
+    ActorCutscene_SetIntentToPlay(this->csId);
     this->actionFuncStored = this->actionFunc;
     this->actionFunc = EnBigslime_PlayCutscene;
     this->actor.speedXZ = 0.0f;
 }
 
 void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-        ActorCutscene_Stop(0x7D);
-        ActorCutscene_SetIntentToPlay(this->cutscene);
-    } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->actor);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+        ActorCutscene_SetIntentToPlay(this->csId);
+    } else if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_Start(this->csId, &this->actor);
         if (this->actionFuncStored != EnBigslime_SquishFlat) {
             func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         }
 
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->cutscene);
+        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->csId);
         if (this->actor.colChkInfo.health == 0) {
             EnBigslime_SetupCutsceneDefeat(this, play);
         } else if ((this->actionFuncStored == EnBigslime_DamageGekko) ||
@@ -2559,7 +2559,7 @@ void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
             EnBigslime_SetupCutsceneStartBattle(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        ActorCutscene_SetIntentToPlay(this->csId);
     }
 }
 

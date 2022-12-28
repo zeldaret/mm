@@ -339,11 +339,11 @@ s32 func_80A3E97C(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3E9DC(EnTest3* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_D8D)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_D8D, &this->player.actor);
+    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+        ActorCutscene_StartWithPlayerCs(this->csId, &this->player.actor);
         return true;
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_D8D);
+        ActorCutscene_SetIntentToPlay(this->csId);
         return false;
     }
 }
@@ -357,8 +357,8 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         }
     }
     if (this->unk_D78->unk_1 != 0) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_D8D);
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(this->csId);
         play->msgCtx.msgMode = 0x44;
     }
     return false;
@@ -374,9 +374,9 @@ s32 func_80A3EAC4(EnTest3* this, PlayState* play) {
 s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_D78->textId == 0x145F) {
-            ActorCutscene_Stop(this->unk_D8D);
-            this->unk_D8D = 0x7C;
-            ActorCutscene_SetIntentToPlay(this->unk_D8D);
+            ActorCutscene_Stop(this->csId);
+            this->csId = CS_ID_GLOBAL_7C;
+            ActorCutscene_SetIntentToPlay(this->csId);
             this->player.targetedActor = &GET_PLAYER(play)->actor;
         }
         return 1;
@@ -452,7 +452,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     D_80A41D24 = true;
 
     this->player.actor.room = -1;
-    this->player.unk_A86 = -1;
+    this->player.csId = CS_ID_NONE;
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
@@ -596,7 +596,7 @@ s32 func_80A3F384(EnTest3* this, PlayState* play) {
         this->player.doorType = 1;
         this->player.doorDirection = (offset.z >= 0.0f) ? 1.0f : -1.0f;
         this->player.doorActor = &door->dyna.actor;
-        this->player.unk_A86 = -1;
+        this->player.csId = CS_ID_NONE;
         return true;
     }
     return false;
@@ -616,7 +616,7 @@ void func_80A3F534(EnTest3* this, PlayState* play) {
     } else {
         this->unk_D78 = &D_80A41854[1];
     }
-    this->unk_D8D = this->player.actor.cutscene;
+    this->csId = this->player.actor.csId;
 }
 
 void func_80A3F5A4(EnTest3* this, PlayState* play) {
@@ -628,7 +628,7 @@ void func_80A3F5A4(EnTest3* this, PlayState* play) {
     } else {
         this->unk_D78 = &D_80A41854[12];
     }
-    this->unk_D8D = this->player.actor.cutscene;
+    this->csId = this->player.actor.csId;
 }
 
 s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
@@ -757,20 +757,20 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         if (!Play_InCsMode(play)) {
             D_80A41D20 = 1;
             this->unk_D78 = &D_80A41854[20];
-            this->unk_D8D = this->player.actor.cutscene;
+            this->csId = this->player.actor.csId;
             this->player.actor.textId = this->unk_D78->textId;
         }
     } else if (D_80A41D20 == 1) {
-        if (this->unk_D8D >= 0) {
+        if (this->csId >= 0) {
             if (func_80A3E9DC(this, play)) {
-                this->unk_D8D = -1;
+                this->csId = CS_ID_NONE;
                 Environment_StopTime();
             }
         } else if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
-            this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->player.actor.cutscene);
+            this->csId = ActorCutscene_GetAdditionalCsId(this->player.actor.csId);
             SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
             if (play->actorCtx.flags & ACTORCTX_FLAG_5) {
-                this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
+                this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
             }
             Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
             D_80A41D20 = 2;
@@ -793,7 +793,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3FDE4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
-    this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->player.actor.cutscene);
+    this->csId = ActorCutscene_GetAdditionalCsId(this->player.actor.csId);
     return true;
 }
 
@@ -813,7 +813,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
     } else if (D_80A41D64 == 1) {
         func_80A40230(this, play);
     } else if (D_80A41D64 == 2) {
-        ActorCutscene_Stop(this->unk_D8D);
+        ActorCutscene_Stop(this->csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
         D_80A41D64 = 3;
     }
@@ -835,9 +835,9 @@ s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         return true;
     } else {
         func_80A3F15C(this, play, arg2);
-        this->unk_D8D = this->player.actor.cutscene;
+        this->csId = this->player.actor.csId;
         if (play->roomCtx.curRoom.num == 2) {
-            this->unk_D8D = ActorCutscene_GetAdditionalCutscene(this->unk_D8D);
+            this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
         }
         return true;
     }

@@ -355,7 +355,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B321D0(EnZoraegg* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    if (ActorCutscene_GetCurrentCsId() != this->actor.csId) {
         this->actionFunc = func_80B322BC;
         func_80B319D0(play, func_80B319A8(play) + 1);
     }
@@ -365,26 +365,26 @@ void func_80B32228(EnZoraegg* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, this->unk_1DC);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->actor.csId, this->unk_1DC);
         this->actionFunc = func_80B321D0;
     } else {
         if (this->unk_1E8 > 0) {
             this->unk_1E8--;
         } else if (this->unk_1E8 == 0) {
-            ActorCutscene_Stop(player->unk_A86);
-            player->unk_A86 = -1;
+            ActorCutscene_Stop(player->csId);
+            player->csId = CS_ID_NONE;
             this->unk_1E8 = -1;
         }
 
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
 void func_80B322BC(EnZoraegg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->actor.cutscene != -1) {
+    if (this->actor.csId != CS_ID_NONE) {
         this->unk_1DC = func_80B31CB4(play);
         if (this->unk_1DC != NULL) {
             this->unk_1E8 = 3;
@@ -403,11 +403,11 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
         Actor* temp_v0 = func_80B31D14(play);
 
         if (temp_v0 != NULL) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, temp_v0);
+            ActorCutscene_StartWithPlayerCs(this->actor.csId, temp_v0);
             SET_EVENTINF(EVENTINF_33);
             Actor_Kill(&this->actor);
         }
@@ -415,7 +415,7 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
                (fabsf(player->actor.world.pos.x - this->actor.world.pos.x) < (100.0f * this->actor.scale.x)) &&
                (fabsf(player->actor.world.pos.z - this->actor.world.pos.z) < (100.0f * this->actor.scale.z)) &&
                (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 30.0f)) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 

@@ -65,37 +65,37 @@ Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
     return foundActor;
 }
 
-s32 func_80C22400(DmTag* this, s16 arg1) {
+s32 func_80C22400(DmTag* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg1);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(csId);
+    } else if (ActorCutscene_GetCanPlayNext(csId)) {
+        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(arg1);
+        ActorCutscene_SetIntentToPlay(csId);
     }
     return ret;
 }
 
 s16 func_80C2247C(DmTag* this, s32 arg1) {
     s32 i;
-    s16 cs = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
     for (i = 0; i < arg1; i++) {
-        cs = ActorCutscene_GetAdditionalCutscene(cs);
+        csId = ActorCutscene_GetAdditionalCsId(csId);
     }
 
-    return cs;
+    return csId;
 }
 
 s32 func_80C224D8(DmTag* this, PlayState* play) {
     s32 pad;
     Actor* sp30;
     Actor* sp2C;
-    s16 sp2A = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 ret = false;
 
     sp30 = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
@@ -103,9 +103,9 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
     switch (this->unk_1A4) {
         case 0:
-            if (func_80C22400(this, sp2A)) {
+            if (func_80C22400(this, csId)) {
                 if ((sp2C != NULL) && (sp2C->update != NULL)) {
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), sp2C);
+                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), sp2C);
                 }
                 this->unk_1A4++;
                 ret = true;

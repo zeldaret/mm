@@ -384,11 +384,11 @@ void func_80B3D47C(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D558(EnDnp* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_23_20);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
@@ -412,7 +412,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
-        this->actor.cutscene = 0x10;
+        this->actor.csId = 16;
         this->actionFunc = func_80B3D47C;
     } else if (((EN_DNP_GET_TYPE(&this->actor) == EN_DNP_TYPE_WOODFALL_TEMPLE) &&
                 !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) ||

@@ -119,7 +119,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80BAFDB4;
                 EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                ActorCutscene_SetIntentToPlay(this->actor.csId);
                 break;
             }
 
@@ -445,20 +445,20 @@ void EnZod_DoNothing(EnZod* this, PlayState* play) {
 
 void EnZod_Rehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        if (this->actor.cutscene == -1) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_Start(this->actor.csId, &this->actor);
+        this->actor.csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+        if (this->actor.csId == CS_ID_NONE) {
             this->actionFunc = EnZod_DoNothing;
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
             play->transitionType = TRANS_TYPE_05;
             play->transitionTrigger = TRANS_TRIGGER_START;
             gSaveContext.save.weekEventReg[78] &= (u8)~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            ActorCutscene_SetIntentToPlay(this->actor.csId);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 
@@ -468,9 +468,9 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
         func_801477B4(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         this->actionFunc = EnZod_Rehearse;
-        ActorCutscene_Stop(this->actor.cutscene);
-        this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_Stop(this->actor.csId);
+        this->actor.csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
         gSaveContext.save.weekEventReg[79] |= 1;
         Audio_QueueSeqCmd(NA_BGM_INDIGO_GO_SESSION | 0x8000);
     }
@@ -478,13 +478,13 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
 
 void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        ActorCutscene_Start(this->actor.csId, &this->actor);
         func_800B7298(play, NULL, 0x44);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     }
 }
 

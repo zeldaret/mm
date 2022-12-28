@@ -90,7 +90,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
 void TGSw_Init(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
 
-    this->actor.cutscene = this->actor.world.rot.z;
+    this->actor.csId = this->actor.world.rot.z;
     this->actionFunc = TGSw_ActionDecider;
 }
 

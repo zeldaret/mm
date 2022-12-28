@@ -76,7 +76,7 @@ s32 func_809592E0(EnMk* this, s16 index) {
 
 void EnMk_Init(Actor* thisx, PlayState* play) {
     EnMk* this = THIS;
-    s16 cs;
+    s16 csId;
     s32 i;
 
     this->actor.terminalVelocity = -4.0f;
@@ -101,16 +101,16 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
         this->unk_27A |= 2;
     }
 
-    cs = this->actor.cutscene;
-    for (i = 0; i < ARRAY_COUNT(this->unk_276); i++) {
-        this->unk_276[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    csId = this->actor.csId;
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->actor.cutscene = this->unk_276[0];
+    this->actor.csId = this->csIdList[0];
 }
 
 void EnMk_Destroy(Actor* thisx, PlayState* play) {
@@ -372,7 +372,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
 void func_80959D28(EnMk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((play->csCtx.state == 0) && (this->actor.cutscene == -1)) {
+    if ((play->csCtx.state == 0) && (this->actor.csId == CS_ID_NONE)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40)) {
             this->unk_27A &= ~1;
             this->actionFunc = func_80959774;
@@ -381,14 +381,14 @@ void func_80959D28(EnMk* this, PlayState* play) {
         } else {
             this->actionFunc = func_80959E18;
         }
-        this->actor.cutscene = this->unk_276[0];
+        this->actor.csId = this->csIdList[0];
     } else {
-        if (this->actor.cutscene != -1) {
-            if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-                this->actor.cutscene = -1;
+        if (this->actor.csId != CS_ID_NONE) {
+            if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+                ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+                this->actor.csId = CS_ID_NONE;
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                ActorCutscene_SetIntentToPlay(this->actor.csId);
             }
         }
         func_8095954C(this, play);
@@ -412,13 +412,13 @@ void func_80959E18(EnMk* this, PlayState* play) {
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80959D28;
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-            this->actor.cutscene = this->unk_276[0];
+            this->actor.csId = this->csIdList[0];
             SET_WEEKEVENTREG(WEEKEVENTREG_20_40);
             Item_Give(play, ITEM_SONG_NOVA);
         } else {
-            this->actor.cutscene = this->unk_276[1];
+            this->actor.csId = this->csIdList[1];
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        ActorCutscene_SetIntentToPlay(this->actor.csId);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;
