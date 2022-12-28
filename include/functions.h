@@ -2240,27 +2240,11 @@ void Message_FindCreditsMessage(PlayState* play, u16 textId);
 void func_8015E7EC(PlayState* play, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
 
-// void func_80161180(void);
 s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera);
-// void CutsceneCamera_Interpolate(void);
-// void CutsceneCamera_UpdateSpline(void);
 s32 CutsceneCamera_ProcessCommands(u8* cmd, CutsceneCamera* csCamera);
-// s32 func_80161BAC(void);
 void CutsceneCamera_SetState(s16 state);
 void CutsceneCamera_Reset(void);
-// void func_80161C20(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80161E4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_801620CC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8016237C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6);
-// void func_801623E4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_801624EC(void);
-// void func_8016253C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_801629BC(void);
-// void func_80162A50(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80162FF8(void);
-// void func_801631DC(void);
-// void func_80163334(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_80163660(void);
+
 void* KaleidoManager_FaultAddrConvFunc(void* address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
