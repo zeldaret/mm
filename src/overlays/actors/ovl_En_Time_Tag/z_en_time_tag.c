@@ -122,8 +122,8 @@ void func_80ACA12C(EnTimeTag* this, PlayState* play) {
 }
 
 void func_80ACA184(EnTimeTag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->actor.csId);
     } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
         ActorCutscene_Start(this->actor.csId, &this->actor);
@@ -224,8 +224,8 @@ void func_80ACA418(EnTimeTag* this, PlayState* play) {
     if (this->actor.home.rot.x != 0) {
         if (this->actor.csId == CS_ID_NONE) {
             this->actor.home.rot.x = 0;
-        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->actor.csId);
         } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
             ActorCutscene_Start(this->actor.csId, &this->actor);

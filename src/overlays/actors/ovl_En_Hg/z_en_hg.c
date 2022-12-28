@@ -274,8 +274,8 @@ void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
         ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->actor);
         EnHg_SetupCsAction(this);
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
     }

@@ -235,8 +235,8 @@ void func_80C13F9C(EnJgameTsn* this, PlayState* play) {
             ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
             func_80C14030(this);
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             ActorCutscene_SetIntentToPlay(this->actor.csId);
         }

@@ -357,7 +357,7 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         }
     }
     if (this->unk_D78->unk_1 != 0) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csId);
         play->msgCtx.msgMode = 0x44;
     }
@@ -375,7 +375,7 @@ s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_D78->textId == 0x145F) {
             ActorCutscene_Stop(this->csId);
-            this->csId = CS_ID_GLOBAL_7C;
+            this->csId = CS_ID_GLOBAL_TALK;
             ActorCutscene_SetIntentToPlay(this->csId);
             this->player.targetedActor = &GET_PLAYER(play)->actor;
         }

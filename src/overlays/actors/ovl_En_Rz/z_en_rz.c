@@ -396,8 +396,8 @@ s32 func_80BFBFAC(EnRz* this, PlayState* play) {
     if (this->actor.csId == CS_ID_NONE) {
         Message_StartTextbox(play, 0x2925, &this->actor);
         this->actionFunc = func_80BFC078;
-    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->actor.csId);
         return false;
     } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {

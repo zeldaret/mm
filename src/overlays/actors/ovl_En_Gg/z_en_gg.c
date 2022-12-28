@@ -410,8 +410,8 @@ void func_80B359DC(EnGg* this, PlayState* play) {
             ActorCutscene_Start(this->csId, &this->actor);
             this->unk_307 = false;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
 
             if (this->unk_307) {

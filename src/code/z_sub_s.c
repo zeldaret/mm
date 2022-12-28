@@ -1422,7 +1422,7 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes) {
     s32 i;
 
     for (i = 0; i < numCutscenes; i++) {
-        csIdList[i] = -1;
+        csIdList[i] = CS_ID_NONE;
     }
 
     csId = actor->csId;

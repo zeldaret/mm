@@ -323,8 +323,8 @@ void func_80BF15EC(EnIg* this) {
 s32 func_80BF16C8(EnIg* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(csId);
     } else if (ActorCutscene_GetCanPlayNext(csId)) {
         ActorCutscene_StartWithPlayerCs(csId, &this->actor);
@@ -335,13 +335,13 @@ s32 func_80BF16C8(EnIg* this, s16 csId) {
     return ret;
 }
 
-s16 func_80BF1744(EnIg* this, s32 arg1) {
+s16 func_80BF1744(EnIg* this, s32 numCutscenes) {
     s16 csId = CS_ID_NONE;
     s32 i;
 
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         csId = this->actor.child->csId;
-        for (i = 0; i < arg1; i++) {
+        for (i = 0; i < numCutscenes; i++) {
             csId = ActorCutscene_GetAdditionalCsId(csId);
         }
     }

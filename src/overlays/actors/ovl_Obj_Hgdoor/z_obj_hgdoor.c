@@ -113,8 +113,8 @@ void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
         ObjHgdoor_SetupCsAction(this);
         ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         ActorCutscene_SetIntentToPlay(this->csId);
     }

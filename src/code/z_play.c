@@ -523,9 +523,9 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 startActorCsId) {
         ActorCutscene* actorCutscene;
         s32 curCsId;
 
-        *curPlayerCsId = -1;
+        *curPlayerCsId = CS_ID_NONE;
 
-        for (curCsId = startActorCsId; curCsId != -1; curCsId = actorCutscene->additionalCsId) {
+        for (curCsId = startActorCsId; curCsId != CS_ID_NONE; curCsId = actorCutscene->additionalCsId) {
             actorCutscene = ActorCutscene_GetCutscene(curCsId);
 
             if (actorCutscene->csCamSceneDataId == *phi_s1) {

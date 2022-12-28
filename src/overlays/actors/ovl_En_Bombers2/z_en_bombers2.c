@@ -308,8 +308,8 @@ void func_80C050B8(EnBombers2* this, PlayState* play) {
 
 void func_80C0520C(EnBombers2* this, PlayState* play) {
     if (this->unk_2A8 == 0) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csId);
         } else if (ActorCutscene_GetCanPlayNext(this->csId) == 0) {
             ActorCutscene_SetIntentToPlay(this->csId);

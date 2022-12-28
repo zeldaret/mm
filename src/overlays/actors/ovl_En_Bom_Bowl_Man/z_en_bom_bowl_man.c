@@ -192,8 +192,8 @@ void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
         }
     }
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csId1);
     } else if (!ActorCutscene_GetCanPlayNext(this->csId1)) {
         ActorCutscene_SetIntentToPlay(this->csId1);
@@ -214,8 +214,8 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
     if (this->unk_2B8 == 0) {
         Player* player = GET_PLAYER(play);
 
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csId1);
             return;
         }
@@ -276,8 +276,8 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                     play->msgCtx.msgLength = 0;
                     func_809C493C(this, 1, 1.0f);
                     D_809C6100 = 1;
-                    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
                         ActorCutscene_SetIntentToPlay(this->csId2);
                     } else if (!ActorCutscene_GetCanPlayNext(this->csId2)) {
                         ActorCutscene_SetIntentToPlay(this->csId2);
@@ -452,8 +452,8 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
                 ActorCutscene_SetIntentToPlay(this->csId3);
             } else if (!ActorCutscene_GetCanPlayNext(this->csId3)) {
                 ActorCutscene_SetIntentToPlay(this->csId3);
@@ -464,8 +464,8 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
             }
         }
     } else if (this->unk_2C2 == 1) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csId3);
         } else if (!ActorCutscene_GetCanPlayNext(this->csId3)) {
             ActorCutscene_SetIntentToPlay(this->csId3);
@@ -530,8 +530,8 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
 }
 
 void func_809C5B1C(EnBomBowlMan* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csId2);
     } else if (!ActorCutscene_GetCanPlayNext(this->csId2)) {
         ActorCutscene_SetIntentToPlay(this->csId2);

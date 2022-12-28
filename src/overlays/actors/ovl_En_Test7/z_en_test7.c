@@ -412,7 +412,7 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
         Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
-    if (play->playerCsIds[8] == -1) {
+    if (play->playerCsIds[8] == CS_ID_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

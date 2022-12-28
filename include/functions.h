@@ -727,7 +727,8 @@ void func_800BA6FC(PlayState* play, ActorContext* actorCtx);
 void func_800BA798(PlayState* play, ActorContext* actorCtx);
 void Actor_CleanupContext(ActorContext* actorCtx, PlayState* play);
 Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
-Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX, s16 rotY, s16 rotZ, s32 params, u32 cutscene, s32 arg11, Actor* parent);
+Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s16 index, f32 x, f32 y, f32 z, s16 rotX,
+                                     s16 rotY, s16 rotZ, s32 params, u32 csId, s32 arg11, Actor* parent);
 Actor* Actor_SpawnAsChild(ActorContext* actorCtx, Actor* parent, PlayState* play, s16 actorId, f32 posX, f32 posY, f32 posZ, s16 rotX, s16 rotY, s16 rotZ, s32 params);
 void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx);
 void Enemy_StartFinishingBlow(PlayState* play, Actor* actor);
@@ -1273,7 +1274,7 @@ void CutsceneFlags_Unset(PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(PlayState* play, s16 flag);
 
 s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility);
-ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 actorCsId);
+ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 csId);
 void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 num);
 void func_800F15D8(Camera* camera);
 void ActorCutscene_ClearWaiting(void);
@@ -2246,7 +2247,7 @@ s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera);
 // void CutsceneCamera_UpdateSpline(void);
 s32 CutsceneCamera_ProcessCommands(u8* cmd, CutsceneCamera* csCamera);
 // s32 func_80161BAC(void);
-void CutsceneCamera_SetState(s16 arg0);
+void CutsceneCamera_SetState(s16 state);
 void CutsceneCamera_Reset(void);
 // void func_80161C20(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80161E4C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);

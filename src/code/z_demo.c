@@ -1482,7 +1482,7 @@ void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx) {
         gSaveContext.save.cutscene = 0;
         gSaveContext.gameMode = 0;
 
-        ActorCutscene_Stop(CS_ID_GLOBAL_7F);
+        ActorCutscene_Stop(CS_ID_GLOBAL_END);
         Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_IDLE;
     }
@@ -1538,7 +1538,7 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
     if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
         // Try to find an actor cutscene that's triggered by the current spawn
         csId = ActorCutscene_FindEntranceCsId();
-        if (csId != -1) {
+        if (csId != CS_ID_NONE) {
             scriptIndex = ActorCutscene_GetCutsceneScriptIndex(csId);
             if (scriptIndex != -1) {
                 // A scripted cutscene is triggered by a spawn

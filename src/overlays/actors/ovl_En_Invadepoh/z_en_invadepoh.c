@@ -1357,7 +1357,7 @@ void func_80B45648(EnInvadepoh* this) {
     s32 i;
     s16 csId = this->actor.csId;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(sCsIdList); i++) {
         sCsIdList[i] = csId;
         csId = ActorCutscene_GetAdditionalCsId(csId);
     }

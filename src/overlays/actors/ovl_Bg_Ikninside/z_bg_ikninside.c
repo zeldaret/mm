@@ -82,8 +82,8 @@ void func_80C07220(BgIkninside* this, PlayState* play) {
 void func_80C07230(BgIkninside* this, PlayState* play) {
     if (this->dyna.actor.csId == CS_ID_NONE) {
         this->actionFunc = func_80C07220;
-    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
     } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
         ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);

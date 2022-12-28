@@ -546,8 +546,8 @@ void EnSob1_Idle(EnSob1* this, PlayState* play) {
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookFowardCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -672,8 +672,8 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
         }
     }
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookFowardCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -711,8 +711,8 @@ void EnSob1_LookToShopkeeperFromShelf(EnSob1* this, PlayState* play) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopkeeperCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -803,8 +803,8 @@ void EnSob1_Walking(EnSob1* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookFowardCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -834,8 +834,8 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
             EnSob1_SetupAction(this, EnSob1_ContinueShopping);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -854,8 +854,8 @@ void EnSob1_LookToShelf(EnSob1* this, PlayState* play) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -1094,8 +1094,8 @@ void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
         play->msgCtx.stateTimer = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);

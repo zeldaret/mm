@@ -569,7 +569,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 
     if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->csId = CS_ID_NONE;
             func_800B7298(play, NULL, PLAYER_CSMODE_115);

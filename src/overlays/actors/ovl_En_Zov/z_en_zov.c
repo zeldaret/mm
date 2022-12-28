@@ -94,7 +94,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     this->csIdIndex = -1;
     this->cueId = -1;
     this->csIdList[0] = this->picto.actor.csId;
-    this->csIdList[1] = CS_ID_GLOBAL_7C;
+    this->csIdList[1] = CS_ID_GLOBAL_TALK;
     this->unk_322 = 0;
     this->actionFunc = func_80BD1C84;
     this->picto.validationFunc = EnZov_ValidatePictograph;
@@ -507,8 +507,8 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->csIdIndex != -1) && (ActorCutscene_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
-        if ((this->csIdIndex == 0) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C)) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if ((this->csIdIndex == 0) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK)) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
             ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->picto.actor);

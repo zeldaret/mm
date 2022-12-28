@@ -1862,7 +1862,7 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
     player->talkActorDistance = actor->xzDistToPlayer;
     player->exchangeItemId = exchangeItemId;
 
-    ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+    ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
     return true;
 }
 
@@ -2089,7 +2089,7 @@ s32 Actor_SetRideActor(PlayState* play, Actor* horse, s32 mountSide) {
            PLAYER_STATE1_40000 | PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000))) {
         player->rideActor = horse;
         player->mountSide = mountSide;
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
         return true;
     }
 
@@ -3191,7 +3191,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     actor->params = params & 0xFFFF;
     actor->csId = csId & 0x7F;
 
-    if (actor->csId == CS_ID_GLOBAL_7F) {
+    if (actor->csId == CS_ID_GLOBAL_END) {
         actor->csId = CS_ID_NONE;
     }
 

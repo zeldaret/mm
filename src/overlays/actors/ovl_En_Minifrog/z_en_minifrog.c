@@ -289,8 +289,8 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
     }
 
     if (this->flags & 1) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->actor.csId);
         } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
             ActorCutscene_Start(this->actor.csId, &this->actor);
@@ -367,19 +367,19 @@ void EnMinifrog_CheckChoirSuccess(EnMinifrog* this, PlayState* play) {
 
 void EnMinifrog_ContinueChoirCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_Jump(this);
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
         EnMinifrog_CheckChoirSuccess(this, play);
         return; // necessary to match
-    } else if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_7C)) {
-        ActorCutscene_Start(CS_ID_GLOBAL_7C, NULL);
+    } else if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_TALK)) {
+        ActorCutscene_Start(CS_ID_GLOBAL_TALK, NULL);
         EnMinifrog_CheckChoirSuccess(this, play);
         return; // necessary to match
     } else if ((this->actor.csId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() == this->actor.csId)) {
         ActorCutscene_Stop(this->actor.csId);
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
         return; // necessary to match
     } else {
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
     }
 }
 
@@ -443,8 +443,8 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_Jump(this);
     if (this->actor.csId == CS_ID_NONE) {
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
-    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->actor.csId);
     } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
         ActorCutscene_Start(this->actor.csId, &this->actor);

@@ -263,15 +263,15 @@ s16 EnJg_GetCsIdForTeachingLullabyIntro(EnJg* this) {
 void EnJg_SetupGoronShrineCheer(EnJg* this) {
     ActorCutscene_Stop(this->csId);
     if (this->focusedShrineGoronParam == 10) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             this->actionFunc = EnJg_GoronShrineTalk;
         } else {
-            this->csId = CS_ID_GLOBAL_7C;
+            this->csId = CS_ID_GLOBAL_TALK;
         }
     } else {
         this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
     }
 
@@ -394,11 +394,11 @@ void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
         }
         this->actionFunc = EnJg_GoronShrineTalk;
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             if (this->focusedShrineGoronParam == 10) {
                 this->actionFunc = EnJg_GoronShrineTalk;
             } else {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
         }
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -514,8 +514,8 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->csId = EnJg_GetCsIdForTeachingLullabyIntro(this);
-                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                    ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                    ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
                 }
                 ActorCutscene_SetIntentToPlay(this->csId);
                 this->actionFunc = EnJg_TeachLullabyIntro;
@@ -612,8 +612,8 @@ void EnJg_TeachLullabyIntro(EnJg* this, PlayState* play) {
         ActorCutscene_Start(this->csId, &this->actor);
         this->actionFunc = EnJg_LullabyIntroCutsceneAction;
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         ActorCutscene_SetIntentToPlay(this->csId);
     }
@@ -757,8 +757,8 @@ s32 EnJg_GetNextTextId(EnJg* this) {
 
         case 0xDCF: // Spring has come thanks to you
             this->focusedShrineGoronParam = 3;
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             ActorCutscene_SetIntentToPlay(this->csId);
             this->actionFunc = EnJg_GoronShrineCheer;

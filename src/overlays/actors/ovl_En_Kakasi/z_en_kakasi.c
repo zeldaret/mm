@@ -446,8 +446,8 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
             } else if (this->picto.actor.textId == 0x165D || this->picto.actor.textId == 0x165F ||
                        this->picto.actor.textId == 0x1660 || this->picto.actor.textId == 0x1652) {
                 func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_4);
-                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                    ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                    ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
                     ActorCutscene_SetIntentToPlay(this->csIdList[0]);
                     this->actionFunc = EnKakasi_DancingRemark;
                 } else {
@@ -561,8 +561,8 @@ void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_80152434(play, 0x35);
         this->unkState1A8 = 0;
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[0]);
             this->actionFunc = EnKakasi_TeachingSong;
 
@@ -586,8 +586,8 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
     EnKakasi_CheckPlayerPosition(this, play);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
     if (this->unkState1A8 == 0) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[0]);
             return;
         }
@@ -699,8 +699,8 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if (this->unkState1A8 == 0) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[0]);
             return;
         }
@@ -789,8 +789,8 @@ void EnKakasi_DancingRemark(EnKakasi* this, PlayState* play) {
     u32 currentDay = gSaveContext.save.day;
 
     this->unkState196 = 3;
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csIdList[0]);
     } else if (ActorCutscene_GetCanPlayNext(this->csIdList[0]) == 0) {
         ActorCutscene_SetIntentToPlay(this->csIdList[0]);
@@ -1047,8 +1047,8 @@ void EnKakasi_SetupRiseOutOfGround(EnKakasi* this, PlayState* play) {
         csIdIndex = 1;
     }
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csIdList[csIdIndex]);
 
     } else if (ActorCutscene_GetCanPlayNext(this->csIdList[csIdIndex]) == 0) {

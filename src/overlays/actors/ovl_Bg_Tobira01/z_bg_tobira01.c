@@ -34,8 +34,8 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
     s16 prevTimer;
 
     if (this->playCutscene) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         } else if (ActorCutscene_GetCanPlayNext(csId)) {
             ActorCutscene_StartWithPlayerCs(csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_88_40);

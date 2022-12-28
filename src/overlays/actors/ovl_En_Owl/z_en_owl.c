@@ -867,8 +867,8 @@ void func_8095C568(EnOwl* this) {
     if (this->actionFlags & 0x40) {
         if ((this->csIdIndex < 0) || (this->csIdList[this->csIdIndex] < 0)) {
             this->actionFlags &= ~0x40;
-        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
             ActorCutscene_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);

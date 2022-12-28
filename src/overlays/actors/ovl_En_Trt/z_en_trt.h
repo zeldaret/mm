@@ -36,7 +36,7 @@ typedef struct EnTrt {
     /* 0x3D8 */ s16 eyeTexIndex;
     /* 0x3DC */ EnTrtBlinkFunc blinkFunc;
     /* 0x3E0 */ s16 csId;
-    /* 0x3E2 */ s16 tmpGetMushroomCutscene;
+    /* 0x3E2 */ s16 tmpGetMushroomCsId;
     /* 0x3E4 */ Vec3f cursorPos;
     /* 0x3F0 */ Color_RGBAu32 cursorColor;
     /* 0x400 */ u8 drawCursor;
@@ -48,7 +48,7 @@ typedef struct EnTrt {
     /* 0x40C */ s16 lookForwardCutscene;
     /* 0x40E */ s16 lookToShelfCsId;
     /* 0x410 */ s16 lookToShopkeeperCsId;
-    /* 0x412 */ s16 getMushroomCutscene;
+    /* 0x412 */ s16 getMushroomCsId;
     /* 0x414 */ UNK_TYPE1 pad414[0x2];
     /* 0x416 */ Vec3s headRot;
     /* 0x41C */ Vec3f headPos;

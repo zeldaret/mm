@@ -61,14 +61,14 @@ void func_80BD6624(BgHakaTomb* this) {
     this->actionFunc = func_80BD66AC;
 }
 
-s32 func_80BD6638(s16* csId, s16* csIdList, s32 csIdCount) {
+s32 func_80BD6638(s16* csId, s16* csIdList, s32 numCutscenes) {
     s32 pad;
     s32 retVal = false;
     s32 i;
 
     *csId = ActorCutscene_GetCurrentCsId();
     if (*csId >= 0) {
-        for (i = 0; i < csIdCount; i++) {
+        for (i = 0; i < numCutscenes; i++) {
             if (*csId == csIdList[i]) {
                 retVal = true;
                 break;

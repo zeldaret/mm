@@ -246,10 +246,10 @@ void func_80BA1C88(ElfMsg6* this, PlayState* play, s16 arg2) {
 
     if (player->tatlActor != NULL) {
         player->tatlTextId = arg2;
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
         sp20->elfMsg = &this->actor;
         if (this->actor.csId == CS_ID_NONE) {
-            this->actor.csId = CS_ID_GLOBAL_7C;
+            this->actor.csId = CS_ID_GLOBAL_TALK;
         }
     }
 }
@@ -280,10 +280,10 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         this->actor.textId = 0x25B;
     } else if (func_80BA1C00(this) && (player->actor.speedXZ > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
         sp20->elfMsg = &this->actor;
         if (this->actor.csId == CS_ID_NONE) {
-            this->actor.csId = CS_ID_GLOBAL_7C;
+            this->actor.csId = CS_ID_GLOBAL_TALK;
         }
     }
 }
@@ -321,10 +321,10 @@ void func_80BA1E30(ElfMsg6* this, PlayState* play) {
 
     if (func_80BA1C00(this) && (player->actor.speedXZ > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
         sp20->elfMsg = &this->actor;
         if (this->actor.csId == CS_ID_NONE) {
-            this->actor.csId = CS_ID_GLOBAL_7C;
+            this->actor.csId = CS_ID_GLOBAL_TALK;
         }
     }
 }

@@ -116,8 +116,8 @@ void func_8096EE64(ElfMsg2* this, PlayState* play) {
 
         ElfMsg2_SetupAction(this, func_8096EF98);
     } else if ((this->actor.csId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() != this->actor.csId)) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->actor.csId);
         } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
             ActorCutscene_Start(this->actor.csId, &this->actor);

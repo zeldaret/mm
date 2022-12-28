@@ -718,11 +718,11 @@ typedef enum {
     /* 0x78 */ CS_ID_GLOBAL_78 = 120,
     /* 0x79 */ CS_ID_GLOBAL_79,
     /* 0x7A */ CS_ID_GLOBAL_7A,
-    /* 0x7B */ CS_ID_GLOBAL_7B,
-    /* 0x7C */ CS_ID_GLOBAL_7C,
-    /* 0x7D */ CS_ID_GLOBAL_7D,
-    /* 0x7E */ CS_ID_GLOBAL_7E,
-    /* 0x7F */ CS_ID_GLOBAL_7F,
+    /* 0x7B */ CS_ID_GLOBAL_ELEGY,
+    /* 0x7C */ CS_ID_GLOBAL_TALK,
+    /* 0x7D */ CS_ID_GLOBAL_DOOR,
+    /* 0x7E */ CS_ID_GLOBAL_RETURN_TO_CAM, // smoothly return to the previous camera
+    /* 0x7F */ CS_ID_GLOBAL_END,
 } GlobalCutsceneId;
 
 #endif

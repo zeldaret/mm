@@ -2,14 +2,14 @@
 #include "z64shrink_window.h"
 
 ActorCutscene sGlobalActorCutscenes[8] = {
-    /* 0x78 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 },
-    /* 0x79 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 },
-    /* 0x7A */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 },
-    /* 0x7B */ { 0x0002, -1, -25, -1, CS_ID_NONE, 255, 255, 0, 0, 32 },
-    /* 0x7C */ { 0x7FFD, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },
-    /* 0x7D */ { 0x7FFC, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },
-    /* 0x7E */ { 0x7FFE, -2, -14, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },
-    /* 0x7F */ { 0x0000, -1, -1, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },
+    /* 0x78 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 }, // CS_ID_GLOBAL_78
+    /* 0x79 */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 }, // CS_ID_GLOBAL_79
+    /* 0x7A */ { 0xFF9C, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 255, 255 }, // CS_ID_GLOBAL_7A
+    /* 0x7B */ { 0x0002, -1, -25, -1, CS_ID_NONE, 255, 255, 0, 0, 32 },    // CS_ID_GLOBAL_ELEGY
+    /* 0x7C */ { 0x7FFD, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },   // CS_ID_GLOBAL_TALK
+    /* 0x7D */ { 0x7FFC, -1, -1, -1, CS_ID_NONE, 255, 255, -1, 0, 255 },   // CS_ID_GLOBAL_DOOR
+    /* 0x7E */ { 0x7FFE, -2, -14, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },     // CS_ID_GLOBAL_RETURN_TO_CAM
+    /* 0x7F */ { 0x0000, -1, -1, -1, CS_ID_NONE, 0, 255, -1, 0, 32 },      // CS_ID_GLOBAL_END
 };
 
 typedef struct {
@@ -94,7 +94,7 @@ void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 n
         actorCutsceneNextCutscenes[i] = 0;
     }
 
-    sActorCsMgr.endCsId = -1;
+    sActorCsMgr.endCsId = CS_ID_NONE;
     sActorCsMgr.play = play;
     sActorCsMgr.length = -1;
     sActorCsMgr.targetActor = NULL;
@@ -139,7 +139,7 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     s16 priority;
 
     count = 0;
-    actorCsIdMax = -1;
+    actorCsIdMax = CS_ID_NONE;
     priorityMax = SHT_MAX;
     for (i = 0; i < 16; i++) {
         for (bit = 1, j = 0; j < 8; j++) {
@@ -158,7 +158,7 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
             bit <<= 1;
         }
     }
-    if (actorCsIdMax != -1) {
+    if (actorCsIdMax != CS_ID_NONE) {
         actorCutsceneNextCutscenes[actorCsIdMax >> 3] |= 1 << (actorCsIdMax & 7);
     }
     return count;
@@ -205,7 +205,7 @@ void ActorCutscene_End(void) {
             Play_CopyCamera(sActorCsMgr.play, sActorCsMgr.retCamId, sActorCsMgr.subCamId);
             RET_CAM->stateFlags =
                 (RET_CAM->stateFlags & ~CAM_STATE_UNDERWATER) | (CUR_CAM->stateFlags & CAM_STATE_UNDERWATER);
-            ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7E);
+            ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_RETURN_TO_CAM);
             break;
 
         case CS_END_CAM_0:
@@ -247,8 +247,8 @@ void ActorCutscene_End(void) {
 s16 ActorCutscene_Update(void) {
     s16 sp1E = 0;
 
-    if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_7E) != 0) {
-        ActorCutscene_StartWithPlayerCs(CS_ID_GLOBAL_7E, &GET_PLAYER(sActorCsMgr.play)->actor);
+    if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_RETURN_TO_CAM) != 0) {
+        ActorCutscene_StartWithPlayerCs(CS_ID_GLOBAL_RETURN_TO_CAM, &GET_PLAYER(sActorCsMgr.play)->actor);
     }
     if (sActorCsMgr.endCsId == CS_ID_NONE) {
         if (sActorCsMgr.csId != CS_ID_NONE) {
@@ -261,7 +261,7 @@ s16 ActorCutscene_Update(void) {
             }
         }
     }
-    if (sActorCsMgr.endCsId != -1) {
+    if (sActorCsMgr.endCsId != CS_ID_NONE) {
         ActorCutscene_End();
         sp1E = 2;
     }
@@ -285,9 +285,9 @@ void ActorCutscene_SetIntentToPlay(s16 csId) {
 }
 
 s16 ActorCutscene_GetCanPlayNext(s16 csId) {
-    if (csId == CS_ID_GLOBAL_7F) {
+    if (csId == CS_ID_GLOBAL_END) {
         if (sActorCsMgr.csId == CS_ID_NONE) {
-            return CS_ID_GLOBAL_7F;
+            return CS_ID_GLOBAL_END;
         } else {
             return 0;
         }
@@ -351,19 +351,22 @@ s16 ActorCutscene_Start(s16 csId, Actor* actor) {
     ShrinkWindow_Letterbox_SetSizeTarget(actorCs->letterboxSize);
     ActorCutscene_SetHudVisibility(actorCs->hudVisibility);
 
-    if (csId == CS_ID_GLOBAL_7F) {
+    if (csId == CS_ID_GLOBAL_END) {
         sp20 = 1;
     } else if (actorCs->scriptIndex != -1) {
+        // scripted cutscene
         sp20 = 1;
-    } else if ((csId != CS_ID_GLOBAL_7D) && (csId != CS_ID_GLOBAL_7C)) {
+    } else if ((csId != CS_ID_GLOBAL_DOOR) && (csId != CS_ID_GLOBAL_TALK)) {
         sp20 = 2;
     }
 
     if (sp20 != 0) {
         sActorCsMgr.retCamId = Play_GetActiveCamId(sActorCsMgr.play);
         sActorCsMgr.subCamId = Play_CreateSubCamera(sActorCsMgr.play);
+
         subCam = Play_GetCamera(sActorCsMgr.play, sActorCsMgr.subCamId);
         retCam = Play_GetCamera(sActorCsMgr.play, sActorCsMgr.retCamId);
+
         if ((retCam->setting == CAM_SET_START0) || (retCam->setting == CAM_SET_START2) ||
             (retCam->setting == CAM_SET_START1)) {
             if (ActorCutscene_FindEntranceCsId() != csId) {
@@ -410,11 +413,11 @@ s16 ActorCutscene_Stop(s16 csId) {
     if ((sActorCsMgr.length > 0) && (actorCs->scriptIndex == -1)) {
         return -2;
     }
-    if ((csId != CS_ID_GLOBAL_7F) && (actorCs->scriptIndex != -1)) {
+    if ((csId != CS_ID_GLOBAL_END) && (actorCs->scriptIndex != -1)) {
         return -3;
     }
 
-    if (csId == CS_ID_GLOBAL_7F) {
+    if (csId == CS_ID_GLOBAL_END) {
         csId = sActorCsMgr.csId;
     }
     if (csId == sActorCsMgr.csId) {

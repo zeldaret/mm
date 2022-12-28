@@ -111,14 +111,14 @@ void func_8092E284(ElfMsg* this, PlayState* play) {
 
     if ((player->tatlActor != NULL) && ((func_8092E1FC(this)))) {
         player->tatlTextId = func_8092E1D0(this);
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_7C);
+        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
         tatl->elfMsg = &this->actor;
         if (this->actor.csId == CS_ID_NONE) {
-            this->actor.csId = CS_ID_GLOBAL_7C;
+            this->actor.csId = CS_ID_GLOBAL_TALK;
         }
         if ((player->tatlTextId < 0) && (this->actor.home.rot.x < 0)) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
                 ActorCutscene_SetIntentToPlay(this->actor.csId);
             } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
                 this->actor.home.rot.x = 0;

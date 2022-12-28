@@ -170,12 +170,12 @@ void EnTrt_UpdateCursorPos(PlayState* play, EnTrt* this) {
 
 void EnTrt_SetupGetMushroomCutscene(EnTrt* this) {
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
-        if (this->csId != this->tmpGetMushroomCutscene) {
+        if (this->csId != this->tmpGetMushroomCsId) {
             ActorCutscene_Stop(this->csId);
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
-            this->csId = this->tmpGetMushroomCutscene;
+            this->csId = this->tmpGetMushroomCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
             this->cutsceneState = ENTRT_CUTSCENESTATE_WAITING;
         }
@@ -337,7 +337,7 @@ void EnTrt_GetMushroom(EnTrt* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     Player* player = GET_PLAYER(play);
 
-    this->tmpGetMushroomCutscene = this->getMushroomCutscene;
+    this->tmpGetMushroomCsId = this->getMushroomCsId;
     if (this->cutsceneState != ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         EnTrt_SetupGetMushroomCutscene(this);
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
@@ -472,8 +472,8 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_ContinueShopping;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
             } else {
-                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                    ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                    ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
                 }
                 this->csId = this->lookToShopkeeperCsId;
                 ActorCutscene_SetIntentToPlay(this->csId);
@@ -525,8 +525,8 @@ void EnTrt_FaceShopkeeper(EnTrt* this, PlayState* play) {
         }
     }
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookForwardCutscene;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -555,8 +555,8 @@ void EnTrt_LookToShelf(EnTrt* this, PlayState* play) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -790,8 +790,8 @@ void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
             this->flags |= ENTRT_MET;
         }
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -831,8 +831,8 @@ void EnTrt_IdleAwake(EnTrt* this, PlayState* play) {
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookForwardCutscene;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1003,8 +1003,8 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
             this->actionFunc = EnTrt_ContinueShopping;
             this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1098,8 +1098,8 @@ void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
         this->actionFunc = EnTrt_ItemGiven;
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1444,8 +1444,8 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, PlayState* play) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopkeeperCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -1556,7 +1556,7 @@ void EnTrt_GetCutscenes(EnTrt* this, PlayState* play) {
     this->lookForwardCutscene = this->actor.csId;
     this->lookToShelfCsId = ActorCutscene_GetAdditionalCsId(this->lookForwardCutscene);
     this->lookToShopkeeperCsId = ActorCutscene_GetAdditionalCsId(this->lookToShelfCsId);
-    this->getMushroomCutscene = ActorCutscene_GetAdditionalCsId(this->lookToShopkeeperCsId);
+    this->getMushroomCsId = ActorCutscene_GetAdditionalCsId(this->lookToShopkeeperCsId);
 }
 
 void EnTrt_DrawCursor(PlayState* play, EnTrt* this, f32 x, f32 y, f32 z, u8 drawCursor) {

@@ -628,7 +628,7 @@ void func_80B5CC88(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CCA0(EnOt* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_7C, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_NORMAL)) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags2 |= PLAYER_STATE2_20000000;

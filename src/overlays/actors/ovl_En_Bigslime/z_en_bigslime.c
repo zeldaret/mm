@@ -2522,8 +2522,8 @@ void EnBigslime_InitEntrance(EnBigslime* this, PlayState* play) {
 }
 
 void EnBigslime_SetupCutscene(EnBigslime* this) {
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
     }
 
     if (this->actor.colChkInfo.health == 0) {
@@ -2537,8 +2537,8 @@ void EnBigslime_SetupCutscene(EnBigslime* this) {
 }
 
 void EnBigslime_PlayCutscene(EnBigslime* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
         ActorCutscene_SetIntentToPlay(this->csId);
     } else if (ActorCutscene_GetCanPlayNext(this->csId)) {
         ActorCutscene_Start(this->csId, &this->actor);

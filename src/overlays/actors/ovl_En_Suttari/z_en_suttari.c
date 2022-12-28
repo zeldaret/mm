@@ -356,8 +356,8 @@ void func_80BAAB78(EnSuttari* this, PlayState* play) {
                 this->textId = 0x29EE;
                 break;
         }
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         this->actionFunc = func_80BADD0C;

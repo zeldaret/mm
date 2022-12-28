@@ -595,7 +595,7 @@ void func_80A95CEC(EnAz* this, PlayState* play) {
             if (this->actor.bgCheckFlags & 2) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
             }
-            if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_7C, this->csIdList[0], SUBS_CUTSCENE_NORMAL)) {
+            if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_NORMAL)) {
                 func_80A97C0C(this, play);
             }
         }
@@ -688,7 +688,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             if ((play->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
-                if (SubS_StartActorCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_7C,
+                if (SubS_StartActorCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_TALK,
                                             SUBS_CUTSCENE_NORMAL)) {
                     brother->unk_374 |= 0x8000;
                     play->msgCtx.msgMode = 0x44;

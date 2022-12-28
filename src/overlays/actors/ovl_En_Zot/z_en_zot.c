@@ -499,8 +499,8 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     if (this->unk_2F2 & 1) {
         if (this->actor.csId == CS_ID_NONE) {
             this->unk_2F2 &= ~1;
-        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->actor.csId);
         } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
             ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);

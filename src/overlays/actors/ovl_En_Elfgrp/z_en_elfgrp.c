@@ -47,14 +47,14 @@ ActorInit En_Elfgrp_InitVars = {
     (ActorFunc)NULL,
 };
 
-void func_80A396B0(EnElfgrp* this, s32 arg1) {
-    while (arg1 > 0) {
+void func_80A396B0(EnElfgrp* this, s32 numCutscenes) {
+    while (numCutscenes > 0) {
         if (this->actor.csId == CS_ID_NONE) {
             break;
         }
         this->actor.csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
 
-        arg1--;
+        numCutscenes--;
     }
 }
 

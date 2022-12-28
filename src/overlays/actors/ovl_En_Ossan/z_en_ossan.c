@@ -369,8 +369,8 @@ void EnOssan_Idle(EnOssan* this, PlayState* play) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
         if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -622,8 +622,8 @@ void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play) {
     u8 cursorIndex;
 
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopkeeperCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -680,8 +680,8 @@ void EnOssan_LookToLeftShelf(EnOssan* this, PlayState* play) {
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToLeftShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -708,8 +708,8 @@ void EnOssan_LookToRightShelf(EnOssan* this, PlayState* play) {
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToRightShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -960,8 +960,8 @@ void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, PlayState* play) {
         this->cutsceneState = ENOSSAN_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopKeeperFromShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -1103,8 +1103,8 @@ void EnOssan_SetupItemPurchased(EnOssan* this, PlayState* play) {
         play->msgCtx.stateTimer = 4;
         EnOssan_SetupAction(this, EnOssan_ItemPurchased);
         if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1164,8 +1164,8 @@ void EnOssan_ItemPurchased(EnOssan* this, PlayState* play) {
             EnOssan_SetupAction(this, EnOssan_ContinueShopping);
             this->cutsceneState = ENOSSAN_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);

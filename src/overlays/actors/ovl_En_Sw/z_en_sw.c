@@ -1089,8 +1089,8 @@ void func_808DB100(EnSw* this, PlayState* play) {
 }
 
 void func_808DB25C(EnSw* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
     } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
         ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_808D9C18(this);

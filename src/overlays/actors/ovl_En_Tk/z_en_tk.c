@@ -901,7 +901,8 @@ void func_80AEE2A8(EnTk* this, PlayState* play) {
 }
 
 void func_80AEE2C0(EnTk* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_7C, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK,
+                                SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         func_80AEE374(this, play);
     }
 }
@@ -998,13 +999,13 @@ void func_80AEE6B8(EnTk* this, PlayState* play) {
             ActorCutscene_Stop(this->csIdList[0]);
             func_801477B4(play);
             func_80AEDBEC(this, play);
-        } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_7C, this->csIdList[0],
+        } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0],
                                            SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
             this->unk_310 = 3;
             func_80AEDE10(this, play);
             this->unk_2CA &= ~0x20;
         }
-    } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_7C, this->csIdList[0],
+    } else if (SubS_StartActorCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0],
                                        SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->unk_310 = 4;
         func_80AEDE10(this, play);

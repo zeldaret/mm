@@ -1020,8 +1020,8 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->csIdIndex != -1) && (ActorCutscene_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
             ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->actor);

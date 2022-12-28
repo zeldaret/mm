@@ -68,8 +68,8 @@ void func_80C06B70(ObjMuPict* this, PlayState* play) {
             func_80C06DC8(this, play);
             func_80C06CC4(this);
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             ActorCutscene_SetIntentToPlay(this->actor.csId);
             func_80C06DC8(this, play);

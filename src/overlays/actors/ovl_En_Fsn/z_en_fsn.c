@@ -231,8 +231,8 @@ void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
     if ((this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) && (this->lookToShopkeeperBuyingCsId != this->csId) &&
         (this->actor.textId == 0x29CE)) {
         ActorCutscene_Stop(this->csId);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopkeeperBuyingCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -737,8 +737,8 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1028,8 +1028,8 @@ void EnFsn_ResumeInteraction(EnFsn* this, PlayState* play) {
                 this->actor.textId = (this->numSellingItems <= 0) ? 0x29DE : 0x29D6;
             }
             Message_StartTextbox(play, this->actor.textId, &this->actor);
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             ActorCutscene_SetIntentToPlay(this->csId);
             this->actionFunc = EnFsn_ResumeShoppingInteraction;
@@ -1058,8 +1058,8 @@ void EnFsn_ResumeShoppingInteraction(EnFsn* this, PlayState* play) {
                 this->actionFunc = EnFsn_FaceShopkeeperSelling;
             }
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = !this->isSelling ? this->lookToShopkeeperBuyingCsId : this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1070,8 +1070,8 @@ void EnFsn_ResumeShoppingInteraction(EnFsn* this, PlayState* play) {
 void EnFsn_LookToShelf(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->csId);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -1118,8 +1118,8 @@ void EnFsn_BrowseShelf(EnFsn* this, PlayState* play) {
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, PlayState* play) {
     if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->csId);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopkeeperFromShelfCsId;
         ActorCutscene_SetIntentToPlay(this->csId);
@@ -1235,8 +1235,8 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
             ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);
@@ -1281,8 +1281,8 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
             ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
             ActorCutscene_SetIntentToPlay(this->csId);

@@ -1009,8 +1009,8 @@ void EnMaYto_BeginWarmFuzzyFeelingCs(EnMaYto* this, PlayState* play) {
         ActorCutscene_Start(this->actor.csId, &this->actor);
         EnMaYto_SetupWarmFuzzyFeelingCs(this);
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         ActorCutscene_SetIntentToPlay(this->actor.csId);
     }

@@ -1421,8 +1421,8 @@ void func_80BEF518(EnAkindonuts* this, PlayState* play) {
             ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_35E = 1;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             }
             ActorCutscene_SetIntentToPlay(this->csId);
             return;

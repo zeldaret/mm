@@ -784,8 +784,8 @@ void EnMa4_BeginEponasSongCs(EnMa4* this, PlayState* play) {
         ActorCutscene_Start(csId, &this->actor);
         EnMa4_SetupEponasSongCs(this);
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         }
         ActorCutscene_SetIntentToPlay(csId);
     }

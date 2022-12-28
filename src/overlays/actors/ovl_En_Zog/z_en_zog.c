@@ -986,8 +986,8 @@ void EnZog_Update(Actor* thisx, PlayState* play) {
             this->unk_30A &= ~4;
         } else if (this->csIdList[this->csIdIndex] == CS_ID_NONE) {
             this->unk_30A &= ~4;
-        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
             ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
         } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
             ActorCutscene_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);

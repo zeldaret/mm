@@ -1326,8 +1326,8 @@ void func_8088FD04(EnElf* this) {
     if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
         this->unk_264 &= ~1;
         this->unk_264 |= 2;
-    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->actor.csId);
         this->unk_264 |= 1;
     } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {

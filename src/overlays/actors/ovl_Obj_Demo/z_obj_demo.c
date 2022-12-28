@@ -69,7 +69,7 @@ void func_80983678(ObjDemo* this, PlayState* play) {
     func_80983634(play);
     if ((this->actor.xzDistToPlayer < this->xzRange) && (fabsf(this->actor.playerHeightRel) < this->yRange)) {
         if (this->unk_148 == 1) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+            ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
         }
         ActorCutscene_SetIntentToPlay(this->actor.csId);
         this->actionFunc = func_80983704;
@@ -77,8 +77,8 @@ void func_80983678(ObjDemo* this, PlayState* play) {
 }
 
 void func_80983704(ObjDemo* this, PlayState* play) {
-    if ((this->unk_148 == 1) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7D)) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7D);
+    if ((this->unk_148 == 1) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR)) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
         ActorCutscene_SetIntentToPlay(this->actor.csId);
     } else {
         if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {

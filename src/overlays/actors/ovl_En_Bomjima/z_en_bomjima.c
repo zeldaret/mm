@@ -465,8 +465,8 @@ void func_80BFEFF0(EnBomjima* this) {
 void func_80BFF03C(EnBomjima* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csIdList[0]);
     } else if (!ActorCutscene_GetCanPlayNext(this->csIdList[0])) {
         ActorCutscene_SetIntentToPlay(this->csIdList[0]);
@@ -653,8 +653,8 @@ void func_80BFF754(EnBomjima* this, PlayState* play) {
     f32 y;
     f32 z;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_7C) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_7C);
+    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
         ActorCutscene_SetIntentToPlay(this->csIdList[1]);
         return;
     }
