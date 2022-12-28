@@ -1275,7 +1275,7 @@ s32 CutsceneFlags_Get(PlayState* play, s16 flag);
 s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility);
 ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 csId);
 void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 num);
-void func_800F15D8(Camera* camera);
+void ActorCutscene_StoreCamera(Camera* camera);
 void ActorCutscene_ClearWaiting(void);
 s16 ActorCutscene_Update(void);
 void ActorCutscene_SetIntentToPlay(s16 csId);

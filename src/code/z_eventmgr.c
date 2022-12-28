@@ -2,26 +2,30 @@
 #include "z64shrink_window.h"
 
 ActorCutscene sGlobalActorCutscenes[8] = {
-    { -100, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
-      255 }, // CS_ID_GLOBAL_78
-    { -100, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
-      255 }, // CS_ID_GLOBAL_79
-    { -100, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
-      255 }, // CS_ID_GLOBAL_7A
+    // CS_ID_GLOBAL_78
+    { -100, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
+      255 },
+    // CS_ID_GLOBAL_79
+    { -100, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
+      255 },
+    // CS_ID_GLOBAL_7A
+    { -100, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
+      255 },
     // CS_ID_GLOBAL_ELEGY
-    { 2, -1, CS_CAM_ID_GLOBAL_ELEGY, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_NONE, CS_END_CAM_0,
-      32 },
-    // CS_ID_GLOBAL_TALK
-    { 32765, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0,
-      255 },
-    // CS_ID_GLOBAL_DOOR
-    { 32764, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0,
-      255 },
-    // CS_ID_GLOBAL_RETURN_TO_CAM
-    { 32766, -2, CS_CAM_ID_GLOBAL_CONNECT, -1, CS_ID_NONE, CS_END_SFX_NONE, 255, CS_HUD_VISIBILITY_ALL_ALT,
+    { 2, -1, CS_CAM_ID_GLOBAL_ELEGY, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_NONE,
       CS_END_CAM_0, 32 },
+    // CS_ID_GLOBAL_TALK
+    { 32765, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT,
+      CS_END_CAM_0, 255 },
+    // CS_ID_GLOBAL_DOOR
+    { 32764, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT,
+      CS_END_CAM_0, 255 },
+    // CS_ID_GLOBAL_RETURN_TO_CAM
+    { 32766, -2, CS_CAM_ID_GLOBAL_CONNECT, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE, 255,
+      CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0, 32 },
     // CS_ID_GLOBAL_END
-    { 0, -1, CS_CAM_ID_NONE, -1, CS_ID_NONE, CS_END_SFX_NONE, 255, CS_HUD_VISIBILITY_ALL_ALT, CS_END_CAM_0, 32 },
+    { 0, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE, 255, CS_HUD_VISIBILITY_ALL_ALT,
+      CS_END_CAM_0, 32 },
 };
 
 typedef struct {
@@ -33,7 +37,7 @@ typedef struct {
     /* 0x0C */ s32 startMethod;
     /* 0x10 */ PlayState* play;
     /* 0x14 */ s16 retCamId;
-    /* 0x16 */ s16 unk16;
+    /* 0x16 */ s16 cameraStored;
 } ActorCutsceneManager; // size = 0x18
 
 ActorCutsceneManager sActorCsMgr = {
@@ -111,16 +115,19 @@ void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 n
     sActorCsMgr.length = -1;
     sActorCsMgr.targetActor = NULL;
     sActorCsMgr.subCamId = SUB_CAM_ID_DONE;
-    sActorCsMgr.unk16 = 0;
+    sActorCsMgr.cameraStored = false;
     sActorCsMgr.csId = sActorCsMgr.endCsId;
 }
 
-void func_800F15D8(Camera* camera) {
+/**
+ * Store camera into subCam 2, and keep subCam 2 INACTIVE to preserve the struct.
+ */
+void ActorCutscene_StoreCamera(Camera* camera) {
     if (camera != NULL) {
         memcpy(&sActorCsMgr.play->subCameras[2], camera, sizeof(Camera));
         sActorCsMgr.play->subCameras[2].camId = camera->camId;
         Camera_ChangeStatus(&sActorCsMgr.play->subCameras[2], CAM_STATUS_INACTIVE);
-        sActorCsMgr.unk16 = 1;
+        sActorCsMgr.cameraStored = true;
     }
 }
 
@@ -153,6 +160,7 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     count = 0;
     actorCsIdMax = CS_ID_NONE;
     priorityMax = SHT_MAX;
+
     for (i = 0; i < 16; i++) {
         for (bit = 1, j = 0; j < 8; j++) {
             if (sWaitingActorCutsceneList[i] & bit) {
@@ -231,14 +239,15 @@ void ActorCutscene_End(void) {
             oldCamId = RET_CAM->camId;
             oldStateFlags = RET_CAM->stateFlags;
 
-            if (sActorCsMgr.unk16 != 0) {
+            if (sActorCsMgr.cameraStored) {
+                // Restore the camera that was stored in subCam 2
                 memcpy(RET_CAM, &sActorCsMgr.play->subCameras[2], sizeof(Camera));
 
                 RET_CAM->stateFlags =
                     (RET_CAM->stateFlags & ~CAM_STATE_UNDERWATER) | (CUR_CAM->stateFlags & CAM_STATE_UNDERWATER);
 
                 RET_CAM->stateFlags = (RET_CAM->stateFlags & ~CAM_STATE_2) | (oldStateFlags & CAM_STATE_2);
-                sActorCsMgr.unk16 = 0;
+                sActorCsMgr.cameraStored = false;
             }
             RET_CAM->camId = oldCamId;
             break;
@@ -262,6 +271,7 @@ s16 ActorCutscene_Update(void) {
     if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_RETURN_TO_CAM) != 0) {
         ActorCutscene_StartWithPlayerCs(CS_ID_GLOBAL_RETURN_TO_CAM, &GET_PLAYER(sActorCsMgr.play)->actor);
     }
+
     if (sActorCsMgr.endCsId == CS_ID_NONE) {
         if (sActorCsMgr.csId != CS_ID_NONE) {
             if (sActorCsMgr.length > 0) {
@@ -273,6 +283,7 @@ s16 ActorCutscene_Update(void) {
             }
         }
     }
+
     if (sActorCsMgr.endCsId != CS_ID_NONE) {
         ActorCutscene_End();
         sp1E = 2;
@@ -284,7 +295,7 @@ s16 ActorCutscene_Update(void) {
         if ((ActorCutscene_MarkNextCutscenes() == 0) && (sp1E != 0)) {
             ShrinkWindow_Letterbox_SetSizeTarget(0);
         } else if (sp1E == 0) {
-            func_800F15D8(Play_GetCamera(sActorCsMgr.play, sActorCsMgr.retCamId));
+            ActorCutscene_StoreCamera(Play_GetCamera(sActorCsMgr.play, sActorCsMgr.retCamId));
         }
     }
     return sp1E;
@@ -365,7 +376,7 @@ s16 ActorCutscene_Start(s16 csId, Actor* actor) {
 
     if (csId == CS_ID_GLOBAL_END) {
         sp20 = 1;
-    } else if (actorCs->scriptIndex != -1) {
+    } else if (actorCs->scriptIndex != CS_SCRIPT_ID_NONE) {
         // scripted cutscene
         sp20 = 1;
     } else if ((csId != CS_ID_GLOBAL_DOOR) && (csId != CS_ID_GLOBAL_TALK)) {
@@ -387,9 +398,11 @@ s16 ActorCutscene_Start(s16 csId, Actor* actor) {
                 Camera_ClearFlags(retCam, CAM_STATE_2);
             }
         }
+
         memcpy(subCam, retCam, sizeof(Camera));
         subCam->camId = sActorCsMgr.subCamId;
         Camera_ClearFlags(subCam, CAM_STATE_6 | CAM_STATE_0);
+
         Play_ChangeCameraStatus(sActorCsMgr.play, sActorCsMgr.retCamId, CAM_STATUS_WAIT);
         Play_ChangeCameraStatus(sActorCsMgr.play, sActorCsMgr.subCamId, CAM_STATUS_ACTIVE);
 
@@ -422,10 +435,10 @@ s16 ActorCutscene_Stop(s16 csId) {
     }
 
     actorCs = ActorCutscene_GetCutsceneImpl(sActorCsMgr.csId);
-    if ((sActorCsMgr.length > 0) && (actorCs->scriptIndex == -1)) {
+    if ((sActorCsMgr.length > 0) && (actorCs->scriptIndex == CS_SCRIPT_ID_NONE)) {
         return -2;
     }
-    if ((csId != CS_ID_GLOBAL_END) && (actorCs->scriptIndex != -1)) {
+    if ((csId != CS_ID_GLOBAL_END) && (actorCs->scriptIndex != CS_SCRIPT_ID_NONE)) {
         return -3;
     }
 
@@ -485,7 +498,7 @@ s16 ActorCutscene_FindEntranceCsId(void) {
 
     for (csId = 0; csId < sActorCutsceneCount; csId++) {
         //! FAKE:
-        if ((sActorCutsceneList[csId].scriptIndex != -1) &&
+        if ((sActorCutsceneList[csId].scriptIndex != CS_SCRIPT_ID_NONE) &&
             (sActorCutsceneList[csId].scriptIndex < (play = sActorCsMgr.play)->csCtx.scriptListCount) &&
             (sActorCsMgr.play->curSpawn ==
              sActorCsMgr.play->csCtx.scriptList[sActorCutsceneList[csId].scriptIndex].spawn)) {

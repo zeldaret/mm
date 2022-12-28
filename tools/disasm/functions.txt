@@ -1639,7 +1639,7 @@
     0x800F1460:("ActorCutscene_SetHudVisibility",),
     0x800F14F8:("ActorCutscene_GetCutsceneImpl",),
     0x800F1544:("ActorCutscene_Init",),
-    0x800F15D8:("func_800F15D8",),
+    0x800F15D8:("ActorCutscene_StoreCamera",),
     0x800F1648:("ActorCutscene_ClearWaiting",),
     0x800F1678:("ActorCutscene_ClearNextCutscenes",),
     0x800F16A8:("ActorCutscene_MarkNextCutscenes",),

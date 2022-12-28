@@ -1153,7 +1153,7 @@ asm/non_matchings/code/code_800F12D0/func_800F13E8.s,func_800F13E8,0x800F13E8,0x
 asm/non_matchings/code/z_eventmgr/ActorCutscene_SetHudVisibility.s,ActorCutscene_SetHudVisibility,0x800F1460,0x26
 asm/non_matchings/code/z_eventmgr/ActorCutscene_GetCutsceneImpl.s,ActorCutscene_GetCutsceneImpl,0x800F14F8,0x13
 asm/non_matchings/code/z_eventmgr/ActorCutscene_Init.s,ActorCutscene_Init,0x800F1544,0x25
-asm/non_matchings/code/z_eventmgr/func_800F15D8.s,func_800F15D8,0x800F15D8,0x1C
+asm/non_matchings/code/z_eventmgr/ActorCutscene_StoreCamera.s,ActorCutscene_StoreCamera,0x800F15D8,0x1C
 asm/non_matchings/code/z_eventmgr/ActorCutscene_ClearWaiting.s,ActorCutscene_ClearWaiting,0x800F1648,0xC
 asm/non_matchings/code/z_eventmgr/ActorCutscene_ClearNextCutscenes.s,ActorCutscene_ClearNextCutscenes,0x800F1678,0xC
 asm/non_matchings/code/z_eventmgr/ActorCutscene_MarkNextCutscenes.s,ActorCutscene_MarkNextCutscenes,0x800F16A8,0x55

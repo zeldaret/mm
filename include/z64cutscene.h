@@ -639,6 +639,8 @@ typedef enum {
     /* 0x7F */ CS_ID_GLOBAL_END,
 } GlobalCutsceneId;
 
+#define CS_SCRIPT_ID_NONE -1
+
 typedef enum {
     // global (see sGlobalCamDataSettings)
     /* -25 */ CS_CAM_ID_GLOBAL_ELEGY = -25,         // CAM_SET_ELEGY_SHELL

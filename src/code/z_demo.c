@@ -1540,7 +1540,7 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
         csId = ActorCutscene_FindEntranceCsId();
         if (csId != CS_ID_NONE) {
             scriptIndex = ActorCutscene_GetCutsceneScriptIndex(csId);
-            if (scriptIndex != -1) {
+            if (scriptIndex != CS_SCRIPT_ID_NONE) {
                 // A scripted cutscene is triggered by a spawn
                 if ((play->csCtx.scriptList[scriptIndex].spawnFlags != CS_SPAWN_FLAG_NONE) &&
                     (gSaveContext.respawnFlag == 0)) {
