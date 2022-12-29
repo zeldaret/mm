@@ -118,12 +118,12 @@
 
 /**
  * ARGS
- *   s32 numEntries (e)
+ *   s32 numBytes (b)
  * FORMAT
- *   0000005A eeeeeeee
+ *   0000005A bbbbbbbb
  *   size = 0x8
  */
-#define CS_CAM_SPLINE_LIST(numEntries) { CS_CMD_CAMERA_SPLINE }, { CMD_W(numEntries) }
+#define CS_CAM_SPLINE_LIST(numBytes) { CS_CMD_CAMERA_SPLINE }, { CMD_W(numBytes) }
 
 /**
  * ARGS
