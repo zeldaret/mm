@@ -702,33 +702,46 @@ typedef struct {
     /* 0x0 */ s16 numEntries;
     /* 0x2 */ s16 unk_02; // unused
     /* 0x4 */ s16 unk_04; // unused
-    /* 0x6 */ s16 unk_06;
-} CutsceneCameraCmdHeader; // size = 0x8
+    /* 0x6 */ s16 duration;
+} CsCmdCamSpline; // size = 0x8
 
 // Both camAt and camEye
 typedef struct {
     /* 0x0 */ u8 interpType;
-    /* 0x1 */ u8 unk_01;
-    /* 0x2 */ s16 unk_02;
+    /* 0x1 */ u8 speed; // needs testing
+    /* 0x2 */ s16 duration;
     /* 0x4 */ Vec3s pos;
-    /* 0xA */ s16 unk_0A;
-} CutsceneCameraSubCmd1Cmd2; // size = 0xC
+    /* 0xA */ s16 relativeTo;
+} CsCmdCamPoint; // size = 0xC
 
-typedef struct {
-    /* 0x0 */ CutsceneCameraSubCmd1Cmd2 subCmd1Cmd2[1]; // variable size
-} CutsceneCameraCmd1Cmd2; // size = 0xC * numEntries
+typedef enum {
+    /* 0 */ CS_CAM_INTERP_0,
+    /* 1 */ CS_CAM_INTERP_1,
+    /* 2 */ CS_CAM_INTERP_2,
+    /* 3 */ CS_CAM_INTERP_3,
+    /* 4 */ CS_CAM_INTERP_4,
+    /* 5 */ CS_CAM_INTERP_5,
+    /* 6 */ CS_CAM_INTERP_6,
+    /* 7 */ CS_CAM_INTERP_7,
+} CutsceneCamInterpType;
+
+typedef enum {
+    /* 0 */ CS_CAM_REL_0,
+    /* 1 */ CS_CAM_REL_1,
+    /* 2 */ CS_CAM_REL_2,
+    /* 3 */ CS_CAM_REL_3,
+    /* 4 */ CS_CAM_REL_4,
+    /* 5 */ CS_CAM_REL_5,
+} CutsceneCamRelativeTo;
+
 
 // Roll and Fov Data
 typedef struct {
-    /* 0x0 */ s16 unk_00; // unused
-    /* 0x2 */ s16 unk_02; // roll data
-    /* 0x4 */ s16 unk_04; // fov data
-    /* 0x6 */ s16 unk_06; // unused
-} CutsceneCameraSubCmd3; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ CutsceneCameraSubCmd3 subCmd3[1]; // variable size
-} CutsceneCameraCmd3; // size = 0x8 * numEntries
+    /* 0x0 */ s16 unused0; // unused
+    /* 0x2 */ s16 roll;
+    /* 0x4 */ s16 fov;
+    /* 0x6 */ s16 unused1; // unused
+} CsCmdCamMisc; // size = 0x8
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
@@ -740,26 +753,34 @@ typedef struct {
     /* 0x26 */ s16 unk_26;
     /* 0x28 */ s16 unk_28;
     /* 0x2A */ s16 numEntries;
-    /* 0x1E */ u8 unk_2C;
+    /* 0x1E */ u8 curPoint;
     /* 0x2D */ u8 unk_2D;
     /* 0x2E */ UNK_TYPE1 unk_2E[2];
-} SubCutsceneCamera; // size = 0x30
+} CutsceneCameraInterp; // size = 0x30
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
+    /* 0x00 */ s16 splineIndex;
     /* 0x02 */ s16 cmdIndex;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x10 */ SubCutsceneCamera eyeInterp;
-    /* 0x40 */ SubCutsceneCamera atInterp;
-    /* 0x70 */ CutsceneCameraCmd1Cmd2* atCmd;
-    /* 0x74 */ CutsceneCameraCmd1Cmd2* eyeCmd;
-    /* 0x78 */ CutsceneCameraCmd3* cmd3;
+    /* 0x04 */ s16 splineNeedsInit;
+    /* 0x06 */ s16 state;
+    /* 0x08 */ s16 nextSplineTimer;
+    /* 0x0A */ s16 updateSplineTimer;
+    /* 0x0C */ s16 duration; // Duration of the current spline
+    /* 0x10 */ CutsceneCameraInterp eyeInterp;
+    /* 0x40 */ CutsceneCameraInterp atInterp;
+    /* 0x70 */ CsCmdCamPoint* atCmd;
+    /* 0x74 */ CsCmdCamPoint* eyeCmd;
+    /* 0x78 */ CsCmdCamMisc* miscCmd;
     /* 0x7C */ Camera* camera;
 } CutsceneCamera; // size = 0x80
+
+typedef enum {
+    /* 0 */ CS_CAM_STATE_UPDATE_ALL, // Update spline and next spline timer
+    /* 0 */ CS_CAM_STATE_UPDATE_SPLINE, // Update spline, do not advance next spline timer
+    /* 0 */ CS_CAM_STATE_PAUSE, // No updates
+    /* 0 */ CS_CAM_STATE_DONE_SPLINE, // Finished the current spline, ready for the next one
+    /* 0 */ CS_CAM_STATE_DONE = 999, // Finished all the splines.
+} CutsceneCameraState;
 
 // OoT Remnant
 #define CS_CAM_DATA_NOT_APPLIED 0xFFFF

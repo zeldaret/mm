@@ -2421,8 +2421,8 @@ asm/non_matchings/code/z_shrink_window/ShrinkWindow_Draw.s,ShrinkWindow_Draw,0x8
 asm/non_matchings/code/cutscene_camera/func_80161180.s,func_80161180,0x80161180,0x7
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Init.s,CutsceneCamera_Init,0x8016119C,0x24
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Interpolate.s,CutsceneCamera_Interpolate,0x8016122C,0x23
-asm/non_matchings/code/cutscene_camera/CutsceneCamera_UpdateSpline.s,CutsceneCamera_UpdateSpline,0x801612B8,0x1B8
-asm/non_matchings/code/cutscene_camera/CutsceneCamera_ProcessCommands.s,CutsceneCamera_ProcessCommands,0x80161998,0x85
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_ProcessSpline.s,CutsceneCamera_ProcessSpline,0x801612B8,0x1B8
+asm/non_matchings/code/cutscene_camera/CutsceneCamera_UpdateSplines.s,CutsceneCamera_UpdateSplines,0x80161998,0x85
 asm/non_matchings/code/cutscene_camera/func_80161BAC.s,func_80161BAC,0x80161BAC,0xD
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_SetState.s,CutsceneCamera_SetState,0x80161BE0,0xB
 asm/non_matchings/code/cutscene_camera/CutsceneCamera_Reset.s,CutsceneCamera_Reset,0x80161C0C,0x5

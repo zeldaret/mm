@@ -3,24 +3,15 @@
 extern CutsceneCamera* sCurCsCamera;
 
 // function declarations
-s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
-s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CutsceneCameraCmd1Cmd2* arg3, CutsceneCameraCmd3* arg4,
-                  SubCutsceneCamera* arg5);
+s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
 f32 func_80163660(Actor* actor);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161180.s")
@@ -31,71 +22,71 @@ f32 func_80163660(Actor* actor);
 s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera) {
     csCamera->camera = camera;
 
-    csCamera->unk_08 = csCamera->unk_0A = 0;
+    csCamera->nextSplineTimer = csCamera->updateSplineTimer = 0;
     csCamera->cmdIndex = 0;
-    csCamera->unk_00 = -1;
-    csCamera->unk_04 = 1;
-    csCamera->unk_06 = 0;
+    csCamera->splineIndex = 0xFFFF;
+    csCamera->splineNeedsInit = true;
+    csCamera->state = CS_CAM_STATE_UPDATE_ALL;
 
     sCurCsCamera = csCamera;
 
-    __osMemset(&csCamera->eyeInterp, 0, sizeof(SubCutsceneCamera));
-    __osMemset(&csCamera->atInterp, 0, sizeof(SubCutsceneCamera));
+    __osMemset(&csCamera->eyeInterp, 0, sizeof(CutsceneCameraInterp));
+    __osMemset(&csCamera->atInterp, 0, sizeof(CutsceneCameraInterp));
 
     csCamera->eyeInterp.unk_2D = csCamera->atInterp.unk_2D = 7;
 
     return 1;
 }
 
-s16 (*CutsceneCamera_Interpolate(u8 interpType))(Vec3f*, f32*, s16*, CutsceneCameraCmd1Cmd2*, CutsceneCameraCmd3*,
-                                                 SubCutsceneCamera*) {
+s16 (*CutsceneCamera_Interpolate(u8 interpType))(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*,
+                                                 CutsceneCameraInterp*) {
     switch (interpType) {
-        case 7:
+        case CS_CAM_INTERP_7:
         default:
             return func_80161180;
 
-        case 0:
+        case CS_CAM_INTERP_0:
             return func_8016237C;
 
-        case 5:
+        case CS_CAM_INTERP_5:
             return func_8016253C;
 
-        case 4:
+        case CS_CAM_INTERP_4:
             return func_80162A50;
 
-        case 1:
+        case CS_CAM_INTERP_1:
             return func_801623E4;
 
-        case 2:
+        case CS_CAM_INTERP_2:
             return func_80161C20;
 
-        case 3:
+        case CS_CAM_INTERP_3:
             return func_80161E4C;
 
-        case 6:
+        case CS_CAM_INTERP_6:
             return func_801620CC;
     }
 }
 
-u8 CutsceneCamera_UpdateSpline(CutsceneCamera* csCamera) {
+u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
     s32 sp5C;
     f32* fov;
     s16* roll;
-    s16 (*interpHandler)(Vec3f*, f32*, s16*, CutsceneCameraCmd1Cmd2*, CutsceneCameraCmd3*, SubCutsceneCamera*);
+    s16 (*interpHandler)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
     Player* player;
     Actor* target;
-    s16 sp46;
+    s16 numPoints;
 
     sp5C = true;
-    if (csCamera->unk_06 == 3) {
+    if (csCamera->state == CS_CAM_STATE_DONE_SPLINE) {
         return false;
     }
 
     player = GET_PLAYER(csCamera->camera->play);
     target = csCamera->camera->target;
 
-    if (csCamera->eyeCmd[csCamera->atInterp.unk_2C].subCmd1Cmd2[0].interpType <
-        csCamera->atCmd[csCamera->eyeInterp.unk_2C].subCmd1Cmd2[0].interpType) {
+    if (csCamera->eyeCmd[csCamera->atInterp.curPoint].interpType <
+        csCamera->atCmd[csCamera->eyeInterp.curPoint].interpType) {
         sp5C = false;
     }
 
@@ -114,63 +105,63 @@ u8 CutsceneCamera_UpdateSpline(CutsceneCamera* csCamera) {
         roll = &csCamera->camera->roll;
     }
 
-    interpHandler = CutsceneCamera_Interpolate(csCamera->atCmd[csCamera->eyeInterp.unk_2C].subCmd1Cmd2[0].interpType);
+    interpHandler = CutsceneCamera_Interpolate(csCamera->atCmd[csCamera->eyeInterp.curPoint].interpType);
 
-    switch (csCamera->atCmd[csCamera->eyeInterp.unk_2C].subCmd1Cmd2[0].unk_0A) {
-        case 2:
+    switch (csCamera->atCmd[csCamera->eyeInterp.curPoint].relativeTo) {
+        case CS_CAM_REL_2:
             OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 2);
             break;
 
-        case 3:
+        case CS_CAM_REL_3:
             OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
             break;
 
-        case 1:
+        case CS_CAM_REL_1:
             OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
             break;
 
-        case 4:
+        case CS_CAM_REL_4:
             OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->at, &csCamera->camera->at, 1);
             break;
 
-        case 5:
+        case CS_CAM_REL_5:
             OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->at, &csCamera->camera->at, 2);
             break;
 
-        default:
+        default: // CS_CAM_REL_0
             break;
     }
 
-    sp46 = interpHandler(&csCamera->camera->at, fov, roll, &csCamera->atCmd[csCamera->eyeInterp.unk_2C],
-                         &csCamera->cmd3[csCamera->eyeInterp.unk_2C], &csCamera->eyeInterp);
+    numPoints = interpHandler(&csCamera->camera->at, fov, roll, &csCamera->atCmd[csCamera->eyeInterp.curPoint],
+                              &csCamera->miscCmd[csCamera->eyeInterp.curPoint], &csCamera->eyeInterp);
 
-    switch (csCamera->atCmd[csCamera->eyeInterp.unk_2C].subCmd1Cmd2[0].unk_0A) {
-        case 2:
+    switch (csCamera->atCmd[csCamera->eyeInterp.curPoint].relativeTo) {
+        case CS_CAM_REL_2:
             OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 2);
             break;
 
-        case 3:
+        case CS_CAM_REL_3:
             OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
             csCamera->camera->at.y += func_80163660(&player->actor);
             break;
 
-        case 1:
+        case CS_CAM_REL_1:
             OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->at, &csCamera->camera->at, 1);
             break;
 
-        case 4:
+        case CS_CAM_REL_4:
             OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->at, &csCamera->camera->at, 1);
             break;
 
-        case 5:
+        case CS_CAM_REL_5:
             OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->at, &csCamera->camera->at, 2);
             break;
 
-        default:
+        default: // CS_CAM_REL_0
             break;
     }
 
-    csCamera->eyeInterp.unk_2C += sp46;
+    csCamera->eyeInterp.curPoint += numPoints;
 
     if (sp5C) {
         fov = &csCamera->camera->fov;
@@ -184,66 +175,66 @@ u8 CutsceneCamera_UpdateSpline(CutsceneCamera* csCamera) {
         roll = NULL;
     }
 
-    interpHandler = CutsceneCamera_Interpolate(csCamera->eyeCmd[csCamera->atInterp.unk_2C].subCmd1Cmd2[0].interpType);
+    interpHandler = CutsceneCamera_Interpolate(csCamera->eyeCmd[csCamera->atInterp.curPoint].interpType);
 
-    switch (csCamera->eyeCmd[csCamera->atInterp.unk_2C].subCmd1Cmd2[0].unk_0A) {
-        case 2:
+    switch (csCamera->eyeCmd[csCamera->atInterp.curPoint].relativeTo) {
+        case CS_CAM_REL_2:
             OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
             break;
 
-        case 3:
+        case CS_CAM_REL_3:
             OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
             break;
 
-        case 1:
+        case CS_CAM_REL_1:
             OLib_DbCameraVec3fDiff(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
             break;
 
-        case 4:
+        case CS_CAM_REL_4:
             OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
             break;
 
-        case 5:
+        case CS_CAM_REL_5:
             OLib_DbCameraVec3fDiff(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
             break;
 
-        default:
+        default: // CS_CAM_REL_0
             break;
     }
 
-    sp46 = interpHandler(&csCamera->camera->eye, fov, roll, &csCamera->eyeCmd[csCamera->atInterp.unk_2C],
-                         &csCamera->cmd3[csCamera->atInterp.unk_2C], &csCamera->atInterp);
+    numPoints = interpHandler(&csCamera->camera->eye, fov, roll, &csCamera->eyeCmd[csCamera->atInterp.curPoint],
+                              &csCamera->miscCmd[csCamera->atInterp.curPoint], &csCamera->atInterp);
 
-    switch (csCamera->eyeCmd[csCamera->atInterp.unk_2C].subCmd1Cmd2[0].unk_0A) {
-        case 2:
+    switch (csCamera->eyeCmd[csCamera->atInterp.curPoint].relativeTo) {
+        case CS_CAM_REL_2:
             OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
             break;
 
-        case 3:
+        case CS_CAM_REL_3:
             OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
             csCamera->camera->eye.y += func_80163660(&player->actor);
             break;
 
-        case 1:
+        case CS_CAM_REL_1:
             OLib_DbCameraVec3fSum(&player->actor.world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
             break;
 
-        case 4:
+        case CS_CAM_REL_4:
             OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 1);
             break;
 
-        case 5:
+        case CS_CAM_REL_5:
             OLib_DbCameraVec3fSum(&target->world, &csCamera->camera->eye, &csCamera->camera->eye, 2);
             break;
 
-        default:
+        default: // CS_CAM_REL_0
             break;
     }
 
-    csCamera->atInterp.unk_2C += sp46;
+    csCamera->atInterp.curPoint += numPoints;
 
-    if ((csCamera->eyeInterp.unk_2C >= csCamera->eyeInterp.numEntries) ||
-        (csCamera->atInterp.unk_2C >= csCamera->atInterp.numEntries)) {
+    if ((csCamera->eyeInterp.curPoint >= csCamera->eyeInterp.numEntries) ||
+        (csCamera->atInterp.curPoint >= csCamera->atInterp.numEntries)) {
         return false;
     }
 
@@ -253,98 +244,108 @@ u8 CutsceneCamera_UpdateSpline(CutsceneCamera* csCamera) {
 /**
  * Processes camera cutscene commands
  */
-s32 CutsceneCamera_ProcessCommands(u8* cmd, CutsceneCamera* csCamera) {
-    CutsceneCameraCmdHeader* cmdHeader;
+s32 CutsceneCamera_UpdateSplines(u8* cmd, CutsceneCamera* csCamera) {
+    CsCmdCamSpline* spline;
 
-    switch (csCamera->unk_06) {
-        case 999:
+    switch (csCamera->state) {
+        case CS_CAM_STATE_DONE:
             return 0;
 
-        case 2:
-            return csCamera->unk_08;
+        case CS_CAM_STATE_PAUSE:
+            return csCamera->nextSplineTimer;
 
-        case 1:
-            if (csCamera->unk_0C >= csCamera->unk_0A) {
-                csCamera->unk_0A++;
-                if (csCamera->unk_0C >= csCamera->unk_0A) {
+        case CS_CAM_STATE_UPDATE_SPLINE:
+            if (csCamera->updateSplineTimer <= csCamera->duration) {
+                csCamera->updateSplineTimer++;
+                if (csCamera->updateSplineTimer <= csCamera->duration) {
                     // Process Spline
-                    if (!CutsceneCamera_UpdateSpline(csCamera)) {
-                        csCamera->unk_06 = 3;
+                    if (!CutsceneCamera_ProcessSpline(csCamera)) {
+                        csCamera->state = CS_CAM_STATE_DONE_SPLINE;
                     }
                 }
             }
             break;
 
-        case 3:
+        case CS_CAM_STATE_DONE_SPLINE:
             break;
 
-        default:
-            if (csCamera->unk_04 == 1) {
-                // Header
-                cmdHeader = (CutsceneCameraCmdHeader*)&cmd[csCamera->cmdIndex];
-                csCamera->atInterp.numEntries = csCamera->eyeInterp.numEntries = cmdHeader->numEntries;
-                csCamera->unk_0C = cmdHeader->unk_06;
-                csCamera->cmdIndex += sizeof(CutsceneCameraCmdHeader);
+        default: // CS_CAM_STATE_UPDATE_ALL
+            if (csCamera->splineNeedsInit == true) {
+                // Spline Header
+                spline = (CsCmdCamSpline*)&cmd[csCamera->cmdIndex];
+                csCamera->atInterp.numEntries = csCamera->eyeInterp.numEntries = spline->numEntries;
+                csCamera->duration = spline->duration;
+                csCamera->cmdIndex += sizeof(CsCmdCamSpline);
 
-                // First Command (at)
-                csCamera->atCmd = (CutsceneCameraCmd1Cmd2*)&cmd[csCamera->cmdIndex];
-                csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CutsceneCameraCmd1Cmd2));
+                // At Point
+                csCamera->atCmd = (CsCmdCamPoint*)&cmd[csCamera->cmdIndex];
+                csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamPoint));
 
-                // Second Command (eye)
-                csCamera->eyeCmd = (CutsceneCameraCmd1Cmd2*)&cmd[csCamera->cmdIndex];
-                csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CutsceneCameraCmd1Cmd2));
+                // Misc Point
+                csCamera->eyeCmd = (CsCmdCamPoint*)&cmd[csCamera->cmdIndex];
+                csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamPoint));
 
-                // Third Command
-                csCamera->cmd3 = (CutsceneCameraCmd3*)&cmd[csCamera->cmdIndex];
-                csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CutsceneCameraSubCmd3));
+                // Misc
+                csCamera->miscCmd = (CsCmdCamMisc*)&cmd[csCamera->cmdIndex];
+                csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamMisc));
 
                 // Other Params
-                csCamera->eyeInterp.unk_2C = 0;
-                csCamera->atInterp.unk_2C = 0;
+                csCamera->eyeInterp.curPoint = 0;
+                csCamera->atInterp.curPoint = 0;
 
-                csCamera->unk_04 = 0;
-                csCamera->unk_00 = (csCamera->unk_00 & 0xFFFF) + 1;
-                csCamera->unk_06 = 0;
-                csCamera->unk_08 = csCamera->unk_0A = 0;
+                csCamera->splineNeedsInit = false;
+                csCamera->splineIndex = (csCamera->splineIndex & 0xFFFF) + 1;
+                csCamera->state = CS_CAM_STATE_UPDATE_ALL;
+                csCamera->nextSplineTimer = csCamera->updateSplineTimer = 0;
                 csCamera->eyeInterp.unk_2D = csCamera->atInterp.unk_2D = 7;
             }
 
-            csCamera->unk_08++;
+            csCamera->nextSplineTimer++;
 
-            if (csCamera->unk_0C >= csCamera->unk_0A) {
-                csCamera->unk_0A++;
-                if (csCamera->unk_0C >= csCamera->unk_0A) {
+            if (csCamera->updateSplineTimer <= csCamera->duration) {
+                csCamera->updateSplineTimer++;
+                if (csCamera->updateSplineTimer <= csCamera->duration) {
                     // Process SubCommands
-                    if (!CutsceneCamera_UpdateSpline(csCamera)) {
-                        csCamera->unk_06 = 3;
+                    if (!CutsceneCamera_ProcessSpline(csCamera)) {
+                        csCamera->state = CS_CAM_STATE_DONE_SPLINE;
                     }
                 }
             }
             break;
     }
 
-    if (csCamera->unk_0C < csCamera->unk_08) {
-        csCamera->unk_04 = 1;
-        cmdHeader = (CutsceneCameraCmdHeader*)&cmd[csCamera->cmdIndex];
-        if (cmdHeader->numEntries == -1) {
-            csCamera->unk_06 = 999;
+    if (csCamera->nextSplineTimer > csCamera->duration) {
+        // Next Spline
+        csCamera->splineNeedsInit = true;
+        spline = (CsCmdCamSpline*)&cmd[csCamera->cmdIndex];
+        if (spline->numEntries == -1) {
+            csCamera->state = CS_CAM_STATE_DONE;
             return 0;
         }
     }
 
-    return csCamera->unk_08;
+    return csCamera->nextSplineTimer;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161BAC.s")
+// Unused
+s16 func_80161BAC(void) {
+    u32 ret = sCurCsCamera->state == CS_CAM_STATE_PAUSE;
+
+    if (!ret) {
+        ret = sCurCsCamera->state == CS_CAM_STATE_UPDATE_SPLINE;
+    }
+
+    return ret;
+}
 
 void CutsceneCamera_SetState(s16 state) {
-    if (sCurCsCamera->unk_06 == 0) {
-        sCurCsCamera->unk_06 = state;
+    if (sCurCsCamera->state == CS_CAM_STATE_UPDATE_ALL) {
+        sCurCsCamera->state = state;
     }
 }
 
 void CutsceneCamera_Reset(void) {
-    sCurCsCamera->unk_06 = 0;
+    sCurCsCamera->state = CS_CAM_STATE_UPDATE_ALL;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161C20.s")

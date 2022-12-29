@@ -927,7 +927,7 @@ s32 CutsceneCmd_UpdateCamSpline(PlayState* play, u8* script) {
     script += sizeof(cmdBytes);
 
     if (!Play_IsDebugCamEnabled()) {
-        CutsceneCamera_ProcessCommands(script, &sCutsceneCameraInfo);
+        CutsceneCamera_UpdateSplines(script, &sCutsceneCameraInfo);
     }
     return cmdBytes + sizeof(cmdBytes);
 }
@@ -1115,7 +1115,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                 sCurOcarinaAction = 0;
                 CutsceneCamera_Reset();
             } else {
-                CutsceneCamera_SetState(1);
+                CutsceneCamera_SetState(CS_CAM_STATE_UPDATE_SPLINE);
             }
         }
     }

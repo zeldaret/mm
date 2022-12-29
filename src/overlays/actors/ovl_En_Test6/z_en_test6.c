@@ -60,49 +60,49 @@ CutsceneData D_80A93E80[] = {
     CS_CAM_SPLINE(13, 424, 0, 100),
 
     // Camera At Data
-    /* 0x0 */ CS_CAM_POINT(4, 100, 13, 0, 21, -19, 0),
-    /* 0x1 */ CS_CAM_POINT(4, 100, 18, 0, 21, -19, 0),
-    /* 0x2 */ CS_CAM_POINT(4, 100, 16, 0, 21, -19, 0),
-    /* 0x3 */ CS_CAM_POINT(4, 100, 17, -26, -5, -32, 0),
-    /* 0x4 */ CS_CAM_POINT(4, 100, 15, 0, 18, -32, 0),
-    /* 0x5 */ CS_CAM_POINT(4, 100, 14, 1, 22, -27, 0),
-    /* 0x6 */ CS_CAM_POINT(4, 100, 12, 0, 1, -5, 0),
-    /* 0x7 */ CS_CAM_POINT(4, 100, 7, 16, 29, -77, 0),
-    /* 0x8 */ CS_CAM_POINT(4, 100, 3, 1, 19, 111, 0),
-    /* 0x9 */ CS_CAM_POINT(4, 100, 3, -59, 21, 91, 0),
-    /* 0xA */ CS_CAM_POINT(4, 100, 3, -19, 59, 84, 0),
-    /* 0xB */ CS_CAM_POINT(4, 100, 136, -19, 59, 84, 0),
-    /* 0xC */ CS_CAM_POINT(4, 100, 108, -17, 57, 82, 0),
+    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 13, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 18, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 16, 0, 21, -19, CS_CAM_REL_0),
+    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 17, -26, -5, -32, CS_CAM_REL_0),
+    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 15, 0, 18, -32, CS_CAM_REL_0),
+    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 14, 1, 22, -27, CS_CAM_REL_0),
+    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 12, 0, 1, -5, CS_CAM_REL_0),
+    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 7, 16, 29, -77, CS_CAM_REL_0),
+    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, 1, 19, 111, CS_CAM_REL_0),
+    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -59, 21, 91, CS_CAM_REL_0),
+    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -19, 59, 84, CS_CAM_REL_0),
+    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 136, -19, 59, 84, CS_CAM_REL_0),
+    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 108, -17, 57, 82, CS_CAM_REL_0),
 
     // Camera Eye Data
-    /* 0x0 */ CS_CAM_POINT(4, 100, 13, 0, 50, 681, 0),
-    /* 0x1 */ CS_CAM_POINT(4, 100, 18, 0, 50, 681, 0),
-    /* 0x2 */ CS_CAM_POINT(4, 100, 16, 0, 50, 681, 0),
-    /* 0x3 */ CS_CAM_POINT(4, 100, 17, -104, 375, 345, 0),
-    /* 0x4 */ CS_CAM_POINT(4, 100, 15, 0, -62, 289, 0),
-    /* 0x5 */ CS_CAM_POINT(4, 100, 14, -47, 125, 205, 0),
-    /* 0x6 */ CS_CAM_POINT(4, 100, 12, -58, -17, 199, 0),
-    /* 0x7 */ CS_CAM_POINT(4, 100, 7, 16, 53, 211, 0),
-    /* 0x8 */ CS_CAM_POINT(4, 100, 3, -31, 63, 623, 0),
-    /* 0x9 */ CS_CAM_POINT(4, 100, 3, -341, 464, 542, 0),
-    /* 0xA */ CS_CAM_POINT(4, 100, 3, -341, 464, 542, 0),
-    /* 0xB */ CS_CAM_POINT(4, 100, 136, -341, 464, 542, 0),
-    /* 0xC */ CS_CAM_POINT(4, 100, 108, -339, 462, 540, 0),
+    /* 0x0 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 13, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x1 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 18, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x2 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 16, 0, 50, 681, CS_CAM_REL_0),
+    /* 0x3 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 17, -104, 375, 345, CS_CAM_REL_0),
+    /* 0x4 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 15, 0, -62, 289, CS_CAM_REL_0),
+    /* 0x5 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 14, -47, 125, 205, CS_CAM_REL_0),
+    /* 0x6 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 12, -58, -17, 199, CS_CAM_REL_0),
+    /* 0x7 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 7, 16, 53, 211, CS_CAM_REL_0),
+    /* 0x8 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -31, 63, 623, CS_CAM_REL_0),
+    /* 0x9 */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xA */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 3, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xB */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 136, -341, 464, 542, CS_CAM_REL_0),
+    /* 0xC */ CS_CAM_POINT(CS_CAM_INTERP_4, 100, 108, -339, 462, 540, CS_CAM_REL_0),
 
     // Camera Roll and Fov Data
-    /* 0x0 */ CS_CAM_MISC(15, 0x000A, 70, 0),
-    /* 0x1 */ CS_CAM_MISC(15, 0x000A, 70, 0),
-    /* 0x2 */ CS_CAM_MISC(15, 0x000A, 70, 0),
-    /* 0x3 */ CS_CAM_MISC(10, 0x0002, 60, 0),
-    /* 0x4 */ CS_CAM_MISC(10, 0xFFEC, 55, 0),
-    /* 0x5 */ CS_CAM_MISC(16, 0x0000, 43, 0),
-    /* 0x6 */ CS_CAM_MISC(12, 0x0006, 47, 0),
-    /* 0x7 */ CS_CAM_MISC(5, 0xFFFB, 50, 0),
-    /* 0x8 */ CS_CAM_MISC(2, 0xFFDC, 108, 0),
-    /* 0x9 */ CS_CAM_MISC(2, 0xFFD8, 120, 0),
-    /* 0xA */ CS_CAM_MISC(2, 0xFFC4, 120, 0),
-    /* 0xB */ CS_CAM_MISC(2, 0xFFBA, 130, 0),
-    /* 0xC */ CS_CAM_MISC(2, 0xFFB0, 140, 0),
+    /* 0x0 */ CS_CAM_MISC(15, 0xA, 70, 0),
+    /* 0x1 */ CS_CAM_MISC(15, 0xA, 70, 0),
+    /* 0x2 */ CS_CAM_MISC(15, 0xA, 70, 0),
+    /* 0x3 */ CS_CAM_MISC(10, 0x2, 60, 0),
+    /* 0x4 */ CS_CAM_MISC(10, -0x14, 55, 0),
+    /* 0x5 */ CS_CAM_MISC(16, 0x0, 43, 0),
+    /* 0x6 */ CS_CAM_MISC(12, 0x6, 47, 0),
+    /* 0x7 */ CS_CAM_MISC(5, -0x5, 50, 0),
+    /* 0x8 */ CS_CAM_MISC(2, -0x24, 108, 0),
+    /* 0x9 */ CS_CAM_MISC(2, -0x28, 120, 0),
+    /* 0xA */ CS_CAM_MISC(2, -0x3C, 120, 0),
+    /* 0xB */ CS_CAM_MISC(2, -0x46, 130, 0),
+    /* 0xC */ CS_CAM_MISC(2, -0x50, 140, 0),
 
     // Terminate
     CS_CAM_END()
@@ -769,7 +769,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     }
 
     if ((this->unk_27A <= 115) && (this->unk_27A >= 16)) {
-        CutsceneCamera_ProcessCommands((u8*)D_80A93E80, &this->unk_18C);
+        CutsceneCamera_UpdateSplines((u8*)D_80A93E80, &this->unk_18C);
     } else if (this->unk_27A < 16) {
         subCamId = ActorCutscene_GetCurrentSubCamId(play->playerCsIds[8]);
 

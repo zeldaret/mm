@@ -118,22 +118,45 @@
 
 /**
  * ARGS
- *   s32 entries (e)
+ *   s32 numEntries (e)
  * FORMAT
  *   0000005A eeeeeeee
  *   size = 0x8
  */
-#define CS_CAM_SPLINE_LIST(entries) { CS_CMD_CAMERA_SPLINE }, { CMD_W(entries) }
+#define CS_CAM_SPLINE_LIST(numEntries) { CS_CMD_CAMERA_SPLINE }, { CMD_W(numEntries) }
 
-#define CS_CAM_SPLINE(numEntries, unused0, unused1, unk_06) \
-    { CMD_HH(numEntries, unused0) }, { CMD_HH(unused1, unk_06) }
+/**
+ * ARGS
+ *   s16 numEntries (e), s16 duration (d)
+ * FORMAT
+ *   eeeeUUUU VVVVdddd
+ *   size = 0x8
+ */
+#define CS_CAM_SPLINE(numEntries, unused0, unused1, duration) \
+    { CMD_HH(numEntries, unused0) }, { CMD_HH(unused1, duration) }
 
-#define CS_CAM_POINT(interp, unk_01, unk_02, posX, posY, posZ, unk_0A) \
-    { CMD_BBH(interp, unk_01, unk_02) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, unk_0A) }
+/**
+ * ARGS
+ *   u8 interpType (i), u8 speed (s), s16 duration (d), Vec3s pos (x/y/z), s16 relativeTo (r)
+ * FORMAT
+ *   iissdddd xxxxyyyy zzzzrrrr
+ *   size = 0xC
+ */
+#define CS_CAM_POINT(interpType, speed, duration, posX, posY, posZ, relativeTo) \
+    { CMD_BBH(interpType, speed, duration) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, relativeTo) }
 
+
+/**
+ * ARGS
+ *   s16 roll (r), s16 fov (f)
+ * FORMAT
+ *   UUUUrrrr ffffVVVV
+ *   size = 0x8
+ */
 #define CS_CAM_MISC(unused0, roll, fov, unused1) \
     { CMD_HH(unused0, roll) }, { CMD_HH(fov, unused1) }
 
+// First half-word is read from as `numEntries` in `CS_CAM_SPLINE()`
 #define CS_CAM_END() { CMD_HH(0xFFFF, 4) }
 
 
