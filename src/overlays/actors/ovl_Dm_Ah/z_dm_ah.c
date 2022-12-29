@@ -129,7 +129,7 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (!this->unk_29C) {
-            this->cueId = 0xFF;
+            this->cueId = 255;
             this->unk_29C = true;
             this->animationIndex2 = this->animationIndex;
         }

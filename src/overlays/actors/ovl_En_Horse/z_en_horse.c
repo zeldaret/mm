@@ -2926,7 +2926,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
 
     if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) &&
         (gSaveContext.minigameStatus != MINIGAME_STATUS_END)) {
-        gSaveContext.save.cutscene = 0;
+        gSaveContext.save.cutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_64;
     }

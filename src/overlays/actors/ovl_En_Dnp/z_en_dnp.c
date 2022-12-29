@@ -267,7 +267,7 @@ s32 func_80B3D044(EnDnp* this, PlayState* play) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
             this->actor.flags &= ~ACTOR_FLAG_1;
-            this->cueId = 0xFF;
+            this->cueId = 255;
         }
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;

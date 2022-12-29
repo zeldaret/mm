@@ -626,7 +626,7 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
         this->actor.draw = NULL;
     }
 
-    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450) && this->fireballAlpha > 0) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450) && (this->fireballAlpha > 0)) {
         func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);

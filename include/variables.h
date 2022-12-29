@@ -2389,7 +2389,7 @@ extern GameInfo* gGameInfo;
 // extern UNK_TYPE1 D_801F48C8;
 
 extern UNK_TYPE D_801F4DDC;
-extern u8 D_801F4DE0;
+extern u8 gDisablePlayerCsModeStartPos;
 extern s16 gDungeonBossWarpSceneId;
 
 extern ActorCutscene* sActorCutsceneList;

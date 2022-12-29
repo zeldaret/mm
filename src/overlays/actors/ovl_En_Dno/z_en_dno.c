@@ -243,7 +243,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;
             this->unk_3B0 = 0;
-            this->unk_468 = 99;
+            this->cueId = 99;
             this->skelAnime.playSpeed = 0.0f;
 
             switch (EN_DNO_GET_C000(thisx)) {
@@ -920,7 +920,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_475)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_475);
-        if (this->unk_468 != play->csCtx.actorCues[cueChannel]->id) {
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     phi_a2 = 13;

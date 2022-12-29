@@ -3925,7 +3925,7 @@
     0x801F4D48:("sCutsceneCameraInfo","UNK_TYPE","",0x80),
     0x801F4DC8:("sCueTypeList","u16","[10]",0x14),
     0x801F4DDC:("D_801F4DDC","UNK_TYPE1","",0x1),
-    0x801F4DE0:("D_801F4DE0","UNK_TYPE1","",0x1),
+    0x801F4DE0:("gDisablePlayerCsModeStartPos","UNK_TYPE1","",0x1),
     0x801F4DE2:("gDungeonBossWarpSceneId","UNK_TYPE2","",0x2),
     0x801F4DF0:("sActorCutsceneList","ActorCutscene*","",0x4),
     0x801F4DF4:("sActorCutsceneCount","s16","",0x2),

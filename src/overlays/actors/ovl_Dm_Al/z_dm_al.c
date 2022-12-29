@@ -53,7 +53,7 @@ void func_80C1BDD8(DmAl* this, PlayState* play) {
 
     if (play->csCtx.state != 0) {
         if (!this->unk_45C) {
-            this->cueId = 0xFF;
+            this->cueId = 255;
             this->unk_45C = true;
             this->animIndex2 = this->animIndex;
         }

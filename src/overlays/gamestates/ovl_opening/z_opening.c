@@ -18,7 +18,7 @@ void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
     Sram_InitNewSave();
 
     gSaveContext.save.entrance = sOpeningEntrances[D_801BB12C];
-    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = sOpeningCutscenes[D_801BB12C];
+    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutsceneIndex = sOpeningCutscenes[D_801BB12C];
     gSaveContext.sceneLayer = 0;
 
     gSaveContext.save.time = CLOCK_TIME(8, 0);

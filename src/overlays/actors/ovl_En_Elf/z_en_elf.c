@@ -1346,7 +1346,7 @@ void func_8088FDCC(EnElf* this) {
     this->fairyFlags &= ~0x20;
     this->actor.focus.pos = this->actor.world.pos;
     this->unk_234 = NULL;
-    if ((this->unk_264 & 2) && (this->actor.csId != 0x7C)) {
+    if ((this->unk_264 & 2) && (this->actor.csId != CS_ID_GLOBAL_TALK)) {
         ActorCutscene_Stop(this->actor.csId);
     }
     this->unk_264 &= ~0x20;

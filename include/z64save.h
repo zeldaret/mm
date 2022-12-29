@@ -258,7 +258,7 @@ typedef struct Save {
     /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
     /* 0x0006 */ u8 unk_06;
     /* 0x0007 */ u8 linkAge;                            // "link_age"
-    /* 0x0008 */ s32 cutscene;                          // "day_time"
+    /* 0x0008 */ s32 cutsceneIndex;                     // "day_time"
     /* 0x000C */ u16 time;                              // "zelda_time"
     /* 0x000E */ u16 owlSaveLocation;
     /* 0x0010 */ s32 isNight;                           // "asahiru_fg"
@@ -1517,7 +1517,7 @@ void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
-void func_80144A94(SramContext* sramCtx);
+void Sram_SaveResetFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);

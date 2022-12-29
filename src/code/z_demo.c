@@ -27,7 +27,7 @@ s16 sCutsceneQuakeIndex;
 CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 UNK_TYPE D_801F4DDC;
-u8 D_801F4DE0;
+u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
 
 void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
@@ -43,7 +43,7 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
         sCueTypeList[i] = 0;
     }
 
-    D_801F4DE0 = 0;
+    gDisablePlayerCsModeStartPos = 0;
 
     Audio_SetCutsceneFlag(false);
 }
@@ -70,7 +70,7 @@ CutsceneHandler sManualCutsceneHandlers[] = {
 };
 
 void Cutscene_UpdateManual(PlayState* play, CutsceneContext* csCtx) {
-    if (gSaveContext.save.cutscene < 0xFFF0) {
+    if (gSaveContext.save.cutsceneIndex < 0xFFF0) {
         sManualCutsceneHandlers[csCtx->state](play, csCtx);
     }
 }
@@ -89,11 +89,11 @@ void Cutscene_UpdateScripted(PlayState* play, CutsceneContext* csCtx) {
     }
 
     if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE)) {
-        gSaveContext.save.cutscene = 0xFFFD;
+        gSaveContext.save.cutsceneIndex = 0xFFFD;
         gSaveContext.cutsceneTrigger = 1;
     }
 
-    if (gSaveContext.save.cutscene >= 0xFFF0) {
+    if (gSaveContext.save.cutsceneIndex >= 0xFFF0) {
         Cutscene_SetupScripted(play, csCtx);
         sScriptedCutsceneHandlers[csCtx->state](play, csCtx);
     }
@@ -149,7 +149,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
     }
 
     switch (cmd->type) {
-        case CS_MISC_STORM:
+        case CS_MISC_RAIN:
             if (isFirstFrame) {
                 func_800FD78C(play);
                 play->envCtx.unk_F2[0] = 60;
@@ -317,7 +317,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_1B:
+        case CS_MISC_DEST_CUTSCENE_MAP_MOON_CRASH_FIRE:
             if (isFirstFrame) {
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
@@ -326,7 +326,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_1C:
+        case CS_MISC_SKYBOX_GLOOMY:
             if (isFirstFrame) {
                 // skyboxConfig
                 play->envCtx.unk_17 = 0xD;
@@ -337,23 +337,23 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.playerForm = sCutsceneStoredPlayerForm;
             break;
 
-        case CS_MISC_1E:
-            D_801F4DE0 = true;
+        case CS_MISC_DISABLE_PLAYER_CSMODE_START_POS:
+            gDisablePlayerCsModeStartPos = true;
             break;
 
-        case CS_MISC_1F:
-            D_801F4DE0 = false;
+        case CS_MISC_ENABLE_PLAYER_CSMODE_START_POS:
+            gDisablePlayerCsModeStartPos = false;
             break;
 
-        case CS_MISC_SPECIAL_SAVE:
+        case CS_MISC_SAVE_ENTER_CLOCK_TOWN:
             if (isFirstFrame) {
                 Sram_SaveSpecialEnterClockTown(play);
             }
             break;
 
-        case CS_MISC_SAVE:
+        case CS_MISC_SAVE_RESET_MOON_CRASH:
             if (isFirstFrame) {
-                func_80144A94(&play->sramCtx);
+                Sram_SaveResetFromMoonCrash(&play->sramCtx);
             }
             break;
 
@@ -593,7 +593,7 @@ void CutsceneCmd_DestinationImpl(PlayState* play, CutsceneContext* csCtx, CsCmdD
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = true;
     }
 
-    gSaveContext.save.cutscene = 0;
+    gSaveContext.save.cutsceneIndex = 0;
 
     if (cmd->type == CS_DESTINATION_DEFAULT) {
         play->nextEntrance = play->csCtx.scriptList[play->csCtx.scriptIndex].nextEntrance;
@@ -1456,7 +1456,7 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
 /* End of command handling section */
 
 void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx) {
-    if (gSaveContext.save.cutscene >= 0xFFF0) {
+    if (gSaveContext.save.cutsceneIndex >= 0xFFF0) {
         csCtx->curFrame++;
         Cutscene_ProcessScript(play, csCtx, (u8*)play->csCtx.script);
     }
@@ -1479,7 +1479,7 @@ void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx) {
             csCtx->actorCues[i] = NULL;
         }
 
-        gSaveContext.save.cutscene = 0;
+        gSaveContext.save.cutsceneIndex = 0;
         gSaveContext.gameMode = 0;
 
         ActorCutscene_Stop(CS_ID_GLOBAL_END);
@@ -1490,10 +1490,10 @@ void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx) {
 
 void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
     if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_IDLE) && !Player_InCsMode(play)) {
-        gSaveContext.save.cutscene = 0xFFFD;
+        gSaveContext.save.cutsceneIndex = 0xFFFD;
     }
 
-    if ((gSaveContext.save.cutscene >= 0xFFF0) && (csCtx->state == CS_STATE_IDLE)) {
+    if ((gSaveContext.save.cutsceneIndex >= 0xFFF0) && (csCtx->state == CS_STATE_IDLE)) {
         s16 i;
 
         sCurTextId = 0;

@@ -705,7 +705,7 @@ wordReplace = {
     "gSaveContext.permanentSceneFlags": "gSaveContext.save.permanentSceneFlags",
     "gSaveContext.bomberCode": "gSaveContext.save.bomberCode",
     "gSaveContext.skullTokenCount": "gSaveContext.save.skullTokenCount",
-    "gSaveContext.cutscene": "gSaveContext.save.cutscene",
+    "gSaveContext.cutscene": "gSaveContext.save.cutsceneIndex",
     "gSaveContext.health": "gSaveContext.save.playerData.health",
     "gSaveContext.equips": "gSaveContext.save.equips",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",

@@ -37,11 +37,11 @@ typedef struct {
     /* 0x0C */ s32 startMethod;
     /* 0x10 */ PlayState* play;
     /* 0x14 */ s16 retCamId;
-    /* 0x16 */ s16 cameraStored;
+    /* 0x16 */ s16 isCameraStored;
 } ActorCutsceneManager; // size = 0x18
 
 ActorCutsceneManager sActorCsMgr = {
-    -1, 0, -1, SUB_CAM_ID_DONE, NULL, 0, NULL, CAM_ID_MAIN, 0,
+    CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, 0, NULL, CAM_ID_MAIN, false,
 };
 
 s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility) {
@@ -115,7 +115,7 @@ void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 n
     sActorCsMgr.length = -1;
     sActorCsMgr.targetActor = NULL;
     sActorCsMgr.subCamId = SUB_CAM_ID_DONE;
-    sActorCsMgr.cameraStored = false;
+    sActorCsMgr.isCameraStored = false;
     sActorCsMgr.csId = sActorCsMgr.endCsId;
 }
 
@@ -127,7 +127,7 @@ void ActorCutscene_StoreCamera(Camera* camera) {
         memcpy(&sActorCsMgr.play->subCameras[2], camera, sizeof(Camera));
         sActorCsMgr.play->subCameras[2].camId = camera->camId;
         Camera_ChangeStatus(&sActorCsMgr.play->subCameras[2], CAM_STATUS_INACTIVE);
-        sActorCsMgr.cameraStored = true;
+        sActorCsMgr.isCameraStored = true;
     }
 }
 
@@ -239,7 +239,7 @@ void ActorCutscene_End(void) {
             oldCamId = RET_CAM->camId;
             oldStateFlags = RET_CAM->stateFlags;
 
-            if (sActorCsMgr.cameraStored) {
+            if (sActorCsMgr.isCameraStored) {
                 // Restore the camera that was stored in subCam 2
                 memcpy(RET_CAM, &sActorCsMgr.play->subCameras[2], sizeof(Camera));
 
@@ -247,7 +247,7 @@ void ActorCutscene_End(void) {
                     (RET_CAM->stateFlags & ~CAM_STATE_UNDERWATER) | (CUR_CAM->stateFlags & CAM_STATE_UNDERWATER);
 
                 RET_CAM->stateFlags = (RET_CAM->stateFlags & ~CAM_STATE_2) | (oldStateFlags & CAM_STATE_2);
-                sActorCsMgr.cameraStored = false;
+                sActorCsMgr.isCameraStored = false;
             }
             RET_CAM->camId = oldCamId;
             break;
