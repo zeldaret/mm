@@ -2797,7 +2797,7 @@
     0x80144684:("Sram_GenerateRandomSaveFields",),
     0x80144890:("Sram_InitNewSave",),
     0x80144968:("Sram_InitDebugSave",),
-    0x80144A94:("Sram_SaveResetFromMoonCrash",),
+    0x80144A94:("Sram_ResetSaveFromMoonCrash",),
     0x80144E78:("Sram_OpenSave",),
     0x8014546C:("func_8014546C",),
     0x80145698:("func_80145698",),

@@ -1517,7 +1517,7 @@ void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
 void Sram_InitDebugSave(void);
-void Sram_SaveResetFromMoonCrash(SramContext* sramCtx);
+void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);

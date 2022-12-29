@@ -939,7 +939,7 @@ void Sram_InitDebugSave(void) {
     Sram_GenerateRandomSaveFields();
 }
 
-void Sram_SaveResetFromMoonCrash(SramContext* sramCtx) {
+void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
     s32 i;
     s32 cutsceneIndex = gSaveContext.save.cutsceneIndex;
 

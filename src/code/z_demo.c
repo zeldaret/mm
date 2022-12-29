@@ -351,9 +351,9 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_SAVE_RESET_MOON_CRASH:
+        case CS_MISC_RESET_SAVE_FROM_MOON_CRASH:
             if (isFirstFrame) {
-                Sram_SaveResetFromMoonCrash(&play->sramCtx);
+                Sram_ResetSaveFromMoonCrash(&play->sramCtx);
             }
             break;
 
