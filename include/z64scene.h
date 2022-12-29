@@ -814,7 +814,7 @@ typedef enum {
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
 
 /*
-* Entrances used in cutscene destination. Includes scene layer thats immediately applied to `nextCutsceneIndex` and removed.
+* Entrances used in cutscene destination. Includes scene layer that's immediately applied to `nextCutsceneIndex` and removed.
 * See `CutsceneEntry.nextEntrance`
 * 0xFE00:  Index into sSceneEntranceTable (Scene)
 * 0x01F0:  Index into the scenes specific entrance table (Spawn)

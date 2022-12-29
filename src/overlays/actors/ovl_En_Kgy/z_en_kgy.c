@@ -58,7 +58,8 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
     this->zubora = EnKgy_FindZubora(play);
     this->iceBlock = EnKgy_FindIceBlock(play);
     Flags_UnsetSwitch(play, ENKGY_GET_FE00(&this->actor) + 1);
-    if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (Flags_GetSwitch(play, ENKGY_GET_FE00(&this->actor)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         Flags_SetSwitch(play, ENKGY_GET_FE00(&this->actor) + 1);
         play->envCtx.lightSettingOverride = 1;
         SET_WEEKEVENTREG(WEEKEVENTREG_21_01);

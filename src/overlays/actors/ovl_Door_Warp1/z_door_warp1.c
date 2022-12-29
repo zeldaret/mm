@@ -710,7 +710,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
         } else {
             switch (phi_v0_2) {
                 case 0:
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -726,7 +726,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 1:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_33_80);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE);
                     play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     play->transitionType = TRANS_TYPE_03;
@@ -734,14 +734,14 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 3:
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         play->nextEntrance = ENTRANCE(ZORA_CAPE, 9);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
                         gSaveContext.nextTransitionType = TRANS_TYPE_03;
                     } else {
-                        SET_WEEKEVENTREG(WEEKEVENTREG_55_80);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE);
                         play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
@@ -751,7 +751,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
                     break;
 
                 case 2:
-                    SET_WEEKEVENTREG(WEEKEVENTREG_52_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE);
                     play->nextEntrance = ENTRANCE(IKANA_CANYON, 15);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;

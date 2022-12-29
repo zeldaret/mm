@@ -1376,7 +1376,7 @@ void func_80A143A8(EnGo* this, PlayState* play) {
 void func_80A14430(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
+        (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
         func_80A14018(this, play);
         this->actionFunc = func_80A149B0;
     } else {

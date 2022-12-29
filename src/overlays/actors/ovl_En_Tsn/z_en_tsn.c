@@ -103,7 +103,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
             break;
     }
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_0) {
             this->actionFunc = func_80AE0D78;
         } else {
@@ -144,7 +144,7 @@ void EnTsn_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_Kill(&this->actor);
     }
 }

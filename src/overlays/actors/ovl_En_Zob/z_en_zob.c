@@ -120,7 +120,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80BA0AD8;
             }
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -135,7 +135,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;

@@ -667,10 +667,11 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
         gSaveContext.respawnFlag = -6;
     } else {
         play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
         } else if ((play->nextEntrance == ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8)) &&
-                   CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+                   CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
             play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 8);
         }
     }

@@ -1027,7 +1027,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80B51760;
             }
         } else if (play->sceneId == SCENE_GORONRACE) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                 if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 1)) {
                     this->actionFunc = func_80B51760;
                 } else if (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2)) {

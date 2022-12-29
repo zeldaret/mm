@@ -582,7 +582,7 @@ typedef union CutsceneData {
 #define CS_SPAWN_FLAG_ALWAYS 0xFE
 // Despite there being more than `0x1F` indices for weekEventFlags,
 // this u8 flag entry can only check weekEventFlags with indices [0x0 - 0x1F]
-#define CS_SPAWN_FLAG_WEEKEVENTREG(flag) ((((flag) & 0x1F00) >> 5) | ((bit) & 0x7F))
+#define CS_SPAWN_FLAG_WEEKEVENTREG(flag) ((((flag) & 0x1F00) >> 5) | ((flag) & 0x7F))
 #define CHECK_CS_SPAWN_FLAG_WEEKEVENTREG(spawnFlags) (GET_WEEKEVENTREG((spawnFlags) / 8) & (1 << ((spawnFlags) % 8)))
 #define SET_CS_SPAWN_FLAG_WEEKEVENTREG(spawnFlags) (WEEKEVENTREG((spawnFlags) / 8) = GET_WEEKEVENTREG((spawnFlags) / 8) | (1 << ((spawnFlags) % 8)))
 

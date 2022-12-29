@@ -263,7 +263,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 break;
 
             case 0xD82: // "What has brought you all this way?"
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                     func_80151938(play, 0xD83); // "Could it be... Has spring finally come to the mountains?"
                 } else {
                     func_80151938(play, 0xD86); // "Could it be... You came all this way looking for me?"

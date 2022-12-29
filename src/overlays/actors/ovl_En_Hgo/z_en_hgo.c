@@ -109,7 +109,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     this->textId = 0;
     this->talkFlags = TALK_FLAG_NONE;
     this->isInCutscene = false;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         EnHgo_SetupTalk(this);
     } else {
         thisx->draw = NULL;

@@ -156,7 +156,7 @@ void EnPamera_Init(Actor* thisx, PlayState* play) {
 
         if (1) {}
 
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) ||
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || (gSaveContext.save.entrance == ENTRANCE(IKANA_CANYON, 9))) {
             Actor_Kill(&this->actor);
         }
@@ -569,7 +569,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
     this->actor.update = func_80BDA344;
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->actor.flags |= ACTOR_FLAG_100000;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         func_80BD9E60(this);
         func_80BD9938(this);
     } else {
@@ -605,7 +605,8 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
 
             this->unk_324 = 0x15A8;
         } else if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
-                   (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
+                   (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
             func_80BD93CC(this, 1, 0);
             Message_StartTextbox(play, 0x158E, &this->actor);
             this->unk_324 = 0x158E;

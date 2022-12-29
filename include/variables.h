@@ -482,7 +482,6 @@ extern u8 D_801BB12C;
 // extern UNK_TYPE1 D_801BC210;
 extern Gfx D_801BC240[9];
 extern Gfx D_801BC288[3];
-// extern UNK_TYPE1 D_801BC41E;
 extern ActorCutscene sGlobalActorCutscenes[8];
 extern GameStateOverlay gGameStateOverlayTable[];
 extern s32 graphNumGameStates;

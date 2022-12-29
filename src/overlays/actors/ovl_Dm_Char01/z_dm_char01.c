@@ -67,7 +67,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
 
     switch (DMCHAR01_GET(&this->dyna.actor)) {
         case DMCHAR01_0:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
                 this->unk_34C = 2;
                 this->actionFunc = func_80AA8F1C;
                 break;
@@ -97,7 +97,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             break;
 
         case DMCHAR01_1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) || (gSaveContext.sceneLayer == 1)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE) || (gSaveContext.sceneLayer == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
             } else {
@@ -134,7 +134,7 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodfallSceneryTempleRampAndPlatformCol);
 
             this->unk_34D = true;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
                 this->actionFunc = func_80AA9020;
                 this->dyna.actor.world.pos.y -= 120.0f;
             } else {
@@ -349,7 +349,7 @@ void func_80AA9020(DmChar01* this, PlayState* play) {
         CsCmdActorCue* cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_135)];
 
         if ((cue->startFrame == play->csCtx.curFrame) && (cue->id == 2)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_20_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE);
             this->actionFunc = func_80AA90AC;
         }
     }

@@ -37,7 +37,7 @@ void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {
 void DmChar06_Init(Actor* thisx, PlayState* play) {
     DmChar06* this = THIS;
 
-    SET_WEEKEVENTREG(WEEKEVENTREG_33_80);
+    SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE);
     Actor_SetScale(&this->actor, 1.0f);
     this->alpha = 255;
     DmChar06_SetupAction(this, func_80AAE6F0);

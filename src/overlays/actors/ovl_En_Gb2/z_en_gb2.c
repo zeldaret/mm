@@ -887,7 +887,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
         case ENGB2_7_0:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_80)) {
                 Actor_Kill(&this->actor);
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
 

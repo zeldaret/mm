@@ -40,7 +40,7 @@ ActorInit Obj_Mu_Pict_InitVars = {
 void ObjMuPict_Init(Actor* thisx, PlayState* play) {
     ObjMuPict* this = THIS;
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         Actor_Kill(&this->actor);
     }
 

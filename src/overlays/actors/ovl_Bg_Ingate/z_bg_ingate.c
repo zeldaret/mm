@@ -330,7 +330,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         Actor_SetScale(&this->dyna.actor, 1.0f);
         this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
         }
         if (!CHECK_EVENTINF(EVENTINF_35) && CHECK_WEEKEVENTREG(WEEKEVENTREG_90_40)) {

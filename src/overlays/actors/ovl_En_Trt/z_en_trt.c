@@ -1054,7 +1054,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, PlayState* play) {
         }
     }
     if ((talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 5);
         } else {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_POISONED, 5);

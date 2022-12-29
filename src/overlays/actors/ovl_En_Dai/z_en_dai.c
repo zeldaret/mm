@@ -522,7 +522,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->unk_1CE = 0;
     this->unk_1D6 = 0;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;

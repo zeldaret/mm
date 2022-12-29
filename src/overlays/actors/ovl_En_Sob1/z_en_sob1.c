@@ -406,7 +406,7 @@ void EnSob1_Init(Actor* thisx, PlayState* play) {
             this->shopType = ZORA_SHOP;
             break;
         case GORON_SHOP:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                 this->shopType = GORON_SHOP_SPRING;
             } else {
                 this->shopType = GORON_SHOP;

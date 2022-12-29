@@ -53,7 +53,7 @@ void BgIknvDoukutu_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80BD71BC;
             this->cueType = CS_CMD_ACTOR_CUE_516;
             this->unk_160 = 1.0f;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 this->dyna.actor.draw = func_80BD7768;
                 this->actionFunc = func_80BD73D0;
                 play->envCtx.lightSettingOverride = 25;

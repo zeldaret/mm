@@ -77,7 +77,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);

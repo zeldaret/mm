@@ -104,7 +104,7 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->picto.actor.colChkInfo, NULL, &sColChkInfoInit);
     this->csId = ActorCutscene_GetAdditionalCsId(this->picto.actor.csId);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) ||
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE) ||
         ((this->picto.actor.params != 0xFF) && Flags_GetSwitch(play, this->picto.actor.params))) {
         Actor_Kill(&this->picto.actor);
     } else {

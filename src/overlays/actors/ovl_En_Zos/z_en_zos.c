@@ -100,7 +100,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
 
@@ -120,7 +120,7 @@ void EnZos_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;

@@ -390,7 +390,7 @@ void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play) {
 void func_80AAFCCC(DmChar08* this, PlayState* play) {
     switch (play->sceneId) {
         case SCENE_31MISAKI:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 switch (this->unk_206) {
                     case 0:
                         break;

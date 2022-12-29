@@ -147,7 +147,7 @@ void func_80959624(EnMk* this, PlayState* play) {
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
             textId = 0xFBC;
         } else {
             textId = 0xFBB;
@@ -212,7 +212,7 @@ void func_80959844(EnMk* this, PlayState* play) {
         switch (gSaveContext.save.playerForm) {
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_10)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         textId = 0xFAF;
                     } else {
                         textId = 0xFAE;
@@ -224,7 +224,7 @@ void func_80959844(EnMk* this, PlayState* play) {
 
             case PLAYER_FORM_GORON:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_08)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         textId = 0xFAB;
                     } else {
                         textId = 0xFAA;
@@ -239,7 +239,7 @@ void func_80959844(EnMk* this, PlayState* play) {
                 if (func_80959524(play) > 0) {
                     textId = 0xFA7;
                 } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_04)) {
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                         textId = 0xFBF;
                     } else {
                         textId = 0xFA6;
@@ -283,7 +283,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
                         break;
 
                     case 0xFA2:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                             func_801477B4(play);
                             this->actionFunc = func_80959E18;
                         } else {
@@ -314,7 +314,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 
                     case 0xFA8:
                         SET_WEEKEVENTREG(WEEKEVENTREG_19_08);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                             func_80151938(play, 0xFBD);
                         } else {
                             func_80151938(play, 0xFA9);
@@ -323,7 +323,7 @@ void func_80959A24(EnMk* this, PlayState* play) {
 
                     case 0xFAC:
                         SET_WEEKEVENTREG(WEEKEVENTREG_19_10);
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                             func_80151938(play, 0xFBE);
                         } else {
                             func_80151938(play, 0xFAD);

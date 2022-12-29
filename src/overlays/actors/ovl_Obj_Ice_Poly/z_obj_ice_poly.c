@@ -116,7 +116,7 @@ void ObjIcePoly_Init(Actor* thisx, PlayState* play) {
     thisx->shape.rot.z = -0x500;
 
     if (((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) ||
-        ((play->sceneId == SCENE_KAJIYA) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80))) {
+        ((play->sceneId == SCENE_KAJIYA) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
         Actor_Kill(thisx);
         return;
     }

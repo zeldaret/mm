@@ -161,7 +161,7 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     actorCsIdMax = CS_ID_NONE;
     priorityMax = SHT_MAX;
 
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < ARRAY_COUNT(sNextActorCutsceneList); i++) {
         for (bit = 1, j = 0; j < 8; j++) {
             if (sWaitingActorCutsceneList[i] & bit) {
                 csId = (i << 3) | j;

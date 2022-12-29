@@ -357,7 +357,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
             if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
@@ -384,7 +384,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
             phi_a1 = 0x12FF;
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {

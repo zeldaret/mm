@@ -234,7 +234,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
 s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     play->nextEntrance = ENTRANCE(GORON_RACETRACK, 2);
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
@@ -420,7 +420,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
         if (this->shouldRestartRace) {
             play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                 // Spring
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
