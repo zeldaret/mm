@@ -317,7 +317,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_DEST_CUTSCENE_MAP_MOON_CRASH_FIRE:
+        case CS_MISC_DEST_MOON_CRASH_FIRE_WALL:
             if (isFirstFrame) {
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
@@ -326,7 +326,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_SKYBOX_GLOOMY:
+        case CS_MISC_SKYBOX_MOON_CRASH:
             if (isFirstFrame) {
                 // skyboxConfig
                 play->envCtx.unk_17 = 0xD;
