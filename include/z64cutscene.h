@@ -568,7 +568,7 @@ typedef enum {
     /* 0x25 */ CS_MISC_UNIMPLEMENTED_25,
     /* 0x26 */ CS_MISC_DAWN_OF_A_NEW_DAY,
     /* 0x27 */ CS_MISC_PLAYER_FORM_ZORA,
-    /* 0x28 */ CS_MISC_FOREVER
+    /* 0x28 */ CS_MISC_FINALE
 } CutsceneMiscType;
 
 typedef union CutsceneData {

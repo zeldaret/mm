@@ -129,7 +129,6 @@ void CutsceneHandler_StartScript(PlayState* play, CutsceneContext* csCtx) {
 
 /* Start of command handling section */
 
-// Command 0x96: Miscellaneous commands.
 void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
     static u16 D_801BB15C = 0xFFFF;
     Player* player = GET_PLAYER(play);
@@ -392,7 +391,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.playerForm = PLAYER_FORM_ZORA;
             break;
 
-        case CS_MISC_FOREVER:
+        case CS_MISC_FINALE:
             csCtx->curFrame = cmd->startFrame - 1; // the cutscene runs forever
             break;
 
@@ -458,45 +457,38 @@ void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCm
 
 #ifdef NON_MATCHING
 // needs in-function static bss
-// audio related
 void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd) {
     static u16 sSeqId;
     u8 dayMinusOne;
 
     if (csCtx->curFrame == cmd->startFrame) {
-        dayMinusOne = (gSaveContext.save.day - 1);
+        dayMinusOne = gSaveContext.save.day - 1;
         if (dayMinusOne >= 3) {
             dayMinusOne = 0;
         }
 
         switch (cmd->type) {
             case CS_MOD_SEQ_0:
-                // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_1);
                 func_801A246C(SEQ_PLAYER_BGM_MAIN, 1);
                 break;
 
             case CS_MOD_SEQ_1:
-                // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_0);
                 func_801A246C(SEQ_PLAYER_BGM_MAIN, 0);
                 break;
 
             case CS_MOD_SEQ_2:
-                // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_2);
                 func_801A246C(SEQ_PLAYER_BGM_MAIN, 2);
                 break;
 
             case CS_MOD_AMBIENCE_0:
-                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_1);
                 func_801A246C(SEQ_PLAYER_AMBIENCE, 1);
                 break;
 
             case CS_MOD_AMBIENCE_1:
-                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_0);
                 func_801A246C(SEQ_PLAYER_AMBIENCE, 0);
                 break;
 
             case CS_MOD_AMBIENCE_2:
-                // func_801A246C(SEQ_PLAYER_AMBIENCE, TYPE_2);
                 func_801A246C(SEQ_PLAYER_AMBIENCE, 2);
                 break;
 
@@ -508,6 +500,9 @@ void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdMo
                 if (sSeqId != NA_BGM_DISABLED) {
                     Audio_PlaySceneSequence(sSeqId, dayMinusOne);
                 }
+                break;
+
+            default:
                 break;
         }
     }
