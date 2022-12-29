@@ -1069,7 +1069,7 @@ asm/non_matchings/code/z_demo/CutsceneCmd_FadeOutAmbience.s,CutsceneCmd_FadeOutA
 asm/non_matchings/code/z_demo/CutsceneCmd_RumbleController.s,CutsceneCmd_RumbleController,0x800EAF20,0x30
 asm/non_matchings/code/z_demo/CutsceneCmd_FadeColorScreen.s,CutsceneCmd_FadeColorScreen,0x800EAFE0,0x7F
 asm/non_matchings/code/z_demo/CutsceneCmd_SetTime.s,CutsceneCmd_SetTime,0x800EB1DC,0x62
-asm/non_matchings/code/z_demo/CutsceneCmd_DestinationImpl.s,CutsceneCmd_DestinationImpl,0x800EB364,0x54
+asm/non_matchings/code/z_demo/CutsceneCmd_DestinationDefault.s,CutsceneCmd_DestinationDefault,0x800EB364,0x54
 asm/non_matchings/code/z_demo/CutsceneCmd_Destination.s,CutsceneCmd_Destination,0x800EB4B4,0x91
 asm/non_matchings/code/z_demo/CutsceneCmd_ChooseCreditsScenes.s,CutsceneCmd_ChooseCreditsScenes,0x800EB6F8,0x11C
 asm/non_matchings/code/z_demo/CutsceneCmd_MotionBlur.s,CutsceneCmd_MotionBlur,0x800EBB68,0x5A

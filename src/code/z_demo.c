@@ -16,7 +16,7 @@ void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx);
 UNK_TYPE4 D_801BB120 = 0;
 u16 sCurTextId = 0;
 u16 sCurOcarinaAction = 0;
-u8 D_801BB12C = 0;
+u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
 
 // bss
@@ -575,7 +575,7 @@ void CutsceneCmd_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdTime* cmd
     }
 }
 
-void CutsceneCmd_DestinationImpl(PlayState* play, CutsceneContext* csCtx, CsCmdDestination* cmd) {
+void CutsceneCmd_DestinationDefault(PlayState* play, CutsceneContext* csCtx, CsCmdDestination* cmd) {
     csCtx->state = CS_STATE_RUN_UNSTOPPABLE;
     func_80165690();
     Audio_SetCutsceneFlag(false);
@@ -594,12 +594,13 @@ void CutsceneCmd_DestinationImpl(PlayState* play, CutsceneContext* csCtx, CsCmdD
         play->nextEntrance = play->csCtx.scriptList[play->csCtx.scriptIndex].nextEntrance;
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
+
         if (gSaveContext.gameMode != 1) {
             Scene_SetExitFade(play);
         } else {
-            D_801BB12C++;
-            if (D_801BB12C >= 2) {
-                D_801BB12C = 0;
+            gOpeningEntranceIndex++;
+            if (gOpeningEntranceIndex >= 2) {
+                gOpeningEntranceIndex = 0;
             }
             play->transitionType = TRANS_TYPE_04;
         }
@@ -615,7 +616,7 @@ void CutsceneCmd_DestinationImpl(PlayState* play, CutsceneContext* csCtx, CsCmdD
 void CutsceneCmd_Destination(PlayState* play, CutsceneContext* csCtx, CsCmdDestination* cmd) {
     if (cmd->type == CS_DESTINATION_DEFAULT) {
         if (csCtx->curFrame == cmd->startFrame) {
-            CutsceneCmd_DestinationImpl(play, csCtx, cmd);
+            CutsceneCmd_DestinationDefault(play, csCtx, cmd);
         }
     } else if (cmd->type == CS_DESTINATION_BOSS_WARP) {
         if (csCtx->curFrame == cmd->startFrame) {
@@ -676,7 +677,7 @@ void CutsceneCmd_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, Cs
     if ((csCtx->curFrame >= cmd->startFrame) && (func_801A3950(SEQ_PLAYER_BGM_MAIN, true) != 0xFF)) {
         switch (cmd->type) {
             case CS_CREDITS_DESTINATION:
-                CutsceneCmd_DestinationImpl(play, csCtx, (CsCmdDestination*)cmd);
+                CutsceneCmd_DestinationDefault(play, csCtx, (CsCmdDestination*)cmd);
                 break;
 
             case CS_CREDITS_MASK_KAMARO:
@@ -920,15 +921,15 @@ void CutsceneCmd_Transition(PlayState* play, CutsceneContext* csCtx, CsCmdTransi
 }
 
 s32 CutsceneCmd_UpdateCamSpline(PlayState* play, u8* script) {
-    s32 cmdEntries = 0;
+    s32 cmdBytes = 0;
 
-    bcopy(script, &cmdEntries, sizeof(cmdEntries));
-    script += sizeof(cmdEntries);
+    bcopy(script, &cmdBytes, sizeof(cmdBytes));
+    script += sizeof(cmdBytes);
 
     if (!Play_IsDebugCamEnabled()) {
         CutsceneCamera_ProcessCommands(script, &sCutsceneCameraInfo);
     }
-    return cmdEntries + sizeof(cmdEntries);
+    return cmdBytes + sizeof(cmdBytes);
 }
 
 /**
@@ -1003,11 +1004,10 @@ s32 Cutscene_CountNormalMasks(void) {
 }
 
 void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
-    static s32 D_801BB160 = CS_TEXT_TYPE_DEFAULT;
+    static s32 sCutsceneTextboxType = CS_TEXT_TYPE_DEFAULT;
     u8 talkState;
     s32 pad;
     u16 endFrame;
-    s32 pad2;
 
     if ((cmd->startFrame >= csCtx->curFrame) || ((cmd->endFrame < csCtx->curFrame))) {
         return;
@@ -1015,10 +1015,10 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
 
     if (cmd->type != CS_TEXT_OCARINA_ACTION) {
         if (sCurTextId != cmd->textId) {
-            if (D_801BB160 == CS_TEXT_TYPE_3) {
+            if (sCutsceneTextboxType == CS_TEXT_TYPE_3) {
                 csCtx->curFrame--;
             }
-            D_801BB160 = CS_TEXT_TYPE_1;
+            sCutsceneTextboxType = CS_TEXT_TYPE_1;
             sCurTextId = cmd->textId;
             if (cmd->type == CS_TEXT_TYPE_BOSSES_REMAINS) {
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
@@ -1044,7 +1044,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             goto else_label;
         }
     } else if (sCurOcarinaAction != cmd->textId) {
-        D_801BB160 = CS_TEXT_OCARINA_ACTION;
+        sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
         sCurOcarinaAction = cmd->textId;
         func_80152434(play, cmd->textId);
     } else {
@@ -1058,6 +1058,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
                 (talkState != TEXT_STATE_8)) {
                 csCtx->curFrame--;
+
                 if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                     if (play->msgCtx.choiceIndex == 0) {
                         if (cmd->textId == 0x33BD) {
@@ -1068,7 +1069,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                         if (cmd->altTextId1 != 0xFFFF) {
                             func_80151938(play, cmd->altTextId1);
                             if (cmd->type == CS_TEXT_TYPE_3) {
-                                D_801BB160 = CS_TEXT_TYPE_3;
+                                sCutsceneTextboxType = CS_TEXT_TYPE_3;
                                 if (cmd->altTextId2 != 0xFFFF) {
                                     csCtx->curFrame++;
                                 }
@@ -1086,7 +1087,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                         if (cmd->altTextId2 != 0xFFFF) {
                             func_80151938(play, cmd->altTextId2);
                             if (cmd->type == CS_TEXT_TYPE_3) {
-                                D_801BB160 = CS_TEXT_TYPE_3;
+                                sCutsceneTextboxType = CS_TEXT_TYPE_3;
                                 if (cmd->altTextId1 != 0xFFFF) {
                                     csCtx->curFrame++;
                                 }
@@ -1103,7 +1104,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                 }
             }
 
-            if ((talkState == TEXT_STATE_CLOSING) && (D_801BB160 == CS_TEXT_TYPE_3)) {
+            if ((talkState == TEXT_STATE_CLOSING) && (sCutsceneTextboxType == CS_TEXT_TYPE_3)) {
                 csCtx->curFrame--;
                 sCurTextId++;
             }
@@ -1194,27 +1195,25 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
         bcopy(script, &cmdType, sizeof(cmdType));
         script += sizeof(cmdType);
 
-        // TODO: This should probably be added to the CutsceneCmd enum. Consider doing it when this function matches.
-        if (cmdType == 0xFFFFFFFF) {
+        if (cmdType == CS_CAM_STOP) {
             break;
         }
 
         // Check special cases of command types. This are generic ActorCues
-        // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
         if (((cmdType >= CS_CMD_ACTOR_CUE_100) && (cmdType <= CS_CMD_ACTOR_CUE_149)) ||
             (cmdType == CS_CMD_ACTOR_CUE_201) ||
             ((cmdType >= CS_CMD_ACTOR_CUE_450) && (cmdType <= CS_CMD_ACTOR_CUE_599))) {
             for (j = 0; j < ARRAY_COUNT(sCueTypeList); j = (s16)(j + 1)) {
                 if (sCueTypeList[j] == (u16)cmdType) {
                     Cutscene_SetActorCue(csCtx, &script, j);
-                    cmdType = -2;
+                    cmdType = CS_CMD_ACTOR_CUE_POST_PROCESS;
                     break;
                 }
 
                 if (sCueTypeList[j] == 0) {
                     sCueTypeList[j] = cmdType;
                     Cutscene_SetActorCue(csCtx, &script, j);
-                    cmdType = -2;
+                    cmdType = CS_CMD_ACTOR_CUE_POST_PROCESS;
                     break;
                 }
             }
@@ -1434,7 +1433,7 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
                 }
                 break;
 
-            case -2:
+            case CS_CMD_ACTOR_CUE_POST_PROCESS:
                 break;
 
             default:
@@ -1509,7 +1508,9 @@ void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
 
             csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
             CutsceneCamera_Init(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
-            csCtx->unk_18 = 0xFFFF;
+
+            // OoT Remnant
+            csCtx->camEyeSplinePointsAppliedFrame = CS_CAM_DATA_NOT_APPLIED;
 
             if (gSaveContext.cutsceneTrigger == 0) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
@@ -1596,21 +1597,21 @@ void Cutscene_SetScript(PlayState* play, u8 scriptIndex) {
  * and the current cutscene frame
  */
 void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 cueChannel) {
-    Vec3f start;
-    Vec3f end;
-    CsCmdActorCue* entry = play->csCtx.actorCues[cueChannel];
+    Vec3f startPos;
+    Vec3f endPos;
+    CsCmdActorCue* cue = play->csCtx.actorCues[cueChannel];
     f32 lerp;
 
-    start.x = entry->startPos.x;
-    start.y = entry->startPos.y;
-    start.z = entry->startPos.z;
-    end.x = entry->endPos.x;
-    end.y = entry->endPos.y;
-    end.z = entry->endPos.z;
+    startPos.x = cue->startPos.x;
+    startPos.y = cue->startPos.y;
+    startPos.z = cue->startPos.z;
+    endPos.x = cue->endPos.x;
+    endPos.y = cue->endPos.y;
+    endPos.z = cue->endPos.z;
 
-    lerp = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.curFrame);
+    lerp = Environment_LerpWeight(cue->endFrame, cue->startFrame, play->csCtx.curFrame);
 
-    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, lerp);
+    VEC3F_LERPIMPDST(&actor->world.pos, &startPos, &endPos, lerp);
 }
 
 /**
@@ -1629,24 +1630,24 @@ void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 cueChannel
  * position and the current cutscene frame
  */
 void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel) {
-    Vec3f start;
-    Vec3f end;
-    CsCmdActorCue* entry;
+    Vec3f startPos;
+    Vec3f endPos;
+    CsCmdActorCue* cue;
     f32 lerp;
 
-    start.x = play->csCtx.actorCues[cueChannel]->startPos.x;
-    start.y = play->csCtx.actorCues[cueChannel]->startPos.y;
-    start.z = play->csCtx.actorCues[cueChannel]->startPos.z;
-    end.x = play->csCtx.actorCues[cueChannel]->endPos.x;
-    end.y = play->csCtx.actorCues[cueChannel]->endPos.y;
-    end.z = play->csCtx.actorCues[cueChannel]->endPos.z;
+    startPos.x = play->csCtx.actorCues[cueChannel]->startPos.x;
+    startPos.y = play->csCtx.actorCues[cueChannel]->startPos.y;
+    startPos.z = play->csCtx.actorCues[cueChannel]->startPos.z;
+    endPos.x = play->csCtx.actorCues[cueChannel]->endPos.x;
+    endPos.y = play->csCtx.actorCues[cueChannel]->endPos.y;
+    endPos.z = play->csCtx.actorCues[cueChannel]->endPos.z;
 
-    entry = play->csCtx.actorCues[cueChannel];
-    lerp = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.curFrame);
+    cue = play->csCtx.actorCues[cueChannel];
+    lerp = Environment_LerpWeight(cue->endFrame, cue->startFrame, play->csCtx.curFrame);
 
-    VEC3F_LERPIMPDST(&actor->world.pos, &start, &end, lerp);
+    VEC3F_LERPIMPDST(&actor->world.pos, &startPos, &endPos, lerp);
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 
@@ -1655,23 +1656,23 @@ void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueC
  * position and the current cutscene frame
  */
 void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel) {
-    Vec3f start;
-    Vec3f end;
-    CsCmdActorCue* entry;
+    Vec3f startPos;
+    Vec3f endPos;
+    CsCmdActorCue* cue;
     f32 lerp;
 
-    start.x = play->csCtx.actorCues[cueChannel]->startPos.x;
-    start.z = play->csCtx.actorCues[cueChannel]->startPos.z;
-    end.x = play->csCtx.actorCues[cueChannel]->endPos.x;
-    end.z = play->csCtx.actorCues[cueChannel]->endPos.z;
+    startPos.x = play->csCtx.actorCues[cueChannel]->startPos.x;
+    startPos.z = play->csCtx.actorCues[cueChannel]->startPos.z;
+    endPos.x = play->csCtx.actorCues[cueChannel]->endPos.x;
+    endPos.z = play->csCtx.actorCues[cueChannel]->endPos.z;
 
-    entry = play->csCtx.actorCues[cueChannel];
-    lerp = Environment_LerpWeight(entry->endFrame, entry->startFrame, play->csCtx.curFrame);
+    cue = play->csCtx.actorCues[cueChannel];
+    lerp = Environment_LerpWeight(cue->endFrame, cue->startFrame, play->csCtx.curFrame);
 
-    actor->world.pos.x = start.x + (end.x - start.x) * lerp;
-    actor->world.pos.z = start.z + (end.z - start.z) * lerp;
+    actor->world.pos.x = startPos.x + (endPos.x - startPos.x) * lerp;
+    actor->world.pos.z = startPos.z + (endPos.z - startPos.z) * lerp;
 
-    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&start, &end), 10, 1000, 1);
+    Math_SmoothStepToS(&actor->world.rot.y, Math_Vec3f_Yaw(&startPos, &endPos), 10, 1000, 1);
     actor->shape.rot.y = actor->world.rot.y;
 }
 

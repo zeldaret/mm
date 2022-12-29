@@ -28,6 +28,12 @@ ActorCutscene sGlobalActorCutscenes[8] = {
       CS_END_CAM_0, 32 },
 };
 
+typedef enum {
+    /* 0 */ CS_START_0,
+    /* 1 */ CS_START_1,
+    /* 2 */ CS_START_2,
+} ActorCutsceneStartMethod;
+
 typedef struct {
     /* 0x00 */ s16 csId;
     /* 0x02 */ s16 length;
@@ -41,7 +47,7 @@ typedef struct {
 } ActorCutsceneManager; // size = 0x18
 
 ActorCutsceneManager sActorCsMgr = {
-    CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, 0, NULL, CAM_ID_MAIN, false,
+    CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
 
 s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility) {
@@ -151,15 +157,11 @@ s16 ActorCutscene_MarkNextCutscenes(void) {
     s16 bit;
     s32 i;
     s32 j;
-    s16 priorityMax;
-    s16 actorCsIdMax;
-    s32 count;
+    s32 count = 0;
+    s16 actorCsIdMax = CS_ID_NONE;
+    s16 priorityMax = SHT_MAX;
     s16 csId;
     s16 priority;
-
-    count = 0;
-    actorCsIdMax = CS_ID_NONE;
-    priorityMax = SHT_MAX;
 
     for (i = 0; i < ARRAY_COUNT(sNextActorCutsceneList); i++) {
         for (bit = 1, j = 0; j < 8; j++) {
@@ -190,12 +192,12 @@ void ActorCutscene_End(void) {
     s16 oldStateFlags;
 
     switch (sActorCsMgr.startMethod) {
-        case 2:
+        case CS_START_2:
             sActorCsMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
             // fallthrough
-        case 1:
+        case CS_START_1:
             func_800B7298(sActorCsMgr.play, 0, PLAYER_CSMODE_END);
-            sActorCsMgr.startMethod = 0;
+            sActorCsMgr.startMethod = CS_START_0;
             break;
 
         default:
@@ -325,37 +327,37 @@ s16 ActorCutscene_GetCanPlayNext(s16 csId) {
  * Start an actor cutscene, activate Player Cutscene Mode "Wait"
  */
 s16 ActorCutscene_StartWithPlayerCs(s16 csId, Actor* actor) {
-    s16 sp1E = ActorCutscene_Start(csId, actor);
+    s16 startCsId = ActorCutscene_Start(csId, actor);
 
-    if (sp1E >= 0) {
+    if (startCsId >= 0) {
         func_800B7298(sActorCsMgr.play, 0, PLAYER_CSMODE_WAIT);
         if (sActorCsMgr.length == 0) {
             ActorCutscene_Stop(sActorCsMgr.csId);
         }
-        sActorCsMgr.startMethod = 1;
+        sActorCsMgr.startMethod = CS_START_1;
     }
-    return sp1E;
+    return startCsId;
 }
 
 /**
  * Start an actor cutscene, activate Player Cutscene Mode "Wait", turn on ACTOR_FLAG_100000
  */
 s16 ActorCutscene_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
-    s16 sp1E = ActorCutscene_Start(csId, actor);
+    s16 startCsId = ActorCutscene_Start(csId, actor);
 
-    if (sp1E >= 0) {
+    if (startCsId >= 0) {
         func_800B7298(sActorCsMgr.play, 0, PLAYER_CSMODE_WAIT);
         if (sActorCsMgr.length == 0) {
             ActorCutscene_Stop(sActorCsMgr.csId);
         }
         if (actor != NULL) {
             actor->flags |= ACTOR_FLAG_100000;
-            sActorCsMgr.startMethod = 2;
+            sActorCsMgr.startMethod = CS_START_2;
         } else {
-            sActorCsMgr.startMethod = 1;
+            sActorCsMgr.startMethod = CS_START_1;
         }
     }
-    return sp1E;
+    return startCsId;
 }
 
 s16 ActorCutscene_Start(s16 csId, Actor* actor) {
@@ -368,7 +370,7 @@ s16 ActorCutscene_Start(s16 csId, Actor* actor) {
         return csId;
     }
 
-    sActorCsMgr.startMethod = 0;
+    sActorCsMgr.startMethod = CS_START_0;
     actorCs = ActorCutscene_GetCutsceneImpl(csId);
 
     ShrinkWindow_Letterbox_SetSizeTarget(actorCs->letterboxSize);

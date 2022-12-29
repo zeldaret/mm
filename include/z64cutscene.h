@@ -229,7 +229,7 @@ typedef enum {
     /*  1 */ CS_TEXT_TYPE_1,
     /*  2 */ CS_TEXT_OCARINA_ACTION,
     /*  3 */ CS_TEXT_TYPE_3,
-    /*  4 */ CS_TEXT_TYPE_BOSSES_REMAINS,
+    /*  4 */ CS_TEXT_TYPE_BOSSES_REMAINS, // use `altText1` in the Giant Cutscene if all remains are already obtained
     /*  5 */ CS_TEXT_TYPE_ALL_NORMAL_MASKS
 } CutsceneTextboxType;
 
@@ -524,7 +524,9 @@ typedef enum {
     /* 0x254 */ CS_CMD_ACTOR_CUE_596,
     /* 0x255 */ CS_CMD_ACTOR_CUE_597,
     /* 0x256 */ CS_CMD_ACTOR_CUE_598,
-    /* 0x257 */ CS_CMD_ACTOR_CUE_599
+    /* 0x257 */ CS_CMD_ACTOR_CUE_599,
+    /*    -2 */ CS_CMD_ACTOR_CUE_POST_PROCESS = 0xFFFFFFFE,
+    /*    -1 */ CS_CAM_STOP, // OoT Remnant
 } CutsceneCmd;
 
 typedef enum {
@@ -602,10 +604,8 @@ typedef struct {
     /* 0x10 */ u16 curFrame;
     /* 0x12 */ u16 scriptIndex;
     /* 0x14 */ s32 subCamId;
-    /* 0x18 */ u16 unk_18;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ UNK_TYPE1 unk_1C[0x8];
+    /* 0x18 */ u16 camEyeSplinePointsAppliedFrame; // Remnant of OoT. Set but never used.
+    /* 0x1C */ UNK_TYPE1 unk_1C[0xA]; // Remnant of cam data from OoT
     /* 0x24 */ CsCmdActorCue* playerCue;
     /* 0x28 */ CsCmdActorCue* actorCues[10]; // "npcdemopnt"
     /* 0x50 */ CutsceneEntry* scriptList;
@@ -760,5 +760,8 @@ typedef struct {
     /* 0x78 */ CutsceneCameraCmd3* cmd3;
     /* 0x7C */ Camera* camera;
 } CutsceneCamera; // size = 0x80
+
+// OoT Remnant
+#define CS_CAM_DATA_NOT_APPLIED 0xFFFF
 
 #endif

@@ -1555,7 +1555,7 @@
     0x800EAF20:("CutsceneCmd_RumbleController",),
     0x800EAFE0:("CutsceneCmd_FadeColorScreen",),
     0x800EB1DC:("CutsceneCmd_SetTime",),
-    0x800EB364:("CutsceneCmd_DestinationImpl",),
+    0x800EB364:("CutsceneCmd_DestinationDefault",),
     0x800EB4B4:("CutsceneCmd_Destination",),
     0x800EB6F8:("CutsceneCmd_ChooseCreditsScenes",),
     0x800EBB68:("CutsceneCmd_MotionBlur",),

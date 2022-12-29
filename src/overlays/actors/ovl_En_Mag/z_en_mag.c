@@ -383,9 +383,9 @@ void EnMag_Update(Actor* thisx, PlayState* play) {
                             CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_B)) {
                             if (play->transitionTrigger != TRANS_TRIGGER_START) {
                                 Audio_SetCutsceneFlag(false);
-                                D_801BB12C++;
-                                if (D_801BB12C >= 2) {
-                                    D_801BB12C = 0;
+                                gOpeningEntranceIndex++;
+                                if (gOpeningEntranceIndex >= 2) {
+                                    gOpeningEntranceIndex = 0;
                                 }
                                 play_sound(NA_SE_SY_PIECE_OF_HEART);
                                 gSaveContext.gameMode = 2; // Go to FileChoose

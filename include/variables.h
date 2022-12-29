@@ -477,7 +477,7 @@ extern EffectShieldParticleInit shieldParticleInitWood;
 // extern UNK_TYPE2 D_801BB0FC;
 // extern UNK_TYPE1 D_801BB100;
 
-extern u8 D_801BB12C;
+extern u8 gOpeningEntranceIndex;
 
 // extern UNK_TYPE1 D_801BC210;
 extern Gfx D_801BC240[9];
