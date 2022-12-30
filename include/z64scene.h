@@ -815,7 +815,7 @@ typedef enum {
 
 /*
 * Entrances used in cutscene destination. Includes scene layer that's immediately applied to `nextCutsceneIndex` and removed.
-* See `CutsceneEntry.nextEntrance`
+* See `CutsceneScriptEntry.nextEntrance`
 * 0xFE00:  Index into sSceneEntranceTable (Scene)
 * 0x01F0:  Index into the scenes specific entrance table (Spawn)
 * 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneLayer

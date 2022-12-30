@@ -1040,85 +1040,87 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             } else {
                 Message_StartTextbox(play, cmd->textId, NULL);
             }
-        } else {
-            goto else_label;
+            goto end;
         }
-    } else if (sCurOcarinaAction != cmd->textId) {
-        sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
-        sCurOcarinaAction = cmd->textId;
-        func_80152434(play, cmd->textId);
     } else {
-    else_label:
-        if (csCtx->curFrame >= cmd->endFrame) {
-            // The Textbox command can change the current cutscene frame, mainly to prevent advancing the cutscene when
-            // a textbox that is expected to be closed by the user is still open.
-
-            endFrame = csCtx->curFrame;
-            talkState = Message_GetState(&play->msgCtx);
-            if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
-                (talkState != TEXT_STATE_8)) {
-                csCtx->curFrame--;
-
-                if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-                    if (play->msgCtx.choiceIndex == 0) {
-                        if (cmd->textId == 0x33BD) {
-                            // Gormon Track: do you understand?
-                            func_8019F230();
-                        }
-
-                        if (cmd->altTextId1 != 0xFFFF) {
-                            func_80151938(play, cmd->altTextId1);
-                            if (cmd->type == CS_TEXT_TYPE_3) {
-                                sCutsceneTextboxType = CS_TEXT_TYPE_3;
-                                if (cmd->altTextId2 != 0xFFFF) {
-                                    csCtx->curFrame++;
-                                }
-                            }
-                        } else {
-                            func_801477B4(play);
-                            csCtx->curFrame++;
-                        }
-                    } else {
-                        if (cmd->textId == 0x33BD) {
-                            // Gormon Track: do you understand?
-                            func_8019F208();
-                        }
-
-                        if (cmd->altTextId2 != 0xFFFF) {
-                            func_80151938(play, cmd->altTextId2);
-                            if (cmd->type == CS_TEXT_TYPE_3) {
-                                sCutsceneTextboxType = CS_TEXT_TYPE_3;
-                                if (cmd->altTextId1 != 0xFFFF) {
-                                    csCtx->curFrame++;
-                                }
-                            }
-                        } else {
-                            func_801477B4(play);
-                            csCtx->curFrame++;
-                        }
-                    }
-                }
-
-                if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                    func_80152434(play, cmd->textId);
-                }
-            }
-
-            if ((talkState == TEXT_STATE_CLOSING) && (sCutsceneTextboxType == CS_TEXT_TYPE_3)) {
-                csCtx->curFrame--;
-                sCurTextId++;
-            }
-
-            if (endFrame == csCtx->curFrame) {
-                Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
-                sCurTextId = 0;
-                sCurOcarinaAction = 0;
-                CutsceneCamera_Reset();
-            } else {
-                CutsceneCamera_SetState(CS_CAM_STATE_UPDATE_SPLINE);
-            }
+        if (sCurOcarinaAction != cmd->textId) {
+            sCutsceneTextboxType = CS_TEXT_OCARINA_ACTION;
+            sCurOcarinaAction = cmd->textId;
+            func_80152434(play, cmd->textId);
+            return;
         }
     }
+
+    if (csCtx->curFrame >= cmd->endFrame) {
+        // The Textbox command can change the current cutscene frame, mainly to prevent advancing the cutscene when
+        // a textbox that is expected to be closed by the user is still open.
+        endFrame = csCtx->curFrame;
+        talkState = Message_GetState(&play->msgCtx);
+        if ((talkState != TEXT_STATE_CLOSING) && (talkState != TEXT_STATE_NONE) && (talkState != TEXT_STATE_7) &&
+            (talkState != TEXT_STATE_8)) {
+            csCtx->curFrame--;
+
+            if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
+                if (play->msgCtx.choiceIndex == 0) {
+                    if (cmd->textId == 0x33BD) {
+                        // Gormon Track: do you understand?
+                        func_8019F230();
+                    }
+
+                    if (cmd->altTextId1 != 0xFFFF) {
+                        func_80151938(play, cmd->altTextId1);
+                        if (cmd->type == CS_TEXT_TYPE_3) {
+                            sCutsceneTextboxType = CS_TEXT_TYPE_3;
+                            if (cmd->altTextId2 != 0xFFFF) {
+                                csCtx->curFrame++;
+                            }
+                        }
+                    } else {
+                        func_801477B4(play);
+                        csCtx->curFrame++;
+                    }
+                } else {
+                    if (cmd->textId == 0x33BD) {
+                        // Gormon Track: do you understand?
+                        func_8019F208();
+                    }
+
+                    if (cmd->altTextId2 != 0xFFFF) {
+                        func_80151938(play, cmd->altTextId2);
+                        if (cmd->type == CS_TEXT_TYPE_3) {
+                            sCutsceneTextboxType = CS_TEXT_TYPE_3;
+                            if (cmd->altTextId1 != 0xFFFF) {
+                                csCtx->curFrame++;
+                            }
+                        }
+                    } else {
+                        func_801477B4(play);
+                        csCtx->curFrame++;
+                    }
+                }
+            }
+
+            if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+                func_80152434(play, cmd->textId);
+            }
+        }
+
+        if ((talkState == TEXT_STATE_CLOSING) && (sCutsceneTextboxType == CS_TEXT_TYPE_3)) {
+            csCtx->curFrame--;
+            sCurTextId++;
+        }
+
+        if (endFrame == csCtx->curFrame) {
+            Interface_SetHudVisibility(HUD_VISIBILITY_NONE);
+            sCurTextId = 0;
+            sCurOcarinaAction = 0;
+            CutsceneCamera_Reset();
+        } else {
+            CutsceneCamera_SetState(CS_CAM_STATE_UPDATE_SPLINE);
+        }
+    }
+end:;
+    return;
 }
 
 void Cutscene_SetActorCue(CutsceneContext* csCtx, u8** script, s16 cueChannel) {

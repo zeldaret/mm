@@ -584,7 +584,7 @@
 #define CS_DESTINATION_LIST(entries) { CS_CMD_DESTINATION }, { CMD_W(entries) }
 
 /**
- *  Sends the player to a new destination using the entry defined in `CutsceneEntry`.
+ *  Sends the player to a new destination using the entry defined in `CutsceneScriptEntry`.
  * 
  * ARGS
  *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
