@@ -641,7 +641,7 @@ typedef enum {
     /* 0x7D */ CS_ID_GLOBAL_DOOR,
     /* 0x7E */ CS_ID_GLOBAL_RETURN_TO_CAM, // smoothly return to the previous camera
     /* 0x7F */ CS_ID_GLOBAL_END,
-} GlobalCutsceneId;
+} CutsceneId;
 
 #define CS_SCRIPT_ID_NONE -1
 

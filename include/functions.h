@@ -2241,7 +2241,7 @@ void func_8015E7EC(PlayState* play, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
 
 s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera);
-s32 CutsceneCamera_UpdateSplines(u8* cmd, CutsceneCamera* csCamera);
+s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera);
 void CutsceneCamera_SetState(s16 state);
 void CutsceneCamera_Reset(void);
 

@@ -253,7 +253,7 @@ u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
 /**
  * Processes camera cutscene commands
  */
-s32 CutsceneCamera_UpdateSplines(u8* cmd, CutsceneCamera* csCamera) {
+s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera) {
     CsCmdCamSpline* spline;
 
     switch (csCamera->state) {
@@ -281,21 +281,21 @@ s32 CutsceneCamera_UpdateSplines(u8* cmd, CutsceneCamera* csCamera) {
         default: // CS_CAM_STATE_UPDATE_ALL
             if (csCamera->splineNeedsInit == true) {
                 // Spline Header
-                spline = (CsCmdCamSpline*)&cmd[csCamera->cmdIndex];
+                spline = (CsCmdCamSpline*)&script[csCamera->cmdIndex];
                 csCamera->atInterp.numEntries = csCamera->eyeInterp.numEntries = spline->numEntries;
                 csCamera->duration = spline->duration;
                 csCamera->cmdIndex += sizeof(CsCmdCamSpline);
 
                 // At Point
-                csCamera->atCmd = (CsCmdCamPoint*)&cmd[csCamera->cmdIndex];
+                csCamera->atCmd = (CsCmdCamPoint*)&script[csCamera->cmdIndex];
                 csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamPoint));
 
                 // Misc Point
-                csCamera->eyeCmd = (CsCmdCamPoint*)&cmd[csCamera->cmdIndex];
+                csCamera->eyeCmd = (CsCmdCamPoint*)&script[csCamera->cmdIndex];
                 csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamPoint));
 
                 // Misc
-                csCamera->miscCmd = (CsCmdCamMisc*)&cmd[csCamera->cmdIndex];
+                csCamera->miscCmd = (CsCmdCamMisc*)&script[csCamera->cmdIndex];
                 csCamera->cmdIndex += (s16)(csCamera->eyeInterp.numEntries * sizeof(CsCmdCamMisc));
 
                 // Other Params
@@ -303,6 +303,7 @@ s32 CutsceneCamera_UpdateSplines(u8* cmd, CutsceneCamera* csCamera) {
                 csCamera->atInterp.curPoint = 0;
 
                 csCamera->splineNeedsInit = false;
+                //! FAKE: csCamera->splineIndex++;
                 csCamera->splineIndex = (csCamera->splineIndex & 0xFFFF) + 1;
                 csCamera->state = CS_CAM_STATE_UPDATE_ALL;
                 csCamera->nextSplineTimer = csCamera->updateSplineTimer = 0;
@@ -326,7 +327,7 @@ s32 CutsceneCamera_UpdateSplines(u8* cmd, CutsceneCamera* csCamera) {
     if (csCamera->nextSplineTimer > csCamera->duration) {
         // Next Spline
         csCamera->splineNeedsInit = true;
-        spline = (CsCmdCamSpline*)&cmd[csCamera->cmdIndex];
+        spline = (CsCmdCamSpline*)&script[csCamera->cmdIndex];
         if (spline->numEntries == -1) {
             csCamera->state = CS_CAM_STATE_DONE;
             return 0;
