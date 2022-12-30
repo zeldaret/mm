@@ -2276,7 +2276,7 @@ void Transition_Init(TransitionContext* transitionCtx);
 void Transition_Destroy(TransitionContext* transitionCtx);
 
 void TransitionTile_Destroy(TransitionTile* this);
-void TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows);
+TransitionTile* TransitionTile_Init(TransitionTile* this, s32 cols, s32 rows);
 void TransitionTile_Draw(TransitionTile* this, Gfx** gfxP);
 void TransitionTile_Update(TransitionTile* this);
 
