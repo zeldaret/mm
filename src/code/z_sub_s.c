@@ -1394,7 +1394,7 @@ s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
         ActorCutscene_SetIntentToPlay(nextCsId);
     } else if (ActorCutscene_GetCanPlayNext(nextCsId)) {
         switch (type) {
-            case SUBS_CUTSCENE_PLAYER_CS:
+            case SUBS_CUTSCENE_PLAYER:
                 ActorCutscene_StartWithPlayerCs(nextCsId, actor);
                 break;
 
@@ -1402,7 +1402,7 @@ s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
                 ActorCutscene_Start(nextCsId, actor);
                 break;
 
-            case SUBS_CUTSCENE_PLAYER_CS_SET_FLAG:
+            case SUBS_CUTSCENE_PLAYER_SET_FLAG:
                 ActorCutscene_StartWithPlayerCsAndSetFlag(nextCsId, actor);
                 break;
 

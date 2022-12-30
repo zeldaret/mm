@@ -11,9 +11,9 @@ extern Vec3f gOneVec3f;
 #define SUBS_TIME_PATHING_ORDER 3
 
 typedef enum {
-    /* 0 */ SUBS_CUTSCENE_PLAYER_CS,
+    /* 0 */ SUBS_CUTSCENE_PLAYER,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
-    /* 2 */ SUBS_CUTSCENE_PLAYER_CS_SET_FLAG
+    /* 2 */ SUBS_CUTSCENE_PLAYER_SET_FLAG
 } SubSCutsceneType;
 
 //! @TODO: rename based on func_8013E748 and func_800B8500

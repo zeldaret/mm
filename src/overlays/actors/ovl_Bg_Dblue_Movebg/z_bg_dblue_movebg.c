@@ -722,7 +722,7 @@ void BgDblueMovebg_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_172 & 8) {
-        if (SubS_StartActorCutscene(&this->dyna.actor, this->csId, CS_ID_NONE, SUBS_CUTSCENE_PLAYER_CS)) {
+        if (SubS_StartActorCutscene(&this->dyna.actor, this->csId, CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
             this->unk_172 &= ~8;
         }
     }

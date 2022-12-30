@@ -1399,7 +1399,7 @@ void func_80A97A28(EnAz* this, PlayState* play) {
 }
 
 void func_80A97A40(EnAz* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, 0, CS_ID_NONE, SUBS_CUTSCENE_PLAYER_CS)) {
+    if (SubS_StartActorCutscene(&this->actor, 0, CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
         play->msgCtx.msgMode = 0;
         play->msgCtx.msgLength = 0;
         func_80A97A9C(this, play);

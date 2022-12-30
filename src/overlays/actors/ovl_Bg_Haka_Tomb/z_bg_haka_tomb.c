@@ -101,7 +101,7 @@ void func_80BD6754(BgHakaTomb* this) {
 }
 
 void func_80BD6768(BgHakaTomb* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_PLAYER_CS)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
         BgHakaTomb_SetupDoNothing(this);
     }
 }

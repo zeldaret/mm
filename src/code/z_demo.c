@@ -548,12 +548,12 @@ void CutsceneCmd_FadeColorScreen(PlayState* play, CutsceneContext* csCtx, CsCmdF
         play->envCtx.fillScreen = true;
         alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
-        if (((cmd->type == CS_FADE_IN_SCREEN)) || (cmd->type == CS_FADE_OUT_SCREEN)) {
+        if (((cmd->type == CS_FADE_SCREEN_FILL_IN)) || (cmd->type == CS_FADE_SCREEN_FILL_OUT)) {
             play->envCtx.screenFillColor[0] = cmd->color.r;
             play->envCtx.screenFillColor[1] = cmd->color.g;
             play->envCtx.screenFillColor[2] = cmd->color.b;
 
-            if (cmd->type == CS_FADE_OUT_SCREEN) {
+            if (cmd->type == CS_FADE_SCREEN_FILL_OUT) {
                 play->envCtx.screenFillColor[3] = (1.0f - alpha) * 255.0f;
             } else {
                 play->envCtx.screenFillColor[3] = 255.0f * alpha;

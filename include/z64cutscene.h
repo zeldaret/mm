@@ -115,7 +115,7 @@ typedef enum {
     /* 6 */ CS_MOD_AMBIENCE_2,
     /* 7 */ CS_MOD_SEQ_STORE,
     /* 8 */ CS_MOD_SEQ_RESTORE
-} CsModifySeq;
+} CsModifySeqType;
 
 typedef union {
     struct {
@@ -231,7 +231,7 @@ typedef enum {
     /*  3 */ CS_TEXT_TYPE_3,
     /*  4 */ CS_TEXT_TYPE_BOSSES_REMAINS, // use `altText1` in the Giant Cutscene if all remains are already obtained
     /*  5 */ CS_TEXT_TYPE_ALL_NORMAL_MASKS
-} CutsceneTextboxType;
+} CutsceneTextType;
 
 typedef union {
     struct {
@@ -261,8 +261,8 @@ typedef union {
 } CsCmdFadeScreen; // size = 0xC
 
 typedef enum {
-    /* 1 */ CS_FADE_IN_SCREEN = 1,
-    /* 2 */ CS_FADE_OUT_SCREEN,
+    /* 1 */ CS_FADE_SCREEN_FILL_IN = 1,
+    /* 2 */ CS_FADE_SCREEN_FILL_OUT
 } CsFadeScreen;
 
 typedef union {
@@ -526,7 +526,7 @@ typedef enum {
     /* 0x256 */ CS_CMD_ACTOR_CUE_598,
     /* 0x257 */ CS_CMD_ACTOR_CUE_599,
     /*    -2 */ CS_CMD_ACTOR_CUE_POST_PROCESS = 0xFFFFFFFE,
-    /*    -1 */ CS_CAM_STOP, // OoT Remnant
+    /*    -1 */ CS_CAM_STOP // OoT Remnant
 } CutsceneCmd;
 
 typedef enum {
@@ -620,7 +620,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x02 */ s16 length;
-    /* 0x04 */ s16 csCamId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
+    /* 0x04 */ s16 csCamId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from a sceneLayer
     /* 0x06 */ s16 scriptIndex;
     /* 0x08 */ s16 additionalCsId;
     /* 0x0A */ u8 endSfx;
@@ -632,7 +632,7 @@ typedef struct {
 
 typedef enum {
     /*   -1 */ CS_ID_NONE = -1,
-    // CsId's 0 - 119 are scene-specific and index `ActorCutscene`
+    // CsId's 0 - 119 are sceneLayer-specific and index `ActorCutscene`
     /* 0x78 */ CS_ID_GLOBAL_78 = 120,
     /* 0x79 */ CS_ID_GLOBAL_79,
     /* 0x7A */ CS_ID_GLOBAL_7A,
@@ -640,7 +640,7 @@ typedef enum {
     /* 0x7C */ CS_ID_GLOBAL_TALK,
     /* 0x7D */ CS_ID_GLOBAL_DOOR,
     /* 0x7E */ CS_ID_GLOBAL_RETURN_TO_CAM, // smoothly return to the previous camera
-    /* 0x7F */ CS_ID_GLOBAL_END,
+    /* 0x7F */ CS_ID_GLOBAL_END
 } CutsceneId;
 
 #define CS_SCRIPT_ID_NONE -1
@@ -671,8 +671,8 @@ typedef enum {
     /*  -4 */ CS_CAM_ID_GLOBAL_ITEM_BOTTLE,         // CAM_SET_ITEM2
     /*  -3 */ CS_CAM_ID_GLOBAL_ITEM_OCARINA,        // CAM_SET_ITEM1
     /*  -2 */ CS_CAM_ID_GLOBAL_ITEM_GET,            // CAM_SET_ITEM0
-    /*  -1 */ CS_CAM_ID_NONE,
-    // CamCsId's 0+ are scene-specific and index `ActorCsCamInfo`
+    /*  -1 */ CS_CAM_ID_NONE
+    // CamCsId's 0+ are sceneLayer-specific and index `ActorCsCamInfo`
 } CamCutsceneId;
 
 typedef enum {
@@ -726,7 +726,7 @@ typedef enum {
     /* 4 */ CS_CAM_INTERP_4,
     /* 5 */ CS_CAM_INTERP_5,
     /* 6 */ CS_CAM_INTERP_6,
-    /* 7 */ CS_CAM_INTERP_7,
+    /* 7 */ CS_CAM_INTERP_7
 } CutsceneCamInterpType;
 
 typedef enum {
@@ -735,7 +735,7 @@ typedef enum {
     /* 2 */ CS_CAM_REL_2,
     /* 3 */ CS_CAM_REL_3,
     /* 4 */ CS_CAM_REL_4,
-    /* 5 */ CS_CAM_REL_5,
+    /* 5 */ CS_CAM_REL_5
 } CutsceneCamRelativeTo;
 
 
@@ -783,7 +783,7 @@ typedef enum {
     /* 0 */ CS_CAM_STATE_UPDATE_SPLINE, // Update spline, do not advance next spline timer
     /* 0 */ CS_CAM_STATE_PAUSE, // No updates
     /* 0 */ CS_CAM_STATE_DONE_SPLINE, // Finished the current spline, ready for the next one
-    /* 0 */ CS_CAM_STATE_DONE = 999, // Finished all the splines.
+    /* 0 */ CS_CAM_STATE_DONE = 999 // Finished all the splines.
 } CutsceneCameraState;
 
 // OoT Remnant

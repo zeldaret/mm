@@ -308,13 +308,13 @@ void func_80B5BDA8(EnOt* this, PlayState* play) {
 void func_80B5BE04(EnOt* this, PlayState* play) {
     switch (this->unk_388) {
         case 0:
-            if (SubS_StartActorCutscene(&this->actor, this->csIdList[2], CS_ID_NONE, SUBS_CUTSCENE_PLAYER_CS)) {
+            if (SubS_StartActorCutscene(&this->actor, this->csIdList[2], CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
 
         case 1:
-            if (SubS_StartActorCutscene(&this->actor, this->csIdList[3], CS_ID_NONE, SUBS_CUTSCENE_PLAYER_CS)) {
+            if (SubS_StartActorCutscene(&this->actor, this->csIdList[3], CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;

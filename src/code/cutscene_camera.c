@@ -339,13 +339,7 @@ s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera) {
 
 // Unused
 s16 func_80161BAC(void) {
-    u32 ret = sCurCsCamera->state == CS_CAM_STATE_PAUSE;
-
-    if (!ret) {
-        ret = sCurCsCamera->state == CS_CAM_STATE_UPDATE_SPLINE;
-    }
-
-    return ret;
+    return (sCurCsCamera->state == CS_CAM_STATE_PAUSE) || (sCurCsCamera->state == CS_CAM_STATE_UPDATE_SPLINE);
 }
 
 void CutsceneCamera_SetState(s16 state) {
