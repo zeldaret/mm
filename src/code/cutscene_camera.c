@@ -3,15 +3,15 @@
 extern CutsceneCamera* sCurCsCamera;
 
 // function declarations
-s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
-s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* arg3, CsCmdCamMisc* arg4, CutsceneCameraInterp* arg5);
+s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_8016253C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_801623E4(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
+s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc, CutsceneCameraInterp* interp);
 f32 func_80163660(Actor* actor);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161180.s")
