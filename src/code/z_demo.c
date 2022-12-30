@@ -277,7 +277,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_LONG_SCARECROW_SONG:
             AudioOcarina_PlayLongScarecrowSong();
-            csCtx->curFrame = cmd->startFrame - 1;
+            csCtx->curFrame = cmd->startFrame - 1; // the cutscene runs forever
             break;
 
         case CS_MISC_SET_CSFLAG_3:
