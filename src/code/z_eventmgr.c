@@ -97,10 +97,10 @@ s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility) {
 }
 
 ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 csId) {
-    if (csId < 0x78) {
+    if (csId < CS_ID_GLOBAL_78) {
         return &sActorCutsceneList[csId];
     } else {
-        csId -= 0x78;
+        csId -= CS_ID_GLOBAL_78;
         return &sGlobalActorCutscenes[csId];
     }
 }

@@ -1063,7 +1063,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
                 if (play->msgCtx.choiceIndex == 0) {
                     if (cmd->textId == 0x33BD) {
-                        // Gormon Track: do you understand?
+                        // Gorman Track: do you understand?
                         func_8019F230();
                     }
 
@@ -1081,7 +1081,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                     }
                 } else {
                     if (cmd->textId == 0x33BD) {
-                        // Gormon Track: do you understand?
+                        // Gorman Track: do you understand?
                         func_8019F208();
                     }
 
@@ -1226,7 +1226,7 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
                 script += sizeof(cmdEntries);
 
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_Misc(play, csCtx, (void*)script);
+                    CutsceneCmd_Misc(play, csCtx, (CsCmdMisc*)script);
                     script += sizeof(CsCmdMisc);
                 }
                 break;
