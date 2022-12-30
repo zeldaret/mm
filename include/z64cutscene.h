@@ -702,16 +702,16 @@ typedef struct {
     /* 0x0 */ s16 numEntries;
     /* 0x2 */ s16 unk_02; // unused
     /* 0x4 */ s16 unk_04; // unused
-    /* 0x6 */ s16 duration;
+    /* 0x6 */ s16 duration; // total duration
 } CsCmdCamSpline; // size = 0x8
 
 // Both camAt and camEye
 typedef struct {
-    /* 0x0 */ u8 interpType;
-    /* 0x1 */ u8 speed; // needs testing
-    /* 0x2 */ s16 duration;
+    /* 0x0 */ u8 interpType; // see `CutsceneCamInterpType`
+    /* 0x1 */ u8 weight; // for certain types of interpTypes, shifts the weight to certain points. Default is 100.
+    /* 0x2 */ s16 duration; // duration of current point
     /* 0x4 */ Vec3s pos;
-    /* 0xA */ s16 relativeTo;
+    /* 0xA */ s16 relativeTo; // see `CutsceneCamRelativeTo`
 } CsCmdCamPoint; // size = 0xC
 
 typedef enum {

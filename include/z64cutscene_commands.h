@@ -31,79 +31,79 @@
 
 /**
  * ARGS
- *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e), s16 type (o),
+ *   s16 textId (i), s16 startFrame (s), s16 endFrame (e), s16 type (o),
  *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
  * FORMAT
  *   iiiissss eeeeoooo yyyynnnn
  *   size = 0xC
  */
-#define CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, type, topOptionBranch, bottomOptionBranch) \
-    { CMD_HH(messageId, startFrame) }, { CMD_HH(endFrame, type) }, { CMD_HH(topOptionBranch, bottomOptionBranch) }
+#define CS_TEXT(textId, startFrame, endFrame, type, topOptionBranch, bottomOptionBranch) \
+    { CMD_HH(textId, startFrame) }, { CMD_HH(endFrame, type) }, { CMD_HH(topOptionBranch, bottomOptionBranch) }
 
 /**
  * ARGS
- *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
+ *   s16 textId (i), s16 startFrame (s), s16 endFrame (e),
  *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
  * FORMAT
  *   iiiissss eeee0000 yyyynnnn
  *   size = 0xC
  */
-#define CS_TEXT_DEFAULT(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
-    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXT_TYPE_DEFAULT, topOptionBranch, bottomOptionBranch)
+#define CS_TEXT_DEFAULT(textId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
+    CS_TEXT(textId, startFrame, endFrame, CS_TEXT_TYPE_DEFAULT, topOptionBranch, bottomOptionBranch)
 
 /**
  * ARGS
- *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
+ *   s16 textId (i), s16 startFrame (s), s16 endFrame (e),
  *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
  * FORMAT
  *   iiiissss eeee0001 yyyynnnn
  *   size = 0xC
  */
-#define CS_TEXT_TYPE_1(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
-    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXT_TYPE_1, topOptionBranch, bottomOptionBranch)
+#define CS_TEXT_TYPE_1(textId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
+    CS_TEXT(textId, startFrame, endFrame, CS_TEXT_TYPE_1, topOptionBranch, bottomOptionBranch)
 
 /**
  * ARGS
- *   s16 ocarinaSongAction (o), s16 startFrame (s), s16 endFrame (e), s16 messageId (i)
+ *   s16 ocarinaSongAction (o), s16 startFrame (s), s16 endFrame (e), s16 textId (i)
  * FORMAT
  *   oooossss eeee0002 iiiiFFFF
  *   size = 0xC
  */
-#define CS_TEXT_OCARINA_ACTION(ocarinaSongAction, startFrame, endFrame, messageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(ocarinaSongAction, startFrame, endFrame, CS_TEXT_OCARINA_ACTION, messageId, 0xFFFF)
+#define CS_TEXT_OCARINA_ACTION(ocarinaSongAction, startFrame, endFrame, textId) \
+    CS_TEXT(ocarinaSongAction, startFrame, endFrame, CS_TEXT_OCARINA_ACTION, textId, 0xFFFF)
 
 /**
  * ARGS
- *   s16 messageId (i), s16 startFrame (s), s16 endFrame (e),
+ *   s16 textId (i), s16 startFrame (s), s16 endFrame (e),
  *   s16 topOptionBranch (y), s16 bottomOptionBranch (n)
  * FORMAT
  *   iiiissss eeee0003 yyyynnnn
  *   size = 0xC
  */
-#define CS_TEXT_TYPE_3(messageId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
-    CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXT_TYPE_3, topOptionBranch, bottomOptionBranch)
+#define CS_TEXT_TYPE_3(textId, startFrame, endFrame, topOptionBranch, bottomOptionBranch) \
+    CS_TEXT(textId, startFrame, endFrame, CS_TEXT_TYPE_3, topOptionBranch, bottomOptionBranch)
 
 /**
- * If Player has all 4 bosses' remains then alternativeMessageId is used, otherwise defaultMessageId is used
+ * If Player has all 4 bosses' remains then alternativeTextId is used, otherwise defaultTextId is used
  * ARGS
- *   s16 defaultMessageId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeMessageId (a)
+ *   s16 defaultTextId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeTextId (a)
  * FORMAT
  *   ddddssss eeee0004 aaaaFFFF
  *   size = 0xC
  */
-#define CS_TEXT_BOSSES_REMAINS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXT_TYPE_BOSSES_REMAINS, alternativeMessageId, 0xFFFF)
+#define CS_TEXT_BOSSES_REMAINS(defaultTextId, startFrame, endFrame, alternativeTextId) \
+    CS_TEXT(defaultTextId, startFrame, endFrame, CS_TEXT_TYPE_BOSSES_REMAINS, alternativeTextId, 0xFFFF)
 
 /**
- * If Player has every non-transformation mask then alternativeMessageId is used, otherwise defaultMessageId is used
+ * If Player has every non-transformation mask then alternativeTextId is used, otherwise defaultTextId is used
  * ARGS
- *   s16 defaultMessageId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeMessageId (a)
+ *   s16 defaultTextId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeTextId (a)
  * FORMAT
  *   ddddssss eeee0005 aaaaFFFF
  *   size = 0xC
  */
-#define CS_TEXT_ALL_NORMAL_MASKS(defaultMessageId, startFrame, endFrame, alternativeMessageId) \
-    CS_TEXT_DISPLAY_TEXTBOX(defaultMessageId, startFrame, endFrame, CS_TEXT_TYPE_ALL_NORMAL_MASKS, alternativeMessageId, 0xFFFF)
+#define CS_TEXT_ALL_NORMAL_MASKS(defaultTextId, startFrame, endFrame, alternativeTextId) \
+    CS_TEXT(defaultTextId, startFrame, endFrame, CS_TEXT_TYPE_ALL_NORMAL_MASKS, alternativeTextId, 0xFFFF)
 
 /**
  * ARGS
@@ -113,7 +113,7 @@
  *   size = 0xC
  */
 #define CS_TEXT_NONE(startFrame, endFrame) \
-    CS_TEXT_DISPLAY_TEXTBOX(0xFFFF, startFrame, endFrame, CS_TEXT_TYPE_NONE, 0xFFFF, 0xFFFF)
+    CS_TEXT(0xFFFF, startFrame, endFrame, CS_TEXT_TYPE_NONE, 0xFFFF, 0xFFFF)
 
 
 /**
@@ -129,7 +129,8 @@
  * ARGS
  *   s16 numEntries (e), s16 duration (d)
  * FORMAT
- *   eeeeUUUU VVVVdddd
+ *   Capital U is Unused
+ *   eeeeUUUU UUUUdddd
  *   size = 0x8
  */
 #define CS_CAM_SPLINE(numEntries, unused0, unused1, duration) \
@@ -137,20 +138,20 @@
 
 /**
  * ARGS
- *   u8 interpType (i), u8 speed (s), s16 duration (d), Vec3s pos (x/y/z), s16 relativeTo (r)
+ *   u8 interpType (i), u8 weight (2), s16 duration (d), Vec3s pos (x/y/z), s16 relativeTo (r)
  * FORMAT
- *   iissdddd xxxxyyyy zzzzrrrr
+ *   ii22dddd xxxxyyyy zzzzrrrr
  *   size = 0xC
  */
-#define CS_CAM_POINT(interpType, speed, duration, posX, posY, posZ, relativeTo) \
-    { CMD_BBH(interpType, speed, duration) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, relativeTo) }
-
+#define CS_CAM_POINT(interpType, weight, duration, posX, posY, posZ, relativeTo) \
+    { CMD_BBH(interpType, weight, duration) }, { CMD_HH(posX, posY) }, { CMD_HH(posZ, relativeTo) }
 
 /**
  * ARGS
  *   s16 roll (r), s16 fov (f)
  * FORMAT
- *   UUUUrrrr ffffVVVV
+ *   Capital U is Unused
+ *   UUUUrrrr ffffUUUU
  *   size = 0x8
  */
 #define CS_CAM_MISC(unused0, roll, fov, unused1) \
@@ -178,14 +179,14 @@
  * For commands that only need to last one frame, set `endFrame` to `startFrame + 1`.
  * 
  * ARGS
- *   s16 unk (u), s16 startFrame (s), s16 endFrame (e)
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   uuuussss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_MISC(unk, startFrame, endFrame, unk_06) \
-    { CMD_HH(unk, startFrame) }, { CMD_HH(endFrame, unk_06) }
+#define CS_MISC(type, startFrame, endFrame, unused0) \
+    { CMD_HH(type, startFrame) }, { CMD_HH(endFrame, unused0) }
 
 
 /**
@@ -204,10 +205,10 @@
  * The lighting change will take place immediately with no blending.
  * 
  * ARGS
- *   s16 setting (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 setting (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
 #define CS_LIGHT_SETTING(lightSetting, startFrame, endFrame) \
@@ -225,14 +226,14 @@
 
 /**
  * ARGS
- *   s16 transitionType (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_TRANSITION(transitionType, startFrame, endFrame) \
-    { CMD_HH(transitionType, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_TRANSITION(type, startFrame, endFrame) \
+    { CMD_HH(type, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -246,14 +247,14 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_MOTION_BLUR(base, startFrame, endFrame) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_MOTION_BLUR(type, startFrame, endFrame) \
+    { CMD_HH(type, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -267,14 +268,14 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 giveTatl (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_GIVE_TATL(base, startFrame, endFrame) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_GIVE_TATL(giveTatl, startFrame, endFrame) \
+    { CMD_HH(giveTatl, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -288,42 +289,15 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e),
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e),
  *   u8 red (r), u8 green (g), blue (b)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeerrgg bbUUUUUU
+ *   ttttssss eeeerrgg bbUUUUUU
  *   size = 0x0C
  */
-#define CS_FADE_SCREEN(base, startFrame, endFrame, red, green, blue) \
-    { CMD_HH(base, startFrame) }, { CMD_HBB(endFrame, red, green) }, { CMD_BBBB(blue, 0, 0, 0) }
-
-
-/**
- *  Stops a sequence at the specified time.
- * @note `endFrame` is not used in the implementation of the command, so its value does not matter
- * 
- * ARGS
- *   s32 entries (e)
- * FORMAT
- *   0000009C eeeeeeee
- *   size = 0x8
- */
-#define CS_FADE_OUT_SEQ_LIST(entries) { CS_CMD_FADE_OUT_SEQ }, { CMD_W(entries) }
-
-/**
- *  Fade out the sequence that is playing on the specified sequence player, over the specified frame range.
- * @see `CutsceneFadeOutSeqPlayer`
- * 
- * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
- * FORMAT
- *   Capital U is Unused
- *   mmmmssss eeeeUUUU UUUUUUUU
- *   size = 0x0C
- */
-#define CS_FADE_OUT_SEQ(base, startFrame, endFrame) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, 0) }, { CMD_W(0) }
+#define CS_FADE_SCREEN(type, startFrame, endFrame, red, green, blue) \
+    { CMD_HH(type, startFrame) }, { CMD_HBB(endFrame, red, green) }, { CMD_BBBB(blue, 0, 0, 0) }
 
 
 /**
@@ -343,14 +317,14 @@
  * @note `endFrame` is not used in the implementation of the command, so its value does not matter
  * 
  * ARGS
- *   s16 unk (u), s16 startFrame (s), s16 endFrame (e), s8 hour (h), s8 min (m)
+ *   s16 startFrame (s), s16 endFrame (e), s8 hour (h), s8 min (m)
  * FORMAT
  *   Capital U is Unused
- *   uuuussss eeeehhmm UUUUUUUU
+ *   UUUUssss eeeehhmm UUUUUUUU
  *   size = 0xC
  */
-#define CS_TIME(unk, startFrame, endFrame, hour, min, unused) \
-    { CMD_HH(unk, startFrame) }, { CMD_HBB(endFrame, hour, min) }, { CMD_W(unused) }
+#define CS_TIME(unused0, startFrame, endFrame, hour, min) \
+    { CMD_HH(unused0, startFrame) }, { CMD_HBB(endFrame, hour, min) }, { CMD_W(0) }
 
 
 /**
@@ -431,77 +405,14 @@
  * @note `endFrame` is not used in the implementation of the command, so its value does not matter
  * 
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 seqId (i), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   iiiissss eeeeUUUU
  *   size = 0x8
  */
-#define CS_START_SEQ(sequence, startFrame, endFrame) \
-    { CMD_HH((sequence + 1), startFrame) }, { CMD_HH(endFrame, endFrame) }
-
-
-/**
- * ARGS
- *   s32 entries (e)
- * FORMAT
- *   00000130 eeeeeeee
- *   size = 0x8
- */
-#define CS_SFX_REVERB_INDEX_2_LIST(entries) { CS_CMD_SFX_REVERB_INDEX_2 }, { CMD_W(entries) }
-
-/**
- * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
- * FORMAT
- *   Capital U is Unused
- *   mmmmssss eeeeUUUU
- *   size = 0x30
- */
-#define CS_SFX_REVERB_INDEX_2(base, startFrame, endFrame, unk_06) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
-
-
-/**
- * ARGS
- *   s32 entries (e)
- * FORMAT
- *   00000131 eeeeeeee
- *   size = 0x8
- */
-#define CS_SFX_REVERB_INDEX_1_LIST(entries) { CS_CMD_SFX_REVERB_INDEX_1 }, { CMD_W(entries) }
-
-/**
- * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
- * FORMAT
- *   Capital U is Unused
- *   mmmmssss eeeeUUUU
- *   size = 0x8
- */
-#define CS_SFX_REVERB_INDEX_1(base, startFrame, endFrame, unk_06) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
-
-
-/**
- * ARGS
- *   s32 entries (e)
- * FORMAT
- *   00000132 eeeeeeee
- *   size = 0x8
- */
-#define CS_MODIFY_SEQ_LIST(entries) { CS_CMD_MODIFY_SEQ }, { CMD_W(entries) }
-
-/**
- * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
- * FORMAT
- *   Capital U is Unused
- *   mmmmssss eeeeUUUU
- *   size = 0x8
- */
-#define CS_MODIFY_SEQ(base, startFrame, endFrame) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_START_SEQ(seqId, startFrame, endFrame) \
+    { CMD_HH((seqId + 1), startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -519,14 +430,41 @@
  * Stops a sequence at the specified time.
  * 
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 seqId (i), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   iiiissss eeeeUUUU
  *   size = 0x8
  */
 #define CS_STOP_SEQ(seqId, startFrame, endFrame, unk_06) \
     { CMD_HH((seqId + 1), startFrame) }, { CMD_HH(endFrame, unk_06) }
+
+
+/**
+ *  Stops a sequence at the specified time.
+ * @note `endFrame` is not used in the implementation of the command, so its value does not matter
+ * 
+ * ARGS
+ *   s32 entries (e)
+ * FORMAT
+ *   0000009C eeeeeeee
+ *   size = 0x8
+ */
+#define CS_FADE_OUT_SEQ_LIST(entries) { CS_CMD_FADE_OUT_SEQ }, { CMD_W(entries) }
+
+/**
+ *  Fade out the sequence that is playing on the specified sequence player, over the specified frame range.
+ * @see `CutsceneFadeOutSeqPlayer`
+ * 
+ * ARGS
+ *   s16 seqPlayer (p), s16 startFrame (s), s16 endFrame (e)
+ * FORMAT
+ *   Capital U is Unused
+ *   ppppssss eeeeUUUU UUUUUUUU
+ *   size = 0x0C
+ */
+#define CS_FADE_OUT_SEQ(seqPlayer, startFrame, endFrame) \
+    { CMD_HH(seqPlayer, startFrame) }, { CMD_HH(endFrame, 0) }, { CMD_W(0) }
 
 
 /**
@@ -540,14 +478,14 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   UUUUssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_START_AMBIENCE(base, startFrame, endFrame, unk_06) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
+#define CS_START_AMBIENCE(unused0, startFrame, endFrame) \
+    { CMD_HH(unused0, startFrame) }, { CMD_HH(endFrame, 0) }
 
 
 /**
@@ -561,14 +499,77 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   UUUUssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_FADE_OUT_AMBIENCE(base, startFrame, endFrame, unk_06) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
+#define CS_FADE_OUT_AMBIENCE(unused0, startFrame, endFrame) \
+    { CMD_HH(unused0, startFrame) }, { CMD_HH(endFrame, 0) }
+
+
+/**
+ * ARGS
+ *   s32 entries (e)
+ * FORMAT
+ *   00000132 eeeeeeee
+ *   size = 0x8
+ */
+#define CS_MODIFY_SEQ_LIST(entries) { CS_CMD_MODIFY_SEQ }, { CMD_W(entries) }
+
+/**
+ * ARGS
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
+ * FORMAT
+ *   Capital U is Unused
+ *   ttttssss eeeeUUUU
+ *   size = 0x8
+ */
+#define CS_MODIFY_SEQ(type, startFrame, endFrame) \
+    { CMD_HH(type, startFrame) }, { CMD_HH(endFrame, endFrame) }
+
+
+/**
+ * ARGS
+ *   s32 entries (e)
+ * FORMAT
+ *   00000130 eeeeeeee
+ *   size = 0x8
+ */
+#define CS_SFX_REVERB_INDEX_2_LIST(entries) { CS_CMD_SFX_REVERB_INDEX_2 }, { CMD_W(entries) }
+
+/**
+ * ARGS
+ *   s16 startFrame (s), s16 endFrame (e)
+ * FORMAT
+ *   Capital U is Unused
+ *   UUUUssss eeeeUUUU
+ *   size = 0x30
+ */
+#define CS_SFX_REVERB_INDEX_2(unused0, startFrame, endFrame) \
+    { CMD_HH(unused0, startFrame) }, { CMD_HH(endFrame, 0) }
+
+
+/**
+ * ARGS
+ *   s32 entries (e)
+ * FORMAT
+ *   00000131 eeeeeeee
+ *   size = 0x8
+ */
+#define CS_SFX_REVERB_INDEX_1_LIST(entries) { CS_CMD_SFX_REVERB_INDEX_1 }, { CMD_W(entries) }
+
+/**
+ * ARGS
+ *   s16 startFrame (s), s16 endFrame (e)
+ * FORMAT
+ *   Capital U is Unused
+ *   UUUUssss eeeeUUUU
+ *   size = 0x8
+ */
+#define CS_SFX_REVERB_INDEX_1(unused0, startFrame, endFrame) \
+    { CMD_HH(unused0, startFrame) }, { CMD_HH(endFrame, 0) }
 
 
 /**
@@ -586,14 +587,14 @@
  *  Sends the player to a new destination using the entry defined in `CutsceneEntry`.
  * 
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_DESTINATION(base, startFrame, endFrame) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_DESTINATION(type, startFrame, endFrame) \
+    { CMD_HH(type, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -607,14 +608,14 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_CHOOSE_CREDITS_SCENES(base, startFrame, endFrame) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
+#define CS_CHOOSE_CREDITS_SCENES(type, startFrame, endFrame) \
+    { CMD_HH(type, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 
 /**
@@ -628,14 +629,14 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 type (t), s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   ttttssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_RUMBLE(base, startFrame, endFrame, intensity, decayTimer, decayStep) \
-    { CMD_HH(base, startFrame) }, { CMD_HBB(endFrame, intensity, decayTimer) }, { CMD_BBBB(decayStep, 0, 0, 0) }
+#define CS_RUMBLE(type, startFrame, endFrame, intensity, decayTimer, decayStep) \
+    { CMD_HH(type, startFrame) }, { CMD_HBB(endFrame, intensity, decayTimer) }, { CMD_BBBB(decayStep, 0, 0, 0) }
 
 
 /**
@@ -649,14 +650,14 @@
 
 /**
  * ARGS
- *   s16 base (m), s16 startFrame (s), s16 endFrame (e)
+ *   s16 startFrame (s), s16 endFrame (e)
  * FORMAT
  *   Capital U is Unused
- *   mmmmssss eeeeUUUU
+ *   UUUUssss eeeeUUUU
  *   size = 0x8
  */
-#define CS_UNK_DATA(base, startFrame, endFrame, unk_06) \
-    { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, unk_06) }
+#define CS_UNK_DATA(unused0, startFrame, endFrame, unk_06) \
+    { CMD_HH(unused0, startFrame) }, { CMD_HH(endFrame, unk_06) }
 
 
 /**
@@ -671,6 +672,7 @@
 #define CS_PLAYER_ACTION               CS_PLAYER_CUE
 #define CS_LIGHTING_LIST               CS_LIGHT_SETTING_LIST
 #define CS_CAMERA_LIST                 CS_CAM_SPLINE_LIST
+#define CS_TEXT_DISPLAY_TEXTBOX        CS_TEXT
 #define CS_TEXT_LEARN_SONG             CS_TEXT_OCARINA_ACTION
 #define CS_SCENE_TRANS_FX_LIST         CS_TRANSITION_LIST
 #define CS_SCENE_TRANS_FX              CS_TRANSITION
