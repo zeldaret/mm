@@ -1,11 +1,13 @@
 /**
  * @file z_fbdemo.c
  *
- * This file implements an unused transition system that takes the current screen, partitions it into large tiles, and can apply an effect to them.
+ * This file implements an unused transition system that takes the current screen, partitions it into large tiles, and
+ * can apply an effect to them.
  *
  * The screen is divided into 7 rows and 10 columns of tiles. (`gScreenWidth`/ 10 = `gScreenHeight` / 7 = 0x20)
  *
- * @note The only coded effect has a visual effect to blend the tiles to a single point, which looks like the screen gets sucked into.
+ * @note The only coded effect has a visual effect to blend the tiles to a single point, which looks like the screen
+ * gets sucked into.
  */
 #include "global.h"
 #include "system_malloc.h"
@@ -42,8 +44,8 @@ void TransitionTile_InitGraphics(TransitionTile* this) {
             for (colTex = 0, col = 0; col < (this->cols + 1); col++, colTex += 0x20) {
                 Vtx_tn* vtxn = &vtx->n;
 
-                // clang-format on
-                vtx++;   \
+                // clang-format off
+                vtx++; \
                 vtxn->tc[0] = colTex << 6; \
                 vtxn->ob[0] = col * 0x20; \
                 vtxn->ob[1] = row * 0x20; \
