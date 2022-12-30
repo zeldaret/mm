@@ -2,6 +2,8 @@
 
 extern CutsceneCamera* sCurCsCamera;
 
+typedef s16 (*CsCamInterpolateCallback)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
+
 // function declarations
 s16 func_80161180(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
                   CutsceneCameraInterp* interp);
@@ -47,8 +49,7 @@ s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera) {
     return 1;
 }
 
-s16 (*CutsceneCamera_Interpolate(u8 interpType))(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*,
-                                                 CutsceneCameraInterp*) {
+CsCamInterpolateCallback CutsceneCamera_Interpolate(u8 interpType) {
     switch (interpType) {
         case CS_CAM_INTERP_7:
         default:
@@ -81,7 +82,7 @@ u8 CutsceneCamera_ProcessSpline(CutsceneCamera* csCamera) {
     s32 sp5C;
     f32* fov;
     s16* roll;
-    s16 (*interpHandler)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
+    CsCamInterpolateCallback interpHandler;
     Player* player;
     Actor* target;
     s16 numPoints;
