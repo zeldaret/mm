@@ -1120,7 +1120,6 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
         }
     }
 end:;
-    return;
 }
 
 void Cutscene_SetActorCue(CutsceneContext* csCtx, u8** script, s16 cueChannel) {
