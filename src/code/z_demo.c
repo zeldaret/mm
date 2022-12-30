@@ -1009,7 +1009,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
     s32 pad;
     u16 endFrame;
 
-    if ((cmd->startFrame >= csCtx->curFrame) || ((cmd->endFrame < csCtx->curFrame))) {
+    if ((csCtx->curFrame <= cmd->startFrame) || (csCtx->curFrame > cmd->endFrame)) {
         return;
     }
 
@@ -1040,6 +1040,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
             } else {
                 Message_StartTextbox(play, cmd->textId, NULL);
             }
+            //! FAKE: return;
             goto end;
         }
     } else {

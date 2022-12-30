@@ -867,7 +867,7 @@ typedef enum {
     /* 0x14 */ SCENE_CMD_ID_END,
     /* 0x15 */ SCENE_CMD_ID_SOUND_SETTINGS,
     /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
-    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
+    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
     /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
@@ -952,26 +952,29 @@ typedef enum {
 #define SCENE_CMD_ECHO_SETTINGS(echo) \
     { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
 
-#define SCENE_CMD_CUTSCENE_LIST(numCutscene, scriptList) \
-    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(scriptList) }
+#define SCENE_CMD_CUTSCENE_SCRIPT_LIST(numEntries, scriptList) \
+    { SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST, numEntries, CMD_PTR(scriptList) }
 
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
 
-#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED // TODO: ZAPD Capatability
 #define SCENE_CMD_SET_REGION_VISITED() \
     { SCENE_CMD_ID_SET_REGION_VISITED, 0, CMD_W(0) }
 
 #define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
     { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }
 
-#define SCENE_CMD_ACTOR_CUTSCENE_LIST(actorCutsceneCount, actorCutsceneList) \
-    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, actorCutsceneCount, CMD_PTR(actorCutsceneList) }
+#define SCENE_CMD_ACTOR_CUTSCENE_LIST(numEntries, actorCutsceneList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, numEntries, CMD_PTR(actorCutsceneList) }
 
 #define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
     { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
 
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
+
+ // TODO: ZAPD Capatability
+#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
+#define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
 
 #endif
