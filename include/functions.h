@@ -1272,8 +1272,6 @@ void CutsceneFlags_Set(PlayState* play, s16 flag);
 void CutsceneFlags_Unset(PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(PlayState* play, s16 flag);
 
-s16 ActorCutscene_SetHudVisibility(s16 csHudVisibility);
-ActorCutscene* ActorCutscene_GetCutsceneImpl(s16 csId);
 void ActorCutscene_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 num);
 void ActorCutscene_StoreCamera(Camera* camera);
 void ActorCutscene_ClearWaiting(void);
