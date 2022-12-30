@@ -329,7 +329,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
 
     if (((ENTEST6_GET(&this->actor) == ENTEST6_24) || (ENTEST6_GET(&this->actor) == ENTEST6_25) ||
          (ENTEST6_GET(&this->actor) == ENTEST6_26)) &&
-        (play->playerCsIds[8] == -1)) {
+        (play->playerCsIds[8] == CS_ID_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
