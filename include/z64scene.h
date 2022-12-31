@@ -176,7 +176,7 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  scriptListCount;
     /* 0x4 */ void* segment;
-} SCmdCutsceneList; // size = 0x8
+} SCmdCsScriptList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -522,7 +522,7 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCutsceneList      scriptList;
+    /* Command: 0x17 */ SCmdCsScriptList      scriptList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;

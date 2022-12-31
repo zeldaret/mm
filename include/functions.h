@@ -1918,7 +1918,7 @@ void Scene_HeaderCmd09(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdSoundSettings(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdEchoSetting(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd);
-void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd);
+void Scene_HeaderCmdCutsceneScriptList(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdActorCutsceneList(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmdMiniMap(PlayState* play, SceneCmd* cmd);
 void Scene_HeaderCmd1D(PlayState* play, SceneCmd* cmd);

@@ -1961,7 +1961,7 @@ asm/non_matchings/code/z_scene/Scene_HeaderCmd09.s,Scene_HeaderCmd09,0x801303D0,
 asm/non_matchings/code/z_scene/Scene_HeaderCmdSoundSettings.s,Scene_HeaderCmdSoundSettings,0x801303E0,0x17
 asm/non_matchings/code/z_scene/Scene_HeaderCmdEchoSetting.s,Scene_HeaderCmdEchoSetting,0x8013043C,0x6
 asm/non_matchings/code/z_scene/Scene_HeaderCmdAltHeaderList.s,Scene_HeaderCmdAltHeaderList,0x80130454,0x1E
-asm/non_matchings/code/z_scene/Scene_HeaderCmdCutsceneList.s,Scene_HeaderCmdCutsceneList,0x801304CC,0xD
+asm/non_matchings/code/z_scene/Scene_HeaderCmdCutsceneScriptList.s,Scene_HeaderCmdCutsceneScriptList,0x801304CC,0xD
 asm/non_matchings/code/z_scene/Scene_HeaderCmdActorCutsceneList.s,Scene_HeaderCmdActorCutsceneList,0x80130500,0x10
 asm/non_matchings/code/z_scene/Scene_HeaderCmdMiniMap.s,Scene_HeaderCmdMiniMap,0x80130540,0xE
 asm/non_matchings/code/z_scene/Scene_HeaderCmd1D.s,Scene_HeaderCmd1D,0x80130578,0x4

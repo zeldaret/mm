@@ -471,7 +471,7 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
 }
 
 // SceneTableEntry Header Command 0x17: Cutscene List
-void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
+void Scene_HeaderCmdCutsceneScriptList(PlayState* play, SceneCmd* cmd) {
     play->csCtx.scriptListCount = cmd->scriptList.scriptListCount;
     play->csCtx.scriptList = Lib_SegmentedToVirtual(cmd->scriptList.segment);
 }
@@ -564,7 +564,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
         NULL,
         Scene_HeaderCmdSoundSettings,
         Scene_HeaderCmdEchoSetting,
-        Scene_HeaderCmdCutsceneList,
+        Scene_HeaderCmdCutsceneScriptList,
         Scene_HeaderCmdAltHeaderList,
         Scene_HeaderCmdSetRegionVisitedFlag,
         Scene_HeaderCmdAnimatedMaterials,

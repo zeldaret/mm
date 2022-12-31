@@ -2447,7 +2447,7 @@
     0x801303E0:("Scene_HeaderCmdSoundSettings",),
     0x8013043C:("Scene_HeaderCmdEchoSetting",),
     0x80130454:("Scene_HeaderCmdAltHeaderList",),
-    0x801304CC:("Scene_HeaderCmdCutsceneList",),
+    0x801304CC:("Scene_HeaderCmdCutsceneScriptList",),
     0x80130500:("Scene_HeaderCmdActorCutsceneList",),
     0x80130540:("Scene_HeaderCmdMiniMap",),
     0x80130578:("Scene_HeaderCmd1D",),
