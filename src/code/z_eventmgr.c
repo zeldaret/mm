@@ -110,11 +110,11 @@ ActorCutscene* CutsceneManager_GetCutsceneImpl(s16 csId) {
     }
 }
 
-void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 num) {
+void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 numEntries) {
     s32 i;
 
     sCutsceneList = cutsceneList;
-    sCutsceneListNumEntries = num;
+    sCutsceneListNumEntries = numEntries;
 
     for (i = 0; i < ARRAY_COUNT(sWaitingCutsceneList); i++) {
         sWaitingCutsceneList[i] = 0;

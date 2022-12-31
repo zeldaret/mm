@@ -199,7 +199,7 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdCutsceneActorList; // size = 0x8
+} SCmdCutsceneList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -526,7 +526,7 @@ typedef union {
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
-    /* Command: 0x1B */ SCmdCutsceneActorList cutsceneActorList;
+    /* Command: 0x1B */ SCmdCutsceneList      cutsceneList;
     /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
     /* Command: 0x1D */ // Unused
     /* Command: 0x1E */ SCmdMinimapChests     minimapChests;

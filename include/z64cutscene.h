@@ -820,7 +820,7 @@ s32 Cutscene_GetCueChannel(struct PlayState* play, u16 cueType);
 s32 Cutscene_IsCueInChannel(struct PlayState* play, u16 cueType);
 u8 Cutscene_IsPlaying(struct PlayState* play);
 
-void CutsceneManager_Init(struct PlayState* play, ActorCutscene* cutsceneList, s16 num);
+void CutsceneManager_Init(struct PlayState* play, ActorCutscene* cutsceneList, s16 numEntries);
 void CutsceneManager_StoreCamera(Camera* camera);
 void CutsceneManager_ClearWaiting(void);
 s16 CutsceneManager_Update(void);

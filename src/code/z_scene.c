@@ -470,15 +470,15 @@ void Scene_HeaderCmdAltHeaderList(PlayState* play, SceneCmd* cmd) {
     }
 }
 
-// SceneTableEntry Header Command 0x17: Cutscene List
+// SceneTableEntry Header Command 0x17: Cutscene Script List
 void Scene_HeaderCmdCutsceneScriptList(PlayState* play, SceneCmd* cmd) {
     play->csCtx.scriptListCount = cmd->scriptList.scriptListCount;
     play->csCtx.scriptList = Lib_SegmentedToVirtual(cmd->scriptList.segment);
 }
 
-// SceneTableEntry Header Command 0x1B: Actor Cutscene List
-void Scene_HeaderCmdActorCutsceneList(PlayState* play, SceneCmd* cmd) {
-    CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment), cmd->cutsceneActorList.num);
+// SceneTableEntry Header Command 0x1B: Cutscene List
+void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
+    CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneList.segment), cmd->cutsceneList.num);
 }
 
 // SceneTableEntry Header Command 0x1C: Mini Maps
@@ -568,7 +568,7 @@ s32 Scene_ProcessHeader(PlayState* play, SceneCmd* header) {
         Scene_HeaderCmdAltHeaderList,
         Scene_HeaderCmdSetRegionVisitedFlag,
         Scene_HeaderCmdAnimatedMaterials,
-        Scene_HeaderCmdActorCutsceneList,
+        Scene_HeaderCmdCutsceneList,
         Scene_HeaderCmdMiniMap,
         Scene_HeaderCmd1D,
         Scene_HeaderCmdMiniMapCompassInfo,
