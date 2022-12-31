@@ -841,6 +841,11 @@ s16 CutsceneManager_FindEntranceCsId(void);
 s32 func_800F22C4(s16 csId, Actor* actor);
 void CutsceneManager_SetReturnCamera(s16 camId);
 
+s32 CutsceneCamera_Init(Camera* camera, CutsceneCamera* csCamera);
+s32 CutsceneCamera_UpdateSplines(u8* script, CutsceneCamera* csCamera);
+void CutsceneCamera_SetState(s16 state);
+void CutsceneCamera_Reset(void);
+
 void CutsceneFlags_UnsetAll(struct PlayState* play);
 void CutsceneFlags_Set(struct PlayState* play, s16 flag);
 void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
