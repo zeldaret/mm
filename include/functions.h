@@ -1236,23 +1236,6 @@ DebugDispObject* DebugDisplay_AddObject(f32 posX, f32 posY, f32 posZ, s16 rotX, 
 // void func_800E9E94(void);
 void func_800E9F78(GraphicsContext* gfxCtx);
 
-void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_StartManual(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_StopManual(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_UpdateManual(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_UpdateScripted(PlayState* play, CutsceneContext* csCtx);
-void Cutscene_HandleEntranceTriggers(PlayState* play);
-void func_800EDDB0(PlayState* play);
-void Cutscene_StartScripted(PlayState* play, u8 scriptIndex);
-void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 cueChannel);
-void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 cueChannel);
-void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel);
-void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel);
-s32 Cutscene_GetSceneLayer(PlayState* play);
-s32 Cutscene_GetCueChannel(PlayState* play, u16 cueType);
-s32 Cutscene_IsCueInChannel(PlayState* play, u16 cueType);
-u8 Cutscene_IsPlaying(PlayState* play);
-
 void GetItem_Draw(PlayState* play, s16 drawId);
 
 void EffFootmark_Init(PlayState* play);
@@ -1266,32 +1249,6 @@ void SoundSource_PlaySfxEachFrameAtFixedWorldPos(PlayState* play, Vec3f* worldPo
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
 u16 Text_GetFaceReaction(PlayState* play, u32 reactionSet);
-
-void CutsceneFlags_UnsetAll(PlayState* play);
-void CutsceneFlags_Set(PlayState* play, s16 flag);
-void CutsceneFlags_Unset(PlayState* play, s16 flag);
-s32 CutsceneFlags_Get(PlayState* play, s16 flag);
-
-void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 num);
-void CutsceneManager_StoreCamera(Camera* camera);
-void CutsceneManager_ClearWaiting(void);
-s16 CutsceneManager_Update(void);
-void CutsceneManager_Queue(s16 csId);
-s16 CutsceneManager_IsNext(s16 csId);
-s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor);
-s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor);
-s16 CutsceneManager_Start(s16 csId, Actor* actor);
-s16 CutsceneManager_Stop(s16 csId);
-s16 CutsceneManager_GetCurrentCsId(void);
-ActorCutscene* CutsceneManager_GetCutscene(s16 csId);
-s16 CutsceneManager_GetAdditionalCsId(s16 csId);
-s16 CutsceneManager_GetLength(s16 csId);
-s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId);
-s16 CutsceneManager_GetCutsceneCustomValue(s16 csId);
-s16 CutsceneManager_GetCurrentSubCamId(s16 csId);
-s16 CutsceneManager_FindEntranceCsId(void);
-s32 func_800F22C4(s16 csId, Actor* actor);
-void CutsceneManager_SetReturnCamera(s16 camId);
 
 void FireObj_SetPosition(FireObj* fire, Vec3f* pos);
 void FireObj_Draw(PlayState* play, FireObj* fire);

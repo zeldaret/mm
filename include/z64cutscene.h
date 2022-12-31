@@ -789,4 +789,47 @@ typedef enum {
 // OoT Remnant
 #define CS_CAM_DATA_NOT_APPLIED 0xFFFF
 
+void Cutscene_InitContext(struct PlayState* play, CutsceneContext* csCtx);
+void Cutscene_StartManual(struct PlayState* play, CutsceneContext* csCtx);
+void Cutscene_StopManual(struct PlayState* play, CutsceneContext* csCtx);
+void Cutscene_UpdateManual(struct PlayState* play, CutsceneContext* csCtx);
+void Cutscene_UpdateScripted(struct PlayState* play, CutsceneContext* csCtx);
+void Cutscene_HandleEntranceTriggers(struct PlayState* play);
+void func_800EDDB0(struct PlayState* play);
+void Cutscene_StartScripted(struct PlayState* play, u8 scriptIndex);
+void Cutscene_ActorTranslate(Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateAndYaw(Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, struct PlayState* play, s32 cueChannel);
+void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, struct PlayState* play, s32 cueChannel);
+s32 Cutscene_GetSceneLayer(struct PlayState* play);
+s32 Cutscene_GetCueChannel(struct PlayState* play, u16 cueType);
+s32 Cutscene_IsCueInChannel(struct PlayState* play, u16 cueType);
+u8 Cutscene_IsPlaying(struct PlayState* play);
+
+void CutsceneManager_Init(struct PlayState* play, ActorCutscene* cutsceneList, s16 num);
+void CutsceneManager_StoreCamera(Camera* camera);
+void CutsceneManager_ClearWaiting(void);
+s16 CutsceneManager_Update(void);
+void CutsceneManager_Queue(s16 csId);
+s16 CutsceneManager_IsNext(s16 csId);
+s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor);
+s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor);
+s16 CutsceneManager_Start(s16 csId, Actor* actor);
+s16 CutsceneManager_Stop(s16 csId);
+s16 CutsceneManager_GetCurrentCsId(void);
+ActorCutscene* CutsceneManager_GetCutscene(s16 csId);
+s16 CutsceneManager_GetAdditionalCsId(s16 csId);
+s16 CutsceneManager_GetLength(s16 csId);
+s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId);
+s16 CutsceneManager_GetCutsceneCustomValue(s16 csId);
+s16 CutsceneManager_GetCurrentSubCamId(s16 csId);
+s16 CutsceneManager_FindEntranceCsId(void);
+s32 func_800F22C4(s16 csId, Actor* actor);
+void CutsceneManager_SetReturnCamera(s16 camId);
+
+void CutsceneFlags_UnsetAll(struct PlayState* play);
+void CutsceneFlags_Set(struct PlayState* play, s16 flag);
+void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
+s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
+
 #endif
