@@ -143,14 +143,14 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
     s32 pad1;
 
     if (this->pendingAction != OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
-        if (ActorCutscene_GetCurrentCsId() != thisx->csId) {
-            if (ActorCutscene_GetCanPlayNext(thisx->csId) != 0) {
-                ActorCutscene_StartWithPlayerCs(thisx->csId, thisx);
+        if (CutsceneManager_GetCurrentCsId() != thisx->csId) {
+            if (CutsceneManager_IsNext(thisx->csId) != 0) {
+                CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
                     Flags_SetSwitch(play, switchFlag);
                 }
             } else {
-                ActorCutscene_SetIntentToPlay(thisx->csId);
+                CutsceneManager_Queue(thisx->csId);
             }
         } else if (func_800F22C4(thisx->csId, thisx) != 0) {
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;

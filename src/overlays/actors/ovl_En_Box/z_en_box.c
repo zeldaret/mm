@@ -295,12 +295,12 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     csId = this->dyna.actor.csId;
 
     while (csId != CS_ID_NONE) {
-        if (ActorCutscene_GetCutsceneCustomValue(csId) == 1) {
+        if (CutsceneManager_GetCutsceneCustomValue(csId) == 1) {
             this->csId2 = csId;
         } else {
             this->csId1 = csId;
         }
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
     func_80867BDC(&this->unk_1F4, play, &this->dyna.actor.home.pos);
 }
@@ -388,12 +388,12 @@ void EnBox_FallOnSwitchFlag(EnBox* this, PlayState* play) {
 void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
     func_800B8C50(&this->dyna.actor, play);
     if (Flags_GetSwitch(play, this->switchFlag)) {
-        if (ActorCutscene_GetCanPlayNext(this->csId1)) {
-            ActorCutscene_StartWithPlayerCs(this->csId1, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->csId1)) {
+            CutsceneManager_StartWithPlayerCs(this->csId1, &this->dyna.actor);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId1);
+            CutsceneManager_Queue(this->csId1);
         }
     }
 }
@@ -401,13 +401,13 @@ void EnBox_AppearSwitchFlag(EnBox* this, PlayState* play) {
 void EnBox_AppearOnRoomClear(EnBox* this, PlayState* play) {
     func_800B8C50(&this->dyna.actor, play);
     if (Flags_GetClearTemp(play, this->dyna.actor.room)) {
-        if (ActorCutscene_GetCanPlayNext(this->csId1)) {
-            ActorCutscene_StartWithPlayerCs(this->csId1, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->csId1)) {
+            CutsceneManager_StartWithPlayerCs(this->csId1, &this->dyna.actor);
             Flags_SetClear(play, this->dyna.actor.room);
             EnBox_SetupAction(this, func_80868AFC);
             this->unk_1A0 = -30;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId1);
+            CutsceneManager_Queue(this->csId1);
         }
     }
 }
@@ -432,7 +432,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y += 1.25f;
         }
         this->unk_1A0++;
-        if ((this->csId1 != -1) && ActorCutscene_GetCurrentCsId() == this->csId1) {
+        if ((this->csId1 != -1) && CutsceneManager_GetCurrentCsId() == this->csId1) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
             } else if (this->unk_1A0 == 22) {
@@ -445,7 +445,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
     } else {
         EnBox_SetupAction(this, EnBox_WaitOpen);
-        ActorCutscene_Stop(this->dyna.actor.csId);
+        CutsceneManager_Stop(this->dyna.actor.csId);
     }
 }
 
@@ -460,8 +460,8 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
-    if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (ActorCutscene_GetCurrentCsId() == this->csId2) ||
-                                 (ActorCutscene_GetCurrentCsId() == CS_ID_NONE))) {
+    if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (CutsceneManager_GetCurrentCsId() == this->csId2) ||
+                                 (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
             animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;

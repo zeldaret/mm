@@ -694,11 +694,11 @@ void EnOsn_InitCutscene(EnOsn* this) {
     this->csId = this->actor.csId;
     if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
         (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
 
         if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
             (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-            this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         }
     }
 }
@@ -737,14 +737,14 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
 }
 
 void EnOsn_StartCutscene(EnOsn* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_Start(this->csId, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->actor);
         this->actionFunc = EnOsn_HandleCsAction;
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 

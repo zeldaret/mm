@@ -102,13 +102,13 @@ void EnMm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80965D3C(EnMm* this, PlayState* play) {
-    s16 csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+    s16 csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         EnMm_SetupAction(this, func_80965DB4);
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
 }
 

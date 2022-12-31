@@ -384,11 +384,11 @@ void func_80B3D47C(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D558(EnDnp* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_23_20);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

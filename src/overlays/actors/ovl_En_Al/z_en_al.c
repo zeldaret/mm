@@ -222,14 +222,14 @@ Actor* func_80BDE384(EnAl* this, PlayState* play) {
 s32 func_80BDE408(EnAl* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(csId);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
@@ -239,7 +239,7 @@ s16 func_80BDE484(EnAl* this, s32 numCutscenes) {
     s32 i;
 
     for (i = 0; i < numCutscenes; i++) {
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
     return csId;
@@ -332,7 +332,8 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 6:
         case 8:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_4E6++;
             sp20 = true;
@@ -342,13 +343,13 @@ s32 func_80BDE7FC(EnAl* this, PlayState* play) {
         case 3:
         case 5:
         case 7:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             this->unk_4E6++;
             sp20 = true;
             break;
 
         case 9:
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->unk_4E6++;
             sp20 = true;
             break;

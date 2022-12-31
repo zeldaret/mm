@@ -191,13 +191,13 @@ void func_80BD6274(BgHakaBombwall* this, PlayState* play) {
 
 void BgHakaBombwall_SetupPlayCutscene(BgHakaBombwall* this) {
     this->dyna.actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = BgHakaBombwall_PlayCutscene;
 }
 
 void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80BD5E6C(this, play);
         this->dyna.actor.draw = NULL;
         Flags_SetSwitch(play, BGHAKABOMBWALL_GET_7F(&this->dyna.actor));
@@ -205,7 +205,7 @@ void BgHakaBombwall_PlayCutscene(BgHakaBombwall* this, PlayState* play) {
         func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
         BgHakaBombwall_SetupEndCutscene(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -217,7 +217,7 @@ void BgHakaBombwall_SetupEndCutscene(BgHakaBombwall* this) {
 void BgHakaBombwall_EndCutscene(BgHakaBombwall* this, PlayState* play) {
     this->csTimer--;
     if (this->csTimer <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.csId);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Actor_Kill(&this->dyna.actor);
     }
 }

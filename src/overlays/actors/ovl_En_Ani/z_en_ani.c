@@ -307,13 +307,13 @@ void EnAni_Update(Actor* thisx, PlayState* play) {
     if (this->stateFlags & ANI_STATE_FALLING) {
         if (this->actor.csId == CS_ID_NONE) {
             this->stateFlags &= ~ANI_STATE_FALLING;
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
-            this->actor.csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->actor.csId)),
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+            this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->actor.csId)),
                                    &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }

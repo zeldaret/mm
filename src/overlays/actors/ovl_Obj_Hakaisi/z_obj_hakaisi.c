@@ -193,10 +193,10 @@ void func_80B14558(ObjHakaisi* this) {
 
 void func_80B1456C(ObjHakaisi* this, PlayState* play) {
     if (this->csId != CS_ID_NONE) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (this->dyna.actor.colChkInfo.health < 30) {
@@ -258,8 +258,8 @@ void func_80B149A8(ObjHakaisi* this) {
 void func_80B149C0(ObjHakaisi* this, PlayState* play) {
     if (this->unk_19A < 60) {
         this->unk_19A++;
-    } else if ((this->csId != CS_ID_NONE) && !ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_Stop(this->csId);
+    } else if ((this->csId != CS_ID_NONE) && !CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Stop(this->csId);
     }
 }
 

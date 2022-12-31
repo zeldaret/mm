@@ -102,7 +102,7 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->shellCollider, &this->picto.actor, &sShellCylinderInit);
     Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->picto.actor, &sBodyCylinderInit);
     CollisionCheck_SetInfo(&this->picto.actor.colChkInfo, NULL, &sColChkInfoInit);
-    this->csId = ActorCutscene_GetAdditionalCsId(this->picto.actor.csId);
+    this->csId = CutsceneManager_GetAdditionalCsId(this->picto.actor.csId);
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE) ||
         ((this->picto.actor.params != 0xFF) && Flags_GetSwitch(play, this->picto.actor.params))) {
@@ -129,8 +129,8 @@ void EnBigokuta_Destroy(Actor* thisx, PlayState* play) {
 void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, PlayState* play, Vec3f* subCamAt, Vec3f* subCamEye) {
     s16 angle;
 
-    ActorCutscene_Start(this->picto.actor.csId, &this->picto.actor);
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.csId);
+    CutsceneManager_Start(this->picto.actor.csId, &this->picto.actor);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
     Play_SetCameraAtEye(play, this->subCamId, subCamAt, subCamEye);
 
     angle = BINANG_SUB(Actor_YawToPoint(&this->picto.actor, subCamEye), this->picto.actor.home.rot.y);
@@ -160,7 +160,7 @@ void EnBigokuta_ResetCamera(EnBigokuta* this, PlayState* play) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->picto.actor.csId);
+        CutsceneManager_Stop(this->picto.actor.csId);
     }
 }
 
@@ -270,12 +270,12 @@ void EnBigokuta_UpdateOrSetupCam(EnBigokuta* this, PlayState* play) {
     if (this->picto.actor.csId != CS_ID_NONE) {
         if (this->subCamId != SUB_CAM_ID_DONE) {
             EnBigokuta_MoveCamera(this, play);
-        } else if (ActorCutscene_GetCanPlayNext(this->picto.actor.csId)) {
+        } else if (CutsceneManager_IsNext(this->picto.actor.csId)) {
             Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
             EnBigokuta_SetupCutsceneCamera(this, play, &mainCam->at, &mainCam->eye);
         } else {
-            ActorCutscene_SetIntentToPlay(this->picto.actor.csId);
+            CutsceneManager_Queue(this->picto.actor.csId);
         }
     }
 }
@@ -289,7 +289,7 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, PlayState* play) {
     this->timer = 0;
 
     Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, ANIMMODE_ONCE, -3.0f);
-    ActorCutscene_SetIntentToPlay(this->picto.actor.csId);
+    CutsceneManager_Queue(this->picto.actor.csId);
 
     this->playerHoldPos.x = (Math_SinS(this->picto.actor.shape.rot.y) * 66.0f) + this->picto.actor.world.pos.x;
     this->playerHoldPos.y = (this->picto.actor.home.pos.y - 49.5f) + 42.899998f;
@@ -355,7 +355,7 @@ void EnBigokuta_HoldPlayer(EnBigokuta* this, PlayState* play) {
 }
 
 void EnBigokuta_SetupDeathCutscene(EnBigokuta* this) {
-    ActorCutscene_SetIntentToPlay(this->csId);
+    CutsceneManager_Queue(this->csId);
     this->timer = 0;
     this->bodyCollider.base.acFlags &= ~AC_ON;
     this->actionFunc = EnBigokuta_PlayDeathCutscene;
@@ -374,8 +374,8 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
             Actor_SpawnIceEffects(play, &this->picto.actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
             EnBigokuta_SetupDeathEffects(this);
         }
-    } else if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_Start(this->csId, &this->picto.actor);
+    } else if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->picto.actor);
 
         if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
             func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_WAIT);
@@ -390,7 +390,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
             EnBigokuta_SetupDeathEffects(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -450,7 +450,7 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                     Flags_SetSwitch(play, this->picto.actor.params);
                 }
 
-                ActorCutscene_Stop(this->csId);
+                CutsceneManager_Stop(this->csId);
                 Actor_Kill(&this->picto.actor);
 
                 if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {

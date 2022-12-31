@@ -111,16 +111,16 @@ s32 func_80BD7CEC(BgIknvObj* this) {
         return true;
     }
 
-    if (ActorCutscene_GetCurrentCsId() == this->dyna.actor.csId) {
+    if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
         return true;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         return true;
     }
 
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     return false;
 }
 
@@ -166,7 +166,7 @@ void func_80BD7F4C(BgIknvObj* this, PlayState* play) {
         this->actionFunc = func_80BD7ED8;
     }
     if ((this->dyna.actor.home.rot.x == 1) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_58_80)) {
-        ActorCutscene_Stop(this->dyna.actor.csId);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->dyna.actor.home.rot.x = 0;
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);

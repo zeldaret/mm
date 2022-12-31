@@ -1479,7 +1479,7 @@ void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx) {
         gSaveContext.save.cutsceneIndex = 0;
         gSaveContext.gameMode = 0;
 
-        ActorCutscene_Stop(CS_ID_GLOBAL_END);
+        CutsceneManager_Stop(CS_ID_GLOBAL_END);
         Audio_SetCutsceneFlag(false);
         csCtx->state = CS_STATE_IDLE;
     }
@@ -1508,7 +1508,7 @@ void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
 
             csCtx->curFrame = 0xFFFF;
 
-            csCtx->subCamId = ActorCutscene_GetCurrentSubCamId(0x7F);
+            csCtx->subCamId = CutsceneManager_GetCurrentSubCamId(0x7F);
             CutsceneCamera_Init(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
 
             // OoT Remnant
@@ -1536,29 +1536,29 @@ void Cutscene_HandleEntranceTriggers(PlayState* play) {
 
     if (((gSaveContext.gameMode == 0) || (gSaveContext.gameMode == 1)) && (gSaveContext.respawnFlag <= 0)) {
         // Try to find an actor cutscene that's triggered by the current spawn
-        csId = ActorCutscene_FindEntranceCsId();
+        csId = CutsceneManager_FindEntranceCsId();
         if (csId != CS_ID_NONE) {
-            scriptIndex = ActorCutscene_GetCutsceneScriptIndex(csId);
+            scriptIndex = CutsceneManager_GetCutsceneScriptIndex(csId);
             if (scriptIndex != CS_SCRIPT_ID_NONE) {
                 // A scripted cutscene is triggered by a spawn
                 if ((play->csCtx.scriptList[scriptIndex].spawnFlags != CS_SPAWN_FLAG_NONE) &&
                     (gSaveContext.respawnFlag == 0)) {
                     if (play->csCtx.scriptList[scriptIndex].spawnFlags == CS_SPAWN_FLAG_ALWAYS) {
                         // Entrance cutscenes that always run
-                        ActorCutscene_Start(csId, NULL);
+                        CutsceneManager_Start(csId, NULL);
                         gSaveContext.showTitleCard = false;
 
                     } else if (!CHECK_CS_SPAWN_FLAG_WEEKEVENTREG(play->csCtx.scriptList[scriptIndex].spawnFlags)) {
                         // Entrance cutscenes that only run once
                         SET_CS_SPAWN_FLAG_WEEKEVENTREG(play->csCtx.scriptList[scriptIndex].spawnFlags);
-                        ActorCutscene_Start(csId, NULL);
+                        CutsceneManager_Start(csId, NULL);
                         // The title card will be used by the cs misc command if necessary.
                         gSaveContext.showTitleCard = false;
                     }
                 }
             } else {
                 // A non-scripted cutscene is triggered by a spawn
-                ActorCutscene_StartWithPlayerCs(csId, NULL);
+                CutsceneManager_StartWithPlayerCs(csId, NULL);
             }
         }
     }

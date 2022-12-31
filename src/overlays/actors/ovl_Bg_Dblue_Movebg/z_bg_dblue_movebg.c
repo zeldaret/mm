@@ -385,7 +385,7 @@ void func_80A2A32C(BgDblueMovebg* this, PlayState* play) {
         }
 
         if (phi_v1) {
-            this->unk_180 = ActorCutscene_GetCutsceneCustomValue(this->csIdList[0]);
+            this->unk_180 = CutsceneManager_GetCutsceneCustomValue(this->csIdList[0]);
             this->csId = this->csIdList[0];
             this->unk_172 |= 8;
             this->actionFunc = func_80A2A444;
@@ -447,7 +447,7 @@ void func_80A2A670(BgDblueMovebg* this, PlayState* play) {
 void func_80A2A688(BgDblueMovebg* this, PlayState* play) {
     this->unk_180--;
     if (this->unk_180 <= 0) {
-        ActorCutscene_Stop(this->csIdList[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y - 60.0f, 2.0f) &&
@@ -477,7 +477,7 @@ void func_80A2A714(BgDblueMovebg* this, PlayState* play) {
         }
         this->unk_17E = phi_v0 * phi_f0;
 
-        this->unk_180 = ActorCutscene_GetCutsceneCustomValue(this->csIdList[0]);
+        this->unk_180 = CutsceneManager_GetCutsceneCustomValue(this->csIdList[0]);
         this->csId = this->csIdList[0];
         this->unk_172 |= 8;
         this->actionFunc = func_80A2A7F8;
@@ -550,12 +550,12 @@ void func_80A2AAB8(BgDblueMovebg* this, PlayState* play) {
     s32 sp18;
 
     if (this->unk_180-- <= 0) {
-        ActorCutscene_Stop(this->csIdList[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
 
     sp18 = false;
     if ((this->unk_1D0 > 0) && ((sCsIdList[0] >= 0) || (sCsIdList[1] >= 0))) {
-        if (ActorCutscene_GetCurrentCsId() != CS_ID_NONE) {
+        if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
             sp18 = true;
         }
     }

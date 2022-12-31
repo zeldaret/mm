@@ -1443,7 +1443,7 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
 
     switch (this->csState) {
         case 0:
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);
@@ -1657,7 +1657,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, PlayState* play) {
     this->csTimer++;
     switch (this->csState) {
         case 0:
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
                 func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                 this->subCamId = Play_CreateSubCamera(play);

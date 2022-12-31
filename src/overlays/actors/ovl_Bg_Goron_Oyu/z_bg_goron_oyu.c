@@ -53,11 +53,11 @@ void func_80B400C8(BgGoronOyu* this, PlayState* play) {
 }
 
 void func_80B40100(BgGoronOyu* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->initCsId)) {
-        ActorCutscene_StartWithPlayerCs(this->initCsId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->initCsId)) {
+        CutsceneManager_StartWithPlayerCs(this->initCsId, &this->dyna.actor);
         this->actionFunc = func_80B40160;
     } else {
-        ActorCutscene_SetIntentToPlay(this->initCsId);
+        CutsceneManager_Queue(this->initCsId);
     }
 }
 
@@ -69,7 +69,7 @@ void func_80B40160(BgGoronOyu* this, PlayState* play) {
     BgGoronOyu_UpdateWaterBoxInfo(this, play);
 
     if (this->unk_164 <= 0.0f) {
-        ActorCutscene_Stop(this->initCsId);
+        CutsceneManager_Stop(this->initCsId);
         this->unk_164 = 0.0f;
         func_80B40080(this);
     }

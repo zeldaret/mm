@@ -296,7 +296,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     sCsIdList[0] = csId;
     if (csId >= 0) {
-        ActorCutscene* actorCutscene = ActorCutscene_GetCutscene(sCsIdList[0]);
+        ActorCutscene* actorCutscene = CutsceneManager_GetCutscene(sCsIdList[0]);
 
         SET_EVENTINF(EVENTINF_52);
         sCsIdList[1] = actorCutscene->additionalCsId;
@@ -471,10 +471,10 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 void func_80A42F20(EnTest4* this, PlayState* play) {
     if (!this->transitionCsTimer) {
         if (sCurCsId >= 0) {
-            if (ActorCutscene_GetCanPlayNext(sCurCsId) == 0) {
-                ActorCutscene_SetIntentToPlay(sCurCsId);
+            if (CutsceneManager_IsNext(sCurCsId) == 0) {
+                CutsceneManager_Queue(sCurCsId);
             } else {
-                ActorCutscene_Start(sCurCsId, &this->actor);
+                CutsceneManager_Start(sCurCsId, &this->actor);
                 this->transitionCsTimer = 1;
             }
         } else {
@@ -506,7 +506,7 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
         }
 
         if (sCurCsId >= 0) {
-            ActorCutscene_Stop(sCurCsId);
+            CutsceneManager_Stop(sCurCsId);
         }
 
         gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;

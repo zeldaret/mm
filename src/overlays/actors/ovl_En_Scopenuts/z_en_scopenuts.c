@@ -448,14 +448,14 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
     }
 
     if (this->unk_36C == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_36C = 1;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     }
@@ -593,7 +593,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
 
         if (sp32 == 3) {
             if (this->unk_334 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->csId);
+                CutsceneManager_Stop(this->csId);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_40);
                 this->actionFunc = func_80BCC288;
             } else {
@@ -601,7 +601,7 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
             }
         }
     } else if (this->actor.playerHeightRel > 500.0f) {
-        ActorCutscene_Stop(this->csId);
+        CutsceneManager_Stop(this->csId);
         this->actionFunc = func_80BCC288;
     }
 
@@ -609,17 +609,17 @@ void func_80BCBFFC(EnScopenuts* this, PlayState* play) {
     func_80BCAD64(this, sp32);
 
     if (this->unk_36C == 2) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_36C = 3;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     } else if ((this->unk_36C == 1) && (this->unk_36E == 20)) {
-        ActorCutscene_Stop(this->csId);
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Stop(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->unk_36C = 2;
     }
     this->unk_36E++;

@@ -153,7 +153,7 @@ void EnHg_Init(Actor* thisx, PlayState* play) {
             break;
         }
         this->csIdList[i] = csId;
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
     EnHg_SetupWait(this);
 }
@@ -270,14 +270,14 @@ void EnHg_SetupCutscene(EnHg* this) {
 }
 
 void EnHg_PlayCutscene(EnHg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
-        ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->actor);
+    if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+        CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
         EnHg_SetupCsAction(this);
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+        CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
     }
 }
 

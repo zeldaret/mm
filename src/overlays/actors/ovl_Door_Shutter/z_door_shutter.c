@@ -313,17 +313,17 @@ void func_808A0F88(DoorShutter* this, PlayState* play) {
         this->csId = this->actor.csId;
         if (this->doorType == 7) {
             if (this->csId != CS_ID_NONE) {
-                this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             Flags_SetClear(play, this->actor.room);
             DoorShutter_SetupAction(this, func_808A1784);
             this->unk_167 = -1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     } else if (func_808A0E28(this, play)) {
         Player* player = GET_PLAYER(play);
@@ -454,7 +454,7 @@ s32 func_808A1478(DoorShutter* this, PlayState* play, f32 arg2) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_METALDOOR_OPEN);
         }
 
-        if ((this->csId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() == this->csId)) {
+        if ((this->csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId)) {
             func_800B724C(play, &this->actor, PLAYER_CSMODE_1);
         }
     }
@@ -469,12 +469,12 @@ void func_808A1548(DoorShutter* this, PlayState* play) {
     if (func_808A1478(this, play, 1.0f)) {
         if (Flags_GetSwitch(play, DOORSHUTTER_GET_7F(&this->actor))) {
             this->csId = this->actor.csId;
-            if (ActorCutscene_GetCanPlayNext(this->csId)) {
-                ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+            if (CutsceneManager_IsNext(this->csId)) {
+                CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
                 DoorShutter_SetupAction(this, func_808A1784);
                 this->unk_167 = -1;
             } else {
-                ActorCutscene_SetIntentToPlay(this->csId);
+                CutsceneManager_Queue(this->csId);
             }
         } else if (func_808A0E28(this, play)) {
             Player* player = GET_PLAYER(play);
@@ -569,7 +569,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 
     if (DoorShutter_SetupDoor(this, play) && !(player->stateFlags1 & PLAYER_STATE1_800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
             func_801226E0(play, ((void)0, gSaveContext.respawn[RESPAWN_MODE_DOWN].data));
             player->csId = CS_ID_NONE;
             func_800B7298(play, NULL, PLAYER_CSMODE_115);

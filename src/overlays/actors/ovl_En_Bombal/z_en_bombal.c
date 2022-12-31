@@ -109,16 +109,16 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csId);
             return;
         }
 
-        if (!ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_SetIntentToPlay(this->csId);
+        if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Queue(this->csId);
         } else {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             phi_s0 = true;
         }
     } else {
@@ -147,7 +147,7 @@ void func_80C05DE8(EnBombal* this, PlayState* play) {
     if (this->timer == 0) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-            ActorCutscene_Stop(this->csId);
+            CutsceneManager_Stop(this->csId);
         }
         Actor_Kill(&this->actor);
         return;

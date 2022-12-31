@@ -278,8 +278,8 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                 EnMinifrog_SpawnDust(this, play);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.csId != CS_ID_NONE) {
-                    if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
-                        ActorCutscene_Stop(this->actor.csId);
+                    if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                        CutsceneManager_Stop(this->actor.csId);
                     }
                 }
 
@@ -289,14 +289,14 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
     }
 
     if (this->flags & 1) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-            ActorCutscene_Start(this->actor.csId, &this->actor);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_Start(this->actor.csId, &this->actor);
             this->flags &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -367,19 +367,19 @@ void EnMinifrog_CheckChoirSuccess(EnMinifrog* this, PlayState* play) {
 
 void EnMinifrog_ContinueChoirCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_Jump(this);
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
         EnMinifrog_CheckChoirSuccess(this, play);
         return; // necessary to match
-    } else if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_TALK)) {
-        ActorCutscene_Start(CS_ID_GLOBAL_TALK, NULL);
+    } else if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+        CutsceneManager_Start(CS_ID_GLOBAL_TALK, NULL);
         EnMinifrog_CheckChoirSuccess(this, play);
         return; // necessary to match
-    } else if ((this->actor.csId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() == this->actor.csId)) {
-        ActorCutscene_Stop(this->actor.csId);
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
+    } else if ((this->actor.csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->actor.csId)) {
+        CutsceneManager_Stop(this->actor.csId);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         return; // necessary to match
     } else {
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
     }
 }
 
@@ -443,18 +443,18 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, PlayState* play) {
     EnMinifrog_Jump(this);
     if (this->actor.csId == CS_ID_NONE) {
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
-    } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_Start(this->actor.csId, &this->actor);
+    } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->actor.csId);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         this->actionFunc = EnMinifrog_SetupNextFrogChoir;
         this->timer = 5;
         func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
         play->setPlayerTalkAnim(play, &gPlayerAnim_pn_gakkiplay, 0);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

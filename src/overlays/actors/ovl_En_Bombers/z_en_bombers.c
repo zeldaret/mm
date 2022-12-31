@@ -128,7 +128,7 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     s32 i = 0;
 
                     // clang-format off
-                    while (csId != CS_ID_NONE) { bomBowlMan->csIdList[i] = csId; csId = ActorCutscene_GetAdditionalCsId(csId); i++; }
+                    while (csId != CS_ID_NONE) { bomBowlMan->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
                     // clang-format on
 
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);

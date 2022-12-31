@@ -173,16 +173,16 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
 }
 
 void BgIkanaDharma_SetupStartCutscene(BgIkanaDharma* this) {
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     this->actionFunc = BgIkanaDharma_StartCutscene;
 }
 
 void BgIkanaDharma_StartCutscene(BgIkanaDharma* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         BgIkanaDharma_SetupWaitForCutsceneToEnd(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -200,7 +200,7 @@ void BgIkanaDharma_WaitForCutsceneToEnd(BgIkanaDharma* this, PlayState* play) {
                 sFirstHitBgIkanaDharma = NULL;
             }
 
-            ActorCutscene_Stop(this->dyna.actor.csId);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
 

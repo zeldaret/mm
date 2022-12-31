@@ -379,11 +379,11 @@ void func_80967060(EnWeatherTag* this, PlayState* play) {
 void func_80967148(EnWeatherTag* this, PlayState* play) {
     s16 csId = this->actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_Start(csId, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_DoNothing);
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -482,7 +482,7 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
-        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) &&
+        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
         (play->csCtx.state == 0)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;

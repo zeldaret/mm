@@ -200,7 +200,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
            (this->colliders2[1].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[1].base.ac->id == ACTOR_OBJ_AQUA) &&
            (this->colliders2[1].base.ac->params == OBJAQUA_1))))) {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
         this->unk_14A = 0;
         this->actionFunc = func_80931E58;
         this->actor.focus.rot.y = this->actor.yawTowardsPlayer;
@@ -220,7 +220,7 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
             } while (actor != NULL);
         }
     } else if ((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(play, this->unk_149)) {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
         this->unk_14A = 1;
         this->actionFunc = func_80931E58;
     } else {
@@ -265,8 +265,8 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
 }
 
 void func_80931E58(ObjIcePoly* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         if (this->unk_14A == 1) {
             func_80931828(this, play);
             Actor_Kill(&this->actor);
@@ -277,7 +277,7 @@ void func_80931E58(ObjIcePoly* this, PlayState* play) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_MELT);
         this->actionFunc = func_80931EEC;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -327,7 +327,7 @@ void func_80931EEC(ObjIcePoly* this, PlayState* play) {
     this->unk_148 -= 6;
 
     if (this->unk_14A == 0) {
-        ActorCutscene_Stop(this->actor.csId);
+        CutsceneManager_Stop(this->actor.csId);
         if (this->unk_149 != OBJICEPOLY_FF_FF) {
             Flags_SetSwitch(play, this->unk_149);
         }

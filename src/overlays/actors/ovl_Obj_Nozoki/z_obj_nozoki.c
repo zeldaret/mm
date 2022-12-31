@@ -107,7 +107,7 @@ void func_80BA2514(ObjNozoki* this, PlayState* play) {
         if (this->unk_15C == 0) {
             Actor_SetObjectDependency(play, &this->dyna.actor);
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_secom_obj_Colheader_0001C0);
-            if (ActorCutscene_GetAdditionalCsId(this->csId) >= 0) {
+            if (CutsceneManager_GetAdditionalCsId(this->csId) >= 0) {
                 this->dyna.actor.params |= OBJNOZOKI_400;
             }
             ObjNozoki_SetupAction(this, func_80BA27C4);
@@ -133,12 +133,12 @@ s32 func_80BA26A8(ObjNozoki* this) {
         return true;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_StartWithPlayerCs(this->csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         return true;
     }
 
-    ActorCutscene_SetIntentToPlay(this->csId);
+    CutsceneManager_Queue(this->csId);
     return false;
 }
 
@@ -185,7 +185,7 @@ void func_80BA27C4(ObjNozoki* this, PlayState* play) {
                 this->unk_15E = 25;
                 play_sound(NA_SE_SY_SECOM_WARNING);
             } else {
-                this->unk_15E = ActorCutscene_GetLength(this->csId);
+                this->unk_15E = CutsceneManager_GetLength(this->csId);
                 if (this->unk_15E < 0) {
                     this->unk_15E = 50;
                 }
@@ -221,14 +221,14 @@ void func_80BA28DC(ObjNozoki* this, PlayState* play) {
 
                     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &sp28, &GET_PLAYER(play)->actor.world.pos);
                     if (sp28.z < -20.0f) {
-                        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+                        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
                     }
                 }
             } else if (D_80BA36B4 == 0) {
                 if (func_80BA26A8(this)) {
                     D_80BA36B4 = 1;
                 }
-            } else if (ActorCutscene_GetCurrentCsId() != this->csId) {
+            } else if (CutsceneManager_GetCurrentCsId() != this->csId) {
                 this->csId = csId;
                 this->dyna.actor.params &= ~OBJNOZOKI_400;
                 Audio_QueueSeqCmd(0x881A);
@@ -278,10 +278,10 @@ s32 func_80BA2C28(ObjNozoki* this) {
     s16 csId = this->csId;
 
     for (i = 0; i < 3; i++) {
-        if (ActorCutscene_GetCurrentCsId() == csId) {
+        if (CutsceneManager_GetCurrentCsId() == csId) {
             return i;
         }
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
     return -1;

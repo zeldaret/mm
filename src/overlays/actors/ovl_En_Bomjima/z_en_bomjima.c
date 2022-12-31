@@ -140,7 +140,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
 
         while (csId != CS_ID_NONE) {
             // clang-format off
-            this->csIdList[i] = csId; csId = ActorCutscene_GetAdditionalCsId(csId);
+            this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId);
             // clang-format on
             i++;
         }
@@ -389,7 +389,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
         return;
     }
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) {
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
         func_800B8614(&this->actor, play, 70.0f);
     }
 
@@ -465,17 +465,17 @@ void func_80BFEFF0(EnBomjima* this) {
 void func_80BFF03C(EnBomjima* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(this->csIdList[0]);
-    } else if (!ActorCutscene_GetCanPlayNext(this->csIdList[0])) {
-        ActorCutscene_SetIntentToPlay(this->csIdList[0]);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csIdList[0]);
+    } else if (!CutsceneManager_IsNext(this->csIdList[0])) {
+        CutsceneManager_Queue(this->csIdList[0]);
     } else {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
         this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
         this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play));
-        ActorCutscene_StartWithPlayerCs(this->csIdList[0], &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
         func_80BFF120(this);
     }
 }
@@ -494,7 +494,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->cutsceneTimer == 1) {
-        ActorCutscene_Stop(this->csIdList[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
         this->cutsceneEnded = true;
     }
 
@@ -653,14 +653,14 @@ void func_80BFF754(EnBomjima* this, PlayState* play) {
     f32 y;
     f32 z;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(this->csIdList[1]);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csIdList[1]);
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(this->csIdList[1])) {
-        ActorCutscene_SetIntentToPlay(this->csIdList[1]);
+    if (!CutsceneManager_IsNext(this->csIdList[1])) {
+        CutsceneManager_Queue(this->csIdList[1]);
         return;
     }
 
@@ -690,7 +690,7 @@ void func_80BFF754(EnBomjima* this, PlayState* play) {
     }
 
     D_80C009F0 = 0;
-    ActorCutscene_StartWithPlayerCs(this->csIdList[1], &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
     this->actionFunc = func_80BFF9B0;
 }
 
@@ -774,7 +774,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
         gSaveContext.nextTransitionType = TRANS_TYPE_03;
-        ActorCutscene_Stop(this->csIdList[1]);
+        CutsceneManager_Stop(this->csIdList[1]);
     }
 }
 

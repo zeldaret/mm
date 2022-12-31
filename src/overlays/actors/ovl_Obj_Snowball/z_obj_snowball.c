@@ -123,7 +123,7 @@ void func_80B02DB0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02, ActorCutscene_GetAdditionalCsId(this->actor.csId),
+                                  this->actor.params | ptr->unk_02, CutsceneManager_GetAdditionalCsId(this->actor.csId),
                                   this->actor.unk20, NULL);
 }
 
@@ -584,13 +584,13 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
 }
 
 void func_80B04540(ObjSnowball* this, PlayState* play) {
-    ActorCutscene_SetIntentToPlay(this->actor.csId);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_80B0457C;
 }
 
 void func_80B0457C(ObjSnowball* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_80B03FF8(this, play);
         this->unk_20B = 1;
         if (this->unk_20A == 0) {
@@ -599,7 +599,7 @@ void func_80B0457C(ObjSnowball* this, PlayState* play) {
             func_80B046E4(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -615,7 +615,7 @@ void func_80B04648(ObjSnowball* this, PlayState* play) {
     this->unk_208--;
     if (this->unk_208 <= 0) {
         if (this->unk_20B != 0) {
-            ActorCutscene_Stop(this->actor.csId);
+            CutsceneManager_Stop(this->actor.csId);
         }
 
         if (this->actor.home.rot.y == 1) {
@@ -719,7 +719,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
 
     if ((this->unk_208 <= 0) || ((this->unk_1A8[0].unk_2D & 1) && (this->unk_1A8[1].unk_2D & 1))) {
         if (this->unk_20B != 0) {
-            ActorCutscene_Stop(this->actor.csId);
+            CutsceneManager_Stop(this->actor.csId);
         }
 
         if (this->actor.home.rot.y == 1) {

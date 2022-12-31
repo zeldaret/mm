@@ -243,18 +243,18 @@ void func_80BDB788(EnHiddenNuts* this) {
 void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     Vec3f sp3C;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(this->csId);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_SetIntentToPlay(this->csId);
+    if (!CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
     this->unk_228 = -1200.0f;
 
     Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);

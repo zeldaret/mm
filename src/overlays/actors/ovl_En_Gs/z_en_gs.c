@@ -339,7 +339,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
 
 void func_80998300(EnGs* this, PlayState* play) {
     if (this->actor.csId != CS_ID_NONE) {
-        ActorCutscene_Stop(play->playerCsIds[0]);
+        CutsceneManager_Stop(play->playerCsIds[0]);
     }
 }
 
@@ -446,7 +446,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
         if ((this->unk_19C == 5) && (this->unk_194 != 0)) {
             s32 i;
 
-            ActorCutscene_Stop(this->csIdList[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {

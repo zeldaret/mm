@@ -494,7 +494,7 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
     }
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
-        if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
+        if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
             func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
         }
     }
@@ -518,16 +518,16 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.update == NULL) {
-        if ((this->unk_1B5 == 2) && (ActorCutscene_GetCutsceneScriptIndex(this->actor.csId) == -1)) {
-            ActorCutscene_Stop(this->actor.csId);
+        if ((this->unk_1B5 == 2) && (CutsceneManager_GetCutsceneScriptIndex(this->actor.csId) == -1)) {
+            CutsceneManager_Stop(this->actor.csId);
             this->unk_1B5 = 0;
         }
     } else {
         if (this->unk_1B5 != 0) {
             Actor_SetFocus(&this->actor, 0.0f);
             if (this->unk_1B5 == 1) {
-                if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-                    ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+                if (CutsceneManager_IsNext(this->actor.csId)) {
+                    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
                     if (this->actor.csId >= 0) {
                         func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                     }
@@ -539,7 +539,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
 
                     this->unk_1B5 = 2;
                 } else {
-                    ActorCutscene_SetIntentToPlay(this->actor.csId);
+                    CutsceneManager_Queue(this->actor.csId);
                 }
             }
         }

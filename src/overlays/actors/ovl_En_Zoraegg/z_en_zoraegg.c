@@ -355,7 +355,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
 }
 
 void func_80B321D0(EnZoraegg* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentCsId() != this->actor.csId) {
+    if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         this->actionFunc = func_80B322BC;
         func_80B319D0(play, func_80B319A8(play) + 1);
     }
@@ -365,19 +365,19 @@ void func_80B32228(EnZoraegg* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, this->unk_1DC);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, this->unk_1DC);
         this->actionFunc = func_80B321D0;
     } else {
         if (this->unk_1E8 > 0) {
             this->unk_1E8--;
         } else if (this->unk_1E8 == 0) {
-            ActorCutscene_Stop(player->csId);
+            CutsceneManager_Stop(player->csId);
             player->csId = CS_ID_NONE;
             this->unk_1E8 = -1;
         }
 
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -403,11 +403,11 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         Actor* temp_v0 = func_80B31D14(play);
 
         if (temp_v0 != NULL) {
-            ActorCutscene_StartWithPlayerCs(this->actor.csId, temp_v0);
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, temp_v0);
             SET_EVENTINF(EVENTINF_33);
             Actor_Kill(&this->actor);
         }
@@ -415,7 +415,7 @@ void func_80B32390(EnZoraegg* this, PlayState* play) {
                (fabsf(player->actor.world.pos.x - this->actor.world.pos.x) < (100.0f * this->actor.scale.x)) &&
                (fabsf(player->actor.world.pos.z - this->actor.world.pos.z) < (100.0f * this->actor.scale.z)) &&
                (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 30.0f)) {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

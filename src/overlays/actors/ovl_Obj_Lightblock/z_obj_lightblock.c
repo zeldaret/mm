@@ -134,7 +134,7 @@ void func_80AF3ADC(ObjLightblock* this, PlayState* play) {
     }
 
     if (this->collisionCounter >= 8) {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         func_80AF3B8C(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -146,13 +146,13 @@ void func_80AF3B8C(ObjLightblock* this) {
 }
 
 void func_80AF3BA0(ObjLightblock* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
         func_80AF3910(this, play);
         func_80AF3C18(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -167,7 +167,7 @@ void func_80AF3C34(ObjLightblock* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
         csId = this->dyna.actor.csId;
-        ActorCutscene_Stop(csId);
+        CutsceneManager_Stop(csId);
         Actor_Kill(&this->dyna.actor);
         return;
     }

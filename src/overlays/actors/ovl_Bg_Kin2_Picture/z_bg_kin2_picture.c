@@ -202,7 +202,7 @@ void BgKin2Picture_Wait(BgKin2Picture* this, PlayState* play) {
     // hit by projectile
     if (this->colliderTris.base.acFlags & AC_HIT) {
         this->colliderTris.base.acFlags &= ~AC_HIT;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         BgKin2Picture_SetupPlayCutscene(this);
     } else { // Gold Skulltula can be heard behind Skullkid's painting.
         if (this->skulltulaNoiseTimer >= 0) {
@@ -227,12 +227,12 @@ void BgKin2Picture_SetupPlayCutscene(BgKin2Picture* this) {
 }
 
 void BgKin2Picture_PlayCutscene(BgKin2Picture* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->cutsceneStarted = true;
         BgKin2Picture_SetupShiver(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -314,7 +314,7 @@ void BgKin2Picture_Fall(BgKin2Picture* this, PlayState* play) {
         this->dyna.actor.shape.yOffset = 40.0f;
 
         if (this->cutsceneStarted) {
-            ActorCutscene_Stop(this->dyna.actor.csId);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
 
         func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);

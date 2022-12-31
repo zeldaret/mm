@@ -231,14 +231,14 @@ void func_80C13F88(EnJgameTsn* this) {
 
 void func_80C13F9C(EnJgameTsn* this, PlayState* play) {
     if (this->actor.csId != CS_ID_NONE) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             func_80C14030(this);
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
         }
     } else {
         func_80C14030(this);
@@ -267,8 +267,8 @@ void func_80C14044(EnJgameTsn* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
-                    ActorCutscene_Stop(this->actor.csId);
+                if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 func_80C13B74(this);
             }
@@ -466,8 +466,8 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x109E:
-                if (ActorCutscene_GetCurrentCsId() == this->actor.csId) {
-                    ActorCutscene_Stop(this->actor.csId);
+                if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 func_801477B4(play);
                 func_80C1476C(this, play);

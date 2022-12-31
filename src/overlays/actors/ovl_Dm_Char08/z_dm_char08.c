@@ -277,20 +277,20 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
 void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
     s16 csId = this->dyna.actor.csId;
     s16 additionalCsId =
-        ActorCutscene_GetAdditionalCsId(ActorCutscene_GetAdditionalCsId(ActorCutscene_GetAdditionalCsId(csId)));
+        CutsceneManager_GetAdditionalCsId(CutsceneManager_GetAdditionalCsId(CutsceneManager_GetAdditionalCsId(csId)));
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_08)) {
         csId = additionalCsId;
     }
 
-    if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_Start(csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->dyna.actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_53_20);
         SET_WEEKEVENTREG(WEEKEVENTREG_93_08);
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80AAF884;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -325,18 +325,18 @@ void func_80AAFA18(DmChar08* this, PlayState* play) {
     s16 nextCsId2;
     s16 nextCsId1;
 
-    nextCsId1 = ActorCutscene_GetAdditionalCsId(this->dyna.actor.csId);
+    nextCsId1 = CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId);
     nextCsId2 = nextCsId1;
-    nextCsId1 = ActorCutscene_GetAdditionalCsId(nextCsId1);
+    nextCsId1 = CutsceneManager_GetAdditionalCsId(nextCsId1);
 
     nextCsId = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCsId1 : nextCsId2;
 
-    if (ActorCutscene_GetCanPlayNext(nextCsId) != 0) {
+    if (CutsceneManager_IsNext(nextCsId) != 0) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_40);
-        ActorCutscene_Start(nextCsId, &this->dyna.actor);
+        CutsceneManager_Start(nextCsId, &this->dyna.actor);
         this->actionFunc = DmChar08_DoNothing;
     } else {
-        ActorCutscene_SetIntentToPlay(nextCsId);
+        CutsceneManager_Queue(nextCsId);
     }
 }
 

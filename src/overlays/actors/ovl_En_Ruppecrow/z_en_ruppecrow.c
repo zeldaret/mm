@@ -503,7 +503,7 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
             }
         }
 
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = EnRuppecrow_HandleSongCutscene;
     }
 
@@ -525,12 +525,12 @@ void EnRuppecrow_HandleSong(EnRuppecrow* this, PlayState* play) {
 void EnRuppecrow_HandleSongCutscene(EnRuppecrow* this, PlayState* play) {
     EnRuppecrow_UpdatePosition(this, play);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_Start(this->actor.csId, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         EnRuppecrow_UpdateSpeed(this, play);
         this->actionFunc = EnRuppecrow_FlyWhileDroppingRupees;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -553,7 +553,7 @@ void EnRuppecrow_FlyWhileDroppingRupees(EnRuppecrow* this, PlayState* play) {
         this->skelAnime.playSpeed = 1.0f;
         Actor_MoveWithGravity(&this->actor);
     } else {
-        if (ActorCutscene_GetCurrentCsId() != this->actor.csId) {
+        if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
             EnRuppecrow_UpdateSpeed(this, play);
             Math_ApproachF(&this->actor.speedXZ, this->speedModifier, 0.2f, 0.5f);
         }

@@ -1389,21 +1389,21 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
     s32 isStarted = false;
 
-    if ((curCsId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() == curCsId)) {
-        ActorCutscene_Stop(curCsId);
-        ActorCutscene_SetIntentToPlay(nextCsId);
-    } else if (ActorCutscene_GetCanPlayNext(nextCsId)) {
+    if ((curCsId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == curCsId)) {
+        CutsceneManager_Stop(curCsId);
+        CutsceneManager_Queue(nextCsId);
+    } else if (CutsceneManager_IsNext(nextCsId)) {
         switch (type) {
             case SUBS_CUTSCENE_PLAYER:
-                ActorCutscene_StartWithPlayerCs(nextCsId, actor);
+                CutsceneManager_StartWithPlayerCs(nextCsId, actor);
                 break;
 
             case SUBS_CUTSCENE_NORMAL:
-                ActorCutscene_Start(nextCsId, actor);
+                CutsceneManager_Start(nextCsId, actor);
                 break;
 
             case SUBS_CUTSCENE_PLAYER_SET_FLAG:
-                ActorCutscene_StartWithPlayerCsAndSetFlag(nextCsId, actor);
+                CutsceneManager_StartWithPlayerCsAndSetFlag(nextCsId, actor);
                 break;
 
             default:
@@ -1411,7 +1411,7 @@ s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
         }
         isStarted = true;
     } else {
-        ActorCutscene_SetIntentToPlay(nextCsId);
+        CutsceneManager_Queue(nextCsId);
     }
 
     return isStarted;
@@ -1432,7 +1432,7 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes) {
         // Note: Infinite loop if numCutscenes is less than possible additional csIdList
         if (i < numCutscenes) {
             csIdList[i] = csId;
-            csId = ActorCutscene_GetAdditionalCsId(csId);
+            csId = CutsceneManager_GetAdditionalCsId(csId);
             i++;
         }
     }

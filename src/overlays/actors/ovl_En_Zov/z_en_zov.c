@@ -135,8 +135,8 @@ void EnZov_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BD13DC(EnZov* this) {
     if (this->csIdIndex != -1) {
-        if (ActorCutscene_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
-            ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
         this->csIdIndex = -1;
     }
@@ -506,14 +506,14 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
         this->unk_2EC = 0;
     }
 
-    if ((this->csIdIndex != -1) && (ActorCutscene_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
-        if ((this->csIdIndex == 0) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK)) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
-            ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->picto.actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if ((this->csIdIndex == 0) && (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK)) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->picto.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }

@@ -490,7 +490,7 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
                 if ((this->actor.csId != CS_ID_NONE) && !(this->unk_2F2 & 1)) {
-                    ActorCutscene_Stop(this->actor.csId);
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 this->unk_2F2 &= ~1;
                 break;
@@ -500,14 +500,14 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     if (this->unk_2F2 & 1) {
         if (this->actor.csId == CS_ID_NONE) {
             this->unk_2F2 &= ~1;
-        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->unk_2F2 &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }

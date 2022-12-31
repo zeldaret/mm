@@ -310,56 +310,56 @@ void func_80BAAB78(EnSuttari* this, PlayState* play) {
                 this->textId = 0x29E5;
                 break;
             case 0x29E5:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 1;
                 this->textId = 0x29E6;
                 break;
             case 0x29E6:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 0;
                 this->textId = 0x29E7;
                 break;
             case 0x29E7:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 1;
                 this->textId = 0x29E8;
                 break;
             case 0x29E8:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 0;
                 this->textId = 0x29E9;
                 break;
             case 0x29E9:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 1;
                 this->textId = 0x29EA;
                 break;
             case 0x29EA:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 0;
                 this->textId = 0x29EB;
                 break;
             case 0x29EB:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 1;
                 this->textId = 0x29EC;
                 break;
             case 0x29EC:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->csIdIndex = 0;
                 this->textId = 0x29ED;
                 break;
             case 0x29ED:
-                ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 this->flags1 |= 0x400;
                 this->csIdIndex = 1;
                 this->textId = 0x29EE;
                 break;
         }
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+        CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         this->actionFunc = func_80BADD0C;
     } else if (this->flags1 & 1) {
         switch (this->textId) {
@@ -859,8 +859,8 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             }
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_83_04) && !(this->flags1 & 0x1000)) {
-                if (ActorCutscene_GetCanPlayNext(this->csIdList[0])) {
-                    ActorCutscene_Start(this->csIdList[0], &this->actor);
+                if (CutsceneManager_IsNext(this->csIdList[0])) {
+                    CutsceneManager_Start(this->csIdList[0], &this->actor);
                     if (!(player->stateFlags1 & PLAYER_STATE1_10000000)) {
                         this->flags2 |= 0x10;
                         player->stateFlags1 |= PLAYER_STATE1_10000000;
@@ -868,7 +868,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
                     this->flags1 |= 0x1000;
                     this->flags2 |= 2;
                 } else {
-                    ActorCutscene_SetIntentToPlay(this->csIdList[0]);
+                    CutsceneManager_Queue(this->csIdList[0]);
                 }
             }
             func_80BABFD4(this, play);
@@ -970,7 +970,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             Actor_Kill(&this->actor);
         }
         this->csIdList[0] = this->actor.csId;
-        this->csIdList[1] = ActorCutscene_GetAdditionalCsId(this->csIdList[0]);
+        this->csIdList[1] = CutsceneManager_GetAdditionalCsId(this->csIdList[0]);
         this->flags1 |= 0x80;
         this->flags1 |= 8;
         this->animIndex = 1;
@@ -995,7 +995,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->animIndex = 0;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->csIdList[0] = this->actor.csId;
-        this->csIdList[1] = ActorCutscene_GetAdditionalCsId(this->csIdList[0]);
+        this->csIdList[1] = CutsceneManager_GetAdditionalCsId(this->csIdList[0]);
         this->flags1 |= 4;
         this->actionFunc = func_80BAD7F8;
         return;
@@ -1168,26 +1168,26 @@ void func_80BAD130(EnSuttari* this, PlayState* play) {
 }
 
 void func_80BAD230(EnSuttari* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csIdList[1])) {
-        ActorCutscene_Start(this->csIdList[1], &this->actor);
+    if (CutsceneManager_IsNext(this->csIdList[1])) {
+        CutsceneManager_Start(this->csIdList[1], &this->actor);
         this->textId = 0x2A31;
         Message_StartTextbox(play, this->textId, &this->actor);
         this->flags1 |= 0x4000;
         Audio_QueueSeqCmd(NA_BGM_CHASE | 0x8000);
         this->actionFunc = func_80BAD380;
     } else {
-        ActorCutscene_SetIntentToPlay(this->csIdList[1]);
+        CutsceneManager_Queue(this->csIdList[1]);
     }
 }
 
 void func_80BAD2B4(EnSuttari* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x2A30) {
-            ActorCutscene_Stop(this->csIdList[0]);
-            ActorCutscene_SetIntentToPlay(this->csIdList[1]);
+            CutsceneManager_Stop(this->csIdList[0]);
+            CutsceneManager_Queue(this->csIdList[1]);
             this->actionFunc = func_80BAD230;
         } else {
-            ActorCutscene_Stop(this->csIdList[1]);
+            CutsceneManager_Stop(this->csIdList[1]);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             this->flags1 |= 0x40;
@@ -1211,7 +1211,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->flags2 &= ~0x10;
             player->stateFlags1 &= ~PLAYER_STATE1_10000000;
             this->flags1 &= ~0x4000;
-            ActorCutscene_Stop(this->csIdList[1]);
+            CutsceneManager_Stop(this->csIdList[1]);
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             this->flags1 |= 0x40;
@@ -1346,7 +1346,7 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             if (this->flags1 & 0x400) {
                 if (this->textId == 0x29EE) {
-                    ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+                    CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
                 }
                 this->flags1 &= ~0x400;
                 if (this->flags2 & 1) {
@@ -1385,16 +1385,16 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
 }
 
 void func_80BADD0C(EnSuttari* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
+    if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
         if (this->csIdIndex == 0) {
-            ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->enFsn->actor);
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->enFsn->actor);
         } else {
-            ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->actor);
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
         }
         func_80BAAA94(this);
         this->actionFunc = func_80BADA9C;
     } else {
-        ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+        CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
     }
 }
 

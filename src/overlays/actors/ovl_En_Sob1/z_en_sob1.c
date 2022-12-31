@@ -456,7 +456,7 @@ void EnSob1_EndInteraction(PlayState* play, EnSob1* this) {
     Player* player = GET_PLAYER(play);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
-        ActorCutscene_Stop(this->csId);
+        CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &play->state);
@@ -546,11 +546,11 @@ void EnSob1_Idle(EnSob1* this, PlayState* play) {
     this->headRotTarget = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookFowardCsId;
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
         }
         player->stateFlags2 |= PLAYER_STATE2_20000000;
@@ -623,11 +623,11 @@ void EnSob1_Hello(EnSob1* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play) &&
@@ -664,19 +664,19 @@ void EnSob1_FaceShopkeeper(EnSob1* this, PlayState* play) {
     u8 cursorIndex;
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookFowardCsId;
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else {
         if (talkState == TEXT_STATE_CHOICE) {
@@ -707,23 +707,23 @@ void EnSob1_TalkingToShopkeeper(EnSob1* this, PlayState* play) {
 
 void EnSob1_LookToShopkeeperFromShelf(EnSob1* this, PlayState* play) {
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
-        ActorCutscene_Stop(this->csId);
+        CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShopkeeperCsId;
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
             EnSob1_StartShopping(play, this);
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
@@ -765,11 +765,11 @@ void EnSob1_Walk(EnSob1* this, PlayState* play) {
     f32 distSq;
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (this->path != NULL) {
@@ -794,20 +794,20 @@ void EnSob1_Walking(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookFowardCsId;
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
         }
         player->stateFlags2 |= PLAYER_STATE2_20000000;
@@ -828,17 +828,17 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             player->stateFlags2 |= PLAYER_STATE2_20000000;
             EnSob1_SetupAction(this, EnSob1_ContinueShopping);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -850,25 +850,25 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
 
 void EnSob1_LookToShelf(EnSob1* this, PlayState* play) {
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
-        ActorCutscene_Stop(this->csId);
+        CutsceneManager_Stop(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
         this->csId = this->lookToShelfCsId;
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (ActorCutscene_GetCanPlayNext(this->csId) != 0) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId) != 0) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
             EnSob1_UpdateCursorPos(play, this);
             EnSob1_SetupAction(this, EnSob1_BrowseShelf);
             func_80151938(play, this->items[this->cursorIndex]->actor.textId);
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     }
 }
@@ -975,7 +975,7 @@ void EnSob1_HandleCanBuyItem(PlayState* play, EnSob1* this) {
     switch (item->canBuyFunc(play, item)) {
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENSOB1_CUTSCENESTATE_PLAYING) {
-                ActorCutscene_Stop(this->csId);
+                CutsceneManager_Stop(this->csId);
                 this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
@@ -1094,11 +1094,11 @@ void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
         play->msgCtx.stateTimer = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
             this->csId = this->lookToShopkeeperCsId;
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
         func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
@@ -1291,8 +1291,8 @@ s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIndex, Vec3f* pos, f32* distS
 
 void EnSob1_GetCutscenes(EnSob1* this) {
     this->lookFowardCsId = this->actor.csId;
-    this->lookToShelfCsId = ActorCutscene_GetAdditionalCsId(this->lookFowardCsId);
-    this->lookToShopkeeperCsId = ActorCutscene_GetAdditionalCsId(this->lookToShelfCsId);
+    this->lookToShelfCsId = CutsceneManager_GetAdditionalCsId(this->lookFowardCsId);
+    this->lookToShopkeeperCsId = CutsceneManager_GetAdditionalCsId(this->lookToShelfCsId);
 }
 
 void EnSob1_WaitForBlink(EnSob1* this) {

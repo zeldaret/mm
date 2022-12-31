@@ -66,7 +66,7 @@ s32 func_80BD6638(s16* csId, s16* csIdList, s32 numCutscenes) {
     s32 retVal = false;
     s32 i;
 
-    *csId = ActorCutscene_GetCurrentCsId();
+    *csId = CutsceneManager_GetCurrentCsId();
     if (*csId >= 0) {
         for (i = 0; i < numCutscenes; i++) {
             if (*csId == csIdList[i]) {

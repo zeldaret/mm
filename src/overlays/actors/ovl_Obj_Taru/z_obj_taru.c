@@ -296,14 +296,14 @@ void func_80B9C174(ObjTaru* this, PlayState* play) {
 }
 
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {

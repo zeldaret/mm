@@ -323,14 +323,14 @@ void func_80BF15EC(EnIg* this) {
 s32 func_80BF16C8(EnIg* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(csId);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
@@ -342,7 +342,7 @@ s16 func_80BF1744(EnIg* this, s32 numCutscenes) {
     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
         csId = this->actor.child->csId;
         for (i = 0; i < numCutscenes; i++) {
-            csId = ActorCutscene_GetAdditionalCsId(csId);
+            csId = CutsceneManager_GetAdditionalCsId(csId);
         }
     }
     return csId;
@@ -362,7 +362,7 @@ s32 func_80BF17BC(EnIg* this, PlayState* play) {
                 case 2:
                 case 4:
                     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                        Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)),
+                        Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
                                               this->actor.child);
                     }
                     this->unk_3F6++;
@@ -373,17 +373,17 @@ s32 func_80BF17BC(EnIg* this, PlayState* play) {
         case 1:
         case 3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_10) && (this->unk_3F6 == 3)) {
-                ActorCutscene_Stop(csId);
+                CutsceneManager_Stop(csId);
                 this->unk_3F6 = 5;
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             }
             this->unk_3F6++;
             ret = true;
             break;
 
         case 5:
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->unk_3F6++;
             ret = true;
             break;

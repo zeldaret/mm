@@ -106,7 +106,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
         this->csIdList[i] = csId;
         if (csId != CS_ID_NONE) {
             this->actor.csId = csId;
-            csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -384,11 +384,11 @@ void func_80959D28(EnMk* this, PlayState* play) {
         this->actor.csId = this->csIdList[0];
     } else {
         if (this->actor.csId != CS_ID_NONE) {
-            if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-                ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+            if (CutsceneManager_IsNext(this->actor.csId)) {
+                CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
                 this->actor.csId = CS_ID_NONE;
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.csId);
+                CutsceneManager_Queue(this->actor.csId);
             }
         }
         func_8095954C(this, play);
@@ -418,7 +418,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
         } else {
             this->actor.csId = this->csIdList[1];
         }
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80959844(this, play);
         this->actionFunc = func_80959A24;

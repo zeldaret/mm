@@ -87,17 +87,17 @@ void func_80A4CA90(ObjFireshield* this) {
 void func_80A4CABC(ObjFireshield* this) {
     s32 pad;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         s32 sp18 = OBJFIRESHIELD_GET_7F(&this->actor);
         s32 temp_a0 = (sp18 & ~0x1F) >> 5;
 
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80A4CB7C;
         this->unk_194 = 20;
         D_80A4D884[temp_a0] |= 1 << (sp18 & 0x1F);
         D_80A4D894[temp_a0] |= 1 << (sp18 & 0x1F);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -113,7 +113,7 @@ void func_80A4CB7C(ObjFireshield* this) {
         return;
     }
 
-    ActorCutscene_Stop(this->actor.csId);
+    CutsceneManager_Stop(this->actor.csId);
     this->actionFunc = func_80A4CD28;
     D_80A4D894[(sp18 & ~0x1F) >> 5] &= ~(1 << (sp18 & 0x1F));
 }

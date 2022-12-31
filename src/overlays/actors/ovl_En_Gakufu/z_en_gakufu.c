@@ -221,11 +221,11 @@ void EnGakufu_GiveReward(EnGakufu* this, PlayState* play) {
 void EnGakufu_PlayRewardCutscene(EnGakufu* this, PlayState* play) {
     if (this->actor.csId == CS_ID_NONE) {
         EnGakufu_GiveReward(this, play);
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         EnGakufu_GiveReward(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

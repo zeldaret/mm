@@ -537,7 +537,7 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
         *curPlayerCsId = CS_ID_NONE;
 
         for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = actorCutscene->additionalCsId) {
-            actorCutscene = ActorCutscene_GetCutscene(curCsId);
+            actorCutscene = CutsceneManager_GetCutscene(curCsId);
 
             if (actorCutscene->csCamId == *csCamId) {
                 if ((actorCutscene->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (actorCutscene->priority == 700)) {

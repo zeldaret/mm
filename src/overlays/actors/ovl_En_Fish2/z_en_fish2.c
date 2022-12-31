@@ -192,7 +192,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
         i = 0;
 
         // clang-format off
-        while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = ActorCutscene_GetAdditionalCsId(csId); i++; }
+        while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
         // clang-format on
 
         Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
@@ -784,11 +784,11 @@ void func_80B29EE4(EnFish2* this, PlayState* play) {
 
 void func_80B2A01C(EnFish2* this, PlayState* play) {
     if (this->unk_2B4 == 0) {
-        if (!ActorCutscene_GetCanPlayNext(this->csIdList[0])) {
-            ActorCutscene_SetIntentToPlay(this->csIdList[0]);
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
+            CutsceneManager_Queue(this->csIdList[0]);
         } else {
             this->unk_2B4 = 15;
-            ActorCutscene_StartWithPlayerCs(this->csIdList[0], &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
             this->actionFunc = func_80B2A094;
         }
     }
@@ -801,13 +801,13 @@ void func_80B2A094(EnFish2* this, PlayState* play) {
         D_80B2B2E4 = 1;
     }
 
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->csIdList[0]);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->csIdList[0]);
 
     if (D_80B2B2EC != 0) {
         D_80B2B2EC++;
         if (D_80B2B2EC > 200) {
             Actor_Kill(&this->actor);
-            ActorCutscene_Stop(this->csIdList[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             return;
         }
     }
@@ -862,7 +862,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
     if ((this->unk_2B4 == 0) && (D_80B2B2E4 == 3)) {
         D_80B2B2E0 = D_80B2B2EC = D_80B2B2E4 = 0;
         D_80B2B2F4 = NULL;
-        ActorCutscene_Stop(this->csIdList[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
         Actor_Kill(&this->actor);
     }
 }

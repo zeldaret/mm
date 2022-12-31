@@ -56,7 +56,7 @@ void EffChange_Init(Actor* thisx, PlayState* play) {
     this->step = 0;
     this->actor.shape.rot.y = 0;
     this->skeletonInfo.frameCtrl.unk_C = (2.0f / 3.0f);
-    ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_ELEGY);
+    CutsceneManager_Queue(CS_ID_GLOBAL_ELEGY);
 }
 
 void EffChange_Destroy(Actor* thisx, PlayState* play) {
@@ -80,7 +80,7 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
 
     if (func_80183DE0(&this->skeletonInfo)) {
         Actor_Kill(&this->actor);
-        ActorCutscene_Stop(CS_ID_GLOBAL_ELEGY);
+        CutsceneManager_Stop(CS_ID_GLOBAL_ELEGY);
         func_800FD2B4(play, 0.0f, 850.0f, 0.2f, 0.0f);
         return;
     }
@@ -109,11 +109,11 @@ void func_80A4C5CC(EffChange* this, PlayState* play) {
         phi_fv0 = 0.0f;
     }
     func_800FD2B4(play, phi_fv0, 850.0f, 0.2f, 0.0f);
-    if (ActorCutscene_GetCurrentCsId() != CS_ID_GLOBAL_ELEGY) {
-        if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_ELEGY)) {
-            ActorCutscene_Start(CS_ID_GLOBAL_ELEGY, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_ELEGY) {
+        if (CutsceneManager_IsNext(CS_ID_GLOBAL_ELEGY)) {
+            CutsceneManager_Start(CS_ID_GLOBAL_ELEGY, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_ELEGY);
+            CutsceneManager_Queue(CS_ID_GLOBAL_ELEGY);
         }
     }
 }

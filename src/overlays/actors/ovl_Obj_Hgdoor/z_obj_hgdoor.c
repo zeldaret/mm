@@ -108,15 +108,15 @@ void ObjHgdoor_SetupCutscene(ObjHgdoor* this) {
 }
 
 void ObjHgdoor_PlayCutscene(ObjHgdoor* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_Start(this->csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->dyna.actor);
         ObjHgdoor_SetupCsAction(this);
         ObjHgdoor_SetupCsAction((ObjHgdoor*)this->dyna.actor.child);
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -160,8 +160,8 @@ void ObjHgdoor_SetupStopCs(ObjHgdoor* this) {
 
 void ObjHgdoor_StopCs(ObjHgdoor* this, PlayState* play) {
     if (this->timer++ > 80) {
-        if (!ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_Stop(this->csId);
+        if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Stop(this->csId);
         }
     }
 }

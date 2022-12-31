@@ -792,14 +792,14 @@ Actor* func_80AF8040(EnPm* this, PlayState* play) {
 s32 func_80AF80F4(EnPm* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(csId);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
@@ -812,7 +812,7 @@ s16 func_80AF8170(EnPm* this, s32 numCutscenes) {
         csId = this->actor.child->csId;
 
         for (i = 0; i < numCutscenes; i++) {
-            csId = ActorCutscene_GetAdditionalCsId(csId);
+            csId = CutsceneManager_GetAdditionalCsId(csId);
         }
     }
     return csId;
@@ -833,7 +833,8 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 4:
         case 6:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_378++;
             ret = true;
@@ -843,16 +844,16 @@ s32 func_80AF81E8(EnPm* this, PlayState* play) {
         case 3:
         case 5:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08) && (this->unk_378 == 3)) {
-                ActorCutscene_Stop(csId);
+                CutsceneManager_Stop(csId);
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             }
             this->unk_378++;
             ret = true;
             break;
 
         case 7:
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->unk_378++;
             ret = true;
             break;
@@ -875,7 +876,7 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 4:
         case 6:
         case 8:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             this->unk_378++;
             ret = true;
             break;
@@ -885,14 +886,15 @@ s32 func_80AF8348(EnPm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_378++;
             ret = true;
             break;
 
         case 9:
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->unk_378++;
             ret = true;
             break;
@@ -2112,7 +2114,7 @@ void EnPm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     switch (limbIndex) {
         case 15:
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Matrix_MultVec3f(&gZeroVec3f, &this->actor.focus.pos);
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             }

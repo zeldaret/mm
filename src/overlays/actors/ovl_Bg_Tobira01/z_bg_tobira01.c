@@ -34,14 +34,14 @@ void BgTobira01_Open(BgTobira01* this, PlayState* play) {
     s16 prevTimer;
 
     if (this->playCutscene) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        } else if (ActorCutscene_GetCanPlayNext(csId)) {
-            ActorCutscene_StartWithPlayerCs(csId, &this->dyna.actor);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        } else if (CutsceneManager_IsNext(csId)) {
+            CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_88_40);
             this->playCutscene = false;
         } else {
-            ActorCutscene_SetIntentToPlay(csId);
+            CutsceneManager_Queue(csId);
         }
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_40) && (this->timer == 0) && (play->actorCtx.unk1F5 != 0) &&
                (play->actorCtx.unk1F4 == 0) &&

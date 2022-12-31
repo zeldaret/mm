@@ -696,7 +696,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
     } else {
         if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
             OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_TOWER_CLOCK_TERMINA_FIELD &&
-            ActorCutscene_GetCurrentCsId() == CS_ID_NONE) {
+            CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
             this->actor.draw = NULL;
         }
         this->clockTime = gSaveContext.save.time;
@@ -729,7 +729,7 @@ void ObjTokeidai_ExteriorGear_Idle(ObjTokeidai* this, PlayState* play) {
         } else {
             if (!(play->actorCtx.flags & ACTORCTX_FLAG_1) &&
                 (OBJ_TOKEIDAI_TYPE(&this->actor) == OBJ_TOKEIDAI_TYPE_EXTERIOR_GEAR_TERMINA_FIELD) &&
-                (ActorCutscene_GetCurrentCsId() == CS_ID_NONE)) {
+                (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                 this->actor.draw = NULL;
             }
             this->clockTime = gSaveContext.save.time;

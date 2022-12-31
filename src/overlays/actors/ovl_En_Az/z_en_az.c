@@ -649,10 +649,10 @@ void func_80A95F94(EnAz* this, PlayState* play) {
 
 void func_80A95FE8(EnAz* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (ActorCutscene_GetCanPlayNext(this->csIdList[0])) {
-        ActorCutscene_StartWithPlayerCs(this->csIdList[0], &this->actor);
+    if (CutsceneManager_IsNext(this->csIdList[0])) {
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
     } else {
-        ActorCutscene_SetIntentToPlay(this->csIdList[0]);
+        CutsceneManager_Queue(this->csIdList[0]);
     }
     if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -672,7 +672,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
             this->actor.shape.rot.x = 0;
             this->actor.gravity = 0.0f;
             func_80A97C0C(this, play);
-            ActorCutscene_Stop(this->csIdList[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
         }
         Actor_MoveWithGravity(&this->actor);
     }

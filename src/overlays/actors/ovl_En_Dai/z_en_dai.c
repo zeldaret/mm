@@ -401,10 +401,10 @@ s32 func_80B3ED88(EnDai* this) {
 void func_80B3EE8C(EnDai* this, PlayState* play) {
     s16 csId = this->actor.csId;
 
-    if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
 }
 

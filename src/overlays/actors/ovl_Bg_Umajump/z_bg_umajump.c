@@ -53,18 +53,18 @@ void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
     }
 
     if (play->csCtx.state == CS_STATE_IDLE) {
-        ActorCutscene_Stop(this->dyna.actor.csId);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->dyna.actor.update = Actor_Noop;
     }
 }
 
 void BgUmajump_PlayCutscene(BgUmajump* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_89_20);
         this->actionFunc = BgUmajump_StopCutscene;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

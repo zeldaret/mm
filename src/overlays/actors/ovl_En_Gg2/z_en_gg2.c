@@ -204,7 +204,7 @@ void func_80B3B120(EnGg2* this, PlayState* play) {
 void func_80B3B21C(EnGg2* this, PlayState* play) {
     this->actor.speedXZ = 0.0f;
     if ((this->actor.xzDistToPlayer < 100.0f) && CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         this->actionFunc = func_80B3B5D4;
     }
 }
@@ -274,14 +274,14 @@ void func_80B3B4B0(EnGg2* this, PlayState* play) {
 }
 
 void func_80B3B5D4(EnGg2* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         this->actionFunc = func_80B3AE60;
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 

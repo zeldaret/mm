@@ -237,7 +237,7 @@ void ObjChan_ChandelierAction(ObjChan* this2, PlayState* play) {
     }
     if ((this->stateFlags & OBJCHAN_STATE_CUTSCENE) && this->rotationSpeed == OBJCHAN_ROTATION_SPEED) {
         this->stateFlags &= ~OBJCHAN_STATE_CUTSCENE;
-        ActorCutscene_Stop(this->csIdList[0]);
+        CutsceneManager_Stop(this->csIdList[0]);
     }
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);

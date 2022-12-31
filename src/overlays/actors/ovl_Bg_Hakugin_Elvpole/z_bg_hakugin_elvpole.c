@@ -107,12 +107,12 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         if (this->dyna.actor.csId == CS_ID_NONE) {
             this->unk_160 = false;
             return;
-        } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_160 = false;
             return;
         }
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

@@ -194,7 +194,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
 
     switch (this->unk_1C9) {
         case 0:
-            if (ActorCutscene_GetCurrentCsId() != CS_ID_NONE) {
+            if (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) {
                 break;
             }
 

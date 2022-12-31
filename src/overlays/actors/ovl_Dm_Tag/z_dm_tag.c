@@ -68,14 +68,14 @@ Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
 s32 func_80C22400(DmTag* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(csId);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
@@ -85,7 +85,7 @@ s16 func_80C2247C(DmTag* this, s32 numCutscenes) {
     s16 csId = this->actor.csId;
 
     for (i = 0; i < numCutscenes; i++) {
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
     return csId;
@@ -105,7 +105,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
         case 0:
             if (func_80C22400(this, csId)) {
                 if ((sp2C != NULL) && (sp2C->update != NULL)) {
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), sp2C);
+                    Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), sp2C);
                 }
                 this->unk_1A4++;
                 ret = true;
@@ -114,7 +114,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
         case 1:
             if ((sp30 != NULL) && (sp30->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(func_80C2247C(this, 0))),
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(func_80C2247C(this, 0))),
                                       sp30);
             }
             this->unk_1A4++;
@@ -122,7 +122,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 2:
-            ActorCutscene_Stop(func_80C2247C(this, 0));
+            CutsceneManager_Stop(func_80C2247C(this, 0));
             if (func_80C22400(this, func_80C2247C(this, 1))) {
                 this->unk_1A4++;
                 ret = true;
@@ -130,7 +130,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 3:
-            ActorCutscene_Stop(func_80C2247C(this, 1));
+            CutsceneManager_Stop(func_80C2247C(this, 1));
             if (func_80C22400(this, func_80C2247C(this, 2))) {
                 this->unk_1A4++;
                 ret = true;
@@ -138,7 +138,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 4:
-            ActorCutscene_Stop(func_80C2247C(this, 2));
+            CutsceneManager_Stop(func_80C2247C(this, 2));
             if (func_80C22400(this, func_80C2247C(this, 3))) {
                 this->unk_1A4++;
                 ret = true;
@@ -146,7 +146,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 5:
-            ActorCutscene_Stop(func_80C2247C(this, 3));
+            CutsceneManager_Stop(func_80C2247C(this, 3));
             if (func_80C22400(this, func_80C2247C(this, 4))) {
                 this->unk_1A4++;
                 ret = true;

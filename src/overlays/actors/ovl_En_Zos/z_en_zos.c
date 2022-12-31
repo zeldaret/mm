@@ -302,15 +302,15 @@ void func_80BBB414(EnZos* this, PlayState* play) {
 void func_80BBB4CC(EnZos* this, PlayState* play) {
     func_80BBB414(this, play);
 
-    if ((this->actor.csId != CS_ID_NONE) && (ActorCutscene_GetCurrentCsId() != this->actor.csId)) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-            ActorCutscene_Start(this->actor.csId, &this->actor);
+    if ((this->actor.csId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() != this->actor.csId)) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_Start(this->actor.csId, &this->actor);
             this->actor.csId = CS_ID_NONE;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }

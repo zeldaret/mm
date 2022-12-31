@@ -367,7 +367,7 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
 
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->actor.csId);
+        CutsceneManager_Stop(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
             func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         }
@@ -1196,21 +1196,21 @@ void func_8089D1E0(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089D2E0(EnDinofos* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.csId);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8089D318;
 }
 
 void func_8089D318(EnDinofos* this, PlayState* play) {
     Vec3f subCamEye;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         if (this->actor.colChkInfo.health == 0) {
-            ActorCutscene_Start(this->actor.csId, &this->actor);
+            CutsceneManager_Start(this->actor.csId, &this->actor);
             func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         } else {
-            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;
@@ -1221,7 +1221,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
             func_8089B100(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

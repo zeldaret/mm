@@ -69,29 +69,29 @@ void func_80983678(ObjDemo* this, PlayState* play) {
     func_80983634(play);
     if ((this->actor.xzDistToPlayer < this->xzRange) && (fabsf(this->actor.playerHeightRel) < this->yRange)) {
         if (this->unk_148 == 1) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
+            CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
         }
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = func_80983704;
     }
 }
 
 void func_80983704(ObjDemo* this, PlayState* play) {
-    if ((this->unk_148 == 1) && (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR)) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+    if ((this->unk_148 == 1) && (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR)) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
+        CutsceneManager_Queue(this->actor.csId);
     } else {
-        if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
             if (this->unk_148 == 1) {
-                ActorCutscene_Start(this->actor.csId, &this->actor);
+                CutsceneManager_Start(this->actor.csId, &this->actor);
                 func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
-                ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+                CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             }
             if (play->sceneId == SCENE_CASTLE) {
                 Audio_QueueSeqCmd(NA_BGM_IKANA_CASTLE | 0x8000);
             }
-            this->actor.csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+            this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
             if (this->actor.csId == CS_ID_NONE) {
                 if (this->actor.params != 0xFF) {
                     Flags_SetSwitch(play, this->actor.params);
@@ -99,7 +99,7 @@ void func_80983704(ObjDemo* this, PlayState* play) {
                 Actor_Kill(&this->actor);
             }
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
             func_80983634(play);
         }
     }

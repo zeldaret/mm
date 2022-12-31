@@ -100,7 +100,7 @@ void BgCtowerRot_DoorClose(BgCtowerRot* this, PlayState* play) {
     if (!Math_SmoothStepToF(&this->timer, 0.0f, 0.1f, 15.0f, 0.1f)) {
         if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
-            ActorCutscene_Stop(this->dyna.actor.csId);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
         this->actionFunc = BgCtowerRot_DoorDoNothing;
     } else if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
@@ -119,19 +119,19 @@ void BgCtowerRot_DoorIdle(BgCtowerRot* this, PlayState* play) {
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     if (offset.z > 30.0f) {
         this->unk160 = 0.0f;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = BgCtowerRot_SetupDoorClose;
     }
 }
 
 void BgCtowerRot_SetupDoorClose(BgCtowerRot* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         if (this->dyna.actor.params == BGCTOWERROT_STONE_DOOR_MAIN) {
-            ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         }
         this->actionFunc = BgCtowerRot_DoorClose;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 

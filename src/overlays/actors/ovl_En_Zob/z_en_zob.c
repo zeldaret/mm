@@ -105,7 +105,7 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
         this->csIdList[i] = csId;
         if (csId != CS_ID_NONE) {
             this->actor.csId = csId;
-            csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -254,8 +254,8 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
 
 void func_80B9FC0C(EnZob* this) {
     if (this->csIdIndex != -1) {
-        if (ActorCutscene_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
-            ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
         this->csIdIndex = -1;
     }
@@ -715,14 +715,14 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->csIdIndex != -1) && (ActorCutscene_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
-            ActorCutscene_Start(this->csIdList[this->csIdIndex], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 

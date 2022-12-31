@@ -1166,8 +1166,8 @@ void DmStk_WaitForTelescope(DmStk* this, PlayState* play) {
  */
 void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
     s16 dayOneAndTwoCsId = this->actor.csId;
-    s16 dayThreeCsId = ActorCutscene_GetAdditionalCsId(dayOneAndTwoCsId);
-    s16 finalHoursCsId = ActorCutscene_GetAdditionalCsId(dayThreeCsId);
+    s16 dayThreeCsId = CutsceneManager_GetAdditionalCsId(dayOneAndTwoCsId);
+    s16 finalHoursCsId = CutsceneManager_GetAdditionalCsId(dayThreeCsId);
     s16 csId;
 
     if (gSaveContext.save.day < 3) {
@@ -1179,21 +1179,21 @@ void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
         csId = dayThreeCsId;
     }
 
-    if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_Start(csId, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->actor);
         Environment_StartTime();
         this->actionFunc = DmStk_DoNothing;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
 }
 
 void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(9)) {
-        ActorCutscene_Start(9, &this->actor);
+    if (CutsceneManager_IsNext(9)) {
+        CutsceneManager_Start(9, &this->actor);
         this->actionFunc = DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(9);
+        CutsceneManager_Queue(9);
     }
 }
 
@@ -1207,11 +1207,11 @@ void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, PlayState* 
 }
 
 void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(11)) {
-        ActorCutscene_Start(11, &this->actor);
+    if (CutsceneManager_IsNext(11)) {
+        CutsceneManager_Start(11, &this->actor);
         this->actionFunc = DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(11);
+        CutsceneManager_Queue(11);
     }
 }
 
@@ -1224,16 +1224,16 @@ void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, PlayState* 
 }
 
 void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(10)) {
+    if (CutsceneManager_IsNext(10)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_DAMAGE);
-        ActorCutscene_Start(10, &this->actor);
+        CutsceneManager_Start(10, &this->actor);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.shape.rot.y = this->actor.shape.rot.x;
         this->actor.world.rot.y = this->actor.shape.rot.x;
         this->actionFunc = DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(10);
+        CutsceneManager_Queue(10);
     }
 }
 
@@ -1794,12 +1794,12 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
                 break;
 
             case SK_DEKU_PIPES_CS_STATE_PLAYER_USED_OCARINA:
-                if (ActorCutscene_GetCanPlayNext(16)) {
+                if (CutsceneManager_IsNext(16)) {
                     this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_START;
-                    ActorCutscene_Start(16, &this->actor);
+                    CutsceneManager_Start(16, &this->actor);
                     this->actionFunc = DmStk_ClockTower_Idle;
                 } else {
-                    ActorCutscene_SetIntentToPlay(16);
+                    CutsceneManager_Queue(16);
                 }
                 break;
 
@@ -1814,7 +1814,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         // Skull Kid is always loaded in the scene, even if he isn't visible, hence why time always passes.
         if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
-            (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) &&
+            (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
             (play->csCtx.state == 0)) {
             gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
             if (R_TIME_SPEED != 0) {

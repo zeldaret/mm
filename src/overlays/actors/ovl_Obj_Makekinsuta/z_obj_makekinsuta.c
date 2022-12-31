@@ -109,7 +109,7 @@ void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
 
     if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
         this->actor.update = func_8099FD7C;
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     } else {
         if (this->unk144 >= 0) {
             if (this->unk144 == 0) {
@@ -127,8 +127,8 @@ void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_8099FD7C(Actor* thisx, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(thisx->csId)) {
-        ActorCutscene_StartWithPlayerCs(thisx->csId, thisx);
+    if (CutsceneManager_IsNext(thisx->csId)) {
+        CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
         if (thisx->csId >= 0) {
             func_800B7298(play, thisx, PLAYER_CSMODE_4);
         }
@@ -136,6 +136,6 @@ void func_8099FD7C(Actor* thisx, PlayState* play) {
         thisx->update = Actor_Noop;
         thisx->flags &= ~ACTOR_FLAG_10;
     } else {
-        ActorCutscene_SetIntentToPlay(thisx->csId);
+        CutsceneManager_Queue(thisx->csId);
     }
 }

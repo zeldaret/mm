@@ -58,7 +58,7 @@ void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     i = 0;
 
     // clang-format off
-    while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = ActorCutscene_GetAdditionalCsId(csId); i++; }
+    while (csId != CS_ID_NONE) { this->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
     // clang-format on
 
     this->dyna.actor.scale.x = 0.1f;

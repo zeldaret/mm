@@ -111,21 +111,21 @@ void func_8092E284(ElfMsg* this, PlayState* play) {
 
     if ((player->tatlActor != NULL) && ((func_8092E1FC(this)))) {
         player->tatlTextId = func_8092E1D0(this);
-        ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         tatl->elfMsg = &this->actor;
         if (this->actor.csId == CS_ID_NONE) {
             this->actor.csId = CS_ID_GLOBAL_TALK;
         }
         if ((player->tatlTextId < 0) && (this->actor.home.rot.x < 0)) {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_DOOR);
-                ActorCutscene_SetIntentToPlay(this->actor.csId);
-            } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
+                CutsceneManager_Queue(this->actor.csId);
+            } else if (CutsceneManager_IsNext(this->actor.csId)) {
                 this->actor.home.rot.x = 0;
-                ActorCutscene_Start(this->actor.csId, &this->actor);
+                CutsceneManager_Start(this->actor.csId, &this->actor);
                 func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.csId);
+                CutsceneManager_Queue(this->actor.csId);
             }
         }
     }

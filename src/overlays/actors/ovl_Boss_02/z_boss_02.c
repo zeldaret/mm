@@ -2150,7 +2150,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 100:
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_NONE) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Cutscene_StartManual(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);

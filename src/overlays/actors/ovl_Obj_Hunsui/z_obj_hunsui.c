@@ -583,10 +583,10 @@ void func_80B9D714(ObjHunsui* this, PlayState* play) {
             csId = this->dyna.actor.csId;
 
             if (this->unk_16E == 0) {
-                if ((csId >= 0) && !ActorCutscene_GetCanPlayNext(csId)) {
-                    ActorCutscene_SetIntentToPlay(csId);
+                if ((csId >= 0) && !CutsceneManager_IsNext(csId)) {
+                    CutsceneManager_Queue(csId);
                 } else if (csId >= 0) {
-                    ActorCutscene_StartWithPlayerCs(csId, &this->dyna.actor);
+                    CutsceneManager_StartWithPlayerCs(csId, &this->dyna.actor);
                     this->unk_16E = -1;
                 } else {
                     this->unk_16E = 40;

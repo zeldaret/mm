@@ -223,7 +223,7 @@ void func_80BD8658(EnPamera* this) {
             break;
         }
         this->csIdList[i] = csId;
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 }
 
@@ -242,9 +242,9 @@ void func_80BD8700(EnPamera* this) {
 
 void func_80BD8758(EnPamera* this, PlayState* play) {
     if (this->hideInisdeTimer++ > 1800) {
-        if (ActorCutscene_GetCanPlayNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
-            ActorCutscene_StartWithPlayerCs(this->csIdList[0], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csIdList[0])),
+        if (CutsceneManager_IsNext(this->csIdList[0]) && (this->csIdList[0] != -1)) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[0])),
                                    &this->actor);
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -253,7 +253,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
             func_80BD9338(this, play);
             func_80BD8908(this);
         } else if ((this->csIdList[0] != -1) && (this->actor.xzDistToPlayer < 1000.0f)) {
-            ActorCutscene_SetIntentToPlay(this->csIdList[0]);
+            CutsceneManager_Queue(this->csIdList[0]);
         } else {
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
@@ -429,13 +429,13 @@ void func_80BD90AC(EnPamera* this, PlayState* play) {
         ((this->actor.xzDistToPlayer < 150.0f) ||
          ((this->actionFunc == func_80BD909C) &&
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
-        if ((ActorCutscene_GetCanPlayNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
-            ActorCutscene_StartWithPlayerCs(this->csIdList[1], &this->actor);
-            Camera_SetToTrackActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->csIdList[1])),
+        if ((CutsceneManager_IsNext(this->csIdList[1])) && ((this->csIdList[1] != -1))) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[1], &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(this->csIdList[1])),
                                    &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->csIdList[1] != -1) {
-            ActorCutscene_SetIntentToPlay(this->csIdList[1]);
+            CutsceneManager_Queue(this->csIdList[1]);
         } else {
             EnPamera_LookDownWell(this);
         }

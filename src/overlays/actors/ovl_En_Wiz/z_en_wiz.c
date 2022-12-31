@@ -668,13 +668,13 @@ void EnWiz_MoveGhosts(EnWiz* this) {
 }
 
 void EnWiz_StartIntroCutscene(EnWiz* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_SetupAppear(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -828,13 +828,13 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
 }
 
 void EnWiz_SetupSecondPhaseCutscene(EnWiz* this, PlayState* play) {
-    s16 secondPhaseCsId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+    s16 secondPhaseCsId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (!ActorCutscene_GetCanPlayNext(secondPhaseCsId)) {
-        ActorCutscene_SetIntentToPlay(secondPhaseCsId);
+    if (!CutsceneManager_IsNext(secondPhaseCsId)) {
+        CutsceneManager_Queue(secondPhaseCsId);
     } else {
-        ActorCutscene_StartWithPlayerCsAndSetFlag(secondPhaseCsId, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(secondPhaseCsId);
+        CutsceneManager_StartWithPlayerCsAndSetFlag(secondPhaseCsId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(secondPhaseCsId);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
         this->action = EN_WIZ_ACTION_RUN_BETWEEN_PLATFORMS;
@@ -885,7 +885,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
                     this->platformCount = 0;
                     this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
                     this->timer = 0;
-                    ActorCutscene_Stop(ActorCutscene_GetAdditionalCsId(this->actor.csId));
+                    CutsceneManager_Stop(CutsceneManager_GetAdditionalCsId(this->actor.csId));
                     this->actor.flags &= ~ACTOR_FLAG_100000;
                     EnWiz_SetupDisappear(this);
                     return;
@@ -1037,7 +1037,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
 
         if ((this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) && (this->introCutsceneTimer == 0)) {
             this->introCutsceneState = EN_WIZ_INTRO_CS_END;
-            ActorCutscene_Stop(this->actor.csId);
+            CutsceneManager_Stop(this->actor.csId);
             this->actor.flags &= ~ACTOR_FLAG_100000;
         }
 

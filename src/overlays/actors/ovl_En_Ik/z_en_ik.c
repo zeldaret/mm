@@ -651,7 +651,7 @@ void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->subCamId != SUB_CAM_ID_DONE) {
-            ActorCutscene_Stop(this->actor.csId);
+            CutsceneManager_Stop(this->actor.csId);
             this->subCamId = SUB_CAM_ID_DONE;
             EnIk_SetupIdle(this);
         } else {
@@ -693,7 +693,7 @@ void EnIk_Die(EnIk* this, PlayState* play) {
             }
             if (this->timer == 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
-                ActorCutscene_Stop(this->actor.csId);
+                CutsceneManager_Stop(this->actor.csId);
                 Actor_Kill(&this->actor);
             }
         }
@@ -723,7 +723,7 @@ void EnIk_Frozen(EnIk* this, PlayState* play) {
 }
 
 void EnIk_SetupCutscene(EnIk* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.csId);
+    CutsceneManager_Queue(this->actor.csId);
     this->actor.speedXZ = 0.0f;
     if (this->actor.colChkInfo.health != 0) {
         func_800BE504(&this->actor, &this->colliderCylinder);
@@ -735,10 +735,10 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
     Vec3f subCamEye;
 
     this->invincibilityFrames = 12;
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         if (this->actor.csId != CS_ID_NONE) {
-            ActorCutscene_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
-            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
+            this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
             subCamEye.x = (Math_SinS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y + 20.0f;
             subCamEye.z = (Math_CosS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.z;
@@ -750,7 +750,7 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
             EnIk_SetupDie(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

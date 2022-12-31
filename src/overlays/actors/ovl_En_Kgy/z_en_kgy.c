@@ -92,7 +92,7 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
         this->csIdList[i] = csId;
         if (csId != CS_ID_NONE) {
             this->actor.csId = csId;
-            csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -228,14 +228,14 @@ void func_80B40EE8(EnKgy* this, PlayState* play) {
         }
     }
 
-    if ((this->csIdIndex != -1) && (ActorCutscene_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->csIdList[this->csIdIndex])) {
-            ActorCutscene_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_StartWithPlayerCs(this->csIdList[this->csIdIndex], &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->csIdList[this->csIdIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 
@@ -343,7 +343,7 @@ void func_80B411DC(EnKgy* this, PlayState* play, s32 arg2) {
 }
 
 void func_80B41368(EnKgy* this, PlayState* play, s32 arg2) {
-    ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+    CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
     func_80B411DC(this, play, arg2);
     this->unk_2E6 = 20;
     this->unk_29C |= 2;
@@ -354,7 +354,7 @@ void func_80B413C8(EnKgy* this) {
 
     this->unk_2B4 = sp1C;
     this->actor.focus.pos = sp1C;
-    ActorCutscene_Stop(this->csIdList[this->csIdIndex]);
+    CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
     this->csIdIndex = -1;
     this->unk_2E6 = 0;
     this->unk_29C &= ~2;
@@ -468,12 +468,12 @@ void func_80B417B8(EnKgy* this, PlayState* play) {
 
 void func_80B41858(EnKgy* this, PlayState* play) {
     func_80B4163C(this, play);
-    if (ActorCutscene_GetCanPlayNext(this->csIdList[5])) {
-        ActorCutscene_StartWithPlayerCs(this->csIdList[5], &this->actor);
+    if (CutsceneManager_IsNext(this->csIdList[5])) {
+        CutsceneManager_StartWithPlayerCs(this->csIdList[5], &this->actor);
         this->actionFunc = func_80B419B0;
         func_80B40E18(this, 7);
     } else {
-        ActorCutscene_SetIntentToPlay(this->csIdList[5]);
+        CutsceneManager_Queue(this->csIdList[5]);
     }
 }
 
@@ -485,7 +485,7 @@ void func_80B418C4(EnKgy* this, PlayState* play) {
         func_801477B4(play);
         this->actor.textId = 0xC4F;
         func_80B413C8(this);
-        ActorCutscene_SetIntentToPlay(this->csIdList[5]);
+        CutsceneManager_Queue(this->csIdList[5]);
         this->actionFunc = func_80B41858;
         this->actor.flags &= ~ACTOR_FLAG_100;
     }

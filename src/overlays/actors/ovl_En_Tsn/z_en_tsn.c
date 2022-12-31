@@ -369,7 +369,7 @@ void func_80AE0698(EnTsn* this, PlayState* play) {
     this->actionFunc = func_80AE0C88;
     this->unk_220 &= ~2;
     this->actor.focus.pos = this->actor.world.pos;
-    ActorCutscene_Stop(this->actor.csId);
+    CutsceneManager_Stop(this->actor.csId);
     ENTSN_SET_Z(&this->unk_1D8->actor, false);
 }
 
@@ -433,7 +433,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                             func_80AE0460(this, play);
                             this->unk_220 &= ~2;
                             this->actor.focus.pos = this->actor.world.pos;
-                            ActorCutscene_Stop(this->actor.csId);
+                            CutsceneManager_Stop(this->actor.csId);
                             this->actor.flags &= ~ACTOR_FLAG_100;
                             REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
                         } else {
@@ -517,14 +517,14 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
     if (this->unk_220 & 4) {
         if (this->actor.csId == CS_ID_NONE) {
             this->unk_220 &= ~4;
-        } else if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->unk_220 &= ~4;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.csId);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -545,7 +545,7 @@ void func_80AE0D10(EnTsn* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         func_801477B4(play);
         this->actionFunc = func_80AE0D78;
-        ActorCutscene_Stop(this->actor.csId);
+        CutsceneManager_Stop(this->actor.csId);
     }
 }
 

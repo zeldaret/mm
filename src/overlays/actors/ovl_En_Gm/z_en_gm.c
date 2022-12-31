@@ -428,14 +428,14 @@ void func_8094E2D0(EnGm* this) {
 s32 func_8094E454(EnGm* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(csId);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
@@ -445,7 +445,7 @@ s16 func_8094E4D0(EnGm* this, s32 numCutscenes) {
     s16 csId = this->actor.csId;
 
     for (i = 0; i < numCutscenes; i++) {
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
     return csId;
@@ -464,9 +464,9 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
 
         case 2:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_40) && (this->unk_3E0 == 2)) {
-                ActorCutscene_Stop(csId);
+                CutsceneManager_Stop(csId);
             } else {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             }
             this->unk_3E0++;
             ret = true;
@@ -474,14 +474,15 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
 
         case 1:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->unk_3E0++;
             ret = true;
             break;
 
         case 3:
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->unk_3E0++;
             ret = true;
             break;
@@ -533,7 +534,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
             if (func_8094E454(this, csId)) {
                 case 4:
                 case 6:
-                    subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId));
+                    subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId));
                     Camera_SetTargetActor(subCam, &this->actor);
                     this->unk_3E0++;
                     ret = true;
@@ -544,7 +545,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
         case 5:
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId));
+                subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId));
                 Camera_SetTargetActor(subCam, this->actor.child);
             }
             this->unk_3E0++;
@@ -553,7 +554,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
 
         case 8:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->unk_3E2 = 0;
             this->unk_3E0++;
             break;
@@ -1763,7 +1764,7 @@ void EnGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp30;
     s32 pad2;
 
-    if ((ActorCutscene_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == 16)) {
+    if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == 16)) {
         Matrix_MultVec3f(&D_80951E24, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }

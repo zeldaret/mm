@@ -79,10 +79,10 @@ void func_80C08BBC(ObjKzsaku* this) {
 
 void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play) {
     if (this->dyna.actor.csId != CS_ID_NONE) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
     if (this->raisedAmount < 450.0f) {
@@ -103,8 +103,8 @@ void func_80C08C84(ObjKzsaku* this) {
 void func_80C08CB0(ObjKzsaku* this, PlayState* play) {
     if (this->timer <= 20) {
         if (this->timer == 20) {
-            if (ActorCutscene_GetCurrentCsId() == this->dyna.actor.csId) {
-                ActorCutscene_Stop(this->dyna.actor.csId);
+            if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
+                CutsceneManager_Stop(this->dyna.actor.csId);
             }
             this->timer = 21;
         } else {

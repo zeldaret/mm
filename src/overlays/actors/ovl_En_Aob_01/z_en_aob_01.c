@@ -603,10 +603,10 @@ s32 func_809C2504(EnAob01* this, PlayState* play) {
 
     while (npc != NULL) {
         if ((npc->id == ACTOR_EN_RACEDOG) &&
-            (ActorCutscene_GetCutsceneCustomValue(this->csId) == ((EnRacedog*)npc)->currentPoint)) {
-            ActorCutscene_Stop(this->csId);
+            (CutsceneManager_GetCutsceneCustomValue(this->csId) == ((EnRacedog*)npc)->currentPoint)) {
+            CutsceneManager_Stop(this->csId);
             this->unk_3F4 = npc;
-            this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             return true;
         }
         npc = npc->next;
@@ -651,22 +651,22 @@ s32 func_809C25E4(EnAob01* this, PlayState* play) {
 }
 
 s32 func_809C2680(EnAob01* this) {
-    if ((ActorCutscene_GetLength(this->csId) > 0) && (ActorCutscene_GetCurrentCsId() != this->csId)) {
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+    if ((CutsceneManager_GetLength(this->csId) > 0) && (CutsceneManager_GetCurrentCsId() != this->csId)) {
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         return true;
     }
     return false;
 }
 
 void func_809C26E4(EnAob01* this, PlayState* play) {
-    ActorCutscene_Stop(this->csId);
-    this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+    CutsceneManager_Stop(this->csId);
+    this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
     this->actionFunc = func_809C2824;
 }
 
 void func_809C2730(EnAob01* this, PlayState* play) {
     if (func_809C2504(this, play) || func_809C2680(this)) {
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->actionFunc = func_809C2824;
     }
 }
@@ -685,9 +685,9 @@ void func_809C2788(EnAob01* this, PlayState* play) {
 }
 
 void func_809C2824(EnAob01* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_Start(this->csId, this->unk_3F4);
-        switch (ActorCutscene_GetCutsceneCustomValue(this->csId)) {
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, this->unk_3F4);
+        switch (CutsceneManager_GetCutsceneCustomValue(this->csId)) {
             case 255:
                 this->actionFunc = func_809C26E4;
                 break;
@@ -700,7 +700,7 @@ void func_809C2824(EnAob01* this, PlayState* play) {
                 this->actionFunc = func_809C2730;
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -950,7 +950,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
             this->actor.draw = NULL;
             this->csId = this->actor.csId;
             func_809C2594(this, play);
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             this->actor.flags &= ~ACTOR_FLAG_1;
             func_809C2F34(this, play);
             this->actionFunc = func_809C2824;

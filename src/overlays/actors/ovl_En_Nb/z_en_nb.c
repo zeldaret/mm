@@ -230,14 +230,14 @@ Actor* func_80BBFF90(EnNb* this, PlayState* play) {
 s32 func_80BBFFD4(EnNb* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(csId);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(csId);
+        CutsceneManager_Queue(csId);
     }
 
     return ret;
@@ -248,7 +248,7 @@ s16 func_80BC0050(EnNb* this, s32 numCutscenes) {
     s32 i;
 
     for (i = 0; i < numCutscenes; i++) {
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
     return csId;
@@ -282,7 +282,7 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
         case ENNB_BEHAVIOUR_4:
         case ENNB_BEHAVIOUR_6:
         case ENNB_BEHAVIOUR_8:
-            Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), &this->actor);
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
             this->behaviour++;
             ret = true;
             break;
@@ -292,14 +292,15 @@ s32 func_80BC00AC(Actor* thisx, PlayState* play) {
         case ENNB_BEHAVIOUR_5:
         case ENNB_BEHAVIOUR_7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(csId)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)),
+                                      this->actor.child);
             }
             this->behaviour++;
             ret = true;
             break;
 
         case ENNB_BEHAVIOUR_9:
-            ActorCutscene_Stop(csId);
+            CutsceneManager_Stop(csId);
             this->behaviour++;
             ret = true;
             break;
@@ -744,7 +745,7 @@ void EnNb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnNb* this = THIS;
     Vec3f focusTarget;
 
-    if ((ActorCutscene_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == NB_LIMB_HEAD)) {
+    if ((CutsceneManager_GetCurrentCsId() == CS_ID_NONE) && (limbIndex == NB_LIMB_HEAD)) {
         Matrix_MultVec3f(&gZeroVec3f, &focusTarget);
         Math_ApproachF(&thisx->focus.pos.x, focusTarget.x, 0.6f, 10000.0f);
         Math_ApproachF(&thisx->focus.pos.y, focusTarget.y, 0.6f, 10000.0f);

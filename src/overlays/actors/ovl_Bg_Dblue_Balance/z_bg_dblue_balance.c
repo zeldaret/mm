@@ -627,16 +627,16 @@ void func_80B83518(Actor* thisx, PlayState* play) {
     if (this->unk_17F == 2) {
         this->unk_17E--;
         if (this->unk_17E <= 0) {
-            ActorCutscene_Stop(this->dyna.actor.csId);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             this->unk_17F = 0;
         }
     } else if ((this->unk_17F != 0) && (this->unk_17F == 1)) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-            ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_17F = 2;
             this->unk_17E = 0x50;
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
     this->unk_16C = this->unk_170;

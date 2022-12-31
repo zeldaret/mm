@@ -478,7 +478,7 @@ void Scene_HeaderCmdCutsceneList(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
 void Scene_HeaderCmdActorCutsceneList(PlayState* play, SceneCmd* cmd) {
-    ActorCutscene_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment), cmd->cutsceneActorList.num);
+    CutsceneManager_Init(play, Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment), cmd->cutsceneActorList.num);
 }
 
 // SceneTableEntry Header Command 0x1C: Mini Maps

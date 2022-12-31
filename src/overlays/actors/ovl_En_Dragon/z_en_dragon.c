@@ -447,7 +447,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetSubCamEyeAt(EnDragon* this, PlayState* play, Vec3f subCamEye, Vec3f subCamAt) {
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     Math_Vec3f_Copy(&this->subCamEye, &subCamEye);
     Math_Vec3f_Copy(&this->subCamAt, &subCamAt);
     Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
@@ -458,10 +458,10 @@ void EnDragon_SetupGrab(EnDragon* this, PlayState* play) {
     Vec3f extendedPos;
     s16 yaw;
 
-    if (!ActorCutscene_GetCanPlayNext(this->grabCsId)) {
-        ActorCutscene_SetIntentToPlay(this->grabCsId);
+    if (!CutsceneManager_IsNext(this->grabCsId)) {
+        CutsceneManager_Queue(this->grabCsId);
     } else {
-        ActorCutscene_StartWithPlayerCs(this->grabCsId, &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->grabCsId, &this->actor);
         Math_Vec3f_Copy(&extendedPos, &this->burrowEntrancePos);
         extendedPos.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         extendedPos.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
@@ -496,7 +496,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
     Vec3f pos; // used as both the extended position and the camera eye
     Vec3f subCamAt;
 
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->grabTimer == 0) {
@@ -617,7 +617,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->grabWaitTimer = 30;
-        ActorCutscene_Stop(this->grabCsId);
+        CutsceneManager_Stop(this->grabCsId);
         if (player->stateFlags2 & PLAYER_STATE2_80) {
             player->unk_AE8 = 100;
         }
@@ -634,10 +634,10 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
 }
 
 void EnDragon_SetupDead(EnDragon* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(this->deathCsId)) {
-        ActorCutscene_SetIntentToPlay(this->deathCsId);
+    if (!CutsceneManager_IsNext(this->deathCsId)) {
+        CutsceneManager_Queue(this->deathCsId);
     } else {
-        ActorCutscene_StartWithPlayerCs(this->deathCsId, &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->deathCsId, &this->actor);
         this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->timer = 20;

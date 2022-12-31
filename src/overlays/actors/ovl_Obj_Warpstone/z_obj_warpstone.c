@@ -97,19 +97,19 @@ s32 ObjWarpstone_ClosedIdle(ObjWarpstone* this, PlayState* play) {
 }
 
 s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, PlayState* play) {
-    if ((this->dyna.actor.csId < 0) || ActorCutscene_GetCanPlayNext(this->dyna.actor.csId)) {
-        ActorCutscene_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+    if ((this->dyna.actor.csId < 0) || CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         ObjWarpstone_SetupAction(this, ObjWarpstone_PlayOpeningCutscene);
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OWL_WARP_SWITCH_ON);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
     return true;
 }
 
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, PlayState* play) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
-        ActorCutscene_Stop(this->dyna.actor.csId);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(&this->dyna.actor));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {

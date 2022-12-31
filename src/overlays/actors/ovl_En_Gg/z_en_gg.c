@@ -406,16 +406,16 @@ void func_80B359DC(EnGg* this, PlayState* play) {
             this->unk_307 = true;
         }
 
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_Start(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Start(this->csId, &this->actor);
             this->unk_307 = false;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
 
             if (this->unk_307) {
-                ActorCutscene_SetIntentToPlay(this->csId);
+                CutsceneManager_Queue(this->csId);
             }
         }
     } else {

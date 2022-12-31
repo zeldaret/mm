@@ -996,13 +996,13 @@ void func_80A134B0(EnGo* this, PlayState* play, s32 arg2) {
 }
 
 s32 func_80A134F4(EnGo* this, s16 csId) {
-    if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-    } else if (ActorCutscene_GetCanPlayNext(csId)) {
-        ActorCutscene_StartWithPlayerCs(csId, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         return true;
     }
-    ActorCutscene_SetIntentToPlay(csId);
+    CutsceneManager_Queue(csId);
     return false;
 }
 
@@ -1112,7 +1112,7 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
 
     switch (this->unk_3C0) {
         case 0:
-            this->csId = ActorCutscene_GetAdditionalCsId(this->actor.csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
             if (func_80A134F4(this, this->csId)) {
                 this->unk_3C4 = 1;
                 this->unk_3C0 = 1;
@@ -1121,8 +1121,8 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             }
 
         case 1:
-            if (ActorCutscene_GetCurrentCsId() != this->csId) {
-                this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+            if (CutsceneManager_GetCurrentCsId() != this->csId) {
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
                 this->unk_3C0 = 2;
             } else {
                 break;
@@ -1136,11 +1136,11 @@ s32 func_80A13B1C(EnGo* this, PlayState* play) {
             }
 
         case 3:
-            if (ActorCutscene_GetCanPlayNext(CS_ID_GLOBAL_TALK)) {
-                ActorCutscene_StartWithPlayerCs(CS_ID_GLOBAL_TALK, NULL);
+            if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+                CutsceneManager_StartWithPlayerCs(CS_ID_GLOBAL_TALK, NULL);
                 this->unk_3C0 = 4;
-            } else if (ActorCutscene_GetCurrentCsId() == this->csId) {
-                ActorCutscene_SetIntentToPlay(CS_ID_GLOBAL_TALK);
+            } else if (CutsceneManager_GetCurrentCsId() == this->csId) {
+                CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
             }
     }
 
@@ -1258,7 +1258,7 @@ s32 func_80A13E80(EnGo* this, PlayState* play) {
 
         case 3:
             if (this->unk_3C2 >= 60) {
-                ActorCutscene_Stop(this->csId);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3C2 = 0;
                 this->unk_3C0 = 0;
                 ret = true;
@@ -1625,7 +1625,7 @@ void func_80A14EB0(EnGo* this, PlayState* play) {
         this->unk_3A0 = (this->unk_39C / 0.9f) * 100.0f;
         func_80A139E4(this);
     } else {
-        ActorCutscene_Stop(this->actor.csId);
+        CutsceneManager_Stop(this->actor.csId);
         func_80A143A8(this, play);
         if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
             SubS_UpdateFlags(&this->unk_390, 4, 7);

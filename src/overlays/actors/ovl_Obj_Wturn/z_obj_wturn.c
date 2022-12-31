@@ -52,15 +52,15 @@ void func_808A7968(ObjWturn* this, PlayState* play) {
 }
 
 void func_808A7A24(ObjWturn* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.csId);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_808A7A5C;
 }
 
 void func_808A7A5C(ObjWturn* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.csId)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         func_808A7AAC(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -69,9 +69,9 @@ void func_808A7AAC(ObjWturn* this, PlayState* play) {
     Vec3f subCamEye;
     Vec3f subCamAt;
 
-    ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
     func_8016566C(140);
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     func_800B7298(play, &this->actor, PLAYER_CSMODE_21);
     subCamAt.x = player->actor.focus.pos.x;
     subCamAt.z = player->actor.focus.pos.z;

@@ -1359,7 +1359,7 @@ void func_80B45648(EnInvadepoh* this) {
 
     for (i = 0; i < ARRAY_COUNT(sCsIdList); i++) {
         sCsIdList[i] = csId;
-        csId = ActorCutscene_GetAdditionalCsId(csId);
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 }
 
@@ -1915,11 +1915,11 @@ void func_80B46E20(EnInvadepoh* this) {
 void func_80B46E44(EnInvadepoh* this, PlayState* play) {
     if (this->actionTimer > 0) {
         this->actionTimer--;
-    } else if (ActorCutscene_GetCanPlayNext(sCsIdList[0])) {
-        ActorCutscene_StartWithPlayerCs(sCsIdList[0], &this->actor);
+    } else if (CutsceneManager_IsNext(sCsIdList[0])) {
+        CutsceneManager_StartWithPlayerCs(sCsIdList[0], &this->actor);
         func_80B46EC0(this);
     } else {
-        ActorCutscene_SetIntentToPlay(sCsIdList[0]);
+        CutsceneManager_Queue(sCsIdList[0]);
     }
 }
 
@@ -1940,7 +1940,7 @@ void func_80B46EE8(EnInvadepoh* this, PlayState* play) {
 
     this->actionTimer--;
     if (this->actionTimer <= 0) {
-        ActorCutscene_Stop(sCsIdList[0]);
+        CutsceneManager_Stop(sCsIdList[0]);
         Audio_QueueSeqCmd(NA_BGM_ALIEN_INVASION | 0x8000);
         func_80B46F88(this);
     }
@@ -1974,11 +1974,11 @@ void func_80B47064(EnInvadepoh* this) {
 }
 
 void func_80B47084(EnInvadepoh* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(sCsIdList[1])) {
-        ActorCutscene_StartWithPlayerCs(sCsIdList[1], &this->actor);
+    if (CutsceneManager_IsNext(sCsIdList[1])) {
+        CutsceneManager_StartWithPlayerCs(sCsIdList[1], &this->actor);
         func_80B470E0(this);
     } else {
-        ActorCutscene_SetIntentToPlay(sCsIdList[1]);
+        CutsceneManager_Queue(sCsIdList[1]);
     }
 }
 

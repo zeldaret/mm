@@ -308,13 +308,13 @@ void func_80C050B8(EnBombers2* this, PlayState* play) {
 
 void func_80C0520C(EnBombers2* this, PlayState* play) {
     if (this->unk_2A8 == 0) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-            ActorCutscene_SetIntentToPlay(this->csId);
-        } else if (ActorCutscene_GetCanPlayNext(this->csId) == 0) {
-            ActorCutscene_SetIntentToPlay(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csId);
+        } else if (CutsceneManager_IsNext(this->csId) == 0) {
+            CutsceneManager_Queue(this->csId);
         } else {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_2A8 = 1;
         }
     } else {
@@ -331,7 +331,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
                 SET_WEEKEVENTREG(WEEKEVENTREG_73_80);
-                ActorCutscene_Stop(this->csId);
+                CutsceneManager_Stop(this->csId);
                 this->unk_2AC = 1;
                 this->actor.textId = sTextIds[this->textIdIndex];
                 Message_StartTextbox(play, this->actor.textId, &this->actor);

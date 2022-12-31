@@ -639,7 +639,7 @@ wordReplace = {
     "func_8010A54C": "Minimap_Draw",
     "func_8010A580": "Map_Update",
 
-    "ActorCutscene_GetCurrentCamera": "ActorCutscene_GetCurrentSubCamId",
+    "CutsceneManager_GetCurrentCamera": "CutsceneManager_GetCurrentSubCamId",
 
     "Entrance_CreateIndex": "Entrance_Create",
     "Entrance_CreateIndexFromSpawn": "Entrance_CreateFromSpawn",

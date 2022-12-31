@@ -532,14 +532,14 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 
     func_80ADAE64(this);
     if (this->unk_366 == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 1;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     }
@@ -659,31 +659,31 @@ void func_80ADC37C(EnSellnuts* this, PlayState* play) {
         this->actor.world.rot.x = -sp30.x;
         if (func_80ADCE4C(this, this->path, this->unk_334) && (sp2C < 500.0f)) {
             if (this->unk_334 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->csId);
+                CutsceneManager_Stop(this->csId);
                 this->actionFunc = func_80ADC580;
             } else {
                 this->unk_334++;
             }
         }
     } else if (this->actor.playerHeightRel > 500.0f) {
-        ActorCutscene_Stop(this->csId);
+        CutsceneManager_Stop(this->csId);
         this->actionFunc = func_80ADC580;
     }
 
     Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.2f, 1.0f);
     Actor_MoveWithoutGravity(&this->actor);
     if (this->unk_366 == 2) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 3;
         } else {
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     } else if ((this->unk_366 == 1) && (this->unk_368 == 20)) {
-        ActorCutscene_Stop(this->csId);
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Stop(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->unk_366 = 2;
     }
 
@@ -741,22 +741,22 @@ void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
 
     if (this->unk_366 == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 1;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
         }
     } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->unk_366 = 0;
-        ActorCutscene_Stop(this->csId);
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Stop(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->unk_338 |= 8;
         this->actionFunc = func_80ADC8C4;
     }
@@ -766,14 +766,14 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
     Vec3s sp30;
 
     if (this->unk_366 == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->csId)) {
-            ActorCutscene_StartWithPlayerCs(this->csId, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 1;
         } else {
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     }
@@ -816,7 +816,7 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
         this->actor.shape.rot.y += 0x4000;
         this->unk_360 *= 0.93f;
         if (this->actor.world.pos.y < -50.0f) {
-            ActorCutscene_Stop(this->csId);
+            CutsceneManager_Stop(this->csId);
             this->unk_338 &= ~8;
             this->unk_34E = 20;
             this->unk_350 = 4;
@@ -835,7 +835,7 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
             this->collider.dim.height = 0;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_34C == 17) {
-            ActorCutscene_Stop(this->csId);
+            CutsceneManager_Stop(this->csId);
             SET_WEEKEVENTREG(WEEKEVENTREG_73_04);
             Actor_Kill(&this->actor);
         }

@@ -508,11 +508,11 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_84_10);
             switch (this->unk_388) {
                 case 0:
-                    ActorCutscene_Stop(this->csIdList[2]);
+                    CutsceneManager_Stop(this->csIdList[2]);
                     break;
 
                 case 1:
-                    ActorCutscene_Stop(this->csIdList[3]);
+                    CutsceneManager_Stop(this->csIdList[3]);
                     break;
             }
             this->unk_73C = -1;
@@ -665,7 +665,7 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1069)) {
                 this->unk_32C |= 4;
-                ActorCutscene_Stop(this->csIdList[0]);
+                CutsceneManager_Stop(this->csIdList[0]);
                 player->stateFlags2 &= ~PLAYER_STATE2_20000000;
                 func_80B5CE6C(this, play);
             }

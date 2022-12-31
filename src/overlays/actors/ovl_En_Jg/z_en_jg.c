@@ -257,25 +257,25 @@ s16 EnJg_GetCsIdForTeachingLullabyIntro(EnJg* this) {
         return this->actor.csId;
     }
 
-    return ActorCutscene_GetAdditionalCsId(this->actor.csId);
+    return CutsceneManager_GetAdditionalCsId(this->actor.csId);
 }
 
 void EnJg_SetupGoronShrineCheer(EnJg* this) {
-    ActorCutscene_Stop(this->csId);
+    CutsceneManager_Stop(this->csId);
     if (this->focusedShrineGoronParam == 10) {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             this->actionFunc = EnJg_GoronShrineTalk;
         } else {
             this->csId = CS_ID_GLOBAL_TALK;
         }
     } else {
-        this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
     }
 
-    ActorCutscene_SetIntentToPlay(this->csId);
+    CutsceneManager_Queue(this->csId);
     this->actionFunc = EnJg_GoronShrineCheer;
 
     switch (this->textId) {
@@ -373,7 +373,7 @@ void EnJg_GoronShrineTalk(EnJg* this, PlayState* play) {
 }
 
 void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
+    if (CutsceneManager_IsNext(this->csId)) {
         switch (this->textId) {
             case 0xDD0: // The greatest Goron hero of all?
             case 0xDD2: // The immortal Goron?
@@ -382,26 +382,26 @@ void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
             case 0xDD6: // Darmani, greatest in the world!
                 // Focus on a specifc Goron for these lines
                 this->shrineGoron = EnJg_GetShrineGoronToFocusOn(play, this->focusedShrineGoronParam);
-                ActorCutscene_Start(this->csId, this->shrineGoron);
+                CutsceneManager_Start(this->csId, this->shrineGoron);
                 Camera_SetTargetActor(play->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
 
             default:
                 // Focus on the whole group for these lines
-                ActorCutscene_Start(this->csId, &this->actor);
+                CutsceneManager_Start(this->csId, &this->actor);
                 Camera_SetTargetActor(play->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
         }
         this->actionFunc = EnJg_GoronShrineTalk;
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             if (this->focusedShrineGoronParam == 10) {
                 this->actionFunc = EnJg_GoronShrineTalk;
             } else {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
         }
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -514,10 +514,10 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->csId = EnJg_GetCsIdForTeachingLullabyIntro(this);
-                if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                    ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+                if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                    CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
                 }
-                ActorCutscene_SetIntentToPlay(this->csId);
+                CutsceneManager_Queue(this->csId);
                 this->actionFunc = EnJg_TeachLullabyIntro;
             }
         } else {
@@ -608,14 +608,14 @@ void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
 }
 
 void EnJg_TeachLullabyIntro(EnJg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_Start(this->csId, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->actor);
         this->actionFunc = EnJg_LullabyIntroCutsceneAction;
     } else {
-        if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-            ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -757,10 +757,10 @@ s32 EnJg_GetNextTextId(EnJg* this) {
 
         case 0xDCF: // Spring has come thanks to you
             this->focusedShrineGoronParam = 3;
-            if (ActorCutscene_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
-                ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             this->actionFunc = EnJg_GoronShrineCheer;
             return 0xDD0; // The greatest Goron hero of all?
 

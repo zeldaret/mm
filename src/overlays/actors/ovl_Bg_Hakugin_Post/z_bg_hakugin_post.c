@@ -163,7 +163,7 @@ void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 unkStruct->unk_0000[i].unk_34 = 1;
             }
             unkStruct->unk_0000[i].csId = this->dyna.actor.csId;
-            unkStruct->unk_0000[i].additionalCsId = ActorCutscene_GetAdditionalCsId(unkStruct->unk_0000[i].csId);
+            unkStruct->unk_0000[i].additionalCsId = CutsceneManager_GetAdditionalCsId(unkStruct->unk_0000[i].csId);
         } else {
             unkStruct->unk_0000[i].unk_34 = 1;
             unkStruct->unk_0000[i].csId = CS_ID_NONE;
@@ -823,7 +823,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
 
     if (this->unk_170 != 0) {
         func_80A9D1E0(this, func_80A9D0A0, (this->unk_164 - this->dyna.actor.home.pos.y) + 100.0f, 0x3C,
-                      ActorCutscene_GetAdditionalCsId(this->dyna.actor.csId));
+                      CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId));
         return;
     }
 
@@ -887,7 +887,7 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
 void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csLength, s16 csId) {
     this->unkFunc = unkFunc;
     this->csId = csId;
-    this->csLength = ActorCutscene_GetLength(csId);
+    this->csLength = CutsceneManager_GetLength(csId);
     if (this->csLength < 0) {
         this->csLength = csLength;
     }
@@ -898,11 +898,11 @@ void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 }
 
 void func_80A9D260(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_StartWithPlayerCs(this->csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         this->unkFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -911,7 +911,7 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
     this->csId = csId;
     this->additionalCsId = additionalCsId;
     this->csLength = -1;
-    this->csLength = ActorCutscene_GetLength(csId);
+    this->csLength = CutsceneManager_GetLength(csId);
     if (this->csLength < 0) {
         this->csLength = 15;
     }
@@ -922,20 +922,20 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 }
 
 void func_80A9D360(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_StartWithPlayerCs(this->csId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         if (this->additionalCsId >= 0) {
             func_80A9D3E4(this);
         } else {
             this->unkFunc(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void func_80A9D3E4(BgHakuginPost* this) {
-    this->additionalCsLength = ActorCutscene_GetLength(this->additionalCsId);
+    this->additionalCsLength = CutsceneManager_GetLength(this->additionalCsId);
     if (this->additionalCsLength < 0) {
         this->additionalCsLength = 30;
     }
@@ -943,11 +943,11 @@ void func_80A9D3E4(BgHakuginPost* this) {
 }
 
 void func_80A9D434(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->additionalCsId) != 0) {
-        ActorCutscene_StartWithPlayerCs(this->additionalCsId, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->additionalCsId) != 0) {
+        CutsceneManager_StartWithPlayerCs(this->additionalCsId, &this->dyna.actor);
         this->unkFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->additionalCsId);
+        CutsceneManager_Queue(this->additionalCsId);
     }
 }
 
@@ -959,14 +959,14 @@ void BgHakuginPost_Update(Actor* thisx, PlayState* play) {
     if ((this->csLength >= 0) && ((this->actionFunc != func_80A9D260) || (this->actionFunc != func_80A9D360))) {
         this->csLength--;
         if (this->csLength < 0) {
-            ActorCutscene_Stop(this->csId);
+            CutsceneManager_Stop(this->csId);
         }
     }
 
     if ((this->additionalCsLength >= 0) && (this->actionFunc != func_80A9D434)) {
         this->additionalCsLength--;
         if (this->additionalCsLength < 0) {
-            ActorCutscene_Stop(this->additionalCsId);
+            CutsceneManager_Stop(this->additionalCsId);
         }
     }
 

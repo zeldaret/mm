@@ -339,11 +339,11 @@ s32 func_80A3E97C(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3E9DC(EnTest3* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->csId)) {
-        ActorCutscene_StartWithPlayerCs(this->csId, &this->player.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->player.actor);
         return true;
     } else {
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Queue(this->csId);
         return false;
     }
 }
@@ -357,8 +357,8 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         }
     }
     if (this->unk_D78->unk_1 != 0) {
-        ActorCutscene_Stop(CS_ID_GLOBAL_TALK);
-        ActorCutscene_SetIntentToPlay(this->csId);
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csId);
         play->msgCtx.msgMode = 0x44;
     }
     return false;
@@ -374,9 +374,9 @@ s32 func_80A3EAC4(EnTest3* this, PlayState* play) {
 s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_D78->textId == 0x145F) {
-            ActorCutscene_Stop(this->csId);
+            CutsceneManager_Stop(this->csId);
             this->csId = CS_ID_GLOBAL_TALK;
-            ActorCutscene_SetIntentToPlay(this->csId);
+            CutsceneManager_Queue(this->csId);
             this->player.targetedActor = &GET_PLAYER(play)->actor;
         }
         return 1;
@@ -666,7 +666,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             this->unk_D90->stateFlags1 |= PLAYER_STATE1_20;
             func_800BC154(play, &play->actorCtx, &this->unk_D90->actor, 4);
             func_800BC154(play, &play->actorCtx, &this->player.actor, 2);
-            ActorCutscene_SetReturnCamera(this->subCamId);
+            CutsceneManager_SetReturnCamera(this->subCamId);
             play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
         }
         func_800B863C(&this->player.actor, play);
@@ -767,10 +767,10 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
                 Environment_StopTime();
             }
         } else if ((play->actorCtx.flags & ACTORCTX_FLAG_6) || (play->actorCtx.flags & ACTORCTX_FLAG_5)) {
-            this->csId = ActorCutscene_GetAdditionalCsId(this->player.actor.csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->player.actor.csId);
             SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
             if (play->actorCtx.flags & ACTORCTX_FLAG_5) {
-                this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
             }
             Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
             D_80A41D20 = 2;
@@ -778,7 +778,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
             func_80A3F73C(this, play);
         }
     } else if ((D_80A41D20 == 2) && func_80A3E9DC(this, play)) {
-        ActorCutscene_SetReturnCamera(CAM_ID_MAIN);
+        CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
         if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
             func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
@@ -793,7 +793,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3FDE4(EnTest3* this, PlayState* play, struct_80A41828* arg2, ScheduleOutput* scheduleOutput) {
-    this->csId = ActorCutscene_GetAdditionalCsId(this->player.actor.csId);
+    this->csId = CutsceneManager_GetAdditionalCsId(this->player.actor.csId);
     return true;
 }
 
@@ -813,7 +813,7 @@ s32 func_80A3FE20(EnTest3* this, PlayState* play) {
     } else if (D_80A41D64 == 1) {
         func_80A40230(this, play);
     } else if (D_80A41D64 == 2) {
-        ActorCutscene_Stop(this->csId);
+        CutsceneManager_Stop(this->csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_90_02);
         D_80A41D64 = 3;
     }
@@ -837,7 +837,7 @@ s32 func_80A3FF10(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
         func_80A3F15C(this, play, arg2);
         this->csId = this->player.actor.csId;
         if (play->roomCtx.curRoom.num == 2) {
-            this->csId = ActorCutscene_GetAdditionalCsId(this->csId);
+            this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
         }
         return true;
     }
@@ -1032,7 +1032,7 @@ void func_80A409D4(EnTest3* this, PlayState* play) {
     if ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)) {
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
         func_80A3F0B0(this, play);
-        ActorCutscene_SetReturnCamera(CAM_ID_MAIN);
+        CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
     } else {
         sEnTest3_Input = *CONTROLLER1(&play->state);
     }

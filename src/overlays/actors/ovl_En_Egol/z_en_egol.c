@@ -1043,11 +1043,11 @@ void EnEgol_Damaged(EnEgol* this, PlayState* play) {
 }
 
 void EnEgol_StartDeathCutscene(EnEgol* this, PlayState* play) {
-    if (!ActorCutscene_GetCanPlayNext(this->actor.csId)) {
-        ActorCutscene_SetIntentToPlay(this->actor.csId);
+    if (!CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Queue(this->actor.csId);
     } else {
-        ActorCutscene_StartWithPlayerCs(this->actor.csId, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.csId);
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         this->subCamFovTarget = 60.0f;
         EnEgol_ChangeAnim(this, EYEGORE_ANIM_DEATH);
         this->action = EYEGORE_ACTION_DYING;
@@ -1075,7 +1075,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
         if (this->switchFlag > -1) {
             Flags_SetSwitch(play, this->switchFlag);
         }
-        ActorCutscene_Stop(this->actor.csId);
+        CutsceneManager_Stop(this->actor.csId);
         Actor_Kill(&this->actor);
     } else {
         if (Animation_OnFrame(&this->skelAnime, 46.0f)) {
