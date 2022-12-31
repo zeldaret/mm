@@ -2215,7 +2215,7 @@ asm/non_matchings/code/z_sub_s/SubS_ActorPathing_MoveWithGravity.s,SubS_ActorPat
 asm/non_matchings/code/z_sub_s/SubS_ActorPathing_MoveWithoutGravityReverse.s,SubS_ActorPathing_MoveWithoutGravityReverse,0x8013E07C,0xA
 asm/non_matchings/code/z_sub_s/SubS_ActorPathing_SetNextPoint.s,SubS_ActorPathing_SetNextPoint,0x8013E0A4,0x49
 asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationBySpeedInfo.s,SubS_ChangeAnimationBySpeedInfo,0x8013E1C8,0x43
-asm/non_matchings/code/z_sub_s/SubS_StartActorCutscene.s,SubS_StartActorCutscene,0x8013E2D4,0x39
+asm/non_matchings/code/z_sub_s/SubS_StartCutscene.s,SubS_StartCutscene,0x8013E2D4,0x39
 asm/non_matchings/code/z_sub_s/SubS_FillCutscenesList.s,SubS_FillCutscenesList,0x8013E3B8,0x3E
 asm/non_matchings/code/z_sub_s/SubS_ConstructPlane.s,SubS_ConstructPlane,0x8013E4B0,0x47
 asm/non_matchings/code/z_sub_s/SubS_LineSegVsPlane.s,SubS_LineSegVsPlane,0x8013E5CC,0x1D

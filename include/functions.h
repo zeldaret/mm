@@ -1272,7 +1272,7 @@ void CutsceneFlags_Set(PlayState* play, s16 flag);
 void CutsceneFlags_Unset(PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(PlayState* play, s16 flag);
 
-void CutsceneManager_Init(PlayState* play, ActorCutscene* actorCutsceneList, s16 num);
+void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 num);
 void CutsceneManager_StoreCamera(Camera* camera);
 void CutsceneManager_ClearWaiting(void);
 s16 CutsceneManager_Update(void);

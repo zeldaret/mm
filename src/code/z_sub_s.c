@@ -1386,7 +1386,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     *curAnimIndex = nextAnimIndex;
 }
 
-s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
+s32 SubS_StartCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
     s32 isStarted = false;
 
     if ((curCsId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == curCsId)) {

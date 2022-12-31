@@ -328,7 +328,7 @@ void ObjHunsui_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if ((this->unk_172 & 0x40) &&
-        SubS_StartActorCutscene(&this->dyna.actor, this->csId, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
+        SubS_StartCutscene(&this->dyna.actor, this->csId, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         this->unk_172 &= ~0x40;
     }
 

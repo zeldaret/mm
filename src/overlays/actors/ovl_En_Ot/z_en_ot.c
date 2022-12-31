@@ -308,13 +308,13 @@ void func_80B5BDA8(EnOt* this, PlayState* play) {
 void func_80B5BE04(EnOt* this, PlayState* play) {
     switch (this->unk_388) {
         case 0:
-            if (SubS_StartActorCutscene(&this->actor, this->csIdList[2], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
+            if (SubS_StartCutscene(&this->actor, this->csIdList[2], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
 
         case 1:
-            if (SubS_StartActorCutscene(&this->actor, this->csIdList[3], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
+            if (SubS_StartCutscene(&this->actor, this->csIdList[3], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
@@ -626,7 +626,7 @@ void func_80B5CC88(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CCA0(EnOt* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_NORMAL)) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags2 |= PLAYER_STATE2_20000000;

@@ -568,7 +568,7 @@ wordReplace = {
     "func_8013E640": "SubS_FindActorCustom",
     "func_ActorCategoryIterateById": "SubS_FindActor",
     "func_8013BB7C": "SubS_FindNearestActor",
-    "func_8013E2D4": "SubS_StartActorCutscene",
+    "func_8013E2D4": "SubS_StartCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_UpdateFlags",
     "func_8013D8DC": "SubS_IsObjectLoaded",

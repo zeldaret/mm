@@ -262,7 +262,7 @@ void func_80997E4C(EnGs* this, PlayState* play) {
 }
 
 void func_80997FF0(EnGs* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, play->playerCsIds[0], CS_ID_NONE, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, play->playerCsIds[0], CS_ID_NONE, SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, play);
     }
 }
@@ -380,7 +380,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         Player* player = GET_PLAYER(play);
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);

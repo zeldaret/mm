@@ -531,17 +531,17 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
     s16* csCamId = sPlayerCsIdToCsCamId;
 
     for (i = 0; i < ARRAY_COUNT(this->playerCsIds); i++, curPlayerCsId++, csCamId++) {
-        ActorCutscene* actorCutscene;
+        ActorCutscene* csEntry;
         s32 curCsId;
 
         *curPlayerCsId = CS_ID_NONE;
 
-        for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = actorCutscene->additionalCsId) {
-            actorCutscene = CutsceneManager_GetCutscene(curCsId);
+        for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = csEntry->additionalCsId) {
+            csEntry = CutsceneManager_GetCutscene(curCsId);
 
-            if (actorCutscene->csCamId == *csCamId) {
-                if ((actorCutscene->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (actorCutscene->priority == 700)) {
-                    actorCutscene->priority = 550;
+            if (csEntry->csCamId == *csCamId) {
+                if ((csEntry->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (csEntry->priority == 700)) {
+                    csEntry->priority = 550;
                 }
                 *curPlayerCsId = curCsId;
                 break;

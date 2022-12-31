@@ -2701,7 +2701,7 @@
     0x8013E07C:("SubS_ActorPathing_MoveWithoutGravityReverse",),
     0x8013E0A4:("SubS_ActorPathing_SetNextPoint",),
     0x8013E1C8:("SubS_ChangeAnimationBySpeedInfo",),
-    0x8013E2D4:("SubS_StartActorCutscene",),
+    0x8013E2D4:("SubS_StartCutscene",),
     0x8013E3B8:("SubS_FillCutscenesList",),
     0x8013E4B0:("SubS_ConstructPlane",),
     0x8013E5CC:("SubS_LineSegVsPlane",),

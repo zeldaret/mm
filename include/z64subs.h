@@ -153,7 +153,7 @@ s32 SubS_ActorPathing_SetNextPoint(struct PlayState* play, ActorPathing* actorPa
 
 void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex, s32* curAnimIndex);
 
-s32 SubS_StartActorCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type);
+s32 SubS_StartCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type);
 s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes);
 
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane);
