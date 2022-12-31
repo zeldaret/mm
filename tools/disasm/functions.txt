@@ -1573,7 +1573,7 @@
     0x800EDBE0:("Cutscene_HandleEntranceTriggers",),
     0x800EDDB0:("func_800EDDB0",),
     0x800EDDBC:("func_800EDDBC",),
-    0x800EDDCC:("Cutscene_SetScript",),
+    0x800EDDCC:("Cutscene_StartScripted",),
     0x800EDE34:("Cutscene_ActorTranslate",),
     0x800EDF24:("Cutscene_ActorTranslateAndYaw",),
     0x800EDF78:("Cutscene_ActorTranslateAndYawSmooth",),

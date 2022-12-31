@@ -369,7 +369,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
     ActorCutscene* csEntry;
     Camera* subCam;
     Camera* retCam;
-    s32 sp20 = 0;
+    s32 csType = 0;
 
     if ((csId < 0) || (sCutsceneMgr.csId != CS_ID_NONE)) {
         return csId;
@@ -382,15 +382,15 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
     CutsceneManager_SetHudVisibility(csEntry->hudVisibility);
 
     if (csId == CS_ID_GLOBAL_END) {
-        sp20 = 1;
+        csType = 1;
     } else if (csEntry->scriptIndex != CS_SCRIPT_ID_NONE) {
         // scripted cutscene
-        sp20 = 1;
+        csType = 1;
     } else if ((csId != CS_ID_GLOBAL_DOOR) && (csId != CS_ID_GLOBAL_TALK)) {
-        sp20 = 2;
+        csType = 2;
     }
 
-    if (sp20 != 0) {
+    if (csType != 0) {
         sCutsceneMgr.retCamId = Play_GetActiveCamId(sCutsceneMgr.play);
         sCutsceneMgr.subCamId = Play_CreateSubCamera(sCutsceneMgr.play);
 
@@ -416,9 +416,9 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
         subCam->target = sCutsceneMgr.targetActor = actor;
         subCam->behaviorFlags = 0;
 
-        if (sp20 == 1) {
+        if (csType == 1) {
             Camera_ChangeSetting(subCam, CAM_SET_FREE0);
-            Cutscene_SetScript(sCutsceneMgr.play, csEntry->scriptIndex);
+            Cutscene_StartScripted(sCutsceneMgr.play, csEntry->scriptIndex);
             sCutsceneMgr.length = csEntry->length;
         } else {
             if (csEntry->csCamId != CS_CAM_ID_NONE) {

@@ -1243,7 +1243,7 @@ void Cutscene_UpdateManual(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_UpdateScripted(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_HandleEntranceTriggers(PlayState* play);
 void func_800EDDB0(PlayState* play);
-void Cutscene_SetScript(PlayState* play, u8 scriptIndex);
+void Cutscene_StartScripted(PlayState* play, u8 scriptIndex);
 void Cutscene_ActorTranslate(Actor* actor, PlayState* play, s32 cueChannel);
 void Cutscene_ActorTranslateAndYaw(Actor* actor, PlayState* play, s32 cueChannel);
 void Cutscene_ActorTranslateAndYawSmooth(Actor* actor, PlayState* play, s32 cueChannel);
