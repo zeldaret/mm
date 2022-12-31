@@ -376,7 +376,7 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B94A4(DoorWarp1* this, PlayState* play) {
-    if (!func_808B866C(this, play) && (CutsceneManager_GetCurrentCsId() != play->playerCsIds[8])) {
+    if (!func_808B866C(this, play) && (CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, play, 1);
@@ -384,10 +384,10 @@ void func_808B94A4(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9524(DoorWarp1* this, PlayState* play) {
-    if (!CutsceneManager_IsNext(play->playerCsIds[9])) {
-        CutsceneManager_Queue(play->playerCsIds[9]);
+    if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE])) {
+        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE]);
     } else {
-        CutsceneManager_Start(play->playerCsIds[9], NULL);
+        CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE], NULL);
         DoorWarp1_SetupAction(this, func_808B958C);
     }
 }
@@ -457,10 +457,10 @@ void func_808B977C(DoorWarp1* this, PlayState* play) {
 }
 
 void func_808B9840(DoorWarp1* this, PlayState* play) {
-    if (!CutsceneManager_IsNext(play->playerCsIds[9])) {
-        CutsceneManager_Queue(play->playerCsIds[9]);
+    if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE])) {
+        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE]);
     } else {
-        CutsceneManager_Start(play->playerCsIds[9], NULL);
+        CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE], NULL);
         DoorWarp1_SetupAction(this, func_808B98A8);
     }
 }
@@ -616,10 +616,10 @@ void func_808B9FD0(DoorWarp1* this, PlayState* play) {
         return;
     }
 
-    if (!CutsceneManager_IsNext(play->playerCsIds[9])) {
-        CutsceneManager_Queue(play->playerCsIds[9]);
+    if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE])) {
+        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE]);
     } else {
-        CutsceneManager_Start(play->playerCsIds[9], NULL);
+        CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_ENTRANCE], NULL);
         AudioSfx_PlaySfx(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
         Animation_ChangeImpl(&this->skelAnime, &gWarpCrystalAnim, 1.0f, Animation_GetLastFrame(&gWarpCrystalAnim),

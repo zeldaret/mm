@@ -262,7 +262,8 @@ void func_80997E4C(EnGs* this, PlayState* play) {
 }
 
 void func_80997FF0(EnGs* this, PlayState* play) {
-    if (SubS_StartCutscene(&this->actor, play->playerCsIds[0], CS_ID_NONE, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA], CS_ID_NONE,
+                           SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, play);
     }
 }
@@ -339,7 +340,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
 
 void func_80998300(EnGs* this, PlayState* play) {
     if (this->actor.csId != CS_ID_NONE) {
-        CutsceneManager_Stop(play->playerCsIds[0]);
+        CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_ITEM_OCARINA]);
     }
 }
 

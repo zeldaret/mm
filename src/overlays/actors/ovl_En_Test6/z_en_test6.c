@@ -141,12 +141,12 @@ void func_80A90730(EnTest6* this, PlayState* play) {
         case ENTEST6_24:
         case ENTEST6_25:
             func_80A91690(this, play);
-            CutsceneManager_Queue(play->playerCsIds[8]);
+            CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
             return;
 
         case ENTEST6_26:
             func_80A920C8(this, play);
-            CutsceneManager_Queue(play->playerCsIds[8]);
+            CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
             return;
     }
 
@@ -329,7 +329,7 @@ void EnTest6_Init(Actor* thisx, PlayState* play2) {
 
     if (((ENTEST6_GET(&this->actor) == ENTEST6_24) || (ENTEST6_GET(&this->actor) == ENTEST6_25) ||
          (ENTEST6_GET(&this->actor) == ENTEST6_26)) &&
-        (play->playerCsIds[8] == CS_ID_NONE)) {
+        (play->playerCsIds[PLAYER_CS_ID_SONG_WARP] == CS_ID_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -378,21 +378,21 @@ void func_80A9156C(EnTest6* this, PlayState* play) {
     switch (ENTEST6_GET(&this->actor)) {
         case ENTEST6_24:
         case ENTEST6_25:
-            if (!CutsceneManager_IsNext(play->playerCsIds[8])) {
-                CutsceneManager_Queue(play->playerCsIds[8]);
+            if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
+                CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
             } else {
-                CutsceneManager_Start(play->playerCsIds[8], NULL);
-                this->subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[8]);
+                CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
+                this->subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
                 EnTest6_SetupAction(this, func_80A91760);
             }
             break;
 
         case ENTEST6_26:
-            if (!CutsceneManager_IsNext(play->playerCsIds[8])) {
-                CutsceneManager_Queue(play->playerCsIds[8]);
+            if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
+                CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
             } else {
-                CutsceneManager_Start(play->playerCsIds[8], NULL);
-                this->subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[8]);
+                CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
+                this->subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
                 EnTest6_SetupAction(this, func_80A92188);
             }
             break;
@@ -422,7 +422,7 @@ void func_80A916F0(EnTest6* this, PlayState* play) {
 
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
-    CutsceneManager_Stop(play->playerCsIds[8]);
+    CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     func_800B7298(play, NULL, PLAYER_CSMODE_END);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
@@ -643,7 +643,7 @@ void func_80A92118(EnTest6* this, PlayState* play) {
 
     player->actor.freezeTimer = 0;
     play->unk_18844 = 0;
-    CutsceneManager_Stop(play->playerCsIds[8]);
+    CutsceneManager_Stop(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     func_800B7298(play, NULL, PLAYER_CSMODE_END);
     func_80A90C34();
     Distortion_ClearType(DISTORTION_TYPE_5);
@@ -759,7 +759,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     func_80A92950(this, play);
 
     if (this->unk_27A == 115) {
-        subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[8]);
+        subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
         subCam = Play_GetCamera(play, subCamId);
 
         this->subCamAt = subCam->at;
@@ -771,7 +771,7 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     if ((this->unk_27A <= 115) && (this->unk_27A >= 16)) {
         CutsceneCamera_UpdateSplines((u8*)D_80A93E80, &this->unk_18C);
     } else if (this->unk_27A < 16) {
-        subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[8]);
+        subCamId = CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
 
         Play_SetCameraAtEyeUp(play, subCamId, &this->subCamAt, &this->subCamEye, &sSubCamUp);
         Play_SetCameraFov(play, subCamId, this->subCamFov);

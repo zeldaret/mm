@@ -2014,7 +2014,7 @@ s32 Actor_PickUp(Actor* actor, PlayState* play, GetItemId getItemId, f32 xzRange
                     player->getItemDirection = absYawDiff;
 
                     if ((getItemId > GI_NONE) && (getItemId < GI_MAX)) {
-                        CutsceneManager_Queue(play->playerCsIds[1]);
+                        CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_ITEM_GET]);
                     }
 
                     return true;

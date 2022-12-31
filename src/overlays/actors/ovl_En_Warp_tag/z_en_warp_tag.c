@@ -141,7 +141,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     ActorEntry* playerActorEntry;
-    Player* player;
+    Player* player = GET_PLAYER(play);
     s32 playerSpawnIndex;
     s32 new15E;
     s32 entrance;
@@ -149,13 +149,13 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     u8 playerForm;
     s16 playerParams;
 
-    player = GET_PLAYER(play);
-    if (play->playerCsIds[4] >= 0 && CutsceneManager_GetCurrentCsId() != play->playerCsIds[4]) {
-        if (CutsceneManager_IsNext(play->playerCsIds[4]) == 0) {
-            CutsceneManager_Queue(play->playerCsIds[4]);
+    if (play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON] >= 0 &&
+        CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]) {
+        if (CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]) == 0) {
+            CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]);
 
         } else {
-            CutsceneManager_StartWithPlayerCs(play->playerCsIds[4], &this->dyna.actor);
+            CutsceneManager_StartWithPlayerCs(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON], &this->dyna.actor);
             func_800B8E58(player, NA_SE_PL_WARP_PLATE);
             func_8016566C(0);
         }
