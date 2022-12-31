@@ -1584,7 +1584,7 @@ void func_800EDDBC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
 void Cutscene_SetScript(PlayState* play, u8 scriptIndex) {
-    if (!dREG(95)) {
+    if (!R_USE_DEBUG_CUTSCENE) {
         play->csCtx.scriptIndex = scriptIndex;
         play->csCtx.script = Lib_SegmentedToVirtual(play->csCtx.scriptList[scriptIndex].script);
     }
