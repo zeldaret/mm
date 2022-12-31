@@ -380,7 +380,7 @@ void func_809985B8(EnGs* this, PlayState* play) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
+    if (SubS_StartActorCutscene(&this->actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         Player* player = GET_PLAYER(play);
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);

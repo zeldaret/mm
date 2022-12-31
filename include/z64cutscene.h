@@ -129,7 +129,7 @@ typedef union {
 typedef enum {
     /* 1 */ CS_DESTINATION_DEFAULT = 1,
     /* 2 */ CS_DESTINATION_BOSS_WARP
-} CsDestination;
+} CsDestinationType;
 
 typedef union {
     struct {
@@ -166,7 +166,7 @@ typedef union {
 typedef enum {
     /* 1 */ CS_MOTION_BLUR_INSTANT = 1,
     /* 2 */ CS_MOTION_BLUR_GRADUAL
-} CsMotionBlur;
+} CsMotionBlurType;
 
 typedef union {
     struct {
@@ -263,7 +263,7 @@ typedef union {
 typedef enum {
     /* 1 */ CS_FADE_SCREEN_FILL_IN = 1,
     /* 2 */ CS_FADE_SCREEN_FILL_OUT
-} CsFadeScreen;
+} CsFadeScreenType;
 
 typedef union {
     struct {

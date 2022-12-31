@@ -239,7 +239,7 @@ void func_80C1886C(BgLastBwall* this, PlayState* play) {
 }
 
 void func_80C18884(BgLastBwall* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_PLAYER)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->csIdList[0], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         func_80C188C4(this, play);
     }
 }
