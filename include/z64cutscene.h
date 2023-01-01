@@ -580,11 +580,25 @@ typedef union CutsceneData {
     s8  b[4];
 } CutsceneData;
 
+#define BIT_FLAG_TO_SHIFT(flag) \
+    ((flag & 0x80) ? 7 : \
+    (flag & 0x40) ? 6 : \
+    (flag & 0x20) ? 5 : \
+    (flag & 0x10) ? 4 : \
+    (flag & 0x8) ? 3 : \
+    (flag & 0x4) ? 2 : \
+    (flag & 0x2) ? 1 : \
+    (flag & 0x1) ? 0 : \
+    0)
+
+// Do not trigger the scripted cutscene upon any spawn
 #define CS_SPAWN_FLAG_NONE 0xFF
+// Always trigger the scripted cutscene upon the specified spawn
 #define CS_SPAWN_FLAG_ALWAYS 0xFE
-// Despite there being more than `0x1F` indices for weekEventFlags,
-// this u8 flag entry can only check weekEventFlags with indices [0x0 - 0x1F]
-#define CS_SPAWN_FLAG_WEEKEVENTREG(flag) ((((flag) & 0x1F00) >> 5) | ((flag) & 0x7F))
+// Trigger the scripted cutscene once upon the specified spawn if `weekEventFlags` is not set. Set `weekEventFlags` after the cutscene.
+//! @note Despite there being more than `0x1F` indices for weekEventFlags, this u8 flag entry can only check weekEventFlags with indices [0 - 0x1F]
+#define CS_SPAWN_FLAG_ONCE(weekEventFlag) ((((weekEventFlag) & 0x1F00) >> 5) | BIT_FLAG_TO_SHIFT((weekEventFlag) & 0xFF))
+
 #define CHECK_CS_SPAWN_FLAG_WEEKEVENTREG(spawnFlags) (GET_WEEKEVENTREG((spawnFlags) / 8) & (1 << ((spawnFlags) % 8)))
 #define SET_CS_SPAWN_FLAG_WEEKEVENTREG(spawnFlags) (WEEKEVENTREG((spawnFlags) / 8) = GET_WEEKEVENTREG((spawnFlags) / 8) | (1 << ((spawnFlags) % 8)))
 
