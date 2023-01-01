@@ -2201,6 +2201,8 @@ void Play_Init(GameState* thisx) {
         gSaveContext.unk_3DC0 = 0;
         Magic_Reset(this);
         gSaveContext.sceneLayer = (gSaveContext.save.cutscene & 0xF) + 1;
+
+        // Set saved cutscene to 0 so it doesn't immediately play, but instead let the `CutsceneManager` handle it.
         gSaveContext.save.cutscene = 0;
     } else {
         gSaveContext.sceneLayer = 0;
