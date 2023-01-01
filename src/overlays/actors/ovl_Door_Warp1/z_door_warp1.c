@@ -652,7 +652,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
 
         if (this->unk_202 != 0) {
             if (phi_v0_2 > 0) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
+                SET_WEEKEVENTREG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON);
             }
 
             switch (phi_v0_2) {
@@ -711,7 +711,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
             switch (phi_v0_2) {
                 case 0:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
-                        SET_WEEKEVENTREG(WEEKEVENTREG_07_80);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON);
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_03;
