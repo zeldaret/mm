@@ -798,6 +798,9 @@ typedef enum SunsSongState {
 // Player is playing the Milk Run
 #define WEEKEVENTREG_31_80 PACK_WEEKEVENTREG_FLAG(31, 0x80)
 
+//! @note: entrance cutscenes defined in `CutsceneEntry`can not use
+//! any of the below weekEventFlags due to bitpacking
+
 #define WEEKEVENTREG_32_01 PACK_WEEKEVENTREG_FLAG(32, 0x01)
 #define WEEKEVENTREG_32_02 PACK_WEEKEVENTREG_FLAG(32, 0x02)
 #define WEEKEVENTREG_32_04 PACK_WEEKEVENTREG_FLAG(32, 0x04)
