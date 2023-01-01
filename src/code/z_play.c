@@ -910,7 +910,7 @@ void Play_UpdateMain(PlayState* this) {
     gSegments[2] = VIRTUAL_TO_PHYSICAL(this->sceneSegment);
 
     if (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_PROCESS) {
-        R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_DONE;
+        R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_READY;
         MsgEvent_SendNullTask();
         Play_TakePictoPhoto(&this->pauseBgPreRender);
         R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
@@ -1242,10 +1242,10 @@ void Play_DrawMain(PlayState* this) {
             if (!gSaveContext.screenScaleFlag) {
                 PreRender_ApplyFiltersSlowlyInit(&this->pauseBgPreRender);
             }
-            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_DONE;
+            R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_READY;
             SREG(33) |= 1;
         } else {
-            if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) {
+            if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) {
                 Gfx* sp8C = POLY_OPA_DISP;
 
                 if (this->pauseBgPreRender.unk_4D == 2) {

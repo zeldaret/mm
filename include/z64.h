@@ -958,7 +958,7 @@ typedef enum {
     /* 0 */ PICTO_PHOTO_STATE_OFF,
     /* 1 */ PICTO_PHOTO_STATE_SETUP,
     /* 2 */ PICTO_PHOTO_STATE_PROCESS,
-    /* 3 */ PICTO_PHOTO_STATE_DONE
+    /* 3 */ PICTO_PHOTO_STATE_READY
 } PictoPhotoState;
 
 // OoT's TransitionUnk

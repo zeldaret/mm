@@ -1431,7 +1431,7 @@ void KaleidoScope_Update(PlayState* play) {
     }
 
     // Process the Cursor input
-    if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_DONE) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
+    if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) && (pauseCtx->debugEditor == DEBUG_EDITOR_NONE) &&
         !IS_PAUSE_STATE_OWLWARP &&
         (((pauseCtx->state >= PAUSE_STATE_OPENING_3) && (pauseCtx->state <= PAUSE_STATE_SAVEPROMPT)) ||
          ((pauseCtx->state >= PAUSE_STATE_GAMEOVER_2) && (pauseCtx->state <= PAUSE_STATE_UNPAUSE_SETUP)))) {
