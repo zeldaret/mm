@@ -1508,7 +1508,7 @@ void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx) {
 
             csCtx->curFrame = 0xFFFF;
 
-            csCtx->subCamId = CutsceneManager_GetCurrentSubCamId(0x7F);
+            csCtx->subCamId = CutsceneManager_GetCurrentSubCamId(CS_ID_GLOBAL_END);
             CutsceneCamera_Init(Play_GetCamera(play, csCtx->subCamId), &sCutsceneCameraInfo);
 
             // OoT Remnant
