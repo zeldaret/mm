@@ -793,13 +793,13 @@ typedef enum SunsSongState {
 #define WEEKEVENTREG_31_10 PACK_WEEKEVENTREG_FLAG(31, 0x10)
 #define WEEKEVENTREG_31_20 PACK_WEEKEVENTREG_FLAG(31, 0x20)
 
+//! @note: entrance cutscenes defined in `CutsceneEntry` can not use
+//! any of the below weekEventFlags due to bitpacking
+
 // Cremia asked the player to accompany her to town
 #define WEEKEVENTREG_31_40 PACK_WEEKEVENTREG_FLAG(31, 0x40)
 // Player is playing the Milk Run
 #define WEEKEVENTREG_31_80 PACK_WEEKEVENTREG_FLAG(31, 0x80)
-
-//! @note: entrance cutscenes defined in `CutsceneEntry` can not use
-//! any of the below weekEventFlags due to bitpacking
 
 #define WEEKEVENTREG_32_01 PACK_WEEKEVENTREG_FLAG(32, 0x01)
 #define WEEKEVENTREG_32_02 PACK_WEEKEVENTREG_FLAG(32, 0x02)
