@@ -711,6 +711,7 @@ void func_808BA10C(DoorWarp1* this, PlayState* play) {
             switch (phi_v0_2) {
                 case 0:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02)) {
+                        // Skips the entrance cutscene as this flag is attached to `ENTRANCE(WOODFALL_TEMPLE, 1)`
                         SET_WEEKEVENTREG(WEEKEVENTREG_ENTERED_WOODFALL_TEMPLE_PRISON);
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;

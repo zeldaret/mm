@@ -345,6 +345,7 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
     sp4C = SkelAnime_Update(&this->skin.skelAnime);
 
     if ((sp4C != 0) || (this->unk_148 == 1) || (this->unk_148 == 0)) {
+        // The carry-over of this flag from OoT was not done correctly
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_ZORA_HALL)) {
             f32 sp44 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
             s32 pad;
