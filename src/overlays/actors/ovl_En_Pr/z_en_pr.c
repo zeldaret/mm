@@ -12,7 +12,7 @@
 
 #define THIS ((EnPr*)thisx)
 
-void EnPr_Init(Actor* thisx, PlayState* play);
+void EnPr_Init(Actor* thisx, PlayState* play2);
 void EnPr_Destroy(Actor* thisx, PlayState* play);
 void EnPr_Update(Actor* thisx, PlayState* play);
 void EnPr_Draw(Actor* thisx, PlayState* play);
@@ -68,7 +68,7 @@ static DamageTable sDamageTable = {
 
 f32 D_80A338C0[PLAYER_FORM_MAX] = { 30.0f, 30.0f, 30.0f, 15.0f, 15.0f };
 
-const ActorInit En_Pr_InitVars = {
+ActorInit En_Pr_InitVars = {
     ACTOR_EN_PR,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -262,7 +262,7 @@ void func_80A32740(EnPr* this, PlayState* play) {
     if (this->unk_2C8 < sqrtf(SQ(this->actor.world.pos.x - this->actor.home.pos.x) +
                               SQ(this->actor.world.pos.z - this->actor.home.pos.z))) {
         func_80A32854(this);
-    } else if ((this->unk_20E == 0) && (player->stateFlags1 & 0x8000000)) {
+    } else if ((this->unk_20E == 0) && (player->stateFlags1 & PLAYER_STATE1_8000000)) {
         if (sqrtf(SQ(player->actor.world.pos.x - this->actor.home.pos.x) +
                   SQ(player->actor.world.pos.z - this->actor.home.pos.z)) < this->unk_2C8) {
             func_80A32AF8(this);
@@ -298,7 +298,7 @@ void func_80A3295C(EnPr* this) {
 void func_80A32984(EnPr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags1 & 0x8000000) && (this->unk_20E == 0)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (this->unk_20E == 0)) {
         this->unk_22C = this->actor.world.rot.y;
         func_80A32AF8(this);
     } else if (!func_80A325E4(this)) {
@@ -345,10 +345,10 @@ void func_80A32B20(EnPr* this, PlayState* play) {
 
     this->actor.speedXZ = BREG(57) + 3.0f;
     Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
-    this->unk_2B8 = D_80A338C0[(void)0, gSaveContext.save.playerForm] + player->actor.world.pos.y;
+    this->unk_2B8 = D_80A338C0[GET_PLAYER_FORM] + player->actor.world.pos.y;
     func_80A324E0(this, play);
 
-    if (!(player->stateFlags1 & 0x8000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_8000000)) {
         this->skelAnime.playSpeed = 1.0f;
         this->actor.speedXZ = 1.0f;
         func_80A32854(this);
@@ -375,14 +375,14 @@ void func_80A32CDC(EnPr* this) {
 void func_80A32D28(EnPr* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x8000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_8000000)) {
         this->skelAnime.playSpeed = 1.0f;
         this->actor.speedXZ = 1.0f;
         func_80A32854(this);
     } else {
         Math_SmoothStepToS(&this->unk_22C, this->actor.yawTowardsPlayer, BREG(49) + 1, BREG(50) + 1000, BREG(51));
         func_80A325E4(this);
-        this->unk_2B8 = D_80A338C0[(void)0, gSaveContext.save.playerForm] + player->actor.world.pos.y;
+        this->unk_2B8 = D_80A338C0[GET_PLAYER_FORM] + player->actor.world.pos.y;
         func_80A324E0(this, play);
         if (this->unk_2C8 < sqrtf(SQ(player->actor.world.pos.x - this->actor.home.pos.x) +
                                   SQ(player->actor.world.pos.z - this->actor.home.pos.z))) {
@@ -445,7 +445,7 @@ void func_80A32F48(EnPr* this, PlayState* play) {
     if (this->unk_2D2 != 0) {
         Math_SmoothStepToS(&this->unk_2D0, 0, 1, 15, 50);
         if (this->unk_2D0 < 2) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -463,7 +463,7 @@ void func_80A33098(EnPr* this, PlayState* play) {
                             this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
 
-            if ((player->stateFlags1 & 0x8000000) && (this->actor.colChkInfo.damageEffect == 5)) {
+            if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (this->actor.colChkInfo.damageEffect == 5)) {
                 this->drawDmgEffAlpha = 40;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
             }

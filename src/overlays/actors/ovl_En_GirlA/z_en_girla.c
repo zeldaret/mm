@@ -51,7 +51,7 @@ void EnGirlA_BuyShieldMirror(PlayState* play, EnGirlA* this);
 
 void EnGirlA_BuyFanfare(PlayState* play, EnGirlA* this);
 
-const ActorInit En_GirlA_InitVars = {
+ActorInit En_GirlA_InitVars = {
     ACTOR_EN_GIRLA,
     ACTORCAT_PROP,
     FLAGS,
@@ -160,14 +160,14 @@ void EnGirlA_InitObjIndex(EnGirlA* this, PlayState* play) {
     s16 params = this->actor.params;
 
     //! @bug: Condition is impossible, && should be an ||
-    if (params >= SI_MAX && params < SI_POTION_RED_1) {
-        Actor_MarkForDeath(&this->actor);
+    if ((params >= SI_MAX) && (params < SI_POTION_RED_1)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     this->objIndex = Object_GetIndex(&play->objectCtx, sShopItemEntries[params].objectId);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -205,13 +205,13 @@ s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this) {
-    if (!(gSaveContext.save.weekEventReg[53] & 8)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (!(gSaveContext.save.weekEventReg[53] & 0x10)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_10)) {
         return CANBUY_RESULT_SUCCESS_2;
     }
     if (gSaveContext.save.playerData.rupees < play->msgCtx.unk1206C) {

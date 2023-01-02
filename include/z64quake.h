@@ -42,7 +42,7 @@ u32 Quake_SetQuakeValues(s16 quakeIndex, s16 verticalMag, s16 horizontalMag, s16
 u32 Quake_SetQuakeValues2(s16 quakeIndex, s16 isShakePerpendicular, Vec3s shakePlaneOffset);
 s16 Quake_Add(Camera* camera, u32 type);
 s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData);
-u32 Quake_Remove(s16 quakeIndex);
+u32 Quake_Remove(s16 index);
 s32 Quake_NumActiveQuakes(void);
 void Quake_Init(void);
 

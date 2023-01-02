@@ -22,7 +22,7 @@ Actor* func_80B3403C(PlayState* play);
 void func_80B34314(EnKbt* this, PlayState* play);
 void func_80B34598(EnKbt* this, PlayState* play);
 
-const ActorInit En_Kbt_InitVars = {
+ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
     ACTORCAT_NPC,
     FLAGS,

@@ -67,7 +67,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x1 */ u8  naviQuestHintFileId;
     /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
@@ -119,7 +119,7 @@ typedef struct {
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  hour;
     /* 0x5 */ u8  min;
-    /* 0x6 */ u8  unk6;
+    /* 0x6 */ u8  timeSpeed;
 } SCmdTimeSettings; // size = 0x7
 
 typedef struct {
@@ -174,9 +174,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cameraMovement;
-    /* 0x4 */ u32 area;
-} SCmdMiscSettings; // size = 0x8
+    /* 0x1 */ u8  sceneCsCount;
+    /* 0x4 */ void* segment;
+} SCmdCutsceneList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -186,9 +186,8 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  data1;
-    /* 0x4 */ u32 data2;
-} SCmdWorldMapVisited; // size = 0x8
+    /* 0x1 */ UNK_TYPE1 pad[7];
+} SCmdRegionVisited; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -290,7 +289,7 @@ typedef struct {
 typedef struct {
     struct {
         s8 room;    // Room to switch to
-        s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
+        s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
     } /* 0x0 */ sides[2]; // 0 = front, 1 = back
     /* 0x4 */ s16   id;
     /* 0x6 */ Vec3s pos;
@@ -446,9 +445,9 @@ typedef struct {
 } BackgroundRecord; // size = 0x1C
 
 typedef struct {
-    /* 0x0 */ s16 playerXMax; 
+    /* 0x0 */ s16 playerXMax;
     /* 0x2 */ s16 playerZMax;
-    /* 0x4 */ s16 playerXMin; 
+    /* 0x4 */ s16 playerXMin;
     /* 0x6 */ s16 playerZMin;
     /* 0x8 */ u32 opaqueDList;
     /* 0xC */ u32 translucentDList;
@@ -459,7 +458,7 @@ typedef struct {
     /* 0x1 */ u8 numEntries;
     /* 0x4 */ u32 dListStart;
     /* 0x8 */ u32 dListEnd;
-} MeshHeader2; // size = 0xC 
+} MeshHeader2; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u8 count; // number of points in the path
@@ -478,13 +477,8 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ MinimapEntry* entry;
-    /* 0x04 */ s32 unk4;
-} MinimapList; // size  = 0x8
-
-typedef struct {
-    /* 0x00 */ MinimapEntry* entry;
     /* 0x04 */ s16 scale;
-} MinimapList2; // size  = 0x8
+} MinimapList; // size  = 0x8
 
 typedef struct {
     /* 0x00 */ UNK_TYPE2 unk0;
@@ -528,15 +522,58 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdMiscSettings      miscSettings;
+    /* Command: 0x17 */ SCmdCutsceneList      cutsceneList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
-    /* Command: 0x19 */ SCmdWorldMapVisited   worldMapVisited;
+    /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
     /* Command: 0x1B */ SCmdCutsceneActorList cutsceneActorList;
     /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
     /* Command: 0x1D */ // Unused
     /* Command: 0x1E */ SCmdMinimapChests     minimapChests;
 } SceneCmd; // size = 0x8
+
+// Sets cursor point options on the world map
+typedef enum {
+    /* 0x0 */ REGION_GREAT_BAY,
+    /* 0x1 */ REGION_ZORA_HALL,
+    /* 0x2 */ REGION_ROMANI_RANCH,
+    /* 0x3 */ REGION_DEKU_PALACE,
+    /* 0x4 */ REGION_WOODFALL,
+    /* 0x5 */ REGION_CLOCK_TOWN,
+    /* 0x6 */ REGION_SNOWHEAD,
+    /* 0x7 */ REGION_IKANA_GRAVEYARD,
+    /* 0x8 */ REGION_IKANA_CANYON,
+    /* 0x9 */ REGION_GORON_VILLAGE,
+    /* 0xA */ REGION_STONE_TOWER,
+    /* 0xB */ REGION_MAX
+} RegionId;
+
+// Sets warp points for owl statues
+typedef enum {
+    /* 0x0 */ OWL_WARP_GREAT_BAY_COAST,
+    /* 0x1 */ OWL_WARP_ZORA_CAPE,
+    /* 0x2 */ OWL_WARP_SNOWHEAD,
+    /* 0x3 */ OWL_WARP_MOUNTAIN_VILLAGE,
+    /* 0x4 */ OWL_WARP_CLOCK_TOWN,
+    /* 0x5 */ OWL_WARP_MILK_ROAD,
+    /* 0x6 */ OWL_WARP_WOODFALL,
+    /* 0x7 */ OWL_WARP_SOUTHERN_SWAMP,
+    /* 0x8 */ OWL_WARP_IKANA_CANYON,
+    /* 0x9 */ OWL_WARP_STONE_TOWER,
+    /* 0xA */ OWL_WARP_ENTRANCE, // Special index for warping to the entrance of a scene
+    /* 0xB */ OWL_WARP_MAX
+} OwlWarpId;
+
+// Sets cloud visibility on the world map
+typedef enum {
+    /* 0 */ TINGLE_MAP_CLOCK_TOWN,
+    /* 1 */ TINGLE_MAP_WOODFALL,
+    /* 2 */ TINGLE_MAP_SNOWHEAD,
+    /* 3 */ TINGLE_MAP_ROMANI_RANCH,
+    /* 4 */ TINGLE_MAP_GREAT_BAY,
+    /* 5 */ TINGLE_MAP_STONE_TOWER,
+    /* 6 */ TINGLE_MAP_MAX
+} TingleMapId;
 
 typedef enum {
     /* 0x00 */ SCENE_20SICHITAI2, // Southern Swamp (Clear)
@@ -788,6 +825,14 @@ typedef enum {
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
 
+// TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
+// Leftover from OoT
+typedef enum {
+    /* 0 */ NAVI_QUEST_HINTS_NONE,
+    /* 1 */ NAVI_QUEST_HINTS_OVERWORLD,
+    /* 2 */ NAVI_QUEST_HINTS_DUNGEON
+} NaviQuestHintFileId;
+
 // SceneTableEntry commands
 typedef enum {
     /* 0x00 */ SCENE_CMD_ID_SPAWN_LIST,
@@ -815,7 +860,7 @@ typedef enum {
     /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
     /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
-    /* 0x19 */ SCENE_CMD_ID_MISC_SETTINGS,
+    /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
     /* 0x1B */ SCENE_CMD_ID_ACTOR_CUTSCENE_LIST,
     /* 0x1C */ SCENE_CMD_ID_MINIMAP_INFO,
@@ -845,8 +890,8 @@ typedef enum {
 #define SCENE_CMD_ENTRANCE_LIST(entranceList) \
     { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
 
-#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
-    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+#define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
 #define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \
@@ -866,13 +911,13 @@ typedef enum {
     { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
 
 #define SCENE_CMD_LIGHT_LIST(numLights, lightList) \
-    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) } 
+    { SCENE_CMD_ID_LIGHT_LIST, numLights, CMD_PTR(lightList) }
 
 #define SCENE_CMD_PATH_LIST(pathList) \
     { SCENE_CMD_ID_PATH_LIST, 0, CMD_PTR(pathList) }
 
 #define SCENE_CMD_TRANSITION_ACTOR_LIST(numTransitionActors, actorList) \
-    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) } 
+    { SCENE_CMD_ID_TRANSI_ACTOR_LIST, numTransitionActors, CMD_PTR(actorList) }
 
 #define SCENE_CMD_ENV_LIGHT_SETTINGS(numLightSettings, lightSettingsList) \
     { SCENE_CMD_ID_ENV_LIGHT_SETTINGS, numLightSettings, CMD_PTR(lightSettingsList) }
@@ -904,8 +949,9 @@ typedef enum {
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
 
-#define SCENE_CMD_MISC_SETTINGS() \
-    { SCENE_CMD_ID_MISC_SETTINGS, 0, CMD_W(0) }
+#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED // TODO: ZAPD Capatability
+#define SCENE_CMD_SET_REGION_VISITED() \
+    { SCENE_CMD_ID_SET_REGION_VISITED, 0, CMD_W(0) }
 
 #define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
     { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }

@@ -34,6 +34,4 @@ typedef struct EnFuMato {
     /* 0x30A */ s16 unk_30A;
 } EnFuMato; // size = 0x30C
 
-extern const ActorInit En_Fu_Mato_InitVars;
-
 #endif // Z_EN_FU_MATO_H

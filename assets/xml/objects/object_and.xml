@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_and" Segment="6">
-        <Animation Name="object_and_Anim_0000C8" Offset="0xC8" />
+        <Animation Name="object_and_Anim_0000C8" Offset="0xC8" /> <!-- Original name is "and_test" -->
         <DList Name="object_and_DL_004670" Offset="0x4670" />
         <DList Name="object_and_DL_004708" Offset="0x4708" />
         <DList Name="object_and_DL_0047F0" Offset="0x47F0" />
@@ -68,12 +68,12 @@
         <Limb Name="object_and_Standardlimb_00B304" Type="Standard" EnumName="OBJECT_AND_LIMB_18" Offset="0xB304" />
         <Limb Name="object_and_Standardlimb_00B310" Type="Standard" EnumName="OBJECT_AND_LIMB_19" Offset="0xB310" />
         <Skeleton Name="object_and_Skel_00B380" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AND_LIMB_NONE" LimbMax="OBJECT_AND_LIMB_MAX" EnumName="ObjectAndLimb" Offset="0xB380" />
-        <Animation Name="object_and_Anim_00DA58" Offset="0xDA58" />
-        <Animation Name="object_and_Anim_00EE00" Offset="0xEE00" />
-        <Animation Name="object_and_Anim_00F6C4" Offset="0xF6C4" />
-        <Animation Name="object_and_Anim_00FE64" Offset="0xFE64" />
-        <Animation Name="object_and_Anim_01067C" Offset="0x1067C" />
-        <Animation Name="object_and_Anim_011AFC" Offset="0x11AFC" />
-        <Animation Name="object_and_Anim_0122D0" Offset="0x122D0" />
+        <Animation Name="object_and_Anim_00DA58" Offset="0xDA58" /> <!-- Original name is "wa_aruku" ("walk") -->
+        <Animation Name="object_and_Anim_00EE00" Offset="0xEE00" /> <!-- Original name is "wa_hidari" ("left; left hand side") -->
+        <Animation Name="object_and_Anim_00F6C4" Offset="0xF6C4" /> <!-- Original name is "wa_hidari_loop" -->
+        <Animation Name="object_and_Anim_00FE64" Offset="0xFE64" /> <!-- Original name is "wa_kaoage" ("raising face") -->
+        <Animation Name="object_and_Anim_01067C" Offset="0x1067C" /> <!-- Original name is "wa_kaoage_loop" -->
+        <Animation Name="object_and_Anim_011AFC" Offset="0x11AFC" /> <!-- Original name is "wa_kaoaruki" (probably a combination of "kaoage" and "aruki") -->
+        <Animation Name="object_and_Anim_0122D0" Offset="0x122D0" /> <!-- Original name is "wa_utumuki_loop" ("looking down") -->
     </File>
 </Root>

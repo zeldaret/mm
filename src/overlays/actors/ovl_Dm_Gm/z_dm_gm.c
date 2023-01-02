@@ -21,7 +21,7 @@ void func_80C24A00(DmGm* this, PlayState* play);
 void func_80C24BD0(DmGm* this, PlayState* play);
 void func_80C25000(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Gm_InitVars = {
+ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,
     FLAGS,

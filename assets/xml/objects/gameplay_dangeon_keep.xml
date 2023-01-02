@@ -92,6 +92,6 @@
         <DList Name="gWarpTagGoronTrialBaseDL" Offset="0x21EF0" />
         <Texture Name="gWarpTagRainbowTex" OutName="warptag_rainbow" Format="rgba32" Width="32" Height="32" Offset="0x21FF8" />
         <TextureAnimation Name="gWarpTagRainbowTexAnim" Offset="0x23008" />
-        <Collision Name="gWarpTagGoronTrialBaseCollider" Offset="0x2324C" />
+        <Collision Name="gWarpTagGoronTrialBaseCol" Offset="0x2324C" />
     </File>
 </Root>

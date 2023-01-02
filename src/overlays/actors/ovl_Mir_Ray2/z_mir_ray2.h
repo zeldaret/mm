@@ -19,6 +19,4 @@ typedef struct MirRay2 {
     /* 0x1B0 */ LightInfo lightInfo;
 } MirRay2; // size = 0x1C0
 
-extern const ActorInit Mir_Ray2_InitVars;
-
 #endif // Z_MIR_RAY2_H

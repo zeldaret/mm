@@ -208,7 +208,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
         if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
             if (GET_CUR_FORM_BTN_SLOT(i + 1) >= NUM_ITEM_SLOTS) {
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j], 4, 0);
-                POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
+                POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, gEquippedItemOutlineTex, 32, 32, 0);
             }
         }
     }
@@ -223,7 +223,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
         if (((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS]) != ITEM_NONE) {
             if (!CHECK_GIVEN_MASK_ON_MOON(i)) {
-                if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MASK) &&
+                if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MASK) &&
                     (pauseCtx->cursorSpecialPos == 0) &&
                     gMaskPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
                     if ((sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
@@ -257,7 +257,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
                 }
 
                 gSPVertex(POLY_OPA_DISP++, &pauseCtx->maskVtx[j + 0], 4, 0);
-                KaleidoScope_DrawQuadTextureRGBA32(
+                KaleidoScope_DrawTexQuadRGBA32(
                     play->state.gfxCtx, gItemIcons[((void)0, gSaveContext.save.inventory.items[i + NUM_ITEM_SLOTS])],
                     32, 32, 0);
             }
@@ -285,11 +285,11 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
     s16 moveCursorResult;
     s16 pad2;
 
-    pauseCtx->cursorColorSet = 0;
-    pauseCtx->nameColorSet = 0;
+    pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
+    pauseCtx->nameColorSet = PAUSE_NAME_COLOR_SET_WHITE;
 
-    if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MASK) &&
-        !pauseCtx->itemDescriptionOn) {
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+        (pauseCtx->pageIndex == PAUSE_MASK) && !pauseCtx->itemDescriptionOn) {
         moveCursorResult = PAUSE_CURSOR_RESULT_NONE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
 
@@ -298,7 +298,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
         // Move cursor left/right
         if (pauseCtx->cursorSpecialPos == 0) {
             // cursor is currently on a slot
-            pauseCtx->cursorColorSet = 2;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (ABS_ALT(pauseCtx->stickAdjX) > 30) {
                 cursorPoint = pauseCtx->cursorPoint[PAUSE_MASK];
@@ -497,7 +497,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             }
 
             cursorSlot = pauseCtx->cursorPoint[PAUSE_MASK];
-            pauseCtx->cursorColorSet = 2;
+            pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
 
             if (moveCursorResult == PAUSE_CURSOR_RESULT_SLOT) {
                 cursorItem = gSaveContext.save.inventory.items[pauseCtx->cursorPoint[PAUSE_MASK] + NUM_ITEM_SLOTS];
@@ -513,7 +513,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
 
             if (cursorItem == ITEM_NONE) {
                 cursorItem = PAUSE_ITEM_NONE;
-                pauseCtx->cursorColorSet = 0;
+                pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
             }
 
             if ((cursorItem != PAUSE_ITEM_NONE) && (msgCtx->msgLength == 0)) {
@@ -533,7 +533,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             if (cursorItem != PAUSE_ITEM_NONE) {
                 // Equip item to the C buttons
                 if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && !pauseCtx->itemDescriptionOn &&
-                    (pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) &&
+                    (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                     CHECK_BTN_ANY(input->press.button, BTN_CLEFT | BTN_CDOWN | BTN_CRIGHT)) {
 
                     // Ensure that a mask is not unequipped while being used
@@ -566,8 +566,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         }
                     }
 
-                    if ((Player_GetEnvTimerType(play) >= PLAYER_ENV_TIMER_UNDERWATER_FLOOR) &&
-                        (Player_GetEnvTimerType(play) <= PLAYER_ENV_TIMER_UNDERWATER_FREE) &&
+                    if ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
+                        (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE) &&
                         ((cursorSlot == (SLOT_MASK_DEKU - NUM_ITEM_SLOTS)) ||
                          (cursorSlot == (SLOT_MASK_GORON - NUM_ITEM_SLOTS)))) {
                         play_sound(NA_SE_SY_ERROR);
@@ -585,7 +585,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     // Equip item to the C buttons
                     pauseCtx->equipTargetItem = cursorItem;
                     pauseCtx->equipTargetSlot = cursorSlot + NUM_ITEM_SLOTS;
-                    pauseCtx->unk_200 = 0xF;
+                    pauseCtx->mainState = PAUSE_MAIN_STATE_EQUIP_MASK;
                     vtxIndex = cursorSlot * 4;
                     pauseCtx->equipAnimX = pauseCtx->maskVtx[vtxIndex].v.ob[0] * 10;
                     pauseCtx->equipAnimY = pauseCtx->maskVtx[vtxIndex].v.ob[1] * 10;
@@ -594,9 +594,9 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     sMaskEquipState = EQUIP_STATE_MOVE_TO_C_BTN;
                     sMaskEquipAnimTimer = 10;
                     play_sound(NA_SE_SY_DECIDE);
-                } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == 6) &&
-                           (pauseCtx->unk_200 == 0) && CHECK_BTN_ALL(input->press.button, BTN_A) &&
-                           (msgCtx->msgLength == 0)) {
+                } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
+                           (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+                           CHECK_BTN_ALL(input->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
                     // Give description on item through a message box
                     pauseCtx->itemDescriptionOn = true;
                     if (pauseCtx->cursorYIndex[PAUSE_MASK] < 2) {
@@ -613,8 +613,8 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MASK]) {
             play_sound(NA_SE_SY_CURSOR);
         }
-    } else if ((pauseCtx->unk_200 == 0xF) && (pauseCtx->pageIndex == PAUSE_MASK)) {
-        pauseCtx->cursorColorSet = 2;
+    } else if ((pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK) && (pauseCtx->pageIndex == PAUSE_MASK)) {
+        pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
     }
 }
 
@@ -796,7 +796,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
             }
 
             // Reset params
-            pauseCtx->unk_200 = 0;
+            pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
             sMaskEquipAnimTimer = 10;
             pauseCtx->equipAnimScale = 320;
             pauseCtx->equipAnimShrinkRate = 40;

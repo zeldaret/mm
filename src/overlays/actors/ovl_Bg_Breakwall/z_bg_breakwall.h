@@ -26,6 +26,4 @@ typedef struct BgBreakwall {
     /* 0x160 */ BgBreakwallActionFunc actionFunc;
 } BgBreakwall; // size = 0x164
 
-extern const ActorInit Bg_Breakwall_InitVars;
-
 #endif // Z_BG_BREAKWALL_H

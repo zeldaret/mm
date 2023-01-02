@@ -39,7 +39,7 @@ typedef struct {
 /* z_map_disp */
 
 typedef struct {
-    /* 0x00 */ MinimapList2* unk0; //unk0 -> sub1 -> s16[5]
+    /* 0x00 */ MinimapList* unk0;
     /* 0x04 */ s32 curRoom;
     /* 0x08 */ s16 unk8;
     /* 0x0A */ s16 unkA;
@@ -106,9 +106,9 @@ void func_801098A0(s32, s32*);
 s32 func_80109908(s32);
 s32 func_80109A98(s32);
 s32 func_80109AD8(s32);
-s32 func_801096D4(s32 arg0);
-void MapData_GetMapTexDim(s32 arg0, s32 *arg1, s32 *arg2);
-void func_801097C8(s32 arg0, s32* arg1, s32* arg2);
+s32 func_801096D4(s32 mapId);
+void MapData_GetMapTexDim(s32 mapId, s32* width, s32* height);
+void func_801097C8(s32 mapId, s32* arg1, s32* arg2);
 void MapData_GetMapScale(s32 mapId, s32 *scale);
 void func_80109D40(s32, s32*, s32*);
 void func_80109DD8(s32, s32*, s32*);

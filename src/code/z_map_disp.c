@@ -674,13 +674,13 @@ void func_8010534C(PlayState* play) {
     D_801BEBB8.unk58 = 0;
 }
 
-void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
+void func_8010549C(PlayState* play, void* segmentAddress) {
     MinimapEntry* var_v1;
     MinimapList* temp_v0;
     s32 i;
 
-    if (Map_IsInBossArea(globalCtx) == 0) {
-        D_801BEC1C = globalCtx->numRooms;
+    if (Map_IsInBossArea(play) == 0) {
+        D_801BEC1C = play->numRooms;
         temp_v0 = Lib_SegmentedToVirtual(segmentAddress);
         D_801BEC14 = *temp_v0;
         var_v1 = Lib_SegmentedToVirtual(temp_v0->entry);
@@ -690,18 +690,18 @@ void func_8010549C(PlayState* globalCtx, void* segmentAddress) {
         }
 
         D_801BEC14.entry = D_801F5130;
-        if (globalCtx->colCtx.colHeader != NULL) {
-            D_801BEBB8.unk30 = globalCtx->colCtx.colHeader->minBounds.x;
-            D_801BEBB8.unk32 = globalCtx->colCtx.colHeader->minBounds.z;
-            D_801BEBB8.unk34 = globalCtx->colCtx.colHeader->maxBounds.x - globalCtx->colCtx.colHeader->minBounds.x;
-            D_801BEBB8.unk36 = globalCtx->colCtx.colHeader->maxBounds.z - globalCtx->colCtx.colHeader->minBounds.z;
+        if (play->colCtx.colHeader != NULL) {
+            D_801BEBB8.unk30 = play->colCtx.colHeader->minBounds.x;
+            D_801BEBB8.unk32 = play->colCtx.colHeader->minBounds.z;
+            D_801BEBB8.unk34 = play->colCtx.colHeader->maxBounds.x - play->colCtx.colHeader->minBounds.x;
+            D_801BEBB8.unk36 = play->colCtx.colHeader->maxBounds.z - play->colCtx.colHeader->minBounds.z;
             D_801BEBB8.unk38 = D_801BEBB8.unk30 + (D_801BEBB8.unk34 * 0.5f);
             D_801BEBB8.unk3A = D_801BEBB8.unk32 + (D_801BEBB8.unk36 * 0.5f);
         }
     }
     D_801BEBB8.unk0 = &D_801BEC14;
-    func_80104F34(globalCtx);
-    func_8010534C(globalCtx);
+    func_80104F34(play);
+    func_8010534C(play);
 }
 
 void func_8010565C(PlayState* play, s32 num, void* segmentAddress) {
@@ -1023,7 +1023,7 @@ void func_80106644(PlayState* play, s32 x, s32 z, s32 rot) {
             }
             if (((func_8010A0A4(play) == 0) || CHECK_DUNGEON_ITEM(1, gSaveContext.mapIndex)) &&
                 ((func_8010A0A4(play) != 0) || Inventory_IsMapVisible(play->sceneId))) {
-                if (play->interfaceCtx.unk_280 == 0) {
+                if (play->interfaceCtx.minigameState == 0) {
                     func_80105FE0(play, x, z, rot);
                 }
                 func_8010439C(play);
@@ -1056,7 +1056,7 @@ void MapDisp_DestroyIMap(PlayState* play) {
 
 #ifdef NON_MATCHING
 // alloc pause screen dungeon map
-void* func_801068FC(PlayState* play, void* heap) {
+void* func_801068FC(PlayState* play, void* heap, size_t size) {
     void* heapNext; // sp3C
     s32 temp_s2;
     s32 temp_v0;
@@ -1479,13 +1479,11 @@ void func_80108124(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
                     roomA = D_801F53B0[i].sides[0].room;
                     roomB = D_801F53B0[i].sides[1].room;
                     if (CHECK_DUNGEON_ITEM(2, gSaveContext.mapIndex) || (roomA < 0) ||
-                        (gSaveContext.save
-                             .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                        (gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomA)) ||
                         (roomB < 0) ||
-                        (gSaveContext.save
-                             .permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
+                        (gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
                              .rooms &
                          (1 << roomB))) {
                         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -1562,7 +1560,7 @@ s32 func_80108A64(PlayState* play) {
     if ((pauseCtx->state == 7) || ((pauseCtx->state >= 8) && (pauseCtx->state < 0x13))) {
         return 1;
     }
-    if ((pauseCtx->state != 6) || (pauseCtx->unk_200 != 0)) {
+    if ((pauseCtx->state != 6) || (pauseCtx->mainState != 0)) {
         return 1;
     }
     if (pauseCtx->alpha == 0) {
@@ -1607,8 +1605,7 @@ void func_80108AF8(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
         for (var_s1 = 0; var_s1 < D_801BEBB8.unk40; var_s1++) {
-            if ((gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))]
-                     .unk_14 &
+            if ((gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneId(func_80106D08(play->sceneId))].unk_14 &
                  gBitFlags[4 - var_s1]) ||
                 CHECK_DUNGEON_ITEM2(2, spB4)) {
                 gDPLoadTextureBlock(POLY_OPA_DISP++, func_80108A10(D_801BEBB8.unk44 + var_s1), G_IM_FMT_IA, G_IM_SIZ_8b,

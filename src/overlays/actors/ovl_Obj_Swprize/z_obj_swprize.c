@@ -23,7 +23,7 @@ void func_80C25710(ObjSwprize* this);
 void func_80C2572C(ObjSwprize* this, PlayState* play);
 void ObjSwprize_SetupDoNothing(ObjSwprize* this);
 
-const ActorInit Obj_Swprize_InitVars = {
+ActorInit Obj_Swprize_InitVars = {
     ACTOR_OBJ_SWPRIZE,
     ACTORCAT_PROP,
     FLAGS,
@@ -65,7 +65,7 @@ void func_80C253D0(ObjSwprize* this, PlayState* play) {
                 if (sp78.y < 0.98f) {
                     collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
                     collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
-                    collectible->world.rot.y = Math_FAtan2F(sp78.z, sp78.x) + D_80C257F8[i];
+                    collectible->world.rot.y = Math_Atan2S_XY(sp78.z, sp78.x) + D_80C257F8[i];
                 } else {
                     collectible->world.rot.y = i * (0x10000 / 3);
                 }
@@ -76,7 +76,7 @@ void func_80C253D0(ObjSwprize* this, PlayState* play) {
         if ((collectible != NULL) && (sp78.y < 0.98f)) {
             collectible->velocity.y = (sp78.y + 1.0f) * 4.0f;
             collectible->speedXZ = (2.0f * (1.0f - fabsf(sp78.y))) + 2.0f;
-            collectible->world.rot.y = Math_FAtan2F(sp78.z, sp78.x);
+            collectible->world.rot.y = Math_Atan2S_XY(sp78.z, sp78.x);
         }
     }
 }

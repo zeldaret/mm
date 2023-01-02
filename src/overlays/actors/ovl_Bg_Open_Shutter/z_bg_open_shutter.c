@@ -15,7 +15,7 @@
 
 void BgOpenShutter_Init(Actor* thisx, PlayState* play);
 void BgOpenShutter_Destroy(Actor* thisx, PlayState* play);
-void BgOpenShutter_Update(Actor* thisx, PlayState* play);
+void BgOpenShutter_Update(Actor* thisx, PlayState* play2);
 void BgOpenShutter_Draw(Actor* thisx, PlayState* play);
 
 void func_80ACAD88(BgOpenShutter* this, PlayState* play);
@@ -27,7 +27,7 @@ typedef enum {
     /* 0x2 */ BGOPENSHUTTER_DOOR_CLOSED,
 } BGOpenShutterDoorState;
 
-const ActorInit Bg_Open_Shutter_InitVars = {
+ActorInit Bg_Open_Shutter_InitVars = {
     ACTOR_BG_OPEN_SHUTTER,
     ACTORCAT_DOOR,
     FLAGS,
@@ -121,7 +121,7 @@ void func_80ACAD88(BgOpenShutter* this, PlayState* play) {
 
         doorDirection = func_80ACABA8(this, play);
         if (doorDirection > 0) {
-            player->doorType = 2;
+            player->doorType = PLAYER_DOORTYPE_SLIDING;
             player->doorDirection = doorDirection;
             player->doorActor = &this->dyna.actor;
             func_80122F28(player);

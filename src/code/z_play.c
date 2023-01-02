@@ -39,9 +39,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801663C4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CompressI8ToI5.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80166644.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_DecompressI5ToI8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801668B4.s")
 
@@ -540,13 +540,13 @@ void Play_AssignPlayerActorCsIdsFromScene(GameState* thisx, s32 startActorCsId) 
     }
 }
 
-// These regs are used by Gameplay_Draw, and several actors, purpose as yet unclear.
-void func_8016A268(GameState* thisx, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5) {
-    MREG(64) = arg1;
-    MREG(65) = arg2;
-    MREG(66) = arg3;
-    MREG(67) = arg4;
-    MREG(68) = arg5;
+// Set values to fill screen
+void Play_FillScreen(GameState* thisx, s16 fillScreenOn, u8 red, u8 green, u8 blue, u8 alpha) {
+    R_PLAY_FILL_SCREEN_ON = fillScreenOn;
+    R_PLAY_FILL_SCREEN_R = red;
+    R_PLAY_FILL_SCREEN_G = green;
+    R_PLAY_FILL_SCREEN_B = blue;
+    R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Init.s")

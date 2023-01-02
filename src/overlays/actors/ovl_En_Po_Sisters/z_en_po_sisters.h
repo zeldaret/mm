@@ -68,6 +68,4 @@ typedef struct EnPoSisters {
     /* 0x358 */ MtxF mtxf;
 } EnPoSisters; // size = 0x398
 
-extern const ActorInit En_Po_Sisters_InitVars;
-
 #endif // Z_EN_PO_SISTERS_H

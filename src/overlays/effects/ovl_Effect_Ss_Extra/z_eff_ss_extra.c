@@ -37,7 +37,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
     if ((objIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objIndex))) {
         void* segBackup = gSegments[6];
 
-        gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
 
         this->pos = params->pos;
         this->velocity = params->velocity;
@@ -66,7 +66,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(storedSegment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(storedSegment);
 
     gSPSegment(POLY_XLU_DISP++, 0x06, storedSegment);
 
@@ -92,6 +92,6 @@ void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this) {
     }
 
     if (this->rTimer == 1) {
-        play->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
+        play->interfaceCtx.minigamePoints = sScores[this->rScoreIndex];
     }
 }

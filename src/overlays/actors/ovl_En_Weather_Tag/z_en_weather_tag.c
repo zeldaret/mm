@@ -35,7 +35,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play);
 void func_809674C8(EnWeatherTag* this, PlayState* play);
 void func_80967608(EnWeatherTag* this, PlayState* play);
 
-const ActorInit En_Weather_Tag_InitVars = {
+ActorInit En_Weather_Tag_InitVars = {
     ACTOR_EN_WEATHER_TAG,
     ACTORCAT_PROP,
     FLAGS,
@@ -77,8 +77,8 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (gSaveContext.save.weekEventReg[52] & 0x20) { // if cleared STT
-                Actor_MarkForDeath(&this->actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+                Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
             break;
@@ -214,15 +214,15 @@ void func_80966A68(EnWeatherTag* this, PlayState* play) {
     }
     if ((s16)this->unk154 < 0) { // cast req
         this->unk154 = 0;
-        // @BUG redudant code
-        Actor_MarkForDeath(&this->actor);
+        // redundant code
+        Actor_Kill(&this->actor);
         EnWeatherTag_SetupAction(this, EnWeatherTag_Die);
     }
     func_8096689C(this, play);
 }
 
 void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 // WEATHERTAG_TYPE_UNK1
@@ -486,9 +486,10 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (ActorCutscene_GetCurrentIndex() == -1) &&
         (play->csCtx.state == 0)) {
 
-        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)REG(15);
-        if (REG(15) != 0) {
-            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.daySpeed);
+        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+        if (R_TIME_SPEED != 0) {
+            gSaveContext.save.time =
+                ((void)0, gSaveContext.save.time) + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
         }
     }
 }

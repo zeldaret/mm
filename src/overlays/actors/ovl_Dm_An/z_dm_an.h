@@ -36,6 +36,4 @@ typedef struct DmAn {
     /* 0x2D4 */ s32 unk_2D4;
 } DmAn; // size = 0x2D8
 
-extern const ActorInit Dm_An_InitVars;
-
 #endif // Z_DM_AN_H

@@ -19,9 +19,9 @@ void DmAn_Update(Actor* thisx, PlayState* play);
 void func_80C1C958(DmAn* this, PlayState* play);
 void func_80C1CAB0(DmAn* this, PlayState* play);
 void func_80C1CC80(DmAn* this, PlayState* play);
-void func_80C1D0B0(Actor* this, PlayState* play);
+void func_80C1D0B0(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_An_InitVars = {
+ActorInit Dm_An_InitVars = {
     ACTOR_DM_AN,
     ACTORCAT_NPC,
     FLAGS,
