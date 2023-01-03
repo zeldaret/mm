@@ -10,12 +10,12 @@
 
 #define THIS ((EnBoj05*)thisx)
 
-void EnBoj05_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBoj05_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBoj05_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBoj05_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBoj05_Init(Actor* thisx, PlayState* play);
+void EnBoj05_Destroy(Actor* thisx, PlayState* play);
+void EnBoj05_Update(Actor* thisx, PlayState* play);
+void EnBoj05_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Boj_05_InitVars = {
+ActorInit En_Boj_05_InitVars = {
     ACTOR_EN_BOJ_05,
     ACTORCAT_NPC,
     FLAGS,
@@ -27,11 +27,11 @@ const ActorInit En_Boj_05_InitVars = {
     (ActorFunc)EnBoj05_Draw,
 };
 
-void EnBoj05_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoj05_Init(Actor* thisx, PlayState* play) {
 }
-void EnBoj05_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoj05_Destroy(Actor* thisx, PlayState* play) {
 }
-void EnBoj05_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoj05_Update(Actor* thisx, PlayState* play) {
 }
-void EnBoj05_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBoj05_Draw(Actor* thisx, PlayState* play) {
 }

@@ -13,18 +13,18 @@
 
 #define THIS ((EnDnk*)thisx)
 
-void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnDnk_Init(Actor* thisx, PlayState* play);
+void EnDnk_Destroy(Actor* thisx, PlayState* play);
+void EnDnk_Update(Actor* thisx, PlayState* play);
 
-void func_80A51890(EnDnk* this, GlobalContext* globalCtx);
-void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx);
-void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
-void func_80A52134(EnDnk* this, GlobalContext* globalCtx);
+void func_80A51890(EnDnk* this, PlayState* play);
+void EnDnk_DoNothing(EnDnk* this, PlayState* play);
+void func_80A52018(Actor* thisx, PlayState* play);
+void func_80A52134(EnDnk* this, PlayState* play);
 
 static s16 D_80A521A0 = 0;
 
-const ActorInit En_Dnk_InitVars = {
+ActorInit En_Dnk_InitVars = {
     ACTOR_EN_DNK,
     ACTORCAT_NPC,
     FLAGS,
@@ -93,7 +93,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
@@ -138,18 +138,18 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     s32 sp30 = false;
 
     if (animIndex >= 0) {
-        if (animIndex < ARRAY_COUNT(sAnimations)) {
+        if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
             sp30 = true;
-            frameCount = sAnimations[animIndex].frameCount;
+            frameCount = sAnimationInfo[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
+                frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
             }
-            frame = sAnimations[animIndex].startFrame;
+            frame = sAnimationInfo[animIndex].startFrame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed, frame,
-                             frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
+            Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed, frame,
+                             frameCount, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
         }
     }
     return sp30;
@@ -169,35 +169,35 @@ s32 func_80A515C4(EnDnk* this) {
     return ret;
 }
 
-void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
-    if (SubS_IsObjectLoaded(this->unk_28E, globalCtx) == true) {
-        gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_28E].segment);
+void func_80A51648(EnDnk* this, PlayState* play) {
+    if (SubS_IsObjectLoaded(this->unk_28E, play) == true) {
+        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
-                               this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
+                SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
+                               DEKU_PALACE_GUARD_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
             case ENDNK_GET_3_1:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
+                SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
                                this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 18);
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
+                SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_SCRUB_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }
 
-        Collider_InitCylinder(globalCtx, &this->collider);
-        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        Collider_InitCylinder(play, &this->collider);
+        Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -212,64 +212,64 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A51890(EnDnk* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 126)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 126));
+void func_80A51890(EnDnk* this, PlayState* play) {
+    if (Cutscene_CheckActorAction(play, 126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 126));
     }
 }
 
-void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx) {
+void EnDnk_DoNothing(EnDnk* this, PlayState* play) {
 }
 
-void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnk_Init(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
     this->unk_28E = -1;
     switch (ENDNK_GET_3(&this->actor)) {
         case ENDNK_GET_3_1:
-            this->unk_28E = SubS_GetObjectIndex(OBJECT_HINTNUTS, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_HINTNUTS, play);
             break;
 
         case ENDNK_GET_3_0:
-            this->unk_28E = SubS_GetObjectIndex(OBJECT_DNK, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DNK, play);
             break;
 
         case ENDNK_GET_3_2:
-            this->unk_28E = SubS_GetObjectIndex(OBJECT_DEKUNUTS, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DEKUNUTS, play);
             break;
     }
 
     if (this->unk_28E >= 0) {
         this->actionFunc = func_80A51648;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     this->unk_2A2 = D_80A521A0;
     D_80A521A0++;
 }
 
-void EnDnk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnk_Destroy(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnDnk_Update(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
     s32 pad;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
     func_80A515C4(this);
     Actor_SetFocus(&this->actor, 34.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    func_80A52134(this, globalCtx);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    func_80A52134(this, play);
 }
 
-s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80A51A78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -277,7 +277,7 @@ s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80A51AA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
     Vec3f sp50 = gZeroVec3f;
@@ -316,15 +316,15 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_260[limbIndex]);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
+void func_80A51CB8(EnDnk* this, PlayState* play) {
     static TexturePtr D_80A5245C[] = {
         gDekuPalaceGuardEyeOpenTex,
         gDekuPalaceGuardEyeHalfTex,
@@ -332,20 +332,20 @@ void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     };
     s32 pad;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51A78, func_80A51AA4,
                       &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 func_80A51D78(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
 
     this->unk_260[limbIndex] = *dList;
@@ -353,7 +353,7 @@ s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
     Vec3f sp50 = gZeroVec3f;
@@ -393,37 +393,37 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, this->unk_260[limbIndex]);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A51FC0(EnDnk* this, GlobalContext* globalCtx) {
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
+void func_80A51FC0(EnDnk* this, PlayState* play) {
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
                       &this->actor);
 }
 
-void func_80A52018(Actor* thisx, GlobalContext* globalCtx) {
+void func_80A52018(Actor* thisx, PlayState* play) {
     EnDnk* this = THIS;
 
     switch (ENDNK_GET_3(thisx)) {
         case ENDNK_GET_3_0:
-            func_80A51CB8(this, globalCtx);
+            func_80A51CB8(this, play);
             break;
 
         case ENDNK_GET_3_1:
         case ENDNK_GET_3_2:
-            func_80A51FC0(this, globalCtx);
+            func_80A51FC0(this, play);
             break;
     }
 }
 
-void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
-    switch (globalCtx->csCtx.frames) {
+void func_80A52074(EnDnk* this, PlayState* play) {
+    switch (play->csCtx.frames) {
         case 80:
             func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
             break;
@@ -441,14 +441,14 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((globalCtx->csCtx.frames >= 198) && (globalCtx->csCtx.frames < 438)) {
+    if ((play->csCtx.frames >= 198) && (play->csCtx.frames < 438)) {
         func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }
 
-void func_80A52134(EnDnk* this, GlobalContext* globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (globalCtx->sceneNum == SCENE_SPOT00) &&
-        (gSaveContext.sceneSetupIndex == 2)) {
-        func_80A52074(this, globalCtx);
+void func_80A52134(EnDnk* this, PlayState* play) {
+    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+        (gSaveContext.sceneLayer == 2)) {
+        func_80A52074(this, play);
     }
 }

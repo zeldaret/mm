@@ -5,7 +5,7 @@
 
 struct ObjTree;
 
-typedef void (*ObjTreeActionFunc)(struct ObjTree*, GlobalContext*);
+typedef void (*ObjTreeActionFunc)(struct ObjTree*, PlayState*);
 
 #define OBJTREE_ISLARGE(thisx) ((thisx)->params & 0x8000)
 
@@ -18,7 +18,5 @@ typedef struct ObjTree {
     /* 0x1B2 */ s16 swayVelocity;
     /* 0x1B4 */ s16 timer;
 } ObjTree; // size = 0x1B8
-
-extern const ActorInit Obj_Tree_InitVars;
 
 #endif // Z_OBJ_TREE_H

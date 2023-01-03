@@ -39,7 +39,7 @@ void AudioMgr_HandleRetrace(AudioMgr* audioMgr) {
     if (SREG(20) >= 2) {
         rspTask = NULL;
     } else {
-        rspTask = func_80192BE0();
+        rspTask = AudioThread_Update();
     }
 
     if (audioMgr->rspTask != NULL) {
@@ -78,7 +78,7 @@ void AudioMgr_ThreadEntry(void* arg) {
     s16* msg = NULL;
     s32 exit;
 
-    func_801A4C30();
+    Audio_Init();
     AudioLoad_SetDmaHandler(DmaMgr_DmaHandler);
     func_801A4D00();
     osSendMesg(&audioMgr->lockMsgQ, NULL, OS_MESG_BLOCK);

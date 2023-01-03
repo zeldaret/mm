@@ -13,6 +13,8 @@
 #include "ultra64/rcp.h"
 #include "ultra64/rdp.h"
 #include "ultra64/rsp.h"
+#include "ultra64/r4300.h"
+#include "ultra64/ucode.h"
 #include "ultra64/vi.h"
 
 #endif

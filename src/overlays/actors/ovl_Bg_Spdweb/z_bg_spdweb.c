@@ -11,20 +11,20 @@
 
 #define THIS ((BgSpdweb*)thisx)
 
-void BgSpdweb_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgSpdweb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgSpdweb_Update(Actor* thisx, GlobalContext* globalCtx);
-void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void BgSpdweb_Init(Actor* thisx, PlayState* play);
+void BgSpdweb_Destroy(Actor* thisx, PlayState* play);
+void BgSpdweb_Update(Actor* thisx, PlayState* play);
+void BgSpdweb_Draw(Actor* thisx, PlayState* play);
 
 void func_809CE068(BgSpdweb* this);
-void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx);
-void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx);
-void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx);
-void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CE234(BgSpdweb* this, PlayState* play);
+void func_809CE4C8(BgSpdweb* this, PlayState* play);
+void func_809CE830(BgSpdweb* this, PlayState* play);
+void func_809CEBC0(BgSpdweb* this, PlayState* play);
 void func_809CEE74(BgSpdweb* this);
-void func_809CEEAC(BgSpdweb* this, GlobalContext* globalCtx);
+void func_809CEEAC(BgSpdweb* this, PlayState* play);
 
-const ActorInit Bg_Spdweb_InitVars = {
+ActorInit Bg_Spdweb_InitVars = {
     ACTOR_BG_SPDWEB,
     ACTORCAT_BG,
     FLAGS,
@@ -70,7 +70,7 @@ static ColliderTrisInit sTrisInit1 = {
         OC2_TYPE_2,
         COLSHAPE_TRIS,
     },
-    2,
+    ARRAY_COUNT(sTrisElementsInit1),
     sTrisElementsInit1,
 };
 
@@ -130,7 +130,7 @@ static ColliderTrisInit sTrisInit2 = {
         OC2_TYPE_2,
         COLSHAPE_TRIS,
     },
-    4,
+    ARRAY_COUNT(sTrisElementsInit2),
     sTrisElementsInit2,
 };
 
@@ -143,7 +143,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void BgSpdweb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Init(Actor* thisx, PlayState* play) {
     BgSpdweb* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -153,32 +153,32 @@ void BgSpdweb_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 1);
 
     if (this->dyna.actor.params == BGSPDWEB_FF_0) {
-        Collider_InitAndSetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit1, this->colliderElements);
+        Collider_InitAndSetTris(play, &this->collider, &this->dyna.actor, &sTrisInit1, this->colliderElements);
         func_809CE068(this);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spdweb_Colheader_002678);
-        this->unk_2F8 = globalCtx->colCtx.dyna.bgActors[this->dyna.bgId].colHeader->vtxList;
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_spdweb_Colheader_002678);
+        this->unk_2F8 = play->colCtx.dyna.bgActors[this->dyna.bgId].colHeader->vtxList;
         this->unk_164 = 0.0f;
         this->actionFunc = func_809CE4C8;
     } else {
-        Collider_InitAndSetTris(globalCtx, &this->collider, &this->dyna.actor, &sTrisInit2, this->colliderElements);
+        Collider_InitAndSetTris(play, &this->collider, &this->dyna.actor, &sTrisInit2, this->colliderElements);
         func_809CE068(this);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spdweb_Colheader_0011C0);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &object_spdweb_Colheader_0011C0);
         this->actionFunc = func_809CEBC0;
         Actor_SetFocus(&this->dyna.actor, 30.0f);
     }
 
     this->unk_162 = 0;
 
-    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+    if (Flags_GetSwitch(play, this->switchFlag)) {
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgSpdweb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Destroy(Actor* thisx, PlayState* play) {
     BgSpdweb* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    Collider_DestroyTris(globalCtx, &this->collider);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyTris(play, &this->collider);
 }
 
 void func_809CE068(BgSpdweb* this) {
@@ -203,9 +203,9 @@ void func_809CE15C(BgSpdweb* this) {
             (this->dyna.actor.home.pos.y - this->dyna.actor.world.pos.y) * 10.0f;
 }
 
-void func_809CE1D0(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CE1D0(BgSpdweb* this, PlayState* play) {
     this->unk_162 = 30;
-    Flags_SetSwitch(globalCtx, this->switchFlag);
+    Flags_SetSwitch(play, this->switchFlag);
 
     if (this->dyna.actor.params == BGSPDWEB_FF_0) {
         this->actionFunc = func_809CE234;
@@ -214,7 +214,7 @@ void func_809CE1D0(BgSpdweb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CE234(BgSpdweb* this, PlayState* play) {
     Vec3f spB4;
     Vec3f spA8;
     f32 temp_f20;
@@ -230,7 +230,7 @@ void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx) {
 
     if (this->unk_162 == 0) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -258,17 +258,17 @@ void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx) {
             spB4.y = 0.0f;
             spB4.z = 7.0f * temp_f22 * temp_f20;
 
-            EffectSsDeadDb_Spawn(globalCtx, &this->dyna.actor.home.pos, &spB4, &gZeroVec3f, &D_809CF208, &D_809CF20C,
-                                 0x32, 8, 0xE);
+            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spB4, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x32,
+                                 8, 0xE);
             phi_s2 += 0x2AAA;
         }
 
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
     }
 }
 
-void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809CE4C8(BgSpdweb* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     Vec3f sp40;
     ColliderTrisElement* element;
     s16 sp3A;
@@ -278,11 +278,11 @@ void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
     sp40.x = this->dyna.actor.world.pos.x;
     sp40.y = this->dyna.actor.world.pos.y - 50.0f;
     sp40.z = this->dyna.actor.world.pos.z;
-    sp3A = player->unk_B6A;
+    sp3A = player->fallDistance;
 
-    if (func_80123F48(globalCtx, &sp40, 70.0f, 50.0f)) {
-        this->dyna.actor.home.pos.x = player->swordInfo[0].tip.x;
-        this->dyna.actor.home.pos.z = player->swordInfo[0].tip.z;
+    if (Player_IsBurningStickInRange(play, &sp40, 70.0f, 50.0f)) {
+        this->dyna.actor.home.pos.x = player->meleeWeaponInfo[0].tip.x;
+        this->dyna.actor.home.pos.z = player->meleeWeaponInfo[0].tip.z;
         func_809CEE74(this);
         return;
     }
@@ -311,7 +311,7 @@ void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
             this->unk_164 = temp_f12;
             this->unk_162 = 12;
             if (sp3A > 50) {
-                player->stateFlags1 |= 0x20;
+                player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_161 = 1;
             }
         } else if (player->actor.speedXZ != 0.0f) {
@@ -330,15 +330,15 @@ void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
         if ((this->unk_161 != 0) ||
             ((DynaPolyActor_IsInRidingMovingState(&this->dyna) != 0) && (this->unk_164 > 2.0f))) {
             player->actor.velocity.y = this->unk_164 * 0.7f;
-            player->unk_B68 = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
+            player->fallStartHeight = (SQ(this->unk_164) * 0.15f) + this->dyna.actor.world.pos.y;
             this->unk_161 = 0;
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~PLAYER_STATE1_20;
         }
     } else if (this->unk_162 == 11) {
         if (this->unk_164 > 3.0f) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WEB_VIBRATION);
         } else {
-            func_801A75E8(NA_SE_EV_WEB_VIBRATION);
+            AudioSfx_StopById(NA_SE_EV_WEB_VIBRATION);
         }
     }
 
@@ -347,26 +347,23 @@ void func_809CE4C8(BgSpdweb* this, GlobalContext* globalCtx) {
     }
 
     func_809CE15C(this);
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
-#ifdef NON_MATCHING
-void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CE830(BgSpdweb* this, PlayState* play) {
     Vec3f spDC;
     Vec3f spD0;
     Vec3f spC4;
-    f32 spB0;
-    f32 spA4;
-    f32 sp9C;
-    f32 sp94;
-    f32 sp90;
-    f32 temp_f20;
-    f32 temp_f22;
-    f32 temp_f28;
-    f32 temp_f30;
     s32 i;
-    s16 temp_s0;
     s16 temp_s3;
+    s16 temp_s0;
+    f32 cosF2;
+    f32 sinF2;
+    f32 cosQ;
+    f32 sinQ;
+    f32 cosF1;
+    f32 sinF1;
+    f32 temp_f28;
 
     if (this->unk_162 != 0) {
         this->unk_162--;
@@ -376,59 +373,52 @@ void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx) {
         if (ActorCutscene_GetLength(this->dyna.actor.cutscene) == -1) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
     if ((this->unk_162 % 3) == 0) {
         temp_s3 = Rand_ZeroOne() * 0x2AAA;
-        spB0 = Math_CosS(this->dyna.actor.shape.rot.x);
-        temp_f20 = Math_SinS(this->dyna.actor.shape.rot.x);
-        temp_f30 = Math_CosS(this->dyna.actor.shape.rot.y);
-        spA4 = Math_SinS(this->dyna.actor.shape.rot.y);
-        if (1) {}
+        cosQ = Math_CosS(this->dyna.actor.shape.rot.x);
+        sinQ = Math_SinS(this->dyna.actor.shape.rot.x);
+        cosF1 = Math_CosS(this->dyna.actor.shape.rot.y);
+        sinF1 = Math_SinS(this->dyna.actor.shape.rot.y);
 
-        spC4.x = this->dyna.actor.world.pos.x + ((90.0f * temp_f20) * spA4);
-        spC4.y = this->dyna.actor.world.pos.y + (90.0f * spB0);
-        spC4.z = this->dyna.actor.world.pos.z + ((90.0f * temp_f20) * temp_f30);
-
-        sp94 = temp_f20 * spA4;
-        sp90 = temp_f20 * temp_f30;
+        spC4.x = this->dyna.actor.world.pos.x + 90.0f * sinQ * sinF1;
+        spC4.y = this->dyna.actor.world.pos.y + 90.0f * cosQ;
+        spC4.z = this->dyna.actor.world.pos.z + 90.0f * sinQ * cosF1;
 
         for (i = 0; i < 6; i++) {
             temp_s0 = (s32)randPlusMinusPoint5Scaled(0x2800) + temp_s3;
-            temp_f20 = Math_SinS(temp_s0);
-            temp_f22 = Math_CosS(temp_s0);
+            sinF2 = Math_SinS(temp_s0);
+            cosF2 = Math_CosS(temp_s0);
 
-            spD0.x = spC4.x + (90.0f * ((sp94 * temp_f22) + (temp_f30 * temp_f20)));
-            spD0.y = spC4.y + ((90.0f * spB0) * temp_f22);
-            spD0.z = spC4.z + (90.0f * ((sp90 * temp_f22) - (spA4 * temp_f20)));
+            spD0.x = spC4.x + 90.0f * ((cosF1 * sinF2) + (sinQ * sinF1 * cosF2));
+            spD0.y = spC4.y + 90.0f * cosQ * cosF2;
+            spD0.z = spC4.z + 90.0f * ((sinQ * cosF1 * cosF2) - (sinF1 * sinF2));
 
             temp_f28 = Math_Vec3f_DistXYZ(&this->dyna.actor.home.pos, &spD0) * (1.0f / 90.0f);
             if (temp_f28 < 0.65f) {
                 temp_f28 = 1.0f - temp_f28;
-                temp_f20 = Math_SinS(BINANG_ROT180(temp_s0));
-                temp_f22 = Math_CosS(BINANG_ROT180(temp_s0));
+                sinF2 = Math_SinS(BINANG_ROT180(temp_s0));
+                cosF2 = Math_CosS(BINANG_ROT180(temp_s0));
             }
 
-            spDC.x = (6.5f * temp_f28) * ((temp_f30 * temp_f20) + (temp_f22 * sp94));
-            spDC.y = temp_f22 * ((6.5f * temp_f28) * spB0);
-            spDC.z = (6.5f * temp_f28) * ((temp_f22 * sp90) - (spA4 * temp_f20));
+            spDC.x = 6.5f * temp_f28 * ((cosF1 * sinF2) + (sinQ * sinF1 * cosF2));
+            spDC.y = 6.5f * temp_f28 * cosQ * cosF2;
+            spDC.z = 6.5f * temp_f28 * ((sinQ * cosF1 * cosF2) - (sinF1 * sinF2));
 
-            EffectSsDeadDb_Spawn(globalCtx, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C,
-                                 0x3C, 8, 0xE);
+            EffectSsDeadDb_Spawn(play, &this->dyna.actor.home.pos, &spDC, &gZeroVec3f, &D_809CF208, &D_809CF20C, 0x3C,
+                                 8, 0xE);
             temp_s3 += 0x2AAA;
         }
 
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.home.pos, 11, NA_SE_EN_EXTINCT);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Spdweb/func_809CE830.s")
-#endif
 
-void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809CEBC0(BgSpdweb* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
     f32 sp58;
     f32 temp_f10;
     f32 temp_f18;
@@ -460,8 +450,8 @@ void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx) {
                 this->dyna.actor.world.pos.z;
         }
         func_809CEE74(this);
-    } else if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
-        Math_Vec3f_Diff(&player->swordInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
+    } else if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->dyna.actor.world.pos, &sp3C);
         sp38 = Math_SinS(-this->dyna.actor.shape.rot.x);
         sp34 = Math_CosS(-this->dyna.actor.shape.rot.x);
         sp30 = Math_SinS(-this->dyna.actor.shape.rot.y);
@@ -472,12 +462,12 @@ void func_809CEBC0(BgSpdweb* this, GlobalContext* globalCtx) {
         temp_f10 = (sp3C.x * sp2C) + (sp3C.z * sp30);
 
         if ((fabsf(temp_f10) < 70.0f) && (fabsf(sp58) < 10.0f) && (temp_f18 < 160.0f) && (temp_f18 > 20.0f)) {
-            Math_Vec3f_Copy(&this->dyna.actor.home.pos, &player->swordInfo[0].tip);
+            Math_Vec3f_Copy(&this->dyna.actor.home.pos, &player->meleeWeaponInfo[0].tip);
             func_809CEE74(this);
         }
     }
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
 void func_809CEE74(BgSpdweb* this) {
@@ -485,42 +475,42 @@ void func_809CEE74(BgSpdweb* this) {
     this->actionFunc = func_809CEEAC;
 }
 
-void func_809CEEAC(BgSpdweb* this, GlobalContext* globalCtx) {
+void func_809CEEAC(BgSpdweb* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        func_809CE1D0(this, globalCtx);
+        func_809CE1D0(this, play);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
     }
 }
 
-void BgSpdweb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Update(Actor* thisx, PlayState* play) {
     BgSpdweb* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-void BgSpdweb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void BgSpdweb_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
 
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
 
     if (thisx->params == BGSPDWEB_FF_1) {
-        gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], object_spdweb_DL_000060);
     } else {
         Matrix_Translate(0.0f, (thisx->home.pos.y - thisx->world.pos.y) * 10.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ((thisx->home.pos.y - thisx->world.pos.y) + 10.0f) * 0.1f, 1.0f, MTXMODE_APPLY);
 
-        gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], object_spdweb_DL_0012F0);
     }
 
     POLY_XLU_DISP = &gfx[3];
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

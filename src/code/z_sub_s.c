@@ -17,12 +17,12 @@ s32 D_801C5DBC[] = { 0, 1 }; // Unused
 /**
  * Finds the first EnDoor instance with unk_1A4 == 5 and the specified switchFlag.
  */
-EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 switchFlag) {
+EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
     Actor* actor = NULL;
     EnDoor* door;
 
     while (true) {
-        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
+        actor = SubS_FindActor(play, actor, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)actor;
 
         if (actor == NULL) {
@@ -44,7 +44,7 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 switchFlag) {
     return door;
 }
 
-Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** skeleton, Vec3s* jointTable,
+Gfx* SubS_DrawTransformFlexLimb(PlayState* play, s32 limbIndex, void** skeleton, Vec3s* jointTable,
                                 OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                                 TransformLimbDraw transformLimbDraw, Actor* actor, Mtx** mtx, Gfx* gfx) {
     StandardLimb* limb;
@@ -62,11 +62,11 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     pos.z = limb->jointPos.z;
     newDList = limbDList = limb->dList;
 
-    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
-        transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
+        transformLimbDraw(play, limbIndex, actor, &gfx);
 
         if (newDList != NULL) {
             Matrix_ToMtx(*mtx);
@@ -80,15 +80,15 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
         Matrix_Pop();
     }
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
+        postLimbDraw(play, limbIndex, &limbDList, &rot, actor, &gfx);
     }
     if (limb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+        gfx = SubS_DrawTransformFlexLimb(play, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
     Matrix_Pop();
     if (limb->sibling != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+        gfx = SubS_DrawTransformFlexLimb(play, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
     return gfx;
@@ -103,7 +103,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
  * coordinates.
  * Note that the `TransformLimbDraw` does not have a NULL check, so must be provided even if empty.
  */
-Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable, s32 dListCount,
                             OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw,
                             TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx) {
     StandardLimb* rootLimb;
@@ -112,7 +112,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     Gfx* limbDList;
     Vec3f pos;
     Vec3s rot;
-    Mtx* mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(dListCount * sizeof(Mtx)));
+    Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, dListCount * sizeof(Mtx));
 
     if (skeleton == NULL) {
         return NULL;
@@ -128,11 +128,11 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     newDlist = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if (overrideLimbDraw == NULL || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
-        transformLimbDraw(globalCtx, 1, actor, &gfx);
+        transformLimbDraw(play, 1, actor, &gfx);
 
         if (newDlist != NULL) {
             Matrix_ToMtx(mtx);
@@ -147,21 +147,21 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     }
 
     if (postLimbDraw != NULL) {
-        postLimbDraw(globalCtx, 1, &limbDList, &rot, actor, &gfx);
+        postLimbDraw(play, 1, &limbDList, &rot, actor, &gfx);
     }
 
     if (rootLimb->child != LIMB_DONE) {
-        gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
-                                         postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
+        gfx = SubS_DrawTransformFlexLimb(play, rootLimb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
+                                         transformLimbDraw, actor, &mtx, gfx);
     }
     Matrix_Pop();
     return gfx;
 }
 
-s32 SubS_InCsMode(GlobalContext* globalCtx) {
+s32 SubS_InCsMode(PlayState* play) {
     s32 inCsMode = false;
 
-    if (Play_InCsMode(globalCtx)) {
+    if (Play_InCsMode(play)) {
         inCsMode = true;
     }
 
@@ -178,8 +178,7 @@ s32 SubS_InCsMode(GlobalContext* globalCtx) {
  * @param[in] stepRot boolean, step towards newRot instead of setting directly
  * @param[in] overrideRot boolean, override newRot with the specified input.
  *
- * Note:
- *  If overrideRot is true, the rotation will automatically step instead of setting directly
+ * @note if overrideRot is true, the rotation will automatically step instead of setting directly
  */
 s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot) {
     Vec3f newPos;
@@ -214,25 +213,280 @@ void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
     *flags = (*flags & ~unsetBits) | setBits;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AF00.s")
+/**
+ * Fills the knot array to be used with time paths
+ *
+ * The default knot array just pads with `order` duplicate knots of the first knot at the front and of the last knot
+ * at the end.
+ *
+ * @param[out] knots an array of values that are used to compute the progress and the individual weights
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
+ * @param[in] numPoints the number of points to fill, generally the path count + order
+ *
+ * @note Same note as SubS_TimePathing_Update()
+ */
+void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints) {
+    s32 i;
+    f32 val = 0.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B010.s")
+    for (i = 0; i < numPoints; i++) {
+        if ((i >= order) && (i < (numPoints - order + 1))) {
+            val += 1.0f;
+        }
+        knots[i] = val;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B0C8.s")
+typedef enum {
+    /* 0 */ SUBS_TIME_PATHING_PROGRESS_STATUS_ERROR,
+    /* 1 */ SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH,
+    /* 2 */ SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END
+} SUBS_TIME_PATHING_PROGRESS_STATUS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B350.s")
+/**
+ * Computes the progress to be used with time paths
+ *
+ * @param[out] progress the progress along the path, used to compute the weights
+ * @param[in] elapsedTime how much time has passed
+ * @param[in] waypointTime how much time per each waypoint
+ * @param[in] totalTime how much time the path should take to travel
+ * @param[in] pathCount the path count
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation
+ * @param[in] knots see SubS_TimePathing_FillKnots()
+ *
+ * @return see SUBS_TIME_PATHING_PROGRESS_STATUS
+ */
+s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount,
+                                     s32 order, f32 knots[]) {
+    s32 i;
+    s32 j;
+    s32 k;
+    f32 waypointTimeInv; // The fraction of a waypoint a single unit of time contains
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B6B0.s")
+    *progress = 0.0f;
+    if ((waypointTime <= 0) || (elapsedTime < 0)) {
+        return SUBS_TIME_PATHING_PROGRESS_STATUS_ERROR;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013B878.s")
+    // When using the knots from SubS_TimePathing_FillKnots() these nested loops seem to simplify to
+    // *progress = (f32)elapsedTime / (f32)waypointTime;
+    waypointTimeInv = 1.0f / waypointTime;
+    k = 0;
+    for (i = order - 1; i < pathCount; i++) {
+        for (j = 0; j < waypointTime; j++) {
+            if (k == elapsedTime) {
+                break;
+            }
+            *progress += (knots[i + 1] - knots[i]) * waypointTimeInv;
+            k++;
+        }
+    }
 
-Path* SubS_GetAdditionalPath(GlobalContext* globalCtx, u8 pathIndex, s32 max) {
+    return (elapsedTime == totalTime) ? SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END
+                                      : SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH;
+}
+
+/**
+ * Computes the interpolation weights to be used with time paths
+ *
+ * Seems to use some kind of B-Spline interpolation algorithm
+ *
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
+ * @param[in] progress see SubS_TimePathing_ComputeProgress()
+ * @param[in] waypoint the current waypoint
+ * @param[in] knots see SubS_TimePathing_FillKnots()
+ * @param[out] weights how much to weight each point considered
+ */
+void SubS_TimePathing_ComputeWeights(s32 order, f32 progress, s32 waypoint, f32 knots[], f32 weights[]) {
+    f32 weightsTemp[10][11];
+    s32 i;
+    s32 j;
+    s32 k;
+
+    for (i = 0; i < order; i++) {
+        for (j = 0; j < order + 1; j++) {
+            weightsTemp[i][j] = 0.0f;
+        }
+    }
+
+    weightsTemp[0][order - 1] = 1.0f;
+
+    for (i = 1; i < order; i++) {
+        for (j = waypoint - i, k = (order - 1) - i; j <= waypoint; j++, k++) {
+            if (knots[j + i] != knots[j]) {
+                weightsTemp[i][k] = ((progress - knots[j]) / (knots[j + i] - knots[j])) * weightsTemp[i - 1][k];
+            } else {
+                weightsTemp[i][k] = 0.0f;
+            }
+
+            if (knots[j + i + 1] != knots[j + 1]) {
+                weightsTemp[i][k] +=
+                    ((knots[j + i + 1] - progress) / (knots[j + i + 1] - knots[j + 1])) * weightsTemp[i - 1][k + 1];
+            }
+        }
+    }
+    for (j = 0; j < order; j++) {
+        weights[j] = weightsTemp[order - 1][j];
+    }
+}
+
+/**
+ * Computes the X and Z component of the position to move to in time based paths
+ *
+ * @param[out] x computed x position
+ * @param[out] z computed z position
+ * @param[in] progress see SubS_TimePathing_ComputeProgress()
+ * @param[in] order the order of the interpolation i.e. the number of points in the interpolation, max is 10
+ * @param[in] waypoint the current waypoint
+ * @param[in] points the path's points
+ * @param[in] knots see SubS_TimePathing_FillKnots()
+ */
+void SubS_TimePathing_ComputeTargetPosXZ(f32* x, f32* z, f32 progress, s32 order, s32 waypoint, Vec3s points[],
+                                         f32 knots[]) {
+    f32 xPos;
+    f32 zPos;
+    f32 weights[11];
+    f32 weightedX;
+    f32 weightedZ;
+    f32 weightedTotal;
+    s32 i;
+
+    SubS_TimePathing_ComputeWeights(order, progress, waypoint, knots, weights);
+    weightedTotal = 0.0f;
+    weightedZ = 0.0f;
+    weightedX = 0.0f;
+
+    for (i = 0; i < order; i++) {
+        xPos = points[waypoint - order + i + 1].x;
+        zPos = points[waypoint - order + i + 1].z;
+
+        weightedX += weights[i] * xPos;
+        weightedZ += weights[i] * zPos;
+        weightedTotal += weights[i];
+    }
+    *x = weightedX / weightedTotal;
+    *z = weightedZ / weightedTotal;
+}
+
+/**
+ * Updates a time based path that an actor follows by:
+ *  - Computing the X and Z components of the next point to move to
+ *  - Updating the waypoint
+ *  - Updating the time
+ *
+ * @param[in] path
+ * @param[out] progress see SubS_TimePathing_ComputeProgress()
+ * @param[in,out] elapsedTime how much time has passed
+ * @param[in] waypointTime how much time per each waypoint
+ * @param[in] totalTime how much time the path should take to travel
+ * @param[in,out] waypoint the current waypoint, this and the previous two points will be used to compute the targetPos
+ * @param[in] knots see SubS_TimePathing_FillKnots()
+ * @param[out] targetPos the computed position to move to
+ * @param[in] timeSpeed how fast time moves
+ *
+ * @return s32 returns true when the end has been reached.
+ *
+ * @note This system/function makes a couple of assumptions about the order used:
+ *      1. the order is assumed to be 3, see SUBS_TIME_PATHING_ORDER
+ *      2. even if SUBS_TIME_PATHING_ORDER is updated, the order can only be a max of 10
+ */
+s32 SubS_TimePathing_Update(Path* path, f32* progress, s32* elapsedTime, s32 waypointTime, s32 totalTime, s32* waypoint,
+                            f32 knots[], Vec3f* targetPos, s32 timeSpeed) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    s32 state;
+    f32 endX;
+    f32 endZ;
+    s32 reachedEnd = false;
+
+    if (*waypoint >= path->count) {
+        state = SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END;
+    } else {
+        state = SubS_TimePathing_ComputeProgress(progress, *elapsedTime, waypointTime, totalTime, path->count,
+                                                 SUBS_TIME_PATHING_ORDER, knots);
+    }
+
+    switch (state) {
+        case SUBS_TIME_PATHING_PROGRESS_STATUS_STILL_ON_PATH:
+            reachedEnd = false;
+            SubS_TimePathing_ComputeTargetPosXZ(&targetPos->x, &targetPos->z, *progress, SUBS_TIME_PATHING_ORDER,
+                                                *waypoint, points, knots);
+            break;
+        case SUBS_TIME_PATHING_PROGRESS_STATUS_SHOULD_REACH_END:
+            endX = points[path->count - 1].x;
+            endZ = points[path->count - 1].z;
+            targetPos->x = endX * 1;
+            targetPos->z = endZ * 1;
+            reachedEnd = true;
+            break;
+    }
+
+    *elapsedTime += timeSpeed;
+    if (*elapsedTime >= totalTime) {
+        *elapsedTime = totalTime;
+    } else if (*elapsedTime < 0) {
+        *elapsedTime = 0;
+    }
+    *waypoint = (*elapsedTime / waypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
+
+    return reachedEnd;
+}
+
+/**
+ * Computes the initial Y component of a time based path
+ *
+ * @param[in] play
+ * @param[in] path
+ * @param[in] waypoint the current waypoint, this and the previous two points will be used to compute the target pos
+ * @param[out] targetPos the computed position to move to, only the Y component has meaning
+ *
+ * @note Same note as SubS_TimePathing_Update()
+ */
+void SubS_TimePathing_ComputeInitialY(PlayState* play, Path* path, s32 waypoint, Vec3f* targetPos) {
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
+    Vec3f posA;
+    Vec3f posB;
+    Vec3f posResult;
+    s32 i = waypoint - (SUBS_TIME_PATHING_ORDER - 1);
+    s16 max;
+    s16 min;
+    s32 isSetup;
+    CollisionPoly* outPoly = NULL;
+    s32 bgId = 0;
+
+    max = 0;
+    min = 0;
+    isSetup = false;
+    for (; i <= waypoint; i++) {
+        if (isSetup) {
+            if (max < points[i].y) {
+                max = points[i].y;
+            }
+            if (points[i].y < min) {
+                min = points[i].y;
+            }
+        } else {
+            max = min = points[i].y;
+        }
+        isSetup = true;
+    }
+    max += 30;
+    min -= 30;
+    posA = *targetPos;
+    posB = *targetPos;
+    posA.y = max;
+    posB.y = min;
+    if (BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &posResult, &outPoly, true, true, true, true, &bgId)) {
+        targetPos->y = posResult.y;
+    }
+}
+
+Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
     Path* path;
     s32 i = 0;
 
     do {
-        path = &globalCtx->setupPathList[pathIndex];
-        if (i >= max) {
+        path = &play->setupPathList[pathIndex];
+        if (i >= limit) {
             break;
         }
         pathIndex = path->unk1;
@@ -245,7 +499,7 @@ Path* SubS_GetAdditionalPath(GlobalContext* globalCtx, u8 pathIndex, s32 max) {
 /**
  * Finds the nearest actor instance of a specified Id and category to an actor.
  */
-Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCategory, s16 actorId) {
+Actor* SubS_FindNearestActor(Actor* actor, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* actorIter = NULL;
     Actor* actorTmp;
     f32 dist;
@@ -254,7 +508,7 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     s32 isSetup = false;
 
     do {
-        actorIter = SubS_FindActor(globalCtx, actorIter, actorCategory, actorId);
+        actorIter = SubS_FindActor(play, actorIter, actorCategory, actorId);
 
         actorTmp = actorIter;
         if (actorTmp == NULL) {
@@ -277,24 +531,24 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     return closestActor;
 }
 
-s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
     s32 endFrame;
     s32 startFrame;
 
-    animations += index;
-    endFrame = animations->frameCount;
-    if (animations->frameCount < 0) {
-        endFrame = Animation_GetLastFrame(&animations->animation->common);
+    animationInfo += animIndex;
+    endFrame = animationInfo->frameCount;
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(&animationInfo->animation->common);
     }
-    startFrame = animations->startFrame;
+    startFrame = animationInfo->startFrame;
     if (startFrame >= endFrame || startFrame < 0) {
         return false;
     }
-    if (animations->playSpeed < 0.0f) {
+    if (animationInfo->playSpeed < 0.0f) {
         SWAP(s32, endFrame, startFrame);
     }
-    Animation_Change(skelAnime, animations->animation, animations->playSpeed, startFrame, endFrame, animations->mode,
-                     animations->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
     return true;
 }
 
@@ -331,7 +585,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     return reached;
 }
 
-Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s32* startPointIndex) {
+Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
     s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
@@ -344,7 +598,7 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     }
 
     while (pathIndex != 0xFF) {
-        path = &globalCtx->setupPathList[pathIndex];
+        path = &play->setupPathList[pathIndex];
         if (sPathDayFlags[day] & path->unk2) {
             found = true;
             break;
@@ -362,9 +616,189 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     return path;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C068.s")
+/**
+ * Computes the point to move toward using a weight based algorithm that considers 4 points along the path
+ *
+ * @param path
+ * @param waypoint the current waypoint, this and the previous three points will be used to compute the point
+ * @param point the point computed
+ * @param progress the main weight value used to compute the weights for the points considered
+ * @param direction the direciton along the path to move, 1 for forwards, anything else for backwards
+ *
+ * @note only computes X and Z components of the point
+ */
+s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 progress, s32 direction) {
+    s32 i;
+    f32 weight0;
+    f32 weight1;
+    f32 weight2;
+    f32 weight3;
+    s32 lastPoint;
+    s32 secondLastPoint;
+    s32 secondPoint;
+    s32 firstPoint;
+    f32 xPoints[4];
+    f32 zPoints[4];
+    f32 oneMinusProgress;
+    f32 squared;
+    f32 cubed;
+    Vec3s* points;
+    s32 count = path->count;
+    s32 pointIndex;
+    s32 tmp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C624.s")
+    if (path == NULL) {
+        return false;
+    }
+    if (direction == 1) {
+        if (waypoint <= 2) {
+            pointIndex = 2;
+        } else {
+            pointIndex = (waypoint == 3) ? 3 : waypoint;
+        }
+        for (i = 0; i < 4; i++, pointIndex--) {
+            if (pointIndex <= 0) {
+                pointIndex = 0;
+            }
+            points = Lib_SegmentedToVirtual(path->points);
+            points = &points[pointIndex];
+            xPoints[i] = points->x;
+            zPoints[i] = points->z;
+        }
+        lastPoint = count - 1;
+        secondLastPoint = count - 2;
+        secondPoint = 3;
+        firstPoint = 2;
+    } else {
+        if (waypoint >= count - 3) {
+            pointIndex = count - 3;
+        } else {
+            tmp = waypoint + 4;
+            pointIndex = (count == tmp) ? count - 4 : waypoint;
+        }
+        for (i = 0; i < 4; i++, pointIndex++) {
+            if (pointIndex >= path->count) {
+                pointIndex = path->count - 1;
+            }
+            points = Lib_SegmentedToVirtual(path->points);
+            points = &points[pointIndex];
+            xPoints[i] = points->x;
+            zPoints[i] = points->z;
+        }
+        lastPoint = 0;
+        secondLastPoint = 1;
+        secondPoint = count - 4;
+        firstPoint = count - 3;
+    }
+    if (waypoint == lastPoint) {
+        oneMinusProgress = 1.0f - progress;
+        squared = progress * progress;
+        cubed = progress * squared;
+        weight0 = oneMinusProgress * oneMinusProgress * oneMinusProgress;
+        weight1 = (1.75f * cubed) - (4.5f * squared) + (3.0f * progress);
+        weight2 = ((-11.0f / 12.0f) * cubed) + (1.5f * squared);
+        weight3 = (1.0f / 6.0f) * cubed;
+    } else if (waypoint == secondLastPoint) {
+        oneMinusProgress = 1.0f - progress;
+        squared = progress * progress;
+        cubed = progress * squared;
+        weight0 = oneMinusProgress * oneMinusProgress * oneMinusProgress * ((void)0, 0.25f); //! FAKE:
+        weight1 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * progress) + (7.0f / 12.0f);
+        weight2 = (-0.5f * cubed) + (0.5f * squared) + (progress * 0.5f) + (1.0f / 6.0f);
+        weight3 = cubed * (1.0f / 6.0f);
+    } else if (waypoint == secondPoint) {
+        oneMinusProgress = 1.0f - progress;
+        squared = oneMinusProgress * oneMinusProgress;
+        cubed = oneMinusProgress * squared;
+        weight0 = (1.0f / 6.0f) * cubed;
+        weight1 = (-0.5f * cubed) + (0.5f * squared) + (0.5f * oneMinusProgress) + (1.0f / 6.0f);
+        weight2 = ((7.0f / 12.0f) * cubed) - (1.25f * squared) + (0.25f * oneMinusProgress) + (7.0f / 12.0f);
+        weight3 = progress * progress * progress * 0.25f;
+    } else if (((direction == 1) && (firstPoint >= waypoint)) || ((direction != 1) && (waypoint >= firstPoint))) {
+        oneMinusProgress = 1.0f - progress;
+        squared = oneMinusProgress * oneMinusProgress;
+        cubed = oneMinusProgress * squared;
+        weight0 = (1.0f / 6.0f) * cubed;
+        weight1 = ((-11.0f / 12.0f) * cubed) + (1.5f * squared);
+        weight2 = (1.75f * cubed) - (4.5f * squared) + (3.0f * oneMinusProgress);
+        weight3 = progress * progress * progress;
+    } else {
+        oneMinusProgress = 1.0f - progress;
+        squared = progress * progress;
+        cubed = squared * progress;
+        weight0 = oneMinusProgress * oneMinusProgress;
+        weight0 = oneMinusProgress * weight0 / 6.0f;
+        weight1 = (cubed * 0.5f) - squared + (2.0f / 3.0f);
+        weight2 = (cubed / -2.0f) + (squared * 0.5f) + (progress * 0.5f) + (1.0f / 6.0f);
+        weight3 = cubed / 6.0f;
+    }
+    point->x = (weight0 * xPoints[0]) + (weight1 * xPoints[1]) + (weight2 * xPoints[2]) + (weight3 * xPoints[3]);
+    point->z = (weight0 * zPoints[0]) + (weight1 * zPoints[1]) + (weight2 * zPoints[2]) + (weight3 * zPoints[3]);
+
+    return true;
+}
+
+// WeightPathing System is completely unused
+/**
+ * Moves an actor based on a weight based algorithm that takes into account 4 points along the path
+ *
+ * @param actor
+ * @param path
+ * @param waypoint the current waypoint, this and the previous three points will be used to move forward
+ * @param progress the progress towards a given waypoint, used to compute the weights
+ * @param direction the direction along the path to move, 1 for forwards, anything else for backwards
+ * @param returnStart boolean, true if the actor should wrap back to start when reaching the end
+ *
+ * @return s32 true if actor reached the end of the path in this iteration, false otherwise
+ */
+s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart) {
+    Vec3f worldPos = actor->world.pos;
+    Vec3f velocity = actor->velocity;
+    Vec3f point;
+    f32 dist;
+
+    if (((direction != 1) && (*waypoint >= (path->count - 2))) || ((direction == 1) && (*waypoint < 2))) {
+        return false;
+    }
+    while (true) {
+        if (!SubS_WeightPathing_ComputePoint(path, *waypoint, &point, *progress, direction) ||
+            ((s32)(actor->speedXZ * 10000.0f) == 0)) {
+            return false;
+        }
+        dist = Math_Vec3f_DistXZ(&actor->world.pos, &point);
+        actor->world.rot.y = Math_Vec3f_Yaw(&actor->world.pos, &point);
+        Actor_MoveWithGravity(actor);
+        if (Math_Vec3f_DistXZ(&actor->world.pos, &point) < dist) {
+            break;
+        }
+        *progress += 0.1f;
+        if (*progress >= 1.1f) {
+            if (direction != 1) {
+                (*waypoint)++;
+                if (*waypoint >= (path->count - 2)) {
+                    if (returnStart) {
+                        *waypoint = 0;
+                    } else {
+                        return true;
+                    }
+                }
+            } else {
+                (*waypoint)--;
+                if (*waypoint < 2) {
+                    if (returnStart) {
+                        *waypoint = path->count - 2;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            *progress = 0.0f;
+        }
+        actor->world.pos = worldPos;
+        actor->velocity = velocity;
+    }
+    return false;
+}
 
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     Vec3s* point;
@@ -382,57 +816,66 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
+s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
     s32 ret = false;
     s16 x;
     s16 y;
     f32 xzDistToPlayerTemp;
 
-    Actor_GetScreenPos(globalCtx, actor, &x, &y);
+    Actor_GetScreenPos(play, actor, &x, &y);
 
     switch (type) {
         case 1:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_PickUp(actor, globalCtx, itemId, xzRange, yRange);
+            ret = Actor_PickUp(actor, play, itemId, xzRange, yRange);
             break;
+
         case 2:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 3:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 4:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
-            actor->flags |= 0x10000;
-            ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            actor->flags |= ACTOR_FLAG_10000;
+            ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
+
         case 5:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
-                actor->flags |= 0x10000;
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                actor->flags |= ACTOR_FLAG_10000;
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
         case 6:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                actor->flags |= 0x10000;
-                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+                actor->flags |= ACTOR_FLAG_10000;
+                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }
             break;
+
+        default:
+            break;
     }
+
     return ret;
 }
 
@@ -557,10 +1000,10 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gShadowDL);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
     gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, SUBS_SHADOW_TEX_WIDTH, SUBS_SHADOW_TEX_HEIGHT, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
-    gSPDisplayList(POLY_OPA_DISP++, gShadowVtxDL);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowModelDL);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -575,7 +1018,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
  * @param[in] stepMin the minimun step in degrees
  * @param[in] stepMax the maximum step in degrees
  */
-s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
+s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax) {
     s16 prevRot = *rot;
     f32 step;
     f32 prevRotStep;
@@ -611,44 +1054,42 @@ s16 SubS_ComputeTurnToPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f
 /**
  * Computes the necessary HeadRot and TorsoRot to smoothly turn an actors's head and torso to a point
  *
- * @param[in] point the point to turn to
+ * @param[in] target the point to turn to
  * @param[in] focusPos the actor's focus postion
  * @param[in] shapeRot the actor's shape rotation
- * @param[in,out] turnTarget the intermediate target step that headRot and torsoRot step towards
+ * @param[in,out] trackTarget the intermediate target step that headRot and torsoRot step towards
  * @param[in,out] headRot the computed head rotation
  * @param[in,out] torsoRot the computed torso rotation
- * @param[in] options various options to adjust how the actor turns, see `SubS_ComputeTurnToPointRot and
- * TurnOptions/TurnOptionsSet`
- *
+ * @param[in] options various options to adjust how the actor turns, see SubS_ComputeTrackPointRot()
  */
-s32 SubS_TurnToPoint(Vec3f* point, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* turnTarget, Vec3s* headRot, Vec3s* torsoRot,
-                     TurnOptionsSet* options) {
+s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trackTarget, Vec3s* headRot,
+                    Vec3s* torsoRot, TrackOptionsSet* options) {
     s16 pitch;
     s16 yaw;
     s16 pad;
     s16 targetY;
-    f32 diffX = point->x - focusPos->x;
+    f32 diffX = target->x - focusPos->x;
     s16 targetX;
-    f32 diffZ = point->z - focusPos->z;
+    f32 diffZ = target->z - focusPos->z;
 
-    yaw = Math_FAtan2F(diffZ, diffX);
-    pitch = Math_FAtan2F(sqrtf(SQ(diffX) + SQ(diffZ)), point->y - focusPos->y);
-    Math_SmoothStepToS(&turnTarget->x, pitch, 4, 0x2710, 0);
-    Math_SmoothStepToS(&turnTarget->y, yaw, 4, 0x2710, 0);
+    yaw = Math_Atan2S_XY(diffZ, diffX);
+    pitch = Math_Atan2S_XY(sqrtf(SQ(diffX) + SQ(diffZ)), target->y - focusPos->y);
+    Math_SmoothStepToS(&trackTarget->x, pitch, 4, 0x2710, 0);
+    Math_SmoothStepToS(&trackTarget->y, yaw, 4, 0x2710, 0);
 
     targetX =
-        SubS_ComputeTurnToPointRot(&headRot->x, options->headRotX.rotMax, turnTarget->x, options->headRotX.slowness,
-                                   options->headRotX.rotStepMin, options->headRotX.rotStepMax);
+        SubS_ComputeTrackPointRot(&headRot->x, options->headRotX.rotMax, trackTarget->x, options->headRotX.slowness,
+                                  options->headRotX.rotStepMin, options->headRotX.rotStepMax);
     //! @bug: torsoRotX uses headRotX slowness
-    SubS_ComputeTurnToPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
-                               options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
+    SubS_ComputeTrackPointRot(&torsoRot->x, options->torsoRotX.rotMax, targetX, options->headRotX.slowness,
+                              options->torsoRotX.rotStepMin, options->torsoRotX.rotStepMax);
 
-    targetY = turnTarget->y - shapeRot->y;
-    SubS_ComputeTurnToPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
-                               options->headRotY.rotStepMin, options->headRotY.rotStepMax);
-    SubS_ComputeTurnToPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
-                               options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
-                               options->torsoRotY.rotStepMax);
+    targetY = trackTarget->y - shapeRot->y;
+    SubS_ComputeTrackPointRot(&headRot->y, options->headRotY.rotMax, targetY - torsoRot->y, options->headRotY.slowness,
+                              options->headRotY.rotStepMin, options->headRotY.rotStepMax);
+    SubS_ComputeTrackPointRot(&torsoRot->y, options->torsoRotY.rotMax, targetY - headRot->y,
+                              options->torsoRotY.slowness, options->torsoRotY.rotStepMin,
+                              options->torsoRotY.rotStepMax);
 
     return true;
 }
@@ -657,8 +1098,8 @@ s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
 }
 
-Path* SubS_GetPathByIndex(GlobalContext* globalCtx, s16 pathIndex, s16 max) {
-    return (pathIndex != max) ? &globalCtx->setupPathList[pathIndex] : NULL;
+Path* SubS_GetPathByIndex(PlayState* play, s16 pathIndex, s16 max) {
+    return (pathIndex != max) ? &play->setupPathList[pathIndex] : NULL;
 }
 
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst) {
@@ -720,22 +1161,22 @@ s16 SubS_GetDistSqAndOrientPath(Path* path, s32 pointIndex, Vec3f* pos, f32* dis
     return Math_Atan2S(diffX, diffZ);
 }
 
-s8 SubS_IsObjectLoaded(s8 index, GlobalContext* globalCtx) {
-    return !Object_IsLoaded(&globalCtx->objectCtx, index) ? false : true;
+s8 SubS_IsObjectLoaded(s8 index, PlayState* play) {
+    return !Object_IsLoaded(&play->objectCtx, index) ? false : true;
 }
 
-s8 SubS_GetObjectIndex(s16 id, GlobalContext* globalCtx) {
-    return Object_GetIndex(&globalCtx->objectCtx, id);
+s8 SubS_GetObjectIndex(s16 id, PlayState* play) {
+    return Object_GetIndex(&play->objectCtx, id);
 }
 
 /**
  * Finds the first actor instance of a specified Id and category.
  */
-Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorCategory, s16 actorId) {
+Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, s16 actorId) {
     Actor* actor = actorListStart;
 
     if (actor == NULL) {
-        actor = globalCtx->actorCtx.actorLists[actorCategory].first;
+        actor = play->actorCtx.actorLists[actorCategory].first;
     }
 
     while (actor != NULL && actorId != actor->id) {
@@ -745,9 +1186,9 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     return actor;
 }
 
-s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
+s32 SubS_FillLimbRotTables(PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
     s32 i;
-    u32 frames = globalCtx->gameplayFrames;
+    u32 frames = play->gameplayFrames;
 
     for (i = 0; i < numLimbs; i++) {
         limbRotTableY[i] = (i * 50 + 0x814) * frames;
@@ -757,7 +1198,7 @@ s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* li
     return true;
 }
 
-s32 SubS_IsFloorAbove(GlobalContext* globalCtx, Vec3f* pos, f32 distAbove) {
+s32 SubS_IsFloorAbove(PlayState* play, Vec3f* pos, f32 distAbove) {
     CollisionPoly* outPoly;
     Vec3f posA;
     Vec3f posB;
@@ -766,8 +1207,7 @@ s32 SubS_IsFloorAbove(GlobalContext* globalCtx, Vec3f* pos, f32 distAbove) {
 
     posA = posB = *pos;
     posB.y += distAbove;
-    return BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &posResult, &outPoly, false, true, false, true,
-                                   &bgId);
+    return BgCheck_EntityLineTest1(&play->colCtx, &posA, &posB, &posResult, &outPoly, false, true, false, true, &bgId);
 }
 
 s32 SubS_CopyPointFromPathList(Path* paths, s32 pathIndex, s32 pointIndex, Vec3f* dst) {
@@ -781,18 +1221,17 @@ s32 SubS_CopyPointFromPathList(Path* paths, s32 pathIndex, s32 pointIndex, Vec3f
     return false;
 }
 
-u8 SubS_GetPathCount(Path* paths, s32 index) {
-    Path* path = &paths[index];
+u8 SubS_GetPathCountFromPathList(Path* paths, s32 pathIndex) {
+    Path* path = &paths[pathIndex];
 
     return path->count;
 }
 
-void SubS_ActorPathing_Init(GlobalContext* globalCtx, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath,
-                            Path* paths, s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex,
-                            u8 flags) {
+void SubS_ActorPathing_Init(PlayState* play, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath, Path* paths,
+                            s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex, u8 flags) {
     Path* path;
 
-    actorPath->setupPathList = globalCtx->setupPathList;
+    actorPath->setupPathList = play->setupPathList;
     actorPath->pathIndex = pathIndex;
     path = &paths[pathIndex];
     actorPath->points = Lib_SegmentedToVirtual(path->points);
@@ -817,9 +1256,9 @@ void SubS_ActorPathing_Init(GlobalContext* globalCtx, Vec3f* worldPos, Actor* ac
     actorPath->prevFlags = flags;
 }
 
-s32 SubS_ActorPathing_Update(GlobalContext* globalCtx, ActorPathing* actorPath,
-                             ActorPathingComputeFunc computePointInfoFunc, ActorPathingUpdateFunc updateActorInfoFunc,
-                             ActorPathingUpdateFunc moveFunc, ActorPathingUpdateFunc setNextPointFunc) {
+s32 SubS_ActorPathing_Update(PlayState* play, ActorPathing* actorPath, ActorPathingComputeFunc computePointInfoFunc,
+                             ActorPathingUpdateFunc updateActorInfoFunc, ActorPathingUpdateFunc moveFunc,
+                             ActorPathingUpdateFunc setNextPointFunc) {
     s32 shouldSetNextPoint;
     s32 reupdate;
 
@@ -839,24 +1278,24 @@ s32 SubS_ActorPathing_Update(GlobalContext* globalCtx, ActorPathing* actorPath,
     do {
         shouldSetNextPoint = false;
         if (actorPath->computePointInfoFunc != NULL) {
-            actorPath->computePointInfoFunc(globalCtx, actorPath);
+            actorPath->computePointInfoFunc(play, actorPath);
         }
         if (actorPath->updateActorInfoFunc != NULL) {
-            shouldSetNextPoint = actorPath->updateActorInfoFunc(globalCtx, actorPath);
+            shouldSetNextPoint = actorPath->updateActorInfoFunc(play, actorPath);
         }
         if (shouldSetNextPoint) {
             if (actorPath->setNextPointFunc != NULL) {
-                reupdate = actorPath->setNextPointFunc(globalCtx, actorPath);
+                reupdate = actorPath->setNextPointFunc(play, actorPath);
             }
         } else if (actorPath->moveFunc != NULL) {
-            reupdate = actorPath->moveFunc(globalCtx, actorPath);
+            reupdate = actorPath->moveFunc(play, actorPath);
         }
     } while (reupdate);
     actorPath->prevFlags = actorPath->flags;
     return false;
 }
 
-void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* actorPath) {
+void SubS_ActorPathing_ComputePointInfo(PlayState* play, ActorPathing* actorPath) {
     Vec3f diff;
 
     actorPath->curPoint.x = actorPath->points[actorPath->curPointIndex].x + actorPath->pointOffset.x;
@@ -867,22 +1306,22 @@ void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* 
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
     actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
     actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
-    actorPath->rotToCurPoint.y = Math_FAtan2F(diff.z, diff.x);
-    actorPath->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
+    actorPath->rotToCurPoint.y = Math_Atan2S_XY(diff.z, diff.x);
+    actorPath->rotToCurPoint.x = Math_Atan2S_XY(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;
 }
 
-s32 SubS_ActorPathing_MoveWithGravity(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 SubS_ActorPathing_MoveWithGravity(PlayState* play, ActorPathing* actorPath) {
     Actor_MoveWithGravity(actorPath->actor);
     return false;
 }
 
-s32 SubS_ActorPathing_MoveWithoutGravityReverse(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 SubS_ActorPathing_MoveWithoutGravityReverse(PlayState* play, ActorPathing* actorPath) {
     Actor_MoveWithoutGravityReverse(actorPath->actor);
     return false;
 }
 
-s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 SubS_ActorPathing_SetNextPoint(PlayState* play, ActorPathing* actorPath) {
     s32 reupdate = true;
 
     Math_Vec3f_Copy(&actorPath->prevPoint, &actorPath->curPoint);
@@ -918,21 +1357,21 @@ s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actor
     return reupdate;
 }
 
-void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
-                                     s32* curIndex) {
-    AnimationSpeedInfo* animation = &animations[nextIndex];
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex,
+                                     s32* curAnimIndex) {
+    AnimationSpeedInfo* animation = &animationInfo[nextAnimIndex];
     f32 startFrame = skelAnime->curFrame;
     f32 endFrame;
     f32 morphFrames;
 
-    if ((*curIndex < 0) || (nextIndex == *curIndex)) {
+    if ((*curAnimIndex < 0) || (nextAnimIndex == *curAnimIndex)) {
         morphFrames = 0.0f;
-        if (*curIndex < 0) {
+        if (*curAnimIndex < 0) {
             startFrame = 0.0f;
         }
     } else {
         morphFrames = animation->morphFrames;
-        if (nextIndex != *curIndex) {
+        if (nextAnimIndex != *curAnimIndex) {
             startFrame = 0.0f;
         }
     }
@@ -944,7 +1383,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     }
     Animation_Change(skelAnime, animation->animation, animation->playSpeed, startFrame, endFrame, animation->mode,
                      morphFrames);
-    *curIndex = nextIndex;
+    *curAnimIndex = nextAnimIndex;
 }
 
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
@@ -1004,9 +1443,7 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
  * @param[in] rot the angles to rotate with, uses just the x and y components
  * @param[out] plane the computed plane
  *
- * Notes:
- *  The unit input vector is expected to already be normalized (only uses are with the z unit vector)
- *
+ * @note the unit input vector is expected to already be normalized (only uses are with the z unit vector)
  */
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
     f32 sin;
@@ -1053,18 +1490,18 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
  * The callback should return `true` when the actor is succesfully verified.
  */
-Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory,
-                            s16 actorId, void* verifyData, VerifyActor verifyActor) {
+Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
+                            void* verifyData, VerifyActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
-        actorIter = globalCtx->actorCtx.actorLists[actorCategory].first;
+        actorIter = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actorIter != NULL && (actorId != actorIter->id ||
-                                 (actorId == actorIter->id &&
-                                  (verifyActor == NULL ||
-                                   (verifyActor != NULL && !verifyActor(globalCtx, actor, actorIter, verifyData)))))) {
+    while (actorIter != NULL &&
+           (actorId != actorIter->id ||
+            (actorId == actorIter->id &&
+             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 
@@ -1072,18 +1509,18 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
+s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
                   func_8013E748_VerifyFunc verifyFunc) {
     s32 ret = false;
 
-    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(globalCtx, actor, data))) {
-        ret = func_800B8500(actor, globalCtx, xzRange, yRange, exchangeItemId);
+    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(play, actor, data))) {
+        ret = func_800B8500(actor, play, xzRange, yRange, exchangeItemId);
     }
     return ret;
 }
 
-s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, void* data) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
+    Player* player = GET_PLAYER(play);
     Vec3s* yawTols = (Vec3s*)data;
     s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
@@ -1102,13 +1539,13 @@ s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, voi
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
                   s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+    return func_8013E748(actor, play, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
 /**
@@ -1129,9 +1566,9 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
  * @param[in] torsoZRotStepMax the max torso's Z rotation step
  * @param[in] torsoXRotStepMax the max torso's X rotation step
  */
-s32 SubS_TurnToPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
-                         s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
-                         u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
+s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget,
+                        s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep,
+                        u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax) {
     s16 yaw = Math_Vec3f_Yaw(worldPos, yawTarget) - shapeYRot;
     s16 pad;
     s16 pad2;

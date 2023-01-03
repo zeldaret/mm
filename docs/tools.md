@@ -23,7 +23,7 @@
     - [`tools/warnings_count/check_new_warnings.sh`](#toolswarnings_countcheck_new_warningssh)
     - [`tools/warnings_count/update_current_warnings.sh`](#toolswarnings_countupdate_current_warningssh)
     - [`fixle.sh`](#fixlesh)
-    - [`format.sh`](#formatsh)
+    - [`format.py`](#formatpy)
   - [External tools](#external-tools)
     - [mips_to_c](#mips_to_c)
     - [Permuter](#permuter)
@@ -196,9 +196,31 @@ If you have to add new warnings, **and have permission from the leads**, run thi
 
 Fixes line endings in the repo to Linux style (LF), which is required for the build process to work. (You may be better off creating a new clone directly in Linux/WSL, though)
 
-### `format.sh`
+### `format.py`
 
-Formats all C files in the repo using `clang-format-11` (instructions on how to install this version are pinned in Discord if you can't get it from your package manager in the usual way). This will touch all files in the repo, so the next `make` will take longer.
+Formats all C files in the repo using `clang-format-11`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
+
+You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (i.e. `-j1`).
+
+`clang-11` is available in many native package managers, but if not try:
+
+Linux:
+Download llvm's setup script, run it, than install normally
+```bash
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh 11
+rm llvm.sh
+sudo apt install clang-format-11 clang-tidy-11 clang-apply-replacements-11
+```
+
+Mac:
+Install with brew, than create symlinks for `clang-tidy` and `clang-apply-replacements` to use properly
+```bash
+brew install llvm clang-format-11
+ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
+```
 
 ## External tools
 
@@ -286,6 +308,6 @@ We use a [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0
 - **Function size statistics**: Intended as a crude estimate of how hard a file will be. Beginners should look for small largest function size and total size; the columns give a rough estimate of the distribution of function sizes without getting unnecessarily statistically descriptive. As you become more experienced, you should work on larger files to leave the smaller ones for other beginners.
 - **Description**: What the file is. It's helpful if you can fill this in if you know! They should be synchronised with the short top-of-file descriptions.
 - **Status**: (Free)/Reserved/PR/Merged. To be kept up-to-date by the reserver.
-- **Reserved**: To reserve a file, put your Discord name in the "Reserved" column. It is common courtesy to not work on a file that is being worked on by another contributor, so ensure the "Reserved" column is blank before working on a file. If it is not, you can ask the reserver(s) if they want to release it or collaborate on it, but don't expect them to agree. More information on what is expected when you reserve a file is available in the [CONTRIBUTING.md](../CONTRIBUTING.md).
+- **Reserved**: To reserve a file, put your Discord name in the "Reserved" column. It is common courtesy to not work on a file that is being worked on by another contributor, so ensure the "Reserved" column is blank before working on a file. If it is not, you can ask the reserver(s) if they want to release it or collaborate on it, but don't expect them to agree. More information on what is expected when you reserve a file is available in the [CONTRIBUTING.md](CONTRIBUTING.md).
 - **Interested**: If you would like to work on a file, but don't want to reserve it, or would be interested in collaboration, etc. You should talk to any Interested people if you want to work on the file.
 - **Notes**: Any other useful information: partial progress by someone unable to finish the file, other files it works with, etc.

@@ -21,13 +21,11 @@ typedef struct EnTest {
     /* 0x144 */ SkeletonInfo skeletonInfo;
     /* 0x174 */ s32 unk_174;
     /* 0x178 */ Vec3s unk_178[12];
-    /* 0x1C0 */ s16 unk_1C0[36];
+    /* 0x1C0 */ Vec3s unk_1C0[12];
     /* 0x208 */ u8 unk_208;
     /* 0x209 */ u8 unk_209;
     /* 0x20A */ u8 unk_20A;
     /* 0x20C */ EnTestStruct unk_20C[20];
 } EnTest; // size = 0x6BC
-
-extern const ActorInit En_Test_InitVars;
 
 #endif // Z_EN_TEST_H

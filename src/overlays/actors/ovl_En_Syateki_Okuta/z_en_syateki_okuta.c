@@ -11,24 +11,24 @@
 
 #define THIS ((EnSyatekiOkuta*)thisx)
 
-void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play);
+void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play);
+void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play);
+void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play);
 
 void func_80A36260(EnSyatekiOkuta* this);
-void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A362A8(EnSyatekiOkuta* this, PlayState* play);
 void func_80A362F8(EnSyatekiOkuta* this);
-void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx);
-void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36350(EnSyatekiOkuta* this, PlayState* play);
+void func_80A363B4(EnSyatekiOkuta* this, PlayState* play);
 void func_80A36444(EnSyatekiOkuta* this);
-void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36488(EnSyatekiOkuta* this, PlayState* play);
 void func_80A364C0(EnSyatekiOkuta* this);
-void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
-void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36504(EnSyatekiOkuta* this, PlayState* play);
+void func_80A365EC(EnSyatekiOkuta* this, PlayState* play);
 void func_80A36CB0(EnSyatekiOkuta* this);
 
-const ActorInit En_Syateki_Okuta_InitVars = {
+ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
@@ -72,7 +72,7 @@ static AnimationInfo sAnimations[] = {
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_OCTOROK, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
@@ -86,7 +86,7 @@ Color_RGBA8 D_80A37BA4 = { 255, 255, 255, 255 };
 
 Color_RGBA8 D_80A37BA8 = { 150, 150, 150, 0 };
 
-void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSyatekiOkuta* this = THIS;
     WaterBox* waterbox;
@@ -94,18 +94,18 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
                    OCTOROK_LIMB_MAX);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId,
-                                                          &this->actor, &this->actor.world.pos);
+    this->actor.floorHeight =
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
 
-    if (!(WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &ySurface, &waterbox)) ||
+    if (!(WaterBox_GetSurface1_2(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
+                                 &waterbox)) ||
         (ySurface <= this->actor.floorHeight)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->actor.world.pos.y = this->actor.home.pos.y = ySurface;
     }
@@ -115,18 +115,18 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A36260(this);
 }
 
-void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
     EnSyatekiOkuta* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80A36148(Vec3f* pos, Vec3f* velocity, s16 scaleStep, GlobalContext* globalCtx) {
-    func_800B0DE0(globalCtx, pos, velocity, &gZeroVec3f, &D_80A37B90, &D_80A37B94, 400, scaleStep);
+void func_80A36148(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    func_800B0DE0(play, pos, velocity, &gZeroVec3f, &D_80A37B90, &D_80A37B94, 400, scaleStep);
 }
 
-void func_80A361B0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
-    EffectSsGSplash_Spawn(globalCtx, &this->actor.home.pos, NULL, NULL, 0, 800);
+void func_80A361B0(EnSyatekiOkuta* this, PlayState* play) {
+    EffectSsGSplash_Spawn(play, &this->actor.home.pos, NULL, NULL, 0, 800);
 }
 
 s32 func_80A361F4(EnSyatekiOkuta* this) {
@@ -137,7 +137,7 @@ s32 func_80A361F4(EnSyatekiOkuta* this) {
 
     temp_v1 = EN_SYATEKI_OKUTA_GET_F(&this->actor);
     if ((temp_v1 == 1) || (temp_v1 == 4)) {
-        temp_a0 = syatekiMan->unk_190;
+        temp_a0 = syatekiMan->octorokFlags;
         temp_a1 = (temp_v1 * 2) + 6;
 
         if ((temp_a0 >> temp_a1) & 3) {
@@ -158,8 +158,8 @@ void func_80A36260(EnSyatekiOkuta* this) {
     this->actionFunc = func_80A362A8;
 }
 
-void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
-    Actor* actorIt = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
+void func_80A362A8(EnSyatekiOkuta* this, PlayState* play) {
+    Actor* actorIt = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorIt != NULL) {
         if (actorIt->id == ACTOR_EN_SYATEKI_MAN) {
@@ -179,22 +179,22 @@ void func_80A362F8(EnSyatekiOkuta* this) {
     this->actionFunc = func_80A36350;
 }
 
-void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A36350(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 void func_80A36360(EnSyatekiOkuta* this) {
     this->actor.draw = EnSyatekiOkuta_Draw;
     this->unk_2AA = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
     this->actionFunc = func_80A363B4;
 }
 
-void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A363B4(EnSyatekiOkuta* this, PlayState* play) {
     if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
         if (func_80A361F4(this)) {
             return;
         } else {
-            func_80A361B0(this, globalCtx);
+            func_80A361B0(this, play);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         }
     }
@@ -205,26 +205,26 @@ void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A36444(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
     this->actionFunc = func_80A36488;
 }
 
-void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A36488(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (syatekiMan->unk_26C >= 0x46) {
+    if (syatekiMan->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL) {
         func_80A364C0(this);
     }
 }
 
 void func_80A364C0(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80A36504;
 }
 
-void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A36504(EnSyatekiOkuta* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
-        func_80A361B0(this, globalCtx);
+        func_80A361B0(this, play);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_LAND);
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         func_80A362F8(this);
@@ -238,11 +238,11 @@ void func_80A3657C(EnSyatekiOkuta* this) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80A365EC;
 }
 
-void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A365EC(EnSyatekiOkuta* this, PlayState* play) {
     Vec3f sp84;
     Vec3f sp78;
     s32 pad;
@@ -260,7 +260,7 @@ void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
             sp84.x = 0.0f;
             sp84.y = -0.5f;
             sp84.z = 0.0f;
-            func_80A36148(&sp78, &sp84, -20, globalCtx);
+            func_80A36148(&sp78, &sp84, -20, play);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
         }
 
@@ -268,7 +268,7 @@ void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        func_80A361B0(this, globalCtx);
+        func_80A361B0(this, play);
     }
 
     if (this->unk_2A4 < 3) {
@@ -279,13 +279,13 @@ void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
         Actor_SetScale(&this->actor, (((this->unk_2A4 - 5) * 0.04f) + 0.8f) * 0.01f);
     } else {
         if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.002f)) {
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_COMMON_WATER_MID);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_COMMON_WATER_MID);
             for (i = 0; i < 10; i++) {
                 sp84.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
                 sp84.y = Rand_ZeroOne() * 7.0f;
                 sp84.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
-                EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->actor.world.pos, &sp84, &D_80A37B98, &D_80A37BA4,
-                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, 0);
+                EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &sp84, &D_80A37B98, &D_80A37BA4,
+                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, false);
             }
 
             func_80A362F8(this);
@@ -296,7 +296,7 @@ void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A368E0(EnSyatekiOkuta* this, PlayState* play) {
     this->collider.dim.height =
         (sCylinderInit.dim.height - this->collider.dim.yShift) * this->unk_1D8.y * this->actor.scale.y * 100.0f;
     this->collider.dim.radius = sCylinderInit.dim.radius * this->actor.scale.x * 100.0f;
@@ -320,10 +320,10 @@ void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     // jointTable->y is the y-translation of the skeleton root
     this->collider.dim.pos.y = this->actor.world.pos.y + (this->skelAnime.jointTable->y * this->actor.scale.y);
     this->collider.dim.pos.z = this->actor.world.pos.z;
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 func_80A36A90(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+s32 func_80A36A90(EnSyatekiOkuta* this, PlayState* play) {
     if ((this->actionFunc == func_80A365EC) || (this->actionFunc == func_80A36350)) {
         return false;
     }
@@ -333,17 +333,18 @@ s32 func_80A36A90(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    func_80A368E0(this, globalCtx);
+    func_80A368E0(this, play);
     return false;
 }
 
-void func_80A36AF8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+void func_80A36AF8(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s16 temp_v1_2;
 
-    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) && (syatekiMan->unk_26A == 1) &&
-        (syatekiMan->unk_26C == 0)) {
-        temp_v1_2 = (syatekiMan->unk_190 >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
+    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) &&
+        (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) &&
+        (syatekiMan->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING)) {
+        temp_v1_2 = (syatekiMan->octorokFlags >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);
             this->unk_2A6 = temp_v1_2;
@@ -352,29 +353,29 @@ void func_80A36AF8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSyatekiOkuta* this = THIS;
     EnSyatekiMan* syatekiMan;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actionFunc != func_80A36350) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    func_80A36AF8(this, globalCtx);
+    func_80A36AF8(this, play);
 
-    if (func_80A36A90(this, globalCtx)) {
+    if (func_80A36A90(this, play)) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
         if (this->unk_2A6 == 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
-            globalCtx->interfaceCtx.unk_25C++;
-            syatekiMan->unk_280++;
-            syatekiMan->unk_26E = 1;
+            play->interfaceCtx.minigamePoints++;
+            syatekiMan->score++;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_RED;
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
-            syatekiMan->unk_26E = 2;
+            syatekiMan->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_BLUE;
         }
 
         func_80A3657C(this);
@@ -462,8 +463,7 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
     return true;
 }
 
-s32 EnSyatekiOkuta_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                    Actor* thisx) {
+s32 EnSyatekiOkuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     Vec3f sp20;
     f32 curFrame;
@@ -484,21 +484,21 @@ s32 EnSyatekiOkuta_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx
     return false;
 }
 
-void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
     EnSyatekiOkuta* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     if (this->unk_2A6 == 1) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x08, gShootingGalleryOctorokBlueMaterialDL);
     }
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw,
-                      NULL, &this->actor);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw, NULL,
+                      &this->actor);
+    func_8012C2DC(play->state.gfxCtx);
     if (this->actionFunc == func_80A365EC) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f,
                          MTXMODE_NEW);
@@ -509,7 +509,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->unk_2AA);
         }
 
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->unk_2A6 == 2) {
             gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCrossDL);
@@ -518,5 +518,5 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

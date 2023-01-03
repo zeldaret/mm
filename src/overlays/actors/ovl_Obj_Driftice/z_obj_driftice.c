@@ -11,21 +11,21 @@
 
 #define THIS ((ObjDriftice*)thisx)
 
-void ObjDriftice_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjDriftice_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjDriftice_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjDriftice_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjDriftice_Init(Actor* thisx, PlayState* play);
+void ObjDriftice_Destroy(Actor* thisx, PlayState* play);
+void ObjDriftice_Update(Actor* thisx, PlayState* play);
+void ObjDriftice_Draw(Actor* thisx, PlayState* play);
 
 void func_80A671A8(ObjDriftice* this);
-void func_80A671BC(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A671BC(ObjDriftice* this, PlayState* play);
 void func_80A671CC(ObjDriftice* this);
-void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A671E0(ObjDriftice* this, PlayState* play);
 void func_80A6743C(ObjDriftice* this);
-void func_80A67450(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A67450(ObjDriftice* this, PlayState* play);
 void func_80A674A8(ObjDriftice* this);
-void func_80A674C4(ObjDriftice* this, GlobalContext* globalCtx);
+void func_80A674C4(ObjDriftice* this, PlayState* play);
 
-const ActorInit Obj_Driftice_InitVars = {
+ActorInit Obj_Driftice_InitVars = {
     ACTOR_OBJ_DRIFTICE,
     ACTORCAT_BG,
     FLAGS,
@@ -264,7 +264,7 @@ void func_80A66E30(ObjDrifticeStruct* arg0, ObjDriftice* this) {
     func_80A665AC(&this->dyna.actor.shape.rot.z, 0xA28);
 }
 
-void ObjDriftice_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDriftice_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjDriftice* this = THIS;
     f32* sp2C = D_80A67620[OBJDRIFTICE_GET_3(&this->dyna.actor)];
@@ -302,14 +302,14 @@ void ObjDriftice_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     DynaPolyActor_Init(&this->dyna, phi_a1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_driftice_Colheader_001AA8);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_driftice_Colheader_001AA8);
 
     if (sp20 != 0) {
         func_80A671A8(this);
     } else {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
 
-        path = &globalCtx->setupPathList[OBJDRIFTICE_GET_1FC(&this->dyna.actor)];
+        path = &play->setupPathList[OBJDRIFTICE_GET_1FC(&this->dyna.actor)];
         this->unk_164 = 0;
         this->unk_160 = path->count - 1;
         this->unk_168 = 1;
@@ -320,24 +320,24 @@ void ObjDriftice_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjDriftice_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDriftice_Destroy(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 void func_80A671A8(ObjDriftice* this) {
     this->actionFunc = func_80A671BC;
 }
 
-void func_80A671BC(ObjDriftice* this, GlobalContext* globalCtx) {
+void func_80A671BC(ObjDriftice* this, PlayState* play) {
 }
 
 void func_80A671CC(ObjDriftice* this) {
     this->actionFunc = func_80A671E0;
 }
 
-void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx) {
+void func_80A671E0(ObjDriftice* this, PlayState* play) {
     f32 phi_f0;
     Vec3f sp40;
     f32 sp3C;
@@ -389,7 +389,7 @@ void func_80A671E0(ObjDriftice* this, GlobalContext* globalCtx) {
                 if ((this->unk_16C[0].x != points->x) || (this->unk_16C[0].y != points->y) ||
                     (this->unk_16C[0].z != points->z)) {
                     func_80A6743C(this);
-                    func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp30 = false;
                 }
             }
@@ -405,10 +405,10 @@ void func_80A6743C(ObjDriftice* this) {
     this->actionFunc = func_80A67450;
 }
 
-void func_80A67450(ObjDriftice* this, GlobalContext* globalCtx) {
+void func_80A67450(ObjDriftice* this, PlayState* play) {
     if (this->unk_248 < 0) {
         func_80A66570(this, this->unk_164);
-        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
         func_80A671CC(this);
     }
 }
@@ -418,7 +418,7 @@ void func_80A674A8(ObjDriftice* this) {
     this->actionFunc = func_80A674C4;
 }
 
-void func_80A674C4(ObjDriftice* this, GlobalContext* globalCtx) {
+void func_80A674C4(ObjDriftice* this, PlayState* play) {
     this->unk_24C--;
     if (this->unk_24C <= 0) {
         this->dyna.actor.speedXZ = 0.0f;
@@ -426,7 +426,7 @@ void func_80A674C4(ObjDriftice* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjDriftice_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDriftice_Update(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
@@ -445,15 +445,15 @@ void ObjDriftice_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.actor.shape.rot.y += this->unk_244;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (OBJDRIFTICE_GET_ROT(&this->dyna.actor) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
         func_80A66E30(&this->unk_170, this);
     }
 }
 
-void ObjDriftice_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjDriftice_Draw(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
-    Gfx_DrawDListOpa(globalCtx, object_driftice_DL_0016A0);
+    Gfx_DrawDListOpa(play, object_driftice_DL_0016A0);
 }

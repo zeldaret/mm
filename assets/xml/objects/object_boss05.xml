@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_boss05" Segment="6">
-        <Animation Name="object_boss05_Anim_0006A4" Offset="0x6A4" />
-        <Animation Name="object_boss05_Anim_000A5C" Offset="0xA5C" />
+        <Animation Name="object_boss05_Anim_0006A4" Offset="0x6A4" /> <!-- Original name is "wdb_atackH" -->
+        <Animation Name="object_boss05_Anim_000A5C" Offset="0xA5C" /> <!-- Original name is "wdb_atackwalkH" -->
         <Animation Name="object_boss05_Anim_000ABC" Offset="0xABC" />
         <DList Name="object_boss05_DL_0011C0" Offset="0x11C0" />
         <DList Name="object_boss05_DL_001288" Offset="0x1288" />
@@ -24,10 +24,10 @@
         <Limb Name="object_boss05_Standardlimb_002498" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_07" Offset="0x2498" />
         <Limb Name="object_boss05_Standardlimb_0024A4" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_08" Offset="0x24A4" />
         <Limb Name="object_boss05_Standardlimb_0024B0" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_09" Offset="0x24B0" />
-        <Skeleton Name="object_boss05_Skel_0024E0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS05_1_LIMB_NONE" LimbMax="OBJECT_BOSS05_1_LIMB_MAX" EnumName="object_boss05_1_Limbs" Offset="0x24E0" />
-        <Animation Name="object_boss05_Anim_002F0C" Offset="0x2F0C" />
-        <Animation Name="object_boss05_Anim_003448" Offset="0x3448" />
-        <Animation Name="object_boss05_Anim_003500" Offset="0x3500" />
+        <Skeleton Name="object_boss05_Skel_0024E0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS05_1_LIMB_NONE" LimbMax="OBJECT_BOSS05_1_LIMB_MAX" EnumName="ObjectBoss051Limb" Offset="0x24E0" />
+        <Animation Name="object_boss05_Anim_002F0C" Offset="0x2F0C" /> <!-- Original name is "wdb_damageH" -->
+        <Animation Name="object_boss05_Anim_003448" Offset="0x3448" /> <!-- Original name is "wdb_hakkenH" ("detection") -->
+        <Animation Name="object_boss05_Anim_003500" Offset="0x3500" /> <!-- Original name is "wdb_head" -->
         <DList Name="object_boss05_DL_004620" Offset="0x4620" />
         <DList Name="object_boss05_DL_0046C8" Offset="0x46C8" />
         <DList Name="object_boss05_DL_004788" Offset="0x4788" />
@@ -72,10 +72,10 @@
         <Limb Name="object_boss05_Standardlimb_006308" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_11" Offset="0x6308" />
         <Limb Name="object_boss05_Standardlimb_006314" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_12" Offset="0x6314" />
         <Limb Name="object_boss05_Standardlimb_006320" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_13" Offset="0x6320" />
-        <Skeleton Name="object_boss05_Skel_006378" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS05_2_LIMB_NONE" LimbMax="OBJECT_BOSS05_2_LIMB_MAX" EnumName="object_boss05_2_Limbs" Offset="0x6378" />
-        <Animation Name="object_boss05_Anim_006484" Offset="0x6484" />
-        <Animation Name="object_boss05_Anim_006E50" Offset="0x6E50" />
-        <Animation Name="object_boss05_Anim_007488" Offset="0x7488" />
-        <Animation Name="object_boss05_Anim_007908" Offset="0x7908" />
+        <Skeleton Name="object_boss05_Skel_006378" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS05_2_LIMB_NONE" LimbMax="OBJECT_BOSS05_2_LIMB_MAX" EnumName="ObjectBoss052Limb" Offset="0x6378" />
+        <Animation Name="object_boss05_Anim_006484" Offset="0x6484" /> <!-- Original name is "wdb_pakupaku" ("repeatedly opening and closing (one's mouth)") -->
+        <Animation Name="object_boss05_Anim_006E50" Offset="0x6E50" /> <!-- Original name is "wdb_startH" -->
+        <Animation Name="object_boss05_Anim_007488" Offset="0x7488" /> <!-- Original name is "wdb_waitH" -->
+        <Animation Name="object_boss05_Anim_007908" Offset="0x7908" /> <!-- Original name is "wdb_walkH" -->
     </File>
 </Root>

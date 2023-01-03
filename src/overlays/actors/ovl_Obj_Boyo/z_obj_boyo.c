@@ -13,12 +13,12 @@
 
 #define THIS ((ObjBoyo*)thisx)
 
-void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2);
-void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2);
-void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjBoyo_Init(Actor* thisx, PlayState* play);
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play2);
+void ObjBoyo_Update(Actor* thisx, PlayState* play2);
+void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Boyo_InitVars = {
+ActorInit Obj_Boyo_InitVars = {
     ACTOR_OBJ_BOYO,
     ACTORCAT_PROP,
     FLAGS,
@@ -57,22 +57,22 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjBoyo_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoyo_Init(Actor* thisx, PlayState* play) {
     ObjBoyo* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_190 = Lib_SegmentedToVirtual(object_boyo_Matanimheader_000E88);
 }
 
-void ObjBoyo_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjBoyo* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
@@ -82,7 +82,7 @@ void ObjBoyo_UpdatePlayerBumpValues(ObjBoyo* this, Player* target) {
 
 void ObjBoyo_UpdatePirateBumpValues(ObjBoyo* src, EnKaizoku* target) {
     target->unk_2F0 = 30.0f;
-    target->unk_2F4 = Actor_YawBetweenActors(&src->actor, &target->actor);
+    target->unk_2F4 = Actor_YawBetweenActors(&src->actor, &target->picto.actor);
 }
 
 void ObjBoyo_UpdateBombBumpValues(ObjBoyo* src, EnBom* target) {
@@ -95,14 +95,14 @@ BumperCollideInfo sBumperCollideInfo[] = {
     { ACTOR_EN_BOM, (BumperCollideActorFunc)ObjBoyo_UpdateBombBumpValues },
 };
 
-Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* num) {
+Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, PlayState* play, s32* num) {
     Actor* collideActor;
     BumperCollideInfo* collideInfo;
     s32 i;
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *num = 0;
-        return &GET_PLAYER(globalCtx)->actor;
+        return &GET_PLAYER(play)->actor;
     }
 
     if (this->collider.base.ocFlags1 & OC2_UNK1) {
@@ -118,13 +118,13 @@ Actor* ObjBoyo_GetCollidedActor(ObjBoyo* this, GlobalContext* globalCtx, s32* nu
     return NULL;
 }
 
-void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjBoyo* this = THIS;
     Actor* target;
     s32 num;
 
-    target = ObjBoyo_GetCollidedActor(this, globalCtx, &num);
+    target = ObjBoyo_GetCollidedActor(this, play, &num);
 
     if (target != NULL) {
         sBumperCollideInfo[num].actorCollideFunc(this, (void*)target);
@@ -169,16 +169,16 @@ void ObjBoyo_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->collider.base.ocFlags1 &= ~OC1_HIT;
     this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     if (thisx->xzDistToPlayer < 2000.0f) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
-void ObjBoyo_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
     ObjBoyo* this = THIS;
 
-    AnimatedMat_Draw(globalCtx, this->unk_190);
-    Gfx_DrawDListOpa(globalCtx, object_boyo_DL_000300);
+    AnimatedMat_Draw(play, this->unk_190);
+    Gfx_DrawDListOpa(play, object_boyo_DL_000300);
 }

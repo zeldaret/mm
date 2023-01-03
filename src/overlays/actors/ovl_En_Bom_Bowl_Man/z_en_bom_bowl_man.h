@@ -5,7 +5,7 @@
 
 struct EnBomBowlMan;
 
-typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, GlobalContext*);
+typedef void (*EnBomBowlManActionFunc)(struct EnBomBowlMan*, PlayState*);
 
 #define ENBOMBOWLMAN_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMBOWLMAN_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
@@ -56,7 +56,5 @@ typedef struct EnBomBowlMan {
     /* 0x02F6 */ s16 unk_2F6;
     /* 0x02F8 */ s32 unk_2F8;
 } EnBomBowlMan; // size = 0x2FC
-
-extern const ActorInit En_Bom_Bowl_Man_InitVars;
 
 #endif // Z_EN_BOM_BOWL_MAN_H

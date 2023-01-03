@@ -11,20 +11,20 @@
 
 #define THIS ((EnMuto*)thisx)
 
-void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMuto_Init(Actor* thisx, PlayState* play);
+void EnMuto_Destroy(Actor* thisx, PlayState* play);
+void EnMuto_Update(Actor* thisx, PlayState* play2);
+void EnMuto_Draw(Actor* thisx, PlayState* play);
 
-void EnMuto_ChangeAnim(EnMuto* this, s32 arg1);
+void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex);
 void EnMuto_SetHeadRotation(EnMuto* this);
 void EnMuto_SetupIdle(EnMuto* this);
-void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx);
-void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx);
-void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx);
-s32 EnMuto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnMuto_Idle(EnMuto* this, PlayState* play);
+void EnMuto_SetupDialogue(EnMuto* this, PlayState* play);
+void EnMuto_InDialogue(EnMuto* this, PlayState* play);
+s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
-const ActorInit En_Muto_InitVars = {
+ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
     ACTORCAT_NPC,
     FLAGS,
@@ -58,45 +58,45 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
-void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMuto_Init(Actor* thisx, PlayState* play) {
     EnMuto* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50,
-                       this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50, this->jointTable,
+                       this->morphTable, 17);
 
     this->isInMayorsRoom = this->actor.params;
     if (!this->isInMayorsRoom) {
         this->shouldSetHeadRotation = true;
         this->textIdIndex = 2;
-        if (gSaveContext.save.weekEventReg[60] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_80)) {
             this->textIdIndex = 3;
         }
 
         if (gSaveContext.save.day != 3 || !gSaveContext.save.isNight) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
 
-        if (gSaveContext.save.weekEventReg[63] & 0x80 || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
-            Actor_MarkForDeath(&this->actor);
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80) || ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
+            Actor_Kill(&this->actor);
         }
     }
 
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     EnMuto_SetupIdle(this);
 }
 
-void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMuto_Destroy(Actor* thisx, PlayState* play) {
     EnMuto* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
@@ -129,14 +129,14 @@ void EnMuto_SetupIdle(EnMuto* this) {
     this->actionFunc = EnMuto_Idle;
 }
 
-void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
+void EnMuto_Idle(EnMuto* this, PlayState* play) {
     Player* player;
     this->actor.textId = sTextIds[this->textIdIndex];
 
     if (!this->isInMayorsRoom) {
-        player = GET_PLAYER(globalCtx);
+        player = GET_PLAYER(play);
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (!(gSaveContext.save.weekEventReg[88] & 8)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_08)) {
                 this->actor.textId = 0x62C;
             } else {
                 this->actor.textId = 0x62B;
@@ -146,12 +146,12 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
 
     if (1) {} // Needed to match
 
-    if (!this->isInMayorsRoom && Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
+    if (!this->isInMayorsRoom && Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
         this->actor.textId = 0x2363;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        EnMuto_SetupDialogue(this, globalCtx);
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        EnMuto_SetupDialogue(this, play);
         return;
     }
 
@@ -164,23 +164,23 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     } else {
         this->textIdIndex = 0;
-        if (gSaveContext.save.weekEventReg[60] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_08)) {
             this->textIdIndex = 1;
         }
-        if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLE) {
+        if (Player_GetMask(play) == PLAYER_MASK_COUPLE) {
             this->textIdIndex = 4;
         }
 
         if (this->cutsceneState == 1) {
-            EnMuto_SetupDialogue(this, globalCtx);
+            EnMuto_SetupDialogue(this, play);
             return;
         }
     }
 
-    func_800B8614(&this->actor, globalCtx, 80.0f);
+    func_800B8614(&this->actor, play, 80.0f);
 }
 
-void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
+void EnMuto_SetupDialogue(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = 0;
     }
@@ -188,24 +188,24 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (this->targetActor != NULL) {
         this->shouldSetHeadRotation = true;
         this->cutsceneState = 1;
-        Actor_ChangeFocus(this->targetActor, globalCtx, this->targetActor);
+        Actor_ChangeFocus(this->targetActor, play, this->targetActor);
     }
 
     this->isInDialogue = true;
     this->actionFunc = EnMuto_InDialogue;
 }
 
-void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
+void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
-            func_801477B4(globalCtx);
+        if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            func_801477B4(play);
 
             if (this->actor.textId == 0x62C) {
-                gSaveContext.save.weekEventReg[88] |= 8;
+                SET_WEEKEVENTREG(WEEKEVENTREG_88_08);
             }
             if (this->actor.textId == 0x624) {
-                gSaveContext.save.weekEventReg[60] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_60_80);
             }
 
             this->textIdIndex = 3;
@@ -229,13 +229,13 @@ void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (globalCtx->msgCtx.currentTextId == 0x2AC6 || globalCtx->msgCtx.currentTextId == 0x2AC7 ||
-        globalCtx->msgCtx.currentTextId == 0x2AC8) {
+    if (play->msgCtx.currentTextId == 0x2AC6 || play->msgCtx.currentTextId == 0x2AC7 ||
+        play->msgCtx.currentTextId == 0x2AC8) {
         this->skelAnime.playSpeed = 0.0f;
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         this->skelAnime.curFrame = 30.0f;
     }
-    if (globalCtx->msgCtx.currentTextId == 0x2ACF) {
+    if (play->msgCtx.currentTextId == 0x2ACF) {
         this->skelAnime.playSpeed = 0.0f;
     }
 
@@ -244,8 +244,8 @@ void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnMuto_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnMuto* this = THIS;
 
     SkelAnime_Update(&this->skelAnime);
@@ -255,11 +255,11 @@ void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->isInMayorsRoom && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     DECR(this->unusedCounter);
 
@@ -272,16 +272,15 @@ void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_SmoothStepToS(&this->headRot.x, this->headRotTarget.x, 1, 0x3E8, 0);
     Math_SmoothStepToS(&this->waistRot.y, this->waistRotTarget.y, 1, 0xBB8, 0);
 
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1DU);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 
     this->actor.uncullZoneForward = 500.0f;
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-s32 EnMuto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                            Actor* thisx) {
+s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnMuto* this = THIS;
 
     if (limbIndex == 1) {
@@ -296,10 +295,10 @@ s32 EnMuto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     return false;
 }
 
-void EnMuto_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnMuto_Draw(Actor* thisx, PlayState* play) {
     EnMuto* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMuto_OverrideLimbDraw, NULL, &this->actor);
 }

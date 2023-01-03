@@ -5,7 +5,7 @@
 
 struct EnHonotrap;
 
-typedef void (*EnHonotrapActionFunc)(struct EnHonotrap*, GlobalContext*);
+typedef void (*EnHonotrapActionFunc)(struct EnHonotrap*, PlayState*);
 
 typedef union {
     struct {
@@ -42,7 +42,5 @@ typedef struct EnHonotrap {
     /* 0x23C */ EnHonotrap23C unk23C;
     /* 0x2C0 */ s8 unk2C0;
 } EnHonotrap; // size = 0x2C4
-
-extern const ActorInit En_Honotrap_InitVars;
 
 #endif // Z_EN_HONOTRAP_H

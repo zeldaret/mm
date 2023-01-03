@@ -30,7 +30,7 @@
         <Limb Name="gCowNoseRingLimb" Type="Standard" EnumName="COW_LIMB_NOSE_RING" Offset="0x3FF0" />
 
         <!-- Cow Skeleton -->
-        <Skeleton Name="gCowSkel" Type="Flex" LimbType="Standard" LimbNone="COW_LIMB_NONE" LimbMax="COW_LIMB_MAX" EnumName="CowLimbs" Offset="0x4010" />
+        <Skeleton Name="gCowSkel" Type="Flex" LimbType="Standard" LimbNone="COW_LIMB_NONE" LimbMax="COW_LIMB_MAX" EnumName="CowLimb" Offset="0x4010" />
 
         <Animation Name="gCowMooAnim" Offset="0x4264" /> <!-- Original name is "usi_mooo" -->
         <Animation Name="gCowTailIdleAnim" Offset="0x4348" /> <!-- Original name is "ust_daran" ("loosely") -->
@@ -50,7 +50,7 @@
         <Limb Name="gCowTailEndLimb" Type="Standard" EnumName="COW_TAIL_LIMB_END" Offset="0x4C10" />
 
         <!-- Cow Tail Skeleton -->
-        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" LimbNone="COW_TAIL_LIMB_NONE" LimbMax="COW_TAIL_LIMB_MAX" EnumName="CowTailLimbs"Offset="0x4C30" />
+        <Skeleton Name="gCowTailSkel" Type="Flex" LimbType="Standard" LimbNone="COW_TAIL_LIMB_NONE" LimbMax="COW_TAIL_LIMB_MAX" EnumName="CowTailLimb" Offset="0x4C30" />
 
         <Animation Name="gCowTailSwishAnim" Offset="0x4E98" /> <!-- Original name is "ust_furifuri" ("fluttery") -->
     </File>

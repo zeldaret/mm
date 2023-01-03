@@ -43,7 +43,7 @@
         <Limb Name="gEenoBodyBottomLimb" Type="Standard" EnumName="EENO_LIMB_BODY_BOTTOM" Offset="0x4568" />
 
         <!-- Eeno Skeleton -->
-        <Skeleton Name="gEenoSkel" Type="Flex" LimbType="Standard" LimbNone="EENO_LIMB_NONE" LimbMax="EENO_LIMB_MAX" EnumName="EenoLimbs" Offset="0x45A0" />
+        <Skeleton Name="gEenoSkel" Type="Flex" LimbType="Standard" LimbNone="EENO_LIMB_NONE" LimbMax="EENO_LIMB_MAX" EnumName="EenoLimb" Offset="0x45A0" />
 
         <!-- Eeno Animations -->
         <Animation Name="gEenoDamageAnim" Offset="0x4628" /> <!-- Original name is "sm_damege" -->
@@ -58,7 +58,7 @@
         <Limb Name="gEenoSnowPileTopLimb" Type="Standard" EnumName="EENO_SNOW_PILE_LIMB_TOP" Offset="0x4A7C" />
 
         <!-- Eeno Snow Pile Skeleton -->
-        <Skeleton Name="gEenoSnowPileSkel" Type="Flex" LimbType="Standard" LimbNone="EENO_SNOW_PILE_LIMB_NONE" LimbMax="EENO_SNOW_PILE_LIMB_MAX" EnumName="EenoSnowPileLimbs" Offset="0x4A90" />
+        <Skeleton Name="gEenoSnowPileSkel" Type="Flex" LimbType="Standard" LimbNone="EENO_SNOW_PILE_LIMB_NONE" LimbMax="EENO_SNOW_PILE_LIMB_MAX" EnumName="EenoSnowPileLimb" Offset="0x4A90" />
         
         <!-- Eeno Animations -->
         <Animation Name="gEenoLargeSnowballThrowAnim" Offset="0x4F14" /> <!-- Original name is "sm_nageA" ("throw A") -->

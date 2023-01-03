@@ -11,17 +11,17 @@
 
 #define THIS ((EnMs*)thisx)
 
-void EnMs_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnMs_Init(Actor* thisx, PlayState* play);
+void EnMs_Destroy(Actor* thisx, PlayState* play);
+void EnMs_Update(Actor* thisx, PlayState* play);
+void EnMs_Draw(Actor* thisx, PlayState* play);
 
-void EnMs_Wait(EnMs* this, GlobalContext* globalCtx);
-void EnMs_Talk(EnMs* this, GlobalContext* globalCtx);
-void EnMs_Sell(EnMs* this, GlobalContext* globalCtx);
-void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx);
+void EnMs_Wait(EnMs* this, PlayState* play);
+void EnMs_Talk(EnMs* this, PlayState* play);
+void EnMs_Sell(EnMs* this, PlayState* play);
+void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play);
 
-const ActorInit En_Ms_InitVars = {
+ActorInit En_Ms_InitVars = {
     ACTOR_EN_MS,
     ACTORCAT_NPC,
     FLAGS,
@@ -57,14 +57,14 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
-void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Init(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ms_Skel_003DC0, &object_ms_Anim_0005EC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ms_Skel_003DC0, &object_ms_Anim_0005EC, this->jointTable,
                        this->morphTable, 9);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Actor_SetScale(&this->actor, 0.015f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE; // Eating Magic Beans all day will do that to you
@@ -74,13 +74,13 @@ void EnMs_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
 }
 
-void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Destroy(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
+void EnMs_Wait(EnMs* this, PlayState* play) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (gSaveContext.save.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
@@ -89,45 +89,45 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnMs_Talk;
     } else if ((this->actor.xzDistToPlayer < 90.0f) && (ABS_ALT(yawDiff) < 0x2000)) {
-        func_800B8614(&this->actor, globalCtx, 90.0f);
+        func_800B8614(&this->actor, play, 90.0f);
     }
 }
 
-void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
-    switch (Message_GetState(&globalCtx->msgCtx)) {
-        case 6:
-            if (Message_ShouldAdvance(globalCtx)) {
+void EnMs_Talk(EnMs* this, PlayState* play) {
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_DONE:
+            if (Message_ShouldAdvance(play)) {
                 this->actionFunc = EnMs_Wait;
             }
             break;
 
-        case 5:
-            if (Message_ShouldAdvance(globalCtx)) {
-                func_801477B4(globalCtx);
-                Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                func_801477B4(play);
+                Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
                              this->actor.playerHeightRel);
                 this->actionFunc = EnMs_Sell;
             }
             break;
 
-        case 4:
-            if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.choiceIndex) {
+        case TEXT_STATE_CHOICE:
+            if (Message_ShouldAdvance(play)) {
+                switch (play->msgCtx.choiceIndex) {
                     case 0: // yes
-                        func_801477B4(globalCtx);
+                        func_801477B4(play);
                         if (gSaveContext.save.playerData.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
-                            func_80151938(globalCtx, 0x935); // "[...] You don't have enough Rupees."
+                            func_80151938(play, 0x935); // "[...] You don't have enough Rupees."
                         } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
                             play_sound(NA_SE_SY_ERROR);
-                            func_80151938(globalCtx, 0x937); // "[...] You can't carry anymore."
+                            func_80151938(play, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
-                            Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, 90.0f, 10.0f);
-                            func_801159EC(-10);
+                            Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, 90.0f, 10.0f);
+                            Rupees_ChangeBy(-10);
                             this->actionFunc = EnMs_Sell;
                         }
                         break;
@@ -135,36 +135,37 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
                     case 1: // no
                     default:
                         func_8019F230();
-                        func_80151938(globalCtx, 0x934); // "[...] Well, if your mood changes [...]"
+                        func_80151938(play, 0x934); // "[...] Well, if your mood changes [...]"
                         break;
                 }
             }
             break;
+
         default:
             break;
     }
 }
 
-void EnMs_Sell(EnMs* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void EnMs_Sell(EnMs* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
         this->actionFunc = EnMs_TalkAfterPurchase;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_PickUp(&this->actor, play, GI_MAGIC_BEANS, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     }
 }
 
-void EnMs_TalkAfterPurchase(EnMs* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_80151938(globalCtx, 0x936); // "You can plant 'em whenever you want [...]"
+void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        func_80151938(play, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
-        func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, -1);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_MINUS1);
     }
 }
 
-void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnMs* this = THIS;
 
@@ -172,15 +173,15 @@ void EnMs_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetArrowOffset = 500.0f;
     Actor_SetScale(&this->actor, 0.015f);
     SkelAnime_Update(&this->skelAnime);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void EnMs_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnMs_Draw(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          NULL, NULL, &this->actor);
+    func_8012C28C(play->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, &this->actor);
 }

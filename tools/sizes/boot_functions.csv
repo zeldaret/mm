@@ -134,7 +134,7 @@ asm/non_matchings/boot/stackcheck/StackCheck_Cleanup.s,StackCheck_Cleanup,0x8008
 asm/non_matchings/boot/stackcheck/StackCheck_GetState.s,StackCheck_GetState,0x80085468,0x1E
 asm/non_matchings/boot/stackcheck/StackCheck_CheckAll.s,StackCheck_CheckAll,0x800854E0,0x16
 asm/non_matchings/boot/stackcheck/StackCheck_Check.s,StackCheck_Check,0x80085538,0xE
-asm/non_matchings/boot/gfxprint/GfxPrint_InitDlist.s,GfxPrint_InitDlist,0x80085570,0x113
+asm/non_matchings/boot/gfxprint/GfxPrint_Setup.s,GfxPrint_Setup,0x80085570,0x113
 asm/non_matchings/boot/gfxprint/GfxPrint_SetColor.s,GfxPrint_SetColor,0x800859BC,0x13
 asm/non_matchings/boot/gfxprint/GfxPrint_SetPosPx.s,GfxPrint_SetPosPx,0x80085A08,0x9
 asm/non_matchings/boot/gfxprint/GfxPrint_SetPos.s,GfxPrint_SetPos,0x80085A2C,0xA

@@ -11,14 +11,14 @@
 #define THIS ((TGSw*)thisx)
 
 // Prototypes
-void TGSw_Init(Actor* thisx, GlobalContext* globalCtx);
-void TGSw_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void TGSw_Update(Actor* thisx, GlobalContext* globalCtx);
-void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx);
+void TGSw_Init(Actor* thisx, PlayState* play);
+void TGSw_Destroy(Actor* thisx, PlayState* play);
+void TGSw_Update(Actor* thisx, PlayState* play);
+void TGSw_Draw(Actor* thisx, PlayState* play);
 
-void TGSw_ActionExecuteOneShot(struct TGSw* this, GlobalContext* globalCtx);
+void TGSw_ActionExecuteOneShot(struct TGSw* this, PlayState* play);
 
-const ActorInit TG_Sw_InitVars = {
+ActorInit TG_Sw_InitVars = {
     ACTOR_TG_SW,
     ACTORCAT_PROP,
     FLAGS,
@@ -30,33 +30,33 @@ const ActorInit TG_Sw_InitVars = {
     (ActorFunc)TGSw_Draw,
 };
 
-void TGSw_ActionDecider(TGSw* this, GlobalContext* globalCtx) {
+void TGSw_ActionDecider(TGSw* this, PlayState* play) {
     f32 scaledAbsoluteRotZ;
     f32 scaledAbsoluteRotY;
     u8 unk1F4;
 
     // Maybe actorCtx Debug Flag?
-    if (globalCtx->actorCtx.unk1F5 != 0) {
+    if (play->actorCtx.unk1F5 != 0) {
         scaledAbsoluteRotY = ABS_ALT(this->actor.world.rot.y) * 4.0f;
         scaledAbsoluteRotZ = ABS_ALT(this->actor.world.rot.z) * 4.0f;
 
         if ((scaledAbsoluteRotZ < this->actor.xzDistToPlayer) || (scaledAbsoluteRotY < this->actor.playerHeightRel)) {
             return;
         }
-        unk1F4 = globalCtx->actorCtx.unk1F4;
+        unk1F4 = play->actorCtx.unk1F4;
         if (unk1F4 == 2 || unk1F4 == 0) {
-            this->actionFunc = &TGSw_ActionExecuteOneShot;
+            this->actionFunc = TGSw_ActionExecuteOneShot;
         }
     }
 }
 
-void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
+void TGSw_ActionExecuteOneShot(TGSw* this, PlayState* play) {
     Actor* actor = NULL;
 
     if (1) {}
 
     do {
-        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
+        actor = SubS_FindActor(play, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
         if (actor == NULL) {
             break;
         }
@@ -71,7 +71,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
     actor = NULL;
 
     do {
-        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_SW);
+        actor = SubS_FindActor(play, actor, ACTORCAT_NPC, ACTOR_EN_SW);
 
         if (actor == NULL) {
             break;
@@ -84,25 +84,26 @@ void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
         actor = actor->next;
     } while (actor != NULL);
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
-void TGSw_Init(Actor* thisx, GlobalContext* globalCtx) {
+void TGSw_Init(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
+
     this->actor.cutscene = this->actor.world.rot.z;
-    this->actionFunc = &TGSw_ActionDecider;
+    this->actionFunc = TGSw_ActionDecider;
 }
 
-void TGSw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    ;
+void TGSw_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void TGSw_Update(Actor* thisx, GlobalContext* globalCtx) {
+void TGSw_Update(Actor* thisx, PlayState* play) {
     TGSw* this = THIS;
-    this->actionFunc(this, globalCtx);
+
+    this->actionFunc(this, play);
 }
 
-void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void TGSw_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     f32 scale;
     s32 absRot;
@@ -113,11 +114,11 @@ void TGSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
         absRot = ABS_ALT(thisx->world.rot.y);
 
         DebugDisplay_AddObject(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0, thisx->shape.rot.y, 0,
-                               0.1f, 0.1f, scale, 160, 160, 160, 255, 6, globalCtx->state.gfxCtx);
+                               0.1f, 0.1f, scale, 160, 160, 160, 255, 6, play->state.gfxCtx);
 
         scale = absRot * 0.2f;
         DebugDisplay_AddObject(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0, 0.1f, scale, 0.1f,
-                               160, 160, 160, 255, 6, globalCtx->state.gfxCtx);
+                               160, 160, 160, 255, 6, play->state.gfxCtx);
         thisx->shape.rot.y += 0x1000;
     }
 }

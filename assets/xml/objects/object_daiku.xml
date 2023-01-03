@@ -65,7 +65,7 @@
         <Limb Name="object_daiku_Standardlimb_00A7EC" Type="Standard" EnumName="OBJECT_DAIKU_LIMB_0E" Offset="0xA7EC" />
         <Limb Name="object_daiku_Standardlimb_00A7F8" Type="Standard" EnumName="OBJECT_DAIKU_LIMB_0F" Offset="0xA7F8" />
         <Limb Name="object_daiku_Standardlimb_00A804" Type="Standard" EnumName="OBJECT_DAIKU_LIMB_10" Offset="0xA804" />
-        <Skeleton Name="object_daiku_Skel_00A850" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DAIKU_LIMB_NONE" LimbMax="OBJECT_DAIKU_LIMB_MAX" EnumName="object_daiku_Limbs" Offset="0xA850" />
+        <Skeleton Name="object_daiku_Skel_00A850" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DAIKU_LIMB_NONE" LimbMax="OBJECT_DAIKU_LIMB_MAX" EnumName="ObjectDaikuLimb" Offset="0xA850" />
         <Animation Name="object_daiku_Anim_00ACD0" Offset="0xACD0" />
         <Animation Name="object_daiku_Anim_00B690" Offset="0xB690" />
         <Animation Name="object_daiku_Anim_00BEAC" Offset="0xBEAC" />

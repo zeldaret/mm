@@ -18,13 +18,13 @@
 
 #define THIS ((BgSinkaiKabe*)thisx)
 
-void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx);
-void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx);
+void BgSinkaiKabe_Init(Actor* thisx, PlayState* play);
+void BgSinkaiKabe_Destroy(Actor* thisx, PlayState* play);
+void BgSinkaiKabe_Update(Actor* thisx, PlayState* play);
 
-void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, GlobalContext* globalCtx);
+void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play);
 
-const ActorInit Bg_Sinkai_Kabe_InitVars = {
+ActorInit Bg_Sinkai_Kabe_InitVars = {
     ACTOR_BG_SINKAI_KABE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -38,7 +38,7 @@ const ActorInit Bg_Sinkai_Kabe_InitVars = {
 
 static s32 sCurrentPythonIndex = 0;
 
-void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
+void BgSinkaiKabe_Init(Actor* thisx, PlayState* play) {
     BgSinkaiKabe* this = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
@@ -50,7 +50,7 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&gPinnacleRockPythonDenCol, &colHeader);
-    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Math_Vec3f_Copy(&pos, &this->dyna.actor.world.pos);
     pos.x += Math_SinS(this->dyna.actor.world.rot.y + 0x8000) * 3000.0f;
     pos.z += Math_CosS(this->dyna.actor.world.rot.y + 0x8000) * 3000.0f;
@@ -67,10 +67,9 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->pythonIndex = sCurrentPythonIndex;
     sCurrentPythonIndex++;
 
-    if (!(gSaveContext.save.weekEventReg[13] & 1)) {
-        this->deepPython =
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_DRAGON, pos.x, pos.y, pos.z,
-                               0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_13_01)) {
+        this->deepPython = Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_EN_DRAGON, pos.x, pos.y,
+                                              pos.z, 0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
         if (this->deepPython != NULL) {
             EnDragon* dragon = (EnDragon*)this->deepPython;
@@ -83,14 +82,14 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     } else {
         shouldSpawnSeahorse = false;
-        if (((this->dyna.actor.params == 0) && (gSaveContext.save.weekEventReg[83] & 0x10)) ||
-            ((this->dyna.actor.params == 1) && (gSaveContext.save.weekEventReg[83] & 0x20)) ||
-            ((this->dyna.actor.params == 2) && (gSaveContext.save.weekEventReg[83] & 0x40)) ||
-            ((this->dyna.actor.params == 3) && (gSaveContext.save.weekEventReg[83] & 0x80)) ||
-            ((this->dyna.actor.params == 4) && (gSaveContext.save.weekEventReg[84] & 1)) ||
-            ((this->dyna.actor.params == 5) && (gSaveContext.save.weekEventReg[84] & 2)) ||
-            ((this->dyna.actor.params == 6) && (gSaveContext.save.weekEventReg[84] & 4)) ||
-            ((this->dyna.actor.params == 7) && (gSaveContext.save.weekEventReg[84] & 8))) {
+        if (((this->dyna.actor.params == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_10)) ||
+            ((this->dyna.actor.params == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_20)) ||
+            ((this->dyna.actor.params == 2) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_40)) ||
+            ((this->dyna.actor.params == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_80)) ||
+            ((this->dyna.actor.params == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_01)) ||
+            ((this->dyna.actor.params == 5) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_02)) ||
+            ((this->dyna.actor.params == 6) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_04)) ||
+            ((this->dyna.actor.params == 7) && CHECK_WEEKEVENTREG(WEEKEVENTREG_84_08))) {
             shouldSpawnSeahorse = true;
         }
 
@@ -99,33 +98,33 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
         pos.y += -100.0f;
         pos.z += (Math_CosS(this->dyna.actor.world.rot.y + 0x8000) * 500.0f);
         if (shouldSpawnSeahorse) {
-            Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, pos.x, pos.y, pos.z, 0,
+            Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, pos.x, pos.y, pos.z, 0,
                                           this->dyna.actor.shape.rot.y, 0, 0x4000, this->dyna.actor.cutscene,
                                           this->dyna.actor.unk20, NULL);
         }
 
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 
     this->actionFunc = BgSinkaiKabe_WaitForPlayer;
 }
 
-void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void BgSinkaiKabe_Destroy(Actor* thisx, PlayState* play) {
     BgSinkaiKabe* this = THIS;
 
-    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
 /**
  * Extends this actor's Deep Python if the player gets close enough.
  */
-void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, GlobalContext* globalCtx) {
+void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, PlayState* play) {
     if (this->deepPython != NULL) {
         if (this->deepPython->update != NULL) {
             EnDragon* dragon = (EnDragon*)this->deepPython;
 
             if (dragon->action == DEEP_PYTHON_ACTION_IDLE) {
-                Player* player = GET_PLAYER(globalCtx);
+                Player* player = GET_PLAYER(play);
 
                 if ((this->dyna.actor.xzDistToPlayer < 500.0f) ||
                     ((ABS_ALT(BINANG_SUB(this->dyna.actor.yawTowardsPlayer, this->dyna.actor.world.rot.y)) < 0x2000) &&
@@ -141,12 +140,12 @@ void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, GlobalContext* globalCtx) {
     }
 
     if (this->deepPython == NULL) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
-void BgSinkaiKabe_Update(Actor* thisx, GlobalContext* globalCtx) {
+void BgSinkaiKabe_Update(Actor* thisx, PlayState* play) {
     BgSinkaiKabe* this = THIS;
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }

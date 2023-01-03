@@ -10,15 +10,15 @@
 
 #define THIS ((EnSnowwd*)thisx)
 
-void EnSnowwd_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnSnowwd_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnSnowwd_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnSnowwd_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSnowwd_Init(Actor* thisx, PlayState* play);
+void EnSnowwd_Destroy(Actor* thisx, PlayState* play);
+void EnSnowwd_Update(Actor* thisx, PlayState* play);
+void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 
-void func_80AF76F0(EnSnowwd* this, GlobalContext* globalCtx);
+void func_80AF76F0(EnSnowwd* this, PlayState* play);
 
 #if 0
-const ActorInit En_Snowwd_InitVars = {
+ActorInit En_Snowwd_InitVars = {
     ACTOR_EN_SNOWWD,
     ACTORCAT_PROP,
     FLAGS,

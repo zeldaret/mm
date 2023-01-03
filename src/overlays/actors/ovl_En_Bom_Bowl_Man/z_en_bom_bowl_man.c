@@ -11,33 +11,33 @@
 
 #define THIS ((EnBomBowlMan*)thisx)
 
-void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnBomBowlMan_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnBomBowlMan_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnBomBowlMan_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnBomBowlMan_Init(Actor* thisx, PlayState* play);
+void EnBomBowlMan_Destroy(Actor* thisx, PlayState* play);
+void EnBomBowlMan_Update(Actor* thisx, PlayState* play);
+void EnBomBowlMan_Draw(Actor* thisx, PlayState* play);
 
-void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C51B4(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C4BC4(EnBomBowlMan* this, PlayState* play);
+void func_809C4DA4(EnBomBowlMan* this, PlayState* play);
+void func_809C51B4(EnBomBowlMan* this, PlayState* play);
 void func_809C52B4(EnBomBowlMan* this);
-void func_809C5310(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5310(EnBomBowlMan* this, PlayState* play);
 void func_809C53A4(EnBomBowlMan* this);
-void func_809C5408(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C5598(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C59A4(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C59F0(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C5AA4(EnBomBowlMan* this, GlobalContext* globalCtx);
-void func_809C5B1C(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5408(EnBomBowlMan* this, PlayState* play);
+void func_809C5524(EnBomBowlMan* this, PlayState* play);
+void func_809C5598(EnBomBowlMan* this, PlayState* play);
+void func_809C5738(EnBomBowlMan* this, PlayState* play);
+void func_809C59A4(EnBomBowlMan* this, PlayState* play);
+void func_809C59F0(EnBomBowlMan* this, PlayState* play);
+void func_809C5AA4(EnBomBowlMan* this, PlayState* play);
+void func_809C5B1C(EnBomBowlMan* this, PlayState* play);
 void func_809C5BA0(EnBomBowlMan* this);
-void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx);
+void func_809C5BF4(EnBomBowlMan* this, PlayState* play);
 
 s32 D_809C6100 = 0;
 
 s32 D_809C6104 = 0;
 
-const ActorInit En_Bom_Bowl_Man_InitVars = {
+ActorInit En_Bom_Bowl_Man_InitVars = {
     ACTOR_EN_BOM_BOWL_MAN,
     ACTORCAT_NPC,
     FLAGS,
@@ -70,13 +70,13 @@ Vec3f D_809C61A0[] = {
     { -610.0f, 200.0f, -2350.0f }, { -570.0f, 200.0f, -2350.0f },
 };
 
-void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
     EnBomBowlMan* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphTable, 21);
     this->unk_2F6 = ENBOMBOWLMAN_GET_F0(&this->actor);
     this->unk_2F4 = ENBOMBOWLMAN_GET_F(&this->actor);
@@ -85,7 +85,7 @@ void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
         if (this->unk_2F4 == 0) {
-            func_809C4BC4(this, globalCtx);
+            func_809C4BC4(this, play);
         } else {
             this->unk_2F4--;
             func_809C5BA0(this);
@@ -94,22 +94,22 @@ void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = SubS_GetPathByIndex(globalCtx, this->unk_29A, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
-    if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
-        !CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
+    if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
+        !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         func_809C52B4(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
-void EnBomBowlMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnBomBowlMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_809C493C(EnBomBowlMan* this, s32 arg1, f32 arg2) {
@@ -158,12 +158,12 @@ void func_809C4B50(EnBomBowlMan* this) {
 void func_809C4B6C(EnBomBowlMan* this) {
     if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
 
-void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C4BC4(EnBomBowlMan* this, PlayState* play) {
     s32 pad;
     s32 i;
     Vec3f sp7C;
@@ -181,9 +181,8 @@ void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx) {
             this->unk_2D8[code] = this;
         } else {
             Math_Vec3f_Copy(&sp7C, &D_809C61A0[i]);
-            bomBowlMan =
-                (EnBomBowlMan*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_BOM_BOWL_MAN,
-                                                  sp7C.x, sp7C.y, sp7C.z, 0, this->actor.world.rot.y, 0, code);
+            bomBowlMan = (EnBomBowlMan*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_BOM_BOWL_MAN,
+                                                           sp7C.x, sp7C.y, sp7C.z, 0, this->actor.world.rot.y, 0, code);
             if (bomBowlMan != NULL) {
                 if (i == 2) {
                     this->unk_2D8[0] = bomBowlMan;
@@ -203,17 +202,17 @@ void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx) {
     func_809C493C(this, 3, 1.0f);
     this->unk_2D4 = this->actor.yawTowardsPlayer;
     this->unk_290 = this->actor.yawTowardsPlayer;
-    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
-    gSaveContext.save.weekEventReg[85] &= (u8)~2;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_73_10);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_02);
     this->unk_29C = 0;
     this->actionFunc = func_809C4DA4;
 }
 
-void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
     Math_SmoothStepToS(&this->unk_290, this->unk_2D4, 1, 5000, 0);
 
     if (this->unk_2B8 == 0) {
-        Player* player = GET_PLAYER(globalCtx);
+        Player* player = GET_PLAYER(play);
 
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -232,24 +231,24 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         this->unk_2D4 = this->actor.yawTowardsPlayer;
         this->unk_290 = this->actor.yawTowardsPlayer;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            Message_StartTextbox(globalCtx, D_809C618C[0], &this->actor);
+            Message_StartTextbox(play, D_809C618C[0], &this->actor);
         } else {
-            Message_StartTextbox(globalCtx, D_809C6198[0], &this->actor);
+            Message_StartTextbox(play, D_809C6198[0], &this->actor);
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        Player* player = GET_PLAYER(globalCtx);
+    if ((this->unk_2BC == 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        Player* player = GET_PLAYER(play);
         s32 pad;
         s32 sp28 = false;
 
-        func_801477B4(globalCtx);
+        func_801477B4(play);
 
         switch (this->unk_2C0) {
             case 0:
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
-                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
+                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D0)),
                                       &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
@@ -261,7 +260,7 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 func_809C493C(this, 3, 1.0f);
                 this->unk_2D4 = this->actor.yawTowardsPlayer;
                 this->unk_2C0 = 2;
-                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
+                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     this->unk_2C0 = 4;
                 }
                 break;
@@ -270,11 +269,11 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2B8 = 2;
                     ActorCutscene_Stop(this->unk_2D0);
-                    func_809C59A4(this, globalCtx);
+                    func_809C59A4(this, play);
                     sp28 = true;
                 } else {
                     this->unk_2C0 = 3;
-                    globalCtx->msgCtx.unk11F10 = 0;
+                    play->msgCtx.msgLength = 0;
                     func_809C493C(this, 1, 1.0f);
                     D_809C6100 = 1;
                     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -302,7 +301,7 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 if (this->unk_2B8 != 2) {
                     ActorCutscene_Stop(this->unk_2D0);
                 }
-                globalCtx->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 func_809C493C(this, 1, 1.0f);
                 D_809C6100 = 1;
                 this->actionFunc = func_809C5B1C;
@@ -310,9 +309,9 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 break;
 
             case 5:
-                func_80151BB4(globalCtx, 0x24);
-                func_80151BB4(globalCtx, 0x25);
-                func_80151BB4(globalCtx, 0);
+                func_80151BB4(play, 0x24);
+                func_80151BB4(play, 0x25);
+                func_80151BB4(play, 0);
                 this->actionFunc = func_809C51B4;
                 sp28 = true;
                 break;
@@ -320,31 +319,31 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
 
         if (!sp28) {
             if (player->transformation == PLAYER_FORM_HUMAN) {
-                func_80151938(globalCtx, D_809C618C[this->unk_2C0]);
+                func_80151938(play, D_809C618C[this->unk_2C0]);
             } else {
-                func_80151938(globalCtx, D_809C6198[this->unk_2C0]);
+                func_80151938(play, D_809C6198[this->unk_2C0]);
             }
         }
     }
 }
 
-void func_809C51B4(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-    if ((globalCtx->msgCtx.unk120B1 == 0) &&
-        ((globalCtx->msgCtx.msgMode == 0) || (Message_GetState(&globalCtx->msgCtx) == 6))) {
-        globalCtx->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
+    if ((play->msgCtx.unk120B1 == 0) &&
+        ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
+        play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
-        globalCtx->sceneLoadFlag = 0x14;
-        globalCtx->unk_1887F = 0x56;
-        gSaveContext.nextTransition = 3;
-        gSaveContext.save.weekEventReg[75] &= (u8)~0x40;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_86;
+        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_75_40);
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            gSaveContext.save.weekEventReg[84] |= 0x80;
-            gSaveContext.save.weekEventReg[77] &= (u8)~2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_77_02);
         } else {
-            gSaveContext.save.weekEventReg[73] |= 0x20;
-            gSaveContext.save.weekEventReg[85] &= (u8)~1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_73_20);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_85_01);
         }
     }
 }
@@ -360,17 +359,17 @@ void func_809C52B4(EnBomBowlMan* this) {
     this->actionFunc = func_809C5310;
 }
 
-void func_809C5310(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+void func_809C5310(EnBomBowlMan* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (player->actor.world.pos.x < 1510.0f) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             if (this->actor.xzDistToPlayer < this->unk_2C8) {
-                func_800B7298(globalCtx, &this->actor, 7);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
                 func_809C53A4(this);
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -384,9 +383,9 @@ void func_809C53A4(EnBomBowlMan* this) {
     this->actionFunc = func_809C5408;
 }
 
-void func_809C5408(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C5408(EnBomBowlMan* this, PlayState* play) {
     s32 pad[2];
-    Player* player = GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(play);
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &player->actor.world.pos), 1,
                        0x1388, 0);
@@ -396,23 +395,23 @@ void func_809C5408(EnBomBowlMan* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.world.pos.x, 1350.0f, 0.3f, 2.0f);
     Math_ApproachF(&this->actor.world.pos.z, -1800.0f, 0.3f, 2.0f);
     if (sqrtf(SQ(this->actor.world.pos.x - 1350.0f) + SQ(this->actor.world.pos.z + 1800.0f)) < 4.0f) {
-        func_809C5524(this, globalCtx);
+        func_809C5524(this, play);
     }
 }
 
-void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C5524(EnBomBowlMan* this, PlayState* play) {
     this->actor.textId = 0x730;
-    if (!(gSaveContext.save.weekEventReg[85] & 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);
-    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
+    Message_StartTextbox(play, this->actor.textId, &this->actor);
     this->actionFunc = func_809C5598;
 }
 
-void func_809C5598(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        func_801477B4(globalCtx);
+void func_809C5598(EnBomBowlMan* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+        func_801477B4(play);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;
         } else if (this->actor.textId == 0x731) {
@@ -424,33 +423,33 @@ void func_809C5598(EnBomBowlMan* this, GlobalContext* globalCtx) {
         } else if (this->actor.textId == 0x734) {
             this->actor.textId = 0x715;
         } else if (this->actor.textId == 0x715) {
-            func_800B7298(globalCtx, &this->actor, 6);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
             func_809C493C(this, 17, 1.0f);
-            func_809C59A4(this, globalCtx);
+            func_809C59A4(this, play);
             return;
         } else if (this->actor.textId == 0x716) {
             this->actor.textId = 0x735;
         } else if (this->actor.textId == 0x735) {
             this->unk_2C2 = 0;
             func_809C493C(this, 17, 1.0f);
-            func_80151BB4(globalCtx, 0x24);
-            func_80151BB4(globalCtx, 0x25);
-            func_80151BB4(globalCtx, 0);
-            func_800B7298(globalCtx, &this->actor, 7);
+            func_80151BB4(play, 0x24);
+            func_80151BB4(play, 0x25);
+            func_80151BB4(play, 0);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
             this->actionFunc = func_809C5738;
             return;
         }
-        func_80151938(globalCtx, this->actor.textId);
+        func_80151938(play, this->actor.textId);
     }
 }
 
-void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s32 pad[3];
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((globalCtx->msgCtx.unk120B1 == 0) &&
-            ((globalCtx->msgCtx.msgMode == 0) || (Message_GetState(&globalCtx->msgCtx) == 6))) {
+        if ((play->msgCtx.unk120B1 == 0) &&
+            ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -484,25 +483,26 @@ void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx) {
             (this->path != NULL)) {
             this->unk_298++;
             if (this->unk_298 >= this->path->count) {
-                gSaveContext.save.weekEventReg[84] |= 0x80;
-                gSaveContext.save.weekEventReg[83] &= (u8)~4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
                 ActorCutscene_Stop(this->unk_2D6);
-                Actor_MarkForDeath(&this->actor);
-            } else {
-                func_809C4B6C(this);
+                Actor_Kill(&this->actor);
+                return;
             }
+
+            func_809C4B6C(this);
         }
     }
 }
 
-void func_809C59A4(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    Actor_PickUp(&this->actor, globalCtx, GI_50, 300.0f, 300.0f);
+void func_809C59A4(EnBomBowlMan* this, PlayState* play) {
+    Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     this->unk_29C = 1;
     this->actionFunc = func_809C59F0;
 }
 
-void func_809C59F0(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    if (Actor_HasParent(&this->actor, globalCtx)) {
+void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
+    if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
             this->unk_2C0 = 3;
@@ -510,26 +510,26 @@ void func_809C59F0(EnBomBowlMan* this, GlobalContext* globalCtx) {
         } else {
             this->actor.textId = 0x716;
         }
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->actionFunc = func_809C5AA4;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, GI_50, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
     }
 }
 
-void func_809C5AA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {
             this->actionFunc = func_809C4DA4;
         } else {
             this->actionFunc = func_809C5598;
         }
     } else {
-        func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
+        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
-void func_809C5B1C(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C5B1C(EnBomBowlMan* this, PlayState* play) {
     if (ActorCutscene_GetCurrentIndex() == 0x7C) {
         ActorCutscene_Stop(0x7C);
         ActorCutscene_SetIntentToPlay(this->unk_2D2);
@@ -551,9 +551,9 @@ void func_809C5BA0(EnBomBowlMan* this) {
     this->actionFunc = func_809C5BF4;
 }
 
-void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx) {
+void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
     f32 sp2C = this->skelAnime.curFrame;
-    s32 sp28;
+    Camera* subCam;
 
     if ((D_809C6104 != 0) && (this->unk_2F8 != 15)) {
         func_809C493C(this, 15, 1.0f);
@@ -574,34 +574,34 @@ void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_2F4 == 0) {
-            sp28 = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_2D2));
+            subCam = Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(this->unk_2D2));
 
             if (D_809C6100 > 5) {
-                Player* player = GET_PLAYER(globalCtx);
+                Player* player = GET_PLAYER(play);
 
-                func_801477B4(globalCtx);
-                Camera_SetTargetActor(sp28, &this->unk_2D8[0]->actor);
+                func_801477B4(play);
+                Camera_SetTargetActor(subCam, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2C0 = 5;
-                    Message_StartTextbox(globalCtx, D_809C618C[this->unk_2C0], &this->actor);
+                    Message_StartTextbox(play, D_809C618C[this->unk_2C0], &this->actor);
                 } else {
                     this->unk_2C0 = 3;
-                    Message_StartTextbox(globalCtx, D_809C6198[this->unk_2C0], &this->actor);
+                    Message_StartTextbox(play, D_809C6198[this->unk_2C0], &this->actor);
                 }
                 this->unk_29C = 0;
                 this->actionFunc = func_809C4DA4;
             } else {
                 s32 idx = D_809C6100 - 1;
 
-                Camera_SetTargetActor(sp28, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(subCam, &this->unk_2D8[1 + idx]->actor);
             }
         }
     }
 }
 
-void EnBomBowlMan_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnBomBowlMan_Update(Actor* thisx, PlayState* play) {
     EnBomBowlMan* this = THIS;
 
     if (this->unk_2BA != 0) {
@@ -617,7 +617,7 @@ void EnBomBowlMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_809C49CC(this);
     Actor_SetFocus(&this->actor, 20.0f);
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->unk_28A, this->unk_290, 1, 0x1388, 0);
@@ -630,11 +630,10 @@ void EnBomBowlMan_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_2F2 = (s32)Rand_ZeroFloat(60.0f) + 20;
         }
     }
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-s32 EnBomBowlMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                  Actor* thisx) {
+s32 EnBomBowlMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBomBowlMan* this = THIS;
 
     if (limbIndex == 15) {
@@ -672,21 +671,21 @@ TexturePtr D_809C6220[] = {
     object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
 };
 
-void EnBomBowlMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnBomBowlMan_Draw(Actor* thisx, PlayState* play) {
     EnBomBowlMan* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809C6214[this->unk_2F0]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_809C6220[this->unk_2F4]));
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(D_809C6200[this->unk_2F4]));
 
-    Scene_SetRenderModeXlu(globalCtx, 0, 1);
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    Scene_SetRenderModeXlu(play, 0, 1);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBomBowlMan_OverrideLimbDraw, NULL, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

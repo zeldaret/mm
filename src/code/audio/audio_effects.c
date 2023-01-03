@@ -7,7 +7,7 @@ void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 reca
 
     if (channel->changes.s.volume || recalculateVolume) {
         channelVolume = channel->volume * channel->volumeScale * channel->seqPlayer->appliedFadeVolume;
-        if (channel->seqPlayer->muted && (channel->muteBehavior & 0x20)) {
+        if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_SOFTEN)) {
             channelVolume = channel->seqPlayer->muteVolumeScale * channelVolume;
         }
         channel->appliedVolume = channelVolume * channelVolume;
@@ -63,7 +63,7 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
         }
 
         seqPlayer->fadeTimer--;
-        if (seqPlayer->fadeTimer == 0 && seqPlayer->state == 2) {
+        if ((seqPlayer->fadeTimer == 0) && (seqPlayer->state == SEQPLAYER_STATE_FADE_OUT)) {
             AudioSeq_SequencePlayerDisable(seqPlayer);
             return;
         }
@@ -112,10 +112,10 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     static f32 activeVibratoFreqScaleSum = 0.0f;
     static s32 activeVibratoCount = 0;
     f32 pitchChange;
-    f32 extent;
-    f32 invExtent;
+    f32 depth;
+    f32 invDepth;
     f32 result;
-    f32 scaledExtent;
+    f32 scaledDepth;
     VibratoSubStruct* subVib = vib->vibSubStruct;
 
     if (vib->delay != 0) {
@@ -124,17 +124,17 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     }
 
     if (subVib != NULL) {
-        if (vib->extentChangeTimer) {
-            if (vib->extentChangeTimer == 1) {
-                vib->extent = (s32)subVib->vibratoExtentTarget;
+        if (vib->depthChangeTimer) {
+            if (vib->depthChangeTimer == 1) {
+                vib->depth = (s32)subVib->vibratoDepthTarget;
             } else {
-                vib->extent += ((s32)subVib->vibratoExtentTarget - vib->extent) / (s32)vib->extentChangeTimer;
+                vib->depth += ((s32)subVib->vibratoDepthTarget - vib->depth) / (s32)vib->depthChangeTimer;
             }
 
-            vib->extentChangeTimer--;
-        } else if (subVib->vibratoExtentTarget != (s32)vib->extent) {
-            if ((vib->extentChangeTimer = subVib->vibratoExtentChangeDelay) == 0) {
-                vib->extent = (s32)subVib->vibratoExtentTarget;
+            vib->depthChangeTimer--;
+        } else if (subVib->vibratoDepthTarget != (s32)vib->depth) {
+            if ((vib->depthChangeTimer = subVib->vibratoDepthChangeDelay) == 0) {
+                vib->depth = (s32)subVib->vibratoDepthTarget;
             }
         }
 
@@ -153,17 +153,17 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
         }
     }
 
-    if (vib->extent == 0.0f) {
+    if (vib->depth == 0.0f) {
         return 1.0f;
     }
 
     pitchChange = AudioEffects_GetVibratoPitchChange(vib) + 32768.0f;
-    scaledExtent = vib->extent / 4096.0f;
-    extent = scaledExtent + 1.0f;
-    invExtent = 1.0f / extent;
+    scaledDepth = vib->depth / 4096.0f;
+    depth = scaledDepth + 1.0f;
+    invDepth = 1.0f / depth;
 
     // inverse linear interpolation
-    result = 1.0f / ((extent - invExtent) * pitchChange / 65536.0f + invExtent);
+    result = 1.0f / ((depth - invDepth) * pitchChange / 65536.0f + invDepth);
 
     activeVibratoFreqScaleSum += result;
     activeVibratoCount++;
@@ -196,10 +196,10 @@ void AudioEffects_NoteVibratoInit(Note* note) {
 
     subVib = vib->vibSubStruct;
 
-    if ((vib->extentChangeTimer = subVib->vibratoExtentChangeDelay) == 0) {
-        vib->extent = (s32)subVib->vibratoExtentTarget;
+    if ((vib->depthChangeTimer = subVib->vibratoDepthChangeDelay) == 0) {
+        vib->depth = (s32)subVib->vibratoDepthTarget;
     } else {
-        vib->extent = (s32)subVib->vibratoExtentStart;
+        vib->depth = (s32)subVib->vibratoDepthStart;
     }
 
     if ((vib->rateChangeTimer = subVib->vibratoRateChangeDelay) == 0) {
@@ -218,7 +218,7 @@ void AudioEffects_NotePortamentoInit(Note* note) {
     note->playbackState.portamento = note->playbackState.parentLayer->portamento;
 }
 
-void AudioEffects_AdsrInit(AdsrState* adsr, AdsrEnvelope* envelope, s16* volOut) {
+void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut) {
     adsr->action.asByte = 0;
     adsr->delay = 0;
     adsr->envelope = envelope;
@@ -243,12 +243,10 @@ f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
                 break;
             }
             // fallthrough
-
         case ADSR_STATE_START_LOOP:
             adsr->envIndex = 0;
             adsr->action.s.state = ADSR_STATE_LOOP;
             // fallthrough
-
         retry:
         case ADSR_STATE_LOOP:
             adsr->delay = adsr->envelope[adsr->envIndex].delay;
@@ -256,18 +254,21 @@ f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
                 case ADSR_DISABLE:
                     adsr->action.s.state = ADSR_STATE_DISABLED;
                     break;
+
                 case ADSR_HANG:
                     adsr->action.s.state = ADSR_STATE_HANG;
                     break;
+
                 case ADSR_GOTO:
                     adsr->envIndex = adsr->envelope[adsr->envIndex].arg;
                     goto retry;
+
                 case ADSR_RESTART:
                     adsr->action.s.state = ADSR_STATE_INITIAL;
                     break;
 
                 default:
-                    adsr->delay *= gAudioContext.audioBufferParameters.unk_24;
+                    adsr->delay *= gAudioCtx.audioBufferParameters.updatesPerFrameScaled;
                     if (adsr->delay == 0) {
                         adsr->delay = 1;
                     }
@@ -282,14 +283,13 @@ f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
                 break;
             }
             // fallthrough
-
         case ADSR_STATE_FADE:
             adsr->current += adsr->velocity;
-            if (--adsr->delay <= 0) {
+            adsr->delay--;
+            if (adsr->delay <= 0) {
                 adsr->action.s.state = ADSR_STATE_LOOP;
             }
             // fallthrough
-
         case ADSR_STATE_HANG:
             break;
 

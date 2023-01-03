@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64load.h"
 
 #define KALEIDO_OVERLAY(name)                                                                        \
     {                                                                                                \
@@ -53,7 +54,7 @@ void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl) {
     }
 }
 
-void KaleidoManager_Init(GlobalContext* globalCtx) {
+void KaleidoManager_Init(PlayState* play) {
     s32 largestSize = 0;
     s32 size;
     u32 i;
@@ -65,7 +66,7 @@ void KaleidoManager_Init(GlobalContext* globalCtx) {
         }
     }
 
-    sKaleidoAreaPtr = THA_AllocEndAlign16(&globalCtx->state.heap, largestSize);
+    sKaleidoAreaPtr = THA_AllocEndAlign16(&play->state.heap, largestSize);
     gKaleidoMgrCurOvl = NULL;
     Fault_AddAddrConvClient(&sKaleidoAreaFaultClient, KaleidoManager_FaultAddrConvFunc, NULL);
 }

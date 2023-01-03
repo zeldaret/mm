@@ -1,8 +1,8 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A7B10.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/Audio_StartSequence.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A7D04.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/Audio_StopSequence.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A7D84.s")
 
@@ -10,7 +10,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A89D0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A8A50.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/Audio_GetActiveSequence.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A8ABC.s")
 

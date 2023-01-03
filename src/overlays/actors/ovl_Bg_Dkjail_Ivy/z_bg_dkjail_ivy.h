@@ -3,17 +3,18 @@
 
 #include "global.h"
 
+#define BG_DKJAIL_GET_SWITCH(thisx) ((thisx)->params & 0x7F)
+
 struct BgDkjailIvy;
 
-typedef void (*BgDkjailIvyActionFunc)(struct BgDkjailIvy*, GlobalContext*);
+typedef void (*BgDkjailIvyActionFunc)(struct BgDkjailIvy*, PlayState*);
 
 typedef struct BgDkjailIvy {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x64];
-    /* 0x01A8 */ BgDkjailIvyActionFunc actionFunc;
-    /* 0x01AC */ char unk_1AC[0x4];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ ColliderCylinder collider;
+    /* 0x1A8 */ BgDkjailIvyActionFunc actionFunc;
+    /* 0x1AC */ s8 fadeOutTimer;
+    /* 0x1AD */ u8 alpha;
 } BgDkjailIvy; // size = 0x1B0
-
-extern const ActorInit Bg_Dkjail_Ivy_InitVars;
 
 #endif // Z_BG_DKJAIL_IVY_H

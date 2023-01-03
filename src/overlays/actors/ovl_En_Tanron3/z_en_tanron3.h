@@ -6,7 +6,7 @@
 
 struct EnTanron3;
 
-typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, GlobalContext*);
+typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, PlayState*);
 
 #define TANRON3_WORK_TIMER_MAX 3
 
@@ -40,7 +40,5 @@ typedef struct EnTanron3 {
     /* 0x2AC */ ColliderCylinder acCollider;
     /* 0x2F8 */ EnTanron3ActionFunc actionFunc;
 } EnTanron3; // size = 0x2FC
-
-extern const ActorInit En_Tanron3_InitVars;
 
 #endif // Z_EN_TANRON3_H

@@ -5,7 +5,7 @@
 
 struct EnDodongo;
 
-typedef void (*EnDodongoActionFunc)(struct EnDodongo*, GlobalContext*);
+typedef void (*EnDodongoActionFunc)(struct EnDodongo*, PlayState*);
 
 typedef struct EnDodongo {
     /* 0x000 */ Actor actor;
@@ -35,7 +35,5 @@ typedef struct EnDodongo {
     /* 0x734 */ ColliderJntSph collider3;
     /* 0x754 */ ColliderJntSphElement collider3Elements[3];
 } EnDodongo; // size = 0x814
-
-extern const ActorInit En_Dodongo_InitVars;
 
 #endif // Z_EN_DODONGO_H

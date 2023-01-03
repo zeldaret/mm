@@ -1,7 +1,7 @@
 #ifndef Z64_BGCHECK_H
 #define Z64_BGCHECK_H
 
-struct GlobalContext;
+struct PlayState;
 struct Actor;
 struct DynaPolyActor;
 
@@ -56,11 +56,6 @@ struct DynaPolyActor;
 // CollisionContext flags
 #define BGCHECK_FLAG_REVERSE_CONVEYOR_FLOW 1
 
-typedef enum {
-    /* 0 */ CONVEYOR_WATER,
-    /* 1 */ CONVEYOR_FLOOR
-} ConveyorType;
-
 typedef struct {
     /* 0x0 */ Vec3s pos;
 } BgVertex; // size = 0x6
@@ -72,27 +67,38 @@ typedef struct {
 } ScaleRotPos; // size = 0x20
 
 typedef struct CollisionPoly {
-    /* 0x00 */ u16 type;
+    /* 0x0 */ u16 type;
     union {
-        u16 vtxData[3];
+        /* 0x2 */ u16 vtxData[3];
         struct {
-            /* 0x02 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
-            /* 0x04 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
+            /* 0x2 */ u16 flags_vIA; // 0xE000 is poly exclusion flags (xpFlags), 0x1FFF is vtxId
+            /* 0x4 */ u16 flags_vIB; // 0xE000 is flags, 0x1FFF is vtxId
                                       // 0x2000 = poly IsConveyor surface
-            /* 0x06 */ u16 vIC;
+            /* 0x6 */ u16 vIC;
         };
     };
-    /* 0x08 */ Vec3s normal; // Unit normal vector
+    /* 0x8 */ Vec3s normal; // Unit normal vector
                              // Value ranges from -0x7FFF to 0x7FFF, representing -1.0 to 1.0; 0x8000 is invalid
 
-    /* 0x0E */ s16 dist; // Plane distance from origin along the normal
+    /* 0xE */ s16 dist; // Plane distance from origin along the normal
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x0 */ u16 setting;
-    /* 0x2 */ s16 numData;
-    /* 0x4 */ Vec3s* data;
-} CamData; // size = 0x8 (BgCamData)
+    /* 0x0 */ u16 setting; // camera setting described by CameraSettingType enum
+    /* 0x2 */ s16 count; // only used when `bgCamFuncData` is a list of points used for crawlspaces (unused oot legacy)
+    /* 0x4 */ Vec3s* bgCamFuncData; // s16 data grouped in threes (ex. Vec3s), is usually of type `BgCamFuncData`
+} BgCamInfo; // size = 0x8
+
+typedef BgCamInfo CamData; // TODO: ZAPD compatibility
+
+// The structure used for all instances of s16 data from `BgCamInfo`.
+typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ Vec3s rot;
+    /* 0x0C */ s16 fov;
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s16 unk_10;
+} BgCamFuncData; // size = 0x12
 
 typedef struct {
     /* 0x0 */ Vec3s minPos;
@@ -102,7 +108,7 @@ typedef struct {
     // 0x0008_0000 = ?
     // 0x0007_E000 = room index, 0x3F = all rooms
     // 0x0000_1F00 = lighting setting index
-    // 0x0000_00FF = CamData index
+    // 0x0000_00FF = bgCam index
 } WaterBox; // size = 0x10
 
 typedef struct {
@@ -116,7 +122,7 @@ typedef struct {
     // 0x001C_0000 = ?
     // 0x0003_E000 = ?
     // 0x0000_1F00 = scene exit index
-    // 0x0000_00FF = CamData index
+    // 0x0000_00FF = bgCam index
     // Word 1
     // 0x0800_0000 = wall damage
     // 0x07E0_0000 = conveyor direction
@@ -137,7 +143,7 @@ typedef struct {
     /* 0x14 */ u16 numPolygons;
     /* 0x18 */ CollisionPoly* polyList;
     /* 0x1C */ SurfaceType* surfaceTypeList;
-    /* 0x20 */ CamData* cameraDataList;
+    /* 0x20 */ CamData* bgCamList;
     /* 0x24 */ u16 numWaterBoxes;
     /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // size = 0x2C
@@ -147,9 +153,10 @@ typedef struct {
     /* 0x2 */ u16 next; // index of the next SSNode in the list, or SS_NULL if last element 
 } SSNode; // size = 0x4
 
+// represents a linked list of type SSNode
 typedef struct {
-    u16 head; // index of the first SSNode in the list, or SS_NULL if the list is empty
-} SSList; // represents a linked list of type SSNode
+    /* 0x0 */ u16 head; // index of the first SSNode in the list, or SS_NULL if the list is empty
+} SSList; // size = 0x2
 
 typedef struct {
     /* 0x0 */ u16 max;
@@ -223,7 +230,7 @@ typedef struct {
 } CollisionContext; // size = 0x1470
 
 typedef struct {
-    /* 0x00 */ struct GlobalContext* globalCtx;
+    /* 0x00 */ struct PlayState* play;
     /* 0x04 */ CollisionContext* colCtx;
     /* 0x08 */ u16 xpFlags;
     /* 0x0C */ CollisionPoly** resultPoly;
@@ -302,8 +309,9 @@ typedef struct {
 } BgSpecialSceneMeshSubdivision; // size = 0xC
 
 typedef struct {
-    s16 sceneId;
-    Vec3s subdivAmount;
-    s32 nodeListMax; // if -1, dynamically compute max nodes
-} BgCheckSceneSubdivisionEntry;
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ Vec3s subdivAmount;
+    /* 0x8 */ s32 nodeListMax; // if -1, dynamically compute max nodes
+} BgCheckSceneSubdivisionEntry; // size = 0xC
+
 #endif

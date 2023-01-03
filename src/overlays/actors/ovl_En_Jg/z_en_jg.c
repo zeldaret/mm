@@ -15,47 +15,47 @@
 #define FLAG_LOOKING_AT_PLAYER (1 << 2)
 #define FLAG_DRUM_SPAWNED (1 << 3)
 
-void EnJg_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnJg_Init(Actor* thisx, PlayState* play);
+void EnJg_Destroy(Actor* thisx, PlayState* play);
+void EnJg_Update(Actor* thisx, PlayState* play);
+void EnJg_Draw(Actor* thisx, PlayState* play);
 
-void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx);
-void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx);
-void EnJg_Walk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_Talk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx);
-void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx);
-void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx);
-void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx);
-void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx);
+void EnJg_GoronShrineTalk(EnJg* this, PlayState* play);
+void EnJg_GoronShrineCheer(EnJg* this, PlayState* play);
+void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play);
+void EnJg_Walk(EnJg* this, PlayState* play);
+void EnJg_Talk(EnJg* this, PlayState* play);
+void EnJg_SetupWalk(EnJg* this, PlayState* play);
+void EnJg_FrozenIdle(EnJg* this, PlayState* play);
+void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play);
+void EnJg_TeachLullabyIntro(EnJg* this, PlayState* play);
+void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play);
 s32 EnJg_GetNextTextId(EnJg* this);
-s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx);
-void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* globalCtx);
+s32 EnJg_GetStartingConversationTextId(EnJg* this, PlayState* play);
+void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play);
 
 typedef enum {
-    /*  0 */ EN_JG_ANIMATION_IDLE,
-    /*  1 */ EN_JG_ANIMATION_WALK,
-    /*  2 */ EN_JG_ANIMATION_WAVING,
-    /*  3 */ EN_JG_ANIMATION_SHAKING_HEAD,
-    /*  4 */ EN_JG_ANIMATION_SURPRISE_START,
-    /*  5 */ EN_JG_ANIMATION_SURPRISE_LOOP,
-    /*  6 */ EN_JG_ANIMATION_ANGRY,
-    /*  7 */ EN_JG_ANIMATION_FROZEN_START,
-    /*  8 */ EN_JG_ANIMATION_FROZEN_LOOP,
-    /*  9 */ EN_JG_ANIMATION_WALK_2,
-    /* 10 */ EN_JG_ANIMATION_TAKING_OUT_DRUM,
-    /* 11 */ EN_JG_ANIMATION_DRUM_IDLE,
-    /* 12 */ EN_JG_ANIMATION_PLAYING_DRUM,
-    /* 13 */ EN_JG_ANIMATION_THINKING,
-    /* 14 */ EN_JG_ANIMATION_REMEMBERING,
-    /* 15 */ EN_JG_ANIMATION_STRONG_REMEMBERING,
-    /* 16 */ EN_JG_ANIMATION_DEPRESSED,
-    /* 17 */ EN_JG_ANIMATION_CUTSCENE_IDLE,
-    /* 18 */ EN_JG_ANIMATION_CRADLE,
-    /* 19 */ EN_JG_ANIMATION_MAX,
-} EnJgAnimationIndex;
+    /*  0 */ EN_JG_ANIM_IDLE,
+    /*  1 */ EN_JG_ANIM_WALK,
+    /*  2 */ EN_JG_ANIM_WAVING,
+    /*  3 */ EN_JG_ANIM_SHAKING_HEAD,
+    /*  4 */ EN_JG_ANIM_SURPRISE_START,
+    /*  5 */ EN_JG_ANIM_SURPRISE_LOOP,
+    /*  6 */ EN_JG_ANIM_ANGRY,
+    /*  7 */ EN_JG_ANIM_FROZEN_START,
+    /*  8 */ EN_JG_ANIM_FROZEN_LOOP,
+    /*  9 */ EN_JG_ANIM_WALK_2,
+    /* 10 */ EN_JG_ANIM_TAKING_OUT_DRUM,
+    /* 11 */ EN_JG_ANIM_DRUM_IDLE,
+    /* 12 */ EN_JG_ANIM_PLAYING_DRUM,
+    /* 13 */ EN_JG_ANIM_THINKING,
+    /* 14 */ EN_JG_ANIM_REMEMBERING,
+    /* 15 */ EN_JG_ANIM_STRONG_REMEMBERING,
+    /* 16 */ EN_JG_ANIM_DEPRESSED,
+    /* 17 */ EN_JG_ANIM_CUTSCENE_IDLE,
+    /* 18 */ EN_JG_ANIM_CRADLE,
+    /* 19 */ EN_JG_ANIM_MAX,
+} EnJgAnimation;
 
 typedef enum {
     /* 0x0 */ EN_JG_ACTION_FIRST_THAW,
@@ -64,7 +64,7 @@ typedef enum {
     /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
 } EnJgAction;
 
-const ActorInit En_Jg_InitVars = {
+ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
     ACTORCAT_NPC,
     FLAGS,
@@ -133,7 +133,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gGoronElderIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gGoronElderWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
     { &gGoronElderWavingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
@@ -172,12 +172,12 @@ static Vec3f sBreathAccelOffset = { 0.0f, 0.0f, -0.070000000298f };
  * returning a pointer to the specified Goron so the camera
  * can focus on them.
  */
-Actor* EnJg_GetShrineGoronToFocusOn(GlobalContext* globalCtx, u8 focusedShrineGoronParam) {
-    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
+Actor* EnJg_GetShrineGoronToFocusOn(PlayState* play, u8 focusedShrineGoronParam) {
+    Actor* actorIterator = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
         if ((actorIterator->id == ACTOR_EN_S_GORO) &&
-            (EN_S_GORO_GET_PARAM_F(actorIterator) == focusedShrineGoronParam)) {
+            (EN_S_GORO_GET_MAIN_TYPE(actorIterator) == focusedShrineGoronParam)) {
             return actorIterator;
         }
 
@@ -187,14 +187,14 @@ Actor* EnJg_GetShrineGoronToFocusOn(GlobalContext* globalCtx, u8 focusedShrineGo
     return NULL;
 }
 
-void EnJg_UpdateCollision(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_UpdateCollision(EnJg* this, PlayState* play) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
 
-    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 30.0f, 30.0f, 7);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 30.0f, 7);
 }
 
 s16 EnJg_GetWalkingYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
@@ -214,7 +214,7 @@ s16 EnJg_GetWalkingYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ
 
     *distSQ = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
+    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
@@ -293,23 +293,23 @@ void EnJg_SetupGoronShrineCheer(EnJg* this) {
     }
 }
 
-void EnJg_SetupTalk(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_SetupTalk(EnJg* this, PlayState* play) {
     switch (this->textId) {
         case 0xDAC: // What was I doing?
-            this->animationIndex = EN_JG_ANIMATION_SHAKING_HEAD;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_SHAKING_HEAD;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
         case 0xDAD: // I must hurry!
-            this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_SURPRISE_START;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_AlternateTalkOrWalkInPlace;
             break;
 
         case 0xDB7: // You're Darmani!
-            this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_SURPRISE_START;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
@@ -319,8 +319,8 @@ void EnJg_SetupTalk(EnJg* this, GlobalContext* globalCtx) {
         case 0xDBA: // I've been made a fool of!
         case 0xDBD: // "...What?"
         case 0xDC4: // It's so cold I can't play
-            this->animationIndex = EN_JG_ANIMATION_IDLE;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_IDLE;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
@@ -328,51 +328,51 @@ void EnJg_SetupTalk(EnJg* this, GlobalContext* globalCtx) {
         case 0xDBB: // If I can see past the illusion, you'll vanish
         case 0xDBC: // Following me won't do you any good
         case 0xDC6: // I am counting on you
-            this->animationIndex = EN_JG_ANIMATION_ANGRY;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_ANGRY;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
 
         case 0xDB4: // This is our problem (first)
         case 0xDB5: // This is our problem (repeat)
-            this->animationIndex = EN_JG_ANIMATION_WAVING;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_WAVING;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Talk;
             break;
     }
 }
 
-void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
-    EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(this, globalCtx);
+void EnJg_Idle(EnJg* this, PlayState* play) {
+    EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(this, play);
 }
 
-void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+void EnJg_GoronShrineIdle(EnJg* this, PlayState* play) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
-        Message_StartTextbox(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
     } else if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
-        func_800B863C(&this->actor, globalCtx);
-        this->textId = EnJg_GetStartingConversationTextId(this, globalCtx);
+        func_800B863C(&this->actor, play);
+        this->textId = EnJg_GetStartingConversationTextId(this, play);
     }
 }
 
-void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+void EnJg_GoronShrineTalk(EnJg* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
             // There is nothing more to say after these lines, so end the current conversation.
-            globalCtx->msgCtx.msgMode = 0x43;
-            globalCtx->msgCtx.unk12023 = 4;
+            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_GoronShrineIdle;
         } else {
             this->textId = EnJg_GetNextTextId(this);
-            Message_StartTextbox(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(play, this->textId, &this->actor);
         }
     }
 }
 
-void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         switch (this->textId) {
             case 0xDD0: // The greatest Goron hero of all?
@@ -381,15 +381,15 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
             case 0xDD4: // "Darmani, greatest of Gorons!"
             case 0xDD6: // Darmani, greatest in the world!
                 // Focus on a specifc Goron for these lines
-                this->shrineGoron = EnJg_GetShrineGoronToFocusOn(globalCtx, this->focusedShrineGoronParam);
+                this->shrineGoron = EnJg_GetShrineGoronToFocusOn(play, this->focusedShrineGoronParam);
                 ActorCutscene_Start(this->cutscene, this->shrineGoron);
-                Camera_SetTargetActor(globalCtx->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
+                Camera_SetTargetActor(play->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
 
             default:
                 // Focus on the whole group for these lines
                 ActorCutscene_Start(this->cutscene, &this->actor);
-                Camera_SetTargetActor(globalCtx->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
+                Camera_SetTargetActor(play->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
         }
         this->actionFunc = EnJg_GoronShrineTalk;
@@ -414,32 +414,32 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
  * Additionally, when the elder has reached the end of his specified path, this function will
  * set his speed to 0, causing him to walk in place.
  */
-void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
-    u8 messageState = Message_GetState(&globalCtx->msgCtx);
+void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_START) {
+    if (this->animIndex == EN_JG_ANIM_SURPRISE_START) {
         if (currentFrame == lastFrame) {
-            this->animationIndex = EN_JG_ANIMATION_SURPRISE_LOOP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_SURPRISE_LOOP;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
-    } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
-        if ((messageState == 5) && Message_ShouldAdvance(globalCtx)) {
-            globalCtx->msgCtx.msgMode = 0x43;
-            globalCtx->msgCtx.unk12023 = 4;
+    } else if (this->animIndex == EN_JG_ANIM_SURPRISE_LOOP) {
+        if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
+            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
-            this->animationIndex = EN_JG_ANIMATION_WALK;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_WALK;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Walk;
         }
-    } else if (this->animationIndex == EN_JG_ANIMATION_WALK) {
+    } else if (this->animIndex == EN_JG_ANIM_WALK) {
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
-        EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(this, globalCtx);
+        EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(this, play);
     }
 }
 
-void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_Walk(EnJg* this, PlayState* play) {
     s16 yRotation;
     f32 distSQ;
 
@@ -455,7 +455,7 @@ void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
         if (EnJg_ReachedPoint(this, this->path, this->currentPoint)) {
             if (this->currentPoint >= (this->path->count - 1)) {
                 // Force the elder to walk in place
-                this->animationIndex = EN_JG_ANIMATION_WALK;
+                this->animIndex = EN_JG_ANIM_WALK;
                 this->actionFunc = EnJg_AlternateTalkOrWalkInPlace;
             } else {
                 this->currentPoint++;
@@ -466,26 +466,26 @@ void EnJg_Walk(EnJg* this, GlobalContext* globalCtx) {
         }
     }
 
-    EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(this, globalCtx);
+    EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(this, play);
 }
 
-void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
-    u8 messageState = Message_GetState(&globalCtx->msgCtx);
+void EnJg_Talk(EnJg* this, PlayState* play) {
+    u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
     u16 temp;
 
-    if ((this->animationIndex == EN_JG_ANIMATION_SURPRISE_START) && (currentFrame == lastFrame)) {
-        this->animationIndex = EN_JG_ANIMATION_SURPRISE_LOOP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+    if ((this->animIndex == EN_JG_ANIM_SURPRISE_START) && (currentFrame == lastFrame)) {
+        this->animIndex = EN_JG_ANIM_SURPRISE_LOOP;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
 
-    if ((messageState == 5) && Message_ShouldAdvance(globalCtx)) {
+    if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         temp = this->textId;
         if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
             // There is nothing more to say after these lines, so end the current conversation.
-            globalCtx->msgCtx.msgMode = 0x43;
-            globalCtx->msgCtx.unk12023 = 4;
+            play->msgCtx.msgMode = 0x43;
+            play->msgCtx.stateTimer = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
             this->actionFunc = EnJg_SetupWalk;
             return;
@@ -493,25 +493,25 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
 
         temp = this->textId;
         if ((temp == 0xDBB) || (temp == 0xDBC)) {
-            if (!(gSaveContext.save.weekEventReg[24] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_24_80)) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
-                globalCtx->msgCtx.msgMode = 0x43;
-                globalCtx->msgCtx.unk12023 = 4;
+                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
-            } else if (((gSaveContext.save.weekEventReg[24] & 0x40)) ||
+            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_24_40)) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
                 // The player already has the Lullaby or Lullaby Intro, so say "I'm counting on you"
                 this->textId = EnJg_GetNextTextId(this);
-                Message_StartTextbox(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(play, this->textId, &this->actor);
                 this->actionFunc = EnJg_SetupTalk;
             } else {
                 // To get to this point, the player *has* talked to the Goron Child, but doesn't
                 // already have the Lullaby or Lullaby Intro. End the current conversation and
                 // start the cutscene that teaches the Lullaby Intro.
-                globalCtx->msgCtx.msgMode = 0x43;
-                globalCtx->msgCtx.unk12023 = 4;
+                play->msgCtx.msgMode = 0x43;
+                play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->cutscene = EnJg_GetCutsceneForTeachingLullabyIntro(this);
                 if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -522,17 +522,17 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
             }
         } else {
             this->textId = EnJg_GetNextTextId(this);
-            Message_StartTextbox(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnJg_SetupTalk;
         }
     }
 }
 
-void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx) {
-    if (this->animationIndex != EN_JG_ANIMATION_WALK) {
-        this->animationIndex = EN_JG_ANIMATION_WALK;
+void EnJg_SetupWalk(EnJg* this, PlayState* play) {
+    if (this->animIndex != EN_JG_ANIM_WALK) {
+        this->animIndex = EN_JG_ANIM_WALK;
         this->freezeTimer = 1000;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_Walk;
     } else {
         this->freezeTimer = 1000;
@@ -540,74 +540,74 @@ void EnJg_SetupWalk(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnJg_Freeze(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_Freeze(EnJg* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->action == EN_JG_ACTION_SPAWNING) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
         this->freezeTimer = 1000;
         this->skelAnime.curFrame = lastFrame;
-        this->icePoly = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+        this->icePoly = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                                     this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
                                     this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
-        this->animationIndex = EN_JG_ANIMATION_FROZEN_LOOP;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+        this->animIndex = EN_JG_ANIM_FROZEN_LOOP;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_FrozenIdle;
-    } else if (this->animationIndex == EN_JG_ANIMATION_FROZEN_START) {
+    } else if (this->animIndex == EN_JG_ANIM_FROZEN_START) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
         if (currentFrame == lastFrame) {
             this->freezeTimer = 1000;
-            this->icePoly = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+            this->icePoly = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
                                         this->actor.world.rot.y, this->actor.world.rot.z, 0xFF50);
-            this->animationIndex = EN_JG_ANIMATION_FROZEN_LOOP;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_FROZEN_LOOP;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_FrozenIdle;
         }
     }
 }
 
-void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
     if (this->icePoly->update == NULL) {
         this->icePoly = NULL;
-        if (this->animationIndex == EN_JG_ANIMATION_FROZEN_LOOP) {
+        if (this->animIndex == EN_JG_ANIM_FROZEN_LOOP) {
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                this->animationIndex = EN_JG_ANIMATION_IDLE;
+                this->animIndex = EN_JG_ANIM_IDLE;
 
                 // If you've never talked to the elder before, he stands
                 // around idle until you've talked to him at least once.
                 // Otherwise, he immediately begins walking after being
                 // thawed out.
                 if (this->textId == 0xDAC) {
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                     this->actionFunc = EnJg_Idle;
                 } else {
                     this->freezeTimer = 1000;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                     this->actionFunc = EnJg_Walk;
                 }
             }
         }
     } else {
-        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            Message_StartTextbox(globalCtx, 0x236, &this->actor); // The old Goron is frozen solid!
+        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+            Message_StartTextbox(play, 0x236, &this->actor); // The old Goron is frozen solid!
             this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
-            func_800B863C(&this->actor, globalCtx);
+            func_800B863C(&this->actor, play);
         }
     }
 }
 
-void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
-        globalCtx->msgCtx.msgMode = 0x43;
-        globalCtx->msgCtx.unk12023 = 4;
+void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
+        play->msgCtx.msgMode = 0x43;
+        play->msgCtx.stateTimer = 4;
         this->actionFunc = EnJg_FrozenIdle;
     }
 }
 
-void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_TeachLullabyIntro(EnJg* this, PlayState* play) {
     if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
         ActorCutscene_Start(this->cutscene, &this->actor);
         this->actionFunc = EnJg_LullabyIntroCutsceneAction;
@@ -619,78 +619,78 @@ void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
     s32 pad;
 
-    if (Cutscene_CheckActorAction(globalCtx, 470)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 470);
+    if (Cutscene_CheckActorAction(play, 470)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(play, 470);
 
-        if (this->csAction != globalCtx->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = globalCtx->csCtx.actorActions[actionIndex]->action;
+        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = play->csCtx.actorActions[actionIndex]->action;
 
-            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorActions[actionIndex]->action) {
                 case 1:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_CUTSCENE_IDLE;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
-                        Actor_MarkForDeath(this->drum);
+                        Actor_Kill(this->drum);
                         this->drum = NULL;
                     }
                     break;
 
                 case 2:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_TAKING_OUT_DRUM;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_TAKING_OUT_DRUM;
                     break;
 
                 case 3:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_DRUM_IDLE;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_DRUM_IDLE;
                     break;
 
                 case 4:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_PLAYING_DRUM;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_PLAYING_DRUM;
                     break;
 
                 case 5:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_THINKING;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_THINKING;
                     break;
 
                 case 6:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_REMEMBERING;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_REMEMBERING;
                     break;
 
                 case 7:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_STRONG_REMEMBERING;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_STRONG_REMEMBERING;
                     break;
 
                 case 8:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_DEPRESSED;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_DEPRESSED;
                     break;
 
                 case 9:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_CRADLE;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_CRADLE;
                     break;
 
                 default:
-                    this->cutsceneAnimationIndex = EN_JG_ANIMATION_IDLE;
+                    this->cutsceneAnimIndex = EN_JG_ANIM_IDLE;
                     break;
             }
 
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->cutsceneAnimationIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->cutsceneAnimIndex);
         }
 
         if ((!(this->flags & FLAG_DRUM_SPAWNED)) &&
-            (((this->cutsceneAnimationIndex == EN_JG_ANIMATION_TAKING_OUT_DRUM) &&
-              (Animation_OnFrame(&this->skelAnime, 14.0f)) && (this->action != EN_JG_ACTION_LULLABY_INTRO_CS)) ||
-             (((this->cutsceneAnimationIndex == EN_JG_ANIMATION_DRUM_IDLE) ||
-               (this->cutsceneAnimationIndex == EN_JG_ANIMATION_PLAYING_DRUM)) &&
+            (((this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) && (Animation_OnFrame(&this->skelAnime, 14.0f)) &&
+              (this->action != EN_JG_ACTION_LULLABY_INTRO_CS)) ||
+             (((this->cutsceneAnimIndex == EN_JG_ANIM_DRUM_IDLE) ||
+               (this->cutsceneAnimIndex == EN_JG_ANIM_PLAYING_DRUM)) &&
               (this->action == EN_JG_ACTION_LULLABY_INTRO_CS)))) {
             this->flags |= FLAG_DRUM_SPAWNED;
             this->drum = Actor_SpawnAsChildAndCutscene(
-                &globalCtx->actorCtx, globalCtx, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
+                &play->actorCtx, play, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
                 this->actor.params, this->actor.cutscene, this->actor.unk20, NULL);
         }
 
-        if (this->cutsceneAnimationIndex == EN_JG_ANIMATION_TAKING_OUT_DRUM) {
+        if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {
             if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
                 Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
             } else if (Animation_OnFrame(&this->skelAnime, 38.0f)) {
@@ -700,7 +700,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
     } else {
         this->csAction = 99;
         this->freezeTimer = 1000;
-        gSaveContext.save.weekEventReg[24] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_24_40);
         this->actionFunc = EnJg_Idle;
     }
 }
@@ -830,7 +830,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return 0xDDC; // Everyone would accept you
 
         case 0xDDC: // Everyone would accept you
-            gSaveContext.save.weekEventReg[77] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_77_80);
             return 0xDDD; // Think it over slowly
 
         default:
@@ -843,12 +843,12 @@ s32 EnJg_GetNextTextId(EnJg* this) {
  * under most circumstances. Some circumstances (like the very first time the player
  * talks to him after he thaws) bypass this function.
  */
-s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+s32 EnJg_GetStartingConversationTextId(EnJg* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
     if (!EN_JG_IS_IN_GORON_SHRINE(&this->actor)) {
         if (player->transformation == PLAYER_FORM_GORON) {
-            if ((gSaveContext.save.weekEventReg[24] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                 // The player has already talked as a Goron at least once.
                 return 0xDBC; // Following me won't do you any good
@@ -858,7 +858,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
             return 0xDB6; // "Hunh???"
         }
 
-        if (gSaveContext.save.weekEventReg[24] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_20)) {
             // The player has already talked as a non-Goron at least once.
             return 0xDB5; // This is our problem (repeat)
         }
@@ -868,7 +868,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
     }
 
     if (player->transformation == PLAYER_FORM_GORON) {
-        if (gSaveContext.save.weekEventReg[77] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
             // The player has heard the Goron Shrine cheer as a Goron at least once.
             return 0xDDE; // Come back after entering the race
         }
@@ -881,11 +881,11 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
     return 0xDCB; // Welcome to spring
 }
 
-void EnJg_SpawnBreath(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_SpawnBreath(EnJg* this, PlayState* play) {
     s16 scale = (Rand_ZeroOne() * 20.0f) + 30.0f;
 
-    if (globalCtx->state.frames % 8 == 0) {
-        EffectSsIceSmoke_Spawn(globalCtx, &this->breathPos, &this->breathVelocity, &this->breathAccel, scale);
+    if (play->state.frames % 8 == 0) {
+        EffectSsIceSmoke_Spawn(play, &this->breathPos, &this->breathVelocity, &this->breathAccel, scale);
     }
 }
 
@@ -897,107 +897,106 @@ void EnJg_SpawnBreath(EnJg* this, GlobalContext* globalCtx) {
  *   freeze timer is 0 or negative, this function starts the process of freezing him before
  *   handing it off to EnJg_Freeze.
  */
-void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* globalCtx) {
+void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         this->actor.speedXZ = 0.0f;
 
         if (this->textId == 0xDAC) {
             this->action = EN_JG_ACTION_FIRST_THAW;
         } else if (this->textId == 0xDAE) {
-            gSaveContext.save.weekEventReg[24] |= 0x20;
+            SET_WEEKEVENTREG(WEEKEVENTREG_24_20);
         } else if (this->textId == 0xDB6) {
-            gSaveContext.save.weekEventReg[24] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_24_10);
         }
 
-        Message_StartTextbox(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_SetupTalk;
     } else {
         if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
-            func_800B863C(&this->actor, globalCtx);
+            func_800B863C(&this->actor, play);
             if (this->action == EN_JG_ACTION_FIRST_THAW) {
-                this->textId = EnJg_GetStartingConversationTextId(this, globalCtx);
+                this->textId = EnJg_GetStartingConversationTextId(this, play);
             }
         }
 
         this->freezeTimer--;
         if ((this->freezeTimer <= 0) && (currentFrame == lastFrame)) {
-            this->animationIndex = EN_JG_ANIMATION_FROZEN_START;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            this->animIndex = EN_JG_ANIM_FROZEN_START;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
             this->actionFunc = EnJg_Freeze;
         }
     }
 }
 
-void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnJg_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnJg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGoronElderSkel, &gGoronElderIdleAnim, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGoronElderSkel, &gGoronElderIdleAnim, this->jointTable,
                        this->morphTable, GORON_ELDER_LIMB_MAX);
 
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_SetScale(&this->actor, 0.01f);
 
     if (!EN_JG_IS_IN_GORON_SHRINE(thisx)) {
-        if ((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7) &&
-            (globalCtx->csCtx.currentCsIndex == 0)) {
+        if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0)) {
             // This is the elder that appears in the cutscene for learning the full Goron Lullaby.
-            this->animationIndex = EN_JG_ANIMATION_IDLE;
+            this->animIndex = EN_JG_ANIM_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_LullabyIntroCutsceneAction;
         } else {
             // This is the elder that appears in Mountain Village or the Path to Goron Village in winter.
-            this->path = SubS_GetPathByIndex(globalCtx, EN_JG_GET_PATH(thisx), 0x3F);
-            this->animationIndex = EN_JG_ANIMATION_SURPRISE_START;
+            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH(thisx), 0x3F);
+            this->animIndex = EN_JG_ANIM_SURPRISE_START;
             this->action = EN_JG_ACTION_SPAWNING;
             this->freezeTimer = 1000;
             this->textId = 0xDAC; // What was I doing?
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnJg_Freeze;
         }
     } else {
         // This is the elder that appears in Goron Shrine in spring.
-        this->animationIndex = EN_JG_ANIMATION_IDLE;
+        this->animIndex = EN_JG_ANIM_IDLE;
         this->cutscene = this->actor.cutscene;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_GoronShrineIdle;
     }
 }
 
-void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnJg_Destroy(Actor* thisx, PlayState* play) {
     EnJg* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider);
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnJg_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnJg_Update(Actor* thisx, PlayState* play) {
     EnJg* this = THIS;
 
     if ((this->actionFunc != EnJg_FrozenIdle) && (this->actionFunc != EnJg_EndFrozenInteraction)) {
-        EnJg_UpdateCollision(this, globalCtx);
+        EnJg_UpdateCollision(this, play);
         Actor_MoveWithGravity(&this->actor);
         SkelAnime_Update(&this->skelAnime);
 
         if ((this->action != EN_JG_ACTION_LULLABY_INTRO_CS) && (!EN_JG_IS_IN_GORON_SHRINE(&this->actor))) {
-            EnJg_SpawnBreath(this, globalCtx);
+            EnJg_SpawnBreath(this, play);
         }
 
-        func_800E9250(globalCtx, &this->actor, &this->unusedRotation1, &this->unusedRotation2, this->actor.focus.pos);
+        Actor_TrackPlayer(play, &this->actor, &this->unusedRotation1, &this->unusedRotation2, this->actor.focus.pos);
     }
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
-s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnJg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnJg* this = THIS;
 
     if (limbIndex == GORON_ELDER_LIMB_ROOT) {
@@ -1014,7 +1013,7 @@ s32 EnJg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnJg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnJg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnJg* this = THIS;
 
     if (limbIndex == GORON_ELDER_LIMB_HEAD) {
@@ -1029,9 +1028,9 @@ void EnJg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnJg_Draw(Actor* thisx, PlayState* play) {
     EnJg* this = THIS;
 
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnJg_OverrideLimbDraw, EnJg_PostLimbDraw, &this->actor);
 }

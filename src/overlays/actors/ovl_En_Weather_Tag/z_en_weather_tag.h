@@ -5,12 +5,12 @@
 
 struct EnWeatherTag;
 
-typedef void (*EnWeatherTagActionFunc)(struct EnWeatherTag*, GlobalContext*);
+typedef void (*EnWeatherTagActionFunc)(struct EnWeatherTag*, PlayState*);
 
 typedef struct EnWeatherTag {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnWeatherTagActionFunc actionFunc;
-    /* 0x148 */ u8 pad148[0x4]; // todo attempt remove
+    /* 0x148 */ UNK_TYPE1 pad148[0x4];
     /* 0x14C */ u8 pathCount;
     /* 0x150 */ Vec3s* pathPoints;
     // 154: the code avoids what would be a negative value if signed, but signed wont match
@@ -19,12 +19,10 @@ typedef struct EnWeatherTag {
     /* 0x158 */ u16 unk158; // increment/decrement amount for 154
 } EnWeatherTag; // size = 0x15C
 
-extern const ActorInit En_Weather_Tag_InitVars;
-
-#define WEATHER_TAG_TYPE(x) (x->actor.params & 0xF)
-#define WEATHER_TAG_PATHID(x) (x->actor.params >> 4 & 0xF)
-#define WEATHER_TAG_RANGE100(x) ((u8)(((x->actor.params >> 8) & 0xFF)) * 100.0f)
-#define WEATHER_TAG_RANGE100INT(x) ((u8)(((x->actor.params >> 8))) * 100)
+#define WEATHER_TAG_TYPE(thisx) ((thisx)->params & 0xF)
+#define WEATHER_TAG_PATHID(thisx) (((thisx)->params >> 4) & 0xF)
+#define WEATHER_TAG_RANGE100(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100.0f)
+#define WEATHER_TAG_RANGE100INT(thisx) ((u8)(((thisx)->params >> 8) & 0xFF) * 100)
 
 typedef enum {
     /* 0 */ WEATHERTAG_TYPE_UNK0,

@@ -1,5 +1,5 @@
-#ifndef _Z64OBJECT_H_
-#define _Z64OBJECT_H_
+#ifndef Z64OBJECT_H
+#define Z64OBJECT_H
 
 #define OBJECT_SPACE_SIZE_DEFAULT 1413120
 #define OBJECT_SPACE_SIZE_CLOCK_TOWN 1566720
@@ -207,7 +207,7 @@ typedef enum {
     /* 0x0C3 */ OBJECT_GI_SHIELD_3,
     /* 0x0C4 */ OBJECT_UNSET_C4,
     /* 0x0C5 */ OBJECT_UNSET_C5,
-    /* 0x0C6 */ OBJECT_GI_MAGIC_BEANS,
+    /* 0x0C6 */ OBJECT_GI_BEAN,
     /* 0x0C7 */ OBJECT_GI_FISH,
     /* 0x0C8 */ OBJECT_UNSET_C8,
     /* 0x0C9 */ OBJECT_UNSET_C9,
@@ -404,7 +404,7 @@ typedef enum {
     /* 0x188 */ OBJECT_FALL,
     /* 0x189 */ OBJECT_HANAREYAMA_OBJ,
     /* 0x18A */ OBJECT_CRACE_OBJECT,
-    /* 0x18B */ OBJECT_DNQ,
+    /* 0x18B */ OBJECT_DNO,
     /* 0x18C */ OBJECT_OBJ_TOKEIDAI,
     /* 0x18D */ OBJECT_EG,
     /* 0x18E */ OBJECT_TRU,
@@ -477,7 +477,7 @@ typedef enum {
     /* 0x1D1 */ OBJECT_MARUTA,
     /* 0x1D2 */ OBJECT_GHAKA,
     /* 0x1D3 */ OBJECT_OYU,
-    /* 0x1D4 */ OBJECT_DNP,
+    /* 0x1D4 */ OBJECT_DNQ,
     /* 0x1D5 */ OBJECT_DAI,
     /* 0x1D6 */ OBJECT_KGY,
     /* 0x1D7 */ OBJECT_FB,
@@ -508,7 +508,7 @@ typedef enum {
     /* 0x1F0 */ OBJECT_GI_SEAHORSE,
     /* 0x1F1 */ OBJECT_BIGPO,
     /* 0x1F2 */ OBJECT_HARIKO,
-    /* 0x1F3 */ OBJECT_DNO,
+    /* 0x1F3 */ OBJECT_DNJ,
     /* 0x1F4 */ OBJECT_SINKAI_KABE,
     /* 0x1F5 */ OBJECT_KIN2_OBJ,
     /* 0x1F6 */ OBJECT_ISHI,

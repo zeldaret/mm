@@ -5,7 +5,7 @@
 
 struct ObjectKankyo;
 
-typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo*, GlobalContext*);
+typedef void (*ObjectKankyoActionFunc)(struct ObjectKankyo*, PlayState*);
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -27,7 +27,5 @@ typedef struct ObjectKankyo {
     /* 0x114E */ u8 unk_114E;
     /* 0x1150 */ ObjectKankyoActionFunc actionFunc;
 } ObjectKankyo; // size = 0x1154
-
-extern const ActorInit Object_Kankyo_InitVars;
 
 #endif // Z_OBJECT_KANKYO_H

@@ -77,63 +77,65 @@ u16 sATan2Tbl[] = {
     0x1FF6, 0x1FFB, 0x2000,
 };
 
-u16 Math_GetAtan2Tbl(f32 opposite, f32 adjacent) {
-    return sATan2Tbl[(s32)((opposite / adjacent) * 0x400)];
+u16 Math_GetAtan2Tbl(f32 y, f32 x) {
+    return sATan2Tbl[(s32)((y / x) * 0x400)];
 }
 
-s16 Math_Atan2S(f32 opposite, f32 adjacent) {
+s16 Math_Atan2S(f32 y, f32 x) {
     s32 angle;
 
-    if (opposite == 0.0f) {
-        if (adjacent >= 0.0f) {
+    if (y == 0.0f) {
+        if (x >= 0.0f) {
             angle = 0;
         } else {
             angle = 0x8000;
         }
-    } else if (adjacent == 0.0f) {
-        if (opposite >= 0.0f) {
+    } else if (x == 0.0f) {
+        if (y >= 0.0f) {
             angle = 0x4000;
         } else {
             angle = 0xC000;
         }
-    } else if (opposite >= 0.0f) {
-        if (adjacent >= 0.0f) {
-            if (opposite <= adjacent) {
-                angle = Math_GetAtan2Tbl(opposite, adjacent);
+    } else if (y >= 0.0f) {
+        if (x >= 0.0f) {
+            if (y <= x) {
+                angle = Math_GetAtan2Tbl(y, x);
             } else {
-                angle = 0x4000 - Math_GetAtan2Tbl(adjacent, opposite);
+                angle = 0x4000 - Math_GetAtan2Tbl(x, y);
             }
         } else {
-            if (-adjacent < opposite) {
-                angle = Math_GetAtan2Tbl(-adjacent, opposite) + 0x4000;
+            if (-x < y) {
+                angle = Math_GetAtan2Tbl(-x, y) + 0x4000;
             } else {
-                angle = 0x8000 - Math_GetAtan2Tbl(opposite, -adjacent);
+                angle = 0x8000 - Math_GetAtan2Tbl(y, -x);
             }
         }
-    } else if (adjacent < 0.0f) {
-        if (-opposite <= -adjacent) {
-            angle = Math_GetAtan2Tbl(-opposite, -adjacent) + 0x8000;
+    } else if (x < 0.0f) {
+        if (-y <= -x) {
+            angle = Math_GetAtan2Tbl(-y, -x) + 0x8000;
         } else {
-            angle = 0xC000 - Math_GetAtan2Tbl(-adjacent, -opposite);
+            angle = 0xC000 - Math_GetAtan2Tbl(-x, -y);
         }
     } else {
-        if (adjacent < -opposite) {
-            angle = Math_GetAtan2Tbl(adjacent, -opposite) + 0xC000;
+        if (x < -y) {
+            angle = Math_GetAtan2Tbl(x, -y) + 0xC000;
         } else {
-            angle = -Math_GetAtan2Tbl(-opposite, adjacent);
+            angle = -Math_GetAtan2Tbl(-y, x);
         }
     }
     return angle;
 }
 
-f32 Math_Atan2F(f32 opposite, f32 adjacent) {
-    return Math_Atan2S(opposite, adjacent) * (M_PI / 0x8000);
+f32 Math_Atan2F(f32 y, f32 x) {
+    return Math_Atan2S(y, x) * (M_PI / 0x8000);
 }
 
-s16 Math_FAtan2F(f32 adjacent, f32 opposite) {
-    return Math_Atan2S(opposite, adjacent);
+// Match the OoT implementation of Math_Atan2S
+s16 Math_Atan2S_XY(f32 x, f32 y) {
+    return Math_Atan2S(y, x);
 }
 
-f32 Math_Acot2F(f32 adjacent, f32 opposite) {
-    return Math_Atan2F(opposite, adjacent);
+// Match the OoT implementation of Math_Atan2F
+f32 Math_Atan2F_XY(f32 x, f32 y) {
+    return Math_Atan2F(y, x);
 }

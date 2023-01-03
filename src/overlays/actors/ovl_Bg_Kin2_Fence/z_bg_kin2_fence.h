@@ -5,7 +5,7 @@
 
 struct BgKin2Fence;
 
-typedef void (*BgKin2FenceActionFunc)(struct BgKin2Fence*, GlobalContext*);
+typedef void (*BgKin2FenceActionFunc)(struct BgKin2Fence*, PlayState*);
 
 typedef struct BgKin2Fence {
     /* 0x000 */ DynaPolyActor dyna;
@@ -16,7 +16,5 @@ typedef struct BgKin2Fence {
     /* 0x281 */ s8 cooldownTimer;
     /* 0x282 */ s8 waitBeforeOpenTimer;
 } BgKin2Fence; // size = 0x284
-
-extern const ActorInit Bg_Kin2_Fence_InitVars;
 
 #endif // Z_BG_KIN2_FENCE_H

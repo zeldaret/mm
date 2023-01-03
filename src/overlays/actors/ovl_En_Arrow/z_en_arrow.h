@@ -5,7 +5,7 @@
 
 struct EnArrow;
 
-typedef void (*EnArrowActionFunc)(struct EnArrow*, GlobalContext*);
+typedef void (*EnArrowActionFunc)(struct EnArrow*, PlayState*);
 
 enum {
     /* -8  */ ENARROW_MINUS8 = -8,
@@ -52,7 +52,5 @@ typedef struct EnArrow {
     /* 0x268 */ Vec3f unk_268;
     /* 0x274 */ EnArrowActionFunc actionFunc;
 } EnArrow; // size = 0x278
-
-extern const ActorInit En_Arrow_InitVars;
 
 #endif // Z_EN_ARROW_H

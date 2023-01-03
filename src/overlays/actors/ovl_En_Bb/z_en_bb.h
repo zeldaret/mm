@@ -8,7 +8,7 @@
 
 struct EnBb;
 
-typedef void (*EnBbActionFunc)(struct EnBb*, GlobalContext*);
+typedef void (*EnBbActionFunc)(struct EnBb*, PlayState*);
 
 typedef struct EnBb {
     /* 0x000 */ Actor actor;
@@ -36,7 +36,5 @@ typedef struct EnBb {
     /* 0x2F0 */ Gfx* limbDList;
     /* 0x2F4 */ ColliderSphere collider;
 } EnBb; // size = 0x34C
-
-extern const ActorInit En_Bb_InitVars;
 
 #endif // Z_EN_BB_H

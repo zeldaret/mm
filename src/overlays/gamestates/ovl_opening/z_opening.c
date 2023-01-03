@@ -5,60 +5,60 @@
  */
 
 #include "z_opening.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 
-void Opening_SetupForTitleCutscene(OpeningContext* this) {
-    static s32 openingEntrances[] = { 0x1C00, 0x1C10 };
-    static s32 openingCutscenes[] = { 0xFFFA, 0xFFFA };
+void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
+    static s32 sOpeningEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };
+    static s32 sOpeningCutscenes[] = { 0xFFFA, 0xFFFA };
 
-    gSaveContext.eventInf[1] &= (u8)~0x80;
+    CLEAR_EVENTINF(EVENTINF_17);
     gSaveContext.gameMode = 1;
 
     Sram_InitNewSave();
 
-    gSaveContext.save.entranceIndex = openingEntrances[D_801BB12C];
-    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = openingCutscenes[D_801BB12C];
-    gSaveContext.sceneSetupIndex = 0;
+    gSaveContext.save.entrance = sOpeningEntrances[D_801BB12C];
+    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = sOpeningCutscenes[D_801BB12C];
+    gSaveContext.sceneLayer = 0;
 
     gSaveContext.save.time = CLOCK_TIME(8, 0);
     gSaveContext.save.day = 1;
 
-    {
-        GameState* thisx = &this->gameState;
-        thisx->running = false;
-    }
-    SET_NEXT_GAMESTATE(&this->gameState, Play_Init, GlobalContext);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
+
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
 }
 
-void func_80803EA0(OpeningContext* this) {
+void func_80803EA0(TitleSetupState* this) {
     SREG(33) |= 1;
 }
 
-void Opening_Main(GameState* thisx) {
-    OpeningContext* this = (OpeningContext*)thisx;
+void TitleSetup_Main(GameState* thisx) {
+    TitleSetupState* this = (TitleSetupState*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, false, true, 0, 0, 0);
-    Opening_SetupForTitleCutscene(this);
+    func_8012CF0C(this->state.gfxCtx, false, true, 0, 0, 0);
+    TitleSetup_SetupTitleScreen(this);
     func_80803EA0(this);
 }
 
-void Opening_Destroy(GameState* thisx) {
+void TitleSetup_Destroy(GameState* thisx) {
     ShrinkWindow_Destroy();
 }
 
-void Opening_Init(GameState* thisx) {
-    OpeningContext* this = (OpeningContext*)thisx;
+void TitleSetup_Init(GameState* thisx) {
+    TitleSetupState* this = (TitleSetupState*)thisx;
 
-    Game_SetFramerateDivisor(&this->gameState, 1);
-    Matrix_Init(&this->gameState);
+    Game_SetFramerateDivisor(&this->state, 1);
+    Matrix_Init(&this->state);
     ShrinkWindow_Init();
-    View_Init(&this->view, this->gameState.gfxCtx);
-    this->gameState.main = Opening_Main;
-    this->gameState.destroy = Opening_Destroy;
+    View_Init(&this->view, this->state.gfxCtx);
+    this->state.main = TitleSetup_Main;
+    this->state.destroy = TitleSetup_Destroy;
 
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[RESPAWN_MODE_GORON].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_ZORA].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_DEKU].entranceIndex = 0xFF;
-    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_ZORA].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DEKU].entrance = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
 }

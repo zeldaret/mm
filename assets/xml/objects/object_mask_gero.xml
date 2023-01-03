@@ -1,13 +1,14 @@
 ﻿<Root>
+    <!-- Object for Don Gero's Mask-->
     <File Name="object_mask_gero" Segment="10">
-        <DList Name="object_mask_gero_DL_000DC0" Offset="0xDC0" />
-        <Texture Name="object_mask_gero_TLUT_001388" OutName="tlut_001388" Format="rgba16" Width="16" Height="16" Offset="0x1388" />
-        <Texture Name="object_mask_gero_Tex_001588" OutName="tex_001588" Format="ci8" Width="16" Height="16" Offset="0x1588" />
-        <Texture Name="object_mask_gero_Tex_001688" OutName="tex_001688" Format="rgba16" Width="32" Height="32" Offset="0x1688" />
-        <Texture Name="object_mask_gero_Tex_001E88" OutName="tex_001E88" Format="ci8" Width="16" Height="16" Offset="0x1E88" />
-        <Texture Name="object_mask_gero_Tex_001F88" OutName="tex_001F88" Format="ci8" Width="32" Height="32" Offset="0x1F88" />
-        <Texture Name="object_mask_gero_Tex_002388" OutName="tex_002388" Format="ci8" Width="16" Height="16" Offset="0x2388" />
-        <Texture Name="object_mask_gero_Tex_002488" OutName="tex_002488" Format="rgba16" Width="32" Height="32" Offset="0x2488" />
-        <Texture Name="object_mask_gero_Tex_002C88" OutName="tex_002C88" Format="rgba16" Width="16" Height="16" Offset="0x2C88" />
+        <DList Name="gDonGeroMaskDL" Offset="0xDC0" />
+        <Texture Name="gDonGeroMaskTLUT" OutName="don_gero_mask_tlut" Format="rgba16" Width="16" Height="16" Offset="0x1388" />
+        <Texture Name="gDonGeroMaskBottomTex" OutName="don_gero_mask_bottom" Format="ci8" Width="16" Height="16" Offset="0x1588" />
+        <Texture Name="gDonGeroMaskToesTex" OutName="don_gero_mask_toes" Format="rgba16" Width="32" Height="32" Offset="0x1688" />
+        <Texture Name="gDonGeroMaskTopTex" OutName="don_gero_mask_top" Format="ci8" Width="16" Height="16" Offset="0x1E88" />
+        <Texture Name="gDonGeroMaskNostrilTex" OutName="don_gero_mask_nostril" Format="ci8" Width="32" Height="32" Offset="0x1F88" />
+        <Texture Name="gDonGeroMaskMouthTex" OutName="don_gero_mask_mouth" Format="ci8" Width="16" Height="16" Offset="0x2388" />
+        <Texture Name="gDonGeroMaskFrillsTex" OutName="don_gero_mask_frills" Format="rgba16" Width="32" Height="32" Offset="0x2488" />
+        <Texture Name="gDonGeroMaskEyeTex" OutName="don_gero_mask_eye" Format="rgba16" Width="16" Height="16" Offset="0x2C88" />
     </File>
 </Root>

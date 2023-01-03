@@ -11,18 +11,18 @@
 
 #define THIS ((ObjComb*)thisx)
 
-void ObjComb_Init(Actor* thisx, GlobalContext* globalCtx);
-void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx);
-void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx);
+void ObjComb_Init(Actor* thisx, PlayState* play);
+void ObjComb_Destroy(Actor* thisx, PlayState* play2);
+void ObjComb_Update(Actor* thisx, PlayState* play);
+void ObjComb_Draw(Actor* thisx, PlayState* play);
 
 void func_8098DC44(ObjComb* this);
-void func_8098DC60(ObjComb* this, GlobalContext* globalCtx);
-void func_8098DEA0(ObjComb* this, GlobalContext* globalCtx);
+void func_8098DC60(ObjComb* this, PlayState* play);
+void func_8098DEA0(ObjComb* this, PlayState* play);
 void func_8098E098(ObjComb* this);
-void func_8098E0B8(ObjComb* this, GlobalContext* globalCtx);
+void func_8098E0B8(ObjComb* this, PlayState* play);
 
-const ActorInit Obj_Comb_InitVars = {
+ActorInit Obj_Comb_InitVars = {
     ACTOR_OBJ_COMB,
     ACTORCAT_PROP,
     FLAGS,
@@ -57,7 +57,7 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_2,
         COLSHAPE_JNTSPH,
     },
-    1,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
@@ -68,7 +68,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_STOP),
 };
 
-s32 func_8098CE40(ObjComb* this, GlobalContext* globalCtx) {
+s32 func_8098CE40(ObjComb* this, PlayState* play) {
     s32 phi_a2 = -1;
     s32 temp_v0 = (OBJCOMB_GET_1F(&this->actor) << 2) | 0xFF01;
 
@@ -76,10 +76,10 @@ s32 func_8098CE40(ObjComb* this, GlobalContext* globalCtx) {
         phi_a2 = ((temp_v0 & 0x3FC) >> 2) & 0xFF;
     }
 
-    return ((phi_a2 < 0) == 1) || !Flags_GetTreasure(globalCtx, phi_a2);
+    return ((phi_a2 < 0) == 1) || !Flags_GetTreasure(play, phi_a2);
 }
 
-void func_8098CEAC(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098CEAC(ObjComb* this, PlayState* play) {
     Vec3f spDC;
     Vec3f spD0;
     Vec3f spC4;
@@ -126,7 +126,7 @@ void func_8098CEAC(ObjComb* this, GlobalContext* globalCtx) {
         } else {
             phi_v0 = 0x20;
         }
-        EffectSsKakera_Spawn(globalCtx, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f10, 0, 0, 60, -1,
+        EffectSsKakera_Spawn(play, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f10, 0, 0, 60, -1,
                              OBJECT_COMB, object_comb_DL_001040);
     }
 
@@ -134,10 +134,10 @@ void func_8098CEAC(ObjComb* this, GlobalContext* globalCtx) {
     spD0.y = this->actor.world.pos.y - 10.0f;
     spD0.z = this->actor.world.pos.z;
 
-    func_800BBFB0(globalCtx, &spD0, 40.0f, 6, 70, 60, 1);
+    func_800BBFB0(play, &spD0, 40.0f, 6, 70, 60, 1);
 }
 
-void func_8098D19C(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098D19C(ObjComb* this, PlayState* play) {
     Vec3f spDC;
     Vec3f spD0;
     Vec3f spC4;
@@ -184,7 +184,7 @@ void func_8098D19C(ObjComb* this, GlobalContext* globalCtx) {
             phi_v0 = 0x20;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f8, 0, 0, 60, -1,
+        EffectSsKakera_Spawn(play, &spD0, &spC4, &spD0, phi_s0, phi_v0, phi_s1, 4, 0, temp_f8, 0, 0, 60, -1,
                              OBJECT_COMB, object_comb_DL_001040);
     }
 
@@ -192,10 +192,10 @@ void func_8098D19C(ObjComb* this, GlobalContext* globalCtx) {
     spD0.y = this->actor.world.pos.y + 20.0f;
     spD0.z = this->actor.world.pos.z;
 
-    func_800BBFB0(globalCtx, &spD0, 40.0f, 6, 70, 60, 1);
+    func_800BBFB0(play, &spD0, 40.0f, 6, 70, 60, 1);
 }
 
-void func_8098D47C(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098D47C(ObjComb* this, PlayState* play) {
     Vec3f spD4;
     Vec3f spC8;
     Vec3f spBC;
@@ -235,12 +235,12 @@ void func_8098D47C(ObjComb* this, GlobalContext* globalCtx) {
             phi_v0 = 0x20;
         }
 
-        EffectSsKakera_Spawn(globalCtx, &spC8, &spBC, &spC8, phi_s0, phi_v0, 40, 0, 0, temp_f10, 0, 0, 80, -1,
-                             OBJECT_COMB, object_comb_DL_001040);
+        EffectSsKakera_Spawn(play, &spC8, &spBC, &spC8, phi_s0, phi_v0, 40, 0, 0, temp_f10, 0, 0, 80, -1, OBJECT_COMB,
+                             object_comb_DL_001040);
     }
 }
 
-void func_8098D6E0(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098D6E0(ObjComb* this, PlayState* play) {
     s32 i;
     Vec3f sp70;
     f32 temp_f0;
@@ -254,23 +254,23 @@ void func_8098D6E0(ObjComb* this, GlobalContext* globalCtx) {
         temp_f20 = ((1.0f - SQ(temp_f0)) * 14.0f) + 4.0f;
         sp70.x = (Math_SinS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20) + this->actor.world.pos.x;
         sp70.z = (Math_CosS((s32)(Rand_ZeroOne() * 8000.0f) + temp) * temp_f20) + this->actor.world.pos.z;
-        EffectSsGSplash_Spawn(globalCtx, &sp70, NULL, NULL, 0, 200);
+        EffectSsGSplash_Spawn(play, &sp70, NULL, NULL, 0, 200);
     }
 
     sp70.x = this->actor.world.pos.x;
     sp70.z = this->actor.world.pos.z;
-    EffectSsGSplash_Spawn(globalCtx, &sp70, NULL, NULL, 0, 300);
+    EffectSsGSplash_Spawn(play, &sp70, NULL, NULL, 0, 300);
 }
 
-void func_8098D870(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098D870(ObjComb* this, PlayState* play) {
     s32 temp_v0 = func_800A8150(OBJCOMB_GET_3F(&this->actor));
 
     if (temp_v0 >= 0) {
-        Item_DropCollectible(globalCtx, &this->actor.world.pos, ((OBJCOMB_GET_7F00(&this->actor)) << 8) | temp_v0);
+        Item_DropCollectible(play, &this->actor.world.pos, ((OBJCOMB_GET_7F00(&this->actor)) << 8) | temp_v0);
     }
 }
 
-void func_8098D8C8(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098D8C8(ObjComb* this, PlayState* play) {
     s32 params = OBJCOMB_GET_F(&this->actor);
     s32 i;
     s32 phi_s5;
@@ -283,21 +283,21 @@ void func_8098D8C8(ObjComb* this, GlobalContext* globalCtx) {
     this->unk_1B6 = 0;
 
     for (i = 0; i < params; i++) {
-        if (Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BEE, this->actor.world.pos.x, this->actor.world.pos.y,
+        if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BEE, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, phi_s5)) {
             this->unk_1B6 = 1;
         }
     }
 }
 
-void func_8098D99C(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098D99C(ObjComb* this, PlayState* play) {
     s32 params;
     Actor* temp_v0;
 
-    if (func_8098CE40(this, globalCtx)) {
+    if (func_8098CE40(this, play)) {
         params = (OBJCOMB_GET_1F(&this->actor) << 2) | 0xFF01;
-        temp_v0 = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_SW, this->actor.world.pos.x,
-                              this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, params);
+        temp_v0 = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, this->actor.world.pos.x, this->actor.world.pos.y,
+                              this->actor.world.pos.z, 0, this->actor.home.rot.y, 0, params);
 
         if (temp_v0 != NULL) {
             temp_v0->parent = &this->actor;
@@ -314,46 +314,49 @@ void func_8098D99C(ObjComb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_8098DA74(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098DA74(ObjComb* this, PlayState* play) {
     s32 temp_v0 = OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor);
 
     if (temp_v0 == 0) {
-        func_8098D870(this, globalCtx);
+        func_8098D870(this, play);
     } else if (temp_v0 == 1) {
-        func_8098D8C8(this, globalCtx);
+        func_8098D8C8(this, play);
     } else {
-        func_8098D99C(this, globalCtx);
+        func_8098D99C(this, play);
     }
 }
 
-void ObjComb_Init(Actor* thisx, GlobalContext* globalCtx) {
+void ObjComb_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjComb* this = THIS;
     s32 sp2C = OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitJntSph(globalCtx, &this->collider);
+    Collider_InitJntSph(play, &this->collider);
 
-    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && (gSaveContext.save.weekEventReg[83] & 2)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((sp2C == 1) && OBJCOMB_GET_10(&this->actor) && CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
 
-    if ((sp2C == 0) && func_800A81A4(globalCtx, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
+    if ((sp2C == 0) && Item_CanDropBigFairy(play, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
         this->unk_1B7 = 1;
         this->actor.flags |= ACTOR_FLAG_10;
     }
 
-    if ((sp2C != 2) || !func_8098CE40(this, globalCtx)) {
+    if ((sp2C != 2) || !func_8098CE40(this, play)) {
         this->unk_1B8 = -1;
     }
     func_8098DC44(this);
 }
 
-void ObjComb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyJntSph(globalCtx, &THIS->collider);
+void ObjComb_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjComb* this = THIS;
+
+    Collider_DestroyJntSph(play, &this->collider);
 }
 
 void func_8098DC44(ObjComb* this) {
@@ -361,7 +364,7 @@ void func_8098DC44(ObjComb* this) {
     this->actionFunc = func_8098DC60;
 }
 
-void func_8098DC60(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098DC60(ObjComb* this, PlayState* play) {
     s32 temp_a0;
     s8 temp_v0;
     u32 temp_v1;
@@ -378,9 +381,9 @@ void func_8098DC60(ObjComb* this, GlobalContext* globalCtx) {
 
     if (this->unk_1B3) {
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0182C29C) {
-            func_8098CEAC(this, globalCtx);
-            func_8098DA74(this, globalCtx);
-            Actor_MarkForDeath(&this->actor);
+            func_8098CEAC(this, play);
+            func_8098DA74(this, play);
+            Actor_Kill(&this->actor);
         } else {
             s32 dmgFlags = this->collider.elements->info.acHitInfo->toucher.dmgFlags;
 
@@ -413,11 +416,11 @@ void func_8098DC60(ObjComb* this, GlobalContext* globalCtx) {
                 this->unk_1B8--;
             }
         }
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 
     if (this->actor.update != NULL) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 
     this->actor.shape.rot.x = (s32)(Math_SinS(this->unk_1AA) * this->unk_1A8) + this->actor.home.rot.x;
@@ -432,20 +435,20 @@ void func_8098DE58(ObjComb* this) {
     this->actionFunc = func_8098DEA0;
 }
 
-void func_8098DEA0(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098DEA0(ObjComb* this, PlayState* play) {
     this->unk_1B4--;
     if ((this->actor.bgCheckFlags & 1) || (this->unk_1B4 <= 0)) {
-        func_8098DA74(this, globalCtx);
+        func_8098DA74(this, play);
         if ((this->actor.bgCheckFlags & 0x20) && (this->actor.depthInWater > 30.0f)) {
-            func_8098D47C(this, globalCtx);
+            func_8098D47C(this, play);
         } else {
-            func_8098D19C(this, globalCtx);
+            func_8098D19C(this, play);
         }
-        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_HONEYCOMB_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_HONEYCOMB_BROKEN);
         func_8098E098(this);
     } else {
         if (this->actor.bgCheckFlags & 0x40) {
-            func_8098D6E0(this, globalCtx);
+            func_8098D6E0(this, play);
         }
 
         if (this->actor.bgCheckFlags & 0x20) {
@@ -472,8 +475,8 @@ void func_8098DEA0(ObjComb* this, GlobalContext* globalCtx) {
         Actor_MoveWithGravity(&this->actor);
         this->actor.shape.rot.x += this->unk_1AE;
         this->actor.shape.rot.y += this->unk_1B0;
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 12.0f, 0.0f, 5);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 12.0f, 0.0f, 5);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -483,21 +486,21 @@ void func_8098E098(ObjComb* this) {
     this->actionFunc = func_8098E0B8;
 }
 
-void func_8098E0B8(ObjComb* this, GlobalContext* globalCtx) {
+void func_8098E0B8(ObjComb* this, PlayState* play) {
     this->unk_1B4--;
     if (this->unk_1B4 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.cutscene >= 0)) {
         if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-            func_800B7298(globalCtx, &this->actor, 4);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
         }
     }
 }
 
-void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx) {
+void ObjComb_Update(Actor* thisx, PlayState* play) {
     ObjComb* this = THIS;
 
     this->unk_1B3 = (this->collider.base.acFlags & AC_HIT) != 0;
@@ -512,7 +515,7 @@ void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 
     if (this->actor.update == NULL) {
         if ((this->unk_1B5 == 2) && (func_800F2138(this->actor.cutscene) == -1)) {
@@ -526,12 +529,12 @@ void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx) {
                 if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
                     ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
                     if (this->actor.cutscene >= 0) {
-                        func_800B7298(globalCtx, &this->actor, 1);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                     }
 
                     if (((OBJCOMB_GET_8000(&this->actor) | OBJCOMB_GET_80(&this->actor)) == 1) &&
                         OBJCOMB_GET_10(&this->actor)) {
-                        gSaveContext.save.weekEventReg[83] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_83_02);
                     }
 
                     this->unk_1B5 = 2;
@@ -542,18 +545,18 @@ void ObjComb_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->unk_1B7 != 0) {
-            globalCtx->actorCtx.unk5 |= 8;
+            play->actorCtx.flags |= ACTORCTX_FLAG_3;
             this->actor.flags |= ACTOR_FLAG_10;
         }
     }
 }
 
-void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void ObjComb_Draw(Actor* thisx, PlayState* play) {
     ObjComb* this = THIS;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C28C(play->state.gfxCtx);
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (118.0f * this->actor.scale.y),
                      this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -562,10 +565,10 @@ void ObjComb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Translate(0.0f, -(this->actor.scale.y * 118.0f), 0.0f, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_comb_DL_000CB0);
 
     Collider_UpdateSpheres(0, &this->collider);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }

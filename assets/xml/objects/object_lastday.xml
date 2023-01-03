@@ -1,5 +1,8 @@
 ﻿<Root>
     <File Name="object_lastday" Segment="6">
+        <Array Name="object_lastday_Vtx_000000" Count="6" Offset="0x0">
+            <Vtx/>
+        </Array>
         <DList Name="object_lastday_DL_000060" Offset="0x60" />
         <TextureAnimation Name="object_lastday_Matanimheader_000148" Offset="0x148" />
         <DList Name="object_lastday_DL_000210" Offset="0x210" />

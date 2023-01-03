@@ -41,6 +41,7 @@ FaultDrawer sFaultDrawerDefault = {
     NULL, // inputCallback
 };
 
+//! TODO: Needs to be extracted
 #pragma GLOBAL_ASM("asm/non_matchings/boot/fault_drawer/sFaultDrawerFont.s")
 
 void FaultDrawer_SetOsSyncPrintfEnabled(u32 enabled) {

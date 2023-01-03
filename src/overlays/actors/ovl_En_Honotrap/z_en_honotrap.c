@@ -11,33 +11,33 @@
 
 #define THIS ((EnHonotrap*)thisx)
 
-void EnHonotrap_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnHonotrap_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnHonotrap_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnHonotrap_Init(Actor* thisx, PlayState* play);
+void EnHonotrap_Destroy(Actor* thisx, PlayState* play);
+void EnHonotrap_Update(Actor* thisx, PlayState* play);
+void EnHonotrap_Draw(Actor* thisx, PlayState* play);
 
-void func_8092EBDC(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092ECF0(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EDD8(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EE1C(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EE90(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092EF98(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F074(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F0B8(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F10C(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F208(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F3D8(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F5EC(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F7BC(EnHonotrap* this, GlobalContext* globalCtx);
-void func_8092F878(EnHonotrap* this, GlobalContext* globalCtx);
+void func_8092EBDC(EnHonotrap* this, PlayState* play);
+void func_8092ECF0(EnHonotrap* this, PlayState* play);
+void func_8092EDD8(EnHonotrap* this, PlayState* play);
+void func_8092EE1C(EnHonotrap* this, PlayState* play);
+void func_8092EE90(EnHonotrap* this, PlayState* play);
+void func_8092EF98(EnHonotrap* this, PlayState* play);
+void func_8092F074(EnHonotrap* this, PlayState* play);
+void func_8092F0B8(EnHonotrap* this, PlayState* play);
+void func_8092F10C(EnHonotrap* this, PlayState* play);
+void func_8092F208(EnHonotrap* this, PlayState* play);
+void func_8092F3D8(EnHonotrap* this, PlayState* play);
+void func_8092F5EC(EnHonotrap* this, PlayState* play);
+void func_8092F7BC(EnHonotrap* this, PlayState* play);
+void func_8092F878(EnHonotrap* this, PlayState* play);
 
-void func_8092E638(EnHonotrap* this, GlobalContext* globalCtx); // d
-void func_8092E840(EnHonotrap* this, GlobalContext* globalCtx); // d
-void func_8092E988(EnHonotrap* this, GlobalContext* globalCtx); // d
-void func_8092FE44(Actor* thisx, GlobalContext* globalCtx);
-void func_8092FEFC(Actor* thisx, GlobalContext* globalCtx);
-void func_80930030(Actor* thisx, GlobalContext* globalCtx);
-void func_80930190(Actor* thisx, GlobalContext* globalCtx);
+void func_8092E638(EnHonotrap* this, PlayState* play); // d
+void func_8092E840(EnHonotrap* this, PlayState* play); // d
+void func_8092E988(EnHonotrap* this, PlayState* play); // d
+void func_8092FE44(Actor* thisx, PlayState* play);
+void func_8092FEFC(Actor* thisx, PlayState* play);
+void func_80930030(Actor* thisx, PlayState* play);
+void func_80930190(Actor* thisx, PlayState* play);
 
 void func_8092EBC0(EnHonotrap* this);
 void func_8092EE68(EnHonotrap* this);
@@ -45,7 +45,7 @@ void func_8092F0F8(EnHonotrap* this);
 void func_8092F854(EnHonotrap* this);
 
 #if 0
-const ActorInit En_Honotrap_InitVars = {
+ActorInit En_Honotrap_InitVars = {
     ACTOR_EN_HONOTRAP,
     ACTORCAT_PROP,
     FLAGS,
@@ -72,7 +72,7 @@ static ColliderTrisElementInit D_80930424[2] = {
 // static ColliderTrisInit sTrisInit = {
 static ColliderTrisInit D_8093049C = {
     { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    2, D_80930424, // sTrisElementsInit,
+    ARRAY_COUNT(sTrisElementsInit), D_80930424, // sTrisElementsInit,
 };
 
 // static ColliderCylinderInit sCylinderInit = {
@@ -106,7 +106,7 @@ extern InitChainEntry D_809304E0[];
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/func_8092E5A4.s")
 
 // EnHonotrap_InitEye
-void func_8092E638(EnHonotrap* this, GlobalContext* globalCtx) {
+void func_8092E638(EnHonotrap* this, PlayState* play) {
     s32 i;
     s32 j;
     s32 k;
@@ -126,8 +126,8 @@ void func_8092E638(EnHonotrap* this, GlobalContext* globalCtx) {
         }
     }
 
-    Collider_InitTris(globalCtx, &this->collider.tris);
-    Collider_SetTris(globalCtx, &this->collider.tris, &this->actor, &D_8093049C, this->collider.elements);
+    Collider_InitTris(play, &this->collider.tris);
+    Collider_SetTris(play, &this->collider.tris, &this->actor, &D_8093049C, this->collider.elements);
 
     for (i = 0; i < 2; i++) {
         for (j = 0, vtx = sp70; j < 3; j++, vtx++) {
@@ -150,20 +150,20 @@ void func_8092E638(EnHonotrap* this, GlobalContext* globalCtx) {
 }
 
 // EnHonotrap_InitFlame
-void func_8092E840(EnHonotrap* this, GlobalContext* globalCtx) {
+void func_8092E840(EnHonotrap* this, PlayState* play) {
     s32 pad[2];
     s32 params;
 
     params = this->actor.params;
     Actor_SetScale(&this->actor, 0.0001f);
-    Collider_InitCylinder(globalCtx, &this->collider.cyl);
-    Collider_SetCylinder(globalCtx, &this->collider.cyl, &this->actor, &D_809304AC);
+    Collider_InitCylinder(play, &this->collider.cyl);
+    Collider_SetCylinder(play, &this->collider.cyl, &this->actor, &D_809304AC);
     Collider_UpdateCylinder(&this->actor, &this->collider.cyl);
     this->actor.terminalVelocity = -1.0f;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &D_809304D8);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.shape.shadowAlpha = 0x80;
-    this->unk228 = GET_PLAYER(globalCtx)->actor.world.pos;
+    this->unk228 = GET_PLAYER(play)->actor.world.pos;
     this->unk228.y += 10.0f;
     this->unk23A = Rand_ZeroOne() * 511.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FLAME_IGNITION);
@@ -176,14 +176,14 @@ void func_8092E840(EnHonotrap* this, GlobalContext* globalCtx) {
     func_8092F0F8(this);
 }
 
-void func_8092E988(EnHonotrap* this, GlobalContext* globalCtx) {
+void func_8092E988(EnHonotrap* this, PlayState* play) {
     EnHonotrap23C* var_s2;
     s32 var_s0;
     s32 i;
 
     Actor_SetScale(&this->actor, 0.0001f);
-    Collider_InitCylinder(globalCtx, &this->collider.cyl);
-    Collider_SetCylinder(globalCtx, &this->collider.cyl, &this->actor, &D_809304AC);
+    Collider_InitCylinder(play, &this->collider.cyl);
+    Collider_SetCylinder(play, &this->collider.cyl, &this->actor, &D_809304AC);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &D_809304D8);
 
     var_s0 = Rand_ZeroOne() * 511.0f;
@@ -198,36 +198,36 @@ void func_8092E988(EnHonotrap* this, GlobalContext* globalCtx) {
     func_8092F854(this);
 }
 
-void EnHonotrap_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnHonotrap_Init(Actor* thisx, PlayState* play) {
     s32 params;
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     params = this->actor.params;
     Actor_ProcessInitChain(&this->actor, D_809304E0);
     if ((params == 0) || (params == 3)) {
-        func_8092E638(this, globalCtx);
+        func_8092E638(this, play);
     } else if (params == 4) {
-        func_8092E988(this, globalCtx);
+        func_8092E988(this, play);
         this->actor.update = func_8092FEFC;
         this->actor.draw = func_80930190;
         this->actor.uncullZoneScale = 500.0f;
         this->actor.uncullZoneDownward = 500.0f;
     } else {
-        func_8092E840(this, globalCtx);
+        func_8092E840(this, play);
         this->actor.update = func_8092FE44;
         this->actor.draw = func_80930030;
     }
 }
 
-void EnHonotrap_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+void EnHonotrap_Destroy(Actor* thisx, PlayState* play) {
     s16 params;
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     params = this->actor.params;
     if ((params == 0) || (params == 3)) {
-        Collider_DestroyTris(globalCtx, &this->collider.tris);
+        Collider_DestroyTris(play, &this->collider.tris);
     } else {
-        Collider_DestroyCylinder(globalCtx, &this->collider.cyl);
+        Collider_DestroyCylinder(play, &this->collider.cyl);
     }
 }
 
@@ -301,7 +301,7 @@ void func_8092F854(EnHonotrap* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/EnHonotrap_Update.s")
 
-void func_8092FE44(Actor* thisx, GlobalContext* globalCtx) {
+void func_8092FE44(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
 
     if (this->unk220 > 0) {
@@ -314,12 +314,12 @@ void func_8092FE44(Actor* thisx, GlobalContext* globalCtx) {
     }
     Actor_SetFocus(&this->actor, 5.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
     this->unk23A -= 0x14;
     this->unk23A &= 0x1FF;
 }
 
-void func_8092FEFC(Actor* thisx, GlobalContext* globalCtx) {
+void func_8092FEFC(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
     Actor* temp_v0;
 
@@ -332,40 +332,40 @@ void func_8092FEFC(Actor* thisx, GlobalContext* globalCtx) {
     }
     this->unk238 += 0x640;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
-    this->actionFunc(this, globalCtx);
+    this->actionFunc(this, play);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/EnHonotrap_Draw.s")
 
-void func_80930030(Actor* thisx, GlobalContext* globalCtx) {
+void func_80930030(Actor* thisx, PlayState* play) {
     s32 pad;
     EnHonotrap* this = (EnHonotrap*)thisx;
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, this->unk23A, 32, 128));
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, this->unk23A, 32, 128));
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-    Matrix_RotateYS(Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000, MTXMODE_APPLY);
-    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    Matrix_RotateYS(Camera_GetCamDirYaw(play->cameraPtrs[play->activeCamId]) + 0x8000, MTXMODE_APPLY);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 #ifdef NON_MATCHING
-void func_80930190(Actor* thisx, GlobalContext* globalCtx) {
+void func_80930190(Actor* thisx, PlayState* play) {
     EnHonotrap* this = (EnHonotrap*)thisx;
     Vec3s spB8;
     EnHonotrapArr* temp_s0;
     EnHonotrap23C* var_s3;
     s32 i; // s4
 
-    OPEN_DISPS(globalCtx->state.gfxCtx);
-    func_8012C2DC(globalCtx->state.gfxCtx);
+    OPEN_DISPS(play->state.gfxCtx);
+    func_8012C2DC(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
-    func_800DFC90(&spB8, globalCtx->cameraPtrs[globalCtx->activeCamera]);
+    func_800DFC90(&spB8, play->cameraPtrs[play->activeCamId]);
     spB8.y += 0x8000;
     var_s3 = &this->unk23C;
     for (i = 0; i < 6; i++) {
@@ -373,19 +373,19 @@ void func_80930190(Actor* thisx, GlobalContext* globalCtx) {
         if (temp_s0->unk12 != 0) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
-                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, temp_s0->unk_10, 0x20, 0x80));
+                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, temp_s0->unk_10, 0x20, 0x80));
             Matrix_SetTranslateRotateYXZ(temp_s0->unk0.x, temp_s0->unk0.y - (4000.0f * temp_s0->unkC), temp_s0->unk0.z,
                                          &spB8);
             // temp_fa1 = temp_s0->unkC;
             Matrix_Scale(((fabsf(Math_SinS((s16)(spB8.y - this->actor.shape.rot.y) >> 1)) * 0.2f) + 1.7f) *
                              temp_s0->unkC,
                          temp_s0->unkC, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+            gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
         }
     }
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Honotrap/func_80930190.s")

@@ -53,6 +53,6 @@
         <Limb Name="gCarnivorousLilyPadRootsLimb" Type="Standard" EnumName="CARNIVOROUS_LILY_PAD_LIMB_ROOTS" Offset="0x33F0" />
 
         <!-- Carnivorous Lily Pad Skeleton -->
-        <Skeleton Name="gCarnivorousLilyPadSkel" Type="Flex" LimbType="Standard" LimbNone="CARNIVOROUS_LILY_PAD_LIMB_NONE" LimbMax="CARNIVOROUS_LILY_PAD_LIMB_MAX" EnumName="CarnivorousLilyPadLimbs" Offset="0x3428" />
+        <Skeleton Name="gCarnivorousLilyPadSkel" Type="Flex" LimbType="Standard" LimbNone="CARNIVOROUS_LILY_PAD_LIMB_NONE" LimbMax="CARNIVOROUS_LILY_PAD_LIMB_MAX" EnumName="CarnivorousLilyPadLimb" Offset="0x3428" />
     </File>
 </Root>

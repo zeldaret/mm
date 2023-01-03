@@ -22,9 +22,9 @@
 
 #define PARAMS ((EffectSsLightningInitParams*)initParamsx)
 
-u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
-void EffectSsLightning_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
-void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
+u32 EffectSsLightning_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx);
+void EffectSsLightning_Update(PlayState* play, u32 index, EffectSs* this);
+void EffectSsLightning_Draw(PlayState* play, u32 index, EffectSs* this);
 
 TexturePtr sLightningTextures[] = {
     gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex, gEffLightning4Tex,
@@ -38,7 +38,7 @@ const EffectSsInit Effect_Ss_Lightning_InitVars = {
 
 static s32 sIsDesegmented = false;
 
-u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
+u32 EffectSsLightning_Init(PlayState* play, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsLightningInitParams* initParams = PARAMS;
     s32 i;
 
@@ -70,7 +70,7 @@ u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, 
     return 1;
 }
 
-void EffectSsLightning_NewLightning(GlobalContext* globalCtx, Vec3f* pos, s32 yaw, EffectSs* this) {
+void EffectSsLightning_NewLightning(PlayState* play, Vec3f* pos, s32 yaw, EffectSs* this) {
     EffectSs newLightning;
 
     EffectSS_Delete(&newLightning);
@@ -80,11 +80,11 @@ void EffectSsLightning_NewLightning(GlobalContext* globalCtx, Vec3f* pos, s32 ya
     newLightning.rYaw = yaw;
     newLightning.life = newLightning.rLifespan;
 
-    EffectSS_Copy(globalCtx, &newLightning);
+    EffectSS_Copy(play, &newLightning);
 }
 
-void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+void EffectSsLightning_Draw(PlayState* play, u32 index, EffectSs* this) {
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
     MtxF mfResult;
     MtxF mfTrans;
     MtxF mfScale;
@@ -109,7 +109,7 @@ void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this)
     xzScale = yScale * 0.6f;
     SkinMatrix_SetScale(&mfScale, xzScale, yScale, xzScale);
     SkinMatrix_SetRotateRPY(&mfRot, this->vec.x, this->vec.y, this->rYaw);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &play->billboardMtxF, &mfTransBillboard);
     SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfRot, &mfTransBillboardRot);
     SkinMatrix_MtxFMtxFMult(&mfTransBillboardRot, &mfScale, &mfResult);
 
@@ -130,7 +130,7 @@ void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this)
     CLOSE_DISPS(gfxCtx);
 }
 
-void EffectSsLightning_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
+void EffectSsLightning_Update(PlayState* play, u32 index, EffectSs* this) {
     s32 pad;
     Vec3f pos;
     s32 yaw;
@@ -145,13 +145,13 @@ void EffectSsLightning_Update(GlobalContext* globalCtx, u32 index, EffectSs* thi
         pos.y = this->pos.y + (Math_SinS(this->rYaw - 0x4000) * scale);
 
         scale = Math_CosS(this->rYaw - 0x4000) * scale;
-        pos.x = this->pos.x - (Math_CosS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx))) * scale);
-        pos.z = this->pos.z + (Math_SinS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx))) * scale);
+        pos.x = this->pos.x - (Math_CosS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play))) * scale);
+        pos.z = this->pos.z + (Math_SinS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(play))) * scale);
 
-        EffectSsLightning_NewLightning(globalCtx, &pos, yaw, this);
+        EffectSsLightning_NewLightning(play, &pos, yaw, this);
 
         if (Rand_ZeroOne() < 0.1f) {
-            EffectSsLightning_NewLightning(globalCtx, &pos, (this->rYaw * 2) - yaw, this);
+            EffectSsLightning_NewLightning(play, &pos, (this->rYaw * 2) - yaw, this);
         }
     }
 }

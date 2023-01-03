@@ -10,29 +10,29 @@
 
 #define THIS ((EnJso2*)thisx)
 
-void EnJso2_Init(Actor* thisx, GlobalContext* globalCtx);
-void EnJso2_Destroy(Actor* thisx, GlobalContext* globalCtx);
-void EnJso2_Update(Actor* thisx, GlobalContext* globalCtx);
-void EnJso2_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnJso2_Init(Actor* thisx, PlayState* play);
+void EnJso2_Destroy(Actor* thisx, PlayState* play);
+void EnJso2_Update(Actor* thisx, PlayState* play);
+void EnJso2_Draw(Actor* thisx, PlayState* play);
 
-void func_80A778F8(EnJso2* this, GlobalContext* globalCtx);
-void func_80A785E4(EnJso2* this, GlobalContext* globalCtx);
-void func_80A78868(EnJso2* this, GlobalContext* globalCtx);
-void func_80A78ACC(EnJso2* this, GlobalContext* globalCtx);
-void func_80A78B70(EnJso2* this, GlobalContext* globalCtx);
-void func_80A78C7C(EnJso2* this, GlobalContext* globalCtx);
-void func_80A78F04(EnJso2* this, GlobalContext* globalCtx);
-void func_80A79038(EnJso2* this, GlobalContext* globalCtx);
-void func_80A7919C(EnJso2* this, GlobalContext* globalCtx);
-void func_80A79364(EnJso2* this, GlobalContext* globalCtx);
-void func_80A794C8(EnJso2* this, GlobalContext* globalCtx);
-void func_80A79600(EnJso2* this, GlobalContext* globalCtx);
-void func_80A7980C(EnJso2* this, GlobalContext* globalCtx);
-void func_80A798C8(EnJso2* this, GlobalContext* globalCtx);
-void func_80A79A84(EnJso2* this, GlobalContext* globalCtx);
-void func_80A79BA0(EnJso2* this, GlobalContext* globalCtx);
-void func_80A7A124(EnJso2* this, GlobalContext* globalCtx);
-void func_80A7A2EC(EnJso2* this, GlobalContext* globalCtx);
+void func_80A778F8(EnJso2* this, PlayState* play);
+void func_80A785E4(EnJso2* this, PlayState* play);
+void func_80A78868(EnJso2* this, PlayState* play);
+void func_80A78ACC(EnJso2* this, PlayState* play);
+void func_80A78B70(EnJso2* this, PlayState* play);
+void func_80A78C7C(EnJso2* this, PlayState* play);
+void func_80A78F04(EnJso2* this, PlayState* play);
+void func_80A79038(EnJso2* this, PlayState* play);
+void func_80A7919C(EnJso2* this, PlayState* play);
+void func_80A79364(EnJso2* this, PlayState* play);
+void func_80A794C8(EnJso2* this, PlayState* play);
+void func_80A79600(EnJso2* this, PlayState* play);
+void func_80A7980C(EnJso2* this, PlayState* play);
+void func_80A798C8(EnJso2* this, PlayState* play);
+void func_80A79A84(EnJso2* this, PlayState* play);
+void func_80A79BA0(EnJso2* this, PlayState* play);
+void func_80A7A124(EnJso2* this, PlayState* play);
+void func_80A7A2EC(EnJso2* this, PlayState* play);
 
 #if 0
 // static DamageTable sDamageTable = {
@@ -71,7 +71,7 @@ static DamageTable D_80A7B4F0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Jso2_InitVars = {
+ActorInit En_Jso2_InitVars = {
     ACTOR_EN_JSO2,
     ACTORCAT_ENEMY,
     FLAGS,

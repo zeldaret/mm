@@ -51,7 +51,7 @@ You can keep the diff open in the terminal, and it will refresh when the C file 
 In this case, we see that various branches are happening in the wrong place. Here I fear experience is necessary: notice that the function has three blocks that look quite similar, and three separate conditionals that depend on the same variable. This is a good indicator of a switch. Changing the function to use a switch,
 
 ```C
-void EnJj_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnJj_Init(Actor* thisx, PlayState* play) {
     EnJj* this = THIS;
 
     s32 sp4C;
@@ -64,7 +64,7 @@ void EnJj_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (temp_v0) {
         case -1:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B9A8, &D_06001F4C, this->jointTable,
+            SkelAnime_InitFlex(play, &this->skelAnime, &D_0600B9A8, &D_06001F4C, this->jointTable,
                                this->morphTable, 22);
             Animation_PlayLoop(&this->skelAnime, &D_06001F4C);
             this->unk_30A = 0;
@@ -78,24 +78,24 @@ void EnJj_Init(Actor* thisx, GlobalContext* globalCtx) {
                 func_80A87800(this, func_80A87C30);
             }
             this->childActor = Actor_SpawnAsChild(
-                &globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_JJ, this->dyna.actor.world.pos.x - 10.0f,
+                &play->actorCtx, &this->dyna.actor, play, ACTOR_EN_JJ, this->dyna.actor.world.pos.x - 10.0f,
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.world.rot.y, 0, 0);
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&D_06000A1C, &sp4C);
             this->dyna.bgId =
-                DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp4C);
-            Collider_InitCylinder(globalCtx, &this->collider);
-            Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A88CB4);
+                DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp4C);
+            Collider_InitCylinder(play, &this->collider);
+            Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &D_80A88CB4);
             this->dyna.actor.colChkInfo.mass = 0xFF;
             break;
         case 0:
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&D_06001830, &sp4C);
-            // temp_a1_2 = &globalCtx->colCtx.dyna;
+            // temp_a1_2 = &play->colCtx.dyna;
             // sp44 = temp_a1_2;
             this->dyna.bgId =
-                DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp4C);
-            func_8003ECA8(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp4C);
+            func_8003ECA8(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.update = func_80A87F44;
             this->dyna.actor.draw = NULL;
             Actor_SetScale(&this->dyna.actor, 0.087f);
@@ -104,7 +104,7 @@ void EnJj_Init(Actor* thisx, GlobalContext* globalCtx) {
             DynaPolyActor_Init(&this->dyna, 0);
             CollisionHeader_GetVirtual(&D_0600BA8C, &sp4C);
             this->dyna.bgId =
-                DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp4C);
+                DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp4C);
             this->dyna.actor.update = func_80A87F44;
             this->dyna.actor.draw = NULL;
             Actor_SetScale(&this->dyna.actor, 0.087f);
@@ -123,10 +123,10 @@ we see that the diff is nearly correct (note that `-3` lets you compare current 
 ![Init diff 2](images/init_diff2.png)
 </details>
 
-except we still have some stack issues. Now that `temp_v0` is only used once, it looks fake. Eliminating it actually seems to make the stack worse. To fix this, we employ something that we have evidence that the developers did: namely, we make a copy of `globalCtx` (the theory is that they actually used `gameState` as an argument of the main 4 functions, just like we used `Actor* thisx` as the first argument.) The quick way to do this is to change the top of the function to
+except we still have some stack issues. Now that `temp_v0` is only used once, it looks fake. Eliminating it actually seems to make the stack worse. To fix this, we employ something that we have evidence that the developers did: namely, we make a copy of `play` (the theory is that they actually used `gameState` as an argument of the main 4 functions, just like we used `Actor* thisx` as the first argument.) The quick way to do this is to change the top of the function to
 ```C
-void EnJj_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    GlobalContext* globalCtx = globalCtx2;
+void EnJj_Init(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     EnJj* this = THIS;
 	...
 ```
