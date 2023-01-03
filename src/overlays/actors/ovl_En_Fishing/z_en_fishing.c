@@ -4,6 +4,7 @@
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -846,7 +847,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         D_8090CD04 = 20;
         play->specialEffects = sFishingEffects;
-        REG(15) = 1; // gTimeIncrement in OoT
+        R_TIME_SPEED = 1;
         D_809171FC = 0;
         D_809171F6 = 10;
 
