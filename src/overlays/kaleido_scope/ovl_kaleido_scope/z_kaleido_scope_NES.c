@@ -631,7 +631,7 @@ void KaleidoScope_Update(PlayState* play) {
 
                 DmaMgr_SendRequest0(pauseCtx->iconItemAltSegment, SEGMENT_ROM_START(icon_item_dungeon_static), size);
                 iconItemLangSegment =
-                    func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size), size);
+                    func_801068FC(play, (void*)ALIGN16((uintptr_t)pauseCtx->iconItemAltSegment + size));
                 sInDungeonScene = true;
             } else {
                 size_t size;

@@ -1552,7 +1552,7 @@ s32 func_80106530(PlayState* play);
 // void func_8010657C(void);
 void func_80106644(PlayState* play, s32 x, s32 z, s32 rot);
 // void func_8010683C(void);
-void* func_801068FC(PlayState* play, void* heap, size_t size);
+void* func_801068FC(PlayState* play, void* heap);
 // void func_80106BEC(void);
 // void func_80106D08(void);
 // void func_80106D5C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);

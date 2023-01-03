@@ -1054,10 +1054,9 @@ void MapDisp_DestroyIMap(PlayState* play) {
     MapDisp_ResetIMap();
 }
 
-#ifdef NON_MATCHING
 // alloc pause screen dungeon map
-void* func_801068FC(PlayState* play, void* heap, size_t size) {
-    void* heapNext; // sp3C
+void* func_801068FC(PlayState* play, void* heap) {
+    void* heapNext;
     s32 temp_s2;
     s32 temp_v0;
     s32 var_s1;
@@ -1120,14 +1119,17 @@ void* func_801068FC(PlayState* play, void* heap, size_t size) {
                     break;
                 }
             }
-            D_801F56B0.unk104[var_s4] = (!var_s3) ? NULL : D_801F56B0.unk84[var_s1];
+            if (!var_s3) {
+                D_801F56B0.unk104[var_s4] = NULL;
+            } else {
+                void* dummy = D_801F56B0.unk84[var_s1]; //! FAKE:
+
+                D_801F56B0.unk104[var_s4] = D_801F56B0.unk84[var_s1];
+            }
         }
     }
     return heapNext;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_map_disp/func_801068FC.s")
-#endif
 
 s32 func_80106BEC(s32 arg0, f32 arg1) {
     if (arg0 == 0) {
