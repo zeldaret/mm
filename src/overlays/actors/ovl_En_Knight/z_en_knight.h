@@ -18,7 +18,6 @@ typedef struct EnKnight {
     /* 0x152 */ u8 unk152;
     /* 0x153 */ u8 unk_153;
     /* 0x154 */ u8 unk_154;
-    /* 0x155 */ char pad155[1];
     /* 0x156 */ s16 unk156;
     /* 0x158 */ s16 unk158;
     /* 0x15A */ s16 unk15A;
