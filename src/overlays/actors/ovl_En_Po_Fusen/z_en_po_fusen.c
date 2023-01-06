@@ -94,7 +94,7 @@ static DamageTable sDamageTable = {
 
 void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
-    f32 heightTemp;
+    f32 flyingHeightMin;
 
     this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.007f;
     this->actor.targetMode = 6;
@@ -103,9 +103,10 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
 
-    if (0) {}
+    if (1) {}
+
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(play, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040, this->jointTable,
+    SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkeleton, &gPoeBalloonAnim_000040, this->jointTable,
                        this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
@@ -114,9 +115,9 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
 
-    heightTemp = this->actor.floorHeight + 90.0f;
-    if (this->actor.home.pos.y < heightTemp) {
-        this->actor.home.pos.y = heightTemp;
+    flyingHeightMin = this->actor.floorHeight + 90.0f;
+    if (this->actor.home.pos.y < flyingHeightMin) {
+        this->actor.home.pos.y = flyingHeightMin;
     }
 
     this->randScaleChange = (Rand_Next() % 0xFFFE) - 0x7FFF;
