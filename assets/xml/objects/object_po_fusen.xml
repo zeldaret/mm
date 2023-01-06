@@ -1,7 +1,8 @@
 ﻿<Root>
     <File Name="object_po_fusen" Segment="6">
-        <!-- does NOT work in z64utils -->
-        <Animation Name="gPoeBalloonAnim_000040" Offset="0x40" />
+        <!-- Empty, contains the data "0x0000, 0xC000". -->
+        <!-- PoFusen is animated directly from its code. -->
+        <Animation Name="gPoeBalloonEmptyAnim" Offset="0x40" />
 
         <DList Name="gPoeBalloonChainAndLanternDL" Offset="0x8C0" />
         <DList Name="gPoeBalloonLeftHandDL" Offset="0xAF8" />
@@ -18,9 +19,8 @@
         <Texture Name="gPoeBalloonLanternTopTex" OutName="lantern_top" Format="rgba16" Width="16" Height="16" Offset="0x14E0" />
         <Texture Name="gPoeBalloonLanternStandTex" OutName="lantern_stand" Format="rgba16" Width="16" Height="16" Offset="0x16E0" />
         <Texture Name="gPoeBalloonLanternGlassTex" OutName="lantern_glass" Format="ci8" Width="16" Height="16" Offset="0x18E0" />
-        <!-- Unused texture: hidden by the fact they used black to override the texture. -->
-        <Texture Name="gPoeBalloonTex_0019E0" OutName="tex_0019E0" Format="i4" Width="16" Height="16" Offset="0x19E0" />
-        <!-- Think this is just extra texture for the orange skin surface -->
+        <Texture Name="gPoeBalloonHandTex" OutName="the_hand" Format="i4" Width="16" Height="16" Offset="0x19E0" />
+        <!-- Think this is just extra texture for the orange skin surface. -->
         <Texture Name="gPoeBalloonOrangeBlotchTex" OutName="orange_blotch" Format="rgba16" Width="16" Height="16" Offset="0x1A60" />
         <Texture Name="gPoeBalloonFaceTex" OutName="face" Format="rgba16" Width="32" Height="16" Offset="0x1C60" />
         <Texture Name="gPoeBalloonChainLinkTex" OutName="chain_link" Format="rgba16" Width="16" Height="32" Offset="0x2060" />

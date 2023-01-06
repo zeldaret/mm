@@ -6,7 +6,6 @@
 
 #include "z_en_po_fusen.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
-#include "objects/object_po_fusen/object_po_fusen.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
@@ -57,39 +56,44 @@ static ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
+typedef enum {
+    /* 0x0 */ POFUSEN_DAMAGEEFFECT_NOEFFECT,
+    /* 0xF */ POFUSEN_DAMAGEEFFECT_POP = 0xF,
+} PoFusenDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(0, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(0, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0x0),
-    /* Goron punch    */ DMG_ENTRY(0, 0x0),
-    /* Sword          */ DMG_ENTRY(0, 0x0),
-    /* Goron pound    */ DMG_ENTRY(0, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0xF),
-    /* Ice arrow      */ DMG_ENTRY(1, 0xF),
-    /* Light arrow    */ DMG_ENTRY(1, 0xF),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(0, 0x0),
-    /* Zora punch     */ DMG_ENTRY(0, 0x0),
-    /* Spin attack    */ DMG_ENTRY(0, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Deku Stick     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Horse trample  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Explosives     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Zora boomerang */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Normal arrow   */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Hookshot       */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Goron punch    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Sword          */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Goron pound    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Fire arrow     */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
+    /* Ice arrow      */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
+    /* Light arrow    */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
+    /* Goron spikes   */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
+    /* Deku spin      */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Deku bubble    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Deku launch    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Zora barrier   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Normal shield  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Light ray      */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Thrown object  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Zora punch     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Spin attack    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Sword beam     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Normal Roll    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Unblockable    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Powder Keg     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
 };
 
 void EnPoFusen_Init(Actor* thisx, PlayState* play) {
@@ -103,11 +107,9 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     Collider_InitSphere(play, &this->collider);
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
 
-    if (1) {}
-
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkeleton, &gPoeBalloonAnim_000040, this->jointTable,
-                       this->morphTable, 10);
+    SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkeleton, &gPoeBalloonEmptyAnim, this->jointTable,
+                       this->morphTable, POE_BALLOON_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
@@ -123,19 +125,18 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     this->randScaleChange = (Rand_Next() % 0xFFFE) - 0x7FFF;
     this->randYRotChange = (Rand_Next() % 0x4B0) - 0x258;
     this->avgBaseRotation = 0x10000 / 12;
-    this->limb3Rot = 0;
+    this->limbRotRightUpperArmY = 0;
     this->limb46Rot = 0;
     this->limb57Rot = 0;
-    this->limb8Rot = 0;
-    this->limb9Rot = 0x71C;
+    this->limbRotLeftHand = 0;
+    this->limbRotChainAndLantern = 0x71C;
     this->randBaseRotChange = 0;
 
     if (ENPOFUSEN_IS_FUSE_TYPE(&this->actor)) {
         EnPoFusen_InitFuse(this);
-        return;
+    } else {
+        EnPoFusen_InitNoFuse(this);
     }
-
-    EnPoFusen_InitNoFuse(this);
 }
 
 void EnPoFusen_Destroy(Actor* thisx, PlayState* play) {
@@ -144,20 +145,22 @@ void EnPoFusen_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroySphere(play, &this->collider);
 }
 
+/**
+ * Search for Romani's actor, beacuse it's PoFusen's job to update her actor on pop.
+ */
 u16 EnPoFusen_CheckParent(EnPoFusen* this, PlayState* play) {
-    Actor* actorPtr;
+    Actor* actorSearchPtr = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
-    actorPtr = play->actorCtx.actorLists[ACTORCAT_NPC].first;
     if (ENPOFUSEN_IS_FUSE_TYPE(&this->actor)) {
         return true;
     }
 
-    while (actorPtr != NULL) {
-        if (actorPtr->id == ACTOR_EN_MA4) {
-            this->actor.parent = actorPtr;
+    while (actorSearchPtr != NULL) {
+        if (actorSearchPtr->id == ACTOR_EN_MA4) {
+            this->actor.parent = actorSearchPtr;
             return true;
         }
-        actorPtr = actorPtr->next;
+        actorSearchPtr = actorSearchPtr->next;
     }
 
     return false;
@@ -172,7 +175,7 @@ u16 EnPoFusen_CheckCollision(EnPoFusen* this, PlayState* play) {
     this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 20.0f;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == POFUSEN_DAMAGEEFFECT_POP)) {
         this->collider.base.acFlags &= ~AC_HIT;
         return true;
     }
@@ -205,16 +208,16 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
     this->actor.shape.rot.z = (Math_SinS(this->randBaseRotChange) * 910.0f);
 
     if ((this->randScaleChange < 0x4000) && (this->randScaleChange >= -0x3FFF)) {
-        Math_SmoothStepToS(&this->limb9Rot, 0x38E, 0x14, 0xBB8, 0x64);
+        Math_SmoothStepToS(&this->limbRotChainAndLantern, 0x38E, 0x14, 0xBB8, 0x64);
     } else {
-        Math_SmoothStepToS(&this->limb9Rot, 0x71C, 0x8, 0xBB8, 0x64);
+        Math_SmoothStepToS(&this->limbRotChainAndLantern, 0x71C, 0x8, 0xBB8, 0x64);
     }
 
-    this->avgBaseRotation = this->limb9Rot * 3;
-    this->limb3Rot = (Math_SinS(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
+    this->avgBaseRotation = this->limbRotChainAndLantern * 3;
+    this->limbRotRightUpperArmY = (Math_SinS(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
     this->limb46Rot = (Math_SinS(this->randBaseRotChange) * this->avgBaseRotation);
     this->limb57Rot = (Math_SinS(this->randBaseRotChange - 0x38E3) * this->avgBaseRotation);
-    this->limb8Rot = (Math_SinS(this->randBaseRotChange - 0x71C6) * this->avgBaseRotation);
+    this->limbRotLeftHand = (Math_SinS(this->randBaseRotChange - 0x71C6) * this->avgBaseRotation);
 
     shadowScaleTmp = ((1.0f - Math_SinS(this->randScaleChange)) * 10.0f) + 50.0f;
     shadowAlphaTmp = ((1.0f - Math_SinS(this->randScaleChange)) * 75.0f) + 100.0f;
@@ -224,10 +227,9 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
 
 void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
     Actor* parent = this->actor.parent;
-    EnMa4* romani;
 
     if ((parent != NULL) && (parent->id == ACTOR_EN_MA4)) {
-        romani = (EnMa4*)parent;
+        EnMa4* romani = (EnMa4*)parent;
         romani->poppedBalloonCounter++;
     }
 
@@ -236,6 +238,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 }
 
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
+    // Spawns some smoke and some light rays for the pop.
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
                 this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
@@ -244,6 +247,7 @@ void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
 
 void EnPoFusen_InitFuse(EnPoFusen* this) {
     s16 rotZ = this->actor.shape.rot.z;
+
     this->fuse = ENPOFUSEN_GET_FUSE_LEN(&this->actor);
     this->actor.shape.rot.z = 0;
     this->randScaleChange = rotZ & 0xFFFF;
@@ -259,6 +263,7 @@ void EnPoFusen_IdleFuse(EnPoFusen* this, PlayState* play) {
 
 void EnPoFusen_Update(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
+
     this->actionFunc(this, play);
     if (EnPoFusen_CheckCollision(this, play)) {
         EnPoFusen_IncrementRomaniPop(this);
@@ -267,39 +272,38 @@ void EnPoFusen_Update(Actor* thisx, PlayState* play) {
 
 s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnPoFusen* this = THIS;
-    f32 zScale;
-    f32 yScale;
-    f32 xScale;
-    s16 pad;
-    s16 zRot;
-    s16 pad2;
-    s16 xRot;
 
-    if (limbIndex == 2) {
-        zScale = (Math_CosS(this->randScaleChange) * 0.08f) + 1.0f;
-        xScale = zScale;
-        if (!zScale) {}
+    if (limbIndex == POE_BALLOON_LIMB_BODY) {
+        f32 zScale = (Math_CosS(this->randScaleChange) * 0.08f) + 1.0f;
+        f32 yScale;
+        f32 xScale = zScale;
+        s16 pad;
+        s16 zRot;
+        s16 pad2;
+        s16 xRot;
+
         yScale = (Math_SinS(this->randScaleChange) * 0.08f) + 1.0f;
-        yScale = yScale * yScale;
+        yScale = SQ(yScale);
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
         Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
         Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
         Matrix_RotateZS(-zRot, MTXMODE_APPLY);
         Matrix_RotateXS(-xRot, MTXMODE_APPLY);
-    } else if (limbIndex == 3) {
-        rot->y += this->limb3Rot;
-    } else if (limbIndex == 6) {
+
+    } else if (limbIndex == POE_BALLOON_RIGHT_UPPERARM) {
+        rot->y += this->limbRotRightUpperArmY;
+    } else if (limbIndex == POE_BALLOON_LEFT_UPPERARM) {
         rot->y += this->limb46Rot;
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == POE_BALLOON_RIGHT_FORARM) {
         rot->z += this->limb46Rot;
-    } else if ((limbIndex == 5) || (limbIndex == 7)) {
+    } else if ((limbIndex == POE_BALLOON_RIGHT_HAND) || (limbIndex == POE_BALLOON_LEFT_FORARM)) {
         rot->z += this->limb57Rot;
-    } else if (limbIndex == 8) {
-        rot->z += this->limb8Rot;
-    } else if (limbIndex == 9) {
-        rot->y += (s16)(this->limb9Rot * Math_SinS(this->randBaseRotChange));
-        rot->z += (s16)(this->limb9Rot * Math_CosS(this->randBaseRotChange));
+    } else if (limbIndex == POE_BALLOON_LEFT_HAND) {
+        rot->z += this->limbRotLeftHand;
+    } else if (limbIndex == POE_BALLOON_LIMB_CHAIN_AND_LANTERN) {
+        rot->y += (s16)(this->limbRotChainAndLantern * Math_SinS(this->randBaseRotChange));
+        rot->z += (s16)(this->limbRotChainAndLantern * Math_CosS(this->randBaseRotChange));
     }
     return false;
 }
@@ -312,6 +316,7 @@ void EnPoFusen_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void EnPoFusen_Draw(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
+
     func_8012C28C(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
                                    EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_TransformLimbDraw,
