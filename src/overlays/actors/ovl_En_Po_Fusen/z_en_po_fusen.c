@@ -57,43 +57,43 @@ static ColliderSphereInit sSphereInit = {
 };
 
 typedef enum {
-    /* 0x0 */ POFUSEN_DAMAGEEFFECT_NOEFFECT,
+    /* 0x0 */ POFUSEN_DAMAGEEFFECT_NONE,
     /* 0xF */ POFUSEN_DAMAGEEFFECT_POP = 0xF,
 } PoFusenDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Deku Stick     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Horse trample  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Explosives     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Zora boomerang */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Deku Nut       */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Deku Stick     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Explosives     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Zora boomerang */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
     /* Normal arrow   */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Hookshot       */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Goron punch    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Sword          */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Goron pound    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Goron punch    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Sword          */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Goron pound    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
     /* Fire arrow     */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
     /* Ice arrow      */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
     /* Light arrow    */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
     /* Goron spikes   */ DMG_ENTRY(1, POFUSEN_DAMAGEEFFECT_POP),
-    /* Deku spin      */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Deku bubble    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Deku launch    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Zora barrier   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Normal shield  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Light ray      */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Thrown object  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Zora punch     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Spin attack    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Sword beam     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Normal Roll    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Unblockable    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
-    /* Powder Keg     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NOEFFECT),
+    /* Deku spin      */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Deku bubble    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Light ray      */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Thrown object  */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Zora punch     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Spin attack    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
+    /* Powder Keg     */ DMG_ENTRY(0, POFUSEN_DAMAGEEFFECT_NONE),
 };
 
 void EnPoFusen_Init(Actor* thisx, PlayState* play) {
@@ -108,8 +108,8 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     Collider_SetSphere(play, &this->collider, &this->actor, &sSphereInit);
 
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkeleton, &gPoeBalloonEmptyAnim, this->jointTable,
-                       this->morphTable, POE_BALLOON_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkel, &gPoeBalloonEmptyAnim, this->jointTable, this->morphTable,
+                       POE_BALLOON_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
@@ -291,13 +291,13 @@ s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         Matrix_RotateZS(-zRot, MTXMODE_APPLY);
         Matrix_RotateXS(-xRot, MTXMODE_APPLY);
 
-    } else if (limbIndex == POE_BALLOON_RIGHT_UPPERARM) {
+    } else if (limbIndex == POE_BALLOON_RIGHT_UPPER_ARM) {
         rot->y += this->limbRotRightUpperArmY;
-    } else if (limbIndex == POE_BALLOON_LEFT_UPPERARM) {
+    } else if (limbIndex == POE_BALLOON_LEFT_UPPER_ARM) {
         rot->y += this->limb46Rot;
-    } else if (limbIndex == POE_BALLOON_RIGHT_FORARM) {
+    } else if (limbIndex == POE_BALLOON_RIGHT_FOREARM) {
         rot->z += this->limb46Rot;
-    } else if ((limbIndex == POE_BALLOON_RIGHT_HAND) || (limbIndex == POE_BALLOON_LEFT_FORARM)) {
+    } else if ((limbIndex == POE_BALLOON_RIGHT_HAND) || (limbIndex == POE_BALLOON_LEFT_FOREARM)) {
         rot->z += this->limb57Rot;
     } else if (limbIndex == POE_BALLOON_LEFT_HAND) {
         rot->z += this->limbRotLeftHand;
