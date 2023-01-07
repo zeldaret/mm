@@ -6,11 +6,11 @@
 
         <DList Name="gPoeBalloonChainAndLanternDL" Offset="0x8C0" />
         <DList Name="gPoeBalloonLeftHandDL" Offset="0xAF8" />
-        <DList Name="gPoeBalloonLeftForarmDL" Offset="0xB90" />
-        <DList Name="gPoeBalloonLeftUpperarmDL" Offset="0xC48" />
+        <DList Name="gPoeBalloonLeftForearmDL" Offset="0xB90" />
+        <DList Name="gPoeBalloonLeftUpperArmDL" Offset="0xC48" />
         <DList Name="gPoeBalloonRightHandDL" Offset="0xCD8" />
-        <DList Name="gPoeBalloonRightForarmDL" Offset="0xD70" />
-        <DList Name="gPoeBalloonRightUpperarmDL" Offset="0xE28" />
+        <DList Name="gPoeBalloonRightForearmDL" Offset="0xD70" />
+        <DList Name="gPoeBalloonRightUpperArmDL" Offset="0xE28" />
         <DList Name="gPoeBalloonBodyDL" Offset="0xEB8" />
 
         <Texture Name="gPoeBalloonTLUT" OutName="balloon_tlut" Format="rgba16" Width="16" Height="16" Offset="0x10E0" />
@@ -27,14 +27,14 @@
 
         <Limb Name="gPoeBalloonRootLimb" Type="Standard" EnumName="POE_BALLOON_LIMB_ROOT" Offset="0x2460" />
         <Limb Name="gPoeBalloonBodyLimb" Type="Standard" EnumName="POE_BALLOON_LIMB_BODY" Offset="0x246C" />
-        <Limb Name="gPoeBalloonRightUpperArmLimb" Type="Standard" EnumName="POE_BALLOON_RIGHT_UPPERARM" Offset="0x2478" />
-        <Limb Name="gPoeBalloonRightForarmLimb" Type="Standard" EnumName="POE_BALLOON_RIGHT_FORARM" Offset="0x2484" />
+        <Limb Name="gPoeBalloonRightUpperArmLimb" Type="Standard" EnumName="POE_BALLOON_RIGHT_UPPER_ARM" Offset="0x2478" />
+        <Limb Name="gPoeBalloonRightForearmLimb" Type="Standard" EnumName="POE_BALLOON_RIGHT_FOREARM" Offset="0x2484" />
         <Limb Name="gPoeBalloonRightHandLimb" Type="Standard" EnumName="POE_BALLOON_RIGHT_HAND" Offset="0x2490" />
-        <Limb Name="gPoeBalloonLeftUpperArmLimb" Type="Standard" EnumName="POE_BALLOON_LEFT_UPPERARM" Offset="0x249C" />
-        <Limb Name="gPoeBalloonLeftForarmLimb" Type="Standard" EnumName="POE_BALLOON_LEFT_FORARM" Offset="0x24A8" />
+        <Limb Name="gPoeBalloonLeftUpperArmLimb" Type="Standard" EnumName="POE_BALLOON_LEFT_UPPER_ARM" Offset="0x249C" />
+        <Limb Name="gPoeBalloonLeftForearmLimb" Type="Standard" EnumName="POE_BALLOON_LEFT_FOREARM" Offset="0x24A8" />
         <Limb Name="gPoeBalloonLeftHandLimb" Type="Standard" EnumName="POE_BALLOON_LEFT_HAND" Offset="0x24B4" />
         <Limb Name="gPoeBalloonChainAndLanternLimb" Type="Standard" EnumName="POE_BALLOON_LIMB_CHAIN_AND_LANTERN" Offset="0x24C0" />
 
-        <Skeleton Name="gPoeBalloonSkeleton" Type="Flex" LimbType="Standard" LimbNone="POE_BALLOON_LIMB_NONE" LimbMax="POE_BALLOON_LIMB_MAX" EnumName="ObjectPoFusenLimb" Offset="0x24F0" />
+        <Skeleton Name="gPoeBalloonSkel" Type="Flex" LimbType="Standard" LimbNone="POE_BALLOON_LIMB_NONE" LimbMax="POE_BALLOON_LIMB_MAX" EnumName="PoeBalloonLimb" Offset="0x24F0" />
     </File>
 </Root>
