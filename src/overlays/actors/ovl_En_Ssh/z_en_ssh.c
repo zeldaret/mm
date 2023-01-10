@@ -654,7 +654,7 @@ void EnSsh_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = 0.0f;
     this->initialYaw = this->actor.world.rot.y;
     EnSsh_SetupAction(this, EnSsh_Start);
-    if (Inventory_GetSkullTokenCount(play->sceneId) >= 30) {
+    if (Inventory_GetSkullTokenCount(play->sceneId) >= STH_SWAMP_SPIDER_TOKENS_REQUIRED) {
         Actor_Kill(&this->actor);
     }
 }
@@ -708,11 +708,11 @@ void EnSsh_Talk(EnSsh* this, PlayState* play) {
 void func_809756D0(EnSsh* this, PlayState* play) {
     u16 phi_a1;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        SET_WEEKEVENTREG(WEEKEVENTREG_34_08);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
     }
     Message_StartTextbox(play, phi_a1, &this->actor);
 }

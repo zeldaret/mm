@@ -2,34 +2,53 @@
 #define Z_EN_STH_H
 
 #include "global.h"
+#include "objects/object_sth/object_sth.h"
+#include "objects/object_ahg/object_ahg.h" 
+#include "objects/object_mask_truth/object_mask_truth.h"
 
 struct EnSth;
 
 typedef void (*EnSthActionFunc)(struct EnSth*, PlayState*);
 
-#define ENSTH_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENSTH_GET_100(thisx) ((thisx)->params & 0x100)
-
-enum {
-    /* 1 */ ENSTH_F_1 = 1,
-    /* 2 */ ENSTH_F_2,
-    /* 3 */ ENSTH_F_3,
-    /* 4 */ ENSTH_F_4,
-    /* 5 */ ENSTH_F_5,
-};
 
 typedef struct EnSth {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
-    /* 0x1D4 */ Vec3s jointTable[16];
-    /* 0x234 */ Vec3s morphTable[16];
-    /* 0x294 */ Vec3s unk_294;
-    /* 0x29A */ s16 unk_29A;
-    /* 0x29C */ u16 unk_29C;
-    /* 0x29E */ u8 unk_29E;
-    /* 0x29F */ u8 unk_29F;
+    /* 0x1D4 */ Vec3s jointTable[STH_LIMB_MAX];
+    /* 0x234 */ Vec3s morphTable[STH_LIMB_MAX];
+    /* 0x294 */ Vec3s headRot;
+    /* 0x29A */ s16 curAnimIndex;
+    /* 0x29C */ u16 sthFlags;
+    /* 0x29E */ u8 mainObjectId;
+    /* 0x29F */ u8 maskOfTruthObjectId;
     /* 0x2A0 */ EnSthActionFunc actionFunc;
 } EnSth; // size = 0x2A4
+
+// Note: Vanilla types usually have 0xFEXX typing, but this upper section is unused by the code, reason unknown
+#define STH_GET_TYPE(thisx) ((thisx)->params & 0xF)
+#define STH_GET_SWAMP_BODY(thisx) ((thisx)->params & 0x100)
+
+// The get item for the reward for ocean spiderhouse (wallet, or rupees) is set here
+#define STH_GI_ID(thisx) ((thisx)->home.rot.z)
+
+typedef enum {
+    /* 1 */ STH_TYPE_UNUSED_1 = 1,
+    /* 2 */ STH_TYPE_SWAMP_SPIDERHOUSE_CURED, // cursed is EnSsh
+    /* 3 */ STH_TYPE_MOON_LOOKING, // southclocktown, looking up at the moon
+    /* 4 */ STH_TYPE_OCEAN_SPIDERHOUSE_GREETING, // looking for shelter
+    /* 5 */ STH_TYPE_OCEAN_SPIDERHOUSE_SUFFERING, // shelter was not enough
+    // Other values: Actor will spawn and animate with arm waving, no further interaction.
+} EnSthTypes;
+
+// This actor has its own flags system
+#define STH_FLAG_CLEAR              (0)
+#define STH_FLAG_DRAW_TRUTH_MASK    (1 << 0)
+#define STH_FLAG_CURED              (1 << 1)
+#define STH_FLAG_SAVED              (1 << 2) // set, but not read 
+#define STH_FLAG_DISABLE_HEAD_TRACK (1 << 3)
+
+#define STH_SWAMP_SPIDER_TOKENS_REQUIRED 30
+#define STH_OCEAN_SPIDER_TOKENS_REQUIRED 30
 
 #endif // Z_EN_STH_H
