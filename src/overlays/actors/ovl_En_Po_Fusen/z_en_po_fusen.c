@@ -125,7 +125,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     this->randScaleChange = (Rand_Next() % 0xFFFE) - 0x7FFF;
     this->randYRotChange = (Rand_Next() % 0x4B0) - 0x258;
     this->avgBaseRotation = 0x10000 / 12;
-    this->limbRotRightUpperArmY = 0;
+    this->limbRotYRightUpperArm = 0;
     this->limb46Rot = 0;
     this->limb57Rot = 0;
     this->limbRotLeftHand = 0;
@@ -214,7 +214,7 @@ void EnPoFusen_Idle(EnPoFusen* this, PlayState* play) {
     }
 
     this->avgBaseRotation = this->limbRotChainAndLantern * 3;
-    this->limbRotRightUpperArmY = (Math_SinS(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
+    this->limbRotYRightUpperArm = (Math_SinS(this->randBaseRotChange + 0x38E3) * this->avgBaseRotation);
     this->limb46Rot = (Math_SinS(this->randBaseRotChange) * this->avgBaseRotation);
     this->limb57Rot = (Math_SinS(this->randBaseRotChange - 0x38E3) * this->avgBaseRotation);
     this->limbRotLeftHand = (Math_SinS(this->randBaseRotChange - 0x71C6) * this->avgBaseRotation);
@@ -292,7 +292,7 @@ s32 EnPoFusen_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         Matrix_RotateXS(-xRot, MTXMODE_APPLY);
 
     } else if (limbIndex == POE_BALLOON_RIGHT_UPPER_ARM) {
-        rot->y += this->limbRotRightUpperArmY;
+        rot->y += this->limbRotYRightUpperArm;
     } else if (limbIndex == POE_BALLOON_LEFT_UPPER_ARM) {
         rot->y += this->limb46Rot;
     } else if (limbIndex == POE_BALLOON_RIGHT_FOREARM) {

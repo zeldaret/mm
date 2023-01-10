@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for Poe Balloon archery target in Romani Ranch. -->
     <File Name="object_po_fusen" Segment="6">
         <!-- Empty: PoFusen is animated directly from its code. -->
         <Animation Name="gPoeBalloonEmptyAnim" Offset="0x40" />

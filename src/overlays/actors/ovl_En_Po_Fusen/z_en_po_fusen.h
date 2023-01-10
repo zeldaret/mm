@@ -23,7 +23,7 @@ typedef struct EnPoFusen {
     /* 0x25E */ s16 randXZRotChange;
     /* 0x260 */ s16 randYRotChange;
     /* 0x262 */ s16 avgBaseRotation;
-    /* 0x264 */ s16 limbRotRightUpperArmY;
+    /* 0x264 */ s16 limbRotYRightUpperArm;
     /* 0x266 */ s16 limb46Rot;
     /* 0x268 */ s16 limb57Rot;
     /* 0x26A */ s16 limbRotLeftHand;
