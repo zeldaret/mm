@@ -3191,7 +3191,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     actor->params = params & 0xFFFF;
     actor->csId = csId & 0x7F;
 
-    if (actor->csId == CS_ID_GLOBAL_END) {
+    if (actor->csId == 0x7F) {
         actor->csId = CS_ID_NONE;
     }
 

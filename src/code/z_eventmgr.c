@@ -317,7 +317,7 @@ void CutsceneManager_Queue(s16 csId) {
 s16 CutsceneManager_IsNext(s16 csId) {
     if (csId == CS_ID_GLOBAL_END) {
         if (sCutsceneMgr.csId == CS_ID_NONE) {
-            return CS_ID_GLOBAL_END;
+            return 0x7F;
         } else {
             return 0;
         }
