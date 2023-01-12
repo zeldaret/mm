@@ -900,14 +900,14 @@ void CutsceneCmd_Transition(PlayState* play, CutsceneContext* csCtx, CsCmdTransi
                 }
                 break;
 
-            case CS_TRANS_BLACK_C:
+            case CS_TRANS_GRAY_TO_BLACK:
                 play->envCtx.screenFillColor[0] = (1.0f - lerp) * 160.0f;
                 play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[2] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[3] = 255;
                 break;
 
-            case CS_TRANS_BLACK_D:
+            case CS_TRANS_BLACK_TO_GRAY:
                 play->envCtx.screenFillColor[0] = 160.0f * lerp;
                 play->envCtx.screenFillColor[1] = play->envCtx.screenFillColor[0];
                 play->envCtx.screenFillColor[2] = play->envCtx.screenFillColor[0];

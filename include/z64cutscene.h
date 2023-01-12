@@ -207,8 +207,8 @@ typedef enum {
     /*  9 */ CS_TRANS_TRIGGER_INSTANCE, // used with `TRANS_MODE_INSTANCE_WAIT`
     /* 10 */ CS_TRANS_BLACK_FILL_OUT,
     /* 11 */ CS_TRANS_BLACK_FILL_IN,
-    /* 12 */ CS_TRANS_BLACK_C,
-    /* 13 */ CS_TRANS_BLACK_D
+    /* 12 */ CS_TRANS_GRAY_TO_BLACK,
+    /* 13 */ CS_TRANS_BLACK_TO_GRAY
 } CutsceneTransitionType;
 
 typedef union {
