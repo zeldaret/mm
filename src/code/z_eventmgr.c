@@ -325,7 +325,7 @@ s16 CutsceneManager_IsNext(s16 csId) {
     if (csId <= CS_ID_NONE) {
         return -1;
     }
-    return (sNextCutsceneList[csId >> 3] & (1 << (csId & 7))) ? true : false;
+    return (sNextCutsceneList[csId >> 3] & (1 << (csId & 7))) ? 1 : 0;
 }
 
 /**
