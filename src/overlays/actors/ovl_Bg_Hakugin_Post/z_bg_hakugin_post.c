@@ -943,7 +943,7 @@ void func_80A9D3E4(BgHakuginPost* this) {
 }
 
 void func_80A9D434(BgHakuginPost* this, PlayState* play) {
-    if (CutsceneManager_IsNext(this->additionalCsId) != 0) {
+    if (CutsceneManager_IsNext(this->additionalCsId)) {
         CutsceneManager_StartWithPlayerCs(this->additionalCsId, &this->dyna.actor);
         this->unkFunc(this);
     } else {

@@ -331,7 +331,7 @@ void func_80AAFA18(DmChar08* this, PlayState* play) {
 
     nextCsId = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCsId1 : nextCsId2;
 
-    if (CutsceneManager_IsNext(nextCsId) != 0) {
+    if (CutsceneManager_IsNext(nextCsId)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_40);
         CutsceneManager_Start(nextCsId, &this->dyna.actor);
         this->actionFunc = DmChar08_DoNothing;

@@ -311,7 +311,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
         if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             CutsceneManager_Queue(this->csId);
-        } else if (CutsceneManager_IsNext(this->csId) == 0) {
+        } else if (!CutsceneManager_IsNext(this->csId)) {
             CutsceneManager_Queue(this->csId);
         } else {
             CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);

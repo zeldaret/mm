@@ -471,7 +471,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 void func_80A42F20(EnTest4* this, PlayState* play) {
     if (!this->transitionCsTimer) {
         if (sCurCsId >= 0) {
-            if (CutsceneManager_IsNext(sCurCsId) == 0) {
+            if (!CutsceneManager_IsNext(sCurCsId)) {
                 CutsceneManager_Queue(sCurCsId);
             } else {
                 CutsceneManager_Start(sCurCsId, &this->actor);

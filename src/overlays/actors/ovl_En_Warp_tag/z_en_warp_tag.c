@@ -151,7 +151,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
 
     if (play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON] >= 0 &&
         CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]) {
-        if (CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]) == 0) {
+        if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
             CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]);
 
         } else {

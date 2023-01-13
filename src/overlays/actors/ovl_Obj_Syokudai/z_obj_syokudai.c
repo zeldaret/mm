@@ -144,7 +144,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
 
     if (this->pendingAction != OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
         if (CutsceneManager_GetCurrentCsId() != thisx->csId) {
-            if (CutsceneManager_IsNext(thisx->csId) != 0) {
+            if (CutsceneManager_IsNext(thisx->csId)) {
                 CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
                     Flags_SetSwitch(play, switchFlag);
@@ -171,6 +171,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
         } else {
             s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
             u32 flameColliderHurtboxDmgFlags = 0;
+
             player = GET_PLAYER(play);
 
             if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {

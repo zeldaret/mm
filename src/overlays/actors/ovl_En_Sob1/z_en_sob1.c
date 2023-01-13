@@ -861,7 +861,7 @@ void EnSob1_LookToShelf(EnSob1* this, PlayState* play) {
         CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENSOB1_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENSOB1_CUTSCENESTATE_WAITING) {
-        if (CutsceneManager_IsNext(this->csId) != 0) {
+        if (CutsceneManager_IsNext(this->csId)) {
             CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENSOB1_CUTSCENESTATE_PLAYING;
             EnSob1_UpdateCursorPos(play, this);

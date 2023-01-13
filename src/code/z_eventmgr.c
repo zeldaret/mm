@@ -275,7 +275,7 @@ void CutsceneManager_End(void) {
 s16 CutsceneManager_Update(void) {
     s16 sp1E = 0;
 
-    if (CutsceneManager_IsNext(CS_ID_GLOBAL_RETURN_TO_CAM) != 0) {
+    if (CutsceneManager_IsNext(CS_ID_GLOBAL_RETURN_TO_CAM)) {
         CutsceneManager_StartWithPlayerCs(CS_ID_GLOBAL_RETURN_TO_CAM, &GET_PLAYER(sCutsceneMgr.play)->actor);
     }
 

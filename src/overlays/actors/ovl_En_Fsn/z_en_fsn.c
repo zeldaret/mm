@@ -1077,7 +1077,7 @@ void EnFsn_LookToShelf(EnFsn* this, PlayState* play) {
         CutsceneManager_Queue(this->csId);
         this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
     } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
-        if (CutsceneManager_IsNext(this->csId) != 0) {
+        if (CutsceneManager_IsNext(this->csId)) {
             CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             EnFsn_UpdateCursorPos(this, play);

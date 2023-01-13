@@ -566,7 +566,7 @@ void EnKakasi_OcarinaRemark(EnKakasi* this, PlayState* play) {
             CutsceneManager_Queue(this->csIdList[0]);
             this->actionFunc = EnKakasi_TeachingSong;
 
-        } else if (CutsceneManager_IsNext(this->csIdList[0]) == 0) {
+        } else if (!CutsceneManager_IsNext(this->csIdList[0])) {
             CutsceneManager_Queue(this->csIdList[0]);
             this->actionFunc = EnKakasi_TeachingSong;
 
@@ -591,7 +591,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
-        if (CutsceneManager_IsNext(this->csIdList[0]) == 0) {
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
             CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
@@ -704,7 +704,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
             CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
-        if (CutsceneManager_IsNext(this->csIdList[0]) == 0) {
+        if (!CutsceneManager_IsNext(this->csIdList[0])) {
             CutsceneManager_Queue(this->csIdList[0]);
             return;
         }
@@ -792,7 +792,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, PlayState* play) {
     if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         CutsceneManager_Queue(this->csIdList[0]);
-    } else if (CutsceneManager_IsNext(this->csIdList[0]) == 0) {
+    } else if (!CutsceneManager_IsNext(this->csIdList[0])) {
         CutsceneManager_Queue(this->csIdList[0]);
     } else {
         CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->picto.actor);
@@ -1050,10 +1050,8 @@ void EnKakasi_SetupRiseOutOfGround(EnKakasi* this, PlayState* play) {
     if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
         CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         CutsceneManager_Queue(this->csIdList[csIdIndex]);
-
-    } else if (CutsceneManager_IsNext(this->csIdList[csIdIndex]) == 0) {
+    } else if (!CutsceneManager_IsNext(this->csIdList[csIdIndex])) {
         CutsceneManager_Queue(this->csIdList[csIdIndex]);
-
     } else {
         CutsceneManager_StartWithPlayerCs(this->csIdList[csIdIndex], &this->picto.actor);
         Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EN_AKINDONUTS_HIDE);
