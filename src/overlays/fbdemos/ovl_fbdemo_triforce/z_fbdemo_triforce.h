@@ -1,7 +1,8 @@
 #ifndef Z_FBDEMO_TRIFORCE_H
 #define Z_FBDEMO_TRIFORCE_H
 
-#include "global.h"
+#include "ultra64.h"
+#include "color.h"
 
 typedef enum {
     /* 0 */ STATE_NONE,
