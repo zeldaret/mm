@@ -164,8 +164,8 @@ typedef union {
 } CsCmdMotionBlur; // size = 0x8
 
 typedef enum {
-    /* 1 */ CS_MOTION_BLUR_INSTANT = 1,
-    /* 2 */ CS_MOTION_BLUR_GRADUAL
+    /* 1 */ CS_MOTION_BLUR_ENABLE = 1, // enable instantly
+    /* 2 */ CS_MOTION_BLUR_DISABLE // disable gradually
 } CsMotionBlurType;
 
 typedef union {

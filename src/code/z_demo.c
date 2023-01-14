@@ -793,11 +793,11 @@ void CutsceneCmd_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, Cs
 
 void CutsceneCmd_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdMotionBlur* cmd) {
     if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
-        if ((csCtx->curFrame == cmd->startFrame) && (cmd->type == CS_MOTION_BLUR_INSTANT)) {
+        if ((csCtx->curFrame == cmd->startFrame) && (cmd->type == CS_MOTION_BLUR_ENABLE)) {
             Play_EnableMotionBlur(180);
         }
 
-        if (cmd->type == CS_MOTION_BLUR_GRADUAL) {
+        if (cmd->type == CS_MOTION_BLUR_DISABLE) {
             f32 lerp = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
             if (lerp >= 0.9f) {
