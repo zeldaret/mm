@@ -6,7 +6,7 @@
 #include "global.h"
 #include "z64shrink_window.h"
 
-ActorCutscene sGlobalCutscenes[] = {
+ActorCutscene sGlobalCutsceneList[] = {
     // CS_ID_GLOBAL_78
     { -100, -1, CS_CAM_ID_NONE, CS_SCRIPT_ID_NONE, CS_ID_NONE, CS_END_SFX_NONE_ALT, 255, CS_HUD_VISIBILITY_ALL_ALT, 255,
       255 },
@@ -103,18 +103,18 @@ s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
 
 ActorCutscene* CutsceneManager_GetCutsceneImpl(s16 csId) {
     if (csId < CS_ID_GLOBAL_78) {
-        return &sCutsceneList[csId];
+        return &sSceneCutsceneList[csId];
     } else {
         csId -= CS_ID_GLOBAL_78;
-        return &sGlobalCutscenes[csId];
+        return &sGlobalCutsceneList[csId];
     }
 }
 
 void CutsceneManager_Init(PlayState* play, ActorCutscene* cutsceneList, s16 numEntries) {
     s32 i;
 
-    sCutsceneList = cutsceneList;
-    sCutsceneListNumEntries = numEntries;
+    sSceneCutsceneList = cutsceneList;
+    sSceneCutsceneCount = numEntries;
 
     for (i = 0; i < ARRAY_COUNT(sWaitingCutsceneList); i++) {
         sWaitingCutsceneList[i] = 0;
@@ -503,19 +503,19 @@ s16 CutsceneManager_FindEntranceCsId(void) {
     PlayState* play;
     s32 csId;
 
-    for (csId = 0; csId < sCutsceneListNumEntries; csId++) {
+    for (csId = 0; csId < sSceneCutsceneCount; csId++) {
         //! FAKE:
-        if ((sCutsceneList[csId].scriptIndex != CS_SCRIPT_ID_NONE) &&
-            (sCutsceneList[csId].scriptIndex < (play = sCutsceneMgr.play)->csCtx.scriptListCount) &&
+        if ((sSceneCutsceneList[csId].scriptIndex != CS_SCRIPT_ID_NONE) &&
+            (sSceneCutsceneList[csId].scriptIndex < (play = sCutsceneMgr.play)->csCtx.scriptListCount) &&
             (sCutsceneMgr.play->curSpawn ==
-             sCutsceneMgr.play->csCtx.scriptList[sCutsceneList[csId].scriptIndex].spawn)) {
+             sCutsceneMgr.play->csCtx.scriptList[sSceneCutsceneList[csId].scriptIndex].spawn)) {
             return csId;
         }
     }
 
-    for (csId = 0; csId < sCutsceneListNumEntries; csId++) {
-        if ((sCutsceneList[csId].customValue >= 100) &&
-            (sCutsceneList[csId].customValue == (sCutsceneMgr.play->curSpawn + 100))) {
+    for (csId = 0; csId < sSceneCutsceneCount; csId++) {
+        if ((sSceneCutsceneList[csId].customValue >= 100) &&
+            (sSceneCutsceneList[csId].customValue == (sCutsceneMgr.play->curSpawn + 100))) {
             return csId;
         }
     }
