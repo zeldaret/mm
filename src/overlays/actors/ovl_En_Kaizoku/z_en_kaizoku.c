@@ -446,10 +446,10 @@ void EnKaizoku_ChangeAnim(EnKaizoku* this, EnKaizokuAnimation animIndex) {
 }
 
 s32 EnKaizoku_ValidatePictograph(PlayState* play, Actor* actor) {
-    s32 ret = Snap_ValidatePictograph(play, actor, PICTOGRAPH_PIRATE_GOOD, &actor->focus.pos, &actor->shape.rot, 10.0f,
+    s32 ret = Snap_ValidatePictograph(play, actor, PICTO_VALID_PIRATE_GOOD, &actor->focus.pos, &actor->shape.rot, 10.0f,
                                       400.0f, -1);
 
-    ret |= Snap_ValidatePictograph(play, actor, PICTOGRAPH_PIRATE_TOO_FAR, &actor->focus.pos, &actor->shape.rot, 10.0f,
+    ret |= Snap_ValidatePictograph(play, actor, PICTO_VALID_PIRATE_TOO_FAR, &actor->focus.pos, &actor->shape.rot, 10.0f,
                                    1200.0f, -1);
     return ret;
 }

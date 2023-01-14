@@ -111,7 +111,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
                             1 << 10, 1 << 10);
     }
 
-    func_800FC444(this->state.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
+    Environment_FillScreen(this->state.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
 
     sTitleRotation += 300;
 

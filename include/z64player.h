@@ -822,7 +822,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_2000       (1 << 13)
 // 
 #define PLAYER_STATE3_4000       (1 << 14)
-// 
+// Swimming Zora
 #define PLAYER_STATE3_8000       (1 << 15)
 // 
 #define PLAYER_STATE3_10000      (1 << 16)
