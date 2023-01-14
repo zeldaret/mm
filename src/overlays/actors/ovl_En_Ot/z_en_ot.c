@@ -59,9 +59,9 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2);
 
-static EnOt* D_80B5E880;
-static EnOt* D_80B5E884;
-static EnOt* D_80B5E888;
+EnOt* D_80B5E880;
+EnOt* D_80B5E884;
+EnOt* D_80B5E888;
 
 ActorInit En_Ot_InitVars = {
     /**/ ACTOR_EN_OT,
@@ -1137,7 +1137,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
 
     for (i = 0; i < arg2; i++, arg1++) {

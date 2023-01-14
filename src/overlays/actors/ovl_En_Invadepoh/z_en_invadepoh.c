@@ -3,7 +3,7 @@
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
-
+#include "prevent_bss_reordering.h"
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -3016,7 +3016,7 @@ void func_80B49C38(EnInvadepoh* this, PlayState* play) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(play);
             if (temp_v0_2 > 0) {
-                temp_v0_2 = (REG(15) * -16.0f / temp_v0_2) - 0.5f;
+                temp_v0_2 = (R_TIME_SPEED * -16.0f / temp_v0_2) - 0.5f;
                 this->unk378 = func_80B45550(this, play, SQ(80.0f), temp_v0_2);
             }
         }
@@ -3968,7 +3968,7 @@ void func_80B4C730(EnInvadepoh* this, PlayState* play) {
         if (this->unk378 == 0) {
             temp_v0_2 = func_800FE620(play);
             if (temp_v0_2 > 0) {
-                temp_v0_2 = (REG(15) * -23.0f / temp_v0_2) - 0.5f;
+                temp_v0_2 = (R_TIME_SPEED * -23.0f / temp_v0_2) - 0.5f;
                 this->unk378 = func_80B45550(this, play, SQ(80.0f), temp_v0_2);
             }
         }

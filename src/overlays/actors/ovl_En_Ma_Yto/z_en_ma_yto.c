@@ -1091,7 +1091,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {

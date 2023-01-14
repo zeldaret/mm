@@ -570,7 +570,7 @@ void func_80A5A184(Actor* thisx, PlayState* play2) {
         }
     }
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(gfxCtx);
 }

@@ -235,8 +235,8 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     BgIkanaBombwall* this = THIS;
     s32 sp2C = BGIKANABOMBWALL_GET_100(&this->dyna.actor);
-    s32 sp28;
-    s32 sp24;
+    CollisionHeader* colHeader;
+    ColliderCylinderInit* cylinderInit;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
@@ -248,15 +248,15 @@ void BgIkanaBombwall_Init(Actor* thisx, PlayState* play) {
     }
 
     if (sp2C == 0) {
-        sp28 = &object_ikana_obj_Colheader_000488;
-        sp24 = &sCylinderInit1;
+        colHeader = &object_ikana_obj_Colheader_000488;
+        cylinderInit = &sCylinderInit1;
     } else {
-        sp28 = &object_ikana_obj_Colheader_000128;
-        sp24 = &sCylinderInit2;
+        colHeader = &object_ikana_obj_Colheader_000128;
+        cylinderInit = &sCylinderInit2;
     }
 
-    DynaPolyActor_LoadMesh(play, &this->dyna, sp28);
-    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, sp24);
+    DynaPolyActor_LoadMesh(play, &this->dyna, colHeader);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, cylinderInit);
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     if (sp2C == 0) {

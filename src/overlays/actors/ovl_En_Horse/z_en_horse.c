@@ -875,7 +875,7 @@ void EnHorse_Init(Actor* thisx, PlayState* play2) {
         EnHorse_InitCutscene(this, play);
     } else if (thisx->params == ENHORSE_10) {
         EnHorse_InitHorsebackArchery(this);
-        func_80112AFC(play);
+        Interface_InitMinigame(play);
     } else if (thisx->params == ENHORSE_14) {
         func_808846F0(this, play);
         if ((play->sceneId == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(play)) {
@@ -2917,22 +2917,23 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, PlayState* play) {
         EnHorse_PlayWalkingSound(this);
     }
 
-    if (play->interfaceCtx.hbaAmmo == 0) {
+    if (play->interfaceCtx.minigameAmmo == 0) {
         this->hbaTimer++;
     }
 
     sp28 = Audio_IsSequencePlaying(NA_BGM_HORSE_GOAL);
     EnHorse_UpdateHbaRaceInfo(this, play, &sHbaInfo);
 
-    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) && (gSaveContext.minigameState != 3)) {
+    if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) &&
+        (gSaveContext.minigameStatus != MINIGAME_STATUS_END)) {
         gSaveContext.save.cutscene = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_64;
     }
 
-    if (play->interfaceCtx.hbaAmmo) {}
+    if (play->interfaceCtx.minigameAmmo) {}
 
-    if (((play->interfaceCtx.hbaAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
+    if (((play->interfaceCtx.minigameAmmo == 0) || (this->hbaFlags & 2)) && (this->hbaFlags & 4)) {
         this->hbaFlags &= ~4;
         Audio_QueueSeqCmd(0x8041);
     }

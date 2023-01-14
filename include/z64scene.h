@@ -119,7 +119,7 @@ typedef struct {
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  hour;
     /* 0x5 */ u8  min;
-    /* 0x6 */ u8  unk6;
+    /* 0x6 */ u8  timeSpeed;
 } SCmdTimeSettings; // size = 0x7
 
 typedef struct {
@@ -341,6 +341,7 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
+    /* 0xD */ u8 unk_D;
 } SceneTableEntry; // size = 0x10
 
 typedef struct {
@@ -477,7 +478,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ MinimapEntry* entry;
-    /* 0x4 */ UNK_TYPE unk4;
+    /* 0x4 */ s16 unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {

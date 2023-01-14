@@ -73,13 +73,13 @@ s32 func_809A9110(PlayState* play, Vec3f* arg1) {
 
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, arg1, &sp20, &sp2C);
 
-    if ((play->unk_187F0.z * -130.13191f) < sp20.z) {
+    if ((play->projectionMtxFDiagonal.z * -130.13191f) < sp20.z) {
         if (sp2C < 1.0f) {
             sp2C = 1.0f;
         }
 
-        if (((fabsf(sp20.x) - (130.13191f * play->unk_187F0.x)) < sp2C) &&
-            ((fabsf(sp20.y) - (130.13191f * play->unk_187F0.y)) < sp2C)) {
+        if (((fabsf(sp20.x) - (130.13191f * play->projectionMtxFDiagonal.x)) < sp2C) &&
+            ((fabsf(sp20.y) - (130.13191f * play->projectionMtxFDiagonal.y)) < sp2C)) {
             return true;
         }
     }

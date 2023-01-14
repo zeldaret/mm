@@ -105,7 +105,7 @@ TexturePtr D_80BD3F14[] = {
     object_ah_Tex_006D70, object_ah_Tex_007570, object_ah_Tex_007D70, object_ah_Tex_007570, object_ah_Tex_008570,
 };
 
-s32 func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
+Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     Actor* tempActor;
     Actor* foundActor = NULL;
 

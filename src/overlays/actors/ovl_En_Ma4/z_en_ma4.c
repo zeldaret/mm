@@ -666,7 +666,7 @@ void EnMa4_BeginHorsebackGame(EnMa4* this, PlayState* play) {
     gSaveContext.nextCutsceneIndex = 0xFFF0;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_80;
-    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
@@ -688,10 +688,10 @@ void EnMa4_HorsebackGameTalking(EnMa4* this, PlayState* play) {
 void EnMa4_InitHorsebackGame(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    play->interfaceCtx.unk_280 = 1;
+    play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 0);
     SET_WEEKEVENTREG(WEEKEVENTREG_08_01);
-    func_80112AFC(play);
+    Interface_InitMinigame(play);
     player->stateFlags1 |= PLAYER_STATE1_20;
     this->actionFunc = EnMa4_SetupHorsebackGameWait;
 }
@@ -699,7 +699,7 @@ void EnMa4_InitHorsebackGame(EnMa4* this, PlayState* play) {
 void EnMa4_SetupHorsebackGameWait(EnMa4* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->interfaceCtx.unk_280 == 8) {
+    if (play->interfaceCtx.minigameState == MINIGAME_STATE_COUNTDOWN_GO) {
         this->actionFunc = EnMa4_HorsebackGameWait;
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     }
@@ -714,7 +714,7 @@ void EnMa4_HorsebackGameWait(EnMa4* this, PlayState* play) {
 
     if (this->poppedBalloonCounter != D_80AC0258) {
         D_80AC0258 = this->poppedBalloonCounter;
-        play->interfaceCtx.unk_25C = 1;
+        play->interfaceCtx.minigamePoints = 1;
     }
 
     if ((gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120)) ||
@@ -760,10 +760,10 @@ void EnMa4_HorsebackGameEnd(EnMa4* this, PlayState* play) {
 
         if (this->poppedBalloonCounter == 10) {
             play->transitionType = TRANS_TYPE_80;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         } else {
             play->transitionType = TRANS_TYPE_64;
-            gSaveContext.nextTransitionType = TRANS_TYPE_02;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
         }
 
         this->poppedBalloonCounter = 0;
@@ -863,7 +863,7 @@ void EnMa4_BeginDescribeThemCs(EnMa4* this, PlayState* play) {
     gSaveContext.nextCutsceneIndex = 0xFFF5;
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_64;
-    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
