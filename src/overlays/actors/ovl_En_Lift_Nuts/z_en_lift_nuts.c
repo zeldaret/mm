@@ -740,7 +740,7 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
 
     if (player->stateFlags3 & PLAYER_STATE3_200) {
         this->actor.speedXZ = 2.0f;
-        gSaveContext.eventInf[3] |= 0x10;
+        SET_EVENTINF(EVENTINF_34);
         Interface_StartTimer(4, 0);
         func_80AE9B4C(1, 2);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_FOUND);
@@ -750,7 +750,7 @@ void func_80AEB148(EnLiftNuts* this, PlayState* play) {
 
 void func_80AEB1C8(EnLiftNuts* this) {
     this->actor.speedXZ = 2.0f;
-    gSaveContext.eventInf[3] |= 0x10;
+    SET_EVENTINF(EVENTINF_34);
     Interface_StartTimer(4, 0);
     func_80AE9B4C(1, 2);
     this->actionFunc = func_80AEB230;
@@ -815,13 +815,13 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
             this->textId = 0x27EC;
         }
     } else if (this->unk_354 == 30) {
-        gSaveContext.eventInf[3] &= (u8)~0x10;
+        CLEAR_EVENTINF(EVENTINF_34);
         gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = ENTRANCE(DEKU_SCRUB_PLAYGROUND, 1);
         gSaveContext.nextCutsceneIndex = 0;
         func_80169EFC(&play->state);
         gSaveContext.respawnFlag = -2;
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
     }
     this->unk_354++;
 }

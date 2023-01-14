@@ -1454,7 +1454,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gEyegoreEyeLaserTexAnim));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnEgol_OverrideLimbDraw, EnEgol_PostLimbDraw, &this->actor);
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
     if (this->dmgEffectTimer != 0) {
         f32 drawDmgEffAlpha = 0.05f * this->dmgEffectTimer;

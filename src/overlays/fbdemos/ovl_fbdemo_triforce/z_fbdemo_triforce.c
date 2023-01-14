@@ -4,6 +4,7 @@
  * Description:
  */
 
+#include "global.h"
 #include "z_fbdemo_triforce.h"
 #include "assets/objects/object_fbdemo_triforce/ovl_fbdemo_triforce.c"
 

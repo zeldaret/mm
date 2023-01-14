@@ -224,7 +224,7 @@ void ActorShadow_DrawFeet(Actor* actor, Lights* mapper, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(floorHeight); i++, spB8 >>= 1) {
             feetPosPtr->y += 50.0f;
-            *floorHeightPtr = func_80169100(play, &sp13C, &poly, &bgId, feetPosPtr);
+            *floorHeightPtr = Play_GetFloorSurfaceImpl(play, &sp13C, &poly, &bgId, feetPosPtr);
             feetPosPtr->y -= 50.0f;
 
             distToFloor = feetPosPtr->y - *floorHeightPtr;
@@ -2475,7 +2475,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     params.player = player;
     params.play = play;
 
-    if (play->unk_18844 != 0) {
+    if (play->unk_18844) {
         params.unk_18 = ACTOR_FLAG_200000;
     } else {
         params.unk_18 = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_10;
@@ -2734,7 +2734,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numInvisibleActors, Actor** invis
 
         spAC = tmp;
         Actor_DrawLensOverlay(&spAC, play->actorCtx.lensMaskSize);
-        tmp = func_801660B8(play, spAC);
+        tmp = Play_SetFog(play, spAC);
 
         for (spB4 = 0, invisibleActor = invisibleActors; spB4 < numInvisibleActors; spB4++, invisibleActor++) {
             POLY_XLU_DISP = tmp;
@@ -2815,9 +2815,9 @@ s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projec
         f32 phi_f16;
 
         if (play->view.fovy != 60.0f) {
-            phi_f12 = actor->uncullZoneScale * play->unk_187F0.x * 0.76980036f; // sqrt(16/27)
+            phi_f12 = actor->uncullZoneScale * play->projectionMtxFDiagonal.x * 0.76980036f; // sqrt(16/27)
 
-            phi_f14 = play->unk_187F0.y * 0.57735026f; // 1 / sqrt(3)
+            phi_f14 = play->projectionMtxFDiagonal.y * 0.57735026f; // 1 / sqrt(3)
             phi_f16 = actor->uncullZoneScale * phi_f14;
             phi_f14 *= actor->uncullZoneDownward;
         } else {
@@ -2845,7 +2845,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     s32 actorFlags;
     s32 i;
 
-    if (play->unk_18844 != 0) {
+    if (play->unk_18844) {
         actorFlags = ACTOR_FLAG_200000;
     } else {
         actorFlags = ACTOR_FLAG_200000 | ACTOR_FLAG_40 | ACTOR_FLAG_20;
@@ -2916,7 +2916,7 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
     gSPBranchList(ref2, &tmp2[1]);
     POLY_XLU_DISP = &tmp2[1];
 
-    if (play->unk_18844 == 0) {
+    if (!play->unk_18844) {
         Lights_DrawGlow(play);
     }
 

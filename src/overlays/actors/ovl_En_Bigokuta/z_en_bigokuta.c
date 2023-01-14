@@ -179,7 +179,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 }
 
 s32 EnBigokuta_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_BIG_OCTO, &thisx->focus.pos, &thisx->shape.rot, 280.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_BIG_OCTO, &thisx->focus.pos, &thisx->shape.rot, 280.0f,
                                    1800.0f, -1);
 }
 
