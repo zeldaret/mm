@@ -120,7 +120,7 @@ typedef enum {
     /* 0 */ PAUSE_BG_PRERENDER_OFF,
     /* 1 */ PAUSE_BG_PRERENDER_SETUP, // The current frame is only drawn for the purpose of serving as the pause background.
     /* 2 */ PAUSE_BG_PRERENDER_PROCESS, // The previous frame was PAUSE_BG_PRERENDER_DRAW, now apply prerender filters.
-    /* 3 */ PAUSE_BG_PRERENDER_DONE, // The pause background is ready to be used.
+    /* 3 */ PAUSE_BG_PRERENDER_READY, // The pause background is ready to be used.
     /* 4 */ PAUSE_BG_PRERENDER_UNK4,
     /* 5 */ PAUSE_BG_PRERENDER_MAX
 } PauseBgPreRenderState;
