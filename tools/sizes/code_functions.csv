@@ -2749,11 +2749,11 @@ asm/non_matchings/code/sys_cmpdma/func_80178A24.s,func_80178A24,0x80178A24,0x4
 asm/non_matchings/code/sys_cmpdma/func_80178A34.s,func_80178A34,0x80178A34,0x18
 asm/non_matchings/code/sys_cmpdma/func_80178A94.s,func_80178A94,0x80178A94,0xB
 asm/non_matchings/code/sys_cmpdma/func_80178AC0.s,func_80178AC0,0x80178AC0,0x70
-asm/non_matchings/code/sys_cmpdma/func_80178C80.s,func_80178C80,0x80178C80,0x3F
-asm/non_matchings/code/sys_cmpdma/func_80178D7C.s,func_80178D7C,0x80178D7C,0xC
-asm/non_matchings/code/sys_cmpdma/func_80178DAC.s,func_80178DAC,0x80178DAC,0x24
-asm/non_matchings/code/sys_cmpdma/func_80178E3C.s,func_80178E3C,0x80178E3C,0x10
-asm/non_matchings/code/sys_cmpdma/func_80178E7C.s,func_80178E7C,0x80178E7C,0x2D
+asm/non_matchings/code/sys_cmpdma/CmpDma_GetFileInfo.s,CmpDma_GetFileInfo,0x80178C80,0x3F
+asm/non_matchings/code/sys_cmpdma/CmpDma_Decompress.s,CmpDma_Decompress,0x80178D7C,0xC
+asm/non_matchings/code/sys_cmpdma/CmpDma_LoadFileImpl.s,CmpDma_LoadFileImpl,0x80178DAC,0x24
+asm/non_matchings/code/sys_cmpdma/CmpDma_LoadFile.s,CmpDma_LoadFile,0x80178E3C,0x10
+asm/non_matchings/code/sys_cmpdma/CmpDma_LoadAllFiles.s,CmpDma_LoadAllFiles,0x80178E7C,0x2D
 asm/non_matchings/code/sys_initial_check/Check_WriteRGBA16Pixel.s,Check_WriteRGBA16Pixel,0x80178F30,0xC
 asm/non_matchings/code/sys_initial_check/Check_WriteI4Pixel.s,Check_WriteI4Pixel,0x80178F60,0x10
 asm/non_matchings/code/sys_initial_check/Check_DrawI4Texture.s,Check_DrawI4Texture,0x80178FA0,0x3C
