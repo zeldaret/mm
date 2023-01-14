@@ -62,6 +62,6 @@ void Skybox_Init(struct GameState* gameState, SkyboxContext* skyboxCtx, s16 skyb
 Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z);
 void SkyboxDraw_SetColors(SkyboxContext* skyboxCtx, u8 primR, u8 primG, u8 primB, u8 envR, u8 envG, u8 envB);
 void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, struct GraphicsContext* gfxCtx, s16 skyboxId, s16 blend, f32 x, f32 y, f32 z);
-void SkyboxDraw_Noop(SkyboxContext* skyboxCtx);
+void SkyboxDraw_Update(SkyboxContext* skyboxCtx);
 
 #endif

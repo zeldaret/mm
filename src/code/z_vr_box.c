@@ -220,7 +220,7 @@ void Skybox_Setup(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) 
 
             // Inverted Stone Tower Temple and Inverted Stone Tower
             if ((play->sceneId == SCENE_F41) || (play->sceneId == SCENE_INISIE_R)) {
-                skyboxCtx->rotZ = 3.15000009537f;
+                skyboxCtx->rotZ = 3.15f;
             }
             break;
 
@@ -288,7 +288,7 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
 }
 
 void Skybox_Init(GameState* gameState, SkyboxContext* skyboxCtx, s16 skyboxId) {
-    skyboxCtx->skyboxShouldDraw = 0;
+    skyboxCtx->skyboxShouldDraw = false;
     skyboxCtx->rotX = skyboxCtx->rotY = skyboxCtx->rotZ = 0.0f;
 
     Skybox_Setup(gameState, skyboxCtx, skyboxId);

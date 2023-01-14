@@ -341,6 +341,7 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
+    /* 0xD */ u8 unk_D;
 } SceneTableEntry; // size = 0x10
 
 typedef struct {
@@ -477,7 +478,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ MinimapEntry* entry;
-    /* 0x4 */ UNK_TYPE unk4;
+    /* 0x4 */ s16 unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {

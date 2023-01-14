@@ -158,14 +158,14 @@ s32 func_808F8EB0(EnHorseGameCheck* this, PlayState* play) {
 
     if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3) {
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_02;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
     } else if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
         play->transitionType = TRANS_TYPE_80;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
     } else if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_4) {
         SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_3);
-        play->transitionType = TRANS_TYPE_02;
-        gSaveContext.nextTransitionType = TRANS_TYPE_02;
+        play->transitionType = TRANS_TYPE_FADE_BLACK;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
     }
 
     D_801BDA9C = 0;
