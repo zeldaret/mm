@@ -762,7 +762,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
                           func_80BBC4E4, func_80BBC500, &this->actor);
 
     if (this->unk_2B6 & 0x40) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

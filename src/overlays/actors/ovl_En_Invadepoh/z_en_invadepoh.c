@@ -3,7 +3,6 @@
  * Overlay: ovl_En_Invadepoh
  * Description: Ranch nighttime actors
  */
-
 #include "z_en_invadepoh.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/gameplay_keep/gameplay_keep.h"

@@ -158,8 +158,8 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_02;
-            gSaveContext.nextTransitionType = TRANS_TYPE_06;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             this->unk_1A4++;
             break;
     }
@@ -172,8 +172,8 @@ s32 func_80C227E8(DmTag* this, PlayState* play) {
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_02;
-        gSaveContext.nextTransitionType = TRANS_TYPE_06;
+        play->transitionType = TRANS_TYPE_FADE_BLACK;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
         this->unk_1A4++;
     }
     return false;

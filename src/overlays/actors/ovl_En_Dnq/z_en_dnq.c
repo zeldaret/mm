@@ -83,7 +83,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTOGRAPH_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_DEKU_KING, &thisx->focus.pos, &thisx->world.rot, 120.0f,
                                    480.0f, 0x38E3);
 }
 

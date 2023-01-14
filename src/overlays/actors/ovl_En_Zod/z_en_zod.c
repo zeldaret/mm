@@ -451,7 +451,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
         if (this->actor.csId == CS_ID_NONE) {
             this->actionFunc = EnZod_DoNothing;
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
-            play->transitionType = TRANS_TYPE_05;
+            play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
             play->transitionTrigger = TRANS_TRIGGER_START;
             gSaveContext.save.weekEventReg[78] &= (u8)~1;
         } else {
@@ -645,7 +645,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnZod_OverrideLimbDraw, EnZod_PostLimbDraw, &this->actor);
     if (this->stateFlags & TIJO_STATE_2) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

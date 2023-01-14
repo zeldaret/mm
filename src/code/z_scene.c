@@ -149,7 +149,7 @@ void Scene_HeaderCmdSpawnList(PlayState* play, SceneCmd* cmd) {
     play->linkActorEntry =
         (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) + play->setupEntranceList[play->curSpawn].spawn;
     if ((PLAYER_GET_INITMODE(play->linkActorEntry) == PLAYER_INITMODE_TELESCOPE) ||
-        ((gSaveContext.respawnFlag == 0x02) &&
+        ((gSaveContext.respawnFlag == 2) &&
          (gSaveContext.respawn[RESPAWN_MODE_RETURN].playerParams == PLAYER_PARAMS(0xFF, PLAYER_INITMODE_TELESCOPE)))) {
         // Skull Kid Object
         Object_Spawn(&play->objectCtx, OBJECT_STK);
@@ -231,7 +231,7 @@ void Scene_HeaderCmdSpecialFiles(PlayState* play, SceneCmd* cmd) {
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {
-        play->naviQuestHints = Play_LoadScene(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
+        play->naviQuestHints = Play_LoadFile(play, &naviQuestHintFiles[cmd->specialFiles.naviQuestHintFileId - 1]);
     }
 }
 
@@ -603,5 +603,5 @@ u16 Entrance_Create(s32 scene, s32 spawn, s32 layer) {
  * Creates an layer 0 entrance from the current entrance and the given spawn.
  */
 u16 Entrance_CreateFromSpawn(s32 spawn) {
-    return Entrance_Create(gSaveContext.save.entrance >> 9, spawn, 0);
+    return Entrance_Create((u32)gSaveContext.save.entrance >> 9, spawn, 0);
 }

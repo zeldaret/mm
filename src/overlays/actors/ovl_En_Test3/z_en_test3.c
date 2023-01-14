@@ -1293,7 +1293,7 @@ void EnTest3_Draw(Actor* thisx, PlayState* play2) {
                           this->player.skelAnime.dListCount, EnTest3_OverrideLimbDraw, EnTest3_PostLimbDraw,
                           &this->player.actor, 0);
     if (this->player.invincibilityTimer > 0) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
     if ((this->player.getItemDrawId - 1) != GID_NONE) {
         Player_DrawGetItem(play, &this->player);

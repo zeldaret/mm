@@ -344,8 +344,8 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, PlayState* play) {
                     play->nextEntrance = ENTRANCE(CLOCK_TOWER_ROOFTOP, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_02;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+                    play->transitionType = TRANS_TYPE_FADE_BLACK;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
                     sGiantsCutsceneState = 9;
                 }
                 break;
@@ -785,7 +785,7 @@ void EnFall_LodMoon_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gLodmoonEyesDL);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
     gSPDisplayList(POLY_OPA_DISP++, gLodmoonMoonDL);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

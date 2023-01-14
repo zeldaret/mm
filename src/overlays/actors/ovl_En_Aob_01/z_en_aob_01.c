@@ -678,7 +678,7 @@ void func_809C2788(EnAob01* this, PlayState* play) {
             play->nextEntrance = ENTRANCE(DOGGY_RACETRACK, 1);
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;
             play->transitionType = TRANS_TYPE_64;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
             play->transitionTrigger = TRANS_TRIGGER_START;
         }
     }

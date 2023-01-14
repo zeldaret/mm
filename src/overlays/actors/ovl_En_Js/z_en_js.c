@@ -110,7 +110,7 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_8096A6F4;
 
             Animation_PlayLoop(&this->skelAnime, &gMoonChildSittingAnim);
-            func_8016566C(0x3C);
+            Play_EnableMotionBlur(60);
 
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_20)) {
                 Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
@@ -151,7 +151,7 @@ void EnJs_Destroy(Actor* thisx, PlayState* play) {
     paramsF = ENJS_GET_TYPE(&this->actor);
     switch (paramsF) {
         case 0:
-            func_80165690();
+            Play_DisableMotionBlur();
             break;
         case 5:
         case 6:

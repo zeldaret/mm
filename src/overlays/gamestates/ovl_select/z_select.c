@@ -35,7 +35,7 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
 
     if (spawn != 0) {
         gSaveContext.save.entrance =
-            Entrance_Create((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
+            Entrance_Create(gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
     }
     if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0)) {
         gSaveContext.save.day = 0;

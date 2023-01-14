@@ -692,7 +692,7 @@ void func_80BD9C70(EnPamera* this, PlayState* play) {
     play->nextEntrance = ENTRANCE(IKANA_CANYON, 2);
     play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_70;
-    gSaveContext.nextTransitionType = TRANS_TYPE_02;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
 }
 
 s32 func_80BD9CB8(EnPamera* this, PlayState* play) {

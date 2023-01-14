@@ -438,7 +438,7 @@ void func_80AF19A8(EnTest7* this, PlayState* play) {
     } else {
         CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
         func_80AF082C(this, func_80AF1A2C);
-        play->unk_18844 = 1;
+        play->unk_18844 = true;
     }
 }
 
@@ -462,7 +462,7 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
         func_80AF082C(this, func_80AF1CA0);
         this->unk_144 |= 0x20;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
-        func_8016566C(0x78);
+        Play_EnableMotionBlur(120);
     }
 }
 
@@ -601,10 +601,10 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 255;
-        play->unk_18844 = 0;
+        play->unk_18844 = false;
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF21E8);
-        func_80165690();
+        Play_DisableMotionBlur();
     }
 }
 
@@ -679,7 +679,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
     }
 
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_02;
+    play->transitionType = TRANS_TYPE_FADE_BLACK;
     gSaveContext.seqId = (u8)NA_BGM_DISABLED;
     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }

@@ -164,8 +164,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_LIFT_FOG:
-            if (play->envCtx.lightSettings.fogFar < 12800) {
-                play->envCtx.lightSettings.fogFar += 35;
+            if (play->envCtx.lightSettings.zFar < 12800) {
+                play->envCtx.lightSettings.zFar += 35;
             }
             break;
 
@@ -249,11 +249,11 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_HALT_ALL_ACTORS:
-            play->unk_18845 = 1;
+            play->haltAllActors = true;
             break;
 
         case CS_MISC_RESUME_ALL_ACTORS:
-            play->unk_18845 = 0;
+            play->haltAllActors = false;
             break;
 
         case CS_MISC_SANDSTORM_FILL:
@@ -321,7 +321,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
                 play->nextEntrance = ENTRANCE(CUTSCENE, 0);
                 gSaveContext.nextCutsceneIndex = 0xFFF8;
                 play->transitionTrigger = TRANS_TRIGGER_START;
-                play->transitionType = TRANS_TYPE_03;
+                play->transitionType = TRANS_TYPE_FADE_WHITE;
             }
             break;
 
@@ -577,7 +577,7 @@ void CutsceneCmd_SetTime(PlayState* play, CutsceneContext* csCtx, CsCmdTime* cmd
 
 void CutsceneCmd_DestinationDefault(PlayState* play, CutsceneContext* csCtx, CsCmdDestination* cmd) {
     csCtx->state = CS_STATE_RUN_UNSTOPPABLE;
-    func_80165690();
+    Play_DisableMotionBlur();
     Audio_SetCutsceneFlag(false);
     gSaveContext.cutsceneTransitionControl = 1;
 
@@ -602,7 +602,7 @@ void CutsceneCmd_DestinationDefault(PlayState* play, CutsceneContext* csCtx, CsC
             if (gOpeningEntranceIndex >= 2) {
                 gOpeningEntranceIndex = 0;
             }
-            play->transitionType = TRANS_TYPE_04;
+            play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
         }
 
         if ((play->nextEntrance & 0xF) > 0) {
@@ -620,19 +620,19 @@ void CutsceneCmd_Destination(PlayState* play, CutsceneContext* csCtx, CsCmdDesti
         }
     } else if (cmd->type == CS_DESTINATION_BOSS_WARP) {
         if (csCtx->curFrame == cmd->startFrame) {
-            func_80165690();
+            Play_DisableMotionBlur();
 
             switch (gDungeonBossWarpSceneId) {
                 case SCENE_MITURIN_BS:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
                         play->nextEntrance = ENTRANCE(WOODFALL_TEMPLE, 1);
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     } else {
                         play->nextEntrance = ENTRANCE(WOODFALL, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     }
                     break;
 
@@ -640,12 +640,12 @@ void CutsceneCmd_Destination(PlayState* play, CutsceneContext* csCtx, CsCmdDesti
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                         play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 7);
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     } else {
                         play->nextEntrance = ENTRANCE(MOUNTAIN_VILLAGE_SPRING, 0);
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         play->transitionTrigger = TRANS_TRIGGER_START;
-                        play->transitionType = TRANS_TYPE_03;
+                        play->transitionType = TRANS_TYPE_FADE_WHITE;
                     }
                     break;
 
@@ -654,7 +654,7 @@ void CutsceneCmd_Destination(PlayState* play, CutsceneContext* csCtx, CsCmdDesti
                     play->nextEntrance = ENTRANCE(ZORA_CAPE, 8);
                     gSaveContext.nextCutsceneIndex = 0xFFF0;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
                     break;
 
                 case SCENE_INISIE_BS:
@@ -662,7 +662,7 @@ void CutsceneCmd_Destination(PlayState* play, CutsceneContext* csCtx, CsCmdDesti
                     play->nextEntrance = ENTRANCE(IKANA_CANYON, 0);
                     gSaveContext.nextCutsceneIndex = 0xFFF1;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    play->transitionType = TRANS_TYPE_03;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE;
                     break;
 
                 default:
@@ -794,16 +794,16 @@ void CutsceneCmd_ChooseCreditsScenes(PlayState* play, CutsceneContext* csCtx, Cs
 void CutsceneCmd_MotionBlur(PlayState* play, CutsceneContext* csCtx, CsCmdMotionBlur* cmd) {
     if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
         if ((csCtx->curFrame == cmd->startFrame) && (cmd->type == CS_MOTION_BLUR_INSTANT)) {
-            func_8016566C(180);
+            Play_EnableMotionBlur(180);
         }
 
         if (cmd->type == CS_MOTION_BLUR_GRADUAL) {
             f32 lerp = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
             if (lerp >= 0.9f) {
-                func_80165690();
+                Play_DisableMotionBlur();
             } else {
-                func_80165658((1.0f - lerp) * 180.0f);
+                Play_SetMotionBlurAlpha((1.0f - lerp) * 180.0f);
             }
         }
     }
