@@ -19,7 +19,7 @@
         <DList Name="gAhgRightHandDL" Offset="0x3400" />
         <DList Name="gAhgRightForArmDL" Offset="0x3570" />
         <DList Name="gAhgRightUpperArmDL" Offset="0x36A0" />
-        <DList Name="gAhgLeftHandDl" Offset="0x37D8" />
+        <DList Name="gAhgLeftHandDL" Offset="0x37D8" />
         <DList Name="gAhgLeftForearmDL" Offset="0x3948" />
         <DList Name="gAhgLeftUpperArmDL" Offset="0x3A78" />
         <DList Name="gAhgLeftChestDL" Offset="0x3BB0" />
@@ -27,16 +27,16 @@
         <DList Name="gAhgRightShinDL" Offset="0x3F18" />
         <DList Name="gAhgRightThighDL" Offset="0x4048" />
         <DList Name="gAhgLeftFootDL" Offset="0x4180" />
-        <DList Name="gAhgLeftShinDl" Offset="0x42C0" />
+        <DList Name="gAhgLeftShinDL" Offset="0x42C0" />
         <DList Name="gAhgLeftThighDL" Offset="0x43F0" />
-        <DList Name="gAhgPelvis" Offset="0x4528" />
+        <DList Name="gAhgPelvisDL" Offset="0x4528" />
 
         <!-- Assets used for alternate heads left over from OOT -->
-        <Texture Name="gAhgTlut2" OutName="tlut2" Format="rgba16" Width="16" Height="12" Offset="0x46C8" />
+        <Texture Name="gAhg2TLUT" OutName="tlut2" Format="rgba16" Width="16" Height="12" Offset="0x46C8" />
         <Texture Name="gAhgEar2Tex" OutName="ear2" Format="ci8" Width="8" Height="8" Offset="0x4848" TlutOffset="0x46C8" />
         <Texture Name="gAhgMouthTex" OutName="mouth" Format="ci8" Width="32" Height="16" Offset="0x4888" TlutOffset="0x46C8"  />
         <Texture Name="gAhgEyeAndEyebrowTex" OutName="eye_with_eyebrow" Format="ci8" Width="16" Height="16" Offset="0x4A88" TlutOffset="0x46C8"  />
-        <Texture Name="gAhgRedHair" OutName="red_hair" Format="ci8" Width="8" Height="16" Offset="0x4B88" TlutOffset="0x46C8"  />
+        <Texture Name="gAhgRedHairTex" OutName="red_hair" Format="ci8" Width="8" Height="16" Offset="0x4B88" TlutOffset="0x46C8"  />
         <DList Name="gAhgRedHeadDL" Offset="0x5408" />
         <DList Name="gAhgShortHairHeadDL" Offset="0x5628" />
 
