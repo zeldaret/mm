@@ -703,7 +703,7 @@ typedef enum {
     /*  -2 */ CS_CAM_ID_GLOBAL_ITEM_GET,            // CAM_SET_ITEM0
     /*  -1 */ CS_CAM_ID_NONE
     // CamCsId's 0+ are sceneLayer-specific and index `ActorCsCamInfo`
-} CamCutsceneId;
+} CutsceneCamId;
 
 typedef enum {
     /* -1 */ CS_HUD_VISIBILITY_ALL_ALT = -1,
