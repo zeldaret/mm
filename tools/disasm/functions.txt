@@ -1652,7 +1652,7 @@
     0x800F1D84:("CutsceneManager_Start",),
     0x800F1FBC:("CutsceneManager_Stop",),
     0x800F207C:("CutsceneManager_GetCurrentCsId",),
-    0x800F208C:("CutsceneManager_GetCutscene",),
+    0x800F208C:("CutsceneManager_GetCutsceneEntry",),
     0x800F20B8:("CutsceneManager_GetAdditionalCsId",),
     0x800F20F8:("CutsceneManager_GetLength",),
     0x800F2138:("CutsceneManager_GetCutsceneScriptIndex",),

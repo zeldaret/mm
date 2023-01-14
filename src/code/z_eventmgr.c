@@ -463,7 +463,7 @@ s16 CutsceneManager_GetCurrentCsId(void) {
     return sCutsceneMgr.csId;
 }
 
-ActorCutscene* CutsceneManager_GetCutscene(s16 csId) {
+ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
     return CutsceneManager_GetCutsceneImpl(csId);
 }
 

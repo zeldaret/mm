@@ -643,6 +643,8 @@ typedef struct {
     /* 0x0E */ u8 endCam;
     /* 0x0F */ u8 letterboxSize;
 } ActorCutscene; // size = 0x10
+// TODO: rename `ActorCutscene` to `CutsceneEntry` once ZAPD uses `CutsceneScriptEntry`
+// typedef CutsceneEntry ActorCutscene;
 
 typedef enum {
     /*   -1 */ CS_ID_NONE = -1,
@@ -845,7 +847,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor);
 s16 CutsceneManager_Start(s16 csId, Actor* actor);
 s16 CutsceneManager_Stop(s16 csId);
 s16 CutsceneManager_GetCurrentCsId(void);
-ActorCutscene* CutsceneManager_GetCutscene(s16 csId);
+ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId);
 s16 CutsceneManager_GetAdditionalCsId(s16 csId);
 s16 CutsceneManager_GetLength(s16 csId);
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId);

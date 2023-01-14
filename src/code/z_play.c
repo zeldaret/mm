@@ -2029,10 +2029,10 @@ s16 sPlayerCsIdToCsCamId[] = {
 
 // Used by Player
 /**
- * Extract the common actor cutscene ids used by Player from the scene and set the actor cutscene ids in
- * this->playerCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
- * to -1. Otherwise, if there is an ActorCutscene where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
- * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
+ * Extract the common cutscene ids used by Player from the scene and set the cutscene ids in this->playerCsIds.
+ * If a playerCsId is not present in the scene, then that particular id is set to CS_ID_NONE.
+ * Otherwise, if there is an ActorCutscene where csCamId matches the appropriate element of sPlayerCsIdToCsCamId,
+ * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one).
  */
 void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
     PlayState* this = (PlayState*)thisx;
@@ -2047,7 +2047,7 @@ void Play_AssignPlayerCsIdsFromScene(GameState* thisx, s32 spawnCsId) {
         *curPlayerCsId = CS_ID_NONE;
 
         for (curCsId = spawnCsId; curCsId != CS_ID_NONE; curCsId = csEntry->additionalCsId) {
-            csEntry = CutsceneManager_GetCutscene(curCsId);
+            csEntry = CutsceneManager_GetCutsceneEntry(curCsId);
 
             if (csEntry->csCamId == *csCamId) {
                 if ((csEntry->csCamId == CS_CAM_ID_GLOBAL_ITEM_OCARINA) && (csEntry->priority == 700)) {

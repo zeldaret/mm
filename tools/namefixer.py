@@ -567,7 +567,7 @@ wordReplace = {
     "ActorCutscene_Start": "CutsceneManager_Start",
     "ActorCutscene_Stop": "CutsceneManager_Stop",
     "ActorCutscene_GetCurrentIndex": "CutsceneManager_GetCurrentCsId",
-    "ActorCutscene_GetCutscene": "CutsceneManager_GetCutscene",
+    "ActorCutscene_GetCutscene": "CutsceneManager_GetCutsceneEntry",
     "ActorCutscene_GetAdditionalCutscene": "CutsceneManager_GetAdditionalCsId",
     "ActorCutscene_GetLength": "CutsceneManager_GetLength",
     "ActorCutscene_GetCurrentSubCamId": "CutsceneManager_GetCurrentSubCamId",
