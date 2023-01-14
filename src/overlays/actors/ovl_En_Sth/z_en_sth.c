@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-enum {
+typedef enum {
     /* 0x0 */ STH_ANIM_SIGNALLING,   // default, waving arms at you from telescope, OOT: cured happy animation
     /* 0x1 */ STH_ANIM_BENDING_DOWN, // default of second body
     /* 0x2 */ STH_ANIM_TALKING,
@@ -70,15 +70,15 @@ enum {
     /* 0x6 */ STH_ANIM_BEGGING,        // wants to buy ocean house
     /* 0x7 */ STH_ANIM_DISPAIR,        // after buying ocean house, can be found at bottom of slide
     /* 0x8 */ STH_ANIM_START,          // set in init, not an actual index to the array
-};
+} EnSthAnimationIndexes;
 
 static AnimationHeader* sAnimationInfo[] = {
     &gEnSthSignalingAnim, &gEnSthBendingDownAnim,  &gEnSthTalkingWithHandUpAnim,
-    &gEnSthWaitingAnim,   &gEnSthLookUpAnim,           &gEnSthLookingAroundRestlesslyAnim,
+    &gEnSthWaitingAnim,   &gEnSthLookUpAnim,       &gEnSthLookingAroundRestlesslyAnim,
     &gEnSthBeggingAnim,   &gEnSthPanicShakingAnim,
 };
 
-// three slightly different variants of "Only a little time left oh goddess please save me"
+// three slightly different variants of "Only a little time left, oh goddess please save me"
 static u16 sSthOceanspiderhouseDispairText[] = { 0x1144, 0x1145, 0x1146 };
 
 static u16 sSthFirstOceanSpiderHouseGreetDialogue2[] = {
