@@ -101,7 +101,7 @@ s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     return hudVisibility;
 }
 
-ActorCutscene* CutsceneManager_GetCutsceneImpl(s16 csId) {
+ActorCutscene* CutsceneManager_GetCutsceneEntryImpl(s16 csId) {
     if (csId < CS_ID_GLOBAL_78) {
         return &sSceneCutsceneList[csId];
     } else {
@@ -172,7 +172,7 @@ s16 CutsceneManager_MarkNextCutscenes(void) {
         for (bit = 1, j = 0; j < 8; j++) {
             if (sWaitingCutsceneList[i] & bit) {
                 csId = (i << 3) | j;
-                priority = CutsceneManager_GetCutsceneImpl(csId)->priority;
+                priority = CutsceneManager_GetCutsceneEntryImpl(csId)->priority;
 
                 if ((priority ^ 0) == -1) {
                     sNextCutsceneList[i] |= bit;
@@ -209,7 +209,7 @@ void CutsceneManager_End(void) {
             break;
     }
 
-    csEntry = CutsceneManager_GetCutsceneImpl(sCutsceneMgr.csId);
+    csEntry = CutsceneManager_GetCutsceneEntryImpl(sCutsceneMgr.csId);
 
     switch (csEntry->endSfx) {
         case CS_END_SFX_TRE_BOX_APPEAR:
@@ -376,7 +376,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
     }
 
     sCutsceneMgr.startMethod = CS_START_0;
-    csEntry = CutsceneManager_GetCutsceneImpl(csId);
+    csEntry = CutsceneManager_GetCutsceneEntryImpl(csId);
 
     ShrinkWindow_Letterbox_SetSizeTarget(csEntry->letterboxSize);
     CutsceneManager_SetHudVisibility(csEntry->hudVisibility);
@@ -441,7 +441,7 @@ s16 CutsceneManager_Stop(s16 csId) {
         return csId;
     }
 
-    csEntry = CutsceneManager_GetCutsceneImpl(sCutsceneMgr.csId);
+    csEntry = CutsceneManager_GetCutsceneEntryImpl(sCutsceneMgr.csId);
     if ((sCutsceneMgr.length > 0) && (csEntry->scriptIndex == CS_SCRIPT_ID_NONE)) {
         return -2;
     }
@@ -464,35 +464,35 @@ s16 CutsceneManager_GetCurrentCsId(void) {
 }
 
 ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
-    return CutsceneManager_GetCutsceneImpl(csId);
+    return CutsceneManager_GetCutsceneEntryImpl(csId);
 }
 
 s16 CutsceneManager_GetAdditionalCsId(s16 csId) {
     if (csId < 0) {
         return CS_ID_NONE;
     }
-    return CutsceneManager_GetCutsceneImpl(csId)->additionalCsId;
+    return CutsceneManager_GetCutsceneEntryImpl(csId)->additionalCsId;
 }
 
 s16 CutsceneManager_GetLength(s16 csId) {
     if (csId < 0) {
         return -1;
     }
-    return CutsceneManager_GetCutsceneImpl(csId)->length;
+    return CutsceneManager_GetCutsceneEntryImpl(csId)->length;
 }
 
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId) {
     if (csId < 0) {
         return -1;
     }
-    return CutsceneManager_GetCutsceneImpl(csId)->scriptIndex;
+    return CutsceneManager_GetCutsceneEntryImpl(csId)->scriptIndex;
 }
 
 s16 CutsceneManager_GetCutsceneCustomValue(s16 csId) {
     if (csId < 0) {
         return -1;
     }
-    return CutsceneManager_GetCutsceneImpl(csId)->customValue;
+    return CutsceneManager_GetCutsceneEntryImpl(csId)->customValue;
 }
 
 s16 CutsceneManager_GetCurrentSubCamId(s16 csId) {

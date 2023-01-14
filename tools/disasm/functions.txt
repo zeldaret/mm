@@ -1637,7 +1637,7 @@
     0x800F1374:("CutsceneFlags_Unset",),
     0x800F13E8:("CutsceneFlags_Get",),
     0x800F1460:("CutsceneManager_SetHudVisibility",),
-    0x800F14F8:("CutsceneManager_GetCutsceneImpl",),
+    0x800F14F8:("CutsceneManager_GetCutsceneEntryImpl",),
     0x800F1544:("CutsceneManager_Init",),
     0x800F15D8:("CutsceneManager_StoreCamera",),
     0x800F1648:("CutsceneManager_ClearWaiting",),
