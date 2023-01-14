@@ -1364,7 +1364,8 @@ void Play_DrawMain(PlayState* this) {
 
             Play_DrawMotionBlur(this);
 
-            if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) || (gTransitionTileState == TRANS_TILE_SETUP)) ||
+            if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
+                 (gTransitionTileState == TRANS_TILE_SETUP)) ||
                 (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
