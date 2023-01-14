@@ -379,7 +379,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_DAWN_OF_A_NEW_DAY:
-            gSaveContext.save.day = 9;
+            gSaveContext.save.day = 9; // 9 % 5 is day number 4, see `CURRENT_DAY`
 
             STOP_GAMESTATE(&play->state);
             SET_NEXT_GAMESTATE(&play->state, DayTelop_Init, sizeof(DayTelopState));
