@@ -74,7 +74,7 @@ enum {
 
 static AnimationHeader* sAnimationInfo[] = {
     &gEnSthSignalingAnim, &gEnSthBendingDownAnim,  &gEnSthTalkingWithHandUpAnim,
-    &gEnSthWaitingAnim,   &gEnSthLookUp,           &gEnSthLookingAroundRestlesslyAnim,
+    &gEnSthWaitingAnim,   &gEnSthLookUpAnim,           &gEnSthLookingAroundRestlesslyAnim,
     &gEnSthBeggingAnim,   &gEnSthPanicShakingAnim,
 };
 
