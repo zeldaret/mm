@@ -22,7 +22,7 @@ static Gfx sSceneDrawDefaultDL[] = {
 /**
  * Executes the current scene draw config handler.
  */
-void Scene_ExecuteDrawConfig(PlayState* play) {
+void Scene_Draw(PlayState* play) {
     static void (*sceneDrawConfigHandlers[])(PlayState*) = {
         Scene_DrawConfigDefault,
         Scene_DrawConfigMatAnim,
