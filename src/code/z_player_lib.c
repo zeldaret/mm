@@ -141,7 +141,7 @@ void func_801229A0(PlayState* play, Player* player) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if ((gSaveContext.jinxTimer != 0) || (player->invincibilityTimer > 0)) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

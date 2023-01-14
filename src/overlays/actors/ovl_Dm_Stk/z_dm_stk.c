@@ -1024,9 +1024,9 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
         this->deflectCount = 0;
         this->maskType = SK_MASK_TYPE_NORMAL;
         this->animIndex = SK_ANIM_IDLE;
-        this->fogR = play->lightCtx.unk7;
-        this->fogG = play->lightCtx.unk8;
-        this->fogB = play->lightCtx.unk9;
+        this->fogR = play->lightCtx.fogColor.r;
+        this->fogG = play->lightCtx.fogColor.g;
+        this->fogB = play->lightCtx.fogColor.b;
 
         if ((play->sceneId == SCENE_LOST_WOODS) && (gSaveContext.sceneLayer == 1)) {
             this->alpha = 0;
@@ -1594,9 +1594,9 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
             this->fadeInState++;
         }
 
-        this->fogR = play->lightCtx.unk7 * this->fogScale;
-        this->fogG = play->lightCtx.unk8 * this->fogScale;
-        this->fogB = play->lightCtx.unk9 * this->fogScale;
+        this->fogR = play->lightCtx.fogColor.r * this->fogScale;
+        this->fogG = play->lightCtx.fogColor.g * this->fogScale;
+        this->fogB = play->lightCtx.fogColor.b * this->fogScale;
     } else if (this->fadeInState == SK_FADE_IN_STATE_INCREASE_FOG) {
         if (this->fogN < 996) {
             this->fogN += 10;
@@ -1895,7 +1895,7 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, this->fogR, this->fogG, this->fogB, this->fogA,
                                                this->fogN, this->fogF);
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
-                    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+                    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
                 } else {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
                 }
