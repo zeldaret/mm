@@ -541,18 +541,43 @@ wordReplace = {
     "func_800FE498": "Environment_StartTime",
     "func_800FE4A8": "Environment_IsTimeStopped",
     "func_800F5A8C": "Environment_LerpWeight",
+
     "func_801A3F54": "Audio_SetCutsceneFlag",
     "func_800EA0D4": "Cutscene_StartManual",
+    "Cutscene_Start": "Cutscene_StartManual",
     "func_800EA0EC": "Cutscene_StopManual",
+    "Cutscene_End": "Cutscene_StopManual",
     "func_800EDE34": "Cutscene_ActorTranslate",
     "func_800EDF24": "Cutscene_ActorTranslateAndYaw",
     "func_800EDF78": "Cutscene_ActorTranslateAndYawSmooth",
     "func_800EE0CC": "Cutscene_ActorTranslateXZAndYawSmooth",
     "func_800EE1D8": "Cutscene_GetSceneLayer",
     "func_800EE200": "Cutscene_GetCueChannel",
+    "Cutscene_GetActorActionIndex": "Cutscene_GetCueChannel",
     "func_800EE29C": "Cutscene_IsCueInChannel",
+    "Cutscene_CheckActorAction": "Cutscene_IsCueInChannel",
     "func_800EE2F4": "Cutscene_IsPlaying",
     "Cutscene_GetSceneSetupIndex": "Cutscene_GetSceneLayer",
+
+    "func_800F15D8": "CutsceneManager_StoreCamera",
+    "ActorCutscene_SetIntentToPlay": "CutsceneManager_Queue",
+    "ActorCutscene_GetCanPlayNext": "CutsceneManager_IsNext",
+    "ActorCutscene_StartAndSetUnkLinkFields": "CutsceneManager_StartWithPlayerCs",
+    "ActorCutscene_StartAndSetFlag": "CutsceneManager_StartWithPlayerCsAndSetFlag",
+    "ActorCutscene_Start": "CutsceneManager_Start",
+    "ActorCutscene_Stop": "CutsceneManager_Stop",
+    "ActorCutscene_GetCurrentIndex": "CutsceneManager_GetCurrentCsId",
+    "ActorCutscene_GetCutscene": "CutsceneManager_GetCutscene",
+    "ActorCutscene_GetAdditionalCutscene": "CutsceneManager_GetAdditionalCsId",
+    "ActorCutscene_GetLength": "CutsceneManager_GetLength",
+    "ActorCutscene_GetCurrentSubCamId": "CutsceneManager_GetCurrentSubCamId",
+    "ActorCutscene_GetCurrentCamera": "CutsceneManager_GetCurrentSubCamId",
+
+    "EnvFlags_UnsetAll": "CutsceneFlags_UnsetAll",
+    "EnvFlags_Set": "CutsceneFlags_Set",
+    "EnvFlags_Unset": "CutsceneFlags_Unset",
+    "EnvFlags_Get": "CutsceneFlags_Get",
+
     "func_801343C0": "SkelAnime_DrawTransformFlexOpa",
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_80114E90": "Inventory_HasEmptyBottle",
@@ -575,6 +600,7 @@ wordReplace = {
     "func_ActorCategoryIterateById": "SubS_FindActor",
     "func_8013BB7C": "SubS_FindNearestActor",
     "func_8013E2D4": "SubS_StartCutscene",
+    "SubS_StartActorCutscene": "SubS_StartCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_UpdateFlags",
     "func_8013D8DC": "SubS_IsObjectLoaded",
@@ -645,8 +671,6 @@ wordReplace = {
     "func_8010A54C": "Minimap_Draw",
     "func_8010A580": "Map_Update",
 
-    "CutsceneManager_GetCurrentCamera": "CutsceneManager_GetCurrentSubCamId",
-
     "Entrance_CreateIndex": "Entrance_Create",
     "Entrance_CreateIndexFromSpawn": "Entrance_CreateFromSpawn",
 
@@ -681,6 +705,7 @@ wordReplace = {
     "actor.minVelocityY": "actor.terminalVelocity",
     "actor.yDistToWater": "actor.depthInWater",
     "actor.yDistToPlayer": "actor.playerHeightRel",
+    "actor.cutscene": "actor.csId",
 
     "gSaveContext.unk_3F1E": "gSaveContext.hudVisibilityForceButtonAlphasByStatus",
     "gSaveContext.unk_3F20": "gSaveContext.nextHudVisibility",
@@ -714,6 +739,7 @@ wordReplace = {
     "gSaveContext.bomberCode": "gSaveContext.save.bomberCode",
     "gSaveContext.skullTokenCount": "gSaveContext.save.skullTokenCount",
     "gSaveContext.cutscene": "gSaveContext.save.cutsceneIndex",
+    "gSaveContext.save.cutscene": "gSaveContext.save.cutsceneIndex",
     "gSaveContext.health": "gSaveContext.save.playerData.health",
     "gSaveContext.equips": "gSaveContext.save.equips",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
@@ -756,10 +782,20 @@ wordReplace = {
     "player->unk_730": "player->targetedActor",
     "player->ageProperties->unk_92": "player->ageProperties->voiceSfxIdOffset",
     "player->ageProperties->unk_94": "player->ageProperties->surfaceSfxIdOffset",
+    "player->unk_A86": "player->csId",
 
     "csCtx.npcActions": "csCtx.actorCues",
     "csCtx->npcActions": "csCtx->actorCues",
+    "csCtx.actorActions": "csCtx.actorCues",
+    "csCtx->actorActions": "csCtx->actorCues",
+    "csCtx.playerAction": "csCtx.playerCue",
+    "csCtx->playerAction": "csCtx->playerCue",
     "csCtx.unk_12": "csCtx.scriptIndex",
+    "csCtx.currentCsIndex": "csCtx.scriptIndex",
+    "csCtx->currentCsIndex": "csCtx->scriptIndex",
+    "csCtx.frames": "csCtx.curFrame",
+    "csCtx->frames": "csCtx->curFrame",
+
     "globalCtx->mf_187FC": "play->billboardMtxF",
     "globalCtx->projectionMatrix": "play->viewProjectionMtxF",
     "globalCtx->actorCtx.actorList[": "play->actorCtx.actorLists[",
@@ -791,6 +827,8 @@ wordReplace = {
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
+    "play->playerActorCsIds": "play->playerCsIds",
+    "play->envFlags": "play->cutsceneFlags",
 
     "gSaveContext.unk_3DC8": "gSaveContext.timerOsTime",
     "gSaveContext.unk_3DD0": "gSaveContext.timerStates",
@@ -838,6 +876,11 @@ wordReplace = {
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
     "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
 
+    "WEEKEVENTREG_20_02": "WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE",
+    "WEEKEVENTREG_33_80": "WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE",
+    "WEEKEVENTREG_52_20": "WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE",
+    "WEEKEVENTREG_55_80": "WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE",
+
     # Enums
     "TRANS_TYPE_00": "TRANS_TYPE_WIPE",
     "TRANS_TYPE_01": "TRANS_TYPE_TRIFORCE",
@@ -862,6 +905,10 @@ wordReplace = {
     "TRANS_TYPE_20": "TRANS_TYPE_FADE_DYNAMIC",
     "TRANS_TYPE_21": "TRANS_TYPE_CIRCLE",
     "TRANS_TYPE_22": "TRANS_TYPE_WIPE5",
+    "PLAYER_CSMODE_6", "PLAYER_CSMODE_END",
+    "PLAYER_CSMODE_7", "PLAYER_CSMODE_WAIT",
+    "SUBS_CUTSCENE_SET_UNK_LINK_FIELDS", "SUBS_CUTSCENE_WITH_PLAYER",
+    "SUBS_CUTSCENE_SET_FLAG", "SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG",
     # Example of custom behaviour:
     # "PLAYER": ("GET_PLAYER(play)", {"ignore": (-1, '"PLAYER"')}), # ignore "PLAYER" in sSoundBankNames
 }
