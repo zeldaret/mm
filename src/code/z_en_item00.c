@@ -819,7 +819,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (this->actor.params == ITEM00_NUTS_10) {
         texIndex = 6;

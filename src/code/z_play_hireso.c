@@ -16,12 +16,12 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016EA90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016F1A8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/BombersNotebook_Draw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016F4EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016F5A8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/BombersNotebook_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016FC78.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/BombersNotebook_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/func_8016FC98.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play_hireso/BombersNotebook_Destroy.s")
