@@ -336,7 +336,7 @@ void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
         play->transitionType = TRANS_TYPE_86;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_75_40);
         if (player->transformation == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_84_80);
@@ -553,7 +553,7 @@ void func_809C5BA0(EnBomBowlMan* this) {
 
 void func_809C5BF4(EnBomBowlMan* this, PlayState* play) {
     f32 sp2C = this->skelAnime.curFrame;
-    s32 subCam;
+    Camera* subCam;
 
     if ((D_809C6104 != 0) && (this->unk_2F8 != 15)) {
         func_809C493C(this, 15, 1.0f);

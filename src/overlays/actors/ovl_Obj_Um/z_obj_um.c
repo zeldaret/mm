@@ -698,7 +698,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             sp54 = false;
             this->flags |= OBJ_UM_FLAG_0100;
             ObjUm_SetupAction(this, func_80B7A144);
-            func_800FE484();
+            Environment_StopTime();
         } else {
             // Waiting for player
 
@@ -722,7 +722,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
             this->pathIndex = this->initialPathIndex;
             sp54 = false;
-            func_800FE484();
+            Environment_StopTime();
             ObjUm_SetupAction(this, ObjUm_PreMilkRunStartCs);
             this->unk_354 = 0;
             ObjUm_RotatePlayer(this, play, 0);
@@ -735,7 +735,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
         this->pathIndex = this->initialPathIndex;
         sp54 = false;
-        func_800FE484();
+        Environment_StopTime();
         ObjUm_SetupAction(this, ObjUm_StartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
@@ -747,7 +747,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
 
         this->pathIndex = this->initialPathIndex;
         sp54 = false;
-        func_800FE484();
+        Environment_StopTime();
         ObjUm_SetupAction(this, ObjUm_PostMilkRunStartCs);
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
@@ -838,7 +838,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                     D_801BDAA0 = 1;
                 }
                 play->transitionType = TRANS_TYPE_64;
-                gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 phi_v1 = true;
             } else {
@@ -1142,7 +1142,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, PlayState* play) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 play->nextEntrance = ENTRANCE(MILK_ROAD, 5);
                 play->transitionType = TRANS_TYPE_64;
-                gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                 play->transitionTrigger = TRANS_TRIGGER_START;
             } else {
                 func_80B79524(this);
@@ -1245,7 +1245,7 @@ void func_80B7A2AC(ObjUm* this, PlayState* play) {
         case OBJUM_PATH_STATE_FINISH:
             play->nextEntrance = ENTRANCE(GORMAN_TRACK, 4);
             play->transitionType = TRANS_TYPE_64;
-            gSaveContext.nextTransitionType = TRANS_TYPE_03;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
             play->transitionTrigger = TRANS_TRIGGER_START;
             break;
 
@@ -1303,14 +1303,14 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_01);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02);
                 } else {
                     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
                     play->transitionType = TRANS_TYPE_64;
-                    gSaveContext.nextTransitionType = TRANS_TYPE_03;
+                    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_02);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01);
@@ -1552,7 +1552,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, PlayState* play) {
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         play->nextEntrance = ENTRANCE(TERMINA_FIELD, 0);
         play->transitionType = TRANS_TYPE_64;
-        gSaveContext.nextTransitionType = TRANS_TYPE_03;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
         play->transitionTrigger = TRANS_TRIGGER_START;
         gSaveContext.save.time += CLOCK_TIME(1, 0) + 2;
     }

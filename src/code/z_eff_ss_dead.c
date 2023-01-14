@@ -50,7 +50,7 @@ void func_800AE5A0(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -105,7 +105,7 @@ void func_800AE8EC(PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
-    POLY_XLU_DISP = func_801660B8(play, POLY_XLU_DISP);
+    POLY_XLU_DISP = Play_SetFog(play, POLY_XLU_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

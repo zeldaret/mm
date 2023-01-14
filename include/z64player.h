@@ -72,12 +72,12 @@ typedef enum PlayerMask {
 } PlayerMask;
 
 typedef enum {
-    /* 0 */ PLAYER_ENV_TIMER_NONE,
-    /* 1 */ PLAYER_ENV_TIMER_HOTROOM,
-    /* 2 */ PLAYER_ENV_TIMER_UNDERWATER_FLOOR,
-    /* 3 */ PLAYER_ENV_TIMER_SWIMMING,
-    /* 4 */ PLAYER_ENV_TIMER_UNDERWATER_FREE
-} PlayerEnvTimerType;
+    /* 0 */ PLAYER_ENV_HAZARD_NONE,
+    /* 1 */ PLAYER_ENV_HAZARD_HOTROOM,
+    /* 2 */ PLAYER_ENV_HAZARD_UNDERWATER_FLOOR,
+    /* 3 */ PLAYER_ENV_HAZARD_SWIMMING,
+    /* 4 */ PLAYER_ENV_HAZARD_UNDERWATER_FREE
+} PlayerEnvHazard;
 
 typedef enum PlayerItemAction {
     /*   -1 */ PLAYER_IA_MINUS1 = -1,
@@ -745,7 +745,7 @@ typedef enum PlayerCsMode {
 #define PLAYER_STATE3_2000       (1 << 13)
 // 
 #define PLAYER_STATE3_4000       (1 << 14)
-// 
+// Swimming Zora
 #define PLAYER_STATE3_8000       (1 << 15)
 // 
 #define PLAYER_STATE3_10000      (1 << 16)
