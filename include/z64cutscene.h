@@ -247,7 +247,7 @@ typedef union {
 
 typedef enum {
     /* 1 */ CS_RUMBLE_ONCE = 1, // rumble once when startFrame is reached
-    /* 2 */ CS_RUMBLE_REPEATED // rumble every 64 frames between startFrame and endFrame
+    /* 2 */ CS_RUMBLE_PULSE // rumble every 64 frames between startFrame and endFrame
 } CutsceneRumbleType;
 
 typedef union {
@@ -258,12 +258,12 @@ typedef union {
         /* 0x6 */ Color_RGB8 color;
     };
     s32 _words[3];
-} CsCmdFadeScreen; // size = 0xC
+} CsCmdTransitionGeneral; // size = 0xC
 
 typedef enum {
-    /* 1 */ CS_FADE_SCREEN_FILL_IN = 1,
-    /* 2 */ CS_FADE_SCREEN_FILL_OUT
-} CsFadeScreenType;
+    /* 1 */ CS_TRANS_GENERAL_FILL_IN = 1,
+    /* 2 */ CS_TRANS_GENERAL_FILL_OUT
+} CsTransitionGeneralType;
 
 typedef union {
     struct {
@@ -349,7 +349,7 @@ typedef enum {
     /* 0x098 */ CS_CMD_TRANSITION,
     /* 0x099 */ CS_CMD_MOTION_BLUR,
     /* 0x09A */ CS_CMD_GIVE_TATL,
-    /* 0x09B */ CS_CMD_FADE_SCREEN,
+    /* 0x09B */ CS_CMD_TRANSITION_GENERAL,
     /* 0x09C */ CS_CMD_FADE_OUT_SEQ,
     /* 0x09D */ CS_CMD_TIME,
     /* 0x0C8 */ CS_CMD_PLAYER_CUE = 200,
@@ -538,8 +538,8 @@ typedef enum {
     /* 0x05 */ CS_MISC_STOP_CUTSCENE,
     /* 0x06 */ CS_MISC_UNIMPLEMENTED_6,
     /* 0x07 */ CS_MISC_SHOW_TITLE_CARD,
-    /* 0x08 */ CS_MISC_MEDIUM_QUAKE_START,
-    /* 0x09 */ CS_MISC_QUAKE_STOP,
+    /* 0x08 */ CS_MISC_EARTHQUAKE_MEDIUM,
+    /* 0x09 */ CS_MISC_EARTHQUAKE_STOP,
     /* 0x0A */ CS_MISC_VISMONO_BLACK_AND_WHITE,
     /* 0x0B */ CS_MISC_VISMONO_SEPIA,
     /* 0x0C */ CS_MISC_HIDE_ROOM,
@@ -556,9 +556,9 @@ typedef enum {
     /* 0x17 */ CS_MISC_ENABLE_PLAYER_REFLECTION,
     /* 0x18 */ CS_MISC_DISABLE_PLAYER_REFLECTION,
     /* 0x19 */ CS_MISC_PLAYER_FORM_HUMAN,
-    /* 0x1A */ CS_MISC_STRONG_QUAKE_START,
+    /* 0x1A */ CS_MISC_EARTHQUAKE_STRONG,
     /* 0x1B */ CS_MISC_DEST_MOON_CRASH_FIRE_WALL,
-    /* 0x1C */ CS_MISC_SKYBOX_MOON_CRASH,
+    /* 0x1C */ CS_MISC_MOON_CRASH_SKYBOX,
     /* 0x1D */ CS_MISC_PLAYER_FORM_RESTORED,
     /* 0x1E */ CS_MISC_DISABLE_PLAYER_CSMODE_START_POS,
     /* 0x1F */ CS_MISC_ENABLE_PLAYER_CSMODE_START_POS,
@@ -566,7 +566,7 @@ typedef enum {
     /* 0x21 */ CS_MISC_SAVE_ENTER_CLOCK_TOWN,
     /* 0x22 */ CS_MISC_RESET_SAVE_FROM_MOON_CRASH,
     /* 0x23 */ CS_MISC_TIME_ADVANCE,
-    /* 0x24 */ CS_MISC_WEAK_QUAKE_START,
+    /* 0x24 */ CS_MISC_EARTHQUAKE_WEAK,
     /* 0x25 */ CS_MISC_UNIMPLEMENTED_25,
     /* 0x26 */ CS_MISC_DAWN_OF_A_NEW_DAY,
     /* 0x27 */ CS_MISC_PLAYER_FORM_ZORA,

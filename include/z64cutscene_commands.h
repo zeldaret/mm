@@ -285,7 +285,7 @@
  *   0000009B eeeeeeee
  *   size = 0x8
  */
-#define CS_FADE_SCREEN_LIST(entries) { CS_CMD_FADE_SCREEN }, { CMD_W(entries) }
+#define CS_TRANSITION_GENERAL_LIST(entries) { CS_CMD_TRANSITION_GENERAL }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -296,7 +296,7 @@
  *   ttttssss eeeerrgg bbUUUUUU
  *   size = 0x0C
  */
-#define CS_FADE_SCREEN(type, startFrame, endFrame, red, green, blue) \
+#define CS_TRANSITION_GENERAL(type, startFrame, endFrame, red, green, blue) \
     { CMD_HH(type, startFrame) }, { CMD_HBB(endFrame, red, green) }, { CMD_BBBB(blue, 0, 0, 0) }
 
 
@@ -694,8 +694,8 @@
 #define CS_SCENE_UNK_132               CS_MODIFY_SEQ
 #define CS_MOTIONBLUR_LIST             CS_MOTION_BLUR_LIST
 #define CS_MOTIONBLUR                  CS_MOTION_BLUR
-#define CS_FADESCREEN_LIST             CS_FADE_SCREEN_LIST
-#define CS_FADESCREEN                  CS_FADE_SCREEN
+#define CS_FADESCREEN_LIST             CS_TRANSITION_GENERAL_LIST
+#define CS_FADESCREEN                  CS_TRANSITION_GENERAL
 #define CS_TERMINATOR_LIST             CS_DESTINATION_LIST
 #define CS_TERMINATOR                  CS_DESTINATION
 

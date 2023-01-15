@@ -1553,7 +1553,7 @@
     0x800EADB0:("CutsceneCmd_ModifySequence",),
     0x800EAECC:("CutsceneCmd_FadeOutAmbience",),
     0x800EAF20:("CutsceneCmd_RumbleController",),
-    0x800EAFE0:("CutsceneCmd_FadeColorScreen",),
+    0x800EAFE0:("CutsceneCmd_TransitionGeneral",),
     0x800EB1DC:("CutsceneCmd_SetTime",),
     0x800EB364:("CutsceneCmd_DestinationDefault",),
     0x800EB4B4:("CutsceneCmd_Destination",),

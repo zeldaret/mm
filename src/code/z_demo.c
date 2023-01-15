@@ -198,7 +198,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_MEDIUM_QUAKE_START:
+        case CS_MISC_EARTHQUAKE_MEDIUM:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
@@ -208,7 +208,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_QUAKE_STOP:
+        case CS_MISC_EARTHQUAKE_STOP:
             if (isFirstFrame) {
                 Quake_Init();
             }
@@ -306,7 +306,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
             break;
 
-        case CS_MISC_STRONG_QUAKE_START:
+        case CS_MISC_EARTHQUAKE_STRONG:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
@@ -325,7 +325,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_SKYBOX_MOON_CRASH:
+        case CS_MISC_MOON_CRASH_SKYBOX:
             if (isFirstFrame) {
                 // skyboxConfig
                 play->envCtx.unk_17 = 0xD;
@@ -368,7 +368,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             }
             break;
 
-        case CS_MISC_WEAK_QUAKE_START:
+        case CS_MISC_EARTHQUAKE_WEAK:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
@@ -528,7 +528,7 @@ void CutsceneCmd_RumbleController(PlayState* play, CutsceneContext* csCtx, CsCmd
             }
             break;
 
-        case CS_RUMBLE_REPEATED:
+        case CS_RUMBLE_PULSE:
             if ((csCtx->curFrame >= cmd->startFrame) && (csCtx->curFrame <= cmd->endFrame)) {
                 if ((csCtx->curFrame == cmd->startFrame) || (play->state.frames % 64 == 0)) {
                     Rumble_Request(0.0f, cmd->intensity, cmd->decayTimer, cmd->decayStep);
@@ -541,19 +541,19 @@ void CutsceneCmd_RumbleController(PlayState* play, CutsceneContext* csCtx, CsCmd
     }
 }
 
-void CutsceneCmd_FadeColorScreen(PlayState* play, CutsceneContext* csCtx, CsCmdFadeScreen* cmd) {
+void CutsceneCmd_TransitionGeneral(PlayState* play, CutsceneContext* csCtx, CsCmdTransitionGeneral* cmd) {
     if ((csCtx->curFrame >= cmd->startFrame) && (cmd->endFrame >= csCtx->curFrame)) {
         f32 alpha;
 
         play->envCtx.fillScreen = true;
         alpha = Environment_LerpWeight(cmd->endFrame, cmd->startFrame, csCtx->curFrame);
 
-        if (((cmd->type == CS_FADE_SCREEN_FILL_IN)) || (cmd->type == CS_FADE_SCREEN_FILL_OUT)) {
+        if (((cmd->type == CS_TRANS_GENERAL_FILL_IN)) || (cmd->type == CS_TRANS_GENERAL_FILL_OUT)) {
             play->envCtx.screenFillColor[0] = cmd->color.r;
             play->envCtx.screenFillColor[1] = cmd->color.g;
             play->envCtx.screenFillColor[2] = cmd->color.b;
 
-            if (cmd->type == CS_FADE_SCREEN_FILL_OUT) {
+            if (cmd->type == CS_TRANS_GENERAL_FILL_OUT) {
                 play->envCtx.screenFillColor[3] = (1.0f - alpha) * 255.0f;
             } else {
                 play->envCtx.screenFillColor[3] = 255.0f * alpha;
@@ -1201,7 +1201,6 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
             break;
         }
 
-        // Check special cases of command types. This are generic ActorCues
         if (((cmdType >= CS_CMD_ACTOR_CUE_100) && (cmdType <= CS_CMD_ACTOR_CUE_149)) ||
             (cmdType == CS_CMD_ACTOR_CUE_201) ||
             ((cmdType >= CS_CMD_ACTOR_CUE_450) && (cmdType <= CS_CMD_ACTOR_CUE_599))) {
@@ -1332,13 +1331,13 @@ void Cutscene_ProcessScript(PlayState* play, CutsceneContext* csCtx, u8* script)
                 }
                 break;
 
-            case CS_CMD_FADE_SCREEN:
+            case CS_CMD_TRANSITION_GENERAL:
                 bcopy(script, &cmdEntries, sizeof(cmdEntries));
                 script += sizeof(cmdEntries);
 
                 for (j = 0; j < cmdEntries; j++) {
-                    CutsceneCmd_FadeColorScreen(play, csCtx, (CsCmdFadeScreen*)script);
-                    script += sizeof(CsCmdFadeScreen);
+                    CutsceneCmd_TransitionGeneral(play, csCtx, (CsCmdTransitionGeneral*)script);
+                    script += sizeof(CsCmdTransitionGeneral);
                 }
                 break;
 

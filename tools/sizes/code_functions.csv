@@ -1067,7 +1067,7 @@ asm/non_matchings/code/z_demo/Cutscene_SetSfxReverbIndexTo1.s,Cutscene_SetSfxRev
 asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s,CutsceneCmd_ModifySequence,0x800EADB0,0x47
 asm/non_matchings/code/z_demo/CutsceneCmd_FadeOutAmbience.s,CutsceneCmd_FadeOutAmbience,0x800EAECC,0x15
 asm/non_matchings/code/z_demo/CutsceneCmd_RumbleController.s,CutsceneCmd_RumbleController,0x800EAF20,0x30
-asm/non_matchings/code/z_demo/CutsceneCmd_FadeColorScreen.s,CutsceneCmd_FadeColorScreen,0x800EAFE0,0x7F
+asm/non_matchings/code/z_demo/CutsceneCmd_TransitionGeneral.s,CutsceneCmd_TransitionGeneral,0x800EAFE0,0x7F
 asm/non_matchings/code/z_demo/CutsceneCmd_SetTime.s,CutsceneCmd_SetTime,0x800EB1DC,0x62
 asm/non_matchings/code/z_demo/CutsceneCmd_DestinationDefault.s,CutsceneCmd_DestinationDefault,0x800EB364,0x54
 asm/non_matchings/code/z_demo/CutsceneCmd_Destination.s,CutsceneCmd_Destination,0x800EB4B4,0x91
