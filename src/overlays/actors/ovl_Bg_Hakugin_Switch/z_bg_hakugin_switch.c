@@ -146,9 +146,9 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
         this->csId = this->dyna.actor.csId;
 
         if (sp34 == 0) {
-            this->additionalCutsceneId = -1;
+            this->additionalCsId = CS_ID_NONE;
         } else {
-            this->additionalCutsceneId = CutsceneManager_GetAdditionalCsId(this->csId);
+            this->additionalCsId = CutsceneManager_GetAdditionalCsId(this->csId);
         }
 
         if (sp30) {
@@ -167,7 +167,7 @@ void BgHakuginSwitch_Init(Actor* thisx, PlayState* play) {
 
         this->unk_1A8 = D_80B1688C[sp34].unk_10;
         this->csId = this->dyna.actor.csId;
-        this->additionalCutsceneId = CutsceneManager_GetAdditionalCsId(this->csId);
+        this->additionalCsId = CutsceneManager_GetAdditionalCsId(this->csId);
 
         if (sp30 == sp28) {
             func_80B15F3C(this, play);
@@ -343,7 +343,7 @@ void func_80B15F88(BgHakuginSwitch* this, PlayState* play) {
     if (phi_a0 != phi_v1) {
         if ((sp18->unk_14 & 0xFF) & 0x20) {
             if (D_80B16AF0 < play->gameplayFrames) {
-                func_80B15A4C(this, func_80B1606C, this->additionalCutsceneId);
+                func_80B15A4C(this, func_80B1606C, this->additionalCsId);
             }
         } else {
             func_80B1606C(this, play);
@@ -466,7 +466,7 @@ void func_80B16494(BgHakuginSwitch* this, PlayState* play) {
 void func_80B16520(BgHakuginSwitch* this, PlayState* play) {
     if (!Flags_GetSwitch(play, BGHAKUGINSWITCH_GET_SWITCHFLAG(&this->dyna.actor))) {
         if (BGHAKUGINSWITCH_GET_7(&this->dyna.actor) == BGHAKUGINSWITCH_GET_7_1) {
-            func_80B16180(this, func_80B165A0, 0, this->additionalCutsceneId);
+            func_80B16180(this, func_80B165A0, 0, this->additionalCsId);
         } else {
             func_80B165A0(this, play);
         }
