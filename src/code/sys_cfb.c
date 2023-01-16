@@ -1,4 +1,5 @@
 #include "global.h"
+#include "system_malloc.h"
 
 #define D_80780000 gPictoPhotoI8
 
@@ -102,7 +103,7 @@ void* SysCfb_GetFramebuffer(s32 index) {
     return NULL;
 }
 
-u16* SysCfb_GetZBuffer(void) {
+void* SysCfb_GetZBuffer(void) {
     return gZBufferPtr;
 }
 

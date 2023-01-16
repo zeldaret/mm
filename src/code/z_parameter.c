@@ -4333,7 +4333,7 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->nextEntrance = ENTRANCE(TERMINA_FIELD, 12);
     gSaveContext.nextCutsceneIndex = 0;
     play->transitionTrigger = TRANS_TRIGGER_START;
-    play->transitionType = TRANS_TYPE_03;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
 void Interface_GetTimerDigits(u64 timer, s16* timerArr) {

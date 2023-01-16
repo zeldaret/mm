@@ -50,7 +50,7 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
     gfxCtx->workBuffer = pool->workBuffer;
     gfxCtx->debugBuffer = pool->debugBuffer;
 
-    gfxCtx->curFrameBuffer = (u16*)SysCfb_GetFramebuffer(gfxCtx->framebufferIdx % 2);
+    gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
     gSegments[0x0F] = gfxCtx->curFrameBuffer;
 
     gfxCtx->zbuffer = SysCfb_GetZBuffer();
@@ -116,7 +116,7 @@ void* Graph_FaultAddrConvFunc(void* address, void* param) {
 void Graph_Init(GraphicsContext* gfxCtx) {
     bzero(gfxCtx, sizeof(GraphicsContext));
     gfxCtx->gfxPoolIdx = 0;
-    gfxCtx->framebufferIdx = 0;
+    gfxCtx->framebufferIndex = 0;
     gfxCtx->viMode = NULL;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
@@ -165,7 +165,7 @@ retry:
 
     gfxCtx->masterList = gGfxMasterDL;
     if (gfxCtx->callback != NULL) {
-        gfxCtx->callback(gfxCtx, gfxCtx->callbackParam);
+        gfxCtx->callback(gfxCtx, gfxCtx->callbackArg);
     }
 
     task->type = M_GFXTASK;
@@ -191,7 +191,7 @@ retry:
     if (SREG(33) & 1) {
         SREG(33) &= ~1;
         scTask->flags &= ~OS_SC_SWAPBUFFER;
-        gfxCtx->framebufferIdx--;
+        gfxCtx->framebufferIndex--;
     }
 
     scTask->msgQ = &gfxCtx->queue;
@@ -305,7 +305,7 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     if (!problem) {
         Graph_TaskSet00(gfxCtx, gameState);
         gfxCtx->gfxPoolIdx++;
-        gfxCtx->framebufferIdx++;
+        gfxCtx->framebufferIndex++;
     }
 
     {
