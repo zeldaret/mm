@@ -23,8 +23,9 @@ typedef struct {
 } EnHonotrapArr; //size 0x14
 
 typedef struct {
-    char unk0[0x8];
-    f32 unk_08;
+    f32 unk0;
+    f32 unk4;
+    f32 unk8;
     EnHonotrapArr unkC[6];
 } EnHonotrap23C;
 
@@ -36,11 +37,11 @@ typedef struct EnHonotrap {
     /* 0x222 */ s16 unk222;
     /* 0x224 */ s16 unk224;
     /* 0x228 */ Vec3f unk228;
-    /* 0x234 */ char pad234[4];
+    /* 0x234 */ f32 unk234;
     /* 0x238 */ s16 unk238;
     /* 0x23A */ s16 unk23A;
     /* 0x23C */ EnHonotrap23C unk23C;
-    /* 0x2C0 */ s8 unk2C0;
+    /* 0x2C0 */ u8 unk2C0;
 } EnHonotrap; // size = 0x2C4
 
 #endif // Z_EN_HONOTRAP_H
