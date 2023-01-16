@@ -30,7 +30,7 @@ void GameState_SetFBFilter(Gfx** gfx, u32 arg1) {
         D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
         D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
         D_801F8010.color.a = R_FB_FILTER_A;
-        func_80140D10(&D_801F8010, &dlist);
+        VisCvg_Draw(&D_801F8010, &dlist);
     } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
         D_801F8020.useRgba = (R_FB_FILTER_TYPE == 6);
         D_801F8020.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
@@ -209,7 +209,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         init(gameState);
 
-        func_80140CE0(&D_801F8010);
+        VisCvg_Init(&D_801F8010);
         func_801420C0(&D_801F8020);
         VisMono_Init(&sMonoColors);
         ViMode_Init(&D_801F8048);
@@ -231,7 +231,7 @@ void GameState_Destroy(GameState* gameState) {
 
     Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
-    func_80140D04(&D_801F8010);
+    VisCvg_Destroy(&D_801F8010);
     func_801420F4(&D_801F8020);
     VisMono_Destroy(&sMonoColors);
     ViMode_Destroy(&D_801F8048);

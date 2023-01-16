@@ -39,45 +39,45 @@ Gfx D_801C5E00[] = {
     gsSPBranchList(D_0E000000.fillRect),
 };
 
-void func_80140CE0(struct_801F8010* arg0) {
-    arg0->type = 0;
-    arg0->setScissor = false;
-    arg0->color.r = 255;
-    arg0->color.g = 255;
-    arg0->color.b = 255;
-    arg0->color.a = 255;
+void VisCvg_Init(struct_801F8010* this) {
+    this->type = 0;
+    this->setScissor = false;
+    this->color.r = 255;
+    this->color.g = 255;
+    this->color.b = 255;
+    this->color.a = 255;
 }
 
-void func_80140D04(struct_801F8010* arg0) {
+void VisCvg_Destroy(struct_801F8010* this) {
 }
 
-void func_80140D10(struct_801F8010* arg0, Gfx** gfxp) {
+void VisCvg_Draw(struct_801F8010* this, Gfx** gfxp) {
     Gfx* gfx = *gfxp;
 
     gDPPipeSync(gfx++);
     gDPSetPrimDepth(gfx++, -1, -1);
 
-    if (arg0->setScissor == true) {
+    if (this->setScissor == true) {
         gSPDisplayList(gfx++, D_0E000000.setScissor);
     }
 
-    switch (arg0->type) {
+    switch (this->type) {
         case 1:
             gSPDisplayList(gfx++, D_801C5DF0);
             break;
 
         case 2:
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, arg0->color.rgba);
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, this->color.rgba);
             gSPDisplayList(gfx++, D_801C5E00);
             break;
 
         case 3:
-            gDPSetColor(gfx++, G_SETBLENDCOLOR, arg0->color.rgba);
+            gDPSetColor(gfx++, G_SETBLENDCOLOR, this->color.rgba);
             gSPDisplayList(gfx++, D_801C5DD0);
             break;
 
         case 4:
-            gDPSetColor(gfx++, G_SETFOGCOLOR, arg0->color.rgba);
+            gDPSetColor(gfx++, G_SETFOGCOLOR, this->color.rgba);
             gSPDisplayList(gfx++, D_801C5DE0);
             break;
 
